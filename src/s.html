@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+      #div1{
+        width:150px;
+        height:1000px;
+        background:#999999;
+        position:absolute;
+        left:-150px;}
+      span{
+        width:20px;
+        height:70px;
+        line-height:23px;
+        background:#09C;
+        position:absolute;
+        right:-20px;
+        top:70px;}
+    </style>
+  <script>
+    window.onload=function(){
+      var odiv=document.getElementById('div1');
+      odiv.onmouseover=function ()
+      {
+
+        startmove(0,10);//第一个参数为div   left属性的目标值   第二个为 每次移动多少像素
+
+      }
+      odiv.onmouseout=function ()
+      {
+        startmove(-150,-10);
+      }
+    }
+
+    var timer=null;
+    function startmove(target,speed)
+    {
+
+      var odiv=document.getElementById('div1');
+      clearInterval(timer);
+      timer=setInterval(function (){
+
+        if(odiv.offsetLeft==target)
+        {
+          clearInterval(timer);
+        }
+        else
+        {
+          odiv.style.left=odiv.offsetLeft+speed+'px';
+        }
+
+      },30)
+
+    }
+
+  </script>
+</head>
+<body>
+<div id="div1">
+  <span>侧边栏</span>
+</div>
+</body>
+</html>
