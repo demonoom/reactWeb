@@ -12,7 +12,6 @@ const CourseWareComponents = (props) => {
         <Col span="8">
           <Card bordered={true}>
             <div className="custom-image">
-              <img alt="example" width="100%" height="150px" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />
               <div className="custom-card">
                 题目：<h3>荒漠化的防治</h3>
                 <p>上传者：叶练</p>
@@ -26,7 +25,7 @@ const CourseWareComponents = (props) => {
         <Col span="8">
           <Card  bordered={true}>
             <div className="custom-image">
-              <img alt="example" width="100%" height="150px" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />
+              {/*<img alt="example" width="100%" height="150px" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />*/}
               <div className="custom-card">
                 题目：<h3>荒漠化的防治</h3>
                 <p>上传者：叶练</p>
@@ -39,7 +38,6 @@ const CourseWareComponents = (props) => {
         <Col span="8">
           <Card  bordered={true}>
             <div className="custom-image">
-              <img alt="example" width="100%" height="150px" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />
               <div className="custom-card">
                 题目：<h3>荒漠化的防治</h3>
                 <p>上传者：叶练</p>

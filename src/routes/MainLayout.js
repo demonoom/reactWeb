@@ -38,8 +38,7 @@ const MainLayout = React.createClass({
 
      if(e.key=="teachTimes"){
        // this.setState({activeMiddleMenu:'sub1'});
-      // this.refs.middleMenu.activeMenu='sub1';
-
+       this.refs.middleMenu.activeMenu='goSchool';
      }else{
          // this.setState({activeMiddleMenu: 'sub4'});
        //this.refs.middleMenu.activeMenu='sub4';

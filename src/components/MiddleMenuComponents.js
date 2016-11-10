@@ -2,92 +2,164 @@ import React, { PropTypes,Link } from 'react';
 import { Table, Popconfirm, Button } from 'antd';
 import ReactDOM from 'react-dom';
 import { Menu, Icon } from 'antd';
-import { Badge } from 'antd';
+import { Badge,Pagination } from 'antd';
 import TeachingComponents from '../components/TeachingComponents';
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
+import reqwest from 'reqwest';
 
 // let uuid = 0;
 
 
-
+//菜单二级子菜单数组
 let lessonData=new Array();
+//一级菜单数组
 let List=new Array();
+//菜单元素，根据构建出来的该对象，对菜单进行生成
+let children;
+var mMenu;
 const MiddleMenuComponents = React.createClass({
   getInitialState() {
+    mMenu = this;
     return {
-      current: '6',
+      currentMenu: 'goSchool',
+      currentPage: 1,
       openSubMenu:this.props.activeMenu,
       show: 1,
-      lessonCount:3,
-      //titleList:{1: ['新增菜单'],2: ['新增菜单111']},
-      titleList:['新增菜单','新增菜单111'],
+      lessonCount:0,
+      menuList:[],
     };
-    List = this.state.titleList;
   },
 
-  componentWillReceiveProps(){
-      this.setState({openSubMenu:this.props.activeMenu});
-  },
   handleClick(e) {
     alert(e.key);
     this.setState({
-      current: e.key,
+      currentMenu: e.key,
     });
     //location.hash=e.key;
   },
+
   subMenuTitleClick(e){
     this.setState({openSubMenu:e.key});
   },
+
   openMenu:function (e) {
     alert(e.key);
   },
 
-  handleEmail: function(values){
-    lessonData=new Array();
-    for(let i=1;i<=values.courseTimes;i++){
-      lessonData.push({lessonid:i,lessonName:`第${i}课时`});
-    }
-    console.log("lessonData:"+lessonData);
-    this.setState({titleList:{1: [values.nickname],}});
-    this.setState({lessonCount: values.courseTimes});
-    //List.push(this.state.titleList);
-    List.push(values.nickname);
-    ///this.refs.middleMenu.appendChild(children);
-    //ReactDOM.findDOMNode(this.refs.middleMenu).append("surprise");
-    //this.refs.middleMenu.render(children);
-    //this.refs.middleMenu;
+  handleMenu: function(lessonInfo){
+    //lessonData.splice(0,lessonData.length);
+    List.push([ lessonInfo.scheduleId, lessonInfo.courseName, lessonInfo.courseTimes]);
+    this.setState({menuList: List});
+    this.buildMenuChildren();
+  },
+
+  doWebService : function(data,listener) {
+      var service = this;
+      //this.WEBSERVICE_URL = "http://192.168.2.103:8080/Excoord_For_Education/webservice";
+      this.WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
+      if (service.requesting) {
+        return;
+      }
+      service.requesting = true;
+      $.post(service.WEBSERVICE_URL, {
+        params : data
+      }, function(result, status) {
+        service.requesting = false;
+        if (status == "success") {
+          listener.onResponse(result);
+        } else {
+          listener.onError(result);
+        }
+      }, "json");
+  },
+
+  getLessonMenu(){
+    var param = {
+      "method":'getTeachScheduleByIdent',
+      "ident":'23836'
+    };
+    this.doWebService(JSON.stringify(param), {
+      onResponse : function(ret) {
+        console.log(ret.msg);
+        ret.response.forEach(function (e) {
+            var lessonArray = e.split("#");
+            var scheduleId = lessonArray[0];
+            var courseName = lessonArray[1];
+            var courseTimes = 0;//当值为0时，系统不显示具体的子菜单数量（即菜单上无徽标显示）
+            //console.log(lessonArray[0]+"-----------"+lessonArray[1]);
+          //courseTimes需要作为当前教学进度下的资源数量进行显示（课件和题目的总和）
+            var lessonInfo = {"scheduleId":scheduleId,"courseName":courseName,"courseTimes":courseTimes};
+            mMenu.handleMenu(lessonInfo);
+        });
+      },
+      onError : function(error) {
+        alert(error);
+        //phone.finish();
+      }
+    });
+  },
+
+  componentWillReceiveProps(){
+    this.setState({openSubMenu:this.props.activeMenu});
+  },
+
+  componentDidMount(){
+      this.getLessonMenu();
+  },
+
+  // componentWillMount(){
+  //   this.getLessonMenu();
+  // },
+
+  buildMenuChildren:function () {
+    children = this.state.menuList.map((e, i)=> {
+      return <SubMenu key={e[0]} onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" /><span>{e[1]}</span><Badge count={e[2]}/></span>}>
+      </SubMenu>
+    });
+  },
+
+  onChange(page) {
+    console.log(page);
+    this.setState({
+      currentPage: page,
+    });
+  },
+
+  editTeachSchedule:function (e) {
+        alert("修改教学进度"+e.currentTarget.title);
+    this.showModal('edit');
+  },
+
+  deleteTeachSchedule:function (e) {
+    alert("请先删除当前进度下的教学资源，再执行此操作"+e.currentTarget.title);
+  },
+
+  showModal:function (optType) {
+    //alert(this.state.currentMenu);
+    this.refs.teachingComponents.showModal('add');
   },
 
   render() {
-    const Options = lessonData.map(lesson => <Menu.Item key={lesson.lessonid}>{lesson.lessonName}</Menu.Item>);
-    const children = List.map((e, i)=> {
-      return <SubMenu key={e} onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" /><span>{e}</span><Badge count={this.state.lessonCount}/></span>}>
-        {Options}
-      </SubMenu>
-    });
-
     return (
       <div>
-        <TeachingComponents callbackParent={this.handleEmail}/>
+        <Button type="primary" icon="plus" onClick={this.showModal}>添加教学进度</Button>
+        <TeachingComponents ref="teachingComponents" callbackParent={this.handleMenu}/>
         <Menu ref="middleMenu" onClick={this.handleClick}
               style={{ width: 240 }}
-              defaultOpenKeys={[this.state.openSubMenu]}
+              defaultOpenKeys={['goSchool']}
               openKeys={[this.state.openSubMenu]}
-              selectedKeys={[this.state.current]}
+              selectedKeys={['LeftNav']}
               mode="inline"
         >
           {/*添加了徽标，用来显示菜单下的课时数*/}
-          <SubMenu key="goSchool" onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" /><span>上学啦</span><Badge count={4}/></span>}>
-            <Menu.Item key="LeftNav">第1课时</Menu.Item>
-            <Menu.Item key="2">第2课时</Menu.Item>
-            <Menu.Item key="3">第3课时</Menu.Item>
-            <Menu.Item key="4">第4课时</Menu.Item>
+          <SubMenu key="goSchool" onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" /><span>示例：上学啦</span><Badge count={4}/> <span title="goSchool" onClick={this.editTeachSchedule}><Icon type="edit"/></span>  <span title="goSchool" onClick={this.deleteTeachSchedule}><Icon type="delete"/></span> </span>}>
           </SubMenu>
 
           {children}
 
         </Menu>
+        <Pagination size="small" total={100} current={this.state.currentPage} onChange={this.onChange}/>
       </div>
     );
   },

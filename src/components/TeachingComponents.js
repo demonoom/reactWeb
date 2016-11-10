@@ -4,26 +4,39 @@ import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox } from
 const FormItem = Form.Item;
 const Option = Select.Option;
 
+var subjectForm;
 const SubjectForm = Form.create()(React.createClass({
+
   getInitialState() {
+    subjectForm = this;
     return {
-      visible: false
+      visible: false,
+      optType:'add',
     };
   },
   handleSubmit(e) {
     e.preventDefault();
+    alert("====:"+this.props.optType);
     this.props.form.validateFieldsAndScroll((err, values) => {
-      if (err) {
-        return;
+      if(values=="delete"){
+        this.setState({ visible: false });
+      }else{
+        if (err) {
+          return;
+        }
+        console.log("courseName:"+values.courseName)
+        console.log('Received values of form: ', values);
+        values.scheduleId=values.courseName;
+        this.props.callbackParent(values);
       }
-      console.log("nickName:"+values.nickname)
-      console.log('Received values of form: ', values);
-      this.props.callbackParent(values);
     });
-    this.setState({ visible: false });
+
   },
-  handleCancel() {
-    this.setState({ visible: false });
+  /*handleCancel() {
+    subjectForm.setState({ visible: false });
+  },*/
+  handleCancel(e) {
+    this.props.callbackParent("cancel");
   },
   checkConfirm(rule, value, callback) {
     const form = this.props.form;
@@ -50,28 +63,11 @@ const SubjectForm = Form.create()(React.createClass({
           )}
           hasFeedback
         >
-          {getFieldDecorator('nickname', {
+          {getFieldDecorator('courseName', {
             rules: [{ required: true, message: '请输入题目!' }],
           })(
             <Input />
           )}
-        </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label="课时"
-        >
-          {getFieldDecorator('courseTimes', {
-            rules: [{ required: true, message: '请选择课时!' }],
-          })(
-            <Select placeholder="请选择课时" style={{ width: '100%' }}>
-              <Option value="0">0节课时</Option>
-              <Option value="1">1节课时</Option>
-              <Option value="2">2节课时</Option>
-              <Option value="3">3节课时</Option>
-              <Option value="4">4节课时</Option>
-            </Select>
-          )}
-
         </FormItem>
         <FormItem>
           <Button type="primary" htmlType="submit" className="login-form-button">
@@ -88,14 +84,17 @@ const SubjectForm = Form.create()(React.createClass({
 
 const TeachingComponents = React.createClass({
   getInitialState() {
+    //alert("===="+this.props.modalVisible);
     return {
       loading: false,
       visible: false,
     };
+    //this.setState({ visible: this.props.modalVisible });
   },
-  showModal() {
+  showModal(openType) {
     this.setState({
       visible: true,
+      optType:openType,
     });
   },
   handleOk() {
@@ -112,13 +111,14 @@ const TeachingComponents = React.createClass({
   handleEmail: function(val){
     this.props.callbackParent(val);
     //this.setState({lessonCount: val});
+    this.setState({ visible: false });
   },
 
   render() {
     return (
       <div>
 
-        <Button type="primary" icon="plus" onClick={this.showModal}>添加教学进度</Button>
+
         <Modal
           visible={this.state.visible}
           title="教学进度"
@@ -127,7 +127,7 @@ const TeachingComponents = React.createClass({
 
           ]}
         >
-          <SubjectForm  callbackParent={this.handleEmail}></SubjectForm>
+          <SubjectForm optType={this.state.optType}  callbackParent={this.handleEmail}></SubjectForm>
         </Modal>
       </div>
     );
