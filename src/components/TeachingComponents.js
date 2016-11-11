@@ -9,26 +9,75 @@ const SubjectForm = Form.create()(React.createClass({
 
   getInitialState() {
     subjectForm = this;
+    alert(this.props.editSchuldeId);
     return {
       visible: false,
       optType:'add',
+      editSchuldeId:this.props.editSchuldeId,
     };
   },
+
+  doWebService : function(data,listener) {
+    var service = this;
+    //this.WEBSERVICE_URL = "http://192.168.2.103:8080/Excoord_For_Education/webservice";
+    this.WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
+    if (service.requesting) {
+      return;
+    }
+    service.requesting = true;
+    $.post(service.WEBSERVICE_URL, {
+      params : data
+    }, function(result, status) {
+      service.requesting = false;
+      if (status == "success") {
+        listener.onResponse(result);
+      } else {
+        listener.onError(result);
+      }
+    }, "json");
+  },
+
+  saveSchedule(ident,scheduleName){
+    var param = {
+      "method":'addTeachSchedule',
+      "ident":ident,
+      "title":scheduleName
+    };
+    this.doWebService(JSON.stringify(param), {
+      onResponse : function(ret) {
+        console.log(ret.msg);
+        var uId = ret.response.colUid;
+        var colTitle = ret.response.colTitle;
+      },
+      onError : function(error) {
+        alert(error);
+      }
+    });
+  },
+
   handleSubmit(e) {
     e.preventDefault();
-    alert("====:"+this.props.optType);
+    //alert("====:"+this.props.optType);
     this.props.form.validateFieldsAndScroll((err, values) => {
-      if(values=="delete"){
-        this.setState({ visible: false });
+      var ident = "23836";
+      var scheduleName = values.courseName;
+      if(this.props.optType=="edit"){
+          alert("edit"+scheduleName);
+          //this.setState({ visible: false });
+
       }else{
-        if (err) {
+        this.saveSchedule(ident,scheduleName);
+        //alert("add"+values.courseName);
+        /*if (err) {
           return;
         }
-        console.log("courseName:"+values.courseName)
-        console.log('Received values of form: ', values);
+        console.log("courseName:"+values.courseName);
         values.scheduleId=values.courseName;
-        this.props.callbackParent(values);
+        //console.log('Received values of form: ', values);
+        this.props.callbackParent(values);*/
+
       }
+      this.props.callbackParent("cancel");
     });
 
   },
@@ -58,15 +107,15 @@ const SubjectForm = Form.create()(React.createClass({
           {...formItemLayout}
           label={(
             <span>
-              题目&nbsp;
+              名称&nbsp;
             </span>
           )}
           hasFeedback
         >
           {getFieldDecorator('courseName', {
-            rules: [{ required: true, message: '请输入题目!' }],
+            rules: [{ required: true, message: '请输入名称!' }],
           })(
-            <Input />
+            <Input defaultValue={this.props.editSchuldeId}/>
           )}
         </FormItem>
         <FormItem>
@@ -88,13 +137,17 @@ const TeachingComponents = React.createClass({
     return {
       loading: false,
       visible: false,
+      editSchuldeId:0,
     };
     //this.setState({ visible: this.props.modalVisible });
   },
-  showModal(openType) {
+  showModal(openType,editSchuldeId) {
+    //alert("editSchuldeId:"+editSchuldeId);
+    //this.refs.courseName.value=editSchuldeId;
     this.setState({
       visible: true,
       optType:openType,
+      editSchuldeId:editSchuldeId,
     });
   },
   handleOk() {
@@ -127,7 +180,7 @@ const TeachingComponents = React.createClass({
 
           ]}
         >
-          <SubjectForm optType={this.state.optType}  callbackParent={this.handleEmail}></SubjectForm>
+          <SubjectForm optType={this.state.optType} editSchuldeId={this.state.editSchuldeId} callbackParent={this.handleEmail}></SubjectForm>
         </Modal>
       </div>
     );

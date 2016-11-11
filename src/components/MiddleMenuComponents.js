@@ -31,6 +31,26 @@ const MiddleMenuComponents = React.createClass({
     };
   },
 
+  doWebService : function(data,listener) {
+    var service = this;
+    //this.WEBSERVICE_URL = "http://192.168.2.103:8080/Excoord_For_Education/webservice";
+    this.WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
+    if (service.requesting) {
+      return;
+    }
+    service.requesting = true;
+    $.post(service.WEBSERVICE_URL, {
+      params : data
+    }, function(result, status) {
+      service.requesting = false;
+      if (status == "success") {
+        listener.onResponse(result);
+      } else {
+        listener.onError(result);
+      }
+    }, "json");
+  },
+
   handleClick(e) {
     alert(e.key);
     this.setState({
@@ -52,26 +72,6 @@ const MiddleMenuComponents = React.createClass({
     List.push([ lessonInfo.scheduleId, lessonInfo.courseName, lessonInfo.courseTimes]);
     this.setState({menuList: List});
     this.buildMenuChildren();
-  },
-
-  doWebService : function(data,listener) {
-      var service = this;
-      //this.WEBSERVICE_URL = "http://192.168.2.103:8080/Excoord_For_Education/webservice";
-      this.WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
-      if (service.requesting) {
-        return;
-      }
-      service.requesting = true;
-      $.post(service.WEBSERVICE_URL, {
-        params : data
-      }, function(result, status) {
-        service.requesting = false;
-        if (status == "success") {
-          listener.onResponse(result);
-        } else {
-          listener.onError(result);
-        }
-      }, "json");
   },
 
   getLessonMenu(){
@@ -114,7 +114,7 @@ const MiddleMenuComponents = React.createClass({
 
   buildMenuChildren:function () {
     children = this.state.menuList.map((e, i)=> {
-      return <SubMenu key={e[0]} onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" /><span>{e[1]}</span><Badge count={e[2]}/></span>}>
+      return <SubMenu key={e[0]} onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" /><span>{e[1]}</span><Badge count={e[2]}/> <span title={e[0]} onClick={this.editTeachSchedule}><Icon type="edit"/></span>  <span title={e[0]} onClick={this.deleteTeachSchedule}><Icon type="delete"/></span> </span>}>
       </SubMenu>
     });
   },
@@ -128,16 +128,17 @@ const MiddleMenuComponents = React.createClass({
 
   editTeachSchedule:function (e) {
         alert("修改教学进度"+e.currentTarget.title);
-    this.showModal('edit');
+    this.showModal('edit',e.currentTarget.title);
   },
 
   deleteTeachSchedule:function (e) {
     alert("请先删除当前进度下的教学资源，再执行此操作"+e.currentTarget.title);
   },
 
-  showModal:function (optType) {
-    //alert(this.state.currentMenu);
-    this.refs.teachingComponents.showModal('add');
+  showModal:function (optType,editSchuldeId) {
+    optType = (optType=="edit"?"edit":"add");
+    //alert("oooo:"+optType);
+    this.refs.teachingComponents.showModal(optType,editSchuldeId);
   },
 
   render() {
