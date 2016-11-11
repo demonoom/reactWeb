@@ -17,8 +17,10 @@ const store = createStore(function () {
 
 });
 
+var mainLayout;
 const MainLayout = React.createClass({
   getInitialState() {
+    mainLayout = this;
     return {
       collapse: true,
       activeMiddleMenu:'sub1',
@@ -34,23 +36,31 @@ const MainLayout = React.createClass({
     //alert(this.state.activeMiddleMenu);
     // this.state.activeMiddleMenu='sub1';
     //location.hash = e.key;  //Menu 的key值实际上是指向一个Router path，通过location.hash完成页面的跳转访问
+    //alert(e.key);
     this.setState({currentKey:e.key});
 
      if(e.key=="teachTimes"){
        // this.setState({activeMiddleMenu:'sub1'});
-       this.refs.middleMenu.activeMenu='goSchool';
+       //this.refs.middleMenu.activeMenu='goSchool';
      }else{
          // this.setState({activeMiddleMenu: 'sub4'});
        //this.refs.middleMenu.activeMenu='sub4';
-
      }
   },
+  //获取教学进度下的课件资源
+  getTeachPlans:function (teachScheduleId) {
+    //点击的菜单标识：teachScheduleId
+      //alert("teachScheduleId::"+teachScheduleId);
+      //alert("mt:");
+    mainLayout.refs.mainTabComponents.getTeachPlans(teachScheduleId);
+  },
+
   render() {
     const collapse = this.state.collapse;
     //根据如下判断结果，完成对页面中部位置的渲染，不同情况，渲染不同组件
     var middleComponent;
     if(this.state.currentKey=="teachTimes"){
-      middleComponent = <MiddleMenuComponents activeMenu={this.state.activeMiddleMenu}/>;
+      middleComponent = <MiddleMenuComponents activeMenu={this.state.activeMiddleMenu}  callbackParent={this.getTeachPlans}/>;
     }else if(this.state.currentKey=="KnowledgeResources"){
       middleComponent = <KnowledgeComponents></KnowledgeComponents>;
     }
@@ -62,7 +72,7 @@ const MainLayout = React.createClass({
           <div className="ant-layout-logo">
             <UserCardModalComponents/>
           </div>
-          <Menu mode="inline" theme="dark" defaultSelectedKeys={['teachTimes']}  onClick={this.toolbarClick}>
+          <Menu mode="inline" theme="dark" defaultSelectedKeys={[this.state.currentKey]}  onClick={this.toolbarClick}>
             <Menu.Item key="teachTimes">
               <Icon type="bar-chart" /><span className="nav-text">教学进度</span>
             </Menu.Item>
@@ -105,7 +115,7 @@ const MainLayout = React.createClass({
                   <div className="ant-layout-container">
                     <div className="ant-layout-content">
                       <div>
-                        <MainTabComponents/>
+                        <MainTabComponents ref="mainTabComponents"/>
                       </div>
                     </div>
                   </div>

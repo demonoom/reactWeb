@@ -9,7 +9,7 @@ const HeaderComponents = (props) => {
     <div>
       <MaaeeLogo/>
       <SearchInput placeholder="请输入关键字搜索"
-                   onSearch={value => console.log(value)} style={{ width: 200 }}
+                   onSearch={value => console.log(value)} style={{ width:300 }}
       />
       &nbsp;&nbsp;<Button icon="cloud-upload-o"/>
       <SideMenu/>

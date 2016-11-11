@@ -5,8 +5,6 @@ import { Menu, Icon } from 'antd';
 import { Badge,Pagination } from 'antd';
 import TeachingComponents from '../components/TeachingComponents';
 const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
-import reqwest from 'reqwest';
 
 // let uuid = 0;
 
@@ -52,19 +50,22 @@ const MiddleMenuComponents = React.createClass({
   },
 
   handleClick(e) {
-    alert(e.key);
+     // alert("11111:"+e.key);
     this.setState({
       currentMenu: e.key,
     });
+
     //location.hash=e.key;
   },
-
+  //菜单被选择时执行的函数
   subMenuTitleClick(e){
+    //alert(e.key);
     this.setState({openSubMenu:e.key});
+    this.props.callbackParent(e.key);
   },
 
   openMenu:function (e) {
-    alert(e.key);
+    //alert(e.key);
   },
 
   handleMenu: function(lessonInfo){
@@ -94,7 +95,7 @@ const MiddleMenuComponents = React.createClass({
         });
       },
       onError : function(error) {
-        alert(error);
+        //alert(error);
         //phone.finish();
       }
     });
@@ -127,7 +128,7 @@ const MiddleMenuComponents = React.createClass({
   },
 
   editTeachSchedule:function (e) {
-        alert("修改教学进度"+e.currentTarget.title);
+        //alert("修改教学进度"+e.currentTarget.title);
     this.showModal('edit',e.currentTarget.title);
   },
 
