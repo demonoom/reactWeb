@@ -10,7 +10,7 @@ import SubjectUploadTabComponents from './SubjectUploadTabComponents';
 
 
 const TabPane = Tabs.TabPane;
-const operations = <div><UseKnowledgeComponents></UseKnowledgeComponents><SubjectUploadTabComponents></SubjectUploadTabComponents><Button type="primary" icon="delete" onClick={deleteConfirm}></Button></div>;
+const operations = <div className="ant-tabs-right"><UseKnowledgeComponents ></UseKnowledgeComponents><SubjectUploadTabComponents ></SubjectUploadTabComponents><Button type="primary" icon="delete" onClick={deleteConfirm} style={{display:'inline-block', margin:'0 0 0 12px'}}></Button></div>;
 
 //定义js函数，完成删除前的确认提示操作
 function deleteConfirm() {
@@ -18,36 +18,19 @@ function deleteConfirm() {
   var rs = confirm("确定要删除这"+count+"条记录吗？");
 }
 
-const tabNameArray = [
-  {
-    title: '课件',
-    content: <div>
-      <CourseWareComponents/>
-    </div>,
-    key:'key001'   /*Tab的key值，根据key的不同对Tab进行区分*/
-  },
-  {
-    title: '题目',
-    content: <SubjectTable/>,
-    key:'2'
-  },{
-    title: 'rich',
-    content: <div>
-      <RichEditorComponents value="Test" id="content" width="800" height="200" disabled={false}/>
-    </div>,
-    key:'3'
-  },
-];
+
 
 const MainTabComponents = React.createClass({
   getInitialState() {
-    this.newTabIndex = 0;
-    const panes = tabNameArray;
     return {
-      activeKey: panes[0].key,
-      panes,
+
     };
   },
+    getTeachPlans(teachScheduleId){
+        //alert("main :"+teachScheduleId);
+        this.refs.courseWare.getTeachPlans("23836",teachScheduleId);
+    },
+
   onChange(activeKey) {
     this.setState({ activeKey });
   },
@@ -57,14 +40,15 @@ const MainTabComponents = React.createClass({
         <Tabs
           hideAdd
           onChange={this.onChange}
-          activeKey={this.state.activeKey}
           /*type="editable-card"     启用该属性，会使Tab上带有删除的图标*/
           onEdit={this.onEdit}
           tabBarExtraContent={operations}
         >
-          {this.state.panes.map(pane => <TabPane tab={pane.title} key={pane.key}>
+          {/*{this.state.panes.map(pane => <TabPane tab={pane.title} key={pane.key}>
             {pane.content}
-          </TabPane>)}
+          </TabPane>)}*/}
+            <TabPane tab="课件" key="课件"><CourseWareComponents ref="courseWare"/></TabPane>
+            <TabPane tab="题目" key="题目"><SubjectTable/></TabPane>
         </Tabs>
       </div>
     );

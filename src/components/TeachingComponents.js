@@ -118,11 +118,11 @@ const SubjectForm = Form.create()(React.createClass({
             <Input defaultValue={this.props.editSchuldeId}/>
           )}
         </FormItem>
-        <FormItem>
-          <Button type="primary" htmlType="submit" className="login-form-button">
+        <FormItem style={{text:'center'}}>
+          <Button type="primary" htmlType="submit" className="login-form-button" >
             确定
           </Button>
-          <Button type="primary" htmlType="reset" className="login-form-button" onClick={this.handleCancel}>
+          <Button type="primary" htmlType="reset" className="login-form-button" onClick={this.handleCancel} >
             取消
           </Button>
         </FormItem>

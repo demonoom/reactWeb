@@ -66,7 +66,7 @@ const UseKnowledgeComponents = React.createClass({
   },
   render() {
     return (
-      <div>
+      <div className="toobar">
 
         <Button type="primary" icon="share-alt" onClick={this.showModal}></Button>
         <Modal
