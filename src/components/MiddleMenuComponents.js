@@ -116,7 +116,7 @@ const MiddleMenuComponents = React.createClass({
 
   buildMenuChildren:function () {
     children = this.state.menuList.map((e, i)=> {
-      return <SubMenu key={e[0]} onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" /><span>{e[1]}</span><Badge count={e[2]}/> <span title={e[0]} onClick={this.editTeachSchedule}><Icon type="edit"/></span>  <span title={e[0]} onClick={this.deleteTeachSchedule}><Icon type="delete"/></span> </span>}>
+      return <SubMenu key={e[0]} onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" className='le_1' /><span>{e[1]}</span><Badge count={e[2]}/> <span title={e[0]} onClick={this.editTeachSchedule} className='write_right'><Icon type="edit"/></span><span title={e[0]} onClick={this.deleteTeachSchedule} className='del_right'><Icon type="delete"/></span> </span>}>
       </SubMenu>
     });
   },
@@ -146,19 +146,15 @@ const MiddleMenuComponents = React.createClass({
   render() {
     return (
       <div>
-        <Button type="primary" icon="plus" onClick={this.showModal}>添加教学进度</Button>
+        <Button type="primary" icon="plus" onClick={this.showModal} className='add_study'>添加教学进度</Button>
         <TeachingComponents ref="teachingComponents" callbackParent={this.handleMenu}/>
         <Menu ref="middleMenu" onClick={this.handleClick}
-              style={{ width: 240 }}
+              className="cont_t"
               defaultOpenKeys={['goSchool']}
               openKeys={[this.state.openSubMenu]}
               selectedKeys={['LeftNav']}
               mode="inline"
         >
-          {/*添加了徽标，用来显示菜单下的课时数*/}
-         {/* <SubMenu key="goSchool" onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" /><span>示例：上学啦</span><Badge count={4}/> <span title="goSchool" onClick={this.editTeachSchedule}><Icon type="edit"/></span>  <span title="goSchool" onClick={this.deleteTeachSchedule}><Icon type="delete"/></span> </span>}>
-          </SubMenu>*/}
-
           {children}
 
         </Menu>

@@ -10,8 +10,6 @@ import SubjectUploadTabComponents from './SubjectUploadTabComponents';
 
 
 const TabPane = Tabs.TabPane;
-//const operations = <div><Button type="primary" icon="share-alt" onClick={showModal}></Button><SubjectUploadTabComponents></SubjectUploadTabComponents><Button type="primary" icon="delete" onClick={deleteConfirm}></Button></div>;
-
 //定义js函数，完成删除前的确认提示操作
 function deleteConfirm() {
   var count =5;
@@ -60,7 +58,7 @@ const MainTabComponents = React.createClass({
           onChange={this.onChange}
           /*type="editable-card"     启用该属性，会使Tab上带有删除的图标*/
           onEdit={this.onEdit}
-          tabBarExtraContent={<div><Button type="primary" icon="share-alt" onClick={this.showModal}></Button><SubjectUploadTabComponents></SubjectUploadTabComponents><Button type="primary" icon="delete" onClick={deleteConfirm}></Button></div>}
+          tabBarExtraContent={<div  className="ant-tabs-right"><Button type="primary" icon="share-alt" onClick={this.showModal}></Button><SubjectUploadTabComponents></SubjectUploadTabComponents><Button type="primary" icon="delete" onClick={deleteConfirm}  style={{display:'inline-block', margin:'0 0 0 12px'}}></Button></div>}
         >
           {/*{this.state.panes.map(pane => <TabPane tab={pane.title} key={pane.key}>
             {pane.content}

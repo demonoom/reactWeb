@@ -95,7 +95,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             wrapperCol: { span: 17 },
         };
         return (
-            <div>
+            <div className="toobar">
 
                 <Button type="primary" onClick={this.showModal}>题目</Button>
                 <Modal
@@ -103,9 +103,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                     title="添加题目"
                     width="616"
                     onCancel={this.handleCancel}
-                    footer={[
-
-                    ]}
+                    footer={[]}
                 >
                     <Tabs
                         hideAdd

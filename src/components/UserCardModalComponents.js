@@ -25,7 +25,7 @@ const UserCardModalComponents = React.createClass({
   render() {
     return (
       <div>
-        <img src={require('./images/maaeeLogo.jpg')}  onClick={this.showModal}/>
+        <img src={require('./images/user.png')}  onClick={this.showModal}/>
        {/* <Button type="primary" onClick={this.showModal}>
           Open modal dialog
         </Button>*/}
