@@ -8,7 +8,7 @@ import MiddleMenuComponents from '../components/MiddleMenuComponents';
 import HeaderComponents from '../components/HeaderComponents';
 import UserCardModalComponents from '../components/UserCardModalComponents';
 import FloatButton  from '../components/FloatButton';
-import KnowledgeComponents from '../components/KnowledgeComponents';
+import KnowledgeMenuComponents from '../components/KnowledgeMenuComponents';
 
 import { createStore } from 'redux';
 
@@ -48,11 +48,11 @@ const MainLayout = React.createClass({
      }
   },
   //获取教学进度下的课件资源
-  getTeachPlans:function (teachScheduleId) {
+  getTeachPlans:function (optContent) {
     //点击的菜单标识：teachScheduleId
-      //alert("teachScheduleId::"+teachScheduleId);
+     // alert("optContent::"+optContent);
       //alert("mt:");
-    mainLayout.refs.mainTabComponents.getTeachPlans(teachScheduleId);
+    mainLayout.refs.mainTabComponents.getTeachPlans(optContent);
   },
 
   render() {
@@ -62,7 +62,7 @@ const MainLayout = React.createClass({
     if(this.state.currentKey=="teachTimes"){
       middleComponent = <MiddleMenuComponents activeMenu={this.state.activeMiddleMenu}  callbackParent={this.getTeachPlans}/>;
     }else if(this.state.currentKey=="KnowledgeResources"){
-      middleComponent = <KnowledgeComponents></KnowledgeComponents>;
+      middleComponent = <KnowledgeMenuComponents callbackParent={this.getTeachPlans}></KnowledgeMenuComponents>;
     }
 
     return (

@@ -61,7 +61,8 @@ const MiddleMenuComponents = React.createClass({
   subMenuTitleClick(e){
     //alert(e.key);
     this.setState({openSubMenu:e.key});
-    this.props.callbackParent(e.key);
+    var optContent = e.key+"#"+"bySchedule";
+    this.props.callbackParent(optContent);
   },
 
   openMenu:function (e) {
@@ -154,10 +155,6 @@ const MiddleMenuComponents = React.createClass({
               selectedKeys={['LeftNav']}
               mode="inline"
         >
-          {/*添加了徽标，用来显示菜单下的课时数*/}
-          <SubMenu key="goSchool" onTitleClick={this.subMenuTitleClick} title={<span><Icon className='le_1' type="mail" /><span className='cont_write'>示例：上学啦</span><Badge count={4}/> <span title="goSchool" onClick={this.editTeachSchedule} className='write_right'><Icon type="edit"/></span><span title="goSchool" onClick={this.deleteTeachSchedule} className='del_right'><Icon type="delete"/></span> </span>}>
-          </SubMenu>
-
           {children}
 
         </Menu>
