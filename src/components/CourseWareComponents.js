@@ -104,12 +104,21 @@ const CourseWareComponents = React.createClass({
         coursePanelChildren = courseWareList.map((e, i)=> {
             return <Panel header={<span><Icon type="file-ppt" size="large"/>&nbsp;&nbsp;&nbsp;&nbsp;{e[1]}</span> }  key={e[1]}>
                     <pre>
+<<<<<<< HEAD
                          <span>文件类型：{e[2]}</span>
                          <span>课件名称：{e[1]}</span>
                          <span>所在知识点：自然地理</span>
                          <span>创建人：张老师</span>
                          <span>上传时间：2016-1-1</span>
                          <Button style={{ float:'right'}}>使用</Button>
+=======
+                         文件类型:{e[2]}
+                         课件名称:{e[1]}
+                         所在知识点：自然地理
+                         创建人：张老师
+                         上传时间：2016-1-1
+                         <Button>使用</Button>
+>>>>>>> ab54f559d01a480ea63ebd32e5864d9855983db5
                     </pre>
             </Panel>
         });
@@ -123,7 +132,11 @@ const CourseWareComponents = React.createClass({
 
   render: function () {
     return (
+<<<<<<< HEAD
         <div >
+=======
+        <div>
+>>>>>>> ab54f559d01a480ea63ebd32e5864d9855983db5
             <Collapse defaultActiveKey={activeKey} ref="collapse" onChange={callback}>
                 {coursePanelChildren}
             </Collapse>
