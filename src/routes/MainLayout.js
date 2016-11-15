@@ -103,7 +103,7 @@ const MainLayout = React.createClass({
                 <HeaderComponents/>
           </div>
 
-          <div>
+          <div className="ant-layout-operation">
             <Row>
               <Col span={5}>
                 <div>
