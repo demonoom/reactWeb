@@ -2,179 +2,189 @@ import React, { PropTypes } from 'react';
 import { Tabs, Button,Radio } from 'antd';
 import { Modal} from 'antd';
 import { Slider } from 'antd';
+import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox } from 'antd';
+const FormItem = Form.Item;
 import RichEditorComponents from './RichEditorComponents';
 const RadioGroup = Radio.Group;
+const Option = Select.Option;
 
 
 const TabPane = Tabs.TabPane;
 
 /*滑动输入框数据范围定义*/
 const marks = {
-  1: '1',
-  2: '2',
-  3: '3',
-  4: '4',
-  5: '5',
-  6: '6',
-  7: {
-    style: {
-      color: 'red',
+    1: '1',
+    2: '2',
+    3: '3',
+    4: '4',
+    5: '5',
+    6: '6',
+    7: {
+        style: {
+            color: 'red',
+        },
+        label: <strong></strong>,
     },
-    label: <strong></strong>,
-  },
 };
 
-const RadioSelect = React.createClass({
-  getInitialState() {
-    return {
-      value: 1,
-    };
-  },
-  onChange(e) {
-    console.log('radio checked', e.target.value);
-    this.setState({
-      value: e.target.value,
-    });
-  },
-  render() {
-    return (
-      <RadioGroup onChange={this.onChange} value={this.state.value}>
-        <Radio key="a" value={1}>A</Radio>
-        <Radio key="b" value={2}>B</Radio>
-        <Radio key="c" value={3}>C</Radio>
-        <Radio key="d" value={4}>D</Radio>
-      </RadioGroup>
-    );
-  },
-});
+const SubjectUploadTabComponents = Form.create()(React.createClass({
+    getInitialState() {
+        return {
+            loading: false,
+            visible: false,
+            activeKey: '单选题',
+            markSelected:6,
+            score:1,
+        };
+    },
+    showModal() {
+        this.setState({
+            visible: true,
+        });
+    },
+    handleOk() {
+        this.setState({ visible: false });
+    },
+    handleCancel() {
+        this.setState({ visible: false });
+    },
 
-/*单选题面板*/
-const SingleSelectPanel = React.createClass({
-  getInitialState() {
-    return {
-    };
-  },
-  render() {
-    return (
-      <div style={{height:200}}>
-        难度：易&nbsp;<Slider marks={marks} defaultValue={3} step={1} max={7} min={1}/>&nbsp;难<br/>
-        题目：<RichEditorComponents value="Test" id="content" width="800" height="200" disabled={false}/>
-        答案：<RadioSelect/>
-      </div>
-    );
-  },
-});
+    handleEmail: function(val){
+        this.props.callbackParent(val);
+        //this.setState({lessonCount: val});
+    },
 
-/*弹出窗口的面板组*/
-const tabNameArray = [
-  {
-    title: '单选题',
-    content: <SingleSelectPanel></SingleSelectPanel>,
-    key:'key001'   /*Tab的key值，根据key的不同对Tab进行区分*/
-  },
-  {
-    title: '多选题',
-    content: 1111,
-    key:'2'
-  },{
-    title: '判断题',
-    content: <div>
-      12123
-    </div>,
-    key:'3'
-  },{
-    title: '简答题',
-    content: <div>
-      12123
-    </div>,
-    key:'4'
-  },{
-    title: '材料题',
-    content: <div>
-      12123
-    </div>,
-    key:'5'
-  },
-];
+    sliderOnChange(value) {
+        console.log("sliderValue:"+value)
+        this.setState({
+            markSelected: value,
+        });
+    },
 
-const SubjectTabComponents = React.createClass({
-  getInitialState() {
-    this.newTabIndex = 0;
-    const panes = tabNameArray;
-    return {
-      activeKey: panes[0].key,
-      panes,
-    };
-  },
-  onChange(activeKey) {
-    this.setState({ activeKey });
-  },
-  render() {
-    return (
-      <div>
-        <Tabs
-          hideAdd
-          onChange={this.onChange}
-          activeKey={this.state.activeKey}
-          onEdit={this.onEdit}
-        >
-          {this.state.panes.map(pane => <TabPane tab={pane.title} key={pane.key}>
-            {pane.content}
-          </TabPane>)}
-        </Tabs>
-      </div>
-    );
-  },
-});
+    selectHandleChange:function (value) {
+        console.log(`selected ${value}`);
+        this.setState({score:value});
+    },
 
+    singleHandleSubmit(e) {
+        e.preventDefault();
+        this.props.form.validateFieldsAndScroll((err, values) => {
+            var ident = "23836";
+            var easy = this.state.markSelected;
+            var score = this.state.score;
+            var subjectName = values.subjectName;
+            var answer = values.answer;
+            console.log("easy:"+easy);
+            console.log("score:"+score);
+            console.log("subjectName:"+subjectName);
+            console.log("answer:"+answer);
+        });
+    },
 
-const SubjectUploadTabComponents = React.createClass({
-  getInitialState() {
-    return {
-      loading: false,
-      visible: false,
-    };
-  },
-  showModal() {
-    this.setState({
-      visible: true,
-    });
-  },
-  handleOk() {
-    // this.setState({ loading: true });
-    // setTimeout(() => {
-    //   this.setState({ loading: false, visible: false });
-    // }, 3000);
-    this.setState({ visible: false });
-  },
-  handleCancel() {
-    this.setState({ visible: false });
-  },
+    addScore:function () {
+        var score = this.state.score;
+        var newScore = parseInt(score)+parseFloat(0.5);
+        console.log("newScore:"+newScore)
+        this.setState({score:newScore});
+    },
 
-  handleEmail: function(val){
-    this.props.callbackParent(val);
-    //this.setState({lessonCount: val});
-  },
+    render() {
+        const { getFieldDecorator } = this.props.form;
+        const formItemLayout = {
+            labelCol: { span: 3},
+            wrapperCol: { span: 17 },
+        };
+        return (
+            <div>
 
-  render() {
-    return (
-      <div>
+                <Button type="primary" onClick={this.showModal}>题目</Button>
+                <Modal
+                    visible={this.state.visible}
+                    title="添加题目"
+                    width="616"
+                    onCancel={this.handleCancel}
+                    footer={[
 
-        <Button type="primary" onClick={this.showModal}>题目</Button>
-        <Modal
-          visible={this.state.visible}
-          title="添加题目"
-          width="616"
-          onCancel={this.handleCancel}
-          footer={[
-
-          ]}
-        >
-          <SubjectTabComponents></SubjectTabComponents>
-        </Modal>
-      </div>
-    );
-  },
-});
+                    ]}
+                >
+                    <Tabs
+                        hideAdd
+                        onChange={this.onChange}
+                        defaultActiveKey={this.state.activeKey}
+                        onEdit={this.onEdit}
+                    >
+                        <TabPane tab="单选题" key="单选题">
+                            <Form horizontal onSubmit={this.singleHandleSubmit}>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label={(
+                                        <span>难度</span>
+                                    )}
+                                    hasFeedback>
+                                    {getFieldDecorator('easy')(
+                                        <div style={{width:400}}>易&nbsp;<Slider marks={marks} defaultValue={this.state.markSelected} onChange={this.sliderOnChange} step={1} max={7} min={1} />&nbsp;难</div>
+                                    )}
+                                </FormItem>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label={(<span>题目</span>)}
+                                    hasFeedback>
+                                    {getFieldDecorator('subjectName', {
+                                        rules: [{ required: true, message: '请输入题目!' }],
+                                    })(
+                                        <Input/>
+                                    )}
+                                </FormItem>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label={(<span>答案</span>)}
+                                    hasFeedback>
+                                    {getFieldDecorator('answer')(
+                                        <RadioGroup onChange={this.onChange}>
+                                            <Radio key="A" value="A">A</Radio>
+                                            <Radio key="B" value="B">B</Radio>
+                                            <Radio key="C" value="C">C</Radio>
+                                            <Radio key="D" value="D">D</Radio>
+                                        </RadioGroup>
+                                    )}
+                                </FormItem>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label={(<span>分值</span>)}
+                                    hasFeedback>
+                                    {getFieldDecorator('score')(
+                                        <div>
+                                            <Select size="large" defaultValue={this.state.score} style={{ width: 100 }} onChange={this.selectHandleChange}>
+                                                <Option value="1">1</Option>
+                                                <Option value="2">2</Option>
+                                                <Option value="5">5</Option>
+                                                <Option value="10">10</Option>
+                                            </Select>
+                                            <Button type="primary" className="login-form-button" onClick={this.addScore}>
+                                                +0.5
+                                            </Button>
+                                        </div>
+                                    )}
+                                </FormItem>
+                                <FormItem>
+                                    <Button type="primary" htmlType="submit" className="login-form-button">
+                                        保存并继续添加
+                                    </Button>
+                                    <Button type="primary" htmlType="submit" className="login-form-button">
+                                        保存并返回列表
+                                    </Button>
+                                </FormItem>
+                            </Form>
+                        </TabPane>
+                        <TabPane tab="多选题" key="多选题"><div>多选题</div></TabPane>
+                        <TabPane tab="判断题" key="判断题"><div>判断题</div></TabPane>
+                        <TabPane tab="简答题" key="简答题"><div>简答题</div></TabPane>
+                        <TabPane tab="材料题" key="材料题"><div>材料题</div></TabPane>
+                    </Tabs>
+                </Modal>
+            </div>
+        );
+    },
+}));
 
 export default SubjectUploadTabComponents;

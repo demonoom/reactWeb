@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Card, Col, Row,Checkbox,Collapse,Icon,Button,Pagination} from 'antd';
+import UseKnowledgeComponents from './UseKnowledgeComponents';
 const Panel = Collapse.Panel;
 
 function callback(key) {
@@ -50,14 +51,24 @@ const CourseWareComponents = React.createClass({
         }, "json");
     },
 
-  getTeachPlans(ident,teachScheduleId){
-      //alert("ccc:"+ident+"==="+teachScheduleId);
-      var param = {
-          "method":'getTeachPlans',
-          "ident":ident,
-           "teachScheduleId":teachScheduleId,
-          "pageNo":"1"
-      };
+  getTeachPlans(ident,teachScheduleId,optType){
+      alert("ccc:"+ident+"==="+teachScheduleId+"===="+optType);
+      var param;
+      if(optType=="bySchedule"){
+          param = {
+              "method":'getTeachPlans',
+              "ident":ident,
+              "teachScheduleId":teachScheduleId,
+              "pageNo":"1"
+          };
+      }else{
+          param = {
+              "method":'getRecentSubjectsList',
+              "ident":ident,
+              "teachScheduleId":teachScheduleId,
+              "type":"1"
+          };
+      }
     this.doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
         console.log("teachMSG:"+ret.msg);
@@ -100,6 +111,12 @@ const CourseWareComponents = React.createClass({
         this.buildPanels();
     },*/
 
+    showModal:function (e) {
+       // alert("111"+e.target.value);
+        var currentSchedule = e.target.value;
+        this.refs.useKnowledgeComponents.showModal(currentSchedule);
+    },
+
     buildPanels:function (courseWareList) {
         coursePanelChildren = courseWareList.map((e, i)=> {
             return <Panel header={<span><Icon type="file-ppt" size="large"/>&nbsp;&nbsp;&nbsp;&nbsp;{e[1]}</span> }  key={e[1]}>
@@ -109,7 +126,7 @@ const CourseWareComponents = React.createClass({
                          所在知识点：自然地理
                          创建人：张老师
                          上传时间：2016-1-1
-                         <Button>使用</Button>
+                        <Button type="primary" icon="share-alt" value={e[1]} onClick={this.showModal}></Button>
                     </pre>
             </Panel>
         });
@@ -124,6 +141,7 @@ const CourseWareComponents = React.createClass({
   render: function () {
     return (
         <div>
+            <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
             <Collapse defaultActiveKey={activeKey} ref="collapse" onChange={callback}>
                 {coursePanelChildren}
             </Collapse>

@@ -40,33 +40,16 @@ const columns = [{
 ];
 
 const data = [];
-for (let i = 0; i < 46; i++) {
-  if(i%2==0){
-    data.push({
-      key: i,
-      name: `Edward King ${i}`,
-      content: '学习内容',
-      subjectType: `单选题`,
-      subjectScore:`5`,
-      subjectOpt:<Button><Icon type="edit"/></Button>,
-    });
-  }else{
-    data.push({
-      key: i,
-      name: `王老师 ${i}`,
-      content: '判断题学习内容',
-      subjectType: `判断题`,
-      subjectScore:`2`,
-      subjectOpt:<Button><Icon type="edit"/></Button>,
-    });
-  }
-}
 
+var subjectList;
+var subTable;
 const SUbjectTable = React.createClass({
   getInitialState() {
+    subTable = this;
     return {
       selectedRowKeys: [],  // Check here to configure the default column
       loading: false,
+      count:0,
     };
   },
   start() {
@@ -83,6 +66,67 @@ const SUbjectTable = React.createClass({
     console.log('selectedRowKeys changed: ', selectedRowKeys);
     this.setState({ selectedRowKeys });
   },
+  doWebService : function(data,listener) {
+    var service = this;
+    //this.WEBSERVICE_URL = "http://192.168.2.103:8080/Excoord_For_Education/webservice";
+    this.WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
+    if (service.requesting) {
+      return;
+    }
+    service.requesting = true;
+    $.post(service.WEBSERVICE_URL, {
+      params : data
+    }, function(result, status) {
+      service.requesting = false;
+      if (status == "success") {
+        listener.onResponse(result);
+      } else {
+        listener.onError(result);
+      }
+    }, "json");
+  },
+
+  getSubjectData(ident,teachScheduleId,pageNo){
+    alert("ccc:"+ident+"==="+teachScheduleId);
+    var param = {
+      "method":'getClassSubjects',
+      "ident":ident,
+      "teachScheduleId":teachScheduleId,
+      "pageNo":pageNo
+    };
+    this.doWebService(JSON.stringify(param), {
+      onResponse : function(ret) {
+        console.log("getSubjectDataMSG:"+ret.msg);
+        subjectList=new Array();
+        var response = ret.response;
+        var count=0;
+        response.forEach(function (e) {
+          console.log("eeeeee:"+e);
+          var key = e.sid;
+          var name=e.colName;
+          var content=<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article>;
+          var subjectType=e.typeName;
+          var subjectScore=e.score;
+          var subjectOpt=<Button><Icon type="edit"/></Button>;
+          data.push({
+            key: key,
+            name: name,
+            content: content,
+            subjectType:subjectType,
+            subjectScore:subjectScore,
+            subjectOpt:subjectOpt,
+          });
+          count++;
+          subTable.setState({count:count});
+        });
+      },
+      onError : function(error) {
+        alert(error);
+      }
+
+    });
+  },
+
   render() {
     const { loading, selectedRowKeys } = this.state;
     const rowSelection = {
