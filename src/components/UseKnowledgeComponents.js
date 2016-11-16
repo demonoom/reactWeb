@@ -136,10 +136,7 @@ const UseKnowledgeComponents = React.createClass({
     };
     return (
 
-
-      <div>
-
-       {/* <Button type="primary" icon="share-alt" onClick={this.showModal}></Button>*/}
+      <div className="toobar">
         <Modal
           visible={this.state.visible}
           title="使用至"

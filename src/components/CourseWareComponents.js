@@ -61,41 +61,73 @@ const CourseWareComponents = React.createClass({
               "teachScheduleId":teachScheduleId,
               "pageNo":"1"
           };
+          this.doWebService(JSON.stringify(param), {
+              onResponse : function(ret) {
+                  console.log("teachMSG:"+ret.msg);
+                  courseWareList=new Array();
+                  var response = ret.response;
+                  var count=0;
+                  response.forEach(function (e) {
+                      var uId = e.colUid;
+                      var colName = e.colName;
+                      var colFileType = e.colFileType;
+                      console.log(uId+"==========="+colName+"=="+colFileType);
+                      var courseInfo = {"uId":uId,"colName":colName,"colFileType":colFileType};
+                      //courseWare.handlePanel(courseInfo);
+                      activeKey.push(courseInfo.colName);
+                      courseWareList.push([courseInfo.uId,courseInfo.colName,courseInfo.colFileType]);
+                      count++;
+                  });
+
+                  courseWare.buildPanels(courseWareList);
+                  courseWare.setState({courseListState:courseWareList});
+                  courseWare.setState({totalCount:count});
+              },
+              onError : function(error) {
+                  alert(error);
+              }
+
+          });
       }else{
           param = {
-              "method":'getRecentSubjectsList',
-              "ident":ident,
-              "teachScheduleId":teachScheduleId,
-              "type":"1"
+              "method":'getMaterialsByKnowledgePointId',
+              "pointId":teachScheduleId,
+              "type":"0",
+              "pageNo":"1",
           };
-      }
-    this.doWebService(JSON.stringify(param), {
-      onResponse : function(ret) {
-        console.log("teachMSG:"+ret.msg);
-          courseWareList=new Array();
-        var response = ret.response;
-          var count=0;
-        response.forEach(function (e) {
-          var uId = e.colUid;
-          var colName = e.colName;
-          var colFileType = e.colFileType;
-          console.log(uId+"==========="+colName+"=="+colFileType);
-            var courseInfo = {"uId":uId,"colName":colName,"colFileType":colFileType};
-            //courseWare.handlePanel(courseInfo);
-            activeKey.push(courseInfo.colName);
-            courseWareList.push([courseInfo.uId,courseInfo.colName,courseInfo.colFileType]);
-            count++;
-        });
+          this.doWebService(JSON.stringify(param), {
+              onResponse : function(ret) {
+                  console.log("teachMSG:"+ret.msg);
+                  courseWareList=new Array();
+                  var response = ret.response;
+                  var count=0;
+                  response.forEach(function (e) {
+                      var id = e.id;
+                      var fileName = e.name;
+                      var userName = e.user.userName;
+                      var path = e.path;
+                      var pdfPath = e.pdfPath;
+                      var fileType=fileName.substring(fileName.lastIndexOf(".")+1);
+                      var pointId = e.pointId;
+                      var createTime = e.createTime;
+                      // console.log(uId+"==========="+colName+"=="+colFileType);
+                      // var courseInfo = {"uId":uId,"colName":colName,"colFileType":colFileType};
+                      //courseWare.handlePanel(courseInfo);
+                      activeKey.push(fileName);
+                      courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointId,createTime]);
+                      count++;
+                  });
 
-          courseWare.buildPanels(courseWareList);
-          courseWare.setState({courseListState:courseWareList});
-          courseWare.setState({totalCount:count});
-      },
-      onError : function(error) {
-        alert(error);
-      }
+                  courseWare.buildKonwledgePanels(courseWareList);
+                  courseWare.setState({courseListState:courseWareList});
+                  courseWare.setState({totalCount:count});
+              },
+              onError : function(error) {
+                  alert(error);
+              }
 
-    });
+          });
+      }
   },
 
     onChange(page) {
@@ -125,8 +157,32 @@ const CourseWareComponents = React.createClass({
                          <span>课件名称：{e[1]}</span>
                          <span>所在知识点：自然地理</span>
                          <span>创建人：张老师</span>
+                         <span>所在学校：上海七宝中学</span>
                          <span>上传时间：2016-1-1</span>
-                         <Button style={{ float:'right'}} type="primary"  icon="share-alt"  value={e[1]} onClick={this.showModal}>使用</Button>
+                         <Button style={{ float:'right'}} type="primary"  icon="share-alt"  value={e[1]} onClick="">删除</Button>
+                         <Button style={{ float:'right'}} type="primary"  icon="share-alt"  value={e[1]} onClick="">下载</Button>
+                    </pre>
+            </Panel>
+        });
+        //courseWare.setState({activeKey:activeKey});
+    },
+
+    buildKonwledgePanels:function (courseWareList) {
+        coursePanelChildren = courseWareList.map((e, i)=> {
+            return <Panel header={<span><Icon type="file-ppt" size="large"/>&nbsp;&nbsp;&nbsp;&nbsp;{e[1]}</span> }  key={e[1]}>
+                    <pre>
+                         <span>文件类型：{e[5]}</span>
+                         <span>课件名称：{e[1]}</span>
+                         <span>所在知识点：{e[6]}</span>
+                         <span>创建人：{e[2]}</span>
+                         <span>上传时间：{e[7]}</span>
+                            
+
+                            <div>
+                                <a href={e[3]}>下载</a>
+                                <Button style={{ float:'right'}} type="primary"  icon="share-alt"  value={e[1]} onClick={this.showModal}>使用</Button>
+                            </div>
+
                     </pre>
             </Panel>
         });
