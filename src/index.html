@@ -61,7 +61,8 @@
     }
 	ul.cont_t{
 		width:240px;
-		overflow:auto;
+		overflow-y:auto;
+		overflow-x:hidden;
 	}
     .ant-layout-aside .ant-layout-sider > .ant-menu > .ant-menu-item {
       margin: 16px 0;
@@ -157,6 +158,10 @@
       padding: 24px;
 	  height:100%
     }
+	.ant-layout-content > div:first-child{
+		height:100%
+		
+		}
     .ant-layout-aside .ant-layout-footer {
       height: 42px;
       line-height: 42px;
@@ -210,8 +215,11 @@
 	  background:#364760;
     }
     .ant-pagination{
-      margin-top:20px;
-	  float:left;
+    	margin-top: 10px;
+		position: absolute;
+		bottom: 0;
+		right: 4px;
+		margin-bottom: 10px;
     }
     .ant-collapse-content > .ant-collapse-content-box{
       line-height:30px
@@ -228,6 +236,9 @@
 		margin-left:10px;
 		float:left;
 		margin-top:-2px
+	}
+	.ant-collapse-header{
+		background:#f7f7f7;
 	}
 	.del_right{
 		float:right;
@@ -256,6 +267,17 @@
 	.ant-collapse-content-box button span{
 		margin-right:0;
 	}
+	.ant-tabs:not(.ant-tabs-vertical) .ant-tabs-tabpane{
+		height:100%;
+	}
+	.ant-tabs:not(.ant-tabs-vertical) .ant-tabs-tabpane > div:first-child{
+		height:100%
+	}
+	.ant-collapse{
+		    background: #fff;
+            height: calc(100% - 50px);
+            overflow: auto;
+	}
 	.add_study{
 		background:#5ec170;
 		margin:10px 0 10px 25px;
@@ -273,7 +295,7 @@
 	}
 .ant-menu-inline, .ant-menu-vertical{
 	border-right:none;
-	height: calc(100% - 54px);
+	height: calc(100% - 94px);
     padding: 10px 0 0 0;
 	z-index:-1;
 
@@ -349,12 +371,22 @@ html, body, #root {
 .ant-menu-dark.ant-menu-inline .ant-menu-item-selected{
 	background:#202b39;
 }
-.ant-menu-submenu-title:hover,.ant-menu-submenu-open{
+.ant-menu-submenu-title:hover, .ant-menu-submenu-open{
 	background:#fff;
-	border-left:3px solid #f60;
-	font-weight:bold
+	font-weight:bold;
+	box-sizing:border-box;
+    -moz-box-sizing:border-box; /* Firefox */
+   -webkit-box-sizing:border-box; /* Safari */
+   width:100%;
+   border:#1px solid #fff;
+   border-left:2px solid #E97779
 }
-
+.ant-tabs{
+	height:100%
+}
+.ant-tabs-content {
+	height:calc(100% - 56px)
+}
   </style>
 </head>
 <body>
