@@ -136,7 +136,7 @@ const UseKnowledgeComponents = React.createClass({
     };
     return (
 
-      <div className="toobar">
+      <div>
         <Modal
           visible={this.state.visible}
           title="使用至"

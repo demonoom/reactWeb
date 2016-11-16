@@ -4,6 +4,7 @@ import reqwest from 'reqwest';
 
 const columns = [{
   title: '出题人',
+  className:'222',
   dataIndex: 'name',
 }, {
   title: '内容',

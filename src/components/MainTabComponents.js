@@ -59,6 +59,7 @@ const MainTabComponents = React.createClass({
       <div>
           <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
           <Breadcrumb>
+		       <img className="adress_icon" src={require('./images/adress.png')} />
               <Breadcrumb.Item>首页</Breadcrumb.Item>
               <Breadcrumb.Item><a href="">数学</a></Breadcrumb.Item>
               <Breadcrumb.Item><a href="">小学</a></Breadcrumb.Item>
