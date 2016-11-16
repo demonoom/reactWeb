@@ -22,7 +22,7 @@ const UseKnowledgeComponents = React.createClass({
     };
   },
   showModal(currentKnowlege,optType) {
-      alert("currentKnowlege:"+currentKnowlege+",optType:"+optType);
+      // alert("currentKnowlege:"+currentKnowlege+",optType:"+optType);
       //当前点击的，计划应用的课件资源
     knowledge.setState({optType:optType});
     knowledge.setState({currentKnowlege:currentKnowlege});
@@ -36,7 +36,7 @@ const UseKnowledgeComponents = React.createClass({
 
   handleSubmit(e) {
     e.preventDefault();
-     alert(knowledge.state.currentKnowlege+"===:"+knowledge.state.schedule+",optType"+knowledge.state.optType);
+     // alert(knowledge.state.currentKnowlege+"===:"+knowledge.state.schedule+",optType"+knowledge.state.optType);
      if(knowledge.state.optType=="courseWare"){
        knowledge.copyMaterialToSchedule('23836',knowledge.state.currentKnowlege,knowledge.state.schedule);
      }else{
@@ -56,6 +56,9 @@ const UseKnowledgeComponents = React.createClass({
         console.log(ret.msg);
         if(ret.response){
             alert("知识点使用成功");
+            knowledge.setState({
+              visible: false,
+            });
         }else{
             alert("知识点使用失败");
         }
@@ -180,7 +183,7 @@ const UseKnowledgeComponents = React.createClass({
     };
     return (
 
-      <div className="toobar">
+      <div>
         <Modal
           visible={this.state.visible}
           title="使用至"

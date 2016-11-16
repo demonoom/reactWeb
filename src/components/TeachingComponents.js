@@ -9,7 +9,7 @@ const SubjectForm = Form.create()(React.createClass({
 
   getInitialState() {
     subjectForm = this;
-    alert(this.props.editSchuldeId);
+    //alert(this.props.editSchuldeId);
     return {
       visible: false,
       optType:'add',
@@ -46,8 +46,11 @@ const SubjectForm = Form.create()(React.createClass({
     this.doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
         console.log(ret.msg);
-        var uId = ret.response.colUid;
-        var colTitle = ret.response.colTitle;
+        if(ret.msg=="调用成功" && ret.response.colTsId!=null){
+            alert("教学进度添加成功");
+        }else{
+            alert("教学进度添加失败");
+        }
       },
       onError : function(error) {
         alert(error);

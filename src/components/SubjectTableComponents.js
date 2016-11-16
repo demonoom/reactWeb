@@ -5,6 +5,7 @@ import reqwest from 'reqwest';
 
 const columns = [{
   title: '出题人',
+  className:'222',
   dataIndex: 'name',
 }, {
   title: '内容',
@@ -40,8 +41,7 @@ const columns = [{
 },
 ];
 
-const data = [];
-
+var data = [];
 var subjectList;
 var subTable;
 const SUbjectTable = React.createClass({
@@ -88,7 +88,8 @@ const SUbjectTable = React.createClass({
   },
 
   getSubjectData(ident,ScheduleOrSubjectId,pageNo,optType){
-    alert("ccc:"+ident+"==="+ScheduleOrSubjectId+",,,,"+optType);
+    data=[];
+    // alert("ccc:"+ident+"==="+ScheduleOrSubjectId+",,,,"+optType);
     if(optType=="bySchedule"){
       subTable.getSubjectDataBySchedule(ident,ScheduleOrSubjectId,pageNo);
     }else{
@@ -97,7 +98,7 @@ const SUbjectTable = React.createClass({
   },
 
   getSubjectDataBySchedule:function (ident,ScheduleOrSubjectId,pageNo) {
-    alert("getSubjectDataBySchedule:"+ident+"==="+ScheduleOrSubjectId);
+    // alert("getSubjectDataBySchedule:"+ident+"==="+ScheduleOrSubjectId);
     var param = {
       "method":'getClassSubjects',
       "ident":ident,
@@ -139,7 +140,7 @@ const SUbjectTable = React.createClass({
   },
 
   getSubjectDataByKnowledge:function (ident,ScheduleOrSubjectId,pageNo) {
-    alert("getSubjectDataByKnowledge:"+ident+"==="+ScheduleOrSubjectId);
+    // alert("getSubjectDataByKnowledge:"+ident+"==="+ScheduleOrSubjectId);
     var param = {
       "method":'getUserSubjectsByKnowledgePoint',
       "ident":ident,
@@ -155,7 +156,7 @@ const SUbjectTable = React.createClass({
         var response = ret.response;
         var count=0;
         response.forEach(function (e) {
-          console.log("eeeeee:"+e);
+          console.log("getSubjectDataByKnowledge:"+e);
           var key = e.id;
           var name=e.user.userName;
           var content=<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article>;
@@ -183,7 +184,7 @@ const SUbjectTable = React.createClass({
 
   showModal:function (e) {
     var currentKnowledge = e.target.value;
-    alert(currentKnowledge);
+    // alert(currentKnowledge);
     //alert("111"+currentSchedule+","+this.refs.useKnowledgeComponents);
     subTable.refs.useKnowledgeComponents.showModal(currentKnowledge,"knowledgeSubject");
   },

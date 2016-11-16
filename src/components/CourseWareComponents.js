@@ -52,7 +52,7 @@ const CourseWareComponents = React.createClass({
     },
 
   getTeachPlans(ident,teachScheduleId,optType){
-      alert("ccc:"+ident+"==="+teachScheduleId+"===="+optType);
+      // alert("ccc:"+ident+"==="+teachScheduleId+"===="+optType);
       var param;
       if(optType=="bySchedule"){
           param = {
@@ -149,21 +149,26 @@ const CourseWareComponents = React.createClass({
 
     showModal:function (e) {
         var currentSchedule = e.target.value;
-        alert("111"+currentSchedule+","+this.refs.useKnowledgeComponents);
+        // alert("111"+currentSchedule+","+this.refs.useKnowledgeComponents);
         this.refs.useKnowledgeComponents.showModal(currentSchedule,"courseWare");
     },
 
     buildPanels:function (courseWareList) {
         coursePanelChildren = courseWareList.map((e, i)=> {
-            return <Panel header={<span><Icon type="file-pdf" size="large"/>&nbsp;&nbsp;&nbsp;&nbsp;{e[1]}</span> }  key={e[1]}>
+            return <Panel header={<span><Icon type="file-ppt" className="icon_geshi" size="large"/>&nbsp;&nbsp;&nbsp;&nbsp;{e[1]}</span> }  key={e[1]}>
                     <pre>
-                         <span>文件类型：{e[5]}</span>
-                         <span>课件名称：{e[1]}</span>
-                         <span>所在知识点：{e[6]}</span>
-                         <span>创建人：{e[2]}</span>
-                         <span>上传时间：{e[7]}</span>
-                         <a href={e[3]}>下载</a>
-                         <Button style={{ float:'right'}} type="primary"  icon="share-alt"  value={e[1]} onClick="this.downLoadFile(e[3])">下载</Button>
+					 <div className="bnt2_tex">
+                         <span><span className="col1">文件类型：</span><span className="col2">{e[5]}</span></span>
+                         <span><span className="col1">课件名称：</span><span className="col2">{e[1]}</span></span>
+                         <span><span className="col1">所在知识点：</span><span className="col2">{e[6]}</span></span>
+                         <span><span className="col1">创建人：</span><span className="col2">{e[2]}</span></span>
+                         <span><span className="col1">所在学校：</span><span className="col2">上海七宝中学</span></span>
+                         <span><span className="col1">上传时间：</span><span className="col2">{e[7]}</span></span>
+					</div>
+					<div className="bnt2_right">
+                    <Button style={{ float:'right'}}    value={e[1]} onClick="">删除</Button>
+                         <Button style={{ float:'right'}}  value={e[1]} onClick="">下载</Button>
+					</div>
                     </pre>
             </Panel>
         });
@@ -178,14 +183,15 @@ const CourseWareComponents = React.createClass({
         coursePanelChildren = courseWareList.map((e, i)=> {
             return <Panel header={<span><Icon type="file-ppt" size="large"/>&nbsp;&nbsp;&nbsp;&nbsp;{e[1]}</span> }  key={e[1]}>
                     <pre>
+					<div className="bnt2_tex">
                          <span>文件类型：{e[5]}</span>
                          <span>课件名称：{e[1]}</span>
                          <span>所在知识点：{e[6]}</span>
                          <span>创建人：{e[2]}</span>
                          <span>上传时间：{e[7]}</span>
-                            
+                      </div>       
 
-                            <div>
+                            <div className="bnt2_right">
                                 <a href={e[3]}>下载</a>
                                 <Button style={{ float:'right'}} type="primary"  icon="share-alt"  value={e[0]} onClick={this.showModal}>使用</Button>
                             </div>

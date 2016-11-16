@@ -26,6 +26,8 @@ const MainTabComponents = React.createClass({
         currentTeachScheduleId:'',
         currentSubjectId:'',
         currentOptType:'',
+        defaultActiveKey:'课件',
+        activeKey:'课件'
     };
   },
     getTeachPlans(optContent){
@@ -38,13 +40,17 @@ const MainTabComponents = React.createClass({
         this.refs.courseWare.getTeachPlans("23836",teachScheduleId,optType);
         this.setState({currentOptType:optType});
         this.setState({currentTeachScheduleId:teachScheduleId});
+        this.setState({activeKey:'课件'});
     },
 
   onChange(activeKey) {
-      alert(activeKey+"==="+this.refs.subTable);
-      alert(this.state.currentOptType+"----"+this.state.currentTeachScheduleId);
+      // alert(activeKey+"==="+this.refs.subTable);
+      // alert(this.state.currentOptType+"----"+this.state.currentTeachScheduleId);
       if(activeKey=="题目"){
+          this.setState({activeKey:'题目'});
           this.refs.subTable.getSubjectData("23836",this.state.currentTeachScheduleId,1,this.state.currentOptType);
+      }else{
+          this.setState({activeKey:'课件'});
       }
     //this.setState({ activeKey });
   },
@@ -59,6 +65,7 @@ const MainTabComponents = React.createClass({
       <div>
           <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
           <Breadcrumb>
+		       <img className="adress_icon" src={require('./images/adress.png')} />
               <Breadcrumb.Item>首页</Breadcrumb.Item>
               <Breadcrumb.Item><a href="">数学</a></Breadcrumb.Item>
               <Breadcrumb.Item><a href="">小学</a></Breadcrumb.Item>
@@ -70,6 +77,8 @@ const MainTabComponents = React.createClass({
           onChange={this.onChange}
           /*type="editable-card"     启用该属性，会使Tab上带有删除的图标*/
           onEdit={this.onEdit}
+          activeKey={this.state.activeKey}
+          defaultActiveKey={this.state.defaultActiveKey}
           tabBarExtraContent={<div className="ant-tabs-right"><Button type="primary" icon="share-alt" onClick={this.showModal}></Button><SubjectUploadTabComponents></SubjectUploadTabComponents><span className="toobar"><Button type="primary" icon="delete" onClick={deleteConfirm}  ></Button></span></div>}
         >
           {/*{this.state.panes.map(pane => <TabPane tab={pane.title} key={pane.key}>

@@ -191,7 +191,7 @@ const KnowledgeMenuComponents = React.createClass({
   render() {
     return (
         <div>
-          <div>知识点资源</div>
+          <div className="menu_til">知识点资源</div>
           <Menu ref="middleMenu" onClick={this.handleClick}
                 className="cont_t"
                 defaultOpenKeys={['goSchool']}
