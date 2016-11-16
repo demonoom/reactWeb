@@ -185,7 +185,7 @@ const KnowledgeMenuComponents = React.createClass({
         <div>
           <TeachingComponents ref="teachingComponents" callbackParent={this.handleMenu}/>
           <Menu ref="middleMenu" onClick={this.handleClick}
-                style={{ width: 240 }}
+                className="cont_t"
                 defaultOpenKeys={['goSchool']}
                 selectedKeys={[this.state.openSubMenu]}
                 mode="inline"

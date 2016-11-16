@@ -148,14 +148,15 @@
     }
 
     .ant-layout-aside .ant-layout-container {
-      margin: 24px 16px;
+      margin:0;
+	  height:100%
     }
 
     .ant-layout-aside .ant-layout-content {
       background: #fff;
       padding: 24px;
+	  height:100%
     }
-
     .ant-layout-aside .ant-layout-footer {
       height: 42px;
       line-height: 42px;
@@ -257,9 +258,9 @@
 	}
 	.add_study{
 		background:#5ec170;
-		margin:10px 0 10px 20px;
+		margin:10px 0 10px 25px;
 		border:1px solid #5ec170;
-		padding:5px 20px;
+		padding:8px 30px;
 		border-radius:3px;
 	}
 	.add_study:hover{
@@ -297,8 +298,11 @@
     height: 100%;
 	background: #f0f2f5;
 }
-.ant-col-5 div:first-child {
+ .ant-col-5 > div:first-child{
 	height:100%;
+}
+.ant-col-19 > div:first-child{
+	height:100%
 }
 .ant-col-19 {
     display: block;
@@ -307,6 +311,7 @@
     float: none;
 	width: calc(100% - 240px);
 	height:100%;
+	top:0
 }
 .ant-form-item-control, .ant-modal-footer {
 	text-align:center

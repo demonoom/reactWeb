@@ -24,7 +24,7 @@ const MiddleMenu = React.createClass({
   render() {
     return (
       <Menu onClick={this.handleClick}
-            style={{ width: 240 }}
+            className="cont_t"
             defaultOpenKeys={[this.props.activeMenu]}
             selectedKeys={[this.state.current]}
             mode="inline"
