@@ -63,7 +63,7 @@ const MainTabComponents = React.createClass({
           onChange={this.onChange}
           /*type="editable-card"     启用该属性，会使Tab上带有删除的图标*/
           onEdit={this.onEdit}
-          tabBarExtraContent={<div  className="ant-tabs-right"><Button type="primary" icon="share-alt" onClick={this.showModal}></Button><SubjectUploadTabComponents></SubjectUploadTabComponents><Button type="primary" icon="delete" onClick={deleteConfirm}  style={{display:'inline-block', margin:'0 0 0 12px'}}></Button></div>}
+          tabBarExtraContent={<div className="ant-tabs-right"><Button type="primary" icon="share-alt" onClick={this.showModal}></Button><SubjectUploadTabComponents></SubjectUploadTabComponents><span className="toobar"><Button type="primary" icon="delete" onClick={deleteConfirm}  ></Button></span></div>}
         >
           {/*{this.state.panes.map(pane => <TabPane tab={pane.title} key={pane.key}>
             {pane.content}

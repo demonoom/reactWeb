@@ -193,7 +193,7 @@ const KnowledgeMenuComponents = React.createClass({
         <div>
           <div>知识点资源</div>
           <Menu ref="middleMenu" onClick={this.handleClick}
-                style={{ width: 240 }}
+                className="cont_t"
                 defaultOpenKeys={['goSchool']}
                 selectedKeys={[this.state.openSubMenu]}
                 mode="inline"

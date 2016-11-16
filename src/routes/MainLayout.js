@@ -106,20 +106,14 @@ const MainLayout = React.createClass({
           <div className="ant-layout-operation">
             <Row>
               <Col span={5}>
-                <div>
                   {middleComponent}
-                </div>
               </Col>
               <Col span={19}>
-                <div>
                   <div className="ant-layout-container">
                     <div className="ant-layout-content">
-                      <div>
                         <MainTabComponents ref="mainTabComponents"/>
-                      </div>
                     </div>
                   </div>
-                </div>
               </Col>
             </Row>
           </div>
