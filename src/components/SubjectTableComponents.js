@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Table, Button,Icon } from 'antd';
+import UseKnowledgeComponents from './UseKnowledgeComponents';
 import reqwest from 'reqwest';
 
 const columns = [{
@@ -88,22 +89,21 @@ const SUbjectTable = React.createClass({
 
   getSubjectData(ident,ScheduleOrSubjectId,pageNo,optType){
     alert("ccc:"+ident+"==="+ScheduleOrSubjectId+",,,,"+optType);
-    var param;
     if(optType=="bySchedule"){
-      param = {
-        "method":'getClassSubjects',
-        "ident":ident,
-        "teachScheduleId":ScheduleOrSubjectId,
-        "pageNo":pageNo
-      };
-    }else if(optType=="bySubjectId"){
-      param = {
-        "method":'getClassSubjects',
-        "ident":ident,
-        "teachScheduleId":ScheduleOrSubjectId,
-        "pageNo":pageNo
-      };
+      subTable.getSubjectDataBySchedule(ident,ScheduleOrSubjectId,pageNo);
+    }else{
+      subTable.getSubjectDataByKnowledge(ident,ScheduleOrSubjectId,pageNo);
     }
+  },
+
+  getSubjectDataBySchedule:function (ident,ScheduleOrSubjectId,pageNo) {
+    alert("getSubjectDataBySchedule:"+ident+"==="+ScheduleOrSubjectId);
+    var param = {
+      "method":'getClassSubjects',
+      "ident":ident,
+      "teachScheduleId":ScheduleOrSubjectId,
+      "pageNo":pageNo
+    };
 
     this.doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
@@ -138,6 +138,56 @@ const SUbjectTable = React.createClass({
     });
   },
 
+  getSubjectDataByKnowledge:function (ident,ScheduleOrSubjectId,pageNo) {
+    alert("getSubjectDataByKnowledge:"+ident+"==="+ScheduleOrSubjectId);
+    var param = {
+      "method":'getUserSubjectsByKnowledgePoint',
+      "ident":ident,
+      "pointId":ScheduleOrSubjectId,
+      "isOwmer":"N",
+      "pageNo":pageNo
+    };
+
+    this.doWebService(JSON.stringify(param), {
+      onResponse : function(ret) {
+        console.log("getSubjectDataMSG:"+ret.msg);
+        subjectList=new Array();
+        var response = ret.response;
+        var count=0;
+        response.forEach(function (e) {
+          console.log("eeeeee:"+e);
+          var key = e.id;
+          var name=e.user.userName;
+          var content=<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article>;
+          var subjectType=e.typeName;
+          var subjectScore=e.score;
+          var subjectOpt=<Button style={{ float:'right'}} type="primary"  icon="share-alt"  value={key} onClick={subTable.showModal}>使用</Button>;
+          data.push({
+            key: key,
+            name: name,
+            content: content,
+            subjectType:subjectType,
+            subjectScore:subjectScore,
+            subjectOpt:subjectOpt,
+          });
+          count++;
+          subTable.setState({count:count});
+        });
+      },
+      onError : function(error) {
+        alert(error);
+      }
+
+    });
+  },
+
+  showModal:function (e) {
+    var currentKnowledge = e.target.value;
+    alert(currentKnowledge);
+    //alert("111"+currentSchedule+","+this.refs.useKnowledgeComponents);
+    subTable.refs.useKnowledgeComponents.showModal(currentKnowledge,"knowledgeSubject");
+  },
+
   render() {
     const { loading, selectedRowKeys } = this.state;
     const rowSelection = {
@@ -147,6 +197,7 @@ const SUbjectTable = React.createClass({
     const hasSelected = selectedRowKeys.length > 0;
     return (
       <div>
+        <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
         <div>
           <span style={{ marginLeft: 8 }}>{hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}</span>
         </div>

@@ -17,13 +17,15 @@ const UseKnowledgeComponents = React.createClass({
       visible: false,
       menuList:[],
       schedule:'',
-      currentSchedule:'',
+      currentKnowlege:'',
+      optType:''
     };
   },
-  showModal(currentSchedule) {
-      //alert("currentSchedule:"+currentSchedule);
+  showModal(currentKnowlege,optType) {
+      alert("currentKnowlege:"+currentKnowlege+",optType:"+optType);
       //当前点击的，计划应用的课件资源
-      this.setState({currentSchedule:currentSchedule});
+    knowledge.setState({optType:optType});
+    knowledge.setState({currentKnowlege:currentKnowlege});
     knowledge.setState({
       visible: true,
     });
@@ -34,15 +36,57 @@ const UseKnowledgeComponents = React.createClass({
 
   handleSubmit(e) {
     e.preventDefault();
-     alert(knowledge.state.schedule);
-    /*this.props.form.validateFieldsAndScroll((err, values) => {
-      alert(values);
-      if (err) {
-        return;
-      }
-      console.log('Received values of form: ', values);
-    });*/
+     alert(knowledge.state.currentKnowlege+"===:"+knowledge.state.schedule+",optType"+knowledge.state.optType);
+     if(knowledge.state.optType=="courseWare"){
+       knowledge.copyMaterialToSchedule('23836',knowledge.state.currentKnowlege,knowledge.state.schedule);
+     }else{
+       knowledge.copySubjects(knowledge.state.currentKnowlege,knowledge.state.schedule);
+     }
   },
+
+  copyMaterialToSchedule(userId,materiaIds,scheduleId){
+    var param = {
+      "method":'copyMaterialToSchedule',
+      "userId":userId,
+      "materiaIds":materiaIds,
+      "scheduleId":scheduleId
+    };
+    this.doWebService(JSON.stringify(param), {
+      onResponse : function(ret) {
+        console.log(ret.msg);
+        if(ret.response){
+            alert("知识点使用成功");
+        }else{
+            alert("知识点使用失败");
+        }
+      },
+      onError : function(error) {
+        alert(error);
+      }
+    });
+  },
+
+  copySubjects(subjectsIds,scheduleId){
+    var param = {
+      "method":'copySubjects',
+      "subjectsIds":subjectsIds,
+      "teachScheduleId":scheduleId
+    };
+    this.doWebService(JSON.stringify(param), {
+      onResponse : function(ret) {
+        console.log(ret.msg);
+        if(ret.response){
+          alert("知识点使用成功");
+        }else{
+          alert("知识点使用失败");
+        }
+      },
+      onError : function(error) {
+        alert(error);
+      }
+    });
+  },
+
   handleOk() {
     this.setState({ loading: true });
     setTimeout(() => {
