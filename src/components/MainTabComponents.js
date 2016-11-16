@@ -24,6 +24,8 @@ const MainTabComponents = React.createClass({
     return {
         currentIdent:0,
         currentTeachScheduleId:'',
+        currentSubjectId:'',
+        currentOptType:'',
     };
   },
     getTeachPlans(optContent){
@@ -32,14 +34,17 @@ const MainTabComponents = React.createClass({
         var teachScheduleId = optContentArray[0];
         var optType =optContentArray[1];
         //alert(teachScheduleId+"------"+optType);
+
         this.refs.courseWare.getTeachPlans("23836",teachScheduleId,optType);
+        this.setState({currentOptType:optType});
         this.setState({currentTeachScheduleId:teachScheduleId});
     },
 
   onChange(activeKey) {
-      console.log(activeKey+"==="+this.refs.subTable);
+      alert(activeKey+"==="+this.refs.subTable);
+      alert(this.state.currentOptType+"----"+this.state.currentTeachScheduleId);
       if(activeKey=="题目"){
-          this.refs.subTable.getSubjectData("23836",this.state.currentTeachScheduleId,1);
+          this.refs.subTable.getSubjectData("23836",this.state.currentTeachScheduleId,1,this.state.currentOptType);
       }
     //this.setState({ activeKey });
   },

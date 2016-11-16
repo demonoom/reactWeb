@@ -86,14 +86,25 @@ const SUbjectTable = React.createClass({
     }, "json");
   },
 
-  getSubjectData(ident,teachScheduleId,pageNo){
-    alert("ccc:"+ident+"==="+teachScheduleId);
-    var param = {
-      "method":'getClassSubjects',
-      "ident":ident,
-      "teachScheduleId":teachScheduleId,
-      "pageNo":pageNo
-    };
+  getSubjectData(ident,ScheduleOrSubjectId,pageNo,optType){
+    alert("ccc:"+ident+"==="+ScheduleOrSubjectId+",,,,"+optType);
+    var param;
+    if(optType=="bySchedule"){
+      param = {
+        "method":'getClassSubjects',
+        "ident":ident,
+        "teachScheduleId":ScheduleOrSubjectId,
+        "pageNo":pageNo
+      };
+    }else if(optType=="bySubjectId"){
+      param = {
+        "method":'getClassSubjects',
+        "ident":ident,
+        "teachScheduleId":ScheduleOrSubjectId,
+        "pageNo":pageNo
+      };
+    }
+
     this.doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
         console.log("getSubjectDataMSG:"+ret.msg);
