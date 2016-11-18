@@ -273,7 +273,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
         return (
             <div className="toobar">
 
-                <Button type="primary" onClick={this.showModal}>题目</Button>
+                <Button type="" onClick={this.showModal}>题目</Button>
                 <Modal
                     visible={this.state.visible}
                     title="添加题目"

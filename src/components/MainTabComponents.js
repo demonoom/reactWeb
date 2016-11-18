@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Tabs, Breadcrumb,Button,Radio } from 'antd';
+import { Tabs, Breadcrumb, Icon, Button,Radio } from 'antd';
 import CourseWareComponents from './CourseWareComponents';
 import SubjectTable from './SubjectTableComponents';
 import UseKnowledgeComponents from './UseKnowledgeComponents';
@@ -69,13 +69,13 @@ const MainTabComponents = React.createClass({
     return (
       <div>
           <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
-          <Breadcrumb>
-		       <img className="adress_icon" src={require('./images/adress.png')} />
+          <Breadcrumb separator=">">
+		      <Breadcrumb.Item href=""><Icon type="home" /></Breadcrumb.Item>
               <Breadcrumb.Item>首页</Breadcrumb.Item>
               <Breadcrumb.Item><a href="">数学</a></Breadcrumb.Item>
               <Breadcrumb.Item><a href="">小学</a></Breadcrumb.Item>
-              <Breadcrumb.Item>一年级上</Breadcrumb.Item>
-              <Breadcrumb.Item>分一分 认识图形</Breadcrumb.Item>
+              <Breadcrumb.Item><a href="">一年级上</a></Breadcrumb.Item>
+              <Breadcrumb.Item><a href="">分一分 认识图形</a></Breadcrumb.Item>
           </Breadcrumb>
         <Tabs
           hideAdd
@@ -85,7 +85,7 @@ const MainTabComponents = React.createClass({
           ref = "mainTab"
           activeKey={this.state.activeKey}
           defaultActiveKey={this.state.defaultActiveKey}
-          tabBarExtraContent={<div className="ant-tabs-right"><Button type="primary" icon="share-alt" onClick={this.showModal}></Button><SubjectUploadTabComponents params={this.state.subjectParams}></SubjectUploadTabComponents><span className="toobar"><Button type="primary" icon="delete" onClick={deleteConfirm}  ></Button></span></div>}
+          tabBarExtraContent={<div className="ant-tabs-right"><Button type="" icon="share-alt" onClick={this.showModal}></Button><SubjectUploadTabComponents params={this.state.subjectParams}></SubjectUploadTabComponents><span className="toobar"><Button type="" icon="delete" onClick={deleteConfirm}  ></Button></span></div>}
         >
           {/*{this.state.panes.map(pane => <TabPane tab={pane.title} key={pane.key}>
             {pane.content}
