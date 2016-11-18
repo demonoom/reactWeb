@@ -291,7 +291,7 @@
 	}
 .ant-menu-inline, .ant-menu-vertical{
 	border-right:none;
-	height: calc(100% - 94px);
+	height: calc(100% - 106px);
     padding:  0;
 	z-index:-1;
 
@@ -407,10 +407,21 @@ html, body, #root {
 	margin-left:15px;
 }
 .clearfix{
-	height:calc(100% - 20px);
+	height:100%;
 	overflow:auto;
 }
-
+.clearfix > div:first-child{
+	height:calc(100% - 48px)
+}
+.ant-spin-container, .ant-table-content, .ant-table-scroll{
+	height:100%;
+}
+.ant-table-fixed-header .ant-table-body{
+	min-height:calc(100% - 50px)
+}
+.ant-spin-container > div:first-child{
+	height:100%;
+}
 .icon_geshi{
 	background:url(components/images/mp4.png) no-repeat;
 	width:22px;
@@ -446,4 +457,24 @@ html, body, #root {
 }
 .breadcrumb-arrow {
     padding: 0 10px;
+}
+.ant-table-pagination{
+	margin-top: 10px;
+    position: relative;
+    bottom: 0;
+    right: 4px;
+    margin-bottom: 10px;
+}
+.ant-table-thead > tr > th.ant-table-selection-user, .ant-table-tbody > tr > td.ant-table-selection-user{
+	width:80px
+}
+.ant-table-thead > tr > th.ant-table-selection-topic, .ant-table-tbody > tr > td.ant-table-selection-topic{
+	width:80px
+}
+.ant-table-thead > tr > th.ant-table-selection-score, .ant-table-tbody > tr > td.ant-table-selection-score{
+	width:80px;
+	text-align:center;
+}
+.ant-table-body{
+	height:calc(100% - 40px)
 }

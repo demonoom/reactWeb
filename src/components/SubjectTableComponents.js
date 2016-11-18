@@ -5,7 +5,7 @@ import reqwest from 'reqwest';
 
 const columns = [{
   title: '出题人',
-  className:'222',
+  className:'ant-table-selection-user',
   dataIndex: 'name',
 }, {
   title: '内容',
@@ -13,6 +13,7 @@ const columns = [{
 },
   {
   title: '题型',
+  className:'ant-table-selection-topic',
   dataIndex: 'subjectType',
   filters: [{
     text: '单选题',
@@ -34,9 +35,11 @@ const columns = [{
 },
   {
   title: '分值',
+  className:'ant-table-selection-score',
   dataIndex: 'subjectScore',
 }, {
   title: '操作',
+  className:'ant-table-selection-topic',
   dataIndex: 'subjectOpt',
 },
 ];
@@ -197,12 +200,9 @@ const SUbjectTable = React.createClass({
     };
     const hasSelected = selectedRowKeys.length > 0;
     return (
-      <div>
+      <div >
         <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
-        <div>
-          <span style={{ marginLeft: 8 }}>{hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}</span>
-        </div>
-        <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
+        <Table rowSelection={rowSelection} columns={columns} dataSource={data} pagination={{ pageSize: 50 }} scroll={{ y: 400}}/>
       </div>
     );
   },
