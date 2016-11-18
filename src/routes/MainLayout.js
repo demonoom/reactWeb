@@ -48,11 +48,15 @@ const MainLayout = React.createClass({
      }
   },
   //获取教学进度下的课件资源
-  getTeachPlans:function (optContent) {
+  getTeachPlans:function (optContent,breadCrumbArray) {
     //点击的菜单标识：teachScheduleId
      // alert("optContent::"+optContent);
-      //alert("mt:");
-    mainLayout.refs.mainTabComponents.getTeachPlans(optContent);
+    if(optContent==null){
+      // alert("mt:"+breadCrumbArray.length);
+      mainLayout.refs.mainTabComponents.buildBreadcrumb(breadCrumbArray);
+    }else{
+      mainLayout.refs.mainTabComponents.getTeachPlans(optContent);
+    }
   },
 
   render() {

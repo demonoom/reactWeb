@@ -185,6 +185,24 @@ const SUbjectTable = React.createClass({
     });
   },
 
+  componentDidMount(){
+    subTable.initGetSubjectInfo();
+  },
+
+  componentWillReceiveProps(){
+    subTable.initGetSubjectInfo();
+  },
+
+  initGetSubjectInfo:function () {
+    alert("params:"+subTable.props.params);
+    var subjectParamArray = subTable.props.params.split("#");
+    var ident = subjectParamArray[0];
+    var ScheduleOrSubjectId = subjectParamArray[1];
+    var pageNo = subjectParamArray[2];
+    var optType = subjectParamArray[3];
+    subTable.getSubjectData(ident,ScheduleOrSubjectId,pageNo,optType);
+  },
+
   showModal:function (e) {
     var currentKnowledge = e.target.value;
     // alert(currentKnowledge);
