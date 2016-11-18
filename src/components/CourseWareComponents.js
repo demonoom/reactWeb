@@ -210,10 +210,12 @@ const CourseWareComponents = React.createClass({
   render: function () {
     return (
         <div>
-            <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
-            <Collapse defaultActiveKey={activeKey} ref="collapse" onChange={callback}>
-                {coursePanelChildren}
-            </Collapse>
+            <div>
+                <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
+                <Collapse defaultActiveKey={activeKey} ref="collapse" onChange={callback}>
+                    {coursePanelChildren}
+                </Collapse>
+            </div>
             <Pagination total={courseWare.state.totalCount}  current={courseWare.state.currentPage} onChange={this.onChange}/>
         </div>
     );

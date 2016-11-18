@@ -63,7 +63,7 @@ const KnowledgeMenuComponents = React.createClass({
   },
   //菜单被选择时执行的函数
   subMenuTitleClick(e){
-    //alert("ekey:"+e.key);
+    // alert("ekey:"+e.key+",text:"+e.domEvent.target.innerText);
     var menuKeyArray = e.key.split("#");
     var menuId = menuKeyArray[0];
     var childrenCount = menuKeyArray[1];
@@ -132,8 +132,18 @@ const KnowledgeMenuComponents = React.createClass({
     var menuContent;
     children = menuList.map((e, i)=> {
       menuContent = (e[0]!=null?e[0]:e);
-      const Options = menuContent.children.map(konwledge => <SubMenu key={konwledge.id} onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" /><span>{konwledge.content}</span></span>}>
-          {this.buildOptions(konwledge.children)}
+      const Options = menuContent.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length} onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" /><span>{konwledge.content}</span></span>}>
+          {/*{this.buildOptions(konwledge.children)}*/}
+          {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length} onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" /><span>{konwledge.content}</span></span>}>
+            {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length} onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" /><span>{konwledge.content}</span></span>}>
+              {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length} onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" /><span>{konwledge.content}</span></span>}>
+                {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length} onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" /><span>{konwledge.content}</span></span>}>
+                  {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length} onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" /><span>{konwledge.content}</span></span>}>
+                  </SubMenu>)}
+                </SubMenu>)}
+              </SubMenu>)}
+            </SubMenu>)}
+          </SubMenu>)}
       </SubMenu>);
       return <SubMenu key={menuContent.id} onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" /><span>{menuContent.content}</span></span>}>
         {Options}
@@ -151,7 +161,7 @@ const KnowledgeMenuComponents = React.createClass({
       }
   },
 
-  buildOptions:function (children) {
+  /*buildOptions:function (children) {
     const Options = children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length} onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" /><span>{konwledge.content}</span></span>}>
           {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length} onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" /><span>{konwledge.content}</span></span>}>
               {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length} onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" /><span>{konwledge.content}</span></span>}>
@@ -166,7 +176,7 @@ const KnowledgeMenuComponents = React.createClass({
       </SubMenu>);
       vdom.push(Options);
       return vdom;
-  },
+  },*/
 
   onChange(page) {
     console.log(page);

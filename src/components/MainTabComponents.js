@@ -27,7 +27,8 @@ const MainTabComponents = React.createClass({
         currentSubjectId:'',
         currentOptType:'',
         defaultActiveKey:'课件',
-        activeKey:'课件'
+        activeKey:'课件',
+        subjectParams:''
     };
   },
     getTeachPlans(optContent){
@@ -41,6 +42,7 @@ const MainTabComponents = React.createClass({
         this.setState({currentOptType:optType});
         this.setState({currentTeachScheduleId:teachScheduleId});
         this.setState({activeKey:'课件'});
+        this.setState({subjectParams:"23836"+"#"+teachScheduleId+"#"+1+"#"+optType});
     },
 
   onChange(activeKey) {
@@ -48,7 +50,10 @@ const MainTabComponents = React.createClass({
       // alert(this.state.currentOptType+"----"+this.state.currentTeachScheduleId);
       if(activeKey=="题目"){
           this.setState({activeKey:'题目'});
-          this.refs.subTable.getSubjectData("23836",this.state.currentTeachScheduleId,1,this.state.currentOptType);
+          // this.refs.subTable.getSubjectData("23836",this.state.currentTeachScheduleId,1,this.state.currentOptType);
+          // this.refs.mainTab.props.children[1].props.children.params="23836"+"#"+this.state.currentTeachScheduleId,1,this.state.currentOptType;
+          //this.refs.mainTab.props.children[1].params="23836"+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType;
+          this.setState({subjectParams:"23836"+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType});
       }else{
           this.setState({activeKey:'课件'});
       }
@@ -77,15 +82,16 @@ const MainTabComponents = React.createClass({
           onChange={this.onChange}
           /*type="editable-card"     启用该属性，会使Tab上带有删除的图标*/
           onEdit={this.onEdit}
+          ref = "mainTab"
           activeKey={this.state.activeKey}
           defaultActiveKey={this.state.defaultActiveKey}
-          tabBarExtraContent={<div className="ant-tabs-right"><Button type="primary" icon="share-alt" onClick={this.showModal}></Button><SubjectUploadTabComponents></SubjectUploadTabComponents><span className="toobar"><Button type="primary" icon="delete" onClick={deleteConfirm}  ></Button></span></div>}
+          tabBarExtraContent={<div className="ant-tabs-right"><Button type="primary" icon="share-alt" onClick={this.showModal}></Button><SubjectUploadTabComponents params={this.state.subjectParams}></SubjectUploadTabComponents><span className="toobar"><Button type="primary" icon="delete" onClick={deleteConfirm}  ></Button></span></div>}
         >
           {/*{this.state.panes.map(pane => <TabPane tab={pane.title} key={pane.key}>
             {pane.content}
           </TabPane>)}*/}
             <TabPane tab="课件" key="课件"><CourseWareComponents ref="courseWare"/></TabPane>
-            <TabPane tab="题目" key="题目"><SubjectTable  ref="subTable"/></TabPane>
+            <TabPane tab="题目" key="题目"><SubjectTable  ref="subTable" params={this.state.subjectParams}/></TabPane>
         </Tabs>
       </div>
     );
