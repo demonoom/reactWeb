@@ -18,7 +18,9 @@ const UseKnowledgeComponents = React.createClass({
       menuList:[],
       schedule:'',
       currentKnowlege:'',
-      optType:''
+      optType:'',
+      inputState:true,
+      isNewSchedule:false,
     };
   },
   showModal(currentKnowlege,optType) {
@@ -36,12 +38,48 @@ const UseKnowledgeComponents = React.createClass({
 
   handleSubmit(e) {
     e.preventDefault();
-     // alert(knowledge.state.currentKnowlege+"===:"+knowledge.state.schedule+",optType"+knowledge.state.optType);
-     if(knowledge.state.optType=="courseWare"){
-       knowledge.copyMaterialToSchedule('23836',knowledge.state.currentKnowlege,knowledge.state.schedule);
-     }else{
-       knowledge.copySubjects(knowledge.state.currentKnowlege,knowledge.state.schedule);
-     }
+    if(this.state.isNewSchedule==true){
+      var inputObj = knowledge.refs.scheduleName;
+      var scheduleName = inputObj.refs.input.value;
+      alert("inputValue:"+scheduleName);
+      knowledge.saveSchedule("23836",scheduleName);
+
+    }else{
+      alert("使用");
+      // alert(knowledge.state.currentKnowlege+"===:"+knowledge.state.schedule+",optType"+knowledge.state.optType);
+      if(knowledge.state.optType=="courseWare"){
+        knowledge.copyMaterialToSchedule('23836',knowledge.state.currentKnowlege,knowledge.state.schedule);
+      }else{
+        knowledge.copySubjects(knowledge.state.currentKnowlege,knowledge.state.schedule);
+      }
+    }
+  },
+
+  saveSchedule(ident,scheduleName){
+    var param = {
+      "method":'addTeachSchedule',
+      "ident":ident,
+      "title":scheduleName
+    };
+    this.doWebService(JSON.stringify(param), {
+      onResponse : function(ret) {
+        console.log(ret.msg);
+        if(ret.msg=="调用成功" && ret.response.colTsId!=null){
+          knowledge.setState({schedule:ret.response.colTsId});
+          if(knowledge.state.optType=="courseWare"){
+            knowledge.copyMaterialToSchedule('23836',knowledge.state.currentKnowlege,knowledge.state.schedule);
+          }else{
+            knowledge.copySubjects(knowledge.state.currentKnowlege,knowledge.state.schedule);
+          }
+          alert("知识点使用成功");
+        }else{
+          alert("知识点使用失败");
+        }
+      },
+      onError : function(error) {
+        alert(error);
+      }
+    });
   },
 
   copyMaterialToSchedule(userId,materiaIds,scheduleId){
@@ -175,6 +213,18 @@ const UseKnowledgeComponents = React.createClass({
     });
   },
 
+  checkBoxOnChange(e) {
+    console.log(`checked = ${e.target.checked}`);
+    var inputObj = knowledge.refs.scheduleName;
+    //alert("inputValue:"+inputObj.refs.input.value);
+    if(e.target.checked==true){
+      knowledge.setState({inputState:false,isNewSchedule:true});
+    }else{
+      inputObj.refs.input.value="";
+      knowledge.setState({inputState:true,isNewSchedule:false});
+    }
+  },
+
   render() {
 
     const formItemLayout = {
@@ -201,6 +251,10 @@ const UseKnowledgeComponents = React.createClass({
               <Select defaultValue={knowledge.state.schedule} key="teachSchedule" style={{ width: '100%' }} ref="teachSchedule" onChange={this.handleSchedule}>
                 {options}
               </Select>
+              <div>
+                <Checkbox onChange={knowledge.checkBoxOnChange}>使用当前知识点作为教学进度</Checkbox>
+                教学进度:<Input ref="scheduleName" disabled={this.state.inputState}/>
+              </div>
               <Button key="submit" type="primary"  htmlType="submit"  size="large">
                 提交
               </Button>

@@ -154,6 +154,7 @@ const SUbjectTable = React.createClass({
 
   getSubjectDataByKnowledge:function (ident,ScheduleOrSubjectId,pageNo) {
     // alert("getSubjectDataByKnowledge:"+ident+"==="+ScheduleOrSubjectId);
+    // alert(pageNo);
     var param = {
       "method":'getUserSubjectsByKnowledgePoint',
       "ident":ident,
@@ -230,7 +231,7 @@ const SUbjectTable = React.createClass({
     return (
       <div >
         <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
-        <Table rowSelection={rowSelection} columns={columns} dataSource={data} pagination={{ pageSize: 50 }} scroll={{ y: 400}}/>
+        <Table rowSelection={rowSelection} columns={columns} dataSource={data} pagination={{ pageSize: 10 }} scroll={{ y: 400}}/>
       </div>
     );
   },
