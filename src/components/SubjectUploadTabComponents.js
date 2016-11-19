@@ -277,7 +277,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                 <Modal
                     visible={this.state.visible}
                     title="添加题目"
-                    width="616"
+                    className="ant-modal-width"
                     onCancel={this.handleCancel}
                     footer={[]}
                 >
