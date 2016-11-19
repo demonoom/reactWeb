@@ -33,28 +33,22 @@ const MainLayout = React.createClass({
     })
   },
   toolbarClick:function (e) {
-    //alert(this.state.activeMiddleMenu);
-    // this.state.activeMiddleMenu='sub1';
-    //location.hash = e.key;  //Menu 的key值实际上是指向一个Router path，通过location.hash完成页面的跳转访问
-    //alert(e.key);
     this.setState({currentKey:e.key});
-
-     if(e.key=="teachTimes"){
-       // this.setState({activeMiddleMenu:'sub1'});
-       //this.refs.middleMenu.activeMenu='goSchool';
-     }else{
-         // this.setState({activeMiddleMenu: 'sub4'});
-       //this.refs.middleMenu.activeMenu='sub4';
-     }
   },
   //获取教学进度下的课件资源
   getTeachPlans:function (optContent,breadCrumbArray) {
     //点击的菜单标识：teachScheduleId
-     // alert("optContent::"+optContent);
+    //  alert("optContent:mainLayout:"+optContent);
     if(optContent==null){
       // alert("mt:"+breadCrumbArray.length);
       mainLayout.refs.mainTabComponents.buildBreadcrumb(breadCrumbArray);
     }else{
+
+      var optContentArray = optContent.split("#");
+      if(optContentArray[1]!="bySubjectId"){
+        var breadcrumbArray = [{hrefLink:'#/MainLayout',hrefText:"首页"}];
+        mainLayout.refs.mainTabComponents.buildBreadcrumb(breadcrumbArray);
+      }
       mainLayout.refs.mainTabComponents.getTeachPlans(optContent);
     }
   },

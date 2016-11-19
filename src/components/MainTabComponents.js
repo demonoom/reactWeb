@@ -29,8 +29,8 @@ const MainTabComponents = React.createClass({
             currentOptType:'',
             defaultActiveKey:'课件',
             activeKey:'课件',
-            subjectParams:''
-
+            subjectParams:'',
+            breadcrumbArray:[]
         };
     },
     getTeachPlans(optContent){
@@ -38,9 +38,10 @@ const MainTabComponents = React.createClass({
         var optContentArray = optContent.split("#");
         var teachScheduleId = optContentArray[0];
         var optType =optContentArray[1];
+        var pageNo = 1;
         //alert(teachScheduleId+"------"+optType);
 
-        this.refs.courseWare.getTeachPlans("23836",teachScheduleId,optType);
+        this.refs.courseWare.getTeachPlans("23836",teachScheduleId,optType,pageNo);
         this.setState({currentOptType:optType});
         this.setState({currentTeachScheduleId:teachScheduleId});
         this.setState({activeKey:'课件'});
@@ -70,7 +71,7 @@ const MainTabComponents = React.createClass({
         breadcrumbChildren = breadcrumbArray.map((e, i)=> {
             return <Breadcrumb.Item><a href={e.hrefLink}>{e.hrefText}</a></Breadcrumb.Item>
         });
-        this.setState({activeKey:'课件'});
+        this.setState({breadcrumbArray:breadcrumbArray});
     },
 
     componentWillMount(){
@@ -83,7 +84,7 @@ const MainTabComponents = React.createClass({
             <div>
                 <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
                 <Breadcrumb separator=">">
-                    <Breadcrumb.Item href="javaScript:alert('123');"><Icon type="home" /></Breadcrumb.Item>
+                    <Breadcrumb.Item href=""><Icon type="home" /></Breadcrumb.Item>
                     {breadcrumbChildren}
                 </Breadcrumb>
                 <Tabs

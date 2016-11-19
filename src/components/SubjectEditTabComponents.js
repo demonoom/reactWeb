@@ -52,7 +52,7 @@ const props = {
     },
 };
 var mulitiAnswer = new Array();
-const SubjectUploadTabComponents = Form.create()(React.createClass({
+const SubjectEditTabComponents = Form.create()(React.createClass({
     getInitialState() {
         return {
             loading: false,
@@ -60,11 +60,17 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             activeKey: '单选题',
             markSelected:6,
             score:1,
+            editSubjectName:'',
         };
     },
     showModal() {
+        alert("sId:"+this.props.editParams);
+        var editParamsArray = this.props.editParams.split("#");
         this.setState({
             visible: true,
+            activeKey:editParamsArray[1],
+            editSubjectName:editParamsArray[2],
+            score:editParamsArray[3],
         });
     },
     handleOk() {
@@ -273,11 +279,11 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
         return (
             <div className="toobar">
 
-                <Button type="" onClick={this.showModal}>题目</Button>
+                <Button type="" onClick={this.showModal}><Icon type="edit"/></Button>
                 <Modal
                     visible={this.state.visible}
-                    title="添加题目"
-                    className="ant-modal-width"
+                    title="修改题目"
+                    width="616"
                     onCancel={this.handleCancel}
                     footer={[]}
                 >
@@ -296,7 +302,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     {getFieldDecorator('subjectName', {
                                         rules: [{ required: true, message: '请输入题目!' }],
                                     })(
-                                        <Input type="textarea" rows={4}/>
+                                        <Input type="textarea" rows={4} value={this.state.editSubjectName}/>
                                     )}
                                 </FormItem>
                                 <FormItem
@@ -321,6 +327,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                             <Select size="large" defaultValue={this.state.score} style={{ width: 100 }} onChange={this.selectHandleChange}>
                                                 <Option value="1">1</Option>
                                                 <Option value="2">2</Option>
+                                                <Option value="3">3</Option>
                                                 <Option value="5">5</Option>
                                                 <Option value="10">10</Option>
                                             </Select>
@@ -377,6 +384,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                             <Select size="large" defaultValue={this.state.score} style={{ width: 100 }} onChange={this.selectHandleChange}>
                                                 <Option value="1">1</Option>
                                                 <Option value="2">2</Option>
+                                                <Option value="3">3</Option>
                                                 <Option value="5">5</Option>
                                                 <Option value="10">10</Option>
                                             </Select>
@@ -429,6 +437,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                             <Select size="large" defaultValue={this.state.score} style={{ width: 100 }} onChange={this.selectHandleChange}>
                                                 <Option value="1">1</Option>
                                                 <Option value="2">2</Option>
+                                                <Option value="3">3</Option>
                                                 <Option value="5">5</Option>
                                                 <Option value="10">10</Option>
                                             </Select>
@@ -480,6 +489,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                             <Select size="large" defaultValue={this.state.score} style={{ width: 100 }} onChange={this.selectHandleChange}>
                                                 <Option value="1">1</Option>
                                                 <Option value="2">2</Option>
+                                                <Option value="3">3</Option>
                                                 <Option value="5">5</Option>
                                                 <Option value="10">10</Option>
                                             </Select>
@@ -552,6 +562,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                             <Select size="large" defaultValue={this.state.score} style={{ width: 100 }} onChange={this.selectHandleChange}>
                                                 <Option value="1">1</Option>
                                                 <Option value="2">2</Option>
+                                                <Option value="3">3</Option>
                                                 <Option value="5">5</Option>
                                                 <Option value="10">10</Option>
                                             </Select>
@@ -578,4 +589,4 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
     },
 }));
 
-export default SubjectUploadTabComponents;
+export default SubjectEditTabComponents;

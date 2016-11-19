@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Table, Button,Icon } from 'antd';
 import UseKnowledgeComponents from './UseKnowledgeComponents';
+import SubjectEditTabComponents from './SubjectEditTabComponents';
 import reqwest from 'reqwest';
 
 const columns = [{
@@ -122,7 +123,7 @@ const SUbjectTable = React.createClass({
           var content=<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article>;
           var subjectType=e.typeName;
           var subjectScore=e.score;
-          var subjectOpt=<Button><Icon type="edit"/></Button>;
+          var subjectOpt=<div><SubjectEditTabComponents editParams={e.sid+"#"+e.typeName+"#"+e.shortContent+"#"+e.score}></SubjectEditTabComponents><Button value={e.sid} onClick={subTable.deleteSubject}><Icon type="delete"/></Button><Button value={e.sid} onClick="">录制微课</Button></div>;
           data.push({
             key: key,
             name: name,
@@ -140,6 +141,15 @@ const SUbjectTable = React.createClass({
       }
 
     });
+  },
+
+  editSubject:function (e) {
+    alert("editSubject:"+e.target.value);
+
+  },
+
+  deleteSubject:function (e) {
+    alert("deleteSubject:"+e.target.value);
   },
 
   getSubjectDataByKnowledge:function (ident,ScheduleOrSubjectId,pageNo) {
@@ -194,7 +204,7 @@ const SUbjectTable = React.createClass({
   },
 
   initGetSubjectInfo:function () {
-    alert("params:"+subTable.props.params);
+    // alert("params in subjectTable:"+subTable.props.params);
     var subjectParamArray = subTable.props.params.split("#");
     var ident = subjectParamArray[0];
     var ScheduleOrSubjectId = subjectParamArray[1];
