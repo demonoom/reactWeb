@@ -206,12 +206,12 @@ const CourseWareComponents = React.createClass({
                          <span>课件名称：{e[1]}</span>
                          <span>所在知识点：{e[6]}</span>
                          <span>创建人：{e[2]}</span>
-                         <span>上传时间：{e[7]}</span>
+                         <span>上传时间：{e[7]}</span> 
                       </div>       
 
                             <div className="bnt2_right">
                                 <Button style={{ float:'right'}}  value={e[3]} onClick={courseWare.downLoadFile}>下载</Button>
-                                <Button style={{ float:'right'}} type="primary"  icon="share-alt"  value={e[0]} onClick={this.showModal}>使用</Button>
+                                <Button style={{ float:'right'}} type=""  icon=""  value={e[0]} onClick={this.showModal}>使用</Button>
                             </div>
 
                     </pre>
