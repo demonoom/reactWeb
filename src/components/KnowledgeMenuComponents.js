@@ -69,19 +69,19 @@ const KnowledgeMenuComponents = React.createClass({
     var menuId = menuKeyArray[0];
     var childrenCount = menuKeyArray[1];
     var menuLevel = menuKeyArray[2];
-    alert(menuLevel);
+    // alert(menuLevel);
     this.setState({openSubMenu:menuId});
-    this.bulidBreadCrumbArray(e.domEvent.target.innerText,menuLevel);
     if(childrenCount==0){
       var optContent = menuId+"#"+"bySubjectId";
       this.props.callbackParent(optContent,breadCrumbArray);
     }else{
+      this.bulidBreadCrumbArray(e.domEvent.target.innerText,menuLevel);
       this.props.callbackParent(null,breadCrumbArray);
     }
   },
 
   bulidBreadCrumbArray:function (menuText,menuLevel) {
-    var breadJson = { hrefLink: '', hrefText:menuText ,menuLevel:menuLevel};
+    var breadJson = { hrefLink: '#/MainLayout', hrefText:menuText ,menuLevel:menuLevel};
     if(menuLevel==0){
       breadCrumbArray=new Array();
       breadCrumbArray.push(breadJson);
@@ -127,24 +127,14 @@ const KnowledgeMenuComponents = React.createClass({
         console.log(ret.msg);
         var count =0;
         ret.response.forEach(function (e) {
-          console.log("eeeee:"+e);
           count++;
-          /*var lessonArray = e.split("#");
-           var scheduleId = lessonArray[0];
-           var courseName = lessonArray[1];
-           var courseTimes = 0;//当值为0时，系统不显示具体的子菜单数量（即菜单上无徽标显示）
-           //console.log(lessonArray[0]+"-----------"+lessonArray[1]);
-           //courseTimes需要作为当前教学进度下的资源数量进行显示（课件和题目的总和）
-           var lessonInfo = {"scheduleId":scheduleId,"courseName":courseName,"courseTimes":courseTimes};
-           */
-          mMenu.handleMenu(e);
+          List.push([e]);
         });
-        mMenu.buildMenuChildren(mMenu.state.menuList);
+        mMenu.buildMenuChildren(List);
         mMenu.setState({totalCount:count});
       },
       onError : function(error) {
-        //alert(error);
-        //phone.finish();
+        alert(error);
       }
     });
   },

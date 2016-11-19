@@ -26,7 +26,10 @@ const CourseWareComponents = React.createClass({
         courseListState:[],
         activeKey:[],
         currentPage:1,
-        totalCount:0
+        totalCount:0,
+        ident:'',
+        teachScheduleId:'',
+        optType:'',
     };
   },
 
@@ -51,14 +54,19 @@ const CourseWareComponents = React.createClass({
         }, "json");
     },
 
-  getTeachPlans(ident,teachScheduleId,optType){
+  getTeachPlans(ident,teachScheduleId,optType,pageNo){
       // alert("ccc:"+ident+"==="+teachScheduleId+"===="+optType);
+      courseWare.setState({
+          ident:ident,
+          teachScheduleId:teachScheduleId,
+          optType:optType
+      })
       var param;
       if(optType=="bySchedule"){
           param = {
               "method":'getMaterialsBySheduleId',
               "scheduleId":teachScheduleId,
-              "pageNo":"1"
+              "pageNo":pageNo
           };
           this.doWebService(JSON.stringify(param), {
               onResponse : function(ret) {
@@ -73,8 +81,9 @@ const CourseWareComponents = React.createClass({
                       var path = e.path;
                       var pdfPath = e.pdfPath;
                       var fileType=fileName.substring(fileName.lastIndexOf(".")+1);
-                      var pointId = e.pointId;
-                      var createTime = e.createTime;
+                      var pointId = e.point.content;
+                     // alert(e.createTime);//1476 0186 7700 0
+                      var createTime = courseWare.getLocalTime(e.createTime);
                       // console.log(uId+"==========="+colName+"=="+colFileType);
                       // var courseInfo = {"uId":uId,"colName":colName,"colFileType":colFileType};
                       //courseWare.handlePanel(courseInfo);
@@ -97,7 +106,7 @@ const CourseWareComponents = React.createClass({
               "method":'getMaterialsByKnowledgePointId',
               "pointId":teachScheduleId,
               "type":"0",
-              "pageNo":"1",
+              "pageNo":pageNo,
           };
           this.doWebService(JSON.stringify(param), {
               onResponse : function(ret) {
@@ -113,7 +122,8 @@ const CourseWareComponents = React.createClass({
                       var pdfPath = e.pdfPath;
                       var fileType=fileName.substring(fileName.lastIndexOf(".")+1);
                       var pointId = e.pointId;
-                      var createTime = e.createTime;
+                      // alert(e.createTime);
+                      var createTime = courseWare.getLocalTime(e.createTime);
                       // console.log(uId+"==========="+colName+"=="+colFileType);
                       // var courseInfo = {"uId":uId,"colName":colName,"colFileType":colFileType};
                       //courseWare.handlePanel(courseInfo);
@@ -133,12 +143,18 @@ const CourseWareComponents = React.createClass({
           });
       }
   },
+    getLocalTime:function (nS) {
+        var newDate = new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/,' ');
+        return newDate;
+    },
 
     onChange(page) {
         console.log(page);
+        courseWare.getTeachPlans(courseWare.state.ident,courseWare.state.teachScheduleId,courseWare.state.optType,page)
         this.setState({
             currentPage: page,
         });
+
     },
 
     /*handlePanel:function (courseInfo) {
@@ -162,22 +178,24 @@ const CourseWareComponents = React.createClass({
                          <span><span className="col1">课件名称：</span><span className="col2">{e[1]}</span></span>
                          <span><span className="col1">所在知识点：</span><span className="col2">{e[6]}</span></span>
                          <span><span className="col1">创建人：</span><span className="col2">{e[2]}</span></span>
-                         <span><span className="col1">所在学校：</span><span className="col2">上海七宝中学</span></span>
+                         {/*<span><span className="col1">所在学校：</span><span className="col2">上海七宝中学</span></span>*/}
                          <span><span className="col1">上传时间：</span><span className="col2">{e[7]}</span></span>
 					</div>
 					<div className="bnt2_right">
                     <Button style={{ float:'right'}}    value={e[1]} onClick="">删除</Button>
-                         <Button style={{ float:'right'}}  value={e[1]} onClick="">下载</Button>
+                         <Button style={{ float:'right'}}  value={e[3]} onClick={courseWare.downLoadFile}>下载</Button>
 					</div>
                     </pre>
             </Panel>
         });
         //courseWare.setState({activeKey:activeKey});
     },
-/*    downLoadFile:function (hrefAddress) {
-        alert(hrefAddress);
-        window.location.href=hrefAddress;
-    },*/
+
+    downLoadFile:function (e) {
+        // alert("123"+e);
+        // window.location.href=e.target.value;
+        window.open(e.target.value);
+    },
 
     buildKonwledgePanels:function (courseWareList) {
         coursePanelChildren = courseWareList.map((e, i)=> {
@@ -192,7 +210,7 @@ const CourseWareComponents = React.createClass({
                       </div>       
 
                             <div className="bnt2_right">
-                                <a href={e[3]}>下载</a>
+                                <Button style={{ float:'right'}}  value={e[3]} onClick={courseWare.downLoadFile}>下载</Button>
                                 <Button style={{ float:'right'}} type="primary"  icon="share-alt"  value={e[0]} onClick={this.showModal}>使用</Button>
                             </div>
 
