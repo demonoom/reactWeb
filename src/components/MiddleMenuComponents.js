@@ -16,6 +16,7 @@ let List=new Array();
 //菜单元素，根据构建出来的该对象，对菜单进行生成
 let children;
 var mMenu;
+var scheduleCount=0;
 const MiddleMenuComponents = React.createClass({
   getInitialState() {
     mMenu = this;
@@ -91,6 +92,7 @@ const MiddleMenuComponents = React.createClass({
             var courseTimes = 0;//当值为0时，系统不显示具体的子菜单数量（即菜单上无徽标显示）
             //console.log(lessonArray[0]+"-----------"+lessonArray[1]);
           //courseTimes需要作为当前教学进度下的资源数量进行显示（课件和题目的总和）
+          scheduleCount++;
             var lessonInfo = {"scheduleId":scheduleId,"courseName":courseName,"courseTimes":courseTimes};
             mMenu.handleMenu(lessonInfo);
         });
@@ -158,7 +160,7 @@ const MiddleMenuComponents = React.createClass({
           {children}
 
         </Menu>
-        <Pagination size="small" total={100} current={this.state.currentPage} onChange={this.onChange}/>
+        <Pagination size="small" total={scheduleCount} current={this.state.currentPage} onChange={this.onChange}/>
       </div>
     );
   },
