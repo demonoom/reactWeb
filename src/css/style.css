@@ -466,7 +466,7 @@ html, body, #root {
     margin-bottom: 10px;
 }
 .ant-table-thead > tr > th.ant-table-selection-user, .ant-table-tbody > tr > td.ant-table-selection-user{
-	width:80px
+	width:100px
 }
 .ant-table-thead > tr > th.ant-table-selection-topic, .ant-table-tbody > tr > td.ant-table-selection-topic{
 	width:80px
@@ -475,6 +475,17 @@ html, body, #root {
 	width:80px;
 	text-align:center;
 }
+.ant-table-thead > tr > th.ant-table-selection-smallclass, .ant-table-tbody > tr > td.ant-table-selection-smallclass{
+	width:180px
+}
 .ant-table-body{
 	height:calc(100% - 40px)
+}
+.ant-menu-item-selected {
+    color: #2db7f5;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+.ant-btn {
+	padding:4px 8px;
 }
