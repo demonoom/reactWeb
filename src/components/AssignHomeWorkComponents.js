@@ -106,8 +106,9 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
     };
     this.doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
+        alert(ret.msg);
         console.log(ret.msg);
-        if(ret.msg=="调用成功"){
+        if(ret.msg=="调用成功" && ret.response==true){
             alert("作业布置成功");
         }else{
             alert("作业布置失败");
@@ -121,10 +122,11 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
 
   handleSubmit(e) {
     e.preventDefault();
-    ident="23836";
-    sids="";
-    clazzIds="";
-    dateTime = "";
+    var ident="23836";
+    // sids="";
+    // clazzIds="";
+    // dateTime = "";
+    alert(sids+"\n"+clazzIds+"\n"+dateTime);
     assignHomeWork.publishHomeworkSubject(ident,sids,clazzIds,dateTime);
   },
   /*handleCancel() {
@@ -148,7 +150,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
 
   //日期控件值改变时，获取当前选择的日期（第一个参数表示的是时间戳，第二个是YYYY-MM-dd格式的日期）
   assignDateOnChange(date, dateString) {
-    dateTime = date;
+    dateTime = ""+date;
     console.log("assignDate:"+date, dateString);
   },
 
@@ -332,7 +334,10 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
       subjectModalVisible: false,
     });
   },
-
+  //设置禁用今天之前的日期
+  disabledDate(current) {
+    return current && current.valueOf() < Date.now();
+  },
   render() {
     const { getFieldDecorator } = assignHomeWork.props.form;
     const formItemLayout = {
@@ -350,7 +355,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
 
     return (
         <div>
-          <Form vertical onSubmit={this.handleSubmit}>
+          <Form vertical onSubmit={assignHomeWork.handleSubmit}>
             <FormItem
                 {...formItemLayout}
                 label={(
@@ -361,7 +366,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
                 hasFeedback
             >
               {getFieldDecorator('assignDate')(
-                  <DatePicker onChange={assignHomeWork.assignDateOnChange} />
+                  <span><DatePicker onChange={assignHomeWork.assignDateOnChange}  disabledDate={assignHomeWork.disabledDate} /></span>
               )}
             </FormItem>
 
@@ -427,7 +432,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
           <Modal title="选择题目" visible={assignHomeWork.state.subjectModalVisible}
                  onCancel={assignHomeWork.subjectModalHandleCancel}
                  footer={[
-                   <Button key="return" type="ghost" size="large" onClick={assignHomeWork.subjectModalHandleCancel}>返回</Button>,
+                   <Button key="ok" type="ghost" size="large" onClick={assignHomeWork.subjectModalHandleCancel}>确定</Button>,
                  ]}
           >
               <Row>

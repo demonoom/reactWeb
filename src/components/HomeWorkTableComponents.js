@@ -80,7 +80,10 @@ const HomeWorkTableComponents = React.createClass({
       columns = [ {
         title: '标题',
         dataIndex: 'title',
-      }, {
+      },{
+          title: '日期',
+          dataIndex: 'useDate',
+        },{
         title: '操作',
         className:'ant-table-selection-topic',
         dataIndex: 'subjectOpt',
@@ -140,6 +143,7 @@ const HomeWorkTableComponents = React.createClass({
           data.push({
               key:key,
               title:title,
+              useDate:subTable.getLocalTime(useDate),
               subjectOpt:subjectOpt,
           });
           count++;
@@ -152,6 +156,15 @@ const HomeWorkTableComponents = React.createClass({
       }
 
     });
+  },
+
+  getLocalTime:function (nS) {
+    // var newDate = new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/,' ');
+    // return newDate;
+    var newDate = new Date();
+    newDate.setTime(nS);
+    console.log("localDate："+newDate.toLocaleDateString())
+    return newDate.toLocaleDateString();
   },
 
   //点击作业列表中的查看时，进入题目列表
