@@ -24,6 +24,8 @@ const HomeWorkTableComponents = React.createClass({
       selectedRowKeys: [],  // Check here to configure the default column
       loading: false,
       count:0,
+      totalCount:0,
+      currentPage:1,
       currentView:'homeWorkList'
     };
   },
@@ -80,7 +82,10 @@ const HomeWorkTableComponents = React.createClass({
       columns = [ {
         title: '标题',
         dataIndex: 'title',
-      }, {
+      },{
+          title: '日期',
+          dataIndex: 'useDate',
+        },{
         title: '操作',
         className:'ant-table-selection-topic',
         dataIndex: 'subjectOpt',
@@ -123,7 +128,6 @@ const HomeWorkTableComponents = React.createClass({
         console.log("getSubjectDataMSG:"+ret.msg);
         subjectList=new Array();
         var response = ret.response;
-        var count=0;
         response.forEach(function (e) {
           console.log("getDoneHomeworkList:"+e);
           var colCid = e.colCid;
@@ -140,11 +144,12 @@ const HomeWorkTableComponents = React.createClass({
           data.push({
               key:key,
               title:title,
+              useDate:subTable.getLocalTime(useDate),
               subjectOpt:subjectOpt,
           });
-          count++;
         });
-        console.log("count:"+count);
+        var pager = ret.pager;
+        subTable.setState({totalCount:parseInt(pager.pageCount)*15});
         subTable.setState({currentView:'homeWorkList'});
       },
       onError : function(error) {
@@ -152,6 +157,15 @@ const HomeWorkTableComponents = React.createClass({
       }
 
     });
+  },
+
+  getLocalTime:function (nS) {
+    // var newDate = new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/,' ');
+    // return newDate;
+    var newDate = new Date();
+    newDate.setTime(nS);
+    console.log("localDate："+newDate.toLocaleDateString())
+    return newDate.toLocaleDateString();
   },
 
   //点击作业列表中的查看时，进入题目列表
@@ -184,12 +198,22 @@ const HomeWorkTableComponents = React.createClass({
             subjectScore:score,
           });
         });
+        var pager = ret.pager;
+        subTable.setState({totalCount:parseInt(pager.pageCount)*15});
         subTable.setState({currentView:'subjectList'});
       },
       onError : function(error) {
         alert(error);
       }
 
+    });
+  },
+
+  pageOnChange(pageNo) {
+    console.log(pageNo);
+    subTable.getDoneHomeworkList("23836",pageNo);
+    this.setState({
+      currentPage: pageNo,
     });
   },
 
@@ -206,7 +230,7 @@ const HomeWorkTableComponents = React.createClass({
     const hasSelected = selectedRowKeys.length > 0;
     return (
       <div >
-        <Table rowSelection={rowSelection} columns={columns}  dataSource={data} pagination={{ pageSize: 10 }} scroll={{ y: 400}}/>
+        <Table rowSelection={rowSelection} columns={columns}  dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: 15,onChange:subTable.pageOnChange }} scroll={{ y: 400}}/>
       </div>
     );
   },

@@ -55,6 +55,7 @@ const SUbjectTable = React.createClass({
       selectedRowKeys: [],  // Check here to configure the default column
       loading: false,
       count:0,
+      totalCount:0,
     };
   },
   start() {
@@ -115,7 +116,6 @@ const SUbjectTable = React.createClass({
         console.log("getSubjectDataMSG:"+ret.msg);
         subjectList=new Array();
         var response = ret.response;
-        var count=0;
         response.forEach(function (e) {
           console.log("eeeeee:"+e);
           var key = e.sid;
@@ -132,8 +132,8 @@ const SUbjectTable = React.createClass({
             subjectScore:subjectScore,
             subjectOpt:subjectOpt,
           });
-          count++;
-          subTable.setState({count:count});
+          var pager = ret.pager;
+          subTable.setState({totalCount:parseInt(pager.pageCount)*15});
         });
       },
       onError : function(error) {
@@ -168,7 +168,6 @@ const SUbjectTable = React.createClass({
         console.log("getSubjectDataMSG:"+ret.msg);
         subjectList=new Array();
         var response = ret.response;
-        var count=0;
         response.forEach(function (e) {
           console.log("getSubjectDataByKnowledge:"+e);
           var key = e.id;
@@ -185,8 +184,8 @@ const SUbjectTable = React.createClass({
             subjectScore:subjectScore,
             subjectOpt:subjectOpt,
           });
-          count++;
-          subTable.setState({count:count});
+          var pager = ret.pager;
+          subTable.setState({totalCount:parseInt(pager.pageCount)*15});
         });
       },
       onError : function(error) {
@@ -205,7 +204,7 @@ const SUbjectTable = React.createClass({
   },
 
   initGetSubjectInfo:function () {
-    alert("params in subjectTable:"+subTable.props.params);
+    // alert("params in subjectTable:"+subTable.props.params);
     var subjectParamArray = subTable.props.params.split("#");
     var ident = subjectParamArray[0];
     var ScheduleOrSubjectId = subjectParamArray[1];
@@ -221,6 +220,15 @@ const SUbjectTable = React.createClass({
     subTable.refs.useKnowledgeComponents.showModal(currentKnowledge,"knowledgeSubject");
   },
 
+  pageOnChange(pageNo) {
+    console.log(pageNo);
+    subTable.initGetSubjectInfo();
+    this.setState({
+      currentPage: pageNo,
+    });
+
+  },
+
   render() {
     const { loading, selectedRowKeys } = this.state;
     const rowSelection = {
@@ -231,7 +239,7 @@ const SUbjectTable = React.createClass({
     return (
       <div >
         <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
-        <Table rowSelection={rowSelection} columns={columns} dataSource={data} pagination={{ pageSize: 10 }} scroll={{ y: 400}}/>
+        <Table rowSelection={rowSelection} columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: 15,onChange:subTable.pageOnChange }} scroll={{ y: 400}}/>
       </div>
     );
   },

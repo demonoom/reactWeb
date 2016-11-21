@@ -496,6 +496,7 @@ html, body, #root {
 .ant-btn {
 	padding:4px 8px;
 }
+
 .date_tr{
    position:relative;
    top:7px;
@@ -534,4 +535,44 @@ html, body, #root {
 }
 .ant-menu-vertical > .ant-menu-item, .ant-menu-inline > .ant-menu-item, .ant-menu-item-group-list > .ant-menu-item, .ant-menu-vertical > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-item-group-list > .ant-menu-submenu > .ant-menu-submenu-title{
 	font-size:14px
+}
+
+#components-form-demo-normal-login .login-form {
+	max-width: 300px;
+}
+#components-form-demo-normal-login .login-form-forgot {
+	float: right;
+}
+#components-form-demo-normal-login .login-form-button {
+	width: 100%;
+}
+
+.code
+{
+	font-family:Arial;
+	font-style:italic;
+	color:blue;
+	font-size:30px;
+	border:0;
+	padding:2px 3px;
+	letter-spacing:3px;
+	font-weight:bolder;
+	float:left;
+	cursor:pointer;
+	width:150px;
+	height:60px;
+	line-height:60px;
+	text-align:center;
+	vertical-align:middle;
+}
+a
+{
+	text-decoration:none;
+	font-size:12px;
+	color:#288bc4;
+}
+a:hover
+{
+	text-decoration:underline;
+>>>>>>> 732d147041edce32ef68ba23864508e9138b1876
 }

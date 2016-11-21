@@ -14,10 +14,6 @@ var subjectData = [];
 var scheduleColumns = [ {
   title: '教学进度',
   dataIndex: 'scheduleName',
-}, {
-  title: '操作',
-  className:'ant-table-selection-topic',
-  dataIndex: 'scheduleOpt',
 },
 ];
 
@@ -73,6 +69,8 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
       selectedSubjectKeys:[],
       subjectCount:0,
       subjectModalVisible:false,
+      totalSubjectCount:0,
+      currentScheduleId:0,
     };
   },
 
@@ -227,6 +225,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
     subjectData=[];
     assignHomeWork.getSubjectDataBySchedule("23836",scheduleId,1);
     assignHomeWork.setState({ selectedRowKeys });
+    assignHomeWork.setState({ currentScheduleId:scheduleId});
   },
 
   subjectListOnChange(checkedList) {
@@ -258,7 +257,6 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
       onResponse : function(ret) {
         console.log("getSubjectDataMSG:"+ret.msg);
         var response = ret.response;
-        var count=0;
         response.forEach(function (e) {
           console.log("eeeeee:"+e);
           var key = e.sid;
@@ -269,8 +267,8 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
             content: content,
             subjectType:subjectType,
           });
-          count++;
-          assignHomeWork.setState({subjectCount:count});
+          var pager = ret.pager;
+          assignHomeWork.setState({totalSubjectCount:parseInt(pager.pageCount)*15});
         });
       },
       onError : function(error) {
@@ -311,11 +309,38 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
     /*plainOptions.forEach(function (e) {
         alert(e.value);
     })*/
-    plainOptions=[];
-    defaultCheckedList=[];
-    assignHomeWork.setState({selectedSubjectKeys:[]});
-    assignHomeWork.setState({ checkedList:defaultCheckedList});
+    if(assignHomeWork.state.checkAll==true){
+        plainOptions=[];
+        defaultCheckedList=[];
+        assignHomeWork.setState({selectedSubjectKeys:[]});
+        assignHomeWork.setState({ checkedList:defaultCheckedList});
+    }else{
+        for(var i=0;i<plainOptions.length;i++){
+            var checkedListJson = plainOptions[i];
+            if(assignHomeWork.removeCheckedList(checkedListJson.value)){
+              plainOptions.splice(i,1);
+            }
+        }
+        var selectedKeys=[];
+        for(var i=0;i<plainOptions.length;i++){
+          var checkedListJson = plainOptions[i];
+          selectedKeys.push(checkedListJson.value)
+          defaultCheckedList.push(checkedListJson.value);
+        }
+        assignHomeWork.setState({selectedSubjectKeys:selectedKeys});
+        assignHomeWork.setState({ checkedList:defaultCheckedList});
+    }
   },
+
+  removeCheckedList(checkedValue){
+      for(var i=0;i<assignHomeWork.state.checkedList;i++){
+          if(checkedValue==assignHomeWork.state.checkedList[i]){
+              return true;
+          }
+      }
+      return false;
+  },
+
 
   showSubjectModal() {
     assignHomeWork.setState({
@@ -334,6 +359,19 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
       subjectModalVisible: false,
     });
   },
+  //设置禁用今天之前的日期
+  disabledDate(current) {
+    return current && current.valueOf() < Date.now();
+  },
+
+  pageOnChange(pageNo) {
+    console.log(pageNo);
+    assignHomeWork.getSubjectDataBySchedule("23836",assignHomeWork.state.currentScheduleId,pageNo);
+    this.setState({
+      currentPage: pageNo,
+    });
+  },
+
 
   render() {
     const { getFieldDecorator } = assignHomeWork.props.form;
@@ -365,7 +403,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
                 hasFeedback
             >
               {getFieldDecorator('assignDate')(
-                  <DatePicker onChange={assignHomeWork.assignDateOnChange} />
+                  <span><DatePicker onChange={assignHomeWork.assignDateOnChange}  disabledDate={assignHomeWork.disabledDate} /></span>
               )}
             </FormItem>
 
@@ -418,27 +456,36 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
                   </div>
               )}
             </FormItem>
-			</div>
+		</div>
+
             <FormItem className="ant-pagination">
               <Button type="primary" htmlType="submit" className="login-form-button class_right" >
-                确定
+                保存
+
               </Button>
-              <Button type="primary" htmlType="reset" className="login-form-button" onClick={this.handleCancel} >
+              {/*<Button type="primary" htmlType="reset" className="login-form-button" onClick={this.handleCancel} >
                 取消
-              </Button>
+              </Button>*/}
             </FormItem>
+
           </Form>
+	
+		  
           <Modal title="选择题目" className="choose_class" visible={assignHomeWork.state.subjectModalVisible}
                  onCancel={assignHomeWork.subjectModalHandleCancel}
                  footer={[
+
                    <Button key="return" type="primary" size="large" onClick={assignHomeWork.subjectModalHandleCancel}>确定</Button>,
+
+                   <Button key="ok" type="ghost" size="large" onClick={assignHomeWork.subjectModalHandleCancel}>确定</Button>,
+
                  ]}
           >
               <Row>
                 <Col span={7}><Table size="small" onRowClick={assignHomeWork.onScheduleSelectChange} selectedRowKeys={assignHomeWork.selectedRowKeys} columns={scheduleColumns}  dataSource={scheduleData} scroll={{ y: 300}}/></Col>
                 <Col span={17} className="col17_le">
                   <div>
-                    <Table rowSelection={subjectRowSelection} columns={subjectColumns} dataSource={subjectData} scroll={{ y: 300}}/>
+                    <Table rowSelection={subjectRowSelection} columns={subjectColumns} dataSource={subjectData} pagination={{ total:assignHomeWork.state.totalSubjectCount,pageSize: 15,onChange:assignHomeWork.pageOnChange }}  scroll={{ y: 300}}/>
                   </div>
                 </Col>
               </Row>

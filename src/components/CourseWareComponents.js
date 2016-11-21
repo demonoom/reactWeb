@@ -73,7 +73,6 @@ const CourseWareComponents = React.createClass({
                   console.log("teachMSG:"+ret.msg);
                   courseWareList=new Array();
                   var response = ret.response;
-                  var count=0;
                   response.forEach(function (e) {
                       var id = e.id;
                       var fileName = e.name;
@@ -89,12 +88,11 @@ const CourseWareComponents = React.createClass({
                       //courseWare.handlePanel(courseInfo);
                       activeKey.push(fileName);
                       courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointId,createTime]);
-                      count++;
                   });
-
                   courseWare.buildPanels(courseWareList);
                   courseWare.setState({courseListState:courseWareList});
-                  courseWare.setState({totalCount:count});
+                  var pager = ret.pager;
+                  courseWare.setState({totalCount:parseInt(pager.pageCount)*15});
               },
               onError : function(error) {
                   alert(error);
@@ -113,7 +111,6 @@ const CourseWareComponents = React.createClass({
                   console.log("teachMSG:"+ret.msg);
                   courseWareList=new Array();
                   var response = ret.response;
-                  var count=0;
                   response.forEach(function (e) {
                       var id = e.id;
                       var fileName = e.name;
@@ -122,19 +119,14 @@ const CourseWareComponents = React.createClass({
                       var pdfPath = e.pdfPath;
                       var fileType=fileName.substring(fileName.lastIndexOf(".")+1);
                       var pointId = e.pointId;
-                      // alert(e.createTime);
                       var createTime = courseWare.getLocalTime(e.createTime);
-                      // console.log(uId+"==========="+colName+"=="+colFileType);
-                      // var courseInfo = {"uId":uId,"colName":colName,"colFileType":colFileType};
-                      //courseWare.handlePanel(courseInfo);
                       activeKey.push(fileName);
                       courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointId,createTime]);
-                      count++;
                   });
-
                   courseWare.buildKonwledgePanels(courseWareList);
                   courseWare.setState({courseListState:courseWareList});
-                  courseWare.setState({totalCount:count});
+                  var pager = ret.pager;
+                  courseWare.setState({totalCount:parseInt(pager.pageCount)*15});
               },
               onError : function(error) {
                   alert(error);

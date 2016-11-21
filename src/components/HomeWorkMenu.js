@@ -62,7 +62,9 @@ const HomeWorkMenu = React.createClass({
   subMenuTitleClick(e){
     this.setState({openSubMenu:e.key});
     var optContent = e.key;
-    this.props.callbackParent(optContent);
+    if(e.key=="assignHomeWork"){
+      this.props.callbackParent(optContent);
+    }
   },
 
   openMenu:function (e) {
@@ -157,10 +159,10 @@ const HomeWorkMenu = React.createClass({
           >
             <SubMenu key="assignHomeWork" onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" className='le_1' /><span>布置作业</span></span>}>
             </SubMenu>
-            <SubMenu key="homeWorkCount" onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" className='le_1' /><span>作业统计</span></span>}>
+{/*            <SubMenu key="homeWorkCount" onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" className='le_1' /><span>作业统计</span></span>}>
             </SubMenu>
             <SubMenu key="correctHomeWork" onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" className='le_1' /><span>批改作业</span></span>}>
-            </SubMenu>
+            </SubMenu>*/}
 
 
           </Menu>
