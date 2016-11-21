@@ -52,7 +52,7 @@ const MiddleMenuComponents = React.createClass({
 
   handleClick(e) {
      // alert("11111:"+e.key);
-    this.setState({
+    mMenu.setState({
       currentMenu: e.key,
     });
 
@@ -60,21 +60,14 @@ const MiddleMenuComponents = React.createClass({
   },
   //菜单被选择时执行的函数
   subMenuTitleClick(e){
-    //alert(e.key);
-    this.setState({openSubMenu:e.key});
+    alert(e.key);
+    mMenu.setState({openSubMenu:e.key});
     var optContent = e.key+"#"+"bySchedule";
-    this.props.callbackParent(optContent);
+    mMenu.props.callbackParent(optContent);
   },
 
   openMenu:function (e) {
     //alert(e.key);
-  },
-
-  handleMenu: function(lessonInfo){
-    //lessonData.splice(0,lessonData.length);
-    List.push([ lessonInfo.scheduleId, lessonInfo.courseName, lessonInfo.courseTimes]);
-    this.setState({menuList: List});
-    this.buildMenuChildren();
   },
 
   getLessonMenu(){
@@ -86,38 +79,36 @@ const MiddleMenuComponents = React.createClass({
       onResponse : function(ret) {
         console.log(ret.msg);
         ret.response.forEach(function (e) {
-            var lessonArray = e.split("#");
-            var scheduleId = lessonArray[0];
-            var courseName = lessonArray[1];
-            var courseTimes = 0;//当值为0时，系统不显示具体的子菜单数量（即菜单上无徽标显示）
-            //console.log(lessonArray[0]+"-----------"+lessonArray[1]);
-          //courseTimes需要作为当前教学进度下的资源数量进行显示（课件和题目的总和）
+          var lessonArray = e.split("#");
+          var scheduleId = lessonArray[0];
+          var courseName = lessonArray[1];
+          var courseTimes = 0;//当值为0时，系统不显示具体的子菜单数量（即菜单上无徽标显示）
           scheduleCount++;
-            var lessonInfo = {"scheduleId":scheduleId,"courseName":courseName,"courseTimes":courseTimes};
-            mMenu.handleMenu(lessonInfo);
+          List.push([ scheduleId, courseName, courseTimes]);
         });
+        mMenu.buildMenuChildren(List);
+        mMenu.setState({menuList: List});
       },
       onError : function(error) {
-        //alert(error);
-        //phone.finish();
+        alert(error);
       }
     });
   },
 
   componentWillReceiveProps(){
-    this.setState({openSubMenu:this.props.activeMenu});
+    mMenu.setState({openSubMenu:this.props.activeMenu});
   },
 
   componentDidMount(){
-      this.getLessonMenu();
+    mMenu.getLessonMenu();
   },
 
   // componentWillMount(){
   //   this.getLessonMenu();
   // },
 
-  buildMenuChildren:function () {
-    children = this.state.menuList.map((e, i)=> {
+  buildMenuChildren:function (menuList) {
+    children = menuList.map((e, i)=> {
       return <SubMenu key={e[0]} onTitleClick={this.subMenuTitleClick} title={<span><span>{e[1]}</span><Badge count={e[2]}/> <span title={e[0]} onClick={this.editTeachSchedule} className='write_right'><Icon type="edit"/></span><span title={e[0]} onClick={this.deleteTeachSchedule} className='del_right'><Icon type="delete"/></span> </span>}>
       </SubMenu>
     });
@@ -132,7 +123,7 @@ const MiddleMenuComponents = React.createClass({
 
   editTeachSchedule:function (e) {
         //alert("修改教学进度"+e.currentTarget.title);
-    this.showModal('edit',e.currentTarget.title);
+    mMenu.showModal('edit',e.currentTarget.title);
   },
 
   deleteTeachSchedule:function (e) {
@@ -142,7 +133,7 @@ const MiddleMenuComponents = React.createClass({
   showModal:function (optType,editSchuldeId) {
     optType = (optType=="edit"?"edit":"add");
     //alert("oooo:"+optType);
-    this.refs.teachingComponents.showModal(optType,editSchuldeId);
+    mMenu.refs.teachingComponents.showModal(optType,editSchuldeId);
   },
 
   render() {
