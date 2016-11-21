@@ -123,7 +123,7 @@ const SubjectForm = Form.create()(React.createClass({
           )}
         </FormItem>
         <FormItem className="ant-modal-footer">
-          <Button type="primary" htmlType="submit" className="login-form-button"  >
+          <Button type="primary" htmlType="submit" className="login-form-button botton_left"  >
             确定
           </Button>
           <Button type="primary" htmlType="reset" className="login-form-button" onClick={this.handleCancel} >

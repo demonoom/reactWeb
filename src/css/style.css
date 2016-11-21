@@ -1,3 +1,4 @@
+
 .ant-layout-aside {
       position: relative;
       min-height: 100%;
@@ -64,8 +65,9 @@
     }
 
     .ant-layout-aside-collapse .ant-layout-sider > .ant-menu > .ant-menu-item > .anticon {
-      font-size: 16px;
+      font-size: 22px;
       display: inline-block;
+	  line-height:64px;
     }
 
     .ant-layout-aside-collapse .ant-layout-sider > .ant-menu > .ant-menu-item .nav-text {
@@ -336,7 +338,7 @@
 	text-align:left
 }
 .ant-modal-footer{
-	text-align:center;
+	text-align:center !important;
 	padding:30px 0 !important;
 }
 .ant-form-item-control button{
@@ -520,4 +522,16 @@ html, body, #root {
     left: 30px;
     top: -30px;
     margin-bottom: -30px;
+}
+.bai{
+	width:100%
+}
+.botton_left{
+	margin-left:202px !important;
+}
+.padding_menu{
+	padding-left:20px !important;
+}
+.ant-menu-vertical > .ant-menu-item, .ant-menu-inline > .ant-menu-item, .ant-menu-item-group-list > .ant-menu-item, .ant-menu-vertical > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-item-group-list > .ant-menu-submenu > .ant-menu-submenu-title{
+	font-size:14px
 }

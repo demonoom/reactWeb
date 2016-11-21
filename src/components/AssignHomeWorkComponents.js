@@ -295,7 +295,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
     selectedSubjectKeys.forEach(function (e) {
         var subjectArray = e.split("#");
         defaultCheckedList.push(subjectArray[0]);
-        plainOptions.push({label:<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: subjectArray[1]}}></article>,value:subjectArray[0]});
+        plainOptions.push({label:<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: subjectArray[1]}} ></article>,value:subjectArray[0]});
         i++;
         if(i!=selectedSubjectKeys.length){
           sids+=subjectArray[0]+",";

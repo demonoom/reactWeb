@@ -90,16 +90,16 @@ const MainLayout = React.createClass({
             <UserCardModalComponents/>
           </div>
           <Menu mode="inline" theme="dark" defaultSelectedKeys={[this.state.currentKey]}  onClick={this.toolbarClick}>
-            <Menu.Item key="teachTimes">
+            <Menu.Item key="teachTimes" className="padding_menu">
               <Icon type="bar-chart" /><span className="nav-text">教学进度</span>
             </Menu.Item>
-            <Menu.Item key="KnowledgeResources">
+            <Menu.Item key="KnowledgeResources" className="padding_menu">
               <Icon type="book" /><span className="nav-text">资源库</span>
             </Menu.Item>
-            <Menu.Item key="teachReady" href="wwww.baidu.com">
+            <Menu.Item key="teachReady" href="wwww.baidu.com" className="padding_menu">
               <Icon type="edit"/><span className="nav-text">备课</span>
             </Menu.Item>
-            <Menu.Item key="homeWork">
+            <Menu.Item key="homeWork" className="padding_menu">
               <Icon type="file" /><span className="nav-text">家庭作业</span>
             </Menu.Item>
             <Menu.Item key="folder">

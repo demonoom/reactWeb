@@ -182,8 +182,8 @@ const CourseWareComponents = React.createClass({
                          <span><span className="col1">上传时间：</span><span className="col2">{e[7]}</span></span>
 					</div>
 					<div className="bnt2_right">
-                    <Button style={{ float:'right'}}    value={e[1]} onClick="">删除</Button>
-                         <Button style={{ float:'right'}}  value={e[3]} onClick={courseWare.downLoadFile}>下载</Button>
+                    <Button style={{ float:'right'}} icon="delete" value={e[1]} onClick=""></Button>
+                         <Button style={{ float:'right'}} icon="download"   value={e[3]} onClick={courseWare.downLoadFile}></Button>
 					</div>
                     </pre>
             </Panel>
@@ -210,7 +210,7 @@ const CourseWareComponents = React.createClass({
                       </div>       
 
                             <div className="bnt2_right">
-                                <Button style={{ float:'right'}}  value={e[3]} onClick={courseWare.downLoadFile}>下载</Button>
+                                <Button style={{ float:'right'}} icon="download"  value={e[3]} onClick={courseWare.downLoadFile}></Button>
                                 <Button style={{ float:'right'}} type=""  icon=""  value={e[0]} onClick={this.showModal}>使用</Button>
                             </div>
 
