@@ -72,6 +72,16 @@ const MainTabComponents = React.createClass({
     },
 
     render() {
+
+        var toolbarExtra;
+        if(this.state.currentOptType==""){
+            toolbarExtra = <div className="ant-tabs-right"></div>;
+        }else if(this.state.currentOptType=="bySchedule"){
+            toolbarExtra = <div className="ant-tabs-right"><span className="toobar"><Button type="" icon="delete" onClick={deleteConfirm}  ></Button></span></div>;
+        }else{
+            toolbarExtra = <div className="ant-tabs-right"><Button type="" icon="share-alt" onClick={this.showModal}></Button><SubjectUploadTabComponents params={this.state.subjectParams}></SubjectUploadTabComponents><span className="toobar"><Button type="" icon="delete" onClick={deleteConfirm}  ></Button></span></div>;
+        }
+
         return (
             <div>
                 <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
@@ -87,7 +97,7 @@ const MainTabComponents = React.createClass({
                     ref = "mainTab"
                     activeKey={this.state.activeKey}
                     defaultActiveKey={this.state.defaultActiveKey}
-                    tabBarExtraContent={<div className="ant-tabs-right"><Button type="" icon="share-alt" onClick={this.showModal}></Button><SubjectUploadTabComponents params={this.state.subjectParams}></SubjectUploadTabComponents><span className="toobar"><Button type="" icon="delete" onClick={deleteConfirm}  ></Button></span></div>}
+                    tabBarExtraContent={toolbarExtra}
                 >
                     <TabPane tab="课件" key="课件"><CourseWareComponents ref="courseWare"/></TabPane>
                     <TabPane tab="题目" key="题目"><SubjectTable  ref="subTable" params={this.state.subjectParams}/></TabPane>
