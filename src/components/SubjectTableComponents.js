@@ -40,7 +40,7 @@ const columns = [{
   dataIndex: 'subjectScore',
 }, {
   title: '操作',
-  className:'ant-table-selection-topic',
+  className:'ant-table-selection-smallclass',
   dataIndex: 'subjectOpt',
 },
 ];
@@ -123,7 +123,7 @@ const SUbjectTable = React.createClass({
           var content=<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article>;
           var subjectType=e.typeName;
           var subjectScore=e.score;
-          var subjectOpt=<div><SubjectEditTabComponents editParams={e.sid+"#"+e.typeName+"#"+e.shortContent+"#"+e.score}></SubjectEditTabComponents><Button value={e.sid} onClick={subTable.deleteSubject}><Icon type="delete"/></Button><Button value={e.sid} onClick="">录制微课</Button></div>;
+          var subjectOpt=<div className="smallclass"><SubjectEditTabComponents editParams={e.sid+"#"+e.typeName+"#"+e.shortContent+"#"+e.score}></SubjectEditTabComponents><span className="toobar"><Button value={e.sid} onClick={subTable.deleteSubject}><Icon type="delete"/></Button></span><span className="toobar"><Button value={e.sid} onClick="">录制微课</Button></span></div>;
           data.push({
             key: key,
             name: name,
@@ -176,7 +176,7 @@ const SUbjectTable = React.createClass({
           var content=<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article>;
           var subjectType=e.typeName;
           var subjectScore=e.score;
-          var subjectOpt=<Button style={{ float:'right'}} type="primary"  icon="share-alt"  value={key} onClick={subTable.showModal}>使用</Button>;
+          var subjectOpt=<Button style={{ float:'right'}} type=""  value={key} onClick={subTable.showModal}>使用</Button>;
           data.push({
             key: key,
             name: name,

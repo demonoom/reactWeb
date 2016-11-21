@@ -118,7 +118,7 @@ const MiddleMenuComponents = React.createClass({
 
   buildMenuChildren:function () {
     children = this.state.menuList.map((e, i)=> {
-      return <SubMenu key={e[0]} onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" className='le_1' /><span>{e[1]}</span><Badge count={e[2]}/> <span title={e[0]} onClick={this.editTeachSchedule} className='write_right'><Icon type="edit"/></span><span title={e[0]} onClick={this.deleteTeachSchedule} className='del_right'><Icon type="delete"/></span> </span>}>
+      return <SubMenu key={e[0]} onTitleClick={this.subMenuTitleClick} title={<span><span>{e[1]}</span><Badge count={e[2]}/> <span title={e[0]} onClick={this.editTeachSchedule} className='write_right'><Icon type="edit"/></span><span title={e[0]} onClick={this.deleteTeachSchedule} className='del_right'><Icon type="delete"/></span> </span>}>
       </SubMenu>
     });
   },

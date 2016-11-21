@@ -113,7 +113,8 @@ const SubjectForm = Form.create()(React.createClass({
               名称&nbsp;
             </span>
           )}
-          hasFeedback
+          hasFeedbac
+		 
         >
           {getFieldDecorator('courseName', {
             rules: [{ required: true, message: '请输入名称!' }],
