@@ -205,7 +205,7 @@ const SUbjectTable = React.createClass({
   },
 
   initGetSubjectInfo:function () {
-    // alert("params in subjectTable:"+subTable.props.params);
+    alert("params in subjectTable:"+subTable.props.params);
     var subjectParamArray = subTable.props.params.split("#");
     var ident = subjectParamArray[0];
     var ScheduleOrSubjectId = subjectParamArray[1];
