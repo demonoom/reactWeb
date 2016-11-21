@@ -67,6 +67,8 @@ const Login = Form.create()(React.createClass({
                 }else if(response.colUtype=="TEAC"){
                     sessionStorage.setItem("ident", response.colUid);
                     location.hash="MainLayout";
+                }else{
+                    alert("用户身份不正确,请重新输入！");
                 }
             },
             onError : function(error) {
