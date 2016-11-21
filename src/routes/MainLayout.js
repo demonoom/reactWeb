@@ -60,6 +60,13 @@ const MainLayout = React.createClass({
     }
   },
 
+  componentWillMount(){
+    var userIdent = sessionStorage.getItem("ident");
+    if(userIdent==null || userIdent==""){
+        location.hash="Login";
+    }
+  },
+
   //获取老师的已布置作业列表
   getTeacherHomeWork:function (optType) {
       // alert("家庭作业操作："+optType);
