@@ -64,7 +64,7 @@ const KnowledgeMenuComponents = React.createClass({
   },
   //菜单被选择时执行的函数
   subMenuTitleClick(e){
-    alert("ekey:"+e.key);
+    // alert("ekey:"+e.key);
     var menuKeyArray = e.key.split("#");
     var menuId = menuKeyArray[0];
     var childrenCount = menuKeyArray[1];
