@@ -332,7 +332,7 @@
 	top:0
 }
 .ant-form-item-control, .ant-modal-footer {
-	text-align:center
+	text-align:left
 }
 .ant-form-item-control button{
 	margin:0 10px
@@ -488,4 +488,8 @@ html, body, #root {
 }
 .ant-btn {
 	padding:4px 8px;
+}
+.date_tr{
+   position:relative;
+   top:7px;
 }

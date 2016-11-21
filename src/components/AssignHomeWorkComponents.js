@@ -334,7 +334,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
         <FormItem
             {...formItemLayout}
             label={(
-                <span>
+                <span className="date_tr">
               日期&nbsp;
             </span>
             )}
@@ -348,7 +348,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
         <FormItem
             {...formItemLayout}
             label={(
-                <span>
+                <span className="date_tr">
               班级&nbsp;
             </span>
             )}
