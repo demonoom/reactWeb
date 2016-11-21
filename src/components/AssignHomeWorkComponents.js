@@ -72,6 +72,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
       checkAll: false,
       selectedSubjectKeys:[],
       subjectCount:0,
+      subjectModalVisible:false,
     };
   },
 
@@ -105,8 +106,9 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
     };
     this.doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
+        alert(ret.msg);
         console.log(ret.msg);
-        if(ret.msg=="调用成功"){
+        if(ret.msg=="调用成功" && ret.response==true){
             alert("作业布置成功");
         }else{
             alert("作业布置失败");
@@ -120,10 +122,11 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
 
   handleSubmit(e) {
     e.preventDefault();
-    ident="23836";
-    sids="";
-    clazzIds="";
-    dateTime = "";
+    var ident="23836";
+    // sids="";
+    // clazzIds="";
+    // dateTime = "";
+    alert(sids+"\n"+clazzIds+"\n"+dateTime);
     assignHomeWork.publishHomeworkSubject(ident,sids,clazzIds,dateTime);
   },
   /*handleCancel() {
@@ -147,7 +150,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
 
   //日期控件值改变时，获取当前选择的日期（第一个参数表示的是时间戳，第二个是YYYY-MM-dd格式的日期）
   assignDateOnChange(date, dateString) {
-    dateTime = date;
+    dateTime = ""+date;
     console.log("assignDate:"+date, dateString);
   },
 
@@ -314,6 +317,24 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
     assignHomeWork.setState({ checkedList:defaultCheckedList});
   },
 
+  showSubjectModal() {
+    assignHomeWork.setState({
+      subjectModalVisible: true,
+    });
+  },
+  subjectModalHandleOk() {
+    console.log('Clicked OK');
+    assignHomeWork.setState({
+      subjectModalVisible: false,
+    });
+  },
+  subjectModalHandleCancel(e) {
+    console.log(e);
+    assignHomeWork.setState({
+      subjectModalVisible: false,
+    });
+  },
+
   render() {
     const { getFieldDecorator } = assignHomeWork.props.form;
     const formItemLayout = {
@@ -330,87 +351,99 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
     const hasSelected = selectedSubjectKeys.length > 0;
 
     return (
-      <Form vertical onSubmit={this.handleSubmit}>
-        <FormItem
-            {...formItemLayout}
-            label={(
-                <span className="date_tr">
+        <div>
+		 
+          <Form vertical onSubmit={assignHomeWork.handleSubmit} className="homework">
+		   <div className="ant-collapse ant-modal-footer">
+            <FormItem
+                {...formItemLayout}
+                label={(
+                    <span className="date_tr">
               日期&nbsp;
             </span>
-            )}
-            hasFeedback
-        >
-          {getFieldDecorator('assignDate')(
-              <DatePicker onChange={assignHomeWork.assignDateOnChange} />
-          )}
-        </FormItem>
+                )}
+                hasFeedback
+            >
+              {getFieldDecorator('assignDate')(
+                  <DatePicker onChange={assignHomeWork.assignDateOnChange} />
+              )}
+            </FormItem>
 
-        <FormItem
-            {...formItemLayout}
-            label={(
-                <span className="date_tr">
+            <FormItem
+                {...formItemLayout}
+                label={(
+                    <span className="date_tr">
               班级&nbsp;
             </span>
-            )}
-            hasFeedback
-        >
-          {getFieldDecorator('classList')(
-              <CheckboxGroup options={classList} onChange={assignHomeWork.classListOnChange} />
-          )}
-        </FormItem>
+                )}
+                hasFeedback
+            >
+              {getFieldDecorator('classList')(
+                  <CheckboxGroup options={classList} onChange={assignHomeWork.classListOnChange} />
+              )}
+            </FormItem>
 
-        <FormItem
-            {...formItemLayout}
-            label={(
-                <span>
+            <FormItem
+                {...formItemLayout}
+                label={(
+                    <span className="date_tr">
               题目&nbsp;
             </span>
-            )}
-            hasFeedback
-        >
-          {getFieldDecorator('scheduleList')(
-              <div>
-                <Row>
-                  <Col span={12}><Table size="small" onRowClick={assignHomeWork.onScheduleSelectChange} selectedRowKeys={assignHomeWork.selectedRowKeys} columns={scheduleColumns}  dataSource={scheduleData} scroll={{ y: 300}}/></Col>
-                  <Col span={12}>
-                    <div>
-                        <Table rowSelection={subjectRowSelection} columns={subjectColumns} dataSource={subjectData} scroll={{ y: 300}}/>
-                     </div>
-                  </Col>
-                </Row>
-{/*                <Row>
-                  <Col span={24}>已选择题目</Col>
-                </Row>*/}
-                <Row>
-                  <Col span={24}>
-                    <div>
-                      <div style={{ borderBottom: '1px solid #E9E9E9' }}>
-                        <Checkbox
-                            indeterminate={assignHomeWork.state.indeterminate}
-                            onChange={assignHomeWork.subjectListOnCheckAllChange}
-                            checked={assignHomeWork.state.checkAll}
-                        >
-                          Check all  <Button onClick={assignHomeWork.removeAllSelectedSubject}>删除已选题目</Button>
-                        </Checkbox>
-                      </div>
-                      <br />
-                      <CheckboxGroup options={plainOptions} defaultValue={assignHomeWork.state.checkedList} value={assignHomeWork.state.checkedList} onChange={assignHomeWork.subjectListOnChange} />
-                    </div>
-                  </Col>
-                </Row>
-              </div>
-          )}
-        </FormItem>
-
-        <FormItem style={{text:'center'}}>
-          <Button type="primary" htmlType="submit" className="login-form-button" >
-            确定
-          </Button>
-          <Button type="primary" htmlType="reset" className="login-form-button" onClick={this.handleCancel} >
-            取消
-          </Button>
-        </FormItem>
-      </Form>
+                )}
+                hasFeedback
+            >
+              {getFieldDecorator('scheduleList')(
+                  <div>
+                    {/*                <Row>
+                     <Col span={24}>已选择题目</Col>
+                     </Row>*/}
+                    <Row>
+                      <Col span={24}>
+                        <div>
+                          <Button type="primary" onClick={assignHomeWork.showSubjectModal}><Icon type="check-circle-o" />选择题目</Button>
+                          <div className="class_bo">
+                            <Checkbox
+                                indeterminate={assignHomeWork.state.indeterminate}
+                                onChange={assignHomeWork.subjectListOnCheckAllChange}
+                                checked={assignHomeWork.state.checkAll}
+                            >
+                              Check all  <Button onClick={assignHomeWork.removeAllSelectedSubject}>删除已选题目</Button>
+                            </Checkbox>
+                          </div>
+                          <br />
+                          <CheckboxGroup options={plainOptions} defaultValue={assignHomeWork.state.checkedList} value={assignHomeWork.state.checkedList} onChange={assignHomeWork.subjectListOnChange} />
+                        </div>
+                      </Col>
+                    </Row>
+                  </div>
+              )}
+            </FormItem>
+			</div>
+            <FormItem className="ant-pagination">
+              <Button type="primary" htmlType="submit" className="login-form-button class_right" >
+                确定
+              </Button>
+              <Button type="primary" htmlType="reset" className="login-form-button" onClick={this.handleCancel} >
+                取消
+              </Button>
+            </FormItem>
+          </Form>
+          <Modal title="选择题目" className="choose_class" visible={assignHomeWork.state.subjectModalVisible}
+                 onCancel={assignHomeWork.subjectModalHandleCancel}
+                 footer={[
+                   <Button key="return" type="primary" size="large" onClick={assignHomeWork.subjectModalHandleCancel}>确定</Button>,
+                 ]}
+          >
+              <Row>
+                <Col span={7}><Table size="small" onRowClick={assignHomeWork.onScheduleSelectChange} selectedRowKeys={assignHomeWork.selectedRowKeys} columns={scheduleColumns}  dataSource={scheduleData} scroll={{ y: 300}}/></Col>
+                <Col span={17} className="col17_le">
+                  <div>
+                    <Table rowSelection={subjectRowSelection} columns={subjectColumns} dataSource={subjectData} scroll={{ y: 300}}/>
+                  </div>
+                </Col>
+              </Row>
+          </Modal>
+        </div>
     );
   },
 }));

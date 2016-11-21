@@ -234,7 +234,7 @@ const CourseWareComponents = React.createClass({
                     {coursePanelChildren}
                 </Collapse>
             </div>
-            <Pagination total={courseWare.state.totalCount}  current={courseWare.state.currentPage} onChange={this.onChange}/>
+            <Pagination total={courseWare.state.totalCount} pageSize={15} current={courseWare.state.currentPage} onChange={this.onChange}/>
         </div>
     );
   },
