@@ -60,7 +60,7 @@ const MiddleMenuComponents = React.createClass({
   },
   //菜单被选择时执行的函数
   subMenuTitleClick(e){
-    alert(e.key);
+    // alert(e.key);
     mMenu.setState({openSubMenu:e.key});
     var optContent = e.key+"#"+"bySchedule";
     mMenu.props.callbackParent(optContent);
