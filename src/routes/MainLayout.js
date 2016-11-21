@@ -9,7 +9,13 @@ import HeaderComponents from '../components/HeaderComponents';
 import UserCardModalComponents from '../components/UserCardModalComponents';
 import FloatButton  from '../components/FloatButton';
 import KnowledgeMenuComponents from '../components/KnowledgeMenuComponents';
+import HomeWorkMenu from '../components/HomeWorkMenu';
+import HomeWorkTabComponents from '../components/HomeWorkTabComponents';
+import moment from 'moment';
 
+// 推荐在入口文件全局设置 locale
+import 'moment/locale/zh-cn';
+moment.locale('zh-cn');
 import { createStore } from 'redux';
 
 
@@ -33,6 +39,7 @@ const MainLayout = React.createClass({
     })
   },
   toolbarClick:function (e) {
+      // alert(e.key);
     this.setState({currentKey:e.key});
   },
   //获取教学进度下的课件资源
@@ -53,14 +60,26 @@ const MainLayout = React.createClass({
     }
   },
 
+  //获取老师的已布置作业列表
+  getTeacherHomeWork:function (optType) {
+      // alert("家庭作业操作："+optType);
+      mainLayout.refs.homeWorkTabComponents.getTeacherHomeWork(optType);
+  },
+
   render() {
     const collapse = this.state.collapse;
     //根据如下判断结果，完成对页面中部位置的渲染，不同情况，渲染不同组件
     var middleComponent;
+    var tabComponent=<MainTabComponents ref="mainTabComponents"/>;
     if(this.state.currentKey=="teachTimes"){
       middleComponent = <MiddleMenuComponents activeMenu={this.state.activeMiddleMenu}  callbackParent={this.getTeachPlans}/>;
+      tabComponent=<MainTabComponents ref="mainTabComponents"/>;
     }else if(this.state.currentKey=="KnowledgeResources"){
       middleComponent = <KnowledgeMenuComponents callbackParent={this.getTeachPlans}></KnowledgeMenuComponents>;
+      tabComponent=<MainTabComponents ref="mainTabComponents"/>;
+    }else if(this.state.currentKey=="homeWork"){
+      middleComponent = <HomeWorkMenu callbackParent={this.getTeacherHomeWork}></HomeWorkMenu>
+      tabComponent=<HomeWorkTabComponents ref="homeWorkTabComponents"/>;
     }
 
     return (
@@ -80,7 +99,7 @@ const MainLayout = React.createClass({
             <Menu.Item key="teachReady" href="wwww.baidu.com">
               <Icon type="edit"/><span className="nav-text">备课</span>
             </Menu.Item>
-            <Menu.Item key="notification">
+            <Menu.Item key="homeWork">
               <Icon type="file" /><span className="nav-text">家庭作业</span>
             </Menu.Item>
             <Menu.Item key="folder">
@@ -109,7 +128,7 @@ const MainLayout = React.createClass({
               <Col span={19}>
                   <div className="ant-layout-container">
                     <div className="ant-layout-content">
-                        <MainTabComponents ref="mainTabComponents"/>
+                      {tabComponent}
                     </div>
                   </div>
               </Col>
