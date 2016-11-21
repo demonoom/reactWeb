@@ -39,8 +39,6 @@ const MainTabComponents = React.createClass({
         var teachScheduleId = optContentArray[0];
         var optType =optContentArray[1];
         var pageNo = 1;
-        //alert(teachScheduleId+"------"+optType);
-
         this.refs.courseWare.getTeachPlans("23836",teachScheduleId,optType,pageNo);
         this.setState({currentOptType:optType});
         this.setState({currentTeachScheduleId:teachScheduleId});
@@ -49,18 +47,12 @@ const MainTabComponents = React.createClass({
     },
 
     onChange(activeKey) {
-        // alert(activeKey+"==="+this.refs.subTable);
-        // alert(this.state.currentOptType+"----"+this.state.currentTeachScheduleId);
         if(activeKey=="题目"){
             this.setState({activeKey:'题目'});
-            // this.refs.subTable.getSubjectData("23836",this.state.currentTeachScheduleId,1,this.state.currentOptType);
-            // this.refs.mainTab.props.children[1].props.children.params="23836"+"#"+this.state.currentTeachScheduleId,1,this.state.currentOptType;
-            //this.refs.mainTab.props.children[1].params="23836"+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType;
             this.setState({subjectParams:"23836"+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType});
         }else{
             this.setState({activeKey:'课件'});
         }
-        //this.setState({ activeKey });
     },
 
     showModal:function () {
@@ -69,7 +61,7 @@ const MainTabComponents = React.createClass({
     //生成面包屑导航
     buildBreadcrumb:function (breadcrumbArray) {
         breadcrumbChildren = breadcrumbArray.map((e, i)=> {
-            return <Breadcrumb.Item><a href={e.hrefLink}>{e.hrefText}</a></Breadcrumb.Item>
+            return <Breadcrumb.Item key={e.hrefText}><a href={e.hrefLink}>{e.hrefText}</a></Breadcrumb.Item>
         });
         this.setState({breadcrumbArray:breadcrumbArray});
     },
@@ -97,9 +89,6 @@ const MainTabComponents = React.createClass({
                     defaultActiveKey={this.state.defaultActiveKey}
                     tabBarExtraContent={<div className="ant-tabs-right"><Button type="" icon="share-alt" onClick={this.showModal}></Button><SubjectUploadTabComponents params={this.state.subjectParams}></SubjectUploadTabComponents><span className="toobar"><Button type="" icon="delete" onClick={deleteConfirm}  ></Button></span></div>}
                 >
-                    {/*{this.state.panes.map(pane => <TabPane tab={pane.title} key={pane.key}>
-                     {pane.content}
-                     </TabPane>)}*/}
                     <TabPane tab="课件" key="课件"><CourseWareComponents ref="courseWare"/></TabPane>
                     <TabPane tab="题目" key="题目"><SubjectTable  ref="subTable" params={this.state.subjectParams}/></TabPane>
                 </Tabs>
