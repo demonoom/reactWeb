@@ -417,7 +417,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
                 hasFeedback
             >
               {getFieldDecorator('classList')(
-                  <CheckboxGroup options={classList} onChange={assignHomeWork.classListOnChange} />
+                  <CheckboxGroup options={classList} onChange={assignHomeWork.classListOnChange}/>
               )}
             </FormItem>
 

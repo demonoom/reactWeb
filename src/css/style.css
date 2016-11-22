@@ -204,7 +204,9 @@
 		bottom: 0;
 		right: 4px;
 		margin-bottom: 10px;
-		height:30px !important
+		height:30px !important;
+		transform:translate(-50%,0);
+		left:50%;
     }
     .ant-collapse-content > .ant-collapse-content-box{
       line-height:30px;
@@ -531,7 +533,7 @@ html, body, #root {
 }
 .class_bo{
 	border-bottom: 1px solid #E9E9E9;
-	padding:0 0 10px 10px;
+	padding:0 0 10px 0;
 	margin-top:25px;
 }
 .class_right{
@@ -606,3 +608,18 @@ a:hover{
 .ant-table-fixed-header .ant-table-scroll .ant-table-header{
 	font-size:16px;
 }
+.ant-checkbox-wrapper{
+	display:block;
+	padding-left:10px;
+}
+article.content{
+	position:relative;
+	top:-30px;
+	left:32px;
+	margin-bottom:-30px;
+}
+.line_block{
+	display:inline-block;
+}
+.ant-checkbox-wrapper + .ant-checkbox-wrapper{
+	margin-left:0px;}
