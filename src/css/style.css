@@ -427,13 +427,16 @@ html, body, #root {
 }
 .clearfix{
 	height:100%;
-	overflow:auto;
+	overflow:hidden;
 }
 .clearfix > div:first-child{
 	height:calc(100% - 48px)
 }
 .ant-spin-container, .ant-table-content, .ant-table-scroll{
 	height:100%;
+}
+.ant-table-scroll{
+	overflow: hidden;
 }
 .ant-table-fixed-header .ant-table-body{
 	min-height:calc(100% - 50px)

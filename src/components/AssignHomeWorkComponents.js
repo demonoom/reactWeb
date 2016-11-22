@@ -477,7 +477,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
 
                    <Button key="return" type="primary" size="large" onClick={assignHomeWork.subjectModalHandleCancel}>确定</Button>,
 
-                   <Button key="ok" type="ghost" size="large" onClick={assignHomeWork.subjectModalHandleCancel}>确定</Button>,
+                   <Button key="ok" type="ghost" size="large" onClick={assignHomeWork.subjectModalHandleCancel}>取消</Button>,
 
                  ]}
           >
