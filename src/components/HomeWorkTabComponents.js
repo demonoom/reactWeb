@@ -52,7 +52,7 @@ const HomeWorkTabComponents = React.createClass({
             </TabPane>;
         }else{
             tabPanel = <TabPane tab="布置作业" key="布置作业">
-                <AssignHomeWorkComponents ref="assignHomeWorkCom"></AssignHomeWorkComponents>
+                <AssignHomeWorkComponents ref="assignHomeWorkCom"  callbackParent={this.getTeacherHomeWork}></AssignHomeWorkComponents>
             </TabPane>;
         }
 
