@@ -132,8 +132,12 @@ const MiddleMenuComponents = React.createClass({
 
   showModal:function (optType,editSchuldeId) {
     optType = (optType=="edit"?"edit":"add");
-    //alert("oooo:"+optType);
+    // alert("editSchuldeId:"+editSchuldeId);
     mMenu.refs.teachingComponents.showModal(optType,editSchuldeId);
+  },
+
+  handleMenu(){
+    mMenu.getLessonMenu();
   },
 
   render() {

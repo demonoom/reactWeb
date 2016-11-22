@@ -9,11 +9,9 @@ const SubjectForm = Form.create()(React.createClass({
 
   getInitialState() {
     subjectForm = this;
-    //alert(this.props.editSchuldeId);
     return {
       visible: false,
       optType:'add',
-      editSchuldeId:this.props.editSchuldeId,
     };
   },
 
@@ -60,33 +58,18 @@ const SubjectForm = Form.create()(React.createClass({
 
   handleSubmit(e) {
     e.preventDefault();
-    //alert("====:"+this.props.optType);
     this.props.form.validateFieldsAndScroll((err, values) => {
       var ident = sessionStorage.getItem("ident");
       var scheduleName = values.courseName;
       if(this.props.optType=="edit"){
-          alert("edit"+scheduleName);
-          //this.setState({ visible: false });
-
+          // alert("edit"+scheduleName);
       }else{
         this.saveSchedule(ident,scheduleName);
-        //alert("add"+values.courseName);
-        /*if (err) {
-          return;
-        }
-        console.log("courseName:"+values.courseName);
-        values.scheduleId=values.courseName;
-        //console.log('Received values of form: ', values);
-        this.props.callbackParent(values);*/
-
       }
       this.props.callbackParent("cancel");
     });
 
   },
-  /*handleCancel() {
-    subjectForm.setState({ visible: false });
-  },*/
   handleCancel(e) {
     this.props.callbackParent("cancel");
   },
@@ -119,7 +102,10 @@ const SubjectForm = Form.create()(React.createClass({
           {getFieldDecorator('courseName', {
             rules: [{ required: true, message: '请输入名称!' }],
           })(
-            <Input defaultValue={this.props.editSchuldeId}/>
+              <div style={{ marginBottom: 16 }}>
+                <Input  defaultValue={subjectForm.props.editSchuldeId}/>
+              </div>
+
           )}
         </FormItem>
         <FormItem className="ant-modal-footer">
@@ -137,7 +123,6 @@ const SubjectForm = Form.create()(React.createClass({
 
 const TeachingComponents = React.createClass({
   getInitialState() {
-    //alert("===="+this.props.modalVisible);
     return {
       loading: false,
       visible: false,
@@ -146,8 +131,9 @@ const TeachingComponents = React.createClass({
     //this.setState({ visible: this.props.modalVisible });
   },
   showModal(openType,editSchuldeId) {
-    //alert("editSchuldeId:"+editSchuldeId);
-    //this.refs.courseName.value=editSchuldeId;
+    if(openType=="add"){
+      editSchuldeId="";
+    }
     this.setState({
       visible: true,
       optType:openType,
@@ -155,10 +141,6 @@ const TeachingComponents = React.createClass({
     });
   },
   handleOk() {
-    // this.setState({ loading: true });
-    // setTimeout(() => {
-    //   this.setState({ loading: false, visible: false });
-    // }, 3000);
     this.setState({ visible: false });
   },
   handleCancel() {
@@ -166,16 +148,13 @@ const TeachingComponents = React.createClass({
   },
 
   handleEmail: function(val){
-    this.props.callbackParent(val);
-    //this.setState({lessonCount: val});
+    this.props.callbackParent();
     this.setState({ visible: false });
   },
 
   render() {
     return (
       <div>
-
-
         <Modal
           visible={this.state.visible}
           title="教学进度"
