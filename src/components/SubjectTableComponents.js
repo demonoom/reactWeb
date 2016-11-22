@@ -175,7 +175,7 @@ const SUbjectTable = React.createClass({
           var content=<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article>;
           var subjectType=e.typeName;
           var subjectScore=e.score;
-          var subjectOpt=<Button style={{ float:'right'}} type=""  value={key} onClick={subTable.showModal}>使用</Button>;
+          var subjectOpt=<Button style={{ }} type=""  value={key} onClick={subTable.showModal}>使用</Button>;
           data.push({
             key: key,
             name: name,
