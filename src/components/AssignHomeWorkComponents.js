@@ -111,6 +111,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
         }else{
             alert("作业布置失败");
         }
+        assignHomeWork.props.callbackParent();
       },
       onError : function(error) {
         alert(error);
@@ -131,7 +132,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
    assignHomeWork.setState({ visible: false });
   },*/
   handleCancel(e) {
-    this.props.callbackParent("cancel");
+    assignHomeWork.props.callbackParent();
   },
   checkConfirm(rule, value, callback) {
     const form = this.props.form;
@@ -462,9 +463,9 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
               <Button type="primary" htmlType="submit" className="login-form-button class_right" >
                 保存
               </Button>
-              {/*<Button type="primary" htmlType="reset" className="login-form-button" onClick={this.handleCancel} >
+              <Button type="primary" htmlType="reset" className="login-form-button" onClick={this.handleCancel} >
                 取消
-              </Button>*/}
+              </Button>
             </FormItem>
 
           </Form>
