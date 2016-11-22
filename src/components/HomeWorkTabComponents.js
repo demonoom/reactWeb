@@ -35,7 +35,7 @@ const HomeWorkTabComponents = React.createClass({
         // alert("getTeacherHomeWork in tab:"+optContent);
         this.setState({currentOpt:'checkHomeWorkList',});
         this.setState({activeKey:'作业列表'});
-        this.refs.homeWorkTable.getDoneHomeworkList("23836",1);
+        this.refs.homeWorkTable.getDoneHomeworkList(sessionStorage.getItem("ident"),1);
     },
 
     assignHomeWork(){

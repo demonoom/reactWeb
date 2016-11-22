@@ -81,7 +81,7 @@ const HomeWorkMenu = React.createClass({
   getLessonMenu(){
     var param = {
       "method":'getTeachScheduleByIdent',
-      "ident":'23836'
+      "ident":sessionStorage.getItem("ident")
     };
     this.doWebService(JSON.stringify(param), {
       onResponse : function(ret) {

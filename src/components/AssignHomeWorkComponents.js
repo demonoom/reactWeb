@@ -104,8 +104,8 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
     };
     this.doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
-        alert(ret.msg);
-        console.log(ret.msg);
+        // alert(ret.msg);
+        // console.log(ret.msg);
         if(ret.msg=="调用成功" && ret.response==true){
             alert("作业布置成功");
         }else{
@@ -120,11 +120,11 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
 
   handleSubmit(e) {
     e.preventDefault();
-    var ident="23836";
+    var ident=sessionStorage.getItem("ident");
     // sids="";
     // clazzIds="";
     // dateTime = "";
-    alert(sids+"\n"+clazzIds+"\n"+dateTime);
+    // alert(sids+"\n"+clazzIds+"\n"+dateTime);
     assignHomeWork.publishHomeworkSubject(ident,sids,clazzIds,dateTime);
   },
   /*handleCancel() {
@@ -142,7 +142,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
   },
 
   componentDidMount(){
-      assignHomeWork.getTeacherClasses("23836");
+      assignHomeWork.getTeacherClasses(sessionStorage.getItem("ident"));
       // assignHomeWork.getScheduleList();
   },
 
@@ -195,7 +195,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
   getScheduleList(){
     var param = {
       "method":'getTeachScheduleByIdent',
-      "ident":'23836'
+      "ident":sessionStorage.getItem("ident")
     };
     this.doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
@@ -223,7 +223,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
     console.log('selectedRowKeys changed: ', selectedRowKeys);
     var scheduleId = selectedRowKeys.key;
     subjectData=[];
-    assignHomeWork.getSubjectDataBySchedule("23836",scheduleId,1);
+    assignHomeWork.getSubjectDataBySchedule(sessionStorage.getItem("ident"),scheduleId,1);
     assignHomeWork.setState({ selectedRowKeys });
     assignHomeWork.setState({ currentScheduleId:scheduleId});
   },
@@ -360,13 +360,13 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
     });
   },
   //设置禁用今天之前的日期
-  disabledDate(current) {
+/*  disabledDate(current) {
     return current && current.valueOf() < Date.now();
-  },
+  },*/
 
   pageOnChange(pageNo) {
     console.log(pageNo);
-    assignHomeWork.getSubjectDataBySchedule("23836",assignHomeWork.state.currentScheduleId,pageNo);
+    assignHomeWork.getSubjectDataBySchedule(sessionStorage.getItem("ident"),assignHomeWork.state.currentScheduleId,pageNo);
     this.setState({
       currentPage: pageNo,
     });
@@ -401,7 +401,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
                 hasFeedback
             >
               {getFieldDecorator('assignDate')(
-                  <span><DatePicker onChange={assignHomeWork.assignDateOnChange}  disabledDate={assignHomeWork.disabledDate} /></span>
+                  <span><DatePicker onChange={assignHomeWork.assignDateOnChange} /></span>
               )}
             </FormItem>
 

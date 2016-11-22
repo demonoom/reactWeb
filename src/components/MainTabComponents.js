@@ -30,7 +30,8 @@ const MainTabComponents = React.createClass({
             defaultActiveKey:'课件',
             activeKey:'课件',
             subjectParams:'',
-            breadcrumbArray:[]
+            breadcrumbArray:[],
+            currentKnowledgeName:''
         };
     },
     getTeachPlans(optContent){
@@ -38,18 +39,21 @@ const MainTabComponents = React.createClass({
         var optContentArray = optContent.split("#");
         var teachScheduleId = optContentArray[0];
         var optType =optContentArray[1];
+        var knowledgeName = optContentArray[2];
         var pageNo = 1;
-        this.refs.courseWare.getTeachPlans("23836",teachScheduleId,optType,pageNo);
+        // alert("knowledgeName:"+knowledgeName);
+        this.refs.courseWare.getTeachPlans(sessionStorage.getItem("ident"),teachScheduleId,optType,pageNo,knowledgeName);
         this.setState({currentOptType:optType});
         this.setState({currentTeachScheduleId:teachScheduleId});
+        this.setState({currentKnowledgeName:knowledgeName});
         this.setState({activeKey:'课件'});
-        this.setState({subjectParams:"23836"+"#"+teachScheduleId+"#"+1+"#"+optType});
+        this.setState({subjectParams:sessionStorage.getItem("ident")+"#"+teachScheduleId+"#"+1+"#"+optType});
     },
 
     onChange(activeKey) {
         if(activeKey=="题目"){
             this.setState({activeKey:'题目'});
-            this.setState({subjectParams:"23836"+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType});
+            this.setState({subjectParams:sessionStorage.getItem("ident")+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType});
         }else{
             this.setState({activeKey:'课件'});
         }
@@ -63,6 +67,7 @@ const MainTabComponents = React.createClass({
         breadcrumbChildren = breadcrumbArray.map((e, i)=> {
             return <Breadcrumb.Item key={e.hrefText}><a href={e.hrefLink}>{e.hrefText}</a></Breadcrumb.Item>
         });
+        this.setState({activeKey:'课件'});
         this.setState({breadcrumbArray:breadcrumbArray});
     },
 

@@ -23,13 +23,14 @@ const CourseWareComponents = React.createClass({
   getInitialState() {
     courseWare = this;
     return {
-        courseListState:[],
+        courseListState:this.props.courseList,
         activeKey:[],
         currentPage:1,
         totalCount:0,
         ident:'',
         teachScheduleId:'',
         optType:'',
+        knowledgeName:''
     };
   },
 
@@ -54,12 +55,18 @@ const CourseWareComponents = React.createClass({
         }, "json");
     },
 
-  getTeachPlans(ident,teachScheduleId,optType,pageNo){
+  initCourseWareList(){
+      courseWare.setState({courseListState:[]});
+      courseWare.setState({totalCount:0});
+  },
+
+  getTeachPlans(ident,teachScheduleId,optType,pageNo,knowledgeName){
       // alert("ccc:"+ident+"==="+teachScheduleId+"===="+optType);
       courseWare.setState({
           ident:ident,
           teachScheduleId:teachScheduleId,
-          optType:optType
+          optType:optType,
+          knowledgeName:knowledgeName
       })
       var param;
       if(optType=="bySchedule"){
@@ -82,12 +89,16 @@ const CourseWareComponents = React.createClass({
                       var fileType=fileName.substring(fileName.lastIndexOf(".")+1);
                       var pointId = e.point.content;
                      // alert(e.createTime);//1476 0186 7700 0
+                      var fileTypeLogo = "file-ppt";
+                      if(fileType=="pdf"){
+                          fileTypeLogo = "file-pdf";
+                      }
                       var createTime = courseWare.getLocalTime(e.createTime);
                       // console.log(uId+"==========="+colName+"=="+colFileType);
                       // var courseInfo = {"uId":uId,"colName":colName,"colFileType":colFileType};
                       //courseWare.handlePanel(courseInfo);
                       activeKey.push(fileName);
-                      courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointId,createTime]);
+                      courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointId,createTime,fileTypeLogo]);
                   });
                   courseWare.buildPanels(courseWareList);
                   courseWare.setState({courseListState:courseWareList});
@@ -120,8 +131,9 @@ const CourseWareComponents = React.createClass({
                       var fileType=fileName.substring(fileName.lastIndexOf(".")+1);
                       var pointId = e.pointId;
                       var createTime = courseWare.getLocalTime(e.createTime);
+                      var fileTypeLogo = "file-ppt";
                       activeKey.push(fileName);
-                      courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointId,createTime]);
+                      courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointId,createTime,fileTypeLogo]);
                   });
                   courseWare.buildKonwledgePanels(courseWareList);
                   courseWare.setState({courseListState:courseWareList});
@@ -157,13 +169,13 @@ const CourseWareComponents = React.createClass({
 
     showModal:function (e) {
         var currentSchedule = e.target.value;
-        // alert("111"+currentSchedule+","+this.refs.useKnowledgeComponents);
-        this.refs.useKnowledgeComponents.showModal(currentSchedule,"courseWare");
+         // alert("111"+currentSchedule+","+this.refs.useKnowledgeComponents);
+        this.refs.useKnowledgeComponents.showModal(currentSchedule,"courseWare",courseWare.state.knowledgeName);
     },
 
     buildPanels:function (courseWareList) {
         coursePanelChildren = courseWareList.map((e, i)=> {
-            return <Panel header={<span><Icon type="file-ppt" className="icon_geshi" size="large"/>&nbsp;&nbsp;&nbsp;&nbsp;{e[1]}</span> }  key={e[1]}>
+            return <Panel header={<span><Icon type={e[8]} className="icon_geshi" size="large"/>&nbsp;&nbsp;&nbsp;&nbsp;{e[1]}</span> }  key={e[1]}>
                     <pre>
 					 <div className="bnt2_tex">
                          <span><span className="col1">文件类型：</span><span className="col2">{e[5]}</span></span>

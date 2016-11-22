@@ -62,7 +62,7 @@ const SubjectForm = Form.create()(React.createClass({
     e.preventDefault();
     //alert("====:"+this.props.optType);
     this.props.form.validateFieldsAndScroll((err, values) => {
-      var ident = "23836";
+      var ident = sessionStorage.getItem("ident");
       var scheduleName = values.courseName;
       if(this.props.optType=="edit"){
           alert("edit"+scheduleName);

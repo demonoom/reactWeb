@@ -211,7 +211,7 @@ const HomeWorkTableComponents = React.createClass({
 
   pageOnChange(pageNo) {
     console.log(pageNo);
-    subTable.getDoneHomeworkList("23836",pageNo);
+    subTable.getDoneHomeworkList(sessionStorage.getItem("ident"),pageNo);
     this.setState({
       currentPage: pageNo,
     });
