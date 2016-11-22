@@ -205,8 +205,7 @@
 		right: 4px;
 		margin-bottom: 10px;
 		height:30px !important;
-		transform:translate(-50%,0);
-		left:50%;
+	
     }
     .ant-collapse-content > .ant-collapse-content-box{
       line-height:30px;
@@ -312,9 +311,7 @@
 	background:none;
 	
 }
-.ant-modal-footer{
-	border:none;
-}
+
 .ant-col-5 {
     width: 240px;
 	position: relative;
@@ -341,7 +338,11 @@
 }
 .ant-modal-footer{
 	text-align:center !important;
-	padding:30px 0 !important;
+	padding:30px 0 0 0 !important;
+	border:none
+}
+.ant-modal-footer button{
+	padding:4px 20px;
 }
 .ant-form-item-control button{
 	margin:0 10px
@@ -537,7 +538,8 @@ html, body, #root {
 	margin-top:25px;
 }
 .class_right{
-	    margin-left: 87px !important;
+	text-align:center !important;
+	margin:0 auto;
 }
 .choose_class{
 	width:920px !important
@@ -558,7 +560,10 @@ html, body, #root {
 	width:100%
 }
 .botton_left{
-	margin-left:202px !important;
+	margin-left:160px !important;
+}
+.botton_left1{
+	margin-left:115px !important;
 }
 .padding_menu{
 	padding-left:20px !important;
@@ -609,10 +614,9 @@ html, body, #root {
 }
 .login_bg_content{
 	float:right;
-	
 	width:350px;
 	border-radius:8px;
-	padding:0 20px 20px 20px;
+	padding:0 20px 30px 20px;
 	background:#fff;
 }
 
@@ -637,8 +641,11 @@ html, body, #root {
 }
 .login_buton{
 	width:100%;
-	padding:6px 0;
 	font-size:16px;
+	height:36px;
+	line-height:34px;
+	padding:0 !important;
+	margin-top:6px;
 }
 #components-form-demo-normal-login .login-form {
 	max-width: 300px;
@@ -655,18 +662,16 @@ html, body, #root {
 	font-style:italic;
 	color:blue;
 	font-size:20px;
-	border:0;
-	padding:2px 3px;
 	letter-spacing:3px;
 	font-weight:bolder;
-	float:left;
+	float:right;
 	cursor:pointer;
 	width:60px;
-	height:20px;
+	height:25px;
 	line-height:20px;
 	text-align:center;
 	vertical-align:middle;
-	margin:10px 16px 0 0
+	margin:7px 0 0 16px;
 }
 .code_a{
 	line-height:30px;
@@ -690,7 +695,7 @@ a:hover{
 	display:block;
 	padding-left:10px;
 }
-article.content{
+article.content_2{
 	position:relative;
 	top:-30px;
 	left:32px;
@@ -701,4 +706,21 @@ article.content{
 }
 .ant-checkbox-wrapper + .ant-checkbox-wrapper{
 	margin-left:0px;
+}
+.ant-breadcrumb-link a{
+	font-size:14px !important;
+}
+.affix_bottom{
+	position:absolute;
+    bottom: -10px;
+    left: 21px;
+    z-index: 100;
+	cursor:pointer
+}
+.affix_bottom img{
+	width:22px;
+	height:22px;
+}
+.yz_input{
+	width:120px;
 }

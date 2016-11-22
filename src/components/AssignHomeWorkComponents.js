@@ -294,7 +294,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
     selectedSubjectKeys.forEach(function (e) {
         var subjectArray = e.split("#");
         defaultCheckedList.push(subjectArray[0]);
-        plainOptions.push({label:<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: subjectArray[1]}} ></article>,value:subjectArray[0]});
+        plainOptions.push({label:<article id='contentHtml' className='content content_2' dangerouslySetInnerHTML={{__html: subjectArray[1]}} ></article>,value:subjectArray[0]});
         i++;
         if(i!=selectedSubjectKeys.length){
           sids+=subjectArray[0]+",";
@@ -462,7 +462,6 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
             <FormItem className="ant-pagination">
               <Button type="primary" htmlType="submit" className="login-form-button class_right" >
                 保存
-
               </Button>
               <Button type="primary" htmlType="reset" className="login-form-button" onClick={this.handleCancel} >
                 取消
