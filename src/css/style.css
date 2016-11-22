@@ -396,18 +396,23 @@ html, body, #root {
 	
 }
 .ant-breadcrumb a, .ant-collapse-header{
-	font-size:14px !important;
+	font-size:16px !important;
 }
 
 .bnt2_tex{
 	width:calc(100% - 160px);
 	float:left;
+	font-size:14px;
 }
 .bnt2_tex span.col1{
-	color:#888;
+	color:#666;
 }
 .bnt2_tex span.col2{
-	color:#333;
+	color:#666;
+}
+.ant-collapse > .ant-collapse-item > .ant-collapse-header{
+	height:42px;
+	line-height:42px;
 }
 .bnt2_right{
 	width:160px;
@@ -436,25 +441,25 @@ html, body, #root {
 }
 .icon_geshi{
 	background:url(../../src/components/images/icon_geshi.png) no-repeat;
-	height:23px;
-	padding-left:28px;
-	margin-top:7px;
+	height:30px;
+	padding-left:38px;
+	margin-top:6px;
 	float:left
 }
 .icon_ppt{
 	background-position:0 0;
 }
 .icon_mp4{
-	background-position:0 -23px;
+	background-position:0 -30px;
 }
 .icon_flv{
-	background-position:0 -46px;
+	background-position:0 -60px;
 }
 .icon_pdf{
-	background-position:0 -69px;
+	background-position:0 -90px;
 }
 .icon_pptx{
-	background-position:0 -92px;
+	background-position:0 -120px;
 }
 .menu_til{
 	font-size:18px;
@@ -481,7 +486,7 @@ html, body, #root {
 }
 .ant-tabs-nav .ant-tabs-tab{
 	padding:8px 36px;
-	font-size:16px
+	font-size:18px
 }
 .breadcrumb-arrow {
     padding: 0 10px;
@@ -507,7 +512,8 @@ html, body, #root {
 	width:180px
 }
 .ant-table-body{
-	height:calc(100% - 40px)
+	height:calc(100% - 40px);
+	font-size:14px;
 }
 .ant-menu-item-selected {
     color: #2db7f5;
@@ -520,7 +526,8 @@ html, body, #root {
 
 .date_tr{
    position:relative;
-   top:7px;
+   top:5px;
+   font-size:14px;
 }
 .class_bo{
 	border-bottom: 1px solid #E9E9E9;
@@ -597,5 +604,5 @@ a:hover{
 
 }
 .ant-table-fixed-header .ant-table-scroll .ant-table-header{
-	font-size:14px;
+	font-size:16px;
 }

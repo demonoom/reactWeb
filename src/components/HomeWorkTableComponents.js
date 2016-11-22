@@ -85,6 +85,7 @@ const HomeWorkTableComponents = React.createClass({
       },{
           title: '日期',
           dataIndex: 'useDate',
+		  className:'ant-table-selection-smallclass',
         },{
         title: '操作',
         className:'ant-table-selection-topic',

@@ -163,7 +163,7 @@ const CourseWareComponents = React.createClass({
 
     buildPanels:function (courseWareList) {
         coursePanelChildren = courseWareList.map((e, i)=> {
-            return <Panel header={<span><span type="" className="icon_geshi icon_pptx"></span><span>{e[1]}</span> </span>}  key={e[1]}>
+            return <Panel header={<span><span type="" className="icon_geshi icon_mp4"></span><span>{e[1]}</span></span>}  key={e[1]}>
                     <pre>
 					 <div className="bnt2_tex">
                          <span><span className="col1">文件类型：</span><span className="col2">{e[5]}</span></span>
@@ -191,7 +191,7 @@ const CourseWareComponents = React.createClass({
 
     buildKonwledgePanels:function (courseWareList) {
         coursePanelChildren = courseWareList.map((e, i)=> {
-            return <Panel header={<span><Icon type="file-ppt" size="large"/>&nbsp;&nbsp;&nbsp;&nbsp;{e[1]}</span> }  key={e[1]}>
+            return <Panel header={<span><span type="" className="icon_geshi icon_pptx"></span><span>{e[1]}</span></span> }  key={e[1]}>
                     <pre>
 					<div className="bnt2_tex">
                          <span>文件类型：{e[5]}</span>
