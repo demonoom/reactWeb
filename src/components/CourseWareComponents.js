@@ -202,7 +202,7 @@ const CourseWareComponents = React.createClass({
         coursePanelChildren = courseWareList.map((e, i)=> {
             var eysOnButton ;
             if(e[9]!=null && e[9]!=""){
-                eysOnButton = <Button style={{ float:'right'}} icon="eye-o" value={e[9]} onClick={courseWare.viewFile}></Button>
+                eysOnButton = <Button style={{ float:'right'}} icon="eye-o" title="查看" value={e[9]} onClick={courseWare.viewFile}></Button>
             }
             return <Panel header={<span><span type="" className={e[8]}></span><span>{e[1]}</span> </span>}  key={e[1]}>
                     <pre>
@@ -215,9 +215,9 @@ const CourseWareComponents = React.createClass({
                          <span><span className="col1">上传时间：</span><span className="col2">{e[7]}</span></span>
 					</div>
 					<div className="bnt2_right">
-                        {eysOnButton}
-                         <Button style={{ float:'right'}} icon="delete" value={e[1]} onClick=""></Button>
-                         <Button style={{ float:'right'}} icon="download"   value={e[3]} onClick={courseWare.downLoadFile}></Button>
+                         <Button style={{ float:'right'}} icon="delete" title="删除" value={e[1]} onClick=""></Button>
+                         <Button style={{ float:'right'}} icon="download" title="下载"  value={e[3]} onClick={courseWare.downLoadFile}></Button>
+                         {eysOnButton}
 					</div>
                     </pre>
             </Panel>
@@ -241,7 +241,7 @@ const CourseWareComponents = React.createClass({
         coursePanelChildren = courseWareList.map((e, i)=> {
             var eysOnButton ;
             if(e[9]!=null && e[9]!=""){
-                eysOnButton = <Button style={{ float:'right'}} icon="eye-o" value={e[9]} onClick={courseWare.viewFile}></Button>
+                eysOnButton = <Button style={{ float:'right'}} icon="eye-o" title="查看" value={e[9]} onClick={courseWare.viewFile}></Button>
             }
             return <Panel header={<span><span type="" className={e[8]}></span><span>{e[1]}</span> </span>}  key={e[1]}>
                     <pre>
@@ -254,9 +254,9 @@ const CourseWareComponents = React.createClass({
                       </div>       
 
                             <div className="bnt2_right">
+                                <Button style={{ float:'right'}} icon="download"  title="下载" value={e[3]} onClick={courseWare.downLoadFile}></Button>
+                                <Button style={{ float:'right'}} type=""  icon="export" title="使用"  value={e[0]} onClick={this.showModal}></Button>
                                 {eysOnButton}
-                                <Button style={{ float:'right'}} icon="download"  value={e[3]} onClick={courseWare.downLoadFile}></Button>
-                                <Button style={{ float:'right'}} type=""  icon=""  value={e[0]} onClick={this.showModal}>使用</Button>
                             </div>
 
                     </pre>
