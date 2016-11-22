@@ -293,7 +293,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
     selectedSubjectKeys.forEach(function (e) {
         var subjectArray = e.split("#");
         defaultCheckedList.push(subjectArray[0]);
-        plainOptions.push({label:<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: subjectArray[1]}}></article>,value:subjectArray[0]});
+        plainOptions.push({label:<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: subjectArray[1]}} ></article>,value:subjectArray[0]});
         i++;
         if(i!=selectedSubjectKeys.length){
           sids+=subjectArray[0]+",";
@@ -390,11 +390,13 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
 
     return (
         <div>
-          <Form vertical onSubmit={assignHomeWork.handleSubmit}>
+		 
+          <Form vertical onSubmit={assignHomeWork.handleSubmit} className="homework">
+		   <div className="ant-collapse ant-modal-footer">
             <FormItem
                 {...formItemLayout}
                 label={(
-                    <span>
+                    <span className="date_tr">
               日期&nbsp;
             </span>
                 )}
@@ -408,7 +410,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
             <FormItem
                 {...formItemLayout}
                 label={(
-                    <span>
+                    <span className="date_tr">
               班级&nbsp;
             </span>
                 )}
@@ -422,7 +424,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
             <FormItem
                 {...formItemLayout}
                 label={(
-                    <span>
+                    <span className="date_tr">
               题目&nbsp;
             </span>
                 )}
@@ -436,8 +438,8 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
                     <Row>
                       <Col span={24}>
                         <div>
-                          <Button type="primary" onClick={assignHomeWork.showSubjectModal}>选择题目</Button>
-                          <div style={{ borderBottom: '1px solid #E9E9E9' }}>
+                          <Button type="primary" onClick={assignHomeWork.showSubjectModal}><Icon type="check-circle-o" />选择题目</Button>
+                          <div className="class_bo">
                             <Checkbox
                                 indeterminate={assignHomeWork.state.indeterminate}
                                 onChange={assignHomeWork.subjectListOnCheckAllChange}
@@ -454,25 +456,34 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
                   </div>
               )}
             </FormItem>
+		</div>
 
-            <FormItem style={{text:'center'}}>
-              <Button type="primary" htmlType="submit" className="login-form-button" >
+            <FormItem className="ant-pagination">
+              <Button type="primary" htmlType="submit" className="login-form-button class_right" >
                 保存
+
               </Button>
               {/*<Button type="primary" htmlType="reset" className="login-form-button" onClick={this.handleCancel} >
                 取消
               </Button>*/}
             </FormItem>
+
           </Form>
-          <Modal title="选择题目" visible={assignHomeWork.state.subjectModalVisible}
+	
+		  
+          <Modal title="选择题目" className="choose_class" visible={assignHomeWork.state.subjectModalVisible}
                  onCancel={assignHomeWork.subjectModalHandleCancel}
                  footer={[
+
+                   <Button key="return" type="primary" size="large" onClick={assignHomeWork.subjectModalHandleCancel}>确定</Button>,
+
                    <Button key="ok" type="ghost" size="large" onClick={assignHomeWork.subjectModalHandleCancel}>确定</Button>,
+
                  ]}
           >
               <Row>
-                <Col span={12}><Table size="small" onRowClick={assignHomeWork.onScheduleSelectChange} selectedRowKeys={assignHomeWork.selectedRowKeys} columns={scheduleColumns}  dataSource={scheduleData} scroll={{ y: 300}}/></Col>
-                <Col span={12}>
+                <Col span={7}><Table size="small" onRowClick={assignHomeWork.onScheduleSelectChange} selectedRowKeys={assignHomeWork.selectedRowKeys} columns={scheduleColumns}  dataSource={scheduleData} scroll={{ y: 300}}/></Col>
+                <Col span={17} className="col17_le">
                   <div>
                     <Table rowSelection={subjectRowSelection} columns={subjectColumns} dataSource={subjectData} pagination={{ total:assignHomeWork.state.totalSubjectCount,pageSize: 15,onChange:assignHomeWork.pageOnChange }}  scroll={{ y: 300}}/>
                   </div>

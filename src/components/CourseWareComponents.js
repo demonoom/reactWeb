@@ -89,9 +89,17 @@ const CourseWareComponents = React.createClass({
                       var fileType=fileName.substring(fileName.lastIndexOf(".")+1);
                       var pointId = e.point.content;
                      // alert(e.createTime);//1476 0186 7700 0
-                      var fileTypeLogo = "file-ppt";
-                      if(fileType=="pdf"){
-                          fileTypeLogo = "file-pdf";
+                      var fileTypeLogo;
+                      if(fileType=="ppt"){
+                          fileTypeLogo = "icon_geshi icon_ppt";
+                      }else if(fileType=="mp4"){
+                          fileTypeLogo = "icon_geshi icon_mp4";
+                      }else if(fileType=="flv"){
+                          fileTypeLogo = "icon_geshi icon_flv";
+                      }else if(fileType=="pdf"){
+                          fileTypeLogo = "icon_geshi icon_pdf";
+                      }else if(fileType=="pptx"){
+                          fileTypeLogo = "icon_geshi icon_pptx";
                       }
                       var createTime = courseWare.getLocalTime(e.createTime);
                       // console.log(uId+"==========="+colName+"=="+colFileType);
@@ -131,7 +139,18 @@ const CourseWareComponents = React.createClass({
                       var fileType=fileName.substring(fileName.lastIndexOf(".")+1);
                       var pointId = e.pointId;
                       var createTime = courseWare.getLocalTime(e.createTime);
-                      var fileTypeLogo = "file-ppt";
+                      var fileTypeLogo;
+                      if(fileType=="ppt"){
+                          fileTypeLogo = "icon_geshi icon_ppt";
+                      }else if(fileType=="mp4"){
+                          fileTypeLogo = "icon_geshi icon_mp4";
+                      }else if(fileType=="flv"){
+                          fileTypeLogo = "icon_geshi icon_flv";
+                      }else if(fileType=="pdf"){
+                          fileTypeLogo = "icon_geshi icon_pdf";
+                      }else if(fileType=="pptx"){
+                          fileTypeLogo = "icon_geshi icon_pptx";
+                      }
                       activeKey.push(fileName);
                       courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointId,createTime,fileTypeLogo]);
                   });
@@ -175,7 +194,7 @@ const CourseWareComponents = React.createClass({
 
     buildPanels:function (courseWareList) {
         coursePanelChildren = courseWareList.map((e, i)=> {
-            return <Panel header={<span><Icon type={e[8]} className="icon_geshi" size="large"/>&nbsp;&nbsp;&nbsp;&nbsp;{e[1]}</span> }  key={e[1]}>
+            return <Panel header={<span><span type="" className={e[8]}></span><span>{e[1]}</span> </span>}  key={e[1]}>
                     <pre>
 					 <div className="bnt2_tex">
                          <span><span className="col1">文件类型：</span><span className="col2">{e[5]}</span></span>
@@ -186,8 +205,8 @@ const CourseWareComponents = React.createClass({
                          <span><span className="col1">上传时间：</span><span className="col2">{e[7]}</span></span>
 					</div>
 					<div className="bnt2_right">
-                    <Button style={{ float:'right'}}    value={e[1]} onClick="">删除</Button>
-                         <Button style={{ float:'right'}}  value={e[3]} onClick={courseWare.downLoadFile}>下载</Button>
+                    <Button style={{ float:'right'}} icon="delete" value={e[1]} onClick=""></Button>
+                         <Button style={{ float:'right'}} icon="download"   value={e[3]} onClick={courseWare.downLoadFile}></Button>
 					</div>
                     </pre>
             </Panel>
@@ -203,7 +222,7 @@ const CourseWareComponents = React.createClass({
 
     buildKonwledgePanels:function (courseWareList) {
         coursePanelChildren = courseWareList.map((e, i)=> {
-            return <Panel header={<span><Icon type="file-ppt" size="large"/>&nbsp;&nbsp;&nbsp;&nbsp;{e[1]}</span> }  key={e[1]}>
+            return <Panel header={<span><span type="" className={e[8]}></span><span>{e[1]}</span> </span>}  key={e[1]}>
                     <pre>
 					<div className="bnt2_tex">
                          <span>文件类型：{e[5]}</span>
@@ -214,7 +233,7 @@ const CourseWareComponents = React.createClass({
                       </div>       
 
                             <div className="bnt2_right">
-                                <Button style={{ float:'right'}}  value={e[3]} onClick={courseWare.downLoadFile}>下载</Button>
+                                <Button style={{ float:'right'}} icon="download"  value={e[3]} onClick={courseWare.downLoadFile}></Button>
                                 <Button style={{ float:'right'}} type=""  icon=""  value={e[0]} onClick={this.showModal}>使用</Button>
                             </div>
 

@@ -337,7 +337,7 @@ const SubjectEditTabComponents = Form.create()(React.createClass({
                                         </div>
                                     )}
                                 </FormItem>
-                                <FormItem>
+                                <FormItem className="ant-modal-footer">
                                     <Button type="primary" htmlType="submit" className="login-form-button">
                                         保存并继续添加
                                     </Button>
@@ -394,7 +394,7 @@ const SubjectEditTabComponents = Form.create()(React.createClass({
                                         </div>
                                     )}
                                 </FormItem>
-                                <FormItem>
+                                <FormItem className="ant-modal-footer">
                                     <Button type="primary" htmlType="submit" className="login-form-button">
                                         保存并继续添加
                                     </Button>
@@ -447,7 +447,7 @@ const SubjectEditTabComponents = Form.create()(React.createClass({
                                         </div>
                                     )}
                                 </FormItem>
-                                <FormItem>
+                                <FormItem className="ant-modal-footer">
                                     <Button type="primary" htmlType="submit" className="login-form-button">
                                         保存并继续添加
                                     </Button>
@@ -499,7 +499,7 @@ const SubjectEditTabComponents = Form.create()(React.createClass({
                                         </div>
                                     )}
                                 </FormItem>
-                                <FormItem>
+                                <FormItem className="ant-modal-footer">
                                     <Button type="primary" htmlType="submit" className="login-form-button">
                                         保存并继续添加
                                     </Button>
@@ -572,7 +572,7 @@ const SubjectEditTabComponents = Form.create()(React.createClass({
                                         </div>
                                     )}
                                 </FormItem>
-                                <FormItem>
+                                <FormItem className="ant-modal-footer">
                                     <Button type="primary" htmlType="submit" className="login-form-button">
                                         保存并继续添加
                                     </Button>
