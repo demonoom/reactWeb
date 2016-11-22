@@ -537,7 +537,8 @@ html, body, #root {
 	margin-top:25px;
 }
 .class_right{
-	    margin-left: 87px !important;
+	text-align:center !important;
+	margin:0 auto;
 }
 .choose_class{
 	width:920px !important
@@ -690,7 +691,7 @@ a:hover{
 	display:block;
 	padding-left:10px;
 }
-article.content{
+article.content_2{
 	position:relative;
 	top:-30px;
 	left:32px;
@@ -701,4 +702,7 @@ article.content{
 }
 .ant-checkbox-wrapper + .ant-checkbox-wrapper{
 	margin-left:0px;
+}
+.ant-breadcrumb-link a{
+	font-size:14px !important;
 }
