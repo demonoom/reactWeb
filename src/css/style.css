@@ -338,7 +338,12 @@
 }
 .ant-modal-footer{
 	text-align:center !important;
-	padding:30px 0 0 0 !important;
+	padding:30px 0 15px 0 !important;
+	border:none
+}
+.ant-modal-footer1{
+	text-align:center !important;
+	padding:30px 0 !important;
 	border:none
 }
 .ant-modal-footer button{
