@@ -90,8 +90,10 @@ const CourseWareComponents = React.createClass({
                       var pointId = e.point.content;
                      // alert(e.createTime);//1476 0186 7700 0
                       var fileTypeLogo;
+                      var htmlPath="";
                       if(fileType=="ppt"){
                           fileTypeLogo = "icon_geshi icon_ppt";
+                          htmlPath = e.htmlPath;
                       }else if(fileType=="mp4"){
                           fileTypeLogo = "icon_geshi icon_mp4";
                       }else if(fileType=="flv"){
@@ -100,13 +102,14 @@ const CourseWareComponents = React.createClass({
                           fileTypeLogo = "icon_geshi icon_pdf";
                       }else if(fileType=="pptx"){
                           fileTypeLogo = "icon_geshi icon_pptx";
+                          htmlPath = e.htmlPath;
                       }
                       var createTime = courseWare.getLocalTime(e.createTime);
                       // console.log(uId+"==========="+colName+"=="+colFileType);
                       // var courseInfo = {"uId":uId,"colName":colName,"colFileType":colFileType};
                       //courseWare.handlePanel(courseInfo);
                       activeKey.push(fileName);
-                      courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointId,createTime,fileTypeLogo]);
+                      courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointId,createTime,fileTypeLogo,htmlPath]);
                   });
                   courseWare.buildPanels(courseWareList);
                   courseWare.setState({courseListState:courseWareList});
@@ -140,8 +143,10 @@ const CourseWareComponents = React.createClass({
                       var pointId = e.pointId;
                       var createTime = courseWare.getLocalTime(e.createTime);
                       var fileTypeLogo;
+                      var htmlPath="";
                       if(fileType=="ppt"){
                           fileTypeLogo = "icon_geshi icon_ppt";
+                          htmlPath = e.htmlPath;
                       }else if(fileType=="mp4"){
                           fileTypeLogo = "icon_geshi icon_mp4";
                       }else if(fileType=="flv"){
@@ -150,9 +155,10 @@ const CourseWareComponents = React.createClass({
                           fileTypeLogo = "icon_geshi icon_pdf";
                       }else if(fileType=="pptx"){
                           fileTypeLogo = "icon_geshi icon_pptx";
+                          htmlPath = e.htmlPath;
                       }
                       activeKey.push(fileName);
-                      courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointId,createTime,fileTypeLogo]);
+                      courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointId,createTime,fileTypeLogo,htmlPath]);
                   });
                   courseWare.buildKonwledgePanels(courseWareList);
                   courseWare.setState({courseListState:courseWareList});
@@ -194,7 +200,10 @@ const CourseWareComponents = React.createClass({
 
     buildPanels:function (courseWareList) {
         coursePanelChildren = courseWareList.map((e, i)=> {
-
+            var eysOnButton ;
+            if(e[9]!=null && e[9]!=""){
+                eysOnButton = <Button style={{ float:'right'}} icon="eye-o" value={e[9]} onClick={courseWare.viewFile}></Button>
+            }
             return <Panel header={<span><span type="" className={e[8]}></span><span>{e[1]}</span> </span>}  key={e[1]}>
                     <pre>
 					 <div className="bnt2_tex">
@@ -206,7 +215,8 @@ const CourseWareComponents = React.createClass({
                          <span><span className="col1">上传时间：</span><span className="col2">{e[7]}</span></span>
 					</div>
 					<div className="bnt2_right">
-                    <Button style={{ float:'right'}} icon="delete" value={e[1]} onClick=""></Button>
+                        {eysOnButton}
+                         <Button style={{ float:'right'}} icon="delete" value={e[1]} onClick=""></Button>
                          <Button style={{ float:'right'}} icon="download"   value={e[3]} onClick={courseWare.downLoadFile}></Button>
 					</div>
                     </pre>
@@ -221,9 +231,18 @@ const CourseWareComponents = React.createClass({
         window.open(e.target.value);
     },
 
+    viewFile:function (e) {
+        // alert("123"+e);
+        // window.location.href=e.target.value;
+        window.open(e.target.value);
+    },
+
     buildKonwledgePanels:function (courseWareList) {
         coursePanelChildren = courseWareList.map((e, i)=> {
-
+            var eysOnButton ;
+            if(e[9]!=null && e[9]!=""){
+                eysOnButton = <Button style={{ float:'right'}} icon="eye-o" value={e[9]} onClick={courseWare.viewFile}></Button>
+            }
             return <Panel header={<span><span type="" className={e[8]}></span><span>{e[1]}</span> </span>}  key={e[1]}>
                     <pre>
 					<div className="bnt2_tex">
@@ -235,6 +254,7 @@ const CourseWareComponents = React.createClass({
                       </div>       
 
                             <div className="bnt2_right">
+                                {eysOnButton}
                                 <Button style={{ float:'right'}} icon="download"  value={e[3]} onClick={courseWare.downLoadFile}></Button>
                                 <Button style={{ float:'right'}} type=""  icon=""  value={e[0]} onClick={this.showModal}>使用</Button>
                             </div>

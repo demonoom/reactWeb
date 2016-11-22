@@ -61,11 +61,11 @@ const MainLayout = React.createClass({
   },
 
   componentWillMount(){
-    // var userIdent = sessionStorage.getItem("ident");
-    // if(userIdent==null || userIdent==""){
-    //     location.hash="Login";
-    // }
-    sessionStorage.setItem("ident","23836");
+    var userIdent = sessionStorage.getItem("ident");
+    if(userIdent==null || userIdent==""){
+        location.hash="login";
+    }
+    //sessionStorage.setItem("ident","23836");
   },
 
   //获取老师的已布置作业列表
@@ -104,18 +104,18 @@ const MainLayout = React.createClass({
             <Menu.Item key="KnowledgeResources" className="padding_menu">
               <Icon type="book" /><span className="nav-text">资源库</span>
             </Menu.Item>
-            <Menu.Item key="teachReady" href="wwww.baidu.com" className="padding_menu">
+{/*            <Menu.Item key="teachReady" href="wwww.baidu.com" className="padding_menu">
               <Icon type="edit"/><span className="nav-text">备课</span>
-            </Menu.Item>
+            </Menu.Item>*/}
             <Menu.Item key="homeWork" className="padding_menu">
               <Icon type="file" /><span className="nav-text">家庭作业</span>
             </Menu.Item>
-            <Menu.Item key="folder" className="padding_menu">
+{/*            <Menu.Item key="folder" className="padding_menu">
               <Icon type="clock-circle-o" /><span className="nav-text">统计+回顾</span>
             </Menu.Item>
             <Menu.Item key="resources" className="padding_menu">
               <Icon type="hdd" /><span className="nav-text">资源中心</span>
-            </Menu.Item>
+            </Menu.Item>*/}
             <FloatButton/>
           </Menu>
           <div className="ant-aside-action" onClick={this.onCollapseChange}>

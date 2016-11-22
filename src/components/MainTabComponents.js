@@ -82,9 +82,11 @@ const MainTabComponents = React.createClass({
         if(this.state.currentOptType==""){
             toolbarExtra = <div className="ant-tabs-right"></div>;
         }else if(this.state.currentOptType=="bySchedule"){
-            toolbarExtra = <div className="ant-tabs-right"><span className="toobar"><Button type="" icon="delete" onClick={deleteConfirm}  ></Button></span></div>;
+            /*toolbarExtra = <div className="ant-tabs-right"><span className="toobar"><Button type="" icon="delete" onClick={deleteConfirm}  ></Button></span></div>;*/
+            toolbarExtra = <div className="ant-tabs-right"></div>;
         }else{
-            toolbarExtra = <div className="ant-tabs-right"><Button type="" icon="share-alt" onClick={this.showModal}></Button><SubjectUploadTabComponents params={this.state.subjectParams}></SubjectUploadTabComponents><span className="toobar"><Button type="" icon="delete" onClick={deleteConfirm}  ></Button></span></div>;
+            /*toolbarExtra = <div className="ant-tabs-right"><Button type="" icon="share-alt" onClick={this.showModal}></Button><SubjectUploadTabComponents params={this.state.subjectParams}></SubjectUploadTabComponents><span className="toobar"><Button type="" icon="delete" onClick={deleteConfirm}  ></Button></span></div>;*/
+            toolbarExtra = <div className="ant-tabs-right"><SubjectUploadTabComponents params={this.state.subjectParams}></SubjectUploadTabComponents></div>;
         }
 
         return (

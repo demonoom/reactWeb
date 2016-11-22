@@ -151,7 +151,7 @@ const MiddleMenuComponents = React.createClass({
           {children}
 
         </Menu>
-        <Pagination size="small" total={scheduleCount} current={this.state.currentPage} onChange={this.onChange}/>
+        {/*<Pagination size="small" total={scheduleCount} current={this.state.currentPage} onChange={this.onChange}/>*/}
       </div>
     );
   },

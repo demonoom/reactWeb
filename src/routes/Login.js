@@ -114,17 +114,23 @@ const Login = Form.create()(React.createClass({
 					<div className="login_welcome">欢迎登录</div>
 						<Form onSubmit={this.handleSubmit} className="login-form">
 							<FormItem {...formItemLayout} label="用户名">
-								{getFieldDecorator('userName')(
+								{getFieldDecorator('userName',{
+                                    rules: [{ required: true, message: '请输入用户名!' }],
+                                })(
 									<Input addonBefore={<Icon type="user" />} placeholder="请输入用户名"/>
 								)}
 							</FormItem>
 							<FormItem {...formItemLayout} label="密&nbsp;&nbsp;&nbsp;码">
-								{getFieldDecorator('password')(
+								{getFieldDecorator('password',{
+                                    rules: [{ required: true, message: '请输入密码!' }],
+                                })(
 									<Input addonBefore={<Icon type="lock" />} type="password" placeholder="请输入密码"/>
 								)}
 							</FormItem>
 							<FormItem {...formItemLayout} label="验证码">
-								{getFieldDecorator('validateCode')(
+								{getFieldDecorator('validateCode',{
+                                    rules: [{ required: true, message: '请输入验证码!' }],
+                                })(
 									<div>
 										<Input  placeholder="请输入验证码" />
 										<div className="code" id="checkCode" onClick={this.createCode} >{this.state.code}</div>
