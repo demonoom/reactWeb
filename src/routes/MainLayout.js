@@ -61,11 +61,11 @@ const MainLayout = React.createClass({
   },
 
   componentWillMount(){
-    // var userIdent = sessionStorage.getItem("ident");
-    // if(userIdent==null || userIdent==""){
-    //     location.hash="Login";
-    // }
-    sessionStorage.setItem("ident","23836");
+    var userIdent = sessionStorage.getItem("ident");
+    if(userIdent==null || userIdent==""){
+        location.hash="login";
+    }
+    //sessionStorage.setItem("ident","23836");
   },
 
   //获取老师的已布置作业列表
