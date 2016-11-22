@@ -135,7 +135,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
     singleHandleSubmit(e) {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
-            var ident = "23836";
+            var ident = sessionStorage.getItem("ident");
             var easy = this.state.markSelected;
             var score = this.state.score;
             var subjectName = values.subjectName;
@@ -164,7 +164,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
     MulitiHandleSubmit(e) {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
-            var ident = "23836";
+            var ident = sessionStorage.getItem("ident");
             var score = this.state.score;
             var subjectName = values.subjectName;
             var answer = mulitiAnswer;
@@ -187,7 +187,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
     correctHandleSubmit(e) {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
-            var ident = "23836";
+            var ident = sessionStorage.getItem("ident");
             var easy = this.state.markSelected;
             var score = this.state.score;
             var subjectName = values.subjectName;
@@ -212,7 +212,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
     simpleAnswerHandleSubmit(e) {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
-            var ident = "23836";
+            var ident = sessionStorage.getItem("ident");
             var easy = this.state.markSelected;
             var score = this.state.score;
             var subjectName = values.subjectName;

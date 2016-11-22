@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react';
 import { Modal, Button } from 'antd';
-import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox } from 'antd';
+import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox,Radio } from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
+const RadioGroup = Radio.Group;
 
 //一级菜单数组
 let List=new Array();
@@ -21,11 +22,16 @@ const UseKnowledgeComponents = React.createClass({
       optType:'',
       inputState:true,
       isNewSchedule:false,
+      currentKnowledgeState:false,
+      newScheduleState:false,
+      knowledgeName:'',
     };
   },
-  showModal(currentKnowlege,optType) {
+  showModal(currentKnowlege,optType,knowledgeName) {
       // alert("currentKnowlege:"+currentKnowlege+",optType:"+optType);
       //当前点击的，计划应用的课件资源
+    // alert("knowledgeName in user"+knowledgeName);
+    knowledge.setState({knowledgeName:knowledgeName});
     knowledge.setState({optType:optType});
     knowledge.setState({currentKnowlege:currentKnowlege});
     knowledge.setState({
@@ -41,14 +47,27 @@ const UseKnowledgeComponents = React.createClass({
     if(this.state.isNewSchedule==true){
       var inputObj = knowledge.refs.scheduleName;
       var scheduleName = inputObj.refs.input.value;
-      alert("inputValue:"+scheduleName);
-      knowledge.saveSchedule("23836",scheduleName);
+      if(knowledge.state.currentKnowledgeState==true){
+        scheduleName=knowledge.state.knowledgeName;
+      }else{
+        scheduleName = inputObj.refs.input.value;
+      }
+      knowledge.saveSchedule(sessionStorage.getItem("ident"),scheduleName);
+      // currentKnowledgeState:false,
+      // newScheduleState:false,
+      /*if(knowledge.state.newScheduleState==true){
+        var inputObj = knowledge.refs.scheduleName;
 
+        alert("inputValue:"+scheduleName);
+        //knowledge.saveSchedule(sessionStorage.getItem("ident"),scheduleName);
+      }else{
+        var scheduleName = inputObj.refs.input.value;
+      }*/
     }else{
       alert("使用");
       // alert(knowledge.state.currentKnowlege+"===:"+knowledge.state.schedule+",optType"+knowledge.state.optType);
       if(knowledge.state.optType=="courseWare"){
-        knowledge.copyMaterialToSchedule('23836',knowledge.state.currentKnowlege,knowledge.state.schedule);
+        knowledge.copyMaterialToSchedule(sessionStorage.getItem("ident"),knowledge.state.currentKnowlege,knowledge.state.schedule);
       }else{
         knowledge.copySubjects(knowledge.state.currentKnowlege,knowledge.state.schedule);
       }
@@ -67,7 +86,7 @@ const UseKnowledgeComponents = React.createClass({
         if(ret.msg=="调用成功" && ret.response.colTsId!=null){
           knowledge.setState({schedule:ret.response.colTsId});
           if(knowledge.state.optType=="courseWare"){
-            knowledge.copyMaterialToSchedule('23836',knowledge.state.currentKnowlege,knowledge.state.schedule);
+            knowledge.copyMaterialToSchedule(sessionStorage.getItem("ident"),knowledge.state.currentKnowlege,ret.response.colTsId);
           }else{
             knowledge.copySubjects(knowledge.state.currentKnowlege,knowledge.state.schedule);
           }
@@ -162,7 +181,7 @@ const UseKnowledgeComponents = React.createClass({
     //alert("kkk");
     var param = {
       "method":'getTeachScheduleByIdent',
-      "ident":'23836'
+      "ident":sessionStorage.getItem("ident")
     };
     this.doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
@@ -214,14 +233,36 @@ const UseKnowledgeComponents = React.createClass({
   },
 
   checkBoxOnChange(e) {
+    // currentKnowledgeState:false,
+        // newScheduleState:false,
     console.log(`checked = ${e.target.checked}`);
+    // currentKnowledgeState:false,
+        // newScheduleState:false,
+    var checkBoxValue = e.target.value;
     var inputObj = knowledge.refs.scheduleName;
-    //alert("inputValue:"+inputObj.refs.input.value);
-    if(e.target.checked==true){
-      knowledge.setState({inputState:false,isNewSchedule:true});
+    var currentKnowledgeState;
+    var newScheduleState;
+    if(checkBoxValue=="currentKnowledge"){
+        if(e.target.checked==true){
+          currentKnowledgeState=true;
+        }else{
+          currentKnowledgeState=false;
+        }
+        inputObj.refs.input.value="";
+        knowledge.setState({inputState:true});
     }else{
-      inputObj.refs.input.value="";
-      knowledge.setState({inputState:true,isNewSchedule:false});
+      if(e.target.checked==true){
+        newScheduleState=true;
+      }else{
+        newScheduleState=true;
+      }
+      knowledge.setState({inputState:false});
+    }
+    knowledge.setState({currentKnowledgeState:currentKnowledgeState,newScheduleState:newScheduleState});
+    if(currentKnowledgeState==true || newScheduleState==true){
+      knowledge.setState({isNewSchedule:true});
+    }else{
+      knowledge.setState({isNewSchedule:false});
     }
   },
 
@@ -252,8 +293,8 @@ const UseKnowledgeComponents = React.createClass({
                 {options}
               </Select>
               <div>
-                <Checkbox onChange={knowledge.checkBoxOnChange}>使用当前知识点作为教学进度</Checkbox>
-                教学进度:<Input ref="scheduleName" disabled={this.state.inputState}/>
+                <Checkbox onChange={knowledge.checkBoxOnChange} value="currentKnowledge">使用当前知识点作为教学进度</Checkbox>
+                <Checkbox onChange={knowledge.checkBoxOnChange} value="newSchedule">新建教学进度:<Input ref="scheduleName" disabled={this.state.inputState}/></Checkbox>
               </div>
               <div className="ant-modal-footer">
 			  <Button key="submit" type="primary"  htmlType="submit"  size="large">提交</Button>

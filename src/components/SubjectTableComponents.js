@@ -76,14 +76,14 @@ const SUbjectTable = React.createClass({
     var service = this;
     //this.WEBSERVICE_URL = "http://192.168.2.103:8080/Excoord_For_Education/webservice";
     this.WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
-    if (service.requesting) {
-      return;
-    }
-    service.requesting = true;
+    // if (service.requesting) {
+    //   return;
+    // }
+    // service.requesting = true;
     $.post(service.WEBSERVICE_URL, {
       params : data
     }, function(result, status) {
-      service.requesting = false;
+      // service.requesting = false;
       if (status == "success") {
         listener.onResponse(result);
       } else {
@@ -103,7 +103,7 @@ const SUbjectTable = React.createClass({
   },
 
   getSubjectDataBySchedule:function (ident,ScheduleOrSubjectId,pageNo) {
-    // alert("getSubjectDataBySchedule:"+ident+"==="+ScheduleOrSubjectId);
+    //alert("getSubjectDataBySchedule:"+ident+"==="+ScheduleOrSubjectId);
     var param = {
       "method":'getClassSubjects',
       "ident":ident,

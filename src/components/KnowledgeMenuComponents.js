@@ -69,10 +69,11 @@ const KnowledgeMenuComponents = React.createClass({
     var menuId = menuKeyArray[0];
     var childrenCount = menuKeyArray[1];
     var menuLevel = menuKeyArray[2];
-    // alert(menuLevel);
+    var menuName = menuKeyArray[3];
+    // alert(menuName);
     this.setState({openSubMenu:menuId});
     if(childrenCount==0){
-      var optContent = menuId+"#"+"bySubjectId";
+      var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
       this.props.callbackParent(optContent,breadCrumbArray);
     }else{
       this.bulidBreadCrumbArray(e.domEvent.target.innerText,menuLevel);
@@ -151,19 +152,41 @@ const KnowledgeMenuComponents = React.createClass({
     this.getLessonMenu();
   },
 
+  /* buildMenuChildren:function (menuList) {
+    var menuContent;
+    children = menuList.map((e, i)=> {
+      menuContent = (e[0]!=null?e[0]:e);
+      const Options = menuContent.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"1"} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
+          {/!*{this.buildOptions(konwledge.children)}*!/}
+          {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"2"} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
+            {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"3"} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
+              {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"4"} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
+                {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"5"} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
+                  {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"6"} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
+                  </SubMenu>)}
+                </SubMenu>)}
+              </SubMenu>)}
+            </SubMenu>)}
+          </SubMenu>)}
+      </SubMenu>);
+      return <SubMenu key={menuContent.id+"#"+menuContent.children.length+"#"+"0"} isRootMenu="true" onTitleClick={this.subMenuTitleClick} title={<span>{menuContent.content}</span>}>
+        {Options}
+      </SubMenu>
+    });
+  },*/
   buildMenuChildren:function (menuList) {
     var menuContent;
     children = menuList.map((e, i)=> {
       menuContent = (e[0]!=null?e[0]:e);
       // const Options =
-      return <SubMenu key={menuContent.id+"#"+menuContent.children.length+"#"+"0"} isRootMenu="true" onTitleClick={this.subMenuTitleClick} title={<span>{menuContent.content}</span>}>
+      return <SubMenu key={menuContent.id+"#"+menuContent.children.length+"#"+"0"+"#"+menuContent.content} isRootMenu="true" onTitleClick={this.subMenuTitleClick} title={<span>{menuContent.content}</span>}>
         {
-          menuContent.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"1"} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
-            {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"2"} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
-              {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"3"} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
-                {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"4"} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
-                  {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"5"} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
-                    {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"6"} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
+          menuContent.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"1"+"#"+konwledge.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
+            {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"2"+"#"+konwledge.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
+              {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"3"+"#"+konwledge.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
+                {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"4"+"#"+konwledge.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
+                  {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"5"+"#"+konwledge.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
+                    {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"6"+"#"+konwledge.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
                     </SubMenu>)}
                   </SubMenu>)}
                 </SubMenu>)}
