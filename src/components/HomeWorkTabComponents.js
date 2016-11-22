@@ -65,6 +65,7 @@ const HomeWorkTabComponents = React.createClass({
                 </Breadcrumb>
                 <Tabs
                     hideAdd
+                    animated="false"
                     onChange={this.onChange}
                     /*type="editable-card"     启用该属性，会使Tab上带有删除的图标*/
                     onEdit={this.onEdit}
