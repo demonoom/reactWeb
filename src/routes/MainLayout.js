@@ -118,9 +118,11 @@ const MainLayout = React.createClass({
             </Menu.Item>*/}
             <FloatButton/>
           </Menu>
-          <div className="ant-aside-action" onClick={this.onCollapseChange}>
-            {collapse ? <Icon type="right" /> : <Icon type="left" />}
+
+          <div className="ant-aside-action" > 
+
           </div>
+		
         </aside>
 
         <div className="ant-layout-main">

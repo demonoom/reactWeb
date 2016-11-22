@@ -13,9 +13,9 @@ const FloatButton = React.createClass({
 
     render() {
         return (
-            <Affix  offsetTop={375}>
+            <Affix className="affix_bottom">
                 <Popover content={<div><span onClick={this.logOut}>退出登录</span></div>}>
-                    <Button type="primary" icon="ellipsis"></Button>
+                    <img src={('../../src/components/images/exit_ma.png')}/>
                 </Popover>
             </Affix>
         );

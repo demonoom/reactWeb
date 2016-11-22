@@ -131,10 +131,16 @@ const Login = Form.create()(React.createClass({
 								{getFieldDecorator('validateCode',{
                                     rules: [{ required: true, message: '请输入验证码!' }],
                                 })(
-										<Input  placeholder="请输入验证码" />
-										<span className="code" id="checkCode" onClick={this.createCode} >{this.state.code}</span>
-										<a onClick={this.createCode} className="code_a">看不清换一张</a>
+									
+									<Input  placeholder="请输入验证码" className="yz_input" />
+									
 								)}
+								{
+
+										
+										<div className="code" id="checkCode" onClick={this.createCode} >{this.state.code}</div>
+	
+									}
 							</FormItem>
 		
 							<div className="login_buton">
