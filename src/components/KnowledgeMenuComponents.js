@@ -240,7 +240,7 @@ const KnowledgeMenuComponents = React.createClass({
           >
             {children}
           </Menu>
-          <Pagination size="small" total={100} current={this.state.currentPage} onChange={this.onChange}/>
+          {/*<Pagination size="small" total={100} current={this.state.currentPage} onChange={this.onChange}/>*/}
         </div>
     );
   },
