@@ -566,7 +566,80 @@ html, body, #root {
 .ant-menu-vertical > .ant-menu-item, .ant-menu-inline > .ant-menu-item, .ant-menu-item-group-list > .ant-menu-item, .ant-menu-vertical > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-item-group-list > .ant-menu-submenu > .ant-menu-submenu-title{
 	font-size:14px
 }
+.login_bg{	
+	height:100%;
+	position:relative;
+	background: -webkit-linear-gradient(#309ffb, #52cffd); /* Safari 5.1 - 6.0 */
+  background: -o-linear-gradient(#309ffb, #52cffd); /* Opera 11.1 - 12.0 */
+  background: -moz-linear-gradient(#309ffb, #52cffd); /* Firefox 3.6 - 15 */
+  background: linear-gradient(#309ffb, #52cffd); /* 标准的语法 */
+}
+.login_bottom{
+	background:url(../../src/components/images/login02_4.png);
+	position:absolute;
+	bottom:0;
+	height:200px;
+	width:1920px;
+	text-align:center;
+	
+}
+.login_sun{
+	width:180px;
+	height:179px;
+	position:absolute;
+	top:30px;
+	right:80px;
+	background:url(../../src/components/images/login03_5.png);
+}
+.login_duxing{
+	width:458px;
+	height:537px;
+	position:absolute;
+	left:0;
+	top:50%;
+	transform:translate(-50%,-50%);
+	background:url(../../src/components/images/login01_1.png);
+	}
+.login_bg_cont{
+	width:720px;
+	position:absolute;
+	left:50%;
+	top:50%;
+	transform:translate(-50%,-50%);
+}
+.login_bg_content{
+	float:right;
+	
+	width:350px;
+	border-radius:8px;
+	padding:0 20px 20px 20px;
+	background:#fff;
+}
 
+.login_bg_content label{
+	font-size:14px !important;
+	}
+.login_logo{
+	text-align:center;
+	padding:20px 0;
+	position:absolute;
+	top:0px;
+	left:30px;
+}
+.login_welcome{
+	height:60px;
+	line-height:60px;
+	color:#309ffb;
+	text-align:center;
+	font-size:18px;
+	border-bottom:1px solid #eee;
+	margin-bottom:25px;
+}
+.login_buton{
+	width:100%;
+	padding:6px 0;
+	font-size:16px;
+}
 #components-form-demo-normal-login .login-form {
 	max-width: 300px;
 }
@@ -577,23 +650,28 @@ html, body, #root {
 	width: 100%;
 }
 
-.code
-{
+.code{
 	font-family:Arial;
 	font-style:italic;
 	color:blue;
-	font-size:30px;
+	font-size:20px;
 	border:0;
 	padding:2px 3px;
 	letter-spacing:3px;
 	font-weight:bolder;
 	float:left;
 	cursor:pointer;
-	width:150px;
-	height:60px;
-	line-height:60px;
+	width:60px;
+	height:20px;
+	line-height:20px;
 	text-align:center;
 	vertical-align:middle;
+	margin:10px 16px 0 0
+}
+.code_a{
+	line-height:30px;
+	position:relative;
+	top:7px;
 }
 a
 {
@@ -622,4 +700,5 @@ article.content{
 	display:inline-block;
 }
 .ant-checkbox-wrapper + .ant-checkbox-wrapper{
-	margin-left:0px;}
+	margin-left:0px;
+}
