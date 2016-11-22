@@ -239,6 +239,10 @@ const CourseWareComponents = React.createClass({
 
     buildKonwledgePanels:function (courseWareList) {
         coursePanelChildren = courseWareList.map((e, i)=> {
+            var eysOnButton ;
+            if(e[9]!=null && e[9]!=""){
+                eysOnButton = <Button style={{ float:'right'}} icon="eye-o" value={e[9]} onClick={courseWare.viewFile}></Button>
+            }
             return <Panel header={<span><span type="" className={e[8]}></span><span>{e[1]}</span> </span>}  key={e[1]}>
                     <pre>
 					<div className="bnt2_tex">
@@ -250,6 +254,7 @@ const CourseWareComponents = React.createClass({
                       </div>       
 
                             <div className="bnt2_right">
+                                {eysOnButton}
                                 <Button style={{ float:'right'}} icon="download"  value={e[3]} onClick={courseWare.downLoadFile}></Button>
                                 <Button style={{ float:'right'}} type=""  icon=""  value={e[0]} onClick={this.showModal}>使用</Button>
                             </div>

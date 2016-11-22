@@ -103,37 +103,49 @@ const Login = Form.create()(React.createClass({
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: { span: 6 },
-            wrapperCol: { span: 14 },
+            wrapperCol: { span: 16 },
         };
         return (
-            <div>
-                <Form onSubmit={this.handleSubmit} className="login-form">
-                    <FormItem {...formItemLayout} label="用户名">
-                        {getFieldDecorator('userName')(
-                            <Input addonBefore={<Icon type="user" />} placeholder="请输入用户名"/>
-                        )}
-                    </FormItem>
-                    <FormItem {...formItemLayout} label="密码111">
-                        {getFieldDecorator('password')(
-                            <Input addonBefore={<Icon type="lock" />} type="password" placeholder="请输入密码"/>
-                        )}
-                    </FormItem>
-                    <FormItem {...formItemLayout} label="验证码">
-                        {getFieldDecorator('validateCode')(
-                            <div>
-                                <Input  placeholder="请输入验证码" />
-                                <div className="code" id="checkCode" onClick={this.createCode} >{this.state.code}</div>
-                                <a onClick={this.createCode}>看不清换一张</a>
-                            </div>
-                        )}
-                    </FormItem>
-                    <FormItem {...formItemLayout} >
-                        <Button type="primary" htmlType="submit" className="login-form-button">
-                            登录
-                        </Button>
-                    </FormItem>
-                </Form>
+            <div className="login_bg">
+			<div className="login_logo"><img src={('../../src/components/images/maaee.png')}/></div>
+			<div className="login_bg_cont">
+				<div className="login_duxing"></div>
+			 	<div className="login_bg_content">
+					<div className="login_welcome">欢迎登录</div>
+						<Form onSubmit={this.handleSubmit} className="login-form">
+							<FormItem {...formItemLayout} label="用户名">
+								{getFieldDecorator('userName')(
+									<Input addonBefore={<Icon type="user" />} placeholder="请输入用户名"/>
+								)}
+							</FormItem>
+							<FormItem {...formItemLayout} label="密&nbsp;&nbsp;&nbsp;码">
+								{getFieldDecorator('password')(
+									<Input addonBefore={<Icon type="lock" />} type="password" placeholder="请输入密码"/>
+								)}
+							</FormItem>
+							<FormItem {...formItemLayout} label="验证码">
+								{getFieldDecorator('validateCode')(
+									<div>
+										<Input  placeholder="请输入验证码" />
+										<div className="code" id="checkCode" onClick={this.createCode} >{this.state.code}</div>
+										<a onClick={this.createCode} className="code_a">看不清换一张</a>
+									</div>
+								)}
+							</FormItem>
+		
+							<div className="login_buton">
+								<Button type="primary" htmlType="submit" className="login-form-button login_buton">
+									登录
+								</Button>
+							</div>
+							
+						</Form>
+						</div>
+					</div>
+			<div className="login_bottom"></div>
+			<div className="login_sun"></div>
             </div>
+			
         );
     },
 }));
