@@ -64,7 +64,7 @@ const SubjectEditTabComponents = Form.create()(React.createClass({
         };
     },
     showModal() {
-        alert("sId:"+this.props.editParams);
+        // alert("sId:"+this.props.editParams);
         var editParamsArray = this.props.editParams.split("#");
         this.setState({
             visible: true,

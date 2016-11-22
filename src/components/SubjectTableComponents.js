@@ -144,12 +144,12 @@ const SUbjectTable = React.createClass({
   },
 
   editSubject:function (e) {
-    alert("editSubject:"+e.target.value);
+    // alert("editSubject:"+e.target.value);
 
   },
 
   deleteSubject:function (e) {
-    alert("deleteSubject:"+e.target.value);
+    // alert("deleteSubject:"+e.target.value);
   },
 
   getSubjectDataByKnowledge:function (ident,ScheduleOrSubjectId,pageNo) {
