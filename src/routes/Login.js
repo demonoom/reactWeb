@@ -106,36 +106,34 @@ const Login = Form.create()(React.createClass({
             wrapperCol: { span: 14 },
         };
         return (
-            <Form onSubmit={this.handleSubmit} className="login-form">
-                <FormItem {...formItemLayout} label="用户名">
-                    {getFieldDecorator('userName', {
-                        rules: [{ required: true, message: 'Please input your username!' }],
-                    })(
-                        <Input addonBefore={<Icon type="user" />} placeholder="请输入用户名" value="te23836" />
-                    )}
-                </FormItem>
-                <FormItem {...formItemLayout} label="密码">
-                    {getFieldDecorator('password', {
-                        rules: [{ required: true, message: 'Please input your Password!' }],
-                    })(
-                        <Input addonBefore={<Icon type="lock" />} type="password" placeholder="请输入密码" value="wd00000000"/>
-                    )}
-                </FormItem>
-                <FormItem {...formItemLayout} label="验证码">
-                    {getFieldDecorator('validateCode')(
-                        <div>
-                            <Input  placeholder="请输入验证码" />
-                            <div className="code" id="checkCode" onClick={this.createCode} >{this.state.code}</div>
-                            <a onClick={this.createCode}>看不清换一张</a>
-                        </div>
-                    )}
-                </FormItem>
-                <FormItem>
-                    <Button type="primary" htmlType="submit" className="login-form-button">
-                        登录
-                    </Button>
-                </FormItem>
-            </Form>
+            <div>
+                <Form onSubmit={this.handleSubmit} className="login-form">
+                    <FormItem {...formItemLayout} label="用户名">
+                        {getFieldDecorator('userName')(
+                            <Input addonBefore={<Icon type="user" />} placeholder="请输入用户名"/>
+                        )}
+                    </FormItem>
+                    <FormItem {...formItemLayout} label="密码111">
+                        {getFieldDecorator('password')(
+                            <Input addonBefore={<Icon type="lock" />} type="password" placeholder="请输入密码"/>
+                        )}
+                    </FormItem>
+                    <FormItem {...formItemLayout} label="验证码">
+                        {getFieldDecorator('validateCode')(
+                            <div>
+                                <Input  placeholder="请输入验证码" />
+                                <div className="code" id="checkCode" onClick={this.createCode} >{this.state.code}</div>
+                                <a onClick={this.createCode}>看不清换一张</a>
+                            </div>
+                        )}
+                    </FormItem>
+                    <FormItem {...formItemLayout} >
+                        <Button type="primary" htmlType="submit" className="login-form-button">
+                            登录
+                        </Button>
+                    </FormItem>
+                </Form>
+            </div>
         );
     },
 }));
