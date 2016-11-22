@@ -727,7 +727,11 @@ article.content_2{
 .affix_bottom img{
 	width:22px;
 	height:22px;
+	
 }
+.affix_bottom_tc{
+	cursor:pointer
+	}
 .yz_input{
 	width:120px;
 }
