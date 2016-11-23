@@ -78,6 +78,7 @@ const HomeWorkTableComponents = React.createClass({
       },{
         title: '分值',
         dataIndex: 'subjectScore',
+		className:'ant-table-selection-score'
       },
       ];
     }else{
