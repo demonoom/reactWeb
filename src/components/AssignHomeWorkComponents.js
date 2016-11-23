@@ -462,7 +462,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
                                 onChange={assignHomeWork.subjectListOnCheckAllChange}
                                 checked={assignHomeWork.state.checkAll}
                             >
-                              Check all  <Button onClick={assignHomeWork.removeAllSelectedSubject}>删除已选题目</Button>
+                              全 选  <Button onClick={assignHomeWork.removeAllSelectedSubject}>删除已选题目</Button>
                             </Checkbox>
                           </div>
                           <br />

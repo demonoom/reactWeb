@@ -26,7 +26,9 @@ const HomeWorkTableComponents = React.createClass({
       count:0,
       totalCount:0,
       currentPage:1,
-      currentView:'homeWorkList'
+      currentView:'homeWorkList',
+      clazzId:'',
+      dateTime:''
     };
   },
   start() {
@@ -115,6 +117,7 @@ const HomeWorkTableComponents = React.createClass({
     var pageNo=1;
     subTable.buildPageView(optSource);
     subTable.getHomeworkSubjects(ident,clazzId,dateTime,pageNo);
+    subTable.setState({currentView:'subjectDetailList',clazzId:clazzId,dateTime:dateTime});
     // alert("in getSubjectData");
   },
 
@@ -220,7 +223,14 @@ const HomeWorkTableComponents = React.createClass({
 
   pageOnChange(pageNo) {
     console.log(pageNo);
-    subTable.getDoneHomeworkList(sessionStorage.getItem("ident"),pageNo);
+    var currentView = subTable.state.currentView;
+    if(currentView=="homeWorkList"){
+      subTable.getDoneHomeworkList(sessionStorage.getItem("ident"),pageNo);
+    }else{
+      // subjectDetailList
+      subTable.getHomeworkSubjects(sessionStorage.getItem("ident"),subTable.state.clazzId,subTable.state.dateTime,pageNo)
+    }
+
     this.setState({
       currentPage: pageNo,
     });

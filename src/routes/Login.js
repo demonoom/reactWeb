@@ -60,15 +60,17 @@ const Login = Form.create()(React.createClass({
             onResponse : function(ret) {
                 console.log(ret.msg);
                 var response = ret.response;
-                if(ret.msg=="用户不存在！"){
+                if(ret.msg=="用户不存在！"|| ret.msg=="对不起，密码不正确！"){
                     alert("用户名或密码错误,请重新输入！");
-                }else if(response.colValid!=1){
-                    alert("用户已被禁用,请联系管理员！");
-                }else if(response.colUtype=="TEAC"){
-                    sessionStorage.setItem("ident", response.colUid);
-                    location.hash="MainLayout";
-                }else{
-                    alert("用户身份不正确,请重新输入！");
+                }else if(ret.msg=="调用成功"){
+                    if(response.colValid!=1){
+                        alert("用户已被禁用,请联系管理员！");
+                    }else if(response.colUtype!="TEAC"){
+                        alert("用户身份不正确,请重新输入！");
+                    }else{
+                        sessionStorage.setItem("ident", response.colUid);
+                        location.hash="MainLayout";
+                    }
                 }
             },
             onError : function(error) {

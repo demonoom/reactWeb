@@ -56,6 +56,9 @@ const SUbjectTable = React.createClass({
       loading: false,
       count:0,
       totalCount:0,
+      optType:'',
+      ScheduleOrSubjectId:'',
+      ident:'',
     };
   },
   start() {
@@ -95,6 +98,7 @@ const SUbjectTable = React.createClass({
   getSubjectData(ident,ScheduleOrSubjectId,pageNo,optType){
     data=[];
     // alert("ccc:"+ident+"==="+ScheduleOrSubjectId+",,,,"+optType);
+    subTable.setState({optType:optType});
     if(optType=="bySchedule"){
       subTable.getSubjectDataBySchedule(ident,ScheduleOrSubjectId,pageNo);
     }else{
@@ -203,12 +207,17 @@ const SUbjectTable = React.createClass({
     subTable.initGetSubjectInfo();
   },
 
-  initGetSubjectInfo:function () {
+  initGetSubjectInfo:function (currentPageNo) {
     // alert("params in subjectTable:"+subTable.props.params);
     var subjectParamArray = subTable.props.params.split("#");
     var ident = subjectParamArray[0];
     var ScheduleOrSubjectId = subjectParamArray[1];
-    var pageNo = subjectParamArray[2];
+    var pageNo=1;
+    if(currentPageNo==null || currentPageNo==""){
+      pageNo = subjectParamArray[2];
+    }else{
+      pageNo=currentPageNo;
+    }
     var optType = subjectParamArray[3];
     subTable.getSubjectData(ident,ScheduleOrSubjectId,pageNo,optType);
   },
@@ -222,7 +231,7 @@ const SUbjectTable = React.createClass({
 
   pageOnChange(pageNo) {
     console.log(pageNo);
-    subTable.initGetSubjectInfo();
+    subTable.initGetSubjectInfo(pageNo);
     this.setState({
       currentPage: pageNo,
     });
