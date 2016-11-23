@@ -60,8 +60,8 @@ const HomeWorkTabComponents = React.createClass({
             <div>
                 <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
                 <Breadcrumb separator=">">
-                    <Breadcrumb.Item href=""><Icon type="home" /></Breadcrumb.Item>
-                    <Breadcrumb.Item href="">首页</Breadcrumb.Item>
+                    <Breadcrumb.Item ><Icon type="home" /></Breadcrumb.Item>
+                    <Breadcrumb.Item href="#/MainLayout">首页</Breadcrumb.Item>
                 </Breadcrumb>
                 <Tabs
                     hideAdd
