@@ -1,4 +1,8 @@
-
+.logo_layout{
+	margin: 6px 0px 0px;
+    position: absolute;
+    left: -48px;
+}
 .ant-layout-aside {
       position: relative;
       min-height: 100%;
@@ -12,16 +16,24 @@
 
     }
     .ant-layout-logo{
-      background: #1488e8
+      background: #309ffb
 
     }
-    .ant-layout-aside-collapse .ant-layout-logo img{
-      width:32px;
-      height:32px;
-      border-radius: 50%;
-      transition: all 0.3s ease;
-    }
-    .ant-layout-aside .ant-layout-sider {
+.layout_logo{
+	width:64px;
+	height:64px;
+	margin-top:48px;
+	background:#364760;
+	border-bottom:1px solid #51627c
+	}
+.layout_logo img{
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+	cursor:pointer;
+	margin-top:14px;
+}
+ .ant-layout-aside .ant-layout-sider {
       width: 224px;
       background: #364760;
       position: absolute;
@@ -40,7 +52,8 @@
 
     .ant-layout-aside .ant-layout-sider > .ant-menu {
       margin-bottom: 20px;
-	  z-index:1000
+	  z-index:1000;
+	  margin-top:64px;
     }
 	ul.cont_t{
 		width:240px;
@@ -236,7 +249,7 @@
 		}
 	.write_right{
 		float:right;
-		margin-right:40px;
+		margin-right:22px;
 		}
 	.cont_write{
 		max-width:90px;
@@ -268,15 +281,22 @@
 	.ant-tabs:not(.ant-tabs-vertical) .ant-tabs-tabpane > div:first-child{
 		height:100%
 	}
+.ant-menu-submenu-inline > .ant-menu-submenu-title:after{
+	font-family: "a" !important;
+    font-style: normal;
+	content:none !important;
+    zoom: 1;
+}
 	.ant-collapse{
-		    background: #fff;
-            max-height: calc(100% - 50px);
-			min-height:200px;
-            overflow-y: auto;
-			overflow-x:hidden;
-			position: absolute;
-    		top: 0;
-			width:100%;
+		background: #fff;
+		max-height: calc(100% - 50px);
+		min-height:200px;
+		overflow-y: auto;
+		overflow-x:hidden;
+		position: absolute;
+		top: 0;
+		width:100%;
+		border:none !important
 	}
 	.add_study{
 		background:#5ec170;
@@ -735,3 +755,5 @@ article.content_2{
 .yz_input{
 	width:120px;
 }
+.ant-menu-submenu-inline > .ant-menu-submenu-title:after｛
+｝
