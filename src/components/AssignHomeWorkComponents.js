@@ -282,7 +282,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
   //题目表格行被选中时获取被选中项目
   onSubjectTableSelectChange(selectedSubjectKeys) {
     console.log('subject selectedRowKeys changed: ', selectedSubjectKeys);
-    assignHomeWork.buildSubjectCheckList(selectedSubjectKeys);
+    // assignHomeWork.buildSubjectCheckList(selectedSubjectKeys);
     this.setState({ selectedSubjectKeys });
   },
 
@@ -294,7 +294,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
     selectedSubjectKeys.forEach(function (e) {
         var subjectArray = e.split("#");
         defaultCheckedList.push(subjectArray[0]);
-        plainOptions.push({label:<article id='contentHtml' className='content content_2' dangerouslySetInnerHTML={{__html: subjectArray[1]}} ></article>,value:subjectArray[0]});
+        plainOptions.push({label:<article id='contentHtml' className='content content_2' value={subjectArray[1]} dangerouslySetInnerHTML={{__html: subjectArray[1]}} ></article>,value:subjectArray[0]});
         i++;
         if(i!=selectedSubjectKeys.length){
           sids+=subjectArray[0]+",";
@@ -316,25 +316,40 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
         assignHomeWork.setState({selectedSubjectKeys:[]});
         assignHomeWork.setState({ checkedList:defaultCheckedList});
     }else{
-        for(var i=0;i<plainOptions.length;i++){
+        var i = 0;
+        while(i<plainOptions.length){
             var checkedListJson = plainOptions[i];
+            //判断是否是选中的checkBox
             if(assignHomeWork.removeCheckedList(checkedListJson.value)){
               plainOptions.splice(i,1);
+              i=0;
+            }else{
+              i++;
             }
         }
-        var selectedKeys=[];
-        for(var i=0;i<plainOptions.length;i++){
-          var checkedListJson = plainOptions[i];
-          selectedKeys.push(checkedListJson.value)
-          defaultCheckedList.push(checkedListJson.value);
+        if(plainOptions.length==0){
+            plainOptions=[];
+            defaultCheckedList=[];
+            assignHomeWork.setState({selectedSubjectKeys:[]});
+            assignHomeWork.setState({ checkedList:defaultCheckedList});
+        }else{
+          var selectedKeys=[];
+          defaultCheckedList.splice(0,defaultCheckedList.length);
+          for(var i=0;i<plainOptions.length;i++){
+            var checkedListJson = plainOptions[i];
+            var key = checkedListJson.value;
+            var labelValue = checkedListJson.label.props.value;
+            selectedKeys.push(key+"#"+labelValue);
+            defaultCheckedList.push(key);
+          }
+          assignHomeWork.setState({selectedSubjectKeys:selectedKeys});
+          assignHomeWork.setState({ checkedList:defaultCheckedList});
         }
-        assignHomeWork.setState({selectedSubjectKeys:selectedKeys});
-        assignHomeWork.setState({ checkedList:defaultCheckedList});
     }
   },
 
   removeCheckedList(checkedValue){
-      for(var i=0;i<assignHomeWork.state.checkedList;i++){
+      for(var i=0;i<assignHomeWork.state.checkedList.length;i++){
           if(checkedValue==assignHomeWork.state.checkedList[i]){
               return true;
           }
@@ -350,6 +365,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
   },
   subjectModalHandleOk() {
     console.log('Clicked OK');
+    assignHomeWork.buildSubjectCheckList(assignHomeWork.state.selectedSubjectKeys);
     assignHomeWork.setState({
       subjectModalVisible: false,
     });
@@ -475,7 +491,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
                  onCancel={assignHomeWork.subjectModalHandleCancel}
                  footer={[
 
-                   <Button key="return" type="primary" size="large" onClick={assignHomeWork.subjectModalHandleCancel}>确定</Button>,
+                   <Button key="return" type="primary" size="large" onClick={assignHomeWork.subjectModalHandleOk}>确定</Button>,
 
                    <Button key="ok" type="ghost" size="large" onClick={assignHomeWork.subjectModalHandleCancel}>取消</Button>,
 

@@ -96,10 +96,18 @@ const HomeWorkTableComponents = React.createClass({
   },
 
   //点击查看时,进入题目列表
-  getSubjectData(e){
+  getSubjectData(e,handler){
+    //alert("===getSubjectData==="+e);
+    var target = e.target;
+    if(navigator.userAgent.indexOf("Chrome") > -1){
+      //e = window.event;
+      target=e.currentTarget;
+    }else{
+      target = e.target;
+    }
     data=[];
-    var optSource = e.target.textContent;
-    var value = e.target.value;
+    var optSource = target.textContent;
+    var value = target.value;
     var valueArray=value.split("#");
     var ident=valueArray[0];
     var clazzId=valueArray[1];
@@ -141,7 +149,7 @@ const HomeWorkTableComponents = React.createClass({
           var useDate = e.useDate;
           var title = clazzName+" "+hcount+" "+colCourse+"作业";
           var key =ident+"#"+colClazzId+"#"+useDate;
-          var subjectOpt=<Button type="primary" value={key} onClick={subTable.getSubjectData}>查看</Button>;
+          var subjectOpt=<Button type="primary" value={key} text={key} onClick={subTable.getSubjectData}>查看</Button>;
           data.push({
               key:key,
               title:title,
