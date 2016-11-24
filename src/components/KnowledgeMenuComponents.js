@@ -31,6 +31,8 @@ const KnowledgeMenuComponents = React.createClass({
       lessonCount:0,
       menuList:[],
       totalCount:0,
+      fatherMenuName:'',
+      breadCrumbArray:[],
     };
   },
 
@@ -70,14 +72,36 @@ const KnowledgeMenuComponents = React.createClass({
     var childrenCount = menuKeyArray[1];
     var menuLevel = menuKeyArray[2];
     var menuName = menuKeyArray[3];
+    var fatherMenuName = menuKeyArray[4];
     // alert(menuName);
     this.setState({openSubMenu:menuId});
-    if(childrenCount==0){
+    /*if(childrenCount==0){
+      if(menuLevel==0){
+        this.bulidBreadCrumbArray(menuName,menuLevel);
+      }else {
+        this.bulidBreadCrumbArray(fatherMenuName,menuLevel);
+      }
       var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
       this.props.callbackParent(optContent,breadCrumbArray);
     }else{
-      this.bulidBreadCrumbArray(e.domEvent.target.innerText,menuLevel);
+      // this.bulidBreadCrumbArray(e.domEvent.target.innerText,menuLevel);
+      if(menuLevel==0){
+        this.bulidBreadCrumbArray(e.domEvent.target.innerText,menuLevel);
+      }else{
+        this.bulidBreadCrumbArray(fatherMenuName,menuLevel);
+      }
       this.props.callbackParent(null,breadCrumbArray);
+    }*/
+    if(menuLevel==0 && childrenCount!=0){
+      this.bulidBreadCrumbArray(menuName,menuLevel);
+      this.props.callbackParent(null,breadCrumbArray);
+    }else if(menuLevel!=0 && childrenCount!=0){
+      this.bulidBreadCrumbArray(menuName,menuLevel);
+      this.props.callbackParent(null,breadCrumbArray);
+    }else if(menuLevel!=0 && childrenCount==0){
+      var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
+      this.bulidBreadCrumbArray(fatherMenuName,menuLevel-1);
+      this.props.callbackParent(optContent,breadCrumbArray);
     }
   },
 
@@ -90,21 +114,60 @@ const KnowledgeMenuComponents = React.createClass({
       this.checkSameLevelBread(breadJson,breadCrumbArray);
       // breadCrumbArray.push(breadJson);
     }
+    this.setState({breadCrumbArray:breadCrumbArray});
+  },
+
+  checkIsFatherLevel(breadJson,breadCrumbArray){
+      var index=-1;
+      for(var i=0;i<breadCrumbArray.length;i++){
+        //如果是相同层次的菜单，则返回当前的菜单索引位置
+        if(breadJson.menuLevel == breadCrumbArray[i].menuLevel){
+          index=i;
+          break;
+        }
+      }
+      if(index!=-1){
+        //如果点击的是同级菜单，则替换当前的菜单，并删除之后的所有菜单项目
+        breadCrumbArray[index]=breadJson;
+        for(var i=0;i<breadCrumbArray.length;i++){
+          if(i>index){
+            breadCrumbArray.splice(i,1);
+          }
+        }
+        breadCrumbArray.push(breadJson);
+      }else{
+        breadCrumbArray.push(breadJson);
+      }
+      return breadCrumbArray;
   },
 
   checkSameLevelBread:function (breadJson,breadCrumbArray) {
       var index=-1;
       for(var i=0;i<breadCrumbArray.length;i++){
+          //如果是相同层次的菜单，则返回当前的菜单索引位置
           if(breadJson.menuLevel == breadCrumbArray[i].menuLevel){
             index=i;
             break;
           }
       }
+      var removeArray=[];
       if(index!=-1){
+        //如果点击的是同级菜单，则替换当前的菜单，并删除之后的所有菜单项目
         breadCrumbArray[index]=breadJson;
+        for(var i=0;i<breadCrumbArray.length;i++){
+          if(i>index){
+            removeArray.push(i);
+            //breadCrumbArray.splice(i,1);
+          }
+        }
+        for(var i=0;i<removeArray.length;i++){
+          breadCrumbArray.splice(removeArray[i],1);
+        }
+
       }else{
         breadCrumbArray.push(breadJson);
       }
+
       return breadCrumbArray;
   },
 
@@ -152,41 +215,19 @@ const KnowledgeMenuComponents = React.createClass({
     this.getLessonMenu();
   },
 
-  /* buildMenuChildren:function (menuList) {
-    var menuContent;
-    children = menuList.map((e, i)=> {
-      menuContent = (e[0]!=null?e[0]:e);
-      const Options = menuContent.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"1"} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
-          {/!*{this.buildOptions(konwledge.children)}*!/}
-          {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"2"} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
-            {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"3"} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
-              {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"4"} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
-                {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"5"} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
-                  {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"6"} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
-                  </SubMenu>)}
-                </SubMenu>)}
-              </SubMenu>)}
-            </SubMenu>)}
-          </SubMenu>)}
-      </SubMenu>);
-      return <SubMenu key={menuContent.id+"#"+menuContent.children.length+"#"+"0"} isRootMenu="true" onTitleClick={this.subMenuTitleClick} title={<span>{menuContent.content}</span>}>
-        {Options}
-      </SubMenu>
-    });
-  },*/
   buildMenuChildren:function (menuList) {
     var menuContent;
     children = menuList.map((e, i)=> {
       menuContent = (e[0]!=null?e[0]:e);
       // const Options =
-      return <SubMenu key={menuContent.id+"#"+menuContent.children.length+"#"+"0"+"#"+menuContent.content} isRootMenu="true" onTitleClick={this.subMenuTitleClick} title={<span>{menuContent.content}</span>}>
+      return <SubMenu key={menuContent.id+"#"+menuContent.children.length+"#"+"0"+"#"+menuContent.content+"#"+""} isRootMenu="true" onTitleClick={this.subMenuTitleClick} title={<span>{menuContent.content}</span>}>
         {
-          menuContent.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"1"+"#"+konwledge.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
-            {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"2"+"#"+konwledge.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
-              {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"3"+"#"+konwledge.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
-                {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"4"+"#"+konwledge.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
-                  {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"5"+"#"+konwledge.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
-                    {konwledge.children.map(konwledge => <SubMenu key={konwledge.id+"#"+konwledge.children.length+"#"+"6"+"#"+konwledge.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge.content}</span>}>
+          menuContent.children.map(konwledge1 => <SubMenu key={konwledge1.id+"#"+konwledge1.children.length+"#"+"1"+"#"+konwledge1.content+"#"+menuContent.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge1.content}</span>}>
+            {konwledge1.children.map(konwledge2 => <SubMenu key={konwledge2.id+"#"+konwledge2.children.length+"#"+"2"+"#"+konwledge2.content+"#"+konwledge1.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge2.content}</span>}>
+              {konwledge2.children.map(konwledge3 => <SubMenu key={konwledge3.id+"#"+konwledge3.children.length+"#"+"3"+"#"+konwledge3.content+"#"+konwledge2.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge3.content}</span>}>
+                {konwledge3.children.map(konwledge4 => <SubMenu key={konwledge4.id+"#"+konwledge4.children.length+"#"+"4"+"#"+konwledge4.content+"#"+konwledge3.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge4.content}</span>}>
+                  {konwledge4.children.map(konwledge5 => <SubMenu key={konwledge5.id+"#"+konwledge5.children.length+"#"+"5"+"#"+konwledge5.content+"#"+konwledge4.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge5.content}</span>}>
+                    {konwledge5.children.map(konwledge6 => <SubMenu key={konwledge6.id+"#"+konwledge6.children.length+"#"+"6"+"#"+konwledge6.content+"#"+konwledge5.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge6.content}</span>}>
                     </SubMenu>)}
                   </SubMenu>)}
                 </SubMenu>)}

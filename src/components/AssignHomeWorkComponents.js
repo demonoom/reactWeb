@@ -63,7 +63,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
       selectedRowKeys: [],  // Check here to configure the default column
       loading: false,
       scheduleCount:0,
-      checkedList: defaultCheckedList,
+      checkedList: [],
       indeterminate: true,
       checkAll: false,
       selectedSubjectKeys:[],
@@ -126,12 +126,33 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
     // clazzIds="";
     // dateTime = "";
     // alert(sids+"\n"+clazzIds+"\n"+dateTime);
-    assignHomeWork.publishHomeworkSubject(ident,sids,clazzIds,dateTime);
+    if(assignHomeWork.isEmpty(dateTime)){
+        alert("请选择日期");
+    }else if(assignHomeWork.isEmpty(clazzIds)){
+      alert("请选择班级");
+    }else if(assignHomeWork.isEmpty(sids)){
+      alert("请选择题目");
+    }else{
+      assignHomeWork.publishHomeworkSubject(ident,sids,clazzIds,dateTime);
+      //保存之后，将已选题目列表清空
+      plainOptions = [];
+    }
   },
+
+  isEmpty(content){
+    if(content==null || content=="" || typeof(content)=="undefined"){
+        return true;
+    }else{
+        return false;
+    }
+  },
+
   /*handleCancel() {
    assignHomeWork.setState({ visible: false });
   },*/
   handleCancel(e) {
+    // 保存之后，将已选题目列表清空
+    plainOptions = [];
     assignHomeWork.props.callbackParent();
   },
   checkConfirm(rule, value, callback) {
@@ -310,28 +331,31 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
     /*plainOptions.forEach(function (e) {
         alert(e.value);
     })*/
-    if(assignHomeWork.state.checkAll==true){
+    if(assignHomeWork.state.checkedList.length==0){
+        alert("请选择题目后，再删除！");
+    }else{
+      if(assignHomeWork.state.checkAll==true){
         plainOptions=[];
         defaultCheckedList=[];
         assignHomeWork.setState({selectedSubjectKeys:[]});
         assignHomeWork.setState({ checkedList:defaultCheckedList});
-    }else{
+      }else{
         var i = 0;
         while(i<plainOptions.length){
-            var checkedListJson = plainOptions[i];
-            //判断是否是选中的checkBox
-            if(assignHomeWork.removeCheckedList(checkedListJson.value)){
-              plainOptions.splice(i,1);
-              i=0;
-            }else{
-              i++;
-            }
+          var checkedListJson = plainOptions[i];
+          //判断是否是选中的checkBox
+          if(assignHomeWork.removeCheckedList(checkedListJson.value)){
+            plainOptions.splice(i,1);
+            i=0;
+          }else{
+            i++;
+          }
         }
         if(plainOptions.length==0){
-            plainOptions=[];
-            defaultCheckedList=[];
-            assignHomeWork.setState({selectedSubjectKeys:[]});
-            assignHomeWork.setState({ checkedList:defaultCheckedList});
+          plainOptions=[];
+          defaultCheckedList=[];
+          assignHomeWork.setState({selectedSubjectKeys:[]});
+          assignHomeWork.setState({ checkedList:defaultCheckedList});
         }else{
           var selectedKeys=[];
           defaultCheckedList.splice(0,defaultCheckedList.length);
@@ -345,6 +369,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
           assignHomeWork.setState({selectedSubjectKeys:selectedKeys});
           assignHomeWork.setState({ checkedList:defaultCheckedList});
         }
+      }
     }
   },
 
