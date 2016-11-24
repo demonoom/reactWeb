@@ -12,6 +12,10 @@ const columns = [{
   title: '内容',
   dataIndex: 'content',
 },
+//   {
+//   title: '上传时间',
+//   dataIndex: 'submitTime',
+// },
   {
   title: '题型',
   className:'ant-table-selection-topic',
@@ -128,10 +132,12 @@ const SUbjectTable = React.createClass({
           var subjectType=e.typeName;
           var subjectScore=e.score;
           var subjectOpt=<div className="smallclass"><SubjectEditTabComponents editParams={e.sid+"#"+e.typeName+"#"+e.shortContent+"#"+e.score}></SubjectEditTabComponents><span className="toobar"><Button value={e.sid} onClick={subTable.deleteSubject}><Icon type="delete"/></Button></span><span className="toobar"><Button value={e.sid} onClick="">录制微课</Button></span></div>;
+          // var submitTime = e.submitTime;
           data.push({
             key: key,
             name: name,
             content: content,
+            // submitTime:submitTime,
             subjectType:subjectType,
             subjectScore:subjectScore,
             subjectOpt:subjectOpt,
@@ -179,11 +185,13 @@ const SUbjectTable = React.createClass({
           var content=<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article>;
           var subjectType=e.typeName;
           var subjectScore=e.score;
+          // var submitTime = subTable.getLocalTime(e.createTime);
           var subjectOpt=<Button style={{ }} type=""  value={key} onClick={subTable.showModal}>使用</Button>;
           data.push({
             key: key,
             name: name,
             content: content,
+            // submitTime:submitTime,
             subjectType:subjectType,
             subjectScore:subjectScore,
             subjectOpt:subjectOpt,
@@ -198,6 +206,15 @@ const SUbjectTable = React.createClass({
 
     });
   },
+
+  /*getLocalTime:function (nS) {
+    // var newDate = new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/,' ');
+    // return newDate;
+    var newDate = new Date();
+    newDate.setTime(nS);
+    console.log("localDate："+newDate.toLocaleDateString())
+    return newDate.toLocaleDateString();
+  },*/
 
   componentDidMount(){
     subTable.initGetSubjectInfo();
