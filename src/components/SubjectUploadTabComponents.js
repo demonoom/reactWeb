@@ -267,16 +267,17 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
     render() {
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
-            labelCol: { span: 3},
+            labelCol: { span: 4},
             wrapperCol: { span: 17 },
         };
         return (
             <div className="toobar">
 
-                <Button type="" onClick={this.showModal}>题目</Button>
+                <Button  type="primary" icon="plus" onClick={this.showModal} className="add_study">添加题目</Button>
                 <Modal
                     visible={this.state.visible}
                     title="添加题目"
+					width="620"
                     className="ant-modal-width"
                     onCancel={this.handleCancel}
                     footer={[]}
@@ -330,8 +331,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                         </div>
                                     )}
                                 </FormItem>
-                                <FormItem>
-                                    <Button type="primary" htmlType="submit" className="login-form-button">
+                                <FormItem className="ant-modal-footer">
+                                    <Button type="primary" htmlType="submit" className="login-form-button botton_left1">
                                         保存并继续添加
                                     </Button>
                                     <Button type="primary" htmlType="submit" className="login-form-button">
@@ -386,8 +387,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                         </div>
                                     )}
                                 </FormItem>
-                                <FormItem>
-                                    <Button type="primary" htmlType="submit" className="login-form-button">
+                                <FormItem className="ant-modal-footer">
+                                    <Button type="primary" htmlType="submit" className="login-form-button botton_left1">
                                         保存并继续添加
                                     </Button>
                                     <Button type="primary" htmlType="submit" className="login-form-button">
@@ -438,8 +439,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                         </div>
                                     )}
                                 </FormItem>
-                                <FormItem>
-                                    <Button type="primary" htmlType="submit" className="login-form-button">
+                                <FormItem className="ant-modal-footer">
+                                    <Button type="primary" htmlType="submit" className="login-form-button botton_left1">
                                         保存并继续添加
                                     </Button>
                                     <Button type="primary" htmlType="submit" className="login-form-button">
@@ -489,8 +490,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                         </div>
                                     )}
                                 </FormItem>
-                                <FormItem>
-                                    <Button type="primary" htmlType="submit" className="login-form-button">
+                                <FormItem className="ant-modal-footer">
+                                    <Button type="primary" htmlType="submit" className="login-form-button botton_left1">
                                         保存并继续添加
                                     </Button>
                                     <Button type="primary" htmlType="submit" className="login-form-button">
@@ -561,8 +562,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                         </div>
                                     )}
                                 </FormItem>
-                                <FormItem>
-                                    <Button type="primary" htmlType="submit" className="login-form-button">
+                                <FormItem className="ant-modal-footer">
+                                    <Button type="primary" htmlType="submit" className="login-form-button botton_left1">
                                         保存并继续添加
                                     </Button>
                                     <Button type="primary" htmlType="submit" className="login-form-button">
