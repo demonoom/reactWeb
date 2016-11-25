@@ -757,3 +757,6 @@ article.content_2{
 }
 .ant-menu-submenu-inline > .ant-menu-submenu-title:after｛
 ｝
+.ant-modal-body {
+    padding:30px 16px 0 16px !important
+}

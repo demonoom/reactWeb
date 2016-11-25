@@ -273,7 +273,7 @@ const SubjectEditTabComponents = Form.create()(React.createClass({
     render() {
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
-            labelCol: { span: 3},
+            labelCol: { span: 4},
             wrapperCol: { span: 17 },
         };
         return (
@@ -283,7 +283,7 @@ const SubjectEditTabComponents = Form.create()(React.createClass({
                 <Modal
                     visible={this.state.visible}
                     title="修改题目"
-                    width="616"
+                    width="620"
                     onCancel={this.handleCancel}
                     footer={[]}
                 >

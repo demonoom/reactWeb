@@ -153,7 +153,7 @@ const HomeWorkTableComponents = React.createClass({
           var useDate = e.useDate;
           var title = clazzName+" "+hcount+" "+colCourse+"作业";
           var key =ident+"#"+colClazzId+"#"+useDate;
-          var subjectOpt=<Button type="primary" value={key} text={key} onClick={subTable.getSubjectData}>查看</Button>;
+          var subjectOpt=<Button type="button" value={key} text={key} onClick={subTable.getSubjectData}>查看</Button>;
           data.push({
               key:key,
               title:title,

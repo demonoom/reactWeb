@@ -397,7 +397,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
     render() {
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
-            labelCol: { span: 3},
+            labelCol: { span: 4},
             wrapperCol: { span: 17 },
         };
         const children = [];
@@ -459,11 +459,11 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
 
         return (
             <div className="toobar">
-
-                <Button type="" onClick={this.showModal} icon="upload" title="上传题目" >题目</Button>
+                <Button  type="primary" icon="plus" onClick={this.showModal} title="上传题目" className="add_study">添加题目</Button>
                 <Modal
                     visible={this.state.visible}
                     title="添加题目"
+					width="620"
                     className="ant-modal-width"
                     onCancel={this.handleCancel}
                     footer={[]}
@@ -494,8 +494,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     )}
                                 </FormItem>
                                 {scoreItem}
-                                <FormItem>
-                                    <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.singleHandleSubmit}>
+                                <FormItem className="ant-modal-footer">
+                                    <Button type="primary" htmlType="submit" className="login-form-button botton_left1" onClick={this.singleHandleSubmit}>
                                         保存并继续添加
                                     </Button>
                                     <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.singleHandleSubmit} >
@@ -520,8 +520,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     )}
                                 </FormItem>
                                 {scoreItem}
-                                <FormItem>
-                                    <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.MulitiHandleSubmit}>
+                                <FormItem className="ant-modal-footer">
+                                    <Button type="primary" htmlType="submit" className="login-form-button botton_left1" onClick={this.MulitiHandleSubmit}>
                                         保存并继续添加
                                     </Button>
                                     <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.MulitiHandleSubmit} >
@@ -548,8 +548,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     )}
                                 </FormItem>
                                 {scoreItem}
-                                <FormItem>
-                                    <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.correctHandleSubmit}>
+                                <FormItem className="ant-modal-footer">
+                                    <Button type="primary" htmlType="submit" className="login-form-button botton_left1" onClick={this.correctHandleSubmit}>
                                         保存并继续添加
                                     </Button>
                                     <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.correctHandleSubmit} >
@@ -575,8 +575,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     )}
                                 </FormItem>
                                 {scoreItem}
-                                <FormItem>
-                                    <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.simpleAnswerHandleSubmit}>
+                                <FormItem className="ant-modal-footer">
+                                    <Button type="primary" htmlType="submit" className="login-form-button botton_left1" onClick={this.simpleAnswerHandleSubmit}>
                                         保存并继续添加
                                     </Button>
                                     <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.simpleAnswerHandleSubmit} >
@@ -587,7 +587,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                         </div></TabPane>
 
                         <TabPane tab="材料题" key="材料题"><div>
-                            <Form horizontal onSubmit={this.singleHandleSubmit}>
+                            <Form horizontal>
                                 <FormItem
                                     {...formItemLayout}
                                     label={(<span>材料文件</span>)}
@@ -617,7 +617,14 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     )}
                                 </FormItem>
                                 {scoreItem}
-                                {buttonItem}
+                                <FormItem className="ant-modal-footer">
+                                    <Button type="primary" htmlType="submit" className="login-form-button botton_left1">
+                                        保存并继续添加
+                                    </Button>
+                                    <Button type="primary" htmlType="submit" className="login-form-button">
+                                        保存并返回列表
+                                    </Button>
+                                </FormItem>
                             </Form>
                         </div></TabPane>
                     </Tabs>
