@@ -132,7 +132,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
     render() {
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
-            labelCol: { span: 3},
+            labelCol: { span: 4},
             wrapperCol: { span: 17 },
         };
         return (
@@ -147,7 +147,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                     footer={[]}
                 >
                         <Form horizontal>
-                            <FormItem
+                            <FormItem  className="timu_pad"
                                 {...formItemLayout}
                                 label={(<span>材料文件</span>)}
                                 hasFeedback>
@@ -159,8 +159,9 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                                     </div>
                                 )}
                             </FormItem>
-                            <FormItem>
-                                <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.uploadFile}>
+
+                            <FormItem >
+                                <Button type="primary" htmlType="submit" className="login-form-button botton_left3" onClick={this.uploadFile}>
                                     保存
                                 </Button>
                                 <Button type="primary" htmlType="reset" className="login-form-button">

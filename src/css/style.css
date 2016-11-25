@@ -231,7 +231,7 @@
 		padding: 0 0 0 12px
 	}
 	.ant-tabs-right{
-		width:180px;
+		width:210px;
 		text-align:right;
 		margin-top:13px
 		}
@@ -592,6 +592,9 @@ html, body, #root {
 .botton_left1{
 	margin-left:115px !important;
 }
+.botton_left3{
+	margin-left:200px !important;
+}
 .padding_menu{
 	padding-left:20px !important;
 }
@@ -759,4 +762,10 @@ article.content_2{
 ｝
 .ant-modal-body {
     padding:30px 16px 0 16px !important
+}
+.right_ri{
+	float:right
+}
+.timu_pad{
+	padding:25px 0 !important;
 }
