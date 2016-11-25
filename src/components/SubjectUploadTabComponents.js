@@ -150,10 +150,18 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
 
     initPage(){
         this.setState({score:1});
-        this.refs.subjectNameInput.refs.input.value="";
-        this.refs.singleAnswer.state.value="A";
-        this.refs.scoreDefined.refs.input.value="";
-        this.refs.simpleAnswerInput.refs.input.value="";
+        if(!this.isEmpty(this.refs.subjectNameInput)){
+            this.refs.subjectNameInput.refs.input.value="";
+        }
+        if(!this.isEmpty(this.refs.singleAnswer)){
+            this.refs.singleAnswer.state.value="A";
+        }
+        if(!this.isEmpty(this.refs.scoreDefined)){
+            this.refs.scoreDefined.refs.input.value="";
+        }
+        if(!this.isEmpty(this.refs.simpleAnswerInput)){
+            this.refs.simpleAnswerInput.refs.input.value="";
+        }
         this.setState({scoreChecked:false,scoreInputState:true,scoreDisable:false,mulitiAnswerDefaultValue:['A'],correctAnswerValue:"正确"});
     },
 

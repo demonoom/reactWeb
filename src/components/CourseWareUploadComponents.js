@@ -4,10 +4,12 @@ import { Modal} from 'antd';
 import { Slider } from 'antd';
 import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox } from 'antd';
 import { Upload,  message } from 'antd';
+import FileUploadComponents from './FileUploadComponents';
 const Dragger = Upload.Dragger;
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 const Option = Select.Option;
+const CheckboxGroup = Checkbox.Group;
 
 const props = {
     name: 'file',
@@ -29,14 +31,13 @@ const props = {
         }
     },
 };
+
+var uploadFileList=[];
 const CourseWareUploadComponents = Form.create()(React.createClass({
     getInitialState() {
         return {
-            loading: false,
             visible: false,
-            activeKey: '单选题',
-            markSelected:6,
-            score:1,
+            submitFileCheckedList:['大蚂蚁.txt'],
         };
     },
     showModal() {
@@ -56,19 +57,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
         //this.setState({lessonCount: val});
     },
 
-    sliderOnChange(value) {
-        console.log("sliderValue:"+value)
-        this.setState({
-            markSelected: value,
-        });
-    },
-
-    selectHandleChange:function (value) {
-        console.log(`selected ${value}`);
-        this.setState({score:value});
-    },
-
-    doWebService : function(data,listener) {
+    /*doWebService : function(data,listener) {
         var service = this;
         //this.WEBSERVICE_URL = "http://192.168.2.103:8080/Excoord_For_Education/webservice";
         this.WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
@@ -86,45 +75,58 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                 listener.onError(result);
             }
         }, "json");
-    },
+    },*/
 
-
-    saveSubject(batchAddSubjectBeanJson){
-        var param = {
-            "method":'batchAddSubjects',
-            "batchAddSubjectBeanJson":[batchAddSubjectBeanJson],
-        };
-        this.doWebService(JSON.stringify(param), {
-            onResponse : function(ret) {
-                console.log(ret.msg);
-                if(ret.msg=="调用成功" && ret.response==true){
-                    alert("题目添加成功");
-                }else{
-                    alert("题目添加失败");
-                }
-            },
-            onError : function(error) {
-                alert(error);
+    doWebService : function(data,listener) {
+        var service = this;
+        this.WEBSERVICE_URL = "http://101.201.45.125:8890/Excoord_Upload_Server/file/upload";
+        if (service.requesting) {
+            return;
+        }
+        service.requesting = true;
+        $.post(service.WEBSERVICE_URL, {
+            params : data
+        }, function(result, status) {
+            service.requesting = false;
+            if (status == "success") {
+                listener.onResponse(result);
+            } else {
+                listener.onError(result);
             }
-        });
+        }, "json");
     },
 
-    coverOnChange(info) {
-        if (info.file.status !== 'uploading') {
-            console.log(info.file, info.fileList);
-        }
-        if (info.file.status === 'done') {
-            message.success(`${info.file.name} file uploaded successfully.`);
-        } else if (info.file.status === 'error') {
-            message.error(`${info.file.name} file upload failed.`);
+    //点击保存按钮，文件上传
+    uploadFile(){
+        if(uploadFileList.length==0){
+            alert("请选择上传的文件,谢谢！");
+        }else{
+            var param = {
+                "file":uploadFileList[0],
+            };
+            this.doWebService(JSON.stringify(param), {
+                onResponse : function(ret) {
+                    console.log(ret.msg);
+                    if(ret.msg=="调用成功" && ret.response==true){
+                        alert("课件上传成功");
+                    }else{
+                        alert("课件上传失败");
+                    }
+                },
+                onError : function(error) {
+                    alert(error);
+                }
+            });
         }
     },
 
-    addScore:function () {
-        var score = this.state.score;
-        var newScore = parseInt(score)+parseFloat(0.5);
-        console.log("newScore:"+newScore)
-        this.setState({score:newScore});
+    handleFileSubmit(fileList){
+        // alert("已上传文件："+fileList.length);
+        for(var i=0;i<fileList.length;i++){
+            var fileJson = fileList[i];
+            var fileObj = fileJson.fileObj;
+            uploadFileList.push(fileObj[0]);
+        }
     },
 
     render() {
@@ -144,7 +146,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                     onCancel={this.handleCancel}
                     footer={[]}
                 >
-                        <Form horizontal onSubmit={this.singleHandleSubmit}>
+                        <Form horizontal>
                             <FormItem
                                 {...formItemLayout}
                                 label={(<span>材料文件</span>)}
@@ -152,15 +154,13 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                                 {getFieldDecorator('materialFile', {
                                     rules: [{ required: true, message: '请上传课件!' }],
                                 })(
-                                    <div style={{ width: 346, height: 80 }}>
-                                        <Dragger {...props}>
-                                            <Icon type="plus" />
-                                        </Dragger>
+                                    <div>
+                                        <FileUploadComponents callBackParent={this.handleFileSubmit}/>
                                     </div>
                                 )}
                             </FormItem>
                             <FormItem>
-                                <Button type="primary" htmlType="submit" className="login-form-button">
+                                <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.uploadFile}>
                                     保存
                                 </Button>
                                 <Button type="primary" htmlType="reset" className="login-form-button">

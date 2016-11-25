@@ -102,6 +102,10 @@ const KnowledgeMenuComponents = React.createClass({
       var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
       this.bulidBreadCrumbArray(fatherMenuName,menuLevel-1);
       this.props.callbackParent(optContent,breadCrumbArray);
+    }else if(menuLevel==0 && childrenCount==0){
+      this.bulidBreadCrumbArray(menuName,menuLevel);
+      var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
+      this.props.callbackParent(optContent,breadCrumbArray);
     }
   },
 
