@@ -131,7 +131,7 @@ const SUbjectTable = React.createClass({
           var content=<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article>;
           var subjectType=e.typeName;
           var subjectScore=e.score;
-          var subjectOpt=<div className="smallclass"><SubjectEditTabComponents editParams={e.sid+"#"+e.typeName+"#"+e.shortContent+"#"+e.score}></SubjectEditTabComponents><span className="toobar"><Button value={e.sid} onClick={subTable.deleteSubject}><Icon type="delete"/></Button></span><span className="toobar"><Button value={e.sid} onClick="">录制微课</Button></span></div>;
+          var subjectOpt=<div className="smallclass"><SubjectEditTabComponents editParams={e.sid+"#"+e.typeName+"#"+e.shortContent+"#"+e.score}></SubjectEditTabComponents><span className="toobar"><Button value={e.sid} title="删除" onClick={subTable.deleteSubject}><Icon type="delete"/></Button></span><span className="toobar"><Button value={e.sid} onClick="">录制微课</Button></span></div>;
           // var submitTime = e.submitTime;
           data.push({
             key: key,
@@ -186,7 +186,7 @@ const SUbjectTable = React.createClass({
           var subjectType=e.typeName;
           var subjectScore=e.score;
           // var submitTime = subTable.getLocalTime(e.createTime);
-          var subjectOpt=<Button style={{ }} type=""  value={key} onClick={subTable.showModal}>使用</Button>;
+          var subjectOpt=<Button style={{ }} type=""  value={key} onClick={subTable.showModal}  icon="export" title="使用" ></Button>;
           data.push({
             key: key,
             name: name,

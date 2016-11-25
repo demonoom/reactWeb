@@ -52,6 +52,7 @@ const props = {
     },
 };
 var mulitiAnswer = new Array();
+var data=[];
 const SubjectUploadTabComponents = Form.create()(React.createClass({
     getInitialState() {
         return {
@@ -60,6 +61,13 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             activeKey: '单选题',
             markSelected:6,
             score:1,
+            subjectName:'',
+            singleAnswer:'A',
+            scoreChecked:false,
+            scoreInputState:true,
+            scoreDisable:false,
+            mulitiAnswerDefaultValue:['A'],
+            correctAnswerValue:"正确",
         };
     },
     showModal() {
@@ -131,41 +139,94 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             }
         });
     },
+    //系统非空判断
+    isEmpty(content){
+        if(content==null || content=="" || typeof(content)=="undefined"){
+            return true;
+        }else{
+            return false;
+        }
+    },
+
+    initPage(){
+        this.setState({score:1});
+        this.refs.subjectNameInput.refs.input.value="";
+        this.refs.singleAnswer.state.value="A";
+        this.refs.scoreDefined.refs.input.value="";
+        this.refs.simpleAnswerInput.refs.input.value="";
+        this.setState({scoreChecked:false,scoreInputState:true,scoreDisable:false,mulitiAnswerDefaultValue:['A'],correctAnswerValue:"正确"});
+    },
+
     //单选题新增
     singleHandleSubmit(e) {
         e.preventDefault();
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        data=[];
+        //获取当前点击的是哪个按钮
+        var currentButton = target.textContent;
+        // alert(currentButton);
         this.props.form.validateFieldsAndScroll((err, values) => {
             var ident = sessionStorage.getItem("ident");
             var easy = this.state.markSelected;
             var score = this.state.score;
+            //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
+            if(this.state.scoreDisable==true){
+                score =this.refs.scoreDefined.refs.input.value;
+            }
             var subjectName = values.subjectName;
-            var answer = values.answer;
+            var answer = this.state.singleAnswer;
             // alert("params:"+this.props.params);
             var subjectParamArray = this.props.params.split("#");
             var ident = subjectParamArray[0];
             var ScheduleOrSubjectId = subjectParamArray[1];
             var optType = subjectParamArray[3];
-            var batchAddSubjectBeanJson={"textTigan":subjectName,"textAnswer":answer,"score":score,"userId":ident,"type":"C"};
-            if(optType=="bySubjectId"){
-                batchAddSubjectBeanJson.knowledgePointId=ScheduleOrSubjectId;
+            //完成基础的非空验证
+            if(this.isEmpty(subjectName)){
+                alert("请输入题目");
+            }else if(this.isEmpty(answer)){
+                alert("请输入答案");
+            }else if(this.isEmpty(score) || score==0){
+                alert("请选择分值");
+            }else{
+                var batchAddSubjectBeanJson={"textTigan":subjectName,"textAnswer":answer,"score":score,"userId":ident,"type":"C"};
+                if(optType=="bySubjectId"){
+                    batchAddSubjectBeanJson.knowledgePointId=ScheduleOrSubjectId;
+                }
+                //完成题目的新增操作
+                this.saveSubject(batchAddSubjectBeanJson);
+                if(currentButton=="保存并返回列表"){
+                    //关闭并返回题目列表页面
+                    this.setState({ visible: false,score:1});
+                }
+                //重新初始化页面
+                this.initPage();
             }
-            // else{
-            //     batchAddSubjectBeanJson.teachscheduleId = ScheduleOrSubjectId;
-            // }
-            // console.log("easy:"+easy);
-            console.log("score:"+batchAddSubjectBeanJson.score);
-            console.log("subjectName:"+batchAddSubjectBeanJson.textTigan);
-            console.log("answer:"+batchAddSubjectBeanJson.textAnswer);
-            console.log("batchAddSubjectBeanJson userId:"+batchAddSubjectBeanJson.userId);
-            this.saveSubject(batchAddSubjectBeanJson);
         });
     },
     //多选题新增
     MulitiHandleSubmit(e) {
         e.preventDefault();
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        data=[];
+        //获取当前点击的是哪个按钮
+        var currentButton = target.textContent;
         this.props.form.validateFieldsAndScroll((err, values) => {
             var ident = sessionStorage.getItem("ident");
             var score = this.state.score;
+            //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
+            if(this.state.scoreDisable==true){
+                score =this.refs.scoreDefined.refs.input.value;
+            }
             var subjectName = values.subjectName;
             var answer = mulitiAnswer;
             var subjectParamArray = this.props.params.split("#");
@@ -176,22 +237,46 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             if(optType=="bySubjectId"){
                 batchAddSubjectBeanJson.knowledgePointId=ScheduleOrSubjectId;
             }
-            console.log("score:"+batchAddSubjectBeanJson.score);
-            console.log("subjectName:"+batchAddSubjectBeanJson.textTigan);
-            console.log("answer:"+batchAddSubjectBeanJson.textAnswer);
-            console.log("batchAddSubjectBeanJson userId:"+batchAddSubjectBeanJson.userId);
-            this.saveSubject(batchAddSubjectBeanJson);
+            //完成基础的非空验证
+            if(this.isEmpty(subjectName)){
+                alert("请输入题目");
+            }else if(this.isEmpty(answer)){
+                alert("请输入答案");
+            }else if(this.isEmpty(score) || score==0){
+                alert("请选择分值");
+            }else{
+                this.saveSubject(batchAddSubjectBeanJson);
+                if(currentButton=="保存并返回列表"){
+                    //关闭并返回题目列表页面
+                    this.setState({ visible: false,score:1});
+                }
+            }
+            //重新初始化页面
+            this.initPage();
         });
     },
     //判断题新增
     correctHandleSubmit(e) {
         e.preventDefault();
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        data=[];
+        //获取当前点击的是哪个按钮
+        var currentButton = target.textContent;
         this.props.form.validateFieldsAndScroll((err, values) => {
             var ident = sessionStorage.getItem("ident");
             var easy = this.state.markSelected;
             var score = this.state.score;
+            //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
+            if(this.state.scoreDisable==true){
+                score =this.refs.scoreDefined.refs.input.value;
+            }
             var subjectName = values.subjectName;
-            var answer = values.correctAnswer;
+            var answer = this.state.correctAnswerValue;
             var subjectParamArray = this.props.params.split("#");
             var ident = subjectParamArray[0];
             var ScheduleOrSubjectId = subjectParamArray[1];
@@ -200,23 +285,47 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             if(optType=="bySubjectId"){
                 batchAddSubjectBeanJson.knowledgePointId=ScheduleOrSubjectId;
             }
-            console.log("score:"+batchAddSubjectBeanJson.score);
-            console.log("subjectName:"+batchAddSubjectBeanJson.textTigan);
-            console.log("answer:"+batchAddSubjectBeanJson.textAnswer);
-            console.log("batchAddSubjectBeanJson userId:"+batchAddSubjectBeanJson.userId);
-            this.saveSubject(batchAddSubjectBeanJson);
+            //完成基础的非空验证
+            if(this.isEmpty(subjectName)){
+                alert("请输入题目");
+            }else if(this.isEmpty(answer)){
+                alert("请输入答案");
+            }else if(this.isEmpty(score) || score==0){
+                alert("请选择分值");
+            }else {
+                this.saveSubject(batchAddSubjectBeanJson);
+                if(currentButton=="保存并返回列表"){
+                    //关闭并返回题目列表页面
+                    this.setState({ visible: false,score:1});
+                }
+            }
+            //重新初始化页面
+            this.initPage();
         });
     },
 
     //简答题新增
     simpleAnswerHandleSubmit(e) {
         e.preventDefault();
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        data=[];
+        //获取当前点击的是哪个按钮
+        var currentButton = target.textContent;
         this.props.form.validateFieldsAndScroll((err, values) => {
             var ident = sessionStorage.getItem("ident");
             var easy = this.state.markSelected;
             var score = this.state.score;
+            //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
+            if(this.state.scoreDisable==true){
+                score =this.refs.scoreDefined.refs.input.value;
+            }
             var subjectName = values.subjectName;
-            var answer = values.answer;
+            var answer = this.refs.simpleAnswerInput.refs.input.value;
             var subjectParamArray = this.props.params.split("#");
             var ident = subjectParamArray[0];
             var ScheduleOrSubjectId = subjectParamArray[1];
@@ -225,11 +334,22 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             if(optType=="bySubjectId"){
                 batchAddSubjectBeanJson.knowledgePointId=ScheduleOrSubjectId;
             }
-            console.log("score:"+batchAddSubjectBeanJson.score);
-            console.log("subjectName:"+batchAddSubjectBeanJson.textTigan);
-            console.log("answer:"+batchAddSubjectBeanJson.textAnswer);
-            console.log("batchAddSubjectBeanJson userId:"+batchAddSubjectBeanJson.userId);
-            this.saveSubject(batchAddSubjectBeanJson);
+            //完成基础的非空验证
+            if(this.isEmpty(subjectName)){
+                alert("请输入题目");
+            }else if(this.isEmpty(answer)){
+                alert("请输入答案");
+            }else if(this.isEmpty(score) || score==0){
+                alert("请选择分值");
+            }else {
+                this.saveSubject(batchAddSubjectBeanJson);
+                if(currentButton=="保存并返回列表"){
+                    //关闭并返回题目列表页面
+                    this.setState({ visible: false,score:1});
+                }
+            }
+            //重新初始化页面
+            this.initPage();
         });
     },
 
@@ -251,17 +371,27 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
         this.setState({score:newScore});
     },
 
-    mulitiAnswerOnChange:function (e) {
-        if(e.target.checked==true){
-            mulitiAnswer.push(e.target.value);
-        }else{
-            for(var i=0;i<mulitiAnswer.length;i++){
-                if(mulitiAnswer[i]==e.target.value){
-                    mulitiAnswer.splice(i,1);
-                }
-            }
-        }
+    mulitiAnswerOnChange:function (checkedValues) {
+        mulitiAnswer=checkedValues;
+        this.setState({mulitiAnswerDefaultValue:checkedValues});
+    },
 
+    scoreSelectTypeOnChange(e){
+        var checkStatus = e.target.checked;
+        if(checkStatus==true){
+            this.setState({scoreInputState:false,scoreChecked:!this.state.scoreChecked,scoreDisable:true,score:1});
+        }else{
+            this.setState({scoreDisable:false});
+        }
+        this.setState({scoreChecked:!this.state.scoreChecked});
+    },
+
+    correctAnswerOnChange(e){
+        this.setState({correctAnswerValue:e.target.value});
+    },
+
+    singleAnswerOnChange(e){
+        this.setState({singleAnswer:e.target.value});
     },
 
     render() {
@@ -270,10 +400,67 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             labelCol: { span: 3},
             wrapperCol: { span: 17 },
         };
+        const children = [];
+        for (let i = 1; i <=10; i++) {
+            children.push(<Option key={i} value={i}>{i}分</Option>);
+        };
+
+        const mulitiAnswerOptions = [
+            { label: 'A', value: 'A' },
+            { label: 'B', value: 'B' },
+            { label: 'C', value: 'C' },
+            { label: 'D', value: 'D' },
+            { label: 'E', value: 'E' },
+        ];
+
+        const subjectItem=[];
+        subjectItem.push(<FormItem
+            {...formItemLayout}
+            label={(<span>题目</span>)}
+            hasFeedback>
+            {getFieldDecorator('subjectName', {
+                rules: [{ required: true, message: '请输入题目!' }],
+            })(
+                <div>
+                    <Input type="textarea" ref="subjectNameInput" defaultValue={this.state.subjectName} rows={4}/>
+                </div>
+            )}
+        </FormItem>);
+
+        const scoreItem=[];
+        scoreItem.push(<FormItem
+            {...formItemLayout}
+            label={(<span>分值</span>)}
+            hasFeedback>
+            {getFieldDecorator('score')(
+                <div>
+                    <Row>
+                        <Col span={8}>
+                            <Select value={this.state.score} ref="scoreSelect" style={{ width: 100 }} disabled={this.state.scoreDisable} onChange={this.selectHandleChange}>
+                                {children}
+                            </Select>
+                        </Col>
+                        <Col span={7}><Checkbox onChange={this.scoreSelectTypeOnChange} ref="scoreCheckBox" checked={this.state.scoreChecked} value="defined">自定义:</Checkbox></Col>
+                        <Col span={9}><Input ref="scoreDefined" disabled={this.state.scoreInputState}  />分</Col>
+                    </Row>
+                </div>
+            )}
+        </FormItem>);
+
+        const buttonItem=[];
+        buttonItem.push(<FormItem>
+            <Button type="primary" htmlType="submit" className="login-form-button">
+                保存并继续添加
+            </Button>
+            <Button type="primary" htmlType="submit" className="login-form-button" >
+                保存并返回列表
+            </Button>
+        </FormItem>);
+
         return (
             <div className="toobar">
 
-                <Button type="" onClick={this.showModal}>题目</Button>
+                <Button type="" onClick={this.showModal} icon="upload" title="上传题目" >题目</Button>
                 <Modal
                     visible={this.state.visible}
                     title="添加题目"
@@ -288,53 +475,30 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                         onEdit={this.onEdit}
                     >
                         <TabPane tab="单选题" key="单选题">
-                            <Form horizontal onSubmit={this.singleHandleSubmit}>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label={(<span>题目</span>)}
-                                    hasFeedback>
-                                    {getFieldDecorator('subjectName', {
-                                        rules: [{ required: true, message: '请输入题目!' }],
-                                    })(
-                                        <Input type="textarea" rows={4}/>
-                                    )}
-                                </FormItem>
+                            <Form horizontal>
+                                {subjectItem}
                                 <FormItem
                                     {...formItemLayout}
                                     label={(<span>答案</span>)}
                                     hasFeedback>
                                     {getFieldDecorator('answer')(
-                                        <RadioGroup onChange={this.onChange}>
-                                            <Radio key="A" value="A">A</Radio>
-                                            <Radio key="B" value="B">B</Radio>
-                                            <Radio key="C" value="C">C</Radio>
-                                            <Radio key="D" value="D">D</Radio>
-                                        </RadioGroup>
-                                    )}
-                                </FormItem>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label={(<span>分值</span>)}
-                                    hasFeedback>
-                                    {getFieldDecorator('score')(
                                         <div>
-                                            <Select size="large" defaultValue={this.state.score} style={{ width: 100 }} onChange={this.selectHandleChange}>
-                                                <Option value="1">1</Option>
-                                                <Option value="2">2</Option>
-                                                <Option value="5">5</Option>
-                                                <Option value="10">10</Option>
-                                            </Select>
-                                            <Button type="primary" className="login-form-button" onClick={this.addScore}>
-                                                +0.5
-                                            </Button>
+                                            <RadioGroup onChange={this.singleAnswerOnChange} ref="singleAnswer" defaultValue={this.state.singleAnswer}>
+                                                <Radio key="A" value="A">A</Radio>
+                                                <Radio key="B" value="B">B</Radio>
+                                                <Radio key="C" value="C">C</Radio>
+                                                <Radio key="D" value="D">D</Radio>
+                                                <Radio key="E" value="E">E</Radio>
+                                            </RadioGroup>
                                         </div>
                                     )}
                                 </FormItem>
+                                {scoreItem}
                                 <FormItem>
-                                    <Button type="primary" htmlType="submit" className="login-form-button">
+                                    <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.singleHandleSubmit}>
                                         保存并继续添加
                                     </Button>
-                                    <Button type="primary" htmlType="submit" className="login-form-button">
+                                    <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.singleHandleSubmit} >
                                         保存并返回列表
                                     </Button>
                                 </FormItem>
@@ -343,54 +507,24 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
 
 
                         <TabPane tab="多选题" key="多选题"><div>
-                            <Form horizontal onSubmit={this.MulitiHandleSubmit}>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label={(<span>题目</span>)}
-                                    hasFeedback>
-                                    {getFieldDecorator('subjectName', {
-                                        rules: [{ required: true, message: '请输入题目!' }],
-                                    })(
-                                        <Input type="textarea" rows={4}/>
-                                    )}
-                                </FormItem>
+                            <Form horizontal>
+                                {subjectItem}
                                 <FormItem
                                     {...formItemLayout}
                                     label={(<span>答案</span>)}
                                     hasFeedback>
                                     {getFieldDecorator('mulitiAnswer')(
                                         <div>
-                                            <Checkbox value="A" onChange={this.mulitiAnswerOnChange}>A</Checkbox>
-                                            <Checkbox value="B" onChange={this.mulitiAnswerOnChange}>B</Checkbox>
-                                            <Checkbox value="C" onChange={this.mulitiAnswerOnChange}>C</Checkbox>
-                                            <Checkbox value="D" onChange={this.mulitiAnswerOnChange}>D</Checkbox>
-                                            <Checkbox value="E" onChange={this.mulitiAnswerOnChange}>E</Checkbox>
+                                            <CheckboxGroup options={mulitiAnswerOptions} defaultValue={this.state.mulitiAnswerDefaultValue} value={this.state.mulitiAnswerDefaultValue} onChange={this.mulitiAnswerOnChange} />
                                         </div>
                                     )}
                                 </FormItem>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label={(<span>分值</span>)}
-                                    hasFeedback>
-                                    {getFieldDecorator('score')(
-                                        <div>
-                                            <Select size="large" defaultValue={this.state.score} style={{ width: 100 }} onChange={this.selectHandleChange}>
-                                                <Option value="1">1</Option>
-                                                <Option value="2">2</Option>
-                                                <Option value="5">5</Option>
-                                                <Option value="10">10</Option>
-                                            </Select>
-                                            <Button type="primary" className="login-form-button" onClick={this.addScore}>
-                                                +0.5
-                                            </Button>
-                                        </div>
-                                    )}
-                                </FormItem>
+                                {scoreItem}
                                 <FormItem>
-                                    <Button type="primary" htmlType="submit" className="login-form-button">
+                                    <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.MulitiHandleSubmit}>
                                         保存并继续添加
                                     </Button>
-                                    <Button type="primary" htmlType="submit" className="login-form-button">
+                                    <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.MulitiHandleSubmit} >
                                         保存并返回列表
                                     </Button>
                                 </FormItem>
@@ -398,51 +532,27 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                         </div></TabPane>
 
                         <TabPane tab="判断题" key="判断题"><div>
-                            <Form horizontal onSubmit={this.correctHandleSubmit}>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label={(<span>题目</span>)}
-                                    hasFeedback>
-                                    {getFieldDecorator('subjectName', {
-                                        rules: [{ required: true, message: '请输入题目!' }],
-                                    })(
-                                        <Input type="textarea" rows={4}/>
-                                    )}
-                                </FormItem>
+                            <Form horizontal>
+                                {subjectItem}
                                 <FormItem
                                     {...formItemLayout}
                                     label={(<span>答案</span>)}
                                     hasFeedback>
                                     {getFieldDecorator('correctAnswer')(
-                                        <RadioGroup onChange={this.onChange}>
-                                            <Radio key="正确" value="正确">正确</Radio>
-                                            <Radio key="错误" value="错误">错误</Radio>
-                                        </RadioGroup>
-                                    )}
-                                </FormItem>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label={(<span>分值</span>)}
-                                    hasFeedback>
-                                    {getFieldDecorator('score')(
                                         <div>
-                                            <Select size="large" defaultValue={this.state.score} style={{ width: 100 }} onChange={this.selectHandleChange}>
-                                                <Option value="1">1</Option>
-                                                <Option value="2">2</Option>
-                                                <Option value="5">5</Option>
-                                                <Option value="10">10</Option>
-                                            </Select>
-                                            <Button type="primary" className="login-form-button" onClick={this.addScore}>
-                                                +0.5
-                                            </Button>
+                                            <RadioGroup onChange={this.correctAnswerOnChange} defaultValue={this.state.correctAnswerValue} value={this.state.correctAnswerValue}>
+                                                <Radio key="正确" value="正确">正确</Radio>
+                                                <Radio key="错误" value="错误">错误</Radio>
+                                            </RadioGroup>
                                         </div>
                                     )}
                                 </FormItem>
+                                {scoreItem}
                                 <FormItem>
-                                    <Button type="primary" htmlType="submit" className="login-form-button">
+                                    <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.correctHandleSubmit}>
                                         保存并继续添加
                                     </Button>
-                                    <Button type="primary" htmlType="submit" className="login-form-button">
+                                    <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.correctHandleSubmit} >
                                         保存并返回列表
                                     </Button>
                                 </FormItem>
@@ -450,17 +560,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                         </div></TabPane>
 
                         <TabPane tab="简答题" key="简答题"><div>
-                            <Form horizontal onSubmit={this.simpleAnswerHandleSubmit}>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label={(<span>题目</span>)}
-                                    hasFeedback>
-                                    {getFieldDecorator('subjectName', {
-                                        rules: [{ required: true, message: '请输入题目!' }],
-                                    })(
-                                        <Input type="textarea" rows={4}/>
-                                    )}
-                                </FormItem>
+                            <Form horizontal>
+                                {subjectItem}
                                 <FormItem
                                     {...formItemLayout}
                                     label={(<span>答案</span>)}
@@ -468,32 +569,17 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     {getFieldDecorator('answer', {
                                         rules: [{ required: true, message: '请输入题目!' }],
                                     })(
-                                        <Input type="textarea" rows={4}/>
-                                    )}
-                                </FormItem>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label={(<span>分值</span>)}
-                                    hasFeedback>
-                                    {getFieldDecorator('score')(
                                         <div>
-                                            <Select size="large" defaultValue={this.state.score} style={{ width: 100 }} onChange={this.selectHandleChange}>
-                                                <Option value="1">1</Option>
-                                                <Option value="2">2</Option>
-                                                <Option value="5">5</Option>
-                                                <Option value="10">10</Option>
-                                            </Select>
-                                            <Button type="primary" className="login-form-button" onClick={this.addScore}>
-                                                +0.5
-                                            </Button>
+                                            <Input type="textarea" ref="simpleAnswerInput"  defaultValue={this.state.simpleAnswerValue}  rows={4}  />
                                         </div>
                                     )}
                                 </FormItem>
+                                {scoreItem}
                                 <FormItem>
-                                    <Button type="primary" htmlType="submit" className="login-form-button">
+                                    <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.simpleAnswerHandleSubmit}>
                                         保存并继续添加
                                     </Button>
-                                    <Button type="primary" htmlType="submit" className="login-form-button">
+                                    <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.simpleAnswerHandleSubmit} >
                                         保存并返回列表
                                     </Button>
                                 </FormItem>
@@ -504,24 +590,10 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                             <Form horizontal onSubmit={this.singleHandleSubmit}>
                                 <FormItem
                                     {...formItemLayout}
-                                    label={(<span>材料封面</span>)}
-                                    hasFeedback>
-                                    {getFieldDecorator('materialCover', {
-                                        rules: [{ required: true, message: '请输入题目!' }],
-                                    })(
-                                        <div style={{ width: 346, height: 80 }}>
-                                            <Dragger {...props}>
-                                                <Icon type="plus" />
-                                            </Dragger>
-                                        </div>
-                                    )}
-                                </FormItem>
-                                <FormItem
-                                    {...formItemLayout}
                                     label={(<span>材料文件</span>)}
                                     hasFeedback>
                                     {getFieldDecorator('materialFile', {
-                                        rules: [{ required: true, message: '请输入题目!' }],
+                                        rules: [{ required: true, message: '请上传材料!' }],
                                     })(
                                         <div style={{ width: 346, height: 80 }}>
                                             <Dragger {...props}>
@@ -530,6 +602,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                         </div>
                                     )}
                                 </FormItem>
+                                {subjectItem}
                                 <FormItem
                                     {...formItemLayout}
                                     label={(<span>答案</span>)}
@@ -543,32 +616,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                         </RadioGroup>
                                     )}
                                 </FormItem>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label={(<span>分值</span>)}
-                                    hasFeedback>
-                                    {getFieldDecorator('score')(
-                                        <div>
-                                            <Select size="large" defaultValue={this.state.score} style={{ width: 100 }} onChange={this.selectHandleChange}>
-                                                <Option value="1">1</Option>
-                                                <Option value="2">2</Option>
-                                                <Option value="5">5</Option>
-                                                <Option value="10">10</Option>
-                                            </Select>
-                                            <Button type="primary" className="login-form-button" onClick={this.addScore}>
-                                                +0.5
-                                            </Button>
-                                        </div>
-                                    )}
-                                </FormItem>
-                                <FormItem>
-                                    <Button type="primary" htmlType="submit" className="login-form-button">
-                                        保存并继续添加
-                                    </Button>
-                                    <Button type="primary" htmlType="submit" className="login-form-button">
-                                        保存并返回列表
-                                    </Button>
-                                </FormItem>
+                                {scoreItem}
+                                {buttonItem}
                             </Form>
                         </div></TabPane>
                     </Tabs>

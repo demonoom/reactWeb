@@ -279,7 +279,7 @@ const SubjectEditTabComponents = Form.create()(React.createClass({
         return (
             <div className="toobar">
 
-                <Button type="" onClick={this.showModal}><Icon type="edit"/></Button>
+                <Button type="" onClick={this.showModal} title="修改"><Icon type="edit"/></Button>
                 <Modal
                     visible={this.state.visible}
                     title="修改题目"
