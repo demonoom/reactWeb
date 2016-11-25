@@ -86,9 +86,9 @@ const MainTabComponents = React.createClass({
             toolbarExtra = <div className="ant-tabs-right"></div>;
         }else{
             /*toolbarExtra = <div className="ant-tabs-right"><Button type="" icon="share-alt" onClick={this.showModal}></Button><SubjectUploadTabComponents params={this.state.subjectParams}></SubjectUploadTabComponents><span className="toobar"><Button type="" icon="delete" onClick={deleteConfirm}  ></Button></span></div>;*/
-            // toolbarExtra = <div className="ant-tabs-right"><CourseWareUploadComponents></CourseWareUploadComponents><SubjectUploadTabComponents params={this.state.subjectParams}></SubjectUploadTabComponents></div>;
+            toolbarExtra = <div className="ant-tabs-right"><CourseWareUploadComponents params={this.state.subjectParams}></CourseWareUploadComponents><SubjectUploadTabComponents params={this.state.subjectParams}></SubjectUploadTabComponents></div>;
         }
-        toolbarExtra = <div className="ant-tabs-right"><CourseWareUploadComponents params={this.state.subjectParams}></CourseWareUploadComponents><SubjectUploadTabComponents params={this.state.subjectParams}></SubjectUploadTabComponents></div>;
+        {/*toolbarExtra = <div className="ant-tabs-right"><CourseWareUploadComponents params={this.state.subjectParams}></CourseWareUploadComponents><SubjectUploadTabComponents params={this.state.subjectParams}></SubjectUploadTabComponents></div>;*/}
         return (
             <div>
                 <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
