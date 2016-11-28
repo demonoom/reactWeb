@@ -88,6 +88,7 @@ const CourseWareComponents = React.createClass({
                       var pdfPath = e.pdfPath;
                       var fileType=fileName.substring(fileName.lastIndexOf(".")+1);
                       var pointId = e.point.content;
+                      var collectCount = e.collectCount; //收藏次数即现今的点赞次数
                      // alert(e.createTime);//1476 0186 7700 0
                       var fileTypeLogo;
                       var htmlPath="";
@@ -109,7 +110,7 @@ const CourseWareComponents = React.createClass({
                       // var courseInfo = {"uId":uId,"colName":colName,"colFileType":colFileType};
                       //courseWare.handlePanel(courseInfo);
                       activeKey.push(fileName);
-                      courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointId,createTime,fileTypeLogo,htmlPath]);
+                      courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointId,createTime,fileTypeLogo,htmlPath,collectCount]);
                   });
                   courseWare.buildPanels(courseWareList);
                   courseWare.setState({courseListState:courseWareList});
@@ -146,6 +147,7 @@ const CourseWareComponents = React.createClass({
                       var fileTypeLogo;
                       var type = e.type;
                       var htmlPath="";
+                      var collectCount = e.collectCount; //收藏次数即现今的点赞次数
                       if(fileType=="ppt"){
                           fileTypeLogo = "icon_geshi icon_ppt";
                           htmlPath = e.htmlPath;
@@ -160,7 +162,7 @@ const CourseWareComponents = React.createClass({
                           htmlPath = e.htmlPath;
                       }
                       activeKey.push(fileName);
-                      courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointId,createTime,fileTypeLogo,htmlPath,type]);
+                      courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointId,createTime,fileTypeLogo,htmlPath,type,collectCount]);
                   });
                   courseWare.buildKonwledgePanels(courseWareList);
                   courseWare.setState({courseListState:courseWareList});
@@ -222,6 +224,7 @@ const CourseWareComponents = React.createClass({
                          <span><span className="col1">创建人：</span><span className="col2">{e[2]}</span></span>
                          {/*<span><span className="col1">所在学校：</span><span className="col2">上海七宝中学</span></span>*/}
                          <span><span className="col1">上传时间：</span><span className="col2">{e[7]}</span></span>
+                         <span><span className="col1">点赞次数：</span><span className="col2">{e[10]}</span></span>
 					</div>
 					<div className="bnt2_right">
                          <Button style={{ float:'right'}} icon="delete" title="删除" value={e[1]} onClick=""></Button>
@@ -265,7 +268,8 @@ const CourseWareComponents = React.createClass({
                          <span>课件名称：{e[1]}</span>
                          <span>所在知识点：{e[6]}</span>
                          <span>创建人：{e[2]}</span>
-                         <span>上传时间：{e[7]}</span> 
+                         <span>上传时间：{e[7]}</span>
+                         <span>点赞次数：{e[11]}</span>
                       </div>       
 
                             <div className="bnt2_right">
