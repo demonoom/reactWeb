@@ -131,7 +131,8 @@ const SUbjectTable = React.createClass({
           var content=<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article>;
           var subjectType=e.typeName;
           var subjectScore=e.score;
-          var subjectOpt=<div className="smallclass"><SubjectEditTabComponents editParams={e.sid+"#"+e.typeName+"#"+e.shortContent+"#"+e.score}></SubjectEditTabComponents><span className="toobar"><Button value={e.sid} title="删除" onClick={subTable.deleteSubject}><Icon type="delete"/></Button></span></div>;
+          //<SubjectEditTabComponents editParams={e.sid+"#"+e.typeName+"#"+e.shortContent+"#"+e.score}></SubjectEditTabComponents>
+          var subjectOpt=<div className="smallclass"><span className="toobar"><Button value={e.sid} title="删除" onClick={subTable.deleteSubject}><Icon type="delete"/></Button></span></div>;
           // var submitTime = e.submitTime;
           data.push({
             key: key,
