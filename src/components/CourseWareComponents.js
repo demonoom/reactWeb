@@ -257,7 +257,7 @@ const CourseWareComponents = React.createClass({
                       </div>       
 
                             <div className="bnt2_right">
-                                <Button value={e.sid} onClick="">引用微课</Button>
+                                <Button value={e.sid} onClick="" className="right_ri">引用微课</Button>
                                 <a href={e[3]} target="_blank" title="下载"  style={{ float:'right'}}><Button icon="download"/></a>
                                 {/*<Button style={{ float:'right'}} icon="download"  title="下载" value={e[3]} onClick={courseWare.downLoadFile}></Button>*/}
                                 <Button style={{ float:'right'}} type=""  icon="export" title="使用"  value={e[0]} onClick={this.showModal}></Button>

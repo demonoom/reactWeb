@@ -442,7 +442,7 @@ html, body, #root {
 	line-height:42px;
 }
 .bnt2_right{
-	width:160px;
+	width:220px;
 	position: absolute;
     top: 16px;
     right: 0;
@@ -768,4 +768,8 @@ article.content_2{
 }
 .timu_pad{
 	padding:25px 0 !important;
+}
+.border_borhui{
+	border:1px solid #eee;
+	
 }
