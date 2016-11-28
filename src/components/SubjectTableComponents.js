@@ -63,6 +63,7 @@ const SUbjectTable = React.createClass({
       optType:'',
       ScheduleOrSubjectId:'',
       ident:'',
+      knowledgeName:''
     };
   },
   start() {
@@ -99,10 +100,10 @@ const SUbjectTable = React.createClass({
     }, "json");
   },
 
-  getSubjectData(ident,ScheduleOrSubjectId,pageNo,optType){
+  getSubjectData(ident,ScheduleOrSubjectId,pageNo,optType,knowledgeName){
     data=[];
     // alert("ccc:"+ident+"==="+ScheduleOrSubjectId+",,,,"+optType);
-    subTable.setState({optType:optType});
+    subTable.setState({optType:optType,knowledgeName:knowledgeName});
     if(optType=="bySchedule"){
       subTable.getSubjectDataBySchedule(ident,ScheduleOrSubjectId,pageNo);
     }else{
@@ -237,14 +238,15 @@ const SUbjectTable = React.createClass({
       pageNo=currentPageNo;
     }
     var optType = subjectParamArray[3];
-    subTable.getSubjectData(ident,ScheduleOrSubjectId,pageNo,optType);
+    var knowledgeName = subjectParamArray[4];
+    subTable.getSubjectData(ident,ScheduleOrSubjectId,pageNo,optType,knowledgeName);
   },
 
   showModal:function (e) {
     var currentKnowledge = e.target.value;
     // alert(currentKnowledge);
     //alert("111"+currentSchedule+","+this.refs.useKnowledgeComponents);
-    subTable.refs.useKnowledgeComponents.showModal(currentKnowledge,"knowledgeSubject");
+    subTable.refs.useKnowledgeComponents.showModal(currentKnowledge,"knowledgeSubject",subTable.state.knowledgeName);
   },
 
   pageOnChange(pageNo) {

@@ -64,7 +64,7 @@ const UseKnowledgeComponents = React.createClass({
         var scheduleName = inputObj.refs.input.value;
       }*/
     }else{
-      alert("使用");
+      // alert("使用");
       // alert(knowledge.state.currentKnowlege+"===:"+knowledge.state.schedule+",optType"+knowledge.state.optType);
       if(knowledge.state.optType=="courseWare"){
         knowledge.copyMaterialToSchedule(sessionStorage.getItem("ident"),knowledge.state.currentKnowlege,knowledge.state.schedule);
@@ -90,9 +90,9 @@ const UseKnowledgeComponents = React.createClass({
           }else{
             knowledge.copySubjects(knowledge.state.currentKnowlege,knowledge.state.schedule);
           }
-          alert("知识点使用成功");
+          // alert("知识点使用成功");
         }else{
-          alert("知识点使用失败");
+          // alert("知识点使用失败");
         }
       },
       onError : function(error) {
@@ -113,12 +113,12 @@ const UseKnowledgeComponents = React.createClass({
         console.log(ret.msg);
         if(ret.response){
             alert("知识点使用成功");
-            knowledge.setState({
-              visible: false,
-            });
         }else{
             alert("知识点使用失败");
         }
+        knowledge.setState({
+          visible: false,
+        });
       },
       onError : function(error) {
         alert(error);
@@ -140,6 +140,9 @@ const UseKnowledgeComponents = React.createClass({
         }else{
           alert("知识点使用失败");
         }
+        knowledge.setState({
+          visible: false,
+        });
       },
       onError : function(error) {
         alert(error);

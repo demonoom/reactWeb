@@ -31,7 +31,7 @@ const MainTabComponents = React.createClass({
             activeKey:'课件',
             subjectParams:'',
             breadcrumbArray:[],
-            currentKnowledgeName:''
+            currentKnowledgeName:'',
         };
     },
     getTeachPlans(optContent){
@@ -53,7 +53,7 @@ const MainTabComponents = React.createClass({
     onChange(activeKey) {
         if(activeKey=="题目"){
             this.setState({activeKey:'题目'});
-            this.setState({subjectParams:sessionStorage.getItem("ident")+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType});
+            this.setState({subjectParams:sessionStorage.getItem("ident")+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType+"#"+this.state.currentKnowledgeName});
         }else{
             this.setState({activeKey:'课件'});
         }
