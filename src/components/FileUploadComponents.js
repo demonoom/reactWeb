@@ -29,7 +29,10 @@ const FileUploadComponents = Form.create()(React.createClass({
         var fileType = files[0].type;
         var fileName = files[0].name;
         var isExit = this.checkCurrentFileIsSubmit(fileName);
-        if(isExit==true){
+        var isMuliti = this.checkSubmitFileCount();
+        if(isMuliti==true){
+            alert("请勿同时上传多个文件,谢谢！");
+        }else if(isExit==true){
             alert("请勿重复上传,谢谢!");
         }else if(!this.checkIsRightFileType(fileType)){
             alert("文件类型不正确,请重新上传,谢谢!");
@@ -37,9 +40,20 @@ const FileUploadComponents = Form.create()(React.createClass({
             var fileJson = { label: fileName,value:fileName,fileObj:files };
             submitFileOptions.push(fileJson);
             this.setState({submitFileCheckedList:['']});
+            //回调，将已上传的文件列表传给父组件
             this.props.callBackParent(submitFileOptions);
         }
     },
+
+    //判断已上传文件个数，目前只允许单文件上传
+    checkSubmitFileCount(){
+        var isOk=false;
+        if(submitFileOptions.length>=1){
+            isOk=true;
+        }
+        return isOk;
+    },
+
     //检查当前文件是否已经上传
     checkCurrentFileIsSubmit(fileName){
          for(var i=0;i<submitFileOptions.length;i++){
@@ -53,19 +67,32 @@ const FileUploadComponents = Form.create()(React.createClass({
     //检查上传的文件类型是否正确
     checkIsRightFileType(fileType){
          var isOk = false;
-         if(fileType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"){
+         /*if(fileType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"){
              //docx格式
              isOk = true;
          }else if(fileType == "application/msword"){
              //doc格式
              isOk = true;
-         }else if(fileType == "application/vnd.openxmlformats-officedocument.presentationml.presentation"){
-             //pptx格式
-             isOk = true;
-         }else if(fileType == "application/vnd.ms-powerpoint"){
-             //ppt格式
-             isOk = true;
-         }else if(fileType == "application/vnd.ms-excel"){
+         }else*/
+        if(fileType == "application/vnd.openxmlformats-officedocument.presentationml.presentation"){
+            //pptx格式
+            isOk = true;
+        }else if(fileType == "application/vnd.ms-powerpoint"){
+            //ppt格式
+            isOk = true;
+        }else if(fileType == "application/pdf"){
+            //pdf格式
+            isOk = true;
+        }else if(fileType == "video/x-flv"){
+            //flv格式
+            isOk=true;
+        }else if(fileType == "video/mp4"){
+            //mp4格式
+            isOk=true;
+        }
+
+
+         /*else if(fileType == "application/vnd.ms-excel"){
              //xls格式
              isOk = true;
          }else if(fileType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"){
@@ -73,9 +100,6 @@ const FileUploadComponents = Form.create()(React.createClass({
              isOk = true;
          }else if(fileType == "text/plain"){
              //txt格式
-             isOk = true;
-         }else if(fileType == "application/pdf"){
-             //pdf格式
              isOk = true;
          }else if(fileType == "image/png"){
              //png格式
@@ -86,7 +110,7 @@ const FileUploadComponents = Form.create()(React.createClass({
          }else if(fileType == "image/bmp"){
              //bmp格式
              isOk = true;
-         }
+         }*/
          return isOk;
     },
 

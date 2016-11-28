@@ -143,7 +143,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
             "method":'addNormalMaterial',
             "ident":ident,
             "knowledgePointId":knowledgePointId,
-            "cover":"http://img3.imgtn.bdimg.com/it/u=2038410951,442832394&fm=23&gp=0.jpg",
+            "cover":"http://pic.qiantucdn.com/58pic/19/30/17/5695e8b35c176_1024.jpg",
             "file":file,
             "fileName":fileName
         };
@@ -194,9 +194,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                                 {...formItemLayout}
                                 label={(<span>材料文件</span>)}
                                 hasFeedback>
-                                {getFieldDecorator('materialFile', {
-                                    rules: [{ required: true, message: '请上传课件!' }],
-                                })(
+                                {getFieldDecorator('materialFile')(
                                     <div>
                                         <FileUploadComponents callBackParent={courseWareUpload.handleFileSubmit}/>
                                     </div>
@@ -207,7 +205,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                                 <Button type="primary" htmlType="submit" className="login-form-button botton_left3" onClick={courseWareUpload.uploadFile}>
                                     保存
                                 </Button>
-                                <Button type="primary" htmlType="reset" className="login-form-button">
+                                <Button type="primary" htmlType="reset" className="login-form-button" onClick={courseWareUpload.handleCancel}>
                                     取消
                                 </Button>
                             </FormItem>
