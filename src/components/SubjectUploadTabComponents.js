@@ -449,8 +449,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                 {children}
                             </Select>
                         </Col>
-                        <Col span={6}><Checkbox onChange={this.scoreSelectTypeOnChange} ref="scoreCheckBox" checked={this.state.scoreChecked} value="defined">自定义:</Checkbox></Col>
-                        <Col span={12}><span><Input ref="scoreDefined" placeholder="请输入自定义分值" disabled={this.state.scoreInputState}  /></span></Col>
+						<Col span={8} className="right_ri"><span><Input ref="scoreDefined" placeholder="请输入自定义分值" disabled={this.state.scoreInputState}  /></span></Col>
+                        <Col span={6} className="right_ri"><Checkbox onChange={this.scoreSelectTypeOnChange} ref="scoreCheckBox" checked={this.state.scoreChecked} value="defined">自定义:</Checkbox></Col>
                     </Row>
                 </div>
             )}
