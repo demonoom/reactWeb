@@ -34,10 +34,13 @@ const StudyEvaluateTabComponents = React.createClass({
 
 
     getStudyEvaluate(optContent){
-        alert("学情");
+        // alert("学情");
         this.setState({currentOpt:'studyEvaluate',});
         this.setState({activeKey:'学情分析'});
         // this.refs.homeWorkTable.getDoneHomeworkList(sessionStorage.getItem("ident"),1);
+    },
+    goBack(){
+        this.refs.study.contentWindow.location.replace(this.state.currentPageLink);
     },
 
     render() {
@@ -58,9 +61,10 @@ const StudyEvaluateTabComponents = React.createClass({
                     ref = "mainTab"
                     activeKey={this.state.activeKey}
                     defaultActiveKey={this.state.defaultActiveKey}
+                    tabBarExtraContent={<div className="ant-tabs-right"><Button type="primary" onClick={this.goBack} className="add_study">返回</Button></div>}
                 >
                     <TabPane tab="学情分析" key="学情分析">
-                        <iframe src={this.state.currentPageLink} className="analyze_iframe"></iframe>
+                        <iframe ref="study" src={this.state.currentPageLink} className="analyze_iframe"></iframe>
                     </TabPane>
 
                 </Tabs>
