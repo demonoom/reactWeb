@@ -33,27 +33,29 @@ const props = {
 };
 
 var uploadFileList=[];
+var courseWareUpload;
 const CourseWareUploadComponents = Form.create()(React.createClass({
     getInitialState() {
+        courseWareUpload = this;
         return {
             visible: false,
             submitFileCheckedList:['大蚂蚁.txt'],
         };
     },
     showModal() {
-        this.setState({
+        courseWareUpload.setState({
             visible: true,
         });
     },
     handleOk() {
-        this.setState({ visible: false });
+        courseWareUpload.setState({ visible: false });
     },
     handleCancel() {
-        this.setState({ visible: false });
+        courseWareUpload.setState({ visible: false });
     },
 
     handleEmail: function(val){
-        this.props.callbackParent(val);
+        courseWareUpload.props.callbackParent(val);
         //this.setState({lessonCount: val});
     },
 
@@ -79,15 +81,15 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
 
     doWebService : function(data,listener) {
         var service = this;
-        this.WEBSERVICE_URL = "http://101.201.45.125:8890/Excoord_Upload_Server/file/upload";
-        if (service.requesting) {
-            return;
-        }
-        service.requesting = true;
+        this.WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
+        // if (service.requesting) {
+        //     return;
+        // }
+        // service.requesting = true;
         $.post(service.WEBSERVICE_URL, {
             params : data
         }, function(result, status) {
-            service.requesting = false;
+            // service.requesting = false;
             if (status == "success") {
                 listener.onResponse(result);
             } else {
@@ -101,23 +103,64 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
         if(uploadFileList.length==0){
             alert("请选择上传的文件,谢谢！");
         }else{
-            var param = {
-                "file":uploadFileList[0],
-            };
-            this.doWebService(JSON.stringify(param), {
-                onResponse : function(ret) {
-                    console.log(ret.msg);
-                    if(ret.msg=="调用成功" && ret.response==true){
-                        alert("课件上传成功");
-                    }else{
-                        alert("课件上传失败");
+            /*$.post("http://101.201.45.125:8890/Excoord_Upload_Server/file/upload",{"file":uploadFileList[0]},
+                function(data){
+                    alert("Data Loaded: " + data);
+            });*/
+            var formData = new FormData();
+            // var name = $("input").val();
+            formData.append("file",uploadFileList[0]);
+            formData.append("name","比较.pdf");
+            $.ajax({
+                type: "POST",
+                url: "http://101.201.45.125:8890/Excoord_Upload_Server/file/upload",
+                // url:"http://192.168.1.115:8890/Excoord_Upload_Server/file/upload",
+                enctype: 'multipart/form-data',
+                data: formData,
+                // 告诉jQuery不要去处理发送的数据
+                processData : false,
+                // 告诉jQuery不要去设置Content-Type请求头
+                contentType : false,
+                success: function (responseStr) {
+                    if(responseStr!=""){
+                        var fileUrl=responseStr;
+                        courseWareUpload.addNormalMaterial(fileUrl,uploadFileList[0].name);
+                        courseWareUpload.setState({ visible: false });
                     }
                 },
-                onError : function(error) {
-                    alert(error);
+                error : function(responseStr) {
+                    console.log("error"+responseStr);
                 }
             });
         }
+    },
+    //添加课件到知识点下
+    addNormalMaterial(file,fileName){
+        var subjectParamArray = courseWareUpload.props.params.split("#");
+        var ident = subjectParamArray[0];
+        var knowledgePointId = subjectParamArray[1];
+        var param = {
+            "method":'addNormalMaterial',
+            "ident":ident,
+            "knowledgePointId":knowledgePointId,
+            "cover":"http://img3.imgtn.bdimg.com/it/u=2038410951,442832394&fm=23&gp=0.jpg",
+            "file":file,
+            "fileName":fileName
+        };
+        courseWareUpload.doWebService(JSON.stringify(param), {
+            onResponse : function(ret) {
+                console.log(ret.msg);
+                if(ret.msg=="调用成功" && ret.response==true){
+                    alert("课件添加成功");
+                }else{
+                    alert("课件添加失败");
+                }
+            },
+            onError : function(error) {
+                alert(error);
+            }
+        });
+
     },
 
     handleFileSubmit(fileList){
@@ -130,7 +173,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
     },
 
     render() {
-        const { getFieldDecorator } = this.props.form;
+        const { getFieldDecorator } = courseWareUpload.props.form;
         const formItemLayout = {
             labelCol: { span: 4},
             wrapperCol: { span: 17 },
@@ -138,12 +181,12 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
         return (
             <div className="toobar">
 
-                <Button type="primary" onClick={this.showModal} icon="plus" title="上传课件" className="add_study">添加课件</Button>
+                <Button type="primary" onClick={courseWareUpload.showModal} icon="plus" title="上传课件" className="add_study">添加课件</Button>
                 <Modal
-                    visible={this.state.visible}
+                    visible={courseWareUpload.state.visible}
                     title="上传课件"
                     className="ant-modal-width"
-                    onCancel={this.handleCancel}
+                    onCancel={courseWareUpload.handleCancel}
                     footer={[]}
                 >
                         <Form horizontal>
@@ -155,13 +198,13 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                                     rules: [{ required: true, message: '请上传课件!' }],
                                 })(
                                     <div>
-                                        <FileUploadComponents callBackParent={this.handleFileSubmit}/>
+                                        <FileUploadComponents callBackParent={courseWareUpload.handleFileSubmit}/>
                                     </div>
                                 )}
                             </FormItem>
 
                             <FormItem >
-                                <Button type="primary" htmlType="submit" className="login-form-button botton_left3" onClick={this.uploadFile}>
+                                <Button type="primary" htmlType="submit" className="login-form-button botton_left3" onClick={courseWareUpload.uploadFile}>
                                     保存
                                 </Button>
                                 <Button type="primary" htmlType="reset" className="login-form-button">

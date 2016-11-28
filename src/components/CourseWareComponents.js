@@ -124,8 +124,9 @@ const CourseWareComponents = React.createClass({
       }else{
           param = {
               "method":'getMaterialsByKnowledgePointId',
+              "userId":"-1",
               "pointId":teachScheduleId,
-              "type":"0",
+              "type":"-1",
               "pageNo":pageNo,
           };
           this.doWebService(JSON.stringify(param), {
@@ -143,6 +144,7 @@ const CourseWareComponents = React.createClass({
                       var pointId = e.pointId;
                       var createTime = courseWare.getLocalTime(e.createTime);
                       var fileTypeLogo;
+                      var type = e.type;
                       var htmlPath="";
                       if(fileType=="ppt"){
                           fileTypeLogo = "icon_geshi icon_ppt";
@@ -158,7 +160,7 @@ const CourseWareComponents = React.createClass({
                           htmlPath = e.htmlPath;
                       }
                       activeKey.push(fileName);
-                      courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointId,createTime,fileTypeLogo,htmlPath]);
+                      courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointId,createTime,fileTypeLogo,htmlPath,type]);
                   });
                   courseWare.buildKonwledgePanels(courseWareList);
                   courseWare.setState({courseListState:courseWareList});
@@ -193,7 +195,13 @@ const CourseWareComponents = React.createClass({
     },*/
 
     showModal:function (e) {
-        var currentSchedule = e.target.value;
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var currentSchedule = target.value;
          // alert("111"+currentSchedule+","+this.refs.useKnowledgeComponents);
         this.refs.useKnowledgeComponents.showModal(currentSchedule,"courseWare",courseWare.state.knowledgeName);
     },
@@ -242,10 +250,14 @@ const CourseWareComponents = React.createClass({
     buildKonwledgePanels:function (courseWareList) {
         coursePanelChildren = courseWareList.map((e, i)=> {
             var eysOnButton ;
+            // var useButton;
             if(e[9]!=null && e[9]!=""){
                 // eysOnButton = <Button style={{ float:'right'}} icon="eye-o" title="查看" value={e[9]} onClick={courseWare.viewFile}></Button>
-                eysOnButton = <a href={e[9]} target="_blank" title="查看"  style={{ float:'right'}}><Button icon="eye-o"/></a>
+                eysOnButton = <a href={e[9]} target="_blank" title="查看"  style={{ float:'right'}} ><Button icon="eye-o"/></a>
             }
+            /*if(e[10]!=null && e[10]!="" && e[10]==3){
+                useButton=<Button value={e[0]} style={{ float:'right'}} type=""  onClick={this.showModal}>引用微课</Button>
+            }*/
             return <Panel header={<span><span type="" className={e[8]}></span><span>{e[1]}</span> </span>}  key={e[1]}>
                     <pre>
 					<div className="bnt2_tex">

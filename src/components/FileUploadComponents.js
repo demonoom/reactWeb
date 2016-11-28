@@ -118,8 +118,9 @@ const FileUploadComponents = Form.create()(React.createClass({
         return (
             <div>
                 <Row>
-                    <div style={{ width: 346, height: 180,backgroundColor:'green' }} onDragOver={this.dragOver} onDrop={this.sbumitFile}>
-                        <Icon type="plus" />
+                    <div className="upload_area" onDragOver={this.dragOver} onDrop={this.sbumitFile}>
+                        {/*<Icon type="plus" />*/}
+                        <span style={{align:'center'}}>请将文件拖拽到此区域实现上传</span>
                     </div>
                 </Row>
                 <Row>

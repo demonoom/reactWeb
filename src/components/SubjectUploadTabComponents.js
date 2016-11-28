@@ -594,7 +594,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                             </Form>
                         </div></TabPane>
 
-                        <TabPane tab="材料题" key="材料题"><div>
+                       {/* <TabPane tab="材料题" key="材料题"><div>
                             <Form horizontal>
                                 <FormItem
                                     {...formItemLayout}
@@ -634,7 +634,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     </Button>
                                 </FormItem>
                             </Form>
-                        </div></TabPane>
+                        </div></TabPane>*/}
                     </Tabs>
                 </Modal>
             </div>
