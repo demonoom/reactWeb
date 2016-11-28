@@ -60,7 +60,7 @@ const StudyEvaluateTabComponents = React.createClass({
                     defaultActiveKey={this.state.defaultActiveKey}
                 >
                     <TabPane tab="学情分析" key="学情分析">
-                        <iframe src={this.state.currentPageLink} style={{width:950,height:400}}></iframe>
+                        <iframe src={this.state.currentPageLink} className="analyze_iframe"></iframe>
                     </TabPane>
 
                 </Tabs>
