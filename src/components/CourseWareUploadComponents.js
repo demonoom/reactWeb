@@ -43,6 +43,10 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
         };
     },
     showModal() {
+        uploadFileList.splice(0,uploadFileList.length);
+        // if(this.refs.fileUploadCom!=null && typeof(this.refs.fileUploadCom)!='undefined' ){
+        //     this.refs.fileUploadCom.initFileUploadPage('test');
+        // }
         courseWareUpload.setState({
             visible: true,
         });
@@ -53,31 +57,6 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
     handleCancel() {
         courseWareUpload.setState({ visible: false });
     },
-
-    handleEmail: function(val){
-        courseWareUpload.props.callbackParent(val);
-        //this.setState({lessonCount: val});
-    },
-
-    /*doWebService : function(data,listener) {
-        var service = this;
-        //this.WEBSERVICE_URL = "http://192.168.2.103:8080/Excoord_For_Education/webservice";
-        this.WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
-        if (service.requesting) {
-            return;
-        }
-        service.requesting = true;
-        $.post(service.WEBSERVICE_URL, {
-            params : data
-        }, function(result, status) {
-            service.requesting = false;
-            if (status == "success") {
-                listener.onResponse(result);
-            } else {
-                listener.onError(result);
-            }
-        }, "json");
-    },*/
 
     doWebService : function(data,listener) {
         var service = this;
@@ -103,18 +82,12 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
         if(uploadFileList.length==0){
             alert("请选择上传的文件,谢谢！");
         }else{
-            /*$.post("http://101.201.45.125:8890/Excoord_Upload_Server/file/upload",{"file":uploadFileList[0]},
-                function(data){
-                    alert("Data Loaded: " + data);
-            });*/
             var formData = new FormData();
-            // var name = $("input").val();
             formData.append("file",uploadFileList[0]);
             formData.append("name",uploadFileList[0].name);
             $.ajax({
                 type: "POST",
                 url: "http://101.201.45.125:8890/Excoord_Upload_Server/file/upload",
-                // url:"http://192.168.1.115:8890/Excoord_Upload_Server/file/upload",
                 enctype: 'multipart/form-data',
                 data: formData,
                 // 告诉jQuery不要去处理发送的数据
@@ -164,7 +137,6 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
     },
 
     handleFileSubmit(fileList){
-        // alert("已上传文件："+fileList.length);
         for(var i=0;i<fileList.length;i++){
             var fileJson = fileList[i];
             var fileObj = fileJson.fileObj;
@@ -196,7 +168,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                                 hasFeedback>
                                 {getFieldDecorator('materialFile')(
                                     <div>
-                                        <FileUploadComponents callBackParent={courseWareUpload.handleFileSubmit}/>
+                                        <FileUploadComponents ref="fileUploadCom" callBackParent={courseWareUpload.handleFileSubmit}/>
                                     </div>
                                 )}
                             </FormItem>

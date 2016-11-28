@@ -12,6 +12,9 @@ import KnowledgeMenuComponents from '../components/KnowledgeMenuComponents';
 import HomeWorkMenu from '../components/HomeWorkMenu';
 import HomeWorkTabComponents from '../components/HomeWorkTabComponents';
 import moment from 'moment';
+import StudyEvaluateMenu from '../components/StudyEvaluateMenu';
+import StudyEvaluateTabComponents from '../components/StudyEvaluateTabComponents';
+
 
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
@@ -76,6 +79,10 @@ const MainLayout = React.createClass({
       mainLayout.refs.homeWorkTabComponents.getTeacherHomeWork(optType);
   },
 
+  getStudyEvaluate:function (optType) {
+      mainLayout.refs.studyEvaluateTabComponents.getStudyEvaluate();
+  },
+
   render() {
     const collapse = this.state.collapse;
     //根据如下判断结果，完成对页面中部位置的渲染，不同情况，渲染不同组件
@@ -90,6 +97,10 @@ const MainLayout = React.createClass({
     }else if(this.state.currentKey=="homeWork"){
       middleComponent = <HomeWorkMenu callbackParent={this.getTeacherHomeWork}></HomeWorkMenu>
       tabComponent=<HomeWorkTabComponents ref="homeWorkTabComponents"/>;
+    }else if(this.state.currentKey =="studyEvaluate"){
+      //学习评价
+      middleComponent = <StudyEvaluateMenu callbackParent={this.getStudyEvaluate}></StudyEvaluateMenu>
+      tabComponent=<StudyEvaluateTabComponents ref="studyEvaluateTabComponents"/>;
     }
 
     return (
@@ -111,6 +122,9 @@ const MainLayout = React.createClass({
             </Menu.Item>*/}
             <Menu.Item key="homeWork" className="padding_menu">
               <Icon type="file" /><span className="nav-text">家庭作业</span>
+            </Menu.Item>
+            <Menu.Item key="studyEvaluate" className="padding_menu">
+              <Icon type="clock-circle-o" /><span className="nav-text">学习评价</span>
             </Menu.Item>
 {/*            <Menu.Item key="folder" className="padding_menu">
               <Icon type="clock-circle-o" /><span className="nav-text">统计+回顾</span>

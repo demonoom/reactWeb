@@ -12,15 +12,24 @@ var submitFileOptions=[];
 
 const FileUploadComponents = Form.create()(React.createClass({
     getInitialState() {
+        submitFileOptions=[];
         return {
             visible: false,
-            submitFileCheckedList:['大蚂蚁.txt'],
+            submitFileCheckedList:[],
+            submitFileOptions:[],
         };
     },
 
     //拖拽过程中，通过该函数阻止浏览器默认动作
     dragOver(e){
         e.preventDefault();
+        submitFileOptions.splice(0,submitFileOptions.length);
+        this.setState({submitFileCheckedList:[],submitFileOptions:submitFileOptions});
+    },
+
+    initFileUploadPage:function(test){
+        alert("initPage"+test);
+        this.setState({submitFileOptions:[],submitFileCheckedList:[]});
     },
     //鼠标拖放以后，获取当前的文件
     sbumitFile(e){
@@ -39,7 +48,7 @@ const FileUploadComponents = Form.create()(React.createClass({
         }else{
             var fileJson = { label: fileName,value:fileName,fileObj:files };
             submitFileOptions.push(fileJson);
-            this.setState({submitFileCheckedList:['']});
+            this.setState({submitFileCheckedList:[''],submitFileOptions:submitFileOptions});
             //回调，将已上传的文件列表传给父组件
             this.props.callBackParent(submitFileOptions);
         }
@@ -48,7 +57,7 @@ const FileUploadComponents = Form.create()(React.createClass({
     //判断已上传文件个数，目前只允许单文件上传
     checkSubmitFileCount(){
         var isOk=false;
-        if(submitFileOptions.length>=1){
+        if(this.state.submitFileOptions.length>=1){
             isOk=true;
         }
         return isOk;
@@ -56,8 +65,8 @@ const FileUploadComponents = Form.create()(React.createClass({
 
     //检查当前文件是否已经上传
     checkCurrentFileIsSubmit(fileName){
-         for(var i=0;i<submitFileOptions.length;i++){
-             var fileJson = submitFileOptions[i];
+         for(var i=0;i<this.state.submitFileOptions.length;i++){
+             var fileJson = this.state.submitFileOptions[i];
              if(fileJson.value==fileName){
                  return true;
              }
@@ -117,21 +126,27 @@ const FileUploadComponents = Form.create()(React.createClass({
     //移除列表中已上传的文件
     removeFile(){
         var checkedList = this.state.submitFileCheckedList;
-        for(var rindex=0;rindex<checkedList.length;rindex++){
-            var fileName = checkedList[rindex];
-            var i=0;
-            while(i<submitFileOptions.length){
-                var fileJson = submitFileOptions[i];
-                if(fileJson.value==fileName){
-                    submitFileOptions.splice(i,1);
-                    i=0;
-                    continue;
+        if(checkedList.length==0){
+            alert("请选择文件后移除");
+        }else{
+            for(var rindex=0;rindex<checkedList.length;rindex++){
+                var fileName = checkedList[rindex];
+                var i=0;
+                while(i<submitFileOptions.length){
+                    var fileJson = submitFileOptions[i];
+                    if(fileJson.value==fileName){
+                        submitFileOptions.splice(i,1);
+                        i=0;
+                        continue;
+                    }
+                    i++;
                 }
-                i++;
+                this.setState({submitFileCheckedList:[],submitFileOptions:submitFileOptions});
             }
-            this.setState({submitFileCheckedList:[]});
+
+            this.props.callBackParent(submitFileOptions);
+            // submitFileOptions=[];
         }
-        this.props.callBackParent(submitFileOptions);
     },
 
     submitFileCheckBoxOnChange:function (checkedValues) {
@@ -152,7 +167,7 @@ const FileUploadComponents = Form.create()(React.createClass({
                         已上传文件列表   <Button type="primary" onClick={this.removeFile}>移除</Button>
                     </div>
                     <div>
-                        <CheckboxGroup options={submitFileOptions} defaultValue={this.state.submitFileCheckedList} value={this.state.submitFileCheckedList} onChange={this.submitFileCheckBoxOnChange}/>
+                        <CheckboxGroup options={this.state.submitFileOptions} defaultValue={this.state.submitFileCheckedList} value={this.state.submitFileCheckedList} onChange={this.submitFileCheckBoxOnChange}/>
                     </div>
                 </Row>
             </div>
