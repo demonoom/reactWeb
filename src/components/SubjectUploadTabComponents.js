@@ -389,7 +389,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
         if(checkStatus==true){
             this.setState({scoreInputState:false,scoreChecked:!this.state.scoreChecked,scoreDisable:true,score:1});
         }else{
-            this.setState({scoreDisable:false});
+            this.setState({scoreDisable:false,scoreInputState:true});
         }
         this.setState({scoreChecked:!this.state.scoreChecked});
     },
@@ -408,6 +408,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             labelCol: { span: 4},
             wrapperCol: { span: 17 },
         };
+
         const children = [];
         for (let i = 1; i <=10; i++) {
             children.push(<Option key={i} value={i}>{i}分</Option>);
@@ -443,13 +444,13 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             {getFieldDecorator('score')(
                 <div>
                     <Row>
-                        <Col span={8}>
+                        <Col span={6}>
                             <Select value={this.state.score} ref="scoreSelect" style={{ width: 100 }} disabled={this.state.scoreDisable} onChange={this.selectHandleChange}>
                                 {children}
                             </Select>
                         </Col>
-                        <Col span={7}><Checkbox onChange={this.scoreSelectTypeOnChange} ref="scoreCheckBox" checked={this.state.scoreChecked} value="defined">自定义:</Checkbox></Col>
-                        <Col span={9}><Input ref="scoreDefined" disabled={this.state.scoreInputState}  />分</Col>
+                        <Col span={6}><Checkbox onChange={this.scoreSelectTypeOnChange} ref="scoreCheckBox" checked={this.state.scoreChecked} value="defined">自定义:</Checkbox></Col>
+                        <Col span={12}><span><Input ref="scoreDefined" placeholder="请输入自定义分值" disabled={this.state.scoreInputState}  /></span></Col>
                     </Row>
                 </div>
             )}
