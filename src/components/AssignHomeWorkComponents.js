@@ -170,8 +170,11 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
 
   //日期控件值改变时，获取当前选择的日期（第一个参数表示的是时间戳，第二个是YYYY-MM-dd格式的日期）
   assignDateOnChange(date, dateString) {
+    if(assignHomeWork.isEmpty(date)){
+      dateTime="";
+    }
     dateTime = ""+date;
-    console.log("assignDate:"+date, dateString);
+    console.log("assignDate:"+dateTime, dateString);
   },
 
   getTeacherClasses(ident){
