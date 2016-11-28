@@ -4,6 +4,7 @@ import { Modal} from 'antd';
 import { Slider } from 'antd';
 import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox } from 'antd';
 import { Upload,  message } from 'antd';
+import FileUploadComponents from './FileUploadComponents';
 const Dragger = Upload.Dragger;
 const FormItem = Form.Item;
 import RichEditorComponents from './RichEditorComponents';
@@ -53,6 +54,7 @@ const props = {
 };
 var mulitiAnswer = new Array();
 var data=[];
+var uploadFileList=[];
 const SubjectUploadTabComponents = Form.create()(React.createClass({
     getInitialState() {
         return {
@@ -402,6 +404,94 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
         this.setState({singleAnswer:e.target.value});
     },
 
+    handleFileSubmit(fileList){
+        // alert("已上传文件："+fileList.length);
+        for(var i=0;i<fileList.length;i++){
+            var fileJson = fileList[i];
+            var fileObj = fileJson.fileObj;
+            uploadFileList.push(fileObj[0]);
+        }
+    },
+
+    //点击保存按钮，文件上传
+    uploadFile(){
+        if(uploadFileList.length==0){
+            alert("请选择上传的文件,谢谢！");
+        }else{
+            var formData = new FormData();
+            formData.append("file",uploadFileList[0]);
+            formData.append("name",uploadFileList[0].name);
+            $.ajax({
+                type: "POST",
+                url: "http://101.201.45.125:8890/Excoord_Upload_Server/file/upload",
+                // url:"http://192.168.1.115:8890/Excoord_Upload_Server/file/upload",
+                enctype: 'multipart/form-data',
+                data: formData,
+                // 告诉jQuery不要去处理发送的数据
+                processData : false,
+                // 告诉jQuery不要去设置Content-Type请求头
+                contentType : false,
+                success: function (responseStr) {
+                    if(responseStr!=""){
+                        var fileUrl=responseStr;
+                        this.addNormalMaterial(fileUrl,uploadFileList[0].name);
+                        this.setState({ visible: false });
+                    }
+                },
+                error : function(responseStr) {
+                    console.log("error"+responseStr);
+                }
+            });
+        }
+    },
+
+    //材料题新增
+    materialHandleSubmit(e) {
+        e.preventDefault();
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        data=[];
+        //获取当前点击的是哪个按钮
+        var currentButton = target.textContent;
+        this.props.form.validateFieldsAndScroll((err, values) => {
+            var ident = sessionStorage.getItem("ident");
+            var score = this.state.score;
+            //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
+            if(this.state.scoreDisable==true){
+                score =this.refs.scoreDefined.refs.input.value;
+            }
+            var subjectName = values.subjectName;
+            var answer = this.state.singleAnswer;
+            var subjectParamArray = this.props.params.split("#");
+            var ScheduleOrSubjectId = subjectParamArray[1];
+            var optType = subjectParamArray[3];
+            var batchAddSubjectBeanJson={"textTigan":subjectName,"textAnswer":answer,"score":score,"userId":ident,"type":"S"};
+            if(optType=="bySubjectId"){
+                batchAddSubjectBeanJson.knowledgePointId=ScheduleOrSubjectId;
+            }
+            //完成基础的非空验证
+            if(this.isEmpty(subjectName)){
+                alert("请输入题目");
+            }else if(this.isEmpty(answer)){
+                alert("请输入答案");
+            }else if(this.isEmpty(score) || score==0){
+                alert("请选择分值");
+            }else {
+                //this.saveSubject(batchAddSubjectBeanJson);
+                if(currentButton=="保存并返回列表"){
+                    //关闭并返回题目列表页面
+                    this.setState({ visible: false,score:1});
+                }
+            }
+            //重新初始化页面
+            this.initPage();
+        });
+    },
+
     render() {
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
@@ -595,7 +685,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                             </Form>
                         </div></TabPane>
 
-                       {/* <TabPane tab="材料题" key="材料题"><div>
+                        {/*<TabPane tab="材料题" key="材料题"><div>
                             <Form horizontal>
                                 <FormItem
                                     {...formItemLayout}
@@ -604,10 +694,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     {getFieldDecorator('materialFile', {
                                         rules: [{ required: true, message: '请上传材料!' }],
                                     })(
-                                        <div style={{ width: 346, height: 80 }}>
-                                            <Dragger {...props}>
-                                                <Icon type="plus" />
-                                            </Dragger>
+                                        <div>
+                                            <FileUploadComponents callBackParent={this.handleFileSubmit}/>
                                         </div>
                                     )}
                                 </FormItem>
@@ -617,20 +705,23 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     label={(<span>答案</span>)}
                                     hasFeedback>
                                     {getFieldDecorator('answer')(
-                                        <RadioGroup onChange={this.onChange}>
-                                            <Radio key="A" value="A">A</Radio>
-                                            <Radio key="B" value="B">B</Radio>
-                                            <Radio key="C" value="C">C</Radio>
-                                            <Radio key="D" value="D">D</Radio>
-                                        </RadioGroup>
+                                        <div>
+                                            <RadioGroup onChange={this.singleAnswerOnChange} ref="singleAnswer" defaultValue={this.state.singleAnswer}>
+                                                <Radio key="A" value="A">A</Radio>
+                                                <Radio key="B" value="B">B</Radio>
+                                                <Radio key="C" value="C">C</Radio>
+                                                <Radio key="D" value="D">D</Radio>
+                                                <Radio key="E" value="E">E</Radio>
+                                            </RadioGroup>
+                                        </div>
                                     )}
                                 </FormItem>
                                 {scoreItem}
                                 <FormItem className="ant-modal-footer">
-                                    <Button type="primary" htmlType="submit" className="login-form-button botton_left1">
+                                    <Button type="primary" htmlType="submit" className="login-form-button botton_left1" onClick={this.materialHandleSubmit}>
                                         保存并继续添加
                                     </Button>
-                                    <Button type="primary" htmlType="submit" className="login-form-button">
+                                    <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.materialHandleSubmit}>
                                         保存并返回列表
                                     </Button>
                                 </FormItem>

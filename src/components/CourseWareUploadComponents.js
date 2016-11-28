@@ -110,7 +110,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
             var formData = new FormData();
             // var name = $("input").val();
             formData.append("file",uploadFileList[0]);
-            formData.append("name","比较.pdf");
+            formData.append("name",uploadFileList[0].name);
             $.ajax({
                 type: "POST",
                 url: "http://101.201.45.125:8890/Excoord_Upload_Server/file/upload",
