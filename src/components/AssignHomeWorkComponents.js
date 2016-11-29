@@ -140,7 +140,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
   },
 
   isEmpty(content){
-    if(content==null || content=="" || typeof(content)=="undefined"){
+    if(content==null || content=="null" || content=="" || typeof(content)=="undefined"){
         return true;
     }else{
         return false;
@@ -337,6 +337,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
     if(assignHomeWork.state.checkedList.length==0){
         alert("请选择题目后，再删除！");
     }else{
+      sids="";
       if(assignHomeWork.state.checkAll==true){
         plainOptions=[];
         defaultCheckedList=[];
@@ -368,6 +369,11 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
             var labelValue = checkedListJson.label.props.value;
             selectedKeys.push(key+"#"+labelValue);
             defaultCheckedList.push(key);
+            if(i!=plainOptions.length-1){
+              sids+=key+",";
+            }else{
+              sids+=key;
+            }
           }
           assignHomeWork.setState({selectedSubjectKeys:selectedKeys});
           assignHomeWork.setState({ checkedList:defaultCheckedList});
