@@ -209,6 +209,39 @@ const CourseWareComponents = React.createClass({
         this.refs.useKnowledgeComponents.showModal(currentSchedule,"courseWare",courseWare.state.knowledgeName);
     },
 
+    //删除教学进度下的材料（课件）
+    deleteScheduleMaterials(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            //e = window.event;
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        // alert(target.value);
+        var materialIds = target.value;
+        var param = {
+            "method":'deleteScheduleMaterials',
+            "ident":sessionStorage.getItem("ident"),
+            "scheduleId":courseWare.state.teachScheduleId,
+            "materialIds":materialIds
+        };
+        this.doWebService(JSON.stringify(param), {
+            onResponse : function(ret) {
+                console.log(ret.msg);
+                if(ret.msg=="调用成功" && ret.response==true){
+                    alert("课件删除成功");
+                }else{
+                    alert("课件删除失败");
+                }
+                courseWare.getTeachPlans(sessionStorage.getItem("ident"),courseWare.state.teachScheduleId,"bySchedule",courseWare.state.currentPage,courseWare.state.knowledgeName)
+            },
+            onError : function(error) {
+                alert(error);
+            }
+        });
+    },
+
     buildPanels:function (courseWareList) {
         coursePanelChildren = courseWareList.map((e, i)=> {
             var eysOnButton ;
@@ -228,7 +261,7 @@ const CourseWareComponents = React.createClass({
                          <span><span className="col1">点赞次数：</span><span className="col2">{e[10]}</span></span>
 					</div>
 					<div className="bnt2_right">
-                         <Button style={{ float:'right'}} icon="delete" title="删除" value={e[1]} onClick=""></Button>
+                         <Button style={{ float:'right'}} icon="delete" title="删除" value={e[0]} onClick={this.deleteScheduleMaterials}></Button>
                          {/*<Button style={{ float:'right'}} icon="download" title="下载"  value={e[3]} onClick={courseWare.downLoadFile}></Button>*/}
                         <a href={e[3]} target="_blank" title="下载"   style={{ float:'right'}}><Button icon="download"/></a>
                          {eysOnButton}

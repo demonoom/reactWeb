@@ -50,7 +50,7 @@ const columns = [{
 ];
 
 var data = [];
-var subjectList;
+var subjectList=[];
 var subTable;
 const SUbjectTable = React.createClass({
   getInitialState() {
@@ -63,7 +63,9 @@ const SUbjectTable = React.createClass({
       optType:'',
       ScheduleOrSubjectId:'',
       ident:'',
-      knowledgeName:''
+      knowledgeName:'',
+      currentPage:1,
+      data:data
     };
   },
   start() {
@@ -84,6 +86,7 @@ const SUbjectTable = React.createClass({
     var service = this;
     //this.WEBSERVICE_URL = "http://192.168.2.103:8080/Excoord_For_Education/webservice";
     this.WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
+    // this.WEBSERVICE_URL = "http://192.168.1.115:8080/Excoord_For_Education/webservice";
     // if (service.requesting) {
     //   return;
     // }
@@ -103,7 +106,7 @@ const SUbjectTable = React.createClass({
   getSubjectData(ident,ScheduleOrSubjectId,pageNo,optType,knowledgeName){
     data=[];
     // alert("ccc:"+ident+"==="+ScheduleOrSubjectId+",,,,"+optType);
-    subTable.setState({optType:optType,knowledgeName:knowledgeName});
+    subTable.setState({optType:optType,knowledgeName:knowledgeName,ScheduleOrSubjectId:ScheduleOrSubjectId});
     if(optType=="bySchedule"){
       subTable.getSubjectDataBySchedule(ident,ScheduleOrSubjectId,pageNo);
     }else{
@@ -123,7 +126,9 @@ const SUbjectTable = React.createClass({
     this.doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
         console.log("getSubjectDataMSG:"+ret.msg);
-        subjectList=new Array();
+        // subjectList=new Array();
+        subjectList.splice(0,subjectList.length);
+        data.splice(0,data.length);
         var response = ret.response;
         response.forEach(function (e) {
           console.log("eeeeee:"+e);
@@ -160,8 +165,36 @@ const SUbjectTable = React.createClass({
 
   },
 
+  //删除教学进度下的题目
   deleteSubject:function (e) {
-    // alert("deleteSubject:"+e.target.value);
+    var target = e.target;
+    if(navigator.userAgent.indexOf("Chrome") > -1){
+      target=e.currentTarget;
+    }else{
+      target = e.target;
+    }
+    alert("deleteSubject:"+target.value);
+    var subjectIds = target.value;
+    var param = {
+      "method":'deleteScheduleSubjects',
+      "ident":sessionStorage.getItem("ident"),
+      "scheduleId":subTable.state.ScheduleOrSubjectId,
+      "subjectIds":subjectIds
+    };
+    this.doWebService(JSON.stringify(param), {
+      onResponse : function(ret) {
+        console.log(ret.msg);
+        if(ret.msg=="调用成功" && ret.response==true){
+          alert("题目删除成功");
+        }else{
+          alert("题目删除失败");
+        }
+        subTable.getSubjectDataBySchedule(sessionStorage.getItem("ident"),subTable.state.ScheduleOrSubjectId,subTable.state.currentPage);
+      },
+      onError : function(error) {
+        alert(error);
+      }
+    });
   },
 
   getSubjectDataByKnowledge:function (ident,ScheduleOrSubjectId,pageNo) {
