@@ -468,6 +468,8 @@ html, body, #root {
 }
 .ant-breadcrumb a, .ant-collapse-header{
 	font-size:16px !important;
+	font-weight: bold;
+	color: #309ffb !important;
 }
 
 .bnt2_tex{
@@ -865,7 +867,7 @@ article.content_2{
 	} /* 滑块颜色 */
 
 	::-webkit-scrollbar-button {
-		  background-color: #7c2929;
+		  background-color: none;
 	} /* 滑轨两头的监听按钮颜色 */
 
 	/* ::-webkit-scrollbar-corner {
@@ -887,4 +889,63 @@ article.content_2{
     top: 50%;
     left: 50%;
     transform: translate(-50% , -50%);
+}
+p.user_cont1{
+	text-align:center;
+	height: 150px;
+    border-bottom: 1px solid #ede9e5;
+    background-color: #888;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    position: relative;
+    overflow: hidden;
+	position: absolute;
+    left: 0;
+    top: -2px;
+    width: 300px;
+}
+p.user_cont1 span{
+	text-align:center;
+	position:relative;
+	top:80px;
+	z-index:1000
+}
+p.user_cont{
+	padding:8px 15px;
+}
+p.user_cont span.name{
+	color:#a6a6a6;
+	width:65px;
+	margin-right:10px;
+	
+	
+}
+.model_wi{
+	width:300px !important
+}
+	
+p.user_cont span.name1{
+	color:#474747;
+	
+}
+.blur {
+    filter: url(blur.svg#blur); /* FireFox, Chrome, Opera */   
+    -webkit-filter: blur(10px); /* Chrome, Opera */
+       -moz-filter: blur(10px);
+        -ms-filter: blur(10px);   
+            filter: blur(10px);
+    filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=10, MakeShadow=false); /* IE6~IE9 */
+	    width: 100%;
+    height: 100%;
+	margin-top: -32px;
+}
+.img_us{
+	    position: absolute;
+    top: 45px;
+    z-index: 1000;
+}
+.model_title{
+	padding:0;}
+.model_to{
+	margin-top:115px;
 }
