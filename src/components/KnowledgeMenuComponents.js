@@ -40,6 +40,7 @@ const KnowledgeMenuComponents = React.createClass({
     var service = this;
     //this.WEBSERVICE_URL = "http://192.168.2.103:8080/Excoord_For_Education/webservice";
     this.WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
+    // this.WEBSERVICE_URL = "http://192.168.1.115:8080/Excoord_For_Education/webservice";
     if (service.requesting) {
       return;
     }
@@ -94,10 +95,12 @@ const KnowledgeMenuComponents = React.createClass({
     }*/
     if(menuLevel==0 && childrenCount!=0){
       this.bulidBreadCrumbArray(menuName,menuLevel);
-      this.props.callbackParent(null,breadCrumbArray);
+      var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
+      this.props.callbackParent(optContent,breadCrumbArray);
     }else if(menuLevel!=0 && childrenCount!=0){
       this.bulidBreadCrumbArray(menuName,menuLevel);
-      this.props.callbackParent(null,breadCrumbArray);
+      var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
+      this.props.callbackParent(optContent,breadCrumbArray);
     }else if(menuLevel!=0 && childrenCount==0){
       var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
       this.bulidBreadCrumbArray(fatherMenuName,menuLevel-1);
