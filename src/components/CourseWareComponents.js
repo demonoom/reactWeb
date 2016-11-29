@@ -38,6 +38,7 @@ const CourseWareComponents = React.createClass({
         var service = this;
         //this.WEBSERVICE_URL = "http://192.168.2.103:8080/Excoord_For_Education/webservice";
         this.WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
+        // this.WEBSERVICE_URL = "http://192.168.1.115:8080/Excoord_For_Education/webservice";
         if (service.requesting) {
             return;
         }

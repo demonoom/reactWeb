@@ -5,20 +5,35 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 
 var subjectForm;
+var editSchuldeInfo;
+var editSchuldeId="";
+var editSchuldeName="";
 const SubjectForm = Form.create()(React.createClass({
 
   getInitialState() {
     subjectForm = this;
+    editSchuldeInfo = subjectForm.props.editSchuldeInfo;
+    var editInfoArray = editSchuldeInfo.split("#");
+    if(editInfoArray!=null && editInfoArray.length!=0){
+      editSchuldeId = editInfoArray[0];  //待修改的教学进度id
+      editSchuldeName = editInfoArray[1]; //待修改的教学进度名称
+      subjectForm.setState({editSchuldeId:editSchuldeId,editSchuldeName:editSchuldeName});
+    }
     return {
       visible: false,
       optType:'add',
+      editSchuldeId:editSchuldeId,
+      editSchuldeName:editSchuldeName,
     };
   },
+
 
   doWebService : function(data,listener) {
     var service = this;
     //this.WEBSERVICE_URL = "http://192.168.2.103:8080/Excoord_For_Education/webservice";
     this.WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
+    // this.WEBSERVICE_URL = "http://192.168.1.115:8080/Excoord_For_Education/webservice";
+    // this.WEBSERVICE_URL = "http://192.168.1.115:8080/Excoord_For_Education/webservice";
     if (service.requesting) {
       return;
     }
@@ -56,6 +71,29 @@ const SubjectForm = Form.create()(React.createClass({
     });
   },
 
+  //修改教学进度
+  updateSchedule(ident,scheduleName){
+    var param = {
+      "method":'updateTeachSchedule',
+      "ident":ident,
+      "scheduleId":this.state.editSchuldeId,
+      "title":scheduleName
+    };
+    this.doWebService(JSON.stringify(param), {
+      onResponse : function(ret) {
+        console.log(ret.msg);
+        if(ret.msg=="调用成功" && ret.response==true){
+          alert("教学进度修改成功");
+        }else{
+          alert("教学进度修改失败");
+        }
+      },
+      onError : function(error) {
+        alert(error);
+      }
+    });
+  },
+
   handleSubmit(e) {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
@@ -63,6 +101,7 @@ const SubjectForm = Form.create()(React.createClass({
       var scheduleName = values.courseName;
       if(this.props.optType=="edit"){
           // alert("edit"+scheduleName);
+          this.updateSchedule(ident,scheduleName);
       }else{
         this.saveSchedule(ident,scheduleName);
       }
@@ -97,13 +136,13 @@ const SubjectForm = Form.create()(React.createClass({
             </span>
           )}
           hasFeedbac
-		 
+
         >
           {getFieldDecorator('courseName', {
             rules: [{ required: true, message: '请输入名称!' }],
           })(
               <div style={{ marginBottom: 16 }}>
-                <Input  defaultValue={subjectForm.props.editSchuldeId}/>
+                <Input  defaultValue={subjectForm.state.editSchuldeName}/>
               </div>
 
           )}
@@ -127,17 +166,18 @@ const TeachingComponents = React.createClass({
       loading: false,
       visible: false,
       editSchuldeId:0,
+      editSchuldeInfo:editSchuldeInfo
     };
     //this.setState({ visible: this.props.modalVisible });
   },
-  showModal(openType,editSchuldeId) {
+  showModal(openType,editSchuldeInfo) {
     if(openType=="add"){
-      editSchuldeId="";
+      editSchuldeInfo="";
     }
     this.setState({
       visible: true,
       optType:openType,
-      editSchuldeId:editSchuldeId,
+      editSchuldeInfo:editSchuldeInfo,
     });
   },
   handleOk() {
@@ -163,7 +203,7 @@ const TeachingComponents = React.createClass({
 
           ]}
         >
-          <SubjectForm optType={this.state.optType} editSchuldeId={this.state.editSchuldeId} callbackParent={this.handleEmail}></SubjectForm>
+          <SubjectForm optType={this.state.optType} editSchuldeInfo={this.state.editSchuldeInfo} callbackParent={this.handleEmail}></SubjectForm>
         </Modal>
       </div>
     );
