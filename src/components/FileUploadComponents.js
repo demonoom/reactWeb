@@ -27,10 +27,14 @@ const FileUploadComponents = Form.create()(React.createClass({
         this.setState({submitFileCheckedList:[],submitFileOptions:submitFileOptions});
     },
 
-    initFileUploadPage:function(test){
-        alert("initPage"+test);
-        this.setState({submitFileOptions:[],submitFileCheckedList:[]});
+    componentWillReceiveProps(){
+        var fatherState=this.props.fatherState;
+        if(fatherState==false){
+            this.setState({submitFileCheckedList:[],submitFileOptions:[]});
+            this.props.callBackParent([]);
+        }
     },
+
     //鼠标拖放以后，获取当前的文件
     sbumitFile(e){
         e.preventDefault();
@@ -48,7 +52,7 @@ const FileUploadComponents = Form.create()(React.createClass({
         }else{
             var fileJson = { label: fileName,value:fileName,fileObj:files };
             submitFileOptions.push(fileJson);
-            this.setState({submitFileCheckedList:[''],submitFileOptions:submitFileOptions});
+            this.setState({submitFileCheckedList:[],submitFileOptions:submitFileOptions});
             //回调，将已上传的文件列表传给父组件
             this.props.callBackParent(submitFileOptions);
         }
@@ -142,10 +146,9 @@ const FileUploadComponents = Form.create()(React.createClass({
                     i++;
                 }
                 this.setState({submitFileCheckedList:[],submitFileOptions:submitFileOptions});
-            }
 
-            this.props.callBackParent(submitFileOptions);
-            // submitFileOptions=[];
+            }
+            this.props.callBackParent([]);
         }
     },
 

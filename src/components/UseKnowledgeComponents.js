@@ -10,6 +10,7 @@ let List=new Array();
 //菜单元素，根据构建出来的该对象，对菜单进行生成
 let options;
 var knowledge;
+var knowledgeName;
 const UseKnowledgeComponents = React.createClass({
   getInitialState() {
     knowledge = this;
@@ -31,6 +32,7 @@ const UseKnowledgeComponents = React.createClass({
       // alert("currentKnowlege:"+currentKnowlege+",optType:"+optType);
       //当前点击的，计划应用的课件资源
     // alert("knowledgeName in user"+knowledgeName);
+    knowledgeName = knowledgeName;
     knowledge.setState({knowledgeName:knowledgeName});
     knowledge.setState({optType:optType});
     knowledge.setState({currentKnowlege:currentKnowlege});
@@ -48,7 +50,7 @@ const UseKnowledgeComponents = React.createClass({
       var inputObj = knowledge.refs.scheduleName;
       var scheduleName = inputObj.refs.input.value;
       if(knowledge.state.currentKnowledgeState==true){
-        scheduleName=knowledge.state.knowledgeName;
+        scheduleName=this.state.knowledgeName;
       }else{
         scheduleName = inputObj.refs.input.value;
       }
