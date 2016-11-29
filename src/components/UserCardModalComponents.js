@@ -31,9 +31,10 @@ const UserCardModalComponents = React.createClass({
         </Button>*/}
         <Modal
           visible={this.state.visible}
-          title="小蚂蚁"
+          title={<p className="user_cont1"> <img className="img_us" src={require('./images/user.png')}  onClick={this.showModal}/><span>丹丹</span><img src={require('./images/user.png')} className="blur"/><br/></p>} 
           onOk={this.handleOk}
           onCancel={this.handleCancel}
+		  className="model_wi"
           footer={[
             <Button key="sendMessage" type="primary" size="large" loading={this.state.loading} onClick={this.handleOk}>
               发消息
@@ -43,11 +44,11 @@ const UserCardModalComponents = React.createClass({
             </Button>,
           ]}
         >
-          <p>学校名称：</p>
-          <p>姓名：小蚂蚁</p>
-          <p>年级:一年级</p>
-          <p>班级:一班</p>
-          <p>地区：西安市</p>
+          <p className="user_cont model_to"><span className="name">学校名称：</span><span className="name1"></span></p>
+          <p className="user_cont"><span className="name">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</span><span className="name1">小蚂蚁</span></p>
+          <p className="user_cont"><span className="name">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span><span className="name1">一年级</span></p>
+          <p className="user_cont"><span className="name">班&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span><span className="name1">一班</span></p>
+          <p className="user_cont"><span className="name">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;区：</span><span className="name1">西安市</span></p>
         </Modal>
       </div>
     );
