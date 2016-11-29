@@ -4,9 +4,23 @@
     left: -48px;
 }
 .ant-layout-aside {
-      position: relative;
-      min-height: 100%;
-    }
+      position: absolute;
+	 height: 600px;
+	width:1000px;
+    overflow: hidden;
+	position:relative;
+	transform:translate(-50%,-50%);
+	-ms-transform:translate(-50%,-50%); 	/* IE 9 */
+    -moz-transform:translate(-50%,-50%); 	/* Firefox */
+    -webkit-transform:translate(-50%,-50%); /* Safari 和 Chrome */
+    -o-transform:translate(-50%,-50%); 	/* Opera */
+	left:50%;
+	top:50%;
+  	-webkit-box-shadow:0 0 10px #c1c1c1;  
+  	-moz-box-shadow:0 0 10px #c1c1c1;  
+ 	 box-shadow:0 0 10px #c1c1c1;
+	 border-radius:4px;
+}
 
     .ant-layout-aside .ant-layout-logo {
       height: 53px;
@@ -23,8 +37,9 @@
 	width:64px;
 	height:64px;
 	margin-top:38px;
-	background:#364760;
-	border-bottom:1px solid #51627c
+	background:#e4eaf4;
+	border-bottom:1px solid #dddcdd;
+	border-right:1px solid #dddcdd;
 	}
 .layout_logo img{
     width: 36px;
@@ -35,7 +50,7 @@
 }
  .ant-layout-aside .ant-layout-sider {
       width: 224px;
-      background: #364760;
+      background: #e4eaf4;
       position: absolute;
       overflow: visible;
       padding-bottom: 24px;
@@ -54,6 +69,7 @@
       margin-bottom: 20px;
 	  z-index:1000;
 	  margin-top:64px;
+	  border-right:1px solid #dddcdd
     }
 	ul.cont_t{
 		width:240px;
@@ -89,9 +105,24 @@
     }
 
     .ant-layout-aside-collapse .ant-layout-sider > .ant-menu > .ant-menu-item:hover {
-      background: #2db7f5;
-      color: #fff;
+      background: #e4eaf4;
+	  color:#309ffb;
       transition: all 0s ease;
+    }
+	 .ant-layout-aside-collapse .ant-layout-sider > .ant-menu > .ant-menu-item div.tan {
+		 display:none
+}
+    .ant-layout-aside-collapse .ant-layout-sider > .ant-menu > .ant-menu-item:hover div.tan {
+      background: #000;
+      color: #fff;
+	  position:relative;
+	  left:0px;
+	  top:0px;
+	  height:25px;
+	  line-height:25px;
+	  display: inline-block;
+	  border-radius:4px;
+	  padding:0 8px;
     }
 
     .ant-layout-aside-collapse .ant-layout-sider > .ant-menu > .ant-menu-item:hover .nav-text {
@@ -109,12 +140,11 @@
       width: 224px;
       position: absolute;
       bottom: 0;
-      background: #656565;
+      background: #c0c0c0;
       color: #fff;
       text-align: center;
       line-height: 42px;
       cursor: pointer;
-      transition: all 0.3s ease;
     }
 
     .ant-layout-aside-collapse .ant-aside-action {
@@ -216,7 +246,7 @@
     	margin-top: 10px;
 		position: absolute;
 		bottom: 0;
-		right: 4px;
+		right: 12px;
 		margin-bottom: 10px;
 		height:30px !important;
 	
@@ -337,8 +367,8 @@
     width: 240px;
 	position: relative;
     height: 100%;
-	background: #f0f2f5;
-	border-right:1px solid #e9e9e9
+	background: #f5f9ff;
+	border-right:1px solid #e6e5e6
 }
 
  .ant-col-5 > div:first-child{
@@ -395,18 +425,20 @@
 	overflow:hidden
 }
 html, body, #root {
-    height: 100%;
     overflow: hidden;
-}
+	position:relative;
+} 
+
 .ant-layout-operation{
 	width:100%;
 	height:calc(100% - 96px);
 }
 .ant-menu-dark.ant-menu-inline .ant-menu-item-selected{
-	background:#202b39;
+	color:#309ffb;
+	background:#e4eaf4;
 }
 .ant-menu-submenu-title:hover, .ant-menu-submenu-open{
-	background:#fff;
+	background:#d5edfe;
 	font-weight:bold;
 	box-sizing:border-box;
     -moz-box-sizing:border-box; /* Firefox */
@@ -419,14 +451,17 @@ html, body, #root {
 	padding:0;
 }
 .ant-tabs-content {
-	height:calc(100% - 60px);
+	height:calc(100% - 53px);
 	margin:0;
+    padding: 0;
+    width: calc(100% - 24px);
+	float:right
 }
 .ant-breadcrumb{
 	    height: 45px;
     line-height: 45px;
     padding-left: 24px;
-    background: #eee;
+    border-bottom:1px solid #eee;
     margin: 0;
 	font-size:16px;
 	
@@ -517,8 +552,8 @@ html, body, #root {
 	margin:4px 12px 0 0
 }
 .ant-tabs-nav{
-	height:60px;
-	line-height:44px;
+	height: 50px;
+    line-height: 34px;
 	margin-left:24px;
 }
 .ant-tabs-ink-bar-animated{
@@ -538,7 +573,7 @@ html, body, #root {
 	margin-top: 10px;
     position: relative;
     bottom: 0;
-    right: 4px;
+    right: 12px;
     margin-bottom: 10px;
 }
 .ant-table-thead > tr > th.ant-table-selection-user, .ant-table-tbody > tr > td.ant-table-selection-user{
@@ -844,4 +879,12 @@ article.content_2{
 }
 .ant-tabs-bar{
 	margin-bottom:1px;
+}
+.ant-modal{
+	position: absolute;
+    width: 616px;
+    margin: 0 auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50% , -50%);
 }

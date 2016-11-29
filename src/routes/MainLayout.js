@@ -104,6 +104,7 @@ const MainLayout = React.createClass({
     }
 
     return (
+
       <div className={collapse ? "ant-layout-aside ant-layout-aside-collapse" : "ant-layout-aside"}>
 
         <aside className="ant-layout-sider">
@@ -112,19 +113,19 @@ const MainLayout = React.createClass({
           </div>
           <Menu mode="inline" theme="dark" defaultSelectedKeys={[this.state.currentKey]}  onClick={this.toolbarClick}>
             <Menu.Item key="teachTimes" className="padding_menu">
-              <Icon type="bar-chart" /><span className="nav-text">教学进度</span>
+              <Icon type="bar-chart" /><div className="tan">教学进度</div>
             </Menu.Item>
             <Menu.Item key="KnowledgeResources" className="padding_menu">
-              <Icon type="book" /><span className="nav-text">资源库</span>
+              <Icon type="book" /><div className="tan">资源库</div>
             </Menu.Item>
 {/*            <Menu.Item key="teachReady" href="wwww.baidu.com" className="padding_menu">
               <Icon type="edit"/><span className="nav-text">备课</span>
             </Menu.Item>*/}
             <Menu.Item key="homeWork" className="padding_menu">
-              <Icon type="file" /><span className="nav-text">家庭作业</span>
+              <Icon type="file" /><div className="tan">家庭作业</div>
             </Menu.Item>
             <Menu.Item key="studyEvaluate" className="padding_menu">
-              <Icon type="clock-circle-o" /><span className="nav-text">学习评价</span>
+              <Icon type="clock-circle-o" /><div className="tan">学习评价</div>
             </Menu.Item>
 {/*            <Menu.Item key="folder" className="padding_menu">
               <Icon type="clock-circle-o" /><span className="nav-text">统计+回顾</span>
@@ -166,6 +167,7 @@ const MainLayout = React.createClass({
           </div>
         </div>
       </div>
+	
     );
   },
 });
