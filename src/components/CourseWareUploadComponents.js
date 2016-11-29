@@ -50,6 +50,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
         courseWareUpload.setState({
             visible: true,
         });
+        // this.refs.fileUploadCom.forceUpdate();
     },
     handleOk() {
         courseWareUpload.setState({ visible: false });
@@ -137,6 +138,9 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
     },
 
     handleFileSubmit(fileList){
+        if(fileList==null || fileList.length==0){
+            uploadFileList.splice(0,uploadFileList.length);
+        }
         for(var i=0;i<fileList.length;i++){
             var fileJson = fileList[i];
             var fileObj = fileJson.fileObj;
@@ -168,7 +172,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                                 hasFeedback>
                                 {getFieldDecorator('materialFile')(
                                     <div>
-                                        <FileUploadComponents ref="fileUploadCom" callBackParent={courseWareUpload.handleFileSubmit}/>
+                                        <FileUploadComponents ref="fileUploadCom" fatherState={courseWareUpload.state.visible} callBackParent={courseWareUpload.handleFileSubmit}/>
                                     </div>
                                 )}
                             </FormItem>
