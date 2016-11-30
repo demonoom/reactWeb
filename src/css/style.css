@@ -1,4 +1,8 @@
-.logo_layout{
+body{
+	font-family:"冬青黑体简体中文","Tahoma","Hiragino Sans GB","Microsoft YaHei","微软雅黑","STHeiti","WenQuanYi Micro Hei",SimSun,sans-serif, "Apple Color Emoji" !important;
+	background:url(../../src/components/images/bg_6.png) center bottom;
+	background-size:cover;
+}.logo_layout{
 	margin: 1px 0px 0px;
     position: absolute;
     left: -48px;
@@ -16,9 +20,10 @@
     -o-transform:translate(-50%,-50%); 	/* Opera */
 	left:50%;
 	top:50%;
-  	-webkit-box-shadow:0 0 10px #c1c1c1;  
-  	-moz-box-shadow:0 0 10px #c1c1c1;  
- 	 box-shadow:0 0 10px #c1c1c1;
+	
+  	-webkit-box-shadow:rgba(0,0,0,0.15) 1px 4px 12px;
+  	-moz-box-shadow:rgba(0,0,0,0.15) 1px 4px 12px; 
+ 	 box-shadow:rgba(0,0,0,0.15) 1px 4px 12px;
 	 border-radius:4px;
 }
 
@@ -75,7 +80,7 @@
 		width:240px;
 		overflow-y:auto;
 		overflow-x:hidden;
-		height:calc(100% - 64px)
+		height:calc(100% - 100px)
 	}
     .ant-layout-aside .ant-layout-sider > .ant-menu > .ant-menu-item {
       margin: 16px 0;
@@ -251,6 +256,10 @@
 		height:30px !important;
 	
     }
+.mini{
+	height:20px !important;
+	margin:8px 0;
+}
     .ant-collapse-content > .ant-collapse-content-box{
       line-height:30px;
 	  position:relative;
@@ -403,7 +412,8 @@
 	border:none
 }
 .ant-modal-footer button{
-	padding:4px 20px;
+	padding:6px 20px;
+	min-width:72px;
 }
 .ant-form-item-control button{
 	margin:0 10px
@@ -431,14 +441,14 @@ html, body, #root {
 
 .ant-layout-operation{
 	width:100%;
-	height:calc(100% - 96px);
+	height:calc(100% - 54px);
 }
 .ant-menu-dark.ant-menu-inline .ant-menu-item-selected{
 	color:#309ffb;
 	background:#e4eaf4;
 }
-.ant-menu-submenu-title:hover, .ant-menu-submenu-open{
-	background:#d5edfe;
+.ant-menu-submenu-title:hover, .ant-menu-submenu-title:active{
+	background:#e5f0fa;
 	font-weight:bold;
 	box-sizing:border-box;
     -moz-box-sizing:border-box; /* Firefox */
@@ -446,6 +456,10 @@ html, body, #root {
    width:100%;
    border:#1px solid #fff;
 }
+.ant-menu-submenu-open, .ant-menu-submenu-open:hover{
+	 background:#d5edfe;
+	}
+
 .ant-tabs{
 	height:calc(100% - 18px);
 	padding:0;
@@ -948,4 +962,19 @@ p.user_cont span.name1{
 	padding:0;}
 .model_to{
 	margin-top:115px;
+}
+.ant-layout-footer{
+	position:absolute;
+	bottom:0;
+	height:35px;
+	line-height:35px;
+	width:100%;
+	text-align:center;
+}
+.modol_width{
+	width:440px !important;
+} 
+.ant-form-item {
+    font-size: 12px;
+    margin: 12px 0 12px 0 !important;
 }

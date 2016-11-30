@@ -147,14 +147,14 @@ const SubjectForm = Form.create()(React.createClass({
 
           )}
         </FormItem>
-        <FormItem className="ant-modal-footer">
-          <Button type="primary" htmlType="submit" className="login-form-button botton_left"  >
+        <div className="ant-modal-footer">
+          <Button type="primary" htmlType="submit" className="login-form-button"  >
             确定
           </Button>
           <Button type="primary" htmlType="reset" className="login-form-button" onClick={this.handleCancel} >
             取消
           </Button>
-        </FormItem>
+        </div>
       </Form>
     );
   },
@@ -194,14 +194,12 @@ const TeachingComponents = React.createClass({
 
   render() {
     return (
-      <div>
+      <div >
         <Modal
           visible={this.state.visible}
           title="教学进度"
           onCancel={this.handleCancel}
-          footer={[
-
-          ]}
+		  className="modol_width"
         >
           <SubjectForm optType={this.state.optType} editSchuldeInfo={this.state.editSchuldeInfo} callbackParent={this.handleEmail}></SubjectForm>
         </Modal>

@@ -161,10 +161,7 @@ const MainLayout = React.createClass({
               </Col>
             </Row>
           </div>
-          <div className="ant-layout-footer">
-            <BackTopButton/>
-            小蚂蚁移动教学平台 版权所有 恒坐标教育集团
-          </div>
+        
         </div>
       </div>
 	
@@ -172,3 +169,4 @@ const MainLayout = React.createClass({
   },
 });
 export default MainLayout;
+  
