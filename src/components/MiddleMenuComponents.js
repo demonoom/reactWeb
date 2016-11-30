@@ -52,7 +52,6 @@ const MiddleMenuComponents = React.createClass({
   },
 
   handleClick(e) {
-     // alert("11111:"+e.key);
     mMenu.setState({
       currentMenu: e.key,
     });
@@ -61,22 +60,12 @@ const MiddleMenuComponents = React.createClass({
   },
   //菜单被选择时执行的函数
   subMenuTitleClick(e){
-    // alert(e.key);
     mMenu.setState({openSubMenu:e.key});
     var optContent = e.key+"#"+"bySchedule";
     mMenu.props.callbackParent(optContent);
   },
 
-  openMenu:function (e) {
-    //alert(e.key);
-  },
-
   getLessonMenu(pageNo){
-    /*var param = {
-      "method":'getTeachScheduleByIdent',
-      "ident":sessionStorage.getItem("ident")
-    };*/
-    //alert("pageNo:"+pageNo);
     var param = {
       "method":'getTeachScheduls',
       "ident":sessionStorage.getItem("ident"),
@@ -167,6 +156,7 @@ const MiddleMenuComponents = React.createClass({
   showModal:function (optType,editSchuldeId) {
     optType = (optType=="edit"?"edit":"add");
     // alert("editSchuldeId:"+editSchuldeId);
+    // alert(optType);
     mMenu.refs.teachingComponents.showModal(optType,editSchuldeId);
   },
 
