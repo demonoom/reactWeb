@@ -173,7 +173,7 @@ const SubjectForm = Form.create()(React.createClass({
           <Button type="primary" htmlType="submit" className="login-form-button"  >
             确定
           </Button>
-          <Button type="primary" htmlType="reset" className="login-form-button" onClick={subjectForm.handleCancel} >
+          <Button type="ghost" htmlType="reset" className="login-form-button" onClick={subjectForm.handleCancel} >
             取消
           </Button>
         </div>

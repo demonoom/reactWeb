@@ -152,7 +152,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
         const { getFieldDecorator } = courseWareUpload.props.form;
         const formItemLayout = {
             labelCol: { span: 4},
-            wrapperCol: { span: 17 },
+            wrapperCol: { span: 20 },
         };
         return (
             <div className="toobar">
@@ -161,21 +161,21 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                 <Modal
                     visible={courseWareUpload.state.visible}
                     title="上传课件"
-                    className="ant-modal-width"
+                    className="modol_width"
                     onCancel={courseWareUpload.handleCancel}
                     footer={[
                         <div>
-                            <Button type="primary" htmlType="submit" className="login-form-button botton_left3" onClick={courseWareUpload.uploadFile}>
+                            <Button type="primary" htmlType="submit" className="login-form-button" onClick={courseWareUpload.uploadFile}>
                                 保存
                             </Button>
-                            <Button type="primary" htmlType="reset" className="login-form-button" onClick={courseWareUpload.handleCancel}>
+                            <Button type="ghost" htmlType="reset" className="login-form-button" onClick={courseWareUpload.handleCancel}>
                                 取消
                             </Button>
                         </div>
                     ]}
                 >
                         <Form horizontal>
-                            <FormItem  className="timu_pad"
+                            <FormItem 
                                 {...formItemLayout}
                                 label={(<span>材料文件</span>)}
                                 hasFeedback>

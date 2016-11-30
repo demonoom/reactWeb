@@ -513,7 +513,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
               <Button type="primary" htmlType="submit" className="login-form-button class_right" >
                 保存
               </Button>
-              <Button type="primary" htmlType="reset" className="login-form-button" onClick={this.handleCancel} >
+              <Button type="ghost" htmlType="reset" className="login-form-button" onClick={this.handleCancel} >
                 取消
               </Button>
             </FormItem>

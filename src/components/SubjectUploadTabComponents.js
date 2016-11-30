@@ -553,7 +553,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
 
         var currentActiveKey = this.state.activeKey;
         var buttons =<div>
-            <Button type="primary" htmlType="submit" className="login-form-button botton_left1" onClick={this.singleHandleSubmit}>
+            <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.singleHandleSubmit}>
                 保存并继续添加
             </Button>
             <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.singleHandleSubmit} >
@@ -562,7 +562,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
         </div>;
         if(currentActiveKey=="单选题"){
             buttons =<div>
-                <Button type="primary" htmlType="submit" className="login-form-button botton_left1" onClick={this.singleHandleSubmit}>
+                <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.singleHandleSubmit}>
                     保存并继续添加
                 </Button>
                 <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.singleHandleSubmit} >
@@ -571,7 +571,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             </div>;
         }else if(currentActiveKey=="多选题"){
             buttons =<div>
-                <Button type="primary" htmlType="submit" className="login-form-button botton_left1" onClick={this.MulitiHandleSubmit}>
+                <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.MulitiHandleSubmit}>
                     保存并继续添加
                 </Button>
                 <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.MulitiHandleSubmit} >
@@ -580,7 +580,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             </div>;
         }else if(currentActiveKey=="判断题"){
             buttons =<div>
-                <Button type="primary" htmlType="submit" className="login-form-button botton_left1" onClick={this.correctHandleSubmit}>
+                <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.correctHandleSubmit}>
                     保存并继续添加
                 </Button>
                 <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.correctHandleSubmit} >
@@ -589,7 +589,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             </div>;
         }else if(currentActiveKey=="简答题"){
             buttons =<div>
-                <Button type="primary" htmlType="submit" className="login-form-button botton_left1" onClick={this.simpleAnswerHandleSubmit}>
+                <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.simpleAnswerHandleSubmit}>
                     保存并继续添加
                 </Button>
                 <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.simpleAnswerHandleSubmit} >
@@ -732,7 +732,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                 </FormItem>
                                 {scoreItem}
                                 <FormItem className="ant-modal-footer">
-                                    <Button type="primary" htmlType="submit" className="login-form-button botton_left1" onClick={this.materialHandleSubmit}>
+                                    <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.materialHandleSubmit}>
                                         保存并继续添加
                                     </Button>
                                     <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.materialHandleSubmit}>
