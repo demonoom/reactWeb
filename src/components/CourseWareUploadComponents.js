@@ -163,7 +163,16 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                     title="上传课件"
                     className="ant-modal-width"
                     onCancel={courseWareUpload.handleCancel}
-                    footer={[]}
+                    footer={[
+                        <div>
+                            <Button type="primary" htmlType="submit" className="login-form-button botton_left3" onClick={courseWareUpload.uploadFile}>
+                                保存
+                            </Button>
+                            <Button type="primary" htmlType="reset" className="login-form-button" onClick={courseWareUpload.handleCancel}>
+                                取消
+                            </Button>
+                        </div>
+                    ]}
                 >
                         <Form horizontal>
                             <FormItem  className="timu_pad"
@@ -175,15 +184,6 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                                         <FileUploadComponents ref="fileUploadCom" fatherState={courseWareUpload.state.visible} callBackParent={courseWareUpload.handleFileSubmit}/>
                                     </div>
                                 )}
-                            </FormItem>
-
-                            <FormItem >
-                                <Button type="primary" htmlType="submit" className="login-form-button botton_left3" onClick={courseWareUpload.uploadFile}>
-                                    保存
-                                </Button>
-                                <Button type="primary" htmlType="reset" className="login-form-button" onClick={courseWareUpload.handleCancel}>
-                                    取消
-                                </Button>
                             </FormItem>
                         </Form>
                 </Modal>
