@@ -62,10 +62,23 @@ const MainTabComponents = React.createClass({
     showModal:function () {
         this.refs.useKnowledgeComponents.showModal();
     },
+
+    breadClick(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        // alert("key:"+target.id);
+        var optContent = target.id+"#"+"bySubjectId"+"#"+target.textContent;
+        this.getTeachPlans(optContent);
+    },
+
     //生成面包屑导航
     buildBreadcrumb:function (breadcrumbArray) {
         breadcrumbChildren = breadcrumbArray.map((e, i)=> {
-            return <Breadcrumb.Item key={e.hrefText}><a href={e.hrefLink}>{e.hrefText}</a></Breadcrumb.Item>
+            return <Breadcrumb.Item key={e.menuId}><a id={e.menuId} onClick={this.breadClick}>{e.hrefText}</a></Breadcrumb.Item>
         });
         this.setState({activeKey:'课件'});
         this.setState({breadcrumbArray:breadcrumbArray});

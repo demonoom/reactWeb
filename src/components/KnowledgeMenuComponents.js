@@ -93,27 +93,34 @@ const KnowledgeMenuComponents = React.createClass({
       }
       this.props.callbackParent(null,breadCrumbArray);
     }*/
-    if(menuLevel==0 && childrenCount!=0){
+    /*if(menuLevel==0 && childrenCount!=0){
       this.bulidBreadCrumbArray(menuName,menuLevel);
-      var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
-      this.props.callbackParent(optContent,breadCrumbArray);
+      // var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
+      // this.props.callbackParent(optContent,breadCrumbArray);
     }else if(menuLevel!=0 && childrenCount!=0){
       this.bulidBreadCrumbArray(menuName,menuLevel);
-      var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
-      this.props.callbackParent(optContent,breadCrumbArray);
+      // var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
+      // this.props.callbackParent(optContent,breadCrumbArray);
     }else if(menuLevel!=0 && childrenCount==0){
-      var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
       this.bulidBreadCrumbArray(fatherMenuName,menuLevel-1);
-      this.props.callbackParent(optContent,breadCrumbArray);
+      // var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
+      // this.props.callbackParent(optContent,breadCrumbArray);
     }else if(menuLevel==0 && childrenCount==0){
       this.bulidBreadCrumbArray(menuName,menuLevel);
-      var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
-      this.props.callbackParent(optContent,breadCrumbArray);
+      // var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
+      // this.props.callbackParent(optContent,breadCrumbArray);
+    }*/
+    if(menuLevel!=0 && childrenCount==0){
+      this.bulidBreadCrumbArray(fatherMenuName,menuLevel-1,menuId);
+    }else{
+      this.bulidBreadCrumbArray(menuName,menuLevel,menuId);
     }
+    var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
+    this.props.callbackParent(optContent,breadCrumbArray);
   },
 
-  bulidBreadCrumbArray:function (menuText,menuLevel) {
-    var breadJson = { hrefLink: '#/MainLayout', hrefText:menuText ,menuLevel:menuLevel};
+  bulidBreadCrumbArray:function (menuText,menuLevel,menuId) {
+    var breadJson = { hrefLink: '#/MainLayout', hrefText:menuText ,menuLevel:menuLevel,menuId:menuId};
     if(menuLevel==0){
       breadCrumbArray=new Array();
       breadCrumbArray.push(breadJson);
