@@ -286,10 +286,10 @@ const UseKnowledgeComponents = React.createClass({
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[
-
+            <Button key="submit" type="primary"  htmlType="submit"  size="large" onClick={this.handleSubmit}>提交</Button>
           ]}
         >
-          <Form horizontal onSubmit={this.handleSubmit}>
+          <Form horizontal>
             <FormItem
                 {...formItemLayout}
                 label="教学进度"
@@ -301,9 +301,6 @@ const UseKnowledgeComponents = React.createClass({
                 <Checkbox onChange={knowledge.checkBoxOnChange} value="currentKnowledge">使用当前知识点作为教学进度</Checkbox>
                 <Checkbox onChange={knowledge.checkBoxOnChange} value="newSchedule">新建教学进度:<Input ref="scheduleName" disabled={this.state.inputState}/></Checkbox>
               </div>
-              <div className="ant-modal-footer">
-			  <Button key="submit" type="primary"  htmlType="submit"  size="large">提交</Button>
-			  </div>
             </FormItem>
           </Form>
         </Modal>

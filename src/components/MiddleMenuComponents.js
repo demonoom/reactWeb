@@ -76,6 +76,7 @@ const MiddleMenuComponents = React.createClass({
       "method":'getTeachScheduleByIdent',
       "ident":sessionStorage.getItem("ident")
     };*/
+    //alert("pageNo:"+pageNo);
     var param = {
       "method":'getTeachScheduls',
       "ident":sessionStorage.getItem("ident"),
@@ -117,7 +118,8 @@ const MiddleMenuComponents = React.createClass({
 
   buildMenuChildren:function (menuList) {
     children = menuList.map((e, i)=> {
-      return <SubMenu key={e[0]} onTitleClick={this.subMenuTitleClick} title={<span><span>{e[1]}</span><Badge count={e[2]}/> <span title={e[0]+"#"+e[1]} onClick={this.editTeachSchedule} className='write_right'><Icon type="edit"/></span><span title={e[0]} onClick={this.deleteTeachSchedule} className='del_right'><Icon type="delete"/></span> </span>}>
+      return <SubMenu key={e[0]} onTitleClick={this.subMenuTitleClick} title={<span><span>{e[1]}</span><Badge count={e[2]}/> <span id={e[0]+"#"+e[1]} onClick={this.editTeachSchedule} className='write_right'><Icon type="edit"/></span><span id={e[0]} onClick={this.deleteTeachSchedule} className='del_right'><Icon type="delete"/></span> </span>}>
+
       </SubMenu>
     });
   },
@@ -131,32 +133,35 @@ const MiddleMenuComponents = React.createClass({
   },
 
   editTeachSchedule:function (e) {
-        //alert("修改教学进度"+e.currentTarget.title);
-    mMenu.showModal('edit',e.currentTarget.title);
+        // alert("修改教学进度"+e.currentTarget.id);
+    mMenu.showModal('edit',e.currentTarget.id);
   },
 
   deleteTeachSchedule:function (e) {
     //alert("请先删除当前进度下的教学资源，再执行此操作"+e.currentTarget.title);
-    var sids = e.currentTarget.title;
-    var param = {
-      "method":'deleteTeachSchedules',
-      "ident":sessionStorage.getItem("ident"),
-      "sids":sids
-    };
-    this.doWebService(JSON.stringify(param), {
-      onResponse : function(ret) {
-        console.log(ret.msg);
-        if(ret.msg=="调用成功" && ret.response==true){
-          alert("教学进度删除成功");
-        }else{
-          alert("教学进度删除失败");
+    var confirmResult = confirm("确定要删除该教学进度?");
+    if(confirmResult){
+      var sids = e.currentTarget.id;
+      var param = {
+        "method":'deleteTeachSchedules',
+        "ident":sessionStorage.getItem("ident"),
+        "sids":sids
+      };
+      this.doWebService(JSON.stringify(param), {
+        onResponse : function(ret) {
+          console.log(ret.msg);
+          if(ret.msg=="调用成功" && ret.response==true){
+            alert("教学进度删除成功");
+          }else{
+            alert("教学进度删除失败");
+          }
+          mMenu.getLessonMenu(mMenu.state.currentPage);
+        },
+        onError : function(error) {
+          alert(error);
         }
-        mMenu.getLessonMenu(mMenu.state.currentPage);
-      },
-      onError : function(error) {
-        alert(error);
-      }
-    });
+      });
+    }
   },
 
   showModal:function (optType,editSchuldeId) {
@@ -166,7 +171,7 @@ const MiddleMenuComponents = React.createClass({
   },
 
   handleMenu(){
-    mMenu.getLessonMenu(this.state.currentPage);
+    mMenu.getLessonMenu(mMenu.state.currentPage);
   },
 
   render() {

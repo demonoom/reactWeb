@@ -12,13 +12,9 @@ const SubjectForm = Form.create()(React.createClass({
 
   getInitialState() {
     subjectForm = this;
-    editSchuldeInfo = subjectForm.props.editSchuldeInfo;
-    var editInfoArray = editSchuldeInfo.split("#");
-    if(editInfoArray!=null && editInfoArray.length!=0){
-      editSchuldeId = editInfoArray[0];  //待修改的教学进度id
-      editSchuldeName = editInfoArray[1]; //待修改的教学进度名称
-      subjectForm.setState({editSchuldeId:editSchuldeId,editSchuldeName:editSchuldeName});
-    }
+    editSchuldeId="";
+    editSchuldeName="";
+    subjectForm.initFormInfo();
     return {
       visible: false,
       optType:'add',
@@ -27,6 +23,34 @@ const SubjectForm = Form.create()(React.createClass({
     };
   },
 
+  componentWillReceiveProps: function(nextProps) {
+    // alert("componentWillUpdate");
+    editSchuldeInfo = nextProps.editSchuldeInfo;
+    if(editSchuldeInfo==null || editSchuldeInfo==""){
+      subjectForm.setState({editSchuldeId:"",editSchuldeName:""});
+    }else{
+      var editInfoArray = editSchuldeInfo.split("#");
+      if(editInfoArray!=null && editInfoArray.length!=0){
+        editSchuldeId = editInfoArray[0];  //待修改的教学进度id
+        editSchuldeName = editInfoArray[1]; //待修改的教学进度名称
+        subjectForm.setState({editSchuldeId:editSchuldeId,editSchuldeName:editSchuldeName});
+      }
+    }
+  },
+
+  initFormInfo(){
+    editSchuldeInfo = subjectForm.props.editSchuldeInfo;
+    if(editSchuldeInfo==null || editSchuldeInfo==""){
+      subjectForm.setState({editSchuldeId:"",editSchuldeName:""});
+    }else {
+      var editInfoArray = editSchuldeInfo.split("#");
+      if(editInfoArray!=null && editInfoArray.length!=0){
+        editSchuldeId = editInfoArray[0];  //待修改的教学进度id
+        editSchuldeName = editInfoArray[1]; //待修改的教学进度名称
+        subjectForm.setState({editSchuldeId:editSchuldeId,editSchuldeName:editSchuldeName});
+      }
+    }
+  },
 
   doWebService : function(data,listener) {
     var service = this;
@@ -56,7 +80,7 @@ const SubjectForm = Form.create()(React.createClass({
       "ident":ident,
       "title":scheduleName
     };
-    this.doWebService(JSON.stringify(param), {
+    subjectForm.doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
         console.log(ret.msg);
         if(ret.msg=="调用成功" && ret.response.colTsId!=null){
@@ -64,6 +88,7 @@ const SubjectForm = Form.create()(React.createClass({
         }else{
             alert("教学进度添加失败");
         }
+        subjectForm.props.callbackParent("cancel");
       },
       onError : function(error) {
         alert(error);
@@ -76,10 +101,10 @@ const SubjectForm = Form.create()(React.createClass({
     var param = {
       "method":'updateTeachSchedule',
       "ident":ident,
-      "scheduleId":this.state.editSchuldeId,
+      "scheduleId":subjectForm.state.editSchuldeId,
       "title":scheduleName
     };
-    this.doWebService(JSON.stringify(param), {
+    subjectForm.doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
         console.log(ret.msg);
         if(ret.msg=="调用成功" && ret.response==true){
@@ -87,6 +112,7 @@ const SubjectForm = Form.create()(React.createClass({
         }else{
           alert("教学进度修改失败");
         }
+        subjectForm.props.callbackParent("cancel");
       },
       onError : function(error) {
         alert(error);
@@ -96,37 +122,36 @@ const SubjectForm = Form.create()(React.createClass({
 
   handleSubmit(e) {
     e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
+    subjectForm.props.form.validateFieldsAndScroll((err, values) => {
       var ident = sessionStorage.getItem("ident");
       var scheduleName = values.courseName;
-      if(this.props.optType=="edit"){
+      if(subjectForm.props.optType=="edit"){
           // alert("edit"+scheduleName);
-          this.updateSchedule(ident,scheduleName);
+        subjectForm.updateSchedule(ident,scheduleName);
       }else{
-        this.saveSchedule(ident,scheduleName);
+        subjectForm.saveSchedule(ident,scheduleName);
       }
-      this.props.callbackParent("cancel");
     });
 
   },
   handleCancel(e) {
-    this.props.callbackParent("cancel");
+    subjectForm.props.callbackParent("cancel");
   },
   checkConfirm(rule, value, callback) {
-    const form = this.props.form;
+    const form = subjectForm.props.form;
     if (value && this.state.passwordDirty) {
       form.validateFields(['confirm'], { force: true });
     }
     callback();
   },
   render() {
-    const { getFieldDecorator } = this.props.form;
+    const { getFieldDecorator } = subjectForm.props.form;
     const formItemLayout = {
       labelCol: { span: 6 },
       wrapperCol: { span: 14 },
     };
     return (
-      <Form horizontal onSubmit={this.handleSubmit}>
+      <Form horizontal onSubmit={subjectForm.handleSubmit}>
 
         <FormItem
           {...formItemLayout}
@@ -138,20 +163,17 @@ const SubjectForm = Form.create()(React.createClass({
           hasFeedbac
 
         >
-          {getFieldDecorator('courseName', {
-            rules: [{ required: true, message: '请输入名称!' }],
-          })(
+          {getFieldDecorator('courseName')(
               <div style={{ marginBottom: 16 }}>
                 <Input  defaultValue={subjectForm.state.editSchuldeName}/>
               </div>
-
           )}
         </FormItem>
         <div className="ant-modal-footer">
           <Button type="primary" htmlType="submit" className="login-form-button"  >
             确定
           </Button>
-          <Button type="primary" htmlType="reset" className="login-form-button" onClick={this.handleCancel} >
+          <Button type="primary" htmlType="reset" className="login-form-button" onClick={subjectForm.handleCancel} >
             取消
           </Button>
         </div>
@@ -171,6 +193,7 @@ const TeachingComponents = React.createClass({
     //this.setState({ visible: this.props.modalVisible });
   },
   showModal(openType,editSchuldeInfo) {
+    // alert("teaching:"+editSchuldeInfo);
     if(openType=="add"){
       editSchuldeInfo="";
     }
