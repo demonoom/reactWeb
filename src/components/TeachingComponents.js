@@ -16,8 +16,8 @@ const TeachingComponents = React.createClass({
     return {
       visible: false,
       optType:'add',
-      editSchuldeId:editSchuldeId,
-      editSchuldeName:editSchuldeName,
+      schuldeId:editSchuldeId,
+      schuldeName:editSchuldeName,
       loading: false,
     };
   },
@@ -69,7 +69,7 @@ const TeachingComponents = React.createClass({
     var param = {
       "method":'updateTeachSchedule',
       "ident":ident,
-      "scheduleId":subjectForm.state.editSchuldeId,
+      "scheduleId":subjectForm.state.schuldeId,
       "title":scheduleName
     };
     subjectForm.doWebService(JSON.stringify(param), {
@@ -92,13 +92,10 @@ const TeachingComponents = React.createClass({
   handleSubmit(e) {
     e.preventDefault();
     var ident = sessionStorage.getItem("ident");
-    var scheduleName = subjectForm.refs.editSchuldeName.refs.input.value;
-    // alert("scheduleName:"+scheduleName);
+    var scheduleName = subjectForm.refs.editSchuldeNameInput.refs.input.value;
     if(subjectForm.state.optType=="edit"){
-      // alert("edit:"+scheduleName);
       subjectForm.updateSchedule(ident,scheduleName);
     }else{
-      // alert("add:"+scheduleName);
       subjectForm.saveSchedule(ident,scheduleName);
     }
   },
@@ -111,15 +108,18 @@ const TeachingComponents = React.createClass({
       editSchuldeInfo="";
     }
     if(editSchuldeInfo==null || editSchuldeInfo==""){
-      subjectForm.setState({visible: true,optType:openType,editSchuldeId:"",editSchuldeName:""});
+      subjectForm.setState({visible: true,optType:openType,schuldeId:"",schuldeName:""});
+      subjectForm.refs.editSchuldeNameInput.refs.input.value="";
     }else {
       var editInfoArray = editSchuldeInfo.split("#");
       if(editInfoArray!=null && editInfoArray.length!=0){
         editSchuldeId = editInfoArray[0];  //待修改的教学进度id
         editSchuldeName = editInfoArray[1]; //待修改的教学进度名称
-        subjectForm.setState({visible: true,optType:openType,editSchuldeId:editSchuldeId,editSchuldeName:editSchuldeName});
+        subjectForm.setState({visible: true,optType:openType,schuldeId:editSchuldeId,schuldeName:editSchuldeName});
+        subjectForm.refs.editSchuldeNameInput.refs.input.value=editSchuldeName;
       }
     }
+
   },
 
   handleEmail: function(val){
@@ -150,7 +150,7 @@ const TeachingComponents = React.createClass({
                   hasFeedbac
                 >
                   <div style={{ marginBottom: 16 }}>
-                    <Input ref="editSchuldeName" defaultValue={subjectForm.state.editSchuldeName} />
+                    <Input ref="editSchuldeNameInput" defaultValue={subjectForm.state.schuldeName} />
                   </div>
                 </FormItem>
               </Form>
