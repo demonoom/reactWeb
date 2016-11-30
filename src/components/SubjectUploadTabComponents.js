@@ -620,7 +620,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                         onEdit={this.onEdit}
                     >
                         <TabPane tab="单选题" key="单选题">
-                            <Form horizontal>
+                            <Form horizontal className="ant-form-fo">
                                 {subjectItem}
                                 <FormItem
                                     {...formItemLayout}
@@ -644,7 +644,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
 
 
                         <TabPane tab="多选题" key="多选题"><div>
-                            <Form horizontal>
+                            <Form horizontal className="ant-form-fo">
                                 {subjectItem}
                                 <FormItem
                                     {...formItemLayout}
@@ -661,7 +661,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                         </div></TabPane>
 
                         <TabPane tab="判断题" key="判断题"><div>
-                            <Form horizontal>
+                            <Form horizontal className="ant-form-fo">
                                 {subjectItem}
                                 <FormItem
                                     {...formItemLayout}
@@ -681,7 +681,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                         </div></TabPane>
 
                         <TabPane tab="简答题" key="简答题"><div>
-                            <Form horizontal>
+                            <Form horizontal className="ant-form-fo">
                                 {subjectItem}
                                 <FormItem
                                     {...formItemLayout}
