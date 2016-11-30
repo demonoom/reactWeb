@@ -167,34 +167,36 @@ const SUbjectTable = React.createClass({
 
   //删除教学进度下的题目
   deleteSubject:function (e) {
-    var target = e.target;
-    if(navigator.userAgent.indexOf("Chrome") > -1){
-      target=e.currentTarget;
-    }else{
-      target = e.target;
-    }
-    alert("deleteSubject:"+target.value);
-    var subjectIds = target.value;
-    var param = {
-      "method":'deleteScheduleSubjects',
-      "ident":sessionStorage.getItem("ident"),
-      "scheduleId":subTable.state.ScheduleOrSubjectId,
-      "subjectIds":subjectIds
-    };
-    this.doWebService(JSON.stringify(param), {
-      onResponse : function(ret) {
-        console.log(ret.msg);
-        if(ret.msg=="调用成功" && ret.response==true){
-          alert("题目删除成功");
+    if(confirm("确定要删除该题目?")){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+          target=e.currentTarget;
         }else{
-          alert("题目删除失败");
+          target = e.target;
         }
-        subTable.getSubjectDataBySchedule(sessionStorage.getItem("ident"),subTable.state.ScheduleOrSubjectId,subTable.state.currentPage);
-      },
-      onError : function(error) {
-        alert(error);
-      }
-    });
+        // alert("deleteSubject:"+target.value);
+        var subjectIds = target.value;
+        var param = {
+          "method":'deleteScheduleSubjects',
+          "ident":sessionStorage.getItem("ident"),
+          "scheduleId":subTable.state.ScheduleOrSubjectId,
+          "subjectIds":subjectIds
+        };
+        this.doWebService(JSON.stringify(param), {
+          onResponse : function(ret) {
+            console.log(ret.msg);
+            if(ret.msg=="调用成功" && ret.response==true){
+              alert("题目删除成功");
+            }else{
+              alert("题目删除失败");
+            }
+            subTable.getSubjectDataBySchedule(sessionStorage.getItem("ident"),subTable.state.ScheduleOrSubjectId,subTable.state.currentPage);
+          },
+          onError : function(error) {
+            alert(error);
+          }
+        });
+    }
   },
 
   getSubjectDataByKnowledge:function (ident,ScheduleOrSubjectId,pageNo) {
