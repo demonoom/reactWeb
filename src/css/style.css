@@ -458,9 +458,9 @@ html, body, #root {
    width:100%;
    border:#1px solid #fff;
 }
-.ant-menu-submenu-open, .ant-menu-submenu-open:hover{
+/*.ant-menu-submenu-open, .ant-menu-submenu-open:hover{
 	 background:#d5edfe;
-	}
+	}*/
 
 .ant-tabs{
 	height:calc(100% - 18px);

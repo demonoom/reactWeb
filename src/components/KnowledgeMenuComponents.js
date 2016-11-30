@@ -56,15 +56,6 @@ const KnowledgeMenuComponents = React.createClass({
       }
     }, "json");
   },
-
-  handleClick(e) {
-    // alert("11111:"+e.key);
-    this.setState({
-      currentMenu: e.key,
-    });
-
-    //location.hash=e.key;
-  },
   //菜单被选择时执行的函数
   subMenuTitleClick(e){
     // alert("ekey:"+e.key);
@@ -74,42 +65,7 @@ const KnowledgeMenuComponents = React.createClass({
     var menuLevel = menuKeyArray[2];
     var menuName = menuKeyArray[3];
     var fatherMenuName = menuKeyArray[4];
-    // alert(menuName);
-    this.setState({openSubMenu:menuId});
-    /*if(childrenCount==0){
-      if(menuLevel==0){
-        this.bulidBreadCrumbArray(menuName,menuLevel);
-      }else {
-        this.bulidBreadCrumbArray(fatherMenuName,menuLevel);
-      }
-      var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
-      this.props.callbackParent(optContent,breadCrumbArray);
-    }else{
-      // this.bulidBreadCrumbArray(e.domEvent.target.innerText,menuLevel);
-      if(menuLevel==0){
-        this.bulidBreadCrumbArray(e.domEvent.target.innerText,menuLevel);
-      }else{
-        this.bulidBreadCrumbArray(fatherMenuName,menuLevel);
-      }
-      this.props.callbackParent(null,breadCrumbArray);
-    }*/
-    /*if(menuLevel==0 && childrenCount!=0){
-      this.bulidBreadCrumbArray(menuName,menuLevel);
-      // var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
-      // this.props.callbackParent(optContent,breadCrumbArray);
-    }else if(menuLevel!=0 && childrenCount!=0){
-      this.bulidBreadCrumbArray(menuName,menuLevel);
-      // var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
-      // this.props.callbackParent(optContent,breadCrumbArray);
-    }else if(menuLevel!=0 && childrenCount==0){
-      this.bulidBreadCrumbArray(fatherMenuName,menuLevel-1);
-      // var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
-      // this.props.callbackParent(optContent,breadCrumbArray);
-    }else if(menuLevel==0 && childrenCount==0){
-      this.bulidBreadCrumbArray(menuName,menuLevel);
-      // var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
-      // this.props.callbackParent(optContent,breadCrumbArray);
-    }*/
+    this.setState({openSubMenu:[e.key]});
     if(menuLevel!=0 && childrenCount==0){
       this.bulidBreadCrumbArray(fatherMenuName,menuLevel-1,menuId);
     }else{
@@ -185,17 +141,6 @@ const KnowledgeMenuComponents = React.createClass({
       return breadCrumbArray;
   },
 
-  openMenu:function (e) {
-    //alert(e.key);
-  },
-
-  handleMenu: function(e){
-    //lessonData.splice(0,lessonData.length);
-    List.push([e]);
-    this.setState({menuList: List});
-    // this.buildMenuChildren();
-  },
-
   getLessonMenu(){
     var param = {
       "method":'getAllKnowledgePoints',
@@ -216,14 +161,6 @@ const KnowledgeMenuComponents = React.createClass({
       }
     });
   },
-
-  componentWillReceiveProps(){
-    this.setState({openSubMenu:this.props.activeMenu});
-  },
-
-  // componentDidMount(){
-  //   this.getLessonMenu();
-  // },
 
   componentWillMount(){
     this.getLessonMenu();
@@ -263,32 +200,11 @@ const KnowledgeMenuComponents = React.createClass({
       }
   },
 
-  onChange(page) {
-    console.log(page);
-    this.setState({
-      currentPage: page,
-    });
-  },
-
-  editTeachSchedule:function (e) {
-    this.showModal('edit',e.currentTarget.title);
-  },
-
-  deleteTeachSchedule:function (e) {
-    alert("请先删除当前进度下的教学资源，再执行此操作"+e.currentTarget.title);
-  },
-
-  showModal:function (optType,editSchuldeId) {
-    optType = (optType=="edit"?"edit":"add");
-    this.refs.teachingComponents.showModal(optType,editSchuldeId);
-  },
-
   render() {
     return (
         <div>
           <div className="menu_til">知识点资源</div>
-          <Menu ref="middleMenu" onClick={this.handleClick}
-                className="cont_t"
+          <Menu ref="middleMenu"
                 defaultOpenKeys={['goSchool']}
                 selectedKeys={[this.state.openSubMenu]}
                 mode="inline"
