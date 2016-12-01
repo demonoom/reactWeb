@@ -988,3 +988,23 @@ p.user_cont span.name1{
     font-size: 12px;
     margin: 12px 0 12px 0 !important;
 }
+.17_hei{
+	height:100%;
+}
+.17_hei1{
+height:98%;
+}
+.ant-modal-title{
+	font-size:16px !important;
+}
+label {
+    font-size: 14px;
+}
+.ant-col-4 {
+    display: block;
+    width: 16.66666667%;
+}
+.ant-col-20 {
+    display: block;
+    width: 83.33333333%;
+}

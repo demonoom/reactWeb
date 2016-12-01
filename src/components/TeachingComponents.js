@@ -143,13 +143,13 @@ const TeachingComponents = React.createClass({
 
                 <FormItem
                   label={(
-                    <span>
+                    <span className="ant-col-4">
                       名称&nbsp;
                     </span>
                   )}
                   hasFeedbac
                 >
-                  <div style={{ marginBottom: 16 }}>
+                  <div>
                     <Input ref="editSchuldeName" defaultValue={subjectForm.state.editSchuldeName} />
                   </div>
                 </FormItem>
