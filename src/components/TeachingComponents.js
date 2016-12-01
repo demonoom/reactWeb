@@ -141,7 +141,7 @@ const TeachingComponents = React.createClass({
           >
               <Form horizontal>
 
-                <FormItem
+                <FormItem 
                   label={(
                     <span>
                       名称&nbsp;
@@ -151,6 +151,7 @@ const TeachingComponents = React.createClass({
                 >
                   <div style={{ marginBottom: 16 }}>
                     <Input ref="editSchuldeNameInput" defaultValue={subjectForm.state.schuldeName} />
+
                   </div>
                 </FormItem>
               </Form>

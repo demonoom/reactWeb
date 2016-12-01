@@ -293,8 +293,8 @@ const SubjectEditTabComponents = Form.create()(React.createClass({
                         defaultActiveKey={this.state.activeKey}
                         onEdit={this.onEdit}
                     >
-                        <TabPane tab="单选题" key="单选题">
-                            <Form horizontal onSubmit={this.singleHandleSubmit}>
+                        <TabPane tab="单选题" key="单选题" style={{height:345}}>
+                            <Form  horizontal onSubmit={this.singleHandleSubmit}>
                                 <FormItem
                                     {...formItemLayout}
                                     label={(<span>题目</span>)}
@@ -458,7 +458,7 @@ const SubjectEditTabComponents = Form.create()(React.createClass({
                             </Form>
                         </div></TabPane>
 
-                        <TabPane tab="简答题" key="简答题"><div>
+                        <TabPane tab="简答题" key="简答题" className="ant-form-fo"><div>
                             <Form horizontal onSubmit={this.simpleAnswerHandleSubmit}>
                                 <FormItem
                                     {...formItemLayout}
@@ -511,7 +511,7 @@ const SubjectEditTabComponents = Form.create()(React.createClass({
                         </div></TabPane>
 
                         <TabPane tab="材料题" key="材料题"><div>
-                            <Form horizontal onSubmit={this.singleHandleSubmit}>
+                            <Form horizontal onSubmit={this.singleHandleSubmit} className="ant-form-fo">
                                 <FormItem
                                     {...formItemLayout}
                                     label={(<span>材料封面</span>)}

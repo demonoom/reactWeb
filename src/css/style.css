@@ -1,6 +1,6 @@
 body{
 	font-family:"冬青黑体简体中文","Tahoma","Hiragino Sans GB","Microsoft YaHei","微软雅黑","STHeiti","WenQuanYi Micro Hei",SimSun,sans-serif, "Apple Color Emoji" !important;
-	background:url(../../src/components/images/bg_6.png) center bottom;
+	background:url(../../src/components/images/bg_6.png);
 	background-size:cover;
 }.logo_layout{
 	margin: 1px 0px 0px;
@@ -317,6 +317,7 @@ body{
 	}
 	.ant-tabs:not(.ant-tabs-vertical) .ant-tabs-tabpane{
 		height:100%;
+		padding:8px 0 0 0
 	}
 	.ant-tabs:not(.ant-tabs-vertical) .ant-tabs-tabpane > div:first-child{
 		height:100%
@@ -342,7 +343,7 @@ body{
 		background:#5ec170;
 		margin:0;
 		border:1px solid #5ec170;
-		padding:8px 30px;
+		padding:4px 8px !important;
 		border-radius:3px;
 	}
 	.add_study:hover{
@@ -644,6 +645,9 @@ html, body, #root {
 }
 .ant-form{
 	height:100%;
+}
+.ant-form-fo{
+	height:310px !important;
 }
 .homework_show{
 	position: relative;
@@ -983,4 +987,24 @@ p.user_cont span.name1{
 .ant-form-item {
     font-size: 12px;
     margin: 12px 0 12px 0 !important;
+}
+.17_hei{
+	height:100%;
+}
+.17_hei1{
+height:98%;
+}
+.ant-modal-title{
+	font-size:16px !important;
+}
+label {
+    font-size: 14px;
+}
+.ant-col-4 {
+    display: block;
+    width: 16.66666667%;
+}
+.ant-col-20 {
+    display: block;
+    width: 83.33333333%;
 }
