@@ -26,6 +26,7 @@ const UseKnowledgeComponents = React.createClass({
       currentKnowledgeState:false,
       newScheduleState:false,
       knowledgeName:'',
+      selectOptions:[],
     };
   },
   showModal(currentKnowlege,optType,knowledgeName) {
@@ -39,10 +40,11 @@ const UseKnowledgeComponents = React.createClass({
     knowledge.setState({
       visible: true,
     });
-  },
-  componentWillMount(){
     this.getLessonMenu();
   },
+  // componentDidMount(){
+  //   this.getLessonMenu();
+  // },
 
   handleSubmit(e) {
     e.preventDefault();
@@ -113,10 +115,10 @@ const UseKnowledgeComponents = React.createClass({
     this.doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
         console.log(ret.msg);
-        if(ret.response){
-            alert("知识点使用成功");
+        if(ret.msg=="调用成功" && ret.response==true){
+            alert("课件使用成功");
         }else{
-            alert("知识点使用失败");
+            alert("课件使用失败");
         }
         knowledge.setState({
           visible: false,
@@ -137,10 +139,10 @@ const UseKnowledgeComponents = React.createClass({
     this.doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
         console.log(ret.msg);
-        if(ret.response){
-          alert("知识点使用成功");
+        if(ret.msg=="调用成功" && ret.response==true){
+          alert("题目使用成功");
         }else{
-          alert("知识点使用失败");
+          alert("题目使用失败");
         }
         knowledge.setState({
           visible: false,
@@ -183,7 +185,6 @@ const UseKnowledgeComponents = React.createClass({
   },
 
   getLessonMenu(){
-    //alert("kkk");
     var param = {
       "method":'getTeachScheduleByIdent',
       "ident":sessionStorage.getItem("ident")
@@ -191,6 +192,7 @@ const UseKnowledgeComponents = React.createClass({
     this.doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
         console.log(ret.msg);
+        List.splice(0,List.length);
         ret.response.forEach(function (e) {
           var lessonArray = e.split("#");
           var scheduleId = lessonArray[0];
@@ -202,6 +204,7 @@ const UseKnowledgeComponents = React.createClass({
           List.push([ lessonInfo.scheduleId, lessonInfo.courseName, lessonInfo.courseTimes]);
           console.log("le:"+lessonInfo);
           //knowledge.handleMenu(lessonInfo);
+          knowledge.setState({menuList:List});
         });
         knowledge.buildMenuChildren();
       },
@@ -227,6 +230,7 @@ const UseKnowledgeComponents = React.createClass({
         }
       return <Option key={e[0]} value={e[0]}>{e[1]}</Option>
     });
+    knowledge.setState({selectOptions:options});
   },
 
   handleSchedule: function(e) {
@@ -295,7 +299,7 @@ const UseKnowledgeComponents = React.createClass({
                 label="教学进度"
             >
               <Select defaultValue={knowledge.state.schedule} key="teachSchedule" style={{ width: '100%' }} ref="teachSchedule" onChange={this.handleSchedule}>
-                {options}
+                {knowledge.state.selectOptions}
               </Select>
               <div>
                 <Checkbox onChange={knowledge.checkBoxOnChange} value="currentKnowledge">使用当前知识点作为教学进度</Checkbox>

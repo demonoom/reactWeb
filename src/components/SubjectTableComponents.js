@@ -223,7 +223,7 @@ const SUbjectTable = React.createClass({
           var subjectType=e.typeName;
           var subjectScore=e.score;
           // var submitTime = subTable.getLocalTime(e.createTime);
-          var subjectOpt=<Button style={{ }} type=""  value={key} onClick={subTable.showModal}  icon="export" title="使用" ></Button>;
+          var subjectOpt=<Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" ></Button>;
           data.push({
             key: key,
             name: name,
@@ -278,7 +278,14 @@ const SUbjectTable = React.createClass({
   },
 
   showModal:function (e) {
-    var currentKnowledge = e.target.value;
+    var target = e.target;
+    if(navigator.userAgent.indexOf("Chrome") > -1){
+      //e = window.event;
+      target=e.currentTarget;
+    }else{
+      target = e.target;
+    }
+    var currentKnowledge = target.value;
     // alert(currentKnowledge);
     //alert("111"+currentSchedule+","+this.refs.useKnowledgeComponents);
     subTable.refs.useKnowledgeComponents.showModal(currentKnowledge,"knowledgeSubject",subTable.state.knowledgeName);
