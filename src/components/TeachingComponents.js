@@ -139,12 +139,12 @@ const TeachingComponents = React.createClass({
                 <Button type="ghost" htmlType="reset" className="login-form-button" onClick={subjectForm.handleCancel} >取消</Button>
               ]}
           >
-            <div>
+            <div className="ant-form-item">
               <Row>
-                <Col span={4}>
+                <Col span={6} className="right_look">
                   <span>名称：</span>
                 </Col>
-                <Col span={20}><span><Input ref="editSchuldeNameInput" placeholder="请输入教学进度名称" defaultValue={subjectForm.state.schuldeName} /></span></Col>
+                <Col span={14}><span><Input ref="editSchuldeNameInput" placeholder="请输入教学进度名称" defaultValue={subjectForm.state.schuldeName} /></span></Col>
               </Row>
             </div>
           </Modal>

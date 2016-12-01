@@ -170,7 +170,7 @@ const MiddleMenuComponents = React.createClass({
         <div className="menu_til"><Button type="primary" icon="plus" onClick={this.showModal} className='add_study'>添加教学进度</Button></div>
         <TeachingComponents ref="teachingComponents" callbackParent={this.handleMenu}/>
         <Menu ref="middleMenu" onClick={this.handleClick}
-              className="cont_t"
+              className="cont_t2"
               defaultOpenKeys={['goSchool']}
               openKeys={[this.state.openSubMenu]}
               selectedKeys={['LeftNav']}

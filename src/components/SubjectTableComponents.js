@@ -10,6 +10,7 @@ const columns = [{
   dataIndex: 'name',
 }, {
   title: '内容',
+  className:'ant-table-selection-cont',
   dataIndex: 'content',
 },
 //   {
@@ -44,7 +45,7 @@ const columns = [{
   dataIndex: 'subjectScore',
 }, {
   title: '操作',
-  className:'ant-table-selection-smallclass',
+  className:'ant-table-selection-score',
   dataIndex: 'subjectOpt',
 },
 ];

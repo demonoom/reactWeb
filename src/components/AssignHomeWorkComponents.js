@@ -19,6 +19,7 @@ var scheduleColumns = [ {
 
 var subjectColumns = [ {
   title: '内容',
+  className:'ant-table-selection-cont2',
   dataIndex: 'content'
 }, {
   title: '题型',
@@ -532,8 +533,8 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
                  ]}
           >
               <Row style={{height:400}}>
-                <Col span={7}><Table size="small" onRowClick={assignHomeWork.onScheduleSelectChange} selectedRowKeys={assignHomeWork.selectedRowKeys} columns={scheduleColumns}  dataSource={scheduleData} scroll={{ y: 300}}/></Col>
-                <Col span={17} className="col17_le 17_hei">
+                <Col span={7} className="ant-form"><Table size="small" onRowClick={assignHomeWork.onScheduleSelectChange} selectedRowKeys={assignHomeWork.selectedRowKeys} columns={scheduleColumns}  dataSource={scheduleData} scroll={{ y: 300}}/></Col>
+                <Col span={17} className="col17_le 17_hei ant-form">
                   <div className="17_hei1">
                     <Table rowSelection={subjectRowSelection} columns={subjectColumns} dataSource={subjectData} pagination={{ total:assignHomeWork.state.totalSubjectCount,pageSize: 15,onChange:assignHomeWork.pageOnChange }}  scroll={{ y: 300}}/>
                   </div>
