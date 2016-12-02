@@ -71,6 +71,7 @@ const HomeWorkTableComponents = React.createClass({
       columns = [  {
         title: '内容',
         dataIndex: 'subjectContent',
+		className:'ant-table-selection-cont3'
       },{
         title: '类型',
         className:'ant-table-selection-topic',

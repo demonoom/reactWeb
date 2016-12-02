@@ -35,7 +35,7 @@ body{
 
     }
     .ant-layout-logo{
-      background: #309ffb
+      background: #2896fb
 
     }
 .layout_logo{
@@ -80,8 +80,15 @@ body{
 		width:240px;
 		overflow-y:auto;
 		overflow-x:hidden;
-		height:calc(100% - 100px)
+		height:calc(100% - 72px)
 	}
+	ul.cont_t2 {
+    width: 240px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: calc(100% - 105px);
+    border-bottom: 1px solid #Eee;
+}
     .ant-layout-aside .ant-layout-sider > .ant-menu > .ant-menu-item {
       margin: 16px 0;
     }
@@ -158,7 +165,7 @@ body{
     }
 
     .ant-layout-aside .ant-layout-header {
-      background: #309ffb;
+      background: #2896fb;
       height: 54px;
       border-bottom: 1px solid #e9e9e9;
     }
@@ -258,7 +265,10 @@ body{
     }
 .mini{
 	height:20px !important;
-	margin:8px 0;
+	margin:11px 0;
+}
+.mini li{
+	margin:0 4px !important;
 }
     .ant-collapse-content > .ant-collapse-content-box{
       line-height:30px;
@@ -471,7 +481,7 @@ html, body, #root {
 	height:calc(100% - 53px);
 	margin:0;
     padding: 0;
-    width: calc(100% - 24px);
+    width: calc(100% - 16px);
 	float:right
 }
 .ant-breadcrumb{
@@ -518,7 +528,7 @@ html, body, #root {
 	overflow:hidden;
 }
 .clearfix > div:first-child{
-	height:calc(100% - 48px)
+	height:calc(100% - 38px)
 }
 .ant-spin-container, .ant-table-content, .ant-table-scroll{
 	height:100%;
@@ -590,16 +600,21 @@ html, body, #root {
 }
 .ant-table-pagination{
 	margin-top: 10px;
-    position: relative;
+    position: absolute;
     bottom: 0;
     right: 12px;
     margin-bottom: 10px;
 }
+.ant-table-thead > tr > th.ant-table-selection-column, .ant-table-tbody > tr > td.ant-table-selection-column{
+	width:40px;
+	text-align:center;
+}
 .ant-table-thead > tr > th.ant-table-selection-user, .ant-table-tbody > tr > td.ant-table-selection-user{
-	width:100px
+	width:90px
 }
 .ant-table-thead > tr > th.ant-table-selection-topic, .ant-table-tbody > tr > td.ant-table-selection-topic{
-	width:80px
+	width:80px;
+	text-align:center
 }
 .ant-table-thead > tr > th.ant-table-selection-score, .ant-table-tbody > tr > td.ant-table-selection-score{
 	width:80px;
@@ -607,6 +622,27 @@ html, body, #root {
 }
 .ant-table-thead > tr > th.ant-table-selection-smallclass, .ant-table-tbody > tr > td.ant-table-selection-smallclass{
 	width:180px
+}
+.ant-table-thead > tr > th.ant-table-selection-cont, .ant-table-tbody > tr > td.ant-table-selection-cont{
+	max-width:210px !important;
+}
+.ant-table-thead > tr > th.ant-table-selection-cont article, .ant-table-tbody > tr > td.ant-table-selection-cont article{
+	max-height:100px !important;
+	overflow:hidden
+}
+.ant-table-thead > tr > th.ant-table-selection-cont2, .ant-table-tbody > tr > td.ant-table-selection-cont2{
+	max-width:440px !important;
+}
+.ant-table-thead > tr > th.ant-table-selection-cont2 article, .ant-table-tbody > tr > td.ant-table-selection-cont2 article{
+	max-height:100px !important;
+	overflow:hidden
+}
+.ant-table-thead > tr > th.ant-table-selection-cont3, .ant-table-tbody > tr > td.ant-table-selection-cont3{
+	max-width:400px !important;
+}
+.ant-table-thead > tr > th.ant-table-selection-cont3 article, .ant-table-tbody > tr > td.ant-table-selection-cont3 article{
+	max-height:100px !important;
+	overflow:hidden
 }
 .ant-table-body{
 	height:calc(100% - 40px);
@@ -618,7 +654,7 @@ html, body, #root {
     transform: translateZ(0);
 }
 .ant-btn {
-	padding:4px 15px;
+	padding:4px 8px;
 	border-radius:3px !important;
 	font-size:13px !important
 }
@@ -899,6 +935,7 @@ article.content_2{
 	} 横向滚动条和纵向滚动条相交处尖角的颜色 */
 .ant-table-fixed-header .ant-table-scroll .ant-table-header{
 	    overflow: hidden;
+		width: calc(100% - 8px);
 	}
 .ant-tabs-extra-content{
 	margin-right:24px;
@@ -985,7 +1022,7 @@ p.user_cont span.name1{
 	width:440px !important;
 } 
 .ant-form-item {
-    font-size: 12px;
+    font-size: 14px;
     margin: 12px 0 12px 0 !important;
 }
 .17_hei{
@@ -1007,4 +1044,42 @@ label {
 .ant-col-20 {
     display: block;
     width: 83.33333333%;
+}
+a {
+    color: #2896fb;
+	text-decoration:none;
+}
+.ant-pagination-prev, .ant-pagination-next, .ant-pagination-jump-prev, .ant-pagination-jump-next{
+	border-radius:50%
+}
+.ant-pagination-next:hover{
+	border-color: #2896fb;
+	color:#2896fb !important;
+}
+.ant-pagination-item:hover{
+
+	border-color: #2896fb;
+	color:#2896fb !important;
+}
+.ant-pagination-item-active{
+	background:#2896fb;
+	border-color: #2896fb;
+}
+.ant-pagination-item{
+	border-radius:50%;
+}
+.ant-menu-submenu-open{
+	color: #2896fb;
+}
+.ant-table-tbody > tr > td img{
+	max-width:220px;
+	height:100px !important;
+	overflow:hidden;
+}
+.right_look{
+	text-align:right;
+	line-height:26px;
+}
+.bun_one{
+    margin-right: 253px;
 }
