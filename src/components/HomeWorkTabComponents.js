@@ -28,11 +28,11 @@ const HomeWorkTabComponents = React.createClass({
             activeKey:'作业列表',
             subjectParams:'',
             currentOpt:'checkHomeWorkList',
+            isNewPage:false,
         };
     },
 
     getTeacherHomeWork(optContent){
-        // alert("getTeacherHomeWork in tab:"+optContent);
         this.setState({currentOpt:'checkHomeWorkList',});
         this.setState({activeKey:'作业列表'});
         this.refs.homeWorkTable.getDoneHomeworkList(sessionStorage.getItem("ident"),1);
@@ -40,7 +40,8 @@ const HomeWorkTabComponents = React.createClass({
 
     assignHomeWork(){
         this.setState({currentOpt:'assignHomeWork',});
-        this.setState({activeKey:'布置作业'});
+        this.setState({activeKey:'布置作业',isNewPage:true});
+        this.refs.assignHomeWorkCom.getInitialState();
     },
 
     render() {
@@ -52,7 +53,7 @@ const HomeWorkTabComponents = React.createClass({
             </TabPane>;
         }else{
             tabPanel = <TabPane tab="布置作业" key="布置作业">
-                <AssignHomeWorkComponents ref="assignHomeWorkCom"  callbackParent={this.getTeacherHomeWork}></AssignHomeWorkComponents>
+                <AssignHomeWorkComponents ref="assignHomeWorkCom" params={this.state.isNewPage}  callbackParent={this.getTeacherHomeWork}></AssignHomeWorkComponents>
             </TabPane>;
         }
 

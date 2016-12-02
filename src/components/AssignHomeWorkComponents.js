@@ -51,11 +51,14 @@ var defaultCheckedList = [];
 var sids="";
 var clazzIds="";
 var dateTime = "";
-const AssignHomeWorkComponents = Form.create()(React.createClass({
+const AssignHomeWorkComponents = React.createClass({
 
   getInitialState() {
     assignHomeWork = this;
-    //alert(this.props.editSchuldeId);
+    sids="";
+    clazzIds="";
+    dateTime = "";
+    assignHomeWork.getTeacherClasses(sessionStorage.getItem("ident"));
     return {
       visible: false,
       optType:'add',
@@ -72,12 +75,13 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
       subjectModalVisible:false,
       totalSubjectCount:0,
       currentScheduleId:0,
+      isNewPage:false,
+      classList:[]
     };
   },
 
   doWebService : function(data,listener) {
     var service = this;
-    //this.WEBSERVICE_URL = "http://192.168.2.103:8080/Excoord_For_Education/webservice";
     this.WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
     if (service.requesting) {
       return;
@@ -105,8 +109,6 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
     };
     this.doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
-        // alert(ret.msg);
-        // console.log(ret.msg);
         if(ret.msg=="调用成功" && ret.response==true){
             alert("作业布置成功");
         }else{
@@ -123,10 +125,6 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
   handleSubmit(e) {
     e.preventDefault();
     var ident=sessionStorage.getItem("ident");
-    // sids="";
-    // clazzIds="";
-    // dateTime = "";
-    // alert(sids+"\n"+clazzIds+"\n"+dateTime);
     if(assignHomeWork.isEmpty(dateTime)){
         alert("请选择日期");
     }else if(assignHomeWork.isEmpty(clazzIds)){
@@ -187,6 +185,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
     this.doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
         var response = ret.response;
+        classList.splice(0,classList.length);
         response.forEach(function (e) {
           console.log("getTeacherClasses:"+e);
           var classArray = e.split("#");
@@ -196,6 +195,7 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
         });
         assignHomeWork.getScheduleList();
         assignHomeWork.setState({classCount:classList.length});
+        assignHomeWork.setState({classList:classList});
       },
       onError : function(error) {
         alert(error);
@@ -236,7 +236,6 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
             scheduleOpt:'',
           });
         });
-        // alert("scheduleData.length:"+scheduleData.length);
         assignHomeWork.setState({scheduleCount:scheduleData.length});
       },
       onError : function(error) {
@@ -271,7 +270,6 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
 
   //根据教学进度获取题目列表
   getSubjectDataBySchedule:function (ident,ScheduleOrSubjectId,pageNo) {
-    // alert("getSubjectDataBySchedule:"+ident+"==="+ScheduleOrSubjectId);
     var param = {
       "method":'getClassSubjects',
       "ident":ident,
@@ -332,9 +330,6 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
 
   //移除所有已选择的题目
   removeAllSelectedSubject(){
-    /*plainOptions.forEach(function (e) {
-        alert(e.value);
-    })*/
     if(assignHomeWork.state.checkedList.length==0){
         alert("请选择题目后，再删除！");
     }else{
@@ -426,13 +421,6 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
 
 
   render() {
-    const { getFieldDecorator } = assignHomeWork.props.form;
-    const formItemLayout = {
-      labelCol: { span: 2 },
-      wrapperCol: { span: 22 },
-    };
-
-
     const { loading, selectedSubjectKeys } = assignHomeWork.state;
     const subjectRowSelection = {
       selectedRowKeys:selectedSubjectKeys,
@@ -442,85 +430,67 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
 
     return (
         <div>
-		 
-          <Form vertical onSubmit={assignHomeWork.handleSubmit} className="homework">
-		   <div className="ant-collapse ant-modal-footer">
-            <FormItem
-                {...formItemLayout}
-                label={(
-                    <span className="date_tr">
-              日期&nbsp;
-            </span>
-                )}
-                hasFeedback
-            >
-              {getFieldDecorator('assignDate')(
-                  <span><DatePicker onChange={assignHomeWork.assignDateOnChange} /></span>
-              )}
-            </FormItem>
+		   <div className="ant-collapse ant-modal-footer homework">
 
-            <FormItem
-                {...formItemLayout}
-                label={(
-                    <span className="date_tr">
-              班级&nbsp;
-            </span>
-                )}
-                hasFeedback
-            >
-              {getFieldDecorator('classList')(
-                  <CheckboxGroup options={classList} onChange={assignHomeWork.classListOnChange}/>
-              )}
-            </FormItem>
+             <Row>
+                <Col span={2}>
+                    <span className="date_tr">日期:</span>
+                </Col>
+               <Col span={22}>
+                    <span className="date_tr"><DatePicker onChange={assignHomeWork.assignDateOnChange} /></span>
+               </Col>
+             </Row>
 
-            <FormItem
-                {...formItemLayout}
-                label={(
-                    <span className="date_tr">
-              题目&nbsp;
-            </span>
-                )}
-                hasFeedback
-            >
-              {getFieldDecorator('scheduleList')(
-                  <div>
-                    {/*                <Row>
-                     <Col span={24}>已选择题目</Col>
-                     </Row>*/}
-                    <Row>
-                      <Col span={24}>
-                        <div>
-                          <Button type="primary" onClick={assignHomeWork.showSubjectModal}><Icon type="check-circle-o" />选择题目</Button>
-                          <div className="class_bo">
-                            <Checkbox
-                                indeterminate={assignHomeWork.state.indeterminate}
-                                onChange={assignHomeWork.subjectListOnCheckAllChange}
-                                checked={assignHomeWork.state.checkAll}
-                            >
-                              全 选  <Button onClick={assignHomeWork.removeAllSelectedSubject}>删除已选题目</Button>
-                            </Checkbox>
-                          </div>
-                          <br />
-                          <CheckboxGroup options={plainOptions} defaultValue={assignHomeWork.state.checkedList} value={assignHomeWork.state.checkedList} onChange={assignHomeWork.subjectListOnChange} />
-                        </div>
-                      </Col>
-                    </Row>
-                  </div>
-              )}
-            </FormItem>
+             <Row>
+               <Col span={2}>
+                 <span className="date_tr">班级:</span>
+               </Col>
+               <Col span={22}>
+                 <span className="date_tr"><CheckboxGroup options={assignHomeWork.state.classList} onChange={assignHomeWork.classListOnChange}/></span>
+               </Col>
+             </Row>
+
+             <Row className="date_tr">
+               <Col span={2}>
+                 <span>题目:</span>
+               </Col>
+               <Col span={22}>
+                 <div>
+                   <Row>
+                     <Col span={24}>
+                       <div>
+                         <Button type="primary" onClick={assignHomeWork.showSubjectModal}><Icon type="check-circle-o" />选择题目</Button>
+                         <div className="class_bo">
+                           <Checkbox
+                               indeterminate={assignHomeWork.state.indeterminate}
+                               onChange={assignHomeWork.subjectListOnCheckAllChange}
+                               checked={assignHomeWork.state.checkAll}
+                           >
+                             全 选  <Button onClick={assignHomeWork.removeAllSelectedSubject}>删除已选题目</Button>
+                           </Checkbox>
+                         </div>
+                         <br />
+                         <CheckboxGroup options={plainOptions} defaultValue={assignHomeWork.state.checkedList} value={assignHomeWork.state.checkedList} onChange={assignHomeWork.subjectListOnChange} />
+                       </div>
+                     </Col>
+                   </Row>
+                 </div>
+               </Col>
+             </Row>
+
+             <Row>
+               <Col span={24}>
+                 <span>
+                   <Button type="primary" htmlType="submit" className="login-form-button class_right" onClick={assignHomeWork.handleSubmit}>
+                    保存
+                   </Button>
+                   <Button type="ghost" htmlType="reset" className="login-form-button" onClick={this.handleCancel} >
+                    取消
+                   </Button>
+                 </span>
+               </Col>
+             </Row>
 		</div>
-
-            <FormItem className="ant-pagination">
-              <Button type="primary" htmlType="submit" className="login-form-button class_right" >
-                保存
-              </Button>
-              <Button type="ghost" htmlType="reset" className="login-form-button" onClick={this.handleCancel} >
-                取消
-              </Button>
-            </FormItem>
-
-          </Form>
-	
 		  
           <Modal title="选择题目" className="choose_class" visible={assignHomeWork.state.subjectModalVisible}
                  onCancel={assignHomeWork.subjectModalHandleCancel}
@@ -544,6 +514,6 @@ const AssignHomeWorkComponents = Form.create()(React.createClass({
         </div>
     );
   },
-}));
+});
 export  default AssignHomeWorkComponents;
 
