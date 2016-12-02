@@ -25,13 +25,13 @@ const UserCardModalComponents = React.createClass({
   render() {
     return (
       <div className="layout_logo">
-        <img src={require('./images/user.png')}  onClick={this.showModal}/>
+        <img src={require('./images/user.jpg')}  onClick={this.showModal}/>
        {/* <Button type="primary" onClick={this.showModal}>
           Open modal dialog
         </Button>*/}
         <Modal
           visible={this.state.visible}
-          title={<p className="user_cont1"> <img className="img_us" src={require('./images/user.png')}  onClick={this.showModal}/><span>丹丹</span><img src={require('./images/user.png')} className="blur"/><br/></p>} 
+          title={<p className="user_cont1"> <img className="img_us" src={require('./images/user.jpg')}  onClick={this.showModal}/><span>丹丹</span><img src={require('./images/user.jpg')} className="blur"/><br/></p>} 
           onOk={this.handleOk}
           onCancel={this.handleCancel}
 		  className="model_wi"
