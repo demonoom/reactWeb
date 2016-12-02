@@ -432,29 +432,29 @@ const AssignHomeWorkComponents = React.createClass({
         <div>
 		   <div className="ant-collapse ant-modal-footer homework">
 
-             <Row>
-                <Col span={2}>
-                    <span className="date_tr">日期:</span>
+             <Row className="ant-form-item">
+                <Col span={3}>
+                    <span className="date_tr text_30">日期:</span>
                 </Col>
-               <Col span={22}>
+               <Col span={21} className="ant-form-item-control">
                     <span className="date_tr"><DatePicker onChange={assignHomeWork.assignDateOnChange} /></span>
                </Col>
              </Row>
 
-             <Row>
-               <Col span={2}>
-                 <span className="date_tr">班级:</span>
+             <Row className="ant-form-item">
+               <Col span={3}>
+                 <span className="date_tr text_30">班级:</span>
                </Col>
-               <Col span={22}>
+               <Col span={21} className="ant-form-item-control">
                  <span className="date_tr"><CheckboxGroup options={assignHomeWork.state.classList} onChange={assignHomeWork.classListOnChange}/></span>
                </Col>
              </Row>
 
-             <Row className="date_tr">
-               <Col span={2}>
-                 <span>题目:</span>
+             <Row className="date_tr ant-form-item">
+               <Col span={3}>
+                 <span className="text_30">题目:</span>
                </Col>
-               <Col span={22}>
+               <Col span={21} className="ant-form-item-control">
                  <div>
                    <Row>
                      <Col span={24}>
@@ -478,7 +478,9 @@ const AssignHomeWorkComponents = React.createClass({
                </Col>
              </Row>
 
-             <Row>
+		</div>
+		 
+             <Row className="homework_out ant-modal-footer">
                <Col span={24}>
                  <span>
                    <Button type="primary" htmlType="submit" className="login-form-button class_right" onClick={assignHomeWork.handleSubmit}>
@@ -489,9 +491,7 @@ const AssignHomeWorkComponents = React.createClass({
                    </Button>
                  </span>
                </Col>
-             </Row>
-		</div>
-		  
+             </Row> 
           <Modal title="选择题目" className="choose_class" visible={assignHomeWork.state.subjectModalVisible}
                  onCancel={assignHomeWork.subjectModalHandleCancel}
                  footer={[
