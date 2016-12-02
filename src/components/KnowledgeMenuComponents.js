@@ -5,7 +5,6 @@ import { Menu, Icon } from 'antd';
 import { Badge,Pagination } from 'antd';
 import TeachingComponents from '../components/TeachingComponents';
 const SubMenu = Menu.SubMenu;
-
 // let uuid = 0;
 
 
@@ -21,6 +20,17 @@ var subMenu;
 var vdom = new Array();
 var breadCrumbArray=new Array();
 var openKeys=[];
+
+
+var styles = {
+    color: 'red',
+    backgroundColor: 'red'
+};
+
+/*var menuStyle={
+    color: '#2896fb'
+};*/
+
 const KnowledgeMenuComponents = React.createClass({
   getInitialState() {
     mMenu = this;
@@ -58,30 +68,42 @@ const KnowledgeMenuComponents = React.createClass({
     }, "json");
   },
   //菜单被选择时执行的函数
-  subMenuTitleClick(e){
-    var menuKeyArray = e.key.split("#");
-    var menuId = menuKeyArray[0];
-    var childrenCount = menuKeyArray[1];
-    var menuLevel = menuKeyArray[2];
-    var menuName = menuKeyArray[3];
-    var fatherMenuName = menuKeyArray[4];
-    // this.setState({openSubMenu:[e.key]});
-    // openKeys.splice(0,openKeys.length);
-    // openKeys.push(e.key);
-    mMenu.buildOpenMenuKeysArray(e.key,menuLevel);
-    var openKeysStr = openKeys.join(',');
-    console.log("openKeys:"+openKeysStr);
-    // defaultOpenKeys={['81#3#0#数学#','86#13#1#小学#数学','89#7#2#一年级上#小学']}
-    // openKeys={['81#3#0#数学#','86#13#1#小学#数学','89#7#2#一年级上#小学']}
-    mMenu.setState({openSubMenu:openKeysStr});
-    if(menuLevel!=0 && childrenCount==0){
-      this.bulidBreadCrumbArray(fatherMenuName,menuLevel-1,menuId);
-    }else{
-      this.bulidBreadCrumbArray(menuName,menuLevel,menuId);
-    }
-    var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
-    this.props.callbackParent(optContent,breadCrumbArray);
-  },
+    subMenuTitleClick(e){
+        var domE = e.domEvent;
+        var target = domE.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=domE.currentTarget;
+        }else{
+            target = domE.target;
+        }
+
+        $("div[style]").each(function(){
+            $(this).css("background-color","");
+        });
+        target.style.backgroundColor="#2896fb";
+        var menuKeyArray = e.key.split("#");
+        var menuId = menuKeyArray[0];
+        var childrenCount = menuKeyArray[1];
+        var menuLevel = menuKeyArray[2];
+        var menuName = menuKeyArray[3];
+        var fatherMenuName = menuKeyArray[4];
+        mMenu.buildOpenMenuKeysArray(e.key,menuLevel);
+        var openKeysStr = openKeys.join(',');
+        console.log("openKeys:"+openKeysStr);
+        // defaultOpenKeys={['81#3#0#数学#','86#13#1#小学#数学','89#7#2#一年级上#小学']}
+        // openKeys={['81#3#0#数学#','86#13#1#小学#数学','89#7#2#一年级上#小学']}
+        mMenu.setState({openSubMenu:openKeysStr});
+        this.setState({
+            currentMenu: e.key,
+        });
+        if(menuLevel!=0 && childrenCount==0){
+            this.bulidBreadCrumbArray(fatherMenuName,menuLevel-1,menuId);
+        }else{
+            this.bulidBreadCrumbArray(menuName,menuLevel,menuId);
+        }
+        var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
+        this.props.callbackParent(optContent,breadCrumbArray);
+    },
   //判断当前点击的菜单key是否已经在被点击key的数组中
   checkCurrentMenuKeyIsExist(currentClickKey){
       for(var i=0;i<openKeys.length;i++){
@@ -203,7 +225,7 @@ const KnowledgeMenuComponents = React.createClass({
     children = menuList.map((e, i)=> {
       menuContent = (e[0]!=null?e[0]:e);
       // const Options =
-      return <SubMenu key={menuContent.id+"#"+menuContent.children.length+"#"+"0"+"#"+menuContent.content+"#"+""} isRootMenu="true" onTitleClick={this.subMenuTitleClick} title={<span>{menuContent.content}</span>}>
+      return <SubMenu key={menuContent.id+"#"+menuContent.children.length+"#"+"0"+"#"+menuContent.content+"#"+""} sMenu="1" isRootMenu="true" onTitleClick={this.subMenuTitleClick} title={<span>{menuContent.content}</span>}>
         {
           menuContent.children.map(konwledge1 => <SubMenu key={konwledge1.id+"#"+konwledge1.children.length+"#"+"1"+"#"+konwledge1.content+"#"+menuContent.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge1.content}</span>}>
             {konwledge1.children.map(konwledge2 => <SubMenu key={konwledge2.id+"#"+konwledge2.children.length+"#"+"2"+"#"+konwledge2.content+"#"+konwledge1.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge2.content}</span>}>
@@ -233,7 +255,7 @@ const KnowledgeMenuComponents = React.createClass({
   },
 
   handleClick(e) {
-    // alert("handle:"+e.key);
+    alert("handle:"+e.key);
     this.setState({
       currentMenu: e.key,
     });
