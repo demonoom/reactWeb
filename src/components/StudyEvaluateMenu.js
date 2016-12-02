@@ -25,6 +25,17 @@ const StudyEvaluateMenu = React.createClass({
   },
   //菜单被选择时执行的函数
   subMenuTitleClick(e){
+    var domE = e.domEvent;
+    var target = domE.target;
+    if(navigator.userAgent.indexOf("Chrome") > -1){
+      target=domE.currentTarget;
+    }else{
+      target = domE.target;
+    }
+    $("div[style]").each(function(){
+      $(this).css("background-color","");
+    });
+    target.style.backgroundColor="#d4edff";
     this.setState({openSubMenu:e.key});
     var optContent = e.key;
     if(e.key=="studyEvaluate"){
