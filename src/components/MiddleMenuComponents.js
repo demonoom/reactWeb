@@ -70,7 +70,7 @@ const MiddleMenuComponents = React.createClass({
     $("div[style]").each(function(){
       $(this).css("background-color","");
     });
-    target.style.backgroundColor="#2896fb";
+    target.style.backgroundColor="#d4edff";
     mMenu.setState({openSubMenu:e.key});
     var optContent = e.key+"#"+"bySchedule";
     mMenu.props.callbackParent(optContent);
