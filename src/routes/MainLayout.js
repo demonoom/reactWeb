@@ -14,8 +14,8 @@ import HomeWorkTabComponents from '../components/HomeWorkTabComponents';
 import moment from 'moment';
 import StudyEvaluateMenu from '../components/StudyEvaluateMenu';
 import StudyEvaluateTabComponents from '../components/StudyEvaluateTabComponents';
-
-
+import { LocaleProvider } from 'antd';
+import enUS from 'antd/lib/locale-provider/en_US';
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
@@ -34,6 +34,8 @@ const MainLayout = React.createClass({
       collapse: true,
       activeMiddleMenu:'sub1',
       currentKey:'teachTimes',
+      // locale: enUS,
+      locale: 'zh-cn',
     };
   },
   onCollapseChange() {
@@ -104,7 +106,7 @@ const MainLayout = React.createClass({
     }
 
     return (
-
+        <LocaleProvider locale={this.state.locale}>
       <div className={collapse ? "ant-layout-aside ant-layout-aside-collapse" : "ant-layout-aside"}>
 
         <aside className="ant-layout-sider">
@@ -164,7 +166,7 @@ const MainLayout = React.createClass({
         
         </div>
       </div>
-	
+        </LocaleProvider>
     );
   },
 });
