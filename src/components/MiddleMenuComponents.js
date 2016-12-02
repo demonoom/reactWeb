@@ -60,6 +60,17 @@ const MiddleMenuComponents = React.createClass({
   },
   //菜单被选择时执行的函数
   subMenuTitleClick(e){
+    var domE = e.domEvent;
+    var target = domE.target;
+    if(navigator.userAgent.indexOf("Chrome") > -1){
+      target=domE.currentTarget;
+    }else{
+      target = domE.target;
+    }
+    $("div[style]").each(function(){
+      $(this).css("background-color","");
+    });
+    target.style.backgroundColor="#2896fb";
     mMenu.setState({openSubMenu:e.key});
     var optContent = e.key+"#"+"bySchedule";
     mMenu.props.callbackParent(optContent);
@@ -107,7 +118,7 @@ const MiddleMenuComponents = React.createClass({
 
   buildMenuChildren:function (menuList) {
     children = menuList.map((e, i)=> {
-      return <SubMenu key={e[0]} onTitleClick={this.subMenuTitleClick} title={<span><span>{e[1]}</span><Badge count={e[2]}/> <span id={e[0]+"#"+e[1]} onClick={this.editTeachSchedule} className='write_right'><Icon type="edit"/></span><span id={e[0]} onClick={this.deleteTeachSchedule} className='del_right'><Icon type="delete"/></span> </span>}>
+      return <SubMenu key={e[0]} onTitleClick={this.subMenuTitleClick} style={{backgroundColor:'red'}} title={<span><span>{e[1]}</span><Badge count={e[2]}/> <span id={e[0]+"#"+e[1]} onClick={this.editTeachSchedule} className='write_right'><Icon type="edit"/></span><span id={e[0]} onClick={this.deleteTeachSchedule} className='del_right'><Icon type="delete"/></span> </span>}>
 
       </SubMenu>
     });

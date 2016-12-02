@@ -225,7 +225,7 @@ const KnowledgeMenuComponents = React.createClass({
     children = menuList.map((e, i)=> {
       menuContent = (e[0]!=null?e[0]:e);
       // const Options =
-      return <SubMenu key={menuContent.id+"#"+menuContent.children.length+"#"+"0"+"#"+menuContent.content+"#"+""} sMenu="1" isRootMenu="true" onTitleClick={this.subMenuTitleClick} title={<span>{menuContent.content}</span>}>
+      return <SubMenu key={menuContent.id+"#"+menuContent.children.length+"#"+"0"+"#"+menuContent.content+"#"+""} isRootMenu="true" onTitleClick={this.subMenuTitleClick} title={<span>{menuContent.content}</span>}>
         {
           menuContent.children.map(konwledge1 => <SubMenu key={konwledge1.id+"#"+konwledge1.children.length+"#"+"1"+"#"+konwledge1.content+"#"+menuContent.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge1.content}</span>}>
             {konwledge1.children.map(konwledge2 => <SubMenu key={konwledge2.id+"#"+konwledge2.children.length+"#"+"2"+"#"+konwledge2.content+"#"+konwledge1.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge2.content}</span>}>
