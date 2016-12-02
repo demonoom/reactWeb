@@ -341,7 +341,7 @@ const SubjectEditTabComponents = Form.create()(React.createClass({
                                     <Button type="primary" htmlType="submit" className="login-form-button">
                                         保存并继续添加
                                     </Button>
-                                    <Button type="primary" htmlType="submit" className="login-form-button">
+                                    <Button type="ghost" htmlType="submit" className="login-form-button">
                                         保存并返回列表
                                     </Button>
                                 </FormItem>
@@ -398,7 +398,7 @@ const SubjectEditTabComponents = Form.create()(React.createClass({
                                     <Button type="primary" htmlType="submit" className="login-form-button">
                                         保存并继续添加
                                     </Button>
-                                    <Button type="primary" htmlType="submit" className="login-form-button">
+                                    <Button type="ghost" htmlType="submit" className="login-form-button">
                                         保存并返回列表
                                     </Button>
                                 </FormItem>
@@ -451,7 +451,7 @@ const SubjectEditTabComponents = Form.create()(React.createClass({
                                     <Button type="primary" htmlType="submit" className="login-form-button">
                                         保存并继续添加
                                     </Button>
-                                    <Button type="primary" htmlType="submit" className="login-form-button">
+                                    <Button type="ghost" htmlType="submit" className="login-form-button">
                                         保存并返回列表
                                     </Button>
                                 </FormItem>
@@ -503,7 +503,7 @@ const SubjectEditTabComponents = Form.create()(React.createClass({
                                     <Button type="primary" htmlType="submit" className="login-form-button">
                                         保存并继续添加
                                     </Button>
-                                    <Button type="primary" htmlType="submit" className="login-form-button">
+                                    <Button type="ghost" htmlType="submit" className="login-form-button">
                                         保存并返回列表
                                     </Button>
                                 </FormItem>
@@ -576,7 +576,7 @@ const SubjectEditTabComponents = Form.create()(React.createClass({
                                     <Button type="primary" htmlType="submit" className="login-form-button">
                                         保存并继续添加
                                     </Button>
-                                    <Button type="primary" htmlType="submit" className="login-form-button">
+                                    <Button type="ghost" htmlType="submit" className="login-form-button">
                                         保存并返回列表
                                     </Button>
                                 </FormItem>

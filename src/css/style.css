@@ -7,12 +7,14 @@ body{
     position: absolute;
     left: -48px;
 }
+
+
+@media only screen and (max-width: 1366px) {
 .ant-layout-aside {
       position: absolute;
 	 height: 600px;
 	width:1000px;
     overflow: hidden;
-	position:relative;
 	transform:translate(-50%,-50%);
 	-ms-transform:translate(-50%,-50%); 	/* IE 9 */
     -moz-transform:translate(-50%,-50%); 	/* Firefox */
@@ -26,7 +28,6 @@ body{
  	 box-shadow:rgba(0,0,0,0.15) 1px 4px 12px;
 	 border-radius:4px;
 }
-
     .ant-layout-aside .ant-layout-logo {
       height: 53px;
       transition: all 0.3s ease;
@@ -34,10 +35,45 @@ body{
 	  text-align:center;
 
     }
-    .ant-layout-logo{
+	    .ant-layout-logo{
       background: #2896fb
 
     }
+}
+
+@media only screen and (min-width: 1366px){
+	.ant-layout-aside {
+      position: absolute;
+	 height: 708px;
+	width:1180px;
+    overflow: hidden;
+	transform:translate(-50%,-50%);
+	-ms-transform:translate(-50%,-50%); 	/* IE 9 */
+    -moz-transform:translate(-50%,-50%); 	/* Firefox */
+    -webkit-transform:translate(-50%,-50%); /* Safari 和 Chrome */
+    -o-transform:translate(-50%,-50%); 	/* Opera */
+	left:50%;
+	top:50%;
+	
+  	-webkit-box-shadow:rgba(0,0,0,0.15) 1px 4px 12px;
+  	-moz-box-shadow:rgba(0,0,0,0.15) 1px 4px 12px; 
+ 	 box-shadow:rgba(0,0,0,0.15) 1px 4px 12px;
+	 border-radius:4px;
+}
+    .ant-layout-aside .ant-layout-logo {
+      height: 53px;
+      transition: all 0.3s ease;
+	  padding:15px 0;
+	  text-align:center;
+
+    }
+	 .ant-layout-logo{
+      background: #2896fb
+
+    }
+}
+
+
 .layout_logo{
 	width:64px;
 	height:64px;
@@ -268,7 +304,7 @@ body{
 	margin:11px 0;
 }
 .mini li{
-	margin:0 4px !important;
+	margin:0 2px !important;
 }
     .ant-collapse-content > .ant-collapse-content-box{
       line-height:30px;
@@ -327,7 +363,7 @@ body{
 	}
 	.ant-tabs:not(.ant-tabs-vertical) .ant-tabs-tabpane{
 		height:100%;
-		padding:8px 0 0 0
+		padding:8px 0 0 16px
 	}
 	.ant-tabs:not(.ant-tabs-vertical) .ant-tabs-tabpane > div:first-child{
 		height:100%
@@ -346,7 +382,7 @@ body{
 		overflow-x:hidden;
 		position: absolute;
 		top: 0;
-		width:100%;
+
 		border:none !important
 	}
 	.add_study{
@@ -481,9 +517,8 @@ html, body, #root {
 	height:calc(100% - 53px);
 	margin:0;
     padding: 0;
-    width: calc(100% - 16px);
+    width: 100% ;
 	float:right;
-	margin-left:16px;
 }
 .ant-breadcrumb{
 	    height: 45px;
@@ -529,7 +564,7 @@ html, body, #root {
 	overflow:hidden;
 }
 .clearfix > div:first-child{
-	height:calc(100% - 38px)
+	height:calc(100% - 50px)
 }
 .ant-spin-container, .ant-table-content, .ant-table-scroll{
 	height:100%;
@@ -538,6 +573,9 @@ html, body, #root {
 	overflow: hidden;
 }
 .ant-table-fixed-header .ant-table-body{
+	min-height:calc(100% - 50px)
+}
+.homework-body-height{
 	min-height:calc(100% - 50px)
 }
 .ant-spin-container > div:first-child{
@@ -601,7 +639,7 @@ html, body, #root {
 }
 .ant-table-pagination{
 	margin-top: 10px;
-    position: absolute;
+    position: 	relative;
     bottom: 0;
     right: 12px;
     margin-bottom: 10px;
@@ -684,7 +722,7 @@ html, body, #root {
 	height:100%;
 }
 .ant-form-fo{
-	height:310px !important;
+	height:240px !important;
 }
 .homework_show{
 	position: relative;
@@ -974,8 +1012,9 @@ p.user_cont1{
 p.user_cont1 span{
 	text-align:center;
 	position:relative;
-	top:80px;
-	z-index:1000
+	top:88px;
+	z-index:1000;
+	font-weight: normal;
 }
 p.user_cont{
 	padding:8px 15px;
@@ -1007,9 +1046,14 @@ p.user_cont span.name1{
 	margin-top: -32px;
 }
 .img_us{
-	    position: absolute;
-    top: 45px;
+	position: absolute;
+    top: 37px;
     z-index: 1000;
+	width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    margin: 0 auto;
+    left: 126px;
 }
 .model_title{
 	padding:0;}

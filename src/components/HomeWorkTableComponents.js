@@ -134,7 +134,8 @@ const HomeWorkTableComponents = React.createClass({
     var param = {
       "method":'getUserHomeworkInfoList',
       "ident":ident,
-      "pageNo":pageNo
+      "pageNo":pageNo,
+
     };
 
     this.doWebService(JSON.stringify(param), {

@@ -556,7 +556,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.singleHandleSubmit}>
                 保存并继续添加
             </Button>
-            <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.singleHandleSubmit} >
+            <Button type="ghost" htmlType="submit" className="login-form-button" onClick={this.singleHandleSubmit} >
                 保存并返回列表
             </Button>
         </div>;
@@ -565,7 +565,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                 <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.singleHandleSubmit}>
                     保存并继续添加
                 </Button>
-                <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.singleHandleSubmit} >
+                <Button type="ghost" htmlType="submit" className="login-form-button" onClick={this.singleHandleSubmit} >
                     保存并返回列表
                 </Button>
             </div>;
@@ -574,7 +574,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                 <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.MulitiHandleSubmit}>
                     保存并继续添加
                 </Button>
-                <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.MulitiHandleSubmit} >
+                <Button type="ghost" htmlType="submit" className="login-form-button" onClick={this.MulitiHandleSubmit} >
                     保存并返回列表
                 </Button>
             </div>;
@@ -583,7 +583,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                 <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.correctHandleSubmit}>
                     保存并继续添加
                 </Button>
-                <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.correctHandleSubmit} >
+                <Button type="ghost" htmlType="submit" className="login-form-button" onClick={this.correctHandleSubmit} >
                     保存并返回列表
                 </Button>
             </div>;
@@ -592,7 +592,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                 <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.simpleAnswerHandleSubmit}>
                     保存并继续添加
                 </Button>
-                <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.simpleAnswerHandleSubmit} >
+                <Button type="ghost" htmlType="submit" className="login-form-button" onClick={this.simpleAnswerHandleSubmit} >
                     保存并返回列表
                 </Button>
             </div>;
