@@ -163,6 +163,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                     title="上传课件"
                     className="modol_width"
                     onCancel={courseWareUpload.handleCancel}
+                    transitionName=""  //禁用modal的动画效果
                     footer={[
                         <div>
                             <Button type="primary" htmlType="submit" className="login-form-button" onClick={courseWareUpload.uploadFile}>

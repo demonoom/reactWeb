@@ -494,6 +494,7 @@ const AssignHomeWorkComponents = React.createClass({
              </Row> 
           <Modal title="选择题目" className="choose_class" visible={assignHomeWork.state.subjectModalVisible}
                  onCancel={assignHomeWork.subjectModalHandleCancel}
+                 transitionName=""  //禁用modal的动画效果
                  footer={[
 
                    <Button key="return" type="primary" size="large" onClick={assignHomeWork.subjectModalHandleOk}>确定</Button>,

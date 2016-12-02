@@ -73,6 +73,7 @@ const HomeWorkTabComponents = React.createClass({
                     ref = "mainTab"
                     activeKey={this.state.activeKey}
                     defaultActiveKey={this.state.defaultActiveKey}
+                    transitionName=""  //禁用Tabs的动画效果
                     tabBarExtraContent={<div className="ant-tabs-right"><Button type="primary" onClick={this.assignHomeWork} className="add_study">布置作业</Button></div>}
                 >
                     {/*<TabPane tab="布置作业" key="布置作业">

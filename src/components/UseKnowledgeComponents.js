@@ -289,6 +289,7 @@ const UseKnowledgeComponents = React.createClass({
           title="使用至"
           onOk={this.handleOk}
           onCancel={this.handleCancel}
+          transitionName=""  //禁用modal的动画效果
           footer={[
             <Button key="submit" type="primary"  htmlType="submit"  size="large" onClick={this.handleSubmit}>提交</Button>
           ]}

@@ -607,6 +607,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
 					width="620"
                     className="ant-modal-width"
                     onCancel={this.handleCancel}
+                    transitionName=""  //禁用modal的动画效果
                     footer={[
                         <div>
                             {buttons}

@@ -134,6 +134,7 @@ const TeachingComponents = React.createClass({
               title="教学进度"
               onCancel={subjectForm.handleCancel}
               className="modol_width"
+              transitionName=""  //禁用modal的动画效果
               footer={[
                 <Button type="primary" htmlType="submit" className="login-form-button" onClick={subjectForm.handleSubmit}  >确定</Button>,
                 <Button type="ghost" htmlType="reset" className="login-form-button" onClick={subjectForm.handleCancel} >取消</Button>

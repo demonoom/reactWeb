@@ -6,16 +6,12 @@ import UseKnowledgeComponents from './UseKnowledgeComponents';
 import CourseWareUploadComponents from './CourseWareUploadComponents';
 import SubjectUploadTabComponents from './SubjectUploadTabComponents';
 
-
-
-
 const TabPane = Tabs.TabPane;
 //定义js函数，完成删除前的确认提示操作
 function deleteConfirm() {
     var count =5;
     var rs = confirm("确定要删除这"+count+"条记录吗？");
 }
-
 
 var mt;
 let breadcrumbChildren;
@@ -118,6 +114,7 @@ const MainTabComponents = React.createClass({
                     activeKey={this.state.activeKey}
                     defaultActiveKey={this.state.defaultActiveKey}
                     tabBarExtraContent={toolbarExtra}
+                    transitionName=""  //禁用Tabs的动画效果
                 >
                     <TabPane tab="课件" key="课件"><CourseWareComponents ref="courseWare"/></TabPane>
                     <TabPane tab="题目" key="题目"><SubjectTable  ref="subTable" params={this.state.subjectParams}/></TabPane>
