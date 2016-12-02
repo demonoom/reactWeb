@@ -208,6 +208,7 @@ const KnowledgeMenuComponents = React.createClass({
                 defaultOpenKeys={['goSchool']}
                 selectedKeys={[this.state.openSubMenu]}
 				 className="cont_t"
+				mode="inline"
 
           >
             {children}

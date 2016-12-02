@@ -662,9 +662,9 @@ html, body, #root {
 
 .date_tr{
    position:relative;
-   top:5px;
    font-size:14px;
 }
+
 .class_bo{
 	border-bottom: 1px solid #E9E9E9;
 	padding:0 0 10px 0;
@@ -831,7 +831,7 @@ a:hover{
 	font-size:16px;
 }
 .ant-checkbox-wrapper{
-	display:block;
+	display:inline-block;
 	padding-left:10px;
 }
 article.content_2{
@@ -839,6 +839,11 @@ article.content_2{
 	top:-30px;
 	left:32px;
 	margin-bottom:-30px;
+	width:500px;
+	overflow:hidden;
+}
+article.content_2 img{
+	max-width:500px;
 }
 .line_block{
 	display:inline-block;
@@ -1083,4 +1088,13 @@ a {
 }
 .bun_one{
     margin-right: 253px;
+}
+.homework_out{
+	position:absolute;
+	width:100%;
+	height: 50px !important;
+    bottom: 10px;
+}
+.text_30{
+	line-height:32px;
 }
