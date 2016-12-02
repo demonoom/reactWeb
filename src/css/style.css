@@ -482,7 +482,8 @@ html, body, #root {
 	margin:0;
     padding: 0;
     width: calc(100% - 16px);
-	float:right
+	float:right;
+	margin-left:16px;
 }
 .ant-breadcrumb{
 	    height: 45px;
