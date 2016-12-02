@@ -1118,9 +1118,9 @@ a {
 .ant-pagination-item{
 	border-radius:50%;
 }
-.ant-menu-submenu-open{
+/*ant-menu-submenu-open{
 	color: #2896fb;
-}
+}*/
 .ant-table-tbody > tr > td img{
 	max-width:220px;
 	height:100px !important;
