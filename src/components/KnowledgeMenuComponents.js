@@ -20,13 +20,14 @@ var mMenu;
 var subMenu;
 var vdom = new Array();
 var breadCrumbArray=new Array();
+var openKeys=[];
 const KnowledgeMenuComponents = React.createClass({
   getInitialState() {
     mMenu = this;
     return {
-      currentMenu: 'goSchool',
+      currentMenu: '',
       currentPage: 1,
-      openSubMenu:this.props.activeMenu,
+      openSubMenu:[],
       show: 1,
       lessonCount:0,
       menuList:[],
@@ -58,14 +59,21 @@ const KnowledgeMenuComponents = React.createClass({
   },
   //菜单被选择时执行的函数
   subMenuTitleClick(e){
-    // alert("ekey:"+e.key);
     var menuKeyArray = e.key.split("#");
     var menuId = menuKeyArray[0];
     var childrenCount = menuKeyArray[1];
     var menuLevel = menuKeyArray[2];
     var menuName = menuKeyArray[3];
     var fatherMenuName = menuKeyArray[4];
-    this.setState({openSubMenu:[e.key]});
+    // this.setState({openSubMenu:[e.key]});
+    // openKeys.splice(0,openKeys.length);
+    // openKeys.push(e.key);
+    mMenu.buildOpenMenuKeysArray(e.key,menuLevel);
+    var openKeysStr = openKeys.join(',');
+    console.log("openKeys:"+openKeysStr);
+    // defaultOpenKeys={['81#3#0#数学#','86#13#1#小学#数学','89#7#2#一年级上#小学']}
+    // openKeys={['81#3#0#数学#','86#13#1#小学#数学','89#7#2#一年级上#小学']}
+    mMenu.setState({openSubMenu:openKeysStr});
     if(menuLevel!=0 && childrenCount==0){
       this.bulidBreadCrumbArray(fatherMenuName,menuLevel-1,menuId);
     }else{
@@ -74,6 +82,30 @@ const KnowledgeMenuComponents = React.createClass({
     var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
     this.props.callbackParent(optContent,breadCrumbArray);
   },
+  //判断当前点击的菜单key是否已经在被点击key的数组中
+  checkCurrentMenuKeyIsExist(currentClickKey){
+      for(var i=0;i<openKeys.length;i++){
+          var existKey = openKeys[i];
+          if(openKeys==currentClickKey){
+              return true;
+          }
+      }
+      return false;
+  },
+
+  //构建被点击菜单key的数组
+  buildOpenMenuKeysArray(currentClickKey,menuLevel){
+      if(menuLevel==0){
+        openKeys.splice(0,openKeys.length);
+        openKeys.push(currentClickKey);
+      }else {
+        var isExist = mMenu.checkCurrentMenuKeyIsExist(currentClickKey);
+        if(isExist==false){
+          openKeys.push(currentClickKey);
+        }
+      }
+  },
+
 
   bulidBreadCrumbArray:function (menuText,menuLevel,menuId) {
     var breadJson = { hrefLink: '#/MainLayout', hrefText:menuText ,menuLevel:menuLevel,menuId:menuId};
@@ -200,15 +232,24 @@ const KnowledgeMenuComponents = React.createClass({
       }
   },
 
+  handleClick(e) {
+    // alert("handle:"+e.key);
+    this.setState({
+      currentMenu: e.key,
+    });
+    //location.hash=e.key;
+  },
+
   render() {
     return (
         <div>
           <div className="menu_til">知识点资源</div>
-          <Menu ref="middleMenu"
-                defaultOpenKeys={['goSchool']}
-                selectedKeys={[this.state.openSubMenu]}
-				 className="cont_t"
-
+          <Menu ref="middleMenu"  onClick={this.handleClick}
+                defaultOpenKeys={mMenu.state.openSubMenu}
+                openKeys={mMenu.state.openSubMenu}
+                selectedKeys={[mMenu.state.currentMenu]}
+                className="cont_t"
+                mode="inline"
           >
             {children}
           </Menu>
