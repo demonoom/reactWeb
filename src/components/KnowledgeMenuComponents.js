@@ -32,20 +32,55 @@ var styles = {
 };*/
 
 const KnowledgeMenuComponents = React.createClass({
-  getInitialState() {
-    mMenu = this;
-    return {
-      currentMenu: '',
-      currentPage: 1,
-      openSubMenu:[],
-      show: 1,
-      lessonCount:0,
-      menuList:[],
-      totalCount:0,
-      fatherMenuName:'',
-      breadCrumbArray:[],
-    };
-  },
+    getInitialState() {
+        mMenu = this;
+        return {
+            currentMenu: '',
+            currentPage: 1,
+            openSubMenu:[],
+            show: 1,
+            lessonCount:0,
+            menuList:[],
+            totalCount:0,
+            fatherMenuName:'',
+            breadCrumbArray:[],
+        };
+    },
+
+    componentDidMount(){
+        mMenu.initOpenSubMenu();
+    },
+
+    initOpenSubMenu(){
+        var openKeysStr = sessionStorage.getItem("openKeysStr");
+        if(openKeysStr!=null && openKeysStr!=""){
+            mMenu.setState({openSubMenu:openKeysStr});
+        }
+        var openKeysArray = openKeysStr.split(",");
+        for(var i=0;i<openKeysArray.length;i++){
+            var openKey = openKeysArray[i];
+            var keyArray = openKey.split("#");
+            // 89#7#2#一年级上#小学
+            var menuId = keyArray[0];
+            var childrenCount = keyArray[1];
+            var menuLevel = keyArray[2];
+            var menuName = keyArray[3];
+            var fatherMenuName = keyArray[4];
+            mMenu.buildOpenMenuKeysArray(openKey,menuLevel);
+            if(menuLevel!=0 && childrenCount==0){
+                this.bulidBreadCrumbArray(fatherMenuName,menuLevel-1,menuId,openKeysStr);
+            }else{
+                this.bulidBreadCrumbArray(menuName,menuLevel,menuId,openKeysStr);
+            }
+            if(i==openKeysArray.length-1){
+                this.setState({
+                    currentMenu: openKey,
+                });
+                var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
+                this.props.callbackParent(optContent,breadCrumbArray);
+            }
+        }
+    },
 
   doWebService : function(data,listener) {
     var service = this;
@@ -93,6 +128,8 @@ const KnowledgeMenuComponents = React.createClass({
         console.log("openKeys:"+openKeysStr);
         // defaultOpenKeys={['81#3#0#数学#','86#13#1#小学#数学','89#7#2#一年级上#小学']}
         // openKeys={['81#3#0#数学#','86#13#1#小学#数学','89#7#2#一年级上#小学']}
+        //全局存放用户在知识点导航下的访问路径，退出时将此值保存到数据库，下次登录时获取
+        sessionStorage.setItem("openKeysStr",openKeysStr);
         mMenu.setState({openSubMenu:openKeysStr});
         this.setState({
             currentMenu: e.key,
@@ -146,6 +183,8 @@ const KnowledgeMenuComponents = React.createClass({
             // breadCrumbArray.push(breadJson);
         }
         openKeysStr=openKeys;
+        //全局存放用户在知识点导航下的访问路径，退出时将此值保存到数据库，下次登录时获取
+        sessionStorage.setItem("openKeysStr",openKeysStr);
         this.setState({breadCrumbArray:breadCrumbArray,openSubMenu:openKeysStr});
         return breadCrumbArray;
     },

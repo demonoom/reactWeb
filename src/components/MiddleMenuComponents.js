@@ -1,7 +1,7 @@
 import React, { PropTypes,Link } from 'react';
 import { Table, Popconfirm, Button } from 'antd';
 import ReactDOM from 'react-dom';
-import { Menu, Icon } from 'antd';
+import { Menu, Icon,message,Dropdown } from 'antd';
 import { Badge,Pagination } from 'antd';
 import TeachingComponents from '../components/TeachingComponents';
 const SubMenu = Menu.SubMenu;
@@ -116,10 +116,37 @@ const MiddleMenuComponents = React.createClass({
   //   this.getLessonMenu();
   // },
 
+  /**
+   * 教学进度名称右侧的DropDownMenu点击响应处理函数
+   * @param key 被点击menu item的key
+   */
+  menuItemOnClick : function ({ key }) {
+    var clickKey = `${key}`;
+    var keyArray = clickKey.split("#");
+    if(keyArray.length==2){
+        //修改
+      mMenu.showModal('edit',clickKey);
+    }else{
+        //删除
+      mMenu.deleteTeachSchedule(clickKey);
+    }
+  },
+
+  /**
+   * 构建教学进度菜单对象
+   * @param menuList 菜单对象值的数组
+   */
   buildMenuChildren:function (menuList) {
     children = menuList.map((e, i)=> {
-      return <SubMenu key={e[0]} onTitleClick={this.subMenuTitleClick} style={{backgroundColor:'red'}} title={<div><span>{e[1]}</span><Badge count={e[2]}/> <span id={e[0]+"#"+e[1]} onClick={this.editTeachSchedule} className='write_right'><Icon type="edit"/></span><span id={e[0]} onClick={this.deleteTeachSchedule} className='del_right'><Icon type="delete"/></span></div>}>
 
+   
+      const menu = (
+          <Menu onClick={mMenu.menuItemOnClick}>
+              <Menu.Item key={e[0]+"#"+e[1]}>修改教学进度</Menu.Item>
+              <Menu.Item key={e[0]}>删除教学进度</Menu.Item>
+            </Menu>
+      );
+      return <SubMenu key={e[0]} onTitleClick={this.subMenuTitleClick} style={{backgroundColor:'red'}} title={<span><span>{e[1]}</span><Badge count={e[2]}/> <Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link" href="#"><Icon type="ellipsis" className="icon_more" /></a></Dropdown> </span>}>
       </SubMenu>
     });
   },
@@ -131,17 +158,15 @@ const MiddleMenuComponents = React.createClass({
       currentPage: page,
     });
   },
-
-  editTeachSchedule:function (e) {
-        // alert("修改教学进度"+e.currentTarget.id);
-    mMenu.showModal('edit',e.currentTarget.id);
-  },
-
-  deleteTeachSchedule:function (e) {
+  /**
+   * 删除教学进度
+   * @param key 被删除教学进度的id
+   */
+  deleteTeachSchedule:function (key) {
     //alert("请先删除当前进度下的教学资源，再执行此操作"+e.currentTarget.title);
     var confirmResult = confirm("确定要删除该教学进度?");
     if(confirmResult){
-      var sids = e.currentTarget.id;
+      var sids = key;
       var param = {
         "method":'deleteTeachSchedules',
         "ident":sessionStorage.getItem("ident"),
@@ -164,10 +189,13 @@ const MiddleMenuComponents = React.createClass({
     }
   },
 
+  /**
+   * 新增和修改教学进度的弹窗
+   * @param optType 操作方式  add/edit,通过该值区分是新增操作还是修改操作
+   * @param editSchuldeId 如果是修改操作，则该值为被修改教学进度的id，不能为空
+   */
   showModal:function (optType,editSchuldeId) {
     optType = (optType=="edit"?"edit":"add");
-    // alert("editSchuldeId:"+editSchuldeId);
-    // alert(optType);
     mMenu.refs.teachingComponents.showModal(optType,editSchuldeId);
   },
 

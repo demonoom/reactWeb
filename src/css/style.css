@@ -1153,3 +1153,21 @@ a {
 	font-size:16px;
 	border-bottom:none;
 }
+.ant-dropdown-link {
+    font-size: 16px;
+	line-height:18px;
+    position: absolute;
+    right: 0;
+	color:#999;
+	top:12px;
+}
+.ant-dropdown-menu {
+    position: absolute;
+    right: 0;
+}
+.icon_more{
+    width: 18px;
+    height: 18px;
+    border: 1px solid #999;
+    border-radius: 50%;
+}

@@ -34,6 +34,7 @@ const MainLayout = React.createClass({
       collapse: true,
       activeMiddleMenu:'sub1',
       currentKey:'teachTimes',
+      openKeysStr:'',
       // locale: enUS,
       locale: 'zh-cn',
     };
@@ -136,7 +137,7 @@ const MainLayout = React.createClass({
             <Menu.Item key="resources" className="padding_menu">
               <Icon type="hdd" /><span className="nav-text">资源中心</span>
             </Menu.Item>*/}
-            <FloatButton/>
+            <FloatButton ref="floatButton"/>
           </Menu>
 
           <div className="ant-aside-action" > 
