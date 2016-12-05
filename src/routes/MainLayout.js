@@ -81,8 +81,8 @@ const MainLayout = React.createClass({
     mainLayout.refs.studyEvaluateTabComponents.getStudyEvaluate();
   },
 
-  callBackKnowledgeMenuBuildBreadCrume(menuText,menuLevel,menuId){
-    var breadCrumbArray = mainLayout.refs.knowledgeMenuComponents.bulidBreadCrumbArray(menuText,menuLevel,menuId);
+  callBackKnowledgeMenuBuildBreadCrume(menuText,menuLevel,menuId,openKeysStr){
+    var breadCrumbArray = mainLayout.refs.knowledgeMenuComponents.bulidBreadCrumbArray(menuText,menuLevel,menuId,openKeysStr);
     return breadCrumbArray;
   },
 

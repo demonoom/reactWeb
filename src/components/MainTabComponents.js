@@ -66,17 +66,20 @@ const MainTabComponents = React.createClass({
             target = e.target;
         }
         var idStr = target.id;
-        var keyArray = idStr.split("#");
+        var keyArray = idStr.split("*");
+        var menuId = keyArray[0];
+        var menuLevel = keyArray[1];
+        var openKeysStr = keyArray[2];
         var optContent = keyArray[0]+"#"+"bySubjectId"+"#"+target.textContent;
         this.getTeachPlans(optContent);
-        var breadCrumbArray = this.props.callBackKnowledgeMenuBuildBreadCrume(target.textContent,keyArray[1],keyArray[0]);
+        var breadCrumbArray = this.props.callBackKnowledgeMenuBuildBreadCrume(target.textContent,menuLevel,menuId,openKeysStr);
         this.buildBreadcrumb(breadCrumbArray);
     },
 
     //生成面包屑导航
     buildBreadcrumb:function (breadcrumbArray) {
         breadcrumbChildren = breadcrumbArray.map((e, i)=> {
-            return <Breadcrumb.Item key={e.menuId}><a id={e.menuId+"#"+e.menuLevel} onClick={this.breadClick}>{e.hrefText}</a></Breadcrumb.Item>
+            return <Breadcrumb.Item key={e.menuId}><a id={e.menuId+"*"+e.menuLevel+"*"+e.openKeysStr} onClick={this.breadClick}>{e.hrefText}</a></Breadcrumb.Item>
         });
         this.setState({activeKey:'课件'});
         this.setState({breadcrumbArray:breadcrumbArray});
