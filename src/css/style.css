@@ -114,8 +114,7 @@ body{
     }
 	ul.cont_t{
 		width:240px;
-		overflow-y:auto;
-		overflow-x:hidden;
+		overflow:auto;
 		height:calc(100% - 72px)
 	}
 	ul.cont_t2 {
@@ -529,7 +528,13 @@ html, body, #root {
 	font-size:16px;
 	
 }
-.ant-breadcrumb a, .ant-collapse-header{
+.ant-breadcrumb > span:last-child{
+	font-weight:normal
+}
+.ant-breadcrumb a:hover{
+	color:#309ffb !important
+}
+ .ant-collapse-header{
 	font-size:16px !important;
 	font-weight: bold;
 	color: #309ffb !important;
@@ -889,9 +894,7 @@ article.content_2 img{
 .ant-checkbox-wrapper + .ant-checkbox-wrapper{
 	margin-left:0px;
 }
-.ant-breadcrumb-link a{
-	font-size:14px !important;
-}
+
 .affix_bottom{
 	position:absolute;
     bottom: -10px;
@@ -962,6 +965,7 @@ article.content_2 img{
 }
 	::-webkit-scrollbar {
 		  width: 8px;
+		  height:8px;
 	} /* 这是针对缺省样式 (必须的) */
 
 
