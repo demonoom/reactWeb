@@ -20,7 +20,7 @@ var subMenu;
 var vdom = new Array();
 var breadCrumbArray=new Array();
 var openKeys=[];
-
+var openKeysStr="";
 
 var styles = {
     color: 'red',
@@ -88,7 +88,8 @@ const KnowledgeMenuComponents = React.createClass({
         var menuName = menuKeyArray[3];
         var fatherMenuName = menuKeyArray[4];
         mMenu.buildOpenMenuKeysArray(e.key,menuLevel);
-        var openKeysStr = openKeys.join(',');
+        openKeysStr="";
+        openKeysStr = openKeys.join(',');
         console.log("openKeys:"+openKeysStr);
         // defaultOpenKeys={['81#3#0#数学#','86#13#1#小学#数学','89#7#2#一年级上#小学']}
         // openKeys={['81#3#0#数学#','86#13#1#小学#数学','89#7#2#一年级上#小学']}
@@ -97,9 +98,9 @@ const KnowledgeMenuComponents = React.createClass({
             currentMenu: e.key,
         });
         if(menuLevel!=0 && childrenCount==0){
-            this.bulidBreadCrumbArray(fatherMenuName,menuLevel-1,menuId);
+            this.bulidBreadCrumbArray(fatherMenuName,menuLevel-1,menuId,openKeysStr);
         }else{
-            this.bulidBreadCrumbArray(menuName,menuLevel,menuId);
+            this.bulidBreadCrumbArray(menuName,menuLevel,menuId,openKeysStr);
         }
         var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
         this.props.callbackParent(optContent,breadCrumbArray);
@@ -107,39 +108,51 @@ const KnowledgeMenuComponents = React.createClass({
   //判断当前点击的菜单key是否已经在被点击key的数组中
   checkCurrentMenuKeyIsExist(currentClickKey){
       for(var i=0;i<openKeys.length;i++){
-          var existKey = openKeys[i];
-          if(openKeys==currentClickKey){
+          var existKeyArray = openKeys[i].split("#");
+          var menuId = existKeyArray[0];
+          var menuName = existKeyArray[2];
+
+          var currentMenuKeyArray = currentClickKey.split("#");
+          var currentMenuId = currentMenuKeyArray[0];
+          var currentMenuName = currentMenuKeyArray[2];
+
+          if(menuId==currentMenuId && menuName==currentMenuName){
               return true;
           }
       }
       return false;
   },
 
-  //构建被点击菜单key的数组
-  buildOpenMenuKeysArray(currentClickKey,menuLevel){
-      if(menuLevel==0){
-        openKeys.splice(0,openKeys.length);
-        openKeys.push(currentClickKey);
-      }else {
-        var isExist = mMenu.checkCurrentMenuKeyIsExist(currentClickKey);
-        if(isExist==false){
-          openKeys.push(currentClickKey);
+    //构建被点击菜单key的数组
+    buildOpenMenuKeysArray(currentClickKey,menuLevel){
+        if(menuLevel==0){
+            openKeys.splice(0,openKeys.length);
+            openKeys.push(currentClickKey);
+        }else {
+            var isExist = mMenu.checkCurrentMenuKeyIsExist(currentClickKey);
+            if(isExist==false){
+                openKeys.push(currentClickKey);
+            }
         }
-      }
-  },
+    },
 
+    bulidBreadCrumbArray:function (menuText,menuLevel,menuId,openKeys) {
+        var breadJson = { hrefLink: '#/MainLayout', hrefText:menuText ,menuLevel:menuLevel,menuId:menuId,openKeysStr:openKeys};
+        if(menuLevel==0){
+            breadCrumbArray=new Array();
+            breadCrumbArray.push(breadJson);
+        }else{
+            this.checkSameLevelBread(breadJson,breadCrumbArray);
+            // breadCrumbArray.push(breadJson);
+        }
+        openKeysStr=openKeys;
+        this.setState({breadCrumbArray:breadCrumbArray,openSubMenu:openKeysStr});
+        return breadCrumbArray;
+    },
 
-  bulidBreadCrumbArray:function (menuText,menuLevel,menuId) {
-    var breadJson = { hrefLink: '#/MainLayout', hrefText:menuText ,menuLevel:menuLevel,menuId:menuId};
-    if(menuLevel==0){
-      breadCrumbArray=new Array();
-      breadCrumbArray.push(breadJson);
-    }else{
-      this.checkSameLevelBread(breadJson,breadCrumbArray);
-      // breadCrumbArray.push(breadJson);
-    }
-    this.setState({breadCrumbArray:breadCrumbArray});
-  },
+    refreshOpenMenu(openKeys){
+
+    },
 
   checkIsFatherLevel(breadJson,breadCrumbArray){
       var index=-1;
@@ -169,7 +182,7 @@ const KnowledgeMenuComponents = React.createClass({
       var index=-1;
       for(var i=0;i<breadCrumbArray.length;i++){
           //如果是相同层次的菜单，则返回当前的菜单索引位置
-          if(breadJson.menuLevel == breadCrumbArray[i].menuLevel){
+          if(breadJson.menuLevel <= breadCrumbArray[i].menuLevel){
             index=i;
             break;
           }
@@ -184,10 +197,10 @@ const KnowledgeMenuComponents = React.createClass({
             //breadCrumbArray.splice(i,1);
           }
         }
-        for(var i=0;i<removeArray.length;i++){
+        /*for(var i=0;i<removeArray.length;i++){
           breadCrumbArray.splice(removeArray[i],1);
-        }
-
+        }*/
+          breadCrumbArray.splice(removeArray[0],removeArray.length);
       }else{
         breadCrumbArray.push(breadJson);
       }
@@ -246,16 +259,13 @@ const KnowledgeMenuComponents = React.createClass({
 
   hasChild:function (menuContent) {
       if(menuContent.children.length!=0){
-          //alert(true);
           return true;
       }else{
-          // alert(false);
           return false;
       }
   },
 
   handleClick(e) {
-    alert("handle:"+e.key);
     this.setState({
       currentMenu: e.key,
     });
