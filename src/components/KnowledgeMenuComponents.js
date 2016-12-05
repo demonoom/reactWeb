@@ -128,7 +128,6 @@ const KnowledgeMenuComponents = React.createClass({
       }
   },
 
-
   bulidBreadCrumbArray:function (menuText,menuLevel,menuId) {
     var breadJson = { hrefLink: '#/MainLayout', hrefText:menuText ,menuLevel:menuLevel,menuId:menuId};
     if(menuLevel==0){
@@ -139,6 +138,7 @@ const KnowledgeMenuComponents = React.createClass({
       // breadCrumbArray.push(breadJson);
     }
     this.setState({breadCrumbArray:breadCrumbArray});
+      return breadCrumbArray;
   },
 
   checkIsFatherLevel(breadJson,breadCrumbArray){
@@ -246,16 +246,13 @@ const KnowledgeMenuComponents = React.createClass({
 
   hasChild:function (menuContent) {
       if(menuContent.children.length!=0){
-          //alert(true);
           return true;
       }else{
-          // alert(false);
           return false;
       }
   },
 
   handleClick(e) {
-    alert("handle:"+e.key);
     this.setState({
       currentMenu: e.key,
     });

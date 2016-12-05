@@ -44,15 +44,12 @@ const MainLayout = React.createClass({
     })
   },
   toolbarClick:function (e) {
-      // alert(e.key);
     this.setState({currentKey:e.key});
   },
   //获取教学进度下的课件资源
   getTeachPlans:function (optContent,breadCrumbArray) {
     //点击的菜单标识：teachScheduleId
-    //  alert("optContent:mainLayout:"+optContent);
     if(optContent==null){
-      // alert("mt:"+breadCrumbArray.length);
       mainLayout.refs.mainTabComponents.buildBreadcrumb(breadCrumbArray);
     }else{
 
@@ -77,12 +74,16 @@ const MainLayout = React.createClass({
 
   //获取老师的已布置作业列表
   getTeacherHomeWork:function (optType) {
-      // alert("家庭作业操作："+optType);
       mainLayout.refs.homeWorkTabComponents.getTeacherHomeWork(optType);
   },
 
   getStudyEvaluate:function (optType) {
-      mainLayout.refs.studyEvaluateTabComponents.getStudyEvaluate();
+    mainLayout.refs.studyEvaluateTabComponents.getStudyEvaluate();
+  },
+
+  callBackKnowledgeMenuBuildBreadCrume(menuText,menuLevel,menuId){
+    var breadCrumbArray = mainLayout.refs.knowledgeMenuComponents.bulidBreadCrumbArray(menuText,menuLevel,menuId);
+    return breadCrumbArray;
   },
 
   render() {
@@ -94,8 +95,8 @@ const MainLayout = React.createClass({
       middleComponent = <MiddleMenuComponents activeMenu={this.state.activeMiddleMenu}  callbackParent={this.getTeachPlans}/>;
       tabComponent=<MainTabComponents ref="mainTabComponents"/>;
     }else if(this.state.currentKey=="KnowledgeResources"){
-      middleComponent = <KnowledgeMenuComponents callbackParent={this.getTeachPlans}></KnowledgeMenuComponents>;
-      tabComponent=<MainTabComponents ref="mainTabComponents"/>;
+      middleComponent = <KnowledgeMenuComponents ref="knowledgeMenuComponents" callbackParent={this.getTeachPlans}></KnowledgeMenuComponents>;
+      tabComponent=<MainTabComponents ref="mainTabComponents" callBackKnowledgeMenuBuildBreadCrume={this.callBackKnowledgeMenuBuildBreadCrume}/>;
     }else if(this.state.currentKey=="homeWork"){
       middleComponent = <HomeWorkMenu callbackParent={this.getTeacherHomeWork}></HomeWorkMenu>
       tabComponent=<HomeWorkTabComponents ref="homeWorkTabComponents"/>;

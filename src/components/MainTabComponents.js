@@ -15,6 +15,7 @@ function deleteConfirm() {
 
 var mt;
 let breadcrumbChildren;
+var breadCrumbArray=[];
 const MainTabComponents = React.createClass({
 
     getInitialState() {
@@ -31,13 +32,11 @@ const MainTabComponents = React.createClass({
         };
     },
     getTeachPlans(optContent){
-        //alert("main :"+teachScheduleId);
         var optContentArray = optContent.split("#");
         var teachScheduleId = optContentArray[0];
         var optType =optContentArray[1];
         var knowledgeName = optContentArray[2];
         var pageNo = 1;
-        // alert("knowledgeName:"+knowledgeName);
         this.refs.courseWare.getTeachPlans(sessionStorage.getItem("ident"),teachScheduleId,optType,pageNo,knowledgeName);
         this.setState({currentOptType:optType});
         this.setState({currentTeachScheduleId:teachScheduleId});
@@ -66,15 +65,18 @@ const MainTabComponents = React.createClass({
         }else{
             target = e.target;
         }
-        // alert("key:"+target.id);
-        var optContent = target.id+"#"+"bySubjectId"+"#"+target.textContent;
+        var idStr = target.id;
+        var keyArray = idStr.split("#");
+        var optContent = keyArray[0]+"#"+"bySubjectId"+"#"+target.textContent;
         this.getTeachPlans(optContent);
+        var breadCrumbArray = this.props.callBackKnowledgeMenuBuildBreadCrume(target.textContent,keyArray[1],keyArray[0]);
+        this.buildBreadcrumb(breadCrumbArray);
     },
 
     //生成面包屑导航
     buildBreadcrumb:function (breadcrumbArray) {
         breadcrumbChildren = breadcrumbArray.map((e, i)=> {
-            return <Breadcrumb.Item key={e.menuId}><a id={e.menuId} onClick={this.breadClick}>{e.hrefText}</a></Breadcrumb.Item>
+            return <Breadcrumb.Item key={e.menuId}><a id={e.menuId+"#"+e.menuLevel} onClick={this.breadClick}>{e.hrefText}</a></Breadcrumb.Item>
         });
         this.setState({activeKey:'课件'});
         this.setState({breadcrumbArray:breadcrumbArray});
