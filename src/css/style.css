@@ -972,6 +972,7 @@ article.content_2 img{
 	::-webkit-scrollbar-thumb {
 		  background-color: #ccc; 
 		  border-radius: 9px;
+		  -webkit-border-radius: 9px;
 	} /* 滑块颜色 */
 
 	::-webkit-scrollbar-button {
@@ -1145,4 +1146,10 @@ a {
 }
 .text_30{
 	line-height:32px;
+}
+.ant-table-placeholder{
+	top:-300px;
+	color:#7c87a5;
+	font-size:16px;
+	border-bottom:none;
 }
