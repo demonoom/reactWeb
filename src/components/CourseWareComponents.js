@@ -41,8 +41,11 @@ const CourseWareComponents = React.createClass({
         courseWare.setState({totalCount:0});
     },
 
-    getTeachPlans(ident,teachScheduleId,optType,pageNo,knowledgeName){
+
+
+    getTeachPlans(ident,teachScheduleId,optType,pageNo,knowledgeName,dataFilter){
         // alert("ccc:"+ident+"==="+teachScheduleId+"===="+optType);
+        // alert("dataFilter:"+dataFilter);
         courseWare.setState({
             ident:ident,
             teachScheduleId:teachScheduleId,
@@ -104,9 +107,15 @@ const CourseWareComponents = React.createClass({
 
             });
         }else{
+            var userId = ident;
+            if(dataFilter=="self"){
+                userId = ident;
+            }else if(dataFilter=="other"){
+                userId = "-"+ident;
+            }
             param = {
                 "method":'getMaterialsByKnowledgePointId',
-                "userId":"-1",
+                "userId":userId,
                 "pointId":teachScheduleId,
                 "type":"-1",
                 "pageNo":pageNo,

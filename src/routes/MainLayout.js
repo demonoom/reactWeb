@@ -27,7 +27,6 @@ const store = createStore(function () {
 });
 
 var mainLayout;
-var percent =0 ;
 const MainLayout = React.createClass({
   getInitialState() {
     mainLayout = this;
@@ -38,14 +37,9 @@ const MainLayout = React.createClass({
       openKeysStr:'',
       // locale: enUS,
       locale: 'zh-cn',
-      percent: 0,
     };
   },
 
-  updatePercent(newPercent){
-    // alert("newPercent:"+newPercent);
-    mainLayout.setState({percent:newPercent});
-  },
 
   onCollapseChange() {
     this.setState({
@@ -54,6 +48,10 @@ const MainLayout = React.createClass({
   },
   toolbarClick:function (e) {
     this.setState({currentKey:e.key});
+    if(e.key=="teachTimes"){
+      var breadcrumbArray = [{hrefLink:'#/MainLayout',hrefText:"首页"}];
+      mainLayout.refs.mainTabComponents.buildBreadcrumb(breadcrumbArray);
+    }
   },
   //获取教学进度下的课件资源
   getTeachPlans:function (optContent,breadCrumbArray) {
@@ -103,22 +101,19 @@ const MainLayout = React.createClass({
     var middleComponent;
     var tabComponent=<MainTabComponents ref="mainTabComponents"/>;
     if(this.state.currentKey=="teachTimes"){
-      middleComponent = <MiddleMenuComponents activeMenu={this.state.activeMiddleMenu}  callbackProgressIncrease={this.updatePercent} callbackParent={this.getTeachPlans}/>;
-      tabComponent=<MainTabComponents ref="mainTabComponents"  callbackProgressIncrease={this.updatePercent}/>;
+      middleComponent = <MiddleMenuComponents activeMenu={this.state.activeMiddleMenu}  callbackParent={this.getTeachPlans}/>;
+      tabComponent=<MainTabComponents ref="mainTabComponents" />;
     }else if(this.state.currentKey=="KnowledgeResources"){
-      middleComponent = <KnowledgeMenuComponents ref="knowledgeMenuComponents" callbackParent={this.getTeachPlans}  callbackProgressIncrease={this.updatePercent}></KnowledgeMenuComponents>;
-      tabComponent=<MainTabComponents ref="mainTabComponents" callBackKnowledgeMenuBuildBreadCrume={this.callBackKnowledgeMenuBuildBreadCrume}  callbackProgressIncrease={this.updatePercent}/>;
+      middleComponent = <KnowledgeMenuComponents ref="knowledgeMenuComponents" callbackParent={this.getTeachPlans} ></KnowledgeMenuComponents>;
+      tabComponent=<MainTabComponents ref="mainTabComponents" callBackKnowledgeMenuBuildBreadCrume={this.callBackKnowledgeMenuBuildBreadCrume} />;
     }else if(this.state.currentKey=="homeWork"){
-      middleComponent = <HomeWorkMenu callbackParent={this.getTeacherHomeWork}  callbackProgressIncrease={this.updatePercent}></HomeWorkMenu>
-      tabComponent=<HomeWorkTabComponents ref="homeWorkTabComponents"  callbackProgressIncrease={this.updatePercent}/>;
+      middleComponent = <HomeWorkMenu callbackParent={this.getTeacherHomeWork}  ></HomeWorkMenu>
+      tabComponent=<HomeWorkTabComponents ref="homeWorkTabComponents" />;
     }else if(this.state.currentKey =="studyEvaluate"){
       //学习评价
-      middleComponent = <StudyEvaluateMenu callbackParent={this.getStudyEvaluate} callbackProgressIncrease={this.updatePercent}></StudyEvaluateMenu>
-      tabComponent=<StudyEvaluateTabComponents ref="studyEvaluateTabComponents" callbackProgressIncrease={this.updatePercent}/>;
+      middleComponent = <StudyEvaluateMenu callbackParent={this.getStudyEvaluate} ></StudyEvaluateMenu>
+      tabComponent=<StudyEvaluateTabComponents ref="studyEvaluateTabComponents"/>;
     }
-
-    // var percent = progressIncrease(0);
-    // mainLayout.setState({percent:percent});
 
     return (
         <LocaleProvider locale={this.state.locale}>

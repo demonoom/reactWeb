@@ -18,6 +18,7 @@ export function doWebService(data,listener) {
     var width=0;
     //计时器对象，通过计时器对象，完成定时的进度条刷新
     var timer;
+    var requestCount=0;
     if(pro!=null){
         //每次访问设定初始值
         pro.style.width="0%";
@@ -28,7 +29,16 @@ export function doWebService(data,listener) {
             () => {
                 //定时器每隔一定毫秒时间宽度+20
                 width += 20;
+                requestCount++;
                 //在后台结果未返回前，即使计时器计算的宽度大于了100，也将进度条控制在100以内（此处设置了95），以表现未走完的状态
+                if(requestCount>20){
+                    //设置请求次数，如果超时请求次数大于10次，则取消定时器，进度条隐藏
+                    console.log("请求超时")
+                    pro.style.width = "100%";
+                    pro.style.display = 'none';
+                    //清除定时器
+                    clearInterval(timer);
+                }
                 if(width>=100){
                     width = 95;
                     pro.style.width="95%";

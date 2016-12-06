@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
-import { Tabs, Breadcrumb, Icon, Button,Radio } from 'antd';
+import { Tabs, Breadcrumb, Icon } from 'antd';
+import { Menu, Dropdown } from 'antd';
 import CourseWareComponents from './CourseWareComponents';
 import SubjectTable from './SubjectTableComponents';
 import UseKnowledgeComponents from './UseKnowledgeComponents';
@@ -29,6 +30,7 @@ const MainTabComponents = React.createClass({
             subjectParams:'',
             breadcrumbArray:[],
             currentKnowledgeName:'',
+            dataFilter:'self',
         };
     },
     getTeachPlans(optContent){
@@ -37,7 +39,7 @@ const MainTabComponents = React.createClass({
         var optType =optContentArray[1];
         var knowledgeName = optContentArray[2];
         var pageNo = 1;
-        this.refs.courseWare.getTeachPlans(sessionStorage.getItem("ident"),teachScheduleId,optType,pageNo,knowledgeName);
+        this.refs.courseWare.getTeachPlans(sessionStorage.getItem("ident"),teachScheduleId,optType,pageNo,knowledgeName,this.state.dataFilter);
         this.setState({currentOptType:optType});
         this.setState({currentTeachScheduleId:teachScheduleId});
         this.setState({currentKnowledgeName:knowledgeName});
@@ -83,6 +85,7 @@ const MainTabComponents = React.createClass({
         });
         this.setState({activeKey:'课件'});
         this.setState({breadcrumbArray:breadcrumbArray});
+        this.setState({currentOptType:"bySchedule"});
     },
 
     componentWillMount(){
@@ -90,19 +93,43 @@ const MainTabComponents = React.createClass({
         this.buildBreadcrumb(breadcrumbArray);
     },
 
+    /**
+     * 课件tab名称右侧的DropDownMenu点击响应处理函数
+     * @param key 被点击menu item的key
+     */
+    menuItemOnClick : function ({ key }) {
+        var clickKey = `${key}`;
+        this.setState({dataFilter:clickKey});
+        if(this.state.activeKey=="课件"){
+            this.refs.courseWare.getTeachPlans(sessionStorage.getItem("ident"),this.state.currentTeachScheduleId,this.state.currentOptType,1,this.state.currentKnowledgeName,clickKey);
+        }else{
+            this.setState({subjectParams:sessionStorage.getItem("ident")+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType+"#"+this.state.currentKnowledgeName+"#"+clickKey});
+        }
+    },
+
     render() {
 
         var toolbarExtra;
-        if(this.state.currentOptType==""){
-            toolbarExtra = <div className="ant-tabs-right"></div>;
-        }else if(this.state.currentOptType=="bySchedule"){
-            /*toolbarExtra = <div className="ant-tabs-right"><span className="toobar"><Button type="" icon="delete" onClick={deleteConfirm}  ></Button></span></div>;*/
-            toolbarExtra = <div className="ant-tabs-right"></div>;
-        }else{
-            /*toolbarExtra = <div className="ant-tabs-right"><Button type="" icon="share-alt" onClick={this.showModal}></Button><SubjectUploadTabComponents params={this.state.subjectParams}></SubjectUploadTabComponents><span className="toobar"><Button type="" icon="delete" onClick={deleteConfirm}  ></Button></span></div>;*/
+        var tabPanel;
+        var subjectTabPanel;
+        const menu = (
+            <Menu onClick={this.menuItemOnClick}>
+                <Menu.Item key="self">只看自己</Menu.Item>
+                <Menu.Item key="other">查看他人</Menu.Item>
+            </Menu>
+        );
+        if(this.state.currentOptType=="bySubjectId"){
             toolbarExtra = <div className="ant-tabs-right"><CourseWareUploadComponents params={this.state.subjectParams}></CourseWareUploadComponents><SubjectUploadTabComponents params={this.state.subjectParams}></SubjectUploadTabComponents></div>;
+            tabPanel=<TabPane tab={<span>课件<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link" href="#"><Icon type="filter"/></a></Dropdown></span>} key="课件"><CourseWareComponents ref="courseWare"/></TabPane>;
+            subjectTabPanel=<TabPane tab={<span>题目<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link" href="#"><Icon type="filter"/></a></Dropdown></span>} key="题目"><SubjectTable  ref="subTable" params={this.state.subjectParams}/></TabPane>;
+        }else{
+            toolbarExtra = <div className="ant-tabs-right"></div>;
+            tabPanel=<TabPane tab="课件" key="课件"><CourseWareComponents ref="courseWare"/></TabPane>;
+            subjectTabPanel=<TabPane tab="题目" key="题目"><SubjectTable  ref="subTable" params={this.state.subjectParams}/></TabPane>
         }
-        {/*toolbarExtra = <div className="ant-tabs-right"><CourseWareUploadComponents params={this.state.subjectParams}></CourseWareUploadComponents><SubjectUploadTabComponents params={this.state.subjectParams}></SubjectUploadTabComponents></div>;*/}
+
+
+
         return (
             <div>
                 <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
@@ -121,8 +148,8 @@ const MainTabComponents = React.createClass({
                     tabBarExtraContent={toolbarExtra}
                     transitionName=""  //禁用Tabs的动画效果
                 >
-                    <TabPane tab="课件" key="课件"><CourseWareComponents ref="courseWare"/></TabPane>
-                    <TabPane tab="题目" key="题目"><SubjectTable  ref="subTable" params={this.state.subjectParams}/></TabPane>
+                    {tabPanel}
+                    {subjectTabPanel}
                 </Tabs>
             </div>
         );

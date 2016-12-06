@@ -83,14 +83,14 @@ const SUbjectTable = React.createClass({
     this.setState({ selectedRowKeys });
   },
 
-  getSubjectData(ident,ScheduleOrSubjectId,pageNo,optType,knowledgeName){
+  getSubjectData(ident,ScheduleOrSubjectId,pageNo,optType,knowledgeName,isOwmer){
     data=[];
     // alert("ccc:"+ident+"==="+ScheduleOrSubjectId+",,,,"+optType);
     subTable.setState({optType:optType,knowledgeName:knowledgeName,ScheduleOrSubjectId:ScheduleOrSubjectId});
     if(optType=="bySchedule"){
       subTable.getSubjectDataBySchedule(ident,ScheduleOrSubjectId,pageNo);
     }else{
-      subTable.getSubjectDataByKnowledge(ident,ScheduleOrSubjectId,pageNo);
+      subTable.getSubjectDataByKnowledge(ident,ScheduleOrSubjectId,pageNo,isOwmer);
     }
   },
 
@@ -179,14 +179,14 @@ const SUbjectTable = React.createClass({
     }
   },
 
-  getSubjectDataByKnowledge:function (ident,ScheduleOrSubjectId,pageNo) {
+  getSubjectDataByKnowledge:function (ident,ScheduleOrSubjectId,pageNo,isOwmer) {
     // alert("getSubjectDataByKnowledge:"+ident+"==="+ScheduleOrSubjectId);
     // alert(pageNo);
     var param = {
       "method":'getUserSubjectsByKnowledgePoint',
       "ident":ident,
       "pointId":ScheduleOrSubjectId,
-      "isOwmer":"N",
+      "isOwmer":isOwmer,
       "pageNo":pageNo
     };
 
@@ -254,7 +254,14 @@ const SUbjectTable = React.createClass({
     }
     var optType = subjectParamArray[3];
     var knowledgeName = subjectParamArray[4];
-    subTable.getSubjectData(ident,ScheduleOrSubjectId,pageNo,optType,knowledgeName);
+    var dataFilter = subjectParamArray[5];
+    var isOwmer="Y";
+    if(dataFilter=="self"){
+      isOwmer="Y";
+    }else if(dataFilter=="other"){
+      isOwmer="N";
+    }
+    subTable.getSubjectData(ident,ScheduleOrSubjectId,pageNo,optType,knowledgeName,isOwmer);
   },
 
   showModal:function (e) {
