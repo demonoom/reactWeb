@@ -1,8 +1,6 @@
 import React, { PropTypes } from 'react';
-import { Table, Button,Icon } from 'antd';
-import UseKnowledgeComponents from './UseKnowledgeComponents';
-import SubjectEditTabComponents from './SubjectEditTabComponents';
-import reqwest from 'reqwest';
+import { Table, Button } from 'antd';
+import { doWebService } from '../WebServiceHelper';
 
 var columns = [ {
   title: '标题',
@@ -44,25 +42,6 @@ const HomeWorkTableComponents = React.createClass({
   onSelectChange(selectedRowKeys) {
     console.log('selectedRowKeys changed: ', selectedRowKeys);
     this.setState({ selectedRowKeys });
-  },
-  doWebService : function(data,listener) {
-    var service = this;
-    //this.WEBSERVICE_URL = "http://192.168.2.103:8080/Excoord_For_Education/webservice";
-    this.WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
-    if (service.requesting) {
-      return;
-    }
-    service.requesting = true;
-    $.post(service.WEBSERVICE_URL, {
-      params : data
-    }, function(result, status) {
-      service.requesting = false;
-      if (status == "success") {
-        listener.onResponse(result);
-      } else {
-        listener.onError(result);
-      }
-    }, "json");
   },
 
   buildPageView(optSource){
@@ -138,7 +117,7 @@ const HomeWorkTableComponents = React.createClass({
 
     };
 
-    this.doWebService(JSON.stringify(param), {
+    doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
         console.log("getSubjectDataMSG:"+ret.msg);
         subjectList=new Array();
@@ -194,7 +173,7 @@ const HomeWorkTableComponents = React.createClass({
       "pageNo":pageNo
     };
 
-    this.doWebService(JSON.stringify(param), {
+    doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
         console.log("getSubjectDataMSG:"+ret.msg);
         subjectList=new Array();

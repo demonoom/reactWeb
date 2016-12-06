@@ -1,11 +1,9 @@
 import React, { PropTypes } from 'react';
 import { Modal, Button } from 'antd';
 import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox } from 'antd';
-const FormItem = Form.Item;
-const Option = Select.Option;
+import { doWebService } from '../WebServiceHelper';
 
 var subjectForm;
-var editSchuldeInfo;
 var editSchuldeId="";
 var editSchuldeName="";
 
@@ -22,38 +20,19 @@ const TeachingComponents = React.createClass({
     };
   },
 
-  doWebService : function(data,listener) {
-    var service = this;
-    this.WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
-    if (service.requesting) {
-      return;
-    }
-    service.requesting = true;
-    $.post(service.WEBSERVICE_URL, {
-      params : data
-    }, function(result, status) {
-      service.requesting = false;
-      if (status == "success") {
-        listener.onResponse(result);
-      } else {
-        listener.onError(result);
-      }
-    }, "json");
-  },
-
   saveSchedule(ident,scheduleName){
     var param = {
       "method":'addTeachSchedule',
       "ident":ident,
       "title":scheduleName
     };
-    subjectForm.doWebService(JSON.stringify(param), {
+    doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
         console.log(ret.msg);
         if(ret.msg=="调用成功" && ret.response.colTsId!=null){
-            alert("教学进度添加成功");
+          alert("教学进度添加成功");
         }else{
-            alert("教学进度添加失败");
+          alert("教学进度添加失败");
         }
         subjectForm.props.callbackParent();
         subjectForm.setState({ visible: false });
@@ -72,7 +51,7 @@ const TeachingComponents = React.createClass({
       "scheduleId":subjectForm.state.schuldeId,
       "title":scheduleName
     };
-    subjectForm.doWebService(JSON.stringify(param), {
+    doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
         console.log(ret.msg);
         if(ret.msg=="调用成功" && ret.response==true){
@@ -129,26 +108,26 @@ const TeachingComponents = React.createClass({
 
   render() {
     return (
-          <Modal
-              visible={subjectForm.state.visible}
-              title="教学进度"
-              onCancel={subjectForm.handleCancel}
-              className="modol_width"
-              transitionName=""  //禁用modal的动画效果
-              footer={[
-                <Button type="primary" htmlType="submit" className="login-form-button" onClick={subjectForm.handleSubmit}  >确定</Button>,
-                <Button type="ghost" htmlType="reset" className="login-form-button" onClick={subjectForm.handleCancel} >取消</Button>
-              ]}
-          >
-            <div className="ant-form-item">
-              <Row>
-                <Col span={6} className="right_look">
-                  <span>名称：</span>
-                </Col>
-                <Col span={14}><span><Input ref="editSchuldeNameInput" placeholder="请输入教学进度名称" defaultValue={subjectForm.state.schuldeName} /></span></Col>
-              </Row>
-            </div>
-          </Modal>
+        <Modal
+            visible={subjectForm.state.visible}
+            title="教学进度"
+            onCancel={subjectForm.handleCancel}
+            className="modol_width"
+            transitionName=""  //禁用modal的动画效果
+            footer={[
+              <Button type="primary" htmlType="submit" className="login-form-button" onClick={subjectForm.handleSubmit}  >确定</Button>,
+              <Button type="ghost" htmlType="reset" className="login-form-button" onClick={subjectForm.handleCancel} >取消</Button>
+            ]}
+        >
+          <div className="ant-form-item">
+            <Row>
+              <Col span={6} className="right_look">
+                <span>名称：</span>
+              </Col>
+              <Col span={14}><span><Input ref="editSchuldeNameInput" placeholder="请输入教学进度名称" defaultValue={subjectForm.state.schuldeName} /></span></Col>
+            </Row>
+          </div>
+        </Modal>
     );
   },
 });

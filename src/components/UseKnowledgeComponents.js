@@ -1,16 +1,15 @@
 import React, { PropTypes } from 'react';
 import { Modal, Button } from 'antd';
-import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox,Radio } from 'antd';
+import { Form, Input, Tooltip, Icon, Cascader, Select,Checkbox,Radio } from 'antd';
+import { doWebService } from '../WebServiceHelper';
 const FormItem = Form.Item;
 const Option = Select.Option;
-const RadioGroup = Radio.Group;
 
 //一级菜单数组
 let List=new Array();
 //菜单元素，根据构建出来的该对象，对菜单进行生成
 let options;
 var knowledge;
-var knowledgeName;
 const UseKnowledgeComponents = React.createClass({
   getInitialState() {
     knowledge = this;
@@ -30,8 +29,8 @@ const UseKnowledgeComponents = React.createClass({
     };
   },
   showModal(currentKnowlege,optType,knowledgeName) {
-      // alert("currentKnowlege:"+currentKnowlege+",optType:"+optType);
-      //当前点击的，计划应用的课件资源
+    // alert("currentKnowlege:"+currentKnowlege+",optType:"+optType);
+    //当前点击的，计划应用的课件资源
     // alert("knowledgeName in user"+knowledgeName);
     knowledgeName = knowledgeName;
     knowledge.setState({knowledgeName:knowledgeName});
@@ -60,13 +59,13 @@ const UseKnowledgeComponents = React.createClass({
       // currentKnowledgeState:false,
       // newScheduleState:false,
       /*if(knowledge.state.newScheduleState==true){
-        var inputObj = knowledge.refs.scheduleName;
+       var inputObj = knowledge.refs.scheduleName;
 
-        alert("inputValue:"+scheduleName);
-        //knowledge.saveSchedule(sessionStorage.getItem("ident"),scheduleName);
-      }else{
-        var scheduleName = inputObj.refs.input.value;
-      }*/
+       alert("inputValue:"+scheduleName);
+       //knowledge.saveSchedule(sessionStorage.getItem("ident"),scheduleName);
+       }else{
+       var scheduleName = inputObj.refs.input.value;
+       }*/
     }else{
       // alert("使用");
       // alert(knowledge.state.currentKnowlege+"===:"+knowledge.state.schedule+",optType"+knowledge.state.optType);
@@ -84,7 +83,7 @@ const UseKnowledgeComponents = React.createClass({
       "ident":ident,
       "title":scheduleName
     };
-    this.doWebService(JSON.stringify(param), {
+    doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
         console.log(ret.msg);
         if(ret.msg=="调用成功" && ret.response.colTsId!=null){
@@ -112,13 +111,13 @@ const UseKnowledgeComponents = React.createClass({
       "materiaIds":materiaIds,
       "scheduleId":scheduleId
     };
-    this.doWebService(JSON.stringify(param), {
+    doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
         console.log(ret.msg);
         if(ret.msg=="调用成功" && ret.response==true){
-            alert("课件使用成功");
+          alert("课件使用成功");
         }else{
-            alert("课件使用失败");
+          alert("课件使用失败");
         }
         knowledge.setState({
           visible: false,
@@ -136,7 +135,7 @@ const UseKnowledgeComponents = React.createClass({
       "subjectsIds":subjectsIds,
       "teachScheduleId":scheduleId
     };
-    this.doWebService(JSON.stringify(param), {
+    doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
         console.log(ret.msg);
         if(ret.msg=="调用成功" && ret.response==true){
@@ -164,32 +163,12 @@ const UseKnowledgeComponents = React.createClass({
     this.setState({ visible: false });
   },
 
-  doWebService : function(data,listener) {
-    var service = this;
-    //this.WEBSERVICE_URL = "http://192.168.2.103:8080/Excoord_For_Education/webservice";
-    this.WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
-    if (service.requesting) {
-      return;
-    }
-    service.requesting = true;
-    $.post(service.WEBSERVICE_URL, {
-      params : data
-    }, function(result, status) {
-      service.requesting = false;
-      if (status == "success") {
-        listener.onResponse(result);
-      } else {
-        listener.onError(result);
-      }
-    }, "json");
-  },
-
   getLessonMenu(){
     var param = {
       "method":'getTeachScheduleByIdent',
       "ident":sessionStorage.getItem("ident")
     };
-    this.doWebService(JSON.stringify(param), {
+    doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
         console.log(ret.msg);
         List.splice(0,List.length);
@@ -225,9 +204,9 @@ const UseKnowledgeComponents = React.createClass({
   buildMenuChildren:function () {
     //alert("buildMenuChildren"+List.length);
     options = List.map((e, i)=> {
-        if(i==0){
-            knowledge.setState({schedule:e[0] });
-        }
+      if(i==0){
+        knowledge.setState({schedule:e[0] });
+      }
       return <Option key={e[0]} value={e[0]}>{e[1]}</Option>
     });
     knowledge.setState({selectOptions:options});
@@ -235,7 +214,7 @@ const UseKnowledgeComponents = React.createClass({
 
   handleSchedule: function(e) {
     var value = e;
-   // alert("vvv:"+value);
+    // alert("vvv:"+value);
     this.setState({
       schedule: value,
     });
@@ -243,22 +222,22 @@ const UseKnowledgeComponents = React.createClass({
 
   checkBoxOnChange(e) {
     // currentKnowledgeState:false,
-        // newScheduleState:false,
+    // newScheduleState:false,
     console.log(`checked = ${e.target.checked}`);
     // currentKnowledgeState:false,
-        // newScheduleState:false,
+    // newScheduleState:false,
     var checkBoxValue = e.target.value;
     var inputObj = knowledge.refs.scheduleName;
     var currentKnowledgeState;
     var newScheduleState;
     if(checkBoxValue=="currentKnowledge"){
-        if(e.target.checked==true){
-          currentKnowledgeState=true;
-        }else{
-          currentKnowledgeState=false;
-        }
-        inputObj.refs.input.value="";
-        knowledge.setState({inputState:true});
+      if(e.target.checked==true){
+        currentKnowledgeState=true;
+      }else{
+        currentKnowledgeState=false;
+      }
+      inputObj.refs.input.value="";
+      knowledge.setState({inputState:true});
     }else{
       if(e.target.checked==true){
         newScheduleState=true;
@@ -283,33 +262,33 @@ const UseKnowledgeComponents = React.createClass({
     };
     return (
 
-      <div>
-        <Modal
-          visible={this.state.visible}
-          title="使用至"
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-          transitionName=""  //禁用modal的动画效果
-          footer={[
-            <Button key="submit" type="primary"  htmlType="submit"  size="large" onClick={this.handleSubmit}>提交</Button>
-          ]}
-        >
-          <Form horizontal>
-            <FormItem
-                {...formItemLayout}
-                label="教学进度"
-            >
-              <Select defaultValue={knowledge.state.schedule} key="teachSchedule" style={{ width: '100%' }} ref="teachSchedule" onChange={this.handleSchedule}>
-                {knowledge.state.selectOptions}
-              </Select>
-              <div>
-                <Checkbox onChange={knowledge.checkBoxOnChange} value="currentKnowledge">使用当前知识点作为教学进度</Checkbox>
-                <Checkbox onChange={knowledge.checkBoxOnChange} value="newSchedule">新建教学进度:<Input ref="scheduleName" disabled={this.state.inputState}/></Checkbox>
-              </div>
-            </FormItem>
-          </Form>
-        </Modal>
-      </div>
+        <div>
+          <Modal
+              visible={this.state.visible}
+              title="使用至"
+              onOk={this.handleOk}
+              onCancel={this.handleCancel}
+              transitionName=""  //禁用modal的动画效果
+              footer={[
+                <Button key="submit" type="primary"  htmlType="submit"  size="large" onClick={this.handleSubmit}>提交</Button>
+              ]}
+          >
+            <Form horizontal>
+              <FormItem
+                  {...formItemLayout}
+                  label="教学进度"
+              >
+                <Select defaultValue={knowledge.state.schedule} key="teachSchedule" style={{ width: '100%' }} ref="teachSchedule" onChange={this.handleSchedule}>
+                  {knowledge.state.selectOptions}
+                </Select>
+                <div>
+                  <Checkbox onChange={knowledge.checkBoxOnChange} value="currentKnowledge">使用当前知识点作为教学进度</Checkbox>
+                  <Checkbox onChange={knowledge.checkBoxOnChange} value="newSchedule">新建教学进度:<Input ref="scheduleName" disabled={this.state.inputState}/></Checkbox>
+                </div>
+              </FormItem>
+            </Form>
+          </Modal>
+        </div>
     );
   },
 });

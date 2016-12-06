@@ -1,9 +1,9 @@
 import React, { PropTypes,Link } from 'react';
 import { Table, Popconfirm, Button } from 'antd';
-import ReactDOM from 'react-dom';
 import { Menu, Icon,message,Dropdown } from 'antd';
 import { Badge,Pagination } from 'antd';
 import TeachingComponents from '../components/TeachingComponents';
+import { doWebService } from '../WebServiceHelper';
 const SubMenu = Menu.SubMenu;
 
 // let uuid = 0;
@@ -17,6 +17,8 @@ let List=new Array();
 let children;
 var mMenu;
 var scheduleCount=0;
+var percent = 0;
+
 const MiddleMenuComponents = React.createClass({
   getInitialState() {
     mMenu = this;
@@ -28,27 +30,6 @@ const MiddleMenuComponents = React.createClass({
       lessonCount:0,
       menuList:[],
     };
-  },
-
-  doWebService : function(data,listener) {
-    var service = this;
-    //this.WEBSERVICE_URL = "http://192.168.2.103:8080/Excoord_For_Education/webservice";
-    this.WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
-    // this.WEBSERVICE_URL = "http://192.168.1.115:8080/Excoord_For_Education/webservice";
-    if (service.requesting) {
-      return;
-    }
-    service.requesting = true;
-    $.post(service.WEBSERVICE_URL, {
-      params : data
-    }, function(result, status) {
-      service.requesting = false;
-      if (status == "success") {
-        listener.onResponse(result);
-      } else {
-        listener.onError(result);
-      }
-    }, "json");
   },
 
   handleClick(e) {
@@ -76,13 +57,15 @@ const MiddleMenuComponents = React.createClass({
     mMenu.props.callbackParent(optContent);
   },
 
+
+
   getLessonMenu(pageNo){
     var param = {
       "method":'getTeachScheduls',
       "ident":sessionStorage.getItem("ident"),
       "pageNo":pageNo
     };
-    this.doWebService(JSON.stringify(param), {
+    doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
         console.log(ret.msg);
         List.splice(0,List.length);
@@ -111,10 +94,6 @@ const MiddleMenuComponents = React.createClass({
   componentDidMount(){
     mMenu.getLessonMenu(this.state.currentPage);
   },
-
-  // componentWillMount(){
-  //   this.getLessonMenu();
-  // },
 
   /**
    * 教学进度名称右侧的DropDownMenu点击响应处理函数
@@ -172,7 +151,7 @@ const MiddleMenuComponents = React.createClass({
         "ident":sessionStorage.getItem("ident"),
         "sids":sids
       };
-      this.doWebService(JSON.stringify(param), {
+      doWebService(JSON.stringify(param), {
         onResponse : function(ret) {
           console.log(ret.msg);
           if(ret.msg=="调用成功" && ret.response==true){
@@ -206,19 +185,19 @@ const MiddleMenuComponents = React.createClass({
   render() {
     return (
       <div>
-        <div className="menu_til"><Button type="primary" icon="plus" onClick={this.showModal} className='add_study'>添加教学进度</Button></div>
-        <TeachingComponents ref="teachingComponents" callbackParent={this.handleMenu}/>
-        <Menu ref="middleMenu" onClick={this.handleClick}
-              className="cont_t2"
-              defaultOpenKeys={['goSchool']}
-              openKeys={[this.state.openSubMenu]}
-              selectedKeys={['LeftNav']}
-              mode="inline"
-        >
-          {children}
+          <div className="menu_til"><Button type="primary" icon="plus" onClick={this.showModal} className='add_study'>添加教学进度</Button></div>
+          <TeachingComponents ref="teachingComponents" callbackParent={this.handleMenu}/>
+          <Menu ref="middleMenu" onClick={this.handleClick}
+                className="cont_t2"
+                defaultOpenKeys={['goSchool']}
+                openKeys={[this.state.openSubMenu]}
+                selectedKeys={['LeftNav']}
+                mode="inline"
+          >
+            {children}
 
-        </Menu>
-        <Pagination size="small" total={this.state.lessonCount} pageSize="15" current={this.state.currentPage} onChange={this.onChange}/>
+          </Menu>
+          <Pagination size="small" total={this.state.lessonCount} pageSize="15" current={this.state.currentPage} onChange={this.onChange}/>
       </div>
     );
   },
