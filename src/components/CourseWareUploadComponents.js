@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { Tabs, Button,Radio } from 'antd';
 import { Modal} from 'antd';
 import { Slider } from 'antd';
-import { Form, Input, Tooltip, Icon, Cascader, Select, Checkbox } from 'antd';
+import { Form, Input, Tooltip, Icon, Cascader, Select, Checkbox,Row,Col } from 'antd';
 import { Upload,  message } from 'antd';
 import { doWebService } from '../WebServiceHelper';
 import FileUploadComponents from './FileUploadComponents';
@@ -36,19 +36,18 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
         courseWareUpload = this;
         return {
             visible: false,
-            submitFileCheckedList:['大蚂蚁.txt'],
+            submitFileCheckedList:[],
         };
     },
     showModal() {
         uploadFileList.splice(0,uploadFileList.length);
-        // if(this.refs.fileUploadCom!=null && typeof(this.refs.fileUploadCom)!='undefined' ){
-        //     this.refs.fileUploadCom.initFileUploadPage('test');
-        // }
         courseWareUpload.setState({
             visible: true,
         });
-        // this.refs.fileUploadCom.forceUpdate();
+        //弹出文件上传窗口时，初始化窗口数据
+        courseWareUpload.refs.fileUploadCom.initFileUploadPage();
     },
+
     handleOk() {
         courseWareUpload.setState({ visible: false });
     },
@@ -153,18 +152,14 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                         </div>
                     ]}
                 >
-                        <Form horizontal>
-                            <FormItem 
-                                {...formItemLayout}
-                                label={(<span>材料文件</span>)}
-                                hasFeedback>
-                                {getFieldDecorator('materialFile')(
-                                    <div>
-                                        <FileUploadComponents ref="fileUploadCom" fatherState={courseWareUpload.state.visible} callBackParent={courseWareUpload.handleFileSubmit}/>
-                                    </div>
-                                )}
-                            </FormItem>
-                        </Form>
+                        <Row>
+                            <Col span={4}>文件</Col>
+                            <Col span={20}>
+                                <div>
+                                    <FileUploadComponents ref="fileUploadCom" fatherState={courseWareUpload.state.visible} callBackParent={courseWareUpload.handleFileSubmit}/>
+                                </div>
+                            </Col>
+                        </Row>
                 </Modal>
             </div>
         );

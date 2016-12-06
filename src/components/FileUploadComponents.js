@@ -10,7 +10,7 @@ const CheckboxGroup = Checkbox.Group;
 
 var submitFileOptions=[];
 
-const FileUploadComponents = Form.create()(React.createClass({
+const FileUploadComponents = React.createClass({
     getInitialState() {
         submitFileOptions=[];
         return {
@@ -18,6 +18,15 @@ const FileUploadComponents = Form.create()(React.createClass({
             submitFileCheckedList:[],
             submitFileOptions:[],
         };
+    },
+
+    initFileUploadPage(){
+        console.log("initCom");
+        this.setState({submitFileCheckedList:[],submitFileOptions:[]});
+        var fileField = document.getElementById("fileField");
+        // fileField.files.splice(0,fileField.files.length);
+        fileField.value="";
+        console.log("123123"+fileField.value);
     },
 
     //拖拽过程中，通过该函数阻止浏览器默认动作
@@ -39,6 +48,10 @@ const FileUploadComponents = Form.create()(React.createClass({
     sbumitFile(e){
         e.preventDefault();
         var files = e.dataTransfer.files;
+        this.checkFileInfo(files);
+    },
+
+    checkFileInfo(files){
         var fileType = files[0].type;
         var fileName = files[0].name;
         var isExit = this.checkCurrentFileIsSubmit(fileName);
@@ -156,12 +169,28 @@ const FileUploadComponents = Form.create()(React.createClass({
         this.setState({submitFileCheckedList:checkedValues});
     },
 
+    selectFile(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var files = target.files;
+        this.checkFileInfo(files);
+    },
+
+    F_Open_dialog(){
+        document.getElementById("fileField").click();
+    },
+
     render() {
         return (
             <div>
                 <Row>
                     <div className="upload_area" onDragOver={this.dragOver} onDrop={this.sbumitFile}>
-                        {/*<Icon type="plus" />*/}
+                        <input type="file" name="fileField" class="file" id="fileField" size="28" onChange={this.selectFile} style={{display:'none'}} />
+                        <Button type="primary" icon="plus" size={5} onClick={this.F_Open_dialog}></Button>
                         <span style={{align:'center'}}>请将文件拖拽到此区域实现上传</span>
                     </div>
                 </Row>
@@ -176,6 +205,6 @@ const FileUploadComponents = Form.create()(React.createClass({
             </div>
         );
     },
-}));
+});
 
 export default FileUploadComponents;
