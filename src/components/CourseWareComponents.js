@@ -5,7 +5,8 @@ import { doWebService } from '../WebServiceHelper';
 const Panel = Collapse.Panel;
 
 function callback(key) {
-    console.log(key);
+    // console.log(key);
+    // alert(key);
 }
 
 const text = `
@@ -311,7 +312,7 @@ const CourseWareComponents = React.createClass({
             <div>
                 <div>
                     <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
-                    <Collapse defaultActiveKey={activeKey} ref="collapse" onChange={callback}>
+                    <Collapse defaultActiveKey={activeKey} activeKey={activeKey} ref="collapse" onChange={callback}>
                         {coursePanelChildren}
                     </Collapse>
                 </div>
