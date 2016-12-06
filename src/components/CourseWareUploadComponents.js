@@ -2,14 +2,11 @@ import React, { PropTypes } from 'react';
 import { Tabs, Button,Radio } from 'antd';
 import { Modal} from 'antd';
 import { Slider } from 'antd';
-import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox } from 'antd';
+import { Form, Input, Tooltip, Icon, Cascader, Select, Checkbox } from 'antd';
 import { Upload,  message } from 'antd';
+import { doWebService } from '../WebServiceHelper';
 import FileUploadComponents from './FileUploadComponents';
-const Dragger = Upload.Dragger;
 const FormItem = Form.Item;
-const RadioGroup = Radio.Group;
-const Option = Select.Option;
-const CheckboxGroup = Checkbox.Group;
 
 const props = {
     name: 'file',
@@ -59,25 +56,6 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
         courseWareUpload.setState({ visible: false });
     },
 
-    doWebService : function(data,listener) {
-        var service = this;
-        this.WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
-        // if (service.requesting) {
-        //     return;
-        // }
-        // service.requesting = true;
-        $.post(service.WEBSERVICE_URL, {
-            params : data
-        }, function(result, status) {
-            // service.requesting = false;
-            if (status == "success") {
-                listener.onResponse(result);
-            } else {
-                listener.onError(result);
-            }
-        }, "json");
-    },
-
     //点击保存按钮，文件上传
     uploadFile(){
         if(uploadFileList.length==0){
@@ -121,7 +99,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
             "file":file,
             "fileName":fileName
         };
-        courseWareUpload.doWebService(JSON.stringify(param), {
+        doWebService(JSON.stringify(param), {
             onResponse : function(ret) {
                 console.log(ret.msg);
                 if(ret.msg=="调用成功" && ret.response==true){

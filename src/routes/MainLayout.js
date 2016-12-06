@@ -1,5 +1,5 @@
 import React from  'react';
-import { Menu, Breadcrumb, Icon ,Button} from 'antd';
+import { Menu, Breadcrumb, Icon ,Button,Progress} from 'antd';
 import { BackTop } from 'antd';
 import { Row, Col } from 'antd';
 import BackTopButton from  '../components/BackTopButton';
@@ -27,6 +27,7 @@ const store = createStore(function () {
 });
 
 var mainLayout;
+var percent =0 ;
 const MainLayout = React.createClass({
   getInitialState() {
     mainLayout = this;
@@ -37,8 +38,15 @@ const MainLayout = React.createClass({
       openKeysStr:'',
       // locale: enUS,
       locale: 'zh-cn',
+      percent: 0,
     };
   },
+
+  updatePercent(newPercent){
+    // alert("newPercent:"+newPercent);
+    mainLayout.setState({percent:newPercent});
+  },
+
   onCollapseChange() {
     this.setState({
       collapse: !this.state.collapse,
@@ -87,25 +95,30 @@ const MainLayout = React.createClass({
     return breadCrumbArray;
   },
 
+
+
   render() {
     const collapse = this.state.collapse;
     //根据如下判断结果，完成对页面中部位置的渲染，不同情况，渲染不同组件
     var middleComponent;
     var tabComponent=<MainTabComponents ref="mainTabComponents"/>;
     if(this.state.currentKey=="teachTimes"){
-      middleComponent = <MiddleMenuComponents activeMenu={this.state.activeMiddleMenu}  callbackParent={this.getTeachPlans}/>;
-      tabComponent=<MainTabComponents ref="mainTabComponents"/>;
+      middleComponent = <MiddleMenuComponents activeMenu={this.state.activeMiddleMenu}  callbackProgressIncrease={this.updatePercent} callbackParent={this.getTeachPlans}/>;
+      tabComponent=<MainTabComponents ref="mainTabComponents"  callbackProgressIncrease={this.updatePercent}/>;
     }else if(this.state.currentKey=="KnowledgeResources"){
-      middleComponent = <KnowledgeMenuComponents ref="knowledgeMenuComponents" callbackParent={this.getTeachPlans}></KnowledgeMenuComponents>;
-      tabComponent=<MainTabComponents ref="mainTabComponents" callBackKnowledgeMenuBuildBreadCrume={this.callBackKnowledgeMenuBuildBreadCrume}/>;
+      middleComponent = <KnowledgeMenuComponents ref="knowledgeMenuComponents" callbackParent={this.getTeachPlans}  callbackProgressIncrease={this.updatePercent}></KnowledgeMenuComponents>;
+      tabComponent=<MainTabComponents ref="mainTabComponents" callBackKnowledgeMenuBuildBreadCrume={this.callBackKnowledgeMenuBuildBreadCrume}  callbackProgressIncrease={this.updatePercent}/>;
     }else if(this.state.currentKey=="homeWork"){
-      middleComponent = <HomeWorkMenu callbackParent={this.getTeacherHomeWork}></HomeWorkMenu>
-      tabComponent=<HomeWorkTabComponents ref="homeWorkTabComponents"/>;
+      middleComponent = <HomeWorkMenu callbackParent={this.getTeacherHomeWork}  callbackProgressIncrease={this.updatePercent}></HomeWorkMenu>
+      tabComponent=<HomeWorkTabComponents ref="homeWorkTabComponents"  callbackProgressIncrease={this.updatePercent}/>;
     }else if(this.state.currentKey =="studyEvaluate"){
       //学习评价
-      middleComponent = <StudyEvaluateMenu callbackParent={this.getStudyEvaluate}></StudyEvaluateMenu>
-      tabComponent=<StudyEvaluateTabComponents ref="studyEvaluateTabComponents"/>;
+      middleComponent = <StudyEvaluateMenu callbackParent={this.getStudyEvaluate} callbackProgressIncrease={this.updatePercent}></StudyEvaluateMenu>
+      tabComponent=<StudyEvaluateTabComponents ref="studyEvaluateTabComponents" callbackProgressIncrease={this.updatePercent}/>;
     }
+
+    // var percent = progressIncrease(0);
+    // mainLayout.setState({percent:percent});
 
     return (
         <LocaleProvider locale={this.state.locale}>
@@ -149,6 +162,7 @@ const MainLayout = React.createClass({
         <div className="ant-layout-main">
           <div className="ant-layout-header">
                 <HeaderComponents/>
+
           </div>
 
           <div className="ant-layout-operation">

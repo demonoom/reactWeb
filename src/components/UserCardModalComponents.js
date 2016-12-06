@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
-import { Modal, Button,Row, Col } from 'antd';
+import { Modal } from 'antd';
+import { doWebService } from '../WebServiceHelper';
 
 var teacherInfo;
 const UserCardModalComponents = React.createClass({
@@ -32,27 +33,9 @@ const UserCardModalComponents = React.createClass({
     teacherInfo.setState({ visible: false });
   },
 
-  doWebService : function(data,listener) {
-    var service = this;
-    this.WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
-    if (service.requesting) {
-      return;
-    }
-    service.requesting = true;
-    $.post(service.WEBSERVICE_URL, {
-      params : data
-    }, function(result, status) {
-      service.requesting = false;
-      if (status == "success") {
-        listener.onResponse(result);
-      } else {
-        listener.onError(result);
-      }
-    }, "json");
-  },
-
   componentWillMount(){
     var ident = sessionStorage.getItem("ident");
+    // alert("will"+ident);
     teacherInfo.getTeacherInfo(ident);
   },
 
@@ -61,7 +44,7 @@ const UserCardModalComponents = React.createClass({
       "method":'getTeacherInfo',
       "ident":ident,
     };
-    teacherInfo.doWebService(JSON.stringify(param), {
+    doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
         console.log(ret.msg);
         var response = ret.response;
@@ -85,34 +68,34 @@ const UserCardModalComponents = React.createClass({
 
   render() {
     return (
-      <div className="layout_logo">
-        <img src={teacherInfo.state.userHeadIcon}  onClick={teacherInfo.showModal}/>
-        <Modal
-          visible={teacherInfo.state.visible}
-          title={<p className="user_cont1"> <img className="img_us" src={teacherInfo.state.userHeadIcon}  onClick={teacherInfo.showModal}/><span>丹丹</span><img src={teacherInfo.state.userHeadIcon} className="blur"/><br/></p>}
-          onOk={teacherInfo.handleOk}
-          onCancel={teacherInfo.handleCancel}
-		  className="model_wi"
-          transitionName=""  //禁用modal的动画效果
-          footer={[
+        <div className="layout_logo">
+          <img src={teacherInfo.state.userHeadIcon}  onClick={teacherInfo.showModal}/>
+          <Modal
+              visible={teacherInfo.state.visible}
+              title={<p className="user_cont1"> <img className="img_us" src={teacherInfo.state.userHeadIcon}  onClick={teacherInfo.showModal}/><span>丹丹</span><img src={teacherInfo.state.userHeadIcon} className="blur"/><br/></p>}
+              onOk={teacherInfo.handleOk}
+              onCancel={teacherInfo.handleCancel}
+              className="model_wi"
+              transitionName=""  //禁用modal的动画效果
+              footer={[
 
-          ]}
-        >
-          {/*<p className="user_cont model_to"><span className="name">学校名称：{teacherInfo.state.schoolName}</span><span className="name1"></span></p>*/}
-          <p className="user_cont model_to"><span className="name">学校名称：</span><span className="name1">{teacherInfo.state.schoolName}</span></p>
-          <p className="user_cont"><span className="name">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;区：</span><span className="name1">{teacherInfo.state.schoolAddress}</span></p>
+              ]}
+          >
+            {/*<p className="user_cont model_to"><span className="name">学校名称：{teacherInfo.state.schoolName}</span><span className="name1"></span></p>*/}
+            <p className="user_cont model_to"><span className="name">学校名称：</span><span className="name1">{teacherInfo.state.schoolName}</span></p>
+            <p className="user_cont"><span className="name">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;区：</span><span className="name1">{teacherInfo.state.schoolAddress}</span></p>
 
-          {/* userName:userName,
-          userHeadIcon:userHeadIcon,
-          courseName:courseName,
-          schoolName*/}
-          <p className="user_cont"><span className="name">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</span><span className="name1">{teacherInfo.state.userName}</span></p>
-          {/*<p className="user_cont"><span className="name">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span><span className="name1">一年级</span></p>
-          <p className="user_cont"><span className="name">班&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span><span className="name1">一班</span></p>*/}
-          <p className="user_cont"><span className="name">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：</span><span className="name1">{teacherInfo.state.courseName}</span></p>
+            {/* userName:userName,
+             userHeadIcon:userHeadIcon,
+             courseName:courseName,
+             schoolName*/}
+            <p className="user_cont"><span className="name">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</span><span className="name1">{teacherInfo.state.userName}</span></p>
+            {/*<p className="user_cont"><span className="name">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span><span className="name1">一年级</span></p>
+             <p className="user_cont"><span className="name">班&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span><span className="name1">一班</span></p>*/}
+            <p className="user_cont"><span className="name">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：</span><span className="name1">{teacherInfo.state.courseName}</span></p>
 
-        </Modal>
-      </div>
+          </Modal>
+        </div>
     );
   },
 });

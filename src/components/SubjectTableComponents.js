@@ -1,8 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Table, Button,Icon } from 'antd';
 import UseKnowledgeComponents from './UseKnowledgeComponents';
-import SubjectEditTabComponents from './SubjectEditTabComponents';
-import reqwest from 'reqwest';
+import { doWebService } from '../WebServiceHelper';
 
 const columns = [{
   title: '出题人',
@@ -18,36 +17,36 @@ const columns = [{
 //   dataIndex: 'submitTime',
 // },
   {
-  title: '题型',
-  className:'ant-table-selection-topic',
-  dataIndex: 'subjectType',
-  filters: [{
-    text: '单选题',
-    value: '单选题',
-  }, {
-    text: '多选题',
-    value: '多选题',
-  }, {
-    text: '判断题',
-    value: '判断题',
-  }, {
-    text: '简答题',
-    value: '简答题',
-  }, {
-    text: '材料题',
-    value: '材料题',
-  },],
+    title: '题型',
+    className:'ant-table-selection-topic',
+    dataIndex: 'subjectType',
+    filters: [{
+      text: '单选题',
+      value: '单选题',
+    }, {
+      text: '多选题',
+      value: '多选题',
+    }, {
+      text: '判断题',
+      value: '判断题',
+    }, {
+      text: '简答题',
+      value: '简答题',
+    }, {
+      text: '材料题',
+      value: '材料题',
+    },],
     onFilter: (value, record) => record.subjectType.indexOf(value) === 0,
-},
+  },
   {
-  title: '分值',
-  className:'ant-table-selection-score',
-  dataIndex: 'subjectScore',
-}, {
-  title: '操作',
-  className:'ant-table-selection-score',
-  dataIndex: 'subjectOpt',
-},
+    title: '分值',
+    className:'ant-table-selection-score',
+    dataIndex: 'subjectScore',
+  }, {
+    title: '操作',
+    className:'ant-table-selection-score',
+    dataIndex: 'subjectOpt',
+  },
 ];
 
 var data = [];
@@ -83,26 +82,6 @@ const SUbjectTable = React.createClass({
     console.log('selectedRowKeys changed: ', selectedRowKeys);
     this.setState({ selectedRowKeys });
   },
-  doWebService : function(data,listener) {
-    var service = this;
-    //this.WEBSERVICE_URL = "http://192.168.2.103:8080/Excoord_For_Education/webservice";
-    this.WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
-    // this.WEBSERVICE_URL = "http://192.168.1.115:8080/Excoord_For_Education/webservice";
-    // if (service.requesting) {
-    //   return;
-    // }
-    // service.requesting = true;
-    $.post(service.WEBSERVICE_URL, {
-      params : data
-    }, function(result, status) {
-      // service.requesting = false;
-      if (status == "success") {
-        listener.onResponse(result);
-      } else {
-        listener.onError(result);
-      }
-    }, "json");
-  },
 
   getSubjectData(ident,ScheduleOrSubjectId,pageNo,optType,knowledgeName){
     data=[];
@@ -124,7 +103,7 @@ const SUbjectTable = React.createClass({
       "pageNo":pageNo
     };
 
-    this.doWebService(JSON.stringify(param), {
+    doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
         console.log("getSubjectDataMSG:"+ret.msg);
         // subjectList=new Array();
@@ -169,34 +148,34 @@ const SUbjectTable = React.createClass({
   //删除教学进度下的题目
   deleteSubject:function (e) {
     if(confirm("确定要删除该题目?")){
-        var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-          target=e.currentTarget;
-        }else{
-          target = e.target;
-        }
-        // alert("deleteSubject:"+target.value);
-        var subjectIds = target.value;
-        var param = {
-          "method":'deleteScheduleSubjects',
-          "ident":sessionStorage.getItem("ident"),
-          "scheduleId":subTable.state.ScheduleOrSubjectId,
-          "subjectIds":subjectIds
-        };
-        this.doWebService(JSON.stringify(param), {
-          onResponse : function(ret) {
-            console.log(ret.msg);
-            if(ret.msg=="调用成功" && ret.response==true){
-              alert("题目删除成功");
-            }else{
-              alert("题目删除失败");
-            }
-            subTable.getSubjectDataBySchedule(sessionStorage.getItem("ident"),subTable.state.ScheduleOrSubjectId,subTable.state.currentPage);
-          },
-          onError : function(error) {
-            alert(error);
+      var target = e.target;
+      if(navigator.userAgent.indexOf("Chrome") > -1){
+        target=e.currentTarget;
+      }else{
+        target = e.target;
+      }
+      // alert("deleteSubject:"+target.value);
+      var subjectIds = target.value;
+      var param = {
+        "method":'deleteScheduleSubjects',
+        "ident":sessionStorage.getItem("ident"),
+        "scheduleId":subTable.state.ScheduleOrSubjectId,
+        "subjectIds":subjectIds
+      };
+      doWebService(JSON.stringify(param), {
+        onResponse : function(ret) {
+          console.log(ret.msg);
+          if(ret.msg=="调用成功" && ret.response==true){
+            alert("题目删除成功");
+          }else{
+            alert("题目删除失败");
           }
-        });
+          subTable.getSubjectDataBySchedule(sessionStorage.getItem("ident"),subTable.state.ScheduleOrSubjectId,subTable.state.currentPage);
+        },
+        onError : function(error) {
+          alert(error);
+        }
+      });
     }
   },
 
@@ -211,7 +190,7 @@ const SUbjectTable = React.createClass({
       "pageNo":pageNo
     };
 
-    this.doWebService(JSON.stringify(param), {
+    doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
         console.log("getSubjectDataMSG:"+ret.msg);
         subjectList=new Array();
@@ -246,13 +225,13 @@ const SUbjectTable = React.createClass({
   },
 
   /*getLocalTime:function (nS) {
-    // var newDate = new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/,' ');
-    // return newDate;
-    var newDate = new Date();
-    newDate.setTime(nS);
-    console.log("localDate："+newDate.toLocaleDateString())
-    return newDate.toLocaleDateString();
-  },*/
+   // var newDate = new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/,' ');
+   // return newDate;
+   var newDate = new Date();
+   newDate.setTime(nS);
+   console.log("localDate："+newDate.toLocaleDateString())
+   return newDate.toLocaleDateString();
+   },*/
 
   componentDidMount(){
     subTable.initGetSubjectInfo();
@@ -309,10 +288,10 @@ const SUbjectTable = React.createClass({
     };
     const hasSelected = selectedRowKeys.length > 0;
     return (
-      <div >
-        <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
-        <Table rowSelection={rowSelection} columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: 15,onChange:subTable.pageOnChange }} scroll={{ y: 400}}/>
-      </div>
+        <div >
+          <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
+          <Table rowSelection={rowSelection} columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: 15,onChange:subTable.pageOnChange }} scroll={{ y: 400}}/>
+        </div>
     );
   },
 });

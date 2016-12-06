@@ -1,35 +1,18 @@
 import React, { PropTypes,Link } from 'react';
-import { Table, Popconfirm, Button } from 'antd';
-import ReactDOM from 'react-dom';
+import { Table, Popconfirm} from 'antd';
 import { Menu, Icon } from 'antd';
 import { Badge,Pagination } from 'antd';
-import TeachingComponents from '../components/TeachingComponents';
+import { doWebService } from '../WebServiceHelper';
 const SubMenu = Menu.SubMenu;
-// let uuid = 0;
 
-
-//菜单二级子菜单数组
-let lessonData=new Array();
 //一级菜单数组
 let List=new Array();
 //菜单元素，根据构建出来的该对象，对菜单进行生成
 let children;
-let childrenSub;
 var mMenu;
-var subMenu;
-var vdom = new Array();
 var breadCrumbArray=new Array();
 var openKeys=[];
 var openKeysStr="";
-
-var styles = {
-    color: 'red',
-    backgroundColor: 'red'
-};
-
-/*var menuStyle={
-    color: '#2896fb'
-};*/
 
 const KnowledgeMenuComponents = React.createClass({
     getInitialState() {
@@ -82,27 +65,7 @@ const KnowledgeMenuComponents = React.createClass({
         }
     },
 
-  doWebService : function(data,listener) {
-    var service = this;
-    //this.WEBSERVICE_URL = "http://192.168.2.103:8080/Excoord_For_Education/webservice";
-    this.WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
-    // this.WEBSERVICE_URL = "http://192.168.1.115:8080/Excoord_For_Education/webservice";
-    if (service.requesting) {
-      return;
-    }
-    service.requesting = true;
-    $.post(service.WEBSERVICE_URL, {
-      params : data
-    }, function(result, status) {
-      service.requesting = false;
-      if (status == "success") {
-        listener.onResponse(result);
-      } else {
-        listener.onError(result);
-      }
-    }, "json");
-  },
-  //菜单被选择时执行的函数
+    //菜单被选择时执行的函数
     subMenuTitleClick(e){
         var domE = e.domEvent;
         var target = domE.target;
@@ -142,23 +105,23 @@ const KnowledgeMenuComponents = React.createClass({
         var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
         this.props.callbackParent(optContent,breadCrumbArray);
     },
-  //判断当前点击的菜单key是否已经在被点击key的数组中
-  checkCurrentMenuKeyIsExist(currentClickKey){
-      for(var i=0;i<openKeys.length;i++){
-          var existKeyArray = openKeys[i].split("#");
-          var menuId = existKeyArray[0];
-          var menuName = existKeyArray[2];
+    //判断当前点击的菜单key是否已经在被点击key的数组中
+    checkCurrentMenuKeyIsExist(currentClickKey){
+        for(var i=0;i<openKeys.length;i++){
+            var existKeyArray = openKeys[i].split("#");
+            var menuId = existKeyArray[0];
+            var menuName = existKeyArray[2];
 
-          var currentMenuKeyArray = currentClickKey.split("#");
-          var currentMenuId = currentMenuKeyArray[0];
-          var currentMenuName = currentMenuKeyArray[2];
+            var currentMenuKeyArray = currentClickKey.split("#");
+            var currentMenuId = currentMenuKeyArray[0];
+            var currentMenuName = currentMenuKeyArray[2];
 
-          if(menuId==currentMenuId && menuName==currentMenuName){
-              return true;
-          }
-      }
-      return false;
-  },
+            if(menuId==currentMenuId && menuName==currentMenuName){
+                return true;
+            }
+        }
+        return false;
+    },
 
     //构建被点击菜单key的数组
     buildOpenMenuKeysArray(currentClickKey,menuLevel){
@@ -193,140 +156,140 @@ const KnowledgeMenuComponents = React.createClass({
 
     },
 
-  checkIsFatherLevel(breadJson,breadCrumbArray){
-      var index=-1;
-      for(var i=0;i<breadCrumbArray.length;i++){
-        //如果是相同层次的菜单，则返回当前的菜单索引位置
-        if(breadJson.menuLevel == breadCrumbArray[i].menuLevel){
-          index=i;
-          break;
-        }
-      }
-      if(index!=-1){
-        //如果点击的是同级菜单，则替换当前的菜单，并删除之后的所有菜单项目
-        breadCrumbArray[index]=breadJson;
+    checkIsFatherLevel(breadJson,breadCrumbArray){
+        var index=-1;
         for(var i=0;i<breadCrumbArray.length;i++){
-          if(i>index){
-            breadCrumbArray.splice(i,1);
-          }
+            //如果是相同层次的菜单，则返回当前的菜单索引位置
+            if(breadJson.menuLevel == breadCrumbArray[i].menuLevel){
+                index=i;
+                break;
+            }
         }
-        breadCrumbArray.push(breadJson);
-      }else{
-        breadCrumbArray.push(breadJson);
-      }
-      return breadCrumbArray;
-  },
+        if(index!=-1){
+            //如果点击的是同级菜单，则替换当前的菜单，并删除之后的所有菜单项目
+            breadCrumbArray[index]=breadJson;
+            for(var i=0;i<breadCrumbArray.length;i++){
+                if(i>index){
+                    breadCrumbArray.splice(i,1);
+                }
+            }
+            breadCrumbArray.push(breadJson);
+        }else{
+            breadCrumbArray.push(breadJson);
+        }
+        return breadCrumbArray;
+    },
 
-  checkSameLevelBread:function (breadJson,breadCrumbArray) {
-      var index=-1;
-      for(var i=0;i<breadCrumbArray.length;i++){
-          //如果是相同层次的菜单，则返回当前的菜单索引位置
-          if(breadJson.menuLevel <= breadCrumbArray[i].menuLevel){
-            index=i;
-            break;
-          }
-      }
-      var removeArray=[];
-      if(index!=-1){
-        //如果点击的是同级菜单，则替换当前的菜单，并删除之后的所有菜单项目
-        breadCrumbArray[index]=breadJson;
+    checkSameLevelBread:function (breadJson,breadCrumbArray) {
+        var index=-1;
         for(var i=0;i<breadCrumbArray.length;i++){
-          if(i>index){
-            removeArray.push(i);
-            //breadCrumbArray.splice(i,1);
-          }
+            //如果是相同层次的菜单，则返回当前的菜单索引位置
+            if(breadJson.menuLevel <= breadCrumbArray[i].menuLevel){
+                index=i;
+                break;
+            }
         }
-        /*for(var i=0;i<removeArray.length;i++){
-          breadCrumbArray.splice(removeArray[i],1);
-        }*/
-          breadCrumbArray.splice(removeArray[0],removeArray.length);
-      }else{
-        breadCrumbArray.push(breadJson);
-      }
+        var removeArray=[];
+        if(index!=-1){
+            //如果点击的是同级菜单，则替换当前的菜单，并删除之后的所有菜单项目
+            breadCrumbArray[index]=breadJson;
+            for(var i=0;i<breadCrumbArray.length;i++){
+                if(i>index){
+                    removeArray.push(i);
+                    //breadCrumbArray.splice(i,1);
+                }
+            }
+            /*for(var i=0;i<removeArray.length;i++){
+             breadCrumbArray.splice(removeArray[i],1);
+             }*/
+            breadCrumbArray.splice(removeArray[0],removeArray.length);
+        }else{
+            breadCrumbArray.push(breadJson);
+        }
 
-      return breadCrumbArray;
-  },
+        return breadCrumbArray;
+    },
 
-  getLessonMenu(){
-    var param = {
-      "method":'getAllKnowledgePoints',
-    };
-    this.doWebService(JSON.stringify(param), {
-      onResponse : function(ret) {
-        console.log(ret.msg);
-        var count =0;
-        ret.response.forEach(function (e) {
-          count++;
-          List.push([e]);
+    getLessonMenu(){
+        var param = {
+            "method":'getAllKnowledgePoints',
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse : function(ret) {
+                console.log(ret.msg);
+                var count =0;
+                ret.response.forEach(function (e) {
+                    count++;
+                    List.push([e]);
+                });
+                mMenu.buildMenuChildren(List);
+                mMenu.setState({totalCount:count});
+            },
+            onError : function(error) {
+                alert(error);
+            }
         });
-        mMenu.buildMenuChildren(List);
-        mMenu.setState({totalCount:count});
-      },
-      onError : function(error) {
-        alert(error);
-      }
-    });
-  },
+    },
 
-  componentWillMount(){
-    this.getLessonMenu();
-  },
+    componentWillMount(){
+        this.getLessonMenu();
+    },
 
-  buildMenuChildren:function (menuList) {
-    var menuContent;
-    children = menuList.map((e, i)=> {
-      menuContent = (e[0]!=null?e[0]:e);
-      // const Options =
-      return <SubMenu key={menuContent.id+"#"+menuContent.children.length+"#"+"0"+"#"+menuContent.content+"#"+""} isRootMenu="true" onTitleClick={this.subMenuTitleClick} title={<span>{menuContent.content}</span>}>
-        {
-          menuContent.children.map(konwledge1 => <SubMenu key={konwledge1.id+"#"+konwledge1.children.length+"#"+"1"+"#"+konwledge1.content+"#"+menuContent.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge1.content}</span>}>
-            {konwledge1.children.map(konwledge2 => <SubMenu key={konwledge2.id+"#"+konwledge2.children.length+"#"+"2"+"#"+konwledge2.content+"#"+konwledge1.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge2.content}</span>}>
-              {konwledge2.children.map(konwledge3 => <SubMenu key={konwledge3.id+"#"+konwledge3.children.length+"#"+"3"+"#"+konwledge3.content+"#"+konwledge2.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge3.content}</span>}>
-                {konwledge3.children.map(konwledge4 => <SubMenu key={konwledge4.id+"#"+konwledge4.children.length+"#"+"4"+"#"+konwledge4.content+"#"+konwledge3.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge4.content}</span>}>
-                  {konwledge4.children.map(konwledge5 => <SubMenu key={konwledge5.id+"#"+konwledge5.children.length+"#"+"5"+"#"+konwledge5.content+"#"+konwledge4.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge5.content}</span>}>
-                    {konwledge5.children.map(konwledge6 => <SubMenu key={konwledge6.id+"#"+konwledge6.children.length+"#"+"6"+"#"+konwledge6.content+"#"+konwledge5.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge6.content}</span>}>
-                    </SubMenu>)}
-                  </SubMenu>)}
-                </SubMenu>)}
-              </SubMenu>)}
-            </SubMenu>)}
-          </SubMenu>)
+    buildMenuChildren:function (menuList) {
+        var menuContent;
+        children = menuList.map((e, i)=> {
+            menuContent = (e[0]!=null?e[0]:e);
+            // const Options =
+            return <SubMenu key={menuContent.id+"#"+menuContent.children.length+"#"+"0"+"#"+menuContent.content+"#"+""} isRootMenu="true" onTitleClick={this.subMenuTitleClick} title={<span>{menuContent.content}</span>}>
+                {
+                    menuContent.children.map(konwledge1 => <SubMenu key={konwledge1.id+"#"+konwledge1.children.length+"#"+"1"+"#"+konwledge1.content+"#"+menuContent.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge1.content}</span>}>
+                        {konwledge1.children.map(konwledge2 => <SubMenu key={konwledge2.id+"#"+konwledge2.children.length+"#"+"2"+"#"+konwledge2.content+"#"+konwledge1.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge2.content}</span>}>
+                            {konwledge2.children.map(konwledge3 => <SubMenu key={konwledge3.id+"#"+konwledge3.children.length+"#"+"3"+"#"+konwledge3.content+"#"+konwledge2.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge3.content}</span>}>
+                                {konwledge3.children.map(konwledge4 => <SubMenu key={konwledge4.id+"#"+konwledge4.children.length+"#"+"4"+"#"+konwledge4.content+"#"+konwledge3.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge4.content}</span>}>
+                                    {konwledge4.children.map(konwledge5 => <SubMenu key={konwledge5.id+"#"+konwledge5.children.length+"#"+"5"+"#"+konwledge5.content+"#"+konwledge4.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge5.content}</span>}>
+                                        {konwledge5.children.map(konwledge6 => <SubMenu key={konwledge6.id+"#"+konwledge6.children.length+"#"+"6"+"#"+konwledge6.content+"#"+konwledge5.content} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge6.content}</span>}>
+                                        </SubMenu>)}
+                                    </SubMenu>)}
+                                </SubMenu>)}
+                            </SubMenu>)}
+                        </SubMenu>)}
+                    </SubMenu>)
+                }
+            </SubMenu>
+        });
+    },
+
+    hasChild:function (menuContent) {
+        if(menuContent.children.length!=0){
+            return true;
+        }else{
+            return false;
         }
-      </SubMenu>
-    });
-  },
+    },
 
-  hasChild:function (menuContent) {
-      if(menuContent.children.length!=0){
-          return true;
-      }else{
-          return false;
-      }
-  },
+    handleClick(e) {
+        this.setState({
+            currentMenu: e.key,
+        });
+        //location.hash=e.key;
+    },
 
-  handleClick(e) {
-    this.setState({
-      currentMenu: e.key,
-    });
-    //location.hash=e.key;
-  },
-
-  render() {
-    return (
-        <div>
-          <div className="menu_til">知识点资源</div>
-          <Menu ref="middleMenu"  onClick={this.handleClick}
-                defaultOpenKeys={mMenu.state.openSubMenu}
-                openKeys={mMenu.state.openSubMenu}
-                selectedKeys={[mMenu.state.currentMenu]}
-                className="cont_t"
-                mode="inline"
-          >
-            {children}
-          </Menu>
-          {/*<Pagination size="small" total={100} current={this.state.currentPage} onChange={this.onChange}/>*/}
-        </div>
-    );
-  },
+    render() {
+        return (
+            <div>
+                <div className="menu_til">知识点资源</div>
+                <Menu ref="middleMenu"  onClick={this.handleClick}
+                      defaultOpenKeys={mMenu.state.openSubMenu}
+                      openKeys={mMenu.state.openSubMenu}
+                      selectedKeys={[mMenu.state.currentMenu]}
+                      className="cont_t"
+                      mode="inline"
+                >
+                    {children}
+                </Menu>
+                {/*<Pagination size="small" total={100} current={this.state.currentPage} onChange={this.onChange}/>*/}
+            </div>
+        );
+    },
 });
 export default KnowledgeMenuComponents;

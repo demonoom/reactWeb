@@ -5,9 +5,8 @@ import { Slider } from 'antd';
 import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox } from 'antd';
 import { Upload,  message } from 'antd';
 import FileUploadComponents from './FileUploadComponents';
-const Dragger = Upload.Dragger;
+import { doWebService } from '../WebServiceHelper';
 const FormItem = Form.Item;
-import RichEditorComponents from './RichEditorComponents';
 const RadioGroup = Radio.Group;
 const Option = Select.Option;
 const CheckboxGroup = Checkbox.Group;
@@ -101,33 +100,12 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
         this.setState({score:value});
     },
 
-    doWebService : function(data,listener) {
-        var service = this;
-        //this.WEBSERVICE_URL = "http://192.168.2.103:8080/Excoord_For_Education/webservice";
-        this.WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
-        if (service.requesting) {
-            return;
-        }
-        service.requesting = true;
-        $.post(service.WEBSERVICE_URL, {
-            params : data
-        }, function(result, status) {
-            service.requesting = false;
-            if (status == "success") {
-                listener.onResponse(result);
-            } else {
-                listener.onError(result);
-            }
-        }, "json");
-    },
-
-
     saveSubject(batchAddSubjectBeanJson){
         var param = {
             "method":'batchAddSubjects',
             "batchAddSubjectBeanJson":[batchAddSubjectBeanJson],
         };
-        this.doWebService(JSON.stringify(param), {
+        doWebService(JSON.stringify(param), {
             onResponse : function(ret) {
                 console.log(ret.msg);
                 if(ret.msg=="调用成功" && ret.response==true){
