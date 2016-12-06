@@ -114,7 +114,7 @@ body{
     }
 	ul.cont_t{
 		width:240px;
-		overflow-x:auto;
+		overflow-x: hidden;
 		overflow-y:auto;
 		height:calc(100% - 72px)
 	}
