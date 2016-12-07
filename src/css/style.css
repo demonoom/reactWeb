@@ -938,13 +938,13 @@ article.content_2 img{
 	border-radius:4px;
 	margin-bottom:20px;
 	text-align:center;
-	font-size:16px;
+	font-size:14px;
 	color:#7c87a5
 }
 .upload_area span{
 	text-align:center;
 	display:block;
-	line-height:100px;
+	line-height:46px;
 	}
 .analyze_iframe{
 	width:100%;
@@ -1196,4 +1196,19 @@ a {
     background-image: -webkit-linear-gradient( bottom left, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent);
     background-image: linear-gradient(to top right, rgba(255,255,255,0.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.15) 75%, transparent 75%, transparent);
     background-size: 15px 15px;
+}
+.add_bnt{
+	border-radius: 50% !important;
+    width: 30px;
+    height: 30px;
+    font-size: 18px !important;
+    line-height: 28px;
+    padding: 0 !important;
+    background: #5ec170 !important;
+    border: 1px solid #5ec170 !important;
+    margin-top: 20px;
+    font-weight: bold;
+}
+.add_out{
+	margin-left:12px;
 }
