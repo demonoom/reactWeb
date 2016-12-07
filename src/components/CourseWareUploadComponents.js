@@ -77,6 +77,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                         var fileUrl=responseStr;
                         courseWareUpload.addNormalMaterial(fileUrl,uploadFileList[0].name);
                         courseWareUpload.setState({ visible: false });
+                        courseWareUpload.props.courseUploadCallBack();
                     }
                 },
                 error : function(responseStr) {

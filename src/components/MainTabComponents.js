@@ -106,6 +106,12 @@ const MainTabComponents = React.createClass({
             this.setState({subjectParams:sessionStorage.getItem("ident")+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType+"#"+this.state.currentKnowledgeName+"#"+clickKey});
         }
     },
+    /**
+     * 课件上传成功后的回调函数
+     */
+    courseUploadCallBack(){
+        this.refs.courseWare.getTeachPlans(sessionStorage.getItem("ident"),this.state.currentTeachScheduleId,this.state.currentOptType,1,this.state.currentKnowledgeName,this.state.dataFilter);
+    },
 
     render() {
 
@@ -119,7 +125,7 @@ const MainTabComponents = React.createClass({
             </Menu>
         );
         if(this.state.currentOptType=="bySubjectId"){
-            toolbarExtra = <div className="ant-tabs-right"><CourseWareUploadComponents params={this.state.subjectParams}></CourseWareUploadComponents><SubjectUploadTabComponents params={this.state.subjectParams}></SubjectUploadTabComponents></div>;
+            toolbarExtra = <div className="ant-tabs-right"><CourseWareUploadComponents courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}></CourseWareUploadComponents><SubjectUploadTabComponents params={this.state.subjectParams}></SubjectUploadTabComponents></div>;
             tabPanel=<TabPane tab={<span>课件<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link" href="#"><Icon type="filter"/></a></Dropdown></span>} key="课件"><CourseWareComponents ref="courseWare"/></TabPane>;
             subjectTabPanel=<TabPane tab={<span>题目<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link" href="#"><Icon type="filter"/></a></Dropdown></span>} key="题目"><SubjectTable  ref="subTable" params={this.state.subjectParams}/></TabPane>;
         }else{
