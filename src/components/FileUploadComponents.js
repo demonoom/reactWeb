@@ -24,9 +24,7 @@ const FileUploadComponents = React.createClass({
         console.log("initCom");
         this.setState({submitFileCheckedList:[],submitFileOptions:[]});
         var fileField = document.getElementById("fileField");
-        // fileField.files.splice(0,fileField.files.length);
         fileField.value="";
-        console.log("123123"+fileField.value);
     },
 
     //拖拽过程中，通过该函数阻止浏览器默认动作
@@ -159,7 +157,8 @@ const FileUploadComponents = React.createClass({
                     i++;
                 }
                 this.setState({submitFileCheckedList:[],submitFileOptions:submitFileOptions});
-
+                var fileField = document.getElementById("fileField");
+                fileField.value="";
             }
             this.props.callBackParent([]);
         }
