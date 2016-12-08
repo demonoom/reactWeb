@@ -126,8 +126,8 @@ const MainTabComponents = React.createClass({
         );
         if(this.state.currentOptType=="bySubjectId"){
             toolbarExtra = <div className="ant-tabs-right"><CourseWareUploadComponents courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}></CourseWareUploadComponents><SubjectUploadTabComponents params={this.state.subjectParams}></SubjectUploadTabComponents></div>;
-            tabPanel=<TabPane tab={<span>课件<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link" href="#"><Icon type="filter"/></a></Dropdown></span>} key="课件"><CourseWareComponents ref="courseWare"/></TabPane>;
-            subjectTabPanel=<TabPane tab={<span>题目<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link" href="#"><Icon type="filter"/></a></Dropdown></span>} key="题目"><SubjectTable  ref="subTable" params={this.state.subjectParams}/></TabPane>;
+            tabPanel=<TabPane tab={<span>课件<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link icon_filter" href="#"><Icon type="filter"/></a></Dropdown></span>} key="课件"><CourseWareComponents ref="courseWare"/></TabPane>;
+            subjectTabPanel=<TabPane tab={<span>题目<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link icon_filter" href="#"><Icon type="filter" /></a></Dropdown></span>} key="题目"><SubjectTable  ref="subTable" params={this.state.subjectParams}/></TabPane>;
         }else{
             toolbarExtra = <div className="ant-tabs-right"></div>;
             tabPanel=<TabPane tab="课件" key="课件"><CourseWareComponents ref="courseWare"/></TabPane>;

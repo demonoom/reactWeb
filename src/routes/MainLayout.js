@@ -134,7 +134,7 @@ const MainLayout = React.createClass({
               <Icon type="edit"/><span className="nav-text">备课</span>
             </Menu.Item>*/}
             <Menu.Item key="homeWork" className="padding_menu">
-              <Icon type="file" /><div className="tan">家庭作业</div>
+              <i className="iconfont">&#xe65e;</i><div className="tan">家庭作业</div>
             </Menu.Item>
             <Menu.Item key="studyEvaluate" className="padding_menu">
               <Icon type="clock-circle-o" /><div className="tan">学习评价</div>
