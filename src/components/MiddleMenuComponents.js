@@ -51,7 +51,7 @@ const MiddleMenuComponents = React.createClass({
     $("div[style]").each(function(){
       $(this).css("background-color","");
     });
-    target.style.backgroundColor="#d4edff";
+    target.style.backgroundColor="#e5f2fe" ;
     mMenu.setState({openSubMenu:e.key});
     var optContent = e.key+"#"+"bySchedule";
     mMenu.props.callbackParent(optContent);
@@ -121,8 +121,8 @@ const MiddleMenuComponents = React.createClass({
    
       const menu = (
           <Menu onClick={mMenu.menuItemOnClick}>
-              <Menu.Item key={e[0]+"#"+e[1]}>修改教学进度</Menu.Item>
-              <Menu.Item key={e[0]}>删除教学进度</Menu.Item>
+              <Menu.Item key={e[0]+"#"+e[1]} className="popup_i_icon"><Icon className="icon_right" type="edit" />修改</Menu.Item>
+              <Menu.Item key={e[0]} className="popup_i_icon"><Icon className="icon_right" type="delete" />删除</Menu.Item>
             </Menu>
       );
       return <SubMenu key={e[0]} onTitleClick={this.subMenuTitleClick} style={{backgroundColor:'red'}} title={<span><span>{e[1]}</span><Badge count={e[2]}/> <Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link" href="#"><Icon type="ellipsis" className="icon_more" /></a></Dropdown> </span>}>

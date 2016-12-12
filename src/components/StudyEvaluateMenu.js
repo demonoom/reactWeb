@@ -35,7 +35,7 @@ const StudyEvaluateMenu = React.createClass({
     $("div[style]").each(function(){
       $(this).css("background-color","");
     });
-    target.style.backgroundColor="#d4edff";
+    target.style.backgroundColor="#e5f2fe";
     this.setState({openSubMenu:e.key});
     var optContent = e.key;
     if(e.key=="studyEvaluate"){
