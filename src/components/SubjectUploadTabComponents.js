@@ -4,6 +4,9 @@ import { Modal} from 'antd';
 import { Slider } from 'antd';
 import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox } from 'antd';
 import { Upload,  message } from 'antd';
+import CkEditorWithWordPasterComponents from  './CkEditorWithWordPasterComponents';
+import CkEditorWithWordPasterComponents1 from  './CkEditorWithWordPasterComponents1';
+import RichEditorComponents from  './RichEditorComponents';
 import FileUploadComponents from './FileUploadComponents';
 import { doWebService } from '../WebServiceHelper';
 const FormItem = Form.Item;
@@ -504,7 +507,10 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                 rules: [{ required: true, message: '请输入题目!' }],
             })(
                 <div>
-                    <Input type="textarea" ref="subjectNameInput" defaultValue={this.state.subjectName} rows={4}/>
+                   {/* <Input type="textarea" ref="subjectNameInput" defaultValue={this.state.subjectName} rows={4}/>*/}
+                    {/*<CkEditorWithWordPasterComponents key="ckeditor"/>*/}
+                    <CkEditorWithWordPasterComponents1></CkEditorWithWordPasterComponents1>
+                   {/* <RichEditorComponents></RichEditorComponents>*/}
                 </div>
             )}
         </FormItem>);
@@ -518,7 +524,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                 <div>
                     <Row>
                         <Col span={6}>
-                            <Select value={this.state.score} ref="scoreSelect" style={{ width: 100 }} disabled={this.state.scoreDisable} onChange={this.selectHandleChange}>
+                            {/*value={this.state.score}*/}
+                            <Select  ref="scoreSelect" style={{ width: 100 }} disabled={this.state.scoreDisable} onChange={this.selectHandleChange}>
                                 {children}
                             </Select>
                         </Col>
@@ -582,7 +589,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                 <Modal
                     visible={this.state.visible}
                     title="添加题目"
-					width="620"
+					width="620px"
                     className="ant-modal-width"
                     onCancel={this.handleCancel}
                     transitionName=""  //禁用modal的动画效果
