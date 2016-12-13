@@ -189,16 +189,16 @@ const FileUploadComponents = React.createClass({
                 <Row>
                     <div className="upload_area" onDragOver={this.dragOver} onDrop={this.sbumitFile}>
                         <input type="file" name="fileField" class="file" id="fileField" size="28" onChange={this.selectFile} style={{display:'none'}} />
-                        <Button type="primary" icon="plus" size={5} onClick={this.F_Open_dialog}></Button>
+                        <Button type="primary" icon="plus" className="add_bnt" size={5} onClick={this.F_Open_dialog}></Button>
                         <span style={{align:'center'}}>请将文件拖拽到此区域实现上传</span>
                     </div>
                 </Row>
                 <Row>
                     <div>
-                        已上传文件列表   <Button type="primary" onClick={this.removeFile}>移除</Button>
+                        已上传文件列表<Button type="primary" className="add_out" onClick={this.removeFile}>移除</Button>
                     </div>
-                    <div>
-                        <CheckboxGroup options={this.state.submitFileOptions} defaultValue={this.state.submitFileCheckedList} value={this.state.submitFileCheckedList} onChange={this.submitFileCheckBoxOnChange}/>
+                    <div className="le_1">
+                        <CheckboxGroup options={this.state.submitFileOptions} style={{margin:'9px'}}  defaultValue={this.state.submitFileCheckedList} value={this.state.submitFileCheckedList} onChange={this.submitFileCheckBoxOnChange}/>
                     </div>
                 </Row>
             </div>

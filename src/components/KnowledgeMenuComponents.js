@@ -78,7 +78,7 @@ const KnowledgeMenuComponents = React.createClass({
         $("div[style]").each(function(){
             $(this).css("background-color","");
         });
-        target.style.backgroundColor="#d4edff";
+        target.style.backgroundColor="#e5f2fe";
         var menuKeyArray = e.key.split("#");
         var menuId = menuKeyArray[0];
         var childrenCount = menuKeyArray[1];
