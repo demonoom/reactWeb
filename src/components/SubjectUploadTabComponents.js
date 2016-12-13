@@ -8,6 +8,9 @@ import CkEditorWithWordPasterComponents from  './CkEditorWithWordPasterComponent
 import CkEditorWithWordPasterComponents1 from  './CkEditorWithWordPasterComponents1';
 import RichEditorComponents from  './RichEditorComponents';
 import FileUploadComponents from './FileUploadComponents';
+import RichEditorComponentsForMuliti from './RichEditorComponentsForMuliti';
+import RichEditorComponentsForCorrect from './RichEditorComponentsForCorrect';
+import RichEditorComponentsForSimpleAnswer from './RichEditorComponentsForSimpleAnswer';
 import { doWebService } from '../WebServiceHelper';
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -72,6 +75,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             scoreDisable:false,
             mulitiAnswerDefaultValue:['A'],
             correctAnswerValue:"正确",
+            subjectItem:[],
         };
     },
     showModal() {
@@ -89,6 +93,10 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
     handleEmail: function(val){
         this.props.callbackParent(val);
         //this.setState({lessonCount: val});
+    },
+
+    componentDidMount(){
+      this.state.subjectItem.push(<RichEditorComponents/>);
     },
 
     sliderOnChange(value) {
@@ -134,7 +142,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
     initPage(){
         this.setState({score:1});
         if(!this.isEmpty(this.refs.subjectNameInput)){
-            this.refs.subjectNameInput.refs.input.value="";
+            // this.refs.subjectNameInput.refs.input.value="";
+            UE.getEditor("container").setContent("");
         }
         if(!this.isEmpty(this.refs.singleAnswer)){
             this.refs.singleAnswer.state.value="A";
@@ -169,7 +178,9 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             if(this.state.scoreDisable==true){
                 score =this.refs.scoreDefined.refs.input.value;
             }
-            var subjectName = values.subjectName;
+            var subjectName = UE.getEditor("container").getContent();
+            console.log("richContent:"+subjectName);
+            // var subjectName = values.subjectName;
             var answer = this.state.singleAnswer;
             // alert("params:"+this.props.params);
             var subjectParamArray = this.props.params.split("#");
@@ -218,7 +229,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             if(this.state.scoreDisable==true){
                 score =this.refs.scoreDefined.refs.input.value;
             }
-            var subjectName = values.subjectName;
+            var subjectName = UE.getEditor("mulitiContainer").getContent();
             var answer = mulitiAnswer;
             var subjectParamArray = this.props.params.split("#");
             var ident = subjectParamArray[0];
@@ -266,7 +277,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             if(this.state.scoreDisable==true){
                 score =this.refs.scoreDefined.refs.input.value;
             }
-            var subjectName = values.subjectName;
+            var subjectName = UE.getEditor("correctContainer").getContent();
             var answer = this.state.correctAnswerValue;
             var subjectParamArray = this.props.params.split("#");
             var ident = subjectParamArray[0];
@@ -315,7 +326,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             if(this.state.scoreDisable==true){
                 score =this.refs.scoreDefined.refs.input.value;
             }
-            var subjectName = values.subjectName;
+            var subjectName = UE.getEditor("simpleAnswerContainer").getContent();
             var answer = this.refs.simpleAnswerInput.refs.input.value;
             var subjectParamArray = this.props.params.split("#");
             var ident = subjectParamArray[0];
@@ -445,7 +456,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             if(this.state.scoreDisable==true){
                 score =this.refs.scoreDefined.refs.input.value;
             }
-            var subjectName = values.subjectName;
+            var subjectName = UE.getEditor("container").getContent();
             var answer = this.state.singleAnswer;
             var subjectParamArray = this.props.params.split("#");
             var ScheduleOrSubjectId = subjectParamArray[1];
@@ -475,7 +486,20 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
 
     tabOnChange(key) {
         // alert(key);
+      this.initPage();
         this.setState({activeKey: key});
+      this.state.subjectItem.splice(0);
+      this.state.subjectItem.push(<RichEditorComponents/>);
+        /*this.state.subjectItem.push(<FormItem
+          {...formItemLayout}
+          label={(<span>题目</span>)}
+          hasFeedback>
+          {getFieldDecorator('subjectName', {
+            rules: [{ required: true, message: '请输入题目!' }],
+          })(
+            <RichEditorComponents/>
+          )}
+        </FormItem>);*/
     },
 
     render() {
@@ -499,20 +523,16 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
         ];
 
         const subjectItem=[];
+        subjectItem.splice(0);
         subjectItem.push(<FormItem
-            {...formItemLayout}
-            label={(<span>题目</span>)}
-            hasFeedback>
-            {getFieldDecorator('subjectName', {
-                rules: [{ required: true, message: '请输入题目!' }],
-            })(
-                <div>
-                   {/* <Input type="textarea" ref="subjectNameInput" defaultValue={this.state.subjectName} rows={4}/>*/}
-                    {/*<CkEditorWithWordPasterComponents key="ckeditor"/>*/}
-                    <CkEditorWithWordPasterComponents1></CkEditorWithWordPasterComponents1>
-                   {/* <RichEditorComponents></RichEditorComponents>*/}
-                </div>
-            )}
+          {...formItemLayout}
+          label={(<span>题目</span>)}
+          hasFeedback>
+          {getFieldDecorator('subjectName', {
+            rules: [{ required: true, message: '请输入题目!' }],
+          })(
+            <RichEditorComponents/>
+          )}
         </FormItem>);
 
         const scoreItem=[];
@@ -589,7 +609,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                 <Modal
                     visible={this.state.visible}
                     title="添加题目"
-					width="620px"
+					width="920px"
                     className="ant-modal-width"
                     onCancel={this.handleCancel}
                     transitionName=""  //禁用modal的动画效果
@@ -607,7 +627,16 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                     >
                         <TabPane tab="单选题" key="单选题">
                             <Form horizontal className="ant-form-fo">
-                                {subjectItem}
+                                <FormItem
+                                    {...formItemLayout}
+                                    label={(<span>题目</span>)}
+                                    hasFeedback>
+                                    {getFieldDecorator('subjectName', {
+                                        rules: [{ required: true, message: '请输入题目!' }],
+                                    })(
+                                        <RichEditorComponents/>
+                                    )}
+                                </FormItem>
                                 <FormItem
                                     {...formItemLayout}
                                     label={(<span>答案</span>)}
@@ -631,7 +660,16 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
 
                         <TabPane tab="多选题" key="多选题"><div>
                             <Form horizontal className="ant-form-fo">
-                                {subjectItem}
+                                <FormItem
+                                    {...formItemLayout}
+                                    label={(<span>题目</span>)}
+                                    hasFeedback>
+                                    {getFieldDecorator('subjectNameM', {
+                                        rules: [{ required: true, message: '请输入题目!' }],
+                                    })(
+                                        <RichEditorComponentsForMuliti/>
+                                    )}
+                                </FormItem>
                                 <FormItem
                                     {...formItemLayout}
                                     label={(<span>答案</span>)}
@@ -648,7 +686,16 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
 
                         <TabPane tab="判断题" key="判断题"><div>
                             <Form horizontal className="ant-form-fo">
-                                {subjectItem}
+                                <FormItem
+                                    {...formItemLayout}
+                                    label={(<span>题目</span>)}
+                                    hasFeedback>
+                                    {getFieldDecorator('subjectNameM', {
+                                        rules: [{ required: true, message: '请输入题目!' }],
+                                    })(
+                                        <RichEditorComponentsForCorrect/>
+                                    )}
+                                </FormItem>
                                 <FormItem
                                     {...formItemLayout}
                                     label={(<span>答案</span>)}
@@ -668,7 +715,16 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
 
                         <TabPane tab="简答题" key="简答题"><div>
                             <Form horizontal className="ant-form-fo">
-                                {subjectItem}
+                                <FormItem
+                                    {...formItemLayout}
+                                    label={(<span>题目</span>)}
+                                    hasFeedback>
+                                    {getFieldDecorator('subjectNameM', {
+                                        rules: [{ required: true, message: '请输入题目!' }],
+                                    })(
+                                        <RichEditorComponentsForSimpleAnswer/>
+                                    )}
+                                </FormItem>
                                 <FormItem
                                     {...formItemLayout}
                                     label={(<span>答案</span>)}
