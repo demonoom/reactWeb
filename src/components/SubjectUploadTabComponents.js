@@ -618,9 +618,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     {...formItemLayout}
                                     label={(<span>题目</span>)}
                                     hasFeedback>
-                                    {getFieldDecorator('subjectName', {
-                                        rules: [{ required: true, message: '请输入题目!' }],
-                                    })(
+                                    {getFieldDecorator('subjectName')(
                                         <RichEditorComponents/>
                                     )}
                                 </FormItem>
@@ -659,9 +657,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     {...formItemLayout}
                                     label={(<span>题目</span>)}
                                     hasFeedback>
-                                    {getFieldDecorator('subjectNameM', {
-                                        rules: [{ required: true, message: '请输入题目!' }],
-                                    })(
+                                    {getFieldDecorator('subjectNameM')(
                                         <RichEditorComponentsForMuliti/>
                                     )}
                                 </FormItem>
@@ -693,9 +689,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     {...formItemLayout}
                                     label={(<span>题目</span>)}
                                     hasFeedback>
-                                    {getFieldDecorator('subjectNameM', {
-                                        rules: [{ required: true, message: '请输入题目!' }],
-                                    })(
+                                    {getFieldDecorator('subjectNameM')(
                                         <RichEditorComponentsForCorrect/>
                                     )}
                                 </FormItem>
@@ -730,9 +724,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     {...formItemLayout}
                                     label={(<span>题目</span>)}
                                     hasFeedback>
-                                    {getFieldDecorator('subjectNameM', {
-                                        rules: [{ required: true, message: '请输入题目!' }],
-                                    })(
+                                    {getFieldDecorator('subjectNameM')(
                                         <RichEditorComponentsForSimpleAnswer/>
                                     )}
                                 </FormItem>
@@ -740,9 +732,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     {...formItemLayout}
                                     label={(<span>答案</span>)}
                                     hasFeedback>
-                                    {getFieldDecorator('answer', {
-                                        rules: [{ required: true, message: '请输入题目!' }],
-                                    })(
+                                    {getFieldDecorator('answer')(
                                         <div>
                                             <Input type="textarea" ref="simpleAnswerInput"  defaultValue={this.state.simpleAnswerValue}  rows={4}  />
                                         </div>
