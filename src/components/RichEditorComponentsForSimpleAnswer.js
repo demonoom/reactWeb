@@ -12,10 +12,12 @@ var RichEditorComponentsForSimpleAnswer = React.createClass({
         'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
         'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
         'directionalityltr', 'directionalityrtl', 'indent', '|',
-        'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
+        'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|','link', 'unlink', 'anchor', '|',
         'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
         'simpleupload',
-        'horizontal', 'date', 'time','spechars'
+        'horizontal', 'date', 'time','spechars',
+        '|','inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', 'charts',
+        '|','print', 'searchreplace','help'
       ]] ,
       lang:"zh-cn"
       //字体

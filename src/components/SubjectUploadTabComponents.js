@@ -75,7 +75,6 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             scoreDisable:false,
             mulitiAnswerDefaultValue:['A'],
             correctAnswerValue:"正确",
-            subjectItem:[],
         };
     },
     showModal() {
@@ -93,10 +92,6 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
     handleEmail: function(val){
         this.props.callbackParent(val);
         //this.setState({lessonCount: val});
-    },
-
-    componentDidMount(){
-      this.state.subjectItem.push(<RichEditorComponents/>);
     },
 
     sliderOnChange(value) {
@@ -141,9 +136,17 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
 
     initPage(){
         this.setState({score:1});
-        if(!this.isEmpty(this.refs.subjectNameInput)){
-            // this.refs.subjectNameInput.refs.input.value="";
+        if(!this.isEmpty(UE.getEditor("container"))){
             UE.getEditor("container").setContent("");
+        }
+        if(!this.isEmpty(UE.getEditor("mulitiContainer"))){
+            UE.getEditor("mulitiContainer").setContent("");
+        }
+        if(!this.isEmpty(UE.getEditor("correctContainer"))){
+            UE.getEditor("correctContainer").setContent("");
+        }
+        if(!this.isEmpty(UE.getEditor("simpleAnswerContainer"))){
+            UE.getEditor("simpleAnswerContainer").setContent("");
         }
         if(!this.isEmpty(this.refs.singleAnswer)){
             this.refs.singleAnswer.state.value="A";
@@ -486,20 +489,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
 
     tabOnChange(key) {
         // alert(key);
-      this.initPage();
+        // this.initPage();
         this.setState({activeKey: key});
-      this.state.subjectItem.splice(0);
-      this.state.subjectItem.push(<RichEditorComponents/>);
-        /*this.state.subjectItem.push(<FormItem
-          {...formItemLayout}
-          label={(<span>题目</span>)}
-          hasFeedback>
-          {getFieldDecorator('subjectName', {
-            rules: [{ required: true, message: '请输入题目!' }],
-          })(
-            <RichEditorComponents/>
-          )}
-        </FormItem>);*/
     },
 
     render() {
@@ -522,19 +513,6 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             { label: 'E', value: 'E' },
         ];
 
-        const subjectItem=[];
-        subjectItem.splice(0);
-        subjectItem.push(<FormItem
-          {...formItemLayout}
-          label={(<span>题目</span>)}
-          hasFeedback>
-          {getFieldDecorator('subjectName', {
-            rules: [{ required: true, message: '请输入题目!' }],
-          })(
-            <RichEditorComponents/>
-          )}
-        </FormItem>);
-
         const scoreItem=[];
         scoreItem.push(<FormItem
             {...formItemLayout}
@@ -549,7 +527,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                 {children}
                             </Select>
                         </Col>
-						<Col span={8} className="right_ri"><span><Input ref="scoreDefined" placeholder="请输入自定义分值" disabled={this.state.scoreInputState}  /></span></Col>
+                        <Col span={8} className="right_ri"><span><Input ref="scoreDefined" placeholder="请输入自定义分值" disabled={this.state.scoreInputState}  /></span></Col>
                         <Col span={6} className="right_ri"><Checkbox onChange={this.scoreSelectTypeOnChange} ref="scoreCheckBox" checked={this.state.scoreChecked} value="defined">自定义:</Checkbox></Col>
                     </Row>
                 </div>
@@ -609,7 +587,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                 <Modal
                     visible={this.state.visible}
                     title="添加题目"
-					width="920px"
+                    width="920px"
                     className="ant-modal-width"
                     onCancel={this.handleCancel}
                     transitionName=""  //禁用modal的动画效果
@@ -740,49 +718,6 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                 {scoreItem}
                             </Form>
                         </div></TabPane>
-
-                        {/*<TabPane tab="材料题" key="材料题"><div>
-                            <Form horizontal>
-                                <FormItem
-                                    {...formItemLayout}
-                                    label={(<span>材料文件</span>)}
-                                    hasFeedback>
-                                    {getFieldDecorator('materialFile', {
-                                        rules: [{ required: true, message: '请上传材料!' }],
-                                    })(
-                                        <div>
-                                            <FileUploadComponents callBackParent={this.handleFileSubmit}/>
-                                        </div>
-                                    )}
-                                </FormItem>
-                                {subjectItem}
-                                <FormItem
-                                    {...formItemLayout}
-                                    label={(<span>答案</span>)}
-                                    hasFeedback>
-                                    {getFieldDecorator('answer')(
-                                        <div>
-                                            <RadioGroup onChange={this.singleAnswerOnChange} ref="singleAnswer" defaultValue={this.state.singleAnswer}>
-                                                <Radio key="A" value="A">A</Radio>
-                                                <Radio key="B" value="B">B</Radio>
-                                                <Radio key="C" value="C">C</Radio>
-                                                <Radio key="D" value="D">D</Radio>
-                                                <Radio key="E" value="E">E</Radio>
-                                            </RadioGroup>
-                                        </div>
-                                    )}
-                                </FormItem>
-                                {scoreItem}
-                                <FormItem className="ant-modal-footer">
-                                    <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.materialHandleSubmit}>
-                                        保存并继续添加
-                                    </Button>
-                                    <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.materialHandleSubmit}>
-                                        保存并返回列表
-                                    </Button>
-                                </FormItem>
-                            </Form>
-                        </div></TabPane>*/}
                     </Tabs>
                 </Modal>
             </div>

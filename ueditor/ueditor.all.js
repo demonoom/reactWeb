@@ -13063,7 +13063,7 @@ UE.commands['time'] = UE.commands["date"] = {
 
   UE.commands['wordpaster'] = {
     execCommand : function(){
-      pasterMgr.Paste();
+        pasterMgr.PasteManual();return;//wordPaster
     }
   };
   UE.commands['netpaster'] = {
