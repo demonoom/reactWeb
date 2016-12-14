@@ -6,7 +6,7 @@ var RichEditorComponentsForCorrect = React.createClass({
     var editor = UE.getEditor("correctContainer", {
       //工具栏
       toolbars: [[
-        'fullscreen', 'source', '|', 'undo', 'redo', '|',
+        'source', '|', 'undo', 'redo', '|',
         'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch',
         '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
         'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',

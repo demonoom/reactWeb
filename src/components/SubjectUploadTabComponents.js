@@ -43,7 +43,6 @@ const props = {
     // action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
     action: 'http://www.maaee.com/Excoord_Upload_Server/file/upload',
     beforeUpload(file) {
-        //alert(file);
         data:{file}
     },
     onChange(info) {
@@ -58,10 +57,31 @@ const props = {
     },
 };
 var mulitiAnswer = new Array();
-var data=[];
+// var data=new Array();
 var uploadFileList=[];
+
+/*function doWebService(data,listener) {
+    var service = this;
+    this.WEBSERVICE_URL = "http://192.168.1.115:8080/Excoord_For_Education/webservice";
+    if (service.requesting) {
+        return;
+    }
+    service.requesting = true;
+    $.post(service.WEBSERVICE_URL, {
+        params : data
+    }, function(result, status) {
+        service.requesting = false;
+        if (status == "success") {
+            listener.onResponse(result);
+        } else {
+            listener.onError(result);
+        }
+    }, "json");
+}*/
+var subjectUpload;
 const SubjectUploadTabComponents = Form.create()(React.createClass({
     getInitialState() {
+        subjectUpload = this;
         return {
             loading: false,
             visible: false,
@@ -75,7 +95,10 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             scoreDisable:false,
             mulitiAnswerDefaultValue:['A'],
             correctAnswerValue:"正确",
-            useSameSchedule:false,
+            useSameScheduleForSingle:true,
+            useSameScheduleForMSelect:true,
+            useSameScheduleForCorrect:true,
+            useSameScheduleForSimpleAnswer:true,
         };
     },
     showModal() {
@@ -107,25 +130,6 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
         this.setState({score:value});
     },
 
-    saveSubject(batchAddSubjectBeanJson){
-        var param = {
-            "method":'batchAddSubjects',
-            "batchAddSubjectBeanJson":[batchAddSubjectBeanJson],
-        };
-        doWebService(JSON.stringify(param), {
-            onResponse : function(ret) {
-                console.log(ret.msg);
-                if(ret.msg=="调用成功" && ret.response==true){
-                    alert("题目添加成功");
-                }else{
-                    alert("题目添加失败");
-                }
-            },
-            onError : function(error) {
-                alert(error);
-            }
-        });
-    },
     //系统非空判断
     isEmpty(content){
         if(content==null || content=="" || typeof(content)=="undefined"){
@@ -161,6 +165,73 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
         this.setState({scoreChecked:false,scoreInputState:true,scoreDisable:false,mulitiAnswerDefaultValue:['A'],correctAnswerValue:"正确"});
     },
 
+    //新增题目到知识点下
+    saveSubject(batchAddSubjectBeanJson,knowledgeName,isLinkToSchedule){
+        var param = {
+            "method":'batchAddSubjects',
+            "batchAddSubjectBeanJson":[batchAddSubjectBeanJson],
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse : function(ret) {
+                console.log(ret.msg);
+                if(ret.msg=="调用成功" && ret.success==true){
+                    if(isLinkToSchedule==true){
+                        var subjectsIds = ret.response[0];
+                        var userId = sessionStorage.getItem("ident");
+                        subjectUpload.teachScheduleInfo(userId,knowledgeName,subjectsIds);
+                    }else{
+                        alert("题目添加成功");
+                    }
+                }else{
+                    alert("题目添加失败");
+                }
+            },
+            onError : function(error) {
+                alert(error);
+            }
+        });
+    },
+
+    //获取教学进度，如果没有会创建一个新的
+    teachScheduleInfo(userId,title,subjectsIds){
+        var param = {
+            "method":'getOrCreateTeachSchedule',
+            "userId":userId,
+            "title":title,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse : function(ret) {
+                console.log(ret.msg);
+                if(ret.msg=="调用成功" && ret.success==true){
+                    var scheduleId = ret.response.colTsId;
+                    subjectUpload.copySubjects(subjectsIds,scheduleId);
+                }
+            },
+            onError : function(error) {
+                alert(error);
+            }
+        });
+    },
+
+    copySubjects(subjectsIds,scheduleId){
+        var param = {
+            "method":'copySubjects',
+            "subjectsIds":subjectsIds,
+            "teachScheduleId":scheduleId
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse : function(ret) {
+                console.log(ret.msg);
+                if(ret.msg=="调用成功" && ret.response==true){
+                    alert("题目添加成功");
+                }
+            },
+            onError : function(error) {
+                alert(error);
+            }
+        });
+    },
+
     //单选题新增
     singleHandleSubmit(e) {
         e.preventDefault();
@@ -170,49 +241,49 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
         }else{
             target = e.target;
         }
-        data=[];
+        // data=[];
         //获取当前点击的是哪个按钮
         var currentButton = target.textContent;
         // alert(currentButton);
-        this.props.form.validateFieldsAndScroll((err, values) => {
-            var ident = sessionStorage.getItem("ident");
-            var easy = this.state.markSelected;
-            var score = this.state.score;
-            //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
-            if(this.state.scoreDisable==true){
-                score =this.refs.scoreDefined.refs.input.value;
+        var ident = sessionStorage.getItem("ident");
+        var score = this.state.score;
+        //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
+        if(this.state.scoreDisable==true){
+            score =this.refs.scoreDefined.refs.input.value;
+        }
+        var subjectName = UE.getEditor("container").getContent();
+        console.log("richContent:"+subjectName);
+        // var subjectName = values.subjectName;
+        var answer = this.state.singleAnswer;
+        // alert("params:"+this.props.params);
+        var subjectParamArray = this.props.params.split("#");
+        var ident = subjectParamArray[0];
+        var ScheduleOrSubjectId = subjectParamArray[1];
+        var optType = subjectParamArray[3];
+        var knowledgeName = subjectParamArray[4];
+        var isLinkToSchedule=this.state.useSameScheduleForSingle;
+        // alert("knowledgeName:"+knowledgeName+"\t"+isLinkToSchedule);
+        //完成基础的非空验证
+        if(this.isEmpty(subjectName)){
+            alert("请输入题目");
+        }else if(this.isEmpty(answer)){
+            alert("请输入答案");
+        }else if(this.isEmpty(score) || score==0){
+            alert("请选择分值");
+        }else{
+            var batchAddSubjectBeanJson={"textTigan":subjectName,"textAnswer":answer,"score":score,"userId":ident,"type":"C"};
+            if(optType=="bySubjectId"){
+                batchAddSubjectBeanJson.knowledgePointId=ScheduleOrSubjectId;
             }
-            var subjectName = UE.getEditor("container").getContent();
-            console.log("richContent:"+subjectName);
-            // var subjectName = values.subjectName;
-            var answer = this.state.singleAnswer;
-            // alert("params:"+this.props.params);
-            var subjectParamArray = this.props.params.split("#");
-            var ident = subjectParamArray[0];
-            var ScheduleOrSubjectId = subjectParamArray[1];
-            var optType = subjectParamArray[3];
-            //完成基础的非空验证
-            if(this.isEmpty(subjectName)){
-                alert("请输入题目");
-            }else if(this.isEmpty(answer)){
-                alert("请输入答案");
-            }else if(this.isEmpty(score) || score==0){
-                alert("请选择分值");
-            }else{
-                var batchAddSubjectBeanJson={"textTigan":subjectName,"textAnswer":answer,"score":score,"userId":ident,"type":"C"};
-                if(optType=="bySubjectId"){
-                    batchAddSubjectBeanJson.knowledgePointId=ScheduleOrSubjectId;
-                }
-                //完成题目的新增操作
-                this.saveSubject(batchAddSubjectBeanJson);
-                if(currentButton=="保存并返回列表"){
-                    //关闭并返回题目列表页面
-                    this.setState({ visible: false,score:1});
-                }
-                //重新初始化页面
-                this.initPage();
+            //完成题目的新增操作
+            this.saveSubject(batchAddSubjectBeanJson,knowledgeName,isLinkToSchedule);
+            if(currentButton=="保存并返回列表"){
+                //关闭并返回题目列表页面
+                this.setState({ visible: false,score:1});
             }
-        });
+            //重新初始化页面
+            this.initPage();
+        }
     },
     //多选题新增
     MulitiHandleSubmit(e) {
@@ -223,7 +294,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
         }else{
             target = e.target;
         }
-        data=[];
+        // data=[];
         //获取当前点击的是哪个按钮
         var currentButton = target.textContent;
         this.props.form.validateFieldsAndScroll((err, values) => {
@@ -239,6 +310,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             var ident = subjectParamArray[0];
             var ScheduleOrSubjectId = subjectParamArray[1];
             var optType = subjectParamArray[3];
+            var knowledgeName = subjectParamArray[4];
+            var isLinkToSchedule=this.state.useSameScheduleForMSelect;
             var batchAddSubjectBeanJson={"textTigan":subjectName,"textAnswer":mulitiAnswer,"score":score,"userId":ident,"type":"MC"};
             if(optType=="bySubjectId"){
                 batchAddSubjectBeanJson.knowledgePointId=ScheduleOrSubjectId;
@@ -251,7 +324,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             }else if(this.isEmpty(score) || score==0){
                 alert("请选择分值");
             }else{
-                this.saveSubject(batchAddSubjectBeanJson);
+                this.saveSubject(batchAddSubjectBeanJson,knowledgeName,isLinkToSchedule);
                 if(currentButton=="保存并返回列表"){
                     //关闭并返回题目列表页面
                     this.setState({ visible: false,score:1});
@@ -270,7 +343,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
         }else{
             target = e.target;
         }
-        data=[];
+        // data=[];
         //获取当前点击的是哪个按钮
         var currentButton = target.textContent;
         this.props.form.validateFieldsAndScroll((err, values) => {
@@ -287,6 +360,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             var ident = subjectParamArray[0];
             var ScheduleOrSubjectId = subjectParamArray[1];
             var optType = subjectParamArray[3];
+            var knowledgeName = subjectParamArray[4];
+            var isLinkToSchedule=this.state.useSameScheduleForCorrect;
             var batchAddSubjectBeanJson={"textTigan":subjectName,"textAnswer":answer,"score":score,"userId":ident,"type":"J"};
             if(optType=="bySubjectId"){
                 batchAddSubjectBeanJson.knowledgePointId=ScheduleOrSubjectId;
@@ -299,7 +374,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             }else if(this.isEmpty(score) || score==0){
                 alert("请选择分值");
             }else {
-                this.saveSubject(batchAddSubjectBeanJson);
+                this.saveSubject(batchAddSubjectBeanJson,knowledgeName,isLinkToSchedule);
                 if(currentButton=="保存并返回列表"){
                     //关闭并返回题目列表页面
                     this.setState({ visible: false,score:1});
@@ -319,7 +394,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
         }else{
             target = e.target;
         }
-        data=[];
+        // data=[];
         //获取当前点击的是哪个按钮
         var currentButton = target.textContent;
         this.props.form.validateFieldsAndScroll((err, values) => {
@@ -336,6 +411,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             var ident = subjectParamArray[0];
             var ScheduleOrSubjectId = subjectParamArray[1];
             var optType = subjectParamArray[3];
+            var knowledgeName = subjectParamArray[4];
+            var isLinkToSchedule=this.state.useSameScheduleForSimpleAnswer;
             var batchAddSubjectBeanJson={"textTigan":subjectName,"textAnswer":answer,"score":score,"userId":ident,"type":"S"};
             if(optType=="bySubjectId"){
                 batchAddSubjectBeanJson.knowledgePointId=ScheduleOrSubjectId;
@@ -348,7 +425,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             }else if(this.isEmpty(score) || score==0){
                 alert("请选择分值");
             }else {
-                this.saveSubject(batchAddSubjectBeanJson);
+                this.saveSubject(batchAddSubjectBeanJson,knowledgeName,isLinkToSchedule);
                 if(currentButton=="保存并返回列表"){
                     //关闭并返回题目列表页面
                     this.setState({ visible: false,score:1});
@@ -450,7 +527,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
         }else{
             target = e.target;
         }
-        data=[];
+        // data=[];
         //获取当前点击的是哪个按钮
         var currentButton = target.textContent;
         this.props.form.validateFieldsAndScroll((err, values) => {
@@ -495,11 +572,24 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
     },
 
     //useSameSchedule
-    checkBoxOnChange(e) {
-        // currentKnowledgeState:false,
-        // newScheduleState:false,
+    checkBoxOnChangeForSingle(e) {
         console.log(`checked = ${e.target.checked}`);
-        this.setState({useSameSchedule: e.target.checked});
+        this.setState({useSameScheduleForSingle: e.target.checked});
+    },
+
+    checkBoxOnChangeForMSelect(e) {
+        console.log(`checked = ${e.target.checked}`);
+        this.setState({useSameScheduleForMSelect: e.target.checked});
+    },
+
+    checkBoxOnChangeForCorrect(e) {
+        console.log(`checked = ${e.target.checked}`);
+        this.setState({useSameScheduleForCorrect: e.target.checked});
+    },
+
+    checkBoxOnChangeForSimpleAnswer(e) {
+        console.log(`checked = ${e.target.checked}`);
+        this.setState({useSameScheduleForSimpleAnswer: e.target.checked});
     },
 
     render() {
@@ -536,8 +626,10 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                 {children}
                             </Select>
                         </Col>
+
                         <Col span={8} className="right_ri"><span><Input ref="scoreDefined" placeholder="请输入自定义分值" disabled={this.state.scoreInputState}  /></span></Col>
                         <Col span={6} className="right_ri custom—1"><Checkbox onChange={this.scoreSelectTypeOnChange} ref="scoreCheckBox" checked={this.state.scoreChecked} value="defined">自定义:</Checkbox></Col>
+
                     </Row>
                 </div>
             )}
@@ -640,14 +732,6 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     )}
                                 </FormItem>
                                 {scoreItem}
-                                <FormItem className="custom—top"
-                                    {...formItemLayout}
-                                    label={(<span>引用</span>)}
-                                    hasFeedback>
-                                    {getFieldDecorator('subjectName')(
-                                        <Checkbox onChange={this.checkBoxOnChange} value="currentKnowledge" className="yinyong yinyong2">同时引用到同名教学进度下</Checkbox>
-                                    )}
-                                </FormItem>
                             </Form>
                         </TabPane>
                         <TabPane tab="多选题" key="多选题"><div>
@@ -671,14 +755,6 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     )}
                                 </FormItem>
                                 {scoreItem}
-                                <FormItem className="custom—top"
-                                    {...formItemLayout}
-                                    label={(<span>引用</span>)}
-                                    hasFeedback>
-                                    {getFieldDecorator('subjectName')(
-                                        <Checkbox onChange={this.checkBoxOnChange} value="currentKnowledge" className="yinyong yinyong2">同时引用到同名教学进度下</Checkbox>
-                                    )}
-                                </FormItem>
                             </Form>
                         </div></TabPane>
                         <TabPane tab="判断题" key="判断题"><div>
@@ -705,14 +781,6 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     )}
                                 </FormItem>
                                 {scoreItem}
-                                <FormItem className="custom—top"
-                                    {...formItemLayout}
-                                    label={(<span>引用</span>)}
-                                    hasFeedback>
-                                    {getFieldDecorator('subjectName')(
-                                        <Checkbox onChange={this.checkBoxOnChange} value="currentKnowledge" className="yinyong yinyong2">同时引用到同名教学进度下</Checkbox>
-                                    )}
-                                </FormItem>
                             </Form>
                         </div></TabPane>
                         <TabPane tab="简答题" key="简答题"><div>
@@ -736,14 +804,6 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     )}
                                 </FormItem>
                                 {scoreItem}
-                                <FormItem className="custom—top"
-                                    {...formItemLayout}
-                                    label={(<span>引用</span>)}
-                                    hasFeedback>
-                                    {getFieldDecorator('subjectName')(
-                                        <Checkbox onChange={this.checkBoxOnChange} value="currentKnowledge" className="yinyong yinyong2" >同时引用到同名教学进度下</Checkbox>
-                                    )}
-                                </FormItem>
                             </Form>
                         </div></TabPane>
                     </Tabs>
