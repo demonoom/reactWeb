@@ -185,7 +185,7 @@ const MiddleMenuComponents = React.createClass({
   render() {
     return (
       <div>
-          <div className="menu_til"><Button type="primary" icon="plus" onClick={this.showModal} className='add_study'>添加教学进度</Button></div>
+          <div className="menu_til"><Button type="primary" icon="plus-circle" onClick={this.showModal} className='add_study'>添加教学进度</Button></div>
           <TeachingComponents ref="teachingComponents" callbackParent={this.handleMenu}/>
           <Menu ref="middleMenu" onClick={this.handleClick}
                 className="cont_t2"

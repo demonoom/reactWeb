@@ -135,7 +135,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
         return (
             <div className="toobar">
 
-                <Button type="primary" onClick={courseWareUpload.showModal} icon="plus" title="上传课件" className="add_study">添加课件</Button>
+                <Button type="primary" onClick={courseWareUpload.showModal} icon="plus-circle" title="上传课件" className="add_study add_study—a">添加课件</Button>
                 <Modal
                     visible={courseWareUpload.state.visible}
                     title="上传课件"
