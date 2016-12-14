@@ -3,7 +3,6 @@
  * version: ueditor
  * build: Wed Aug 10 2016 11:06:16 GMT+0800 (CST)
  */
-
 (function(){
 
 // editor.js
@@ -1187,8 +1186,8 @@ var utils = UE.utils = {
 
         }
     }(),
-    
-    
+
+
 
     /**
      * 动态添加css样式
@@ -13062,6 +13061,16 @@ UE.commands['time'] = UE.commands["date"] = {
     }
 };
 
+  UE.commands['wordpaster'] = {
+    execCommand : function(){
+        pasterMgr.PasteManual();return;//wordPaster
+    }
+  };
+  UE.commands['netpaster'] = {
+    execCommand : function(){
+      pasterMgr.UploadNetImg();
+    }
+  };
 
 // plugins/rowspacing.js
 /**
@@ -14066,8 +14075,66 @@ UE.plugin.register('wordimage',function(){
                 notNeedUndo:true
             }
         },
+
         inputRule : function (root) {
             utils.each(root.getNodesByTagName('img'), function (img) {
+              /*var attrsSrc = img.attrs.src;
+              var filePath = attrsSrc.substring(8);
+              var imgObj = document.createElement('img');
+              imgObj.src = filePath;
+              var canvas = document.createElement("canvas");
+              canvas.width = img.attrs.width;
+              canvas.height = img.attrs.height;
+              var ctx = canvas.getContext("2d");
+              ctx.drawImage(imgObj, 0, 0, img.attrs.width, img.attrs.height);
+              var dataURL = canvas.toDataURL("image/png");
+              console.log(dataURL);
+              var pic = dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+              console.log("pic:"+pic);*/
+
+
+              /*var htmlParts = ["<img src=\""+filePath+"\" />"];
+              var myBlob = new Blob(htmlParts, { "type" : "image\/png" });
+
+              var fileReader = new FileReader();
+              var upfile = document.querySelector('#wordImg');
+              // Read in the image file as a data URL.
+              fileReader.readAsDataURL(myBlob);
+              fileReader.onload = function(evt)
+              {
+                if(FileReader.DONE==fileReader.readyState)
+                {
+                  var img =  document.createElement('img');
+                  img.src = this.result; //是Base64的data url数据
+                  // document.body.appendChild(img);
+                  console.log("base64:"+this.result);
+                  var formData = new FormData();
+                  formData.append("file",this.result);
+                  $.ajax({
+                    type: "POST",
+                    url: "http://192.168.1.115:8890/Excoord_Upload_Server/file/upload",
+                    enctype: 'multipart/form-data',
+                    data: formData,
+                    // 告诉jQuery不要去处理发送的数据
+                    processData : false,
+                    // 告诉jQuery不要去设置Content-Type请求头
+                    contentType : false,
+                    success: function (responseStr) {
+                      if(responseStr!=""){
+                        var fileUrl=responseStr;
+                        console.log("fileUrl:"+fileUrl);
+                      }
+                    },
+                    error : function(responseStr) {
+                      console.log("error"+responseStr);
+                    }
+                  });
+                }
+                // fileReader.readAsDataURL(upfile.files[0]);
+              }*/
+
+
+
                 var attrs = img.attrs,
                     flag = parseInt(attrs.width) < 128 || parseInt(attrs.height) < 43,
                     opt = me.options,
@@ -14533,6 +14600,15 @@ UE.plugin.register('copy', function () {
  */
 UE.plugins['paste'] = function () {
     function getClipboardData(callback) {
+      /*if(pasterMgr==null || typeof (pasterMgr)=="undefined"){
+        var pasterMgr = new WordPasterManager();
+        pasterMgr.Config["PostUrl"] = "http://www.maaee.com/manage/subject/subject_upload.jsp";
+        // pasterMgr.Load();//加载控件
+        pasterMgr.PasteManual();return;//wordPaster
+      }else{
+        pasterMgr.PasteManual();return;//wordPaster
+      }*/
+      pasterMgr.PasteManual();return;//wordPaster
         var doc = this.document;
         if (doc.getElementById('baidu_pastebin')) {
             return;
@@ -21937,6 +22013,7 @@ UE.plugins['contextmenu'] = function () {
             menu,
             items = me.options.contextMenu || [
                 {label:lang['selectall'], cmdName:'selectall'},
+                {label:'粘贴Word图片', cmdName:'wordpaster'},
                 {
                     label:lang.cleardoc,
                     cmdName:'cleardoc',
@@ -27834,7 +27911,7 @@ UE.ui = baidu.editor.ui = {};
         'blockquote', 'pasteplain', 'pagebreak',
         'selectall', 'print','horizontal', 'removeformat', 'time', 'date', 'unlink',
         'insertparagraphbeforetable', 'insertrow', 'insertcol', 'mergeright', 'mergedown', 'deleterow',
-        'deletecol', 'splittorows', 'splittocols', 'splittocells', 'mergecells', 'deletetable', 'drafts'];
+        'deletecol', 'splittorows', 'splittocols', 'splittocells', 'mergecells', 'deletetable', 'wordpaster','netpaster','drafts'];
 
     for (var i = 0, ci; ci = btnCmds[i++];) {
         ci = ci.toLowerCase();
@@ -29402,7 +29479,7 @@ UE.ui = baidu.editor.ui = {};
                     if (opt.initialFrameWidth) {
                         opt.minFrameWidth = opt.initialFrameWidth;
                     } else {
-                        opt.minFrameWidth = opt.initialFrameWidth = holder.offsetWidth;
+                        // opt.minFrameWidth = opt.initialFrameWidth = holder.offsetWidth;
                         var styleWidth = holder.style.width;
                         if(/%$/.test(styleWidth)) {
                             opt.initialFrameWidth = styleWidth;

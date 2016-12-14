@@ -1901,3 +1901,16 @@ div.edui-box {
 .edui-default  .edui-pastecontainer .edui-button  .edui-state-hover .edui-plaintxticon{
     background-position: -72px -34px;
 }
+.edui-default .edui-for-wordpaster .edui-icon {
+  width: 16px;
+  height: 16px;
+  background-position: -648px -77px;
+}
+.edui-default .edui-for-netpaster .edui-icon {
+  width: 16px;
+  height: 16px;
+  background-position: -693px -77px;
+}
+.edui-default .edui-for-excelpaster .edui-icon {
+  background-position: -675px -77px;
+}

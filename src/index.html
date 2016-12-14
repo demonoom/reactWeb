@@ -10,6 +10,23 @@
   <script type="text/javascript" src="../ueditor/ueditor.config.js"></script>
   <!-- 编辑器源码文件 -->
   <script type="text/javascript" src="../ueditor/ueditor.all.js"></script>
+  <!-- 配置ckEditor和wordPaster   begin -->
+  <link type="text/css" rel="Stylesheet"
+        href="../ueditor/WordPaster/css/WordPaster.css" />
+  <link type="text/css" rel="Stylesheet"
+        href="../ckeditor/contents.css" />
+  <link type="text/css" rel="stylesheet"
+        href="../ueditor/WordPaster/css/ui-lightness/jquery-ui-1.8.11.custom.css" />
+  <script type="text/javascript" src="../ueditor/WordPaster/js/jquery.min.js"
+          charset="utf-8"></script>
+  <script type="text/javascript"
+          src="../ueditor/WordPaster/js/jquery-ui-1.8.11.custom.min.js"></script>
+  <script type="text/javascript" src="../ueditor/WordPaster/js/WordPaster.js"
+          charset="utf-8"></script>
+  <script type="text/javascript" src="../ckeditor/ckeditor.js"></script>
+  <script type="text/javascript" src="../ckeditor/adapters/jquery.js"></script>
+  <script type="text/javascript" src="../jquerylib/jquery.form.js"></script>
+  <!-- 配置ckEditor和wordPaster   end -->
   <script type="text/javascript" src="../ueditor/lang/zh-cn/zh-cn.js"></script>
   <script type="text/javascript" src="../jquerylib/jquery.min.js"></script>
   <script type="text/javascript" src="../jquerylib/jquery.jsonp.js"></script>
@@ -17,15 +34,25 @@
   <script type="text/javascript" src="components/MiddleMenuComponents.js"></script>
   <!–[if lt IE 9]><script src=”http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js”></script><![endif]–>
   <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/style.css">
-  
+  <script type="text/javascript">
+    var pasterMgr = new PasterManager();
+    //      var pasterMgr = new WordPasterManager();
+    pasterMgr.Config["PostUrl"] = "http://www.maaee.com/manage/subject/subject_upload.jsp";
+    //      pasterMgr.Load();//加载控件
+
+    //      UE.getEditor('container',{onready:function(){//创建一个编辑器实例
+    //        pasterMgr.SetEditor(this);
+    //      }});
+  </script>
+
 </head>
 <body>
 
 <div id="root"></div>
 <div class="ant-layout-footer">
-            <BackTopButton/>
-            小蚂蚁移动教学平台 版权所有 恒坐标教育集团
-          </div>
+  <BackTopButton/>
+  小蚂蚁移动教学平台 版权所有 恒坐标教育集团
+</div>
 
 <script src="index.js"></script>
 
