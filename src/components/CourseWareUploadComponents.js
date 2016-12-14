@@ -37,7 +37,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
         return {
             visible: false,
             submitFileCheckedList:[],
-            useSameSchedule:false,
+            useSameSchedule:true,
         };
     },
     showModal() {
@@ -193,8 +193,8 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
     checkBoxOnChange(e) {
         // currentKnowledgeState:false,
         // newScheduleState:false,
-        console.log(`checked = ${e.target.checked}`);
-        this.setState({useSameSchedule:e.target.checked});
+        // console.log(`checked = ${e.target.checked}`);
+        // this.setState({useSameSchedule:e.target.checked});
         // currentKnowledgeState:false,
         // newScheduleState:false,
         /*var checkBoxValue = e.target.value;
@@ -234,7 +234,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
         return (
             <div className="toobar">
 
-                <Button type="primary" onClick={courseWareUpload.showModal} icon="plus" title="上传课件" className="add_study">添加课件</Button>
+                <Button type="primary" onClick={courseWareUpload.showModal} icon="plus-circle" title="上传课件" className="add_study add_study—a">添加课件</Button>
                 <Modal
                     visible={courseWareUpload.state.visible}
                     title="上传课件"
@@ -253,21 +253,21 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                     ]}
                 >
                         <Row>
-                            <Col span={4}>文件</Col>
+                            <Col span={4}>上传文件：</Col>
                             <Col span={20}>
                                 <div>
                                     <FileUploadComponents ref="fileUploadCom" fatherState={courseWareUpload.state.visible} callBackParent={courseWareUpload.handleFileSubmit}/>
                                 </div>
                             </Col>
                         </Row>
-                        <Row>
+                        {/*<Row>
                             <Col span={4}></Col>
                             <Col span={20}>
                                 <div>
-                                    <Checkbox onChange={courseWareUpload.checkBoxOnChange} value="currentKnowledge">同时引用到同名教学进度下</Checkbox>
+                                    <Checkbox onChange={courseWareUpload.checkBoxOnChange} value="currentKnowledge" className="yinyong yinyong3"><span className="yinyong2">同时引用到同名教学进度下</span></Checkbox>
                                 </div>
                             </Col>
-                        </Row>
+                        </Row>*/}
                 </Modal>
             </div>
         );

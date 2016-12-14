@@ -39,7 +39,10 @@ const KnowledgeMenuComponents = React.createClass({
         if(openKeysStr!=null && openKeysStr!=""){
             mMenu.setState({openSubMenu:openKeysStr});
         }
-        var openKeysArray = openKeysStr.split(",");
+        var openKeysArray;
+        if(openKeysStr!=null && openKeysStr!=""){
+            openKeysArray = openKeysStr.split(",");
+        }
         for(var i=0;i<openKeysArray.length;i++){
             var openKey = openKeysArray[i];
             var keyArray = openKey.split("#");

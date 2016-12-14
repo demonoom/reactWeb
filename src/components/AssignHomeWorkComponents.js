@@ -441,7 +441,7 @@ const AssignHomeWorkComponents = React.createClass({
                   <Row>
                     <Col span={24}>
                       <div>
-                        <Button type="primary" onClick={assignHomeWork.showSubjectModal}><Icon type="check-circle-o" />选择题目</Button>
+                        <Button type="add_study add_study-b" onClick={assignHomeWork.showSubjectModal}><Icon type="check-circle-o" />选择题目</Button>
                         <div className="class_bo">
                           <Checkbox
                               indeterminate={assignHomeWork.state.indeterminate}

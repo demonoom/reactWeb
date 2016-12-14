@@ -6,7 +6,7 @@ var RichEditorComponentsForCorrect = React.createClass({
     var editor = UE.getEditor("correctContainer", {
       //工具栏
       toolbars: [[
-        'fullscreen', 'source', '|', 'undo', 'redo', '|',
+        'source', '|', 'undo', 'redo', '|',
         'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch',
         '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
         'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
@@ -83,7 +83,7 @@ var RichEditorComponentsForCorrect = React.createClass({
         <script id="correctContainer" name="content" type="text/plain">
 
         </script>
-        <embed type="application/chrWordPstSXLY" PLUGINSPAGE="http://www.maaee.com/uploadFile/WordPaster.crx" width="1" height="1"
+        <embed type="application/chrWordPstSXLY" PLUGINSPAGE="http://www.maaee.com/uploadFile/WordPaster.crx" width="1" height="0"
                id="objWordPaster"/>
         <div style={{display: "none"}}>
           <div id="PasterMessager">
