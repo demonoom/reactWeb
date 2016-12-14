@@ -200,23 +200,20 @@ const CourseWareComponents = React.createClass({
         this.refs.useKnowledgeComponents.showModal(currentSchedule,"courseWare",courseWare.state.knowledgeName);
     },
 
-    //删除教学进度下的材料（课件）
-    deleteScheduleMaterials(e){
+    //删除资源库下的材料（课件）
+    batchDeleteMaterial(e){
         if(confirm("确定要删除该课件?")){
             var target = e.target;
             if(navigator.userAgent.indexOf("Chrome") > -1){
-                //e = window.event;
                 target=e.currentTarget;
             }else{
                 target = e.target;
             }
-            // alert(target.value);
             var materialIds = target.value;
             var param = {
-                "method":'deleteScheduleMaterials',
+                "method":'batchDeleteMaterial',
                 "ident":sessionStorage.getItem("ident"),
-                "scheduleId":courseWare.state.teachScheduleId,
-                "materialIds":materialIds
+                "mids":materialIds
             };
             doWebService(JSON.stringify(param), {
                 onResponse : function(ret) {
@@ -226,7 +223,7 @@ const CourseWareComponents = React.createClass({
                     }else{
                         alert("课件删除失败");
                     }
-                    courseWare.getTeachPlans(sessionStorage.getItem("ident"),courseWare.state.teachScheduleId,"bySchedule",courseWare.state.currentPage,courseWare.state.knowledgeName)
+                    courseWare.getTeachPlans(courseWare.state.ident,courseWare.state.teachScheduleId,courseWare.state.optType,1);
                 },
                 onError : function(error) {
                     alert(error);
@@ -287,7 +284,7 @@ const CourseWareComponents = React.createClass({
                 eysOnButton = <a href={e[9]} target="_blank" title="查看"  style={{ float:'right'}} ><Button icon="eye-o"/></a>
             }
             if(e[12]!=null && e[12]==sessionStorage.getItem("ident")){
-                delButton = <Button style={{ float:'right'}} icon="delete" title="删除" value={e[0]}></Button>
+                delButton = <Button style={{ float:'right'}} icon="delete" title="删除" value={e[0]} onClick={courseWare.batchDeleteMaterial}></Button>
             }
             /*if(e[10]!=null && e[10]!="" && e[10]==3){
              useButton=<Button value={e[0]} style={{ float:'right'}} type=""  onClick={this.showModal}>引用微课</Button>
@@ -305,7 +302,7 @@ const CourseWareComponents = React.createClass({
 
                             <div className="bnt2_right">
                                 {/*<Button value={e.sid} onClick="" className="right_ri">引用微课</Button>*/}
-                                {/*{delButton}*/}
+                                {delButton}
                                 <a href={e[3]} target="_blank" title="下载"  style={{ float:'right'}}><Button icon="download"/></a>
                                 {/*<Button style={{ float:'right'}} icon="download"  title="下载" value={e[3]} onClick={courseWare.downLoadFile}></Button>*/}
                                 <Button style={{ float:'right'}} type=""  icon="export" title="使用"  value={e[0]} onClick={this.showModal}></Button>

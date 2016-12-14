@@ -75,6 +75,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             scoreDisable:false,
             mulitiAnswerDefaultValue:['A'],
             correctAnswerValue:"正确",
+            useSameSchedule:false,
         };
     },
     showModal() {
@@ -493,6 +494,14 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
         this.setState({activeKey: key});
     },
 
+    //useSameSchedule
+    checkBoxOnChange(e) {
+        // currentKnowledgeState:false,
+        // newScheduleState:false,
+        console.log(`checked = ${e.target.checked}`);
+        this.setState({useSameSchedule: e.target.checked});
+    },
+
     render() {
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
@@ -610,9 +619,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     {...formItemLayout}
                                     label={(<span>题目</span>)}
                                     hasFeedback>
-                                    {getFieldDecorator('subjectName', {
-                                        rules: [{ required: true, message: '请输入题目!' }],
-                                    })(
+                                    {getFieldDecorator('subjectName')(
                                         <RichEditorComponents/>
                                     )}
                                 </FormItem>
@@ -633,6 +640,14 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     )}
                                 </FormItem>
                                 {scoreItem}
+                                <FormItem className="custom—top"
+                                    {...formItemLayout}
+                                    label={(<span>引用</span>)}
+                                    hasFeedback>
+                                    {getFieldDecorator('subjectName')(
+                                        <Checkbox onChange={this.checkBoxOnChange} value="currentKnowledge" className="yinyong">同时引用到同名教学进度下</Checkbox>
+                                    )}
+                                </FormItem>
                             </Form>
                         </TabPane>
                         <TabPane tab="多选题" key="多选题"><div>
@@ -641,9 +656,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     {...formItemLayout}
                                     label={(<span>题目</span>)}
                                     hasFeedback>
-                                    {getFieldDecorator('subjectNameM', {
-                                        rules: [{ required: true, message: '请输入题目!' }],
-                                    })(
+                                    {getFieldDecorator('subjectNameM')(
                                         <RichEditorComponentsForMuliti/>
                                     )}
                                 </FormItem>
@@ -658,6 +671,14 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     )}
                                 </FormItem>
                                 {scoreItem}
+                                <FormItem className="custom—top"
+                                    {...formItemLayout}
+                                    label={(<span>引用</span>)}
+                                    hasFeedback>
+                                    {getFieldDecorator('subjectName')(
+                                        <Checkbox onChange={this.checkBoxOnChange} value="currentKnowledge" className="yinyong">同时引用到同名教学进度下</Checkbox>
+                                    )}
+                                </FormItem>
                             </Form>
                         </div></TabPane>
                         <TabPane tab="判断题" key="判断题"><div>
@@ -666,9 +687,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     {...formItemLayout}
                                     label={(<span>题目</span>)}
                                     hasFeedback>
-                                    {getFieldDecorator('subjectNameM', {
-                                        rules: [{ required: true, message: '请输入题目!' }],
-                                    })(
+                                    {getFieldDecorator('subjectNameM')(
                                         <RichEditorComponentsForCorrect/>
                                     )}
                                 </FormItem>
@@ -686,6 +705,14 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     )}
                                 </FormItem>
                                 {scoreItem}
+                                <FormItem className="custom—top"
+                                    {...formItemLayout}
+                                    label={(<span>引用</span>)}
+                                    hasFeedback>
+                                    {getFieldDecorator('subjectName')(
+                                        <Checkbox onChange={this.checkBoxOnChange} value="currentKnowledge" className="yinyong">同时引用到同名教学进度下</Checkbox>
+                                    )}
+                                </FormItem>
                             </Form>
                         </div></TabPane>
                         <TabPane tab="简答题" key="简答题"><div>
@@ -694,9 +721,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     {...formItemLayout}
                                     label={(<span>题目</span>)}
                                     hasFeedback>
-                                    {getFieldDecorator('subjectNameM', {
-                                        rules: [{ required: true, message: '请输入题目!' }],
-                                    })(
+                                    {getFieldDecorator('subjectNameM')(
                                         <RichEditorComponentsForSimpleAnswer/>
                                     )}
                                 </FormItem>
@@ -704,15 +729,21 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     {...formItemLayout}
                                     label={(<span>答案</span>)}
                                     hasFeedback>
-                                    {getFieldDecorator('answer', {
-                                        rules: [{ required: true, message: '请输入题目!' }],
-                                    })(
+                                    {getFieldDecorator('answer')(
                                         <div>
                                             <Input type="textarea" ref="simpleAnswerInput"  defaultValue={this.state.simpleAnswerValue}  rows={4}  />
                                         </div>
                                     )}
                                 </FormItem>
                                 {scoreItem}
+                                <FormItem className="custom—top"
+                                    {...formItemLayout}
+                                    label={(<span>引用</span>)}
+                                    hasFeedback>
+                                    {getFieldDecorator('subjectName')(
+                                        <Checkbox onChange={this.checkBoxOnChange} value="currentKnowledge" className="yinyong" >同时引用到同名教学进度下</Checkbox>
+                                    )}
+                                </FormItem>
                             </Form>
                         </div></TabPane>
                     </Tabs>

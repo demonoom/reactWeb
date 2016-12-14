@@ -393,7 +393,7 @@ body{
 		padding:4px 12px !important;
 		border-radius:20px !important;
 	}
-	.add_study:hover{
+.add_study:hover{
 		background:#ff9d8b;
 		border:1px solid #ff9d8b
 	}
@@ -957,7 +957,7 @@ article.content_2 img{
 .upload_area{
 	border:1px dashed #d9d9d9;
 	width:100%;
-	height:100px;
+	height:101px;
 	background:#f8f8f8;
 	border-radius:4px;
 	margin-bottom:20px;
@@ -1228,24 +1228,19 @@ a {
     font-size: 18px !important;
     line-height: 28px;
     padding: 0 !important;
-    background: #5ec170 !important;
-    border: 1px solid #5ec170 !important;
+    background: #2dbe60 !important;
+    border: 1px solid #2dbe60 !important;
     margin-top: 20px;
     font-weight: bold;
 }
+
 .add_out{
 	margin-left:12px;
 }
 .le_1 .ant-checkbox-wrapper{
 	padding-left:0 !important;
 }
-.le_1 .ant-checkbox-wrapper + span, .le_1 .ant-checkbox + span {
-	position: relative;
-    left: 18px;
-    display: inline-block;
-    top: -18px;
 
-}
 .icon_filter{
 	position: relative;
     left: 8px;
@@ -1310,4 +1305,18 @@ a {
 }
 .custom—top{
 	top:-15px;
+}
+.yinyong{
+	left:-10px !important
+}
+.yinyong3{
+	margin-top:16px;
+}
+.yinyong2{
+	color: #309ffb 
+}
+.yinyong4{
+	    display: block;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
 }

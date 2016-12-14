@@ -194,11 +194,11 @@ const FileUploadComponents = React.createClass({
                     </div>
                 </Row>
                 <Row>
-                    <div>
-                        已上传文件列表<Button type="primary" className="add_out" onClick={this.removeFile}>移除</Button>
+                    <div className="date_tr">
+                        已上传文件列表<Button type="primary" className="add_out add_study" onClick={this.removeFile}>移除</Button>
                     </div>
                     <div className="le_1">
-                        <CheckboxGroup options={this.state.submitFileOptions} style={{margin:'9px'}}  defaultValue={this.state.submitFileCheckedList} value={this.state.submitFileCheckedList} onChange={this.submitFileCheckBoxOnChange}/>
+                        <CheckboxGroup options={this.state.submitFileOptions} style={{margin:'9px'}} defaultValue={this.state.submitFileCheckedList} value={this.state.submitFileCheckedList} onChange={this.submitFileCheckBoxOnChange}/>
                     </div>
                 </Row>
             </div>
