@@ -93,7 +93,8 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
         var ident = subjectParamArray[0];
         var knowledgePointId = subjectParamArray[1];
         var knowledgeName = subjectParamArray[4];
-        alert("knowledgeName:"+knowledgeName+"\t"+this.state.useSameSchedule);
+        var isLinkToSchedule=this.state.useSameSchedule;
+        //alert("knowledgeName:"+knowledgeName+"\t"+isLinkToSchedule);
         var param = {
             "method":'addNormalMaterial',
             "ident":ident,
@@ -105,8 +106,14 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse : function(ret) {
                 console.log(ret.msg);
-                if(ret.msg=="调用成功" && ret.response==true){
-                    alert("课件添加成功");
+                if(ret.msg=="调用成功" && ret.success==true){
+                    var courseWareReturnId = ret.response;
+                    //引用到同名教学进度下，如果没有同名教学进度，则新建
+                    if(isLinkToSchedule == true){
+                        courseWareUpload.getOrCreateTeachSchedule(ident,knowledgeName,courseWareReturnId);
+                    }else{
+                        alert("课件添加成功");
+                    }
                 }else{
                     alert("课件添加失败");
                 }
@@ -115,8 +122,37 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                 alert(error);
             }
         });
-
     },
+
+    /**
+     * 根据tilte获取教学进度，如果没有会创建一个新的
+     * @param userId   用户id
+     * @param materiaIds 课件id
+     * @param scheduleId 我的备课id
+     */
+    getOrCreateTeachSchedule(userId,title,materiaIds){
+        var param = {
+            "method":'getOrCreateTeachSchedule',
+            "userId":userId,
+            "title":title,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse : function(ret) {
+                console.log(ret.msg);
+                if(ret.msg=="调用成功" && ret.success==true){
+                    var scheduleId = ret.response.colTsId;
+                    courseWareUpload.copyMaterialToSchedule(userId,materiaIds,scheduleId)
+                }
+                knowledge.setState({
+                    visible: false,
+                });
+            },
+            onError : function(error) {
+                alert(error);
+            }
+        });
+},
+
     /**
      * 拷贝课件到我的备课下
      * @param userId   用户id
@@ -134,13 +170,8 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
             onResponse : function(ret) {
                 console.log(ret.msg);
                 if(ret.msg=="调用成功" && ret.response==true){
-                    alert("课件使用成功");
-                }else{
-                    alert("课件使用失败");
+                    alert("课件添加成功");
                 }
-                knowledge.setState({
-                    visible: false,
-                });
             },
             onError : function(error) {
                 alert(error);
