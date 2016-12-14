@@ -44,7 +44,7 @@ const columns = [{
     dataIndex: 'subjectScore',
   }, {
     title: '操作',
-    className:'ant-table-selection-score',
+    className:'ant-table-selection-score3',
     dataIndex: 'subjectOpt',
   },
 ];
@@ -236,7 +236,7 @@ const SUbjectTable = React.createClass({
           // var submitTime = subTable.getLocalTime(e.createTime);
           var subjectOpt=<Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" ></Button>;
           if(userId==sessionStorage.getItem("ident")){
-            subjectOpt=<div><Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" ></Button><Button style={{ }} type=""  value={e.id} onClick={subTable.delMySubjects}  icon="delete" title="删除" ></Button></div>;
+            subjectOpt=<div><Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" className="score3_i"></Button><Button style={{ }} type=""  value={e.id} onClick={subTable.delMySubjects}  icon="delete" title="删除" className="score3_i" ></Button></div>;
           }else{
             subjectOpt=<Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" ></Button>;
           }
