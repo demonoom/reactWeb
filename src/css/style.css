@@ -297,6 +297,7 @@ body{
 		right: 12px;
 		margin-bottom: 10px;
 		height:30px !important;
+		padding:0 12px 0 0;
 	
     }
 .mini{
@@ -750,6 +751,9 @@ html, body, #root {
 }
 .ant-form-fo{
 	height:240px !important;
+}
+.ant-form-word{
+	height:260px !important;
 }
 .homework_show{
 	position: relative;
@@ -1299,4 +1303,11 @@ a {
 .ant-input-seach{
 	background-color: #1242bf;
     border: 1px solid #0b38ac;
+}
+.custom—1{
+	text-align:right;
+	font-size:14px;
+}
+.custom—top{
+	top:-15px;
 }

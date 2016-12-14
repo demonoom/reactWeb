@@ -83,7 +83,7 @@ var RichEditorComponents = React.createClass({
         <script id="container" name="content" type="text/plain">
 
         </script>
-        <embed type="application/chrWordPstSXLY" PLUGINSPAGE="http://www.maaee.com/uploadFile/WordPaster.crx" width="1" height="1"
+        <embed type="application/chrWordPstSXLY" PLUGINSPAGE="http://www.maaee.com/uploadFile/WordPaster.crx" width="1" height="0"
                id="objWordPaster"/>
         <div style={{display: "none"}}>
           <div id="PasterMessager">

@@ -496,8 +496,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
     render() {
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
-            labelCol: { span: 4},
-            wrapperCol: { span: 17 },
+            labelCol: { span: 3},
+            wrapperCol: { span: 20 },
         };
 
         const children = [];
@@ -514,7 +514,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
         ];
 
         const scoreItem=[];
-        scoreItem.push(<FormItem
+        scoreItem.push(<FormItem className="custom—top"
             {...formItemLayout}
             label={(<span>分值</span>)}
             hasFeedback>
@@ -528,7 +528,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                             </Select>
                         </Col>
                         <Col span={8} className="right_ri"><span><Input ref="scoreDefined" placeholder="请输入自定义分值" disabled={this.state.scoreInputState}  /></span></Col>
-                        <Col span={6} className="right_ri"><Checkbox onChange={this.scoreSelectTypeOnChange} ref="scoreCheckBox" checked={this.state.scoreChecked} value="defined">自定义:</Checkbox></Col>
+                        <Col span={6} className="right_ri custom—1"><Checkbox onChange={this.scoreSelectTypeOnChange} ref="scoreCheckBox" checked={this.state.scoreChecked} value="defined">自定义:</Checkbox></Col>
                     </Row>
                 </div>
             )}
@@ -587,7 +587,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                 <Modal
                     visible={this.state.visible}
                     title="添加题目"
-                    width="920px"
+                    width="860px"
+					height="636px"
                     className="ant-modal-width"
                     onCancel={this.handleCancel}
                     transitionName=""  //禁用modal的动画效果
@@ -605,7 +606,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                     >
                         <TabPane tab="单选题" key="单选题">
                             <Form horizontal className="ant-form-fo">
-                                <FormItem
+                                <FormItem className="ant-form-word"
                                     {...formItemLayout}
                                     label={(<span>题目</span>)}
                                     hasFeedback>
@@ -615,7 +616,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                         <RichEditorComponents/>
                                     )}
                                 </FormItem>
-                                <FormItem
+                                <FormItem className="custom—top"
                                     {...formItemLayout}
                                     label={(<span>答案</span>)}
                                     hasFeedback>
@@ -634,11 +635,9 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                 {scoreItem}
                             </Form>
                         </TabPane>
-
-
                         <TabPane tab="多选题" key="多选题"><div>
                             <Form horizontal className="ant-form-fo">
-                                <FormItem
+                                <FormItem className="ant-form-word"
                                     {...formItemLayout}
                                     label={(<span>题目</span>)}
                                     hasFeedback>
@@ -648,7 +647,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                         <RichEditorComponentsForMuliti/>
                                     )}
                                 </FormItem>
-                                <FormItem
+                                <FormItem className="custom—top"
                                     {...formItemLayout}
                                     label={(<span>答案</span>)}
                                     hasFeedback>
@@ -661,10 +660,9 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                 {scoreItem}
                             </Form>
                         </div></TabPane>
-
                         <TabPane tab="判断题" key="判断题"><div>
                             <Form horizontal className="ant-form-fo">
-                                <FormItem
+                                <FormItem className="ant-form-word"
                                     {...formItemLayout}
                                     label={(<span>题目</span>)}
                                     hasFeedback>
@@ -674,7 +672,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                         <RichEditorComponentsForCorrect/>
                                     )}
                                 </FormItem>
-                                <FormItem
+                                <FormItem className="custom—top"
                                     {...formItemLayout}
                                     label={(<span>答案</span>)}
                                     hasFeedback>
@@ -690,10 +688,9 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                 {scoreItem}
                             </Form>
                         </div></TabPane>
-
                         <TabPane tab="简答题" key="简答题"><div>
                             <Form horizontal className="ant-form-fo">
-                                <FormItem
+                                <FormItem className="ant-form-word"
                                     {...formItemLayout}
                                     label={(<span>题目</span>)}
                                     hasFeedback>
@@ -703,7 +700,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                         <RichEditorComponentsForSimpleAnswer/>
                                     )}
                                 </FormItem>
-                                <FormItem
+                                <FormItem className="custom—top"
                                     {...formItemLayout}
                                     label={(<span>答案</span>)}
                                     hasFeedback>
