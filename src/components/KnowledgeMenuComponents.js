@@ -215,7 +215,8 @@ const KnowledgeMenuComponents = React.createClass({
 
     getLessonMenu(){
         var param = {
-            "method":'getAllKnowledgePoints',
+            "method":'getUserRalatedPoints',
+            "userId":sessionStorage.getItem("ident"),
         };
         doWebService(JSON.stringify(param), {
             onResponse : function(ret) {
