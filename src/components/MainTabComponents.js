@@ -44,13 +44,13 @@ const MainTabComponents = React.createClass({
         this.setState({currentTeachScheduleId:teachScheduleId});
         this.setState({currentKnowledgeName:knowledgeName});
         this.setState({activeKey:'课件'});
-        this.setState({subjectParams:sessionStorage.getItem("ident")+"#"+teachScheduleId+"#"+1+"#"+optType});
+        this.setState({subjectParams:sessionStorage.getItem("ident")+"#"+teachScheduleId+"#"+1+"#"+optType+"#"+knowledgeName+"#"+this.state.dataFilter});
     },
 
     onChange(activeKey) {
         if(activeKey=="题目"){
             this.setState({activeKey:'题目'});
-            this.setState({subjectParams:sessionStorage.getItem("ident")+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType+"#"+this.state.currentKnowledgeName});
+            this.setState({subjectParams:sessionStorage.getItem("ident")+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType+"#"+this.state.currentKnowledgeName+"#"+this.state.dataFilter});
         }else{
             this.setState({activeKey:'课件'});
         }

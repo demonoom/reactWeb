@@ -96,7 +96,7 @@ const MiddleMenuComponents = React.createClass({
   },
 
   /**
-   * 教学进度名称右侧的DropDownMenu点击响应处理函数
+   * 备课信息名称右侧的DropDownMenu点击响应处理函数
    * @param key 被点击menu item的key
    */
   menuItemOnClick : function ({ key }) {
@@ -112,7 +112,7 @@ const MiddleMenuComponents = React.createClass({
   },
 
   /**
-   * 构建教学进度菜单对象
+   * 构建备课信息菜单对象
    * @param menuList 菜单对象值的数组
    */
   buildMenuChildren:function (menuList) {
@@ -138,12 +138,12 @@ const MiddleMenuComponents = React.createClass({
     });
   },
   /**
-   * 删除教学进度
-   * @param key 被删除教学进度的id
+   * 删除备课信息
+   * @param key 被删除备课信息的id
    */
   deleteTeachSchedule:function (key) {
     //alert("请先删除当前进度下的教学资源，再执行此操作"+e.currentTarget.title);
-    var confirmResult = confirm("确定要删除该教学进度?");
+    var confirmResult = confirm("确定要删除该备课信息?");
     if(confirmResult){
       var sids = key;
       var param = {
@@ -155,9 +155,9 @@ const MiddleMenuComponents = React.createClass({
         onResponse : function(ret) {
           console.log(ret.msg);
           if(ret.msg=="调用成功" && ret.response==true){
-            alert("教学进度删除成功");
+            alert("备课信息删除成功");
           }else{
-            alert("教学进度删除失败");
+            alert("备课信息删除失败");
           }
           mMenu.getLessonMenu(mMenu.state.currentPage);
         },
@@ -169,9 +169,9 @@ const MiddleMenuComponents = React.createClass({
   },
 
   /**
-   * 新增和修改教学进度的弹窗
+   * 新增和修改备课信息的弹窗
    * @param optType 操作方式  add/edit,通过该值区分是新增操作还是修改操作
-   * @param editSchuldeId 如果是修改操作，则该值为被修改教学进度的id，不能为空
+   * @param editSchuldeId 如果是修改操作，则该值为被修改备课信息的id，不能为空
    */
   showModal:function (optType,editSchuldeId) {
     optType = (optType=="edit"?"edit":"add");
@@ -185,7 +185,7 @@ const MiddleMenuComponents = React.createClass({
   render() {
     return (
       <div>
-          <div className="menu_til"><Button type="primary" icon="plus" onClick={this.showModal} className='add_study'>添加教学进度</Button></div>
+          <div className="menu_til"><Button type="primary" icon="plus" onClick={this.showModal} className='add_study'>添加备课信息</Button></div>
           <TeachingComponents ref="teachingComponents" callbackParent={this.handleMenu}/>
           <Menu ref="middleMenu" onClick={this.handleClick}
                 className="cont_t2"

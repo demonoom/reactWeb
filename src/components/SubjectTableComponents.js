@@ -179,9 +179,39 @@ const SUbjectTable = React.createClass({
     }
   },
 
+  //删除资源库下的题目
+  delMySubjects:function (e) {
+    if(confirm("确定要删除该题目?")){
+      var target = e.target;
+      if(navigator.userAgent.indexOf("Chrome") > -1){
+        target=e.currentTarget;
+      }else{
+        target = e.target;
+      }
+      var subjectIds = target.value;
+      var param = {
+        "method":'delMySubjects',
+        "userId":sessionStorage.getItem("ident"),
+        "subjects":subjectIds
+      };
+      doWebService(JSON.stringify(param), {
+        onResponse : function(ret) {
+          console.log(ret.msg);
+          if(ret.msg=="调用成功" && ret.response==true){
+            alert("题目删除成功");
+          }else{
+            alert("题目删除失败");
+          }
+          subTable.getSubjectDataByKnowledge(sessionStorage.getItem("ident"),subTable.state.ScheduleOrSubjectId,subTable.state.currentPage,"Y");
+        },
+        onError : function(error) {
+          alert(error);
+        }
+      });
+    }
+  },
+
   getSubjectDataByKnowledge:function (ident,ScheduleOrSubjectId,pageNo,isOwmer) {
-    // alert("getSubjectDataByKnowledge:"+ident+"==="+ScheduleOrSubjectId);
-    // alert(pageNo);
     var param = {
       "method":'getUserSubjectsByKnowledgePoint',
       "ident":ident,
@@ -202,8 +232,15 @@ const SUbjectTable = React.createClass({
           var content=<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article>;
           var subjectType=e.typeName;
           var subjectScore=e.score;
+          var userId = e.user.colUid;
           // var submitTime = subTable.getLocalTime(e.createTime);
           var subjectOpt=<Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" ></Button>;
+          if(userId==sessionStorage.getItem("ident")){
+            subjectOpt=<div><Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" ></Button><Button style={{ }} type=""  value={e.id} onClick={subTable.delMySubjects}  icon="delete" title="删除" ></Button></div>;
+          }else{
+            subjectOpt=<Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" ></Button>;
+          }
+
           data.push({
             key: key,
             name: name,

@@ -75,6 +75,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             scoreDisable:false,
             mulitiAnswerDefaultValue:['A'],
             correctAnswerValue:"正确",
+            useSameSchedule:false,
         };
     },
     showModal() {
@@ -493,6 +494,14 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
         this.setState({activeKey: key});
     },
 
+    //useSameSchedule
+    checkBoxOnChange(e) {
+        // currentKnowledgeState:false,
+        // newScheduleState:false,
+        console.log(`checked = ${e.target.checked}`);
+        this.setState({useSameSchedule: e.target.checked});
+    },
+
     render() {
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
@@ -632,6 +641,14 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     )}
                                 </FormItem>
                                 {scoreItem}
+                                <FormItem
+                                    {...formItemLayout}
+                                    label={(<span>引用</span>)}
+                                    hasFeedback>
+                                    {getFieldDecorator('subjectName')(
+                                        <Checkbox onChange={this.checkBoxOnChange} value="currentKnowledge">同时引用到同名教学进度下</Checkbox>
+                                    )}
+                                </FormItem>
                             </Form>
                         </TabPane>
 
@@ -659,6 +676,14 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     )}
                                 </FormItem>
                                 {scoreItem}
+                                <FormItem
+                                    {...formItemLayout}
+                                    label={(<span>引用</span>)}
+                                    hasFeedback>
+                                    {getFieldDecorator('subjectName')(
+                                        <Checkbox onChange={this.checkBoxOnChange} value="currentKnowledge">同时引用到同名教学进度下</Checkbox>
+                                    )}
+                                </FormItem>
                             </Form>
                         </div></TabPane>
 
@@ -688,6 +713,14 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     )}
                                 </FormItem>
                                 {scoreItem}
+                                <FormItem
+                                    {...formItemLayout}
+                                    label={(<span>引用</span>)}
+                                    hasFeedback>
+                                    {getFieldDecorator('subjectName')(
+                                        <Checkbox onChange={this.checkBoxOnChange} value="currentKnowledge">同时引用到同名教学进度下</Checkbox>
+                                    )}
+                                </FormItem>
                             </Form>
                         </div></TabPane>
 
@@ -716,6 +749,14 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     )}
                                 </FormItem>
                                 {scoreItem}
+                                <FormItem
+                                    {...formItemLayout}
+                                    label={(<span>引用</span>)}
+                                    hasFeedback>
+                                    {getFieldDecorator('subjectName')(
+                                        <Checkbox onChange={this.checkBoxOnChange} value="currentKnowledge">同时引用到同名教学进度下</Checkbox>
+                                    )}
+                                </FormItem>
                             </Form>
                         </div></TabPane>
                     </Tabs>

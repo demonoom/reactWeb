@@ -11,8 +11,8 @@ const FormItem = Form.Item;
 const props = {
     name: 'file',
     showUploadList: true,
-    // action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
-    action: 'http://www.maaee.com/Excoord_Upload_Server/file/upload',
+    action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
+    // action: 'http://www.maaee.com/Excoord_Upload_Server/file/upload',
     beforeUpload(file) {
         //alert(file);
         data:{file}
@@ -37,6 +37,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
         return {
             visible: false,
             submitFileCheckedList:[],
+            useSameSchedule:false,
         };
     },
     showModal() {
@@ -91,6 +92,8 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
         var subjectParamArray = courseWareUpload.props.params.split("#");
         var ident = subjectParamArray[0];
         var knowledgePointId = subjectParamArray[1];
+        var knowledgeName = subjectParamArray[4];
+        alert("knowledgeName:"+knowledgeName+"\t"+this.state.useSameSchedule);
         var param = {
             "method":'addNormalMaterial',
             "ident":ident,
@@ -114,6 +117,36 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
         });
 
     },
+    /**
+     * 拷贝课件到我的备课下
+     * @param userId   用户id
+     * @param materiaIds 课件id
+     * @param scheduleId 我的备课id
+     */
+    copyMaterialToSchedule(userId,materiaIds,scheduleId){
+        var param = {
+            "method":'copyMaterialToSchedule',
+            "userId":userId,
+            "materiaIds":materiaIds,
+            "scheduleId":scheduleId
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse : function(ret) {
+                console.log(ret.msg);
+                if(ret.msg=="调用成功" && ret.response==true){
+                    alert("课件使用成功");
+                }else{
+                    alert("课件使用失败");
+                }
+                knowledge.setState({
+                    visible: false,
+                });
+            },
+            onError : function(error) {
+                alert(error);
+            }
+        });
+    },
 
     handleFileSubmit(fileList){
         if(fileList==null || fileList.length==0){
@@ -124,6 +157,41 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
             var fileObj = fileJson.fileObj;
             uploadFileList.push(fileObj[0]);
         }
+    },
+
+    checkBoxOnChange(e) {
+        // currentKnowledgeState:false,
+        // newScheduleState:false,
+        console.log(`checked = ${e.target.checked}`);
+        this.setState({useSameSchedule:e.target.checked});
+        // currentKnowledgeState:false,
+        // newScheduleState:false,
+        /*var checkBoxValue = e.target.value;
+        var inputObj = knowledge.refs.scheduleName;
+        var currentKnowledgeState;
+        var newScheduleState;
+        if(checkBoxValue=="currentKnowledge"){
+            if(e.target.checked==true){
+                currentKnowledgeState=true;
+            }else{
+                currentKnowledgeState=false;
+            }
+            inputObj.refs.input.value="";
+            knowledge.setState({inputState:true});
+        }else{
+            if(e.target.checked==true){
+                newScheduleState=true;
+            }else{
+                newScheduleState=true;
+            }
+            knowledge.setState({inputState:false});
+        }
+        knowledge.setState({currentKnowledgeState:currentKnowledgeState,newScheduleState:newScheduleState});
+        if(currentKnowledgeState==true || newScheduleState==true){
+            knowledge.setState({isNewSchedule:true});
+        }else{
+            knowledge.setState({isNewSchedule:false});
+        }*/
     },
 
     render() {
@@ -158,6 +226,14 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                             <Col span={20}>
                                 <div>
                                     <FileUploadComponents ref="fileUploadCom" fatherState={courseWareUpload.state.visible} callBackParent={courseWareUpload.handleFileSubmit}/>
+                                </div>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col span={4}></Col>
+                            <Col span={20}>
+                                <div>
+                                    <Checkbox onChange={courseWareUpload.checkBoxOnChange} value="currentKnowledge">同时引用到同名教学进度下</Checkbox>
                                 </div>
                             </Col>
                         </Row>
