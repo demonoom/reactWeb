@@ -188,7 +188,7 @@ body{
       width: 224px;
       position: absolute;
       bottom: 0;
-      background: #ebebeb;
+      background: #7c87a5;
       color: #99999b;
       text-align: center;
       line-height: 42px;
@@ -582,8 +582,14 @@ html, body, #root {
     top: 16px;
     right: 0;
 }
-.bnt2_right button{
-	margin-left:15px;
+.bnt3_right{
+	width:100px;
+	position: absolute;
+    top: 16px;
+    right: 0;
+}
+.bnt2_right button, .bnt3_right button{
+	margin-left:10px;
 }
 .clearfix{
 	height:100%;
@@ -687,6 +693,10 @@ html, body, #root {
 	width:80px;
 	text-align:center;
 }
+.ant-table-thead > tr > th.ant-table-selection-score3, .ant-table-tbody > tr > td.ant-table-selection-score3{
+	width:106px;
+	text-align:center;
+}
 .ant-table-thead > tr > th.ant-table-selection-smallclass, .ant-table-tbody > tr > td.ant-table-selection-smallclass{
 	width:180px
 }
@@ -710,6 +720,9 @@ html, body, #root {
 .ant-table-thead > tr > th.ant-table-selection-cont3 article, .ant-table-tbody > tr > td.ant-table-selection-cont3 article{
 	max-height:100px !important;
 	overflow:hidden
+}
+.score3_i{
+	margin:0 6px;
 }
 .ant-table-body{
 	height:calc(100% - 40px);
@@ -1054,6 +1067,7 @@ p.user_cont span.name{
 	color:#a6a6a6;
 	width:65px;
 	margin-right:10px;
+	font-size:14px;
 	
 	
 }
@@ -1100,23 +1114,21 @@ p.user_cont span.name1{
 	text-align:center;
 }
 .modol_width{
-	width:440px !important;
+	width:480px !important;
 } 
 .ant-form-item {
     font-size: 14px;
     margin: 12px 0 12px 0 !important;
 }
-.17_hei{
-	height:100%;
-}
+
 .17_hei1{
-height:98%;
+   height:98%;
 }
 .ant-modal-title{
 	font-size:16px !important;
 }
 label {
-    font-size: 14px;
+    font-size: 14px !important;
 }
 .ant-col-4 {
     display: block;
@@ -1313,10 +1325,18 @@ a {
 	margin-top:16px;
 }
 .yinyong2{
-	color: #309ffb 
+	color: #9c6a4d 
 }
 .yinyong4{
-	    display: block;
+	display: block;
     padding: 8px 0;
     border-bottom: 1px solid #eee;
+}
+.menu_left_icon{
+	width:64px;
+	height:64px;
+	background:url(../../src/components/images/menu_left.png) no-repeat;
+}
+.menu_beike{
+	background-position:0 0;
 }

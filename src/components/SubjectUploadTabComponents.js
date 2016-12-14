@@ -645,7 +645,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     label={(<span>引用</span>)}
                                     hasFeedback>
                                     {getFieldDecorator('subjectName')(
-                                        <Checkbox onChange={this.checkBoxOnChange} value="currentKnowledge" className="yinyong">同时引用到同名教学进度下</Checkbox>
+                                        <Checkbox onChange={this.checkBoxOnChange} value="currentKnowledge" className="yinyong yinyong2">同时引用到同名教学进度下</Checkbox>
                                     )}
                                 </FormItem>
                             </Form>
@@ -676,7 +676,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     label={(<span>引用</span>)}
                                     hasFeedback>
                                     {getFieldDecorator('subjectName')(
-                                        <Checkbox onChange={this.checkBoxOnChange} value="currentKnowledge" className="yinyong">同时引用到同名教学进度下</Checkbox>
+                                        <Checkbox onChange={this.checkBoxOnChange} value="currentKnowledge" className="yinyong yinyong2">同时引用到同名教学进度下</Checkbox>
                                     )}
                                 </FormItem>
                             </Form>
@@ -710,7 +710,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     label={(<span>引用</span>)}
                                     hasFeedback>
                                     {getFieldDecorator('subjectName')(
-                                        <Checkbox onChange={this.checkBoxOnChange} value="currentKnowledge" className="yinyong">同时引用到同名教学进度下</Checkbox>
+                                        <Checkbox onChange={this.checkBoxOnChange} value="currentKnowledge" className="yinyong yinyong2">同时引用到同名教学进度下</Checkbox>
                                     )}
                                 </FormItem>
                             </Form>
@@ -741,7 +741,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     label={(<span>引用</span>)}
                                     hasFeedback>
                                     {getFieldDecorator('subjectName')(
-                                        <Checkbox onChange={this.checkBoxOnChange} value="currentKnowledge" className="yinyong" >同时引用到同名教学进度下</Checkbox>
+                                        <Checkbox onChange={this.checkBoxOnChange} value="currentKnowledge" className="yinyong yinyong2" >同时引用到同名教学进度下</Checkbox>
                                     )}
                                 </FormItem>
                             </Form>
