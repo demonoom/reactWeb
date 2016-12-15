@@ -125,7 +125,7 @@ const MiddleMenuComponents = React.createClass({
               <Menu.Item key={e[0]} className="popup_i_icon"><Icon className="icon_right" type="delete" />删除</Menu.Item>
             </Menu>
       );
-      return <SubMenu key={e[0]} onTitleClick={this.subMenuTitleClick} style={{backgroundColor:'red'}} title={<span><span>{e[1]}</span><Badge count={e[2]}/> <Dropdown overlay={menu}  trigger={['click']}  className='del_right'><i className=" ant-dropdown-link iconfont iconfont_exit">&#xe60e;</i></Dropdown> </span>}>
+      return <SubMenu key={e[0]} onTitleClick={this.subMenuTitleClick} style={{backgroundColor:'red'}} title={<span><span>{e[1]}</span><Badge count={e[2]}/> <Dropdown overlay={menu}  trigger={['click']}  className='del_right'><i className="iconfont iconfont_more">&#xe60e;</i></Dropdown> </span>}>
       </SubMenu>
     });
   },

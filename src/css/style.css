@@ -1311,6 +1311,17 @@ a {
 	top:-10px;
 	color: #e8e8e8;
 }
+.iconfont_more{
+	font-size:18px;
+	color: #999;
+	line-height: 18px;
+    position: absolute;
+    right: 8px;
+    top: 12px;
+}
+.iconfont_more:hover{
+	color: #309ffb
+}
 .ant-menu-dark .ant-menu-item, .ant-menu-dark .ant-menu-item > a{
 	color:#707275
 }
