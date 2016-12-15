@@ -1287,14 +1287,16 @@ a {
 
 }
 
+
 @font-face {
   font-family: 'iconfont';  /* project id 197083 */
-  src: url('//at.alicdn.com/t/font_actws9oxl8tzkt9.eot');
-  src: url('//at.alicdn.com/t/font_actws9oxl8tzkt9.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_actws9oxl8tzkt9.woff') format('woff'),
-  url('//at.alicdn.com/t/font_actws9oxl8tzkt9.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_actws9oxl8tzkt9.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_ufwwt0whkadu0udi.eot');
+  src: url('//at.alicdn.com/t/font_ufwwt0whkadu0udi.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_ufwwt0whkadu0udi.woff') format('woff'),
+  url('//at.alicdn.com/t/font_ufwwt0whkadu0udi.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_ufwwt0whkadu0udi.svg#iconfont') format('svg');
 }
+
 .iconfont{
 	font-family:"iconfont";
 	font-size:24px;
@@ -1302,6 +1304,12 @@ a {
 	-webkit-font-smoothing: antialiased;
     -webkit-text-stroke-width: 0.2px;
     -moz-osx-font-smoothing: grayscale; 
+}
+.iconfont_exit{
+	font-size:18px;
+	position:relative;
+	top:-10px;
+	color: #e8e8e8;
 }
 .ant-menu-dark .ant-menu-item, .ant-menu-dark .ant-menu-item > a{
 	color:#707275
@@ -1402,4 +1410,7 @@ a {
 	    padding: 0px 34px 0 24px;
 		overflow:hidden;
 		text-overflow:ellipsis;
+}
+.ant-menu-submenu{
+	margin-right:1px;
 }

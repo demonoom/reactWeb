@@ -47,14 +47,13 @@ const FloatButton = React.createClass({
         const content = (
             <div>
                 <p>修改密码</p>
-                <hr/>
                 <p onClick={this.logOut}>退出系统</p>
             </div>
         );
         return (
             <Affix className="affix_bottom">
                 <Popover content={content}>
-                    <img src={('../../src/components/images/exit_ma.png')}/>
+                    <i className="iconfont iconfont_exit">&#xe60e;</i>
                 </Popover>
             </Affix>
         );
