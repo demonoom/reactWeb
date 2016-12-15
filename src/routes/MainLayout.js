@@ -61,11 +61,12 @@ const MainLayout = React.createClass({
     }else{
 
       var optContentArray = optContent.split("#");
+      var childrenCount = optContentArray[3];
       if(optContentArray[1]!="bySubjectId"){
         var breadcrumbArray = [{hrefLink:'#/MainLayout',hrefText:"首页"}];
         mainLayout.refs.mainTabComponents.buildBreadcrumb(breadcrumbArray);
       }else{
-        mainLayout.refs.mainTabComponents.buildBreadcrumb(breadCrumbArray);
+        mainLayout.refs.mainTabComponents.buildBreadcrumb(breadCrumbArray,childrenCount);
       }
       mainLayout.refs.mainTabComponents.getTeachPlans(optContent);
     }

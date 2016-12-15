@@ -64,7 +64,7 @@ const KnowledgeMenuComponents = React.createClass({
                 this.setState({
                     currentMenu: openKey,
                 });
-                var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
+                var optContent = menuId+"#"+"bySubjectId"+"#"+menuName+"#"+childrenCount;
                 this.props.callbackParent(optContent,breadCrumbArray);
             }
         }
@@ -107,7 +107,7 @@ const KnowledgeMenuComponents = React.createClass({
         }else{
             this.bulidBreadCrumbArray(menuName,menuLevel,menuId,openKeysStr);
         }
-        var optContent = menuId+"#"+"bySubjectId"+"#"+menuName;
+        var optContent = menuId+"#"+"bySubjectId"+"#"+menuName+"#"+childrenCount;
         this.props.callbackParent(optContent,breadCrumbArray);
     },
     //判断当前点击的菜单key是否已经在被点击key的数组中
