@@ -2,32 +2,11 @@ import React, { PropTypes } from 'react';
 import { Tabs, Button,Radio } from 'antd';
 import { Modal} from 'antd';
 import { Slider } from 'antd';
-import { Form, Input, Tooltip, Icon, Cascader, Select, Checkbox,Row,Col } from 'antd';
+import { Form, Input, Tooltip, Icon, Cascader, Select, Checkbox,Row,Col,Spin } from 'antd';
 import { Upload,  message } from 'antd';
 import { doWebService } from '../WebServiceHelper';
 import FileUploadComponents from './FileUploadComponents';
 const FormItem = Form.Item;
-
-const props = {
-    name: 'file',
-    showUploadList: true,
-    action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
-    // action: 'http://www.maaee.com/Excoord_Upload_Server/file/upload',
-    beforeUpload(file) {
-        //alert(file);
-        data:{file}
-    },
-    onChange(info) {
-        if (info.file.status !== 'uploading') {
-            console.log(info.file, info.fileList);
-        }
-        if (info.file.status === 'done') {
-            message.success(`${info.file.name} file uploaded successfully.`);
-        } else if (info.file.status === 'error') {
-            message.error(`${info.file.name} file upload failed.`);
-        }
-    },
-};
 
 var uploadFileList=[];
 var courseWareUpload;
@@ -38,22 +17,20 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
             visible: false,
             submitFileCheckedList:[],
             useSameSchedule:true,
+            spinLoading:false,
         };
     },
     showModal() {
         uploadFileList.splice(0,uploadFileList.length);
         courseWareUpload.setState({
-            visible: true,
+            spinLoading:false,visible: true,
         });
         //弹出文件上传窗口时，初始化窗口数据
         courseWareUpload.refs.fileUploadCom.initFileUploadPage();
     },
 
-    handleOk() {
-        courseWareUpload.setState({ visible: false });
-    },
     handleCancel() {
-        courseWareUpload.setState({ visible: false });
+        courseWareUpload.setState({ visible: false,spinLoading:false });
     },
 
     //点击保存按钮，文件上传
@@ -64,6 +41,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
             var formData = new FormData();
             formData.append("file",uploadFileList[0]);
             formData.append("name",uploadFileList[0].name);
+            courseWareUpload.setState({spinLoading:true});
             $.ajax({
                 type: "POST",
                 url: "http://101.201.45.125:8890/Excoord_Upload_Server/file/upload",
@@ -77,14 +55,16 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                     if(responseStr!=""){
                         var fileUrl=responseStr;
                         courseWareUpload.addNormalMaterial(fileUrl,uploadFileList[0].name);
-                        courseWareUpload.setState({ visible: false });
+                        courseWareUpload.setState({ visible: false,spinLoading:false });
                         courseWareUpload.props.courseUploadCallBack();
                     }
                 },
                 error : function(responseStr) {
                     console.log("error"+responseStr);
+                    courseWareUpload.setState({ visible: false,spinLoading:false });
                 }
             });
+
         }
     },
     //添加课件到知识点下
@@ -117,9 +97,11 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                 }else{
                     alert("课件添加失败");
                 }
+                courseWareUpload.setState({spinLoading:false});
             },
             onError : function(error) {
                 alert(error);
+                courseWareUpload.setState({spinLoading:false});
             }
         });
     },
@@ -144,7 +126,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                     courseWareUpload.copyMaterialToSchedule(userId,materiaIds,scheduleId)
                 }
                 knowledge.setState({
-                    visible: false,
+                    visible: false,spinLoading:false
                 });
             },
             onError : function(error) {
@@ -190,41 +172,6 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
         }
     },
 
-    checkBoxOnChange(e) {
-        // currentKnowledgeState:false,
-        // newScheduleState:false,
-        // console.log(`checked = ${e.target.checked}`);
-        // this.setState({useSameSchedule:e.target.checked});
-        // currentKnowledgeState:false,
-        // newScheduleState:false,
-        /*var checkBoxValue = e.target.value;
-        var inputObj = knowledge.refs.scheduleName;
-        var currentKnowledgeState;
-        var newScheduleState;
-        if(checkBoxValue=="currentKnowledge"){
-            if(e.target.checked==true){
-                currentKnowledgeState=true;
-            }else{
-                currentKnowledgeState=false;
-            }
-            inputObj.refs.input.value="";
-            knowledge.setState({inputState:true});
-        }else{
-            if(e.target.checked==true){
-                newScheduleState=true;
-            }else{
-                newScheduleState=true;
-            }
-            knowledge.setState({inputState:false});
-        }
-        knowledge.setState({currentKnowledgeState:currentKnowledgeState,newScheduleState:newScheduleState});
-        if(currentKnowledgeState==true || newScheduleState==true){
-            knowledge.setState({isNewSchedule:true});
-        }else{
-            knowledge.setState({isNewSchedule:false});
-        }*/
-    },
-
     render() {
         const { getFieldDecorator } = courseWareUpload.props.form;
         const formItemLayout = {
@@ -252,6 +199,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                         </div>
                     ]}
                 >
+                    <Spin tip="课件上传中..." spinning={courseWareUpload.state.spinLoading}>
                         <Row>
                             <Col span={4}>上传文件：</Col>
                             <Col span={20}>
@@ -260,14 +208,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                                 </div>
                             </Col>
                         </Row>
-                        {/*<Row>
-                            <Col span={4}></Col>
-                            <Col span={20}>
-                                <div>
-                                    <Checkbox onChange={courseWareUpload.checkBoxOnChange} value="currentKnowledge" className="yinyong yinyong3"><span className="yinyong2">同时引用到同名教学进度下</span></Checkbox>
-                                </div>
-                            </Col>
-                        </Row>*/}
+                    </Spin>
                 </Modal>
             </div>
         );

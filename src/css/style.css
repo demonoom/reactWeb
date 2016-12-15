@@ -2,7 +2,10 @@ body{
 	font-family:"冬青黑体简体中文","Tahoma","Hiragino Sans GB","Microsoft YaHei","微软雅黑","STHeiti","WenQuanYi Micro Hei",SimSun,sans-serif, "Apple Color Emoji" !important;
 	background:url(../../src/components/images/bg_6.png);
 	background-size:cover;
-}.logo_layout{
+	margin:0;
+	padding:0;
+}
+.logo_layout{
 	margin: 8px 0px 0px;
     position: absolute;
     left: -24px;
@@ -122,7 +125,7 @@ body{
     width: 240px;
     overflow-y: auto;
     overflow-x: hidden;
-    height: calc(100% - 105px);
+    height: calc(100% - 104px);
     border-bottom: 1px solid #e3e8f7;
 }
     .ant-layout-aside .ant-layout-sider > .ant-menu > .ant-menu-item {
@@ -400,6 +403,7 @@ body{
 .add_study—a{
 	padding:4px 8px !important;
 }
+
 .add_study-b{
 	background:#2dbe60 !important;
 	border:1px solid #2dbe60 !important;
@@ -410,6 +414,23 @@ body{
 	background:#34d56c !important;
 	border:1px solid #34d56c !important;
 	color:#fff;
+}
+.add_study-d{
+	background:#2dbe60 !important;
+	border:1px solid #2dbe60 !important;
+	padding:6px 25px !important;
+	color:#fff;
+}
+.add_study-d:hover{
+	background:#34d56c !important;
+	border:1px solid #34d56c !important;
+	color:#fff;
+}
+.add_study-d-le{
+	margin-left:27px;
+}
+.add_study-d-le1{
+	margin-left:20px;
 }
 .ant-modal-header{
 	background:#309ffb;
@@ -521,7 +542,7 @@ html, body, #root {
 }
 .ant-menu-submenu-title:hover, .ant-menu-submenu-title:active{
 	background:#e5f0fa;
-	font-weight:bold;
+	font-weight: normal;
 	box-sizing:border-box;
     -moz-box-sizing:border-box; /* Firefox */
    -webkit-box-sizing:border-box; /* Safari */
@@ -1344,4 +1365,41 @@ a {
 }
 .menu_beike{
 	background-position:0 0;
+}
+.binding_a{
+	 background: #fffded;
+    border: 1px solid #fbdf85;
+    color: #9c6a3d;
+    padding: 4px 8px;
+    margin: 4px 5px 0 5px;
+    border-radius: 4px;
+	position:relative;
+
+}
+.binding_a:after, .binding_a:before {
+  border: solid transparent;
+  content: ' ';
+  height: 0;
+  top: 100%;
+  position: absolute;
+  width: 0;
+}
+
+.binding_a:after {
+  border-width: 5px;
+  border-top-color: #fffded;
+  top: 100%;
+  left:108px;
+}
+
+.binding_a:before {
+  border-width: 7px;
+  border-top-color: #fbdf85;
+  left:106px;
+  top: 100%;
+}
+.ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title{
+	    padding: 0px 34px 0 24px;
+		overflow:hidden;
+		text-overflow:ellipsis;
 }
