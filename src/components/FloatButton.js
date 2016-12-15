@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Popover, Affix, Button } from 'antd';
+import { Popover, Affix, Button,Dropdown,Menu,Icon } from 'antd';
 import UserPasswordModifyComponents from './UserPasswordModifyComponents';
 import { doWebService } from '../WebServiceHelper';
 
@@ -48,22 +48,29 @@ const FloatButton = React.createClass({
         this.refs.userPasswordModify.showModal();
     },
 
+    menuItemOnClick : function ({ key }) {
+        var clickKey = `${key}`;
+        console.log("clickKey:"+clickKey)
+        if(clickKey=="modifyPassword"){
+            this.showModifyModal();
+        }else if(clickKey=="existSystem"){
+            this.logOut();
+        }
+    },
+
     render() {
-        const content = (
-            <div>
-                <p onClick={this.showModifyModal}>修改密码</p>
-                <hr/>
-                <p onClick={this.logOut}>退出系统</p>
-            </div>
+        const menu = (
+            <Menu onClick={this.menuItemOnClick}>
+                <Menu.Item key="modifyPassword" className="popup_i_icon"><Icon className="icon_right" type="edit" />修改密码</Menu.Item>
+                <Menu.Item key="existSystem" className="popup_i_icon"><Icon className="icon_right" type="delete" />退出系统</Menu.Item>
+            </Menu>
         );
         return (
            <div>
                <UserPasswordModifyComponents ref="userPasswordModify"/>
-               <Affix className="affix_bottom">
-                   <Popover content={content} trigger="click">
-                       <img src={('../../src/components/images/exit_ma.png')}/>
-                   </Popover>
-               </Affix>
+               <Dropdown overlay={menu}  trigger={['click']}  className='affix_bottom'>
+                   <Icon type="ellipsis" className="icon_more" />
+               </Dropdown>
            </div>
         );
     }
