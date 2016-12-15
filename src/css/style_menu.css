@@ -2,10 +2,7 @@ body{
 	font-family:"冬青黑体简体中文","Tahoma","Hiragino Sans GB","Microsoft YaHei","微软雅黑","STHeiti","WenQuanYi Micro Hei",SimSun,sans-serif, "Apple Color Emoji" !important;
 	background:url(../../src/components/images/bg_6.png);
 	background-size:cover;
-	margin:0;
-	padding:0;
-}
-.logo_layout{
+}.logo_layout{
 	margin: 8px 0px 0px;
     position: absolute;
     left: -24px;
@@ -81,9 +78,8 @@ body{
 	width:64px;
 	height:64px;
 	margin-top:38px;
-	background:#eeeff4;
+	background:#f8f8f8;
 	border-right: 1px solid #e3e3e3;
-	border-bottom:1px solid #dfe0e3;
 	}
 .layout_logo img{
     width: 36px;
@@ -94,7 +90,7 @@ body{
 }
  .ant-layout-aside .ant-layout-sider {
       width: 224px;
-      background: #eeeff4;
+      background: #f8f8f8;
       position: absolute;
       overflow: visible;
       padding-bottom: 24px;
@@ -113,7 +109,7 @@ body{
       margin-bottom: 20px;
 	  z-index:1000;
 	  margin-top:64px;
-	  border-right: 1px solid #dfe0e3;
+	  border-right: 1px solid #e3e3e3;
     }
 	ul.cont_t{
 		width:240px;
@@ -125,7 +121,7 @@ body{
     width: 240px;
     overflow-y: auto;
     overflow-x: hidden;
-    height: calc(100% - 104px);
+    height: calc(100% - 105px);
     border-bottom: 1px solid #e3e8f7;
 }
     .ant-layout-aside .ant-layout-sider > .ant-menu > .ant-menu-item {
@@ -162,14 +158,14 @@ body{
       transition: all 0s ease;
     }
 	 .ant-layout-aside-collapse .ant-layout-sider > .ant-menu > .ant-menu-item div.tan {
-		 display:none
+		 display:none;
 }
     .ant-layout-aside-collapse .ant-layout-sider > .ant-menu > .ant-menu-item:hover div.tan {
       background: #000;
       color: #fff;
 	  position:relative;
-	  left:0px;
-	  top:0px;
+	  left:64px;
+	  top:-64px;
 	  height:25px;
 	  line-height:25px;
 	  display: inline-block;
@@ -395,6 +391,7 @@ body{
 		background:#fd8069;
 		border:1px solid #fd8069;
 		padding:4px 12px !important;
+		border-radius:20px !important;
 	}
 .add_study:hover{
 		background:#ff9d8b;
@@ -403,7 +400,6 @@ body{
 .add_study—a{
 	padding:4px 8px !important;
 }
-
 .add_study-b{
 	background:#2dbe60 !important;
 	border:1px solid #2dbe60 !important;
@@ -414,23 +410,6 @@ body{
 	background:#34d56c !important;
 	border:1px solid #34d56c !important;
 	color:#fff;
-}
-.add_study-d{
-	background:#2dbe60 !important;
-	border:1px solid #2dbe60 !important;
-	padding:6px 25px !important;
-	color:#fff;
-}
-.add_study-d:hover{
-	background:#34d56c !important;
-	border:1px solid #34d56c !important;
-	color:#fff;
-}
-.add_study-d-le{
-	margin-left:27px;
-}
-.add_study-d-le1{
-	margin-left:20px;
 }
 .ant-modal-header{
 	background:#309ffb;
@@ -459,8 +438,8 @@ body{
     width: 240px;
 	position: relative;
     height: 100%;
-	background: #fcfcfc;
-	border-right:1px solid #dfe0e3
+	background: #fafbfe;
+	border-right:1px solid #dce4f3
 }
 
  .ant-col-5 > div:first-child{
@@ -529,11 +508,8 @@ html, body, #root {
 	height:calc(100% - 54px);
 }
 .ant-menu-dark.ant-menu-inline .ant-menu-item-selected{
-	color: #fff;
-	background:#309ffb;
-    box-sizing: border-box;
-	-moz-box-sizing:border-box; /* Firefox */
-   -webkit-box-sizing:border-box; /* Safari */
+	color: #309ffb;
+	background:#f8f8f8
   
 }
 .ant-menu-dark.ant-menu-inline i .ant-menu-item-selected i{
@@ -542,7 +518,7 @@ html, body, #root {
 }
 .ant-menu-submenu-title:hover, .ant-menu-submenu-title:active{
 	background:#e5f0fa;
-	font-weight: normal;
+	font-weight:bold;
 	box-sizing:border-box;
     -moz-box-sizing:border-box; /* Firefox */
    -webkit-box-sizing:border-box; /* Safari */
@@ -664,7 +640,7 @@ html, body, #root {
 	line-height:63px;
 	height:63px;
 	padding: 0 0 0 24px;
-    border-bottom: 1px solid #dfe0e3;
+    border-bottom: 1px solid #e3e8f7;
 }
 .ant-menu-dark.ant-menu-inline li {
 	height:64px;
@@ -759,6 +735,7 @@ html, body, #root {
 }
 .ant-btn {
 	padding:4px 8px;
+	border-radius:20px !important;
 	font-size:13px !important
 }
 
@@ -810,7 +787,7 @@ html, body, #root {
 	margin-left:200px !important;
 }
 .padding_menu{
-	padding-left:20px !important;
+	padding-left:0px !important;
 }
 .ant-menu-vertical > .ant-menu-item, .ant-menu-inline > .ant-menu-item, .ant-menu-item-group-list > .ant-menu-item, .ant-menu-vertical > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-item-group-list > .ant-menu-submenu > .ant-menu-submenu-title{
 	font-size:14px
@@ -1205,9 +1182,6 @@ a {
 	height: 50px !important;
     bottom: 10px;
 }
-.homework{
-	width:100%
-}
 .text_30{
 	line-height:32px;
 }
@@ -1363,43 +1337,27 @@ a {
 	height:64px;
 	background:url(../../src/components/images/menu_left.png) no-repeat;
 }
-.menu_beike{
+.menu_lessons{
 	background-position:0 0;
 }
-.binding_a{
-	 background: #fffded;
-    border: 1px solid #fbdf85;
-    color: #9c6a3d;
-    padding: 4px 8px;
-    margin: 4px 5px 0 5px;
-    border-radius: 4px;
-	position:relative;
-
+.menu_lessons:hover{
+	background-position:-71px 0;
 }
-.binding_a:after, .binding_a:before {
-  border: solid transparent;
-  content: ' ';
-  height: 0;
-  top: 100%;
-  position: absolute;
-  width: 0;
+.menu_resources{
+	background-position:0 -64px;
 }
-
-.binding_a:after {
-  border-width: 5px;
-  border-top-color: #fffded;
-  top: 100%;
-  left:108px;
+.menu_resources:hover{
+	background-position:-71px -64px;
 }
-
-.binding_a:before {
-  border-width: 7px;
-  border-top-color: #fbdf85;
-  left:106px;
-  top: 100%;
+.menu_homework{
+	background-position:0 -128px;
 }
-.ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title{
-	    padding: 0px 34px 0 24px;
-		overflow:hidden;
-		text-overflow:ellipsis;
+.menu_homework:hover{
+	background-position:-71px -128px;
+}
+.menu_evaluation{
+	background-position:0 -192px;
+}
+.menu_evaluation:hover{
+	background-position:-71px -192px;
 }
