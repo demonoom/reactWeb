@@ -1,8 +1,9 @@
 import React, { PropTypes,Link } from 'react';
 import { Table, Popconfirm} from 'antd';
-import { Menu, Icon } from 'antd';
+import { Menu, Icon,Button } from 'antd';
 import { Badge,Pagination } from 'antd';
 import { doWebService } from '../WebServiceHelper';
+import BindKnowledgeComponents from './BindKnowledgeComponents';
 const SubMenu = Menu.SubMenu;
 
 //一级菜单数组
@@ -27,6 +28,7 @@ const KnowledgeMenuComponents = React.createClass({
             totalCount:0,
             fatherMenuName:'',
             breadCrumbArray:[],
+            noHaveKnowledgeTip:'',
         };
     },
 
@@ -214,6 +216,7 @@ const KnowledgeMenuComponents = React.createClass({
     },
 
     getLessonMenu(){
+        List.splice(0);
         var param = {
             "method":'getUserRalatedPoints',
             "userId":sessionStorage.getItem("ident"),
@@ -226,8 +229,12 @@ const KnowledgeMenuComponents = React.createClass({
                     count++;
                     List.push([e]);
                 });
-                mMenu.buildMenuChildren(List);
-                mMenu.setState({totalCount:count});
+                if(List==null || List.length==0){
+                    mMenu.setState({noHaveKnowledgeTip:'您目前还没有知识点，请先点击下方按钮绑定知识点'});
+                }else{
+                    mMenu.buildMenuChildren(List);
+                    mMenu.setState({totalCount:count,noHaveKnowledgeTip:''});
+                }
             },
             onError : function(error) {
                 alert(error);
@@ -278,10 +285,23 @@ const KnowledgeMenuComponents = React.createClass({
         //location.hash=e.key;
     },
 
+    showModal:function (optType,editSchuldeId) {
+        optType = (optType=="edit"?"edit":"add");
+        mMenu.refs.bindKnowledgeComponent.showModal();
+    },
+
+    handleMenu(){
+        mMenu.getLessonMenu();
+    },
+
     render() {
         return (
             <div>
-                <div className="menu_til">知识点资源</div>
+                <div>{this.state.noHaveKnowledgeTip}</div>
+                <div className="menu_til">
+                    <Button type="primary" icon="plus-circle" onClick={mMenu.showModal} className='add_study-b'>绑定知识点</Button>
+                </div>
+                <BindKnowledgeComponents  ref="bindKnowledgeComponent" callbackParent={mMenu.handleMenu}/>
                 <Menu ref="middleMenu"  onClick={this.handleClick}
                       defaultOpenKeys={mMenu.state.openSubMenu}
                       openKeys={mMenu.state.openSubMenu}

@@ -173,9 +173,9 @@ const MiddleMenuComponents = React.createClass({
    * @param optType 操作方式  add/edit,通过该值区分是新增操作还是修改操作
    * @param editSchuldeId 如果是修改操作，则该值为被修改备课信息的id，不能为空
    */
-  showModal:function (optType,editSchuldeId) {
+  showModal:function (optType) {
     optType = (optType=="edit"?"edit":"add");
-    mMenu.refs.teachingComponents.showModal(optType,editSchuldeId);
+    mMenu.refs.teachingComponents.showModal(optType);
   },
 
   handleMenu(){
