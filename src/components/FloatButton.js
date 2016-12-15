@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Popover, Affix, Button } from 'antd';
+import UserPasswordModifyComponents from './UserPasswordModifyComponents';
 import { doWebService } from '../WebServiceHelper';
 
 
@@ -43,20 +44,27 @@ const FloatButton = React.createClass({
         });
     },
 
+    showModifyModal(){
+        this.refs.userPasswordModify.showModal();
+    },
+
     render() {
         const content = (
             <div>
-                <p>修改密码</p>
+                <p onClick={this.showModifyModal}>修改密码</p>
                 <hr/>
                 <p onClick={this.logOut}>退出系统</p>
             </div>
         );
         return (
-            <Affix className="affix_bottom">
-                <Popover content={content}>
-                    <img src={('../../src/components/images/exit_ma.png')}/>
-                </Popover>
-            </Affix>
+           <div>
+               <UserPasswordModifyComponents ref="userPasswordModify"/>
+               <Affix className="affix_bottom">
+                   <Popover content={content} trigger="click">
+                       <img src={('../../src/components/images/exit_ma.png')}/>
+                   </Popover>
+               </Affix>
+           </div>
         );
     }
 
