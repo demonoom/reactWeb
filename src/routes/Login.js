@@ -1,11 +1,14 @@
 import React, { PropTypes } from 'react';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 const FormItem = Form.Item;
+import { doWebService } from '../WebServiceHelper';
 
 var code;
+var loginComponent;
 const Login = Form.create()(React.createClass({
 
     getInitialState() {
+        loginComponent = this;
         return {
             code: '',
         };
@@ -23,11 +26,11 @@ const Login = Form.create()(React.createClass({
             var charNum = Math.floor(Math.random() * 52);
             code += codeChars[charNum];
         }
-        this.setState({code:code});
+        loginComponent.setState({code:code});
     },
 
     componentDidMount(){
-        this.createCode();
+        loginComponent.createCode();
     },
 
     doWebService : function(data,listener) {
@@ -69,6 +72,7 @@ const Login = Form.create()(React.createClass({
                         alert("用户身份不正确,请重新输入！");
                     }else{
                         sessionStorage.setItem("ident", response.colUid);
+                        loginComponent.getHistoryAccessPointId(response.colUid);
                         location.hash="MainLayout";
                     }
                 }
@@ -79,30 +83,46 @@ const Login = Form.create()(React.createClass({
         });
     },
 
+    getHistoryAccessPointId(userId){
+        var param = {
+            "method":'getHistoryAccessPointId',
+            "userId":userId,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse : function(ret) {
+                var response = ret.response;
+                sessionStorage.setItem("openKeysStr",response);
+            },
+            onError : function(error) {
+                alert(error);
+            }
+        });
+    },
+
     handleSubmit(e) {
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
+        loginComponent.props.form.validateFields((err, values) => {
             var inputCode=values.validateCode;
             if(inputCode.length <= 0)
             {
                 alert("请输入验证码！");
             }
-            else if(inputCode.toUpperCase() != this.state.code.toUpperCase())
+            else if(inputCode.toUpperCase() != loginComponent.state.code.toUpperCase())
             {
                 alert("验证码输入有误！");
-                this.createCode();
+                loginComponent.createCode();
             }
             else
             {
                 if (!err) {
                     //console.log('Received values of form: ', values.userName+"\t"+values.password+"\t"+values.validateCode);
-                    this.loginValidate(values.userName,values.password);
+                    loginComponent.loginValidate(values.userName,values.password);
                 }
             }
         });
     },
     render() {
-        const { getFieldDecorator } = this.props.form;
+        const { getFieldDecorator } = loginComponent.props.form;
         const formItemLayout = {
             labelCol: { span: 6 },
             wrapperCol: { span: 16 },
@@ -114,7 +134,7 @@ const Login = Form.create()(React.createClass({
 				<div className="login_duxing"></div>
 			 	<div className="login_bg_content">
 					<div className="login_welcome">欢迎登录</div>
-						<Form onSubmit={this.handleSubmit} className="login-form">
+						<Form onSubmit={loginComponent.handleSubmit} className="login-form">
 							<FormItem {...formItemLayout} label="用户名">
 								{getFieldDecorator('userName',{
                                     rules: [{ required: true, message: '请输入用户名!' }],
@@ -140,7 +160,7 @@ const Login = Form.create()(React.createClass({
 								{
 
 										
-										<div className="code" id="checkCode" onClick={this.createCode} >{this.state.code}</div>
+										<div className="code" id="checkCode" onClick={loginComponent.createCode} >{loginComponent.state.code}</div>
 	
 									}
 							</FormItem>
