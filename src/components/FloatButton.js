@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Popover, Affix, Button } from 'antd';
+import { Popover, Affix, Button,Dropdown,Menu,Icon } from 'antd';
 import UserPasswordModifyComponents from './UserPasswordModifyComponents';
 import { doWebService } from '../WebServiceHelper';
 
@@ -48,24 +48,32 @@ const FloatButton = React.createClass({
         this.refs.userPasswordModify.showModal();
     },
 
+    menuItemOnClick : function ({ key }) {
+        var clickKey = `${key}`;
+        console.log("clickKey:"+clickKey)
+        if(clickKey=="modifyPassword"){
+            this.showModifyModal();
+        }else if(clickKey=="existSystem"){
+            this.logOut();
+        }
+    },
+
     render() {
-        const content = (
-            <div>
-                <p onClick={this.showModifyModal}>修改密码</p>
-                <hr/>
-                <p onClick={this.logOut}>退出系统</p>
-            </div>
+        const menu = (
+            <Menu onClick={this.menuItemOnClick} className="dropdown-menu-tc">
+                <Menu.Item key="modifyPassword" className="popup_i_icon"><Icon className="icon_right" type="edit" />修改密码</Menu.Item>
+                <Menu.Item key="existSystem" className="popup_i_icon"><Icon className="icon_right" type="delete" />退出系统</Menu.Item>
+            </Menu>
         );
         return (
 
 
-           <div className="yinyong4">
+           <div className="more_div">
                <UserPasswordModifyComponents ref="userPasswordModify"/>
-               <Affix className="affix_bottom">
-                   <Popover content={content} trigger="click">
-                       <i className="iconfont iconfont_exit">&#xe60e;</i>
-                   </Popover>
-               </Affix>
+
+               <Dropdown overlay={menu}  trigger={['click']} className='affix_bottom'>
+                  <i className="iconfont iconfont_more_bnt">&#xe60e;</i>
+               </Dropdown>
            </div>
 
         );

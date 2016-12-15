@@ -59,7 +59,7 @@ const Login = Form.create()(React.createClass({
             "username":userName,
             "password":userPassword
         };
-        this.doWebService(JSON.stringify(param), {
+        doWebService(JSON.stringify(param), {
             onResponse : function(ret) {
                 console.log(ret.msg);
                 var response = ret.response;

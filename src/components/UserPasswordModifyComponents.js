@@ -15,9 +15,9 @@ const UserPasswordModifyComponents = React.createClass({
 
   //修改备课信息
   modifyUserPassword(){
-      var oldPassword = subjectForm.refs.oldPassword.refs.input.value;
-      var newPassword = subjectForm.refs.newPassword.refs.input.value;
-      var confirmPassword = subjectForm.refs.confirmPassword.refs.input.value;
+      var oldPassword = this.refs.oldPassword.refs.input.value;
+      var newPassword = this.refs.newPassword.refs.input.value;
+      var confirmPassword = this.refs.confirmPassword.refs.input.value;
       if(this.isEmpty(oldPassword) || this.isEmpty(newPassword) || this.isEmpty(confirmPassword)){
         alert("请输入密码!");
       }else if(newPassword != confirmPassword){
@@ -32,9 +32,12 @@ const UserPasswordModifyComponents = React.createClass({
           onResponse : function(ret) {
             console.log(ret.msg);
             if(ret.msg=="调用成功" && ret.response==true){
-              alert("知识点绑定成功");
+              alert("密码修改成功，请重新登录");
+              sessionStorage.removeItem("openKeysStr");
+              sessionStorage.removeItem("ident");
+              location.hash="Login";
             }else{
-              alert("知识点绑定失败");
+              alert("密码修改失败");
             }
             userPasswordModify.setState({ visible: false });
           },
@@ -79,20 +82,20 @@ const UserPasswordModifyComponents = React.createClass({
                   <Input ref="oldPassword" />
               </Col>
           </Row>
-          <Row className="ant-form-item">
+          <Row className="ant-form-item password_line">
             <Col span={6}></Col>
-            <Col span={14}>
+            <Col span={14} className="password_ts">
               如忘记原密码，请联系系统管理员进行密码重置
             </Col>
           </Row>
-          <Row className="ant-form-item">
-            <Col span={6}>新密码：</Col>
+          <Row className="ant-form-item password_cow">
+            <Col span={6} className="right_look">新密码：</Col>
             <Col span={14}>
               <Input ref="newPassword"/>
             </Col>
           </Row>
-          <Row className="ant-form-item">
-            <Col span={6}>确认新密码：</Col>
+          <Row className="ant-form-item password_cow">
+            <Col span={6} className="right_look">确认新密码：</Col>
             <Col span={14}>
               <Input ref="confirmPassword"/>
             </Col>
