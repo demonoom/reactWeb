@@ -227,10 +227,10 @@ const KnowledgeMenuComponents = React.createClass({
                 var count =0;
                 ret.response.forEach(function (e) {
                     count++;
-          //   List.push([e]);
+                    List.push([e]);
                 });
                 if(List==null || List.length==0){
-                    mMenu.setState({noHaveKnowledgeTip:'您目前还没有知识点，请先点击下方按钮绑定知识点'});
+                    mMenu.setState({noHaveKnowledgeTip:<div className="binding_a">您目前还没有知识点，请先点击下方按钮绑定知识点</div>});
                 }else{
                     mMenu.buildMenuChildren(List);
                     mMenu.setState({totalCount:count,noHaveKnowledgeTip:''});
@@ -297,7 +297,7 @@ const KnowledgeMenuComponents = React.createClass({
     render() {
         return (
             <div>
-                <div className="binding_a">{this.state.noHaveKnowledgeTip}</div>
+                {this.state.noHaveKnowledgeTip}
                 <div className="menu_til">
                     <Button type="primary" icon="plus-circle" onClick={mMenu.showModal} className="add_study-d add_study-d-le">绑定知识点</Button>
                 </div>
