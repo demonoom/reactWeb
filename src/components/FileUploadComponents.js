@@ -52,6 +52,7 @@ const FileUploadComponents = React.createClass({
     checkFileInfo(files){
         var fileType = files[0].type;
         var fileName = files[0].name;
+        var fileSize = files[0].size;
         var isExit = this.checkCurrentFileIsSubmit(fileName);
         var isMuliti = this.checkSubmitFileCount();
         if(isMuliti==true){
@@ -60,6 +61,8 @@ const FileUploadComponents = React.createClass({
             alert("请勿重复上传,谢谢!");
         }else if(!this.checkIsRightFileType(fileType)){
             alert("文件类型不正确,请重新上传,谢谢!");
+        }else if(fileSize >= 104857600){
+            alert("请勿上传超过100M的文件，谢谢!");
         }else{
             var fileJson = { label: fileName,value:fileName,fileObj:files };
             submitFileOptions.push(fileJson);
