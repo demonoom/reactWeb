@@ -15,7 +15,7 @@ body{
 @media only screen and (max-width: 1366px) {
 .ant-layout-aside {
       position: absolute;
-	 height: 600px;
+	 height: 602px;
 	width:1000px;
     overflow: hidden;
 	transform:translate(-50%,-50%);
@@ -47,7 +47,7 @@ body{
 @media only screen and (min-width: 1366px){
 	.ant-layout-aside {
       position: absolute;
-	 height: 708px;
+	 height: 650px;
 	width:1180px;
     overflow: hidden;
 	transform:translate(-50%,-50%);
@@ -126,7 +126,7 @@ body{
     overflow-y: auto;
     overflow-x: hidden;
     height: calc(100% - 104px);
-    border-bottom: 1px solid #e3e8f7;
+    border-bottom: 1px solid #dfe0e3;
 }
     .ant-layout-aside .ant-layout-sider > .ant-menu > .ant-menu-item {
       margin: 16px 0;
