@@ -149,6 +149,8 @@ function WordPasterManager(mgr)
 	//添加到已完成列表
 	this.CompleteAdd = function(localPathStr, serverPathStr)
 	{
+    serverPathStr = serverPathStr.replace(/(^\s*)|(\s*$)/g, "");
+    console.log("serverPath:"+serverPathStr);
 		this.UploadCompleteImage.push({ localPath: localPathStr, serverPath: serverPathStr });
 	};
 
@@ -459,7 +461,7 @@ function WordPasterManager(mgr)
 	this.ReplaceEditorImgTag = function(srcOld,srcNew,w,h)
 	{
 		var img = "<img src=\"";
-		img += srcNew;
+		img += srcNew.replace(/(^\s*)|(\s*$)/g, "");
 		img += "\"";
 
 		if (w == "0" || h == "0")
@@ -1319,7 +1321,7 @@ function ImagePaster_Complete(obj)
 
 	//插入到编辑器
 	var img = "<img src=\"";
-	img += obj.Com.GetResponse();
+	img += obj.Com.GetResponse().replace(/(^\s*)|(\s*$)/g, "");
 	img += "\" />";
 	// Insert as plain text.
 	obj.InsertHtml(img);
@@ -1782,25 +1784,25 @@ function PasterManager()
 		if (!this.PasteDialogCreated)
 		{
 			//图片粘贴上传对话框
-			$('#PasterMessager').dialog({
+			/*$('#PasterMessager').dialog({
 				autoOpen: false,
 				resizable: false,
 				width: 300,
 				height: 200
-			});
+			});*/
 			this.PasteDialogCreated = true;
 		}
-		$('#PasterMessager').dialog('open');
+		//$('#PasterMessager').dialog('open');
 	};
 	this.ClosePasteFileDialog = function()
 	{
-		$('#PasterMessager').dialog('close');
+		//$('#PasterMessager').dialog('close');
 	};
 	this.InsertHtml = function (html)
 	{
 	  console.log("returnHtml:"+html);
-		// this.Editor.insertHtml(html);
-    // this.Editor.setContent(html,true);
+		this.Editor.insertHtml(html);
+    //this.Editor.setContent(html,true);
 	};
 
 	//一般在FCKeditor_OnComplete()中调用
