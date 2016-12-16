@@ -192,7 +192,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
         });
     },
 
-    //获取教学进度，如果没有会创建一个新的
+    //获取备课计划，如果没有会创建一个新的
     teachScheduleInfo(userId,title,subjectsIds){
         var param = {
             "method":'getOrCreateTeachSchedule',

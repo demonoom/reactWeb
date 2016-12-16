@@ -200,6 +200,41 @@ const CourseWareComponents = React.createClass({
         this.refs.useKnowledgeComponents.showModal(currentSchedule,"courseWare",courseWare.state.knowledgeName);
     },
 
+    //删除教学进度下的材料（课件）
+    deleteScheduleMaterials(e){
+        if(confirm("确定要删除该课件?")){
+            var target = e.target;
+            if(navigator.userAgent.indexOf("Chrome") > -1){
+                //e = window.event;
+                target=e.currentTarget;
+            }else{
+                target = e.target;
+            }
+            // alert(target.value);
+            var materialIds = target.value;
+            var param = {
+                "method":'deleteScheduleMaterials',
+                "ident":sessionStorage.getItem("ident"),
+                "scheduleId":courseWare.state.teachScheduleId,
+                "materialIds":materialIds
+            };
+            doWebService(JSON.stringify(param), {
+                onResponse : function(ret) {
+                    console.log(ret.msg);
+                    if(ret.msg=="调用成功" && ret.response==true){
+                        alert("课件删除成功");
+                    }else{
+                        alert("课件删除失败");
+                    }
+                    courseWare.getTeachPlans(sessionStorage.getItem("ident"),courseWare.state.teachScheduleId,"bySchedule",courseWare.state.currentPage,courseWare.state.knowledgeName)
+                },
+                onError : function(error) {
+                    alert(error);
+                }
+            });
+        }
+    },
+
     //删除资源库下的材料（课件）
     batchDeleteMaterial(e){
         if(confirm("确定要删除该课件?")){

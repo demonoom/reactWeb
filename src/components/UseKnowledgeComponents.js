@@ -178,7 +178,7 @@ const UseKnowledgeComponents = React.createClass({
           var courseName = lessonArray[1];
           var courseTimes = 0;//当值为0时，系统不显示具体的子菜单数量（即菜单上无徽标显示）
           //console.log(lessonArray[0]+"-----------"+lessonArray[1]);
-          //courseTimes需要作为当前教学进度下的资源数量进行显示（课件和题目的总和）
+          //courseTimes需要作为当前备课计划下的资源数量进行显示（课件和题目的总和）
           var lessonInfo = {"scheduleId":scheduleId,"courseName":courseName,"courseTimes":courseTimes};
           List.push([ lessonInfo.scheduleId, lessonInfo.courseName, lessonInfo.courseTimes]);
           console.log("le:"+lessonInfo);
@@ -242,7 +242,7 @@ const UseKnowledgeComponents = React.createClass({
       if(e.target.checked==true){
         newScheduleState=true;
       }else{
-        newScheduleState=true;
+        newScheduleState=false;
       }
       knowledge.setState({inputState:false});
     }
@@ -276,14 +276,14 @@ const UseKnowledgeComponents = React.createClass({
             <Form horizontal>
               <FormItem
                   {...formItemLayout}
-                  label="教学进度"
+                  label="备课计划"
               >
                 <Select defaultValue={knowledge.state.schedule} key="teachSchedule" style={{ width: '100%' }} ref="teachSchedule" onChange={this.handleSchedule}>
                   {knowledge.state.selectOptions}
                 </Select>
                 <div>
-                  <Checkbox onChange={knowledge.checkBoxOnChange} value="currentKnowledge">使用当前知识点作为教学进度</Checkbox>
-                  <Checkbox onChange={knowledge.checkBoxOnChange} value="newSchedule">新建教学进度:<Input ref="scheduleName" disabled={this.state.inputState}/></Checkbox>
+                  <Checkbox onChange={knowledge.checkBoxOnChange} value="currentKnowledge">使用当前知识点作为备课计划</Checkbox>
+                  <Checkbox onChange={knowledge.checkBoxOnChange} value="newSchedule">新建备课计划:<Input ref="scheduleName" disabled={this.state.inputState}/></Checkbox>
                 </div>
               </FormItem>
             </Form>

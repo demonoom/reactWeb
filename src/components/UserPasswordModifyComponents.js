@@ -13,7 +13,7 @@ const UserPasswordModifyComponents = React.createClass({
     };
   },
 
-  //修改备课信息
+  //修改备课计划
   modifyUserPassword(){
       var oldPassword = this.refs.oldPassword.refs.input.value;
       var newPassword = this.refs.newPassword.refs.input.value;

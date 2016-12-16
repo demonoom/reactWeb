@@ -88,7 +88,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                 console.log(ret.msg);
                 if(ret.msg=="调用成功" && ret.success==true){
                     var courseWareReturnId = ret.response;
-                    //引用到同名教学进度下，如果没有同名教学进度，则新建
+                    //引用到同名备课计划下，如果没有同名备课计划，则新建
                     if(isLinkToSchedule == true){
                         courseWareUpload.getOrCreateTeachSchedule(ident,knowledgeName,courseWareReturnId);
                     }else{
@@ -107,7 +107,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
     },
 
     /**
-     * 根据tilte获取教学进度，如果没有会创建一个新的
+     * 根据tilte获取备课计划，如果没有会创建一个新的
      * @param userId   用户id
      * @param materiaIds 课件id
      * @param scheduleId 我的备课id

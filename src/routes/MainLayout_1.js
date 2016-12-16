@@ -64,7 +64,7 @@ const MainLayout = React.createClass({
           </div>
           <Menu mode="inline" theme="dark" defaultSelectedKeys={['teachTimes']}  onClick={this.toolbarClick}>
             <Menu.Item key="teachTimes">
-              <Icon type="bar-chart" /><span className="nav-text">教学进度</span>
+              <Icon type="bar-chart" /><span className="nav-text">备课计划</span>
             </Menu.Item>
             <Menu.Item key="KnowledgeResources">
               <Icon type="book" /><span className="nav-text">资源库</span>

@@ -29,11 +29,11 @@ const MiddleMenu = React.createClass({
             selectedKeys={[this.state.current]}
             mode="inline"
       >
-        <SubMenu key="sub1" title={<span><Icon type="mail" /><span>教学进度</span></span>}>
-          <Menu.Item key="1">教学进度 1</Menu.Item>
-          <Menu.Item key="2">教学进度 2</Menu.Item>
-          <Menu.Item key="3">教学进度 3</Menu.Item>
-          <Menu.Item key="4">教学进度 4</Menu.Item>
+        <SubMenu key="sub1" title={<span><Icon type="mail" /><span>备课计划</span></span>}>
+          <Menu.Item key="1">备课计划 1</Menu.Item>
+          <Menu.Item key="2">备课计划 2</Menu.Item>
+          <Menu.Item key="3">备课计划 3</Menu.Item>
+          <Menu.Item key="4">备课计划 4</Menu.Item>
         </SubMenu>
         <SubMenu key="sub2" title={<span><Icon type="appstore" /><span>题库中心</span></span>}>
           <Menu.Item key="buttons">题库中心 5</Menu.Item>

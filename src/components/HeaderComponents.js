@@ -9,8 +9,8 @@ const HeaderComponents = (props) => {
         <div>
             <MaaeeLogo/>
 
-            <Button icon="cloud-upload-o" className="colud_bnt"/>
-            <SearchInput placeholder="请输入关键字搜索"onSearch={value => console.log(value)} style={{ width:300 }} />
+            {/*<Button icon="cloud-upload-o" className="colud_bnt"/>
+            <SearchInput placeholder="请输入关键字搜索"onSearch={value => console.log(value)} style={{ width:300 }} />*/}
             <ProgressBar style={{valign:'bottom'}}></ProgressBar>
         </div>
     );

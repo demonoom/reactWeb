@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Modal, Button } from 'antd';
-import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox,Table } from 'antd';
+import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox,Table,Popover } from 'antd';
 import { DatePicker } from 'antd';
 import { doWebService } from '../WebServiceHelper';
 const { MonthPicker, RangePicker } = DatePicker;
@@ -11,9 +11,10 @@ const CheckboxGroup = Checkbox.Group;
 var assignHomeWork;
 var classList = [];
 var scheduleData = [];
+var knowledgeDate=[];
 var subjectData = [];
 var scheduleColumns = [ {
-  title: '教学进度',
+  title: '备课计划',
   dataIndex: 'scheduleName',
 
 },
@@ -177,6 +178,7 @@ const AssignHomeWorkComponents = React.createClass({
           classList.push({label:className,value:classId})
         });
         assignHomeWork.getScheduleList();
+        //assignHomeWork.getKnowledgeMenu();
         assignHomeWork.setState({classCount:classList.length});
         assignHomeWork.setState({classList:classList});
       },
@@ -200,7 +202,7 @@ const AssignHomeWorkComponents = React.createClass({
     //
   },
 
-  //获取老师名下的教学进度
+  //获取老师名下的备课计划
   getScheduleList(){
     var param = {
       "method":'getTeachScheduleByIdent',
@@ -227,6 +229,39 @@ const AssignHomeWorkComponents = React.createClass({
     });
   },
 
+  /*getKnowledgeMenu(){
+    knowledgeDate.splice(0);
+    var param = {
+      "method":'getUserRalatedPoints',
+      "userId":sessionStorage.getItem("ident"),
+    };
+    doWebService(JSON.stringify(param), {
+      onResponse : function(ret) {
+        console.log(ret.msg);
+        var count =0;
+        ret.response.forEach(function (e) {
+          count++;
+          var scheduleId = scheduleArray[0];
+          var courseName = scheduleArray[1];
+          scheduleData.push({
+            key:scheduleId,
+            scheduleName:courseName,
+            scheduleOpt:'',
+          });
+        });
+        if(List==null || List.length==0){
+          mMenu.setState({noHaveKnowledgeTip:<div className="binding_a">您目前还没有知识点，请先点击下方按钮绑定知识点</div>});
+        }else{
+          mMenu.buildMenuChildren(List);
+          mMenu.setState({totalCount:count,noHaveKnowledgeTip:''});
+        }
+      },
+      onError : function(error) {
+        alert(error);
+      }
+    });
+  },*/
+
   onScheduleSelectChange(selectedRowKeys) {
     console.log('selectedRowKeys changed: ', selectedRowKeys);
     var scheduleId = selectedRowKeys.key;
@@ -251,7 +286,7 @@ const AssignHomeWorkComponents = React.createClass({
     });
   },
 
-  //根据教学进度获取题目列表
+  //根据备课计划获取题目列表
   getSubjectDataBySchedule:function (ident,ScheduleOrSubjectId,pageNo) {
     var param = {
       "method":'getClassSubjects',
@@ -267,7 +302,8 @@ const AssignHomeWorkComponents = React.createClass({
         response.forEach(function (e) {
           console.log("eeeeee:"+e);
           var key = e.sid;
-          var content=<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article>;
+          //var content=<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article>;
+          var content = <Popover content={<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article></Popover>;
           var subjectType=e.typeName;
           subjectData.push({
             key: key+"#"+e.shortContent,

@@ -43,7 +43,7 @@ const BindKnowledgeComponents = React.createClass({
     });
   },
 
-  //修改备课信息
+  //修改备课计划
   bindPointForTeacher(){
     if(bindKnowledge.state.selectedKnowledge==null || bindKnowledge.state.selectedKnowledge==""){
       alert("请选择具体的知识点完成绑定");

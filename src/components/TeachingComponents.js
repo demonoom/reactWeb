@@ -30,9 +30,9 @@ const TeachingComponents = React.createClass({
       onResponse : function(ret) {
         console.log(ret.msg);
         if(ret.msg=="调用成功" && ret.response.colTsId!=null){
-          alert("备课信息添加成功");
+          alert("备课计划添加成功");
         }else{
-          alert("备课信息添加失败");
+          alert("备课计划添加失败");
         }
         subjectForm.props.callbackParent();
         subjectForm.setState({ visible: false });
@@ -43,7 +43,7 @@ const TeachingComponents = React.createClass({
     });
   },
 
-  //修改备课信息
+  //修改备课计划
   updateSchedule(ident,scheduleName){
     var param = {
       "method":'updateTeachSchedule',
@@ -55,9 +55,9 @@ const TeachingComponents = React.createClass({
       onResponse : function(ret) {
         console.log(ret.msg);
         if(ret.msg=="调用成功" && ret.response==true){
-          alert("备课信息修改成功");
+          alert("备课计划修改成功");
         }else{
-          alert("备课信息修改失败");
+          alert("备课计划修改失败");
         }
         subjectForm.props.callbackParent();
         subjectForm.setState({ visible: false });
@@ -92,8 +92,8 @@ const TeachingComponents = React.createClass({
     }else {
       var editInfoArray = editSchuldeInfo.split("#");
       if(editInfoArray!=null && editInfoArray.length!=0){
-        editSchuldeId = editInfoArray[0];  //待修改的备课信息id
-        editSchuldeName = editInfoArray[1]; //待修改的教学进度名称
+        editSchuldeId = editInfoArray[0];  //待修改的备课计划id
+        editSchuldeName = editInfoArray[1]; //待修改的备课计划名称
         subjectForm.setState({visible: true,optType:openType,schuldeId:editSchuldeId,schuldeName:editSchuldeName});
         subjectForm.refs.editSchuldeNameInput.refs.input.value=editSchuldeName;
       }
@@ -110,7 +110,7 @@ const TeachingComponents = React.createClass({
     return (
         <Modal
             visible={subjectForm.state.visible}
-            title="备课信息"
+            title="备课计划"
             onCancel={subjectForm.handleCancel}
             className="modol_width"
             transitionName=""  //禁用modal的动画效果
@@ -124,7 +124,7 @@ const TeachingComponents = React.createClass({
               <Col span={6} className="right_look">
                 <span>名称：</span>
               </Col>
-              <Col span={14}><span><Input ref="editSchuldeNameInput" placeholder="请输入教学进度名称" defaultValue={subjectForm.state.schuldeName} /></span></Col>
+              <Col span={14}><span><Input ref="editSchuldeNameInput" placeholder="请输入备课计划名称" defaultValue={subjectForm.state.schuldeName} /></span></Col>
             </Row>
           </div>
         </Modal>

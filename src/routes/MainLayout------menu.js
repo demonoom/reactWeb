@@ -53,7 +53,7 @@ const MainLayout = React.createClass({
       mainLayout.refs.mainTabComponents.buildBreadcrumb(breadcrumbArray);
     }
   },
-  //获取教学进度下的课件资源
+  //获取备课计划下的课件资源
   getTeachPlans:function (optContent,breadCrumbArray) {
     //点击的菜单标识：teachScheduleId
     if(optContent==null){

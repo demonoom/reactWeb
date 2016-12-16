@@ -107,32 +107,36 @@ const SUbjectTable = React.createClass({
       onResponse : function(ret) {
         console.log("getSubjectDataMSG:"+ret.msg);
         // subjectList=new Array();
-        subjectList.splice(0,subjectList.length);
-        data.splice(0,data.length);
+        subjectList.splice(0);
+        data.splice(0);
         var response = ret.response;
-        response.forEach(function (e) {
-          console.log("eeeeee:"+e);
-          var key = e.sid;
-          var name=e.colName;
-          var content=<Popover content={<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article></Popover>;
-          //var content=<Tooltip title={<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article></Tooltip>;
-          var subjectType=e.typeName;
-          var subjectScore=e.score;
-          // <SubjectEditTabComponents editParams={e.sid+"#"+e.typeName+"#"+e.shortContent+"#"+e.score}></SubjectEditTabComponents>
-          var subjectOpt=<div className="smallclass"><span className="toobar"><Button value={e.sid} title="删除" onClick={subTable.deleteSubject}><Icon type="delete"/></Button></span></div>;
-          // var submitTime = e.submitTime;
-          data.push({
-            key: key,
-            name: name,
-            content: content,
-            // submitTime:submitTime,
-            subjectType:subjectType,
-            subjectScore:subjectScore,
-            subjectOpt:subjectOpt,
-          });
-          var pager = ret.pager;
-          subTable.setState({totalCount:parseInt(pager.pageCount)*15});
-        });
+        if(response==null || response.length==0){
+          subTable.setState({totalCount:0});
+        }else{
+            response.forEach(function (e) {
+              console.log("eeeeee:"+e);
+              var key = e.sid;
+              var name=e.colName;
+              var content=<Popover content={<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article></Popover>;
+              //var content=<Tooltip title={<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article></Tooltip>;
+              var subjectType=e.typeName;
+              var subjectScore=e.score;
+              // <SubjectEditTabComponents editParams={e.sid+"#"+e.typeName+"#"+e.shortContent+"#"+e.score}></SubjectEditTabComponents>
+              var subjectOpt=<div className="smallclass"><span className="toobar"><Button value={e.sid} title="删除" onClick={subTable.deleteSubject}><Icon type="delete"/></Button></span></div>;
+              // var submitTime = e.submitTime;
+              data.push({
+                key: key,
+                name: name,
+                content: content,
+                // submitTime:submitTime,
+                subjectType:subjectType,
+                subjectScore:subjectScore,
+                subjectOpt:subjectOpt,
+              });
+              var pager = ret.pager;
+              subTable.setState({totalCount:parseInt(pager.pageCount)*15});
+            });
+        }
       },
       onError : function(error) {
         alert(error);
@@ -146,7 +150,7 @@ const SUbjectTable = React.createClass({
 
   },
 
-  //删除教学进度下的题目
+  //删除备课计划下的题目
   deleteSubject:function (e) {
     if(confirm("确定要删除该题目?")){
       var target = e.target;
@@ -224,36 +228,41 @@ const SUbjectTable = React.createClass({
     doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
         console.log("getSubjectDataMSG:"+ret.msg);
-        subjectList=new Array();
+        subjectList.splice(0);
+        data.splice(0);
         var response = ret.response;
-        response.forEach(function (e) {
-          console.log("getSubjectDataByKnowledge:"+e);
-          var key = e.id;
-          var name=e.user.userName;
-          var content=<Popover content={<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
-          var subjectType=e.typeName;
-          var subjectScore=e.score;
-          var userId = e.user.colUid;
-          // var submitTime = subTable.getLocalTime(e.createTime);
-          var subjectOpt=<Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" ></Button>;
-          if(userId==sessionStorage.getItem("ident")){
-            subjectOpt=<div><Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" className="score3_i"></Button><Button style={{ }} type=""  value={e.id} onClick={subTable.delMySubjects}  icon="delete" title="删除" className="score3_i" ></Button></div>;
-          }else{
-            subjectOpt=<Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" ></Button>;
-          }
+        if(response==null || response.length==0){
+          subTable.setState({totalCount:0});
+        }else {
+          response.forEach(function (e) {
+            console.log("getSubjectDataByKnowledge:"+e);
+            var key = e.id;
+            var name=e.user.userName;
+            var content=<Popover content={<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
+            var subjectType=e.typeName;
+            var subjectScore=e.score;
+            var userId = e.user.colUid;
+            // var submitTime = subTable.getLocalTime(e.createTime);
+            var subjectOpt=<Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" ></Button>;
+            if(userId==sessionStorage.getItem("ident")){
+              subjectOpt=<div><Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" className="score3_i"></Button><Button style={{ }} type=""  value={e.id} onClick={subTable.delMySubjects}  icon="delete" title="删除" className="score3_i" ></Button></div>;
+            }else{
+              subjectOpt=<Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" ></Button>;
+            }
 
-          data.push({
-            key: key,
-            name: name,
-            content: content,
-            // submitTime:submitTime,
-            subjectType:subjectType,
-            subjectScore:subjectScore,
-            subjectOpt:subjectOpt,
+            data.push({
+              key: key,
+              name: name,
+              content: content,
+              // submitTime:submitTime,
+              subjectType:subjectType,
+              subjectScore:subjectScore,
+              subjectOpt:subjectOpt,
+            });
+            var pager = ret.pager;
+            subTable.setState({totalCount:parseInt(pager.pageCount)*15});
           });
-          var pager = ret.pager;
-          subTable.setState({totalCount:parseInt(pager.pageCount)*15});
-        });
+        }
       },
       onError : function(error) {
         alert(error);
