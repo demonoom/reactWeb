@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Table, Button } from 'antd';
+import { Table, Button,Popover } from 'antd';
 import { doWebService } from '../WebServiceHelper';
 
 var columns = [ {
@@ -46,7 +46,7 @@ const HomeWorkTableComponents = React.createClass({
 
   buildPageView(optSource){
     // alert("optSource:"+optSource);
-    if(optSource=="查 看"){
+    if(optSource=="查看"){
       columns = [  {
         title: '内容',
         dataIndex: 'subjectContent',
@@ -89,12 +89,12 @@ const HomeWorkTableComponents = React.createClass({
       target = e.target;
     }
     data=[];
-    var optSource = target.textContent;
     var value = target.value;
     var valueArray=value.split("#");
     var ident=valueArray[0];
     var clazzId=valueArray[1];
     var dateTime=valueArray[2];
+    var optSource = valueArray[3];
     var pageNo=1;
     subTable.buildPageView(optSource);
     subTable.getHomeworkSubjects(ident,clazzId,dateTime,pageNo);
@@ -133,7 +133,7 @@ const HomeWorkTableComponents = React.createClass({
           //作业日期
           var useDate = e.useDate;
           var title = clazzName+" "+hcount+" "+colCourse+"作业";
-          var key =ident+"#"+colClazzId+"#"+useDate;
+          var key =ident+"#"+colClazzId+"#"+useDate+"#查看";
           var subjectOpt=<Button type="button" value={key} text={key} onClick={subTable.getSubjectData}  icon="search"></Button>;
           data.push({
               key:key,
@@ -181,7 +181,7 @@ const HomeWorkTableComponents = React.createClass({
         response.forEach(function (e) {
           console.log("getDoneHomeworkList:"+e);
           var id = e.id;
-          var content = <article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article>;
+          var content = <Popover  placement="topLeft" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article>}><article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
           var subjectType = e.subjectType;
           var typeName = e.typeName;
           var score = e.score;
