@@ -230,7 +230,7 @@ const SUbjectTable = React.createClass({
           console.log("getSubjectDataByKnowledge:"+e);
           var key = e.id;
           var name=e.user.userName;
-          var content=<Popover  placement="topLeft" content={<article id='contentHtml' className='content Popover' dangerouslySetInnerHTML={{__html: e.content}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
+          var content=<Popover  placement="topLeft" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
           var subjectType=e.typeName;
           var subjectScore=e.score;
           var userId = e.user.colUid;
