@@ -117,7 +117,7 @@ const SUbjectTable = React.createClass({
               console.log("eeeeee:"+e);
               var key = e.sid;
               var name=e.colName;
-              var content=<Popover content={<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article></Popover>;
+              var content=<Popover placement="topLeft" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.shortContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article></Popover>;
               //var content=<Tooltip title={<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article></Tooltip>;
               var subjectType=e.typeName;
               var subjectScore=e.score;
@@ -238,7 +238,7 @@ const SUbjectTable = React.createClass({
             console.log("getSubjectDataByKnowledge:"+e);
             var key = e.id;
             var name=e.user.userName;
-            var content=<Popover content={<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
+            var content=<Popover  placement="topLeft" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
             var subjectType=e.typeName;
             var subjectScore=e.score;
             var userId = e.user.colUid;
@@ -249,7 +249,6 @@ const SUbjectTable = React.createClass({
             }else{
               subjectOpt=<Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" ></Button>;
             }
-
             data.push({
               key: key,
               name: name,

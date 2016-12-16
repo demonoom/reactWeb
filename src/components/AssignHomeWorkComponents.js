@@ -303,7 +303,7 @@ const AssignHomeWorkComponents = React.createClass({
           console.log("eeeeee:"+e);
           var key = e.sid;
           //var content=<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article>;
-          var content = <Popover content={<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article></Popover>;
+          var content = <Popover placement="topLeft" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.shortContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article></Popover>;
           var subjectType=e.typeName;
           subjectData.push({
             key: key+"#"+e.shortContent,
