@@ -239,7 +239,7 @@ const CourseWareComponents = React.createClass({
                 // eysOnButton = <Button style={{ float:'right'}} icon="eye-o" title="查看" value={e[9]} onClick={courseWare.viewFile}></Button>
                 eysOnButton = <a href={e[9]} target="_blank" title="查看"  style={{ float:'right'}}><Button icon="eye-o"/></a>
             }
-            return <Panel header={<span><span type="" className={e[8]}></span><span>{e[1]}</span> </span>}  key={e[1]}>
+            return <Panel header={<span><span type="" className={e[8]}></span><span className="name_file">{e[1]}</span> </span>}  key={e[1]}>
                     <pre>
 					 <div className="bnt2_tex">
                          <span><span className="col1">文件类型：</span><span className="col2">{e[5]}</span></span>
@@ -289,15 +289,15 @@ const CourseWareComponents = React.createClass({
             /*if(e[10]!=null && e[10]!="" && e[10]==3){
              useButton=<Button value={e[0]} style={{ float:'right'}} type=""  onClick={this.showModal}>引用微课</Button>
              }*/
-            return <Panel header={<span><span type="" className={e[8]}></span><span>{e[1]}</span> </span>}  key={e[1]}>
+            return <Panel header={<span><span type="" className={e[8]}></span><span className="name_file">{e[1]}</span> </span>}  key={e[1]}>
                     <pre>
 					<div className="bnt2_tex">
-                         <span>文件类型：{e[5]}</span>
-                         <span>课件名称：{e[1]}</span>
-                         <span>所在知识点：{e[6]}</span>
-                         <span>创建人：{e[2]}</span>
-                         <span>上传时间：{e[7]}</span>
-                         <span>点赞次数：{e[11]}</span>
+                         <span className="col1">文件类型：{e[5]}</span>
+                         <span className="col1">课件名称：{e[1]}</span>
+                         <span className="col1">所在知识点：{e[6]}</span>
+                         <span className="col1">创建人：{e[2]}</span>
+                         <span className="col1">上传时间：{e[7]}</span>
+                         <span className="col1">点赞次数：{e[11]}</span>
                       </div>       
 
                             <div className="bnt2_right">
