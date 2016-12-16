@@ -72,7 +72,7 @@ const UserCardModalComponents = React.createClass({
           <img src={teacherInfo.state.userHeadIcon}  onClick={teacherInfo.showModal}/>
           <Modal
               visible={teacherInfo.state.visible}
-              title={<p className="user_cont1"> <img className="img_us" src={teacherInfo.state.userHeadIcon}  onClick={teacherInfo.showModal}/><span>丹丹</span><img src={teacherInfo.state.userHeadIcon} className="blur"/><br/></p>}
+              title={<p className="user_cont1"> <img className="img_us" src={teacherInfo.state.userHeadIcon}  onClick={teacherInfo.showModal}/><span>{teacherInfo.state.userName}</span><img src={teacherInfo.state.userHeadIcon} className="blur"/><br/></p>}
               onOk={teacherInfo.handleOk}
               onCancel={teacherInfo.handleCancel}
               className="model_wi"

@@ -10,7 +10,7 @@ import Login from './routes/Login';
 export default function({ history }) {
     return (
         <Router history={history}>
-            <Route path="/" component={Login} />
+            <Route path="/LittleAntWeb" component={Login} />
            {/* <Route path="/" component={IndexPage} />*/}
             <Route path="/products" component={Products} />
             <Route path="/buttons" component={Buttons} />

@@ -79,7 +79,7 @@ const UserPasswordModifyComponents = React.createClass({
           <Row className="ant-form-item">
               <Col span={6} className="right_look">原密码：</Col>
               <Col span={14}>
-                  <Input ref="oldPassword" />
+                  <Input ref="oldPassword" type="password" />
               </Col>
           </Row>
           <Row className="ant-form-item password_line">
@@ -91,13 +91,13 @@ const UserPasswordModifyComponents = React.createClass({
           <Row className="ant-form-item password_cow">
             <Col span={6} className="right_look">新密码：</Col>
             <Col span={14}>
-              <Input ref="newPassword"/>
+              <Input ref="newPassword" type="password"/>
             </Col>
           </Row>
           <Row className="ant-form-item password_cow">
             <Col span={6} className="right_look">确认新密码：</Col>
             <Col span={14}>
-              <Input ref="confirmPassword"/>
+              <Input ref="confirmPassword" type="password"/>
             </Col>
           </Row>
 
