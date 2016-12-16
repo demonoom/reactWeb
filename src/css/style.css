@@ -157,10 +157,14 @@ body{
     }
 
     .ant-layout-aside-collapse .ant-layout-sider > .ant-menu > .ant-menu-item:hover {
-      background: #ebf1fb;
-	  color:#2b86ff;
-      transition: all 0s ease;
+      background: #46aafd;
+	  color:#fff;
     }
+.ant-layout-aside-collapse .ant-layout-sider > .ant-menu > .ant-menu-item:active {
+      background: #309ffb;
+	  color:#fff;
+    }
+	
 	 .ant-layout-aside-collapse .ant-layout-sider > .ant-menu > .ant-menu-item div.tan {
 		 display:none
 }
@@ -175,6 +179,7 @@ body{
 	  display: inline-block;
 	  border-radius:4px;
 	  padding:0 8px;
+	  z-index:1000
     }
 
     .ant-layout-aside-collapse .ant-layout-sider > .ant-menu > .ant-menu-item:hover .nav-text {
@@ -298,7 +303,7 @@ body{
     	margin-top: 10px;
 		position: absolute;
 		bottom: 0;
-		right: 12px;
+		right: 0;
 		margin-bottom: 10px;
 		height:30px !important;
 		padding:0 12px 0 0;
@@ -387,6 +392,7 @@ body{
 		overflow-x:hidden;
 		position: absolute;
 		top: 0;
+		width:calc(100% - 16px);
 
 		border:none !important
 	}
@@ -536,12 +542,20 @@ html, body, #root {
    -webkit-box-sizing:border-box; /* Safari */
   
 }
+.ant-menu-dark.ant-menu-inline .ant-menu-item-active{
+	color: #fff;
+	background:#309ffb;
+    box-sizing: border-box;
+	-moz-box-sizing:border-box; /* Firefox */
+   -webkit-box-sizing:border-box; /* Safari */
+  
+}
 .ant-menu-dark.ant-menu-inline i .ant-menu-item-selected i{
 	color:#309ffb;
 	
 }
 .ant-menu-submenu-title:hover, .ant-menu-submenu-title:active{
-	background:#e5f0fa;
+	background:#309ffb;
 	font-weight: normal;
 	box-sizing:border-box;
     -moz-box-sizing:border-box; /* Firefox */
@@ -549,9 +563,9 @@ html, body, #root {
    width:100%;
    border:#1px solid #fff;
 }
-/*.ant-menu-submenu-open, .ant-menu-submenu-open:hover{
-	 background:#d5edfe;
-	}*/
+.ant-menu-item-open, .ant-menu-item-open:hover{
+	 background:#309ffb;
+	}
 
 .ant-tabs{
 	height:calc(100% - 18px);
@@ -592,9 +606,15 @@ html, body, #root {
 }
 .bnt2_tex span.col1{
 	color:#666;
+	word-break:break-all;
+	word-wrap:break-word;
+	white-space: pre-wrap;
 }
 .bnt2_tex span.col2{
 	color:#666;
+	word-break:break-all;
+	word-wrap:break-word;
+	white-space: pre-wrap;
 }
 .ant-collapse > .ant-collapse-item > .ant-collapse-header{
 	height:42px;
@@ -697,7 +717,7 @@ html, body, #root {
 }
 .ant-table-pagination{
 	margin-top: 10px;
-    position: 	relative;
+    position: absolute;
     bottom: 0;
     right: 12px;
     margin-bottom: 10px;
@@ -1344,10 +1364,11 @@ a {
 .ant-collapse > .ant-collapse-item{
 	    border-top: #e5edfb 1px solid;
 }
-.ant-menu-item:hover, .ant-menu-item-active, .ant-menu-submenu-active, .ant-menu-submenu-title:hover{
+.ant-menu-item:hover,  .ant-menu-submenu-active, .ant-menu-submenu-title:hover{
 	background:#f2f8fe;
 	
 }
+
 .ant-menu-submenu-active{
 	color:#2896fb;
 }
@@ -1365,13 +1386,7 @@ a {
     font-size: 15px;
     color: #7c87a5;
 }
-.ant-search-input.ant-input-group .ant-input:first-child, .ant-search-input.ant-input-group .ant-select:first-child{
-	border-radius:20px;
-}
-.ant-input-seach{
-	background-color: #1242bf;
-    border: 1px solid #0b38ac;
-}
+
 .custom—1{
 	text-align:right;
 	font-size:14px;
@@ -1437,6 +1452,7 @@ a {
 	    padding: 0px 34px 0 24px;
 		overflow:hidden;
 		text-overflow:ellipsis;
+		white-space: nowrap;
 }
 .ant-menu-submenu{
 	margin-right:1px;
@@ -1459,4 +1475,19 @@ a {
     background: #fff;
     width: 102px;
 
+}
+.knowledge_inp{
+	width:200px !important
+}
+.ant-checkbox-wrapper + span, .ant-checkbox + span{
+	word-break:break-all;
+	word-wrap:break-word;
+	white-space:pre-wrap;
+}
+.name_file{
+	width:calc(100% - 95px);
+	overflow:hidden;
+	text-overflow:ellipsis;
+	display: inline-block;
+	white-space: nowrap
 }

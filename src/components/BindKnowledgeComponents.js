@@ -111,10 +111,10 @@ const BindKnowledgeComponents = React.createClass({
             ]}
         >
           <Row>
-              <Col span={4}>知识点:</Col>
-              <Col span={20}>
+              <Col span={6} className="right_look">知识点：</Col>
+              <Col span={14}>
                 <Cascader
-                    ref="knowledgeSelect"
+                    ref="knowledgeSelect" className="knowledge_inp"
                     options={options}
                     onChange={bindKnowledge.cascaderOnChange}
                     value={this.state.defaultSelected}

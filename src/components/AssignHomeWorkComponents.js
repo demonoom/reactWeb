@@ -15,6 +15,7 @@ var subjectData = [];
 var scheduleColumns = [ {
   title: '教学进度',
   dataIndex: 'scheduleName',
+
 },
 ];
 
@@ -486,7 +487,7 @@ const AssignHomeWorkComponents = React.createClass({
                  ]}
           >
             <Row style={{height:400}}>
-              <Col span={7} className="ant-form"><Table size="small" onRowClick={assignHomeWork.onScheduleSelectChange} selectedRowKeys={assignHomeWork.selectedRowKeys} columns={scheduleColumns}  dataSource={scheduleData} scroll={{ y: 300}}/></Col>
+              <Col span={7} className="ant-form"><Table size="small"  onRowClick={assignHomeWork.onScheduleSelectChange} selectedRowKeys={assignHomeWork.selectedRowKeys}  columns={scheduleColumns}  dataSource={scheduleData} scroll={{ y: 300}}/></Col>
               <Col span={17} className="col17_le 17_hei ant-form">
                 <div className="17_hei1">
                   <Table rowSelection={subjectRowSelection} columns={subjectColumns} dataSource={subjectData} pagination={{ total:assignHomeWork.state.totalSubjectCount,pageSize: 15,onChange:assignHomeWork.pageOnChange }}  scroll={{ y: 300}}/>
