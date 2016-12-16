@@ -93,7 +93,7 @@ const BindKnowledgeComponents = React.createClass({
     if(value.length>=2){
       bindKnowledge.setState({selectedKnowledge:value[1]});
     }else{
-      bindKnowledge.setState({selectedKnowledge:''});
+      bindKnowledge.setState({selectedKnowledge:value[0]});
     }
   },
 
