@@ -60,18 +60,22 @@ const FloatButton = React.createClass({
 
     render() {
         const menu = (
-            <Menu onClick={this.menuItemOnClick}>
+            <Menu onClick={this.menuItemOnClick} className="dropdown-menu-tc">
                 <Menu.Item key="modifyPassword" className="popup_i_icon"><Icon className="icon_right" type="edit" />修改密码</Menu.Item>
                 <Menu.Item key="existSystem" className="popup_i_icon"><Icon className="icon_right" type="delete" />退出系统</Menu.Item>
             </Menu>
         );
         return (
-           <div>
+
+
+           <div className="more_div">
                <UserPasswordModifyComponents ref="userPasswordModify"/>
-               <Dropdown overlay={menu}  trigger={['click']}  className='affix_bottom'>
-                   <Icon type="ellipsis" className="icon_more" />
+
+               <Dropdown overlay={menu}  trigger={['click']} className='affix_bottom'>
+                  <i className="iconfont iconfont_more_bnt">&#xe60e;</i>
                </Dropdown>
            </div>
+
         );
     }
 

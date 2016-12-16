@@ -76,27 +76,27 @@ const UserPasswordModifyComponents = React.createClass({
               <Button type="ghost" htmlType="reset" className="login-form-button" onClick={userPasswordModify.handleCancel} >取消</Button>
             ]}
         >
-          <Row>
-              <Col span={4}>原密码:</Col>
-              <Col span={20}>
+          <Row className="ant-form-item">
+              <Col span={6} className="right_look">原密码：</Col>
+              <Col span={14}>
                   <Input ref="oldPassword" />
               </Col>
           </Row>
-          <Row>
-            <Col span={4}></Col>
-            <Col span={20}>
+          <Row className="ant-form-item password_line">
+            <Col span={6}></Col>
+            <Col span={14} className="password_ts">
               如忘记原密码，请联系系统管理员进行密码重置
             </Col>
           </Row>
-          <Row>
-            <Col span={4}>新密码:</Col>
-            <Col span={20}>
+          <Row className="ant-form-item password_cow">
+            <Col span={6} className="right_look">新密码：</Col>
+            <Col span={14}>
               <Input ref="newPassword"/>
             </Col>
           </Row>
-          <Row>
-            <Col span={4}>确认新密码:</Col>
-            <Col span={20}>
+          <Row className="ant-form-item password_cow">
+            <Col span={6} className="right_look">确认新密码：</Col>
+            <Col span={14}>
               <Input ref="confirmPassword"/>
             </Col>
           </Row>
