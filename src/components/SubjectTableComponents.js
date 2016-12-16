@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Table, Button,Icon } from 'antd';
+import { Table, Button,Icon,Popover } from 'antd';
 import UseKnowledgeComponents from './UseKnowledgeComponents';
 import { doWebService } from '../WebServiceHelper';
 
@@ -52,6 +52,12 @@ const columns = [{
 var data = [];
 var subjectList=[];
 var subTable;
+const subjectContent = (
+    <div>
+      <p>Content</p>
+      <p>Content</p>
+    </div>
+);
 const SUbjectTable = React.createClass({
   getInitialState() {
     subTable = this;
@@ -65,7 +71,7 @@ const SUbjectTable = React.createClass({
       ident:'',
       knowledgeName:'',
       currentPage:1,
-      data:data
+      data:data,
     };
   },
   start() {
@@ -114,7 +120,7 @@ const SUbjectTable = React.createClass({
           console.log("eeeeee:"+e);
           var key = e.sid;
           var name=e.colName;
-          var content=<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article>;
+          var content=<Popover content={subjectContent} title="Title"><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article></Popover>;
           var subjectType=e.typeName;
           var subjectScore=e.score;
           // <SubjectEditTabComponents editParams={e.sid+"#"+e.typeName+"#"+e.shortContent+"#"+e.score}></SubjectEditTabComponents>
