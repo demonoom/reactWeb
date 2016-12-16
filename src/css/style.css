@@ -1491,3 +1491,8 @@ a {
 	display: inline-block;
 	white-space: nowrap
 }
+.Popover_width{
+	max-width:650px;
+}
+.ant-popover-open{
+	display:block}

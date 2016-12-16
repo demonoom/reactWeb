@@ -73,10 +73,10 @@ const MainLayout = React.createClass({
   },
 
   componentWillMount(){
-    var userIdent = sessionStorage.getItem("ident");
-    if(userIdent==null || userIdent==""){
-        location.hash="login";
-    }
+    // var userIdent = sessionStorage.getItem("ident");
+    // if(userIdent==null || userIdent==""){
+    //     location.hash="login";
+    // }
     //sessionStorage.setItem("ident","23836");
   },
 
