@@ -129,7 +129,7 @@ const MainTabComponents = React.createClass({
             </Menu>
         );
         if(this.state.currentOptType=="bySubjectId" && this.state.currentMenuChildrenCount==0){
-            toolbarExtra = <div className="ant-tabs-right"><CourseWareUploadComponents courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}></CourseWareUploadComponents><SubjectUploadTabComponents params={this.state.subjectParams}></SubjectUploadTabComponents></div>;
+            toolbarExtra = <div className="ant-tabs-right"><CourseWareUploadComponents courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}></CourseWareUploadComponents><SubjectUploadTabComponents courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}></SubjectUploadTabComponents></div>;
             tabPanel=<TabPane tab={<span>课件<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link icon_filter" href="#"><Icon type="filter"/></a></Dropdown></span>} key="课件"><CourseWareComponents ref="courseWare"/></TabPane>;
             subjectTabPanel=<TabPane tab={<span>题目<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link icon_filter" href="#"><Icon type="filter" /></a></Dropdown></span>} key="题目"><SubjectTable  ref="subTable" params={this.state.subjectParams}/></TabPane>;
         }else if(this.state.currentOptType=="bySubjectId"){

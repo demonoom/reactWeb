@@ -181,6 +181,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                         subjectUpload.teachScheduleInfo(userId,knowledgeName,subjectsIds);
                     }else{
                         alert("题目添加成功");
+                        subjectUpload.props.courseUploadCallBack();
                     }
                 }else{
                     alert("题目添加失败");
@@ -224,6 +225,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                 console.log(ret.msg);
                 if(ret.msg=="调用成功" && ret.response==true){
                     alert("题目添加成功");
+                    subjectUpload.props.courseUploadCallBack();
                 }
             },
             onError : function(error) {

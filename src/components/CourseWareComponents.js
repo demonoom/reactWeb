@@ -63,6 +63,7 @@ const CourseWareComponents = React.createClass({
                 onResponse : function(ret) {
                     console.log("teachMSG:"+ret.msg);
                     courseWareList=new Array();
+                    courseWareList.splice(0);
                     var response = ret.response;
                     response.forEach(function (e) {
                         var id = e.id;
@@ -124,6 +125,7 @@ const CourseWareComponents = React.createClass({
                 onResponse : function(ret) {
                     console.log("teachMSG:"+ret.msg);
                     courseWareList=new Array();
+                    courseWareList.splice(0);
                     var response = ret.response;
                     response.forEach(function (e) {
                         var id = e.id;
