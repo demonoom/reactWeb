@@ -8,9 +8,10 @@ import CkEditorWithWordPasterComponents from  './CkEditorWithWordPasterComponent
 import CkEditorWithWordPasterComponents1 from  './CkEditorWithWordPasterComponents1';
 import RichEditorComponents from  './RichEditorComponents';
 import FileUploadComponents from './FileUploadComponents';
-import RichEditorComponentsForMuliti from './RichEditorComponentsForMuliti';
+import RichEditorComponentsForMuSelect from './RichEditorComponentsForMuSelect';
 import RichEditorComponentsForCorrect from './RichEditorComponentsForCorrect';
 import RichEditorComponentsForSimpleAnswer from './RichEditorComponentsForSimpleAnswer';
+import RichEditorComponentsForAnswer from './RichEditorComponentsForAnswer';
 import { doWebService } from '../WebServiceHelper';
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -144,8 +145,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
         if(!this.isEmpty(UE.getEditor("container"))){
             UE.getEditor("container").setContent("");
         }
-        if(!this.isEmpty(UE.getEditor("mulitiContainer"))){
-            UE.getEditor("mulitiContainer").setContent("");
+        if(!this.isEmpty(UE.getEditor("muSelectContainer"))){
+            UE.getEditor("muSelectContainer").setContent("");
         }
         if(!this.isEmpty(UE.getEditor("correctContainer"))){
             UE.getEditor("correctContainer").setContent("");
@@ -159,8 +160,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
         if(!this.isEmpty(this.refs.scoreDefined)){
             this.refs.scoreDefined.refs.input.value="";
         }
-        if(!this.isEmpty(this.refs.simpleAnswerInput)){
-            this.refs.simpleAnswerInput.refs.input.value="";
+        if(!this.isEmpty(UE.getEditor("answerContainer"))){
+            UE.getEditor("answerContainer").setContent("");
         }
         this.setState({scoreChecked:false,scoreInputState:true,scoreDisable:false,mulitiAnswerDefaultValue:['A'],correctAnswerValue:"正确"});
     },
@@ -306,7 +307,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             if(this.state.scoreDisable==true){
                 score =this.refs.scoreDefined.refs.input.value;
             }
-            var subjectName = UE.getEditor("mulitiContainer").getContent();
+            var subjectName = UE.getEditor("muSelectContainer").getContent();
             var answer = mulitiAnswer;
             var subjectParamArray = this.props.params.split("#");
             var ident = subjectParamArray[0];
@@ -408,7 +409,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                 score =this.refs.scoreDefined.refs.input.value;
             }
             var subjectName = UE.getEditor("simpleAnswerContainer").getContent();
-            var answer = this.refs.simpleAnswerInput.refs.input.value;
+            // var answer = this.refs.simpleAnswerInput.refs.input.value;
+            var answer = UE.getEditor("answerContainer").getContent();
             var subjectParamArray = this.props.params.split("#");
             var ident = subjectParamArray[0];
             var ScheduleOrSubjectId = subjectParamArray[1];
@@ -743,7 +745,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     label={(<span>题目</span>)}
                                     hasFeedback>
                                     {getFieldDecorator('subjectNameM')(
-                                        <RichEditorComponentsForMuliti/>
+                                        <RichEditorComponentsForMuSelect/>
                                     )}
                                 </FormItem>
                                 <FormItem className="custom—top"
@@ -801,7 +803,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                                     hasFeedback>
                                     {getFieldDecorator('answer')(
                                         <div>
-                                            <Input type="textarea" ref="simpleAnswerInput"  defaultValue={this.state.simpleAnswerValue}  rows={4}  />
+                                            {/*<Input type="textarea" ref="simpleAnswerInput"  defaultValue={this.state.simpleAnswerValue}  rows={4}  />*/}
+                                            <RichEditorComponentsForAnswer/>
                                         </div>
                                     )}
                                 </FormItem>

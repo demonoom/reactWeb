@@ -1543,7 +1543,7 @@ function PasterManager()
 		, "Parse": function() { }
 		, "IsWord": function()
 		{
-			return this.Com.WordParser_IsWord();
+      return this.Com.WordParser_IsWord();
 		}
 		, "IsExcel": function ()
 		{
@@ -1631,7 +1631,7 @@ function PasterManager()
     		this.Com.ImgPst_PostUrl = _this.Config["PostUrl"];
     		this.Com.ImgPst_EncodeType = _this.Config["EncodeType"];
     		this.Com.ImgPst_ImageType = _this.Config["PasteImageType"];
-    		this.Com.ImgPst_SetThumbSize(_this.Config["ThumbWidth"], _this.Config["ThumbHeight"]);
+    		// this.Com.ImgPst_SetThumbSize(_this.Config["ThumbWidth"], _this.Config["ThumbHeight"]);
     		//event
     		this.Com.ImgPst_OnComplete = this.OnComplete;
     		this.Com.ImgPst_OnConnected = this.OnConnected;
@@ -1801,8 +1801,9 @@ function PasterManager()
 	this.InsertHtml = function (html)
 	{
 	  console.log("returnHtml:"+html);
-		this.Editor.insertHtml(html);
-    //this.Editor.setContent(html,true);
+    // _this.ReplaceEditorImgTag(html);
+		// this.Editor.insertHtml(html);
+    // this.Editor.setContent(html);
 	};
 
 	//一般在FCKeditor_OnComplete()中调用

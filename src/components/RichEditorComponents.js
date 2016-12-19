@@ -6,18 +6,13 @@ var RichEditorComponents = React.createClass({
     var editor = UE.getEditor("container", {
       //工具栏
       toolbars: [[
-        'source', '|', 'undo', 'redo', '|',
+        'undo', 'redo', '|',
         'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch',
         '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
         'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
-        'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
-        'directionalityltr', 'directionalityrtl', 'indent', '|',
-        'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|','link', 'unlink', 'anchor', '|',
-        'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
-        'simpleupload',
-        'horizontal', 'date', 'time','spechars',
-        '|','inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', 'charts',
-        '|','print', 'searchreplace','help'
+         'fontfamily', 'fontsize', '|',
+        'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'link', 'unlink', '|',
+        'horizontal','spechars',
       ]] ,
       lang:"zh-cn"
       //字体
@@ -43,7 +38,7 @@ var RichEditorComponents = React.createClass({
       ,readonly:this.props.disabled,
       imageUrlPrefix:'http://www.maaee.com/manage/',
       imageUrl: "subject/subject_upload.jsp",
-      imagePath: "__ROOT__/Uploads/",
+      imagePath: "http://www.maaee.com/manage/subject/subject_upload.jsp",
       imageManagerUrl: "http://www.maaee.com/manage/subject/subject_upload.jsp",
       imageManagerPath: "__ROOT__/",
       imageActionName: "uploadimage", /* 执行上传图片的action名称 */

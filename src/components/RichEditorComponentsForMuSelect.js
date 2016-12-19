@@ -1,23 +1,18 @@
 import React, { PropTypes } from 'react';
 import { WordPasterManager } from '../../ueditor/WordPaster/js/WordPaster';
 
-var RichEditorComponentsForMuliti = React.createClass({
+var RichEditorComponentsForMuSelect = React.createClass({
   componentDidMount(){
-    var editor = UE.getEditor("mulitiContainer", {
+    var editor = UE.getEditor("muSelectContainer", {
       //工具栏
       toolbars: [[
-        'source', '|', 'undo', 'redo', '|',
+        'undo', 'redo', '|',
         'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch',
         '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
         'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
-        'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
-        'directionalityltr', 'directionalityrtl', 'indent', '|',
-        'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|','link', 'unlink', 'anchor', '|',
-        'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
-        'simpleupload',
-        'horizontal', 'date', 'time','spechars',
-        '|','inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', 'charts',
-        '|','print', 'searchreplace','help'
+        'fontfamily', 'fontsize', '|',
+        'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'link', 'unlink', '|',
+        'horizontal','spechars',
       ]] ,
       lang:"zh-cn"
       //字体
@@ -80,7 +75,7 @@ var RichEditorComponentsForMuliti = React.createClass({
   render : function(){
     return (
       <div>
-        <script id="mulitiContainer" name="content" type="text/plain">
+        <script id="muSelectContainer" name="content" type="text/plain">
 
         </script>
         <embed type="application/chrWordPstSXLY" PLUGINSPAGE="http://www.maaee.com/uploadFile/WordPaster.crx" width="1" height="0"
@@ -113,4 +108,4 @@ var RichEditorComponentsForMuliti = React.createClass({
     )
   }
 })
-export default RichEditorComponentsForMuliti;
+export default RichEditorComponentsForMuSelect;

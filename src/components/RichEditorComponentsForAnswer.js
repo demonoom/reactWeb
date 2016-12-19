@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react';
 import { WordPasterManager } from '../../ueditor/WordPaster/js/WordPaster';
 
-var RichEditorComponentsForSimpleAnswer = React.createClass({
+var RichEditorComponentsForAnswer = React.createClass({
   componentDidMount(){
-    var editor = UE.getEditor("simpleAnswerContainer", {
+    var editor = UE.getEditor("answerContainer", {
       //工具栏
       toolbars: [[
         'undo', 'redo', '|',
@@ -75,10 +75,10 @@ var RichEditorComponentsForSimpleAnswer = React.createClass({
   render : function(){
     return (
       <div>
-        <script id="simpleAnswerContainer" name="content" type="text/plain">
+        <script id="answerContainer" name="content" type="text/plain">
 
         </script>
-        <embed type="application/chrWordPstSXLY" PLUGINSPAGE="http://www.maaee.com/uploadFile/WordPaster.crx" width="1" height="0"
+       {/* <embed type="application/chrWordPstSXLY" PLUGINSPAGE="http://www.maaee.com/uploadFile/WordPaster.crx" width="1" height="0"
                id="objWordPaster"/>
         <div style={{display: "none"}}>
           <div id="PasterMessager">
@@ -103,9 +103,9 @@ var RichEditorComponentsForSimpleAnswer = React.createClass({
           <div id="ImageUploadDialog" title="上传图片">
             <div id="FilePostLister"></div>
           </div>
-        </div>
+        </div>*/}
       </div>
     )
   }
 })
-export default RichEditorComponentsForSimpleAnswer;
+export default RichEditorComponentsForAnswer;
