@@ -30,7 +30,7 @@ const FileUploadComponents = React.createClass({
     //拖拽过程中，通过该函数阻止浏览器默认动作
     dragOver(e){
         e.preventDefault();
-        submitFileOptions.splice(0,submitFileOptions.length);
+        submitFileOptions.splice(0);
         this.setState({submitFileCheckedList:[],submitFileOptions:submitFileOptions});
     },
 
@@ -178,6 +178,7 @@ const FileUploadComponents = React.createClass({
         }else{
             target = e.target;
         }
+        submitFileOptions.splice(0);
         var files = target.files;
         this.checkFileInfo(files);
     },

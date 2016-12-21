@@ -28844,7 +28844,9 @@
             countDom.innerHTML = errMsg;
             editor.fireEvent("wordcountoverflow");
           } else {
-            countDom.innerHTML = msg.replace("{#leave}", max - count).replace("{#count}", count);
+            if(countDom!=null && typeof (countDom)!="undefined"){
+              countDom.innerHTML = msg.replace("{#leave}", max - count).replace("{#count}", count);
+            }
           }
         }
 
