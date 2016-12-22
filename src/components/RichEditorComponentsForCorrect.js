@@ -67,7 +67,7 @@ var RichEditorComponentsForCorrect = React.createClass({
       var value = me.props.value?me.props.value:'<p></p>';
       editor.setContent(value);
       // pasterMgr.SetEditor(editor);
-      pasterMgr.Init(editor);
+        pasterMgr.Init(editor);
     });
 
   },

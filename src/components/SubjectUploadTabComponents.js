@@ -4,10 +4,7 @@ import { Modal} from 'antd';
 import { Slider } from 'antd';
 import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox } from 'antd';
 import { Upload,  message } from 'antd';
-import CkEditorWithWordPasterComponents from  './CkEditorWithWordPasterComponents';
-import CkEditorWithWordPasterComponents1 from  './CkEditorWithWordPasterComponents1';
 import RichEditorComponents from  './RichEditorComponents';
-import FileUploadComponents from './FileUploadComponents';
 import RichEditorComponentsForMuSelect from './RichEditorComponentsForMuSelect';
 import RichEditorComponentsForCorrect from './RichEditorComponentsForCorrect';
 import RichEditorComponentsForSimpleAnswer from './RichEditorComponentsForSimpleAnswer';
@@ -61,24 +58,6 @@ var mulitiAnswer = new Array();
 // var data=new Array();
 var uploadFileList=[];
 
-/*function doWebService(data,listener) {
-    var service = this;
-    this.WEBSERVICE_URL = "http://192.168.1.115:8080/Excoord_For_Education/webservice";
-    if (service.requesting) {
-        return;
-    }
-    service.requesting = true;
-    $.post(service.WEBSERVICE_URL, {
-        params : data
-    }, function(result, status) {
-        service.requesting = false;
-        if (status == "success") {
-            listener.onResponse(result);
-        } else {
-            listener.onError(result);
-        }
-    }, "json");
-}*/
 var subjectUpload;
 const SubjectUploadTabComponents = Form.create()(React.createClass({
     getInitialState() {

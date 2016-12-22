@@ -72,10 +72,14 @@ const TeachingComponents = React.createClass({
     e.preventDefault();
     var ident = sessionStorage.getItem("ident");
     var scheduleName = subjectForm.refs.editSchuldeNameInput.refs.input.value;
-    if(subjectForm.state.optType=="edit"){
-      subjectForm.updateSchedule(ident,scheduleName);
+    if(this.isEmpty(scheduleName)){
+        alert("请输入备课名称！");
     }else{
-      subjectForm.saveSchedule(ident,scheduleName);
+        if(subjectForm.state.optType=="edit"){
+          subjectForm.updateSchedule(ident,scheduleName);
+        }else{
+          subjectForm.saveSchedule(ident,scheduleName);
+        }
     }
   },
   handleCancel(e) {
@@ -104,6 +108,15 @@ const TeachingComponents = React.createClass({
   handleEmail: function(val){
     subjectForm.props.callbackParent();
     subjectForm.setState({ visible: false });
+  },
+
+  //系统非空判断
+  isEmpty(content){
+    if(content==null || content=="" || typeof(content)=="undefined"){
+      return true;
+    }else{
+      return false;
+    }
   },
 
   render() {

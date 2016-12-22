@@ -28825,12 +28825,12 @@
           setCount(this,me);
         });
         function setCount(editor,ui) {
-          editor.setOpt({
+          /*editor.setOpt({
             wordCount:true,
             maximumWords:10000,
             wordCountMsg:editor.options.wordCountMsg || editor.getLang("wordCountMsg"),
             wordOverFlowMsg:editor.options.wordOverFlowMsg || editor.getLang("wordOverFlowMsg")
-          });
+          });*/
           var opt = editor.options,
             max = opt.maximumWords,
             msg = opt.wordCountMsg ,

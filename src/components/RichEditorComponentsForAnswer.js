@@ -75,10 +75,10 @@ var RichEditorComponentsForAnswer = React.createClass({
   render : function(){
     return (
       <div>
-        <script id="answerContainer" name="content" type="text/plain">
+        <script id="answerContainer" name="aswerContent" type="text/plain">
 
         </script>
-       {/* <embed type="application/chrWordPstSXLY" PLUGINSPAGE="http://www.maaee.com/uploadFile/WordPaster.crx" width="1" height="0"
+        <embed type="application/chrWordPstSXLY" PLUGINSPAGE="http://www.maaee.com/uploadFile/WordPaster.crx" width="1" height="0"
                id="objWordPaster"/>
         <div style={{display: "none"}}>
           <div id="PasterMessager">
@@ -103,7 +103,7 @@ var RichEditorComponentsForAnswer = React.createClass({
           <div id="ImageUploadDialog" title="上传图片">
             <div id="FilePostLister"></div>
           </div>
-        </div>*/}
+        </div>
       </div>
     )
   }

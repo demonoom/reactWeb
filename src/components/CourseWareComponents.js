@@ -32,7 +32,8 @@ const CourseWareComponents = React.createClass({
             ident:'',
             teachScheduleId:'',
             optType:'',
-            knowledgeName:''
+            knowledgeName:'',
+            dataFilter:'self'
         };
     },
 
@@ -50,7 +51,8 @@ const CourseWareComponents = React.createClass({
             ident:ident,
             teachScheduleId:teachScheduleId,
             optType:optType,
-            knowledgeName:knowledgeName
+            knowledgeName:knowledgeName,
+            dataFilter:dataFilter
         })
         var param;
         if(optType=="bySchedule"){
@@ -177,7 +179,7 @@ const CourseWareComponents = React.createClass({
 
     onChange(page) {
         console.log(page);
-        courseWare.getTeachPlans(courseWare.state.ident,courseWare.state.teachScheduleId,courseWare.state.optType,page)
+        courseWare.getTeachPlans(courseWare.state.ident,courseWare.state.teachScheduleId,courseWare.state.optType,page,courseWare.state.knowledgeName,courseWare.state.dataFilter);
         this.setState({
             currentPage: page,
         });
@@ -335,7 +337,7 @@ const CourseWareComponents = React.createClass({
                          <span className="col1">创建人：{e[2]}</span>
                          <span className="col1">上传时间：{e[7]}</span>
                          <span className="col1">点赞次数：{e[11]}</span>
-                      </div>       
+                      </div>
 
                             <div className="bnt2_right">
                                 {/*<Button value={e.sid} onClick="" className="right_ri">引用微课</Button>*/}

@@ -32,6 +32,7 @@ const MainTabComponents = React.createClass({
             currentKnowledgeName:'',
             dataFilter:'self',
             currentMenuChildrenCount:-1,
+            toolbarExtenderDisplay:false
         };
     },
     getTeachPlans(optContent){
@@ -118,10 +119,9 @@ const MainTabComponents = React.createClass({
     },
 
     render() {
-
-        var toolbarExtra;
         var tabPanel;
         var subjectTabPanel;
+        var displayType='none';
         const menu = (
             <Menu onClick={this.menuItemOnClick}>
                 <Menu.Item key="self">只看自己</Menu.Item>
@@ -129,18 +129,19 @@ const MainTabComponents = React.createClass({
             </Menu>
         );
         if(this.state.currentOptType=="bySubjectId" && this.state.currentMenuChildrenCount==0){
-            toolbarExtra = <div className="ant-tabs-right"><CourseWareUploadComponents courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}></CourseWareUploadComponents><SubjectUploadTabComponents courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}></SubjectUploadTabComponents></div>;
+            displayType='block';
             tabPanel=<TabPane tab={<span>课件<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link icon_filter" href="#"><Icon type="filter"/></a></Dropdown></span>} key="课件"><CourseWareComponents ref="courseWare"/></TabPane>;
             subjectTabPanel=<TabPane tab={<span>题目<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link icon_filter" href="#"><Icon type="filter" /></a></Dropdown></span>} key="题目"><SubjectTable  ref="subTable" params={this.state.subjectParams}/></TabPane>;
         }else if(this.state.currentOptType=="bySubjectId"){
-            toolbarExtra = <div className="ant-tabs-right"></div>;
+            displayType='none';
             tabPanel=<TabPane tab={<span>课件<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link icon_filter" href="#"><Icon type="filter"/></a></Dropdown></span>} key="课件"><CourseWareComponents ref="courseWare"/></TabPane>;
             subjectTabPanel=<TabPane tab={<span>题目<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link icon_filter" href="#"><Icon type="filter" /></a></Dropdown></span>} key="题目"><SubjectTable  ref="subTable" params={this.state.subjectParams}/></TabPane>;
         }else{
-            toolbarExtra = <div className="ant-tabs-right"></div>;
+            displayType='none';
             tabPanel=<TabPane tab="课件" key="课件"><CourseWareComponents ref="courseWare"/></TabPane>;
             subjectTabPanel=<TabPane tab="题目" key="题目"><SubjectTable  ref="subTable" params={this.state.subjectParams}/></TabPane>
         }
+        var toolbarExtra = <div className="ant-tabs-right" style={{display:displayType}}><CourseWareUploadComponents courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}></CourseWareUploadComponents><SubjectUploadTabComponents courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}></SubjectUploadTabComponents></div>;
 
         return (
             <div>

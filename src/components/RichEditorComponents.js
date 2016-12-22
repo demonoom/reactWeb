@@ -3,7 +3,7 @@ import { WordPasterManager } from '../../ueditor/WordPaster/js/WordPaster';
 
 var RichEditorComponents = React.createClass({
   componentDidMount(){
-    var editor = UE.getEditor("container", {
+    var editorForSingle = UE.getEditor("container", {
       //工具栏
       toolbars: [[
         'undo', 'redo', '|',
@@ -63,11 +63,11 @@ var RichEditorComponents = React.createClass({
       /* 非法字符 \ : * ? " < > | */
     });
     var me = this;
-    editor.ready( function( ueditor ) {
+    editorForSingle.ready( function( ueditor ) {
       var value = me.props.value?me.props.value:'<p></p>';
-      editor.setContent(value);
+      editorForSingle.setContent(value);
       // pasterMgr.SetEditor(editor);
-      pasterMgr.Init(editor);
+      pasterMgr.Init(editorForSingle);
     });
 
   },
