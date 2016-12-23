@@ -26,6 +26,8 @@
 
   UE.version = "1.4.3";
 
+  UE.currentActiveEditorKey="";
+
   var dom = UE.dom = {};
 
 // core/browser.js
@@ -14551,6 +14553,7 @@
        }else{
        pasterMgr.PasteManual();return;//wordPaster
        }*/
+      UE.currentActiveEditorKey = this.key;
       pasterMgr.PasteManual();return;//wordPaster
       var doc = this.document;
       if (doc.getElementById('baidu_pastebin')) {

@@ -480,9 +480,21 @@ function WordPasterManager(mgr)
 		img += "/>";
 
 		this.EditorContent = this.EditorContent.replace(srcOld, img);
-    this.Editor.setContent(this.EditorContent);
-		//this.Editor.SetData(this.EditorContent);
+    if(!this.isEmpty(UE.getEditor(UE.currentActiveEditorKey))){
+      UE.getEditor(UE.currentActiveEditorKey).setContent(this.EditorContent);
+    }else{
+      this.Editor.setContent(this.EditorContent);
+    }
 	};
+
+  //系统非空判断
+  this.isEmpty = function(content){
+    if(content==null || content=="" || typeof(content)=="undefined"){
+      return true;
+    }else{
+      return false;
+    }
+  }
 
 	/*
 		更新编辑器内容。

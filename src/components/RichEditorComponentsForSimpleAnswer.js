@@ -75,7 +75,7 @@ var RichEditorComponentsForSimpleAnswer = React.createClass({
   render : function(){
     return (
       <div>
-        <script id="simpleAnswerContainer" name="simpleContent" type="text/plain">
+        <script id="simpleAnswerContainer" name="simpleAnswerContent" type="text/plain">
 
         </script>
         <embed type="application/chrWordPstSXLY" PLUGINSPAGE="http://www.maaee.com/uploadFile/WordPaster.crx" width="1" height="0"
