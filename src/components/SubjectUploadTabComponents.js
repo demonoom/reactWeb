@@ -90,7 +90,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
         this.setState({ visible: false });
     },
     handleCancel() {
-        this.setState({ visible: false });
+      this.setState({ visible: false });
     },
 
     handleEmail: function(val){
@@ -234,6 +234,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             score =this.refs.scoreDefined.refs.input.value;
         }
         var subjectName = UE.getEditor("container").getContent();
+        subjectName = subjectName.replace(/\+/g,"%2B"); //将+号替换为十六进制
         console.log("richContent:"+subjectName);
         // var subjectName = values.subjectName;
         var answer = this.state.singleAnswer;
@@ -287,6 +288,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                 score =this.refs.scoreDefined.refs.input.value;
             }
             var subjectName = UE.getEditor("muSelectContainer").getContent();
+            subjectName = subjectName.replace(/\+/g,"%2B"); //将+号替换为十六进制
             var answer = mulitiAnswer;
             var subjectParamArray = this.props.params.split("#");
             var ident = subjectParamArray[0];
@@ -337,6 +339,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                 score =this.refs.scoreDefined.refs.input.value;
             }
             var subjectName = UE.getEditor("correctContainer").getContent();
+            subjectName = subjectName.replace(/\+/g,"%2B"); //将+号替换为十六进制
             var answer = this.state.correctAnswerValue;
             var subjectParamArray = this.props.params.split("#");
             var ident = subjectParamArray[0];
@@ -388,8 +391,10 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                 score =this.refs.scoreDefined.refs.input.value;
             }
             var subjectName = UE.getEditor("simpleAnswerContainer").getContent();
+            subjectName = subjectName.replace(/\+/g,"%2B"); //将+号替换为十六进制
             // var answer = this.refs.simpleAnswerInput.refs.input.value;
             var answer = UE.getEditor("answerContainer").getContent();
+            answer = answer.replace(/\+/g,"%2B"); //将+号替换为十六进制
             var subjectParamArray = this.props.params.split("#");
             var ident = subjectParamArray[0];
             var ScheduleOrSubjectId = subjectParamArray[1];

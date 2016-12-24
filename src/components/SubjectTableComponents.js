@@ -283,13 +283,16 @@ const SUbjectTable = React.createClass({
     subTable.initGetSubjectInfo();
   },
 
-  componentWillReceiveProps(){
-    subTable.initGetSubjectInfo();
-  },
+  // componentWillReceiveProps(){
+  //   subTable.initGetSubjectInfo();
+  // },
 
-  initGetSubjectInfo:function (currentPageNo) {
+  initGetSubjectInfo:function (subjectParams,currentPageNo) {
     // alert("params in subjectTable:"+subTable.props.params);
     var subjectParamArray = subTable.props.params.split("#");
+    if(subjectParams!=null && typeof(subjectParams)!="undefined" ){
+      subjectParamArray = subjectParams.split("#");
+    }
     var ident = subjectParamArray[0];
     var ScheduleOrSubjectId = subjectParamArray[1];
     var pageNo=1;
