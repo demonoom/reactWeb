@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Table, Button,Icon,Popover,Tooltip } from 'antd';
+import { Table, Button,Icon,Popover,Tooltip,message } from 'antd';
 import UseKnowledgeComponents from './UseKnowledgeComponents';
 import { doWebService } from '../WebServiceHelper';
 
@@ -139,7 +139,8 @@ const SUbjectTable = React.createClass({
         }
       },
       onError : function(error) {
-        alert(error);
+        // alert(error);
+        message.error(error);
       }
 
     });
@@ -171,14 +172,17 @@ const SUbjectTable = React.createClass({
         onResponse : function(ret) {
           console.log(ret.msg);
           if(ret.msg=="调用成功" && ret.response==true){
-            alert("题目删除成功");
+            // alert("题目删除成功");
+            message.success("题目删除成功");
           }else{
-            alert("题目删除失败");
+            // alert("题目删除失败");
+            message.error("题目删除失败");
           }
           subTable.getSubjectDataBySchedule(sessionStorage.getItem("ident"),subTable.state.ScheduleOrSubjectId,subTable.state.currentPage);
         },
         onError : function(error) {
-          alert(error);
+          // alert(error);
+          message.error(error);
         }
       });
     }
@@ -203,14 +207,17 @@ const SUbjectTable = React.createClass({
         onResponse : function(ret) {
           console.log(ret.msg);
           if(ret.msg=="调用成功" && ret.response==true){
-            alert("题目删除成功");
+            // alert("题目删除成功");
+            message.success("题目删除成功");
           }else{
-            alert("题目删除失败");
+            // alert("题目删除失败");
+            message.error("题目删除失败");
           }
           subTable.getSubjectDataByKnowledge(sessionStorage.getItem("ident"),subTable.state.ScheduleOrSubjectId,subTable.state.currentPage,"Y");
         },
         onError : function(error) {
-          alert(error);
+          // alert(error);
+          message.error(error);
         }
       });
     }
@@ -264,7 +271,8 @@ const SUbjectTable = React.createClass({
         }
       },
       onError : function(error) {
-        alert(error);
+        // alert(error);
+        message.error(error);
       }
 
     });

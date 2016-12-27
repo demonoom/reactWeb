@@ -1,5 +1,5 @@
 import React, { PropTypes,Link } from 'react';
-import { Table, Popconfirm} from 'antd';
+import { Table, Popconfirm,message} from 'antd';
 import { Menu, Icon,Button } from 'antd';
 import { Badge,Pagination } from 'antd';
 import { doWebService } from '../WebServiceHelper';
@@ -237,7 +237,8 @@ const KnowledgeMenuComponents = React.createClass({
                 }
             },
             onError : function(error) {
-                alert(error);
+                // alert(error);
+              message.error(error);
             }
         });
     },

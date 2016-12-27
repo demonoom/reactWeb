@@ -56,13 +56,17 @@ const FileUploadComponents = React.createClass({
         var isExit = this.checkCurrentFileIsSubmit(fileName);
         var isMuliti = this.checkSubmitFileCount();
         if(isMuliti==true){
-            alert("请勿同时上传多个文件,谢谢！");
+            // alert("请勿同时上传多个文件,谢谢！");
+            message.warning("请勿同时上传多个文件,谢谢！");
         }else if(isExit==true){
-            alert("请勿重复上传,谢谢!");
+            // alert("请勿重复上传,谢谢!");
+            message.warning("请勿重复上传,谢谢!");
         }else if(!this.checkIsRightFileType(fileType)){
-            alert("文件类型不正确,请重新上传,谢谢!");
+            // alert("文件类型不正确,请重新上传,谢谢!");
+            message.warning("文件类型不正确,请重新上传,谢谢!");
         }else if(fileSize >= 104857600){
-            alert("请勿上传超过100M的文件，谢谢!");
+            // alert("请勿上传超过100M的文件，谢谢!");
+            message.warning("请勿上传超过100M的文件，谢谢!");
         }else{
             var fileJson = { label: fileName,value:fileName,fileObj:files };
             submitFileOptions.push(fileJson);
@@ -145,7 +149,8 @@ const FileUploadComponents = React.createClass({
     removeFile(){
         var checkedList = this.state.submitFileCheckedList;
         if(checkedList.length==0){
-            alert("请选择文件后移除");
+            // alert("请选择文件后移除");
+            message.warning("请选择文件后移除");
         }else{
             for(var rindex=0;rindex<checkedList.length;rindex++){
                 var fileName = checkedList[rindex];

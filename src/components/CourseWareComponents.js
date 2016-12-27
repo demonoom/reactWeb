@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Card, Checkbox,Collapse,Icon,Button,Pagination} from 'antd';
+import { Card, Checkbox,Collapse,Icon,Button,Pagination,message} from 'antd';
 import UseKnowledgeComponents from './UseKnowledgeComponents';
 import { doWebService } from '../WebServiceHelper';
 const Panel = Collapse.Panel;
@@ -105,7 +105,8 @@ const CourseWareComponents = React.createClass({
                     courseWare.setState({totalCount:parseInt(pager.pageCount)*15});
                 },
                 onError : function(error) {
-                    alert(error);
+                    // alert(error);
+                    message.error(error);
                 }
 
             });
@@ -166,7 +167,8 @@ const CourseWareComponents = React.createClass({
                     courseWare.setState({totalCount:parseInt(pager.pageCount)*15});
                 },
                 onError : function(error) {
-                    alert(error);
+                    // alert(error);
+                    message.error(error);
                 }
 
             });
@@ -226,14 +228,17 @@ const CourseWareComponents = React.createClass({
                 onResponse : function(ret) {
                     console.log(ret.msg);
                     if(ret.msg=="调用成功" && ret.response==true){
-                        alert("课件删除成功");
+                        // alert("课件删除成功");
+                        message.success("课件删除成功");
                     }else{
-                        alert("课件删除失败");
+                        // alert("课件删除失败");
+                        message.error("课件删除失败");
                     }
                     courseWare.getTeachPlans(sessionStorage.getItem("ident"),courseWare.state.teachScheduleId,"bySchedule",courseWare.state.currentPage,courseWare.state.knowledgeName)
                 },
                 onError : function(error) {
-                    alert(error);
+                    // alert(error);
+                    message.error(error);
                 }
             });
         }
@@ -258,14 +263,17 @@ const CourseWareComponents = React.createClass({
                 onResponse : function(ret) {
                     console.log(ret.msg);
                     if(ret.msg=="调用成功" && ret.response==true){
-                        alert("课件删除成功");
+                        // alert("课件删除成功");
+                        message.success("课件删除成功");
                     }else{
-                        alert("课件删除失败");
+                        // alert("课件删除失败");
+                        message.error("课件删除失败");
                     }
                     courseWare.getTeachPlans(courseWare.state.ident,courseWare.state.teachScheduleId,courseWare.state.optType,1);
                 },
                 onError : function(error) {
-                    alert(error);
+                    // alert(error);
+                    message.error(error);
                 }
             });
         }

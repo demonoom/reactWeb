@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Modal, Button } from 'antd';
+import { Modal, Button,message } from 'antd';
 import { Menu, Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox } from 'antd';
 import { doWebService } from '../WebServiceHelper';
 
@@ -38,7 +38,8 @@ const BindKnowledgeComponents = React.createClass({
         });
       },
       onError : function(error) {
-        alert(error);
+        // alert(error);
+        message.error(error);
       }
     });
   },
@@ -46,7 +47,8 @@ const BindKnowledgeComponents = React.createClass({
   //修改备课计划
   bindPointForTeacher(){
     if(bindKnowledge.state.selectedKnowledge==null || bindKnowledge.state.selectedKnowledge==""){
-      alert("请选择具体的知识点完成绑定");
+      // alert("请选择具体的知识点完成绑定");
+      message.warning("请选择具体的知识点完成绑定");
       bindKnowledge.props.callbackParent();
       bindKnowledge.setState({ visible: false });
     }else{
@@ -59,15 +61,18 @@ const BindKnowledgeComponents = React.createClass({
         onResponse : function(ret) {
           console.log(ret.msg);
           if(ret.msg=="调用成功" && ret.response==true){
-            alert("知识点绑定成功");
+            // alert("知识点绑定成功");
+            message.success("知识点绑定成功");
           }else{
-            alert("知识点绑定失败");
+            // alert("知识点绑定失败");
+            message.error("知识点绑定失败");
           }
           bindKnowledge.props.callbackParent();
           bindKnowledge.setState({ visible: false });
         },
         onError : function(error) {
-          alert(error);
+          // alert(error);
+          message.error(error);
         }
       });
     }

@@ -121,8 +121,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
 
     initPage(){
         this.setState({score:1});
-        if(!this.isEmpty(UE.getEditor("container"))){
-            UE.getEditor("container").setContent("");
+        if(!this.isEmpty(UE.getEditor("singleContainer"))){
+            UE.getEditor("singleContainer").setContent("");
         }
         if(!this.isEmpty(UE.getEditor("muSelectContainer"))){
             UE.getEditor("muSelectContainer").setContent("");
@@ -160,15 +160,18 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                         var userId = sessionStorage.getItem("ident");
                         subjectUpload.teachScheduleInfo(userId,knowledgeName,subjectsIds);
                     }else{
-                        alert("题目添加成功");
+                        // alert("题目添加成功");
+                        message.success("题目添加成功");
                         subjectUpload.props.courseUploadCallBack();
                     }
                 }else{
-                    alert("题目添加失败");
+                    // alert("题目添加失败");
+                    message.error("题目添加失败");
                 }
             },
             onError : function(error) {
-                alert(error);
+                // alert(error);
+                message.error(error);
             }
         });
     },
@@ -189,7 +192,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                 }
             },
             onError : function(error) {
-                alert(error);
+                // alert(error);
+                message.error(error);
             }
         });
     },
@@ -204,12 +208,14 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             onResponse : function(ret) {
                 console.log(ret.msg);
                 if(ret.msg=="调用成功" && ret.response==true){
-                    alert("题目添加成功");
+                    // alert("题目添加成功");
+                    message.success("题目添加成功");
                     subjectUpload.props.courseUploadCallBack();
                 }
             },
             onError : function(error) {
-                alert(error);
+                // alert(error);
+                message.error(error);
             }
         });
     },
@@ -233,7 +239,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
         if(this.state.scoreDisable==true){
             score =this.refs.scoreDefined.refs.input.value;
         }
-        var subjectName = UE.getEditor("container").getContent();
+        var subjectName = UE.getEditor("singleContainer").getContent();
         subjectName = subjectName.replace(/\+/g,"%2B"); //将+号替换为十六进制
         console.log("richContent:"+subjectName);
         // var subjectName = values.subjectName;
@@ -248,11 +254,14 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
         // alert("knowledgeName:"+knowledgeName+"\t"+isLinkToSchedule);
         //完成基础的非空验证
         if(this.isEmpty(subjectName)){
-            alert("请输入题目");
+            // alert("请输入题目");
+            message.warning("请输入题目");
         }else if(this.isEmpty(answer)){
-            alert("请输入答案");
+            // alert("请输入答案");
+            message.warning("请输入答案");
         }else if(this.isEmpty(score) || score==0){
-            alert("请选择分值");
+            // alert("请选择分值");
+            message.warning("请选择分值");
         }else{
             var batchAddSubjectBeanJson={"textTigan":subjectName,"textAnswer":answer,"score":score,"userId":ident,"type":"C"};
             if(optType=="bySubjectId"){
@@ -302,11 +311,14 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             }
             //完成基础的非空验证
             if(this.isEmpty(subjectName)){
-                alert("请输入题目");
+                // alert("请输入题目");
+                message.warning("请输入题目");
             }else if(this.isEmpty(answer)){
-                alert("请输入答案");
+                // alert("请输入答案");
+                message.warning("请输入答案");
             }else if(this.isEmpty(score) || score==0){
-                alert("请选择分值");
+                // alert("请选择分值");
+                message.warning("请选择分值");
             }else{
                 this.saveSubject(batchAddSubjectBeanJson,knowledgeName,isLinkToSchedule);
                 if(currentButton=="保存并返回列表"){
@@ -353,11 +365,14 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             }
             //完成基础的非空验证
             if(this.isEmpty(subjectName)){
-                alert("请输入题目");
+                // alert("请输入题目");
+                message.warning("请输入题目");
             }else if(this.isEmpty(answer)){
-                alert("请输入答案");
+                // alert("请输入答案");
+                message.warning("请输入答案");
             }else if(this.isEmpty(score) || score==0){
-                alert("请选择分值");
+                // alert("请选择分值");
+                message.warning("请选择分值");
             }else {
                 this.saveSubject(batchAddSubjectBeanJson,knowledgeName,isLinkToSchedule);
                 if(currentButton=="保存并返回列表"){
@@ -407,11 +422,14 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             }
             //完成基础的非空验证
             if(this.isEmpty(subjectName)){
-                alert("请输入题目");
+                // alert("请输入题目");
+                message.warning("请输入题目");
             }else if(this.isEmpty(answer)){
-                alert("请输入答案");
+                // alert("请输入答案");
+                message.warning("请输入答案");
             }else if(this.isEmpty(score) || score==0){
-                alert("请选择分值");
+                // alert("请选择分值");
+                message.warning("请选择分值");
             }else {
                 this.saveSubject(batchAddSubjectBeanJson,knowledgeName,isLinkToSchedule);
                 if(currentButton=="保存并返回列表"){
@@ -477,7 +495,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
     //点击保存按钮，文件上传
     uploadFile(){
         if(uploadFileList.length==0){
-            alert("请选择上传的文件,谢谢！");
+            // alert("请选择上传的文件,谢谢！");
+            message.warning("请选择上传的文件,谢谢！");
         }else{
             var formData = new FormData();
             formData.append("file",uploadFileList[0]);
@@ -525,7 +544,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             if(this.state.scoreDisable==true){
                 score =this.refs.scoreDefined.refs.input.value;
             }
-            var subjectName = UE.getEditor("container").getContent();
+            var subjectName = UE.getEditor("singleContainer").getContent();
             var answer = this.state.singleAnswer;
             var subjectParamArray = this.props.params.split("#");
             var ScheduleOrSubjectId = subjectParamArray[1];
@@ -536,11 +555,14 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             }
             //完成基础的非空验证
             if(this.isEmpty(subjectName)){
-                alert("请输入题目");
+                // alert("请输入题目");
+                message.warning("请输入题目");
             }else if(this.isEmpty(answer)){
-                alert("请输入答案");
+                // alert("请输入答案");
+                message.warning("请输入答案");
             }else if(this.isEmpty(score) || score==0){
-                alert("请选择分值");
+                // alert("请选择分值");
+                message.warning("请选择分值");
             }else {
                 //this.saveSubject(batchAddSubjectBeanJson);
                 if(currentButton=="保存并返回列表"){

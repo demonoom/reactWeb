@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Table, Button,Popover } from 'antd';
+import { Table, Button,Popover,message } from 'antd';
 import { doWebService } from '../WebServiceHelper';
 
 var columns = [ {
@@ -147,7 +147,8 @@ const HomeWorkTableComponents = React.createClass({
         subTable.setState({currentView:'homeWorkList'});
       },
       onError : function(error) {
-        alert(error);
+        // alert(error);
+        message.error(error);
       }
 
     });
@@ -197,7 +198,8 @@ const HomeWorkTableComponents = React.createClass({
         subTable.setState({currentView:'subjectList'});
       },
       onError : function(error) {
-        alert(error);
+        // alert(error);
+        message.error(error);
       }
 
     });

@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { Form, Icon, Input, Button, Checkbox,message } from 'antd';
 const FormItem = Form.Item;
 import { doWebService } from '../WebServiceHelper';
 
@@ -64,12 +64,15 @@ const Login = Form.create()(React.createClass({
                 console.log(ret.msg);
                 var response = ret.response;
                 if(ret.msg=="用户不存在！"|| ret.msg=="对不起，密码不正确！"){
-                    alert("用户名或密码错误,请重新输入！");
+                    // alert("用户名或密码错误,请重新输入！");
+                    message.error("用户名或密码错误,请重新输入！");
                 }else if(ret.msg=="调用成功"){
                     if(response.colValid!=1){
-                        alert("用户已被禁用,请联系管理员！");
+                        // alert("用户已被禁用,请联系管理员！");
+                        message.error("用户已被禁用,请联系管理员！");
                     }else if(response.colUtype!="TEAC"){
-                        alert("用户身份不正确,请重新输入！");
+                        // alert("用户身份不正确,请重新输入！");
+                        message.error("用户身份不正确,请重新输入！");
                     }else{
                         sessionStorage.setItem("ident", response.colUid);
                         loginComponent.getHistoryAccessPointId(response.colUid);
@@ -78,7 +81,8 @@ const Login = Form.create()(React.createClass({
                 }
             },
             onError : function(error) {
-                alert(error);
+                // alert(error);
+                message.error(error);
             }
         });
     },
@@ -94,7 +98,8 @@ const Login = Form.create()(React.createClass({
                 sessionStorage.setItem("openKeysStr",response);
             },
             onError : function(error) {
-                alert(error);
+                // alert(error);
+                message.error(error);
             }
         });
     },
@@ -105,11 +110,13 @@ const Login = Form.create()(React.createClass({
             var inputCode=values.validateCode;
             if(inputCode.length <= 0)
             {
-                alert("请输入验证码！");
+                // alert("请输入验证码！");
+                message.warning("请输入验证码！");
             }
             else if(inputCode.toUpperCase() != loginComponent.state.code.toUpperCase())
             {
-                alert("验证码输入有误！");
+                // alert("验证码输入有误！");
+                message.warning("验证码输入有误！");
                 loginComponent.createCode();
             }
             else
@@ -153,31 +160,31 @@ const Login = Form.create()(React.createClass({
 								{getFieldDecorator('validateCode',{
                                     rules: [{ required: true, message: '请输入验证码!' }],
                                 })(
-									
+
 									<Input  placeholder="请输入验证码" className="yz_input" />
-									
+
 								)}
 								{
 
-										
+
 										<div className="code" id="checkCode" onClick={loginComponent.createCode} >{loginComponent.state.code}</div>
-	
+
 									}
 							</FormItem>
-		
+
 							<div className="login_buton">
 								<Button type="primary" htmlType="submit" className="login-form-button login_buton">
 									登录
 								</Button>
 							</div>
-							
+
 						</Form>
 						</div>
 					</div>
 			<div className="login_bottom"></div>
 			<div className="login_sun"></div>
             </div>
-			
+
         );
     },
 }));

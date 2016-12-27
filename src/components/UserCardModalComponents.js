@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Modal } from 'antd';
+import { Modal,message } from 'antd';
 import { doWebService } from '../WebServiceHelper';
 
 var teacherInfo;
@@ -57,11 +57,13 @@ const UserCardModalComponents = React.createClass({
           var schoolAddress = response.school.address;
           teacherInfo.setState({userName:userName,userHeadIcon:userHeadIcon,courseName:courseName,schoolName:schoolName,schoolAddress:schoolAddress});
         }else{
-          alert("老师信息获取失败");
+          // alert("老师信息获取失败");
+          message.error("老师信息获取失败");
         }
       },
       onError : function(error) {
-        alert(error);
+        // alert(error);
+        message.error(error);
       }
     });
   },

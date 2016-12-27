@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Modal, Button } from 'antd';
+import { Modal, Button,message } from 'antd';
 import { Form, Input, Tooltip, Icon, Cascader, Select,Checkbox,Radio } from 'antd';
 import { doWebService } from '../WebServiceHelper';
 const FormItem = Form.Item;
@@ -48,7 +48,8 @@ const UseKnowledgeComponents = React.createClass({
   handleSubmit(e) {
     e.preventDefault();
     if(this.state.schedule=='' && knowledge.state.currentKnowledgeState==false && knowledge.state.newScheduleState==false){
-          alert("请选择或输入备课计划名称后再进行操作!");
+          // alert("请选择或输入备课计划名称后再进行操作!");
+          message.warning("请选择或输入备课计划名称后再进行操作!");
           return;
     }else{
       if(this.state.isNewSchedule==true){
@@ -104,7 +105,8 @@ const UseKnowledgeComponents = React.createClass({
         }
       },
       onError : function(error) {
-        alert(error);
+        // alert(error);
+        message.error(error);
       }
     });
   },
@@ -120,16 +122,19 @@ const UseKnowledgeComponents = React.createClass({
       onResponse : function(ret) {
         console.log(ret.msg);
         if(ret.msg=="调用成功" && ret.response==true){
-          alert("课件使用成功");
+          // alert("课件使用成功");
+          message.success("课件使用成功");
         }else{
-          alert("课件使用失败");
+          // alert("课件使用失败");
+          message.error("课件使用失败");
         }
         knowledge.setState({
           visible: false,
         });
       },
       onError : function(error) {
-        alert(error);
+        // alert(error);
+        message.error(error);
       }
     });
   },
@@ -144,16 +149,19 @@ const UseKnowledgeComponents = React.createClass({
       onResponse : function(ret) {
         console.log(ret.msg);
         if(ret.msg=="调用成功" && ret.response==true){
-          alert("题目使用成功");
+          // alert("题目使用成功");
+          message.success("题目使用成功");
         }else{
-          alert("题目使用失败");
+          // alert("题目使用失败");
+          message.error("题目使用失败");
         }
         knowledge.setState({
           visible: false,
         });
       },
       onError : function(error) {
-        alert(error);
+        // alert(error);
+        message.error(error);
       }
     });
   },

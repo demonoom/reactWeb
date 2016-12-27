@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Table, Popconfirm, Button } from 'antd';
+import { Table, Popconfirm, Button,message } from 'antd';
 import { Menu, Icon } from 'antd';
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;

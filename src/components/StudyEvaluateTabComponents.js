@@ -14,6 +14,9 @@ function deleteConfirm() {
     var rs = confirm("确定要删除这"+count+"条记录吗？");
 }
 
+function touchstart(){
+  console.log("模拟touchstart");
+}
 
 var mt;
 

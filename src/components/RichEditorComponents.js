@@ -3,7 +3,7 @@ import { WordPasterManager } from '../../ueditor/WordPaster/js/WordPaster';
 
 var RichEditorComponents = React.createClass({
   componentDidMount(){
-    var editorForSingle = UE.getEditor("container", {
+    var editorForSingle = UE.getEditor("singleContainer", {
       //工具栏
       toolbars: [[
         'undo', 'redo', '|',
@@ -75,7 +75,7 @@ var RichEditorComponents = React.createClass({
   render : function(){
     return (
       <div>
-        <script id="container" name="content" type="text/plain">
+        <script id="singleContainer" name="singleContent" type="text/plain">
 
         </script>
         <embed type="application/chrWordPstSXLY" PLUGINSPAGE="http://www.maaee.com/uploadFile/WordPaster.crx" width="1" height="0"
