@@ -23773,7 +23773,8 @@
       maxSize = me.getOpt(filetype + 'MaxSize');
       allowFiles = me.getOpt(filetype + 'AllowFiles');
       // actionUrl = me.getActionUrl(me.getOpt(filetype + 'ActionName'));
-      actionUrl ="http://www.maaee.com/manage/subject/subject_upload.jsp";
+      // actionUrl ="http://www.maaee.com/manage/subject/subject_upload.jsp";
+      actionUrl ="http://www.maaee.com/Excoord_For_Education/manage/subject/subject_upload.jsp";
       errorHandler = function(title) {
         var loader = me.document.getElementById(loadingId);
         loader && domUtils.remove(loader);

@@ -485,6 +485,7 @@ function WordPasterManager(mgr)
     }else{
       this.Editor.setContent(this.EditorContent);
     }
+    // UE.getEditor(UE.currentActiveEditorKey).setContent(this.EditorContent);
 	};
 
   //系统非空判断
