@@ -82,7 +82,8 @@ const MiddleMenuComponents = React.createClass({
         mMenu.setState({menuList: List,lessonCount:pager.rsCount});
       },
       onError : function(error) {
-        alert(error);
+        // alert(error);
+        message.error(error);
       }
     });
   },
@@ -118,7 +119,7 @@ const MiddleMenuComponents = React.createClass({
   buildMenuChildren:function (menuList) {
     children = menuList.map((e, i)=> {
 
-   
+
       const menu = (
           <Menu onClick={mMenu.menuItemOnClick}>
               <Menu.Item key={e[0]+"#"+e[1]} className="popup_i_icon"><Icon className="icon_right" type="edit" />修改</Menu.Item>
@@ -155,14 +156,17 @@ const MiddleMenuComponents = React.createClass({
         onResponse : function(ret) {
           console.log(ret.msg);
           if(ret.msg=="调用成功" && ret.response==true){
-            alert("备课计划删除成功");
+            // alert("备课计划删除成功");
+            message.success("备课计划删除成功");
           }else{
-            alert("备课计划删除失败");
+            // alert("备课计划删除失败");
+            message.error("备课计划删除失败");
           }
           mMenu.getLessonMenu(mMenu.state.currentPage);
         },
         onError : function(error) {
-          alert(error);
+          // alert(error);
+          message.error(error);
         }
       });
     }

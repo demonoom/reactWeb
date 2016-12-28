@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Modal, Button } from 'antd';
+import { Modal, Button,message } from 'antd';
 import { Menu, Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox } from 'antd';
 import { doWebService } from '../WebServiceHelper';
 
@@ -19,9 +19,11 @@ const UserPasswordModifyComponents = React.createClass({
       var newPassword = this.refs.newPassword.refs.input.value;
       var confirmPassword = this.refs.confirmPassword.refs.input.value;
       if(this.isEmpty(oldPassword) || this.isEmpty(newPassword) || this.isEmpty(confirmPassword)){
-        alert("请输入密码!");
+        // alert("请输入密码!");
+        message.warning("请输入密码!");
       }else if(newPassword != confirmPassword){
-        alert("请确保两次输入的新密码一致!");
+        // alert("请确保两次输入的新密码一致!");
+        message.warning("请确保两次输入的新密码一致!");
       }else{
         var param = {
           "method":'changePassword',
@@ -32,17 +34,20 @@ const UserPasswordModifyComponents = React.createClass({
           onResponse : function(ret) {
             console.log(ret.msg);
             if(ret.msg=="调用成功" && ret.response==true){
-              alert("密码修改成功，请重新登录");
+              // alert("密码修改成功，请重新登录");
+              message.success("密码修改成功，请重新登录");
               sessionStorage.removeItem("openKeysStr");
               sessionStorage.removeItem("ident");
               location.hash="Login";
             }else{
-              alert("密码修改失败");
+              // alert("密码修改失败");
+              message.error("密码修改失败");
             }
             userPasswordModify.setState({ visible: false });
           },
           onError : function(error) {
-            alert(error);
+            // alert(error);
+            message.error(error);
           }
         });
       }

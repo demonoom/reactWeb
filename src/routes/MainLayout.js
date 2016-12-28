@@ -50,33 +50,43 @@ const MainLayout = React.createClass({
     this.setState({currentKey:e.key});
     if(e.key=="teachTimes"){
       var breadcrumbArray = [{hrefLink:'#/MainLayout',hrefText:"首页"}];
-      mainLayout.refs.mainTabComponents.buildBreadcrumb(breadcrumbArray);
+      if(mainLayout.refs.mainTabComponents!=null && typeof(mainLayout.refs.mainTabComponents)!="undefined" ){
+          mainLayout.refs.mainTabComponents.buildBreadcrumb(breadcrumbArray);
+      }
     }
   },
   //获取备课计划下的课件资源
   getTeachPlans:function (optContent,breadCrumbArray) {
     //点击的菜单标识：teachScheduleId
     if(optContent==null){
-      mainLayout.refs.mainTabComponents.buildBreadcrumb(breadCrumbArray);
+      if(mainLayout.refs.mainTabComponents!=null && typeof(mainLayout.refs.mainTabComponents)!="undefined" ){
+        mainLayout.refs.mainTabComponents.buildBreadcrumb(breadCrumbArray);
+      }
     }else{
 
       var optContentArray = optContent.split("#");
       var childrenCount = optContentArray[3];
       if(optContentArray[1]!="bySubjectId"){
         var breadcrumbArray = [{hrefLink:'#/MainLayout',hrefText:"首页"}];
-        mainLayout.refs.mainTabComponents.buildBreadcrumb(breadcrumbArray);
+        if(mainLayout.refs.mainTabComponents!=null && typeof(mainLayout.refs.mainTabComponents)!="undefined" ){
+          mainLayout.refs.mainTabComponents.buildBreadcrumb(breadcrumbArray);
+        }
       }else{
-        mainLayout.refs.mainTabComponents.buildBreadcrumb(breadCrumbArray,childrenCount);
+        if(mainLayout.refs.mainTabComponents!=null && typeof(mainLayout.refs.mainTabComponents)!="undefined" ){
+          mainLayout.refs.mainTabComponents.buildBreadcrumb(breadCrumbArray,childrenCount);
+        }
       }
-      mainLayout.refs.mainTabComponents.getTeachPlans(optContent);
+      if(mainLayout.refs.mainTabComponents!=null && typeof(mainLayout.refs.mainTabComponents)!="undefined" ){
+        mainLayout.refs.mainTabComponents.getTeachPlans(optContent);
+      }
     }
   },
 
   componentWillMount(){
-    // var userIdent = sessionStorage.getItem("ident");
-    // if(userIdent==null || userIdent==""){
-    //     location.hash="login";
-    // }
+    var userIdent = sessionStorage.getItem("ident");
+    if(userIdent==null || userIdent==""){
+        location.hash="login";
+    }
     //sessionStorage.setItem("ident","23836");
   },
 

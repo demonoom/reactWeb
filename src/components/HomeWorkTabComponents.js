@@ -41,7 +41,9 @@ const HomeWorkTabComponents = React.createClass({
     assignHomeWork(){
         this.setState({currentOpt:'assignHomeWork',});
         this.setState({activeKey:'布置作业',isNewPage:true});
-        this.refs.assignHomeWorkCom.getInitialState();
+        if(this.refs.assignHomeWorkCom!=null && typeof (this.refs.assignHomeWorkCom)!="undefined"){
+          this.refs.assignHomeWorkCom.getInitialState();
+        }
     },
 
     render() {

@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Modal, Button } from 'antd';
+import { Modal, Button ,message} from 'antd';
 import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox } from 'antd';
 import { doWebService } from '../WebServiceHelper';
 
@@ -30,15 +30,18 @@ const TeachingComponents = React.createClass({
       onResponse : function(ret) {
         console.log(ret.msg);
         if(ret.msg=="调用成功" && ret.response.colTsId!=null){
-          alert("备课计划添加成功");
+          // alert("备课计划添加成功");
+          message.success("备课计划添加成功");
         }else{
-          alert("备课计划添加失败");
+          // alert("备课计划添加失败");
+          message.error("备课计划添加失败");
         }
         subjectForm.props.callbackParent();
         subjectForm.setState({ visible: false });
       },
       onError : function(error) {
-        alert(error);
+        // alert(error);
+        message.error(error);
       }
     });
   },
@@ -55,15 +58,18 @@ const TeachingComponents = React.createClass({
       onResponse : function(ret) {
         console.log(ret.msg);
         if(ret.msg=="调用成功" && ret.response==true){
-          alert("备课计划修改成功");
+          // alert("备课计划修改成功");
+          message.success("备课计划修改成功")
         }else{
-          alert("备课计划修改失败");
+          // alert("备课计划修改失败");
+          message.error("备课计划修改失败");
         }
         subjectForm.props.callbackParent();
         subjectForm.setState({ visible: false });
       },
       onError : function(error) {
-        alert(error);
+        // alert(error);
+        message.error(error);
       }
     });
   },
@@ -72,10 +78,14 @@ const TeachingComponents = React.createClass({
     e.preventDefault();
     var ident = sessionStorage.getItem("ident");
     var scheduleName = subjectForm.refs.editSchuldeNameInput.refs.input.value;
-    if(subjectForm.state.optType=="edit"){
-      subjectForm.updateSchedule(ident,scheduleName);
+    if(this.isEmpty(scheduleName)){
+        message.warning("请输入备课名称！");
     }else{
-      subjectForm.saveSchedule(ident,scheduleName);
+        if(subjectForm.state.optType=="edit"){
+          subjectForm.updateSchedule(ident,scheduleName);
+        }else{
+          subjectForm.saveSchedule(ident,scheduleName);
+        }
     }
   },
   handleCancel(e) {
@@ -104,6 +114,15 @@ const TeachingComponents = React.createClass({
   handleEmail: function(val){
     subjectForm.props.callbackParent();
     subjectForm.setState({ visible: false });
+  },
+
+  //系统非空判断
+  isEmpty(content){
+    if(content==null || content=="" || typeof(content)=="undefined"){
+      return true;
+    }else{
+      return false;
+    }
   },
 
   render() {

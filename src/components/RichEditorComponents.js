@@ -3,21 +3,16 @@ import { WordPasterManager } from '../../ueditor/WordPaster/js/WordPaster';
 
 var RichEditorComponents = React.createClass({
   componentDidMount(){
-    var editor = UE.getEditor("container", {
+    var editorForSingle = UE.getEditor("singleContainer", {
       //工具栏
       toolbars: [[
-        'source', '|', 'undo', 'redo', '|',
+        'undo', 'redo', '|',
         'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch',
         '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
         'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
-        'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
-        'directionalityltr', 'directionalityrtl', 'indent', '|',
-        'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|','link', 'unlink', 'anchor', '|',
-        'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
-        'simpleupload',
-        'horizontal', 'date', 'time','spechars',
-        '|','inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', 'charts',
-        '|','print', 'searchreplace','help'
+         'fontfamily', 'fontsize', '|',
+        'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'link', 'unlink', '|',
+        'horizontal','spechars',
       ]] ,
       lang:"zh-cn"
       //字体
@@ -41,10 +36,10 @@ var RichEditorComponents = React.createClass({
       , initialFrameHeight: this.props.height  //设置当前组件的初始高度，具体大小由调用者传入（不需要带单位）
       , initialFrameWidth: this.props.width   //设置当前组件的初始宽度，具体大小由调用者传入（不需要带单位）
       ,readonly:this.props.disabled,
-      imageUrlPrefix:'http://www.maaee.com/manage/',
+      imageUrlPrefix:'http://www.maaee.com/Excoord_For_Education/manage/',
       imageUrl: "subject/subject_upload.jsp",
-      imagePath: "__ROOT__/Uploads/",
-      imageManagerUrl: "http://www.maaee.com/manage/subject/subject_upload.jsp",
+      imagePath: "http://www.maaee.com/Excoord_For_Education/manage/subject/subject_upload.jsp",
+      imageManagerUrl: "http://www.maaee.com/Excoord_For_Education/manage/subject/subject_upload.jsp",
       imageManagerPath: "__ROOT__/",
       imageActionName: "uploadimage", /* 执行上传图片的action名称 */
       imageFieldName: "upfile", /* 提交的图片表单名称 */
@@ -68,11 +63,11 @@ var RichEditorComponents = React.createClass({
       /* 非法字符 \ : * ? " < > | */
     });
     var me = this;
-    editor.ready( function( ueditor ) {
+    editorForSingle.ready( function( ueditor ) {
       var value = me.props.value?me.props.value:'<p></p>';
-      editor.setContent(value);
+      editorForSingle.setContent(value);
       // pasterMgr.SetEditor(editor);
-      pasterMgr.Init(editor);
+      pasterMgr.Init(editorForSingle);
     });
 
   },
@@ -80,7 +75,7 @@ var RichEditorComponents = React.createClass({
   render : function(){
     return (
       <div>
-        <script id="container" name="content" type="text/plain">
+        <script id="singleContainer" name="singleContent" type="text/plain">
 
         </script>
         <embed type="application/chrWordPstSXLY" PLUGINSPAGE="http://www.maaee.com/uploadFile/WordPaster.crx" width="1" height="0"

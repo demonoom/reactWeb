@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Modal, Button } from 'antd';
+import { Modal, Button,message } from 'antd';
 import { Form, Input, Tooltip, Icon, Cascader, Select,Checkbox,Radio } from 'antd';
 import { doWebService } from '../WebServiceHelper';
 const FormItem = Form.Item;
@@ -47,32 +47,38 @@ const UseKnowledgeComponents = React.createClass({
 
   handleSubmit(e) {
     e.preventDefault();
-    if(this.state.isNewSchedule==true){
-      var inputObj = knowledge.refs.scheduleName;
-      var scheduleName = inputObj.refs.input.value;
-      if(knowledge.state.currentKnowledgeState==true){
-        scheduleName=this.state.knowledgeName;
-      }else{
-        scheduleName = inputObj.refs.input.value;
-      }
-      knowledge.saveSchedule(sessionStorage.getItem("ident"),scheduleName);
-      // currentKnowledgeState:false,
-      // newScheduleState:false,
-      /*if(knowledge.state.newScheduleState==true){
-       var inputObj = knowledge.refs.scheduleName;
-
-       alert("inputValue:"+scheduleName);
-       //knowledge.saveSchedule(sessionStorage.getItem("ident"),scheduleName);
-       }else{
-       var scheduleName = inputObj.refs.input.value;
-       }*/
+    if(this.state.schedule=='' && knowledge.state.currentKnowledgeState==false && knowledge.state.newScheduleState==false){
+          // alert("请选择或输入备课计划名称后再进行操作!");
+          message.warning("请选择或输入备课计划名称后再进行操作!");
+          return;
     }else{
-      // alert("使用");
-      // alert(knowledge.state.currentKnowlege+"===:"+knowledge.state.schedule+",optType"+knowledge.state.optType);
-      if(knowledge.state.optType=="courseWare"){
-        knowledge.copyMaterialToSchedule(sessionStorage.getItem("ident"),knowledge.state.currentKnowlege,knowledge.state.schedule);
+      if(this.state.isNewSchedule==true){
+        var inputObj = knowledge.refs.scheduleName;
+        var scheduleName = inputObj.refs.input.value;
+        if(knowledge.state.currentKnowledgeState==true){
+          scheduleName=this.state.knowledgeName;
+        }else{
+          scheduleName = inputObj.refs.input.value;
+        }
+        knowledge.saveSchedule(sessionStorage.getItem("ident"),scheduleName);
+        // currentKnowledgeState:false,
+        // newScheduleState:false,
+        /*if(knowledge.state.newScheduleState==true){
+         var inputObj = knowledge.refs.scheduleName;
+
+         alert("inputValue:"+scheduleName);
+         //knowledge.saveSchedule(sessionStorage.getItem("ident"),scheduleName);
+         }else{
+         var scheduleName = inputObj.refs.input.value;
+         }*/
       }else{
-        knowledge.copySubjects(knowledge.state.currentKnowlege,knowledge.state.schedule);
+        // alert("使用");
+        // alert(knowledge.state.currentKnowlege+"===:"+knowledge.state.schedule+",optType"+knowledge.state.optType);
+        if(knowledge.state.optType=="courseWare"){
+          knowledge.copyMaterialToSchedule(sessionStorage.getItem("ident"),knowledge.state.currentKnowlege,knowledge.state.schedule);
+        }else{
+          knowledge.copySubjects(knowledge.state.currentKnowlege,knowledge.state.schedule);
+        }
       }
     }
   },
@@ -99,7 +105,8 @@ const UseKnowledgeComponents = React.createClass({
         }
       },
       onError : function(error) {
-        alert(error);
+        // alert(error);
+        message.error(error);
       }
     });
   },
@@ -115,16 +122,19 @@ const UseKnowledgeComponents = React.createClass({
       onResponse : function(ret) {
         console.log(ret.msg);
         if(ret.msg=="调用成功" && ret.response==true){
-          alert("课件使用成功");
+          // alert("课件使用成功");
+          message.success("课件使用成功");
         }else{
-          alert("课件使用失败");
+          // alert("课件使用失败");
+          message.error("课件使用失败");
         }
         knowledge.setState({
           visible: false,
         });
       },
       onError : function(error) {
-        alert(error);
+        // alert(error);
+        message.error(error);
       }
     });
   },
@@ -139,16 +149,19 @@ const UseKnowledgeComponents = React.createClass({
       onResponse : function(ret) {
         console.log(ret.msg);
         if(ret.msg=="调用成功" && ret.response==true){
-          alert("题目使用成功");
+          // alert("题目使用成功");
+          message.success("题目使用成功");
         }else{
-          alert("题目使用失败");
+          // alert("题目使用失败");
+          message.error("题目使用失败");
         }
         knowledge.setState({
           visible: false,
         });
       },
       onError : function(error) {
-        alert(error);
+        // alert(error);
+        message.error(error);
       }
     });
   },
@@ -216,8 +229,13 @@ const UseKnowledgeComponents = React.createClass({
     var value = e;
     // alert("vvv:"+value);
     this.setState({
-      schedule: value,
+      schedule: value,isNewSchedule:false
     });
+    if(knowledge.state.currentKnowledgeState==true || knowledge.state.newScheduleState==true){
+      this.setState({isNewSchedule:true});
+    }else{
+      this.setState({isNewSchedule:false});
+    }
   },
 
   checkBoxOnChange(e) {
@@ -228,8 +246,8 @@ const UseKnowledgeComponents = React.createClass({
     // newScheduleState:false,
     var checkBoxValue = e.target.value;
     var inputObj = knowledge.refs.scheduleName;
-    var currentKnowledgeState;
-    var newScheduleState;
+    var currentKnowledgeState=false;
+    var newScheduleState=false;
     if(checkBoxValue=="currentKnowledge"){
       if(e.target.checked==true){
         currentKnowledgeState=true;
@@ -241,14 +259,16 @@ const UseKnowledgeComponents = React.createClass({
     }else{
       if(e.target.checked==true){
         newScheduleState=true;
+        knowledge.setState({inputState:false});
       }else{
         newScheduleState=false;
+        inputObj.refs.input.value="";
+        knowledge.setState({inputState:true});
       }
-      knowledge.setState({inputState:false});
     }
     knowledge.setState({currentKnowledgeState:currentKnowledgeState,newScheduleState:newScheduleState});
     if(currentKnowledgeState==true || newScheduleState==true){
-      knowledge.setState({isNewSchedule:true});
+      knowledge.setState({isNewSchedule:true,schedule:''});
     }else{
       knowledge.setState({isNewSchedule:false});
     }
@@ -278,11 +298,11 @@ const UseKnowledgeComponents = React.createClass({
                   {...formItemLayout}
                   label="备课计划"
               >
-                <Select defaultValue={knowledge.state.schedule} key="teachSchedule" style={{ width: '100%' }} ref="teachSchedule" onChange={this.handleSchedule}>
+                <Select defaultValue={knowledge.state.schedule} value={knowledge.state.schedule} key="teachSchedule" style={{ width: '100%' }} ref="teachSchedule" onChange={this.handleSchedule}>
                   {knowledge.state.selectOptions}
                 </Select>
                 <div>
-                  <Checkbox onChange={knowledge.checkBoxOnChange} value="currentKnowledge">使用当前知识点作为备课计划</Checkbox>
+                  <Checkbox onChange={knowledge.checkBoxOnChange} value="currentKnowledge">使用当前知识点名称作为备课计划名称</Checkbox>
                   <Checkbox onChange={knowledge.checkBoxOnChange} value="newSchedule">新建备课计划:<Input ref="scheduleName" disabled={this.state.inputState}/></Checkbox>
                 </div>
               </FormItem>

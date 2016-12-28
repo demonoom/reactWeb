@@ -480,9 +480,22 @@ function WordPasterManager(mgr)
 		img += "/>";
 
 		this.EditorContent = this.EditorContent.replace(srcOld, img);
-    this.Editor.setContent(this.EditorContent);
-		//this.Editor.SetData(this.EditorContent);
+    if(!this.isEmpty(UE.getEditor(UE.currentActiveEditorKey))){
+      UE.getEditor(UE.currentActiveEditorKey).setContent(this.EditorContent);
+    }else{
+      this.Editor.setContent(this.EditorContent);
+    }
+    // UE.getEditor(UE.currentActiveEditorKey).setContent(this.EditorContent);
 	};
+
+  //系统非空判断
+  this.isEmpty = function(content){
+    if(content==null || content=="" || typeof(content)=="undefined"){
+      return true;
+    }else{
+      return false;
+    }
+  }
 
 	/*
 		更新编辑器内容。
@@ -1543,7 +1556,7 @@ function PasterManager()
 		, "Parse": function() { }
 		, "IsWord": function()
 		{
-			return this.Com.WordParser_IsWord();
+      return this.Com.WordParser_IsWord();
 		}
 		, "IsExcel": function ()
 		{
@@ -1631,7 +1644,7 @@ function PasterManager()
     		this.Com.ImgPst_PostUrl = _this.Config["PostUrl"];
     		this.Com.ImgPst_EncodeType = _this.Config["EncodeType"];
     		this.Com.ImgPst_ImageType = _this.Config["PasteImageType"];
-    		this.Com.ImgPst_SetThumbSize(_this.Config["ThumbWidth"], _this.Config["ThumbHeight"]);
+    		// this.Com.ImgPst_SetThumbSize(_this.Config["ThumbWidth"], _this.Config["ThumbHeight"]);
     		//event
     		this.Com.ImgPst_OnComplete = this.OnComplete;
     		this.Com.ImgPst_OnConnected = this.OnConnected;
@@ -1801,8 +1814,9 @@ function PasterManager()
 	this.InsertHtml = function (html)
 	{
 	  console.log("returnHtml:"+html);
-		this.Editor.insertHtml(html);
-    //this.Editor.setContent(html,true);
+    // _this.ReplaceEditorImgTag(html);
+		// this.Editor.insertHtml(html);
+    // this.Editor.setContent(html);
 	};
 
 	//一般在FCKeditor_OnComplete()中调用

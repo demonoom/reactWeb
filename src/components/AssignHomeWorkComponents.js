@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Modal, Button } from 'antd';
+import { Modal, Button,message } from 'antd';
 import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox,Table,Popover } from 'antd';
 import { DatePicker } from 'antd';
 import { doWebService } from '../WebServiceHelper';
@@ -94,14 +94,16 @@ const AssignHomeWorkComponents = React.createClass({
     doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
         if(ret.msg=="调用成功" && ret.response==true){
-          alert("作业布置成功");
+          // alert("作业布置成功");
+          message.success("作业布置成功");
         }else{
-          alert("作业布置失败");
+          // alert("作业布置失败");
+          message.error("作业布置失败");
         }
         assignHomeWork.props.callbackParent();
       },
       onError : function(error) {
-        alert(error);
+        message.error(error);
       }
     });
   },
@@ -110,11 +112,14 @@ const AssignHomeWorkComponents = React.createClass({
     e.preventDefault();
     var ident=sessionStorage.getItem("ident");
     if(assignHomeWork.isEmpty(dateTime)){
-      alert("请选择日期");
+      // alert("请选择日期");
+      message.warning("请选择日期");
     }else if(assignHomeWork.isEmpty(clazzIds)){
-      alert("请选择班级");
+      // alert("请选择班级");
+      message.warning("请选择班级");
     }else if(assignHomeWork.isEmpty(sids)){
-      alert("请选择题目");
+      // alert("请选择题目");
+      message.warning("请选择题目");
     }else{
       assignHomeWork.publishHomeworkSubject(ident,sids,clazzIds,dateTime);
       //保存之后，将已选题目列表清空
@@ -183,7 +188,8 @@ const AssignHomeWorkComponents = React.createClass({
         assignHomeWork.setState({classList:classList});
       },
       onError : function(error) {
-        alert(error);
+        // alert(error);
+        message.error(error);
       }
     });
   },
@@ -224,7 +230,8 @@ const AssignHomeWorkComponents = React.createClass({
         assignHomeWork.setState({scheduleCount:scheduleData.length});
       },
       onError : function(error) {
-        alert(error);
+        // alert(error);
+        message.error(error);
       }
     });
   },
@@ -315,7 +322,8 @@ const AssignHomeWorkComponents = React.createClass({
         });
       },
       onError : function(error) {
-        alert(error);
+        // alert(error);
+        message.error(error);
       }
 
     });
@@ -350,7 +358,8 @@ const AssignHomeWorkComponents = React.createClass({
   //移除所有已选择的题目
   removeAllSelectedSubject(){
     if(assignHomeWork.state.checkedList.length==0){
-      alert("请选择题目后，再删除！");
+      // alert("请选择题目后，再删除！");
+      message.warning("请选择题目后，再删除！");
     }else{
       sids="";
       if(assignHomeWork.state.checkAll==true){

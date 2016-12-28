@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Card, Checkbox,Collapse,Icon,Button,Pagination} from 'antd';
+import { Card, Checkbox,Collapse,Icon,Button,Pagination,message} from 'antd';
 import UseKnowledgeComponents from './UseKnowledgeComponents';
 import { doWebService } from '../WebServiceHelper';
 const Panel = Collapse.Panel;
@@ -32,7 +32,8 @@ const CourseWareComponents = React.createClass({
             ident:'',
             teachScheduleId:'',
             optType:'',
-            knowledgeName:''
+            knowledgeName:'',
+            dataFilter:'self'
         };
     },
 
@@ -50,7 +51,8 @@ const CourseWareComponents = React.createClass({
             ident:ident,
             teachScheduleId:teachScheduleId,
             optType:optType,
-            knowledgeName:knowledgeName
+            knowledgeName:knowledgeName,
+            dataFilter:dataFilter
         })
         var param;
         if(optType=="bySchedule"){
@@ -63,6 +65,7 @@ const CourseWareComponents = React.createClass({
                 onResponse : function(ret) {
                     console.log("teachMSG:"+ret.msg);
                     courseWareList=new Array();
+                    courseWareList.splice(0);
                     var response = ret.response;
                     response.forEach(function (e) {
                         var id = e.id;
@@ -102,7 +105,8 @@ const CourseWareComponents = React.createClass({
                     courseWare.setState({totalCount:parseInt(pager.pageCount)*15});
                 },
                 onError : function(error) {
-                    alert(error);
+                    // alert(error);
+                    message.error(error);
                 }
 
             });
@@ -124,6 +128,7 @@ const CourseWareComponents = React.createClass({
                 onResponse : function(ret) {
                     console.log("teachMSG:"+ret.msg);
                     courseWareList=new Array();
+                    courseWareList.splice(0);
                     var response = ret.response;
                     response.forEach(function (e) {
                         var id = e.id;
@@ -162,7 +167,8 @@ const CourseWareComponents = React.createClass({
                     courseWare.setState({totalCount:parseInt(pager.pageCount)*15});
                 },
                 onError : function(error) {
-                    alert(error);
+                    // alert(error);
+                    message.error(error);
                 }
 
             });
@@ -175,7 +181,7 @@ const CourseWareComponents = React.createClass({
 
     onChange(page) {
         console.log(page);
-        courseWare.getTeachPlans(courseWare.state.ident,courseWare.state.teachScheduleId,courseWare.state.optType,page)
+        courseWare.getTeachPlans(courseWare.state.ident,courseWare.state.teachScheduleId,courseWare.state.optType,page,courseWare.state.knowledgeName,courseWare.state.dataFilter);
         this.setState({
             currentPage: page,
         });
@@ -222,14 +228,17 @@ const CourseWareComponents = React.createClass({
                 onResponse : function(ret) {
                     console.log(ret.msg);
                     if(ret.msg=="调用成功" && ret.response==true){
-                        alert("课件删除成功");
+                        // alert("课件删除成功");
+                        message.success("课件删除成功");
                     }else{
-                        alert("课件删除失败");
+                        // alert("课件删除失败");
+                        message.error("课件删除失败");
                     }
                     courseWare.getTeachPlans(sessionStorage.getItem("ident"),courseWare.state.teachScheduleId,"bySchedule",courseWare.state.currentPage,courseWare.state.knowledgeName)
                 },
                 onError : function(error) {
-                    alert(error);
+                    // alert(error);
+                    message.error(error);
                 }
             });
         }
@@ -254,14 +263,17 @@ const CourseWareComponents = React.createClass({
                 onResponse : function(ret) {
                     console.log(ret.msg);
                     if(ret.msg=="调用成功" && ret.response==true){
-                        alert("课件删除成功");
+                        // alert("课件删除成功");
+                        message.success("课件删除成功");
                     }else{
-                        alert("课件删除失败");
+                        // alert("课件删除失败");
+                        message.error("课件删除失败");
                     }
                     courseWare.getTeachPlans(courseWare.state.ident,courseWare.state.teachScheduleId,courseWare.state.optType,1);
                 },
                 onError : function(error) {
-                    alert(error);
+                    // alert(error);
+                    message.error(error);
                 }
             });
         }
@@ -333,7 +345,7 @@ const CourseWareComponents = React.createClass({
                          <span className="col1">创建人：{e[2]}</span>
                          <span className="col1">上传时间：{e[7]}</span>
                          <span className="col1">点赞次数：{e[11]}</span>
-                      </div>       
+                      </div>
 
                             <div className="bnt2_right">
                                 {/*<Button value={e.sid} onClick="" className="right_ri">引用微课</Button>*/}
