@@ -66,6 +66,7 @@ const SUbjectTable = React.createClass({
       knowledgeName:'',
       currentPage:1,
       data:data,
+      subjectParams:''
     };
   },
   start() {
@@ -298,8 +299,10 @@ const SUbjectTable = React.createClass({
   initGetSubjectInfo:function (subjectParams,currentPageNo) {
     // alert("params in subjectTable:"+subTable.props.params);
     var subjectParamArray = subTable.props.params.split("#");
+    subTable.setState({subjectParams:subTable.props.params});
     if(subjectParams!=null && typeof(subjectParams)!="undefined" ){
       subjectParamArray = subjectParams.split("#");
+      subTable.setState({subjectParams:subjectParams});
     }
     var ident = subjectParamArray[0];
     var ScheduleOrSubjectId = subjectParamArray[1];
@@ -337,7 +340,7 @@ const SUbjectTable = React.createClass({
 
   pageOnChange(pageNo) {
     console.log(pageNo);
-    subTable.initGetSubjectInfo(pageNo);
+    subTable.initGetSubjectInfo(this.state.subjectParams,pageNo);
     this.setState({
       currentPage: pageNo,
     });
