@@ -21,38 +21,38 @@ const TabPane = Tabs.TabPane;
 
 /*滑动输入框数据范围定义*/
 const marks = {
-    1: '1',
-    2: '2',
-    3: '3',
-    4: '4',
-    5: '5',
-    6: '6',
-    7: {
-        style: {
-            color: 'red',
-        },
-        label: <strong></strong>,
+  1: '1',
+  2: '2',
+  3: '3',
+  4: '4',
+  5: '5',
+  6: '6',
+  7: {
+    style: {
+      color: 'red',
     },
+    label: <strong></strong>,
+  },
 };
 
 const props = {
-    name: 'file',
-    showUploadList: true,
-    // action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
-    action: 'http://www.maaee.com/Excoord_Upload_Server/file/upload',
-    beforeUpload(file) {
-        data:{file}
-    },
-    onChange(info) {
-        if (info.file.status !== 'uploading') {
-            console.log(info.file, info.fileList);
-        }
-        if (info.file.status === 'done') {
-            message.success(`${info.file.name} file uploaded successfully.`);
-        } else if (info.file.status === 'error') {
-            message.error(`${info.file.name} file upload failed.`);
-        }
-    },
+  name: 'file',
+  showUploadList: true,
+  // action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
+  action: 'http://www.maaee.com/Excoord_Upload_Server/file/upload',
+  beforeUpload(file) {
+    data:{file}
+  },
+  onChange(info) {
+    if (info.file.status !== 'uploading') {
+      console.log(info.file, info.fileList);
+    }
+    if (info.file.status === 'done') {
+      message.success(`${info.file.name} file uploaded successfully.`);
+    } else if (info.file.status === 'error') {
+      message.error(`${info.file.name} file upload failed.`);
+    }
+  },
 };
 var mulitiAnswer = new Array();
 // var data=new Array();
@@ -60,768 +60,791 @@ var uploadFileList=[];
 
 var subjectUpload;
 const SubjectUploadTabComponents = Form.create()(React.createClass({
-    getInitialState() {
-        subjectUpload = this;
-        return {
-            loading: false,
-            visible: false,
-            activeKey: '单选题',
-            markSelected:6,
-            score:1,
-            subjectName:'',
-            singleAnswer:'A',
-            scoreChecked:false,
-            scoreInputState:true,
-            scoreDisable:false,
-            mulitiAnswerDefaultValue:['A'],
-            correctAnswerValue:"正确",
-            useSameScheduleForSingle:true,
-            useSameScheduleForMSelect:true,
-            useSameScheduleForCorrect:true,
-            useSameScheduleForSimpleAnswer:true,
-        };
-    },
-    showModal() {
-        this.setState({
-            visible: true,
-        });
-    },
-    handleOk() {
-        this.setState({ visible: false });
-    },
-    handleCancel() {
-      this.setState({ visible: false });
-    },
-
-    handleEmail: function(val){
-        this.props.callbackParent(val);
-        //this.setState({lessonCount: val});
-    },
-
-    sliderOnChange(value) {
-        console.log("sliderValue:"+value)
-        this.setState({
-            markSelected: value,
-        });
-    },
-
-    selectHandleChange:function (value) {
-        console.log(`selected ${value}`);
-        this.setState({score:value});
-    },
-
-    //系统非空判断
-    isEmpty(content){
-        if(content==null || content=="" || typeof(content)=="undefined"){
-            return true;
-        }else{
-            return false;
-        }
-    },
-
-    initPage(){
-        this.setState({score:1});
+  getInitialState() {
+    subjectUpload = this;
+    return {
+      loading: false,
+      visible: false,
+      activeKey: '单选题',
+      markSelected:6,
+      score:1,
+      subjectName:'',
+      singleAnswer:'A',
+      scoreChecked:false,
+      scoreInputState:true,
+      scoreDisable:false,
+      mulitiAnswerDefaultValue:['A'],
+      correctAnswerValue:"正确",
+      useSameScheduleForSingle:true,
+      useSameScheduleForMSelect:true,
+      useSameScheduleForCorrect:true,
+      useSameScheduleForSimpleAnswer:true,
+    };
+  },
+  showModal() {
+    // pasterMgr.Init();
+    this.setState({
+      visible: true,
+    });
+  },
+  handleOk() {
+    this.setState({ visible: false });
+  },
+  editorsInit(){
+      if(this.state.activeKey=="单选题"){
         if(!this.isEmpty(UE.getEditor("singleContainer"))){
-            UE.getEditor("singleContainer").setContent("");
+          UE.getEditor("singleContainer").setContent('');
         }
+      }else if(this.state.activeKey=="多选题"){
         if(!this.isEmpty(UE.getEditor("muSelectContainer"))){
-            UE.getEditor("muSelectContainer").setContent("");
+          UE.getEditor("muSelectContainer").setContent('');
         }
+      }else if(this.state.activeKey=="判断题"){
         if(!this.isEmpty(UE.getEditor("correctContainer"))){
-            UE.getEditor("correctContainer").setContent("");
+          UE.getEditor("correctContainer").setContent('');
         }
+      }else if(this.state.activeKey=="简答题"){
         if(!this.isEmpty(UE.getEditor("simpleAnswerContainer"))){
-            UE.getEditor("simpleAnswerContainer").setContent("");
-        }
-        if(!this.isEmpty(this.refs.singleAnswer)){
-            this.refs.singleAnswer.state.value="A";
-        }
-        if(!this.isEmpty(this.refs.scoreDefined)){
-            this.refs.scoreDefined.refs.input.value="";
+          UE.getEditor("simpleAnswerContainer").setContent('');
         }
         if(!this.isEmpty(UE.getEditor("answerContainer"))){
-            UE.getEditor("answerContainer").setContent("");
+          UE.getEditor("answerContainer").setContent('');
         }
-        this.setState({scoreChecked:false,scoreInputState:true,scoreDisable:false,mulitiAnswerDefaultValue:['A'],correctAnswerValue:"正确"});
-    },
+      }
+  },
+  handleCancel() {
+    /*var editorBodyArray = document.getElementsByTagName("body");
+    for(var i =0;i<editorBodyArray.length;i++){
+      if(editorBodyArray[i].className=="view"){
+        editorBodyArray[i].innerHTML="";
+      }
+    }*/
+    this.setState({ visible: false });
+    this.editorsInit();
+    pasterMgr.Init();
+    pasterMgr.Config["PostUrl"] = "http://www.maaee.com/Excoord_For_Education/manage/subject/subject_upload.jsp";
+    //subjectUpload.initPage();
+    // UE.getEditor("singleContainer").reset();
 
-    //新增题目到知识点下
-    saveSubject(batchAddSubjectBeanJson,knowledgeName,isLinkToSchedule){
-        var param = {
-            "method":'batchAddSubjects',
-            "batchAddSubjectBeanJson":[batchAddSubjectBeanJson],
-        };
-        doWebService(JSON.stringify(param), {
-            onResponse : function(ret) {
-                console.log(ret.msg);
-                if(ret.msg=="调用成功" && ret.success==true){
-                    if(isLinkToSchedule==true){
-                        var subjectsIds = ret.response[0];
-                        var userId = sessionStorage.getItem("ident");
-                        subjectUpload.teachScheduleInfo(userId,knowledgeName,subjectsIds);
-                    }else{
-                        // alert("题目添加成功");
-                        message.success("题目添加成功");
-                        subjectUpload.props.courseUploadCallBack();
-                    }
-                }else{
-                    // alert("题目添加失败");
-                    message.error("题目添加失败");
-                }
-            },
-            onError : function(error) {
-                // alert(error);
-                message.error(error);
-            }
-        });
-    },
+  },
 
-    //获取备课计划，如果没有会创建一个新的
-    teachScheduleInfo(userId,title,subjectsIds){
-        var param = {
-            "method":'getOrCreateTeachSchedule',
-            "userId":userId,
-            "title":title,
-        };
-        doWebService(JSON.stringify(param), {
-            onResponse : function(ret) {
-                console.log(ret.msg);
-                if(ret.msg=="调用成功" && ret.success==true){
-                    var scheduleId = ret.response.colTsId;
-                    subjectUpload.copySubjects(subjectsIds,scheduleId);
-                }
-            },
-            onError : function(error) {
-                // alert(error);
-                message.error(error);
-            }
-        });
-    },
+  handleEmail: function(val){
+    this.props.callbackParent(val);
+    //this.setState({lessonCount: val});
+  },
 
-    copySubjects(subjectsIds,scheduleId){
-        var param = {
-            "method":'copySubjects',
-            "subjectsIds":subjectsIds,
-            "teachScheduleId":scheduleId
-        };
-        doWebService(JSON.stringify(param), {
-            onResponse : function(ret) {
-                console.log(ret.msg);
-                if(ret.msg=="调用成功" && ret.response==true){
-                    // alert("题目添加成功");
-                    message.success("题目添加成功");
-                    subjectUpload.props.courseUploadCallBack();
-                }
-            },
-            onError : function(error) {
-                // alert(error);
-                message.error(error);
-            }
-        });
-    },
+  sliderOnChange(value) {
+    console.log("sliderValue:"+value)
+    this.setState({
+      markSelected: value,
+    });
+  },
 
-    //单选题新增
-    singleHandleSubmit(e) {
-        e.preventDefault();
-        var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
+  selectHandleChange:function (value) {
+    console.log(`selected ${value}`);
+    this.setState({score:value});
+  },
+
+  //系统非空判断
+  isEmpty(content){
+    if(content==null || content=="" || typeof(content)=="undefined"){
+      return true;
+    }else{
+      return false;
+    }
+  },
+
+  initPage(){
+    this.editorsInit();
+    this.setState({score:1});
+    if(!this.isEmpty(this.refs.singleAnswer)){
+      this.refs.singleAnswer.state.value="A";
+    }
+    if(!this.isEmpty(this.refs.scoreDefined)){
+      this.refs.scoreDefined.refs.input.value="";
+    }
+    this.setState({scoreChecked:false,scoreInputState:true,scoreDisable:false,mulitiAnswerDefaultValue:['A'],correctAnswerValue:"正确"});
+    pasterMgr.Init();
+    pasterMgr.Config["PostUrl"] = "http://www.maaee.com/Excoord_For_Education/manage/subject/subject_upload.jsp";
+  },
+
+  //新增题目到知识点下
+  saveSubject(batchAddSubjectBeanJson,knowledgeName,isLinkToSchedule){
+    var param = {
+      "method":'batchAddSubjects',
+      "batchAddSubjectBeanJson":[batchAddSubjectBeanJson],
+    };
+    doWebService(JSON.stringify(param), {
+      onResponse : function(ret) {
+        console.log(ret.msg);
+        if(ret.msg=="调用成功" && ret.success==true){
+          if(isLinkToSchedule==true){
+            var subjectsIds = ret.response[0];
+            var userId = sessionStorage.getItem("ident");
+            subjectUpload.teachScheduleInfo(userId,knowledgeName,subjectsIds);
+          }else{
+            // alert("题目添加成功");
+            message.success("题目添加成功");
+            subjectUpload.props.courseUploadCallBack();
+          }
         }else{
-            target = e.target;
+          // alert("题目添加失败");
+          message.error("题目添加失败");
         }
-        // data=[];
-        //获取当前点击的是哪个按钮
-        var currentButton = target.textContent;
-        // alert(currentButton);
-        var ident = sessionStorage.getItem("ident");
-        var score = this.state.score;
-        //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
-        if(this.state.scoreDisable==true){
-            score =this.refs.scoreDefined.refs.input.value;
+      },
+      onError : function(error) {
+        // alert(error);
+        message.error(error);
+      }
+    });
+  },
+
+  //获取备课计划，如果没有会创建一个新的
+  teachScheduleInfo(userId,title,subjectsIds){
+    var param = {
+      "method":'getOrCreateTeachSchedule',
+      "userId":userId,
+      "title":title,
+    };
+    doWebService(JSON.stringify(param), {
+      onResponse : function(ret) {
+        console.log(ret.msg);
+        if(ret.msg=="调用成功" && ret.success==true){
+          var scheduleId = ret.response.colTsId;
+          subjectUpload.copySubjects(subjectsIds,scheduleId);
         }
-        var subjectName = UE.getEditor("singleContainer").getContent();
-        subjectName = subjectName.replace(/\+/g,"%2B"); //将+号替换为十六进制
-        console.log("richContent:"+subjectName);
-        // var subjectName = values.subjectName;
-        var answer = this.state.singleAnswer;
-        // alert("params:"+this.props.params);
-        var subjectParamArray = this.props.params.split("#");
-        var ident = subjectParamArray[0];
-        var ScheduleOrSubjectId = subjectParamArray[1];
-        var optType = subjectParamArray[3];
-        var knowledgeName = subjectParamArray[4];
-        var isLinkToSchedule=this.state.useSameScheduleForSingle;
-        // alert("knowledgeName:"+knowledgeName+"\t"+isLinkToSchedule);
-        //完成基础的非空验证
-        if(this.isEmpty(subjectName)){
-            // alert("请输入题目");
-            message.warning("请输入题目");
-        }else if(this.isEmpty(answer)){
-            // alert("请输入答案");
-            message.warning("请输入答案");
-        }else if(this.isEmpty(score) || score==0){
-            // alert("请选择分值");
-            message.warning("请选择分值");
-        }else{
-            var batchAddSubjectBeanJson={"textTigan":subjectName,"textAnswer":answer,"score":score,"userId":ident,"type":"C"};
-            if(optType=="bySubjectId"){
-                batchAddSubjectBeanJson.knowledgePointId=ScheduleOrSubjectId;
-            }
-            //完成题目的新增操作
-            this.saveSubject(batchAddSubjectBeanJson,knowledgeName,isLinkToSchedule);
-            if(currentButton=="保存并返回列表"){
-                //关闭并返回题目列表页面
-                this.setState({ visible: false,score:1});
-            }
-            //重新初始化页面
-            this.initPage();
+      },
+      onError : function(error) {
+        // alert(error);
+        message.error(error);
+      }
+    });
+  },
+
+  copySubjects(subjectsIds,scheduleId){
+    var param = {
+      "method":'copySubjects',
+      "subjectsIds":subjectsIds,
+      "teachScheduleId":scheduleId
+    };
+    doWebService(JSON.stringify(param), {
+      onResponse : function(ret) {
+        console.log(ret.msg);
+        if(ret.msg=="调用成功" && ret.response==true){
+          // alert("题目添加成功");
+          message.success("题目添加成功");
+          subjectUpload.props.courseUploadCallBack();
         }
-    },
-    //多选题新增
-    MulitiHandleSubmit(e) {
-        e.preventDefault();
-        var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
-            target = e.target;
+      },
+      onError : function(error) {
+        // alert(error);
+        message.error(error);
+      }
+    });
+  },
+
+  //单选题新增
+  singleHandleSubmit(e) {
+    e.preventDefault();
+    var target = e.target;
+    if(navigator.userAgent.indexOf("Chrome") > -1){
+      target=e.currentTarget;
+    }else{
+      target = e.target;
+    }
+    // data=[];
+    //获取当前点击的是哪个按钮
+    var currentButton = target.textContent;
+    // alert(currentButton);
+    var ident = sessionStorage.getItem("ident");
+    var score = this.state.score;
+    //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
+    if(this.state.scoreDisable==true){
+      score =this.refs.scoreDefined.refs.input.value;
+    }
+    var subjectName = UE.getEditor("singleContainer").getContent();
+    subjectName = subjectName.replace(/\+/g,"%2B"); //将+号替换为十六进制
+    console.log("richContent:"+subjectName);
+    // var subjectName = values.subjectName;
+    var answer = this.state.singleAnswer;
+    // alert("params:"+this.props.params);
+    var subjectParamArray = this.props.params.split("#");
+    var ident = subjectParamArray[0];
+    var ScheduleOrSubjectId = subjectParamArray[1];
+    var optType = subjectParamArray[3];
+    var knowledgeName = subjectParamArray[4];
+    var isLinkToSchedule=this.state.useSameScheduleForSingle;
+    // alert("knowledgeName:"+knowledgeName+"\t"+isLinkToSchedule);
+    //完成基础的非空验证
+    if(this.isEmpty(subjectName)){
+      // alert("请输入题目");
+      message.warning("请输入题目");
+    }else if(this.isEmpty(answer)){
+      // alert("请输入答案");
+      message.warning("请输入答案");
+    }else if(this.isEmpty(score) || score==0){
+      // alert("请选择分值");
+      message.warning("请选择分值");
+    }else{
+      var batchAddSubjectBeanJson={"textTigan":subjectName,"textAnswer":answer,"score":score,"userId":ident,"type":"C"};
+      if(optType=="bySubjectId"){
+        batchAddSubjectBeanJson.knowledgePointId=ScheduleOrSubjectId;
+      }
+      //完成题目的新增操作
+      this.saveSubject(batchAddSubjectBeanJson,knowledgeName,isLinkToSchedule);
+      if(currentButton=="保存并返回列表"){
+        //关闭并返回题目列表页面
+        this.setState({ visible: false,score:1});
+      }
+      //重新初始化页面
+      this.initPage();
+    }
+  },
+  //多选题新增
+  MulitiHandleSubmit(e) {
+    e.preventDefault();
+    var target = e.target;
+    if(navigator.userAgent.indexOf("Chrome") > -1){
+      target=e.currentTarget;
+    }else{
+      target = e.target;
+    }
+    // data=[];
+    //获取当前点击的是哪个按钮
+    var currentButton = target.textContent;
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      var ident = sessionStorage.getItem("ident");
+      var score = this.state.score;
+      //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
+      if(this.state.scoreDisable==true){
+        score =this.refs.scoreDefined.refs.input.value;
+      }
+      var subjectName = UE.getEditor("muSelectContainer").getContent();
+      subjectName = subjectName.replace(/\+/g,"%2B"); //将+号替换为十六进制
+      var answer = mulitiAnswer;
+      var subjectParamArray = this.props.params.split("#");
+      var ident = subjectParamArray[0];
+      var ScheduleOrSubjectId = subjectParamArray[1];
+      var optType = subjectParamArray[3];
+      var knowledgeName = subjectParamArray[4];
+      var isLinkToSchedule=this.state.useSameScheduleForMSelect;
+      var batchAddSubjectBeanJson={"textTigan":subjectName,"textAnswer":mulitiAnswer,"score":score,"userId":ident,"type":"MC"};
+      if(optType=="bySubjectId"){
+        batchAddSubjectBeanJson.knowledgePointId=ScheduleOrSubjectId;
+      }
+      //完成基础的非空验证
+      if(this.isEmpty(subjectName)){
+        // alert("请输入题目");
+        message.warning("请输入题目");
+      }else if(this.isEmpty(answer)){
+        // alert("请输入答案");
+        message.warning("请输入答案");
+      }else if(this.isEmpty(score) || score==0){
+        // alert("请选择分值");
+        message.warning("请选择分值");
+      }else{
+        this.saveSubject(batchAddSubjectBeanJson,knowledgeName,isLinkToSchedule);
+        if(currentButton=="保存并返回列表"){
+          //关闭并返回题目列表页面
+          this.setState({ visible: false,score:1});
         }
-        // data=[];
-        //获取当前点击的是哪个按钮
-        var currentButton = target.textContent;
-        this.props.form.validateFieldsAndScroll((err, values) => {
-            var ident = sessionStorage.getItem("ident");
-            var score = this.state.score;
-            //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
-            if(this.state.scoreDisable==true){
-                score =this.refs.scoreDefined.refs.input.value;
-            }
-            var subjectName = UE.getEditor("muSelectContainer").getContent();
-            subjectName = subjectName.replace(/\+/g,"%2B"); //将+号替换为十六进制
-            var answer = mulitiAnswer;
-            var subjectParamArray = this.props.params.split("#");
-            var ident = subjectParamArray[0];
-            var ScheduleOrSubjectId = subjectParamArray[1];
-            var optType = subjectParamArray[3];
-            var knowledgeName = subjectParamArray[4];
-            var isLinkToSchedule=this.state.useSameScheduleForMSelect;
-            var batchAddSubjectBeanJson={"textTigan":subjectName,"textAnswer":mulitiAnswer,"score":score,"userId":ident,"type":"MC"};
-            if(optType=="bySubjectId"){
-                batchAddSubjectBeanJson.knowledgePointId=ScheduleOrSubjectId;
-            }
-            //完成基础的非空验证
-            if(this.isEmpty(subjectName)){
-                // alert("请输入题目");
-                message.warning("请输入题目");
-            }else if(this.isEmpty(answer)){
-                // alert("请输入答案");
-                message.warning("请输入答案");
-            }else if(this.isEmpty(score) || score==0){
-                // alert("请选择分值");
-                message.warning("请选择分值");
-            }else{
-                this.saveSubject(batchAddSubjectBeanJson,knowledgeName,isLinkToSchedule);
-                if(currentButton=="保存并返回列表"){
-                    //关闭并返回题目列表页面
-                    this.setState({ visible: false,score:1});
-                }
-            }
-            //重新初始化页面
-            this.initPage();
-        });
-    },
-    //判断题新增
-    correctHandleSubmit(e) {
-        e.preventDefault();
-        var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
-            target = e.target;
+      }
+      //重新初始化页面
+      this.initPage();
+    });
+  },
+  //判断题新增
+  correctHandleSubmit(e) {
+    e.preventDefault();
+    var target = e.target;
+    if(navigator.userAgent.indexOf("Chrome") > -1){
+      target=e.currentTarget;
+    }else{
+      target = e.target;
+    }
+    // data=[];
+    //获取当前点击的是哪个按钮
+    var currentButton = target.textContent;
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      var ident = sessionStorage.getItem("ident");
+      var easy = this.state.markSelected;
+      var score = this.state.score;
+      //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
+      if(this.state.scoreDisable==true){
+        score =this.refs.scoreDefined.refs.input.value;
+      }
+      var subjectName = UE.getEditor("correctContainer").getContent();
+      subjectName = subjectName.replace(/\+/g,"%2B"); //将+号替换为十六进制
+      var answer = this.state.correctAnswerValue;
+      var subjectParamArray = this.props.params.split("#");
+      var ident = subjectParamArray[0];
+      var ScheduleOrSubjectId = subjectParamArray[1];
+      var optType = subjectParamArray[3];
+      var knowledgeName = subjectParamArray[4];
+      var isLinkToSchedule=this.state.useSameScheduleForCorrect;
+      var batchAddSubjectBeanJson={"textTigan":subjectName,"textAnswer":answer,"score":score,"userId":ident,"type":"J"};
+      if(optType=="bySubjectId"){
+        batchAddSubjectBeanJson.knowledgePointId=ScheduleOrSubjectId;
+      }
+      //完成基础的非空验证
+      if(this.isEmpty(subjectName)){
+        // alert("请输入题目");
+        message.warning("请输入题目");
+      }else if(this.isEmpty(answer)){
+        // alert("请输入答案");
+        message.warning("请输入答案");
+      }else if(this.isEmpty(score) || score==0){
+        // alert("请选择分值");
+        message.warning("请选择分值");
+      }else {
+        this.saveSubject(batchAddSubjectBeanJson,knowledgeName,isLinkToSchedule);
+        if(currentButton=="保存并返回列表"){
+          //关闭并返回题目列表页面
+          this.setState({ visible: false,score:1});
         }
-        // data=[];
-        //获取当前点击的是哪个按钮
-        var currentButton = target.textContent;
-        this.props.form.validateFieldsAndScroll((err, values) => {
-            var ident = sessionStorage.getItem("ident");
-            var easy = this.state.markSelected;
-            var score = this.state.score;
-            //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
-            if(this.state.scoreDisable==true){
-                score =this.refs.scoreDefined.refs.input.value;
-            }
-            var subjectName = UE.getEditor("correctContainer").getContent();
-            subjectName = subjectName.replace(/\+/g,"%2B"); //将+号替换为十六进制
-            var answer = this.state.correctAnswerValue;
-            var subjectParamArray = this.props.params.split("#");
-            var ident = subjectParamArray[0];
-            var ScheduleOrSubjectId = subjectParamArray[1];
-            var optType = subjectParamArray[3];
-            var knowledgeName = subjectParamArray[4];
-            var isLinkToSchedule=this.state.useSameScheduleForCorrect;
-            var batchAddSubjectBeanJson={"textTigan":subjectName,"textAnswer":answer,"score":score,"userId":ident,"type":"J"};
-            if(optType=="bySubjectId"){
-                batchAddSubjectBeanJson.knowledgePointId=ScheduleOrSubjectId;
-            }
-            //完成基础的非空验证
-            if(this.isEmpty(subjectName)){
-                // alert("请输入题目");
-                message.warning("请输入题目");
-            }else if(this.isEmpty(answer)){
-                // alert("请输入答案");
-                message.warning("请输入答案");
-            }else if(this.isEmpty(score) || score==0){
-                // alert("请选择分值");
-                message.warning("请选择分值");
-            }else {
-                this.saveSubject(batchAddSubjectBeanJson,knowledgeName,isLinkToSchedule);
-                if(currentButton=="保存并返回列表"){
-                    //关闭并返回题目列表页面
-                    this.setState({ visible: false,score:1});
-                }
-            }
-            //重新初始化页面
-            this.initPage();
-        });
-    },
+      }
+      //重新初始化页面
+      this.initPage();
+    });
+  },
 
-    //简答题新增
-    simpleAnswerHandleSubmit(e) {
-        e.preventDefault();
-        var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
-            target = e.target;
+  //简答题新增
+  simpleAnswerHandleSubmit(e) {
+    e.preventDefault();
+    var target = e.target;
+    if(navigator.userAgent.indexOf("Chrome") > -1){
+      target=e.currentTarget;
+    }else{
+      target = e.target;
+    }
+    // data=[];
+    //获取当前点击的是哪个按钮
+    var currentButton = target.textContent;
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      var ident = sessionStorage.getItem("ident");
+      var easy = this.state.markSelected;
+      var score = this.state.score;
+      //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
+      if(this.state.scoreDisable==true){
+        score =this.refs.scoreDefined.refs.input.value;
+      }
+      var subjectName = UE.getEditor("simpleAnswerContainer").getContent();
+      subjectName = subjectName.replace(/\+/g,"%2B"); //将+号替换为十六进制
+      // var answer = this.refs.simpleAnswerInput.refs.input.value;
+      var answer = UE.getEditor("answerContainer").getContent();
+      answer = answer.replace(/\+/g,"%2B"); //将+号替换为十六进制
+      var subjectParamArray = this.props.params.split("#");
+      var ident = subjectParamArray[0];
+      var ScheduleOrSubjectId = subjectParamArray[1];
+      var optType = subjectParamArray[3];
+      var knowledgeName = subjectParamArray[4];
+      var isLinkToSchedule=this.state.useSameScheduleForSimpleAnswer;
+      var batchAddSubjectBeanJson={"textTigan":subjectName,"textAnswer":answer,"score":score,"userId":ident,"type":"S"};
+      if(optType=="bySubjectId"){
+        batchAddSubjectBeanJson.knowledgePointId=ScheduleOrSubjectId;
+      }
+      //完成基础的非空验证
+      if(this.isEmpty(subjectName)){
+        // alert("请输入题目");
+        message.warning("请输入题目");
+      }else if(this.isEmpty(answer)){
+        // alert("请输入答案");
+        message.warning("请输入答案");
+      }else if(this.isEmpty(score) || score==0){
+        // alert("请选择分值");
+        message.warning("请选择分值");
+      }else {
+        this.saveSubject(batchAddSubjectBeanJson,knowledgeName,isLinkToSchedule);
+        if(currentButton=="保存并返回列表"){
+          //关闭并返回题目列表页面
+          this.setState({ visible: false,score:1});
         }
-        // data=[];
-        //获取当前点击的是哪个按钮
-        var currentButton = target.textContent;
-        this.props.form.validateFieldsAndScroll((err, values) => {
-            var ident = sessionStorage.getItem("ident");
-            var easy = this.state.markSelected;
-            var score = this.state.score;
-            //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
-            if(this.state.scoreDisable==true){
-                score =this.refs.scoreDefined.refs.input.value;
-            }
-            var subjectName = UE.getEditor("simpleAnswerContainer").getContent();
-            subjectName = subjectName.replace(/\+/g,"%2B"); //将+号替换为十六进制
-            // var answer = this.refs.simpleAnswerInput.refs.input.value;
-            var answer = UE.getEditor("answerContainer").getContent();
-            answer = answer.replace(/\+/g,"%2B"); //将+号替换为十六进制
-            var subjectParamArray = this.props.params.split("#");
-            var ident = subjectParamArray[0];
-            var ScheduleOrSubjectId = subjectParamArray[1];
-            var optType = subjectParamArray[3];
-            var knowledgeName = subjectParamArray[4];
-            var isLinkToSchedule=this.state.useSameScheduleForSimpleAnswer;
-            var batchAddSubjectBeanJson={"textTigan":subjectName,"textAnswer":answer,"score":score,"userId":ident,"type":"S"};
-            if(optType=="bySubjectId"){
-                batchAddSubjectBeanJson.knowledgePointId=ScheduleOrSubjectId;
-            }
-            //完成基础的非空验证
-            if(this.isEmpty(subjectName)){
-                // alert("请输入题目");
-                message.warning("请输入题目");
-            }else if(this.isEmpty(answer)){
-                // alert("请输入答案");
-                message.warning("请输入答案");
-            }else if(this.isEmpty(score) || score==0){
-                // alert("请选择分值");
-                message.warning("请选择分值");
-            }else {
-                this.saveSubject(batchAddSubjectBeanJson,knowledgeName,isLinkToSchedule);
-                if(currentButton=="保存并返回列表"){
-                    //关闭并返回题目列表页面
-                    this.setState({ visible: false,score:1});
-                }
-            }
-            //重新初始化页面
-            this.initPage();
-        });
-    },
+      }
+      //重新初始化页面
+      this.initPage();
+    });
+  },
 
-    coverOnChange(info) {
-        if (info.file.status !== 'uploading') {
-            console.log(info.file, info.fileList);
+  coverOnChange(info) {
+    if (info.file.status !== 'uploading') {
+      console.log(info.file, info.fileList);
+    }
+    if (info.file.status === 'done') {
+      message.success(`${info.file.name} file uploaded successfully.`);
+    } else if (info.file.status === 'error') {
+      message.error(`${info.file.name} file upload failed.`);
+    }
+  },
+
+  addScore:function () {
+    var score = this.state.score;
+    var newScore = parseInt(score)+parseFloat(0.5);
+    console.log("newScore:"+newScore)
+    this.setState({score:newScore});
+  },
+
+  mulitiAnswerOnChange:function (checkedValues) {
+    mulitiAnswer=checkedValues;
+    this.setState({mulitiAnswerDefaultValue:checkedValues});
+  },
+
+  scoreSelectTypeOnChange(e){
+    var checkStatus = e.target.checked;
+    if(checkStatus==true){
+      this.setState({scoreInputState:false,scoreChecked:!this.state.scoreChecked,scoreDisable:true,score:1});
+    }else{
+      this.setState({scoreDisable:false,scoreInputState:true});
+    }
+    this.setState({scoreChecked:!this.state.scoreChecked});
+  },
+
+  correctAnswerOnChange(e){
+    this.setState({correctAnswerValue:e.target.value});
+  },
+
+  singleAnswerOnChange(e){
+    this.setState({singleAnswer:e.target.value});
+  },
+
+  handleFileSubmit(fileList){
+    // alert("已上传文件："+fileList.length);
+    for(var i=0;i<fileList.length;i++){
+      var fileJson = fileList[i];
+      var fileObj = fileJson.fileObj;
+      uploadFileList.push(fileObj[0]);
+    }
+  },
+
+  //点击保存按钮，文件上传
+  uploadFile(){
+    if(uploadFileList.length==0){
+      // alert("请选择上传的文件,谢谢！");
+      message.warning("请选择上传的文件,谢谢！");
+    }else{
+      var formData = new FormData();
+      formData.append("file",uploadFileList[0]);
+      formData.append("name",uploadFileList[0].name);
+      $.ajax({
+        type: "POST",
+        url: "http://101.201.45.125:8890/Excoord_Upload_Server/file/upload",
+        // url:"http://192.168.1.115:8890/Excoord_Upload_Server/file/upload",
+        enctype: 'multipart/form-data',
+        data: formData,
+        // 告诉jQuery不要去处理发送的数据
+        processData : false,
+        // 告诉jQuery不要去设置Content-Type请求头
+        contentType : false,
+        success: function (responseStr) {
+          if(responseStr!=""){
+            var fileUrl=responseStr;
+            this.addNormalMaterial(fileUrl,uploadFileList[0].name);
+            this.setState({ visible: false });
+          }
+        },
+        error : function(responseStr) {
+          console.log("error"+responseStr);
         }
-        if (info.file.status === 'done') {
-            message.success(`${info.file.name} file uploaded successfully.`);
-        } else if (info.file.status === 'error') {
-            message.error(`${info.file.name} file upload failed.`);
+      });
+    }
+  },
+
+  //材料题新增
+  materialHandleSubmit(e) {
+    e.preventDefault();
+    var target = e.target;
+    if(navigator.userAgent.indexOf("Chrome") > -1){
+      target=e.currentTarget;
+    }else{
+      target = e.target;
+    }
+    // data=[];
+    //获取当前点击的是哪个按钮
+    var currentButton = target.textContent;
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      var ident = sessionStorage.getItem("ident");
+      var score = this.state.score;
+      //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
+      if(this.state.scoreDisable==true){
+        score =this.refs.scoreDefined.refs.input.value;
+      }
+      var subjectName = UE.getEditor("singleContainer").getContent();
+      var answer = this.state.singleAnswer;
+      var subjectParamArray = this.props.params.split("#");
+      var ScheduleOrSubjectId = subjectParamArray[1];
+      var optType = subjectParamArray[3];
+      var batchAddSubjectBeanJson={"textTigan":subjectName,"textAnswer":answer,"score":score,"userId":ident,"type":"S"};
+      if(optType=="bySubjectId"){
+        batchAddSubjectBeanJson.knowledgePointId=ScheduleOrSubjectId;
+      }
+      //完成基础的非空验证
+      if(this.isEmpty(subjectName)){
+        // alert("请输入题目");
+        message.warning("请输入题目");
+      }else if(this.isEmpty(answer)){
+        // alert("请输入答案");
+        message.warning("请输入答案");
+      }else if(this.isEmpty(score) || score==0){
+        // alert("请选择分值");
+        message.warning("请选择分值");
+      }else {
+        //this.saveSubject(batchAddSubjectBeanJson);
+        if(currentButton=="保存并返回列表"){
+          //关闭并返回题目列表页面
+          this.setState({ visible: false,score:1});
         }
-    },
+      }
+      //重新初始化页面
+      this.initPage();
+    });
+  },
 
-    addScore:function () {
-        var score = this.state.score;
-        var newScore = parseInt(score)+parseFloat(0.5);
-        console.log("newScore:"+newScore)
-        this.setState({score:newScore});
-    },
+  tabOnChange(key) {
+    // alert(key);
+    // this.initPage();
+    this.setState({activeKey: key});
+  },
 
-    mulitiAnswerOnChange:function (checkedValues) {
-        mulitiAnswer=checkedValues;
-        this.setState({mulitiAnswerDefaultValue:checkedValues});
-    },
+  //useSameSchedule
+  checkBoxOnChangeForSingle(e) {
+    console.log(`checked = ${e.target.checked}`);
+    this.setState({useSameScheduleForSingle: e.target.checked});
+  },
 
-    scoreSelectTypeOnChange(e){
-        var checkStatus = e.target.checked;
-        if(checkStatus==true){
-            this.setState({scoreInputState:false,scoreChecked:!this.state.scoreChecked,scoreDisable:true,score:1});
-        }else{
-            this.setState({scoreDisable:false,scoreInputState:true});
-        }
-        this.setState({scoreChecked:!this.state.scoreChecked});
-    },
+  checkBoxOnChangeForMSelect(e) {
+    console.log(`checked = ${e.target.checked}`);
+    this.setState({useSameScheduleForMSelect: e.target.checked});
+  },
 
-    correctAnswerOnChange(e){
-        this.setState({correctAnswerValue:e.target.value});
-    },
+  checkBoxOnChangeForCorrect(e) {
+    console.log(`checked = ${e.target.checked}`);
+    this.setState({useSameScheduleForCorrect: e.target.checked});
+  },
 
-    singleAnswerOnChange(e){
-        this.setState({singleAnswer:e.target.value});
-    },
+  checkBoxOnChangeForSimpleAnswer(e) {
+    console.log(`checked = ${e.target.checked}`);
+    this.setState({useSameScheduleForSimpleAnswer: e.target.checked});
+  },
 
-    handleFileSubmit(fileList){
-        // alert("已上传文件："+fileList.length);
-        for(var i=0;i<fileList.length;i++){
-            var fileJson = fileList[i];
-            var fileObj = fileJson.fileObj;
-            uploadFileList.push(fileObj[0]);
-        }
-    },
+  render() {
+    const { getFieldDecorator } = this.props.form;
+    const formItemLayout = {
+      labelCol: { span: 3},
+      wrapperCol: { span: 20 },
+    };
 
-    //点击保存按钮，文件上传
-    uploadFile(){
-        if(uploadFileList.length==0){
-            // alert("请选择上传的文件,谢谢！");
-            message.warning("请选择上传的文件,谢谢！");
-        }else{
-            var formData = new FormData();
-            formData.append("file",uploadFileList[0]);
-            formData.append("name",uploadFileList[0].name);
-            $.ajax({
-                type: "POST",
-                url: "http://101.201.45.125:8890/Excoord_Upload_Server/file/upload",
-                // url:"http://192.168.1.115:8890/Excoord_Upload_Server/file/upload",
-                enctype: 'multipart/form-data',
-                data: formData,
-                // 告诉jQuery不要去处理发送的数据
-                processData : false,
-                // 告诉jQuery不要去设置Content-Type请求头
-                contentType : false,
-                success: function (responseStr) {
-                    if(responseStr!=""){
-                        var fileUrl=responseStr;
-                        this.addNormalMaterial(fileUrl,uploadFileList[0].name);
-                        this.setState({ visible: false });
-                    }
-                },
-                error : function(responseStr) {
-                    console.log("error"+responseStr);
-                }
-            });
-        }
-    },
+    const children = [];
+    for (let i = 1; i <=10; i++) {
+      children.push(<Option key={i} value={i}>{i}分</Option>);
+    };
 
-    //材料题新增
-    materialHandleSubmit(e) {
-        e.preventDefault();
-        var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
-            target = e.target;
-        }
-        // data=[];
-        //获取当前点击的是哪个按钮
-        var currentButton = target.textContent;
-        this.props.form.validateFieldsAndScroll((err, values) => {
-            var ident = sessionStorage.getItem("ident");
-            var score = this.state.score;
-            //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
-            if(this.state.scoreDisable==true){
-                score =this.refs.scoreDefined.refs.input.value;
-            }
-            var subjectName = UE.getEditor("singleContainer").getContent();
-            var answer = this.state.singleAnswer;
-            var subjectParamArray = this.props.params.split("#");
-            var ScheduleOrSubjectId = subjectParamArray[1];
-            var optType = subjectParamArray[3];
-            var batchAddSubjectBeanJson={"textTigan":subjectName,"textAnswer":answer,"score":score,"userId":ident,"type":"S"};
-            if(optType=="bySubjectId"){
-                batchAddSubjectBeanJson.knowledgePointId=ScheduleOrSubjectId;
-            }
-            //完成基础的非空验证
-            if(this.isEmpty(subjectName)){
-                // alert("请输入题目");
-                message.warning("请输入题目");
-            }else if(this.isEmpty(answer)){
-                // alert("请输入答案");
-                message.warning("请输入答案");
-            }else if(this.isEmpty(score) || score==0){
-                // alert("请选择分值");
-                message.warning("请选择分值");
-            }else {
-                //this.saveSubject(batchAddSubjectBeanJson);
-                if(currentButton=="保存并返回列表"){
-                    //关闭并返回题目列表页面
-                    this.setState({ visible: false,score:1});
-                }
-            }
-            //重新初始化页面
-            this.initPage();
-        });
-    },
+    const mulitiAnswerOptions = [
+      { label: 'A', value: 'A' },
+      { label: 'B', value: 'B' },
+      { label: 'C', value: 'C' },
+      { label: 'D', value: 'D' },
+      { label: 'E', value: 'E' },
+    ];
 
-    tabOnChange(key) {
-        // alert(key);
-        // this.initPage();
-        this.setState({activeKey: key});
-    },
+    const scoreItem=[];
+    scoreItem.push(<FormItem className="custom—top"
+                             {...formItemLayout}
+                             label={(<span>分值</span>)}
+                             hasFeedback>
+      {getFieldDecorator('score')(
+        <div>
+          <Row>
+            <Col span={6}>
+              {/*value={this.state.score}*/}
+              <Select  ref="scoreSelect" style={{ width: 100 }} disabled={this.state.scoreDisable} onChange={this.selectHandleChange}>
+                {children}
+              </Select>
+            </Col>
 
-    //useSameSchedule
-    checkBoxOnChangeForSingle(e) {
-        console.log(`checked = ${e.target.checked}`);
-        this.setState({useSameScheduleForSingle: e.target.checked});
-    },
+            <Col span={8} className="right_ri"><span><Input ref="scoreDefined" placeholder="请输入自定义分值" disabled={this.state.scoreInputState}  /></span></Col>
+            <Col span={6} className="right_ri custom—1"><Checkbox onChange={this.scoreSelectTypeOnChange} ref="scoreCheckBox" checked={this.state.scoreChecked} value="defined">自定义:</Checkbox></Col>
 
-    checkBoxOnChangeForMSelect(e) {
-        console.log(`checked = ${e.target.checked}`);
-        this.setState({useSameScheduleForMSelect: e.target.checked});
-    },
+          </Row>
+        </div>
+      )}
+    </FormItem>);
 
-    checkBoxOnChangeForCorrect(e) {
-        console.log(`checked = ${e.target.checked}`);
-        this.setState({useSameScheduleForCorrect: e.target.checked});
-    },
+    var currentActiveKey = this.state.activeKey;
+    var buttons =<div>
+      <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.singleHandleSubmit}>
+        保存并继续添加
+      </Button>
+      <Button type="ghost" htmlType="submit" className="login-form-button" onClick={this.singleHandleSubmit} >
+        保存并返回列表
+      </Button>
+    </div>;
+    if(currentActiveKey=="单选题"){
+      buttons =<div>
+        <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.singleHandleSubmit}>
+          保存并继续添加
+        </Button>
+        <Button type="ghost" htmlType="submit" className="login-form-button" onClick={this.singleHandleSubmit} >
+          保存并返回列表
+        </Button>
+      </div>;
+    }else if(currentActiveKey=="多选题"){
+      buttons =<div>
+        <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.MulitiHandleSubmit}>
+          保存并继续添加
+        </Button>
+        <Button type="ghost" htmlType="submit" className="login-form-button" onClick={this.MulitiHandleSubmit} >
+          保存并返回列表
+        </Button>
+      </div>;
+    }else if(currentActiveKey=="判断题"){
+      buttons =<div>
+        <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.correctHandleSubmit}>
+          保存并继续添加
+        </Button>
+        <Button type="ghost" htmlType="submit" className="login-form-button" onClick={this.correctHandleSubmit} >
+          保存并返回列表
+        </Button>
+      </div>;
+    }else if(currentActiveKey=="简答题"){
+      buttons =<div>
+        <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.simpleAnswerHandleSubmit}>
+          保存并继续添加
+        </Button>
+        <Button type="ghost" htmlType="submit" className="login-form-button" onClick={this.simpleAnswerHandleSubmit} >
+          保存并返回列表
+        </Button>
+      </div>;
+    }
 
-    checkBoxOnChangeForSimpleAnswer(e) {
-        console.log(`checked = ${e.target.checked}`);
-        this.setState({useSameScheduleForSimpleAnswer: e.target.checked});
-    },
-
-    render() {
-        const { getFieldDecorator } = this.props.form;
-        const formItemLayout = {
-            labelCol: { span: 3},
-            wrapperCol: { span: 20 },
-        };
-
-        const children = [];
-        for (let i = 1; i <=10; i++) {
-            children.push(<Option key={i} value={i}>{i}分</Option>);
-        };
-
-        const mulitiAnswerOptions = [
-            { label: 'A', value: 'A' },
-            { label: 'B', value: 'B' },
-            { label: 'C', value: 'C' },
-            { label: 'D', value: 'D' },
-            { label: 'E', value: 'E' },
-        ];
-
-        const scoreItem=[];
-        scoreItem.push(<FormItem className="custom—top"
-            {...formItemLayout}
-            label={(<span>分值</span>)}
-            hasFeedback>
-            {getFieldDecorator('score')(
-                <div>
-                    <Row>
-                        <Col span={6}>
-                            {/*value={this.state.score}*/}
-                            <Select  ref="scoreSelect" style={{ width: 100 }} disabled={this.state.scoreDisable} onChange={this.selectHandleChange}>
-                                {children}
-                            </Select>
-                        </Col>
-
-                        <Col span={8} className="right_ri"><span><Input ref="scoreDefined" placeholder="请输入自定义分值" disabled={this.state.scoreInputState}  /></span></Col>
-                        <Col span={6} className="right_ri custom—1"><Checkbox onChange={this.scoreSelectTypeOnChange} ref="scoreCheckBox" checked={this.state.scoreChecked} value="defined">自定义:</Checkbox></Col>
-
-                    </Row>
-                </div>
-            )}
-        </FormItem>);
-
-        var currentActiveKey = this.state.activeKey;
-        var buttons =<div>
-            <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.singleHandleSubmit}>
-                保存并继续添加
-            </Button>
-            <Button type="ghost" htmlType="submit" className="login-form-button" onClick={this.singleHandleSubmit} >
-                保存并返回列表
-            </Button>
-        </div>;
-        if(currentActiveKey=="单选题"){
-            buttons =<div>
-                <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.singleHandleSubmit}>
-                    保存并继续添加
-                </Button>
-                <Button type="ghost" htmlType="submit" className="login-form-button" onClick={this.singleHandleSubmit} >
-                    保存并返回列表
-                </Button>
-            </div>;
-        }else if(currentActiveKey=="多选题"){
-            buttons =<div>
-                <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.MulitiHandleSubmit}>
-                    保存并继续添加
-                </Button>
-                <Button type="ghost" htmlType="submit" className="login-form-button" onClick={this.MulitiHandleSubmit} >
-                    保存并返回列表
-                </Button>
-            </div>;
-        }else if(currentActiveKey=="判断题"){
-            buttons =<div>
-                <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.correctHandleSubmit}>
-                    保存并继续添加
-                </Button>
-                <Button type="ghost" htmlType="submit" className="login-form-button" onClick={this.correctHandleSubmit} >
-                    保存并返回列表
-                </Button>
-            </div>;
-        }else if(currentActiveKey=="简答题"){
-            buttons =<div>
-                <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.simpleAnswerHandleSubmit}>
-                    保存并继续添加
-                </Button>
-                <Button type="ghost" htmlType="submit" className="login-form-button" onClick={this.simpleAnswerHandleSubmit} >
-                    保存并返回列表
-                </Button>
-            </div>;
-        }
-
-        return (
-            <div className="toobar right_ri">
-                <Button  type="primary" icon="plus-circle" onClick={this.showModal} title="上传题目" className="add_study add_study-b">添加题目</Button>
-                <Modal
-                    visible={this.state.visible}
-                    title="添加题目"
-                    width="860px"
-					height="636px"
-                    className="ant-modal-width"
-                    onCancel={this.handleCancel}
-                    transitionName=""  //禁用modal的动画效果
-                    footer={[
-                        <div>
-                            {buttons}
-                        </div>
-                    ]}
-                >
-                    <Tabs
-                        hideAdd
-                        onChange={this.tabOnChange}
-                        defaultActiveKey={this.state.activeKey}
-                        onEdit={this.onEdit}
-                    >
-                        <TabPane tab="单选题" key="单选题">
-                            <Form horizontal className="ant-form-fo">
-                                <FormItem className="ant-form-word"
-                                    {...formItemLayout}
-                                    label={(<span>题目</span>)}
-                                    hasFeedback>
-                                    {getFieldDecorator('subjectName')(
-                                        <RichEditorComponents/>
-                                    )}
-                                </FormItem>
-                                <FormItem className="custom—top"
-                                    {...formItemLayout}
-                                    label={(<span>答案</span>)}
-                                    hasFeedback>
-                                    {getFieldDecorator('answer')(
-                                        <div>
-                                            <RadioGroup onChange={this.singleAnswerOnChange} ref="singleAnswer" defaultValue={this.state.singleAnswer}>
-                                                <Radio key="A" value="A">A</Radio>
-                                                <Radio key="B" value="B">B</Radio>
-                                                <Radio key="C" value="C">C</Radio>
-                                                <Radio key="D" value="D">D</Radio>
-                                                <Radio key="E" value="E">E</Radio>
-                                            </RadioGroup>
-                                        </div>
-                                    )}
-                                </FormItem>
-                                {scoreItem}
-                            </Form>
-                        </TabPane>
-                        <TabPane tab="多选题" key="多选题"><div>
-                            <Form horizontal className="ant-form-fo">
-                                <FormItem className="ant-form-word"
-                                    {...formItemLayout}
-                                    label={(<span>题目</span>)}
-                                    hasFeedback>
-                                    {getFieldDecorator('subjectNameM')(
-                                        <RichEditorComponentsForMuSelect/>
-                                    )}
-                                </FormItem>
-                                <FormItem className="custom—top"
-                                    {...formItemLayout}
-                                    label={(<span>答案</span>)}
-                                    hasFeedback>
-                                    {getFieldDecorator('mulitiAnswer')(
-                                        <div>
-                                            <CheckboxGroup options={mulitiAnswerOptions} defaultValue={this.state.mulitiAnswerDefaultValue} value={this.state.mulitiAnswerDefaultValue} onChange={this.mulitiAnswerOnChange} />
-                                        </div>
-                                    )}
-                                </FormItem>
-                                {scoreItem}
-                            </Form>
-                        </div></TabPane>
-                        <TabPane tab="判断题" key="判断题"><div>
-                            <Form horizontal className="ant-form-fo">
-                                <FormItem className="ant-form-word"
-                                    {...formItemLayout}
-                                    label={(<span>题目</span>)}
-                                    hasFeedback>
-                                    {getFieldDecorator('subjectNameM')(
-                                        <RichEditorComponentsForCorrect/>
-                                    )}
-                                </FormItem>
-                                <FormItem className="custom—top"
-                                    {...formItemLayout}
-                                    label={(<span>答案</span>)}
-                                    hasFeedback>
-                                    {getFieldDecorator('correctAnswer')(
-                                        <div>
-                                            <RadioGroup onChange={this.correctAnswerOnChange} defaultValue={this.state.correctAnswerValue} value={this.state.correctAnswerValue}>
-                                                <Radio key="正确" value="正确">正确</Radio>
-                                                <Radio key="错误" value="错误">错误</Radio>
-                                            </RadioGroup>
-                                        </div>
-                                    )}
-                                </FormItem>
-                                {scoreItem}
-                            </Form>
-                        </div></TabPane>
-                        <TabPane tab="简答题" key="简答题"><div>
-                            <Form horizontal className="ant-form-fo">
-                                <FormItem className="ant-form-word"
-                                    {...formItemLayout}
-                                    label={(<span>题目</span>)}
-                                    hasFeedback>
-                                    {getFieldDecorator('subjectNameM')(
-                                        <RichEditorComponentsForSimpleAnswer/>
-                                    )}
-                                </FormItem>
-                                <FormItem className="custom—top"
-                                    {...formItemLayout}
-                                    label={(<span>答案</span>)}
-                                    hasFeedback>
-                                    {getFieldDecorator('answer')(
-                                        <div>
-                                            {/*<Input type="textarea" ref="simpleAnswerInput"  defaultValue={this.state.simpleAnswerValue}  rows={4}  />*/}
-                                            <RichEditorComponentsForAnswer/>
-                                        </div>
-                                    )}
-                                </FormItem>
-                                {scoreItem}
-                            </Form>
-                        </div></TabPane>
-                    </Tabs>
-                </Modal>
+    return (
+      <div className="toobar right_ri">
+        <Button  type="primary" icon="plus-circle" onClick={this.showModal} title="上传题目" className="add_study add_study-b">添加题目</Button>
+        <Modal
+          visible={this.state.visible}
+          title="添加题目"
+          width="860px"
+          height="636px"
+          className="ant-modal-width"
+          onCancel={this.handleCancel}
+          transitionName=""  //禁用modal的动画效果
+          footer={[
+            <div>
+              {buttons}
             </div>
-        );
-    },
+          ]}
+        >
+          <Tabs
+            hideAdd
+            onChange={this.tabOnChange}
+            defaultActiveKey={this.state.activeKey}
+            onEdit={this.onEdit}
+          >
+            <TabPane tab="单选题" key="单选题">
+              <Form horizontal className="ant-form-fo">
+                <FormItem className="ant-form-word"
+                          {...formItemLayout}
+                          label={(<span>题目</span>)}
+                          hasFeedback>
+                  {getFieldDecorator('subjectName')(
+                    <RichEditorComponents/>
+                  )}
+                </FormItem>
+                <FormItem className="custom—top"
+                          {...formItemLayout}
+                          label={(<span>答案</span>)}
+                          hasFeedback>
+                  {getFieldDecorator('answer')(
+                    <div>
+                      <RadioGroup onChange={this.singleAnswerOnChange} ref="singleAnswer" defaultValue={this.state.singleAnswer}>
+                        <Radio key="A" value="A">A</Radio>
+                        <Radio key="B" value="B">B</Radio>
+                        <Radio key="C" value="C">C</Radio>
+                        <Radio key="D" value="D">D</Radio>
+                        <Radio key="E" value="E">E</Radio>
+                      </RadioGroup>
+                    </div>
+                  )}
+                </FormItem>
+                {scoreItem}
+              </Form>
+            </TabPane>
+            <TabPane tab="多选题" key="多选题"><div>
+              <Form horizontal className="ant-form-fo">
+                <FormItem className="ant-form-word"
+                          {...formItemLayout}
+                          label={(<span>题目</span>)}
+                          hasFeedback>
+                  {getFieldDecorator('subjectNameM')(
+                    <RichEditorComponentsForMuSelect/>
+                  )}
+                </FormItem>
+                <FormItem className="custom—top"
+                          {...formItemLayout}
+                          label={(<span>答案</span>)}
+                          hasFeedback>
+                  {getFieldDecorator('mulitiAnswer')(
+                    <div>
+                      <CheckboxGroup options={mulitiAnswerOptions} defaultValue={this.state.mulitiAnswerDefaultValue} value={this.state.mulitiAnswerDefaultValue} onChange={this.mulitiAnswerOnChange} />
+                    </div>
+                  )}
+                </FormItem>
+                {scoreItem}
+              </Form>
+            </div></TabPane>
+            <TabPane tab="判断题" key="判断题"><div>
+              <Form horizontal className="ant-form-fo">
+                <FormItem className="ant-form-word"
+                          {...formItemLayout}
+                          label={(<span>题目</span>)}
+                          hasFeedback>
+                  {getFieldDecorator('subjectNameM')(
+                    <RichEditorComponentsForCorrect/>
+                  )}
+                </FormItem>
+                <FormItem className="custom—top"
+                          {...formItemLayout}
+                          label={(<span>答案</span>)}
+                          hasFeedback>
+                  {getFieldDecorator('correctAnswer')(
+                    <div>
+                      <RadioGroup onChange={this.correctAnswerOnChange} defaultValue={this.state.correctAnswerValue} value={this.state.correctAnswerValue}>
+                        <Radio key="正确" value="正确">正确</Radio>
+                        <Radio key="错误" value="错误">错误</Radio>
+                      </RadioGroup>
+                    </div>
+                  )}
+                </FormItem>
+                {scoreItem}
+              </Form>
+            </div></TabPane>
+            <TabPane tab="简答题" key="简答题"><div>
+              <Form horizontal className="ant-form-fo">
+                <FormItem className="ant-form-word"
+                          {...formItemLayout}
+                          label={(<span>题目</span>)}
+                          hasFeedback>
+                  {getFieldDecorator('subjectNameM')(
+                    <RichEditorComponentsForSimpleAnswer/>
+                  )}
+                </FormItem>
+                <FormItem className="custom—top"
+                          {...formItemLayout}
+                          label={(<span>答案</span>)}
+                          hasFeedback>
+                  {getFieldDecorator('answer')(
+                    <div>
+                      {/*<Input type="textarea" ref="simpleAnswerInput"  defaultValue={this.state.simpleAnswerValue}  rows={4}  />*/}
+                      <RichEditorComponentsForAnswer/>
+                    </div>
+                  )}
+                </FormItem>
+                {scoreItem}
+              </Form>
+            </div></TabPane>
+          </Tabs>
+        </Modal>
+      </div>
+    );
+  },
 }));
 
 export default SubjectUploadTabComponents;

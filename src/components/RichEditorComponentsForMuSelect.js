@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react';
 import { WordPasterManager } from '../../ueditor/WordPaster/js/WordPaster';
-
+var editor;
 var RichEditorComponentsForMuSelect = React.createClass({
   componentDidMount(){
-    var editor = UE.getEditor("muSelectContainer", {
+    editor = UE.getEditor("muSelectContainer", {
       //工具栏
       toolbars: [[
         'undo', 'redo', '|',
@@ -67,9 +67,28 @@ var RichEditorComponentsForMuSelect = React.createClass({
       var value = me.props.value?me.props.value:'<p></p>';
       editor.setContent(value);
       // pasterMgr.SetEditor(editor);
+      if(pasterMgr==null || typeof (pasterMgr)=="undefined"){
+        pasterMgr = new PasterManager();
+        pasterMgr.Config["PostUrl"] = "http://www.maaee.com/Excoord_For_Education/manage/subject/subject_upload.jsp";
+      }
       pasterMgr.Init(editor);
     });
 
+  },
+
+/*  componentWillMount(){
+    console.log("多选componentWillMount");
+    if(editor==null || typeof(editor)=="undefined" ){
+      editor = new UE.Editor();
+      editor.render("muSelectContainer");
+      pasterMgr.Init(editor);
+    }
+  },*/
+
+  componentWillUnmount(){
+    console.log("多选unmount");
+    //React.unmountComponentAtNode(document.getElementById("singleContainer"));
+    UE.getEditor("muSelectContainer").destroy();
   },
 
   render : function(){

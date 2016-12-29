@@ -24,6 +24,12 @@ var WordPasterError = {
 	, "10": "下载网络文件失败"
 };
 
+var oldLocalImg;
+var oldLocalImgWidth;
+var oldLocalImgHeight;
+var oldEditorContent;
+var serverReturnPath;
+
 //DAFB3AE12494FA2E2891238FC22E46AFA6437200A018115574E842DDC2B44DC4D47A0C6492B3C54F41ECC0C129 为  192.168.1.100的一周授权码
 //DAFB3AE12494FA2E2891238FC22E46AFA6437200A018115574E842DDC2B54DC7985CE21F401DC44F50E52B8CAE 为  192.168.0.216的一周授权码
 //DAFB3AE12494FA2E2891238FC22E46AFA6437200A018115574E842DDC2B54DC7985CE21F401DC44F50E62B8EA7 为  192.168.0.216的50天授权码
@@ -94,7 +100,7 @@ function WordPasterManager(mgr)
 	this.WordParser.Init();
 	this.OpenDialog = mgr.OpenUploadFileDialog;
 	this.CloseDialog = mgr.CloseUploadFileDialog;
-	this.InsertHtml = mgr.InsertHtml;
+	// this.InsertHtml = mgr.InsertHtml;
 
 	this.EditorContent = ""; //编辑器内容。当图片上传完后需要更新此变量值
 	this.Editor = null; //编辑器
@@ -151,7 +157,8 @@ function WordPasterManager(mgr)
 	{
     serverPathStr = serverPathStr.replace(/(^\s*)|(\s*$)/g, "");
     console.log("serverPath:"+serverPathStr);
-		this.UploadCompleteImage.push({ localPath: localPathStr, serverPath: serverPathStr });
+    serverReturnPath = serverPathStr;
+		//this.UploadCompleteImage.push({ localPath: localPathStr, serverPath: serverPathStr });
 	};
 
 	//清空已完成列表，关闭图片上传对话框时调用
@@ -236,7 +243,38 @@ function WordPasterManager(mgr)
 		//有图片
 		if (this.WordParser.GetImages())
 		{
-			this.OpenDialog();
+			// this.OpenDialog();
+      oldEditorContent = this.EditorContent;
+      var startPoint = this.EditorContent.indexOf("<img");
+      var stopPoint = this.EditorContent.substring(startPoint).indexOf("/>");
+      var imgHtml = this.EditorContent.substring(startPoint).substring(0,stopPoint+2);
+      oldLocalImg= imgHtml;
+      // imgPath,imgHtml,width,height
+      var srcReg = /src=\"([^\"]*?)\"/i;
+      var arr = imgHtml.match(srcReg);
+      var src;
+      if (arr != undefined && arr.length > 0) {
+        var fileSrc = arr[1];
+        var startStr = "file:///";
+        var filePoint = fileSrc.indexOf(startStr);
+        src = fileSrc.substring(startStr.length);
+      }
+      var widthReg = /width=\"?(\d*)\"/i;
+      var widthArr = imgHtml.match(widthReg);
+      var width;
+      if (widthArr != undefined && widthArr.length > 0) {
+        width = widthArr[1];
+      }
+      oldLocalImgWidth = width ;
+      var heightReg = /height=\"?(\d*)\"/i;
+      var heightArr = imgHtml.match(heightReg);
+      var height;
+      if (heightArr != undefined && heightArr.length > 0) {
+        height = heightArr[1];
+      }
+      oldLocalImgHeight = height;
+      // this.AddFile(src, imgHtml, width, height);
+      this.AddLocalFile(src);
 			this.PostFirst();
 		} //没有图片
 		else
@@ -478,12 +516,19 @@ function WordPasterManager(mgr)
 			img += " style=\"" + RegExp.$1 + "\" ";
 		}
 		img += "/>";
-
-		this.EditorContent = this.EditorContent.replace(srcOld, img);
+    var srcNewUrl = srcNew.replace(/(^\s*)|(\s*$)/g, "");
+    if(oldEditorContent.indexOf(srcNewUrl)!=-1){
+      var replactImg = "<img src=\""+srcNewUrl+"\"/>";
+      // var replactImg = '<img src="' + srcNewUrl + '"/>';
+      oldEditorContent = oldEditorContent.replace(replactImg, " ");
+    }
+    oldEditorContent = oldEditorContent.replace(srcOld, img);
     if(!this.isEmpty(UE.getEditor(UE.currentActiveEditorKey))){
-      UE.getEditor(UE.currentActiveEditorKey).setContent(this.EditorContent);
+      UE.getEditor(UE.currentActiveEditorKey).setContent(oldEditorContent,false);
+      return;
     }else{
-      this.Editor.setContent(this.EditorContent);
+      this.Editor.setContent(oldEditorContent,false);
+      return;
     }
     // UE.getEditor(UE.currentActiveEditorKey).setContent(this.EditorContent);
 	};
@@ -504,7 +549,7 @@ function WordPasterManager(mgr)
 	*/
 	this.UpdateContent = function ()
 	{
-		this.InsertHtml(this.EditorContent);
+		// this.InsertHtml(this.EditorContent);
 	};
 
 	//更新网络图片
@@ -891,7 +936,7 @@ function FileUploader(fileID,filePath,mgr,width,height)
 	// this.ActiveX = mgr.ActiveX;
 	this.Fields = mgr.Fields;
 	this.Browser = mgr.Browser;
-	this.InsertHtml = mgr.InsertHtml;
+	// this.InsertHtml = mgr.InsertHtml;
 	this.UploaderPool = mgr.UploaderPool;
 	this.UploaderPoolFF = mgr.UploaderPoolFF;
 
@@ -1021,7 +1066,7 @@ function FileUploader(fileID,filePath,mgr,width,height)
 		}
 		,"SetImageType":function(tp)
 		{
-			this.Com.FileUploader_SetImageType(this.SignID,tp);
+			// this.Com.FileUploader_SetImageType(this.SignID,tp);
 		}
 		,"GetResponse" : function()
 		{
@@ -1147,8 +1192,9 @@ function FileUploader(fileID,filePath,mgr,width,height)
 	//本地图片文件上传完毕
 	this.LocalFileComplete = function (imgSrc)
 	{
-		var img = '<img src="' + imgSrc + '"/>';
-		_this.InsertHtml(img);
+		// var img = '<img src="' + imgSrc + '"/>';
+		// _this.InsertHtml(img);
+    this.Manager.ReplaceEditorImgTag(oldLocalImg,imgSrc,oldLocalImgWidth,oldLocalImgHeight);
 	};
 
 	//网络图片上传完毕
@@ -1248,7 +1294,7 @@ function ImagePasterManager(mgr)
 	this.OpenDialog = mgr.OpenPasteFileDialog;
 	//关闭图片上传窗口
 	this.CloseDialog = mgr.ClosePasteFileDialog;
-	this.InsertHtml = mgr.InsertHtml;
+	// this.InsertHtml = mgr.InsertHtml;
 
 	this.InfoDiv = $("#PasterMessager"); //提示信息层
 	this.InfoIco = this.InfoDiv.find('img[name="ico"]');//信息图标
@@ -1332,12 +1378,16 @@ function ImagePaster_Complete(obj)
 	obj.State = obj.StateType.Complete;
 	//obj.InfoDiv.style.display = "none"; //隐藏信息层
 
+  if(this.UploaderList!=null &&　typeof(this.UploaderList)!="undefined" ){
+    this.UploaderList = new Object();
+    this.UploaderListCount=0;
+  }
 	//插入到编辑器
-	var img = "<img src=\"";
+/*	var img = "<img src=\"";
 	img += obj.Com.GetResponse().replace(/(^\s*)|(\s*$)/g, "");
 	img += "\" />";
 	// Insert as plain text.
-	obj.InsertHtml(img);
+	obj.InsertHtml(img);*/
 	//关闭窗口
 	obj.CloseDialog();//关闭上传窗口
 }
@@ -1556,7 +1606,8 @@ function PasterManager()
 		, "Parse": function() { }
 		, "IsWord": function()
 		{
-      return this.Com.WordParser_IsWord();
+      // return this.Com.WordParser_IsWord();
+        return true;
 		}
 		, "IsExcel": function ()
 		{
@@ -1814,6 +1865,15 @@ function PasterManager()
 	this.InsertHtml = function (html)
 	{
 	  console.log("returnHtml:"+html);
+	  if(html.indexOf("file")!=-1){
+      oldEditorContent = html;
+      if(this.Manager!=null && typeof (this.Manager)!="undefined"){
+          this.Manager.ReplaceEditorImgTag(oldLocalImg,serverReturnPath,oldLocalImgWidth,oldLocalImgHeight);
+      }
+    }
+    // this.ReplaceEditorImgTag(oldLocalImg,html,oldLocalImgWidth,oldLocalImgHeight);
+    // this.Manager.ReplaceEditorImgTag(oldLocalImg,html,oldLocalImgWidth,oldLocalImgHeight);
+    // this.ReplaceEditorImgTag(html);
     // _this.ReplaceEditorImgTag(html);
 		// this.Editor.insertHtml(html);
     // this.Editor.setContent(html);

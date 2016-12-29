@@ -7343,9 +7343,9 @@
         var me = this;
 
         me.fireEvent('beforesetcontent', html);
-        var root = UE.htmlparser(html);
-        me.filterInputRule(root);
-        html = root.toHtml();
+        /*var root = UE.htmlparser(html);
+        me.filterInputRule(root);*/
+        // html = root.toHtml();
 
         me.body.innerHTML = (isAppendTo ? me.body.innerHTML : '') + html;
 
@@ -7377,7 +7377,7 @@
                   me.body.appendChild(p);
                   break;
                 } else {
-                  child.parentNode.insertBefore(p, child);
+                  // child.parentNode.insertBefore(p, child);
                   p = me.document.createElement('p');
                 }
               }
@@ -8029,7 +8029,7 @@
         }
 
         if(serverUrl) {
-          serverUrl = serverUrl + (serverUrl.indexOf('?') == -1 ? '?':'&') + 'action=' + (actionName || '');
+          //serverUrl = serverUrl + (serverUrl.indexOf('?') == -1 ? '?':'&') + 'action=' + (actionName || '');
           return utils.formatUrl(serverUrl);
         } else {
           return '';
@@ -8275,11 +8275,11 @@
         }
       }
 
-      url = url.replace(reg, '\x241' + callbackField + '=' + callbackFnName);
+      /*url = url.replace(reg, '\x241' + callbackField + '=' + callbackFnName);
 
       if (url.search(reg) < 0) {
         url += (url.indexOf('?') < 0 ? '?' : '&') + callbackField + '=' + callbackFnName;
-      }
+      }*/
 
       var queryStr = json2str(opts);  // { name:"Jim",city:"Beijing" } --> "name=Jim&city=Beijing"
       //如果用户直接通过data参数传递json对象过来，则也要将此json对象转化为字符串
@@ -14079,7 +14079,7 @@
       },
 
       inputRule : function (root) {
-        utils.each(root.getNodesByTagName('img'), function (img) {
+        /*utils.each(root.getNodesByTagName('img'), function (img) {
           var attrs = img.attrs,
             flag = parseInt(attrs.width) < 128 || parseInt(attrs.height) < 43,
             opt = me.options,
@@ -14094,7 +14094,7 @@
               'style':'background:url(' + ( flag ? opt.themePath + opt.theme + '/images/word.gif' : opt.langPath + opt.lang + '/images/localimage.png') + ') no-repeat center center;border:1px solid #ddd'
             })
           }
-        })
+        })*/
       }
     }
   });

@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react';
 import { WordPasterManager } from '../../ueditor/WordPaster/js/WordPaster';
-
+var editorForSingle ;
 var RichEditorComponents = React.createClass({
+
   componentDidMount(){
-    var editorForSingle = UE.getEditor("singleContainer", {
+     editorForSingle = UE.getEditor("singleContainer", {
       //工具栏
       toolbars: [[
         'undo', 'redo', '|',
@@ -67,9 +68,27 @@ var RichEditorComponents = React.createClass({
       var value = me.props.value?me.props.value:'<p></p>';
       editorForSingle.setContent(value);
       // pasterMgr.SetEditor(editor);
+      if(pasterMgr==null || typeof (pasterMgr)=="undefined"){
+          pasterMgr = new PasterManager();
+          pasterMgr.Config["PostUrl"] = "http://www.maaee.com/Excoord_For_Education/manage/subject/subject_upload.jsp";
+      }
       pasterMgr.Init(editorForSingle);
     });
+  },
 
+/*  componentWillMount(){
+    console.log("单选componentWillMount");
+    if(editorForSingle==null || typeof(editorForSingle)=="undefined" ){
+      editorForSingle = new UE.Editor();
+      editorForSingle.render("singleContainer");
+      pasterMgr.Init(editorForSingle);
+    }
+  },*/
+
+  componentWillUnmount(){
+      console.log("单选unmount");
+      //React.unmountComponentAtNode(document.getElementById("singleContainer"));
+      UE.getEditor("singleContainer").destroy();
   },
 
   render : function(){
