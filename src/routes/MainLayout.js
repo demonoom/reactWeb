@@ -159,10 +159,10 @@ const MainLayout = React.createClass({
             <FloatButton ref="floatButton"/>
           </Menu>
 
-          <div className="ant-aside-action" > 
+          <div className="ant-aside-action" >
 
           </div>
-		
+
         </aside>
 
         <div className="ant-layout-main">
@@ -185,7 +185,7 @@ const MainLayout = React.createClass({
               </Col>
             </Row>
           </div>
-        
+
         </div>
       </div>
         </LocaleProvider>
@@ -193,4 +193,3 @@ const MainLayout = React.createClass({
   },
 });
 export default MainLayout;
-  

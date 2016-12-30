@@ -61,10 +61,19 @@
 <div id="root"></div>
 <div class="ant-layout-footer">
   <BackTopButton/>
+  <div id="componyInfo"></div>
   <script>
-    if (sessionStorage.getItem("ident")==null || sessionStorage.getItem("ident")==""){
-      document.write("<div>小蚂蚁移动教学平台 版权所有 恒坐标教育集团</div>");
+    var timer;
+    function checkIsLogin() {
+        if (sessionStorage.getItem("ident")==null || sessionStorage.getItem("ident")==""){
+            timer = setTimeout("checkIsLogin()",500);
+            document.getElementById("componyInfo").innerHTML="小蚂蚁移动教学平台 版权所有 恒坐标教育集团";
+        }else{
+            document.getElementById("componyInfo").innerHTML="";
+            clearTimeout(timer);
+        }
     }
+    checkIsLogin();
   </script>
 
 </div>
