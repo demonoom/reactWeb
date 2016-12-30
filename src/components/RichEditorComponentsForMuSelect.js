@@ -64,8 +64,12 @@ var RichEditorComponentsForMuSelect = React.createClass({
     });
     var me = this;
     editor.ready( function( ueditor ) {
-      var value = me.props.value?me.props.value:'<p></p>';
-      editor.setContent(value);
+      if(muEditorContent!=""){
+        editor.setContent(muEditorContent);
+      }else {
+        var value = me.props.value ? me.props.value : '<p></p>';
+        editor.setContent(value);
+      }
       // pasterMgr.SetEditor(editor);
       if(pasterMgr==null || typeof (pasterMgr)=="undefined"){
         pasterMgr = new PasterManager();
@@ -76,14 +80,14 @@ var RichEditorComponentsForMuSelect = React.createClass({
 
   },
 
-/*  componentWillMount(){
-    console.log("多选componentWillMount");
-    if(editor==null || typeof(editor)=="undefined" ){
-      editor = new UE.Editor();
-      editor.render("muSelectContainer");
-      pasterMgr.Init(editor);
+  componentDidUpdate(){
+    if(muEditorContent!=""){
+      editor.setContent(muEditorContent);
+    }else {
+      var value = me.props.value ? me.props.value : '<p></p>';
+      editor.setContent(value);
     }
-  },*/
+  },
 
   componentWillUnmount(){
     console.log("多选unmount");

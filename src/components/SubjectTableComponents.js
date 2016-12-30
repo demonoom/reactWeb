@@ -1,7 +1,9 @@
 import React, { PropTypes } from 'react';
-import { Table, Button,Icon,Popover,Tooltip,message } from 'antd';
+import { Table, Button,Icon,Popover,Tooltip,message,Modal } from 'antd';
 import UseKnowledgeComponents from './UseKnowledgeComponents';
+import SubjectEditTabComponents from './SubjectEditTabComponents';
 import { doWebService } from '../WebServiceHelper';
+const confirm = Modal.confirm;
 
 const columns = [{
   title: '出题人',
@@ -154,74 +156,82 @@ const SUbjectTable = React.createClass({
 
   //删除备课计划下的题目
   deleteSubject:function (e) {
-    if(confirm("确定要删除该题目?")){
-      var target = e.target;
-      if(navigator.userAgent.indexOf("Chrome") > -1){
-        target=e.currentTarget;
-      }else{
-        target = e.target;
-      }
-      // alert("deleteSubject:"+target.value);
-      var subjectIds = target.value;
-      var param = {
-        "method":'deleteScheduleSubjects',
-        "ident":sessionStorage.getItem("ident"),
-        "scheduleId":subTable.state.ScheduleOrSubjectId,
-        "subjectIds":subjectIds
-      };
-      doWebService(JSON.stringify(param), {
-        onResponse : function(ret) {
-          console.log(ret.msg);
-          if(ret.msg=="调用成功" && ret.response==true){
-            // alert("题目删除成功");
-            message.success("题目删除成功");
-          }else{
-            // alert("题目删除失败");
-            message.error("题目删除失败");
-          }
-          subTable.getSubjectDataBySchedule(sessionStorage.getItem("ident"),subTable.state.ScheduleOrSubjectId,subTable.state.currentPage);
-        },
-        onError : function(error) {
-          // alert(error);
-          message.error(error);
-        }
-      });
+    var target = e.target;
+    if(navigator.userAgent.indexOf("Chrome") > -1){
+      target=e.currentTarget;
+    }else{
+      target = e.target;
     }
+    // alert("deleteSubject:"+target.value);
+    var subjectIds = target.value;
+    confirm({
+      title: '确定要删除该题目?',
+      onOk() {
+          var param = {
+            "method":'deleteScheduleSubjects',
+            "ident":sessionStorage.getItem("ident"),
+            "scheduleId":subTable.state.ScheduleOrSubjectId,
+            "subjectIds":subjectIds
+          };
+          doWebService(JSON.stringify(param), {
+            onResponse : function(ret) {
+              console.log(ret.msg);
+              if(ret.msg=="调用成功" && ret.response==true){
+                // alert("题目删除成功");
+                message.success("题目删除成功");
+              }else{
+                // alert("题目删除失败");
+                message.error("题目删除失败");
+              }
+              subTable.getSubjectDataBySchedule(sessionStorage.getItem("ident"),subTable.state.ScheduleOrSubjectId,subTable.state.currentPage);
+            },
+            onError : function(error) {
+              // alert(error);
+              message.error(error);
+            }
+          });
+      },
+      onCancel() {},
+    });
   },
 
   //删除资源库下的题目
   delMySubjects:function (e) {
-    if(confirm("确定要删除该题目?")){
-      var target = e.target;
-      if(navigator.userAgent.indexOf("Chrome") > -1){
-        target=e.currentTarget;
-      }else{
-        target = e.target;
-      }
-      var subjectIds = target.value;
-      var param = {
-        "method":'delMySubjects',
-        "userId":sessionStorage.getItem("ident"),
-        "subjects":subjectIds
-      };
-      doWebService(JSON.stringify(param), {
-        onResponse : function(ret) {
-          console.log(ret.msg);
-          if(ret.msg=="调用成功" && ret.response==true){
-            // alert("题目删除成功");
-            message.success("题目删除成功");
-          }else{
-            // alert("题目删除失败");
-            message.error("题目删除失败");
-          }
-          subTable.getSubjectDataByKnowledge(sessionStorage.getItem("ident"),subTable.state.ScheduleOrSubjectId,subTable.state.currentPage,"Y");
-        },
-        onError : function(error) {
-          // alert(error);
-          message.error(error);
-        }
-      });
+    var target = e.target;
+    if(navigator.userAgent.indexOf("Chrome") > -1){
+      target=e.currentTarget;
+    }else{
+      target = e.target;
     }
+    var subjectIds = target.value;
+    confirm({
+        title: '确定要删除该题目?',
+        onOk() {
+          var param = {
+            "method":'delMySubjects',
+            "userId":sessionStorage.getItem("ident"),
+            "subjects":subjectIds
+          };
+          doWebService(JSON.stringify(param), {
+            onResponse : function(ret) {
+              console.log(ret.msg);
+              if(ret.msg=="调用成功" && ret.response==true){
+                // alert("题目删除成功");
+                message.success("题目删除成功");
+              }else{
+                // alert("题目删除失败");
+                message.error("题目删除失败");
+              }
+              subTable.getSubjectDataByKnowledge(sessionStorage.getItem("ident"),subTable.state.ScheduleOrSubjectId,subTable.state.currentPage,"Y");
+            },
+            onError : function(error) {
+              // alert(error);
+              message.error(error);
+            }
+          });
+      },
+      onCancel() {},
+    });
   },
 
   getSubjectDataByKnowledge:function (ident,ScheduleOrSubjectId,pageNo,isOwmer) {
@@ -249,11 +259,12 @@ const SUbjectTable = React.createClass({
             var content=<Popover  placement="topLeft" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
             var subjectType=e.typeName;
             var subjectScore=e.score;
+            var answer = e.answer;
             var userId = e.user.colUid;
             // var submitTime = subTable.getLocalTime(e.createTime);
             var subjectOpt=<Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" ></Button>;
             if(userId==sessionStorage.getItem("ident")){
-              subjectOpt=<div><Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" className="score3_i"></Button><Button style={{ }} type=""  value={e.id} onClick={subTable.delMySubjects}  icon="delete" title="删除" className="score3_i" ></Button></div>;
+              subjectOpt=<div><Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" className="score3_i"></Button><Button style={{ }} type=""  value={e.id+"#"+e.typeName} onClick={subTable.showModifySubjectModal}  icon="edit" title="修改" className="score3_i"></Button><Button style={{ }} type=""  value={e.id} onClick={subTable.delMySubjects}  icon="delete" title="删除" className="score3_i" ></Button></div>;
             }else{
               subjectOpt=<Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" ></Button>;
             }
@@ -265,6 +276,7 @@ const SUbjectTable = React.createClass({
               subjectType:subjectType,
               subjectScore:subjectScore,
               subjectOpt:subjectOpt,
+              answer:answer
             });
             var pager = ret.pager;
             subTable.setState({totalCount:parseInt(pager.pageCount)*15});
@@ -338,13 +350,31 @@ const SUbjectTable = React.createClass({
     subTable.refs.useKnowledgeComponents.showModal(currentKnowledge,"knowledgeSubject",subTable.state.knowledgeName);
   },
 
+  showModifySubjectModal:function (e) {
+    var target = e.target;
+    if(navigator.userAgent.indexOf("Chrome") > -1){
+      //e = window.event;
+      target=e.currentTarget;
+    }else{
+      target = e.target;
+    }
+    var currentSubjectInfo = target.value;
+    subTable.refs.subjectEditTabComponents.showModal(currentSubjectInfo);
+    // alert(currentKnowledge);
+    //alert("111"+currentSchedule+","+this.refs.useKnowledgeComponents);
+    // subTable.refs.useKnowledgeComponents.showModal(currentKnowledge,"knowledgeSubject",subTable.state.knowledgeName);
+  },
+
   pageOnChange(pageNo) {
     console.log(pageNo);
     subTable.initGetSubjectInfo(this.state.subjectParams,pageNo);
     this.setState({
       currentPage: pageNo,
     });
+  },
 
+  subjectEditCallBack(){
+    subTable.getSubjectDataByKnowledge(sessionStorage.getItem("ident"),subTable.state.ScheduleOrSubjectId,subTable.state.currentPage,"Y");
   },
 
   render() {
@@ -356,6 +386,7 @@ const SUbjectTable = React.createClass({
     const hasSelected = selectedRowKeys.length > 0;
     return (
         <div >
+          <SubjectEditTabComponents ref="subjectEditTabComponents" subjectEditCallBack={subTable.subjectEditCallBack}></SubjectEditTabComponents>
           <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
           <Table rowSelection={rowSelection} columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: 15,onChange:subTable.pageOnChange }} scroll={{ y: 400}}/>
         </div>

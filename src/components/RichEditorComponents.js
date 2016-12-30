@@ -65,8 +65,13 @@ var RichEditorComponents = React.createClass({
     });
     var me = this;
     editorForSingle.ready( function( ueditor ) {
-      var value = me.props.value?me.props.value:'<p></p>';
-      editorForSingle.setContent(value);
+      // alert("editorContentForSingle:"+editorContentForSingle);
+      if(editorContent!=""){
+        editorForSingle.setContent(editorContent);
+      }else{
+        var value = me.props.value?me.props.value:'<p></p>';
+        editorForSingle.setContent(value);
+      }
       // pasterMgr.SetEditor(editor);
       if(pasterMgr==null || typeof (pasterMgr)=="undefined"){
           pasterMgr = new PasterManager();
@@ -76,14 +81,22 @@ var RichEditorComponents = React.createClass({
     });
   },
 
-/*  componentWillMount(){
-    console.log("单选componentWillMount");
-    if(editorForSingle==null || typeof(editorForSingle)=="undefined" ){
-      editorForSingle = new UE.Editor();
-      editorForSingle.render("singleContainer");
-      pasterMgr.Init(editorForSingle);
+  componentWillUpdate(){
+      console.log("componentWillUpdate:"+editorContent);
+  },
+
+  componentWillReceiveProps(){
+      console.log("componentWillReceiveProps:"+editorContent);
+  },
+
+  componentDidUpdate(){
+    if(editorContent!=""){
+      editorForSingle.setContent(editorContent);
+    }else{
+      var value = me.props.value?me.props.value:'<p></p>';
+      editorForSingle.setContent(value);
     }
-  },*/
+  },
 
   componentWillUnmount(){
       console.log("单选unmount");

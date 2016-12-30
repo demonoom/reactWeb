@@ -120,6 +120,9 @@ const FileUploadComponents = React.createClass({
         }else if(fileType == "video/mp4"){
             //mp4格式
             isOk=true;
+        }else if(fileType == "audio/mp3"){
+            //mp3格式
+            isOk=true;
         }
 
 

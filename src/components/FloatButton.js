@@ -1,23 +1,37 @@
 import React, { PropTypes } from 'react';
-import { Popover, Affix, Button,Dropdown,Menu,Icon } from 'antd';
+import { Popover, Affix, Button,Dropdown,Menu,Icon,Modal } from 'antd';
 import UserPasswordModifyComponents from './UserPasswordModifyComponents';
 import { doWebService } from '../WebServiceHelper';
+const confirm = Modal.confirm;
 
-
+var floatButton;
 const FloatButton = React.createClass({
+
+    getInitialState() {
+      floatButton = this;
+      return {
+        visible: false,
+        submitFileCheckedList:[],
+        submitFileOptions:[],
+      };
+    },
 
     logOut(){
         // alert(sessionStorage.getItem("openKeysStr"));
         var openKeysStr = sessionStorage.getItem("openKeysStr");
-        if(confirm("您确定退出登录么?")){
+        confirm({
+          title: '您确定退出登录么?',
+          onOk() {
             if(openKeysStr!=null && openKeysStr!=""){
-                //已有访问记录，本地移除后，保存到数据库
-                var userId = sessionStorage.getItem("ident");
-                this.saveHistoryAccessPointId(userId,openKeysStr);
+              //已有访问记录，本地移除后，保存到数据库
+              var userId = sessionStorage.getItem("ident");
+              floatButton.saveHistoryAccessPointId(userId,openKeysStr);
             }else{
-                location.hash="Login";
+              location.hash="Login";
             }
-        }
+          },
+          onCancel() {},
+        });
     },
 
     saveHistoryAccessPointId(userId,pointId){
@@ -45,22 +59,22 @@ const FloatButton = React.createClass({
     },
 
     showModifyModal(){
-        this.refs.userPasswordModify.showModal();
+      floatButton.refs.userPasswordModify.showModal();
     },
 
     menuItemOnClick : function ({ key }) {
         var clickKey = `${key}`;
         console.log("clickKey:"+clickKey)
         if(clickKey=="modifyPassword"){
-            this.showModifyModal();
+          floatButton.showModifyModal();
         }else if(clickKey=="existSystem"){
-            this.logOut();
+          floatButton.logOut();
         }
     },
 
     render() {
         const menu = (
-            <Menu onClick={this.menuItemOnClick} className="dropdown-menu-tc">
+            <Menu onClick={floatButton.menuItemOnClick} className="dropdown-menu-tc">
                 <Menu.Item key="modifyPassword" className="popup_i_icon"><Icon className="icon_right" type="edit" />修改密码</Menu.Item>
                 <Menu.Item key="existSystem" className="popup_i_icon"><Icon className="icon_right" type="delete" />退出系统</Menu.Item>
             </Menu>

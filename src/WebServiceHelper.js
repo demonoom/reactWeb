@@ -4,7 +4,7 @@
 //导出常量
 
 export const WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
-// export const WEBSERVICE_URL = "http://192.168.1.115:8080/Excoord_For_Education/webservice";
+// export const WEBSERVICE_URL = "http://192.168.1.112:8080/Excoord_For_Education/webservice";
 // var requesting = false;
 
 export function doWebService(data,listener) {

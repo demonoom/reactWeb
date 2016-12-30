@@ -54,7 +54,7 @@ const props = {
     }
   },
 };
-var mulitiAnswer = new Array();
+var mulitiAnswer = new Array('A');
 // var data=new Array();
 var uploadFileList=[];
 
@@ -73,7 +73,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
       scoreChecked:false,
       scoreInputState:true,
       scoreDisable:false,
-      mulitiAnswerDefaultValue:['A'],
+      mulitiAnswerDefaultValue:'A',
       correctAnswerValue:"正确",
       useSameScheduleForSingle:true,
       useSameScheduleForMSelect:true,
@@ -163,7 +163,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
     if(!this.isEmpty(this.refs.scoreDefined)){
       this.refs.scoreDefined.refs.input.value="";
     }
-    this.setState({scoreChecked:false,scoreInputState:true,scoreDisable:false,mulitiAnswerDefaultValue:['A'],correctAnswerValue:"正确"});
+    this.setState({scoreChecked:false,scoreInputState:true,scoreDisable:false,mulitiAnswerDefaultValue:'A',correctAnswerValue:"正确"});
     pasterMgr.Init();
     pasterMgr.Config["PostUrl"] = "http://www.maaee.com/Excoord_For_Education/manage/subject/subject_upload.jsp";
   },
@@ -655,7 +655,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
           <Row>
             <Col span={6}>
               {/*value={this.state.score}*/}
-              <Select  ref="scoreSelect" style={{ width: 100 }} disabled={this.state.scoreDisable} onChange={this.selectHandleChange}>
+              <Select  ref="scoreSelect" defaultValue="1" style={{ width: 100 }} disabled={this.state.scoreDisable} onChange={this.selectHandleChange}>
                 {children}
               </Select>
             </Col>

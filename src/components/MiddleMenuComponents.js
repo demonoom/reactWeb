@@ -1,10 +1,11 @@
 import React, { PropTypes,Link } from 'react';
-import { Table, Popconfirm, Button } from 'antd';
+import { Table, Popconfirm, Button,Modal } from 'antd';
 import { Menu, Icon,message,Dropdown } from 'antd';
 import { Badge,Pagination } from 'antd';
 import TeachingComponents from '../components/TeachingComponents';
 import { doWebService } from '../WebServiceHelper';
 const SubMenu = Menu.SubMenu;
+const confirm = Modal.confirm;
 
 // let uuid = 0;
 
@@ -144,32 +145,42 @@ const MiddleMenuComponents = React.createClass({
    */
   deleteTeachSchedule:function (key) {
     //alert("请先删除当前进度下的教学资源，再执行此操作"+e.currentTarget.title);
-    var confirmResult = confirm("确定要删除该备课计划?");
-    if(confirmResult){
-      var sids = key;
-      var param = {
-        "method":'deleteTeachSchedules',
-        "ident":sessionStorage.getItem("ident"),
-        "sids":sids
-      };
-      doWebService(JSON.stringify(param), {
-        onResponse : function(ret) {
-          console.log(ret.msg);
-          if(ret.msg=="调用成功" && ret.response==true){
-            // alert("备课计划删除成功");
-            message.success("备课计划删除成功");
-          }else{
-            // alert("备课计划删除失败");
-            message.error("备课计划删除失败");
+
+    confirm({
+      title: '确定要删除该备课计划?',
+      content: '',
+      transitionName:'',
+      onOk() {
+        var sids = key;
+        var param = {
+          "method":'deleteTeachSchedules',
+          "ident":sessionStorage.getItem("ident"),
+          "sids":sids
+        };
+        doWebService(JSON.stringify(param), {
+          onResponse : function(ret) {
+            console.log(ret.msg);
+            if(ret.msg=="调用成功" && ret.response==true){
+              message.success("备课计划删除成功");
+            }else{
+              message.error("备课计划删除失败");
+            }
+            mMenu.getLessonMenu(mMenu.state.currentPage);
+          },
+          onError : function(error) {
+            // alert(error);
+            message.error(error);
           }
-          mMenu.getLessonMenu(mMenu.state.currentPage);
-        },
-        onError : function(error) {
-          // alert(error);
-          message.error(error);
-        }
-      });
-    }
+        });
+      },
+      onCancel() {},
+    });
+
+
+/*    var confirmResult = confirm("确定要删除该备课计划?");
+    if(confirmResult){
+
+    }*/
   },
 
   /**

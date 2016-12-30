@@ -64,8 +64,12 @@ var RichEditorComponentsForSimpleAnswer = React.createClass({
     });
     var me = this;
     editor.ready( function( ueditor ) {
-      var value = me.props.value?me.props.value:'<p></p>';
-      editor.setContent(value);
+      if(simpleEditorContent!=""){
+        editor.setContent(simpleEditorContent);
+      }else {
+        var value = me.props.value ? me.props.value : '<p></p>';
+        editor.setContent(value);
+      }
       // pasterMgr.SetEditor(editor);
       if(pasterMgr==null || typeof (pasterMgr)=="undefined"){
         pasterMgr = new PasterManager();
@@ -76,14 +80,14 @@ var RichEditorComponentsForSimpleAnswer = React.createClass({
 
   },
 
-/*  componentWillMount(){
-    console.log("简答componentWillMount");
-    if(editor==null || typeof(editor)=="undefined" ){
-      editor = new UE.Editor();
-      editor.render("simpleAnswerContainer");
-      pasterMgr.Init(editor);
+  componentDidUpdate(){
+    if(simpleEditorContent!=""){
+      editor.setContent(simpleEditorContent);
+    }else {
+      var value = me.props.value ? me.props.value : '<p></p>';
+      editor.setContent(value);
     }
-  },*/
+  },
 
   componentWillUnmount(){
     console.log("简答unmount");

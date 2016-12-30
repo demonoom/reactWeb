@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react';
-import { Card, Checkbox,Collapse,Icon,Button,Pagination,message} from 'antd';
+import { Card, Checkbox,Collapse,Icon,Button,Pagination,message,Modal} from 'antd';
 import UseKnowledgeComponents from './UseKnowledgeComponents';
 import { doWebService } from '../WebServiceHelper';
 const Panel = Collapse.Panel;
+const confirm = Modal.confirm;
 
 function callback(key) {
     // console.log(key);
@@ -208,75 +209,85 @@ const CourseWareComponents = React.createClass({
 
     //删除教学进度下的材料（课件）
     deleteScheduleMaterials(e){
-        if(confirm("确定要删除该课件?")){
-            var target = e.target;
-            if(navigator.userAgent.indexOf("Chrome") > -1){
-                //e = window.event;
-                target=e.currentTarget;
-            }else{
-                target = e.target;
-            }
-            // alert(target.value);
-            var materialIds = target.value;
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+          //e = window.event;
+          target=e.currentTarget;
+        }else{
+          target = e.target;
+        }
+        // alert(target.value);
+        var materialIds = target.value;
+        confirm({
+          title: '确定要删除该课件?',
+          content: '',
+          onOk() {
             var param = {
-                "method":'deleteScheduleMaterials',
-                "ident":sessionStorage.getItem("ident"),
-                "scheduleId":courseWare.state.teachScheduleId,
-                "materialIds":materialIds
+              "method":'deleteScheduleMaterials',
+              "ident":sessionStorage.getItem("ident"),
+              "scheduleId":courseWare.state.teachScheduleId,
+              "materialIds":materialIds
             };
             doWebService(JSON.stringify(param), {
-                onResponse : function(ret) {
-                    console.log(ret.msg);
-                    if(ret.msg=="调用成功" && ret.response==true){
-                        // alert("课件删除成功");
-                        message.success("课件删除成功");
-                    }else{
-                        // alert("课件删除失败");
-                        message.error("课件删除失败");
-                    }
-                    courseWare.getTeachPlans(sessionStorage.getItem("ident"),courseWare.state.teachScheduleId,"bySchedule",courseWare.state.currentPage,courseWare.state.knowledgeName)
-                },
-                onError : function(error) {
-                    // alert(error);
-                    message.error(error);
+              onResponse : function(ret) {
+                console.log(ret.msg);
+                if(ret.msg=="调用成功" && ret.response==true){
+                  // alert("课件删除成功");
+                  message.success("课件删除成功");
+                }else{
+                  // alert("课件删除失败");
+                  message.error("课件删除失败");
                 }
+                courseWare.getTeachPlans(sessionStorage.getItem("ident"),courseWare.state.teachScheduleId,"bySchedule",courseWare.state.currentPage,courseWare.state.knowledgeName)
+              },
+              onError : function(error) {
+                // alert(error);
+                message.error(error);
+              }
             });
-        }
+          },
+          onCancel() {},
+        });
     },
 
     //删除资源库下的材料（课件）
     batchDeleteMaterial(e){
-        if(confirm("确定要删除该课件?")){
-            var target = e.target;
-            if(navigator.userAgent.indexOf("Chrome") > -1){
-                target=e.currentTarget;
-            }else{
-                target = e.target;
+      var target = e.target;
+      if(navigator.userAgent.indexOf("Chrome") > -1){
+        target=e.currentTarget;
+      }else{
+        target = e.target;
+      }
+      var materialIds = target.value;
+      confirm({
+        title: '确定要删除该课件?',
+        content: '',
+        onOk() {
+          var param = {
+            "method":'batchDeleteMaterial',
+            "ident":sessionStorage.getItem("ident"),
+            "mids":materialIds
+          };
+          doWebService(JSON.stringify(param), {
+            onResponse : function(ret) {
+              console.log(ret.msg);
+              if(ret.msg=="调用成功" && ret.response==true){
+                // alert("课件删除成功");
+                message.success("课件删除成功");
+              }else{
+                // alert("课件删除失败");
+                message.error("课件删除失败");
+              }
+              courseWare.getTeachPlans(courseWare.state.ident,courseWare.state.teachScheduleId,courseWare.state.optType,1);
+            },
+            onError : function(error) {
+              // alert(error);
+              message.error(error);
             }
-            var materialIds = target.value;
-            var param = {
-                "method":'batchDeleteMaterial',
-                "ident":sessionStorage.getItem("ident"),
-                "mids":materialIds
-            };
-            doWebService(JSON.stringify(param), {
-                onResponse : function(ret) {
-                    console.log(ret.msg);
-                    if(ret.msg=="调用成功" && ret.response==true){
-                        // alert("课件删除成功");
-                        message.success("课件删除成功");
-                    }else{
-                        // alert("课件删除失败");
-                        message.error("课件删除失败");
-                    }
-                    courseWare.getTeachPlans(courseWare.state.ident,courseWare.state.teachScheduleId,courseWare.state.optType,1);
-                },
-                onError : function(error) {
-                    // alert(error);
-                    message.error(error);
-                }
-            });
-        }
+          });
+        },
+        onCancel() {},
+      });
     },
 
     buildPanels:function (courseWareList) {

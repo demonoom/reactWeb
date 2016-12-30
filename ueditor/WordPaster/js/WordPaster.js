@@ -6,7 +6,6 @@
 	更新记录：
 		2012-07-04 增加对IE9的支持。
 */
-
 //全局对象
 var WordPasterManagerInstance = null; //全局实例
 //系统错误
@@ -1477,6 +1476,7 @@ function PasterManager()
          } //安装插件
 		, "Setup": function()
 		{
+      alert("请在组件安装完成后，刷新并重新登录，谢谢！");
 			var xpi = new Object();
 			xpi["Calendar"] = _this.Config["XpiPath"];
 			InstallTrigger.install(xpi, function(name, result) { });
@@ -1508,6 +1508,7 @@ function PasterManager()
 		} //安装插件
 		, "Setup": function()
 		{
+      alert("请在组件安装完成后，刷新并重新登录，谢谢！");
 			document.write('<iframe style="display:none;" src="' + _this.Config["CabPath"] + '"></iframe>');
 		}
 		, "Init": function()
