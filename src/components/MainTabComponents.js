@@ -92,7 +92,15 @@ const MainTabComponents = React.createClass({
         });
         this.setState({activeKey:'课件'});
         this.setState({breadcrumbArray:breadcrumbArray});
-        this.setState({currentOptType:"bySchedule"});
+        if(toolbarKey!="KnowledgeResources"){
+          this.setState({currentOptType:"bySchedule"});
+        }else{
+          this.setState({currentOptType:"bySubjectId"});
+        }
+    },
+
+    setCurrentOptType(toolbarKey){
+
     },
 
     componentWillMount(){
@@ -111,6 +119,7 @@ const MainTabComponents = React.createClass({
             this.refs.courseWare.getTeachPlans(sessionStorage.getItem("ident"),this.state.currentTeachScheduleId,this.state.currentOptType,1,this.state.currentKnowledgeName,clickKey);
         }else{
             var subjectParams = sessionStorage.getItem("ident")+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType+"#"+this.state.currentKnowledgeName+"#"+clickKey;
+            globalSubjectParam=subjectParams;
             this.refs.subTable.initGetSubjectInfo(subjectParams);
             //this.setState({subjectParams:sessionStorage.getItem("ident")+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType+"#"+this.state.currentKnowledgeName+"#"+clickKey});
         }
@@ -137,7 +146,8 @@ const MainTabComponents = React.createClass({
                 <Menu.Item key="other">查看他人</Menu.Item>
             </Menu>
         );
-        if(this.state.currentOptType=="bySubjectId" && this.state.currentMenuChildrenCount==0){
+        //this.state.currentMenuChildrenCount
+        if(this.state.currentOptType=="bySubjectId" && lastClickMenuChildrenCount==0){
             displayType='block';
             tabPanel=<TabPane tab={<span>课件<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link icon_filter" href="#"><Icon type="filter"/></a></Dropdown></span>} key="课件"><CourseWareComponents ref="courseWare"/></TabPane>;
             subjectTabPanel=<TabPane tab={<span>题目<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link icon_filter" href="#"><Icon type="filter" /></a></Dropdown></span>} key="题目"><SubjectTable  ref="subTable" params={this.state.subjectParams}/></TabPane>;
