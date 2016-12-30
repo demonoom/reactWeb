@@ -83,9 +83,6 @@ var RichEditorComponentsForAnswer = React.createClass({
   componentDidUpdate(){
     if(answerContent!=null && typeof(answerContent)!="undefined" && answerContent!=""){
       editor.setContent(answerContent);
-    }else{
-      var value = me.props.value?me.props.value:'<p></p>';
-      editor.setContent(value);
     }
   },
 

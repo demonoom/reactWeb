@@ -83,9 +83,6 @@ var RichEditorComponentsForSimpleAnswer = React.createClass({
   componentDidUpdate(){
     if(simpleEditorContent!=""){
       editor.setContent(simpleEditorContent);
-    }else {
-      var value = me.props.value ? me.props.value : '<p></p>';
-      editor.setContent(value);
     }
   },
 

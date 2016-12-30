@@ -83,9 +83,6 @@ var RichEditorComponentsForCorrect = React.createClass({
   componentDidUpdate(){
     if(correctEditorContent!=""){
       editor.setContent(correctEditorContent);
-    }else {
-      var value = me.props.value ? me.props.value : '<p></p>';
-      editor.setContent(value);
     }
   },
 

@@ -83,9 +83,6 @@ var RichEditorComponentsForMuSelect = React.createClass({
   componentDidUpdate(){
     if(muEditorContent!=""){
       editor.setContent(muEditorContent);
-    }else {
-      var value = me.props.value ? me.props.value : '<p></p>';
-      editor.setContent(value);
     }
   },
 

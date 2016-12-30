@@ -135,7 +135,7 @@ const SubjectEditTabComponents = React.createClass({
     if(!this.isEmpty(this.refs.singleAnswer)){
       this.refs.singleAnswer.state.value="A";
     }
-    this.setState({scoreChecked:false,scoreInputState:true,scoreDisable:false,mulitiAnswerDefaultValue:'A',correctAnswerValue:"正确"});
+    this.setState({activeKey: "单选题" ,scoreChecked:false,scoreInputState:true,scoreDisable:false,mulitiAnswerDefaultValue:'A',correctAnswerValue:"正确"});
     pasterMgr.Init();
     pasterMgr.Config["PostUrl"] = "http://www.maaee.com/Excoord_For_Education/manage/subject/subject_upload.jsp";
   },
@@ -325,7 +325,11 @@ const SubjectEditTabComponents = React.createClass({
   },
 
   tabOnChange(key) {
-    this.setState({activeKey: key});
+    if(key!=this.state.activeKey){
+        message.warning("修改过程中禁止切换题型，谢谢！");
+    }else{
+        this.setState({activeKey: key});
+    }
   },
   //自定义分值文本框内容改变事件处理函数
   onScoreDefinedValueChange(e){

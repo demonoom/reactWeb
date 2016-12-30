@@ -81,20 +81,17 @@ var RichEditorComponents = React.createClass({
     });
   },
 
-  componentWillUpdate(){
+/*  componentWillUpdate(){
       console.log("componentWillUpdate:"+editorContent);
   },
 
   componentWillReceiveProps(){
       console.log("componentWillReceiveProps:"+editorContent);
-  },
+  },*/
 
   componentDidUpdate(){
     if(editorContent!=""){
       editorForSingle.setContent(editorContent);
-    }else{
-      var value = me.props.value?me.props.value:'<p></p>';
-      editorForSingle.setContent(value);
     }
   },
 

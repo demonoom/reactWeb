@@ -120,7 +120,8 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
       }
     }*/
     this.setState({ visible: false });
-    this.editorsInit();
+    // this.editorsInit();
+    this.initPage();
     pasterMgr.Init();
     pasterMgr.Config["PostUrl"] = "http://www.maaee.com/Excoord_For_Education/manage/subject/subject_upload.jsp";
     //subjectUpload.initPage();
@@ -156,7 +157,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
 
   initPage(){
     this.editorsInit();
-    this.setState({score:1});
+    this.setState({score:1,scoreDefinedValue:''});
     if(!this.isEmpty(this.refs.singleAnswer)){
       this.refs.singleAnswer.state.value="A";
     }
@@ -260,7 +261,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
     var score = this.state.score;
     //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
     if(this.state.scoreDisable==true){
-      score =this.refs.scoreDefined.refs.input.value;
+      score =this.state.scoreDefinedValue;
     }
     var subjectName = UE.getEditor("singleContainer").getContent();
     subjectName = subjectName.replace(/\+/g,"%2B"); //将+号替换为十六进制
@@ -317,7 +318,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
       var score = this.state.score;
       //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
       if(this.state.scoreDisable==true){
-        score =this.refs.scoreDefined.refs.input.value;
+        score =this.state.scoreDefinedValue;
       }
       var subjectName = UE.getEditor("muSelectContainer").getContent();
       subjectName = subjectName.replace(/\+/g,"%2B"); //将+号替换为十六进制
@@ -371,7 +372,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
       var score = this.state.score;
       //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
       if(this.state.scoreDisable==true){
-        score =this.refs.scoreDefined.refs.input.value;
+        score =this.state.scoreDefinedValue;
       }
       var subjectName = UE.getEditor("correctContainer").getContent();
       subjectName = subjectName.replace(/\+/g,"%2B"); //将+号替换为十六进制
@@ -426,7 +427,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
       var score = this.state.score;
       //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
       if(this.state.scoreDisable==true){
-        score =this.refs.scoreDefined.refs.input.value;
+        score =this.state.scoreDefinedValue;
       }
       var subjectName = UE.getEditor("simpleAnswerContainer").getContent();
       subjectName = subjectName.replace(/\+/g,"%2B"); //将+号替换为十六进制
@@ -565,7 +566,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
       var score = this.state.score;
       //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
       if(this.state.scoreDisable==true){
-        score =this.refs.scoreDefined.refs.input.value;
+        score =this.state.scoreDefinedValue;
       }
       var subjectName = UE.getEditor("singleContainer").getContent();
       var answer = this.state.singleAnswer;
@@ -625,6 +626,11 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
     this.setState({useSameScheduleForSimpleAnswer: e.target.checked});
   },
 
+  //自定义分值文本框内容改变事件处理函数
+  onScoreDefinedValueChange(e){
+    this.setState({scoreDefinedValue:e.target.value});
+  },
+
   render() {
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
@@ -655,12 +661,12 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
           <Row>
             <Col span={6}>
               {/*value={this.state.score}*/}
-              <Select  ref="scoreSelect" defaultValue="1" style={{ width: 100 }} disabled={this.state.scoreDisable} onChange={this.selectHandleChange}>
+              <Select  ref="scoreSelect" defaultValue={subjectUpload.state.score} value={subjectUpload.state.score} style={{ width: 100 }} disabled={this.state.scoreDisable} onChange={this.selectHandleChange}>
                 {children}
               </Select>
             </Col>
 
-            <Col span={8} className="right_ri"><span><Input ref="scoreDefined" placeholder="请输入自定义分值" disabled={this.state.scoreInputState}  /></span></Col>
+            <Col span={8} className="right_ri"><span><Input ref="scoreDefined" defaultValue={this.state.scoreDefinedValue} value={this.state.scoreDefinedValue}  onChange={this.onScoreDefinedValueChange} placeholder="请输入自定义分值" disabled={this.state.scoreInputState}  /></span></Col>
             <Col span={6} className="right_ri custom—1"><Checkbox onChange={this.scoreSelectTypeOnChange} ref="scoreCheckBox" checked={this.state.scoreChecked} value="defined">自定义:</Checkbox></Col>
 
           </Row>
