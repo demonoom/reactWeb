@@ -373,7 +373,7 @@ body{
 	}
 	.ant-tabs:not(.ant-tabs-vertical) .ant-tabs-tabpane{
 		height:100%;
-		padding:8px 0 0 16px
+		padding:8px 0 0 16px;
 	}
 	.ant-tabs:not(.ant-tabs-vertical) .ant-tabs-tabpane > div:first-child{
 		height:100%
@@ -392,7 +392,7 @@ body{
 		overflow-x:hidden;
 		position: absolute;
 		top: 0;
-		width:calc(100% - 16px);
+		width:calc(100% - 16px) !important;
 
 		border:none !important
 	}
@@ -739,7 +739,7 @@ html, body, #root {
 	text-align:center;
 }
 .ant-table-thead > tr > th.ant-table-selection-score3, .ant-table-tbody > tr > td.ant-table-selection-score3{
-	width:106px;
+	width:146px;
 	text-align:center;
 }
 .ant-table-thead > tr > th.ant-table-selection-smallclass, .ant-table-tbody > tr > td.ant-table-selection-smallclass{
@@ -805,6 +805,9 @@ html, body, #root {
 }
 .ant-form{
 	height:100%;
+}
+.ant-form > div{
+	height:100% !important;
 }
 .ant-form-fo{
 	height:240px !important;
