@@ -61,7 +61,12 @@
 <div id="root"></div>
 <div class="ant-layout-footer">
   <BackTopButton/>
-  小蚂蚁移动教学平台 版权所有 恒坐标教育集团
+  <script>
+    if (sessionStorage.getItem("ident")==null || sessionStorage.getItem("ident")==""){
+      document.write("<div>小蚂蚁移动教学平台 版权所有 恒坐标教育集团</div>");
+    }
+  </script>
+
 </div>
 
 <script src="index.js"></script>
