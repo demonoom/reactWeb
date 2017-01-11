@@ -19,12 +19,9 @@ const StudyEvaluateMenu = React.createClass({
   },
 
   handleClick(e) {
-    this.setState({
+    mMenu.setState({
       currentMenu: e.key,
     });
-  },
-  //菜单被选择时执行的函数
-  subMenuTitleClick(e){
     var domE = e.domEvent;
     var target = domE.target;
     if(navigator.userAgent.indexOf("Chrome") > -1){
@@ -32,22 +29,15 @@ const StudyEvaluateMenu = React.createClass({
     }else{
       target = domE.target;
     }
-    $("div[style]").each(function(){
+    $("li[style]").each(function(){
       $(this).css("background-color","");
     });
     target.style.backgroundColor="#e5f2fe";
-    this.setState({openSubMenu:e.key});
+    mMenu.setState({openSubMenu:e.key});
     var optContent = e.key;
     if(e.key=="studyEvaluate"){
-      this.props.callbackParent(optContent);
+      mMenu.props.callbackParent(optContent);
     }
-  },
-
-  onChange(page) {
-    console.log(page);
-    this.setState({
-      currentPage: page,
-    });
   },
 
   render() {
@@ -56,20 +46,12 @@ const StudyEvaluateMenu = React.createClass({
           <div className="menu_til">学习评价</div>
           <Menu ref="middleMenu" onClick={this.handleClick}
                 className="cont_t"
-                defaultOpenKeys={['goSchool']}
+                defaultOpenKeys={['studyEvaluate']}
                 openKeys={[this.state.openSubMenu]}
-                selectedKeys={['assignHomeWork']}
+                selectedKeys={['studyEvaluate']}
                 mode="inline"
           >
-            <SubMenu key="studyEvaluate" onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" className='le_1' /><span>学情分析</span></span>}>
-
-            </SubMenu>
-{/*            <SubMenu key="homeWorkCount" onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" className='le_1' /><span>作业统计</span></span>}>
-            </SubMenu>
-            <SubMenu key="correctHomeWork" onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" className='le_1' /><span>批改作业</span></span>}>
-            </SubMenu>*/}
-
-
+            <Menu.Item key="studyEvaluate" style={{backgroundColor:'#e5f2fe'}} > <span><Icon type="mail" className='le_1' /><span>学情分析</span></span> </Menu.Item>
           </Menu>
         </div>
     );

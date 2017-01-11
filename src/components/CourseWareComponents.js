@@ -43,6 +43,9 @@ const CourseWareComponents = React.createClass({
         courseWare.setState({totalCount:0});
     },
 
+    componentDidMount(){
+        console.log("did")
+    },
 
 
     getTeachPlans(ident,teachScheduleId,optType,pageNo,knowledgeName,dataFilter){
@@ -379,6 +382,17 @@ const CourseWareComponents = React.createClass({
      },*/
 
     render: function () {
+       /* var lastClickKnowledgeName = courseWare.state.knowledgeName;
+        if(lastClickKnowledgeName == null || lastClickKnowledgeName==""){
+            lastClickKnowledgeName = lastClickMenuName;
+        }*/
+        $(".ant-menu-submenu-title").each(function(){
+            if($(this)[0].textContent==lastClickMenuName){
+                $(this).css("background-color","#e5f2fe");
+            }else{
+                $(this).css("background-color","");
+            }
+        });
         return (
             <div>
                 <div>

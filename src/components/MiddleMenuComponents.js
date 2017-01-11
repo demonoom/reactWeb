@@ -30,6 +30,7 @@ const MiddleMenuComponents = React.createClass({
       show: 1,
       lessonCount:0,
       menuList:[],
+      selectedKey:''
     };
   },
 
@@ -37,11 +38,6 @@ const MiddleMenuComponents = React.createClass({
     mMenu.setState({
       currentMenu: e.key,
     });
-
-    //location.hash=e.key;
-  },
-  //菜单被选择时执行的函数
-  subMenuTitleClick(e){
     var domE = e.domEvent;
     var target = domE.target;
     if(navigator.userAgent.indexOf("Chrome") > -1){
@@ -49,7 +45,7 @@ const MiddleMenuComponents = React.createClass({
     }else{
       target = domE.target;
     }
-    $("div[style]").each(function(){
+    $("li[style]").each(function(){
       $(this).css("background-color","");
     });
     target.style.backgroundColor="#e5f2fe" ;
@@ -57,8 +53,6 @@ const MiddleMenuComponents = React.createClass({
     var optContent = e.key+"#"+"bySchedule";
     mMenu.props.callbackParent(optContent);
   },
-
-
 
   getLessonMenu(pageNo){
     var param = {
@@ -71,11 +65,9 @@ const MiddleMenuComponents = React.createClass({
         console.log(ret.msg);
         List.splice(0,List.length);
         ret.response.forEach(function (e) {
-          // var lessonArray = e.split("#");
           var scheduleId = e.colTsId;
           var courseName = e.colTitle;
           var courseTimes = 0;//当值为0时，系统不显示具体的子菜单数量（即菜单上无徽标显示）
-          // scheduleCount++;
           List.push([ scheduleId, courseName, courseTimes]);
         });
         mMenu.buildMenuChildren(List);
@@ -83,7 +75,6 @@ const MiddleMenuComponents = React.createClass({
         mMenu.setState({menuList: List,lessonCount:pager.rsCount});
       },
       onError : function(error) {
-        // alert(error);
         message.error(error);
       }
     });
@@ -120,15 +111,25 @@ const MiddleMenuComponents = React.createClass({
   buildMenuChildren:function (menuList) {
     children = menuList.map((e, i)=> {
 
-
       const menu = (
           <Menu onClick={mMenu.menuItemOnClick}>
               <Menu.Item key={e[0]+"#"+e[1]} className="popup_i_icon"><Icon className="icon_right" type="edit" />修改</Menu.Item>
               <Menu.Item key={e[0]} className="popup_i_icon"><Icon className="icon_right" type="delete" />删除</Menu.Item>
             </Menu>
       );
-      return <SubMenu key={e[0]} onTitleClick={this.subMenuTitleClick} style={{backgroundColor:'red'}} title={<span><span>{e[1]}</span><Badge count={e[2]}/> <Dropdown overlay={menu}  trigger={['click']}  className='del_right'><i className="iconfont iconfont_more">&#xe60e;</i></Dropdown> </span>}>
-      </SubMenu>
+      if(i==0){
+        mMenu.setState({
+          currentMenu: e[0],
+        });
+        var optContent = e[0]+"#"+"bySchedule";
+        mMenu.props.callbackParent(optContent);
+        return <Menu.Item key={e[0]} style={{backgroundColor:'#e5f2fe'}} > {e[1]} <Dropdown overlay={menu}  trigger={['click']}  className='del_right'><i className="iconfont iconfont_more">&#xe60e;</i></Dropdown>
+        </Menu.Item>
+      }else{
+        return <Menu.Item key={e[0]} > {e[1]} <Dropdown overlay={menu}  trigger={['click']}  className='del_right'><i className="iconfont iconfont_more">&#xe60e;</i></Dropdown>
+        </Menu.Item>
+      }
+
     });
   },
 
@@ -144,8 +145,6 @@ const MiddleMenuComponents = React.createClass({
    * @param key 被删除备课计划的id
    */
   deleteTeachSchedule:function (key) {
-    //alert("请先删除当前进度下的教学资源，再执行此操作"+e.currentTarget.title);
-
     confirm({
       title: '确定要删除该备课计划?',
       content: '',
@@ -168,19 +167,12 @@ const MiddleMenuComponents = React.createClass({
             mMenu.getLessonMenu(mMenu.state.currentPage);
           },
           onError : function(error) {
-            // alert(error);
             message.error(error);
           }
         });
       },
       onCancel() {},
     });
-
-
-/*    var confirmResult = confirm("确定要删除该备课计划?");
-    if(confirmResult){
-
-    }*/
   },
 
   /**
@@ -205,9 +197,9 @@ const MiddleMenuComponents = React.createClass({
           <TeachingComponents ref="teachingComponents" callbackParent={this.handleMenu}/>
           <Menu ref="middleMenu" onClick={this.handleClick}
                 className="cont_t2"
-                defaultOpenKeys={['goSchool']}
-                openKeys={[this.state.openSubMenu]}
-                selectedKeys={['LeftNav']}
+                defaultOpenKeys={[mMenu.state.currentMenu]}
+                openKeys={[this.state.currentMenu]}
+                selectedKeys={[mMenu.state.currentMenu]}
                 mode="inline"
           >
             {children}
