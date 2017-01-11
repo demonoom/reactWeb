@@ -10,13 +10,6 @@ function callback(key) {
     // alert(key);
 }
 
-const text = `
-  A dog is a type of domesticated animal.
-  Known for its loyalty and faithfulness,
-  it can be found as a welcome guest in many households across the world.
-`;
-
-
 var courseWare;
 var courseWareList;
 var activeKey = new Array();
@@ -49,8 +42,6 @@ const CourseWareComponents = React.createClass({
 
 
     getTeachPlans(ident,teachScheduleId,optType,pageNo,knowledgeName,dataFilter){
-        // alert("ccc:"+ident+"==="+teachScheduleId+"===="+optType);
-        // alert("dataFilter:"+dataFilter);
         courseWare.setState({
             ident:ident,
             teachScheduleId:teachScheduleId,
@@ -80,7 +71,6 @@ const CourseWareComponents = React.createClass({
                         var fileType=fileName.substring(fileName.lastIndexOf(".")+1);
                         var pointId = e.point.content;
                         var collectCount = e.collectCount; //收藏次数即现今的点赞次数
-                        // alert(e.createTime);//1476 0186 7700 0
                         var fileTypeLogo;
                         var htmlPath="";
                         if(fileType=="ppt"){
@@ -97,9 +87,6 @@ const CourseWareComponents = React.createClass({
                             htmlPath = e.htmlPath;
                         }
                         var createTime = courseWare.getLocalTime(e.createTime);
-                        // console.log(uId+"==========="+colName+"=="+colFileType);
-                        // var courseInfo = {"uId":uId,"colName":colName,"colFileType":colFileType};
-                        //courseWare.handlePanel(courseInfo);
                         activeKey.push(fileName);
                         courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointId,createTime,fileTypeLogo,htmlPath,collectCount]);
                     });
@@ -171,7 +158,6 @@ const CourseWareComponents = React.createClass({
                     courseWare.setState({totalCount:parseInt(pager.pageCount)*15});
                 },
                 onError : function(error) {
-                    // alert(error);
                     message.error(error);
                 }
 
@@ -192,12 +178,6 @@ const CourseWareComponents = React.createClass({
 
     },
 
-    /*handlePanel:function (courseInfo) {
-
-     this.setState({courseListState:courseWareList});
-     this.buildPanels();
-     },*/
-
     showModal:function (e) {
         var target = e.target;
         if(navigator.userAgent.indexOf("Chrome") > -1){
@@ -206,7 +186,6 @@ const CourseWareComponents = React.createClass({
             target = e.target;
         }
         var currentSchedule = target.value;
-        // alert("111"+currentSchedule+","+this.refs.useKnowledgeComponents);
         this.refs.useKnowledgeComponents.showModal(currentSchedule,"courseWare",courseWare.state.knowledgeName);
     },
 
@@ -214,12 +193,10 @@ const CourseWareComponents = React.createClass({
     deleteScheduleMaterials(e){
         var target = e.target;
         if(navigator.userAgent.indexOf("Chrome") > -1){
-          //e = window.event;
           target=e.currentTarget;
         }else{
           target = e.target;
         }
-        // alert(target.value);
         var materialIds = target.value;
         confirm({
           title: '确定要删除该课件?',
@@ -235,16 +212,13 @@ const CourseWareComponents = React.createClass({
               onResponse : function(ret) {
                 console.log(ret.msg);
                 if(ret.msg=="调用成功" && ret.response==true){
-                  // alert("课件删除成功");
                   message.success("课件删除成功");
                 }else{
-                  // alert("课件删除失败");
                   message.error("课件删除失败");
                 }
                 courseWare.getTeachPlans(sessionStorage.getItem("ident"),courseWare.state.teachScheduleId,"bySchedule",courseWare.state.currentPage,courseWare.state.knowledgeName)
               },
               onError : function(error) {
-                // alert(error);
                 message.error(error);
               }
             });
@@ -275,16 +249,13 @@ const CourseWareComponents = React.createClass({
             onResponse : function(ret) {
               console.log(ret.msg);
               if(ret.msg=="调用成功" && ret.response==true){
-                // alert("课件删除成功");
                 message.success("课件删除成功");
               }else{
-                // alert("课件删除失败");
                 message.error("课件删除失败");
               }
               courseWare.getTeachPlans(courseWare.state.ident,courseWare.state.teachScheduleId,courseWare.state.optType,1);
             },
             onError : function(error) {
-              // alert(error);
               message.error(error);
             }
           });
@@ -294,63 +265,57 @@ const CourseWareComponents = React.createClass({
     },
 
     buildPanels:function (courseWareList) {
-        coursePanelChildren = courseWareList.map((e, i)=> {
-            var eysOnButton ;
-            if(e[9]!=null && e[9]!="" && typeof(e[9])!="undefined" ){
-                // eysOnButton = <Button style={{ float:'right'}} icon="eye-o" title="查看" value={e[9]} onClick={courseWare.viewFile}></Button>
-                eysOnButton = <a href={e[9]} target="_blank" title="查看"  style={{ float:'right'}}><Button icon="eye-o"/></a>
-            }
-            return <Panel header={<span><span type="" className={e[8]}></span><span className="name_file">{e[1]}</span> </span>}  key={e[1]}>
+        if(courseWareList.length==0){
+            coursePanelChildren = <img src={require('./images/noDataTipImg.png')} />;
+        }else{
+            coursePanelChildren = courseWareList.map((e, i)=> {
+                var eysOnButton ;
+                if(e[9]!=null && e[9]!="" && typeof(e[9])!="undefined" ){
+                    eysOnButton = <a href={e[9]} target="_blank" title="查看"  style={{ float:'right'}}><Button icon="eye-o"/></a>
+                }
+                return <Panel header={<span><span type="" className={e[8]}></span><span className="name_file">{e[1]}</span> </span>}  key={e[1]}>
                     <pre>
 					 <div className="bnt2_tex">
                          <span><span className="col1">文件类型：</span><span className="col2">{e[5]}</span></span>
                          <span><span className="col1">课件名称：</span><span className="col2">{e[1]}</span></span>
                          <span><span className="col1">所在知识点：</span><span className="col2">{e[6]}</span></span>
                          <span><span className="col1">创建人：</span><span className="col2">{e[2]}</span></span>
-                         {/*<span><span className="col1">所在学校：</span><span className="col2">上海七宝中学</span></span>*/}
                          <span><span className="col1">上传时间：</span><span className="col2">{e[7]}</span></span>
                          <span><span className="col1">点赞次数：</span><span className="col2">{e[10]}</span></span>
 					</div>
 					<div className="bnt2_right">
                          <Button style={{ float:'right'}} icon="delete" title="删除" value={e[0]} onClick={this.deleteScheduleMaterials}></Button>
-                        {/*<Button style={{ float:'right'}} icon="download" title="下载"  value={e[3]} onClick={courseWare.downLoadFile}></Button>*/}
                         <a href={e[3]} target="_blank" title="下载" download={e[3]}  style={{ float:'right'}}><Button icon="download"/></a>
                         {eysOnButton}
 					</div>
                     </pre>
-            </Panel>
-        });
-        //courseWare.setState({activeKey:activeKey});
+                </Panel>
+            });
+        }
     },
 
     downLoadFile:function (e) {
-        // alert("123"+e);
-        // window.location.href=e.target.value;
         window.open(e.target.value);
     },
 
     viewFile:function (e) {
-        // alert("123"+e);
         window.location.href=e.target.value;
-        // window.open(e.target.value);
     },
 
     buildKonwledgePanels:function (courseWareList) {
-        coursePanelChildren = courseWareList.map((e, i)=> {
-            var eysOnButton ;
-            var delButton;
-            // var useButton;
-            if(e[9]!=null && e[9]!=""){
-                // eysOnButton = <Button style={{ float:'right'}} icon="eye-o" title="查看" value={e[9]} onClick={courseWare.viewFile}></Button>
-                eysOnButton = <a href={e[9]} target="_blank" title="查看"  style={{ float:'right'}} ><Button icon="eye-o"/></a>
-            }
-            if(e[12]!=null && e[12]==sessionStorage.getItem("ident")){
-                delButton = <Button style={{ float:'right'}} icon="delete" title="删除" value={e[0]} onClick={courseWare.batchDeleteMaterial}></Button>
-            }
-            /*if(e[10]!=null && e[10]!="" && e[10]==3){
-             useButton=<Button value={e[0]} style={{ float:'right'}} type=""  onClick={this.showModal}>引用微课</Button>
-             }*/
-            return <Panel header={<span><span type="" className={e[8]}></span><span className="name_file">{e[1]}</span> </span>}  key={e[1]}>
+        if(courseWareList.length==0){
+            coursePanelChildren = <img src={require('./images/noDataTipImg.png')} style={{align:center}}/>;
+        }else{
+            coursePanelChildren = courseWareList.map((e, i)=> {
+                var eysOnButton ;
+                var delButton;
+                if(e[9]!=null && e[9]!=""){
+                    eysOnButton = <a href={e[9]} target="_blank" title="查看"  style={{ float:'right'}} ><Button icon="eye-o"/></a>
+                }
+                if(e[12]!=null && e[12]==sessionStorage.getItem("ident")){
+                    delButton = <Button style={{ float:'right'}} icon="delete" title="删除" value={e[0]} onClick={courseWare.batchDeleteMaterial}></Button>
+                }
+                return <Panel header={<span><span type="" className={e[8]}></span><span className="name_file">{e[1]}</span> </span>}  key={e[1]}>
                     <pre>
 					<div className="bnt2_tex">
                          <span className="col1">文件类型：{e[5]}</span>
@@ -371,21 +336,12 @@ const CourseWareComponents = React.createClass({
                             </div>
 
                     </pre>
-            </Panel>
-        });
-        //courseWare.setState({activeKey:activeKey});
+                </Panel>
+            });
+        }
     },
 
-    /*componentDidMount(){
-     alert("1111");
-     courseWare.getTeachPlans(23836,5237);
-     },*/
-
     render: function () {
-       /* var lastClickKnowledgeName = courseWare.state.knowledgeName;
-        if(lastClickKnowledgeName == null || lastClickKnowledgeName==""){
-            lastClickKnowledgeName = lastClickMenuName;
-        }*/
         $(".ant-menu-submenu-title").each(function(){
             if($(this)[0].textContent==lastClickMenuName){
                 $(this).css("background-color","#e5f2fe");
