@@ -123,11 +123,23 @@ const MiddleMenuComponents = React.createClass({
         });
         var optContent = e[0]+"#"+"bySchedule";
         mMenu.props.callbackParent(optContent);
-        return <Menu.Item key={e[0]} style={{backgroundColor:'#e5f2fe'}} > {e[1]} <Dropdown overlay={menu}  trigger={['click']}  className='del_right'><i className="iconfont iconfont_more">&#xe60e;</i></Dropdown>
-        </Menu.Item>
+        //div显示的内容过长时，使用title提示
+        if(e[1].length>10){
+          return <Menu.Item key={e[0]} style={{backgroundColor:'#e5f2fe'}}> <div title={e[1]} className="submenu_left_hidden">{e[1]}</div> <Dropdown overlay={menu}  trigger={['click']}  className='del_right'><i className="iconfont iconfont_more">&#xe60e;</i></Dropdown>
+          </Menu.Item>
+        }else{
+          return <Menu.Item key={e[0]} style={{backgroundColor:'#e5f2fe'}}> <div className="submenu_left_hidden">{e[1]}</div> <Dropdown overlay={menu}  trigger={['click']}  className='del_right'><i className="iconfont iconfont_more">&#xe60e;</i></Dropdown>
+          </Menu.Item>
+        }
       }else{
-        return <Menu.Item key={e[0]} > {e[1]} <Dropdown overlay={menu}  trigger={['click']}  className='del_right'><i className="iconfont iconfont_more">&#xe60e;</i></Dropdown>
-        </Menu.Item>
+        if(e[1].length>10){
+          return <Menu.Item key={e[0]} > <div title={e[1]} className="submenu_left_hidden">{e[1]}</div> <Dropdown overlay={menu}  trigger={['click']}  className='del_right'><i className="iconfont iconfont_more">&#xe60e;</i></Dropdown>
+          </Menu.Item>
+        }else{
+          return <Menu.Item key={e[0]} > <div className="submenu_left_hidden">{e[1]}</div> <Dropdown overlay={menu}  trigger={['click']}  className='del_right'><i className="iconfont iconfont_more">&#xe60e;</i></Dropdown>
+          </Menu.Item>
+        }
+
       }
 
     });
