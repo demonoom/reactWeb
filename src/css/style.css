@@ -681,6 +681,9 @@ html, body, #root {
 .icon_pptx{
 	background-position:0 -120px;
 }
+.icon_mp3{
+	background-position:0 -150px;
+}
 .menu_til{
 	font-size:18px;
 	line-height:63px;
