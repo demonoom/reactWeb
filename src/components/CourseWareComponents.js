@@ -85,6 +85,8 @@ const CourseWareComponents = React.createClass({
                         }else if(fileType=="pptx"){
                             fileTypeLogo = "icon_geshi icon_pptx";
                             htmlPath = e.htmlPath;
+                        }else if(fileType=="mp3"){
+                            fileTypeLogo = "icon_geshi icon_mp3";
                         }
                         var createTime = courseWare.getLocalTime(e.createTime);
                         activeKey.push(fileName);

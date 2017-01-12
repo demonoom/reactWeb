@@ -72,8 +72,15 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
     addNormalMaterial(file,fileName){
         var subjectParamArray = courseWareUpload.props.params.split("#");
         var ident = subjectParamArray[0];
-        var knowledgePointId = subjectParamArray[1];
+        var knowledgePointId = "";
         var knowledgeName = subjectParamArray[4];
+        if(subjectParamArray[1] == null || subjectParamArray[1]==""){
+            knowledgePointId = sessionStorage.getItem("lastClickMenuId");
+            knowledgeName = sessionStorage.getItem("lastClickMenuName");
+        }else{
+            knowledgePointId = subjectParamArray[1];
+            knowledgeName = subjectParamArray[4];
+        }
         var isLinkToSchedule=this.state.useSameSchedule;
         //alert("knowledgeName:"+knowledgeName+"\t"+isLinkToSchedule);
         var param = {
