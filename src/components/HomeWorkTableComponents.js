@@ -18,6 +18,7 @@ var subTable;
 const HomeWorkTableComponents = React.createClass({
   getInitialState() {
     subTable = this;
+    this.getDoneHomeworkList(sessionStorage.getItem("ident"),1);
     return {
       selectedRowKeys: [],  // Check here to configure the default column
       loading: false,
@@ -108,7 +109,7 @@ const HomeWorkTableComponents = React.createClass({
   getDoneHomeworkList:function (ident,pageNo) {
     // alert("homttable ident:"+ident+",pageNo:"+pageNo);
     data=[];
-    subTable.setState({currentView:'subjectList'});
+    subTable.setState({currentView:'subjectList',totalCount:0});
     subTable.buildPageView();
     var param = {
       "method":'getUserHomeworkInfoList',

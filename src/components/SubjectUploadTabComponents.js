@@ -322,14 +322,18 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
       }
       var subjectName = UE.getEditor("muSelectContainer").getContent();
       subjectName = subjectName.replace(/\+/g,"%2B"); //将+号替换为十六进制
-      var answer = mulitiAnswer;
+      //将获取的多选答案数组转换为字符串
+      var answer = "";
+      for(var i = 0;i<mulitiAnswer.length;i++){
+        answer += mulitiAnswer[i];
+      }
       var subjectParamArray = this.props.params.split("#");
       var ident = subjectParamArray[0];
       var ScheduleOrSubjectId = subjectParamArray[1];
       var optType = subjectParamArray[3];
       var knowledgeName = subjectParamArray[4];
       var isLinkToSchedule=this.state.useSameScheduleForMSelect;
-      var batchAddSubjectBeanJson={"textTigan":subjectName,"textAnswer":mulitiAnswer,"score":score,"userId":ident,"type":"MC"};
+      var batchAddSubjectBeanJson={"textTigan":subjectName,"textAnswer":answer,"score":score,"userId":ident,"type":"MC"};
       if(optType=="bySubjectId"){
         batchAddSubjectBeanJson.knowledgePointId=ScheduleOrSubjectId;
       }

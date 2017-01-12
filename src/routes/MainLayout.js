@@ -47,13 +47,18 @@ const MainLayout = React.createClass({
     })
   },
   toolbarClick:function (e) {
+    toolbarKey=e.key;
     this.setState({currentKey:e.key});
-    if(e.key=="teachTimes"){
+    if(e.key!="KnowledgeResources"){
       var breadcrumbArray = [{hrefLink:'#/MainLayout',hrefText:"首页"}];
       if(mainLayout.refs.mainTabComponents!=null && typeof(mainLayout.refs.mainTabComponents)!="undefined" ){
-          mainLayout.refs.mainTabComponents.buildBreadcrumb(breadcrumbArray);
+          mainLayout.refs.mainTabComponents.buildBreadcrumb(breadcrumbArray,0);
       }
     }
+
+    /*if(mainLayout.refs.mainTabComponents!=null && typeof(mainLayout.refs.mainTabComponents)!="undefined" ) {
+      mainLayout.refs.mainTabComponents.setCurrentOptType(e.key);
+    }*/
   },
   //获取备课计划下的课件资源
   getTeachPlans:function (optContent,breadCrumbArray) {
@@ -66,6 +71,7 @@ const MainLayout = React.createClass({
 
       var optContentArray = optContent.split("#");
       var childrenCount = optContentArray[3];
+      lastClickMenuChildrenCount = childrenCount;
       if(optContentArray[1]!="bySubjectId"){
         var breadcrumbArray = [{hrefLink:'#/MainLayout',hrefText:"首页"}];
         if(mainLayout.refs.mainTabComponents!=null && typeof(mainLayout.refs.mainTabComponents)!="undefined" ){

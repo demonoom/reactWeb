@@ -22,9 +22,7 @@ const HomeWorkMenu = React.createClass({
     this.setState({
       currentMenu: e.key,
     });
-  },
-  //菜单被选择时执行的函数
-  subMenuTitleClick(e){
+
     var domE = e.domEvent;
     var target = domE.target;
     if(navigator.userAgent.indexOf("Chrome") > -1){
@@ -32,7 +30,7 @@ const HomeWorkMenu = React.createClass({
     }else{
       target = domE.target;
     }
-    $("div[style]").each(function(){
+    $("li[style]").each(function(){
       $(this).css("background-color","");
     });
     target.style.backgroundColor="#e5f2fe";
@@ -41,13 +39,7 @@ const HomeWorkMenu = React.createClass({
     if(e.key=="assignHomeWork"){
       this.props.callbackParent(optContent);
     }
-  },
 
-  onChange(page) {
-    console.log(page);
-    this.setState({
-      currentPage: page,
-    });
   },
 
   render() {
@@ -61,14 +53,7 @@ const HomeWorkMenu = React.createClass({
                 selectedKeys={['assignHomeWork']}
                 mode="inline"
           >
-            <SubMenu key="assignHomeWork" onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" className='le_1' /><span>布置作业</span></span>}>
-            </SubMenu>
-{/*            <SubMenu key="homeWorkCount" onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" className='le_1' /><span>作业统计</span></span>}>
-            </SubMenu>
-            <SubMenu key="correctHomeWork" onTitleClick={this.subMenuTitleClick} title={<span><Icon type="mail" className='le_1' /><span>批改作业</span></span>}>
-            </SubMenu>*/}
-
-
+            <Menu.Item key="assignHomeWork" style={{backgroundColor:'#e5f2fe'}} > <span><Icon type="mail" className='le_1' /><span>布置作业</span></span> </Menu.Item>
           </Menu>
         </div>
     );
