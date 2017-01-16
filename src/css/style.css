@@ -1468,6 +1468,20 @@ a {
 	text-overflow:ellipsis;
 	white-space: nowrap;
 }
+.submenu_left_hidden:hover{
+	padding:4px 8px;
+	background:#000;
+	background: #000;
+    color: #fff;
+	position:relative;
+	  left:0px;
+	  top:0px;
+	  height:25px;
+	  line-height:25px;
+	  display: inline-block;
+	  border-radius:4px;
+	  z-index:1000
+}
 .ant-menu-submenu{
 	margin-right:1px;
 }
@@ -1518,3 +1532,5 @@ a {
 	-webkit-transform:translate(-50%, -50%); /* Safari 和 Chrome */
 	-o-transform:translate(-50%, -50%);
 }
+.title_1{
+	background:red}
