@@ -71,7 +71,8 @@ const MainLayout = React.createClass({
 
       var optContentArray = optContent.split("#");
       var childrenCount = optContentArray[3];
-      lastClickMenuChildrenCount = childrenCount;
+      //lastClickMenuChildrenCount = childrenCount;
+      sessionStorage.setItem("lastClickMenuChildrenCount",childrenCount);
       if(optContentArray[1]!="bySubjectId"){
         var breadcrumbArray = [{hrefLink:'#/MainLayout',hrefText:"首页"}];
         if(mainLayout.refs.mainTabComponents!=null && typeof(mainLayout.refs.mainTabComponents)!="undefined" ){

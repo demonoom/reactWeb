@@ -274,6 +274,10 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
     var ScheduleOrSubjectId = subjectParamArray[1];
     var optType = subjectParamArray[3];
     var knowledgeName = subjectParamArray[4];
+    if(ScheduleOrSubjectId==null || ScheduleOrSubjectId==""){
+        ScheduleOrSubjectId = sessionStorage.getItem("lastClickMenuId");
+        knowledgeName = sessionStorage.getItem("lastClickMenuName");
+    }
     var isLinkToSchedule=this.state.useSameScheduleForSingle;
     // alert("knowledgeName:"+knowledgeName+"\t"+isLinkToSchedule);
     //完成基础的非空验证
@@ -332,6 +336,10 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
       var ScheduleOrSubjectId = subjectParamArray[1];
       var optType = subjectParamArray[3];
       var knowledgeName = subjectParamArray[4];
+      if(ScheduleOrSubjectId==null || ScheduleOrSubjectId==""){
+        ScheduleOrSubjectId = sessionStorage.getItem("lastClickMenuId");
+        knowledgeName = sessionStorage.getItem("lastClickMenuName");
+      }
       var isLinkToSchedule=this.state.useSameScheduleForMSelect;
       var batchAddSubjectBeanJson={"textTigan":subjectName,"textAnswer":answer,"score":score,"userId":ident,"type":"MC"};
       if(optType=="bySubjectId"){
@@ -386,6 +394,10 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
       var ScheduleOrSubjectId = subjectParamArray[1];
       var optType = subjectParamArray[3];
       var knowledgeName = subjectParamArray[4];
+      if(ScheduleOrSubjectId==null || ScheduleOrSubjectId==""){
+        ScheduleOrSubjectId = sessionStorage.getItem("lastClickMenuId");
+        knowledgeName = sessionStorage.getItem("lastClickMenuName");
+      }
       var isLinkToSchedule=this.state.useSameScheduleForCorrect;
       var batchAddSubjectBeanJson={"textTigan":subjectName,"textAnswer":answer,"score":score,"userId":ident,"type":"J"};
       if(optType=="bySubjectId"){
@@ -443,6 +455,10 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
       var ScheduleOrSubjectId = subjectParamArray[1];
       var optType = subjectParamArray[3];
       var knowledgeName = subjectParamArray[4];
+      if(ScheduleOrSubjectId==null || ScheduleOrSubjectId==""){
+        ScheduleOrSubjectId = sessionStorage.getItem("lastClickMenuId");
+        knowledgeName = sessionStorage.getItem("lastClickMenuName");
+      }
       var isLinkToSchedule=this.state.useSameScheduleForSimpleAnswer;
       var batchAddSubjectBeanJson={"textTigan":subjectName,"textAnswer":answer,"score":score,"userId":ident,"type":"S"};
       if(optType=="bySubjectId"){

@@ -119,7 +119,6 @@ const MainTabComponents = React.createClass({
             this.refs.courseWare.getTeachPlans(sessionStorage.getItem("ident"),this.state.currentTeachScheduleId,this.state.currentOptType,1,this.state.currentKnowledgeName,clickKey);
         }else{
             var subjectParams = sessionStorage.getItem("ident")+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType+"#"+this.state.currentKnowledgeName+"#"+clickKey;
-            globalSubjectParam=subjectParams;
             this.refs.subTable.initGetSubjectInfo(subjectParams);
             //this.setState({subjectParams:sessionStorage.getItem("ident")+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType+"#"+this.state.currentKnowledgeName+"#"+clickKey});
         }
@@ -147,7 +146,7 @@ const MainTabComponents = React.createClass({
             </Menu>
         );
         //this.state.currentMenuChildrenCount
-        if(this.state.currentOptType=="bySubjectId" && lastClickMenuChildrenCount==0){
+        if(this.state.currentOptType=="bySubjectId" && sessionStorage.getItem("lastClickMenuChildrenCount")==0 && sessionStorage.getItem("lastClickMenuId")!=null ){
             displayType='block';
             tabPanel=<TabPane tab={<span>课件<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link icon_filter" href="#"><Icon type="down-circle-o"/></a></Dropdown></span>} key="课件"><CourseWareComponents ref="courseWare"/></TabPane>;
             subjectTabPanel=<TabPane tab={<span>题目<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link icon_filter" href="#"><Icon type="down-circle-o" /></a></Dropdown></span>} key="题目"><SubjectTable  ref="subTable" params={this.state.subjectParams}/></TabPane>;

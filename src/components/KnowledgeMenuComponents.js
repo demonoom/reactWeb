@@ -71,7 +71,7 @@ const KnowledgeMenuComponents = React.createClass({
                 //lastClickMenuName = menuName;
                 // lastClickMenuId
                 // var optContent = menuId+"#"+"bySubjectId"+"#"+menuName+"#"+childrenCount;
-                var optContent = lastClickMenuId+"#"+"bySubjectId"+"#"+lastClickMenuName+"#"+childrenCount;
+                var optContent = sessionStorage.getItem("lastClickMenuId")+"#"+"bySubjectId"+"#"+sessionStorage.getItem("lastClickMenuName")+"#"+childrenCount;
                 this.props.callbackParent(optContent,breadCrumbArray);
             }
         }
@@ -114,8 +114,10 @@ const KnowledgeMenuComponents = React.createClass({
         }else{
             this.bulidBreadCrumbArray(menuName,menuLevel,menuId,openKeysStr);
         }
-        lastClickMenuName = menuName;
-        lastClickMenuId = menuId;
+        // lastClickMenuName = menuName;
+        //lastClickMenuId = menuId;
+        sessionStorage.setItem("lastClickMenuName",menuName);
+        sessionStorage.setItem("lastClickMenuId",menuId);
         var optContent = menuId+"#"+"bySubjectId"+"#"+menuName+"#"+childrenCount;
         this.props.callbackParent(optContent,breadCrumbArray);
     },

@@ -7,9 +7,14 @@ module.exports = function(webpackConfig, env) {
     style: 'css',
   }]);
 
+  entry: {
+    app: './src/index.js'
+  }
+
   // Support hmr
   if (env === 'development') {
-    webpackConfig.devtool = '#eval';
+    /*webpackConfig.devtool = '#eval';*/
+    webpackConfig.devtool = false;
     webpackConfig.babel.plugins.push('dva-hmr');
   } else {
     webpackConfig.babel.plugins.push('dev-expression');
@@ -45,10 +50,10 @@ module.exports = function(webpackConfig, env) {
       loader.test = /\.css$/;
     }
     //加载第三方的样式文件---ckeditor富客户端组件
-    if (loader.test.toString() === '/\\.ckeditor\\.css$/') {
-      loader.exclude = /ckeditor/;
-      loader.test = /\.css$/;
-    }
+    // if (loader.test.toString() === '/\\.ckeditor\\.css$/') {
+    //   loader.exclude = /ckeditor/;
+    //   loader.test = /\.css$/;
+    // }
     //加载第三方的样式文件---wordPaster富客户端插件
     if (loader.test.toString() === '/\\.WordPaster\\.css$/') {
       loader.exclude = /WordPaster/;

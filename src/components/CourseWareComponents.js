@@ -85,6 +85,8 @@ const CourseWareComponents = React.createClass({
                         }else if(fileType=="pptx"){
                             fileTypeLogo = "icon_geshi icon_pptx";
                             htmlPath = e.htmlPath;
+                        }else if(fileType=="mp3"){
+                            fileTypeLogo = "icon_geshi icon_mp3";
                         }
                         var createTime = courseWare.getLocalTime(e.createTime);
                         activeKey.push(fileName);
@@ -148,6 +150,8 @@ const CourseWareComponents = React.createClass({
                         }else if(fileType=="pptx"){
                             fileTypeLogo = "icon_geshi icon_pptx";
                             htmlPath = e.htmlPath;
+                        }else if(fileType=="mp3"){
+                            fileTypeLogo = "icon_geshi icon_mp3";
                         }
                         activeKey.push(fileName);
                         courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointId,createTime,fileTypeLogo,htmlPath,type,collectCount,userId]);
@@ -343,7 +347,7 @@ const CourseWareComponents = React.createClass({
 
     render: function () {
         $(".ant-menu-submenu-title").each(function(){
-            if($(this)[0].textContent==lastClickMenuName){
+            if($(this)[0].textContent==sessionStorage.getItem("lastClickMenuName")){
                 $(this).css("background-color","#e5f2fe");
             }else{
                 $(this).css("background-color","");

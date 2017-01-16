@@ -1462,6 +1462,12 @@ a {
 		text-overflow:ellipsis;
 		white-space: nowrap;
 }
+.submenu_left_hidden{
+	padding: 0px 24px 0 24px;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space: nowrap;
+}
 .ant-menu-submenu{
 	margin-right:1px;
 }
