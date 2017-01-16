@@ -6,7 +6,11 @@ import './index.less';
 // import { browserHistory } from 'dva/router';
 import dva from 'dva';
 
-const app = dva();
+const app = dva({
+    onError(e) {
+        console.log("global error:"+e.message);
+    },
+});
 /*const app = dva({
     history: browserHistory,
 });
