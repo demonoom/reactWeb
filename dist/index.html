@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="renderer" content="webkit">
+  <title>小蚂蚁移动教学平台</title>
+  <link rel="stylesheet" href="index.css" />
+  <link rel="icon" href="../src/components/images/logo_title.png" type="image/x-icon"/>
+  <!-- 配置文件 -->
+  <script type="text/javascript" src="../ueditor/ueditor.config.js"></script>
+  <!-- 编辑器源码文件 -->
+  <script type="text/javascript" src="../ueditor/ueditor.all.js"></script>
+  <!-- 配置ckEditor和wordPaster   begin -->
+  <link type="text/css" rel="Stylesheet"
+        href="../ueditor/WordPaster/css/WordPaster.css" />
+  <link type="text/css" rel="Stylesheet"
+        href="../ckeditor/contents.css" />
+  <link type="text/css" rel="stylesheet"
+        href="../ueditor/WordPaster/css/ui-lightness/jquery-ui-1.8.11.custom.css" />
+  <script type="text/javascript" src="../ueditor/WordPaster/js/jquery.min.js"
+          charset="utf-8"></script>
+  <script type="text/javascript"
+          src="../ueditor/WordPaster/js/jquery-ui-1.8.11.custom.min.js"></script>
+  <script type="text/javascript" src="../ueditor/WordPaster/js/WordPaster.js"
+          charset="utf-8"></script>
+  <script type="text/javascript" src="../ckeditor/ckeditor.js"></script>
+  <script type="text/javascript" src="../ckeditor/adapters/jquery.js"></script>
+  <script type="text/javascript" src="../jquerylib/jquery.form.js"></script>
+  <!-- 配置ckEditor和wordPaster   end -->
+  <script type="text/javascript" src="../ueditor/lang/zh-cn/zh-cn.js"></script>
+  <script type="text/javascript" src="../jquerylib/jquery.min.js"></script>
+  <script type="text/javascript" src="../jquerylib/jquery.jsonp.js"></script>
+<!--  <script type="text/javascript" src="WebServiceHelper.js"></script>
+  <script type="text/javascript" src="components/MiddleMenuComponents.js"></script>-->
+  <!–[if lt IE 9]><!--<script src=”http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js”></script>--><![endif]–>
+  <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/style.css">
+  <script type="text/javascript">
+   /* var browserName = navigator.userAgent.toLowerCase();
+    this.chrome38 = browserName.indexOf("chrome/38") > 0;
+    if(this.chrome38){
+
+    }*/
+   var pasterMgr;
+   var editorContent="";
+   var muEditorContent="";
+   var correctEditorContent="";
+   var simpleEditorContent="";
+   var answerContent="";
+   var toolbarKey="";
+   //var lastClickMenuChildrenCount=0;
+   //var lastClickMenuId="";
+//   var lastClickMenuName="";
+    //      var pasterMgr = new WordPasterManager();
+    //      pasterMgr.Load();//加载控件
+
+    //      UE.getEditor('container',{onready:function(){//创建一个编辑器实例
+    //        pasterMgr.SetEditor(this);
+    //      }});
+  </script>
+
+</head>
+<body>
+
+<div id="root"></div>
+<div class="ant-layout-footer">
+  <BackTopButton/>
+  <div id="componyInfo"></div>
+  <script>
+    var timer;
+    function checkIsLogin() {
+        if (sessionStorage.getItem("ident")==null || sessionStorage.getItem("ident")==""){
+            timer = setTimeout("checkIsLogin()",500);
+            document.getElementById("componyInfo").innerHTML="小蚂蚁移动教学平台 版权所有 恒坐标教育集团";
+        }else{
+            document.getElementById("componyInfo").innerHTML="";
+            clearTimeout(timer);
+        }
+    }
+    checkIsLogin();
+  </script>
+
+</div>
+
+<script src="index.js"></script>
+
+</body>
+</html>

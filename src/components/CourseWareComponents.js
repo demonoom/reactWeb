@@ -110,6 +110,7 @@ const CourseWareComponents = React.createClass({
             }else if(dataFilter=="other"){
                 userId = "-"+ident;
             }
+            // alert("getMaterialsByKnowledgePointId:"+teachScheduleId);
             param = {
                 "method":'getMaterialsByKnowledgePointId',
                 "userId":userId,
@@ -119,7 +120,7 @@ const CourseWareComponents = React.createClass({
             };
             doWebService(JSON.stringify(param), {
                 onResponse : function(ret) {
-                    console.log("teachMSG:"+ret.msg);
+                    console.log("teachMSG:"+ret.msg+"=="+ret.response.length);
                     courseWareList=new Array();
                     courseWareList.splice(0);
                     var response = ret.response;
