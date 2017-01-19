@@ -44,16 +44,11 @@ module.exports = function(webpackConfig, env) {
       loader.exclude = /node_modules/;
       loader.test = /\.css$/;
     }
-    //加载第三方的样式文件---ueditor富客户端组件
-    if (loader.test.toString() === '/\\.ueditor\\.css$/') {
-      loader.exclude = /ueditor/;
+    //加载第三方的样式文件---ckeditor富客户端组件
+    if (loader.test.toString() === '/\\.ckeditor\\.css$/') {
+      loader.exclude = /ckeditor/;
       loader.test = /\.css$/;
     }
-    //加载第三方的样式文件---ckeditor富客户端组件
-    // if (loader.test.toString() === '/\\.ckeditor\\.css$/') {
-    //   loader.exclude = /ckeditor/;
-    //   loader.test = /\.css$/;
-    // }
     //加载第三方的样式文件---wordPaster富客户端插件
     if (loader.test.toString() === '/\\.WordPaster\\.css$/') {
       loader.exclude = /WordPaster/;

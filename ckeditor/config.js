@@ -25,25 +25,14 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'colors' },
 		{ name: 'about' }
 	];
-	
-	//�Զ��幤����ʾ��
-	//config.toolbar = 'Full';
-	 config.toolbar_Custom = [
-      ['Source', '-', 'Save', 'NewPage', 'Preview', '-', 'Templates'],
-      ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord','imagepaster','netpaster', '-', 'Print', 'SpellChecker', 'Scayt','Image'],
-      ['Undo', 'Redo', '-', 'Find', 'Replace', '-', 'SelectAll', 'RemoveFormat'],
-      ['Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField'],
-      '/',
-      ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript'],
-      ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', 'Blockquote'],
-      ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-      ['Link', 'Unlink', 'Anchor'],
-      ['Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak'],
-      '/',
-       ['Styles', 'Format', 'Font', 'FontSize'],
-       ['TextColor', 'BGColor']
-   ];
-	 	 
+
+	//保留word样式
+	config.pasteFromWordRemoveFontStyles = false;
+	config.pasteFromWordRemoveStyles = false;
+	//是否强制复制来的内容去除格式 
+	config.forcePasteAsPlainText = false;//不去除
+	config.pasteFromWordNumberedHeadingToList = false;
+
 	// Remove some buttons, provided by the standard plugins, which we don't
 	// need to have in the Standard(s) toolbar.
 	config.removeButtons = 'Underline,Subscript,Superscript';

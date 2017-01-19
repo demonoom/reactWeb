@@ -3,11 +3,13 @@ import { Tabs, Button,Radio } from 'antd';
 import { Modal} from 'antd';
 import { Form, Input, Select, Row, Col, Checkbox } from 'antd';
 import {   message } from 'antd';
-import RichEditorComponents from  './RichEditorComponents';
-import RichEditorComponentsForMuSelect from './RichEditorComponentsForMuSelect';
-import RichEditorComponentsForCorrect from './RichEditorComponentsForCorrect';
-import RichEditorComponentsForSimpleAnswer from './RichEditorComponentsForSimpleAnswer';
-import RichEditorComponentsForAnswer from './RichEditorComponentsForAnswer';
+import CkEditorComponentForSingleByModify from './ckeditorComponents/CkEditorComponentForSingleByModify';
+import CkEditorComponentForMuSelectByModify from './ckeditorComponents/CkEditorComponentForMuSelectByModify';
+import CkEditorComponentForCorrectByModify from './ckeditorComponents/CkEditorComponentForCorrectByModify';
+import CkEditorComponentForSimpleByModify from './ckeditorComponents/CkEditorComponentForSimpleByModify';
+import CkEditorComponentForAnswerByModify from './ckeditorComponents/CkEditorComponentForAnswerByModify';
+
+
 import { doWebService } from '../WebServiceHelper';
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -87,32 +89,35 @@ const SubjectEditTabComponents = React.createClass({
     this.setState({ visible: false });
   },
   editorsInit(){
-    if(this.state.activeKey=="单选题"){
-      if(!this.isEmpty(UE.getEditor("singleContainer"))){
-        UE.getEditor("singleContainer").setContent('');
-      }
-    }else if(this.state.activeKey=="多选题"){
-      if(!this.isEmpty(UE.getEditor("muSelectContainer"))){
-        UE.getEditor("muSelectContainer").setContent('');
-      }
-    }else if(this.state.activeKey=="判断题"){
-      if(!this.isEmpty(UE.getEditor("correctContainer"))){
-        UE.getEditor("correctContainer").setContent('');
-      }
-    }else if(this.state.activeKey=="简答题"){
-      if(!this.isEmpty(UE.getEditor("simpleAnswerContainer"))){
-        UE.getEditor("simpleAnswerContainer").setContent('');
-      }
-      if(!this.isEmpty(UE.getEditor("answerContainer"))){
-        UE.getEditor("answerContainer").setContent('');
-      }
+    if(!this.isEmpty(CKEDITOR.instances['singleEditorByModify'])){
+      CKEDITOR.instances['singleEditorByModify'].setData('');
     }
+    if(!this.isEmpty(CKEDITOR.instances['muEditorByModify'])){
+      CKEDITOR.instances['muEditorByModify'].setData('');
+    }
+    if(!this.isEmpty(CKEDITOR.instances['correctEditorByModify'])){
+      CKEDITOR.instances['correctEditorByModify'].setData('');
+    }
+    if(!this.isEmpty(CKEDITOR.instances['simpleEditorByModify'])){
+      CKEDITOR.instances['simpleEditorByModify'].setData('');
+    }
+    if(!this.isEmpty(CKEDITOR.instances['answerEditorByModify'])){
+      CKEDITOR.instances['answerEditorByModify'].setData('');
+    }
+    /*if(this.state.activeKey=="单选题"){
+
+    }else if(this.state.activeKey=="多选题"){
+
+    }else if(this.state.activeKey=="判断题"){
+
+    }else if(this.state.activeKey=="简答题"){
+
+    }*/
   },
   handleCancel() {
     this.setState({ visible: false,activeKey: "单选题" });
-    this.editorsInit();
-    pasterMgr.Init();
-    pasterMgr.Config["PostUrl"] = "http://www.maaee.com/Excoord_For_Education/manage/subject/subject_upload.jsp";
+    //this.editorsInit();
+    this.initPage();
   },
 
   selectHandleChange:function (value) {
@@ -136,8 +141,6 @@ const SubjectEditTabComponents = React.createClass({
       this.refs.singleAnswer.state.value="A";
     }
     this.setState({activeKey: "单选题" ,scoreChecked:false,scoreInputState:true,scoreDisable:false,mulitiAnswerDefaultValue:'A',correctAnswerValue:"正确"});
-    pasterMgr.Init();
-    pasterMgr.Config["PostUrl"] = "http://www.maaee.com/Excoord_For_Education/manage/subject/subject_upload.jsp";
   },
 
   //修改题目
@@ -158,6 +161,7 @@ const SubjectEditTabComponents = React.createClass({
         }else{
           message.error("题目修改失败");
         }
+        this.initPage();
       },
       onError : function(error) {
         message.error(error);
@@ -180,7 +184,7 @@ const SubjectEditTabComponents = React.createClass({
     if(this.state.scoreDisable==true){
       score =this.state.scoreDefinedValue;
     }
-    var subjectName = UE.getEditor("singleContainer").getContent();
+    var subjectName = CKEDITOR.instances['singleEditorByModify'].getData();
     subjectName = subjectName.replace(/\+/g,"%2B"); //将+号替换为十六进制
     var answer = this.state.singleAnswer;
     //完成基础的非空验证
@@ -213,9 +217,13 @@ const SubjectEditTabComponents = React.createClass({
     if(this.state.scoreDisable==true){
       score =this.state.scoreDefinedValue;
     }
-    var subjectName = UE.getEditor("muSelectContainer").getContent();
+    var subjectName = CKEDITOR.instances['muEditorByModify'].getData();
     subjectName = subjectName.replace(/\+/g,"%2B"); //将+号替换为十六进制
-    var answer = mulitiAnswer;
+    //将获取的多选答案数组转换为字符串
+    var answer = "";
+    for(var i = 0;i<mulitiAnswer.length;i++){
+      answer += mulitiAnswer[i];
+    }
     //完成基础的非空验证
     if(this.isEmpty(subjectName)){
       // alert("请输入题目");
@@ -248,7 +256,7 @@ const SubjectEditTabComponents = React.createClass({
     if(this.state.scoreDisable==true){
       score =this.state.scoreDefinedValue;
     }
-    var subjectName = UE.getEditor("correctContainer").getContent();
+    var subjectName =  CKEDITOR.instances['correctEditorByModify'].getData();
     subjectName = subjectName.replace(/\+/g,"%2B"); //将+号替换为十六进制
     var answer = this.state.correctAnswerValue;
     //完成基础的非空验证
@@ -282,9 +290,9 @@ const SubjectEditTabComponents = React.createClass({
     if(this.state.scoreDisable==true){
       score =this.state.scoreDefinedValue;
     }
-    var subjectName = UE.getEditor("simpleAnswerContainer").getContent();
+    var subjectName = CKEDITOR.instances['simpleEditorByModify'].getData();
     subjectName = subjectName.replace(/\+/g,"%2B"); //将+号替换为十六进制
-    var answer = UE.getEditor("answerContainer").getContent();
+    var answer = CKEDITOR.instances['answerEditorByModify'].getData();
     answer = answer.replace(/\+/g,"%2B"); //将+号替换为十六进制
     //完成基础的非空验证
     if(this.isEmpty(subjectName)){
@@ -449,7 +457,7 @@ const SubjectEditTabComponents = React.createClass({
                       <span>题目</span>
                   </Col>
                   <Col span={20}>
-                    <RichEditorComponents/>
+                    <CkEditorComponentForSingleByModify/>
                   </Col>
               </Row>
               <Row>
@@ -480,7 +488,7 @@ const SubjectEditTabComponents = React.createClass({
                     <span>题目</span>
                   </Col>
                   <Col span={20}>
-                    <RichEditorComponentsForMuSelect/>
+                    <CkEditorComponentForMuSelectByModify/>
                   </Col>
                 </Row>
 
@@ -507,7 +515,7 @@ const SubjectEditTabComponents = React.createClass({
                   <span>题目</span>
                 </Col>
                 <Col span={20}>
-                  <RichEditorComponentsForCorrect/>
+                  <CkEditorComponentForCorrectByModify/>
                 </Col>
               </Row>
 
@@ -538,7 +546,7 @@ const SubjectEditTabComponents = React.createClass({
                   <span>题目</span>
                 </Col>
                 <Col span={20}>
-                  <RichEditorComponentsForSimpleAnswer/>
+                  <CkEditorComponentForSimpleByModify/>
                 </Col>
               </Row>
 
@@ -548,8 +556,7 @@ const SubjectEditTabComponents = React.createClass({
                 </Col>
                 <Col span={20}>
                   <div>
-                    {/*<Input type="textarea" ref="simpleAnswerInput"  defaultValue={this.state.simpleAnswerValue}  rows={4}  />*/}
-                    <RichEditorComponentsForAnswer/>
+                    <CkEditorComponentForAnswerByModify/>
                   </div>
                 </Col>
               </Row>

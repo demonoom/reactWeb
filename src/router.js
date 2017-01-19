@@ -6,6 +6,7 @@ import Buttons from './routes/Buttons';
 import Btns from './routes/btnTest'
 import MainLayout from './routes/MainLayout';
 import Login from './routes/Login';
+import CkEditorTest from './routes/CkEditorTest';
 
 export default function({ history }) {
     return (
@@ -17,6 +18,7 @@ export default function({ history }) {
             <Route path="/btnTest" component={Btns} />
             <Route path="/MainLayout" component={MainLayout} />
             <Route path="/login" component={Login}/>
+            <Route path="/ckTest" component={CkEditorTest}/>
         </Router>
     );
 };

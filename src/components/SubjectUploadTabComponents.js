@@ -1,63 +1,21 @@
 import React, { PropTypes } from 'react';
 import { Tabs, Button,Radio } from 'antd';
 import { Modal} from 'antd';
-import { Slider } from 'antd';
-import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox } from 'antd';
-import { Upload,  message } from 'antd';
-import RichEditorComponents from  './RichEditorComponents';
-import RichEditorComponentsForMuSelect from './RichEditorComponentsForMuSelect';
-import RichEditorComponentsForCorrect from './RichEditorComponentsForCorrect';
-import RichEditorComponentsForSimpleAnswer from './RichEditorComponentsForSimpleAnswer';
-import RichEditorComponentsForAnswer from './RichEditorComponentsForAnswer';
+import { Form, Input, Select, Row, Col, Checkbox } from 'antd';
+import {  message } from 'antd';
+import CkEditorComponentForSingle from './ckeditorComponents/CkEditorComponentForSingle';
+import CkEditorComponentForMuSelect from './ckeditorComponents/CkEditorComponentForMuSelect';
+import CkEditorComponentForCorrect from './ckeditorComponents/CkEditorComponentForCorrect';
+import CkEditorComponentForSimple from './ckeditorComponents/CkEditorComponentForSimple';
+import CkEditorComponentForAnswer from './ckeditorComponents/CkEditorComponentForAnswer';
 import { doWebService } from '../WebServiceHelper';
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 const Option = Select.Option;
 const CheckboxGroup = Checkbox.Group;
-const plainOptions = ['A', 'B', 'C','D','E'];
-
-
 const TabPane = Tabs.TabPane;
 
-/*滑动输入框数据范围定义*/
-const marks = {
-  1: '1',
-  2: '2',
-  3: '3',
-  4: '4',
-  5: '5',
-  6: '6',
-  7: {
-    style: {
-      color: 'red',
-    },
-    label: <strong></strong>,
-  },
-};
-
-const props = {
-  name: 'file',
-  showUploadList: true,
-  // action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
-  action: 'http://www.maaee.com/Excoord_Upload_Server/file/upload',
-  beforeUpload(file) {
-    data:{file}
-  },
-  onChange(info) {
-    if (info.file.status !== 'uploading') {
-      console.log(info.file, info.fileList);
-    }
-    if (info.file.status === 'done') {
-      message.success(`${info.file.name} file uploaded successfully.`);
-    } else if (info.file.status === 'error') {
-      message.error(`${info.file.name} file upload failed.`);
-    }
-  },
-};
 var mulitiAnswer = new Array('A');
-// var data=new Array();
-var uploadFileList=[];
-
 var subjectUpload;
 const SubjectUploadTabComponents = Form.create()(React.createClass({
   getInitialState() {
@@ -66,7 +24,6 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
       loading: false,
       visible: false,
       activeKey: '单选题',
-      markSelected:6,
       score:1,
       subjectName:'',
       singleAnswer:'A',
@@ -82,7 +39,6 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
     };
   },
   showModal() {
-    // pasterMgr.Init();
     this.setState({
       visible: true,
     });
@@ -92,53 +48,33 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
   },
   editorsInit(){
       if(this.state.activeKey=="单选题"){
-        if(!this.isEmpty(UE.getEditor("singleContainer"))){
-          UE.getEditor("singleContainer").setContent('');
+        if(!this.isEmpty(CKEDITOR.instances['singleEditor'])){
+          CKEDITOR.instances['singleEditor'].setData('');
         }
       }else if(this.state.activeKey=="多选题"){
-        if(!this.isEmpty(UE.getEditor("muSelectContainer"))){
-          UE.getEditor("muSelectContainer").setContent('');
+        if(!this.isEmpty(CKEDITOR.instances['muEditor'])){
+          CKEDITOR.instances['muEditor'].setData('');
         }
       }else if(this.state.activeKey=="判断题"){
-        if(!this.isEmpty(UE.getEditor("correctContainer"))){
-          UE.getEditor("correctContainer").setContent('');
+        if(!this.isEmpty(CKEDITOR.instances['correctEditor'])){
+          CKEDITOR.instances['correctEditor'].setData('');
         }
       }else if(this.state.activeKey=="简答题"){
-        if(!this.isEmpty(UE.getEditor("simpleAnswerContainer"))){
-          UE.getEditor("simpleAnswerContainer").setContent('');
+        if(!this.isEmpty(CKEDITOR.instances['simpleEditor'])){
+          CKEDITOR.instances['simpleEditor'].setData('');
         }
-        if(!this.isEmpty(UE.getEditor("answerContainer"))){
-          UE.getEditor("answerContainer").setContent('');
+        if(!this.isEmpty(CKEDITOR.instances['answerEditor'])){
+          CKEDITOR.instances['answerEditor'].setData('');
         }
       }
   },
   handleCancel() {
-    /*var editorBodyArray = document.getElementsByTagName("body");
-    for(var i =0;i<editorBodyArray.length;i++){
-      if(editorBodyArray[i].className=="view"){
-        editorBodyArray[i].innerHTML="";
-      }
-    }*/
     this.setState({ visible: false });
-    // this.editorsInit();
     this.initPage();
-    pasterMgr.Init();
-    pasterMgr.Config["PostUrl"] = "http://www.maaee.com/Excoord_For_Education/manage/subject/subject_upload.jsp";
-    //subjectUpload.initPage();
-    // UE.getEditor("singleContainer").reset();
-
   },
 
   handleEmail: function(val){
     this.props.callbackParent(val);
-    //this.setState({lessonCount: val});
-  },
-
-  sliderOnChange(value) {
-    console.log("sliderValue:"+value)
-    this.setState({
-      markSelected: value,
-    });
   },
 
   selectHandleChange:function (value) {
@@ -165,8 +101,6 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
       this.refs.scoreDefined.refs.input.value="";
     }
     this.setState({scoreChecked:false,scoreInputState:true,scoreDisable:false,mulitiAnswerDefaultValue:'A',correctAnswerValue:"正确"});
-    pasterMgr.Init();
-    pasterMgr.Config["PostUrl"] = "http://www.maaee.com/Excoord_For_Education/manage/subject/subject_upload.jsp";
   },
 
   //新增题目到知识点下
@@ -184,17 +118,14 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
             var userId = sessionStorage.getItem("ident");
             subjectUpload.teachScheduleInfo(userId,knowledgeName,subjectsIds);
           }else{
-            // alert("题目添加成功");
             message.success("题目添加成功");
             subjectUpload.props.courseUploadCallBack();
           }
         }else{
-          // alert("题目添加失败");
           message.error("题目添加失败");
         }
       },
       onError : function(error) {
-        // alert(error);
         message.error(error);
       }
     });
@@ -216,7 +147,6 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
         }
       },
       onError : function(error) {
-        // alert(error);
         message.error(error);
       }
     });
@@ -232,13 +162,11 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
       onResponse : function(ret) {
         console.log(ret.msg);
         if(ret.msg=="调用成功" && ret.response==true){
-          // alert("题目添加成功");
           message.success("题目添加成功");
           subjectUpload.props.courseUploadCallBack();
         }
       },
       onError : function(error) {
-        // alert(error);
         message.error(error);
       }
     });
@@ -253,22 +181,17 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
     }else{
       target = e.target;
     }
-    // data=[];
     //获取当前点击的是哪个按钮
     var currentButton = target.textContent;
-    // alert(currentButton);
     var ident = sessionStorage.getItem("ident");
     var score = this.state.score;
     //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
     if(this.state.scoreDisable==true){
       score =this.state.scoreDefinedValue;
     }
-    var subjectName = UE.getEditor("singleContainer").getContent();
+    var subjectName = CKEDITOR.instances['singleEditor'].getData();
     subjectName = subjectName.replace(/\+/g,"%2B"); //将+号替换为十六进制
-    console.log("richContent:"+subjectName);
-    // var subjectName = values.subjectName;
     var answer = this.state.singleAnswer;
-    // alert("params:"+this.props.params);
     var subjectParamArray = this.props.params.split("#");
     var ident = subjectParamArray[0];
     var ScheduleOrSubjectId = subjectParamArray[1];
@@ -279,16 +202,12 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
         knowledgeName = sessionStorage.getItem("lastClickMenuName");
     }
     var isLinkToSchedule=this.state.useSameScheduleForSingle;
-    // alert("knowledgeName:"+knowledgeName+"\t"+isLinkToSchedule);
     //完成基础的非空验证
     if(this.isEmpty(subjectName)){
-      // alert("请输入题目");
       message.warning("请输入题目");
     }else if(this.isEmpty(answer)){
-      // alert("请输入答案");
       message.warning("请输入答案");
     }else if(this.isEmpty(score) || score==0){
-      // alert("请选择分值");
       message.warning("请选择分值");
     }else{
       var batchAddSubjectBeanJson={"textTigan":subjectName,"textAnswer":answer,"score":score,"userId":ident,"type":"C"};
@@ -324,7 +243,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
       if(this.state.scoreDisable==true){
         score =this.state.scoreDefinedValue;
       }
-      var subjectName = UE.getEditor("muSelectContainer").getContent();
+      var subjectName = CKEDITOR.instances['muEditor'].getData();
       subjectName = subjectName.replace(/\+/g,"%2B"); //将+号替换为十六进制
       //将获取的多选答案数组转换为字符串
       var answer = "";
@@ -347,13 +266,10 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
       }
       //完成基础的非空验证
       if(this.isEmpty(subjectName)){
-        // alert("请输入题目");
         message.warning("请输入题目");
       }else if(this.isEmpty(answer)){
-        // alert("请输入答案");
         message.warning("请输入答案");
       }else if(this.isEmpty(score) || score==0){
-        // alert("请选择分值");
         message.warning("请选择分值");
       }else{
         this.saveSubject(batchAddSubjectBeanJson,knowledgeName,isLinkToSchedule);
@@ -380,13 +296,12 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
     var currentButton = target.textContent;
     this.props.form.validateFieldsAndScroll((err, values) => {
       var ident = sessionStorage.getItem("ident");
-      var easy = this.state.markSelected;
       var score = this.state.score;
       //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
       if(this.state.scoreDisable==true){
         score =this.state.scoreDefinedValue;
       }
-      var subjectName = UE.getEditor("correctContainer").getContent();
+      var subjectName =  CKEDITOR.instances['correctEditor'].getData();
       subjectName = subjectName.replace(/\+/g,"%2B"); //将+号替换为十六进制
       var answer = this.state.correctAnswerValue;
       var subjectParamArray = this.props.params.split("#");
@@ -405,13 +320,10 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
       }
       //完成基础的非空验证
       if(this.isEmpty(subjectName)){
-        // alert("请输入题目");
         message.warning("请输入题目");
       }else if(this.isEmpty(answer)){
-        // alert("请输入答案");
         message.warning("请输入答案");
       }else if(this.isEmpty(score) || score==0){
-        // alert("请选择分值");
         message.warning("请选择分值");
       }else {
         this.saveSubject(batchAddSubjectBeanJson,knowledgeName,isLinkToSchedule);
@@ -439,16 +351,15 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
     var currentButton = target.textContent;
     this.props.form.validateFieldsAndScroll((err, values) => {
       var ident = sessionStorage.getItem("ident");
-      var easy = this.state.markSelected;
       var score = this.state.score;
       //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
       if(this.state.scoreDisable==true){
         score =this.state.scoreDefinedValue;
       }
-      var subjectName = UE.getEditor("simpleAnswerContainer").getContent();
+      var subjectName = CKEDITOR.instances['simpleEditor'].getData();
       subjectName = subjectName.replace(/\+/g,"%2B"); //将+号替换为十六进制
       // var answer = this.refs.simpleAnswerInput.refs.input.value;
-      var answer = UE.getEditor("answerContainer").getContent();
+      var answer = CKEDITOR.instances['answerEditor'].getData();
       answer = answer.replace(/\+/g,"%2B"); //将+号替换为十六进制
       var subjectParamArray = this.props.params.split("#");
       var ident = subjectParamArray[0];
@@ -466,13 +377,10 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
       }
       //完成基础的非空验证
       if(this.isEmpty(subjectName)){
-        // alert("请输入题目");
         message.warning("请输入题目");
       }else if(this.isEmpty(answer)){
-        // alert("请输入答案");
         message.warning("请输入答案");
       }else if(this.isEmpty(score) || score==0){
-        // alert("请选择分值");
         message.warning("请选择分值");
       }else {
         this.saveSubject(batchAddSubjectBeanJson,knowledgeName,isLinkToSchedule);
@@ -527,105 +435,12 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
     this.setState({singleAnswer:e.target.value});
   },
 
-  handleFileSubmit(fileList){
-    // alert("已上传文件："+fileList.length);
-    for(var i=0;i<fileList.length;i++){
-      var fileJson = fileList[i];
-      var fileObj = fileJson.fileObj;
-      uploadFileList.push(fileObj[0]);
-    }
-  },
-
-  //点击保存按钮，文件上传
-  uploadFile(){
-    if(uploadFileList.length==0){
-      // alert("请选择上传的文件,谢谢！");
-      message.warning("请选择上传的文件,谢谢！");
-    }else{
-      var formData = new FormData();
-      formData.append("file",uploadFileList[0]);
-      formData.append("name",uploadFileList[0].name);
-      $.ajax({
-        type: "POST",
-        url: "http://101.201.45.125:8890/Excoord_Upload_Server/file/upload",
-        // url:"http://192.168.1.115:8890/Excoord_Upload_Server/file/upload",
-        enctype: 'multipart/form-data',
-        data: formData,
-        // 告诉jQuery不要去处理发送的数据
-        processData : false,
-        // 告诉jQuery不要去设置Content-Type请求头
-        contentType : false,
-        success: function (responseStr) {
-          if(responseStr!=""){
-            var fileUrl=responseStr;
-            this.addNormalMaterial(fileUrl,uploadFileList[0].name);
-            this.setState({ visible: false });
-          }
-        },
-        error : function(responseStr) {
-          console.log("error"+responseStr);
-        }
-      });
-    }
-  },
-
-  //材料题新增
-  materialHandleSubmit(e) {
-    e.preventDefault();
-    var target = e.target;
-    if(navigator.userAgent.indexOf("Chrome") > -1){
-      target=e.currentTarget;
-    }else{
-      target = e.target;
-    }
-    // data=[];
-    //获取当前点击的是哪个按钮
-    var currentButton = target.textContent;
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      var ident = sessionStorage.getItem("ident");
-      var score = this.state.score;
-      //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
-      if(this.state.scoreDisable==true){
-        score =this.state.scoreDefinedValue;
-      }
-      var subjectName = UE.getEditor("singleContainer").getContent();
-      var answer = this.state.singleAnswer;
-      var subjectParamArray = this.props.params.split("#");
-      var ScheduleOrSubjectId = subjectParamArray[1];
-      var optType = subjectParamArray[3];
-      var batchAddSubjectBeanJson={"textTigan":subjectName,"textAnswer":answer,"score":score,"userId":ident,"type":"S"};
-      if(optType=="bySubjectId"){
-        batchAddSubjectBeanJson.knowledgePointId=ScheduleOrSubjectId;
-      }
-      //完成基础的非空验证
-      if(this.isEmpty(subjectName)){
-        // alert("请输入题目");
-        message.warning("请输入题目");
-      }else if(this.isEmpty(answer)){
-        // alert("请输入答案");
-        message.warning("请输入答案");
-      }else if(this.isEmpty(score) || score==0){
-        // alert("请选择分值");
-        message.warning("请选择分值");
-      }else {
-        //this.saveSubject(batchAddSubjectBeanJson);
-        if(currentButton=="保存并返回列表"){
-          //关闭并返回题目列表页面
-          this.setState({ visible: false,score:1});
-        }
-      }
-      //重新初始化页面
-      this.initPage();
-    });
-  },
-
   tabOnChange(key) {
-    // alert(key);
-    // this.initPage();
     this.setState({activeKey: key});
+    //重新初始化页面
+    this.initPage();
   },
 
-  //useSameSchedule
   checkBoxOnChangeForSingle(e) {
     console.log(`checked = ${e.target.checked}`);
     this.setState({useSameScheduleForSingle: e.target.checked});
@@ -771,7 +586,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                           label={(<span>题目</span>)}
                           hasFeedback>
                   {getFieldDecorator('subjectName')(
-                    <RichEditorComponents/>
+                      <CkEditorComponentForSingle />
                   )}
                 </FormItem>
                 <FormItem className="custom—top"
@@ -800,7 +615,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                           label={(<span>题目</span>)}
                           hasFeedback>
                   {getFieldDecorator('subjectNameM')(
-                    <RichEditorComponentsForMuSelect/>
+                    <CkEditorComponentForMuSelect/>
                   )}
                 </FormItem>
                 <FormItem className="custom—top"
@@ -823,7 +638,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                           label={(<span>题目</span>)}
                           hasFeedback>
                   {getFieldDecorator('subjectNameM')(
-                    <RichEditorComponentsForCorrect/>
+                    <CkEditorComponentForCorrect/>
                   )}
                 </FormItem>
                 <FormItem className="custom—top"
@@ -849,7 +664,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                           label={(<span>题目</span>)}
                           hasFeedback>
                   {getFieldDecorator('subjectNameM')(
-                    <RichEditorComponentsForSimpleAnswer/>
+                    <CkEditorComponentForSimple/>
                   )}
                 </FormItem>
                 <FormItem className="custom—top"
@@ -858,8 +673,7 @@ const SubjectUploadTabComponents = Form.create()(React.createClass({
                           hasFeedback>
                   {getFieldDecorator('answer')(
                     <div>
-                      {/*<Input type="textarea" ref="simpleAnswerInput"  defaultValue={this.state.simpleAnswerValue}  rows={4}  />*/}
-                      <RichEditorComponentsForAnswer/>
+                      <CkEditorComponentForAnswer/>
                     </div>
                   )}
                 </FormItem>

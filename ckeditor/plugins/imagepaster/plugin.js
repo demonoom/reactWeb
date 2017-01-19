@@ -11,7 +11,7 @@
 		});
 		editor.ui.addButton('imagepaster',
 		{
-			label: '粘贴本地图片,Word文档',
+			label: '粘贴本地文件,Word文档',
 			command: 'imagepaster',
 			icon: this.path + 'images/paster.png'
 		});
