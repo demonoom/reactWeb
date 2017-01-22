@@ -31,6 +31,7 @@ const MainTabComponents = React.createClass({
             breadcrumbArray:[],
             currentKnowledgeName:'',
             dataFilter:'self',
+            subjectDataFilter:'self',
             currentMenuChildrenCount:-1,
             toolbarExtenderDisplay:false
         };
@@ -52,8 +53,7 @@ const MainTabComponents = React.createClass({
     onChange(activeKey) {
         if(activeKey=="题目"){
             this.setState({activeKey:'题目'});
-            //this.setState({subjectParams:sessionStorage.getItem("ident")+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType+"#"+this.state.currentKnowledgeName+"#"+this.state.dataFilter});
-            var subjectParams = sessionStorage.getItem("ident")+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType+"#"+this.state.currentKnowledgeName+"#"+this.state.dataFilter;
+            var subjectParams = sessionStorage.getItem("ident")+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType+"#"+this.state.currentKnowledgeName+"#"+this.state.subjectDataFilter;
             this.refs.subTable.initGetSubjectInfo(subjectParams);
         }else{
             this.setState({activeKey:'课件'});
@@ -114,10 +114,11 @@ const MainTabComponents = React.createClass({
      */
     menuItemOnClick : function ({ key }) {
         var clickKey = `${key}`;
-        this.setState({dataFilter:clickKey});
         if(this.state.activeKey=="课件"){
+            this.setState({dataFilter:clickKey});
             this.refs.courseWare.getTeachPlans(sessionStorage.getItem("ident"),this.state.currentTeachScheduleId,this.state.currentOptType,1,this.state.currentKnowledgeName,clickKey);
         }else{
+            this.setState({subjectDataFilter:clickKey});
             var subjectParams = sessionStorage.getItem("ident")+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType+"#"+this.state.currentKnowledgeName+"#"+clickKey;
             this.refs.subTable.initGetSubjectInfo(subjectParams);
             //this.setState({subjectParams:sessionStorage.getItem("ident")+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType+"#"+this.state.currentKnowledgeName+"#"+clickKey});
@@ -128,7 +129,7 @@ const MainTabComponents = React.createClass({
      */
     courseUploadCallBack(){
         if(this.state.activeKey=="题目"){
-          var subjectParams = sessionStorage.getItem("ident")+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType+"#"+this.state.currentKnowledgeName+"#"+this.state.dataFilter;
+          var subjectParams = sessionStorage.getItem("ident")+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType+"#"+this.state.currentKnowledgeName+"#"+this.state.subjectDataFilter;
           this.refs.subTable.initGetSubjectInfo(subjectParams);
         }else{
           this.refs.courseWare.getTeachPlans(sessionStorage.getItem("ident"),this.state.currentTeachScheduleId,this.state.currentOptType,1,this.state.currentKnowledgeName,this.state.dataFilter);
