@@ -1468,7 +1468,7 @@ a {
 	text-overflow:ellipsis;
 	white-space: nowrap;
 }
-.submenu_left_hidden:hover{
+/*.submenu_left_hidden:hover{
 	padding:4px 8px;
 	background:#000;
 	background: #000;
@@ -1481,7 +1481,7 @@ a {
 	  display: inline-block;
 	  border-radius:4px;
 	  z-index:1000
-}
+}*/
 .ant-menu-submenu{
 	margin-right:1px;
 }
