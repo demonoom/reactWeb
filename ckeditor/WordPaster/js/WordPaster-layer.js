@@ -27,7 +27,7 @@ var WordPasterConfig = {
 	"EncodeType"		    : "GB2312"
 	, "Company"			    : "荆门泽优软件有限公司"
 	, "Version"			    : "1,5,123,31671"
-	, "License"			    : ""
+	, "License"			    : "DAFB3AE12494FA2E2891238FC22E46AFA6437200A05E5F1074B4158489E04D967F0A74B3C2F8A56BA656228480"
 	, "Debug"			    : false//调试模式
 	, "LogFile"			    : "f:\\log.txt"//日志文件路径
 	, "PasteWordType"	    : ""	//粘贴WORD的图片格式。JPG/PNG/GIF/BMP，推荐使用JPG格式，防止出现大图片。
@@ -527,6 +527,7 @@ function WordPasterManager()
 	    this.layerID = layer.open({
 	        type: 1,
 	        title: false,
+			skin: 'layui-layer-demo', //样式类名
 	        area: ['auto', 'auto'],
 	        border: [10, 0.3, '#000'], //去掉默认边框
 	        shade: [0], //去掉遮罩
