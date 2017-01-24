@@ -530,7 +530,8 @@ function WordPasterManager()
 			skin: 'layui-layer-demo', //样式类名
 	        area: ['auto', 'auto'],
 	        border: [10, 0.3, '#000'], //去掉默认边框
-	        shade: [0], //去掉遮罩
+			shade: 0, //去掉遮罩
+			shadeClose: true,
 	        closeBtn: [0, false], //去掉默认关闭按钮
 	        content: _this.imgUploaderDlg
 	    });
