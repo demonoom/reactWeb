@@ -313,7 +313,7 @@ const AssignHomeWorkComponents = React.createClass({
           var content = <Popover placement="topLeft" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.shortContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article></Popover>;
           var subjectType=e.typeName;
           subjectData.push({
-            key: key+"#"+e.shortContent,
+            key: key+"^"+e.shortContent,
             content: content,
             subjectType:subjectType,
           });
@@ -342,9 +342,12 @@ const AssignHomeWorkComponents = React.createClass({
     var i = 0;
     sids="";
     selectedSubjectKeys.forEach(function (e) {
-      var subjectArray = e.split("#");
+      var subjectArray = e.split("^");
+      console.log("subjectArray[1]："+subjectArray[1])
       defaultCheckedList.push(subjectArray[0]);
-      plainOptions.push({label:<article id='contentHtml' className='content content_2' value={subjectArray[1]} dangerouslySetInnerHTML={{__html: subjectArray[1]}} ></article>,value:subjectArray[0]});
+      // <article id='contentHtml' className='content content_2' value={subjectArray[1]} dangerouslySetInnerHTML={{__html: subjectArray[1]}} ></article>
+      var content = <Popover content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html:subjectArray[1]}}></article>}><article id='contentHtml' className='content content_2' dangerouslySetInnerHTML={{__html: subjectArray[1]}}></article></Popover>;
+      plainOptions.push({label:content,value:subjectArray[0]});
       i++;
       if(i!=selectedSubjectKeys.length){
         sids+=subjectArray[0]+",";
@@ -391,7 +394,7 @@ const AssignHomeWorkComponents = React.createClass({
             var checkedListJson = plainOptions[i];
             var key = checkedListJson.value;
             var labelValue = checkedListJson.label.props.value;
-            selectedKeys.push(key+"#"+labelValue);
+            selectedKeys.push(key+"^"+labelValue);
             defaultCheckedList.push(key);
             if(i!=plainOptions.length-1){
               sids+=key+",";

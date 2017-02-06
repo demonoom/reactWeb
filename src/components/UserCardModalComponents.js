@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Modal,message } from 'antd';
+import { Modal,message,Button } from 'antd';
 import { doWebService } from '../WebServiceHelper';
 
 var teacherInfo;
@@ -23,19 +23,13 @@ const UserCardModalComponents = React.createClass({
       visible: true,
     });
   },
-  handleOk() {
-    teacherInfo.setState({ loading: true });
-    setTimeout(() => {
-      teacherInfo.setState({ loading: false, visible: false });
-    }, 3000);
-  },
+
   handleCancel() {
     teacherInfo.setState({ visible: false });
   },
 
   componentWillMount(){
     var ident = sessionStorage.getItem("ident");
-    // alert("will"+ident);
     teacherInfo.getTeacherInfo(ident);
   },
 
@@ -68,6 +62,16 @@ const UserCardModalComponents = React.createClass({
     });
   },
 
+  searchOwnerCourseWare(){
+    teacherInfo.props.callbackParent("getCourseWares");
+    teacherInfo.setState({ visible: false });
+  },
+
+  searchOwnerSubject(){
+    teacherInfo.props.callbackParent("getSubjects");
+    teacherInfo.setState({ visible: false });
+  },
+
   render() {
     return (
         <div className="layout_logo">
@@ -75,7 +79,6 @@ const UserCardModalComponents = React.createClass({
           <Modal
               visible={teacherInfo.state.visible}
               title={<p className="user_cont1"> <img className="img_us" src={teacherInfo.state.userHeadIcon}  onClick={teacherInfo.showModal}/><span>{teacherInfo.state.userName}</span><img src={teacherInfo.state.userHeadIcon} className="blur"/><br/></p>}
-              onOk={teacherInfo.handleOk}
               onCancel={teacherInfo.handleCancel}
               className="model_wi"
               transitionName=""  //禁用modal的动画效果
@@ -95,7 +98,13 @@ const UserCardModalComponents = React.createClass({
             {/*<p className="user_cont"><span className="name">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span><span className="name1">一年级</span></p>
              <p className="user_cont"><span className="name">班&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span><span className="name1">一班</span></p>*/}
             <p className="user_cont"><span className="name">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：</span><span className="name1">{teacherInfo.state.courseName}</span></p>
-
+            {/*<hr/>
+            <Button type="primary" htmlType="submit" className="login-form-button class_right" onClick={teacherInfo.searchOwnerCourseWare}>
+              我的资源
+            </Button>
+            <Button type="primary" htmlType="submit" className="login-form-button class_right" onClick={teacherInfo.searchOwnerSubject}>
+              我的题目
+            </Button>*/}
           </Modal>
         </div>
     );

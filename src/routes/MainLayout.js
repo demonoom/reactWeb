@@ -37,6 +37,7 @@ const MainLayout = React.createClass({
       openKeysStr:'',
       // locale: enUS,
       locale: 'zh-cn',
+      resouceType:'',
     };
   },
 
@@ -48,7 +49,7 @@ const MainLayout = React.createClass({
   },
   toolbarClick:function (e) {
     toolbarKey=e.key;
-    this.setState({currentKey:e.key});
+    this.setState({currentKey:e.key,resouceType:''});
     if(e.key!="KnowledgeResources"){
       var breadcrumbArray = [{hrefLink:'#/MainLayout',hrefText:"首页"}];
       if(mainLayout.refs.mainTabComponents!=null && typeof(mainLayout.refs.mainTabComponents)!="undefined" ){
@@ -111,12 +112,18 @@ const MainLayout = React.createClass({
     return breadCrumbArray;
   },
 
+  getTeacherResource(resouceType){
+    alert("resouceType:"+resouceType);
+    mainLayout.setState({resouceType:resouceType});
+  },
+
 
 
   render() {
     const collapse = this.state.collapse;
     //根据如下判断结果，完成对页面中部位置的渲染，不同情况，渲染不同组件
     var middleComponent;
+    var mainContent;
     var tabComponent=<MainTabComponents ref="mainTabComponents"/>;
     if(this.state.currentKey=="teachTimes"){
       middleComponent = <MiddleMenuComponents activeMenu={this.state.activeMiddleMenu}  callbackParent={this.getTeachPlans}/>;
@@ -132,6 +139,31 @@ const MainLayout = React.createClass({
       middleComponent = <StudyEvaluateMenu callbackParent={this.getStudyEvaluate} ></StudyEvaluateMenu>
       tabComponent=<StudyEvaluateTabComponents ref="studyEvaluateTabComponents"/>;
     }
+    if(mainLayout.state.resouceType==null || mainLayout.state.resouceType==''){
+      mainContent = <Row>
+        <Col span={5}>
+          {middleComponent}
+        </Col>
+        <Col span={19}>
+          <div className="ant-layout-container">
+            <div className="ant-layout-content">
+              {tabComponent}
+            </div>
+          </div>
+        </Col>
+      </Row>;
+    }else{
+      mainContent = <Row>
+        <Col span={24}>
+          <div className="ant-layout-container">
+            <div className="ant-layout-content">
+              {tabComponent}
+            </div>
+          </div>
+        </Col>
+      </Row>;
+    }
+
 
     return (
         <LocaleProvider locale={this.state.locale}>
@@ -139,7 +171,7 @@ const MainLayout = React.createClass({
 
         <aside className="ant-layout-sider">
           <div className="ant-layout-logo">
-            <UserCardModalComponents/>
+            <UserCardModalComponents callbackParent={this.getTeacherResource}/>
           </div>
           <Menu mode="inline" theme="dark" defaultSelectedKeys={[this.state.currentKey]}  onClick={this.toolbarClick}>
             <Menu.Item key="teachTimes" className="padding_menu">
@@ -179,18 +211,7 @@ const MainLayout = React.createClass({
           </div>
 
           <div className="ant-layout-operation">
-            <Row>
-              <Col span={5}>
-                  {middleComponent}
-              </Col>
-              <Col span={19}>
-                  <div className="ant-layout-container">
-                    <div className="ant-layout-content">
-                      {tabComponent}
-                    </div>
-                  </div>
-              </Col>
-            </Row>
+            {mainContent}
           </div>
 
         </div>

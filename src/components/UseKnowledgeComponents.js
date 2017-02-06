@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react';
 import { Modal, Button,message } from 'antd';
-import { Form, Input, Tooltip, Icon, Cascader, Select,Checkbox,Radio } from 'antd';
+import { Form, Input, Select,Radio,Row,Col } from 'antd';
 import { doWebService } from '../WebServiceHelper';
+const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -14,24 +15,18 @@ const UseKnowledgeComponents = React.createClass({
   getInitialState() {
     knowledge = this;
     return {
-      loading: false,
       visible: false,
       menuList:[],
-      schedule:'',
+      schedule:'',//当前下拉列表选择的备课计划id
       currentKnowlege:'',
       optType:'',
-      inputState:true,
-      isNewSchedule:false,
-      currentKnowledgeState:false,
-      newScheduleState:false,
       knowledgeName:'',
       selectOptions:[],
+      useTypeValue:'currentKnowledge'
     };
   },
   showModal(currentKnowlege,optType,knowledgeName) {
-    // alert("currentKnowlege:"+currentKnowlege+",optType:"+optType);
     //当前点击的，计划应用的课件资源
-    // alert("knowledgeName in user"+knowledgeName);
     knowledgeName = knowledgeName;
     knowledge.setState({knowledgeName:knowledgeName});
     knowledge.setState({optType:optType});
@@ -41,46 +36,35 @@ const UseKnowledgeComponents = React.createClass({
     });
     this.getLessonMenu();
   },
-  // componentDidMount(){
-  //   this.getLessonMenu();
-  // },
+
+  initPage(){
+    knowledge.setState({
+      schedule:'',
+      selectOptions:[],
+      useTypeValue:'currentKnowledge'
+    });
+  },
 
   handleSubmit(e) {
     e.preventDefault();
-    if(this.state.schedule=='' && knowledge.state.currentKnowledgeState==false && knowledge.state.newScheduleState==false){
-          // alert("请选择或输入备课计划名称后再进行操作!");
-          message.warning("请选择或输入备课计划名称后再进行操作!");
-          return;
-    }else{
-      if(this.state.isNewSchedule==true){
-        var inputObj = knowledge.refs.scheduleName;
-        var scheduleName = inputObj.refs.input.value;
-        if(knowledge.state.currentKnowledgeState==true){
-          scheduleName=this.state.knowledgeName;
-        }else{
-          scheduleName = inputObj.refs.input.value;
-        }
-        knowledge.saveSchedule(sessionStorage.getItem("ident"),scheduleName);
-        // currentKnowledgeState:false,
-        // newScheduleState:false,
-        /*if(knowledge.state.newScheduleState==true){
-         var inputObj = knowledge.refs.scheduleName;
-
-         alert("inputValue:"+scheduleName);
-         //knowledge.saveSchedule(sessionStorage.getItem("ident"),scheduleName);
-         }else{
-         var scheduleName = inputObj.refs.input.value;
-         }*/
+    if(this.state.useTypeValue=="currentKnowledge"){
+      //使用当前知识点作为备课计划
+      var scheduleName = this.state.knowledgeName;
+      knowledge.saveSchedule(sessionStorage.getItem("ident"),scheduleName);
+    }else if(this.state.useTypeValue=="searchSchedule"){
+      //使用至现有计划
+      if(knowledge.state.optType=="courseWare"){
+        knowledge.copyMaterialToSchedule(sessionStorage.getItem("ident"),knowledge.state.currentKnowlege,knowledge.state.schedule);
       }else{
-        // alert("使用");
-        // alert(knowledge.state.currentKnowlege+"===:"+knowledge.state.schedule+",optType"+knowledge.state.optType);
-        if(knowledge.state.optType=="courseWare"){
-          knowledge.copyMaterialToSchedule(sessionStorage.getItem("ident"),knowledge.state.currentKnowlege,knowledge.state.schedule);
-        }else{
-          knowledge.copySubjects(knowledge.state.currentKnowlege,knowledge.state.schedule);
-        }
+        knowledge.copySubjects(knowledge.state.currentKnowlege,knowledge.state.schedule);
       }
+    }else if(this.state.useTypeValue=="newSchedule"){
+      //新建备课计划
+      var inputObj = knowledge.refs.scheduleName;
+      var scheduleName = inputObj.refs.input.value;
+      knowledge.saveSchedule(sessionStorage.getItem("ident"),scheduleName);
     }
+    knowledge.initPage();
   },
 
   saveSchedule(ident,scheduleName){
@@ -99,13 +83,9 @@ const UseKnowledgeComponents = React.createClass({
           }else{
             knowledge.copySubjects(knowledge.state.currentKnowlege,knowledge.state.schedule);
           }
-          // alert("知识点使用成功");
-        }else{
-          // alert("知识点使用失败");
         }
       },
       onError : function(error) {
-        // alert(error);
         message.error(error);
       }
     });
@@ -122,10 +102,8 @@ const UseKnowledgeComponents = React.createClass({
       onResponse : function(ret) {
         console.log(ret.msg);
         if(ret.msg=="调用成功" && ret.response==true){
-          // alert("课件使用成功");
           message.success("课件使用成功");
         }else{
-          // alert("课件使用失败");
           message.error("课件使用失败");
         }
         knowledge.setState({
@@ -133,7 +111,6 @@ const UseKnowledgeComponents = React.createClass({
         });
       },
       onError : function(error) {
-        // alert(error);
         message.error(error);
       }
     });
@@ -149,10 +126,8 @@ const UseKnowledgeComponents = React.createClass({
       onResponse : function(ret) {
         console.log(ret.msg);
         if(ret.msg=="调用成功" && ret.response==true){
-          // alert("题目使用成功");
           message.success("题目使用成功");
         }else{
-          // alert("题目使用失败");
           message.error("题目使用失败");
         }
         knowledge.setState({
@@ -160,19 +135,13 @@ const UseKnowledgeComponents = React.createClass({
         });
       },
       onError : function(error) {
-        // alert(error);
         message.error(error);
       }
     });
   },
 
-  handleOk() {
-    this.setState({ loading: true });
-    setTimeout(() => {
-      this.setState({ loading: false, visible: false });
-    }, 3000);
-  },
   handleCancel() {
+    knowledge.initPage();
     this.setState({ visible: false });
   },
 
@@ -201,21 +170,15 @@ const UseKnowledgeComponents = React.createClass({
         knowledge.buildMenuChildren();
       },
       onError : function(error) {
-        //alert(error);
-        //phone.finish();
       }
     });
   },
 
   handleMenu: function(lessonInfo){
-    //lessonData.splice(0,lessonData.length);
-    // alert("handleMenu");
     List.push([ lessonInfo.scheduleId, lessonInfo.courseName, lessonInfo.courseTimes]);
-    // alert("ll:"+List.length);
   },
 
   buildMenuChildren:function () {
-    //alert("buildMenuChildren"+List.length);
     options = List.map((e, i)=> {
       if(i==0){
         knowledge.setState({schedule:e[0] });
@@ -227,51 +190,15 @@ const UseKnowledgeComponents = React.createClass({
 
   handleSchedule: function(e) {
     var value = e;
-    // alert("vvv:"+value);
     this.setState({
-      schedule: value,isNewSchedule:false
+      schedule: value
     });
-    if(knowledge.state.currentKnowledgeState==true || knowledge.state.newScheduleState==true){
-      this.setState({isNewSchedule:true});
-    }else{
-      this.setState({isNewSchedule:false});
-    }
   },
 
-  checkBoxOnChange(e) {
-    // currentKnowledgeState:false,
-    // newScheduleState:false,
-    console.log(`checked = ${e.target.checked}`);
-    // currentKnowledgeState:false,
-    // newScheduleState:false,
-    var checkBoxValue = e.target.value;
-    var inputObj = knowledge.refs.scheduleName;
-    var currentKnowledgeState=false;
-    var newScheduleState=false;
-    if(checkBoxValue=="currentKnowledge"){
-      if(e.target.checked==true){
-        currentKnowledgeState=true;
-      }else{
-        currentKnowledgeState=false;
-      }
-      inputObj.refs.input.value="";
-      knowledge.setState({inputState:true});
-    }else{
-      if(e.target.checked==true){
-        newScheduleState=true;
-        knowledge.setState({inputState:false});
-      }else{
-        newScheduleState=false;
-        inputObj.refs.input.value="";
-        knowledge.setState({inputState:true});
-      }
-    }
-    knowledge.setState({currentKnowledgeState:currentKnowledgeState,newScheduleState:newScheduleState});
-    if(currentKnowledgeState==true || newScheduleState==true){
-      knowledge.setState({isNewSchedule:true,schedule:''});
-    }else{
-      knowledge.setState({isNewSchedule:false});
-    }
+  useTypeOnChange(e) {
+    this.setState({
+      useTypeValue: e.target.value,
+    });
   },
 
   render() {
@@ -285,8 +212,7 @@ const UseKnowledgeComponents = React.createClass({
         <div>
           <Modal
               visible={this.state.visible}
-              title="使用至"
-              onOk={this.handleOk}
+              title="使用至备课计划"
               onCancel={this.handleCancel}
               transitionName=""  //禁用modal的动画效果
               footer={[
@@ -296,15 +222,17 @@ const UseKnowledgeComponents = React.createClass({
             <Form horizontal>
               <FormItem
                   {...formItemLayout}
-                  label="备课计划"
               >
-                <Select defaultValue={knowledge.state.schedule} value={knowledge.state.schedule} key="teachSchedule" style={{ width: '100%' }} ref="teachSchedule" onChange={this.handleSchedule}>
-                  {knowledge.state.selectOptions}
-                </Select>
-                <div>
-                  <Checkbox onChange={knowledge.checkBoxOnChange} value="currentKnowledge">使用当前知识点名称作为备课计划名称</Checkbox>
-                  <Checkbox onChange={knowledge.checkBoxOnChange} value="newSchedule">新建备课计划:<Input ref="scheduleName" disabled={this.state.inputState}/></Checkbox>
-                </div>
+                <RadioGroup onChange={this.useTypeOnChange} value={this.state.useTypeValue}>
+                  <Radio value="currentKnowledge">使用当前知识点名称作为备课计划名称</Radio>
+                  <Radio value="searchSchedule">
+                    使用至现有计划：
+                    <Select defaultValue={knowledge.state.schedule} value={knowledge.state.schedule} key="teachSchedule" style={{ width: '100%' }} ref="teachSchedule" onChange={this.handleSchedule}>
+                      {knowledge.state.selectOptions}
+                    </Select>
+                  </Radio>
+                  <Radio value="newSchedule">新建备课计划:<Input ref="scheduleName"/></Radio>
+                </RadioGroup>
               </FormItem>
             </Form>
           </Modal>

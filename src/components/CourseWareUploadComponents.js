@@ -36,7 +36,6 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
     //点击保存按钮，文件上传
     uploadFile(){
         if(uploadFileList.length==0){
-            // alert("请选择上传的文件,谢谢！");
             message.warning("请选择上传的文件,谢谢！");
         }else{
             var formData = new FormData();
@@ -82,7 +81,6 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
             knowledgeName = subjectParamArray[4];
         }
         var isLinkToSchedule=this.state.useSameSchedule;
-        //alert("knowledgeName:"+knowledgeName+"\t"+isLinkToSchedule);
         var param = {
             "method":'addNormalMaterial',
             "ident":ident,
@@ -100,17 +98,14 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                     if(isLinkToSchedule == true){
                         courseWareUpload.getOrCreateTeachSchedule(ident,knowledgeName,courseWareReturnId);
                     }else{
-                        // alert("课件添加成功");
                         message.success("课件添加成功");
                     }
                 }else{
-                    // alert("课件添加失败");
                     message.error("课件添加失败");
                 }
                 courseWareUpload.setState({spinLoading:false});
             },
             onError : function(error) {
-                // alert(error);
                 message.error(error);
                 courseWareUpload.setState({spinLoading:false});
             }
@@ -141,7 +136,6 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                 });
             },
             onError : function(error) {
-                // alert(error);
                 message.error(error);
             }
         });
@@ -164,12 +158,10 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
             onResponse : function(ret) {
                 console.log(ret.msg);
                 if(ret.msg=="调用成功" && ret.response==true){
-                    // alert("课件添加成功");
                     message.success("课件添加成功");
                 }
             },
             onError : function(error) {
-                // alert(error);
                 message.error(error);
             }
         });
