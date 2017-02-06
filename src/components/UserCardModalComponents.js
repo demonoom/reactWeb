@@ -98,13 +98,13 @@ const UserCardModalComponents = React.createClass({
             {/*<p className="user_cont"><span className="name">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span><span className="name1">一年级</span></p>
              <p className="user_cont"><span className="name">班&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span><span className="name1">一班</span></p>*/}
             <p className="user_cont"><span className="name">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：</span><span className="name1">{teacherInfo.state.courseName}</span></p>
-            {/*<hr/>
+            <hr/>
             <Button type="primary" htmlType="submit" className="login-form-button class_right" onClick={teacherInfo.searchOwnerCourseWare}>
               我的资源
             </Button>
             <Button type="primary" htmlType="submit" className="login-form-button class_right" onClick={teacherInfo.searchOwnerSubject}>
               我的题目
-            </Button>*/}
+            </Button>
           </Modal>
         </div>
     );

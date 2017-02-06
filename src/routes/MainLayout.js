@@ -11,6 +11,7 @@ import FloatButton  from '../components/FloatButton';
 import KnowledgeMenuComponents from '../components/KnowledgeMenuComponents';
 import HomeWorkMenu from '../components/HomeWorkMenu';
 import HomeWorkTabComponents from '../components/HomeWorkTabComponents';
+import TeacherResource from '../components/TeacherInfos/TeacherResource';
 import moment from 'moment';
 import StudyEvaluateMenu from '../components/StudyEvaluateMenu';
 import StudyEvaluateTabComponents from '../components/StudyEvaluateTabComponents';
@@ -157,7 +158,7 @@ const MainLayout = React.createClass({
         <Col span={24}>
           <div className="ant-layout-container">
             <div className="ant-layout-content">
-              {tabComponent}
+              <TeacherResource/>
             </div>
           </div>
         </Col>
