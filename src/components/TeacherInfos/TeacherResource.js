@@ -55,12 +55,8 @@ const TeacherResource = React.createClass({
             <div>
                 <Breadcrumb separator=">">
                     <Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
-                    <Breadcrumb.Item>
-                        <span>个人中心</span>
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item>
-                        <span>{breadMenuTip}</span>
-                    </Breadcrumb.Item>
+                    <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
+                    <Breadcrumb.Item href="#/MainLayout">{breadMenuTip}</Breadcrumb.Item>
                 </Breadcrumb>
                 {mainComponent}
             </div>

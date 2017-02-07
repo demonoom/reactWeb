@@ -173,10 +173,12 @@ const TeacherAllCourseWare = React.createClass({
             }
         });
         return (
-            <div>
+            <div className='ant-tabs ant-tabs-top ant-tabs-line'>
+			    <div className='ant-tabs-tabpane ant-tabs-tabpane-active'>
                 <Collapse defaultActiveKey={activeKey} activeKey={activeKey} ref="collapse" onChange={callback}>
                     {coursePanelChildren}
                 </Collapse>
+				</div>
                 <Pagination total={courseWare.state.totalCount} pageSize={15} current={courseWare.state.currentPage} onChange={this.onChange}/>
             </div>
         );
