@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Card, Checkbox,Collapse,Icon,Button,Pagination,message,Modal} from 'antd';
 import { doWebService } from '../../WebServiceHelper';
+import UseKnowledgeComponents from '../UseKnowledgeComponents';
 const Panel = Collapse.Panel;
 const confirm = Modal.confirm;
 
@@ -107,13 +108,62 @@ const TeacherAllCourseWare = React.createClass({
         return newDate;
     },
 
+    //分页响应事件
     onChange(page) {
         console.log(page);
         courseWare.getTeachPlans(sessionStorage.getItem("ident"),page);
         this.setState({
             currentPage: page,
         });
+    },
 
+    //删除资源库下的材料（课件）
+    batchDeleteMaterial(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var materialIds = target.value;
+        confirm({
+            title: '确定要删除该课件?',
+            content: '',
+            onOk() {
+                var param = {
+                    "method":'batchDeleteMaterial',
+                    "ident":sessionStorage.getItem("ident"),
+                    "mids":materialIds
+                };
+                doWebService(JSON.stringify(param), {
+                    onResponse : function(ret) {
+                        console.log(ret.msg);
+                        if(ret.msg=="调用成功" && ret.response==true){
+                            message.success("课件删除成功");
+                        }else{
+                            message.error("课件删除失败");
+                        }
+                        courseWare.getTeachPlans(sessionStorage.getItem("ident"),courseWare.state.currentPage);
+                    },
+                    onError : function(error) {
+                        message.error(error);
+                    }
+                });
+            },
+            onCancel() {},
+        });
+    },
+
+    //显示使用至备课计划的弹窗
+    showModal:function (e) {
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var currentSchedule = target.value;
+        this.refs.useKnowledgeComponents.showModal(currentSchedule,"TeacherAllCourseWare",courseWare.state.knowledgeName);
     },
 
     buildKonwledgePanels:function (courseWareList) {
@@ -164,10 +214,13 @@ const TeacherAllCourseWare = React.createClass({
             }
         });
         return (
-            <div>
+            <div className='ant-tabs ant-tabs-top ant-tabs-line'>
+                <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
+			    <div className='ant-tabs-tabpane ant-tabs-tabpane-active'>
                 <Collapse defaultActiveKey={activeKey} activeKey={activeKey} ref="collapse" onChange={callback}>
                     {coursePanelChildren}
                 </Collapse>
+				</div>
                 <Pagination total={courseWare.state.totalCount} pageSize={15} current={courseWare.state.currentPage} onChange={this.onChange}/>
             </div>
         );

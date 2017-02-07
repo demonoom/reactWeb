@@ -51,8 +51,9 @@ const UseKnowledgeComponents = React.createClass({
       //个人中心题目列表的使用功能
       console.log("=====TeacherAllSubjects")
       knowledge.copySubjects(knowledge.state.currentKnowlege,knowledge.state.schedule);
-    }else if(knowledge.state.optType=="TeacherAllSubjects"){
+    }else if(knowledge.state.optType=="TeacherAllCourseWare"){
       //个人中心资源列表的使用功能
+      knowledge.copyMaterialToSchedule(sessionStorage.getItem("ident"),knowledge.state.currentKnowlege,knowledge.state.schedule);
     }else{
       //资源库的使用功能
       if(this.state.useTypeValue=="currentKnowledge"){
@@ -219,7 +220,7 @@ const UseKnowledgeComponents = React.createClass({
     };
 
     var attach;
-    if(knowledge.state.optType=="TeacherAllSubjects"){
+    if(knowledge.state.optType=="TeacherAllSubjects" || knowledge.state.optType=="TeacherAllCourseWare"){
       attach = <div>使用至现有计划：
         <Select defaultValue={knowledge.state.schedule} value={knowledge.state.schedule} key="teachSchedule" style={{ width: '100%' }} ref="teachSchedule" onChange={this.handleSchedule}>
           {knowledge.state.selectOptions}

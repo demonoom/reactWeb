@@ -215,10 +215,12 @@ const TeacherAllSubjects = React.createClass({
     };
     const hasSelected = selectedRowKeys.length > 0;
     return (
-        <div >
+        <div className='ant-tabs ant-tabs-top ant-tabs-line'>
+		  <div className='ant-tabs-tabpane ant-tabs-tabpane-active'>
           <SubjectEditTabComponents ref="subjectEditTabComponents" subjectEditCallBack={subTable.subjectEditCallBack}></SubjectEditTabComponents>
           <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
           <Table columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: 15,onChange:subTable.pageOnChange }} scroll={{ y: 400}}/>
+		  </div>
         </div>
     );
   },

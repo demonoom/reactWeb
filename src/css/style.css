@@ -433,6 +433,17 @@ body{
 	border:1px solid #34d56c !important;
 	color:#fff;
 }
+.add_study-f{
+	background:#2dbe60 !important;
+	border:1px solid #2dbe60 !important;
+	padding:4px 20px !important;
+	color:#fff;
+}
+.add_study-f:hover{
+	background:#34d56c !important;
+	border:1px solid #34d56c !important;
+	color:#fff;
+}
 .add_study-d-le{
 	margin-left:27px;
 }
@@ -588,6 +599,7 @@ html, body, #root {
 	font-size:16px;
 	
 }
+
 .ant-breadcrumb > span:last-child{
 	font-weight:normal
 }
@@ -786,7 +798,10 @@ html, body, #root {
 	padding:4px 8px;
 	font-size:13px !important
 }
-
+.ant-btn-f {
+	padding:4px 20px !important;
+	font-size:13px !important
+}
 .date_tr{
    position:relative;
    font-size:14px;
@@ -1107,12 +1122,16 @@ p.user_cont1{
 p.user_cont1 span{
 	text-align:center;
 	position:relative;
-	top:88px;
+	top:92px;
 	z-index:1000;
 	font-weight: normal;
+	font-size:14px;
 }
 p.user_cont{
 	padding:8px 15px;
+}
+p.user_cont_cen{
+	text-align:center
 }
 p.user_cont span.name{
 	color:#a6a6a6;
@@ -1533,4 +1552,17 @@ a {
 	-o-transform:translate(-50%, -50%);
 }
 .title_1{
-	background:red}
+	background:red
+}
+.user_btn{
+	margin:10px 10px 0 10px ;
+}
+.ant-col-24{
+	height:100%;
+}
+.ant-tabs:not(.ant-tabs-vertical) .ant-tabs-tabpane > div.toobar{
+	padding:0 !important
+}
+.ant-breadcrumb-separator{
+	font-size:12px;
+}
