@@ -114,7 +114,7 @@ const MainLayout = React.createClass({
   },
 
   getTeacherResource(resouceType){
-    alert("resouceType:"+resouceType);
+    // alert("resouceType:"+resouceType);
     mainLayout.setState({resouceType:resouceType});
   },
 
@@ -158,7 +158,7 @@ const MainLayout = React.createClass({
         <Col span={24}>
           <div className="ant-layout-container">
             <div className="ant-layout-content">
-              <TeacherResource/>
+              <TeacherResource ref="teacherResource" resouceType={mainLayout.state.resouceType}/>
             </div>
           </div>
         </Col>

@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { Tabs, Breadcrumb, Icon } from 'antd';
 import { Menu, Dropdown } from 'antd';
 import TeacherAllCourseWare from '../TeacherInfos/TeacherAllCourseWare';
+import TeacherAllSubjects from '../TeacherInfos/TeacherAllSubjects';
 
 const TabPane = Tabs.TabPane;
 //定义js函数，完成删除前的确认提示操作
@@ -13,7 +14,7 @@ function deleteConfirm() {
 var mt;
 let breadcrumbChildren;
 var breadCrumbArray=[];
-const MainTabComponents = React.createClass({
+const TeacherResource = React.createClass({
 
     getInitialState() {
         return {
@@ -32,31 +33,39 @@ const MainTabComponents = React.createClass({
             toolbarExtenderDisplay:false
         };
     },
-    getTeachPlans(optContent){
-        var optContentArray = optContent.split("#");
-        var teachScheduleId = optContentArray[0];
-        var optType =optContentArray[1];
-        var knowledgeName = optContentArray[2];
-        var pageNo = 1;
-        this.refs.courseWare.getTeachPlans(sessionStorage.getItem("ident"),teachScheduleId,optType,pageNo,knowledgeName,this.state.dataFilter);
-        this.setState({currentOptType:optType});
-        this.setState({currentTeachScheduleId:teachScheduleId});
-        this.setState({currentKnowledgeName:knowledgeName});
-        this.setState({activeKey:'课件'});
-        this.setState({subjectParams:sessionStorage.getItem("ident")+"#"+teachScheduleId+"#"+1+"#"+optType+"#"+knowledgeName+"#"+this.state.dataFilter});
+    getTeachPlans(){
+        // this.refs.courseWare.getTeachPlans(sessionStorage.getItem("ident"),teachScheduleId,optType,pageNo,knowledgeName,this.state.dataFilter);
+    },
+
+    componentDidMount(){
+        // alert("ttt"+this.props.resouceType);
     },
 
     render() {
+        var mainComponent ;
+        var breadMenuTip;
+        if(this.props.resouceType=="getCourseWares"){
+            mainComponent = <TeacherAllCourseWare ref="courseWare"/>;
+            breadMenuTip="我的资源";
+        }else if(this.props.resouceType=="getSubjects"){
+            mainComponent = <TeacherAllSubjects ref="teacherAllSubjects"></TeacherAllSubjects>;
+            breadMenuTip="我的题目";
+        }
         return (
             <div>
-                {/*<Breadcrumb separator=">">
+                <Breadcrumb separator=">">
                     <Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
-                    {breadcrumbChildren}
-                </Breadcrumb>*/}
-                <TeacherAllCourseWare ref="courseWare"/>
+                    <Breadcrumb.Item>
+                        <span>个人中心</span>
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item>
+                        <span>{breadMenuTip}</span>
+                    </Breadcrumb.Item>
+                </Breadcrumb>
+                {mainComponent}
             </div>
         );
     },
 });
 
-export default MainTabComponents;
+export default TeacherResource;

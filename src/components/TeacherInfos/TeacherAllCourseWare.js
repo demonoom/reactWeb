@@ -13,7 +13,7 @@ var courseWare;
 var courseWareList;
 var activeKey = new Array();
 var coursePanelChildren;
-const CourseWareComponents = React.createClass({
+const TeacherAllCourseWare = React.createClass({
 
     getInitialState() {
         courseWare = this;
@@ -53,7 +53,7 @@ const CourseWareComponents = React.createClass({
         if(dataFilter=="self"){
             userId = 23836;
         }
-        alert("tea:"+teachScheduleId);
+        // alert("tea:"+teachScheduleId);
         var param = {
             "method":'getMaterialsByKnowledgePointId',
             "userId":userId,
@@ -174,7 +174,6 @@ const CourseWareComponents = React.createClass({
         });
         return (
             <div>
-                <span>资源列表</span>
                 <Collapse defaultActiveKey={activeKey} activeKey={activeKey} ref="collapse" onChange={callback}>
                     {coursePanelChildren}
                 </Collapse>
@@ -185,4 +184,4 @@ const CourseWareComponents = React.createClass({
 
 });
 
-export default CourseWareComponents;
+export default TeacherAllCourseWare;
