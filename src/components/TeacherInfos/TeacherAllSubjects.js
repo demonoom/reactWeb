@@ -77,13 +77,11 @@ const TeacherAllSubjects = React.createClass({
     this.setState({ selectedRowKeys });
   },
 
-  getSubjectDataByKnowledge:function (ident,ScheduleOrSubjectId,pageNo,isOwmer) {
+  getUserSubjectsByUid:function (ident,pageNo) {
     var param = {
-      "method":'getUserSubjectsByKnowledgePoint',
-      "ident":'23836',
-      "pointId":'4340',
-      "isOwmer":'Y',
-      "pageNo":'1'
+      "method":'getUserSubjectsByUid',
+      "userId":ident,
+      "pageNo":pageNo
     };
 
     doWebService(JSON.stringify(param), {
@@ -96,7 +94,7 @@ const TeacherAllSubjects = React.createClass({
           subTable.setState({totalCount:0});
         }else {
           response.forEach(function (e) {
-            console.log("getSubjectDataByKnowledge:"+e);
+            console.log("getUserSubjectsByUid:"+e);
             var key = e.id;
             var name=e.user.userName;
             var content=<Popover  placement="topLeft" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
@@ -104,13 +102,7 @@ const TeacherAllSubjects = React.createClass({
             var subjectScore=e.score;
             var answer = e.answer;
             var userId = e.user.colUid;
-            // var submitTime = subTable.getLocalTime(e.createTime);
-            var subjectOpt=<Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" ></Button>;
-            if(userId==sessionStorage.getItem("ident")){
-              subjectOpt=<div><Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" className="score3_i"></Button><Button style={{ }} type=""  value={e.id+"#"+e.typeName} onClick={subTable.showModifySubjectModal}  icon="edit" title="修改" className="score3_i"></Button><Button style={{ }} type=""  value={e.id} onClick={subTable.delMySubjects}  icon="delete" title="删除" className="score3_i" ></Button></div>;
-            }else{
-              subjectOpt=<Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" ></Button>;
-            }
+            var subjectOpt=<div><Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" className="score3_i"></Button><Button style={{ }} type=""  value={e.id+"#"+e.typeName} onClick={subTable.showModifySubjectModal}  icon="edit" title="修改" className="score3_i"></Button><Button style={{ }} type=""  value={e.id} onClick={subTable.delMySubjects}  icon="delete" title="删除" className="score3_i" ></Button></div>;
             data.push({
               key: key,
               name: name,
@@ -133,21 +125,86 @@ const TeacherAllSubjects = React.createClass({
     });
   },
 
-
+  //页面组件加载完成后的回调函，用来向已加载的组件填充数据
   componentDidMount(){
-    subTable.getSubjectDataByKnowledge();
+    var initPageNo = 1;
+    subTable.getUserSubjectsByUid(sessionStorage.getItem("ident"),initPageNo);
   },
 
+  //列表分页响应事件
   pageOnChange(pageNo) {
-    console.log(pageNo);
-    subTable.initGetSubjectInfo(this.state.subjectParams,pageNo);
+    console.log("pageNo:"+pageNo);
+    subTable.getUserSubjectsByUid(sessionStorage.getItem("ident"),pageNo);
     this.setState({
       currentPage: pageNo,
     });
   },
-
+  //题目修改完成后的回调函数，用来刷新
   subjectEditCallBack(){
-    subTable.getSubjectDataByKnowledge(sessionStorage.getItem("ident"),subTable.state.ScheduleOrSubjectId,subTable.state.currentPage,"Y");
+    subTable.getUserSubjectsByUid(sessionStorage.getItem("ident"),subTable.state.currentPage);
+  },
+
+  //删除资源库下的题目
+  delMySubjects:function (e) {
+    var target = e.target;
+    if(navigator.userAgent.indexOf("Chrome") > -1){
+      target=e.currentTarget;
+    }else{
+      target = e.target;
+    }
+    var subjectIds = target.value;
+    confirm({
+      title: '确定要删除该题目?',
+      onOk() {
+        var param = {
+          "method":'delMySubjects',
+          "userId":sessionStorage.getItem("ident"),
+          "subjects":subjectIds
+        };
+        doWebService(JSON.stringify(param), {
+          onResponse : function(ret) {
+            console.log(ret.msg);
+            if(ret.msg=="调用成功" && ret.response==true){
+              // alert("题目删除成功");
+              message.success("题目删除成功");
+            }else{
+              // alert("题目删除失败");
+              message.error("题目删除失败");
+            }
+            subTable.getUserSubjectsByUid(sessionStorage.getItem("ident"),subTable.state.currentPage);
+          },
+          onError : function(error) {
+            // alert(error);
+            message.error(error);
+          }
+        });
+      },
+      onCancel() {},
+    });
+  },
+
+  //题目修改功能
+  showModifySubjectModal:function (e) {
+    var target = e.target;
+    if(navigator.userAgent.indexOf("Chrome") > -1){
+      target=e.currentTarget;
+    }else{
+      target = e.target;
+    }
+    var currentSubjectInfo = target.value;
+    subTable.refs.subjectEditTabComponents.showModal(currentSubjectInfo);
+  },
+
+  //弹出题目使用至备课计划的窗口
+  showModal:function (e) {
+    var target = e.target;
+    if(navigator.userAgent.indexOf("Chrome") > -1){
+      target=e.currentTarget;
+    }else{
+      target = e.target;
+    }
+    var currentKnowledge = target.value;
+    subTable.refs.useKnowledgeComponents.showModal(currentKnowledge,"TeacherAllSubjects",subTable.state.knowledgeName);
   },
 
   render() {
@@ -161,7 +218,7 @@ const TeacherAllSubjects = React.createClass({
         <div >
           <SubjectEditTabComponents ref="subjectEditTabComponents" subjectEditCallBack={subTable.subjectEditCallBack}></SubjectEditTabComponents>
           <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
-          <Table rowSelection={rowSelection} columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: 15,onChange:subTable.pageOnChange }} scroll={{ y: 400}}/>
+          <Table columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: 15,onChange:subTable.pageOnChange }} scroll={{ y: 400}}/>
         </div>
     );
   },

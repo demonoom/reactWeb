@@ -47,23 +47,33 @@ const UseKnowledgeComponents = React.createClass({
 
   handleSubmit(e) {
     e.preventDefault();
-    if(this.state.useTypeValue=="currentKnowledge"){
-      //使用当前知识点作为备课计划
-      var scheduleName = this.state.knowledgeName;
-      knowledge.saveSchedule(sessionStorage.getItem("ident"),scheduleName);
-    }else if(this.state.useTypeValue=="searchSchedule"){
-      //使用至现有计划
-      if(knowledge.state.optType=="courseWare"){
-        knowledge.copyMaterialToSchedule(sessionStorage.getItem("ident"),knowledge.state.currentKnowlege,knowledge.state.schedule);
-      }else{
-        knowledge.copySubjects(knowledge.state.currentKnowlege,knowledge.state.schedule);
+    if(knowledge.state.optType=="TeacherAllSubjects"){
+      //个人中心题目列表的使用功能
+      console.log("=====TeacherAllSubjects")
+      knowledge.copySubjects(knowledge.state.currentKnowlege,knowledge.state.schedule);
+    }else if(knowledge.state.optType=="TeacherAllSubjects"){
+      //个人中心资源列表的使用功能
+    }else{
+      //资源库的使用功能
+      if(this.state.useTypeValue=="currentKnowledge"){
+        //使用当前知识点作为备课计划
+        var scheduleName = this.state.knowledgeName;
+        knowledge.saveSchedule(sessionStorage.getItem("ident"),scheduleName);
+      }else if(this.state.useTypeValue=="searchSchedule"){
+        //使用至现有计划
+        if(knowledge.state.optType=="courseWare"){
+          knowledge.copyMaterialToSchedule(sessionStorage.getItem("ident"),knowledge.state.currentKnowlege,knowledge.state.schedule);
+        }else{
+          knowledge.copySubjects(knowledge.state.currentKnowlege,knowledge.state.schedule);
+        }
+      }else if(this.state.useTypeValue=="newSchedule"){
+        //新建备课计划
+        var inputObj = knowledge.refs.scheduleName;
+        var scheduleName = inputObj.refs.input.value;
+        knowledge.saveSchedule(sessionStorage.getItem("ident"),scheduleName);
       }
-    }else if(this.state.useTypeValue=="newSchedule"){
-      //新建备课计划
-      var inputObj = knowledge.refs.scheduleName;
-      var scheduleName = inputObj.refs.input.value;
-      knowledge.saveSchedule(sessionStorage.getItem("ident"),scheduleName);
     }
+
     knowledge.initPage();
   },
 
@@ -207,6 +217,26 @@ const UseKnowledgeComponents = React.createClass({
       labelCol: { span: 6 },
       wrapperCol: { span: 14 },
     };
+
+    var attach;
+    if(knowledge.state.optType=="TeacherAllSubjects"){
+      attach = <div>使用至现有计划：
+        <Select defaultValue={knowledge.state.schedule} value={knowledge.state.schedule} key="teachSchedule" style={{ width: '100%' }} ref="teachSchedule" onChange={this.handleSchedule}>
+          {knowledge.state.selectOptions}
+        </Select></div>;
+    }else{
+      attach = <RadioGroup onChange={this.useTypeOnChange} value={this.state.useTypeValue}>
+        <Radio value="currentKnowledge">使用当前知识点名称作为备课计划名称</Radio>
+        <Radio value="searchSchedule">
+          使用至现有计划：
+          <Select defaultValue={knowledge.state.schedule} value={knowledge.state.schedule} key="teachSchedule" style={{ width: '100%' }} ref="teachSchedule" onChange={this.handleSchedule}>
+            {knowledge.state.selectOptions}
+          </Select>
+        </Radio>
+        <Radio value="newSchedule">新建备课计划:<Input ref="scheduleName"/></Radio>
+      </RadioGroup>;
+    }
+
     return (
 
         <div>
@@ -223,16 +253,7 @@ const UseKnowledgeComponents = React.createClass({
               <FormItem
                   {...formItemLayout}
               >
-                <RadioGroup onChange={this.useTypeOnChange} value={this.state.useTypeValue}>
-                  <Radio value="currentKnowledge">使用当前知识点名称作为备课计划名称</Radio>
-                  <Radio value="searchSchedule">
-                    使用至现有计划：
-                    <Select defaultValue={knowledge.state.schedule} value={knowledge.state.schedule} key="teachSchedule" style={{ width: '100%' }} ref="teachSchedule" onChange={this.handleSchedule}>
-                      {knowledge.state.selectOptions}
-                    </Select>
-                  </Radio>
-                  <Radio value="newSchedule">新建备课计划:<Input ref="scheduleName"/></Radio>
-                </RadioGroup>
+                {attach}
               </FormItem>
             </Form>
           </Modal>

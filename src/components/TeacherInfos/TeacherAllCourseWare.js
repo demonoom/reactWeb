@@ -37,29 +37,20 @@ const TeacherAllCourseWare = React.createClass({
 
     componentDidMount(){
         console.log("did");
-        courseWare.getTeachPlans();
+        var initPageNo = 1;
+        courseWare.getTeachPlans(sessionStorage.getItem("ident"),initPageNo);
     },
 
 
-    getTeachPlans(ident,teachScheduleId,optType,pageNo,knowledgeName,dataFilter){
+    getTeachPlans(ident,pageNo){
         courseWare.setState({
             ident:ident,
-            teachScheduleId:teachScheduleId,
-            optType:optType,
-            knowledgeName:knowledgeName,
-            dataFilter:dataFilter
         })
-        var userId = ident;
-        if(dataFilter=="self"){
-            userId = 23836;
-        }
-        // alert("tea:"+teachScheduleId);
         var param = {
-            "method":'getMaterialsByKnowledgePointId',
-            "userId":userId,
-            "pointId":'4340',
-            "type":"-1",
-            "pageNo":'1',
+            "method":'getMaterialsByUid',
+            "userId":ident,
+            "mtype":"-1",
+            "pageNo":pageNo,
         };
         doWebService(JSON.stringify(param), {
             onResponse : function(ret) {
@@ -118,7 +109,7 @@ const TeacherAllCourseWare = React.createClass({
 
     onChange(page) {
         console.log(page);
-        courseWare.getTeachPlans(courseWare.state.ident,courseWare.state.teachScheduleId,courseWare.state.optType,page,courseWare.state.knowledgeName,courseWare.state.dataFilter);
+        courseWare.getTeachPlans(sessionStorage.getItem("ident"),page);
         this.setState({
             currentPage: page,
         });

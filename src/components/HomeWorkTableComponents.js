@@ -56,11 +56,11 @@ const HomeWorkTableComponents = React.createClass({
         title: '类型',
         className:'ant-table-selection-topic',
         dataIndex: 'subjectType',
-      },{
+      },/*{
         title: '分值',
         dataIndex: 'subjectScore',
 		className:'ant-table-selection-score'
-      },
+      },*/
       ];
     }else{
       columns = [ {
