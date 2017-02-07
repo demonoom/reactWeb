@@ -221,19 +221,19 @@ const UseKnowledgeComponents = React.createClass({
 
     var attach;
     if(knowledge.state.optType=="TeacherAllSubjects" || knowledge.state.optType=="TeacherAllCourseWare"){
-      attach = <div>使用至现有计划：
+      attach = <div className='ant-radio-group ant-radio-group-large'><Radio value="currentKnowledge">使用至现有计划：
         <Select defaultValue={knowledge.state.schedule} value={knowledge.state.schedule} key="teachSchedule" style={{ width: '100%' }} ref="teachSchedule" onChange={this.handleSchedule}>
           {knowledge.state.selectOptions}
-        </Select></div>;
+        </Select></Radio></div>;
     }else{
       attach = <RadioGroup onChange={this.useTypeOnChange} value={this.state.useTypeValue}>
-        <Radio value="currentKnowledge">使用当前知识点名称作为备课计划名称</Radio>
+        <Radio value="currentKnowledge">使用当前知识点名称作为备课计划名称</Radio><br />
         <Radio value="searchSchedule">
           使用至现有计划：
           <Select defaultValue={knowledge.state.schedule} value={knowledge.state.schedule} key="teachSchedule" style={{ width: '100%' }} ref="teachSchedule" onChange={this.handleSchedule}>
             {knowledge.state.selectOptions}
           </Select>
-        </Radio>
+        </Radio><br />
         <Radio value="newSchedule">新建备课计划:<Input ref="scheduleName"/></Radio>
       </RadioGroup>;
     }
