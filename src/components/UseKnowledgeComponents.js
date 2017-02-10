@@ -221,7 +221,7 @@ const UseKnowledgeComponents = React.createClass({
 
     var attach;
     if(knowledge.state.optType=="TeacherAllSubjects" || knowledge.state.optType=="TeacherAllCourseWare"){
-      attach = <div className='ant-radio-group ant-radio-group-large'><Radio value="currentKnowledge">使用至现有计划：
+      attach = <div className='ant-radio-group ant-radio-group-large'><Radio value="currentKnowledge" checked="true">使用至现有计划：
         <Select defaultValue={knowledge.state.schedule} value={knowledge.state.schedule} key="teachSchedule" style={{ width: '100%' }} ref="teachSchedule" onChange={this.handleSchedule}>
           {knowledge.state.selectOptions}
         </Select></Radio></div>;

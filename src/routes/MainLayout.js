@@ -10,7 +10,9 @@ import UserCardModalComponents from '../components/UserCardModalComponents';
 import FloatButton  from '../components/FloatButton';
 import KnowledgeMenuComponents from '../components/KnowledgeMenuComponents';
 import HomeWorkMenu from '../components/HomeWorkMenu';
+import ExamMenu from '../components/exam/ExamMenu';
 import HomeWorkTabComponents from '../components/HomeWorkTabComponents';
+import ExamPagerTabComponents from '../components/exam/ExamPagerTabComponents';
 import TeacherResource from '../components/TeacherInfos/TeacherResource';
 import moment from 'moment';
 import StudyEvaluateMenu from '../components/StudyEvaluateMenu';
@@ -104,6 +106,11 @@ const MainLayout = React.createClass({
       mainLayout.refs.homeWorkTabComponents.getTeacherHomeWork(optType);
   },
 
+  //获取试卷列表
+  getExamPagerList:function (optType) {
+      mainLayout.refs.examPagerTabComponents.getExamPagerList();
+  },
+
   getStudyEvaluate:function (optType) {
     mainLayout.refs.studyEvaluateTabComponents.getStudyEvaluate();
   },
@@ -139,6 +146,10 @@ const MainLayout = React.createClass({
       //学习评价
       middleComponent = <StudyEvaluateMenu callbackParent={this.getStudyEvaluate} ></StudyEvaluateMenu>
       tabComponent=<StudyEvaluateTabComponents ref="studyEvaluateTabComponents"/>;
+    }else if(this.state.currentKey =="exam"){
+      //考试
+      middleComponent = <ExamMenu callbackParent={this.getExamPagerList}></ExamMenu>
+      tabComponent=<ExamPagerTabComponents ref="examPagerTabComponents" />;
     }
     if(mainLayout.state.resouceType==null || mainLayout.state.resouceType==''){
       mainContent = <Row>
@@ -190,6 +201,9 @@ const MainLayout = React.createClass({
             <Menu.Item key="studyEvaluate" className="padding_menu">
               <Icon type="clock-circle-o" /><div className="tan">学习评价</div>
             </Menu.Item>
+            {/*<Menu.Item key="exam" className="padding_menu">
+              <Icon type="file-text" /><div className="tan">考试</div>
+            </Menu.Item>*/}
 {/*            <Menu.Item key="folder" className="padding_menu">
               <Icon type="clock-circle-o" /><span className="nav-text">统计+回顾</span>
             </Menu.Item>
