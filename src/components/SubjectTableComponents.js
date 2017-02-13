@@ -124,6 +124,10 @@ const SUbjectTable = React.createClass({
               //var content=<Tooltip title={<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article></Tooltip>;
               var subjectType=e.typeName;
               var subjectScore=e.score;
+              if(parseInt(e.score)<0)
+              {
+                subjectScore='--';
+              }
               // <SubjectEditTabComponents editParams={e.sid+"#"+e.typeName+"#"+e.shortContent+"#"+e.score}></SubjectEditTabComponents>
               var subjectOpt=<div className="smallclass"><span className="toobar"><Button value={e.sid} title="删除" onClick={subTable.deleteSubject}><Icon type="delete"/></Button></span></div>;
               // var submitTime = e.submitTime;
@@ -259,6 +263,10 @@ const SUbjectTable = React.createClass({
             var content=<Popover  placement="topLeft" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
             var subjectType=e.typeName;
             var subjectScore=e.score;
+            if(parseInt(e.score)<0)
+            {
+              subjectScore='--';
+            }
             var answer = e.answer;
             var userId = e.user.colUid;
             // var submitTime = subTable.getLocalTime(e.createTime);

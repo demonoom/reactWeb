@@ -28,6 +28,9 @@ const UseKnowledgeComponents = React.createClass({
   showModal(currentKnowlege,optType,knowledgeName) {
     //当前点击的，计划应用的课件资源
     knowledgeName = knowledgeName;
+    if(optType=="TeacherAllSubjects" || optType=="TeacherAllCourseWare"){
+      knowledge.setState({useTypeValue:'searchSchedule'});
+    }
     knowledge.setState({knowledgeName:knowledgeName});
     knowledge.setState({optType:optType});
     knowledge.setState({currentKnowlege:currentKnowlege});
@@ -50,10 +53,24 @@ const UseKnowledgeComponents = React.createClass({
     if(knowledge.state.optType=="TeacherAllSubjects"){
       //个人中心题目列表的使用功能
       console.log("=====TeacherAllSubjects")
-      knowledge.copySubjects(knowledge.state.currentKnowlege,knowledge.state.schedule);
+      if(this.state.useTypeValue=="searchSchedule"){
+        knowledge.copySubjects(knowledge.state.currentKnowlege,knowledge.state.schedule);
+      }else if(this.state.useTypeValue=="newSchedule"){
+        //新建备课计划
+        var inputObj = knowledge.refs.scheduleName;
+        var scheduleName = inputObj.refs.input.value;
+        knowledge.saveSchedule(sessionStorage.getItem("ident"),scheduleName);
+      }
     }else if(knowledge.state.optType=="TeacherAllCourseWare"){
       //个人中心资源列表的使用功能
-      knowledge.copyMaterialToSchedule(sessionStorage.getItem("ident"),knowledge.state.currentKnowlege,knowledge.state.schedule);
+      if(this.state.useTypeValue=="searchSchedule"){
+        knowledge.copyMaterialToSchedule(sessionStorage.getItem("ident"),knowledge.state.currentKnowlege,knowledge.state.schedule);
+      }else if(this.state.useTypeValue=="newSchedule"){
+        //新建备课计划
+        var inputObj = knowledge.refs.scheduleName;
+        var scheduleName = inputObj.refs.input.value;
+        knowledge.saveSchedule(sessionStorage.getItem("ident"),scheduleName);
+      }
     }else{
       //资源库的使用功能
       if(this.state.useTypeValue=="currentKnowledge"){
@@ -89,7 +106,7 @@ const UseKnowledgeComponents = React.createClass({
         console.log(ret.msg);
         if(ret.msg=="调用成功" && ret.response.colTsId!=null){
           knowledge.setState({schedule:ret.response.colTsId});
-          if(knowledge.state.optType=="courseWare"){
+          if(knowledge.state.optType=="courseWare" || knowledge.state.optType=="TeacherAllCourseWare"){
             knowledge.copyMaterialToSchedule(sessionStorage.getItem("ident"),knowledge.state.currentKnowlege,ret.response.colTsId);
           }else{
             knowledge.copySubjects(knowledge.state.currentKnowlege,knowledge.state.schedule);
@@ -220,11 +237,21 @@ const UseKnowledgeComponents = React.createClass({
     };
 
     var attach;
+    //从个人中心进入时，没有使用当前知识点作为备课计划名称的操作项
     if(knowledge.state.optType=="TeacherAllSubjects" || knowledge.state.optType=="TeacherAllCourseWare"){
-      attach = <div className='ant-radio-group ant-radio-group-large'><Radio value="currentKnowledge" checked="true">使用至现有计划：
+      /*attach = <div className='ant-radio-group ant-radio-group-large'><Radio value="currentKnowledge" checked="true">使用至现有计划：
         <Select defaultValue={knowledge.state.schedule} value={knowledge.state.schedule} key="teachSchedule" style={{ width: '100%' }} ref="teachSchedule" onChange={this.handleSchedule}>
           {knowledge.state.selectOptions}
-        </Select></Radio></div>;
+        </Select></Radio></div>;*/
+      attach = <RadioGroup onChange={this.useTypeOnChange} value={this.state.useTypeValue}>
+        <Radio value="searchSchedule">
+          使用至现有计划：
+          <Select defaultValue={knowledge.state.schedule} value={knowledge.state.schedule} key="teachSchedule" style={{ width: '100%' }} ref="teachSchedule" onChange={this.handleSchedule}>
+            {knowledge.state.selectOptions}
+          </Select>
+        </Radio><br />
+        <Radio value="newSchedule">新建备课计划:<Input ref="scheduleName"/></Radio>
+      </RadioGroup>;
     }else{
       attach = <RadioGroup onChange={this.useTypeOnChange} value={this.state.useTypeValue}>
         <Radio value="currentKnowledge">使用当前知识点名称作为备课计划名称</Radio><br />

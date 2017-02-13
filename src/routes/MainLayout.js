@@ -36,7 +36,7 @@ const MainLayout = React.createClass({
     return {
       collapse: true,
       activeMiddleMenu:'sub1',
-      currentKey:'teachTimes',
+      currentKey:'exam',
       openKeysStr:'',
       // locale: enUS,
       locale: 'zh-cn',

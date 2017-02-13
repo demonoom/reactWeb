@@ -27,11 +27,11 @@ const selectAnswerOptions = [
 ];
 //答题卡
 var cardChild;
+var cardChildTagArray=[];
 //答题卡数组
 var cardChildArray=[];
 var cardTagArray = [];
 const CreateExamPagerComponents = React.createClass({
-
     getInitialState() {
         createExamPager = this;
         sids = "";
@@ -40,15 +40,16 @@ const CreateExamPagerComponents = React.createClass({
         return {
             visible: false,
             optType: 'add',
-            editSchuldeId: this.props.editSchuldeId,
+            editSchuldeId: createExamPager.props.editSchuldeId,
             checkedList: [],
             indeterminate: true,
             subjectTypeValue: 'selectAnswer',
-            answerTitle:'',
-            answerCount:1,
+            answerTitle:'选择题',
+            answerCount:2,
             answerScore:2,
             subjectCount:0,
             cardList:[],//答题卡中选择题的选项数组
+            cardChildTagArray:[]
         };
     },
 
@@ -164,6 +165,7 @@ const CreateExamPagerComponents = React.createClass({
             return false;
         }
     },
+
     /**
      * 答题卡中的题目答案选中事件响应函数
      * @param checkedValues
@@ -182,13 +184,33 @@ const CreateExamPagerComponents = React.createClass({
         // alert("selectedKey:"+selectedKey);
     },
 
-    deleteAnswerCard(){
-       alert("删除选定答题卡");
+    /**
+     * 删除答题卡时的响应函数
+     */
+    deleteAnswerCard(e){
+        var deleteCardTitle = e.target.value;
+        alert("删除选定答题卡"+deleteCardTitle);
+        for(var i=0;i<cardChildArray.length;i++){
+            var cardChildJson = cardChildArray[i];
+            var cartTitleInJson = cardChildJson.answerTitle;
+            if(deleteCardTitle == cartTitleInJson){
+                cardChildArray.splice(i,1);
+                break;
+            }
+        }
+        this.buildCardChildArray();
     },
 
+    /**
+     * 答题卡中的题目分值改变时的响应函数
+     */
     subjectScoreOnChange(){
         alert("subjectScoreOnChange");
     },
+
+    /**
+     * 创建答题卡中的题目div
+     */
     buildSubjectDivContent(index,answerTitle){
         var subjectDiv =<div>
             <Row>
@@ -197,54 +219,53 @@ const CreateExamPagerComponents = React.createClass({
             <Row>
                 <Col span={3}>答案：</Col>
                 <Col span={12}>
-                    <CheckboxGroup options={selectAnswerOptions} defaultValue={['A']} onChange={this.answerInCardOnChange}/>
+                    <CheckboxGroup options={selectAnswerOptions} defaultValue={['A']} onChange={createExamPager.answerInCardOnChange}/>
                 </Col>
             </Row>
             <Row>
                 <Col span={3}>分值：</Col>
-                <Col span={5} style={{cursor:'pointer'}}>
-                    <Input ref="subjectScore"  onChange={createExamPager.subjectScoreOnChange}/>
-                    <Button shape="circle" size="small" icon="search" onClick={createExamPager.deleteAnswerCard} />
+                <Col span={5}>
+                    <Input onChange={createExamPager.subjectScoreOnChange}/>
                 </Col>
             </Row>
             <Row>
                 <Col span={3}></Col>
                 <Col span={5}>
-                    {/*<Button  onClick={this.deleteSubjectContentDiv}>
+                    <Button  onClick={createExamPager.deleteSubjectContentDiv}>
                         所属知识点
-                    </Button>*/}
+                    </Button>
                 </Col>
                 <Col span={3}>
-                    {/*<Button type="ghost" icon="plus-circle-o" htmlType="reset"
-                            className="login-form-button" onClick={this.handleCancel}>
+                    <Button type="ghost" icon="plus-circle-o" htmlType="reset"
+                            className="login-form-button" onClick={createExamPager.deleteSubjectContentDiv}>
                         解析
-                    </Button>*/}
+                    </Button>
                 </Col>
             </Row>
             <Row>
                 <Col span={3}></Col>
                 <Col span={3}>
-                    {/*<Button onclick={this.deleteAnswerCard}>
-                        删除1
-                    </Button>*/}
+                    <Button  onClick={createExamPager.deleteSubjectContentDiv}>
+                        删除
+                    </Button>
                 </Col>
             </Row>
         </div>;
         return subjectDiv;
     },
-
-    buildCartTagArray(cardChildArray){
-        cardChildArray.map((e, i)=> {
-            // alert("123"+e.answerTitle);
+    /**
+     * 创建Card组件的标记，最终在页面上显示cardChildTagArray中的内容
+     */
+    buildCardChildArray(){
+        cardChildTagArray = cardChildArray.map((e, i)=> {
             var subjectArray=e.cardSubjectAnswerArray;
-            // alert("len:"+subjectArray.length);
-            var cardTag = <Card key={e.answerTitle} title={e.answerTitle} extra={<Button size="small" shape="circle" icon="search" onClick={this.deleteAnswerCard} />} style={{width: 650}}>
+            return <Card key={e.answerTitle} title={e.answerTitle} extra={<Button title={e.answerTitle} value={e.answerTitle} icon="delete" onClick={createExamPager.deleteAnswerCard}>删除</Button>} style={{width: 650}}>
                 {
-                    subjectArray.map((item,j)=>item.divContent,createExamPager)
+                    subjectArray.map((item,j)=>item.divContent)
                 }
-            </Card>;
-            cardTagArray.push(cardTag);
-        },createExamPager)
+            </Card>
+        },createExamPager);
+        createExamPager.setState({cardChildTagArray:cardChildTagArray});
     },
 
     /**
@@ -264,7 +285,7 @@ const CreateExamPagerComponents = React.createClass({
             //答题卡中的题目编号数组
             var cardSubjectAnswerArray=[];
             for(var i=1;i<=answerCount;i++){
-                var subjectDiv = this.buildSubjectDivContent(i,answerTitle);
+                var subjectDiv = createExamPager.buildSubjectDivContent(i,answerTitle);
                 var subjectDivJson = {"index":i,"divContent":subjectDiv};
                 cardSubjectAnswerArray.push(subjectDivJson);
             }
@@ -277,29 +298,18 @@ const CreateExamPagerComponents = React.createClass({
             cardChildJsonWithExist.answerCount = newAnswerCount;
             var cardSubjectAnswerArray=[];
             for(var i=1;i<=newAnswerCount;i++){
-                var subjectDiv = this.buildSubjectDivContent(i,answerTitle);
+                var subjectDiv = createExamPager.buildSubjectDivContent(i,answerTitle);
                 var subjectDivJson = {"index":i,"divContent":subjectDiv};
                 cardSubjectAnswerArray.push(subjectDivJson);
             }
             cardChildJsonWithExist.cardSubjectAnswerArray = cardSubjectAnswerArray;
-            //cardChildArray.push(cardChildJsonWithExist);
         }
-        cardChild =cardChildArray.map((e, i)=> {
-            // alert("123"+e.answerTitle);
-            var subjectArray=e.cardSubjectAnswerArray;
-            // alert("len:"+subjectArray.length);
-            return <Card key={e.answerTitle} title={e.answerTitle} extra={<Button size="small" shape="circle" icon="search" onClick={this.deleteAnswerCard} />} style={{width: 650}}>
-                {
-                    subjectArray.map((item,j)=>item.divContent,createExamPager)
-                }
-            </Card>;
-        },createExamPager);
-        createExamPager.setState({subjectCount:1});
+        createExamPager.buildCardChildArray();
+        // var newCount = createExamPager.state.subjectCount+1;
+        // createExamPager.setState({subjectCount:newCount});
     },
 
     render() {
-
-
         return (
             <div>
                 <div className="ant-collapse ant-modal-footer homework">
@@ -344,7 +354,7 @@ const CreateExamPagerComponents = React.createClass({
                                         <span className="text_30">标题:</span>
                                     </Col>
                                     <Col span={15}>
-                                        <Input ref="answerTitle" placeholder="请输入答题卡标题" onChange={this.answerTitleOnChange}/>
+                                        <Input ref="answerTitle" defaultValue={"选择题"} placeholder="请输入答题卡标题" onChange={createExamPager.answerTitleOnChange}/>
                                     </Col>
                                 </Row>
 
@@ -353,8 +363,8 @@ const CreateExamPagerComponents = React.createClass({
                                         <span className="text_30">题型:</span>
                                     </Col>
                                     <Col span={21}>
-                                        <RadioGroup onChange={this.subjectTypeOnChange}
-                                                    value={this.state.subjectTypeValue}>
+                                        <RadioGroup onChange={createExamPager.subjectTypeOnChange}
+                                                    value={createExamPager.state.subjectTypeValue}>
                                             <Radio value="selectAnswer">选择</Radio>
                                             <Radio value="correct">判断</Radio>
                                             <Radio value="fillBlanks">填空</Radio>
@@ -398,50 +408,7 @@ const CreateExamPagerComponents = React.createClass({
                         </Col>
                     </Row>
                     <Row className="date_tr ant-form-item">
-                        {cardChild}
-                        {/*<Card title="选择题" extra={<a href="#">删除</a>} style={{width: 650}}>
-                            <div>
-                                <Row>
-                                    <Col span={1}>1.</Col>
-                                </Row>
-                                <Row>
-                                    <Col span={3}>答案：</Col>
-                                    <Col span={12}>
-                                        <CheckboxGroup options={selectAnswerOptions} defaultValue={['A']}/>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col span={3}>分值：</Col>
-                                    <Col span={5}>
-                                        <Input ref="subjectScore"/>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col span={3}></Col>
-                                    <Col span={5}>
-                                        <Button type="ghost" icon="plus-circle-o" htmlType="reset"
-                                                className="login-form-button" onClick={this.handleCancel}>
-                                            所属知识点
-                                        </Button>
-                                    </Col>
-                                    <Col span={3}>
-                                        <Button type="ghost" icon="plus-circle-o" htmlType="reset"
-                                                className="login-form-button" onClick={this.handleCancel}>
-                                            解析
-                                        </Button>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col span={3}></Col>
-                                    <Col span={3}>
-                                        <Button type="ghost" icon="delete" htmlType="reset"
-                                                className="login-form-button" onClick={this.handleCancel}>
-                                            删除
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            </div>
-                        </Card>*/}
+                        {createExamPager.state.cardChildTagArray}
                     </Row>
                 </div>
 
@@ -452,7 +419,7 @@ const CreateExamPagerComponents = React.createClass({
                            onClick={createExamPager.handleSubmit}>
                     保存
                    </Button>
-                   <Button type="ghost" htmlType="reset" className="login-form-button" onClick={this.handleCancel}>
+                   <Button type="ghost" htmlType="reset" className="login-form-button" onClick={createExamPager.handleCancel}>
                     取消
                    </Button>
                  </span>
