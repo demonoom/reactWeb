@@ -402,7 +402,7 @@ function WordPasterManager()
 	this.setupTip = function ()
 	{
 	    this.OpenDialogPaste();
-	    var dom = this.imgMsg.html("未检测到控件，请先<a name='aCtl'>安装控件</a>,Chrome 45+需要单独<a name='aCrx'>安装扩展</a>");
+	    var dom = this.imgMsg.html("未检测到控件，请先<a name='aCtl'>安装控件</a><br>Chrome 45+需要单独<a name='aCrx'>安装扩展</a>");
 	    var lnk = dom.find('a[name="aCtl"]');
 	    lnk.attr("href", this.Config["ExePath"]);
 	    var crx = dom.find('a[name="aCrx"]');
