@@ -362,21 +362,24 @@ const SubjectEditTabComponents = React.createClass({
 
     scoreItem.push(
       <div>
-          <Row>
-            <Col span={4}>
-              <span>分值</span>
+          <Row className="row-t-f">
+            <Col span={3} className="ant-form-item-label">
+              <span className="font-14">分值：</span>
             </Col>
 
-            <Col span={6}>
+            <Col span={20}>
+			<div className="ant-form-item-control">
               {/*value={this.state.score}*/}
               <Select  ref="scoreSelect" defaultValue={subjectUpload.state.score} value={subjectUpload.state.score} style={{ width: 100 }} disabled={this.state.scoreDisable} onChange={this.selectHandleChange}>
                 {children}
               </Select>
-            </Col>
+			  
+
 
             <Col span={8} className="right_ri"><span><Input ref="scoreDefined" defaultValue={this.state.scoreDefinedValue} value={this.state.scoreDefinedValue} onChange={this.onScoreDefinedValueChange} placeholder="请输入自定义分值" disabled={this.state.scoreInputState}  /></span></Col>
             <Col span={6} className="right_ri custom—1"><Checkbox onChange={this.scoreSelectTypeOnChange} ref="scoreCheckBox" checked={this.state.scoreChecked} value="defined">自定义:</Checkbox></Col>
-
+            </div>
+			</Col>
           </Row>
       </div>
     )
@@ -453,19 +456,19 @@ const SubjectEditTabComponents = React.createClass({
           >
             <TabPane tab="单选题" key="单选题">
               <Row>
-                  <Col span={4}>
-                      <span>题目</span>
+                  <Col span={3} className="ant-form-item-label">
+                      <span className="font-14">题目：</span>
                   </Col>
                   <Col span={20}>
                     <CkEditorComponentForSingleByModify/>
                   </Col>
               </Row>
               <Row>
-                <Col span={4}>
-                  <span>答案</span>
+                <Col span={3} className="ant-form-item-label">
+                  <span className="font-14">答案：</span>
                 </Col>
                 <Col span={20}>
-                    <div>
+                    <div className="ant-form-item-control">
                       <RadioGroup onChange={this.singleAnswerOnChange} ref="singleAnswer" defaultValue={subjectUpload.state.singleAnswer} value={subjectUpload.state.singleAnswer}>
                         <Radio key="A" value="A">A</Radio>
                         <Radio key="B" value="B">B</Radio>
@@ -484,8 +487,8 @@ const SubjectEditTabComponents = React.createClass({
             </TabPane>
             <TabPane tab="多选题" key="多选题"><div>
                 <Row>
-                  <Col span={4}>
-                    <span>题目</span>
+                  <Col span={3} className="ant-form-item-label">
+                    <span className="font-14">题目：</span>
                   </Col>
                   <Col span={20}>
                     <CkEditorComponentForMuSelectByModify/>
@@ -493,11 +496,11 @@ const SubjectEditTabComponents = React.createClass({
                 </Row>
 
               <Row>
-                <Col span={4}>
-                  <span>答案</span>
+                <Col span={3} className="ant-form-item-label">
+                  <span className="font-14">答案：</span>
                 </Col>
                 <Col span={20}>
-                  <div>
+                  <div className="ant-form-item-control">
                     <CheckboxGroup options={mulitiAnswerOptions} defaultValue={subjectUpload.state.mulitiAnswerDefaultValue} value={subjectUpload.state.mulitiAnswerDefaultValue} onChange={this.mulitiAnswerOnChange} />
                   </div>
                 </Col>
@@ -511,8 +514,8 @@ const SubjectEditTabComponents = React.createClass({
             </div></TabPane>
             <TabPane tab="判断题" key="判断题"><div>
               <Row>
-                <Col span={4}>
-                  <span>题目</span>
+                <Col span={3} className="ant-form-item-label">
+                  <span className="font-14">题目：</span>
                 </Col>
                 <Col span={20}>
                   <CkEditorComponentForCorrectByModify/>
@@ -520,11 +523,11 @@ const SubjectEditTabComponents = React.createClass({
               </Row>
 
               <Row>
-                <Col span={4}>
-                  <span>答案</span>
+                <Col span={3} className="ant-form-item-label">
+                  <span className="font-14">答案：</span>
                 </Col>
                 <Col span={20}>
-                  <div>
+                  <div className="ant-form-item-control">
                     <RadioGroup onChange={this.correctAnswerOnChange} defaultValue={subjectUpload.state.correctAnswerValue} value={subjectUpload.state.correctAnswerValue}>
                       <Radio key="正确" value="正确">正确</Radio>
                       <Radio key="错误" value="错误">错误</Radio>
@@ -542,8 +545,8 @@ const SubjectEditTabComponents = React.createClass({
             <TabPane tab="简答题" key="简答题"><div>
 
               <Row>
-                <Col span={4}>
-                  <span>题目</span>
+                <Col span={3} className="ant-form-item-label">
+                  <span className="font-14">题目：</span>
                 </Col>
                 <Col span={20}>
                   <CkEditorComponentForSimpleByModify/>
@@ -551,11 +554,11 @@ const SubjectEditTabComponents = React.createClass({
               </Row>
 
               <Row>
-                <Col span={4}>
-                  <span>答案</span>
+                <Col span={3} className="ant-form-item-label">
+                  <span className="font-14">答案：</span>
                 </Col>
                 <Col span={20}>
-                  <div>
+                  <div className="ant-form-item-control">
                     <CkEditorComponentForAnswerByModify/>
                   </div>
                 </Col>

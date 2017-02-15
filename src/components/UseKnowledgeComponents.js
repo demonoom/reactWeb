@@ -246,11 +246,11 @@ const UseKnowledgeComponents = React.createClass({
       attach = <RadioGroup onChange={this.useTypeOnChange} value={this.state.useTypeValue}>
         <Radio value="searchSchedule">
           使用至现有计划：
-          <Select defaultValue={knowledge.state.schedule} value={knowledge.state.schedule} key="teachSchedule" style={{ width: '100%' }} ref="teachSchedule" onChange={this.handleSchedule}>
+          <Select defaultValue={knowledge.state.schedule} value={knowledge.state.schedule} key="teachSchedule" style={{ width: '95%' }} ref="teachSchedule" onChange={this.handleSchedule}>
             {knowledge.state.selectOptions}
           </Select>
         </Radio><br />
-        <Radio value="newSchedule">新建备课计划:<Input ref="scheduleName"/></Radio>
+        <Radio value="newSchedule"><span className="left-letter">新建备课计划：</span><Input ref="scheduleName"/></Radio>
       </RadioGroup>;
     }else{
       attach = <RadioGroup onChange={this.useTypeOnChange} value={this.state.useTypeValue}>
@@ -261,7 +261,7 @@ const UseKnowledgeComponents = React.createClass({
             {knowledge.state.selectOptions}
           </Select>
         </Radio><br />
-        <Radio value="newSchedule">新建备课计划:<Input ref="scheduleName"/></Radio>
+        <Radio value="newSchedule"><span className="left-letter">新建备课计划：</span><Input ref="scheduleName"/></Radio>
       </RadioGroup>;
     }
 
