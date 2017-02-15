@@ -89,7 +89,7 @@ const CourseWareComponents = React.createClass({
                             fileTypeLogo = "icon_geshi icon_mp3";
                         }
                         var createTime = courseWare.getLocalTime(e.createTime);
-                        activeKey.push(fileName);
+                        activeKey.push(fileName+"#"+createTime);
                         courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointId,createTime,fileTypeLogo,htmlPath,collectCount]);
                     });
                     courseWare.buildPanels(courseWareList);
@@ -154,7 +154,7 @@ const CourseWareComponents = React.createClass({
                         }else if(fileType=="mp3"){
                             fileTypeLogo = "icon_geshi icon_mp3";
                         }
-                        activeKey.push(fileName);
+                        activeKey.push(fileName+"#"+createTime);
                         courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointId,createTime,fileTypeLogo,htmlPath,type,collectCount,userId]);
                     });
                     courseWare.buildKonwledgePanels(courseWareList);
@@ -278,7 +278,7 @@ const CourseWareComponents = React.createClass({
                 if(e[9]!=null && e[9]!="" && typeof(e[9])!="undefined" ){
                     eysOnButton = <a href={e[9]} target="_blank" title="查看"  style={{ float:'right'}}><Button icon="eye-o"/></a>
                 }
-                return <Panel header={<span><span type="" className={e[8]}></span><span className="name_file">{e[1]}</span> </span>}  key={e[1]}>
+                return <Panel header={<span><span type="" className={e[8]}></span><span className="name_file">{e[1]}</span> </span>}  key={e[1]+"#"+e[7]}>
                     <pre>
 					 <div className="bnt2_tex">
                          <span><span className="col1">文件类型：</span><span className="col2">{e[5]}</span></span>
@@ -320,7 +320,7 @@ const CourseWareComponents = React.createClass({
                 if(e[12]!=null && e[12]==sessionStorage.getItem("ident")){
                     delButton = <Button style={{ float:'right'}} icon="delete" title="删除" value={e[0]} onClick={courseWare.batchDeleteMaterial}></Button>
                 }
-                return <Panel header={<span><span type="" className={e[8]}></span><span className="name_file">{e[1]}</span> </span>}  key={e[1]}>
+                return <Panel header={<span><span type="" className={e[8]}></span><span className="name_file">{e[1]}</span> </span>}  key={e[1]+"#"+e[7]}>
                     <pre>
 					<div className="bnt2_tex">
                          <span className="col1">文件类型：{e[5]}</span>
