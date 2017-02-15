@@ -1183,6 +1183,7 @@ p.user_cont span.name1{
 	line-height:35px;
 	width:100%;
 	text-align:center;
+	color:#fff;
 }
 .modol_width{
 	width:480px !important;
@@ -1261,7 +1262,7 @@ a {
 	line-height:32px;
 }
 .ant-table-placeholder{
-	top:-300px;
+	margin-top:-300px;
 	color:#7c87a5;
 	font-size:16px;
 	border-bottom:none;
@@ -1435,6 +1436,9 @@ a {
     padding: 8px 0;
     border-bottom: 1px solid #eee;
 }
+.row-t-f{
+	margin-top:10px;
+}
 .menu_left_icon{
 	width:64px;
 	height:64px;
@@ -1482,7 +1486,7 @@ a {
 		white-space: nowrap;
 }
 .submenu_left_hidden{
-	padding: 0px 24px 0 24px;
+	padding: 0px 24px 0 0;
 	overflow:hidden;
 	text-overflow:ellipsis;
 	white-space: nowrap;
@@ -1573,3 +1577,13 @@ a {
 }
 
 /* 安装控件弹出框*/
+.ant-menu-inline .ant-menu-selected, .ant-menu-inline .ant-menu-item-selected{
+	border-right:1px solid #e5f2fe
+}
+.left-letter{
+	letter-spacing:2px;
+}
+.font-14 {
+    font-size: 14px !important;
+	color:#666;
+}
