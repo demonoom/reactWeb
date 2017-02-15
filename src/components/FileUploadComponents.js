@@ -66,7 +66,7 @@ const FileUploadComponents = React.createClass({
             }else if(isExit==true){
                 message.warning("请勿重复上传,谢谢!");
             }else if(!this.checkIsRightFileTypeByEndWith(fileType)){
-                message.warning("文件类型不正确,请重新上传,谢谢!");
+                message.warning("本系统只支持后缀名为ppt、pptx、pdf、mp3、mp4、flv文件的上传操作,请重新上传,谢谢!",10);
             }else if(fileSize >= 104857600){
                 message.warning("请勿上传超过100M的文件，谢谢!");
             }else{

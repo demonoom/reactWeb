@@ -89,7 +89,7 @@ const TeacherAllCourseWare = React.createClass({
                     }else if(fileType=="mp3"){
                         fileTypeLogo = "icon_geshi icon_mp3";
                     }
-                    activeKey.push(fileName);
+                    activeKey.push(fileName+"#"+createTime);
                     courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointId,createTime,fileTypeLogo,htmlPath,type,collectCount,userId]);
                 });
                 courseWare.buildKonwledgePanels(courseWareList);
@@ -179,7 +179,7 @@ const TeacherAllCourseWare = React.createClass({
                 if(e[12]!=null && e[12]==sessionStorage.getItem("ident")){
                     delButton = <Button style={{ float:'right'}} icon="delete" title="删除" value={e[0]} onClick={courseWare.batchDeleteMaterial}></Button>
                 }
-                return <Panel header={<span><span type="" className={e[8]}></span><span className="name_file">{e[1]}</span> </span>}  key={e[1]}>
+                return <Panel header={<span><span type="" className={e[8]}></span><span className="name_file">{e[1]}</span> </span>}  key={e[1]+"#"+e[7]}>
                     <pre>
 					<div className="bnt2_tex">
                          <span className="col1">文件类型：{e[5]}</span>
