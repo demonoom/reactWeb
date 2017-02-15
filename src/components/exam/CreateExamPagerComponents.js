@@ -19,14 +19,7 @@ var sids = "";
 var clazzIds = "";
 var dateTime = "";
 //答题卡数组，用来存放动态生成的答题卡Card对象
-const selectAnswerOptions = [
-    {label: 'A', value: 'A'},
-    {label: 'B', value: 'B'},
-    {label: 'C', value: 'C'},
-    {label: 'D', value: 'D'},
-    {label: 'E', value: 'E'},
-    {label: 'F', value: 'F'},
-];
+const selectAnswerOptions = [];
 //答题卡
 var cardChild;
 var cardChildTagArray=[];
@@ -56,6 +49,8 @@ const CreateExamPagerComponents = React.createClass({
             spinLoading:false,      //上传试卷图片过程中的加载动画
             examPagerUrl:'',        //试卷图片的上传地址
             examPagerTitle:'',      //试卷标题
+            answerCardArray:[],     //答题卡的数组
+            exmQuestionArray:[],    //答题卡中题目的数组
         };
     },
 
@@ -130,13 +125,56 @@ const CreateExamPagerComponents = React.createClass({
      */
     componentDidMount(){
     },
-
-    //设置答题卡时的题型单选事件响应函数
-    subjectTypeOnChange(e){
-        console.log('radio checked', e.target.value);
-        createExamPager.setState({
-            subjectTypeValue: e.target.value,
-        });
+    /**
+     * 需要更新的题目信息
+     * @param subjectJson 包括题型、所属答题卡等信息
+     * @param optType 操作方式，即更新的是答案、分值、关联的知识点等
+     */
+    refreshCardChildArray(subjectJson,optType){
+        // var cardChildJson = {'answerTitle':answerTitle,'answerSubjectType':answerSubjectType,
+        // 'answerCount':answerCount,'answerScore':answerScore,'cardSubjectAnswerArray':cardSubjectAnswerArray};
+        // var subjectJson = {answerCardTitle:answerCardTitle,subjectNum:subjectNum,currentChoice:currentChoice};
+        for(var i =0;i<cardChildArray.length;i++){
+            var cardChildJson = cardChildArray[i];
+            //找到对应的答题卡
+            if(subjectJson.answerCardTitle == cardChildJson.answerTitle){
+                //找到对应的题目编号
+                for(var j=0;j<cardChildJson.cardSubjectAnswerArray.length;j++){
+                    // var subjectDivJson = {"index":i,"divContent":subjectDiv};
+                    var subjectDivJson = cardChildJson.cardSubjectAnswerArray[j];
+                    if(subjectJson.subjectNum == subjectDivJson.index){
+                        //找到对应的题目编号后，设置答案
+                        subjectDivJson.textAnswer = subjectJson.currentChoice;
+                        break;
+                    }
+                }
+            }
+        }
+    },
+    /**
+     * 设置答题卡时的题型单选事件响应函数
+     */
+    subjectTypeOnChange(checkedValues){
+        console.log('checked = ', checkedValues);
+        var currentChoice='';
+        //当前题目所属的答题卡标题
+        var answerCardTitle;
+        //当前题目的编号
+        var subjectNum;
+        for(var i=0;i<checkedValues.length;i++){
+            var currentSelectStr = checkedValues[i];
+            var currentSelectArray = currentSelectStr.split("#");
+            //当前题目所属的答题卡标题
+            answerCardTitle = currentSelectArray[0];
+            //当前题目的编号
+            subjectNum = currentSelectArray[1];
+            //当前题目的选择
+            var choice = currentSelectArray[3];
+            currentChoice+=choice;
+            console.log("currentChoice:"+currentChoice);
+        }
+        var subjectJson = {answerCardTitle:answerCardTitle,subjectNum:subjectNum,currentChoice:currentChoice};
+        createExamPager.refreshCardChildArray(subjectJson,"answerChange");
     },
     /**
      设置答题卡中的答题卡标题内容改变事件响应函数
@@ -309,11 +347,46 @@ const CreateExamPagerComponents = React.createClass({
     blankOnChange(e){
         console.log("blankOnChange:"+e.target.value);
     },
+    /**
+     * 创建选择题选项的数组
+     * @param num
+     * @param answerTitle
+     */
+    buildSelectOptionsArray(num,answerTitle){
+        var choiceArray = [];
+        selectAnswerOptions.splice(0, selectAnswerOptions.length);
+        for (var i = 0; i < 6; i++) {
+            var optionJson;
+            switch (i) {
+                case 0:
+                    optionJson = {label: 'A', value: answerTitle + "#" + num + "#checkbox#A"};
+                    break;
+                case 1:
+                    optionJson = {label: 'B', value: answerTitle + "#" + num + "#checkbox#B"};
+                    break;
+                case 2:
+                    optionJson = {label: 'C', value: answerTitle + "#" + num + "#checkbox#C"};
+                    break;
+                case 3:
+                    optionJson = {label: 'D', value: answerTitle + "#" + num + "#checkbox#D"};
+                    break;
+                case 4:
+                    optionJson = {label: 'E', value: answerTitle + "#" + num + "#checkbox#E"};
+                    break;
+                case 5:
+                    optionJson = {label: 'F', value: answerTitle + "#" + num + "#checkbox#F"};
+                    break;
+            }
+            choiceArray.push(optionJson);
+            selectAnswerOptions.push(choiceArray);
+        }
+    },
 
     /**
      * 创建答题卡中选择题的题目div
      */
     buildChoiceSubjectDivContent(num,answerTitle){
+        createExamPager.buildSelectOptionsArray(num,answerTitle);
         var subjectDiv =<div key={num} data-key={num}>
             <Row>
                 <Col span={1}>{num}.</Col>
@@ -321,12 +394,7 @@ const CreateExamPagerComponents = React.createClass({
             <Row>
                 <Col span={3}>答案：</Col>
                 <Col span={12}>
-                    <Checkbox value={answerTitle+"#"+num+"#checkbox#A"}  onChange={createExamPager.answerInCardOnChange} >A</Checkbox>
-                    <Checkbox value={answerTitle+"#"+num+"#checkbox#B"}  onChange={createExamPager.answerInCardOnChange} >B</Checkbox>
-                    <Checkbox value={answerTitle+"#"+num+"#checkbox#C"}  onChange={createExamPager.answerInCardOnChange} >C</Checkbox>
-                    <Checkbox value={answerTitle+"#"+num+"#checkbox#D"}  onChange={createExamPager.answerInCardOnChange} >D</Checkbox>
-                    <Checkbox value={answerTitle+"#"+num+"#checkbox#E"}  onChange={createExamPager.answerInCardOnChange} >E</Checkbox>
-                    <Checkbox value={answerTitle+"#"+num+"#checkbox#F"}  onChange={createExamPager.answerInCardOnChange} >F</Checkbox>
+                    <CheckboxGroup options={selectAnswerOptions[num-1]} defaultValue={[answerTitle + "#" + num + "#checkbox#A"]} onChange={createExamPager.subjectTypeOnChange} />
                 </Col>
             </Row>
             <Row>
@@ -523,6 +591,38 @@ const CreateExamPagerComponents = React.createClass({
             </Card>
         },createExamPager);
         createExamPager.setState({cardChildTagArray:cardChildTagArray});
+    },
+    /**
+     * 创建答题卡数组
+     * @param answerTitle
+     * @param answerSubjectType
+     * @param answerCount
+     * @param answerScore
+     */
+    buildExamQuestionArray(answerTitle,answerSubjectType,answerCount,answerScore){
+        //创建者id
+        var ident = sessionStorage.getItem("ident");
+        //答题卡json对象，最终保存时，将会保存该对象
+        var answerCardType;
+        if(answerSubjectType=="selectAnswer"){
+            answerCardType=0;
+        }else if(answerSubjectType=="correct"){
+            answerCardType=1;
+        }else if(answerSubjectType=="fillBlanks"){
+            answerCardType=2;
+        }else if(answerSubjectType=="simpleAnswer"){
+            answerCardType=3;
+        }
+        //考题的数组
+        for(var i=1;i<=answerCount;i++){
+            // 小题的标题(方式是 大题标题加上小题位置作为小题的标题)
+            var subjectTitle = answerTitle+i;
+            var subjectJson={score:answerScore,title:subjectTitle,textAnswer:'',imageAnswer:'',type:answerCardType,textAnalysis:'',imageAnalysis:'',points:{}};
+            //将初始的题目信息推入题目数组中
+            createExamPager.state.exmQuestionArray.push(subjectJson);
+        }
+        var answerCardJson = {type:answerCardType,title:answerTitle,questions:createExamPager.state.exmQuestionArray};
+        createExamPager.state.answerCardArray.push(answerCardJson);
     },
 
     /**
