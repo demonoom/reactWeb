@@ -169,7 +169,7 @@ const ExamPagerTableComponents = React.createClass({
         response.forEach(function (e) {
           console.log("getExamPagerList:"+e);
           var id = e.id;
-          var content = <Popover  placement="topLeft" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article>}><article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
+          var content = <Popover  placement="rightTop" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article>}><article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
           var subjectType = e.subjectType;
           var typeName = e.typeName;
           var score = e.score;
