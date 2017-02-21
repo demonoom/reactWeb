@@ -5,43 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="renderer" content="webkit">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>小蚂蚁移动教学平台</title>
   <link rel="stylesheet" href="index.css" />
   <link rel="icon" href="../src/components/images/logo_title.png" type="image/x-icon"/>
-  <link type="text/css" rel="Stylesheet" href="../ckeditor/WordPaster/css/WordPaster.css"/>
-<!--  <link type="text/css" rel="Stylesheet" href="../ckeditor/WordPaster/js/layer/skin/layer.css"/>
-  <link type="text/css" rel="Stylesheet" href="../ckeditor/WordPaster/js/layer/skin/layer.ext.css"/>-->
-  <link type="text/css" rel="Stylesheet" href="../ckeditor/WordPaster/js/skygqbox.css" />
   <script type="text/javascript" src="../ckeditor/WordPaster/js/json2.min.js" charset="utf-8"></script>
   <script type="text/javascript" src="../jquerylib/jquery.min.js"></script>
-  <!--<script type="text/javascript" src="../ckeditor/WordPaster/js/jquery-1.4.min.js" charset="utf-8"></script>
-  <!--<script type="text/javascript" src="../ckeditor/WordPaster/js/layer/jquery-1.9.1.min.js" charset="utf-8"></script>-->
-  <script type="text/javascript" src="../ckeditor/ckeditor.js"></script>
-  <!--<script type="text/javascript" src="../ckeditor/WordPaster/js/layer/layer.js" charset="utf-8"></script>-->
-  <script type="text/javascript" src="../ckeditor/WordPaster/js/skygqbox.js" charset="utf-8"></script>
-  <script type="text/javascript" src="../ckeditor/WordPaster/js/WordPaster.js" charset="utf-8"></script>
-<!--  <script type="text/javascript" src="../ckeditor/WordPaster/js/WordPaster-layer.js" charset="utf-8"></script>-->
   <script type="text/javascript" src="../jquerylib/jquery.form.js"></script>
-  <!-- 配置ckEditor和wordPaster   end -->
-
   <script type="text/javascript" src="../jquerylib/jquery.jsonp.js"></script>
+  <script type="text/javascript" src="../textboxio/textboxio.js"></script>
   <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/style.css">
-
   <script type="text/javascript">
-    //此处的pasterMgr必须使用全局对象
-    var pasterMgr;
-    pasterMgr = new WordPasterManager();
-    pasterMgr.Config["PostUrl"] = "http://www.maaee.com/Excoord_For_Education/manage/subject/subject_upload.jsp";
-    //此处的配置和加载控件的代码只能写在index页面中，确保只加载一次，否则会随着加载次数的增多，Ckeditor中会出现粘贴内容重复的情况
-    $(document).ready(function(){
-      pasterMgr.Load();//加载控件
-      CKEDITOR.config.extraPlugins = 'imagepaster,netpaster';
-      //自定义快捷键
-      CKEDITOR.config.keystrokes = [
-        [CKEDITOR.CTRL + 86/*V*/,'imagepaster']
-      ];
-    });
-
+    //以下声明的对象为全局的textboxio组件对象
+    var mytextareaSingleEditor;
+    var mytextareaSingleModifyEditor;
+    var mytextareaMulitiEditor;
+    var mytextareaMulitiSelectModifyEditor;
+    var mytextareaCorrectEditor;
+    var mytextareaCorrectModifyEditor;
+    var mytextareaSimpleAnswerEditor;
+    var mytextareaAnswerEditor;
+    var mytextareaSimpleAnswerModifyEditor;
+    var mytextareaAnswerModifyEditor;
+    //textbox默认的全局配置
+    var defaultConfig = {
+      paste : {
+        style : 'retain',  // Overrides default: 'prompt' for MS Office content
+        enableFlashImport: true // Note, true is the default
+      },
+      codeview : {
+        enabled: false,
+        showButton: false
+      },
+      images : {
+        editing : {
+          enabled : true
+        },
+        allowLocal : true,  //该值为false时，将禁止上传本地图片，图文粘贴时将会只有文字
+        upload : {
+          url : 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
+        }
+      }
+    };
   //此处的几个全局对象用来完成题目修改时，向ckEditor传递修改数据用
    var editorContent="";
    var muEditorContent="";

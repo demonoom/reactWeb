@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Table, Button,Icon,Popover,Tooltip,message,Modal } from 'antd';
 import UseKnowledgeComponents from './UseKnowledgeComponents';
-import SubjectEditTabComponents from './SubjectEditTabComponents';
+import SubjectEditByTextboxioTabComponents from './SubjectEditByTextboxioTabComponents';
 import { doWebService } from '../WebServiceHelper';
 const confirm = Modal.confirm;
 
@@ -394,7 +394,7 @@ const SUbjectTable = React.createClass({
     const hasSelected = selectedRowKeys.length > 0;
     return (
         <div >
-          <SubjectEditTabComponents ref="subjectEditTabComponents" subjectEditCallBack={subTable.subjectEditCallBack}></SubjectEditTabComponents>
+          <SubjectEditByTextboxioTabComponents ref="subjectEditTabComponents" subjectEditCallBack={subTable.subjectEditCallBack}></SubjectEditByTextboxioTabComponents>
           <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
           <Table rowSelection={rowSelection} columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: 15,onChange:subTable.pageOnChange }} scroll={{ y: 400}}/>
         </div>

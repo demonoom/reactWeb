@@ -5,7 +5,7 @@ import CourseWareComponents from './CourseWareComponents';
 import SubjectTable from './SubjectTableComponents';
 import UseKnowledgeComponents from './UseKnowledgeComponents';
 import CourseWareUploadComponents from './CourseWareUploadComponents';
-import SubjectUploadTabComponents from './SubjectUploadTabComponents';
+import SubjectUploadByTextboxio from './SubjectUploadByTextboxio';
 
 const TabPane = Tabs.TabPane;
 //定义js函数，完成删除前的确认提示操作
@@ -160,7 +160,7 @@ const MainTabComponents = React.createClass({
             tabPanel=<TabPane tab="课件" key="课件"><CourseWareComponents ref="courseWare"/></TabPane>;
             subjectTabPanel=<TabPane tab="题目" key="题目"><SubjectTable  ref="subTable" params={this.state.subjectParams}/></TabPane>
         }
-        var toolbarExtra = <div className="ant-tabs-right" style={{display:displayType}}><CourseWareUploadComponents courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}></CourseWareUploadComponents><SubjectUploadTabComponents courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}></SubjectUploadTabComponents></div>;
+        var toolbarExtra = <div className="ant-tabs-right" style={{display:displayType}}><CourseWareUploadComponents courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}></CourseWareUploadComponents><SubjectUploadByTextboxio courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}></SubjectUploadByTextboxio></div>;
 
         return (
             <div>

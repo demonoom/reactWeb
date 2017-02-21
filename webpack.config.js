@@ -44,14 +44,9 @@ module.exports = function(webpackConfig, env) {
       loader.exclude = /node_modules/;
       loader.test = /\.css$/;
     }
-    //加载第三方的样式文件---ckeditor富客户端组件
-    if (loader.test.toString() === '/\\.ckeditor\\.css$/') {
-      loader.exclude = /ckeditor/;
-      loader.test = /\.css$/;
-    }
-    //加载第三方的样式文件---wordPaster富客户端插件
-    if (loader.test.toString() === '/\\.WordPaster\\.css$/') {
-      loader.exclude = /WordPaster/;
+    //加载第三方的样式文件---textboxio富客户端组件
+    if (loader.test.toString() === '/\\.textboxio\\.css$/') {
+      loader.exclude = /textboxio/;
       loader.test = /\.css$/;
     }
   });

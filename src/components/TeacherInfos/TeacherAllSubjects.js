@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Table, Button,Icon,Popover,Tooltip,message,Modal } from 'antd';
 import UseKnowledgeComponents from '../UseKnowledgeComponents';
-import SubjectEditTabComponents from '../SubjectEditTabComponents';
+import SubjectEditByTextboxioTabComponents from '../SubjectEditByTextboxioTabComponents';
 import { doWebService } from '../../WebServiceHelper';
 const confirm = Modal.confirm;
 
@@ -221,7 +221,7 @@ const TeacherAllSubjects = React.createClass({
     return (
         <div className='ant-tabs ant-tabs-top ant-tabs-line'>
 		  <div className='ant-tabs-tabpane ant-tabs-tabpane-active'>
-          <SubjectEditTabComponents ref="subjectEditTabComponents" subjectEditCallBack={subTable.subjectEditCallBack}></SubjectEditTabComponents>
+          <SubjectEditByTextboxioTabComponents ref="subjectEditTabComponents" subjectEditCallBack={subTable.subjectEditCallBack}></SubjectEditByTextboxioTabComponents>
           <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
           <Table columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: 15,onChange:subTable.pageOnChange }} scroll={{ y: 400}}/>
 		  </div>
