@@ -488,8 +488,8 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
             </div>;
         }
 
-        var tipInfo = <div>1.如果题目来源于word文档，建议使用office2007完成传题操作；<br/>
-            2.文档中的自定义形状或剪贴画，请先使用截图工具截图替换后再进行粘贴上传<br/>
+        var tipInfo = <div className="binding_b_t">1.如果题目来源于word文档，建议使用office2007完成传题操作；<br/>
+            2.文档中的自定义形状或剪贴画，请先使用截图工具截图替换后再进行粘贴上传；<br/>
             3.文档中的数学公式请单独粘贴上传</div>;
 
         return (

@@ -1590,3 +1590,16 @@ a {
     font-size: 14px !important;
 	color:#666;
 }
+.binding_b_t{
+	background: #fffded;
+    border: 1px solid #fbdf85;
+    color: #9c6a3d;
+    padding: 6px 8px;
+    margin: 0px 0 15px 0;
+    border-radius: 0;
+	position:relative;
+	top:10px;
+	font-size:14px;
+	line-height:24px;
+
+}
