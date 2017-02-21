@@ -310,7 +310,7 @@ const AssignHomeWorkComponents = React.createClass({
           console.log("eeeeee:"+e);
           var key = e.sid;
           //var content=<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article>;
-          var content = <Popover placement="topLeft" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.shortContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article></Popover>;
+          var content = <Popover placement="rightTop" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.shortContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article></Popover>;
           var subjectType=e.typeName;
           subjectData.push({
             key: key+"^"+e.shortContent,
@@ -346,7 +346,7 @@ const AssignHomeWorkComponents = React.createClass({
       console.log("subjectArray[1]："+subjectArray[1])
       defaultCheckedList.push(subjectArray[0]);
       // <article id='contentHtml' className='content content_2' value={subjectArray[1]} dangerouslySetInnerHTML={{__html: subjectArray[1]}} ></article>
-      var content = <Popover content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html:subjectArray[1]}}></article>}><article id='contentHtml' className='content content_2' dangerouslySetInnerHTML={{__html: subjectArray[1]}}></article></Popover>;
+      var content = <Popover placement="rightTop"  content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html:subjectArray[1]}}></article>}><article id='contentHtml' className='content content_2' dangerouslySetInnerHTML={{__html: subjectArray[1]}}></article></Popover>;
       plainOptions.push({label:content,value:subjectArray[0]});
       i++;
       if(i!=selectedSubjectKeys.length){

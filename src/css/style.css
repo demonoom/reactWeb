@@ -774,14 +774,16 @@ html, body, #root {
 }
 .ant-table-thead > tr > th.ant-table-selection-cont2 article, .ant-table-tbody > tr > td.ant-table-selection-cont2 article{
 	max-height:100px !important;
-	overflow:hidden
+	overflow:hidden;
+	display:inline-block
 }
 .ant-table-thead > tr > th.ant-table-selection-cont3, .ant-table-tbody > tr > td.ant-table-selection-cont3{
 	max-width:400px !important;
 }
 .ant-table-thead > tr > th.ant-table-selection-cont3 article, .ant-table-tbody > tr > td.ant-table-selection-cont3 article{
 	max-height:100px !important;
-	overflow:hidden
+	overflow:hidden;
+	display:inline-block
 }
 .score3_i{
 	margin:0 6px;
@@ -1545,7 +1547,8 @@ a {
 .Popover_width{
 	max-width:550px;
 	max-height:500px;
-	overflow:auto;
+	overflow-y:auto;
+	overflow-x:hidden;
 }
 .Popover_width img{
 	width:100%;
