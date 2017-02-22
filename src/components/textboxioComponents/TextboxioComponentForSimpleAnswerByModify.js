@@ -7,6 +7,15 @@ var TextboxioComponentForSimpleAnswerByModify = React.createClass({
     if(mytextareaSimpleAnswerModifyEditor!=null && typeof(mytextareaSimpleAnswerModifyEditor)!='undefined' ){
       mytextareaSimpleAnswerModifyEditor.content.set(simpleEditorContent);
     }
+    mytextareaSimpleAnswerModifyEditor.events.dirty.addListener(function () {
+      mytextareaSimpleAnswerModifyEditor.mode.set("code");
+      mytextareaSimpleAnswerModifyEditor.mode.set("design");
+    });
+    mytextareaSimpleAnswerModifyEditor.events.focus.addListener(function () {
+      if(mytextareaSimpleAnswerModifyEditor.mode.get()=="code"){
+        mytextareaSimpleAnswerModifyEditor.mode.set("design");
+      }
+    });
   },
   componentDidUpdate(){
     if(mytextareaSimpleAnswerModifyEditor!=null && typeof(mytextareaSimpleAnswerModifyEditor)!='undefined' ){
@@ -17,6 +26,15 @@ var TextboxioComponentForSimpleAnswerByModify = React.createClass({
         }
       }
     }
+    mytextareaSimpleAnswerModifyEditor.events.dirty.addListener(function () {
+      mytextareaSimpleAnswerModifyEditor.mode.set("code");
+      mytextareaSimpleAnswerModifyEditor.mode.set("design");
+    });
+    mytextareaSimpleAnswerModifyEditor.events.focus.addListener(function () {
+      if(mytextareaSimpleAnswerModifyEditor.mode.get()=="code"){
+        mytextareaSimpleAnswerModifyEditor.mode.set("design");
+      }
+    });
   },
   render : function(){
     return (

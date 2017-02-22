@@ -3,6 +3,19 @@ import React from 'react';
 var TextboxioComponentForCorrect = React.createClass({
   componentDidMount(){
     mytextareaCorrectEditor = textboxio.replace('#myCorrectTextarea',defaultConfig);
+    mytextareaCorrectEditor.events.dirty.addListener(function () {
+      mytextareaCorrectEditor.mode.set("code");
+      mytextareaCorrectEditor.mode.set("design");
+    });
+    mytextareaCorrectEditor.events.focus.addListener(function () {
+      if(mytextareaCorrectEditor.mode.get()=="code"){
+        mytextareaCorrectEditor.mode.set("design");
+      }
+    });
+  },
+  componentDidUpdate(){
+    mytextareaCorrectEditor.mode.set("code");
+    mytextareaCorrectEditor.mode.set("design");
   },
   render : function(){
     return (

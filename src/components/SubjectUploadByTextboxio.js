@@ -219,6 +219,8 @@ const SubjectUploadTabComponents = React.createClass({
         } else {
             target = e.target;
         }
+        // mytextareaSingleEditor.mode.set("code");
+        // mytextareaSingleEditor.mode.set("design");
         //获取当前点击的是哪个按钮
         var currentButton = target.textContent;
         var ident = sessionStorage.getItem("ident");
@@ -292,6 +294,7 @@ const SubjectUploadTabComponents = React.createClass({
         }
         var subjectName = mytextareaMulitiEditor.content.get();
         subjectName = subjectName.replace(/\+/g, "%2B"); //将+号替换为十六进制
+        console.log("ttt:" + subjectName);
         //将获取的多选答案数组转换为字符串
         var answer = "";
         for (var i = 0; i < mulitiAnswer.length; i++) {
@@ -356,6 +359,7 @@ const SubjectUploadTabComponents = React.createClass({
         }
         var subjectName = mytextareaCorrectEditor.content.get();
         subjectName = subjectName.replace(/\+/g, "%2B"); //将+号替换为十六进制
+        console.log("ttt:" + subjectName);
         var answer = this.state.correctAnswerValue;
         var subjectParamArray = this.props.params.split("#");
         var ident = subjectParamArray[0];
@@ -417,8 +421,10 @@ const SubjectUploadTabComponents = React.createClass({
         }
         var subjectName = mytextareaSimpleAnswerEditor.content.get();
         subjectName = subjectName.replace(/\+/g, "%2B"); //将+号替换为十六进制
+        console.log("ttt:" + subjectName);
         var answer = mytextareaAnswerEditor.content.get();
         answer = answer.replace(/\+/g, "%2B"); //将+号替换为十六进制
+        console.log("ttt  answer :" + answer);
         var subjectParamArray = this.props.params.split("#");
         var ident = subjectParamArray[0];
         var ScheduleOrSubjectId = subjectParamArray[1];

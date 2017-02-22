@@ -7,6 +7,15 @@ var TextboxioComponentForSingleByModify = React.createClass({
     if(mytextareaSingleModifyEditor!=null && typeof(mytextareaSingleModifyEditor)!='undefined' ){
       mytextareaSingleModifyEditor.content.set(editorContent);
     }
+    mytextareaSingleModifyEditor.events.dirty.addListener(function () {
+      mytextareaSingleModifyEditor.mode.set("code");
+      mytextareaSingleModifyEditor.mode.set("design");
+    });
+    mytextareaSingleModifyEditor.events.focus.addListener(function () {
+      if(mytextareaSingleModifyEditor.mode.get()=="code"){
+        mytextareaSingleModifyEditor.mode.set("design");
+      }
+    });
   },
   componentDidUpdate(){
     if(mytextareaSingleModifyEditor!=null && typeof(mytextareaSingleModifyEditor)!='undefined' ){
@@ -17,6 +26,15 @@ var TextboxioComponentForSingleByModify = React.createClass({
         }
       }
     }
+    mytextareaSingleModifyEditor.events.dirty.addListener(function () {
+      mytextareaSingleModifyEditor.mode.set("code");
+      mytextareaSingleModifyEditor.mode.set("design");
+    });
+    mytextareaSingleModifyEditor.events.focus.addListener(function () {
+      if(mytextareaSingleModifyEditor.mode.get()=="code"){
+        mytextareaSingleModifyEditor.mode.set("design");
+      }
+    });
   },
   render : function(){
     return (

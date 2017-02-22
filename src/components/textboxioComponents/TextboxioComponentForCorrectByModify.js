@@ -7,6 +7,15 @@ var TextboxioComponentForCorrectByModify = React.createClass({
     if(mytextareaCorrectModifyEditor!=null && typeof(mytextareaCorrectModifyEditor)!='undefined' ){
       mytextareaCorrectModifyEditor.content.set(correctEditorContent);
     }
+    mytextareaCorrectModifyEditor.events.dirty.addListener(function () {
+      mytextareaCorrectModifyEditor.mode.set("code");
+      mytextareaCorrectModifyEditor.mode.set("design");
+    });
+    mytextareaCorrectModifyEditor.events.focus.addListener(function () {
+      if(mytextareaCorrectModifyEditor.mode.get()=="code"){
+        mytextareaCorrectModifyEditor.mode.set("design");
+      }
+    });
   },
   componentDidUpdate(){
     if(mytextareaCorrectModifyEditor!=null && typeof(mytextareaCorrectModifyEditor)!='undefined' ){
@@ -17,6 +26,15 @@ var TextboxioComponentForCorrectByModify = React.createClass({
         }
       }
     }
+    mytextareaCorrectModifyEditor.events.dirty.addListener(function () {
+      mytextareaCorrectModifyEditor.mode.set("code");
+      mytextareaCorrectModifyEditor.mode.set("design");
+    });
+    mytextareaCorrectModifyEditor.events.focus.addListener(function () {
+      if(mytextareaCorrectModifyEditor.mode.get()=="code"){
+        mytextareaCorrectModifyEditor.mode.set("design");
+      }
+    });
   },
   render : function(){
     return (

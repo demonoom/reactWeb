@@ -29,12 +29,13 @@
     var mytextareaAnswerModifyEditor;
     //textbox默认的全局配置
     var defaultConfig = {
+      autosubmit:true,
       paste : {
         style : 'retain',  // Overrides default: 'prompt' for MS Office content
         enableFlashImport: true // Note, true is the default
       },
       codeview : {
-        enabled: false,
+        enabled: true,
         showButton: false
       },
       images : {
@@ -43,7 +44,7 @@
         },
         allowLocal : true,  //该值为false时，将禁止上传本地图片，图文粘贴时将会只有文字
         upload : {
-          url : 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
+          url : 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload'
         }
       }
     };
@@ -54,6 +55,19 @@
    var simpleEditorContent="";
    var answerContent="";
    var toolbarKey="";
+
+    mytextareaSingleEditor.events.dirty.addListener(function () {
+      mytextareaSingleEditor.mode.set("code");
+//       console.log('editor content is now dirty', mytextareaSingleEditor.element());
+      mytextareaSingleEditor.mode.set("design");
+       console.log('mytextareaSingleEditor.mode.get()====>', mytextareaSingleEditor.mode.get())
+    });
+    mytextareaSingleEditor.events.focus.addListener(function () {
+      if(mytextareaSingleEditor.mode.get()=="code"){
+        mytextareaSingleEditor.mode.set("design");
+      }
+       console.log('this editor has focus', mytextareaSingleEditor.element())
+    });
   </script>
 
 </head>

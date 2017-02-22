@@ -184,7 +184,7 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                 } else {
                     message.error("题目修改失败");
                 }
-                this.initPage();
+                // this.initPage();
             },
             onError: function (error) {
                 message.error(error);
@@ -211,6 +211,7 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
         }
         var subjectName = mytextareaSingleModifyEditor.content.get();
         // subjectName = subjectName.replace(/\+/g, "%2B"); //将+号替换为十六进制
+        console.log("ttt:" + subjectName);
         var answer = this.state.singleAnswer;
         //完成基础的非空验证
         if (this.isEmpty(subjectName)) {
@@ -245,6 +246,7 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
             score = this.state.scoreDefinedValue;
         }
         var subjectName = mytextareaMulitiSelectModifyEditor.content.get();
+        console.log("ttt:" + subjectName);
         //将获取的多选答案数组转换为字符串
         var answer = "";
         for (var i = 0; i < mulitiAnswer.length; i++) {
@@ -282,6 +284,7 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
             score = this.state.scoreDefinedValue;
         }
         var subjectName = mytextareaCorrectModifyEditor.content.get();
+        console.log("ttt:" + subjectName);
         var answer = this.state.correctAnswerValue;
         //完成基础的非空验证
         if (this.isEmpty(subjectName)) {
@@ -317,7 +320,9 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
             score = this.state.scoreDefinedValue;
         }
         var subjectName = mytextareaSimpleAnswerModifyEditor.content.get();
+        console.log("ttt:" + subjectName);
         var answer = mytextareaAnswerModifyEditor.content.get();
+        console.log("ttt answer:" + answer);
         //完成基础的非空验证
         if (this.isEmpty(subjectName)) {
             message.warning("请输入题目");

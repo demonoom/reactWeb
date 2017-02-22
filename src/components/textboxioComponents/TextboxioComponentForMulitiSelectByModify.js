@@ -7,6 +7,15 @@ var TextboxioComponentForMulitiSelectByModify = React.createClass({
     if(mytextareaMulitiSelectModifyEditor!=null && typeof(mytextareaMulitiSelectModifyEditor)!='undefined' ){
       mytextareaMulitiSelectModifyEditor.content.set(muEditorContent);
     }
+    mytextareaMulitiSelectModifyEditor.events.dirty.addListener(function () {
+      mytextareaMulitiSelectModifyEditor.mode.set("code");
+      mytextareaMulitiSelectModifyEditor.mode.set("design");
+    });
+    mytextareaMulitiSelectModifyEditor.events.focus.addListener(function () {
+      if(mytextareaMulitiSelectModifyEditor.mode.get()=="code"){
+        mytextareaMulitiSelectModifyEditor.mode.set("design");
+      }
+    });
   },
   componentDidUpdate(){
     if(mytextareaMulitiSelectModifyEditor!=null && typeof(mytextareaMulitiSelectModifyEditor)!='undefined' ){
@@ -17,6 +26,15 @@ var TextboxioComponentForMulitiSelectByModify = React.createClass({
         }
       }
     }
+    mytextareaMulitiSelectModifyEditor.events.dirty.addListener(function () {
+      mytextareaMulitiSelectModifyEditor.mode.set("code");
+      mytextareaMulitiSelectModifyEditor.mode.set("design");
+    });
+    mytextareaMulitiSelectModifyEditor.events.focus.addListener(function () {
+      if(mytextareaMulitiSelectModifyEditor.mode.get()=="code"){
+        mytextareaMulitiSelectModifyEditor.mode.set("design");
+      }
+    });
   },
   render : function(){
     return (
