@@ -14,8 +14,11 @@ var TextboxioComponentForCorrect = React.createClass({
     });
   },
   componentDidUpdate(){
-    mytextareaCorrectEditor.mode.set("code");
-    mytextareaCorrectEditor.mode.set("design");
+    var activeEditor = textboxio.getActiveEditor();
+    if(mytextareaCorrectEditor != null && typeof(mytextareaCorrectEditor)!="undefined" && activeEditor==mytextareaCorrectEditor ) {
+      mytextareaCorrectEditor.mode.set("code");
+      mytextareaCorrectEditor.mode.set("design");
+    }
   },
   render : function(){
     return (

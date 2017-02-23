@@ -5,9 +5,7 @@ var TextboxioComponentForSingle = React.createClass({
     mytextareaSingleEditor = textboxio.replace('#mytextarea',defaultConfig);
     mytextareaSingleEditor.events.dirty.addListener(function () {
       mytextareaSingleEditor.mode.set("code");
-      // console.log('editor content is now dirty', mytextareaSingleEditor.element());
       mytextareaSingleEditor.mode.set("design");
-      // console.log('mytextareaSingleEditor.mode.get()====>', mytextareaSingleEditor.mode.get())
     });
     mytextareaSingleEditor.events.focus.addListener(function () {
       if(mytextareaSingleEditor.mode.get()=="code"){
@@ -16,8 +14,11 @@ var TextboxioComponentForSingle = React.createClass({
     });
   },
   componentDidUpdate(){
-    mytextareaSingleEditor.mode.set("code");
-    mytextareaSingleEditor.mode.set("design");
+    var activeEditor = textboxio.getActiveEditor();
+    if(mytextareaSingleEditor != null && typeof(mytextareaSingleEditor)!="undefined" && activeEditor==mytextareaSingleEditor ){
+      mytextareaSingleEditor.mode.set("code");
+      mytextareaSingleEditor.mode.set("design");
+    }
   },
   render : function(){
     return (

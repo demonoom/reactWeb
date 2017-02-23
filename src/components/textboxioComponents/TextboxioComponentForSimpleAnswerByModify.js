@@ -35,6 +35,11 @@ var TextboxioComponentForSimpleAnswerByModify = React.createClass({
         mytextareaSimpleAnswerModifyEditor.mode.set("design");
       }
     });
+    var activeEditor = textboxio.getActiveEditor();
+    if(mytextareaSimpleAnswerModifyEditor != null && typeof(mytextareaSimpleAnswerModifyEditor)!="undefined" && activeEditor==mytextareaCorrectModifyEditor ){
+      mytextareaSimpleAnswerModifyEditor.mode.set("code");
+      mytextareaSimpleAnswerModifyEditor.mode.set("design");
+    }
   },
   render : function(){
     return (

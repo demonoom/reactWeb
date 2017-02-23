@@ -35,6 +35,11 @@ var TextboxioComponentForMulitiSelectByModify = React.createClass({
         mytextareaMulitiSelectModifyEditor.mode.set("design");
       }
     });
+    var activeEditor = textboxio.getActiveEditor();
+    if(mytextareaMulitiSelectModifyEditor != null && typeof(mytextareaMulitiSelectModifyEditor)!="undefined" && activeEditor==mytextareaMulitiSelectModifyEditor ){
+      mytextareaMulitiSelectModifyEditor.mode.set("code");
+      mytextareaMulitiSelectModifyEditor.mode.set("design");
+    }
   },
   render : function(){
     return (

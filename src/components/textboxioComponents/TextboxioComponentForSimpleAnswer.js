@@ -14,8 +14,11 @@ var TextboxioComponentForSimpleAnswer = React.createClass({
     });
   },
   componentDidUpdate(){
-    mytextareaSimpleAnswerEditor.mode.set("code");
-    mytextareaSimpleAnswerEditor.mode.set("design");
+    var activeEditor = textboxio.getActiveEditor();
+    if(mytextareaSimpleAnswerEditor != null && typeof(mytextareaSimpleAnswerEditor)!="undefined" && activeEditor==mytextareaSimpleAnswerEditor ) {
+      mytextareaSimpleAnswerEditor.mode.set("code");
+      mytextareaSimpleAnswerEditor.mode.set("design");
+    }
   },
   render : function(){
     return (

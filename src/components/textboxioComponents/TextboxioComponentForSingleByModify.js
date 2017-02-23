@@ -35,6 +35,11 @@ var TextboxioComponentForSingleByModify = React.createClass({
         mytextareaSingleModifyEditor.mode.set("design");
       }
     });
+    var activeEditor = textboxio.getActiveEditor();
+    if(mytextareaSingleModifyEditor != null && typeof(mytextareaSingleModifyEditor)!="undefined" && activeEditor==mytextareaSingleModifyEditor ){
+      mytextareaSingleModifyEditor.mode.set("code");
+      mytextareaSingleModifyEditor.mode.set("design");
+    }
   },
   render : function(){
     return (
