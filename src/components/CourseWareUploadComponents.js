@@ -131,7 +131,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                     var scheduleId = ret.response.colTsId;
                     courseWareUpload.copyMaterialToSchedule(userId,materiaIds,scheduleId)
                 }
-                knowledge.setState({
+                courseWareUpload.setState({
                     visible: false,spinLoading:false
                 });
             },
