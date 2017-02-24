@@ -65,11 +65,12 @@ const ExamPagerTableComponents = React.createClass({
       columns = [ {
         title: '试卷名称',
         dataIndex: 'title',
-      },{
+      }
+      /*,{
         title: '操作',
         className:'ant-table-selection-topic',
         dataIndex: 'subjectOpt',
-      },
+      },*/
       ];
     }
   },
@@ -126,7 +127,7 @@ const ExamPagerTableComponents = React.createClass({
           data.push({
               key:pagerId,
               title:pagerTitle,
-              subjectOpt:subjectOpt,
+              //subjectOpt:subjectOpt,
           });
         });
         var pager = ret.pager;

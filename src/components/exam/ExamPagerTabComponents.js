@@ -46,7 +46,7 @@ const ExamPagerTabComponents = React.createClass({
             </TabPane>;
         }else{
             tabPanel = <TabPane tab="组卷" key="组卷">
-                <CreateExamPagerComponents ref="createExamPagerComponents" params={this.state.isNewPage}  callbackParent={this.getTeacherHomeWork}></CreateExamPagerComponents>
+                <CreateExamPagerComponents ref="createExamPagerComponents" params={this.state.isNewPage}  callbackParent={this.getExamPagerList}></CreateExamPagerComponents>
             </TabPane>;
         }
 

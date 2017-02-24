@@ -55,7 +55,8 @@ const FileUploadComponents = React.createClass({
         }else{
             var fileName = files[0].name;
             var lastPointIndex = fileName.lastIndexOf(".");
-            // var fileType = files[0].type;
+            var fileMimeType = files[0].type;
+            console.log("fileMimeType:"+fileMimeType);
             //通过截取文件后缀名的形式，完成对上传文件类型的判断
             var fileType = fileName.substring(lastPointIndex+1);
             var fileSize = files[0].size;

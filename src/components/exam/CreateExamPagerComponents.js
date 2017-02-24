@@ -48,7 +48,8 @@ const CreateExamPagerComponents = React.createClass({
             correctAnswerValue:'',     //判断题的答案
             examPagerModalVisible:false,        //上传试卷图片的Modal窗口的状态
             spinLoading:false,      //上传试卷图片过程中的加载动画
-            examPagerUrl:'',        //试卷图片的上传地址
+            examPagerUrl:[],        //试卷图片的上传地址
+            examPagerImgTag:[],     //试卷图片对应的img标记的数组，用来在页面上显示多个
             examPagerTitle:'',      //试卷标题
             answerCardArray:[],     //答题卡的数组
             exmQuestionArray:[],    //答题卡中题目的数组
@@ -59,9 +60,13 @@ const CreateExamPagerComponents = React.createClass({
             bindKnowledgeBtnInfo:'',     //当前点击的“所属知识点”按钮相关的答题卡、题目信息
             analysisModalVisible:false,      //添加解析窗口状态
             analysisContent:'',      //添加解析文本域的内容
-            uploadImgOptSource:'',      //图片上传的操作来源，包括试卷标题的图片上传、图片解析的上传、图片题目的上传
+            uploadImgOptSource:'examPagerTitleImg',      //图片上传的操作来源，包括试卷标题的图片上传、图片解析的上传、图片题目的上传
             addAnalysisBtnInfo:'',      //添加按钮的所属题目信息
-            analysisUrl:''      //图片解析的url路径
+            analysisUrl:'',      //图片解析的url路径
+            currentImgAnswerInfo:'',        //当前点击图片答案按钮对应的题目信息
+            imageAnswerArray:[],     //存放所有图片答案的数组（该数组会使用字符串作为内容索引）
+            imageAnswerUrl:'',
+            analysisImgTag:''
         };
     },
     /**
@@ -75,18 +80,30 @@ const CreateExamPagerComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                if (ret.msg == "调用成功" && ret.response == true) {
+                if (ret.msg == "调用成功" && ret.success == true) {
                     message.success("组卷成功");
                 } else {
                     message.error("组卷失败");
                 }
-                //createExamPager.props.callbackParent();
+                createExamPager.props.callbackParent();
                 // 回到试卷列表
             },
             onError: function (error) {
                 message.error(error);
             }
         });
+    },
+
+    convertUndefinedToNull(source,sourceType){
+        if(typeof(source)=="undefined"){
+            if(sourceType=="array"){
+                return [];
+            }else{
+                return "";
+            }
+        }else{
+            return source;
+        }
     },
     /**
      * 完成组卷保存操作
@@ -97,13 +114,21 @@ const CreateExamPagerComponents = React.createClass({
         //创建者id
         var ident = sessionStorage.getItem("ident");
         //试卷标题
-        var examPagerTitle = createExamPager.state.examPagerTitle;
+        var examPagerTitle = createExamPager.convertUndefinedToNull(createExamPager.state.examPagerTitle);
+        if(createExamPager.isEmpty(examPagerTitle)){
+            message.warning("请输入试卷标题",5);
+            return;
+        }
         //上传文件的附件url
-        var examPagerUrl = createExamPager.state.examPagerUrl;
+        var examPagerUrl = createExamPager.convertUndefinedToNull(createExamPager.state.examPagerUrl,"array");
         //创建时间
         var createTime = (new Date()).valueOf();
         // 试卷的附件--图片
-        var attachments=[{path:examPagerUrl}];
+        var attachments=[];
+        for(var i=0;i<examPagerUrl.length;i++){
+            var pathJson = {path:examPagerUrl[i]};
+            attachments.push(pathJson);
+        }
         //封装试卷基本信息 *******************************
         var paperJson={title:examPagerTitle,userId:ident,createTime:createTime,attachments:attachments};
         //封装试卷的题目信息questionTypes,数据从cardChildArray中获取，包括了答题卡和题目的信息
@@ -112,10 +137,10 @@ const CreateExamPagerComponents = React.createClass({
         for(var i =0;i<cardChildArray.length;i++){
             var cardChildJson = cardChildArray[i];
             //大题标题(老师自定义的)
-            var title = cardChildJson.answerTitle;
+            var title = createExamPager.convertUndefinedToNull(cardChildJson.answerTitle);
             // 大题类型
             var type;
-            var answerSubjectType = cardChildJson.answerSubjectType;
+            var answerSubjectType = createExamPager.convertUndefinedToNull(cardChildJson.answerSubjectType);
             if(answerSubjectType=="selectAnswer"){
                 type=0;
             }else if(answerSubjectType=="correct"){
@@ -135,18 +160,26 @@ const CreateExamPagerComponents = React.createClass({
                 var questionTitle=title+subjectDivJson.index;
                 // 小题对应的分数
                 var score = subjectDivJson.score;
+                if(isNaN(score) || score==0){
+                    message.warning("请以数字的形式输入"+title+"下第"+subjectDivJson.index+"题的分数",5);
+                    return;
+                }
                 // 文字正确答案
-                var textAnswer = subjectDivJson.textAnswer;
+                var textAnswer = createExamPager.convertUndefinedToNull(subjectDivJson.textAnswer);
+                if(createExamPager.isEmpty(textAnswer)){
+                    message.warning("请选择/输入"+title+"下第"+subjectDivJson.index+"题的答案",5);
+                    return;
+                }
                 // 图片正确答案
-                var imageAnswer = "";
+                var imageAnswer = createExamPager.convertUndefinedToNull(subjectDivJson.imageAnswer);;
                 // 冗余ExmQuestionType的类型，用于查询操作好操作
                 var questionType = type;
                 // 文字解析
-                var textAnalysis = subjectDivJson.textAnalysis;
+                var textAnalysis = createExamPager.convertUndefinedToNull(subjectDivJson.textAnalysis);
                 // 图片解析
-                var imageAnalysis= subjectDivJson.imageAnalysis;
+                var imageAnalysis= createExamPager.convertUndefinedToNull(subjectDivJson.imageAnalysis);
                 // 所属知识点
-                var points = subjectDivJson.points;
+                var points = createExamPager.convertUndefinedToNull(subjectDivJson.points,"array");
                 var questionsJson = {score:score,title:questionTitle,textAnswer:textAnswer,imageAnswer:imageAnswer,type:questionType,textAnalysis:textAnalysis,imageAnalysis:imageAnalysis,points:points};
                 questions.push(questionsJson);
             }
@@ -167,9 +200,11 @@ const CreateExamPagerComponents = React.createClass({
         }
     },
 
+    /**
+     * 取消组卷操作，返回试卷列表
+     * @param e
+     */
     handleCancel(e) {
-        // 保存之后，将已选题目列表清空
-        plainOptions = [];
         createExamPager.props.callbackParent();
     },
 
@@ -207,11 +242,20 @@ const CreateExamPagerComponents = React.createClass({
                             break;
                         }else if(optType=="setPoints"){
                             //设置关联的知识点
-                            subjectDivJson.points = subjectJson.points;
+                            var pointJsonArray = [];
+                            for(var i=0;i<subjectJson.points.length;i++){
+                                var id= subjectJson.points[i];
+                                var pointJson = {"id":id};
+                                pointJsonArray.push(pointJson);
+                            }
+                            subjectDivJson.points=pointJsonArray;
                         }else if(optType=="setAnalysis"){
                             //设置解析内容，包括文字解析和图片解析
                             subjectDivJson.textAnalysis = subjectJson.textAnalysis;
                             subjectDivJson.imageAnalysis = subjectJson.imageAnalysis;
+                        }else if(optType=="setImageAnswer"){
+                            //设置题目的图片答案
+                            subjectDivJson.imageAnswer=subjectJson.imageAnswer;
                         }
                     }
                 }
@@ -326,15 +370,21 @@ const CreateExamPagerComponents = React.createClass({
                     if(deleteAnswerTitle == cartTitleInJson){
                         //已经找到对应的答题卡，接下来需要在答题卡的题目数组中再找出对应的题目编号
                         var cardSubjectAnswerArray = cardChildJson.cardSubjectAnswerArray;
-                        for(var j = 0;j<cardSubjectAnswerArray.length;j++){
-                            var cardSubjectJson = cardSubjectAnswerArray[j];
-                            if(cardSubjectJson.index == deleteSubjectNum){
-                                cardSubjectJson.divContent="";
-                                cardSubjectAnswerArray.splice(deleteSubjectNum-1,1);
-                                createExamPager.refreshSubjectIndexNo(deleteSubjectNum,deleteAnswerTitle,answerSubjectType);
-                                cardChildJson.answerCount = cardChildJson.answerCount-1;
-                                message.success("题目删除成功");
-                                break;
+                        if(cardSubjectAnswerArray.length==1){
+                            //如果删除的题目所属的答题卡中只剩下最后一道题，则直接删除当前的答题卡
+                            cardChildArray.splice(i,1);
+                        }else{
+                            //答题卡中存在多道题时，删除选定题目
+                            for(var j = 0;j<cardSubjectAnswerArray.length;j++){
+                                var cardSubjectJson = cardSubjectAnswerArray[j];
+                                if(cardSubjectJson.index == deleteSubjectNum){
+                                    cardSubjectJson.divContent="";
+                                    cardSubjectAnswerArray.splice(deleteSubjectNum-1,1);
+                                    createExamPager.refreshSubjectIndexNo(deleteSubjectNum,deleteAnswerTitle,answerSubjectType);
+                                    cardChildJson.answerCount = cardChildJson.answerCount-1;
+                                    message.success("题目删除成功");
+                                    break;
+                                }
                             }
                         }
                     }
@@ -369,7 +419,7 @@ const CreateExamPagerComponents = React.createClass({
                         }else if(answerSubjectType=="simpleAnswer"){
                             subjectDiv = createExamPager.buildSimpleAnswerSubjectDivContent(cardSubjectJson.index,answerTitle,answerSubjectType);
                         }
-                        var subjectDivJson = {"index":cardSubjectJson.index,"divContent":subjectDiv,"answerScore":cardSubjectJson.answerScore};
+                        var subjectDivJson = {"index":cardSubjectJson.index,"divContent":subjectDiv,"score":cardSubjectJson.answerScore};
                     }else{
                         var subjectDiv;
                         if(answerSubjectType=="selectAnswer"){
@@ -381,7 +431,7 @@ const CreateExamPagerComponents = React.createClass({
                         }else if(answerSubjectType=="simpleAnswer"){
                             subjectDiv = createExamPager.buildSimpleAnswerSubjectDivContent(j,answerTitle,answerSubjectType);
                         }
-                        var subjectDivJson = {"index":j,"divContent":subjectDiv,"answerScore":cardSubjectJson.answerScore};
+                        var subjectDivJson = {"index":j,"divContent":subjectDiv,"score":cardSubjectJson.answerScore};
                     }
                     cardSubjectAnswerArray[j-1] = subjectDivJson;
                 }
@@ -561,8 +611,8 @@ const CreateExamPagerComponents = React.createClass({
                 <Col span={12}>
                     <RadioGroup key={answerTitle+"#"+num+"#radio#"+answerSubjectType} onChange={createExamPager.correctAnswerOnChange}
                      defaultValue={createExamPager.state.correctAnswerValue}>
-                        <Radio value={answerTitle+"#"+num+"#right#"+answerSubjectType}>正确</Radio>
-                        <Radio value={answerTitle+"#"+num+"#error#"+answerSubjectType}>错误</Radio>
+                        <Radio value={answerTitle+"#"+num+"#0#"+answerSubjectType}>正确</Radio>
+                        <Radio value={answerTitle+"#"+num+"#1#"+answerSubjectType}>错误</Radio>
                     </RadioGroup>
                 </Col>
             </Row>
@@ -629,6 +679,13 @@ const CreateExamPagerComponents = React.createClass({
                         解析
                     </Button>
                 </Col>
+                <Col span={5}>
+                    <Button type="primary" icon="plus-circle" value={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} title="上传图片答案"
+                            className="add_study add_study—a" onClick={createExamPager.showModal}>上传图片答案</Button>
+                    {/*<div style={{width:'200px',height:'200px'}}>
+                        <img src={createExamPager.state.imageAnswerUrl} style={{width:'100px',height:'100px'}}></img>
+                    </div>*/}
+                </Col>
             </Row>
             <Row>
                 <Col span={3}></Col>
@@ -674,6 +731,11 @@ const CreateExamPagerComponents = React.createClass({
                         解析
                     </Button>
                 </Col>
+                <Col span={5}>
+                    <Button type="primary" icon="plus-circle" value={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} title="上传图片答案"
+                            className="add_study add_study—a" onClick={createExamPager.showModal}>上传图片答案</Button>
+                    {/*<img src={createExamPager.state.imageAnswerArray[answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType]} style={{width:'200px',height:'200px'}}></img>*/}
+                </Col>
             </Row>
             <Row>
                 <Col span={3}></Col>
@@ -697,7 +759,7 @@ const CreateExamPagerComponents = React.createClass({
         var answerCardTitle = subjectInfoArray[0];
         //当前题目的编号
         var subjectNum = subjectInfoArray[1];
-        //当前题目的单选选项（right/error）
+        //当前题目的单选选项（正确/错误）
         var subjectAnswer = subjectInfoArray[2];
         var answerSubjectType = subjectInfoArray[3];
         var subjectJson = {answerCardTitle:answerCardTitle,answerSubjectType:answerSubjectType,subjectNum:subjectNum,subjectAnswer:subjectAnswer};
@@ -746,7 +808,7 @@ const CreateExamPagerComponents = React.createClass({
         for(var i=1;i<=answerCount;i++){
             // 小题的标题(方式是 大题标题加上小题位置作为小题的标题)
             var subjectTitle = answerTitle+i;
-            var subjectJson={score:answerScore,title:subjectTitle,textAnswer:'',imageAnswer:'',type:answerCardType,textAnalysis:'',imageAnalysis:'',points:{}};
+            var subjectJson={score:answerScore,title:subjectTitle,textAnswer:'',imageAnswer:'',type:answerCardType,textAnalysis:'',imageAnalysis:'',points:[]};
             //将初始的题目信息推入题目数组中
             createExamPager.state.exmQuestionArray.push(subjectJson);
         }
@@ -760,11 +822,23 @@ const CreateExamPagerComponents = React.createClass({
     addAnswerCard(){
         //答题卡标题
         var answerTitle = createExamPager.state.answerTitle;
+        if(createExamPager.isEmpty(answerTitle)){
+            message.warning("请输入答题卡标题",5);
+            return;
+        }
         //答题卡中的题目类型
         var answerSubjectType = createExamPager.state.subjectTypeValue;
         //答题卡中的题目数量
         var answerCount = parseInt(createExamPager.state.answerCount);
+        if(isNaN(answerCount) || answerCount<=0){
+            message.warning("请以数字的形式输入题目数量",5);
+            return;
+        }
         var answerScore = parseInt(createExamPager.state.answerScore);
+        if(isNaN(answerScore) || answerScore<=0){
+            message.warning("请以数字的形式输入题目分值",5);
+            return;
+        }
         var checkResult = createExamPager.checkCardTitleIsExist(answerTitle,answerSubjectType);
         if(checkResult==false){
             //答题卡中不存在当前要添加的答题卡title
@@ -782,7 +856,7 @@ const CreateExamPagerComponents = React.createClass({
                     subjectDiv = createExamPager.buildSimpleAnswerSubjectDivContent(i,answerTitle,answerSubjectType,answerScore);
                 }
 
-                var subjectDivJson = {"index":i,"divContent":subjectDiv,"answerScore":answerScore};
+                var subjectDivJson = {"index":i,"divContent":subjectDiv,"score":answerScore};
                 cardSubjectAnswerArray.push(subjectDivJson);
             }
             var cardChildJson = {'answerTitle':answerTitle,'answerSubjectType':answerSubjectType,'answerCount':answerCount,'answerScore':answerScore,'cardSubjectAnswerArray':cardSubjectAnswerArray};
@@ -804,7 +878,7 @@ const CreateExamPagerComponents = React.createClass({
                 }else if(answerSubjectType=="simpleAnswer"){
                     subjectDiv = createExamPager.buildSimpleAnswerSubjectDivContent(i,answerTitle,answerSubjectType,answerScore);
                 }
-                var subjectDivJson = {"index":i,"divContent":subjectDiv,"answerScore":answerScore};
+                var subjectDivJson = {"index":i,"divContent":subjectDiv,"score":answerScore};
                 cardSubjectAnswerArray.push(subjectDivJson);
             }
             cardChildJsonWithExist.cardSubjectAnswerArray = cardSubjectAnswerArray;
@@ -823,7 +897,19 @@ const CreateExamPagerComponents = React.createClass({
      * 弹出图片上传窗口
      */
     showModal(e) {
-        var source = e.target.value;
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var source = target.value;
+        var sourceArray = source.split("#");
+        if(sourceArray.length>1){
+            var currentImgAnswerInfo = source;
+            createExamPager.setState({"currentImgAnswerInfo":currentImgAnswerInfo});
+            source = sourceArray[2];
+        }
         //保存图片上传操作的事件源
         createExamPager.setState({uploadImgOptSource:source});
         uploadFileList.splice(0,uploadFileList.length);
@@ -843,39 +929,64 @@ const CreateExamPagerComponents = React.createClass({
         if(uploadFileList.length==0){
             message.warning("请选择上传的文件,谢谢！");
         }else{
-            var formData = new FormData();
-            formData.append("file",uploadFileList[0]);
-            formData.append("name",uploadFileList[0].name);
-            createExamPager.setState({spinLoading:true});
-            $.ajax({
-                type: "POST",
-                url: "http://101.201.45.125:8890/Excoord_Upload_Server/file/upload",
-                enctype: 'multipart/form-data',
-                data: formData,
-                // 告诉jQuery不要去处理发送的数据
-                processData : false,
-                // 告诉jQuery不要去设置Content-Type请求头
-                contentType : false,
-                success: function (responseStr) {
-                    if(responseStr!=""){
-                        var fileUrl=responseStr;
-                        //上传的操作来源
-                        var optSource = createExamPager.state.uploadImgOptSource;
-                        if(optSource=="analysisImg"){
-                            //图片解析操作来源
-                            createExamPager.setState({ examPagerModalVisible: false,spinLoading:false,analysisUrl:fileUrl });
-                        }else if(optSource=="examPagerTitleImg"){
-                            //试卷标题图片来源
-                            createExamPager.setState({ examPagerModalVisible: false,spinLoading:false,examPagerUrl:fileUrl });
+            for(var i=0;i<uploadFileList.length;i++){
+                var formData = new FormData();
+                formData.append("file",uploadFileList[i]);
+                formData.append("name",uploadFileList[i].name);
+                createExamPager.setState({spinLoading:true});
+                $.ajax({
+                    type: "POST",
+                    url: "http://101.201.45.125:8890/Excoord_Upload_Server/file/upload",
+                    enctype: 'multipart/form-data',
+                    data: formData,
+                    // 告诉jQuery不要去处理发送的数据
+                    processData : false,
+                    // 告诉jQuery不要去设置Content-Type请求头
+                    contentType : false,
+                    success: function (responseStr) {
+                        if(responseStr!=""){
+                            var fileUrl=responseStr;
+                            //上传的操作来源
+                            var optSource = createExamPager.state.uploadImgOptSource;
+                            if(optSource=="analysisImg"){
+                                //图片解析操作来源
+                                createExamPager.setState({ examPagerModalVisible: false,spinLoading:false,analysisUrl:fileUrl });
+                                // 上传成功后，直接设置到对应的题目上
+                                var subjectJson = {"answerCardTitle":answerTitle,"answerSubjectType":answerSubjectType,"subjectNum":num,imageAnswer:fileUrl};
+                                createExamPager.refreshCardChildArray(subjectJson,"setImageAnswer");
+                                var analysisImgTag = <img src={fileUrl} style={{width:'400px',height:'200px'}}></img>;
+                                createExamPager.setState({"analysisImgTag":analysisImgTag});
+                            }else if(optSource=="examPagerTitleImg"){
+                                //试卷标题图片来源
+                                createExamPager.state.examPagerUrl.push(fileUrl);
+                                var imgTag = <img src={fileUrl} style={{width:'100px',height:'100px'}}></img>;
+                                createExamPager.state.examPagerImgTag.push(imgTag);
+                                createExamPager.setState({ examPagerModalVisible: false,spinLoading:false});
+                            }else if(optSource=="imageAnswer"){
+                                //题目图片答案的图片来源
+                                var currentImgAnswerInfo = createExamPager.state.currentImgAnswerInfo;
+                                var currentImgAnswerInfoArray = currentImgAnswerInfo.split("#");
+                                // answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType+"#imageAnswer"
+                                var answerTitle=currentImgAnswerInfoArray[0];
+                                var num = currentImgAnswerInfoArray[1];
+                                var answerSubjectType = currentImgAnswerInfoArray[3];
+                                createExamPager.setState({"imageAnswerUrl":fileUrl});
+                                createExamPager.state.imageAnswerArray[currentImgAnswerInfo]=fileUrl;
+                                console.log("image url:"+createExamPager.state.imageAnswerArray[currentImgAnswerInfo]);
+                                // 上传成功后，直接设置到对应的题目上
+                                var subjectJson = {"answerCardTitle":answerTitle,"answerSubjectType":answerSubjectType,"subjectNum":num,imageAnswer:fileUrl};
+                                createExamPager.refreshCardChildArray(subjectJson,"setImageAnswer");
+                                // 操作完成成，清空当前的题目信息
+                                createExamPager.setState({ currentImgAnswerInfo: '',imageAnswer:fileUrl,examPagerModalVisible: false,spinLoading:false});
+                            }
                         }
+                    },
+                    error : function(responseStr) {
+                        console.log("error"+responseStr);
+                        createExamPager.setState({ examPagerModalVisible: false,spinLoading:false });
                     }
-                },
-                error : function(responseStr) {
-                    console.log("error"+responseStr);
-                    createExamPager.setState({ examPagerModalVisible: false,spinLoading:false });
-                }
-            });
-
+                });
+            }
         }
     },
 
@@ -938,12 +1049,49 @@ const CreateExamPagerComponents = React.createClass({
      * 显示绑定知识点的窗口
      */
     showBindKnowledgeModal(e) {
-        // alert(e.target.value);
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var subjectInfo = target.value;
+        //题目信息
+        var subjectInfoWithSelected = createExamPager.getCurrentSubjectInfo(subjectInfo);
+        //选中的知识点信息
+        var pointsArrayWithSelected=[];
+        pointsArrayWithSelected = createExamPager.convertUndefinedToNull(subjectInfoWithSelected.points,"array");
         //获取所有的知识点数据，作为弹窗的下拉列表数据
         createExamPager.getLessonMenu();
         //获取当前老师已绑定知识点，作为穿梭框备选数据
-        createExamPager.getMock();
+        createExamPager.getMock(pointsArrayWithSelected);
         createExamPager.setState({bindKnowledgeBtnInfo:e.target.value,bindKnowledgeModalVisible: true,defaultSelected:[]});
+    },
+    /**
+     * 获取当前图片已选定或输入的信息
+     * @param subjectInfo
+     * @returns {*}
+     */
+    getCurrentSubjectInfo(subjectInfo){
+        // answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType
+        var subjectInfoArray = subjectInfo.split("#");
+        var answerTitle =subjectInfoArray[0];
+        var num =subjectInfoArray[1];
+        var answerSubjectType = subjectInfoArray[3];
+
+        for(var i =0;i<cardChildArray.length;i++){
+            var cardChildJson = cardChildArray[i];
+            //找到对应的答题卡
+            if(answerTitle == cardChildJson.answerTitle && answerSubjectType == cardChildJson.answerSubjectType){
+                //找到对应的题目编号
+                for(var j=0;j<cardChildJson.cardSubjectAnswerArray.length;j++){
+                    var subjectDivJson = cardChildJson.cardSubjectAnswerArray[j];
+                    if(num == subjectDivJson.index){
+                        return subjectDivJson;
+                    }
+                }
+            }
+        }
     },
     /**
      * 绑定知识点弹窗中，下拉列表内容选定时的响应函数
@@ -995,8 +1143,8 @@ const CreateExamPagerComponents = React.createClass({
     /**
      * 获取穿梭框中左侧的备选数据
      */
-    getMock() {
-        const targetKeys = [];
+    getMock(pointsArrayWithSelected) {
+        const targetKeys = pointsArrayWithSelected;
         const mockData = [];
 
         var param = {
@@ -1042,7 +1190,6 @@ const CreateExamPagerComponents = React.createClass({
      * 关联知识点窗口中的确定按钮响应函数
      */
     bindKnowledgeForCurrentSubject(){
-        //alert(createExamPager.state.targetKeys.length);
         //当前选中的要关联的知识点id，在数组中
         //获取弹窗之前点击按钮的题目信息 state中
         //清除题目信息
@@ -1061,21 +1208,43 @@ const CreateExamPagerComponents = React.createClass({
      * 弹出添加解析的窗口
      */
     showAnalysisModal(e){
-        var subjectInfo = e.target.value;
-        createExamPager.setState({analysisModalVisible:true,addAnalysisBtnInfo:subjectInfo,analysisUrl:''});
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var subjectInfo = target.value;
+        //题目信息
+        var subjectInfoWithSelected = createExamPager.getCurrentSubjectInfo(subjectInfo);
+        var analysisContent = createExamPager.convertUndefinedToNull(subjectInfoWithSelected.textAnalysis);
+        var imageAnalysis = createExamPager.convertUndefinedToNull(subjectInfoWithSelected.imageAnalysis);
+        var analysisImgTag="";
+        if(createExamPager.isEmpty(imageAnalysis) == false){
+            var analysisImgTag = <img src={imageAnalysis} style={{width:'400px',height:'200px'}}></img>;
+        }
+        createExamPager.setState({analysisModalVisible:true,"analysisContent":analysisContent,addAnalysisBtnInfo:subjectInfo,"analysisUrl":imageAnalysis,"analysisImgTag":analysisImgTag});
     },
 
     /**
      * 添加解析文本域内容改变响应函数
      */
     analysisOnChange(e){
-        createExamPager.setState({analysisContent:e.target.value});
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            //e = window.event;
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var analysisContent = target.value;
+        createExamPager.setState({"analysisContent":analysisContent});
     },
     /**
      * 添加解析窗口关闭响应函数
      */
     analysisModalHandleCancel(){
-        createExamPager.setState({analysisModalVisible:false,addAnalysisBtnInfo:'',analysisUrl:''});
+        createExamPager.setState({analysisModalVisible:false,addAnalysisBtnInfo:'',"analysisContent":'',"analysisUrl":''});
     },
     /**
      * 向某个题目下添加解析，并关闭窗口
@@ -1092,7 +1261,7 @@ const CreateExamPagerComponents = React.createClass({
         var analysisUrl=createExamPager.state.analysisUrl;
         var subjectJson = {answerCardTitle:answerCardTitle,answerSubjectType:answerSubjectType,subjectNum:subjectNum,textAnalysis:analysisContent,imageAnalysis:analysisUrl};
         createExamPager.refreshCardChildArray(subjectJson,"setAnalysis");
-        createExamPager.setState({analysisModalVisible:false,addAnalysisBtnInfo:'',analysisUrl:''});
+        createExamPager.setState({analysisModalVisible:false,addAnalysisBtnInfo:'',"analysisContent":'',"analysisUrl":''});
     },
 
     render() {
@@ -1112,7 +1281,7 @@ const CreateExamPagerComponents = React.createClass({
                     <Row>
                         <Col span={3} className="right_look">文本答案：</Col>
                         <Col span={18}>
-                            <Input type="textarea" rows={5} onChange={createExamPager.analysisOnChange}/>
+                            <Input type="textarea" value={createExamPager.state.analysisContent} defaultValue={createExamPager.state.analysisContent} rows={5} onChange={createExamPager.analysisOnChange}/>
                         </Col>
                     </Row>
                     <Row>
@@ -1120,6 +1289,9 @@ const CreateExamPagerComponents = React.createClass({
                         <Col span={18}>
                             <Button type="primary" icon="plus-circle" value="analysisImg" title="上传图片解析"
                                     className="add_study add_study—a" onClick={createExamPager.showModal}>上传图片解析</Button>
+                            <div style={{width:'auto',height:'auto'}}>
+                                {createExamPager.state.analysisImgTag}
+                            </div>
                         </Col>
                     </Row>
 
@@ -1187,9 +1359,12 @@ const CreateExamPagerComponents = React.createClass({
                 <span className="date_tr text_30">
                     <Button type="primary" icon="plus-circle" title="上传试卷图片"
                             className="add_study add_study—a" value="examPagerTitleImg" onClick={createExamPager.showModal}>上传试卷图片</Button>
+                    <div style={{width:'auto',height:'auto'}}>
+                        {createExamPager.state.examPagerImgTag}
+                    </div>
                     <Modal
                         visible={createExamPager.state.examPagerModalVisible}
-                        title="上传试卷图片"
+                        title="上传图片"
                         className="modol_width"
                         onCancel={createExamPager.examPagerModalHandleCancel}
                         transitionName=""  //禁用modal的动画效果
