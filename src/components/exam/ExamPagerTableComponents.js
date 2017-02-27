@@ -14,10 +14,10 @@ var columns = [ {
 
 var data = [];
 var subjectList;
-var subTable;
+var examPagerTable;
 const ExamPagerTableComponents = React.createClass({
   getInitialState() {
-    subTable = this;
+    examPagerTable = this;
     this.getExamPagerList(sessionStorage.getItem("ident"),1);
     return {
       selectedRowKeys: [],  // Check here to configure the default column
@@ -55,29 +55,23 @@ const ExamPagerTableComponents = React.createClass({
         title: '类型',
         className:'ant-table-selection-topic',
         dataIndex: 'subjectType',
-      },/*{
-        title: '分值',
-        dataIndex: 'subjectScore',
-		className:'ant-table-selection-score'
-      },*/
+      }
       ];
     }else{
       columns = [ {
         title: '试卷名称',
         dataIndex: 'title',
-      }
-      /*,{
+      },{
         title: '操作',
         className:'ant-table-selection-topic',
         dataIndex: 'subjectOpt',
-      },*/
+      },
       ];
     }
   },
 
   //点击查看时,进入题目列表
   getSubjectData(e,handler){
-    //alert("===getSubjectData==="+e);
     var target = e.target;
     if(navigator.userAgent.indexOf("Chrome") > -1){
       //e = window.event;
@@ -93,20 +87,30 @@ const ExamPagerTableComponents = React.createClass({
     var dateTime=valueArray[2];
     var optSource = valueArray[3];
     var pageNo=1;
-    subTable.buildPageView(optSource);
-    subTable.getHomeworkSubjects(ident,clazzId,dateTime,pageNo);
-    subTable.setState({currentView:'subjectDetailList',clazzId:clazzId,dateTime:dateTime});
-    // alert("in getSubjectData");
+    examPagerTable.buildPageView(optSource);
+    examPagerTable.getHomeworkSubjects(ident,clazzId,dateTime,pageNo);
+    examPagerTable.setState({currentView:'subjectDetailList',clazzId:clazzId,dateTime:dateTime});
+  },
+
+  getExamPagerInfo(e){
+    var target = e.target;
+    if(navigator.userAgent.indexOf("Chrome") > -1){
+      target=e.currentTarget;
+    }else{
+      target = e.target;
+    }
+    var subjectInfoJson = target.value;
+    console.log("===>"+subjectInfoJson);
+    examPagerTable.props.callBackParent(subjectInfoJson);
   },
 
   // getSubject
 
   //点击导航时，进入的试卷列表
   getExamPagerList:function (ident,pageNo) {
-    // alert("homttable ident:"+ident+",pageNo:"+pageNo);
     data=[];
-    subTable.setState({currentView:'subjectList',totalCount:0});
-    subTable.buildPageView();
+    examPagerTable.setState({currentView:'subjectList',totalCount:0});
+    examPagerTable.buildPageView();
     var param = {
       "method":'getUserExmPapers',
       "ident":ident,
@@ -123,19 +127,19 @@ const ExamPagerTableComponents = React.createClass({
           var pagerId = e.id;
           //试卷名称
           var pagerTitle = e.title;
-          var subjectOpt=<Button type="button" value={pagerId} text={pagerId} onClick={subTable.getSubjectData}  icon="edit"></Button>;
+          var jsonstr = JSON.stringify(e);
+          var subjectOpt=<Button type="button" value={jsonstr} text={pagerId} onClick={examPagerTable.getExamPagerInfo}  icon="edit"></Button>;
           data.push({
               key:pagerId,
               title:pagerTitle,
-              //subjectOpt:subjectOpt,
+              subjectOpt:subjectOpt,
           });
         });
         var pager = ret.pager;
-        subTable.setState({totalCount:parseInt(pager.pageCount)*15});
-        subTable.setState({currentView:'examPagerList'});
+        examPagerTable.setState({totalCount:parseInt(pager.pageCount)*15});
+        examPagerTable.setState({currentView:'examPagerList'});
       },
       onError : function(error) {
-        // alert(error);
         message.error(error);
       }
 
@@ -153,7 +157,6 @@ const ExamPagerTableComponents = React.createClass({
 
   //点击作业列表中的查看时，进入题目列表
   getHomeworkSubjects:function (ident,clazzId,dateTime,pageNo) {
-    // alert("homttable getHomeworkSubjects ident:"+ident+",clazzId:"+clazzId+",dateTime:"+dateTime);
     var param = {
       "method":'getHomeworkSubjects',
       "ident":ident,
@@ -182,11 +185,10 @@ const ExamPagerTableComponents = React.createClass({
           });
         });
         var pager = ret.pager;
-        subTable.setState({totalCount:parseInt(pager.pageCount)*15});
-        subTable.setState({currentView:'subjectList'});
+        examPagerTable.setState({totalCount:parseInt(pager.pageCount)*15});
+        examPagerTable.setState({currentView:'subjectList'});
       },
       onError : function(error) {
-        // alert(error);
         message.error(error);
       }
 
@@ -195,12 +197,12 @@ const ExamPagerTableComponents = React.createClass({
 
   pageOnChange(pageNo) {
     console.log(pageNo);
-    var currentView = subTable.state.currentView;
+    var currentView = examPagerTable.state.currentView;
     if(currentView=="examPagerList"){
-      subTable.getExamPagerList(sessionStorage.getItem("ident"),pageNo);
+      examPagerTable.getExamPagerList(sessionStorage.getItem("ident"),pageNo);
     }else{
       // subjectDetailList
-      subTable.getHomeworkSubjects(sessionStorage.getItem("ident"),subTable.state.clazzId,subTable.state.dateTime,pageNo)
+      examPagerTable.getHomeworkSubjects(sessionStorage.getItem("ident"),examPagerTable.state.clazzId,examPagerTable.state.dateTime,pageNo)
     }
 
     this.setState({
@@ -218,7 +220,7 @@ const ExamPagerTableComponents = React.createClass({
     const hasSelected = selectedRowKeys.length > 0;
     return (
       <div >
-        <Table columns={columns}  dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: 15,onChange:subTable.pageOnChange }} scroll={{ y: 400}}/>
+        <Table columns={columns}  dataSource={data} pagination={{ total:examPagerTable.state.totalCount,pageSize: 15,onChange:examPagerTable.pageOnChange }} scroll={{ y: 400}}/>
       </div>
     );
   },
