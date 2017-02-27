@@ -8,7 +8,7 @@ var floatButton;
 const HeaderComponents = React.createClass({
 
     redirectHelpPage(){
-        window.open("http://www.baidu.com","_blank");
+        window.open("http://www.maaee.com/manual/","_blank");
     },
 
     render() {
@@ -19,7 +19,7 @@ const HeaderComponents = React.createClass({
                 {/*<Button icon="cloud-upload-o" className="colud_bnt"/>
                  <SearchInput placeholder="请输入关键字搜索"onSearch={value => console.log(value)} style={{ width:300 }} />*/}
                 <ProgressBar style={{valign:'bottom'}}></ProgressBar>
-                <Button icon="book" onClick={this.redirectHelpPage} className="colud_bnt"/>
+                <Button icon="book" onClick={this.redirectHelpPage} className="colud_bnt help_note">操作手册</Button>
             </div>
         );
     }
