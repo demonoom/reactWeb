@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { Tabs, Button,Radio } from 'antd';
 import { Modal} from 'antd';
 import { Slider } from 'antd';
-import { Form, Input, Tooltip, Icon, Cascader, Select, Checkbox,Row,Col,Spin } from 'antd';
+import { Form, Input, Tooltip, Icon, Cascader, Select, Checkbox,Row,Col,Spin,Progress } from 'antd';
 import { Upload,  message } from 'antd';
 import { doWebService } from '../WebServiceHelper';
 import FileUploadComponents from './FileUploadComponents';
@@ -18,12 +18,14 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
             submitFileCheckedList:[],
             useSameSchedule:true,
             spinLoading:false,
+            uploadPercent:0,
+            progressState:'none',
         };
     },
     showModal() {
         uploadFileList.splice(0,uploadFileList.length);
         courseWareUpload.setState({
-            spinLoading:false,visible: true,
+            spinLoading:false,visible: true,uploadPercent:0,progressState:'block'
         });
         //弹出文件上传窗口时，初始化窗口数据
         courseWareUpload.refs.fileUploadCom.initFileUploadPage();
@@ -51,6 +53,20 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                 processData : false,
                 // 告诉jQuery不要去设置Content-Type请求头
                 contentType : false,
+                xhr: function(){        //这是关键  获取原生的xhr对象  做以前做的所有事情
+                    var xhr = jQuery.ajaxSettings.xhr();
+                    xhr.upload.onload = function (){
+                        courseWareUpload.setState({progressState:'none'});
+                    }
+                    xhr.upload.onprogress = function (ev) {
+                        if(ev.lengthComputable) {
+                            var percent = 100 * ev.loaded/ev.total;
+                            // console.log(Math.round(percent)+"%",ev);
+                            courseWareUpload.setState({uploadPercent:Math.round(percent),progressState:'block'});
+                        }
+                    }
+                    return xhr;
+                },
                 success: function (responseStr) {
                     if(responseStr!=""){
                         var fileUrl=responseStr;
@@ -184,6 +200,8 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
             labelCol: { span: 4},
             wrapperCol: { span: 20 },
         };
+        //根据该状态值，来决定上传进度条是否显示
+        var progressState = courseWareUpload.state.progressState;
         return (
             <div className="toobar">
 
@@ -205,7 +223,6 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                         </div>
                     ]}
                 >
-                    <Spin tip="课件上传中..." spinning={courseWareUpload.state.spinLoading}>
                         <Row>
                             <Col span={4}>上传文件：</Col>
                             <Col span={20}>
@@ -213,8 +230,10 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                                     <FileUploadComponents ref="fileUploadCom" fatherState={courseWareUpload.state.visible} callBackParent={courseWareUpload.handleFileSubmit}/>
                                 </div>
                             </Col>
+                            <div style={{display:progressState}}>
+                                <Progress type="circle" percent={courseWareUpload.state.uploadPercent} />
+                            </div>
                         </Row>
-                    </Spin>
                 </Modal>
             </div>
         );

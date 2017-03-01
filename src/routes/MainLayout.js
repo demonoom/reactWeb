@@ -36,7 +36,7 @@ const MainLayout = React.createClass({
     return {
       collapse: true,
       activeMiddleMenu:'sub1',
-      currentKey:'exam',
+      currentKey:'teachTimes',
       openKeysStr:'',
       // locale: enUS,
       locale: 'zh-cn',
@@ -200,9 +200,9 @@ const MainLayout = React.createClass({
             <Menu.Item key="studyEvaluate" className="padding_menu">
               <Icon type="clock-circle-o" /><div className="tan">学习评价</div>
             </Menu.Item>
-            <Menu.Item key="exam" className="padding_menu">
+            {/*<Menu.Item key="exam" className="padding_menu">
               <Icon type="file-text" /><div className="tan">考试</div>
-            </Menu.Item>
+            </Menu.Item>*/}
 {/*            <Menu.Item key="folder" className="padding_menu">
               <Icon type="clock-circle-o" /><span className="nav-text">统计+回顾</span>
             </Menu.Item>
