@@ -1,11 +1,12 @@
 import React, { PropTypes } from 'react';
 import { Modal, Button,message,Transfer } from 'antd';
-import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox,Table,Popover,Spin } from 'antd';
+import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox,Table,Popover,Spin,Progress } from 'antd';
 import { DatePicker } from 'antd';
 import { Card } from 'antd';
 import { Radio } from 'antd';
 import { doWebService } from '../../WebServiceHelper';
 import FileUploadComponents from './FileUploadComponents';
+import AntUploadComponents from './AntUploadComponents';
 const { MonthPicker, RangePicker } = DatePicker;
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -206,11 +207,6 @@ const CreateExamPagerComponents = React.createClass({
         createExamPager.props.callbackParent();
     },
 
-    /**
-     * 页面组件加载完成的回调函数
-     */
-    componentDidMount(){
-    },
     /**
      * 在答题卡中的答案、分值等改变时，在题目的json对象中，增加对应的答案和分值等信息
      * 该函数会在每个答题卡元素的事件响应函数中进行调用
@@ -911,6 +907,14 @@ const CreateExamPagerComponents = React.createClass({
         }
     },
 
+    onprogress(ev){
+        //console.log(ev);控制台打印progress { target: XMLHttpRequestUpload, isTrusted: true, lengthComputable: true,<br> //loaded: 15020, total: 15020, eventPhase: 0, bubbles: false, cancelable: false, defaultPrevented: false, <br>//timeStamp: 1445144855459000, originalTarget: XMLHttpRequestUpload }
+        if(ev.lengthComputable){
+            var precent=100 * ev.loaded/ev.total;
+            console.log(precent);
+        }
+    },
+
     /**
      * 点击保存按钮，文件上传
      */
@@ -930,8 +934,21 @@ const CreateExamPagerComponents = React.createClass({
                     data: formData,
                     // 告诉jQuery不要去处理发送的数据
                     processData : false,
-                    // 告诉jQuery不要去设置Content-Type请求头
+                    // 告诉jQuery不要去设置Content-Type请求头(没有该选项，服务器会返回http code  417，无法完成上传操作)
                     contentType : false,
+                    xhr: function(){        //这是关键  获取原生的xhr对象  做以前做的所有事情
+                        var xhr = jQuery.ajaxSettings.xhr();
+                        xhr.upload.onload = function (){
+                            // alert('finish downloading')
+                        }
+                        xhr.upload.onprogress = function (ev) {
+                            if(ev.lengthComputable) {
+                                var percent = 100 * ev.loaded/ev.total;
+                                console.log(percent+"%",ev);
+                            }
+                        }
+                        return xhr;
+                    },
                     success: function (responseStr) {
                         if(responseStr!=""){
                             var fileUrl=responseStr;
@@ -1342,44 +1359,44 @@ const CreateExamPagerComponents = React.createClass({
 
                     <Row className="ant-form-item">
                         <Col span={3}>
-                            <span className="text_30"></span>
+                            <span className="text_30">试卷图片:</span>
                         </Col>
-                        <Col span={3}>
-                <span className="date_tr text_30">
-                    <Button type="primary" icon="plus-circle" title="上传试卷图片"
-                            className="add_study add_study—a" value="examPagerTitleImg" onClick={createExamPager.showModal}>上传试卷图片</Button>
-                    <div style={{width:'auto',height:'auto'}}>
-                        {createExamPager.state.examPagerImgTag}
-                    </div>
-                    <Modal
-                        visible={createExamPager.state.examPagerModalVisible}
-                        title="上传图片"
-                        className="modol_width"
-                        onCancel={createExamPager.examPagerModalHandleCancel}
-                        transitionName=""  //禁用modal的动画效果
-                        footer={[
-                            <div>
-                                <Button type="primary" htmlType="submit" className="login-form-button" onClick={createExamPager.uploadFile}>
-                                    保存
-                                </Button>
-                                <Button type="ghost" htmlType="reset" className="login-form-button" onClick={createExamPager.examPagerModalHandleCancel}>
-                                    取消
-                                </Button>
-                            </div>
-                        ]}
-                    >
-                        <Spin tip="试卷图片上传中..." spinning={createExamPager.state.spinLoading}>
-                            <Row>
-                                <Col span={4}>上传文件：</Col>
-                                <Col span={20}>
+                        <Col span={15}>
+                        <span className="date_tr text_30">
+                            {/*<Button type="primary" icon="plus-circle" title="上传试卷图片"
+                                    className="add_study add_study—a" value="examPagerTitleImg" onClick={createExamPager.showModal}>上传试卷图片</Button>*/}
+                            <AntUploadComponents></AntUploadComponents>
+                            {/*<div style={{width:'auto',height:'auto'}}>
+                                {createExamPager.state.examPagerImgTag}
+                            </div>*/}
+                            <Modal
+                                visible={createExamPager.state.examPagerModalVisible}
+                                title="上传图片"
+                                className="modol_width"
+                                onCancel={createExamPager.examPagerModalHandleCancel}
+                                transitionName=""  //禁用modal的动画效果
+                                footer={[
                                     <div>
-                                        <FileUploadComponents ref="fileUploadCom" fatherState={createExamPager.state.examPagerModalVisible} callBackParent={createExamPager.handleFileSubmit}/>
+                                        <Button type="primary" htmlType="submit" className="login-form-button" onClick={createExamPager.uploadFile}>
+                                            保存
+                                        </Button>
+                                        <Button type="ghost" htmlType="reset" className="login-form-button" onClick={createExamPager.examPagerModalHandleCancel}>
+                                            取消
+                                        </Button>
                                     </div>
-                                </Col>
-                            </Row>
-                        </Spin>
-                    </Modal>
-                </span>
+                                ]}
+                            >
+                                    <Row>
+                                        <Progress type="circle" percent={10} style={{zIndex:100}} />
+                                        <Col span={4}>上传文件：</Col>
+                                        <Col span={20}>
+                                            <div>
+                                                <FileUploadComponents ref="fileUploadCom" fatherState={createExamPager.state.examPagerModalVisible} callBackParent={createExamPager.handleFileSubmit}/>
+                                            </div>
+                                        </Col>
+                                    </Row>
+                            </Modal>
+                        </span>
                         </Col>
                     </Row>
 
