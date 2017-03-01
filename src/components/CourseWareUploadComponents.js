@@ -25,7 +25,7 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
     showModal() {
         uploadFileList.splice(0,uploadFileList.length);
         courseWareUpload.setState({
-            spinLoading:false,visible: true,uploadPercent:0,progressState:'block'
+            spinLoading:false,visible: true,uploadPercent:0,progressState:'none'
         });
         //弹出文件上传窗口时，初始化窗口数据
         courseWareUpload.refs.fileUploadCom.initFileUploadPage();
@@ -229,10 +229,11 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                                 <div>
                                     <FileUploadComponents ref="fileUploadCom" fatherState={courseWareUpload.state.visible} callBackParent={courseWareUpload.handleFileSubmit}/>
                                 </div>
-                            </Col>
-                            <div style={{display:progressState}}>
-                                <Progress type="circle" percent={courseWareUpload.state.uploadPercent} />
+								<div style={{display:progressState}}>
+                                <Progress percent={courseWareUpload.state.uploadPercent} width={80} strokeWidth={4} />
                             </div>
+                            </Col>
+                            
                         </Row>
                 </Modal>
             </div>
