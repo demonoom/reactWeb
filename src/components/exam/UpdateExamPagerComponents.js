@@ -1453,10 +1453,10 @@ const UpdateExamPagerComponents = React.createClass({
                 <div className="ant-collapse ant-modal-footer homework">
 
                     <Row className="ant-form-item">
-                        <Col span={3}>
-                            <span className="date_tr text_30">试卷名称:</span>
+                        <Col span={3} className="ant-form-item-label">
+                            <span className="date_tr text_30">试卷名称：</span>
                         </Col>
-                        <Col span={15} className="ant-form-item-control">
+                        <Col span={20} className="ant-form-item-control ant-form-item-label">
                 <span className="date_tr">
                     <Input ref="examPagerTitle" value={createExamPager.state.examPagerTitle} onChange={createExamPager.examPagerTitleChange}/>
                 </span>
@@ -1470,7 +1470,7 @@ const UpdateExamPagerComponents = React.createClass({
                         <Col span={3}>
                 <span className="date_tr text_30">
                     <Button type="primary" icon="plus-circle" title="上传试卷图片"
-                            className="add_study add_study—a" value="examPagerTitleImg" onClick={createExamPager.showModal}>上传试卷图片</Button>
+                            className="add_study-f add_study—a" value="examPagerTitleImg" onClick={createExamPager.showModal}>上传试卷图片</Button>
                     <div className="examination_up_img">
                         {createExamPager.state.examPagerImgTag}
                     </div>
@@ -1507,44 +1507,36 @@ const UpdateExamPagerComponents = React.createClass({
                     </Row>
 
                     <Row className="date_tr ant-form-item">
-                        <Col span={3}>
-                            <span className="text_30">设置答题卡:</span>
+                        <Col span={3} className="ant-form-item-label">
+                            <span className="text_30">设置答题卡：</span>
                         </Col>
                     </Row>
 
                     <Row className="date_tr ant-form-item">
-                        <Col span={3}>
-                            <span className="text_30"></span>
+                        <Col span={3} className="right_upexam">
+                             <span className="text_30">标题：</span>
                         </Col>
-                        <Col span={21} className="ant-form-item-control">
-                            <div>
-                                <Row>
-                                    <Col span={3}>
-                                        <span className="text_30">标题:</span>
-                                    </Col>
-                                    <Col span={15}>
-                                        <Input ref="answerTitle" defaultValue={createExamPager.state.answerTitle} placeholder="请输入答题卡标题" onChange={createExamPager.answerTitleOnChange}/>
-                                    </Col>
-                                </Row>
-
-                                <Row>
-                                    <Col span={3}>
-                                        <span className="text_30">题型:</span>
-                                    </Col>
-                                    <Col span={21}>
-                                        <RadioGroup onChange={createExamPager.subjectTypeOnChange}
-                                                    value={createExamPager.state.subjectTypeValue}>
-                                            <Radio value="0">选择</Radio>
-                                            <Radio value="1">判断</Radio>
-                                            <Radio value="2">填空</Radio>
-                                            <Radio value="3">简答</Radio>
-                                        </RadioGroup>
-                                    </Col>
-                                </Row>
-
-                                <Row>
-                                    <Col span={3}>
-                                        <span className="text_30">题数:</span>
+						 <Col span={15} >
+                              <Input ref="answerTitle" defaultValue={createExamPager.state.answerTitle} placeholder="请输入答题卡标题" onChange={createExamPager.answerTitleOnChange}/>
+                          </Col>
+					 </Row>
+                     <Row>
+                         <Col span={3} className="ant-form-item-label">
+                             <span className="text_30">题型：</span>
+                         </Col>
+                         <Col span={21}>
+                             <RadioGroup onChange={createExamPager.subjectTypeOnChange}
+                                value={createExamPager.state.subjectTypeValue}>
+                             <Radio value="0">选择</Radio>
+                             <Radio value="1">判断</Radio>
+                             <Radio value="2">填空</Radio>
+                             <Radio value="3">简答</Radio>
+                          </RadioGroup>
+                          </Col>
+                       </Row>
+					   <Row>
+                                    <Col span={3} className="ant-form-item-label">
+                                        <span className="text_30">题数：</span>
                                     </Col>
                                     <Col span={3}>
                                         <Input ref="answerCount" defaultValue={createExamPager.state.answerCount} onChange={createExamPager.answerCountOnChange}/>
@@ -1552,16 +1544,14 @@ const UpdateExamPagerComponents = React.createClass({
                                     <Col span={1}>
                                         <span className="text_30"></span>
                                     </Col>
-                                    <Col span={2}>
-                                        <span className="text_30">分值:</span>
+                                    <Col span={2} className="ant-form-item-label">
+                                        <span className="text_30">分值：</span>
                                     </Col>
                                     <Col span={3}>
                                         <Input ref="answerScore" defaultValue={2} onChange={createExamPager.answerScoreOnChange}/>
                                     </Col>
                                 </Row>
-                            </div>
-                        </Col>
-                    </Row>
+
                     <Row className="date_tr ant-form-item">
                         <Col span={3}>
                             <span className="text_30"></span>
