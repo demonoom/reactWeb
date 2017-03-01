@@ -95,7 +95,7 @@ const UpdateExamPagerComponents = React.createClass({
         for(var i=0;i<attachmentsArray.length;i++){
             var imgPathJson = attachmentsArray[i];
             var path = imgPathJson.path;
-            var imgTag = <img src={path} style={{width:'100px',height:'100px'}}></img>;
+            var imgTag = <img src={path} style={{width:'100％'}}></img>;
             createExamPager.state.examPagerUrl.push(path);
             createExamPager.state.examPagerImgTag.push(imgTag);
         }
@@ -1077,7 +1077,7 @@ const UpdateExamPagerComponents = React.createClass({
                             }else if(optSource=="examPagerTitleImg"){
                                 //试卷标题图片来源
                                 createExamPager.state.examPagerUrl.push(fileUrl);
-                                var imgTag = <img src={fileUrl} style={{width:'100px',height:'100px'}}></img>;
+                                var imgTag = <img src={fileUrl} style={{width:'100%'}}></img>;
                                 createExamPager.state.examPagerImgTag.push(imgTag);
                                 createExamPager.setState({ examPagerModalVisible: false,spinLoading:false});
                             }else if(optSource=="imageAnswer"){
@@ -1471,7 +1471,7 @@ const UpdateExamPagerComponents = React.createClass({
                 <span className="date_tr text_30">
                     <Button type="primary" icon="plus-circle" title="上传试卷图片"
                             className="add_study add_study—a" value="examPagerTitleImg" onClick={createExamPager.showModal}>上传试卷图片</Button>
-                    <div style={{width:'auto',height:'auto'}}>
+                    <div className="examination_up_img">
                         {createExamPager.state.examPagerImgTag}
                     </div>
                     <Modal
