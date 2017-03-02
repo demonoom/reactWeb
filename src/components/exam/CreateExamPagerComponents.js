@@ -1272,13 +1272,13 @@ const CreateExamPagerComponents = React.createClass({
                     ]}
                 >
                     <Row>
-                        <Col span={3} className="right_look">文本答案：</Col>
+                        <Col span={4} className="right_look">文本答案：</Col>
                         <Col span={18}>
                             <Input type="textarea" value={createExamPager.state.analysisContent} defaultValue={createExamPager.state.analysisContent} rows={5} onChange={createExamPager.analysisOnChange}/>
                         </Col>
                     </Row>
                     <Row>
-                        <Col span={3} className="right_look"></Col>
+                        <Col span={4} className="right_look"></Col>
                         <Col span={18}>
                             <Button type="primary" icon="plus-circle" value="analysisImg" title="上传图片解析"
                                     className="add_study add_study—a" onClick={createExamPager.showModal}>上传图片解析</Button>

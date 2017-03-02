@@ -686,7 +686,7 @@ const UpdateExamPagerComponents = React.createClass({
         createExamPager.buildSelectOptionsArray(num,answerTitle,answerSubjectType);
         var subjectDiv =<div key={num} data-key={num} className="topic_bor">
             <Row className="ant-form-item">
-                <Col span={3} className="right_upexam"><span>{num}.</span>答案：</Col>
+                <Col span={3} className="right_upexam"><span className="upexam_number">{num}</span>答案：</Col>
                 <Col span={12}> {/*defaultValue={[answerTitle + "#" + num + "#checkbox#A"]}*/}
                     <CheckboxGroup options={selectAnswerOptions[num-1]} defaultValue={textAnswer}  onChange={createExamPager.subjectAnswerOnChange} />
                 </Col>
@@ -721,7 +721,7 @@ const UpdateExamPagerComponents = React.createClass({
     buildCorrectSubjectDivContent(num,answerTitle,answerSubjectType,answerScore,textAnswer){
         var subjectDiv =<div key={num} data-key={num} className="topic_bor">
             <Row className="ant-form-item">
-                <Col span={3} className="right_upexam"><span>{num}.</span>答案：</Col>
+                <Col span={3} className="right_upexam"><span className="upexam_number">{num}</span>答案：</Col>
                 <Col span={12}>
                     <RadioGroup key={answerTitle+"#"+num+"#radio#"+answerSubjectType} onChange={createExamPager.correctAnswerOnChange} defaultValue={textAnswer} >
                         <Radio value={answerTitle+"#"+num+"#0#"+answerSubjectType}>正确</Radio>
@@ -762,7 +762,7 @@ const UpdateExamPagerComponents = React.createClass({
     buildFillBlankSubjectDivContent(num,answerTitle,answerSubjectType,answerScore,textAnswer){
         var subjectDiv =<div key={num} data-key={num} className="topic_bor">
             <Row className="ant-form-item">
-                <Col span={3} className="right_upexam"><span>{num}.</span>答案：</Col>
+                <Col span={3} className="right_upexam"><span className="upexam_number">{num}</span>答案：</Col>
                 <Col span={12}>
                     <Input  id={answerTitle+"#"+num+"#blank#"+answerSubjectType} defaultValue={textAnswer} type="textarea" rows={2} onChange={createExamPager.blankOnChange}/>
                 </Col>
@@ -776,7 +776,7 @@ const UpdateExamPagerComponents = React.createClass({
 				<Col span={3} ></Col>
 				<Col span={12}>
 					<Button type="primary" icon="plus-circle" value={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} title="上传图片答案"
-                            className="add_study add_study—a" onClick={createExamPager.showModal}>上传图片答案</Button>
+                            className="add_study-b" onClick={createExamPager.showModal}>上传图片答案</Button>
 				</Col>
 			</Row>
             <Row className="ant-form-item">
@@ -823,7 +823,7 @@ const UpdateExamPagerComponents = React.createClass({
     buildSimpleAnswerSubjectDivContent(num,answerTitle,answerSubjectType,answerScore,textAnswer){
         var subjectDiv =<div key={num} data-key={num} className="topic_bor">
             <Row className="ant-form-item">
-                <Col span={3} className="right_upexam"><span>{num}.</span>答案：</Col>
+                <Col span={3} className="right_upexam"><span className="upexam_number">{num}</span>答案：</Col>
                 <Col span={12}>
                     <Input  id={answerTitle+"#"+num+"#simpleAnswer#"+answerSubjectType} defaultValue={textAnswer} type="textarea" rows={5} onChange={createExamPager.blankOnChange}/>
                 </Col>
@@ -837,7 +837,7 @@ const UpdateExamPagerComponents = React.createClass({
 				<Col span={3}></Col>
 				<Col span={3}>
 					<Button type="primary" icon="plus-circle" value={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} title="上传图片答案"
-                 className="add_study add_study—a" onClick={createExamPager.showModal}>上传图片答案</Button>
+                 className="add_study-b" onClick={createExamPager.showModal}>上传图片答案</Button>
 				 </Col>
 			</Row>
             <Row className="ant-form-item">
@@ -1067,7 +1067,7 @@ const UpdateExamPagerComponents = React.createClass({
                                 // 上传成功后，直接设置到对应的题目上
                                 var subjectJson = {"answerCardTitle":answerTitle,"answerSubjectType":answerSubjectType,"subjectNum":num,imageAnswer:fileUrl};
                                 createExamPager.refreshCardChildArray(subjectJson,"setImageAnswer");
-                                var analysisImgTag = <img src={fileUrl} style={{width:'400px',height:'200px'}}></img>;
+                                var analysisImgTag = <img src={fileUrl} style={{height:'200px'}}></img>;
                                 createExamPager.setState({"analysisImgTag":analysisImgTag});
                             }else if(optSource=="examPagerTitleImg"){
                                 //试卷标题图片来源
@@ -1386,17 +1386,17 @@ const UpdateExamPagerComponents = React.createClass({
                     ]}
                 >
                     <Row>
-                        <Col span={3} className="right_look">文本答案：</Col>
+                        <Col span={4} className="right_look">文本答案：</Col>
                         <Col span={18}>
                             <Input type="textarea" value={createExamPager.state.analysisContent} defaultValue={createExamPager.state.analysisContent} rows={5} onChange={createExamPager.analysisOnChange}/>
                         </Col>
                     </Row>
                     <Row>
-                        <Col span={3} className="right_look"></Col>
+                        <Col span={4} className="right_look"></Col>
                         <Col span={18}>
                             <Button type="primary" icon="plus-circle" value="analysisImg" title="上传图片解析"
-                                    className="add_study add_study—a" onClick={createExamPager.showModal}>上传图片解析</Button>
-                            <div style={{width:'auto',height:'auto'}}>
+                                    className="add_study-b upexam_to_ma" onClick={createExamPager.showModal}>上传图片解析</Button>
+                            <div className="upexam_to_ma examination_up_img">
                                 {createExamPager.state.analysisImgTag}
                             </div>
                         </Col>
@@ -1414,9 +1414,9 @@ const UpdateExamPagerComponents = React.createClass({
                         <Button type="ghost" htmlType="reset" className="login-form-button" onClick={createExamPager.bindKnowledgeModalHandleCancel} >取消</Button>
                     ]}
                 >
-                    <Row>
-                        <Col span={6} className="right_look">知识点：</Col>
-                        <Col span={14}>
+                    <Row className="ant-form-item">
+                        <span>知识点：</span>
+                        <span>
                             <Cascader
                                 ref="knowledgeSelect" className="knowledge_inp"
                                 options={options}
@@ -1425,18 +1425,18 @@ const UpdateExamPagerComponents = React.createClass({
                                 placeholder="请选择知识点"
                                 showSearch
                             />
-                        </Col>
+                        </span>
                     </Row>
-                    <Row>
+                    <Row className="ant-form-item">
                         <Col span={24}>
                             <Transfer
                                 dataSource={createExamPager.state.mockData}
                                 showSearch
                                 listStyle={{
-                                    width: 200,
-                                    height: 200,
+                                    width: 268,
+                                    height: 320,
                                 }}
-                                operations={['to right', 'to left']}
+                                operations={['', '']}
                                 targetKeys={createExamPager.state.targetKeys}
                                 onChange={createExamPager.transferHandleChange}
                                 render={item => `${item.description}`}
@@ -1448,10 +1448,10 @@ const UpdateExamPagerComponents = React.createClass({
                 <div className="ant-collapse ant-modal-footer homework">
 
                     <Row className="ant-form-item">
-                        <Col span={3} className="ant-form-item-label">
+                        <Col span={3}>
                             <span className="date_tr text_30">试卷名称：</span>
                         </Col>
-                        <Col span={15} className="ant-form-item-control ant-form-item-label">
+                        <Col span={15} className="ant-form-item-control">
                 <span className="date_tr">
                     <Input ref="examPagerTitle" value={createExamPager.state.examPagerTitle} onChange={createExamPager.examPagerTitleChange}/>
                 </span>
@@ -1465,7 +1465,7 @@ const UpdateExamPagerComponents = React.createClass({
                         <Col span={3}>
                 <span className="date_tr text_30">
                     <Button type="primary" icon="plus-circle" title="上传试卷图片"
-                            className="add_study-f add_study—a" value="examPagerTitleImg" onClick={createExamPager.showModal}>上传试卷图片</Button>
+                            className="add_study-b" value="examPagerTitleImg" onClick={createExamPager.showModal}>上传试卷图片</Button>
                     <div className="examination_up_img">
                         {createExamPager.state.examPagerImgTag}
                     </div>

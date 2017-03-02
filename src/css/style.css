@@ -10,8 +10,9 @@ body{
     position: absolute;
     left: 0px;
 }
-
-
+div, a, span, input{
+	outline:none;
+}
 @media only screen and (max-width: 1366px) {
 .ant-layout-aside {
       position: absolute;
@@ -1641,7 +1642,7 @@ a {
 }
 .topic_bor{
 	border-bottom: 1px dashed #e0e0e0;
-	margin-bottom:15px;
+	margin-bottom:20px;
 }
 .topic_bor:last-child{
 	border:none;
@@ -1664,4 +1665,22 @@ a {
 }
 .upexam_update{
 	margin-left:0 !important;
+}
+.upexam_to_ma{
+	margin-top:15px !important;
+}
+.upexam_number{
+	background: #fff5e9;
+	border:1px solid #ffad53;
+    color: #f60;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    text-align: center;
+	line-height:20px;
+	margin-right:8px;
+	border-radius: 3px;
+}
+.upexam_botom_ma{
+	margin-bottom:8px;
 }

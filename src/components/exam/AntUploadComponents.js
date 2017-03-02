@@ -51,7 +51,7 @@ const AntUploadComponents = React.createClass({
                     //上传进度
                     var percent = info.file.percent;
                     console.log("上传进度"+percent);
-                    var pro = <Progress type="circle" width={80}  percent={percent} />;
+                    var pro = <Progress type="circle" width={24} className="upexam_botom_ma" percent={percent} />;
                     antUpload.setState({uploadPercent:pro});
                     console.log(info.file, info.fileList);
                 }
