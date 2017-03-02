@@ -1621,3 +1621,47 @@ a {
 	text-align:right;
 	line-height:22px;
 }
+.upexam_top{
+	padding-top:10px;
+}
+.upexam_fill{
+	width: 650px;
+    margin: 20px auto 0 auto;
+    text-align: left;
+}
+.upexam_topic{
+	width:650px;
+	margin:20px auto 0 auto;
+	text-align:left
+}
+.topic_del{
+	position: relative;
+    top: -7px;
+    right: -4px;
+}
+.topic_bor{
+	border-bottom: 1px dashed #e0e0e0;
+	margin-bottom:15px;
+}
+.topic_bor:last-child{
+	border:none;
+	margin-bottom:0;
+}
+.topic_bor_pa{
+	padding-bottom:10px;
+}
+.topic_bor_pa:last-child{
+	padding-bottom:0;
+}
+.topic_del_ri{
+	position:absolute;
+	top: -5px;
+    right: 0;
+}
+.upexam_Set{
+	background:#f7f7f7;
+	width:calc(100% - 14px)
+}
+.upexam_update{
+	margin-left:0 !important;
+}

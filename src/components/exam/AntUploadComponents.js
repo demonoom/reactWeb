@@ -81,7 +81,7 @@ const AntUploadComponents = React.createClass({
                     <div style={{height:'auto','z-index:':'100'}}>
                         {antUpload.state.uploadPercent}
                     </div>
-                    <Button>
+                    <Button className="upexam_update">
                         <Icon type="upload" /> 上传
                     </Button>
                 </Upload>
