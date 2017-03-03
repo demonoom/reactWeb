@@ -181,7 +181,7 @@ const CreateExamPagerComponents = React.createClass({
         }
         paperJson.questionTypes = questionTypesArray;
         console.log(paperJson);
-        // createExamPager.createExamPager(paperJson);
+        createExamPager.createExamPager(paperJson);
     },
 
     isEmpty(content){
