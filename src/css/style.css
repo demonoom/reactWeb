@@ -1687,8 +1687,10 @@ a {
 .upexam_le_te{
 	text-align:left
 }
-.ant-btn-clicked:after{
-	display:block;
+.upexam_float{
+	float:left;
 }
-.ant-modal-footer button span{
-	float:left;}
+.upexam_le_datika{
+	text-align: left !important;
+    margin-left: 24px;
+}
