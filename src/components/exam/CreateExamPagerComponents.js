@@ -31,8 +31,8 @@ const CreateExamPagerComponents = React.createClass({
             editSchuldeId: createExamPager.props.editSchuldeId,
             checkedList: [],
             indeterminate: true,
-            subjectTypeValue: '2',       //答题卡的题目类型，默认为选择题
-            answerTitle:'填空题',      //默认的答题卡题目
+            subjectTypeValue: '0',       //答题卡的题目类型，默认为选择题
+            answerTitle:'',      //默认的答题卡题目
             answerCount:2,      //每个答题卡上默认生成的题目数量，默认2个题目
             answerScore:2,      //每题的分值，默认2分
             cardList:[],        //答题卡中选择题的选项数组

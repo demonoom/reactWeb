@@ -118,9 +118,9 @@ const SUbjectTable = React.createClass({
         }else{
             response.forEach(function (e) {
               console.log("eeeeee:"+e);
-              var key = e.sid;
-              var name=e.colName;
-              var content=<Popover placement="rightTop" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.shortContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article></Popover>;
+              var key = e.id;
+              //var name=e.colName;
+              var content=<Popover placement="rightTop" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
               //var content=<Tooltip title={<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article></Tooltip>;
               var subjectType=e.typeName;
               var subjectScore=e.score;
@@ -128,14 +128,11 @@ const SUbjectTable = React.createClass({
               {
                 subjectScore='--';
               }
-              // <SubjectEditTabComponents editParams={e.sid+"#"+e.typeName+"#"+e.shortContent+"#"+e.score}></SubjectEditTabComponents>
-              var subjectOpt=<div className="smallclass"><span className="toobar"><Button value={e.sid} title="删除" onClick={subTable.deleteSubject}><Icon type="delete"/></Button></span></div>;
-              // var submitTime = e.submitTime;
+              var subjectOpt=<div className="smallclass"><span className="toobar"><Button value={e.id} title="删除" onClick={subTable.deleteSubject}><Icon type="delete"/></Button></span></div>;
               data.push({
                 key: key,
                 name: name,
                 content: content,
-                // submitTime:submitTime,
                 subjectType:subjectType,
                 subjectScore:subjectScore,
                 subjectOpt:subjectOpt,
