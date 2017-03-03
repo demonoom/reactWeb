@@ -8,7 +8,7 @@ var floatButton;
 const HeaderComponents = React.createClass({
 
     redirectHelpPage(){
-        window.open("http://www.maaee.com/manual/","_blank");
+        window.open("http://maaee.com/luble/handbook/index.html","_blank");
     },
 
     render() {
