@@ -1687,3 +1687,10 @@ a {
 .upexam_le_te{
 	text-align:left
 }
+.upexam_float{
+	float:left;
+}
+.upexam_le_datika{
+	text-align: left !important;
+    margin-left: 24px;
+}

@@ -1392,7 +1392,7 @@ const CreateExamPagerComponents = React.createClass({
                             <span className="text_30">试卷图片：</span>
                         </Col>
                         <Col span={18}>
-                        <span className="date_tr text_30">
+                        <span className="date_tr text_30 upexam_float">
                             <UploadExamPagerComponents key="examPagerTitleUpload" callBackParent={createExamPager.getExamPagerTitleImgList}></UploadExamPagerComponents>
                             <Modal
                                 visible={createExamPager.state.examPagerModalVisible}
@@ -1426,7 +1426,7 @@ const CreateExamPagerComponents = React.createClass({
                     </Row>
 
                     <Row className="date_tr ant-form-item upexam_Set">
-                        <Col span={3} className="ant-form-item-label">
+                        <Col span={15} className="ant-form-item-label upexam_le_datika">
                             <span className="text_30">设置答题卡：</span>
                         </Col>
                     </Row>

@@ -1489,13 +1489,13 @@ const UpdateExamPagerComponents = React.createClass({
                         <Button type="ghost" htmlType="reset" className="login-form-button" onClick={createExamPager.analysisModalHandleCancel} >取消</Button>
                     ]}
                 >
-                    <Row>
+                    <Row className="ant-form-item">
                         <Col span={4} className="right_look">文本答案：</Col>
                         <Col span={18}>
                             <Input type="textarea" value={createExamPager.state.analysisContent} defaultValue={createExamPager.state.analysisContent} rows={5} onChange={createExamPager.analysisOnChange}/>
                         </Col>
                     </Row>
-                    <Row>
+                    <Row className="ant-form-item">
                         <Col span={4} className="right_look">图片解析：</Col>
                         <Col span={18}>
                             <AntUploadComponentsForUpdate fileList={createExamPager.state.analysisFileList} callBackParent={createExamPager.getAnalysisiImgList}></AntUploadComponentsForUpdate>
@@ -1562,7 +1562,7 @@ const UpdateExamPagerComponents = React.createClass({
                             <span className="text_30"></span>
                         </Col>
                         <Col span={18}>
-                <span className="date_tr text_30">
+                <span className="date_tr text_30 upexam_float">
                     <AntUploadComponentsForExamPagerUpdate fileList={createExamPager.state.examPagerImgTag} key="examPagerTitleUpload" callBackParent={createExamPager.getExamPagerTitleImgList}></AntUploadComponentsForExamPagerUpdate>
                     <Modal
                         visible={createExamPager.state.examPagerModalVisible}
@@ -1597,7 +1597,7 @@ const UpdateExamPagerComponents = React.createClass({
                     </Row>
 
                     <Row className="date_tr ant-form-item upexam_Set">
-                        <Col span={3} className="ant-form-item-label">
+                        <Col span={15} className="ant-form-item-label upexam_le_datika">
                             <span className="text_30">设置答题卡：</span>
                         </Col>
                     </Row>
