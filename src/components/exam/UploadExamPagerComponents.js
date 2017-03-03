@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Upload, Icon,Button,message, Modal,Progress } from 'antd';
 var antUpload;
-const AntUploadComponents = React.createClass({
+const UploadExamPagerComponents = React.createClass({
 
     getInitialState() {
         antUpload = this;
@@ -11,13 +11,8 @@ const AntUploadComponents = React.createClass({
             defaultFileList = antUpload.props.fileList ;
         }
         return {
-            defaultFileList: defaultFileList,
-            subjectInfo:antUpload.props.params,
+            defaultFileList:defaultFileList,
         };
-    },
-
-    componentDidMount(){
-        console.log("antUpload.props.params:"+antUpload.props.params)
     },
 
     componentWillReceiveProps(){
@@ -28,18 +23,13 @@ const AntUploadComponents = React.createClass({
         antUpload.setState({defaultFileList:defaultFileList});
     },
 
-    showInfo(e){
-        antUpload.setState({subjectInfo:e.target.value});
-    },
-
     render() {
 
         const props = {
-            key:antUpload.props.params,
-            name:antUpload.state.subjectInfo,
             action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
             listType: 'picture',
-            defaultFileList:[],
+            defaultFileList: [],
+            //fileList:antUpload.state.defaultFileList,
             onChange(info) {
                 if (info.file.status !== 'uploading') {
                     //上传进度
@@ -48,7 +38,7 @@ const AntUploadComponents = React.createClass({
                     antUpload.setState({uploadPercent:percent,progressState:'block'});
                     console.log(info.file, info.fileList);
                     if(info.file.status==="removed"){
-                        antUpload.props.callBackParent(info.file,antUpload.state.subjectInfo,"removed");
+                        antUpload.props.callBackParent(info.file,"removed");
                     }
                 }
                 if (info.file.status === 'done') {
@@ -62,9 +52,10 @@ const AntUploadComponents = React.createClass({
                         status: 'done',
                         url: url,
                         thumbUrl: thumbUrl,
-                        subjectInfo:antUpload.state.subjectInfo
+                        subjectInfo:antUpload.props.params
                     };
-                    antUpload.props.callBackParent(info.file,antUpload.state.subjectInfo);
+                    //antUpload.state.defaultFileList.push(fileJson);
+                    antUpload.props.callBackParent(info.file);
                     antUpload.setState({uploadPercent:0,progressState:'none'});
                     message.success(`${info.file.name} 文件上传成功`,5);
                 } else if (info.file.status === 'error') {
@@ -75,12 +66,11 @@ const AntUploadComponents = React.createClass({
                 console.log(file);
             },
         };
-        return (
 
+        return (
             <div>
-                <Upload
-                    {...props}>
-                    <Button value={antUpload.props.params} onClick={antUpload.showInfo}>
+                <Upload {...props}>
+                    <Button>
                         <Icon type="upload" /> 上传
                     </Button>
                 </Upload>
@@ -89,4 +79,4 @@ const AntUploadComponents = React.createClass({
     },
 });
 
-export default AntUploadComponents;
+export default UploadExamPagerComponents;

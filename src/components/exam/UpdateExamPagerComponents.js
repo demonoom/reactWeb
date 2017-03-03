@@ -6,6 +6,7 @@ import { Card } from 'antd';
 import { Radio } from 'antd';
 import { doWebService } from '../../WebServiceHelper';
 import FileUploadComponents from './FileUploadComponents';
+import AntUploadComponents from './AntUploadComponents';
 const { MonthPicker, RangePicker } = DatePicker;
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -68,6 +69,7 @@ const UpdateExamPagerComponents = React.createClass({
             imageAnswerUrl:'',
             analysisImgTag:'',  //图片解析时，使用的图片解析img标记
             updatePagerId:'',   //修改试卷时，待修改的试卷id
+            imageAnswerFileArray:[],    //图片答案的数组
         };
     },
 
@@ -95,9 +97,14 @@ const UpdateExamPagerComponents = React.createClass({
         for(var i=0;i<attachmentsArray.length;i++){
             var imgPathJson = attachmentsArray[i];
             var path = imgPathJson.path;
-            var imgTag = <img src={path} style={{width:'100％'}}></img>;
+            // var imgTag = <img src={path} style={{width:'100％'}}></img>;
+            var fileJson = {
+                uid: examPagerTitle+"#"+i,
+                url: path,
+            }
             createExamPager.state.examPagerUrl.push(path);
-            createExamPager.state.examPagerImgTag.push(imgTag);
+            //存放了获取到的图片json数据，用来传入AntUploadComponents组件，作为默认显示数据
+            createExamPager.state.examPagerImgTag.push(fileJson);
         }
         //答题卡数组
         var questionTypesArray = examPaperJson.questionTypes;
@@ -113,6 +120,7 @@ const UpdateExamPagerComponents = React.createClass({
                 var subjectInfo = subjectInfoArray[j-1];
                 var answerScore = subjectInfo.score;
                 var textAnswer = subjectInfo.textAnswer;
+                var imageAnswer = subjectInfo.imageAnswer;
                 switch(answerSubjectType){
                     case 0:
                         //选择题
@@ -132,7 +140,15 @@ const UpdateExamPagerComponents = React.createClass({
                         break;
                     case 2:
                         //填空
-                        subjectDiv = createExamPager.buildFillBlankSubjectDivContent(j,answerTitle,answerSubjectType,answerScore,textAnswer);
+                        var imageAnswerFileArray=[];
+                        if(createExamPager.isEmpty(imageAnswer)==false){
+                            var fileJson = {
+                                uid: answerTitle+"#"+j+"#imageAnswer#"+answerSubjectType,
+                                url: imageAnswer,
+                            }
+                            imageAnswerFileArray.push(fileJson);
+                        }
+                        subjectDiv = createExamPager.buildFillBlankSubjectDivContent(j,answerTitle,answerSubjectType,answerScore,textAnswer,imageAnswerFileArray);
                         break;
                     case 3:
                         //简单
@@ -776,7 +792,8 @@ const UpdateExamPagerComponents = React.createClass({
     /**
      * 创建答题卡中填空题的题目div
      */
-    buildFillBlankSubjectDivContent(num,answerTitle,answerSubjectType,answerScore,textAnswer){
+    buildFillBlankSubjectDivContent(num,answerTitle,answerSubjectType,answerScore,textAnswer,imageAnswerFileArray){
+        imageAnswerFileArray=createExamPager.convertUndefinedToNull(imageAnswerFileArray,"array");
         var subjectDiv =<div key={num} data-key={num}>
             <Row>
                 <Col span={1}>{num}.</Col>
@@ -805,12 +822,8 @@ const UpdateExamPagerComponents = React.createClass({
                         解析
                     </Button>
                 </Col>
-                <Col span={5}>
-                    <Button type="primary" icon="plus-circle" value={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} title="上传图片答案"
-                            className="add_study add_study—a" onClick={createExamPager.showModal}>上传图片答案</Button>
-                    {/*<div style={{width:'200px',height:'200px'}}>
-                        <img src={createExamPager.state.imageAnswerUrl} style={{width:'100px',height:'100px'}}></img>
-                    </div>*/}
+                <Col span={13}>
+                    <AntUploadComponents id={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType}  fileList={imageAnswerFileArray} params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponents>
                 </Col>
             </Row>
             <Row>
@@ -857,10 +870,8 @@ const UpdateExamPagerComponents = React.createClass({
                         解析
                     </Button>
                 </Col>
-                <Col span={5}>
-                    <Button type="primary" icon="plus-circle" value={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} title="上传图片答案"
-                            className="add_study add_study—a" onClick={createExamPager.showModal}>上传图片答案</Button>
-                    {/*<img src={createExamPager.state.imageAnswerArray[answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType]} style={{width:'200px',height:'200px'}}></img>*/}
+                <Col span={13}>
+                    <AntUploadComponents params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponents>
                 </Col>
             </Row>
             <Row>
@@ -937,6 +948,18 @@ const UpdateExamPagerComponents = React.createClass({
      * 根据答题卡结构的设定方式，生成对应的每个题目的答案
      */
     addAnswerCard(){
+        //试卷名称
+        /*var examPagerTitle = createExamPager.convertUndefinedToNull(createExamPager.state.examPagerTitle);
+         if(createExamPager.isEmpty(examPagerTitle)){
+         message.warning("请输入试卷名称",5);
+         return;
+         }
+         //上传文件的附件url
+         var examPagerUrl = createExamPager.convertUndefinedToNull(createExamPager.state.examPagerUrl,"array");
+         if(createExamPager.isEmpty(examPagerUrl) || examPagerUrl.length<=0){
+         message.warning("请上传试卷图片",5);
+         return;
+         }*/
         //答题卡标题
         var answerTitle = createExamPager.state.answerTitle;
         if(createExamPager.isEmpty(answerTitle)){
@@ -1376,6 +1399,77 @@ const UpdateExamPagerComponents = React.createClass({
         createExamPager.setState({analysisModalVisible:false,addAnalysisBtnInfo:'',"analysisContent":'',"analysisUrl":''});
     },
 
+    /**
+     * 获取题目的图片答案
+     */
+    getImgAnswerList(fileList,subjectInfo){
+        if(createExamPager.isEmpty(fileList) || fileList.length==0){
+            createExamPager.state.imageAnswerUrl='';
+            //题目图片答案的图片来源
+            subjectInfo = subjectInfo.uid;
+            var currentImgAnswerInfoArray = subjectInfo.split("#");
+            // answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType+"#imageAnswer"
+            var answerTitle=currentImgAnswerInfoArray[0];
+            var num = currentImgAnswerInfoArray[1];
+            var answerSubjectType = currentImgAnswerInfoArray[3];
+
+            createExamPager.state.imageAnswerArray[subjectInfo]=fileUrl;
+            console.log("image url:"+createExamPager.state.imageAnswerArray[subjectInfo]);
+            // 上传成功后，直接设置到对应的题目上
+            var subjectJson = {"answerCardTitle":answerTitle,"answerSubjectType":answerSubjectType,"subjectNum":num,imageAnswer:''};
+            createExamPager.refreshCardChildArray(subjectJson,"setImageAnswer");
+        }
+        for(var i=0;i<fileList.length;i++){
+            var fileJson = fileList[i];
+            var fileUrl = fileJson.url;
+            var subjectInfo = fileJson.uid;
+            console.log("imageAnswerUrl URl："+fileUrl);
+            createExamPager.setState({"imageAnswerUrl":fileUrl});
+            //题目图片答案的图片来源
+            var currentImgAnswerInfoArray = subjectInfo.split("#");
+            // answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType+"#imageAnswer"
+            var answerTitle=currentImgAnswerInfoArray[0];
+            var num = currentImgAnswerInfoArray[1];
+            var answerSubjectType = currentImgAnswerInfoArray[3];
+
+            createExamPager.state.imageAnswerArray[subjectInfo]=fileUrl;
+            console.log("image url:"+createExamPager.state.imageAnswerArray[subjectInfo]);
+            // 上传成功后，直接设置到对应的题目上
+            var subjectJson = {"answerCardTitle":answerTitle,"answerSubjectType":answerSubjectType,"subjectNum":num,imageAnswer:fileUrl};
+            createExamPager.refreshCardChildArray(subjectJson,"setImageAnswer");
+            // 操作完成成，清空当前的题目信息
+            createExamPager.setState({ currentImgAnswerInfo: '',imageAnswer:fileUrl,examPagerModalVisible: false,spinLoading:false});
+        }
+    },
+    /**
+     * 获取试卷标题图片的文件路径列表
+     */
+    getExamPagerTitleImgList(fileList){
+        // alert(fileList.length);
+        if(createExamPager.isEmpty(fileList) || fileList.length==0){
+            createExamPager.state.examPagerUrl.splice(0);
+        }
+        for(var i=0;i<fileList.length;i++){
+            var fileJson = fileList[i];
+            var fileUrl = fileJson.url;
+            createExamPager.state.examPagerUrl.push(fileUrl);
+        }
+    },
+    /**
+     * 获取图片解析的url路径
+     */
+    getAnalysisiImgList(fileList){
+        if(createExamPager.isEmpty(fileList) || fileList.length==0){
+            createExamPager.setState({"analysisUrl":''});
+        }
+        for(var i=0;i<fileList.length;i++){
+            var fileJson = fileList[i];
+            var fileUrl = fileJson.url;
+            console.log("analysis URl："+fileUrl);
+            createExamPager.setState({"analysisUrl":fileUrl});
+        }
+    },
+
     render() {
         return (
             <div>
@@ -1391,19 +1485,15 @@ const UpdateExamPagerComponents = React.createClass({
                     ]}
                 >
                     <Row>
-                        <Col span={3} className="right_look">文本答案：</Col>
+                        <Col span={3} className="right_look">文本解析：</Col>
                         <Col span={18}>
                             <Input type="textarea" value={createExamPager.state.analysisContent} defaultValue={createExamPager.state.analysisContent} rows={5} onChange={createExamPager.analysisOnChange}/>
                         </Col>
                     </Row>
                     <Row>
-                        <Col span={3} className="right_look"></Col>
+                        <Col span={3} className="right_look">图片解析：</Col>
                         <Col span={18}>
-                            <Button type="primary" icon="plus-circle" value="analysisImg" title="上传图片解析"
-                                    className="add_study add_study—a" onClick={createExamPager.showModal}>上传图片解析</Button>
-                            <div style={{width:'auto',height:'auto'}}>
-                                {createExamPager.state.analysisImgTag}
-                            </div>
+                            <AntUploadComponents fileList={createExamPager.state.analysisFileList} callBackParent={createExamPager.getAnalysisiImgList}></AntUploadComponents>
                         </Col>
                     </Row>
 
@@ -1469,11 +1559,7 @@ const UpdateExamPagerComponents = React.createClass({
                         </Col>
                         <Col span={3}>
                 <span className="date_tr text_30">
-                    <Button type="primary" icon="plus-circle" title="上传试卷图片"
-                            className="add_study-f add_study—a" value="examPagerTitleImg" onClick={createExamPager.showModal}>上传试卷图片</Button>
-                    <div className="examination_up_img">
-                        {createExamPager.state.examPagerImgTag}
-                    </div>
+                    <AntUploadComponents fileList={createExamPager.state.examPagerImgTag} key="examPagerTitleUpload" callBackParent={createExamPager.getExamPagerTitleImgList}></AntUploadComponents>
                     <Modal
                         visible={createExamPager.state.examPagerModalVisible}
                         title="上传图片"
