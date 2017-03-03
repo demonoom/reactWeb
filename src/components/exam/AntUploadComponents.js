@@ -46,6 +46,8 @@ const AntUploadComponents = React.createClass({
                     var percent = info.file.percent;
                     console.log("上传进度"+percent);
                     antUpload.setState({uploadPercent:percent,progressState:'block'});
+                    /*var pro = <Progress type="circle" width={24} className="upexam_botom_ma" percent={percent} />;
+                    antUpload.setState({uploadPercent:pro});*/
                     console.log(info.file, info.fileList);
                     if(info.file.status==="removed"){
                         antUpload.props.callBackParent(info.file,antUpload.state.subjectInfo,"removed");
@@ -78,9 +80,11 @@ const AntUploadComponents = React.createClass({
         return (
 
             <div>
-                <Upload
-                    {...props}>
-                    <Button value={antUpload.props.params} onClick={antUpload.showInfo}>
+                <Upload {...props}>
+                    {/*<div style={{height:'auto','z-index:':'100'}}>
+                        {antUpload.state.uploadPercent}
+                    </div>*/}
+                    <Button value={antUpload.props.params} onClick={antUpload.showInfo} className="add_study-b">
                         <Icon type="upload" /> 上传
                     </Button>
                 </Upload>

@@ -10,8 +10,9 @@ body{
     position: absolute;
     left: 0px;
 }
-
-
+div, a, span, input{
+	outline:none;
+}
 @media only screen and (max-width: 1366px) {
 .ant-layout-aside {
       position: absolute;
@@ -1620,4 +1621,66 @@ a {
 .right_upexam{
 	text-align:right;
 	line-height:22px;
+}
+.upexam_top{
+	padding-top:10px;
+}
+.upexam_fill{
+	width: 650px;
+    margin: 20px auto 0 auto;
+    text-align: left;
+}
+.upexam_topic{
+	width:650px;
+	margin:20px auto 0 auto;
+	text-align:left
+}
+.topic_del{
+	position: relative;
+    top: -7px;
+    right: -4px;
+}
+.topic_bor{
+	border-bottom: 1px dashed #e0e0e0;
+	margin-bottom:20px;
+}
+.topic_bor:last-child{
+	border:none;
+	margin-bottom:0;
+}
+.topic_bor_pa{
+	padding-bottom:10px;
+}
+.topic_bor_pa:last-child{
+	padding-bottom:0;
+}
+.topic_del_ri{
+	position:absolute;
+	top: -5px;
+    right: 0;
+}
+.upexam_Set{
+	background:#f7f7f7;
+	width:calc(100% - 14px)
+}
+.upexam_update{
+	margin-left:0 !important;
+}
+.upexam_to_ma{
+	margin-top:15px !important;
+}
+.upexam_number{
+	background: #fff5e9;
+	border:1px solid #ffad53;
+    color: #f60;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    text-align: center;
+	line-height:20px;
+	margin-right:8px;
+	border-radius: 3px;
+}
+.upexam_botom_ma{
+	margin-bottom:8px;
 }
