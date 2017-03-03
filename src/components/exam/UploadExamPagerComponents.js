@@ -12,6 +12,8 @@ const UploadExamPagerComponents = React.createClass({
         }
         return {
             defaultFileList:defaultFileList,
+            previewVisible: false,
+            previewImage: '',
         };
     },
 
@@ -23,13 +25,25 @@ const UploadExamPagerComponents = React.createClass({
         antUpload.setState({defaultFileList:defaultFileList});
     },
 
+    handlePreview(file){
+        antUpload.setState({
+            previewImage: file.url || file.thumbUrl,
+            previewVisible: true,
+        });
+    },
+
+    handleCancel(){
+        antUpload.setState({ previewVisible: false })
+    },
+
     render() {
 
         const props = {
             action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
-            listType: 'picture',
+            listType: 'picture-card',
             defaultFileList: [],
             //fileList:antUpload.state.defaultFileList,
+            onPreview:antUpload.handlePreview,
             onChange(info) {
                 if (info.file.status !== 'uploading') {
                     //上传进度
@@ -70,10 +84,14 @@ const UploadExamPagerComponents = React.createClass({
         return (
             <div>
                 <Upload {...props}>
-                    <Button className="add_study-d">
-                        <Icon type="upload" /> 上传
-                    </Button>
+                    <div>
+                        <Icon type="plus" />
+                        <div className="ant-upload-text">Upload</div>
+                    </div>
                 </Upload>
+                <Modal maskClosable="true" visible={antUpload.state.previewVisible} footer={null} onCancel={antUpload.handleCancel}>
+                    <img alt="example" style={{ width: '100%' }} src={antUpload.state.previewImage} />
+                </Modal>
             </div>
         );
     },

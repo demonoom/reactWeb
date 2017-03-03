@@ -13,6 +13,8 @@ const AntUploadComponentsForUpdate = React.createClass({
         return {
             defaultFileList: defaultFileList,
             subjectInfo:antUpload.props.params,
+            previewVisible: false,
+            previewImage: '',
         };
     },
 
@@ -32,6 +34,17 @@ const AntUploadComponentsForUpdate = React.createClass({
         antUpload.setState({subjectInfo:e.target.value});
     },
 
+    handlePreview(file){
+        antUpload.setState({
+            previewImage: file.url || file.thumbUrl,
+            previewVisible: true,
+        });
+    },
+
+    handleCancel(){
+        antUpload.setState({ previewVisible: false })
+    },
+
     render() {
 
         const props = {
@@ -40,6 +53,7 @@ const AntUploadComponentsForUpdate = React.createClass({
             action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
             listType: 'picture',
             defaultFileList:antUpload.state.defaultFileList,
+            onPreview:antUpload.handlePreview,
             onChange(info) {
                 if (info.file.status !== 'uploading') {
                     //上传进度
@@ -88,6 +102,9 @@ const AntUploadComponentsForUpdate = React.createClass({
                         <Icon type="upload" /> 上传
                     </Button>
                 </Upload>
+                <Modal maskClosable="true" visible={antUpload.state.previewVisible} footer={null} onCancel={antUpload.handleCancel}>
+                    <img alt="example" style={{ width: '100%' }} src={antUpload.state.previewImage} />
+                </Modal>
             </div>
         );
     },
