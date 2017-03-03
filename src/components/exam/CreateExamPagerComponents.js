@@ -7,6 +7,7 @@ import { Radio } from 'antd';
 import { doWebService } from '../../WebServiceHelper';
 import FileUploadComponents from './FileUploadComponents';
 import AntUploadComponents from './AntUploadComponents';
+import AntUploadComponentsForExamPagerUpdate from './AntUploadComponentsForExamPagerUpdate';
 import UploadExamPagerComponents from './UploadExamPagerComponents';
 const CheckboxGroup = Checkbox.Group;
 const RadioGroup = Radio.Group;
@@ -1391,7 +1392,7 @@ const CreateExamPagerComponents = React.createClass({
                             <span className="text_30">试卷图片：</span>
                         </Col>
                         <Col span={18}>
-                        <span className="date_tr text_30 upexam_le_te">
+                        <span className="date_tr text_30">
                             <UploadExamPagerComponents key="examPagerTitleUpload" callBackParent={createExamPager.getExamPagerTitleImgList}></UploadExamPagerComponents>
                             <Modal
                                 visible={createExamPager.state.examPagerModalVisible}
