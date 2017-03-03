@@ -588,8 +588,8 @@ const CreateExamPagerComponents = React.createClass({
                 <Col span={12} className="upexam_le_te">
                     <RadioGroup key={answerTitle+"#"+num+"#radio#"+answerSubjectType} onChange={createExamPager.correctAnswerOnChange}
                      defaultValue={createExamPager.state.correctAnswerValue}>
-                        <Radio value={answerTitle+"#"+num+"#0#"+answerSubjectType}>正确</Radio>
-                        <Radio value={answerTitle+"#"+num+"#1#"+answerSubjectType}>错误</Radio>
+                        <Radio value={answerTitle+"#"+num+"#1#"+answerSubjectType}>正确</Radio>
+                        <Radio value={answerTitle+"#"+num+"#0#"+answerSubjectType}>错误</Radio>
                     </RadioGroup>
                 </Col>
                 <div className="topic_del_ri">
@@ -774,7 +774,7 @@ const CreateExamPagerComponents = React.createClass({
      */
     addAnswerCard(){
         //试卷名称
-        /*var examPagerTitle = createExamPager.convertUndefinedToNull(createExamPager.state.examPagerTitle);
+        var examPagerTitle = createExamPager.convertUndefinedToNull(createExamPager.state.examPagerTitle);
         if(createExamPager.isEmpty(examPagerTitle)){
             message.warning("请输入试卷名称",5);
             return;
@@ -784,7 +784,7 @@ const CreateExamPagerComponents = React.createClass({
         if(createExamPager.isEmpty(examPagerUrl) || examPagerUrl.length<=0){
             message.warning("请上传试卷图片",5);
             return;
-        }*/
+        }
         //答题卡标题
         var answerTitle = createExamPager.state.answerTitle;
         if(createExamPager.isEmpty(answerTitle)){

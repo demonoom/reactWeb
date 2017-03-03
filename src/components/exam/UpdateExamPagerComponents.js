@@ -6,7 +6,9 @@ import { Card } from 'antd';
 import { Radio } from 'antd';
 import { doWebService } from '../../WebServiceHelper';
 import FileUploadComponents from './FileUploadComponents';
-import AntUploadComponents from './AntUploadComponents';
+/*import AntUploadComponents from './AntUploadComponents';*/
+import AntUploadComponentsForUpdate from './AntUploadComponentsForUpdate';
+import AntUploadComponentsForExamPagerUpdate from './AntUploadComponentsForExamPagerUpdate';
 const { MonthPicker, RangePicker } = DatePicker;
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -740,8 +742,8 @@ const UpdateExamPagerComponents = React.createClass({
                 <Col span={3} className="right_upexam"><span className="upexam_number">{num}</span>答案：</Col>
                 <Col span={12}>
                     <RadioGroup key={answerTitle+"#"+num+"#radio#"+answerSubjectType} onChange={createExamPager.correctAnswerOnChange} defaultValue={textAnswer} >
-                        <Radio value={answerTitle+"#"+num+"#0#"+answerSubjectType}>正确</Radio>
-                        <Radio value={answerTitle+"#"+num+"#1#"+answerSubjectType}>错误</Radio>
+                        <Radio value={answerTitle+"#"+num+"#1#"+answerSubjectType}>正确</Radio>
+                        <Radio value={answerTitle+"#"+num+"#0#"+answerSubjectType}>错误</Radio>
                     </RadioGroup>
                 </Col>
 				<div className="topic_del_ri">
@@ -792,7 +794,7 @@ const UpdateExamPagerComponents = React.createClass({
 			<Row className="ant-form-item">
 				<Col span={3} ></Col>
 				<Col span={12}>
-                    <AntUploadComponents className="add_study-b" id={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType}  fileList={imageAnswerFileArray} params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponents>
+                    <AntUploadComponentsForUpdate className="add_study-b" id={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType}  fileList={imageAnswerFileArray} params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponentsForUpdate>
 					{/*<Button type="primary" icon="plus-circle" value={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} title="上传图片答案"
                             className="add_study-b" onClick={createExamPager.showModal}>上传图片答案</Button>*/}
 				</Col>
@@ -850,7 +852,7 @@ const UpdateExamPagerComponents = React.createClass({
 			<Row className="ant-form-item">
 				<Col span={3}></Col>
 				<Col span={3}>
-                    <AntUploadComponents params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponents>
+                    <AntUploadComponentsForUpdate params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponentsForUpdate>
 					{/*<Button type="primary" icon="plus-circle" value={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} title="上传图片答案"
                  className="add_study-b" onClick={createExamPager.showModal}>上传图片答案</Button>*/}
 				 </Col>
@@ -1444,9 +1446,14 @@ const UpdateExamPagerComponents = React.createClass({
      */
     getExamPagerTitleImgList(fileList){
         // alert(fileList.length);
-        if(createExamPager.isEmpty(fileList) || fileList.length==0){
+        /*var fileList =[];
+        for(o in fileListObj){
+            fileList.push(o);
+        }*/
+        createExamPager.state.examPagerUrl.splice(0);
+        /*if(createExamPager.isEmpty(fileList) || fileList.length==0){
             createExamPager.state.examPagerUrl.splice(0);
-        }
+        }*/
         for(var i=0;i<fileList.length;i++){
             var fileJson = fileList[i];
             var fileUrl = fileJson.url;
@@ -1491,7 +1498,7 @@ const UpdateExamPagerComponents = React.createClass({
                     <Row>
                         <Col span={4} className="right_look">图片解析：</Col>
                         <Col span={18}>
-                            <AntUploadComponents fileList={createExamPager.state.analysisFileList} callBackParent={createExamPager.getAnalysisiImgList}></AntUploadComponents>
+                            <AntUploadComponentsForUpdate fileList={createExamPager.state.analysisFileList} callBackParent={createExamPager.getAnalysisiImgList}></AntUploadComponentsForUpdate>
                         </Col>
                     </Row>
 
@@ -1554,9 +1561,9 @@ const UpdateExamPagerComponents = React.createClass({
                         <Col span={3}>
                             <span className="text_30"></span>
                         </Col>
-                        <Col span={3}>
+                        <Col span={18}>
                 <span className="date_tr text_30">
-                    <AntUploadComponents fileList={createExamPager.state.examPagerImgTag} key="examPagerTitleUpload" callBackParent={createExamPager.getExamPagerTitleImgList}></AntUploadComponents>
+                    <AntUploadComponentsForExamPagerUpdate fileList={createExamPager.state.examPagerImgTag} key="examPagerTitleUpload" callBackParent={createExamPager.getExamPagerTitleImgList}></AntUploadComponentsForExamPagerUpdate>
                     <Modal
                         visible={createExamPager.state.examPagerModalVisible}
                         title="上传图片"
