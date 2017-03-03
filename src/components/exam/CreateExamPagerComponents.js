@@ -1390,7 +1390,7 @@ const CreateExamPagerComponents = React.createClass({
                         <Col span={3} className="right_upexam">
                             <span className="text_30">试卷图片：</span>
                         </Col>
-                        <Col span={3}>
+                        <Col span={18}>
                         <span className="date_tr text_30">
                             <UploadExamPagerComponents key="examPagerTitleUpload" callBackParent={createExamPager.getExamPagerTitleImgList}></UploadExamPagerComponents>
                             <Modal
