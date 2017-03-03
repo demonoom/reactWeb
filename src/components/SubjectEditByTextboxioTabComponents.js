@@ -56,23 +56,23 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
             onResponse: function (ret) {
                 var response = ret.response;
                 if (subjectType == "单选题") {
-                    editorContent = response.colContent;
+                    editorContent = response.content;
                     subjectUpload.setState({
-                        singleAnswer: response.colAnswer,
+                        singleAnswer: response.answer,
                     });
                 } else if (subjectType == "多选题") {
-                    muEditorContent = response.colContent;
+                    muEditorContent = response.content;
                     subjectUpload.setState({
-                        mulitiAnswerDefaultValue: response.colAnswer,
+                        mulitiAnswerDefaultValue: response.answer,
                     });
                 } else if (subjectType == "判断题") {
-                    correctEditorContent = response.colContent;
+                    correctEditorContent = response.content;
                     subjectUpload.setState({
-                        correctAnswerValue: response.colAnswer,
+                        correctAnswerValue: response.answer,
                     });
                 } else if (subjectType == "简答题") {
-                    simpleEditorContent = response.colContent;
-                    answerContent = response.colAnswer;
+                    simpleEditorContent = response.content;
+                    answerContent = response.answer;
                 }
                 if (response.score > 10) {
                     subjectUpload.setState({
