@@ -746,11 +746,11 @@ const UpdateExamPagerComponents = React.createClass({
                         <Radio value={answerTitle+"#"+num+"#0#"+answerSubjectType}>错误</Radio>
                     </RadioGroup>
                 </Col>
-				<div className="topic_del_ri">
+				<Col span={4}>
 					<Button key={answerTitle+"#"+num+"delBtn"} value={answerTitle+"#"+num} onClick={createExamPager.deleteSubjectContentDiv}>
                         删除
                     </Button>
-				</div>
+				</Col>
             </Row>
             <Row className="ant-form-item">
                 <Col span={3} className="right_upexam">分值：</Col>
