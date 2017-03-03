@@ -1540,7 +1540,7 @@ const UpdateExamPagerComponents = React.createClass({
                 </Modal>
                 <div className="ant-collapse ant-modal-footer homework">
                     <Row className="ant-form-item">
-                        <Col span={3}>
+                        <Col span={3} className="right_upexam">
                             <span className="date_tr text_30">试卷名称：</span>
                         </Col>
                         <Col span={15} className="ant-form-item-control">

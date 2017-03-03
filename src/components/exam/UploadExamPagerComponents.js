@@ -70,7 +70,7 @@ const UploadExamPagerComponents = React.createClass({
         return (
             <div>
                 <Upload {...props}>
-                    <Button>
+                    <Button className="add_study-d">
                         <Icon type="upload" /> 上传
                     </Button>
                 </Upload>
