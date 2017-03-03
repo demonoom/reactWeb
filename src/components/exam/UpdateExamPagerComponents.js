@@ -343,7 +343,7 @@ const UpdateExamPagerComponents = React.createClass({
         }
         paperJson.questionTypes = questionTypesArray;
         console.log(paperJson);
-        // createExamPager.updateExmPaper(paperJson);
+        createExamPager.updateExmPaper(paperJson);
     },
 
     isEmpty(content){
