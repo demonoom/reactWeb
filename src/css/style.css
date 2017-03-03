@@ -1687,8 +1687,3 @@ a {
 .upexam_le_te{
 	text-align:left
 }
-.ant-btn-clicked:after{
-	display:block;
-}
-.ant-modal-footer button span{
-	float:left;}
