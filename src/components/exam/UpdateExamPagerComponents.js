@@ -343,7 +343,8 @@ const UpdateExamPagerComponents = React.createClass({
         }
         paperJson.questionTypes = questionTypesArray;
         console.log(paperJson);
-        createExamPager.updateExmPaper(paperJson);
+        cardChildArray.splice(0);
+        // createExamPager.updateExmPaper(paperJson);
     },
 
     isEmpty(content){
@@ -792,7 +793,7 @@ const UpdateExamPagerComponents = React.createClass({
 				</div>
             </Row>
 			<Row className="ant-form-item">
-				<Col span={3} ></Col>
+				<Col span={3} >图片答案：</Col>
 				<Col span={12}>
                     <AntUploadComponentsForUpdate className="add_study-b" id={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType}  fileList={imageAnswerFileArray} params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponentsForUpdate>
 					{/*<Button type="primary" icon="plus-circle" value={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} title="上传图片答案"
@@ -850,7 +851,7 @@ const UpdateExamPagerComponents = React.createClass({
 				</div>
             </Row>
 			<Row className="ant-form-item">
-				<Col span={3}></Col>
+				<Col span={3}>图片答案：</Col>
 				<Col span={3}>
                     <AntUploadComponentsForUpdate params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponentsForUpdate>
 					{/*<Button type="primary" icon="plus-circle" value={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} title="上传图片答案"
@@ -1536,6 +1537,7 @@ const UpdateExamPagerComponents = React.createClass({
                                     width: 268,
                                     height: 320,
                                 }}
+                                titles={['待选知识点','已选知识点']}
                                 operations={['', '']}
                                 targetKeys={createExamPager.state.targetKeys}
                                 onChange={createExamPager.transferHandleChange}

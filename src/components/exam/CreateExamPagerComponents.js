@@ -181,7 +181,8 @@ const CreateExamPagerComponents = React.createClass({
         }
         paperJson.questionTypes = questionTypesArray;
         console.log(paperJson);
-        createExamPager.createExamPager(paperJson);
+        cardChildArray.splice(0);
+        // createExamPager.createExamPager(paperJson);
     },
 
     isEmpty(content){
@@ -639,7 +640,7 @@ const CreateExamPagerComponents = React.createClass({
                 </div>
             </Row>
             <Row className="ant-form-item">
-                <Col span={3} ></Col>
+                <Col span={3} >图片答案：</Col>
                 <Col span={12} className="upexam_le_te">
                     <AntUploadComponents key={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponents>
                 </Col>
@@ -682,7 +683,7 @@ const CreateExamPagerComponents = React.createClass({
                 </div>
             </Row>
             <Row className="ant-form-item">
-                <Col span={3} ></Col>
+                <Col span={3} >图片答案：</Col>
                 <Col span={12} className="upexam_le_te">
                     <AntUploadComponents key={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponents>
                     {/*<Button type="primary" icon="plus-circle" value={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} title="上传图片答案"
@@ -1366,6 +1367,7 @@ const CreateExamPagerComponents = React.createClass({
                                     width: 268,
                                     height: 320,
                                 }}
+                                titles={['待选知识点','已选知识点']}
                                 operations={['', '']}
                                 targetKeys={createExamPager.state.targetKeys}
                                 onChange={createExamPager.transferHandleChange}

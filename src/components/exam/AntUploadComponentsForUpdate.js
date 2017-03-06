@@ -7,14 +7,17 @@ const AntUploadComponentsForUpdate = React.createClass({
         antUpload = this;
         var defaultFileList = [];
         console.log("subjectInfo"+antUpload.props.params);
+        var isDisabled = false;
         if(typeof(antUpload.props.fileList)!="undefined" && antUpload.props.fileList.length!=0){
             defaultFileList = antUpload.props.fileList ;
+            isDisabled = true;
         }
         return {
             defaultFileList: defaultFileList,
             subjectInfo:antUpload.props.params,
             previewVisible: false,
             previewImage: '',
+            disabled:isDisabled,
         };
     },
 
@@ -26,6 +29,7 @@ const AntUploadComponentsForUpdate = React.createClass({
         var defaultFileList = [];
         if(typeof(antUpload.props.fileList)!="undefined" && antUpload.props.fileList.length!=0){
             defaultFileList = antUpload.props.fileList ;
+            antUpload.setState({disabled:true});
         }
         antUpload.setState({defaultFileList:defaultFileList});
     },
@@ -54,6 +58,7 @@ const AntUploadComponentsForUpdate = React.createClass({
             listType: 'picture',
             defaultFileList:antUpload.state.defaultFileList,
             onPreview:antUpload.handlePreview,
+            disabled:antUpload.state.disabled,
             onChange(info) {
                 if (info.file.status !== 'uploading') {
                     //上传进度
@@ -64,6 +69,7 @@ const AntUploadComponentsForUpdate = React.createClass({
                     antUpload.setState({uploadPercent:pro});*/
                     console.log(info.file, info.fileList);
                     if(info.file.status==="removed"){
+                        antUpload.setState({disabled:false});
                         antUpload.props.callBackParent(info.file,antUpload.state.subjectInfo,"removed");
                     }
                 }
@@ -81,7 +87,7 @@ const AntUploadComponentsForUpdate = React.createClass({
                         subjectInfo:antUpload.state.subjectInfo
                     };
                     antUpload.props.callBackParent(info.file,antUpload.state.subjectInfo);
-                    antUpload.setState({uploadPercent:0,progressState:'none'});
+                    antUpload.setState({disabled:true});
                     message.success(`${info.file.name} 文件上传成功`,5);
                 } else if (info.file.status === 'error') {
                     message.error(`${info.file.name} 文件上传失败.`,5);
