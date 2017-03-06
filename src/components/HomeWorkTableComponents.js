@@ -183,7 +183,8 @@ const HomeWorkTableComponents = React.createClass({
         response.forEach(function (e) {
           console.log("getDoneHomeworkList:"+e);
           var id = e.id;
-          var content = <Popover  placement="rightTop" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article>}><article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
+          var popOverContent = '<div><span>题目:</span>'+e.content+'<hr/><span>答案:</span>'+e.answer+'</div>';
+          var content = <Popover  placement="rightTop" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: popOverContent}}></article>}><article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
           var subjectType = e.subjectType;
           var typeName = e.typeName;
           var score = e.score;

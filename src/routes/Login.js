@@ -5,12 +5,15 @@ import { doWebService } from '../WebServiceHelper';
 
 var code;
 var loginComponent;
+var loginFailedCount=0;
 const Login = Form.create()(React.createClass({
 
     getInitialState() {
         loginComponent = this;
         return {
             code: '',
+            isValidateCode:false,
+            loginFailedCount:0,
         };
     },
 
@@ -64,16 +67,20 @@ const Login = Form.create()(React.createClass({
                 console.log(ret.msg);
                 var response = ret.response;
                 if(ret.msg=="用户不存在！"|| ret.msg=="对不起，密码不正确！"){
-                    // alert("用户名或密码错误,请重新输入！");
+                    loginFailedCount++;
+                    loginComponent.setState({loginFailedCount:loginFailedCount});
                     message.error("用户名或密码错误,请重新输入！");
                 }else if(ret.msg=="调用成功"){
                     if(response.colValid!=1){
-                        // alert("用户已被禁用,请联系管理员！");
+                        loginFailedCount++;
+                        loginComponent.setState({loginFailedCount:loginFailedCount});
                         message.error("用户已被禁用,请联系管理员！");
                     }else if(response.colUtype!="TEAC"){
-                        // alert("用户身份不正确,请重新输入！");
+                        loginFailedCount++;
+                        loginComponent.setState({loginFailedCount:loginFailedCount});
                         message.error("用户身份不正确,请重新输入！");
                     }else{
+                        loginComponent.setState({loginFailedCount:0});
                         sessionStorage.setItem("ident", response.colUid);
                         loginComponent.getHistoryAccessPointId(response.colUid);
                         location.hash="MainLayout";
@@ -81,7 +88,6 @@ const Login = Form.create()(React.createClass({
                 }
             },
             onError : function(error) {
-                // alert(error);
                 message.error(error);
             }
         });
@@ -98,7 +104,6 @@ const Login = Form.create()(React.createClass({
                 sessionStorage.setItem("openKeysStr",response);
             },
             onError : function(error) {
-                // alert(error);
                 message.error(error);
             }
         });
@@ -108,21 +113,24 @@ const Login = Form.create()(React.createClass({
         e.preventDefault();
         loginComponent.props.form.validateFields((err, values) => {
             var inputCode=values.validateCode;
-            if(inputCode.length <= 0)
-            {
-                // alert("请输入验证码！");
-                message.warning("请输入验证码！");
-            }
-            else if(inputCode.toUpperCase() != loginComponent.state.code.toUpperCase())
-            {
-                // alert("验证码输入有误！");
-                message.warning("验证码输入有误！");
-                loginComponent.createCode();
-            }
-            else
-            {
+            if(loginComponent.state.loginFailedCount>2){
+                if(inputCode.length <= 0)
+                {
+                    message.warning("请输入验证码！");
+                }
+                else if(inputCode.toUpperCase() != loginComponent.state.code.toUpperCase())
+                {
+                    message.warning("验证码输入有误！");
+                    loginComponent.createCode();
+                }
+                else
+                {
+                    if (!err) {
+                        loginComponent.loginValidate(values.userName,values.password);
+                    }
+                }
+            }else{
                 if (!err) {
-                    //console.log('Received values of form: ', values.userName+"\t"+values.password+"\t"+values.validateCode);
                     loginComponent.loginValidate(values.userName,values.password);
                 }
             }
@@ -134,6 +142,28 @@ const Login = Form.create()(React.createClass({
             labelCol: { span: 6 },
             wrapperCol: { span: 16 },
         };
+
+        var codeDiv;
+        if(loginComponent.state.loginFailedCount>=2){
+            codeDiv = <FormItem {...formItemLayout} label="验证码">
+                {getFieldDecorator('validateCode',{
+                    rules: [{ required: true, message: '请输入验证码!' }],
+                })(
+
+                    <Input  placeholder="请输入验证码" className="yz_input" />
+
+                )}
+                {
+
+
+                    <div className="code" id="checkCode" onClick={loginComponent.createCode} >{loginComponent.state.code}</div>
+
+                }
+            </FormItem>;
+        }else{
+            codeDiv="";
+        }
+
         return (
             <div className="login_bg">
 			<div className="login_logo"><img src={('../../src/components/images/maaee.png')}/></div>
@@ -156,21 +186,7 @@ const Login = Form.create()(React.createClass({
 									<Input addonBefore={<Icon type="lock" />} type="password" placeholder="请输入密码"/>
 								)}
 							</FormItem>
-							<FormItem {...formItemLayout} label="验证码">
-								{getFieldDecorator('validateCode',{
-                                    rules: [{ required: true, message: '请输入验证码!' }],
-                                })(
-
-									<Input  placeholder="请输入验证码" className="yz_input" />
-
-								)}
-								{
-
-
-										<div className="code" id="checkCode" onClick={loginComponent.createCode} >{loginComponent.state.code}</div>
-
-									}
-							</FormItem>
+                            {codeDiv}
 
 							<div className="login_buton">
 								<Button type="primary" htmlType="submit" className="login-form-button login_buton">

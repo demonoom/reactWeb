@@ -97,7 +97,8 @@ const TeacherAllSubjects = React.createClass({
             console.log("getUserSubjectsByUid:"+e);
             var key = e.id;
             var name=e.user.userName;
-            var content=<Popover  placement="rightTop" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
+            var popOverContent = '<div><span>题目:</span>'+e.content+'<hr/><span>答案:</span>'+e.answer+'</div>';
+            var content=<Popover  placement="rightTop" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: popOverContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
             var subjectType=e.typeName;
             var subjectScore=e.score;
             if(parseInt(e.score)<0)

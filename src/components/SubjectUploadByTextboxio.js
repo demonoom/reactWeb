@@ -16,6 +16,15 @@ const TabPane = Tabs.TabPane;
 
 var mulitiAnswer = new Array('A');
 var subjectUpload;
+//定义多选题答案
+const mulitiAnswerOptions = [
+    {label: 'A', value: 'A'},
+    {label: 'B', value: 'B'},
+    {label: 'C', value: 'C'},
+    {label: 'D', value: 'D'},
+    {label: 'E', value: 'E'},
+    {label: 'F', value: 'F'},
+];
 /**
  * 题目上传组件
  */
@@ -315,7 +324,8 @@ const SubjectUploadTabComponents = React.createClass({
             "textAnswer": answer,
             "score": score,
             "userId": ident,
-            "type": "MC"
+            "type": "MC",
+            "alterNativeAnswerCount":mulitiAnswerOptions.length
         };
         if (optType == "bySubjectId") {
             batchAddSubjectBeanJson.knowledgePointId = ScheduleOrSubjectId;
@@ -533,14 +543,6 @@ const SubjectUploadTabComponents = React.createClass({
             children.push(<Option key={i} value={i}>{i}分</Option>);
         }
         ;
-        //定义多选题答案
-        const mulitiAnswerOptions = [
-            {label: 'A', value: 'A'},
-            {label: 'B', value: 'B'},
-            {label: 'C', value: 'C'},
-            {label: 'D', value: 'D'},
-            {label: 'E', value: 'E'},
-        ];
 
         //定义分数组件，因为各个tabPanel面板中都需要存在分值，所以统一定义
         const scoreItem = [];

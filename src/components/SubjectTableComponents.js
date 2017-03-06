@@ -59,6 +59,7 @@ const SUbjectTable = React.createClass({
     subTable = this;
     return {
       selectedRowKeys: [],  // Check here to configure the default column
+      selectedRowKeysStr:'',
       loading: false,
       count:0,
       totalCount:0,
@@ -68,7 +69,8 @@ const SUbjectTable = React.createClass({
       knowledgeName:'',
       currentPage:1,
       data:data,
-      subjectParams:''
+      subjectParams:'',
+      isOwmer:'N'
     };
   },
   start() {
@@ -83,12 +85,13 @@ const SUbjectTable = React.createClass({
   },
   onSelectChange(selectedRowKeys) {
     console.log('selectedRowKeys changed: ', selectedRowKeys);
-    this.setState({ selectedRowKeys });
+    var selectedRowKeysStr =selectedRowKeys.join(",");
+    console.log("selectedRowKeysStr:"+selectedRowKeysStr);
+    this.setState({ selectedRowKeys,selectedRowKeysStr });
   },
 
   getSubjectData(ident,ScheduleOrSubjectId,pageNo,optType,knowledgeName,isOwmer){
     data=[];
-    // alert("ccc:"+ident+"==="+ScheduleOrSubjectId+",,,,"+optType);
     subTable.setState({optType:optType,knowledgeName:knowledgeName,ScheduleOrSubjectId:ScheduleOrSubjectId});
     if(optType=="bySchedule"){
       subTable.getSubjectDataBySchedule(ident,ScheduleOrSubjectId,pageNo);
@@ -98,7 +101,6 @@ const SUbjectTable = React.createClass({
   },
 
   getSubjectDataBySchedule:function (ident,ScheduleOrSubjectId,pageNo) {
-    //alert("getSubjectDataBySchedule:"+ident+"==="+ScheduleOrSubjectId);
     var param = {
       "method":'getClassSubjects',
       "ident":ident,
@@ -119,8 +121,9 @@ const SUbjectTable = React.createClass({
             response.forEach(function (e) {
               console.log("eeeeee:"+e);
               var key = e.id;
-              //var name=e.colName;
-              var content=<Popover placement="rightTop" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
+              var name=e.user.userName;
+              var popOverContent = '<div><span>题目:</span>'+e.content+'<hr/><span>答案:</span>'+e.answer+'</div>';
+              var content=<Popover placement="rightTop" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: popOverContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
               //var content=<Tooltip title={<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article></Tooltip>;
               var subjectType=e.typeName;
               var subjectScore=e.score;
@@ -143,7 +146,6 @@ const SUbjectTable = React.createClass({
         }
       },
       onError : function(error) {
-        // alert(error);
         message.error(error);
       }
 
@@ -151,8 +153,70 @@ const SUbjectTable = React.createClass({
   },
 
   editSubject:function (e) {
-    // alert("editSubject:"+e.target.value);
 
+  },
+  /**
+   * 批量或单独删除备课计划下的题目
+   * @param subjectIds
+   */
+  deleteSubjectsByConditonForSchedule(subjectIds){
+    confirm({
+      title: '确定要删除该题目?',
+      onOk() {
+        var param = {
+          "method":'deleteScheduleSubjects',
+          "ident":sessionStorage.getItem("ident"),
+          "scheduleId":subTable.state.ScheduleOrSubjectId,
+          "subjectIds":subjectIds
+        };
+        doWebService(JSON.stringify(param), {
+          onResponse : function(ret) {
+            console.log(ret.msg);
+            if(ret.msg=="调用成功" && ret.response==true){
+              message.success("题目删除成功");
+            }else{
+              message.error("题目删除失败");
+            }
+            subTable.getSubjectDataBySchedule(sessionStorage.getItem("ident"),subTable.state.ScheduleOrSubjectId,subTable.state.currentPage);
+          },
+          onError : function(error) {
+            message.error(error);
+          }
+        });
+      },
+      onCancel() {},
+    });
+  },
+  /**
+   * 批量或单独删除资源库下的题目
+   * @param subjectIds
+   */
+  deleteSubjectsByConditon(subjectIds){
+    confirm({
+      title: '确定要删除选定的题目?',
+      onOk() {
+        var param = {
+          "method":'delMySubjects',
+          "userId":sessionStorage.getItem("ident"),
+          "subjects":subjectIds
+        };
+        doWebService(JSON.stringify(param), {
+          onResponse : function(ret) {
+            console.log(ret.msg);
+            if(ret.msg=="调用成功" && ret.response==true){
+              message.success("题目删除成功");
+            }else{
+              message.error("题目删除失败");
+            }
+            subTable.getSubjectDataByKnowledge(sessionStorage.getItem("ident"),subTable.state.ScheduleOrSubjectId,subTable.state.currentPage,"Y");
+          },
+          onError : function(error) {
+            message.error(error);
+          }
+        });
+      },
+      onCancel() {},
+    });
   },
 
   //删除备课计划下的题目
@@ -163,37 +227,22 @@ const SUbjectTable = React.createClass({
     }else{
       target = e.target;
     }
-    // alert("deleteSubject:"+target.value);
     var subjectIds = target.value;
-    confirm({
-      title: '确定要删除该题目?',
-      onOk() {
-          var param = {
-            "method":'deleteScheduleSubjects',
-            "ident":sessionStorage.getItem("ident"),
-            "scheduleId":subTable.state.ScheduleOrSubjectId,
-            "subjectIds":subjectIds
-          };
-          doWebService(JSON.stringify(param), {
-            onResponse : function(ret) {
-              console.log(ret.msg);
-              if(ret.msg=="调用成功" && ret.response==true){
-                // alert("题目删除成功");
-                message.success("题目删除成功");
-              }else{
-                // alert("题目删除失败");
-                message.error("题目删除失败");
-              }
-              subTable.getSubjectDataBySchedule(sessionStorage.getItem("ident"),subTable.state.ScheduleOrSubjectId,subTable.state.currentPage);
-            },
-            onError : function(error) {
-              // alert(error);
-              message.error(error);
-            }
-          });
-      },
-      onCancel() {},
-    });
+    subTable.deleteSubjectsByConditonForSchedule(subjectIds);
+  },
+
+  /**
+   * 根据复选框的选择，批量删除资源库下的题目
+   */
+  deleteAllSelectedSubjectS(){
+    //已选中的题目的id字符串，使用逗号进行分割
+    var subjectIds = subTable.state.selectedRowKeysStr;
+    if(subTable.state.optType=="bySchedule"){
+      subTable.deleteSubjectsByConditonForSchedule(subjectIds);
+    }else{
+      subTable.deleteSubjectsByConditon(subjectIds);
+    }
+    subTable.setState({selectedRowKeysStr:'',selectedRowKeys:[]});
   },
 
   //删除资源库下的题目
@@ -205,36 +254,16 @@ const SUbjectTable = React.createClass({
       target = e.target;
     }
     var subjectIds = target.value;
-    confirm({
-        title: '确定要删除该题目?',
-        onOk() {
-          var param = {
-            "method":'delMySubjects',
-            "userId":sessionStorage.getItem("ident"),
-            "subjects":subjectIds
-          };
-          doWebService(JSON.stringify(param), {
-            onResponse : function(ret) {
-              console.log(ret.msg);
-              if(ret.msg=="调用成功" && ret.response==true){
-                // alert("题目删除成功");
-                message.success("题目删除成功");
-              }else{
-                // alert("题目删除失败");
-                message.error("题目删除失败");
-              }
-              subTable.getSubjectDataByKnowledge(sessionStorage.getItem("ident"),subTable.state.ScheduleOrSubjectId,subTable.state.currentPage,"Y");
-            },
-            onError : function(error) {
-              // alert(error);
-              message.error(error);
-            }
-          });
-      },
-      onCancel() {},
-    });
+    subTable.deleteSubjectsByConditon(subjectIds);
   },
 
+  /**
+   * 根据资源库的知识点id获取知识点下的题目
+   * @param ident
+   * @param ScheduleOrSubjectId
+   * @param pageNo
+   * @param isOwmer
+   */
   getSubjectDataByKnowledge:function (ident,ScheduleOrSubjectId,pageNo,isOwmer) {
     var param = {
       "method":'getUserSubjectsByKnowledgePoint',
@@ -257,7 +286,8 @@ const SUbjectTable = React.createClass({
             console.log("getSubjectDataByKnowledge:"+e);
             var key = e.id;
             var name=e.user.userName;
-            var content=<Popover  placement="rightTop" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
+            var popOverContent = '<div><span>题目:</span>'+e.content+'<hr/><span>答案:</span>'+e.answer+'</div>';
+            var content=<Popover  placement="rightTop" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: popOverContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
             var subjectType=e.typeName;
             var subjectScore=e.score;
             if(parseInt(e.score)<0)
@@ -289,7 +319,6 @@ const SUbjectTable = React.createClass({
         }
       },
       onError : function(error) {
-        // alert(error);
         message.error(error);
       }
 
@@ -314,7 +343,6 @@ const SUbjectTable = React.createClass({
   // },
 
   initGetSubjectInfo:function (subjectParams,currentPageNo) {
-    // alert("params in subjectTable:"+subTable.props.params);
     var subjectParamArray = subTable.props.params.split("#");
     subTable.setState({subjectParams:subTable.props.params});
     if(subjectParams!=null && typeof(subjectParams)!="undefined" ){
@@ -338,6 +366,7 @@ const SUbjectTable = React.createClass({
     }else if(dataFilter=="other"){
       isOwmer="N";
     }
+    subTable.setState({isOwmer});
     subTable.getSubjectData(ident,ScheduleOrSubjectId,pageNo,optType,knowledgeName,isOwmer);
   },
 
@@ -350,8 +379,6 @@ const SUbjectTable = React.createClass({
       target = e.target;
     }
     var currentKnowledge = target.value;
-    // alert(currentKnowledge);
-    //alert("111"+currentSchedule+","+this.refs.useKnowledgeComponents);
     subTable.refs.useKnowledgeComponents.showModal(currentKnowledge,"knowledgeSubject",subTable.state.knowledgeName);
   },
 
@@ -365,9 +392,6 @@ const SUbjectTable = React.createClass({
     }
     var currentSubjectInfo = target.value;
     subTable.refs.subjectEditTabComponents.showModal(currentSubjectInfo);
-    // alert(currentKnowledge);
-    //alert("111"+currentSchedule+","+this.refs.useKnowledgeComponents);
-    // subTable.refs.useKnowledgeComponents.showModal(currentKnowledge,"knowledgeSubject",subTable.state.knowledgeName);
   },
 
   pageOnChange(pageNo) {
@@ -389,11 +413,25 @@ const SUbjectTable = React.createClass({
       onChange: this.onSelectChange,
     };
     const hasSelected = selectedRowKeys.length > 0;
+    var delBtn;
+    var subjectTable;
+    if(subTable.state.isOwmer=="Y"){
+      delBtn = <div><Button type="primary" onClick={this.deleteAllSelectedSubjectS}
+                       disabled={!hasSelected} loading={loading}
+      >批量删除</Button><span style={{ marginLeft: 8 }}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span></div>;
+      subjectTable = <Table rowSelection={rowSelection} columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: 15,onChange:subTable.pageOnChange }} scroll={{ y: 400}}/>;
+    }else{
+      delBtn ='';
+      subjectTable = <Table columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: 15,onChange:subTable.pageOnChange }} scroll={{ y: 400}}/>;
+    }
     return (
         <div >
           <SubjectEditByTextboxioTabComponents ref="subjectEditTabComponents" subjectEditCallBack={subTable.subjectEditCallBack}></SubjectEditByTextboxioTabComponents>
           <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
-          <Table rowSelection={rowSelection} columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: 15,onChange:subTable.pageOnChange }} scroll={{ y: 400}}/>
+          <div style={{ marginBottom: 16 }}>
+            {delBtn}
+          </div>
+          {subjectTable}
         </div>
     );
   },

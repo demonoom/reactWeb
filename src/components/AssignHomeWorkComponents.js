@@ -309,10 +309,11 @@ const AssignHomeWorkComponents = React.createClass({
         response.forEach(function (e) {
           console.log("eeeeee:"+e);
           var key = e.id;
-          var content = <Popover placement="rightTop" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
+          var popOverContent = '<div><span>题目:</span>'+e.content+'<hr/><span>答案:</span>'+e.answer+'</div>';
+          var content = <Popover placement="rightTop" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: popOverContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: popOverContent}}></article></Popover>;
           var subjectType=e.typeName;
           subjectData.push({
-            key: key+"^"+e.content,
+            key: key+"^"+e.content+"^"+e.answer,
             content: content,
             subjectType:subjectType,
           });
@@ -345,7 +346,8 @@ const AssignHomeWorkComponents = React.createClass({
       console.log("subjectArray[1]："+subjectArray[1])
       defaultCheckedList.push(subjectArray[0]);
       // <article id='contentHtml' className='content content_2' value={subjectArray[1]} dangerouslySetInnerHTML={{__html: subjectArray[1]}} ></article>
-      var content = <Popover placement="rightTop"  content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html:subjectArray[1]}}></article>}><article id='contentHtml' className='content content_2' dangerouslySetInnerHTML={{__html: subjectArray[1]}}></article></Popover>;
+      var popOverContent = '<div><span>题目:</span>'+subjectArray[1]+'<hr/><span>答案:</span>'+subjectArray[2]+'</div>';
+      var content = <Popover placement="rightTop"  content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html:popOverContent}}></article>}><article id='contentHtml' className='content content_2' dangerouslySetInnerHTML={{__html: subjectArray[1]}}></article></Popover>;
       plainOptions.push({label:content,value:subjectArray[0]});
       i++;
       if(i!=selectedSubjectKeys.length){
