@@ -3,10 +3,10 @@ import React from 'react';
 var TextboxioComponentForSimpleAnswer = React.createClass({
   componentDidMount(){
     mytextareaSimpleAnswerEditor = textboxio.replace('#mySimpleAnswerTextarea',defaultConfig);
-    mytextareaSimpleAnswerEditor.events.dirty.addListener(function () {
+    /*mytextareaSimpleAnswerEditor.events.dirty.addListener(function () {
       mytextareaSimpleAnswerEditor.mode.set("code");
       mytextareaSimpleAnswerEditor.mode.set("design");
-    });
+    });*/
     mytextareaSimpleAnswerEditor.events.focus.addListener(function () {
       if(mytextareaSimpleAnswerEditor.mode.get()=="code"){
         mytextareaSimpleAnswerEditor.mode.set("design");
@@ -14,10 +14,15 @@ var TextboxioComponentForSimpleAnswer = React.createClass({
     });
   },
   componentDidUpdate(){
+    if(mytextareaSimpleAnswerEditor==null || typeof(mytextareaSimpleAnswerEditor)=="undefined" ){
+      mytextareaSimpleAnswerEditor = textboxio.replace('#mySimpleAnswerTextarea',defaultConfig);
+    }
     var activeEditor = textboxio.getActiveEditor();
-    if(mytextareaSimpleAnswerEditor != null && typeof(mytextareaSimpleAnswerEditor)!="undefined" && activeEditor==mytextareaSimpleAnswerEditor ) {
-      mytextareaSimpleAnswerEditor.mode.set("code");
-      mytextareaSimpleAnswerEditor.mode.set("design");
+    if(mytextareaSimpleAnswerEditor != null && typeof(mytextareaSimpleAnswerEditor)!="undefined" && (activeEditor==mytextareaSimpleAnswerEditor || activeEditor==mytextareaAnswerEditor)) {
+      if(mytextareaSimpleAnswerEditor.mode!= null && typeof(mytextareaSimpleAnswerEditor.mode)!="undefined" ){
+        mytextareaSimpleAnswerEditor.mode.set("code");
+        mytextareaSimpleAnswerEditor.mode.set("design");
+      }
     }
   },
   render : function(){

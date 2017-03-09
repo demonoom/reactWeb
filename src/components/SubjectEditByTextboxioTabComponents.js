@@ -92,8 +92,16 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                         scoreDefinedValue: response.score
                     });
                 } else {
+                    if(response.score <= 0){
+                        subjectUpload.setState({
+                            score: -1
+                        });
+                    }else{
+                        subjectUpload.setState({
+                            score: response.score,
+                        });
+                    }
                     subjectUpload.setState({
-                        score: response.score,
                         scoreDisable: false,
                         scoreInputState: true
                     });
@@ -140,7 +148,6 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
      * 分值下拉列表改变时的响应函数
      */
     selectHandleChange: function (value) {
-        console.log(`selected ${value}`);
         this.setState({score: value});
     },
 
@@ -186,7 +193,6 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                console.log(ret.msg);
                 if (ret.msg == "调用成功" && ret.response == true) {
                     message.success("题目修改成功");
                     subjectUpload.props.subjectEditCallBack();
@@ -220,14 +226,13 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
         }
         var subjectName = mytextareaSingleModifyEditor.content.get();
         // subjectName = subjectName.replace(/\+/g, "%2B"); //将+号替换为十六进制
-        console.log("ttt:" + subjectName);
         var answer = this.state.singleAnswer;
         //完成基础的非空验证
         if (this.isEmpty(subjectName)) {
             message.warning("请输入题目");
         } else if (this.isEmpty(answer)) {
             message.warning("请输入答案");
-        } else if (this.isEmpty(score) || score == 0) {
+        } else if (this.isEmpty(score) || score <= 0) {
             message.warning("请选择分值");
         } else {
             //完成题目的修改操作
@@ -255,7 +260,6 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
             score = this.state.scoreDefinedValue;
         }
         var subjectName = mytextareaMulitiSelectModifyEditor.content.get();
-        console.log("ttt:" + subjectName);
         //将获取的多选答案数组转换为字符串
         var answer = "";
         for (var i = 0; i < mulitiAnswer.length; i++) {
@@ -266,7 +270,7 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
             message.warning("请输入题目");
         } else if (this.isEmpty(answer)) {
             message.warning("请输入答案");
-        } else if (this.isEmpty(score) || score == 0) {
+        } else if (this.isEmpty(score) || score <= 0) {
             message.warning("请选择分值");
         } else {
             this.modifySubject(subjectName, answer, score);
@@ -293,14 +297,13 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
             score = this.state.scoreDefinedValue;
         }
         var subjectName = mytextareaCorrectModifyEditor.content.get();
-        console.log("ttt:" + subjectName);
         var answer = this.state.correctAnswerValue;
         //完成基础的非空验证
         if (this.isEmpty(subjectName)) {
             message.warning("请输入题目");
         } else if (this.isEmpty(answer)) {
             message.warning("请输入答案");
-        } else if (this.isEmpty(score) || score == 0) {
+        } else if (this.isEmpty(score) || score <= 0) {
             message.warning("请选择分值");
         } else {
             this.modifySubject(subjectName, answer, score);
@@ -329,15 +332,13 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
             score = this.state.scoreDefinedValue;
         }
         var subjectName = mytextareaSimpleAnswerModifyEditor.content.get();
-        console.log("ttt:" + subjectName);
         var answer = mytextareaAnswerModifyEditor.content.get();
-        console.log("ttt answer:" + answer);
         //完成基础的非空验证
         if (this.isEmpty(subjectName)) {
             message.warning("请输入题目");
         } else if (this.isEmpty(answer)) {
             message.warning("请输入答案");
-        } else if (this.isEmpty(score) || score == 0) {
+        } else if (this.isEmpty(score) || score <= 0) {
             message.warning("请选择分值");
         } else {
             this.modifySubject(subjectName, answer, score);
@@ -405,6 +406,7 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
     render() {
         //定义分值下拉列表的内容
         const children = [];
+        children.push(<Option key={-1} value={-1}>请选择</Option>);
         for (let i = 1; i <= 10; i++) {
             children.push(<Option key={i} value={i}>{i}分</Option>);
         }

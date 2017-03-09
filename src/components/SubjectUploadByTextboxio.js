@@ -35,7 +35,7 @@ const SubjectUploadTabComponents = React.createClass({
             loading: false,
             visible: false,
             activeKey: '单选题',
-            score: 1,
+            score: -1,
             subjectName: '',
             singleAnswer: 'A',
             scoreChecked: false,
@@ -95,7 +95,6 @@ const SubjectUploadTabComponents = React.createClass({
      * @param value
      */
     selectHandleChange: function (value) {
-        console.log(`selected ${value}`);
         this.setState({score: value});
     },
 
@@ -116,7 +115,7 @@ const SubjectUploadTabComponents = React.createClass({
      */
     initPage(){
         this.editorsInit();
-        this.setState({score: 1, scoreDefinedValue: ''});
+        this.setState({score: -1, scoreDefinedValue: ''});
         if (!this.isEmpty(this.refs.singleAnswer)) {
             this.refs.singleAnswer.state.value = "A";
         }
@@ -128,7 +127,7 @@ const SubjectUploadTabComponents = React.createClass({
             scoreInputState: true,
             scoreDisable: false,
             mulitiAnswerDefaultValue: 'A',
-            correctAnswerValue: "正确"
+            correctAnswerValue: "正确",
         });
     },
 
@@ -145,7 +144,6 @@ const SubjectUploadTabComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                console.log(ret.msg);
                 if (ret.msg == "调用成功" && ret.success == true) {
                     if (isLinkToSchedule == true) {
                         var subjectsIds = ret.response[0];
@@ -179,7 +177,6 @@ const SubjectUploadTabComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                console.log(ret.msg);
                 if (ret.msg == "调用成功" && ret.success == true) {
                     var scheduleId = ret.response.colTsId;
                     subjectUpload.copySubjects(subjectsIds, scheduleId);
@@ -204,7 +201,6 @@ const SubjectUploadTabComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                console.log(ret.msg);
                 if (ret.msg == "调用成功" && ret.response == true) {
                     message.success("题目添加成功");
                     subjectUpload.props.courseUploadCallBack();
@@ -239,7 +235,6 @@ const SubjectUploadTabComponents = React.createClass({
             score = this.state.scoreDefinedValue;
         }
         var subjectName = mytextareaSingleEditor.content.get();
-        console.log("ttt:" + subjectName);
         subjectName = subjectName.replace(/\+/g, "%2B"); //将+号替换为十六进制
         var answer = this.state.singleAnswer;
         var subjectParamArray = this.props.params.split("#");
@@ -257,7 +252,7 @@ const SubjectUploadTabComponents = React.createClass({
             message.warning("请输入题目");
         } else if (this.isEmpty(answer)) {
             message.warning("请输入答案");
-        } else if (this.isEmpty(score) || score == 0) {
+        } else if (this.isEmpty(score) || score <= 0) {
             message.warning("请选择分值");
         } else {
             var batchAddSubjectBeanJson = {
@@ -303,7 +298,6 @@ const SubjectUploadTabComponents = React.createClass({
         }
         var subjectName = mytextareaMulitiEditor.content.get();
         subjectName = subjectName.replace(/\+/g, "%2B"); //将+号替换为十六进制
-        console.log("ttt:" + subjectName);
         //将获取的多选答案数组转换为字符串
         var answer = "";
         for (var i = 0; i < mulitiAnswer.length; i++) {
@@ -335,7 +329,7 @@ const SubjectUploadTabComponents = React.createClass({
             message.warning("请输入题目");
         } else if (this.isEmpty(answer)) {
             message.warning("请输入答案");
-        } else if (this.isEmpty(score) || score == 0) {
+        } else if (this.isEmpty(score) || score <= 0) {
             message.warning("请选择分值");
         } else {
             this.saveSubject(batchAddSubjectBeanJson, knowledgeName, isLinkToSchedule);
@@ -343,9 +337,9 @@ const SubjectUploadTabComponents = React.createClass({
                 //关闭并返回题目列表页面
                 this.setState({visible: false, score: 1});
             }
+            //重新初始化页面
+            this.initPage();
         }
-        //重新初始化页面
-        this.initPage();
     },
     /**
      * 判断题新增
@@ -369,7 +363,6 @@ const SubjectUploadTabComponents = React.createClass({
         }
         var subjectName = mytextareaCorrectEditor.content.get();
         subjectName = subjectName.replace(/\+/g, "%2B"); //将+号替换为十六进制
-        console.log("ttt:" + subjectName);
         var answer = this.state.correctAnswerValue;
         var subjectParamArray = this.props.params.split("#");
         var ident = subjectParamArray[0];
@@ -396,7 +389,7 @@ const SubjectUploadTabComponents = React.createClass({
             message.warning("请输入题目");
         } else if (this.isEmpty(answer)) {
             message.warning("请输入答案");
-        } else if (this.isEmpty(score) || score == 0) {
+        } else if (this.isEmpty(score) || score <= 0) {
             message.warning("请选择分值");
         } else {
             this.saveSubject(batchAddSubjectBeanJson, knowledgeName, isLinkToSchedule);
@@ -404,9 +397,9 @@ const SubjectUploadTabComponents = React.createClass({
                 //关闭并返回题目列表页面
                 this.setState({visible: false, score: 1});
             }
+            //重新初始化页面
+            this.initPage();
         }
-        //重新初始化页面
-        this.initPage();
     },
 
     /**
@@ -431,10 +424,8 @@ const SubjectUploadTabComponents = React.createClass({
         }
         var subjectName = mytextareaSimpleAnswerEditor.content.get();
         subjectName = subjectName.replace(/\+/g, "%2B"); //将+号替换为十六进制
-        console.log("ttt:" + subjectName);
         var answer = mytextareaAnswerEditor.content.get();
         answer = answer.replace(/\+/g, "%2B"); //将+号替换为十六进制
-        console.log("ttt  answer :" + answer);
         var subjectParamArray = this.props.params.split("#");
         var ident = subjectParamArray[0];
         var ScheduleOrSubjectId = subjectParamArray[1];
@@ -460,7 +451,7 @@ const SubjectUploadTabComponents = React.createClass({
             message.warning("请输入题目");
         } else if (this.isEmpty(answer)) {
             message.warning("请输入答案");
-        } else if (this.isEmpty(score) || score == 0) {
+        } else if (this.isEmpty(score) || score <= 0) {
             message.warning("请选择分值");
         } else {
             this.saveSubject(batchAddSubjectBeanJson, knowledgeName, isLinkToSchedule);
@@ -468,9 +459,9 @@ const SubjectUploadTabComponents = React.createClass({
                 //关闭并返回题目列表页面
                 this.setState({visible: false, score: 1});
             }
+            //重新初始化页面
+            this.initPage();
         }
-        //重新初始化页面
-        this.initPage();
     },
 
     /**
@@ -519,7 +510,7 @@ const SubjectUploadTabComponents = React.createClass({
      * @param key
      */
     tabOnChange(key) {
-        this.setState({activeKey: key});
+        subjectUpload.setState({activeKey: key});
         //重新初始化页面
         this.initPage();
     },
@@ -539,6 +530,7 @@ const SubjectUploadTabComponents = React.createClass({
     render() {
         //定义分值下拉列表的内容
         const children = [];
+        children.push(<Option key={-1} value={-1}>请选择</Option>);
         for (let i = 1; i <= 10; i++) {
             children.push(<Option key={i} value={i}>{i}分</Option>);
         }

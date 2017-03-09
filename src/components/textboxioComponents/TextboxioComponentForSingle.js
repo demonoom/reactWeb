@@ -3,10 +3,10 @@ import React from 'react';
 var TextboxioComponentForSingle = React.createClass({
   componentDidMount(){
     mytextareaSingleEditor = textboxio.replace('#mytextarea',defaultConfig);
-    mytextareaSingleEditor.events.dirty.addListener(function () {
+    /*mytextareaSingleEditor.events.dirty.addListener(function () {
       mytextareaSingleEditor.mode.set("code");
       mytextareaSingleEditor.mode.set("design");
-    });
+    });*/
     mytextareaSingleEditor.events.focus.addListener(function () {
       if(mytextareaSingleEditor.mode.get()=="code"){
         mytextareaSingleEditor.mode.set("design");
@@ -14,6 +14,9 @@ var TextboxioComponentForSingle = React.createClass({
     });
   },
   componentDidUpdate(){
+    if(mytextareaSingleEditor==null || typeof(mytextareaSingleEditor)=="undefined" ){
+      mytextareaSingleEditor = textboxio.replace('#mytextarea',defaultConfig);
+    }
     var activeEditor = textboxio.getActiveEditor();
     if(mytextareaSingleEditor != null && typeof(mytextareaSingleEditor)!="undefined" && activeEditor==mytextareaSingleEditor ){
       mytextareaSingleEditor.mode.set("code");
