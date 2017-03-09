@@ -22,14 +22,16 @@ const UseKnowledgeComponents = React.createClass({
       optType:'',
       knowledgeName:'',
       selectOptions:[],
-      useTypeValue:'currentKnowledge'
+      useTypeValue:'currentKnowledge',
+      searchScheduleDisableStatus:true,  //使用至现有计划下拉列表的可用状态，默认为不可用
+      newScheduleDisableStatus:true,    //新建备课计划文本框的可用状态，默认为不可用
     };
   },
   showModal(currentKnowlege,optType,knowledgeName) {
     //当前点击的，计划应用的课件资源
     knowledgeName = knowledgeName;
     if(optType=="TeacherAllSubjects" || optType=="TeacherAllCourseWare"){
-      knowledge.setState({useTypeValue:'searchSchedule'});
+      knowledge.setState({useTypeValue:'searchSchedule',searchScheduleDisableStatus:false});
     }
     knowledge.setState({knowledgeName:knowledgeName});
     knowledge.setState({optType:optType});
@@ -227,6 +229,16 @@ const UseKnowledgeComponents = React.createClass({
     this.setState({
       useTypeValue: e.target.value,
     });
+    if(e.target.value=="searchSchedule"){
+      knowledge.setState({searchScheduleDisableStatus:false});
+    }else{
+      knowledge.setState({searchScheduleDisableStatus:true});
+    }
+    if(e.target.value=="newSchedule"){
+      knowledge.setState({newScheduleDisableStatus:false});
+    }else{
+      knowledge.setState({newScheduleDisableStatus:true});
+    }
   },
 
   render() {
@@ -246,22 +258,22 @@ const UseKnowledgeComponents = React.createClass({
       attach = <RadioGroup onChange={this.useTypeOnChange} value={this.state.useTypeValue}>
         <Radio value="searchSchedule">
           使用至现有计划：
-          <Select defaultValue={knowledge.state.schedule} value={knowledge.state.schedule} key="teachSchedule" style={{ width: '95%' }} ref="teachSchedule" onChange={this.handleSchedule}>
+          <Select disabled={knowledge.state.searchScheduleDisableStatus} defaultValue={knowledge.state.schedule} value={knowledge.state.schedule} key="teachSchedule" style={{ width: '95%' }} ref="teachSchedule" onChange={this.handleSchedule}>
             {knowledge.state.selectOptions}
           </Select>
         </Radio><br />
-        <Radio value="newSchedule"><span className="left-letter">新建备课计划：</span><Input ref="scheduleName"/></Radio>
+        <Radio value="newSchedule"><span className="left-letter">新建备课计划：</span><Input disabled={knowledge.state.newScheduleDisableStatus} ref="scheduleName"/></Radio>
       </RadioGroup>;
     }else{
       attach = <RadioGroup onChange={this.useTypeOnChange} value={this.state.useTypeValue}>
         <Radio value="currentKnowledge">使用当前知识点名称作为备课计划名称</Radio><br />
         <Radio value="searchSchedule">
           使用至现有计划：
-          <Select defaultValue={knowledge.state.schedule} value={knowledge.state.schedule} key="teachSchedule" style={{ width: '100%' }} ref="teachSchedule" onChange={this.handleSchedule}>
+          <Select disabled={knowledge.state.searchScheduleDisableStatus} defaultValue={knowledge.state.schedule} value={knowledge.state.schedule} key="teachSchedule" style={{ width: '100%' }} ref="teachSchedule" onChange={this.handleSchedule}>
             {knowledge.state.selectOptions}
           </Select>
         </Radio><br />
-        <Radio value="newSchedule"><span className="left-letter">新建备课计划：</span><Input ref="scheduleName"/></Radio>
+        <Radio value="newSchedule"><span className="left-letter">新建备课计划：</span><Input disabled={knowledge.state.newScheduleDisableStatus} ref="scheduleName"/></Radio>
       </RadioGroup>;
     }
 
