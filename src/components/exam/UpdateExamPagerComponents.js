@@ -710,7 +710,7 @@ const UpdateExamPagerComponents = React.createClass({
                     <CheckboxGroup options={selectAnswerOptions[num-1]} defaultValue={textAnswer}  onChange={createExamPager.subjectAnswerOnChange} />
                 </Col>
 				<div className="topic_del_ri">
-					<Button key={answerTitle+"#"+num+"delBtn"} value={answerTitle+"#"+num} onClick={createExamPager.deleteSubjectContentDiv}>删除</Button>
+					<button key={answerTitle+"#"+num+"delBtn"} value={answerTitle+"#"+num} onClick={createExamPager.deleteSubjectContentDiv}>删除</button>
 				</div>
             </Row>
             <Row className="ant-form-item">
@@ -722,12 +722,12 @@ const UpdateExamPagerComponents = React.createClass({
             <Row className="ant-form-item topic_bor_pa">
                 <Col span={3}></Col>
                 <Col span={18}>
-                    <Button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal}>
+                    <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal}>
                         所属知识点
-                    </Button>
-					<Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal}>
+                    </button>
+					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal}>
                         解析
-                    </Button>
+                    </button>
                 </Col>
             </Row>
         </div>;
@@ -748,9 +748,9 @@ const UpdateExamPagerComponents = React.createClass({
                     </RadioGroup>
                 </Col>
 				<Col span={4}>
-					<Button key={answerTitle+"#"+num+"delBtn"} value={answerTitle+"#"+num} onClick={createExamPager.deleteSubjectContentDiv}>
+					<button key={answerTitle+"#"+num+"delBtn"} value={answerTitle+"#"+num} onClick={createExamPager.deleteSubjectContentDiv}>
                         删除
-                    </Button>
+                    </button>
 				</Col>
             </Row>
             <Row className="ant-form-item">
@@ -762,12 +762,12 @@ const UpdateExamPagerComponents = React.createClass({
             <Row className="ant-form-item topic_bor_pa">
                 <Col span={3}></Col>
                 <Col span={18}>
-                    <Button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal}>
+                    <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal}>
                         所属知识点
-                    </Button>
-					<Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal}>
+                    </button>
+					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal}>
                         解析
-                    </Button>
+                    </button>
                 </Col>
             </Row>
             
@@ -787,17 +787,17 @@ const UpdateExamPagerComponents = React.createClass({
                     <Input  id={answerTitle+"#"+num+"#blank#"+answerSubjectType} defaultValue={textAnswer} type="textarea" rows={2} onChange={createExamPager.blankOnChange}/>
                 </Col>
 				<div className="topic_del_ri">
-					<Button key={answerTitle+"#"+num+"delBtn"} value={answerTitle+"#"+num} onClick={createExamPager.deleteSubjectContentDiv}>
+					<button key={answerTitle+"#"+num+"delBtn"} value={answerTitle+"#"+num} onClick={createExamPager.deleteSubjectContentDiv}>
                         删除
-                    </Button>
+                    </button>
 				</div>
             </Row>
 			<Row className="ant-form-item">
 				<Col span={3} >图片答案：</Col>
 				<Col span={12}>
                     <AntUploadComponentsForUpdate className="add_study-b" id={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType}  fileList={imageAnswerFileArray} params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponentsForUpdate>
-					{/*<Button type="primary" icon="plus-circle" value={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} title="上传图片答案"
-                            className="add_study-b" onClick={createExamPager.showModal}>上传图片答案</Button>*/}
+					{/*<button type="primary" icon="plus-circle" value={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} title="上传图片答案"
+                            className="add_study-b" onClick={createExamPager.showModal}>上传图片答案</button>*/}
 				</Col>
 			</Row>
             <Row className="ant-form-item">
@@ -809,12 +809,12 @@ const UpdateExamPagerComponents = React.createClass({
             <Row className="ant-form-item topic_bor_pa">
                 <Col span={3}></Col>
                 <Col span={18}>
-                    <Button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal}>
+                    <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal}>
                         所属知识点
-                    </Button>
-					<Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal}>
+                    </button>
+					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal}>
                         解析
-                    </Button>
+                    </button>
 					 
                 </Col>
                 <Col span={3}>
@@ -845,17 +845,17 @@ const UpdateExamPagerComponents = React.createClass({
                     <Input  id={answerTitle+"#"+num+"#simpleAnswer#"+answerSubjectType} defaultValue={textAnswer} type="textarea" rows={5} onChange={createExamPager.blankOnChange}/>
                 </Col>
 				<div className="topic_del_ri">
-					<Button key={answerTitle+"#"+num+"delBtn"} value={answerTitle+"#"+num} onClick={createExamPager.deleteSubjectContentDiv}>
+					<button key={answerTitle+"#"+num+"delBtn"} value={answerTitle+"#"+num} onClick={createExamPager.deleteSubjectContentDiv}>
                         删除
-                    </Button>
+                    </button>
 				</div>
             </Row>
 			<Row className="ant-form-item">
 				<Col span={3}>图片答案：</Col>
 				<Col span={3}>
                     <AntUploadComponentsForUpdate params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponentsForUpdate>
-					{/*<Button type="primary" icon="plus-circle" value={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} title="上传图片答案"
-                 className="add_study-b" onClick={createExamPager.showModal}>上传图片答案</Button>*/}
+					{/*<button type="primary" icon="plus-circle" value={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} title="上传图片答案"
+                 className="add_study-b" onClick={createExamPager.showModal}>上传图片答案</button>*/}
 				 </Col>
 			</Row>
             <Row className="ant-form-item">
@@ -867,12 +867,12 @@ const UpdateExamPagerComponents = React.createClass({
             <Row className="ant-form-item topic_bor_pa">
                 <Col span={3}></Col>
                 <Col span={18}>
-                    <Button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal}>
+                    <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal}>
                         所属知识点
-                    </Button>
-					<Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal}>
+                    </button>
+					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal}>
                         解析
-                    </Button>
+                    </button>
 					 
 					
                 </Col>
@@ -913,7 +913,7 @@ const UpdateExamPagerComponents = React.createClass({
     buildCardChildArray(){
         cardChildTagArray = cardChildArray.map((e, i)=> {
             var subjectArray=e.cardSubjectAnswerArray;
-            return <Card key={e.answerTitle+"#"+e.answerSubjectType} title={e.answerTitle} extra={<Button title={e.answerTitle} value={e.answerTitle+"#"+e.answerSubjectType} icon="delete" className="topic_del" onClick={createExamPager.deleteAnswerCard}>删除</Button>} className="upexam_topic">
+            return <Card key={e.answerTitle+"#"+e.answerSubjectType} title={e.answerTitle} extra={<button title={e.answerTitle} value={e.answerTitle+"#"+e.answerSubjectType} icon="delete" className="topic_del" onClick={createExamPager.deleteAnswerCard}>删除</button>} className="upexam_topic">
                 {
                     subjectArray.map((item,j)=>item.divContent)
                 }
@@ -1486,8 +1486,8 @@ const UpdateExamPagerComponents = React.createClass({
                     //className="modol_width"
                     transitionName=""  //禁用modal的动画效果
                     footer={[
-                        <Button type="primary" htmlType="submit" className="login-form-button" onClick={createExamPager.addAnalysisForCurrentSubject}  >确定</Button>,
-                        <Button type="ghost" htmlType="reset" className="login-form-button" onClick={createExamPager.analysisModalHandleCancel} >取消</Button>
+                        <button type="primary" htmlType="submit" className="login-form-button" onClick={createExamPager.addAnalysisForCurrentSubject}  >确定</button>,
+                        <button type="ghost" htmlType="reset" className="login-form-button" onClick={createExamPager.analysisModalHandleCancel} >取消</button>
                     ]}
                 >
                     <Row className="ant-form-item">
@@ -1511,8 +1511,8 @@ const UpdateExamPagerComponents = React.createClass({
                     //className="modol_width"
                     transitionName=""  //禁用modal的动画效果
                     footer={[
-                        <Button type="primary" htmlType="submit" className="login-form-button" onClick={createExamPager.bindKnowledgeForCurrentSubject}  >确定</Button>,
-                        <Button type="ghost" htmlType="reset" className="login-form-button" onClick={createExamPager.bindKnowledgeModalHandleCancel} >取消</Button>
+                        <button type="primary" htmlType="submit" className="login-form-button" onClick={createExamPager.bindKnowledgeForCurrentSubject}  >确定</button>,
+                        <button type="ghost" htmlType="reset" className="login-form-button" onClick={createExamPager.bindKnowledgeModalHandleCancel} >取消</button>
                     ]}
                 >
                     <Row className="ant-form-item">
@@ -1574,12 +1574,12 @@ const UpdateExamPagerComponents = React.createClass({
                         transitionName=""  //禁用modal的动画效果
                         footer={[
                             <div>
-                                <Button type="primary" htmlType="submit" className="login-form-button" onClick={createExamPager.uploadFile}>
+                                <button type="primary" htmlType="submit" className="login-form-button" onClick={createExamPager.uploadFile}>
                                     保存
-                                </Button>
-                                <Button type="ghost" htmlType="reset" className="login-form-button" onClick={createExamPager.examPagerModalHandleCancel}>
+                                </button>
+                                <button type="ghost" htmlType="reset" className="login-form-button" onClick={createExamPager.examPagerModalHandleCancel}>
                                     取消
-                                </Button>
+                                </button>
                             </div>
                         ]}
                     >
@@ -1649,13 +1649,13 @@ const UpdateExamPagerComponents = React.createClass({
                             <span className="text_30"></span>
                         </Col>
                         <Col span={12}>
-                            <Button type="primary" htmlType="submit" className="login-form-button class_right"
+                            <button type="primary" htmlType="submit" className="login-form-button class_right"
                                     onClick={createExamPager.addAnswerCard}>
                                 添加题目
-                            </Button>
-                            <Button type="ghost" htmlType="reset" className="login-form-button" onClick={createExamPager.deleteAllCardChild}>
+                            </button>
+                            <button type="ghost" htmlType="reset" className="login-form-button" onClick={createExamPager.deleteAllCardChild}>
                                 清除全部
-                            </Button>
+                            </button>
                         </Col>
                     </Row>
                     <Row className="date_tr ant-form-item">
@@ -1666,13 +1666,13 @@ const UpdateExamPagerComponents = React.createClass({
                 <Row className="homework_out ant-modal-footer">
                     <Col span={24}>
                  <span>
-                   <Button type="primary" htmlType="submit" className="login-form-button class_right"
+                   <button type="primary" htmlType="submit" className="login-form-button class_right"
                            onClick={createExamPager.saveExampager}>
                     保存
-                   </Button>
-                   <Button type="ghost" htmlType="reset" className="login-form-button" onClick={createExamPager.handleCancel}>
+                   </button>
+                   <button type="ghost" htmlType="reset" className="login-form-button" onClick={createExamPager.handleCancel}>
                     取消
-                   </Button>
+                   </button>
                  </span>
                     </Col>
                 </Row>
