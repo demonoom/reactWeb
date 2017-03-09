@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Table, Button,Icon,Popover,Tooltip,message,Modal } from 'antd';
+import { Table, Button,Icon,Popover,Tooltip,message,Modal,Checkbox } from 'antd';
 import UseKnowledgeComponents from './UseKnowledgeComponents';
 import SubjectEditByTextboxioTabComponents from './SubjectEditByTextboxioTabComponents';
 import { doWebService } from '../WebServiceHelper';
@@ -70,7 +70,8 @@ const SUbjectTable = React.createClass({
       currentPage:1,
       data:data,
       subjectParams:'',
-      isOwmer:'N'
+      isOwmer:'N',
+      isDeleteAllSubject:false,   //是否同步删除资源库下的题目
     };
   },
   start() {
@@ -155,6 +156,12 @@ const SUbjectTable = React.createClass({
   editSubject:function (e) {
 
   },
+
+  isDeleteAll(e){
+    console.log(`checked = ${e.target.checked}`);
+    subTable.setState({isDeleteAllSubject:e.target.checked});
+  },
+
   /**
    * 批量或单独删除备课计划下的题目
    * @param subjectIds
@@ -162,31 +169,38 @@ const SUbjectTable = React.createClass({
   deleteSubjectsByConditonForSchedule(subjectIds){
     confirm({
       title: '确定要删除该题目?',
+      content: <Checkbox onChange={subTable.isDeleteAll}>同步删除资源库下的题目</Checkbox>,
       onOk() {
-        var param = {
-          "method":'deleteScheduleSubjects',
-          "ident":sessionStorage.getItem("ident"),
-          "scheduleId":subTable.state.ScheduleOrSubjectId,
-          "subjectIds":subjectIds
-        };
-        doWebService(JSON.stringify(param), {
-          onResponse : function(ret) {
-            console.log(ret.msg);
-            if(ret.msg=="调用成功" && ret.response==true){
-              message.success("题目删除成功");
-            }else{
-              message.error("题目删除失败");
+        if(subTable.state.isDeleteAllSubject){
+            //同步删除资源库下的题目
+          subTable.setState({isDeleteAllSubject:false});
+        }else{
+          var param = {
+            "method":'deleteScheduleSubjects',
+            "ident":sessionStorage.getItem("ident"),
+            "scheduleId":subTable.state.ScheduleOrSubjectId,
+            "subjectIds":subjectIds
+          };
+          doWebService(JSON.stringify(param), {
+            onResponse : function(ret) {
+              console.log(ret.msg);
+              if(ret.msg=="调用成功" && ret.response==true){
+                message.success("题目删除成功");
+              }else{
+                message.error("题目删除失败");
+              }
+              subTable.getSubjectDataBySchedule(sessionStorage.getItem("ident"),subTable.state.ScheduleOrSubjectId,subTable.state.currentPage);
+            },
+            onError : function(error) {
+              message.error(error);
             }
-            subTable.getSubjectDataBySchedule(sessionStorage.getItem("ident"),subTable.state.ScheduleOrSubjectId,subTable.state.currentPage);
-          },
-          onError : function(error) {
-            message.error(error);
-          }
-        });
+          });
+        }
       },
       onCancel() {},
     });
   },
+
   /**
    * 批量或单独删除资源库下的题目
    * @param subjectIds
