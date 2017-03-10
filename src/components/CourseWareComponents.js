@@ -99,7 +99,6 @@ const CourseWareComponents = React.createClass({
                     courseWare.setState({totalCount: parseInt(pager.pageCount) * 15});
                 },
                 onError: function (error) {
-                    // alert(error);
                     message.error(error);
                 }
 
@@ -111,7 +110,6 @@ const CourseWareComponents = React.createClass({
             } else if (dataFilter == "other") {
                 userId = "-" + ident;
             }
-            // alert("getMaterialsByKnowledgePointId:"+teachScheduleId);
             param = {
                 "method": 'getMaterialsByKnowledgePointId',
                 "userId": userId,
@@ -258,7 +256,6 @@ const CourseWareComponents = React.createClass({
             onOk() {
                 var param;
                 if (courseWare.state.isDeleteAllSubject) {
-                    alert("同步删除备课计划下的资源");
                     param = {
                         "method": 'deleteScheduleAndKnowledgeMaterials',
                         "userId": sessionStorage.getItem("ident"),

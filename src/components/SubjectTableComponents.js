@@ -207,7 +207,6 @@ const SUbjectTable = React.createClass({
         //同时删除此人教学进度和知识点下面的这些题目
         var param
         if(subTable.state.isDeleteAllSubject){
-          alert("同时删除此人教学进度和知识点下面的这些题目");
           param = {
             "method":'deleteScheduleAndKnowledgeSubjects',
             "userId":sessionStorage.getItem("ident"),
@@ -223,7 +222,7 @@ const SUbjectTable = React.createClass({
         doWebService(JSON.stringify(param), {
           onResponse : function(ret) {
             console.log(ret.msg);
-            if(ret.msg=="调用成功" && ret.response==true){
+            if(ret.msg=="调用成功" && ret.success==true){
               message.success("题目删除成功");
             }else{
               message.error("题目删除失败");

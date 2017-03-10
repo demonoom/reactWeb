@@ -1457,7 +1457,7 @@ const UpdateExamPagerComponents = React.createClass({
         }*/
         for(var i=0;i<fileList.length;i++){
             var fileJson = fileList[i];
-            var fileUrl = fileJson.url;
+            var fileUrl = fileJson.response;
             createExamPager.state.examPagerUrl.push(fileUrl);
         }
     },

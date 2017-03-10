@@ -9,6 +9,7 @@ const AntUploadForAnalysisOfCreateComponents = React.createClass({
         console.log("subjectInfo"+antUpload.props.params);
         var isDisabled = false;
         if(typeof(antUpload.props.fileList)!="undefined" && antUpload.props.fileList.length!=0){
+            alert("len:"+antUpload.props.fileList.length);
             defaultFileList = antUpload.props.fileList ;
             isDisabled = true;
         }
@@ -22,13 +23,14 @@ const AntUploadForAnalysisOfCreateComponents = React.createClass({
     },
 
     componentDidMount(){
-        console.log("antUpload.props.params:"+antUpload.props.params)
+        alert("antUpload.props.params:"+antUpload.props.fileList.length);
     },
 
     componentWillReceiveProps(){
         var defaultFileList = [];
+        alert("len in rec:"+antUpload.props.fileList.length);
         if(typeof(antUpload.props.fileList)!="undefined" && antUpload.props.fileList.length!=0){
-            defaultFileList = antUpload.props.fileList ;
+            defaultFileList = [antUpload.props.fileList] ;
             antUpload.setState({disabled:true});
         }
         antUpload.setState({defaultFileList:defaultFileList});
@@ -73,7 +75,7 @@ const AntUploadForAnalysisOfCreateComponents = React.createClass({
                     console.log("上传进度"+percent);
                     antUpload.setState({uploadPercent:percent,progressState:'block'});
                     /*var pro = <Progress type="circle" width={24} className="upexam_botom_ma" percent={percent} />;
-                    antUpload.setState({uploadPercent:pro});*/
+                     antUpload.setState({uploadPercent:pro});*/
                     console.log(info.file, info.fileList);
                     if(info.file.status==="removed"){
                         antUpload.setState({disabled:false});
@@ -109,8 +111,8 @@ const AntUploadForAnalysisOfCreateComponents = React.createClass({
             <div>
                 <Upload {...props}>
                     {/*<div style={{height:'auto','z-index:':'100'}}>
-                        {antUpload.state.uploadPercent}
-                    </div>*/}
+                     {antUpload.state.uploadPercent}
+                     </div>*/}
                     <Button value={antUpload.props.params} onClick={antUpload.showInfo} className="add_study-b">
                         <Icon type="upload" /> 上传
                     </Button>
