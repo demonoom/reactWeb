@@ -1479,7 +1479,7 @@ const CreateExamPagerComponents = React.createClass({
                             <span className="text_30"></span>
                         </Col>
                         <Col span={12}>
-                            <button type="primary" htmlType="submit" className="login-form-button class_right"
+                            <button type="primary" htmlType="submit" className="login-form-button class_right examination_btn_blue"
                                     onClick={createExamPager.addAnswerCard}>
                                 添加题目
                             </button>
