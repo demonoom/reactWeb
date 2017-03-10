@@ -1751,4 +1751,14 @@ a {
 
 }
 .btn_gray_exam_del{
-	font-size:12px !important}
+	font-size:12px !important
+}
+.pl_del{
+	margin-bottom:8px;
+}
+.pl_hei{
+	height:calc(100% - 36px)
+}
+.pl_hei2{
+	height:calc(100% - 10px)
+}
