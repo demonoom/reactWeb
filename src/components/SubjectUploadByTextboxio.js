@@ -44,6 +44,7 @@ const SubjectUploadTabComponents = React.createClass({
                 {label: 'C', value: 'C'},
                 {label: 'D', value: 'D'},
             ],
+            sliderValue:4
         };
     },
     /**
@@ -131,6 +132,7 @@ const SubjectUploadTabComponents = React.createClass({
                 {label: 'C', value: 'C'},
                 {label: 'D', value: 'D'},
             ],
+            sliderValue:4
         });
     },
 
@@ -539,7 +541,7 @@ const SubjectUploadTabComponents = React.createClass({
              var selectValue = {label: selectArray[i], value: selectArray[i]};
             mulitiAnswerOptions.push(selectValue);
         }
-        this.setState({"mulitiAnswerOptions":mulitiAnswerOptions});
+        this.setState({"mulitiAnswerOptions":mulitiAnswerOptions,"sliderValue":value});
     },
 
     /**
@@ -743,7 +745,7 @@ const SubjectUploadTabComponents = React.createClass({
                                                 自定义答案选项数量：
                                             </Col>
                                             <Col span={12}>
-                                                <Slider min={4} max={8} defaultValue={4} onChange={this.sliderChange} />
+                                                <Slider min={4} max={8} defaultValue={this.state.sliderValue} value={this.state.sliderValue} onChange={this.sliderChange} />
                                             </Col>
                                         </Row>
                                         <Row>
