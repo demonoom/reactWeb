@@ -558,6 +558,7 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                                             <Radio key="C" value="C">C</Radio>
                                             <Radio key="D" value="D">D</Radio>
                                             <Radio key="E" value="E">E</Radio>
+                                            <Radio key="F" value="F">F</Radio>
                                         </RadioGroup>
                                     </div>
                                 </Col>
