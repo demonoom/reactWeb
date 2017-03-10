@@ -310,7 +310,7 @@ const AssignHomeWorkComponents = React.createClass({
           console.log("eeeeee:"+e);
           var key = e.id;
           var popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>'+e.content+'<hr/><span class="answer_til answer_til_2">答案：</span>'+e.answer+'</div>';
-          var content = <Popover placement="rightTop" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: popOverContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: popOverContent}}></article></Popover>;
+          var content = <Popover placement="rightTop" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: popOverContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
           var subjectType=e.typeName;
           subjectData.push({
             key: key+"^"+e.content+"^"+e.answer,
