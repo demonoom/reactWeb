@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {Tabs, Button, Radio} from 'antd';
 import {Modal} from 'antd';
-import {Input, Select, Row, Col, Checkbox} from 'antd';
+import {Input, Select, Row, Col, Checkbox,Slider} from 'antd';
 import {message} from 'antd';
 import TextboxioComponentForSingle from './textboxioComponents/TextboxioComponentForSingle'
 import TextboxioComponentForMulitiSelect from './textboxioComponents/TextboxioComponentForMulitiSelect';
@@ -16,15 +16,6 @@ const TabPane = Tabs.TabPane;
 
 var mulitiAnswer = new Array('A');
 var subjectUpload;
-//定义多选题答案
-const mulitiAnswerOptions = [
-    {label: 'A', value: 'A'},
-    {label: 'B', value: 'B'},
-    {label: 'C', value: 'C'},
-    {label: 'D', value: 'D'},
-    {label: 'E', value: 'E'},
-    {label: 'F', value: 'F'},
-];
 /**
  * 题目上传组件
  */
@@ -47,6 +38,12 @@ const SubjectUploadTabComponents = React.createClass({
             useSameScheduleForMSelect: true,
             useSameScheduleForCorrect: true,
             useSameScheduleForSimpleAnswer: true,
+            mulitiAnswerOptions:[
+                {label: 'A', value: 'A'},
+                {label: 'B', value: 'B'},
+                {label: 'C', value: 'C'},
+                {label: 'D', value: 'D'},
+            ],
         };
     },
     /**
@@ -128,6 +125,12 @@ const SubjectUploadTabComponents = React.createClass({
             scoreDisable: false,
             mulitiAnswerDefaultValue: 'A',
             correctAnswerValue: "正确",
+            mulitiAnswerOptions:[
+                {label: 'A', value: 'A'},
+                {label: 'B', value: 'B'},
+                {label: 'C', value: 'C'},
+                {label: 'D', value: 'D'},
+            ],
         });
     },
 
@@ -319,7 +322,7 @@ const SubjectUploadTabComponents = React.createClass({
             "score": score,
             "userId": ident,
             "type": "MC",
-            "alterNativeAnswerCount":mulitiAnswerOptions.length
+            "alterNativeAnswerCount":this.state.mulitiAnswerOptions.length
         };
         if (optType == "bySubjectId") {
             batchAddSubjectBeanJson.knowledgePointId = ScheduleOrSubjectId;
@@ -522,6 +525,22 @@ const SubjectUploadTabComponents = React.createClass({
     onScoreDefinedValueChange(e){
         this.setState({scoreDefinedValue: e.target.value});
     },
+    /**
+     * 自定义多选题选项数量
+     * @param value
+     * @returns {string}
+     */
+    sliderChange(value) {
+        var selectArray=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+        console.log("selectArrayLength:"+selectArray.length);
+        var returnValue = selectArray[value];
+        var mulitiAnswerOptions=[];
+        for(var i=0;i<value;i++){
+             var selectValue = {label: selectArray[i], value: selectArray[i]};
+            mulitiAnswerOptions.push(selectValue);
+        }
+        this.setState({"mulitiAnswerOptions":mulitiAnswerOptions});
+    },
 
     /**
      * 页面元素的渲染操作
@@ -719,12 +738,22 @@ const SubjectUploadTabComponents = React.createClass({
                                         <span className="font-14">答案：</span>
                                     </Col>
                                     <Col span={20}>
-                                        <div className="ant-form-item-control">
-                                            <CheckboxGroup options={mulitiAnswerOptions}
-                                                           defaultValue={this.state.mulitiAnswerDefaultValue}
-                                                           value={this.state.mulitiAnswerDefaultValue}
-                                                           onChange={this.mulitiAnswerOnChange}/>
-                                        </div>
+                                        <Row>
+                                            <Col span={5}>
+                                                自定义答案选项数量：
+                                            </Col>
+                                            <Col span={12}>
+                                                <Slider min={4} max={8} defaultValue={4} onChange={this.sliderChange} />
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <div className="ant-form-item-control">
+                                                <CheckboxGroup options={this.state.mulitiAnswerOptions}
+                                                               defaultValue={this.state.mulitiAnswerDefaultValue}
+                                                               value={this.state.mulitiAnswerDefaultValue}
+                                                               onChange={this.mulitiAnswerOnChange}/>
+                                            </div>
+                                        </Row>
                                     </Col>
                                 </Row>
 

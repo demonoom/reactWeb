@@ -17,15 +17,6 @@ var mulitiAnswer = new Array('A');
 //将要被修改的题目id
 var sid;
 var subjectUpload;
-//定义多选题答案
-const mulitiAnswerOptions = [
-    {label: 'A', value: 'A'},
-    {label: 'B', value: 'B'},
-    {label: 'C', value: 'C'},
-    {label: 'D', value: 'D'},
-    {label: 'E', value: 'E'},
-    {label: 'F', value: 'F'},
-];
 /**
  * 题目修改组件
  */
@@ -39,6 +30,12 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
         return {
             loading: false,
             visible: false,
+            mulitiAnswerOptions:[
+                {label: 'A', value: 'A'},
+                {label: 'B', value: 'B'},
+                {label: 'C', value: 'C'},
+                {label: 'D', value: 'D'},
+            ]
         };
     },
     /**
@@ -71,8 +68,15 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                     });
                 } else if (subjectType == "多选题") {
                     muEditorContent = response.content;
+                    var choosens = response.choosens;
+                    var mulitiAnswerOptions=[];
+                    for(var i=0;i<choosens.length;i++){
+                        var content = choosens[i].content;
+                        var selectValue = {label: content, value: content};
+                        mulitiAnswerOptions.push(selectValue);
+                    }
                     subjectUpload.setState({
-                        mulitiAnswerDefaultValue: response.answer,
+                        mulitiAnswerDefaultValue: response.answer,"mulitiAnswerOptions":mulitiAnswerOptions
                     });
                 } else if (subjectType == "判断题") {
                     correctEditorContent = response.content;
@@ -262,8 +266,8 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
         var subjectName = mytextareaMulitiSelectModifyEditor.content.get();
         //将获取的多选答案数组转换为字符串
         var answer = "";
-        for (var i = 0; i < mulitiAnswer.length; i++) {
-            answer += mulitiAnswer[i];
+        for (var i = 0; i < this.state.mulitiAnswerDefaultValue.length; i++) {
+            answer += this.state.mulitiAnswerDefaultValue[i];
         }
         //完成基础的非空验证
         if (this.isEmpty(subjectName)) {
@@ -588,7 +592,7 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                                     </Col>
                                     <Col span={20}>
                                         <div className="ant-form-item-control">
-                                            <CheckboxGroup options={mulitiAnswerOptions}
+                                            <CheckboxGroup options={this.state.mulitiAnswerOptions}
                                                            defaultValue={subjectUpload.state.mulitiAnswerDefaultValue}
                                                            value={subjectUpload.state.mulitiAnswerDefaultValue}
                                                            onChange={this.mulitiAnswerOnChange}/>

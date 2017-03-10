@@ -1330,7 +1330,8 @@ const CreateExamPagerComponents = React.createClass({
                     <Row className="ant-form-item">
                         <Col span={4} className="right_look">图片解析：</Col>
                         <Col span={18}>
-                            <AntUploadForAnalysisOfCreateComponents callBackParent={createExamPager.getAnalysisiImgList}></AntUploadForAnalysisOfCreateComponents>
+                            {/*<AntUploadComponentsForUpdate className="add_study-b" id={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType}  fileList={imageAnswerFileArray} params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponentsForUpdate>*/}
+                            <AntUploadForAnalysisOfCreateComponents fileList={createExamPager.state.analysisUrl} callBackParent={createExamPager.getAnalysisiImgList}></AntUploadForAnalysisOfCreateComponents>
                         </Col>
                     </Row>
 

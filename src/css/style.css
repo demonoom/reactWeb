@@ -1746,7 +1746,9 @@ a {
 	border:1px solid #57c5f7;
 	}
 .btn_gray_exam{
-	padding: 0 !important;
+	padding: 4px 8px !important;
     min-width: auto!important;
-	border:none !important
+
 }
+.btn_gray_exam_del{
+	font-size:12px !important}
