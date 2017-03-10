@@ -744,7 +744,7 @@ const SubjectUploadTabComponents = React.createClass({
                                     </Col>
                                     <Col span={20}>
                                         <Row>
-                                            <Col span={6} className="ant-form-item-label">
+                                            <Col span className="ant-form-item-label ant-form-item-control timu_line">
                                                 自定义答案选项数量：
                                             </Col>
                                             <Col span={12}>

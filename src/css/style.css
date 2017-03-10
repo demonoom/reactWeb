@@ -1762,3 +1762,7 @@ a {
 .pl_hei2{
 	height:calc(100% - 10px)
 }
+.timu_line{
+	line-height:22px !important;
+	float:left;
+}
