@@ -123,7 +123,7 @@ const SUbjectTable = React.createClass({
               console.log("eeeeee:"+e);
               var key = e.id;
               var name=e.user.userName;
-              var popOverContent = '<div><span>题目:</span>'+e.content+'<hr/><span>答案:</span>'+e.answer+'</div>';
+              var popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>'+e.content+'<hr/><span class="answer_til answer_til_2">答案：</span>'+e.answer+'</div>';
               var content=<Popover placement="rightTop" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: popOverContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
               //var content=<Tooltip title={<article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.shortContent}}></article></Tooltip>;
               var subjectType=e.typeName;
@@ -306,7 +306,7 @@ const SUbjectTable = React.createClass({
             console.log("getSubjectDataByKnowledge:"+e);
             var key = e.id;
             var name=e.user.userName;
-            var popOverContent = '<div><span>题目:</span>'+e.content+'<hr/><span>答案:</span>'+e.answer+'</div>';
+            var popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>'+e.content+'<hr/><span class="answer_til answer_til_2">答案：</span>'+e.answer+'</div>';
             var content=<Popover  placement="rightTop" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: popOverContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
             var subjectType=e.typeName;
             var subjectScore=e.score;
@@ -439,16 +439,16 @@ const SUbjectTable = React.createClass({
       delBtn = <div><Button type="primary" onClick={this.deleteAllSelectedSubjectS}
                        disabled={!hasSelected} loading={loading}
       >批量删除</Button><span style={{ marginLeft: 8 }}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span></div>;
-      subjectTable = <Table rowSelection={rowSelection} columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: 15,onChange:subTable.pageOnChange }} scroll={{ y: 400}}/>;
+      subjectTable = <div className="pl_hei"><Table rowSelection={rowSelection} columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: 15,onChange:subTable.pageOnChange }} scroll={{ y: 400}}/></div>;
     }else{
       delBtn ='';
-      subjectTable = <Table columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: 15,onChange:subTable.pageOnChange }} scroll={{ y: 400}}/>;
+      subjectTable = <div className="pl_hei2"><Table columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: 15,onChange:subTable.pageOnChange }} scroll={{ y: 400}}/></div>;
     }
     return (
         <div >
           <SubjectEditByTextboxioTabComponents ref="subjectEditTabComponents" subjectEditCallBack={subTable.subjectEditCallBack}></SubjectEditByTextboxioTabComponents>
           <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
-          <div style={{ marginBottom: 16 }}>
+          <div className="pl_del">
             {delBtn}
           </div>
           {subjectTable}

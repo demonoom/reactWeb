@@ -1339,14 +1339,13 @@ a {
 
 }
 
-
 @font-face {
   font-family: 'iconfont';  /* project id 197083 */
-  src: url('//at.alicdn.com/t/font_ufwwt0whkadu0udi.eot');
-  src: url('//at.alicdn.com/t/font_ufwwt0whkadu0udi.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_ufwwt0whkadu0udi.woff') format('woff'),
-  url('//at.alicdn.com/t/font_ufwwt0whkadu0udi.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_ufwwt0whkadu0udi.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_4yiz1z6v9f11yvi.eot');
+  src: url('//at.alicdn.com/t/font_4yiz1z6v9f11yvi.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_4yiz1z6v9f11yvi.woff') format('woff'),
+  url('//at.alicdn.com/t/font_4yiz1z6v9f11yvi.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_4yiz1z6v9f11yvi.svg#iconfont') format('svg');
 }
 
 .iconfont{
@@ -1693,4 +1692,73 @@ a {
 .upexam_le_datika{
 	text-align: left !important;
     margin-left: 24px;
+}
+.answer_til{
+	color:#0078e4;
+	font-size:14px;
+	line-height:30px;
+	text-indent:8px;
+}
+.answer_til_1{
+	border-bottom:1px solid #eee;
+	margin-bottom:15px;
+	width:100%;	
+	display:block;
+}
+.answer_til_2{
+	margin-top:15px;
+	width:auto !important
+}
+.examination_btn_gray{
+	background:#f7f7f7;
+	border:1px solid #d9d9d9;
+	border-radius:6px;
+	cursor:pointer;
+	outline:none;
+}
+.examination_btn_gray:hover{
+	background:#fff;
+	border:1px solid #57c5f7
+}
+.examination_btn_blue{
+    color: #fff;
+    background-color: #2db7f5;
+    border-color: #2db7f5;
+	border-radius: 6px;
+	border:none;
+	outline:none;
+	cursor:pointer
+}
+.examination_btn_blue:hover{
+	background:#57c5f7;
+}
+.examination_btn_white{
+    color: #666;
+    background-color: #fff;
+	border-radius: 6px;
+	border:none;
+	outline:none;
+	cursor:pointer;
+	border:1px solid #d9d9d9;
+}
+.examination_btn_white:hover{
+	color:#57c5f7;
+	border:1px solid #57c5f7;
+	}
+.btn_gray_exam{
+	padding: 4px 8px !important;
+    min-width: auto!important;
+
+}
+.btn_gray_exam_del{
+	font-size:12px !important
+}
+.pl_del{
+	margin-bottom:8px;
+}
+.pl_hei{
+	height:calc(100% - 36px)
+}
+.pl_hei2{
+	height:calc(100% - 10px)
 }

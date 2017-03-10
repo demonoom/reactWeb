@@ -45,6 +45,7 @@ const SubjectUploadTabComponents = React.createClass({
                 {label: 'D', value: 'D'},
             ],
             sliderValue:4
+
         };
     },
     /**
@@ -132,6 +133,7 @@ const SubjectUploadTabComponents = React.createClass({
                 {label: 'C', value: 'C'},
                 {label: 'D', value: 'D'},
             ],
+
             sliderValue:4
         });
     },
@@ -742,11 +744,13 @@ const SubjectUploadTabComponents = React.createClass({
                                     </Col>
                                     <Col span={20}>
                                         <Row>
-                                            <Col span={5}>
+                                            <Col span={6} className="ant-form-item-label">
                                                 自定义答案选项数量：
                                             </Col>
                                             <Col span={12}>
+
                                                 <Slider min={4} max={8} defaultValue={this.state.sliderValue} value={this.state.sliderValue} onChange={this.sliderChange} />
+
                                             </Col>
                                         </Row>
                                         <Row>
