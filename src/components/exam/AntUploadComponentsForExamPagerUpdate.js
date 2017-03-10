@@ -81,6 +81,13 @@ const AntUploadComponentsForExamPagerUpdate = React.createClass({
             fileList:antUploadComponentsForExamPagerUpdate.state.fileList,
             onPreview:antUploadComponentsForExamPagerUpdate.handlePreview,
             onChange:antUploadComponentsForExamPagerUpdate.handleChange,
+            beforeUpload(file){
+                var fileType = file.type;
+                if(fileType.indexOf("image")==-1){
+                    message.error('只能上传图片文件，请重新上传',5);
+                    return false;
+                }
+            },
             /*onChange(info) {
                 if (info.file.status !== 'uploading') {
                     //上传进度

@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Upload, Icon,Button,message, Modal,Progress } from 'antd';
 var antUpload;
-const AntUploadComponentsForUpdate = React.createClass({
+const AntUploadForAnalysisOfCreateComponents = React.createClass({
 
     getInitialState() {
         antUpload = this;
@@ -123,4 +123,4 @@ const AntUploadComponentsForUpdate = React.createClass({
     },
 });
 
-export default AntUploadComponentsForUpdate;
+export default AntUploadForAnalysisOfCreateComponents;

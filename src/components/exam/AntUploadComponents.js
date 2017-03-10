@@ -59,6 +59,13 @@ const AntUploadComponents = React.createClass({
             defaultFileList:[],
             onPreview:antUpload.handlePreview,
             disabled:antUpload.state.disabled,
+            beforeUpload(file){
+                var fileType = file.type;
+                if(fileType.indexOf("image")==-1){
+                    message.error('只能上传图片文件，请重新上传',5);
+                    return false;
+                }
+            },
             onChange(info) {
                 if (info.file.status !== 'uploading') {
                     //上传进度

@@ -211,7 +211,6 @@ const CourseWareComponents = React.createClass({
         var materialIds = target.value;
         confirm({
             title: '确定要删除该课件?',
-            content: <Checkbox onChange={courseWare.isDeleteAll}>同步删除资源库下的课件</Checkbox>,
             onOk() {
                 if (courseWare.state.isDeleteAllSubject) {
                     //同步删除资源库下的资源
@@ -255,13 +254,23 @@ const CourseWareComponents = React.createClass({
         var materialIds = target.value;
         confirm({
             title: '确定要删除该课件?',
-            content: '',
+            content: <Checkbox onChange={courseWare.isDeleteAll}>同步删除备课计划下的课件</Checkbox>,
             onOk() {
-                var param = {
-                    "method": 'batchDeleteMaterial',
-                    "ident": sessionStorage.getItem("ident"),
-                    "mids": materialIds
-                };
+                var param;
+                if (courseWare.state.isDeleteAllSubject) {
+                    alert("同步删除备课计划下的资源");
+                    param = {
+                        "method": 'deleteScheduleAndKnowledgeMaterials',
+                        "userId": sessionStorage.getItem("ident"),
+                        "mids": materialIds
+                    };
+                } else {
+                    param = {
+                        "method": 'batchDeleteMaterial',
+                        "ident": sessionStorage.getItem("ident"),
+                        "mids": materialIds
+                    };
+                }
                 doWebService(JSON.stringify(param), {
                     onResponse: function (ret) {
                         console.log(ret.msg);
@@ -276,6 +285,7 @@ const CourseWareComponents = React.createClass({
                         message.error(error);
                     }
                 });
+                courseWare.setState({isDeleteAllSubject: false});
             },
             onCancel() {
             },

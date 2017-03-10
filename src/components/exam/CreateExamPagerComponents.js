@@ -8,6 +8,7 @@ import { doWebService } from '../../WebServiceHelper';
 import FileUploadComponents from './FileUploadComponents';
 import AntUploadComponents from './AntUploadComponents';
 import AntUploadComponentsForExamPagerUpdate from './AntUploadComponentsForExamPagerUpdate';
+import AntUploadForAnalysisOfCreateComponents from './AntUploadForAnalysisOfCreateComponents';
 import UploadExamPagerComponents from './UploadExamPagerComponents';
 const CheckboxGroup = Checkbox.Group;
 const RadioGroup = Radio.Group;
@@ -1329,7 +1330,7 @@ const CreateExamPagerComponents = React.createClass({
                     <Row className="ant-form-item">
                         <Col span={4} className="right_look">图片解析：</Col>
                         <Col span={18}>
-                            <AntUploadComponents fileList={createExamPager.state.analysisFileList} callBackParent={createExamPager.getAnalysisiImgList}></AntUploadComponents>
+                            <AntUploadForAnalysisOfCreateComponents callBackParent={createExamPager.getAnalysisiImgList}></AntUploadForAnalysisOfCreateComponents>
                         </Col>
                     </Row>
 
