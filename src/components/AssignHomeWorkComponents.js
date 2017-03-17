@@ -3,6 +3,7 @@ import { Modal, Button,message } from 'antd';
 import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox,Table,Popover } from 'antd';
 import { DatePicker } from 'antd';
 import { doWebService } from '../WebServiceHelper';
+import {getPageSize} from '../utils/Const';
 const { MonthPicker, RangePicker } = DatePicker;
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -318,7 +319,7 @@ const AssignHomeWorkComponents = React.createClass({
             subjectType:subjectType,
           });
           var pager = ret.pager;
-          assignHomeWork.setState({totalSubjectCount:parseInt(pager.pageCount)*15});
+          assignHomeWork.setState({totalSubjectCount:parseInt(pager.rsCount)});
         });
       },
       onError : function(error) {
@@ -539,7 +540,7 @@ const AssignHomeWorkComponents = React.createClass({
               <Col span={7} className="ant-form"><Table size="small"  onRowClick={assignHomeWork.onScheduleSelectChange} selectedRowKeys={assignHomeWork.selectedRowKeys}  columns={scheduleColumns}  dataSource={scheduleData} scroll={{ y: 300}}/></Col>
               <Col span={17} className="col17_le 17_hei ant-form">
                 <div className="17_hei1">
-                  <Table rowSelection={subjectRowSelection} columns={subjectColumns} dataSource={subjectData} pagination={{ total:assignHomeWork.state.totalSubjectCount,pageSize: 15,onChange:assignHomeWork.pageOnChange }}  scroll={{ y: 300}}/>
+                  <Table rowSelection={subjectRowSelection} columns={subjectColumns} dataSource={subjectData} pagination={{ total:assignHomeWork.state.totalSubjectCount,pageSize: getPageSize(),onChange:assignHomeWork.pageOnChange }}  scroll={{ y: 300}}/>
                 </div>
               </Col>
             </Row>

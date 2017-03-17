@@ -44,8 +44,14 @@ const SubjectUploadTabComponents = React.createClass({
                 {label: 'C', value: 'C'},
                 {label: 'D', value: 'D'},
             ],
-            sliderValue:4
-
+            singleAnswerOptions:[
+                <Radio key="A" value="A">A</Radio>,
+                <Radio key="B" value="B">B</Radio>,
+                <Radio key="C" value="C">C</Radio>,
+                <Radio key="D" value="D">D</Radio>
+            ],
+            sliderValue:4,
+            singleSliderValue:4
         };
     },
     /**
@@ -125,6 +131,7 @@ const SubjectUploadTabComponents = React.createClass({
             scoreChecked: false,
             scoreInputState: true,
             scoreDisable: false,
+            singleAnswer: 'A',
             mulitiAnswerDefaultValue: 'A',
             correctAnswerValue: "正确",
             mulitiAnswerOptions:[
@@ -133,8 +140,14 @@ const SubjectUploadTabComponents = React.createClass({
                 {label: 'C', value: 'C'},
                 {label: 'D', value: 'D'},
             ],
-
-            sliderValue:4
+            singleAnswerOptions:[
+                <Radio key="A" value="A">A</Radio>,
+                <Radio key="B" value="B">B</Radio>,
+                <Radio key="C" value="C">C</Radio>,
+                <Radio key="D" value="D">D</Radio>
+            ],
+            sliderValue:4,
+            singleSliderValue:4
         });
     },
 
@@ -267,7 +280,8 @@ const SubjectUploadTabComponents = React.createClass({
                 "textAnswer": answer,
                 "score": score,
                 "userId": ident,
-                "type": "C"
+                "type": "C",
+                "alterNativeAnswerCount":this.state.singleAnswerOptions.length
             };
             if (optType == "bySubjectId") {
                 batchAddSubjectBeanJson.knowledgePointId = ScheduleOrSubjectId;
@@ -537,13 +551,27 @@ const SubjectUploadTabComponents = React.createClass({
     sliderChange(value) {
         var selectArray=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
         console.log("selectArrayLength:"+selectArray.length);
-        var returnValue = selectArray[value];
         var mulitiAnswerOptions=[];
         for(var i=0;i<value;i++){
              var selectValue = {label: selectArray[i], value: selectArray[i]};
             mulitiAnswerOptions.push(selectValue);
         }
         this.setState({"mulitiAnswerOptions":mulitiAnswerOptions,"sliderValue":value});
+    },
+    /**
+     * 单选题选项自定义数量变化处理函数
+     * @param value
+     */
+    singleSliderChange(value){
+        console.log("single value:"+value);
+        var selectArray=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+        console.log("selectArrayLength:"+selectArray.length);
+        var singleAnswerOptions=[];
+        for(var i=0;i<value;i++){
+            var selectValue = <Radio key={selectArray[i]} value={selectArray[i]}>{selectArray[i]}</Radio>;
+            singleAnswerOptions.push(selectValue);
+        }
+        this.setState({"singleAnswerOptions":singleAnswerOptions,"singleSliderValue":value});
     },
 
     /**
@@ -700,17 +728,28 @@ const SubjectUploadTabComponents = React.createClass({
                                     <span className="font-14">答案：</span>
                                 </Col>
                                 <Col span={20}>
-                                    <div className="ant-form-item-control">
-                                        <RadioGroup onChange={this.singleAnswerOnChange} ref="singleAnswer"
-                                                    defaultValue={this.state.singleAnswer}>
-                                            <Radio key="A" value="A">A</Radio>
-                                            <Radio key="B" value="B">B</Radio>
-                                            <Radio key="C" value="C">C</Radio>
-                                            <Radio key="D" value="D">D</Radio>
-                                            <Radio key="E" value="E">E</Radio>
-                                            <Radio key="F" value="F">F</Radio>
-                                        </RadioGroup>
-                                    </div>
+                                    <Row>
+                                        <Col span className="ant-form-item-label ant-form-item-control timu_line">
+                                            自定义答案选项数量：
+                                        </Col>
+                                        <Col span={12}>
+                                            <Slider min={4} max={8} defaultValue={this.state.singleSliderValue} value={this.state.singleSliderValue} onChange={this.singleSliderChange} />
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <div className="ant-form-item-control">
+                                            <RadioGroup onChange={this.singleAnswerOnChange} ref="singleAnswer"
+                                                        defaultValue={this.state.singleAnswer}>
+                                                {this.state.singleAnswerOptions}
+                                                {/*<Radio key="A" value="A">A</Radio>
+                                                <Radio key="B" value="B">B</Radio>
+                                                <Radio key="C" value="C">C</Radio>
+                                                <Radio key="D" value="D">D</Radio>
+                                                <Radio key="E" value="E">E</Radio>
+                                                <Radio key="F" value="F">F</Radio>*/}
+                                            </RadioGroup>
+                                        </div>
+                                    </Row>
                                 </Col>
                             </Row>
 

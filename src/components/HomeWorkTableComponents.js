@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Table, Button,Popover,message } from 'antd';
 import { doWebService } from '../WebServiceHelper';
+import {getPageSize} from '../utils/Const';
 
 var columns = [ {
   title: '标题',
@@ -144,7 +145,7 @@ const HomeWorkTableComponents = React.createClass({
           });
         });
         var pager = ret.pager;
-        subTable.setState({totalCount:parseInt(pager.pageCount)*15});
+        subTable.setState({totalCount:parseInt(pager.rsCount)});
         subTable.setState({currentView:'homeWorkList'});
       },
       onError : function(error) {
@@ -196,7 +197,7 @@ const HomeWorkTableComponents = React.createClass({
           });
         });
         var pager = ret.pager;
-        subTable.setState({totalCount:parseInt(pager.pageCount)*15});
+        subTable.setState({totalCount:parseInt(pager.rsCount)});
         subTable.setState({currentView:'subjectList'});
       },
       onError : function(error) {
@@ -235,7 +236,7 @@ const HomeWorkTableComponents = React.createClass({
     const hasSelected = selectedRowKeys.length > 0;
     return (
       <div >
-        <Table rowSelection={rowSelection} columns={columns}  dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: 15,onChange:subTable.pageOnChange }} scroll={{ y: 400}}/>
+        <Table rowSelection={rowSelection} columns={columns}  dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: getPageSize(),onChange:subTable.pageOnChange }} scroll={{ y: 400}}/>
       </div>
     );
   },

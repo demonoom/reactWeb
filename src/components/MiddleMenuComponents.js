@@ -4,6 +4,7 @@ import { Menu, Icon,message,Dropdown } from 'antd';
 import { Badge,Pagination } from 'antd';
 import TeachingComponents from '../components/TeachingComponents';
 import { doWebService } from '../WebServiceHelper';
+import {getPageSize} from '../utils/Const';
 const SubMenu = Menu.SubMenu;
 const confirm = Modal.confirm;
 
@@ -217,7 +218,7 @@ const MiddleMenuComponents = React.createClass({
             {children}
 
           </Menu>
-          <Pagination size="small" total={this.state.lessonCount} pageSize="15" current={this.state.currentPage} onChange={this.onChange}/>
+          <Pagination size="small" total={this.state.lessonCount} pageSize={getPageSize()} current={this.state.currentPage} onChange={this.onChange}/>
       </div>
     );
   },

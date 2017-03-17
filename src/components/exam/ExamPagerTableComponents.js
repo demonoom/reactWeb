@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Table, Button,Popover,message } from 'antd';
 import { doWebService } from '../../WebServiceHelper';
+import {getPageSize} from '../../utils/Const';
 
 var columns = [ {
   title: '标题',
@@ -136,7 +137,7 @@ const ExamPagerTableComponents = React.createClass({
           });
         });
         var pager = ret.pager;
-        examPagerTable.setState({totalCount:parseInt(pager.pageCount)*15});
+        examPagerTable.setState({totalCount:parseInt(pager.rsCount)});
         examPagerTable.setState({currentView:'examPagerList'});
       },
       onError : function(error) {
@@ -185,7 +186,7 @@ const ExamPagerTableComponents = React.createClass({
           });
         });
         var pager = ret.pager;
-        examPagerTable.setState({totalCount:parseInt(pager.pageCount)*15});
+        examPagerTable.setState({totalCount:parseInt(pager.rsCount)});
         examPagerTable.setState({currentView:'subjectList'});
       },
       onError : function(error) {
@@ -220,7 +221,7 @@ const ExamPagerTableComponents = React.createClass({
     const hasSelected = selectedRowKeys.length > 0;
     return (
       <div >
-        <Table columns={columns}  dataSource={data} pagination={{ total:examPagerTable.state.totalCount,pageSize: 15,onChange:examPagerTable.pageOnChange }} scroll={{ y: 400}}/>
+        <Table columns={columns}  dataSource={data} pagination={{ total:examPagerTable.state.totalCount,pageSize: getPageSize(),onChange:examPagerTable.pageOnChange }} scroll={{ y: 400}}/>
       </div>
     );
   },

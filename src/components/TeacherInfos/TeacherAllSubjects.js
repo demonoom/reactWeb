@@ -3,6 +3,7 @@ import { Table, Button,Icon,Popover,Tooltip,message,Modal } from 'antd';
 import UseKnowledgeComponents from '../UseKnowledgeComponents';
 import SubjectEditByTextboxioTabComponents from '../SubjectEditByTextboxioTabComponents';
 import { doWebService } from '../../WebServiceHelper';
+import {getPageSize} from '../../utils/Const';
 const confirm = Modal.confirm;
 
 const columns = [{
@@ -119,7 +120,7 @@ const TeacherAllSubjects = React.createClass({
               answer:answer
             });
             var pager = ret.pager;
-            subTable.setState({totalCount:parseInt(pager.pageCount)*15});
+            subTable.setState({totalCount:parseInt(pager.rsCount)});
           });
         }
       },
@@ -224,7 +225,7 @@ const TeacherAllSubjects = React.createClass({
 		  <div className='ant-tabs-tabpane ant-tabs-tabpane-active'>
           <SubjectEditByTextboxioTabComponents ref="subjectEditTabComponents" subjectEditCallBack={subTable.subjectEditCallBack}></SubjectEditByTextboxioTabComponents>
           <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
-          <Table columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: 15,onChange:subTable.pageOnChange }} scroll={{ y: 400}}/>
+          <Table columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: getPageSize(),onChange:subTable.pageOnChange }} scroll={{ y: 400}}/>
 		  </div>
         </div>
     );

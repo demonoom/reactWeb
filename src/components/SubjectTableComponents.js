@@ -3,6 +3,7 @@ import { Table, Button,Icon,Popover,Tooltip,message,Modal,Checkbox } from 'antd'
 import UseKnowledgeComponents from './UseKnowledgeComponents';
 import SubjectEditByTextboxioTabComponents from './SubjectEditByTextboxioTabComponents';
 import { doWebService } from '../WebServiceHelper';
+import {getPageSize} from '../utils/Const';
 const confirm = Modal.confirm;
 
 const columns = [{
@@ -142,7 +143,7 @@ const SUbjectTable = React.createClass({
                 subjectOpt:subjectOpt,
               });
               var pager = ret.pager;
-              subTable.setState({totalCount:parseInt(pager.pageCount)*15});
+              subTable.setState({totalCount:parseInt(pager.rsCount)});
             });
         }
       },
@@ -334,7 +335,7 @@ const SUbjectTable = React.createClass({
               answer:answer
             });
             var pager = ret.pager;
-            subTable.setState({totalCount:parseInt(pager.pageCount)*15});
+            subTable.setState({totalCount:parseInt(pager.rsCount)});
           });
         }
       },
@@ -439,10 +440,10 @@ const SUbjectTable = React.createClass({
       delBtn = <div><Button type="primary" onClick={this.deleteAllSelectedSubjectS}
                        disabled={!hasSelected} loading={loading}
       >批量删除</Button><span style={{ marginLeft: 8 }}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span></div>;
-      subjectTable = <div className="pl_hei"><Table rowSelection={rowSelection} columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: 15,onChange:subTable.pageOnChange }} scroll={{ y: 400}}/></div>;
+      subjectTable = <div className="pl_hei"><Table rowSelection={rowSelection} columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: getPageSize(),onChange:subTable.pageOnChange }} scroll={{ y: 400}}/></div>;
     }else{
       delBtn ='';
-      subjectTable = <div className="pl_hei2"><Table columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: 15,onChange:subTable.pageOnChange }} scroll={{ y: 400}}/></div>;
+      subjectTable = <div className="pl_hei2"><Table columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: getPageSize(),onChange:subTable.pageOnChange }} scroll={{ y: 400}}/></div>;
     }
     return (
         <div >

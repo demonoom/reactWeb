@@ -35,7 +35,13 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                 {label: 'B', value: 'B'},
                 {label: 'C', value: 'C'},
                 {label: 'D', value: 'D'},
-            ]
+            ],
+            singleAnswerOptions:[
+                <Radio key="A" value="A">A</Radio>,
+                <Radio key="B" value="B">B</Radio>,
+                <Radio key="C" value="C">C</Radio>,
+                <Radio key="D" value="D">D</Radio>
+            ],
         };
     },
     /**
@@ -63,8 +69,15 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                 var response = ret.response;
                 if (subjectType == "单选题") {
                     editorContent = response.content;
+                    var choosens = response.choosens;
+                    var singleAnswerOptions=[];
+                    for(var i=0;i<choosens.length;i++){
+                        var content = choosens[i].content;
+                        var selectValue = <Radio key={content} value={content}>{content}</Radio>;
+                        singleAnswerOptions.push(selectValue);
+                    }
                     subjectUpload.setState({
-                        singleAnswer: response.answer,
+                        singleAnswer: response.answer,"singleAnswerOptions":singleAnswerOptions
                     });
                 } else if (subjectType == "多选题") {
                     muEditorContent = response.content;
@@ -553,12 +566,13 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                                         <RadioGroup onChange={this.singleAnswerOnChange} ref="singleAnswer"
                                                     defaultValue={subjectUpload.state.singleAnswer}
                                                     value={subjectUpload.state.singleAnswer}>
-                                            <Radio key="A" value="A">A</Radio>
+                                            {this.state.singleAnswerOptions}
+                                            {/*<Radio key="A" value="A">A</Radio>
                                             <Radio key="B" value="B">B</Radio>
                                             <Radio key="C" value="C">C</Radio>
                                             <Radio key="D" value="D">D</Radio>
                                             <Radio key="E" value="E">E</Radio>
-                                            <Radio key="F" value="F">F</Radio>
+                                            <Radio key="F" value="F">F</Radio>*/}
                                         </RadioGroup>
                                     </div>
                                 </Col>

@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Card, Checkbox,Collapse,Icon,Button,Pagination,message,Modal} from 'antd';
 import { doWebService } from '../../WebServiceHelper';
+import {getPageSize} from '../../utils/Const';
 import UseKnowledgeComponents from '../UseKnowledgeComponents';
 const Panel = Collapse.Panel;
 const confirm = Modal.confirm;
@@ -68,7 +69,7 @@ const TeacherAllCourseWare = React.createClass({
                     var path = e.path;
                     var pdfPath = e.pdfPath;
                     var fileType=fileName.substring(fileName.lastIndexOf(".")+1);
-                    var pointId = e.pointId;
+                    var pointId = e.point.content;
                     var createTime = courseWare.getLocalTime(e.createTime);
                     var fileTypeLogo;
                     var type = e.type;
@@ -89,13 +90,13 @@ const TeacherAllCourseWare = React.createClass({
                     }else if(fileType=="mp3"){
                         fileTypeLogo = "icon_geshi icon_mp3";
                     }
-                    activeKey.push(fileName+"#"+createTime);
+                    activeKey.push(fileName+"#"+createTime+"#"+id);
                     courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointId,createTime,fileTypeLogo,htmlPath,type,collectCount,userId]);
                 });
                 courseWare.buildKonwledgePanels(courseWareList);
                 courseWare.setState({courseListState:courseWareList});
                 var pager = ret.pager;
-                courseWare.setState({totalCount:parseInt(pager.pageCount)*15});
+                courseWare.setState({totalCount:parseInt(pager.rsCount)});
             },
             onError : function(error) {
                 message.error(error);
@@ -179,7 +180,7 @@ const TeacherAllCourseWare = React.createClass({
                 if(e[12]!=null && e[12]==sessionStorage.getItem("ident")){
                     delButton = <Button style={{ float:'right'}} icon="delete" title="删除" value={e[0]} onClick={courseWare.batchDeleteMaterial}></Button>
                 }
-                return <Panel header={<span><span type="" className={e[8]}></span><span className="name_file">{e[1]}</span> </span>}  key={e[1]+"#"+e[7]}>
+                return <Panel header={<span><span type="" className={e[8]}></span><span className="name_file">{e[1]}</span> </span>}  key={e[1]+"#"+e[7]+"#"+e[0]}>
                     <pre>
 					<div className="bnt2_tex">
                          <span className="col1">文件类型：{e[5]}</span>
@@ -221,7 +222,7 @@ const TeacherAllCourseWare = React.createClass({
                     {coursePanelChildren}
                 </Collapse>
 				</div>
-                <Pagination total={courseWare.state.totalCount} pageSize={15} current={courseWare.state.currentPage} onChange={this.onChange}/>
+                <Pagination total={courseWare.state.totalCount} pageSize={getPageSize()} current={courseWare.state.currentPage} onChange={this.onChange}/>
             </div>
         );
     },
