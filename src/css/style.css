@@ -997,6 +997,16 @@ article.content_2{
 article.content_2 img{
 	max-width:500px;
 }
+article.content_3{
+	position:relative;
+	top:10px;
+	left:0px;
+	width:500px;
+	overflow:hidden;
+}
+article.content_3 img{
+	max-width:500px;
+}
 .line_block{
 	display:inline-block;
 }
