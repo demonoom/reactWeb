@@ -303,7 +303,7 @@ const AssignHomeWorkComponents = React.createClass({
             var content = <Popover placement="rightTop"
                                    content={<article id='contentHtml' className='content Popover_width'
                                                      dangerouslySetInnerHTML={{__html: popOverContent}}></article>}>
-                <article id='contentHtml' className='content content_2'
+                <article id='contentHtml' className='content content_3'
                          dangerouslySetInnerHTML={{__html: subjectArray[1]}}></article>
             </Popover>;
             assignHomeWork.state.selectedSubjectData.push({
@@ -437,7 +437,7 @@ const AssignHomeWorkComponents = React.createClass({
                                                 total: assignHomeWork.state.selectedSubjectTotalCount,
                                                 pageSize: getPageSize(),
                                                 onChange: assignHomeWork.selectedSubjectTablePageOnChange
-                                            }} scroll={{y: 300}}/>
+                                            }} scroll={{y: 3000}}/>
                                         </div>
                                     </Col>
                                 </Row>
