@@ -49,6 +49,11 @@ module.exports = function(webpackConfig, env) {
       loader.exclude = /textboxio/;
       loader.test = /\.css$/;
     }
+    //加载第三方的样式文件---ueditor富客户端组件
+    if (loader.test.toString() === '/\\.ueditor\\.css$/') {
+      loader.exclude = /ueditor/;
+      loader.test = /\.css$/;
+    }
   });
 
   return webpackConfig;

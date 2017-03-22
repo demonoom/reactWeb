@@ -17,6 +17,7 @@ import TeacherResource from '../components/TeacherInfos/TeacherResource';
 import moment from 'moment';
 import StudyEvaluateMenu from '../components/StudyEvaluateMenu';
 import StudyEvaluateTabComponents from '../components/StudyEvaluateTabComponents';
+import AntNestTabComponents from '../components/antNest/AntNestTabComponents';
 import { LocaleProvider } from 'antd';
 import enUS from 'antd/lib/locale-provider/en_US';
 // 推荐在入口文件全局设置 locale
@@ -124,8 +125,6 @@ const MainLayout = React.createClass({
     mainLayout.setState({resouceType:resouceType});
   },
 
-
-
   render() {
     const collapse = this.state.collapse;
     //根据如下判断结果，完成对页面中部位置的渲染，不同情况，渲染不同组件
@@ -159,6 +158,16 @@ const MainLayout = React.createClass({
           <div className="ant-layout-container">
             <div className="ant-layout-content">
               {tabComponent}
+            </div>
+          </div>
+        </Col>
+      </Row>;
+    }else if(mainLayout.state.resouceType=="visitAntNest"){
+      mainContent = <Row>
+        <Col span={24}>
+          <div className="ant-layout-container">
+            <div className="ant-layout-content">
+              <AntNestTabComponents ref="antNestTabComponents" resouceType={mainLayout.state.resouceType}/>
             </div>
           </div>
         </Col>

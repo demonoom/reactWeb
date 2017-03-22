@@ -387,7 +387,7 @@ const SUbjectTable = React.createClass({
     }else if(dataFilter=="other"){
       isOwmer="N";
     }
-    subTable.setState({isOwmer});
+    subTable.setState({isOwmer,currentPage:pageNo});
     subTable.getSubjectData(ident,ScheduleOrSubjectId,pageNo,optType,knowledgeName,isOwmer);
   },
 
@@ -443,7 +443,7 @@ const SUbjectTable = React.createClass({
       subjectTable = <div className="pl_hei"><Table rowSelection={rowSelection} columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: getPageSize(),onChange:subTable.pageOnChange }} scroll={{ y: 400}}/></div>;
     }else{
       delBtn ='';
-      subjectTable = <div className="pl_hei2"><Table columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: getPageSize(),onChange:subTable.pageOnChange }} scroll={{ y: 400}}/></div>;
+      subjectTable = <div className="pl_hei2"><Table columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: getPageSize(),defaultCurrent:subTable.state.currentPage,current:subTable.state.currentPage,onChange:subTable.pageOnChange }} scroll={{ y: 400}}/></div>;
     }
     return (
         <div >

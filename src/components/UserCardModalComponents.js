@@ -71,6 +71,14 @@ const UserCardModalComponents = React.createClass({
     teacherInfo.props.callbackParent("getSubjects");
     teacherInfo.setState({ visible: false });
   },
+  /**
+   * 蚁巢入口
+   */
+  searchAntNest(){
+      // alert("蚁巢入口");
+      teacherInfo.props.callbackParent("visitAntNest");
+      teacherInfo.setState({ visible: false });
+  },
 
   render() {
     return (
@@ -104,6 +112,9 @@ const UserCardModalComponents = React.createClass({
             </Button>
             <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn ant-btn-f " onClick={teacherInfo.searchOwnerSubject}>
               我的题目
+            </Button>
+            <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn ant-btn-f " onClick={teacherInfo.searchAntNest}>
+                蚁巢
             </Button>
 			</p>
           </Modal>
