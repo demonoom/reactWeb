@@ -82,6 +82,8 @@ const Login = Form.create()(React.createClass({
                     }else{
                         loginComponent.setState({loginFailedCount:0});
                         sessionStorage.setItem("ident", response.colUid);
+                        var loginUserJson = JSON.stringify(response);
+                        sessionStorage.setItem("loginUser",loginUserJson);
                         loginComponent.getHistoryAccessPointId(response.colUid);
                         location.hash="MainLayout";
                     }

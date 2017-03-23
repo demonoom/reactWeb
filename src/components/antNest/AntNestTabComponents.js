@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
-import { Tabs, Breadcrumb, Icon,Card,Button} from 'antd';
-import { Menu, Dropdown,message,Pagination,Tag , Modal,Popover} from 'antd';
+import { Tabs, Breadcrumb, Icon,Card,Button,Row,Col} from 'antd';
+import { Menu, Dropdown,message,Pagination,Tag , Modal,Popover,Input} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import TeacherAllCourseWare from '../TeacherInfos/TeacherAllCourseWare';
 import {getPageSize} from '../../utils/Const';
@@ -8,8 +8,9 @@ import {getLocalTime} from '../../utils/Const';
 import {isEmpty} from '../../utils/Const';
 import {getAllTopic} from '../../utils/Const';
 import {getOnlyTeacherTopic} from '../../utils/Const';
-import RichEditorComponents from './RichEditorComponents';
 import UploadImgComponents from './UploadImgComponents';
+import EmotionInputComponents from './EmotionInputComponents';
+
 
 const TabPane = Tabs.TabPane;
 const confirm = Modal.confirm;
@@ -33,7 +34,9 @@ const AntNestTabComponents = React.createClass({
             currentTopicTitle:'',
             currentTopicId:'',
             discussModalVisible:false,
-            topicImgUrl:[],     //说说/话题上传的图片路径
+            topicImgUrl:[],     //说说/话题上传的图片路径,
+            topicModalType:'talk',
+            topicTitle:''
         };
     },
     /**
@@ -714,14 +717,14 @@ const AntNestTabComponents = React.createClass({
      */
     discussModalHandleOk(){
         //获取富文本框中包含表情的评论内容
-        var htmlContent = UE.getEditor('container').getContent();
-        console.log("html:"+htmlContent);
+        var inputContent = $("#emotionInput").val();
+        console.log("inputContent:"+inputContent);
         var param = {
             "method": 'addTopicCommentAndResponse2',
             "ident": sessionStorage.getItem("ident"),
             "toUserId":'-1',
             "topicId":antNest.state.currentTopicId,
-            "content":htmlContent
+            "content":inputContent
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -741,6 +744,7 @@ const AntNestTabComponents = React.createClass({
                         antNest.getTopics(1, getOnlyTeacherTopic());
                     }
                 }
+                antNest.initMyEmotionInput();
                 antNest.setState({discussModalVisible: false});
             },
             onError: function (error) {
@@ -753,13 +757,88 @@ const AntNestTabComponents = React.createClass({
      * 关闭评论弹窗
      */
     discussModalHandleCancel(){
+        antNest.initMyEmotionInput();
         antNest.setState({discussModalVisible: false});
+    },
+
+    /**
+     * 初始化表情输入框
+     */
+    initMyEmotionInput(){
+        $("#emotionInput").val("");
+        $(".emoji-wysiwyg-editor")[0].innerHTML="";
+    },
+
+    createUUID() {
+        var s = [];
+        var hexDigits = "0123456789abcdef";
+        for (var i = 0; i < 36; i++) {
+            s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+        }
+        s[14] = "4";  // bits 12-15 of the time_hi_and_version field to 0010
+        s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
+        s[8] = s[13] = s[18] = s[23] = "-";
+
+        var uuid = s.join("");
+        return uuid;
     },
 
     /**
      * 发表说说或话题
      */
     addTopicModalHandleOk(){
+        //获取富文本框中包含表情的评论内容
+        var inputContent = $("#emotionInput").val();
+        console.log("inputContent:"+inputContent);
+        var createTime = (new Date()).valueOf();
+        var uuid = antNest.createUUID();
+        var topicImageArray = antNest.state.topicImgUrl;
+        var attachMents=[];
+        for(var i=0;i<topicImageArray.length;i++){
+            var attach = {"type":1,"address":topicImageArray[i],"createTime":createTime};
+            attachMents.push(attach);
+        }
+        var topicJson={
+            "content":inputContent,
+            "fromUserId":sessionStorage.getItem("ident"),
+            "fromUser":JSON.parse(sessionStorage.getItem("loginUser")),
+            "valid":0,
+            "type":0,
+            "uuid":uuid,
+            "attachMents":attachMents,
+            "comments":[],
+            "open":0,
+        };
+        if(isEmpty(antNest.state.topicTitle)==false){
+            topicJson.type = 1;
+            topicJson.title=antNest.state.topicTitle;
+        }else{
+            topicJson.type = 0;
+        }
+        var param = {
+            "method": 'addTopic',
+            "topicJson": topicJson,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if(ret.success==true && ret.response == true){
+                    message.success("说说发表成功");
+                }else{
+                    message.error("说说发表失败");
+                }
+                $("#emotionInput").val("");
+                if (antNest.state.activeKey == "全部") {
+                    antNest.getTopics(1, getAllTopic());
+                } else {
+                    antNest.getTopics(1, getOnlyTeacherTopic());
+                }
+                antNest.initMyEmotionInput();
+                antNest.setState({addTopicModalVisible: false});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
 
     },
 
@@ -767,6 +846,7 @@ const AntNestTabComponents = React.createClass({
      * 发表说说或话题的窗口关闭响应函数
      */
     addTopicModalHandleCancel(){
+        antNest.initMyEmotionInput();
         antNest.setState({addTopicModalVisible: false});
     },
 
@@ -788,15 +868,37 @@ const AntNestTabComponents = React.createClass({
     /**
      *
      */
-    showaddTopicModal(){
-        antNest.setState({"addTopicModalVisible":true});
+    showaddTopicModal(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var optType = target.value;
+        antNest.setState({"addTopicModalVisible":true,"topicModalType":optType});
+    },
+
+    /**
+     * 话题的标题内容改变时的响应函数
+     * @param e
+     */
+    topicTitleChange(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var title = target.value;
+        antNest.setState({"topicTitle":title});
     },
 
     render() {
         var mainComponent ;
         var breadMenuTip="蚁巢";
         mainComponent = <TeacherAllCourseWare ref="courseWare"/>;
-        var toolbarExtra = <div className="ant-tabs-right"><Button onClick={antNest.showaddTopicModal}>发表说说</Button><Button>发表话题</Button></div>;
+        var toolbarExtra = <div className="ant-tabs-right"><Button value="talk" onClick={antNest.showaddTopicModal}>发表说说</Button><Button value="topic" onClick={antNest.showaddTopicModal}>发表话题</Button></div>;
         var returnToolBar = <div className="ant-tabs-right"><Button onClick={antNest.returnTopicList}>返回</Button></div>
         var tabComponent;
         if(antNest.state.optType=="getTopicById"){
@@ -842,21 +944,35 @@ const AntNestTabComponents = React.createClass({
                 </TabPane>
             </Tabs>;
         }
+        var topicTitle;
+        if(antNest.state.topicModalType=="topic"){
+            topicTitle = <Row>
+                <Col span={3}>标题：</Col>
+                <Col span={15}><Input onChange={antNest.topicTitleChange} /></Col>
+            </Row>;
+        }
         return (
             <div>
                 <Modal title="发布评论" visible={antNest.state.discussModalVisible}
                        onOk={antNest.discussModalHandleOk} onCancel={antNest.discussModalHandleCancel}
                 >
                     <div>
-                        <RichEditorComponents/>
+                        <EmotionInputComponents></EmotionInputComponents>
                     </div>
                 </Modal>
                 <Modal title="发布说说" visible={antNest.state.addTopicModalVisible}
                        onOk={antNest.addTopicModalHandleOk} onCancel={antNest.addTopicModalHandleCancel}
                 >
                     <div>
-                        <RichEditorComponents/>
-                        <UploadImgComponents callBackParent={antNest.getUploadedImgList}></UploadImgComponents>
+                        {topicTitle}
+                        <Row>
+                            <Col span={3}>内容：</Col>
+                            <Col span={15}><EmotionInputComponents></EmotionInputComponents></Col>
+                        </Row>
+                        <Row>
+                            <Col span={3}>附件：</Col>
+                            <Col span={15}><UploadImgComponents callBackParent={antNest.getUploadedImgList}></UploadImgComponents></Col>
+                        </Row>
                     </div>
 
                 </Modal>
