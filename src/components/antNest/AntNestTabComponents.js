@@ -109,7 +109,7 @@ const AntNestTabComponents = React.createClass({
         var topicTitle;
         //话题标题不为空，且是在全部话题列表中的时候、处于有效状态，类型为话题，而非说说时才需要显示话题标题
         if(isEmpty(topicObj.title)==false && useType==0 && topicObj.valid==0 && topicObj.type==1){
-            topicTitle = <a value={topicObj.id} onClick={antNest.getTopicPartakeInfo} className="topics">#{topicObj.title}#</a>
+            topicTitle = <a value={topicObj.id} title={topicObj.id} onClick={antNest.getTopicPartakeInfo} className="topics">#{topicObj.title}#</a>
         }
         //点赞用户span标记数组
         var likeUsersArray = [];
@@ -201,7 +201,7 @@ const AntNestTabComponents = React.createClass({
             parTakeCountCard = <Card>
                 <ul>
                     <span>参与{parTakeCountInfo.participatecount}人,未参与{parTakeCountInfo.unParticipatecount}人</span>
-                    <span><Button>立即参与</Button></span>
+                    <span><Button value={topicObj.id} onClick={antNest.showPartakeModal}>立即参与</Button></span>
                 </ul>
             </Card>;
         }
@@ -402,7 +402,7 @@ const AntNestTabComponents = React.createClass({
         }else{
             target = e.target;
         }
-        var topicId = target.value;
+        var topicId = target.title;
         var initPageNo = 1;
         antNest.getTopicPartakeById(topicId,initPageNo);
     },
@@ -807,7 +807,7 @@ const AntNestTabComponents = React.createClass({
         var topicImageArray = antNest.state.topicImgUrl;
         var attachMents=[];
         for(var i=0;i<topicImageArray.length;i++){
-            var attach = {"type":1,"address":topicImageArray[i],"createTime":createTime};
+            var attach = {"type":1,"address":topicImageArray[i],"createTime":createTime,"user":JSON.parse(sessionStorage.getItem("loginUser"))};
             attachMents.push(attach);
         }
         var topicJson={
@@ -878,7 +878,7 @@ const AntNestTabComponents = React.createClass({
         }
     },
     /**
-     *
+     * 显示发表说说/话题的窗口
      */
     showaddTopicModal(e){
         var target = e.target;
@@ -904,6 +904,32 @@ const AntNestTabComponents = React.createClass({
         }
         var title = target.value;
         antNest.setState({"topicTitle":title});
+    },
+    
+    showPartakeModal(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var topicId = target.value;
+        console.log("topicId:"+topicId);
+        antNest.setState({"partakeModalVisible":true});
+    },
+
+    /**
+     * 立即参与窗口的确定响应函数
+     */
+    partakeModalHandleOk(){
+        antNest.setState({"partakeModalVisible":false});
+    },
+
+    /**
+     * 立即参与窗口的取消响应函数
+     */
+    partakeModalHandleCancel(){
+        antNest.setState({"partakeModalVisible":false});
     },
 
     render() {
@@ -969,7 +995,10 @@ const AntNestTabComponents = React.createClass({
                        onOk={antNest.discussModalHandleOk} onCancel={antNest.discussModalHandleCancel}
                 >
                     <div>
-                        <EmotionInputComponents></EmotionInputComponents>
+                        <Row>
+                            <Col span={3}>内容：</Col>
+                            <Col span={15}><EmotionInputComponents></EmotionInputComponents></Col>
+                        </Row>
                     </div>
                 </Modal>
                 <Modal title="发布说说" visible={antNest.state.addTopicModalVisible}
@@ -977,6 +1006,21 @@ const AntNestTabComponents = React.createClass({
                 >
                     <div>
                         {topicTitle}
+                        <Row>
+                            <Col span={3}>内容：</Col>
+                            <Col span={15}><EmotionInputComponents></EmotionInputComponents></Col>
+                        </Row>
+                        <Row>
+                            <Col span={3}>附件：</Col>
+                            <Col span={15}><UploadImgComponents callBackParent={antNest.getUploadedImgList}></UploadImgComponents></Col>
+                        </Row>
+                    </div>
+
+                </Modal>
+                <Modal title="立即参与" visible={antNest.state.partakeModalVisible}
+                       onOk={antNest.partakeModalHandleOk} onCancel={antNest.partakeModalHandleCancel}
+                >
+                    <div>
                         <Row>
                             <Col span={3}>内容：</Col>
                             <Col span={15}><EmotionInputComponents></EmotionInputComponents></Col>

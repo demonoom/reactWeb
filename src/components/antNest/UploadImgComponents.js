@@ -5,12 +5,16 @@ const UploadImgComponents = React.createClass({
 
     getInitialState() {
         antUpload = this;
-        var defaultFileList = [];
         return {
-            defaultFileList:defaultFileList,
+            defaultFileList:[],
             previewVisible: false,
             previewImage: '',
         };
+    },
+
+    componentDidMount(){
+        alert("123");
+        antUpload.setState({"defaultFileList":[]});
     },
 
 
@@ -22,7 +26,7 @@ const UploadImgComponents = React.createClass({
     },
 
     handleCancel(){
-        antUpload.setState({ previewVisible: false })
+        antUpload.setState({ previewVisible: false ,"defaultFileList":[]})
     },
 
     render() {
@@ -30,7 +34,7 @@ const UploadImgComponents = React.createClass({
         const props = {
             action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
             listType: 'picture-card',
-            defaultFileList: [],
+            defaultFileList: antUpload.state.defaultFileList,
             onPreview:antUpload.handlePreview,
             beforeUpload(file){
                 var fileType = file.type;
@@ -51,12 +55,8 @@ const UploadImgComponents = React.createClass({
                     }
                 }
                 if (info.file.status === 'done') {
-                    var uid = info.file.uid;
-                    var fileName = info.file.name;
-                    var url=info.file.response;
-                    var thumbUrl=info.file.thumbUrl;
                     antUpload.props.callBackParent(info.file);
-                    antUpload.setState({uploadPercent:0,progressState:'none'});
+                    antUpload.setState({uploadPercent:0,progressState:'none',"defaultFileList":[]});
                     message.success(`${info.file.name} 文件上传成功`,5);
                 } else if (info.file.status === 'error') {
                     message.error(`${info.file.name} 文件上传失败.`,5);
