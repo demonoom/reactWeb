@@ -36,7 +36,9 @@ const AntNestTabComponents = React.createClass({
             discussModalVisible:false,
             topicImgUrl:[],     //说说/话题上传的图片路径,
             topicModalType:'talk',
-            topicTitle:''
+            topicTitle:'',
+            toUserId:-1, //评论指定人或直接评论,评论指定人时,值为真实id，否则为-1
+            replayToUserTopicId:''
         };
     },
     /**
@@ -135,7 +137,7 @@ const AntNestTabComponents = React.createClass({
                     {/*<span><article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article></span>*/}
                     <span style={{marginLeft:'15px'}}>
                         <Button value={e.id} icon="delete" shape="circle" type="dashed" onClick={antNest.deleteTopicComment}></Button>
-                        <Button value={e.id+"#"+e.user.colUid} icon="message" shape="circle" type="dashed" onClick={antNest.replayTopicComment}></Button>
+                        <Button value={topicObj.id+"#"+e.user.colUid} icon="message" shape="circle" type="dashed" onClick={antNest.showDiscussModal}></Button>
                     </span>
                 </li>;
                 answerUsersArray.push(answerUserInfo);
@@ -232,6 +234,10 @@ const AntNestTabComponents = React.createClass({
                         var answerUserInfo = <li>
                             <span>{e.user.userName}:</span>
                             <span><article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article></span>
+                            <span style={{marginLeft:'15px'}}>
+                                <Button value={e.id} icon="delete" shape="circle" type="dashed" onClick={antNest.deleteTopicComment}></Button>
+                                <Button value={topicReplayInfo.id+"#"+e.user.colUid} icon="message" shape="circle" type="dashed" onClick={antNest.showDiscussModal}></Button>
+                            </span>
                         </li>;
                         replayAnswerUsersArray.push(answerUserInfo);
                     }
@@ -287,7 +293,7 @@ const AntNestTabComponents = React.createClass({
                         <Button value={topicReplayInfo.id} icon="delete" onClick={antNest.deleteTopic}>删除</Button>
                         <Button value={topicObj.id+"#"+topicReplayInfo.id} icon="to-top" onClick={antNest.setTopicToTop}>置顶</Button>
                         {replayPraiseButton}
-                        <Button icon="message" value={topicReplayInfo.id} onClick={antNest.showDiscussModal}>评论</Button>
+                        <Button icon="message" value={topicReplayInfo.id+"#toUser"} onClick={antNest.showDiscussModal}>评论</Button>
                     </ul>
                     <ul>
                         {replayCardForSingle}
@@ -716,6 +722,10 @@ const AntNestTabComponents = React.createClass({
         });
     },
 
+    /**
+     * 弹出评论窗口
+     * @param e
+     */
     showDiscussModal(e){
         var target = e.target;
         if(navigator.userAgent.indexOf("Chrome") > -1){
@@ -723,8 +733,19 @@ const AntNestTabComponents = React.createClass({
         }else{
             target = e.target;
         }
-        var topicId = target.value;
-        antNest.setState({discussModalVisible: true,"currentTopicId":topicId});
+        var topicIdAndUserId = target.value;
+        var discussArray = topicIdAndUserId.split("#");
+        var topicId = discussArray[0];
+        var toUserId;
+        if(discussArray.length==1){
+            antNest.setState({discussModalVisible: true,"currentTopicId":topicId});
+        }else if(discussArray.length>1 && discussArray[1]=="toUser"){
+            antNest.setState({discussModalVisible: true,"replayToUserTopicId":topicId});
+        }else{
+            //评论指向具体人的id
+            toUserId = discussArray[1];
+            antNest.setState({discussModalVisible: true,"replayTopicId":topicId,"toUserId":toUserId});
+        }
     },
 
     /**
@@ -734,11 +755,23 @@ const AntNestTabComponents = React.createClass({
         //获取富文本框中包含表情的评论内容
         var inputContent = $("#emotionInput").val();
         console.log("inputContent:"+inputContent);
+        var toUserId = -1;
+        if(isEmpty(antNest.state.toUserId)==false){
+            toUserId = antNest.state.toUserId;
+        }
+        var topicId;
+        if(isEmpty(antNest.state.replayTopicId)==false){
+            topicId = antNest.state.replayTopicId;
+        }else if(isEmpty(antNest.state.replayToUserTopicId)==false){
+            topicId = antNest.state.replayToUserTopicId;
+        }else{
+            topicId = antNest.state.currentTopicId;
+        }
         var param = {
             "method": 'addTopicCommentAndResponse2',
             "ident": sessionStorage.getItem("ident"),
-            "toUserId":'-1',
-            "topicId":antNest.state.currentTopicId,
+            "toUserId":toUserId,
+            "topicId":topicId,
             "content":inputContent
         };
         doWebService(JSON.stringify(param), {
@@ -760,7 +793,7 @@ const AntNestTabComponents = React.createClass({
                     }
                 }
                 antNest.initMyEmotionInput();
-                antNest.setState({discussModalVisible: false});
+                antNest.setState({discussModalVisible: false,"toUserId":-1,"replayTopicId":'',"replayToUserTopicId":''});
             },
             onError: function (error) {
                 message.error(error);
@@ -924,7 +957,14 @@ const AntNestTabComponents = React.createClass({
      * 评论某个人的回复
      */
     replayTopicComment(){
-
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var topicId = target.value;
+        console.log("topicId:"+topicId);
     },
 
     /**
@@ -1000,7 +1040,7 @@ const AntNestTabComponents = React.createClass({
         }
         return (
             <div>
-                <Modal title="发布评论" visible={antNest.state.discussModalVisible}
+                <Modal title="评论" visible={antNest.state.discussModalVisible}
                        onOk={antNest.discussModalHandleOk} onCancel={antNest.discussModalHandleCancel}
                 >
                     <div>
