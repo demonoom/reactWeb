@@ -13,7 +13,6 @@ const UploadImgComponents = React.createClass({
     },
 
     componentDidMount(){
-        alert("123");
         antUpload.setState({"defaultFileList":[]});
     },
 

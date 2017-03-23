@@ -133,7 +133,10 @@ const AntNestTabComponents = React.createClass({
                     <span>{e.user.userName}:</span>
                     <span>{e.content}</span>
                     {/*<span><article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article></span>*/}
-                    <span style={{marginLeft:'15px'}}><Button value={e.id} icon="delete" shape="circle" type="dashed" onClick={antNest.deleteTopicComment}></Button></span>
+                    <span style={{marginLeft:'15px'}}>
+                        <Button value={e.id} icon="delete" shape="circle" type="dashed" onClick={antNest.deleteTopicComment}></Button>
+                        <Button value={e.id+"#"+e.user.colUid} icon="delete" shape="circle" type="dashed" onClick={antNest.replayTopicComment}></Button>
+                    </span>
                 </li>;
                 answerUsersArray.push(answerUserInfo);
             }
@@ -916,6 +919,12 @@ const AntNestTabComponents = React.createClass({
         var topicId = target.value;
         console.log("topicId:"+topicId);
         antNest.setState({"partakeModalVisible":true});
+    },
+    /**
+     * 评论某个人的回复
+     */
+    replayTopicComment(){
+
     },
 
     /**
