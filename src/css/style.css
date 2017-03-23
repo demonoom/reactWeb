@@ -1791,8 +1791,33 @@ a {
     border-radius: 50%;
 	cursor:pointer;
 }
+.antnest_name{
+	font-weight:bold;
+	color:#333 !important
+}
 .antnest_pl{
 	margin-left:58px;
 }
+.antnest-card{
+	margin-bottom:15px;
+	}
+.antnest-card .ant-card-head{
+	border-bottom:none;
+	height:100%;
+	line-height:23px;
+}
 .antnest_talk{
-	margin-right:12px;}
+	margin-right:12px;
+	}
+.antnest_head span{
+	margin-right:8px;
+	}
+.ant-card:hover{
+	box-shadow:none !important
+}
+a.topics{ 
+    font-size:14px;
+}
+a.topics:hover{
+	color:#44A6FF
+}

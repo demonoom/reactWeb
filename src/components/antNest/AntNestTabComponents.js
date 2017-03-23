@@ -106,7 +106,7 @@ const AntNestTabComponents = React.createClass({
         var topicTitle;
         //话题标题不为空，且是在全部话题列表中的时候、处于有效状态，类型为话题，而非说说时才需要显示话题标题
         if(isEmpty(topicObj.title)==false && useType==0 && topicObj.valid==0 && topicObj.type==1){
-            topicTitle = <Button value={topicObj.id} onClick={antNest.getTopicPartakeInfo}>#{topicObj.title}#</Button>
+            topicTitle = <a value={topicObj.id} onClick={antNest.getTopicPartakeInfo} className="topics">#{topicObj.title}#</a>
         }
         //点赞用户span标记数组
         var likeUsersArray = [];
@@ -282,8 +282,8 @@ const AntNestTabComponents = React.createClass({
             });
         }
 
-         var cardObj = <Card  style={{ marginBottom: '15px' }} title={<div><span className="antnest_user">{userHeadPhoto}</span>
-                                <span>{topicObj.fromUser.userName}</span>
+         var cardObj = <Card className="antnest-card" title={<div className="antnest_head"><span className="antnest_user">{userHeadPhoto}</span>
+                                <span className="antnest_name">{topicObj.fromUser.userName}</span>
                                 <span>{topicTitle}</span></div>} bordered={false}>
              <ul>
                  <li>
