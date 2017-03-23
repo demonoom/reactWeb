@@ -135,7 +135,7 @@ const AntNestTabComponents = React.createClass({
                     {/*<span><article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article></span>*/}
                     <span style={{marginLeft:'15px'}}>
                         <Button value={e.id} icon="delete" shape="circle" type="dashed" onClick={antNest.deleteTopicComment}></Button>
-                        <Button value={e.id+"#"+e.user.colUid} icon="delete" shape="circle" type="dashed" onClick={antNest.replayTopicComment}></Button>
+                        <Button value={e.id+"#"+e.user.colUid} icon="message" shape="circle" type="dashed" onClick={antNest.replayTopicComment}></Button>
                     </span>
                 </li>;
                 answerUsersArray.push(answerUserInfo);
