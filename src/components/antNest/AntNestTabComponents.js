@@ -152,10 +152,10 @@ const AntNestTabComponents = React.createClass({
             var attachMentType = e.type;
             if(attachMentType==1){
                 //图片附件
-                attachMents = <span className="layout_logo"><img src={e.address}/></span>;
+                attachMents = <span className="antnest_user"><img src={e.address}/></span>;
             }else if(attachMentType==4){
                 //mp4附件
-                attachMents = <span className="layout_logo">
+                attachMents = <span className="antnest_user">
                     <a href={e.address} target="_blank">
                         <img src={e.cover}/><span>{e.content}</span>
                     </a>
@@ -262,7 +262,7 @@ const AntNestTabComponents = React.createClass({
                     </Card>;
                 }
 
-                var topicReplayCard = <Card  style={{ marginBottom: '15px' }} title={<span className="layout_logo">{replayUserHeadPhoto}
+                var topicReplayCard = <Card  style={{ marginBottom: '15px' }} title={<span className="antnest_user">{replayUserHeadPhoto}
                     <span>{topicReplayInfo.fromUser.userName}</span></span>}>
                     <ul>
                         {topicReplayInfo.content}
@@ -282,9 +282,9 @@ const AntNestTabComponents = React.createClass({
             });
         }
 
-         var cardObj = <Card  style={{ marginBottom: '15px' }} title={<span className="layout_logo">{userHeadPhoto}
+         var cardObj = <Card  style={{ marginBottom: '15px' }} title={<div><span className="antnest_user">{userHeadPhoto}</span>
                                 <span>{topicObj.fromUser.userName}</span>
-                                <span>{topicTitle}</span> </span>} bordered={false}>
+                                <span>{topicTitle}</span></div>} bordered={false}>
              <ul>
                  <li>
                      {/*<p>{topicObj.content}</p>*/}
@@ -796,7 +796,7 @@ const AntNestTabComponents = React.createClass({
         var mainComponent ;
         var breadMenuTip="蚁巢";
         mainComponent = <TeacherAllCourseWare ref="courseWare"/>;
-        var toolbarExtra = <div className="ant-tabs-right"><Button onClick={antNest.showaddTopicModal}>发表说说</Button><Button>发表话题</Button></div>;
+        var toolbarExtra = <div className="ant-tabs-right"><Button onClick={antNest.showaddTopicModal} className="antnest_talk">发表说说</Button><Button>发表话题</Button></div>;
         var returnToolBar = <div className="ant-tabs-right"><Button onClick={antNest.returnTopicList}>返回</Button></div>
         var tabComponent;
         if(antNest.state.optType=="getTopicById"){
@@ -809,7 +809,7 @@ const AntNestTabComponents = React.createClass({
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab={antNest.state.currentTopicTitle} key={antNest.state.currentTopicTitle}>
-                    <div style={{ background: '#ECECEC', padding: '30px' ,overflow:'scroll' }}>
+                    <div className="antnest_cont">
                         {antNest.state.topicCardList}
                     </div>
                     <Pagination key="teacher" total={antNest.state.parTakeTotalCount} pageSize={getPageSize()} current={antNest.state.currentPartakePage}
@@ -827,14 +827,14 @@ const AntNestTabComponents = React.createClass({
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab="全部" key="全部">
-                    <div style={{ background: '#ECECEC', padding: '30px' ,overflow:'scroll' }}>
+                    <div className="antnest_cont">
                         {antNest.state.topicCardList}
                     </div>
                     <Pagination key="all" total={antNest.state.totalCount} pageSize={getPageSize()} current={antNest.state.currentPage}
                                 onChange={antNest.pageOnChange}/>
                 </TabPane>
                 <TabPane tab="只看老师" key="只看老师">
-                    <div style={{ background: '#ECECEC', padding: '30px' ,overflow:'scroll' }}>
+                    <div className="antnest_cont">
                         {antNest.state.topicCardList}
                     </div>
                     <Pagination key="allTeacher" total={antNest.state.totalCount} pageSize={getPageSize()} current={antNest.state.currentPage}

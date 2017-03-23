@@ -1776,3 +1776,23 @@ a {
 	line-height:22px !important;
 	float:left;
 }
+.antnest_cont{
+	padding:15px 5px;
+	overflow:scroll;
+}
+.antnest_user{
+	width:48px;
+	height:48px;
+	float:left
+	}
+.antnest_user img{
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+	cursor:pointer;
+}
+.antnest_pl{
+	margin-left:58px;
+}
+.antnest_talk{
+	margin-right:12px;}
