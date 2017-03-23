@@ -109,7 +109,7 @@ const AntNestTabComponents = React.createClass({
         var topicTitle;
         //话题标题不为空，且是在全部话题列表中的时候、处于有效状态，类型为话题，而非说说时才需要显示话题标题
         if(isEmpty(topicObj.title)==false && useType==0 && topicObj.valid==0 && topicObj.type==1){
-            topicTitle = <Button value={topicObj.id} onClick={antNest.getTopicPartakeInfo}>#{topicObj.title}#</Button>
+            topicTitle = <a value={topicObj.id} onClick={antNest.getTopicPartakeInfo} className="topics">#{topicObj.title}#</a>
         }
         //点赞用户span标记数组
         var likeUsersArray = [];
@@ -155,10 +155,10 @@ const AntNestTabComponents = React.createClass({
             var attachMentType = e.type;
             if(attachMentType==1){
                 //图片附件
-                attachMents = <span className="layout_logo"><img src={e.address}/></span>;
+                attachMents = <span className="antnest_user"><img src={e.address}/></span>;
             }else if(attachMentType==4){
                 //mp4附件
-                attachMents = <span className="layout_logo">
+                attachMents = <span className="antnest_user">
                     <a href={e.address} target="_blank">
                         <img src={e.cover}/><span>{e.content}</span>
                     </a>
@@ -171,13 +171,16 @@ const AntNestTabComponents = React.createClass({
         //如果点赞和回复信息都存在，则在card的title部分显示点赞，content部分显示回复
         //否则只需要在内容区域显示即可
         if(likeUsersArray.length!=0 && answerUsersArray.length!=0){
-            replayCard = <Card title={<span><Button icon="like"></Button> {likeUsersArray}</span>}>
+            replayCard = <Card>
+                <ul>
+                    <span><Button icon="like"></Button> {likeUsersArray}</span>
+                </ul>
                 <ul>
                     {answerUsersArray}
                 </ul>
             </Card>;
         }else if(likeUsersArray.length!=0 && answerUsersArray.length==0 ){
-            replayCard = <Card >
+            replayCard = <Card>
                 <span><Button icon="like"></Button> {likeUsersArray}</span>
             </Card>;
         }else if(likeUsersArray.length==0 && answerUsersArray.length!=0 ){
@@ -195,7 +198,7 @@ const AntNestTabComponents = React.createClass({
         //参与人数显示card
         var parTakeCountCard;
         if(isEmpty(parTakeCountInfo)==false){
-            parTakeCountCard = <Card >
+            parTakeCountCard = <Card>
                 <ul>
                     <span>参与{parTakeCountInfo.participatecount}人,未参与{parTakeCountInfo.unParticipatecount}人</span>
                     <span><Button>立即参与</Button></span>
@@ -248,25 +251,31 @@ const AntNestTabComponents = React.createClass({
                 //否则只需要在内容区域显示即可
                 var replayCardForSingle;
                 if(replayLikeUsersArray.length!=0 && replayAnswerUsersArray.length!=0){
-                    replayCardForSingle = <Card title={<span><Button icon="like"></Button> {replayLikeUsersArray}</span>}>
+                    replayCardForSingle = <Card>
+                        <ul>
+                            <span><Button icon="like"></Button> {replayLikeUsersArray}</span>
+                        </ul>
                         <ul>
                             {replayAnswerUsersArray}
                         </ul>
                     </Card>;
                 }else if(replayLikeUsersArray.length!=0 && replayAnswerUsersArray.length==0 ){
-                    replayCardForSingle = <Card >
+                    replayCardForSingle = <Card>
                         <span><Button icon="like"></Button> {replayLikeUsersArray}</span>
                     </Card>;
                 }else if(replayLikeUsersArray.length==0 && replayAnswerUsersArray.length!=0 ){
-                    replayCardForSingle = <Card >
+                    replayCardForSingle = <Card>
                         <ul>
                             {replayAnswerUsersArray}
                         </ul>
                     </Card>;
                 }
 
-                var topicReplayCard = <Card  style={{ marginBottom: '15px' }} title={<span className="layout_logo">{replayUserHeadPhoto}
-                    <span>{topicReplayInfo.fromUser.userName}</span></span>}>
+                var topicReplayCard = <Card  style={{ marginBottom: '15px' }}>
+                    <ul>
+                        <span className="antnest_user">{replayUserHeadPhoto}
+                            <span>{topicReplayInfo.fromUser.userName}</span></span>
+                    </ul>
                     <ul>
                         {topicReplayInfo.content}
                     </ul>
@@ -285,10 +294,13 @@ const AntNestTabComponents = React.createClass({
             });
         }
 
-         var cardObj = <Card  style={{ marginBottom: '15px' }} title={<span className="layout_logo">{userHeadPhoto}
-                                <span>{topicObj.fromUser.userName}</span>
-                                <span>{topicTitle}</span> </span>} bordered={false}>
+         var cardObj = <Card className="antnest-card" bordered={false}>
              <ul>
+                 <li>
+                     <div className="antnest_head"><span className="antnest_user">{userHeadPhoto}</span>
+                         <span className="antnest_name">{topicObj.fromUser.userName}</span>
+                         <span>{topicTitle}</span></div>
+                 </li>
                  <li>
                      {/*<p>{topicObj.content}</p>*/}
                      {topicObj.content}
@@ -898,7 +910,7 @@ const AntNestTabComponents = React.createClass({
         var mainComponent ;
         var breadMenuTip="蚁巢";
         mainComponent = <TeacherAllCourseWare ref="courseWare"/>;
-        var toolbarExtra = <div className="ant-tabs-right"><Button value="talk" onClick={antNest.showaddTopicModal}>发表说说</Button><Button value="topic" onClick={antNest.showaddTopicModal}>发表话题</Button></div>;
+        var toolbarExtra = <div className="ant-tabs-right"><Button value="talk" onClick={antNest.showaddTopicModal} className="antnest_talk">发表说说</Button><Button value="topic" onClick={antNest.showaddTopicModal}>发表话题</Button></div>;
         var returnToolBar = <div className="ant-tabs-right"><Button onClick={antNest.returnTopicList}>返回</Button></div>
         var tabComponent;
         if(antNest.state.optType=="getTopicById"){
@@ -911,7 +923,7 @@ const AntNestTabComponents = React.createClass({
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab={antNest.state.currentTopicTitle} key={antNest.state.currentTopicTitle}>
-                    <div style={{ background: '#ECECEC', padding: '30px' ,overflow:'scroll' }}>
+                    <div className="antnest_cont">
                         {antNest.state.topicCardList}
                     </div>
                     <Pagination key="teacher" total={antNest.state.parTakeTotalCount} pageSize={getPageSize()} current={antNest.state.currentPartakePage}
@@ -929,14 +941,14 @@ const AntNestTabComponents = React.createClass({
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab="全部" key="全部">
-                    <div style={{ background: '#ECECEC', padding: '30px' ,overflow:'scroll' }}>
+                    <div className="antnest_cont">
                         {antNest.state.topicCardList}
                     </div>
                     <Pagination key="all" total={antNest.state.totalCount} pageSize={getPageSize()} current={antNest.state.currentPage}
                                 onChange={antNest.pageOnChange}/>
                 </TabPane>
                 <TabPane tab="只看老师" key="只看老师">
-                    <div style={{ background: '#ECECEC', padding: '30px' ,overflow:'scroll' }}>
+                    <div className="antnest_cont">
                         {antNest.state.topicCardList}
                     </div>
                     <Pagination key="allTeacher" total={antNest.state.totalCount} pageSize={getPageSize()} current={antNest.state.currentPage}
