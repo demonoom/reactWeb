@@ -13,16 +13,12 @@
   <script type="text/javascript" src="../jquerylib/jquery.form.js"></script>
   <script type="text/javascript" src="../jquerylib/jquery.jsonp.js"></script>
   <script type="text/javascript" src="../textboxio/textboxio.js"></script>
-  <!-- 配置文件 -->
-  <script type="text/javascript" src="../ueditor/ueditor.config.js"></script>
-  <!-- 编辑器源码文件 -->
-  <script type="text/javascript" src="../ueditor/ueditor.all.js"></script>
-  <script type="text/javascript" src="../ueditor/ueditor.parse.js"></script>
   <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/style.css?v=1">
-  <!-- emoji picker  -->
+  <!-- emoji picker start -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
   <link href="../emojiPicker/lib/css/nanoscroller.css" rel="stylesheet">
   <link href="../emojiPicker/lib/css/emoji.css" rel="stylesheet">
+  <!-- emoji picker end -->
   <script type="text/javascript">
     //以下声明的对象为全局的textboxio组件对象
     var mytextareaSingleEditor;
@@ -56,26 +52,13 @@
         }
       }
     };
-  //此处的几个全局对象用来完成题目修改时，向ckEditor传递修改数据用
+  //此处的几个全局对象用来完成题目修改时，向textboxio传递修改数据用
    var editorContent="";
    var muEditorContent="";
    var correctEditorContent="";
    var simpleEditorContent="";
    var answerContent="";
    var toolbarKey="";
-
-    mytextareaSingleEditor.events.dirty.addListener(function () {
-      mytextareaSingleEditor.mode.set("code");
-//       console.log('editor content is now dirty', mytextareaSingleEditor.element());
-      mytextareaSingleEditor.mode.set("design");
-       console.log('mytextareaSingleEditor.mode.get()====>', mytextareaSingleEditor.mode.get())
-    });
-    mytextareaSingleEditor.events.focus.addListener(function () {
-      if(mytextareaSingleEditor.mode.get()=="code"){
-        mytextareaSingleEditor.mode.set("design");
-      }
-       console.log('this editor has focus', mytextareaSingleEditor.element())
-    });
   </script>
 
 </head>

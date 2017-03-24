@@ -9,7 +9,7 @@ const AntUploadForAnalysisOfCreateComponents = React.createClass({
         console.log("subjectInfo"+antUpload.props.params);
         var isDisabled = false;
         if(typeof(antUpload.props.fileList)!="undefined" && antUpload.props.fileList.length!=0){
-            alert("len:"+antUpload.props.fileList.length);
+            // alert("len:"+antUpload.props.fileList.length);
             defaultFileList = antUpload.props.fileList ;
             isDisabled = true;
         }
@@ -23,12 +23,12 @@ const AntUploadForAnalysisOfCreateComponents = React.createClass({
     },
 
     componentDidMount(){
-        alert("antUpload.props.params:"+antUpload.props.fileList.length);
+        // alert("antUpload.props.params:"+antUpload.props.fileList.length);
     },
 
     componentWillReceiveProps(){
         var defaultFileList = [];
-        alert("len in rec:"+antUpload.props.fileList.length);
+        // alert("len in rec:"+antUpload.props.fileList.length);
         if(typeof(antUpload.props.fileList)!="undefined" && antUpload.props.fileList.length!=0){
             defaultFileList = [antUpload.props.fileList] ;
             antUpload.setState({disabled:true});

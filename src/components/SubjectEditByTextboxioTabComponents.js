@@ -239,7 +239,8 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
         var score = this.state.score;
         //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
         if (this.state.scoreDisable == true) {
-            score = this.state.scoreDefinedValue;
+            // score = this.state.scoreDefinedValue;
+            score =this.refs.scoreDefined.refs.input.value;
         }
         var subjectName = mytextareaSingleModifyEditor.content.get();
         // subjectName = subjectName.replace(/\+/g, "%2B"); //将+号替换为十六进制
@@ -274,7 +275,8 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
         var score = this.state.score;
         //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
         if (this.state.scoreDisable == true) {
-            score = this.state.scoreDefinedValue;
+            // score = this.state.scoreDefinedValue;
+            score =this.refs.scoreDefined.refs.input.value;
         }
         var subjectName = mytextareaMulitiSelectModifyEditor.content.get();
         //将获取的多选答案数组转换为字符串
@@ -311,7 +313,8 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
         var score = this.state.score;
         //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
         if (this.state.scoreDisable == true) {
-            score = this.state.scoreDefinedValue;
+            // score = this.state.scoreDefinedValue;
+            score =this.refs.scoreDefined.refs.input.value;
         }
         var subjectName = mytextareaCorrectModifyEditor.content.get();
         var answer = this.state.correctAnswerValue;
@@ -346,7 +349,8 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
         var score = this.state.score;
         //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
         if (this.state.scoreDisable == true) {
-            score = this.state.scoreDefinedValue;
+            // score = this.state.scoreDefinedValue;
+            score =this.refs.scoreDefined.refs.input.value;
         }
         var subjectName = mytextareaSimpleAnswerModifyEditor.content.get();
         var answer = mytextareaAnswerModifyEditor.content.get();
@@ -449,8 +453,6 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
 
                             <Col span={8} className="right_ri"><span><Input ref="scoreDefined"
                                                                             defaultValue={this.state.scoreDefinedValue}
-                                                                            value={this.state.scoreDefinedValue}
-                                                                            onChange={this.onScoreDefinedValueChange}
                                                                             placeholder="请输入自定义分值"
                                                                             disabled={this.state.scoreInputState}/></span></Col>
                             <Col span={6} className="right_ri custom—1"><Checkbox
