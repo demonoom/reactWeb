@@ -138,9 +138,9 @@ const AntNestTabComponents = React.createClass({
                     <span>{e.content}</span>
                     {/*<span><article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article></span>*/}
                     <span className="topics_reply">
-                        <a value={e.id} className="topics_btn antnest_talk topics_a"  type="dashed" onClick={antNest.deleteTopicComment}>删除</a>
+                        <Button value={e.id} className="topics_btn antnest_talk topics_a"  type="dashed" onClick={antNest.deleteTopicComment}>删除</Button>
 						<span className="topics_r-line"></span>
-                        <a value={topicObj.id+"#"+e.user.colUid}  shape="circle" type="dashed"  className="topics_btn topics_a"  onClick={antNest.showDiscussModal}>回复</a>
+                        <Button value={topicObj.id+"#"+e.user.colUid}  shape="circle" type="dashed"  className="topics_btn topics_a"  onClick={antNest.showDiscussModal}>回复</Button>
                     </span>
                 </li>;
                 answerUsersArray.push(answerUserInfo);
@@ -151,7 +151,7 @@ const AntNestTabComponents = React.createClass({
             var likeUser = likeUsersInfoArray[i];
             if(parseInt(sessionStorage.getItem("ident")) == likeUser.colUid){
                 //如果当前用户已点赞，则使用实心按钮表示.按钮点击功能表示“点赞”
-                praiseButton = <Button icon="like" value={topicObj.id} onClick={antNest.cancelPraiseForTopic}>点赞</Button>;
+                praiseButton = <Button icon="like" value={topicObj.id} onClick={antNest.cancelPraiseForTopic} className="topics_btn teopics_spa antnest_talk topics_oranges">点赞</Button>;
                 break;
             }else{
                 praiseButton = <Button icon="like-o" value={topicObj.id} onClick={antNest.praiseForTopic}>点赞</Button>;
@@ -179,14 +179,14 @@ const AntNestTabComponents = React.createClass({
         //如果点赞和回复信息都存在，则在card的title部分显示点赞，content部分显示回复
         //否则只需要在内容区域显示即可
         if(likeUsersArray.length!=0 && answerUsersArray.length!=0){
-            replayCard = <Card>
+            replayCard = <div>
                 <ul>
                     <span><Button icon="like"></Button> {likeUsersArray}</span>
                 </ul>
-                <ul>
+                <ul className="toppics_ul_bg">
                     {answerUsersArray}
                 </ul>
-            </Card>;
+            </div>;
         }else if(likeUsersArray.length!=0 && answerUsersArray.length==0 ){
             replayCard = <Card>
                 <span><Button icon="like"></Button> {likeUsersArray}</span>
@@ -201,7 +201,7 @@ const AntNestTabComponents = React.createClass({
         //删除按钮，在单个话题查看页面，不需要显示删除按钮
         var delButton;
         if(useType==0){
-            delButton = <a value={topicObj.id} icon="delete" onClick={antNest.deleteTopic}>删除</a>;
+            delButton = <Button value={topicObj.id} icon="delete" onClick={antNest.deleteTopic}>删除</Button>;
         }
         //参与人数显示card
         var parTakeCountCard;
