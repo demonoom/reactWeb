@@ -1795,6 +1795,7 @@ a {
 	font-weight:bold;
 	color:#333 !important;
 	font-size:14px;
+	margin-right:12px;
 }
 .antnest_pl{
 	margin-left:58px;
@@ -1887,24 +1888,30 @@ a.topics:hover{
     color: #989898;	
 }
 .toppics_ul_bg li.topics_comment span.topics_reply{
+	margin:0 ;
+	padding:0;
 	display:none;
-	height:23px;  
+	height:14px;  
 }
 .toppics_ul_bg li.topics_comment:hover span.topics_reply{
-	float:right;
 	margin:0 ;
 	padding:0;
 	display:inline-block;
 	position:relative;
+	line-height:23px;
 	
-}  
-
+} 
 .topics_btn{
 	border:none;
-	padding:0;
+	padding:0 !important;
 	background:none;
 	position: relative;
-    bottom: 0;
+    bottom: 0 !important;
+}
+.topics_btn:hover, .topics_btn:focus{
+	border:none; 
+	padding:0;
+	background:none;
 }
 .teopics_spa{
 	    letter-spacing: -2px;
@@ -1913,6 +1920,9 @@ a.topics:hover{
 	color:#666;
 	line-height:23px;
 	font-size:12px !important
+}
+.topics_a—bnt{
+	line-height:14px !important
 }
 .topics_a:hover{
 	color:#2896fb;
@@ -1924,4 +1934,20 @@ a.topics:hover{
 	height:10px;
 }
 .topics_oranges{
-	color:#ff804f}
+	color:#ff804f
+}
+.topics-popover{
+	width:300px;
+	height:300px;
+	overflow:hidden
+}
+.topics-popover img{
+	max-width:100%;
+	min-height:100%;
+}
+.topics_bor_bot{
+	border-bottom:1px solid #f0f0f0;
+}
+.topics_le{
+	margin-left:25px;
+}
