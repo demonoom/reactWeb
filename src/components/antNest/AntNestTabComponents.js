@@ -787,9 +787,12 @@ const AntNestTabComponents = React.createClass({
         //获取富文本框中包含表情的评论内容
         var inputContent;
         var emotionInput = antNest.getEmotionInput();
-        if(isEmpty(emotionInput)==false){
-            inputContent = emotionInput;
+        if(isEmpty($("#emotionInput").val())==false){
+            inputContent = $("#emotionInput").val();
         }else{
+            inputContent = emotionInput;
+        }
+        if(isEmpty(inputContent)){
             inputContent = $("#emotionInput").val();
         }
         console.log("inputContent:"+inputContent);
@@ -898,10 +901,10 @@ const AntNestTabComponents = React.createClass({
         //获取富文本框中包含表情的评论内容
         var inputContent;
         var emotionInput = antNest.getEmotionInput();
-        if(isEmpty(emotionInput)==false){
-            inputContent = emotionInput;
-        }else{
+        if(isEmpty($("#emotionInput").val())==false){
             inputContent = $("#emotionInput").val();
+        }else{
+            inputContent = emotionInput;
         }
         console.log("inputContent:"+inputContent);
         var createTime = (new Date()).valueOf();
@@ -1045,10 +1048,10 @@ const AntNestTabComponents = React.createClass({
         //获取富文本框中包含表情的评论内容
         var inputContent;
         var emotionInput = antNest.getEmotionInput();
-        if(isEmpty(emotionInput)==false){
-            inputContent = emotionInput;
-        }else{
+        if(isEmpty($("#emotionInput").val())==false){
             inputContent = $("#emotionInput").val();
+        }else{
+            inputContent = emotionInput;
         }
         console.log("inputContent:"+inputContent);
         var createTime = (new Date()).valueOf();
