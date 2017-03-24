@@ -163,7 +163,11 @@ const AntNestTabComponents = React.createClass({
             var attachMentType = e.type;
             if(attachMentType==1){
                 //图片附件
-                attachMents = <span className="topics_zan"><img src={e.address}/></span>;
+                /*attachMents = <span className="topics_zan"><img src={e.address}/></span>;*/
+                attachMents = <span className="topics_zan">
+                    <Popover placement="rightTop" content={<img src={e.address}/>}><img src={e.address}/></Popover>
+                </span>;
+
             }else if(attachMentType==4){
                 //mp4附件
                 attachMents = <span className="antnest_user">
@@ -201,7 +205,10 @@ const AntNestTabComponents = React.createClass({
         //删除按钮，在单个话题查看页面，不需要显示删除按钮
         var delButton;
         if(useType==0){
-            delButton = <Button value={topicObj.id} icon="delete" onClick={antNest.deleteTopic}>删除</Button>;
+            //STUD
+            if(topicObj.fromUser.colUtype=="STUD" || (topicObj.fromUser.colUtype=="TEAC" && topicObj.fromUser.colUid == sessionStorage.getItem("ident"))){
+                delButton = <Button value={topicObj.id} icon="delete" onClick={antNest.deleteTopic}>删除</Button>;
+            }
         }
         //参与人数显示card
         var parTakeCountCard;
@@ -219,7 +226,7 @@ const AntNestTabComponents = React.createClass({
             topicReplayInfoArray.forEach(function (topicReplayInfo) {
                 var replayUserHeadPhoto;
                 if(isEmpty(topicReplayInfo.fromUser.colPhotoPath)){
-                    replayUserHeadPhoto =  <img src={require('../images/maaee.png')}/>;
+                    replayUserHeadPhoto =  <img src={require('../images/user.jpg')}/>;
                 }else{
                     replayUserHeadPhoto =  <img src={topicReplayInfo.fromUser.colPhotoPath}/>;
                 }
