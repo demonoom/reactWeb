@@ -1887,24 +1887,30 @@ a.topics:hover{
     color: #989898;	
 }
 .toppics_ul_bg li.topics_comment span.topics_reply{
+	margin:0 ;
+	padding:0;
 	display:none;
-	height:23px;  
+	height:25px;  
 }
 .toppics_ul_bg li.topics_comment:hover span.topics_reply{
-	float:right;
 	margin:0 ;
 	padding:0;
 	display:inline-block;
 	position:relative;
+	line-height:23px;
 	
-}  
-
+} 
 .topics_btn{
 	border:none;
 	padding:0;
 	background:none;
 	position: relative;
     bottom: 0;
+}
+.topics_btn:hover, .topics_btn:focus{
+	border:none; 
+	padding:0;
+	background:none;
 }
 .teopics_spa{
 	    letter-spacing: -2px;
@@ -1924,4 +1930,5 @@ a.topics:hover{
 	height:10px;
 }
 .topics_oranges{
-	color:#ff804f}
+	color:#ff804f
+}

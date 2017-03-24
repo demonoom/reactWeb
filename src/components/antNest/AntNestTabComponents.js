@@ -201,7 +201,7 @@ const AntNestTabComponents = React.createClass({
         //删除按钮，在单个话题查看页面，不需要显示删除按钮
         var delButton;
         if(useType==0){
-            delButton = <Button value={topicObj.id} icon="delete" onClick={antNest.deleteTopic}>删除</Button>;
+            delButton = <Button value={topicObj.id} icon="delete" className="ant-btn topics_btn antnest_talk teopics_spa" onClick={antNest.deleteTopic}>删除</Button>;
         }
         //参与人数显示card
         var parTakeCountCard;
