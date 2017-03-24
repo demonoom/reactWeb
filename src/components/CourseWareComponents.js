@@ -3,6 +3,7 @@ import {Card, Checkbox, Collapse, Icon, Button, Pagination, message, Modal} from
 import UseKnowledgeComponents from './UseKnowledgeComponents';
 import {doWebService} from '../WebServiceHelper';
 import {getPageSize} from '../utils/Const';
+import {isEmpty} from '../utils/Const';
 const Panel = Collapse.Panel;
 const confirm = Modal.confirm;
 
@@ -43,7 +44,7 @@ const CourseWareComponents = React.createClass({
     },
 
 
-    getTeachPlans(ident, teachScheduleId, optType, pageNo, knowledgeName, dataFilter){
+    getTeachPlans(ident, teachScheduleId, optType, pageNo, knowledgeName, dataFilter,comeFrom){
         courseWare.setState({
             ident: ident,
             teachScheduleId: teachScheduleId,
@@ -98,6 +99,9 @@ const CourseWareComponents = React.createClass({
                     courseWare.setState({courseListState: courseWareList});
                     var pager = ret.pager;
                     courseWare.setState({totalCount: parseInt(pager.rsCount)});
+                    if(isEmpty(comeFrom)==false && "fromUpload"==comeFrom){
+                        courseWare.setState({"currentPage":1});
+                    }
                 },
                 onError: function (error) {
                     message.error(error);
@@ -161,6 +165,9 @@ const CourseWareComponents = React.createClass({
                     courseWare.setState({courseListState: courseWareList});
                     var pager = ret.pager;
                     courseWare.setState({totalCount: parseInt(pager.rsCount)});
+                    if(isEmpty(comeFrom)==false && "fromUpload"==comeFrom){
+                        courseWare.setState({"currentPage":1});
+                    }
                 },
                 onError: function (error) {
                     message.error(error);
