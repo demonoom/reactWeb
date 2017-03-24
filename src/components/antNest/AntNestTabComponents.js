@@ -38,7 +38,9 @@ const AntNestTabComponents = React.createClass({
             topicModalType:'talk',
             topicTitle:'',
             toUserId:-1, //评论指定人或直接评论,评论指定人时,值为真实id，否则为-1
-            replayToUserTopicId:''
+            replayToUserTopicId:'',
+            partakeTopicId:''       //话题参与时,当前要参与的话题id
+
         };
     },
     /**
@@ -135,9 +137,10 @@ const AntNestTabComponents = React.createClass({
                     <span>{e.user.userName}：</span>
                     <span>{e.content}</span>
                     {/*<span><article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article></span>*/}
-                    <span style={{marginLeft:'15px'}}>
-                        <Button value={e.id} icon="delete" shape="circle" type="dashed" onClick={antNest.deleteTopicComment}></Button>
-                        <Button value={topicObj.id+"#"+e.user.colUid} icon="message" shape="circle" type="dashed" onClick={antNest.showDiscussModal}></Button>
+                    <span className="topics_reply">
+                        <a value={e.id} className="topics_btn antnest_talk topics_a"  type="dashed" onClick={antNest.deleteTopicComment}>删除</a>
+						<span className="topics_r-line"></span>
+                        <a value={topicObj.id+"#"+e.user.colUid}  shape="circle" type="dashed"  className="topics_btn topics_a"  onClick={antNest.showDiscussModal}>回复</a>
                     </span>
                 </li>;
                 answerUsersArray.push(answerUserInfo);
@@ -280,6 +283,25 @@ const AntNestTabComponents = React.createClass({
                     </Card>;
                 }
 
+                var replayAttachMentsArray=[]
+                //遍历附件信息，并按类型封装数据
+                topicReplayInfo.attachMents.forEach(function (e) {
+                    var attachMents;
+                    var attachMentType = e.type;
+                    if(attachMentType==1){
+                        //图片附件
+                        attachMents = <span className="antnest_user"><img src={e.address}/></span>;
+                    }else if(attachMentType==4){
+                        //mp4附件
+                        attachMents = <span className="antnest_user">
+                    <a href={e.address} target="_blank">
+                        <img src={e.cover}/><span>{e.content}</span>
+                    </a>
+                </span>;
+                    }
+                    replayAttachMentsArray.push(attachMents);
+                })
+
                 var topicReplayCard = <Card  style={{ marginBottom: '15px' }}>
                     <ul>
                         <span className="antnest_user">{replayUserHeadPhoto}
@@ -287,6 +309,7 @@ const AntNestTabComponents = React.createClass({
                     </ul>
                     <ul>
                         {topicReplayInfo.content}
+                        {replayAttachMentsArray}
                     </ul>
                     <ul>
                         {getLocalTime(topicReplayInfo.createTime)}
@@ -317,7 +340,7 @@ const AntNestTabComponents = React.createClass({
                  <li>
                      {attachMentsArray}
                  </li>
-                 <li>
+                 <li className="topics_bot">
                      <span className="topics_time">{createTime}</span>
                      <span>{delButton}</span>
                      <span className="topics_dianzan">
@@ -941,18 +964,7 @@ const AntNestTabComponents = React.createClass({
         var title = target.value;
         antNest.setState({"topicTitle":title});
     },
-    
-    showPartakeModal(e){
-        var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
-            target = e.target;
-        }
-        var topicId = target.value;
-        console.log("topicId:"+topicId);
-        antNest.setState({"partakeModalVisible":true});
-    },
+
     /**
      * 评论某个人的回复
      */
@@ -968,10 +980,78 @@ const AntNestTabComponents = React.createClass({
     },
 
     /**
+     * 显示立即参与话题的窗口
+     * @param e
+     */
+    showPartakeModal(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var topicId = target.value;
+        console.log("topicId:"+topicId);
+        antNest.setState({"partakeModalVisible":true,"partakeTopicId":topicId});
+    },
+
+    /**
      * 立即参与窗口的确定响应函数
      */
     partakeModalHandleOk(){
-        antNest.setState({"partakeModalVisible":false});
+        //获取富文本框中包含表情的评论内容
+        var inputContent = $("#emotionInput").val();
+        console.log("inputContent:"+inputContent);
+        var createTime = (new Date()).valueOf();
+        var uuid = antNest.createUUID();
+        var topicImageArray = antNest.state.topicImgUrl;
+        var attachMents=[];
+        for(var i=0;i<topicImageArray.length;i++){
+            var attach = {"type":1,"address":topicImageArray[i],"createTime":createTime,"user":JSON.parse(sessionStorage.getItem("loginUser"))};
+            attachMents.push(attach);
+        }
+        var parentTopic = antNest.findTopicObjFromArrayById(antNest.state.partakeTopicId);
+        var topicJson={
+            "content":inputContent,
+            "fromUserId":sessionStorage.getItem("ident"),
+            "fromUser":JSON.parse(sessionStorage.getItem("loginUser")),
+            "valid":0,
+            "type":1,
+            "uuid":uuid,
+            "attachMents":attachMents,
+            "comments":[],
+            "open":0,
+            "parent":parentTopic
+        };
+        var param = {
+            "method": 'addTopic',
+            "topicJson": topicJson,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if(ret.success==true && ret.response == true){
+                    message.success("话题参与成功");
+                }else{
+                    message.error("话题参与失败");
+                }
+                if(antNest.state.optType=="getTopicById"){
+                    //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
+                    antNest.reGetTopicInfo(1,getAllTopic());
+                    antNest.getTopicPartakeById(antNest.state.currentTopicId,1);
+                }else {
+                    if (antNest.state.activeKey == "全部") {
+                        antNest.getTopics(1, getAllTopic());
+                    } else {
+                        antNest.getTopics(1, getOnlyTeacherTopic());
+                    }
+                }
+                antNest.initMyEmotionInput();
+                antNest.setState({partakeModalVisible: false});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     /**

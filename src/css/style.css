@@ -1837,6 +1837,9 @@ a.topics:hover{
     word-wrap: break-word;
 	font-size:14px;
 }
+.antnest-card .ant-card-body ul li.topics_bot{
+	margin:7px 0; 
+}
 .topics_zan{
 	width:150px;
 	height:150px;
@@ -1860,17 +1863,33 @@ a.topics:hover{
 	float:right;
 }
 .topics_comment{
-    padding: 5px 0px;
-    border-top: #e9e9e9 1px solid;
+    padding: 0;
     height: auto;
+	overflow: hidden;
+    line-height: 23px;
+    word-wrap: break-word;
 }
 
 .topics_userblue{
 	color:#3a54a4 !important
 }
 .toppics_ul_bg{
-	background:#f6f6f6;
+	background:#f8f8f8;
+	padding:6px 12px;
+    color: #989898;
+	
 }
+.toppics_ul_bg li.topics_comment span.topics_reply{
+	display:none
+    
+}
+.toppics_ul_bg li.topics_comment:hover span.topics_reply{
+	float:right;
+	margin:0 0 0 15px;
+	padding:0;
+	display:inline-block
+}  
+
 .topics_btn{
 	border:none;
 	padding:0;
@@ -1881,3 +1900,15 @@ a.topics:hover{
 .teopics_spa{
 	    letter-spacing: -2px;
 	}
+.topics_a{
+	color:#666;
+}
+.topics_a:hover{
+	color:#2896fb;
+	text-decoration:none
+}
+.topics_r-line{
+	border-right:1px solid #e5e5e5;
+	margin-right:12px;
+	height:10px;
+}
