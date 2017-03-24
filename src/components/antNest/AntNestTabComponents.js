@@ -40,6 +40,7 @@ const AntNestTabComponents = React.createClass({
             toUserId:-1, //评论指定人或直接评论,评论指定人时,值为真实id，否则为-1
             replayToUserTopicId:'',
             partakeTopicId:''       //话题参与时,当前要参与的话题id
+
         };
     },
     /**
@@ -102,7 +103,7 @@ const AntNestTabComponents = React.createClass({
         var userHeadPhoto;
         if(isEmpty(topicObj.fromUser.colPhotoPath)){
             //如果用户头像为空，则使用系统默认头像进行显示
-            userHeadPhoto =  <img src={require('../images/maaee.png')}/>;
+            userHeadPhoto =  <img src={require('../images/user.jpg')}/>;
         }else{
             userHeadPhoto =  <img src={topicObj.fromUser.colPhotoPath}/>;
         }
@@ -123,7 +124,7 @@ const AntNestTabComponents = React.createClass({
         var attachMentsArray=[];
         //遍历点赞和回复的信息
         //如果当前用户未点赞，则使用空心按钮表示，按钮点击功能表示“取消点赞”
-        var praiseButton=<Button icon="like-o" value={topicObj.id} onClick={antNest.praiseForTopic}>点赞</Button>;
+        var praiseButton=<Button className="topics_btn antnest_talk teopics_spa" icon="like-o" value={topicObj.id} onClick={antNest.praiseForTopic}>点赞</Button>;
         topicObj.comments.forEach(function (e) {
             if(e.type==1){
                 //点赞
@@ -132,13 +133,14 @@ const AntNestTabComponents = React.createClass({
                 likeUsersInfoArray.push(e.user);
             }else{
                 //评论
-                var answerUserInfo = <li>
-                    <span>{e.user.userName}:</span>
+                var answerUserInfo = <li className="topics_comment">
+                    <span>{e.user.userName}：</span>
                     <span>{e.content}</span>
                     {/*<span><article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article></span>*/}
-                    <span style={{marginLeft:'15px'}}>
-                        <Button value={e.id} icon="delete" shape="circle" type="dashed" onClick={antNest.deleteTopicComment}></Button>
-                        <Button value={topicObj.id+"#"+e.user.colUid} icon="message" shape="circle" type="dashed" onClick={antNest.showDiscussModal}></Button>
+                    <span className="topics_reply">
+                        <a value={e.id} className="topics_btn antnest_talk topics_a"  type="dashed" onClick={antNest.deleteTopicComment}>删除</a>
+						<span className="topics_r-line"></span>
+                        <a value={topicObj.id+"#"+e.user.colUid}  shape="circle" type="dashed"  className="topics_btn topics_a"  onClick={antNest.showDiscussModal}>回复</a>
                     </span>
                 </li>;
                 answerUsersArray.push(answerUserInfo);
@@ -161,7 +163,7 @@ const AntNestTabComponents = React.createClass({
             var attachMentType = e.type;
             if(attachMentType==1){
                 //图片附件
-                attachMents = <span className="antnest_user"><img src={e.address}/></span>;
+                attachMents = <span className="topics_zan"><img src={e.address}/></span>;
             }else if(attachMentType==4){
                 //mp4附件
                 attachMents = <span className="antnest_user">
@@ -190,16 +192,16 @@ const AntNestTabComponents = React.createClass({
                 <span><Button icon="like"></Button> {likeUsersArray}</span>
             </Card>;
         }else if(likeUsersArray.length==0 && answerUsersArray.length!=0 ){
-            replayCard = <Card >
-                <ul>
-                    {answerUsersArray}
+            replayCard = <div >
+                <ul className="toppics_ul_bg">
+                   {answerUsersArray}
                 </ul>
-            </Card>;
+            </div>;
         }
         //删除按钮，在单个话题查看页面，不需要显示删除按钮
         var delButton;
         if(useType==0){
-            delButton = <Button value={topicObj.id} icon="delete" onClick={antNest.deleteTopic}>删除</Button>;
+            delButton = <a value={topicObj.id} icon="delete" onClick={antNest.deleteTopic}>删除</a>;
         }
         //参与人数显示card
         var parTakeCountCard;
@@ -325,25 +327,25 @@ const AntNestTabComponents = React.createClass({
         }
 
          var cardObj = <Card className="antnest-card" bordered={false}>
+		 <div className="antnest_user">{userHeadPhoto}</div>
              <ul>
                  <li>
-                     <div className="antnest_head"><span className="antnest_user">{userHeadPhoto}</span>
                          <span className="antnest_name">{topicObj.fromUser.userName}</span>
-                         <span>{topicTitle}</span></div>
+                         <span>{topicTitle}</span>
                  </li>
-                 <li>
+                 <li className="topics_cont">
                      {/*<p>{topicObj.content}</p>*/}
                      {topicObj.content}
                  </li>
                  <li>
                      {attachMentsArray}
                  </li>
-                 <li>
-                     <span>{createTime}</span>
+                 <li className="topics_bot">
+                     <span className="topics_time">{createTime}</span>
                      <span>{delButton}</span>
-                     <span>
+                     <span className="topics_dianzan">
                          {praiseButton}
-                         <Button icon="message" value={topicObj.id} onClick={antNest.showDiscussModal}>评论</Button>
+                         <Button icon="message" value={topicObj.id} onClick={antNest.showDiscussModal} className="topics_btn antnest_talk teopics_spa">评论</Button>
                      </span>
                  </li>
              </ul>
