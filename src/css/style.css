@@ -1838,17 +1838,19 @@ a.topics:hover{
 	font-size:14px;
 }
 .topics_zan{
-	width:30px;
-	height:30px;
+	width:150px;
+	height:150px;
 	display:inline-block;
-	margin-right:8px;
+	margin:4px 4px 0 0;
 	font-size: 14px;
     color: #333;
+	
 }
 .topics_zan img{
-	width:30px;
-	height:30px;
-	border-radius:50%;
+	min-width: auto;
+    height: auto;
+    width: 100%;
+    min-height: 100%;
 }
 .topics_time{
 	color:#999;
@@ -1868,6 +1870,14 @@ a.topics:hover{
 }
 .toppics_ul_bg{
 	background:#f6f6f6;
-	
-	
 }
+.topics_btn{
+	border:none;
+	padding:0;
+	background:none;
+	position: relative;
+    bottom: 0;
+}
+.teopics_spa{
+	    letter-spacing: -2px;
+	}

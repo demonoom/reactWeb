@@ -120,7 +120,7 @@ const AntNestTabComponents = React.createClass({
         var attachMentsArray=[];
         //遍历点赞和回复的信息
         //如果当前用户未点赞，则使用空心按钮表示，按钮点击功能表示“取消点赞”
-        var praiseButton=<a icon="like-o" value={topicObj.id} onClick={antNest.praiseForTopic}>点赞</a>;
+        var praiseButton=<Button className="topics_btn antnest_talk teopics_spa" icon="like-o" value={topicObj.id} onClick={antNest.praiseForTopic}>点赞</Button>;
         topicObj.comments.forEach(function (e) {
             if(e.type==1){
                 //点赞
@@ -316,7 +316,7 @@ const AntNestTabComponents = React.createClass({
                      <span>{delButton}</span>
                      <span className="topics_dianzan">
                          {praiseButton}
-                         <Button icon="message" value={topicObj.id} onClick={antNest.showDiscussModal}>评ff论</Button>
+                         <Button icon="message" value={topicObj.id} onClick={antNest.showDiscussModal} className="topics_btn antnest_talk teopics_spa">评论</Button>
                      </span>
                  </li>
              </ul>
