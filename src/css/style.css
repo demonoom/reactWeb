@@ -1845,15 +1845,23 @@ a.topics:hover{
 	height:150px;
 	display:inline-block;
 	margin:4px 4px 0 0;
-	font-size: 14px;
-    color: #333;
-	
+	overflow:hidden;
+	background:#f2f2f5;
+	border:1px solid #f2f2f5;
+	position:relative
 }
 .topics_zan img{
-	min-width: auto;
-    height: auto;
-    width: 100%;
     min-height: 100%;
+	width:100%;
+    vertical-align: top;
+	position: absolute;
+	top:50%;
+	left:50%;
+	transform:translate(-50%, -50%);
+	-ms-transform:translate(-50%, -50%); /* IE 9 */
+	-moz-transform:translate(-50%, -50%); /* Firefox */
+	-webkit-transform:translate(-50%, -50%); /* Safari 和 Chrome */
+	-o-transform:translate(-50%, -50%);
 }
 .topics_time{
 	color:#999;
@@ -1876,18 +1884,19 @@ a.topics:hover{
 .toppics_ul_bg{
 	background:#f8f8f8;
 	padding:6px 12px;
-    color: #989898;
-	
+    color: #989898;	
 }
 .toppics_ul_bg li.topics_comment span.topics_reply{
-	display:none
-    
+	display:none;
+	height:23px;  
 }
 .toppics_ul_bg li.topics_comment:hover span.topics_reply{
 	float:right;
-	margin:0 0 0 15px;
+	margin:0 ;
 	padding:0;
-	display:inline-block
+	display:inline-block;
+	position:relative;
+	
 }  
 
 .topics_btn{
@@ -1902,6 +1911,8 @@ a.topics:hover{
 	}
 .topics_a{
 	color:#666;
+	line-height:23px;
+	font-size:12px !important
 }
 .topics_a:hover{
 	color:#2896fb;
@@ -1912,3 +1923,5 @@ a.topics:hover{
 	margin-right:12px;
 	height:10px;
 }
+.topics_oranges{
+	color:#ff804f}
