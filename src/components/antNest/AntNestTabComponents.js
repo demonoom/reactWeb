@@ -783,7 +783,13 @@ const AntNestTabComponents = React.createClass({
      */
     discussModalHandleOk(){
         //获取富文本框中包含表情的评论内容
-        var inputContent = $("#emotionInput").val();
+        var inputContent;
+        var emotionInput = antNest.getEmotionInput();
+        if(isEmpty(emotionInput)==false){
+            inputContent = emotionInput;
+        }else{
+            inputContent = $("#emotionInput").val();
+        }
         console.log("inputContent:"+inputContent);
         var toUserId = -1;
         if(isEmpty(antNest.state.toUserId)==false){
@@ -844,7 +850,14 @@ const AntNestTabComponents = React.createClass({
      */
     initMyEmotionInput(){
         $("#emotionInput").val("");
-        $(".emoji-wysiwyg-editor")[0].innerHTML="";
+        var emotionArray = $(".emoji-wysiwyg-editor");
+        if(isEmpty(emotionArray)==false){
+            for(var i=0;i<emotionArray.length;i++){
+                emotionArray[i].innerHTML="";
+                emotionArray[i].innerText="";
+            }
+        }
+
     },
 
     createUUID() {
@@ -861,12 +874,33 @@ const AntNestTabComponents = React.createClass({
         return uuid;
     },
 
+    getEmotionInput(){
+        var emotionInput="";
+        var emotionArray = $(".emoji-wysiwyg-editor");
+        if(isEmpty(emotionArray)==false){
+            for(var i=0;i<emotionArray.length;i++){
+                var emotionObj = emotionArray[i];
+                if(isEmpty(emotionObj.innerText)==false){
+                    emotionInput = emotionObj.innerText;
+                    break;
+                }
+            }
+        }
+        return emotionInput;
+    },
+
     /**
      * 发表说说或话题
      */
     addTopicModalHandleOk(){
         //获取富文本框中包含表情的评论内容
-        var inputContent = $("#emotionInput").val();
+        var inputContent;
+        var emotionInput = antNest.getEmotionInput();
+        if(isEmpty(emotionInput)==false){
+            inputContent = emotionInput;
+        }else{
+            inputContent = $("#emotionInput").val();
+        }
         console.log("inputContent:"+inputContent);
         var createTime = (new Date()).valueOf();
         var uuid = antNest.createUUID();
@@ -1007,7 +1041,13 @@ const AntNestTabComponents = React.createClass({
      */
     partakeModalHandleOk(){
         //获取富文本框中包含表情的评论内容
-        var inputContent = $("#emotionInput").val();
+        var inputContent;
+        var emotionInput = antNest.getEmotionInput();
+        if(isEmpty(emotionInput)==false){
+            inputContent = emotionInput;
+        }else{
+            inputContent = $("#emotionInput").val();
+        }
         console.log("inputContent:"+inputContent);
         var createTime = (new Date()).valueOf();
         var uuid = antNest.createUUID();
