@@ -209,6 +209,7 @@ const AssignHomeWorkComponents = React.createClass({
 
     //获取老师名下的备课计划
     getScheduleList(){
+        scheduleData.splice(0);
         var param = {
             "method": 'getTeachScheduleByIdent',
             "ident": sessionStorage.getItem("ident")
@@ -477,6 +478,7 @@ const AssignHomeWorkComponents = React.createClass({
                                                                   onRowClick={assignHomeWork.onScheduleSelectChange}
                                                                   selectedRowKeys={assignHomeWork.selectedRowKeys}
                                                                   columns={scheduleColumns} dataSource={scheduleData}
+                                                                  pagination={false}
                                                                   scroll={{y: 300}}/></Col>
                         <Col span={17} className="col17_le 17_hei ant-form">
                             <div className="17_hei1">
