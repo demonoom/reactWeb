@@ -129,10 +129,10 @@ const MainTabComponents = React.createClass({
      */
     courseUploadCallBack(){
         if(this.state.activeKey=="题目"){
-          var subjectParams = sessionStorage.getItem("ident")+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType+"#"+this.state.currentKnowledgeName+"#"+this.state.subjectDataFilter;
+          var subjectParams = sessionStorage.getItem("ident")+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType+"#"+this.state.currentKnowledgeName+"#"+this.state.subjectDataFilter+"#fromUpload";
           this.refs.subTable.initGetSubjectInfo(subjectParams);
         }else{
-          this.refs.courseWare.getTeachPlans(sessionStorage.getItem("ident"),this.state.currentTeachScheduleId,this.state.currentOptType,1,this.state.currentKnowledgeName,this.state.dataFilter);
+          this.refs.courseWare.getTeachPlans(sessionStorage.getItem("ident"),this.state.currentTeachScheduleId,this.state.currentOptType,1,this.state.currentKnowledgeName,this.state.dataFilter,"fromUpload");
         }
     },
 

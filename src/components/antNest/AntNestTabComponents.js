@@ -103,7 +103,7 @@ const AntNestTabComponents = React.createClass({
         var userHeadPhoto;
         if(isEmpty(topicObj.fromUser.colPhotoPath)){
             //如果用户头像为空，则使用系统默认头像进行显示
-            userHeadPhoto =  <img src={require('../images/user.jpg')}/>;
+            userHeadPhoto =  <img src={require('../images/maaee_pic.png')}/>;
         }else{
             userHeadPhoto =  <img src={topicObj.fromUser.colPhotoPath}/>;
         }
@@ -138,9 +138,9 @@ const AntNestTabComponents = React.createClass({
                     <span>{e.content}</span>
                     {/*<span><article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article></span>*/}
                     <span className="topics_reply">
-                        <Button value={e.id} className="topics_btn antnest_talk topics_a"  type="dashed" onClick={antNest.deleteTopicComment}>删除</Button>
+                        <Button value={e.id} className="topics_btn antnest_talk topics_a topics_a—bnt teopics_spa topics_le"  type="dashed" onClick={antNest.deleteTopicComment}>删除</Button>
 						<span className="topics_r-line"></span>
-                        <Button value={topicObj.id+"#"+e.user.colUid}  shape="circle" type="dashed"  className="topics_btn topics_a"  onClick={antNest.showDiscussModal}>回复</Button>
+                        <Button value={topicObj.id+"#"+e.user.colUid}  type="dashed"  className="topics_btn topics_a topics_a—bnt teopics_spa"  onClick={antNest.showDiscussModal}>回复</Button>
                     </span>
                 </li>;
                 answerUsersArray.push(answerUserInfo);
@@ -154,7 +154,7 @@ const AntNestTabComponents = React.createClass({
                 praiseButton = <Button icon="like" value={topicObj.id} onClick={antNest.cancelPraiseForTopic} className="topics_btn teopics_spa antnest_talk topics_oranges">点赞</Button>;
                 break;
             }else{
-                praiseButton = <Button icon="like-o" value={topicObj.id} onClick={antNest.praiseForTopic}>点赞</Button>;
+                praiseButton = <Button icon="like-o" value={topicObj.id} onClick={antNest.praiseForTopic} className="topics_btn antnest_talk teopics_spa">点赞</Button>;
             }
         }
         //遍历附件信息，并按类型封装数据
@@ -163,10 +163,14 @@ const AntNestTabComponents = React.createClass({
             var attachMentType = e.type;
             if(attachMentType==1){
                 //图片附件
-                attachMents = <span className="topics_zan"><img src={e.address}/></span>;
+                /*attachMents = <span className="topics_zan"><img src={e.address}/></span>;*/
+                attachMents = <span className="topics_zan">
+                    <Popover placement="rightTop"  content={<img src={e.address}  className="topics-popover" />}><img src={e.address} /></Popover>
+                </span>;
+
             }else if(attachMentType==4){
                 //mp4附件
-                attachMents = <span className="antnest_user">
+                attachMents = <span className="topics_zan">
                     <a href={e.address} target="_blank">
                         <img src={e.cover}/><span>{e.content}</span>
                     </a>
@@ -180,17 +184,19 @@ const AntNestTabComponents = React.createClass({
         //否则只需要在内容区域显示即可
         if(likeUsersArray.length!=0 && answerUsersArray.length!=0){
             replayCard = <div>
-                <ul>
-                    <span><Button icon="like"></Button> {likeUsersArray}</span>
+                <ul className="toppics_ul_bg topics_bor_bot">
+                    <span><Button icon="like" className="topics_btn"></Button> {likeUsersArray}</span>
                 </ul>
                 <ul className="toppics_ul_bg">
                     {answerUsersArray}
                 </ul>
             </div>;
         }else if(likeUsersArray.length!=0 && answerUsersArray.length==0 ){
-            replayCard = <Card>
-                <span><Button icon="like"></Button> {likeUsersArray}</span>
-            </Card>;
+            replayCard = <div>
+			<ul className="toppics_ul_bg topics_bor_bot">
+                <span><Button icon="like" className="topics_btn"></Button> {likeUsersArray}</span>
+			</ul>
+            </div>;
         }else if(likeUsersArray.length==0 && answerUsersArray.length!=0 ){
             replayCard = <div >
                 <ul className="toppics_ul_bg">
@@ -201,17 +207,20 @@ const AntNestTabComponents = React.createClass({
         //删除按钮，在单个话题查看页面，不需要显示删除按钮
         var delButton;
         if(useType==0){
-            delButton = <Button value={topicObj.id} icon="delete" className="ant-btn topics_btn antnest_talk teopics_spa" onClick={antNest.deleteTopic}>删除</Button>;
+            //STUD
+            if(topicObj.fromUser.colUtype=="STUD" || (topicObj.fromUser.colUtype=="TEAC" && topicObj.fromUser.colUid == sessionStorage.getItem("ident"))){
+               delButton = <Button value={topicObj.id} icon="delete" className="ant-btn topics_btn antnest_talk teopics_spa" onClick={antNest.deleteTopic}>删除</Button>;
+            }
         }
         //参与人数显示card
         var parTakeCountCard;
         if(isEmpty(parTakeCountInfo)==false){
-            parTakeCountCard = <Card>
+            parTakeCountCard = <div>
                 <ul>
                     <span>参与{parTakeCountInfo.participatecount}人,未参与{parTakeCountInfo.unParticipatecount}人</span>
                     <span><Button value={topicObj.id} onClick={antNest.showPartakeModal}>立即参与</Button></span>
                 </ul>
-            </Card>;
+            </div>;
         }
         //单个话题中的回复参与信息
         var topicReplayCardArray=[];
@@ -219,7 +228,7 @@ const AntNestTabComponents = React.createClass({
             topicReplayInfoArray.forEach(function (topicReplayInfo) {
                 var replayUserHeadPhoto;
                 if(isEmpty(topicReplayInfo.fromUser.colPhotoPath)){
-                    replayUserHeadPhoto =  <img src={require('../images/maaee.png')}/>;
+                    replayUserHeadPhoto =  <img src={require('../images/maaee_pic.png')}/>;
                 }else{
                     replayUserHeadPhoto =  <img src={topicReplayInfo.fromUser.colPhotoPath}/>;
                 }
