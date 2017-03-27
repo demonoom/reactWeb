@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Upload, Icon,Button,message, Modal,Progress } from 'antd';
+import {isEmpty} from '../../utils/Const';
 
 var fileList=[];
 var antUpload;
@@ -19,7 +20,7 @@ const UploadImgComponents = React.createClass({
     },
 
     componentWillReceiveProps(nextProps){
-        if(nextProps.fileList.length==0){
+        if(isEmpty(nextProps)==false && isEmpty(nextProps.fileList)==false &&　nextProps.fileList.length==0){
             antUpload.setState({fileList:[]});
         }
     },

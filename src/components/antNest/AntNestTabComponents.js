@@ -139,12 +139,16 @@ const AntNestTabComponents = React.createClass({
                 }else{
                     replayUserTitle=<span>{e.user.userName}：</span>;
                 }
+                var delBtn;
+                if(e.user.colUtype=="STUD" || (e.user.colUtype=="TEAC" && e.user.colUid == sessionStorage.getItem("ident"))){
+                    delBtn = <Button value={e.id} className="topics_btn antnest_talk topics_a topics_a—bnt teopics_spa topics_le"  type="dashed" onClick={antNest.deleteTopicComment}>删除</Button>;
+                }
                 var answerUserInfo = <li className="topics_comment">
                     {replayUserTitle}
                     <span>{e.content}</span>
                     {/*<span><article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article></span>*/}
                     <span className="topics_reply">
-                        <Button value={e.id} className="topics_btn antnest_talk topics_a topics_a—bnt teopics_spa topics_le"  type="dashed" onClick={antNest.deleteTopicComment}>删除</Button>
+                        {delBtn}
 						<span className="topics_r-line"></span>
                         <Button value={topicObj.id+"#"+e.user.colUid}  type="dashed"  className="topics_btn topics_a topics_a—bnt teopics_spa"  onClick={antNest.showDiscussModal}>回复</Button>
                     </span>
@@ -255,11 +259,15 @@ const AntNestTabComponents = React.createClass({
                         }else{
                             replayUserTitle=<span>{e.user.userName}：</span>;
                         }
+                        var delBtnInRelpay;
+                        if(e.user.colUtype=="STUD" || (e.user.colUtype=="TEAC" && e.user.colUid == sessionStorage.getItem("ident"))){
+                            delBtnInRelpay = <Button value={e.id}  type="dashed"  className="topics_btn antnest_talk topics_a topics_a—bnt teopics_spa topics_le" onClick={antNest.deleteTopicComment}>删除</Button>;
+                        }
                         var answerUserInfo = <li className="topics_comment">
                             {replayUserTitle}
                             <span>{e.content}</span>
                             <span className="topics_reply">
-                                <Button value={e.id}  type="dashed"  className="topics_btn antnest_talk topics_a topics_a—bnt teopics_spa topics_le" onClick={antNest.deleteTopicComment}>删除</Button>
+                                {delBtnInRelpay}
 								<span className="topics_r-line"></span>
                                 <Button value={topicReplayInfo.id+"#"+e.user.colUid} type="dashed"  className="topics_btn topics_a topics_a—bnt teopics_spa"  onClick={antNest.showDiscussModal}>回复</Button>
                             </span>
@@ -323,7 +331,14 @@ const AntNestTabComponents = React.createClass({
                     }
                     replayAttachMentsArray.push(attachMents);
                 })
-
+                var delBtnInReplayCard;
+                if(topicReplayInfo.fromUser.colUtype=="STUD" || (topicReplayInfo.fromUser.colUtype=="TEAC" && topicReplayInfo.fromUser.colUid == sessionStorage.getItem("ident"))){
+                    delBtnInReplayCard = <Button value={topicReplayInfo.id} icon="delete" onClick={antNest.deleteTopic} className="topics_btn antnest_talk teopics_spa">删除</Button>;
+                }
+                var praiseBtn;
+                if(topicObj.fromUser.colUtype=="TEAC" && topicObj.fromUser.colUid == sessionStorage.getItem("ident")){
+                    praiseBtn = <Button value={topicObj.id+"#"+topicReplayInfo.id} icon="to-top" onClick={antNest.setTopicToTop} className="topics_btn antnest_talk teopics_spa">置顶</Button>;
+                }
                 var topicReplayCard = <div  style={{ marginBottom: '15px' }}>
                     <div style={{marginLeft:'0'}} className="antnest_user">{replayUserHeadPhoto}</div>
                     <ul>
@@ -331,8 +346,8 @@ const AntNestTabComponents = React.createClass({
                        <li>  {topicReplayInfo.content}</li>
                         <li >{replayAttachMentsArray}</li>
 						<li className="topics_bot"><span className="topics_time">{getLocalTime(topicReplayInfo.createTime)}</span><span className="topics_dianzan">
-						<Button value={topicReplayInfo.id} icon="delete" onClick={antNest.deleteTopic} className="topics_btn antnest_talk teopics_spa">删除</Button>
-                        <Button value={topicObj.id+"#"+topicReplayInfo.id} icon="to-top" onClick={antNest.setTopicToTop} className="topics_btn antnest_talk teopics_spa">置顶</Button>
+                        {delBtnInReplayCard}
+                        {praiseBtn}
                         {replayPraiseButton}
                         <Button icon="message" value={topicReplayInfo.id+"#toUser"} onClick={antNest.showDiscussModal} className="topics_btn teopics_spa">评论</Button></span></li>
                     </ul>
