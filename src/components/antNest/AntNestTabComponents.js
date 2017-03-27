@@ -255,12 +255,13 @@ const AntNestTabComponents = React.createClass({
                         }else{
                             replayUserTitle=<span>{e.user.userName}：</span>;
                         }
-                        var answerUserInfo = <li>
-                            <span>{replayUserTitle}</span>
+                        var answerUserInfo = <li className="topics_comment">
+                            {replayUserTitle}
                             <span>{e.content}</span>
                             <span className="topics_reply">
-                                <Button value={e.id}  shape="circle" type="dashed"  className="topics_btn antnest_talk topics_a topics_a—bnt teopics_spa topics_le" onClick={antNest.deleteTopicComment}>删除</Button>
-                                <Button value={topicReplayInfo.id+"#"+e.user.colUid}  shape="circle" type="dashed"  className="topics_btn topics_a topics_a—bnt teopics_spa"  onClick={antNest.showDiscussModal}>回复</Button>
+                                <Button value={e.id}  type="dashed"  className="topics_btn antnest_talk topics_a topics_a—bnt teopics_spa topics_le" onClick={antNest.deleteTopicComment}>删除</Button>
+								<span className="topics_r-line"></span>
+                                <Button value={topicReplayInfo.id+"#"+e.user.colUid} type="dashed"  className="topics_btn topics_a topics_a—bnt teopics_spa"  onClick={antNest.showDiscussModal}>回复</Button>
                             </span>
                         </li>;
                         replayAnswerUsersArray.push(answerUserInfo);
@@ -293,15 +294,15 @@ const AntNestTabComponents = React.createClass({
                         </ul>
                     </div>;
                 }else if(replayLikeUsersArray.length!=0 && replayAnswerUsersArray.length==0 ){
-                    replayCardForSingle = <Card>
-                        <span><Button icon="like"></Button> {replayLikeUsersArray}</span>
-                    </Card>;
+                    replayCardForSingle = <div>
+                        <span><Button icon="like" className="topics_btn"></Button> {replayLikeUsersArray}</span>
+                    </div>;
                 }else if(replayLikeUsersArray.length==0 && replayAnswerUsersArray.length!=0 ){
-                    replayCardForSingle = <Card>
-                        <ul>
+                    replayCardForSingle = <div>
+                        <ul className="toppics_ul_bg topics_mar60">
                             {replayAnswerUsersArray}
                         </ul>
-                    </Card>;
+                    </div>;
                 }
 
                 var replayAttachMentsArray=[]
@@ -311,7 +312,7 @@ const AntNestTabComponents = React.createClass({
                     var attachMentType = e.type;
                     if(attachMentType==1){
                         //图片附件
-                        attachMents = <span className="antnest_user"><img src={e.address}/></span>;
+                        attachMents = <span className="topics_zan"><img src={e.address}/></span>;
                     }else if(attachMentType==4){
                         //mp4附件
                         attachMents = <span className="antnest_user">
