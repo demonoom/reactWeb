@@ -249,9 +249,15 @@ const AntNestTabComponents = React.createClass({
                         replayLikeUsersInfoArray.push(e.user);
                     }else{
                         //评论
+                        var replayUserTitle;
+                        if(isEmpty(e.toUser)==false && (e.user.colUid!=e.toUser.colUid)){
+                            replayUserTitle=<span>{e.user.userName} 回复 {e.toUser.userName}：</span>;
+                        }else{
+                            replayUserTitle=<span>{e.user.userName}：</span>;
+                        }
                         var answerUserInfo = <li>
-                            <span>{e.user.userName}:</span>
-                            <span><article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article></span>
+                            <span>{replayUserTitle}</span>
+                            <span>{e.content}</span>
                             <span className="topics_reply">
                                 <Button value={e.id}  shape="circle" type="dashed"  className="topics_btn antnest_talk topics_a topics_a—bnt teopics_spa topics_le" onClick={antNest.deleteTopicComment}>删除</Button>
                                 <Button value={topicReplayInfo.id+"#"+e.user.colUid}  shape="circle" type="dashed"  className="topics_btn topics_a topics_a—bnt teopics_spa"  onClick={antNest.showDiscussModal}>回复</Button>
