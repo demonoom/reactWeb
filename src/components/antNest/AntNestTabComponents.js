@@ -133,8 +133,14 @@ const AntNestTabComponents = React.createClass({
                 likeUsersInfoArray.push(e.user);
             }else{
                 //评论
+                var replayUserTitle;
+                if(isEmpty(e.toUser)==false && (e.user.colUid!=e.toUser.colUid)){
+                    replayUserTitle=<span>{e.user.userName} 回复 {e.toUser.userName}：</span>;
+                }else{
+                    replayUserTitle=<span>{e.user.userName}：</span>;
+                }
                 var answerUserInfo = <li className="topics_comment">
-                    <span>{e.user.userName}：</span>
+                    {replayUserTitle}
                     <span>{e.content}</span>
                     {/*<span><article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article></span>*/}
                     <span className="topics_reply">
@@ -782,7 +788,7 @@ const AntNestTabComponents = React.createClass({
     discussModalHandleOk(){
         //获取富文本框中包含表情的评论内容
         var inputContent;
-        var emotionInput = antNest.getEmotionInput();
+        /*var emotionInput = antNest.getEmotionInput();
         if(isEmpty($("#emotionInput").val())==false){
             inputContent = $("#emotionInput").val();
         }else{
@@ -790,7 +796,8 @@ const AntNestTabComponents = React.createClass({
         }
         if(isEmpty(inputContent)){
             inputContent = $("#emotionInput").val();
-        }
+        }*/
+        inputContent = antNest.getEmotionInputById();
         console.log("inputContent:"+inputContent);
         var toUserId = -1;
         if(isEmpty(antNest.state.toUserId)==false){
@@ -891,6 +898,25 @@ const AntNestTabComponents = React.createClass({
     },
 
     /**
+     * 通过id获取文本域对象，并进而获取vaue值
+     * @returns {string}
+     */
+    getEmotionInputById(){
+        var emotionInput="";
+        var emotionInputArray = $("textarea[id='emotionInput']");
+        if(isEmpty(emotionInputArray)==false){
+            for(var i=0;i<emotionInputArray.length;i++){
+                var emotionObj = emotionInputArray[i];
+                if(isEmpty(emotionObj.value)==false){
+                    emotionInput = emotionObj.value;
+                    break;
+                }
+            }
+        }
+        return emotionInput;
+    },
+
+    /**
      * 发表说说或话题
      */
     addTopicModalHandleOk(){
@@ -967,6 +993,7 @@ const AntNestTabComponents = React.createClass({
      * 获取已上传的图片信息
      */
     getUploadedImgList(file,isRemoved){
+        antNest.removeImgViewStyle();
         var imgUrl = file.response;
         if(isEmpty(isRemoved)==false && isRemoved=="removed"){
             for(var i=0;i<antNest.state.topicImgUrl.length;i++){
@@ -978,6 +1005,18 @@ const AntNestTabComponents = React.createClass({
             antNest.state.topicImgUrl.push(imgUrl);
         }
     },
+    /**
+     * 移除图片上传组件的pointerEvents样式属性
+     * 原值为none时，会导致无法点击预览
+     */
+    removeImgViewStyle(){
+        var imgViewObjArray = $("a[rel='noopener noreferrer']");
+        for(var i=0;i<imgViewObjArray.length;i++){
+            var imgViewObj = imgViewObjArray[i];
+            imgViewObj.style.pointerEvents="";
+        }
+    },
+
     /**
      * 显示发表说说/话题的窗口
      */
