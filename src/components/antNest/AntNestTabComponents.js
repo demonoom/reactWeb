@@ -997,6 +997,7 @@ const AntNestTabComponents = React.createClass({
      * 获取已上传的图片信息
      */
     getUploadedImgList(file,isRemoved){
+        antNest.removeImgViewStyle();
         var imgUrl = file.response;
         if(isEmpty(isRemoved)==false && isRemoved=="removed"){
             for(var i=0;i<antNest.state.topicImgUrl.length;i++){
@@ -1008,6 +1009,18 @@ const AntNestTabComponents = React.createClass({
             antNest.state.topicImgUrl.push(imgUrl);
         }
     },
+    /**
+     * 移除图片上传组件的pointerEvents样式属性
+     * 原值为none时，会导致无法点击预览
+     */
+    removeImgViewStyle(){
+        var imgViewObjArray = $("a[rel='noopener noreferrer']");
+        for(var i=0;i<imgViewObjArray.length;i++){
+            var imgViewObj = imgViewObjArray[i];
+            imgViewObj.style.pointerEvents="";
+        }
+    },
+
     /**
      * 显示发表说说/话题的窗口
      */
