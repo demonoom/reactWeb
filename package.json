@@ -17,6 +17,7 @@
     "react-dom": "^15.1.0",
     "react-emoji-picker": "^1.0.13",
     "react-emojione": "^2.0.0",
+    "react-native": "^0.42.3",
     "reqwest": "^2.0.5",
     "routes": "^2.1.0",
     "ueditor": "^1.2.0"

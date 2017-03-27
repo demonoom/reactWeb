@@ -116,6 +116,9 @@ const UserCardModalComponents = React.createClass({
             <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn ant-btn-f " onClick={teacherInfo.searchAntNest}>
                 蚁巢
             </Button>
+            {/*<Button type="primary" htmlType="submit" className="login-form-button class_right user_btn ant-btn-f ">
+                蚁群
+            </Button>*/}
 			</p>
           </Modal>
         </div>
