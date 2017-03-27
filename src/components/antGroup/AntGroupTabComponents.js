@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Tabs, Breadcrumb, Icon,Card,Button,Row,Col} from 'antd';
+import { Tabs, Breadcrumb, Icon,Card,Button,Row,Col,Table} from 'antd';
 import { Menu, Dropdown,message,Pagination,Tag , Modal,Popover,Input} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import {getPageSize} from '../../utils/Const';
@@ -9,15 +9,20 @@ import {getAllTopic} from '../../utils/Const';
 import {getOnlyTeacherTopic} from '../../utils/Const';
 const TabPane = Tabs.TabPane;
 
+var columns = [ {
+    title: '联系人',
+    dataIndex: 'userContacts',
+}];
 var antGroup;
 const AntGroupTabComponents = React.createClass({
 
     getInitialState() {
         antGroup = this;
         return {
-            defaultActiveKey:'userList',
-            activeKey:'userList',
+            defaultActiveKey:'loginWelcome',
+            activeKey:'loginWelcome',
             optType:'getUserList',
+            userContactsData:[],
         };
     },
     /**
@@ -26,37 +31,31 @@ const AntGroupTabComponents = React.createClass({
      */
     onChange(activeKey) {
         this.setState({activeKey:activeKey});
-        var initPageNo = 1;
     },
 
     componentDidMount(){
-        var initPageNo = 1;
-        antGroup.getAntGroup(initPageNo);
+        antGroup.getAntGroup();
     },
 
     /**
-     * 获取话题列表
-     * @param type 0:全部  1：只看老师
-     * @param pageNo
+     * 获取个人中心需要的数据,老师和学生可通用,后期需要什么再添加
      */
-    getAntGroup(pageNo){
-        topicCardArray.splice(0);
-        topicObjArray.splice(0);
+    getAntGroup(){
+        var userContactsData=[];
         var param = {
-            "method": 'getTopicsByType',
+            "method": 'getUserContacts',
             "ident": sessionStorage.getItem("ident"),
-            "type":type,
-            "pageNo": pageNo
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
                 response.forEach(function (e) {
-                    topicObjArray.push(e);
-                    // antGroup.buildTopicCard(e,0);
+                    var userId = e.colUid;
+                    var userName = e.userName;
+                    var userJson = {key:userId,userContacts:userName};
+                    userContactsData.push(userJson);
                 });
-                var pager = ret.pager;
-                antGroup.setState({"topicCardList":topicCardArray,"totalCount":pager.rsCount,"currentPage":pageNo});
+                antGroup.setState({"userContactsData":userContactsData});
             },
             onError: function (error) {
                 message.error(error);
@@ -64,33 +63,29 @@ const AntGroupTabComponents = React.createClass({
         });
     },
 
+    getPersonCenterInfo(record, index){
+        // alert("12312"+record);
+    },
 
     render() {
         var breadMenuTip="蚁群";
+        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+        var welcomeTitle = "欢迎"+loginUser.userName+"登录";
         var toolbarExtra = <div className="ant-tabs-right">
 
         </div>;
-        var tabComponent;
-        if(antGroup.state.optType=="getTopicById"){
-
-        }else{
-            var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
-            var welcomeTitle = "欢迎"+loginUser.userName+"登录";
-            tabComponent = <Tabs
-                hideAdd
-                ref = "mainTab"
-                activeKey={this.state.activeKey}
-                defaultActiveKey={this.state.defaultActiveKey}
-                tabBarExtraContent={toolbarExtra}
-                transitionName=""  //禁用Tabs的动画效果
-            >
-                <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
-                    <div className="antnest_cont topics_calc">
-                        123123
-                    </div>
-                </TabPane>
-            </Tabs>;
-        }
+        var tabComponent = <Tabs
+            hideAdd
+            ref = "mainTab"
+            activeKey={this.state.activeKey}
+            defaultActiveKey={this.state.defaultActiveKey}
+            tabBarExtraContent={toolbarExtra}
+            transitionName=""  //禁用Tabs的动画效果
+        >
+            <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
+                <Table onRowClick={antGroup.getPersonCenterInfo} showHeader={false} scroll={{ x: true, y: 400 }} columns={columns} dataSource={antGroup.state.userContactsData} pagination={false}/>
+            </TabPane>
+        </Tabs>;
         return (
             <div>
                 <Breadcrumb separator=">">
