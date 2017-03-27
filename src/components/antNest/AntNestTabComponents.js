@@ -1145,12 +1145,12 @@ const AntNestTabComponents = React.createClass({
                     <div>
                         {topicTitle}
                         <Row>
-                            <Col span={3}>内容：</Col>
-                            <Col span={15}><EmotionInputComponents></EmotionInputComponents></Col>
+                            <Col span={3} className="right_look">内容：</Col>
+                            <Col span={20}><EmotionInputComponents></EmotionInputComponents></Col>
                         </Row>
                         <Row>
-                            <Col span={3}>附件：</Col>
-                            <Col span={15}><UploadImgComponents callBackParent={antNest.getUploadedImgList}></UploadImgComponents></Col>
+                            <Col span={3} className="right_look">附件：</Col>
+                            <Col span={20}><UploadImgComponents callBackParent={antNest.getUploadedImgList}></UploadImgComponents></Col>
                         </Row>
                     </div>
 
