@@ -1145,7 +1145,7 @@ p.user_cont{
 	padding:8px 15px;
 }
 p.user_cont_cen{
-	text-align:center
+	text-align:left
 }
 p.user_cont span.name{
 	color:#a6a6a6;
@@ -1439,6 +1439,9 @@ a {
 }
 .yinyong3{
 	margin-top:16px;
+}
+.yinyong_topic{
+	margin-bottom:16px;
 }
 .yinyong2{
 	color: #9c6a4d 
@@ -1852,7 +1855,7 @@ a.topics:hover{
 	position:relative
 }
 .topics_zan img{
-    min-height: 100%;
+    height: 100%;
 	width:100%;
     vertical-align: top;
 	position: absolute;
@@ -1950,4 +1953,33 @@ a.topics:hover{
 }
 .topics_le{
 	margin-left:25px;
+}
+.topics_white{
+	color:#fff;
+	margin-bottom:5px;
+}
+.topics_calc{
+	min-height:calc(100% - 50px);
+	max-height:calc(100% - 50px);
+}
+.topics_rela{
+	position:relative
+}
+.topics_ral{
+	border-radius:6px;
+	height:100px;
+}
+.topics_btn_le{
+	width:94px;
+}
+.topics_blue_bg{
+	background:#f8f9fe;
+	border:1px solid #e4e7f8;
+	padding:4px 8px;
+	margin-top: 15px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+.topics_mar60{
+	margin-left:0 !important
 }
