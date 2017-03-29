@@ -149,7 +149,9 @@ const AntGroupTabComponents = React.createClass({
                             if("SGZH"==colUtype || fromUser.colUid==userId){
                                 var uuid = e.uuid;
                                 uuidsArray.push(uuid);
-                                var message={'fromUser':fromUser,'content':e.content,"messageType":"getMessage"};
+                                imgTagArray.splice(0);
+                                var imgTagArrayReturn = antGroup.getImgTag(e.content);
+                                var message={'fromUser':fromUser,'content':e.content,"messageType":"getMessage","imgTagArray":imgTagArrayReturn};
                                 messageList.push(message);
                             }
                         });
@@ -160,7 +162,6 @@ const AntGroupTabComponents = React.createClass({
                         antGroup.setState({"messageList":messageList});
                     }else if(command=="message"){
                         var data = info.data;
-                        imgTagArray.splice(0);
                         var messageOfSinge = data.message;
                         var uuidsArray = [];
                         var fromUser = messageOfSinge.fromUser;
@@ -170,8 +171,9 @@ const AntGroupTabComponents = React.createClass({
                             var uuid = messageOfSinge.uuid;
                             uuidsArray.push(uuid);
                             var content=messageOfSinge.content;
-                            antGroup.changeImgTextToTag(messageOfSinge.content);
-                            var messageShow={'fromUser':fromUser,'content':content,"messageType":"getMessage"};
+                            imgTagArray.splice(0);
+                            var imgTagArrayReturn = antGroup.getImgTag(messageOfSinge.content);
+                            var messageShow={'fromUser':fromUser,'content':content,"messageType":"getMessage","imgTagArray":imgTagArrayReturn};
                             messageList.push(messageShow);
                             if(uuidsArray.length!=0){
                                 var receivedCommand = {"command":"messageRecievedResponse","data":{"uuids":uuidsArray}};
@@ -188,23 +190,30 @@ const AntGroupTabComponents = React.createClass({
         antGroup.setState({"optType":"sendMessage","userIdOfCurrentTalk":userId});
     },
 
+    getImgTag(str){
+        var imgTags = [];
+        imgTags = antGroup.changeImgTextToTag(str,imgTags);
+        return imgTags;
+    },
+
     /**
      * 将表情的标记转为表情的图片
      */
-    changeImgTextToTag(str){
+    changeImgTextToTag(str,imgTags){
         var start = str.indexOf("[bexp_");
         var end = str.indexOf("]");
         var subStr = str.substring(start,end+1);
         var imgUrl = getImgName(subStr);
         var localUrl = "../src/components/images/emotions/"+imgUrl;
-        var subStrReplace = <img src={localUrl} /> ;
-        imgTagArray.push(subStrReplace);
+        var subStrReplace = <img src={localUrl} style={{width:'50px',height:'50px'}}/> ;
+        imgTags.push(subStrReplace);
         var otherStr = str.substring(end+1);
         if(otherStr.indexOf("[bexp_")!=-1){
-            antGroup.changeImgTextToTag(otherStr);
+            antGroup.changeImgTextToTag(otherStr,imgTags);
         }else{
             showImg+=otherStr;
         }
+        return imgTags;
     },
 
     sendMessage(){
@@ -306,7 +315,7 @@ const AntGroupTabComponents = React.createClass({
                     var messageTag;
                     if(isEmpty(messageType)==false && messageType=="getMessage"){
                         messageTag =  <li style={{'textAlign':'left'}}>
-                            {fromUser}：{imgTagArray}{showImg}
+                            {fromUser}：{e.imgTagArray}{showImg}
                         </li>;
                     }else{
                         messageTag =  <li style={{'textAlign':'right'}}>
