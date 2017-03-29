@@ -9,6 +9,7 @@ import {getLocalTime} from '../../utils/Const';
 import {isEmpty} from '../../utils/Const';
 import {getAllTopic} from '../../utils/Const';
 import {getOnlyTeacherTopic} from '../../utils/Const';
+import {getImgName} from '../../utils/Const';
 import {MsgConnection} from '../../utils/msg_websocket_connection';
 const TabPane = Tabs.TabPane;
 
@@ -20,6 +21,8 @@ var antGroup;
 var messageList=[];
 //消息通信js
 var ms;
+var imgTagArray = [];
+var showImg="";
 const AntGroupTabComponents = React.createClass({
 
     getInitialState() {
@@ -125,7 +128,6 @@ const AntGroupTabComponents = React.createClass({
         messageList.splice(0);
         var loginUserId = sessionStorage.getItem("ident");
         var machineId = sessionStorage.getItem("machineId");
-        console.log("machineId:"+machineId);
         var pro = {"command":"messagerConnect","data":{"machineType":"ios","userId":Number.parseInt(loginUserId),"machine":machineId}};
         ms.msgWsListener={onError:function(errorMsg){
             console.log("error:"+errorMsg);
@@ -142,7 +144,6 @@ const AntGroupTabComponents = React.createClass({
                         var messageArray = data.messages;
                         var uuidsArray = [];
                         messageArray.forEach(function (e) {
-                            console.log("content"+e.content);
                             var fromUser = e.fromUser;
                             var colUtype = fromUser.colUtype;
                             if("SGZH"==colUtype || fromUser.colUid==userId){
@@ -159,16 +160,18 @@ const AntGroupTabComponents = React.createClass({
                         antGroup.setState({"messageList":messageList});
                     }else if(command=="message"){
                         var data = info.data;
+                        imgTagArray.splice(0);
                         var messageOfSinge = data.message;
                         var uuidsArray = [];
-                        console.log("content"+messageOfSinge.content);
                         var fromUser = messageOfSinge.fromUser;
                         var colUtype = fromUser.colUtype;
                         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
                         if("SGZH"==colUtype || fromUser.colUid!=loginUser.colUid){
                             var uuid = messageOfSinge.uuid;
                             uuidsArray.push(uuid);
-                            var messageShow={'fromUser':fromUser,'content':messageOfSinge.content,"messageType":"getMessage"};
+                            var content=messageOfSinge.content;
+                            antGroup.changeImgTextToTag(messageOfSinge.content);
+                            var messageShow={'fromUser':fromUser,'content':content,"messageType":"getMessage"};
                             messageList.push(messageShow);
                             if(uuidsArray.length!=0){
                                 var receivedCommand = {"command":"messageRecievedResponse","data":{"uuids":uuidsArray}};
@@ -183,6 +186,25 @@ const AntGroupTabComponents = React.createClass({
         };
         ms.connect(pro);
         antGroup.setState({"optType":"sendMessage","userIdOfCurrentTalk":userId});
+    },
+
+    /**
+     * 将表情的标记转为表情的图片
+     */
+    changeImgTextToTag(str){
+        var start = str.indexOf("[bexp_");
+        var end = str.indexOf("]");
+        var subStr = str.substring(start,end+1);
+        var imgUrl = getImgName(subStr);
+        var localUrl = "../src/components/images/emotions/"+imgUrl;
+        var subStrReplace = <img src={localUrl} /> ;
+        imgTagArray.push(subStrReplace);
+        var otherStr = str.substring(end+1);
+        if(otherStr.indexOf("[bexp_")!=-1){
+            antGroup.changeImgTextToTag(otherStr);
+        }else{
+            showImg+=otherStr;
+        }
     },
 
     sendMessage(){
@@ -284,7 +306,7 @@ const AntGroupTabComponents = React.createClass({
                     var messageTag;
                     if(isEmpty(messageType)==false && messageType=="getMessage"){
                         messageTag =  <li style={{'textAlign':'left'}}>
-                            {fromUser}：{content}
+                            {fromUser}：{imgTagArray}{showImg}
                         </li>;
                     }else{
                         messageTag =  <li style={{'textAlign':'right'}}>
