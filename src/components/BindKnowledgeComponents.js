@@ -5,17 +5,19 @@ import {doWebService} from '../WebServiceHelper';
 
 var bindKnowledge;
 var createExamPager = [];
-const columns = [{
-    title: '科目',
-    dataIndex: 'label',
-    footer: '',
-}];
+var columns;
 
 
 const BindKnowledgeComponents = React.createClass({
 
     getInitialState() {
         bindKnowledge = this;
+        columns = [{
+            title: '科目',
+            dataIndex: 'label',
+            footer: '',
+
+        }];
         return {
             visible: false,
             selectedKnowledge: '',
@@ -23,15 +25,19 @@ const BindKnowledgeComponents = React.createClass({
             mockData: [],
             targetKeys: [],
             lessonMenu: [],
+
         };
     },
     componentDidMount(){
+        this.rowClassChangeTogle(0,$('.knowledge_table tr'));
     },
 
     componentWillMount(){
         this.getLessonMenu();
         this.getUserRalatedPoints();
+
     },
+
 
     // 用户已经选中的知识点
     getUserRalatedPoints(){
@@ -77,6 +83,9 @@ const BindKnowledgeComponents = React.createClass({
                     lessonMenu.push(optionContent);
                 });
                 bindKnowledge.setState({'lessonMenu': lessonMenu});
+                bindKnowledge.selecdRow(lessonMenu[0], 0);
+
+
             },
             onError: function (error) {
                 message.error(error);
@@ -118,8 +127,25 @@ const BindKnowledgeComponents = React.createClass({
         }
     },
 
+    // 表格行切换
+    rowClassChangeTogle(onIndex,els){
+
+        if(!els || !els.length) return;
+        if(!onIndex && isNaN(onIndex)) index = 0;
+
+        $(els).removeClass('select');
+        $(els).each(function(index,el){
+            if(index==onIndex){
+                $(el).addClass('select');
+            }
+        });
+
+},
+
 // 选中的科目
     selecdRow(record, index){
+
+       this.rowClassChangeTogle(index,$('.knowledge_table tr'));
 
 
         const mockData = [];
@@ -145,8 +171,10 @@ const BindKnowledgeComponents = React.createClass({
 
 
     showModal() {
-
         bindKnowledge.setState({visible: true, defaultSelected: []});
+        window.setTimeout(function(){
+            bindKnowledge.rowClassChangeTogle(0,$('.knowledge_table tr'));
+        },0)
     },
 
     handleCallbackParent: function (val) {
@@ -157,44 +185,7 @@ const BindKnowledgeComponents = React.createClass({
     handleCancel(e) {
         bindKnowledge.setState({visible: false, defaultSelected: []});
     },
-    /**
-     * 获取穿梭框中左侧的备选数据
-     */
-    getMock(pointsArrayWithSelected) {
-        const targetKeys = pointsArrayWithSelected;
-        const mockData = [];
 
-        var param = {
-            "method": 'getUserRalatedPoints',
-            "userId": sessionStorage.getItem("ident"),
-        };
-        doWebService(JSON.stringify(param), {
-            onResponse: function (ret) {
-                console.log(ret.msg);
-                ret.response.forEach(function (e) {
-                    var currentContent = e.content;
-                    var currentId = e.id;
-                    var childrenArray = e.children;
-                    childrenArray.forEach(function (e) {
-                        var childrenId = e.id;
-                        var childrenContent = e.content;
-                        const data = {
-                            key: childrenId,
-                            title: currentContent,
-                            description: childrenContent
-                        };
-                        mockData.push(data);
-                    });
-
-
-                });
-                createExamPager.setState({mockData, targetKeys});
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });
-    },
 
     //穿梭框内容改变的响应函数
     transferHandleChange(targetKeys, b, c){
@@ -213,6 +204,9 @@ const BindKnowledgeComponents = React.createClass({
     },
 
 
+
+
+
     render() {
         return (
             <Modal
@@ -226,13 +220,12 @@ const BindKnowledgeComponents = React.createClass({
                             onClick={bindKnowledge.bindPointForTeacher}>确定</Button>,
                     <Button type="ghost" htmlType="reset" className="login-form-button"
                             onClick={bindKnowledge.handleCancel}>取消</Button>
-                ]}
-            >
+                ]}>
 
                 <Row>
                     <Col span={4} >
 					<div className="knowledge_table">
-                        <Table  columns={columns} onRowClick={bindKnowledge.selecdRow} 
+                        <Table  columns={columns} onRowClick={bindKnowledge.selecdRow}
                                dataSource={bindKnowledge.state.lessonMenu} scroll={{y: 325}} pagination={false} showHeader={false} />
 							   </div>
                     </Col>
