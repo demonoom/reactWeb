@@ -96,35 +96,37 @@ const BindKnowledgeComponents = React.createClass({
     //修改，保存知识点
     bindPointForTeacher(){
 
-        let pointIds = bindKnowledge.state.targetKeys.join(',');
+        /*let pointIds = bindKnowledge.state.targetKeys.join(',');
         if (!pointIds || ',' == pointIds) {
             message.warning("请选择具体的知识点完成绑定");
             bindKnowledge.props.callbackParent();
             bindKnowledge.setState({visible: false});
         } else {
-            var param = {
-                // batchBindPointForTeacher
-                "method": 'updateTeacherBindedPoints',
-                "userId": sessionStorage.getItem("ident"),
-                "pointIds": pointIds,
-            };
 
-            doWebService(JSON.stringify(param), {
-                onResponse: function (ret) {
+        }*/
+        let pointIds = bindKnowledge.state.targetKeys.join(',');
+        var param = {
+            // batchBindPointForTeacher
+            "method": 'updateTeacherBindedPoints',
+            "userId": sessionStorage.getItem("ident"),
+            "pointIds": pointIds,
+        };
 
-                    if (ret.msg == "调用成功" && ret.response == true) {
-                        message.success("知识点绑定成功");
-                    } else {
-                        message.error("知识点绑定失败");
-                    }
-                    bindKnowledge.props.callbackParent();
-                    bindKnowledge.setState({visible: false});
-                },
-                onError: function (error) {
-                    message.error(error);
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+
+                if (ret.msg == "调用成功" && ret.response == true) {
+                    message.success("知识点绑定成功");
+                } else {
+                    message.error("知识点绑定失败");
                 }
-            });
-        }
+                bindKnowledge.props.callbackParent();
+                bindKnowledge.setState({visible: false});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     // 表格行切换

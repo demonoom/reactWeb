@@ -241,6 +241,7 @@ const KnowledgeMenuComponents = React.createClass({
                     List.push([e]);
                 });
                 if(List==null || List.length==0){
+                    children="";
                     mMenu.setState({noHaveKnowledgeTip:<div className="binding_a">您目前还没有知识点，请先点击下方按钮绑定知识点</div>});
                 }else{
                     mMenu.buildMenuChildren(List);
