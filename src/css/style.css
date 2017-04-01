@@ -2020,9 +2020,7 @@ a.topics:hover{
 .knowledge_table table tr > td:visited{
 	 background:#eaf8fe;
 }
-.knowledge_table table tr:first-child{
-	background:#eaf8fe;
-}
+
 .knowledge_table table tr.select{
 	background:#eaf8fe;
 }
