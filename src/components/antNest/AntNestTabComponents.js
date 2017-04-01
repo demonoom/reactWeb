@@ -139,12 +139,16 @@ const AntNestTabComponents = React.createClass({
                 }else{
                     replayUserTitle=<span>{e.user.userName}：</span>;
                 }
+                var delBtn;
+                if(e.user.colUtype=="STUD" || (e.user.colUtype=="TEAC" && e.user.colUid == sessionStorage.getItem("ident"))){
+                    delBtn = <Button value={e.id} className="topics_btn antnest_talk topics_a topics_a—bnt teopics_spa topics_le"  type="dashed" onClick={antNest.deleteTopicComment}>删除</Button>;
+                }
                 var answerUserInfo = <li className="topics_comment">
                     {replayUserTitle}
                     <span>{e.content}</span>
                     {/*<span><article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article></span>*/}
                     <span className="topics_reply">
-                        <Button value={e.id} className="topics_btn antnest_talk topics_a topics_a—bnt teopics_spa topics_le"  type="dashed" onClick={antNest.deleteTopicComment}>删除</Button>
+                        {delBtn}
 						<span className="topics_r-line"></span>
                         <Button value={topicObj.id+"#"+e.user.colUid}  type="dashed"  className="topics_btn topics_a topics_a—bnt teopics_spa"  onClick={antNest.showDiscussModal}>回复</Button>
                     </span>
@@ -255,11 +259,15 @@ const AntNestTabComponents = React.createClass({
                         }else{
                             replayUserTitle=<span>{e.user.userName}：</span>;
                         }
+                        var delBtnInRelpay;
+                        if(e.user.colUtype=="STUD" || (e.user.colUtype=="TEAC" && e.user.colUid == sessionStorage.getItem("ident"))){
+                            delBtnInRelpay = <Button value={e.id}  type="dashed"  className="topics_btn antnest_talk topics_a topics_a—bnt teopics_spa topics_le" onClick={antNest.deleteTopicComment}>删除</Button>;
+                        }
                         var answerUserInfo = <li className="topics_comment">
                             {replayUserTitle}
                             <span>{e.content}</span>
                             <span className="topics_reply">
-                                <Button value={e.id}  type="dashed"  className="topics_btn antnest_talk topics_a topics_a—bnt teopics_spa topics_le" onClick={antNest.deleteTopicComment}>删除</Button>
+                                {delBtnInRelpay}
 								<span className="topics_r-line"></span>
                                 <Button value={topicReplayInfo.id+"#"+e.user.colUid} type="dashed"  className="topics_btn topics_a topics_a—bnt teopics_spa"  onClick={antNest.showDiscussModal}>回复</Button>
                             </span>
@@ -323,7 +331,14 @@ const AntNestTabComponents = React.createClass({
                     }
                     replayAttachMentsArray.push(attachMents);
                 })
-
+                var delBtnInReplayCard;
+                if(topicReplayInfo.fromUser.colUtype=="STUD" || (topicReplayInfo.fromUser.colUtype=="TEAC" && topicReplayInfo.fromUser.colUid == sessionStorage.getItem("ident"))){
+                    delBtnInReplayCard = <Button value={topicReplayInfo.id} icon="delete" onClick={antNest.deleteTopic} className="topics_btn antnest_talk teopics_spa">删除</Button>;
+                }
+                var praiseBtn;
+                if(topicObj.fromUser.colUtype=="TEAC" && topicObj.fromUser.colUid == sessionStorage.getItem("ident")){
+                    praiseBtn = <Button value={topicObj.id+"#"+topicReplayInfo.id} icon="to-top" onClick={antNest.setTopicToTop} className="topics_btn antnest_talk teopics_spa">置顶</Button>;
+                }
                 var topicReplayCard = <div  style={{ marginBottom: '15px' }}>
                     <div style={{marginLeft:'0'}} className="antnest_user">{replayUserHeadPhoto}</div>
                     <ul>
@@ -331,8 +346,8 @@ const AntNestTabComponents = React.createClass({
                        <li>  {topicReplayInfo.content}</li>
                         <li >{replayAttachMentsArray}</li>
 						<li className="topics_bot"><span className="topics_time">{getLocalTime(topicReplayInfo.createTime)}</span><span className="topics_dianzan">
-						<Button value={topicReplayInfo.id} icon="delete" onClick={antNest.deleteTopic} className="topics_btn antnest_talk teopics_spa">删除</Button>
-                        <Button value={topicObj.id+"#"+topicReplayInfo.id} icon="to-top" onClick={antNest.setTopicToTop} className="topics_btn antnest_talk teopics_spa">置顶</Button>
+                        {delBtnInReplayCard}
+                        {praiseBtn}
                         {replayPraiseButton}
                         <Button icon="message" value={topicReplayInfo.id+"#toUser"} onClick={antNest.showDiscussModal} className="topics_btn teopics_spa">评论</Button></span></li>
                     </ul>
@@ -805,6 +820,10 @@ const AntNestTabComponents = React.createClass({
             inputContent = $("#emotionInput").val();
         }*/
         inputContent = antNest.getEmotionInputById();
+        if(isEmpty(inputContent)){
+            message.error("评论内容不允许为空,请重新输入",5);
+            return;
+        }
         console.log("inputContent:"+inputContent);
         var toUserId = -1;
         if(isEmpty(antNest.state.toUserId)==false){
@@ -862,6 +881,7 @@ const AntNestTabComponents = React.createClass({
 
     /**
      * 初始化表情输入框
+     * 清空话题标题输入框
      */
     initMyEmotionInput(){
         $("#emotionInput").val("");
@@ -872,7 +892,8 @@ const AntNestTabComponents = React.createClass({
                 emotionArray[i].innerText="";
             }
         }
-
+        //清空话题标题输入框
+        antNest.setState({"topicTitle":'',"topicImgUrl":[]});
     },
 
     createUUID() {
@@ -936,6 +957,16 @@ const AntNestTabComponents = React.createClass({
             inputContent = emotionInput;
         }
         console.log("inputContent:"+inputContent);
+        if(antNest.state.topicModalType=="topic"){
+            if(isEmpty(antNest.state.topicTitle)){
+                message.error("话题的标题不允许为空，请重新输入。",5);
+                return;
+            }
+        }
+        if(isEmpty(inputContent)){
+            message.error("内容不允许为空,请重新输入",5);
+            return;
+        }
         var createTime = (new Date()).valueOf();
         var uuid = antNest.createUUID();
         var topicImageArray = antNest.state.topicImgUrl;
@@ -1156,9 +1187,7 @@ const AntNestTabComponents = React.createClass({
     },
 
     render() {
-        var mainComponent ;
         var breadMenuTip="蚁巢";
-        mainComponent = <TeacherAllCourseWare ref="courseWare"/>;
         var toolbarExtra = <div className="ant-tabs-right"><Button value="talk" onClick={antNest.showaddTopicModal} className="antnest_talk">发表说说</Button><Button value="topic" onClick={antNest.showaddTopicModal}>发表话题</Button></div>;
         var returnToolBar = <div className="ant-tabs-right"><Button onClick={antNest.returnTopicList}>返回</Button></div>
         var tabComponent;
@@ -1209,7 +1238,7 @@ const AntNestTabComponents = React.createClass({
         if(antNest.state.topicModalType=="topic"){
             topicTitle = <Row className="yinyong_topic">
                 <Col span={3} className="right_look">标题：</Col>
-                <Col span={20}><Input onChange={antNest.topicTitleChange} /></Col>
+                <Col span={20}><Input onChange={antNest.topicTitleChange} defaultValue={antNest.state.topicTitle} value={antNest.state.topicTitle} /></Col>
             </Row>;
         }
         return (
@@ -1235,7 +1264,7 @@ const AntNestTabComponents = React.createClass({
                         </Row>
                         <Row className="yinyong3">
                             <Col span={3} className="right_look">附件：</Col>
-                            <Col span={20}><UploadImgComponents callBackParent={antNest.getUploadedImgList}></UploadImgComponents></Col>
+                            <Col span={20}><UploadImgComponents fileList={antNest.state.topicImgUrl} callBackParent={antNest.getUploadedImgList}></UploadImgComponents></Col>
                         </Row>
                     </div>
 

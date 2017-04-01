@@ -80,6 +80,14 @@ const UserCardModalComponents = React.createClass({
       teacherInfo.setState({ visible: false });
   },
 
+  /**
+   * 蚁群入口
+   */
+  searchAntGroup(){
+    teacherInfo.props.callbackParent("visitAntGroup");
+    teacherInfo.setState({ visible: false });
+  },
+
   render() {
     return (
         <div className="layout_logo">
@@ -116,9 +124,9 @@ const UserCardModalComponents = React.createClass({
             <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn ant-btn-f topics_btn_le " onClick={teacherInfo.searchAntNest}>
                 蚁巢
             </Button>
-            {/*<Button type="primary" htmlType="submit" className="login-form-button class_right user_btn ant-btn-f ">
+            <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn ant-btn-f topics_btn_le " onClick={teacherInfo.searchAntGroup}>
                 蚁群
-            </Button>*/}
+            </Button>
 			</p>
           </Modal>
         </div>

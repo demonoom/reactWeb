@@ -18,6 +18,7 @@ import moment from 'moment';
 import StudyEvaluateMenu from '../components/StudyEvaluateMenu';
 import StudyEvaluateTabComponents from '../components/StudyEvaluateTabComponents';
 import AntNestTabComponents from '../components/antNest/AntNestTabComponents';
+import AntGroupTabComponents from '../components/antGroup/AntGroupTabComponents';
 import { LocaleProvider } from 'antd';
 import enUS from 'antd/lib/locale-provider/en_US';
 // 推荐在入口文件全局设置 locale
@@ -168,6 +169,16 @@ const MainLayout = React.createClass({
           <div className="ant-layout-container">
             <div className="ant-layout-content">
               <AntNestTabComponents ref="antNestTabComponents" resouceType={mainLayout.state.resouceType}/>
+            </div>
+          </div>
+        </Col>
+      </Row>;
+    }else if(mainLayout.state.resouceType=="visitAntGroup"){
+      mainContent = <Row>
+        <Col span={24}>
+          <div className="ant-layout-container">
+            <div className="ant-layout-content">
+              <AntGroupTabComponents ref="antGroupTabComponents" resouceType={mainLayout.state.resouceType}/>
             </div>
           </div>
         </Col>

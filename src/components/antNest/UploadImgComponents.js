@@ -1,5 +1,8 @@
 import React, { PropTypes } from 'react';
 import { Upload, Icon,Button,message, Modal,Progress } from 'antd';
+import {isEmpty} from '../../utils/Const';
+
+var fileList=[];
 var antUpload;
 const UploadImgComponents = React.createClass({
 
@@ -14,6 +17,12 @@ const UploadImgComponents = React.createClass({
 
     componentDidMount(){
         antUpload.setState({"defaultFileList":[]});
+    },
+
+    componentWillReceiveProps(nextProps){
+        if(isEmpty(nextProps)==false && isEmpty(nextProps.fileList)==false &&　nextProps.fileList.length==0){
+            antUpload.setState({fileList:[]});
+        }
     },
 
 
@@ -34,6 +43,7 @@ const UploadImgComponents = React.createClass({
             action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
             listType: 'picture-card',
             defaultFileList: antUpload.state.defaultFileList,
+            fileList:antUpload.state.fileList,
             onPreview:antUpload.handlePreview,
             beforeUpload(file){
                 var fileType = file.type;
@@ -60,6 +70,7 @@ const UploadImgComponents = React.createClass({
                 } else if (info.file.status === 'error') {
                     message.error(`${info.file.name} 文件上传失败.`,5);
                 }
+                antUpload.setState({"fileList":info.fileList});
             },
             onRemove(file){
                 console.log(file);
