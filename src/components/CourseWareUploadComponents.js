@@ -99,17 +99,17 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
         var lastPointIndex = fileName.lastIndexOf(".");
         var fileType = fileName.substring(lastPointIndex+1);
         //根据文件类型的不同，设置不同的文件封面
-        var cover = "http://pic.qiantucdn.com/58pic/19/30/17/5695e8b35c176_1024.jpg";
+        var cover = "http://60.205.86.217/upload2/common/ziyuan_img5.png";
         if(fileType=="pptx"){
-            cover = "http://pic.qiantucdn.com/58pic/19/30/17/5695e8b35c176_1024.jpg";
+            cover = "http://60.205.86.217/upload2/common/ziyuan_img3.png";
         }else if(fileType=="ppt"){
-            cover = "http://pic.qiantucdn.com/58pic/19/30/17/5695e8b35c176_1024.jpg";
+            cover = "http://60.205.86.217/upload2/common/ziyuan_img2.png";
         }else if(fileType=="pdf"){
-            cover = "http://pic.qiantucdn.com/58pic/19/30/17/5695e8b35c176_1024.jpg";
+            cover = "http://60.205.86.217/upload2/common/ziyuan_img1.png";
         }else if(fileType=="flv"){
-            cover = "http://pic.qiantucdn.com/58pic/19/30/17/5695e8b35c176_1024.jpg";
+            cover = "http://60.205.86.217/upload2/common/ziyuan_img4.png";
         }else if(fileType=="mp4"){
-            cover = "http://pic.qiantucdn.com/58pic/19/30/17/5695e8b35c176_1024.jpg";
+            cover = "http://60.205.86.217/upload2/common/ziyuan_img6.png";
         }
         var isLinkToSchedule=this.state.useSameSchedule;
         var param = {
