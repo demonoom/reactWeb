@@ -1105,6 +1105,10 @@ article.content_3 img{
 	    overflow: hidden;
 		width: calc(100% - 8px);
 	}
+.ant-table-fixed-header-new1{
+	    overflow: hidden;
+		width: 100%;
+}
 .ant-tabs-extra-content{
 	margin-right:24px;
 }
@@ -1201,6 +1205,9 @@ p.user_cont span.name1{
 .modol_width{
 	width:480px !important;
 } 
+.knowledge_width{
+	width:750px !important;
+} 
 .ant-form-item {
     font-size: 14px;
     margin: 12px 0 12px 0 !important;
@@ -1224,6 +1231,7 @@ label {
     display: block;
     width: 83.33333333%;
 }
+
 a {
     color: #2896fb;
 	text-decoration:none;
@@ -1855,7 +1863,8 @@ a.topics:hover{
 	position:relative
 }
 .topics_zan img{
-    min-width: 100%;
+    height: 100%;
+	min-width: 100%;
     height: 100%;
 	width:auto;
     vertical-align: top;
@@ -1984,4 +1993,39 @@ a.topics:hover{
 }
 .topics_mar60{
 	margin-left:0 !important
+}
+.knowledge_ri{
+	text-align:right
+}
+.ant-transfer-list{
+	text-align:left;
+}
+.knowledge_table table｛{
+	border-radius:0 0 0 0 !important;
+}
+
+.knowledge_table .ant-table-header{
+	width:100% !important
+}
+.knowledge_table table tr > th{
+	background:#e5f2fe;
+}
+.knowledge_table table tr > td{
+	 padding: 10px 8px;
+	 cursor:pointer	
+}
+.knowledge_table table tr > td:hover{
+	 background:#eaf8fe;
+}
+.knowledge_table table tr > td:visited{
+	 background:#eaf8fe;
+}
+.knowledge_table table tr:first-child{
+	background:#eaf8fe;
+}
+.knowledge_table table tr.select{
+	background:#eaf8fe;
+}
+.knowledge_table .ant-table-header{
+	margin-bottom:0 !important
 }

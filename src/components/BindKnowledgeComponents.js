@@ -217,9 +217,9 @@ const BindKnowledgeComponents = React.createClass({
         return (
             <Modal
                 visible={bindKnowledge.state.visible}
-                title="知识点"
+                title="管理知识点"
                 onCancel={bindKnowledge.handleCancel}
-                className="modol_width"
+                className="knowledge_width"
                 transitionName=""  //禁用modal的动画效果
                 footer={[
                     <Button type="primary" htmlType="submit" className="login-form-button"
@@ -230,11 +230,13 @@ const BindKnowledgeComponents = React.createClass({
             >
 
                 <Row>
-                    <Col span={4}>
-                        <Table columns={columns} onRowClick={bindKnowledge.selecdRow}
-                               dataSource={bindKnowledge.state.lessonMenu} scroll={{y: 240}}/>
+                    <Col span={4} >
+					<div className="knowledge_table">
+                        <Table  columns={columns} onRowClick={bindKnowledge.selecdRow} 
+                               dataSource={bindKnowledge.state.lessonMenu} scroll={{y: 325}} pagination={false} showHeader={false} />
+							   </div>
                     </Col>
-                    <Col span={20}>
+                    <Col span={20} className="knowledge_ri">
                         <Transfer
                             dataSource={bindKnowledge.state.mockData}
                             showSearch
