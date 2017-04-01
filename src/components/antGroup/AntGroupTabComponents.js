@@ -12,6 +12,7 @@ import {getOnlyTeacherTopic} from '../../utils/Const';
 import {getImgName} from '../../utils/Const';
 import {MsgConnection} from '../../utils/msg_websocket_connection';
 const TabPane = Tabs.TabPane;
+const confirm = Modal.confirm;
 
 var columns = [ {
     title: '联系人',
@@ -58,6 +59,8 @@ const AntGroupTabComponents = React.createClass({
             currentMemberArray:[],
             selectedRowKeys: [],  // Check here to configure the default column
             selectedRowKeysStr:'',
+            memberData:[],  //添加群成员时，待添加群成员的数组
+            memberTargetKeys:[],    //添加群成员时，已选中待添加群成员的数组
         };
     },
     /**
@@ -457,10 +460,43 @@ const AntGroupTabComponents = React.createClass({
         antGroup.getUserContactsMockData();
         antGroup.setState({"createChatGroupModalVisible":true,"updateGroupId":''});
     },
-
+    /**
+     * 创建群组时，获取当前用户的联系人列表
+     */
     getUserContactsMockData(){
         const mockData = [];
         var targetKeys = [];
+        var param = {
+            "method": 'getUserContacts',
+            "ident": sessionStorage.getItem("ident"),
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse : function(ret) {
+                console.log(ret.msg);
+                var response = ret.response;
+                response.forEach(function (e) {
+                    var userId = e.colUid;
+                    var userName = e.userName;
+                    const data = {
+                        key: userId,
+                        title: userName,
+                    };
+                    mockData.push(data);
+                });
+                antGroup.setState({ mockData, targetKeys });
+            },
+            onError : function(error) {
+                message.error(error);
+            }
+        });
+    },
+    /**
+     * 添加群成员时，获取未在群成员列表中的联系人
+     */
+    getNotMemberUser(){
+        const memberData = [];
+        memberData.splice(0);
+        var memberTargetKeys = [];
         var param = {
             "method": 'getUserContacts',
             "ident": sessionStorage.getItem("ident"),
@@ -478,10 +514,10 @@ const AntGroupTabComponents = React.createClass({
                             key: userId,
                             title: userName,
                         };
-                        mockData.push(data);
+                        memberData.push(data);
                     }
                 });
-                antGroup.setState({ mockData, targetKeys });
+                antGroup.setState({ memberData, memberTargetKeys });
             },
             onError : function(error) {
                 message.error(error);
@@ -625,8 +661,8 @@ const AntGroupTabComponents = React.createClass({
                     }
                 }
             }
-            return isExist;
         }
+        return isExist;
     },
 
     /**
@@ -643,7 +679,18 @@ const AntGroupTabComponents = React.createClass({
      * 移除选中的群组成员
      */
     deleteAllSelectedMembers(){
-        var param = {
+        confirm({
+            title: '确定要移除选中的群成员?',
+            onOk() {
+                var currentGroupObj = antGroup.state.currentGroupObj;
+                var memberIds = antGroup.state.selectedRowKeysStr;
+                var optType="removeMember";
+                antGroup.deleteChatGroupMember(currentGroupObj.chatGroupId,memberIds,optType);
+            },
+            onCancel() {
+            },
+        });
+        /*var param = {
             "method": 'deleteChatGroupMember',
             "chatGroupId": antGroup.state.currentGroupObj.chatGroupId,
             "memberIds": antGroup.state.selectedRowKeysStr
@@ -662,7 +709,7 @@ const AntGroupTabComponents = React.createClass({
             onError: function (error) {
                 message.error(error);
             }
-        });
+        });*/
     },
 
     /**
@@ -688,9 +735,125 @@ const AntGroupTabComponents = React.createClass({
         }
         return a;
     },
-
+    /**
+     * 显示群成员添加Modal窗口
+     */
     showAddMembersModal(){
+        antGroup.getNotMemberUser();
+        antGroup.setState({"addGroupMemberModalVisible":true});
+    },
+    /**
+     * 关闭添加群成员Modal窗口
+     */
+    addGroupMemberModalHandleCancel(){
+        antGroup.setState({"addGroupMemberModalVisible":false});
+    },
+    /**
+     * 添加群成员的Tranfer组件内容改变事件
+     * @param targetKeys
+     */
+    addMemberTransferHandleChange(targetKeys){
+        antGroup.setState({ "memberTargetKeys":targetKeys });
+    },
+    /**
+     * 添加群成员
+     */
+    addGroupMember(){
+        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+        var memberTargetkeys = antGroup.state.memberTargetKeys;
+        var memberIds =memberTargetkeys.join(",");
+        var currentGroupObj = antGroup.state.currentGroupObj;
+        var param = {
+            "method": 'addChatGroupMember',
+            "chatGroupId": currentGroupObj.chatGroupId,
+            "memberIds":memberIds
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if(ret.msg=="调用成功" && ret.success==true && response==true){
+                    message.success("群成员添加成功");
+                }else{
+                    message.success("群成员添加失败");
+                }
+                var currentMemberArray = antGroup.state.currentMemberArray;
+                currentMemberArray = currentMemberArray.concat(memberTargetkeys);
+                antGroup.getUserChatGroup();
+                antGroup.setState({"addGroupMemberModalVisible":false,"currentMemberArray":currentMemberArray});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
 
+    getCurrentMemberIds(){
+        var memberIds="";
+        var currentGroupObj = antGroup.state.currentGroupObj;
+        if(isEmpty(currentGroupObj)==false){
+            var groupTitle = currentGroupObj.name;
+            var groupId = currentGroupObj.chatGroupId;
+            var members = currentGroupObj.members;
+            var membersArray=[];
+            members.forEach(function (e) {
+                var memberId = e.colUid;
+                memberIds+=memberId+",";
+            });
+        }
+        return memberIds;
+    },
+
+    /**
+     * 解散聊天群
+     */
+    dissolutionChatGroup(){
+        confirm({
+            title: '确定要解散该群组?',
+            onOk() {
+                var currentGroupObj = antGroup.state.currentGroupObj;
+                var memberIds = antGroup.getCurrentMemberIds();
+                var optType="dissolution";
+                antGroup.deleteChatGroupMember(currentGroupObj.chatGroupId,memberIds,optType);
+            },
+            onCancel() {
+            },
+        });
+    },
+
+    deleteChatGroupMember(chatGroupId,memberIds,optType){
+        var successTip = "";
+        var errorTip="";
+        if(optType=="dissolution"){
+            successTip = "群组解散成功";
+            errorTip="群组解散失败";
+        }else if(optType=="removeMember"){
+            successTip = "群成员移出成功";
+            errorTip="群成员移出失败";
+        }
+        var param = {
+            "method": 'deleteChatGroupMember',
+            "chatGroupId": chatGroupId,
+            "memberIds": memberIds
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if(ret.msg=="调用成功" && ret.success==true && response==true){
+                    message.success(successTip);
+                }else{
+                    message.success(errorTip);
+                }
+                if(optType=="dissolution"){
+                    antGroup.getUserChatGroup();
+                }else if(optType=="removeMember"){
+                    antGroup.refreshLocalMembers();
+                    antGroup.setState({selectedRowKeysStr:'',selectedRowKeys:[]});
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     render() {
@@ -848,7 +1011,7 @@ const AntGroupTabComponents = React.createClass({
                         <ul>
                             <li>群聊名称{antGroup.state.currentGroupObj.name}人</li>
                             <li>
-                                <Button>解散该群</Button>
+                                <Button onClick={antGroup.dissolutionChatGroup}>解散该群</Button>
                             </li>
                         </ul>
                         <ul>
@@ -959,6 +1122,37 @@ const AntGroupTabComponents = React.createClass({
                     </Row>
 
                 </Modal>
+
+                <Modal
+                    visible={antGroup.state.addGroupMemberModalVisible}
+                    title="添加群成员"
+                    onCancel={antGroup.addGroupMemberModalHandleCancel}
+                    //className="modol_width"
+                    transitionName=""  //禁用modal的动画效果
+                    footer={[
+                        <button type="primary" htmlType="submit" className="login-form-button" onClick={antGroup.addGroupMember}  >确定</button>,
+                        <button type="ghost" htmlType="reset" className="login-form-button" onClick={antGroup.addGroupMemberModalHandleCancel} >取消</button>
+                    ]}
+                >
+                    <Row className="ant-form-item">
+                        <Col span={24}>
+                            <Transfer
+                                dataSource={antGroup.state.memberData}
+                                showSearch
+                                listStyle={{
+                                    width: 268,
+                                    height: 320,
+                                }}
+                                titles={['待选联系人','已选联系人']}
+                                operations={['', '']}
+                                targetKeys={antGroup.state.memberTargetKeys}
+                                onChange={antGroup.addMemberTransferHandleChange}
+                                render={item => `${item.title}`}
+                            />
+                        </Col>
+                    </Row>
+                </Modal>
+
                 <Breadcrumb separator=">">
                     <Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
                     <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
