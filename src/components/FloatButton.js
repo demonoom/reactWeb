@@ -47,6 +47,8 @@ const FloatButton = React.createClass({
                     console.log("保存此用户上次访问的知识点id成功");
                     sessionStorage.removeItem("openKeysStr");
                     sessionStorage.removeItem("ident");
+                    sessionStorage.removeItem("loginUser");
+                    sessionStorage.removeItem("machineId");
                 }else{
                     console.log("保存此用户上次访问的知识点id失败");
                 }

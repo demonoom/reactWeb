@@ -56,6 +56,7 @@ const MainTabComponents = React.createClass({
             var subjectParams = sessionStorage.getItem("ident")+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType+"#"+this.state.currentKnowledgeName+"#"+this.state.subjectDataFilter;
             this.refs.subTable.initGetSubjectInfo(subjectParams);
         }else{
+            this.refs.courseWare.getTeachPlans(sessionStorage.getItem("ident"),this.state.currentTeachScheduleId,this.state.currentOptType,1,this.state.currentKnowledgeName,this.state.dataFilter);
             this.setState({activeKey:'课件'});
         }
     },
@@ -128,6 +129,7 @@ const MainTabComponents = React.createClass({
      * 课件上传成功后的回调函数
      */
     courseUploadCallBack(){
+        console.log("this.state.activeKey"+this.state.activeKey);
         if(this.state.activeKey=="题目"){
           var subjectParams = sessionStorage.getItem("ident")+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType+"#"+this.state.currentKnowledgeName+"#"+this.state.subjectDataFilter+"#fromUpload";
           this.refs.subTable.initGetSubjectInfo(subjectParams);

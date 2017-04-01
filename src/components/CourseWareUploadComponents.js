@@ -96,12 +96,28 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
             knowledgePointId = subjectParamArray[1];
             knowledgeName = subjectParamArray[4];
         }
+        var lastPointIndex = fileName.lastIndexOf(".");
+        var fileType = fileName.substring(lastPointIndex+1);
+        //根据文件类型的不同，设置不同的文件封面
+        var cover = "http://pic.qiantucdn.com/58pic/19/30/17/5695e8b35c176_1024.jpg";
+        if(fileType=="pptx"){
+            cover = "http://pic.qiantucdn.com/58pic/19/30/17/5695e8b35c176_1024.jpg";
+        }else if(fileType=="ppt"){
+            cover = "http://pic.qiantucdn.com/58pic/19/30/17/5695e8b35c176_1024.jpg";
+        }else if(fileType=="pdf"){
+            cover = "http://pic.qiantucdn.com/58pic/19/30/17/5695e8b35c176_1024.jpg";
+        }else if(fileType=="flv"){
+            cover = "http://pic.qiantucdn.com/58pic/19/30/17/5695e8b35c176_1024.jpg";
+        }else if(fileType=="mp4"){
+            cover = "http://pic.qiantucdn.com/58pic/19/30/17/5695e8b35c176_1024.jpg";
+        }
         var isLinkToSchedule=this.state.useSameSchedule;
         var param = {
             "method":'addNormalMaterial',
             "ident":ident,
             "knowledgePointId":knowledgePointId,
-            "cover":"http://pic.qiantucdn.com/58pic/19/30/17/5695e8b35c176_1024.jpg",
+            // "cover":"http://pic.qiantucdn.com/58pic/19/30/17/5695e8b35c176_1024.jpg",
+            "cover":cover,
             "file":file,
             "fileName":fileName
         };
