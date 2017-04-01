@@ -1,34 +1,22 @@
 import React, { PropTypes } from 'react';
-<<<<<<< HEAD
-import { Tabs, Breadcrumb, Icon,Card,Button,Row,Col,Table} from 'antd';
-import { Menu, Dropdown,message,Pagination,Tag , Modal,Popover,Input} from 'antd';
-import {doWebService} from '../../WebServiceHelper';
-=======
 import { Tabs, Breadcrumb, Icon,Card,Button,Row,Col,Table,Transfer} from 'antd';
 import { Menu, Dropdown,message,Pagination,Tag , Modal,Popover,Input} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import PersonCenterComponents from './PersonCenterComponents';
 import EmotionInputComponents from './EmotionInputComponents';
->>>>>>> ff7ed267a2aaae704b745664da8f8728831e4b3a
 import {getPageSize} from '../../utils/Const';
 import {getLocalTime} from '../../utils/Const';
 import {isEmpty} from '../../utils/Const';
 import {getAllTopic} from '../../utils/Const';
 import {getOnlyTeacherTopic} from '../../utils/Const';
-<<<<<<< HEAD
-=======
 import {getImgName} from '../../utils/Const';
 import {MsgConnection} from '../../utils/msg_websocket_connection';
->>>>>>> ff7ed267a2aaae704b745664da8f8728831e4b3a
 const TabPane = Tabs.TabPane;
 
 var columns = [ {
     title: '联系人',
     dataIndex: 'userContacts',
 }];
-<<<<<<< HEAD
-var antGroup;
-=======
 var userGroupsColumns = [ {
     title: '群聊头像',
     dataIndex: 'groupPhoto',
@@ -49,7 +37,6 @@ var ms;
 var imgTagArray = [];
 var showImg="";
 var showContent="";//将要显示的内容
->>>>>>> ff7ed267a2aaae704b745664da8f8728831e4b3a
 const AntGroupTabComponents = React.createClass({
 
     getInitialState() {
@@ -59,8 +46,6 @@ const AntGroupTabComponents = React.createClass({
             activeKey:'loginWelcome',
             optType:'getUserList',
             userContactsData:[],
-<<<<<<< HEAD
-=======
             currentPerson:-1,
             messageList:'',
             userIdOfCurrentTalk:'',
@@ -73,7 +58,6 @@ const AntGroupTabComponents = React.createClass({
             currentMemberArray:[],
             selectedRowKeys: [],  // Check here to configure the default column
             selectedRowKeysStr:'',
->>>>>>> ff7ed267a2aaae704b745664da8f8728831e4b3a
         };
     },
     /**
@@ -89,11 +73,7 @@ const AntGroupTabComponents = React.createClass({
     },
 
     /**
-<<<<<<< HEAD
-     * 获取个人中心需要的数据,老师和学生可通用,后期需要什么再添加
-=======
      * 获取联系人列表
->>>>>>> ff7ed267a2aaae704b745664da8f8728831e4b3a
      */
     getAntGroup(){
         var userContactsData=[];
@@ -107,11 +87,7 @@ const AntGroupTabComponents = React.createClass({
                 response.forEach(function (e) {
                     var userId = e.colUid;
                     var userName = e.userName;
-<<<<<<< HEAD
-                    var userJson = {key:userId,userContacts:userName};
-=======
                     var userJson = {key:userId,userContacts:userName,userObj:e};
->>>>>>> ff7ed267a2aaae704b745664da8f8728831e4b3a
                     userContactsData.push(userJson);
                 });
                 antGroup.setState({"userContactsData":userContactsData});
@@ -122,10 +98,6 @@ const AntGroupTabComponents = React.createClass({
         });
     },
 
-<<<<<<< HEAD
-    getPersonCenterInfo(record, index){
-        // alert("12312"+record);
-=======
     /**
      * 点击联系人列表表格行时，获取当前行对应的记录信息
      * @param record　当前行的用户信息
@@ -719,32 +691,12 @@ const AntGroupTabComponents = React.createClass({
 
     showAddMembersModal(){
 
->>>>>>> ff7ed267a2aaae704b745664da8f8728831e4b3a
     },
 
     render() {
         var breadMenuTip="蚁群";
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         var welcomeTitle = "欢迎"+loginUser.userName+"登录";
-<<<<<<< HEAD
-        var toolbarExtra = <div className="ant-tabs-right">
-
-        </div>;
-        var tabComponent = <Tabs
-            hideAdd
-            ref = "mainTab"
-            activeKey={this.state.activeKey}
-            defaultActiveKey={this.state.defaultActiveKey}
-            tabBarExtraContent={toolbarExtra}
-            transitionName=""  //禁用Tabs的动画效果
-        >
-            <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
-                <Table onRowClick={antGroup.getPersonCenterInfo} showHeader={false} scroll={{ x: true, y: 400 }} columns={columns} dataSource={antGroup.state.userContactsData} pagination={false}/>
-            </TabPane>
-        </Tabs>;
-        return (
-            <div>
-=======
         var toolbarExtra = <div className="ant-tabs-right"><Button onClick={antGroup.showCreateChatGroup}>创建群聊</Button></div>;
 
         var returnToolBar = <div className="ant-tabs-right"><Button onClick={antGroup.returnAntGroupMainPage}>返回</Button></div>;
@@ -1007,7 +959,6 @@ const AntGroupTabComponents = React.createClass({
                     </Row>
 
                 </Modal>
->>>>>>> ff7ed267a2aaae704b745664da8f8728831e4b3a
                 <Breadcrumb separator=">">
                     <Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
                     <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
