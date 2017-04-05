@@ -337,7 +337,7 @@ const AntGroupTabComponents = React.createClass({
             showContent = showContent.replace(subStr,"~");
             var imgUrl = getImgName(subStr);
             var localUrl = "../src/components/images/emotions/"+imgUrl;
-            var subStrReplace = <img src={localUrl} style={{width:'50px',height:'50px'}}/> ;
+            var subStrReplace = <span className='antnest_user'><img src={localUrl}/></span> ;
             imgTags.push(subStrReplace);
             var otherStr = str.substring(end+1);
             if(otherStr.indexOf("[bexp_")!=-1){
@@ -426,7 +426,7 @@ const AntGroupTabComponents = React.createClass({
                         var chatGroupName = e.name;
                         var membersCount = e.members.length;
                         var ownerPhoto = e.owner.avatar;
-                        var imgTag = <img src={ownerPhoto} style={{width:'50px',height:'50px'}}></img>;
+                        var imgTag = <span className='antnest_user'><img src={ownerPhoto}></img></span>;
                         var groupName = chatGroupName+""+membersCount+"人";
                         var chatGroupJson = {key:chatGroupId,groupPhoto:imgTag,'groupName':groupName,"groupObj":e};
                         charGroupArray.push(chatGroupJson);
@@ -803,7 +803,7 @@ const AntGroupTabComponents = React.createClass({
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div>
                         <ul>
-                            <Table onRowClick={antGroup.sendGroupMessage} showHeader={false} scroll={{ x: true, y: 400 }} columns={userGroupsColumns} dataSource={antGroup.state.userGroupsData} pagination={false}/>
+                            <Table className="group_table" onRowClick={antGroup.sendGroupMessage} showHeader={false} scroll={{ x: true, y: 400 }} columns={userGroupsColumns} dataSource={antGroup.state.userGroupsData} pagination={false}/>
                         </ul>
                     </div>
                 </TabPane>

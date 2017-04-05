@@ -1798,7 +1798,7 @@ a {
 	}
 .antnest_user img{
     width: 48px;
-    height: 48px;
+    height: 48px !important;
     border-radius: 50%;
 	cursor:pointer;
 }
@@ -2031,4 +2031,6 @@ a.topics:hover{
 }
 .knowledge_table .ant-table-header{
 	margin-bottom:0 !important
+}
+.group_table{
 }
