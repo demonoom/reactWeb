@@ -876,7 +876,7 @@ const AntGroupTabComponents = React.createClass({
                     <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                         <div>
                             <Button　icon="usergroup-add" onClick={antGroup.getUserChatGroup}>我的群组</Button>
-                            <Table onRowClick={antGroup.getPersonCenterInfo} showHeader={false} scroll={{ x: true, y: 400 }} columns={columns} dataSource={antGroup.state.userContactsData} pagination={false}/>
+                            <Table onRowClick={antGroup.getPersonCenterInfo} showHeader={false} scroll={{ x: true, y: 400}} columns={columns} dataSource={antGroup.state.userContactsData} pagination={false}/>
                         </div>
                     </TabPane>
                 </Tabs>;
@@ -955,7 +955,7 @@ const AntGroupTabComponents = React.createClass({
             </Tabs>;
         }if(antGroup.state.optType=="getUserChatGroup"){
             welcomeTitle = "我的群聊";
-            tabComponent= <Tabs
+            tabComponent= <Tabs 
                 hideAdd
                 ref = "mainTab"
                 activeKey={this.state.activeKey}
@@ -966,7 +966,7 @@ const AntGroupTabComponents = React.createClass({
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div>
                         <ul>
-                            <Table className="group_table" onRowClick={antGroup.sendGroupMessage} showHeader={false} scroll={{ x: true, y: 400 }} columns={userGroupsColumns} dataSource={antGroup.state.userGroupsData} pagination={false}/>
+                            <Table className="group_table" onRowClick={antGroup.sendGroupMessage} showHeader={false} scroll={{ x: true, y: 800 }} columns={userGroupsColumns} dataSource={antGroup.state.userGroupsData} pagination={false}/>
                         </ul>
                     </div>
                 </TabPane>
@@ -1024,7 +1024,7 @@ const AntGroupTabComponents = React.createClass({
             </Tabs>;
         }else if(antGroup.state.optType=="sendGroupMessage"){
             returnToolBar = <div className="ant-tabs-right">
-                <Button onClick={antGroup.setChatGroup}>设置</Button>
+                <Button onClick={antGroup.setChatGroup} className="antnest_talk">设置</Button>
                 <Button onClick={antGroup.returnAntGroupMainPage}>返回</Button>
             </div>;
             welcomeTitle=antGroup.state.currentGroupObj.name;
