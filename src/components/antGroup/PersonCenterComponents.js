@@ -16,9 +16,30 @@ const PersonCenterComponents = React.createClass({
         personCenter = this;
         var userInfo = personCenter.props.userInfo;
         console.log("currentPerson"+userInfo);
+        personCenter.isFollow();
         return {
             userInfo:personCenter.props.userInfo,
         };
+    },
+
+    /**
+     * 获取联系人列表
+     */
+    isFollow(){
+        var param = {
+            "method": 'isFollow',
+            "userId": sessionStorage.getItem("ident"),
+            "toUserId":personCenter.props.userInfo.user.colUid
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var isFollow = ret.response;
+                personCenter.setState({"isFollow":isFollow});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     /**
@@ -34,6 +55,89 @@ const PersonCenterComponents = React.createClass({
         var userId = target.value;
         console.log(userId);
         personCenter.props.callBackTurnToMessagePage(userId);
+    },
+    /**
+     * 学生的提问
+     * @param e
+     */
+    studentAsk(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var userId = target.value;
+        console.log(userId);
+        personCenter.props.callBackTurnToAsk(userId);
+    },
+    /**
+     * 学生的学习轨迹
+     */
+    studentStudyTrack(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var userId = target.value;
+        console.log(userId);
+        personCenter.props.callBackStudyTrack(userId);
+    },
+    /**
+     * 关注联系人
+     */
+    followUser(){
+        var param = {
+            "method": 'follow',
+            "userId": sessionStorage.getItem("ident"),
+            "toUserId":personCenter.props.userInfo.user.colUid
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if(ret.msg=="调用成功" && ret.success==true){
+                    message.success("关注成功");
+                    personCenter.setState({"isFollow":true});
+                }else{
+                    message.error(ret.msg);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 关注联系人
+     */
+    unfollowUser(){
+        var param = {
+            "method": 'unFollow',
+            "userId": sessionStorage.getItem("ident"),
+            "toUserId":personCenter.props.userInfo.user.colUid
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if(ret.msg=="调用成功" && ret.success==true){
+                    message.success("取消关注成功");
+                    personCenter.setState({"isFollow":false});
+                }else{
+                    message.error(ret.msg);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 获取我的关注列表
+     */
+    getMyFollows(e){
+        personCenter.props.callBackGetMyFollows(personCenter.props.userInfo.user);
     },
 
     render() {
@@ -52,33 +156,41 @@ const PersonCenterComponents = React.createClass({
         if(user.colUtype=="STUD"){
             userCard = <Card title={userName+'的个人名片'} className="bai">
                 <Row>
-                    <Col span={10}><Button icon="question-circle-o">{userName}的提问</Button></Col>
+                    <Col span={10}><Button value={user.colUid} icon="question-circle-o" onClick={personCenter.studentAsk}>{userName}的提问</Button></Col>
                 </Row>
                 <Row>
-                    <Col span={10}><Button icon="area-chart">{userName}的学习轨迹</Button></Col>
+                    <Col span={10}><Button value={user.colUid} icon="area-chart" onClick={personCenter.studentStudyTrack}>{userName}的学习轨迹</Button></Col>
                 </Row>
                 <Row>
-                    <Col span={10}><Button icon="star-o">{userName}的收藏</Button></Col>
+                    <Col span={10}><Button value={user.colUid} icon="star-o">{userName}的收藏</Button></Col>
                 </Row>
                 <Row>
-                    <Col span={10}><Button icon="heart-o">{userName}的关注</Button></Col>
+                    <Col span={10}><Button value={user.colUid} icon="heart-o" onClick={personCenter.getMyFollows}>{userName}的关注</Button></Col>
                 </Row>
             </Card>;
         }else{
             userCard = <Card title={userName+'的个人名片'}  className="bai">
                 <Row>
-                    <Col span={10}><Button icon="question-circle-o">{userName}的直播</Button></Col>
+                    <Col span={10}><Button value={user.colUid} icon="question-circle-o">{userName}的直播</Button></Col>
                 </Row>
                 <Row>
-                    <Col span={10}><Button icon="area-chart">{userName}的备课</Button></Col>
+                    <Col span={10}><Button value={user.colUid} icon="area-chart">{userName}的备课</Button></Col>
                 </Row>
                 <Row>
-                    <Col span={10}><Button icon="star-o">{userName}的收藏</Button></Col>
+                    <Col span={10}><Button value={user.colUid} icon="star-o">{userName}的收藏</Button></Col>
                 </Row>
                 <Row>
-                    <Col span={10}><Button icon="heart-o">{userName}的关注</Button></Col>
+                    <Col span={10}><Button value={user.colUid} icon="heart-o">{userName}的关注</Button></Col>
                 </Row>
             </Card>;
+        }
+
+        var followButton;
+        console.log("isFollow:"+personCenter.state.isFollow);
+        if(personCenter.state.isFollow==false){
+            followButton = <Button icon="plus" onClick={personCenter.followUser}>关注</Button>;
+        }else {
+            followButton = <Button icon="plus" onClick={personCenter.unfollowUser}>取消关注</Button>;
         }
 
         return (
@@ -91,7 +203,7 @@ const PersonCenterComponents = React.createClass({
                 </Card>
                 <Card className="bai">
                     <Button icon="message" value={personCenter.state.userInfo.user.colUid} onClick={personCenter.sendMessage}>发消息</Button>
-                    <Button icon="plus">关注</Button>
+                    {followButton}
                 </Card>
                 <Card title={personCenter.state.userInfo.user.userName+'的个人名片'}  className="bai">
                     <Row>

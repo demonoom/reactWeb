@@ -130,7 +130,7 @@ const AntGroupTabComponents = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var userInfo = ret.response;
-                antGroup.setState({"optType":"personCenter","currentPerson":userInfo});
+                antGroup.setState({"optType":"personCenter","currentPerson":userInfo,"activeKey":"loginWelcome"});
             },
             onError: function (error) {
                 message.error(error);
@@ -140,7 +140,7 @@ const AntGroupTabComponents = React.createClass({
 
     returnAntGroupMainPage(){
         antGroup.getAntGroup();
-        antGroup.setState({"optType":"getUserList"});
+        antGroup.setState({"optType":"getUserList","activeKey":'loginWelcome'});
     },
 
     createUUID() {
@@ -866,7 +866,10 @@ const AntGroupTabComponents = React.createClass({
             });
         }
     },
-
+    /**
+     * 修改群组名称时，名称内容改变的响应函数
+     * @param e
+     */
     updateChatGroupTitleOnChange(e){
         var target = e.target;
         if(navigator.userAgent.indexOf("Chrome") > -1){
@@ -878,6 +881,49 @@ const AntGroupTabComponents = React.createClass({
         antGroup.setState({"updateChatGroupTitle":updateChatGroupTitle});
     },
 
+    /**
+     * 学生的提问
+     */
+    callBackTurnToAsk(userId){
+        antGroup.setState({"optType":"turnToAsk","studentId":userId,"activeKey":"我发起过的提问"});
+    },
+
+    /**
+     * 学生的学习轨迹
+     */
+    callBackStudyTrack(userId){
+        antGroup.setState({"optType":"turnStudyTrack","studentId":userId,"activeKey":"studyTrack"});
+    },
+    /**
+     * 获取关注列表
+     * @param userId
+     */
+    getMyFollows(user){
+        var param = {
+            "method": 'getMyFollows',
+            "userId": user.colUid,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if(ret.msg=="调用成功" && ret.success==true){
+                    var response = ret.response;
+                    antGroup.setState({"optType":"getMyFollows","activeKey":"userFollows","currentFollowUser":user});
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+    /**
+     * 返回个人中心页面
+     *
+     */
+    returnPersonCenter(){
+        var userId = antGroup.state.currentFollowUser.colUid;
+        antGroup.getPersonalCenterData(userId);
+    },
+
     render() {
         var breadMenuTip="蚁群";
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
@@ -887,7 +933,7 @@ const AntGroupTabComponents = React.createClass({
         var returnToolBar = <div className="ant-tabs-right"><Button onClick={antGroup.returnAntGroupMainPage}>返回</Button></div>;
         var tabComponent;
         if(antGroup.state.optType=="getUserList"){
-                tabComponent= tabComponent = <Tabs
+                tabComponent= <Tabs
                     hideAdd
                     ref = "mainTab"
                     activeKey={this.state.activeKey}
@@ -914,7 +960,13 @@ const AntGroupTabComponents = React.createClass({
             >
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div  style={{'overflow':'auto','align':'center'}}>
-                        <PersonCenterComponents ref="personCenter" userInfo={antGroup.state.currentPerson} callBackTurnToMessagePage={antGroup.turnToMessagePage}></PersonCenterComponents>
+                        <PersonCenterComponents ref="personCenter"
+                                                userInfo={antGroup.state.currentPerson}
+                                                callBackTurnToMessagePage={antGroup.turnToMessagePage}
+                                                callBackTurnToAsk={antGroup.callBackTurnToAsk}
+                                                callBackStudyTrack={antGroup.callBackStudyTrack}
+                                                callBackGetMyFollows={antGroup.getMyFollows}
+                        ></PersonCenterComponents>
                     </div>
                 </TabPane>
             </Tabs>;
@@ -1112,7 +1164,57 @@ const AntGroupTabComponents = React.createClass({
                     </div>
                 </TabPane>
             </Tabs>;
+        }else if(antGroup.state.optType=="turnToAsk"){
+            var currentPageLink = "http://www.maaee.com:80/Excoord_PhoneService/quiz/getUserAskedQuiz/" + antGroup.state.studentId;
+            welcomeTitle="我发起过的提问";
+            tabComponent = <Tabs
+                hideAdd
+                ref = "studentAskTab"
+                activeKey={this.state.activeKey}
+                defaultActiveKey={this.state.defaultActiveKey}
+                tabBarExtraContent={returnToolBar}
+                transitionName=""  //禁用Tabs的动画效果
+            >
+                <TabPane tab="我发起过的提问" key="我发起过的提问">
+                    <iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe>
+                </TabPane>
+            </Tabs>;
         }
+        else if(antGroup.state.optType=="turnStudyTrack"){
+            var currentPageLink = "http://www.maaee.com:80/Excoord_PhoneService/user/studytrack/" + antGroup.state.studentId;
+            welcomeTitle="我的学习轨迹";
+            tabComponent = <Tabs
+                hideAdd
+                ref = "studentStudyTrackTab"
+                activeKey={this.state.activeKey}
+                defaultActiveKey={this.state.defaultActiveKey}
+                tabBarExtraContent={returnToolBar}
+                transitionName=""  //禁用Tabs的动画效果
+            >
+                <TabPane tab="学习轨迹" key="studyTrack">
+                    <iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe>
+                </TabPane>
+            </Tabs>;
+        }else if(antGroup.state.optType=="getMyFollows"){
+            welcomeTitle=antGroup.state.currentFollowUser.userName+"的关注";
+            var returnPersonCenterToolBar = <div className="ant-tabs-right"><Button onClick={antGroup.returnPersonCenter}>返回</Button></div>;
+            tabComponent= <Tabs
+                hideAdd
+                ref = "mainTab"
+                activeKey={this.state.activeKey}
+                defaultActiveKey={this.state.defaultActiveKey}
+                tabBarExtraContent={returnPersonCenterToolBar}
+                transitionName=""  //禁用Tabs的动画效果
+            >
+                <TabPane tab={welcomeTitle} key="userFollows" className="topics_rela">
+                    <div>
+                        暂无数据
+                        {/*<Table onRowClick={antGroup.getPersonCenterInfo} showHeader={false} scroll={{ x: true, y: 400 }} columns={columns} dataSource={antGroup.state.userContactsData} pagination={false}/>*/}
+                    </div>
+                </TabPane>
+            </Tabs>;
+        }
+
         return (
             <div>
                 <Modal
