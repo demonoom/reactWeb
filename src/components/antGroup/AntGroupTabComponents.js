@@ -61,6 +61,7 @@ const AntGroupTabComponents = React.createClass({
             selectedRowKeysStr:'',
             memberData:[],  //添加群成员时，待添加群成员的数组
             memberTargetKeys:[],    //添加群成员时，已选中待添加群成员的数组
+            updateChatGroupTitle:''
         };
     },
     /**
@@ -107,8 +108,15 @@ const AntGroupTabComponents = React.createClass({
      * @param index　当前行的索引顺序，从０开始
      */
     getPersonCenterInfo(record, index){
+        var userType = record.userObj.colUtype;
         console.log("12312"+record.userObj.userName);
-        antGroup.getPersonalCenterData(record.key);
+        if(userType=="PAREN"){
+            //家长直接进入聊天窗口
+            antGroup.setState({"optType":"sendMessage","currentPerson":record.userObj});
+            antGroup.turnToMessagePage(record.key);
+        }else {
+            antGroup.getPersonalCenterData(record.key);
+        }
     },
 
     /**
@@ -537,50 +545,7 @@ const AntGroupTabComponents = React.createClass({
         var updateGroupId = antGroup.state.updateGroupId;
         var currentGroupObj = antGroup.state.currentGroupObj;
         if(isEmpty(updateGroupId)==false){
-            //更新(判断和当前的groupObj信息是否一致)
-            if(isEmpty(antGroup.state.chatGroupTitle)==false  && currentGroupObj.name != antGroup.state.chatGroupTitle ){
-                var param = {
-                    "method": 'updateChatGroupName',
-                    "chatGroupId": updateGroupId,
-                    "name": antGroup.state.chatGroupTitle,
-                    "userId": sessionStorage.getItem("ident"),
-                };
-                doWebService(JSON.stringify(param), {
-                    onResponse: function (ret) {
-                        var response = ret.response;
-                        if(ret.msg=="调用成功" && ret.success==true && response==true){
-                            message.success("聊天群组修改成功");
-                        }else{
-                            message.success("聊天群组修改失败");
-                        }
-                    },
-                    onError: function (error) {
-                        message.error(error);
-                    }
-                });
-            }
-            //更新
-            var currentMembers = currentGroupObj.members.join(',');
-            if(isEmpty(memberIds)==false  && currentMembers != memberIds){
-                var param = {
-                    "method": 'addChatGroupMember',
-                    "chatGroupId": updateGroupId,
-                    "memberIds": memberIds,
-                };
-                doWebService(JSON.stringify(param), {
-                    onResponse: function (ret) {
-                        var response = ret.response;
-                        if(ret.msg=="调用成功" && ret.success==true && response==true){
-                            message.success("聊天群组修改成功");
-                        }else{
-                            message.success("聊天群组修改失败");
-                        }
-                    },
-                    onError: function (error) {
-                        message.error(error);
-                    }
-                });
-            }
+
         }else{
             var param = {
                 "method": 'createChatGroup',
@@ -690,26 +655,6 @@ const AntGroupTabComponents = React.createClass({
             onCancel() {
             },
         });
-        /*var param = {
-            "method": 'deleteChatGroupMember',
-            "chatGroupId": antGroup.state.currentGroupObj.chatGroupId,
-            "memberIds": antGroup.state.selectedRowKeysStr
-        };
-        antGroup.refreshLocalMembers();
-        doWebService(JSON.stringify(param), {
-            onResponse: function (ret) {
-                var response = ret.response;
-                if(ret.msg=="调用成功" && ret.success==true && response==true){
-                    message.success("群成员移除成功");
-                }else{
-                    message.success("群成员移除失败");
-                }
-                antGroup.setState({selectedRowKeysStr:'',selectedRowKeys:[]});
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });*/
     },
 
     /**
@@ -819,6 +764,22 @@ const AntGroupTabComponents = React.createClass({
             },
         });
     },
+    /**
+     * 删除并退出群组
+     */
+    exitChatGroup(){
+        confirm({
+            title: '确定要退出该群组?',
+            onOk() {
+                var currentGroupObj = antGroup.state.currentGroupObj;
+                var memberIds = sessionStorage.getItem("ident");
+                var optType="exitChatGroup";
+                antGroup.deleteChatGroupMember(currentGroupObj.chatGroupId,memberIds,optType);
+            },
+            onCancel() {
+            },
+        });
+    },
 
     deleteChatGroupMember(chatGroupId,memberIds,optType){
         var successTip = "";
@@ -829,6 +790,9 @@ const AntGroupTabComponents = React.createClass({
         }else if(optType=="removeMember"){
             successTip = "群成员移出成功";
             errorTip="群成员移出失败";
+        }else if(optType=="exitChatGroup"){
+            successTip = "您已成功退出该群组";
+            errorTip="退出群组失败";
         }
         var param = {
             "method": 'deleteChatGroupMember',
@@ -843,7 +807,7 @@ const AntGroupTabComponents = React.createClass({
                 }else{
                     message.success(errorTip);
                 }
-                if(optType=="dissolution"){
+                if(optType=="dissolution" || optType=="exitChatGroup"){
                     antGroup.getUserChatGroup();
                 }else if(optType=="removeMember"){
                     antGroup.refreshLocalMembers();
@@ -854,6 +818,64 @@ const AntGroupTabComponents = React.createClass({
                 message.error(error);
             }
         });
+    },
+
+    /**
+     * 显示修改群名称的窗口
+     */
+    showUpdateChatGroupNameModal(){
+        var currentGroupObj = antGroup.state.currentGroupObj;
+        var updateChatGroupTitle = currentGroupObj.name;
+        antGroup.setState({"updateChatGroupNameModalVisible":true,"updateChatGroupTitle":updateChatGroupTitle});
+    },
+
+    /**
+     * 关闭修改群名称的窗口
+     */
+    updateChatGroupNameModalHandleCancel(){
+        antGroup.setState({"updateChatGroupNameModalVisible":false});
+    },
+
+    /**
+     * 修改群名称
+     */
+    updateChatGroupName(){
+        //更新(判断和当前的groupObj信息是否一致)
+        var currentGroupObj = antGroup.state.currentGroupObj;
+        if(isEmpty(antGroup.state.updateChatGroupTitle)==false){
+            var param = {
+                "method": 'updateChatGroupName',
+                "chatGroupId": currentGroupObj.chatGroupId,
+                "name": antGroup.state.updateChatGroupTitle,
+                "userId": sessionStorage.getItem("ident"),
+            };
+            doWebService(JSON.stringify(param), {
+                onResponse: function (ret) {
+                    var response = ret.response;
+                    if(ret.msg=="调用成功" && ret.success==true && response==true){
+                        message.success("聊天群组修改成功");
+                    }else{
+                        message.success("聊天群组修改失败");
+                    }
+                    antGroup.getUserChatGroup();
+                    antGroup.setState({"updateChatGroupNameModalVisible":false});
+                },
+                onError: function (error) {
+                    message.error(error);
+                }
+            });
+        }
+    },
+
+    updateChatGroupTitleOnChange(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var updateChatGroupTitle = target.value;
+        antGroup.setState({"updateChatGroupTitle":updateChatGroupTitle});
     },
 
     render() {
@@ -891,7 +913,7 @@ const AntGroupTabComponents = React.createClass({
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
-                    <div  style={{'overflow-y':'auto','align':'center'}}>
+                    <div  style={{'overflow':'auto','align':'center'}}>
                         <PersonCenterComponents ref="personCenter" userInfo={antGroup.state.currentPerson} callBackTurnToMessagePage={antGroup.turnToMessagePage}></PersonCenterComponents>
                     </div>
                 </TabPane>
@@ -926,7 +948,11 @@ const AntGroupTabComponents = React.createClass({
                     messageTagArray.push(messageTag);
                 })
             }
-            welcomeTitle=antGroup.state.currentPerson.user.userName;
+            if(isEmpty(antGroup.state.currentPerson.userName)==false){
+                welcomeTitle=antGroup.state.currentPerson.userName;
+            }else {
+                welcomeTitle=antGroup.state.currentPerson.user.userName;
+            }
             tabComponent = <Tabs
                 hideAdd
                 ref = "personCenterTab"
@@ -980,6 +1006,9 @@ const AntGroupTabComponents = React.createClass({
             };
             const hasSelected = selectedRowKeys.length > 0;
             var topButton = <div>
+                <Button type="primary" onClick={this.showUpdateChatGroupNameModal}
+                        loading={loading}
+                >修改群名称</Button>
                 <Button type="primary" onClick={this.showAddMembersModal}
                         loading={loading}
                 >添加群成员</Button>
@@ -1016,7 +1045,7 @@ const AntGroupTabComponents = React.createClass({
                         </ul>
                         <ul>
                             <li>
-                                <Button>删除并退出</Button>
+                                <Button onClick={antGroup.exitChatGroup}>删除并退出</Button>
                             </li>
                         </ul>
                     </div>
@@ -1121,6 +1150,25 @@ const AntGroupTabComponents = React.createClass({
                         </Col>
                     </Row>
 
+                </Modal>
+
+                <Modal
+                    visible={antGroup.state.updateChatGroupNameModalVisible}
+                    title="修改群名称"
+                    onCancel={antGroup.updateChatGroupNameModalHandleCancel}
+                    //className="modol_width"
+                    transitionName=""  //禁用modal的动画效果
+                    footer={[
+                        <button type="primary" htmlType="submit" className="login-form-button" onClick={antGroup.updateChatGroupName}  >确定</button>,
+                        <button type="ghost" htmlType="reset" className="login-form-button" onClick={antGroup.updateChatGroupNameModalHandleCancel} >取消</button>
+                    ]}
+                >
+                    <Row className="ant-form-item">
+                        <Col span={3}>群名称：</Col>
+                        <Col span={13}>
+                            <Input value={antGroup.state.updateChatGroupTitle} defaultValue={antGroup.state.updateChatGroupTitle} onChange={antGroup.updateChatGroupTitleOnChange}/>
+                        </Col>
+                    </Row>
                 </Modal>
 
                 <Modal

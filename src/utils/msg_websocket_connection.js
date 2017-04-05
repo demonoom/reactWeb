@@ -1,6 +1,6 @@
 export function MsgConnection(){
 	this.msgWsListener = null;
-	this.WS_URL = "ws://192.168.1.59:8889/Excoord_MessageServer/message";
+	this.WS_URL = "ws://172.16.2.102:8889/Excoord_MessageServer/message";
 	this.ws = null;
 	this.PING_COMMAND = "ping_0123456789_abcdefg";
 	this.PONG_COMMAND = "pong_0123456789_abcdefg";
