@@ -38,11 +38,47 @@ const PersonCenterComponents = React.createClass({
 
     render() {
         var userPhotoTag;
-        if(isEmpty(personCenter.state.userInfo.user.avatar)==false){
+        var user = personCenter.state.userInfo.user;
+        var userName = user.userName;
+        if(isEmpty(user.avatar)==false){
             userPhotoTag = <p>
-                <img src={personCenter.state.userInfo.user.avatar}/>
+                <img src={user.avatar}/>
             </p>;
         }
+        var userCard;
+        //PAREN---家长
+        if(user.colUtype=="STUD"){
+            userCard = <Card title={userName+'的个人名片'}  style={{ width: 700 }}>
+                <Row>
+                    <Col span={10}><Button icon="question-circle-o">{userName}的提问</Button></Col>
+                </Row>
+                <Row>
+                    <Col span={10}><Button icon="area-chart">{userName}的学习轨迹</Button></Col>
+                </Row>
+                <Row>
+                    <Col span={10}><Button icon="star-o">{userName}的收藏</Button></Col>
+                </Row>
+                <Row>
+                    <Col span={10}><Button icon="heart-o">{userName}的关注</Button></Col>
+                </Row>
+            </Card>;
+        }else{
+            userCard = <Card title={userName+'的个人名片'}  style={{ width: 700 }}>
+                <Row>
+                    <Col span={10}><Button icon="question-circle-o">{userName}的直播</Button></Col>
+                </Row>
+                <Row>
+                    <Col span={10}><Button icon="area-chart">{userName}的备课</Button></Col>
+                </Row>
+                <Row>
+                    <Col span={10}><Button icon="star-o">{userName}的收藏</Button></Col>
+                </Row>
+                <Row>
+                    <Col span={10}><Button icon="heart-o">{userName}的关注</Button></Col>
+                </Row>
+            </Card>;
+        }
+
         return (
             <div>
                 <Card style={{ width: 700 }}>
@@ -67,20 +103,7 @@ const PersonCenterComponents = React.createClass({
                         <Col span={10}>这家伙很懒</Col>
                     </Row>
                 </Card>
-                <Card title={personCenter.state.userInfo.user.userName+'的个人名片'}  style={{ width: 700 }}>
-                    <Row>
-                        <Col span={10}><Button icon="question-circle-o">{personCenter.state.userInfo.user.userName}的提问</Button></Col>
-                    </Row>
-                    <Row>
-                        <Col span={10}><Button icon="area-chart">{personCenter.state.userInfo.user.userName}的学习轨迹</Button></Col>
-                    </Row>
-                    <Row>
-                        <Col span={10}><Button icon="star-o">{personCenter.state.userInfo.user.userName}的收藏</Button></Col>
-                    </Row>
-                    <Row>
-                        <Col span={10}><Button icon="heart-o">{personCenter.state.userInfo.user.userName}的关注</Button></Col>
-                    </Row>
-                </Card>
+                {userCard}
             </div>
         );
     },
