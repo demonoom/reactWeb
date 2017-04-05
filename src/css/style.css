@@ -1127,10 +1127,9 @@ p.user_cont1{
 	text-align:center;
 	height: 150px;
     border-bottom: 1px solid #ede9e5;
-    background-color: #888;
+    background-color: #aaa;
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
-    position: relative;
     overflow: hidden;
 	position: absolute;
     left: 0;
@@ -1169,14 +1168,13 @@ p.user_cont span.name1{
 }
 .blur {
     filter: url(blur.svg#blur); /* FireFox, Chrome, Opera */   
-    -webkit-filter: blur(10px); /* Chrome, Opera */
-       -moz-filter: blur(10px);
-        -ms-filter: blur(10px);   
-            filter: blur(10px);
-    filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=10, MakeShadow=false); /* IE6~IE9 */
+    -webkit-filter: blur(30px); /* Chrome, Opera */
+       -moz-filter: blur(30px);
+        -ms-filter: blur(30px);   
+            filter: blur(30px);
+    filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=30, MakeShadow=false); /* IE6~IE9 */
 	    width: 100%;
-    height: 100%;
-	margin-top: -32px;
+	margin-top: 0;
 }
 .img_us{
 	position: absolute;
@@ -2020,16 +2018,13 @@ a.topics:hover{
 .knowledge_table table tr > td:visited{
 	 background:#eaf8fe;
 }
-<<<<<<< HEAD
 .knowledge_table table tr:first-child{
 	background:#eaf8fe;
 }
 .knowledge_table table tr:first-child{
 	background:#eaf8fe;
 }
-=======
 
->>>>>>> f3bdea9a34dab0b1f31b17a9ca31cf0aecbffbf0
 .knowledge_table table tr.select{
 	background:#eaf8fe;
 }
@@ -2037,4 +2032,49 @@ a.topics:hover{
 	margin-bottom:0 !important
 }
 .group_table{
+	width:100%
 }
+.group_table .ant-table-tbody > tr > td span.antnest_user img{
+	width:48px;
+	height:48px !important
+}
+.group_table .ant-table-tbody > tr > td:first-child {
+	width:50px;
+	}
+.group_table .ant-table-header{
+	margin-bottom:1px !important;
+}
+p.person_user_bg{
+	text-align:center;
+    overflow: hidden;
+	position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+	height:100%;
+	background-size:100%;
+	padding:10px 0 0 0
+}
+.person_user{
+	width:60px;
+	height:60px;
+	border-radius:50%;
+	border:2px solid #fff;
+	overflow: hidden;
+    display: inline-block;
+    box-sizing: border-box;
+    background-size: cover;
+    background-clip: content-box;
+    background-position: center center;
+}
+.person_btn{
+	margin-top:55px;
+	text-align:center;
+}
+.person_le{
+	width:55px;
+}
+.person_ri_user{
+	}
+.person_ri_name{
+	line-height:64px;}

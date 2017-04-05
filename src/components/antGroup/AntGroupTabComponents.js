@@ -992,7 +992,7 @@ const AntGroupTabComponents = React.createClass({
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div>
                         <ul>
-                            <Table className="group_table" onRowClick={antGroup.sendGroupMessage} showHeader={false} scroll={{ x: true, y: 800 }} columns={userGroupsColumns} dataSource={antGroup.state.userGroupsData} pagination={false}/>
+                            <Table className="group_table" onRowClick={antGroup.sendGroupMessage} showHeader={false} scroll={{ x: true, y: 500 }} columns={userGroupsColumns} dataSource={antGroup.state.userGroupsData} pagination={false}/>
                         </ul>
                     </div>
                 </TabPane>
@@ -1027,8 +1027,8 @@ const AntGroupTabComponents = React.createClass({
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div style={{'overflow':'auto'}}>
                         <ul>
-                          <img src={antGroup.state.currentGroupObj.owner.avatar}/>
-                            {antGroup.state.currentGroupObj.name}
+                          <img src={antGroup.state.currentGroupObj.owner.avatar} className="person_user"/>
+                          <span className="person_ri_name">{antGroup.state.currentGroupObj.name}</span>
                         </ul>
                         <ul>
                             <li>群聊成员{antGroup.state.currentMemberArray.length}人</li>
@@ -1096,7 +1096,7 @@ const AntGroupTabComponents = React.createClass({
             >
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div>
-                        <Card style={{height:'300px',width:'730px'}}>
+                        <Card style={{height:'300px',width:'100%'}}>
                             <ul>
                                 {messageTagArray}
                             </ul>
