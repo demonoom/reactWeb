@@ -69,7 +69,15 @@ const TeacherAllCourseWare = React.createClass({
                     var path = e.path;
                     var pdfPath = e.pdfPath;
                     var fileType=fileName.substring(fileName.lastIndexOf(".")+1);
-                    var pointId = e.point.content;
+                    var pointId = e.pointId;
+                    var pointContent = '';
+
+                    if(!pointId){
+                         pointContent = '其它';
+                    }else{
+                         pointContent = e.point.content;
+                    }
+
                     var createTime = courseWare.getLocalTime(e.createTime);
                     var fileTypeLogo;
                     var type = e.type;
@@ -91,7 +99,7 @@ const TeacherAllCourseWare = React.createClass({
                         fileTypeLogo = "icon_geshi icon_mp3";
                     }
                     activeKey.push(fileName+"#"+createTime+"#"+id);
-                    courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointId,createTime,fileTypeLogo,htmlPath,type,collectCount,userId]);
+                    courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointContent,createTime,fileTypeLogo,htmlPath,type,collectCount,userId]);
                 });
                 courseWare.buildKonwledgePanels(courseWareList);
                 courseWare.setState({courseListState:courseWareList});
