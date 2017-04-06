@@ -91,6 +91,7 @@ const AntGroupTabComponents = React.createClass({
                 response.forEach(function (e) {
                     var userId = e.colUid;
                     var userName = e.userName;
+                    console.log("userInfo======》"+userId+"=="+e.userName+"=="+e.colUtype);
                     var userJson = {key:userId,userContacts:userName,userObj:e};
                     userContactsData.push(userJson);
                 });
@@ -110,8 +111,9 @@ const AntGroupTabComponents = React.createClass({
     getPersonCenterInfo(record, index){
         var userType = record.userObj.colUtype;
         console.log("12312"+record.userObj.userName);
-        if(userType=="PAREN"){
+        if(userType=="PAREN" || userType=="EADM" || userType=="SGZH"){
             //家长直接进入聊天窗口
+            //蚂蚁君点击进入后，只能接收消息，无法发送消息
             antGroup.setState({"optType":"sendMessage","currentPerson":record.userObj});
             antGroup.turnToMessagePage(record.key);
         }else {
@@ -907,6 +909,13 @@ const AntGroupTabComponents = React.createClass({
             onResponse: function (ret) {
                 if(ret.msg=="调用成功" && ret.success==true){
                     var response = ret.response;
+                    response.forEach(function (e) {
+                        var followUser = e.user;
+                        var course = e.course;
+                        var userName = followUser.userName;
+                        var courseName = course.colCourse;
+
+                    });
                     antGroup.setState({"optType":"getMyFollows","activeKey":"userFollows","currentFollowUser":user});
                 }
             },
@@ -1003,6 +1012,17 @@ const AntGroupTabComponents = React.createClass({
             }else {
                 welcomeTitle=antGroup.state.currentPerson.user.userName;
             }
+            var emotionInput;
+            if(antGroup.state.currentPerson.colUtype!="SGZH"){
+                emotionInput = <Row>
+                    <Col span={18}>
+                        <EmotionInputComponents></EmotionInputComponents>
+                    </Col>
+                    <Col span={4}>
+                        <Button onClick={antGroup.sendMessage}>发送</Button>
+                    </Col>
+                </Row>;
+            }
             tabComponent = <Tabs
                 hideAdd
                 ref = "personCenterTab"
@@ -1018,14 +1038,7 @@ const AntGroupTabComponents = React.createClass({
                                 {messageTagArray}
                             </ul>
                         </Card>
-                        <Row>
-                            <Col span={18}>
-                                <EmotionInputComponents></EmotionInputComponents>
-                            </Col>
-                            <Col span={4}>
-                                <Button onClick={antGroup.sendMessage}>发送</Button>
-                            </Col>
-                        </Row>
+                        {emotionInput}
                     </div>
                 </TabPane>
             </Tabs>;
@@ -1130,7 +1143,7 @@ const AntGroupTabComponents = React.createClass({
                         }
                     }else{
                         messageTag =  <li style={{'textAlign':'right'}}>
-                            {fromUser}：{content}
+                            {content}：{fromUser}
                         </li>;
                     }
                     messageTagArray.push(messageTag);

@@ -151,10 +151,12 @@ const PersonCenterComponents = React.createClass({
             </p>;
 			<div></div>
         }
-        var userCard;
+        var userLinkCard;
+        var userInfoCard;
         //PAREN---家长
         if(user.colUtype=="STUD"){
             userCard = <Card title={userName+'的个人名片'} className="bai">
+
                 <Row>
                     <Col span={10}><Button value={user.colUid} icon="question-circle-o" onClick={personCenter.studentAsk}>{userName}的提问</Button></Col>
                 </Row>
@@ -168,19 +170,47 @@ const PersonCenterComponents = React.createClass({
                     <Col span={10}><Button value={user.colUid} icon="heart-o" onClick={personCenter.getMyFollows}>{userName}的关注</Button></Col>
                 </Row>
             </Card>;
+            userInfoCard = <Card title={personCenter.state.userInfo.user.userName+'的个人名片'}  style={{ width: 700 }}>
+                <Row>
+                    <Col span={4} className="person_le">学校：</Col>
+                    <Col span={8}>{personCenter.state.userInfo.school}</Col>
+                    <Col span={4}>年级：</Col>
+                    <Col span={8}>{personCenter.state.userInfo.grade}</Col>
+                </Row>
+                <Row>
+                    <Col span={4}>个人简介：</Col>
+                    <Col span={10}>这家伙很懒，还没编辑个人简介</Col>
+                </Row>
+            </Card>;
         }else{
+
             userCard = <Card title={userName+'的个人名片'}  className="bai">
+
                 <Row>
                     <Col span={10}><Button value={user.colUid} icon="question-circle-o">{userName}的直播</Button></Col>
                 </Row>
                 <Row>
-                    <Col span={10}><Button value={user.colUid} icon="area-chart">{userName}的备课</Button></Col>
+                    <Col span={10}><Button value={user.colUid} icon="area-chart">{userName}的资源</Button></Col>
                 </Row>
                 <Row>
-                    <Col span={10}><Button value={user.colUid} icon="star-o">{userName}的收藏</Button></Col>
+                    <Col span={10}><Button value={user.colUid} icon="star-o">{userName}的题库</Button></Col>
                 </Row>
                 <Row>
                     <Col span={10}><Button value={user.colUid} icon="heart-o">{userName}的关注</Button></Col>
+                </Row>
+            </Card>;
+            userInfoCard = <Card title={personCenter.state.userInfo.user.userName+'的个人名片'}  style={{ width: 700 }}  className="bai">
+                <Row>
+                    <Col span={4}>学校：</Col>
+                    <Col span={8}>{personCenter.state.userInfo.school}</Col>
+                    <Col span={4}>科目：</Col>
+                    <Col span={8}>{personCenter.state.userInfo.course}</Col>
+                    <Col span={4}>年级：</Col>
+                    <Col span={8}>{personCenter.state.userInfo.grade}</Col>
+                </Row>
+                <Row>
+                    <Col span={4}>个人简介：</Col>
+                    <Col span={10}>该老师很忙，还没编辑个人简介</Col>
                 </Row>
             </Card>;
         }
@@ -205,19 +235,10 @@ const PersonCenterComponents = React.createClass({
                     <Button icon="message" value={personCenter.state.userInfo.user.colUid} onClick={personCenter.sendMessage}>发消息</Button>
                     {followButton}
                 </Card>
-                <Card title={personCenter.state.userInfo.user.userName+'的个人名片'}  className="bai">
-                    <Row>
-                        <Col className="person_le">学校：</Col>
-                        <Col span={8}>{personCenter.state.userInfo.school}</Col>
-                        <Col span={4}>年级：</Col>
-                        <Col span={8}>{personCenter.state.userInfo.grade}</Col>
-                    </Row>
-                    <Row>
-                        <Col span={4}>个人简介：</Col>
-                        <Col span={10}>这家伙很懒</Col>
-                    </Row>
-                </Card>
-                {userCard}
+
+                {userInfoCard}
+                {userLinkCard}
+
             </div>
         );
     },

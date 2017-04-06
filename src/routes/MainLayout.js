@@ -55,13 +55,17 @@ const MainLayout = React.createClass({
   toolbarClick:function (e) {
     toolbarKey=e.key;
     this.setState({currentKey:e.key,resouceType:''});
-    if(e.key!="KnowledgeResources"){
-      var breadcrumbArray = [{hrefLink:'#/MainLayout',hrefText:"首页"}];
-      if(mainLayout.refs.mainTabComponents!=null && typeof(mainLayout.refs.mainTabComponents)!="undefined" ){
+    if(toolbarKey=="antNest"){
+      //蚁巢
+      mainLayout.setState({resouceType:"visitAntNest"});
+    }else{
+      if(e.key!="KnowledgeResources"){
+        var breadcrumbArray = [{hrefLink:'#/MainLayout',hrefText:"首页"}];
+        if(mainLayout.refs.mainTabComponents!=null && typeof(mainLayout.refs.mainTabComponents)!="undefined" ){
           mainLayout.refs.mainTabComponents.buildBreadcrumb(breadcrumbArray,0);
+        }
       }
     }
-
     /*if(mainLayout.refs.mainTabComponents!=null && typeof(mainLayout.refs.mainTabComponents)!="undefined" ) {
       mainLayout.refs.mainTabComponents.setCurrentOptType(e.key);
     }*/
@@ -219,6 +223,9 @@ const MainLayout = React.createClass({
             </Menu.Item>
             <Menu.Item key="studyEvaluate" className="padding_menu">
               <Icon type="clock-circle-o" /><div className="tan">学习评价</div>
+            </Menu.Item>
+            <Menu.Item key="antNest" className="padding_menu">
+            <i className="icon_yichao"></i><div className="tan">蚁巢</div>
             </Menu.Item>
             {/*<Menu.Item key="exam" className="padding_menu">
               <Icon type="file-text" /><div className="tan">考试</div>
