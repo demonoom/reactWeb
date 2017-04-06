@@ -18,6 +18,7 @@ var columns = [ {
     title: '联系人',
     dataIndex: 'userContacts',
 }];
+
 var userGroupsColumns = [ {
     title: '群聊头像',
     dataIndex: 'groupPhoto',
@@ -30,6 +31,18 @@ var groupUserTableColumns = [ {
     title: '群成员',
     dataIndex: 'groupUser',
 }];
+
+var followUserColumns=[
+    {
+        title:'姓名',
+        dataIndex:'userName'
+    },
+    {
+        title:'科目',
+        dataIndex:'courseName'
+    }
+];
+
 
 var antGroup;
 var messageList=[];
@@ -61,7 +74,8 @@ const AntGroupTabComponents = React.createClass({
             selectedRowKeysStr:'',
             memberData:[],  //添加群成员时，待添加群成员的数组
             memberTargetKeys:[],    //添加群成员时，已选中待添加群成员的数组
-            updateChatGroupTitle:''
+            updateChatGroupTitle:'',
+            followsUserArray:[],
         };
     },
     /**
@@ -909,20 +923,41 @@ const AntGroupTabComponents = React.createClass({
             onResponse: function (ret) {
                 if(ret.msg=="调用成功" && ret.success==true){
                     var response = ret.response;
+                    var followsUserArray=[];
                     response.forEach(function (e) {
                         var followUser = e.user;
                         var course = e.course;
                         var userName = followUser.userName;
                         var courseName = course.colCourse;
-
+                        /*var liTag = <li>
+                            <span onClick={antGroup.followUserPersonCenter} value={followUser.colUid}>{userName}</span><br/>
+                            <span onClick={antGroup.followUserPersonCenter} value={followUser.colUid}>{courseName}</span>
+                        </li>;*/
+                        var userJson = {key:followUser.colUid,"userName":userName,"courseName":courseName,"userObj":followUser};
+                        followsUserArray.push(userJson);
                     });
-                    antGroup.setState({"optType":"getMyFollows","activeKey":"userFollows","currentFollowUser":user});
+                    antGroup.setState({"optType":"getMyFollows","activeKey":"userFollows","currentFollowUser":user,"followsUserArray":followsUserArray});
                 }
             },
             onError: function (error) {
                 message.error(error);
             }
         });
+    },
+
+    /**
+     * 关注用户的个人中心
+     */
+    followUserPersonCenter(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var userId = target.value;
+        console.log("userId===>"+userId);
+        antGroup.getPersonalCenterData(userId);
     },
     /**
      * 返回个人中心页面
@@ -931,6 +966,13 @@ const AntGroupTabComponents = React.createClass({
     returnPersonCenter(){
         var userId = antGroup.state.currentFollowUser.colUid;
         antGroup.getPersonalCenterData(userId);
+    },
+    /**
+     * 获取用户的收藏
+     * @param user
+     */
+    callBackGetUserFavorite(user){
+        console.log("favorite"+user.colUid+"=="+user.userName);
     },
 
     render() {
@@ -973,6 +1015,7 @@ const AntGroupTabComponents = React.createClass({
                                                 callBackTurnToAsk={antGroup.callBackTurnToAsk}
                                                 callBackStudyTrack={antGroup.callBackStudyTrack}
                                                 callBackGetMyFollows={antGroup.getMyFollows}
+                                                callBackGetUserFavorite={antGroup.callBackGetUserFavorite}
                         ></PersonCenterComponents>
                     </div>
                 </TabPane>
@@ -1219,8 +1262,7 @@ const AntGroupTabComponents = React.createClass({
             >
                 <TabPane tab={welcomeTitle} key="userFollows" className="topics_rela">
                     <div>
-                        暂无数据
-                        {/*<Table onRowClick={antGroup.getPersonCenterInfo} showHeader={false} scroll={{ x: true, y: 400 }} columns={columns} dataSource={antGroup.state.userContactsData} pagination={false}/>*/}
+                        <Table onRowClick={antGroup.getPersonCenterInfo} showHeader={true} scroll={{ x: true, y: 400 }} columns={followUserColumns} dataSource={antGroup.state.followsUserArray} pagination={false}/>
                     </div>
                 </TabPane>
             </Tabs>;
