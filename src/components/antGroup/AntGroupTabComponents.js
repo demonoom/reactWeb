@@ -364,7 +364,7 @@ const AntGroupTabComponents = React.createClass({
             showContent = showContent.replace(subStr,"~");
             var imgUrl = getImgName(subStr);
             var localUrl = "../src/components/images/emotions/"+imgUrl;
-            var subStrReplace = <img src={localUrl} style={{width:'50px',height:'50px'}}/> ;
+            var subStrReplace = <span className='antnest_user'><img src={localUrl}/></span> ;
             imgTags.push(subStrReplace);
             var otherStr = str.substring(end+1);
             if(otherStr.indexOf("[bexp_")!=-1){
@@ -453,7 +453,7 @@ const AntGroupTabComponents = React.createClass({
                         var chatGroupName = e.name;
                         var membersCount = e.members.length;
                         var ownerPhoto = e.owner.avatar;
-                        var imgTag = <img src={ownerPhoto} style={{width:'50px',height:'50px'}}></img>;
+                        var imgTag = <span className='antnest_user'><img src={ownerPhoto}></img></span>;
                         var groupName = chatGroupName+""+membersCount+"人";
                         var chatGroupJson = {key:chatGroupId,groupPhoto:imgTag,'groupName':groupName,"groupObj":e};
                         charGroupArray.push(chatGroupJson);
@@ -993,10 +993,8 @@ const AntGroupTabComponents = React.createClass({
                     transitionName=""  //禁用Tabs的动画效果
                 >
                     <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
-                        <div>
-                            <Button　icon="usergroup-add" onClick={antGroup.getUserChatGroup}>我的群组</Button>
-                            <Table onRowClick={antGroup.getPersonCenterInfo} showHeader={false} scroll={{ x: true, y: 400 }} columns={columns} dataSource={antGroup.state.userContactsData} pagination={false}/>
-                        </div>
+                            <p className="group_double"　icon="usergroup-add" onClick={antGroup.getUserChatGroup}>我的群组</p>
+                            <Table onRowClick={antGroup.getPersonCenterInfo} showHeader={false} scroll={{ x: true, y: 430}} columns={columns} dataSource={antGroup.state.userContactsData} pagination={false}/>
                     </TabPane>
                 </Tabs>;
         }else if(antGroup.state.optType=="personCenter"){
@@ -1089,7 +1087,7 @@ const AntGroupTabComponents = React.createClass({
             </Tabs>;
         }if(antGroup.state.optType=="getUserChatGroup"){
             welcomeTitle = "我的群聊";
-            tabComponent= <Tabs
+            tabComponent= <Tabs 
                 hideAdd
                 ref = "mainTab"
                 activeKey={this.state.activeKey}
@@ -1099,8 +1097,8 @@ const AntGroupTabComponents = React.createClass({
             >
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div>
-                        <ul>
-                            <Table onRowClick={antGroup.sendGroupMessage} showHeader={false} scroll={{ x: true, y: 400 }} columns={userGroupsColumns} dataSource={antGroup.state.userGroupsData} pagination={false}/>
+                        <ul className="group_table">
+                            <Table onRowClick={antGroup.sendGroupMessage} showHeader={false} scroll={{ x: true, y: 500 }} columns={userGroupsColumns} dataSource={antGroup.state.userGroupsData} pagination={false}/>
                         </ul>
                     </div>
                 </TabPane>
@@ -1135,8 +1133,8 @@ const AntGroupTabComponents = React.createClass({
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div style={{'overflow':'auto'}}>
                         <ul>
-                          <img src={antGroup.state.currentGroupObj.owner.avatar}/>
-                            {antGroup.state.currentGroupObj.name}
+                          <img src={antGroup.state.currentGroupObj.owner.avatar} className="person_user"/>
+                          <span className="person_ri_name">{antGroup.state.currentGroupObj.name}</span>
                         </ul>
                         <ul>
                             <li>群聊成员{antGroup.state.currentMemberArray.length}人</li>
@@ -1161,7 +1159,7 @@ const AntGroupTabComponents = React.createClass({
             </Tabs>;
         }else if(antGroup.state.optType=="sendGroupMessage"){
             returnToolBar = <div className="ant-tabs-right">
-                <Button onClick={antGroup.setChatGroup}>设置</Button>
+                <Button onClick={antGroup.setChatGroup} className="antnest_talk">设置</Button>
                 <Button onClick={antGroup.returnAntGroupMainPage}>返回</Button>
             </div>;
             welcomeTitle=antGroup.state.currentGroupObj.name;
@@ -1188,7 +1186,7 @@ const AntGroupTabComponents = React.createClass({
                         }
                     }else{
                         messageTag =  <li style={{'textAlign':'right'}}>
-                            {fromUser}：{content}
+                            {content}：{fromUser}
                         </li>;
                     }
                     messageTagArray.push(messageTag);
@@ -1204,16 +1202,16 @@ const AntGroupTabComponents = React.createClass({
             >
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div>
-                        <Card style={{height:'300px',width:'730px'}}>
+                        <div className="group_talk">
                             <ul>
                                 {messageTagArray}
                             </ul>
-                        </Card>
-                        <Row>
-                            <Col span={18}>
+                        </div>
+                        <Row className="group_send">
+                            <Col className="group_send_talk">
                                 <EmotionInputComponents></EmotionInputComponents>
                             </Col>
-                            <Col span={4}>
+                            <Col className="group_send_btn">
                                 <Button onClick={antGroup.sendMessage}>发送</Button>
                             </Col>
                         </Row>

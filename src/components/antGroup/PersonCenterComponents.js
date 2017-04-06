@@ -152,15 +152,18 @@ const PersonCenterComponents = React.createClass({
         var user = personCenter.state.userInfo.user;
         var userName = user.userName;
         if(isEmpty(user.avatar)==false){
-            userPhotoTag = <p>
-                <img src={user.avatar}/>
+            userPhotoTag = <p className="person_user_bg">
+                <img src={user.avatar} className="person_user"/>
+				<img src={user.avatar} className="blur"/>		
             </p>;
+			<div></div>
         }
         var userLinkCard;
         var userInfoCard;
         //PAREN---家长
         if(user.colUtype=="STUD"){
-            userLinkCard = <Card title={userName+'的个人名片'}  style={{ width: 700 }}>
+            userCard = <Card title={userName+'的个人名片'} className="bai">
+
                 <Row>
                     <Col span={10}><Button value={user.colUid} icon="question-circle-o" onClick={personCenter.studentAsk}>{userName}的提问</Button></Col>
                 </Row>
@@ -176,7 +179,7 @@ const PersonCenterComponents = React.createClass({
             </Card>;
             userInfoCard = <Card title={personCenter.state.userInfo.user.userName+'的个人名片'}  style={{ width: 700 }}>
                 <Row>
-                    <Col span={4}>学校：</Col>
+                    <Col span={4} className="person_le">学校：</Col>
                     <Col span={8}>{personCenter.state.userInfo.school}</Col>
                     <Col span={4}>年级：</Col>
                     <Col span={8}>{personCenter.state.userInfo.grade}</Col>
@@ -187,7 +190,9 @@ const PersonCenterComponents = React.createClass({
                 </Row>
             </Card>;
         }else{
-            userLinkCard = <Card title={userName+'的个人名片'}  style={{ width: 700 }}>
+
+            userCard = <Card title={userName+'的个人名片'}  className="bai">
+
                 <Row>
                     <Col span={10}><Button value={user.colUid} icon="question-circle-o">{userName}的直播</Button></Col>
                 </Row>
@@ -201,7 +206,7 @@ const PersonCenterComponents = React.createClass({
                     <Col span={10}><Button value={user.colUid} icon="heart-o">{userName}的关注</Button></Col>
                 </Row>
             </Card>;
-            userInfoCard = <Card title={personCenter.state.userInfo.user.userName+'的个人名片'}  style={{ width: 700 }}>
+            userInfoCard = <Card title={personCenter.state.userInfo.user.userName+'的个人名片'}  style={{ width: 700 }}  className="bai">
                 <Row>
                     <Col span={4}>学校：</Col>
                     <Col span={8}>{personCenter.state.userInfo.school}</Col>
@@ -227,18 +232,20 @@ const PersonCenterComponents = React.createClass({
 
         return (
             <div>
-                <Card style={{ width: 700 }}>
+                <Card className="bai">
                     {userPhotoTag}
-                    <p>
+                    <p className="person_btn">
                         <Button>{personCenter.state.userInfo.score}积分</Button><Button>{personCenter.state.userInfo.level.name}</Button>
                     </p>
                 </Card>
-                <Card style={{ width: 700 }}>
+                <Card className="bai">
                     <Button icon="message" value={personCenter.state.userInfo.user.colUid} onClick={personCenter.sendMessage}>发消息</Button>
                     {followButton}
                 </Card>
+
                 {userInfoCard}
                 {userLinkCard}
+
             </div>
         );
     },

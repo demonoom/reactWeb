@@ -1127,10 +1127,9 @@ p.user_cont1{
 	text-align:center;
 	height: 150px;
     border-bottom: 1px solid #ede9e5;
-    background-color: #888;
+    background-color: #aaa;
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
-    position: relative;
     overflow: hidden;
 	position: absolute;
     left: 0;
@@ -1169,14 +1168,13 @@ p.user_cont span.name1{
 }
 .blur {
     filter: url(blur.svg#blur); /* FireFox, Chrome, Opera */   
-    -webkit-filter: blur(10px); /* Chrome, Opera */
-       -moz-filter: blur(10px);
-        -ms-filter: blur(10px);   
-            filter: blur(10px);
-    filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=10, MakeShadow=false); /* IE6~IE9 */
+    -webkit-filter: blur(30px); /* Chrome, Opera */
+       -moz-filter: blur(30px);
+        -ms-filter: blur(30px);   
+            filter: blur(30px);
+    filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=30, MakeShadow=false); /* IE6~IE9 */
 	    width: 100%;
-    height: 100%;
-	margin-top: -32px;
+	margin-top: 0;
 }
 .img_us{
 	position: absolute;
@@ -1792,13 +1790,13 @@ a {
 	overflow:scroll;
 }
 .antnest_user{
-	width:48px;
-	height:48px;
+	width:38px;
+	height:38px;
 	float:left
 	}
 .antnest_user img{
-    width: 48px;
-    height: 48px;
+    width: 38px;
+    height: 38px !important;
     border-radius: 50%;
 	cursor:pointer;
 }
@@ -2020,10 +2018,139 @@ a.topics:hover{
 .knowledge_table table tr > td:visited{
 	 background:#eaf8fe;
 }
+.knowledge_table table tr:first-child{
+	background:#eaf8fe;
+}
+.knowledge_table table tr:first-child{
+	background:#eaf8fe;
+}
 
 .knowledge_table table tr.select{
 	background:#eaf8fe;
 }
 .knowledge_table .ant-table-header{
 	margin-bottom:0 !important
+}
+.group_table{
+	width:100%
+}
+.group_table .ant-table-tbody > tr > td span.antnest_user img{
+	width:38px;
+	height:38px !important
+}
+.group_table .ant-table-tbody > tr > td:first-child {
+	width:50px;
+	}
+.group_table .ant-table-header{
+	margin-bottom:1px !important;
+}
+p.person_user_bg{
+	text-align:center;
+    overflow: hidden;
+	position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+	height:100%;
+	background-size:100%;
+	padding:10px 0 0 0
+}
+.person_user{
+	width:60px;
+	height:60px;
+	border-radius:50%;
+	border:2px solid #fff;
+	overflow: hidden;
+    display: inline-block;
+    box-sizing: border-box;
+    background-size: cover;
+    background-clip: content-box;
+    background-position: center center;
+}
+.person_btn{
+	margin-top:55px;
+	text-align:center;
+}
+.person_le{
+	width:55px;
+}
+.person_ri_user{
+	}
+.person_ri_name{
+	line-height:64px;
+}
+.group_double{
+	border-bottom: 1px solid #e9e9e9;
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 16px 0 ;
+	font-size:14px;
+	text-indent:24px;
+	width:100%
+}
+.group_double:hover{
+	background:#eaf8fe;
+	cursor:pointer
+}
+
+p.group_double + div.clearfix{
+	margin-top:54px;
+	height:calc(100% - 54px) !important;
+	height:-moz-calc(100% - 54px) !important;
+    height:-webkit-calc(100% - 54px) !important;
+}
+p.group_double + div.clearfix > div:first-child, p.group_double + div.clearfix > div:first-child .ant-table-body{
+	height:100%;
+}
+p.group_double + div.clearfix > div:first-child .ant-table-header{
+	margin-bottom:0 !important
+}
+p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr{
+	cursor:pointer
+}
+.group_talk{
+	height:394px;
+	padding:0 20px 0 0;
+}
+.group_send{
+	height:100px;
+}
+.group_send_talk{
+	width:calc(100% -80px);
+	width:-moz-calc(100% -80px);
+	width: -webkit-calc(100% - 80px);
+	height:100%;
+	position:relative;
+	float:left;
+}
+.group_send_talk .emoji-wysiwyg-editor{
+	border-radius:0;
+	height:100px;
+	border-right:none;
+}
+.group_send_btn{
+	width:80px;
+	height:100%;
+	float:right
+}
+.group_send_btn button{
+	width:100%;
+	height:100%;
+	border-radius: 0;
+}
+.icon_yichao{
+	background:url(../components/images/icon_yichao.png) no-repeat 0 0;
+	width:23px;
+	height:23px;
+	display:inline-block;
+	margin-top: 20px;
+}
+.padding_menu:hover .icon_yichao{
+	background:url(../components/images/icon_yichao.png) no-repeat 0 -48px;
+
+}
+.padding_menu:hover .icon_yichao, .ant-menu-item-selected .icon_yichao{
+	background:url(../components/images/icon_yichao.png) no-repeat 0 -48px;
+
 }
