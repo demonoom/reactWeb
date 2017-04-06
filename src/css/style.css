@@ -1790,13 +1790,13 @@ a {
 	overflow:scroll;
 }
 .antnest_user{
-	width:48px;
-	height:48px;
+	width:38px;
+	height:38px;
 	float:left
 	}
 .antnest_user img{
-    width: 48px;
-    height: 48px !important;
+    width: 38px;
+    height: 38px !important;
     border-radius: 50%;
 	cursor:pointer;
 }
@@ -2035,8 +2035,8 @@ a.topics:hover{
 	width:100%
 }
 .group_table .ant-table-tbody > tr > td span.antnest_user img{
-	width:48px;
-	height:48px !important
+	width:38px;
+	height:38px !important
 }
 .group_table .ant-table-tbody > tr > td:first-child {
 	width:50px;
@@ -2077,4 +2077,65 @@ p.person_user_bg{
 .person_ri_user{
 	}
 .person_ri_name{
-	line-height:64px;}
+	line-height:64px;
+}
+.group_double{
+	border-bottom: 1px solid #e9e9e9;
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 16px 0 ;
+	font-size:14px;
+	text-indent:24px;
+	width:100%
+}
+.group_double:hover{
+	background:#eaf8fe;
+	cursor:pointer
+}
+
+p.group_double + div.clearfix{
+	margin-top:54px;
+	height:calc(100% - 54px) !important;
+	height:-moz-calc(100% - 54px) !important;
+    height:-webkit-calc(100% - 54px) !important;
+}
+p.group_double + div.clearfix > div:first-child, p.group_double + div.clearfix > div:first-child .ant-table-body{
+	height:100%;
+}
+p.group_double + div.clearfix > div:first-child .ant-table-header{
+	margin-bottom:0 !important
+}
+p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr{
+	cursor:pointer
+}
+.group_talk{
+	height:394px;
+	padding:0 20px 0 0;
+}
+.group_send{
+	height:100px;
+}
+.group_send_talk{
+	width:calc(100% -80px);
+	width:-moz-calc(100% -80px);
+	width: -webkit-calc(100% - 80px);
+	height:100%;
+	position:relative;
+	float:left;
+}
+.group_send_talk .emoji-wysiwyg-editor{
+	border-radius:0;
+	height:100px;
+	border-right:none;
+}
+.group_send_btn{
+	width:80px;
+	height:100%;
+	float:right
+}
+.group_send_btn button{
+	width:100%;
+	height:100%;
+	border-radius: 0;
+}

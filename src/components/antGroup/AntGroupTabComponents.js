@@ -942,10 +942,8 @@ const AntGroupTabComponents = React.createClass({
                     transitionName=""  //禁用Tabs的动画效果
                 >
                     <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
-                        <div>
-                            <Button　icon="usergroup-add" onClick={antGroup.getUserChatGroup}>我的群组</Button>
-                            <Table onRowClick={antGroup.getPersonCenterInfo} showHeader={false} scroll={{ x: true, y: 400}} columns={columns} dataSource={antGroup.state.userContactsData} pagination={false}/>
-                        </div>
+                            <p className="group_double"　icon="usergroup-add" onClick={antGroup.getUserChatGroup}>我的群组</p>
+                            <Table onRowClick={antGroup.getPersonCenterInfo} showHeader={false} scroll={{ x: true, y: 430}} columns={columns} dataSource={antGroup.state.userContactsData} pagination={false}/>
                     </TabPane>
                 </Tabs>;
         }else if(antGroup.state.optType=="personCenter"){
@@ -1043,8 +1041,8 @@ const AntGroupTabComponents = React.createClass({
             >
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div>
-                        <ul>
-                            <Table className="group_table" onRowClick={antGroup.sendGroupMessage} showHeader={false} scroll={{ x: true, y: 500 }} columns={userGroupsColumns} dataSource={antGroup.state.userGroupsData} pagination={false}/>
+                        <ul className="group_table">
+                            <Table onRowClick={antGroup.sendGroupMessage} showHeader={false} scroll={{ x: true, y: 500 }} columns={userGroupsColumns} dataSource={antGroup.state.userGroupsData} pagination={false}/>
                         </ul>
                     </div>
                 </TabPane>
@@ -1148,16 +1146,16 @@ const AntGroupTabComponents = React.createClass({
             >
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div>
-                        <Card style={{height:'300px',width:'100%'}}>
+                        <div className="group_talk">
                             <ul>
                                 {messageTagArray}
                             </ul>
-                        </Card>
-                        <Row>
-                            <Col span={18}>
+                        </div>
+                        <Row className="group_send">
+                            <Col className="group_send_talk">
                                 <EmotionInputComponents></EmotionInputComponents>
                             </Col>
-                            <Col span={4}>
+                            <Col className="group_send_btn">
                                 <Button onClick={antGroup.sendMessage}>发送</Button>
                             </Col>
                         </Row>
