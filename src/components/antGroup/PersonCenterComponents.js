@@ -162,7 +162,7 @@ const PersonCenterComponents = React.createClass({
         var userInfoCard;
         //PAREN---家长
         if(user.colUtype=="STUD"){
-            userCard = <Card title={userName+'的个人名片'} className="bai">
+            userLinkCard = <Card title={userName+'的个人名片'} className="bai">
 
                 <Row>
                     <Col span={10}><Button value={user.colUid} icon="question-circle-o" onClick={personCenter.studentAsk}>{userName}的提问</Button></Col>
@@ -191,7 +191,7 @@ const PersonCenterComponents = React.createClass({
             </Card>;
         }else{
 
-            userCard = <Card title={userName+'的个人名片'}  className="bai">
+            userLinkCard = <Card title={userName+'的个人名片'}  className="bai">
 
                 <Row>
                     <Col span={10}><Button value={user.colUid} icon="question-circle-o">{userName}的直播</Button></Col>
