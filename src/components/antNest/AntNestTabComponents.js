@@ -1066,6 +1066,7 @@ const AntNestTabComponents = React.createClass({
             target = e.target;
         }
         var optType = target.value;
+        antNest.initMyEmotionInput();
         antNest.setState({"addTopicModalVisible":true,"topicModalType":optType});
     },
 
