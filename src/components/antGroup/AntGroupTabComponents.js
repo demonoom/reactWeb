@@ -1277,8 +1277,8 @@ const AntGroupTabComponents = React.createClass({
                     //className="modol_width"
                     transitionName=""  //禁用modal的动画效果
                     footer={[
-                        <button type="primary" htmlType="submit" className="login-form-button" onClick={antGroup.createChatGroup}  >确定</button>,
-                        <button type="ghost" htmlType="reset" className="login-form-button" onClick={antGroup.createChatGroupModalHandleCancel} >取消</button>
+                        <button type="primary" htmlType="submit" className="ant-btn-primary ant-btn" onClick={antGroup.createChatGroup}  >确定</button>,
+                        <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button" onClick={antGroup.createChatGroupModalHandleCancel} >取消</button>
                     ]}
                 >
                     <Row className="ant-form-item">
