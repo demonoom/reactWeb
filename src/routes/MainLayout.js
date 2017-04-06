@@ -225,7 +225,7 @@ const MainLayout = React.createClass({
               <Icon type="clock-circle-o" /><div className="tan">学习评价</div>
             </Menu.Item>
             <Menu.Item key="antNest" className="padding_menu">
-              <img style={{width:'20px',height:'20px'}} src={require('../components/images/icon_yichao.png')}/> <div className="tan">蚁巢</div>
+              <img style={{width:'22px',height:'22px'}} src={require('../components/images/icon_yichao.png')}/> <div className="tan">蚁巢</div>
             </Menu.Item>
             {/*<Menu.Item key="exam" className="padding_menu">
               <Icon type="file-text" /><div className="tan">考试</div>
