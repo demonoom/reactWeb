@@ -140,6 +140,13 @@ const PersonCenterComponents = React.createClass({
         personCenter.props.callBackGetMyFollows(personCenter.props.userInfo.user);
     },
 
+    /**
+     * 获取我的关注列表
+     */
+    getUserFavorite(e){
+        personCenter.props.callBackGetUserFavorite(personCenter.props.userInfo.user);
+    },
+
     render() {
         var userPhotoTag;
         var user = personCenter.state.userInfo.user;
@@ -161,7 +168,7 @@ const PersonCenterComponents = React.createClass({
                     <Col span={10}><Button value={user.colUid} icon="area-chart" onClick={personCenter.studentStudyTrack}>{userName}的学习轨迹</Button></Col>
                 </Row>
                 <Row>
-                    <Col span={10}><Button value={user.colUid} icon="star-o">{userName}的收藏</Button></Col>
+                    <Col span={10}><Button value={user.colUid} icon="star-o" onClick={personCenter.getUserFavorite}>{userName}的收藏</Button></Col>
                 </Row>
                 <Row>
                     <Col span={10}><Button value={user.colUid} icon="heart-o" onClick={personCenter.getMyFollows}>{userName}的关注</Button></Col>
