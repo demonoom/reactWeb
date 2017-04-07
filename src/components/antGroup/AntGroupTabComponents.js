@@ -1008,7 +1008,7 @@ const AntGroupTabComponents = React.createClass({
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
-                    <div  style={{'overflow':'auto','align':'center'}}>
+                    <div className="person_padding" >
                         <PersonCenterComponents ref="personCenter"
                                                 userInfo={antGroup.state.currentPerson}
                                                 callBackTurnToMessagePage={antGroup.turnToMessagePage}
@@ -1057,11 +1057,11 @@ const AntGroupTabComponents = React.createClass({
             }
             var emotionInput;
             if(antGroup.state.currentPerson.colUtype!="SGZH"){
-                emotionInput = <Row>
-                    <Col span={18}>
+                emotionInput = <Row className="group_send">
+                    <Col className="group_send_talk">
                         <EmotionInputComponents></EmotionInputComponents>
                     </Col>
-                    <Col span={4}>
+                    <Col  className="group_send_btn">
                         <Button onClick={antGroup.sendMessage}>发送</Button>
                     </Col>
                 </Row>;
@@ -1076,11 +1076,11 @@ const AntGroupTabComponents = React.createClass({
             >
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div>
-                        <Card style={{height:'300px',width:'730px'}}>
+                        <div className="group_talk">
                             <ul>
                                 {messageTagArray}
                             </ul>
-                        </Card>
+                        </div>
                         {emotionInput}
                     </div>
                 </TabPane>
