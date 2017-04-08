@@ -8,6 +8,7 @@ import MiddleMenuComponents from '../components/MiddleMenuComponents';
 import HeaderComponents from '../components/HeaderComponents';
 import UserCardModalComponents from '../components/UserCardModalComponents';
 import FloatButton  from '../components/FloatButton';
+import MyFavorites  from '../components/Favorites';
 import KnowledgeMenuComponents from '../components/KnowledgeMenuComponents';
 import HomeWorkMenu from '../components/HomeWorkMenu';
 import ExamMenu from '../components/exam/ExamMenu';
@@ -150,50 +151,96 @@ const MainLayout = React.createClass({
       middleComponent = <ExamMenu callbackParent={this.getExamPagerList}></ExamMenu>
       tabComponent=<ExamPagerTabComponents ref="examPagerTabComponents" />;
     }
-    if(mainLayout.state.resouceType==null || mainLayout.state.resouceType==''){
-      mainContent = <Row>
-        <Col span={5}>
-          {middleComponent}
-        </Col>
-        <Col span={19}>
-          <div className="ant-layout-container">
-            <div className="ant-layout-content">
-              {tabComponent}
-            </div>
-          </div>
-        </Col>
-      </Row>;
-    }else if(mainLayout.state.resouceType=="visitAntNest"){
-      mainContent = <Row>
-        <Col span={24}>
-          <div className="ant-layout-container">
-            <div className="ant-layout-content">
-              <AntNestTabComponents ref="antNestTabComponents" resouceType={mainLayout.state.resouceType}/>
-            </div>
-          </div>
-        </Col>
-      </Row>;
-    }else if(mainLayout.state.resouceType=="visitAntGroup"){
-      mainContent = <Row>
-        <Col span={24}>
-          <div className="ant-layout-container">
-            <div className="ant-layout-content">
-              <AntGroupTabComponents ref="antGroupTabComponents" resouceType={mainLayout.state.resouceType}/>
-            </div>
-          </div>
-        </Col>
-      </Row>;
-    }else{
-      mainContent = <Row>
-        <Col span={24}>
-          <div className="ant-layout-container">
-            <div className="ant-layout-content">
-              <TeacherResource ref="teacherResource" resouceType={mainLayout.state.resouceType}/>
-            </div>
-          </div>
-        </Col>
-      </Row>;
-    }
+    //
+      switch (mainLayout.state.resouceType){
+          case '':
+              mainContent = <Row>
+                <Col span={5}>
+                    {middleComponent}
+                </Col>
+                <Col span={19}>
+                  <div className="ant-layout-container">
+                    <div className="ant-layout-content">
+                        {tabComponent}
+                    </div>
+                  </div>
+                </Col>
+              </Row>;
+            break;
+          case null:
+              mainContent = <Row>
+                <Col span={5}>
+                    {middleComponent}
+                </Col>
+                <Col span={19}>
+                  <div className="ant-layout-container">
+                    <div className="ant-layout-content">
+                        {tabComponent}
+                    </div>
+                  </div>
+                </Col>
+              </Row>;
+              break;
+          case 'visitAntNest':
+              mainContent = <Row>
+                <Col span={24}>
+                  <div className="ant-layout-container">
+                    <div className="ant-layout-content">
+                      <AntNestTabComponents ref="antNestTabComponents" resouceType={mainLayout.state.resouceType}/>
+                    </div>
+                  </div>
+                </Col>
+              </Row>;
+              break;
+          case 'visitAntGroup':
+              mainContent = <Row>
+                <Col span={24}>
+                  <div className="ant-layout-container">
+                    <div className="ant-layout-content">
+                      <AntGroupTabComponents ref="antGroupTabComponents" resouceType={mainLayout.state.resouceType}/>
+                    </div>
+                  </div>
+                </Col>
+              </Row>;
+              break;
+          case 'visitMyFavorites':
+              mainContent = <Row>
+                <Col span={24}>
+                  <div className="ant-layout-container">
+                    <div className="ant-layout-content">
+                      <MyFavorites />
+                    </div>
+                  </div>
+                </Col>
+              </Row>;
+
+              break;
+          case 'visitMyDirect':
+              mainContent = <Row>
+                <Col span={24}>
+                  <div className="ant-layout-container">
+                    <div className="ant-layout-content">
+                      <MyFavorites />
+                    </div>
+                  </div>
+                </Col>
+              </Row>;
+
+              break;
+          default :
+              mainContent = <Row>
+                <Col span={24}>
+                  <div className="ant-layout-container">
+                    <div className="ant-layout-content">
+                      <TeacherResource ref="teacherResource" resouceType={mainLayout.state.resouceType}/>
+                    </div>
+                  </div>
+                </Col>
+              </Row>;
+              break;
+
+      }
+
 
 
     return (
