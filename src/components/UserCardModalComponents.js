@@ -153,9 +153,46 @@ const UserCardModalComponents = React.createClass({
     },
 
   getTitle(){
+        let uploadProps={
+            action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
+            showUploadList : {false},
+            className : "avatar-uploader",
+            name : "avatar",
+            beforeUpload (file){
+                var fileType = file.type;
+                if(fileType.indexOf("image")==-1){
+                    message.error('只能上传图片文件，请重新上传',5);
+                    return false;
+                }
+            },
+            onChange (info){
+
+                if (info.file.status !== 'uploading') {
+                    //上传进度
+                    var percent = info.file.percent;
+                    this.setState({uploadPercent:percent,progressState:'block'});
+                    if(info.file.status==="removed"){
+                      //  this.props.callBackParent(info.file,"removed");
+                    }
+                }
+                if (info.file.status === 'done') {
+                    this.changeFace(info);
+                    message.success(`${info.file.name} 文件上传成功`,5);
+                } else if (info.file.status === 'error') {
+                    message.error(`${info.file.name} 文件上传失败.`,5);
+                }
+            }
+
+        };
+
    return <span>
-               <UploadImgComponents callBackParent={this.changeFace.bind(this)} />
-               <img className="img_us" src={this.state.userHeadIcon}  />
+       <Upload {...uploadProps}>
+        {
+            this.state.userHeadIcon ?  <img src={this.state.userHeadIcon}   className="img_us" /> :  <Icon type="plus" className="avatar-uploader-trigger" />
+        }
+      </Upload>
+               {/*<img className="img_us" src={this.state.userHeadIcon}  />*/}
+               <br/>
                 <span>{this.state.userName} </span>
                 { this.state.userHeadIcon ? <img src={this.state.userHeadIcon} className="blur"/> : null }
          </span>;

@@ -2177,4 +2177,22 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr{
 	background:url(../components/images/icon_yichao.png) no-repeat 0 -48px;
 
 }
->>>>>>> 06cbf000deee2fe54d8ed5847abea8748595ac4d
+
+.avatar-uploader,
+.avatar-uploader-trigger,
+.avatar {
+	width: 60px;
+	height: 60px;
+}
+.avatar-uploader {
+	display: block;
+	border: 1px dashed #d9d9d9;
+	border-radius: 6px;
+	cursor: pointer;
+}
+.avatar-uploader-trigger {
+	display: table-cell;
+	vertical-align: middle;
+	font-size: 28px;
+	color: #999;
+}
