@@ -123,7 +123,8 @@ const UserCardModalComponents = React.createClass({
         this.setState({ visible: false });
     },
     myMTV(){
-        this.props.callbackParent("myMTV");
+       this.props.callEvent({resouceType: 'visitAntGroup', ref: 'antGroupTabComponents', methond:'getLiveInfoByUid', ident: this.state.ident,pageNo:1 });
+      //  this.props.callbackParent("myMTV");
         this.setState({ visible: false });
     },
 

@@ -17,7 +17,7 @@ class Favorites extends React.Component {
         super(props);
         this.state = { // define this.state in constructor
             ident: this.props.userid || sessionStorage.getItem("ident"),
-            visible: true,
+            breadcrumbVisible: this.props.breadcrumbVisible  ? 'block' : 'none',
             method: 'getUserFavorite',
             type: 1,
             pageNo: 1,
@@ -133,7 +133,7 @@ class Favorites extends React.Component {
     render() {
         return (
             <div>
-                <Breadcrumb separator=">">
+                <Breadcrumb separator=">"  style={{display: this.state.breadcrumbVisible}}  >
                     <Breadcrumb.Item><Icon type="home"/></Breadcrumb.Item>
                     <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
                     <Breadcrumb.Item href="#/MainLayout">我的收藏</Breadcrumb.Item>
