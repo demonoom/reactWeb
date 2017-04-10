@@ -111,7 +111,7 @@ class Favorites extends React.Component {
 
     // 取消收藏
     cancelFav(address, fn) {
-        debugger
+
         var _self = this;
         var args = {
             "method": 'removeFavorite',

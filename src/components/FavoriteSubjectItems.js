@@ -1,5 +1,5 @@
 import React from 'react';
-import {Table, Button} from 'antd';
+import {Table, Button,Popover} from 'antd';
 import UseKnowledge from './UseKnowledgeComponents';
 import {getPageSize} from '../utils/Const';
 
@@ -92,16 +92,18 @@ const FavoriteSubjectItems = React.createClass({
                 subjectScore = '--';
             }
             let subjectOpt = <div>
-                <a target="_blank" title="查看" style={{float: 'right'}} href={e.address}><Button icon="eye-o"/></a>
                 <a target="_blank" title="取消收藏" style={{float: 'right'}} onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)}><Button
                     icon="star"/></a>
             </div>;
 
+            let popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>'+e.subjects.content+'<hr/><span class="answer_til answer_til_2">答案：</span>'+e.subjects.answer+'</div>';
+
+            let content=<Popover  placement="rightTop" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: popOverContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
 
             this.data.push({
                 key: e.favoriteId,
                 name: e.subjects.user.userName,
-                content: e.subjects.content,
+                content: content,
                 subjectType: e.subjects.typeName,
                 subjectScore: subjectScore,
                 subjectOpt: subjectOpt,
