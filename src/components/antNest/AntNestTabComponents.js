@@ -175,7 +175,7 @@ const AntNestTabComponents = React.createClass({
                 //图片附件
                 /*attachMents = <span className="topics_zan"><img src={e.address}/></span>;*/
                 attachMents = <span className="topics_zan">
-                    <Popover placement="bottomLeft"  content={<img src={e.address}  className="topics-popover" />}><img src={e.address} /></Popover>
+                    <Popover placement="bottom"  content={<img src={e.address} arrowPointAtCenter  className="topics-popover" />}><img src={e.address} /></Popover>
                 </span>;
 
             }else if(attachMentType==4){
@@ -1066,6 +1066,7 @@ const AntNestTabComponents = React.createClass({
             target = e.target;
         }
         var optType = target.value;
+        antNest.initMyEmotionInput();
         antNest.setState({"addTopicModalVisible":true,"topicModalType":optType});
     },
 
