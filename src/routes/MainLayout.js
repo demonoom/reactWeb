@@ -137,6 +137,7 @@ const MainLayout = React.createClass({
         //调用组件进行通信
         let obj = this.state.objxx;
         if(obj){
+          debugger
           this.refs[obj.ref][obj.methond].call(this,obj.userinfo.colUid);
         }
     },
@@ -311,7 +312,7 @@ const MainLayout = React.createClass({
 
         <aside className="ant-layout-sider">
           <div className="ant-layout-logo">
-            <UserCardModalComponents callbackParent={this.getTeacherResource}/>
+            <UserCardModalComponents callbackParent={this.getTeacherResource} callEvent={this.switchSection.bind(this)}/>
           </div>
           <Menu mode="inline" theme="dark" defaultSelectedKeys={[this.state.currentKey]}  onClick={this.toolbarClick}>
             <Menu.Item key="teachTimes" className="padding_menu">
