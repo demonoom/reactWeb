@@ -2113,19 +2113,60 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr{
 .group_talk{
 	height:394px;
 	padding:0 20px 0 0;
+	overflow:auto
 }
 .group_talk ul li{
 	padding:10px 0;
 	float: left;
     width: 100%;
 }
+.group_talk ul li.right{
+	padding:10px 0;
+	float: right;
+    width: 100%;
+}
+.group_talk ul li div.u-name{
+	min-height: 21px;
+    display: flex;
+}
+.group_talk ul li.right div.u-name{
+	flex-direction: row-reverse;
+}
+    
+.group_talk ul li div.u-name span{
+	display: inline-block;
+    float: left;
+    padding-left: 50px;
+	color:#8E97A6
+}
+.group_talk ul li.right div.u-name span{
+	padding-right: 50px;
+	color:#8E97A6
+}
+.group_talk ul li div.talk-cont{
+	display: flex;
+    flex-direction: row;
+}
+.group_talk ul li.right div.talk-cont{
+	display: flex;
+    flex-direction: row-reverse;
+}
 .group_talk ul li span.name{
-	width:60px;
-	height:60px;
-	display:inline-block;
 	background: #000;
 	position:relative;
-	top:-5px;
+	top:0;
+	width: 38px;
+    height: 38px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+    display: inline-block;
+    box-sizing: border-box;
+    background-size: cover;
+    background-clip: content-box;
+    background-position: center center;
+    border-radius: 50%;
 }
 .group_send{
 	height:100px;
@@ -2280,39 +2321,50 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr{
 .person_attention table tr td:first-child, .person_attention table tr th:first-child{
 	width:400px;
 }
-.borderballoon{
-    background: #32c355;
+.borderballoon {
+    background: #40baff;
     border-radius: 4px;
     position: relative;
-    display: inline-block;
-    padding: 5px 20px;
-	margin-right: 12px;
-	max-width:calc(100% -60px);
-	max-width:-moz-calc(100% -60px);
-	max-width: -webkit-calc(100% - 60px);
-	text-align:left;
-	color:#fff;
+    display: inline-flex;
+    padding: 6px 12px;
+    margin-right: 12px;
+    max-width: calc(100% - 150px);
+    max-width: -moz-calc(100% - 150px);
+    max-width: -webkit-calc(100% - 150px);
+	min-width:0;
+    text-align: left;
+    color: #fff;
+    flex-direction: row-reverse;
+	font-size:14px;
+	line-height:24px;
 }
 .borderballoon:after{
     content: "";
     position: absolute;
     border-style: solid;
-    border-color:  transparent transparent transparent #32c355;
+    border-color:  transparent transparent transparent #40baff;
     border-width: 6px;
     top: 8px;
     right: -12px;
+}
+.borderballoon img{
+	padding:0 5px;
 }
 .borderballoon_le{
     background: #f2f2f2;
     border-radius: 4px;
     position: relative;
     display: inline-block;
-    padding: 5px 20px;
-	margin-right: 12px;
-	max-width:calc(100% -60px);
-	max-width:-moz-calc(100% -60px);
-	max-width: -webkit-calc(100% - 60px);
+    padding: 6px 12px;
+	margin-left: 12px;
+	max-width:calc(100% - 150px);
+	max-width:-moz-calc(100% - 150px);
+	max-width: -webkit-calc(100% - 150px);
 	text-align:left;
+	min-width:0;
+	flex-direction: row;
+	font-size:14px;
+	line-height:24px;
 }
 .borderballoon_le:after{
     content: "";
@@ -2321,5 +2373,5 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr{
     border-color:  transparent transparent transparent #f2f2f2;
     border-width: 6px;
     top: 8px;
-    left: -12px;
+    left:12px;
 }

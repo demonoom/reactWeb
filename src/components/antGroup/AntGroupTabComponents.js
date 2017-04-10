@@ -1033,18 +1033,23 @@ const AntGroupTabComponents = React.createClass({
                         if(isEmpty(e.messageReturnJson)==false && isEmpty(e.messageReturnJson.messageType)==false){
                             if(e.messageReturnJson.messageType=="text"){
                                 messageTag =  <li style={{'textAlign':'left'}}>
-                                    <span >{fromUser}</span><span className="borderballoon_le">{e.content}</span>
+								    <div className="u-name"><span>{fromUser}</span></div>
+                                    <div className="talk-cont"><span className="name "  >{fromUser}</span><span className="borderballoon_le">{e.content}</span></div>
                                 </li>;
                             }else if(e.messageReturnJson.messageType=="imgTag"){
                                 messageTag =  <li style={{'textAlign':'left'}}>
-                                    <span className="name " >{fromUser}</span><span  className="borderballoon_le ">{e.imgTagArray}</span>
+								<div className="u-name"><span>{fromUser}</span></div>
+                                <div className="talk-cont"><span className="name " >{fromUser}</span><span  className="borderballoon_le ">{e.imgTagArray}</span></div>
                                 </li>;
                             }
 
                         }
                     }else{
-                        messageTag =  <li style={{'textAlign':'right'}}>
-                            <span className="borderballoon">{content}</span><span className="name">{fromUser}</span>
+                        messageTag =  <li  className="right" style={{'textAlign':'right'}}>
+						<div className="u-name"><span>{fromUser}</span></div>
+						<div className="talk-cont">
+						    <span className="name">{fromUser}</span><span className="borderballoon">{content}</span>
+						</div> 
                         </li>;
                     }
                     messageTagArray.push(messageTag);
@@ -1175,18 +1180,21 @@ const AntGroupTabComponents = React.createClass({
                         if(isEmpty(e.messageReturnJson)==false && isEmpty(e.messageReturnJson.messageType)==false){
                             if(e.messageReturnJson.messageType=="text"){
                                 messageTag =  <li style={{'textAlign':'left'}}>
-									<span >{fromUser}</span><span className="borderballoon_le">{e.content}</span>
+								    <div className="u-name"><span>{fromUser}</span></div>
+                                    <div className="talk-cont"><span >{fromUser}</span><span className="borderballoon_le">{e.content}</span></div>
                                 </li>;
                             }else if(e.messageReturnJson.messageType=="imgTag"){
                                 messageTag =  <li style={{'textAlign':'left'}}>
-									<span >{fromUser}</span><span className="borderballoon_le">{e.imgTagArray}</span>
+								 <div className="u-name"><span>{fromUser}</span></div>
+								 <div className="talk-cont"><span >{fromUser}</span><span className="borderballoon_le">{e.imgTagArray}</span></div>
                                 </li>;
                             }
 
                         }
                     }else{
-                        messageTag =  <li style={{'textAlign':'right'}}>
-							<span className="borderballoon">{content}</span><span className="name">{fromUser}</span>
+                        messageTag =  <li className="right" style={{'textAlign':'right'}}>
+						<div className="u-name"><span>{fromUser}</span></div>
+						<div className="talk-cont"><span className="name">{fromUser}</span><span className="borderballoon">{content}</span></div>	
                         </li>;
                     }
                     messageTagArray.push(messageTag);
