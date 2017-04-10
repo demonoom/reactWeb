@@ -251,12 +251,12 @@ const PersonCenterComponents = React.createClass({
 					<span className="person_btn_ri">
                     <Button icon="message" value={personCenter.state.userInfo.user.colUid} onClick={personCenter.sendMessage} className="antnest_talk  persono_btn_blue">发消息</Button>
                      {followButton}
+					 </span>
                 </Card>
-
-                <div>{userLinkCard}</div>
+                <div>{userLinkCard}
                 {userInfoCard}
                 
-
+               </div>
             </div>
         );
     },
