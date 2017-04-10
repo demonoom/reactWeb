@@ -176,7 +176,7 @@ const AntGroupTabComponents = React.createClass({
      */
     getPersonCenterInfo(record, index){
         var userType = record.userObj.colUtype;
-        console.log("12312"+record.userObj.userName);
+
         if(userType=="PAREN" || userType=="EADM" || userType=="SGZH"){
             //家长直接进入聊天窗口
             //蚂蚁君点击进入后，只能接收消息，无法发送消息
