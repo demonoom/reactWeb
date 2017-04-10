@@ -134,10 +134,8 @@ const MainLayout = React.createClass({
     mainLayout.setState({resouceType:resouceType});
   },
     componentDidUpdate(){
-        //调用组件进行通信
         let obj = this.state.objxx;
         if(obj){
-          debugger
           this.refs[obj.ref][obj.methond].call(this,obj.userinfo.colUid);
         }
     },
