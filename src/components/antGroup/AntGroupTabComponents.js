@@ -5,6 +5,9 @@ import {doWebService} from '../../WebServiceHelper';
 import PersonCenterComponents from './PersonCenterComponents';
 import EmotionInputComponents from './EmotionInputComponents';
 import UseKnowledgeComponents from '../UseKnowledgeComponents';
+import FavoriteSubjectItems from '../FavoriteSubjectItems';
+import FavItem from '../FavoriteItem';
+import Favorites from '../Favorites';
 import {getPageSize} from '../../utils/Const';
 import {getLocalTime} from '../../utils/Const';
 import {isEmpty} from '../../utils/Const';
@@ -124,6 +127,7 @@ const AntGroupTabComponents = React.createClass({
             memberTargetKeys:[],    //添加群成员时，已选中待添加群成员的数组
             updateChatGroupTitle:'',
             followsUserArray:[],
+            breadcrumbVisible:true
         };
     },
     /**
@@ -1011,13 +1015,6 @@ const AntGroupTabComponents = React.createClass({
         var userId = antGroup.state.currentUser.colUid;
         antGroup.getPersonalCenterData(userId);
     },
-    /**
-     * 获取用户的收藏
-     * @param user
-     */
-    callBackGetUserFavorite(user){
-        console.log("favorite"+user.colUid+"=="+user.userName);
-    },
 
     /**
      * 获取老师用户的题目
@@ -1327,8 +1324,13 @@ const AntGroupTabComponents = React.createClass({
         antGroup.setState({"optType":"turnToLiveInfoShowPage","activeKey":"turnToLiveInfoShowPage","liveInfoId":liveInfoId});
     },
 
-    showMt(){
-        alert("showMt()");
+    /**
+     * 获取用户的收藏
+     * @param user
+     */
+    callBackGetUserFavorite(user){
+        console.log("favorite"+user.colUid+"=="+user.userName);
+        antGroup.setState({"optType":"userFavorite","studentId":user.colUid,"activeKey":"1"});
     },
 
     render() {
@@ -1720,6 +1722,8 @@ const AntGroupTabComponents = React.createClass({
                     {liveInfoShowIframe}
                 </TabPane>
             </Tabs>;
+        }else if(antGroup.state.optType=="userFavorite"){
+            tabComponent = <Favorites userid={antGroup.state.studentId} breadcrumbVisible={false}></Favorites>;
         }else if(antGroup.state.optType=="getPlatformRulePage"){
             userPhoneCard=<div>
                 <span>
@@ -2021,6 +2025,21 @@ const AntGroupTabComponents = React.createClass({
             </Tabs>;
         }
 
+        var breadCrumb;
+        var isVisible=false;
+        if(isEmpty(antGroup.props.breadcrumbVisible)==false){
+            isVisible=antGroup.props.breadcrumbVisible;
+        }else{
+            isVisible=antGroup.state.breadcrumbVisible;
+        }
+        if(isVisible){
+           breadCrumb = <Breadcrumb separator=">">
+               <Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
+               <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
+               <Breadcrumb.Item href="#/MainLayout">{breadMenuTip}</Breadcrumb.Item>
+           </Breadcrumb>;
+        }
+
         return (
             <div>
                 <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
@@ -2110,11 +2129,7 @@ const AntGroupTabComponents = React.createClass({
                     </Row>
                 </Modal>
 
-                <Breadcrumb separator=">">
-                    <Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
-                    <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
-                    <Breadcrumb.Item href="#/MainLayout">{breadMenuTip}</Breadcrumb.Item>
-                </Breadcrumb>
+                {breadCrumb}
                 {userPhoneCard}
                 {tabComponent}
             </div>
