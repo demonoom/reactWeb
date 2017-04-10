@@ -1140,7 +1140,6 @@ p.user_cont1{
 p.user_cont1 span{
 	text-align:center;
 	position:relative;
-	top:92px;
 	z-index:1000;
 	font-weight: normal;
 	font-size:14px;
@@ -1180,13 +1179,13 @@ p.user_cont span.name1{
 }
 .img_us{
 	position: absolute;
-    top: 37px;
+   /* top: 37px; */
     z-index: 1000;
 	width: 48px;
     height: 48px;
     border-radius: 50%;
     margin: 0 auto;
-    left: 126px;
+	/*   left: 126px;  */
 }
 .model_title{
 	padding:0;}
@@ -2026,4 +2025,27 @@ a.topics:hover{
 }
 .knowledge_table .ant-table-header{
 	margin-bottom:0 !important
+}
+
+
+/****/
+
+#rcDialogTitle0 .avatar-uploader,
+#rcDialogTitle0 .avatar-uploader-trigger,
+#rcDialogTitle0 .avatar {
+	width: 60px;
+	height: 60px;
+}
+#rcDialogTitle0 .avatar-uploader {
+	display: block;
+	border: 1px dashed #d9d9d9;
+	border-radius: 6px;
+	cursor: pointer;
+
+}
+#rcDialogTitle0  .avatar-uploader-trigger {
+	display: table-cell;
+	vertical-align: middle;
+	font-size: 28px;
+	color: #999;
 }

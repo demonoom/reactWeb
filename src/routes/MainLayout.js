@@ -8,7 +8,10 @@ import MiddleMenuComponents from '../components/MiddleMenuComponents';
 import HeaderComponents from '../components/HeaderComponents';
 import UserCardModalComponents from '../components/UserCardModalComponents';
 import FloatButton  from '../components/FloatButton';
+import MyMTV  from '../components/MyMTV';
+import MyFollows  from '../components/MyFollows';
 import MyFavorites  from '../components/Favorites';
+import FindStudentPwd  from '../components/FindStudentPwd';
 import KnowledgeMenuComponents from '../components/KnowledgeMenuComponents';
 import HomeWorkMenu from '../components/HomeWorkMenu';
 import ExamMenu from '../components/exam/ExamMenu';
@@ -198,6 +201,50 @@ const MainLayout = React.createClass({
                   <div className="ant-layout-container">
                     <div className="ant-layout-content">
                       <AntGroupTabComponents ref="antGroupTabComponents" resouceType={mainLayout.state.resouceType}/>
+                    </div>
+                  </div>
+                </Col>
+              </Row>;
+              break;
+          case 'myFavrites':
+              mainContent = <Row>
+                <Col span={24}>
+                  <div className="ant-layout-container">
+                    <div className="ant-layout-content">
+                      <MyFavorites resouceType={mainLayout.state.resouceType} />
+                    </div>
+                  </div>
+                </Col>
+              </Row>;
+              break;
+          case 'myMTV':
+              mainContent = <Row>
+                <Col span={24}>
+                  <div className="ant-layout-container">
+                    <div className="ant-layout-content">
+                      <MyMTV  resouceType={mainLayout.state.resouceType} />
+                    </div>
+                  </div>
+                </Col>
+              </Row>;
+              break;
+          case 'findStudentPwd':
+              mainContent = <Row>
+                <Col span={24}>
+                  <div className="ant-layout-container">
+                    <div className="ant-layout-content">
+                      <FindStudentPwd resouceType={mainLayout.state.resouceType} />
+                    </div>
+                  </div>
+                </Col>
+              </Row>;
+              break;
+          case 'MyFollows':
+              mainContent = <Row>
+                <Col span={24}>
+                  <div className="ant-layout-container">
+                    <div className="ant-layout-content">
+                      <MyFollows resouceType={mainLayout.state.resouceType} />
                     </div>
                   </div>
                 </Col>

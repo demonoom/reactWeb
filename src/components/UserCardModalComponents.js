@@ -1,12 +1,34 @@
 import React, { PropTypes } from 'react';
-import { Modal,message,Button } from 'antd';
+import { Modal,message,Button,Upload,Icon } from 'antd';
 import { doWebService } from '../WebServiceHelper';
+import UploadImgComponents from './antNest/UploadImgComponents';
+
+function getBase64(img, callback) {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result));
+    reader.readAsDataURL(img);
+}
+
+function beforeUpload(file) {
+    const isJPG = file.type === 'image/jpeg';
+    if (!isJPG) {
+        message.error('You can only upload JPG file!');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+        message.error('Image must smaller than 2MB!');
+    }
+    return isJPG && isLt2M;
+}
 
 var teacherInfo;
+
+
 const UserCardModalComponents = React.createClass({
   getInitialState() {
     teacherInfo = this;
     return {
+        ident: this.props.userid || sessionStorage.getItem("ident"),
       loading: false,
       visible: false,
       userName:'',
@@ -14,6 +36,7 @@ const UserCardModalComponents = React.createClass({
       courseName:'',
       schoolName:'',
       schoolAddress:'',
+        imageUrl:''
     };
   },
   showModal() {
@@ -23,6 +46,7 @@ const UserCardModalComponents = React.createClass({
       visible: true,
     });
   },
+
 
   handleCancel() {
     teacherInfo.setState({ visible: false });
@@ -40,12 +64,11 @@ const UserCardModalComponents = React.createClass({
     };
     doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
-        console.log(ret.msg);
         var response = ret.response;
         if(ret.msg=="调用成功" && response!=null){
           // alert("老师信息获取成功");
           var userName = response.user.userName;//用户名
-          var userHeadIcon = response.antLevel.icon;//头像
+          var userHeadIcon = response.user.avatar;//头像
           var courseName = response.course.colCourse;//科目
           var schoolName = response.school.name;//学校名称
           var schoolAddress = response.school.address;
@@ -88,31 +111,74 @@ const UserCardModalComponents = React.createClass({
     teacherInfo.setState({ visible: false });
   },
 
+    myFavrites(){
+        this.props.callbackParent("myFavrites");
+        this.setState({ visible: false });
+    },
+    findStudentPwd(){
+        this.props.callbackParent("findStudentPwd");
+        this.setState({ visible: false });
+    },
+    MyFollows(){
+        this.props.callbackParent("MyFollows");
+        this.setState({ visible: false });
+    },
+    myMTV(){
+        this.props.callbackParent("myMTV");
+        this.setState({ visible: false });
+    },
+
+    // face change
+    changeFace(info){
+        var _this=this;
+        var param = {
+            "method":'upadteAvatar',
+            "ident": this.state.ident,
+            "avatar": info.response,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse : function(res) {
+               if(res.success){
+                   _this.setState({userHeadIcon:info.response} );
+                   message.info('更换成功！')
+               }else{
+                   message.info('更换失败，请稍候重试！')
+               }
+            },
+            onError : function(error) {
+                message.error(error);
+            }
+        });
+
+    },
+
+  getTitle(){
+   return <span>
+               <UploadImgComponents callBackParent={this.changeFace.bind(this)} />
+               <img className="img_us" src={this.state.userHeadIcon}  />
+                <span>{this.state.userName} </span>
+                { this.state.userHeadIcon ? <img src={this.state.userHeadIcon} className="blur"/> : null }
+         </span>;
+  },
+
   render() {
+
     return (
         <div className="layout_logo">
-          <img src={teacherInfo.state.userHeadIcon}  onClick={teacherInfo.showModal}/>
+          <img src={this.state.userHeadIcon}  onClick={this.showModal}/>
           <Modal
-              visible={teacherInfo.state.visible}
-              title={<p className="user_cont1"> <img className="img_us" src={teacherInfo.state.userHeadIcon}  onClick={teacherInfo.showModal}/><span>{teacherInfo.state.userName}</span><img src={teacherInfo.state.userHeadIcon} className="blur"/><br/></p>}
+              visible={this.state.visible}
+              title={<p className="user_cont1">{this.getTitle()} </p>}
               onCancel={teacherInfo.handleCancel}
               className="model_wi"
-              transitionName=""  //禁用modal的动画效果
+              transitionName=""
               footer={[
 
               ]}
           >
-            {/*<p className="user_cont model_to"><span className="name">学校名称：{teacherInfo.state.schoolName}</span><span className="name1"></span></p>*/}
             <p className="user_cont model_to"><span className="name">学校名称：</span><span className="name1">{teacherInfo.state.schoolName}</span></p>
             <p className="user_cont"><span className="name">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;区：</span><span className="name1">{teacherInfo.state.schoolAddress}</span></p>
-
-            {/* userName:userName,
-             userHeadIcon:userHeadIcon,
-             courseName:courseName,
-             schoolName*/}
             <p className="user_cont"><span className="name">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</span><span className="name1">{teacherInfo.state.userName}</span></p>
-            {/*<p className="user_cont"><span className="name">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span><span className="name1">一年级</span></p>
-             <p className="user_cont"><span className="name">班&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span><span className="name1">一班</span></p>*/}
             <p className="user_cont"><span className="name">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：</span><span className="name1">{teacherInfo.state.courseName}</span></p>
 			<p className="user_cont user_cont_cen">
             <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn add_study add_study-f" onClick={teacherInfo.searchOwnerCourseWare}>
@@ -127,6 +193,18 @@ const UserCardModalComponents = React.createClass({
             <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn ant-btn-f topics_btn_le " onClick={teacherInfo.searchAntGroup}>
                 蚁群
             </Button>
+              <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn ant-btn-f topics_btn_le " onClick={this.myFavrites}>
+                收藏
+            </Button>
+              <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn ant-btn-f topics_btn_le " onClick={this.findStudentPwd}>
+                找回学生密码
+              </Button>
+              <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn ant-btn-f topics_btn_le " onClick={this.MyFollows}>
+              我的关注
+              </Button>
+                <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn ant-btn-f topics_btn_le " onClick={this.myMTV}>
+              我的直播课
+              </Button>
 			</p>
           </Modal>
         </div>
