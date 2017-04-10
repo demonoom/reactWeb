@@ -17,7 +17,7 @@ class Favorites extends React.Component {
         super(props);
         this.state = { // define this.state in constructor
             ident: this.props.userid || sessionStorage.getItem("ident"),
-            breadcrumbVisible: this.props.breadcrumbVisible  || true,
+            breadcrumbVisible: this.props.breadcrumbVisible && true,
             method: 'getUserFavorite',
             type: 1,
             pageNo: 1,

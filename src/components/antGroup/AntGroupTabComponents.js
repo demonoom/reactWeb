@@ -40,6 +40,10 @@ var groupUserTableColumns = [ {
 
 var followUserColumns=[
     {
+        title:'头像',
+        dataIndex:'userHeaderIcon'
+    },
+    {
         title:'姓名',
         dataIndex:'userName'
     },
@@ -981,7 +985,8 @@ const AntGroupTabComponents = React.createClass({
                         var course = e.course;
                         var userName = followUser.userName;
                         var courseName = course.colCourse;
-                        var userJson = {key:followUser.colUid,"userName":userName,"courseName":courseName,"userObj":followUser};
+                        var userHeaderIcon = <img src={followUser.avatar}></img>;
+                        var userJson = {key:followUser.colUid,"userName":userName,"courseName":courseName,userHeaderIcon:userHeaderIcon,"userObj":followUser};
                         followsUserArray.push(userJson);
                     });
                     antGroup.setState({"optType":"getMyFollows","activeKey":"userFollows","currentUser":user,"followsUserArray":followsUserArray});
