@@ -147,6 +147,33 @@ const PersonCenterComponents = React.createClass({
         personCenter.props.callBackGetUserFavorite(personCenter.props.userInfo.user);
     },
 
+    /**
+     * 获取我的题目
+     */
+    getMySubjects(){
+        personCenter.props.callBackGetMySubjects(personCenter.props.userInfo.user);
+    },
+
+    /**
+     * 获取我的资源
+     */
+    getMyCourseWares(){
+        personCenter.props.callBackGetMyCourseWares(personCenter.props.userInfo.user);
+    },
+
+    /**
+     * 获取我的直播课
+     */
+    getLiveInfo(){
+        personCenter.props.callBackGetLiveInfo(personCenter.props.userInfo.user);
+    },
+    /**
+     * 进入系统平台规则显示页面
+     */
+    turnToPlatformRulePage(){
+        personCenter.props.callBackTurnToPlatformRulePage(personCenter.props.userInfo);
+    },
+
     render() {
         var userPhotoTag;
         var user = personCenter.state.userInfo.user;
@@ -181,11 +208,12 @@ const PersonCenterComponents = React.createClass({
             </Card>;
         }else{
 
+
             userLinkCard = <div title={userName+'的个人名片'}  className="person_container ">
-                <Button value={user.colUid} icon="play-circle-o" className="person_cor person_cor1"><div>直播</div></Button>
-                <Button value={user.colUid} icon="area-chart" className="person_cor person_cor2"><div>资源</div></Button>
-                <Button value={user.colUid} icon="star-o" className="person_cor person_cor3"><div>题库</div></Button>
-                <Button value={user.colUid} icon="heart-o" className="person_cor person_cor4"><div>关注</div></Button>
+                <Button value={user.colUid} icon="play-circle-o"  className="person_cor person_cor1" onClick={personCenter.getLiveInfo}><div>直播</div></Button>
+                <Button value={user.colUid} icon="area-chart" className="person_cor person_cor2" onClick={personCenter.getMyCourseWares}><div>资源</div></Button>
+                <Button value={user.colUid} icon="star-o" className="person_cor person_cor3" onClick={personCenter.getMySubjects}><div>题库</div></Button>
+                <Button value={user.colUid} icon="heart-o" className="person_cor person_cor4" onClick={personCenter.getMyFollows}><div>关注</div></Button>
             </div>;
 			
             userInfoCard = <Card title={personCenter.state.userInfo.user.userName+'的个人名片'}  className="bai">
@@ -217,13 +245,14 @@ const PersonCenterComponents = React.createClass({
                 <Card className="bai">
                     {userPhotoTag}
                     <span className="person_btn">
-                        <Button className="antnest_talk">{personCenter.state.userInfo.score}积分</Button><Button>{personCenter.state.userInfo.level.name}</Button>
+                        <Button className="antnest_talk" onClick={personCenter.turnToPlatformRulePage}>{personCenter.state.userInfo.score}积分</Button>
+						<Button onClick={personCenter.turnToPlatformRulePage} >{personCenter.state.userInfo.level.name}</Button>
                     </span>
 					<span className="person_btn_ri">
                     <Button icon="message" value={personCenter.state.userInfo.user.colUid} onClick={personCenter.sendMessage} className="antnest_talk  persono_btn_blue">发消息</Button>
-                    {followButton}
-                </span>
+                     {followButton}
                 </Card>
+
                 <div>{userLinkCard}</div>
                 {userInfoCard}
                 

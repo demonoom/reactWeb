@@ -95,6 +95,7 @@ const TeacherAllSubjects = React.createClass({
           subTable.setState({totalCount:0});
         }else {
           response.forEach(function (e) {
+            debugger
             console.log("getUserSubjectsByUid:"+e);
             var key = e.id;
             var name=e.user.userName;

@@ -1139,7 +1139,6 @@ p.user_cont1{
 p.user_cont1 span{
 	text-align:center;
 	position:relative;
-	top:92px;
 	z-index:1000;
 	font-weight: normal;
 	font-size:14px;
@@ -1178,13 +1177,13 @@ p.user_cont span.name1{
 }
 .img_us{
 	position: absolute;
-    top: 37px;
+   /* top: 37px; */
     z-index: 1000;
 	width: 48px;
     height: 48px;
     border-radius: 50%;
     margin: 0 auto;
-    left: 126px;
+	/*   left: 126px;  */
 }
 .model_title{
 	padding:0;}
@@ -2030,6 +2029,31 @@ a.topics:hover{
 .knowledge_table .ant-table-header{
 	margin-bottom:0 !important
 }
+<<<<<<< HEAD
+
+
+/****/
+
+#rcDialogTitle0 .avatar-uploader,
+#rcDialogTitle0 .avatar-uploader-trigger,
+#rcDialogTitle0 .avatar {
+	width: 60px;
+	height: 60px;
+}
+#rcDialogTitle0 .avatar-uploader {
+	display: block;
+	border: 1px dashed #d9d9d9;
+	border-radius: 6px;
+	cursor: pointer;
+
+}
+#rcDialogTitle0  .avatar-uploader-trigger {
+	display: table-cell;
+	vertical-align: middle;
+	font-size: 28px;
+	color: #999;
+}
+=======
 .group_table{
 	width:100%
 }
@@ -2209,6 +2233,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr{
 	background:url(../components/images/icon_yichao.png) no-repeat 0 -48px;
 
 }
+<<<<<<< HEAD
 .person_13{
 	font-size:13px !important;
 }
@@ -2375,3 +2400,6 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr{
     top: 8px;
     left:12px;
 }
+=======
+>>>>>>> 06cbf000deee2fe54d8ed5847abea8748595ac4d
+>>>>>>> 11e924e62b5aa01c8d2164dd77831688ea385dcd
