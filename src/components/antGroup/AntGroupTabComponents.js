@@ -1033,18 +1033,18 @@ const AntGroupTabComponents = React.createClass({
                         if(isEmpty(e.messageReturnJson)==false && isEmpty(e.messageReturnJson.messageType)==false){
                             if(e.messageReturnJson.messageType=="text"){
                                 messageTag =  <li style={{'textAlign':'left'}}>
-                                    {fromUser}：{e.content}
+                                    <span >{fromUser}</span><span className="borderballoon_le">{e.content}</span>
                                 </li>;
                             }else if(e.messageReturnJson.messageType=="imgTag"){
                                 messageTag =  <li style={{'textAlign':'left'}}>
-                                    {fromUser}：{e.imgTagArray}
+                                    <span className="name " >{fromUser}</span><span  className="borderballoon_le ">{e.imgTagArray}</span>
                                 </li>;
                             }
 
                         }
                     }else{
                         messageTag =  <li style={{'textAlign':'right'}}>
-                            {fromUser}：{content}
+                            <span className="borderballoon">{content}</span><span className="name">{fromUser}</span>
                         </li>;
                     }
                     messageTagArray.push(messageTag);
@@ -1175,18 +1175,18 @@ const AntGroupTabComponents = React.createClass({
                         if(isEmpty(e.messageReturnJson)==false && isEmpty(e.messageReturnJson.messageType)==false){
                             if(e.messageReturnJson.messageType=="text"){
                                 messageTag =  <li style={{'textAlign':'left'}}>
-                                    {fromUser}：{e.content}
+									<span >{fromUser}</span><span className="borderballoon_le">{e.content}</span>
                                 </li>;
                             }else if(e.messageReturnJson.messageType=="imgTag"){
                                 messageTag =  <li style={{'textAlign':'left'}}>
-                                    {fromUser}：{e.imgTagArray}
+									<span >{fromUser}</span><span className="borderballoon_le">{e.imgTagArray}</span>
                                 </li>;
                             }
 
                         }
                     }else{
                         messageTag =  <li style={{'textAlign':'right'}}>
-                            {content}：{fromUser}
+							<span className="borderballoon">{content}</span><span className="name">{fromUser}</span>
                         </li>;
                     }
                     messageTagArray.push(messageTag);
@@ -1261,7 +1261,7 @@ const AntGroupTabComponents = React.createClass({
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab={welcomeTitle} key="userFollows" className="topics_rela">
-                    <div>
+                    <div className="person_attention">
                         <Table onRowClick={antGroup.getPersonCenterInfo} showHeader={true} scroll={{ x: true, y: 400 }} columns={followUserColumns} dataSource={antGroup.state.followsUserArray} pagination={false}/>
                     </div>
                 </TabPane>

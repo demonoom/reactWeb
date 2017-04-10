@@ -2114,6 +2114,19 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr{
 	height:394px;
 	padding:0 20px 0 0;
 }
+.group_talk ul li{
+	padding:10px 0;
+	float: left;
+    width: 100%;
+}
+.group_talk ul li span.name{
+	width:60px;
+	height:60px;
+	display:inline-block;
+	background: #000;
+	position:relative;
+	top:-5px;
+}
 .group_send{
 	height:100px;
 }
@@ -2211,6 +2224,8 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr{
 .person_cor div{
 	position:relative;
 	top:12px;
+	left:-23px;
+	width:80px;
 }
 .persono_btn_blue{
 	border:1px solid #57c5f7
@@ -2258,4 +2273,53 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr{
 .person_btn_ri Button{
 	padding:6px 20px;
     top: -2px;
+}
+.person_attention{
+	width:100%;
+}
+.person_attention table tr td:first-child, .person_attention table tr th:first-child{
+	width:400px;
+}
+.borderballoon{
+    background: #32c355;
+    border-radius: 4px;
+    position: relative;
+    display: inline-block;
+    padding: 5px 20px;
+	margin-right: 12px;
+	max-width:calc(100% -60px);
+	max-width:-moz-calc(100% -60px);
+	max-width: -webkit-calc(100% - 60px);
+	text-align:left;
+	color:#fff;
+}
+.borderballoon:after{
+    content: "";
+    position: absolute;
+    border-style: solid;
+    border-color:  transparent transparent transparent #32c355;
+    border-width: 6px;
+    top: 8px;
+    right: -12px;
+}
+.borderballoon_le{
+    background: #f2f2f2;
+    border-radius: 4px;
+    position: relative;
+    display: inline-block;
+    padding: 5px 20px;
+	margin-right: 12px;
+	max-width:calc(100% -60px);
+	max-width:-moz-calc(100% -60px);
+	max-width: -webkit-calc(100% - 60px);
+	text-align:left;
+}
+.borderballoon_le:after{
+    content: "";
+    position: absolute;
+    border-style: solid;
+    border-color:  transparent transparent transparent #f2f2f2;
+    border-width: 6px;
+    top: 8px;
+    left: -12px;
 }
