@@ -116,11 +116,11 @@ const UserCardModalComponents = React.createClass({
         this.setState({ visible: false });
     },
     findStudentPwd(){
-        this.props.callbackParent("findStudentPwd");
+        this.props.callbackParent("resetStudentAccountKey");
         this.setState({ visible: false });
     },
     MyFollows(){
-        this.props.callbackParent("MyFollows");
+        this.props.callbackParent("myFollows");
         this.setState({ visible: false });
     },
     myMTV(){
