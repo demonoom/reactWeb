@@ -26,7 +26,7 @@ const FavoriteOtherItems = React.createClass({
 
     },
 
-
+    activeKey:[],
 
     download: function (e) {
         window.open(e.target.value);
@@ -38,19 +38,18 @@ const FavoriteOtherItems = React.createClass({
 
 
     buildFavOtherUi: function (courseWareList) {
-        console.log("FavoriteOtherItems items");
+        console.log("Favorite Other Items.");
         coursePanelChildren = null;
-
         if (!courseWareList || !courseWareList.length) {
             coursePanelChildren = <img className="noDataTipImg" src={require('./images/noDataTipImg.png')}/>;
             return;
         }
-
+        this.activeKey = [];
         coursePanelChildren = courseWareList.map((e, i) => {
 
             let refkey = e.type + "#" + e.favoriteId;
             let content = e.content;
-
+            this.activeKey.push(refkey);
             return <div key={refkey}>
                 <div className="left">
                     <a target="_blank" href={e.address}><img style={{width: '42px'}} src={e.cover}/></a>
@@ -82,6 +81,7 @@ const FavoriteOtherItems = React.createClass({
         return (
             <div>
                 {coursePanelChildren}
+                <Pagination onChange={this.props.pageChange} total={this.props.param.total} current={this.props.param.pageNo}   defaultCurrent={1}/>
             </div>
         );
     },
