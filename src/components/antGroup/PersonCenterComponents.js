@@ -54,7 +54,7 @@ const PersonCenterComponents = React.createClass({
         }
         var userId = target.value;
         console.log(userId);
-        personCenter.props.callBackTurnToMessagePage(userId);
+        personCenter.props.callBackTurnToMessagePage(personCenter.props.userInfo.user);
     },
     /**
      * 学生的提问
