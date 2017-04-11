@@ -133,6 +133,16 @@ const MainLayout = React.createClass({
   getTeacherResource(resouceType){
     mainLayout.setState({resouceType:resouceType});
   },
+    componentDidUpdate(){
+        let obj = this.state.objxx;
+        if(obj){
+          this.refs[obj.ref][obj.methond].call(this,obj.userinfo.colUid);
+        }
+    },
+  // 切换组件页面
+    switchSection(obj){
+        this.setState({resouceType:obj.resouceType,objxx:obj});
+    },
 
   render() {
     const collapse = this.state.collapse;
@@ -248,7 +258,7 @@ const MainLayout = React.createClass({
                 <Col span={24}>
                   <div className="ant-layout-container">
                     <div className="ant-layout-content">
-                      <MyFollows resouceType={mainLayout.state.resouceType} />
+                      <MyFollows resouceType={mainLayout.state.resouceType} callEvent={this.switchSection.bind(this)} />
                     </div>
                   </div>
                 </Col>
@@ -300,7 +310,7 @@ const MainLayout = React.createClass({
 
         <aside className="ant-layout-sider">
           <div className="ant-layout-logo">
-            <UserCardModalComponents callbackParent={this.getTeacherResource}/>
+            <UserCardModalComponents callbackParent={this.getTeacherResource} callEvent={this.switchSection.bind(this)}/>
           </div>
           <Menu mode="inline" theme="dark" defaultSelectedKeys={[this.state.currentKey]}  onClick={this.toolbarClick}>
             <Menu.Item key="teachTimes" className="padding_menu">

@@ -5,6 +5,9 @@ import {doWebService} from '../../WebServiceHelper';
 import PersonCenterComponents from './PersonCenterComponents';
 import EmotionInputComponents from './EmotionInputComponents';
 import UseKnowledgeComponents from '../UseKnowledgeComponents';
+import FavoriteSubjectItems from '../FavoriteSubjectItems';
+import FavItem from '../FavoriteItem';
+import Favorites from '../Favorites';
 import {getPageSize} from '../../utils/Const';
 import {getLocalTime} from '../../utils/Const';
 import {isEmpty} from '../../utils/Const';
@@ -36,6 +39,10 @@ var groupUserTableColumns = [ {
 }];
 
 var followUserColumns=[
+    {
+        title:'头像',
+        dataIndex:'userHeaderIcon'
+    },
     {
         title:'姓名',
         dataIndex:'userName'
@@ -124,6 +131,7 @@ const AntGroupTabComponents = React.createClass({
             memberTargetKeys:[],    //添加群成员时，已选中待添加群成员的数组
             updateChatGroupTitle:'',
             followsUserArray:[],
+            breadcrumbVisible:true
         };
     },
     /**
@@ -172,7 +180,7 @@ const AntGroupTabComponents = React.createClass({
      */
     getPersonCenterInfo(record, index){
         var userType = record.userObj.colUtype;
-        console.log("12312"+record.userObj.userName);
+
         if(userType=="PAREN" || userType=="EADM" || userType=="SGZH"){
             //家长直接进入聊天窗口
             //蚂蚁君点击进入后，只能接收消息，无法发送消息
@@ -977,7 +985,8 @@ const AntGroupTabComponents = React.createClass({
                         var course = e.course;
                         var userName = followUser.userName;
                         var courseName = course.colCourse;
-                        var userJson = {key:followUser.colUid,"userName":userName,"courseName":courseName,"userObj":followUser};
+                        var userHeaderIcon = <img src={followUser.avatar}></img>;
+                        var userJson = {key:followUser.colUid,"userName":userName,"courseName":courseName,userHeaderIcon:userHeaderIcon,"userObj":followUser};
                         followsUserArray.push(userJson);
                     });
                     antGroup.setState({"optType":"getMyFollows","activeKey":"userFollows","currentUser":user,"followsUserArray":followsUserArray});
@@ -1010,13 +1019,6 @@ const AntGroupTabComponents = React.createClass({
     returnPersonCenter(){
         var userId = antGroup.state.currentUser.colUid;
         antGroup.getPersonalCenterData(userId);
-    },
-    /**
-     * 获取用户的收藏
-     * @param user
-     */
-    callBackGetUserFavorite(user){
-        console.log("favorite"+user.colUid+"=="+user.userName);
     },
 
     /**
@@ -1327,8 +1329,13 @@ const AntGroupTabComponents = React.createClass({
         antGroup.setState({"optType":"turnToLiveInfoShowPage","activeKey":"turnToLiveInfoShowPage","liveInfoId":liveInfoId});
     },
 
-    showMt(){
-        alert("showMt()");
+    /**
+     * 获取用户的收藏
+     * @param user
+     */
+    callBackGetUserFavorite(user){
+        console.log("favorite"+user.colUid+"=="+user.userName);
+        antGroup.setState({"optType":"userFavorite","studentId":user.colUid,"activeKey":"1"});
     },
 
     render() {
@@ -1728,6 +1735,8 @@ const AntGroupTabComponents = React.createClass({
                     {liveInfoShowIframe}
                 </TabPane>
             </Tabs>;
+        }else if(antGroup.state.optType=="userFavorite"){
+            tabComponent = <Favorites userid={antGroup.state.studentId} breadcrumbVisible={false}></Favorites>;
         }else if(antGroup.state.optType=="getPlatformRulePage"){
             userPhoneCard=<div>
                 <span>
@@ -2029,6 +2038,21 @@ const AntGroupTabComponents = React.createClass({
             </Tabs>;
         }
 
+        var breadCrumb;
+        var isVisible=false;
+        if(isEmpty(antGroup.props.breadcrumbVisible)==false){
+            isVisible=antGroup.props.breadcrumbVisible;
+        }else{
+            isVisible=antGroup.state.breadcrumbVisible;
+        }
+        if(isVisible){
+           breadCrumb = <Breadcrumb separator=">">
+               <Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
+               <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
+               <Breadcrumb.Item href="#/MainLayout">{breadMenuTip}</Breadcrumb.Item>
+           </Breadcrumb>;
+        }
+
         return (
             <div>
                 <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
@@ -2118,11 +2142,7 @@ const AntGroupTabComponents = React.createClass({
                     </Row>
                 </Modal>
 
-                <Breadcrumb separator=">">
-                    <Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
-                    <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
-                    <Breadcrumb.Item href="#/MainLayout">{breadMenuTip}</Breadcrumb.Item>
-                </Breadcrumb>
+                {breadCrumb}
                 {userPhoneCard}
                 {tabComponent}
             </div>

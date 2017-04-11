@@ -4,7 +4,7 @@
 import {Tabs, Breadcrumb, Icon,message,Card,Button} from 'antd';
 import React from 'react';
 import {doWebService} from '../WebServiceHelper';
-
+import PersonCenterComponents from './antGroup/PersonCenterComponents';
 
 class MyFollows extends React.Component {
 
@@ -17,6 +17,8 @@ class MyFollows extends React.Component {
             type: 1,
             pageNo: 1,
             data: [],
+            antGroupTabResouceType:'personCenter',
+            antGroupTabVisible:false
         };
             this.htmlTemplet={}
     }
@@ -48,7 +50,12 @@ class MyFollows extends React.Component {
         });
     }
 
+    viewProsenInfo(userinfo) {
+        this.props.callEvent({resouceType: 'visitAntGroup', ref: 'antGroupTabComponents', methond:'getPersonalCenterData', userinfo: userinfo });
+    }
+
     buildTemplet(dataArray) {
+
         this.htmlTemplet=null;
         if (!dataArray || !dataArray.length) {
             this.htmlTemplet = <img className="noDataTipImg" src={require('./images/noDataTipImg.png')}/>;
@@ -57,14 +64,13 @@ class MyFollows extends React.Component {
 
         this.htmlTemplet = dataArray.map((e, i) => {
 
-            let viewUrl = 'xxxxxxxxx?uid=' + e.uid;
             let refkey = e.uid + "#" + e.courseId;
             return <div className="ant-card-body"><div style={{ width: 240 , display:'inline-block' }} bodyStyle={{ padding:'5px' }}  key={refkey}>
                 <div className="custom-image">
-                    <a href={viewUrl} target="_blank" > <img alt={e.user.userName + '头像'} width="100%" src={e.user.avatar} /></a>
+                    <a  onClick={this.viewProsenInfo.bind(this,e.user)} target="_blank" > <img alt={e.user.userName + '头像'} width="100%" src={e.user.avatar} /></a>
                 </div>
                 <div className="custom-card">
-                    <p> <a   target="_blank" title="查看"  href={viewUrl} ><Button icon="eye-o"/></a>
+                    <p> <a   target="_blank" title="查看"  onClick={this.viewProsenInfo.bind(this,e.user)} ><Button icon="eye-o"/></a>
                         <a   target="_blank"  title="取消收藏"  ><Button icon="star"/></a>
                     </p>
                     <h3>{e.user.userName}</h3>

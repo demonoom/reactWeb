@@ -141,7 +141,7 @@ const PersonCenterComponents = React.createClass({
     },
 
     /**
-     * 获取我的关注列表
+     * 获取我的收藏列表
      */
     getUserFavorite(e){
         personCenter.props.callBackGetUserFavorite(personCenter.props.userInfo.user);

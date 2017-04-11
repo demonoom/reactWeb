@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Modal,message,Button,Upload,Icon } from 'antd';
 import { doWebService } from '../WebServiceHelper';
-import UploadImgComponents from './antNest/UploadImgComponents';
 
 function getBase64(img, callback) {
     const reader = new FileReader();
@@ -124,7 +123,8 @@ const UserCardModalComponents = React.createClass({
         this.setState({ visible: false });
     },
     myMTV(){
-        this.props.callbackParent("myMTV");
+       this.props.callEvent({resouceType: 'visitAntGroup', ref: 'antGroupTabComponents', methond:'getLiveInfoByUid', ident: this.state.ident,pageNo:1 });
+      //  this.props.callbackParent("myMTV");
         this.setState({ visible: false });
     },
 
@@ -139,8 +139,8 @@ const UserCardModalComponents = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse : function(res) {
                if(res.success){
-                   _this.setState({userHeadIcon:info.response} );
-                   message.info('更换成功！')
+                   _this.setState({userHeadIcon:param.avatar} );
+                   message.info('更换成功！',3)
                }else{
                    message.info('更换失败，请稍候重试！')
                }
@@ -149,7 +149,6 @@ const UserCardModalComponents = React.createClass({
                 message.error(error);
             }
         });
-
     },
 
   getTitle(){
@@ -166,21 +165,24 @@ const UserCardModalComponents = React.createClass({
                 }
             },
             onChange (info){
+                switch (info.file.status) {
+                    case "uploading":
+                        var percent = info.file.percent;
+                        teacherInfo.setState({uploadPercent: percent, progressState: 'block'});
+                        break;
+                    case "removed":
 
-                if (info.file.status !== 'uploading') {
-                    //上传进度
-                    var percent = info.file.percent;
-                    this.setState({uploadPercent:percent,progressState:'block'});
-                    if(info.file.status==="removed"){
-                      //  this.props.callBackParent(info.file,"removed");
-                    }
+                        break;
+                    case "done":
+                        teacherInfo.changeFace(info.file);
+                      //  message.success(`${info.file.name} 文件上传成功`, 5);
+                        break;
+                    case "error":
+                        message.error(`${info.file.name} 文件上传失败.`, 5);
+                        break;
                 }
-                if (info.file.status === 'done') {
-                    this.changeFace(info);
-                    message.success(`${info.file.name} 文件上传成功`,5);
-                } else if (info.file.status === 'error') {
-                    message.error(`${info.file.name} 文件上传失败.`,5);
-                }
+
+
             }
 
         };

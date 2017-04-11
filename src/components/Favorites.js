@@ -17,7 +17,7 @@ class Favorites extends React.Component {
         super(props);
         this.state = { // define this.state in constructor
             ident: this.props.userid || sessionStorage.getItem("ident"),
-            visible: true,
+            breadcrumbVisible: this.props.breadcrumbVisible && true,
             method: 'getUserFavorite',
             type: 1,
             pageNo: 1,
@@ -111,7 +111,7 @@ class Favorites extends React.Component {
 
     // 取消收藏
     cancelFav(address, fn) {
-        debugger
+
         var _self = this;
         var args = {
             "method": 'removeFavorite',
@@ -130,14 +130,22 @@ class Favorites extends React.Component {
         });
     }
 
+
+    getBreadCrumb(){
+        if( this.state.breadcrumbVisible ){
+            return <Breadcrumb separator=">"  style={{display: this.state.breadcrumbVisible}}  >
+                <Breadcrumb.Item><Icon type="home"/></Breadcrumb.Item>
+                <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
+                <Breadcrumb.Item href="#/MainLayout">我的收藏</Breadcrumb.Item>
+            </Breadcrumb>
+        }
+    }
+
     render() {
+
         return (
             <div>
-                <Breadcrumb separator=">">
-                    <Breadcrumb.Item><Icon type="home"/></Breadcrumb.Item>
-                    <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
-                    <Breadcrumb.Item href="#/MainLayout">我的收藏</Breadcrumb.Item>
-                </Breadcrumb>
+                {this.getBreadCrumb()}
                 <Tabs onTabClick={this.tabClick.bind(this)} defaultActiveKey={this.state.activeKey}>
                     <TabPane tab={this.FAVTYPE[1][2]} key='1'>
                         <SubjectItem param={this.state.subject} onCancelfavrite={this.cancelFav} upgradeData={this.upgradeCurrent.bind(this)}/>
