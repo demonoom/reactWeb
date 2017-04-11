@@ -1528,19 +1528,29 @@ const AntGroupTabComponents = React.createClass({
                 onChange: this.onGroupUserTableSelectChange,
             };
             const hasSelected = selectedRowKeys.length > 0;
-            var topButton = <div>
-                <Button type="primary" onClick={this.showUpdateChatGroupNameModal}
-                        loading={loading}
-                >修改群名称</Button>
-                <Button type="primary" onClick={this.showAddMembersModal}
-                        loading={loading}
-                >添加群成员</Button>
-                {/*<Button type="primary" onClick={this.deleteAllSelectedMembers}
-                                  disabled={!hasSelected} loading={loading}
-            >移除群成员</Button>
-                <span style={{ marginLeft: 8 }}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span>*/}
-            </div>;
-
+            var topButton;
+            var dissolutionChatGroupButton;
+            if(antGroup.state.currentGroupObj.owner.colUid==sessionStorage.getItem("ident")){
+                topButton = <div>
+                    <Button type="primary" onClick={this.showUpdateChatGroupNameModal}
+                            loading={loading}
+                    >修改群名称</Button>
+                    <Button type="primary" onClick={this.showAddMembersModal}
+                            loading={loading}
+                    >添加群成员</Button>
+                    {/*<Button type="primary" onClick={this.deleteAllSelectedMembers}
+                     disabled={!hasSelected} loading={loading}
+                     >移除群成员</Button>
+                     <span style={{ marginLeft: 8 }}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span>*/}
+                </div>;
+                dissolutionChatGroupButton = <Button onClick={antGroup.dissolutionChatGroup}>解散该群</Button>;
+            }else{
+                topButton = <div>
+                    <Button type="primary" onClick={this.showAddMembersModal}
+                            loading={loading}
+                    >添加群成员</Button>
+                </div>;
+            }
             var memberLiTag=[];
             antGroup.state.currentMemberArray.forEach(function (e) {
                 var memberId = e.key;
@@ -1584,7 +1594,7 @@ const AntGroupTabComponents = React.createClass({
                         <ul>
                             <li>群聊名称{antGroup.state.currentGroupObj.name}人</li>
                             <li>
-                                <Button onClick={antGroup.dissolutionChatGroup}>解散该群</Button>
+                                {dissolutionChatGroupButton}
                             </li>
                         </ul>
                         <ul>

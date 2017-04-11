@@ -170,7 +170,11 @@ const PersonCenterComponents = React.createClass({
         var userLinkCard;
         var userInfoCard;
         //PAREN---家长
+        var intro=personCenter.state.userInfo.introduction;
         if(user.colUtype=="STUD"){
+            if(isEmpty(intro)){
+                intro="这家伙很懒，还没编辑个人简介";
+            }
             userLinkCard = <div title={userName+'的个人名片'} className="person_container">
                 <Button value={user.colUid} icon="question-circle-o" onClick={personCenter.studentAsk} className="person_cor person_cor1"><div>提问</div></Button>
                 <Button value={user.colUid} icon="area-chart" onClick={personCenter.studentStudyTrack} className="person_cor person_cor2"><div>学习轨迹</div></Button>
@@ -186,12 +190,13 @@ const PersonCenterComponents = React.createClass({
                 </Row>
                 <Row>
                     <Col span={3} className="gary_person">个人简介：</Col>
-                    <Col span={21} className="black_person">这家伙很懒，还没编辑个人简介</Col>
+                    <Col span={21} className="black_person">{intro}</Col>
                 </Row>
             </Card>;
         }else{
-
-
+            if(isEmpty(intro)){
+                intro="该老师很忙，还没编辑个人简介";
+            }
             userLinkCard = <div title={userName+'的个人名片'}  className="person_container ">
                 <Button value={user.colUid} icon="play-circle-o"  className="person_cor person_cor1" onClick={personCenter.getLiveInfo}><div>直播</div></Button>
                 <Button value={user.colUid} icon="area-chart" className="person_cor person_cor2" onClick={personCenter.getMyCourseWares}><div>资源</div></Button>
@@ -210,7 +215,7 @@ const PersonCenterComponents = React.createClass({
                 </Row>
                 <Row>
                     <Col span={3} className="gary_person">个人简介：</Col>
-                    <Col span={21} className="black_person">该老师很忙，还没编辑个人简介</Col>
+                    <Col span={21} className="black_person">{intro}</Col>
                 </Row>
             </Card>;
         }
