@@ -131,7 +131,13 @@ const AntGroupTabComponents = React.createClass({
             memberTargetKeys:[],    //添加群成员时，已选中待添加群成员的数组
             updateChatGroupTitle:'',
             followsUserArray:[],
-            breadcrumbVisible:true
+            breadcrumbVisible:true,
+            totalLiveCount:0,   //直播课页面的直播课总数
+            currentLivePage:1,  //直播课页面的当前页码
+            currentCourseWarePage:1,    //资源页面的当前页码
+            totalCourseWareCount:0,     //资源页面的资源总数
+            currentSubjectPage:1,    //题目页面的当前页码
+            totalSubjectCount:0,     //题目页面的资源总数
         };
     },
     /**
@@ -1115,7 +1121,7 @@ const AntGroupTabComponents = React.createClass({
                             answer:answer
                         });
                         var pager = ret.pager;
-                        antGroup.setState({totalCount:parseInt(pager.rsCount),"optType":"getUserSubjects","activeKey":'userSubjects'});
+                        antGroup.setState({totalSubjectCount:parseInt(pager.rsCount),"optType":"getUserSubjects","activeKey":'userSubjects'});
                     });
                 }
             },
@@ -1202,7 +1208,7 @@ const AntGroupTabComponents = React.createClass({
                 antGroup.buildKonwledgePanels(courseWareList);
                 antGroup.setState({courseListState:courseWareList,"optType":"getUserCourseWares","activeKey":'userCourseWares'});
                 var pager = ret.pager;
-                antGroup.setState({totalCount:parseInt(pager.rsCount)});
+                antGroup.setState({totalCourseWareCount:parseInt(pager.rsCount)});
             },
             onError : function(error) {
                 message.error(error);
@@ -1319,6 +1325,8 @@ const AntGroupTabComponents = React.createClass({
                         </Card>;
                         userLiveData.push(liveCard);
                     });
+                    var pager = ret.pager;
+                    antGroup.setState({"totalLiveCount":parseInt(pager.rsCount)});
                 }
                 antGroup.setState({"userLiveData":userLiveData,"optType":"getLiveInfoByUid","activeKey":"userLiveInfos"});
             },
@@ -1373,6 +1381,35 @@ const AntGroupTabComponents = React.createClass({
      */
     callBackGetUserFavorite(user){
         antGroup.setState({"optType":"userFavorite","studentId":user.colUid,"activeKey":"1"});
+    },
+
+    /**
+     * 直播页面的分页响应函数
+     */
+    onLiveInfoPageChange(page){
+        var userId = antGroup.state.currentUser.colUid;
+        antGroup.getLiveInfoByUid(userId,page);
+        antGroup.setState({
+            currentLivePage: page,
+        });
+    },
+    /**
+     * 资源页面的分页响应函数
+     */
+    onCourseWareChange(page){
+        var userId = antGroup.state.currentUser.colUid;
+        antGroup.getTeachPlans(userId,page);
+        antGroup.setState({
+            currentCourseWarePage: page,
+        });
+    },
+
+    onSubjectPageChange(page){
+        var userId = antGroup.state.currentUser.colUid;
+        antGroup.getUserSubjects(userId,page);
+        antGroup.setState({
+            currentSubjectPage: page,
+        });
     },
 
     render() {
@@ -1735,7 +1772,7 @@ const AntGroupTabComponents = React.createClass({
             >
                 <TabPane tab={welcomeTitle} key="userSubjects" className="topics_rela">
                     <div>
-                        <Table columns={subjectTableColumns} dataSource={data} pagination={{ total:antGroup.state.totalCount,pageSize: getPageSize(),onChange:antGroup.pageOnChange }} scroll={{ y: 400}}/>
+                        <Table columns={subjectTableColumns} dataSource={data} pagination={{ total:antGroup.state.totalSubjectCount,pageSize: getPageSize(),onChange:antGroup.onSubjectPageChange }} scroll={{ y: 400}}/>
                     </div>
                 </TabPane>
             </Tabs>;
@@ -1757,7 +1794,7 @@ const AntGroupTabComponents = React.createClass({
                                 {coursePanelChildren}
                             </Collapse>
                         </div>
-                        <Pagination total={antGroup.state.totalCount} pageSize={getPageSize()} current={antGroup.state.currentPage} onChange={this.onChange}/>
+                        <Pagination total={antGroup.state.totalCourseWareCount} pageSize={getPageSize()} current={antGroup.state.currentCourseWarePage} onChange={this.onCourseWareChange}/>
                     </div>
                 </TabPane>
             </Tabs>;
@@ -1775,7 +1812,7 @@ const AntGroupTabComponents = React.createClass({
                 <TabPane tab={welcomeTitle} key="userLiveInfos" className="topics_rela">
                     <div className='ant-tabs ant-tabs-top ant-tabs-line' style={{'overflow':'auto'}}>
                         {antGroup.state.userLiveData}
-                        <Pagination total={antGroup.state.totalCount} pageSize={getPageSize()} current={antGroup.state.currentPage} onChange={this.onChange}/>
+                        <Pagination total={antGroup.state.totalLiveCount} pageSize={getPageSize()} current={antGroup.state.currentLivePage} onChange={this.onLiveInfoPageChange}/>
                     </div>
                 </TabPane>
             </Tabs>;
