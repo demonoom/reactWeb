@@ -1299,7 +1299,7 @@ const AntGroupTabComponents = React.createClass({
                         }
                         var liveCard = <Card style={{ width: 200 }} bodyStyle={{ padding: 0 }}>
                             <div className="custom-image">
-                                <img id={id} onClick={antGroup.turnToLiveInfoShowPage} alt="example" width="100%" src={cover} />
+                                <img className="attention_img"  id={id} onClick={antGroup.turnToLiveInfoShowPage} alt="example" width="100%" src={cover} />
                             </div>
                             <div className="custom-card" value={id} onClick={antGroup.turnToLiveInfoShowPage}>
                                 <h3>{title}</h3>
@@ -1797,7 +1797,7 @@ const AntGroupTabComponents = React.createClass({
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab="我的积分" key="userScores">
-                    <iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe>
+                    <div className="topics_le"><iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe></div>
                 </TabPane>
             </Tabs>;
         }else if(antGroup.state.optType=="turnToLiveInfoShowPage"){

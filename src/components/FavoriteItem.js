@@ -116,10 +116,10 @@ const FavoriteItem = React.createClass({
                                 className="col2">{getLocalTime(e.material.createTime)}</span></span>
                         </div>
                         <div className="bnt2_right">
-                            <a target="_blank" title="查看" style={{float: 'right'}} href={e.address}><Button
+                            <a target="_blank" title="查看" className="right_ri" href={e.address}><Button
                                 icon="eye-o"/></a>
-                            <a target="_blank" title="取消收藏" style={{float: 'right'}}
-                                 onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)}><Button icon="star"/></a>
+                            <a target="_blank" title="取消收藏" className="right_ri" 
+                                 onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)}><Button icon="star-o"/></a>
                         </div>
                     </Panel>
                     break;
@@ -135,12 +135,12 @@ const FavoriteItem = React.createClass({
                                 className="col2">{getLocalTime(e.material.createTime)}</span></span>
                         </div>
                         <div className="bnt2_right">
-                            <a target="_blank" title="下载" style={{float: 'right'}} href={e.material.path}
+                            <a target="_blank" title="下载" className="right_ri" href={e.material.path}
                                download={e.material.path}><Button icon="download"/></a>
-                            <a target="_blank" title="查看" style={{float: 'right'}} href={e.address}><Button
+                            <a target="_blank" title="查看" className="right_ri" href={e.address}><Button
                                 icon="eye-o"/></a>
-                            <a target="_blank" title="取消收藏" style={{float: 'right'}}
-                               onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)} ><Button icon="star"/></a>
+                            <a target="_blank" title="取消收藏" className="right_ri"
+                               onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)} ><Button icon="star-o"/></a>
                         </div>
                     </Panel>
                     break;
