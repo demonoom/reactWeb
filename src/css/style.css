@@ -2185,7 +2185,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr{
 	display: flex;
     flex-direction: row-reverse;
 }
-.group_talk ul li span.name img{
+.group_talk ul li span.name img, .{
 	position:relative;
 	top:0;
 	width: 38px;
@@ -2410,5 +2410,6 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr{
     top: 8px;
     left:-12px;
 }
-
-
+.level_list_pa{
+	padding:15px 25px !important;
+}

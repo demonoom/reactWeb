@@ -1765,7 +1765,7 @@ const AntGroupTabComponents = React.createClass({
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab="我的积分" key="userScores">
-                    <iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe>
+                    <div className="topics_le"><iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe></div>
                 </TabPane>
             </Tabs>;
         }else if(antGroup.state.optType=="turnToLiveInfoShowPage"){
