@@ -1422,7 +1422,7 @@ const AntGroupTabComponents = React.createClass({
                 messageList.forEach(function (e) {
                     var content = e.content;
                     var fromUser = e.fromUser.userName;
-                    var userPhoneIcon=<img style={{width:'20px',height:'20px'}} src={e.fromUser.avatar}></img>;
+                    var userPhoneIcon=<img src={e.fromUser.avatar}></img>;
                     var messageType = e.messageType;
                     var messageTag;
                     if(isEmpty(messageType)==false && messageType=="getMessage"){
@@ -1532,7 +1532,7 @@ const AntGroupTabComponents = React.createClass({
                 var userInfo = e.userInfo;
                 var userHeaderIcon;
                 if(isEmpty(userInfo)==false){
-                    userHeaderIcon = <img style={{width:'20px',height:'20px'}} src={userInfo.avatar}></img>;
+                    userHeaderIcon = <img src={userInfo.avatar}></img>;
                 }
                 console.log(memberId+"<===>"+groupUser)
                 var liTag = <li>
@@ -1590,7 +1590,7 @@ const AntGroupTabComponents = React.createClass({
                 messageList.forEach(function (e) {
                     var content = e.content;
                     var fromUser = e.fromUser.userName;
-                    var userPhoneIcon=<img style={{width:'20px',height:'20px'}} src={e.fromUser.avatar}></img>;
+                    var userPhoneIcon=<img  src={e.fromUser.avatar}></img>;
                     var messageType = e.messageType;
                     var messageTag;
                     if(isEmpty(messageType)==false && messageType=="getMessage"){

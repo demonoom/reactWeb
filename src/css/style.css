@@ -2185,8 +2185,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr{
 	display: flex;
     flex-direction: row-reverse;
 }
-.group_talk ul li span.name{
-	background: #000;
+.group_talk ul li span.name img{
 	position:relative;
 	top:0;
 	width: 38px;
