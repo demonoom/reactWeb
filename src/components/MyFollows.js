@@ -51,7 +51,7 @@ class MyFollows extends React.Component {
     }
 
     viewProsenInfo(userinfo) {
-        this.props.callEvent({resouceType: 'visitAntGroup', ref: 'antGroupTabComponents', methond:'getPersonalCenterData', userinfo: userinfo });
+        this.props.callEvent({resouceType: 'visitAntGroup', ref: 'antGroupTabComponents', methond:'callCurrentPage', param: userinfo });
     }
 
     buildTemplet(dataArray) {
@@ -63,7 +63,6 @@ class MyFollows extends React.Component {
         }
 
         this.htmlTemplet = dataArray.map((e, i) => {
-
             let refkey = e.uid + "#" + e.courseId;
             return <div className="ant-card-body"><div style={{ width: 240 , display:'inline-block' }} bodyStyle={{ padding:'5px' }}  key={refkey}>
                 <div className="custom-image">

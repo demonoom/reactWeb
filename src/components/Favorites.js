@@ -15,7 +15,7 @@ class Favorites extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { // define this.state in constructor
+        this.state = {
             ident: this.props.userid || sessionStorage.getItem("ident"),
             breadcrumbVisible: this.props.breadcrumbVisible && true,
             method: 'getUserFavorite',
@@ -23,7 +23,7 @@ class Favorites extends React.Component {
             pageNo: 1,
             data: [],
             activeKey: '1',
-// 默认数据
+            // 默认数据
             other: {type: 0, pageNo: 1, data: null},
             subject: {type: 1, pageNo: 1, data: null, activeKey: '1'},
             weike: {type: 2, pageNo: 1, data: null},
