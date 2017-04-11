@@ -186,7 +186,10 @@ const AntGroupTabComponents = React.createClass({
             antGroup.getPersonalCenterData(record.key);
         }
     },
-
+// proxy methond
+    callCurrentPage(obj){
+        this.getPersonalCenterData(obj.colUid);
+    },
     /**
      * 获取个人中心需要的数据,老师和学生可通用,后期需要什么再添加
      */

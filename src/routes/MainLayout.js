@@ -37,6 +37,7 @@ const store = createStore(function () {
 
 var mainLayout;
 const MainLayout = React.createClass({
+    proxyObj:null,
   getInitialState() {
     mainLayout = this;
     return {
@@ -110,6 +111,18 @@ const MainLayout = React.createClass({
     }
     //sessionStorage.setItem("ident","23836");
   },
+    // 呼叫任何本组件实例的任何方法，前提最终访问的方法只能接受一个对象类型的参数 dapeng
+    componentDidUpdate(){
+        let obj = this.proxyObj;
+        if(!obj) return;
+         this.refs[obj.ref][obj.methond].call(this,obj.param);
+        this.proxyObj=null;
+    },
+    // 切换组件页面
+    switchSection(obj){
+      this.proxyObj = obj;
+        this.setState({resouceType:obj.resouceType});
+    },
 
   //获取老师的已布置作业列表
   getTeacherHomeWork:function (optType) {
@@ -133,16 +146,7 @@ const MainLayout = React.createClass({
   getTeacherResource(resouceType){
     mainLayout.setState({resouceType:resouceType});
   },
-    componentDidUpdate(){
-        let obj = this.state.objxx;
-        if(obj){
-          this.refs[obj.ref][obj.methond].call(this,obj.userinfo.colUid);
-        }
-    },
-  // 切换组件页面
-    switchSection(obj){
-        this.setState({resouceType:obj.resouceType,objxx:obj});
-    },
+
 
   render() {
     const collapse = this.state.collapse;

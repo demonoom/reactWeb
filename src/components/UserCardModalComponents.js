@@ -71,6 +71,7 @@ const UserCardModalComponents = React.createClass({
           var courseName = response.course.colCourse;//科目
           var schoolName = response.school.name;//学校名称
           var schoolAddress = response.school.address;
+            teacherInfo.user = response.user;
           teacherInfo.setState({userName:userName,userHeadIcon:userHeadIcon,courseName:courseName,schoolName:schoolName,schoolAddress:schoolAddress});
         }else{
           // alert("老师信息获取失败");
@@ -123,7 +124,7 @@ const UserCardModalComponents = React.createClass({
         this.setState({ visible: false });
     },
     myMTV(){
-       this.props.callEvent({resouceType: 'visitAntGroup', ref: 'antGroupTabComponents', methond:'getLiveInfoByUid', ident: this.state.ident,pageNo:1 });
+       this.props.callEvent({resouceType: 'visitAntGroup', ref: 'antGroupTabComponents', methond:'callBackGetLiveInfo', param: teacherInfo.user });
       //  this.props.callbackParent("myMTV");
         this.setState({ visible: false });
     },
