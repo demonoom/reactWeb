@@ -1142,6 +1142,7 @@ p.user_cont1 span{
 	z-index:1000;
 	font-weight: normal;
 	font-size:14px;
+	top:14px;
 }
 p.user_cont{
 	padding:8px 15px;
@@ -1153,9 +1154,10 @@ p.user_cont span.name{
 	color:#a6a6a6;
 	width:65px;
 	margin-right:10px;
-	font-size:14px;
-	
-	
+	font-size:14px;	
+}
+.rc-upload{
+	top:0 !important;
 }
 .model_wi{
 	width:300px !important
@@ -1168,23 +1170,22 @@ p.user_cont span.name1{
 .blur {
     filter: url(blur.svg#blur); /* FireFox, Chrome, Opera */   
     -webkit-filter: blur(30px); /* Chrome, Opera */
-       -moz-filter: blur(30px);
-        -ms-filter: blur(30px);   
-            filter: blur(30px);
+    -moz-filter: blur(30px);
+    -ms-filter: blur(30px);   
+    filter: blur(30px);
     filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=30, MakeShadow=false); /* IE6~IE9 */
-	    width: 100%;
+	width: 100%;
 	margin-top: 0;
 }
 .img_us{
-	position: absolute;
-   /* top: 37px; */
+	position:relative; 
     z-index: 1000;
-	width: 48px;
-    height: 48px;
+	width: 60px;
+    height: 60px;
     border-radius: 50%;
     margin: 0 auto;
-	/*   left: 126px;  */
 }
+
 .model_title{
 	padding:0;}
 .model_to{
@@ -2029,23 +2030,32 @@ a.topics:hover{
 .knowledge_table .ant-table-header{
 	margin-bottom:0 !important
 }
-<<<<<<< HEAD
 
-
-/****/
 
 #rcDialogTitle0 .avatar-uploader,
 #rcDialogTitle0 .avatar-uploader-trigger,
 #rcDialogTitle0 .avatar {
-	width: 60px;
-	height: 60px;
+	width: 64px;
+	height: 64px;
 }
 #rcDialogTitle0 .avatar-uploader {
-	display: block;
-	border: 1px dashed #d9d9d9;
-	border-radius: 6px;
+	display: inline-block;
+	border-radius: 50%;
 	cursor: pointer;
-
+	padding:2px;
+	background:#fff; 
+	background:rgba(255,255,255,0.3);
+}
+#rcDialogTitle0 .avatar-uploader:hover {
+	-webkit-box-shadow:0 0 14px #f00;  
+  -moz-box-shadow:0 0 14px #f00;  
+  box-shadow:0 0 14px #f00;  
+  padding:0;
+  background:none;
+   background:#f00\9; 
+   width:60px;
+   height:60px;
+   margin-top:2px;
 }
 #rcDialogTitle0  .avatar-uploader-trigger {
 	display: table-cell;
@@ -2053,7 +2063,7 @@ a.topics:hover{
 	font-size: 28px;
 	color: #999;
 }
-=======
+
 .group_table{
 	width:100%
 }
@@ -2234,6 +2244,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr{
 
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 .person_13{
 	font-size:13px !important;
 }
@@ -2395,11 +2406,10 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr{
     content: "";
     position: absolute;
     border-style: solid;
-    border-color:  transparent transparent transparent #f2f2f2;
+    border-color: transparent #f2f2f2 transparent transparent;
     border-width: 6px;
     top: 8px;
-    left:12px;
+    left:-12px;
 }
-=======
->>>>>>> 06cbf000deee2fe54d8ed5847abea8748595ac4d
->>>>>>> 11e924e62b5aa01c8d2164dd77831688ea385dcd
+
+

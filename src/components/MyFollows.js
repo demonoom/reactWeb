@@ -1,12 +1,8 @@
 /**
  * Created by madapeng on 17-4-5.
  */
-import {Tabs, Breadcrumb, Icon,message} from 'antd';
+import {Tabs, Breadcrumb, Icon,message,Card,Button} from 'antd';
 import React from 'react';
-import FavItem from './FavoriteItem';
-import SubjectItem from './FavoriteSubjectItems';
-import ShippinItem from './FavoriteShipinItems';
-import OtherItem from './FavoriteOtherItems';
 import {doWebService} from '../WebServiceHelper';
 
 
@@ -24,12 +20,12 @@ class MyFollows extends React.Component {
         };
             this.htmlTemplet={}
     }
-   changeState(data){
-debugger
+   changeState(dataa){
+        this.setState({data:dataa});
 };
     componentWillMount(){
-        debugger
-       this.getData(this.changeState);
+
+       this.getData(this.changeState.bind(this));
     }
 
     getData(fn){
@@ -40,15 +36,13 @@ debugger
 
         doWebService(JSON.stringify(param), {
             onResponse : function(res) {
-                debugger
                 if(res.success){
-                   if(fn)fn(res);
+                   if(fn)fn(res.response);
                 }else{
                     message.error(res.msg);
                 }
             },
             onError : function(error) {
-                debugger
                 message.error(error);
             }
         });
@@ -56,7 +50,6 @@ debugger
 
     buildTemplet(dataArray) {
         this.htmlTemplet=null;
-
         if (!dataArray || !dataArray.length) {
             this.htmlTemplet = <img className="noDataTipImg" src={require('./images/noDataTipImg.png')}/>;
             return;
@@ -64,30 +57,29 @@ debugger
 
         this.htmlTemplet = dataArray.map((e, i) => {
 
-            let content = e.content;
-            let refkey = e.type + "#" + e.favoriteId;
-
-            return <Card style={{ width: 240 , display:'inline-block' }} bodyStyle={{ padding:'5px' }}  key={refkey}>
+            let viewUrl = 'xxxxxxxxx?uid=' + e.uid;
+            let refkey = e.uid + "#" + e.courseId;
+            return <div className="ant-card-body"><div style={{ width: 240 , display:'inline-block' }} bodyStyle={{ padding:'5px' }}  key={refkey}>
                 <div className="custom-image">
-                    <a href={e.address} target="_blank" > <img alt="example" width="100%" src={e.cover} /></a>
+                    <a href={viewUrl} target="_blank" > <img alt={e.user.userName + '头像'} width="100%" src={e.user.avatar} /></a>
                 </div>
                 <div className="custom-card">
-                    <p> <a   target="_blank" title="查看"  href={e.address} ><Button icon="eye-o"/></a>
-                        <a   target="_blank"  title="取消收藏"  onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)} ><Button icon="star"/></a>
+                    <p> <a   target="_blank" title="查看"  href={viewUrl} ><Button icon="eye-o"/></a>
+                        <a   target="_blank"  title="取消收藏"  ><Button icon="star"/></a>
                     </p>
-                    <h3>{content}</h3>
-                    <p>学校：{e.liveInfo.schoolName}</p>
-                    <p>上传者：{e.liveInfo.user.userName}</p>
-                    <p>时间：{getLocalTime(e.liveInfo.startTime)}</p>
+                    <h3>{e.user.userName}</h3>
+                    <p>学校：{e.user.schoolName}</p>
+                    <p>科目：{e.course.colCourse}</p>
                 </div>
-            </Card>
-
+            </div>
+			
+</div>
         } );
 
     }
 
     render() {
-        this.buildTemplet();
+        this.buildTemplet(this.state.data);
         return (
             <div>
                 <Breadcrumb separator=">">
