@@ -2261,8 +2261,10 @@ const AntGroupTabComponents = React.createClass({
                 </Modal>
 
                 {breadCrumb}
-                {userPhoneCard}
-                {tabComponent}
+                <div style={{overflow:'auto'}}>
+                    {userPhoneCard}
+                    {tabComponent}
+                </div>
             </div>
         );
     },
