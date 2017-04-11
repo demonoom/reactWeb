@@ -1316,7 +1316,7 @@ const AntGroupTabComponents = React.createClass({
      */
     callBackTurnToPlatformRulePage(user,urlType){
         if(isEmpty(urlType)==false && urlType=="level"){
-            antGroup.setState({"optType":"getScoreOrLevelPage","activeKey":"userScores","urlType":urlType});
+            antGroup.setState({"optType":"getScoreOrLevelPage","currentUser":user,"activeKey":"userScores","urlType":urlType});
         }else{
             antGroup.setState({"optType":"getPlatformRulePage","currentUser":user,"activeKey":"platformRulePage"});
         }
