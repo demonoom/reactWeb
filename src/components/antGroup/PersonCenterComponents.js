@@ -170,8 +170,16 @@ const PersonCenterComponents = React.createClass({
     /**
      * 进入系统平台规则显示页面
      */
-    turnToPlatformRulePage(){
-        personCenter.props.callBackTurnToPlatformRulePage(personCenter.props.userInfo);
+    turnToPlatformRulePage(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var urlType = target.value;
+        console.log(urlType);
+        personCenter.props.callBackTurnToPlatformRulePage(personCenter.props.userInfo,urlType);
     },
 
     render() {
@@ -262,8 +270,8 @@ const PersonCenterComponents = React.createClass({
                 <Card className="bai">
                     {userPhotoTag}
                     <p className="person_btn">
-                        <Button onClick={personCenter.turnToPlatformRulePage}>{personCenter.state.userInfo.score}积分</Button>
-                        <Button onClick={personCenter.turnToPlatformRulePage}>{personCenter.state.userInfo.level.name}</Button>
+                        <Button　value="score" onClick={personCenter.turnToPlatformRulePage}>{personCenter.state.userInfo.score}积分</Button>
+                        <Button value="level" onClick={personCenter.turnToPlatformRulePage}>{personCenter.state.userInfo.level.name}</Button>
                     </p>
                 </Card>
                 <Card className="bai">
