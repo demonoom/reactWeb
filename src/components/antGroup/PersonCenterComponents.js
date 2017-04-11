@@ -170,8 +170,16 @@ const PersonCenterComponents = React.createClass({
     /**
      * 进入系统平台规则显示页面
      */
-    turnToPlatformRulePage(){
-        personCenter.props.callBackTurnToPlatformRulePage(personCenter.props.userInfo);
+    turnToPlatformRulePage(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var urlType = target.value;
+        console.log(urlType);
+        personCenter.props.callBackTurnToPlatformRulePage(personCenter.props.userInfo,urlType);
     },
 
     render() {
@@ -244,15 +252,19 @@ const PersonCenterComponents = React.createClass({
             <div>
                 <Card className="bai">
                     {userPhotoTag}
+
                     <span className="person_btn">
-                        <Button className="antnest_talk" onClick={personCenter.turnToPlatformRulePage}>{personCenter.state.userInfo.score}积分</Button>
-						<Button onClick={personCenter.turnToPlatformRulePage} >{personCenter.state.userInfo.level.name}</Button>
+                        <Button className="antnest_talk" 　value="score" onClick={personCenter.turnToPlatformRulePage}>{personCenter.state.userInfo.score}积分</Button>
+						<Button value="level" onClick={personCenter.turnToPlatformRulePage} >{personCenter.state.userInfo.level.name}</Button>
                     </span>
 					<span className="person_btn_ri">
                     <Button icon="message" value={personCenter.state.userInfo.user.colUid} onClick={personCenter.sendMessage} className="antnest_talk  persono_btn_blue">发消息</Button>
                      {followButton}
 					 </span>
+
+                   
                 </Card>
+               
                 <div>{userLinkCard}
                 {userInfoCard}
                 
