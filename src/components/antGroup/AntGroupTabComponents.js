@@ -1308,7 +1308,7 @@ const AntGroupTabComponents = React.createClass({
                         console.log("getLiveInfoByUid======》"+title+"=="+cover+"=="+userName);
                         var liveCard = <Card style={{ width: 200 }} bodyStyle={{ padding: 0 }}>
                             <div className="custom-image">
-                                <img id={id} onClick={antGroup.turnToLiveInfoShowPage} alt="example" width="100%" src={cover} />
+                                <img className="attention_img"  id={id} onClick={antGroup.turnToLiveInfoShowPage} alt="example" width="100%" src={cover} />
                             </div>
                             <div className="custom-card" value={id} onClick={antGroup.turnToLiveInfoShowPage}>
                                 <h3>{title}</h3>
