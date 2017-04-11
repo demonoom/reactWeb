@@ -1142,6 +1142,7 @@ p.user_cont1 span{
 	z-index:1000;
 	font-weight: normal;
 	font-size:14px;
+	top:14px;
 }
 p.user_cont{
 	padding:8px 15px;
@@ -1153,9 +1154,10 @@ p.user_cont span.name{
 	color:#a6a6a6;
 	width:65px;
 	margin-right:10px;
-	font-size:14px;
-	
-	
+	font-size:14px;	
+}
+.rc-upload{
+	top:0 !important;
 }
 .model_wi{
 	width:300px !important
@@ -1168,23 +1170,22 @@ p.user_cont span.name1{
 .blur {
     filter: url(blur.svg#blur); /* FireFox, Chrome, Opera */   
     -webkit-filter: blur(30px); /* Chrome, Opera */
-       -moz-filter: blur(30px);
-        -ms-filter: blur(30px);   
-            filter: blur(30px);
+    -moz-filter: blur(30px);
+    -ms-filter: blur(30px);   
+    filter: blur(30px);
     filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=30, MakeShadow=false); /* IE6~IE9 */
-	    width: 100%;
+	width: 100%;
 	margin-top: 0;
 }
 .img_us{
-	position: absolute;
-   /* top: 37px; */
+	position:relative; 
     z-index: 1000;
-	width: 48px;
-    height: 48px;
+	width: 60px;
+    height: 60px;
     border-radius: 50%;
     margin: 0 auto;
-	/*   left: 126px;  */
 }
+
 .model_title{
 	padding:0;}
 .model_to{
@@ -2029,23 +2030,32 @@ a.topics:hover{
 .knowledge_table .ant-table-header{
 	margin-bottom:0 !important
 }
-<<<<<<< HEAD
 
-
-/****/
 
 #rcDialogTitle0 .avatar-uploader,
 #rcDialogTitle0 .avatar-uploader-trigger,
 #rcDialogTitle0 .avatar {
-	width: 60px;
-	height: 60px;
+	width: 64px;
+	height: 64px;
 }
 #rcDialogTitle0 .avatar-uploader {
-	display: block;
-	border: 1px dashed #d9d9d9;
-	border-radius: 6px;
+	display: inline-block;
+	border-radius: 50%;
 	cursor: pointer;
-
+	padding:2px;
+	background:#fff; 
+	background:rgba(255,255,255,0.3);
+}
+#rcDialogTitle0 .avatar-uploader:hover {
+	-webkit-box-shadow:0 0 14px #f00;  
+  -moz-box-shadow:0 0 14px #f00;  
+  box-shadow:0 0 14px #f00;  
+  padding:0;
+  background:none;
+   background:#f00\9; 
+   width:60px;
+   height:60px;
+   margin-top:2px;
 }
 #rcDialogTitle0  .avatar-uploader-trigger {
 	display: table-cell;
@@ -2053,7 +2063,7 @@ a.topics:hover{
 	font-size: 28px;
 	color: #999;
 }
-=======
+
 .group_table{
 	width:100%
 }
@@ -2067,32 +2077,34 @@ a.topics:hover{
 .group_table .ant-table-header{
 	margin-bottom:1px !important;
 }
-p.person_user_bg{
-	text-align:center;
-    overflow: hidden;
-	position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-	height:100%;
-	background-size:100%;
-	padding:10px 0 0 0
+span.person_user_bg{
+    width: 60px;
+	height:60px;
+	padding:0;
+	display:inline-block
 }
 .person_user{
 	width:60px;
 	height:60px;
 	border-radius:50%;
-	border:2px solid #fff;
+	border:1px solid #C2C2C2;
 	overflow: hidden;
     display: inline-block;
     box-sizing: border-box;
     background-size: cover;
     background-clip: content-box;
     background-position: center center;
+	padding:2px;
 }
 .person_btn{
-	margin-top:55px;
-	text-align:center;
+	margin-left: 24px;
+    position: relative;
+    top: -20px;
+}
+.person_btn_ri{
+    position: relative;
+    top: 21px;
+	float:right;
 }
 .person_le{
 	width:55px;
@@ -2135,6 +2147,60 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr{
 .group_talk{
 	height:394px;
 	padding:0 20px 0 0;
+	overflow:auto
+}
+.group_talk ul li{
+	padding:10px 0;
+	float: left;
+    width: 100%;
+}
+.group_talk ul li.right{
+	padding:10px 0;
+	float: right;
+    width: 100%;
+}
+.group_talk ul li div.u-name{
+	min-height: 21px;
+    display: flex;
+}
+.group_talk ul li.right div.u-name{
+	flex-direction: row-reverse;
+}
+    
+.group_talk ul li div.u-name span{
+	display: inline-block;
+    float: left;
+    padding-left: 50px;
+	color:#8E97A6
+}
+.group_talk ul li.right div.u-name span{
+	padding-right: 50px;
+	color:#8E97A6
+}
+.group_talk ul li div.talk-cont{
+	display: flex;
+    flex-direction: row;
+}
+.group_talk ul li.right div.talk-cont{
+	display: flex;
+    flex-direction: row-reverse;
+}
+.group_talk ul li span.name{
+	background: #000;
+	position:relative;
+	top:0;
+	width: 38px;
+    height: 38px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+    display: inline-block;
+    box-sizing: border-box;
+    background-size: cover;
+    background-clip: content-box;
+    background-position: center center;
+    border-radius: 50%;
 }
 .group_send{
 	height:100px;
@@ -2177,22 +2243,173 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr{
 	background:url(../components/images/icon_yichao.png) no-repeat 0 -48px;
 
 }
+<<<<<<< HEAD
+<<<<<<< HEAD
+.person_13{
+	font-size:13px !important;
+}
+.gary_person{
+	color:#aeaeb2;
+	padding:4px 0;
+	text-align: center
+}
+.black_person{
+	color:#222;
+	padding:4px 0;
+}
+.person_cor{
+	border-radius:50%;
+	width:50px;
+	height:50px;
+	display:inline-block;
+	border: none;
+}
+.person_cor i{
+	font-size:24px;
+	text-align:center;
+	line-height:40px !important;
+	color:#fff;	
+}
+.person_cor1{
+	background:#ff7669
+}
+.person_cor1:hover{
+	background:#ff9e95;
+	border:none
+}
+.person_cor2{
+	background:#64b5e0
+}
+.person_cor2:hover{
+	background:#8dd7ff;
+	border:none
+}
+.person_cor3{
+	background:#9fce68
+}
+.person_cor3:hover{
+	background:#c6f391;
+	border:none
+}
+.person_cor4{
+	background:#ffc385
+}
+.person_cor4:hover{
+	background:#ffd3a5;
+	border:none
+}
+.person_cor div{
+	position:relative;
+	top:12px;
+	left:-23px;
+	width:80px;
+}
+.persono_btn_blue{
+	border:1px solid #57c5f7
+}
+.person_ri_line{
+	width: 1px;
+    height: 50px !important;
+    border-right: #ebebeb 1px solid;
+    margin-left: 50px;
+    line-height: 50px;
+    position: relative;
+    font-size: 30px;
+    top: -13px;
+}
+.person_container{
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    margin: 25px ;
+    height: 86px;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack:justify ;
+    justify-content: space-between;
+}
+.container Button{
+    width:20%;
+    display: block;
+    height: 50px;
+    line-height: 45px;
+    text-align: center;
+    border 1px solid red;
+    color: sandybrown;
+    font-size: 16px;
+    margin-bottom: 5px;
+    border-radius: 3px;
+    background-color: skyblue;
+    text-decoration: none;
+	 
+}
+.person_padding{
+	padding:15px 60px 0 60px !important;
+}
+.person_btn_ri Button{
+	padding:6px 20px;
+    top: -2px;
+}
+.person_attention{
+	width:100%;
+}
+.person_attention table tr td:first-child, .person_attention table tr th:first-child{
+	width:400px;
+}
+.borderballoon {
+    background: #40baff;
+    border-radius: 4px;
+    position: relative;
+    display: inline-flex;
+    padding: 6px 12px;
+    margin-right: 12px;
+    max-width: calc(100% - 150px);
+    max-width: -moz-calc(100% - 150px);
+    max-width: -webkit-calc(100% - 150px);
+	min-width:0;
+    text-align: left;
+    color: #fff;
+    flex-direction: row-reverse;
+	font-size:14px;
+	line-height:24px;
+}
+.borderballoon:after{
+    content: "";
+    position: absolute;
+    border-style: solid;
+    border-color:  transparent transparent transparent #40baff;
+    border-width: 6px;
+    top: 8px;
+    right: -12px;
+}
+.borderballoon img{
+	padding:0 5px;
+}
+.borderballoon_le{
+    background: #f2f2f2;
+    border-radius: 4px;
+    position: relative;
+    display: inline-block;
+    padding: 6px 12px;
+	margin-left: 12px;
+	max-width:calc(100% - 150px);
+	max-width:-moz-calc(100% - 150px);
+	max-width: -webkit-calc(100% - 150px);
+	text-align:left;
+	min-width:0;
+	flex-direction: row;
+	font-size:14px;
+	line-height:24px;
+}
+.borderballoon_le:after{
+    content: "";
+    position: absolute;
+    border-style: solid;
+    border-color: transparent #f2f2f2 transparent transparent;
+    border-width: 6px;
+    top: 8px;
+    left:-12px;
+}
 
-.avatar-uploader,
-.avatar-uploader-trigger,
-.avatar {
-	width: 60px;
-	height: 60px;
-}
-.avatar-uploader {
-	display: block;
-	border: 1px dashed #d9d9d9;
-	border-radius: 6px;
-	cursor: pointer;
-}
-.avatar-uploader-trigger {
-	display: table-cell;
-	vertical-align: middle;
-	font-size: 28px;
-	color: #999;
-}
+

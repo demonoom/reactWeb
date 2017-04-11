@@ -47,7 +47,7 @@ const FavoriteShipinItems = React.createClass({
             let content = e.content;
             let refkey = e.type + "#" + e.favoriteId;
 
-                    return <Card style={{ width: 240 , display:'inline-block' }} bodyStyle={{ padding:'5px' }}  key={refkey}>
+                    return <div className="ant-card-body"><div style={{ width: 240 , display:'inline-block' }} bodyStyle={{ padding:'5px' }}  key={refkey}>
                         <div className="custom-image">
                             <a href={e.address} target="_blank" > <img alt="example" width="100%" src={e.cover} /></a>
                         </div>
@@ -60,11 +60,12 @@ const FavoriteShipinItems = React.createClass({
                             <p>上传者：{e.liveInfo.user.userName}</p>
                             <p>时间：{getLocalTime(e.liveInfo.startTime)}</p>
                         </div>
-                    </Card>
-
+                    </div>
+</div>
         } );
 
     },
+	
     //列表分页响应事件
     pageOnChange(pageNo) {
 

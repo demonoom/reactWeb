@@ -64,7 +64,7 @@ class MyFollows extends React.Component {
 
         this.htmlTemplet = dataArray.map((e, i) => {
             let refkey = e.uid + "#" + e.courseId;
-            return <Card style={{ width: 240 , display:'inline-block' }} bodyStyle={{ padding:'5px' }}  key={refkey}>
+            return <div className="ant-card-body"><div style={{ width: 240 , display:'inline-block' }} bodyStyle={{ padding:'5px' }}  key={refkey}>
                 <div className="custom-image">
                     <a  onClick={this.viewProsenInfo.bind(this,e.user)} target="_blank" > <img alt={e.user.userName + '头像'} width="100%" src={e.user.avatar} /></a>
                 </div>
@@ -76,8 +76,9 @@ class MyFollows extends React.Component {
                     <p>学校：{e.user.schoolName}</p>
                     <p>科目：{e.course.colCourse}</p>
                 </div>
-            </Card>
-
+            </div>
+			
+</div>
         } );
 
     }

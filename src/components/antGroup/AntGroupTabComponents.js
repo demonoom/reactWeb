@@ -40,6 +40,10 @@ var groupUserTableColumns = [ {
 
 var followUserColumns=[
     {
+        title:'头像',
+        dataIndex:'userHeaderIcon'
+    },
+    {
         title:'姓名',
         dataIndex:'userName'
     },
@@ -670,7 +674,7 @@ const AntGroupTabComponents = React.createClass({
             members.forEach(function (e) {
                 var memberId = e.colUid;
                 var memberName = e.userName;
-                var userJson = {key:memberId,groupUser:memberName};
+                var userJson = {key:memberId,groupUser:memberName,userInfo:e};
                 membersArray.push(userJson);
             });
             antGroup.setState({"optType":'showGroupInfo',"currentMemberArray":membersArray});
@@ -729,12 +733,38 @@ const AntGroupTabComponents = React.createClass({
     },
 
     /**
+     * 移除选中的群组成员
+     */
+    deleteSelectedMember(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var memberIds = target.value;
+        confirm({
+            title: '确定要移除选中的群成员?',
+            onOk() {
+                var currentGroupObj = antGroup.state.currentGroupObj;
+                // var memberIds = antGroup.state.selectedRowKeysStr;
+                var optType="removeMember";
+                antGroup.deleteChatGroupMember(currentGroupObj.chatGroupId,memberIds,optType);
+            },
+            onCancel() {
+            },
+        });
+    },
+
+    /**
      * 刷新本地的群组成员列表
      */
-    refreshLocalMembers(){
+    refreshLocalMembers(memberIds){
         var currentMemberArray = antGroup.state.currentMemberArray;
-        var selectedRowKeys = antGroup.state.selectedRowKeys;
-        currentMemberArray = antGroup.array_diff(currentMemberArray,selectedRowKeys);
+        //var selectedRowKeys = antGroup.state.selectedRowKeys;
+        var memberIdsArray=[];
+        memberIdsArray.push(memberIds);
+        currentMemberArray = antGroup.array_diff(currentMemberArray,memberIdsArray);
         antGroup.setState({"currentMemberArray":currentMemberArray});
     },
 
@@ -794,8 +824,8 @@ const AntGroupTabComponents = React.createClass({
                 }
                 var currentMemberArray = antGroup.state.currentMemberArray;
                 currentMemberArray = currentMemberArray.concat(memberTargetkeys);
-                antGroup.getUserChatGroup();
                 antGroup.setState({"addGroupMemberModalVisible":false,"currentMemberArray":currentMemberArray});
+                antGroup.getUserChatGroup();
             },
             onError: function (error) {
                 message.error(error);
@@ -881,7 +911,7 @@ const AntGroupTabComponents = React.createClass({
                 if(optType=="dissolution" || optType=="exitChatGroup"){
                     antGroup.getUserChatGroup();
                 }else if(optType=="removeMember"){
-                    antGroup.refreshLocalMembers();
+                    antGroup.refreshLocalMembers(memberIds);
                     antGroup.setState({selectedRowKeysStr:'',selectedRowKeys:[]});
                 }
             },
@@ -984,7 +1014,8 @@ const AntGroupTabComponents = React.createClass({
                         var course = e.course;
                         var userName = followUser.userName;
                         var courseName = course.colCourse;
-                        var userJson = {key:followUser.colUid,"userName":userName,"courseName":courseName,"userObj":followUser};
+                        var userHeaderIcon = <img src={followUser.avatar}></img>;
+                        var userJson = {key:followUser.colUid,"userName":userName,"courseName":courseName,userHeaderIcon:userHeaderIcon,"userObj":followUser};
                         followsUserArray.push(userJson);
                     });
                     antGroup.setState({"optType":"getMyFollows","activeKey":"userFollows","currentUser":user,"followsUserArray":followsUserArray});
@@ -1286,8 +1317,12 @@ const AntGroupTabComponents = React.createClass({
     /**
      * 进入平台规则说明页面
      */
-    callBackTurnToPlatformRulePage(user){
-        antGroup.setState({"optType":"getPlatformRulePage","currentUser":user,"activeKey":"platformRulePage"});
+    callBackTurnToPlatformRulePage(user,urlType){
+        if(isEmpty(urlType)==false && urlType=="level"){
+            antGroup.setState({"optType":"getScoreOrLevelPage","currentUser":user,"activeKey":"userScores","urlType":urlType});
+        }else{
+            antGroup.setState({"optType":"getPlatformRulePage","currentUser":user,"activeKey":"platformRulePage"});
+        }
     },
     /**
      * 平台规则页面tab切换响应函数
@@ -1300,16 +1335,8 @@ const AntGroupTabComponents = React.createClass({
      * 跳转到积分详情或等级说明的页面
      * @param e
      */
-    turnToScoreOrLevelPage(e){
-        var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
-            target = e.target;
-        }
-        var urlType = target.value;
-        console.log(urlType);
-        antGroup.setState({"optType":"getScoreOrLevelPage","activeKey":"userScores","urlType":urlType});
+    turnToScoreDetailPage(){
+        antGroup.setState({"optType":"getScoreOrLevelPage","activeKey":"userScores","urlType":"score"});
     },
     /**
      * 跳转到直播详情页面
@@ -1370,7 +1397,7 @@ const AntGroupTabComponents = React.createClass({
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
-                    <div  style={{'overflow':'auto','align':'center'}}>
+                    <div className="person_padding" >
                         <PersonCenterComponents ref="personCenter"
                                                 userInfo={antGroup.state.currentPerson}
                                                 callBackTurnToMessagePage={antGroup.turnToMessagePage}
@@ -1392,25 +1419,34 @@ const AntGroupTabComponents = React.createClass({
             if(isEmpty(messageList)==false && messageList.length>0){
                 messageList.forEach(function (e) {
                     var content = e.content;
-                    var fromUser = e.fromUser.userName;
+                    /*var fromUser = e.fromUser.userName;*/
+                    var fromUser = <span>
+                            <span><img style={{width:'20px',height:'20px'}} src={e.fromUser.avatar}></img></span>
+                            <span>{e.fromUser.userName}</span>
+                        </span>;
                     var messageType = e.messageType;
                     var messageTag;
                     if(isEmpty(messageType)==false && messageType=="getMessage"){
                         if(isEmpty(e.messageReturnJson)==false && isEmpty(e.messageReturnJson.messageType)==false){
                             if(e.messageReturnJson.messageType=="text"){
                                 messageTag =  <li style={{'textAlign':'left'}}>
-                                    {fromUser}：{e.content}
+								    <div className="u-name"><span>{fromUser}</span></div>
+                                    <div className="talk-cont"><span className="name "  >{fromUser}</span><span className="borderballoon_le">{e.content}</span></div>
                                 </li>;
                             }else if(e.messageReturnJson.messageType=="imgTag"){
                                 messageTag =  <li style={{'textAlign':'left'}}>
-                                    {fromUser}：{e.imgTagArray}
+								<div className="u-name"><span>{fromUser}</span></div>
+                                <div className="talk-cont"><span className="name " >{fromUser}</span><span  className="borderballoon_le ">{e.imgTagArray}</span></div>
                                 </li>;
                             }
 
                         }
                     }else{
-                        messageTag =  <li style={{'textAlign':'right'}}>
-                            {fromUser}：{content}
+                        messageTag =  <li  className="right" style={{'textAlign':'right'}}>
+						<div className="u-name"><span>{fromUser}</span></div>
+						<div className="talk-cont">
+						    <span className="name">{fromUser}</span><span className="borderballoon">{content}</span>
+						</div> 
                         </li>;
                     }
                     messageTagArray.push(messageTag);
@@ -1423,11 +1459,11 @@ const AntGroupTabComponents = React.createClass({
             }
             var emotionInput;
             if(antGroup.state.currentPerson.colUtype!="SGZH"){
-                emotionInput = <Row>
-                    <Col span={18}>
+                emotionInput = <Row className="group_send">
+                    <Col className="group_send_talk">
                         <EmotionInputComponents></EmotionInputComponents>
                     </Col>
-                    <Col span={4}>
+                    <Col  className="group_send_btn">
                         <Button onClick={antGroup.sendMessage}>发送</Button>
                     </Col>
                 </Row>;
@@ -1442,11 +1478,11 @@ const AntGroupTabComponents = React.createClass({
             >
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div>
-                        <Card style={{height:'300px',width:'730px'}}>
+                        <div className="group_talk">
                             <ul>
                                 {messageTagArray}
                             </ul>
-                        </Card>
+                        </div>
                         {emotionInput}
                     </div>
                 </TabPane>
@@ -1484,10 +1520,29 @@ const AntGroupTabComponents = React.createClass({
                 <Button type="primary" onClick={this.showAddMembersModal}
                         loading={loading}
                 >添加群成员</Button>
-                <Button type="primary" onClick={this.deleteAllSelectedMembers}
+                {/*<Button type="primary" onClick={this.deleteAllSelectedMembers}
                                   disabled={!hasSelected} loading={loading}
             >移除群成员</Button>
-                <span style={{ marginLeft: 8 }}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span></div>;
+                <span style={{ marginLeft: 8 }}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span>*/}
+            </div>;
+
+            var memberLiTag=[];
+            antGroup.state.currentMemberArray.forEach(function (e) {
+                var memberId = e.key;
+                var groupUser = e.groupUser;
+                var userInfo = e.userInfo;
+                var userHeaderIcon;
+                if(isEmpty(userInfo)==false){
+                    userHeaderIcon = <img style={{width:'20px',height:'20px'}} src={userInfo.avatar}></img>;
+                }
+                console.log(memberId+"<===>"+groupUser)
+                var liTag = <li>
+                        <span>{userHeaderIcon}{groupUser}</span>
+                        <span><Button　value={memberId} onClick={antGroup.deleteSelectedMember}>移出群聊</Button></span>
+                    </li>;
+                memberLiTag.push(liTag);
+            });
+
             tabComponent = <Tabs
                 hideAdd
                 ref = "mainTab"
@@ -1506,7 +1561,8 @@ const AntGroupTabComponents = React.createClass({
                             <li>群聊成员{antGroup.state.currentMemberArray.length}人</li>
                             <li>
                                 {topButton}
-                                <Table  style={{width:'300px'}} rowSelection={rowSelection} columns={groupUserTableColumns} dataSource={antGroup.state.currentMemberArray} scroll={{ x: true, y: 400 }} ></Table>
+                                {memberLiTag}
+                                {/*<Table  style={{width:'300px'}} rowSelection={rowSelection} columns={groupUserTableColumns} dataSource={antGroup.state.currentMemberArray} scroll={{ x: true, y: 400 }} ></Table>*/}
                             </li>
                         </ul>
                         <ul>
@@ -1534,25 +1590,32 @@ const AntGroupTabComponents = React.createClass({
             if(isEmpty(messageList)==false && messageList.length>0){
                 messageList.forEach(function (e) {
                     var content = e.content;
-                    var fromUser = e.fromUser.userName;
+                    // var fromUser = e.fromUser.userName;
+                    var fromUser = <span>
+                            <span><img style={{width:'20px',height:'20px'}} src={e.fromUser.avatar}></img></span>
+                            <span>{e.fromUser.userName}</span>
+                        </span>;
                     var messageType = e.messageType;
                     var messageTag;
                     if(isEmpty(messageType)==false && messageType=="getMessage"){
                         if(isEmpty(e.messageReturnJson)==false && isEmpty(e.messageReturnJson.messageType)==false){
                             if(e.messageReturnJson.messageType=="text"){
                                 messageTag =  <li style={{'textAlign':'left'}}>
-                                    {fromUser}：{e.content}
+								    <div className="u-name"><span>{fromUser}</span></div>
+                                    <div className="talk-cont"><span >{fromUser}</span><span className="borderballoon_le">{e.content}</span></div>
                                 </li>;
                             }else if(e.messageReturnJson.messageType=="imgTag"){
                                 messageTag =  <li style={{'textAlign':'left'}}>
-                                    {fromUser}：{e.imgTagArray}
+								 <div className="u-name"><span>{fromUser}</span></div>
+								 <div className="talk-cont"><span >{fromUser}</span><span className="borderballoon_le">{e.imgTagArray}</span></div>
                                 </li>;
                             }
 
                         }
                     }else{
-                        messageTag =  <li style={{'textAlign':'right'}}>
-                            {content}：{fromUser}
+                        messageTag =  <li className="right" style={{'textAlign':'right'}}>
+						<div className="u-name"><span>{fromUser}</span></div>
+						<div className="talk-cont"><span className="name">{fromUser}</span><span className="borderballoon">{content}</span></div>	
                         </li>;
                     }
                     messageTagArray.push(messageTag);
@@ -1627,7 +1690,7 @@ const AntGroupTabComponents = React.createClass({
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab={welcomeTitle} key="userFollows" className="topics_rela">
-                    <div>
+                    <div className="person_attention">
                         <Table onRowClick={antGroup.getPersonCenterInfo} showHeader={true} scroll={{ x: true, y: 400 }} columns={followUserColumns} dataSource={antGroup.state.followsUserArray} pagination={false}/>
                     </div>
                 </TabPane>
@@ -1730,13 +1793,13 @@ const AntGroupTabComponents = React.createClass({
         }else if(antGroup.state.optType=="getPlatformRulePage"){
             userPhoneCard=<div>
                 <span>
-                    <img value="level" onClick={antGroup.turnToScoreOrLevelPage} style={{width:'100px',height:'100px'}} src={antGroup.state.currentUser.user.avatar}></img>
+                    <img style={{width:'100px',height:'100px'}} src={antGroup.state.currentUser.user.avatar}></img>
                 </span>
                 <span>
                     {antGroup.state.currentUser.user.userName}
                 </span>
                 <span>
-                    <Button value="score" onClick={antGroup.turnToScoreOrLevelPage}>{antGroup.state.currentUser.score}积分</Button>
+                    <Button onClick={antGroup.turnToScoreDetailPage}>{antGroup.state.currentUser.score}积分</Button>
                 </span>
             </div>;
             //学生和老师的升级攻略不同
@@ -2053,8 +2116,8 @@ const AntGroupTabComponents = React.createClass({
                     //className="modol_width"
                     transitionName=""  //禁用modal的动画效果
                     footer={[
-                        <button type="primary" htmlType="submit" className="login-form-button" onClick={antGroup.createChatGroup}  >确定</button>,
-                        <button type="ghost" htmlType="reset" className="login-form-button" onClick={antGroup.createChatGroupModalHandleCancel} >取消</button>
+                        <button type="primary" htmlType="submit" className="ant-btn-primary ant-btn" onClick={antGroup.createChatGroup}  >确定</button>,
+                        <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button" onClick={antGroup.createChatGroupModalHandleCancel} >取消</button>
                     ]}
                 >
                     <Row className="ant-form-item">

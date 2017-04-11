@@ -141,7 +141,7 @@ const PersonCenterComponents = React.createClass({
     },
 
     /**
-     * 获取我的关注列表
+     * 获取我的收藏列表
      */
     getUserFavorite(e){
         personCenter.props.callBackGetUserFavorite(personCenter.props.userInfo.user);
@@ -170,8 +170,16 @@ const PersonCenterComponents = React.createClass({
     /**
      * 进入系统平台规则显示页面
      */
-    turnToPlatformRulePage(){
-        personCenter.props.callBackTurnToPlatformRulePage(personCenter.props.userInfo);
+    turnToPlatformRulePage(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var urlType = target.value;
+        console.log(urlType);
+        personCenter.props.callBackTurnToPlatformRulePage(personCenter.props.userInfo,urlType);
     },
 
     render() {
@@ -179,72 +187,55 @@ const PersonCenterComponents = React.createClass({
         var user = personCenter.state.userInfo.user;
         var userName = user.userName;
         if(isEmpty(user.avatar)==false){
-            userPhotoTag = <p className="person_user_bg">
+            userPhotoTag = <span className="person_user_bg">
                 <img src={user.avatar} className="person_user"/>
-				<img src={user.avatar} className="blur"/>		
-            </p>;
+            </span>;
 			<div></div>
         }
         var userLinkCard;
         var userInfoCard;
         //PAREN---家长
         if(user.colUtype=="STUD"){
-            userLinkCard = <Card title={userName+'的个人名片'} className="bai">
-
-                <Row>
-                    <Col span={10}><Button value={user.colUid} icon="question-circle-o" onClick={personCenter.studentAsk}>{userName}的提问</Button></Col>
+            userLinkCard = <div title={userName+'的个人名片'} className="person_container">
+                <Button value={user.colUid} icon="question-circle-o" onClick={personCenter.studentAsk} className="person_cor person_cor1"><div>提问</div></Button>
+                <Button value={user.colUid} icon="area-chart" onClick={personCenter.studentStudyTrack} className="person_cor person_cor2"><div>学习轨迹</div></Button>
+                <Button value={user.colUid} icon="star-o" onClick={personCenter.getUserFavorite} className="person_cor person_cor3"><div>收藏</div></Button>
+                <Button value={user.colUid} icon="heart-o" onClick={personCenter.getMyFollows} className="person_cor person_cor4"><div>关注</div></Button>
+            </div>;
+            userInfoCard = <Card title={personCenter.state.userInfo.user.userName+'的个人名片'}  className="bai">
+                <Row className="person_13">
+                    <Col span={3} className="gary_person">学&nbsp;&nbsp;&nbsp;&nbsp;校：</Col>
+                    <Col span={21} className="black_person">{personCenter.state.userInfo.school}</Col>
+                    <Col span={3} className="gary_person">年&nbsp;&nbsp;&nbsp;&nbsp;级：</Col>
+                    <Col span={21} className="black_person ">{personCenter.state.userInfo.grade}</Col>
                 </Row>
                 <Row>
-                    <Col span={10}><Button value={user.colUid} icon="area-chart" onClick={personCenter.studentStudyTrack}>{userName}的学习轨迹</Button></Col>
-                </Row>
-                <Row>
-                    <Col span={10}><Button value={user.colUid} icon="star-o" onClick={personCenter.getUserFavorite}>{userName}的收藏</Button></Col>
-                </Row>
-                <Row>
-                    <Col span={10}><Button value={user.colUid} icon="heart-o" onClick={personCenter.getMyFollows}>{userName}的关注</Button></Col>
-                </Row>
-            </Card>;
-            userInfoCard = <Card title={personCenter.state.userInfo.user.userName+'的个人名片'}  style={{ width: 700 }}>
-                <Row>
-                    <Col span={4} className="person_le">学校：</Col>
-                    <Col span={8}>{personCenter.state.userInfo.school}</Col>
-                    <Col span={4}>年级：</Col>
-                    <Col span={8}>{personCenter.state.userInfo.grade}</Col>
-                </Row>
-                <Row>
-                    <Col span={4}>个人简介：</Col>
-                    <Col span={10}>这家伙很懒，还没编辑个人简介</Col>
+                    <Col span={3} className="gary_person">个人简介：</Col>
+                    <Col span={21} className="black_person">这家伙很懒，还没编辑个人简介</Col>
                 </Row>
             </Card>;
         }else{
 
-            userLinkCard = <Card title={userName+'的个人名片'}  className="bai">
 
-                <Row>
-                    <Col span={10}><Button value={user.colUid} icon="question-circle-o" onClick={personCenter.getLiveInfo}>{userName}的直播</Button></Col>
+            userLinkCard = <div title={userName+'的个人名片'}  className="person_container ">
+                <Button value={user.colUid} icon="play-circle-o"  className="person_cor person_cor1" onClick={personCenter.getLiveInfo}><div>直播</div></Button>
+                <Button value={user.colUid} icon="area-chart" className="person_cor person_cor2" onClick={personCenter.getMyCourseWares}><div>资源</div></Button>
+                <Button value={user.colUid} icon="star-o" className="person_cor person_cor3" onClick={personCenter.getMySubjects}><div>题库</div></Button>
+                <Button value={user.colUid} icon="heart-o" className="person_cor person_cor4" onClick={personCenter.getMyFollows}><div>关注</div></Button>
+            </div>;
+			
+            userInfoCard = <Card title={personCenter.state.userInfo.user.userName+'的个人名片'}  className="bai">
+                <Row className="person_13">
+                    <Col span={3} className="gary_person">学&nbsp;&nbsp;&nbsp;&nbsp;校：</Col>
+                    <Col span={21} className="black_person">{personCenter.state.userInfo.school}</Col>
+                    <Col span={3} className="gary_person">科&nbsp;&nbsp;&nbsp;&nbsp;目：</Col>
+                    <Col span={21} className="black_person">{personCenter.state.userInfo.course}</Col>
+                    <Col span={3} className="gary_person">年&nbsp;&nbsp;&nbsp;&nbsp;级：</Col>
+                    <Col span={21} className="black_person">{personCenter.state.userInfo.grade}</Col>
                 </Row>
                 <Row>
-                    <Col span={10}><Button value={user.colUid} icon="area-chart" onClick={personCenter.getMyCourseWares}>{userName}的资源</Button></Col>
-                </Row>
-                <Row>
-                    <Col span={10}><Button value={user.colUid} icon="star-o" onClick={personCenter.getMySubjects}>{userName}的题库</Button></Col>
-                </Row>
-                <Row>
-                    <Col span={10}><Button value={user.colUid} icon="heart-o" onClick={personCenter.getMyFollows}>{userName}的关注</Button></Col>
-                </Row>
-            </Card>;
-            userInfoCard = <Card title={personCenter.state.userInfo.user.userName+'的个人名片'}  style={{ width: 700 }}  className="bai">
-                <Row>
-                    <Col span={4}>学校：</Col>
-                    <Col span={8}>{personCenter.state.userInfo.school}</Col>
-                    <Col span={4}>科目：</Col>
-                    <Col span={8}>{personCenter.state.userInfo.course}</Col>
-                    <Col span={4}>年级：</Col>
-                    <Col span={8}>{personCenter.state.userInfo.grade}</Col>
-                </Row>
-                <Row>
-                    <Col span={4}>个人简介：</Col>
-                    <Col span={10}>该老师很忙，还没编辑个人简介</Col>
+                    <Col span={3} className="gary_person">个人简介：</Col>
+                    <Col span={21} className="black_person">该老师很忙，还没编辑个人简介</Col>
                 </Row>
             </Card>;
         }
@@ -252,7 +243,7 @@ const PersonCenterComponents = React.createClass({
         var followButton;
         console.log("isFollow:"+personCenter.state.isFollow);
         if(personCenter.state.isFollow==false){
-            followButton = <Button icon="plus" onClick={personCenter.followUser}>关注</Button>;
+            followButton = <Button icon="plus" onClick={personCenter.followUser} className="persono_btn_blue">关注</Button>;
         }else {
             followButton = <Button icon="plus" onClick={personCenter.unfollowUser}>取消关注</Button>;
         }
@@ -261,19 +252,23 @@ const PersonCenterComponents = React.createClass({
             <div>
                 <Card className="bai">
                     {userPhotoTag}
-                    <p className="person_btn">
-                        <Button onClick={personCenter.turnToPlatformRulePage}>{personCenter.state.userInfo.score}积分</Button>
-                        <Button onClick={personCenter.turnToPlatformRulePage}>{personCenter.state.userInfo.level.name}</Button>
-                    </p>
-                </Card>
-                <Card className="bai">
-                    <Button icon="message" value={personCenter.state.userInfo.user.colUid} onClick={personCenter.sendMessage}>发消息</Button>
-                    {followButton}
-                </Card>
 
+                    <span className="person_btn">
+                        <Button className="antnest_talk" 　value="score" onClick={personCenter.turnToPlatformRulePage}>{personCenter.state.userInfo.score}积分</Button>
+						<Button value="level" onClick={personCenter.turnToPlatformRulePage} >{personCenter.state.userInfo.level.name}</Button>
+                    </span>
+					<span className="person_btn_ri">
+                    <Button icon="message" value={personCenter.state.userInfo.user.colUid} onClick={personCenter.sendMessage} className="antnest_talk  persono_btn_blue">发消息</Button>
+                     {followButton}
+					 </span>
+
+                   
+                </Card>
+               
+                <div>{userLinkCard}
                 {userInfoCard}
-                {userLinkCard}
-
+                
+               </div>
             </div>
         );
     },
