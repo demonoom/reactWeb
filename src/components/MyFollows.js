@@ -1,7 +1,7 @@
 /**
  * Created by madapeng on 17-4-5.
  */
-import {Tabs, Breadcrumb, Icon,message,Card,Button} from 'antd';
+import {Tabs, Breadcrumb, Icon, message, Card, Button} from 'antd';
 import React from 'react';
 import {doWebService} from '../WebServiceHelper';
 import PersonCenterComponents from './antGroup/PersonCenterComponents';
@@ -17,46 +17,77 @@ class MyFollows extends React.Component {
             type: 1,
             pageNo: 1,
             data: [],
-            antGroupTabResouceType:'personCenter',
-            antGroupTabVisible:false
+            antGroupTabResouceType: 'personCenter',
+            antGroupTabVisible: false
         };
-            this.htmlTemplet={}
-    }
-   changeState(dataa){
-        this.setState({data:dataa});
-};
-    componentWillMount(){
-
-       this.getData(this.changeState.bind(this));
+        this.htmlTemplet = {};
     }
 
-    getData(fn){
+    changeState(dataa) {
+        this.setState({data: dataa});
+    };
+
+    componentWillMount() {
+
+        this.getData(this.changeState.bind(this));
+    }
+
+    getData(fn) {
         var param = {
-            "method":'getMyFollows',
+            "method": 'getMyFollows',
             "userId": this.state.ident,
         };
 
         doWebService(JSON.stringify(param), {
-            onResponse : function(res) {
-                if(res.success){
-                   if(fn)fn(res.response);
-                }else{
+            onResponse: function (res) {
+                if (res.success) {
+                    if (fn) fn(res.response);
+                } else {
                     message.error(res.msg);
                 }
             },
-            onError : function(error) {
+            onError: function (error) {
                 message.error(error);
             }
         });
     }
 
+    unFollow(toUser) {
+        var _this = this;
+        var param = {
+            "method": 'unFollow',
+            "userId": this.state.ident,
+            "toUserId": toUser.colUid,
+        };
+
+        doWebService(JSON.stringify(param), {
+            onResponse: function (res) {
+                if (res.success) {
+                    message.info("取消成功！");
+                    _this.setState({data: []})
+                } else {
+                    message.error(res.msg);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+
+    }
+
     viewProsenInfo(userinfo) {
-        this.props.callEvent({resouceType: 'visitAntGroup', ref: 'antGroupTabComponents', methond:'callCurrentPage', param: userinfo });
+        this.props.callEvent({
+            resouceType: 'visitAntGroup',
+            ref: 'antGroupTabComponents',
+            methond: 'callCurrentPage',
+            param: userinfo
+        });
     }
 
     buildTemplet(dataArray) {
 
-        this.htmlTemplet=null;
+        this.htmlTemplet = null;
         if (!dataArray || !dataArray.length) {
             this.htmlTemplet = <img className="noDataTipImg" src={require('./images/noDataTipImg.png')}/>;
             return;
@@ -64,22 +95,22 @@ class MyFollows extends React.Component {
 
         this.htmlTemplet = dataArray.map((e, i) => {
             let refkey = e.uid + "#" + e.courseId;
-            return <div className="ant-card-body"><div style={{ width: 240 , display:'inline-block' }} bodyStyle={{ padding:'5px' }}  key={refkey}>
-                <div className="custom-image">
-                    <a  onClick={this.viewProsenInfo.bind(this,e.user)} target="_blank" > <img alt={e.user.userName + '头像'} width="100%" src={e.user.avatar} /></a>
-                </div>
-                <div className="custom-card">
-                    <p> <a   target="_blank" title="查看"  onClick={this.viewProsenInfo.bind(this,e.user)} ><Button icon="eye-o"/></a>
-                        <a   target="_blank"  title="取消收藏"  ><Button icon="star"/></a>
-                    </p>
-                    <h3>{e.user.userName}</h3>
-                    <p>学校：{e.user.schoolName}</p>
-                    <p>科目：{e.course.colCourse}</p>
-                </div>
+            return <div className="ant-card-body">
+                <Card style={{width: 240, display: 'inline-block'}} bodyStyle={{padding: '5px'}} key={refkey}>
+                    <div className="custom-image">
+                        <a onClick={this.viewProsenInfo.bind(this, e.user)} target="_blank"> <img
+                            alt={e.user.userName + '头像'} width="100%" src={e.user.avatar}/></a>
+                    </div>
+                    <div className="custom-card">
+                        <p><a target="_blank" title="取消关注" onClick={this.unFollow.bind(this, e.user)}><Button icon="star"/></a></p>
+                        <h3>{e.user.userName}</h3>
+                        <p>学校：{e.user.schoolName}</p>
+                        <p>科目：{e.course.colCourse}</p>
+                    </div>
+                </Card>
+
             </div>
-			
-</div>
-        } );
+        });
 
     }
 
