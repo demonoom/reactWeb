@@ -1244,8 +1244,11 @@ const AntNestTabComponents = React.createClass({
         }
         return (
             <div>
-                <Modal title="评论" visible={antNest.state.discussModalVisible}
-                       onOk={antNest.discussModalHandleOk} onCancel={antNest.discussModalHandleCancel}
+                <Modal title="评论"
+                       visible={antNest.state.discussModalVisible}
+                       transitionName=""  //禁用modal的动画效果
+                       onOk={antNest.discussModalHandleOk}
+                       onCancel={antNest.discussModalHandleCancel}
                 >
                     <div>
                         <Row>
@@ -1254,8 +1257,11 @@ const AntNestTabComponents = React.createClass({
                         </Row>
                     </div>
                 </Modal>
-                <Modal title="发布说说" visible={antNest.state.addTopicModalVisible}
-                       onOk={antNest.addTopicModalHandleOk} onCancel={antNest.addTopicModalHandleCancel}
+                <Modal title="发布说说"
+                       visible={antNest.state.addTopicModalVisible}
+                       transitionName=""  //禁用modal的动画效果
+                       onOk={antNest.addTopicModalHandleOk}
+                       onCancel={antNest.addTopicModalHandleCancel}
                 >
                     <div>
                         {topicTitle}
@@ -1270,8 +1276,11 @@ const AntNestTabComponents = React.createClass({
                     </div>
 
                 </Modal>
-                <Modal title="立即参与" visible={antNest.state.partakeModalVisible}
-                       onOk={antNest.partakeModalHandleOk} onCancel={antNest.partakeModalHandleCancel}
+                <Modal title="立即参与"
+                       visible={antNest.state.partakeModalVisible}
+                       transitionName=""  //禁用modal的动画效果
+                       onOk={antNest.partakeModalHandleOk}
+                       onCancel={antNest.partakeModalHandleCancel}
                 >
                     <div>
                         <Row>

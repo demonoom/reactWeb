@@ -566,7 +566,6 @@ const AntGroupTabComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse : function(ret) {
-                console.log(ret.msg);
                 var response = ret.response;
                 response.forEach(function (e) {
                     var userId = e.colUid;
@@ -597,7 +596,6 @@ const AntGroupTabComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse : function(ret) {
-                console.log(ret.msg);
                 var response = ret.response;
                 response.forEach(function (e) {
                     var userId = e.colUid;
@@ -720,9 +718,7 @@ const AntGroupTabComponents = React.createClass({
      * 群组成员列表选中事件
      */
     onGroupUserTableSelectChange(selectedRowKeys){
-        console.log('selectedRowKeys changed: ', selectedRowKeys);
         var selectedRowKeysStr =selectedRowKeys.join(",");
-        console.log("selectedRowKeysStr:"+selectedRowKeysStr);
         this.setState({ selectedRowKeys,selectedRowKeysStr });
     },
 
@@ -1048,7 +1044,6 @@ const AntGroupTabComponents = React.createClass({
             target = e.target;
         }
         var userId = target.value;
-        console.log("userId===>"+userId);
         antGroup.getPersonalCenterData(userId);
     },
     /**
@@ -1090,7 +1085,6 @@ const AntGroupTabComponents = React.createClass({
 
         doWebService(JSON.stringify(param), {
             onResponse : function(ret) {
-                console.log("getSubjectDataMSG:"+ret.msg);
                 subjectList.splice(0);
                 data.splice(0);
                 var response = ret.response;
@@ -1098,7 +1092,6 @@ const AntGroupTabComponents = React.createClass({
                     antGroup.setState({totalCount:0});
                 }else {
                     response.forEach(function (e) {
-                        console.log("getUserSubjectsByUid:"+e);
                         var key = e.id;
                         var name=e.user.userName;
                         var popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>'+e.content+'<hr/><span class="answer_til answer_til_2">答案：</span>'+e.answer+'</div>';
@@ -1162,7 +1155,6 @@ const AntGroupTabComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse : function(ret) {
-                console.log("teachMSG:"+ret.msg+"=="+ret.response.length);
                 courseWareList=new Array();
                 courseWareList.splice(0);
                 var response = ret.response;
@@ -1305,7 +1297,6 @@ const AntGroupTabComponents = React.createClass({
                         if(isEmpty(password)==false){
                             keyIcon = <Icon type="key" />;
                         }
-                        console.log("getLiveInfoByUid======》"+title+"=="+cover+"=="+userName);
                         var liveCard = <Card style={{ width: 200 }} bodyStyle={{ padding: 0 }}>
                             <div className="custom-image">
                                 <img className="attention_img"  id={id} onClick={antGroup.turnToLiveInfoShowPage} alt="example" width="100%" src={cover} />
@@ -1373,7 +1364,6 @@ const AntGroupTabComponents = React.createClass({
         }
         var liveInfoId = target.id;
         // navigator.setUserAgent("Mozilla/5.0 (Linux; U; Android %s) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1");
-        console.log("userAgent"+navigator.userAgent);
         antGroup.setState({"optType":"turnToLiveInfoShowPage","activeKey":"turnToLiveInfoShowPage","liveInfoId":liveInfoId});
     },
 
@@ -1444,7 +1434,12 @@ const AntGroupTabComponents = React.createClass({
                 messageList.forEach(function (e) {
                     var content = e.content;
                     var fromUser = e.fromUser.userName;
-                    var userPhoneIcon=<img src={e.fromUser.avatar}></img>;
+                    var userPhoneIcon;
+                    if(isEmpty(e.fromUser.avatar)){
+                        userPhoneIcon=<img src={require('../images/maaee_face.png')}></img>;
+                    }else{
+                        userPhoneIcon=<img src={e.fromUser.avatar}></img>;
+                    }
                     var messageType = e.messageType;
                     var messageTag;
                     if(isEmpty(messageType)==false && messageType=="getMessage"){
@@ -1460,7 +1455,6 @@ const AntGroupTabComponents = React.createClass({
                                 <div className="talk-cont"><span className="name " >{userPhoneIcon}</span><span  className="borderballoon_le ">{e.imgTagArray}</span></div>
                                 </li>;
                             }
-
                         }
                     }else{
                         messageTag =  <li  className="right" style={{'textAlign':'right'}}>
@@ -1555,8 +1549,9 @@ const AntGroupTabComponents = React.createClass({
                 var userHeaderIcon;
                 if(isEmpty(userInfo)==false){
                     userHeaderIcon = <img src={userInfo.avatar}></img>;
+                }else{
+                    userHeaderIcon=<img src={require('../images/maaee_face.png')}></img>;
                 }
-                console.log(memberId+"<===>"+groupUser)
                 var liTag = <li>
                         <span>{userHeaderIcon}{groupUser}</span>
                         <span><Button　value={memberId} onClick={antGroup.deleteSelectedMember}>移出群聊</Button></span>
@@ -1612,7 +1607,12 @@ const AntGroupTabComponents = React.createClass({
                 messageList.forEach(function (e) {
                     var content = e.content;
                     var fromUser = e.fromUser.userName;
-                    var userPhoneIcon=<img  src={e.fromUser.avatar}></img>;
+                    var userPhoneIcon;
+                    if(isEmpty(e.fromUser.avatar)){
+                        userPhoneIcon=<img src={require('../images/maaee_face.png')}></img>;
+                    }else{
+                        userPhoneIcon=<img src={e.fromUser.avatar}></img>;
+                    }
                     var messageType = e.messageType;
                     var messageTag;
                     if(isEmpty(messageType)==false && messageType=="getMessage"){
