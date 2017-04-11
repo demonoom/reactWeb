@@ -185,15 +185,12 @@ const AntGroupTabComponents = React.createClass({
             //家长直接进入聊天窗口
             //蚂蚁君点击进入后，只能接收消息，无法发送消息
             antGroup.setState({"optType":"sendMessage","currentPerson":record.userObj});
-            antGroup.turnToMessagePage(record.key);
+            antGroup.turnToMessagePage(record.userObj);
         }else {
             antGroup.getPersonalCenterData(record.key);
         }
     },
-// proxy methond
-    callCurrentPage(obj){
-        this.getPersonalCenterData(obj.colUid);
-    },
+
     /**
      * 获取个人中心需要的数据,老师和学生可通用,后期需要什么再添加
      */
@@ -212,7 +209,9 @@ const AntGroupTabComponents = React.createClass({
             }
         });
     },
-
+    /**
+     * 返回系统联系人的主页面
+     */
     returnAntGroupMainPage(){
         antGroup.getAntGroup();
         antGroup.setState({"optType":"getUserList","activeKey":'loginWelcome'});
@@ -231,8 +230,12 @@ const AntGroupTabComponents = React.createClass({
         var uuid = s.join("");
         return uuid;
     },
-
-    turnToMessagePage(userId){
+    /**
+     * 进入收发消息的窗口
+     * @param user
+     */
+    turnToMessagePage(user){
+        var userId = user.colUid;
         ms = new MsgConnection();
         messageList.splice(0);
         var loginUserId = sessionStorage.getItem("ident");
@@ -313,7 +316,7 @@ const AntGroupTabComponents = React.createClass({
         }
         };
         ms.connect(pro);
-        antGroup.setState({"optType":"sendMessage","userIdOfCurrentTalk":userId});
+        antGroup.setState({"optType":"sendMessage","userIdOfCurrentTalk":userId,"currentUser":user});
     },
 
     turnToChatGroupMessagePage(groupObj){
@@ -533,12 +536,20 @@ const AntGroupTabComponents = React.createClass({
      * @param index　当前行的索引顺序，从０开始
      */
     sendGroupMessage(record, index){
-        console.log("key："+record.key);
-        antGroup.setState({"optType":"sendGroupMessage","currentGroupObj":record.groupObj});
         antGroup.turnToChatGroupMessagePage(record.groupObj);
     },
 
+    /**
+     * 返回当前聊天群组窗口页面（对应tab组件工具栏上的返回按钮）
+     */
+    returnToChatGroupMessagePage(){
+        var currentGroupObj = antGroup.state.currentGroupObj;
+        antGroup.turnToChatGroupMessagePage(currentGroupObj);
+    },
 
+    /**
+     * 显示创建群组的窗口
+     */
     showCreateChatGroup(){
         antGroup.getUserContactsMockData();
         antGroup.setState({"createChatGroupModalVisible":true,"updateGroupId":''});
@@ -555,7 +566,6 @@ const AntGroupTabComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse : function(ret) {
-                console.log(ret.msg);
                 var response = ret.response;
                 response.forEach(function (e) {
                     var userId = e.colUid;
@@ -586,7 +596,6 @@ const AntGroupTabComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse : function(ret) {
-                console.log(ret.msg);
                 var response = ret.response;
                 response.forEach(function (e) {
                     var userId = e.colUid;
@@ -709,9 +718,7 @@ const AntGroupTabComponents = React.createClass({
      * 群组成员列表选中事件
      */
     onGroupUserTableSelectChange(selectedRowKeys){
-        console.log('selectedRowKeys changed: ', selectedRowKeys);
         var selectedRowKeysStr =selectedRowKeys.join(",");
-        console.log("selectedRowKeysStr:"+selectedRowKeysStr);
         this.setState({ selectedRowKeys,selectedRowKeysStr });
     },
 
@@ -912,7 +919,6 @@ const AntGroupTabComponents = React.createClass({
                     antGroup.getUserChatGroup();
                 }else if(optType=="removeMember"){
                     antGroup.refreshLocalMembers(memberIds);
-                    antGroup.setState({selectedRowKeysStr:'',selectedRowKeys:[]});
                 }
             },
             onError: function (error) {
@@ -985,15 +991,15 @@ const AntGroupTabComponents = React.createClass({
     /**
      * 学生的提问
      */
-    callBackTurnToAsk(userId){
-        antGroup.setState({"optType":"turnToAsk","studentId":userId,"activeKey":"我发起过的提问"});
+    callBackTurnToAsk(user){
+        antGroup.setState({"optType":"turnToAsk","currentUser":user,"activeKey":"我发起过的提问"});
     },
 
     /**
      * 学生的学习轨迹
      */
-    callBackStudyTrack(userId){
-        antGroup.setState({"optType":"turnStudyTrack","studentId":userId,"activeKey":"studyTrack"});
+    callBackStudyTrack(user){
+        antGroup.setState({"optType":"turnStudyTrack","currentUser":user,"activeKey":"studyTrack"});
     },
     /**
      * 获取关注列表
@@ -1038,7 +1044,6 @@ const AntGroupTabComponents = React.createClass({
             target = e.target;
         }
         var userId = target.value;
-        console.log("userId===>"+userId);
         antGroup.getPersonalCenterData(userId);
     },
     /**
@@ -1046,8 +1051,21 @@ const AntGroupTabComponents = React.createClass({
      *
      */
     returnPersonCenter(){
-        var userId = antGroup.state.currentUser.colUid;
-        antGroup.getPersonalCenterData(userId);
+        var userInfo = antGroup.state.currentUser;
+        var userId = userInfo.colUid;
+        var userType = userInfo.colUtype;
+        if(isEmpty(userId)){
+            userId = userInfo.user.colUid;
+            userType = userInfo.user.colUtype;
+        }
+        if(userType=="PAREN" || userType=="EADM" || userType=="SGZH"){
+            //1.家长直接进入聊天窗口
+            //2.蚂蚁君点击进入后，只能接收消息，无法发送消息
+            //以上1/2操作完成后，如果要返回，只能返回用户列表
+            antGroup.returnAntGroupMainPage();
+        }else {
+            antGroup.getPersonalCenterData(userId);
+        }
     },
 
     /**
@@ -1067,7 +1085,6 @@ const AntGroupTabComponents = React.createClass({
 
         doWebService(JSON.stringify(param), {
             onResponse : function(ret) {
-                console.log("getSubjectDataMSG:"+ret.msg);
                 subjectList.splice(0);
                 data.splice(0);
                 var response = ret.response;
@@ -1075,7 +1092,6 @@ const AntGroupTabComponents = React.createClass({
                     antGroup.setState({totalCount:0});
                 }else {
                     response.forEach(function (e) {
-                        console.log("getUserSubjectsByUid:"+e);
                         var key = e.id;
                         var name=e.user.userName;
                         var popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>'+e.content+'<hr/><span class="answer_til answer_til_2">答案：</span>'+e.answer+'</div>';
@@ -1139,7 +1155,6 @@ const AntGroupTabComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse : function(ret) {
-                console.log("teachMSG:"+ret.msg+"=="+ret.response.length);
                 courseWareList=new Array();
                 courseWareList.splice(0);
                 var response = ret.response;
@@ -1282,10 +1297,9 @@ const AntGroupTabComponents = React.createClass({
                         if(isEmpty(password)==false){
                             keyIcon = <Icon type="key" />;
                         }
-                        console.log("getLiveInfoByUid======》"+title+"=="+cover+"=="+userName);
                         var liveCard = <Card style={{ width: 200 }} bodyStyle={{ padding: 0 }}>
                             <div className="custom-image">
-                                <img id={id} onClick={antGroup.turnToLiveInfoShowPage} alt="example" width="100%" src={cover} />
+                                <img className="attention_img"  id={id} onClick={antGroup.turnToLiveInfoShowPage} alt="example" width="100%" src={cover} />
                             </div>
                             <div className="custom-card" value={id} onClick={antGroup.turnToLiveInfoShowPage}>
                                 <h3>{title}</h3>
@@ -1317,11 +1331,11 @@ const AntGroupTabComponents = React.createClass({
     /**
      * 进入平台规则说明页面
      */
-    callBackTurnToPlatformRulePage(user,urlType){
+    callBackTurnToPlatformRulePage(userInfo,urlType){
         if(isEmpty(urlType)==false && urlType=="level"){
-            antGroup.setState({"optType":"getScoreOrLevelPage","currentUser":user,"activeKey":"userScores","urlType":urlType});
+            antGroup.setState({"optType":"getScoreOrLevelPage","currentUser":userInfo,"activeKey":"userScores","urlType":urlType});
         }else{
-            antGroup.setState({"optType":"getPlatformRulePage","currentUser":user,"activeKey":"platformRulePage"});
+            antGroup.setState({"optType":"getPlatformRulePage","currentUser":userInfo,"activeKey":"platformRulePage"});
         }
     },
     /**
@@ -1350,7 +1364,6 @@ const AntGroupTabComponents = React.createClass({
         }
         var liveInfoId = target.id;
         // navigator.setUserAgent("Mozilla/5.0 (Linux; U; Android %s) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1");
-        console.log("userAgent"+navigator.userAgent);
         antGroup.setState({"optType":"turnToLiveInfoShowPage","activeKey":"turnToLiveInfoShowPage","liveInfoId":liveInfoId});
     },
 
@@ -1359,7 +1372,6 @@ const AntGroupTabComponents = React.createClass({
      * @param user
      */
     callBackGetUserFavorite(user){
-        console.log("favorite"+user.colUid+"=="+user.userName);
         antGroup.setState({"optType":"userFavorite","studentId":user.colUid,"activeKey":"1"});
     },
 
@@ -1370,6 +1382,8 @@ const AntGroupTabComponents = React.createClass({
         var toolbarExtra = <div className="ant-tabs-right"><Button onClick={antGroup.showCreateChatGroup}>创建群聊</Button></div>;
 
         var returnToolBar = <div className="ant-tabs-right"><Button onClick={antGroup.returnAntGroupMainPage}>返回</Button></div>;
+        var returnPersonCenterToolBar = <div className="ant-tabs-right"><Button onClick={antGroup.returnPersonCenter}>返回</Button></div>;
+        var returnChatGroupMessagePageToolBar = <div className="ant-tabs-right"><Button onClick={antGroup.returnToChatGroupMessagePage}>返回</Button></div>;
         var tabComponent;
         var userPhoneCard;
         if(antGroup.state.optType=="getUserList"){
@@ -1419,11 +1433,13 @@ const AntGroupTabComponents = React.createClass({
             if(isEmpty(messageList)==false && messageList.length>0){
                 messageList.forEach(function (e) {
                     var content = e.content;
-                    /*var fromUser = e.fromUser.userName;*/
-                    var fromUser = <span>
-                            <span><img style={{width:'20px',height:'20px'}} src={e.fromUser.avatar}></img></span>
-                            <span>{e.fromUser.userName}</span>
-                        </span>;
+                    var fromUser = e.fromUser.userName;
+                    var userPhoneIcon;
+                    if(isEmpty(e.fromUser.avatar)){
+                        userPhoneIcon=<img src={require('../images/maaee_face.png')}></img>;
+                    }else{
+                        userPhoneIcon=<img src={e.fromUser.avatar}></img>;
+                    }
                     var messageType = e.messageType;
                     var messageTag;
                     if(isEmpty(messageType)==false && messageType=="getMessage"){
@@ -1431,21 +1447,20 @@ const AntGroupTabComponents = React.createClass({
                             if(e.messageReturnJson.messageType=="text"){
                                 messageTag =  <li style={{'textAlign':'left'}}>
 								    <div className="u-name"><span>{fromUser}</span></div>
-                                    <div className="talk-cont"><span className="name "  >{fromUser}</span><span className="borderballoon_le">{e.content}</span></div>
+                                    <div className="talk-cont"><span className="name "  >{userPhoneIcon}</span><span className="borderballoon_le">{e.content}</span></div>
                                 </li>;
                             }else if(e.messageReturnJson.messageType=="imgTag"){
                                 messageTag =  <li style={{'textAlign':'left'}}>
 								<div className="u-name"><span>{fromUser}</span></div>
-                                <div className="talk-cont"><span className="name " >{fromUser}</span><span  className="borderballoon_le ">{e.imgTagArray}</span></div>
+                                <div className="talk-cont"><span className="name " >{userPhoneIcon}</span><span  className="borderballoon_le ">{e.imgTagArray}</span></div>
                                 </li>;
                             }
-
                         }
                     }else{
                         messageTag =  <li  className="right" style={{'textAlign':'right'}}>
 						<div className="u-name"><span>{fromUser}</span></div>
 						<div className="talk-cont">
-						    <span className="name">{fromUser}</span><span className="borderballoon">{content}</span>
+						    <span className="name">{userPhoneIcon}</span><span className="borderballoon">{content}</span>
 						</div> 
                         </li>;
                     }
@@ -1473,7 +1488,7 @@ const AntGroupTabComponents = React.createClass({
                 ref = "personCenterTab"
                 activeKey={this.state.activeKey}
                 defaultActiveKey={this.state.defaultActiveKey}
-                tabBarExtraContent={returnToolBar}
+                tabBarExtraContent={returnPersonCenterToolBar}
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
@@ -1533,9 +1548,10 @@ const AntGroupTabComponents = React.createClass({
                 var userInfo = e.userInfo;
                 var userHeaderIcon;
                 if(isEmpty(userInfo)==false){
-                    userHeaderIcon = <img style={{width:'20px',height:'20px'}} src={userInfo.avatar}></img>;
+                    userHeaderIcon = <img src={userInfo.avatar}></img>;
+                }else{
+                    userHeaderIcon=<img src={require('../images/maaee_face.png')}></img>;
                 }
-                console.log(memberId+"<===>"+groupUser)
                 var liTag = <li>
                         <span>{userHeaderIcon}{groupUser}</span>
                         <span><Button　value={memberId} onClick={antGroup.deleteSelectedMember}>移出群聊</Button></span>
@@ -1548,7 +1564,7 @@ const AntGroupTabComponents = React.createClass({
                 ref = "mainTab"
                 activeKey={this.state.activeKey}
                 defaultActiveKey={this.state.defaultActiveKey}
-                tabBarExtraContent={returnToolBar}
+                tabBarExtraContent={returnChatGroupMessagePageToolBar}
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
@@ -1582,7 +1598,7 @@ const AntGroupTabComponents = React.createClass({
         }else if(antGroup.state.optType=="sendGroupMessage"){
             returnToolBar = <div className="ant-tabs-right">
                 <Button onClick={antGroup.setChatGroup} className="antnest_talk">设置</Button>
-                <Button onClick={antGroup.returnAntGroupMainPage}>返回</Button>
+                <Button onClick={antGroup.getUserChatGroup}>返回</Button>
             </div>;
             welcomeTitle=antGroup.state.currentGroupObj.name;
             var messageTagArray=[];
@@ -1590,11 +1606,13 @@ const AntGroupTabComponents = React.createClass({
             if(isEmpty(messageList)==false && messageList.length>0){
                 messageList.forEach(function (e) {
                     var content = e.content;
-                    // var fromUser = e.fromUser.userName;
-                    var fromUser = <span>
-                            <span><img style={{width:'20px',height:'20px'}} src={e.fromUser.avatar}></img></span>
-                            <span>{e.fromUser.userName}</span>
-                        </span>;
+                    var fromUser = e.fromUser.userName;
+                    var userPhoneIcon;
+                    if(isEmpty(e.fromUser.avatar)){
+                        userPhoneIcon=<img src={require('../images/maaee_face.png')}></img>;
+                    }else{
+                        userPhoneIcon=<img src={e.fromUser.avatar}></img>;
+                    }
                     var messageType = e.messageType;
                     var messageTag;
                     if(isEmpty(messageType)==false && messageType=="getMessage"){
@@ -1602,12 +1620,12 @@ const AntGroupTabComponents = React.createClass({
                             if(e.messageReturnJson.messageType=="text"){
                                 messageTag =  <li style={{'textAlign':'left'}}>
 								    <div className="u-name"><span>{fromUser}</span></div>
-                                    <div className="talk-cont"><span >{fromUser}</span><span className="borderballoon_le">{e.content}</span></div>
+                                    <div className="talk-cont"><span >{userPhoneIcon}</span><span className="borderballoon_le">{e.content}</span></div>
                                 </li>;
                             }else if(e.messageReturnJson.messageType=="imgTag"){
                                 messageTag =  <li style={{'textAlign':'left'}}>
 								 <div className="u-name"><span>{fromUser}</span></div>
-								 <div className="talk-cont"><span >{fromUser}</span><span className="borderballoon_le">{e.imgTagArray}</span></div>
+								 <div className="talk-cont"><span >{userPhoneIcon}</span><span className="borderballoon_le">{e.imgTagArray}</span></div>
                                 </li>;
                             }
 
@@ -1615,7 +1633,7 @@ const AntGroupTabComponents = React.createClass({
                     }else{
                         messageTag =  <li className="right" style={{'textAlign':'right'}}>
 						<div className="u-name"><span>{fromUser}</span></div>
-						<div className="talk-cont"><span className="name">{fromUser}</span><span className="borderballoon">{content}</span></div>	
+						<div className="talk-cont"><span className="name">{userPhoneIcon}</span><span className="borderballoon">{content}</span></div>
                         </li>;
                     }
                     messageTagArray.push(messageTag);
@@ -1648,14 +1666,14 @@ const AntGroupTabComponents = React.createClass({
                 </TabPane>
             </Tabs>;
         }else if(antGroup.state.optType=="turnToAsk"){
-            var currentPageLink = "http://www.maaee.com:80/Excoord_PhoneService/quiz/getUserAskedQuiz/" + antGroup.state.studentId;
+            var currentPageLink = "http://www.maaee.com:80/Excoord_PhoneService/quiz/getUserAskedQuiz/" + antGroup.state.currentUser.colUid;
             welcomeTitle="我发起过的提问";
             tabComponent = <Tabs
                 hideAdd
                 ref = "studentAskTab"
                 activeKey={this.state.activeKey}
                 defaultActiveKey={this.state.defaultActiveKey}
-                tabBarExtraContent={returnToolBar}
+                tabBarExtraContent={returnPersonCenterToolBar}
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab="我发起过的提问" key="我发起过的提问">
@@ -1664,14 +1682,14 @@ const AntGroupTabComponents = React.createClass({
             </Tabs>;
         }
         else if(antGroup.state.optType=="turnStudyTrack"){
-            var currentPageLink = "http://www.maaee.com:80/Excoord_PhoneService/user/studytrack/" + antGroup.state.studentId;
+            var currentPageLink = "http://www.maaee.com:80/Excoord_PhoneService/user/studytrack/" + antGroup.state.currentUser.colUid;
             welcomeTitle="我的学习轨迹";
             tabComponent = <Tabs
                 hideAdd
                 ref = "studentStudyTrackTab"
                 activeKey={this.state.activeKey}
                 defaultActiveKey={this.state.defaultActiveKey}
-                tabBarExtraContent={returnToolBar}
+                tabBarExtraContent={returnPersonCenterToolBar}
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab="学习轨迹" key="studyTrack">
@@ -1680,7 +1698,6 @@ const AntGroupTabComponents = React.createClass({
             </Tabs>;
         }else if(antGroup.state.optType=="getMyFollows"){
             welcomeTitle=antGroup.state.currentUser.userName+"的关注";
-            var returnPersonCenterToolBar = <div className="ant-tabs-right"><Button onClick={antGroup.returnPersonCenter}>返回</Button></div>;
             tabComponent= <Tabs
                 hideAdd
                 ref = "mainTab"
@@ -1766,11 +1783,11 @@ const AntGroupTabComponents = React.createClass({
                 ref = "studentStudyTrackTab"
                 activeKey={this.state.activeKey}
                 defaultActiveKey={this.state.defaultActiveKey}
-                tabBarExtraContent={returnToolBar}
+                tabBarExtraContent={returnPersonCenterToolBar}
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab="我的积分" key="userScores">
-                    <iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe>
+                    <div className="topics_le"><iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe></div>
                 </TabPane>
             </Tabs>;
         }else if(antGroup.state.optType=="turnToLiveInfoShowPage"){
@@ -2065,7 +2082,7 @@ const AntGroupTabComponents = React.createClass({
                 ref = "studentStudyTrackTab"
                 activeKey={this.state.activeKey}
                 defaultActiveKey={this.state.defaultActiveKey}
-                tabBarExtraContent={returnToolBar}
+                tabBarExtraContent={returnPersonCenterToolBar}
                 transitionName=""  //禁用Tabs的动画效果
                 onChange={antGroup.platformRulePageChange}
             >

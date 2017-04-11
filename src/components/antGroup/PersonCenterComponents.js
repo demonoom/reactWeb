@@ -46,44 +46,19 @@ const PersonCenterComponents = React.createClass({
      * 发消息
      */
     sendMessage(e){
-        var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
-            target = e.target;
-        }
-        var userId = target.value;
-        console.log(userId);
-        personCenter.props.callBackTurnToMessagePage(userId);
+        personCenter.props.callBackTurnToMessagePage(personCenter.props.userInfo.user);
     },
     /**
      * 学生的提问
-     * @param e
      */
-    studentAsk(e){
-        var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
-            target = e.target;
-        }
-        var userId = target.value;
-        console.log(userId);
-        personCenter.props.callBackTurnToAsk(userId);
+    studentAsk(){
+        personCenter.props.callBackTurnToAsk(personCenter.props.userInfo.user);
     },
     /**
      * 学生的学习轨迹
      */
-    studentStudyTrack(e){
-        var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
-            target = e.target;
-        }
-        var userId = target.value;
-        console.log(userId);
-        personCenter.props.callBackStudyTrack(userId);
+    studentStudyTrack(){
+        personCenter.props.callBackStudyTrack(personCenter.props.userInfo.user);
     },
     /**
      * 关注联系人
@@ -136,14 +111,14 @@ const PersonCenterComponents = React.createClass({
     /**
      * 获取我的关注列表
      */
-    getMyFollows(e){
+    getMyFollows(){
         personCenter.props.callBackGetMyFollows(personCenter.props.userInfo.user);
     },
 
     /**
      * 获取我的收藏列表
      */
-    getUserFavorite(e){
+    getUserFavorite(){
         personCenter.props.callBackGetUserFavorite(personCenter.props.userInfo.user);
     },
 

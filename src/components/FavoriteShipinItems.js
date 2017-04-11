@@ -49,7 +49,7 @@ const FavoriteShipinItems = React.createClass({
 
                     return <div className="ant-card-body"><div style={{ width: 240 , display:'inline-block' }} bodyStyle={{ padding:'5px' }}  key={refkey}>
                         <div className="custom-image">
-                            <a href={e.address} target="_blank" > <img alt="example" width="100%" src={e.cover} /></a>
+                            <a href={e.address} target="_blank" ><img alt="example"  className="attention_img"  width="100%" src={e.cover} /></a>
                         </div>
                         <div className="custom-card">
                             <p> <a   target="_blank" title="查看"  href={e.address} ><Button icon="eye-o"/></a>
