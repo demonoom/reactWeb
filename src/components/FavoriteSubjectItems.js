@@ -15,7 +15,7 @@ const FAVTYPE = {
 const columns = [
     {
         title: '出题人',
-        className: 'ant-table-selection-user',
+        className: 'ant-table-selection-score3',
         dataIndex: 'name',
     },
     {
@@ -92,8 +92,8 @@ const FavoriteSubjectItems = React.createClass({
                 subjectScore = '--';
             }
             let subjectOpt = <div>
-                <a target="_blank" title="取消收藏" style={{float: 'right'}} onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)}><Button
-                    icon="star"/></a>
+                <a target="_blank" title="取消收藏"  onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)}><Button
+                    icon="star-o"/></a>
             </div>;
 
             let popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>'+e.subjects.content+'<hr/><span class="answer_til answer_til_2">答案：</span>'+e.subjects.answer+'</div>';

@@ -58,7 +58,7 @@ const FavoriteOtherItems = React.createClass({
                     <span className="col2"> {getLocalTime(e.time)}</span>
                 </div>
                 <div className="right">
-                    <span className="col2"><a target="_blank" title="取消收藏" style={{float: 'right'}}
+                    <span className="col2"><a target="_blank" title="取消收藏" 
                                               onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)} ><Button icon="star"/></a></span>
                     <span className="col2"> <a target="_blank" title="查看" style={{float: 'right'}}
                                                href={e.address}><Button icon="eye-o"/></a></span>
