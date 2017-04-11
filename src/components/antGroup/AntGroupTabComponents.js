@@ -1855,271 +1855,272 @@ const AntGroupTabComponents = React.createClass({
         }else if(antGroup.state.optType=="userFavorite"){
             tabComponent = <Favorites userid={antGroup.state.studentId} breadcrumbVisible={false}></Favorites>;
         }else if(antGroup.state.optType=="getPlatformRulePage"){
-            userPhoneCard=<div>
-                <span>
-                    <img style={{width:'100px',height:'100px'}} src={antGroup.state.currentUser.user.avatar}></img>
+            userPhoneCard=<div className="integral_top">
+                <span className="integral_face">
+                    <img className="person_user" src={antGroup.state.currentUser.user.avatar}></img>
                 </span>
-                <span>
+                <div className="class_right integral_name">
                     {antGroup.state.currentUser.user.userName}
-                </span>
-                <span>
-                    <Button onClick={antGroup.turnToScoreDetailPage}>{antGroup.state.currentUser.score}积分</Button>
-                </span>
+                </div>
+                <div className="class_right">
+                    <Button onClick={antGroup.turnToScoreDetailPage} className="yellow_btn">{antGroup.state.currentUser.score}积分</Button>
+                </div>
+				<div className="integral_line"></div>
             </div>;
             //学生和老师的升级攻略不同
             var upgradeRaiders;
             if(antGroup.state.currentUser.user.colUtype=="STUD"){
-                upgradeRaiders=<ul>
-                    <li>课中</li>
+                upgradeRaiders=<ul className="topics_le integral">
+                    <li className="til">课中</li>
                     <li>
-                        <span><Icon type="minus-circle-o" />逃课一次</span>
-                        <span style={{align:'right'}}>-10积分</span>
+                        <span><Icon type="minus-circle" />逃课一次</span>
+                        <span className="right_ri">-10积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle-o" />课堂练习答错一题</span>
-                        <span style={{align:'right'}}>＋1积分</span>
+                        <span><Icon type="plus-circle" />课堂练习答错一题</span>
+                        <span className="right_ri">＋1积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle-o" />课堂练习答对一题</span>
-                        <span style={{align:'right'}}>＋3积分</span>
+                        <span><Icon type="plus-circle" />课堂练习答对一题</span>
+                        <span className="right_ri">＋3积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle-o" />被送花一次</span>
-                        <span style={{align:'right'}}>＋5积分</span>
+                        <span><Icon type="plus-circle" />被送花一次</span>
+                        <span className="right_ri">＋5积分</span>
                     </li>
                     <li>
-                        <span><Icon type="minus-circle-o" />被批评一次</span>
-                        <span style={{align:'right'}}>-3积分</span>
-                    </li>
-
-                    <li>课下</li>
-                    <li>
-                        <span><Icon type="plus-circle-o" />评论教师话题说说（>10字/条）</span>
-                        <span style={{align:'right'}}>+1积分</span>
-                    </li>
-                    <li>
-                        <span><Icon type="plus-circle-o" />发布蚁巢内容被老师点赞一次</span>
-                        <span style={{align:'right'}}>＋1积分</span>
-                    </li>
-                    <li>
-                        <span><Icon type="plus-circle-o" />课后作业答错一次</span>
-                        <span style={{align:'right'}}>+1积分</span>
-                    </li>
-                    <li>
-                        <span><Icon type="plus-circle-o" />课后作业答对一次</span>
-                        <span style={{align:'right'}}>+3积分</span>
-                    </li>
-                    <li>
-                        <span><Icon type="plus-circle-o" />看微课一个（≥70%）</span>
-                        <span style={{align:'right'}}>+2积分</span>
-                    </li>
-                    <li>
-                        <span><Icon type="plus-circle-o" />看PPT一个（≥70%）</span>
-                        <span style={{align:'right'}}>+1积分</span>
-                    </li>
-                    <li>
-                        <span><Icon type="plus-circle-o" />提问获教师解答（16蚁币/个）</span>
-                        <span style={{align:'right'}}>+50积分</span>
-                    </li>
-                    <li>
-                        <span><Icon type="plus-circle-o" />表扬一次（≤2/科/天）</span>
-                        <span style={{align:'right'}}>+10积分</span>
-                    </li>
-                    <li>
-                        <span><Icon type="minus-circle-o" />批评一次（≤2/科/天）</span>
-                        <span style={{align:'right'}}>-3积分</span>
-                    </li>
-                    <li>
-                        <span><Icon type="plus-circle-o" />自主做题错一题（3个/科/天）</span>
-                        <span style={{align:'right'}}>+1积分</span>
-                    </li>
-                    <li>
-                        <span><Icon type="plus-circle-o" />自主做题对一题（3个/科/天）</span>
-                        <span style={{align:'right'}}>+难度分</span>
-                    </li>
-                    <li>
-                        <span><Icon type="plus-circle-o" />用装备做错一题（3蚁币/个）</span>
-                        <span style={{align:'right'}}>+2积分</span>
-                    </li>
-                    <li>
-                        <span><Icon type="plus-circle-o" />用装备做对一题（同上）</span>
-                        <span style={{align:'right'}}>难度分＊2积分</span>
-                    </li>
-                    <li>
-                        <span><Icon type="plus-circle-o" />装备换题错一题（1蚁币/个）</span>
-                        <span style={{align:'right'}}>+2积分</span>
-                    </li>
-                    <li>
-                        <span><Icon type="plus-circle-o" />装备换题对一题（同上）</span>
-                        <span style={{align:'right'}}>难度分＊2积分</span>
-                    </li>
-                    <li>
-                        <span><Icon type="plus-circle-o" />翻倍道具做题（3蚁币/个）</span>
-                        <span style={{align:'right'}}>总分翻倍</span>
+                        <span><Icon type="minus-circle" />被批评一次</span>
+                        <span className="right_ri">-3积分</span>
                     </li>
 
-                    <li>技能</li>
+                    <li className="til">课下</li>
                     <li>
-                        <span><Icon type="plus-circle-o" />每个技能使用一次</span>
-                        <span style={{align:'right'}}>+2积分</span>
+                        <span><Icon type="plus-circle" />评论教师话题说说（>10字/条）</span>
+                        <span className="right_ri">+1积分</span>
+                    </li>
+                    <li>
+                        <span><Icon type="plus-circle" />发布蚁巢内容被老师点赞一次</span>
+                        <span className="right_ri">＋1积分</span>
+                    </li>
+                    <li>
+                        <span><Icon type="plus-circle" />课后作业答错一次</span>
+                        <span className="right_ri">+1积分</span>
+                    </li>
+                    <li>
+                        <span><Icon type="plus-circle" />课后作业答对一次</span>
+                        <span className="right_ri">+3积分</span>
+                    </li>
+                    <li>
+                        <span><Icon type="plus-circle" />看微课一个（≥70%）</span>
+                        <span className="right_ri">+2积分</span>
+                    </li>
+                    <li>
+                        <span><Icon type="plus-circle" />看PPT一个（≥70%）</span>
+                        <span className="right_ri">+1积分</span>
+                    </li>
+                    <li>
+                        <span><Icon type="plus-circle" />提问获教师解答（16蚁币/个）</span>
+                        <span className="right_ri">+50积分</span>
+                    </li>
+                    <li>
+                        <span><Icon type="plus-circle" />表扬一次（≤2/科/天）</span>
+                        <span className="right_ri">+10积分</span>
+                    </li>
+                    <li>
+                        <span><Icon type="minus-circle" />批评一次（≤2/科/天）</span>
+                        <span className="right_ri">-3积分</span>
+                    </li>
+                    <li>
+                        <span><Icon type="plus-circle" />自主做题错一题（3个/科/天）</span>
+                        <span className="right_ri">+1积分</span>
+                    </li>
+                    <li>
+                        <span><Icon type="plus-circle" />自主做题对一题（3个/科/天）</span>
+                        <span className="right_ri">+难度分</span>
+                    </li>
+                    <li>
+                        <span><Icon type="plus-circle" />用装备做错一题（3蚁币/个）</span>
+                        <span className="right_ri">+2积分</span>
+                    </li>
+                    <li>
+                        <span><Icon type="plus-circle" />用装备做对一题（同上）</span>
+                        <span className="right_ri">难度分＊2积分</span>
+                    </li>
+                    <li>
+                        <span><Icon type="plus-circle" />装备换题错一题（1蚁币/个）</span>
+                        <span className="right_ri">+2积分</span>
+                    </li>
+                    <li>
+                        <span><Icon type="plus-circle" />装备换题对一题（同上）</span>
+                        <span className="right_ri">难度分＊2积分</span>
+                    </li>
+                    <li>
+                        <span><Icon type="plus-circle" />翻倍道具做题（3蚁币/个）</span>
+                        <span className="right_ri">总分翻倍</span>
                     </li>
 
-                    <li>斗转星移（1次/人/天）</li>
+                    <li className="til">技能</li>
                     <li>
-                        <span><Icon type="plus-circle-o" />使用装备不做题(1蚁币/个)</span>
-                        <span style={{align:'right'}}>不扣分</span>
-                    </li>
-                    <li>
-                        <span><Icon type="minus-circle-o" />不用装备不做题</span>
-                        <span style={{align:'right'}}>-2积分</span>
-                    </li>
-                    <li>
-                        <span><Icon type="minus-circle-o" />不用装备做错一题</span>
-                        <span style={{align:'right'}}>-1积分</span>
-                    </li>
-                    <li>
-                        <span><Icon type="plus-circle-o" />不用装备做对一题</span>
-                        <span style={{align:'right'}}>+难度分</span>
-                    </li>
-                    <li>
-                        <span><Icon type="plus-circle-o" />不用装备做对一题，发起人得</span>
-                        <span style={{align:'right'}}>+难度分</span>
+                        <span><Icon type="plus-circle" />每个技能使用一次</span>
+                        <span className="right_ri">+2积分</span>
                     </li>
 
-                    <li>决斗（2蚁币/次）</li>
+                    <li className="til">斗转星移（1次/人/天）</li>
                     <li>
-                        <span><Icon type="minus-circle-o" />发起人不做题</span>
-                        <span style={{align:'right'}}>-使用技能所得积分</span>
+                        <span><Icon type="plus-circle" />使用装备不做题(1蚁币/个)</span>
+                        <span className="right_ri">不扣分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle-o" />对手使用防守装备不做题</span>
-                        <span style={{align:'right'}}>不扣分</span>
+                        <span><Icon type="minus-circle" />不用装备不做题</span>
+                        <span className="right_ri">-2积分</span>
                     </li>
                     <li>
-                        <span><Icon type="minus-circle-o" />对手不使用防守装备不做题</span>
-                        <span style={{align:'right'}}>-2积分</span>
+                        <span><Icon type="minus-circle" />不用装备做错一题</span>
+                        <span className="right_ri">-1积分</span>
                     </li>
                     <li>
-                        <span><Icon type="minus-circle-o" />对手不使用防守装备且做错</span>
-                        <span style={{align:'right'}}>-1积分</span>
+                        <span><Icon type="plus-circle" />不用装备做对一题</span>
+                        <span className="right_ri">+难度分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle-o" />发起人做对，对手错，发起人</span>
-                        <span style={{align:'right'}}>＋2倍难度分</span>
+                        <span><Icon type="plus-circle" />不用装备做对一题，发起人得</span>
+                        <span className="right_ri">+难度分</span>
+                    </li>
+
+                    <li className="til">决斗（2蚁币/次）</li>
+                    <li>
+                        <span><Icon type="minus-circle" />发起人不做题</span>
+                        <span className="right_ri">-使用技能所得积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle-o" />发起人做错，对手对，发起人</span>
-                        <span style={{align:'right'}}>＋0积分</span>
+                        <span><Icon type="plus-circle" />对手使用防守装备不做题</span>
+                        <span className="right_ri">不扣分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle-o" />发起人做错，对手对，对手</span>
-                        <span style={{align:'right'}}>＋难度分</span>
+                        <span><Icon type="minus-circle" />对手不使用防守装备不做题</span>
+                        <span className="right_ri">-2积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle-o" />两人都做对</span>
-                        <span style={{align:'right'}}>＋难度分/人</span>
+                        <span><Icon type="minus-circle" />对手不使用防守装备且做错</span>
+                        <span className="right_ri">-1积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle-o" />两人都做错，发起人</span>
-                        <span style={{align:'right'}}>＋0积分</span>
+                        <span><Icon type="plus-circle" />发起人做对，对手错，发起人</span>
+                        <span className="right_ri">＋2倍难度分</span>
                     </li>
                     <li>
-                        <span><Icon type="minus-circle-o" />两人都做错，对手，发起人</span>
-                        <span style={{align:'right'}}>-1积分</span>
-                    </li>
-                    <li>万箭齐发</li>
-                    <li>
-                        <span><Icon type="minus-circle-o" />发起人不做题</span>
-                        <span style={{align:'right'}}>-使用技能所得积分</span>
+                        <span><Icon type="plus-circle" />发起人做错，对手对，发起人</span>
+                        <span className="right_ri">＋0积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle-o" />对手使用防守装备不做题</span>
-                        <span style={{align:'right'}}>不扣分</span>
+                        <span><Icon type="plus-circle" />发起人做错，对手对，对手</span>
+                        <span className="right_ri">＋难度分</span>
                     </li>
                     <li>
-                        <span><Icon type="minus-circle-o" />对手不使用防守装备不做题</span>
-                        <span style={{align:'right'}}>-2积分</span>
+                        <span><Icon type="plus-circle" />两人都做对</span>
+                        <span className="right_ri">＋难度分/人</span>
                     </li>
                     <li>
-                        <span><Icon type="minus-circle-o" />对手不使用防守装备且做错</span>
-                        <span style={{align:'right'}}>-1积分</span>
+                        <span><Icon type="plus-circle" />两人都做错，发起人</span>
+                        <span className="right_ri">＋0积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle-o" />全班正确率&lt;30%,对手对</span>
-                        <span style={{align:'right'}}>难度分+平摊扣分</span>
+                        <span><Icon type="minus-circle" />两人都做错，对手，发起人</span>
+                        <span className="right_ri">-1积分</span>
+                    </li>
+                    <li className="til">万箭齐发</li>
+                    <li>
+                        <span><Icon type="minus-circle" />发起人不做题</span>
+                        <span className="right_ri">-使用技能所得积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle-o" />全班正确率&lt;30%，发起人</span>
-                        <span style={{align:'right'}}>＋5倍难度分</span>
+                        <span><Icon type="plus-circle" />对手使用防守装备不做题</span>
+                        <span className="right_ri">不扣分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle-o" />全班正确率&lt;30%，发起人</span>
-                        <span style={{align:'right'}}>＋5倍难度分</span>
+                        <span><Icon type="minus-circle" />对手不使用防守装备不做题</span>
+                        <span className="right_ri">-2积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle-o" />全班正确率>30%，对手对</span>
-                        <span style={{align:'right'}}>＋难度分</span>
+                        <span><Icon type="minus-circle" />对手不使用防守装备且做错</span>
+                        <span className="right_ri">-1积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle-o" />正确率>30%，发起人对</span>
-                        <span style={{align:'right'}}>难度分＋扣分</span>
+                        <span><Icon type="plus-circle" />全班正确率&lt;30%,对手对</span>
+                        <span className="right_ri">难度分+平摊扣分</span>
+                    </li>
+                    <li>
+                        <span><Icon type="plus-circle" />全班正确率&lt;30%，发起人</span>
+                        <span className="right_ri">＋5倍难度分</span>
+                    </li>
+                    <li>
+                        <span><Icon type="plus-circle" />全班正确率&lt;30%，发起人</span>
+                        <span className="right_ri">＋5倍难度分</span>
+                    </li>
+                    <li>
+                        <span><Icon type="plus-circle" />全班正确率>30%，对手对</span>
+                        <span className="right_ri">＋难度分</span>
+                    </li>
+                    <li>
+                        <span><Icon type="plus-circle" />正确率>30%，发起人对</span>
+                        <span className="right_ri">难度分＋扣分</span>
                     </li>
 
                 </ul>;
             }else{
-                upgradeRaiders=<ul>
-                    <li>升级攻略</li>
+                upgradeRaiders=<ul className="topics_le integral">
+                    <li className="til">升级攻略</li>
                     <li>
-                        <span><Icon type="plus-circle-o" />上传教案,每一个</span>
-                        <span style={{align:'right'}}>+1积分</span>
+                        <span><Icon type="plus-circle" />上传教案,每一个</span>
+                        <span className="right_ri">+1积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle-o" />课外使用课件</span>
-                        <span style={{align:'right'}}>+10积分</span>
+                        <span><Icon type="plus-circle" />课外使用课件</span>
+                        <span className="right_ri">+10积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle-o" />发布话题,分享教学资源,每一条</span>
-                        <span style={{align:'right'}}>+1积分</span>
+                        <span><Icon type="plus-circle" />发布话题,分享教学资源,每一条</span>
+                        <span className="right_ri">+1积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle-o" />学生参与此话题,并评论</span>
-                        <span style={{align:'right'}}>+1积分</span>
+                        <span><Icon type="plus-circle" />学生参与此话题,并评论</span>
+                        <span className="right_ri">+1积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle-o" />上传微课,每一个</span>
-                        <span style={{align:'right'}}>+2积分</span>
+                        <span><Icon type="plus-circle" />上传微课,每一个</span>
+                        <span className="right_ri">+2积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle-o" />微课校内点击</span>
-                        <span style={{align:'right'}}>+1积分</span>
+                        <span><Icon type="plus-circle" />微课校内点击</span>
+                        <span className="right_ri">+1积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle-o" />微课校外点击</span>
-                        <span style={{align:'right'}}>+10积分</span>
+                        <span><Icon type="plus-circle" />微课校外点击</span>
+                        <span className="right_ri">+10积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle-o" />上传题目,每一个</span>
-                        <span style={{align:'right'}}>+1积分</span>
+                        <span><Icon type="plus-circle" />上传题目,每一个</span>
+                        <span className="right_ri">+1积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle-o" />校内使用此题,每次</span>
-                        <span style={{align:'right'}}>+5积分</span>
+                        <span><Icon type="plus-circle" />校内使用此题,每次</span>
+                        <span className="right_ri">+5积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle-o" />校外使用此题,每次</span>
-                        <span style={{align:'right'}}>+3积分</span>
+                        <span><Icon type="plus-circle" />校外使用此题,每次</span>
+                        <span className="right_ri">+3积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle-o" />课后布置作业,每题</span>
-                        <span style={{align:'right'}}>+1积分</span>
+                        <span><Icon type="plus-circle" />课后布置作业,每题</span>
+                        <span className="right_ri">+1积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle-o" />开课一次</span>
-                        <span style={{align:'right'}}>+50积分</span>
+                        <span><Icon type="plus-circle" />开课一次</span>
+                        <span className="right_ri">+50积分</span>
                     </li>
                     <li>
-                        <span><Icon type="plus-circle-o" />在线解决学生提问</span>
-                        <span style={{align:'right'}}>+20积分</span>
+                        <span><Icon type="plus-circle" />在线解决学生提问</span>
+                        <span className="right_ri">+20积分</span>
                     </li>
                 </ul>;
             }
@@ -2134,17 +2135,17 @@ const AntGroupTabComponents = React.createClass({
                 onChange={antGroup.platformRulePageChange}
             >
                 <TabPane tab="平台规则" key="platformRulePage">
-                    <ul>
-                        <li>禁言</li>
-                        <li><Icon type="plus-circle-o" />课前蚁巢刷屏、发布不良话题或评论</li>
-                        <li><Icon type="plus-circle-o" />视频开课弹幕刷屏或无关言论、老师可关闭弹幕</li>
-                        <li>视频开课被踢出课堂</li>
-                        <li><Icon type="plus-circle-o" />视频开课中公屏或弹幕刷屏或发布不良言论、多次警告无效、可踢出课堂</li>
-                        <li>封号</li>
-                        <li><Icon type="plus-circle-o" />被踢出课堂或禁言1次、封号3天</li>
-                        <li><Icon type="plus-circle-o" />连续被踢出课堂或禁言>=2次、封号1个周</li>
-                        <li><Icon type="plus-circle-o" />连续被踢出课堂或禁言>=5次、封号1个月</li>
-                        <li><Icon type="plus-circle-o" />在校期间出现严重警告、违纪、盗号、不服从老师管理、故意损坏小蚂蚁设备(平板、充电柜、无线AP)等封号1个月</li>
+                    <ul className="topics_le integral">
+                        <li className="til">禁言</li>
+                        <li><Icon type="plus-circle" />课前蚁巢刷屏、发布不良话题或评论</li>
+                        <li><Icon type="plus-circle" />视频开课弹幕刷屏或无关言论、老师可关闭弹幕</li>
+                        <li className="til">视频开课被踢出课堂</li>
+                        <li><Icon type="plus-circle" />视频开课中公屏或弹幕刷屏或发布不良言论、多次警告无效、可踢出课堂</li>
+                        <li className="til">封号</li>
+                        <li><Icon type="plus-circle" />被踢出课堂或禁言1次、封号3天</li>
+                        <li><Icon type="plus-circle" />连续被踢出课堂或禁言>=2次、封号1个周</li>
+                        <li><Icon type="plus-circle" />连续被踢出课堂或禁言>=5次、封号1个月</li>
+                        <li><Icon type="plus-circle" />在校期间出现严重警告、违纪、盗号、不服从老师管理、故意损坏小蚂蚁设备(平板、充电柜、无线AP)等封号1个月</li>
                     </ul>
                 </TabPane>
                 <TabPane tab="升级攻略" key="upgradeRaiders">
