@@ -96,17 +96,19 @@ class MyFollows extends React.Component {
         this.htmlTemplet = dataArray.map((e, i) => {
             let refkey = e.uid + "#" + e.courseId;
 
-            return <ul className="ant-card-body"><li key={refkey} className="focus">
-                <div className="custom-image">
-                    <a  onClick={this.viewProsenInfo.bind(this,e.user)} target="_blank" className="attention_img"><img alt={e.user.userName + '头像'} width="100%" src={e.user.avatar} /></a>
-                </div>
-                <div className="custom-card">
-                    <p> <a   target="_blank" title="查看"  onClick={this.viewProsenInfo.bind(this,e.user)} ><Button icon="eye-o"/></a></p>
-                    <h3>{e.user.userName}</h3>
-                    <p>学校：{e.user.schoolName}</p>
-                    <p>科目：{e.course.colCourse}</p>
+            return <Card key={refkey} className="focus">
+                <span className="person_user_bg">
+                    <a onClick={this.viewProsenInfo.bind(this,e.user)} target="_blank"><img alt={e.user.userName + '头像'} width="100%" src={e.user.avatar} className="person_user" /></a>
+                </span>
+                <div className="custom-card focus_2">
+				    <div className="focus_1">
+					    <span className="antnest_name focus_3">{e.user.userName}</span>
+                        <a target="_blank" title="查看"  onClick={this.viewProsenInfo.bind(this,e.user)} className="right_ri"><Button icon="eye-o" className="focus_btn"/></a>
+                    </div>
+                    <div className="focus_3">学校：{e.user.schoolName}</div>
+                    <div className="focus_3">科目：{e.course.colCourse}</div>
                 </div>		
-</li></ul>
+</Card>
         } );
     }
 

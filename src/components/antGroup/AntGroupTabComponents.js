@@ -1303,22 +1303,22 @@ const AntGroupTabComponents = React.createClass({
                         if(isEmpty(password)==false){
                             keyIcon = <Icon type="key" />;
                         }
-                        var liveCard = <Card style={{ width: 200 }} bodyStyle={{ padding: 0 }}>
-                            <div className="custom-image">
+                        var liveCard = <Card className="live">
+                            <div className="live_img">
                                 <img className="attention_img"  id={id} onClick={antGroup.turnToLiveInfoShowPage} alt="example" width="100%" src={cover} />
                             </div>
                             <div className="custom-card" value={id} onClick={antGroup.turnToLiveInfoShowPage}>
-                                <h3>{title}</h3>
-                                <ul>
+                                <p className="live_h3">{title}</p>
+                                <ul className="live_cont">
                                     <li>
-                                        <img style={{width:'30px',height:'30px'}} src={user.avatar}></img>
-                                        <p>{userName}</p>
-                                        <p>{startTime}</p>
+                                        <span className="attention_img"><img style={{width:'30px',height:'30px'}} src={user.avatar}></img></span>
+                                        <span className="live_span_1">{userName}</span>
+                                        <span className="right_ri live_span_2">{startTime}</span>
                                     </li>
                                     <li>
-                                        <p>{schoolName}</p>
-                                        <p>{courseName}</p>
-                                        <Icon type="lock" />
+                                        <span className="live_color live_green">{schoolName}</span>
+                                        <span className="live_color live_orange">{courseName}</span>
+                                        <Button icon="eye-o" className="focus_btn"/><a><Icon type="lock" /></a>
                                     </li>
                                 </ul>
                             </div>
