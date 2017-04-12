@@ -96,9 +96,9 @@ class MyFollows extends React.Component {
         this.htmlTemplet = dataArray.map((e, i) => {
             let refkey = e.uid + "#" + e.courseId;
 
-            return <li className="ant-card-body" key={refkey}>
+            return <ul className="ant-card-body"><li key={refkey} className="focus">
                 <div className="custom-image">
-                    <a  onClick={this.viewProsenInfo.bind(this,e.user)} target="_blank" className="attention_img"> <img alt={e.user.userName + '头像'} width="100%" src={e.user.avatar} /></a>
+                    <a  onClick={this.viewProsenInfo.bind(this,e.user)} target="_blank" className="attention_img"><img alt={e.user.userName + '头像'} width="100%" src={e.user.avatar} /></a>
                 </div>
                 <div className="custom-card">
                     <p> <a   target="_blank" title="查看"  onClick={this.viewProsenInfo.bind(this,e.user)} ><Button icon="eye-o"/></a></p>
@@ -106,7 +106,7 @@ class MyFollows extends React.Component {
                     <p>学校：{e.user.schoolName}</p>
                     <p>科目：{e.course.colCourse}</p>
                 </div>		
-</li>
+</li></ul>
         } );
     }
 
