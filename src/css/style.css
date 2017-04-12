@@ -2629,7 +2629,24 @@ ul.integral li i{
 	height:100%;
 	overflow:auto;
 }
+
 .reset_wi{
 	display:inline-block;
 	width:240px
+
+}
+.little-layout-aside-r {
+	position: absolute;
+	right: 0;
+	top: 53px;
+	width: 380px;
+	height: calc(100% - 53px);
+	z-index: 1;
+	background-color: darkorange;
+
+}
+.littleAnt-iframe-panle {
+
+	height: 100%;
+
 }
