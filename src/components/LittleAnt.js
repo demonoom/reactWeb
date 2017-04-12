@@ -17,9 +17,19 @@ class LittleIframe extends React.Component {
         this.closepanle = this.closepanle.bind(this)
     }
 
+    /**
+     * 是否强制关闭
+     * @param ifFoce true 强制关闭
+     */
+    closepanle(ifFoce) {
 
-    closepanle() {
+        if (ifFoce) {
+            this.setState({visible: 'none', isShow: false });
+        }
+
+
         let isShowa = !this.state.isShow;
+
         if (isShowa) {
             this.setState({visible: 'block', isShow: isShowa});
         } else {
@@ -28,12 +38,7 @@ class LittleIframe extends React.Component {
 
     }
 
-    // 关闭
-    foceClose() {
 
-            this.setState({visible: 'none', isShow: false });
-
-    }
 
     render() {
         let sty = {
@@ -48,7 +53,7 @@ class LittleIframe extends React.Component {
             display: this.state.visible
         }
 
-        return (<aside style={{...sty}} className="little-layout-aside-r">
+        return (<aside style={{...sty}} className="little-layout-aside-r" onClick={this.notClose} >
                 <div className="little-tilte" onClick={this.closepanle }>关闭</div>
                 <div className="little-menu"></div>
 

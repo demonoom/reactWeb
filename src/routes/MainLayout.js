@@ -159,12 +159,19 @@ const MainLayout = React.createClass({
   },
 
   showpanle(url){
+
       url =  'http://www.maaee.com/Excoord_PC/liveinfo/show/23836/15325';
       this.refs.laifr.closepanle()
       this.setState({panleSrc: url })
+      let event = window.event;
+      event.stopPropagation();
+      event.cancelBubble = true;
   },
   foceClosePanle(){
-      this.refs.laifr.foceClose()
+      this.refs.laifr.closepanle(true)
+      let event = window.event;
+      event.stopPropagation();
+      event.cancelBubble = true;
   },
 
   render() {
@@ -331,7 +338,7 @@ const MainLayout = React.createClass({
         <LocaleProvider locale={this.state.locale} >
       <div className={collapse ? "ant-layout-aside ant-layout-aside-collapse" : "ant-layout-aside"}>
 
-        <aside className="ant-layout-sider"  >
+        <aside className="ant-layout-sider"  onClick={this.foceClosePanle} >
           <div className="ant-layout-logo">
             <UserCardModalComponents callbackParent={this.getTeacherResource} callEvent={this.switchSection}/>
           </div>
