@@ -23,6 +23,7 @@ import StudyEvaluateMenu from '../components/StudyEvaluateMenu';
 import StudyEvaluateTabComponents from '../components/StudyEvaluateTabComponents';
 import AntNestTabComponents from '../components/antNest/AntNestTabComponents';
 import AntGroupTabComponents from '../components/antGroup/AntGroupTabComponents';
+import {isEmpty} from '../utils/Const';
 import { LocaleProvider } from 'antd';
 import enUS from 'antd/lib/locale-provider/en_US';
 // 推荐在入口文件全局设置 locale
@@ -49,6 +50,7 @@ const MainLayout = React.createClass({
       locale: 'zh-cn',
       resouceType:'',
     };
+    this.switchSection = this.switchSection.bind(this)
   },
 
 
@@ -144,6 +146,9 @@ const MainLayout = React.createClass({
   },
 
   getTeacherResource(resouceType){
+    if(resouceType=="visitAntGroup" && isEmpty(mainLayout.refs.antGroupTabComponents)==false){
+      mainLayout.refs.antGroupTabComponents.getAntGroup();
+    }
     mainLayout.setState({resouceType:resouceType});
   },
 
@@ -262,7 +267,7 @@ const MainLayout = React.createClass({
                 <Col span={24}>
                   <div className="ant-layout-container">
                     <div className="ant-layout-content">
-                      <MyFollows resouceType={mainLayout.state.resouceType} callEvent={this.switchSection.bind(this)} />
+                      <MyFollows resouceType={mainLayout.state.resouceType} callEvent={this.switchSection} />
                     </div>
                   </div>
                 </Col>
@@ -314,7 +319,7 @@ const MainLayout = React.createClass({
 
         <aside className="ant-layout-sider">
           <div className="ant-layout-logo">
-            <UserCardModalComponents callbackParent={this.getTeacherResource} callEvent={this.switchSection.bind(this)}/>
+            <UserCardModalComponents callbackParent={this.getTeacherResource} callEvent={this.switchSection}/>
           </div>
           <Menu mode="inline" theme="dark" defaultSelectedKeys={[this.state.currentKey]}  onClick={this.toolbarClick}>
             <Menu.Item key="teachTimes" className="padding_menu">
