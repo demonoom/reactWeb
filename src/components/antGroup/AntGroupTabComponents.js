@@ -138,6 +138,8 @@ const AntGroupTabComponents = React.createClass({
             totalCourseWareCount:0,     //资源页面的资源总数
             currentSubjectPage:1,    //题目页面的当前页码
             totalSubjectCount:0,     //题目页面的资源总数
+            totalChatGroupCount:0,  //当前用户的群组总数
+            currentChatGroupPage:1,    //群组列表页面的当前页码
         };
     },
     /**
@@ -171,7 +173,7 @@ const AntGroupTabComponents = React.createClass({
                     var userJson = {key:userId,userContacts:userName,userObj:e};
                     userContactsData.push(userJson);
                 });
-                antGroup.setState({"userContactsData":userContactsData});
+                antGroup.setState({"userContactsData":userContactsData,"optType":"getUserList","activeKey":'loginWelcome'});
             },
             onError: function (error) {
                 message.error(error);
@@ -509,7 +511,7 @@ const AntGroupTabComponents = React.createClass({
         var param = {
             "method": 'getUserChatGroup',
             "userId": sessionStorage.getItem("ident"),
-            "pageNo":1
+            "pageNo": antGroup.state.currentChatGroupPage
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -528,7 +530,8 @@ const AntGroupTabComponents = React.createClass({
                     });
                     antGroup.setState({"userGroupsData":charGroupArray});
                 }
-                antGroup.setState({"optType":"getUserChatGroup"});
+                var pager = ret.pager;
+                antGroup.setState({"optType":"getUserChatGroup","totalChatGroupCount":parseInt(pager.rsCount)});
             },
             onError: function (error) {
                 message.error(error);
@@ -1412,6 +1415,10 @@ const AntGroupTabComponents = React.createClass({
         });
     },
 
+    onChatGroupPageChange(page){
+
+    },
+
     render() {
         var breadMenuTip="蚁群";
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
@@ -1552,7 +1559,7 @@ const AntGroupTabComponents = React.createClass({
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div>
                         <ul className="group_table">
-                            <Table onRowClick={antGroup.sendGroupMessage} showHeader={false} scroll={{ x: true, y: 500 }} columns={userGroupsColumns} dataSource={antGroup.state.userGroupsData} pagination={false}/>
+                            <Table onRowClick={antGroup.sendGroupMessage} showHeader={false} scroll={{ x: true, y: 500 }} columns={userGroupsColumns} dataSource={antGroup.state.userGroupsData} pagination={{ total:antGroup.state.totalChatGroupCount,pageSize: getPageSize(),onChange:antGroup.onChatGroupPageChange }}/>
                         </ul>
                     </div>
                 </TabPane>

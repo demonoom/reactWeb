@@ -23,6 +23,7 @@ import StudyEvaluateMenu from '../components/StudyEvaluateMenu';
 import StudyEvaluateTabComponents from '../components/StudyEvaluateTabComponents';
 import AntNestTabComponents from '../components/antNest/AntNestTabComponents';
 import AntGroupTabComponents from '../components/antGroup/AntGroupTabComponents';
+import {isEmpty} from '../utils/Const';
 import { LocaleProvider } from 'antd';
 import enUS from 'antd/lib/locale-provider/en_US';
 // 推荐在入口文件全局设置 locale
@@ -144,6 +145,9 @@ const MainLayout = React.createClass({
   },
 
   getTeacherResource(resouceType){
+    if(resouceType=="visitAntGroup" && isEmpty(mainLayout.refs.antGroupTabComponents)==false){
+      mainLayout.refs.antGroupTabComponents.getAntGroup();
+    }
     mainLayout.setState({resouceType:resouceType});
   },
 
