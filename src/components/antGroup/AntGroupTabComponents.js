@@ -504,14 +504,18 @@ const AntGroupTabComponents = React.createClass({
         }
     },
 
+    getUserChatGroup(){
+        antGroup.getUserChatGroupById(antGroup.state.currentChatGroupPage);
+    },
+
     /**
      * 获取当前用户的群组
      */
-    getUserChatGroup(){
+    getUserChatGroupById(pageNo){
         var param = {
             "method": 'getUserChatGroup',
             "userId": sessionStorage.getItem("ident"),
-            "pageNo": antGroup.state.currentChatGroupPage
+            "pageNo": pageNo
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -1416,7 +1420,10 @@ const AntGroupTabComponents = React.createClass({
     },
 
     onChatGroupPageChange(page){
-
+        antGroup.getUserChatGroupById(page);
+        antGroup.setState({
+            currentChatGroupPage: page,
+        });
     },
 
     render() {
