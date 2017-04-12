@@ -188,7 +188,7 @@ const UserCardModalComponents = React.createClass({
 
         };
 
-   return <span>
+   return <div>
        <Upload {...uploadProps}>
         {
             this.state.userHeadIcon ?  <img src={this.state.userHeadIcon}   className="img_us" /> :  <Icon type="plus" className="avatar-uploader-trigger" />
@@ -197,7 +197,7 @@ const UserCardModalComponents = React.createClass({
                <br/>
                 <span>{this.state.userName} </span>
                 { this.state.userHeadIcon ? <img src={this.state.userHeadIcon} className="blur"/> : null }
-         </span>;
+         </div>;
   },
 
   render() {

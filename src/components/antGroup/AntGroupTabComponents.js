@@ -1325,7 +1325,7 @@ const AntGroupTabComponents = React.createClass({
                                     <li>
                                         <span className="live_color live_green">{schoolName}</span>
                                         <span className="live_color live_orange">{courseName}</span>
-                                        <Button icon="eye-o" className="focus_btn"/><a><Icon type="lock" /></a>
+                                        <Button className="right_ri focus_btn"><Icon type="lock" /></Button>
                                     </li>
                                 </ul>
                             </div>
@@ -1823,11 +1823,11 @@ const AntGroupTabComponents = React.createClass({
                 tabBarExtraContent={returnPersonCenterToolBar}
                 transitionName=""  //禁用Tabs的动画效果
             >
-                <TabPane tab={welcomeTitle} key="userLiveInfos" className="topics_rela">
-                    <div className='ant-tabs ant-tabs-top ant-tabs-line' style={{'overflow':'auto'}}>
+                <TabPane tab={welcomeTitle} key="userLiveInfos" className="topics_rela ">
+                    <div className='ant-tabs ant-tabs-top ant-tabs-line topics_calc' style={{'overflow':'auto'}}>
                         {antGroup.state.userLiveData}
-                        <Pagination total={antGroup.state.totalLiveCount} pageSize={getPageSize()} current={antGroup.state.currentLivePage} onChange={this.onLiveInfoPageChange}/>
                     </div>
+					<Pagination total={antGroup.state.totalLiveCount} pageSize={getPageSize()} current={antGroup.state.currentLivePage} onChange={this.onLiveInfoPageChange}/>
                 </TabPane>
             </Tabs>;
         }else if(antGroup.state.optType=="getScoreOrLevelPage"){

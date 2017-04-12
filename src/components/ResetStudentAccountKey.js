@@ -78,11 +78,11 @@ class ResetStudentAccountKey extends React.Component {
 
         if (this.state.toUserAccount) {
             this.templatehtml = <div id="template">
-			<div className="ques_list_new">
+			<div className="ques_list_qus">
                 <div className="password_cow ant-row ant-form-item">
-                    <div className="ant-form-item-control_2 attention_img"><img  src={this.state.toUserAccountData.avatar} width="40dp" height="40dp" /></div>
-                    <div className="ant-form-item-control_2">{this.state.toUserAccountData.userName}</div>
-                    <div className="ant-modal-footer"><Button type="primary" className="password_btn" onClick={this.resetUserPassword } >重置密码</Button></div>
+                    <span className="ant-form-item-control attention_img"><img  src={this.state.toUserAccountData.avatar} width="40dp" height="40dp" /></span>
+                    <span className="ant-form-item-control_2">{this.state.toUserAccountData.userName}</span>
+                    <span className="ant-form-item-control_3 right_ri"><Button type="primary" className="password_btn" onClick={this.resetUserPassword } >重置密码</Button></span>
                 </div>
 				</div>
             </div>;
@@ -103,10 +103,11 @@ class ResetStudentAccountKey extends React.Component {
                 <Row style={{height: 100}}/>
                  <div className="ques_list_new">
                         <div className="password_cow ant-row ant-form-item">
-						    <div className="ant-col-6 right_look">查找账号：</div>
-							<div className="ant-col-14"><input className="ant-input" ref="input1" type="text" placeholder={this.state.placeholder} /></div>
+						    <span className="right_look">查找账号：</span>
+							<span className="reset_wi"><input className="ant-input" ref="input1" type="text" placeholder={this.state.placeholder} /></span>
+							<span className="right_ri"><Button type="primary" icon="search" onClick={this.searhAccess}>Search</Button></span>
 						</div>
-                        <div className="ant-modal-footer"><Button type="primary" icon="search" onClick={this.searhAccess}>Search</Button></div>
+                        
                 </div>
                 <Row>
                     <Col span={3}></Col>
