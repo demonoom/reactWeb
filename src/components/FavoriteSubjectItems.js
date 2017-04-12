@@ -71,16 +71,6 @@ const FavoriteSubjectItems = React.createClass({
 
 
 
-    download: function (e) {
-        window.open(e.target.value);
-    },
-
-    view: function (e) {
-        window.location.href = e.target.value;
-
-    },
-
-
     buildSubjectUi: function (courseWareList, type) {
         if (!courseWareList || !courseWareList.length) {
             return;
@@ -116,7 +106,6 @@ const FavoriteSubjectItems = React.createClass({
     },
     //列表分页响应事件
     pageOnChange(pageNo) {
-
         this.setState({
             currentPage: pageNo,
         });

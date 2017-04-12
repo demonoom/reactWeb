@@ -38,29 +38,27 @@ const FavoriteOtherItems = React.createClass({
 
 
     buildFavOtherUi: function (courseWareList) {
-        console.log("Favorite Other Items.");
+
         coursePanelChildren = null;
         if (!courseWareList || !courseWareList.length) {
             coursePanelChildren = <img className="noDataTipImg" src={require('./images/noDataTipImg.png')}/>;
             return;
         }
-        this.activeKey = [];
         coursePanelChildren = courseWareList.map((e, i) => {
-
-            let refkey = e.type + "#" + e.favoriteId;
             let content = e.content;
-            this.activeKey.push(refkey);
-            return <div key={refkey}>
+
+
+            return <div key={e.id}>
                 <div className="left">
                     <a target="_blank" href={e.address}><img style={{width: '42px'}} src={e.cover}/></a>
                     <span className="col2"><a href={e.address}>{content}</a></span><br/>
                     <span className="col2"> {getLocalTime(e.time)}</span>
                 </div>
                 <div className="right">
-                    <span className="col2"><a target="_blank" title="取消收藏" 
-                                              onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)} ><Button icon="star"/></a></span>
-                    <span className="col2"> <a target="_blank" title="查看" style={{float: 'right'}}
-                                               href={e.address}><Button icon="eye-o"/></a></span>
+                    <span className="col2">
+                        <a target="_blank" title="取消收藏" onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)} ><Button icon="star"/></a></span>
+                    <span className="col2">
+                        <a target="_blank" title="查看"  href={e.address}><Button icon="eye-o"/></a></span>
                 </div>
             </div>
         });

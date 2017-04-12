@@ -142,8 +142,10 @@ class Favorites extends React.Component {
 
 
     getBreadCrumb(){
-        if( this.state.breadcrumbVisible ){
-            return <Breadcrumb separator=">"  >
+        let tag;
+        this.props.breadcrumbVisible === undefined ? tag= true : tag=this.props.breadcrumbVisible;
+        if(tag ){
+            this.breadcrumb = <Breadcrumb separator=">"  >
                 <Breadcrumb.Item><Icon type="home"/></Breadcrumb.Item>
                 <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
                 <Breadcrumb.Item href="#/MainLayout">我的收藏</Breadcrumb.Item>
@@ -152,9 +154,11 @@ class Favorites extends React.Component {
     }
 
     render() {
+        this.getBreadCrumb();
+
         return (
             <div>
-                {this.getBreadCrumb()}
+                {this.breadcrumb}
                 <Tabs onTabClick={this.tabClick.bind(this)} defaultActiveKey={this.state.activeKey}>
                     {/*题目*/}
                     <TabPane tab={this.FAVTYPE[1][2]} key='1'>

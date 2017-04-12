@@ -36,7 +36,6 @@ const FavoriteShipinItems = React.createClass({
 
     buildFavShipionUi: function (courseWareList) {
         coursePanelChildren = null;
-        console.log("Favorite shipin Items.");
         this.activeKey = [];
         if (!courseWareList || !courseWareList.length) {
             coursePanelChildren = <img className="noDataTipImg" src={require('./images/noDataTipImg.png')}/>;

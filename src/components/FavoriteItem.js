@@ -165,7 +165,7 @@ const FavoriteItem = React.createClass({
 
         return ( <div>
             <div>
-            <Collapse defaultActiveKey={this.activeKey} activeKey={this.activeKey} style={CollapseStyle} >{ this.coursePanelChildren }</Collapse>
+                <Collapse defaultActiveKey={this.activeKey} activeKey={this.activeKey} style={CollapseStyle} >{ this.coursePanelChildren }</Collapse>
             </div>
             <div>
             <Pagination total={this.props.param.totalCount} pageSize={getPageSize()} current={this.props.param.currentPage} onChange={this.props.pageChange} />
