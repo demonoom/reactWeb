@@ -2520,3 +2520,18 @@ li.focus{
 	height:100%;
 	overflow:auto;
 }
+
+.little-layout-aside-r {
+	position: absolute;
+	right: 0;
+	top: 53px;
+	width: 380px;
+	height: calc(100% - 53px);
+	z-index: 1;
+	background-color: darkorange;
+
+}
+.littleAnt-iframe-panle {
+
+	height: 100%;
+}
