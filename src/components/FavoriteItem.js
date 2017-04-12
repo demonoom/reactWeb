@@ -1,5 +1,5 @@
 import React from 'react';
-import {Checkbox, Card, Table, Collapse, Button, Pagination, message, Modal} from 'antd';
+import {  Pagination, Collapse, Button, message, Modal} from 'antd';
 import {doWebService} from '../WebServiceHelper';
 import {getPageSize} from '../utils/Const';
 import {getLocalTime} from '../utils/utils';
@@ -95,20 +95,24 @@ const FavoriteItem = React.createClass({
         }
 
         this.data = [];
+        this.activeKey = [];
 
         this.coursePanelChildren = datalist.map((e, i) => {
+            if(type != e.type) return{};
 
-            let tmpType = e.type;
-            if(type != tmpType) return{};
 
+            //
+            //
             let content = e.content;
-
             type +='';
+            let key = type +'-'+e.favoriteId;
+            this.activeKey.push( key );
             switch (type) {
 
+
                 // 2 微课
-                case this.FAVTYPE[2][0]:
-                    return <Panel header={<span>{content}</span>} key={'fav_weikeitem_' + e.favoriteId}>
+                case '2':
+                    return <Panel header={<span>{content}</span>} key={ key } >
                         <div className="bnt2_tex">
                                 <span><span className="col1">创建人：</span><span
                                     className="col2">{e.material.user.userName}</span></span>
@@ -126,8 +130,8 @@ const FavoriteItem = React.createClass({
 
 
                 // 3 讲义
-                case this.FAVTYPE[3][0]:
-                    return <Panel header={<span>{content}</span>} key={'fav_jiangyiitem_' + e.favoriteId}>
+                case '3':
+                    return <Panel header={<span>{content}</span>} key={ key }>
                         <div className="bnt2_tex">
                                 <span><span className="col1">创建人：</span><span
                                     className="col2">{e.material.user.userName}</span></span>
@@ -144,7 +148,6 @@ const FavoriteItem = React.createClass({
                         </div>
                     </Panel>
                     break;
-
 
             }
         });
@@ -165,7 +168,8 @@ const FavoriteItem = React.createClass({
         console.log('buildItemPanels');
          this.buildItemPanels(this.props.param.data, this.props.param.type);
         return ( <div>
-            <Collapse defaultActiveKey={this.activeKey}>{ this.coursePanelChildren }</Collapse>
+            <Collapse defaultActiveKey={this.activeKey} activeKey={this.activeKey} >{ this.coursePanelChildren }</Collapse>
+            <Pagination onChange={this.props.pageChange} total={this.props.param.total} current={this.props.param.pageNo}   defaultCurrent={1}/>
         </div> );
     },
 
