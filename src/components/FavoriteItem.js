@@ -1,9 +1,7 @@
 import React from 'react';
 import {  Pagination, Collapse, Button, message, Modal} from 'antd';
-import {doWebService} from '../WebServiceHelper';
 import {getPageSize} from '../utils/Const';
 import {getLocalTime} from '../utils/utils';
-import UseKnowledge from './UseKnowledgeComponents';
 
 const Panel = Collapse.Panel;
 const confirm = Modal.confirm;
@@ -65,7 +63,6 @@ const FavoriteItem = React.createClass({
     ],
     activeKey: [],
     data: [],
-    totalCount:0,
     coursePanelChildren: {},
     getInitialState() {
 
@@ -146,7 +143,7 @@ const FavoriteItem = React.createClass({
                             <a target="_blank" title="取消收藏" className="right_ri"
                                onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)} ><Button icon="star-o"/></a>
                         </div>
-                    </Panel>
+                       </Panel>
                     break;
 
             }
@@ -155,21 +152,24 @@ const FavoriteItem = React.createClass({
         return
 
     },
-    //列表分页响应事件
-    pageOnChange(pageNo) {
 
-        this.setState({
-            currentPage: pageNo,
-        });
-    },
 
 
     render: function () {
         console.log('buildItemPanels');
          this.buildItemPanels(this.props.param.data, this.props.param.type);
+
+        var CollapseStyle = {
+           height:"360px"
+        };
+
         return ( <div>
-            <Collapse defaultActiveKey={this.activeKey} activeKey={this.activeKey} >{ this.coursePanelChildren }</Collapse>
-            <Pagination onChange={this.props.pageChange} total={this.props.param.total} current={this.props.param.pageNo}   defaultCurrent={1}/>
+            <div>
+            <Collapse defaultActiveKey={this.activeKey} activeKey={this.activeKey} style={CollapseStyle} >{ this.coursePanelChildren }</Collapse>
+            </div>
+            <div>
+            <Pagination total={this.props.param.totalCount} pageSize={getPageSize()} current={this.props.param.currentPage} onChange={this.props.pageChange} />
+            </div>
         </div> );
     },
 

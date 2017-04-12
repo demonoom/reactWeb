@@ -66,13 +66,6 @@ const FavoriteOtherItems = React.createClass({
         });
 
     },
-    //列表分页响应事件
-    pageOnChange(pageNo) {
-
-        this.setState({
-            currentPage: pageNo,
-        });
-    },
 
 
     render: function () {
@@ -80,8 +73,12 @@ const FavoriteOtherItems = React.createClass({
         this.buildFavOtherUi(this.props.param.data);
         return (
             <div>
+            <div>
                 {coursePanelChildren}
-                <Pagination onChange={this.props.pageChange} total={this.props.param.total} current={this.props.param.pageNo}   defaultCurrent={1}/>
+            </div>
+            <div>
+                    <Pagination total={this.props.param.totalCount} pageSize={getPageSize()} current={this.props.param.currentPage} onChange={this.props.pageChange} />
+                </div>
             </div>
         );
     },
