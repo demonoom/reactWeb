@@ -3,6 +3,7 @@ import { Button} from 'antd';
 import MaaeeLogo from './MaaeeLogo';
 import SearchInput from './SearchInput';
 import ProgressBar from '../components/ProgressBar';
+import SideMenuRight from './SideMenuRight';
 
 var floatButton;
 const HeaderComponents = React.createClass({
@@ -20,6 +21,7 @@ const HeaderComponents = React.createClass({
                  <SearchInput placeholder="请输入关键字搜索"onSearch={value => console.log(value)} style={{ width:300 }} />*/}
                 <ProgressBar style={{valign:'bottom'}}></ProgressBar>
                 <Button icon="book" onClick={this.redirectHelpPage} className="colud_bnt help_note">操作手册</Button>
+                {/*<SideMenuRight/>*/}
             </div>
         );
     }

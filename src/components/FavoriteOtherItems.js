@@ -41,7 +41,7 @@ const FavoriteOtherItems = React.createClass({
         let obj ={
             title:tit,
             url:url,
-            width:'400px'
+            width:'380px'
         }
 
         this.props.onPreview(obj)
@@ -58,20 +58,19 @@ const FavoriteOtherItems = React.createClass({
         coursePanelChildren = courseWareList.map((e, i) => {
             let content = e.content;
 
-
             return <div key={e.id}>
                 <div className="left">
-                    <a target="_blank" href={e.address}><img style={{width: '42px'}} src={e.cover}/></a>
-                    <span className="col2"><a href={e.address}>{content}</a></span><br/>
+                    <a target="_blank" onClick={event => {this.view(event,e.address,e.content)} } ><img style={{width: '42px'}} src={e.cover}/></a>
+                    <span className="col2"><a  onClick={event => {this.view(event,e.address,e.content)} }  >{content}</a></span><br/>
                     <span className="col2"> {getLocalTime(e.time)}</span>
                 </div>
                 <div className="right">
                     <span className="col2">
                         <a target="_blank" title="取消收藏" onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)} ><Button icon="star"/></a></span>
-                    <span className="col2">
-                        <a target="_blank" title="查看"   onClick={event => {this.view(event,e.address,e.content)} }  ><Button icon="eye-o"/></a></span>
+
                 </div>
             </div>
+
         });
 
     },
@@ -81,13 +80,12 @@ const FavoriteOtherItems = React.createClass({
         console.log('buildFavOtherUi');
         this.buildFavOtherUi(this.props.param.data);
         return (
-            <div>
-            <div>
+            <div className="favorite_scroll">
+            <div className="favorite_up">
                 {coursePanelChildren}
             </div>
-            <div>
                     <Pagination total={this.props.param.totalCount} pageSize={getPageSize()} current={this.props.param.currentPage} onChange={this.props.pageChange} />
-                </div>
+
             </div>
         );
     },

@@ -40,7 +40,7 @@ const FavoriteShipinItems = React.createClass({
         let obj ={
             title:tit,
             url:url,
-            width:'420px',
+            width:'400px',
 
         }
         this.props.onPreview(obj)
@@ -58,14 +58,14 @@ const FavoriteShipinItems = React.createClass({
             let content = e.content;
             let refkey = e.type + "#" + e.favoriteId;
             this.activeKey.push(refkey);
-            return <div className="ant-card-body">
-                <div style={{width: 240, display: 'inline-block'}} bodyStyle={{padding: '5px'}} key={refkey}>
-                    <div className="custom-image">
-                        <a href={e.address} target="_blank"><img alt="example" className="attention_img" width="100%"
+            return <div className="ant-card live ant-card-bordered">
+                <div  key={refkey}>
+                    <div className="live_img">
+                        <a  onClick={event => {this.view(event,e.address,e.content)} }  target="_blank"><img alt="example" className="attention_img" width="100%"
                                                                  src={e.cover}/></a>
                     </div>
                     <div className="custom-card">
-                        <p><a target="_blank" title="查看"   onClick={event => {this.view(event,e.address,e.content)} }  ><Button icon="eye-o"/></a>
+                        <p>
                             <a target="_blank" title="取消收藏"
                                onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}><Button
                                 icon="star"/></a>
@@ -83,16 +83,18 @@ const FavoriteShipinItems = React.createClass({
         console.log('buildFavShipionUi');
         this.buildFavShipionUi(this.props.param.data, this.props.param.type);
         return (
-            <div>
-            <div>
-                {coursePanelChildren}
+            <div className="favorite_scroll">
+				<div className="favorite_up">
+					{coursePanelChildren}
+				</div>
+				<Pagination total={this.props.param.totalCount} pageSize={getPageSize()} current={this.props.param.currentPage} onChange={this.props.pageChange} />
             </div>
-                <div>
-                    <Pagination total={this.props.param.totalCount} pageSize={getPageSize()} current={this.props.param.currentPage} onChange={this.props.pageChange} />
-                </div>
-            </div>
+
+
         );
+		
     },
+	
 
 });
 

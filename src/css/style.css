@@ -327,7 +327,7 @@ div, a, span, input{
 	  display: inline-block;
      width: 100%;
     }
-	.toobar{
+.toobar{
 		display:inline-block;
 		padding: 0 0 0 12px
 	}
@@ -2203,8 +2203,10 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr{
 	display: flex;
     flex-direction: row-reverse;
 }
+
 .group_talk ul li span.name img, .attention_img img{
 	position:relative;
+	background:#eee;
 	top:0;
 	width: 38px;
     height: 38px;
@@ -2575,7 +2577,7 @@ ul.integral li i{
     white-space: nowrap;
 	line-height:35px;
 	color:#333;
-	    border-bottom: 1px solid #eee;
+	border-bottom: 1px solid #eee;
     background: #f8f8f8;
     margin-bottom: 4px;
 	cursor:pointer
@@ -2715,4 +2717,22 @@ ul.integral li i{
 	to {
 		-webkit-transform: translateX(0);
 	}
+.littleAnt-iframe-panle {
+	height: 100%;
+}
+.favorite_1{
+	padding:14px 20px 10px 12px;
+}
+.favorite_btn{
+	position:relative;
+	top:6px;
+}
+.favorite_scroll{
+	position:relative;	
+}
+.favorite_up{
+	height:calc(100% - 50px);
+	height:-moz-calc(100% - 50px);
+	height: -webkit-calc(100% - 50px);
+	overflow:auto
 }

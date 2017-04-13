@@ -89,7 +89,7 @@ const FavoriteItem = React.createClass({
         let obj ={
             title:tit,
             url:url,
-            width:'380px'
+            width:'400px'
         }
         this.props.onPreview(obj)
     },
@@ -171,14 +171,17 @@ const FavoriteItem = React.createClass({
          this.buildItemPanels(this.props.param.data, this.props.param.type);
 
         var CollapseStyle = {
-           
+           height:"360px"
         };
 
-        return ( 
+        return ( <div>
+            <div>
                 <Collapse defaultActiveKey={this.activeKey} activeKey={this.activeKey} style={CollapseStyle} >{ this.coursePanelChildren }</Collapse>
-                
-        );
-		<Pagination total={this.props.param.totalCount} pageSize={getPageSize()} current={this.props.param.currentPage} onChange={this.props.pageChange} />
+            </div>
+            <div>
+            <Pagination total={this.props.param.totalCount} pageSize={getPageSize()} current={this.props.param.currentPage} onChange={this.props.pageChange} />
+            </div>
+        </div> );
     },
 
 });
