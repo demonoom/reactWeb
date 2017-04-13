@@ -1799,9 +1799,7 @@ const AntGroupTabComponents = React.createClass({
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab={welcomeTitle} key="userSubjects" className="topics_rela">
-                    <div>
                         <Table columns={subjectTableColumns} dataSource={data} pagination={{ total:antGroup.state.totalSubjectCount,pageSize: getPageSize(),onChange:antGroup.onSubjectPageChange }} scroll={{ y: 400}}/>
-                    </div>
                 </TabPane>
             </Tabs>;
         }else if(antGroup.state.optType=="getUserCourseWares"){
@@ -1901,7 +1899,7 @@ const AntGroupTabComponents = React.createClass({
             //学生和老师的升级攻略不同
             var upgradeRaiders;
             if(antGroup.state.currentUser.user.colUtype=="STUD"){
-                upgradeRaiders=<ul className="topics_le integral">
+                upgradeRaiders=<ul className="topics_le integral integral_scroll">
                     <li className="til">课中</li>
                     <li>
                         <span><Icon type="minus-circle" />逃课一次</span>
@@ -2099,7 +2097,7 @@ const AntGroupTabComponents = React.createClass({
 
                 </ul>;
             }else{
-                upgradeRaiders=<ul className="topics_le integral">
+                upgradeRaiders=<ul className="topics_le integral ">
                     <li className="til">升级攻略</li>
                     <li>
                         <span><Icon type="plus-circle" />上传教案,每一个</span>
@@ -2166,7 +2164,7 @@ const AntGroupTabComponents = React.createClass({
                 onChange={antGroup.platformRulePageChange}
             >
                 <TabPane tab="平台规则" key="platformRulePage">
-                    <ul className="topics_le integral">
+                    <ul className="topics_le integral integral_scroll">
                         <li className="til">禁言</li>
                         <li><Icon type="plus-circle" />课前蚁巢刷屏、发布不良话题或评论</li>
                         <li><Icon type="plus-circle" />视频开课弹幕刷屏或无关言论、老师可关闭弹幕</li>
@@ -2180,7 +2178,7 @@ const AntGroupTabComponents = React.createClass({
                     </ul>
                 </TabPane>
                 <TabPane tab="升级攻略" key="upgradeRaiders">
-                    <div style={{'overflow':'auto'}}>
+                    <div>
                         {upgradeRaiders}
                     </div>
                 </TabPane>
@@ -2277,10 +2275,10 @@ const AntGroupTabComponents = React.createClass({
                 </Modal>
 
                 {breadCrumb}
-                <div className="group_cont">
+			<div className="group_cont">
                     {userPhoneCard}
                     {tabComponent}
-                </div>
+				</div>
             </div>
         );
     },

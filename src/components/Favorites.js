@@ -157,27 +157,27 @@ class Favorites extends React.Component {
         this.getBreadCrumb();
 
         return (
-            <div>
+            <div className="favorite_scroll">
                 {this.breadcrumb}
                 <Tabs onTabClick={this.tabClick.bind(this)} defaultActiveKey={this.state.activeKey}>
                     {/*题目*/}
-                    <TabPane tab={this.FAVTYPE[1][2]} key='1'>
+                    <TabPane tab={this.FAVTYPE[1][2]} key='1' className="topics_rela">
                         <SubjectItem param={this.state.subject} onCancelfavrite={this.cancelFav} upgradeData={this.upgradeCurrent.bind(this)}/>
                     </TabPane>
                     {/*微课*/}
-                    <TabPane tab={this.FAVTYPE[2][2]} key='2'>
+                    <TabPane tab={this.FAVTYPE[2][2]} key='2' className="topics_rela">
                         <FavItem param={this.state.weike} onCancelfavrite={this.cancelFav} upgradeData={this.upgradeCurrent.bind(this)} pageChange={this.pageChange}/>
                     </TabPane>
                     {/*讲义*/}
-                    <TabPane tab={this.FAVTYPE[3][2]} key='3'>
+                    <TabPane tab={this.FAVTYPE[3][2]} key='3' className="topics_rela">
                         <FavItem param={this.state.jiangyi} onCancelfavrite={this.cancelFav} upgradeData={this.upgradeCurrent.bind(this)}  pageChange={this.pageChange}/>
                     </TabPane>
                     {/*我的直播课*/}
-                    <TabPane tab={this.FAVTYPE[4][2]} key='4'>
+                    <TabPane tab={this.FAVTYPE[4][2]} key='4' className="topics_rela">
                         <ShippinItem param={this.state.shipin} onCancelfavrite={this.cancelFav} upgradeData={this.upgradeCurrent.bind(this)}  pageChange={this.pageChange}/>
                     </TabPane>
                     {/*其他*/}
-                    <TabPane tab={this.FAVTYPE[0][2]} key='0'>
+                    <TabPane tab={this.FAVTYPE[0][2]} key='0' className="topics_rela">
                         <OtherItem param={this.state.other} onCancelfavrite={this.cancelFav} upgradeData={this.upgradeCurrent.bind(this)}  pageChange={this.pageChange}/>
                     </TabPane>
                 </Tabs>

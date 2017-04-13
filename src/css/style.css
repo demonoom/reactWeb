@@ -2459,8 +2459,12 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr{
 .level_list_pa{
 	padding:15px 25px !important;
 }
+.integral_scroll{
+	height:290px !important;
+	overflow:auto !important;
+}
 ul.integral, .integral_top{
-	margin:0 25px 0 25px;
+	padding:0 25px 0 25px;
 }
 .integral_top{
 	text-align:center;
@@ -2476,7 +2480,7 @@ ul.integral, .integral_top{
 ul.integral li{
 	font-size: 14px;
     line-height: 24px;
-	padding: 10px 0;
+	padding: 10px;
     border-bottom: 1px solid #dfdfdd;
 }
 ul.integral li.til {
@@ -2629,7 +2633,6 @@ ul.integral li i{
 }
 .group_cont{
 	height:100%;
-	overflow:auto;
 }
 
 .reset_wi{
@@ -2658,11 +2661,12 @@ ul.integral li i{
 	top:6px;
 }
 .favorite_scroll{
-	position:relative;	
+	height:100%	
 }
 .favorite_up{
-	height:calc(100% - 50px);
-	height:-moz-calc(100% - 50px);
-	height: -webkit-calc(100% - 50px);
 	overflow:auto
+}
+.other_hei{
+	height:calc(100% - 50px) !important;
+	overflow:auto !important;
 }
