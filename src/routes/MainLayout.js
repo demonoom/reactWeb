@@ -360,9 +360,11 @@ const MainLayout = React.createClass({
             </Menu.Item>
             <Menu.Item key="antNest" className="padding_menu">
             <i className="icon_yichao"></i><div className="tan">蚁巢</div>
-              <i className="icon_yichao"></i><div className="tan" onClick={ this.showpanle } >侧栏</div>
+              {/*<i className="icon_yichao"></i><div className="tan" onClick={ this.showpanle } ></div>*/}
             </Menu.Item>
-
+            <Menu.Item key="sideBar" className="padding_menu">
+               <Icon type="clock-circle-o" onClick={ this.showpanle } /><div className="tan">侧栏</div>
+            </Menu.Item>
             {/*<Menu.Item key="exam" className="padding_menu">
               <Icon type="file-text" /><div className="tan">考试</div>
             </Menu.Item>*/}
