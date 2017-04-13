@@ -46,19 +46,25 @@ const FavoriteShipinItems = React.createClass({
             let content = e.content;
             let refkey = e.type + "#" + e.favoriteId;
             this.activeKey.push(refkey);
-            return <div className="ant-card-body">
-                <div style={{width: 240, display: 'inline-block'}} bodyStyle={{padding: '5px'}} key={refkey}>
-                    <div className="custom-image">
+            return <div className="ant-card live ant-card-bordered">
+                <div  key={refkey}>
+                    <div className="live_img">
                         <a href={e.address} target="_blank"><img alt="example" className="attention_img" width="100%"
                                                                  src={e.cover}/></a>
                     </div>
                     <div className="custom-card">
-                        <p><a target="_blank" title="查看" href={e.address}><Button icon="eye-o"/></a>
-                            <a target="_blank" title="取消收藏"
-                               onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}><Button
-                                icon="star"/></a>
-                        </p>
-                        <h3>{content}</h3>
+						<p className="live_h3">{content}</p>
+                        <ul className="live_cont">
+							<li>
+								<span className="right_ri">
+									<a target="_blank" title="查看" href={e.address}><Button icon="eye-o" className="ant-btn focus_btn"/></a>
+                            		<a target="_blank" title="取消收藏" className="toobar" onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}>
+										<Button icon="star-o" className="ant-btn focus_btn" />
+									</a>
+								</span>
+							</li>
+                        </ul>
+                        
                     </div>
                 </div>
             </div>
@@ -71,16 +77,18 @@ const FavoriteShipinItems = React.createClass({
         console.log('buildFavShipionUi');
         this.buildFavShipionUi(this.props.param.data, this.props.param.type);
         return (
-            <div>
-            <div>
-                {coursePanelChildren}
+            <div className="favorite_scroll">
+				<div className="favorite_up">
+					{coursePanelChildren}
+				</div>
+				<Pagination total={this.props.param.totalCount} pageSize={getPageSize()} current={this.props.param.currentPage} onChange={this.props.pageChange} />
             </div>
-                <div>
-                    <Pagination total={this.props.param.totalCount} pageSize={getPageSize()} current={this.props.param.currentPage} onChange={this.props.pageChange} />
-                </div>
-            </div>
+
+
         );
+		
     },
+	
 
 });
 

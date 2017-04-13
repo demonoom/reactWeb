@@ -48,19 +48,17 @@ const FavoriteOtherItems = React.createClass({
             let content = e.content;
 
 
-            return <div key={e.id}>
-                <div className="left">
-                    <a target="_blank" href={e.address}><img style={{width: '42px'}} src={e.cover}/></a>
-                    <span className="col2"><a href={e.address}>{content}</a></span><br/>
-                    <span className="col2"> {getLocalTime(e.time)}</span>
-                </div>
-                <div className="right">
-                    <span className="col2">
-                        <a target="_blank" title="取消收藏" onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)} ><Button icon="star"/></a></span>
-                    <span className="col2">
-                        <a target="_blank" title="查看"  href={e.address}><Button icon="eye-o"/></a></span>
-                </div>
-            </div>
+            return <li key={e.id} className="favorite_1 topics_bor_bot">
+                    <a target="_blank" href={e.address} className="attention_img"><img src={e.cover}/></a>
+                    <div className="toobar">
+						<span className="antnest_name">{content}</span><br/>
+                   		<span className="topics_time"> {getLocalTime(e.time)}</span>
+					</div>
+                    <span className="right_ri">
+                        <a target="_blank" title="取消收藏" onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)}><Button icon="star-o" className="favorite_btn" /></a>
+                        <a target="_blank" title="查看"  href={e.address} className="toobar"><Button icon="eye-o" className="favorite_btn"/></a>
+					</span>
+            </li>
         });
 
     },
@@ -70,13 +68,12 @@ const FavoriteOtherItems = React.createClass({
         console.log('buildFavOtherUi');
         this.buildFavOtherUi(this.props.param.data);
         return (
-            <div>
-            <div>
+            <div className="favorite_scroll">
+            <div className="favorite_up">
                 {coursePanelChildren}
             </div>
-            <div>
                     <Pagination total={this.props.param.totalCount} pageSize={getPageSize()} current={this.props.param.currentPage} onChange={this.props.pageChange} />
-                </div>
+
             </div>
         );
     },

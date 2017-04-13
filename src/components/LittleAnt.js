@@ -53,7 +53,7 @@ class LittleIframe extends React.Component {
             display: this.state.visible
         }
 
-        return (<aside style={{...sty}} className="little-layout-aside-r" onClick={this.notClose} >
+        return (<aside style={{display:'none'}} className="little-layout-aside-r" onClick={this.notClose} >
                 <div className="little-tilte" onClick={this.closepanle }>关闭</div>
                 <div className="little-menu"></div>
 
