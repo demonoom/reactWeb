@@ -8,6 +8,7 @@ import {getLocalTime} from '../../utils/Const';
 import {isEmpty} from '../../utils/Const';
 import {getAllTopic} from '../../utils/Const';
 import {getOnlyTeacherTopic} from '../../utils/Const';
+import {showLargeImg} from '../../utils/utils';
 import UploadImgComponents from './UploadImgComponents';
 import EmotionInputComponents from './EmotionInputComponents';
 
@@ -174,17 +175,31 @@ const AntNestTabComponents = React.createClass({
             if(attachMentType==1){
                 //图片附件
                 /*attachMents = <span className="topics_zan"><img src={e.address}/></span>;*/
-                attachMents = <span className="topics_zan">
+                /*attachMents = <span className="topics_zan">
                     <Popover placement="bottom"  content={<img src={e.address} arrowPointAtCenter  className="topics-popover" />}><img src={e.address} /></Popover>
+                </span>;*/
+                attachMents = <span className="topics_zan">
+                    <img className="topics_zanImg" src={e.address}  onClick={showLargeImg}/>
                 </span>;
 
             }else if(attachMentType==4){
                 //mp4附件
-                attachMents = <span className="topics_zan">
-                    <a href={e.address} target="_blank">
-                        <img src={e.cover}/><span>{e.content}</span>
-                    </a>
-                </span>;
+                attachMents =<div style={{valign:'top'}}>
+                    <ul>
+                        <li>
+                            <a href={e.address} target="_blank">
+                                {e.content}
+                            </a>
+                        </li>
+                        <li>
+                            <span className="topics_zan">
+                                <a href={e.address} target="_blank">
+                                    <img src={e.cover} />
+                                </a>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
             }
             attachMentsArray.push(attachMents);
         })
@@ -370,7 +385,7 @@ const AntNestTabComponents = React.createClass({
                      {/*<p>{topicObj.content}</p>*/}
                      {topicObj.content}
                  </li>
-                 <li>
+                 <li className="imgLi">
                      {attachMentsArray}
                  </li>
                  <li className="topics_bot">

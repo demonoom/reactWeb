@@ -1413,7 +1413,7 @@ const AntGroupTabComponents = React.createClass({
 
     onSubjectPageChange(page){
         var userId = antGroup.state.currentUser.colUid;
-        antGroup.getUserSubjects(userId,page);
+        antGroup.getUserSubjectsByUid(userId,page);
         antGroup.setState({
             currentSubjectPage: page,
         });
@@ -1437,6 +1437,20 @@ const AntGroupTabComponents = React.createClass({
         var returnChatGroupMessagePageToolBar = <div className="ant-tabs-right"><Button onClick={antGroup.returnToChatGroupMessagePage}>返回</Button></div>;
         var tabComponent;
         var userPhoneCard;
+        var breadCrumb;
+        var isVisible=false;
+        if(isEmpty(antGroup.props.breadcrumbVisible)==false){
+            isVisible=antGroup.props.breadcrumbVisible;
+        }else{
+            isVisible=antGroup.state.breadcrumbVisible;
+        }
+        if(isVisible){
+            breadCrumb = <Breadcrumb separator=">">
+                <Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
+                <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
+                <Breadcrumb.Item href="#/MainLayout">{breadMenuTip}</Breadcrumb.Item>
+            </Breadcrumb>;
+        }
         if(antGroup.state.optType=="getUserList"){
                 tabComponent= <Tabs
                     hideAdd
@@ -1814,7 +1828,10 @@ const AntGroupTabComponents = React.createClass({
             </Tabs>;
         }else if(antGroup.state.optType=="getLiveInfoByUid"){
             welcomeTitle=antGroup.state.currentUser.userName+"的直播课";
-            var returnPersonCenterToolBar = <div className="ant-tabs-right"><Button onClick={antGroup.returnPersonCenter}>返回</Button></div>;
+            var returnPersonCenterToolBar;
+            if(isVisible){
+                returnPersonCenterToolBar = <div className="ant-tabs-right"><Button onClick={antGroup.returnPersonCenter}>返回</Button></div>;
+            }
             tabComponent= <Tabs
                 hideAdd
                 ref = "mainTab"
@@ -2168,21 +2185,6 @@ const AntGroupTabComponents = React.createClass({
                     </div>
                 </TabPane>
             </Tabs>;
-        }
-
-        var breadCrumb;
-        var isVisible=false;
-        if(isEmpty(antGroup.props.breadcrumbVisible)==false){
-            isVisible=antGroup.props.breadcrumbVisible;
-        }else{
-            isVisible=antGroup.state.breadcrumbVisible;
-        }
-        if(isVisible){
-           breadCrumb = <Breadcrumb separator=">">
-               <Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
-               <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
-               <Breadcrumb.Item href="#/MainLayout">{breadMenuTip}</Breadcrumb.Item>
-           </Breadcrumb>;
         }
 
         return (

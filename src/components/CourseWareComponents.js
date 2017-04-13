@@ -341,7 +341,7 @@ const CourseWareComponents = React.createClass({
 
     buildKonwledgePanels: function (courseWareList) {
         if (courseWareList.length == 0) {
-            coursePanelChildren = <img className="noDataTipImg" src={require('./images/noDataTipImg.png')}/>;
+            coursePanelChildren = <img className="noDataTipImg"   onClick={$.openPhotoGallery} src={require('./images/noDataTipImg.png')}/>;
         } else {
             coursePanelChildren = courseWareList.map((e, i)=> {
                 var eysOnButton;
