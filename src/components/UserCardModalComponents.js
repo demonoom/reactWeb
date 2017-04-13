@@ -155,7 +155,7 @@ const UserCardModalComponents = React.createClass({
   getTitle(){
         let uploadProps={
             action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
-            showUploadList : {false},
+            showUploadList : false,
             className : "avatar-uploader",
             name : "avatar",
             beforeUpload (file){
@@ -188,17 +188,16 @@ const UserCardModalComponents = React.createClass({
 
         };
 
-   return <span>
+   return <div>
        <Upload {...uploadProps}>
         {
             this.state.userHeadIcon ?  <img src={this.state.userHeadIcon}   className="img_us" /> :  <Icon type="plus" className="avatar-uploader-trigger" />
         }
       </Upload>
-               {/*<img className="img_us" src={this.state.userHeadIcon}  />*/}
                <br/>
                 <span>{this.state.userName} </span>
                 { this.state.userHeadIcon ? <img src={this.state.userHeadIcon} className="blur"/> : null }
-         </span>;
+         </div>;
   },
 
   render() {
@@ -208,7 +207,7 @@ const UserCardModalComponents = React.createClass({
           <img src={this.state.userHeadIcon}  onClick={this.showModal}/>
           <Modal
               visible={this.state.visible}
-              title={<p className="user_cont1">{this.getTitle()} </p>}
+              title={<div className="user_cont1">{this.getTitle()} </div>}
               onCancel={teacherInfo.handleCancel}
               className="model_wi"
               transitionName=""

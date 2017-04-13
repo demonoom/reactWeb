@@ -20,6 +20,7 @@ import ExamPagerTabComponents from '../components/exam/ExamPagerTabComponents';
 import TeacherResource from '../components/TeacherInfos/TeacherResource';
 import moment from 'moment';
 import StudyEvaluateMenu from '../components/StudyEvaluateMenu';
+import LittleIframe from '../components/LittleAnt';
 import StudyEvaluateTabComponents from '../components/StudyEvaluateTabComponents';
 import AntNestTabComponents from '../components/antNest/AntNestTabComponents';
 import AntGroupTabComponents from '../components/antGroup/AntGroupTabComponents';
@@ -30,6 +31,8 @@ import enUS from 'antd/lib/locale-provider/en_US';
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
 import { createStore } from 'redux';
+
+
 
 
 const store = createStore(function () {
@@ -49,7 +52,11 @@ const MainLayout = React.createClass({
       // locale: enUS,
       locale: 'zh-cn',
       resouceType:'',
+        panleSrc:''
     };
+    this.switchSection = this.switchSection.bind(this)
+    this.showpanle = this.showpanle.bind(this)
+    this.foceClosePanle = this.foceClosePanle.bind(this)
   },
 
 
@@ -151,6 +158,21 @@ const MainLayout = React.createClass({
     mainLayout.setState({resouceType:resouceType});
   },
 
+  showpanle(url){
+
+      url =  'http://www.maaee.com/Excoord_PC/liveinfo/show/23836/15325';
+      this.refs.laifr.closepanle()
+      this.setState({panleSrc: url })
+      let event = window.event;
+      event.stopPropagation();
+      event.cancelBubble = true;
+  },
+  foceClosePanle(){
+      this.refs.laifr.closepanle(true)
+      let event = window.event;
+      event.stopPropagation();
+      event.cancelBubble = true;
+  },
 
   render() {
     const collapse = this.state.collapse;
@@ -266,7 +288,7 @@ const MainLayout = React.createClass({
                 <Col span={24}>
                   <div className="ant-layout-container">
                     <div className="ant-layout-content">
-                      <MyFollows resouceType={mainLayout.state.resouceType} callEvent={this.switchSection.bind(this)} />
+                      <MyFollows resouceType={mainLayout.state.resouceType} callEvent={this.switchSection} />
                     </div>
                   </div>
                 </Col>
@@ -313,12 +335,12 @@ const MainLayout = React.createClass({
 
 
     return (
-        <LocaleProvider locale={this.state.locale}>
+        <LocaleProvider locale={this.state.locale} >
       <div className={collapse ? "ant-layout-aside ant-layout-aside-collapse" : "ant-layout-aside"}>
 
-        <aside className="ant-layout-sider">
+        <aside className="ant-layout-sider"  onClick={this.foceClosePanle} >
           <div className="ant-layout-logo">
-            <UserCardModalComponents callbackParent={this.getTeacherResource} callEvent={this.switchSection.bind(this)}/>
+            <UserCardModalComponents callbackParent={this.getTeacherResource} callEvent={this.switchSection}/>
           </div>
           <Menu mode="inline" theme="dark" defaultSelectedKeys={[this.state.currentKey]}  onClick={this.toolbarClick}>
             <Menu.Item key="teachTimes" className="padding_menu">
@@ -338,7 +360,9 @@ const MainLayout = React.createClass({
             </Menu.Item>
             <Menu.Item key="antNest" className="padding_menu">
             <i className="icon_yichao"></i><div className="tan">蚁巢</div>
+              <i className="icon_yichao"></i><div className="tan" onClick={ this.showpanle } >侧栏</div>
             </Menu.Item>
+
             {/*<Menu.Item key="exam" className="padding_menu">
               <Icon type="file-text" /><div className="tan">考试</div>
             </Menu.Item>*/}
@@ -357,8 +381,9 @@ const MainLayout = React.createClass({
 
         </aside>
 
-        <div className="ant-layout-main">
+        <div className="ant-layout-main" onClick={this.foceClosePanle} >
           <div className="ant-layout-header">
+
                 <HeaderComponents/>
 
           </div>
@@ -368,6 +393,11 @@ const MainLayout = React.createClass({
           </div>
 
         </div>
+
+
+          <LittleIframe src={this.state.panleSrc} ref="laifr" />
+
+
       </div>
         </LocaleProvider>
     );

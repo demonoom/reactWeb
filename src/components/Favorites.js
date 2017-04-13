@@ -78,19 +78,19 @@ class Favorites extends React.Component {
     changeState(obj) {
         switch (parseInt(obj.type)) {
             case 0:
-                this.setState({'other': obj,type:obj.type,total:obj.total,pageNo:obj.pageNo });
+                this.setState({'other': obj, type:obj.type,total:obj.total,pageNo:obj.pageNo });
                 break;
             case 1:
-                this.setState({'subject': obj,type:obj.type,total:obj.total,pageNo:obj.pageNo });
+                this.setState({'subject': obj, type:obj.type,total:obj.total,pageNo:obj.pageNo });
                 break;
             case 2:
-                this.setState({'weike': obj,type:obj.type,total:obj.total,pageNo:obj.pageNo });
+                this.setState({'weike': obj, type:obj.type,total:obj.total,pageNo:obj.pageNo });
                 break;
             case 3:
-                this.setState({'jiangyi': obj,type:obj.type,total:obj.total,pageNo:obj.pageNo });
+                this.setState({'jiangyi': obj, type:obj.type,total:obj.total,pageNo:obj.pageNo });
                 break;
             case 4:
-                this.setState({'shipin': obj,type:obj.type,total:obj.total,pageNo:obj.pageNo });
+                this.setState({'shipin': obj, type:obj.type,total:obj.total,pageNo:obj.pageNo });
                 break;
         }
     }
@@ -101,21 +101,22 @@ class Favorites extends React.Component {
     }
 
 // tab切换
-    tabClick(type) {
+    tabClick(type,pageNo) {
         let ref = this.FAVTYPE[type][1];
         var param = {
             method: this.state.method,
             ident: this.state.ident,
             type: type,
-            pageNo: this.state[ref]['pageNo']
+            pageNo: pageNo || this.state[ref]['pageNo']
         }
         this.getDate(this.changeState, param);
     }
 
-// 翻页
-    pageChange(ev){
+    // 翻页
+    pageChange(pageNo){
         debugger
-      //  this.tabClick(this.state.type);
+       this.tabClick(this.state.type,pageNo);
+
     }
 
     // 取消收藏
@@ -141,8 +142,10 @@ class Favorites extends React.Component {
 
 
     getBreadCrumb(){
-        if( this.state.breadcrumbVisible ){
-            return <Breadcrumb separator=">"  >
+        let tag;
+        this.props.breadcrumbVisible === undefined ? tag= true : tag=this.props.breadcrumbVisible;
+        if(tag ){
+            this.breadcrumb = <Breadcrumb separator=">"  >
                 <Breadcrumb.Item><Icon type="home"/></Breadcrumb.Item>
                 <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
                 <Breadcrumb.Item href="#/MainLayout">我的收藏</Breadcrumb.Item>
@@ -151,9 +154,11 @@ class Favorites extends React.Component {
     }
 
     render() {
+        this.getBreadCrumb();
+
         return (
             <div>
-                {this.getBreadCrumb()}
+                {this.breadcrumb}
                 <Tabs onTabClick={this.tabClick.bind(this)} defaultActiveKey={this.state.activeKey}>
                     {/*题目*/}
                     <TabPane tab={this.FAVTYPE[1][2]} key='1'>

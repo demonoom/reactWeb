@@ -1310,22 +1310,22 @@ const AntGroupTabComponents = React.createClass({
                         if(isEmpty(password)==false){
                             keyIcon = <Icon type="key" />;
                         }
-                        var liveCard = <Card style={{ width: 200 }} bodyStyle={{ padding: 0 }}>
-                            <div className="custom-image">
+                        var liveCard = <Card className="live">
+                            <div className="live_img">
                                 <img className="attention_img"  id={id} onClick={antGroup.turnToLiveInfoShowPage} alt="example" width="100%" src={cover} />
                             </div>
                             <div className="custom-card" value={id} onClick={antGroup.turnToLiveInfoShowPage}>
-                                <h3>{title}</h3>
-                                <ul>
+                                <p className="live_h3">{title}</p>
+                                <ul className="live_cont">
                                     <li>
-                                        <img style={{width:'30px',height:'30px'}} src={user.avatar}></img>
-                                        <p>{userName}</p>
-                                        <p>{startTime}</p>
+                                        <span className="attention_img"><img style={{width:'30px',height:'30px'}} src={user.avatar}></img></span>
+                                        <span className="live_span_1">{userName}</span>
+                                        <span className="right_ri live_span_2">{startTime}</span>
                                     </li>
                                     <li>
-                                        <p>{schoolName}</p>
-                                        <p>{courseName}</p>
-                                        <Icon type="lock" />
+                                        <span className="live_color live_green">{schoolName}</span>
+                                        <span className="live_color live_orange">{courseName}</span>
+                                        <Button className="right_ri focus_btn"><Icon type="lock" /></Button>
                                     </li>
                                 </ul>
                             </div>
@@ -1840,11 +1840,11 @@ const AntGroupTabComponents = React.createClass({
                 tabBarExtraContent={returnPersonCenterToolBar}
                 transitionName=""  //禁用Tabs的动画效果
             >
-                <TabPane tab={welcomeTitle} key="userLiveInfos" className="topics_rela">
-                    <div className='ant-tabs ant-tabs-top ant-tabs-line' style={{'overflow':'auto'}}>
+                <TabPane tab={welcomeTitle} key="userLiveInfos" className="topics_rela ">
+                    <div className='ant-tabs ant-tabs-top ant-tabs-line topics_calc' style={{'overflow':'auto'}}>
                         {antGroup.state.userLiveData}
-                        <Pagination total={antGroup.state.totalLiveCount} pageSize={getPageSize()} current={antGroup.state.currentLivePage} onChange={this.onLiveInfoPageChange}/>
                     </div>
+					<Pagination total={antGroup.state.totalLiveCount} pageSize={getPageSize()} current={antGroup.state.currentLivePage} onChange={this.onLiveInfoPageChange}/>
                 </TabPane>
             </Tabs>;
         }else if(antGroup.state.optType=="getScoreOrLevelPage"){
