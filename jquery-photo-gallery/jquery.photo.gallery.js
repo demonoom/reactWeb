@@ -31,7 +31,7 @@ $.fn.extend({
 							 '</div>' +
 							 '<div class="tool">' +
 							 	'<div class="toolct">' +
-								 	'<span class="oper_fullscreen" title="查看全屏"><i class="icon_tool-fullscreen"></i></span>' +
+								 	/*'<span class="oper_fullscreen" title="查看全屏"><i class="icon_tool-fullscreen"></i></span>' +*/
 									'<span class="oper_bigger" title="放大图片"><i class="icon_tool-bigger"></i></span>' +
 									'<span class="oper_smaller" title="缩小图片"><i class="icon_tool-smaller"></i></span>' +
 									'<span class="oper_rotate" title="向右旋转"><i class="icon_tool-rotate"></i></span>' +
@@ -235,10 +235,12 @@ $.fn.extend({
   	 	$fullscreen.on("click", function(){
 			var parentD = window.parent.document,
 				J = $(parentD.getElementById("J_pg"));
+			preWidth = document.body.clientWidth;
+			preHeight = document.body.clientHeight;
 			if(!isMax){
 				isMax = true;
-				preWidth = document.body.clientWidth;
-				preHeight = document.body.clientHeight;
+				/*preWidth = document.body.clientWidth;
+				preHeight = document.body.clientHeight;*/
 				preTop = J.css("top");
 				preLeft = J.css("left");
 				J.css({
@@ -546,6 +548,12 @@ $.fn.extend({
 		//设置当前的弹出层获得焦点，以便能够直接使用键盘按键进行操作
 		var _parent =  window.parent || window.top,
 			_jg = _parent.document.getElementById("J_pg");
+		$(_jg).css({
+			top: 0,
+			left : 0,
+			width : window.parent.document.body.clientWidth,
+			height : window.parent.document.body.clientHeight,
+		});
 		$(_jg).focus();
 		return this;
 	}
