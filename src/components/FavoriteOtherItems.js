@@ -28,12 +28,23 @@ const FavoriteOtherItems = React.createClass({
 
     activeKey:[],
 
-    download: function (e) {
-        window.open(e.target.value);
-    },
 
-    view: function (e) {
-        window.location.href = e.target.value;
+
+    view: function (e,url,tit) {
+        e = e || window.event;
+        if(e.nativeEvent){
+            e.nativeEvent.stopImmediatePropagation();
+        }
+        e.stopPropagation();
+        e.preventDefault();
+        e.cancelBubble = true;
+        let obj ={
+            title:tit,
+            url:url,
+            width:'400px'
+        }
+
+        this.props.onPreview(obj)
     },
 
 
@@ -58,7 +69,7 @@ const FavoriteOtherItems = React.createClass({
                     <span className="col2">
                         <a target="_blank" title="取消收藏" onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)} ><Button icon="star"/></a></span>
                     <span className="col2">
-                        <a target="_blank" title="查看"  href={e.address}><Button icon="eye-o"/></a></span>
+                        <a target="_blank" title="查看"   onClick={event => {this.view(event,e.address,e.content)} }  ><Button icon="eye-o"/></a></span>
                 </div>
             </div>
         });

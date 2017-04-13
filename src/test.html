@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        div {
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            right: -100px;
+            background: green;
+
+        }
+        .toeffect {
+            right: 0;
+
+            transition: right 300ms linear;
+            /* Firefox 4 */
+            -moz-transition:right 300ms linear;
+            /* Safari and Chrome */
+            -webkit-transition:right 300ms linear;
+            /* Opera */
+            -o-transition:right 300ms linear;
+
+        }
+        .effectend {
+            right: -100px;
+
+            transition: right 100ms linear;
+            /* Firefox 4 */
+            -moz-transition:right 100ms linear;
+            /* Safari and Chrome */
+            -webkit-transition:right 100ms linear;
+            /* Opera */
+            -o-transition:right 100ms linear;
+
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="divid" ></div>
+
+<p onclick="start()" >开始</p>
+<p onclick="stop()" >停止</p>
+
+</body>
+<script>
+
+    function  start(){
+        divid.className = 'toeffect';
+
+    }
+    function  stop(){
+        divid.className = 'effectend';
+
+    }
+
+
+
+</script>
+</html>
+
+

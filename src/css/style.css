@@ -1042,8 +1042,7 @@ article.content_3 img{
 .yz_input{
 	width:120px;
 }
-.ant-menu-submenu-inline > .ant-menu-submenu-title:after｛
-｝
+
 .ant-modal-body {
     padding:30px 16px 0 16px !important
 }
@@ -1105,7 +1104,7 @@ article.content_3 img{
 	} /* 滑块颜色 */
 
 	::-webkit-scrollbar-button {
-		  background-color: none;
+		  background-color: initial;
 	} /* 滑轨两头的监听按钮颜色 */
 
 	/* ::-webkit-scrollbar-corner {
@@ -1182,7 +1181,7 @@ p.user_cont span.name1{
 	
 }
 .blur {
-    filter: url(blur.svg#blur); /* FireFox, Chrome, Opera */   
+    filter: url('blur.svg#blur'); /* FireFox, Chrome, Opera */
     -webkit-filter: blur(30px); /* Chrome, Opera */
     -moz-filter: blur(30px);
     -ms-filter: blur(30px);   
@@ -1220,7 +1219,8 @@ p.user_cont span.name1{
 } 
 .knowledge_width{
 	width:750px !important;
-} 
+}
+
 .ant-form-item {
     font-size: 14px;
     margin: 12px 0 12px 0 !important;
@@ -1781,7 +1781,7 @@ a {
 	}
 .btn_gray_exam{
 	padding: 4px 8px !important;
-    min-width: auto!important;
+    min-width: auto !important;
 
 }
 .btn_gray_exam_del{
@@ -2249,8 +2249,8 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr{
 	height:100px;
 }
 .group_send_talk{
-	width:calc(100% -80px);
-	width:-moz-calc(100% -80px);
+	width:calc(100% - 80px);
+	width:-moz-calc(100% - 80px);
 	width: -webkit-calc(100% - 80px);
 	height:100%;
 	position:relative;
@@ -2286,8 +2286,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr{
 	background:url(../components/images/icon_yichao.png) no-repeat 0 -48px;
 
 }
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 .person_13{
 	font-size:13px !important;
 }
@@ -2378,7 +2377,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr{
     height: 50px;
     line-height: 45px;
     text-align: center;
-    border 1px solid red;
+    border: 1px solid red;
     color: sandybrown;
     font-size: 16px;
     margin-bottom: 5px;
@@ -2635,18 +2634,85 @@ ul.integral li i{
 	width:240px
 
 }
-.little-layout-aside-r {
+
+.little-layout-aside-r-show {
 	position: absolute;
-	right: 0;
+	right: 1px;
 	top: 53px;
 	width: 380px;
 	height: calc(100% - 53px);
 	z-index: 1;
-	background-color: darkorange;
+	background-color: white;
+	border-left: 1px solid #dfe0e3;
+	box-shadow: 0 7px 21px rgba(0, 0, 0, 0.25);
+
+	-webkit-animation: showBox 0.5s ease-in-out;
+	-moz-animation: showBox 0.5s ease-in-out;
+	animation: showBox 0.5s ease-in-out;
 
 }
-.littleAnt-iframe-panle {
 
+
+.little-warp{
 	height: 100%;
+	width: 100%;
+}
 
+
+.little-warp .little-tilte{
+	width: 100%;
+	height: 40px;
+	overflow: hidden;
+	text-align: center;
+	border-bottom: 1px solid #dfe0e3;
+
+}
+.little-warp .little-tilte .title {
+	display: inline-block ;
+	color: black;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	font-size: 1.2em;
+	line-height: 2.5em;
+	font-weight: lighter;
+
+}
+
+.little-warp .little-tilte .close{
+	display: inline-block ;
+	position: absolute;
+	font-weight: lighter;
+	right: 0;
+	top: 0;
+	width: 40px;
+	height: 40px;
+	line-height: 40px;
+	text-decoration: none;
+	text-align: center;
+	font-size: 2em;
+	float: right;
+	color: #dfe0e3;
+	font-family: Arial;
+}
+.littleAnt-iframe-panle {
+	height: calc(100% - 40px);
+}
+
+@keyframes showBox {
+	from {
+		transform: translateX(600px);
+	}
+	to {
+		transform: translateX(0);
+	}
+}
+
+@-webkit-keyframes showBox {
+	from {
+		-webkit-transform: translateX(600px);
+	}
+	to {
+		-webkit-transform: translateX(0);
+	}
 }

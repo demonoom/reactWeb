@@ -88,7 +88,9 @@ const FavoriteSubjectItems = React.createClass({
 
             let popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>'+e.subjects.content+'<hr/><span class="answer_til answer_til_2">答案：</span>'+e.subjects.answer+'</div>';
 
-            let content=<Popover  placement="rightTop" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: popOverContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
+            let content=<Popover  placement="rightTop" content={
+                <article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: popOverContent}}></article>}>
+                <article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
 
             this.data.push({
                 key: e.favoriteId,

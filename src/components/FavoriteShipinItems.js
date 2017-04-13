@@ -29,9 +29,21 @@ const FavoriteShipinItems = React.createClass({
         window.open(e.target.value);
     },
 
-    view: function (e) {
-        window.location.href = e.target.value;
+    view: function (e,url,tit) {
+        e = e || window.event;
+        if(e.nativeEvent){
+            e.nativeEvent.stopImmediatePropagation();
+        }
+        e.stopPropagation();
+        e.preventDefault();
+        e.cancelBubble = true;
+        let obj ={
+            title:tit,
+            url:url,
+            width:'420px',
 
+        }
+        this.props.onPreview(obj)
     },
 
     buildFavShipionUi: function (courseWareList) {
@@ -53,7 +65,7 @@ const FavoriteShipinItems = React.createClass({
                                                                  src={e.cover}/></a>
                     </div>
                     <div className="custom-card">
-                        <p><a target="_blank" title="查看" href={e.address}><Button icon="eye-o"/></a>
+                        <p><a target="_blank" title="查看"   onClick={event => {this.view(event,e.address,e.content)} }  ><Button icon="eye-o"/></a>
                             <a target="_blank" title="取消收藏"
                                onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}><Button
                                 icon="star"/></a>
