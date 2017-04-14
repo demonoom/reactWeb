@@ -86,6 +86,8 @@ const FavoriteItem = React.createClass({
         e.stopPropagation();
         e.preventDefault();
         e.cancelBubble = true;
+        url = url.split('/Excoord_PC/')[1];
+        url = "/proxy/" + url;
         let obj ={
             title:tit,
             url:url,

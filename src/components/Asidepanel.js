@@ -3,6 +3,7 @@
  */
 
 import React from 'react';
+import WebCall from '../utils/phone';
 'use strict';
 
 class Asidepanel extends React.Component {
@@ -33,6 +34,10 @@ class Asidepanel extends React.Component {
         window.open(this.props.param.url);
     }
 
+    bindIfrCall(e){
+
+        asidepanel.contentWindow.phone = WebCall;
+    }
 
     render() {
         let sty = {
@@ -54,7 +59,7 @@ class Asidepanel extends React.Component {
                         <a onClick={  this.zoomview}  className="zoom"><i className="iconfont iconfont_more">&#xe6b8;</i></a>
                     </div>
                     <section className="littleAnt-iframe-panle">
-                        <iframe border={0} style={{...sty2}} src={ this.props.param.url }></iframe>
+                        <iframe id="asidepanel" border={0} style={{...sty2}} src={ this.props.param.url } onLoad={  this.bindIfrCall } ></iframe>
                     </section>
                 </div>
             </aside>
@@ -66,3 +71,4 @@ class Asidepanel extends React.Component {
 
 
 export default Asidepanel;
+

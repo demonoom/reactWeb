@@ -36,6 +36,10 @@ const FavoriteShipinItems = React.createClass({
         e.stopPropagation();
         e.preventDefault();
         e.cancelBubble = true;
+
+        url = url.split('/Excoord_PC/')[1];
+        url = "/proxy/" + url;
+
         let obj ={
             title:tit,
             url:url,
@@ -57,7 +61,6 @@ const FavoriteShipinItems = React.createClass({
             let content = e.content;
             let refkey = e.type + "#" + e.favoriteId;
             this.activeKey.push(refkey);
-            debugger
             return <div className="ant-card live ant-card-bordered">
                 <div  key={refkey}>
                     <div className="live_img">

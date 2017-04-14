@@ -11,6 +11,8 @@ module.exports = function(webpackConfig, env) {
     app: './src/index.js'
   }
 
+
+
   // Support hmr
   if (env === 'development') {
     /*webpackConfig.devtool = '#eval';*/
