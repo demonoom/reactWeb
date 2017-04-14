@@ -1,61 +1,64 @@
 /**
  * Created by devnote on 17-4-7.
  */
-export const phone = function () {
+class WebCall {
 
-    this.showLoading=function () {
-        
-    }
-
-    this.showLoading=function (cancelAble) {
-
-    }
-    
-    this.dismissLoading=function () {
-        
-    }
-
-    this.showMessage=function (message) {
+    showLoading() {
 
     }
 
-    this.playAudio=function (url) {
+    showLoading(cancelAble) {
 
     }
 
-    this.playVideoM=function (jsonObject) {
+    dismissLoading() {
 
     }
 
-    this.playVideoJSON=function (jsonObject) {
+    showMessage(message) {
 
     }
 
-    this.showImage=function (url) {
+    playAudio(url) {
 
     }
 
-    this.showImage=function (url,currentUrl) {
+    playVideoM(jsonObject) {
 
     }
-    
-    this.showPdf=function (pdfUrl) {
-        
-    }
-    
-    this.playVideo = function (videoPath) {
-        
+
+    playVideoJSON(jsonObject) {
+        var obj = eval('(' + str + ')')
+        debugger
+        var flvsrc = obj.liveVideos[0].path;
+
     }
 
-    this.finish = function () {
-        
+    showImage(url) {
+
+    }
+
+    showImage(url, currentUrl) {
+
+    }
+
+    showPdf(pdfUrl) {
+
+    }
+
+    playVideo(videoPath) {
+
+    }
+
+    finish() {
+
     }
 
     /**
      * 结束本activity并且刷新前一个fragment
      */
-    this.finishForRefresh = function () {
-        
+    finishForRefresh() {
+
     }
 
     /**
@@ -63,8 +66,8 @@ export const phone = function () {
      *
      * @param cmd
      */
-    this.finishForExecute = function (cmd) {
-        
+    finishForExecute(cmd) {
+
     }
 
     /**
@@ -72,8 +75,8 @@ export const phone = function () {
      *
      * @param url
      */
-    this.finishForNewPage = function (url) {
-        
+    finishForNewPage(url) {
+
     }
 
     /**
@@ -81,33 +84,32 @@ export const phone = function () {
      *
      * @param shareAble
      */
-    this.setShareAble = function (shareAble) {
-        
+    setShareAble(shareAble) {
+
     }
 
-    this.teacherJoinClass = function (vid) {
-        
+    teacherJoinClass(vid) {
+
     }
+
     /**
      * 是否可以下拉刷新
      *
      * @param refreshAble
      */
-    this.setRefreshAble = function (refreshAble) {
-        
+    setRefreshAble(refreshAble) {
+
     }
 
-    this.showSubjectWeikeMaterials = function (subjectId) {
-        
+    showSubjectWeikeMaterials(subjectId) {
+
     }
 
-    this.addSubjectWeikeMaterialInput = function (subjectId) {
-        
+    addSubjectWeikeMaterialInput(subjectId) {
+
     }
-
-
-
-
 
 
 }
+
+export default WebCall;

@@ -11,6 +11,7 @@ const app = dva({
         console.log("global error:"+e.message);
     },
 });
+
 /*const app = dva({
     history: browserHistory,
 });
