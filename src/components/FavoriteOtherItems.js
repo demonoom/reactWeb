@@ -28,12 +28,23 @@ const FavoriteOtherItems = React.createClass({
 
     activeKey:[],
 
-    download: function (e) {
-        window.open(e.target.value);
-    },
 
-    view: function (e) {
-        window.location.href = e.target.value;
+
+    view: function (e,url,tit) {
+        e = e || window.event;
+        if(e.nativeEvent){
+            e.nativeEvent.stopImmediatePropagation();
+        }
+        e.stopPropagation();
+        e.preventDefault();
+        e.cancelBubble = true;
+        let obj ={
+            title:tit,
+            url:url,
+            width:'380px'
+        }
+
+        this.props.onPreview(obj)
     },
 
 
@@ -47,18 +58,19 @@ const FavoriteOtherItems = React.createClass({
         coursePanelChildren = courseWareList.map((e, i) => {
             let content = e.content;
 
+            return <div key={e.id}>
+                <div className="left">
+                    <a target="_blank" onClick={event => {this.view(event,e.address,e.content)} } ><img style={{width: '42px'}} src={e.cover}/></a>
+                    <span className="col2"><a  onClick={event => {this.view(event,e.address,e.content)} }  >{content}</a></span><br/>
+                    <span className="col2"> {getLocalTime(e.time)}</span>
+                </div>
+                <div className="right">
+                    <span className="col2">
+                        <a target="_blank" title="取消收藏" onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)} ><Button icon="star"/></a></span>
 
-            return <li key={e.id} className="favorite_1 topics_bor_bot">
-                    <a target="_blank" href={e.address} className="attention_img"><img src={e.cover}/></a>
-                    <div className="toobar">
-						<span className="antnest_name">{content}</span><br/>
-                   		<span className="topics_time"> {getLocalTime(e.time)}</span>
-					</div>
-                    <span className="right_ri">
-                        <a target="_blank" title="取消收藏" onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)}><Button icon="star-o" className="favorite_btn" /></a>
-                        <a target="_blank" title="查看"  href={e.address} className="toobar"><Button icon="eye-o" className="favorite_btn"/></a>
-					</span>
-            </li>
+                </div>
+            </div>
+
         });
 
     },

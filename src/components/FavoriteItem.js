@@ -78,9 +78,20 @@ const FavoriteItem = React.createClass({
         window.open(e.target.value);
     },
 
-    view: function (e) {
-        window.location.href = e.target.value;
-
+    view: function (e,url,tit) {
+        e = e || window.event;
+        if(e.nativeEvent){
+            e.nativeEvent.stopImmediatePropagation();
+        }
+        e.stopPropagation();
+        e.preventDefault();
+        e.cancelBubble = true;
+        let obj ={
+            title:tit,
+            url:url,
+            width:'400px'
+        }
+        this.props.onPreview(obj)
     },
 
 
@@ -117,7 +128,7 @@ const FavoriteItem = React.createClass({
                                 className="col2">{getLocalTime(e.material.createTime)}</span></span>
                         </div>
                         <div className="bnt2_right">
-                            <a target="_blank" title="查看" className="right_ri" href={e.address}><Button
+                            <a target="_blank" title="查看" className="right_ri"   onClick={event => {this.view(event,e.address,e.content)} } ><Button
                                 icon="eye-o"/></a>
                             <a target="_blank" title="取消收藏" className="right_ri" 
                                  onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)}><Button icon="star-o"/></a>
@@ -138,7 +149,7 @@ const FavoriteItem = React.createClass({
                         <div className="bnt2_right">
                             <a target="_blank" title="下载" className="right_ri" href={e.material.path}
                                download={e.material.path}><Button icon="download"/></a>
-                            <a target="_blank" title="查看" className="right_ri" href={e.address}><Button
+                            <a target="_blank" title="查看" className="right_ri"  onClick={event => {this.view(event,e.address,e.content)} } ><Button
                                 icon="eye-o"/></a>
                             <a target="_blank" title="取消收藏" className="right_ri"
                                onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)} ><Button icon="star-o"/></a>

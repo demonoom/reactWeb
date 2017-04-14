@@ -114,7 +114,6 @@ class Favorites extends React.Component {
 
     // 翻页
     pageChange(pageNo){
-        debugger
        this.tabClick(this.state.type,pageNo);
 
     }
@@ -141,6 +140,7 @@ class Favorites extends React.Component {
     }
 
 
+
     getBreadCrumb(){
         let tag;
         this.props.breadcrumbVisible === undefined ? tag= true : tag=this.props.breadcrumbVisible;
@@ -162,23 +162,23 @@ class Favorites extends React.Component {
                 <Tabs onTabClick={this.tabClick.bind(this)} defaultActiveKey={this.state.activeKey}>
                     {/*题目*/}
                     <TabPane tab={this.FAVTYPE[1][2]} key='1' className="topics_rela">
-                        <SubjectItem param={this.state.subject} onCancelfavrite={this.cancelFav} upgradeData={this.upgradeCurrent.bind(this)}/>
+                        <SubjectItem param={this.state.subject}   onCancelfavrite={this.cancelFav} upgradeData={this.upgradeCurrent.bind(this)}/>
                     </TabPane>
                     {/*微课*/}
                     <TabPane tab={this.FAVTYPE[2][2]} key='2' className="topics_rela">
-                        <FavItem param={this.state.weike} onCancelfavrite={this.cancelFav} upgradeData={this.upgradeCurrent.bind(this)} pageChange={this.pageChange}/>
+                        <FavItem param={this.state.weike} onPreview={this.props.onPreview} onCancelfavrite={this.cancelFav} upgradeData={this.upgradeCurrent.bind(this)} pageChange={this.pageChange}/>
                     </TabPane>
                     {/*讲义*/}
                     <TabPane tab={this.FAVTYPE[3][2]} key='3' className="topics_rela">
-                        <FavItem param={this.state.jiangyi} onCancelfavrite={this.cancelFav} upgradeData={this.upgradeCurrent.bind(this)}  pageChange={this.pageChange}/>
+                        <FavItem param={this.state.jiangyi} onPreview={this.props.onPreview} onCancelfavrite={this.cancelFav} upgradeData={this.upgradeCurrent.bind(this)}  pageChange={this.pageChange}/>
                     </TabPane>
                     {/*我的直播课*/}
                     <TabPane tab={this.FAVTYPE[4][2]} key='4' className="topics_rela">
-                        <ShippinItem param={this.state.shipin} onCancelfavrite={this.cancelFav} upgradeData={this.upgradeCurrent.bind(this)}  pageChange={this.pageChange}/>
+                        <ShippinItem param={this.state.shipin} onPreview={this.props.onPreview} onCancelfavrite={this.cancelFav} upgradeData={this.upgradeCurrent.bind(this)}  pageChange={this.pageChange}/>
                     </TabPane>
                     {/*其他*/}
                     <TabPane tab={this.FAVTYPE[0][2]} key='0' className="topics_rela">
-                        <OtherItem param={this.state.other} onCancelfavrite={this.cancelFav} upgradeData={this.upgradeCurrent.bind(this)}  pageChange={this.pageChange}/>
+                        <OtherItem param={this.state.other} onPreview={this.props.onPreview} onCancelfavrite={this.cancelFav} upgradeData={this.upgradeCurrent.bind(this)}  pageChange={this.pageChange}/>
                     </TabPane>
                 </Tabs>
             </div>

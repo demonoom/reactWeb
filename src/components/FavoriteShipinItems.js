@@ -29,9 +29,21 @@ const FavoriteShipinItems = React.createClass({
         window.open(e.target.value);
     },
 
-    view: function (e) {
-        window.location.href = e.target.value;
+    view: function (e,url,tit) {
+        e = e || window.event;
+        if(e.nativeEvent){
+            e.nativeEvent.stopImmediatePropagation();
+        }
+        e.stopPropagation();
+        e.preventDefault();
+        e.cancelBubble = true;
+        let obj ={
+            title:tit,
+            url:url,
+            width:'400px',
 
+        }
+        this.props.onPreview(obj)
     },
 
     buildFavShipionUi: function (courseWareList) {
@@ -49,22 +61,26 @@ const FavoriteShipinItems = React.createClass({
             return <div className="ant-card live ant-card-bordered">
                 <div  key={refkey}>
                     <div className="live_img">
-                        <a href={e.address} target="_blank"><img alt="example" className="attention_img" width="100%"
+                        <a  onClick={event => {this.view(event,e.address,e.content)} }  target="_blank"><img alt="example" className="attention_img" width="100%"
                                                                  src={e.cover}/></a>
                     </div>
                     <div className="custom-card">
 						<p className="live_h3">{content}</p>
-                        <ul className="live_cont">
-							<li>
-								<span className="right_ri">
-									<a target="_blank" title="查看" href={e.address}><Button icon="eye-o" className="ant-btn focus_btn"/></a>
-                            		<a target="_blank" title="取消收藏" className="toobar" onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}>
-										<Button icon="star-o" className="ant-btn focus_btn" />
-									</a>
-								</span>
-							</li>
-                        </ul>
-                        
+						<ul className="live_cont">
+                                    <li>
+                                        <span className="attention_img"><img style={{width:'30px',height:'30px'}} src={user.avatar}></img></span>
+                                        <span className="live_span_1">{userName}</span>
+                                        <span className="right_ri live_span_2">{startTime}</span>
+                                    </li>
+                                    <li>
+                                        <a target="_blank" title="取消收藏"
+										   onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}><Buttonn icon="star-o"  className="right_ri focus_btn"/>
+										</a>
+                                    </li>
+                                </ul>
+                        <p>
+                            
+                        </p>
                     </div>
                 </div>
             </div>

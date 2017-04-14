@@ -1,8 +1,5 @@
 import React from  'react';
-import { Menu, Breadcrumb, Icon ,Button,Progress} from 'antd';
-import { BackTop } from 'antd';
-import { Row, Col } from 'antd';
-import BackTopButton from  '../components/BackTopButton';
+import { Menu,  Icon,Row, Col  } from 'antd';
 import MainTabComponents from '../components/MainTabComponents';
 import MiddleMenuComponents from '../components/MiddleMenuComponents';
 import HeaderComponents from '../components/HeaderComponents';
@@ -20,7 +17,7 @@ import ExamPagerTabComponents from '../components/exam/ExamPagerTabComponents';
 import TeacherResource from '../components/TeacherInfos/TeacherResource';
 import moment from 'moment';
 import StudyEvaluateMenu from '../components/StudyEvaluateMenu';
-import LittleIframe from '../components/LittleAnt';
+import Asidepanel from '../components/Asidepanel';
 import StudyEvaluateTabComponents from '../components/StudyEvaluateTabComponents';
 import AntNestTabComponents from '../components/antNest/AntNestTabComponents';
 import AntGroupTabComponents from '../components/antGroup/AntGroupTabComponents';
@@ -49,10 +46,9 @@ const MainLayout = React.createClass({
       activeMiddleMenu:'sub1',
       currentKey:'teachTimes',
       openKeysStr:'',
-      // locale: enUS,
       locale: 'zh-cn',
       resouceType:'',
-        panleSrc:''
+        ifr:{},
     };
     this.switchSection = this.switchSection.bind(this)
     this.showpanle = this.showpanle.bind(this)
@@ -117,7 +113,6 @@ const MainLayout = React.createClass({
     if(userIdent==null || userIdent==""){
         location.hash="login";
     }
-    //sessionStorage.setItem("ident","23836");
   },
     // 呼叫任何本组件实例的任何方法，前提最终访问的方法只能接受一个对象类型的参数 dapeng
     componentDidUpdate(){
@@ -158,20 +153,14 @@ const MainLayout = React.createClass({
     mainLayout.setState({resouceType:resouceType});
   },
 
-  showpanle(url){
 
-      url =  'http://www.maaee.com/Excoord_PC/liveinfo/show/23836/15325';
-      this.refs.laifr.closepanle()
-      this.setState({panleSrc: url })
-      let event = window.event;
-      event.stopPropagation();
-      event.cancelBubble = true;
+  showpanle(obj){
+      this.refs.laifr.closepanle();
+      this.setState({ifr: obj});
   },
+
   foceClosePanle(){
-      this.refs.laifr.closepanle(true)
-      let event = window.event;
-      event.stopPropagation();
-      event.cancelBubble = true;
+      this.refs.laifr.closepanle(true);
   },
 
   render() {
@@ -255,7 +244,7 @@ const MainLayout = React.createClass({
                 <Col span={24}>
                   <div className="ant-layout-container">
                     <div className="ant-layout-content">
-                      <MyFavorites resouceType={mainLayout.state.resouceType} />
+                      <MyFavorites resouceType={mainLayout.state.resouceType} onPreview={ this.showpanle.bind(this) } />
                     </div>
                   </div>
                 </Col>
@@ -338,7 +327,7 @@ const MainLayout = React.createClass({
         <LocaleProvider locale={this.state.locale} >
       <div className={collapse ? "ant-layout-aside ant-layout-aside-collapse" : "ant-layout-aside"}>
 
-        <aside className="ant-layout-sider"  onClick={this.foceClosePanle} >
+        <aside className="ant-layout-sider"  onClick={this.foceClosePanle.bind(this)} >
           <div className="ant-layout-logo">
             <UserCardModalComponents callbackParent={this.getTeacherResource} callEvent={this.switchSection}/>
           </div>
@@ -397,7 +386,7 @@ const MainLayout = React.createClass({
         </div>
 
 
-          <LittleIframe src={this.state.panleSrc} ref="laifr" />
+          <Asidepanel  param={this.state.ifr} ref="laifr"  />
 
 
       </div>
