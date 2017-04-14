@@ -1940,8 +1940,8 @@ a.topics:hover{
 	background:none;
 }
 .teopics_spa{
-	    letter-spacing: -2px;
-	}
+	letter-spacing: -2px;
+}
 .topics_a{
 	color:#666;
 	line-height:23px;
@@ -2085,9 +2085,30 @@ a.topics:hover{
 .group_table{
 	width:100%
 }
-.group_table .ant-table-tbody > tr > td span.antnest_user img{
+.group_table .ant-table-tbody > tr > td span.antnest_user img, .share_img img{
 	width:38px;
 	height:38px !important
+}
+.share_cont{
+	display: inline-block;
+    padding: 10px 40px 10px 15px;
+	border-radius: 6px;
+}
+.share_le{
+	float: left;
+    margin: 0;
+    padding: 0;
+    height: 38px;
+}
+.share_font{
+	line-height: 38px;
+    margin-left: 12px;
+    font-size: 14px;
+	color:#2896fb;
+}
+.share_font:hover{
+	text-decoration:underline;
+	color:#2896fb;
 }
 .group_table .ant-table-tbody > tr > td:first-child {
 	width:50px;
@@ -2545,13 +2566,19 @@ ul.integral li i{
 	height:25px;
 	line-height:22px;
 }
-.focus_1 span.antnest_name{
+.focus_1 span.antnest_name, .focus_1 a.antnest_name{
 	font-weight:normal !important
 }
 .focus_2{
 	display: inline-block;
     margin: 0 0 0 12px;
-    width: 370px;
+    width: 374px;
+}
+.focus_4{
+	width:400px;
+}
+.focus_5{
+	top:2px;
 }
 a.color_gary_f{
 	color:#333;
