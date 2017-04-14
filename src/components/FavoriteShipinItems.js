@@ -24,7 +24,6 @@ const FavoriteShipinItems = React.createClass({
 
     activeKey: [],
 
-
     download: function (e) {
         window.open(e.target.value);
     },
