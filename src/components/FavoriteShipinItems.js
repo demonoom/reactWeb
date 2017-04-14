@@ -92,8 +92,8 @@ const FavoriteShipinItems = React.createClass({
         console.log('buildFavShipionUi');
         this.buildFavShipionUi(this.props.param.data, this.props.param.type);
         return (
-            <div>
-				<div className="topics_calc favorite_up">
+            <div className="favorite_scroll">
+				<div className="favorite_up">
 					{coursePanelChildren}
 				</div>
 				<Pagination total={this.props.param.totalCount} pageSize={getPageSize()} current={this.props.param.currentPage} onChange={this.props.pageChange} />

@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { Tabs, Breadcrumb, Icon,Card,Button,Row,Col} from 'antd';
 import { Menu, Dropdown,message,Pagination,Tag , Modal,Popover,Input} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
+import TeacherAllCourseWare from '../TeacherInfos/TeacherAllCourseWare';
 import {getPageSize} from '../../utils/Const';
 import {getLocalTime} from '../../utils/Const';
 import {isEmpty} from '../../utils/Const';

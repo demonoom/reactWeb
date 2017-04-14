@@ -79,8 +79,8 @@ const FavoriteOtherItems = React.createClass({
         console.log('buildFavOtherUi');
         this.buildFavOtherUi(this.props.param.data);
         return (
-            <div>
-            <div className="other_hei">
+            <div className="favorite_scroll">
+            <div className="favorite_up">
                 {coursePanelChildren}
             </div>
                     <Pagination total={this.props.param.totalCount} pageSize={getPageSize()} current={this.props.param.currentPage} onChange={this.props.pageChange} />
