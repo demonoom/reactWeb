@@ -68,7 +68,7 @@ const FavoriteShipinItems = React.createClass({
 						<p className="live_h3">{content}</p>
 						<ul className="live_cont">
                                     <li>
-                                        <span className="attention_img"><img style={{width:'30px',height:'30px'}} src={user.avatar}></img></span>
+                                        <span className="attention_img"><img style={{width:'30px',height:'30px'}} src={e.user.avatar}></img></span>
                                         <span className="live_span_1">{userName}</span>
                                         <span className="right_ri live_span_2">{startTime}</span>
                                     </li>

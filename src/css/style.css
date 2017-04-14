@@ -511,7 +511,7 @@ div, a, span, input{
 
 .ant-form-item-control_3{
     position: relative;
-    top: -44px;
+    top: -46px;
 }
 .ant-modal-footer{
 	text-align:center !important;
@@ -2551,13 +2551,19 @@ ul.integral li i{
 .focus_2{
 	display: inline-block;
     margin: 0 0 0 12px;
-    width: 378px;
+    width: 370px;
+}
+a.color_gary_f{
+	font-color:#333;
+	font-size:14px;
+	line-height:24px;
 }
 .focus_3{
 	word-break: break-all; 
 	word-wrap:break-word;
 	white-space: pre-wrap;
 }
+
 .live{
 	width:330px;
 	margin: 15px;
@@ -2636,8 +2642,11 @@ ul.integral li i{
 
 .reset_wi{
 	display:inline-block;
-	width:240px
+	width:300px
 
+}
+.reset_wi_hei{
+	height:33px;
 }
 
 .little-layout-aside-r-show {
@@ -2752,4 +2761,7 @@ ul.integral li i{
 .other_hei{
 	height:calc(100% - 50px) !important;
 	overflow:auto !important;
+}
+.reset_btn{
+	padding:6px 20px;
 }

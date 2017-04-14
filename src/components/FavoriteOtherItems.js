@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Pagination, message} from 'antd';
+import {Button, Pagination, message,Card} from 'antd';
 import {doWebService} from '../WebServiceHelper';
 import {getPageSize} from '../utils/Const';
 import {getLocalTime} from '../utils/utils';
@@ -58,18 +58,17 @@ const FavoriteOtherItems = React.createClass({
         coursePanelChildren = courseWareList.map((e, i) => {
             let content = e.content;
 
-            return <div key={e.id}>
-                <div className="left">
-                    <a target="_blank" onClick={event => {this.view(event,e.address,e.content)} } ><img style={{width: '42px'}} src={e.cover}/></a>
-                    <span className="col2"><a  onClick={event => {this.view(event,e.address,e.content)} }  >{content}</a></span><br/>
-                    <span className="col2"> {getLocalTime(e.time)}</span>
-                </div>
-                <div className="right">
-                    <span className="col2">
-                        <a target="_blank" title="取消收藏" onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)} ><Button icon="star"/></a></span>
+            return <Card key={e.id} className="focus">
+                    <a target="_blank" onClick={event => {this.view(event,e.address,e.content)} } className="attention_img"><img src={e.cover}/></a>
+                    <div className="focus_2">
+						<span className="col2 "><a  onClick={event => {this.view(event,e.address,e.content)} }  className="color_gary_f" >{content}</a></span><br/>
+                    	<span className="col2"> {getLocalTime(e.time)}</span>
+					</div>
+                    <span  className="right_ri">
+                        <a target="_blank" title="取消收藏" onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)} ><Button className="ant-btn right_ri focus_btn" icon="star-o"/></a>
+					</span>
 
-                </div>
-            </div>
+            </Card>
 
         });
 
