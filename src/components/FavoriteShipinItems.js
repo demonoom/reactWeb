@@ -57,6 +57,7 @@ const FavoriteShipinItems = React.createClass({
             let content = e.content;
             let refkey = e.type + "#" + e.favoriteId;
             this.activeKey.push(refkey);
+            debugger
             return <div className="ant-card live ant-card-bordered">
                 <div  key={refkey}>
                     <div className="live_img">
@@ -67,7 +68,7 @@ const FavoriteShipinItems = React.createClass({
 						<p className="live_h3">{content}</p>
 						<ul className="live_cont">
                                     <li>
-                                        <span className="attention_img"><img style={{width:'30px',height:'30px'}} src={e.avatar}></img></span>
+                                        <span className="attention_img"><img style={{width:'30px',height:'30px'}} src={e.liveInfo.user.avatar}></img></span>
                                         <span className="live_span_1">{e.liveInfo.user.schoolName}</span>
                                         <span className="live_span_1">{e.liveInfo.user.userName}</span>
                                         <span className="live_span_1">{e.liveInfo.courseName}</span>
