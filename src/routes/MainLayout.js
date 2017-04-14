@@ -168,13 +168,13 @@ const MainLayout = React.createClass({
     //根据如下判断结果，完成对页面中部位置的渲染，不同情况，渲染不同组件
     var middleComponent;
     var mainContent;
-    var tabComponent=<MainTabComponents ref="mainTabComponents"/>;
+    var tabComponent=<MainTabComponents ref="mainTabComponents" showpanle={this.showpanle}/>;
     if(this.state.currentKey=="teachTimes"){
       middleComponent = <MiddleMenuComponents activeMenu={this.state.activeMiddleMenu}  callbackParent={this.getTeachPlans}/>;
-      tabComponent=<MainTabComponents ref="mainTabComponents" />;
+      tabComponent=<MainTabComponents ref="mainTabComponents" showpanle={this.showpanle}/>;
     }else if(this.state.currentKey=="KnowledgeResources"){
       middleComponent = <KnowledgeMenuComponents ref="knowledgeMenuComponents" callbackParent={this.getTeachPlans} ></KnowledgeMenuComponents>;
-      tabComponent=<MainTabComponents ref="mainTabComponents" callBackKnowledgeMenuBuildBreadCrume={this.callBackKnowledgeMenuBuildBreadCrume} />;
+      tabComponent=<MainTabComponents  showpanle={this.showpanle} ref="mainTabComponents" callBackKnowledgeMenuBuildBreadCrume={this.callBackKnowledgeMenuBuildBreadCrume} />;
     }else if(this.state.currentKey=="homeWork"){
       middleComponent = <HomeWorkMenu callbackParent={this.getTeacherHomeWork}  ></HomeWorkMenu>
       tabComponent=<HomeWorkTabComponents ref="homeWorkTabComponents" />;
@@ -312,7 +312,7 @@ const MainLayout = React.createClass({
                 <Col span={24}>
                   <div className="ant-layout-container">
                     <div className="ant-layout-content">
-                      <TeacherResource ref="teacherResource" resouceType={mainLayout.state.resouceType}/>
+                      <TeacherResource ref="teacherResource" showpanle={this.showpanle} resouceType={mainLayout.state.resouceType}/>
                     </div>
                   </div>
                 </Col>
@@ -348,11 +348,7 @@ const MainLayout = React.createClass({
               <Icon type="clock-circle-o" /><div className="tan">学习评价</div>
             </Menu.Item>
             <Menu.Item key="antNest" className="padding_menu">
-            <i className="icon_yichao"></i><div className="tan">蚁巢</div>
-              {/*<i className="icon_yichao"></i><div className="tan" onClick={ this.showpanle } ></div>*/}
-            </Menu.Item>
-            <Menu.Item key="sideBar" className="padding_menu">
-               <Icon type="clock-circle-o" onClick={ this.showpanle } /><div className="tan">侧栏</div>
+              <i className="icon_yichao"></i><div className="tan">蚁巢</div>
             </Menu.Item>
             {/*<Menu.Item key="exam" className="padding_menu">
               <Icon type="file-text" /><div className="tan">考试</div>
