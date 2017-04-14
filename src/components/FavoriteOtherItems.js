@@ -65,7 +65,7 @@ const FavoriteOtherItems = React.createClass({
                     	<span className="col2"> {getLocalTime(e.time)}</span>
 					</div>
                     <span  className="right_ri">
-                        <a target="_blank" title="取消收藏" onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)} ><Button className="ant-btn right_ri focus_btn" icon="star-o"/></a>
+                        <a target="_blank" title="取消收藏" onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)} ><Button className="ant-btn right_ri focus_btn live_span_2" icon="star-o"/></a>
 					</span>
 
             </Card>
