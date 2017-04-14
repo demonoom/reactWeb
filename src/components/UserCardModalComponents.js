@@ -195,7 +195,7 @@ const UserCardModalComponents = React.createClass({
         }
       </Upload>
                <br/>
-                <span>{this.state.userName} </span>
+                <span className="date_tr">{this.state.userName} </span>
                 { this.state.userHeadIcon ? <img src={this.state.userHeadIcon} className="blur"/> : null }
          </div>;
   },

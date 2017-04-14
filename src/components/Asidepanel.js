@@ -50,8 +50,8 @@ class Asidepanel extends React.Component {
                 <div className="little-warp">
                     <div className="little-tilte">
                         <h3 className="title">{ this.props.param.title }</h3>
-                        <a onClick={this.closepanle} className="close">X</a>
-                        <a onClick={  this.zoomview}  className="zoom">大</a>
+                        <a onClick={this.closepanle} className="close"><i className="iconfont iconfont_close">&#xe615;</i></a>
+                        <a onClick={  this.zoomview}  className="zoom"><i className="iconfont iconfont_more">&#xe6b8;</i></a>
                     </div>
                     <section className="littleAnt-iframe-panle">
                         <iframe border={0} style={{...sty2}} src={ this.props.param.url }></iframe>
