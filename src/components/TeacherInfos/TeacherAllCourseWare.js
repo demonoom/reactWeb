@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { Card, Checkbox,Collapse,Icon,Button,Pagination,message,Modal} from 'antd';
 import { doWebService } from '../../WebServiceHelper';
 import {getPageSize} from '../../utils/Const';
+import {isEmpty} from '../../utils/Const';
 import UseKnowledgeComponents from '../UseKnowledgeComponents';
 const Panel = Collapse.Panel;
 const confirm = Modal.confirm;
@@ -175,6 +176,18 @@ const TeacherAllCourseWare = React.createClass({
         this.refs.useKnowledgeComponents.showModal(currentSchedule,"TeacherAllCourseWare",courseWare.state.knowledgeName);
     },
 
+    view: function (e, url, tit) {
+        e = e || window.event;
+        if (e.nativeEvent) {
+            e.nativeEvent.stopImmediatePropagation();
+        }
+        e.stopPropagation();
+        e.preventDefault();
+        e.cancelBubble = true;
+        let obj = {title: tit, url: url, width: '380px'}
+        this.props.onPreview(obj)
+    },
+
     buildKonwledgePanels:function (courseWareList) {
         if(courseWareList.length==0){
             coursePanelChildren = <img  className="noDataTipImg" src={require('../images/noDataTipImg.png')} />;
@@ -182,8 +195,15 @@ const TeacherAllCourseWare = React.createClass({
             coursePanelChildren = courseWareList.map((e, i)=> {
                 var eysOnButton ;
                 var delButton;
-                if(e[9]!=null && e[9]!=""){
+                /*if(e[9]!=null && e[9]!=""){
                     eysOnButton = <a href={e[9]} target="_blank" title="查看"  style={{ float:'right'}} ><Button icon="eye-o"/></a>
+                }*/
+                if (e[9] != null && e[9] != "") {
+                    eysOnButton =
+                        <Button icon="eye-o" style={{float: 'right'}} onClick={event => {this.view(event,e[9],e[1])} } />
+                }else if(isEmpty(e[3])==false){
+                    eysOnButton =
+                        <Button icon="eye-o" style={{float: 'right'}} onClick={event => {this.view(event,e[3],e[1])} } />
                 }
                 if(e[12]!=null && e[12]==sessionStorage.getItem("ident")){
                     delButton = <Button style={{ float:'right'}} icon="delete" title="删除" value={e[0]} onClick={courseWare.batchDeleteMaterial}></Button>
