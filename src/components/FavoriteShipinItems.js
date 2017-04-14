@@ -68,21 +68,18 @@ const FavoriteShipinItems = React.createClass({
 						<ul className="live_cont">
                                     <li>
                                         <span className="attention_img"><img style={{width:'30px',height:'30px'}} src={e.avatar}></img></span>
-                                        <span className="live_span_1">{e.liveInfo.user.schoolName}</span>
-                                        <span className="live_span_1">{e.liveInfo.user.userName}</span>
-                                        <span className="live_span_1">{e.liveInfo.courseName}</span>
+                                        <span className="live_span_1">{e.liveInfo.user.userName}</span>                                        
                                         <span className="right_ri live_span_2">{getLocalTime( e.liveInfo.startTime  )}</span>
                                     </li>
-                                    <li>
-                                        <a target="_blank" title="取消收藏"
+									<li>
+										<span className="live_color live_green">{e.liveInfo.user.schoolName}</span>
+										<span className="live_color live_orange">{e.liveInfo.courseName}</span>
+										<a target="_blank" title="取消收藏"
 										   onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}>
                                             <Button icon="star-o"  className="right_ri focus_btn"/>
 										</a>
-                                    </li>
+									</li>
                                 </ul>
-                        <p>
-                            
-                        </p>
                     </div>
                 </div>
             </div>

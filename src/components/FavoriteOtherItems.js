@@ -59,14 +59,14 @@ const FavoriteOtherItems = React.createClass({
             let content = e.content;
 
             return <Card key={e.id} className="focus">
-                    <a target="_blank" onClick={event => {this.view(event,e.address,e.content)} } className="attention_img"><img src={e.cover}/></a>
-                    <div className="focus_2">
-						<span className="col2 "><a  onClick={event => {this.view(event,e.address,e.content)} }  className="color_gary_f" >{content}</a></span><br/>
-                    	<span className="col2"> {getLocalTime(e.time)}</span>
-					</div>
-                    <span  className="right_ri">
-                        <a target="_blank" title="取消收藏" onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)} ><Button className="ant-btn right_ri focus_btn live_span_2" icon="star-o"/></a>
-					</span>
+						<a target="_blank" onClick={event => {this.view(event,e.address,e.content)} } className="attention_img"><img src={e.cover} width="100%"/></a>
+						<div className="custom-card focus_2 focus_4">
+							<div className="focus_1">
+								<a  onClick={event => {this.view(event,e.address,e.content)} }  className="antnest_name focus_3" >{content}</a>
+								<a target="_blank" title="取消收藏" onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)} className="right_ri"><Button className="ant-btn right_ri focus_btn focus_5" icon="star-o"/></a>
+							</div>
+							<div className="focus_3"> {getLocalTime(e.time)}</div>
+						</div>
 
             </Card>
 
