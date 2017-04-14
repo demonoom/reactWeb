@@ -93,7 +93,7 @@ const FavoriteShipinItems = React.createClass({
         this.buildFavShipionUi(this.props.param.data, this.props.param.type);
         return (
             <div className="favorite_scroll">
-				<div className="favorite_up">
+				<div className="favorite_up topics_calc">
 					{coursePanelChildren}
 				</div>
 				<Pagination total={this.props.param.totalCount} pageSize={getPageSize()} current={this.props.param.currentPage} onChange={this.props.pageChange} />
