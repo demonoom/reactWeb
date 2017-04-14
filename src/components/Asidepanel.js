@@ -13,6 +13,7 @@ class Asidepanel extends React.Component {
             isShow: false,
         }
         this.closepanle = this.closepanle.bind(this)
+        this.zoomview = this.zoomview.bind(this)
     }
 
     /**
@@ -25,6 +26,11 @@ class Asidepanel extends React.Component {
             return;
         }
         this.setState({isShow: true});
+    }
+
+    // 放大查看
+    zoomview(){
+        window.open(this.props.param.url);
     }
 
 
@@ -43,8 +49,9 @@ class Asidepanel extends React.Component {
         return (<aside style={{...sty}} className={ "little-layout-aside-r-show"}>
                 <div className="little-warp">
                     <div className="little-tilte">
-                        <h3 className="title">{ this.props.param.title }</h3><a onClick={this.closepanle}
-                                                                                className="close">X</a>
+                        <h3 className="title">{ this.props.param.title }</h3>
+                        <a onClick={this.closepanle} className="close">X</a>
+                        <a onClick={  this.zoomview}  className="zoom">大</a>
                     </div>
                     <section className="littleAnt-iframe-panle">
                         <iframe border={0} style={{...sty2}} src={ this.props.param.url }></iframe>

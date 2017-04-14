@@ -2684,11 +2684,14 @@ ul.integral li i{
 
 }
 
-.little-warp .little-tilte .close{
+
+
+.little-warp .little-tilte .close,
+.little-warp .little-tilte .zoom
+{
 	display: inline-block ;
 	position: absolute;
 	font-weight: lighter;
-	right: 0;
 	top: 0;
 	width: 40px;
 	height: 40px;
@@ -2700,6 +2703,15 @@ ul.integral li i{
 	color: #dfe0e3;
 	font-family: Arial;
 }
+
+.little-warp .little-tilte .close {
+	right: 0px;
+}
+.little-warp .little-tilte .zoom {
+	right: 50px;
+}
+
+
 .littleAnt-iframe-panle {
 	height: calc(100% - 40px);
 }
