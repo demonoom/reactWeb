@@ -1387,7 +1387,7 @@ const AntGroupTabComponents = React.createClass({
      * @param user
      */
     callBackGetUserFavorite(user){
-        antGroup.setState({"optType":"userFavorite","studentId":user.colUid,"activeKey":"1"});
+        antGroup.setState({"optType":"userFavorite","currentUser":user,"studentId":user.colUid,"activeKey":"1"});
     },
 
     /**

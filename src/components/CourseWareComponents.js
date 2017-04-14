@@ -297,6 +297,18 @@ const CourseWareComponents = React.createClass({
         });
     },
 
+    view: function (e, url, tit) {
+        e = e || window.event;
+        if (e.nativeEvent) {
+            e.nativeEvent.stopImmediatePropagation();
+        }
+        e.stopPropagation();
+        e.preventDefault();
+        e.cancelBubble = true;
+        let obj = {title: tit, url: url, width: '380px'}
+        this.props.onPreview(obj)
+    },
+
     buildPanels: function (courseWareList) {
         if (courseWareList.length == 0) {
             coursePanelChildren = <img className="noDataTipImg" src={require('./images/noDataTipImg.png')}/>;
@@ -305,7 +317,11 @@ const CourseWareComponents = React.createClass({
                 var eysOnButton;
                 if (e[9] != null && e[9] != "" && typeof(e[9]) != "undefined") {
                     eysOnButton =
-                        <a href={e[9]} target="_blank" title="查看" style={{float: 'right'}}><Button icon="eye-o"/></a>
+                        <Button icon="eye-o" style={{float: 'right'}} onClick={event => {this.view(event,e[9],e[1])} } />
+                        /*<a href={e[9]} target="_blank" title="查看" style={{float: 'right'}}><Button icon="eye-o"/></a>*/
+                }else if(isEmpty(e[3])==false){
+                    eysOnButton =
+                        <Button icon="eye-o" style={{float: 'right'}} onClick={event => {this.view(event,e[3],e[1])} } />
                 }
                 return <Panel header={<span><span type="" className={e[8]}></span><span
                     className="name_file">{e[1]}</span> </span>} key={e[1] + "#" + e[7]+"#"+e[0]}>
@@ -347,8 +363,13 @@ const CourseWareComponents = React.createClass({
                 var eysOnButton;
                 var delButton;
                 if (e[9] != null && e[9] != "") {
+                    /*eysOnButton =
+                        <a href={e[9]} target="_blank" title="查看" style={{float: 'right'}}><Button icon="eye-o"/></a>*/
                     eysOnButton =
-                        <a href={e[9]} target="_blank" title="查看" style={{float: 'right'}}><Button icon="eye-o"/></a>
+                        <Button icon="eye-o" style={{float: 'right'}} onClick={event => {this.view(event,e[9],e[1])} } />
+                }else if(isEmpty(e[3])==false){
+                    eysOnButton =
+                        <Button icon="eye-o" style={{float: 'right'}} onClick={event => {this.view(event,e[3],e[1])} } />
                 }
                 if (e[12] != null && e[12] == sessionStorage.getItem("ident")) {
                     delButton = <Button style={{float: 'right'}} icon="delete" title="删除" value={e[0]}

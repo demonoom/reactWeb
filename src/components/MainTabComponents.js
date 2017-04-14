@@ -138,6 +138,8 @@ const MainTabComponents = React.createClass({
         }
     },
 
+
+
     render() {
         var tabPanel;
         var subjectTabPanel;
@@ -151,15 +153,15 @@ const MainTabComponents = React.createClass({
         //this.state.currentMenuChildrenCount
         if(this.state.currentOptType=="bySubjectId" && sessionStorage.getItem("lastClickMenuChildrenCount")==0 && sessionStorage.getItem("lastClickMenuId")!=null ){
             displayType='block';
-            tabPanel=<TabPane tab={<span>课件<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link icon_filter" href="#"><Icon type="down-circle-o"/></a></Dropdown></span>} key="课件"><CourseWareComponents ref="courseWare"/></TabPane>;
+            tabPanel=<TabPane tab={<span>课件<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link icon_filter" href="#"><Icon type="down-circle-o"/></a></Dropdown></span>} key="课件"><CourseWareComponents ref="courseWare" onPreview={ this.props.showpanle }/></TabPane>;
             subjectTabPanel=<TabPane tab={<span>题目<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link icon_filter" href="#"><Icon type="down-circle-o" /></a></Dropdown></span>} key="题目"><SubjectTable  ref="subTable" params={this.state.subjectParams}/></TabPane>;
         }else if(this.state.currentOptType=="bySubjectId"){
             displayType='none';
-            tabPanel=<TabPane tab={<span>课件<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link icon_filter" href="#"><Icon type="down-circle-o"/></a></Dropdown></span>} key="课件"><CourseWareComponents ref="courseWare"/></TabPane>;
+            tabPanel=<TabPane tab={<span>课件<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link icon_filter" href="#"><Icon type="down-circle-o"/></a></Dropdown></span>} key="课件"><CourseWareComponents ref="courseWare" onPreview={ this.props.showpanle }/></TabPane>;
             subjectTabPanel=<TabPane tab={<span>题目<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link icon_filter" href="#"><Icon type="down-circle-o" /></a></Dropdown></span>} key="题目"><SubjectTable  ref="subTable" params={this.state.subjectParams}/></TabPane>;
         }else{
             displayType='none';
-            tabPanel=<TabPane tab="课件" key="课件"><CourseWareComponents ref="courseWare"/></TabPane>;
+            tabPanel=<TabPane tab="课件" key="课件"><CourseWareComponents onPreview={ this.props.showpanle } ref="courseWare"/></TabPane>;
             subjectTabPanel=<TabPane tab="题目" key="题目"><SubjectTable  ref="subTable" params={this.state.subjectParams}/></TabPane>
         }
         var toolbarExtra = <div className="ant-tabs-right" style={{display:displayType}}><CourseWareUploadComponents courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}></CourseWareUploadComponents><SubjectUploadByTextboxio courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}></SubjectUploadByTextboxio></div>;
