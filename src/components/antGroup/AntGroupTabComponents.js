@@ -2200,9 +2200,9 @@ const AntGroupTabComponents = React.createClass({
                     ]}
                 >
                     <Row className="ant-form-item">
-                        <span>群名称：</span>
-                        <span>
-                            <Input value={antGroup.state.chatGroupTitle} defaultValue={antGroup.state.chatGroupTitle} onChange={antGroup.chatGroupTitleOnChange}/>
+                        <span style={{width:'120px'}}>群名称：</span>
+                        <span >
+                            <Input value={antGroup.state.chatGroupTitle} defaultValue={antGroup.state.chatGroupTitle} onChange={antGroup.chatGroupTitleOnChange} />
                         </span>
                     </Row>
                     <Row className="ant-form-item">
