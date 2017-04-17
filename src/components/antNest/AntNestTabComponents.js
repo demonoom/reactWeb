@@ -10,6 +10,7 @@ import {getOnlyTeacherTopic} from '../../utils/Const';
 import {showLargeImg} from '../../utils/utils';
 import UploadImgComponents from './UploadImgComponents';
 import EmotionInputComponents from './EmotionInputComponents';
+import ConfirmModal from '../ConfirmModal';
 
 
 const TabPane = Tabs.TabPane;
@@ -39,8 +40,9 @@ const AntNestTabComponents = React.createClass({
             topicTitle:'',
             toUserId:-1, //评论指定人或直接评论,评论指定人时,值为真实id，否则为-1
             replayToUserTopicId:'',
-            partakeTopicId:''       //话题参与时,当前要参与的话题id
-
+            partakeTopicId:'',       //话题参与时,当前要参与的话题id
+            confirmModalVisible:true,
+            topicCommentId:''
         };
     },
     /**
@@ -141,7 +143,7 @@ const AntNestTabComponents = React.createClass({
                 }
                 var delBtn;
                 if(e.user.colUtype=="STUD" || (e.user.colUtype=="TEAC" && e.user.colUid == sessionStorage.getItem("ident"))){
-                    delBtn = <Button value={e.id} className="topics_btn antnest_talk topics_a topics_a—bnt teopics_spa topics_le"  type="dashed" onClick={antNest.deleteTopicComment}>删除</Button>;
+                    delBtn = <Button value={e.id} className="topics_btn antnest_talk topics_a topics_a—bnt teopics_spa topics_le"  type="dashed" onClick={antNest.showDeleteTopicCommentModal}>删除</Button>;
                 }
                 var answerUserInfo = <li className="topics_comment">
                     {replayUserTitle}
@@ -233,7 +235,7 @@ const AntNestTabComponents = React.createClass({
         if(useType==0){
             //STUD
             if(topicObj.fromUser.colUtype=="STUD" || (topicObj.fromUser.colUtype=="TEAC" && topicObj.fromUser.colUid == sessionStorage.getItem("ident"))){
-               delButton = <Button value={topicObj.id} icon="delete" className="ant-btn topics_btn antnest_talk teopics_spa" onClick={antNest.deleteTopic}>删除</Button>;
+               delButton = <Button value={topicObj.id} icon="delete" className="ant-btn topics_btn antnest_talk teopics_spa" onClick={antNest.showDeleteTopicModal}>删除</Button>;
             }
         }
         //参与人数显示card
@@ -351,7 +353,7 @@ const AntNestTabComponents = React.createClass({
                 }
                 var praiseBtn;
                 if(topicObj.fromUser.colUtype=="TEAC" && topicObj.fromUser.colUid == sessionStorage.getItem("ident")){
-                    praiseBtn = <Button value={topicObj.id+"#"+topicReplayInfo.id} icon="to-top" onClick={antNest.setTopicToTop} className="topics_btn antnest_talk teopics_spa">置顶</Button>;
+                    praiseBtn = <Button value={topicObj.id+"#"+topicReplayInfo.id} icon="to-top" onClick={antNest.showSetTopicTopModal} className="topics_btn antnest_talk teopics_spa">置顶</Button>;
                 }
                 var topicReplayCard = <div  style={{ marginBottom: '15px' }}>
                     <div style={{marginLeft:'0'}} className="antnest_user">{replayUserHeadPhoto}</div>
@@ -643,11 +645,7 @@ const AntNestTabComponents = React.createClass({
         });
     },
 
-    /**
-     * 删除一个话题
-     * @param e
-     */
-    deleteTopic(e){
+    showDeleteTopicModal(e){
         var target = e.target;
         if(navigator.userAgent.indexOf("Chrome") > -1){
             target=e.currentTarget;
@@ -655,48 +653,60 @@ const AntNestTabComponents = React.createClass({
             target = e.target;
         }
         var topicId = target.value;
-        confirm({
-            title: '确定要删除该条记录?',
-            onOk() {
-                var param = {
-                    "method": 'deleteTopic',
-                    "ident": sessionStorage.getItem("ident"),
-                    "topicId":topicId+""
-                };
-                doWebService(JSON.stringify(param), {
-                    onResponse: function (ret) {
-                        if(ret.success==true && ret.response == true){
-                            message.success("删除成功");
-                        }else{
-                            message.error("删除失败");
-                        }
-                        if(antNest.state.optType=="getTopicById"){
-                            //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
-                            antNest.reGetTopicInfo(1,getAllTopic());
-                            antNest.getTopicPartakeById(antNest.state.currentTopicId,1);
-                        }else {
-                            if (antNest.state.activeKey == "全部") {
-                                antNest.getTopics(1, getAllTopic());
-                            } else {
-                                antNest.getTopics(1, getOnlyTeacherTopic());
-                            }
-                        }
-                    },
-                    onError: function (error) {
-                        message.error(error);
-                    }
-                });
-            },
-            onCancel() {
-            },
-        });
+        antNest.refs.confirmModal.changeConfirmModalVisible(true);
+        antNest.setState({"currentTopicId":topicId});
+    },
+    /**
+     * 关闭删除操作的confirm窗口
+     */
+    closeDeleteTopicModal(){
+        antNest.refs.confirmModal.changeConfirmModalVisible(false);
     },
 
     /**
-     * 删除一个话题中的评论
+     * 删除一个话题
      * @param e
      */
-    deleteTopicComment(e){
+    deleteTopic(){
+        antNest.deleteTopicById(antNest.state.currentTopicId);
+    },
+
+    deleteTopicById(topicId){
+        var param = {
+            "method": 'deleteTopic',
+            "ident": sessionStorage.getItem("ident"),
+            "topicId":topicId+""
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if(ret.success==true && ret.response == true){
+                    message.success("删除成功");
+                }else{
+                    message.error("删除失败");
+                }
+                antNest.setState({"currentTopicId":''});
+                antNest.closeDeleteTopicModal();
+                if(antNest.state.optType=="getTopicById"){
+                    //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
+                    antNest.reGetTopicInfo(1,getAllTopic());
+                    antNest.getTopicPartakeById(antNest.state.currentTopicId,1);
+                }else {
+                    if (antNest.state.activeKey == "全部") {
+                        antNest.getTopics(1, getAllTopic());
+                    } else {
+                        antNest.getTopics(1, getOnlyTeacherTopic());
+                    }
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+    /**
+     * 显示删除评论的confirm
+     */
+    showDeleteTopicCommentModal(e){
         var target = e.target;
         if(navigator.userAgent.indexOf("Chrome") > -1){
             target=e.currentTarget;
@@ -704,91 +714,116 @@ const AntNestTabComponents = React.createClass({
             target = e.target;
         }
         var topicCommentId = target.value;
-        confirm({
-            title: '确定要删除该条评论?',
-            onOk() {
-                var param = {
-                    "method": 'deleteTopicComment',
-                    "ident": sessionStorage.getItem("ident"),
-                    "topicCommentId":topicCommentId+""
-                };
-                doWebService(JSON.stringify(param), {
-                    onResponse: function (ret) {
-                        if(ret.success==true && ret.response == true){
-                            message.success("评论删除成功");
-                        }else{
-                            message.error("评论删除失败");
-                        }
-                        if(antNest.state.optType=="getTopicById"){
-                            //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
-                            antNest.reGetTopicInfo(1,getAllTopic());
-                            antNest.getTopicPartakeById(antNest.state.currentTopicId,1);
-                        }else{
-                            if(antNest.state.activeKey=="全部"){
-                                antNest.getTopics(1,getAllTopic());
-                            }else{
-                                antNest.getTopics(1,getOnlyTeacherTopic());
-                            }
-                        }
-                    },
-                    onError: function (error) {
-                        message.error(error);
-                    }
-                });
-            },
-            onCancel() {
-            },
-        });
+        antNest.setState({"topicCommentId":topicCommentId});
+        antNest.refs.deleteTopicCommentModal.changeConfirmModalVisible(true);
     },
 
     /**
-     * 置顶选定的说说
+     * 关闭删除操作的confirm窗口
      */
-    setTopicToTop(e){
+    closeDeleteTopicCommentModal(){
+        antNest.refs.deleteTopicCommentModal.changeConfirmModalVisible(false);
+    },
+
+    /**
+     * 删除一个话题中的评论
+     * @param e
+     */
+    deleteTopicComment(){
+        antNest.deleteTopicCommentById(antNest.state.topicCommentId);
+    },
+    /**
+     * 根据评论id，删除话题/说说中的评论
+     * @param topicCommentId 评论id
+     */
+    deleteTopicCommentById(topicCommentId){
+        var param = {
+            "method": 'deleteTopicComment',
+            "ident": sessionStorage.getItem("ident"),
+            "topicCommentId":topicCommentId+""
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if(ret.success==true && ret.response == true){
+                    message.success("评论删除成功");
+                }else{
+                    message.error("评论删除失败");
+                }
+                antNest.closeDeleteTopicCommentModal();
+                if(antNest.state.optType=="getTopicById"){
+                    //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
+                    antNest.reGetTopicInfo(1,getAllTopic());
+                    antNest.getTopicPartakeById(antNest.state.currentTopicId,1);
+                }else{
+                    if(antNest.state.activeKey=="全部"){
+                        antNest.getTopics(1,getAllTopic());
+                    }else{
+                        antNest.getTopics(1,getOnlyTeacherTopic());
+                    }
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    showSetTopicTopModal(e){
         var target = e.target;
         if(navigator.userAgent.indexOf("Chrome") > -1){
             target=e.currentTarget;
         }else{
             target = e.target;
         }
-        var topicIdStrArray = target.value.split("#");
+        var topicIdStr = target.value;
+        antNest.setState({"currentTopicId":topicIdStr});
+        antNest.refs.setTopicTopModal.changeConfirmModalVisible(true);
+    },
+
+    closeSetTopicTopModal(){
+        antNest.refs.setTopicTopModal.changeConfirmModalVisible(false);
+    },
+
+    setTopicToTop(){
+        antNest.setTopicToTopById(antNest.state.currentTopicId);
+        antNest.closeSetTopicTopModal();
+    },
+
+    /**
+     * 置顶选定的说说
+     */
+    setTopicToTopById(topicIdStr){
+        var topicIdStrArray = topicIdStr.split("#");
         var setTopicId = topicIdStrArray[0];
         var topicSubId = topicIdStrArray[1];
-        confirm({
-            title: '确定要将该条记录置顶?',
-            onOk() {
-                var param = {
-                    "method": 'setHuatiTop',
-                    "userId": sessionStorage.getItem("ident"),
-                    "topicId":topicSubId+"",
-                    "huatiId":setTopicId
-                };
-                doWebService(JSON.stringify(param), {
-                    onResponse: function (ret) {
-                        if(ret.success==true && ret.response == true){
-                            message.success("话题置顶成功");
-                        }else{
-                            message.error("话题置顶失败");
-                        }
-                        if(antNest.state.optType=="getTopicById"){
-                            //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
-                            antNest.reGetTopicInfo(1,getAllTopic());
-                            antNest.getTopicPartakeById(antNest.state.currentTopicId,1);
-                        }else {
-                            if (antNest.state.activeKey == "全部") {
-                                antNest.getTopics(1, getAllTopic());
-                            } else {
-                                antNest.getTopics(1, getOnlyTeacherTopic());
-                            }
-                        }
-                    },
-                    onError: function (error) {
-                        message.error(error);
+        var param = {
+            "method": 'setHuatiTop',
+            "userId": sessionStorage.getItem("ident"),
+            "topicId":topicSubId+"",
+            "huatiId":setTopicId
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if(ret.success==true && ret.response == true){
+                    message.success("话题置顶成功");
+                }else{
+                    message.error("话题置顶失败");
+                }
+                if(antNest.state.optType=="getTopicById"){
+                    //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
+                    antNest.reGetTopicInfo(1,getAllTopic());
+                    antNest.getTopicPartakeById(setTopicId,1);
+                }else {
+                    if (antNest.state.activeKey == "全部") {
+                        antNest.getTopics(1, getAllTopic());
+                    } else {
+                        antNest.getTopics(1, getOnlyTeacherTopic());
                     }
-                });
+                }
             },
-            onCancel() {
-            },
+            onError: function (error) {
+                message.error(error);
+            }
         });
     },
 
@@ -1261,6 +1296,7 @@ const AntNestTabComponents = React.createClass({
                 <Modal title="评论"
                        visible={antNest.state.discussModalVisible}
                        transitionName=""  //禁用modal的动画效果
+                       maskClosable={false} //设置不允许点击蒙层关闭
                        onOk={antNest.discussModalHandleOk}
                        onCancel={antNest.discussModalHandleCancel}
                 >
@@ -1274,6 +1310,7 @@ const AntNestTabComponents = React.createClass({
                 <Modal title="发布说说"
                        visible={antNest.state.addTopicModalVisible}
                        transitionName=""  //禁用modal的动画效果
+                       maskClosable={false} //设置不允许点击蒙层关闭
                        onOk={antNest.addTopicModalHandleOk}
                        onCancel={antNest.addTopicModalHandleCancel}
                 >
@@ -1293,6 +1330,7 @@ const AntNestTabComponents = React.createClass({
                 <Modal title="立即参与"
                        visible={antNest.state.partakeModalVisible}
                        transitionName=""  //禁用modal的动画效果
+                       maskClosable={false} //设置不允许点击蒙层关闭
                        onOk={antNest.partakeModalHandleOk}
                        onCancel={antNest.partakeModalHandleCancel}
                 >
@@ -1308,6 +1346,23 @@ const AntNestTabComponents = React.createClass({
                     </div>
 
                 </Modal>
+                <ConfirmModal ref="confirmModal"
+                              title="确定要删除该条记录?"
+                              onConfirmModalCancel={antNest.closeDeleteTopicModal}
+                              onConfirmModalOK={antNest.deleteTopic}
+                ></ConfirmModal>
+
+                <ConfirmModal ref="deleteTopicCommentModal"
+                              title="确定要删除该条评论?"
+                              onConfirmModalCancel={antNest.closeDeleteTopicCommentModal}
+                              onConfirmModalOK={antNest.deleteTopicComment}
+                ></ConfirmModal>
+
+                <ConfirmModal ref="setTopicTopModal"
+                              title="确定要将该条记录置顶?"
+                              onConfirmModalCancel={antNest.closeSetTopicTopModal}
+                              onConfirmModalOK={antNest.setTopicToTop}
+                ></ConfirmModal>
                 <Breadcrumb separator=">">
                     <Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
                     <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
