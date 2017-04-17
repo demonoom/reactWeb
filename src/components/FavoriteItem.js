@@ -86,6 +86,8 @@ const FavoriteItem = React.createClass({
         e.stopPropagation();
         e.preventDefault();
         e.cancelBubble = true;
+        url = url.split('/Excoord_PC/')[1];
+        url = "/proxy/" + url;
         let obj ={
             title:tit,
             url:url,
@@ -175,12 +177,10 @@ const FavoriteItem = React.createClass({
         };
 
         return ( <div>
-            <div>
-                <Collapse defaultActiveKey={this.activeKey} activeKey={this.activeKey} style={CollapseStyle} >{ this.coursePanelChildren }</Collapse>
-            </div>
-            <div>
-            <Pagination total={this.props.param.totalCount} pageSize={getPageSize()} current={this.props.param.currentPage} onChange={this.props.pageChange} />
-            </div>
+                <div>
+                	<Collapse defaultActiveKey={this.activeKey} activeKey={this.activeKey} style={CollapseStyle}>{ this.coursePanelChildren }</Collapse>
+                </div>
+            	<Pagination total={this.props.param.totalCount} pageSize={getPageSize()} current={this.props.param.currentPage} onChange={this.props.pageChange} />
         </div> );
     },
 

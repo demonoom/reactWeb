@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { Tabs, Breadcrumb, Icon,Card,Button,Row,Col} from 'antd';
 import { Menu, Dropdown,message,Pagination,Tag , Modal,Popover,Input} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
+import TeacherAllCourseWare from '../TeacherInfos/TeacherAllCourseWare';
 import {getPageSize} from '../../utils/Const';
 import {getLocalTime} from '../../utils/Const';
 import {isEmpty} from '../../utils/Const';
@@ -185,22 +186,14 @@ const AntNestTabComponents = React.createClass({
 
             }else if(attachMentType==4){
                 //mp4附件
-                attachMents =<div style={{valign:'top'}}>
-                    <ul>
-                        <li>
-                            <a href={e.address} target="_blank">
-                                {e.content}
-                            </a>
-                        </li>
-                        <li>
-                            <span className="topics_zan">
-                                <a href={e.address} target="_blank">
-                                    <img src={e.cover} />
-                                </a>
-                            </span>
-                        </li>
-                    </ul>
-                </div>
+                attachMents =<div className="toppics_ul_bg share_cont">
+								<a href={e.address} target="_blank" className="share_img share_le">
+									<img src={e.cover} />
+								</a>
+								<a href={e.address} target="_blank" className="share_font">
+									{e.content}
+								</a>
+					         </div>
             }
             attachMentsArray.push(attachMents);
         })

@@ -195,7 +195,7 @@ const UserCardModalComponents = React.createClass({
         }
       </Upload>
                <br/>
-                <span>{this.state.userName} </span>
+                <span className="date_tr">{this.state.userName} </span>
                 { this.state.userHeadIcon ? <img src={this.state.userHeadIcon} className="blur"/> : null }
          </div>;
   },
@@ -233,7 +233,7 @@ const UserCardModalComponents = React.createClass({
               <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn ant-btn-f topics_btn_le " onClick={this.myFavrites}>
                 收藏
             </Button>
-              <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn ant-btn-f topics_btn_le " onClick={this.findStudentPwd}>
+              <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn ant-btn-g topics_btn_le " onClick={this.findStudentPwd}>
                 找回学生密码
               </Button>
               <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn ant-btn-f topics_btn_le " onClick={this.MyFollows}>

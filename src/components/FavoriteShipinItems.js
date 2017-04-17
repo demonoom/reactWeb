@@ -24,7 +24,6 @@ const FavoriteShipinItems = React.createClass({
 
     activeKey: [],
 
-
     download: function (e) {
         window.open(e.target.value);
     },
@@ -37,6 +36,10 @@ const FavoriteShipinItems = React.createClass({
         e.stopPropagation();
         e.preventDefault();
         e.cancelBubble = true;
+
+        url = url.split('/Excoord_PC/')[1];
+        url = "/proxy/" + url;
+
         let obj ={
             title:tit,
             url:url,
@@ -65,12 +68,22 @@ const FavoriteShipinItems = React.createClass({
                                                                  src={e.cover}/></a>
                     </div>
                     <div className="custom-card">
-                        <p>
-                            <a target="_blank" title="取消收藏"
-                               onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}><Button
-                                icon="star"/></a>
-                        </p>
-                        <h3>{content}</h3>
+						<p className="live_h3">{content}</p>
+						<ul className="live_cont">
+                                    <li>
+                                        <span className="attention_img"><img style={{width:'30px',height:'30px'}} src={e.liveInfo.user.avatar}></img></span>
+                                        <span className="live_span_1">{e.liveInfo.user.userName}</span>                                        
+                                        <span className="right_ri live_span_2">{getLocalTime( e.liveInfo.startTime  )}</span>
+                                    </li>
+									<li>
+										<span className="live_color live_green">{e.liveInfo.user.schoolName}</span>
+										<span className="live_color live_orange">{e.liveInfo.courseName}</span>
+										<a target="_blank" title="取消收藏"
+										   onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}>
+                                            <Button icon="star-o"  className="right_ri focus_btn"/>
+										</a>
+									</li>
+                                </ul>
                     </div>
                 </div>
             </div>
@@ -84,7 +97,7 @@ const FavoriteShipinItems = React.createClass({
         this.buildFavShipionUi(this.props.param.data, this.props.param.type);
         return (
             <div className="favorite_scroll">
-				<div className="favorite_up">
+				<div className="favorite_up topics_calc">
 					{coursePanelChildren}
 				</div>
 				<Pagination total={this.props.param.totalCount} pageSize={getPageSize()} current={this.props.param.currentPage} onChange={this.props.pageChange} />

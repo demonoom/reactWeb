@@ -82,7 +82,7 @@ class ResetStudentAccountKey extends React.Component {
                 <div className="password_cow ant-row ant-form-item">
                     <span className="ant-form-item-control attention_img"><img  src={this.state.toUserAccountData.avatar} width="40dp" height="40dp" /></span>
                     <span className="ant-form-item-control_2">{this.state.toUserAccountData.userName}</span>
-                    <span className="ant-form-item-control_3 right_ri"><Button type="primary" className="password_btn" onClick={this.resetUserPassword } >重置密码</Button></span>
+                    <span className="ant-form-item-control_3 right_ri"><Button type="primary" className="reset_btn" onClick={this.resetUserPassword } >重置密码</Button></span>
                 </div>
 				</div>
             </div>;
@@ -104,8 +104,8 @@ class ResetStudentAccountKey extends React.Component {
                  <div className="ques_list_new">
                         <div className="password_cow ant-row ant-form-item">
 						    <span className="right_look">查找账号：</span>
-							<span className="reset_wi"><input className="ant-input" ref="input1" type="text" placeholder={this.state.placeholder} /></span>
-							<span className="right_ri"><Button type="primary" icon="search" onClick={this.searhAccess}>Search</Button></span>
+							<span className="reset_wi"><input className="ant-input reset_wi_hei" ref="input1" type="text" placeholder={this.state.placeholder} /></span>
+							<span className="right_ri"><Button type="primary" icon="search" className="reset_btn" onClick={this.searhAccess}>Search</Button></span>
 						</div>
                         
                 </div>
