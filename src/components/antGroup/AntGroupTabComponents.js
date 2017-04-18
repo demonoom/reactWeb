@@ -430,7 +430,7 @@ const AntGroupTabComponents = React.createClass({
             showContent = showContent.replace(subStr,"~");
             var imgUrl = getImgName(subStr);
             var localUrl = "../src/components/images/emotions/"+imgUrl;
-            var subStrReplace = <span className='antnest_user'><img src={localUrl}/></span> ;
+            var subStrReplace = <span className='attention_img'><img src={localUrl}/></span> ;
             imgTags.push(subStrReplace);
             var otherStr = str.substring(end+1);
             if(otherStr.indexOf("[bexp_")!=-1){
@@ -523,7 +523,7 @@ const AntGroupTabComponents = React.createClass({
                         var chatGroupName = e.name;
                         var membersCount = e.members.length;
                         var ownerPhoto = e.owner.avatar;
-                        var imgTag = <span className='antnest_user'><img src={ownerPhoto}></img></span>;
+                        var imgTag = <div ><img src={ownerPhoto}  className="antnest_38_img" ></img></div>;
                         var groupName = chatGroupName+""+membersCount+"人";
                         var chatGroupJson = {key:chatGroupId,groupPhoto:imgTag,'groupName':groupName,"groupObj":e};
                         charGroupArray.push(chatGroupJson);
@@ -1306,7 +1306,7 @@ const AntGroupTabComponents = React.createClass({
                                 <p className="live_h3">{title}</p>
                                 <ul className="live_cont">
                                     <li>
-                                        <span className="attention_img"><img style={{width:'30px',height:'30px'}} src={user.avatar}></img></span>
+                                        <span className="attention_img"><img src={user.avatar}></img></span>
                                         <span className="live_span_1">{userName}</span>
                                         <span className="right_ri live_span_2">{startTime}</span>
                                     </li>
@@ -1614,7 +1614,7 @@ const AntGroupTabComponents = React.createClass({
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div>
                         <ul className="group_table">
-                            <Table onRowClick={antGroup.sendGroupMessage} showHeader={false} scroll={{ x: true, y: 500 }} columns={userGroupsColumns} dataSource={antGroup.state.userGroupsData} pagination={{ total:antGroup.state.totalChatGroupCount,pageSize: getPageSize(),onChange:antGroup.onChatGroupPageChange }}/>
+                            <Table className="group_table_u" onRowClick={antGroup.sendGroupMessage} showHeader={false} scroll={{ x: true, y: 500 }} columns={userGroupsColumns} dataSource={antGroup.state.userGroupsData} pagination={{ total:antGroup.state.totalChatGroupCount,pageSize: getPageSize(),onChange:antGroup.onChatGroupPageChange }}/>
                         </ul>
                     </div>
                 </TabPane>
@@ -1630,25 +1630,25 @@ const AntGroupTabComponents = React.createClass({
             var topButton;
             var dissolutionChatGroupButton;
             if(antGroup.state.currentGroupObj.owner.colUid==sessionStorage.getItem("ident")){
-                topButton = <div>
+                topButton = <span className="right_ri">
                     <Button type="primary" onClick={this.showUpdateChatGroupNameModal}
                             loading={loading}
                     >修改群名称</Button>
-                    <Button type="primary" onClick={this.showAddMembersModal}
+                    <span className="toobar"><Button type="primary" onClick={this.showAddMembersModal}
                             loading={loading}
-                    >添加群成员</Button>
+                    >添加群成员</Button></span>
                     {/*<Button type="primary" onClick={this.deleteAllSelectedMembers}
                      disabled={!hasSelected} loading={loading}
                      >移除群成员</Button>
                      <span style={{ marginLeft: 8 }}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span>*/}
-                </div>;
-                dissolutionChatGroupButton = <Button onClick={antGroup.showDissolutionChatGroupConfirmModal}>解散该群</Button>;
+                </span>;
+                dissolutionChatGroupButton = <Button onClick={antGroup.showDissolutionChatGroupConfirmModal} className="group_red_font"><i className="iconfont">&#xe616;</i>解散该群</Button>;
             }else{
-                topButton = <div>
+                topButton = <span className="right_ri">
                     <Button type="primary" onClick={this.showAddMembersModal}
                             loading={loading}
                     >添加群成员</Button>
-                </div>;
+                </span>;
             }
             var memberLiTag=[];
             antGroup.state.currentMemberArray.forEach(function (e) {
@@ -1659,12 +1659,12 @@ const AntGroupTabComponents = React.createClass({
                 if(isEmpty(userInfo)==false){
                     userHeaderIcon = <img src={userInfo.avatar}></img>;
                 }else{
-                    userHeaderIcon=<img src={require('../images/maaee_face.png')}></img>;
+                    userHeaderIcon=<span className="attention_img"><img src={require('../images/maaee_face.png')}></img></span>;
                 }
-                var liTag = <li>
-                        <span>{userHeaderIcon}{groupUser}</span>
-                        <span><Button　value={memberId} onClick={antGroup.showConfirmModal}>移出群聊</Button></span>
-                    </li>;
+                var liTag = <div className="group_fr">
+                        <span className="attention_img">{userHeaderIcon}</span><span>{groupUser}</span>
+                        <Button　value={memberId} onClick={antGroup.showConfirmModal} className="group_del"><Icon type="close-circle-o" /></Button>
+                    </div>;
                 memberLiTag.push(liTag);
             });
 
@@ -1678,28 +1678,19 @@ const AntGroupTabComponents = React.createClass({
             >
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div style={{'overflow':'auto'}}>
-                        <ul>
-                          <img src={antGroup.state.currentGroupObj.owner.avatar} className="person_user"/>
-                          <span className="person_ri_name">{antGroup.state.currentGroupObj.name}</span>
+                        <ul className="integral_top">
+                          <span className="integral_face"><img src={antGroup.state.currentGroupObj.owner.avatar} className="person_user"/></span>
+                          <div className="class_right color_gary_f">{antGroup.state.currentGroupObj.name}</div>
+						  <div className="integral_line"></div>
                         </ul>
-                        <ul>
-                            <li>群聊成员{antGroup.state.currentMemberArray.length}人</li>
-                            <li>
-                                {topButton}
+                        <ul className="group_fr_ul">
+                            <li className="color_gary_f"><span>群聊成员：{antGroup.state.currentMemberArray.length}人</span>{topButton}</li>
+                            <li  style={{height:'65px'}}>
                                 {memberLiTag}
                                 {/*<Table  style={{width:'300px'}} rowSelection={rowSelection} columns={groupUserTableColumns} dataSource={antGroup.state.currentMemberArray} scroll={{ x: true, y: 400 }} ></Table>*/}
                             </li>
-                        </ul>
-                        <ul>
-                            <li>群聊名称{antGroup.state.currentGroupObj.name}人</li>
-                            <li>
-                                {dissolutionChatGroupButton}
-                            </li>
-                        </ul>
-                        <ul>
-                            <li>
-                                <Button onClick={antGroup.showExitChatGroupConfirmModal}>删除并退出</Button>
-                            </li>
+							<li className="color_gary_f">群聊名称：{antGroup.state.currentGroupObj.name}</li>
+							<li className="btm"><Button onClick={antGroup.showExitChatGroupConfirmModal} className="group_red_btn">删除并退出</Button>{dissolutionChatGroupButton}</li>
                         </ul>
                     </div>
                 </TabPane>
@@ -2303,8 +2294,8 @@ const AntGroupTabComponents = React.createClass({
                     transitionName=""  //禁用modal的动画效果
                     maskClosable={false} //设置不允许点击蒙层关闭
                     footer={[
-                        <button type="primary" htmlType="submit" className="login-form-button" onClick={antGroup.addGroupMember}  >确定</button>,
-                        <button type="ghost" htmlType="reset" className="login-form-button" onClick={antGroup.addGroupMemberModalHandleCancel} >取消</button>
+                        <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg" onClick={antGroup.addGroupMember}  >确定</button>,
+                        <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button" onClick={antGroup.addGroupMemberModalHandleCancel} >取消</button>
                     ]}
                 >
                     <Row className="ant-form-item">
@@ -2325,7 +2316,6 @@ const AntGroupTabComponents = React.createClass({
                         </Col>
                     </Row>
                 </Modal>
-
                 {breadCrumb}
 			<div className="group_cont">
                     {userPhoneCard}
