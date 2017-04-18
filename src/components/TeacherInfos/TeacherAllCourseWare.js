@@ -77,9 +77,10 @@ const TeacherAllCourseWare = React.createClass({
                     if(!pointId){
                          pointContent = '其它';
                     }else{
-                         pointContent = e.point.content;
+                        if(isEmpty(e.point)==false){
+                            pointContent = e.point.content;
+                        }
                     }
-
                     var createTime = courseWare.getLocalTime(e.createTime);
                     var fileTypeLogo;
                     var type = e.type;
