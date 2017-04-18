@@ -1512,12 +1512,12 @@ const AntGroupTabComponents = React.createClass({
                             if(e.messageReturnJson.messageType=="text"){
                                 messageTag =  <li style={{'textAlign':'left'}}>
 								    <div className="u-name"><span>{fromUser}</span></div>
-                                    <div className="talk-cont"><span className="name "  >{userPhoneIcon}</span><span className="borderballoon_le">{e.content}</span></div>
+                                    <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span className="borderballoon_le">{e.content}</span></div>
                                 </li>;
                             }else if(e.messageReturnJson.messageType=="imgTag"){
                                 messageTag =  <li style={{'textAlign':'left'}}>
 								<div className="u-name"><span>{fromUser}</span></div>
-                                <div className="talk-cont"><span className="name " >{userPhoneIcon}</span><span  className="borderballoon_le ">{e.imgTagArray}</span></div>
+                                <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span  className="borderballoon_le ">{e.imgTagArray}</span></div>
                                 </li>;
                             }
                         }
@@ -2223,8 +2223,8 @@ const AntGroupTabComponents = React.createClass({
                     //className="modol_width"
                     transitionName=""  //禁用modal的动画效果
                     footer={[
-                        <button type="primary" htmlType="submit" className="login-form-button" onClick={antGroup.updateChatGroupName}  >确定</button>,
-                        <button type="ghost" htmlType="reset" className="login-form-button" onClick={antGroup.updateChatGroupNameModalHandleCancel} >取消</button>
+                        <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg" onClick={antGroup.updateChatGroupName}  >确定</button>,
+                        <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button" onClick={antGroup.updateChatGroupNameModalHandleCancel} >取消</button>
                     ]}
                 >
                     <Row className="ant-form-item">
