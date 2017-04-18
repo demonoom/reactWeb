@@ -4,6 +4,7 @@ import UseKnowledgeComponents from '../UseKnowledgeComponents';
 import SubjectEditByTextboxioTabComponents from '../SubjectEditByTextboxioTabComponents';
 import { doWebService } from '../../WebServiceHelper';
 import {getPageSize} from '../../utils/Const';
+import ConfirmModal from '../ConfirmModal';
 const confirm = Modal.confirm;
 
 const columns = [{
@@ -108,13 +109,11 @@ const TeacherAllSubjects = React.createClass({
               subjectScore='--';
             }
             var answer = e.answer;
-            var userId = e.user.colUid;
-            var subjectOpt=<div><Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" className="score3_i"></Button><Button style={{ }} type=""  value={e.id+"#"+e.typeName} onClick={subTable.showModifySubjectModal}  icon="edit" title="修改" className="score3_i"></Button><Button style={{ }} type=""  value={e.id} onClick={subTable.delMySubjects}  icon="delete" title="删除" className="score3_i" ></Button></div>;
+            var subjectOpt=<div><Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" className="score3_i"></Button><Button style={{ }} type=""  value={e.id+"#"+e.typeName} onClick={subTable.showModifySubjectModal}  icon="edit" title="修改" className="score3_i"></Button><Button style={{ }} type=""  value={e.id} onClick={subTable.showConfirmModal}  icon="delete" title="删除" className="score3_i" ></Button></div>;
             data.push({
               key: key,
               name: name,
               content: content,
-              // submitTime:submitTime,
               subjectType:subjectType,
               subjectScore:subjectScore,
               subjectOpt:subjectOpt,
@@ -152,41 +151,27 @@ const TeacherAllSubjects = React.createClass({
   },
 
   //删除资源库下的题目
-  delMySubjects:function (e) {
-    var target = e.target;
-    if(navigator.userAgent.indexOf("Chrome") > -1){
-      target=e.currentTarget;
-    }else{
-      target = e.target;
-    }
-    var subjectIds = target.value;
-    confirm({
-      title: '确定要删除该题目?',
-      onOk() {
-        var param = {
-          "method":'delMySubjects',
-          "userId":sessionStorage.getItem("ident"),
-          "subjects":subjectIds
-        };
-        doWebService(JSON.stringify(param), {
-          onResponse : function(ret) {
-            console.log(ret.msg);
-            if(ret.msg=="调用成功" && ret.response==true){
-              // alert("题目删除成功");
-              message.success("题目删除成功");
-            }else{
-              // alert("题目删除失败");
-              message.error("题目删除失败");
-            }
-            subTable.getUserSubjectsByUid(sessionStorage.getItem("ident"),subTable.state.currentPage);
-          },
-          onError : function(error) {
-            // alert(error);
-            message.error(error);
-          }
-        });
+  delMySubjects:function () {
+    var subjectIds = subTable.state.delSubjectIds;
+    var param = {
+      "method":'delMySubjects',
+      "userId":sessionStorage.getItem("ident"),
+      "subjects":subjectIds
+    };
+    doWebService(JSON.stringify(param), {
+      onResponse : function(ret) {
+        console.log(ret.msg);
+        if(ret.msg=="调用成功" && ret.response==true){
+          message.success("题目删除成功");
+        }else{
+          message.error("题目删除失败");
+        }
+        subTable.closeConfirmModal();
+        subTable.getUserSubjectsByUid(sessionStorage.getItem("ident"),subTable.state.currentPage);
       },
-      onCancel() {},
+      onError : function(error) {
+        message.error(error);
+      }
     });
   },
 
@@ -214,6 +199,22 @@ const TeacherAllSubjects = React.createClass({
     subTable.refs.useKnowledgeComponents.showModal(currentKnowledge,"TeacherAllSubjects",subTable.state.knowledgeName);
   },
 
+  showConfirmModal(e) {
+    var target = e.target;
+    if(navigator.userAgent.indexOf("Chrome") > -1){
+      target=e.currentTarget;
+    }else{
+      target = e.target;
+    }
+    var subjectIds = target.value;
+    subTable.setState({"delSubjectIds":subjectIds});
+    subTable.refs.confirmModal.changeConfirmModalVisible(true);
+  },
+
+  closeConfirmModal(){
+    subTable.refs.confirmModal.changeConfirmModalVisible(false);
+  },
+
   render() {
     const { loading, selectedRowKeys } = this.state;
     const rowSelection = {
@@ -223,6 +224,11 @@ const TeacherAllSubjects = React.createClass({
     const hasSelected = selectedRowKeys.length > 0;
     return (
         <div className='ant-tabs ant-tabs-top ant-tabs-line'>
+          <ConfirmModal ref="confirmModal"
+                        title="确定要删除该题目?"
+                        onConfirmModalCancel={subTable.closeConfirmModal}
+                        onConfirmModalOK={subTable.delMySubjects}
+          ></ConfirmModal>
 		  <div className='ant-tabs-tabpane ant-tabs-tabpane-active'>
           <SubjectEditByTextboxioTabComponents ref="subjectEditTabComponents" subjectEditCallBack={subTable.subjectEditCallBack}></SubjectEditByTextboxioTabComponents>
           <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>

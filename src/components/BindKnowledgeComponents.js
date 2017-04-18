@@ -217,6 +217,7 @@ const BindKnowledgeComponents = React.createClass({
                 onCancel={bindKnowledge.handleCancel}
                 className="knowledge_width"
                 transitionName=""  //禁用modal的动画效果
+                maskClosable={false} //设置不允许点击蒙层关闭
                 footer={[
                     <Button type="primary" htmlType="submit" className="login-form-button"
                             onClick={bindKnowledge.bindPointForTeacher}>确定</Button>,
