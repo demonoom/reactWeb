@@ -86,7 +86,7 @@ const UploadImgComponents = React.createClass({
                         <div className="ant-upload-text">上传图片</div>
                     </div>
                 </Upload>
-                <Modal maskClosable="true" visible={antUpload.state.previewVisible} footer={null} onCancel={antUpload.handleCancel}>
+                <Modal maskClosable={false}  visible={antUpload.state.previewVisible} footer={null} onCancel={antUpload.handleCancel}>
                     <img alt="example" style={{ width: '100%' }} src={antUpload.state.previewImage} />
                 </Modal>
             </div>

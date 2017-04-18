@@ -2,7 +2,8 @@ import React, { PropTypes } from 'react';
 import { Popover, Affix, Button,Dropdown,Menu,Icon,Modal } from 'antd';
 import UserPasswordModifyComponents from './UserPasswordModifyComponents';
 import { doWebService } from '../WebServiceHelper';
-const confirm = Modal.confirm;
+import {isEmpty} from './../utils/Const';
+import ConfirmModal from './ConfirmModal';
 
 var floatButton;
 const FloatButton = React.createClass({
@@ -17,21 +18,17 @@ const FloatButton = React.createClass({
     },
 
     logOut(){
-        // alert(sessionStorage.getItem("openKeysStr"));
         var openKeysStr = sessionStorage.getItem("openKeysStr");
-        confirm({
-          title: '您确定退出登录么?',
-          onOk() {
-            if(openKeysStr!=null && openKeysStr!=""){
-              //已有访问记录，本地移除后，保存到数据库
-              var userId = sessionStorage.getItem("ident");
-              floatButton.saveHistoryAccessPointId(userId,openKeysStr);
-            }else{
-              location.hash="Login";
-            }
-          },
-          onCancel() {},
-        });
+        if(isEmpty(openKeysStr)==false){
+            //已有访问记录，本地移除后，保存到数据库
+            var userId = sessionStorage.getItem("ident");
+            floatButton.saveHistoryAccessPointId(userId,openKeysStr);
+        }else{
+            sessionStorage.removeItem("ident");
+            sessionStorage.removeItem("loginUser");
+            sessionStorage.removeItem("machineId");
+            location.hash="Login";
+        }
     },
 
     saveHistoryAccessPointId(userId,pointId){
@@ -70,8 +67,17 @@ const FloatButton = React.createClass({
         if(clickKey=="modifyPassword"){
           floatButton.showModifyModal();
         }else if(clickKey=="existSystem"){
-          floatButton.logOut();
+          //floatButton.logOut();
+            floatButton.showConfirmModal();
         }
+    },
+
+    showConfirmModal(){
+        floatButton.refs.confirmModal.changeConfirmModalVisible(true);
+    },
+
+    closeConfirmModal(){
+        floatButton.refs.confirmModal.changeConfirmModalVisible(false);
     },
 
     render() {
@@ -82,9 +88,13 @@ const FloatButton = React.createClass({
             </Menu>
         );
         return (
-
-
            <div className="more_div">
+               <ConfirmModal ref="confirmModal"
+                             title="您确定退出登录么?"
+                             onConfirmModalCancel={floatButton.closeConfirmModal}
+                             onConfirmModalOK={floatButton.logOut}
+               ></ConfirmModal>
+
                <UserPasswordModifyComponents ref="userPasswordModify"/>
 
                <Dropdown overlay={menu}  trigger={['click']} className='affix_bottom'>

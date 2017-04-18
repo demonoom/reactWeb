@@ -5,17 +5,13 @@ import {doWebService} from '../../WebServiceHelper';
 import PersonCenterComponents from './PersonCenterComponents';
 import EmotionInputComponents from './EmotionInputComponents';
 import UseKnowledgeComponents from '../UseKnowledgeComponents';
-import FavoriteSubjectItems from '../FavoriteSubjectItems';
-import FavItem from '../FavoriteItem';
 import Favorites from '../Favorites';
 import {getPageSize} from '../../utils/Const';
-import {getLocalTime} from '../../utils/Const';
 import {isEmpty} from '../../utils/Const';
-import {getAllTopic} from '../../utils/Const';
-import {getOnlyTeacherTopic} from '../../utils/Const';
 import {phone} from '../../utils/phone';
 import {getImgName} from '../../utils/Const';
 import {MsgConnection} from '../../utils/msg_websocket_connection';
+import ConfirmModal from '../ConfirmModal';
 const TabPane = Tabs.TabPane;
 const confirm = Modal.confirm;
 const Panel = Collapse.Panel;
@@ -755,25 +751,18 @@ const AntGroupTabComponents = React.createClass({
     /**
      * 移除选中的群组成员
      */
-    deleteSelectedMember(e){
-        var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
-            target = e.target;
-        }
-        var memberIds = target.value;
-        confirm({
-            title: '确定要移除选中的群成员?',
-            onOk() {
-                var currentGroupObj = antGroup.state.currentGroupObj;
-                // var memberIds = antGroup.state.selectedRowKeysStr;
-                var optType="removeMember";
-                antGroup.deleteChatGroupMember(currentGroupObj.chatGroupId,memberIds,optType);
-            },
-            onCancel() {
-            },
-        });
+    deleteSelectedMember(){
+        var currentGroupObj = antGroup.state.currentGroupObj;
+        var memberIds = antGroup.state.delMemberIds;
+        var optType="removeMember";
+        antGroup.deleteChatGroupMember(currentGroupObj.chatGroupId,memberIds,optType);
+        antGroup.closeConfirmModal();
+    },
+
+    deleteSelectedMemberById(memberIds){
+        var currentGroupObj = antGroup.state.currentGroupObj;
+        var optType="removeMember";
+        antGroup.deleteChatGroupMember(currentGroupObj.chatGroupId,memberIds,optType);
     },
 
     /**
@@ -873,23 +862,17 @@ const AntGroupTabComponents = React.createClass({
      * 解散聊天群
      */
     dissolutionChatGroup(){
-        confirm({
-            title: '确定要解散该群组?',
-            onOk() {
-                var currentGroupObj = antGroup.state.currentGroupObj;
-                var memberIds = antGroup.getCurrentMemberIds();
-                var optType="dissolution";
-                antGroup.deleteChatGroupMember(currentGroupObj.chatGroupId,memberIds,optType);
-            },
-            onCancel() {
-            },
-        });
+        var currentGroupObj = antGroup.state.currentGroupObj;
+        var memberIds = antGroup.getCurrentMemberIds();
+        var optType="dissolution";
+        antGroup.deleteChatGroupMember(currentGroupObj.chatGroupId,memberIds,optType);
+        antGroup.closeDissolutionChatGroupConfirmModal();
     },
     /**
      * 删除并退出群组
      */
     exitChatGroup(){
-        confirm({
+        /*confirm({
             title: '确定要退出该群组?',
             onOk() {
                 var currentGroupObj = antGroup.state.currentGroupObj;
@@ -899,7 +882,12 @@ const AntGroupTabComponents = React.createClass({
             },
             onCancel() {
             },
-        });
+        });*/
+        var currentGroupObj = antGroup.state.currentGroupObj;
+        var memberIds = sessionStorage.getItem("ident");
+        var optType="exitChatGroup";
+        antGroup.deleteChatGroupMember(currentGroupObj.chatGroupId,memberIds,optType);
+        antGroup.closeExitChatGroupConfirmModal();
     },
 
     deleteChatGroupMember(chatGroupId,memberIds,optType){
@@ -1426,6 +1414,52 @@ const AntGroupTabComponents = React.createClass({
         });
     },
 
+    showConfirmModal(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var memberIds = target.value;
+        antGroup.setState({"delMemberIds":memberIds});
+        antGroup.refs.confirmModal.changeConfirmModalVisible(true);
+    },
+
+    /**
+     * 关闭移出群聊按钮对应的confirm窗口
+     */
+    closeConfirmModal(){
+        antGroup.refs.confirmModal.changeConfirmModalVisible(false);
+    },
+
+    showDissolutionChatGroupConfirmModal(){
+        antGroup.refs.dissolutionChatGroupConfirmModal.changeConfirmModalVisible(true);
+    },
+
+    /**
+     * 关闭解散群聊按钮对应的confirm窗口
+     */
+    closeDissolutionChatGroupConfirmModal(){
+        antGroup.refs.dissolutionChatGroupConfirmModal.changeConfirmModalVisible(false);
+    },
+
+    showExitChatGroupConfirmModal(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var memberIds = target.value;
+        antGroup.setState({"delMemberIds":memberIds});
+        antGroup.refs.exitChatGroupConfirmModal.changeConfirmModalVisible(true);
+    },
+
+    closeExitChatGroupConfirmModal(){
+        antGroup.refs.exitChatGroupConfirmModal.changeConfirmModalVisible(false);
+    },
+
     render() {
         var breadMenuTip="蚁群";
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
@@ -1608,7 +1642,7 @@ const AntGroupTabComponents = React.createClass({
                      >移除群成员</Button>
                      <span style={{ marginLeft: 8 }}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span>*/}
                 </span>;
-                dissolutionChatGroupButton = <Button onClick={antGroup.dissolutionChatGroup} className="group_red_font"><i className="iconfont">&#xe616;</i>解散该群</Button>;
+                dissolutionChatGroupButton = <Button onClick={antGroup.showDissolutionChatGroupConfirmModal} className="group_red_font"><i className="iconfont">&#xe616;</i>解散该群</Button>;
             }else{
                 topButton = <span className="right_ri">
                     <Button type="primary" onClick={this.showAddMembersModal}
@@ -1629,7 +1663,7 @@ const AntGroupTabComponents = React.createClass({
                 }
                 var liTag = <div className="group_fr">
                         <span className="attention_img">{userHeaderIcon}</span><span>{groupUser}</span>
-                        <Button　value={memberId} onClick={antGroup.deleteSelectedMember} className="group_del"><Icon type="close-circle-o" /></Button>
+                        <Button　value={memberId} onClick={antGroup.showConfirmModal} className="group_del"><Icon type="close-circle-o" /></Button>
                     </div>;
                 memberLiTag.push(liTag);
             });
@@ -1656,7 +1690,7 @@ const AntGroupTabComponents = React.createClass({
                                 {/*<Table  style={{width:'300px'}} rowSelection={rowSelection} columns={groupUserTableColumns} dataSource={antGroup.state.currentMemberArray} scroll={{ x: true, y: 400 }} ></Table>*/}
                             </li>
 							<li className="color_gary_f">群聊名称：{antGroup.state.currentGroupObj.name}</li>
-							<li className="btm"><Button onClick={antGroup.exitChatGroup} className="group_red_btn">删除并退出</Button>{dissolutionChatGroupButton}</li>
+							<li className="btm"><Button onClick={antGroup.showExitChatGroupConfirmModal} className="group_red_btn">删除并退出</Button>{dissolutionChatGroupButton}</li>
                         </ul>
                     </div>
                 </TabPane>
@@ -2178,6 +2212,22 @@ const AntGroupTabComponents = React.createClass({
 
         return (
             <div>
+                <ConfirmModal ref="confirmModal"
+                              title="确定要移除选中的群成员?"
+                              onConfirmModalCancel={antGroup.closeConfirmModal}
+                              onConfirmModalOK={antGroup.deleteSelectedMember}
+                ></ConfirmModal>
+                <ConfirmModal ref="dissolutionChatGroupConfirmModal"
+                    title="确定要解散该群组?"
+                    onConfirmModalCancel={antGroup.closeDissolutionChatGroupConfirmModal}
+                    onConfirmModalOK={antGroup.dissolutionChatGroup}
+                ></ConfirmModal>
+                <ConfirmModal ref="exitChatGroupConfirmModal"
+                    title="确定要退出该群组?"
+                    onConfirmModalCancel={antGroup.closeExitChatGroupConfirmModal}
+                    onConfirmModalOK={antGroup.exitChatGroup}
+                ></ConfirmModal>
+
                 <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
                 <Modal
                     visible={antGroup.state.createChatGroupModalVisible}
@@ -2185,15 +2235,15 @@ const AntGroupTabComponents = React.createClass({
                     onCancel={antGroup.createChatGroupModalHandleCancel}
                     //className="modol_width"
                     transitionName=""  //禁用modal的动画效果
+                    maskClosable={false} //设置不允许点击蒙层关闭
                     footer={[
                         <button type="primary" htmlType="submit" className="ant-btn-primary ant-btn" onClick={antGroup.createChatGroup}  >确定</button>,
                         <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button" onClick={antGroup.createChatGroupModalHandleCancel} >取消</button>
                     ]}
                 >
                     <Row className="ant-form-item">
-                        <span style={{width:'120px'}}>群名称：</span>
                         <span >
-                            <Input value={antGroup.state.chatGroupTitle} defaultValue={antGroup.state.chatGroupTitle} onChange={antGroup.chatGroupTitleOnChange} />
+                            <Input placeholder="请输入群名称" value={antGroup.state.chatGroupTitle} defaultValue={antGroup.state.chatGroupTitle} onChange={antGroup.chatGroupTitleOnChange} />
                         </span>
                     </Row>
                     <Row className="ant-form-item">
@@ -2222,6 +2272,7 @@ const AntGroupTabComponents = React.createClass({
                     onCancel={antGroup.updateChatGroupNameModalHandleCancel}
                     //className="modol_width"
                     transitionName=""  //禁用modal的动画效果
+                    maskClosable={false} //设置不允许点击蒙层关闭
                     footer={[
                         <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg" onClick={antGroup.updateChatGroupName}  >确定</button>,
                         <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button" onClick={antGroup.updateChatGroupNameModalHandleCancel} >取消</button>
@@ -2241,6 +2292,7 @@ const AntGroupTabComponents = React.createClass({
                     onCancel={antGroup.addGroupMemberModalHandleCancel}
                     //className="modol_width"
                     transitionName=""  //禁用modal的动画效果
+                    maskClosable={false} //设置不允许点击蒙层关闭
                     footer={[
                         <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg" onClick={antGroup.addGroupMember}  >确定</button>,
                         <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button" onClick={antGroup.addGroupMemberModalHandleCancel} >取消</button>
@@ -2264,7 +2316,6 @@ const AntGroupTabComponents = React.createClass({
                         </Col>
                     </Row>
                 </Modal>
-
                 {breadCrumb}
 			<div className="group_cont">
                     {userPhoneCard}

@@ -4,8 +4,9 @@ import { doWebService } from '../../WebServiceHelper';
 import {getPageSize} from '../../utils/Const';
 import {isEmpty} from '../../utils/Const';
 import UseKnowledgeComponents from '../UseKnowledgeComponents';
+import ConfirmModal from '../ConfirmModal';
+
 const Panel = Collapse.Panel;
-const confirm = Modal.confirm;
 
 function callback(key) {
     // console.log(key);
@@ -128,39 +129,27 @@ const TeacherAllCourseWare = React.createClass({
     },
 
     //删除资源库下的材料（课件）
-    batchDeleteMaterial(e){
-        var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
-            target = e.target;
-        }
-        var materialIds = target.value;
-        confirm({
-            title: '确定要删除该课件?',
-            content: '',
-            onOk() {
-                var param = {
-                    "method":'batchDeleteMaterial',
-                    "ident":sessionStorage.getItem("ident"),
-                    "mids":materialIds
-                };
-                doWebService(JSON.stringify(param), {
-                    onResponse : function(ret) {
-                        console.log(ret.msg);
-                        if(ret.msg=="调用成功" && ret.response==true){
-                            message.success("课件删除成功");
-                        }else{
-                            message.error("课件删除失败");
-                        }
-                        courseWare.getTeachPlans(sessionStorage.getItem("ident"),courseWare.state.currentPage);
-                    },
-                    onError : function(error) {
-                        message.error(error);
-                    }
-                });
+    batchDeleteMaterial(){
+        var materialIds = courseWare.state.delMaterialIds;
+        var param = {
+            "method":'batchDeleteMaterial',
+            "ident":sessionStorage.getItem("ident"),
+            "mids":materialIds
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse : function(ret) {
+                console.log(ret.msg);
+                if(ret.msg=="调用成功" && ret.response==true){
+                    message.success("课件删除成功");
+                }else{
+                    message.error("课件删除失败");
+                }
+                courseWare.closeConfirmModal();
+                courseWare.getTeachPlans(sessionStorage.getItem("ident"),courseWare.state.currentPage);
             },
-            onCancel() {},
+            onError : function(error) {
+                message.error(error);
+            }
         });
     },
 
@@ -206,7 +195,7 @@ const TeacherAllCourseWare = React.createClass({
                         <Button icon="eye-o" style={{float: 'right'}} onClick={event => {this.view(event,e[3],e[1])} } />
                 }
                 if(e[12]!=null && e[12]==sessionStorage.getItem("ident")){
-                    delButton = <Button style={{ float:'right'}} icon="delete" title="删除" value={e[0]} onClick={courseWare.batchDeleteMaterial}></Button>
+                    delButton = <Button style={{ float:'right'}} icon="delete" title="删除" value={e[0]} onClick={courseWare.showConfirmModal}></Button>
                 }
                 return <Panel header={<span><span type="" className={e[8]}></span><span className="name_file">{e[1]}</span> </span>}  key={e[1]+"#"+e[7]+"#"+e[0]}>
                     <pre>
@@ -234,6 +223,22 @@ const TeacherAllCourseWare = React.createClass({
         }
     },
 
+    showConfirmModal(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var materialIds = target.value;
+        courseWare.setState({"delMaterialIds":materialIds});
+        courseWare.refs.confirmModal.changeConfirmModalVisible(true);
+    },
+
+    closeConfirmModal(){
+        courseWare.refs.confirmModal.changeConfirmModalVisible(false);
+    },
+
     render: function () {
         $(".ant-menu-submenu-title").each(function(){
             if($(this)[0].textContent==sessionStorage.getItem("lastClickMenuName")){
@@ -244,6 +249,11 @@ const TeacherAllCourseWare = React.createClass({
         });
         return (
             <div className='ant-tabs ant-tabs-top ant-tabs-line'>
+                <ConfirmModal ref="confirmModal"
+                              title="确定要删除该课件?"
+                              onConfirmModalCancel={courseWare.closeConfirmModal}
+                              onConfirmModalOK={courseWare.batchDeleteMaterial}
+                ></ConfirmModal>
                 <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
 			    <div className='ant-tabs-tabpane ant-tabs-tabpane-active'>
                 <Collapse defaultActiveKey={activeKey} activeKey={activeKey} ref="collapse" onChange={callback}>

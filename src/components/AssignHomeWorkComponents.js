@@ -464,6 +464,7 @@ const AssignHomeWorkComponents = React.createClass({
                 <Modal title="选择题目" className="choose_class" visible={assignHomeWork.state.subjectModalVisible}
                        onCancel={assignHomeWork.subjectModalHandleCancel}
                        transitionName=""  //禁用modal的动画效果
+                       maskClosable={false} //设置不允许点击蒙层关闭
                        footer={[
 
                            <Button key="return" type="primary" size="large"
