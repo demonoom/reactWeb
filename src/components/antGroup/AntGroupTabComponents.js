@@ -1720,12 +1720,12 @@ const AntGroupTabComponents = React.createClass({
                             if(e.messageReturnJson.messageType=="text"){
                                 messageTag =  <li style={{'textAlign':'left'}}>
 								    <div className="u-name"><span>{fromUser}</span></div>
-                                    <div className="talk-cont"><span >{userPhoneIcon}</span><span className="borderballoon_le">{e.content}</span></div>
+                                    <div className="talk-cont"><span  className="name">{userPhoneIcon}</span><span className="borderballoon_le">{e.content}</span></div>
                                 </li>;
                             }else if(e.messageReturnJson.messageType=="imgTag"){
                                 messageTag =  <li style={{'textAlign':'left'}}>
 								 <div className="u-name"><span>{fromUser}</span></div>
-								 <div className="talk-cont"><span >{userPhoneIcon}</span><span className="borderballoon_le">{e.imgTagArray}</span></div>
+								 <div className="talk-cont"><span  className="name">{userPhoneIcon}</span><span className="borderballoon_le">{e.imgTagArray}</span></div>
                                 </li>;
                             }
 
