@@ -1053,9 +1053,6 @@ article.content_3 img{
 	width:120px;
 }
 
-.ant-modal-body {
-    padding:30px 16px 30px 16px !important
-}
 .right_ri{
 	float:right
 }
@@ -1141,6 +1138,7 @@ article.content_3 img{
     top: 50%;
     left: 50%;
     transform: translate(-50% , -50%);
+	padding-bottom:23px !important;
 }
 p.user_cont1, div.user_cont1{
 	text-align:center;
@@ -1233,7 +1231,7 @@ p.user_cont span.name1{
 
 .ant-form-item {
     font-size: 14px;
-    margin: 12px 0 12px 0 !important;
+    margin-bottom: 16px !important;
 }
 
 .17_hei1{
@@ -2933,4 +2931,13 @@ a.color_gary_f, .color_gary_f{
 .group_red_font i{
 	font-size:14px;
 	padding:0 2px 0 0;
+}
+.icon_Alert{
+	font-size: 24px;
+    position: relative;
+    top: 2px;
+    margin-right: 8px;
+}
+.icon_orange{
+color:#ffbf00
 }

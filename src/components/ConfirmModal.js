@@ -29,14 +29,14 @@ class ConfirmModal extends React.Component{
         return(
             <Modal
                 visible={this.state.isShow}
-                width={400}
+                width={440}
                 transitionName=""  //禁用modal的动画效果
                 closable={true}     //设置显示右上角的关闭按钮（但是需要调整颜色，否则白色会无法显示）
                 maskClosable={false} //设置不允许点击蒙层关闭
                 onOk={this.props.onConfirmModalOK}
                 onCancel={this.props.onConfirmModalCancel}>
-                <div style={{marginLeft:'50px'}}>
-                    <img src={require("./images/bullet-question-d-y.png")} style={{width:'20px',height:'20px'}}></img>
+                <div className="class_right">
+                    <Icon type="question-circle" className="icon_Alert icon_orange" />
                     <span style={{fontSize:'14px'}}>{this.state.content}</span>
                 </div>
             </Modal>
