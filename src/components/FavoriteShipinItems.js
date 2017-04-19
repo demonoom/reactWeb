@@ -28,25 +28,27 @@ const FavoriteShipinItems = React.createClass({
         window.open(e.target.value);
     },
 
-    view: function (e,url,tit) {
+    view: function (e, url, tit) {
         e = e || window.event;
-        if(e.nativeEvent){
+        if (e.nativeEvent) {
             e.nativeEvent.stopImmediatePropagation();
         }
         e.stopPropagation();
         e.preventDefault();
         e.cancelBubble = true;
 
-        url = url.split('/Excoord_PC/')[1];
-        url = "/proxy/" + url;
+        let urlRef = url.split('/Excoord_PC/')[1];
+        if (urlRef) {
+            url = "/proxy/Excoord_PC/" + urlRef;
+        }
 
-        let obj ={
-            title:tit,
-            url:url,
-            width:'400px',
+        let obj = {
+            title: tit,
+            url: url,
+            width: '400px',
 
         }
-         this.props.onPreview(obj)
+        this.props.onPreview(obj)
 
     },
 
@@ -59,32 +61,36 @@ const FavoriteShipinItems = React.createClass({
         }
 
         coursePanelChildren = courseWareList.map((e, i) => {
+
             let content = e.content;
             let refkey = e.type + "#" + e.favoriteId;
             this.activeKey.push(refkey);
             return <div className="ant-card live ant-card-bordered">
-                <div  key={refkey}>
+                <div key={refkey}>
                     <div className="live_img">
-                        <a  onClick={event => {this.view(event,e.address,e.content)} }  target="_blank"><img alt="example" className="attention_img" width="100%"
-                                                                 src={e.cover}/></a>
+                        <a onClick={event => {
+                            this.view(event, e.address, e.content)
+                        } } target="_blank"><img alt="example" className="attention_img" width="100%"
+                                                 src={e.cover}/></a>
                     </div>
                     <div className="custom-card">
-						<p className="live_h3">{content}</p>
-						<ul className="live_cont">
-                                    <li>
-                                        <span className="attention_img"><img style={{width:'30px',height:'30px'}} src={e.liveInfo.user.avatar}></img></span>
-                                        <span className="live_span_1">{e.liveInfo.user.userName}</span>                                        
-                                        <span className="right_ri live_span_2">{getLocalTime( e.liveInfo.startTime  )}</span>
-                                    </li>
-									<li>
-										<span className="live_color live_green">{e.liveInfo.user.schoolName}</span>
-										<span className="live_color live_orange">{e.liveInfo.courseName}</span>
-										<a target="_blank" title="取消收藏"
-										   onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}>
-                                            <Button icon="star-o"  className="right_ri focus_btn"/>
-										</a>
-									</li>
-                                </ul>
+                        <p className="live_h3">{content}</p>
+                        <ul className="live_cont">
+                            <li>
+                                <span className="attention_img"><img style={{width: '30px', height: '30px'}}
+                                                                     src={e.liveInfo.user.avatar}></img></span>
+                                <span className="live_span_1">{e.liveInfo.user.userName}</span>
+                                <span className="right_ri live_span_2">{getLocalTime(e.liveInfo.startTime)}</span>
+                            </li>
+                            <li>
+                                <span className="live_color live_green">{e.liveInfo.user.schoolName}</span>
+                                <span className="live_color live_orange">{e.liveInfo.courseName}</span>
+                                <a target="_blank" title="取消收藏"
+                                   onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}>
+                                    <Button icon="star-o" className="right_ri focus_btn"/>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -98,17 +104,18 @@ const FavoriteShipinItems = React.createClass({
         this.buildFavShipionUi(this.props.param.data, this.props.param.type);
         return (
             <div className="favorite_scroll">
-				<div className="favorite_up topics_calc">
-					{coursePanelChildren}
-				</div>
-				<Pagination total={this.props.param.totalCount} pageSize={getPageSize()} current={this.props.param.currentPage} onChange={this.props.pageChange} />
+                <div className="favorite_up topics_calc">
+                    {coursePanelChildren}
+                </div>
+                <Pagination total={this.props.param.totalCount} pageSize={getPageSize()}
+                            current={this.props.param.currentPage} onChange={this.props.pageChange}/>
             </div>
 
 
         );
-		
+
     },
-	
+
 
 });
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import {  Pagination, Collapse, Button, message, Modal} from 'antd';
+import {Pagination, Collapse, Button, message, Modal} from 'antd';
 import {getPageSize} from '../utils/Const';
 import {getLocalTime} from '../utils/utils';
 
@@ -17,7 +17,7 @@ const FavoriteItem = React.createClass({
         ['4', 'shipin', '直播课']
     ],
 
-    columns : [
+    columns: [
         {
             title: '出题人',
             className: 'ant-table-selection-user',
@@ -78,22 +78,47 @@ const FavoriteItem = React.createClass({
         window.open(e.target.value);
     },
 
-    view: function (e,url,tit) {
+    view: function (e, url, tit) {
         e = e || window.event;
-        if(e.nativeEvent){
+        if (e.nativeEvent) {
             e.nativeEvent.stopImmediatePropagation();
         }
         e.stopPropagation();
         e.preventDefault();
         e.cancelBubble = true;
-        url = url.split('/Excoord_PC/')[1];
-        url = "/proxy/" + url;
-        let obj ={
-            title:tit,
-            url:url,
-            width:'400px'
+        let urlArr = url.split('/Excoord_For_Education/')[1];
+        if(urlArr){
+        url = "/proxy/Excoord_For_Education/" + urlArr;
+        }
+
+        let obj = {
+            title: tit,
+            url: url,
+            width: '400px'
         }
         this.props.onPreview(obj)
+    },
+
+    getUrl(eObj){
+        let fileType = eObj.material.name.split(".")[1];
+        switch (fileType.toLowerCase()) {
+            case 'pptx':
+                return eObj.material.htmlPath;
+                break;
+            case 'ppt':
+                return eObj.material.htmlPath;
+                break;
+            case 'pdf':
+                return eObj.material.path;
+                break;
+            case 'mp4':
+                return eObj.material.path;
+                break;
+            default :
+                return '';
+
+        }
+
     },
 
 
@@ -108,21 +133,22 @@ const FavoriteItem = React.createClass({
         this.activeKey = [];
 
         this.coursePanelChildren = datalist.map((e, i) => {
-            if(type != e.type) return{};
+            if (type != e.type) return {};
 
 
             //
             //
             let content = e.content;
-            type +='';
-            let key = type +'-'+e.favoriteId;
-            this.activeKey.push( key );
+            type += '';
+            let key = type + '-' + e.favoriteId;
+            this.activeKey.push(key);
             switch (type) {
 
 
                 // 2 微课
                 case '2':
-                    return <Panel header={<span>{content}</span>} key={ key } >
+
+                    return <Panel header={<span>{content}</span>} key={ key }>
                         <div className="bnt2_tex">
                                 <span><span className="col1">创建人：</span><span
                                     className="col2">{e.material.user.userName}</span></span>
@@ -130,10 +156,13 @@ const FavoriteItem = React.createClass({
                                 className="col2">{getLocalTime(e.material.createTime)}</span></span>
                         </div>
                         <div className="bnt2_right">
-                            <a target="_blank" title="查看" className="right_ri"   onClick={event => {this.view(event,e.address,e.content)} } ><Button
+                            <a target="_blank" title="查看" className="right_ri" onClick={event => {
+                                this.view(event, this.getUrl(e), e.content)
+                            } }><Button
                                 icon="eye-o"/></a>
-                            <a target="_blank" title="取消收藏" className="right_ri" 
-                                 onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)}><Button icon="star-o"/></a>
+                            <a target="_blank" title="取消收藏" className="right_ri"
+                               onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}><Button
+                                icon="star-o"/></a>
                         </div>
                     </Panel>
                     break;
@@ -141,6 +170,7 @@ const FavoriteItem = React.createClass({
 
                 // 3 讲义
                 case '3':
+
                     return <Panel header={<span>{content}</span>} key={ key }>
                         <div className="bnt2_tex">
                                 <span><span className="col1">创建人：</span><span
@@ -151,12 +181,15 @@ const FavoriteItem = React.createClass({
                         <div className="bnt2_right">
                             <a target="_blank" title="下载" className="right_ri" href={e.material.path}
                                download={e.material.path}><Button icon="download"/></a>
-                            <a target="_blank" title="查看" className="right_ri"  onClick={event => {this.view(event,e.address,e.content)} } ><Button
+                            <a target="_blank" title="查看" className="right_ri" onClick={event => {
+                                this.view(event, this.getUrl(e), e.content)
+                            } }><Button
                                 icon="eye-o"/></a>
                             <a target="_blank" title="取消收藏" className="right_ri"
-                               onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)} ><Button icon="star-o"/></a>
+                               onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}><Button
+                                icon="star-o"/></a>
                         </div>
-                       </Panel>
+                    </Panel>
                     break;
 
             }
@@ -167,20 +200,21 @@ const FavoriteItem = React.createClass({
     },
 
 
-
     render: function () {
         console.log('buildItemPanels');
-         this.buildItemPanels(this.props.param.data, this.props.param.type);
+        this.buildItemPanels(this.props.param.data, this.props.param.type);
 
         var CollapseStyle = {
-           height:"360px"
+            height: "360px"
         };
 
         return ( <div>
-                <div>
-                	<Collapse defaultActiveKey={this.activeKey} activeKey={this.activeKey} style={CollapseStyle}>{ this.coursePanelChildren }</Collapse>
-                </div>
-            	<Pagination total={this.props.param.totalCount} pageSize={getPageSize()} current={this.props.param.currentPage} onChange={this.props.pageChange} />
+            <div>
+                <Collapse defaultActiveKey={this.activeKey} activeKey={this.activeKey}
+                          style={CollapseStyle}>{ this.coursePanelChildren }</Collapse>
+            </div>
+            <Pagination total={this.props.param.totalCount} pageSize={getPageSize()}
+                        current={this.props.param.currentPage} onChange={this.props.pageChange}/>
         </div> );
     },
 
