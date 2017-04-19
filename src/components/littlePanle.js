@@ -163,7 +163,7 @@
         },
         GetLP (objParam) {
 
-            if ((this.mgr.length - this.hideArr.length) >= 5) {
+            if ((this.mgr.length - this.hideArr.length) >= 3) {
                 alert('弹窗打开太多！');
                 return;
             }
