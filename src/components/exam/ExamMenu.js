@@ -2,7 +2,6 @@ import React, { PropTypes,Link } from 'react';
 import { Table, Popconfirm } from 'antd';
 import { Menu, Icon } from 'antd';
 import { Badge,Pagination } from 'antd';
-const SubMenu = Menu.SubMenu;
 
 var mMenu;
 const ExamMenu = React.createClass({
@@ -54,7 +53,6 @@ const ExamMenu = React.createClass({
                 mode="inline"
           >
             <Menu.Item key="createExamPager" style={{backgroundColor:'#e5f2fe'}} > <span><Icon type="mail" className='le_1' /><span>组卷</span></span> </Menu.Item>
-            {/*<Menu.Item key="exam"> <span><Icon type="mail" className='le_1' /><span>考试</span></span> </Menu.Item>*/}
           </Menu>
         </div>
     );

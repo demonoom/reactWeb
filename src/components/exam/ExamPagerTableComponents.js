@@ -33,7 +33,6 @@ const ExamPagerTableComponents = React.createClass({
   },
   start() {
     this.setState({ loading: true });
-    // ajax request after empty completing
     setTimeout(() => {
       this.setState({
         selectedRowKeys: [],
@@ -105,8 +104,6 @@ const ExamPagerTableComponents = React.createClass({
     examPagerTable.props.callBackParent(subjectInfoJson);
   },
 
-  // getSubject
-
   //点击导航时，进入的试卷列表
   getExamPagerList:function (ident,pageNo) {
     data=[];
@@ -148,8 +145,6 @@ const ExamPagerTableComponents = React.createClass({
   },
 
   getLocalTime:function (nS) {
-    // var newDate = new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/,' ');
-    // return newDate;
     var newDate = new Date();
     newDate.setTime(nS);
     console.log("localDate："+newDate.toLocaleDateString())
@@ -202,7 +197,6 @@ const ExamPagerTableComponents = React.createClass({
     if(currentView=="examPagerList"){
       examPagerTable.getExamPagerList(sessionStorage.getItem("ident"),pageNo);
     }else{
-      // subjectDetailList
       examPagerTable.getHomeworkSubjects(sessionStorage.getItem("ident"),examPagerTable.state.clazzId,examPagerTable.state.dateTime,pageNo)
     }
 
