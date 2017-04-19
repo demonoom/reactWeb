@@ -2222,6 +2222,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr{
 	height: calc(100% - 98px);
     padding: 0 20px 0 0;
     overflow: auto;
+	
 }
 .group_talk ul li{
 	padding:10px 0;
