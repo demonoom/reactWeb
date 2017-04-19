@@ -776,9 +776,9 @@ const UpdateExamPagerComponents = React.createClass({
 			<Row className="ant-form-item">
 				<Col span={3} >图片答案：</Col>
 				<Col span={12}>
-                    {/*<AntUploadComponentsForUpdate className="add_study-b" key={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType}  fileList={imageAnswerFileArray} params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponentsForUpdate>*/}
-					<button type="primary" icon="plus-circle" value={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} title="上传图片答案"
-                            className="add_study-b" onClick={createExamPager.showModal}>上传图片答案</button>
+                    <AntUploadComponentsForUpdate className="add_study-b" key={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType}  fileList={imageAnswerFileArray} params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponentsForUpdate>
+					{/*<button type="primary" icon="plus-circle" value={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} title="上传图片答案"
+                            className="add_study-b" onClick={createExamPager.showModal}>上传图片答案</button>*/}
 				</Col>
 			</Row>
             <Row className="ant-form-item">
