@@ -16,6 +16,12 @@ ul, li{
 div, a, span, input{
 	outline:none;
 }
+
+i, cite, em, var, address, dfn {
+    font-style: normal;
+}
+
+
 @media only screen and (max-width: 1366px) {
 .ant-layout-aside {
       position: absolute;
@@ -1053,9 +1059,6 @@ article.content_3 img{
 	width:120px;
 }
 
-.ant-modal-body {
-    padding:30px 16px 30px 16px !important
-}
 .right_ri{
 	float:right
 }
@@ -1141,6 +1144,7 @@ article.content_3 img{
     top: 50%;
     left: 50%;
     transform: translate(-50% , -50%);
+	padding-bottom:23px !important;
 }
 p.user_cont1, div.user_cont1{
 	text-align:center;
@@ -1233,7 +1237,7 @@ p.user_cont span.name1{
 
 .ant-form-item {
     font-size: 14px;
-    margin: 12px 0 12px 0 !important;
+    margin-bottom: 16px !important;
 }
 
 .17_hei1{
@@ -1381,11 +1385,11 @@ a {
 }
 @font-face {
   font-family: 'iconfont';  /* project id 197083 */
-  src: url('//at.alicdn.com/t/font_nzsdhtsitqjgu8fr.eot');
-  src: url('//at.alicdn.com/t/font_nzsdhtsitqjgu8fr.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_nzsdhtsitqjgu8fr.woff') format('woff'),
-  url('//at.alicdn.com/t/font_nzsdhtsitqjgu8fr.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_nzsdhtsitqjgu8fr.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_he2urx0ecps3jtt9.eot');
+  src: url('//at.alicdn.com/t/font_he2urx0ecps3jtt9.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_he2urx0ecps3jtt9.woff') format('woff'),
+  url('//at.alicdn.com/t/font_he2urx0ecps3jtt9.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_he2urx0ecps3jtt9.svg#iconfont') format('svg');
 }
 .iconfont{
 	font-family:"iconfont" !important;
@@ -2728,6 +2732,29 @@ a.color_gary_f, .color_gary_f{
 
 }
 
+.little-layout-aside-r-show .header {
+	width: 100%;
+	height: 45px;
+	overflow: hidden;
+	text-align: center;
+	border-bottom: 1px solid #dfe0e3;
+	line-height:45px;
+}
+
+.little-layout-aside-r-show .content {
+	height: 600px;
+}
+
+
+.little-layout-aside-r-show iframe{
+
+	width:100%;
+	height:100%;
+	border: none;
+}
+
+
+
 
 .little-warp{
 	height: 100%;
@@ -2735,16 +2762,13 @@ a.color_gary_f, .color_gary_f{
 }
 
 
-.little-warp .little-tilte{
-	width: 100%;
-	height: 46px;
+.little-layout-aside-r-show .little-tilte{
+	height: 45px;
 	overflow: hidden;
-	text-align: center;
-	border-bottom: 1px solid #dfe0e3;
-	line-height:46px;
+	display:inline-block
 
 }
-.little-warp .little-tilte .title {
+.little-layout-aside-r-show h3.title {
 	display: inline-block;
     color: #222;
     height: 100%;
@@ -2760,31 +2784,78 @@ a.color_gary_f, .color_gary_f{
 
 }
 
-
-
-.little-warp .little-tilte .close,
-.little-warp .little-tilte .zoom
+.little-layout-aside-r-show .close,
+.little-layout-aside-r-show .zoom
 {
 	display: inline-block ;
 	position: absolute;
 	font-weight: lighter;
-	top: 0;
+	top: 10px;
 	width: 20px;
 	height: 20px;
 	line-height: 20px;
 	text-decoration: none;
 	text-align: center;
-	font-size: 2em;
 	float: right;
-	color: #dfe0e3;
-	font-family: Arial;
+	color: #88919c;
 }
 
-.little-warp .little-tilte .close {
-	right: 0px;
+.little-layout-aside-r-show .close,
+.little-layout-aside-r-show .zoom{
+	font-family:"iconfont" !important;
+	font-size:18px;
+	font-style:normal;
+	-webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale; 
 }
-.little-warp .little-tilte .zoom {
-	right: 25px;
+.little-layout-aside-r-show .close {
+	right: 7px;
+}
+.little-layout-aside-r-show .close:hover {
+	color:#ff473a;
+}
+.little-layout-aside-r-show .zoom {
+	right: 34px;
+}
+.little-layout-aside-r-show .zoom:hover {
+	color:#57c5f7
+}
+.lpmgrbtn{
+	width:150px;
+	padding: 6px 16px;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.2);
+    background: #fff;
+    position: relative;
+    margin-bottom: 10px;
+    overflow: hidden;
+	z-index:1000;
+	float:right;
+	right:115px;
+	top: 8px;
+}
+.lpmgrbtn a{
+	padding:0 8px;
+	color:#88919c
+}
+.lpmgrbtn a:hover{
+	color:#57c5f7;
+	text-decoration:none
+}
+
+.lpmgrbtn a.del:hover{
+	color:#ff473a !important;
+	text-decoration:none
+}
+.lpmgrbtn a i{
+	font-family:"iconfont" !important;
+	font-size:16px;
+	font-style:normal;
+	-webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale; 
+	padding-right:3px;
 }
 .littleAnt-iframe-panle {
 	height: calc(100% - 47px);
@@ -2933,4 +3004,13 @@ a.color_gary_f, .color_gary_f{
 .group_red_font i{
 	font-size:14px;
 	padding:0 2px 0 0;
+}
+.icon_Alert{
+	font-size: 24px;
+    position: relative;
+    top: 2px;
+    margin-right: 8px;
+}
+.icon_orange{
+color:#ffbf00
 }

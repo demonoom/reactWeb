@@ -433,10 +433,10 @@ const CourseWareComponents = React.createClass({
                 $(this).css("background-color", "");
             }
         });
-        var title=<div>
+        var title=<span>
             <span>确定要删除该课件?</span>
             <Checkbox onChange={courseWare.isDeleteAll}>同步删除备课计划下的课件</Checkbox>
-        </div>;
+        </span>;
         return (
             <div>
                 <ConfirmModal ref="confirmModal"

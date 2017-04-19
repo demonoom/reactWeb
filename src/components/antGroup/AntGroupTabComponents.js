@@ -2266,7 +2266,7 @@ const AntGroupTabComponents = React.createClass({
 
                 </Modal>
 
-                <Modal
+                <Modal className="modol_width"
                     visible={antGroup.state.updateChatGroupNameModalVisible}
                     title="修改群名称"
                     onCancel={antGroup.updateChatGroupNameModalHandleCancel}
@@ -2279,8 +2279,8 @@ const AntGroupTabComponents = React.createClass({
                     ]}
                 >
                     <Row className="ant-form-item">
-                        <Col span={3}>群名称：</Col>
-                        <Col span={13}>
+                        <Col span={6} className="right_look">群名称：</Col>
+                        <Col span={14}>
                             <Input value={antGroup.state.updateChatGroupTitle} defaultValue={antGroup.state.updateChatGroupTitle} onChange={antGroup.updateChatGroupTitleOnChange}/>
                         </Col>
                     </Row>

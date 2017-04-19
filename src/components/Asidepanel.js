@@ -24,20 +24,44 @@ class Asidepanel extends React.Component {
     closepanle(ifFoce) {
         if (ifFoce) {
             this.setState({isShow: false});
+            $("#asidepanel")[0].src='';
             return;
         }
         this.setState({isShow: true});
     }
 
     // 放大查看
-    zoomview(){
+    zoomview() {
         window.open(this.props.param.url);
     }
 
-    bindIfrCall(e){
+    componentDidMount() {
 
-        asidepanel.contentWindow.phone = WebCall;
+
+
     }
+
+    componentDidUpdate(){
+        var ifr = $("#asidepanel")[0];
+       // alert(ifr.src);
+        var iDoc = ifr.contentDocument;
+        var iWin = ifr.contentWindow;
+
+        $(iWin.document).ready( function(e,b,c) {
+            iWin.phone = {
+                playVideoJSON(obj){
+                    debugger
+                },
+                showMt(obj){
+                    debugger
+                }
+
+            }
+        });
+
+    }
+
+
 
     render() {
         let sty = {
@@ -55,11 +79,12 @@ class Asidepanel extends React.Component {
                 <div className="little-warp">
                     <div className="little-tilte">
                         <h3 className="title">{ this.props.param.title }</h3>
-                        <a onClick={this.closepanle} className="close"><i className="iconfont iconfont_close">&#xe615;</i></a>
-                        <a onClick={  this.zoomview}  className="zoom"><i className="iconfont iconfont_more">&#xe6b8;</i></a>
+                        <a onClick={this.closepanle} className="close"><i
+                            className="iconfont iconfont_close">&#xe615;</i></a>
+                        <a onClick={  this.zoomview} className="zoom"><i className="iconfont iconfont_more">&#xe6b8;</i></a>
                     </div>
                     <section className="littleAnt-iframe-panle">
-                        <iframe id="asidepanel" border={0} style={{...sty2}} src={ this.props.param.url } onLoad={  this.bindIfrCall } ></iframe>
+                        <iframe id="asidepanel"  style={{...sty2}} src={ this.props.param.url }></iframe>
                     </section>
                 </div>
             </aside>
