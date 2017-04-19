@@ -1,37 +1,67 @@
 import React, { PropTypes } from 'react';
 import { Upload, Icon,Button,message, Modal,Progress } from 'antd';
+import {isEmpty} from '../../utils/Const';
 var antUpload;
+var fileList=[];
 const AntUploadComponentsForUpdate = React.createClass({
 
     getInitialState() {
         antUpload = this;
-        var defaultFileList = [];
-        console.log("subjectInfo"+antUpload.props.params);
-        var isDisabled = false;
-        if(typeof(antUpload.props.fileList)!="undefined" && antUpload.props.fileList.length!=0){
-            defaultFileList = antUpload.props.fileList ;
-            isDisabled = true;
-        }
         return {
-            defaultFileList: defaultFileList,
+            defaultFileList:[],
+            fileList:[],
             subjectInfo:antUpload.props.params,
             previewVisible: false,
             previewImage: '',
-            disabled:isDisabled,
         };
     },
-
+    /**
+     * 图片答案组件加载
+     */
     componentDidMount(){
-        console.log("antUpload.props.params:"+antUpload.props.params)
-    },
-
-    componentWillReceiveProps(){
-        var defaultFileList = [];
-        if(typeof(antUpload.props.fileList)!="undefined" && antUpload.props.fileList.length!=0){
-            defaultFileList = antUpload.props.fileList ;
-            antUpload.setState({disabled:true});
+        console.log("antUpload.props.params:"+antUpload.props.params);
+        var fileListParams = antUpload.props.fileList;
+        if(isEmpty(fileListParams)==false && fileListParams.length!=0 && antUpload.state.fileList.length==0){
+            fileList.splice(0);
+            fileListParams.forEach(function (e) {
+                var fileJson = e;
+                var lastLineIndex = fileJson.url.lastIndexOf("/");
+                var fileName = fileJson.url.substring(lastLineIndex+1);
+                var fileJson={
+                    uid: Math.random(),
+                    name: fileName,
+                    status: 'done',
+                    url: fileJson.url,
+                    thumbUrl: fileJson.url,
+                };
+                fileList.push(fileJson);
+            });
+            antUpload.setState({fileList:fileList});
+        }else{
+            antUpload.setState({fileList:[]});
         }
-        antUpload.setState({defaultFileList:defaultFileList});
+    },
+    /**
+     * 更新试卷的图片解析时，显示的图片内容
+     * @param nextProps
+     */
+    componentWillReceiveProps(nextProps){
+        if(isEmpty(nextProps)==false && isEmpty(nextProps.fileList)==false && nextProps.fileList.length!=0 && antUpload.state.fileList.length==0){
+            fileList.splice(0);
+            var lastLineIndex = nextProps.fileList.lastIndexOf("/");
+            var fileName = nextProps.fileList.substring(lastLineIndex+1);
+            var fileJson={
+                uid: Math.random(),
+                name: fileName,
+                status: 'done',
+                url: nextProps.fileList,
+                thumbUrl: nextProps.fileList,
+            };
+            fileList.push(fileJson);
+            antUpload.setState({fileList:fileList});
+        }else{
+            antUpload.setState({fileList:[]});
+        }
     },
 
     showInfo(e){
@@ -57,8 +87,8 @@ const AntUploadComponentsForUpdate = React.createClass({
             action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
             listType: 'picture',
             defaultFileList:antUpload.state.defaultFileList,
+            fileList:antUpload.state.fileList,
             onPreview:antUpload.handlePreview,
-            disabled:antUpload.state.disabled,
             beforeUpload(file){
                 var fileType = file.type;
                 if(fileType.indexOf("image")==-1){
@@ -72,33 +102,18 @@ const AntUploadComponentsForUpdate = React.createClass({
                     var percent = info.file.percent;
                     console.log("上传进度"+percent);
                     antUpload.setState({uploadPercent:percent,progressState:'block'});
-                    /*var pro = <Progress type="circle" width={24} className="upexam_botom_ma" percent={percent} />;
-                    antUpload.setState({uploadPercent:pro});*/
                     console.log(info.file, info.fileList);
                     if(info.file.status==="removed"){
-                        antUpload.setState({disabled:false});
-                        antUpload.props.callBackParent(info.file,antUpload.state.subjectInfo,"removed");
+                        antUpload.props.callBackParent(info.file,antUpload.props.params,"removed");
                     }
                 }
                 if (info.file.status === 'done') {
-                    var uid = info.file.uid;
-                    var fileName = info.file.name;
-                    var url=info.file.response;
-                    var thumbUrl=info.file.thumbUrl;
-                    var fileJson={
-                        uid: uid,
-                        name: fileName,
-                        status: 'done',
-                        url: url,
-                        thumbUrl: thumbUrl,
-                        subjectInfo:antUpload.state.subjectInfo
-                    };
-                    antUpload.props.callBackParent(info.file,antUpload.state.subjectInfo);
-                    antUpload.setState({disabled:true});
+                    antUpload.props.callBackParent(info.file,antUpload.props.params);
                     message.success(`${info.file.name} 文件上传成功`,5);
                 } else if (info.file.status === 'error') {
                     message.error(`${info.file.name} 文件上传失败.`,5);
                 }
+                antUpload.setState({"fileList":info.fileList});
             },
             onRemove(file){
                 console.log(file);
@@ -108,9 +123,6 @@ const AntUploadComponentsForUpdate = React.createClass({
 
             <div>
                 <Upload {...props}>
-                    {/*<div style={{height:'auto','z-index:':'100'}}>
-                        {antUpload.state.uploadPercent}
-                    </div>*/}
                     <Button value={antUpload.props.params} onClick={antUpload.showInfo} className="add_study-b">
                         <Icon type="upload" /> 上传
                     </Button>

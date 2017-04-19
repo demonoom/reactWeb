@@ -329,13 +329,17 @@ const CourseWareComponents = React.createClass({
         } else {
             coursePanelChildren = courseWareList.map((e, i)=> {
                 var eysOnButton;
-                if (e[9] != null && e[9] != "" && typeof(e[9]) != "undefined") {
-                    eysOnButton =
-                        <Button icon="eye-o" style={{float: 'right'}} onClick={event => {this.view(event,e[9],e[1])} } />
+                if(isEmpty(e[5])==false && ("pptx"==e[5] || "ppt"==e[5])){
+                    if (isEmpty(e[9])==false) {
+                        eysOnButton =
+                            <Button icon="eye-o" style={{float: 'right'}} onClick={event => {this.view(event,e[9],e[1])} } />
                         /*<a href={e[9]} target="_blank" title="查看" style={{float: 'right'}}><Button icon="eye-o"/></a>*/
-                }else if(isEmpty(e[3])==false){
-                    eysOnButton =
-                        <Button icon="eye-o" style={{float: 'right'}} onClick={event => {this.view(event,e[3],e[1])} } />
+                    }
+                }else{
+                    if(isEmpty(e[3])==false){
+                        eysOnButton =
+                            <Button icon="eye-o" style={{float: 'right'}} onClick={event => {this.view(event,e[3],e[1])} } />
+                    }
                 }
                 return <Panel header={<span><span type="" className={e[8]}></span><span
                     className="name_file">{e[1]}</span> </span>} key={e[1] + "#" + e[7]+"#"+e[0]}>
@@ -376,14 +380,17 @@ const CourseWareComponents = React.createClass({
             coursePanelChildren = courseWareList.map((e, i)=> {
                 var eysOnButton;
                 var delButton;
-                if (e[9] != null && e[9] != "") {
-                    /*eysOnButton =
-                        <a href={e[9]} target="_blank" title="查看" style={{float: 'right'}}><Button icon="eye-o"/></a>*/
-                    eysOnButton =
-                        <Button icon="eye-o" style={{float: 'right'}} onClick={event => {this.view(event,e[9],e[1])} } />
-                }else if(isEmpty(e[3])==false){
-                    eysOnButton =
-                        <Button icon="eye-o" style={{float: 'right'}} onClick={event => {this.view(event,e[3],e[1])} } />
+                if(isEmpty(e[5])==false && ("pptx"==e[5] || "ppt"==e[5])) {
+                    if (e[9] != null && e[9] != "") {
+                        eysOnButton =
+                            <Button icon="eye-o" style={{float: 'right'}} onClick={event => {this.view(event,e[9],e[1])} } />
+                    }
+                }
+                else {
+                    if(isEmpty(e[3])==false){
+                        eysOnButton =
+                            <Button icon="eye-o" style={{float: 'right'}} onClick={event => {this.view(event,e[3],e[1])} } />
+                    }
                 }
                 if (e[12] != null && e[12] == sessionStorage.getItem("ident")) {
                     delButton = <Button style={{float: 'right'}} icon="delete" title="删除" value={e[0]}

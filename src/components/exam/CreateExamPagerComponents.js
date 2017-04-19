@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Modal, Button,message,Transfer } from 'antd';
+import { Modal, message,Transfer } from 'antd';
 import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox,Table,Popover,Spin,Progress } from 'antd';
 import { DatePicker } from 'antd';
 import { Card } from 'antd';
@@ -7,7 +7,6 @@ import { Radio } from 'antd';
 import { doWebService } from '../../WebServiceHelper';
 import FileUploadComponents from './FileUploadComponents';
 import AntUploadComponents from './AntUploadComponents';
-import AntUploadComponentsForExamPagerUpdate from './AntUploadComponentsForExamPagerUpdate';
 import AntUploadForAnalysisOfCreateComponents from './AntUploadForAnalysisOfCreateComponents';
 import UploadExamPagerComponents from './UploadExamPagerComponents';
 const CheckboxGroup = Checkbox.Group;
@@ -17,10 +16,9 @@ const confirm = Modal.confirm;
 var createExamPager;
 //答题卡数组，用来存放动态生成的答题卡Card对象
 const selectAnswerOptions = [];
-//答题卡
-var cardChildTagArray=[];
 //答题卡数组
 var cardChildArray=[];
+var cardChildTagArray = [];
 var uploadFileList=[];
 var options=new Array();
 const CreateExamPagerComponents = React.createClass({
@@ -183,7 +181,7 @@ const CreateExamPagerComponents = React.createClass({
         paperJson.questionTypes = questionTypesArray;
         console.log(paperJson);
         cardChildArray.splice(0);
-        // createExamPager.createExamPager(paperJson);
+        createExamPager.createExamPager(paperJson);
     },
 
     isEmpty(content){
@@ -209,16 +207,12 @@ const CreateExamPagerComponents = React.createClass({
      * @param optType 操作方式，即更新的是答案、分值、关联的知识点等
      */
     refreshCardChildArray(subjectJson,optType){
-        // var cardChildJson = {'answerTitle':answerTitle,'answerSubjectType':answerSubjectType,
-        // 'answerCount':answerCount,'answerScore':answerScore,'cardSubjectAnswerArray':cardSubjectAnswerArray};
-        // var subjectJson = {answerCardTitle:answerCardTitle,subjectNum:subjectNum,subjectAnswer:subjectAnswer};
         for(var i =0;i<cardChildArray.length;i++){
             var cardChildJson = cardChildArray[i];
             //找到对应的答题卡
             if(subjectJson.answerCardTitle == cardChildJson.answerTitle && subjectJson.answerSubjectType == cardChildJson.answerSubjectType){
                 //找到对应的题目编号
                 for(var j=0;j<cardChildJson.cardSubjectAnswerArray.length;j++){
-                    // var subjectDivJson = {"index":i,"divContent":subjectDiv};
                     var subjectDivJson = cardChildJson.cardSubjectAnswerArray[j];
                     if(subjectJson.subjectNum == subjectDivJson.index){
                         if(optType=="setAnswer"){
@@ -687,8 +681,6 @@ const CreateExamPagerComponents = React.createClass({
                 <Col span={3} >图片答案：</Col>
                 <Col span={12} className="upexam_le_te">
                     <AntUploadComponents key={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponents>
-                    {/*<button type="primary" icon="plus-circle" value={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} title="上传图片答案"
-                     className="add_study-b" onClick={createExamPager.showModal}>上传图片答案</button>*/}
                 </Col>
             </Row>
             <Row className="ant-form-item">
@@ -891,7 +883,6 @@ const CreateExamPagerComponents = React.createClass({
     },
 
     onprogress(ev){
-        //console.log(ev);控制台打印progress { target: XMLHttpRequestUpload, isTrusted: true, lengthComputable: true,<br> //loaded: 15020, total: 15020, eventPhase: 0, bubbles: false, cancelable: false, defaultPrevented: false, <br>//timeStamp: 1445144855459000, originalTarget: XMLHttpRequestUpload }
         if(ev.lengthComputable){
             var precent=100 * ev.loaded/ev.total;
             console.log(precent);
@@ -1055,7 +1046,6 @@ const CreateExamPagerComponents = React.createClass({
                 pointsArrayWithSelected.push(pointObj.id);
             }
         }
-        //pointsArrayWithSelected = createExamPager.convertUndefinedToNull(subjectInfoWithSelected.points,"array");
         //获取所有的知识点数据，作为弹窗的下拉列表数据
         createExamPager.getLessonMenu();
         //获取当前老师已绑定知识点，作为穿梭框备选数据
@@ -1068,7 +1058,6 @@ const CreateExamPagerComponents = React.createClass({
      * @returns {*}
      */
     getCurrentSubjectInfo(subjectInfo){
-        // answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType
         var subjectInfoArray = subjectInfo.split("#");
         var answerTitle =subjectInfoArray[0];
         var num =subjectInfoArray[1];
@@ -1163,11 +1152,6 @@ const CreateExamPagerComponents = React.createClass({
                         };
                         mockData.push(data);
                     });
-
-                    /*if (data.chosen) {
-                        targetKeys.push(data.key);
-                    }*/
-
                 });
                 createExamPager.setState({ mockData, targetKeys });
             },
@@ -1229,7 +1213,6 @@ const CreateExamPagerComponents = React.createClass({
     analysisOnChange(e){
         var target = e.target;
         if(navigator.userAgent.indexOf("Chrome") > -1){
-            //e = window.event;
             target=e.currentTarget;
         }else{
             target = e.target;
@@ -1314,7 +1297,7 @@ const CreateExamPagerComponents = React.createClass({
                     visible={createExamPager.state.analysisModalVisible}
                     title="添加解析"
                     onCancel={createExamPager.analysisModalHandleCancel}
-                    //className="modol_width"
+                    maskClosable={false} //设置不允许点击蒙层关闭
                     transitionName=""  //禁用modal的动画效果
                     footer={[
                         <button type="primary" htmlType="submit" className="login-form-button examination_btn_blue" onClick={createExamPager.addAnalysisForCurrentSubject}  >确定</button>,
@@ -1340,7 +1323,7 @@ const CreateExamPagerComponents = React.createClass({
                     visible={createExamPager.state.bindKnowledgeModalVisible}
                     title="知识点"
                     onCancel={createExamPager.bindKnowledgeModalHandleCancel}
-                    //className="modol_width"
+                    maskClosable={false} //设置不允许点击蒙层关闭
                     transitionName=""  //禁用modal的动画效果
                     footer={[
                         <button type="primary" htmlType="submit" className="login-form-button examination_btn_blue" onClick={createExamPager.bindKnowledgeForCurrentSubject}  >确定</button>,
@@ -1404,6 +1387,7 @@ const CreateExamPagerComponents = React.createClass({
                                 className="modol_width"
                                 onCancel={createExamPager.examPagerModalHandleCancel}
                                 transitionName=""  //禁用modal的动画效果
+                                maskClosable={false} //设置不允许点击蒙层关闭
                                 footer={[
                                     <div>
                                         <button type="primary" htmlType="submit" className="login-form-button examination_btn_blue" onClick={createExamPager.uploadFile}>
