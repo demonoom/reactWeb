@@ -681,13 +681,13 @@ const AntNestTabComponents = React.createClass({
                 antNest.closeDeleteTopicModal();
                 if(antNest.state.optType=="getTopicById"){
                     //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
-                    antNest.reGetTopicInfo(1,getAllTopic());
-                    antNest.getTopicPartakeById(antNest.state.currentTopicId,1);
+                    antNest.reGetTopicInfo(antNest.state.currentPage,getAllTopic());
+                    antNest.getTopicPartakeById(antNest.state.currentTopicId,antNest.state.currentPage);
                 }else {
                     if (antNest.state.activeKey == "全部") {
-                        antNest.getTopics(1, getAllTopic());
+                        antNest.getTopics(antNest.state.currentPage, getAllTopic());
                     } else {
-                        antNest.getTopics(1, getOnlyTeacherTopic());
+                        antNest.getTopics(antNest.state.currentPage, getOnlyTeacherTopic());
                     }
                 }
             },

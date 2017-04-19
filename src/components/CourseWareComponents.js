@@ -301,7 +301,7 @@ const CourseWareComponents = React.createClass({
                 } else {
                     message.error("课件删除失败");
                 }
-                courseWare.getTeachPlans(courseWare.state.ident, courseWare.state.teachScheduleId, courseWare.state.optType, 1);
+                courseWare.getTeachPlans(courseWare.state.ident, courseWare.state.teachScheduleId, courseWare.state.optType, courseWare.state.currentPage);
             },
             onError: function (error) {
                 message.error(error);
