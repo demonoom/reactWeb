@@ -16,7 +16,7 @@
                 top: 0,
                 left: 0,
                 width: 360,
-                height: 596,
+                height: 590,
                 position: 'relative',
                 backgroundColor: '#fff',
                 zIndex: 0
@@ -121,7 +121,7 @@
         var refOff = $('.ant-layout-operation').offset();
         var refW = $('.ant-layout-operation').width();
 
-        let tmpInterval = orderIndex * 42;
+        let tmpInterval = orderIndex * 45;
         //
         let leftRef = (refOff.left + refW) - refStyle.width;
         leftRef = leftRef + tmpInterval;
@@ -228,7 +228,7 @@
                 } else {
                     newArr.push(item);
                     index = index - tmpArr.length;
-                    let tmpInterval = index * 42;
+                    let tmpInterval = index * 45;
                     let leftRef = (refOff.left + refW) - $(item.el).width();
                     leftRef = leftRef + tmpInterval;
                     leftRef = parseInt(leftRef.toFixed());

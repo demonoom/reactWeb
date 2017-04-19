@@ -72,8 +72,6 @@ const AntUploadComponents = React.createClass({
                     var percent = info.file.percent;
                     console.log("上传进度"+percent);
                     antUpload.setState({uploadPercent:percent,progressState:'block'});
-                    /*var pro = <Progress type="circle" width={24} className="upexam_botom_ma" percent={percent} />;
-                    antUpload.setState({uploadPercent:pro});*/
                     console.log(info.file, info.fileList);
                     if(info.file.status==="removed"){
                         antUpload.setState({disabled:false});
@@ -81,18 +79,6 @@ const AntUploadComponents = React.createClass({
                     }
                 }
                 if (info.file.status === 'done') {
-                    var uid = info.file.uid;
-                    var fileName = info.file.name;
-                    var url=info.file.response;
-                    var thumbUrl=info.file.thumbUrl;
-                    var fileJson={
-                        uid: uid,
-                        name: fileName,
-                        status: 'done',
-                        url: url,
-                        thumbUrl: thumbUrl,
-                        subjectInfo:antUpload.state.subjectInfo
-                    };
                     antUpload.props.callBackParent(info.file,antUpload.state.subjectInfo);
                     antUpload.setState({disabled:true});
                     message.success(`${info.file.name} 文件上传成功`,5);
@@ -108,9 +94,6 @@ const AntUploadComponents = React.createClass({
 
             <div>
                 <Upload {...props}>
-                    {/*<div style={{height:'auto','z-index:':'100'}}>
-                        {antUpload.state.uploadPercent}
-                    </div>*/}
                     <Button value={antUpload.props.params} onClick={antUpload.showInfo} className="add_study-b">
                         <Icon type="upload" /> 上传
                     </Button>

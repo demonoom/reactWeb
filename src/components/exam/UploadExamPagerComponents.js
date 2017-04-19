@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Upload, Icon,Button,message, Modal,Progress } from 'antd';
+import { Upload, Icon,message, Modal,Progress } from 'antd';
 var antUpload;
 const UploadExamPagerComponents = React.createClass({
 
@@ -42,7 +42,6 @@ const UploadExamPagerComponents = React.createClass({
             action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
             listType: 'picture-card',
             defaultFileList: [],
-            //fileList:antUpload.state.defaultFileList,
             onPreview:antUpload.handlePreview,
             beforeUpload(file){
                 var fileType = file.type;
@@ -63,19 +62,6 @@ const UploadExamPagerComponents = React.createClass({
                     }
                 }
                 if (info.file.status === 'done') {
-                    var uid = info.file.uid;
-                    var fileName = info.file.name;
-                    var url=info.file.response;
-                    var thumbUrl=info.file.thumbUrl;
-                    var fileJson={
-                        uid: uid,
-                        name: fileName,
-                        status: 'done',
-                        url: url,
-                        thumbUrl: thumbUrl,
-                        subjectInfo:antUpload.props.params
-                    };
-                    //antUpload.state.defaultFileList.push(fileJson);
                     antUpload.props.callBackParent(info.file);
                     antUpload.setState({uploadPercent:0,progressState:'none'});
                     message.success(`${info.file.name} 文件上传成功`,5);

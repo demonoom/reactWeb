@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Upload, Icon,Button,message, Modal,Progress } from 'antd';
+import { Upload, Icon,message, Modal,Progress } from 'antd';
 var antUploadComponentsForExamPagerUpdate;
 const AntUploadComponentsForExamPagerUpdate = React.createClass({
 
@@ -55,10 +55,6 @@ const AntUploadComponentsForExamPagerUpdate = React.createClass({
                 }
             }
             if (file.status === 'done') {
-                var uid = file.uid;
-                var fileName = file.name;
-                var url=file.response;
-                var thumbUrl=file.thumbUrl;
                 antUploadComponentsForExamPagerUpdate.props.callBackParent(fileList,antUploadComponentsForExamPagerUpdate.state.subjectInfo);
                 message.success(`${file.name} 文件上传成功`,5);
             } else if (file.status === 'error') {
@@ -77,7 +73,6 @@ const AntUploadComponentsForExamPagerUpdate = React.createClass({
             name:antUploadComponentsForExamPagerUpdate.state.subjectInfo,
             action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
             listType: 'picture-card',
-            //defaultFileList:antUploadComponentsForExamPagerUpdate.state.examPagerDefaultFileList,
             fileList:antUploadComponentsForExamPagerUpdate.state.fileList,
             onPreview:antUploadComponentsForExamPagerUpdate.handlePreview,
             onChange:antUploadComponentsForExamPagerUpdate.handleChange,
@@ -88,39 +83,6 @@ const AntUploadComponentsForExamPagerUpdate = React.createClass({
                     return false;
                 }
             },
-            /*onChange(info) {
-                if (info.file.status !== 'uploading') {
-                    //上传进度
-                    var percent = info.file.percent;
-                    console.log("上传进度"+percent);
-                    antUploadComponentsForExamPagerUpdate.setState({uploadPercent:percent,progressState:'block'});
-                    console.log(info.file, info.fileList);
-                    if(info.file.status==="removed"){
-                        antUploadComponentsForExamPagerUpdate.props.callBackParent(info.file,antUploadComponentsForExamPagerUpdate.state.subjectInfo,"removed");
-                    }
-                }
-                if (info.file.status === 'done') {
-                    var uid = info.file.uid;
-                    var fileName = info.file.name;
-                    var url=info.file.response;
-                    var thumbUrl=info.file.thumbUrl;
-                    var fileJson={
-                        uid: uid,
-                        name: fileName,
-                        status: 'done',
-                        url: url,
-                        thumbUrl: thumbUrl,
-                        subjectInfo:antUploadComponentsForExamPagerUpdate.state.subjectInfo
-                    };
-                    antUploadComponentsForExamPagerUpdate.state.examPagerDefaultFileList.push(info.fileList);
-                    // antUploadComponentsForExamPagerUpdate.setState("examPagerDefaultFileList",antUploadComponentsForExamPagerUpdate.state.examPagerDefaultFileList);
-                    antUploadComponentsForExamPagerUpdate.props.callBackParent(info.file,antUploadComponentsForExamPagerUpdate.state.subjectInfo);
-                    antUploadComponentsForExamPagerUpdate.setState({uploadPercent:0,progressState:'none'});
-                    message.success(`${info.file.name} 文件上传成功`,5);
-                } else if (info.file.status === 'error') {
-                    message.error(`${info.file.name} 文件上传失败.`,5);
-                }
-            },*/
             onRemove(file){
                 console.log(file);
             },
@@ -133,10 +95,6 @@ const AntUploadComponentsForExamPagerUpdate = React.createClass({
                         <Icon type="plus" />
                         <div className="ant-upload-text">Upload</div>
                     </div>
-
-                    {/*<Button value={antUploadComponentsForExamPagerUpdate.props.params} onClick={antUploadComponentsForExamPagerUpdate.showInfo} className="add_study-b">
-                        <Icon type="upload" /> 上传
-                    </Button>*/}
                 </Upload>
                 <Modal maskClosable="true" visible={antUploadComponentsForExamPagerUpdate.state.previewVisible} footer={null} onCancel={antUploadComponentsForExamPagerUpdate.handleCancel}>
                     <img alt="example" style={{ width: '100%' }} src={antUploadComponentsForExamPagerUpdate.state.previewImage} />
