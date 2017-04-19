@@ -46,7 +46,8 @@ const FavoriteShipinItems = React.createClass({
             width:'400px',
 
         }
-        this.props.onPreview(obj)
+         this.props.onPreview(obj)
+
     },
 
     buildFavShipionUi: function (courseWareList) {

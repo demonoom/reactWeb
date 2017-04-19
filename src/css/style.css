@@ -16,6 +16,10 @@ ul, li{
 div, a, span, input{
 	outline:none;
 }
+
+
+
+
 @media only screen and (max-width: 1366px) {
 .ant-layout-aside {
       position: absolute;
@@ -2716,6 +2720,25 @@ a.color_gary_f{
 	animation: showBox 0.5s ease-in-out;
 
 }
+
+.little-layout-aside-r-show .header {
+	height: 42px;
+	background-color: #dadada;
+}
+
+.little-layout-aside-r-show .content {
+	height: 600px;
+}
+
+
+.little-layout-aside-r-show iframe{
+
+	width:100%;
+	height:100%;
+	border: none;
+}
+
+
 
 
 .little-warp{
