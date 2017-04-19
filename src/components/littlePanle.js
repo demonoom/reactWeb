@@ -116,8 +116,8 @@
                 <div class="header draggable">
                 <h3 class="title">${ this.param.title }</h3>
                     <div class="little-tilte">
-                        <a     class="close"><i  >X</i></a>
-                        <a     class="zoom"><i  >大</i></a>
+                        <a class="close"><i className="iconfont iconfont_close">&#xe615;</i></a>
+                        <a class="zoom"><i className="iconfont iconfont_more">&#xe6b8;</i></a>
                     </div>
                 </div>
                 <div class="content">
