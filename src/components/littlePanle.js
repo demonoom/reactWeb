@@ -29,7 +29,28 @@
 
     littlePanle.prototype.el = {};
     littlePanle.prototype.zoomview = function (id) {
-        alert('放大' + id);
+        let nodeEl = $('#'+id);
+        let perWidth = nodeEl.width();
+        let perHeight = nodeEl.height();
+        let perTop = nodeEl.css('top');
+        let perLeft = nodeEl.css('left');
+        let refHeight = getViewPortHeight();
+        nodeEl.attr('per', JSON.stringify( {width:Math.round(perWidth) , height:Math.round(perHeight), left:Math.round(perLeft),top:Math.round(perTop)}));
+        nodeEl.css({width:'100%', height: refHeight, left:0,top:-refHeight});
+        //
+        let el = nodeEl.find('.zoom');
+        el.off();
+        el.on('click',this.zoomMinView.bind(this,id));
+    }
+    littlePanle.prototype.zoomMinView = function (id) {
+        let nodeEl = $('#'+id);
+        let perInfo = nodeEl.attr('per');
+        let perObj = eval('('+perInfo+')');
+        nodeEl.css({width:perObj.width, height:perObj.height, left: perObj.left, top: perObj.top });
+        //
+        let el = nodeEl.find('.zoom');
+        el.off();
+        el.on('click',this.zoomview.bind(this,id));
     }
 
     littlePanle.prototype.closepanle = function (id) {
@@ -142,7 +163,7 @@
         },
         GetLP (objParam) {
 
-            if ((this.mgr.length - this.hideArr.length) >= 5) {
+            if ((this.mgr.length - this.hideArr.length) >= 3) {
                 alert('弹窗打开太多！');
                 return;
             }
@@ -221,18 +242,11 @@ function UUID(len, radix) {
     radix = radix || chars.length;
 
     if (len) {
-        // Compact form
         for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random() * radix];
     } else {
-        // rfc4122, version 4 form
         var r;
-
-        // rfc4122 requires these characters
         uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
         uuid[14] = '4';
-
-        // Fill in random data. At i==19 set the high bits of clock sequence as
-        // per rfc4122, sec. 4.1.5
         for (i = 0; i < 36; i++) {
             if (!uuid[i]) {
                 r = 0 | Math.random() * 16;
@@ -243,3 +257,7 @@ function UUID(len, radix) {
 
     return uuid.join('');
 }
+
+function getViewPortHeight() {
+       return document.documentElement.clientHeight || document.body.clientHeight;
+ }
