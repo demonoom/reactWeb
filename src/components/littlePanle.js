@@ -40,8 +40,12 @@
             }
         });
         LP.hideArr = LP.hideArr.concat(tmp);
+        if(!(LP.mgr.length - LP.hideArr.length)){
+            LP.delAll();
+        }else{
 
-        $('#' + id).css({visibility: 'hidden'});
+           $('#' + id).css({visibility: 'hidden'});
+        }
     }
 
 
