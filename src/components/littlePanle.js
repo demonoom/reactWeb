@@ -153,7 +153,7 @@
         },
         addOrderBtn(){
             if (!$('.ant-layout-header .lpmgrbtn').length) {
-                $('.ant-layout-header > div').append("<div class='lpmgrbtn'  ><a style='display: inline-block; width:42px; height: 22px; background-color: #ffc444; color: #fff' onclick='LP.orderAll()'>复位</a><a style='display: inline-block; width:42px; height: 22px; background-color: #ffc444; color: #fff' onclick='LP.delAll()'>删除</a></div>");
+                $('.ant-layout-header > div').append("<div class='lpmgrbtn'><a  onclick='LP.orderAll()'><i class='iconfont'>&#xe648;</i>复位</a><a onclick='LP.delAll()' class='del'><i class='iconfont'>&#xe62f;</i>删除</a></div>");
             }
         },
         delAll(){
