@@ -16,7 +16,7 @@
                 top: 0,
                 left: 0,
                 width: 360,
-                height: 590,
+                height: 596,
                 position: 'relative',
                 backgroundColor: '#fff',
                 zIndex: 0
