@@ -155,8 +155,9 @@ const MainLayout = React.createClass({
 
 
   showpanle(obj){
-      this.refs.laifr.closepanle();
-      this.setState({ifr: obj});
+     // this.refs.laifr.closepanle();
+    //  this.setState({ifr: obj});
+      LP.GetLP(obj);
   },
 
   foceClosePanle(){
@@ -381,7 +382,7 @@ const MainLayout = React.createClass({
 
         </div>
 
-
+        <div className="panleArea" ></div>
           <Asidepanel  param={this.state.ifr} ref="laifr"  />
 
 

@@ -49,6 +49,7 @@ const FavoriteOtherItems = React.createClass({
         }
 
         this.props.onPreview(obj)
+
     },
 
 
