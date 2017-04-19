@@ -40,8 +40,12 @@
             }
         });
         LP.hideArr = LP.hideArr.concat(tmp);
+        if(!(LP.mgr.length - LP.hideArr.length)){
+            LP.delAll();
+        }else{
 
-        $('#' + id).css({visibility: 'hidden'});
+           $('#' + id).css({visibility: 'hidden'});
+        }
     }
 
 
@@ -148,9 +152,16 @@
             return objA;
         },
         addOrderBtn(){
-            if (!$('.ant-layout-header .orderPanleBtn').length) {
-                $('.ant-layout-header > div').append("<div class='reset_btn orderPanleBtn' onclick='LP.orderAll()' >复位</div>");
+            if (!$('.ant-layout-header .lpmgrbtn').length) {
+                $('.ant-layout-header > div').append("<div class='lpmgrbtn'  ><a style='display: inline-block; width:42px; height: 22px; background-color: #ffc444; color: #fff' onclick='LP.orderAll()'>复位</a><a style='display: inline-block; width:42px; height: 22px; background-color: #ffc444; color: #fff' onclick='LP.delAll()'>删除</a></div>");
             }
+        },
+        delAll(){
+          $('.dialog.little-layout-aside-r-show').remove();
+          this.mgr=[];
+          this.hideArr=[];
+          $('.lpmgrbtn').remove();
+
         },
         orderAll(){
 
