@@ -529,6 +529,7 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                     className="ant-modal-width"
                     onCancel={this.handleCancel}
                     transitionName=""  //禁用modal的动画效果
+                    maskClosable={false} //设置不允许点击蒙层关闭
                     footer={[
                         <div>
                             {buttons}

@@ -211,6 +211,7 @@ const UserCardModalComponents = React.createClass({
               onCancel={teacherInfo.handleCancel}
               className="model_wi"
               transitionName=""
+              maskClosable={false} //设置不允许点击蒙层关闭
               footer={[
 
               ]}

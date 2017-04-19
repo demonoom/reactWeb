@@ -351,9 +351,9 @@ const MainLayout = React.createClass({
             <Menu.Item key="antNest" className="padding_menu">
               <i className="icon_yichao"></i><div className="tan">蚁巢</div>
             </Menu.Item>
-            {/*<Menu.Item key="exam" className="padding_menu">
+            <Menu.Item key="exam" className="padding_menu">
               <Icon type="file-text" /><div className="tan">考试</div>
-            </Menu.Item>*/}
+            </Menu.Item>
 {/*            <Menu.Item key="folder" className="padding_menu">
               <Icon type="clock-circle-o" /><span className="nav-text">统计+回顾</span>
             </Menu.Item>

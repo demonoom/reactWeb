@@ -1,11 +1,11 @@
 import React, {PropTypes} from 'react';
-import {Card, Checkbox, Collapse, Icon, Button, Pagination, message, Modal} from 'antd';
+import {Card, Checkbox, Collapse, Icon, Button, Pagination, message} from 'antd';
 import UseKnowledgeComponents from './UseKnowledgeComponents';
 import {doWebService} from '../WebServiceHelper';
 import {getPageSize} from '../utils/Const';
 import {isEmpty} from '../utils/Const';
+import ConfirmModal from './ConfirmModal';
 const Panel = Collapse.Panel;
-const confirm = Modal.confirm;
 
 function callback(key) {
     // console.log(key);
@@ -206,8 +206,7 @@ const CourseWareComponents = React.createClass({
         courseWare.setState({isDeleteAllSubject: e.target.checked});
     },
 
-    //删除教学进度下的材料（课件）
-    deleteScheduleMaterials(e){
+    showDelScheduleMateriaConfirmModal(e){
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             target = e.currentTarget;
@@ -215,86 +214,101 @@ const CourseWareComponents = React.createClass({
             target = e.target;
         }
         var materialIds = target.value;
-        confirm({
-            title: '确定要删除该课件?',
-            onOk() {
-                if (courseWare.state.isDeleteAllSubject) {
-                    //同步删除资源库下的资源
-                    courseWare.setState({isDeleteAllSubject: false});
-                } else {
-                    var param = {
-                        "method": 'deleteScheduleMaterials',
-                        "ident": sessionStorage.getItem("ident"),
-                        "scheduleId": courseWare.state.teachScheduleId,
-                        "materialIds": materialIds
-                    };
-                    doWebService(JSON.stringify(param), {
-                        onResponse: function (ret) {
-                            console.log(ret.msg);
-                            if (ret.msg == "调用成功" && ret.response == true) {
-                                message.success("课件删除成功");
-                            } else {
-                                message.error("课件删除失败");
-                            }
-                            courseWare.getTeachPlans(sessionStorage.getItem("ident"), courseWare.state.teachScheduleId, "bySchedule", courseWare.state.currentPage, courseWare.state.knowledgeName)
-                        },
-                        onError: function (error) {
-                            message.error(error);
-                        }
-                    });
+        courseWare.setState({"delMaterialIds":materialIds});
+        courseWare.refs.delScheduleMateriaConfirmModal.changeConfirmModalVisible(true);
+    },
+
+    closeDelScheduleMateriaConfirmModal(){
+        courseWare.refs.delScheduleMateriaConfirmModal.changeConfirmModalVisible(false);
+    },
+
+    deleteScheduleMaterials(){
+        courseWare.deleteScheduleMaterialsById(courseWare.state.delMaterialIds);
+        courseWare.closeDelScheduleMateriaConfirmModal();
+    },
+
+    //删除教学进度下的材料（课件）
+    deleteScheduleMaterialsById(materialIds){
+        if (courseWare.state.isDeleteAllSubject) {
+            //同步删除资源库下的资源
+            courseWare.setState({isDeleteAllSubject: false});
+        } else {
+            var param = {
+                "method": 'deleteScheduleMaterials',
+                "ident": sessionStorage.getItem("ident"),
+                "scheduleId": courseWare.state.teachScheduleId,
+                "materialIds": materialIds
+            };
+            doWebService(JSON.stringify(param), {
+                onResponse: function (ret) {
+                    console.log(ret.msg);
+                    if (ret.msg == "调用成功" && ret.response == true) {
+                        message.success("课件删除成功");
+                    } else {
+                        message.error("课件删除失败");
+                    }
+                    courseWare.getTeachPlans(sessionStorage.getItem("ident"), courseWare.state.teachScheduleId, "bySchedule", courseWare.state.currentPage, courseWare.state.knowledgeName)
+                },
+                onError: function (error) {
+                    message.error(error);
                 }
-            },
-            onCancel() {
-            },
-        });
+            });
+        }
+    },
+
+    showConfirmModal(e){
+        var target = e.target;
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
+            target = e.target;
+        }
+        var materialIds = target.value;
+        courseWare.setState({"delMaterialIds":materialIds});
+        courseWare.refs.confirmModal.changeConfirmModalVisible(true);
+    },
+
+    closeConfirmModal(){
+        courseWare.refs.confirmModal.changeConfirmModalVisible(false);
+    },
+
+    batchDeleteMaterial(){
+        courseWare.batchDeleteMaterialById(courseWare.state.delMaterialIds);
+        courseWare.closeConfirmModal();
     },
 
     //删除资源库下的材料（课件）
-    batchDeleteMaterial(e){
-        var target = e.target;
-        if (navigator.userAgent.indexOf("Chrome") > -1) {
-            target = e.currentTarget;
+    batchDeleteMaterialById(materialIds){
+        var param;
+        if (courseWare.state.isDeleteAllSubject) {
+            param = {
+                "method": 'deleteScheduleAndKnowledgeMaterials',
+                "userId": sessionStorage.getItem("ident"),
+                "mids": materialIds
+            };
         } else {
-            target = e.target;
+            param = {
+                "method": 'batchDeleteMaterial',
+                "ident": sessionStorage.getItem("ident"),
+                "mids": materialIds
+            };
         }
-        var materialIds = target.value;
-        confirm({
-            title: '确定要删除该课件?',
-            content: <Checkbox onChange={courseWare.isDeleteAll}>同步删除备课计划下的课件</Checkbox>,
-            onOk() {
-                var param;
-                if (courseWare.state.isDeleteAllSubject) {
-                    param = {
-                        "method": 'deleteScheduleAndKnowledgeMaterials',
-                        "userId": sessionStorage.getItem("ident"),
-                        "mids": materialIds
-                    };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                console.log(ret.msg);
+                if (ret.msg == "调用成功" && ret.response == true) {
+                    message.success("课件删除成功");
                 } else {
-                    param = {
-                        "method": 'batchDeleteMaterial',
-                        "ident": sessionStorage.getItem("ident"),
-                        "mids": materialIds
-                    };
+                    message.error("课件删除失败");
                 }
-                doWebService(JSON.stringify(param), {
-                    onResponse: function (ret) {
-                        console.log(ret.msg);
-                        if (ret.msg == "调用成功" && ret.response == true) {
-                            message.success("课件删除成功");
-                        } else {
-                            message.error("课件删除失败");
-                        }
-                        courseWare.getTeachPlans(courseWare.state.ident, courseWare.state.teachScheduleId, courseWare.state.optType, 1);
-                    },
-                    onError: function (error) {
-                        message.error(error);
-                    }
-                });
-                courseWare.setState({isDeleteAllSubject: false});
+                courseWare.getTeachPlans(courseWare.state.ident, courseWare.state.teachScheduleId, courseWare.state.optType, courseWare.state.currentPage);
             },
-            onCancel() {
-            },
+            onError: function (error) {
+                message.error(error);
+            }
         });
+        courseWare.setState({isDeleteAllSubject: false});
+
     },
 
     view: function (e, url, tit) {
@@ -336,7 +350,7 @@ const CourseWareComponents = React.createClass({
 					</div>
 					<div className="bnt2_right">
                          <Button style={{float: 'right'}} icon="delete" title="删除" value={e[0]}
-                                 onClick={this.deleteScheduleMaterials}></Button>
+                                 onClick={this.showDelScheduleMateriaConfirmModal}></Button>
                         <a href={e[3]} target="_blank" title="下载" download={e[3]} style={{float: 'right'}}><Button
                             icon="download"/></a>
                         {eysOnButton}
@@ -373,7 +387,7 @@ const CourseWareComponents = React.createClass({
                 }
                 if (e[12] != null && e[12] == sessionStorage.getItem("ident")) {
                     delButton = <Button style={{float: 'right'}} icon="delete" title="删除" value={e[0]}
-                                        onClick={courseWare.batchDeleteMaterial}></Button>
+                                        onClick={courseWare.showConfirmModal}></Button>
                 }
                 return <Panel header={<span><span type="" className={e[8]}></span><span
                     className="name_file">{e[1]}</span> </span>} key={e[1] + "#" + e[7]+"#"+e[0]}>
@@ -412,8 +426,22 @@ const CourseWareComponents = React.createClass({
                 $(this).css("background-color", "");
             }
         });
+        var title=<div>
+            <span>确定要删除该课件?</span>
+            <Checkbox onChange={courseWare.isDeleteAll}>同步删除备课计划下的课件</Checkbox>
+        </div>;
         return (
             <div>
+                <ConfirmModal ref="confirmModal"
+                              title={title}
+                              onConfirmModalCancel={courseWare.closeConfirmModal}
+                              onConfirmModalOK={courseWare.batchDeleteMaterial}
+                ></ConfirmModal>
+                <ConfirmModal ref="delScheduleMateriaConfirmModal"
+                              title="确定要删除该课件?"
+                              onConfirmModalCancel={courseWare.closeDelScheduleMateriaConfirmModal}
+                              onConfirmModalOK={courseWare.deleteScheduleMaterials}
+                ></ConfirmModal>
                 <div>
                     <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
                     <Collapse defaultActiveKey={activeKey} activeKey={activeKey} ref="collapse" onChange={callback}>

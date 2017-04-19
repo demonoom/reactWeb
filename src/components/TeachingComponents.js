@@ -133,6 +133,7 @@ const TeachingComponents = React.createClass({
             onCancel={subjectForm.handleCancel}
             className="modol_width"
             transitionName=""  //禁用modal的动画效果
+            maskClosable={false} //设置不允许点击蒙层关闭
             footer={[
               <Button type="primary" htmlType="submit" className="login-form-button" onClick={subjectForm.handleSubmit}  >确定</Button>,
               <Button type="ghost" htmlType="reset" className="login-form-button" onClick={subjectForm.handleCancel} >取消</Button>

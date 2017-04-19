@@ -285,6 +285,7 @@ const UseKnowledgeComponents = React.createClass({
               title="使用至备课计划"
               onCancel={this.handleCancel}
               transitionName=""  //禁用modal的动画效果
+              maskClosable={false} //设置不允许点击蒙层关闭
               footer={[
                 <Button key="submit" type="primary"  htmlType="submit"  size="large" onClick={this.handleSubmit}>提交</Button>
               ]}

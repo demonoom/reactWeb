@@ -5,7 +5,7 @@ import SubjectEditByTextboxioTabComponents from './SubjectEditByTextboxioTabComp
 import { doWebService } from '../WebServiceHelper';
 import {getPageSize} from '../utils/Const';
 import {isEmpty} from '../utils/Const';
-const confirm = Modal.confirm;
+import ConfirmModal from './ConfirmModal';
 
 const columns = [{
   title: '出题人',
@@ -134,7 +134,7 @@ const SUbjectTable = React.createClass({
               {
                 subjectScore='--';
               }
-              var subjectOpt=<div className="smallclass"><span className="toobar"><Button value={e.id} title="删除" onClick={subTable.deleteSubject}><Icon type="delete"/></Button></span></div>;
+              var subjectOpt=<div className="smallclass"><span className="toobar"><Button value={e.id} title="删除" onClick={subTable.showConfirmModal}><Icon type="delete"/></Button></span></div>;
               data.push({
                 key: key,
                 name: name,
@@ -164,36 +164,79 @@ const SUbjectTable = React.createClass({
     subTable.setState({isDeleteAllSubject:e.target.checked});
   },
 
+  showDelSubjectConfirmModal(e){
+    var target = e.target;
+    if(navigator.userAgent.indexOf("Chrome") > -1){
+      target=e.currentTarget;
+    }else{
+      target = e.target;
+    }
+    var subjectIds = target.value;
+    subTable.setState({"delSubjectId":subjectIds});
+    subTable.refs.delSubjectConfirmModal.changeConfirmModalVisible(true);
+  },
+
+  closeDelSubjectConfirmModal(){
+    subTable.refs.delSubjectConfirmModal.changeConfirmModalVisible(false);
+  },
+
+  showConfirmModal(e){
+    var target = e.target;
+    if(navigator.userAgent.indexOf("Chrome") > -1){
+      target=e.currentTarget;
+    }else{
+      target = e.target;
+    }
+    var subjectIds = target.value;
+    subTable.setState({"delSubjectId":subjectIds});
+    subTable.refs.confirmModal.changeConfirmModalVisible(true);
+  },
+
+  closeConfirmModal(){
+    subTable.refs.confirmModal.changeConfirmModalVisible(false);
+  },
+
+  showDelAllSubjectConfirmModal(){
+    subTable.refs.delAllSubjectConfirmModal.changeConfirmModalVisible(true);
+  },
+
+  closeDelAllSubjectConfirmModal(){
+    subTable.refs.delAllSubjectConfirmModal.changeConfirmModalVisible(false);
+  },
+
+  showdelAllSubjectInScheduleConfirmModal(){
+    subTable.refs.delAllSubjectInScheduleConfirmModal.changeConfirmModalVisible(true);
+  },
+
+  closeDelAllSubjectInScheduleConfirmModal(){
+    subTable.refs.delAllSubjectInScheduleConfirmModal.changeConfirmModalVisible(false);
+  },
+
+
   /**
    * 批量或单独删除备课计划下的题目
    * @param subjectIds
    */
   deleteSubjectsByConditonForSchedule(subjectIds){
-    confirm({
-      title: '确定要删除该题目?',
-      onOk() {
-        var param = {
-          "method":'deleteScheduleSubjects',
-          "ident":sessionStorage.getItem("ident"),
-          "scheduleId":subTable.state.ScheduleOrSubjectId,
-          "subjectIds":subjectIds
-        };
-        doWebService(JSON.stringify(param), {
-          onResponse : function(ret) {
-            console.log(ret.msg);
-            if(ret.msg=="调用成功" && ret.response==true){
-              message.success("题目删除成功");
-            }else{
-              message.error("题目删除失败");
-            }
-            subTable.getSubjectDataBySchedule(sessionStorage.getItem("ident"),subTable.state.ScheduleOrSubjectId,subTable.state.currentPage);
-          },
-          onError : function(error) {
-            message.error(error);
-          }
-        });
+    var param = {
+      "method":'deleteScheduleSubjects',
+      "ident":sessionStorage.getItem("ident"),
+      "scheduleId":subTable.state.ScheduleOrSubjectId,
+      "subjectIds":subjectIds
+    };
+    doWebService(JSON.stringify(param), {
+      onResponse : function(ret) {
+        console.log(ret.msg);
+        if(ret.msg=="调用成功" && ret.response==true){
+          message.success("题目删除成功");
+        }else{
+          message.error("题目删除失败");
+        }
+        subTable.getSubjectDataBySchedule(sessionStorage.getItem("ident"),subTable.state.ScheduleOrSubjectId,subTable.state.currentPage);
       },
-      onCancel() {},
+      onError : function(error) {
+        message.error(error);
+      }
     });
   },
 
@@ -202,55 +245,49 @@ const SUbjectTable = React.createClass({
    * @param subjectIds
    */
   deleteSubjectsByConditon(subjectIds){
-    confirm({
-      title: '确定要删除选定的题目?',
-      content: <Checkbox onChange={subTable.isDeleteAll}>同步删除备课计划下的题目</Checkbox>,
-      onOk() {
-        //同时删除此人教学进度和知识点下面的这些题目
-        var param
-        if(subTable.state.isDeleteAllSubject){
-          param = {
-            "method":'deleteScheduleAndKnowledgeSubjects',
-            "userId":sessionStorage.getItem("ident"),
-            "subjects":subjectIds
-          };
+    //同时删除此人教学进度和知识点下面的这些题目
+    var param
+    if(subTable.state.isDeleteAllSubject){
+      param = {
+        "method":'deleteScheduleAndKnowledgeSubjects',
+        "userId":sessionStorage.getItem("ident"),
+        "subjects":subjectIds
+      };
+    }else{
+      param = {
+        "method":'delMySubjects',
+        "userId":sessionStorage.getItem("ident"),
+        "subjects":subjectIds
+      };
+    }
+    doWebService(JSON.stringify(param), {
+      onResponse : function(ret) {
+        console.log(ret.msg);
+        if(ret.msg=="调用成功" && ret.success==true){
+          message.success("题目删除成功");
         }else{
-          param = {
-            "method":'delMySubjects',
-            "userId":sessionStorage.getItem("ident"),
-            "subjects":subjectIds
-          };
+          message.error("题目删除失败");
         }
-        doWebService(JSON.stringify(param), {
-          onResponse : function(ret) {
-            console.log(ret.msg);
-            if(ret.msg=="调用成功" && ret.success==true){
-              message.success("题目删除成功");
-            }else{
-              message.error("题目删除失败");
-            }
-            subTable.getSubjectDataByKnowledge(sessionStorage.getItem("ident"),subTable.state.ScheduleOrSubjectId,subTable.state.currentPage,"Y");
-          },
-          onError : function(error) {
-            message.error(error);
-          }
-        });
-        subTable.setState({isDeleteAllSubject:false});
+        subTable.getSubjectDataByKnowledge(sessionStorage.getItem("ident"),subTable.state.ScheduleOrSubjectId,subTable.state.currentPage,"Y");
       },
-      onCancel() {},
+      onError : function(error) {
+        message.error(error);
+      }
     });
+    subTable.setState({isDeleteAllSubject:false});
   },
 
   //删除备课计划下的题目
   deleteSubject:function (e) {
-    var target = e.target;
+    /*var target = e.target;
     if(navigator.userAgent.indexOf("Chrome") > -1){
       target=e.currentTarget;
     }else{
       target = e.target;
     }
-    var subjectIds = target.value;
-    subTable.deleteSubjectsByConditonForSchedule(subjectIds);
+    var subjectIds = target.value;*/
+    subTable.deleteSubjectsByConditonForSchedule(subTable.state.delSubjectId);
+    subTable.closeConfirmModal();
   },
 
   /**
@@ -261,22 +298,25 @@ const SUbjectTable = React.createClass({
     var subjectIds = subTable.state.selectedRowKeysStr;
     if(subTable.state.optType=="bySchedule"){
       subTable.deleteSubjectsByConditonForSchedule(subjectIds);
+      subTable.closeDelAllSubjectInScheduleConfirmModal();
     }else{
       subTable.deleteSubjectsByConditon(subjectIds);
+      subTable.closeDelAllSubjectConfirmModal();
     }
     subTable.setState({selectedRowKeysStr:'',selectedRowKeys:[]});
   },
 
   //删除资源库下的题目
-  delMySubjects:function (e) {
-    var target = e.target;
+  delMySubjects:function () {
+    /*var target = e.target;
     if(navigator.userAgent.indexOf("Chrome") > -1){
       target=e.currentTarget;
     }else{
       target = e.target;
     }
-    var subjectIds = target.value;
-    subTable.deleteSubjectsByConditon(subjectIds);
+    var subjectIds = target.value;*/
+    subTable.deleteSubjectsByConditon(subTable.state.delSubjectId);
+    subTable.closeDelSubjectConfirmModal();
   },
 
   /**
@@ -321,7 +361,7 @@ const SUbjectTable = React.createClass({
             // var submitTime = subTable.getLocalTime(e.createTime);
             var subjectOpt=<Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" ></Button>;
             if(userId==sessionStorage.getItem("ident")){
-              subjectOpt=<div><Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" className="score3_i"></Button><Button style={{ }} type=""  value={e.id+"#"+e.typeName} onClick={subTable.showModifySubjectModal}  icon="edit" title="修改" className="score3_i"></Button><Button style={{ }} type=""  value={e.id} onClick={subTable.delMySubjects}  icon="delete" title="删除" className="score3_i" ></Button></div>;
+              subjectOpt=<div><Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" className="score3_i"></Button><Button style={{ }} type=""  value={e.id+"#"+e.typeName} onClick={subTable.showModifySubjectModal}  icon="edit" title="修改" className="score3_i"></Button><Button style={{ }} type=""  value={e.id} onClick={subTable.showDelSubjectConfirmModal}  icon="delete" title="删除" className="score3_i" ></Button></div>;
             }else{
               subjectOpt=<Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" ></Button>;
             }
@@ -442,16 +482,55 @@ const SUbjectTable = React.createClass({
     var delBtn;
     var subjectTable;
     if(subTable.state.isOwmer=="Y"){
-      delBtn = <div><Button type="primary" onClick={this.deleteAllSelectedSubjectS}
-                       disabled={!hasSelected} loading={loading}
-      >批量删除</Button><span style={{ marginLeft: 8 }}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span></div>;
+      if(subTable.state.optType=="bySchedule"){
+        delBtn = <div><Button type="primary" onClick={this.showdelAllSubjectInScheduleConfirmModal}
+                              disabled={!hasSelected} loading={loading}
+        >批量删除</Button><span style={{ marginLeft: 8 }}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span></div>;
+      }else{
+        delBtn = <div><Button type="primary" onClick={this.showDelAllSubjectConfirmModal}
+                              disabled={!hasSelected} loading={loading}
+        >批量删除</Button><span style={{ marginLeft: 8 }}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span></div>;
+      }
       subjectTable = <div className="pl_hei"><Table rowSelection={rowSelection} columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: getPageSize(),defaultCurrent:subTable.state.currentPage,current:subTable.state.currentPage,onChange:subTable.pageOnChange }} scroll={{ y: 400}}/></div>;
     }else{
       delBtn ='';
       subjectTable = <div className="pl_hei2"><Table columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: getPageSize(),defaultCurrent:subTable.state.currentPage,current:subTable.state.currentPage,onChange:subTable.pageOnChange }} scroll={{ y: 400}}/></div>;
     }
+
+    var title;
+    if(subTable.state.optType=="bySchedule"){
+      title=<div>
+        <span>确定要删除选定的题目?</span>
+      </div>;
+    }else{
+      title=<div>
+        <span>确定要删除选定的题目?</span>
+        <Checkbox defaultChecked={false} onChange={subTable.isDeleteAll}>同步删除备课计划下的题目</Checkbox>
+      </div>;
+    }
+
     return (
         <div >
+          <ConfirmModal ref="confirmModal"
+                        title="确定要删除该题目?"
+                        onConfirmModalCancel={subTable.closeConfirmModal}
+                        onConfirmModalOK={subTable.deleteSubject}
+          ></ConfirmModal>
+          <ConfirmModal ref="delSubjectConfirmModal"
+                        title={title}
+                        onConfirmModalCancel={subTable.closeDelSubjectConfirmModal}
+                        onConfirmModalOK={subTable.delMySubjects}
+          ></ConfirmModal>
+          <ConfirmModal ref="delAllSubjectConfirmModal"
+                        title={title}
+                        onConfirmModalCancel={subTable.closeDelAllSubjectConfirmModal}
+                        onConfirmModalOK={subTable.deleteAllSelectedSubjectS}
+          ></ConfirmModal>
+          <ConfirmModal ref="delAllSubjectInScheduleConfirmModal"
+                        title="确定要删除选中的题目?"
+                        onConfirmModalCancel={subTable.closeDelAllSubjectInScheduleConfirmModal}
+                        onConfirmModalOK={subTable.deleteAllSelectedSubjectS}
+          ></ConfirmModal>
           <SubjectEditByTextboxioTabComponents ref="subjectEditTabComponents" subjectEditCallBack={subTable.subjectEditCallBack}></SubjectEditByTextboxioTabComponents>
           <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
           <div className="pl_del">
