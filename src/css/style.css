@@ -3015,3 +3015,7 @@ a.color_gary_f, .color_gary_f{
 .icon_orange{
 color:#ffbf00
 }
+.ant-input-wrapper{
+	float: left;
+    width: 100%;
+}
