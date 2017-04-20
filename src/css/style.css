@@ -1383,11 +1383,11 @@ a {
 }
 @font-face {
   font-family: 'iconfont';  /* project id 197083 */
-  src: url('//at.alicdn.com/t/font_he2urx0ecps3jtt9.eot');
-  src: url('//at.alicdn.com/t/font_he2urx0ecps3jtt9.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_he2urx0ecps3jtt9.woff') format('woff'),
-  url('//at.alicdn.com/t/font_he2urx0ecps3jtt9.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_he2urx0ecps3jtt9.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_ea8symbodyhqia4i.eot');
+  src: url('//at.alicdn.com/t/font_ea8symbodyhqia4i.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_ea8symbodyhqia4i.woff') format('woff'),
+  url('//at.alicdn.com/t/font_ea8symbodyhqia4i.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_ea8symbodyhqia4i.svg#iconfont') format('svg');
 }
 .iconfont{
 	font-family:"iconfont" !important;
@@ -2735,7 +2735,7 @@ a.color_gary_f, .color_gary_f{
 	width: 100%;
 	height: 45px;
 	overflow: hidden;
-	text-align: center;
+	text-align: left;
 	border-bottom: 1px solid #dfe0e3;
 	line-height:45px;
 }
@@ -2771,20 +2771,23 @@ a.color_gary_f, .color_gary_f{
 	display: inline-block;
     color: #222;
     height: 100%;
-    text-align: center;
+    text-align: left;
     font-size: 14px;
     font-weight: normal;
-    width: 70%;
     margin: 0 auto;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     word-wrap: normal;
+    width: 70%;
+    text-indent: 18px;
 
 }
 
 .little-layout-aside-r-show .close,
-.little-layout-aside-r-show .zoom
+.little-layout-aside-r-show .zoom,
+.little-layout-aside-r-show .back,
+.little-layout-aside-r-show .forward
 {
 	display: inline-block ;
 	position: absolute;
@@ -2800,7 +2803,9 @@ a.color_gary_f, .color_gary_f{
 }
 
 .little-layout-aside-r-show .close,
-.little-layout-aside-r-show .zoom{
+.little-layout-aside-r-show .zoom,
+.little-layout-aside-r-show .back,
+.little-layout-aside-r-show .forward{
 	font-family:"iconfont" !important;
 	font-size:18px;
 	font-style:normal;
@@ -2820,6 +2825,18 @@ a.color_gary_f, .color_gary_f{
 .little-layout-aside-r-show .zoom:hover {
 	color:#57c5f7
 }
+.little-layout-aside-r-show .back {
+	right: 88px;
+}
+.little-layout-aside-r-show .back:hover {
+	color:#57c5f7;
+}
+.little-layout-aside-r-show .forward {
+	right: 61px;
+}
+.little-layout-aside-r-show .forward:hover {
+	color:#57c5f7;
+}
 .lpmgrbtn{
 	width:298px;
 	padding: 6px 16px;
@@ -2835,7 +2852,7 @@ a.color_gary_f, .color_gary_f{
 	top: 8px;
 }
 .lpmgrbtn a{
-	padding:0 8px;
+	padding:0 6px;
 	color:#88919c
 }
 .lpmgrbtn a:hover{
