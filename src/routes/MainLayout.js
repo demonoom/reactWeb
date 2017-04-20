@@ -125,6 +125,7 @@ const MainLayout = React.createClass({
     switchSection(obj){
       this.proxyObj = obj;
         this.setState({resouceType:obj.resouceType});
+
     },
 
   //获取老师的已布置作业列表

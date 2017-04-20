@@ -80,7 +80,7 @@ class MyFollows extends React.Component {
         this.props.callEvent({
             resouceType: 'visitAntGroup',
             ref: 'antGroupTabComponents',
-            methond: 'callCurrentPage',
+            methond: 'getOtherPersonalCenterPage',
             param: userinfo
         });
     }

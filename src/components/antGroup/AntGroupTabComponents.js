@@ -194,6 +194,14 @@ const AntGroupTabComponents = React.createClass({
             antGroup.getPersonalCenterData(record.key);
         }
     },
+    /**
+     * 进入他人的个人中心
+     * @param param
+     */
+    getOtherPersonalCenterPage(param){
+        let uid = param.colUid || param.userId;
+        this.getPersonalCenterData(uid);
+    },
 
     /**
      * 获取个人中心需要的数据,老师和学生可通用,后期需要什么再添加
