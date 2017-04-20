@@ -4,7 +4,7 @@
 import {Tabs, Breadcrumb, Icon, message, Card, Button} from 'antd';
 import React from 'react';
 import {doWebService} from '../WebServiceHelper';
-import PersonCenterComponents from './antGroup/PersonCenterComponents';
+import PersonCenterV2 from './PersonCenterV2';
 
 class MyFollows extends React.Component {
 
@@ -12,6 +12,8 @@ class MyFollows extends React.Component {
         super(props);
         this.state = { // define this.state in constructor
             ident: this.props.userid || sessionStorage.getItem("ident"),
+            followUser: {},
+            followUserVisible: true,
             visible: true,
             method: 'getUserFavorite',
             type: 1,
@@ -123,6 +125,7 @@ class MyFollows extends React.Component {
                     <Breadcrumb.Item href="#/MainLayout">我的关注</Breadcrumb.Item>
                 </Breadcrumb>
                 { this.htmlTemplet }
+                <PersonCenterV2 userInfo={this.state.followUser } visible={this.state.followUserVisible} />
             </div>
         );
     }

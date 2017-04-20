@@ -54,7 +54,7 @@ class ResetStudentAccountKey extends React.Component {
     }
 
     resetUserPassword() {
-       
+
         var _this = this;
         var param = {
             "method": 'resetUserPassword',

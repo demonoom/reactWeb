@@ -114,11 +114,12 @@ const MainLayout = React.createClass({
         location.hash="login";
     }
   },
-    // 呼叫任何本组件实例的任何方法，前提最终访问的方法只能接受一个对象类型的参数 dapeng
+    // 呼叫本组件中的实例任何方法 dapeng
     componentDidUpdate(){
         let obj = this.proxyObj;
         if(!obj) return;
-         this.refs[obj.ref][obj.methond].call(this,obj.param);
+        console.log( obj );
+        this.refs[obj.ref][obj.methond].call(this,obj.param);
         this.proxyObj=null;
     },
     // 切换组件页面
@@ -156,9 +157,7 @@ const MainLayout = React.createClass({
 
 
   showpanle(obj){
-     // this.refs.laifr.closepanle();
-    //  this.setState({ifr: obj});
-      LP.GetLP(obj);
+      LP.Start(obj);
   },
 
   foceClosePanle(){

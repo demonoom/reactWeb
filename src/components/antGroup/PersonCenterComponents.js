@@ -15,12 +15,13 @@ const PersonCenterComponents = React.createClass({
     getInitialState() {
         personCenter = this;
         var userInfo = personCenter.props.userInfo;
-        console.log("currentPerson"+userInfo);
+
         personCenter.isFollow();
         return {
             userInfo:personCenter.props.userInfo,
         };
     },
+
 
     /**
      * 获取联系人列表
@@ -221,7 +222,7 @@ const PersonCenterComponents = React.createClass({
         }
 
         var followButton;
-        console.log("isFollow:"+personCenter.state.isFollow);
+
         if(personCenter.state.isFollow==false){
             followButton = <Button icon="plus" onClick={personCenter.followUser} className="persono_btn_blue">关注</Button>;
         }else {

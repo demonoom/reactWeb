@@ -175,10 +175,10 @@
         mgr: [],
         hideArr: [],
 
-        Start(obj){
+        Start(objParam){
            this.GetLP(objParam);
         },
-        GetLP (objParam) {
+        GetLP(objParam) {
 
             if ((this.mgr.length - this.hideArr.length) >= 3) {
                 alert('弹窗打开太多！');

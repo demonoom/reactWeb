@@ -165,7 +165,7 @@ const AntGroupTabComponents = React.createClass({
                 response.forEach(function (e) {
                     var userId = e.colUid;
                     var userName = e.userName;
-                    console.log("userInfo======》"+userId+"=="+e.userName+"=="+e.colUtype);
+
                     var userJson = {key:userId,userContacts:userName,userObj:e};
                     userContactsData.push(userJson);
                 });
@@ -194,11 +194,16 @@ const AntGroupTabComponents = React.createClass({
             antGroup.getPersonalCenterData(record.key);
         }
     },
+    componentWillReceiveProps: function(nextProps) {
+        console.log('ant group tab nextProps.');
+
+    },
     /**
      * 进入他人的个人中心
      * @param param
      */
     getOtherPersonalCenterPage(param){
+        console.log('ant group tab getOtherPersonalCenterPage.');
         let uid = param.colUid || param.userId;
         this.getPersonalCenterData(uid);
     },
@@ -254,14 +259,14 @@ const AntGroupTabComponents = React.createClass({
         var machineId = sessionStorage.getItem("machineId");
         var pro = {"command":"messagerConnect","data":{"machineType":"ios","userId":Number.parseInt(loginUserId),"machine":machineId}};
         ms.msgWsListener={onError:function(errorMsg){
-            console.log("error:"+errorMsg);
+
         },onWarn:function(warnMsg){
-            console.log("warn:"+warnMsg);
+
         },onMessage:function(info){
             if(antGroup.state.optType=="sendMessage"){
                 //获取messageList
                 var command = info.command;
-                console.log("success:"+command);
+
                 if(isEmpty(command)==false){
                     if(command=="messageList"){
                         var data = info.data;
@@ -336,16 +341,16 @@ const AntGroupTabComponents = React.createClass({
         messageList.splice(0);
         var loginUserId = sessionStorage.getItem("ident");
         var machineId = sessionStorage.getItem("machineId");
-        console.log("turnToChatGroupMessagePage machineId:"+machineId)
+
         var pro = {"command":"messagerConnect","data":{"machineType":"ios","userId":Number.parseInt(loginUserId),"machine":machineId}};
         ms.msgWsListener={onError:function(errorMsg){
-            console.log("ChatGroup Message error:"+errorMsg);
+
         },onWarn:function(warnMsg){
-            console.log("ChatGroup Message warn:"+warnMsg);
+
         },onMessage:function(info){
             //获取messageList
             var command = info.command;
-            console.log("ChatGroup Message success:"+command);
+
             if(antGroup.state.optType=="sendGroupMessage"){
                 if(isEmpty(command)==false){
                     if(command=="messageList"){
@@ -447,7 +452,7 @@ const AntGroupTabComponents = React.createClass({
                 showImg+=otherStr;
             }
             messageReturnJson={messageType:"imgTag",imgMessage:imgTags};
-            console.log("showContent:"+showContent);
+
         }else{
             //不存在表情，为单纯性的文字消息
             messageReturnJson={messageType:"text",textMessage:str};
