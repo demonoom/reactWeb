@@ -40,7 +40,8 @@ class ResetStudentAccountKey extends React.Component {
 
                         message.warn('没有此学生或工号错误！');
                     }else{
-                    _this.setState({toUserAccountData: res.response,toUserAccount: res.response.colAccount})
+
+                    _this.setState({toUserAccountData: res.response,toUserAccount: res.response.colUid})
                     }
                 } else {
                     message.error(res.msg);
@@ -53,6 +54,7 @@ class ResetStudentAccountKey extends React.Component {
     }
 
     resetUserPassword() {
+       
         var _this = this;
         var param = {
             "method": 'resetUserPassword',
