@@ -2821,7 +2821,7 @@ a.color_gary_f, .color_gary_f{
 	color:#57c5f7
 }
 .lpmgrbtn{
-	width:150px;
+	width:298px;
 	padding: 6px 16px;
     border-radius: 4px;
     box-shadow: 0 2px 8px rgba(0,0,0,.2);
@@ -2831,7 +2831,7 @@ a.color_gary_f, .color_gary_f{
     overflow: hidden;
 	z-index:1000;
 	float:right;
-	right:115px;
+	right:100px;
 	top: 8px;
 }
 .lpmgrbtn a{

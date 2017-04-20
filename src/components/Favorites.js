@@ -130,10 +130,16 @@ class Favorites extends React.Component {
 
         doWebService(JSON.stringify(args), {
             onResponse: function (res) {
-                message.info(res.msg);
-                if (!!fn) fn(_self.props.param.type);
+
+                message.info("Cancel successfed!");
+                if (!!fn){
+                    fn(_self.props.param.type);
+                }else{
+                    _self.upgradeCurrent(_self.props.param.type);
+                }
             },
             onError: function (error) {
+
                 message.error(error);
             }
         });
