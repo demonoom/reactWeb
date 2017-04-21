@@ -193,7 +193,7 @@
             if (!$('.ant-layout-header .lpmgrbtn').length) {
                 $('.ant-layout-header > div').append("<div class='lpmgrbtn'>" +
                     "<a onclick='LP.orderAll()' class='no_le'><i class='iconfont'>&#xe67a;</i></a>" +
-                    "<a onclick='LP.delAll()' class='del'><i class='iconfont'>&#xe62f;</i></a>" +
+                    "<a onclick='LP.delAll()' class='del'><i class='iconfont'>&#xe6b4;</i></a>" +
                     "<a onclick='enterFull()' class='enterFull'><i class='iconfont'>&#xe743;</i></a>" +
                     "<a onclick='exitFull()' class='exitFull'><i class='iconfont'>&#xe674;</i></a>" +
                     "</div>");

@@ -215,7 +215,7 @@ const BindKnowledgeComponents = React.createClass({
                 visible={bindKnowledge.state.visible}
                 title="管理知识点"
                 onCancel={bindKnowledge.handleCancel}
-                className="knowledge_width"
+                className="knowledge_width knowledge_hei"
                 transitionName=""  //禁用modal的动画效果
                 maskClosable={false} //设置不允许点击蒙层关闭
                 footer={[
@@ -225,20 +225,20 @@ const BindKnowledgeComponents = React.createClass({
                             onClick={bindKnowledge.handleCancel}>取消</Button>
                 ]}>
 
-                <Row>
-                    <Col span={4} >
+                <div>
+                    <div className="yz_input upexam_float" >
 					<div className="knowledge_table">
                         <Table  columns={columns} onRowClick={bindKnowledge.selecdRow}
                                dataSource={bindKnowledge.state.lessonMenu} scroll={{y: 325}} pagination={false} showHeader={false} />
 							   </div>
-                    </Col>
-                    <Col span={20} className="knowledge_ri">
+                    </div>
+                    <div className="right_ri knowledge_ri">
                         <Transfer
                             dataSource={bindKnowledge.state.mockData}
                             showSearch
                             listStyle={{
                                 width: 268,
-                                height: 320,
+                                height: 325,
                             }}
                             titles={['待选', '已选']}
                             operations={['', '']}
@@ -246,8 +246,8 @@ const BindKnowledgeComponents = React.createClass({
                             onChange={bindKnowledge.transferHandleChange}
                             render={item => `${item.description}`}
                         />
-                    </Col>
-                </Row>
+                    </div>
+                </div>
             </Modal>
         );
     },
