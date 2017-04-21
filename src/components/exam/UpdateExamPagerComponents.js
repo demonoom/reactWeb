@@ -1513,13 +1513,13 @@ const UpdateExamPagerComponents = React.createClass({
                         </span>
                     </Row>
                     <Row className="ant-form-item">
-                        <Col span={24}>
+                        <Col span={24}  className="knowledge_span_wi">
                             <Transfer
                                 dataSource={createExamPager.state.mockData}
                                 showSearch
                                 listStyle={{
                                     width: 268,
-                                    height: 320,
+                                    height: 325,
                                 }}
                                 titles={['待选知识点','已选知识点']}
                                 operations={['', '']}
@@ -1611,7 +1611,7 @@ const UpdateExamPagerComponents = React.createClass({
                           </RadioGroup>
                           </Col>
                        </Row>
-					   <Row>
+					   <Row className="ant-form-item">
                            <Col span={3} className="ant-form-item-label">
                            		<span className="text_30">题数：</span>
                            </Col>

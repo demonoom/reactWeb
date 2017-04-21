@@ -1596,7 +1596,16 @@ li.ant-menu-submenu > ul > li.ant-menu-submenu{
 
 }
 .knowledge_inp{
-	width:200px !important
+	width:526px !important
+}
+.knowledge_span_wi .ant-checkbox-wrapper + span, .ant-checkbox + span{
+	width: 190px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    top: 4px;
+    position: relative;
 }
 .ant-checkbox-wrapper + span, .ant-checkbox + span{
 	word-break:break-all;
@@ -3037,4 +3046,7 @@ a.color_gary_f, .color_gary_f{
 }
 .icon_orange{
 color:#ffbf00
+}
+.knowledge_hei .ant-modal-body{
+	height:360px;
 }
