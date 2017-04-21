@@ -125,6 +125,7 @@ const MainLayout = React.createClass({
     switchSection(obj){
       this.proxyObj = obj;
         this.setState({resouceType:obj.resouceType});
+
     },
 
   //获取老师的已布置作业列表
@@ -352,7 +353,7 @@ const MainLayout = React.createClass({
               <i className="icon_yichao"></i><div className="tan">蚁巢</div>
             </Menu.Item>
             <Menu.Item key="exam" className="padding_menu">
-              <Icon type="file-text" /><div className="tan">考试</div>
+              <i className="iconfont">&#xe622;</i><div className="tan">考试</div>
             </Menu.Item>
 {/*            <Menu.Item key="folder" className="padding_menu">
               <Icon type="clock-circle-o" /><span className="nav-text">统计+回顾</span>

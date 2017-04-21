@@ -16,7 +16,7 @@
                 top: 0,
                 left: 0,
                 width: 360,
-                height: 590,
+                height: 596,
                 position: 'relative',
                 backgroundColor: '#fff',
                 zIndex: 0
@@ -37,6 +37,8 @@
         let refHeight = getViewPortHeight();
         nodeEl.attr('per', JSON.stringify( {width:Math.round(perWidth) , height:Math.round(perHeight), left:Math.round(perLeft),top:Math.round(perTop)}));
         nodeEl.css({width:'100%', height: refHeight, left:0,top:-refHeight});
+        //
+        enterFull();
         //
         let el = nodeEl.find('.zoom');
         el.off();
@@ -80,6 +82,10 @@
         $(this.el).drag();
         $(this.el).find('.close').on('click', this.closepanle.bind(this, this.id));
         $(this.el).find('.zoom').on('click', this.zoomview.bind(this, this.id));
+        $(this.el).find('.back').on('click', this.historyControler.bind(this, this.id,-1));
+        $(this.el).find('.forward').on('click', this.historyControler.bind(this, this.id,1));
+        $(this.el).find('.enterFull').on('click', enterFull );
+        $(this.el).find('.exitFull').on('click', exitFull );
 
         return this;
     }
@@ -132,6 +138,13 @@
 
     }
 
+
+    littlePanle.prototype.historyControler = function (id,num) {
+
+        let ifr = $('#ifr'+id)[0];
+        ifr.contentWindow.history.go(num);
+
+    }
     littlePanle.prototype.templateHtml = function () {
 
         let id = UUID(8, 16);
@@ -141,13 +154,16 @@
                 <div class="header draggable">
                 <h3 class="title">${ this.param.title }</h3>
                     <div class="little-tilte">
+                    	<a class="back"><i className="iconfont iconfont_more">&#xe64c;</i></a>
+                        <a class="forward"><i className="iconfont iconfont_more">&#xe662;</i></a>
                         <a class="close"><i className="iconfont iconfont_close">&#xe615;</i></a>
-                        <a class="zoom"><i className="iconfont iconfont_more">&#xe6b8;</i></a>
+                        <a class="zoom"><i className="iconfont iconfont_more">&#xe67e;</i></a>
+                        
                     </div>
                 </div>
                 <div class="content">
                     <section class="littleAnt-iframe-panle">
-                        <iframe  border={0}   src="${ this.param.url }"></iframe>
+                        <iframe  border={0} id="ifr${id}"  src="${ this.param.url }"></iframe>
                     </section>
                 </div>
                 </div>`;
@@ -158,6 +174,7 @@
     var lpM = {
         mgr: [],
         hideArr: [],
+
         Start(obj){
            this.GetLP(objParam);
         },
@@ -174,7 +191,12 @@
         },
         addOrderBtn(){
             if (!$('.ant-layout-header .lpmgrbtn').length) {
-                $('.ant-layout-header > div').append("<div class='lpmgrbtn'><a  onclick='LP.orderAll()'><i class='iconfont'>&#xe648;</i>复位</a><a onclick='LP.delAll()' class='del'><i class='iconfont'>&#xe62f;</i>删除</a></div>");
+                $('.ant-layout-header > div').append("<div class='lpmgrbtn'>" +
+                    "<a onclick='LP.orderAll()' class='no_le'><i class='iconfont'>&#xe67a;</i></a>" +
+                    "<a onclick='LP.delAll()' class='del'><i class='iconfont'>&#xe62f;</i></a>" +
+                    "<a onclick='enterFull()' class='enterFull'><i class='iconfont'>&#xe743;</i></a>" +
+                    "<a onclick='exitFull()' class='exitFull'><i class='iconfont'>&#xe674;</i></a>" +
+                    "</div>");
             }
         },
         delAll(){
@@ -261,3 +283,39 @@ function UUID(len, radix) {
 function getViewPortHeight() {
        return document.documentElement.clientHeight || document.body.clientHeight;
  }
+
+
+function exitFull() {
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    }
+    else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+    }
+    else if (document.webkitCancelFullScreen) {
+        document.webkitCancelFullScreen();
+    }
+    else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+    }
+}
+
+function enterFull() {
+    var docElm = document.documentElement;
+//W3C
+    if (docElm.requestFullscreen) {
+        docElm.requestFullscreen();
+    }
+//FireFox
+    else if (docElm.mozRequestFullScreen) {
+        docElm.mozRequestFullScreen();
+    }
+//Chrome等
+    else if (docElm.webkitRequestFullScreen) {
+        docElm.webkitRequestFullScreen();
+    }
+//IE11
+    else if (elem.msRequestFullscreen) {
+        elem.msRequestFullscreen();
+    }
+}

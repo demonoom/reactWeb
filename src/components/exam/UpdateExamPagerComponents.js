@@ -1470,8 +1470,8 @@ const UpdateExamPagerComponents = React.createClass({
                     maskClosable={false} //设置不允许点击蒙层关闭
                     transitionName=""  //禁用modal的动画效果
                     footer={[
-                        <button type="primary" htmlType="submit" className="login-form-button" onClick={createExamPager.addAnalysisForCurrentSubject}  >确定</button>,
-                        <button type="ghost" htmlType="reset" className="login-form-button" onClick={createExamPager.analysisModalHandleCancel} >取消</button>
+                        <button type="primary" htmlType="submit" className="login-form-button examination_btn_blue" onClick={createExamPager.addAnalysisForCurrentSubject}  >确定</button>,
+                        <button type="ghost" htmlType="reset" className="login-form-button examination_btn_white" onClick={createExamPager.analysisModalHandleCancel} >取消</button>
                     ]}
                 >
                     <Row className="ant-form-item">
@@ -1495,8 +1495,8 @@ const UpdateExamPagerComponents = React.createClass({
                     maskClosable={false} //设置不允许点击蒙层关闭
                     transitionName=""  //禁用modal的动画效果
                     footer={[
-                        <button type="primary" htmlType="submit" className="login-form-button" onClick={createExamPager.bindKnowledgeForCurrentSubject}  >确定</button>,
-                        <button type="ghost" htmlType="reset" className="login-form-button" onClick={createExamPager.bindKnowledgeModalHandleCancel} >取消</button>
+                        <button type="primary" htmlType="submit" className="login-form-button examination_btn_blue" onClick={createExamPager.bindKnowledgeForCurrentSubject}  >确定</button>,
+                        <button type="ghost" htmlType="reset" className="login-form-button examination_btn_white" onClick={createExamPager.bindKnowledgeModalHandleCancel} >取消</button>
                     ]}
                 >
                     <Row className="ant-form-item">
@@ -1559,10 +1559,10 @@ const UpdateExamPagerComponents = React.createClass({
                         maskClosable={false} //设置不允许点击蒙层关闭
                         footer={[
                             <div>
-                                <button type="primary" htmlType="submit" className="login-form-button" onClick={createExamPager.uploadFile}>
+                                <button type="primary" htmlType="submit" className="login-form-button examination_btn_blue" onClick={createExamPager.uploadFile}>
                                     保存
                                 </button>
-                                <button type="ghost" htmlType="reset" className="login-form-button" onClick={createExamPager.examPagerModalHandleCancel}>
+                                <button type="ghost" htmlType="reset" className="login-form-button examination_btn_white" onClick={createExamPager.examPagerModalHandleCancel}>
                                     取消
                                 </button>
                             </div>

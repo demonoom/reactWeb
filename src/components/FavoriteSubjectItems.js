@@ -72,10 +72,11 @@ const FavoriteSubjectItems = React.createClass({
 
 
     buildSubjectUi: function (courseWareList, type) {
+        this.data = [];
         if (!courseWareList || !courseWareList.length) {
             return;
         }
-        this.data = [];
+
         courseWareList.map((e, i) => {
             let subjectScore = e.subjects.score;
             if (parseInt(subjectScore) < 0) {
