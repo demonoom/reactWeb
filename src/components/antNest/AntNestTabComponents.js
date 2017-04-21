@@ -96,6 +96,18 @@ const AntNestTabComponents = React.createClass({
         });
     },
 
+    view: function (e, url, tit) {
+        e = e || window.event;
+        if (e.nativeEvent) {
+            e.nativeEvent.stopImmediatePropagation();
+        }
+        e.stopPropagation();
+        e.preventDefault();
+        e.cancelBubble = true;
+        let obj = {title: tit, url: url, width: '380px'}
+        this.props.onPreview(obj)
+    },
+
     /**
      * 构建话题的card对象
      * @param topicObj 话题对象
@@ -187,12 +199,12 @@ const AntNestTabComponents = React.createClass({
             }else if(attachMentType==4){
                 //mp4附件
                 attachMents =<div className="toppics_ul_bg share_cont">
-								<a href={e.address} target="_blank" className="share_img share_le">
+								<span  onClick={event => {antNest.view(event,e.address,e.content)} } className="share_img share_le">
 									<img src={e.cover} />
-								</a>
-								<a href={e.address} target="_blank" className="share_font">
+								</span>
+								<span onClick={event => {antNest.view(event,e.address,e.content)} } className="share_font">
 									{e.content}
-								</a>
+								</span>
 					         </div>
             }
             attachMentsArray.push(attachMents);
@@ -333,10 +345,10 @@ const AntNestTabComponents = React.createClass({
                     }else if(attachMentType==4){
                         //mp4附件
                         attachMents = <span className="antnest_user">
-                    <a href={e.address} target="_blank">
-                        <img src={e.cover}/><span>{e.content}</span>
-                    </a>
-                </span>;
+                            <span onClick={event => {antNest.view(event,e.address,e.content)} } >
+                                <img src={e.cover}/><span>{e.content}</span>
+                            </span>
+                        </span>;
                     }
                     replayAttachMentsArray.push(attachMents);
                 })
