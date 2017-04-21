@@ -1273,6 +1273,7 @@ const CreateExamPagerComponents = React.createClass({
      */
     getImgAnswerList(file,subjectInfo,isRemoved){
         var fileUrl = file.response;
+        console.log("getImgAnswerList===>"+subjectInfo);
         if(createExamPager.isEmpty(isRemoved)==false && isRemoved=="removed"){
             fileUrl = "";
         }
