@@ -18,10 +18,13 @@ const UploadImgComponents = React.createClass({
     componentDidMount(){
         antUpload.setState({"defaultFileList":[]});
     },
-
+    /**
+     * 蚁巢发布图片组件
+      * @param nextProps
+     */
     componentWillReceiveProps(nextProps){
         // if(isEmpty(nextProps)==false && isEmpty(nextProps.fileList)==false &&　nextProps.fileList.length==0){
-        if(isEmpty(nextProps)==false && isEmpty(nextProps.fileList)==false && nextProps.fileList.length==0){
+        if(isEmpty(nextProps)==false && nextProps.fileList.length==0){
             antUpload.setState({fileList:[]});
         }
     },
@@ -47,6 +50,11 @@ const UploadImgComponents = React.createClass({
             fileList:antUpload.state.fileList,
             onPreview:antUpload.handlePreview,
             beforeUpload(file){
+                var currentFileList = antUpload.state.fileList;
+                if(isEmpty(currentFileList)==false && currentFileList.length>=9){
+                    message.error('最多只能上传9张图片',5);
+                    return false;
+                }
                 var fileType = file.type;
                 if(fileType.indexOf("image")==-1){
                     message.error('只能上传图片文件，请重新上传',5);

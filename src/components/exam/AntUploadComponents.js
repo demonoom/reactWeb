@@ -1,35 +1,58 @@
 import React, { PropTypes } from 'react';
 import { Upload, Icon,Button,message, Modal,Progress } from 'antd';
+import {isEmpty} from '../../utils/Const';
 var antUpload;
+var subjectFather;
 const AntUploadComponents = React.createClass({
 
     getInitialState() {
         antUpload = this;
         var defaultFileList = [];
-        console.log("subjectInfo"+antUpload.props.params);
-        var isDisabled = false;
+        console.log("subjectInfo--->"+antUpload.props.params);
+        console.log("fileLists--->"+antUpload.props.fileList);
+        subjectFather=antUpload.props.params;
         if(typeof(antUpload.props.fileList)!="undefined" && antUpload.props.fileList.length!=0){
             defaultFileList = antUpload.props.fileList ;
-            isDisabled = true;
         }
         return {
             defaultFileList: defaultFileList,
             subjectInfo:antUpload.props.params,
             previewVisible: false,
             previewImage: '',
-            disabled:isDisabled,
+            fileListParam:antUpload.props.fileList
         };
     },
-
+    /**
+     * 图片答案上传/修改用
+     */
     componentDidMount(){
-        console.log("antUpload.props.params:"+antUpload.props.params)
+        console.log("antUpload.props.params:"+antUpload.state.fileListParam);
+        var fileListParams = antUpload.state.fileListParam;
+        if(isEmpty(fileListParams)==false && fileListParams.length!=0 && antUpload.state.fileList.length==0){
+            fileList.splice(0);
+            fileListParams.forEach(function (e) {
+                var fileJson = e;
+                var lastLineIndex = fileJson.url.lastIndexOf("/");
+                var fileName = fileJson.url.substring(lastLineIndex+1);
+                var fileJson={
+                    uid: Math.random(),
+                    name: fileName,
+                    status: 'done',
+                    url: fileJson.url,
+                    thumbUrl: fileJson.url,
+                };
+                fileList.push(fileJson);
+            });
+            antUpload.setState({fileList:fileList});
+        }else{
+            antUpload.setState({fileList:[]});
+        }
     },
 
     componentWillReceiveProps(){
         var defaultFileList = [];
         if(typeof(antUpload.props.fileList)!="undefined" && antUpload.props.fileList.length!=0){
             defaultFileList = antUpload.props.fileList ;
-            antUpload.setState({disabled:true});
         }
         antUpload.setState({defaultFileList:defaultFileList});
     },
@@ -56,9 +79,9 @@ const AntUploadComponents = React.createClass({
             name:antUpload.state.subjectInfo,
             action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
             listType: 'picture',
-            defaultFileList:[],
+            defaultFileList:antUpload.state.defaultFileList,
+            // fileList:antUpload.state.fileList,
             onPreview:antUpload.handlePreview,
-            disabled:antUpload.state.disabled,
             beforeUpload(file){
                 var fileType = file.type;
                 if(fileType.indexOf("image")==-1){
@@ -72,19 +95,19 @@ const AntUploadComponents = React.createClass({
                     var percent = info.file.percent;
                     console.log("上传进度"+percent);
                     antUpload.setState({uploadPercent:percent,progressState:'block'});
+                    info.fileList.splice(0);
                     console.log(info.file, info.fileList);
                     if(info.file.status==="removed"){
-                        antUpload.setState({disabled:false});
                         antUpload.props.callBackParent(info.file,antUpload.state.subjectInfo,"removed");
                     }
                 }
                 if (info.file.status === 'done') {
                     antUpload.props.callBackParent(info.file,antUpload.state.subjectInfo);
-                    antUpload.setState({disabled:true});
                     message.success(`${info.file.name} 文件上传成功`,5);
                 } else if (info.file.status === 'error') {
                     message.error(`${info.file.name} 文件上传失败.`,5);
                 }
+                // antUpload.setState({"fileList":info.fileList});
             },
             onRemove(file){
                 console.log(file);

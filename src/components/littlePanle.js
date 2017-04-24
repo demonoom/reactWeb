@@ -154,10 +154,10 @@
                 <div class="header draggable">
                 <h3 class="title">${ this.param.title }</h3>
                     <div class="little-tilte">
-                    	<a class="back"><i className="iconfont iconfont_more">&#xe74d;</i></a>
-                        <a class="forward"><i className="iconfont iconfont_more">&#xe801;</i></a>
+                    	<a class="back"><i className="iconfont iconfont_more">&#xe64c;</i></a>
+                        <a class="forward"><i className="iconfont iconfont_more">&#xe662;</i></a>
                         <a class="close"><i className="iconfont iconfont_close">&#xe615;</i></a>
-                        <a class="zoom"><i className="iconfont iconfont_more">&#xe6b8;</i></a>
+                        <a class="zoom"><i className="iconfont iconfont_more">&#xe67e;</i></a>
                         
                     </div>
                 </div>
@@ -192,9 +192,9 @@
         addOrderBtn(){
             if (!$('.ant-layout-header .lpmgrbtn').length) {
                 $('.ant-layout-header > div').append("<div class='lpmgrbtn'>" +
-                    "<a onclick='LP.orderAll()'><i class='iconfont'>&#xe67a;</i></a>" +
-                    "<a onclick='LP.delAll()' class='del'><i class='iconfont'>&#xe62f;</i></a>" +
-                    "<a onclick='enterFull()' class='enterFull'><i class='iconfont'>&#xe600;</i></a>" +
+                    "<a onclick='LP.orderAll()' class='no_le'><i class='iconfont'>&#xe67a;</i></a>" +
+                    "<a onclick='LP.delAll()' class='del'><i class='iconfont'>&#xe6b4;</i></a>" +
+                    "<a onclick='enterFull()' class='enterFull'><i class='iconfont'>&#xe743;</i></a>" +
                     "<a onclick='exitFull()' class='exitFull'><i class='iconfont'>&#xe674;</i></a>" +
                     "</div>");
             }

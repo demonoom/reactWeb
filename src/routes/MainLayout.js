@@ -151,6 +151,7 @@ const MainLayout = React.createClass({
 
     },
 
+
     //获取老师的已布置作业列表
     getTeacherHomeWork: function (optType) {
         mainLayout.refs.homeWorkTabComponents.getTeacherHomeWork(optType);
@@ -425,5 +426,6 @@ const MainLayout = React.createClass({
             </LocaleProvider>
         );
     },
+
 });
 export default MainLayout;
