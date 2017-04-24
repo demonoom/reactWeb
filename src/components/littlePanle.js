@@ -162,8 +162,8 @@
                 <div class="header draggable">
                 <h3 class="title">${ this.param.title }</h3>
                     <div class="little-tilte">
-                    	<a class="back"><i className="iconfont iconfont_more">&#xe64c;</i></a>
-                        <a class="forward"><i className="iconfont iconfont_more">&#xe662;</i></a>
+                    	<!--<a class="back"><i className="iconfont iconfont_more">&#xe64c;</i></a>
+                        <a class="forward"><i className="iconfont iconfont_more">&#xe662;</i></a>-->
                         <a class="close"><i className="iconfont iconfont_close">&#xe615;</i></a>
                         <a class="zoom"><i className="iconfont iconfont_more">&#xe67e;</i></a>
                         

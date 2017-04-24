@@ -133,9 +133,7 @@ class MyFollows extends React.Component {
                             </span>
                 <div className="custom-card focus_2">
                     <div className="focus_1">
-                        <span className="antnest_name focus_3">{e.user.userName}</span>
-                        <a target="_blank" title="查看" onClick={this.viewProsenInfo.bind(this, e.user)}
-                           className="right_ri"><Button icon="eye-o" className="focus_btn"/></a>
+                        <span className="antnest_name focus_3" onClick={this.viewProsenInfo.bind(this, e.user)} >{e.user.userName}</span>
                     </div>
                     <div className="focus_3">学校：{e.user.schoolName}</div>
                     <div className="focus_3">科目：{e.course.colCourse}</div>
