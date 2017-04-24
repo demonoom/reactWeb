@@ -30,29 +30,36 @@
     littlePanle.prototype.el = {};
     littlePanle.prototype.zoomview = function (id) {
         let nodeEl = $('#'+id);
-        let perWidth = nodeEl.width();
-        let perHeight = nodeEl.height();
-        let perTop = nodeEl.css('top');
-        let perLeft = nodeEl.css('left');
-        let refHeight = getViewPortHeight();
-        nodeEl.attr('per', JSON.stringify( {width:Math.round(perWidth) , height:Math.round(perHeight), left:Math.round(perLeft),top:Math.round(perTop)}));
-        nodeEl.css({width:'100%', height: refHeight, left:0,top:-refHeight});
+        let posRef2 = window.getComputedStyle(nodeEl[0]);
+        let perWidth = replaceUnit(posRef2.width);
+        let perHeight = replaceUnit(posRef2.height);
+        let perTop = replaceUnit(posRef2.top);
+        let perLeft = replaceUnit(posRef2.left);
+
+        nodeEl.attr('per', JSON.stringify( { position:posRef2.position , width:Math.round(perWidth) , height:Math.round(perHeight), left:Math.round(perLeft),top:Math.round(perTop)}));
+        nodeEl.css({width:'100%', height: '100%', left:0,top:0,position: 'fixed' });
         //
-        enterFull();
+        enterFull(nodeEl[0]);
         //
         let el = nodeEl.find('.zoom');
         el.off();
         el.on('click',this.zoomMinView.bind(this,id));
     }
     littlePanle.prototype.zoomMinView = function (id) {
+
+        //
         let nodeEl = $('#'+id);
         let perInfo = nodeEl.attr('per');
+        nodeEl.removeAttr('per');
         let perObj = eval('('+perInfo+')');
-        nodeEl.css({width:perObj.width, height:perObj.height, left: perObj.left, top: perObj.top });
-        //
+        nodeEl.css({position: perObj.position ,width:perObj.width, height:perObj.height, left: perObj.left, top: perObj.top });
+
         let el = nodeEl.find('.zoom');
         el.off();
         el.on('click',this.zoomview.bind(this,id));
+        //
+        exitFull();
+
     }
 
     littlePanle.prototype.closepanle = function (id) {
@@ -115,6 +122,7 @@
         this._show();
         return this;
     }
+
 
     littlePanle.prototype.calcPos = function (refStyle, index, orderIndex) {
         // 计算出复位的位置
@@ -194,8 +202,6 @@
                 $('.ant-layout-header > div').append("<div class='lpmgrbtn'>" +
                     "<a onclick='LP.orderAll()' class='no_le'><i class='iconfont'>&#xe67a;</i></a>" +
                     "<a onclick='LP.delAll()' class='del'><i class='iconfont'>&#xe6b4;</i></a>" +
-                    "<a onclick='enterFull()' class='enterFull'><i class='iconfont'>&#xe743;</i></a>" +
-                    "<a onclick='exitFull()' class='exitFull'><i class='iconfont'>&#xe674;</i></a>" +
                     "</div>");
             }
         },
@@ -286,22 +292,26 @@ function getViewPortHeight() {
 
 
 function exitFull() {
-    if (document.exitFullscreen) {
-        document.exitFullscreen();
+    var docElm = document;
+
+    if (docElm.exitFullscreen) {
+        docElm.exitFullscreen();
     }
-    else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen();
+    else if (docElm.mozCancelFullScreen) {
+        docElm.mozCancelFullScreen();
     }
-    else if (document.webkitCancelFullScreen) {
-        document.webkitCancelFullScreen();
+    else if (docElm.webkitCancelFullScreen) {
+        docElm.webkitCancelFullScreen();
     }
-    else if (document.msExitFullscreen) {
-        document.msExitFullscreen();
+    else if (docElm.msExitFullscreen) {
+        docElm.msExitFullscreen();
     }
+    if(typeof fn =='function' )fn();
 }
 
-function enterFull() {
+function enterFull(el) {
     var docElm = document.documentElement;
+    if(el) docElm=el;
 //W3C
     if (docElm.requestFullscreen) {
         docElm.requestFullscreen();
@@ -318,4 +328,8 @@ function enterFull() {
     else if (elem.msRequestFullscreen) {
         elem.msRequestFullscreen();
     }
+}
+function replaceUnit(str){
+ return  parseInt( str.replace(/[a-z]*/img,''))
+
 }
