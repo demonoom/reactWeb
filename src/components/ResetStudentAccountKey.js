@@ -65,7 +65,7 @@ class ResetStudentAccountKey extends React.Component {
             onResponse: function (res) {
                 if (res.success) {
                     _this.setState({toUserAccountData:[],toUserAccount: ""});
-                    message.info("更换成功！");
+                    message.info("重置成功！");
                 } else {
                     message.error(res.msg);
                 }
@@ -107,7 +107,7 @@ class ResetStudentAccountKey extends React.Component {
                         <div className="password_cow ant-row ant-form-item">
 						    <span className="right_look">查找账号：</span>
 							<span className="reset_wi"><input className="ant-input reset_wi_hei" ref="input1" type="text" placeholder={this.state.placeholder} /></span>
-							<span className="right_ri"><Button type="primary" icon="search" className="reset_btn" onClick={this.searhAccess}>Search</Button></span>
+							<span className="right_ri"><Button type="primary" icon="search" className="reset_btn" onClick={this.searhAccess}>查找</Button></span>
 						</div>
                         
                 </div>

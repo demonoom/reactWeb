@@ -8,20 +8,46 @@ import {
 } from 'antd';
 import {doWebService} from '../WebServiceHelper';
 import {isEmpty} from '../utils/Const';
+import {MsgConnection} from '../utils/msg_websocket_connection';
 
-var personCenter;
+var personCenterA;
+var subjectList = [];
+var antGroup;
+var messageList = [];
+//消息通信js
+var ms;
+var imgTagArray = [];
+var showImg = "";
+var showContent = "";//将要显示的内容
+var data = [];
+var courseWareList;
+var activeKey = new Array();
+var coursePanelChildren;
+var liveInfosPanelChildren;
 class PersonCenterV2 extends React.Component {
 
 
     constructor(props) {
-
         super(props);
         this.state = {
             userInfo: this.props.userInfo,
         };
-        personCenter = this;
+        personCenterA = this;
         this.isFollow();
         this.isFollow = this.isFollow.bind(this);
+        this.getLiveInfo = this.getLiveInfo.bind(this)
+        this.getMyFollows = this.getMyFollows.bind(this)
+        this.getMySubjects = this.getMySubjects.bind(this)
+        this.getMyCourseWares = this.getMyCourseWares.bind(this)
+
+    }
+
+    callEvent(param) {
+        if (param) {
+            this.props.callEvent(param);
+            return
+        }
+
 
     }
 
@@ -38,7 +64,7 @@ class PersonCenterV2 extends React.Component {
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var isFollow = ret.response;
-                personCenter.setState({"isFollow": isFollow});
+                personCenterA.setState({"isFollow": isFollow});
             },
             onError: function (error) {
                 message.error(error);
@@ -50,7 +76,7 @@ class PersonCenterV2 extends React.Component {
      * 发消息
      */
     sendMessage(e) {
-        var userId = personCenter.props.userInfo.user.colUid;
+        var userId = personCenterA.props.userInfo.user.colUid;
         ms = new MsgConnection();
         messageList.splice(0);
         var loginUserId = sessionStorage.getItem("ident");
@@ -156,13 +182,14 @@ class PersonCenterV2 extends React.Component {
         antGroup.setState({"optType": "sendMessage", "userIdOfCurrentTalk": userId, "currentUser": user});
     }
 
+
     /**
      * 学生的提问
      */
     studentAsk() {
         antGroup.setState({
             "optType": "turnToAsk",
-            "currentUser": personCenter.props.userInfo.user,
+            "currentUser": personCenterA.props.userInfo.user,
             "activeKey": "我发起过的提问"
         });
     }
@@ -173,7 +200,7 @@ class PersonCenterV2 extends React.Component {
     studentStudyTrack() {
         antGroup.setState({
             "optType": "turnStudyTrack",
-            "currentUser": personCenter.props.userInfo.user,
+            "currentUser": personCenterA.props.userInfo.user,
             "activeKey": "studyTrack"
         });
     }
@@ -185,13 +212,13 @@ class PersonCenterV2 extends React.Component {
         var param = {
             "method": 'follow',
             "userId": sessionStorage.getItem("ident"),
-            "toUserId": personCenter.props.userInfo.user.colUid
+            "toUserId": personCenterA.props.userInfo.user.colUid
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.msg == "调用成功" && ret.success == true) {
                     message.success("关注成功");
-                    personCenter.setState({"isFollow": true});
+                    personCenterA.setState({"isFollow": true});
                 } else {
                     message.error(ret.msg);
                 }
@@ -209,13 +236,13 @@ class PersonCenterV2 extends React.Component {
         var param = {
             "method": 'unFollow',
             "userId": sessionStorage.getItem("ident"),
-            "toUserId": personCenter.props.userInfo.user.colUid
+            "toUserId": personCenterA.props.userInfo.user.colUid
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.msg == "调用成功" && ret.success == true) {
                     message.success("取消关注成功");
-                    personCenter.setState({"isFollow": false});
+                    personCenterA.setState({"isFollow": false});
                 } else {
                     message.error(ret.msg);
                 }
@@ -229,46 +256,86 @@ class PersonCenterV2 extends React.Component {
     /**
      * 获取我的关注列表
      */
-    getMyFollows() {
-        personCenter.props.callBackGetMyFollows(personCenter.props.userInfo.user);
+    getMyFollows(user) {
+        user = this.state.userInfo.user;
+        /*
+         [[methond,param,ref],[methond,param,ref][,...]]
+         mainlayout 切换组件
+         调用ref实例方法或         修改ref属性
+         */
+        let param = {
+            linkpart: [
+                ['switchSection', 'visitAntGroup', null],
+                ['getMyFollows', user, 'antGroupTabComponents']
+            ],
+            param: this.linkpart
+
+        }
+        this.props.callEvent(param);
     }
 
-    /**
-     * 获取我的收藏列表
-     */
-    getUserFavorite() {
-
-        antGroup.setState({
-            "optType": "userFavorite",
-            "currentUser": personCenter.props.userInfo.user,
-            "studentId": personCenter.props.userInfo.user.colUid,
-            "activeKey": "1"
-        });
-    }
 
     /**
      * 获取我的题目
      */
     getMySubjects() {
+        let user = this.state.userInfo.user;
+        /*
+         [[methond,param,ref],[methond,param,ref][,...]]
+         mainlayout 切换组件
+         调用ref实例方法或         修改ref属性
+         */
+        let param = {
+            linkpart: [
+                ['switchSection', 'visitAntGroup', null],
+                ['callBackGetMySubjects', user, 'antGroupTabComponents']
+            ],
+            param: this.linkpart
 
-        antGroup.getUserSubjectsByUid(personCenter.props.userInfo.user.colUid, 1);
-        antGroup.setState({"currentUser": personCenter.props.userInfo.user});
+        }
+        this.props.callEvent(param);
     }
 
     /**
      * 获取我的资源
      */
     getMyCourseWares() {
-        antGroup.getTeachPlans(personCenter.props.userInfo.user.colUid, 1);
-        antGroup.setState({"currentUser": personCenter.props.userInfo.user});
+        let user = this.state.userInfo.user;
+        /*
+         [[methond,param,ref],[methond,param,ref][,...]]
+         mainlayout 切换组件
+         调用ref实例方法或         修改ref属性
+         */
+        let param = {
+            linkpart: [
+                ['switchSection', 'visitAntGroup', null],
+                ['callBackGetMyCourseWares', user, 'antGroupTabComponents']
+            ],
+            param: this.linkpart
+
+        }
+        this.props.callEvent(param);
     }
 
     /**
      * 获取我的直播课
      */
     getLiveInfo() {
-        antGroup.getLiveInfoByUid(personCenter.props.userInfo.user.colUid, 1);
-        antGroup.setState({"currentUser": personCenter.props.userInfo.user});
+        let user = this.state.userInfo.user;
+        /*
+         [[methond,param,ref],[methond,param,ref][,...]]
+         mainlayout 切换组件
+         调用ref实例方法或         修改ref属性
+         */
+        let param = {
+            linkpart: [
+                ['switchSection', 'visitAntGroup', null],
+                ['gitUserLiveInfo', {user: user, pageNo: 1}, 'antGroupTabComponents']
+            ],
+            param: this.linkpart
+
+        }
+        this.props.callEvent(param);
     }
 
     /**
@@ -286,22 +353,45 @@ class PersonCenterV2 extends React.Component {
         if (isEmpty(urlType) == false && urlType == "level") {
             antGroup.setState({
                 "optType": "getScoreOrLevelPage",
-                "currentUser": personCenter.props.userInfo,
+                "currentUser": personCenterA.props.userInfo,
                 "activeKey": "userScores",
                 "urlType": urlType
             });
         } else {
             antGroup.setState({
                 "optType": "getPlatformRulePage",
-                "currentUser": personCenter.props.userInfo,
+                "currentUser": personCenterA.props.userInfo,
                 "activeKey": "platformRulePage"
             });
         }
     }
 
+
+    /**
+     * 获取个人中心
+     */
+    SetPerson(obj) {
+        if (!obj.visible) return;
+        var param = {
+            "method": 'getPersonalCenterData',
+            "userId": obj.userId,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var userInfo = ret.response;
+
+                antGroup.setState({"optType": "personCenter", "currentPerson": userInfo, "activeKey": "loginWelcome"});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    }
+
     render() {
         var userPhotoTag;
-        var user = personCenter.state.userInfo.user;
+        var user = personCenterA.props.userInfo.user;
+
         var userName = user.userName;
         if (isEmpty(user.avatar) == false) {
             userPhotoTag = <span className="person_user_bg">
@@ -312,35 +402,35 @@ class PersonCenterV2 extends React.Component {
         var userLinkCard;
         var userInfoCard;
         //PAREN---家长
-        var intro = personCenter.state.userInfo.introduction;
+        var intro = personCenterA.props.userInfo.introduction;
         if (user.colUtype == "STUD") {
             if (isEmpty(intro)) {
                 intro = "这家伙很懒，还没编辑个人简介";
             }
             userLinkCard = <div title={userName + '的个人名片'} className="person_container">
-                <Button value={user.colUid} icon="question-circle-o" onClick={personCenter.studentAsk}
+                <Button value={user.colUid} icon="question-circle-o" onClick={personCenterA.studentAsk}
                         className="person_cor person_cor1">
                     <div>提问</div>
                 </Button>
-                <Button value={user.colUid} icon="area-chart" onClick={personCenter.studentStudyTrack}
+                <Button value={user.colUid} icon="area-chart" onClick={personCenterA.studentStudyTrack}
                         className="person_cor person_cor2">
                     <div>学习轨迹</div>
                 </Button>
-                <Button value={user.colUid} icon="star-o" onClick={personCenter.getUserFavorite}
+                <Button value={user.colUid} icon="star-o" onClick={personCenterA.getUserFavorite}
                         className="person_cor person_cor3">
                     <div>收藏</div>
                 </Button>
-                <Button value={user.colUid} icon="heart-o" onClick={personCenter.getMyFollows}
+                <Button value={user.colUid} icon="heart-o" onClick={ this.getMyFollows.bind(this, user) }
                         className="person_cor person_cor4">
                     <div>关注</div>
                 </Button>
             </div>;
-            userInfoCard = <Card title={personCenter.state.userInfo.user.userName + '的个人名片'} className="bai">
+            userInfoCard = <Card title={personCenterA.props.userInfo.user.userName + '的个人名片'} className="bai">
                 <Row className="person_13">
                     <Col span={3} className="gary_person">学&nbsp;&nbsp;&nbsp;&nbsp;校：</Col>
-                    <Col span={21} className="black_person">{personCenter.state.userInfo.school}</Col>
+                    <Col span={21} className="black_person">{personCenterA.props.userInfo.school}</Col>
                     <Col span={3} className="gary_person">年&nbsp;&nbsp;&nbsp;&nbsp;级：</Col>
-                    <Col span={21} className="black_person ">{personCenter.state.userInfo.grade}</Col>
+                    <Col span={21} className="black_person ">{personCenterA.props.userInfo.grade}</Col>
                 </Row>
                 <Row>
                     <Col span={3} className="gary_person">个人简介：</Col>
@@ -353,31 +443,31 @@ class PersonCenterV2 extends React.Component {
             }
             userLinkCard = <div title={userName + '的个人名片'} className="person_container ">
                 <Button value={user.colUid} icon="play-circle-o" className="person_cor person_cor1"
-                        onClick={personCenter.getLiveInfo}>
+                        onClick={personCenterA.getLiveInfo}>
                     <div>直播</div>
                 </Button>
                 <Button value={user.colUid} icon="area-chart" className="person_cor person_cor2"
-                        onClick={personCenter.getMyCourseWares}>
+                        onClick={personCenterA.getMyCourseWares}>
                     <div>资源</div>
                 </Button>
                 <Button value={user.colUid} icon="star-o" className="person_cor person_cor3"
-                        onClick={personCenter.getMySubjects}>
+                        onClick={personCenterA.getMySubjects}>
                     <div>题库</div>
                 </Button>
                 <Button value={user.colUid} icon="heart-o" className="person_cor person_cor4"
-                        onClick={personCenter.getMyFollows}>
+                        onClick={  this.getMyFollows.bind(this, user)  }>
                     <div>关注</div>
                 </Button>
             </div>;
 
-            userInfoCard = <Card title={personCenter.state.userInfo.user.userName + '的个人名片'} className="bai">
+            userInfoCard = <Card title={personCenterA.props.userInfo.user.userName + '的个人名片'} className="bai">
                 <Row className="person_13">
                     <Col span={3} className="gary_person">学&nbsp;&nbsp;&nbsp;&nbsp;校：</Col>
-                    <Col span={21} className="black_person">{personCenter.state.userInfo.school}</Col>
+                    <Col span={21} className="black_person">{personCenterA.props.userInfo.school}</Col>
                     <Col span={3} className="gary_person">科&nbsp;&nbsp;&nbsp;&nbsp;目：</Col>
-                    <Col span={21} className="black_person">{personCenter.state.userInfo.course}</Col>
+                    <Col span={21} className="black_person">{personCenterA.props.userInfo.course}</Col>
                     <Col span={3} className="gary_person">年&nbsp;&nbsp;&nbsp;&nbsp;级：</Col>
-                    <Col span={21} className="black_person">{personCenter.state.userInfo.grade}</Col>
+                    <Col span={21} className="black_person">{personCenterA.props.userInfo.grade}</Col>
                 </Row>
                 <Row>
                     <Col span={3} className="gary_person">个人简介：</Col>
@@ -388,11 +478,11 @@ class PersonCenterV2 extends React.Component {
 
         var followButton;
 
-        if (personCenter.state.isFollow == false) {
+        if (personCenterA.props.isFollow == false) {
             followButton =
-                <Button icon="plus" onClick={personCenter.followUser} className="persono_btn_blue">关注</Button>;
+                <Button icon="plus" onClick={personCenterA.followUser} className="persono_btn_blue">关注</Button>;
         } else {
-            followButton = <Button icon="plus" onClick={personCenter.unfollowUser}>取消关注</Button>;
+            followButton = <Button icon="plus" onClick={personCenterA.unfollowUser}>取消关注</Button>;
         }
 
         return (
@@ -402,13 +492,13 @@ class PersonCenterV2 extends React.Component {
 
                     <span className="person_btn">
                         <Button className="antnest_talk" value="score"
-                                onClick={personCenter.turnToPlatformRulePage}>{personCenter.state.userInfo.score}积分</Button>
+                                onClick={personCenterA.turnToPlatformRulePage}>{personCenterA.props.userInfo.score}积分</Button>
 						<Button value="level"
-                                onClick={personCenter.turnToPlatformRulePage}>{personCenter.state.userInfo.level.name}</Button>
+                                onClick={personCenterA.turnToPlatformRulePage}>{personCenterA.props.userInfo.level.name}</Button>
                     </span>
                     <span className="person_btn_ri">
-                    <Button icon="message" value={personCenter.state.userInfo.user.colUid}
-                            onClick={personCenter.sendMessage} className="antnest_talk  persono_btn_blue">发消息</Button>
+                    <Button icon="message" value={personCenterA.props.userInfo.user.colUid}
+                            onClick={personCenterA.sendMessage} className="antnest_talk  persono_btn_blue">发消息</Button>
                         {followButton}
 					 </span>
 

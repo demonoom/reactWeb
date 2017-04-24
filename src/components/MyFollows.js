@@ -12,38 +12,46 @@ class MyFollows extends React.Component {
         super(props);
         this.state = { // define this.state in constructor
             ident: this.props.userid || sessionStorage.getItem("ident"),
-            followUser: {},
-            followUserVisible: true,
-            visible: true,
+            followUserInfo: {},
+            followUserVisible: false,
+            myFollowsListVisible: true,
             method: 'getUserFavorite',
             type: 1,
             pageNo: 1,
-            data: [],
-            antGroupTabResouceType: 'personCenter',
-            antGroupTabVisible: false
+            data: []
         };
-        this.htmlTemplet = {};
+        this.htmlTempletContent = {};
     }
 
-    changeState(dataa) {
-        this.setState({data: dataa});
-    };
 
     componentWillMount() {
 
-        this.getData(this.changeState.bind(this));
+        this.getMyFollows();
     }
 
-    getData(fn) {
+
+// 外部调用显示
+    showMyFollowsListUI(userinfo) {
+        this.getMyFollows(userinfo.colUid);
+    }
+
+    // 内部调用
+    getMyFollows(myIdent) {
+        let _this = this;
         var param = {
             "method": 'getMyFollows',
-            "userId": this.state.ident,
+            "userId": myIdent || this.state.ident,
         };
 
         doWebService(JSON.stringify(param), {
             onResponse: function (res) {
                 if (res.success) {
-                    if (fn) fn(res.response);
+                    _this.setState({
+                        myFollowsListVisible: true,
+                        followUserVisible: false,
+                        data: res.response
+                    });
+                    // if (fn) fn(res.response);
                 } else {
                     message.error(res.msg);
                 }
@@ -78,45 +86,87 @@ class MyFollows extends React.Component {
 
     }
 
+
+    // 展示个人信息
     viewProsenInfo(userinfo) {
-        this.props.callEvent({
-            resouceType: 'visitAntGroup',
-            ref: 'antGroupTabComponents',
-            methond: 'getOtherPersonalCenterPage',
-            param: userinfo
+
+        let _this = this;
+        var param = {
+            "method": 'getPersonalCenterData',
+            "userId": userinfo.colUid,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.success) {
+                    var userInfo = ret.response;
+
+                    _this.setState({
+                        followUserVisible: true,
+                        myFollowsListVisible: false,
+                        followUserInfo: userInfo
+                    });
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
         });
     }
 
-    buildTemplet(dataArray) {
 
-        this.htmlTemplet = null;
+    _buildMyFollowsList() {
+
+        let dataArray = this.state.data;
         if (!dataArray || !dataArray.length) {
-            this.htmlTemplet = <img className="noDataTipImg" src={require('./images/noDataTipImg.png')}/>;
+            this.htmlTempletContent = <img className="noDataTipImg" src={require('./images/noDataTipImg.png')}/>;
             return;
         }
 
-        this.htmlTemplet = dataArray.map((e, i) => {
+        this.htmlTempletContent = dataArray.map((e, i) => {
             let refkey = e.uid + "#" + e.courseId;
 
             return <div><Card key={refkey} className="focus">
-                <span className="person_user_bg">
-                    <a onClick={this.viewProsenInfo.bind(this,e.user)} target="_blank"><img alt={e.user.userName + '头像'} width="100%" src={e.user.avatar} className="person_user" /></a>
-                </span>
+                            <span className="person_user_bg">
+                                <a onClick={this.viewProsenInfo.bind(this, e.user)} target="_blank"><img
+                                    alt={e.user.userName + '头像'} width="100%" src={e.user.avatar}
+                                    className="person_user"/></a>
+                            </span>
                 <div className="custom-card focus_2">
-				    <div className="focus_1">
-					    <span className="antnest_name focus_3">{e.user.userName}</span>
-                        <a target="_blank" title="查看"  onClick={this.viewProsenInfo.bind(this,e.user)} className="right_ri"><Button icon="eye-o" className="focus_btn"/></a>
+                    <div className="focus_1">
+                        <span className="antnest_name focus_3">{e.user.userName}</span>
+                        <a target="_blank" title="查看" onClick={this.viewProsenInfo.bind(this, e.user)}
+                           className="right_ri"><Button icon="eye-o" className="focus_btn"/></a>
                     </div>
                     <div className="focus_3">学校：{e.user.schoolName}</div>
                     <div className="focus_3">科目：{e.course.colCourse}</div>
-                </div>		
-</Card></div>
+                </div>
+            </Card></div>
+        });
 
-        } );
+    }
+
+    buildContent() {
+
+        this.htmlTempletContent = null;
+
+        switch (true) {
+            // 显示被关注的个人信息
+            case this.state.followUserVisible:
+                this.htmlTempletContent =
+                    <PersonCenterV2 userInfo={this.state.followUserInfo }
+                                    visible={this.state.followUserVisible}
+                                    callEvent={ this.props.callEvent }/>;
+                break;
+            // 显示我的关注列表
+            case this.state.myFollowsListVisible:
+                this._buildMyFollowsList();
+                break;
+        }
+
     }
 
     render() {
-        this.buildTemplet(this.state.data);
+        this.buildContent();
         return (
             <div>
                 <Breadcrumb separator=">">
@@ -124,8 +174,7 @@ class MyFollows extends React.Component {
                     <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
                     <Breadcrumb.Item href="#/MainLayout">我的关注</Breadcrumb.Item>
                 </Breadcrumb>
-                { this.htmlTemplet }
-                <PersonCenterV2 userInfo={this.state.followUser } visible={this.state.followUserVisible} />
+                { this.htmlTempletContent }
             </div>
         );
     }
