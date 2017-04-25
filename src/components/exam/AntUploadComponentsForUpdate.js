@@ -87,7 +87,7 @@ const AntUploadComponentsForUpdate = React.createClass({
             action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
             listType: 'picture',
             defaultFileList:antUpload.state.defaultFileList,
-            fileList:antUpload.state.fileList,
+            // fileList:antUpload.state.fileList,
             onPreview:antUpload.handlePreview,
             beforeUpload(file){
                 var fileType = file.type;
@@ -113,7 +113,7 @@ const AntUploadComponentsForUpdate = React.createClass({
                 } else if (info.file.status === 'error') {
                     message.error(`${info.file.name} 文件上传失败.`,5);
                 }
-                antUpload.setState({"fileList":info.fileList});
+                // antUpload.setState({"fileList":info.fileList});
             },
             onRemove(file){
                 console.log(file);

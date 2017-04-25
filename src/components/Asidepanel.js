@@ -42,8 +42,9 @@ class Asidepanel extends React.Component {
     }
 
     componentDidUpdate(){
-        var ifr = $("#asidepanel")[0];
-       // alert(ifr.src);
+
+       /*
+       var ifr = $("#asidepanel")[0];
         var iDoc = ifr.contentDocument;
         var iWin = ifr.contentWindow;
 
@@ -58,6 +59,8 @@ class Asidepanel extends React.Component {
 
             }
         });
+
+        */
 
     }
 

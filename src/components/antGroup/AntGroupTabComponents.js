@@ -107,6 +107,7 @@ const AntGroupTabComponents = React.createClass({
     getInitialState() {
         antGroup = this;
         return {
+            isreader:true,
             defaultActiveKey:'loginWelcome',
             activeKey:'loginWelcome',
             optType:'getUserList',
@@ -137,6 +138,7 @@ const AntGroupTabComponents = React.createClass({
             totalChatGroupCount:0,  //当前用户的群组总数
             currentChatGroupPage:1,    //群组列表页面的当前页码
         };
+
     },
     /**
      * 话题tab切换响应函数
@@ -146,8 +148,16 @@ const AntGroupTabComponents = React.createClass({
         this.setState({activeKey:activeKey});
     },
 
-    componentDidMount(){
+    componentWillMount(){
+         console.log("ant group tab: componentWillMount");
         antGroup.getAntGroup();
+    },
+    shouldComponentUpdate(){
+      if(this.state.isreader){
+          return true;
+      }  else{
+          return false;
+      }
     },
 
     /**
@@ -165,7 +175,7 @@ const AntGroupTabComponents = React.createClass({
                 response.forEach(function (e) {
                     var userId = e.colUid;
                     var userName = e.userName;
-                    console.log("userInfo======》"+userId+"=="+e.userName+"=="+e.colUtype);
+
                     var userJson = {key:userId,userContacts:userName,userObj:e};
                     userContactsData.push(userJson);
                 });
@@ -194,11 +204,13 @@ const AntGroupTabComponents = React.createClass({
             antGroup.getPersonalCenterData(record.key);
         }
     },
+
     /**
      * 进入他人的个人中心
      * @param param
      */
     getOtherPersonalCenterPage(param){
+
         let uid = param.colUid || param.userId;
         this.getPersonalCenterData(uid);
     },
@@ -254,14 +266,14 @@ const AntGroupTabComponents = React.createClass({
         var machineId = sessionStorage.getItem("machineId");
         var pro = {"command":"messagerConnect","data":{"machineType":"ios","userId":Number.parseInt(loginUserId),"machine":machineId}};
         ms.msgWsListener={onError:function(errorMsg){
-            console.log("error:"+errorMsg);
+
         },onWarn:function(warnMsg){
-            console.log("warn:"+warnMsg);
+
         },onMessage:function(info){
             if(antGroup.state.optType=="sendMessage"){
                 //获取messageList
                 var command = info.command;
-                console.log("success:"+command);
+
                 if(isEmpty(command)==false){
                     if(command=="messageList"){
                         var data = info.data;
@@ -336,16 +348,16 @@ const AntGroupTabComponents = React.createClass({
         messageList.splice(0);
         var loginUserId = sessionStorage.getItem("ident");
         var machineId = sessionStorage.getItem("machineId");
-        console.log("turnToChatGroupMessagePage machineId:"+machineId)
+
         var pro = {"command":"messagerConnect","data":{"machineType":"ios","userId":Number.parseInt(loginUserId),"machine":machineId}};
         ms.msgWsListener={onError:function(errorMsg){
-            console.log("ChatGroup Message error:"+errorMsg);
+
         },onWarn:function(warnMsg){
-            console.log("ChatGroup Message warn:"+warnMsg);
+
         },onMessage:function(info){
             //获取messageList
             var command = info.command;
-            console.log("ChatGroup Message success:"+command);
+
             if(antGroup.state.optType=="sendGroupMessage"){
                 if(isEmpty(command)==false){
                     if(command=="messageList"){
@@ -447,7 +459,7 @@ const AntGroupTabComponents = React.createClass({
                 showImg+=otherStr;
             }
             messageReturnJson={messageType:"imgTag",imgMessage:imgTags};
-            console.log("showContent:"+showContent);
+
         }else{
             //不存在表情，为单纯性的文字消息
             messageReturnJson={messageType:"text",textMessage:str};
@@ -1015,6 +1027,7 @@ const AntGroupTabComponents = React.createClass({
      * @param userId
      */
     getMyFollows(user){
+
         var param = {
             "method": 'getMyFollows',
             "userId": user.colUid,
@@ -1081,8 +1094,8 @@ const AntGroupTabComponents = React.createClass({
      * 获取老师用户的题目
      */
     callBackGetMySubjects(user){
+
         antGroup.getUserSubjectsByUid(user.colUid,1);
-        antGroup.setState({"currentUser":user});
     },
 
     getUserSubjectsByUid:function (ident,pageNo) {
@@ -1124,7 +1137,12 @@ const AntGroupTabComponents = React.createClass({
                             answer:answer
                         });
                         var pager = ret.pager;
-                        antGroup.setState({totalSubjectCount:parseInt(pager.rsCount),"optType":"getUserSubjects","activeKey":'userSubjects'});
+                        antGroup.setState({
+                            totalSubjectCount: parseInt(pager.rsCount),
+                            "currentUser": e.user,
+                            "optType": "getUserSubjects",
+                            "activeKey": 'userSubjects'
+                        });
                     });
                 }
             },
@@ -1149,7 +1167,6 @@ const AntGroupTabComponents = React.createClass({
 
     callBackGetMyCourseWares(user){
         antGroup.getTeachPlans(user.colUid,1);
-        antGroup.setState({"currentUser":user});
     },
 
     getTeachPlans(ident,pageNo){
@@ -1167,11 +1184,13 @@ const AntGroupTabComponents = React.createClass({
                 courseWareList=new Array();
                 courseWareList.splice(0);
                 var response = ret.response;
+                let user;
                 response.forEach(function (e) {
                     var id = e.id;
                     var fileName = e.name;
                     //用户编号，用来判断当前的课件是否是自己上传的，如果是，则支持删除功能
                     var userId = e.userId;
+                    user = e.user;
                     var userName = e.user.userName;
                     var path = e.path;
                     var pdfPath = e.pdfPath;
@@ -1209,9 +1228,13 @@ const AntGroupTabComponents = React.createClass({
                     courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointContent,createTime,fileTypeLogo,htmlPath,type,collectCount,userId]);
                 });
                 antGroup.buildKonwledgePanels(courseWareList);
-                antGroup.setState({courseListState:courseWareList,"optType":"getUserCourseWares","activeKey":'userCourseWares'});
-                var pager = ret.pager;
-                antGroup.setState({totalCourseWareCount:parseInt(pager.rsCount)});
+                antGroup.setState({
+                    courseListState: courseWareList,
+                    "currentUser": user,
+                    "optType": "getUserCourseWares",
+                    "activeKey": 'userCourseWares',
+                    totalCourseWareCount: parseInt(ret.pager.rsCount)
+                });
             },
             onError : function(error) {
                 message.error(error);
@@ -1274,12 +1297,17 @@ const AntGroupTabComponents = React.createClass({
         antGroup.getLiveInfoByUid(user.colUid,1);
         antGroup.setState({"currentUser":user});
     },
+    gitUserLiveInfo(obj){
+
+      this.getLiveInfoByUid(obj.user.colUid,obj.pageNo);
+    },
     /**
      * 根据用户的id，获取当前用户的直播课
      * @param userId
      * @param pageNo
      */
     getLiveInfoByUid(userId,pageNo){
+        let _this =this;
         var param = {
             "method": 'getLiveInfoByUid',
             "userId": userId,
@@ -1289,7 +1317,9 @@ const AntGroupTabComponents = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if(ret.msg=="调用成功" && ret.success==true){
+                    let user;
                     var response = ret.response;
+
                     response.forEach(function (e) {
                         var liveCover = e.liveCover;
                         var cover = liveCover.cover;
@@ -1297,7 +1327,7 @@ const AntGroupTabComponents = React.createClass({
                         var schoolName = e.schoolName;
                         var startTime = antGroup.getLocalTime(e.startTime);
                         var title = e.title;
-                        var user = e.user;
+                        user = e.user;
                         var userName = user.userName;
                         var courseName = e.courseName;
                         var password = e.password;
@@ -1328,10 +1358,16 @@ const AntGroupTabComponents = React.createClass({
                         </Card>;
                         userLiveData.push(liveCard);
                     });
-                    var pager = ret.pager;
-                    antGroup.setState({"totalLiveCount":parseInt(pager.rsCount)});
+
+                    antGroup.setState({
+                        "totalLiveCount": parseInt(ret.pager.rsCount),
+                        "currentUser": user, "userLiveData": userLiveData,
+                        "optType": "getLiveInfoByUid",
+                        "activeKey": "userLiveInfos"
+                    });
                 }
-                antGroup.setState({"userLiveData":userLiveData,"optType":"getLiveInfoByUid","activeKey":"userLiveInfos"});
+
+
             },
             onError: function (error) {
                 message.error(error);
@@ -1469,6 +1505,7 @@ const AntGroupTabComponents = React.createClass({
     },
 
     render() {
+
         var breadMenuTip="蚁群";
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         var welcomeTitle = "欢迎"+loginUser.userName+"登录";

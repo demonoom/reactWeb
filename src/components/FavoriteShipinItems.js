@@ -52,6 +52,7 @@ const FavoriteShipinItems = React.createClass({
 
     },
 
+
     buildFavShipionUi: function (courseWareList) {
         coursePanelChildren = null;
         this.activeKey = [];

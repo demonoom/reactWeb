@@ -8,6 +8,7 @@ import { doWebService } from '../../WebServiceHelper';
 import FileUploadComponents from './FileUploadComponents';
 import AntUploadComponentsForUpdate from './AntUploadComponentsForUpdate';
 import AntUploadComponentsForExamPagerUpdate from './AntUploadComponentsForExamPagerUpdate';
+import AntUploadComponents from './AntUploadComponents';
 const CheckboxGroup = Checkbox.Group;
 const RadioGroup = Radio.Group;
 const confirm = Modal.confirm;
@@ -140,7 +141,15 @@ const UpdateExamPagerComponents = React.createClass({
                         break;
                     case 3:
                         //简单
-                        subjectDiv = createExamPager.buildSimpleAnswerSubjectDivContent(j,answerTitle,answerSubjectType,answerScore,textAnswer);
+                        var imageAnswerFileArray=[];
+                        if(createExamPager.isEmpty(imageAnswer)==false){
+                            var fileJson = {
+                                uid: answerTitle+"#"+j+"#imageAnswer#"+answerSubjectType,
+                                url: imageAnswer,
+                            }
+                            imageAnswerFileArray.push(fileJson);
+                        }
+                        subjectDiv = createExamPager.buildSimpleAnswerSubjectDivContent(j,answerTitle,answerSubjectType,answerScore,textAnswer,imageAnswerFileArray);
                         break;
                 }
                 var subjectDivJson = {"index":j,"divContent":subjectDiv,"score":answerScore};
@@ -776,7 +785,9 @@ const UpdateExamPagerComponents = React.createClass({
 			<Row className="ant-form-item">
 				<Col span={3} >图片答案：</Col>
 				<Col span={18}>
-                    <AntUploadComponentsForUpdate className="add_study-b" key={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType}  fileList={imageAnswerFileArray} params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponentsForUpdate>
+                    {/*className="add_study-b"*/}
+                    <AntUploadComponents key={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} fileList={imageAnswerFileArray}  params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponents>
+                    {/*<AntUploadComponentsForUpdate key={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType}  fileList={imageAnswerFileArray} params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponentsForUpdate>*/}
 					{/*<button type="primary" icon="plus-circle" value={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} title="上传图片答案"
                             className="add_study-b" onClick={createExamPager.showModal}>上传图片答案</button>*/}
 				</Col>
@@ -805,7 +816,8 @@ const UpdateExamPagerComponents = React.createClass({
     /**
      * 创建答题卡中简答题的题目div
      */
-    buildSimpleAnswerSubjectDivContent(num,answerTitle,answerSubjectType,answerScore,textAnswer){
+    buildSimpleAnswerSubjectDivContent(num,answerTitle,answerSubjectType,answerScore,textAnswer,imageAnswerFileArray){
+        imageAnswerFileArray=createExamPager.convertUndefinedToNull(imageAnswerFileArray,"array");
         var subjectDiv =<div key={num} data-key={num} className="topic_bor">
             <Row className="ant-form-item">
                 <Col span={3} className="right_upexam"><span className="upexam_number">{num}</span>答案：</Col>
@@ -820,7 +832,8 @@ const UpdateExamPagerComponents = React.createClass({
 			<Row className="ant-form-item">
 				<Col span={3}>图片答案：</Col>
 				<Col span={18}>
-                    <AntUploadComponentsForUpdate params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponentsForUpdate>
+                    {/*<AntUploadComponentsForUpdate params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponentsForUpdate>*/}
+                    <AntUploadComponents key={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} fileList={imageAnswerFileArray}  params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponents>
 				 </Col>
 			</Row>
             <Row className="ant-form-item">
