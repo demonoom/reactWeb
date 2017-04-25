@@ -178,7 +178,7 @@ const AntGroupTabComponents = React.createClass({
                 response.forEach(function (e) {
                     var userId = e.colUid;
                     var userName = e.userName;
-                    var imgTag = <div ><img src={e.avatar}  className="antnest_38_img" ></img></div>;
+                    var imgTag = <div ><img src={e.avatar}  className="antnest_38_img" height="38" ></img></div>;
                     var userJson = {key:userId,userContacts:userName,userObj:e,"userHeadIcon":imgTag};
                     userContactsData.push(userJson);
                 });
@@ -1614,11 +1614,11 @@ const AntGroupTabComponents = React.createClass({
                     transitionName=""  //禁用Tabs的动画效果
                 >
                     <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
-                            <span>
-                                <img src={require('../images/groupTitle.png')} className="logo_layout" />
-                                <p className="group_double"　icon="usergroup-add" onClick={antGroup.getUserChatGroup}>我的群组</p>
-                            </span>
-                            <Table onRowClick={antGroup.getPersonCenterInfo} showHeader={false} scroll={{ x: true, y: 430}} columns={columns} dataSource={antGroup.state.userContactsData} pagination={false}/>
+                            <div className="maaee_group">
+                                <img src={require('../images/groupTitle.png')} className="antnest_38_img" />
+                                <span className=""　icon="usergroup-add" onClick={antGroup.getUserChatGroup}>我的群组</span>
+                            </div>
+                            <Table className="maaeegroup" onRowClick={antGroup.getPersonCenterInfo} showHeader={false} scroll={{ x: true, y: 430}} columns={columns} dataSource={antGroup.state.userContactsData} pagination={true}/>
                     </TabPane>
                 </Tabs>;
         }else if(antGroup.state.optType=="personCenter"){
@@ -1932,7 +1932,7 @@ const AntGroupTabComponents = React.createClass({
                     {/*<div className="person_attention">
                         <Table onRowClick={antGroup.getPersonCenterInfo} showHeader={true} scroll={{ x: true, y: 400 }} columns={followUserColumns} dataSource={antGroup.state.followsUserArray} pagination={false}/>
                     </div>*/}
-                    <div className="person_attention" style={{overflow:'auto'}}>
+                    <div className="person_attention favorite_pa_le" >
                         {antGroup.state.followsUserArray}
                     </div>
                 </TabPane>
