@@ -5,17 +5,18 @@ const AntUploadComponentsForExamPagerUpdate = React.createClass({
 
     getInitialState() {
         antUploadComponentsForExamPagerUpdate = this;
-        var defaultFileList = [];
+        /*var defaultFileList = [];
         console.log("subjectInfo in AntUploadComponentsForExamPagerUpdate"+antUploadComponentsForExamPagerUpdate.props.params);
         if(typeof(antUploadComponentsForExamPagerUpdate.props.fileList)!="undefined" && antUploadComponentsForExamPagerUpdate.props.fileList.length!=0){
             defaultFileList = antUploadComponentsForExamPagerUpdate.props.fileList ;
-        }
+        }*/
         return {
-            examPagerDefaultFileList: defaultFileList,
-            subjectInfo:antUploadComponentsForExamPagerUpdate.props.params,
+            examPagerDefaultFileList: [],
+            // subjectInfo:antUploadComponentsForExamPagerUpdate.props.params,
+            subjectInfo:'',
             previewVisible: false,
             previewImage: '',
-            fileList: defaultFileList,
+            fileList: [],
         };
     },
 
@@ -24,11 +25,11 @@ const AntUploadComponentsForExamPagerUpdate = React.createClass({
     },
 
     componentWillReceiveProps(){
-        var defaultFileList = [];
+        /*var defaultFileList = [];
         if(typeof(antUploadComponentsForExamPagerUpdate.props.fileList)!="undefined" && antUploadComponentsForExamPagerUpdate.props.fileList.length!=0){
             defaultFileList = antUploadComponentsForExamPagerUpdate.props.fileList ;
         }
-        antUploadComponentsForExamPagerUpdate.setState({fileList:defaultFileList});
+        antUploadComponentsForExamPagerUpdate.setState({fileList:defaultFileList});*/
     },
 
     showInfo(e){

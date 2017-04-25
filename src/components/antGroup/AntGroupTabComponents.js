@@ -1293,9 +1293,18 @@ const AntGroupTabComponents = React.createClass({
         return newDate;
     },
 
-    callBackGetLiveInfo(user){
+    callBackGetLiveInfo(obj){
+        console.log(obj.user+"===="+obj.visiable);
+        var user;
+        var isVisible;
+        if(isEmpty(obj.user)==false){
+            user = obj.user;
+            isVisible = obj.visiable;
+        }else{
+            user = obj;
+        }
         antGroup.getLiveInfoByUid(user.colUid,1);
-        antGroup.setState({"currentUser":user});
+        antGroup.setState({"currentUser":obj.user,returnBtnIsShow:isVisible});
     },
     gitUserLiveInfo(obj){
 
@@ -1336,12 +1345,16 @@ const AntGroupTabComponents = React.createClass({
                         if(isEmpty(password)==false){
                             keyIcon = <Icon type="key" />;
                         }
+
+
+	
                         var liveCard = <Card className="live" id={id}  onClick={antGroup.turnToLiveInfoShowPage} >
+							<p className="h3">{title}</p>
                             <div className="live_img">
                                 <img className="attention_img"    width="100%" src={cover} />
+								<div className="live_green"><span>{schoolName}</span></div>
                             </div>
                             <div className="custom-card"  >
-                                <p className="h3">{title}</p>
                                 <ul className="live_cont">
                                     <li>
                                         <span className="attention_img"><img src={user.avatar}></img></span>
@@ -1349,7 +1362,6 @@ const AntGroupTabComponents = React.createClass({
                                         <span className="right_ri live_span_2">{startTime}</span>
                                     </li>
                                     <li>
-                                        <span className="live_color live_green">{schoolName}</span>
                                         <span className="live_color live_orange">{courseName}</span>
                                         <span className="right_ri focus_btn"><Icon type="lock" /></span>
                                     </li>
@@ -1518,9 +1530,13 @@ const AntGroupTabComponents = React.createClass({
         var userPhoneCard;
         var breadCrumb;
         var isVisible=false;
-        if(isEmpty(antGroup.props.breadcrumbVisible)==false){
-            isVisible=antGroup.props.breadcrumbVisible;
+        console.log("returnBtnIsShow===>"+antGroup.state.returnBtnIsShow);
+        if(antGroup.state.returnBtnIsShow==false){
+            console.log("1111111111");
+            isVisible=antGroup.state.returnBtnIsShow;
+            console.log("1111111111"+isVisible);
         }else{
+            console.log("2222");
             isVisible=antGroup.state.breadcrumbVisible;
         }
         if(isVisible){
@@ -1730,7 +1746,7 @@ const AntGroupTabComponents = React.createClass({
                         </ul>
                         <ul className="group_fr_ul">
                             <li className="color_gary_f"><span>群聊成员：{antGroup.state.currentMemberArray.length}人</span>{topButton}</li>
-                            <li  style={{height:'65px'}}>
+                            <li className="user_hei">
                                 {memberLiTag}
                                 {/*<Table  style={{width:'300px'}} rowSelection={rowSelection} columns={groupUserTableColumns} dataSource={antGroup.state.currentMemberArray} scroll={{ x: true, y: 400 }} ></Table>*/}
                             </li>
@@ -1896,16 +1912,18 @@ const AntGroupTabComponents = React.createClass({
             </Tabs>;
         }else if(antGroup.state.optType=="getLiveInfoByUid"){
             welcomeTitle=antGroup.state.currentUser.userName+"的直播课";
-            var returnPersonCenterToolBar;
+            var returnPersonCenterBar;
+            console.log("23423423"+isVisible);
             if(isVisible){
-                returnPersonCenterToolBar = <div className="ant-tabs-right"><Button onClick={antGroup.returnPersonCenter}>返回</Button></div>;
+                console.log("3333")
+                returnPersonCenterBar = <div className="ant-tabs-right"><Button onClick={antGroup.returnPersonCenter}>返回</Button></div>;
             }
             tabComponent= <Tabs
                 hideAdd
                 ref = "mainTab"
                 activeKey={this.state.activeKey}
                 defaultActiveKey={this.state.defaultActiveKey}
-                tabBarExtraContent={returnPersonCenterToolBar}
+                tabBarExtraContent={returnPersonCenterBar}
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab={welcomeTitle} key="userLiveInfos" className="topics_rela ">

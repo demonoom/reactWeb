@@ -3,6 +3,7 @@ import { Upload, Icon,Button,message, Modal,Progress } from 'antd';
 import {isEmpty} from '../../utils/Const';
 var antUpload;
 var subjectFather;
+var fileList=[];
 const AntUploadComponents = React.createClass({
 
     getInitialState() {
@@ -28,7 +29,7 @@ const AntUploadComponents = React.createClass({
     componentDidMount(){
         console.log("antUpload.props.params:"+antUpload.state.fileListParam);
         var fileListParams = antUpload.state.fileListParam;
-        if(isEmpty(fileListParams)==false && fileListParams.length!=0 && antUpload.state.fileList.length==0){
+        if(isEmpty(fileListParams)==false && fileListParams.length!=0 && (isEmpty(antUpload.state.fileList) || antUpload.state.fileList.length==0)){
             fileList.splice(0);
             fileListParams.forEach(function (e) {
                 var fileJson = e;
