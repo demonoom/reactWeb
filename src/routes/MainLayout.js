@@ -389,7 +389,7 @@ const MainLayout = React.createClass({
                                 <div className="tan">蚁巢</div>
                             </Menu.Item>
                             <Menu.Item key="exam" className="padding_menu">
-                                <i className="iconfont">&#xe622;</i>
+                                <i className="iconfont">&#xe602;</i>
                                 <div className="tan">考试</div>
                             </Menu.Item>
                             {/*            <Menu.Item key="folder" className="padding_menu">

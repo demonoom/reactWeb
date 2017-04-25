@@ -68,23 +68,24 @@ const FavoriteShipinItems = React.createClass({
             this.activeKey.push(refkey);
             return <div className="ant-card live ant-card-bordered">
                 <div key={refkey}>
+				<p className="live_h3">{content}</p>
                     <div className="live_img">
                         <a onClick={event => {
                             this.view(event, e.address, e.content)
                         } } target="_blank"><img alt="example" className="attention_img" width="100%"
                                                  src={e.cover}/></a>
+						<div className="live_green"><span>{e.liveInfo.user.schoolName}</span></div>
                     </div>
                     <div className="custom-card">
-                        <p className="live_h3">{content}</p>
                         <ul className="live_cont">
                             <li>
-                                <span className="attention_img"><img style={{width: '30px', height: '30px'}}
+                                <span className="attention_img"><img style={{width: '30px', height: '30px', border:0 }}
                                                                      src={e.liveInfo.user.avatar}></img></span>
                                 <span className="live_span_1">{e.liveInfo.user.userName}</span>
                                 <span className="right_ri live_span_2">{getLocalTime(e.liveInfo.startTime)}</span>
                             </li>
                             <li>
-                                <span className="live_color live_green">{e.liveInfo.user.schoolName}</span>
+                                
                                 <span className="live_color live_orange">{e.liveInfo.courseName}</span>
                                 <a target="_blank" title="取消收藏"
                                    onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}>
@@ -105,7 +106,7 @@ const FavoriteShipinItems = React.createClass({
         this.buildFavShipionUi(this.props.param.data, this.props.param.type);
         return (
             <div className="favorite_scroll">
-                <div className="favorite_up topics_calc">
+                <div className="favorite_up favorite_pa_le topics_calc">
                     {coursePanelChildren}
                 </div>
                 <Pagination total={this.props.param.totalCount} pageSize={getPageSize()}
