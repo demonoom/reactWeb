@@ -81,8 +81,14 @@
     }
 
 
-    littlePanle.prototype._show = function () {
-        var htm = this.templateHtml();
+    littlePanle.prototype._show = function (obj) {
+        var htm = '';
+        if (obj.htmlMode) {
+            htm = this.htmlTemplet();
+        } else {
+            htm = this.iframeTemplet();
+
+        }
         let styleObj = this.calcPos(this.param.stylePage, this.param.stylePage.zIndex, this.param.orderIndex);
 
         htm = $(htm).css(styleObj);
@@ -97,6 +103,42 @@
         $(this.el).find('.exitFull').on('click', exitFull );
 
         return this;
+    }
+
+    littlePanle.prototype.htmlTemplet=function(){
+
+        let id = UUID(8, 16);
+        this.id = id;
+
+        let htm = `<div id="${id}" class="dialog little-layout-aside-r-show">
+                <div class="header draggable">
+                <h3 class="title">${ this.param.title }</h3>
+                    <div class="little-tilte">
+                        <a class="close"><i className="iconfont iconfont_close">&#xe615;</i></a>
+                        <a class="zoom"><i className="iconfont iconfont_more">&#xe67e;</i></a>
+                        
+                    </div>
+                </div>
+                <div class="content">
+                    <section class="littleAnt-iframe-panle">
+                        <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="640"
+        height="480" id="VideoPlayer" align="middle">
+    <param name="allowScriptAccess" value="*"/>
+    <param name="allowFullScreen" value="true"/>
+    <param name="movie"
+           value="flvplayer.swf?video=${this.param.url}&autoplay=true"/>
+    <param name="quality" value="high"/>
+    <param name="bgcolor" value="#ffffff"/>
+    <embed src="flvplayer.swf?video=${this.param.url}&autoplay=true"
+           quality="high" bgcolor="#000000" width="640" height="480" name="VideoPlayer" align="middle"
+           allowScriptAccess="*" allowFullScreen="true" type="application/x-shockwave-flash"
+           pluginspage="http://www.macromedia.com/go/getflashplayer"/>
+</object>
+                    </section>
+                </div>
+                </div>`;
+
+        return htm;
     }
 
     littlePanle.prototype.GetLP = function (obj, oldArray) {
@@ -121,7 +163,7 @@
         this.param.orderIndex = oldArray.length;
         this.param.stylePage.zIndex = maxIndex();
         this.param.stylePage.width = parseInt( obj.width.replace(/[a-z]*/img,''));
-        this._show();
+        this._show(obj);
         return this;
     }
 
@@ -155,7 +197,7 @@
         ifr.contentWindow.history.go(num);
 
     }
-    littlePanle.prototype.templateHtml = function () {
+    littlePanle.prototype.iframeTemplet = function () {
 
         let id = UUID(8, 16);
         this.id = id;
