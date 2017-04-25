@@ -1241,6 +1241,9 @@ p.user_cont span.name1{
 .17_hei1{
    height:98%;
 }
+.17_hei2 > table{
+	padding:3px 8px !important;
+}
 .ant-modal-title{
 	font-size:16px !important;
 	    font-weight: normal;
@@ -2128,7 +2131,11 @@ a.topics:hover{
 	height:38px !important;
 }
 .group_table{
-	width:100%
+	width:100%;
+	height:100%;
+}
+.group_table .ant-table-fixed-header .ant-table-body{
+	height:100%;
 }
 .group_table .ant-table-tbody > tr > td span.antnest_user img, .share_img img{
 	width:30px;
@@ -3052,4 +3059,11 @@ color:#ffbf00
 }
 .knowledge_hei .ant-modal-body{
 	height:360px;
+}
+.lesson tr td{
+	width: 233px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
 }
