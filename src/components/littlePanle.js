@@ -200,8 +200,8 @@
         addOrderBtn(){
             if (!$('.ant-layout-header .lpmgrbtn').length) {
                 $('.ant-layout-header > div').append("<div class='lpmgrbtn'>" +
-                    "<a onclick='LP.orderAll()' class='no_le'><i class='iconfont'>&#xe67a;</i></a>" +
-                    "<a onclick='LP.delAll()' class='del'><i class='iconfont'>&#xe6b4;</i></a>" +
+                    "<a onclick='LP.orderAll()' class='no_le'><i class='iconfont'>&#xe67a;</i><span>复位</span></a>" +
+                    "<a onclick='LP.delAll()' class='del'><i class='iconfont'>&#xe6b4;</i><span>关闭</span></a>" +
                     "</div>");
             }
         },

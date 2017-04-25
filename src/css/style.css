@@ -1,9 +1,12 @@
-body{
+html, body{
 	font-family:"冬青黑体简体中文","Tahoma","Hiragino Sans GB","Microsoft YaHei","微软雅黑","STHeiti","WenQuanYi Micro Hei",SimSun,sans-serif, "Apple Color Emoji" !important;
 	background:url(../../src/components/images/bg_6.png);
 	background-size:cover;
 	margin:0;
 	padding:0;
+	-moz-user-select: none;
+    cursor: default;
+    -webkit-user-select: none;
 }
 ul, li{
 	list-style:none
@@ -2612,7 +2615,7 @@ ul.integral li i{
 .focus{
 	margin: 15px;
     float: left;
-    width: 500px;
+    width: 300px;
 }
 .focus_btn{
 	padding:2px 5px !important;
@@ -2627,10 +2630,10 @@ ul.integral li i{
 .focus_2{
 	display: inline-block;
     margin: 0 0 0 12px;
-    width: 374px;
+    width: 174px;
 }
 .focus_4{
-	width:400px;
+	width:200px;
 }
 .focus_5{
 	top:2px;
@@ -2639,6 +2642,9 @@ a.color_gary_f, .color_gary_f{
 	color:#333;
 	font-size:14px;
 	line-height:24px;
+}
+.group_fr_ul li.user_hei{
+	min-height:65px;
 }
 .focus_3{
 	word-break: break-all; 
@@ -2671,7 +2677,6 @@ a.color_gary_f, .color_gary_f{
 	color:#333;
 	border-bottom: 1px solid #eee;
     background: #f8f8f8;
-    margin-bottom: 4px;
 	cursor:pointer
 }
 .live_h3:hover{
@@ -2712,7 +2717,33 @@ a.color_gary_f, .color_gary_f{
     display: inline-block;
 }
 .live_green{
-	background:#66cc33
+	background-color: rgba(0,0,0,0.5);/* IE9、标准浏览器、IE6和部分IE7内核的浏览器(如QQ浏览器)会读懂 */
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
+}
+.live_green span{
+  color: #FFFFFF;
+}
+@media \0screen\,screen\9 {/* 只支持IE6、7、8 */
+  .live_green{
+	width: 100%;
+    position: absolute;
+    bottom: 0;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
+    background-color:#000000;
+    filter:Alpha(opacity=50);
+    position:static; /* IE6、7、8只能设置position:static(默认属性) ，否则会导致子元素继承Alpha值 */
+    *zoom:1; /* 激活IE6、7的haslayout属性，让它读懂Alpha */
+  }
+  .live_green span{
+    position: relative;/* 设置子元素为相对定位，可让子元素不继承Alpha值 */
+  }  
 }
 .live_orange{
 	background:#ffc444;
@@ -2738,10 +2769,9 @@ a.color_gary_f, .color_gary_f{
 	width: 380px;
 	height: calc(100% - 53px);
 	z-index: 1;
-	background-color: white;
+	background-color: #000;
 	border-left: 1px solid #dfe0e3;
 	box-shadow: 0 7px 21px rgba(0, 0, 0, 0.25);
-
 	-webkit-animation: showBox 0.5s ease-in-out;
 	-moz-animation: showBox 0.5s ease-in-out;
 	animation: showBox 0.5s ease-in-out;
@@ -2755,23 +2785,18 @@ a.color_gary_f, .color_gary_f{
 	text-align: left;
 	border-bottom: 1px solid #dfe0e3;
 	line-height:45px;
-}
-
+	background:#fff;
+} 
 .little-layout-aside-r-show .content {
-	height: 598px;
-}
-
+	    min-height: 598px;
+		height:100%
+    } 
 
 .little-layout-aside-r-show iframe{
-
 	width:100%;
 	height:100%;
 	border: none;
 }
-
-
-
-
 .little-warp{
 	height: 100%;
 	width: 100%;
@@ -2900,6 +2925,7 @@ a.color_gary_f, .color_gary_f{
     width: 20px;
     height: 20px;
 }
+
 .littleAnt-iframe-panle {
 	height: calc(100% - 47px);
 	height: -moz-calc(100% - 47px);
@@ -2980,16 +3006,16 @@ a.color_gary_f, .color_gary_f{
 }
 
 .group_fr{
-	width:40px;
-	text-align:center;
-	display:inline-block;
-	height:61px;
-	margin:0 8px 1em 8px;
-	position: relative;
+	width: 40px;
+    text-align: center;
+    display: inline-block;
+    height: 61px;
+    margin: 0 18px 1em 0;
+    position: relative;
     overflow: hidden;
-	cursor:pointer;
+    cursor: pointer;
     white-space: nowrap;
-	text-overflow: ellipsis;
+    text-overflow: ellipsis;
 }
 .group_fr:hover .group_del{
 	display:block
@@ -3067,3 +3093,4 @@ color:#ffbf00
     white-space: nowrap;
     display: inline-block;
 }
+

@@ -125,8 +125,8 @@ class MyFollows extends React.Component {
         this.htmlTempletContent = dataArray.map((e, i) => {
             let refkey = e.uid + "#" + e.courseId;
 
-            return <div><Card key={refkey} className="focus">
-                            <span className="person_user_bg">
+            return <Card key={refkey} className="focus">
+                            <span className="person_user_bg upexam_float">
                                 <a onClick={this.viewProsenInfo.bind(this, e.user)} target="_blank"><img
                                     alt={e.user.userName + '头像'} width="100%" src={e.user.avatar}
                                     className="person_user"/></a>
@@ -138,7 +138,7 @@ class MyFollows extends React.Component {
                     <div className="focus_3">学校：{e.user.schoolName}</div>
                     <div className="focus_3">科目：{e.course.colCourse}</div>
                 </div>
-            </Card></div>
+            </Card>
         });
 
     }
