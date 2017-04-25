@@ -1,6 +1,6 @@
 import './index.html';
 import './index.less';
-// const express = require('express')
+//const express = require('express')
 // const path = require('path')
 // const port = process.env.PORT || 8080
 // import { browserHistory } from 'dva/router';
@@ -12,19 +12,20 @@ const app = dva({
     },
 });
 
-/*const app = dva({
-    history: browserHistory,
-});
+// const app = dva({
+//     history: browserHistory,
+// });
 
 
 // 通常用于加载静态资源
-app.use(express.static(__dirname + '/public'))
+// app.use(express.static(__dirname + '/static'));
 
 // 在你应用 JavaScript 文件中包含了一个 script 标签
 // 的 index.html 中处理任何一个 route
-app.get('*', function (request, response){
-    response.sendFile(path.resolve(__dirname, 'public', 'index.html'))
-})
+// app.get('*', function (request, response){
+//    response.sendFile(path.resolve(__dirname, 'public', 'index.html'))
+// })
+/*
 app.listen(port)
 console.log("server started on port " + port)*/
 

@@ -87,11 +87,12 @@ const FavoriteSubjectItems = React.createClass({
                     icon="star"/></a>
             </div>;
 
+            let popOverContent1 = '<div>'+e.subjects.content+''+e.subjects.answer+'</div>';
             let popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>'+e.subjects.content+'<hr/><span class="answer_til answer_til_2">答案：</span>'+e.subjects.answer+'</div>';
 
             let content=<Popover  placement="rightTop" content={
                 <article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: popOverContent}}></article>}>
-                <article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
+                <article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: popOverContent1}}></article></Popover>;
 
             this.data.push({
                 key: e.favoriteId,
