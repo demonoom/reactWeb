@@ -17,6 +17,9 @@ const confirm = Modal.confirm;
 const Panel = Collapse.Panel;
 
 var columns = [ {
+    title:'头像',
+    dataIndex:'userHeadIcon'
+},{
     title: '联系人',
     dataIndex: 'userContacts',
 }];
@@ -173,10 +176,11 @@ const AntGroupTabComponents = React.createClass({
             onResponse: function (ret) {
                 var response = ret.response;
                 response.forEach(function (e) {
+                    debugger;
                     var userId = e.colUid;
                     var userName = e.userName;
-
-                    var userJson = {key:userId,userContacts:userName,userObj:e};
+                    var imgTag = <div ><img src={e.avatar}  className="antnest_38_img" ></img></div>;
+                    var userJson = {key:userId,userContacts:userName,userObj:e,"userHeadIcon":imgTag};
                     userContactsData.push(userJson);
                 });
                 antGroup.setState({"userContactsData":userContactsData,"optType":"getUserList","activeKey":'loginWelcome'});
@@ -1604,7 +1608,10 @@ const AntGroupTabComponents = React.createClass({
                     transitionName=""  //禁用Tabs的动画效果
                 >
                     <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
-                            <p className="group_double"　icon="usergroup-add" onClick={antGroup.getUserChatGroup}>我的群组</p>
+                            <span>
+                                <img src={require('../images/groupTitle.png')} className="logo_layout" />
+                                <p className="group_double"　icon="usergroup-add" onClick={antGroup.getUserChatGroup}>我的群组</p>
+                            </span>
                             <Table onRowClick={antGroup.getPersonCenterInfo} showHeader={false} scroll={{ x: true, y: 430}} columns={columns} dataSource={antGroup.state.userContactsData} pagination={false}/>
                     </TabPane>
                 </Tabs>;
