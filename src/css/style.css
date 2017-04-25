@@ -823,7 +823,11 @@ html, body, #root {
 }
 .ant-btn {
 	padding:4px 8px;
-	font-size:13px !important
+	font-size:13px !important;
+	border-radius:4px;
+}
+.ant-input{
+	border-radius:4px;
 }
 .ant-btn-f {
 	padding:4px 20px !important;
@@ -1389,11 +1393,11 @@ a {
 }
 @font-face {
   font-family: 'iconfont';  /* project id 197083 */
-  src: url('//at.alicdn.com/t/font_4viemrennfa5g66r.eot');
-  src: url('//at.alicdn.com/t/font_4viemrennfa5g66r.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_4viemrennfa5g66r.woff') format('woff'),
-  url('//at.alicdn.com/t/font_4viemrennfa5g66r.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_4viemrennfa5g66r.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_4eg62euc1g9l766r.eot');
+  src: url('//at.alicdn.com/t/font_4eg62euc1g9l766r.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_4eg62euc1g9l766r.woff') format('woff'),
+  url('//at.alicdn.com/t/font_4eg62euc1g9l766r.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_4eg62euc1g9l766r.svg#iconfont') format('svg');
 }
 .iconfont{
 	font-family:"iconfont" !important;
@@ -2672,6 +2676,20 @@ a.color_gary_f, .color_gary_f{
 	position:relative
 }
 .live_h3{
+	font-size: 14px;
+    padding: 0 10px;
+    box-sizing: border-box;
+    font-weight: normal;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+	line-height:35px;
+	color:#333;
+	border-bottom: 1px solid #eee;
+    background: #f8f8f8;
+	cursor:pointer
+}
+.live p.h3{
 	font-size: 14px;
     padding: 0 10px;
     box-sizing: border-box;

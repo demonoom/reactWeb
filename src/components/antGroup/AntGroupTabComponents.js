@@ -1363,7 +1363,7 @@ const AntGroupTabComponents = React.createClass({
                                     </li>
                                     <li>
                                         <span className="live_color live_orange">{courseName}</span>
-                                        <span className="right_ri focus_btn"><Icon type="lock" /></span>
+                                        <span className="right_ri focus_btn"><i className="iconfont">&#xe621;</i></span>
                                     </li>
                                 </ul>
                             </div>
