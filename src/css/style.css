@@ -2332,12 +2332,13 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr{
 	height:100px;
 }
 .group_send_talk{
-	width:calc(100% - 80px);
-	width:-moz-calc(100% - 80px);
-	width: -webkit-calc(100% - 80px);
-	height:100%;
-	position:relative;
-	float:left;
+	width: calc(100% - 64px);
+    width: -moz-calc(100% - 64px);
+    width: -webkit-calc(100% - 64px);
+    height: 100%;
+    position: relative;
+    float: left;
+    margin-left: -16px;
 }
 .group_send_talk .emoji-wysiwyg-editor{
 	border-radius:0;
