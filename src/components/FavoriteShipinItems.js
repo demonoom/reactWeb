@@ -75,10 +75,10 @@ const FavoriteShipinItems = React.createClass({
                                                  src={e.cover}/></a>
                     </div>
                     <div className="custom-card">
-                        <p className="live_h3">{content}</p>
+                        <p>{content}</p>
                         <ul className="live_cont">
                             <li>
-                                <span className="attention_img"><img style={{width: '30px', height: '30px'}}
+                                <span className="attention_img"><img style={{width: '30px', height: '30px', border:0 }}
                                                                      src={e.liveInfo.user.avatar}></img></span>
                                 <span className="live_span_1">{e.liveInfo.user.userName}</span>
                                 <span className="right_ri live_span_2">{getLocalTime(e.liveInfo.startTime)}</span>
