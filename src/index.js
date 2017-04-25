@@ -1,6 +1,6 @@
 import './index.html';
 import './index.less';
-const express = require('express')
+//const express = require('express')
 // const path = require('path')
 // const port = process.env.PORT || 8080
 // import { browserHistory } from 'dva/router';
