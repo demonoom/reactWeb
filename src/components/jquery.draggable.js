@@ -50,8 +50,8 @@
         }
     }
 
-    var $document = $(document);
-    document.onselectstart = new Function('event.returnValue=false;');
+     var $document = $(document);
+
 
     function drag($ele) {
 

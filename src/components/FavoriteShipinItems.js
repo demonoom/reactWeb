@@ -88,7 +88,7 @@ const FavoriteShipinItems = React.createClass({
                                 <span className="live_color live_orange">{e.liveInfo.courseName}</span>
                                 <a target="_blank" title="取消收藏"
                                    onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}>
-                                    <Button icon="star-o" className="right_ri focus_btn"/>
+                                    <Button icon="star" className="right_ri focus_btn"/>
                                 </a>
                             </li>
                         </ul>

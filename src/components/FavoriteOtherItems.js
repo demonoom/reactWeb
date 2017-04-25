@@ -95,7 +95,7 @@ const FavoriteOtherItems = React.createClass({
 						<div className="custom-card focus_2 focus_4">
 							<div className="focus_1">
 								<a  onClick={event => {this.view(event,this.getUrl(e),e.content)} }  className="antnest_name focus_3" >{content}</a>
-								<a target="_blank" title="取消收藏" onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)} className="right_ri"><Button className="ant-btn right_ri focus_btn focus_5" icon="star-o"/></a>
+								<a target="_blank" title="取消收藏" onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)} className="right_ri"><Button className="ant-btn right_ri focus_btn focus_5" icon="star"/></a>
 							</div>
 							<div className="focus_3"> {getLocalTime(e.time)}</div>
 						</div>
