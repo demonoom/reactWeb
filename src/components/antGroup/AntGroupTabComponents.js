@@ -193,7 +193,7 @@ const AntGroupTabComponents = React.createClass({
      * @param index　当前行的索引顺序，从０开始
      */
     getPersonCenterInfo(record, index){
-        var userType = record.userObj.colUtype;
+        /*var userType = record.userObj.colUtype;
 
         if(userType=="PAREN" || userType=="EADM" || userType=="SGZH"){
             //家长直接进入聊天窗口
@@ -202,7 +202,22 @@ const AntGroupTabComponents = React.createClass({
             antGroup.turnToMessagePage(record.userObj);
         }else {
             antGroup.getPersonalCenterData(record.key);
+        }*/
+        antGroup.turnToPersonCenter(record.userObj);
+    },
+
+    turnToPersonCenter(followUser){
+        debugger;
+        var userType = followUser.colUtype;
+        if(userType=="PAREN" || userType=="EADM" || userType=="SGZH"){
+            //家长直接进入聊天窗口
+            //蚂蚁君点击进入后，只能接收消息，无法发送消息
+            antGroup.setState({"optType":"sendMessage","currentPerson":followUser});
+            antGroup.turnToMessagePage(followUser);
+        }else {
+            antGroup.getPersonalCenterData(followUser.colUid);
         }
+        console.log("followUser:"+followUser.colUid);
     },
 
     /**
@@ -1044,7 +1059,23 @@ const AntGroupTabComponents = React.createClass({
                         var courseName = course.colCourse;
                         var userHeaderIcon = <img src={followUser.avatar}></img>;
                         var userJson = {key:followUser.colUid,"userName":userName,"courseName":courseName,userHeaderIcon:userHeaderIcon,"userObj":followUser};
-                        followsUserArray.push(userJson);
+                        // followsUserArray.push(userJson);
+                        var followsCard = <Card key={followUser.colUid} id={followUser} className="focus" onClick={antGroup.turnToPersonCenter.bind(antGroup,followUser)}>
+                            <span className="person_user_bg upexam_float">
+                                <a target="_blank"><img
+                                    alt={userName + '头像'} width="100%" src={e.user.avatar}
+                                    className="person_user"/></a>
+                            </span>
+                            <div className="custom-card focus_2">
+                                <div className="focus_1">
+                                    <span className="antnest_name focus_3">{e.user.userName}</span>
+                                </div>
+                                <div className="focus_3">学校：{e.user.schoolName}</div>
+                                <div className="focus_3">科目：{courseName}</div>
+                            </div>
+                        </Card>;
+                        followsUserArray.push(followsCard);
+                        // userLiveData.push(liveCard);
                     });
                     antGroup.setState({"optType":"getMyFollows","activeKey":"userFollows","currentUser":user,"followsUserArray":followsUserArray});
                 }
@@ -1310,6 +1341,19 @@ const AntGroupTabComponents = React.createClass({
 
       this.getLiveInfoByUid(obj.user.colUid,obj.pageNo);
     },
+
+    view: function (e, url, tit) {
+        e = e || window.event;
+        if (e.nativeEvent) {
+            e.nativeEvent.stopImmediatePropagation();
+        }
+        e.stopPropagation();
+        e.preventDefault();
+        e.cancelBubble = true;
+        let obj = {title: tit, url: url, width: '380px'}
+        antGroup.props.onPreview(obj)
+    },
+
     /**
      * 根据用户的id，获取当前用户的直播课
      * @param userId
@@ -1330,6 +1374,7 @@ const AntGroupTabComponents = React.createClass({
                     var response = ret.response;
 
                     response.forEach(function (e) {
+                        debugger;
                         var liveCover = e.liveCover;
                         var cover = liveCover.cover;
                         var liveVideos = e.liveVideos;
@@ -1345,10 +1390,7 @@ const AntGroupTabComponents = React.createClass({
                         if(isEmpty(password)==false){
                             keyIcon = <Icon type="key" />;
                         }
-
-
-	
-                        var liveCard = <Card className="live" id={id}  onClick={antGroup.turnToLiveInfoShowPage} >
+                        var liveCard = <Card className="live" id={id} onClick={event => {antGroup.view(event,liveVideos[0].path,title)} }  >
 							<p className="h3">{title}</p>
                             <div className="live_img">
                                 <img className="attention_img"    width="100%" src={cover} />
@@ -1544,6 +1586,12 @@ const AntGroupTabComponents = React.createClass({
                 <Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
                 <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
                 <Breadcrumb.Item href="#/MainLayout">{breadMenuTip}</Breadcrumb.Item>
+            </Breadcrumb>;
+        }else{
+            breadCrumb = <Breadcrumb separator=">">
+                <Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
+                <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
+                <Breadcrumb.Item href="#/MainLayout">我的直播课</Breadcrumb.Item>
             </Breadcrumb>;
         }
         if(antGroup.state.optType=="getUserList"){
@@ -1868,8 +1916,11 @@ const AntGroupTabComponents = React.createClass({
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab={welcomeTitle} key="userFollows" className="topics_rela">
-                    <div className="person_attention">
+                    {/*<div className="person_attention">
                         <Table onRowClick={antGroup.getPersonCenterInfo} showHeader={true} scroll={{ x: true, y: 400 }} columns={followUserColumns} dataSource={antGroup.state.followsUserArray} pagination={false}/>
+                    </div>*/}
+                    <div className="person_attention" style={{overflow:'auto'}}>
+                        {antGroup.state.followsUserArray}
                     </div>
                 </TabPane>
             </Tabs>;
