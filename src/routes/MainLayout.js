@@ -264,7 +264,7 @@ const MainLayout = React.createClass({
                     <Col span={24}>
                         <div className="ant-layout-container">
                             <div className="ant-layout-content">
-                                <AntGroupTabComponents ref="antGroupTabComponents" resouceType={mainLayout.state.resouceType}/>
+                                <AntGroupTabComponents ref="antGroupTabComponents" resouceType={mainLayout.state.resouceType}  onPreview={ this.showpanle }/>
                             </div>
                         </div>
                     </Col>
