@@ -1511,7 +1511,7 @@ const UpdateExamPagerComponents = React.createClass({
                                 showSearch
                                 listStyle={{
                                     width: 268,
-                                    height: 320,
+                                    height: 321,
                                 }}
                                 titles={['待选知识点','已选知识点']}
                                 operations={['', '']}

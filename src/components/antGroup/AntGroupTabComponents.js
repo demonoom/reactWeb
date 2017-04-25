@@ -1345,12 +1345,16 @@ const AntGroupTabComponents = React.createClass({
                         if(isEmpty(password)==false){
                             keyIcon = <Icon type="key" />;
                         }
+
+
+	
                         var liveCard = <Card className="live" id={id}  onClick={antGroup.turnToLiveInfoShowPage} >
+							<p className="h3">{title}</p>
                             <div className="live_img">
                                 <img className="attention_img"    width="100%" src={cover} />
+								<div className="live_green"><span>{schoolName}</span></div>
                             </div>
                             <div className="custom-card"  >
-                                <p className="h3">{title}</p>
                                 <ul className="live_cont">
                                     <li>
                                         <span className="attention_img"><img src={user.avatar}></img></span>
@@ -1358,7 +1362,6 @@ const AntGroupTabComponents = React.createClass({
                                         <span className="right_ri live_span_2">{startTime}</span>
                                     </li>
                                     <li>
-                                        <span className="live_color live_green">{schoolName}</span>
                                         <span className="live_color live_orange">{courseName}</span>
                                         <span className="right_ri focus_btn"><Icon type="lock" /></span>
                                     </li>
@@ -1743,7 +1746,7 @@ const AntGroupTabComponents = React.createClass({
                         </ul>
                         <ul className="group_fr_ul">
                             <li className="color_gary_f"><span>群聊成员：{antGroup.state.currentMemberArray.length}人</span>{topButton}</li>
-                            <li  style={{height:'65px'}}>
+                            <li className="user_hei">
                                 {memberLiTag}
                                 {/*<Table  style={{width:'300px'}} rowSelection={rowSelection} columns={groupUserTableColumns} dataSource={antGroup.state.currentMemberArray} scroll={{ x: true, y: 400 }} ></Table>*/}
                             </li>
