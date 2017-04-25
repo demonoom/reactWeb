@@ -176,7 +176,6 @@ const AntGroupTabComponents = React.createClass({
             onResponse: function (ret) {
                 var response = ret.response;
                 response.forEach(function (e) {
-                    debugger;
                     var userId = e.colUid;
                     var userName = e.userName;
                     var imgTag = <div ><img src={e.avatar}  className="antnest_38_img" ></img></div>;
@@ -211,7 +210,6 @@ const AntGroupTabComponents = React.createClass({
     },
 
     turnToPersonCenter(followUser){
-        debugger;
         var userType = followUser.colUtype;
         if(userType=="PAREN" || userType=="EADM" || userType=="SGZH"){
             //家长直接进入聊天窗口
@@ -562,9 +560,18 @@ const AntGroupTabComponents = React.createClass({
                         var chatGroupName = e.name;
                         var membersCount = e.members.length;
                         var ownerPhoto = e.owner.avatar;
-                        var imgTag = <div ><img src={ownerPhoto}  className="antnest_38_img" ></img></div>;
+                        var groupMemebersPhoto=[];
+                        for(var i=0;i<e.members.length;i++){
+                            var member = e.members[i];
+                            var memberAvatarTag = <div ><img src={member.avatar}  className="antnest_38_img" ></img></div>;
+                            groupMemebersPhoto.push(memberAvatarTag);
+                            if(i>=3){
+                                break;
+                            }
+                        }
+                        //var imgTag = <div ><img src={ownerPhoto}  className="antnest_38_img" ></img></div>;
                         var groupName = chatGroupName+""+membersCount+"人";
-                        var chatGroupJson = {key:chatGroupId,groupPhoto:imgTag,'groupName':groupName,"groupObj":e};
+                        var chatGroupJson = {key:chatGroupId,groupPhoto:groupMemebersPhoto,'groupName':groupName,"groupObj":e};
                         charGroupArray.push(chatGroupJson);
                     });
                     antGroup.setState({"userGroupsData":charGroupArray});
@@ -1378,7 +1385,6 @@ const AntGroupTabComponents = React.createClass({
                     var response = ret.response;
 
                     response.forEach(function (e) {
-                        debugger;
                         var liveCover = e.liveCover;
                         var cover = liveCover.cover;
                         var liveVideos = e.liveVideos;
