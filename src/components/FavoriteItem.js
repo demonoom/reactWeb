@@ -162,7 +162,7 @@ const FavoriteItem = React.createClass({
                                 icon="eye-o"/></a>
                             <a target="_blank" title="取消收藏" className="right_ri"
                                onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}><Button
-                                icon="star-o"/></a>
+                                icon="star"/></a>
                         </div>
                     </Panel>
                     break;
@@ -187,7 +187,7 @@ const FavoriteItem = React.createClass({
                                 icon="eye-o"/></a>
                             <a target="_blank" title="取消收藏" className="right_ri"
                                onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}><Button
-                                icon="star-o"/></a>
+                                icon="star"/></a>
                         </div>
                     </Panel>
                     break;
