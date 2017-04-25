@@ -125,7 +125,7 @@ const UserCardModalComponents = React.createClass({
         this.setState({ visible: false });
     },
     myMTV(){
-       this.props.callEvent({resouceType: 'visitAntGroup', ref: 'antGroupTabComponents', methond:'callBackGetLiveInfo', param:{user: teacherInfo.user,visiable:true} });
+       this.props.callEvent({resouceType: 'visitAntGroup', ref: 'antGroupTabComponents', methond:'callBackGetLiveInfo', param:{user: teacherInfo.user,visiable:false} });
       //  this.props.callbackParent("myMTV");
         this.setState({ visible: false });
     },
@@ -225,23 +225,23 @@ const UserCardModalComponents = React.createClass({
             <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn add_study add_study-f" onClick={teacherInfo.searchOwnerCourseWare}>
               我的资源
             </Button>
-            <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn ant-btn-f " onClick={teacherInfo.searchOwnerSubject}>
+            <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn topics_btn_le" onClick={teacherInfo.searchOwnerSubject}>
               我的题目
             </Button>
-            <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn ant-btn-f topics_btn_le " onClick={teacherInfo.searchAntGroup}>
+            <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn topics_btn_le " onClick={teacherInfo.searchAntGroup}>
                 蚁群
             </Button>
 
-              <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn ant-btn-f topics_btn_le " onClick={this.myFavrites}>
+              <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn topics_btn_le " onClick={this.myFavrites}>
                 收藏
             </Button>
               <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn ant-btn-g topics_btn_le " onClick={this.findStudentPwd}>
                 找回学生密码
               </Button>
-              <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn ant-btn-f topics_btn_le " onClick={this.MyFollows}>
+              <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn topics_btn_le " onClick={this.MyFollows}>
               我的关注
               </Button>
-                <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn ant-btn-f topics_btn_le " onClick={this.myMTV}>
+                <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn topics_btn_le " onClick={this.myMTV}>
               我的直播课
               </Button>
 			</p>

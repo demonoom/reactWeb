@@ -1293,9 +1293,18 @@ const AntGroupTabComponents = React.createClass({
         return newDate;
     },
 
-    callBackGetLiveInfo(user){
+    callBackGetLiveInfo(obj){
+        console.log(obj.user+"===="+obj.visiable);
+        var user;
+        var isVisible;
+        if(isEmpty(obj.user)==false){
+            user = obj.user;
+            isVisible = obj.visiable;
+        }else{
+            user = obj;
+        }
         antGroup.getLiveInfoByUid(user.colUid,1);
-        antGroup.setState({"currentUser":user});
+        antGroup.setState({"currentUser":obj.user,returnBtnIsShow:isVisible});
     },
     gitUserLiveInfo(obj){
 
@@ -1521,9 +1530,13 @@ const AntGroupTabComponents = React.createClass({
         var userPhoneCard;
         var breadCrumb;
         var isVisible=false;
-        if(isEmpty(antGroup.props.breadcrumbVisible)==false){
-            isVisible=antGroup.props.breadcrumbVisible;
+        console.log("returnBtnIsShow===>"+antGroup.state.returnBtnIsShow);
+        if(antGroup.state.returnBtnIsShow==false){
+            console.log("1111111111");
+            isVisible=antGroup.state.returnBtnIsShow;
+            console.log("1111111111"+isVisible);
         }else{
+            console.log("2222");
             isVisible=antGroup.state.breadcrumbVisible;
         }
         if(isVisible){
@@ -1899,16 +1912,18 @@ const AntGroupTabComponents = React.createClass({
             </Tabs>;
         }else if(antGroup.state.optType=="getLiveInfoByUid"){
             welcomeTitle=antGroup.state.currentUser.userName+"的直播课";
-            var returnPersonCenterToolBar;
+            var returnPersonCenterBar;
+            console.log("23423423"+isVisible);
             if(isVisible){
-                returnPersonCenterToolBar = <div className="ant-tabs-right"><Button onClick={antGroup.returnPersonCenter}>返回</Button></div>;
+                console.log("3333")
+                returnPersonCenterBar = <div className="ant-tabs-right"><Button onClick={antGroup.returnPersonCenter}>返回</Button></div>;
             }
             tabComponent= <Tabs
                 hideAdd
                 ref = "mainTab"
                 activeKey={this.state.activeKey}
                 defaultActiveKey={this.state.defaultActiveKey}
-                tabBarExtraContent={returnPersonCenterToolBar}
+                tabBarExtraContent={returnPersonCenterBar}
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab={welcomeTitle} key="userLiveInfos" className="topics_rela ">

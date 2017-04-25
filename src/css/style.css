@@ -2625,7 +2625,13 @@ ul.integral li i{
 	line-height:22px;
 }
 .focus_1 span.antnest_name, .focus_1 a.antnest_name{
-	font-weight:normal !important
+	font-weight: normal !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    width: 174px;
+	cursor:pointer
 }
 .focus_2{
 	display: inline-block;
