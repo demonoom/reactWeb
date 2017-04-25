@@ -570,8 +570,9 @@ const AntGroupTabComponents = React.createClass({
                             }
                         }
                         //var imgTag = <div ><img src={ownerPhoto}  className="antnest_38_img" ></img></div>;
+                        var imgTag = <div >{groupMemebersPhoto}</div>;
                         var groupName = chatGroupName+""+membersCount+"人";
-                        var chatGroupJson = {key:chatGroupId,groupPhoto:groupMemebersPhoto,'groupName':groupName,"groupObj":e};
+                        var chatGroupJson = {key:chatGroupId,groupPhoto:imgTag,'groupName':groupName,"groupObj":e};
                         charGroupArray.push(chatGroupJson);
                     });
                     antGroup.setState({"userGroupsData":charGroupArray});
