@@ -152,6 +152,9 @@ const MainLayout = React.createClass({
     },
 
 
+
+
+
     //获取老师的已布置作业列表
     getTeacherHomeWork: function (optType) {
         mainLayout.refs.homeWorkTabComponents.getTeacherHomeWork(optType);
@@ -358,8 +361,7 @@ const MainLayout = React.createClass({
 
                     <aside className="ant-layout-sider">
                         <div className="ant-layout-logo">
-                            <UserCardModalComponents callbackParent={this.getTeacherResource}
-                                                     callEvent={this.switchSection}/>
+                            <UserCardModalComponents callbackParent={this.getTeacherResource} callEvent={this.switchSection}/>
                         </div>
                         <Menu mode="inline" theme="dark" defaultSelectedKeys={[this.state.currentKey]}
                               onClick={this.toolbarClick}>

@@ -1336,6 +1336,7 @@ const AntGroupTabComponents = React.createClass({
                         if(isEmpty(password)==false){
                             keyIcon = <Icon type="key" />;
                         }
+<<<<<<< HEAD
                         var liveCard = <Card className="live">
 						    <p className="live_h3">{title}</p>
                             <div className="live_img">
@@ -1343,6 +1344,14 @@ const AntGroupTabComponents = React.createClass({
 								<div className="live_green"><span>{schoolName}</span></div>
                             </div>
 							<div className="custom-card" value={id} onClick={antGroup.turnToLiveInfoShowPage}>
+=======
+                        var liveCard = <Card className="live" id={id}  onClick={antGroup.turnToLiveInfoShowPage} >
+                            <div className="live_img">
+                                <img className="attention_img"    width="100%" src={cover} />
+                            </div>
+                            <div className="custom-card"  >
+                                <p className="h3">{title}</p>
+>>>>>>> a399577d20b5e1a1752edd20a062e881e5a09dc0
                                 <ul className="live_cont">
                                     <li>
                                         <span className="attention_img"><img src={user.avatar}></img></span>
@@ -1351,7 +1360,7 @@ const AntGroupTabComponents = React.createClass({
                                     </li>
                                     <li>
                                         <span className="live_color live_orange">{courseName}</span>
-                                        <Button className="right_ri focus_btn"><Icon type="lock" /></Button>
+                                        <span className="right_ri focus_btn"><Icon type="lock" /></span>
                                     </li>
                                 </ul>
                             </div>

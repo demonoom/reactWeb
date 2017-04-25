@@ -84,7 +84,7 @@ const FavoriteSubjectItems = React.createClass({
             }
             let subjectOpt = <div>
                 <a target="_blank" title="取消收藏"  onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)}><Button
-                    icon="star-o"/></a>
+                    icon="star"/></a>
             </div>;
 
             let popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>'+e.subjects.content+'<hr/><span class="answer_til answer_til_2">答案：</span>'+e.subjects.answer+'</div>';
