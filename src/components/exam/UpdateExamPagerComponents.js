@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Modal, message,Transfer } from 'antd';
 import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox,Table,Popover,Spin } from 'antd';
-import { DatePicker } from 'antd';
+import { DatePicker,Button } from 'antd';
 import { Card } from 'antd';
 import { Radio } from 'antd';
 import { doWebService } from '../../WebServiceHelper';
@@ -702,7 +702,7 @@ const UpdateExamPagerComponents = React.createClass({
                     <CheckboxGroup options={selectAnswerOptions[num-1]} defaultValue={textAnswer}  onChange={createExamPager.subjectAnswerOnChange} />
                 </Col>
 				<div className="topic_del_ri">
-					<button key={answerTitle+"#"+num+"delBtn"} value={answerTitle+"#"+num} onClick={createExamPager.deleteSubjectContentDiv} className="btn_gray_exam examination_btn_gray"><i className="iconfont btn_gray_exam_del">&#xe62f;</i></button>
+					<Button key={answerTitle+"#"+num+"delBtn"} value={answerTitle+"#"+num} onClick={createExamPager.deleteSubjectContentDiv} className="btn_gray_exam examination_btn_gray"><i className="iconfont btn_gray_exam_del">&#xe62f;</i></Button>
 				</div>
             </Row>
             <Row className="ant-form-item">
@@ -717,9 +717,9 @@ const UpdateExamPagerComponents = React.createClass({
                     <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
                         所属知识点
                     </button>
-					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
+					<Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
                         解析
-                    </button>
+                    </Button>
                 </Col>
             </Row>
         </div>;
@@ -756,9 +756,9 @@ const UpdateExamPagerComponents = React.createClass({
                     <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
                         所属知识点
                     </button>
-					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
+					<Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
                         解析
-                    </button>
+                    </Button>
                 </Col>
             </Row>
             
@@ -804,9 +804,9 @@ const UpdateExamPagerComponents = React.createClass({
                     <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
                         所属知识点
                     </button>
-					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
+					<Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
                         解析
-                    </button>	 
+                    </Button>
                 </Col>
             </Row>
         </div>;
@@ -848,9 +848,9 @@ const UpdateExamPagerComponents = React.createClass({
                     <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
                         所属知识点
                     </button>
-					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
+					<Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
                         解析
-                    </button>
+                    </Button>
                 </Col>
             </Row>
         </div>;
@@ -1462,8 +1462,8 @@ const UpdateExamPagerComponents = React.createClass({
                     maskClosable={false} //设置不允许点击蒙层关闭
                     transitionName=""  //禁用modal的动画效果
                     footer={[
-                        <button type="primary" htmlType="submit" className="login-form-button examination_btn_blue" onClick={createExamPager.addAnalysisForCurrentSubject}  >确定</button>,
-                        <button type="ghost" htmlType="reset" className="login-form-button examination_btn_white" onClick={createExamPager.analysisModalHandleCancel} >取消</button>
+                        <Button type="primary" htmlType="submit" className="login-form-button examination_btn_blue" onClick={createExamPager.addAnalysisForCurrentSubject}  >确定</Button>,
+                        <Button type="ghost" htmlType="reset" className="login-form-button examination_btn_white" onClick={createExamPager.analysisModalHandleCancel} >取消</Button>
                     ]}
                 >
                     <Row className="ant-form-item">

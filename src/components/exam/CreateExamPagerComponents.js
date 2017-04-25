@@ -157,12 +157,20 @@ const CreateExamPagerComponents = React.createClass({
                 }
                 // 文字正确答案
                 var textAnswer = createExamPager.convertUndefinedToNull(subjectDivJson.textAnswer);
-                if(createExamPager.isEmpty(textAnswer)){
-                    message.warning("请选择/输入"+title+"下第"+subjectDivJson.index+"题的答案",5);
-                    return;
-                }
                 // 图片正确答案
                 var imageAnswer = createExamPager.convertUndefinedToNull(subjectDivJson.imageAnswer);
+                if(type=="0" || type=="1"){
+                    if(createExamPager.isEmpty(textAnswer)){
+                        message.warning("请选择/输入"+title+"下第"+subjectDivJson.index+"题的答案",5);
+                        return;
+                    }
+                }else{
+                    //填空和简答题中，文本答案和图片答案至少要有一个
+                    if(createExamPager.isEmpty(textAnswer) && createExamPager.isEmpty(imageAnswer)){
+                        message.warning("请选择/输入"+title+"下第"+subjectDivJson.index+"题的答案",5);
+                        return;
+                    }
+                }
                 // 冗余ExmQuestionType的类型，用于查询操作好操作
                 var questionType = type;
                 // 文字解析
@@ -507,8 +515,8 @@ const CreateExamPagerComponents = React.createClass({
      */
     buildSelectOptionsArray(num,answerTitle,answerSubjectType){
         var choiceArray = [];
-        selectAnswerOptions.splice(0, selectAnswerOptions.length);
-        for (var i = 0; i < 6; i++) {
+        selectAnswerOptions.splice(0);
+        for (var i = 0; i < 100; i++) {
             var optionJson;
             switch (i) {
                 case 0:
