@@ -1517,7 +1517,7 @@ const UpdateExamPagerComponents = React.createClass({
                                 operations={['', '']}
                                 targetKeys={createExamPager.state.targetKeys}
                                 onChange={createExamPager.transferHandleChange}
-                                render={item => `${item.description}`}
+                                render={item => `${item.title} - ${item.description}`}
                             />
                         </Col>
                     </Row>
