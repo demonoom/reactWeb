@@ -1551,13 +1551,9 @@ const AntGroupTabComponents = React.createClass({
                         }
                         var liveCard = <Card className="live" >
 							<p className="h3">{title}</p>
-<<<<<<< HEAD
                             <div className="live_img"  id={id} onClick={event => {antGroup.view(event,liveVideos,title)} }  >
                                 <img className="attention_img"    width="100%" src={cover} />
-=======
-                            <div className="live_img">
-                                <img className="attention_img" width="100%" src={cover} />
->>>>>>> 9a07c1ef0b937c5f0fd2d9b782f808a5b24010c3
+
 								<div className="live_green"><span>{schoolName}</span></div>
                             </div>
                             <div className="custom-card"  >
