@@ -472,7 +472,7 @@ i, cite, em, var, address, dfn {
 	z-index:-1;
 
 }
-.antnest_38_img, .maaee_group_face{
+.antnest_38_img, .maaee_group_face, .maaee_group_face1, .maaee_group_face2, .maaee_group_face3{
     width: 38px !important;
     height: 38px !important;
     border-radius: 50%;
@@ -481,10 +481,58 @@ i, cite, em, var, address, dfn {
 .maaee_group_face{
 	background:#eee
 }
-.maaee_group_face div, .maaee_group_face div img{
+.maaee_group_face div, .maaee_group_face img{
 	width:19px !important;
 	height:19px !important;
 	float:left
+}
+.maaee_group_face tr td img{
+	width:19px !important;
+	height:19px !important;
+	float:left;
+}
+.maaee_group_face img:first-child{
+	border-radius:19px 0 0 0
+}
+.maaee_group_face img:nth-child(2){
+	border-radius:0 19px 0 0 
+}
+.maaee_group_face img:nth-child(3){
+	border-radius:0 0 0 19px
+}
+.maaee_group_face img:nth-child(4){
+	border-radius:0 0 19px 0 
+}
+.maaee_group_face1 img{
+	width:38px !important;
+	height:38px !important;
+	float:left
+}
+.maaee_group_face2 img{
+	width:19px !important;
+	height:38px !important;
+	float:left
+}
+.maaee_group_face2 img:nth-child(1){
+	border-radius:38px 0 0 38px;
+}
+.maaee_group_face2 img:nth-child(2){
+	border-radius:0 38px 38px 0 ;
+}
+.maaee_group_face3 img{
+	width:19px !important;
+	height:19px !important;
+	float:left
+}
+.maaee_group_face3 img:nth-child(1){
+	border-radius:19px 0 0 0;
+}
+.maaee_group_face3 img:nth-child(2){
+	border-radius:0 19px 0 0 ;
+}
+.maaee_group_face3 img:nth-child(3){
+	border-radius:0 0 19px 19px ;
+	width:38px !important;
 }
 .ant-modal-content span.ant-modal-close-x{
 		color:#fff;
@@ -1300,11 +1348,15 @@ a {
 }
 /*ant-menu-submenu-open{
 	color: #2896fb;
-}*/
+}
 .ant-table-tbody > tr > td img{
 	max-width:220px;
 	height:100px !important;
 	overflow:hidden;
+}        影响群头像大小，去掉不知会影响别的内容否        */
+.group_table_u table tr td:nth-child(3){
+	text-align:right;
+	padding-right:20px !important
 }
 .maaee_group{
     height: 54px !important;
@@ -2172,23 +2224,7 @@ a.topics:hover{
 	font-size: 28px;
 	color: #999;
 }
-.group_table_u tr td img{
-	width:19px !important;
-	height:19px !important;
-	float:left;
-}
-.group_table_u tr td img:first-child{
-	border-radius:100% 0 0 0
-}
-.group_table_u tr td img:nth-child(2){
-	border-radius:0 100% 0 0 
-}
-.group_table_u tr td img:nth-child(3){
-	border-radius:0 0 0 100% 
-}
-.group_table_u tr td img:nth-child(4){
-	border-radius:0 0 100% 0 
-}
+
 .group_table{
 	width:100%;
 	height:100%;
@@ -2336,7 +2372,9 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr{
 	display: flex;
     flex-direction: row-reverse;
 }
-
+.attention_img{
+	 float:left
+}
 .group_talk ul li span.name img, .attention_img img{
 	position:relative;
 	background:#eee;
@@ -2687,7 +2725,7 @@ ul.integral li i{
     text-overflow: ellipsis;
     white-space: nowrap;
     display: inline-block;
-    width: 174px;
+    width: 160px;
 	cursor:pointer
 }
 .focus_2{
