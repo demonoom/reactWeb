@@ -172,7 +172,7 @@ class MyFollows extends React.Component {
                     <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
                     <Breadcrumb.Item href="#/MainLayout">我的关注</Breadcrumb.Item>
                 </Breadcrumb>
-                <div> { this.htmlTempletContent }</div>
+                <div className="focus_auto favorite_pa_le"> { this.htmlTempletContent }</div>
             </div>
         );
     }

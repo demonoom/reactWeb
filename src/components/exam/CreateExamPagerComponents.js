@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Modal, message,Transfer } from 'antd';
-import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox,Table,Popover,Spin,Progress } from 'antd';
+import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox,Table,Popover,Spin,Progress,Button } from 'antd';
 import { DatePicker } from 'antd';
 import { Card } from 'antd';
 import { Radio } from 'antd';
@@ -157,12 +157,20 @@ const CreateExamPagerComponents = React.createClass({
                 }
                 // 文字正确答案
                 var textAnswer = createExamPager.convertUndefinedToNull(subjectDivJson.textAnswer);
-                if(createExamPager.isEmpty(textAnswer)){
-                    message.warning("请选择/输入"+title+"下第"+subjectDivJson.index+"题的答案",5);
-                    return;
-                }
                 // 图片正确答案
                 var imageAnswer = createExamPager.convertUndefinedToNull(subjectDivJson.imageAnswer);
+                if(type=="0" || type=="1"){
+                    if(createExamPager.isEmpty(textAnswer)){
+                        message.warning("请选择/输入"+title+"下第"+subjectDivJson.index+"题的答案",5);
+                        return;
+                    }
+                }else{
+                    //填空和简答题中，文本答案和图片答案至少要有一个
+                    if(createExamPager.isEmpty(textAnswer) && createExamPager.isEmpty(imageAnswer)){
+                        message.warning("请选择/输入"+title+"下第"+subjectDivJson.index+"题的答案",5);
+                        return;
+                    }
+                }
                 // 冗余ExmQuestionType的类型，用于查询操作好操作
                 var questionType = type;
                 // 文字解析
@@ -345,7 +353,7 @@ const CreateExamPagerComponents = React.createClass({
             title: '确定要删除该题目?',
             content: '',
             onOk() {
-                for(var i=0;i<createExamPager.state.cardChildTagArray.length;i++){
+                for(var i=0;i<cardChildArray.length;i++){
                     var cardChildJson = cardChildArray[i];
                     var cartTitleInJson = cardChildJson.answerTitle;
                     //题目类型
@@ -362,13 +370,19 @@ const CreateExamPagerComponents = React.createClass({
                                 var cardSubjectJson = cardSubjectAnswerArray[j];
                                 if(cardSubjectJson.index == deleteSubjectNum){
                                     cardSubjectJson.divContent="";
-                                    cardSubjectAnswerArray.splice(deleteSubjectNum-1,1);
-                                    createExamPager.refreshSubjectIndexNo(deleteSubjectNum,deleteAnswerTitle,answerSubjectType);
+                                    cardSubjectAnswerArray.splice(j,1);
+                                    //createExamPager.refreshSubjectIndexNo(deleteSubjectNum,deleteAnswerTitle,answerSubjectType);
                                     cardChildJson.answerCount = cardChildJson.answerCount-1;
                                     message.success("题目删除成功");
                                     break;
                                 }
                             }
+                            /*for(var j = 0;j<cardSubjectAnswerArray.length;j++){
+                                var cardSubjectJson = cardSubjectAnswerArray[j];
+                                if(cardSubjectJson.index > deleteSubjectNum){
+                                    cardSubjectJson.index=cardSubjectJson.index-1;
+                                }
+                            }*/
                         }
                     }
                 }
@@ -507,8 +521,8 @@ const CreateExamPagerComponents = React.createClass({
      */
     buildSelectOptionsArray(num,answerTitle,answerSubjectType){
         var choiceArray = [];
-        selectAnswerOptions.splice(0, selectAnswerOptions.length);
-        for (var i = 0; i < 6; i++) {
+        selectAnswerOptions.splice(0);
+        for (var i = 0; i < 100; i++) {
             var optionJson;
             switch (i) {
                 case 0:
@@ -563,9 +577,9 @@ const CreateExamPagerComponents = React.createClass({
                     <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
                         所属知识点
                     </button>
-					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal}>
+					<Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  className="examination_btn_gray" onClick={createExamPager.showAnalysisModal}>
                         解析
-                    </button>
+                    </Button>
                 </Col>
                
             </Row>
@@ -1317,7 +1331,7 @@ const CreateExamPagerComponents = React.createClass({
                     </Row>
 
                 </Modal>
-                <Modal
+                <Modal className="knowledge_span_wi"
                     visible={createExamPager.state.bindKnowledgeModalVisible}
                     title="知识点"
                     onCancel={createExamPager.bindKnowledgeModalHandleCancel}
@@ -1354,7 +1368,7 @@ const CreateExamPagerComponents = React.createClass({
                                 operations={['', '']}
                                 targetKeys={createExamPager.state.targetKeys}
                                 onChange={createExamPager.transferHandleChange}
-                                render={item => `${item.description}`}
+                                render={item => `${item.title} - ${item.description}`}
                             />
                         </div>
                     </div>
