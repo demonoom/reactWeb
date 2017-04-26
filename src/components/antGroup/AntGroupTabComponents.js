@@ -1421,19 +1421,19 @@ const AntGroupTabComponents = React.createClass({
                         var liveCard = <Card className="live" id={id} onClick={event => {antGroup.view(event,liveVideos[0].path,title)} }  >
 							<p className="h3">{title}</p>
                             <div className="live_img">
-                                <img className="attention_img"    width="100%" src={cover} />
+                                <img className="attention_img" width="100%" src={cover} />
 								<div className="live_green"><span>{schoolName}</span></div>
                             </div>
                             <div className="custom-card"  >
                                 <ul className="live_cont">
-                                    <li>
-                                        <span className="attention_img"><img src={user.avatar}></img></span>
-                                        <span className="live_span_1">{userName}</span>
+                                    <li className="li_live_span_3">
+                                        <span className="attention_img2"><img src={user.avatar}></img></span>
+                                        <span className="live_span_1 live_span_3">{userName}</span>
                                         <span className="right_ri live_span_2">{startTime}</span>
                                     </li>
                                     <li>
                                         <span className="live_color live_orange">{courseName}</span>
-                                        <span className="right_ri focus_btn"><i className="iconfont">&#xe621;</i></span>
+                                        <span className="right_ri focus_btn key_span"><i className="iconfont key">&#xe621;</i></span>
                                     </li>
                                 </ul>
                             </div>
@@ -2009,7 +2009,7 @@ const AntGroupTabComponents = React.createClass({
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab={welcomeTitle} key="userLiveInfos" className="topics_rela ">
-                    <div className='ant-tabs ant-tabs-top ant-tabs-line topics_calc' style={{'overflow':'auto'}}>
+                    <div className='ant-tabs ant-tabs-top ant-tabs-line topics_calc favorite_pa_le' style={{'overflow':'auto'}}>
                         {antGroup.state.userLiveData}
                     </div>
 					<Pagination total={antGroup.state.totalLiveCount} pageSize={getPageSize()} current={antGroup.state.currentLivePage} onChange={this.onLiveInfoPageChange}/>
