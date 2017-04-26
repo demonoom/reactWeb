@@ -472,11 +472,16 @@ i, cite, em, var, address, dfn {
 	z-index:-1;
 
 }
-.antnest_38_img{
+.antnest_38_img, .maaee_group_face{
     width: 38px !important;
     height: 38px !important;
     border-radius: 50%;
 	cursor:pointer;
+}
+.maaee_group_face div, .maaee_group_face div img{
+	width:19px !important;
+	height:19px !important;
+	float:left
 }
 .ant-modal-content span.ant-modal-close-x{
 		color:#fff;
@@ -2165,8 +2170,11 @@ a.topics:hover{
 	color: #999;
 }
 .group_table_u tr td img{
-	width:38px !important;
-	height:38px !important;
+	width:19px !important;
+	height:19px !important;
+}
+.maaee_group_face div:first-child{
+	border-radius:100% 0 0 0
 }
 .group_table{
 	width:100%;

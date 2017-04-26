@@ -178,7 +178,7 @@ const AntGroupTabComponents = React.createClass({
                 response.forEach(function (e) {
                     var userId = e.colUid;
                     var userName = e.userName;
-                    var imgTag = <div ><img src={e.avatar}  className="antnest_38_img" height="38" ></img></div>;
+                    var imgTag = <div><img src={e.avatar}  className="antnest_38_img" height="38" ></img></div>;
                     var userJson = {key:userId,userContacts:userName,userObj:e,"userHeadIcon":imgTag};
                     userContactsData.push(userJson);
                 });
@@ -563,14 +563,14 @@ const AntGroupTabComponents = React.createClass({
                         var groupMemebersPhoto=[];
                         for(var i=0;i<e.members.length;i++){
                             var member = e.members[i];
-                            var memberAvatarTag = <div className="antnest_38_img" ><img src={member.avatar} ></img></div>;
+                            var memberAvatarTag = <img src={member.avatar} ></img>;
                             groupMemebersPhoto.push(memberAvatarTag);
                             if(i>=3){
                                 break;
                             }
                         }
                         //var imgTag = <div ><img src={ownerPhoto}  className="antnest_38_img" ></img></div>;
-                        var imgTag = <div >{groupMemebersPhoto}</div>;
+                        var imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
                         var groupName = chatGroupName+""+membersCount+"人";
                         var chatGroupJson = {key:chatGroupId,groupPhoto:imgTag,'groupName':groupName,"groupObj":e};
                         charGroupArray.push(chatGroupJson);
