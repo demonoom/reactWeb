@@ -8,6 +8,7 @@ import { doWebService } from '../../WebServiceHelper';
 import FileUploadComponents from './FileUploadComponents';
 import AntUploadComponentsForUpdate from './AntUploadComponentsForUpdate';
 import AntUploadComponentsForExamPagerUpdate from './AntUploadComponentsForExamPagerUpdate';
+import AntUploadForAnalysisOfCreateComponents from './AntUploadForAnalysisOfCreateComponents';
 import AntUploadComponents from './AntUploadComponents';
 const CheckboxGroup = Checkbox.Group;
 const RadioGroup = Radio.Group;
@@ -115,8 +116,8 @@ const UpdateExamPagerComponents = React.createClass({
                         //选择题
                         //渲染选择题答案到页面上
                         var textAnswerArray=[];
-                        for(var i=0;i<textAnswer.length;i++){
-                            var char = textAnswer.charAt(i);
+                        for(var k=0;k<textAnswer.length;k++){
+                            var char = textAnswer.charAt(k);
                             var selectedValue = answerTitle + "#" + j + "#checkbox#"+char+"#"+answerSubjectType;
                             textAnswerArray.push(selectedValue);
                         }
@@ -185,8 +186,8 @@ const UpdateExamPagerComponents = React.createClass({
                 var imageAnalysis = subjectInfo.imageAnalysis;
                 var pointObjArray = subjectInfo.points;
                 var pointIdArray = [];
-                for(var i=0;i<pointObjArray.length;i++){
-                    var pointObj = pointObjArray[i];
+                for(var k=0;k<pointObjArray.length;k++){
+                    var pointObj = pointObjArray[k];
                     pointIdArray.push(pointObj.id);
                 }
 
@@ -338,8 +339,8 @@ const UpdateExamPagerComponents = React.createClass({
         }
         paperJson.questionTypes = questionTypesArray;
         console.log(paperJson);
-        cardChildArray.splice(0);
-        createExamPager.updateExmPaper(paperJson);
+        // cardChildArray.splice(0);
+        // createExamPager.updateExmPaper(paperJson);
     },
 
     isEmpty(content){
@@ -804,9 +805,9 @@ const UpdateExamPagerComponents = React.createClass({
                     <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
                         所属知识点
                     </button>
-					<Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
+					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
                         解析
-                    </Button>
+                    </button>
                 </Col>
             </Row>
         </div>;
@@ -1462,8 +1463,8 @@ const UpdateExamPagerComponents = React.createClass({
                     maskClosable={false} //设置不允许点击蒙层关闭
                     transitionName=""  //禁用modal的动画效果
                     footer={[
-                        <Button type="primary" htmlType="submit" className="login-form-button examination_btn_blue" onClick={createExamPager.addAnalysisForCurrentSubject}  >确定</Button>,
-                        <Button type="ghost" htmlType="reset" className="login-form-button examination_btn_white" onClick={createExamPager.analysisModalHandleCancel} >取消</Button>
+                        <Button type="primary" onClick={createExamPager.addAnalysisForCurrentSubject}  >确定</Button>,
+                        <Button type="ghost" onClick={createExamPager.analysisModalHandleCancel} >取消</Button>
                     ]}
                 >
                     <Row className="ant-form-item">
@@ -1475,7 +1476,8 @@ const UpdateExamPagerComponents = React.createClass({
                     <Row className="ant-form-item">
                         <Col span={4} className="right_look">图片解析：</Col>
                         <Col span={18}>
-                            <AntUploadComponentsForUpdate fileList={createExamPager.state.analysisUrl} callBackParent={createExamPager.getAnalysisiImgList}></AntUploadComponentsForUpdate>
+                            {/*<AntUploadComponentsForUpdate fileList={createExamPager.state.analysisUrl} callBackParent={createExamPager.getAnalysisiImgList}></AntUploadComponentsForUpdate>*/}
+                            <AntUploadForAnalysisOfCreateComponents fileList={createExamPager.state.analysisUrl} callBackParent={createExamPager.getAnalysisiImgList}></AntUploadForAnalysisOfCreateComponents>
                         </Col>
                     </Row>
 
