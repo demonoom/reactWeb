@@ -478,6 +478,9 @@ i, cite, em, var, address, dfn {
     border-radius: 50%;
 	cursor:pointer;
 }
+.maaee_group_face{
+	background:#eee
+}
 .maaee_group_face div, .maaee_group_face div img{
 	width:19px !important;
 	height:19px !important;
@@ -2172,9 +2175,19 @@ a.topics:hover{
 .group_table_u tr td img{
 	width:19px !important;
 	height:19px !important;
+	float:left;
 }
-.maaee_group_face div:first-child{
+.group_table_u tr td img:first-child{
 	border-radius:100% 0 0 0
+}
+.group_table_u tr td img:nth-child(2){
+	border-radius:0 100% 0 0 
+}
+.group_table_u tr td img:nth-child(3){
+	border-radius:0 0 0 100% 
+}
+.group_table_u tr td img:nth-child(4){
+	border-radius:0 0 100% 0 
 }
 .group_table{
 	width:100%;
