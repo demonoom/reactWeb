@@ -1964,7 +1964,6 @@ li.ant-menu-submenu > ul > li.ant-menu-submenu{
 	cursor:pointer;
 }
 .antnest_name{
-	font-weight:bold;
 	color:#333 !important;
 	font-size:14px;
 	margin-right:12px;
@@ -2009,6 +2008,7 @@ a.topics:hover{
     line-height: 23px;
     word-wrap: break-word;
 	font-size:14px;
+	color:#727272;
 }
 .antnest-card .ant-card-body ul li.topics_bot{
 	margin:7px 0; 
@@ -2383,6 +2383,9 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 .attention_img{
 	 float:left
 }
+.group_talk ul li span.name{
+	height:38px;
+}
 .group_talk ul li span.name img, .attention_img img{
 	position:relative;
 	background:#eee;
@@ -2754,6 +2757,9 @@ ul.integral li i{
     display: inline-block;
     width: 160px;
 	cursor:pointer
+}
+a.antnest_name:hover{
+	text-decoration:none
 }
 .focus_2{
 	display: inline-block;
