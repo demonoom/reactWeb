@@ -1533,6 +1533,11 @@ a {
 .iconfont_jifen{
 	font-size: 15px;
     margin-right: 4px;
+	position: absolute;
+	top: 1px
+}
+.iocnfont_sp_jifen{
+	margin-left: 18px;
 }
 .more_div{
 	  position: absolute;
@@ -2568,7 +2573,11 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 	width:80px;
 }
 .persono_btn_blue{
-	border:1px solid #57c5f7
+	border:1px solid #cee8fc;
+	color:#22a0fd
+}
+.persono_btn_gray i{
+	color:#f56a55
 }
 .person_ri_line{
 	width: 1px;
