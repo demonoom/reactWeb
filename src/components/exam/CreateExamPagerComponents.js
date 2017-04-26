@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Modal, message,Transfer } from 'antd';
-import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox,Table,Popover,Spin,Progress } from 'antd';
+import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox,Table,Popover,Spin,Progress,Button } from 'antd';
 import { DatePicker } from 'antd';
 import { Card } from 'antd';
 import { Radio } from 'antd';
@@ -577,9 +577,9 @@ const CreateExamPagerComponents = React.createClass({
                     <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
                         所属知识点
                     </button>
-					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal}>
+					<Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  className="examination_btn_gray" onClick={createExamPager.showAnalysisModal}>
                         解析
-                    </button>
+                    </Button>
                 </Col>
                
             </Row>
