@@ -30,7 +30,10 @@ var userGroupsColumns = [ {
 },{
     title: '群聊名称',
     dataIndex: 'groupName',
-}];
+},{
+    title: '群聊人数',
+    dataIndex: 'userCount',
+},];
 
 var groupUserTableColumns = [ {
     title: '群成员',
@@ -571,8 +574,22 @@ const AntGroupTabComponents = React.createClass({
                         }
                         //var imgTag = <div ><img src={ownerPhoto}  className="antnest_38_img" ></img></div>;
                         var imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
-                        var groupName = chatGroupName+""+membersCount+"人";
-                        var chatGroupJson = {key:chatGroupId,groupPhoto:imgTag,'groupName':groupName,"groupObj":e};
+                        switch (groupMemebersPhoto.length){
+                            case 1:
+                                imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
+                                break;
+                            case 2:
+                                imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
+                                break;
+                            case 3:
+                                imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
+                                break;
+                            case 4:
+                                imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
+                                break;
+                        }
+                        var groupName = chatGroupName;
+                        var chatGroupJson = {key:chatGroupId,groupPhoto:imgTag,'groupName':groupName,"groupObj":e,"userCount":membersCount+"人"};
                         charGroupArray.push(chatGroupJson);
                     });
                     antGroup.setState({"userGroupsData":charGroupArray});
