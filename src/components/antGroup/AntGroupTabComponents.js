@@ -576,13 +576,13 @@ const AntGroupTabComponents = React.createClass({
                         var imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
                         switch (groupMemebersPhoto.length){
                             case 1:
-                                imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
+                                imgTag = <div className="maaee_group_face1">{groupMemebersPhoto}</div>;
                                 break;
                             case 2:
-                                imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
+                                imgTag = <div className="maaee_group_face2">{groupMemebersPhoto}</div>;
                                 break;
                             case 3:
-                                imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
+                                imgTag = <div className="maaee_group_face3">{groupMemebersPhoto}</div>;
                                 break;
                             case 4:
                                 imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
