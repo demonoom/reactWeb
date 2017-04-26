@@ -108,16 +108,16 @@ const CreateExamPagerComponents = React.createClass({
         var ident = sessionStorage.getItem("ident");
         //试卷标题
         var examPagerTitle = createExamPager.convertUndefinedToNull(createExamPager.state.examPagerTitle);
-        /*if(createExamPager.isEmpty(examPagerTitle)){
+        if(createExamPager.isEmpty(examPagerTitle)){
             message.warning("请输入试卷名称",5);
             return;
-        }*/
+        }
         //上传文件的附件url
         var examPagerUrl = createExamPager.convertUndefinedToNull(createExamPager.state.examPagerUrl,"array");
-        /*if(createExamPager.isEmpty(examPagerUrl) || examPagerUrl.length<=0){
+        if(createExamPager.isEmpty(examPagerUrl) || examPagerUrl.length<=0){
             message.warning("请上传试卷图片",5);
             return;
-        }*/
+        }
         //创建时间
         var createTime = (new Date()).valueOf();
         // 试卷的附件--图片
@@ -188,8 +188,8 @@ const CreateExamPagerComponents = React.createClass({
         }
         paperJson.questionTypes = questionTypesArray;
         console.log(paperJson);
-        // cardChildArray.splice(0);
-        // createExamPager.createExamPager(paperJson);
+        cardChildArray.splice(0);
+        createExamPager.createExamPager(paperJson);
     },
 
     isEmpty(content){

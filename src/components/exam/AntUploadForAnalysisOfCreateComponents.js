@@ -17,7 +17,24 @@ const AntUploadForAnalysisOfCreateComponents = React.createClass({
     },
 
     componentDidMount(){
-        antUpload.setState({"defaultFileList":[]});
+        console.log("==="+antUpload.props.fileList);
+        if(isEmpty(antUpload.props.fileList)==false){
+            fileList.splice(0);
+            var lastLineIndex = antUpload.props.fileList.lastIndexOf("/");
+            var fileName = antUpload.props.fileList.substring(lastLineIndex+1);
+            var fileJson={
+                uid: Math.random(),
+                name: fileName,
+                status: 'done',
+                url: antUpload.props.fileList,
+                thumbUrl: antUpload.props.fileList,
+            };
+            fileList.push(fileJson);
+            antUpload.setState({fileList:fileList});
+            antUpload.setState({"defaultFileList":fileList});
+        }else{
+            antUpload.setState({"defaultFileList":[]});
+        }
     },
     /**
      * 设置文件上传组件的显示内容
