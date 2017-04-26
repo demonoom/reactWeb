@@ -117,13 +117,13 @@ const MainLayout = React.createClass({
             // ['antGroupTabComponents', 'param', 'antGroupTabComponents'],
             let param = this.autoeventparam.linkpart.shift();
             if (param[2]) {
-               let componentPart = this.refs[param[2]];
-                componentPart[param[0]]( param[1],this.autoeventparam);
+                let param = this.autoeventparam;
+                    let componentPart = this.refs[param[2]];
+                    componentPart[param[0]]( param[1],param);
             }
 
             this.autoeventparam = null;
         } else {
-
             let obj = this.proxyObj;
             if (!obj) return;
 

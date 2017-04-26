@@ -29,36 +29,53 @@
 
     littlePanle.prototype.el = {};
     littlePanle.prototype.zoomview = function (id) {
-        let nodeEl = $('#'+id);
+        let nodeEl = $('#' + id);
         let posRef2 = window.getComputedStyle(nodeEl[0]);
         let perWidth = replaceUnit(posRef2.width);
         let perHeight = replaceUnit(posRef2.height);
         let perTop = replaceUnit(posRef2.top);
         let perLeft = replaceUnit(posRef2.left);
 
-        nodeEl.attr('per', JSON.stringify( { position:posRef2.position , width:Math.round(perWidth) , height:Math.round(perHeight), left:Math.round(perLeft),top:Math.round(perTop)}));
-        nodeEl.css({width:'100%', height: '100%', left:0,top:0,position: 'fixed' });
+        nodeEl.attr('per', JSON.stringify({
+            position: posRef2.position,
+            width: Math.round(perWidth),
+            height: Math.round(perHeight),
+            left: Math.round(perLeft),
+            top: Math.round(perTop)
+        }));
+        nodeEl.css({width: '100%', height: '100%', left: 0, top: 0, position: 'fixed'});
         //
         enterFull(nodeEl[0]);
         //
         let el = nodeEl.find('.zoom');
         el.off();
+<<<<<<< HEAD
+        el.html('&#xe680;');
+        el.on('click', this.zoomMinView.bind(this, id));
+=======
         el.html('&#xe60f;');
         el.on('click',this.zoomMinView.bind(this,id));
+>>>>>>> 9a07c1ef0b937c5f0fd2d9b782f808a5b24010c3
     }
     littlePanle.prototype.zoomMinView = function (id) {
 
         //
-        let nodeEl = $('#'+id);
+        let nodeEl = $('#' + id);
         let perInfo = nodeEl.attr('per');
         nodeEl.removeAttr('per');
-        let perObj = eval('('+perInfo+')');
-        nodeEl.css({position: perObj.position ,width:perObj.width, height:perObj.height, left: perObj.left, top: perObj.top });
+        let perObj = eval('(' + perInfo + ')');
+        nodeEl.css({
+            position: perObj.position,
+            width: perObj.width,
+            height: perObj.height,
+            left: perObj.left,
+            top: perObj.top
+        });
 
         let el = nodeEl.find('.zoom');
         el.off();
         el.html('&#xe67e;');
-        el.on('click',this.zoomview.bind(this,id));
+        el.on('click', this.zoomview.bind(this, id));
         //
         exitFull();
 
@@ -72,11 +89,11 @@
             }
         });
         LP.hideArr = LP.hideArr.concat(tmp);
-        if(!(LP.mgr.length - LP.hideArr.length)){
+        if (!(LP.mgr.length - LP.hideArr.length)) {
             LP.delAll();
-        }else{
+        } else {
 
-           $('#' + id).css({visibility: 'hidden'});
+            $('#' + id).css({visibility: 'hidden'});
         }
     }
 
@@ -97,44 +114,47 @@
         $(this.el).drag();
         $(this.el).find('.close').on('click', this.closepanle.bind(this, this.id));
         $(this.el).find('.zoom').on('click', this.zoomview.bind(this, this.id));
-        $(this.el).find('.back').on('click', this.historyControler.bind(this, this.id,-1));
-        $(this.el).find('.forward').on('click', this.historyControler.bind(this, this.id,1));
-        $(this.el).find('.enterFull').on('click', enterFull );
-        $(this.el).find('.exitFull').on('click', exitFull );
+        $(this.el).find('.back').on('click', this.historyControler.bind(this, this.id, -1));
+        $(this.el).find('.forward').on('click', this.historyControler.bind(this, this.id, 1));
+        $(this.el).find('.enterFull').on('click', enterFull);
+        $(this.el).find('.exitFull').on('click', exitFull);
 
         return this;
     }
 
-    littlePanle.prototype.htmlTemplet=function(){
+    littlePanle.prototype.htmlTemplet = function () {
 
         let id = UUID(8, 16);
         this.id = id;
-
+        let url = this.param.videosObj[0].path;
+       // videojs.options.flash.swf = "video-js.swf";
         let htm = `<div id="${id}" class="dialog little-layout-aside-r-show">
                 <div class="header draggable">
                 <h3 class="title">${ this.param.title }</h3>
                     <div class="little-tilte">
                         <a class="close"><i className="iconfont iconfont_close">&#xe615;</i></a>
                         <a class="zoom"><i className="iconfont iconfont_more">&#xe67e;</i></a>
-                        
                     </div>
                 </div>
                 <div class="content">
                     <section class="littleAnt-iframe-panle">
-                        <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="640"
-        height="480" id="VideoPlayer" align="middle">
-    <param name="allowScriptAccess" value="*"/>
-    <param name="allowFullScreen" value="true"/>
-    <param name="movie"
-           value="flvplayer.swf?video=${this.param.url}&autoplay=true"/>
-    <param name="quality" value="high"/>
-    <param name="bgcolor" value="#ffffff"/>
-    <embed src="flvplayer.swf?video=${this.param.url}&autoplay=true"
-           quality="high" bgcolor="#000000" width="640" height="480" name="VideoPlayer" align="middle"
-           allowScriptAccess="*" allowFullScreen="true" type="application/x-shockwave-flash"
-           pluginspage="http://www.macromedia.com/go/getflashplayer"/>
-</object>
-                    </section>
+<video id="${id}" class="video-js vjs-default-skin vjs-big-play-centered" autoplay="autoplay" controls  preload="auto"  data-setup='{}'></video>
+<script !src="">
+var options = {
+    sourceOrder: true,
+    sources: [{
+        src: '${url}',
+        type: 'video/x-flv'
+    }],
+    techOrder: ['html5', 'flash']
+};
+ videojs('${id}', options, function() {
+  this.play();
+    this.on('ended', function() {
+    });
+});
+</script>
+</section>
                 </div>
                 </div>`;
 
@@ -142,8 +162,11 @@
     }
 
     littlePanle.prototype.GetLP = function (obj, oldArray) {
+
         this.param.url = obj.url;
         this.param.title = obj.title;
+        this.param.flvjs = obj.flvjs;
+        this.param.videosObj = obj.param;
 
         let maxIndex = () => {
             let refindex = 0;
@@ -162,7 +185,7 @@
 
         this.param.orderIndex = oldArray.length;
         this.param.stylePage.zIndex = maxIndex();
-        this.param.stylePage.width = parseInt( obj.width.replace(/[a-z]*/img,''));
+        this.param.stylePage.width = parseInt(obj.width.replace(/[a-z]*/img, ''));
         this._show(obj);
         return this;
     }
@@ -191,9 +214,9 @@
     }
 
 
-    littlePanle.prototype.historyControler = function (id,num) {
+    littlePanle.prototype.historyControler = function (id, num) {
 
-        let ifr = $('#ifr'+id)[0];
+        let ifr = $('#ifr' + id)[0];
         ifr.contentWindow.history.go(num);
 
     }
@@ -226,7 +249,7 @@
         hideArr: [],
 
         Start(objParam){
-           this.GetLP(objParam);
+            this.GetLP(objParam);
         },
         GetLP(objParam) {
 
@@ -248,10 +271,10 @@
             }
         },
         delAll(){
-          $('.dialog.little-layout-aside-r-show').remove();
-          this.mgr=[];
-          this.hideArr=[];
-          $('.lpmgrbtn').remove();
+            $('.dialog.little-layout-aside-r-show').remove();
+            this.mgr = [];
+            this.hideArr = [];
+            $('.lpmgrbtn').remove();
 
         },
         orderAll(){
@@ -329,8 +352,8 @@ function UUID(len, radix) {
 }
 
 function getViewPortHeight() {
-       return document.documentElement.clientHeight || document.body.clientHeight;
- }
+    return document.documentElement.clientHeight || document.body.clientHeight;
+}
 
 
 function exitFull() {
@@ -348,12 +371,12 @@ function exitFull() {
     else if (docElm.msExitFullscreen) {
         docElm.msExitFullscreen();
     }
-    if(typeof fn =='function' )fn();
+    if (typeof fn == 'function') fn();
 }
 
 function enterFull(el) {
     var docElm = document.documentElement;
-    if(el) docElm=el;
+    if (el) docElm = el;
 //W3C
     if (docElm.requestFullscreen) {
         docElm.requestFullscreen();
@@ -371,7 +394,7 @@ function enterFull(el) {
         elem.msRequestFullscreen();
     }
 }
-function replaceUnit(str){
- return  parseInt( str.replace(/[a-z]*/img,''))
+function replaceUnit(str) {
+    return parseInt(str.replace(/[a-z]*/img, ''))
 
 }
