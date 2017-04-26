@@ -319,6 +319,7 @@ const AntGroupTabComponents = React.createClass({
                                 }
                                 var message={'fromUser':fromUser,'content':content,"messageType":"getMessage","imgTagArray":imgTagArrayReturn,"messageReturnJson":messageReturnJson};
                                 messageList.push(message);
+                                // messageList.splice(0,0,message);
                             }
                         });
                         if(uuidsArray.length!=0){
@@ -348,7 +349,8 @@ const AntGroupTabComponents = React.createClass({
                                 imgTagArrayReturn = messageReturnJson.imgMessage;
                             }
                             var messageShow={'fromUser':fromUser,'content':content,"messageType":"getMessage","imgTagArray":imgTagArrayReturn,"messageReturnJson":messageReturnJson};
-                            messageList.push(messageShow);
+                            // messageList.push(messageShow);
+                            messageList.splice(0,0,messageShow);
                             if(uuidsArray.length!=0){
                                 var receivedCommand = {"command":"messageRecievedResponse","data":{"uuids":uuidsArray}};
                                 ms.send(receivedCommand);
@@ -403,7 +405,8 @@ const AntGroupTabComponents = React.createClass({
                                     imgTagArrayReturn = messageReturnJson.imgMessage;
                                 }
                                 var message={'fromUser':fromUser,'content':content,"messageType":"getMessage","imgTagArray":imgTagArrayReturn,"messageReturnJson":messageReturnJson};
-                                messageList.push(message);
+                                // messageList.push(message);
+                                messageList.splice(0,0,message);
                             }
                         });
                         if(uuidsArray.length!=0){
@@ -434,6 +437,7 @@ const AntGroupTabComponents = React.createClass({
                             }
                             var messageShow={'fromUser':fromUser,'content':content,"messageType":"getMessage","imgTagArray":imgTagArrayReturn,"messageReturnJson":messageReturnJson};
                             messageList.push(messageShow);
+                            // messageList.splice(0,0,messageShow);
                             if(uuidsArray.length!=0){
                                 var receivedCommand = {"command":"messageRecievedResponse","data":{"uuids":uuidsArray}};
                                 ms.send(receivedCommand);
@@ -488,7 +492,14 @@ const AntGroupTabComponents = React.createClass({
         return messageReturnJson;
     },
 
-    sendMessage(){
+    sendMessage(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var sendType = target.value;
         var messageContent = antGroup.getEmotionInputById();
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         var uuid = antGroup.createUUID();
@@ -501,8 +512,14 @@ const AntGroupTabComponents = React.createClass({
             messageJson.toType=4;
         }
         var commandJson ={"command":"message","data":{"message":messageJson}};
+        if(isEmpty(sendType)==false && sendType=="groupSend"){
+            messageList.push(messageJson);
+        }else{
+            messageList.splice(0,0,messageJson);
+        }
         ms.send(commandJson);
-        messageList.push(messageJson);
+        //messageList.push(messageJson);
+        // messageList.splice(0,0,messageJson);
         antGroup.initMyEmotionInput();
         antGroup.setState({"messageList":messageList});
     },
@@ -610,7 +627,6 @@ const AntGroupTabComponents = React.createClass({
      * @param index　当前行的索引顺序，从０开始
      */
     sendGroupMessage(record, index){
-        debugger
         antGroup.getChatGroupMessages(record.groupObj);
         antGroup.turnToChatGroupMessagePage(record.groupObj);
     },
@@ -650,7 +666,8 @@ const AntGroupTabComponents = React.createClass({
                                     imgTagArrayReturn = messageReturnJson.imgMessage;
                                 }
                                 var message={'fromUser':fromUser,'content':content,"messageType":"getMessage","imgTagArray":imgTagArrayReturn,"messageReturnJson":messageReturnJson};
-                                messageList.push(message);
+                                // messageList.push(message);
+                                messageList.splice(0,0,message);
                             }
                             antGroup.setState({"messageList":messageList});
                         }
@@ -667,7 +684,6 @@ const AntGroupTabComponents = React.createClass({
      * 获取群聊天信息
      */
     getUser2UserMessages(userObj){
-        debugger
         antGroup.turnToMessagePage(userObj);
         var timeNode = (new Date()).valueOf();
         var param = {
@@ -678,12 +694,9 @@ const AntGroupTabComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                debugger
                 console.log("ret:"+ret);
                 if(ret.msg=="调用成功" && ret.success==true){
-                    debugger
                     ret.response.forEach(function (e) {
-                        debugger
                         if(e.command=="message"){
                             var messageOfSinge = e;
                             var uuidsArray = [];
@@ -1781,58 +1794,6 @@ const AntGroupTabComponents = React.createClass({
             var messageTagArray=[];
             var messageList = antGroup.state.messageList;
             if(isEmpty(messageList)==false && messageList.length>0){
-                /*messageList.forEach(function (e) {
-                    var content = e.content;
-                    var fromUser = e.fromUser.userName;
-                    var userPhoneIcon;
-                    if(isEmpty(e.fromUser.avatar)){
-                        userPhoneIcon=<img src={require('../images/maaee_face.png')}></img>;
-                    }else{
-                        userPhoneIcon=<img src={e.fromUser.avatar}></img>;
-                    }
-                    var messageType = e.messageType;
-                    var messageTag;
-                    if(isEmpty(messageType)==false && messageType=="getMessage"){
-                        debugger
-                        if(isEmpty(e.messageReturnJson)==false && isEmpty(e.messageReturnJson.messageType)==false){
-                            debugger
-                            if(e.messageReturnJson.messageType=="text"){
-                                if(e.fromUser.colUid==sessionStorage.getItem("ident")){
-                                    messageTag =  <li  className="right" style={{'textAlign':'right'}}>
-                                        <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span className="borderballoon_le">{e.content}</span></div>
-                                    </li>;
-                                }else{
-                                    messageTag =  <li style={{'textAlign':'left'}}>
-                                        <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span className="borderballoon_le">{e.content}</span></div>
-                                    </li>;
-                                }
-                            }else if(e.messageReturnJson.messageType=="imgTag"){
-                                if(e.fromUser.colUid==sessionStorage.getItem("ident")){
-                                    messageTag =  <li  className="right" style={{'textAlign':'right'}}>
-                                        <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span  className="borderballoon_le ">{e.imgTagArray}</span></div>
-                                    </li>;
-                                }else{
-                                    messageTag =  <li style={{'textAlign':'left'}}>
-                                        <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span  className="borderballoon_le ">{e.imgTagArray}</span></div>
-                                    </li>;
-                                }
-                            }
-                        }
-                    }else{
-                        debugger
-                        messageTag =  <li  className="right" style={{'textAlign':'right'}}>
-						<div className="u-name"><span>{fromUser}</span></div>
-						<div className="talk-cont">
-						    <span className="name">{userPhoneIcon}</span><span className="borderballoon">{content}</span>
-						</div> 
-                        </li>;
-                    }
-                    messageTagArray.push(messageTag);
-                })*/
                 for(var i=messageList.length-1;i>=0;i--){
                     var e = messageList[i];
                     var content = e.content;
@@ -1846,9 +1807,7 @@ const AntGroupTabComponents = React.createClass({
                     var messageType = e.messageType;
                     var messageTag;
                     if(isEmpty(messageType)==false && messageType=="getMessage"){
-                        debugger
                         if(isEmpty(e.messageReturnJson)==false && isEmpty(e.messageReturnJson.messageType)==false){
-                            debugger
                             if(e.messageReturnJson.messageType=="text"){
                                 if(e.fromUser.colUid==sessionStorage.getItem("ident")){
                                     messageTag =  <li  className="right" style={{'textAlign':'right'}}>
@@ -1876,7 +1835,6 @@ const AntGroupTabComponents = React.createClass({
                             }
                         }
                     }else{
-                        debugger
                         messageTag =  <li  className="right" style={{'textAlign':'right'}}>
                             <div className="u-name"><span>{fromUser}</span></div>
                             <div className="talk-cont">
@@ -2094,7 +2052,7 @@ const AntGroupTabComponents = React.createClass({
                                 <EmotionInputComponents></EmotionInputComponents>
                             </Col>
                             <Col className="group_send_btn">
-                                <Button onClick={antGroup.sendMessage}>发送</Button>
+                                <Button value="groupSend" onClick={antGroup.sendMessage}>发送</Button>
                             </Col>
                         </Row>
                     </div>
