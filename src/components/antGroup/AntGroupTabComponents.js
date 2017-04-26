@@ -274,6 +274,7 @@ const AntGroupTabComponents = React.createClass({
         var uuid = s.join("");
         return uuid;
     },
+
     /**
      * 进入收发消息的窗口
      * @param user
@@ -609,7 +610,36 @@ const AntGroupTabComponents = React.createClass({
      * @param index　当前行的索引顺序，从０开始
      */
     sendGroupMessage(record, index){
+        debugger
+        antGroup.getChatGroupMessages(record.groupObj);
         antGroup.turnToChatGroupMessagePage(record.groupObj);
+    },
+
+    /**
+     * 获取个人中心需要的数据,老师和学生可通用,后期需要什么再添加
+     */
+    getChatGroupMessages(groupObj){
+        debugger
+        var timeNode = (new Date()).valueOf();
+        var param = {
+            "method": 'getChatGroupMessages',
+            "chatGroupId": groupObj.chatGroupId,
+            "timeNode":timeNode
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                console.log("ret:"+ret);
+                debugger;
+                if(ret.msg=="调用成功" && ret.success==true){
+                    debugger;
+                    //console.log("ret response:"+ret.response);
+
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     /**
