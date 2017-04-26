@@ -2392,6 +2392,24 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr{
     background-position: center center;
     border-radius: 50%;
 }
+.attention_img2 img{
+	position:relative;
+	background:#eee;
+	top:0;
+	width: 30px;
+    height: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+    display: inline-block;
+    box-sizing: border-box;
+    background-size: cover;
+    background-clip: content-box;
+    background-position: center center;
+    border-radius: 50%;
+	float:left
+}
 .custom-image{
 	margin-right: 8px;
     float: left;
@@ -2812,11 +2830,22 @@ a.color_gary_f, .color_gary_f{
 .live_span_1{
 	position: relative;
     left: 5px;
-    top: -8px;
+    top: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    width: 160px;
 }
 .live_span_2{
 	position: relative;
     top: 8px;
+}
+.live_span_3{
+	width: 125px !important;
+}
+.li_live_span_3{
+	height:34px;
 }
 .live_cont{
 	padding:0 10px;
@@ -3127,7 +3156,7 @@ a.color_gary_f, .color_gary_f{
     text-align: center;
     display: inline-block;
     height: 61px;
-    margin: 0 18px 1em 0;
+    margin:0.5em 18px 0.5em 0;
     position: relative;
     overflow: hidden;
     cursor: pointer;
@@ -3216,4 +3245,15 @@ color:#ffbf00
 .focus_auto{
 	height:calc(100% - 18px);
 	overflow-y:auto
+}
+.key_span{
+	width:20px;
+	height:20px;
+	border-radius:50%;
+	background:#8fc967;
+	padding:1px 0 0 3px  !important
+}
+.key{
+	font-size:14px;
+	color:#fff;
 }
