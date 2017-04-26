@@ -1331,7 +1331,7 @@ const CreateExamPagerComponents = React.createClass({
                     </Row>
 
                 </Modal>
-                <Modal
+                <Modal className="knowledge_span_wi"
                     visible={createExamPager.state.bindKnowledgeModalVisible}
                     title="知识点"
                     onCancel={createExamPager.bindKnowledgeModalHandleCancel}

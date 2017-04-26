@@ -43,7 +43,7 @@
         //
         let el = nodeEl.find('.zoom');
         el.off();
-        el.html('&#xe680;');
+        el.html('&#xe60f;');
         el.on('click',this.zoomMinView.bind(this,id));
     }
     littlePanle.prototype.zoomMinView = function (id) {
