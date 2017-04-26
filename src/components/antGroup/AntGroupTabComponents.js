@@ -616,10 +616,9 @@ const AntGroupTabComponents = React.createClass({
     },
 
     /**
-     * 获取个人中心需要的数据,老师和学生可通用,后期需要什么再添加
+     * 获取群聊天信息
      */
     getChatGroupMessages(groupObj){
-        debugger
         var timeNode = (new Date()).valueOf();
         var param = {
             "method": 'getChatGroupMessages',
@@ -629,11 +628,93 @@ const AntGroupTabComponents = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 console.log("ret:"+ret);
-                debugger;
                 if(ret.msg=="调用成功" && ret.success==true){
-                    debugger;
-                    //console.log("ret response:"+ret.response);
+                    ret.response.forEach(function (e) {
+                        if(e.command=="message"){
+                            var messageOfSinge = e;
+                            var uuidsArray = [];
+                            var fromUser = messageOfSinge.fromUser;
+                            var colUtype = fromUser.colUtype;
+                            var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+                            if(("SGZH"==colUtype || groupObj.chatGroupId==e.toId ) && e.toType==4){
+                                var uuid = e.uuid;
+                                uuidsArray.push(uuid);
+                                imgTagArray.splice(0);
+                                showImg="";
+                                var content = e.content;
+                                var imgTagArrayReturn=[];
+                                var messageReturnJson = antGroup.getImgTag(e.content);
+                                if(messageReturnJson.messageType=="text"){
+                                    content=messageReturnJson.textMessage;
+                                }else if(messageReturnJson.messageType=="imgTag"){
+                                    imgTagArrayReturn = messageReturnJson.imgMessage;
+                                }
+                                var message={'fromUser':fromUser,'content':content,"messageType":"getMessage","imgTagArray":imgTagArrayReturn,"messageReturnJson":messageReturnJson};
+                                messageList.push(message);
+                            }
+                            antGroup.setState({"messageList":messageList});
+                        }
+                    });
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
 
+    /**
+     * 获取群聊天信息
+     */
+    getUser2UserMessages(userObj){
+        debugger
+        antGroup.turnToMessagePage(userObj);
+        var timeNode = (new Date()).valueOf();
+        var param = {
+            "method": 'getUser2UserMessages',
+            "user1Id":userObj.colUid,
+            "user2Id":sessionStorage.getItem("ident"),
+            "timeNode":timeNode
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                debugger
+                console.log("ret:"+ret);
+                if(ret.msg=="调用成功" && ret.success==true){
+                    debugger
+                    ret.response.forEach(function (e) {
+                        debugger
+                        if(e.command=="message"){
+                            var messageOfSinge = e;
+                            var uuidsArray = [];
+                            var fromUser = messageOfSinge.fromUser;
+                            var colUtype = fromUser.colUtype;
+                            var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+                            if(messageOfSinge.toType==1){
+                            // if(("SGZH"==colUtype || fromUser.colUid!=loginUser.colUid) && messageOfSinge.toType==1){
+                                var uuid = messageOfSinge.uuid;
+                                uuidsArray.push(uuid);
+                                var content=messageOfSinge.content;
+                                imgTagArray.splice(0);
+                                showImg="";
+                                //var imgTagArrayReturn = antGroup.getImgTag(messageOfSinge.content);
+                                var imgTagArrayReturn=[];
+                                var messageReturnJson = antGroup.getImgTag(messageOfSinge.content);
+                                if(messageReturnJson.messageType=="text"){
+                                    content=messageReturnJson.textMessage;
+                                }else if(messageReturnJson.messageType=="imgTag"){
+                                    imgTagArrayReturn = messageReturnJson.imgMessage;
+                                }
+                                var messageShow={'fromUser':fromUser,'content':content,"messageType":"getMessage","imgTagArray":imgTagArrayReturn,"messageReturnJson":messageReturnJson};
+                                messageList.push(messageShow);
+                                /*if(uuidsArray.length!=0){
+                                    var receivedCommand = {"command":"messageRecievedResponse","data":{"uuids":uuidsArray}};
+                                    ms.send(receivedCommand);
+                                }*/
+                            }
+                            antGroup.setState({"messageList":messageList});
+                        }
+                    });
                 }
             },
             onError: function (error) {
@@ -1683,7 +1764,7 @@ const AntGroupTabComponents = React.createClass({
                     <div className="person_padding" >
                         <PersonCenterComponents ref="personCenter"
                                                 userInfo={antGroup.state.currentPerson}
-                                                callBackTurnToMessagePage={antGroup.turnToMessagePage}
+                                                callBackTurnToMessagePage={antGroup.getUser2UserMessages}
                                                 callBackTurnToAsk={antGroup.callBackTurnToAsk}
                                                 callBackStudyTrack={antGroup.callBackStudyTrack}
                                                 callBackGetMyFollows={antGroup.getMyFollows}
@@ -1700,7 +1781,7 @@ const AntGroupTabComponents = React.createClass({
             var messageTagArray=[];
             var messageList = antGroup.state.messageList;
             if(isEmpty(messageList)==false && messageList.length>0){
-                messageList.forEach(function (e) {
+                /*messageList.forEach(function (e) {
                     var content = e.content;
                     var fromUser = e.fromUser.userName;
                     var userPhoneIcon;
@@ -1712,20 +1793,37 @@ const AntGroupTabComponents = React.createClass({
                     var messageType = e.messageType;
                     var messageTag;
                     if(isEmpty(messageType)==false && messageType=="getMessage"){
+                        debugger
                         if(isEmpty(e.messageReturnJson)==false && isEmpty(e.messageReturnJson.messageType)==false){
+                            debugger
                             if(e.messageReturnJson.messageType=="text"){
-                                messageTag =  <li style={{'textAlign':'left'}}>
-								    <div className="u-name"><span>{fromUser}</span></div>
-                                    <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span className="borderballoon_le">{e.content}</span></div>
-                                </li>;
+                                if(e.fromUser.colUid==sessionStorage.getItem("ident")){
+                                    messageTag =  <li  className="right" style={{'textAlign':'right'}}>
+                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span className="borderballoon_le">{e.content}</span></div>
+                                    </li>;
+                                }else{
+                                    messageTag =  <li style={{'textAlign':'left'}}>
+                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span className="borderballoon_le">{e.content}</span></div>
+                                    </li>;
+                                }
                             }else if(e.messageReturnJson.messageType=="imgTag"){
-                                messageTag =  <li style={{'textAlign':'left'}}>
-								<div className="u-name"><span>{fromUser}</span></div>
-                                <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span  className="borderballoon_le ">{e.imgTagArray}</span></div>
-                                </li>;
+                                if(e.fromUser.colUid==sessionStorage.getItem("ident")){
+                                    messageTag =  <li  className="right" style={{'textAlign':'right'}}>
+                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span  className="borderballoon_le ">{e.imgTagArray}</span></div>
+                                    </li>;
+                                }else{
+                                    messageTag =  <li style={{'textAlign':'left'}}>
+                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span  className="borderballoon_le ">{e.imgTagArray}</span></div>
+                                    </li>;
+                                }
                             }
                         }
                     }else{
+                        debugger
                         messageTag =  <li  className="right" style={{'textAlign':'right'}}>
 						<div className="u-name"><span>{fromUser}</span></div>
 						<div className="talk-cont">
@@ -1734,7 +1832,60 @@ const AntGroupTabComponents = React.createClass({
                         </li>;
                     }
                     messageTagArray.push(messageTag);
-                })
+                })*/
+                for(var i=messageList.length-1;i>=0;i--){
+                    var e = messageList[i];
+                    var content = e.content;
+                    var fromUser = e.fromUser.userName;
+                    var userPhoneIcon;
+                    if(isEmpty(e.fromUser.avatar)){
+                        userPhoneIcon=<img src={require('../images/maaee_face.png')}></img>;
+                    }else{
+                        userPhoneIcon=<img src={e.fromUser.avatar}></img>;
+                    }
+                    var messageType = e.messageType;
+                    var messageTag;
+                    if(isEmpty(messageType)==false && messageType=="getMessage"){
+                        debugger
+                        if(isEmpty(e.messageReturnJson)==false && isEmpty(e.messageReturnJson.messageType)==false){
+                            debugger
+                            if(e.messageReturnJson.messageType=="text"){
+                                if(e.fromUser.colUid==sessionStorage.getItem("ident")){
+                                    messageTag =  <li  className="right" style={{'textAlign':'right'}}>
+                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span className="borderballoon_le">{e.content}</span></div>
+                                    </li>;
+                                }else{
+                                    messageTag =  <li style={{'textAlign':'left'}}>
+                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span className="borderballoon_le">{e.content}</span></div>
+                                    </li>;
+                                }
+                            }else if(e.messageReturnJson.messageType=="imgTag"){
+                                if(e.fromUser.colUid==sessionStorage.getItem("ident")){
+                                    messageTag =  <li  className="right" style={{'textAlign':'right'}}>
+                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span  className="borderballoon_le ">{e.imgTagArray}</span></div>
+                                    </li>;
+                                }else{
+                                    messageTag =  <li style={{'textAlign':'left'}}>
+                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span  className="borderballoon_le ">{e.imgTagArray}</span></div>
+                                    </li>;
+                                }
+                            }
+                        }
+                    }else{
+                        debugger
+                        messageTag =  <li  className="right" style={{'textAlign':'right'}}>
+                            <div className="u-name"><span>{fromUser}</span></div>
+                            <div className="talk-cont">
+                                <span className="name">{userPhoneIcon}</span><span className="borderballoon">{content}</span>
+                            </div>
+                        </li>;
+                    }
+                    messageTagArray.push(messageTag);
+                }
             }
             if(isEmpty(antGroup.state.currentPerson.userName)==false){
                 welcomeTitle=antGroup.state.currentPerson.userName;
@@ -1888,15 +2039,29 @@ const AntGroupTabComponents = React.createClass({
                     if(isEmpty(messageType)==false && messageType=="getMessage"){
                         if(isEmpty(e.messageReturnJson)==false && isEmpty(e.messageReturnJson.messageType)==false){
                             if(e.messageReturnJson.messageType=="text"){
-                                messageTag =  <li style={{'textAlign':'left'}}>
-								    <div className="u-name"><span>{fromUser}</span></div>
-                                    <div className="talk-cont"><span  className="name">{userPhoneIcon}</span><span className="borderballoon_le">{e.content}</span></div>
-                                </li>;
+                                if(e.fromUser.colUid==sessionStorage.getItem("ident")){
+                                    messageTag =  <li className="right" style={{'textAlign':'right'}}>
+                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="talk-cont"><span  className="name">{userPhoneIcon}</span><span className="borderballoon_le">{e.content}</span></div>
+                                    </li>;
+                                }else{
+                                    messageTag =  <li style={{'textAlign':'left'}}>
+                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="talk-cont"><span  className="name">{userPhoneIcon}</span><span className="borderballoon_le">{e.content}</span></div>
+                                    </li>;
+                                }
                             }else if(e.messageReturnJson.messageType=="imgTag"){
-                                messageTag =  <li style={{'textAlign':'left'}}>
-								 <div className="u-name"><span>{fromUser}</span></div>
-								 <div className="talk-cont"><span  className="name">{userPhoneIcon}</span><span className="borderballoon_le">{e.imgTagArray}</span></div>
-                                </li>;
+                                if(e.fromUser.colUid==sessionStorage.getItem("ident")){
+                                    messageTag =  <li className="right" style={{'textAlign':'right'}}>
+                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="talk-cont"><span  className="name">{userPhoneIcon}</span><span className="borderballoon_le">{e.imgTagArray}</span></div>
+                                    </li>;
+                                }else{
+                                    messageTag =  <li style={{'textAlign':'left'}}>
+                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="talk-cont"><span  className="name">{userPhoneIcon}</span><span className="borderballoon_le">{e.imgTagArray}</span></div>
+                                    </li>;
+                                }
                             }
 
                         }
