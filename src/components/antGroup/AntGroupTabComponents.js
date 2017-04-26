@@ -1615,9 +1615,9 @@ const AntGroupTabComponents = React.createClass({
                     transitionName=""  //禁用Tabs的动画效果
                 >
                     <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
-                            <div className="maaee_group">
+                            <div className="maaee_group" onClick={antGroup.getUserChatGroup}>
                                 <img src={require('../images/groupTitle.png')} className="antnest_38_img" />
-                                <span className=""　icon="usergroup-add" onClick={antGroup.getUserChatGroup}>我的群组</span>
+                                <span className=""　icon="usergroup-add">我的群组</span>
                             </div>
                             <Table className="maaeegroup" onRowClick={antGroup.getPersonCenterInfo} showHeader={false} scroll={{ x: true, y: 430}} columns={columns} dataSource={antGroup.state.userContactsData} pagination={true}/>
                     </TabPane>
