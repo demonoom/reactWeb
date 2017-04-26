@@ -353,7 +353,7 @@ const CreateExamPagerComponents = React.createClass({
             title: '确定要删除该题目?',
             content: '',
             onOk() {
-                for(var i=0;i<createExamPager.state.cardChildTagArray.length;i++){
+                for(var i=0;i<cardChildArray.length;i++){
                     var cardChildJson = cardChildArray[i];
                     var cartTitleInJson = cardChildJson.answerTitle;
                     //题目类型
@@ -370,13 +370,19 @@ const CreateExamPagerComponents = React.createClass({
                                 var cardSubjectJson = cardSubjectAnswerArray[j];
                                 if(cardSubjectJson.index == deleteSubjectNum){
                                     cardSubjectJson.divContent="";
-                                    cardSubjectAnswerArray.splice(deleteSubjectNum-1,1);
-                                    createExamPager.refreshSubjectIndexNo(deleteSubjectNum,deleteAnswerTitle,answerSubjectType);
+                                    cardSubjectAnswerArray.splice(j,1);
+                                    //createExamPager.refreshSubjectIndexNo(deleteSubjectNum,deleteAnswerTitle,answerSubjectType);
                                     cardChildJson.answerCount = cardChildJson.answerCount-1;
                                     message.success("题目删除成功");
                                     break;
                                 }
                             }
+                            /*for(var j = 0;j<cardSubjectAnswerArray.length;j++){
+                                var cardSubjectJson = cardSubjectAnswerArray[j];
+                                if(cardSubjectJson.index > deleteSubjectNum){
+                                    cardSubjectJson.index=cardSubjectJson.index-1;
+                                }
+                            }*/
                         }
                     }
                 }
@@ -1362,7 +1368,7 @@ const CreateExamPagerComponents = React.createClass({
                                 operations={['', '']}
                                 targetKeys={createExamPager.state.targetKeys}
                                 onChange={createExamPager.transferHandleChange}
-                                render={item => `${item.description}`}
+                                render={item => `${item.title} - ${item.description}`}
                             />
                         </div>
                     </div>
