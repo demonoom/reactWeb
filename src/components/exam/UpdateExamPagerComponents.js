@@ -739,7 +739,7 @@ const UpdateExamPagerComponents = React.createClass({
                         <Radio value={answerTitle+"#"+num+"#0#"+answerSubjectType}>错误</Radio>
                     </RadioGroup>
                 </Col>
-				<Col span={4}>
+				<Col className="knowledge_span_wi2">
 					<button key={answerTitle+"#"+num+"delBtn"} value={answerTitle+"#"+num} onClick={createExamPager.deleteSubjectContentDiv} className="btn_gray_exam examination_btn_gray"><i className="iconfont btn_gray_exam_del">&#xe62f;</i>
                     </button>
 				</Col>
