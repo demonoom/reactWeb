@@ -235,7 +235,7 @@ const PersonCenterComponents = React.createClass({
                     {userPhotoTag}
 
                     <span className="person_btn">
-                        <Button className="antnest_talk antnest_icon_radius" 　value="score" onClick={personCenter.turnToPlatformRulePage}><i className="iconfont iconfont_jifen">&#xe608;</i>{personCenter.state.userInfo.score}积分</Button>
+                        <Button className="antnest_talk antnest_icon_radius" 　value="score" onClick={personCenter.turnToPlatformRulePage}><i className="iconfont iconfont_jifen">&#xe608;</i><span>{personCenter.state.userInfo.score}</span>积分</Button>
 						<Button className="antnest_icon_blue_radius" value="level" onClick={personCenter.turnToPlatformRulePage} >{personCenter.state.userInfo.level.name}</Button>
                     </span>
 					<span className="person_btn_ri">
