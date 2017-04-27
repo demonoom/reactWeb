@@ -343,7 +343,9 @@
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
-    user-select: none
+    user-select: none;
+	width:400px;
+	height:552px
 }
 
 .video-js:-moz-full-screen {

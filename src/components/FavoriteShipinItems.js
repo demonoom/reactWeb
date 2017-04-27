@@ -70,14 +70,14 @@ const FavoriteShipinItems = React.createClass({
             debugger
             var keyIcon={};
             if(password){
-                keyIcon =  <Button icon="key" className="right_ri focus_btn"/>;
+                keyIcon =  <span className="right_ri focus_btn key_span"><i className="iconfont key">&#xe621;</i></span>;
             }
 
             let cancelBtn = '';
 
             if (this.state.ident == this.props.userid) {
                 cancelBtn = <a target="_blank" title="取消收藏" onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}>
-                    <Button icon="star" className="right_ri focus_btn"/>
+                    <span className="right_ri focus_btn star_span"><Icon type="star" className="anticon-star" /></span>
                 </a>;
             }else{
 

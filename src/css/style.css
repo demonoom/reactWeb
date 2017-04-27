@@ -3136,9 +3136,9 @@ a.color_gary_f, .color_gary_f{
 }
 
 .littleAnt-iframe-panle {
-	height: calc(100% - 47px);
-	height: -moz-calc(100% - 47px);
-	height: -webkit-calc(100% - 47px);
+	height: calc(100% - 46px);
+	height: -moz-calc(100% - 46px);
+	height: -webkit-calc(100% - 46px);
 }
 @keyframes showBox {
 	from {
@@ -3306,7 +3306,8 @@ color:#ffbf00
     display: inline-block;
 }
 .anticon-star{
-	color:#ffcc00
+	color:#fff;
+	font-size:14px;
 }
 .focus_auto{
 	height:calc(100% - 18px);
@@ -3318,6 +3319,14 @@ color:#ffbf00
 	border-radius:50%;
 	background:#8fc967;
 	padding:1px 0 0 3px  !important
+}
+.star_span{
+	width:20px;
+	height:20px;
+	border-radius:50%;
+	background:#ffcc00;
+	padding:1px 0 0 4px  !important;
+	margin-left:8px;
 }
 .key{
 	font-size:14px;
