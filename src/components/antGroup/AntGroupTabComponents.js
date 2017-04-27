@@ -1836,7 +1836,7 @@ const AntGroupTabComponents = React.createClass({
                                 if(e.fromUser.colUid==sessionStorage.getItem("ident")){
                                     messageTag =  <li  className="right" style={{'textAlign':'right'}}>
                                         <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span className="borderballoon_le">{e.content}</span></div>
+                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span className="borderballoon">{e.content}</span></div>
                                     </li>;
                                 }else{
                                     messageTag =  <li style={{'textAlign':'left'}}>
@@ -1848,7 +1848,7 @@ const AntGroupTabComponents = React.createClass({
                                 if(e.fromUser.colUid==sessionStorage.getItem("ident")){
                                     messageTag =  <li  className="right" style={{'textAlign':'right'}}>
                                         <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span  className="borderballoon_le ">{e.imgTagArray}</span></div>
+                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span  className="borderballoon ">{e.imgTagArray}</span></div>
                                     </li>;
                                 }else{
                                     messageTag =  <li style={{'textAlign':'left'}}>
@@ -1980,7 +1980,7 @@ const AntGroupTabComponents = React.createClass({
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
-                    <div style={{'overflow':'auto'}}>
+                    <div className="del_out">
                         <ul className="integral_top">
                           <span className="integral_face"><img src={antGroup.state.currentGroupObj.owner.avatar} className="person_user"/></span>
                           <div className="class_right color_gary_f">{antGroup.state.currentGroupObj.name}</div>
@@ -2024,7 +2024,7 @@ const AntGroupTabComponents = React.createClass({
                                 if(e.fromUser.colUid==sessionStorage.getItem("ident")){
                                     messageTag =  <li className="right" style={{'textAlign':'right'}}>
                                         <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span  className="name">{userPhoneIcon}</span><span className="borderballoon_le">{e.content}</span></div>
+                                        <div className="talk-cont"><span  className="name">{userPhoneIcon}</span><span className="borderballoon">{e.content}</span></div>
                                     </li>;
                                 }else{
                                     messageTag =  <li style={{'textAlign':'left'}}>
@@ -2036,7 +2036,7 @@ const AntGroupTabComponents = React.createClass({
                                 if(e.fromUser.colUid==sessionStorage.getItem("ident")){
                                     messageTag =  <li className="right" style={{'textAlign':'right'}}>
                                         <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span  className="name">{userPhoneIcon}</span><span className="borderballoon_le">{e.imgTagArray}</span></div>
+                                        <div className="talk-cont"><span  className="name">{userPhoneIcon}</span><span className="borderballoon">{e.imgTagArray}</span></div>
                                     </li>;
                                 }else{
                                     messageTag =  <li style={{'textAlign':'left'}}>

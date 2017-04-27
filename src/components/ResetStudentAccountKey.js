@@ -13,7 +13,7 @@ class ResetStudentAccountKey extends React.Component {
         this.state = { // define this.state in constructor
             ident: sessionStorage.getItem("ident"),
             visible: true,
-            placeholder: '请输入要重置密码的帐号！',
+            placeholder: '请输入要重置密码的帐号',
             method: 'getUserFavorite',
             data: [],
             value: '',

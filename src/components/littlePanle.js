@@ -15,13 +15,14 @@
             stylePage: {
                 top: 0,
                 left: 0,
-                width: 360,
+                width: 400,
                 height: 596,
                 position: 'relative',
                 backgroundColor: '#fff',
                 zIndex: 0
             },
             style: {},
+            sourcesCreate: [],
         }
 
     }
@@ -49,7 +50,7 @@
         //
         let el = nodeEl.find('.zoom');
         el.off();
-        el.html('&#xe680;');
+        el.html('&#xe60f;');
         el.on('click', this.zoomMinView.bind(this, id));
     }
     littlePanle.prototype.zoomMinView = function (id) {
@@ -92,17 +93,9 @@
         }
     }
 
-
-    littlePanle.prototype._show = function (obj) {
-        var htm = '';
-        if (obj.htmlMode) {
-            htm = this.htmlTemplet();
-        } else {
-            htm = this.iframeTemplet();
-
-        }
+    littlePanle.prototype._showIframeTemplet = function (obj) {
+        var htm = this._iframeTemplet();
         let styleObj = this.calcPos(this.param.stylePage, this.param.stylePage.zIndex, this.param.orderIndex);
-
         htm = $(htm).css(styleObj);
         $(document.body).append(htm);
         this.el = $('#' + this.id);
@@ -116,44 +109,109 @@
 
         return this;
     }
-
-    littlePanle.prototype.htmlTemplet = function () {
+    littlePanle.prototype._iframeTemplet = function () {
 
         let id = UUID(8, 16);
         this.id = id;
-        let url = this.param.videosObj[0].path;
-       // videojs.options.flash.swf = "video-js.swf";
         let htm = `<div id="${id}" class="dialog little-layout-aside-r-show">
                 <div class="header draggable">
                 <h3 class="title">${ this.param.title }</h3>
                     <div class="little-tilte">
                         <a class="close"><i className="iconfont iconfont_close">&#xe615;</i></a>
                         <a class="zoom"><i className="iconfont iconfont_more">&#xe67e;</i></a>
+                        
                     </div>
                 </div>
                 <div class="content">
                     <section class="littleAnt-iframe-panle">
-<video id="${id}" class="video-js vjs-default-skin vjs-big-play-centered" autoplay="autoplay" controls  preload="auto"  data-setup='{}'></video>
-<script !src="">
-var options = {
-    sourceOrder: true,
-    sources: [{
-        src: '${url}',
-        type: 'video/x-flv'
-    }],
-    techOrder: ['html5', 'flash']
-};
- videojs('${id}', options, function() {
-  this.play();
-    this.on('ended', function() {
-    });
-});
-</script>
-</section>
+                        <iframe  border={0} id="ifr${id}"  src="${ this.param.url }"></iframe>
+                    </section>
                 </div>
                 </div>`;
 
         return htm;
+    }
+
+    littlePanle.prototype._showHtmlFlv = function (obj) {
+
+        let resultObj = this._HtmlFlvTemplet();
+        var htm = resultObj.htm;
+        let styleObj = this.calcPos(this.param.stylePage, this.param.stylePage.zIndex, this.param.orderIndex);
+        htm = $(htm).css(styleObj);
+        $(document.body).append(htm);
+        this.el = $('#' + this.id);
+        $(this.el).drag();
+        $(this.el).find('.close').on('click', this.closepanle.bind(this, this.id));
+
+
+        var options = {
+            sourceOrder: true,
+            controls: true,
+            preload: "auto",
+            autoplay: true,
+            sources: window.srcList,
+            techOrder: ['html5', 'flash']
+        };
+
+        var playerA = videojs(resultObj.id, options, function () {
+            this.play();
+            this.on('ended', function () {
+            });
+        });
+
+        $('.list-group a').on("click", function () {
+           let newsrc = resultObj.srcList[parseInt($(this).text())-1];
+            playerA.src(newsrc );
+        });
+
+
+        return this;
+    }
+
+    littlePanle.prototype._HtmlFlvTemplet = function () {
+
+        let id = UUID(8, 16);
+        this.id = id;
+        let vid = 'v' + this.id;
+        let videoArr = this.param.videosObj;
+        if( (videoArr instanceof Array)==false ){
+            videoArr = videoArr.liveInfo.liveVideos;
+        }
+        let listBtn = [];
+        window.srcList = [];
+        let classChange='single';
+
+        if (videoArr.length > 1) {
+            classChange='multi';
+            videoArr.map(function (video, i) {
+                i++;
+                window.srcList.push({type: 'video/x-flv', src: video.path});
+                listBtn.push("<a class='listBtn' >" + i + "</a>");
+            });
+        } else {
+            let flv = videoArr[0];
+            window.srcList.push({type: 'video/x-flv', src: flv.path});
+        }
+
+
+
+        let htm = `<div id="${id}" class="dialog little-layout-aside-r-show">
+                <div class="header draggable">
+                <h3 class="title">${ this.param.title }</h3>
+                    <div class="little-tilte">
+                        <a class="close"><i className="iconfont iconfont_close">&#xe615;</i></a>
+                    </div>
+                </div>
+                <div class="content">
+                    <section class="littleAnt-iframe-panle ${classChange}">
+                       <video id="${vid}" class="video-js vjs-default-skin vjs-big-play-centered"
+                       src="${window.srcList[0].src}"   data-setup='{}'></video>
+                       <div class="list-group" >${listBtn.join('')}</div>
+                    </section>
+                </div>
+                </div>`;
+
+        return {htm: htm, id: vid, srcList: window.srcList, listBtn: listBtn};
     }
 
     littlePanle.prototype.GetLP = function (obj, oldArray) {
@@ -181,7 +239,11 @@ var options = {
         this.param.orderIndex = oldArray.length;
         this.param.stylePage.zIndex = maxIndex();
         this.param.stylePage.width = parseInt(obj.width.replace(/[a-z]*/img, ''));
-        this._show(obj);
+        if (obj.htmlMode) {
+            this._showHtmlFlv(obj);
+        } else {
+            this._showIframeTemplet(obj);
+        }
         return this;
     }
 
@@ -215,29 +277,7 @@ var options = {
         ifr.contentWindow.history.go(num);
 
     }
-    littlePanle.prototype.iframeTemplet = function () {
 
-        let id = UUID(8, 16);
-        this.id = id;
-
-        let htm = `<div id="${id}" class="dialog little-layout-aside-r-show">
-                <div class="header draggable">
-                <h3 class="title">${ this.param.title }</h3>
-                    <div class="little-tilte">
-                        <a class="close"><i className="iconfont iconfont_close">&#xe615;</i></a>
-                        <a class="zoom"><i className="iconfont iconfont_more">&#xe67e;</i></a>
-                        
-                    </div>
-                </div>
-                <div class="content">
-                    <section class="littleAnt-iframe-panle">
-                        <iframe  border={0} id="ifr${id}"  src="${ this.param.url }"></iframe>
-                    </section>
-                </div>
-                </div>`;
-
-        return htm;
-    }
 
     var lpM = {
         mgr: [],
