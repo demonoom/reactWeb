@@ -1895,7 +1895,7 @@ const AntGroupTabComponents = React.createClass({
             >
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div>
-                        <div className="group_talk chat-items">
+                        <div className="group_talk">
                             <ul>
                                 {messageTagArray}
                             </ul>
