@@ -77,7 +77,7 @@ const FavoriteShipinItems = React.createClass({
 
             if (this.state.ident == this.props.userid) {
                 cancelBtn = <a target="_blank" title="取消收藏" onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}>
-                    <span className="right_ri focus_btn star_span"><Icon type="star" className="anticon-star" /></span>
+                    <span className="right_ri focus_btn star_span"><i className="iconfont star">&#xe646;</i></span>
                 </a>;
             }else{
 

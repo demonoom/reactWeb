@@ -1488,11 +1488,11 @@ a {
 }
 @font-face {
   font-family: 'iconfont';  /* project id 197083 */
-  src: url('//at.alicdn.com/t/font_6uyzdp9t138fr.eot');
-  src: url('//at.alicdn.com/t/font_6uyzdp9t138fr.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_6uyzdp9t138fr.woff') format('woff'),
-  url('//at.alicdn.com/t/font_6uyzdp9t138fr.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_6uyzdp9t138fr.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_2hgve1py4ju7hkt9.eot');
+  src: url('//at.alicdn.com/t/font_2hgve1py4ju7hkt9.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_2hgve1py4ju7hkt9.woff') format('woff'),
+  url('//at.alicdn.com/t/font_2hgve1py4ju7hkt9.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_2hgve1py4ju7hkt9.svg#iconfont') format('svg');
 }
 .iconfont{
 	font-family:"iconfont" !important;
@@ -2641,6 +2641,10 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 	padding:15px 60px 0 60px !important;
 	overflow-y:auto
 }
+.person_padding_v2{
+	padding:15px 60px 0 20px !important;
+	overflow-y:auto
+}
 .person_btn_ri Button{
 	padding:6px 20px;
     top: -2px;
@@ -2997,8 +3001,9 @@ a.color_gary_f, .color_gary_f{
 	background:#fff;
 } 
 .little-layout-aside-r-show .content {
-	    min-height: 598px;
-		height:100%
+	    min-height: 552px;
+		height:100%;
+		overflow: hidden;
     } 
 
 .little-layout-aside-r-show iframe{
@@ -3136,9 +3141,9 @@ a.color_gary_f, .color_gary_f{
 }
 
 .littleAnt-iframe-panle {
-	height: calc(100% - 46px);
-	height: -moz-calc(100% - 46px);
-	height: -webkit-calc(100% - 46px);
+	height: calc(100% - 45px);
+	height: -moz-calc(100% - 45px);
+	height: -webkit-calc(100% - 45px);
 }
 @keyframes showBox {
 	from {
@@ -3305,9 +3310,9 @@ color:#ffbf00
     white-space: nowrap;
     display: inline-block;
 }
-.anticon-star{
+.star{
 	color:#fff;
-	font-size:14px;
+	font-size:12px;
 }
 .focus_auto{
 	height:calc(100% - 18px);
@@ -3318,17 +3323,22 @@ color:#ffbf00
 	height:20px;
 	border-radius:50%;
 	background:#8fc967;
-	padding:1px 0 0 3px  !important
+	padding:1px 0 0 3px  !important;
+	text-align:center
 }
 .star_span{
 	width:20px;
 	height:20px;
 	border-radius:50%;
 	background:#ffcc00;
-	padding:1px 0 0 4px  !important;
+	padding:1px 0 0 1px !important ;
 	margin-left:8px;
+	text-align:center
 }
 .key{
 	font-size:14px;
 	color:#fff;
+}
+.anticon-star{
+	color:#ffcc00;
 }

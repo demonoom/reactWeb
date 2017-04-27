@@ -480,20 +480,20 @@ class PersonCenterV2 extends React.Component {
 
         if (personCenterA.props.isFollow == false) {
             followButton =
-                <Button icon="plus" onClick={personCenterA.followUser} className="persono_btn_blue">关注</Button>;
+                <Button icon="heart-o" onClick={personCenterA.followUser} className="persono_btn_gray">关注</Button>;
         } else {
-            followButton = <Button icon="plus" onClick={personCenterA.unfollowUser}>取消关注</Button>;
+            followButton = <Button icon="heart" onClick={personCenterA.unfollowUser} className="persono_btn_gray">取消关注</Button>;
         }
 
         return (
-            <div>
+            <div className="person_padding_v2">
                 <Card className="bai">
                     {userPhotoTag}
 
                     <span className="person_btn">
-                        <Button className="antnest_talk" value="score"
-                                onClick={personCenterA.turnToPlatformRulePage}>{personCenterA.props.userInfo.score}积分</Button>
-						<Button value="level"
+                        <Button className="antnest_talk antnest_icon_radius" value="score"
+                                onClick={personCenterA.turnToPlatformRulePage}><i className="iconfont iconfont_jifen">&#xe608;</i><span className="iocnfont_sp_jifen">{personCenterA.props.userInfo.score}</span>积分</Button>
+						<Button value="level" className="antnest_icon_blue_radius"
                                 onClick={personCenterA.turnToPlatformRulePage}>{personCenterA.props.userInfo.level.name}</Button>
                     </span>
                     <span className="person_btn_ri">
