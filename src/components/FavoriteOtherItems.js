@@ -47,7 +47,7 @@ const FavoriteOtherItems = React.createClass({
         let obj ={
             title:tit,
             url:url,
-            width:'380px'
+            width:'400px'
         }
 
         this.props.onPreview(obj)
