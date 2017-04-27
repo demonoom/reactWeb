@@ -93,8 +93,8 @@ const AntUploadComponentsForExamPagerUpdate = React.createClass({
             <div className="clearfix">
                 <Upload {...props}>
                     <div>
-                        <Icon type="plus" />
-                        <div className="ant-upload-text">Upload</div>
+                        <Icon type="plus" className="add_bnt topics_white"/>
+                        <div className="ant-upload-text">上传图片</div>
                     </div>
                 </Upload>
                 <Modal maskClosable="true" visible={antUploadComponentsForExamPagerUpdate.state.previewVisible} footer={null} onCancel={antUploadComponentsForExamPagerUpdate.handleCancel}>

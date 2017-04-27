@@ -2530,7 +2530,6 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 	width:50px;
 	height:50px;
 	display:inline-block;
-	border: none;
 }
 .person_cor i{
 	font-size:24px;
@@ -2539,32 +2538,54 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 	color:#fff;	
 }
 .person_cor1{
-	background:#ff7669
+	background:#ff7669;
+	border:#ff7669 1px solid
 }
 .person_cor1:hover{
 	background:#ff9e95;
-	border:none
+	border:#ff9e95 1px solid
+}
+.person_cor1:active{
+	background:#ff9e95;
+	border:#ff9e95 1px solid
 }
 .person_cor2{
-	background:#64b5e0
+	background:#64b5e0;
+	border:#64b5e0 1px solid
 }
 .person_cor2:hover{
 	background:#8dd7ff;
-	border:none
+	border:#8dd7ff 1px solid
 }
 .person_cor3{
-	background:#9fce68
+	background:#9fce68;
+	border:#9fce68 1px solid
 }
 .person_cor3:hover{
 	background:#c6f391;
-	border:none
+	border:#c6f391 1px solid
 }
 .person_cor4{
-	background:#ffc385
+	background:#ffc385;
+	border:#ffc385 1px solid
 }
 .person_cor4:hover{
 	background:#ffd3a5;
-	border:none
+	border:#ffd3a5 1px solid
+}
+.person_cor1:focus,
+.person_cor2:focus,
+.person_cor3:focus,
+.person_cor4:focus{
+	color: #57c5f7;
+    background-color: #f7f7f7;
+    border-color: #57c5f7;
+}
+.person_cor1:focus i,
+.person_cor2:focus i,
+.person_cor3:focus i,
+.person_cor4:focus i{
+	color:#57c5f7
 }
 .person_cor div{
 	position:relative;
