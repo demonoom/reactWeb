@@ -89,7 +89,6 @@ const FavoriteSubjectItems = React.createClass({
                        onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}><Button
                         icon="star"/></a>
                 </div>;
-
             }
 
             let popOverContent1 = '<div>' + e.subjects.content + '' + e.subjects.answer + '</div>';

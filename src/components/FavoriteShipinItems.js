@@ -50,8 +50,12 @@ const FavoriteShipinItems = React.createClass({
     },
 
 
-    buildFavShipionUi: function (courseWareList) {
+    buildFavShipionUi: function () {
+
+       let courseWareList = this.props.param.data;
         coursePanelChildren = null;
+        debugger
+
         this.activeKey = [];
         if (!courseWareList || !courseWareList.length) {
             coursePanelChildren = <img className="noDataTipImg" src={require('./images/noDataTipImg.png')}/>;
@@ -76,10 +80,13 @@ const FavoriteShipinItems = React.createClass({
                 cancelBtn = <a target="_blank" title="取消收藏" onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}>
                     <Button icon="star" className="right_ri focus_btn"/>
                 </a>;
-            }
+            }else{
 
-            return <div className="ant-card live ant-card-bordered">
-                <div key={refkey}>
+            }
+            debugger
+
+            return <div className="ant-card live ant-card-bordered" key={refkey} >
+                <div >
 				<p className="live_h3">{content}</p>
                     <div className="live_img">
                         <a onClick={event => {
@@ -112,7 +119,7 @@ const FavoriteShipinItems = React.createClass({
 
 
     render: function () {
-        this.buildFavShipionUi(this.props.param.data, this.props.param.type);
+        this.buildFavShipionUi();
         return (
             <div className="favorite_scroll">
                 <div className="favorite_up favorite_pa_le topics_calc">
