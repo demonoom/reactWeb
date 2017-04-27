@@ -9,6 +9,7 @@ import FileUploadComponents from './FileUploadComponents';
 import AntUploadComponentsForUpdate from './AntUploadComponentsForUpdate';
 import AntUploadComponentsForExamPagerUpdate from './AntUploadComponentsForExamPagerUpdate';
 import AntUploadForAnalysisOfCreateComponents from './AntUploadForAnalysisOfCreateComponents';
+import UploadExamPagerComponents from './UploadExamPagerComponents';
 import AntUploadComponents from './AntUploadComponents';
 const CheckboxGroup = Checkbox.Group;
 const RadioGroup = Radio.Group;
@@ -316,12 +317,21 @@ const UpdateExamPagerComponents = React.createClass({
                 }
                 // 文字正确答案
                 var textAnswer = createExamPager.convertUndefinedToNull(subjectDivJson.textAnswer);
-                if(createExamPager.isEmpty(textAnswer)){
-                    message.warning("请选择/输入"+title+"下第"+subjectDivJson.index+"题的答案",5);
-                    return;
-                }
                 // 图片正确答案
-                var imageAnswer = createExamPager.convertUndefinedToNull(subjectDivJson.imageAnswer);;
+                var imageAnswer = createExamPager.convertUndefinedToNull(subjectDivJson.imageAnswer);
+
+                if(type=="0" || type=="1"){
+                    if(createExamPager.isEmpty(textAnswer)){
+                        message.warning("请选择/输入"+title+"下第"+subjectDivJson.index+"题的答案",5);
+                        return;
+                    }
+                }else{
+                    //填空和简答题中，文本答案和图片答案至少要有一个
+                    if(createExamPager.isEmpty(textAnswer) && createExamPager.isEmpty(imageAnswer)){
+                        message.warning("请选择/输入"+title+"下第"+subjectDivJson.index+"题的答案",5);
+                        return;
+                    }
+                }
                 // 冗余ExmQuestionType的类型，用于查询操作好操作
                 var questionType = type;
                 // 文字解析
@@ -339,8 +349,8 @@ const UpdateExamPagerComponents = React.createClass({
         }
         paperJson.questionTypes = questionTypesArray;
         console.log(paperJson);
-        // cardChildArray.splice(0);
-        // createExamPager.updateExmPaper(paperJson);
+        cardChildArray.splice(0);
+        createExamPager.updateExmPaper(paperJson);
     },
 
     isEmpty(content){
@@ -387,8 +397,8 @@ const UpdateExamPagerComponents = React.createClass({
                         }else if(optType=="setPoints"){
                             //设置关联的知识点
                             var pointJsonArray = [];
-                            for(var i=0;i<subjectJson.points.length;i++){
-                                var id= subjectJson.points[i];
+                            for(var k=0;k<subjectJson.points.length;k++){
+                                var id= subjectJson.points[k];
                                 var pointJson = {"id":id};
                                 pointJsonArray.push(pointJson);
                             }
@@ -1430,14 +1440,31 @@ const UpdateExamPagerComponents = React.createClass({
     /**
      * 获取试卷标题图片的文件路径列表
      */
-    getExamPagerTitleImgList(fileList){
+/*    getExamPagerTitleImgList(fileList){
         createExamPager.state.examPagerUrl.splice(0);
         for(var i=0;i<fileList.length;i++){
             var fileJson = fileList[i];
             var fileUrl = fileJson.response;
             createExamPager.state.examPagerUrl.push(fileUrl);
         }
+    },*/
+
+    /**
+     * 获取试卷标题图片的文件路径列表
+     */
+    getExamPagerTitleImgList(file,isRemoved){
+        var examPagerUrl = file.response;
+        if(createExamPager.isEmpty(isRemoved)==false && isRemoved=="removed"){
+            for(var i=0;i<createExamPager.state.examPagerUrl.length;i++){
+                if(createExamPager.state.examPagerUrl[i] == examPagerUrl){
+                    createExamPager.state.examPagerUrl.splice(i,1);
+                }
+            }
+        }else{
+            createExamPager.state.examPagerUrl.push(examPagerUrl);
+        }
     },
+
     /**
      * 获取图片解析的url路径
      */
@@ -1543,7 +1570,8 @@ const UpdateExamPagerComponents = React.createClass({
                         </Col>
                         <Col span={18}>
                 <span className="date_tr text_30 upexam_float">
-                    <AntUploadComponentsForExamPagerUpdate fileList={createExamPager.state.examPagerImgTag} key="examPagerTitleUpload" callBackParent={createExamPager.getExamPagerTitleImgList}></AntUploadComponentsForExamPagerUpdate>
+                    {/*<AntUploadComponentsForExamPagerUpdate fileList={createExamPager.state.examPagerImgTag} key="examPagerTitleUpload" callBackParent={createExamPager.getExamPagerTitleImgList}></AntUploadComponentsForExamPagerUpdate>*/}
+                    <UploadExamPagerComponents fileList={createExamPager.state.examPagerImgTag} key="examPagerTitleUpload" callBackParent={createExamPager.getExamPagerTitleImgList}></UploadExamPagerComponents>
                     <Modal
                         visible={createExamPager.state.examPagerModalVisible}
                         title="上传图片"

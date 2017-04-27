@@ -87,6 +87,11 @@ const CreateExamPagerComponents = React.createClass({
         });
     },
 
+    componentDidMount(){
+        //获取所有的知识点数据，作为弹窗的下拉列表数据
+        createExamPager.getLessonMenu();
+    },
+
     convertUndefinedToNull(source,sourceType){
         if(typeof(source)=="undefined"){
             if(sourceType=="array"){
@@ -188,8 +193,8 @@ const CreateExamPagerComponents = React.createClass({
         }
         paperJson.questionTypes = questionTypesArray;
         console.log(paperJson);
-        cardChildArray.splice(0);
-        createExamPager.createExamPager(paperJson);
+        // cardChildArray.splice(0);
+        // createExamPager.createExamPager(paperJson);
     },
 
     isEmpty(content){
@@ -234,8 +239,8 @@ const CreateExamPagerComponents = React.createClass({
                         }else if(optType=="setPoints"){
                             //设置关联的知识点
                             var pointJsonArray = [];
-                            for(var i=0;i<subjectJson.points.length;i++){
-                                var id= subjectJson.points[i];
+                            for(var k=0;k<subjectJson.points.length;k++){
+                                var id= subjectJson.points[k];
                                 var pointJson = {"id":id};
                                 pointJsonArray.push(pointJson);
                             }
@@ -780,7 +785,7 @@ const CreateExamPagerComponents = React.createClass({
      */
     addAnswerCard(){
         //试卷名称
-        /*var examPagerTitle = createExamPager.convertUndefinedToNull(createExamPager.state.examPagerTitle);
+        var examPagerTitle = createExamPager.convertUndefinedToNull(createExamPager.state.examPagerTitle);
         if(createExamPager.isEmpty(examPagerTitle)){
             message.warning("请输入试卷名称",5);
             return;
@@ -790,7 +795,7 @@ const CreateExamPagerComponents = React.createClass({
         if(createExamPager.isEmpty(examPagerUrl) || examPagerUrl.length<=0){
             message.warning("请上传试卷图片",5);
             return;
-        }*/
+        }
         //答题卡标题
         var answerTitle = createExamPager.state.answerTitle;
         if(createExamPager.isEmpty(answerTitle)){
@@ -1004,7 +1009,7 @@ const CreateExamPagerComponents = React.createClass({
      * 关闭绑定知识点窗口
      */
     bindKnowledgeModalHandleCancel(){
-        createExamPager.setState({ bindKnowledgeModalVisible: false,bindKnowledgeBtnInfo:'' });
+        createExamPager.setState({ bindKnowledgeModalVisible: false,bindKnowledgeBtnInfo:'',mockData:[], targetKeys:[],"knowledgeOptions":[] });
     },
     /**
      * 获取知识点列表
@@ -1017,6 +1022,7 @@ const CreateExamPagerComponents = React.createClass({
             onResponse : function(ret) {
                 console.log(ret.msg);
                 var optionContent;
+                options.splice(0);
                 ret.response.forEach(function (e) {
                     optionContent={value: e.id,
                         label: e.content};
@@ -1029,6 +1035,7 @@ const CreateExamPagerComponents = React.createClass({
                     optionContent.children=childrendArray;
                     options.push(optionContent);
                 });
+                createExamPager.setState({"knowledgeOptions":options});
             },
             onError : function(error) {
                 message.error(error);
@@ -1058,7 +1065,7 @@ const CreateExamPagerComponents = React.createClass({
             }
         }
         //获取所有的知识点数据，作为弹窗的下拉列表数据
-        createExamPager.getLessonMenu();
+        // createExamPager.getLessonMenu();
         //获取当前老师已绑定知识点，作为穿梭框备选数据
         createExamPager.getMock(pointsArrayWithSelected);
         createExamPager.setState({bindKnowledgeBtnInfo:e.target.value,bindKnowledgeModalVisible: true,defaultSelected:[]});
@@ -1173,6 +1180,7 @@ const CreateExamPagerComponents = React.createClass({
     },
     //穿梭框内容改变的响应函数
     transferHandleChange(targetKeys){
+        console.log("targetKeys====>"+targetKeys);
         createExamPager.setState({ targetKeys });
     },
 
@@ -1191,7 +1199,7 @@ const CreateExamPagerComponents = React.createClass({
         var subjectNum =bindKnowledgeBtnInfoArray[1];
         var subjectJson = {answerCardTitle:answerCardTitle,answerSubjectType:answerSubjectType,subjectNum:subjectNum,points:createExamPager.state.targetKeys};
         createExamPager.refreshCardChildArray(subjectJson,"setPoints");
-        createExamPager.setState({ bindKnowledgeModalVisible: false,bindKnowledgeBtnInfo:'' });
+        createExamPager.setState({ bindKnowledgeModalVisible: false,bindKnowledgeBtnInfo:'',mockData:[], targetKeys:[] });
     },
 
     /**
@@ -1347,7 +1355,7 @@ const CreateExamPagerComponents = React.createClass({
                         <span>
                             <Cascader
                                 ref="knowledgeSelect" className="knowledge_inp"
-                                options={options}
+                                options={createExamPager.state.knowledgeOptions}
                                 onChange={createExamPager.cascaderOnChange}
                                 value={createExamPager.state.defaultSelected}
                                 placeholder="请选择知识点"
