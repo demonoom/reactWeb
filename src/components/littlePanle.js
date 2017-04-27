@@ -130,6 +130,8 @@
             window.sourcesCreate.push({type:'video/x-flv',src:video.path})
         });
 
+        debugger
+
         let htm = `<div id="${id}" class="dialog little-layout-aside-r-show">
                 <div class="header draggable">
                 <h3 class="title">${ this.param.title }</h3>

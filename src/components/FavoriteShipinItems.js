@@ -54,7 +54,6 @@ const FavoriteShipinItems = React.createClass({
 
        let courseWareList = this.props.param.data;
         coursePanelChildren = null;
-        debugger
 
         this.activeKey = [];
         if (!courseWareList || !courseWareList.length) {
@@ -68,10 +67,10 @@ const FavoriteShipinItems = React.createClass({
             let refkey = e.type + "#" + e.favoriteId;
             this.activeKey.push(refkey);
             var password = e.liveInfo.password;
-
+            debugger
             var keyIcon={};
             if(password){
-                keyIcon = <Icon type="key" />;
+                keyIcon =  <Button icon="key" className="right_ri focus_btn"/>;
             }
 
             let cancelBtn = '';
@@ -83,7 +82,7 @@ const FavoriteShipinItems = React.createClass({
             }else{
 
             }
-            debugger
+
 
             return <div className="ant-card live ant-card-bordered" key={refkey} >
                 <div >
