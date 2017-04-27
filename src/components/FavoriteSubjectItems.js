@@ -1,5 +1,5 @@
 import React from 'react';
-import {Table, Button,Popover} from 'antd';
+import {Table, Button, Popover} from 'antd';
 import UseKnowledge from './UseKnowledgeComponents';
 import {getPageSize} from '../utils/Const';
 
@@ -61,14 +61,13 @@ const FavoriteSubjectItems = React.createClass({
     getInitialState() {
 
         return {
-            ident: this.props.userid || sessionStorage.getItem("ident"),
+            ident: sessionStorage.getItem("ident"),
             type: this.props.type || FAVTYPE.SUBJECT,
             pageNo: 1,
             data: [],
-            totalCount:0
+            totalCount: 0
         };
     },
-
 
 
     buildSubjectUi: function (courseWareList, type) {
@@ -82,17 +81,26 @@ const FavoriteSubjectItems = React.createClass({
             if (parseInt(subjectScore) < 0) {
                 subjectScore = '--';
             }
-            let subjectOpt = <div>
-                <a target="_blank" title="取消收藏"  onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)}><Button
-                    icon="star"/></a>
-            </div>;
+            let subjectOpt ='';
 
-            let popOverContent1 = '<div>'+e.subjects.content+''+e.subjects.answer+'</div>';
-            let popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>'+e.subjects.content+'<hr/><span class="answer_til answer_til_2">答案：</span>'+e.subjects.answer+'</div>';
+            if (this.state.ident == this.props.userid) {
+                subjectOpt = <div>
+                    <a target="_blank" title="取消收藏"
+                       onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}><Button
+                        icon="star"/></a>
+                </div>;
 
-            let content=<Popover  placement="rightTop" content={
-                <article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: popOverContent}}></article>}>
-                <article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: popOverContent1}}></article></Popover>;
+            }
+
+            let popOverContent1 = '<div>' + e.subjects.content + '' + e.subjects.answer + '</div>';
+            let popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>' + e.subjects.content + '<hr/><span class="answer_til answer_til_2">答案：</span>' + e.subjects.answer + '</div>';
+
+            let content = <Popover placement="rightTop" content={
+                <article id='contentHtml' className='content Popover_width'
+                         dangerouslySetInnerHTML={{__html: popOverContent}}></article>}>
+                <article id='contentHtml' className='content'
+                         dangerouslySetInnerHTML={{__html: popOverContent1}}></article>
+            </Popover>;
 
             this.data.push({
                 key: e.favoriteId,
@@ -118,10 +126,14 @@ const FavoriteSubjectItems = React.createClass({
 
     render: function () {
         console.log('buildSubjectUi');
-         this.buildSubjectUi(this.props.param.data, this.props.param.type);
+        this.buildSubjectUi(this.props.param.data, this.props.param.type);
         return ( <Table columns={columns} dataSource={this.data}
-                       pagination={{total: this.state.totalCount, pageSize: getPageSize(), onChange: this.pageOnChange}}
-                       scroll={{y: 400}}/>
+                        pagination={{
+                            total: this.state.totalCount,
+                            pageSize: getPageSize(),
+                            onChange: this.pageOnChange
+                        }}
+                        scroll={{y: 400}}/>
 
         );
     },

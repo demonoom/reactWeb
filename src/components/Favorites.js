@@ -39,7 +39,10 @@ class Favorites extends React.Component {
             ['3', 'jiangyi', '讲义'],
             ['4', 'shipin', '直播课']
         ];
+
         this.pageChange = this.pageChange.bind(this);
+        this.upgradeCurrent = this.upgradeCurrent.bind(this);
+        this.tabClick = this.tabClick.bind(this);
     }
 
     componentWillMount() {
@@ -163,34 +166,52 @@ class Favorites extends React.Component {
         return (
             <div className="favorite_scroll">
                 {this.breadcrumb}
-                <Tabs onTabClick={this.tabClick.bind(this)} defaultActiveKey={this.state.activeKey}>
-                    {/*题目*/}
+                <Tabs onTabClick={this.tabClick} defaultActiveKey={this.state.activeKey}>
+
                     <TabPane tab={this.FAVTYPE[1][2]} key='1' className="topics_rela">
-                        <SubjectItem param={this.state.subject} onCancelfavrite={this.cancelFav}
-                                     upgradeData={this.upgradeCurrent.bind(this)}/>
+                        <SubjectItem param={this.state.subject}
+                                     userid={this.state.ident}
+                                     onCancelfavrite={this.cancelFav}
+                                     upgradeData={this.upgradeCurrent}/>
                     </TabPane>
-                    {/*微课*/}
+
+
                     <TabPane tab={this.FAVTYPE[2][2]} key='2' className="topics_rela">
-                        <FavItem param={this.state.weike} onPreview={this.props.onPreview}
-                                 onCancelfavrite={this.cancelFav} upgradeData={this.upgradeCurrent.bind(this)}
+                        <FavItem param={this.state.weike}
+                                 userid={this.state.ident}
+                                 onPreview={this.props.onPreview}
+                                 onCancelfavrite={this.cancelFav}
+                                 upgradeData={this.upgradeCurrent}
                                  pageChange={this.pageChange}/>
                     </TabPane>
-                    {/*讲义*/}
+
+
                     <TabPane tab={this.FAVTYPE[3][2]} key='3' className="topics_rela">
-                        <FavItem param={this.state.jiangyi} onPreview={this.props.onPreview}
-                                 onCancelfavrite={this.cancelFav} upgradeData={this.upgradeCurrent.bind(this)}
+                        <FavItem param={this.state.jiangyi}
+                                 userid={this.state.ident}
+                                 onPreview={this.props.onPreview}
+                                 onCancelfavrite={this.cancelFav}
+                                 upgradeData={this.upgradeCurrent}
                                  pageChange={this.pageChange}/>
                     </TabPane>
-                    {/*我的直播课*/}
+
+
                     <TabPane tab={this.FAVTYPE[4][2]} key='4' className="topics_rela">
-                        <ShippinItem param={this.state.shipin} onPreview={this.props.onPreview}
-                                     onCancelfavrite={this.cancelFav} upgradeData={this.upgradeCurrent.bind(this)}
+                        <ShippinItem param={this.state.shipin}
+                                     userid={this.state.ident}
+                                     onPreview={this.props.onPreview}
+                                     onCancelfavrite={this.cancelFav}
+                                     upgradeData={this.upgradeCurrent}
                                      pageChange={this.pageChange}/>
                     </TabPane>
-                    {/*其他*/}
+
+
                     <TabPane tab={this.FAVTYPE[0][2]} key='0' className="topics_rela">
-                        <OtherItem param={this.state.other} onPreview={this.props.onPreview}
-                                   onCancelfavrite={this.cancelFav} upgradeData={this.upgradeCurrent.bind(this)}
+                        <OtherItem param={this.state.other}
+                                   userid={this.state.ident}
+                                   onPreview={this.props.onPreview}
+                                   onCancelfavrite={this.cancelFav}
+                                   upgradeData={this.upgradeCurrent}
                                    pageChange={this.pageChange}/>
                     </TabPane>
                 </Tabs>

@@ -67,7 +67,7 @@ const FavoriteItem = React.createClass({
     getInitialState() {
 
         return {
-            ident: this.props.userid || sessionStorage.getItem("ident"),
+            ident:  sessionStorage.getItem("ident"),
             pageNo: 1,
 
         };
@@ -122,7 +122,10 @@ const FavoriteItem = React.createClass({
     },
 
 
-    buildItemPanels: function (datalist, type) {
+    buildItemPanels: function () {
+
+        let datalist = this.props.param.data;
+        let type = this.props.param.type;
         this.coursePanelChildren = null;
         if (!datalist || !datalist.length) {
             this.coursePanelChildren = <img className="noDataTipImg" src={require('./images/noDataTipImg.png')}/>;
@@ -135,13 +138,18 @@ const FavoriteItem = React.createClass({
         this.coursePanelChildren = datalist.map((e, i) => {
             if (type != e.type) return {};
 
-
-            //
-            //
             let content = e.content;
             type += '';
             let key = type + '-' + e.favoriteId;
             this.activeKey.push(key);
+
+            let cancelBtn = '';
+
+            if (this.state.ident == this.props.userid) {
+                cancelBtn = <a target="_blank" title="取消收藏" className="right_ri"
+                               onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}><Button
+                    icon="star"/></a>
+            }
             switch (type) {
 
 
@@ -158,11 +166,8 @@ const FavoriteItem = React.createClass({
                         <div className="bnt2_right">
                             <a target="_blank" title="查看" className="right_ri" onClick={event => {
                                 this.view(event, this.getUrl(e), e.content)
-                            } }><Button
-                                icon="eye-o"/></a>
-                            <a target="_blank" title="取消收藏" className="right_ri"
-                               onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}><Button
-                                icon="star"/></a>
+                            } }><Button icon="eye-o"/></a>
+                            {cancelBtn}
                         </div>
                     </Panel>
                     break;
@@ -183,11 +188,8 @@ const FavoriteItem = React.createClass({
                                download={e.material.path}><Button icon="download"/></a>
                             <a target="_blank" title="查看" className="right_ri" onClick={event => {
                                 this.view(event, this.getUrl(e), e.content)
-                            } }><Button
-                                icon="eye-o"/></a>
-                            <a target="_blank" title="取消收藏" className="right_ri"
-                               onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}><Button
-                                icon="star"/></a>
+                            } }><Button  icon="eye-o"/></a>
+                            {cancelBtn}
                         </div>
                     </Panel>
                     break;
@@ -201,8 +203,7 @@ const FavoriteItem = React.createClass({
 
 
     render: function () {
-        console.log('buildItemPanels');
-        this.buildItemPanels(this.props.param.data, this.props.param.type);
+        this.buildItemPanels();
 
         var CollapseStyle = {
             height: "360px"
