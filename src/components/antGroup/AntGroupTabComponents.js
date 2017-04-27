@@ -1525,7 +1525,7 @@ const AntGroupTabComponents = React.createClass({
         e.cancelBubble = true;
         */
 
-        let obj = {htmlMode:true, flvjs:flvjsobj,  param: videosObj,title:title,url:"", width: '380px', }
+        let obj = {htmlMode:true, flvjs:flvjsobj,  param: videosObj,title:title,url:"", width: '400px', }
         antGroup.props.onPreview(obj)
     },
 
