@@ -1980,7 +1980,7 @@ const AntGroupTabComponents = React.createClass({
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
-                    <div style={{'overflow':'auto'}}>
+                    <div className="del_out">
                         <ul className="integral_top">
                           <span className="integral_face"><img src={antGroup.state.currentGroupObj.owner.avatar} className="person_user"/></span>
                           <div className="class_right color_gary_f">{antGroup.state.currentGroupObj.name}</div>

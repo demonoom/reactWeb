@@ -15,7 +15,7 @@
             stylePage: {
                 top: 0,
                 left: 0,
-                width: 360,
+                width: 400,
                 height: 596,
                 position: 'relative',
                 backgroundColor: '#fff',
@@ -159,11 +159,9 @@
             });
         });
 
-debugger
         $('.list-group a').on("click", function () {
            let newsrc = resultObj.srcList[parseInt($(this).text())-1];
             playerA.src(newsrc );
-
         });
 
 
@@ -175,7 +173,10 @@ debugger
         let id = UUID(8, 16);
         this.id = id;
         let vid = 'v' + this.id;
-        let videoArr = this.param.videosObj.liveInfo.liveVideos;
+        let videoArr = this.param.videosObj;
+        if( (videoArr instanceof Array)==false ){
+            videoArr = videoArr.liveInfo.liveVideos;
+        }
         let listBtn = [];
         window.srcList = [];
         let classChange='single';
@@ -188,11 +189,11 @@ debugger
                 listBtn.push("<a class='listBtn' >" + i + "</a>");
             });
         } else {
-            window.srcList.push({type: 'video/x-flv', src: videoArr[0].path});
+            let flv = videoArr[0];
+            window.srcList.push({type: 'video/x-flv', src: flv.path});
         }
 
 
-        debugger
 
         let htm = `<div id="${id}" class="dialog little-layout-aside-r-show">
                 <div class="header draggable">

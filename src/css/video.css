@@ -344,7 +344,7 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-	width:400px;
+	width:100%;
 }
 
 .video-js:-moz-full-screen {
