@@ -14,14 +14,33 @@ const PersonCenterComponents = React.createClass({
 
     getInitialState() {
         personCenter = this;
-        var userInfo = personCenter.props.userInfo;
-
+        /*var userInfo = personCenter.props.userInfo;
+        var userContactsData = personCenter.props.userContactsData;
+        console.log("userContactsData===>"+userContactsData.length);*/
+        var isExist = personCenter.checkPersonIsInContacts();
+        console.log("isExist===>"+isExist);
         personCenter.isFollow();
         return {
             userInfo:personCenter.props.userInfo,
+            isExist:isExist
         };
     },
 
+    /**
+     * 判断当前个人中心显示的人员是否是当前用户的联系人
+     */
+    checkPersonIsInContacts(){
+        var isExist=false;
+        var userContactsData = personCenter.props.userContactsData;
+        for(var i=0;i<userContactsData.length;i++){
+            var contactJson=userContactsData[i];
+            if(contactJson.key==personCenter.props.userInfo.user.colUid){
+                isExist = true;
+                break;
+            }
+        }
+        return isExist;
+    },
 
     /**
      * 获取联系人列表
@@ -222,12 +241,26 @@ const PersonCenterComponents = React.createClass({
         }
 
         var followButton;
-
+        var sendMessageButton;
+        //个人中心页面中，如果是自己，则不能显示关注和取消关注
+        if(personCenter.state.userInfo.user.colUid != sessionStorage.getItem("ident")){
+            if(personCenter.state.isFollow==false){
+            followButton = <Button icon="heart-o" onClick={personCenter.followUser} className="persono_btn_gray">关注</Button>;
+        }else {
+            followButton = <Button icon="heart" onClick={personCenter.unfollowUser} className="persono_btn_gray">取消关注</Button>;
+            }
+        }
+        //如果个人中心显示的用户并不是当前用户的联系人，则不能显示发消息按钮
+        if(personCenter.state.isExist){
+            sendMessageButton=<Button icon="message" value={personCenter.state.userInfo.user.colUid} onClick={personCenter.sendMessage} className="antnest_talk  persono_btn_blue">发消息</Button>;
+        }
+/*
         if(personCenter.state.isFollow==false){
             followButton = <Button icon="heart-o" onClick={personCenter.followUser} className="persono_btn_gray">关注</Button>;
         }else {
             followButton = <Button icon="heart" onClick={personCenter.unfollowUser} className="persono_btn_gray">取消关注</Button>;
         }
+*/
 
         return (
             <div>
@@ -239,7 +272,7 @@ const PersonCenterComponents = React.createClass({
 						<Button className="antnest_icon_blue_radius" value="level" onClick={personCenter.turnToPlatformRulePage} >{personCenter.state.userInfo.level.name}</Button>
                     </span>
 					<span className="person_btn_ri">
-                    <Button icon="message" value={personCenter.state.userInfo.user.colUid} onClick={personCenter.sendMessage} className="antnest_talk  persono_btn_blue">发消息</Button>
+                     {sendMessageButton}
                      {followButton}
 					 </span>
 

@@ -229,7 +229,12 @@
 }
 
 .vjs-icon-cancel:before, .video-js .vjs-control.vjs-close-button:before {
-    content: "\f115"
+    content: "\f115";
+	width:20px;
+	height:20px;
+	color:#FFFFFF;
+	background:#f70
+	
 }
 
 .vjs-icon-replay {

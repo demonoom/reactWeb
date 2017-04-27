@@ -185,7 +185,9 @@ const AntGroupTabComponents = React.createClass({
                     var userName = e.userName;
                     var imgTag = <div><img src={e.avatar}  className="antnest_38_img" height="38" ></img></div>;
                     var userJson = {key:userId,userContacts:userName,userObj:e,"userHeadIcon":imgTag};
-                    userContactsData.push(userJson);
+                    if(userId != sessionStorage.getItem("ident")){
+                        userContactsData.push(userJson);
+                    }
                 });
                 antGroup.setState({"userContactsData":userContactsData,"optType":"getUserList","activeKey":'loginWelcome'});
             },
@@ -220,7 +222,8 @@ const AntGroupTabComponents = React.createClass({
             //家长直接进入聊天窗口
             //蚂蚁君点击进入后，只能接收消息，无法发送消息
             antGroup.setState({"optType":"sendMessage","currentPerson":followUser});
-            antGroup.turnToMessagePage(followUser);
+            // antGroup.turnToMessagePage(followUser);
+            antGroup.getUser2UserMessages(followUser);
         }else {
             antGroup.getPersonalCenterData(followUser.colUid);
         }
@@ -769,11 +772,14 @@ const AntGroupTabComponents = React.createClass({
                 response.forEach(function (e) {
                     var userId = e.colUid;
                     var userName = e.userName;
-                    const data = {
-                        key: userId,
-                        title: userName,
-                    };
-                    mockData.push(data);
+                    var userType = e.colUtype;
+                    if(userType!="SGZH" && parseInt(userId) != sessionStorage.getItem("ident")){
+                        const data = {
+                            key: userId,
+                            title: userName,
+                        };
+                        mockData.push(data);
+                    }
                 });
                 antGroup.setState({ mockData, targetKeys });
             },
@@ -800,7 +806,8 @@ const AntGroupTabComponents = React.createClass({
                     var userId = e.colUid;
                     var userName = e.userName;
                     var isExist = antGroup.checkMemberIsExist(userId);
-                    if(isExist==false){
+                    var userType = e.colUtype;
+                    if(isExist==false && userType!="SGZH" && parseInt(userId) != sessionStorage.getItem("ident")){
                         const data = {
                             key: userId,
                             title: userName,
@@ -830,6 +837,15 @@ const AntGroupTabComponents = React.createClass({
         if(isEmpty(updateGroupId)==false){
 
         }else{
+            var title = antGroup.state.chatGroupTitle.trim();
+            if(title.length==0){
+                message.error("请输入群组名称");
+                return;
+            }
+            if(title.length>10){
+                message.error("群组名称不能超过10个字符");
+                return;
+            }
             var param = {
                 "method": 'createChatGroup',
                 "groupAvatar": loginUser.avatar,
@@ -1767,7 +1783,7 @@ const AntGroupTabComponents = React.createClass({
                                 <img src={require('../images/groupTitle.png')} className="antnest_38_img" />
                                 <span className=""　icon="usergroup-add">我的群组</span>
                             </div>
-                            <Table className="maaeegroup" onRowClick={antGroup.getPersonCenterInfo} showHeader={false} scroll={{ x: true, y: 430}} columns={columns} dataSource={antGroup.state.userContactsData} pagination={true}/>
+                            <Table className="maaeegroup" onRowClick={antGroup.getPersonCenterInfo} showHeader={false} scroll={{ x: true, y: 430}} columns={columns} dataSource={antGroup.state.userContactsData} pagination={false}/>
                     </TabPane>
                 </Tabs>;
         }else if(antGroup.state.optType=="personCenter"){
@@ -1784,6 +1800,7 @@ const AntGroupTabComponents = React.createClass({
                     <div className="person_padding" >
                         <PersonCenterComponents ref="personCenter"
                                                 userInfo={antGroup.state.currentPerson}
+                                                userContactsData={antGroup.state.userContactsData}
                                                 callBackTurnToMessagePage={antGroup.getUser2UserMessages}
                                                 callBackTurnToAsk={antGroup.callBackTurnToAsk}
                                                 callBackStudyTrack={antGroup.callBackStudyTrack}
@@ -1819,7 +1836,7 @@ const AntGroupTabComponents = React.createClass({
                                 if(e.fromUser.colUid==sessionStorage.getItem("ident")){
                                     messageTag =  <li  className="right" style={{'textAlign':'right'}}>
                                         <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span className="borderballoon_le">{e.content}</span></div>
+                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span className="borderballoon">{e.content}</span></div>
                                     </li>;
                                 }else{
                                     messageTag =  <li style={{'textAlign':'left'}}>
@@ -1831,7 +1848,7 @@ const AntGroupTabComponents = React.createClass({
                                 if(e.fromUser.colUid==sessionStorage.getItem("ident")){
                                     messageTag =  <li  className="right" style={{'textAlign':'right'}}>
                                         <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span  className="borderballoon_le ">{e.imgTagArray}</span></div>
+                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span  className="borderballoon ">{e.imgTagArray}</span></div>
                                     </li>;
                                 }else{
                                     messageTag =  <li style={{'textAlign':'left'}}>
@@ -1878,7 +1895,7 @@ const AntGroupTabComponents = React.createClass({
             >
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div>
-                        <div className="group_talk">
+                        <div className="group_talk chat-items">
                             <ul>
                                 {messageTagArray}
                             </ul>
@@ -2007,7 +2024,7 @@ const AntGroupTabComponents = React.createClass({
                                 if(e.fromUser.colUid==sessionStorage.getItem("ident")){
                                     messageTag =  <li className="right" style={{'textAlign':'right'}}>
                                         <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span  className="name">{userPhoneIcon}</span><span className="borderballoon_le">{e.content}</span></div>
+                                        <div className="talk-cont"><span  className="name">{userPhoneIcon}</span><span className="borderballoon">{e.content}</span></div>
                                     </li>;
                                 }else{
                                     messageTag =  <li style={{'textAlign':'left'}}>
@@ -2019,7 +2036,7 @@ const AntGroupTabComponents = React.createClass({
                                 if(e.fromUser.colUid==sessionStorage.getItem("ident")){
                                     messageTag =  <li className="right" style={{'textAlign':'right'}}>
                                         <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span  className="name">{userPhoneIcon}</span><span className="borderballoon_le">{e.imgTagArray}</span></div>
+                                        <div className="talk-cont"><span  className="name">{userPhoneIcon}</span><span className="borderballoon">{e.imgTagArray}</span></div>
                                     </li>;
                                 }else{
                                     messageTag =  <li style={{'textAlign':'left'}}>
@@ -2177,6 +2194,7 @@ const AntGroupTabComponents = React.createClass({
             </Tabs>;
         }else if(antGroup.state.optType=="getScoreOrLevelPage"){
             var currentPageLink;
+            returnPersonCenterToolBar = <div className="ant-tabs-right"><Button onClick={antGroup.callBackTurnToPlatformRulePage.bind(antGroup,antGroup.state.currentUser,"score")}>返回</Button></div>;
             if(antGroup.state.urlType=="score"){
                 currentPageLink = "http://www.maaee.com:80/Excoord_PhoneService/user/getUserScores/" + antGroup.state.currentUser.user.colUid;
             }else{

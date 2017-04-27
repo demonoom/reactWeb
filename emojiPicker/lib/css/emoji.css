@@ -124,16 +124,17 @@ img.emoji {
 .emoji-menu {
     position: absolute;
     z-index: 999;
-    width: 225px;
+    width:380px;
     overflow: hidden;
     border: 1px #dfdfdf solid;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
-    overflow: hidden;
     -webkit-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
     -moz-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
+	top: -256px !important;
+    left: -257px !important;
 }
 
 .emoji-items-wrap1 {
