@@ -18,7 +18,7 @@ const FavoriteShipinItems = React.createClass({
 
     getInitialState() {
         return {
-            ident: this.props.userid || sessionStorage.getItem("ident"),
+            ident:  sessionStorage.getItem("ident"),
             type: FAVTYPE.SHIPIN,
             data: [],
             pageNo: 1
@@ -33,13 +33,7 @@ const FavoriteShipinItems = React.createClass({
 
     view: function (e,objref) {
 
-        // e = e || window.event;
-        // if (e.nativeEvent) {
-        //     e.nativeEvent.stopImmediatePropagation();
-        // }
-        // e.stopPropagation();
-        // e.preventDefault();
-        // e.cancelBubble = true;
+
         let url = objref.liveInfo.liveVideos[0].path;
 
 
@@ -69,11 +63,21 @@ const FavoriteShipinItems = React.createClass({
             let content = e.content;
             let refkey = e.type + "#" + e.favoriteId;
             this.activeKey.push(refkey);
-            var password = e.password;
+            var password = e.liveInfo.password;
+
             var keyIcon={};
             if(password){
                 keyIcon = <Icon type="key" />;
             }
+
+            let cancelBtn = '';
+
+            if (this.state.ident == this.props.userid) {
+                cancelBtn = <a target="_blank" title="取消收藏" onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}>
+                    <Button icon="star" className="right_ri focus_btn"/>
+                </a>;
+            }
+
             return <div className="ant-card live ant-card-bordered">
                 <div key={refkey}>
 				<p className="live_h3">{content}</p>
@@ -95,10 +99,7 @@ const FavoriteShipinItems = React.createClass({
                             <li>
                                 
                                 <span className="live_color live_orange">{e.liveInfo.courseName}</span>
-                                <a target="_blank" title="取消收藏"
-                                   onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}>
-                                    <Button icon="star" className="right_ri focus_btn"/>
-                                </a>
+                                {cancelBtn}
                                 {keyIcon}
                             </li>
                         </ul>
@@ -111,7 +112,6 @@ const FavoriteShipinItems = React.createClass({
 
 
     render: function () {
-        console.log('buildFavShipionUi');
         this.buildFavShipionUi(this.props.param.data, this.props.param.type);
         return (
             <div className="favorite_scroll">
