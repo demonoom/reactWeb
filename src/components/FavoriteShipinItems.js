@@ -88,10 +88,9 @@ const FavoriteShipinItems = React.createClass({
                 <div >
 				<p className="live_h3">{content}</p>
                     <div className="live_img">
-                        <a onClick={event => {
-                            this.view(event, e)
-                        } } target="_blank"><img alt="example" className="attention_img" width="100%"
-                                                 src={e.cover}/></a>
+                        <a onClick={event => { this.view(event, e) } } target="_blank">
+                            <img alt="example" className="attention_img" width="100%"  src={e.cover}/>
+                        </a>
 						<div className="live_green"><span>{e.liveInfo.user.schoolName}</span></div>
                     </div>
                     <div className="custom-card">
