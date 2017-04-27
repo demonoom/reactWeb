@@ -159,9 +159,11 @@
             });
         });
 
-
+debugger
         $('.list-group a').on("click", function () {
-            playerA.src = resultObj.srcList[parseInt($(this).text())].src;
+           let newsrc = resultObj.srcList[parseInt($(this).text())-1];
+            playerA.src(newsrc );
+
         });
 
 
@@ -176,8 +178,10 @@
         let videoArr = this.param.videosObj.liveInfo.liveVideos;
         let listBtn = [];
         window.srcList = [];
+        let classChange='single';
 
         if (videoArr.length > 1) {
+            classChange='multi';
             videoArr.map(function (video, i) {
                 i++;
                 window.srcList.push({type: 'video/x-flv', src: video.path});
@@ -198,7 +202,7 @@
                     </div>
                 </div>
                 <div class="content">
-                    <section class="littleAnt-iframe-panle">
+                    <section class="littleAnt-iframe-panle ${classChange}">
                        <video id="${vid}" class="video-js vjs-default-skin vjs-big-play-centered"
                        src="${window.srcList[0].src}"   data-setup='{}'></video>
                        <div class="list-group" >${listBtn.join('')}</div>
