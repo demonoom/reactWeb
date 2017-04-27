@@ -29,6 +29,7 @@ const FloatButton = React.createClass({
             sessionStorage.removeItem("machineId");
             location.hash="Login";
         }
+            LP.delAll();
     },
 
     saveHistoryAccessPointId(userId,pointId){
@@ -68,6 +69,7 @@ const FloatButton = React.createClass({
           floatButton.showModifyModal();
         }else if(clickKey=="existSystem"){
           //floatButton.logOut();
+
             floatButton.showConfirmModal();
         }
     },

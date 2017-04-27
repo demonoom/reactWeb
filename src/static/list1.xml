@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<item>
+    <list name="Intro something.Please custom your title text content"
+          videotitle="Matrix film demo 1"
+          link="video/ani1.flv">
+        <thumb>thumb/1.jpg</thumb>
+    </list>
+
+    <list name="Intro something.Please custom your title text content"
+          videotitle="Final matrix demo 2"
+          link="video/ani2.flv">
+        <thumb>thumb/2.jpg</thumb>
+    </list>
+
+
+</item>

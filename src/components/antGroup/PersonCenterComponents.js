@@ -245,15 +245,22 @@ const PersonCenterComponents = React.createClass({
         //个人中心页面中，如果是自己，则不能显示关注和取消关注
         if(personCenter.state.userInfo.user.colUid != sessionStorage.getItem("ident")){
             if(personCenter.state.isFollow==false){
-                followButton = <Button icon="plus" onClick={personCenter.followUser} className="persono_btn_blue">关注</Button>;
-            }else {
-                followButton = <Button icon="plus" onClick={personCenter.unfollowUser}>取消关注</Button>;
+            followButton = <Button icon="heart-o" onClick={personCenter.followUser} className="persono_btn_gray">关注</Button>;
+        }else {
+            followButton = <Button icon="heart" onClick={personCenter.unfollowUser} className="persono_btn_gray">取消关注</Button>;
             }
         }
         //如果个人中心显示的用户并不是当前用户的联系人，则不能显示发消息按钮
         if(personCenter.state.isExist){
             sendMessageButton=<Button icon="message" value={personCenter.state.userInfo.user.colUid} onClick={personCenter.sendMessage} className="antnest_talk  persono_btn_blue">发消息</Button>;
         }
+/*
+        if(personCenter.state.isFollow==false){
+            followButton = <Button icon="heart-o" onClick={personCenter.followUser} className="persono_btn_gray">关注</Button>;
+        }else {
+            followButton = <Button icon="heart" onClick={personCenter.unfollowUser} className="persono_btn_gray">取消关注</Button>;
+        }
+*/
 
         return (
             <div>
@@ -261,7 +268,7 @@ const PersonCenterComponents = React.createClass({
                     {userPhotoTag}
 
                     <span className="person_btn">
-                        <Button className="antnest_talk antnest_icon_radius" 　value="score" onClick={personCenter.turnToPlatformRulePage}><i className="iconfont iconfont_jifen">&#xe608;</i><span>{personCenter.state.userInfo.score}</span>积分</Button>
+                        <Button className="antnest_talk antnest_icon_radius" 　value="score" onClick={personCenter.turnToPlatformRulePage}><i className="iconfont iconfont_jifen">&#xe608;</i><span className="iocnfont_sp_jifen">{personCenter.state.userInfo.score}</span>积分</Button>
 						<Button className="antnest_icon_blue_radius" value="level" onClick={personCenter.turnToPlatformRulePage} >{personCenter.state.userInfo.level.name}</Button>
                     </span>
 					<span className="person_btn_ri">

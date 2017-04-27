@@ -1,7 +1,10 @@
 import React from 'react';
-import {Pagination, Button} from 'antd';
+import {Pagination, Button,Icon} from 'antd';
 import {getLocalTime} from '../utils/utils';
 import {getPageSize} from '../utils/Const';
+
+
+
 let coursePanelChildren;
 // 我的收藏类型
 const FAVTYPE = {
@@ -15,7 +18,7 @@ const FavoriteShipinItems = React.createClass({
 
     getInitialState() {
         return {
-            ident: this.props.userid || sessionStorage.getItem("ident"),
+            ident:  sessionStorage.getItem("ident"),
             type: FAVTYPE.SHIPIN,
             data: [],
             pageNo: 1
@@ -28,23 +31,17 @@ const FavoriteShipinItems = React.createClass({
         window.open(e.target.value);
     },
 
-    view: function (e, url, tit) {
-        e = e || window.event;
-        if (e.nativeEvent) {
-            e.nativeEvent.stopImmediatePropagation();
-        }
-        e.stopPropagation();
-        e.preventDefault();
-        e.cancelBubble = true;
+    view: function (e,objref) {
 
-        let urlRef = url.split('/Excoord_PC/')[1];
-        if (urlRef) {
-            url = "/proxy/Excoord_PC/" + urlRef;
-        }
+
+        let url = objref.liveInfo.liveVideos[0].path;
+
 
         let obj = {
-            title: tit,
+            title:  objref.content,
             url: url,
+            param:objref,
+            htmlMode:true,
             width: '400px',
 
         }
@@ -66,12 +63,27 @@ const FavoriteShipinItems = React.createClass({
             let content = e.content;
             let refkey = e.type + "#" + e.favoriteId;
             this.activeKey.push(refkey);
+            var password = e.liveInfo.password;
+
+            var keyIcon={};
+            if(password){
+                keyIcon = <Icon type="key" />;
+            }
+
+            let cancelBtn = '';
+
+            if (this.state.ident == this.props.userid) {
+                cancelBtn = <a target="_blank" title="取消收藏" onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}>
+                    <Button icon="star" className="right_ri focus_btn"/>
+                </a>;
+            }
+
             return <div className="ant-card live ant-card-bordered">
                 <div key={refkey}>
 				<p className="live_h3">{content}</p>
                     <div className="live_img">
                         <a onClick={event => {
-                            this.view(event, e.address, e.content)
+                            this.view(event, e)
                         } } target="_blank"><img alt="example" className="attention_img" width="100%"
                                                  src={e.cover}/></a>
 						<div className="live_green"><span>{e.liveInfo.user.schoolName}</span></div>
@@ -87,10 +99,8 @@ const FavoriteShipinItems = React.createClass({
                             <li>
                                 
                                 <span className="live_color live_orange">{e.liveInfo.courseName}</span>
-                                <a target="_blank" title="取消收藏"
-                                   onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}>
-                                    <Button icon="star" className="right_ri focus_btn"/>
-                                </a>
+                                {cancelBtn}
+                                {keyIcon}
                             </li>
                         </ul>
                     </div>
@@ -102,7 +112,6 @@ const FavoriteShipinItems = React.createClass({
 
 
     render: function () {
-        console.log('buildFavShipionUi');
         this.buildFavShipionUi(this.props.param.data, this.props.param.type);
         return (
             <div className="favorite_scroll">

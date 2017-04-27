@@ -12,6 +12,8 @@ import {phone} from '../../utils/phone';
 import {getImgName} from '../../utils/Const';
 import {MsgConnection} from '../../utils/msg_websocket_connection';
 import ConfirmModal from '../ConfirmModal';
+import flvjsobj from 'flv';
+
 const TabPane = Tabs.TabPane;
 const confirm = Modal.confirm;
 const Panel = Collapse.Panel;
@@ -1445,6 +1447,7 @@ const AntGroupTabComponents = React.createClass({
 
     //显示使用至备课计划的弹窗
     showUseKnowledgeModal:function (e) {
+        debugger
         var target = e.target;
         if(navigator.userAgent.indexOf("Chrome") > -1){
             target=e.currentTarget;
@@ -1511,15 +1514,18 @@ const AntGroupTabComponents = React.createClass({
       this.getLiveInfoByUid(obj.user.colUid,obj.pageNo);
     },
 
-    view: function (e, url, tit) {
-        e = e || window.event;
+    view: function (e, videosObj ,title) {
+       /*
+       e = e || window.event;
         if (e.nativeEvent) {
             e.nativeEvent.stopImmediatePropagation();
         }
         e.stopPropagation();
         e.preventDefault();
         e.cancelBubble = true;
-        let obj = {title: tit, url: url, width: '380px'}
+        */
+
+        let obj = {htmlMode:true, flvjs:flvjsobj,  param: videosObj,title:title,url:"", width: '380px', }
         antGroup.props.onPreview(obj)
     },
 
@@ -1543,6 +1549,7 @@ const AntGroupTabComponents = React.createClass({
                     var response = ret.response;
 
                     response.forEach(function (e) {
+
                         var liveCover = e.liveCover;
                         var cover = liveCover.cover;
                         var liveVideos = e.liveVideos;
@@ -1558,10 +1565,10 @@ const AntGroupTabComponents = React.createClass({
                         if(isEmpty(password)==false){
                             keyIcon = <Icon type="key" />;
                         }
-                        var liveCard = <Card className="live" id={id} onClick={event => {antGroup.view(event,liveVideos[0].path,title)} }  >
+                        var liveCard = <Card className="live" >
 							<p className="h3">{title}</p>
-                            <div className="live_img">
-                                <img className="attention_img" width="100%" src={cover} />
+                            <div className="live_img"  id={id} onClick={event => {antGroup.view(event,liveVideos,title)} }  >
+                                <img className="attention_img"    width="100%" src={cover} />
 								<div className="live_green"><span>{schoolName}</span></div>
                             </div>
                             <div className="custom-card"  >

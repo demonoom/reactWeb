@@ -3,7 +3,6 @@ import {Card, Button,message,Breadcrumb,Icon} from 'antd';
 import {getLocalTime} from '../utils/utils';
 import {doWebService} from '../WebServiceHelper';
 
-
 let coursePanelChildren;
 
 class MyMTV extends React.Component {
@@ -20,6 +19,7 @@ class MyMTV extends React.Component {
 
     componentWillMount() {
         this.tabClick(1);
+
 
     }
 
