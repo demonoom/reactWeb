@@ -3302,3 +3302,21 @@ color:#ffbf00
 	font-size:14px;
 	color:#fff;
 }
+.chat-items {
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    box-flex: 1;
+    -webkit-flex: 1;
+    -moz-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    overflow-y: auto;
+    position: relative; 
+	display: -webkit-box;
+    display: -moz-box;
+    display: box;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    -moz-flex-flow: row nowrap;
+}

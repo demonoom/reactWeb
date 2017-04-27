@@ -1819,7 +1819,7 @@ const AntGroupTabComponents = React.createClass({
                                 if(e.fromUser.colUid==sessionStorage.getItem("ident")){
                                     messageTag =  <li  className="right" style={{'textAlign':'right'}}>
                                         <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span className="borderballoon_le">{e.content}</span></div>
+                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span className="borderballoon">{e.content}</span></div>
                                     </li>;
                                 }else{
                                     messageTag =  <li style={{'textAlign':'left'}}>
@@ -1831,7 +1831,7 @@ const AntGroupTabComponents = React.createClass({
                                 if(e.fromUser.colUid==sessionStorage.getItem("ident")){
                                     messageTag =  <li  className="right" style={{'textAlign':'right'}}>
                                         <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span  className="borderballoon_le ">{e.imgTagArray}</span></div>
+                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span  className="borderballoon ">{e.imgTagArray}</span></div>
                                     </li>;
                                 }else{
                                     messageTag =  <li style={{'textAlign':'left'}}>
@@ -1878,7 +1878,7 @@ const AntGroupTabComponents = React.createClass({
             >
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div>
-                        <div className="group_talk">
+                        <div className="group_talk chat-items">
                             <ul>
                                 {messageTagArray}
                             </ul>
@@ -2007,7 +2007,7 @@ const AntGroupTabComponents = React.createClass({
                                 if(e.fromUser.colUid==sessionStorage.getItem("ident")){
                                     messageTag =  <li className="right" style={{'textAlign':'right'}}>
                                         <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span  className="name">{userPhoneIcon}</span><span className="borderballoon_le">{e.content}</span></div>
+                                        <div className="talk-cont"><span  className="name">{userPhoneIcon}</span><span className="borderballoon">{e.content}</span></div>
                                     </li>;
                                 }else{
                                     messageTag =  <li style={{'textAlign':'left'}}>
@@ -2019,7 +2019,7 @@ const AntGroupTabComponents = React.createClass({
                                 if(e.fromUser.colUid==sessionStorage.getItem("ident")){
                                     messageTag =  <li className="right" style={{'textAlign':'right'}}>
                                         <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span  className="name">{userPhoneIcon}</span><span className="borderballoon_le">{e.imgTagArray}</span></div>
+                                        <div className="talk-cont"><span  className="name">{userPhoneIcon}</span><span className="borderballoon">{e.imgTagArray}</span></div>
                                     </li>;
                                 }else{
                                     messageTag =  <li style={{'textAlign':'left'}}>
