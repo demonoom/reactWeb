@@ -1,11 +1,10 @@
 import React from 'react';
-import {Pagination, Button,Icon} from 'antd';
+import {Pagination, Button, Icon,Input, Modal} from 'antd';
 import {getLocalTime} from '../utils/utils';
 import {getPageSize} from '../utils/Const';
 
 
 
-let coursePanelChildren;
 // 我的收藏类型
 const FAVTYPE = {
     OTHER: '0',
@@ -18,11 +17,16 @@ const FavoriteShipinItems = React.createClass({
 
     getInitialState() {
         return {
-            ident:  sessionStorage.getItem("ident"),
+            ident: sessionStorage.getItem("ident"),
             type: FAVTYPE.SHIPIN,
             data: [],
-            pageNo: 1
+            pageNo: 1,
+            videoPwdModalVisible: false,
         };
+        this.pwdInput = '';
+        this.coursePanelChildren ={};
+        this.videoPwdModalHandleOk = this.videoPwdModalHandleOk.bind(this);
+        this.view = this.view.bind(this);
     },
 
     activeKey: [],
@@ -31,17 +35,17 @@ const FavoriteShipinItems = React.createClass({
         window.open(e.target.value);
     },
 
-    view: function (e,objref) {
+    view: function (objref) {
 
 
         let url = objref.liveInfo.liveVideos[0].path;
 
 
         let obj = {
-            title:  objref.content,
+            title: objref.content,
             url: url,
-            param:objref,
-            htmlMode:true,
+            param: objref,
+            htmlMode: true,
             width: '400px',
 
         }
@@ -50,62 +54,77 @@ const FavoriteShipinItems = React.createClass({
     },
 
 
-    buildFavShipionUi: function () {
+    confirmVideoPwd: function (obj) {
 
-       let courseWareList = this.props.param.data;
-        coursePanelChildren = null;
+        if (this.state.ident !== this.props.userid) {
+            return this.view(obj);
+        }
+        var password = obj.liveInfo.password;
+
+        if (password) {
+            let _this=this;
+            Modal.confirm({
+                title: '请输入密码',
+                content: <Input  onKeyDown={(event)=>{ _this.pwdInput = this.value }}  />,
+                okText: '确定',
+                cancelText: '取消',
+                onOk: this.videoPwdModalHandleOk.bind(_this, password, obj),
+            });
+        } else {
+            this.view(obj);
+        }
+
+
+    },
+
+    videoPwdModalHandleOk: function(pwd, obj) {
+
+
+        this.view(obj);
+
+    },
+
+    buildFavShipionUi: function () {
+        let courseWareList = this.props.param.data;
+        this.coursePanelChildren = null;
 
         this.activeKey = [];
         if (!courseWareList || !courseWareList.length) {
-            coursePanelChildren = <img className="noDataTipImg" src={require('./images/noDataTipImg.png')}/>;
+            this.coursePanelChildren = <img className="noDataTipImg" src={require('./images/noDataTipImg.png')}/>;
             return;
         }
 
-        coursePanelChildren = courseWareList.map((e, i) => {
+        this.coursePanelChildren = courseWareList.map((e, i) => {
 
             let content = e.content;
-            let refkey = e.type + "#" + e.favoriteId;
-            this.activeKey.push(refkey);
-            var password = e.liveInfo.password;
-            debugger
-            var keyIcon={};
-            if(password){
-                keyIcon =  <span className="right_ri focus_btn key_span"><i className="iconfont key">&#xe621;</i></span>;
-            }
-
-            let cancelBtn = '';
-
-            if (this.state.ident == this.props.userid) {
-                cancelBtn = <a target="_blank" title="取消收藏" onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}>
-                    <span className="right_ri focus_btn star_span"><Icon type="star" className="anticon-star" /></span>
-                </a>;
-            }else{
-
-            }
-
+            let refkey =   e.favoriteId;
+            let password = e.liveInfo.password;
+            let showCancelBtn = this.state.ident == this.props.userid ? true : false;
+            let showKeyIcon = password ? true :false;
 
             return <div className="ant-card live ant-card-bordered" key={refkey} >
                 <div >
-				<p className="live_h3">{content}</p>
+                    <p className="live_h3">{content}</p>
                     <div className="live_img">
-                        <a onClick={event => { this.view(event, e) } } target="_blank">
-                            <img alt="example" className="attention_img" width="100%"  src={e.cover}/>
+                        <a onClick={this.confirmVideoPwd.bind(this, e) } target="_blank">
+                            <img alt="example" className="attention_img" width="100%" src={e.cover}/>
                         </a>
-						<div className="live_green"><span>{e.liveInfo.user.schoolName}</span></div>
+                        <div className="live_green"><span>{e.liveInfo.user.schoolName}</span></div>
                     </div>
                     <div className="custom-card">
                         <ul className="live_cont">
                             <li className="li_live_span_3">
-                                <span className="attention_img2"><img style={{width: '30px', height: '30px', border:0 }}
-                                                                     src={e.liveInfo.user.avatar}></img></span>
+                                <span className="attention_img2"><img style={{width: '30px', height: '30px', border: 0}}
+                                                                      src={e.liveInfo.user.avatar}></img></span>
                                 <span className="live_span_1 live_span_3">{e.liveInfo.user.userName}</span>
                                 <span className="right_ri live_span_2">{getLocalTime(e.liveInfo.startTime)}</span>
                             </li>
                             <li>
-                                
                                 <span className="live_color live_orange">{e.liveInfo.courseName}</span>
-                                {cancelBtn}
-                                {keyIcon}
+                                <a className={showCancelBtn ? 'show' : 'hide'  } target="_blank" title="取消收藏" onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}>
+                                    <span className="right_ri focus_btn star_span"><Icon type="star" className="anticon-star"/></span>
+                                </a>
+                                <span className={showKeyIcon ? 'right_ri focus_btn key_span show' : 'right_ri focus_btn key_span hide'  }><i className="iconfont key">&#xe621;</i></span>
                             </li>
                         </ul>
                     </div>
@@ -121,7 +140,7 @@ const FavoriteShipinItems = React.createClass({
         return (
             <div className="favorite_scroll">
                 <div className="favorite_up favorite_pa_le topics_calc">
-                    {coursePanelChildren}
+                    {this.coursePanelChildren}
                 </div>
                 <Pagination total={this.props.param.totalCount} pageSize={getPageSize()}
                             current={this.props.param.currentPage} onChange={this.props.pageChange}/>
