@@ -797,7 +797,7 @@ const UpdateExamPagerComponents = React.createClass({
 				<Col span={3} >图片答案：</Col>
 				<Col span={18}>
                     {/*className="add_study-b"*/}
-                    <AntUploadComponents key={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} fileList={imageAnswerFileArray}  params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponents>
+                    <AntUploadComponents fileList={imageAnswerFileArray}  params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponents>
                     {/*<AntUploadComponentsForUpdate key={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType}  fileList={imageAnswerFileArray} params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponentsForUpdate>*/}
 					{/*<button type="primary" icon="plus-circle" value={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} title="上传图片答案"
                             className="add_study-b" onClick={createExamPager.showModal}>上传图片答案</button>*/}
@@ -844,7 +844,7 @@ const UpdateExamPagerComponents = React.createClass({
 				<Col span={3}>图片答案：</Col>
 				<Col span={18}>
                     {/*<AntUploadComponentsForUpdate params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponentsForUpdate>*/}
-                    <AntUploadComponents key={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} fileList={imageAnswerFileArray}  params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponents>
+                    <AntUploadComponents fileList={imageAnswerFileArray}  params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponents>
 				 </Col>
 			</Row>
             <Row className="ant-form-item">

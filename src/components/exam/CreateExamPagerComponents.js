@@ -653,7 +653,7 @@ const CreateExamPagerComponents = React.createClass({
             <Row className="ant-form-item">
                 <Col span={3} >图片答案：</Col>
                 <Col span={12} className="upexam_le_te">
-                    <AntUploadComponents key={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponents>
+                    <AntUploadComponents params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponents>
                 </Col>
             </Row>
             <Row className="ant-form-item">
@@ -695,7 +695,7 @@ const CreateExamPagerComponents = React.createClass({
             <Row className="ant-form-item">
                 <Col span={3} >图片答案：</Col>
                 <Col span={12} className="upexam_le_te">
-                    <AntUploadComponents key={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponents>
+                    <AntUploadComponents params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponents>
                 </Col>
             </Row>
             <Row className="ant-form-item">
