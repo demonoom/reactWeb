@@ -130,28 +130,33 @@ img.emoji {
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
-    -webkit-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
-    -moz-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
-    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
-	top: -256px !important;
-    left: -257px !important;
+    -webkit-box-shadow: 0px 2px 8px 1px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0px 2px 8px 1px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 2px 8px 1px rgba(0, 0, 0, 0.2);
+	top: -224px !important;
+    left: -260px !important;
 }
 
 .emoji-items-wrap1 {
     background: #ffffff;
-    padding: 5px 2px 5px 5px;
+    padding: 0;
 }
 
 .emoji-items-wrap1 .emoji-menu-tabs {
     width: 100%;
     margin-bottom: 8px;
-    margin-top: 3px;
+    margin-top: 0;
+    background: #f5f5f5;
+    border-bottom: 1px solid #e6e5e6;
+	height:40px
 }
 
 .emoji-items-wrap1 .emoji-menu-tabs td {
     text-align: center;
     color: white;
     line-height: 0;
+	width: 36px !important;
+    display: inline-block;
 }
 
 .emoji-menu-tabs .emoji-menu-tab {
@@ -161,6 +166,8 @@ img.emoji {
     background: url('../img/IconsetSmiles.png') no-repeat;
     background-size: 42px 350px;
     border: 0;
+	 margin-top: 3px;
+
 }
 
 .is_1x .emoji-menu-tabs .emoji-menu-tab {
@@ -209,7 +216,7 @@ img.emoji {
 
 .emoji-menu .emoji-items-wrap {
     position: relative;
-    height: 174px;
+    height: 150px;
 }
 
 .emoji-menu .emoji-items {
@@ -226,7 +233,7 @@ img.emoji {
 
 .emoji-menu .emoji-items a {
     margin: -1px 0 0 -1px;
-    padding: 5px;
+    padding: 5px 7px;
     display: block;
     float: left;
     border-radius: 2px;
