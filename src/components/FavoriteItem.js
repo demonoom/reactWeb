@@ -150,6 +150,7 @@ const FavoriteItem = React.createClass({
                                onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}><Button
                     icon="star"/></a>
             }
+
             switch (type) {
 
 

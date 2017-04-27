@@ -22,6 +22,7 @@
                 zIndex: 0
             },
             style: {},
+            sourcesCreate :[],
         }
 
     }
@@ -121,8 +122,14 @@
 
         let id = UUID(8, 16);
         this.id = id;
-        let url = this.param.videosObj[0].path;
-       // videojs.options.flash.swf = "video-js.swf";
+        let videoArr = this.param.videosObj.liveInfo.liveVideos;
+        window.sourcesCreate=[];
+
+
+        videoArr.map(function(video,i){
+            window.sourcesCreate.push({type:'video/x-flv',src:video.path})
+        });
+
         let htm = `<div id="${id}" class="dialog little-layout-aside-r-show">
                 <div class="header draggable">
                 <h3 class="title">${ this.param.title }</h3>
@@ -133,17 +140,14 @@
                 </div>
                 <div class="content">
                     <section class="littleAnt-iframe-panle">
-<video id="${id}" class="video-js vjs-default-skin vjs-big-play-centered" autoplay="autoplay" controls  preload="auto"  data-setup='{}'></video>
+<video id="v${id}" class="video-js vjs-default-skin vjs-big-play-centered" autoplay="autoplay" controls  preload="auto"  data-setup='{}'></video>
 <script !src="">
 var options = {
     sourceOrder: true,
-    sources: [{
-        src: '${url}',
-        type: 'video/x-flv'
-    }],
+    sources: window.sourcesCreate,
     techOrder: ['html5', 'flash']
 };
- videojs('${id}', options, function() {
+ videojs('v${id}', options, function() {
   this.play();
     this.on('ended', function() {
     });
