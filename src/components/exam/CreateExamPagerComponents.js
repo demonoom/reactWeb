@@ -193,8 +193,8 @@ const CreateExamPagerComponents = React.createClass({
         }
         paperJson.questionTypes = questionTypesArray;
         console.log(paperJson);
-        cardChildArray.splice(0);
-        createExamPager.createExamPager(paperJson);
+        // cardChildArray.splice(0);
+        // createExamPager.createExamPager(paperJson);
     },
 
     isEmpty(content){
@@ -322,13 +322,13 @@ const CreateExamPagerComponents = React.createClass({
     checkCardTitleIsExist(answerTitle,answerSubjectType){
         var isExist = false;
         var answerTitleInCardChildJson;
-        cardChildArray.map(function(item,i){
-            answerTitleInCardChildJson = item;
-            if(answerTitleInCardChildJson.answerTitle == answerTitle && answerTitleInCardChildJson.answerSubjectType == answerSubjectType){
+        for(var i=0;i<cardChildArray.length;i++){
+            answerTitleInCardChildJson = cardChildArray[i];
+            if(answerTitleInCardChildJson.answerTitle == answerTitle && parseInt(answerTitleInCardChildJson.answerSubjectType) == parseInt(answerSubjectType)){
                 isExist = true;
-                return;
+                break;
             }
-        },createExamPager)
+        }
         //如果答题卡的标题已经存在，则返回包含当前标题的json对象，否则返回false
         if(isExist==true){
             return answerTitleInCardChildJson;
@@ -747,7 +747,6 @@ const CreateExamPagerComponents = React.createClass({
     buildCardChildArray(){
         cardChildTagArray = cardChildArray.map((e, i)=> {
             var subjectArray=e.cardSubjectAnswerArray;
-            // className="topic_del_ri"
             return <Card key={e.answerTitle+"#"+e.answerSubjectType} title={e.answerTitle} className="upexam_topic" extra={<button title={e.answerTitle} value={e.answerTitle+"#"+e.answerSubjectType} icon="delete" onClick={createExamPager.deleteAnswerCard} className="btn_gray_exam examination_btn_gray">															                        <i className="iconfont btn_gray_exam_del">&#xe62f;</i></button>} style={{width: 650}}>
                 {
                     subjectArray.map((item,j)=>item.divContent)
@@ -786,16 +785,16 @@ const CreateExamPagerComponents = React.createClass({
     addAnswerCard(){
         //试卷名称
         var examPagerTitle = createExamPager.convertUndefinedToNull(createExamPager.state.examPagerTitle);
-        if(createExamPager.isEmpty(examPagerTitle)){
-            message.warning("请输入试卷名称",5);
-            return;
-        }
+        // if(createExamPager.isEmpty(examPagerTitle)){
+        //     message.warning("请输入试卷名称",5);
+        //     return;
+        // }
         //上传文件的附件url
         var examPagerUrl = createExamPager.convertUndefinedToNull(createExamPager.state.examPagerUrl,"array");
-        if(createExamPager.isEmpty(examPagerUrl) || examPagerUrl.length<=0){
-            message.warning("请上传试卷图片",5);
-            return;
-        }
+        // if(createExamPager.isEmpty(examPagerUrl) || examPagerUrl.length<=0){
+        //     message.warning("请上传试卷图片",5);
+        //     return;
+        // }
         //答题卡标题
         var answerTitle = createExamPager.state.answerTitle;
         if(createExamPager.isEmpty(answerTitle)){
@@ -842,6 +841,7 @@ const CreateExamPagerComponents = React.createClass({
             var answerCountBeforeAdd = cardChildJsonWithExist.answerCount;
             //题目的总数量增加
             var newAnswerCount = answerCountBeforeAdd+answerCount;
+            var newSubjectArray=[];
             for(var i=answerCountBeforeAdd+1;i<=newAnswerCount;i++){
                 var subjectDiv;
                 if(answerSubjectType=="0"){
@@ -854,11 +854,27 @@ const CreateExamPagerComponents = React.createClass({
                     subjectDiv = createExamPager.buildSimpleAnswerSubjectDivContent(i,answerTitle,answerSubjectType,answerScore);
                 }
                 var subjectDivJson = {"index":i,"divContent":subjectDiv,"score":answerScore};
+                createExamPager.pushCardChildTagArray(answerTitle,answerSubjectType,subjectDivJson);
                 cardChildJsonWithExist.cardSubjectAnswerArray.push(subjectDivJson);
             }
             cardChildJsonWithExist.answerCount = newAnswerCount;
         }
         createExamPager.buildCardChildArray();
+    },
+    /**
+     * 将新增题目的div标记，推入到指定的Card tag数组中
+     * @param answerTitle
+     * @param answerSubjectType
+     * @param subjectDivJson
+     */
+    pushCardChildTagArray(answerTitle,answerSubjectType,subjectDivJson){
+        var currentKey = answerTitle+"#"+answerSubjectType;
+        for(var i=0;i<cardChildTagArray.length;i++){
+            var cardChild = cardChildTagArray[i];
+            if(cardChild.key==currentKey){
+                cardChild._shadowChildren.push(subjectDivJson.divContent);
+            }
+        }
     },
 
     /**

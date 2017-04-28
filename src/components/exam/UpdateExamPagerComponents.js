@@ -477,13 +477,13 @@ const UpdateExamPagerComponents = React.createClass({
     checkCardTitleIsExist(answerTitle,answerSubjectType){
         var isExist = false;
         var answerTitleInCardChildJson;
-        cardChildArray.map(function(item,i){
-            answerTitleInCardChildJson = item;
-            if(answerTitleInCardChildJson.answerTitle == answerTitle && answerTitleInCardChildJson.answerSubjectType == answerSubjectType){
+        for(var i=0;i<cardChildArray.length;i++){
+            answerTitleInCardChildJson = cardChildArray[i];
+            if(answerTitleInCardChildJson.answerTitle == answerTitle && parseInt(answerTitleInCardChildJson.answerSubjectType) == parseInt(answerSubjectType)){
                 isExist = true;
-                return;
+                break;
             }
-        },createExamPager)
+        }
         //如果答题卡的标题已经存在，则返回包含当前标题的json对象，否则返回false
         if(isExist==true){
             return answerTitleInCardChildJson;
@@ -986,28 +986,43 @@ const UpdateExamPagerComponents = React.createClass({
             cardChildArray.push(cardChildJson);
         }else{
             var cardChildJsonWithExist = checkResult;
+            var answerCountBeforeAdd = cardChildJsonWithExist.answerCount;
             //题目的总数量增加
-            var newAnswerCount = cardChildJsonWithExist.answerCount+answerCount;
-            cardChildJsonWithExist.answerCount = newAnswerCount;
-            var cardSubjectAnswerArray=cardChildJsonWithExist.cardSubjectAnswerArray;
-            for(var i=1;i<=answerCount;i++){
-                var newIndex = cardSubjectAnswerArray.length+i;
+            var newAnswerCount = answerCountBeforeAdd+answerCount;
+            for(var i=answerCountBeforeAdd+1;i<=newAnswerCount;i++){
                 var subjectDiv;
                 if(answerSubjectType=="0"){
-                    subjectDiv = createExamPager.buildChoiceSubjectDivContent(newIndex,answerTitle,answerSubjectType,answerScore);
+                    subjectDiv = createExamPager.buildChoiceSubjectDivContent(i,answerTitle,answerSubjectType,answerScore);
                 }else if(answerSubjectType=="1"){
-                    subjectDiv = createExamPager.buildCorrectSubjectDivContent(newIndex,answerTitle,answerSubjectType,answerScore);
+                    subjectDiv = createExamPager.buildCorrectSubjectDivContent(i,answerTitle,answerSubjectType,answerScore);
                 }else if(answerSubjectType=="2"){
-                    subjectDiv = createExamPager.buildFillBlankSubjectDivContent(newIndex,answerTitle,answerSubjectType,answerScore);
+                    subjectDiv = createExamPager.buildFillBlankSubjectDivContent(i,answerTitle,answerSubjectType,answerScore);
                 }else if(answerSubjectType=="3"){
-                    subjectDiv = createExamPager.buildSimpleAnswerSubjectDivContent(newIndex,answerTitle,answerSubjectType,answerScore);
+                    subjectDiv = createExamPager.buildSimpleAnswerSubjectDivContent(i,answerTitle,answerSubjectType,answerScore);
                 }
-                var subjectDivJson = {"index":newIndex,"divContent":subjectDiv,"score":answerScore};
-                cardSubjectAnswerArray.push(subjectDivJson);
+                var subjectDivJson = {"index":i,"divContent":subjectDiv,"score":answerScore};
+                createExamPager.pushCardChildTagArray(answerTitle,answerSubjectType,subjectDivJson);
+                cardChildJsonWithExist.cardSubjectAnswerArray.push(subjectDivJson);
             }
-            cardChildJsonWithExist.cardSubjectAnswerArray = cardSubjectAnswerArray;
+            cardChildJsonWithExist.answerCount = newAnswerCount;
         }
         createExamPager.buildCardChildArray();
+    },
+
+    /**
+     * 将新增题目的div标记，推入到指定的Card tag数组中
+     * @param answerTitle
+     * @param answerSubjectType
+     * @param subjectDivJson
+     */
+    pushCardChildTagArray(answerTitle,answerSubjectType,subjectDivJson){
+        var currentKey = answerTitle+"#"+answerSubjectType;
+        for(var i=0;i<cardChildTagArray.length;i++){
+            var cardChild = cardChildTagArray[i];
+            if(cardChild.key==currentKey){
+                cardChild._shadowChildren.push(subjectDivJson.divContent);
+            }
+        }
     },
 
     /**
