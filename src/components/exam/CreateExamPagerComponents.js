@@ -624,7 +624,7 @@ const CreateExamPagerComponents = React.createClass({
                     <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
                         所属知识点
                     </button>
-					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal}>
+					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
                         解析
                     </button>
                 </Col>
@@ -665,10 +665,10 @@ const CreateExamPagerComponents = React.createClass({
             <Row className="ant-form-item topic_bor_pa">
                 <Col span={3}></Col>
                 <Col span={18} className="upexam_le_te">
-                    <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} >
+                    <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal}  className="examination_btn_gray">
                         所属知识点
                     </button>
-					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal}>
+					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
                         解析
                     </button>
                 </Col>
@@ -707,10 +707,10 @@ const CreateExamPagerComponents = React.createClass({
             <Row className="ant-form-item topic_bor_pa">
                 <Col span={3}></Col>
                 <Col span={18} className="upexam_le_te">
-                    <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal}>
+                    <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
                         所属知识点
                     </button>
-					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal}>
+					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
                         解析
                     </button>
                 </Col>
