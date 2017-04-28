@@ -193,8 +193,8 @@ const CreateExamPagerComponents = React.createClass({
         }
         paperJson.questionTypes = questionTypesArray;
         console.log(paperJson);
-        // cardChildArray.splice(0);
-        // createExamPager.createExamPager(paperJson);
+        cardChildArray.splice(0);
+        createExamPager.createExamPager(paperJson);
     },
 
     isEmpty(content){
@@ -839,11 +839,10 @@ const CreateExamPagerComponents = React.createClass({
             cardChildArray.push(cardChildJson);
         }else{
             var cardChildJsonWithExist = checkResult;
+            var answerCountBeforeAdd = cardChildJsonWithExist.answerCount;
             //题目的总数量增加
-            var newAnswerCount = cardChildJsonWithExist.answerCount+answerCount;
-            cardChildJsonWithExist.answerCount = newAnswerCount;
-            var cardSubjectAnswerArray=[];
-            for(var i=1;i<=newAnswerCount;i++){
+            var newAnswerCount = answerCountBeforeAdd+answerCount;
+            for(var i=answerCountBeforeAdd+1;i<=newAnswerCount;i++){
                 var subjectDiv;
                 if(answerSubjectType=="0"){
                     subjectDiv = createExamPager.buildChoiceSubjectDivContent(i,answerTitle,answerSubjectType,answerScore);
@@ -855,9 +854,9 @@ const CreateExamPagerComponents = React.createClass({
                     subjectDiv = createExamPager.buildSimpleAnswerSubjectDivContent(i,answerTitle,answerSubjectType,answerScore);
                 }
                 var subjectDivJson = {"index":i,"divContent":subjectDiv,"score":answerScore};
-                cardSubjectAnswerArray.push(subjectDivJson);
+                cardChildJsonWithExist.cardSubjectAnswerArray.push(subjectDivJson);
             }
-            cardChildJsonWithExist.cardSubjectAnswerArray = cardSubjectAnswerArray;
+            cardChildJsonWithExist.answerCount = newAnswerCount;
         }
         createExamPager.buildCardChildArray();
     },
