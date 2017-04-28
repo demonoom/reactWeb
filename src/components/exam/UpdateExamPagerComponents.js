@@ -1483,16 +1483,12 @@ const UpdateExamPagerComponents = React.createClass({
     /**
      * 获取图片解析的url路径
      */
-    getAnalysisiImgList(fileList){
-        if(createExamPager.isEmpty(fileList) || fileList.length==0){
-            createExamPager.setState({"analysisUrl":''});
+    getAnalysisiImgList(file,subjectInfo,isRemoved){
+        var analysisUrl = file.response;
+        if(createExamPager.isEmpty(isRemoved)==false && isRemoved=="removed"){
+            analysisUrl = "";
         }
-        for(var i=0;i<fileList.length;i++){
-            var fileJson = fileList[i];
-            var fileUrl = fileJson.url;
-            console.log("analysis URl："+fileUrl);
-            createExamPager.setState({"analysisUrl":fileUrl});
-        }
+        createExamPager.setState({"analysisUrl":analysisUrl});
     },
 
     render() {
