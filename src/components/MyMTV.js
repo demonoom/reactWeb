@@ -9,21 +9,22 @@ class MyMTV extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { // define this.state in constructor
+        this.state = {
             ident: this.props.userid || sessionStorage.getItem("ident"),
             data: [],
             pageNo: 1,
-            method:'getUserFavorite'
+            // method:'getUserFavorite'
+             method:'getLiveInfoByUid'
         };
+        this.changeState = this.changeState.bind(this);
     }
 
     componentWillMount() {
         this.tabClick(1);
-
-
     }
 
     getDate(fn, param) {
+        debugger
         var args = {
             "method": param.method,
             "userId": param.ident,
@@ -33,6 +34,7 @@ class MyMTV extends React.Component {
         var _this = this;
         doWebService(JSON.stringify(args), {
             onResponse: function (res) {
+                debugger
                 if (!res.success) {
                     message.error(res.msg);
                     return;
@@ -40,6 +42,7 @@ class MyMTV extends React.Component {
                 if (res.pager.rsCount) {
                     args.data = res.response || [];
                     args.pager = res.pager || [];
+                    debugger
                     if (fn) fn.call(_this, args);
                 }
             },
@@ -49,9 +52,12 @@ class MyMTV extends React.Component {
         });
     }
 
+    changeState(args){
 
+        this.setState({...args});
 
-// 翻页
+    }
+
     tabClick(type) {
 
         var param = {
@@ -62,7 +68,6 @@ class MyMTV extends React.Component {
         this.getDate(this.changeState, param);
     }
 
-    // 取消收藏
     cancelFav(address, fn) {
         var _self = this;
         var args = {
@@ -82,8 +87,10 @@ class MyMTV extends React.Component {
         });
     }
 
-    buildFavShipionUi(courseWareList, type) {
-        coursePanelChildren = null;
+    buildFavShipionUi( ) {
+
+       let  courseWareList = this.state.data;
+            coursePanelChildren = null;
 
         if (!courseWareList || !courseWareList.length) {
             coursePanelChildren = <img className="noDataTipImg" src={require('./images/noDataTipImg.png')}/>;
@@ -125,14 +132,21 @@ class MyMTV extends React.Component {
     }
 
     render() {
-        console.log('buildFavShipionUi');
-        this.buildFavShipionUi(this.state.data, this.state.type);
+
+        this.buildFavShipionUi();
+
+        let breadcrumb = <Breadcrumb separator=">">
+            <Breadcrumb.Item><Icon type="home"/></Breadcrumb.Item>
+            <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
+            <Breadcrumb.Item href="#/MainLayout">我的直播课</Breadcrumb.Item>
+        </Breadcrumb>;
+
+        if(this.props.hideBreadcrumb){
+            breadcrumb = null;
+        }
+
         return ( <div>
-                <Breadcrumb separator=">">
-                    <Breadcrumb.Item><Icon type="home"/></Breadcrumb.Item>
-                    <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
-                    <Breadcrumb.Item href="#/MainLayout">我的直播课</Breadcrumb.Item>
-                </Breadcrumb>
+                {breadcrumb}
                 {coursePanelChildren}
             </div>
         );

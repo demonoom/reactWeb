@@ -120,12 +120,12 @@ const UserCardModalComponents = React.createClass({
         this.setState({ visible: false });
     },
     MyFollows(){
+
         this.props.callEvent({resouceType: 'myFollows', ref: 'myFollowsA', methond:'showMyFollowsListUI', param: teacherInfo.user });
-        this.props.callbackParent("myFollows");
+       // this.props.callbackParent("myFollows");
         this.setState({ visible: false });
     },
     myMTV(){
-       this.props.callEvent({resouceType: 'visitAntGroup', ref: 'antGroupTabComponents', methond:'callBackGetLiveInfo', param:{user: teacherInfo.user,visiable:false} });
        this.props.callEvent({resouceType: 'visitAntGroup', ref: 'antGroupTabComponents', methond:'callBackGetLiveInfo', param:{user: teacherInfo.user,visiable:false} });
       //  this.props.callbackParent("myMTV");
         this.setState({ visible: false });
