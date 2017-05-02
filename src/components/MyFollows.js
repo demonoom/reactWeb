@@ -4,54 +4,65 @@
 import {Tabs, Breadcrumb, Icon, message, Card, Button} from 'antd';
 import React from 'react';
 import {doWebService} from '../WebServiceHelper';
-import PersonCenterV2 from './PersonCenterV2';
+import MyFollowExtend from './MyFollowExtend';
 
 class MyFollows extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { // define this.state in constructor
-            ident: this.props.userid || sessionStorage.getItem("ident"),
-            followUserInfo: {},
-            followUserVisible: false,
-            myFollowsListVisible: true,
-            method: 'getUserFavorite',
+        this.state = {
+            ident: sessionStorage.getItem("ident"),
+            followsListVisible: true,
+            prosonCenterVisible: false,
             type: 1,
             pageNo: 1,
-            data: []
+            userInfo: [],
+            userList: [],
         };
+        this.previouUserId = []; // 进入时加一，返回时，减一
+        this.currentUser = '';
+        this.gobackBtn = null;
         this.htmlTempletContent = {};
+        this.getMyFollows = this.getMyFollows.bind(this);
+        this.intoFollowsList = this.intoFollowsList.bind(this);
+        this.intoProsoncenter = this.intoProsoncenter.bind(this);
+        this.returnPersonCenter = this.returnPersonCenter.bind(this);
+        this.returnParentFollowsList = this.returnParentFollowsList.bind(this);
     }
 
 
     componentWillMount() {
-
-        this.getMyFollows();
+        this.getMyFollows(sessionStorage.getItem("ident"));
     }
 
 
-// 外部调用显示
     showMyFollowsListUI(userinfo) {
         this.getMyFollows(userinfo.colUid);
     }
 
-    // 内部调用
-    getMyFollows(myIdent) {
+    // 进入列表
+    getMyFollows(userid, visiableGoBackBtn) {
+
         let _this = this;
         var param = {
-            "method": 'getMyFollows',
-            "userId": myIdent || this.state.ident,
+            method: 'getMyFollows',
+            userId: userid || _this.state.ident,
         };
 
         doWebService(JSON.stringify(param), {
             onResponse: function (res) {
                 if (res.success) {
+                    if (!res.response.length) {
+                        message.info('没有关注的内容！');
+                        return;
+                    }
+
                     _this.setState({
-                        myFollowsListVisible: true,
-                        followUserVisible: false,
-                        data: res.response
+                        followsListVisible: true,
+                        prosonCenterVisible: false,
+                        userList: res.response,
                     });
-                    // if (fn) fn(res.response);
+
                 } else {
                     message.error(res.msg);
                 }
@@ -86,24 +97,21 @@ class MyFollows extends React.Component {
 
     }
 
-
     // 展示个人信息
-    viewProsenInfo(userinfo) {
-
+    viewProsenInfo(userid) {
         let _this = this;
         var param = {
             "method": 'getPersonalCenterData',
-            "userId": userinfo.colUid,
+            "userId": userid,
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.success) {
                     var userInfo = ret.response;
-
                     _this.setState({
-                        followUserVisible: true,
-                        myFollowsListVisible: false,
-                        followUserInfo: userInfo
+                        followsListVisible: false,
+                        prosonCenterVisible: true,
+                        userInfo: userInfo
                     });
                 }
             },
@@ -113,10 +121,75 @@ class MyFollows extends React.Component {
         });
     }
 
+    // 进入关注列表
+    intoFollowsList(userid) {
+
+        let curUser = this.currentUser = userid;
+        if (!curUser) {
+            curUser = this.state.ident;
+        }
+        this.getMyFollows(curUser)
+
+    }
+
+    // 返回父级关注列表
+    returnParentFollowsList() {
+        let parentUser = null;
+
+        this.currentUser = this.previouUserId.pop();
+        if (this.previouUserId.length) {
+            this.currentUser = this.previouUserId.pop();
+        } else {
+            this.currentUser = this.state.ident;
+        }
+
+        parentUser = this.currentUser;
+
+        this.getMyFollows(parentUser)
+        // console.log('返回父级关注列表：' + parentUser);
+    }
+
+    // 返回个人中心
+    returnPersonCenter() {
+        if (!this.currentUser) {
+            this.currentUser = this.state.ident;
+            this.previouUserId = [];
+        }
+
+        this.viewProsenInfo(this.currentUser);
+        // console.log('返回个人中心：' + this.currentUser);
+
+    }
+
+
+    // 进入个人中心
+    intoProsoncenter(userinfo) {
+        this.viewProsenInfo(userinfo.colUid);
+        this.previouUserId.push(userinfo.colUid);
+        this.currentUser = userinfo.userId;
+        // console.log('进入的用户层级');
+        // console.log(this.previouUserId);
+    }
+
+
+    // 登录的操作用户不能返回个人中心
+    notInterProsonCenter() {
+        if (!this.previouUserId.length && this.currentUser == this.state.ident) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
+    showpanle(obj) {
+        LP.Start(obj);
+    }
+
 
     _buildMyFollowsList() {
 
-        let dataArray = this.state.data;
+        let dataArray = this.state.userList;
         if (!dataArray || !dataArray.length) {
             this.htmlTempletContent = <img className="noDataTipImg" src={require('./images/noDataTipImg.png')}/>;
             return;
@@ -126,14 +199,14 @@ class MyFollows extends React.Component {
             let refkey = e.uid + "#" + e.courseId;
 
             return <Card key={refkey} className="focus">
-                            <span className="person_user_bg upexam_float">
-                                <a onClick={this.viewProsenInfo.bind(this, e.user)} target="_blank"><img
-                                    alt={e.user.userName + '头像'} width="100%" src={e.user.avatar}
-                                    className="person_user"/></a>
-                            </span>
+                    <span className="person_user_bg upexam_float">
+                        <a onClick={this.intoProsoncenter.bind(this, e.user)} target="_blank">
+                            <img alt={e.user.userName + '头像'} width="100%" src={e.user.avatar} className="person_user"/></a>
+                    </span>
                 <div className="custom-card focus_2">
                     <div className="focus_1">
-                        <span className="antnest_name focus_3" onClick={this.viewProsenInfo.bind(this, e.user)} >{e.user.userName}</span>
+                        <span className="antnest_name focus_3"
+                              onClick={this.intoProsoncenter.bind(this, e.user)}>{e.user.userName}</span>
                     </div>
                     <div className="focus_3">学校：{e.user.schoolName}</div>
                     <div className="focus_3">科目：{e.course.colCourse}</div>
@@ -143,24 +216,32 @@ class MyFollows extends React.Component {
 
     }
 
+
     buildContent() {
 
         this.htmlTempletContent = null;
+        this.gobackBtn = '';
+
 
         switch (true) {
-            // 显示被关注的个人信息
-            case this.state.followUserVisible:
-                this.htmlTempletContent =
-                    <PersonCenterV2 userInfo={this.state.followUserInfo }
-                                    visible={this.state.followUserVisible}
-                                    callEvent={ this.props.callEvent }/>;
+            // 个人信息
+            case this.state.prosonCenterVisible:
+                this.htmlTempletContent = <MyFollowExtend userinfo={this.state.userInfo}
+                                                          intoMyFollows={this.intoFollowsList}
+                                                          returnParentFollows={this.returnParentFollowsList}
+                                                          onPreview={ this.showpanle }/>;
                 break;
-            // 显示我的关注列表
-            case this.state.myFollowsListVisible:
+
+            // 关注列表
+            case this.state.followsListVisible:
+
+                if (this.notInterProsonCenter()) {
+                    this.gobackBtn =
+                        <div className="ant-tabs-right"><Button onClick={this.returnPersonCenter}>返回</Button></div>;
+                }
                 this._buildMyFollowsList();
                 break;
         }
-
     }
 
     render() {
@@ -172,7 +253,8 @@ class MyFollows extends React.Component {
                     <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
                     <Breadcrumb.Item href="#/MainLayout">我的关注</Breadcrumb.Item>
                 </Breadcrumb>
-                <div className="focus_auto favorite_pa_le"> { this.htmlTempletContent }</div>
+                {this.gobackBtn}
+                { this.htmlTempletContent }
             </div>
         );
     }

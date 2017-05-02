@@ -264,7 +264,7 @@ const MainLayout = React.createClass({
                     <Col span={24}>
                         <div className="ant-layout-container">
                             <div className="ant-layout-content">
-                                <AntGroupTabComponents ref="antGroupTabComponents" resouceType={mainLayout.state.resouceType}  onPreview={ this.showpanle }/>
+                                <AntGroupTabComponents ref="antGroupTabComponents"  onPreview={ this.showpanle.bind(this) } resouceType={mainLayout.state.resouceType}  />
                             </div>
                         </div>
                     </Col>
@@ -275,8 +275,7 @@ const MainLayout = React.createClass({
                     <Col span={24}>
                         <div className="ant-layout-container">
                             <div className="ant-layout-content">
-                                <MyFavorites resouceType={mainLayout.state.resouceType}
-                                             onPreview={ this.showpanle.bind(this) }/>
+                                <MyFavorites  onPreview={ this.showpanle.bind(this) }/>
                             </div>
                         </div>
                     </Col>
@@ -309,7 +308,7 @@ const MainLayout = React.createClass({
                     <Col span={24}>
                         <div className="ant-layout-container">
                             <div className="ant-layout-content">
-                                <MyFollows ref="myFollowsA" callEvent={this.callEvent}/>
+                                <MyFollows ref="myFollowsA" callEvent={this.callEvent}  />
                             </div>
                         </div>
                     </Col>

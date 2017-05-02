@@ -1497,7 +1497,8 @@ const AntGroupTabComponents = React.createClass({
     },
 
     callBackGetLiveInfo(obj){
-        console.log(obj.user+"===="+obj.visiable);
+
+
         var user;
         var isVisible;
         if(isEmpty(obj.user)==false){
@@ -2230,7 +2231,7 @@ const AntGroupTabComponents = React.createClass({
                 </TabPane>
             </Tabs>;
         }else if(antGroup.state.optType=="userFavorite"){
-            tabComponent = <Favorites userid={antGroup.state.studentId} breadcrumbVisible={false}></Favorites>;
+            tabComponent = <Favorites userid={antGroup.state.studentId} breadcrumbVisible={false}  onPreview={ this.props.onPreview }></Favorites>;
         }else if(antGroup.state.optType=="getPlatformRulePage"){
             userPhoneCard=<div className="integral_top">
                 <span className="integral_face">

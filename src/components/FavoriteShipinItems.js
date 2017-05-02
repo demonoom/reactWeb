@@ -1,8 +1,7 @@
 import React from 'react';
-import {Pagination, Button, Icon,Input, Modal} from 'antd';
+import {Pagination, Button, Icon, Input, Modal, message} from 'antd';
 import {getLocalTime} from '../utils/utils';
 import {getPageSize} from '../utils/Const';
-
 
 
 // 我的收藏类型
@@ -24,7 +23,7 @@ const FavoriteShipinItems = React.createClass({
             videoPwdModalVisible: false,
         };
         this.pwdInput = '';
-        this.coursePanelChildren ={};
+        this.coursePanelChildren = {};
         this.videoPwdModalHandleOk = this.videoPwdModalHandleOk.bind(this);
         this.view = this.view.bind(this);
     },
@@ -37,9 +36,12 @@ const FavoriteShipinItems = React.createClass({
 
     view: function (objref) {
 
+        if (!objref.liveInfo.liveVideos[0]) {
+            message.info("无效的视频！");
+            return;
+        }
 
         let url = objref.liveInfo.liveVideos[0].path;
-
 
         let obj = {
             title: objref.content,
@@ -49,6 +51,7 @@ const FavoriteShipinItems = React.createClass({
             width: '400px',
 
         }
+
         this.props.onPreview(obj)
 
     },
@@ -62,10 +65,12 @@ const FavoriteShipinItems = React.createClass({
         var password = obj.liveInfo.password;
 
         if (password) {
-            let _this=this;
+            let _this = this;
             Modal.confirm({
                 title: '请输入密码',
-                content: <Input  onKeyDown={(event)=>{ _this.pwdInput = this.value }}  />,
+                content: <Input onKeyDown={(event) => {
+                    _this.pwdInput = this.value
+                }}/>,
                 okText: '确定',
                 cancelText: '取消',
                 onOk: this.videoPwdModalHandleOk.bind(_this, password, obj),
@@ -77,9 +82,9 @@ const FavoriteShipinItems = React.createClass({
 
     },
 
-    videoPwdModalHandleOk: function(pwd, obj) {
+    videoPwdModalHandleOk: function (pwd, obj) {
 
-
+        debugger
         this.view(obj);
 
     },
@@ -97,12 +102,12 @@ const FavoriteShipinItems = React.createClass({
         this.coursePanelChildren = courseWareList.map((e, i) => {
 
             let content = e.content;
-            let refkey =   e.favoriteId;
+            let refkey = e.favoriteId;
             let password = e.liveInfo.password;
             let showCancelBtn = this.state.ident == this.props.userid ? true : false;
-            let showKeyIcon = password ? true :false;
+            let showKeyIcon = password ? true : false;
 
-            return <div className="ant-card live ant-card-bordered" key={refkey} >
+            return <div className="ant-card live ant-card-bordered" key={refkey}>
                 <div >
                     <p className="live_h3">{content}</p>
                     <div className="live_img">
@@ -121,10 +126,14 @@ const FavoriteShipinItems = React.createClass({
                             </li>
                             <li>
                                 <span className="live_color live_orange">{e.liveInfo.courseName}</span>
-                                <a className={showCancelBtn ? 'show' : 'hide'  } target="_blank" title="取消收藏" onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}>
-                                    <span className="right_ri focus_btn star_span"><Icon type="star" className="anticon-star"/></span>
+                                <a className={showCancelBtn ? 'show' : 'hide'  } target="_blank" title="取消收藏"
+                                   onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}>
+                                    <span className="right_ri focus_btn star_span"><Icon type="star"
+                                                                                         className="anticon-star"/></span>
                                 </a>
-                                <span className={showKeyIcon ? 'right_ri focus_btn key_span show' : 'right_ri focus_btn key_span hide'  }><i className="iconfont key">&#xe621;</i></span>
+                                <span
+                                    className={showKeyIcon ? 'right_ri focus_btn key_span show' : 'right_ri focus_btn key_span hide'  }><i
+                                    className="iconfont key">&#xe621;</i></span>
                             </li>
                         </ul>
                     </div>
