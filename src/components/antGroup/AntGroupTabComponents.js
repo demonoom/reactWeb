@@ -290,7 +290,7 @@ const AntGroupTabComponents = React.createClass({
         messageList.splice(0);
         var loginUserId = sessionStorage.getItem("ident");
         var machineId = sessionStorage.getItem("machineId");
-        var pro = {"command":"messagerConnect","data":{"machineType":"ios","userId":Number.parseInt(loginUserId),"machine":machineId}};
+        var pro = {"command":"messagerConnect","data":{"machineType":"web","userId":Number.parseInt(loginUserId),"machine":machineId}};
         ms.msgWsListener={onError:function(errorMsg){
 
         },onWarn:function(warnMsg){
@@ -377,7 +377,7 @@ const AntGroupTabComponents = React.createClass({
         var loginUserId = sessionStorage.getItem("ident");
         var machineId = sessionStorage.getItem("machineId");
 
-        var pro = {"command":"messagerConnect","data":{"machineType":"ios","userId":Number.parseInt(loginUserId),"machine":machineId}};
+        var pro = {"command":"messagerConnect","data":{"machineType":"web","userId":Number.parseInt(loginUserId),"machine":machineId}};
         ms.msgWsListener={onError:function(errorMsg){
 
         },onWarn:function(warnMsg){

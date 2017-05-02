@@ -583,12 +583,12 @@ i, cite, em, var, address, dfn {
 .ant-form-item-control_2 {
     position: relative;
     left: 43px;
-    top: -44px;
+    top: 9px;
 }
 
 .ant-form-item-control_3{
     position: relative;
-    top: -46px;
+    top: 2px;
 }
 .ant-modal-footer{
 	text-align:center !important;
@@ -3363,4 +3363,7 @@ color:#ffbf00
 	overflow-y:auto;
 	overflow-x:hidden;
 	padding:0 0 15px 0;
+}
+.myfollow_zb{
+	height:100%
 }
