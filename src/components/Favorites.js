@@ -147,6 +147,10 @@ class Favorites extends React.Component {
         });
     }
 
+    onPreview(obj){
+    LP.Start(obj);
+    }
+
 
     getBreadCrumb() {
         let tag;
@@ -179,7 +183,7 @@ class Favorites extends React.Component {
                     <TabPane tab={this.FAVTYPE[2][2]} key='2' className="topics_rela">
                         <FavItem param={this.state.weike}
                                  userid={this.state.ident}
-                                 onPreview={this.props.onPreview}
+                                 onPreview={this.onPreview}
                                  onCancelfavrite={this.cancelFav}
                                  upgradeData={this.upgradeCurrent}
                                  pageChange={this.pageChange}/>
@@ -189,7 +193,7 @@ class Favorites extends React.Component {
                     <TabPane tab={this.FAVTYPE[3][2]} key='3' className="topics_rela">
                         <FavItem param={this.state.jiangyi}
                                  userid={this.state.ident}
-                                 onPreview={this.props.onPreview}
+                                 onPreview={this.onPreview}
                                  onCancelfavrite={this.cancelFav}
                                  upgradeData={this.upgradeCurrent}
                                  pageChange={this.pageChange}/>
@@ -199,7 +203,7 @@ class Favorites extends React.Component {
                     <TabPane tab={this.FAVTYPE[4][2]} key='4' className="topics_rela">
                         <ShippinItem param={this.state.shipin}
                                      userid={this.state.ident}
-                                     onPreview={this.props.onPreview}
+                                     onPreview={this.onPreview}
                                      onCancelfavrite={this.cancelFav}
                                      upgradeData={this.upgradeCurrent}
                                      pageChange={this.pageChange}/>
@@ -209,7 +213,7 @@ class Favorites extends React.Component {
                     <TabPane tab={this.FAVTYPE[0][2]} key='0' className="topics_rela">
                         <OtherItem param={this.state.other}
                                    userid={this.state.ident}
-                                   onPreview={this.props.onPreview}
+                                   onPreview={this.onPreview}
                                    onCancelfavrite={this.cancelFav}
                                    upgradeData={this.upgradeCurrent}
                                    pageChange={this.pageChange}/>
