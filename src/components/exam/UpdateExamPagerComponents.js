@@ -714,11 +714,137 @@ const UpdateExamPagerComponents = React.createClass({
         }
     },
 
+    getSubjectInfoFromPropsJson(num,answerTitle,answerSubjectType){
+        //获取待更新的题目信息，之后会使用该题目的信息，完成页面的数据填充
+        var subject;
+        var examPagerInfoJson=createExamPager.props.params;
+        var examPaperJson = JSON.parse(examPagerInfoJson);
+        //答题卡数组
+        var questionTypesArray = examPaperJson.questionTypes;
+        for(var i=0;i<questionTypesArray.length;i++){
+            var answerCardJson = questionTypesArray[i];
+            var answerSubjectTypeInJson = answerCardJson.type;
+            var answerTitleInJson = answerCardJson.title;
+            var subjectInfoArray = answerCardJson.questions;
+            for(var j=1;j<=subjectInfoArray.length;j++){
+                var subjectInfo = subjectInfoArray[j-1];
+                if(answerTitle == answerTitleInJson && answerSubjectType == answerSubjectTypeInJson && j==num){
+                    subject = subjectInfo;
+                    return subject;
+                }
+            }
+        }
+        return null;
+    },
+
+    /**
+     * 根据给定的题目信息，构建带有不同图标的所属知识点按钮
+     * @param subjectInfoWithSelected 封装有答题卡标题、题目编号和答题卡类型的题目信息
+     * @returns {*}
+     */
+    buildPointButton(subjectInfoWithSelected){
+        var pointBtn;
+        var title = subjectInfoWithSelected.title;
+        var titleArray = title.split(" ");
+        var answerTitle = titleArray[0];
+        var num = titleArray[1];
+        var answerSubjectType = subjectInfoWithSelected.type;
+        if(createExamPager.isEmpty(subjectInfoWithSelected)==false && createExamPager.isEmpty(subjectInfoWithSelected.points)==false && subjectInfoWithSelected.points.length>0){
+            //知识点非空
+            pointBtn = <Button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
+                <img src={require('../images/knowledgeAdded.png')} style={{width:'20px',height:'20px'}}  id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="pointBtn" />所属知识点
+            </Button>
+        }else{
+            pointBtn = <Button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
+                <img src={require('../images/beforeAdd.png')} style={{width:'20px',height:'20px'}} id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="pointBtn"/>所属知识点
+            </Button>
+        }
+        return pointBtn;
+    },
+    /**
+     * 刷新关联题目的“所属知识点”按钮上的图标
+     * @param answerTitle 答题卡标题
+     * @param num  题目编号
+     * @param answerSubjectType 答题卡题型
+     * @param pointIsNull 知识点是否为空，据此设置不同的图标
+     */
+    refreshPointButtonIcon(answerTitle,num,answerSubjectType,pointIsNull){
+        var checkId = answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType;
+        var btnArray = $(".pointBtn");
+        for(var i=0;i<btnArray.length;i++){
+            var btnObj = btnArray[i];
+            if(createExamPager.isEmpty(btnObj.id)==false && btnObj.id == checkId){
+                if(pointIsNull==false){
+                    btnObj.src=require('../images/knowledgeAdded.png');
+                }else{
+                    btnObj.src=require('../images/beforeAdd.png');
+                }
+                break;
+            }
+        }
+    },
+
+    /**
+     * 根据给定的题目信息，构建带有不同图标的解析按钮
+     * @param subjectInfoWithSelected 封装有答题卡标题、题目编号和答题卡类型的题目信息
+     * @returns {*}
+     */
+    buildAnalysisButton(subjectInfoWithSelected){
+        var analysisBtn;
+        var title = subjectInfoWithSelected.title;
+        var titleArray = title.split(" ");
+        var answerTitle = titleArray[0];
+        var num = titleArray[1];
+        var answerSubjectType = subjectInfoWithSelected.type;
+        if(createExamPager.isEmpty(subjectInfoWithSelected)==false && (createExamPager.isEmpty(subjectInfoWithSelected.imageAnalysis)==false || createExamPager.isEmpty(subjectInfoWithSelected.textAnalysis)==false)){
+            //文本或图片解析非空
+            analysisBtn = <Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
+                <img src={require('../images/AnalysisAdded.png')} style={{width:'20px',height:'20px'}} id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="analysisBtn"/>解析
+            </Button>
+        }else{
+            analysisBtn = <Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
+                <img src={require('../images/beforeAdd.png')} style={{width:'20px',height:'20px'}}  id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="analysisBtn"/>解析
+            </Button>
+        }
+        return analysisBtn;
+    },
+
+    /**
+     * 刷新关联题目的“解析”按钮上的图标
+     * @param answerTitle 答题卡标题
+     * @param num  题目编号
+     * @param answerSubjectType 答题卡题型
+     * @param pointIsNull 解析内容（包括文本解析或图片解析）是否为空，据此设置不同的图标
+     */
+    refreshAnalysisButtonIcon(answerTitle,num,answerSubjectType,analysisIsNull){
+        var checkId = answerTitle+"#"+num+"#analysis#"+answerSubjectType;
+        var btnArray = $(".analysisBtn");
+        for(var i=0;i<btnArray.length;i++){
+            var btnObj = btnArray[i];
+            if(createExamPager.isEmpty(btnObj.id)==false && btnObj.id == checkId){
+                if(analysisIsNull==false){
+                    btnObj.src=require('../images/AnalysisAdded.png');
+                }else{
+                    btnObj.src=require('../images/beforeAdd.png');
+                }
+                break;
+            }
+        }
+    },
+
     /**
      * 创建答题卡中选择题的题目div
      */
     buildChoiceSubjectDivContent(num,answerTitle,answerSubjectType,answerScore,textAnswer){
         createExamPager.buildSelectOptionsArray(num,answerTitle,answerSubjectType);
+        //题目信息
+        var subjectInfoWithSelected = createExamPager.getSubjectInfoFromPropsJson(num,answerTitle,answerSubjectType);
+        if(createExamPager.isEmpty(subjectInfoWithSelected)){
+            subjectInfoWithSelected={title:answerTitle+" "+num,type:answerSubjectType};
+        }
+        //选中的知识点信息
+        var pointBtn = createExamPager.buildPointButton(subjectInfoWithSelected);
+        var analysisBtn = createExamPager.buildAnalysisButton(subjectInfoWithSelected);
         var subjectDiv =<div key={num} data-key={num} className="topic_bor">
             <Row className="ant-form-item">
                 <Col span={3} className="right_upexam"><span className="upexam_number" id={answerTitle+"#"+answerSubjectType+"#"+num+"#numSpan"}>{num}</span>答案：</Col>
@@ -740,12 +866,8 @@ const UpdateExamPagerComponents = React.createClass({
             <Row className="ant-form-item topic_bor_pa">
                 <Col span={3}></Col>
                 <Col span={18}>
-                    <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
-                        所属知识点
-                    </button>
-					<Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
-                        解析
-                    </Button>
+                    {pointBtn}
+                    {analysisBtn}
                 </Col>
             </Row>
         </div>;
@@ -756,6 +878,14 @@ const UpdateExamPagerComponents = React.createClass({
      * 创建答题卡中判断题的题目div
      */
     buildCorrectSubjectDivContent(num,answerTitle,answerSubjectType,answerScore,textAnswer){
+        //题目信息
+        var subjectInfoWithSelected = createExamPager.getSubjectInfoFromPropsJson(num,answerTitle,answerSubjectType);
+        if(createExamPager.isEmpty(subjectInfoWithSelected)){
+            subjectInfoWithSelected={title:answerTitle+" "+num,type:answerSubjectType};
+        }
+        //选中的知识点信息
+        var pointBtn = createExamPager.buildPointButton(subjectInfoWithSelected);
+        var analysisBtn = createExamPager.buildAnalysisButton(subjectInfoWithSelected);
         var subjectDiv =<div key={num} data-key={num} className="topic_bor">
             <Row className="ant-form-item">
                 <Col span={3} className="right_upexam"><span className="upexam_number" id={answerTitle+"#"+answerSubjectType+"#"+num+"#numSpan"}>{num}</span>答案：</Col>
@@ -780,12 +910,8 @@ const UpdateExamPagerComponents = React.createClass({
             <Row className="ant-form-item topic_bor_pa">
                 <Col span={3}></Col>
                 <Col span={18}>
-                    <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
-                        所属知识点
-                    </button>
-					<Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
-                        解析
-                    </Button>
+                    {pointBtn}
+                    {analysisBtn}
                 </Col>
             </Row>
             
@@ -798,6 +924,14 @@ const UpdateExamPagerComponents = React.createClass({
      */
     buildFillBlankSubjectDivContent(num,answerTitle,answerSubjectType,answerScore,textAnswer,imageAnswerFileArray){
         imageAnswerFileArray=createExamPager.convertUndefinedToNull(imageAnswerFileArray,"array");
+        //题目信息
+        var subjectInfoWithSelected = createExamPager.getSubjectInfoFromPropsJson(num,answerTitle,answerSubjectType);
+        if(createExamPager.isEmpty(subjectInfoWithSelected)){
+            subjectInfoWithSelected={title:answerTitle+" "+num,type:answerSubjectType};
+        }
+        //选中的知识点信息
+        var pointBtn = createExamPager.buildPointButton(subjectInfoWithSelected);
+        var analysisBtn = createExamPager.buildAnalysisButton(subjectInfoWithSelected);
         var subjectDiv =<div key={num} data-key={num} className="topic_bor">
             <Row className="ant-form-item">
                 <Col span={3} className="right_upexam"><span className="upexam_number" id={answerTitle+"#"+answerSubjectType+"#"+num+"#numSpan"}>{num}</span>答案：</Col>
@@ -826,12 +960,8 @@ const UpdateExamPagerComponents = React.createClass({
             <Row className="ant-form-item topic_bor_pa">
                 <Col span={3}></Col>
                 <Col span={18}>
-                    <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
-                        所属知识点
-                    </button>
-					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
-                        解析
-                    </button>
+                    {pointBtn}
+                    {analysisBtn}
                 </Col>
             </Row>
         </div>;
@@ -843,6 +973,14 @@ const UpdateExamPagerComponents = React.createClass({
      */
     buildSimpleAnswerSubjectDivContent(num,answerTitle,answerSubjectType,answerScore,textAnswer,imageAnswerFileArray){
         imageAnswerFileArray=createExamPager.convertUndefinedToNull(imageAnswerFileArray,"array");
+        //题目信息
+        var subjectInfoWithSelected = createExamPager.getSubjectInfoFromPropsJson(num,answerTitle,answerSubjectType);
+        if(createExamPager.isEmpty(subjectInfoWithSelected)){
+            subjectInfoWithSelected={title:answerTitle+" "+num,type:answerSubjectType};
+        }
+        //选中的知识点信息
+        var pointBtn = createExamPager.buildPointButton(subjectInfoWithSelected);
+        var analysisBtn = createExamPager.buildAnalysisButton(subjectInfoWithSelected);
         var subjectDiv =<div key={num} data-key={num} className="topic_bor">
             <Row className="ant-form-item">
                 <Col span={3} className="right_upexam"><span className="upexam_number" id={answerTitle+"#"+answerSubjectType+"#"+num+"#numSpan"}>{num}</span>答案：</Col>
@@ -870,12 +1008,8 @@ const UpdateExamPagerComponents = React.createClass({
             <Row className="ant-form-item topic_bor_pa">
                 <Col span={3}></Col>
                 <Col span={18}>
-                    <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
-                        所属知识点
-                    </button>
-					<Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
-                        解析
-                    </Button>
+                    {pointBtn}
+                    {analysisBtn}
                 </Col>
             </Row>
         </div>;
@@ -1346,6 +1480,11 @@ const UpdateExamPagerComponents = React.createClass({
         var subjectNum =bindKnowledgeBtnInfoArray[1];
         var subjectJson = {answerCardTitle:answerCardTitle,answerSubjectType:answerSubjectType,subjectNum:subjectNum,points:createExamPager.state.targetKeys};
         createExamPager.refreshCardChildArray(subjectJson,"setPoints");
+        var pointIsNull = true;
+        if(createExamPager.isEmpty(createExamPager.state.targetKeys)==false && createExamPager.state.targetKeys.length>0){
+            pointIsNull = false;
+        }
+        createExamPager.refreshPointButtonIcon(answerCardTitle,subjectNum,answerSubjectType,pointIsNull);
         createExamPager.setState({ bindKnowledgeModalVisible: false,bindKnowledgeBtnInfo:'' });
     },
 
@@ -1405,6 +1544,11 @@ const UpdateExamPagerComponents = React.createClass({
         var analysisUrl=createExamPager.state.analysisUrl;
         var subjectJson = {answerCardTitle:answerCardTitle,answerSubjectType:answerSubjectType,subjectNum:subjectNum,textAnalysis:analysisContent,imageAnalysis:analysisUrl};
         createExamPager.refreshCardChildArray(subjectJson,"setAnalysis");
+        var analysisIsNull = true;
+        if(createExamPager.isEmpty(analysisContent)==false || createExamPager.isEmpty(analysisUrl)==false){
+            analysisIsNull = false;
+        }
+        createExamPager.refreshAnalysisButtonIcon(answerCardTitle,subjectNum,answerSubjectType,analysisIsNull);
         createExamPager.setState({analysisModalVisible:false,addAnalysisBtnInfo:'',"analysisContent":'',"analysisUrl":''});
     },
 
