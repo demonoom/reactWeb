@@ -2313,7 +2313,7 @@ const MyFollowExtend = React.createClass({
         }
 
         return (
-            <div>
+            <div className="myfollow_zb">
                 <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
                 <div className="group_cont">
                     {userPhoneCard}
