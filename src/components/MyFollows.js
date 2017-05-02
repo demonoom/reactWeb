@@ -255,7 +255,7 @@ class MyFollows extends React.Component {
                 </Breadcrumb>
                 {this.gobackBtn}
                 { this.htmlTempletContent }
-                <div className="focus_auto favorite_pa_le_2"> { this.htmlTempletContent }</div>
+                
             </div>
         );
     }
