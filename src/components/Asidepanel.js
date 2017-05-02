@@ -84,7 +84,8 @@ class Asidepanel extends React.Component {
                         <h3 className="title">{ this.props.param.title }</h3>
                         <a onClick={this.closepanle} className="close"><i
                             className="iconfont iconfont_close">&#xe615;</i></a>
-                        <a onClick={  this.zoomview} className="zoom"><i className="iconfont iconfont_more">&#xe6b8;</i></a>
+                        <a onClick={  this.zoomview} className="zoom"><i 
+						    className="iconfont iconfont_more">&#xe60f;</i></a>
                     </div>
                     <section className="littleAnt-iframe-panle">
                         <iframe id="asidepanel"  style={{...sty2}} src={ this.props.param.url }></iframe>

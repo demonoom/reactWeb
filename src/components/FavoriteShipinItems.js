@@ -105,9 +105,14 @@ const FavoriteShipinItems = React.createClass({
             let refkey = e.favoriteId;
             let password = e.liveInfo.password;
             let showCancelBtn = this.state.ident == this.props.userid ? true : false;
+<<<<<<< HEAD
             let showKeyIcon = password ? true : false;
 
             return <div className="ant-card live ant-card-bordered" key={refkey}>
+=======
+            let showKeyIcon = password ? true :false;
+            return <div className="ant-card live ant-card-bordered" key={refkey} >
+>>>>>>> 20dd02c0118e74e145600ab20cd56db116bbfd7a
                 <div >
                     <p className="live_h3">{content}</p>
                     <div className="live_img">
@@ -126,10 +131,15 @@ const FavoriteShipinItems = React.createClass({
                             </li>
                             <li>
                                 <span className="live_color live_orange">{e.liveInfo.courseName}</span>
+<<<<<<< HEAD
                                 <a className={showCancelBtn ? 'show' : 'hide'  } target="_blank" title="取消收藏"
                                    onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}>
                                     <span className="right_ri focus_btn star_span"><Icon type="star"
                                                                                          className="anticon-star"/></span>
+=======
+                                <a className={showCancelBtn ? 'show' : 'hide'  } target="_blank" title="取消收藏" onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}>
+                                    <span className="right_ri focus_btn star_span"><i className="iconfont star">&#xe646;</i></span>
+>>>>>>> 20dd02c0118e74e145600ab20cd56db116bbfd7a
                                 </a>
                                 <span
                                     className={showKeyIcon ? 'right_ri focus_btn key_span show' : 'right_ri focus_btn key_span hide'  }><i

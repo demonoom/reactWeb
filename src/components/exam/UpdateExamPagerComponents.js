@@ -9,6 +9,7 @@ import FileUploadComponents from './FileUploadComponents';
 import AntUploadComponentsForUpdate from './AntUploadComponentsForUpdate';
 import AntUploadComponentsForExamPagerUpdate from './AntUploadComponentsForExamPagerUpdate';
 import AntUploadForAnalysisOfCreateComponents from './AntUploadForAnalysisOfCreateComponents';
+import UploadExamPagerComponents from './UploadExamPagerComponents';
 import AntUploadComponents from './AntUploadComponents';
 const CheckboxGroup = Checkbox.Group;
 const RadioGroup = Radio.Group;
@@ -316,12 +317,21 @@ const UpdateExamPagerComponents = React.createClass({
                 }
                 // 文字正确答案
                 var textAnswer = createExamPager.convertUndefinedToNull(subjectDivJson.textAnswer);
-                if(createExamPager.isEmpty(textAnswer)){
-                    message.warning("请选择/输入"+title+"下第"+subjectDivJson.index+"题的答案",5);
-                    return;
-                }
                 // 图片正确答案
-                var imageAnswer = createExamPager.convertUndefinedToNull(subjectDivJson.imageAnswer);;
+                var imageAnswer = createExamPager.convertUndefinedToNull(subjectDivJson.imageAnswer);
+
+                if(type=="0" || type=="1"){
+                    if(createExamPager.isEmpty(textAnswer)){
+                        message.warning("请选择/输入"+title+"下第"+subjectDivJson.index+"题的答案",5);
+                        return;
+                    }
+                }else{
+                    //填空和简答题中，文本答案和图片答案至少要有一个
+                    if(createExamPager.isEmpty(textAnswer) && createExamPager.isEmpty(imageAnswer)){
+                        message.warning("请选择/输入"+title+"下第"+subjectDivJson.index+"题的答案",5);
+                        return;
+                    }
+                }
                 // 冗余ExmQuestionType的类型，用于查询操作好操作
                 var questionType = type;
                 // 文字解析
@@ -338,9 +348,8 @@ const UpdateExamPagerComponents = React.createClass({
             questionTypesArray.push(questionTypes);
         }
         paperJson.questionTypes = questionTypesArray;
-        console.log(paperJson);
-        // cardChildArray.splice(0);
-        // createExamPager.updateExmPaper(paperJson);
+        cardChildArray.splice(0);
+        createExamPager.updateExmPaper(paperJson);
     },
 
     isEmpty(content){
@@ -387,8 +396,8 @@ const UpdateExamPagerComponents = React.createClass({
                         }else if(optType=="setPoints"){
                             //设置关联的知识点
                             var pointJsonArray = [];
-                            for(var i=0;i<subjectJson.points.length;i++){
-                                var id= subjectJson.points[i];
+                            for(var k=0;k<subjectJson.points.length;k++){
+                                var id= subjectJson.points[k];
                                 var pointJson = {"id":id};
                                 pointJsonArray.push(pointJson);
                             }
@@ -467,13 +476,13 @@ const UpdateExamPagerComponents = React.createClass({
     checkCardTitleIsExist(answerTitle,answerSubjectType){
         var isExist = false;
         var answerTitleInCardChildJson;
-        cardChildArray.map(function(item,i){
-            answerTitleInCardChildJson = item;
-            if(answerTitleInCardChildJson.answerTitle == answerTitle && answerTitleInCardChildJson.answerSubjectType == answerSubjectType){
+        for(var i=0;i<cardChildArray.length;i++){
+            answerTitleInCardChildJson = cardChildArray[i];
+            if(answerTitleInCardChildJson.answerTitle == answerTitle && parseInt(answerTitleInCardChildJson.answerSubjectType) == parseInt(answerSubjectType)){
                 isExist = true;
-                return;
+                break;
             }
-        },createExamPager)
+        }
         //如果答题卡的标题已经存在，则返回包含当前标题的json对象，否则返回false
         if(isExist==true){
             return answerTitleInCardChildJson;
@@ -515,16 +524,27 @@ const UpdateExamPagerComponents = React.createClass({
                             cardChildArray.splice(i,1);
                         }else{
                             //答题卡中存在多道题时，删除选定题目
+                            //待要删除的题目编号
+                            var delPoint=-1;
                             for(var j = 0;j<cardSubjectAnswerArray.length;j++){
                                 var cardSubjectJson = cardSubjectAnswerArray[j];
                                 if(cardSubjectJson.index == deleteSubjectNum){
                                     cardSubjectJson.divContent="";
-                                    cardSubjectAnswerArray.splice(deleteSubjectNum-1,1);
-                                    createExamPager.refreshSubjectIndexNo(deleteSubjectNum,deleteAnswerTitle,answerSubjectType);
-                                    cardChildJson.answerCount = cardChildJson.answerCount-1;
-                                    message.success("题目删除成功");
-                                    break;
+                                    delPoint = j;
                                 }
+                                //比当前删除题目的编号大的题目，将其编号统一减一
+                                if(cardSubjectJson.index > deleteSubjectNum){
+                                    cardSubjectJson.index = parseInt(cardSubjectJson.index)-1;
+                                }
+                            }
+                            if(delPoint!=-1){
+                                cardSubjectAnswerArray.splice(delPoint,1);
+                                //刷新页面上显示的题目编号
+                                createExamPager.refreshSubjectIndexNo(deleteSubjectNum,deleteAnswerTitle,answerSubjectType);
+                                //刷新删除按钮关联的value信息，vlaue信息中存储了题目的基本信息
+                                createExamPager.refreshDelBtnValue(deleteSubjectNum,deleteAnswerTitle,answerSubjectType);
+                                cardChildJson.answerCount = cardChildJson.answerCount-1;
+                                message.success("题目删除成功");
                             }
                         }
                     }
@@ -536,44 +556,47 @@ const UpdateExamPagerComponents = React.createClass({
     },
 
     /**
-     * 删除题目时，刷新题目的编号，保证题目的编号始终是连续且正确的
+     * 删除题目时，刷新题目的编号，保持编号连贯
+     * @param startNo
+     * @param answerTitle
+     * @param answerSubjectType
      */
     refreshSubjectIndexNo(startNo,answerTitle,answerSubjectType){
-        for(var i=0;i<createExamPager.state.cardChildTagArray.length;i++){
-            var cardChildJson = cardChildArray[i];
-            var cartTitleInJson = cardChildJson.answerTitle;
-            if(answerTitle == cartTitleInJson && answerSubjectType == cardChildJson.answerSubjectType){
-                //已经找到对应的答题卡，接下来需要在答题卡的题目数组中再找出对应的题目编号
-                var cardSubjectAnswerArray = cardChildJson.cardSubjectAnswerArray;
-                for(var j = 1;j<cardSubjectAnswerArray.length+1;j++){
-                    var cardSubjectJson = cardSubjectAnswerArray[j-1];
-                    if(cardSubjectJson.index > startNo){
-                        cardSubjectJson.index = cardSubjectJson.index-1;
-                        var subjectDiv;
-                        if(answerSubjectType=="0"){
-                            subjectDiv = createExamPager.buildChoiceSubjectDivContent(cardSubjectJson.index,answerTitle,answerSubjectType);
-                        }else if(answerSubjectType=="1"){
-                            subjectDiv = createExamPager.buildCorrectSubjectDivContent(cardSubjectJson.index,answerTitle,answerSubjectType);
-                        }else if(answerSubjectType=="2"){
-                            subjectDiv = createExamPager.buildFillBlankSubjectDivContent(cardSubjectJson.index,answerTitle,answerSubjectType);
-                        }else if(answerSubjectType=="3"){
-                            subjectDiv = createExamPager.buildSimpleAnswerSubjectDivContent(cardSubjectJson.index,answerTitle,answerSubjectType);
-                        }
-                        var subjectDivJson = {"index":cardSubjectJson.index,"divContent":subjectDiv,"score":cardSubjectJson.answerScore};
-                    }else{
-                        var subjectDiv;
-                        if(answerSubjectType=="0"){
-                            subjectDiv = createExamPager.buildChoiceSubjectDivContent(j,answerTitle,answerSubjectType);
-                        }else if(answerSubjectType=="1"){
-                            subjectDiv = createExamPager.buildCorrectSubjectDivContent(j,answerTitle,answerSubjectType);
-                        }else if(answerSubjectType=="2"){
-                            subjectDiv = createExamPager.buildFillBlankSubjectDivContent(j,answerTitle,answerSubjectType);
-                        }else if(answerSubjectType=="3"){
-                            subjectDiv = createExamPager.buildSimpleAnswerSubjectDivContent(j,answerTitle,answerSubjectType);
-                        }
-                        var subjectDivJson = {"index":j,"divContent":subjectDiv,"score":cardSubjectJson.answerScore};
+        var spanArray = $(".upexam_number");
+        for(var i=0;i<spanArray.length;i++){
+            var spanObj = spanArray[i];
+            if(createExamPager.isEmpty(spanObj.id)==false){
+                var spanIdArray = spanObj.id.split("#");
+                var spanAnswerTitle = spanIdArray[0];
+                var spanSubjectType = parseInt(spanIdArray[1]);
+                if(answerTitle==spanAnswerTitle && spanSubjectType == parseInt(answerSubjectType)){
+                    var innerText = parseInt(spanObj.innerText);
+                    if(innerText > startNo){
+                        spanObj.innerText = innerText -1;
                     }
-                    cardSubjectAnswerArray[j-1] = subjectDivJson;
+                }
+            }
+        }
+    },
+    /**
+     * 刷新删除按钮的题目信息
+     * @param startNo
+     * @param answerTitle
+     * @param answerSubjectType
+     */
+    refreshDelBtnValue(startNo,answerTitle,answerSubjectType){
+        var btnArray = $(".delSubjectBtn");
+        for(var i=0;i<btnArray.length;i++){
+            var btnObj = btnArray[i];
+            if(createExamPager.isEmpty(btnObj.value)==false){
+                var btnValueArray = btnObj.value.split("#");
+                var btnAnswerTitle = btnValueArray[0];
+                var btnSubjectNo = parseInt(btnValueArray[1]);
+                var btnSubjectType = parseInt(btnValueArray[2]);
+                if(answerTitle==btnAnswerTitle && btnSubjectType == parseInt(answerSubjectType)){
+                    if(btnSubjectNo > startNo){
+                        btnObj.value = answerTitle+"#"+(btnSubjectNo -1)+"#"+btnSubjectType;
+                    }
                 }
             }
         }
@@ -691,19 +714,147 @@ const UpdateExamPagerComponents = React.createClass({
         }
     },
 
+    getSubjectInfoFromPropsJson(num,answerTitle,answerSubjectType){
+        //获取待更新的题目信息，之后会使用该题目的信息，完成页面的数据填充
+        var subject;
+        var examPagerInfoJson=createExamPager.props.params;
+        var examPaperJson = JSON.parse(examPagerInfoJson);
+        //答题卡数组
+        var questionTypesArray = examPaperJson.questionTypes;
+        for(var i=0;i<questionTypesArray.length;i++){
+            var answerCardJson = questionTypesArray[i];
+            var answerSubjectTypeInJson = answerCardJson.type;
+            var answerTitleInJson = answerCardJson.title;
+            var subjectInfoArray = answerCardJson.questions;
+            for(var j=1;j<=subjectInfoArray.length;j++){
+                var subjectInfo = subjectInfoArray[j-1];
+                if(answerTitle == answerTitleInJson && answerSubjectType == answerSubjectTypeInJson && j==num){
+                    subject = subjectInfo;
+                    return subject;
+                }
+            }
+        }
+        return null;
+    },
+
+    /**
+     * 根据给定的题目信息，构建带有不同图标的所属知识点按钮
+     * @param subjectInfoWithSelected 封装有答题卡标题、题目编号和答题卡类型的题目信息
+     * @returns {*}
+     */
+    buildPointButton(subjectInfoWithSelected){
+        var pointBtn;
+        var title = subjectInfoWithSelected.title;
+        var titleArray = title.split(" ");
+        var answerTitle = titleArray[0];
+        var num = titleArray[1];
+        var answerSubjectType = subjectInfoWithSelected.type;
+        if(createExamPager.isEmpty(subjectInfoWithSelected)==false && createExamPager.isEmpty(subjectInfoWithSelected.points)==false && subjectInfoWithSelected.points.length>0){
+            //知识点非空
+            pointBtn = <Button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
+                <img src={require('../images/knowledgeAdded.png')} style={{width:'20px',height:'20px'}}  id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="pointBtn" />所属知识点
+            </Button>
+        }else{
+            pointBtn = <Button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
+                <img src={require('../images/beforeAdd.png')} style={{width:'20px',height:'20px'}} id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="pointBtn"/>所属知识点
+            </Button>
+        }
+        return pointBtn;
+    },
+    /**
+     * 刷新关联题目的“所属知识点”按钮上的图标
+     * @param answerTitle 答题卡标题
+     * @param num  题目编号
+     * @param answerSubjectType 答题卡题型
+     * @param pointIsNull 知识点是否为空，据此设置不同的图标
+     */
+    refreshPointButtonIcon(answerTitle,num,answerSubjectType,pointIsNull){
+        var checkId = answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType;
+        var btnArray = $(".pointBtn");
+        for(var i=0;i<btnArray.length;i++){
+            var btnObj = btnArray[i];
+            if(createExamPager.isEmpty(btnObj.id)==false && btnObj.id == checkId){
+                if(pointIsNull==false){
+                    btnObj.src=require('../images/knowledgeAdded.png');
+                }else{
+                    btnObj.src=require('../images/beforeAdd.png');
+                }
+                break;
+            }
+        }
+    },
+
+    /**
+     * 根据给定的题目信息，构建带有不同图标的解析按钮
+     * @param subjectInfoWithSelected 封装有答题卡标题、题目编号和答题卡类型的题目信息
+     * @returns {*}
+     */
+    buildAnalysisButton(subjectInfoWithSelected){
+        var analysisBtn;
+        var title = subjectInfoWithSelected.title;
+        var titleArray = title.split(" ");
+        var answerTitle = titleArray[0];
+        var num = titleArray[1];
+        var answerSubjectType = subjectInfoWithSelected.type;
+        if(createExamPager.isEmpty(subjectInfoWithSelected)==false && (createExamPager.isEmpty(subjectInfoWithSelected.imageAnalysis)==false || createExamPager.isEmpty(subjectInfoWithSelected.textAnalysis)==false)){
+            //文本或图片解析非空
+            analysisBtn = <Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
+                <img src={require('../images/AnalysisAdded.png')} style={{width:'20px',height:'20px'}} id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="analysisBtn"/>解析
+            </Button>
+        }else{
+            analysisBtn = <Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
+                <img src={require('../images/beforeAdd.png')} style={{width:'20px',height:'20px'}}  id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="analysisBtn"/>解析
+            </Button>
+        }
+        return analysisBtn;
+    },
+
+    /**
+     * 刷新关联题目的“解析”按钮上的图标
+     * @param answerTitle 答题卡标题
+     * @param num  题目编号
+     * @param answerSubjectType 答题卡题型
+     * @param pointIsNull 解析内容（包括文本解析或图片解析）是否为空，据此设置不同的图标
+     */
+    refreshAnalysisButtonIcon(answerTitle,num,answerSubjectType,analysisIsNull){
+        var checkId = answerTitle+"#"+num+"#analysis#"+answerSubjectType;
+        var btnArray = $(".analysisBtn");
+        for(var i=0;i<btnArray.length;i++){
+            var btnObj = btnArray[i];
+            if(createExamPager.isEmpty(btnObj.id)==false && btnObj.id == checkId){
+                if(analysisIsNull==false){
+                    btnObj.src=require('../images/AnalysisAdded.png');
+                }else{
+                    btnObj.src=require('../images/beforeAdd.png');
+                }
+                break;
+            }
+        }
+    },
+
     /**
      * 创建答题卡中选择题的题目div
      */
     buildChoiceSubjectDivContent(num,answerTitle,answerSubjectType,answerScore,textAnswer){
         createExamPager.buildSelectOptionsArray(num,answerTitle,answerSubjectType);
+        //题目信息
+        var subjectInfoWithSelected = createExamPager.getSubjectInfoFromPropsJson(num,answerTitle,answerSubjectType);
+        if(createExamPager.isEmpty(subjectInfoWithSelected)){
+            subjectInfoWithSelected={title:answerTitle+" "+num,type:answerSubjectType};
+        }
+        //选中的知识点信息
+        var pointBtn = createExamPager.buildPointButton(subjectInfoWithSelected);
+        var analysisBtn = createExamPager.buildAnalysisButton(subjectInfoWithSelected);
         var subjectDiv =<div key={num} data-key={num} className="topic_bor">
             <Row className="ant-form-item">
-                <Col span={3} className="right_upexam"><span className="upexam_number">{num}</span>答案：</Col>
+                <Col span={3} className="right_upexam"><span className="upexam_number" id={answerTitle+"#"+answerSubjectType+"#"+num+"#numSpan"}>{num}</span>答案：</Col>
                 <Col span={18}> {/*defaultValue={[answerTitle + "#" + num + "#checkbox#A"]}*/}
                     <CheckboxGroup options={selectAnswerOptions[num-1]} defaultValue={textAnswer}  onChange={createExamPager.subjectAnswerOnChange} />
                 </Col>
 				<div className="topic_del_ri">
-					<Button key={answerTitle+"#"+num+"delBtn"} value={answerTitle+"#"+num} onClick={createExamPager.deleteSubjectContentDiv} className="btn_gray_exam examination_btn_gray"><i className="iconfont btn_gray_exam_del">&#xe62f;</i></Button>
+					<Button key={answerTitle+"#"+num+"delBtn"}  value={answerTitle+"#"+num+"#"+answerSubjectType}  onClick={createExamPager.deleteSubjectContentDiv} className="delSubjectBtn btn_gray_exam examination_btn_gray">
+                        <i className="iconfont btn_gray_exam_del">&#xe62f;</i>
+                    </Button>
 				</div>
             </Row>
             <Row className="ant-form-item">
@@ -715,12 +866,8 @@ const UpdateExamPagerComponents = React.createClass({
             <Row className="ant-form-item topic_bor_pa">
                 <Col span={3}></Col>
                 <Col span={18}>
-                    <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
-                        所属知识点
-                    </button>
-					<Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
-                        解析
-                    </Button>
+                    {pointBtn}
+                    {analysisBtn}
                 </Col>
             </Row>
         </div>;
@@ -731,9 +878,17 @@ const UpdateExamPagerComponents = React.createClass({
      * 创建答题卡中判断题的题目div
      */
     buildCorrectSubjectDivContent(num,answerTitle,answerSubjectType,answerScore,textAnswer){
+        //题目信息
+        var subjectInfoWithSelected = createExamPager.getSubjectInfoFromPropsJson(num,answerTitle,answerSubjectType);
+        if(createExamPager.isEmpty(subjectInfoWithSelected)){
+            subjectInfoWithSelected={title:answerTitle+" "+num,type:answerSubjectType};
+        }
+        //选中的知识点信息
+        var pointBtn = createExamPager.buildPointButton(subjectInfoWithSelected);
+        var analysisBtn = createExamPager.buildAnalysisButton(subjectInfoWithSelected);
         var subjectDiv =<div key={num} data-key={num} className="topic_bor">
             <Row className="ant-form-item">
-                <Col span={3} className="right_upexam"><span className="upexam_number">{num}</span>答案：</Col>
+                <Col span={3} className="right_upexam"><span className="upexam_number" id={answerTitle+"#"+answerSubjectType+"#"+num+"#numSpan"}>{num}</span>答案：</Col>
                 <Col span={18} className="knowledge_span_sm_wi">
                     <RadioGroup key={answerTitle+"#"+num+"#radio#"+answerSubjectType} onChange={createExamPager.correctAnswerOnChange} defaultValue={textAnswer} >
                         <Radio value={answerTitle+"#"+num+"#1#"+answerSubjectType}>正确</Radio>
@@ -741,7 +896,8 @@ const UpdateExamPagerComponents = React.createClass({
                     </RadioGroup>
                 </Col>
 				<Col className="knowledge_span_wi2">
-					<button key={answerTitle+"#"+num+"delBtn"} value={answerTitle+"#"+num} onClick={createExamPager.deleteSubjectContentDiv} className="btn_gray_exam examination_btn_gray"><i className="iconfont btn_gray_exam_del">&#xe62f;</i>
+					<button key={answerTitle+"#"+num+"delBtn"}  value={answerTitle+"#"+num+"#"+answerSubjectType}  onClick={createExamPager.deleteSubjectContentDiv} className="delSubjectBtn btn_gray_exam examination_btn_gray">
+                        <i className="iconfont btn_gray_exam_del">&#xe62f;</i>
                     </button>
 				</Col>
             </Row>
@@ -754,12 +910,8 @@ const UpdateExamPagerComponents = React.createClass({
             <Row className="ant-form-item topic_bor_pa">
                 <Col span={3}></Col>
                 <Col span={18}>
-                    <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
-                        所属知识点
-                    </button>
-					<Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
-                        解析
-                    </Button>
+                    {pointBtn}
+                    {analysisBtn}
                 </Col>
             </Row>
             
@@ -772,14 +924,23 @@ const UpdateExamPagerComponents = React.createClass({
      */
     buildFillBlankSubjectDivContent(num,answerTitle,answerSubjectType,answerScore,textAnswer,imageAnswerFileArray){
         imageAnswerFileArray=createExamPager.convertUndefinedToNull(imageAnswerFileArray,"array");
+        //题目信息
+        var subjectInfoWithSelected = createExamPager.getSubjectInfoFromPropsJson(num,answerTitle,answerSubjectType);
+        if(createExamPager.isEmpty(subjectInfoWithSelected)){
+            subjectInfoWithSelected={title:answerTitle+" "+num,type:answerSubjectType};
+        }
+        //选中的知识点信息
+        var pointBtn = createExamPager.buildPointButton(subjectInfoWithSelected);
+        var analysisBtn = createExamPager.buildAnalysisButton(subjectInfoWithSelected);
         var subjectDiv =<div key={num} data-key={num} className="topic_bor">
             <Row className="ant-form-item">
-                <Col span={3} className="right_upexam"><span className="upexam_number">{num}</span>答案：</Col>
+                <Col span={3} className="right_upexam"><span className="upexam_number" id={answerTitle+"#"+answerSubjectType+"#"+num+"#numSpan"}>{num}</span>答案：</Col>
                 <Col span={18} className="knowledge_span_sm_wi">
                     <Input  id={answerTitle+"#"+num+"#blank#"+answerSubjectType} defaultValue={textAnswer} type="textarea" rows={2} onChange={createExamPager.blankOnChange}/>
                 </Col>
 				<div className="topic_del_ri">
-					<button key={answerTitle+"#"+num+"delBtn"} value={answerTitle+"#"+num} onClick={createExamPager.deleteSubjectContentDiv} className="btn_gray_exam examination_btn_gray"><i className="iconfont btn_gray_exam_del">&#xe62f;</i>
+					<button key={answerTitle+"#"+num+"delBtn"}  value={answerTitle+"#"+num+"#"+answerSubjectType}  onClick={createExamPager.deleteSubjectContentDiv} className="delSubjectBtn btn_gray_exam examination_btn_gray">
+                        <i className="iconfont btn_gray_exam_del">&#xe62f;</i>
                     </button>
 				</div>
             </Row>
@@ -787,10 +948,7 @@ const UpdateExamPagerComponents = React.createClass({
 				<Col span={3} >图片答案：</Col>
 				<Col span={18}>
                     {/*className="add_study-b"*/}
-                    <AntUploadComponents key={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} fileList={imageAnswerFileArray}  params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponents>
-                    {/*<AntUploadComponentsForUpdate key={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType}  fileList={imageAnswerFileArray} params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponentsForUpdate>*/}
-					{/*<button type="primary" icon="plus-circle" value={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} title="上传图片答案"
-                            className="add_study-b" onClick={createExamPager.showModal}>上传图片答案</button>*/}
+                    <AntUploadComponents fileList={imageAnswerFileArray}  params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponents>
 				</Col>
 			</Row>
             <Row className="ant-form-item">
@@ -802,12 +960,8 @@ const UpdateExamPagerComponents = React.createClass({
             <Row className="ant-form-item topic_bor_pa">
                 <Col span={3}></Col>
                 <Col span={18}>
-                    <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
-                        所属知识点
-                    </button>
-					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
-                        解析
-                    </button>
+                    {pointBtn}
+                    {analysisBtn}
                 </Col>
             </Row>
         </div>;
@@ -819,22 +973,30 @@ const UpdateExamPagerComponents = React.createClass({
      */
     buildSimpleAnswerSubjectDivContent(num,answerTitle,answerSubjectType,answerScore,textAnswer,imageAnswerFileArray){
         imageAnswerFileArray=createExamPager.convertUndefinedToNull(imageAnswerFileArray,"array");
+        //题目信息
+        var subjectInfoWithSelected = createExamPager.getSubjectInfoFromPropsJson(num,answerTitle,answerSubjectType);
+        if(createExamPager.isEmpty(subjectInfoWithSelected)){
+            subjectInfoWithSelected={title:answerTitle+" "+num,type:answerSubjectType};
+        }
+        //选中的知识点信息
+        var pointBtn = createExamPager.buildPointButton(subjectInfoWithSelected);
+        var analysisBtn = createExamPager.buildAnalysisButton(subjectInfoWithSelected);
         var subjectDiv =<div key={num} data-key={num} className="topic_bor">
             <Row className="ant-form-item">
-                <Col span={3} className="right_upexam"><span className="upexam_number">{num}</span>答案：</Col>
+                <Col span={3} className="right_upexam"><span className="upexam_number" id={answerTitle+"#"+answerSubjectType+"#"+num+"#numSpan"}>{num}</span>答案：</Col>
                 <Col span={18}>
                     <Input  id={answerTitle+"#"+num+"#simpleAnswer#"+answerSubjectType} defaultValue={textAnswer} type="textarea" rows={5} onChange={createExamPager.blankOnChange}/>
                 </Col>
 				<div className="topic_del_ri">
-					<button key={answerTitle+"#"+num+"delBtn"} value={answerTitle+"#"+num} onClick={createExamPager.deleteSubjectContentDiv} className="btn_gray_exam examination_btn_gray"><i className="iconfont btn_gray_exam_del">&#xe62f;</i>
+					<button key={answerTitle+"#"+num+"delBtn"}  value={answerTitle+"#"+num+"#"+answerSubjectType}  onClick={createExamPager.deleteSubjectContentDiv} className="delSubjectBtn btn_gray_exam examination_btn_gray">
+                        <i className="iconfont btn_gray_exam_del">&#xe62f;</i>
                     </button>
 				</div>
             </Row>
 			<Row className="ant-form-item">
 				<Col span={3}>图片答案：</Col>
 				<Col span={18}>
-                    {/*<AntUploadComponentsForUpdate params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponentsForUpdate>*/}
-                    <AntUploadComponents key={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} fileList={imageAnswerFileArray}  params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponents>
+                    <AntUploadComponents fileList={imageAnswerFileArray}  params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponents>
 				 </Col>
 			</Row>
             <Row className="ant-form-item">
@@ -846,12 +1008,8 @@ const UpdateExamPagerComponents = React.createClass({
             <Row className="ant-form-item topic_bor_pa">
                 <Col span={3}></Col>
                 <Col span={18}>
-                    <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
-                        所属知识点
-                    </button>
-					<Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
-                        解析
-                    </Button>
+                    {pointBtn}
+                    {analysisBtn}
                 </Col>
             </Row>
         </div>;
@@ -976,28 +1134,43 @@ const UpdateExamPagerComponents = React.createClass({
             cardChildArray.push(cardChildJson);
         }else{
             var cardChildJsonWithExist = checkResult;
+            var answerCountBeforeAdd = cardChildJsonWithExist.answerCount;
             //题目的总数量增加
-            var newAnswerCount = cardChildJsonWithExist.answerCount+answerCount;
-            cardChildJsonWithExist.answerCount = newAnswerCount;
-            var cardSubjectAnswerArray=cardChildJsonWithExist.cardSubjectAnswerArray;
-            for(var i=1;i<=answerCount;i++){
-                var newIndex = cardSubjectAnswerArray.length+i;
+            var newAnswerCount = answerCountBeforeAdd+answerCount;
+            for(var i=answerCountBeforeAdd+1;i<=newAnswerCount;i++){
                 var subjectDiv;
                 if(answerSubjectType=="0"){
-                    subjectDiv = createExamPager.buildChoiceSubjectDivContent(newIndex,answerTitle,answerSubjectType,answerScore);
+                    subjectDiv = createExamPager.buildChoiceSubjectDivContent(i,answerTitle,answerSubjectType,answerScore);
                 }else if(answerSubjectType=="1"){
-                    subjectDiv = createExamPager.buildCorrectSubjectDivContent(newIndex,answerTitle,answerSubjectType,answerScore);
+                    subjectDiv = createExamPager.buildCorrectSubjectDivContent(i,answerTitle,answerSubjectType,answerScore);
                 }else if(answerSubjectType=="2"){
-                    subjectDiv = createExamPager.buildFillBlankSubjectDivContent(newIndex,answerTitle,answerSubjectType,answerScore);
+                    subjectDiv = createExamPager.buildFillBlankSubjectDivContent(i,answerTitle,answerSubjectType,answerScore);
                 }else if(answerSubjectType=="3"){
-                    subjectDiv = createExamPager.buildSimpleAnswerSubjectDivContent(newIndex,answerTitle,answerSubjectType,answerScore);
+                    subjectDiv = createExamPager.buildSimpleAnswerSubjectDivContent(i,answerTitle,answerSubjectType,answerScore);
                 }
-                var subjectDivJson = {"index":newIndex,"divContent":subjectDiv,"score":answerScore};
-                cardSubjectAnswerArray.push(subjectDivJson);
+                var subjectDivJson = {"index":i,"divContent":subjectDiv,"score":answerScore};
+                createExamPager.pushCardChildTagArray(answerTitle,answerSubjectType,subjectDivJson);
+                cardChildJsonWithExist.cardSubjectAnswerArray.push(subjectDivJson);
             }
-            cardChildJsonWithExist.cardSubjectAnswerArray = cardSubjectAnswerArray;
+            cardChildJsonWithExist.answerCount = newAnswerCount;
         }
         createExamPager.buildCardChildArray();
+    },
+
+    /**
+     * 将新增题目的div标记，推入到指定的Card tag数组中
+     * @param answerTitle
+     * @param answerSubjectType
+     * @param subjectDivJson
+     */
+    pushCardChildTagArray(answerTitle,answerSubjectType,subjectDivJson){
+        var currentKey = answerTitle+"#"+answerSubjectType;
+        for(var i=0;i<cardChildTagArray.length;i++){
+            var cardChild = cardChildTagArray[i];
+            if(cardChild.key==currentKey){
+                cardChild._shadowChildren.push(subjectDivJson.divContent);
+            }
+        }
     },
 
     /**
@@ -1307,6 +1480,11 @@ const UpdateExamPagerComponents = React.createClass({
         var subjectNum =bindKnowledgeBtnInfoArray[1];
         var subjectJson = {answerCardTitle:answerCardTitle,answerSubjectType:answerSubjectType,subjectNum:subjectNum,points:createExamPager.state.targetKeys};
         createExamPager.refreshCardChildArray(subjectJson,"setPoints");
+        var pointIsNull = true;
+        if(createExamPager.isEmpty(createExamPager.state.targetKeys)==false && createExamPager.state.targetKeys.length>0){
+            pointIsNull = false;
+        }
+        createExamPager.refreshPointButtonIcon(answerCardTitle,subjectNum,answerSubjectType,pointIsNull);
         createExamPager.setState({ bindKnowledgeModalVisible: false,bindKnowledgeBtnInfo:'' });
     },
 
@@ -1366,6 +1544,11 @@ const UpdateExamPagerComponents = React.createClass({
         var analysisUrl=createExamPager.state.analysisUrl;
         var subjectJson = {answerCardTitle:answerCardTitle,answerSubjectType:answerSubjectType,subjectNum:subjectNum,textAnalysis:analysisContent,imageAnalysis:analysisUrl};
         createExamPager.refreshCardChildArray(subjectJson,"setAnalysis");
+        var analysisIsNull = true;
+        if(createExamPager.isEmpty(analysisContent)==false || createExamPager.isEmpty(analysisUrl)==false){
+            analysisIsNull = false;
+        }
+        createExamPager.refreshAnalysisButtonIcon(answerCardTitle,subjectNum,answerSubjectType,analysisIsNull);
         createExamPager.setState({analysisModalVisible:false,addAnalysisBtnInfo:'',"analysisContent":'',"analysisUrl":''});
     },
 
@@ -1382,7 +1565,6 @@ const UpdateExamPagerComponents = React.createClass({
         var answerTitle=currentImgAnswerInfoArray[0];
         var num = currentImgAnswerInfoArray[1];
         var answerSubjectType = currentImgAnswerInfoArray[3];
-        console.log("imageAnswerUrl URl："+fileUrl);
         createExamPager.setState({"imageAnswerUrl":fileUrl});
         createExamPager.state.imageAnswerArray[subjectInfo]=fileUrl;
         // 上传成功后，直接设置到对应的题目上
@@ -1390,67 +1572,33 @@ const UpdateExamPagerComponents = React.createClass({
         createExamPager.refreshCardChildArray(subjectJson,"setImageAnswer");
         // 操作完成成，清空当前的题目信息
         createExamPager.setState({ currentImgAnswerInfo: '',imageAnswer:fileUrl,examPagerModalVisible: false,spinLoading:false});
-
-        /*if(createExamPager.isEmpty(fileList) || fileList.length==0){
-            createExamPager.state.imageAnswerUrl='';
-            //题目图片答案的图片来源
-            subjectInfo = subjectInfo.uid;
-            var currentImgAnswerInfoArray = subjectInfo.split("#");
-            var answerTitle=currentImgAnswerInfoArray[0];
-            var num = currentImgAnswerInfoArray[1];
-            var answerSubjectType = currentImgAnswerInfoArray[3];
-
-            createExamPager.state.imageAnswerArray[subjectInfo]=fileUrl;
-            console.log("image url:"+createExamPager.state.imageAnswerArray[subjectInfo]);
-            // 上传成功后，直接设置到对应的题目上
-            var subjectJson = {"answerCardTitle":answerTitle,"answerSubjectType":answerSubjectType,"subjectNum":num,imageAnswer:''};
-            createExamPager.refreshCardChildArray(subjectJson,"setImageAnswer");
-        }
-        for(var i=0;i<fileList.length;i++){
-            var fileJson = fileList[i];
-            var fileUrl = fileJson.url;
-            var subjectInfo = fileJson.uid;
-            console.log("imageAnswerUrl URl："+fileUrl);
-            createExamPager.setState({"imageAnswerUrl":fileUrl});
-            //题目图片答案的图片来源
-            var currentImgAnswerInfoArray = subjectInfo.split("#");
-            var answerTitle=currentImgAnswerInfoArray[0];
-            var num = currentImgAnswerInfoArray[1];
-            var answerSubjectType = currentImgAnswerInfoArray[3];
-
-            createExamPager.state.imageAnswerArray[subjectInfo]=fileUrl;
-            console.log("image url:"+createExamPager.state.imageAnswerArray[subjectInfo]);
-            // 上传成功后，直接设置到对应的题目上
-            var subjectJson = {"answerCardTitle":answerTitle,"answerSubjectType":answerSubjectType,"subjectNum":num,imageAnswer:fileUrl};
-            createExamPager.refreshCardChildArray(subjectJson,"setImageAnswer");
-            // 操作完成成，清空当前的题目信息
-            createExamPager.setState({ currentImgAnswerInfo: '',imageAnswer:fileUrl,examPagerModalVisible: false,spinLoading:false});
-        }*/
     },
+
     /**
      * 获取试卷标题图片的文件路径列表
      */
-    getExamPagerTitleImgList(fileList){
-        createExamPager.state.examPagerUrl.splice(0);
-        for(var i=0;i<fileList.length;i++){
-            var fileJson = fileList[i];
-            var fileUrl = fileJson.response;
-            createExamPager.state.examPagerUrl.push(fileUrl);
+    getExamPagerTitleImgList(file,isRemoved){
+        var examPagerUrl = file.response;
+        if(createExamPager.isEmpty(isRemoved)==false && isRemoved=="removed"){
+            for(var i=0;i<createExamPager.state.examPagerUrl.length;i++){
+                if(createExamPager.state.examPagerUrl[i] == examPagerUrl){
+                    createExamPager.state.examPagerUrl.splice(i,1);
+                }
+            }
+        }else{
+            createExamPager.state.examPagerUrl.push(examPagerUrl);
         }
     },
+
     /**
      * 获取图片解析的url路径
      */
-    getAnalysisiImgList(fileList){
-        if(createExamPager.isEmpty(fileList) || fileList.length==0){
-            createExamPager.setState({"analysisUrl":''});
+    getAnalysisiImgList(file,subjectInfo,isRemoved){
+        var analysisUrl = file.response;
+        if(createExamPager.isEmpty(isRemoved)==false && isRemoved=="removed"){
+            analysisUrl = "";
         }
-        for(var i=0;i<fileList.length;i++){
-            var fileJson = fileList[i];
-            var fileUrl = fileJson.url;
-            console.log("analysis URl："+fileUrl);
-            createExamPager.setState({"analysisUrl":fileUrl});
-        }
+        createExamPager.setState({"analysisUrl":analysisUrl});
     },
 
     render() {
@@ -1476,7 +1624,6 @@ const UpdateExamPagerComponents = React.createClass({
                     <Row className="ant-form-item">
                         <Col span={4} className="right_look">图片解析：</Col>
                         <Col span={18}>
-                            {/*<AntUploadComponentsForUpdate fileList={createExamPager.state.analysisUrl} callBackParent={createExamPager.getAnalysisiImgList}></AntUploadComponentsForUpdate>*/}
                             <AntUploadForAnalysisOfCreateComponents fileList={createExamPager.state.analysisUrl} callBackParent={createExamPager.getAnalysisiImgList}></AntUploadForAnalysisOfCreateComponents>
                         </Col>
                     </Row>
@@ -1543,7 +1690,7 @@ const UpdateExamPagerComponents = React.createClass({
                         </Col>
                         <Col span={18}>
                 <span className="date_tr text_30 upexam_float">
-                    <AntUploadComponentsForExamPagerUpdate fileList={createExamPager.state.examPagerImgTag} key="examPagerTitleUpload" callBackParent={createExamPager.getExamPagerTitleImgList}></AntUploadComponentsForExamPagerUpdate>
+                    <UploadExamPagerComponents fileList={createExamPager.state.examPagerImgTag} key="examPagerTitleUpload" callBackParent={createExamPager.getExamPagerTitleImgList}></UploadExamPagerComponents>
                     <Modal
                         visible={createExamPager.state.examPagerModalVisible}
                         title="上传图片"

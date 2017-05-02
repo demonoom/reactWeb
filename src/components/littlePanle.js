@@ -15,7 +15,7 @@
             stylePage: {
                 top: 0,
                 left: 0,
-                width: 360,
+                width: 400,
                 height: 596,
                 position: 'relative',
                 backgroundColor: '#fff',
@@ -50,7 +50,7 @@
         //
         let el = nodeEl.find('.zoom');
         el.off();
-        el.html('&#xe680;');
+        el.html('&#xe60f;');
         el.on('click', this.zoomMinView.bind(this, id));
     }
     littlePanle.prototype.zoomMinView = function (id) {
