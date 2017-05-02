@@ -1389,6 +1389,9 @@ a {
 .maaeegroup{
 	height: calc(100% - 62px );
 }
+.maaeegroup > div:first-child{
+	height:100%
+}
 .maaeegroup .ant-table-body{
 	height:100%;
 }
