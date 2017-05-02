@@ -19,7 +19,7 @@ class MyFollows extends React.Component {
             userInfo: [],
             userList: [],
         };
-        this.previouUserId = []; // 进入时加一，返回时，减一
+        this.previouUserId = []; // 进入时加，返回时减
         this.currentUser = '';
         this.gobackBtn = null;
         this.htmlTempletContent = {};
@@ -27,6 +27,7 @@ class MyFollows extends React.Component {
         this.intoFollowsList = this.intoFollowsList.bind(this);
         this.intoProsoncenter = this.intoProsoncenter.bind(this);
         this.returnPersonCenter = this.returnPersonCenter.bind(this);
+        this.notInterProsonCenter = this.notInterProsonCenter.bind(this);
         this.returnParentFollowsList = this.returnParentFollowsList.bind(this);
     }
 
@@ -174,6 +175,10 @@ class MyFollows extends React.Component {
 
     // 登录的操作用户不能返回个人中心
     notInterProsonCenter() {
+        if(!this.currentUser){
+            this.currentUser = this.state.ident;
+        }
+
         if (!this.previouUserId.length && this.currentUser == this.state.ident) {
             return false;
         } else {
@@ -255,7 +260,7 @@ class MyFollows extends React.Component {
                 </Breadcrumb>
                 {this.gobackBtn}
                 { this.htmlTempletContent }
-                
+
             </div>
         );
     }
