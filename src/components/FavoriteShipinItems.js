@@ -68,9 +68,7 @@ const FavoriteShipinItems = React.createClass({
             let _this = this;
             Modal.confirm({
                 title: '请输入密码',
-                content: <Input onKeyDown={(event) => {
-                    _this.pwdInput = this.value
-                }}/>,
+                content: <Input id="tmppwd"  />,
                 okText: '确定',
                 cancelText: '取消',
                 onOk: this.videoPwdModalHandleOk.bind(_this, password, obj),
@@ -84,8 +82,11 @@ const FavoriteShipinItems = React.createClass({
 
     videoPwdModalHandleOk: function (pwd, obj) {
 
-        debugger
-        this.view(obj);
+        if (pwd == $('#tmppwd').val()) {
+            this.view(obj);
+        } else {
+            message.warn('密码错误!')
+        }
 
     },
 
@@ -127,8 +128,10 @@ const FavoriteShipinItems = React.createClass({
                             </li>
                             <li>
                                 <span className="live_color live_orange">{e.liveInfo.courseName}</span>
-                                <a className={showCancelBtn ? 'show' : 'hide'  } target="_blank" title="取消收藏" onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}>
-                                    <span className="right_ri focus_btn star_span"><i className="iconfont star">&#xe646;</i></span>
+                                <a className={showCancelBtn ? 'show' : 'hide'  } target="_blank" title="取消收藏"
+                                   onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}>
+                                    <span className="right_ri focus_btn star_span"><i
+                                        className="iconfont star">&#xe646;</i></span>
                                 </a>
                                 <span
                                     className={showKeyIcon ? 'right_ri focus_btn key_span show' : 'right_ri focus_btn key_span hide'  }><i
