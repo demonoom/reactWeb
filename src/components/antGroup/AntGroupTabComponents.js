@@ -1560,11 +1560,10 @@ const AntGroupTabComponents = React.createClass({
                         user = e.user;
                         var userName = user.userName;
                         var courseName = e.courseName;
-                        var password = e.password;
                         var id = e.id;
-                        var keyIcon;
-                        if(isEmpty(password)==false){
-                            keyIcon = <Icon type="key" />;
+                        var keyIcon='';
+                        if(e.password){
+                            keyIcon = <span className="right_ri focus_btn key_span"><i className="iconfont key">&#xe621;</i></span>;
                         }
                         var liveCard = <Card className="live" >
 							<p className="h3">{title}</p>
@@ -1581,7 +1580,7 @@ const AntGroupTabComponents = React.createClass({
                                     </li>
                                     <li>
                                         <span className="live_color live_orange">{courseName}</span>
-                                        <span className="right_ri focus_btn key_span"><i className="iconfont key">&#xe621;</i></span>
+                                        {keyIcon}
                                     </li>
                                 </ul>
                             </div>
