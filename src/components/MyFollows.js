@@ -253,12 +253,9 @@ class MyFollows extends React.Component {
                     <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
                     <Breadcrumb.Item href="#/MainLayout">我的关注</Breadcrumb.Item>
                 </Breadcrumb>
-<<<<<<< HEAD
                 {this.gobackBtn}
                 { this.htmlTempletContent }
-=======
                 <div className="focus_auto favorite_pa_le_2"> { this.htmlTempletContent }</div>
->>>>>>> 20dd02c0118e74e145600ab20cd56db116bbfd7a
             </div>
         );
     }
