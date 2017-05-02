@@ -262,8 +262,15 @@ const CreateExamPagerComponents = React.createClass({
      * 设置答题卡时的题型单选事件响应函数
      */
     subjectTypeOnChange(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var subjectTypeValue = target.value;
         createExamPager.setState({
-            subjectTypeValue: e.target.value,
+            subjectTypeValue: subjectTypeValue,
         });
     },
     /**
@@ -296,21 +303,42 @@ const CreateExamPagerComponents = React.createClass({
      设置答题卡中的答题卡标题内容改变事件响应函数
      */
     answerTitleOnChange(e){
-        createExamPager.setState({ answerTitle: e.target.value });
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var answerTitle = target.value;
+        createExamPager.setState({ answerTitle: answerTitle });
     },
     /**
      * 设置答题卡中的题目的数量文本框内容改变事件的响应函数
      * @param e
      */
     answerCountOnChange(e){
-        createExamPager.setState({ answerCount: e.target.value });
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var answerCount = target.value;
+        createExamPager.setState({ answerCount: answerCount });
     },
     /**
      * 设置答题卡中的题目的数量文本框内容改变事件的响应函数
      * @param e
      */
     answerScoreOnChange(e){
-        createExamPager.setState({ answerScore: e.target.value });
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var answerScore = target.value;
+        createExamPager.setState({ answerScore: answerScore });
     },
     /**
      * 判断当前要添加的答题卡的标题是否已经存在
@@ -339,7 +367,13 @@ const CreateExamPagerComponents = React.createClass({
      * @param checkedValues
      */
     answerInCardOnChange(e) {
-        console.log('checked = ', e.target.value+","+e.target.key);
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        console.log('checked = ', target.value+","+target.key);
     },
 
     /**
@@ -347,7 +381,14 @@ const CreateExamPagerComponents = React.createClass({
      * 注意编号要重新生成
      */
     deleteSubjectContentDiv(e){
-        var selectedSubject = e.target.value;
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var selectedSubject = target.value;
+        // var selectedSubject = e.target.value;
         var deleteInfoArray = selectedSubject.split("#");
         var deleteAnswerTitle = deleteInfoArray[0];
         var deleteSubjectNum = parseInt(deleteInfoArray[1]);
@@ -451,7 +492,14 @@ const CreateExamPagerComponents = React.createClass({
      * 删除答题卡时的响应函数
      */
     deleteAnswerCard(e){
-        var deleteCardInfo = e.target.value;
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var deleteCardInfo = target.value;
+        // var deleteCardInfo = e.target.value;
         var infoArray = deleteCardInfo.split("#");
         var deleteCardTitle = infoArray[0];
         var deleteSubjectType = infoArray[1];
@@ -493,12 +541,18 @@ const CreateExamPagerComponents = React.createClass({
      * 答题卡中的题目分值改变时的响应函数
      */
     subjectScoreOnChange(e){
-        var subjectInfo = e.target.id;
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var subjectInfo = target.id;
         var subjectInfoArray = subjectInfo.split("#");
         var answerCardTitle= subjectInfoArray[0];
         var subjectNum = parseInt(subjectInfoArray[1]);
         var answerSubjectType = subjectInfoArray[3];
-        var subjectScore = parseInt(e.target.value);
+        var subjectScore = parseInt(target.value);
         //封装题目的所属答题卡、编号信息和题目分值
         var subjectJson = {answerCardTitle:answerCardTitle,answerSubjectType:answerSubjectType,subjectNum:subjectNum,subjectScore:subjectScore};
         var optType="setScore";
@@ -510,14 +564,21 @@ const CreateExamPagerComponents = React.createClass({
      * @param e
      */
     blankOnChange(e){
-        var subjectInfo = e.target.id;
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var subjectInfo = target.id;
+        // var subjectInfo = e.target.id;
         var subjectInfoArray = subjectInfo.split("#");
         //通过组件id获取的答题卡信息
         var answerCardTitle= subjectInfoArray[0];
         var subjectNum = parseInt(subjectInfoArray[1]);
         var answerSubjectType = subjectInfoArray[3];
         //填空题答案
-        var subjectAnswer = e.target.value;
+        var subjectAnswer = target.value;
         //封装题目的所属答题卡、编号信息和题目分值
         var subjectJson = {answerCardTitle:answerCardTitle,answerSubjectType:answerSubjectType,subjectNum:subjectNum,subjectAnswer:subjectAnswer};
         var optType = "setAnswer";
@@ -779,7 +840,13 @@ const CreateExamPagerComponents = React.createClass({
      * @param e
      */
     correctAnswerOnChange(e){
-        var subjectInfo = e.target.value;
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var subjectInfo = target.value;
         var subjectInfoArray = subjectInfo.split("#");
         //当前答案所属答题卡名称
         var answerCardTitle = subjectInfoArray[0];
@@ -791,7 +858,7 @@ const CreateExamPagerComponents = React.createClass({
         var subjectJson = {answerCardTitle:answerCardTitle,answerSubjectType:answerSubjectType,subjectNum:subjectNum,subjectAnswer:subjectAnswer};
         createExamPager.refreshCardChildArray(subjectJson,"setAnswer");
         createExamPager.setState({
-            correctAnswerValue: e.target.value,
+            correctAnswerValue: target.value,
         });
     },
 
@@ -1069,7 +1136,14 @@ const CreateExamPagerComponents = React.createClass({
      * @param e
      */
     examPagerTitleChange(e){
-        createExamPager.setState({ examPagerTitle: e.target.value });
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var examPagerTitle = target.value;
+        createExamPager.setState({ examPagerTitle: examPagerTitle });
     },
 
     /**
