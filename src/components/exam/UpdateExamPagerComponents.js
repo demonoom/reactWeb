@@ -806,7 +806,7 @@ const UpdateExamPagerComponents = React.createClass({
         if(createExamPager.isEmpty(subjectInfoWithSelected)==false && createExamPager.isEmpty(subjectInfoWithSelected.points)==false && subjectInfoWithSelected.points.length>0){
             //知识点非空
             pointBtn = <Button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
-                <img src={require('../images/knowledgeAdded.png')} style={{width:'20px',height:'20px'}}  id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="pointBtn" />所属知识点
+                <i id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="iconfont iconfont_knowledge pointBtn">&#xe602;</i>所属知识点
             </Button>
         }else{
             pointBtn = <Button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">

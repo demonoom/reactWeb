@@ -242,7 +242,7 @@ class MyFollows extends React.Component {
 
                 if (this.notInterProsonCenter()) {
                     this.gobackBtn =
-                        <div className="ant-tabs-right"><Button onClick={this.returnPersonCenter}>返回</Button></div>;
+                        <div className="back_follow ant-tabs-bar"><Button onClick={this.returnPersonCenter}>返回</Button></div>;
                 }
                 this._buildMyFollowsList();
                 break;
@@ -259,7 +259,7 @@ class MyFollows extends React.Component {
                     <Breadcrumb.Item href="#/MainLayout">我的关注</Breadcrumb.Item>
                 </Breadcrumb>
                 {this.gobackBtn}
-                <div className="ant-tabs favorite_up">{ this.htmlTempletContent }</div>
+                <div className="follow_my favorite_up">{ this.htmlTempletContent }</div>
 
             </div>
         );
