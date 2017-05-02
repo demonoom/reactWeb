@@ -806,7 +806,7 @@ const UpdateExamPagerComponents = React.createClass({
         if(createExamPager.isEmpty(subjectInfoWithSelected)==false && createExamPager.isEmpty(subjectInfoWithSelected.points)==false && subjectInfoWithSelected.points.length>0){
             //知识点非空
             pointBtn = <Button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
-                <i id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="iconfont iconfont_knowledge pointBtn">&#xe602;</i>所属知识点
+                <i id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="iconfont iconfont_knowledge pointBtn">&#xe783;</i>所属知识点
             </Button>
         }else{
             pointBtn = <Button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
@@ -853,11 +853,12 @@ const UpdateExamPagerComponents = React.createClass({
         if(createExamPager.isEmpty(subjectInfoWithSelected)==false && (createExamPager.isEmpty(subjectInfoWithSelected.imageAnalysis)==false || createExamPager.isEmpty(subjectInfoWithSelected.textAnalysis)==false)){
             //文本或图片解析非空
             analysisBtn = <Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
-                <img src={require('../images/AnalysisAdded.png')} style={{width:'20px',height:'20px'}} id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="analysisBtn"/>解析
+			    <i id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="iconfont iconfont_knowledge analysisBtn" className="iconfont iconfont_knowledge pointBtn">&#xe61d;</i>解析
             </Button>
         }else{
             analysisBtn = <Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
-                <img src={require('../images/beforeAdd.png')} style={{width:'20px',height:'20px'}}  id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="analysisBtn"/>解析
+			<i  id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="iconfont iconfont_knowledge analysisBtn" className="iconfont iconfont_knowledge pointBtn">&#xe611;</i>
+              解析
             </Button>
         }
         return analysisBtn;
