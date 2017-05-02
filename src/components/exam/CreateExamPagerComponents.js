@@ -586,10 +586,10 @@ const CreateExamPagerComponents = React.createClass({
                 <Col span={3}></Col>
                 <Col span={18} className="upexam_le_te">
                     <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
-                        所属知识点
+                        <img src={require('../images/beforeAdd.png')} style={{width:'20px',height:'20px'}} id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="pointBtn"/>所属知识点
                     </button>
 					<Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  className="examination_btn_gray" onClick={createExamPager.showAnalysisModal}>
-                        解析
+                        <img src={require('../images/beforeAdd.png')} style={{width:'20px',height:'20px'}}  id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="analysisBtn"/>解析
                     </Button>
                 </Col>
                
@@ -629,10 +629,10 @@ const CreateExamPagerComponents = React.createClass({
                 <Col span={3}></Col>
                 <Col span={18} className="upexam_le_te">
                     <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
-                        所属知识点
+                        <img src={require('../images/beforeAdd.png')} style={{width:'20px',height:'20px'}} id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="pointBtn"/>所属知识点
                     </button>
 					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
-                        解析
+                        <img src={require('../images/beforeAdd.png')} style={{width:'20px',height:'20px'}}  id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="analysisBtn"/>解析
                     </button>
                 </Col>
                 
@@ -674,10 +674,10 @@ const CreateExamPagerComponents = React.createClass({
                 <Col span={3}></Col>
                 <Col span={18} className="upexam_le_te">
                     <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal}  className="examination_btn_gray">
-                        所属知识点
+                        <img src={require('../images/beforeAdd.png')} style={{width:'20px',height:'20px'}} id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="pointBtn"/>所属知识点
                     </button>
 					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
-                        解析
+                        <img src={require('../images/beforeAdd.png')} style={{width:'20px',height:'20px'}}  id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="analysisBtn"/>解析
                     </button>
                 </Col>
             </Row>
@@ -717,10 +717,10 @@ const CreateExamPagerComponents = React.createClass({
                 <Col span={3}></Col>
                 <Col span={18} className="upexam_le_te">
                     <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
-                        所属知识点
+                        <img src={require('../images/beforeAdd.png')} style={{width:'20px',height:'20px'}} id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="pointBtn"/>所属知识点
                     </button>
 					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
-                        解析
+                        <img src={require('../images/beforeAdd.png')} style={{width:'20px',height:'20px'}}  id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="analysisBtn"/>解析
                     </button>
                 </Col>
                 <Col span={13}>
@@ -729,6 +729,51 @@ const CreateExamPagerComponents = React.createClass({
         </div>;
         return subjectDiv;
     },
+    /**
+     * 刷新关联题目的“解析”按钮上的图标
+     * @param answerTitle 答题卡标题
+     * @param num  题目编号
+     * @param answerSubjectType 答题卡题型
+     * @param pointIsNull 解析内容（包括文本解析或图片解析）是否为空，据此设置不同的图标
+     */
+    refreshAnalysisButtonIcon(answerTitle,num,answerSubjectType,analysisIsNull){
+        var checkId = answerTitle+"#"+num+"#analysis#"+answerSubjectType;
+        var btnArray = $(".analysisBtn");
+        for(var i=0;i<btnArray.length;i++){
+            var btnObj = btnArray[i];
+            if(createExamPager.isEmpty(btnObj.id)==false && btnObj.id == checkId){
+                if(analysisIsNull==false){
+                    btnObj.src=require('../images/AnalysisAdded.png');
+                }else{
+                    btnObj.src=require('../images/beforeAdd.png');
+                }
+                break;
+            }
+        }
+    },
+    /**
+     * 刷新关联题目的“所属知识点”按钮上的图标
+     * @param answerTitle 答题卡标题
+     * @param num  题目编号
+     * @param answerSubjectType 答题卡题型
+     * @param pointIsNull 知识点是否为空，据此设置不同的图标
+     */
+    refreshPointButtonIcon(answerTitle,num,answerSubjectType,pointIsNull){
+        var checkId = answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType;
+        var btnArray = $(".pointBtn");
+        for(var i=0;i<btnArray.length;i++){
+            var btnObj = btnArray[i];
+            if(createExamPager.isEmpty(btnObj.id)==false && btnObj.id == checkId){
+                if(pointIsNull==false){
+                    btnObj.src=require('../images/knowledgeAdded.png');
+                }else{
+                    btnObj.src=require('../images/beforeAdd.png');
+                }
+                break;
+            }
+        }
+    },
+
     /**
      * 判断题答案单选按钮组操作时的响应函数
      * @param e
@@ -1216,6 +1261,11 @@ const CreateExamPagerComponents = React.createClass({
         var subjectNum =bindKnowledgeBtnInfoArray[1];
         var subjectJson = {answerCardTitle:answerCardTitle,answerSubjectType:answerSubjectType,subjectNum:subjectNum,points:createExamPager.state.targetKeys};
         createExamPager.refreshCardChildArray(subjectJson,"setPoints");
+        var pointIsNull = true;
+        if(createExamPager.isEmpty(createExamPager.state.targetKeys)==false && createExamPager.state.targetKeys.length>0){
+            pointIsNull = false;
+        }
+        createExamPager.refreshPointButtonIcon(answerCardTitle,subjectNum,answerSubjectType,pointIsNull);
         createExamPager.setState({ bindKnowledgeModalVisible: false,bindKnowledgeBtnInfo:'',mockData:[], targetKeys:[] });
     },
 
@@ -1277,6 +1327,11 @@ const CreateExamPagerComponents = React.createClass({
         var analysisUrl=createExamPager.state.analysisUrl;
         var subjectJson = {answerCardTitle:answerCardTitle,answerSubjectType:answerSubjectType,subjectNum:subjectNum,textAnalysis:analysisContent,imageAnalysis:analysisUrl};
         createExamPager.refreshCardChildArray(subjectJson,"setAnalysis");
+        var analysisIsNull = true;
+        if(createExamPager.isEmpty(analysisContent)==false || createExamPager.isEmpty(analysisUrl)==false){
+            analysisIsNull = false;
+        }
+        createExamPager.refreshAnalysisButtonIcon(answerCardTitle,subjectNum,answerSubjectType,analysisIsNull);
         createExamPager.setState({analysisModalVisible:false,addAnalysisBtnInfo:'',"analysisContent":'',"analysisUrl":''});
     },
     /**
