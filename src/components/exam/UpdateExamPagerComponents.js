@@ -818,13 +818,14 @@ const UpdateExamPagerComponents = React.createClass({
             //文本或图片解析非空
             analysisBtn = <Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
 			    {/*<i id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="iconfont iconfont_knowledge analysisBtn exam_icon_1">&#xe61d;</i>*/}
-                <img src={require('../images/AnalysisAdded.png')} style={{width:'20px',height:'20px'}}  id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="analysisBtn"/>
+                {/*<img src={require('../images/AnalysisAdded.png')} style={{width:'20px',height:'20px'}}  id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="analysisBtn"/>*/}
+                <div className="analysisBtn" id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} ><i className="iconfont iconfont_knowledge exam_icon_2">&#xe61d;</i></div>
                 解析
             </Button>
         }else{
             analysisBtn = <Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray ">
-                <img src={require('../images/beforeAdd.png')} style={{width:'20px',height:'20px'}}  id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="analysisBtn"/>
-			{/*<i id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="iconfont iconfont_knowledge analysisBtn exam_icon_2">&#xe611;</i>*/}
+                {/*<img src={require('../images/beforeAdd.png')} style={{width:'20px',height:'20px'}}  id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="analysisBtn"/>*/}
+                <div className="analysisBtn" id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} ><i className="iconfont iconfont_knowledge exam_icon_2">&#xe611;</i></div>
               解析
             </Button>
         }
@@ -845,9 +846,13 @@ const UpdateExamPagerComponents = React.createClass({
             var btnObj = btnArray[i];
             if(createExamPager.isEmpty(btnObj.id)==false && btnObj.id == checkId){
                 if(analysisIsNull==false){
-                    btnObj.src=require('../images/AnalysisAdded.png');
+                    //btnObj.src=require('../images/AnalysisAdded.png');
+                    //btnObj.className="iconfont iconfont_knowledge analysisBtn exam_icon_1";
+                    btnObj.innerHTML="<i className=\"iconfont iconfont_knowledge analysisBtn exam_icon_1\">&#xe61d;</i>";
                 }else{
-                    btnObj.src=require('../images/beforeAdd.png');
+                    // btnObj.className="iconfont iconfont_knowledge analysisBtn exam_icon_2";
+                    // btnObj.src=require('../images/beforeAdd.png');
+                    btnObj.innerHTML="<i className=\"iconfont iconfont_knowledge exam_icon_2\">&#xe611;</i>";
                 }
                 break;
             }
