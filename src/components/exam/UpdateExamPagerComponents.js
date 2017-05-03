@@ -817,14 +817,14 @@ const UpdateExamPagerComponents = React.createClass({
         if(createExamPager.isEmpty(subjectInfoWithSelected)==false && (createExamPager.isEmpty(subjectInfoWithSelected.imageAnalysis)==false || createExamPager.isEmpty(subjectInfoWithSelected.textAnalysis)==false)){
             //文本或图片解析非空
             analysisBtn = <Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
-			    {/*<i id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="iconfont iconfont_knowledge analysisBtn">&#xe61d;</i>*/}
+			    {/*<i id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="iconfont iconfont_knowledge analysisBtn exam_icon_1">&#xe61d;</i>*/}
                 <img src={require('../images/AnalysisAdded.png')} style={{width:'20px',height:'20px'}}  id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="analysisBtn"/>
                 解析
             </Button>
         }else{
-            analysisBtn = <Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
+            analysisBtn = <Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray ">
                 <img src={require('../images/beforeAdd.png')} style={{width:'20px',height:'20px'}}  id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="analysisBtn"/>
-			{/*<i  id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="iconfont iconfont_knowledge analysisBtn">&#xe611;</i>*/}
+			{/*<i id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="iconfont iconfont_knowledge analysisBtn exam_icon_2">&#xe611;</i>*/}
               解析
             </Button>
         }
