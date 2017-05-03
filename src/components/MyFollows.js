@@ -259,7 +259,7 @@ class MyFollows extends React.Component {
                     <Breadcrumb.Item href="#/MainLayout">我的关注</Breadcrumb.Item>
                 </Breadcrumb>
                 {this.gobackBtn}
-                <div className="follow_my favorite_up">{ this.htmlTempletContent }</div>
+                <div className="follow_my">{ this.htmlTempletContent }</div>
 
             </div>
         );

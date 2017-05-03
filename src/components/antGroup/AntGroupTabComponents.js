@@ -1593,7 +1593,7 @@ const AntGroupTabComponents = React.createClass({
                         var delButton;
                         if(user.colUid == sessionStorage.getItem("ident")){
                              //如果是当前用户，可以删除自己的直播课
-                            delButton = <Button icon="delete" onClick={antGroup.showDeleteLiveVideosConfirmModal.bind(antGroup,id)}></Button>
+                            delButton = <Button icon="delete" className="right_ri star_del" onClick={antGroup.showDeleteLiveVideosConfirmModal.bind(antGroup,id)}></Button>
                         }
                         var liveCard = <Card className="live" >
 							<p className="h3">{title}</p>

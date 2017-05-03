@@ -3352,6 +3352,19 @@ color:#ffbf00
 	margin-left:8px;
 	text-align:center
 }
+.star_del{
+	margin-right: 8px !important;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    padding: 0 !important;
+    font-size: 13px !important;
+    background: #57c5f7;
+    border: 1px solid #57c5f7;
+    color: #fff;
+    line-height: 18px;
+
+}
 .key{
 	font-size:14px;
 	color:#fff;
@@ -3376,5 +3389,5 @@ color:#ffbf00
 	text-align:right;
 }
 .follow_my{
-	height: calc(100% - 62px );
+	height:100%;
 }
