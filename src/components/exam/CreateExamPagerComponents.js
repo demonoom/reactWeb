@@ -9,6 +9,7 @@ import FileUploadComponents from './FileUploadComponents';
 import AntUploadComponents from './AntUploadComponents';
 import AntUploadForAnalysisOfCreateComponents from './AntUploadForAnalysisOfCreateComponents';
 import UploadExamPagerComponents from './UploadExamPagerComponents';
+import ConfirmModal from '../ConfirmModal';
 const CheckboxGroup = Checkbox.Group;
 const RadioGroup = Radio.Group;
 const confirm = Modal.confirm;
@@ -262,15 +263,8 @@ const CreateExamPagerComponents = React.createClass({
      * 设置答题卡时的题型单选事件响应函数
      */
     subjectTypeOnChange(e){
-        var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
-            target = e.target;
-        }
-        var subjectTypeValue = target.value;
         createExamPager.setState({
-            subjectTypeValue: subjectTypeValue,
+            subjectTypeValue:  e.target.value,
         });
     },
     /**
@@ -380,64 +374,51 @@ const CreateExamPagerComponents = React.createClass({
      * 删除选中的题目
      * 注意编号要重新生成
      */
-    deleteSubjectContentDiv(e){
-        var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
-            target = e.target;
-        }
-        var selectedSubject = target.value;
-        // var selectedSubject = e.target.value;
+    deleteSubjectContentDiv(){
+        var selectedSubject = createExamPager.state.selectedSubject;
         var deleteInfoArray = selectedSubject.split("#");
         var deleteAnswerTitle = deleteInfoArray[0];
         var deleteSubjectNum = parseInt(deleteInfoArray[1]);
-        confirm({
-            title: '确定要删除该题目?',
-            content: '',
-            onOk() {
-                for(var i=0;i<cardChildArray.length;i++){
-                    var cardChildJson = cardChildArray[i];
-                    var cartTitleInJson = cardChildJson.answerTitle;
-                    //题目类型
-                    var answerSubjectType = cardChildJson.answerSubjectType;
-                    if(deleteAnswerTitle == cartTitleInJson){
-                        //已经找到对应的答题卡，接下来需要在答题卡的题目数组中再找出对应的题目编号
-                        var cardSubjectAnswerArray = cardChildJson.cardSubjectAnswerArray;
-                        if(cardSubjectAnswerArray.length==1){
-                            //如果删除的题目所属的答题卡中只剩下最后一道题，则直接删除当前的答题卡
-                            cardChildArray.splice(i,1);
-                        }else{
-                            //答题卡中存在多道题时，删除选定题目
-                            //待要删除的题目编号
-                            var delPoint=-1;
-                            for(var j = 0;j<cardSubjectAnswerArray.length;j++){
-                                var cardSubjectJson = cardSubjectAnswerArray[j];
-                                if(cardSubjectJson.index == deleteSubjectNum){
-                                    cardSubjectJson.divContent="";
-                                    delPoint = j;
-                                }
-                                //比当前删除题目的编号大的题目，将其编号统一减一
-                                if(cardSubjectJson.index > deleteSubjectNum){
-                                    cardSubjectJson.index = parseInt(cardSubjectJson.index)-1;
-                                }
-                            }
-                            if(delPoint!=-1){
-                                cardSubjectAnswerArray.splice(delPoint,1);
-                                //刷新页面上显示的题目编号
-                                createExamPager.refreshSubjectIndexNo(deleteSubjectNum,deleteAnswerTitle,answerSubjectType);
-                                //刷新删除按钮关联的value信息，vlaue信息中存储了题目的基本信息
-                                createExamPager.refreshDelBtnValue(deleteSubjectNum,deleteAnswerTitle,answerSubjectType);
-                                cardChildJson.answerCount = cardChildJson.answerCount-1;
-                                message.success("题目删除成功");
-                            }
+        for(var i=0;i<cardChildArray.length;i++){
+            var cardChildJson = cardChildArray[i];
+            var cartTitleInJson = cardChildJson.answerTitle;
+            //题目类型
+            var answerSubjectType = cardChildJson.answerSubjectType;
+            if(deleteAnswerTitle == cartTitleInJson){
+                //已经找到对应的答题卡，接下来需要在答题卡的题目数组中再找出对应的题目编号
+                var cardSubjectAnswerArray = cardChildJson.cardSubjectAnswerArray;
+                if(cardSubjectAnswerArray.length==1){
+                    //如果删除的题目所属的答题卡中只剩下最后一道题，则直接删除当前的答题卡
+                    cardChildArray.splice(i,1);
+                }else{
+                    //答题卡中存在多道题时，删除选定题目
+                    //待要删除的题目编号
+                    var delPoint=-1;
+                    for(var j = 0;j<cardSubjectAnswerArray.length;j++){
+                        var cardSubjectJson = cardSubjectAnswerArray[j];
+                        if(cardSubjectJson.index == deleteSubjectNum){
+                            cardSubjectJson.divContent="";
+                            delPoint = j;
+                        }
+                        //比当前删除题目的编号大的题目，将其编号统一减一
+                        if(cardSubjectJson.index > deleteSubjectNum){
+                            cardSubjectJson.index = parseInt(cardSubjectJson.index)-1;
                         }
                     }
+                    if(delPoint!=-1){
+                        cardSubjectAnswerArray.splice(delPoint,1);
+                        //刷新页面上显示的题目编号
+                        createExamPager.refreshSubjectIndexNo(deleteSubjectNum,deleteAnswerTitle,answerSubjectType);
+                        //刷新删除按钮关联的value信息，vlaue信息中存储了题目的基本信息
+                        createExamPager.refreshDelBtnValue(deleteSubjectNum,deleteAnswerTitle,answerSubjectType);
+                        cardChildJson.answerCount = cardChildJson.answerCount-1;
+                        message.success("题目删除成功");
+                    }
                 }
-                createExamPager.buildCardChildArray();
-            },
-            onCancel() {},
-        });
+            }
+        }
+        createExamPager.closeConfirmModal();
+        createExamPager.buildCardChildArray();
     },
     /**
      * 删除题目时，刷新题目的编号，保持编号连贯
@@ -491,50 +472,31 @@ const CreateExamPagerComponents = React.createClass({
     /**
      * 删除答题卡时的响应函数
      */
-    deleteAnswerCard(e){
-        var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
-            target = e.target;
-        }
-        var deleteCardInfo = target.value;
-        // var deleteCardInfo = e.target.value;
+    deleteAnswerCard(){
+        var deleteCardInfo = createExamPager.state.deleteCardInfo;
         var infoArray = deleteCardInfo.split("#");
         var deleteCardTitle = infoArray[0];
         var deleteSubjectType = infoArray[1];
-        confirm({
-            title: '确定要删除该答题卡?',
-            content: '',
-            onOk() {
-                for(var i=0;i<cardChildArray.length;i++){
-                    var cardChildJson = cardChildArray[i];
-                    var cartTitleInJson = cardChildJson.answerTitle;
-                    var cartSubjectTypeInJson = cardChildJson.answerSubjectType;
-                    if(deleteCardTitle == cartTitleInJson && cartSubjectTypeInJson==deleteSubjectType){
-                        cardChildArray.splice(i,1);
-                        break;
-                    }
-                }
-                createExamPager.buildCardChildArray();
-            },
-            onCancel() {},
-        });
+        for(var i=0;i<cardChildArray.length;i++){
+            var cardChildJson = cardChildArray[i];
+            var cartTitleInJson = cardChildJson.answerTitle;
+            var cartSubjectTypeInJson = cardChildJson.answerSubjectType;
+            if(deleteCardTitle == cartTitleInJson && cartSubjectTypeInJson==deleteSubjectType){
+                cardChildArray.splice(i,1);
+                break;
+            }
+        }
+        createExamPager.closeDelAnswerCardConfirmModal();
+        createExamPager.buildCardChildArray();
     },
 
     /**
      * 删除全部答题卡时的响应函数，对应清除全部按钮
      */
     deleteAllCardChild(){
-        confirm({
-            title: '确定要清除全部答题卡?',
-            content: '',
-            onOk() {
-                cardChildArray.splice(0,cardChildArray.length);
-                createExamPager.buildCardChildArray();
-            },
-            onCancel() {},
-        });
+        cardChildArray.splice(0,cardChildArray.length);
+        createExamPager.closeDelAllAnswerCardConfirmModal();
+        createExamPager.buildCardChildArray();
     },
 
     /**
@@ -632,7 +594,7 @@ const CreateExamPagerComponents = React.createClass({
                     <CheckboxGroup options={selectAnswerOptions[num-1]} onChange={createExamPager.subjectAnswerOnChange} />
                 </Col>
                 <div className="topic_del_ri">
-                    <button key={answerTitle+"#"+num+"delBtn"} value={answerTitle+"#"+num+"#"+answerSubjectType} onClick={createExamPager.deleteSubjectContentDiv} className="delSubjectBtn btn_gray_exam examination_btn_gray">
+                    <button key={answerTitle+"#"+num+"delBtn"} value={answerTitle+"#"+num+"#"+answerSubjectType} onClick={createExamPager.showConfirmModal} className="delSubjectBtn btn_gray_exam examination_btn_gray">
                         <i className="iconfont btn_gray_exam_del">&#xe62f;</i>
                     </button>
                 </div>
@@ -675,7 +637,7 @@ const CreateExamPagerComponents = React.createClass({
                     </RadioGroup>
                 </Col>
                 <div className="topic_del_ri">
-                    <button key={answerTitle+"#"+num+"delBtn"}  value={answerTitle+"#"+num+"#"+answerSubjectType} onClick={createExamPager.deleteSubjectContentDiv} className="delSubjectBtn btn_gray_exam examination_btn_gray">
+                    <button key={answerTitle+"#"+num+"delBtn"}  value={answerTitle+"#"+num+"#"+answerSubjectType} onClick={createExamPager.showConfirmModal} className="delSubjectBtn btn_gray_exam examination_btn_gray">
                         <i className="iconfont btn_gray_exam_del">&#xe62f;</i>
                     </button>
                 </div>
@@ -714,7 +676,7 @@ const CreateExamPagerComponents = React.createClass({
                     <Input  id={answerTitle+"#"+num+"#blank#"+answerSubjectType} type="textarea" rows={2} onChange={createExamPager.blankOnChange}/>
                 </Col>
                 <div className="topic_del_ri">
-                    <button key={answerTitle+"#"+num+"delBtn"}  value={answerTitle+"#"+num+"#"+answerSubjectType} onClick={createExamPager.deleteSubjectContentDiv} className="delSubjectBtn btn_gray_exam examination_btn_gray">
+                    <button key={answerTitle+"#"+num+"delBtn"}  value={answerTitle+"#"+num+"#"+answerSubjectType} onClick={createExamPager.showConfirmModal} className="delSubjectBtn btn_gray_exam examination_btn_gray">
                         <i className="iconfont btn_gray_exam_del">&#xe62f;</i>
                     </button>
                 </div>
@@ -757,7 +719,7 @@ const CreateExamPagerComponents = React.createClass({
                     <Input  id={answerTitle+"#"+num+"#simpleAnswer#"+answerSubjectType} type="textarea" rows={5} onChange={createExamPager.blankOnChange}/>
                 </Col>
                 <div className="topic_del_ri">
-                    <button key={answerTitle+"#"+num+"delBtn"}  value={answerTitle+"#"+num+"#"+answerSubjectType} onClick={createExamPager.deleteSubjectContentDiv} className="delSubjectBtn btn_gray_exam examination_btn_gray">
+                    <button key={answerTitle+"#"+num+"delBtn"}  value={answerTitle+"#"+num+"#"+answerSubjectType} onClick={createExamPager.showConfirmModal} className="delSubjectBtn btn_gray_exam examination_btn_gray">
                         <i className="iconfont btn_gray_exam_del">&#xe62f;</i>
                     </button>
                 </div>
@@ -868,7 +830,22 @@ const CreateExamPagerComponents = React.createClass({
     buildCardChildArray(){
         cardChildTagArray = cardChildArray.map((e, i)=> {
             var subjectArray=e.cardSubjectAnswerArray;
-            return <Card key={e.answerTitle+"#"+e.answerSubjectType} title={e.answerTitle} className="upexam_topic" extra={<button title={e.answerTitle} value={e.answerTitle+"#"+e.answerSubjectType} icon="delete" onClick={createExamPager.deleteAnswerCard} className="btn_gray_exam examination_btn_gray">															                        <i className="iconfont btn_gray_exam_del">&#xe62f;</i></button>} style={{width: 650}}>
+            var type="选择题";
+            switch (parseInt(e.answerSubjectType)){
+                case 0:
+                    type="选择题";
+                    break;
+                case 1:
+                    type="判断题";
+                    break;
+                case 2:
+                    type="填空题";
+                    break;
+                case 3:
+                    type="简答题";
+                    break;
+            }
+            return <Card key={e.answerTitle+"#"+e.answerSubjectType} title={e.answerTitle+"("+type+")"} className="upexam_topic" extra={<button title={e.answerTitle} value={e.answerTitle+"#"+e.answerSubjectType} icon="delete" onClick={createExamPager.showDelAnswerCardConfirmModal} className="btn_gray_exam examination_btn_gray">															                        <i className="iconfont btn_gray_exam_del">&#xe62f;</i></button>} style={{width: 650}}>
                 {
                     subjectArray.map((item,j)=>item.divContent)
                 }
@@ -1454,9 +1431,66 @@ const CreateExamPagerComponents = React.createClass({
         // 操作完成成，清空当前的题目信息
         createExamPager.setState({ currentImgAnswerInfo: '',imageAnswer:fileUrl,examPagerModalVisible: false,spinLoading:false});
     },
+
+    showConfirmModal(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var selectedSubject = target.value;
+        createExamPager.setState({"selectedSubject":selectedSubject});
+        createExamPager.refs.confirmModal.changeConfirmModalVisible(true);
+    },
+
+    closeConfirmModal(){
+        createExamPager.refs.confirmModal.changeConfirmModalVisible(false);
+    },
+
+    showDelAnswerCardConfirmModal(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var deleteCardInfo = target.value;
+        createExamPager.setState({"deleteCardInfo":deleteCardInfo});
+        createExamPager.refs.delAnswerCardConfirmModal.changeConfirmModalVisible(true);
+    },
+
+    closeDelAnswerCardConfirmModal(){
+        createExamPager.refs.delAnswerCardConfirmModal.changeConfirmModalVisible(false);
+    },
+
+    showDelAllAnswerCardConfirmModal(){
+        createExamPager.refs.delAllAnswerCardConfirmModal.changeConfirmModalVisible(true);
+    },
+
+    closeDelAllAnswerCardConfirmModal(){
+        createExamPager.refs.delAllAnswerCardConfirmModal.changeConfirmModalVisible(false);
+    },
+
+
     render() {
         return (
             <div>
+                <ConfirmModal ref="confirmModal"
+                              title="确定要删除该题目?"
+                              onConfirmModalCancel={createExamPager.closeConfirmModal}
+                              onConfirmModalOK={createExamPager.deleteSubjectContentDiv}
+                ></ConfirmModal>
+                <ConfirmModal ref="delAnswerCardConfirmModal"
+                              title="确定要删除该答题卡?"
+                              onConfirmModalCancel={createExamPager.closeDelAnswerCardConfirmModal}
+                              onConfirmModalOK={createExamPager.deleteAnswerCard}
+                ></ConfirmModal>
+                <ConfirmModal ref="delAllAnswerCardConfirmModal"
+                              title="确定要清除全部答题卡?"
+                              onConfirmModalCancel={createExamPager.closeDelAllAnswerCardConfirmModal}
+                              onConfirmModalOK={createExamPager.deleteAllCardChild}
+                ></ConfirmModal>
                 <Modal
                     visible={createExamPager.state.analysisModalVisible}
                     title="添加解析"
@@ -1632,7 +1666,7 @@ const CreateExamPagerComponents = React.createClass({
                                     onClick={createExamPager.addAnswerCard}>
                                 添加题目
                             </button>
-                            <button type="ghost" className="login-form-button examination_btn_white" onClick={createExamPager.deleteAllCardChild}>
+                            <button type="ghost" className="login-form-button examination_btn_white" onClick={createExamPager.showDelAllAnswerCardConfirmModal}>
                                 清除全部
                             </button>
                         </Col>
