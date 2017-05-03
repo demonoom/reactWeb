@@ -2724,8 +2724,8 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 	padding:15px 25px !important;
 }
 .integral_scroll{
-	height:290px !important;
-	overflow:auto !important;
+	height:333px !important;
+	overflow-y:auto !important;
 }
 .integral_scroll2{
 	height:230px !important;
@@ -2748,6 +2748,9 @@ ul.integral li{
     line-height: 24px;
 	padding: 10px;
     border-bottom: 1px solid #dfdfdd;
+}
+ul.integral li:last-child{
+	border-bottom:none
 }
 ul.integral li.til {
     font-size: 16px;
