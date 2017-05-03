@@ -9,7 +9,7 @@ export default function({ history }) {
             <Route path="/" component={Login} />
             <Route path="/MainLayout" component={MainLayout} />
             <Route path="/login" component={Login}/>
-
+            <Route path="/LittleAntWeb" component={Login}/>
         </Router>
     );
 };
