@@ -222,11 +222,11 @@ class MyFollows extends React.Component {
             return;
         }
         this.title = <div className="favorite_scroll line_block">
-					<div className="follow_me_til">
-					<div className="ant-tabs-ink-bar follow_blue_line"></div>
-						{this.userinfo.userName}关注列表
-					 </div>
-					 </div>;
+            <div className="follow_me_til">
+                <div className="ant-tabs-ink-bar follow_blue_line"></div>
+                {this.userinfo.userName}关注列表
+            </div>
+        </div>;
         this.htmlTempletContent = dataArray.map((e, i) => {
             let refkey = e.uid + "#" + e.courseId;
 
@@ -267,7 +267,7 @@ class MyFollows extends React.Component {
                 if (this.notInterProsonCenter()) {
                     this.gobackBtn =
                         <div className="ant-tabs-extra-content">
-							<div className="ant-tabs-right"><Button onClick={this.returnPersonCenter}>返回</Button></div>
+                            <div className="ant-tabs-right"><Button onClick={this.returnPersonCenter}>返回</Button></div>
                         </div>;
                 }
                 this._buildMyFollowsList();
@@ -285,14 +285,12 @@ class MyFollows extends React.Component {
                     <Breadcrumb.Item href="#/MainLayout">我的关注</Breadcrumb.Item>
                 </Breadcrumb>
                 <div className="group_cont">
-					<div className="ant-tabs-bar">
-						{ this.title}
-                		{ this.gobackBtn}
-					</div>
-                	<div className="favorite_up favorite_scroll">
-						{ this.htmlTempletContent }
-					</div>
-				</div>
+                    <div className="ant-tabs-bar">
+                        { this.title}
+                        { this.gobackBtn}
+                    </div>
+                    <div className="favorite_up favorite_scroll">{ this.htmlTempletContent }</div>
+                </div>
             </div>
         );
     }
