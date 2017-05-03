@@ -2804,7 +2804,7 @@ ul.integral li i{
 .password_input input{
 	padding:8px 12px;
 }
-.focus{
+.focus, .focus_lb{
 	margin: 15px;
     float: left;
     width: 300px;
@@ -3425,4 +3425,4 @@ color:#ffbf00
 }
 .ant-upload-list-picture-card .ant-upload-list-item-info:before{
 	left:0
-}
+	}

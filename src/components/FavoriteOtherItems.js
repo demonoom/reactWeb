@@ -96,7 +96,7 @@ const FavoriteOtherItems = React.createClass({
                 cancelBtn = <a target="_blank" title="取消收藏" onClick={this.props.onCancelfavrite.bind(this, e.address,this.props.upgradeData)} className="right_ri"><Button className="ant-btn right_ri focus_btn focus_5" icon="star"/></a>;
             }
 
-            return <Card key={e.id} className="focus">
+            return <Card key={e.id} className="focus_lb">
 						<a target="_blank" onClick={event => {this.view(event,this.getUrl(e),e.content)} } className="attention_img"><img src={e.cover} width="100%"/></a>
 						<div className="custom-card focus_2 focus_4">
 							<div className="focus_1">
