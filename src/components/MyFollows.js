@@ -251,6 +251,7 @@ class MyFollows extends React.Component {
     buildContent() {
         this.htmlTempletContent = null;
         this.gobackBtn = '';
+        this.originHeight='';
         switch (true) {
             // 个人信息
             case this.state.prosonCenterVisible:
@@ -263,7 +264,7 @@ class MyFollows extends React.Component {
 
             // 关注列表
             case this.state.followsListVisible:
-
+                this.originHeight='enhance';
                 if (this.notInterProsonCenter()) {
                     this.gobackBtn =
                         <div className="ant-tabs-extra-content">
@@ -289,7 +290,7 @@ class MyFollows extends React.Component {
                         { this.title}
                         { this.gobackBtn}
                     </div>
-                    <div className="favorite_up favorite_scroll">{ this.htmlTempletContent }</div>
+                    <div className={' favorite_up favorite_scroll' + this.originHeight}>{ this.htmlTempletContent }</div>
                 </div>
             </div>
         );
