@@ -746,6 +746,8 @@ const AntGroupTabComponents = React.createClass({
      */
     returnToChatGroupMessagePage(){
         var currentGroupObj = antGroup.state.currentGroupObj;
+        //返回群组窗口时，重新获取最近的聊天记录
+        antGroup.getChatGroupMessages(currentGroupObj);
         antGroup.turnToChatGroupMessagePage(currentGroupObj);
     },
 
@@ -1788,13 +1790,9 @@ const AntGroupTabComponents = React.createClass({
         var userPhoneCard;
         var breadCrumb;
         var isVisible=false;
-        console.log("returnBtnIsShow===>"+antGroup.state.returnBtnIsShow);
         if(antGroup.state.returnBtnIsShow==false){
-            console.log("1111111111");
             isVisible=antGroup.state.returnBtnIsShow;
-            console.log("1111111111"+isVisible);
         }else{
-            console.log("2222");
             isVisible=antGroup.state.breadcrumbVisible;
         }
         if(isVisible){
@@ -1935,7 +1933,7 @@ const AntGroupTabComponents = React.createClass({
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
-                    <div>
+                    <div id="personTalk">
                         <div className="group_talk">
                             <ul>
                                 {messageTagArray}
