@@ -226,8 +226,8 @@ class MyFollows extends React.Component {
 		<div className="ant-tabs-nav-wrap">
 		<div className="ant-tabs-nav-scroll">
 						<div className="ant-tabs-nav ant-tabs-nav-animated">
-							<div className="ant-tabs-ink-bar ant-tabs-ink-bar-animated"></div>
-							<div className="ant-tabs-tab-active ant-tabs-tab">{this.userinfo.userName}关注列表</div>
+							<div className="ant-tabs-ink-bar follow_blue_line"></div>
+							<div className="ant-tabs-tab-active ant-tabs-tab follow_me_til">{this.userinfo.userName}关注列表</div>
 						</div>
 						</div>
 						</div>
@@ -291,7 +291,7 @@ class MyFollows extends React.Component {
                 </Breadcrumb>
                 { this.title}
                 { this.gobackBtn}
-                <div className="ant-tabs favorite_up">{ this.htmlTempletContent }</div>
+                <div className="favorite_up">{ this.htmlTempletContent }</div>
             </div>
         );
     }
