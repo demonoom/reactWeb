@@ -222,15 +222,15 @@ class MyFollows extends React.Component {
             return;
         }
         this.title = <h3 className="ant-tabs-bar">
-		<div className="ant-tabs-nav-container">
-		<div className="ant-tabs-nav-wrap">
-		<div className="ant-tabs-nav-scroll">
-						<div className="ant-tabs-nav ant-tabs-nav-animated">
-							<div className="ant-tabs-ink-bar ant-tabs-ink-bar-animated"></div>
-							<div className="ant-tabs-tab-active ant-tabs-tab">{this.userinfo.userName}关注列表</div>
-						</div>
-						</div>
-						</div>
+						<div className="ant-tabs-nav-container">
+							<div className="ant-tabs-nav-wrap">
+								<div className="ant-tabs-nav-scroll">
+									<div className="ant-tabs-nav ant-tabs-nav-animated">
+										<div className="ant-tabs-ink-bar follow_blue_line"></div>
+										<div className="ant-tabs-tab-active ant-tabs-tab follow_me_til">{this.userinfo.userName}关注列表</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</h3>;
         this.htmlTempletContent = dataArray.map((e, i) => {
@@ -272,7 +272,8 @@ class MyFollows extends React.Component {
 
                 if (this.notInterProsonCenter()) {
                     this.gobackBtn =
-                        <div className="back_follow ant-tabs-bar"><Button onClick={this.returnPersonCenter}>返回</Button>
+                        <div className="ant-tabs-extra-content">
+							<div className="ant-tabs-right"><Button onClick={this.returnPersonCenter}>返回</Button></div>
                         </div>;
                 }
                 this._buildMyFollowsList();
@@ -283,15 +284,17 @@ class MyFollows extends React.Component {
     render() {
         this.buildContent();
         return (
-            <div>
+            <div className="favorite_scroll">
                 <Breadcrumb separator=">">
                     <Breadcrumb.Item><Icon type="home"/></Breadcrumb.Item>
                     <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
                     <Breadcrumb.Item href="#/MainLayout">我的关注</Breadcrumb.Item>
                 </Breadcrumb>
-                { this.title}
-                { this.gobackBtn}
-                <div className="ant-tabs favorite_up">{ this.htmlTempletContent }</div>
+                <div className="ant-tabs ant-tabs-top ant-tabs-line">
+					{ this.title}
+                	{ this.gobackBtn}
+                <div className="ant-tabs-content">{ this.htmlTempletContent }</div>
+				</div>
             </div>
         );
     }

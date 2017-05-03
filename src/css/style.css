@@ -807,9 +807,10 @@ html, body, #root {
     line-height: 34px;
 	margin-left:24px;
 }
+/* 标题蓝色线条 
 .ant-tabs-ink-bar-animated{
 	width:144px !important;
-}
+}*/
 .ant-tabs-nav .ant-tabs-tab{
 	padding:8px 36px;
 	font-size:16px;
@@ -3383,6 +3384,9 @@ color:#ffbf00
 .myfollow_zb{
 	height:100%
 }
+.myfollow_blue_h{
+	height:calc(100% - 70px)
+}
 .iconfont_knowledge{
 	font-size: 16px !important;
     margin-right: 4px;
@@ -3395,21 +3399,8 @@ color:#ffbf00
 	height:100%;
 }
 .follow_me_til{
-    padding: 8px 36px;
-    color: #0078e4;
-    font-size: 18px;
-    min-width: 198px;
-    text-align: center;
-	display: inline-block;
-    height: 100%;
-    margin-right: 24px;
-    box-sizing: border-box;
-    position: relative;
-    -webkit-transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-    transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-    text-decoration: none;
-	height: 50px;
-    line-height: 32px;
-    margin-left: 24px;
 	font-weight:500
+}
+.follow_blue_line{
+	width:190px;
 }
