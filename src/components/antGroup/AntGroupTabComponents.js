@@ -504,6 +504,10 @@ const AntGroupTabComponents = React.createClass({
         }
         var sendType = target.value;
         var messageContent = antGroup.getEmotionInputById();
+        if(isEmpty(messageContent)){
+            message.error("消息内容不允许为空!");
+            return;
+        }
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         var uuid = antGroup.createUUID();
         var createTime = (new Date()).valueOf();
@@ -1853,6 +1857,7 @@ const AntGroupTabComponents = React.createClass({
             </Tabs>;
         }else if(antGroup.state.optType=="sendMessage"){
             var messageTagArray=[];
+            messageTagArray.splice(0);
             var messageList = antGroup.state.messageList;
             if(isEmpty(messageList)==false && messageList.length>0){
                 for(var i=messageList.length-1;i>=0;i--){

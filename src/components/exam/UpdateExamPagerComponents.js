@@ -705,7 +705,7 @@ const UpdateExamPagerComponents = React.createClass({
     buildSelectOptionsArray(num,answerTitle,answerSubjectType){
         var choiceArray = [];
         selectAnswerOptions.splice(0, selectAnswerOptions.length);
-        for (var i = 0; i < 6; i++) {
+        for (var i = 0; i < 100; i++) {
             var optionJson;
             switch (i) {
                 case 0:
