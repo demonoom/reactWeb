@@ -158,6 +158,12 @@ const AntGroupTabComponents = React.createClass({
 
     componentWillMount(){
          console.log("ant group tab: componentWillMount");
+        ms = new MsgConnection();
+        var loginUserId = sessionStorage.getItem("ident");
+        var machineId = sessionStorage.getItem("machineId");
+        console.log("turnToMessagePage:"+machineId);
+        var pro = {"command":"messagerConnect","data":{"machineType":"web","userId":Number.parseInt(loginUserId),"machine":machineId}};
+        ms.connect(pro);
         antGroup.getAntGroup();
     },
     shouldComponentUpdate(){
@@ -286,11 +292,7 @@ const AntGroupTabComponents = React.createClass({
      */
     turnToMessagePage(user){
         var userId = user.colUid;
-        ms = new MsgConnection();
         messageList.splice(0);
-        var loginUserId = sessionStorage.getItem("ident");
-        var machineId = sessionStorage.getItem("machineId");
-        var pro = {"command":"messagerConnect","data":{"machineType":"web","userId":Number.parseInt(loginUserId),"machine":machineId}};
         ms.msgWsListener={onError:function(errorMsg){
 
         },onWarn:function(warnMsg){
@@ -367,17 +369,13 @@ const AntGroupTabComponents = React.createClass({
             }
         }
         };
-        ms.connect(pro);
+
         antGroup.setState({"optType":"sendMessage","userIdOfCurrentTalk":userId,"currentUser":user});
     },
 
     turnToChatGroupMessagePage(groupObj){
-        ms = new MsgConnection();
-        messageList.splice(0);
-        var loginUserId = sessionStorage.getItem("ident");
-        var machineId = sessionStorage.getItem("machineId");
 
-        var pro = {"command":"messagerConnect","data":{"machineType":"web","userId":Number.parseInt(loginUserId),"machine":machineId}};
+        messageList.splice(0);
         ms.msgWsListener={onError:function(errorMsg){
 
         },onWarn:function(warnMsg){
@@ -454,7 +452,7 @@ const AntGroupTabComponents = React.createClass({
             }
         }
         };
-        ms.connect(pro);
+
         antGroup.setState({"optType":"sendGroupMessage","currentGroupObj":groupObj});
     },
 
