@@ -213,7 +213,18 @@ class MyFollows extends React.Component {
             this.htmlTempletContent = <img className="noDataTipImg" src={require('./images/noDataTipImg.png')}/>;
             return;
         }
-        this.title = <h3>{this.userinfo.userName}关注列表</h3>;
+        this.title = <h3 className="ant-tabs-bar">
+		<div className="ant-tabs-nav-container">
+		<div className="ant-tabs-nav-wrap">
+		<div className="ant-tabs-nav-scroll">
+						<div className="ant-tabs-nav ant-tabs-nav-animated">
+							<div className="ant-tabs-ink-bar ant-tabs-ink-bar-animated"></div>
+							<div className="ant-tabs-tab-active ant-tabs-tab">{this.userinfo.userName}关注列表</div>
+						</div>
+						</div>
+						</div>
+						</div>
+					</h3>;
         this.htmlTempletContent = dataArray.map((e, i) => {
             let refkey = e.uid + "#" + e.courseId;
 

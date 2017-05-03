@@ -3394,3 +3394,22 @@ color:#ffbf00
 .follow_my{
 	height:100%;
 }
+.follow_me_til{
+    padding: 8px 36px;
+    color: #0078e4;
+    font-size: 18px;
+    min-width: 198px;
+    text-align: center;
+	display: inline-block;
+    height: 100%;
+    margin-right: 24px;
+    box-sizing: border-box;
+    position: relative;
+    -webkit-transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    text-decoration: none;
+	height: 50px;
+    line-height: 32px;
+    margin-left: 24px;
+	font-weight:500
+}
