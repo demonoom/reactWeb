@@ -3426,3 +3426,6 @@ color:#ffbf00
 .ant-upload-list-picture-card .ant-upload-list-item-info:before{
 	left:0
 	}
+.enhance{
+	height:calc(100% - 67px) !important
+}
