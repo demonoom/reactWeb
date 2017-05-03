@@ -1518,8 +1518,8 @@ const AntGroupTabComponents = React.createClass({
       this.getLiveInfoByUid(obj.user.colUid,obj.pageNo);
     },
 
-    view: function (e, videosObj ,title) {
-       /*
+/*    view: function (e, videosObj ,title) {
+       /!*
        e = e || window.event;
         if (e.nativeEvent) {
             e.nativeEvent.stopImmediatePropagation();
@@ -1527,10 +1527,30 @@ const AntGroupTabComponents = React.createClass({
         e.stopPropagation();
         e.preventDefault();
         e.cancelBubble = true;
-        */
+        *!/
 
         let obj = {htmlMode:true, flvjs:flvjsobj,  param: videosObj,title:title,url:"", width: '400px', }
         antGroup.props.onPreview(obj)
+    },*/
+
+    view: function (objref) {
+        debugger
+        if (!objref.liveVideos[0]) {
+            message.info("无效的视频！");
+            return;
+        }
+
+        let obj = {
+            title: objref.title,
+            url: "",
+            param: objref.liveVideos,
+            htmlMode: true,
+            width: '400px',
+
+        }
+
+        antGroup.props.onPreview(obj)
+
     },
 
     /**
@@ -1557,6 +1577,39 @@ const AntGroupTabComponents = React.createClass({
                 message.error(error);
             }
         });
+    },
+
+    videoPwdModalHandleOk: function (pwd, obj) {
+
+        if (pwd == $('#tmppwd').val()) {
+            this.view(obj);
+        } else {
+            message.warn('密码错误!')
+        }
+
+    },
+
+    confirmVideoPwd: function (obj) {
+        debugger;
+        if (parseInt(sessionStorage.getItem("ident")) == antGroup.state.currentUser.colUid) {
+            return antGroup.view(obj);
+        }
+        var password = obj.password;
+
+        if (password) {
+            let _this = this;
+            Modal.confirm({
+                title: '请输入密码',
+                content: <Input id="tmppwd"  />,
+                okText: '确定',
+                cancelText: '取消',
+                onOk: antGroup.videoPwdModalHandleOk.bind(_this, password, obj),
+            });
+        } else {
+            antGroup.view(obj);
+        }
+
+
     },
 
     /**
@@ -1601,7 +1654,7 @@ const AntGroupTabComponents = React.createClass({
                         }
                         var liveCard = <Card className="live" >
 							<p className="h3">{title}</p>
-                            <div className="live_img"  id={id} onClick={event => {antGroup.view(event,liveVideos,title)} }  >
+                            <div className="live_img"  id={id} onClick={antGroup.confirmVideoPwd.bind(antGroup, e) }  >
                                 <img className="attention_img"    width="100%" src={cover} />
 								<div className="live_green"><span>{schoolName}</span></div>
                             </div>
