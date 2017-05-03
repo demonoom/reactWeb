@@ -221,18 +221,12 @@ class MyFollows extends React.Component {
             this.htmlTempletContent = <img className="noDataTipImg" src={require('./images/noDataTipImg.png')}/>;
             return;
         }
-        this.title = <h3 className="ant-tabs-bar">
-						<div className="ant-tabs-nav-container">
-							<div className="ant-tabs-nav-wrap">
-								<div className="ant-tabs-nav-scroll">
-									<div className="ant-tabs-nav ant-tabs-nav-animated">
-										<div className="ant-tabs-ink-bar follow_blue_line"></div>
-										<div className="ant-tabs-tab-active ant-tabs-tab follow_me_til">{this.userinfo.userName}关注列表</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</h3>;
+        this.title = <div className="favorite_scroll line_block">
+					<div className="follow_me_til">
+					<div className="ant-tabs-ink-bar follow_blue_line"></div>
+						{this.userinfo.userName}关注列表
+					 </div>
+					 </div>;
         this.htmlTempletContent = dataArray.map((e, i) => {
             let refkey = e.uid + "#" + e.courseId;
 
@@ -284,16 +278,18 @@ class MyFollows extends React.Component {
     render() {
         this.buildContent();
         return (
-            <div className="favorite_scroll">
+            <div >
                 <Breadcrumb separator=">">
                     <Breadcrumb.Item><Icon type="home"/></Breadcrumb.Item>
                     <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
                     <Breadcrumb.Item href="#/MainLayout">我的关注</Breadcrumb.Item>
                 </Breadcrumb>
-                <div className="ant-tabs ant-tabs-top ant-tabs-line">
-					{ this.title}
-                	{ this.gobackBtn}
-                <div className="ant-tabs-content">{ this.htmlTempletContent }</div>
+                <div className="group_cont">
+					<div className="ant-tabs-bar">
+						{ this.title}
+                		{ this.gobackBtn}
+					</div>
+                <div className="favorite_up favorite_scroll">{ this.htmlTempletContent }</div>
 				</div>
             </div>
         );
