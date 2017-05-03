@@ -308,7 +308,7 @@ const MainLayout = React.createClass({
                     <Col span={24}>
                         <div className="ant-layout-container">
                             <div className="ant-layout-content">
-                                <MyFollows ref="myFollowsA" callEvent={this.callEvent}  />
+                                <MyFollows />
                             </div>
                         </div>
                     </Col>

@@ -120,9 +120,8 @@ const UserCardModalComponents = React.createClass({
         this.setState({ visible: false });
     },
     MyFollows(){
-
-        this.props.callEvent({resouceType: 'myFollows', ref: 'myFollowsA', methond:'showMyFollowsListUI', param: teacherInfo.user });
-       // this.props.callbackParent("myFollows");
+       // this.props.callEvent({resouceType: 'myFollows', ref: 'myFollowsA', methond:'showMyFollowsListUI', param: teacherInfo.user });
+         this.props.callbackParent("myFollows");
         this.setState({ visible: false });
     },
     myMTV(){

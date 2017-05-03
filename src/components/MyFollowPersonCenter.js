@@ -168,7 +168,7 @@ const MyFollowPersonCenter = React.createClass({
 
     intoMyFollows(){
 
-      this.props.intoMyFollows(this.props.userInfo.user.colUid);
+      this.props.intoMyFollows(this.props.userInfo.user);
     },
 
     render() {

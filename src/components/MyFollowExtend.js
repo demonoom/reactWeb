@@ -1762,7 +1762,7 @@ const MyFollowExtend = React.createClass({
 
     },
     tedUpgrade(){
-        return <ul className="topics_le integral ">
+        return <ul className="topics_le integral integral_scroll">
             <li className="til">升级攻略</li>
             <li>
                 <span><Icon type="plus-circle"/>上传教案,每一个</span>
