@@ -88,12 +88,14 @@
         } else {
 
             $('#' + id).css({visibility: 'hidden'});
+            $('#ifr' + id).removeAttr('src');
         }
     }
 
     littlePanle.prototype._showIframeTemplet = function (obj) {
         var objtemplet = this._iframeTemplet(obj);
         let styleObj = this.calcPos(this.param.stylePage, this.param.stylePage.zIndex, this.param.orderIndex);
+
         objtemplet.htm = $(objtemplet.htm).css(styleObj);
         $(document.body).append(objtemplet.htm);
         this.el = $('#' + objtemplet.id);
@@ -275,12 +277,16 @@
 
 
     littlePanle.prototype.calcPos = function (refStyle, index, orderIndex) {
+
         // 计算出复位的位置
         var refOff = $('.ant-layout-operation').offset();
         var refW = $('.ant-layout-operation').width();
 
         let tmpInterval = orderIndex * 45;
         //
+        if(!refStyle.width){
+            refStyle.width = 380;
+        }
         let leftRef = (refOff.left + refW) - refStyle.width;
         leftRef = leftRef + tmpInterval;
         refStyle.left = parseInt(leftRef.toFixed());
@@ -329,14 +335,13 @@
         },
 
         playVideoM(jsonObject) {
-            debugger
+
+
         },
 
         playVideoJSON(jsonObject) {
-            var obj = eval('(' + str + ')')
-            debugger
-            var flvsrc = obj.liveVideos[0].path;
-
+            var obj = eval('(' + jsonObject + ')');
+            top.LP.Start({url: '', title:obj.title,htmlMode:true,param:obj.liveVideos});
         },
 
         showImage(url) {
@@ -348,11 +353,13 @@
         },
 
         showPdf(pdfUrl) {
-            LP.GetLP({url: pdfUrl, title: ''});
+
+            top.LP.Start({url: pdfUrl, title: ''});
         },
 
         playVideo(videoPath) {
-            debugger
+
+            top.LP.Start({url: videoPath, title: ''});
 
         },
 
@@ -427,7 +434,7 @@
             this.GetLP(objParam);
         },
         GetLP(objParam) {
-            debugger
+
             if ((this.mgr.length - this.hideArr.length) >= 3) {
                 alert('弹窗打开太多！');
                 return;
@@ -466,7 +473,7 @@
             let newArr = [];
 
             // 复位所有lp
-            this.mgr.map(function (item, index, arr) {
+            this.mgr.map(function (item, index) {
 
                 if ($(item.el.selector).css('visibility') == 'hidden') {
                     tmpArr.push(item);

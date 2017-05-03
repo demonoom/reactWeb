@@ -2804,10 +2804,16 @@ ul.integral li i{
 .password_input input{
 	padding:8px 12px;
 }
-.focus{
+.focus, .focus_lb{
 	margin: 15px;
     float: left;
     width: 300px;
+}
+.favorite_scroll .focus:first-child{
+	margin-left:76px
+}
+.favorite_scroll .focus:nth-child(4n+0){
+	margin-left:76px
 }
 .focus_btn{
 	padding:2px 5px !important;
@@ -3399,8 +3405,24 @@ color:#ffbf00
 	height:100%;
 }
 .follow_me_til{
-	font-weight:500
+	font-weight:500;
+	color: #0078e4;
+    font-size: 18px;
+	padding: 8px 36px;
+	display: inline-block;
+    height: 100%;
+    margin-right: 24px;
+    box-sizing: border-box;
+    position: relative;
+	height: 49px;
+    line-height: 34px;
+    margin-left: 24px;
+    bottom: -2px;
+	
 }
 .follow_blue_line{
-	width:190px;
+	width:100%;
 }
+.ant-upload-list-picture-card .ant-upload-list-item-info:before{
+	left:0
+	}

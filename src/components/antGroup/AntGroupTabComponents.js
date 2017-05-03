@@ -158,6 +158,12 @@ const AntGroupTabComponents = React.createClass({
 
     componentWillMount(){
          console.log("ant group tab: componentWillMount");
+        ms = new MsgConnection();
+        var loginUserId = sessionStorage.getItem("ident");
+        var machineId = sessionStorage.getItem("machineId");
+        console.log("turnToMessagePage:"+machineId);
+        var pro = {"command":"messagerConnect","data":{"machineType":"web","userId":Number.parseInt(loginUserId),"machine":machineId}};
+        ms.connect(pro);
         antGroup.getAntGroup();
     },
     shouldComponentUpdate(){
@@ -286,11 +292,7 @@ const AntGroupTabComponents = React.createClass({
      */
     turnToMessagePage(user){
         var userId = user.colUid;
-        ms = new MsgConnection();
         messageList.splice(0);
-        var loginUserId = sessionStorage.getItem("ident");
-        var machineId = sessionStorage.getItem("machineId");
-        var pro = {"command":"messagerConnect","data":{"machineType":"web","userId":Number.parseInt(loginUserId),"machine":machineId}};
         ms.msgWsListener={onError:function(errorMsg){
 
         },onWarn:function(warnMsg){
@@ -367,17 +369,13 @@ const AntGroupTabComponents = React.createClass({
             }
         }
         };
-        ms.connect(pro);
+
         antGroup.setState({"optType":"sendMessage","userIdOfCurrentTalk":userId,"currentUser":user});
     },
 
     turnToChatGroupMessagePage(groupObj){
-        ms = new MsgConnection();
-        messageList.splice(0);
-        var loginUserId = sessionStorage.getItem("ident");
-        var machineId = sessionStorage.getItem("machineId");
 
-        var pro = {"command":"messagerConnect","data":{"machineType":"web","userId":Number.parseInt(loginUserId),"machine":machineId}};
+        messageList.splice(0);
         ms.msgWsListener={onError:function(errorMsg){
 
         },onWarn:function(warnMsg){
@@ -454,7 +452,7 @@ const AntGroupTabComponents = React.createClass({
             }
         }
         };
-        ms.connect(pro);
+
         antGroup.setState({"optType":"sendGroupMessage","currentGroupObj":groupObj});
     },
 
@@ -506,6 +504,10 @@ const AntGroupTabComponents = React.createClass({
         }
         var sendType = target.value;
         var messageContent = antGroup.getEmotionInputById();
+        if(isEmpty(messageContent)){
+            message.error("消息内容不允许为空!");
+            return;
+        }
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         var uuid = antGroup.createUUID();
         var createTime = (new Date()).valueOf();
@@ -1855,6 +1857,7 @@ const AntGroupTabComponents = React.createClass({
             </Tabs>;
         }else if(antGroup.state.optType=="sendMessage"){
             var messageTagArray=[];
+            messageTagArray.splice(0);
             var messageList = antGroup.state.messageList;
             if(isEmpty(messageList)==false && messageList.length>0){
                 for(var i=messageList.length-1;i>=0;i--){

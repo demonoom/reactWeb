@@ -273,9 +273,9 @@ const MyFollowPersonCenter = React.createClass({
 
                 </Card>
 
-                <div>{userLinkCard}
+                <div>
+					{userLinkCard}
                     {userInfoCard}
-
                 </div>
             </div>
         );
