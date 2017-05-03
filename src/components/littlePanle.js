@@ -30,6 +30,7 @@
 
     littlePanle.prototype.el = {};
     littlePanle.prototype.zoomview = function (id) {
+
         let nodeEl = $('#' + id);
         let posRef2 = window.getComputedStyle(nodeEl[0]);
         let perWidth = replaceUnit(posRef2.width);
@@ -46,16 +47,13 @@
         }));
         nodeEl.css({width: '100%', height: '100%', left: 0, top: 0, position: 'fixed'});
         //
-        enterFull(nodeEl[0]);
-        //
         let el = nodeEl.find('.zoom');
         el.off();
         el.html('&#xe60f;');
         el.on('click', this.zoomMinView.bind(this, id));
+        enterFull(nodeEl[0]);
     }
     littlePanle.prototype.zoomMinView = function (id) {
-
-        //
         let nodeEl = $('#' + id);
         let perInfo = nodeEl.attr('per');
         nodeEl.removeAttr('per');
@@ -94,11 +92,11 @@
     }
 
     littlePanle.prototype._showIframeTemplet = function (obj) {
-        var htm = this._iframeTemplet();
+        var objtemplet = this._iframeTemplet(obj);
         let styleObj = this.calcPos(this.param.stylePage, this.param.stylePage.zIndex, this.param.orderIndex);
-        htm = $(htm).css(styleObj);
-        $(document.body).append(htm);
-        this.el = $('#' + this.id);
+        objtemplet.htm = $(objtemplet.htm).css(styleObj);
+        $(document.body).append(objtemplet.htm);
+        this.el = $('#' + objtemplet.id);
         $(this.el).drag();
         $(this.el).find('.close').on('click', this.closepanle.bind(this, this.id));
         $(this.el).find('.zoom').on('click', this.zoomview.bind(this, this.id));
@@ -106,16 +104,20 @@
         $(this.el).find('.forward').on('click', this.historyControler.bind(this, this.id, 1));
         $(this.el).find('.enterFull').on('click', enterFull);
         $(this.el).find('.exitFull').on('click', exitFull);
+        this.ifrel = $('#' + objtemplet.ifrid);
+
+        this.ifrel.on('load', this._iframeonloadevent.bind(this, objtemplet.ifrid));
 
         return this;
     }
-    littlePanle.prototype._iframeTemplet = function () {
+    littlePanle.prototype._iframeTemplet = function (obj) {
 
         let id = UUID(8, 16);
         this.id = id;
-        let htm = `<div id="${id}" class="dialog little-layout-aside-r-show">
+        this.ifrid = 'ifr' + id;
+        this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show">
                 <div class="header draggable">
-                <h3 class="title">${ this.param.title }</h3>
+                <h3 class="title">${ obj.title }</h3>
                     <div class="little-tilte">
                         <a class="close"><i className="iconfont iconfont_close">&#xe615;</i></a>
                         <a class="zoom"><i className="iconfont iconfont_more">&#xe67e;</i></a>
@@ -124,12 +126,17 @@
                 </div>
                 <div class="content">
                     <section class="littleAnt-iframe-panle">
-                        <iframe  border={0} id="ifr${id}"  src="${ this.param.url }"></iframe>
+                        <iframe  border={0} id="${this.ifrid}"  src="${ obj.url }"  ></iframe>
                     </section>
                 </div>
                 </div>`;
 
-        return htm;
+        return {htm: this.htm, id: this.id, ifrid: this.ifrid};
+    }
+    littlePanle.prototype._iframeonloadevent = function (id, event) {
+
+        event.target.contentWindow.phone = phone;
+
     }
 
     littlePanle.prototype._showHtmlFlv = function (obj) {
@@ -160,8 +167,8 @@
         });
 
         $('.list-group a').on("click", function () {
-           let newsrc = resultObj.srcList[parseInt($(this).text())-1];
-            playerA.src(newsrc );
+            let newsrc = resultObj.srcList[parseInt($(this).text()) - 1];
+            playerA.src(newsrc);
         });
 
 
@@ -174,15 +181,15 @@
         this.id = id;
         let vid = 'v' + this.id;
         let videoArr = this.param.videosObj;
-        if( (videoArr instanceof Array)==false ){
+        if ((videoArr instanceof Array) == false) {
             videoArr = videoArr.liveInfo.liveVideos;
         }
         let listBtn = [];
         window.srcList = [];
-        let classChange='single';
+        let classChange = 'single';
 
         if (videoArr.length > 1) {
-            classChange='multi';
+            classChange = 'multi';
             videoArr.map(function (video, i) {
                 i++;
                 window.srcList.push({type: 'video/x-flv', src: video.path});
@@ -192,7 +199,6 @@
             let flv = videoArr[0];
             window.srcList.push({type: 'video/x-flv', src: flv.path});
         }
-
 
 
         let htm = `<div id="${id}" class="dialog little-layout-aside-r-show">
@@ -238,13 +244,33 @@
 
         this.param.orderIndex = oldArray.length;
         this.param.stylePage.zIndex = maxIndex();
+        obj.width = obj.width || '';
         this.param.stylePage.width = parseInt(obj.width.replace(/[a-z]*/img, ''));
         if (obj.htmlMode) {
             this._showHtmlFlv(obj);
         } else {
-            this._showIframeTemplet(obj);
+            this._showIframeTemplet(this._setProxyInfo(obj));
         }
         return this;
+    }
+    littlePanle.prototype._setProxyInfo = function (obj) {
+
+        if (/www\.maaee\.com/img.test(obj.url)) {
+            let refurl = obj.url.split('www.maaee.com')[1];
+            obj.url = '/proxy' + refurl;
+            return obj;
+
+        }
+
+        if (/60\.205\.86\.217:8585/img.test(obj.url)) {
+            let refurl = obj.url.split('60.205.86.217:8585')[1];
+            obj.url = '/proxy' + refurl;
+            return obj;
+
+        }
+
+        return obj;
+
     }
 
 
@@ -273,8 +299,122 @@
 
     littlePanle.prototype.historyControler = function (id, num) {
 
-        let ifr = $('#ifr' + id)[0];
+        var ifr = $('#ifr' + id)[0];
         ifr.contentWindow.history.go(num);
+
+    }
+
+    // 保持android ios 一直体验的接口实现
+    var phone = {
+        showLoading() {
+            debugger
+
+        },
+
+        showLoading(cancelAble) {
+            debugger
+
+        },
+
+        dismissLoading() {
+            debugger
+        },
+
+        showMessage(message) {
+            debugger
+        },
+
+        playAudio(url) {
+            debugger
+        },
+
+        playVideoM(jsonObject) {
+            debugger
+        },
+
+        playVideoJSON(jsonObject) {
+            var obj = eval('(' + str + ')')
+            debugger
+            var flvsrc = obj.liveVideos[0].path;
+
+        },
+
+        showImage(url) {
+            debugger
+        },
+
+        showImage(url, currentUrl) {
+            debugger
+        },
+
+        showPdf(pdfUrl) {
+            LP.GetLP({url: pdfUrl, title: ''});
+        },
+
+        playVideo(videoPath) {
+            debugger
+
+        },
+
+        finish() {
+            debugger
+        },
+
+        /**
+         * 结束本activity并且刷新前一个fragment
+         */
+        finishForRefresh() {
+            debugger
+        },
+
+        /**
+         * 结束本fragment并且在前一个fragment执行一段脚本
+         *
+         * @param cmd
+         */
+        finishForExecute(cmd) {
+            debugger
+        },
+
+        /**
+         * 结束并开启一个新页面
+         *
+         * @param url
+         */
+        finishForNewPage(url) {
+            debugger
+        },
+
+        /**
+         * 是否显示分享按钮
+         *
+         * @param shareAble
+         */
+        setShareAble(shareAble) {
+            debugger
+        },
+
+        teacherJoinClass(vid) {
+            debugger
+        },
+
+        /**
+         * 是否可以下拉刷新
+         *
+         * @param refreshAble
+         */
+        setRefreshAble(refreshAble) {
+            debugger
+        },
+
+        showSubjectWeikeMaterials(subjectId) {
+            debugger
+        },
+
+        addSubjectWeikeMaterialInput(subjectId) {
+            debugger
+        }
+
 
     }
 
@@ -287,7 +427,7 @@
             this.GetLP(objParam);
         },
         GetLP(objParam) {
-
+            debugger
             if ((this.mgr.length - this.hideArr.length) >= 3) {
                 alert('弹窗打开太多！');
                 return;
@@ -361,6 +501,7 @@
 
 
     window.LP = lpM;
+
 
 }(jQuery));
 
