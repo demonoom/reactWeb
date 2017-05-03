@@ -83,7 +83,7 @@ const AntUploadComponentsForUpdate = React.createClass({
 
         const props = {
             key:antUpload.props.params,
-            name:antUpload.state.subjectInfo,
+            // name:antUpload.state.subjectInfo,
             action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
             listType: 'picture',
             defaultFileList:antUpload.state.defaultFileList,

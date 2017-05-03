@@ -1447,7 +1447,6 @@ const AntGroupTabComponents = React.createClass({
 
     //显示使用至备课计划的弹窗
     showUseKnowledgeModal:function (e) {
-        debugger
         var target = e.target;
         if(navigator.userAgent.indexOf("Chrome") > -1){
             target=e.currentTarget;
@@ -1531,6 +1530,32 @@ const AntGroupTabComponents = React.createClass({
     },
 
     /**
+     * 删除指定的直播课（用户可以删除自己的直播课）
+     * @param id
+     */
+    deleteLiveVideos(){
+        var param = {
+            "method": 'delLiveInfo',
+            "userId": sessionStorage.getItem("ident"),
+            "liveIds":antGroup.state.delLiveVideoIds
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if(ret.msg=="调用成功" && ret.success==true){
+                    message.success("直播课删除成功");
+                }else{
+                    message.error("直播课删除失败");
+                }
+                antGroup.closeDeleteLiveVideosConfirmModal();
+                antGroup.getLiveInfoByUid(sessionStorage.getItem("ident"),1);
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
      * 根据用户的id，获取当前用户的直播课
      * @param userId
      * @param pageNo
@@ -1565,6 +1590,11 @@ const AntGroupTabComponents = React.createClass({
                         if(e.password){
                             keyIcon = <span className="right_ri focus_btn key_span"><i className="iconfont key">&#xe621;</i></span>;
                         }
+                        var delButton;
+                        if(user.colUid == sessionStorage.getItem("ident")){
+                             //如果是当前用户，可以删除自己的直播课
+                            delButton = <Button icon="delete" className="right_ri star_del" onClick={antGroup.showDeleteLiveVideosConfirmModal.bind(antGroup,id)}></Button>
+                        }
                         var liveCard = <Card className="live" >
 							<p className="h3">{title}</p>
                             <div className="live_img"  id={id} onClick={event => {antGroup.view(event,liveVideos,title)} }  >
@@ -1581,6 +1611,7 @@ const AntGroupTabComponents = React.createClass({
                                     <li>
                                         <span className="live_color live_orange">{courseName}</span>
                                         {keyIcon}
+                                        {delButton}
                                     </li>
                                 </ul>
                             </div>
@@ -1731,6 +1762,16 @@ const AntGroupTabComponents = React.createClass({
 
     closeExitChatGroupConfirmModal(){
         antGroup.refs.exitChatGroupConfirmModal.changeConfirmModalVisible(false);
+    },
+
+    showDeleteLiveVideosConfirmModal(id){
+        console.log(id);
+        antGroup.setState({"delLiveVideoIds":id});
+        antGroup.refs.deleteLiveVideosConfirmModal.changeConfirmModalVisible(true);
+    },
+
+    closeDeleteLiveVideosConfirmModal(){
+        antGroup.refs.deleteLiveVideosConfirmModal.changeConfirmModalVisible(false);
     },
 
     render() {
@@ -2549,6 +2590,11 @@ const AntGroupTabComponents = React.createClass({
                     title="确定要退出该群组?"
                     onConfirmModalCancel={antGroup.closeExitChatGroupConfirmModal}
                     onConfirmModalOK={antGroup.exitChatGroup}
+                ></ConfirmModal>
+                <ConfirmModal ref="deleteLiveVideosConfirmModal"
+                              title="确定要删除该直播课?"
+                              onConfirmModalCancel={antGroup.closeDeleteLiveVideosConfirmModal}
+                              onConfirmModalOK={antGroup.deleteLiveVideos}
                 ></ConfirmModal>
 
                 <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>

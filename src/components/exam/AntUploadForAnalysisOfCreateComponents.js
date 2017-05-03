@@ -78,7 +78,6 @@ const AntUploadForAnalysisOfCreateComponents = React.createClass({
 
         const props = {
             key:antUpload.props.params,
-            name:antUpload.state.subjectInfo,
             action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
             listType: 'picture',
             defaultFileList:antUpload.state.defaultFileList,
@@ -86,6 +85,7 @@ const AntUploadForAnalysisOfCreateComponents = React.createClass({
             onPreview:antUpload.handlePreview,
             beforeUpload(file){
                 var fileType = file.type;
+                props.name = file.name;
                 if(fileType.indexOf("image")==-1){
                     message.error('只能上传图片文件，请重新上传',5);
                     return false;
@@ -103,9 +103,12 @@ const AntUploadForAnalysisOfCreateComponents = React.createClass({
                     }
                 }
                 if (info.file.status === 'done') {
+                    console.log("done propsName:"+props.name);
                     antUpload.props.callBackParent(info.file,antUpload.state.subjectInfo);
                     message.success(`${info.file.name} 文件上传成功`,5);
                 } else if (info.file.status === 'error') {
+                    //解析图片上传错误处理
+                    console.log("error propsName:"+props.name);
                     message.error(`${info.file.name} 文件上传失败.`,5);
                 }
                 antUpload.setState({"fileList":info.fileList});
