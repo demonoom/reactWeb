@@ -1,7 +1,7 @@
 /**
  * Created by madapeng on 17-4-5.
  */
-import {Tabs, Breadcrumb, Icon, message, Card, Button} from 'antd';
+import {Breadcrumb, Icon, message, Card, Button} from 'antd';
 import React from 'react';
 import {doWebService} from '../WebServiceHelper';
 import MyFollowExtend from './MyFollowExtend';
@@ -16,11 +16,11 @@ class MyFollows extends React.Component {
             prosonCenterVisible: false,
             type: 1,
             pageNo: 1,
-            userInfo: [],
+            userinfo: [],
             userList: [],
         };
-        this.previouUserId = []; // 进入时加，返回时减
-        this.currentUser = '';
+        this.previouUsers = [];
+        this.currentUser = this._getCurrentLoginUserInfo();
         this.gobackBtn = null;
         this.htmlTempletContent = {};
         this.getMyFollows = this.getMyFollows.bind(this);
@@ -29,26 +29,57 @@ class MyFollows extends React.Component {
         this.returnPersonCenter = this.returnPersonCenter.bind(this);
         this.notInterProsonCenter = this.notInterProsonCenter.bind(this);
         this.returnParentFollowsList = this.returnParentFollowsList.bind(this);
+        this._getCurrentLoginUserInfo = this._getCurrentLoginUserInfo.bind(this);
     }
 
 
     componentWillMount() {
-        this.getMyFollows(sessionStorage.getItem("ident"));
+        let tag = this.props.initType;
+        let data = this.props.data;
+
+        if (tag) {
+            switch (tag) {
+                case 'personCenter':
+                    this.viewProsenInfo(this._getCurrentLoginUserInfo());
+                    break;
+                default:
+                    this.getMyFollows(this._getCurrentLoginUserInfo());
+            }
+            return;
+        }
+        if (data) {
+            if (data instanceof Array) {
+                this.getMyFollows(data);
+            } else {
+                this.viewProsenInfo(data);
+            }
+            return;
+        }
+
+        this.getMyFollows(this._getCurrentLoginUserInfo());
+
     }
 
 
-    showMyFollowsListUI(userinfo) {
-        this.getMyFollows(userinfo.colUid);
+    _getCurrentLoginUserInfo() {
+        return eval('(' + sessionStorage.getItem('loginUser') + ')');
     }
 
-    // 进入列表
-    getMyFollows(userid, visiableGoBackBtn) {
+    // 进入已关注列表
+    getMyFollows(userobj) {
 
         let _this = this;
+        let userid = null;
+        if (userobj.colUid) {
+            userid = userobj.colUid;
+            this.userinfo = userobj;
+        }
+
         var param = {
             method: 'getMyFollows',
             userId: userid || _this.state.ident,
         };
+
 
         doWebService(JSON.stringify(param), {
             onResponse: function (res) {
@@ -57,7 +88,6 @@ class MyFollows extends React.Component {
                         message.info('没有关注的内容！');
                         return;
                     }
-
                     _this.setState({
                         followsListVisible: true,
                         prosonCenterVisible: false,
@@ -74,6 +104,7 @@ class MyFollows extends React.Component {
         });
     }
 
+    // 取消关注
     unFollow(toUser) {
         var _this = this;
         var param = {
@@ -99,20 +130,20 @@ class MyFollows extends React.Component {
     }
 
     // 展示个人信息
-    viewProsenInfo(userid) {
+    viewProsenInfo(user) {
         let _this = this;
         var param = {
             "method": 'getPersonalCenterData',
-            "userId": userid,
+            "userId": user.colUid,
         };
+
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.success) {
-                    var userInfo = ret.response;
                     _this.setState({
                         followsListVisible: false,
                         prosonCenterVisible: true,
-                        userInfo: userInfo
+                        userinfo: ret.response
                     });
                 }
             },
@@ -123,83 +154,66 @@ class MyFollows extends React.Component {
     }
 
     // 进入关注列表
-    intoFollowsList(userid) {
-
-        let curUser = this.currentUser = userid;
-        if (!curUser) {
-            curUser = this.state.ident;
-        }
-        this.getMyFollows(curUser)
-
+    intoFollowsList(userobj) {
+        this.getMyFollows(userobj)
     }
 
     // 返回父级关注列表
     returnParentFollowsList() {
-        let parentUser = null;
 
-        this.currentUser = this.previouUserId.pop();
-        if (this.previouUserId.length) {
-            this.currentUser = this.previouUserId.pop();
+        this.currentUser = this.previouUsers.pop();
+        if (this.previouUsers.length) {
+            this.currentUser = this.previouUsers.pop();
+            this.getMyFollows(this.currentUser);
         } else {
-            this.currentUser = this.state.ident;
+            this.userinfo = this._getCurrentLoginUserInfo();
+            this.getMyFollows(this.userinfo);
         }
 
-        parentUser = this.currentUser;
-
-        this.getMyFollows(parentUser)
-        // console.log('返回父级关注列表：' + parentUser);
     }
 
     // 返回个人中心
     returnPersonCenter() {
         if (!this.currentUser) {
-            this.currentUser = this.state.ident;
-            this.previouUserId = [];
+            this.currentUser = this._getCurrentLoginUserInfo();
+            this.previouUsers = [];
         }
 
         this.viewProsenInfo(this.currentUser);
-        // console.log('返回个人中心：' + this.currentUser);
-
     }
-
 
     // 进入个人中心
     intoProsoncenter(userinfo) {
-        this.viewProsenInfo(userinfo.colUid);
-        this.previouUserId.push(userinfo.colUid);
-        this.currentUser = userinfo.userId;
-        // console.log('进入的用户层级');
-        // console.log(this.previouUserId);
+        this.viewProsenInfo(userinfo);
+        this.previouUsers.push(userinfo);
+        this.currentUser = userinfo;
     }
 
 
     // 登录的操作用户不能返回个人中心
     notInterProsonCenter() {
-        if(!this.currentUser){
-            this.currentUser = this.state.ident;
+        if (!this.currentUser || !this.currentUser.colUid) {
+            this.currentUser = this._getCurrentLoginUserInfo();
         }
 
-        if (!this.previouUserId.length && this.currentUser == this.state.ident) {
-            return false;
-        } else {
+        if (this.previouUsers.length && ((this.currentUser.colUid + '') != this.state.ident)) {
             return true;
         }
+        return false;
     }
 
-
-    showpanle(obj) {
+    // 侧边预览
+    onPreview(obj) {
         LP.Start(obj);
     }
 
-
     _buildMyFollowsList() {
-
         let dataArray = this.state.userList;
         if (!dataArray || !dataArray.length) {
             this.htmlTempletContent = <img className="noDataTipImg" src={require('./images/noDataTipImg.png')}/>;
             return;
         }
-
+        this.title = <h3>{this.userinfo.userName}关注列表</h3>;
         this.htmlTempletContent = dataArray.map((e, i) => {
             let refkey = e.uid + "#" + e.courseId;
 
@@ -218,23 +232,20 @@ class MyFollows extends React.Component {
                 </div>
             </Card>
         });
-
     }
 
 
     buildContent() {
-
         this.htmlTempletContent = null;
         this.gobackBtn = '';
-
-
         switch (true) {
             // 个人信息
             case this.state.prosonCenterVisible:
-                this.htmlTempletContent = <MyFollowExtend userinfo={this.state.userInfo}
+                this.title = null;
+                this.htmlTempletContent = <MyFollowExtend userinfo={this.state.userinfo}
                                                           intoMyFollows={this.intoFollowsList}
                                                           returnParentFollows={this.returnParentFollowsList}
-                                                          onPreview={ this.showpanle }/>;
+                                                          onPreview={ this.onPreview }/>;
                 break;
 
             // 关注列表
@@ -258,7 +269,8 @@ class MyFollows extends React.Component {
                     <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
                     <Breadcrumb.Item href="#/MainLayout">我的关注</Breadcrumb.Item>
                 </Breadcrumb>
-                {this.gobackBtn}
+                { this.title}
+                { this.gobackBtn}
                 <div className="ant-tabs favorite_up">{ this.htmlTempletContent }</div>
 
             </div>

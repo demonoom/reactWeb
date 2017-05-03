@@ -12,52 +12,96 @@ const FAVTYPE = {
     SHIPIN: '4'
 }
 
-const columns = [
-    {
-        title: '出题人',
-        className: 'ant-table-selection-score3',
-        dataIndex: 'name',
-    },
-    {
-        title: '内容',
-        className: 'ant-table-selection-cont',
-        dataIndex: 'content',
-    },
-    {
-        title: '题型',
-        className: 'ant-table-selection-topic',
-        dataIndex: 'subjectType',
-        filters: [{
-            text: '单选题',
-            value: '单选题',
-        }, {
-            text: '多选题',
-            value: '多选题',
-        }, {
-            text: '判断题',
-            value: '判断题',
-        }, {
-            text: '简答题',
-            value: '简答题',
-        }, {
-            text: '材料题',
-            value: '材料题',
-        },],
-        filterMultiple: true,
-        onFilter: (value, record) => record.subjectType.indexOf(value) === 0,
-    },
-    {
-        title: '分值',
-        className: 'ant-table-selection-score',
-        dataIndex: 'subjectScore',
-    }, {
-        title: '操作',
-        className: 'ant-table-selection-score3',
-        dataIndex: 'subjectOpt',
-    },
-];
+
 const FavoriteSubjectItems = React.createClass({
+
     data: [],
+    columnsAll: [
+        {
+            title: '出题人',
+            className: 'ant-table-selection-score3',
+            dataIndex: 'name',
+        },
+        {
+            title: '内容',
+            className: 'ant-table-selection-cont',
+            dataIndex: 'content',
+        },
+        {
+            title: '题型',
+            className: 'ant-table-selection-topic',
+            dataIndex: 'subjectType',
+            filters: [{
+                text: '单选题',
+                value: '单选题',
+            }, {
+                text: '多选题',
+                value: '多选题',
+            }, {
+                text: '判断题',
+                value: '判断题',
+            }, {
+                text: '简答题',
+                value: '简答题',
+            }, {
+                text: '材料题',
+                value: '材料题',
+            },],
+            filterMultiple: true,
+            onFilter: (value, record) => record.subjectType.indexOf(value) === 0,
+        },
+        {
+            title: '分值',
+            className: 'ant-table-selection-score',
+            dataIndex: 'subjectScore',
+        }, {
+            title: '操作',
+            className: 'ant-table-selection-score3',
+            dataIndex: 'subjectOpt',
+        },
+    ],
+    columnsNoPermission: [
+        {
+            title: '出题人',
+            className: 'ant-table-selection-score3',
+            dataIndex: 'name',
+        },
+        {
+            title: '内容',
+            className: 'ant-table-selection-cont',
+            dataIndex: 'content',
+        },
+        {
+            title: '题型',
+            className: 'ant-table-selection-topic',
+            dataIndex: 'subjectType',
+            filters: [{
+                text: '单选题',
+                value: '单选题',
+            }, {
+                text: '多选题',
+                value: '多选题',
+            }, {
+                text: '判断题',
+                value: '判断题',
+            }, {
+                text: '简答题',
+                value: '简答题',
+            }, {
+                text: '材料题',
+                value: '材料题',
+            },],
+            filterMultiple: true,
+            onFilter: (value, record) => record.subjectType.indexOf(value) === 0,
+        },
+        {
+            title: '分值',
+            className: 'ant-table-selection-score',
+            dataIndex: 'subjectScore',
+        },
+    ],
+    columns:[],
+
     getInitialState() {
 
         return {
@@ -67,10 +111,13 @@ const FavoriteSubjectItems = React.createClass({
             data: [],
             totalCount: 0
         };
+
     },
 
 
-    buildSubjectUi: function (courseWareList, type) {
+    buildSubjectUi: function () {
+
+        let courseWareList = this.props.param.data;
         this.data = [];
         if (!courseWareList || !courseWareList.length) {
             return;
@@ -81,7 +128,7 @@ const FavoriteSubjectItems = React.createClass({
             if (parseInt(subjectScore) < 0) {
                 subjectScore = '--';
             }
-            let subjectOpt ='';
+            let subjectOpt = '';
 
             if (this.state.ident == this.props.userid) {
                 subjectOpt = <div>
@@ -113,6 +160,12 @@ const FavoriteSubjectItems = React.createClass({
 
         });
 
+        if (this.state.ident == this.props.userid) {
+            this.columns = this.columnsAll;
+        } else {
+            this.columns = this.columnsNoPermission;
+        }
+
 
     },
     //列表分页响应事件
@@ -124,9 +177,9 @@ const FavoriteSubjectItems = React.createClass({
 
 
     render: function () {
-        console.log('buildSubjectUi');
-        this.buildSubjectUi(this.props.param.data, this.props.param.type);
-        return ( <Table columns={columns} dataSource={this.data}
+
+        this.buildSubjectUi();
+        return ( <Table columns={this.columns} dataSource={this.data}
                         pagination={{
                             total: this.state.totalCount,
                             pageSize: getPageSize(),
