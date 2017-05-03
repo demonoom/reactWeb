@@ -269,15 +269,9 @@ class MyFollows extends React.Component {
                     <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
                     <Breadcrumb.Item href="#/MainLayout">我的关注</Breadcrumb.Item>
                 </Breadcrumb>
-<<<<<<< HEAD
                 { this.title}
                 { this.gobackBtn}
                 <div className="ant-tabs favorite_up">{ this.htmlTempletContent }</div>
-=======
-                {this.gobackBtn}
-                <div className="follow_my">{ this.htmlTempletContent }</div>
->>>>>>> 018d4f2ad485061b71080c661fd904b29ba2be31
-
             </div>
         );
     }
