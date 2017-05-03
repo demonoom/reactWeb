@@ -609,10 +609,10 @@ const CreateExamPagerComponents = React.createClass({
                 <Col span={3}></Col>
                 <Col span={18} className="upexam_le_te">
                     <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
-                        <img src={require('../images/beforeAdd.png')} style={{width:'20px',height:'20px'}} id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="pointBtn"/>所属知识点
+                        <i id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="iconfont iconfont_knowledge pointBtn">&#xe611;</i>所属知识点
                     </button>
 					<Button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  className="examination_btn_gray" onClick={createExamPager.showAnalysisModal}>
-                        <img src={require('../images/beforeAdd.png')} style={{width:'20px',height:'20px'}}  id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="analysisBtn"/>解析
+                        <i id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="iconfont iconfont_knowledge analysisBtn exam_icon_2">&#xe611;</i>解析
                     </Button>
                 </Col>
                
@@ -652,10 +652,10 @@ const CreateExamPagerComponents = React.createClass({
                 <Col span={3}></Col>
                 <Col span={18} className="upexam_le_te">
                     <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
-                        <img src={require('../images/beforeAdd.png')} style={{width:'20px',height:'20px'}} id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="pointBtn"/>所属知识点
+                        <i id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="iconfont iconfont_knowledge pointBtn">&#xe611;</i>所属知识点
                     </button>
 					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
-                        <img src={require('../images/beforeAdd.png')} style={{width:'20px',height:'20px'}}  id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="analysisBtn"/>解析
+                        <i id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="iconfont iconfont_knowledge analysisBtn exam_icon_2">&#xe611;</i>解析
                     </button>
                 </Col>
                 
@@ -697,10 +697,10 @@ const CreateExamPagerComponents = React.createClass({
                 <Col span={3}></Col>
                 <Col span={18} className="upexam_le_te">
                     <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal}  className="examination_btn_gray">
-                        <img src={require('../images/beforeAdd.png')} style={{width:'20px',height:'20px'}} id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="pointBtn"/>所属知识点
+                        <i id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="iconfont iconfont_knowledge pointBtn">&#xe611;</i>所属知识点
                     </button>
 					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
-                        <img src={require('../images/beforeAdd.png')} style={{width:'20px',height:'20px'}}  id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="analysisBtn"/>解析
+                        <i id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="iconfont iconfont_knowledge analysisBtn exam_icon_2">&#xe611;</i>解析
                     </button>
                 </Col>
             </Row>
@@ -740,10 +740,10 @@ const CreateExamPagerComponents = React.createClass({
                 <Col span={3}></Col>
                 <Col span={18} className="upexam_le_te">
                     <button value={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType}  onClick={createExamPager.showBindKnowledgeModal} className="examination_btn_gray">
-                        <img src={require('../images/beforeAdd.png')} style={{width:'20px',height:'20px'}} id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="pointBtn"/>所属知识点
+                        <i id={answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType} className="iconfont iconfont_knowledge pointBtn">&#xe611;</i>所属知识点
                     </button>
 					<button value={answerTitle+"#"+num+"#analysis#"+answerSubjectType}  onClick={createExamPager.showAnalysisModal} className="examination_btn_gray">
-                        <img src={require('../images/beforeAdd.png')} style={{width:'20px',height:'20px'}}  id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="analysisBtn"/>解析
+                        <i id={answerTitle+"#"+num+"#analysis#"+answerSubjectType} className="iconfont iconfont_knowledge analysisBtn exam_icon_2">&#xe611;</i>解析
                     </button>
                 </Col>
                 <Col span={13}>
@@ -766,9 +766,9 @@ const CreateExamPagerComponents = React.createClass({
             var btnObj = btnArray[i];
             if(createExamPager.isEmpty(btnObj.id)==false && btnObj.id == checkId){
                 if(analysisIsNull==false){
-                    btnObj.src=require('../images/AnalysisAdded.png');
+                    btnObj.innerHTML="&#xe61d;";
                 }else{
-                    btnObj.src=require('../images/beforeAdd.png');
+                    btnObj.innerHTML="&#xe611;";
                 }
                 break;
             }
@@ -788,9 +788,9 @@ const CreateExamPagerComponents = React.createClass({
             var btnObj = btnArray[i];
             if(createExamPager.isEmpty(btnObj.id)==false && btnObj.id == checkId){
                 if(pointIsNull==false){
-                    btnObj.src=require('../images/knowledgeAdded.png');
+                    btnObj.innerHTML="&#xe783;";
                 }else{
-                    btnObj.src=require('../images/beforeAdd.png');
+                    btnObj.innerHTML="&#xe611;";
                 }
                 break;
             }
