@@ -434,7 +434,7 @@ const CourseWareComponents = React.createClass({
             }
         });
         var title=<span>
-            <span>确定要删除该课件?</span>
+            <span className="antnest_talk">确定要删除该课件?</span>
             <Checkbox onChange={courseWare.isDeleteAll}>同步删除备课计划下的课件</Checkbox>
         </span>;
         return (

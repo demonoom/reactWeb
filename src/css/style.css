@@ -2812,7 +2812,7 @@ ul.integral li i{
 .favorite_scroll .focus:first-child{
 	margin-left:76px
 }
-.favorite_scroll .focus:nth-child(4n+0){
+.favorite_scroll .focus:nth-child(3n+1){
 	margin-left:76px
 }
 .focus_btn{
