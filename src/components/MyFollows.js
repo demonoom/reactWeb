@@ -162,6 +162,11 @@ class MyFollows extends React.Component {
     returnParentFollowsList() {
 
         this.currentUser = this.previouUsers.pop();
+        if (!this.currentUser) {
+            this.userinfo = this._getCurrentLoginUserInfo();
+            this.getMyFollows(this.userinfo);
+            return;
+        }
         if (this.previouUsers.length) {
             this.currentUser = this.previouUsers.pop();
             this.getMyFollows(this.currentUser);
@@ -196,10 +201,13 @@ class MyFollows extends React.Component {
             this.currentUser = this._getCurrentLoginUserInfo();
         }
 
-        if (this.previouUsers.length && ((this.currentUser.colUid + '') != this.state.ident)) {
-            return true;
+        if (this.previouUsers.length) {
+            return true; // 返回到个人中心
         }
-        return false;
+        if (this.currentUser.colUid != this.state.ident) {
+            return true; // 返回到个人中心
+        }
+        return false; // 不返回到自己个人中心
     }
 
     // 侧边预览
@@ -253,7 +261,8 @@ class MyFollows extends React.Component {
 
                 if (this.notInterProsonCenter()) {
                     this.gobackBtn =
-                        <div className="back_follow ant-tabs-bar"><Button onClick={this.returnPersonCenter}>返回</Button></div>;
+                        <div className="back_follow ant-tabs-bar"><Button onClick={this.returnPersonCenter}>返回</Button>
+                        </div>;
                 }
                 this._buildMyFollowsList();
                 break;
