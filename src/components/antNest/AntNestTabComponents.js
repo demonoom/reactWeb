@@ -337,7 +337,7 @@ const AntNestTabComponents = React.createClass({
                 })
                 var delBtnInReplayCard;
                 if(topicReplayInfo.fromUser.colUtype=="STUD" || (topicReplayInfo.fromUser.colUtype=="TEAC" && topicReplayInfo.fromUser.colUid == sessionStorage.getItem("ident"))){
-                    delBtnInReplayCard = <Button value={topicReplayInfo.id} icon="delete" onClick={antNest.deleteTopic} className="topics_btn antnest_talk teopics_spa">删除</Button>;
+                    delBtnInReplayCard = <Button value={topicReplayInfo.id} icon="delete" onClick={antNest.deleteTopic.bind(antNest,topicReplayInfo.id)} className="topics_btn antnest_talk teopics_spa">删除111</Button>;
                 }
                 var praiseBtn;
                 if(topicObj.fromUser.colUtype=="TEAC" && topicObj.fromUser.colUid == sessionStorage.getItem("ident")){
@@ -534,8 +534,8 @@ const AntNestTabComponents = React.createClass({
                 }
                 if(antNest.state.optType=="getTopicById"){
                     //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
-                    antNest.reGetTopicInfo(1,getAllTopic());
-                    antNest.getTopicPartakeById(parentTopicId,1);
+                    antNest.reGetTopicInfo(antNest.state.currentShowPage,getAllTopic());
+                    antNest.getTopicPartakeById(parentTopicId,antNest.state.currentShowPage);
                 }else {
                     if(antNest.state.type==0){
                         antNest.getTopics(antNest.state.currentPage, getAllTopic());
@@ -583,8 +583,8 @@ const AntNestTabComponents = React.createClass({
                 }
                 if(antNest.state.optType=="getTopicById"){
                     //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
-                    antNest.reGetTopicInfo(1,getAllTopic());
-                    antNest.getTopicPartakeById(parentTopicId,1);
+                    antNest.reGetTopicInfo(antNest.state.currentShowPage,getAllTopic());
+                    antNest.getTopicPartakeById(parentTopicId,antNest.state.currentShowPage);
                 }else{
                     if(antNest.state.type==0){
                         antNest.getTopics(antNest.state.currentPage,getAllTopic());
@@ -653,8 +653,14 @@ const AntNestTabComponents = React.createClass({
      * 删除一个话题
      * @param e
      */
-    deleteTopic(){
-        antNest.deleteTopicById(antNest.state.currentTopicId);
+    deleteTopic(replayTopicId){
+        var delId;
+        if(isEmpty(replayTopicId)==false){
+            delId = replayTopicId;
+        }else{
+            delId = antNest.state.currentTopicId;
+        }
+        antNest.deleteTopicById(delId);
     },
 
     /**
@@ -674,7 +680,6 @@ const AntNestTabComponents = React.createClass({
                 }else{
                     message.error("删除失败");
                 }
-                antNest.setState({"currentTopicId":''});
                 antNest.closeDeleteTopicModal();
                 if(antNest.state.optType=="getTopicById"){
                     //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
@@ -687,6 +692,7 @@ const AntNestTabComponents = React.createClass({
                         antNest.getTopics(antNest.state.currentTeacherPage, getOnlyTeacherTopic());
                     }
                 }
+                antNest.setState({"currentTopicId":''});
             },
             onError: function (error) {
                 message.error(error);
@@ -743,8 +749,8 @@ const AntNestTabComponents = React.createClass({
                 antNest.closeDeleteTopicCommentModal();
                 if(antNest.state.optType=="getTopicById"){
                     //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
-                    antNest.reGetTopicInfo(1,getAllTopic());
-                    antNest.getTopicPartakeById(antNest.state.currentTopicId,1);
+                    antNest.reGetTopicInfo(antNest.state.currentShowPage,getAllTopic());
+                    antNest.getTopicPartakeById(antNest.state.currentTopicId,antNest.state.currentShowPage);
                 }else{
                     if(antNest.state.type==0){
                         antNest.getTopics(antNest.state.currentPage,getAllTopic());
@@ -811,8 +817,8 @@ const AntNestTabComponents = React.createClass({
                 }
                 if(antNest.state.optType=="getTopicById"){
                     //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
-                    antNest.reGetTopicInfo(1,getAllTopic());
-                    antNest.getTopicPartakeById(setTopicId,1);
+                    antNest.reGetTopicInfo(antNest.state.currentShowPage,getAllTopic());
+                    antNest.getTopicPartakeById(setTopicId,antNest.state.currentShowPage);
                 }else {
                     if (antNest.state.type==0) {
                         antNest.getTopics(antNest.state.currentPage, getAllTopic());
@@ -890,10 +896,13 @@ const AntNestTabComponents = React.createClass({
                 }else{
                     message.error("评论失败");
                 }
+                //这段代码移到前方，可以避免页面重新刷新加载，能够保持页面停留在刚刚操作的位置上
+                antNest.initMyEmotionInput();
+                antNest.setState({discussModalVisible: false,"toUserId":-1,"replayTopicId":'',"replayToUserTopicId":''});
                 if(antNest.state.optType=="getTopicById"){
                     //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
-                    antNest.reGetTopicInfo(1,getAllTopic());
-                    antNest.getTopicPartakeById(antNest.state.currentTopicId,1);
+                    antNest.reGetTopicInfo(antNest.state.currentShowPage,getAllTopic());
+                    antNest.getTopicPartakeById(antNest.state.currentTopicId,antNest.state.currentShowPage);
                 }else {
                     if (antNest.state.type==0) {
                         antNest.getTopics(antNest.state.currentPage, getAllTopic());
@@ -901,8 +910,6 @@ const AntNestTabComponents = React.createClass({
                         antNest.getTopics(antNest.state.currentTeacherPage, getOnlyTeacherTopic());
                     }
                 }
-                antNest.initMyEmotionInput();
-                antNest.setState({discussModalVisible: false,"toUserId":-1,"replayTopicId":'',"replayToUserTopicId":''});
             },
             onError: function (error) {
                 message.error(error);
@@ -1201,8 +1208,8 @@ const AntNestTabComponents = React.createClass({
                 }
                 if(antNest.state.optType=="getTopicById"){
                     //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
-                    antNest.reGetTopicInfo(1,getAllTopic());
-                    antNest.getTopicPartakeById(antNest.state.currentTopicId,1);
+                    antNest.reGetTopicInfo(antNest.state.currentShowPage,getAllTopic());
+                    antNest.getTopicPartakeById(antNest.state.currentTopicId,antNest.state.currentShowPage);
                 }else {
                     if (antNest.state.type == 0) {
                         antNest.getTopics(antNest.state.currentPage, getAllTopic());
@@ -1231,7 +1238,12 @@ const AntNestTabComponents = React.createClass({
      * @returns {XML}
      */
     render() {
-        var breadMenuTip="蚁巢";
+        var breadMenuTip="查看全部";
+        if(antNest.state.type==0){
+            breadMenuTip="查看全部";
+        }else{
+            breadMenuTip="只看老师";
+        }
         var optionButton;
         var topicList;
         if(antNest.state.optType=="getTopicById"){
@@ -1329,7 +1341,8 @@ const AntNestTabComponents = React.createClass({
                 <div style={{display:'inline'}}>
                     <Breadcrumb separator=">">
                         <Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
-                        <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
+                        <Breadcrumb.Item href="#/MainLayout">首页</Breadcrumb.Item>
+                        <Breadcrumb.Item href="#/MainLayout">蚁巢</Breadcrumb.Item>
                         <Breadcrumb.Item href="#/MainLayout">{breadMenuTip}</Breadcrumb.Item>
                     </Breadcrumb>
                     {optionButton}

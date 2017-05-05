@@ -3430,3 +3430,7 @@ color:#ffbf00
 .enhance{
 	height:calc(100% - 67px) !important
 }
+
+.tableRow{
+	background-color: #e5f2fe;
+}
