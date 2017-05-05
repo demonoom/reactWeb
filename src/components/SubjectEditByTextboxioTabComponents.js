@@ -30,13 +30,13 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
         return {
             loading: false,
             visible: false,
-            mulitiAnswerOptions:[
+            mulitiAnswerOptions: [
                 {label: 'A', value: 'A'},
                 {label: 'B', value: 'B'},
                 {label: 'C', value: 'C'},
                 {label: 'D', value: 'D'},
             ],
-            singleAnswerOptions:[
+            singleAnswerOptions: [
                 <Radio key="A" value="A">A</Radio>,
                 <Radio key="B" value="B">B</Radio>,
                 <Radio key="C" value="C">C</Radio>,
@@ -70,26 +70,26 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                 if (subjectType == "单选题") {
                     editorContent = response.content;
                     var choosens = response.choosens;
-                    var singleAnswerOptions=[];
-                    for(var i=0;i<choosens.length;i++){
+                    var singleAnswerOptions = [];
+                    for (var i = 0; i < choosens.length; i++) {
                         var content = choosens[i].content;
                         var selectValue = <Radio key={content} value={content}>{content}</Radio>;
                         singleAnswerOptions.push(selectValue);
                     }
                     subjectUpload.setState({
-                        singleAnswer: response.answer,"singleAnswerOptions":singleAnswerOptions
+                        singleAnswer: response.answer, "singleAnswerOptions": singleAnswerOptions
                     });
                 } else if (subjectType == "多选题") {
                     muEditorContent = response.content;
                     var choosens = response.choosens;
-                    var mulitiAnswerOptions=[];
-                    for(var i=0;i<choosens.length;i++){
+                    var mulitiAnswerOptions = [];
+                    for (var i = 0; i < choosens.length; i++) {
                         var content = choosens[i].content;
                         var selectValue = {label: content, value: content};
                         mulitiAnswerOptions.push(selectValue);
                     }
                     subjectUpload.setState({
-                        mulitiAnswerDefaultValue: response.answer,"mulitiAnswerOptions":mulitiAnswerOptions
+                        mulitiAnswerDefaultValue: response.answer, "mulitiAnswerOptions": mulitiAnswerOptions
                     });
                 } else if (subjectType == "判断题") {
                     correctEditorContent = response.content;
@@ -109,11 +109,11 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                         scoreDefinedValue: response.score
                     });
                 } else {
-                    if(response.score <= 0){
+                    if (response.score <= 0) {
                         subjectUpload.setState({
                             score: -1
                         });
-                    }else{
+                    } else {
                         subjectUpload.setState({
                             score: response.score,
                         });
@@ -216,7 +216,6 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                 } else {
                     message.error("题目修改失败");
                 }
-                // this.initPage();
             },
             onError: function (error) {
                 message.error(error);
@@ -239,11 +238,9 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
         var score = this.state.score;
         //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
         if (this.state.scoreDisable == true) {
-            // score = this.state.scoreDefinedValue;
-            score =this.refs.scoreDefined.refs.input.value;
+            score = this.refs.scoreDefined.refs.input.value;
         }
         var subjectName = mytextareaSingleModifyEditor.content.get();
-        // subjectName = subjectName.replace(/\+/g, "%2B"); //将+号替换为十六进制
         var answer = this.state.singleAnswer;
         //完成基础的非空验证
         if (this.isEmpty(subjectName)) {
@@ -275,8 +272,7 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
         var score = this.state.score;
         //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
         if (this.state.scoreDisable == true) {
-            // score = this.state.scoreDefinedValue;
-            score =this.refs.scoreDefined.refs.input.value;
+            score = this.refs.scoreDefined.refs.input.value;
         }
         var subjectName = mytextareaMulitiSelectModifyEditor.content.get();
         //将获取的多选答案数组转换为字符串
@@ -313,8 +309,7 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
         var score = this.state.score;
         //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
         if (this.state.scoreDisable == true) {
-            // score = this.state.scoreDefinedValue;
-            score =this.refs.scoreDefined.refs.input.value;
+            score = this.refs.scoreDefined.refs.input.value;
         }
         var subjectName = mytextareaCorrectModifyEditor.content.get();
         var answer = this.state.correctAnswerValue;
@@ -349,8 +344,7 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
         var score = this.state.score;
         //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
         if (this.state.scoreDisable == true) {
-            // score = this.state.scoreDefinedValue;
-            score =this.refs.scoreDefined.refs.input.value;
+            score = this.refs.scoreDefined.refs.input.value;
         }
         var subjectName = mytextareaSimpleAnswerModifyEditor.content.get();
         var answer = mytextareaAnswerModifyEditor.content.get();
@@ -443,7 +437,6 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
 
                     <Col span={20}>
                         <div className="ant-form-item-control">
-                            {/*value={this.state.score}*/}
                             <Select ref="scoreSelect" defaultValue={subjectUpload.state.score}
                                     value={subjectUpload.state.score} style={{width: 100}}
                                     disabled={this.state.scoreDisable} onChange={this.selectHandleChange}>
@@ -570,12 +563,6 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                                                     defaultValue={subjectUpload.state.singleAnswer}
                                                     value={subjectUpload.state.singleAnswer}>
                                             {this.state.singleAnswerOptions}
-                                            {/*<Radio key="A" value="A">A</Radio>
-                                            <Radio key="B" value="B">B</Radio>
-                                            <Radio key="C" value="C">C</Radio>
-                                            <Radio key="D" value="D">D</Radio>
-                                            <Radio key="E" value="E">E</Radio>
-                                            <Radio key="F" value="F">F</Radio>*/}
                                         </RadioGroup>
                                     </div>
                                 </Col>

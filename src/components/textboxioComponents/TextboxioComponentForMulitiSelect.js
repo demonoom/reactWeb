@@ -3,10 +3,7 @@ import React from 'react';
 var TextboxioComponentForMulitiSelect = React.createClass({
   componentDidMount(){
     mytextareaMulitiEditor = textboxio.replace('#myMulitiTextarea',defaultConfig);
-    /*mytextareaMulitiEditor.events.dirty.addListener(function () {
-      mytextareaMulitiEditor.mode.set("code");
-      mytextareaMulitiEditor.mode.set("design");
-    });*/
+
     mytextareaMulitiEditor.events.focus.addListener(function () {
       if(mytextareaMulitiEditor.mode.get()=="code"){
         mytextareaMulitiEditor.mode.set("design");

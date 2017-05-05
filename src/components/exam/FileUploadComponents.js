@@ -1,9 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Tabs, Button,Radio } from 'antd';
-import { Modal} from 'antd';
-import { Slider } from 'antd';
-import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Checkbox } from 'antd';
-import { Upload,  message } from 'antd';
+import {  Row, Checkbox,  message , Button } from 'antd';
 const CheckboxGroup = Checkbox.Group;
 
 var submitFileOptions=[];
@@ -18,7 +14,6 @@ const FileUploadComponents = React.createClass({
     },
 
     initFileUploadPage(){
-        console.log("initCom");
         submitFileOptions.splice(0);
         this.setState({submitFileCheckedList:[],submitFileOptions:[]});
         var fileField = document.getElementById("fileField");
@@ -51,7 +46,6 @@ const FileUploadComponents = React.createClass({
         var fileName = files[0].name;
         var fileSize = files[0].size;
         var isExit = this.checkCurrentFileIsSubmit(fileName);
-        // var isMuliti = this.checkSubmitFileCount();
         var isMuliti = false;//不对上传文件的个数进行控制，支持多张图片进行上传
         if(isMuliti==true){
             message.warning("请勿同时上传多个文件,谢谢！");

@@ -13,7 +13,6 @@ class MyMTV extends React.Component {
             ident: this.props.userid || sessionStorage.getItem("ident"),
             data: [],
             pageNo: 1,
-            // method:'getUserFavorite'
              method:'getLiveInfoByUid'
         };
         this.changeState = this.changeState.bind(this);

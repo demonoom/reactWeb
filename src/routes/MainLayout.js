@@ -420,7 +420,7 @@ const MainLayout = React.createClass({
                     </div>
 
                     <div className="panleArea"></div>
-                    <Asidepanel param={this.state.ifr} ref="laifr"/>
+
 
 
                 </div>

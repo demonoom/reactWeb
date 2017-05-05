@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Table, Button,Icon,Popover,Tooltip,message,Modal,Checkbox } from 'antd';
+import { Table, Button,Icon,Popover,message,Checkbox } from 'antd';
 import UseKnowledgeComponents from './UseKnowledgeComponents';
 import SubjectEditByTextboxioTabComponents from './SubjectEditByTextboxioTabComponents';
 import { doWebService } from '../WebServiceHelper';
@@ -15,12 +15,7 @@ const columns = [{
   title: '内容',
   className:'ant-table-selection-cont',
   dataIndex: 'content',
-},
-//   {
-//   title: '上传时间',
-//   dataIndex: 'submitTime',
-// },
-  {
+}, {
     title: '题型',
     className:'ant-table-selection-topic',
     dataIndex: 'subjectType',
@@ -78,7 +73,6 @@ const SUbjectTable = React.createClass({
   },
   start() {
     this.setState({ loading: true });
-    // ajax request after empty completing
     setTimeout(() => {
       this.setState({
         selectedRowKeys: [],
@@ -87,9 +81,7 @@ const SUbjectTable = React.createClass({
     }, 1000);
   },
   onSelectChange(selectedRowKeys) {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
     var selectedRowKeysStr =selectedRowKeys.join(",");
-    console.log("selectedRowKeysStr:"+selectedRowKeysStr);
     this.setState({ selectedRowKeys,selectedRowKeysStr });
   },
 
@@ -113,8 +105,6 @@ const SUbjectTable = React.createClass({
 
     doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
-        console.log("getSubjectDataMSG:"+ret.msg);
-        // subjectList=new Array();
         subjectList.splice(0);
         data.splice(0);
         var response = ret.response;
@@ -122,7 +112,6 @@ const SUbjectTable = React.createClass({
           subTable.setState({totalCount:0});
         }else{
             response.forEach(function (e) {
-              console.log("eeeeee:"+e);
               var key = e.id;
               var name=e.user.userName;
               var popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>'+e.content+'<hr/><span class="answer_til answer_til_2">答案：</span>'+e.answer+'</div>';
@@ -160,7 +149,7 @@ const SUbjectTable = React.createClass({
   },
 
   isDeleteAll(e){
-    console.log(`checked = ${e.target.checked}`);
+
     subTable.setState({isDeleteAllSubject:e.target.checked});
   },
 
@@ -226,7 +215,7 @@ const SUbjectTable = React.createClass({
     };
     doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
-        console.log(ret.msg);
+        log(ret.msg);
         if(ret.msg=="调用成功" && ret.response==true){
           message.success("题目删除成功");
         }else{
@@ -262,7 +251,7 @@ const SUbjectTable = React.createClass({
     }
     doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
-        console.log(ret.msg);
+
         if(ret.msg=="调用成功" && ret.success==true){
           message.success("题目删除成功");
         }else{
@@ -279,13 +268,6 @@ const SUbjectTable = React.createClass({
 
   //删除备课计划下的题目
   deleteSubject:function (e) {
-    /*var target = e.target;
-    if(navigator.userAgent.indexOf("Chrome") > -1){
-      target=e.currentTarget;
-    }else{
-      target = e.target;
-    }
-    var subjectIds = target.value;*/
     subTable.deleteSubjectsByConditonForSchedule(subTable.state.delSubjectId);
     subTable.closeConfirmModal();
   },
@@ -308,13 +290,6 @@ const SUbjectTable = React.createClass({
 
   //删除资源库下的题目
   delMySubjects:function () {
-    /*var target = e.target;
-    if(navigator.userAgent.indexOf("Chrome") > -1){
-      target=e.currentTarget;
-    }else{
-      target = e.target;
-    }
-    var subjectIds = target.value;*/
     subTable.deleteSubjectsByConditon(subTable.state.delSubjectId);
     subTable.closeDelSubjectConfirmModal();
   },
@@ -337,7 +312,6 @@ const SUbjectTable = React.createClass({
 
     doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
-        console.log("getSubjectDataMSG:"+ret.msg);
         subjectList.splice(0);
         data.splice(0);
         var response = ret.response;
@@ -345,7 +319,6 @@ const SUbjectTable = React.createClass({
           subTable.setState({totalCount:0});
         }else {
           response.forEach(function (e) {
-            console.log("getSubjectDataByKnowledge:"+e);
             var key = e.id;
             var name=e.user.userName;
             var popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>'+e.content+'<hr/><span class="answer_til answer_til_2">答案：</span>'+e.answer+'</div>';
@@ -358,7 +331,6 @@ const SUbjectTable = React.createClass({
             }
             var answer = e.answer;
             var userId = e.user.colUid;
-            // var submitTime = subTable.getLocalTime(e.createTime);
             var subjectOpt=<Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" ></Button>;
             if(userId==sessionStorage.getItem("ident")){
               subjectOpt=<div><Button style={{ }} type=""  value={e.id} onClick={subTable.showModal}  icon="export" title="使用" className="score3_i"></Button><Button style={{ }} type=""  value={e.id+"#"+e.typeName} onClick={subTable.showModifySubjectModal}  icon="edit" title="修改" className="score3_i"></Button><Button style={{ }} type=""  value={e.id} onClick={subTable.showDelSubjectConfirmModal}  icon="delete" title="删除" className="score3_i" ></Button></div>;
@@ -369,7 +341,6 @@ const SUbjectTable = React.createClass({
               key: key,
               name: name,
               content: content,
-              // submitTime:submitTime,
               subjectType:subjectType,
               subjectScore:subjectScore,
               subjectOpt:subjectOpt,
@@ -387,22 +358,11 @@ const SUbjectTable = React.createClass({
     });
   },
 
-  /*getLocalTime:function (nS) {
-   // var newDate = new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/,' ');
-   // return newDate;
-   var newDate = new Date();
-   newDate.setTime(nS);
-   console.log("localDate："+newDate.toLocaleDateString())
-   return newDate.toLocaleDateString();
-   },*/
 
   componentDidMount(){
     subTable.initGetSubjectInfo();
   },
 
-  // componentWillReceiveProps(){
-  //   subTable.initGetSubjectInfo();
-  // },
 
   initGetSubjectInfo:function (subjectParams,currentPageNo) {
     var subjectParamArray = subTable.props.params.split("#");
@@ -439,7 +399,6 @@ const SUbjectTable = React.createClass({
   showModal:function (e) {
     var target = e.target;
     if(navigator.userAgent.indexOf("Chrome") > -1){
-      //e = window.event;
       target=e.currentTarget;
     }else{
       target = e.target;
@@ -451,7 +410,6 @@ const SUbjectTable = React.createClass({
   showModifySubjectModal:function (e) {
     var target = e.target;
     if(navigator.userAgent.indexOf("Chrome") > -1){
-      //e = window.event;
       target=e.currentTarget;
     }else{
       target = e.target;
@@ -461,7 +419,6 @@ const SUbjectTable = React.createClass({
   },
 
   pageOnChange(pageNo) {
-    console.log(pageNo);
     subTable.initGetSubjectInfo(this.state.subjectParams,pageNo);
     this.setState({
       currentPage: pageNo,

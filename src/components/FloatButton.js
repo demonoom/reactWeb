@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Popover, Affix, Button,Dropdown,Menu,Icon,Modal } from 'antd';
+import {  Dropdown,Menu,Icon  } from 'antd';
 import UserPasswordModifyComponents from './UserPasswordModifyComponents';
 import { doWebService } from '../WebServiceHelper';
 import {isEmpty} from './../utils/Const';
@@ -40,20 +40,15 @@ const FloatButton = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse : function(ret) {
-                console.log(ret.msg);
                 if(ret.msg=="调用成功" && ret.response==true){
-                    console.log("保存此用户上次访问的知识点id成功");
                     sessionStorage.removeItem("openKeysStr");
                     sessionStorage.removeItem("ident");
                     sessionStorage.removeItem("loginUser");
                     sessionStorage.removeItem("machineId");
-                }else{
-                    console.log("保存此用户上次访问的知识点id失败");
                 }
                 location.hash="Login";
             },
             onError : function(error) {
-                console.log(error);
             }
         });
     },
@@ -64,12 +59,9 @@ const FloatButton = React.createClass({
 
     menuItemOnClick : function ({ key }) {
         var clickKey = `${key}`;
-        console.log("clickKey:"+clickKey)
         if(clickKey=="modifyPassword"){
           floatButton.showModifyModal();
         }else if(clickKey=="existSystem"){
-          //floatButton.logOut();
-
             floatButton.showConfirmModal();
         }
     },

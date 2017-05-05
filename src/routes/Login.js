@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Form, Icon, Input, Button, Checkbox,message } from 'antd';
+import { Form, Icon, Input, Button, message } from 'antd';
 const FormItem = Form.Item;
 import { doWebService } from '../WebServiceHelper';
 

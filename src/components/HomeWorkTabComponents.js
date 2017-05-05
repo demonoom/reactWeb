@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Tabs, Breadcrumb, Icon, Button,Radio } from 'antd';
+import { Tabs, Breadcrumb, Icon, Button } from 'antd';
 import HomeWorkTableComponents from './HomeWorkTableComponents';
 import UseKnowledgeComponents from './UseKnowledgeComponents';
 import AssignHomeWorkComponents from './AssignHomeWorkComponents';
@@ -15,7 +15,6 @@ function deleteConfirm() {
 }
 
 
-var mt;
 const HomeWorkTabComponents = React.createClass({
 
     getInitialState() {
@@ -69,7 +68,6 @@ const HomeWorkTabComponents = React.createClass({
                 <Tabs
                     hideAdd
                     onChange={this.onChange}
-                    /*type="editable-card"     启用该属性，会使Tab上带有删除的图标*/
                     onEdit={this.onEdit}
                     ref = "mainTab"
                     activeKey={this.state.activeKey}
@@ -77,9 +75,6 @@ const HomeWorkTabComponents = React.createClass({
                     transitionName=""  //禁用Tabs的动画效果
                     tabBarExtraContent={<div className="ant-tabs-right"><Button type="primary" onClick={this.assignHomeWork} className="add_study">布置作业</Button></div>}
                 >
-                    {/*<TabPane tab="布置作业" key="布置作业">
-                            <HomeWorkTableComponents ref="homeWorkTable"/>
-                    </TabPane>*/}
                     {tabPanel}
                 </Tabs>
             </div>

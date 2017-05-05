@@ -41,7 +41,6 @@ const ExamPagerTableComponents = React.createClass({
     }, 1000);
   },
   onSelectChange(selectedRowKeys) {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
     this.setState({ selectedRowKeys });
   },
 
@@ -74,7 +73,6 @@ const ExamPagerTableComponents = React.createClass({
   getSubjectData(e,handler){
     var target = e.target;
     if(navigator.userAgent.indexOf("Chrome") > -1){
-      //e = window.event;
       target=e.currentTarget;
     }else{
       target = e.target;
@@ -100,7 +98,6 @@ const ExamPagerTableComponents = React.createClass({
       target = e.target;
     }
     var subjectInfoJson = target.value;
-    console.log("===>"+subjectInfoJson);
     examPagerTable.props.callBackParent(subjectInfoJson);
   },
 
@@ -120,7 +117,6 @@ const ExamPagerTableComponents = React.createClass({
         subjectList=new Array();
         var response = ret.response;
         response.forEach(function (e) {
-          console.log("getExamPagerList:"+e);
           //试卷id
           var pagerId = e.id;
           //试卷名称
@@ -147,7 +143,6 @@ const ExamPagerTableComponents = React.createClass({
   getLocalTime:function (nS) {
     var newDate = new Date();
     newDate.setTime(nS);
-    console.log("localDate："+newDate.toLocaleDateString())
     return newDate.toLocaleDateString();
   },
 
@@ -163,11 +158,9 @@ const ExamPagerTableComponents = React.createClass({
 
     doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
-        console.log("getSubjectDataMSG:"+ret.msg);
         subjectList=new Array();
         var response = ret.response;
         response.forEach(function (e) {
-          console.log("getExamPagerList:"+e);
           var id = e.id;
           var content = <Popover  placement="rightTop" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article>}><article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
           var subjectType = e.subjectType;
@@ -192,7 +185,6 @@ const ExamPagerTableComponents = React.createClass({
   },
 
   pageOnChange(pageNo) {
-    console.log(pageNo);
     var currentView = examPagerTable.state.currentView;
     if(currentView=="examPagerList"){
       examPagerTable.getExamPagerList(sessionStorage.getItem("ident"),pageNo);

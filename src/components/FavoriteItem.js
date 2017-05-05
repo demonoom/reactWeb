@@ -1,11 +1,9 @@
 import React from 'react';
-import {Pagination, Collapse, Button, message, Modal} from 'antd';
+import {Pagination, Collapse, Button,  Modal} from 'antd';
 import {getPageSize} from '../utils/Const';
 import {getLocalTime} from '../utils/utils';
 
 const Panel = Collapse.Panel;
-const confirm = Modal.confirm;
-
 
 const FavoriteItem = React.createClass({
     // 我的收藏类型

@@ -1,12 +1,11 @@
-import React, { PropTypes } from 'react';
+import React, {PropTypes} from 'react';
 
 const MaaeeLogo = (props) => {
-  return (
-    <img src={require('./images/maaee.png')} className="logo_layout" />
-  );
+    return (
+        <img src={require('./images/maaee.png')} className="logo_layout"/>
+    );
 };
 
-MaaeeLogo.propTypes = {
-};
+MaaeeLogo.propTypes = {};
 
 export default MaaeeLogo;

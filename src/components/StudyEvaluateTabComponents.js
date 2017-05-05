@@ -1,8 +1,6 @@
 import React, { PropTypes } from 'react';
-import { Tabs, Breadcrumb, Icon, Button,Radio } from 'antd';
-import HomeWorkTableComponents from './HomeWorkTableComponents';
+import { Tabs, Breadcrumb, Icon, Button } from 'antd';
 import UseKnowledgeComponents from './UseKnowledgeComponents';
-import AssignHomeWorkComponents from './AssignHomeWorkComponents';
 
 
 
@@ -14,9 +12,6 @@ function deleteConfirm() {
     var rs = confirm("确定要删除这"+count+"条记录吗？");
 }
 
-function touchstart(){
-  console.log("模拟touchstart");
-}
 
 var mt;
 
@@ -37,10 +32,8 @@ const StudyEvaluateTabComponents = React.createClass({
 
 
     getStudyEvaluate(optContent){
-        // alert("学情");
         this.setState({currentOpt:'studyEvaluate',});
         this.setState({activeKey:'学情分析'});
-        // this.refs.homeWorkTable.getDoneHomeworkList(sessionStorage.getItem("ident"),1);
     },
     goBack(){
         this.refs.study.contentWindow.location.replace(this.state.currentPageLink);
@@ -58,7 +51,6 @@ const StudyEvaluateTabComponents = React.createClass({
                 <Tabs
                     hideAdd
                     onChange={this.onChange}
-                    /*type="editable-card"     启用该属性，会使Tab上带有删除的图标*/
                     onEdit={this.onEdit}
                     ref = "mainTab"
                     activeKey={this.state.activeKey}

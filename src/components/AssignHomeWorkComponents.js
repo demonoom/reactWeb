@@ -1,20 +1,14 @@
 import React, {PropTypes} from 'react';
-import {Modal, Button, message} from 'antd';
-import {Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Table, Popover} from 'antd';
+import {  Icon,   Row, Col, Checkbox, Table, Popover,Modal, Button, message} from 'antd';
 import {DatePicker} from 'antd';
 import {doWebService} from '../WebServiceHelper';
 import {getPageSize} from '../utils/Const';
-const {MonthPicker, RangePicker} = DatePicker;
-const FormItem = Form.Item;
-const Option = Select.Option;
 const CheckboxGroup = Checkbox.Group;
 
 var assignHomeWork;
 var classList = [];
 var scheduleData = [];
-var knowledgeDate = [];
 var subjectData = [];
-// var selectedSubjectData = [];
 var scheduleColumns = [{
     title: '备课计划',
     dataIndex: 'scheduleName',
@@ -57,8 +51,6 @@ var selectedSubjectColumns = [{
 }
 ];
 
-var plainOptions = [];
-var defaultCheckedList = [];
 var clazzIds = "";
 var dateTime = "";
 const AssignHomeWorkComponents = React.createClass({

@@ -22,5 +22,4 @@ const BackTopButton = (props) => {
   );
 };
 
-// export default Buttons;
 export default BackTopButton;

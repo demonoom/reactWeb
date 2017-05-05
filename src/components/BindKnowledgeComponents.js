@@ -1,10 +1,8 @@
 import React, {PropTypes} from 'react';
 import {Table, Modal, Button, message, Transfer} from 'antd';
-import {Menu, Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox} from 'antd';
 import {doWebService} from '../WebServiceHelper';
 
 var bindKnowledge;
-var createExamPager = [];
 var columns;
 
 
@@ -96,14 +94,6 @@ const BindKnowledgeComponents = React.createClass({
     //修改，保存知识点
     bindPointForTeacher(){
 
-        /*let pointIds = bindKnowledge.state.targetKeys.join(',');
-        if (!pointIds || ',' == pointIds) {
-            message.warning("请选择具体的知识点完成绑定");
-            bindKnowledge.props.callbackParent();
-            bindKnowledge.setState({visible: false});
-        } else {
-
-        }*/
         let pointIds = bindKnowledge.state.targetKeys.join(',');
         var param = {
             // batchBindPointForTeacher
@@ -196,7 +186,6 @@ const BindKnowledgeComponents = React.createClass({
 
 
     cascaderOnChange(value, selectedOptions) {
-        console.log("value:" + value, selectedOptions);
         bindKnowledge.setState({defaultSelected: value});
         if (value.length >= 2) {
             bindKnowledge.setState({selectedKnowledge: value[1]});

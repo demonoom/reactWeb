@@ -1,7 +1,7 @@
 /**
  * Created by madapeng on 17-4-5.
  */
-import {message, Input, Col, Row, Button, Breadcrumb, Icon} from 'antd';
+import {message, Col, Row, Button, Breadcrumb, Icon} from 'antd';
 
 import React from 'react';
 import {doWebService} from '../WebServiceHelper';
@@ -10,7 +10,7 @@ class ResetStudentAccountKey extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { // define this.state in constructor
+        this.state = {
             ident: sessionStorage.getItem("ident"),
             visible: true,
             placeholder: '请输入要重置密码的帐号',

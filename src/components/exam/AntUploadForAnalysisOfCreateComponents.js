@@ -17,7 +17,6 @@ const AntUploadForAnalysisOfCreateComponents = React.createClass({
     },
 
     componentDidMount(){
-        console.log("==="+antUpload.props.fileList);
         if(isEmpty(antUpload.props.fileList)==false){
             fileList.splice(0);
             var lastLineIndex = antUpload.props.fileList.lastIndexOf("/");
@@ -95,26 +94,21 @@ const AntUploadForAnalysisOfCreateComponents = React.createClass({
                 if (info.file.status !== 'uploading') {
                     //上传进度
                     var percent = info.file.percent;
-                    console.log("上传进度"+percent);
                     antUpload.setState({uploadPercent:percent,progressState:'block'});
-                    console.log(info.file, info.fileList);
                     if(info.file.status==="removed"){
                         antUpload.props.callBackParent(info.file,antUpload.state.subjectInfo,"removed");
                     }
                 }
                 if (info.file.status === 'done') {
-                    console.log("done propsName:"+props.name);
                     antUpload.props.callBackParent(info.file,antUpload.state.subjectInfo);
                     message.success(`${info.file.name} 文件上传成功`,5);
                 } else if (info.file.status === 'error') {
                     //解析图片上传错误处理
-                    console.log("error propsName:"+props.name);
                     message.error(`${info.file.name} 文件上传失败.`,5);
                 }
                 antUpload.setState({"fileList":info.fileList});
             },
             onRemove(file){
-                console.log(file);
             },
         };
         return (

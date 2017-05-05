@@ -14,9 +14,7 @@ function deleteConfirm() {
     var rs = confirm("确定要删除这"+count+"条记录吗？");
 }
 
-var mt;
 let breadcrumbChildren;
-var breadCrumbArray=[];
 const MainTabComponents = React.createClass({
 
     getInitialState() {
@@ -122,14 +120,12 @@ const MainTabComponents = React.createClass({
             this.setState({subjectDataFilter:clickKey});
             var subjectParams = sessionStorage.getItem("ident")+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType+"#"+this.state.currentKnowledgeName+"#"+clickKey;
             this.refs.subTable.initGetSubjectInfo(subjectParams);
-            //this.setState({subjectParams:sessionStorage.getItem("ident")+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType+"#"+this.state.currentKnowledgeName+"#"+clickKey});
         }
     },
     /**
      * 课件上传成功后的回调函数
      */
     courseUploadCallBack(){
-        console.log("this.state.activeKey"+this.state.activeKey);
         if(this.state.activeKey=="题目"){
           var subjectParams = sessionStorage.getItem("ident")+"#"+this.state.currentTeachScheduleId+"#"+1+"#"+this.state.currentOptType+"#"+this.state.currentKnowledgeName+"#"+this.state.subjectDataFilter+"#fromUpload";
           this.refs.subTable.initGetSubjectInfo(subjectParams);
@@ -150,7 +146,6 @@ const MainTabComponents = React.createClass({
                 <Menu.Item key="other">查看他人</Menu.Item>
             </Menu>
         );
-        //this.state.currentMenuChildrenCount
         if(this.state.currentOptType=="bySubjectId" && sessionStorage.getItem("lastClickMenuChildrenCount")==0 && sessionStorage.getItem("lastClickMenuId")!=null ){
             displayType='block';
             tabPanel=<TabPane tab={<span>课件<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link icon_filter" href="#"><Icon type="down-circle-o"/></a></Dropdown></span>} key="课件"><CourseWareComponents ref="courseWare" onPreview={ this.props.showpanle }/></TabPane>;
@@ -176,7 +171,6 @@ const MainTabComponents = React.createClass({
                 <Tabs
                     hideAdd
                     onChange={this.onChange}
-                    /*type="editable-card"     启用该属性，会使Tab上带有删除的图标*/
                     onEdit={this.onEdit}
                     ref = "mainTab"
                     activeKey={this.state.activeKey}

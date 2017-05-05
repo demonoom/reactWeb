@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Upload, Icon,Button,message, Modal,Progress } from 'antd';
+import { Upload, Icon,Button,message, Modal } from 'antd';
 import {isEmpty} from '../../utils/Const';
 var antUpload;
 var fileList=[];
@@ -19,7 +19,6 @@ const AntUploadComponentsForUpdate = React.createClass({
      * 图片答案组件加载
      */
     componentDidMount(){
-        console.log("antUpload.props.params:"+antUpload.props.params);
         var fileListParams = antUpload.props.fileList;
         if(isEmpty(fileListParams)==false && fileListParams.length!=0 && antUpload.state.fileList.length==0){
             fileList.splice(0);
@@ -100,9 +99,7 @@ const AntUploadComponentsForUpdate = React.createClass({
                 if (info.file.status !== 'uploading') {
                     //上传进度
                     var percent = info.file.percent;
-                    console.log("上传进度"+percent);
                     antUpload.setState({uploadPercent:percent,progressState:'block'});
-                    console.log(info.file, info.fileList);
                     if(info.file.status==="removed"){
                         antUpload.props.callBackParent(info.file,antUpload.props.params,"removed");
                     }
@@ -113,10 +110,8 @@ const AntUploadComponentsForUpdate = React.createClass({
                 } else if (info.file.status === 'error') {
                     message.error(`${info.file.name} 文件上传失败.`,5);
                 }
-                // antUpload.setState({"fileList":info.fileList});
             },
             onRemove(file){
-                console.log(file);
             },
         };
         return (
