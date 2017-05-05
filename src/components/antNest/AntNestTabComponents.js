@@ -1,8 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Tabs, Breadcrumb, Icon,Card,Button,Row,Col} from 'antd';
-import { Menu, Dropdown,message,Pagination,Tag , Modal,Popover,Input} from 'antd';
+import {message,Pagination,Modal,Input} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
-import TeacherAllCourseWare from '../TeacherInfos/TeacherAllCourseWare';
 import {getPageSize} from '../../utils/Const';
 import {getLocalTime} from '../../utils/Const';
 import {isEmpty} from '../../utils/Const';
@@ -13,10 +12,6 @@ import UploadImgComponents from './UploadImgComponents';
 import EmotionInputComponents from './EmotionInputComponents';
 import ConfirmModal from '../ConfirmModal';
 
-
-const TabPane = Tabs.TabPane;
-const confirm = Modal.confirm;
-
 var topicCardArray=[];
 var antNest;
 var topicObjArray=[];
@@ -25,39 +20,25 @@ const AntNestTabComponents = React.createClass({
     getInitialState() {
         antNest = this;
         return {
-            defaultActiveKey:'全部',
-            activeKey:'全部',
-            topicCardList:[],
-            totalCount:0,
-            parTakeTotalCount:0,
-            currentPage:1,
-            currentPartakePage:1,
-            optType:'getAllTopic',
-            currentTopicTitle:'',
-            currentTopicId:'',
-            discussModalVisible:false,
+            topicCardList:[],   //存放获取的话题Card对象
+            totalCount:0,       //分页时，返回的总数据量
+            currentPage:1,      //在查看全部页面时的当前页码
+            currentTeacherPage:1,       //在只看老师页面时的当前页码
+            //最终页面上显示的分页器上显示的页码值（该值由type来决定，type==0时取currentPage,否则取currentTeacherPage值）
+            currentShowPage:1,
+            optType:'getAllTopic',      //操作类型，用来区分用户的动作是查看话题列表页面，还是查看单个话题
+            currentTopicId:'',          //当前操作的话题id，评论时时都会用到
+            discussModalVisible:false,  //评论的Modal窗口状态控制
             topicImgUrl:[],     //说说/话题上传的图片路径,
-            topicModalType:'talk',
-            topicTitle:'',
+            topicModalType:'talk',  //控制话题和说说Modal的显示，用来存储用户的动作
+            topicTitle:'',      //话题的标题
             toUserId:-1, //评论指定人或直接评论,评论指定人时,值为真实id，否则为-1
-            replayToUserTopicId:'',
+            replayToUserTopicId:'',     //被回复的话题id
             partakeTopicId:'',       //话题参与时,当前要参与的话题id
-            confirmModalVisible:true,
-            topicCommentId:''
+            confirmModalVisible:true,   //删除操作的确认Modal状态控制
+            topicCommentId:'',  //话题评论时的目标id
+            type:0,     //操作类型（0：查看全部  1：只看老师）
         };
-    },
-    /**
-     * 话题tab切换响应函数
-     * @param activeKey
-     */
-    onChange(activeKey) {
-        this.setState({activeKey:activeKey});
-        var initPageNo = 1;
-        if(activeKey=="全部"){
-            antNest.getTopics(initPageNo,getAllTopic());
-        }else{
-            antNest.getTopics(initPageNo,getOnlyTeacherTopic());
-        }
     },
 
     componentDidMount(){
@@ -72,6 +53,13 @@ const AntNestTabComponents = React.createClass({
      * @param pageNo
      */
     getTopics(pageNo,type){
+        if(isEmpty(pageNo)){
+            if(type==0){
+                pageNo = antNest.state.currentPage;
+            }else{
+                pageNo = antNest.state.currentTeacherPage;
+            }
+        }
         topicCardArray.splice(0);
         topicObjArray.splice(0);
         var param = {
@@ -88,7 +76,7 @@ const AntNestTabComponents = React.createClass({
                     antNest.buildTopicCard(e,0);
                 });
                 var pager = ret.pager;
-                antNest.setState({"topicCardList":topicCardArray,"totalCount":pager.rsCount,"currentPage":pageNo});
+                antNest.setState({"topicCardList":topicCardArray,"totalCount":pager.rsCount,"currentShowPage":pageNo,type:type});
             },
             onError: function (error) {
                 message.error(error);
@@ -408,15 +396,17 @@ const AntNestTabComponents = React.createClass({
      * @param page
      */
     pageOnChange(page) {
-        if(antNest.state.activeKey=="全部"){
+        if(antNest.state.type==0){
+            antNest.setState({
+                currentPage: page,
+            });
             antNest.getTopics(page,getAllTopic());
         }else{
+            antNest.setState({
+                currentTeacherPage: page,
+            });
             antNest.getTopics(page,getOnlyTeacherTopic());
         }
-        // antNest.getTopics(page);
-        antNest.setState({
-            currentPage: page,
-        });
     },
     /**
      * 根据话题的id，获取对应的话题详细信息
@@ -443,7 +433,7 @@ const AntNestTabComponents = React.createClass({
                 var topicObj = antNest.findTopicObjFromArrayById(topicId);
                 topicCardArray.splice(0);
                 antNest.buildTopicCard(topicObj,1,topicReplayInfoArray,parTakeCountInfo);
-                antNest.setState({"optType":'getTopicById',"topicCardList":topicCardArray,"currentTopicTitle":topicObj.title,"parTakeTotalCount":pager.rsCount,"currentTopicId":topicId});
+                antNest.setState({"optType":'getTopicById',"topicCardList":topicCardArray,"totalCount":pager.rsCount,"currentTopicId":topicId});
             },
             onError: function (error) {
                 message.error(error);
@@ -469,8 +459,12 @@ const AntNestTabComponents = React.createClass({
      * 从单个话题的页面，返回到话题列表上
      */
     returnTopicList(){
-        antNest.getTopics(1,0);
-        antNest.setState({"optType":"getAllTopic",activeKey:'全部'});
+        if(antNest.state.type==0){
+            antNest.getTopics(antNest.state.currentPage, getAllTopic());
+        }else{
+            antNest.getTopics(antNest.state.currentTeacherPage, getOnlyTeacherTopic());
+        }
+        antNest.setState({"optType":"getAllTopic",type:getAllTopic()});
     },
     /**
      * 获取话题的参与者信息
@@ -504,18 +498,6 @@ const AntNestTabComponents = React.createClass({
             onError: function (error) {
                 message.error(error);
             }
-        });
-    },
-
-    /**
-     * 话题列表分页功能响应函数
-     * @param page
-     */
-    parTakePageOnChange(page) {
-        antNest.getTopics(page);
-        antNest.getTopicPartakeById(antNest.state.currentTopicId,page);
-        antNest.setState({
-            currentPartakePage: page,
         });
     },
 
@@ -555,10 +537,10 @@ const AntNestTabComponents = React.createClass({
                     antNest.reGetTopicInfo(1,getAllTopic());
                     antNest.getTopicPartakeById(parentTopicId,1);
                 }else {
-                    if (antNest.state.activeKey == "全部") {
+                    if(antNest.state.type==0){
                         antNest.getTopics(antNest.state.currentPage, getAllTopic());
-                    } else {
-                        antNest.getTopics(antNest.state.currentPage, getOnlyTeacherTopic());
+                    }else{
+                        antNest.getTopics(antNest.state.currentTeacherPage, getOnlyTeacherTopic());
                     }
                 }
             },
@@ -604,10 +586,10 @@ const AntNestTabComponents = React.createClass({
                     antNest.reGetTopicInfo(1,getAllTopic());
                     antNest.getTopicPartakeById(parentTopicId,1);
                 }else{
-                    if(antNest.state.activeKey=="全部"){
+                    if(antNest.state.type==0){
                         antNest.getTopics(antNest.state.currentPage,getAllTopic());
                     }else{
-                        antNest.getTopics(antNest.state.currentPage,getOnlyTeacherTopic());
+                        antNest.getTopics(antNest.state.currentTeacherPage,getOnlyTeacherTopic());
                     }
                 }
             },
@@ -644,6 +626,10 @@ const AntNestTabComponents = React.createClass({
         });
     },
 
+    /**
+     * 显示删除话题的确认Modal
+     * @param e
+     */
     showDeleteTopicModal(e){
         var target = e.target;
         if(navigator.userAgent.indexOf("Chrome") > -1){
@@ -655,6 +641,7 @@ const AntNestTabComponents = React.createClass({
         antNest.refs.confirmModal.changeConfirmModalVisible(true);
         antNest.setState({"currentTopicId":topicId});
     },
+
     /**
      * 关闭删除操作的confirm窗口
      */
@@ -670,6 +657,10 @@ const AntNestTabComponents = React.createClass({
         antNest.deleteTopicById(antNest.state.currentTopicId);
     },
 
+    /**
+     * 根据给定的话题id，删除指定的话题
+     * @param topicId
+     */
     deleteTopicById(topicId){
         var param = {
             "method": 'deleteTopic',
@@ -690,10 +681,10 @@ const AntNestTabComponents = React.createClass({
                     antNest.reGetTopicInfo(antNest.state.currentPage,getAllTopic());
                     antNest.getTopicPartakeById(antNest.state.currentTopicId,antNest.state.currentPage);
                 }else {
-                    if (antNest.state.activeKey == "全部") {
+                    if (antNest.state.type==0) {
                         antNest.getTopics(antNest.state.currentPage, getAllTopic());
                     } else {
-                        antNest.getTopics(antNest.state.currentPage, getOnlyTeacherTopic());
+                        antNest.getTopics(antNest.state.currentTeacherPage, getOnlyTeacherTopic());
                     }
                 }
             },
@@ -702,6 +693,7 @@ const AntNestTabComponents = React.createClass({
             }
         });
     },
+
     /**
      * 显示删除评论的confirm
      */
@@ -754,10 +746,10 @@ const AntNestTabComponents = React.createClass({
                     antNest.reGetTopicInfo(1,getAllTopic());
                     antNest.getTopicPartakeById(antNest.state.currentTopicId,1);
                 }else{
-                    if(antNest.state.activeKey=="全部"){
+                    if(antNest.state.type==0){
                         antNest.getTopics(antNest.state.currentPage,getAllTopic());
                     }else{
-                        antNest.getTopics(antNest.state.currentPage,getOnlyTeacherTopic());
+                        antNest.getTopics(antNest.state.currentTeacherPage,getOnlyTeacherTopic());
                     }
                 }
             },
@@ -766,7 +758,10 @@ const AntNestTabComponents = React.createClass({
             }
         });
     },
-
+    /**
+     * 显示是否置顶话题的确认Modal
+     * @param e
+     */
     showSetTopicTopModal(e){
         var target = e.target;
         if(navigator.userAgent.indexOf("Chrome") > -1){
@@ -779,10 +774,16 @@ const AntNestTabComponents = React.createClass({
         antNest.refs.setTopicTopModal.changeConfirmModalVisible(true);
     },
 
+    /**
+     * 关闭是否置顶话题的确认Modal
+     */
     closeSetTopicTopModal(){
         antNest.refs.setTopicTopModal.changeConfirmModalVisible(false);
     },
 
+    /**
+     * 将指定的话题参与内容置顶
+     */
     setTopicToTop(){
         antNest.setTopicToTopById(antNest.state.currentTopicId);
         antNest.closeSetTopicTopModal();
@@ -813,10 +814,10 @@ const AntNestTabComponents = React.createClass({
                     antNest.reGetTopicInfo(1,getAllTopic());
                     antNest.getTopicPartakeById(setTopicId,1);
                 }else {
-                    if (antNest.state.activeKey == "全部") {
+                    if (antNest.state.type==0) {
                         antNest.getTopics(antNest.state.currentPage, getAllTopic());
                     } else {
-                        antNest.getTopics(antNest.state.currentPage, getOnlyTeacherTopic());
+                        antNest.getTopics(antNest.state.currentTeacherPage, getOnlyTeacherTopic());
                     }
                 }
             },
@@ -894,10 +895,10 @@ const AntNestTabComponents = React.createClass({
                     antNest.reGetTopicInfo(1,getAllTopic());
                     antNest.getTopicPartakeById(antNest.state.currentTopicId,1);
                 }else {
-                    if (antNest.state.activeKey == "全部") {
+                    if (antNest.state.type==0) {
                         antNest.getTopics(antNest.state.currentPage, getAllTopic());
                     } else {
-                        antNest.getTopics(antNest.state.currentPage, getOnlyTeacherTopic());
+                        antNest.getTopics(antNest.state.currentTeacherPage, getOnlyTeacherTopic());
                     }
                 }
                 antNest.initMyEmotionInput();
@@ -948,6 +949,10 @@ const AntNestTabComponents = React.createClass({
         return uuid;
     },
 
+    /**
+     * 获取输入的emoji表情
+     * @returns {string}
+     */
     getEmotionInput(){
         var emotionInput="";
         var emotionArray = $(".emoji-wysiwyg-editor");
@@ -1041,10 +1046,10 @@ const AntNestTabComponents = React.createClass({
                     message.error("说说发表失败");
                 }
                 $("#emotionInput").val("");
-                if (antNest.state.activeKey == "全部") {
+                if (antNest.state.type==0) {
                     antNest.getTopics(antNest.state.currentPage, getAllTopic());
                 } else {
-                    antNest.getTopics(antNest.state.currentPage, getOnlyTeacherTopic());
+                    antNest.getTopics(antNest.state.currentTeacherPage, getOnlyTeacherTopic());
                 }
                 antNest.initMyEmotionInput();
                 antNest.setState({addTopicModalVisible: false});
@@ -1199,10 +1204,10 @@ const AntNestTabComponents = React.createClass({
                     antNest.reGetTopicInfo(1,getAllTopic());
                     antNest.getTopicPartakeById(antNest.state.currentTopicId,1);
                 }else {
-                    if (antNest.state.activeKey == "全部") {
+                    if (antNest.state.type == 0) {
                         antNest.getTopics(antNest.state.currentPage, getAllTopic());
                     } else {
-                        antNest.getTopics(antNest.state.currentPage, getOnlyTeacherTopic());
+                        antNest.getTopics(antNest.state.currentTeacherPage, getOnlyTeacherTopic());
                     }
                 }
                 antNest.initMyEmotionInput();
@@ -1221,51 +1226,27 @@ const AntNestTabComponents = React.createClass({
         antNest.setState({"partakeModalVisible":false});
     },
 
+    /**
+     * 渲染页面
+     * @returns {XML}
+     */
     render() {
         var breadMenuTip="蚁巢";
-        var toolbarExtra = <div className="ant-tabs-right"><Button value="talk" onClick={antNest.showaddTopicModal} className="antnest_talk">发表说说</Button><Button value="topic" onClick={antNest.showaddTopicModal}>发表话题</Button></div>;
-        var returnToolBar = <div className="ant-tabs-right"><Button onClick={antNest.returnTopicList}>返回</Button></div>
-        var tabComponent;
+        var optionButton;
         var topicList;
         if(antNest.state.optType=="getTopicById"){
-            //获取单个话题的数据
-            tabComponent = <Tabs
-                hideAdd
-                tabBarExtraContent={returnToolBar}
-                activeKey={antNest.state.currentTopicTitle}
-                defaultActiveKey={antNest.state.currentTopicTitle}
-                transitionName=""  //禁用Tabs的动画效果
-            >
-                <TabPane tab={antNest.state.currentTopicTitle} key={antNest.state.currentTopicTitle}>
-                    <div className="antnest_cont">
-                        {antNest.state.topicCardList}
-                    </div>
-                    <Pagination key="teacher" total={antNest.state.parTakeTotalCount} pageSize={getPageSize()} current={antNest.state.currentPartakePage}
-                                onChange={antNest.parTakePageOnChange}/>
-                </TabPane>
-            </Tabs>;
+            optionButton = <div className="ant-tabs-right"><Button onClick={antNest.returnTopicList}>返回</Button></div>;
         }else{
-            /*tabComponent = <Tabs
-                hideAdd
-                onChange={this.onChange}
-                ref = "mainTab"
-                activeKey={this.state.activeKey}
-                defaultActiveKey={this.state.defaultActiveKey}
-                tabBarExtraContent={toolbarExtra}
-                transitionName=""  //禁用Tabs的动画效果
-            >
-
-            </Tabs>;*/
-            topicList = <div style={{overflow:'scroll'}}>
-                <div className="topics_rela">
-                    <div className="antnest_cont topics_calc" style={{overflow:'scroll'}}>
-                        {antNest.state.topicCardList}
-                    </div>
-                    <Pagination key="all" total={antNest.state.totalCount} pageSize={getPageSize()} current={antNest.state.currentPage}
-                                onChange={antNest.pageOnChange}/>
-                </div>
-            </div>
+            optionButton = <div className="ant-tabs-right"><Button value="talk" onClick={antNest.showaddTopicModal} className="antnest_talk">发表说说</Button><Button value="topic" onClick={antNest.showaddTopicModal}>发表话题</Button></div>;
         }
+        topicList =
+            <div className="topics_rela">
+                <div className="antnest_cont topics_calc" style={{overflow:'scroll'}}>
+                    {antNest.state.topicCardList}
+                </div>
+                <Pagination key="all" total={antNest.state.totalCount} pageSize={getPageSize()} current={antNest.state.currentShowPage}
+                            onChange={antNest.pageOnChange}/>
+            </div>
         var topicTitle;
         if(antNest.state.topicModalType=="topic"){
             topicTitle = <Row className="yinyong_topic">
@@ -1345,11 +1326,14 @@ const AntNestTabComponents = React.createClass({
                               onConfirmModalCancel={antNest.closeSetTopicTopModal}
                               onConfirmModalOK={antNest.setTopicToTop}
                 ></ConfirmModal>
-                <Breadcrumb separator=">">
-                    <Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
-                    <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
-                    <Breadcrumb.Item href="#/MainLayout">{breadMenuTip}</Breadcrumb.Item>
-                </Breadcrumb>
+                <div style={{display:'inline'}}>
+                    <Breadcrumb separator=">">
+                        <Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
+                        <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
+                        <Breadcrumb.Item href="#/MainLayout">{breadMenuTip}</Breadcrumb.Item>
+                    </Breadcrumb>
+                    {optionButton}
+                </div>
                 {topicList}
             </div>
         );

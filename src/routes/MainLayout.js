@@ -188,10 +188,11 @@ const MainLayout = React.createClass({
 
     getAntNest(optType){
         console.log(optType+"===");
+        var pageNo;
         if("getAllTopic"==optType){
-            mainLayout.refs.antNestTabComponents.getTopics(1,0);
+            mainLayout.refs.antNestTabComponents.getTopics(pageNo,0);
         }else{
-            mainLayout.refs.antNestTabComponents.getTopics(1,1);
+            mainLayout.refs.antNestTabComponents.getTopics(pageNo,1);
         }
     },
 

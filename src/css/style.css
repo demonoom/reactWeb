@@ -2169,7 +2169,8 @@ a.topics:hover{
 	max-height:calc(100% - 50px);
 }
 .topics_rela{
-	position:relative
+	position:relative;
+	height:calc(100% - 20px);
 }
 .topics_ral{
 	border-radius:6px;
