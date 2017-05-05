@@ -20,6 +20,10 @@ import StudyEvaluateMenu from '../components/StudyEvaluateMenu';
 import StudyEvaluateTabComponents from '../components/StudyEvaluateTabComponents';
 import AntNestTabComponents from '../components/antNest/AntNestTabComponents';
 import AntGroupTabComponents from '../components/antGroup/AntGroupTabComponents';
+import MessageMenu from '../components/layOut/MessageMenu';
+import AntGroupMenu from '../components/layOut/AntGroupMenu';
+import PersonCenterMenu from '../components/layOut/PersonCenterMenu';
+import AntNestMenu from '../components/layOut/AntNestMenu';
 import {isEmpty} from '../utils/Const';
 import {LocaleProvider} from 'antd';
 import enUS from 'antd/lib/locale-provider/en_US';
@@ -41,7 +45,7 @@ const MainLayout = React.createClass({
         return {
             collapse: true,
             activeMiddleMenu: 'sub1',
-            currentKey: 'teachTimes',
+            currentKey: 'message',
             openKeysStr: '',
             locale: 'zh-cn',
             resouceType: '',
@@ -60,20 +64,12 @@ const MainLayout = React.createClass({
     toolbarClick: function (e) {
         toolbarKey = e.key;
         this.setState({currentKey: e.key, resouceType: ''});
-        if (toolbarKey == "antNest") {
-            //蚁巢
-            mainLayout.setState({resouceType: "visitAntNest"});
-        } else {
-            if (e.key != "KnowledgeResources") {
-                var breadcrumbArray = [{hrefLink: '#/MainLayout', hrefText: "首页"}];
-                if (mainLayout.refs.mainTabComponents != null && typeof(mainLayout.refs.mainTabComponents) != "undefined") {
-                    mainLayout.refs.mainTabComponents.buildBreadcrumb(breadcrumbArray, 0);
-                }
+        if (e.key != "KnowledgeResources") {
+            var breadcrumbArray = [{hrefLink: '#/MainLayout', hrefText: "首页"}];
+            if (mainLayout.refs.mainTabComponents != null && typeof(mainLayout.refs.mainTabComponents) != "undefined") {
+                mainLayout.refs.mainTabComponents.buildBreadcrumb(breadcrumbArray, 0);
             }
         }
-        /*if(mainLayout.refs.mainTabComponents!=null && typeof(mainLayout.refs.mainTabComponents)!="undefined" ) {
-         mainLayout.refs.mainTabComponents.setCurrentOptType(e.key);
-         }*/
     },
     //获取备课计划下的课件资源
     getTeachPlans: function (optContent, breadCrumbArray) {
@@ -174,10 +170,11 @@ const MainLayout = React.createClass({
     },
 
     getTeacherResource(resouceType){
-        if (resouceType == "visitAntGroup" && isEmpty(mainLayout.refs.antGroupTabComponents) == false) {
+        /*if (resouceType == "visitAntGroup" && isEmpty(mainLayout.refs.antGroupTabComponents) == false) {
             mainLayout.refs.antGroupTabComponents.getAntGroup();
         }
-        mainLayout.setState({resouceType: resouceType});
+        mainLayout.setState({resouceType: resouceType});*/
+        mainLayout.setState({currentKey:"personCenter"});
     },
 
 
@@ -189,32 +186,44 @@ const MainLayout = React.createClass({
         // this.refs.laifr.closepanle(true);
     },
 
+    getAntNest(optType){
+        console.log(optType+"===");
+        if("getAllTopic"==optType){
+            mainLayout.refs.antNestTabComponents.getTopics(1,0);
+        }else{
+            mainLayout.refs.antNestTabComponents.getTopics(1,1);
+        }
+    },
+
     render() {
         const collapse = this.state.collapse;
         //根据如下判断结果，完成对页面中部位置的渲染，不同情况，渲染不同组件
         var middleComponent;
         var mainContent;
         var tabComponent = <MainTabComponents ref="mainTabComponents" showpanle={this.showpanle}/>;
-        if (this.state.currentKey == "teachTimes") {
+        //消息动态
+        if (this.state.currentKey == "message") {
+            middleComponent =<MessageMenu></MessageMenu>;
+                tabComponent = <MainTabComponents ref="mainTabComponents" showpanle={this.showpanle}/>;
+        } else if (this.state.currentKey == "antGroup") {
+            //蚁群
+            middleComponent = <AntGroupMenu ref="antGroupMenu"></AntGroupMenu>;
+            tabComponent = <MainTabComponents showpanle={this.showpanle} ref="mainTabComponents"
+                                              callBackKnowledgeMenuBuildBreadCrume={this.callBackKnowledgeMenuBuildBreadCrume}/>;
+        } else if (this.state.currentKey == "personCenter") {
+            //个人中心
+            middleComponent = <PersonCenterMenu ></PersonCenterMenu>
+            tabComponent = <HomeWorkTabComponents ref="homeWorkTabComponents"/>;
+        } else if (this.state.currentKey == "antNest") {
+            //蚁巢
+            middleComponent = <AntNestMenu callbackParent={this.getAntNest}></AntNestMenu>;
+            tabComponent = <AntNestTabComponents ref="antNestTabComponents"
+                                                 onPreview={ this.showpanle }/>;
+        } else if (this.state.currentKey == "teachSpace") {
+            //教学空间
             middleComponent =
                 <MiddleMenuComponents activeMenu={this.state.activeMiddleMenu} callbackParent={this.getTeachPlans}/>;
             tabComponent = <MainTabComponents ref="mainTabComponents" showpanle={this.showpanle}/>;
-        } else if (this.state.currentKey == "KnowledgeResources") {
-            middleComponent = <KnowledgeMenuComponents ref="knowledgeMenuComponents"
-                                                       callbackParent={this.getTeachPlans}></KnowledgeMenuComponents>;
-            tabComponent = <MainTabComponents showpanle={this.showpanle} ref="mainTabComponents"
-                                              callBackKnowledgeMenuBuildBreadCrume={this.callBackKnowledgeMenuBuildBreadCrume}/>;
-        } else if (this.state.currentKey == "homeWork") {
-            middleComponent = <HomeWorkMenu callbackParent={this.getTeacherHomeWork}></HomeWorkMenu>
-            tabComponent = <HomeWorkTabComponents ref="homeWorkTabComponents"/>;
-        } else if (this.state.currentKey == "studyEvaluate") {
-            //学习评价
-            middleComponent = <StudyEvaluateMenu callbackParent={this.getStudyEvaluate}></StudyEvaluateMenu>
-            tabComponent = <StudyEvaluateTabComponents ref="studyEvaluateTabComponents"/>;
-        } else if (this.state.currentKey == "exam") {
-            //考试
-            middleComponent = <ExamMenu callbackParent={this.getExamPagerList}></ExamMenu>
-            tabComponent = <ExamPagerTabComponents ref="examPagerTabComponents"/>;
         }
         //
         switch (mainLayout.state.resouceType) {
@@ -246,6 +255,7 @@ const MainLayout = React.createClass({
                     </Col>
                 </Row>;
                 break;
+<<<<<<< HEAD
             case 'visitAntNest':
                 mainContent = <Row>
                     <Col span={24}>
@@ -257,6 +267,8 @@ const MainLayout = React.createClass({
                     </Col>
                 </Row>;
                 break;
+=======
+>>>>>>> 4bc8b9b928d968fbad38fa957e12ff599685ddf6
             case 'visitAntGroup':
                 mainContent = <Row>
                     <Col span={24}>
@@ -362,39 +374,26 @@ const MainLayout = React.createClass({
                         </div>
                         <Menu mode="inline" theme="dark" defaultSelectedKeys={[this.state.currentKey]}
                               onClick={this.toolbarClick}>
-                            <Menu.Item key="teachTimes" className="padding_menu">
-                                <Icon type="bar-chart"/>
-                                <div className="tan">我的备课</div>
-                            </Menu.Item>
-                            <Menu.Item key="KnowledgeResources" className="padding_menu">
-                                <Icon type="book"/>
-                                <div className="tan">资源库</div>
-                            </Menu.Item>
-                            {/*            <Menu.Item key="teachReady" href="wwww.baidu.com" className="padding_menu">
-                             <Icon type="edit"/><span className="nav-text">备课</span>
-                             </Menu.Item>*/}
-                            <Menu.Item key="homeWork" className="padding_menu">
-                                <i className="iconfont">&#xe60b;</i>
-                                <div className="tan">家庭作业</div>
-                            </Menu.Item>
-                            <Menu.Item key="studyEvaluate" className="padding_menu">
-                                <Icon type="clock-circle-o"/>
-                                <div className="tan">学习评价</div>
+                            <Menu.Item key="message" className="padding_menu">
+                                <Icon type="message"/>
+                                <div className="tan">动态</div>
                             </Menu.Item>
                             <Menu.Item key="antNest" className="padding_menu">
                                 <i className="icon_yichao"></i>
                                 <div className="tan">蚁巢</div>
                             </Menu.Item>
-                            <Menu.Item key="exam" className="padding_menu">
-                                <i className="iconfont">&#xe602;</i>
-                                <div className="tan">考试</div>
+                            <Menu.Item key="teachSpace" className="padding_menu">
+                                <Icon type="cloud" />
+                                <div className="tan">教学空间</div>
                             </Menu.Item>
-                            {/*            <Menu.Item key="folder" className="padding_menu">
-                             <Icon type="clock-circle-o" /><span className="nav-text">统计+回顾</span>
-                             </Menu.Item>
-                             <Menu.Item key="resources" className="padding_menu">
-                             <Icon type="hdd" /><span className="nav-text">资源中心</span>
-                             </Menu.Item>*/}
+                            <Menu.Item key="antGroup" className="padding_menu">
+                                <Icon type="team"/>
+                                <div className="tan">蚁群</div>
+                            </Menu.Item>
+                            {/*<Menu.Item key="personCenter" className="padding_menu">
+                                <Icon type="user"/>
+                                <div className="tan">个人中心</div>
+                            </Menu.Item>*/}
                             <FloatButton ref="floatButton"/>
                         </Menu>
 

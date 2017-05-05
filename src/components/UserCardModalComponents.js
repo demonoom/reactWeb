@@ -46,6 +46,10 @@ const UserCardModalComponents = React.createClass({
         });
     },
 
+    //点击头像，进入个人中心模块
+    turnToPersoncenter(){
+        teacherInfo.props.callbackParent();
+    },
 
     handleCancel() {
         teacherInfo.setState({visible: false});
@@ -210,8 +214,8 @@ const UserCardModalComponents = React.createClass({
 
         return (
             <div className="layout_logo">
-                <img src={this.state.userHeadIcon} onClick={this.showModal}/>
-                <Modal
+                <img src={this.state.userHeadIcon} onClick={this.turnToPersoncenter}/>
+                {/*<Modal
                     visible={this.state.visible}
                     title={<div className="user_cont1">{this.getTitle()} </div>}
                     onCancel={teacherInfo.handleCancel}
@@ -265,7 +269,7 @@ const UserCardModalComponents = React.createClass({
                             我的直播课
                         </Button>
                     </p>
-                </Modal>
+                </Modal>*/}
             </div>
         );
     },
