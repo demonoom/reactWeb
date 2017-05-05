@@ -1,5 +1,5 @@
 html, body{
-	font-family:"冬青黑体简体中文","Tahoma","Hiragino Sans GB","Microsoft YaHei","微软雅黑","STHeiti","WenQuanYi Micro Hei",SimSun,sans-serif, "Apple Color Emoji" !important;
+	font-family:"Tahoma","Hiragino Sans GB","Microsoft YaHei","微软雅黑","STHeiti","WenQuanYi Micro Hei",SimSun,sans-serif, "Apple Color Emoji" !important;
 	background:url(../../src/components/images/bg_6.png);
 	background-size:cover;
 	margin:0;
@@ -10,6 +10,9 @@ html, body{
 }
 ul, li{
 	list-style:none
+}
+code, kbd, pre, samp{
+	font-family:"Tahoma","Hiragino Sans GB","Microsoft YaHei","微软雅黑","STHeiti","WenQuanYi Micro Hei",SimSun,sans-serif, "Apple Color Emoji" !important;
 }
 .logo_layout{
 	margin: 8px 0px 0px;
@@ -336,12 +339,12 @@ i, cite, em, var, address, dfn {
 .mini li{
 	margin:0 2px !important;
 }
-    .ant-collapse-content > .ant-collapse-content-box{
-      line-height:30px;
+ .ant-collapse-content > .ant-collapse-content-box{
+      line-height:35px;
 	  position:relative;
 	  display: inline-block;
-     width: 100%;
-    }
+      width: 100%;
+}
 .toobar{
 		display:inline-block;
 		padding: 0 0 0 12px
@@ -703,7 +706,7 @@ html, body, #root {
 .bnt2_tex{
 	width:calc(100% - 160px);
 	float:left;
-	font-size:14px;
+	font-size:16px;
 }
 .bnt2_tex span.col1{
 	color:#666;
@@ -813,7 +816,7 @@ html, body, #root {
 }*/
 .ant-tabs-nav .ant-tabs-tab{
 	padding:8px 36px;
-	font-size:16px;
+	font-size:18px;
 	width:144px;
 	text-align:center;
 }
@@ -956,7 +959,7 @@ html, body, #root {
 	padding-left:20px !important;
 }
 .ant-menu-vertical > .ant-menu-item, .ant-menu-inline > .ant-menu-item, .ant-menu-item-group-list > .ant-menu-item, .ant-menu-vertical > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-item-group-list > .ant-menu-submenu > .ant-menu-submenu-title{
-	font-size:14px
+	font-size:16px
 }
 .login_bg{	
 	height:100%;
@@ -3428,4 +3431,8 @@ color:#ffbf00
 	}
 .enhance{
 	height:calc(100% - 67px) !important
+}
+.te_download_a{
+	float:right;
+	line-height:1px
 }
