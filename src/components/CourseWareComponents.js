@@ -438,7 +438,7 @@ const CourseWareComponents = React.createClass({
                 ></ConfirmModal>
                 <div>
                     <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
-                    <Collapse defaultActiveKey={activeKey} activeKey={activeKey} ref="collapse" onChange={callback}>
+                    <Collapse defaultActiveKey={activeKey} activeKey={activeKey} ref="collapse"  >
                         {coursePanelChildren}
                     </Collapse>
                 </div>
