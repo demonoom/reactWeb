@@ -255,7 +255,6 @@ const MainLayout = React.createClass({
                     </Col>
                 </Row>;
                 break;
-<<<<<<< HEAD
             case 'visitAntNest':
                 mainContent = <Row>
                     <Col span={24}>
@@ -267,8 +266,6 @@ const MainLayout = React.createClass({
                     </Col>
                 </Row>;
                 break;
-=======
->>>>>>> 4bc8b9b928d968fbad38fa957e12ff599685ddf6
             case 'visitAntGroup':
                 mainContent = <Row>
                     <Col span={24}>
