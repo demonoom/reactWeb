@@ -113,8 +113,8 @@ const MainLayout = React.createClass({
             let param = this.autoeventparam.linkpart.shift();
             if (param[2]) {
                 let param = this.autoeventparam;
-                    let componentPart = this.refs[param[2]];
-                    componentPart[param[0]]( param[1],param);
+                let componentPart = this.refs[param[2]];
+                componentPart[param[0]](param[1], param);
             }
 
             this.autoeventparam = null;
@@ -128,26 +128,21 @@ const MainLayout = React.createClass({
     },
     // 切换组件页面
     switchSection(obj){
-       if(typeof obj == 'string'){
-           this.setState({resouceType:obj});
-           return;
-       }
-            this.proxyObj = obj;
-            this.setState({resouceType: obj.resouceType});
+        if (typeof obj == 'string') {
+            this.setState({resouceType: obj});
+            return;
+        }
+        this.proxyObj = obj;
+        this.setState({resouceType: obj.resouceType});
     },
 
     callEvent(param){
         if (!param || !param.linkpart) return;
         let paramref = param.linkpart.shift();
         this.autoeventparam = param;
-        this[paramref[0]](paramref[1],param);
-       // this.setState({resouceType: obj.resouceType});
-
+        this[paramref[0]](paramref[1], param);
 
     },
-
-
-
 
 
     //获取老师的已布置作业列表
@@ -170,11 +165,7 @@ const MainLayout = React.createClass({
     },
 
     getTeacherResource(resouceType){
-        /*if (resouceType == "visitAntGroup" && isEmpty(mainLayout.refs.antGroupTabComponents) == false) {
-            mainLayout.refs.antGroupTabComponents.getAntGroup();
-        }
-        mainLayout.setState({resouceType: resouceType});*/
-        mainLayout.setState({currentKey:"personCenter"});
+        mainLayout.setState({currentKey: "personCenter"});
     },
 
 
@@ -182,16 +173,12 @@ const MainLayout = React.createClass({
         LP.Start(obj);
     },
 
-    foceClosePanle(){
-        // this.refs.laifr.closepanle(true);
-    },
 
     getAntNest(optType){
-        console.log(optType+"===");
-        if("getAllTopic"==optType){
-            mainLayout.refs.antNestTabComponents.getTopics(1,0);
-        }else{
-            mainLayout.refs.antNestTabComponents.getTopics(1,1);
+        if ("getAllTopic" == optType) {
+            mainLayout.refs.antNestTabComponents.getTopics(1, 0);
+        } else {
+            mainLayout.refs.antNestTabComponents.getTopics(1, 1);
         }
     },
 
@@ -201,30 +188,44 @@ const MainLayout = React.createClass({
         var middleComponent;
         var mainContent;
         var tabComponent = <MainTabComponents ref="mainTabComponents" showpanle={this.showpanle}/>;
-        //消息动态
-        if (this.state.currentKey == "message") {
-            middleComponent =<MessageMenu></MessageMenu>;
+
+        switch (this.state.currentKey) {
+
+            case 'message':
+                //消息动态
+                middleComponent = <MessageMenu></MessageMenu>;
                 tabComponent = <MainTabComponents ref="mainTabComponents" showpanle={this.showpanle}/>;
-        } else if (this.state.currentKey == "antGroup") {
-            //蚁群
-            middleComponent = <AntGroupMenu ref="antGroupMenu"></AntGroupMenu>;
-            tabComponent = <MainTabComponents showpanle={this.showpanle} ref="mainTabComponents"
-                                              callBackKnowledgeMenuBuildBreadCrume={this.callBackKnowledgeMenuBuildBreadCrume}/>;
-        } else if (this.state.currentKey == "personCenter") {
-            //个人中心
-            middleComponent = <PersonCenterMenu ></PersonCenterMenu>
-            tabComponent = <HomeWorkTabComponents ref="homeWorkTabComponents"/>;
-        } else if (this.state.currentKey == "antNest") {
-            //蚁巢
-            middleComponent = <AntNestMenu callbackParent={this.getAntNest}></AntNestMenu>;
-            tabComponent = <AntNestTabComponents ref="antNestTabComponents"
-                                                 onPreview={ this.showpanle }/>;
-        } else if (this.state.currentKey == "teachSpace") {
-            //教学空间
-            middleComponent =
-                <MiddleMenuComponents activeMenu={this.state.activeMiddleMenu} callbackParent={this.getTeachPlans}/>;
-            tabComponent = <MainTabComponents ref="mainTabComponents" showpanle={this.showpanle}/>;
+                break;
+            case 'antGroup':
+                //蚁群
+                middleComponent = <AntGroupMenu ref="antGroupMenu"></AntGroupMenu>;
+                tabComponent = <MainTabComponents showpanle={this.showpanle} ref="mainTabComponents"
+                                                  callBackKnowledgeMenuBuildBreadCrume={this.callBackKnowledgeMenuBuildBreadCrume}/>;
+                break;
+            case 'personCenter':
+                //个人中心
+                middleComponent = <PersonCenterMenu ></PersonCenterMenu>
+                tabComponent = <HomeWorkTabComponents ref="homeWorkTabComponents"/>;
+
+                break;
+            case 'antNest':
+                //蚁巢
+                middleComponent = <AntNestMenu callbackParent={this.getAntNest}></AntNestMenu>;
+                tabComponent = <AntNestTabComponents ref="antNestTabComponents" onPreview={ this.showpanle }/>;
+
+                break;
+            case 'teachSpace':
+                //教学空间
+                middleComponent =
+                    <MiddleMenuComponents activeMenu={this.state.activeMiddleMenu}
+                                          callbackParent={this.getTeachPlans}/>;
+                tabComponent = <MainTabComponents ref="mainTabComponents" showpanle={this.showpanle}/>;
+
+                break;
+
         }
+        //
+        //
         //
         switch (mainLayout.state.resouceType) {
             case '':
@@ -260,7 +261,9 @@ const MainLayout = React.createClass({
                     <Col span={24}>
                         <div className="ant-layout-container">
                             <div className="ant-layout-content">
-                                <AntNestTabComponents ref="antNestTabComponents" resouceType={mainLayout.state.resouceType}  onPreview={ this.showpanle }/>
+                                <AntNestTabComponents ref="antNestTabComponents"
+                                                      resouceType={mainLayout.state.resouceType}
+                                                      onPreview={ this.showpanle }/>
                             </div>
                         </div>
                     </Col>
@@ -271,7 +274,9 @@ const MainLayout = React.createClass({
                     <Col span={24}>
                         <div className="ant-layout-container">
                             <div className="ant-layout-content">
-                                <AntGroupTabComponents ref="antGroupTabComponents"  onPreview={ this.showpanle.bind(this) } resouceType={mainLayout.state.resouceType}  />
+                                <AntGroupTabComponents ref="antGroupTabComponents"
+                                                       onPreview={ this.showpanle.bind(this) }
+                                                       resouceType={mainLayout.state.resouceType}/>
                             </div>
                         </div>
                     </Col>
@@ -359,15 +364,17 @@ const MainLayout = React.createClass({
                 break;
 
         }
-
-
+        //
+        //
+        //
         return (
             <LocaleProvider locale={this.state.locale}>
                 <div className={collapse ? "ant-layout-aside ant-layout-aside-collapse" : "ant-layout-aside"}>
 
                     <aside className="ant-layout-sider">
                         <div className="ant-layout-logo">
-                            <UserCardModalComponents callbackParent={this.getTeacherResource} callEvent={this.switchSection}/>
+                            <UserCardModalComponents callbackParent={this.getTeacherResource}
+                                                     callEvent={this.switchSection}/>
                         </div>
                         <Menu mode="inline" theme="dark" defaultSelectedKeys={[this.state.currentKey]}
                               onClick={this.toolbarClick}>
@@ -380,7 +387,7 @@ const MainLayout = React.createClass({
                                 <div className="tan">蚁巢</div>
                             </Menu.Item>
                             <Menu.Item key="teachSpace" className="padding_menu">
-                                <Icon type="cloud" />
+                                <Icon type="cloud"/>
                                 <div className="tan">教学空间</div>
                             </Menu.Item>
                             <Menu.Item key="antGroup" className="padding_menu">
@@ -388,9 +395,9 @@ const MainLayout = React.createClass({
                                 <div className="tan">蚁群</div>
                             </Menu.Item>
                             {/*<Menu.Item key="personCenter" className="padding_menu">
-                                <Icon type="user"/>
-                                <div className="tan">个人中心</div>
-                            </Menu.Item>*/}
+                             <Icon type="user"/>
+                             <div className="tan">个人中心</div>
+                             </Menu.Item>*/}
                             <FloatButton ref="floatButton"/>
                         </Menu>
 
@@ -414,7 +421,6 @@ const MainLayout = React.createClass({
                     </div>
 
                     <div className="panleArea"></div>
-
 
 
                 </div>
