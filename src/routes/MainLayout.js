@@ -17,7 +17,6 @@ import ExamPagerTabComponents from '../components/exam/ExamPagerTabComponents';
 import TeacherResource from '../components/TeacherInfos/TeacherResource';
 import moment from 'moment';
 import StudyEvaluateMenu from '../components/StudyEvaluateMenu';
-import Asidepanel from '../components/Asidepanel';
 import StudyEvaluateTabComponents from '../components/StudyEvaluateTabComponents';
 import AntNestTabComponents from '../components/antNest/AntNestTabComponents';
 import AntGroupTabComponents from '../components/antGroup/AntGroupTabComponents';
@@ -404,7 +403,7 @@ const MainLayout = React.createClass({
                     </div>
 
                     <div className="panleArea"></div>
-                    <Asidepanel param={this.state.ifr} ref="laifr"/>
+
 
 
                 </div>

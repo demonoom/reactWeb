@@ -161,7 +161,6 @@ const AntNestTabComponents = React.createClass({
                 var answerUserInfo = <li className="topics_comment">
                     {replayUserTitle}
                     <span>{e.content}</span>
-                    {/*<span><article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: e.content}}></article></span>*/}
                     <span className="topics_reply">
                         {delBtn}
 						<span className="topics_r-line"></span>
@@ -188,10 +187,6 @@ const AntNestTabComponents = React.createClass({
             var attachMentType = e.type;
             if(attachMentType==1){
                 //图片附件
-                /*attachMents = <span className="topics_zan"><img src={e.address}/></span>;*/
-                /*attachMents = <span className="topics_zan">
-                    <Popover placement="bottom"  content={<img src={e.address} arrowPointAtCenter  className="topics-popover" />}><img src={e.address} /></Popover>
-                </span>;*/
                 attachMents = <span className="topics_zan">
                     <img className="topics_zanImg" src={e.address}  onClick={showLargeImg}/>
                 </span>;
@@ -388,7 +383,6 @@ const AntNestTabComponents = React.createClass({
                          <span>{topicTitle}</span>
                  </li>
                  <li className="topics_cont">
-                     {/*<p>{topicObj.content}</p>*/}
                      {topicObj.content}
                  </li>
                  <li className="imgLi">
@@ -864,21 +858,11 @@ const AntNestTabComponents = React.createClass({
     discussModalHandleOk(){
         //获取富文本框中包含表情的评论内容
         var inputContent;
-        /*var emotionInput = antNest.getEmotionInput();
-        if(isEmpty($("#emotionInput").val())==false){
-            inputContent = $("#emotionInput").val();
-        }else{
-            inputContent = emotionInput;
-        }
-        if(isEmpty(inputContent)){
-            inputContent = $("#emotionInput").val();
-        }*/
         inputContent = antNest.getEmotionInputById();
         if(isEmpty(inputContent)){
             message.error("评论内容不允许为空,请重新输入",5);
             return;
         }
-        console.log("inputContent:"+inputContent);
         var toUserId = -1;
         if(isEmpty(antNest.state.toUserId)==false){
             toUserId = antNest.state.toUserId;
@@ -1010,7 +994,6 @@ const AntNestTabComponents = React.createClass({
         }else{
             inputContent = emotionInput;
         }
-        console.log("inputContent:"+inputContent);
         if(antNest.state.topicModalType=="topic"){
             if(isEmpty(antNest.state.topicTitle)){
                 message.error("话题的标题不允许为空，请重新输入。",5);
@@ -1150,7 +1133,6 @@ const AntNestTabComponents = React.createClass({
             target = e.target;
         }
         var topicId = target.value;
-        console.log("topicId:"+topicId);
     },
 
     /**
@@ -1165,7 +1147,6 @@ const AntNestTabComponents = React.createClass({
             target = e.target;
         }
         var topicId = target.value;
-        console.log("topicId:"+topicId);
         antNest.setState({"partakeModalVisible":true,"partakeTopicId":topicId});
     },
 
@@ -1181,7 +1162,6 @@ const AntNestTabComponents = React.createClass({
         }else{
             inputContent = emotionInput;
         }
-        console.log("inputContent:"+inputContent);
         var createTime = (new Date()).valueOf();
         var uuid = antNest.createUUID();
         var topicImageArray = antNest.state.topicImgUrl;

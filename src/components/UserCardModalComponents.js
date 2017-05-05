@@ -45,6 +45,7 @@ const UserCardModalComponents = React.createClass({
             visible: true,
         });
     },
+
     //点击头像，进入个人中心模块
     turnToPersoncenter(){
         teacherInfo.props.callbackParent();
@@ -68,7 +69,6 @@ const UserCardModalComponents = React.createClass({
             onResponse: function (ret) {
                 var response = ret.response;
                 if (ret.msg == "调用成功" && response != null) {
-                    // alert("老师信息获取成功");
                     var userName = response.user.userName;//用户名
                     var userHeadIcon = response.user.avatar;//头像
                     var courseName = response.course.colCourse;//科目
@@ -83,12 +83,10 @@ const UserCardModalComponents = React.createClass({
                         schoolAddress: schoolAddress
                     });
                 } else {
-                    // alert("老师信息获取失败");
                     message.error("老师信息获取失败");
                 }
             },
             onError: function (error) {
-                // alert(error);
                 message.error(error);
             }
         });
@@ -107,7 +105,6 @@ const UserCardModalComponents = React.createClass({
      * 蚁巢入口
      */
     searchAntNest(){
-        // alert("蚁巢入口");
         teacherInfo.props.callbackParent("visitAntNest");
         teacherInfo.setState({visible: false});
     },
@@ -129,7 +126,6 @@ const UserCardModalComponents = React.createClass({
         this.setState({visible: false});
     },
     MyFollows(){
-        // this.props.callEvent({resouceType: 'myFollows', ref: 'myFollowsA', methond:'showMyFollowsListUI', param: teacherInfo.user });
         this.props.callbackParent("myFollows");
         this.setState({visible: false});
     },
@@ -140,7 +136,6 @@ const UserCardModalComponents = React.createClass({
             methond: 'callBackGetLiveInfo',
             param: {user: teacherInfo.user, visiable: false}
         });
-        //  this.props.callbackParent("myMTV");
         this.setState({visible: false});
     },
 
@@ -191,7 +186,6 @@ const UserCardModalComponents = React.createClass({
                         break;
                     case "done":
                         teacherInfo.changeFace(info.file);
-                        //  message.success(`${info.file.name} 文件上传成功`, 5);
                         break;
                     case "error":
                         message.error(`${info.file.name} 文件上传失败.`, 5);
@@ -222,45 +216,60 @@ const UserCardModalComponents = React.createClass({
             <div className="layout_logo">
                 <img src={this.state.userHeadIcon} onClick={this.turnToPersoncenter}/>
                 {/*<Modal
-                 visible={this.state.visible}
-                 title={<div className="user_cont1">{this.getTitle()} </div>}
-                 onCancel={teacherInfo.handleCancel}
-                 className="model_wi"
-                 transitionName=""
-                 maskClosable={false} //设置不允许点击蒙层关闭
-                 footer={[
+                    visible={this.state.visible}
+                    title={<div className="user_cont1">{this.getTitle()} </div>}
+                    onCancel={teacherInfo.handleCancel}
+                    className="model_wi"
+                    transitionName=""
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    footer={[]}
+                >
+                    <p className="user_cont model_to"><span className="name">学校名称：</span><span
+                        className="name1">{teacherInfo.state.schoolName}</span></p>
+                    <p className="user_cont"><span className="name">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;区：</span><span
+                        className="name1">{teacherInfo.state.schoolAddress}</span></p>
+                    <p className="user_cont"><span className="name">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</span><span
+                        className="name1">{teacherInfo.state.userName}</span></p>
+                    <p className="user_cont"><span className="name">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：</span><span
+                        className="name1">{teacherInfo.state.courseName}</span></p>
+                    <p className="user_cont user_cont_cen">
+                        <Button type="primary" htmlType="submit"
+                                className="login-form-button class_right user_btn add_study add_study-f"
+                                onClick={teacherInfo.searchOwnerCourseWare}>
+                            我的资源
+                        </Button>
+                        <Button type="primary" htmlType="submit"
+                                className="login-form-button class_right user_btn topics_btn_le"
+                                onClick={teacherInfo.searchOwnerSubject}>
+                            我的题目
+                        </Button>
+                        <Button type="primary" htmlType="submit"
+                                className="login-form-button class_right user_btn topics_btn_le "
+                                onClick={teacherInfo.searchAntGroup}>
+                            蚁群
+                        </Button>
 
-                 ]}
-                 >
-                 <p className="user_cont model_to"><span className="name">学校名称：</span><span className="name1">{teacherInfo.state.schoolName}</span></p>
-                 <p className="user_cont"><span className="name">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;区：</span><span className="name1">{teacherInfo.state.schoolAddress}</span></p>
-                 <p className="user_cont"><span className="name">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</span><span className="name1">{teacherInfo.state.userName}</span></p>
-                 <p className="user_cont"><span className="name">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：</span><span className="name1">{teacherInfo.state.courseName}</span></p>
-                 <p className="user_cont user_cont_cen">
-                 <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn add_study add_study-f" onClick={teacherInfo.searchOwnerCourseWare}>
-                 我的资源
-                 </Button>
-                 <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn topics_btn_le" onClick={teacherInfo.searchOwnerSubject}>
-                 我的题目
-                 </Button>
-                 <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn topics_btn_le " onClick={teacherInfo.searchAntGroup}>
-                 蚁群
-                 </Button>
-
-                 <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn topics_btn_le " onClick={this.myFavrites}>
-                 收藏
-                 </Button>
-                 <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn ant-btn-g topics_btn_le " onClick={this.findStudentPwd}>
-                 找回学生密码
-                 </Button>
-                 <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn topics_btn_le " onClick={this.MyFollows}>
-                 我的关注
-                 </Button>
-                 <Button type="primary" htmlType="submit" className="login-form-button class_right user_btn topics_btn_le " onClick={this.myMTV}>
-                 我的直播课
-                 </Button>
-                 </p>
-                 </Modal>*/}
+                        <Button type="primary" htmlType="submit"
+                                className="login-form-button class_right user_btn topics_btn_le "
+                                onClick={this.myFavrites}>
+                            收藏
+                        </Button>
+                        <Button type="primary" htmlType="submit"
+                                className="login-form-button class_right user_btn ant-btn-g topics_btn_le "
+                                onClick={this.findStudentPwd}>
+                            找回学生密码
+                        </Button>
+                        <Button type="primary" htmlType="submit"
+                                className="login-form-button class_right user_btn topics_btn_le "
+                                onClick={this.MyFollows}>
+                            我的关注
+                        </Button>
+                        <Button type="primary" htmlType="submit"
+                                className="login-form-button class_right user_btn topics_btn_le " onClick={this.myMTV}>
+                            我的直播课
+                        </Button>
+                    </p>
+                </Modal>*/}
             </div>
         );
     },

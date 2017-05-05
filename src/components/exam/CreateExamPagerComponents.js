@@ -1,9 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Modal, message,Transfer } from 'antd';
-import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox,Table,Popover,Spin,Progress,Button } from 'antd';
-import { DatePicker } from 'antd';
-import { Card } from 'antd';
-import { Radio } from 'antd';
+import {  Input,  Cascader, Row, Col, Checkbox, Progress,Button } from 'antd';
+import { Card , Radio} from 'antd';
 import { doWebService } from '../../WebServiceHelper';
 import FileUploadComponents from './FileUploadComponents';
 import AntUploadComponents from './AntUploadComponents';
@@ -193,7 +191,6 @@ const CreateExamPagerComponents = React.createClass({
             questionTypesArray.push(questionTypes);
         }
         paperJson.questionTypes = questionTypesArray;
-        console.log(paperJson);
         cardChildArray.splice(0);
         createExamPager.createExamPager(paperJson);
     },
@@ -367,7 +364,6 @@ const CreateExamPagerComponents = React.createClass({
         }else{
             target = e.target;
         }
-        console.log('checked = ', target.value+","+target.key);
     },
 
     /**
@@ -1014,7 +1010,6 @@ const CreateExamPagerComponents = React.createClass({
     onprogress(ev){
         if(ev.lengthComputable){
             var precent=100 * ev.loaded/ev.total;
-            console.log(precent);
         }
     },
 
@@ -1042,12 +1037,10 @@ const CreateExamPagerComponents = React.createClass({
                     xhr: function(){        //这是关键  获取原生的xhr对象  做以前做的所有事情
                         var xhr = jQuery.ajaxSettings.xhr();
                         xhr.upload.onload = function (){
-                            // alert('finish downloading')
                         }
                         xhr.upload.onprogress = function (ev) {
                             if(ev.lengthComputable) {
                                 var percent = 100 * ev.loaded/ev.total;
-                                console.log(percent+"%",ev);
                             }
                         }
                         return xhr;
@@ -1075,7 +1068,6 @@ const CreateExamPagerComponents = React.createClass({
                                 //题目图片答案的图片来源
                                 var currentImgAnswerInfo = createExamPager.state.currentImgAnswerInfo;
                                 var currentImgAnswerInfoArray = currentImgAnswerInfo.split("#");
-                                // answerTitle+"#"+num+"#knowledgePoint#"+answerSubjectType+"#imageAnswer"
                                 var answerTitle=currentImgAnswerInfoArray[0];
                                 var num = currentImgAnswerInfoArray[1];
                                 var answerSubjectType = currentImgAnswerInfoArray[3];
@@ -1090,7 +1082,6 @@ const CreateExamPagerComponents = React.createClass({
                         }
                     },
                     error : function(responseStr) {
-                        console.log("error"+responseStr);
                         createExamPager.setState({ examPagerModalVisible: false,spinLoading:false });
                     }
                 });
@@ -1511,7 +1502,6 @@ const CreateExamPagerComponents = React.createClass({
                     <Row className="ant-form-item">
                         <Col span={4} className="right_look">图片解析：</Col>
                         <Col span={18}>
-                            {/*<AntUploadComponentsForUpdate className="add_study-b" id={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType}  fileList={imageAnswerFileArray} params={answerTitle+"#"+num+"#imageAnswer#"+answerSubjectType} callBackParent={createExamPager.getImgAnswerList}></AntUploadComponentsForUpdate>*/}
                             <AntUploadForAnalysisOfCreateComponents fileList={createExamPager.state.analysisUrl} callBackParent={createExamPager.getAnalysisiImgList}></AntUploadForAnalysisOfCreateComponents>
                         </Col>
                     </Row>

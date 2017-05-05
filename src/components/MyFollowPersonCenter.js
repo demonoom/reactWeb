@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Tabs, Breadcrumb, Icon,Card,Button,Row,Col,Table} from 'antd';
-import { Menu, Dropdown,message,Pagination,Tag , Modal,Popover,Input} from 'antd';
+import { Card,Button,Row,Col ,message,} from 'antd';
 import {doWebService} from '../WebServiceHelper';
 import {isEmpty} from '../utils/Const';
 
@@ -162,7 +161,6 @@ const MyFollowPersonCenter = React.createClass({
             target = e.target;
         }
         var urlType = target.value;
-        console.log(urlType);
         this.props.callBackTurnToPlatformRulePage(this.props.userInfo,urlType);
     },
 
@@ -248,13 +246,6 @@ const MyFollowPersonCenter = React.createClass({
         if(this.state.isExist){
             sendMessageButton=<Button icon="message" value={this.state.userInfo.user.colUid} onClick={this.sendMessage} className="antnest_talk  persono_btn_blue">发消息</Button>;
         }
-        /*
-         if(this.state.isFollow==false){
-         followButton = <Button icon="heart-o" onClick={this.followUser} className="persono_btn_gray">关注</Button>;
-         }else {
-         followButton = <Button icon="heart" onClick={this.unfollowUser} className="persono_btn_gray">取消关注</Button>;
-         }
-         */
 
         return (
             <div>

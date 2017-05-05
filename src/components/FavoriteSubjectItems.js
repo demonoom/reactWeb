@@ -1,6 +1,5 @@
 import React from 'react';
 import {Table, Button, Popover} from 'antd';
-import UseKnowledge from './UseKnowledgeComponents';
 import {getPageSize} from '../utils/Const';
 
 // 我的收藏类型

@@ -1,13 +1,7 @@
 import React, { PropTypes } from 'react';
-import { Tabs, Button,Radio } from 'antd';
-import { Modal} from 'antd';
-import { Slider } from 'antd';
-import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox } from 'antd';
-import { Upload,  message } from 'antd';
-const Option = Select.Option;
+import { message,  Select, Row, Button,  Checkbox } from 'antd';
 const CheckboxGroup = Checkbox.Group;
 
-//@ sourceURL = FileUploadComponents.js
 var submitFileOptions=[];
 
 const FileUploadComponents = React.createClass({
@@ -21,7 +15,6 @@ const FileUploadComponents = React.createClass({
     },
 
     initFileUploadPage(){
-        console.log("initCom");
         this.setState({submitFileCheckedList:[],submitFileOptions:[]});
         var fileField = document.getElementById("fileField");
         fileField.value="";
@@ -56,7 +49,6 @@ const FileUploadComponents = React.createClass({
             var fileName = files[0].name;
             var lastPointIndex = fileName.lastIndexOf(".");
             var fileMimeType = files[0].type;
-            console.log("fileMimeType:"+fileMimeType);
             //通过截取文件后缀名的形式，完成对上传文件类型的判断
             var fileType = fileName.substring(lastPointIndex+1);
             var fileSize = files[0].size;
@@ -123,10 +115,6 @@ const FileUploadComponents = React.createClass({
             //mp4格式
             isOk=true;
         }
-        /*else if(fileType == "mp3"){
-            //mp3格式
-            isOk=true;
-        }*/
         return isOk;
     },
     /**
@@ -137,13 +125,7 @@ const FileUploadComponents = React.createClass({
      */
     checkIsRightFileType(fileType){
          var isOk = false;
-         /*if(fileType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"){
-             //docx格式
-             isOk = true;
-         }else if(fileType == "application/msword"){
-             //doc格式
-             isOk = true;
-         }else*/
+
         if(fileType == "application/vnd.openxmlformats-officedocument.presentationml.presentation"){
             //pptx格式
             isOk = true;
@@ -164,27 +146,6 @@ const FileUploadComponents = React.createClass({
             isOk=true;
         }
 
-
-
-         /*else if(fileType == "application/vnd.ms-excel"){
-             //xls格式
-             isOk = true;
-         }else if(fileType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"){
-             //xlsx格式
-             isOk = true;
-         }else if(fileType == "text/plain"){
-             //txt格式
-             isOk = true;
-         }else if(fileType == "image/png"){
-             //png格式
-             isOk = true;
-         }else if(fileType == "image/jpeg"){
-             //jpeg/jpg格式
-             isOk = true;
-         }else if(fileType == "image/bmp"){
-             //bmp格式
-             isOk = true;
-         }*/
          return isOk;
     },
 

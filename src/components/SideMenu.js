@@ -1,8 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Table, Popconfirm, Button } from 'antd';
-import { Menu, Icon } from 'antd';
-const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
+import { Menu } from 'antd';
 
 var divStyle = {
       width:'150px',
@@ -33,9 +30,7 @@ const SideMenu = React.createClass({
   },
 
   startmove:function (target,speed) {
-      // var odiv=document.getElementById('div1');
       var odiv = this.refs.div1;
-      console.log("======:"+odiv)
       clearInterval(timer);
       timer=setInterval(function (){
 

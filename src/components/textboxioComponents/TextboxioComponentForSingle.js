@@ -3,10 +3,7 @@ import React from 'react';
 var TextboxioComponentForSingle = React.createClass({
   componentDidMount(){
     mytextareaSingleEditor = textboxio.replace('#mytextarea',defaultConfig);
-    /*mytextareaSingleEditor.events.dirty.addListener(function () {
-      mytextareaSingleEditor.mode.set("code");
-      mytextareaSingleEditor.mode.set("design");
-    });*/
+
     mytextareaSingleEditor.events.focus.addListener(function () {
       if(mytextareaSingleEditor.mode.get()=="code"){
         mytextareaSingleEditor.mode.set("design");

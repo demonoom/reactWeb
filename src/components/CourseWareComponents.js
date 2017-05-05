@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {Card, Checkbox, Collapse, Icon, Button, Pagination, message} from 'antd';
+import { Checkbox, Collapse,  Button, Pagination, message} from 'antd';
 import UseKnowledgeComponents from './UseKnowledgeComponents';
 import {doWebService} from '../WebServiceHelper';
 import {getPageSize} from '../utils/Const';
@@ -7,10 +7,6 @@ import {isEmpty} from '../utils/Const';
 import ConfirmModal from './ConfirmModal';
 const Panel = Collapse.Panel;
 
-function callback(key) {
-    // console.log(key);
-    // alert(key);
-}
 
 var courseWare;
 var courseWareList;
@@ -39,9 +35,6 @@ const CourseWareComponents = React.createClass({
         courseWare.setState({totalCount: 0});
     },
 
-    componentDidMount(){
-        console.log("did")
-    },
 
 
     getTeachPlans(ident, teachScheduleId, optType, pageNo, knowledgeName, dataFilter,comeFrom){
@@ -61,7 +54,6 @@ const CourseWareComponents = React.createClass({
             };
             doWebService(JSON.stringify(param), {
                 onResponse: function (ret) {
-                    console.log("teachMSG:" + ret.msg);
                     courseWareList = new Array();
                     courseWareList.splice(0);
                     var response = ret.response;
@@ -124,7 +116,6 @@ const CourseWareComponents = React.createClass({
             };
             doWebService(JSON.stringify(param), {
                 onResponse: function (ret) {
-                    console.log("teachMSG:" + ret.msg + "==" + ret.response.length);
                     courseWareList = new Array();
                     courseWareList.splice(0);
                     var response = ret.response;
@@ -182,7 +173,6 @@ const CourseWareComponents = React.createClass({
     },
 
     onChange(page) {
-        console.log(page);
         courseWare.getTeachPlans(courseWare.state.ident, courseWare.state.teachScheduleId, courseWare.state.optType, page, courseWare.state.knowledgeName, courseWare.state.dataFilter);
         this.setState({
             currentPage: page,
@@ -202,7 +192,6 @@ const CourseWareComponents = React.createClass({
     },
 
     isDeleteAll(e){
-        console.log(`checked = ${e.target.checked}`);
         courseWare.setState({isDeleteAllSubject: e.target.checked});
     },
 
@@ -241,7 +230,6 @@ const CourseWareComponents = React.createClass({
             };
             doWebService(JSON.stringify(param), {
                 onResponse: function (ret) {
-                    console.log(ret.msg);
                     if (ret.msg == "调用成功" && ret.response == true) {
                         message.success("课件删除成功");
                     } else {
@@ -295,7 +283,6 @@ const CourseWareComponents = React.createClass({
         }
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                console.log(ret.msg);
                 if (ret.msg == "调用成功" && ret.response == true) {
                     message.success("课件删除成功");
                 } else {
@@ -451,7 +438,7 @@ const CourseWareComponents = React.createClass({
                 ></ConfirmModal>
                 <div>
                     <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
-                    <Collapse defaultActiveKey={activeKey} activeKey={activeKey} ref="collapse" onChange={callback}>
+                    <Collapse defaultActiveKey={activeKey} activeKey={activeKey} ref="collapse"  >
                         {coursePanelChildren}
                     </Collapse>
                 </div>

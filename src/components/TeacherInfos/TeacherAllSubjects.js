@@ -1,11 +1,10 @@
 import React, { PropTypes } from 'react';
-import { Table, Button,Icon,Popover,Tooltip,message,Modal } from 'antd';
+import { Table, Button,Popover,message } from 'antd';
 import UseKnowledgeComponents from '../UseKnowledgeComponents';
 import SubjectEditByTextboxioTabComponents from '../SubjectEditByTextboxioTabComponents';
 import { doWebService } from '../../WebServiceHelper';
 import {getPageSize} from '../../utils/Const';
 import ConfirmModal from '../ConfirmModal';
-const confirm = Modal.confirm;
 
 const columns = [{
   title: '出题人',
@@ -16,10 +15,6 @@ const columns = [{
   className:'ant-table-selection-cont',
   dataIndex: 'content',
 },
-//   {
-//   title: '上传时间',
-//   dataIndex: 'submitTime',
-// },
   {
     title: '题型',
     className:'ant-table-selection-topic',
@@ -75,7 +70,6 @@ const TeacherAllSubjects = React.createClass({
   },
 
   onSelectChange(selectedRowKeys) {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
     this.setState({ selectedRowKeys });
   },
 
@@ -88,7 +82,6 @@ const TeacherAllSubjects = React.createClass({
 
     doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
-        console.log("getSubjectDataMSG:"+ret.msg);
         subjectList.splice(0);
         data.splice(0);
         var response = ret.response;
@@ -96,8 +89,6 @@ const TeacherAllSubjects = React.createClass({
           subTable.setState({totalCount:0});
         }else {
           response.forEach(function (e) {
-            debugger
-            console.log("getUserSubjectsByUid:"+e);
             var key = e.id;
             var name=e.user.userName;
             var popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>'+e.content+'<hr/><span class="answer_til answer_til_2">答案：</span>'+e.answer+'</div>';
@@ -139,7 +130,6 @@ const TeacherAllSubjects = React.createClass({
 
   //列表分页响应事件
   pageOnChange(pageNo) {
-    console.log("pageNo:"+pageNo);
     subTable.getUserSubjectsByUid(sessionStorage.getItem("ident"),pageNo);
     this.setState({
       currentPage: pageNo,
@@ -160,7 +150,6 @@ const TeacherAllSubjects = React.createClass({
     };
     doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
-        console.log(ret.msg);
         if(ret.msg=="调用成功" && ret.response==true){
           message.success("题目删除成功");
         }else{

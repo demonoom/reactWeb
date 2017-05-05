@@ -1,12 +1,7 @@
 import React, { PropTypes } from 'react';
-import { Tabs, Button,Radio } from 'antd';
-import { Modal} from 'antd';
-import { Slider } from 'antd';
-import { Form, Input, Tooltip, Icon, Cascader, Select, Checkbox,Row,Col,Spin,Progress } from 'antd';
-import { Upload,  message } from 'antd';
+import { Form,Row,Col,Progress ,  Modal,Button, message} from 'antd';
 import { doWebService } from '../WebServiceHelper';
 import FileUploadComponents from './FileUploadComponents';
-const FormItem = Form.Item;
 
 var uploadFileList=[];
 var courseWareUpload;
@@ -61,7 +56,6 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                     xhr.upload.onprogress = function (ev) {
                         if(ev.lengthComputable) {
                             var percent = 100 * ev.loaded/ev.total;
-                            // console.log(Math.round(percent)+"%",ev);
                             courseWareUpload.setState({uploadPercent:Math.round(percent),progressState:'block'});
                         }
                     }
@@ -76,7 +70,6 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
                     }
                 },
                 error : function(responseStr) {
-                    console.log("error"+responseStr);
                     courseWareUpload.setState({ visible: false,spinLoading:false });
                 }
             });
@@ -116,14 +109,12 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
             "method":'addNormalMaterial',
             "ident":ident,
             "knowledgePointId":knowledgePointId,
-            // "cover":"http://pic.qiantucdn.com/58pic/19/30/17/5695e8b35c176_1024.jpg",
             "cover":cover,
             "file":file,
             "fileName":fileName
         };
         doWebService(JSON.stringify(param), {
             onResponse : function(ret) {
-                console.log(ret.msg);
                 if(ret.msg=="调用成功" && ret.success==true){
                     var courseWareReturnId = ret.response;
                     //引用到同名备课计划下，如果没有同名备课计划，则新建
@@ -158,7 +149,6 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse : function(ret) {
-                console.log(ret.msg);
                 if(ret.msg=="调用成功" && ret.success==true){
                     var scheduleId = ret.response.colTsId;
                     courseWareUpload.copyMaterialToSchedule(userId,materiaIds,scheduleId)
@@ -188,7 +178,6 @@ const CourseWareUploadComponents = Form.create()(React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse : function(ret) {
-                console.log(ret.msg);
                 if(ret.msg=="调用成功" && ret.response==true){
                     message.success("课件添加成功");
                 }

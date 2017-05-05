@@ -244,15 +244,12 @@ const SubjectUploadTabComponents = React.createClass({
         } else {
             target = e.target;
         }
-        // mytextareaSingleEditor.mode.set("code");
-        // mytextareaSingleEditor.mode.set("design");
         //获取当前点击的是哪个按钮
         var currentButton = target.textContent;
         var ident = sessionStorage.getItem("ident");
         var score = this.state.score;
         //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
         if (this.state.scoreDisable == true) {
-            // score = this.state.scoreDefinedValue;
             score =this.refs.scoreDefined.refs.input.value;
         }
         var subjectName = mytextareaSingleEditor.content.get();
@@ -316,7 +313,6 @@ const SubjectUploadTabComponents = React.createClass({
         var score = this.state.score;
         //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
         if (this.state.scoreDisable == true) {
-            // score = this.state.scoreDefinedValue;
             score =this.refs.scoreDefined.refs.input.value;
         }
         var subjectName = mytextareaMulitiEditor.content.get();
@@ -444,7 +440,6 @@ const SubjectUploadTabComponents = React.createClass({
         var score = this.state.score;
         //如果选择分数的下拉列表处于不可用状态，则选择文本框中的自定义分值作为成绩
         if (this.state.scoreDisable == true) {
-            // score = this.state.scoreDefinedValue;
             score =this.refs.scoreDefined.refs.input.value;
         }
         var subjectName = mytextareaSimpleAnswerEditor.content.get();
@@ -554,7 +549,6 @@ const SubjectUploadTabComponents = React.createClass({
      */
     sliderChange(value) {
         var selectArray=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-        console.log("selectArrayLength:"+selectArray.length);
         var mulitiAnswerOptions=[];
         for(var i=0;i<value;i++){
              var selectValue = {label: selectArray[i], value: selectArray[i]};
@@ -567,9 +561,7 @@ const SubjectUploadTabComponents = React.createClass({
      * @param value
      */
     singleSliderChange(value){
-        console.log("single value:"+value);
         var selectArray=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-        console.log("selectArrayLength:"+selectArray.length);
         var singleAnswerOptions=[];
         for(var i=0;i<value;i++){
             var selectValue = <Radio key={selectArray[i]} value={selectArray[i]}>{selectArray[i]}</Radio>;
@@ -744,12 +736,6 @@ const SubjectUploadTabComponents = React.createClass({
                                             <RadioGroup onChange={this.singleAnswerOnChange} ref="singleAnswer"
                                                         defaultValue={this.state.singleAnswer}>
                                                 {this.state.singleAnswerOptions}
-                                                {/*<Radio key="A" value="A">A</Radio>
-                                                <Radio key="B" value="B">B</Radio>
-                                                <Radio key="C" value="C">C</Radio>
-                                                <Radio key="D" value="D">D</Radio>
-                                                <Radio key="E" value="E">E</Radio>
-                                                <Radio key="F" value="F">F</Radio>*/}
                                             </RadioGroup>
                                         </div>
                                     </Row>

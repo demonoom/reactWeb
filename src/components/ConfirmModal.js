@@ -3,7 +3,6 @@
  */
 import React, { PropTypes } from 'react';
 import { Modal,Icon } from 'antd';
-import {isEmpty} from '../utils/Const';
 
 class ConfirmModal extends React.Component{
 
