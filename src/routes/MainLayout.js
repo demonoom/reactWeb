@@ -251,8 +251,7 @@ const MainLayout = React.createClass({
                     <Col span={24}>
                         <div className="ant-layout-container">
                             <div className="ant-layout-content">
-                                <AntNestTabComponents ref="antNestTabComponents"
-                                                      resouceType={mainLayout.state.resouceType}  onPreview={ this.showpanle }/>
+                                <AntNestTabComponents ref="antNestTabComponents" resouceType={mainLayout.state.resouceType}  onPreview={ this.showpanle }/>
                             </div>
                         </div>
                     </Col>
@@ -274,7 +273,7 @@ const MainLayout = React.createClass({
                     <Col span={24}>
                         <div className="ant-layout-container">
                             <div className="ant-layout-content">
-                                <MyFavorites  onPreview={ this.showpanle.bind(this) }/>
+                                <MyFavorites  />
                             </div>
                         </div>
                     </Col>
@@ -285,7 +284,7 @@ const MainLayout = React.createClass({
                     <Col span={24}>
                         <div className="ant-layout-container">
                             <div className="ant-layout-content">
-                                <MyMTV resouceType={mainLayout.state.resouceType}/>
+                                <MyMTV  />
                             </div>
                         </div>
                     </Col>
