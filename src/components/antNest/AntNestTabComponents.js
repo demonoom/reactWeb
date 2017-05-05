@@ -562,9 +562,9 @@ const AntNestTabComponents = React.createClass({
                     antNest.getTopicPartakeById(parentTopicId,1);
                 }else {
                     if (antNest.state.activeKey == "全部") {
-                        antNest.getTopics(1, getAllTopic());
+                        antNest.getTopics(antNest.state.currentPage, getAllTopic());
                     } else {
-                        antNest.getTopics(1, getOnlyTeacherTopic());
+                        antNest.getTopics(antNest.state.currentPage, getOnlyTeacherTopic());
                     }
                 }
             },
@@ -611,9 +611,9 @@ const AntNestTabComponents = React.createClass({
                     antNest.getTopicPartakeById(parentTopicId,1);
                 }else{
                     if(antNest.state.activeKey=="全部"){
-                        antNest.getTopics(1,getAllTopic());
+                        antNest.getTopics(antNest.state.currentPage,getAllTopic());
                     }else{
-                        antNest.getTopics(1,getOnlyTeacherTopic());
+                        antNest.getTopics(antNest.state.currentPage,getOnlyTeacherTopic());
                     }
                 }
             },
@@ -761,9 +761,9 @@ const AntNestTabComponents = React.createClass({
                     antNest.getTopicPartakeById(antNest.state.currentTopicId,1);
                 }else{
                     if(antNest.state.activeKey=="全部"){
-                        antNest.getTopics(1,getAllTopic());
+                        antNest.getTopics(antNest.state.currentPage,getAllTopic());
                     }else{
-                        antNest.getTopics(1,getOnlyTeacherTopic());
+                        antNest.getTopics(antNest.state.currentPage,getOnlyTeacherTopic());
                     }
                 }
             },
@@ -820,9 +820,9 @@ const AntNestTabComponents = React.createClass({
                     antNest.getTopicPartakeById(setTopicId,1);
                 }else {
                     if (antNest.state.activeKey == "全部") {
-                        antNest.getTopics(1, getAllTopic());
+                        antNest.getTopics(antNest.state.currentPage, getAllTopic());
                     } else {
-                        antNest.getTopics(1, getOnlyTeacherTopic());
+                        antNest.getTopics(antNest.state.currentPage, getOnlyTeacherTopic());
                     }
                 }
             },
@@ -911,9 +911,9 @@ const AntNestTabComponents = React.createClass({
                     antNest.getTopicPartakeById(antNest.state.currentTopicId,1);
                 }else {
                     if (antNest.state.activeKey == "全部") {
-                        antNest.getTopics(1, getAllTopic());
+                        antNest.getTopics(antNest.state.currentPage, getAllTopic());
                     } else {
-                        antNest.getTopics(1, getOnlyTeacherTopic());
+                        antNest.getTopics(antNest.state.currentPage, getOnlyTeacherTopic());
                     }
                 }
                 antNest.initMyEmotionInput();
@@ -1059,9 +1059,9 @@ const AntNestTabComponents = React.createClass({
                 }
                 $("#emotionInput").val("");
                 if (antNest.state.activeKey == "全部") {
-                    antNest.getTopics(1, getAllTopic());
+                    antNest.getTopics(antNest.state.currentPage, getAllTopic());
                 } else {
-                    antNest.getTopics(1, getOnlyTeacherTopic());
+                    antNest.getTopics(antNest.state.currentPage, getOnlyTeacherTopic());
                 }
                 antNest.initMyEmotionInput();
                 antNest.setState({addTopicModalVisible: false});
@@ -1220,9 +1220,9 @@ const AntNestTabComponents = React.createClass({
                     antNest.getTopicPartakeById(antNest.state.currentTopicId,1);
                 }else {
                     if (antNest.state.activeKey == "全部") {
-                        antNest.getTopics(1, getAllTopic());
+                        antNest.getTopics(antNest.state.currentPage, getAllTopic());
                     } else {
-                        antNest.getTopics(1, getOnlyTeacherTopic());
+                        antNest.getTopics(antNest.state.currentPage, getOnlyTeacherTopic());
                     }
                 }
                 antNest.initMyEmotionInput();
@@ -1246,6 +1246,7 @@ const AntNestTabComponents = React.createClass({
         var toolbarExtra = <div className="ant-tabs-right"><Button value="talk" onClick={antNest.showaddTopicModal} className="antnest_talk">发表说说</Button><Button value="topic" onClick={antNest.showaddTopicModal}>发表话题</Button></div>;
         var returnToolBar = <div className="ant-tabs-right"><Button onClick={antNest.returnTopicList}>返回</Button></div>
         var tabComponent;
+        var topicList;
         if(antNest.state.optType=="getTopicById"){
             //获取单个话题的数据
             tabComponent = <Tabs
@@ -1264,7 +1265,7 @@ const AntNestTabComponents = React.createClass({
                 </TabPane>
             </Tabs>;
         }else{
-            tabComponent = <Tabs
+            /*tabComponent = <Tabs
                 hideAdd
                 onChange={this.onChange}
                 ref = "mainTab"
@@ -1273,21 +1274,17 @@ const AntNestTabComponents = React.createClass({
                 tabBarExtraContent={toolbarExtra}
                 transitionName=""  //禁用Tabs的动画效果
             >
-                <TabPane tab="全部" key="全部" className="topics_rela">
-                    <div className="antnest_cont topics_calc">
+
+            </Tabs>;*/
+            topicList = <div style={{overflow:'scroll'}}>
+                <div className="topics_rela">
+                    <div className="antnest_cont topics_calc" style={{overflow:'scroll'}}>
                         {antNest.state.topicCardList}
                     </div>
                     <Pagination key="all" total={antNest.state.totalCount} pageSize={getPageSize()} current={antNest.state.currentPage}
                                 onChange={antNest.pageOnChange}/>
-                </TabPane>
-                <TabPane tab="只看老师" key="只看老师" className="topics_rela">
-                    <div className="antnest_cont topics_calc">
-                        {antNest.state.topicCardList}
-                    </div>
-                    <Pagination key="allTeacher" total={antNest.state.totalCount} pageSize={getPageSize()} current={antNest.state.currentPage}
-                                onChange={antNest.pageOnChange}/>
-                </TabPane>
-            </Tabs>;
+                </div>
+            </div>
         }
         var topicTitle;
         if(antNest.state.topicModalType=="topic"){
@@ -1373,7 +1370,7 @@ const AntNestTabComponents = React.createClass({
                     <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
                     <Breadcrumb.Item href="#/MainLayout">{breadMenuTip}</Breadcrumb.Item>
                 </Breadcrumb>
-                {tabComponent}
+                {topicList}
             </div>
         );
     },
