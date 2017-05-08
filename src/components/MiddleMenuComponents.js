@@ -211,6 +211,7 @@ const MiddleMenuComponents = React.createClass({
     render() {
         return (
             <div>
+
                 <ConfirmModal ref="delScheduleConfirmModal"
                               title="确定要删除该备课计划?"
                               onConfirmModalCancel={mMenu.closeDelScheduleConfirmModal}

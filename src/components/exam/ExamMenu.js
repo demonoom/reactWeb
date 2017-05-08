@@ -1,10 +1,8 @@
 import React, { PropTypes,Link } from 'react';
 import { Menu, Icon } from 'antd';
 
-var mMenu;
 const ExamMenu = React.createClass({
   getInitialState() {
-    mMenu = this;
     return {
       currentMenu: 'createExamPager',
       currentPage: 1,

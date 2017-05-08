@@ -3429,3 +3429,100 @@ color:#ffbf00
 .enhance{
 	height:calc(100% - 67px) !important
 }
+
+
+/************/
+@keyframes ghostMenuShow {
+	0%   { left:-240px;}
+	100% { left:0px;}
+}
+
+@-webkit-keyframes ghostMenuShow {
+	0%   { left:-240px;}
+	100% { left:0px;}
+}
+@keyframes ghostMenuHide {
+	0%   { left:0px;}
+	100% { left:-240px;}
+}
+
+@-webkit-keyframes ghostMenuHide {
+	0%   { left:0px;}
+	100% { left:-240px;}
+}
+
+.ghostMenuShow {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 240px;
+	height: 100%;
+	z-index: 1;
+	background: #eeeff4;
+	-webkit-animation: ghostMenuShow 0.5s;
+	-moz-animation: ghostMenuShow 0.5s;
+	animation: ghostMenuShow 0.5s;
+
+
+}
+
+.ghostMenuHide{
+	position: absolute;
+	top: 0px;
+	left: -240px;
+	width: 240px;
+	height: 100%;
+	z-index: 1;
+	background: #eeeff4;
+	-webkit-animation: ghostMenuHide 0.5s;
+	-moz-animation: ghostMenuHide 0.5s;
+	animation: ghostMenuHide 0.5s;
+}
+
+.ghostMenu .headler{
+	position: absolute;
+	width: 32px;
+	height: 80px;
+	margin-top: -40px;
+	top: 50%;
+	right: -32px;
+	border-radius: 0px 8px 8px 0px;
+	background: #eeeff4;
+	color: #666666;
+	padding:10px 0px;
+
+}
+.ghostMenu .first {
+	text-indent: 40px;
+	display: block;
+}
+
+.ghostMenu .second {
+	text-indent: 70px;
+	display: block;
+
+}
+
+.ghostMenu li {
+	display: block;
+	padding: 12px 0px;
+	font-size: 16px;
+	font-family: "Microsoft YaHei";
+}
+
+.ghostMenu .first > li {
+	padding: 10px 0px 0px 0px;
+}
+.ghostMenu .first .multi {
+
+	padding:0;
+
+}
+
+.ghostMenu .second li:hover {
+	 background-color: #00A0E9;
+	color: white;
+	cursor: pointer;
+
+}
+

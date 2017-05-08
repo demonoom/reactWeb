@@ -8,6 +8,7 @@ import FloatButton  from '../components/FloatButton';
 import MyMTV  from '../components/MyMTV';
 import MyFollows  from '../components/MyFollows';
 import MyFavorites  from '../components/Favorites';
+import TeachSpace  from '../components/TeachSpaces';
 import ResetStudentAccountKey  from '../components/ResetStudentAccountKey';
 import KnowledgeMenuComponents from '../components/KnowledgeMenuComponents';
 import HomeWorkMenu from '../components/HomeWorkMenu';
@@ -24,6 +25,7 @@ import MessageMenu from '../components/layOut/MessageMenu';
 import AntGroupMenu from '../components/layOut/AntGroupMenu';
 import PersonCenterMenu from '../components/layOut/PersonCenterMenu';
 import AntNestMenu from '../components/layOut/AntNestMenu';
+import TeachSpaceGhostMenu from '../components/TeachSpacesGhostMenu';
 import {isEmpty} from '../utils/Const';
 import {LocaleProvider} from 'antd';
 import enUS from 'antd/lib/locale-provider/en_US';
@@ -44,13 +46,15 @@ const MainLayout = React.createClass({
         mainLayout = this;
         return {
             collapse: true,
-            activeMiddleMenu: 'sub1',
+            ghostMenuVisible: true,
+            activeMiddleMenu: '',
             currentKey: 'message',
             openKeysStr: '',
             locale: 'zh-cn',
             resouceType: '',
             ifr: {},
         };
+        this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
         this.switchSection = this.switchSection.bind(this)
         this.showpanle = this.showpanle.bind(this)
     },
@@ -62,7 +66,16 @@ const MainLayout = React.createClass({
         })
     },
     toolbarClick: function (e) {
+
         toolbarKey = e.key;
+        if ('teachSpace' == toolbarKey) {
+            if (toolbarKey == this.state.currentKey  ) {
+                this.changeGhostMenuVisible();
+            } else {
+                this.setState({currentKey: e.key, resouceType: 'teachSpacePanel'});
+            }
+            return;
+        }
         this.setState({currentKey: e.key, resouceType: ''});
         if (e.key != "KnowledgeResources") {
             var breadcrumbArray = [{hrefLink: '#/MainLayout', hrefText: "首页"}];
@@ -181,6 +194,20 @@ const MainLayout = React.createClass({
             mainLayout.refs.antNestTabComponents.getTopics(1, 1);
         }
     },
+    teachSpaceTab(activeMenu){
+        this.changeGhostMenuVisible({visible:false});
+        this.setState({activeMiddleMenu: activeMenu});
+    },
+
+    changeGhostMenuVisible(obj){
+        if (obj) {
+            this.setState({ghostMenuVisible: obj.visible});
+        } else {
+            let visible = !this.state.ghostMenuVisible;
+            this.setState({ghostMenuVisible: visible});
+        }
+    },
+
 
     render() {
         const collapse = this.state.collapse;
@@ -198,7 +225,7 @@ const MainLayout = React.createClass({
                 break;
             case 'antGroup':
                 //蚁群
-                middleComponent = <AntGroupMenu ref="antGroupMenu"></AntGroupMenu>;
+                middleComponent = <AntGroupMenu ref="antGroupMenu"/>;
                 tabComponent = <MainTabComponents showpanle={this.showpanle} ref="mainTabComponents"
                                                   callBackKnowledgeMenuBuildBreadCrume={this.callBackKnowledgeMenuBuildBreadCrume}/>;
                 break;
@@ -210,18 +237,17 @@ const MainLayout = React.createClass({
                 break;
             case 'antNest':
                 //蚁巢
-                middleComponent = <AntNestMenu callbackParent={this.getAntNest}></AntNestMenu>;
+                middleComponent = <AntNestMenu callbackParent={this.getAntNest}/>;
                 tabComponent = <AntNestTabComponents ref="antNestTabComponents" onPreview={ this.showpanle }/>;
 
                 break;
             case 'teachSpace':
                 //教学空间
                 middleComponent =
-                    <MiddleMenuComponents activeMenu={this.state.activeMiddleMenu}
-                                          callbackParent={this.getTeachPlans}/>;
-                tabComponent = <MainTabComponents ref="mainTabComponents" showpanle={this.showpanle}/>;
+                    <TeachSpaceGhostMenu visible={this.state.ghostMenuVisible} toggleGhostMenu={ this.changeGhostMenuVisible }
+                               changeTabEvent={this.teachSpaceTab}/>;
+                tabComponent = <TeachSpace currentItem={this.state.activeMiddleMenu}/>;
 
-                break;
 
         }
         //
@@ -242,19 +268,17 @@ const MainLayout = React.createClass({
                     </Col>
                 </Row>;
                 break;
-            case null:
-                mainContent = <Row>
-                    <Col span={5}>
-                        {middleComponent}
-                    </Col>
-                    <Col span={19}>
-                        <div className="ant-layout-container">
-                            <div className="ant-layout-content">
+            case 'teachSpacePanel':
+                mainContent =
+                    <Row>
+                        <Col span={24}>
+                            <div className="ant-layout-container teachSpacePanel">
                                 {tabComponent}
+                                {middleComponent}
                             </div>
-                        </div>
-                    </Col>
-                </Row>;
+                            ;
+                        </Col>
+                    </Row>;
                 break;
             case 'visitAntNest':
                 mainContent = <Row>
@@ -269,6 +293,7 @@ const MainLayout = React.createClass({
                     </Col>
                 </Row>;
                 break;
+
             case 'visitAntGroup':
                 mainContent = <Row>
                     <Col span={24}>
