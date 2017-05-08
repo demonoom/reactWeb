@@ -1249,7 +1249,7 @@ const AntNestTabComponents = React.createClass({
         if(antNest.state.optType=="getTopicById"){
             optionButton = <div className="ant-tabs-right"><Button onClick={antNest.returnTopicList}>返回</Button></div>;
         }else{
-            optionButton = <div className="ant-tabs-right"><Button value="talk" onClick={antNest.showaddTopicModal} className="antnest_talk">发表说说</Button><Button value="topic" onClick={antNest.showaddTopicModal}>发表话题</Button></div>;
+            optionButton = <div className="ant-tabs-right talk_ant_btn1"><Button value="talk" onClick={antNest.showaddTopicModal} className="antnest_talk">发表说说</Button><Button value="topic" onClick={antNest.showaddTopicModal}>发表话题</Button></div>;
         }
         topicList =
             <div className="topics_rela">
@@ -1338,7 +1338,7 @@ const AntNestTabComponents = React.createClass({
                               onConfirmModalCancel={antNest.closeSetTopicTopModal}
                               onConfirmModalOK={antNest.setTopicToTop}
                 ></ConfirmModal>
-                <div style={{display:'inline'}}>
+                <div className="talk_ant_btn">
                     <Breadcrumb separator=">">
                         <Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
                         <Breadcrumb.Item href="#/MainLayout">首页</Breadcrumb.Item>
