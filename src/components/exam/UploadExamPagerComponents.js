@@ -8,7 +8,6 @@ const UploadExamPagerComponents = React.createClass({
     getInitialState() {
         antUpload = this;
         var defaultFileList = [];
-        console.log("subjectInfo"+antUpload.props.params);
         if(typeof(antUpload.props.fileList)!="undefined" && antUpload.props.fileList.length!=0){
             defaultFileList = antUpload.props.fileList ;
         }
@@ -21,7 +20,6 @@ const UploadExamPagerComponents = React.createClass({
     },
 
     componentDidMount(){
-        console.log("==="+antUpload.props.fileList);
         if(isEmpty(antUpload.props.fileList)==false){
             fileList.splice(0);
             var lastLineIndex = antUpload.props.fileList.lastIndexOf("/");
@@ -37,22 +35,11 @@ const UploadExamPagerComponents = React.createClass({
             antUpload.setState({fileList:fileList});
             antUpload.setState({"defaultFileList":fileList});
         }
-        /*else{
-            antUpload.setState({"defaultFileList":[]});
-        }*/
     },
 
     /**
      * 试卷图片上传
      */
-/*    componentWillReceiveProps(){
-        var defaultFileList = [];
-        if(typeof(antUpload.props.fileList)!="undefined" && antUpload.props.fileList.length!=0){
-            defaultFileList = antUpload.props.fileList ;
-        }
-        antUpload.setState({defaultFileList:defaultFileList});
-    },*/
-
     componentWillReceiveProps(nextProps){
         if(isEmpty(nextProps)==false && isEmpty(nextProps.fileList)==false && nextProps.fileList.length!=0 && antUpload.state.fileList.length==0){
             fileList.splice(0);
@@ -72,9 +59,6 @@ const UploadExamPagerComponents = React.createClass({
 
             antUpload.setState({fileList:fileList});
         }
-        /*else{
-            antUpload.setState({fileList:[]});
-        }*/
     },
 
 
@@ -94,7 +78,6 @@ const UploadExamPagerComponents = React.createClass({
         const props = {
             action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
             listType: 'picture-card',
-            // defaultFileList: [],
             defaultFileList:antUpload.state.defaultFileList,
             fileList:antUpload.state.fileList,
             onPreview:antUpload.handlePreview,
@@ -109,9 +92,7 @@ const UploadExamPagerComponents = React.createClass({
                 if (info.file.status !== 'uploading') {
                     //上传进度
                     var percent = info.file.percent;
-                    console.log("上传进度"+percent);
                     antUpload.setState({uploadPercent:percent,progressState:'block'});
-                    console.log(info.file, info.fileList);
                     if(info.file.status==="removed"){
                         antUpload.props.callBackParent(info.file,"removed");
                     }
@@ -126,7 +107,6 @@ const UploadExamPagerComponents = React.createClass({
                 antUpload.setState({"fileList":info.fileList});
             },
             onRemove(file){
-                console.log(file);
             },
         };
 

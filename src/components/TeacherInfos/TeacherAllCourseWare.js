@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Card, Checkbox,Collapse,Icon,Button,Pagination,message,Modal} from 'antd';
+import { Collapse,Button,Pagination,message } from 'antd';
 import { doWebService } from '../../WebServiceHelper';
 import {getPageSize} from '../../utils/Const';
 import {isEmpty} from '../../utils/Const';
@@ -8,10 +8,6 @@ import ConfirmModal from '../ConfirmModal';
 
 const Panel = Collapse.Panel;
 
-function callback(key) {
-    // console.log(key);
-    // alert(key);
-}
 
 var courseWare;
 var courseWareList;
@@ -40,7 +36,6 @@ const TeacherAllCourseWare = React.createClass({
     },
 
     componentDidMount(){
-        console.log("did");
         var initPageNo = 1;
         courseWare.getTeachPlans(sessionStorage.getItem("ident"),initPageNo);
     },
@@ -58,7 +53,6 @@ const TeacherAllCourseWare = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse : function(ret) {
-                console.log("teachMSG:"+ret.msg+"=="+ret.response.length);
                 courseWareList=new Array();
                 courseWareList.splice(0);
                 var response = ret.response;
@@ -122,7 +116,6 @@ const TeacherAllCourseWare = React.createClass({
 
     //分页响应事件
     onChange(page) {
-        console.log(page);
         courseWare.getTeachPlans(sessionStorage.getItem("ident"),page);
         this.setState({
             currentPage: page,
@@ -139,7 +132,6 @@ const TeacherAllCourseWare = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse : function(ret) {
-                console.log(ret.msg);
                 if(ret.msg=="调用成功" && ret.response==true){
                     message.success("课件删除成功");
                 }else{
@@ -185,9 +177,6 @@ const TeacherAllCourseWare = React.createClass({
             coursePanelChildren = courseWareList.map((e, i)=> {
                 var eysOnButton ;
                 var delButton;
-                /*if(e[9]!=null && e[9]!=""){
-                    eysOnButton = <a href={e[9]} target="_blank" title="查看"  style={{ float:'right'}} ><Button icon="eye-o"/></a>
-                }*/
                 if (e[9] != null && e[9] != "") {
                     eysOnButton =
                         <Button icon="eye-o" style={{float: 'right'}} onClick={event => {this.view(event,e[9],e[1])} } />
@@ -210,10 +199,13 @@ const TeacherAllCourseWare = React.createClass({
                       </div>
 
                             <div className="bnt2_right">
-                                {/*<Button value={e.sid} onClick="" className="right_ri">引用微课</Button>*/}
                                 {delButton}
+<<<<<<< HEAD
                                 <a href={e[3]} target="_blank" title="下载" download={e[3]} className="te_download_a"><Button icon="download"/></a>
                                 {/*<Button style={{ float:'right'}} icon="download"  title="下载" value={e[3]} onClick={courseWare.downLoadFile}></Button>*/}
+=======
+                                <a href={e[3]} target="_blank" title="下载" download={e[3]} style={{ float:'right'}}><Button icon="download"/></a>
+>>>>>>> e8e5267e88d6bf78975b9bfa1ed12bca92c01b27
                                 <Button style={{ float:'right'}} type=""  icon="export" title="使用"  value={e[0]} onClick={this.showModal}></Button>
                                 {eysOnButton}
                             </div>

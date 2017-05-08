@@ -313,25 +313,25 @@
     // 保持android ios 一直体验的接口实现
     var phone = {
         showLoading() {
-            debugger
+            
 
         },
 
         showLoading(cancelAble) {
-            debugger
+            
 
         },
 
         dismissLoading() {
-            debugger
+            
         },
 
         showMessage(message) {
-            debugger
+            
         },
 
         playAudio(url) {
-            debugger
+            
         },
 
         playVideoM(jsonObject) {
@@ -345,11 +345,11 @@
         },
 
         showImage(url) {
-            debugger
+            
         },
 
         showImage(url, currentUrl) {
-            debugger
+            
         },
 
         showPdf(pdfUrl) {
@@ -364,14 +364,14 @@
         },
 
         finish() {
-            debugger
+            
         },
 
         /**
          * 结束本activity并且刷新前一个fragment
          */
         finishForRefresh() {
-            debugger
+            
         },
 
         /**
@@ -380,7 +380,7 @@
          * @param cmd
          */
         finishForExecute(cmd) {
-            debugger
+            
         },
 
         /**
@@ -389,7 +389,7 @@
          * @param url
          */
         finishForNewPage(url) {
-            debugger
+            
         },
 
         /**
@@ -398,11 +398,11 @@
          * @param shareAble
          */
         setShareAble(shareAble) {
-            debugger
+            
         },
 
         teacherJoinClass(vid) {
-            debugger
+            
         },
 
         /**
@@ -411,15 +411,15 @@
          * @param refreshAble
          */
         setRefreshAble(refreshAble) {
-            debugger
+            
         },
 
         showSubjectWeikeMaterials(subjectId) {
-            debugger
+            
         },
 
         addSubjectWeikeMaterialInput(subjectId) {
-            debugger
+            
         }
 
 
@@ -532,10 +532,6 @@ function UUID(len, radix) {
     }
 
     return uuid.join('');
-}
-
-function getViewPortHeight() {
-    return document.documentElement.clientHeight || document.body.clientHeight;
 }
 
 

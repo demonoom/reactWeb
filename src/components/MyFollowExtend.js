@@ -108,7 +108,6 @@ var data = [];
 var courseWareList;
 var activeKey = [];
 var coursePanelChildren;
-var liveInfosPanelChildren;
 const MyFollowExtend = React.createClass({
 
     getInitialState() {
@@ -533,8 +532,6 @@ const MyFollowExtend = React.createClass({
             messageList.splice(0, 0, messageJson);
         }
         ms.send(commandJson);
-        //messageList.push(messageJson);
-        // messageList.splice(0,0,messageJson);
         this.initMyEmotionInput();
         this.setState({"messageList": messageList});
     },
@@ -597,7 +594,6 @@ const MyFollowExtend = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                console.log("ret:" + ret);
                 if (ret.msg == "调用成功" && ret.success == true) {
                     ret.response.forEach(function (e) {
                         if (e.command == "message") {
@@ -626,7 +622,6 @@ const MyFollowExtend = React.createClass({
                                     "imgTagArray": imgTagArrayReturn,
                                     "messageReturnJson": messageReturnJson
                                 };
-                                // messageList.push(message);
                                 messageList.splice(0, 0, message);
                             }
                             _this.setState({"messageList": messageList});
@@ -655,7 +650,6 @@ const MyFollowExtend = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                console.log("ret:" + ret);
                 if (ret.msg == "调用成功" && ret.success == true) {
                     ret.response.forEach(function (e) {
                         if (e.command == "message") {
@@ -665,13 +659,11 @@ const MyFollowExtend = React.createClass({
                             var colUtype = fromUser.colUtype;
                             var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
                             if (messageOfSinge.toType == 1) {
-                                // if(("SGZH"==colUtype || fromUser.colUid!=loginUser.colUid) && messageOfSinge.toType==1){
                                 var uuid = messageOfSinge.uuid;
                                 uuidsArray.push(uuid);
                                 var content = messageOfSinge.content;
                                 imgTagArray.splice(0);
                                 showImg = "";
-                                //var imgTagArrayReturn = this.getImgTag(messageOfSinge.content);
                                 var imgTagArrayReturn = [];
                                 var messageReturnJson = this.getImgTag(messageOfSinge.content);
                                 if (messageReturnJson.messageType == "text") {
@@ -687,10 +679,6 @@ const MyFollowExtend = React.createClass({
                                     "messageReturnJson": messageReturnJson
                                 };
                                 messageList.push(messageShow);
-                                /*if(uuidsArray.length!=0){
-                                 var receivedCommand = {"command":"messageRecievedResponse","data":{"uuids":uuidsArray}};
-                                 ms.send(receivedCommand);
-                                 }*/
                             }
                             _this.setState({"messageList": messageList});
                         }
@@ -833,9 +821,6 @@ const MyFollowExtend = React.createClass({
         var isExist = false;
         var currentGroupObj = this.state.currentGroupObj;
         if (isEmpty(currentGroupObj) == false) {
-            var groupTitle = currentGroupObj.name;
-            var groupId = currentGroupObj.chatGroupId;
-            var targetKeysParam = [];
             var members = currentGroupObj.members;
             if (isEmpty(members) == false && members.length != 0) {
                 for (var i = 0; i < members.length; i++) {
@@ -973,10 +958,7 @@ const MyFollowExtend = React.createClass({
         var memberIds = "";
         var currentGroupObj = this.state.currentGroupObj;
         if (isEmpty(currentGroupObj) == false) {
-            var groupTitle = currentGroupObj.name;
-            var groupId = currentGroupObj.chatGroupId;
             var members = currentGroupObj.members;
-            var membersArray = [];
             members.forEach(function (e) {
                 var memberId = e.colUid;
                 memberIds += memberId + ",";
@@ -1292,7 +1274,6 @@ const MyFollowExtend = React.createClass({
         } else {
             coursePanelChildren = courseWareList.map((e, i) => {
                 var eysOnButton;
-                var delButton;
                 if (e[9] != null && e[9] != "") {
                     eysOnButton =
                         <a href={e[9]} target="_blank" title="查看" style={{float: 'right'}}><Button icon="eye-o"/></a>
@@ -1359,9 +1340,7 @@ const MyFollowExtend = React.createClass({
                 if (ret.success) {
                     let user;
                     var response = ret.response;
-
                     response.forEach(function (e) {
-
                         var liveCover = e.liveCover;
                         var cover = liveCover.cover;
                         var liveVideos = e.liveVideos;
@@ -1462,7 +1441,6 @@ const MyFollowExtend = React.createClass({
             target = e.target;
         }
         var liveInfoId = target.id;
-        // navigator.setUserAgent("Mozilla/5.0 (Linux; U; Android %s) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1");
         this.setState({
             "optType": "turnToLiveInfoShowPage",
             "activeKey": "turnToLiveInfoShowPage",

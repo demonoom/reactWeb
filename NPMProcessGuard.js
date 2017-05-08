@@ -10,6 +10,7 @@ function run(){
     //在主进程下，调用子进程，执行Linux命令，借助该命令启动antDesign项目
     child_process.exec('npm start', function(error, stdout, stderr) {
         //根据error的结果，来判断是否执行成功
+        console.log("主进程启动错误："+error);
         if(error == null) {
             console.log("服务器启动成功");
         }else{
@@ -27,7 +28,7 @@ function checkServerStatus(){
     child_process.exec('pgrep nodejs', function(e, stdout, stderr) {
         if(e!=null) {
             console.log("服务器异常停止,正在重启");
-            console.log(e.message);
+            console.log("nodejs进程信息："+e.message);
             //监听不到nodejs进程后，表示服务器已停止，所以此处调用run()方法完成进程重启
             run();
         }else{

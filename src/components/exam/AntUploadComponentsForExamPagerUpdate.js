@@ -1,18 +1,16 @@
 import React, { PropTypes } from 'react';
-import { Upload, Icon,message, Modal,Progress } from 'antd';
+import { Upload, Icon,message, Modal } from 'antd';
 var antUploadComponentsForExamPagerUpdate;
 const AntUploadComponentsForExamPagerUpdate = React.createClass({
 
     getInitialState() {
         antUploadComponentsForExamPagerUpdate = this;
         var defaultFileList = [];
-        console.log("subjectInfo in AntUploadComponentsForExamPagerUpdate"+antUploadComponentsForExamPagerUpdate.props.params);
         if(typeof(antUploadComponentsForExamPagerUpdate.props.fileList)!="undefined" && antUploadComponentsForExamPagerUpdate.props.fileList.length!=0){
             defaultFileList = antUploadComponentsForExamPagerUpdate.props.fileList ;
         }
         return {
             examPagerDefaultFileList: [],
-            // subjectInfo:antUploadComponentsForExamPagerUpdate.props.params,
             subjectInfo:'',
             previewVisible: false,
             previewImage: '',
@@ -21,7 +19,6 @@ const AntUploadComponentsForExamPagerUpdate = React.createClass({
     },
 
     componentDidMount(){
-        console.log("antUploadComponentsForExamPagerUpdate.props.params:"+antUploadComponentsForExamPagerUpdate.props.params)
     },
 
     componentWillReceiveProps(){
@@ -50,7 +47,6 @@ const AntUploadComponentsForExamPagerUpdate = React.createClass({
             if (file.status !== 'uploading') {
                 //上传进度
                 var percent = file.percent;
-                console.log("上传进度"+percent);
                 if(file.status==="removed"){
                     antUploadComponentsForExamPagerUpdate.props.callBackParent(fileList,antUploadComponentsForExamPagerUpdate.state.subjectInfo,"removed");
                 }
@@ -71,7 +67,6 @@ const AntUploadComponentsForExamPagerUpdate = React.createClass({
     render() {
         const props = {
             key:antUploadComponentsForExamPagerUpdate.props.params,
-            // name:antUploadComponentsForExamPagerUpdate.state.subjectInfo,
             action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
             listType: 'picture-card',
             fileList:antUploadComponentsForExamPagerUpdate.state.fileList,
@@ -85,7 +80,6 @@ const AntUploadComponentsForExamPagerUpdate = React.createClass({
                 }
             },
             onRemove(file){
-                console.log(file);
             },
         };
         return (

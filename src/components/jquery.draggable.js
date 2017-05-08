@@ -1,4 +1,4 @@
-﻿; (function ($, window, undefined) {
+﻿;(function ($, window, undefined) {
     //#region 拖拽元素类
     function DragElement(node) {
 
@@ -9,6 +9,7 @@
             return false;
         }
     }
+
     DragElement.prototype = {
         constructor: DragElement,
         setXY: function (x, y) {
@@ -28,6 +29,7 @@
         this.x = 0;
         this.y = 0;
     }
+
     Mouse.prototype.setXY = function (x, y) {
         this.x = parseInt(x);
         this.y = parseInt(y);
@@ -50,14 +52,14 @@
         }
     }
 
-     var $document = $(document);
+    var $document = $(document);
 
 
     function drag($ele) {
 
         var $dragNode = $ele.find(".draggable");
         $dragNode = $dragNode.length > 0 ? $dragNode : $ele;
-        
+
 
         $dragNode.on({
             "mousedown": function (event) {
@@ -82,7 +84,6 @@
     }
 
     function move(event) {
-       // "getSelection" in window ? window.getSelection().removeAllRanges() : document.selection.empty()
         if (draggableConfig.dragElement) {
 
             var mouse = draggableConfig.mouse,

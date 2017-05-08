@@ -1,5 +1,5 @@
 import React from 'react';
-import {Pagination, Button, Icon, Input, Modal, message} from 'antd';
+import {Pagination, Input, Modal, message} from 'antd';
 import {getLocalTime} from '../utils/utils';
 import {getPageSize} from '../utils/Const';
 
@@ -22,7 +22,6 @@ const FavoriteShipinItems = React.createClass({
             pageNo: 1,
             videoPwdModalVisible: false,
         };
-        this.pwdInput = '';
         this.coursePanelChildren = {};
         this.videoPwdModalHandleOk = this.videoPwdModalHandleOk.bind(this);
         this.view = this.view.bind(this);

@@ -1,7 +1,5 @@
 import React, { PropTypes,Link } from 'react';
-import { Table, Popconfirm } from 'antd';
 import { Menu, Icon } from 'antd';
-import { Badge,Pagination } from 'antd';
 
 var mMenu;
 const ExamMenu = React.createClass({

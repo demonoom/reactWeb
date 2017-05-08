@@ -1,7 +1,7 @@
 /**
  * Created by madapeng on 17-4-5.
  */
-import {Tabs, Breadcrumb, Icon, message, Pagination} from 'antd';
+import {Tabs, Breadcrumb, Icon, message} from 'antd';
 import React from 'react';
 import FavItem from './FavoriteItem';
 import SubjectItem from './FavoriteSubjectItems';

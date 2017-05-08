@@ -19,15 +19,11 @@ var EmotionInputComponents = React.createClass({
     ga('send', 'pageview');
   },
 
-  inputChange(e){
-    console.log("emotion input:"+e.target.value);
-  },
 
   render : function(){
     return (
       <div>
         <Input type="textarea" id="emotionInput" rows={4} data-emojiable="true" onChange={this.inputChange}/>
-        {/*<textarea class="form-control textarea-control" rows="3" placeholder="Textarea with emoji image input" data-emojiable="true"></textarea>*/}
       </div>
     )
   }

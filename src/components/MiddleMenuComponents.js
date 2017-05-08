@@ -1,15 +1,9 @@
 import React, {PropTypes, Link} from 'react';
-import {Table, Popconfirm, Button} from 'antd';
-import {Menu, Icon, message, Dropdown} from 'antd';
-import {Badge, Pagination} from 'antd';
+import {Menu, Icon, message, Dropdown, Button, Pagination} from 'antd';
 import TeachingComponents from '../components/TeachingComponents';
 import {doWebService} from '../WebServiceHelper';
 import {getPageSize} from '../utils/Const';
 import ConfirmModal from './ConfirmModal';
-const SubMenu = Menu.SubMenu;
-
-// let uuid = 0;
-
 
 //菜单二级子菜单数组
 let lessonData = new Array();
@@ -18,8 +12,6 @@ let List = new Array();
 //菜单元素，根据构建出来的该对象，对菜单进行生成
 let children;
 var mMenu;
-var scheduleCount = 0;
-var percent = 0;
 
 const MiddleMenuComponents = React.createClass({
     getInitialState() {
@@ -32,7 +24,7 @@ const MiddleMenuComponents = React.createClass({
             lessonCount: 0,
             menuList: [],
             selectedKey: '',
-            delScheduleId:'',
+            delScheduleId: '',
         };
     },
 
@@ -64,7 +56,6 @@ const MiddleMenuComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                console.log(ret.msg);
                 List.splice(0, List.length);
                 ret.response.forEach(function (e) {
                     var scheduleId = e.colTsId;
@@ -102,7 +93,6 @@ const MiddleMenuComponents = React.createClass({
             mMenu.showModal('edit', clickKey);
         } else {
             //删除
-            //mMenu.deleteTeachSchedule(clickKey);
             mMenu.showDelScheduleConfirmModal(clickKey);
         }
     },
@@ -112,7 +102,7 @@ const MiddleMenuComponents = React.createClass({
      * @param menuList 菜单对象值的数组
      */
     buildMenuChildren: function (menuList) {
-        children = menuList.map((e, i)=> {
+        children = menuList.map((e, i) => {
 
             const menu = (
                 <Menu onClick={mMenu.menuItemOnClick}>
@@ -163,7 +153,6 @@ const MiddleMenuComponents = React.createClass({
     },
 
     onChange(page) {
-        console.log(page);
         mMenu.getLessonMenu(page);
         this.setState({
             currentPage: page,
@@ -182,7 +171,6 @@ const MiddleMenuComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                console.log(ret.msg);
                 if (ret.msg == "调用成功" && ret.response == true) {
                     message.success("备课计划删除成功");
                 } else {
@@ -212,7 +200,7 @@ const MiddleMenuComponents = React.createClass({
     },
 
     showDelScheduleConfirmModal(scheduleId){
-        mMenu.setState({"delScheduleId":scheduleId});
+        mMenu.setState({"delScheduleId": scheduleId});
         mMenu.refs.delScheduleConfirmModal.changeConfirmModalVisible(true);
     },
 

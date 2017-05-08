@@ -1,8 +1,6 @@
 import React, { PropTypes } from 'react';
-import { Table, Popconfirm, Button,message } from 'antd';
 import { Menu, Icon } from 'antd';
 const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
 
 const MiddleMenu = React.createClass({
   getInitialState() {
@@ -11,8 +9,6 @@ const MiddleMenu = React.createClass({
     };
   },
   handleClick(e) {
-    //alert(e.key);
-    //console.log('click ', e);
     this.setState({
       current: e.key,
     });

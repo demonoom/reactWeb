@@ -43,25 +43,6 @@ class Asidepanel extends React.Component {
 
     componentDidUpdate(){
 
-       /*
-       var ifr = $("#asidepanel")[0];
-        var iDoc = ifr.contentDocument;
-        var iWin = ifr.contentWindow;
-
-        $(iWin.document).ready( function(e,b,c) {
-            iWin.phone = {
-                playVideoJSON(obj){
-                    debugger
-                },
-                showMt(obj){
-                    debugger
-                }
-
-            }
-        });
-
-        */
-
     }
 
 

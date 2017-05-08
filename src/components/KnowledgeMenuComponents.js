@@ -1,7 +1,5 @@
 import React, { PropTypes,Link } from 'react';
-import { Table, Popconfirm,message} from 'antd';
-import { Menu, Icon,Button } from 'antd';
-import { Badge,Pagination } from 'antd';
+import { Menu, Button,message } from 'antd';
 import { doWebService } from '../WebServiceHelper';
 import BindKnowledgeComponents from './BindKnowledgeComponents';
 const SubMenu = Menu.SubMenu;
@@ -68,9 +66,6 @@ const KnowledgeMenuComponents = React.createClass({
                 this.setState({
                     currentMenu: openKey,
                 });
-                //lastClickMenuName = menuName;
-                // lastClickMenuId
-                // var optContent = menuId+"#"+"bySubjectId"+"#"+menuName+"#"+childrenCount;
                 var optContent = sessionStorage.getItem("lastClickMenuId")+"#"+"bySubjectId"+"#"+sessionStorage.getItem("lastClickMenuName")+"#"+childrenCount;
                 this.props.callbackParent(optContent,breadCrumbArray);
             }
@@ -100,7 +95,6 @@ const KnowledgeMenuComponents = React.createClass({
         mMenu.buildOpenMenuKeysArray(e.key,menuLevel);
         openKeysStr="";
         openKeysStr = openKeys.join(',');
-        console.log("openKeys:"+openKeysStr);
         // defaultOpenKeys={['81#3#0#数学#','86#13#1#小学#数学','89#7#2#一年级上#小学']}
         // openKeys={['81#3#0#数学#','86#13#1#小学#数学','89#7#2#一年级上#小学']}
         //全局存放用户在知识点导航下的访问路径，退出时将此值保存到数据库，下次登录时获取
@@ -114,8 +108,6 @@ const KnowledgeMenuComponents = React.createClass({
         }else{
             this.bulidBreadCrumbArray(menuName,menuLevel,menuId,openKeysStr);
         }
-        // lastClickMenuName = menuName;
-        //lastClickMenuId = menuId;
         sessionStorage.setItem("lastClickMenuName",menuName);
         sessionStorage.setItem("lastClickMenuId",menuId);
         var optContent = menuId+"#"+"bySubjectId"+"#"+menuName+"#"+childrenCount;
@@ -159,7 +151,6 @@ const KnowledgeMenuComponents = React.createClass({
             breadCrumbArray.push(breadJson);
         }else{
             this.checkSameLevelBread(breadJson,breadCrumbArray);
-            // breadCrumbArray.push(breadJson);
         }
         openKeysStr=openKeys;
         //全局存放用户在知识点导航下的访问路径，退出时将此值保存到数据库，下次登录时获取
@@ -212,12 +203,8 @@ const KnowledgeMenuComponents = React.createClass({
             for(var i=0;i<breadCrumbArray.length;i++){
                 if(i>index){
                     removeArray.push(i);
-                    //breadCrumbArray.splice(i,1);
                 }
             }
-            /*for(var i=0;i<removeArray.length;i++){
-             breadCrumbArray.splice(removeArray[i],1);
-             }*/
             breadCrumbArray.splice(removeArray[0],removeArray.length);
         }else{
             breadCrumbArray.push(breadJson);
@@ -234,7 +221,6 @@ const KnowledgeMenuComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse : function(ret) {
-                console.log(ret.msg);
                 var count =0;
                 ret.response.forEach(function (e) {
                     count++;
@@ -249,7 +235,6 @@ const KnowledgeMenuComponents = React.createClass({
                 }
             },
             onError : function(error) {
-                // alert(error);
               message.error(error);
             }
         });
@@ -260,7 +245,6 @@ const KnowledgeMenuComponents = React.createClass({
         children = menuList.map((e, i)=> {
             menuContent = (e[0]!=null?e[0]:e);
 
-            // const Options =
             return <SubMenu key={menuContent.id+"#"+menuContent.children.length+"#"+"0"+"#"+menuContent.content+"#"+""}  style={{backgroundColor:'#e5f2fe'}}  isRootMenu="true" onTitleClick={this.subMenuTitleClick} title={<span>{menuContent.content}</span>}>
                 {
                     menuContent.children.map(konwledge1 => <SubMenu key={konwledge1.id+"#"+konwledge1.children.length+"#"+"1"+"#"+konwledge1.content+"#"+menuContent.content} style={{}} isRootMenu="false" onTitleClick={this.subMenuTitleClick} title={<span>{konwledge1.content}</span>}>
@@ -292,11 +276,9 @@ const KnowledgeMenuComponents = React.createClass({
         this.setState({
             currentMenu: e.key,
         });
-        //location.hash=e.key;
     },
 
     showModal:function (optType,editSchuldeId) {
-        optType = (optType=="edit"?"edit":"add");
         mMenu.refs.bindKnowledgeComponent.showModal();
     },
 
@@ -321,7 +303,6 @@ const KnowledgeMenuComponents = React.createClass({
                 >
                     {children}
                 </Menu>
-                {/*<Pagination size="small" total={100} current={this.state.currentPage} onChange={this.onChange}/>*/}
             </div>
         );
     },

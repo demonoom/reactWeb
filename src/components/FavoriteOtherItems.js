@@ -1,9 +1,7 @@
 import React from 'react';
-import {Button, Pagination, message,Card} from 'antd';
-import {doWebService} from '../WebServiceHelper';
+import {Button, Pagination,Card} from 'antd';
 import {getPageSize} from '../utils/Const';
 import {getLocalTime} from '../utils/utils';
-import UseKnowledge from './UseKnowledgeComponents';
 
 let coursePanelChildren;
 // 我的收藏类型
@@ -114,7 +112,6 @@ const FavoriteOtherItems = React.createClass({
 
 
     render: function () {
-        console.log('buildFavOtherUi');
         this.buildFavOtherUi(this.props.param.data);
         return (
             <div className="favorite_scroll">

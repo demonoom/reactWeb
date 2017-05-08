@@ -1,5 +1,4 @@
 import React from 'react';
-import { Input } from 'antd';
 
 var TextboxioComponentForAnswerByModify = React.createClass({
   componentDidMount(){

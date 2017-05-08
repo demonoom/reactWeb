@@ -12,7 +12,6 @@ import {phone} from '../../utils/phone';
 import {getImgName} from '../../utils/Const';
 import {MsgConnection} from '../../utils/msg_websocket_connection';
 import ConfirmModal from '../ConfirmModal';
-import flvjsobj from 'flv';
 
 const TabPane = Tabs.TabPane;
 const confirm = Modal.confirm;
@@ -157,11 +156,9 @@ const AntGroupTabComponents = React.createClass({
     },
 
     componentWillMount(){
-         console.log("ant group tab: componentWillMount");
         ms = new MsgConnection();
         var loginUserId = sessionStorage.getItem("ident");
         var machineId = sessionStorage.getItem("machineId");
-        console.log("turnToMessagePage:"+machineId);
         var pro = {"command":"messagerConnect","data":{"machineType":"web","userId":Number.parseInt(loginUserId),"machine":machineId}};
         ms.connect(pro);
         antGroup.getAntGroup();
@@ -209,16 +206,7 @@ const AntGroupTabComponents = React.createClass({
      * @param index　当前行的索引顺序，从０开始
      */
     getPersonCenterInfo(record, index){
-        /*var userType = record.userObj.colUtype;
 
-        if(userType=="PAREN" || userType=="EADM" || userType=="SGZH"){
-            //家长直接进入聊天窗口
-            //蚂蚁君点击进入后，只能接收消息，无法发送消息
-            antGroup.setState({"optType":"sendMessage","currentPerson":record.userObj});
-            antGroup.turnToMessagePage(record.userObj);
-        }else {
-            antGroup.getPersonalCenterData(record.key);
-        }*/
         antGroup.turnToPersonCenter(record.userObj);
     },
 
@@ -228,12 +216,10 @@ const AntGroupTabComponents = React.createClass({
             //家长直接进入聊天窗口
             //蚂蚁君点击进入后，只能接收消息，无法发送消息
             antGroup.setState({"optType":"sendMessage","currentPerson":followUser});
-            // antGroup.turnToMessagePage(followUser);
             antGroup.getUser2UserMessages(followUser);
         }else {
             antGroup.getPersonalCenterData(followUser.colUid);
         }
-        console.log("followUser:"+followUser.colUid);
     },
 
     /**
@@ -347,7 +333,6 @@ const AntGroupTabComponents = React.createClass({
                             var content=messageOfSinge.content;
                             imgTagArray.splice(0);
                             showImg="";
-                            //var imgTagArrayReturn = antGroup.getImgTag(messageOfSinge.content);
                             var imgTagArrayReturn=[];
                             var messageReturnJson = antGroup.getImgTag(messageOfSinge.content);
                             if(messageReturnJson.messageType=="text"){
@@ -356,7 +341,6 @@ const AntGroupTabComponents = React.createClass({
                                 imgTagArrayReturn = messageReturnJson.imgMessage;
                             }
                             var messageShow={'fromUser':fromUser,'content':content,"messageType":"getMessage","imgTagArray":imgTagArrayReturn,"messageReturnJson":messageReturnJson};
-                            // messageList.push(messageShow);
                             messageList.splice(0,0,messageShow);
                             if(uuidsArray.length!=0){
                                 var receivedCommand = {"command":"messageRecievedResponse","data":{"uuids":uuidsArray}};
@@ -459,7 +443,6 @@ const AntGroupTabComponents = React.createClass({
     getImgTag(str){
         var imgTags = [];
         var messageReturnJson={};
-        //imgTags = antGroup.changeImgTextToTag(str,imgTags,messageReturnJson);
         messageReturnJson = antGroup.changeImgTextToTag(str,imgTags,messageReturnJson);
         return messageReturnJson;
     },
@@ -525,8 +508,6 @@ const AntGroupTabComponents = React.createClass({
             messageList.splice(0,0,messageJson);
         }
         ms.send(commandJson);
-        //messageList.push(messageJson);
-        // messageList.splice(0,0,messageJson);
         antGroup.initMyEmotionInput();
         antGroup.setState({"messageList":messageList});
     },
@@ -587,7 +568,6 @@ const AntGroupTabComponents = React.createClass({
                         var chatGroupId = e.chatGroupId;
                         var chatGroupName = e.name;
                         var membersCount = e.members.length;
-                        var ownerPhoto = e.owner.avatar;
                         var groupMemebersPhoto=[];
                         for(var i=0;i<e.members.length;i++){
                             var member = e.members[i];
@@ -650,7 +630,6 @@ const AntGroupTabComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                console.log("ret:"+ret);
                 if(ret.msg=="调用成功" && ret.success==true){
                     ret.response.forEach(function (e) {
                         if(e.command=="message"){
@@ -701,7 +680,6 @@ const AntGroupTabComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                console.log("ret:"+ret);
                 if(ret.msg=="调用成功" && ret.success==true){
                     ret.response.forEach(function (e) {
                         if(e.command=="message"){
@@ -711,13 +689,11 @@ const AntGroupTabComponents = React.createClass({
                             var colUtype = fromUser.colUtype;
                             var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
                             if(messageOfSinge.toType==1){
-                            // if(("SGZH"==colUtype || fromUser.colUid!=loginUser.colUid) && messageOfSinge.toType==1){
                                 var uuid = messageOfSinge.uuid;
                                 uuidsArray.push(uuid);
                                 var content=messageOfSinge.content;
                                 imgTagArray.splice(0);
                                 showImg="";
-                                //var imgTagArrayReturn = antGroup.getImgTag(messageOfSinge.content);
                                 var imgTagArrayReturn=[];
                                 var messageReturnJson = antGroup.getImgTag(messageOfSinge.content);
                                 if(messageReturnJson.messageType=="text"){
@@ -727,10 +703,6 @@ const AntGroupTabComponents = React.createClass({
                                 }
                                 var messageShow={'fromUser':fromUser,'content':content,"messageType":"getMessage","imgTagArray":imgTagArrayReturn,"messageReturnJson":messageReturnJson};
                                 messageList.push(messageShow);
-                                /*if(uuidsArray.length!=0){
-                                    var receivedCommand = {"command":"messageRecievedResponse","data":{"uuids":uuidsArray}};
-                                    ms.send(receivedCommand);
-                                }*/
                             }
                             antGroup.setState({"messageList":messageList});
                         }
@@ -895,8 +867,6 @@ const AntGroupTabComponents = React.createClass({
     setChatGroup(e){
         var currentGroupObj = antGroup.state.currentGroupObj;
         if(isEmpty(currentGroupObj)==false){
-            var groupTitle = currentGroupObj.name;
-            var groupId = currentGroupObj.chatGroupId;
             var members = currentGroupObj.members;
             var membersArray=[];
             members.forEach(function (e) {
@@ -915,9 +885,6 @@ const AntGroupTabComponents = React.createClass({
         var isExist = false;
         var currentGroupObj = antGroup.state.currentGroupObj;
         if(isEmpty(currentGroupObj)==false){
-            var groupTitle = currentGroupObj.name;
-            var groupId = currentGroupObj.chatGroupId;
-            var targetKeysParam=[];
             var members = currentGroupObj.members;
             if(isEmpty(members)==false && members.length!=0){
                 for(var i=0;i<members.length;i++){
@@ -980,7 +947,6 @@ const AntGroupTabComponents = React.createClass({
      */
     refreshLocalMembers(memberIds){
         var currentMemberArray = antGroup.state.currentMemberArray;
-        //var selectedRowKeys = antGroup.state.selectedRowKeys;
         var memberIdsArray=[];
         memberIdsArray.push(memberIds);
         currentMemberArray = antGroup.array_diff(currentMemberArray,memberIdsArray);
@@ -1082,17 +1048,6 @@ const AntGroupTabComponents = React.createClass({
      * 删除并退出群组
      */
     exitChatGroup(){
-        /*confirm({
-            title: '确定要退出该群组?',
-            onOk() {
-                var currentGroupObj = antGroup.state.currentGroupObj;
-                var memberIds = sessionStorage.getItem("ident");
-                var optType="exitChatGroup";
-                antGroup.deleteChatGroupMember(currentGroupObj.chatGroupId,memberIds,optType);
-            },
-            onCancel() {
-            },
-        });*/
         var currentGroupObj = antGroup.state.currentGroupObj;
         var memberIds = sessionStorage.getItem("ident");
         var optType="exitChatGroup";
@@ -1250,7 +1205,6 @@ const AntGroupTabComponents = React.createClass({
                             </div>
                         </Card>;
                         followsUserArray.push(followsCard);
-                        // userLiveData.push(liveCard);
                     });
                     antGroup.setState({"optType":"getMyFollows","activeKey":"userFollows","currentUser":user,"followsUserArray":followsUserArray});
                 }
@@ -1331,7 +1285,6 @@ const AntGroupTabComponents = React.createClass({
                             subjectScore='--';
                         }
                         var answer = e.answer;
-                        var userId = e.user.colUid;
                         var subjectOpt=<div><Button style={{ }} type=""  value={e.id} onClick={antGroup.showModal}  icon="export" title="使用" className="score3_i"></Button></div>;
                         data.push({
                             key: key,
@@ -1518,20 +1471,6 @@ const AntGroupTabComponents = React.createClass({
       this.getLiveInfoByUid(obj.user.colUid,obj.pageNo);
     },
 
-/*    view: function (e, videosObj ,title) {
-       /!*
-       e = e || window.event;
-        if (e.nativeEvent) {
-            e.nativeEvent.stopImmediatePropagation();
-        }
-        e.stopPropagation();
-        e.preventDefault();
-        e.cancelBubble = true;
-        *!/
-
-        let obj = {htmlMode:true, flvjs:flvjsobj,  param: videosObj,title:title,url:"", width: '400px', }
-        antGroup.props.onPreview(obj)
-    },*/
 
     view: function (objref) {
         debugger
@@ -1727,7 +1666,6 @@ const AntGroupTabComponents = React.createClass({
             target = e.target;
         }
         var liveInfoId = target.id;
-        // navigator.setUserAgent("Mozilla/5.0 (Linux; U; Android %s) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1");
         antGroup.setState({"optType":"turnToLiveInfoShowPage","activeKey":"turnToLiveInfoShowPage","liveInfoId":liveInfoId});
     },
 
@@ -1822,7 +1760,6 @@ const AntGroupTabComponents = React.createClass({
     },
 
     showDeleteLiveVideosConfirmModal(id){
-        console.log(id);
         antGroup.setState({"delLiveVideoIds":id});
         antGroup.refs.deleteLiveVideosConfirmModal.changeConfirmModalVisible(true);
     },
@@ -2020,11 +1957,6 @@ const AntGroupTabComponents = React.createClass({
         }if(antGroup.state.optType=="showGroupInfo"){
             welcomeTitle = "群设置";
             const { loading, selectedRowKeys } = this.state;
-            const rowSelection = {
-                selectedRowKeys,
-                onChange: this.onGroupUserTableSelectChange,
-            };
-            const hasSelected = selectedRowKeys.length > 0;
             var topButton;
             var dissolutionChatGroupButton;
             if(antGroup.state.currentGroupObj.owner.colUid==sessionStorage.getItem("ident")){
@@ -2035,10 +1967,6 @@ const AntGroupTabComponents = React.createClass({
                     <span className="toobar"><Button type="primary" onClick={this.showAddMembersModal}
                             loading={loading}
                     >添加群成员</Button></span>
-                    {/*<Button type="primary" onClick={this.deleteAllSelectedMembers}
-                     disabled={!hasSelected} loading={loading}
-                     >移除群成员</Button>
-                     <span style={{ marginLeft: 8 }}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span>*/}
                 </span>;
                 dissolutionChatGroupButton = <Button onClick={antGroup.showDissolutionChatGroupConfirmModal} className="group_red_font"><i className="iconfont">&#xe616;</i>解散该群</Button>;
             }else{
@@ -2219,9 +2147,6 @@ const AntGroupTabComponents = React.createClass({
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab={welcomeTitle} key="userFollows" className="topics_rela">
-                    {/*<div className="person_attention">
-                        <Table onRowClick={antGroup.getPersonCenterInfo} showHeader={true} scroll={{ x: true, y: 400 }} columns={followUserColumns} dataSource={antGroup.state.followsUserArray} pagination={false}/>
-                    </div>*/}
                     <div className="person_attention favorite_pa_le" >
                         {antGroup.state.followsUserArray}
                     </div>
@@ -2267,9 +2192,7 @@ const AntGroupTabComponents = React.createClass({
         }else if(antGroup.state.optType=="getLiveInfoByUid"){
             welcomeTitle=antGroup.state.currentUser.userName+"的直播课";
             var returnPersonCenterBar;
-            console.log("23423423"+isVisible);
             if(isVisible){
-                console.log("3333")
                 returnPersonCenterBar = <div className="ant-tabs-right"><Button onClick={antGroup.returnPersonCenter}>返回</Button></div>;
             }
             tabComponent= <Tabs
@@ -2656,7 +2579,6 @@ const AntGroupTabComponents = React.createClass({
                     visible={antGroup.state.createChatGroupModalVisible}
                     title="创建群组"
                     onCancel={antGroup.createChatGroupModalHandleCancel}
-                    //className="modol_width"
                     transitionName=""  //禁用modal的动画效果
                     maskClosable={false} //设置不允许点击蒙层关闭
                     footer={[
@@ -2693,7 +2615,6 @@ const AntGroupTabComponents = React.createClass({
                     visible={antGroup.state.updateChatGroupNameModalVisible}
                     title="修改群名称"
                     onCancel={antGroup.updateChatGroupNameModalHandleCancel}
-                    //className="modol_width"
                     transitionName=""  //禁用modal的动画效果
                     maskClosable={false} //设置不允许点击蒙层关闭
                     footer={[
@@ -2713,7 +2634,6 @@ const AntGroupTabComponents = React.createClass({
                     visible={antGroup.state.addGroupMemberModalVisible}
                     title="添加群成员"
                     onCancel={antGroup.addGroupMemberModalHandleCancel}
-                    //className="modol_width"
                     transitionName=""  //禁用modal的动画效果
                     maskClosable={false} //设置不允许点击蒙层关闭
                     footer={[

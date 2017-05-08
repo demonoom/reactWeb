@@ -2175,7 +2175,8 @@ a.topics:hover{
 	max-height:calc(100% - 50px);
 }
 .topics_rela{
-	position:relative
+	position:relative;
+	height:calc(100% - 20px);
 }
 .topics_ral{
 	border-radius:6px;
@@ -3435,7 +3436,14 @@ color:#ffbf00
 .enhance{
 	height:calc(100% - 67px) !important
 }
+<<<<<<< HEAD
 .te_download_a{
 	float:right;
 	line-height:1px
 }
+=======
+
+.tableRow{
+	background-color: #e5f2fe;
+}
+>>>>>>> e8e5267e88d6bf78975b9bfa1ed12bca92c01b27
