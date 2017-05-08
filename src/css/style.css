@@ -3442,7 +3442,6 @@ color:#ffbf00
 .enhance{
 	height:calc(100% - 67px) !important
 }
-<<<<<<< HEAD
 
 
 /************/
@@ -3469,15 +3468,13 @@ color:#ffbf00
 	position: absolute;
 	top: 0px;
 	left: 0px;
-	width: 240px;
+	width: 239px;
 	height: 100%;
 	z-index: 1;
-	background: #eeeff4;
+	background: #fcfcfc;
 	-webkit-animation: ghostMenuShow 0.5s;
 	-moz-animation: ghostMenuShow 0.5s;
 	animation: ghostMenuShow 0.5s;
-
-
 }
 
 .ghostMenuHide{
@@ -3496,23 +3493,38 @@ color:#ffbf00
 .ghostMenu .headler{
 	position: absolute;
 	width: 32px;
-	height: 80px;
+	height: 32px;
 	margin-top: -40px;
 	top: 50%;
 	right: -32px;
 	border-radius: 0px 8px 8px 0px;
-	background: #eeeff4;
-	color: #666666;
-	padding:10px 0px;
+	background: #309FFB;
+	color: #fff;
+	padding:6px 4px;
+	cursor:pointer;
 
 }
+.ghostMenu .headler:hover{
+	background:#1E90EF
+}
+.ghostMenuHide .headler i{
+	font-size:20px;
+	transform:rotate(180deg);
+	-ms-transform:rotate(180deg); /* Internet Explorer */
+	-moz-transform:rotate(180deg); /* Firefox */
+	-webkit-transform:rotate(180deg); /* Safari 和 Chrome */
+	-o-transform:rotate(180deg); /* Opera */
+}
+.ghostMenuShow .headler i{
+	font-size:20px;
+}
 .ghostMenu .first {
-	text-indent: 40px;
+	text-indent:12px;
 	display: block;
 }
 
 .ghostMenu .second {
-	text-indent: 70px;
+	text-indent: 52px;
 	display: block;
 
 }
@@ -3522,25 +3534,30 @@ color:#ffbf00
 	padding: 12px 0px;
 	font-size: 16px;
 	font-family: "Microsoft YaHei";
+	color:#333
 }
-
+.ghostMenu li i{
+	margin-right:8px;
+}
 .ghostMenu .first > li {
-	padding: 10px 0px 0px 0px;
+	padding: 10px 0px 10px 0px;
 }
 .ghostMenu .first .multi {
 
 	padding:0;
 
 }
-
+.ghostMenu .second li{
+	font-size: 15px;
+    color: #666;
+}
 .ghostMenu .second li:hover {
-	 background-color: #00A0E9;
-	color: white;
+	 background-color: #f2f8fe;
+	color: #2db7f5;
 	cursor: pointer;
 
 }
 
-=======
 .te_download_a{
 	float:right;
 	line-height:1px
@@ -3559,4 +3576,4 @@ color:#ffbf00
     top: 2px;
     right: 20px;
 }
->>>>>>> bbcf4ff1d28739dc49a0b06034896b349c3b2768
+

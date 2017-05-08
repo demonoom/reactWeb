@@ -120,7 +120,7 @@ const TeachSpaces = React.createClass({
 
 
         return (
-            <Row className="ant-layout-operation">
+            <Row>
                 <Col span={5}>
                     {middleComponent}
                 </Col>
