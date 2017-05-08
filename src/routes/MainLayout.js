@@ -10,23 +10,20 @@ import MyFollows  from '../components/MyFollows';
 import MyFavorites  from '../components/Favorites';
 import TeachSpace  from '../components/TeachSpaces';
 import ResetStudentAccountKey  from '../components/ResetStudentAccountKey';
-import KnowledgeMenuComponents from '../components/KnowledgeMenuComponents';
-import HomeWorkMenu from '../components/HomeWorkMenu';
-import ExamMenu from '../components/exam/ExamMenu';
 import HomeWorkTabComponents from '../components/HomeWorkTabComponents';
-import ExamPagerTabComponents from '../components/exam/ExamPagerTabComponents';
 import TeacherResource from '../components/TeacherInfos/TeacherResource';
 import moment from 'moment';
-import StudyEvaluateMenu from '../components/StudyEvaluateMenu';
-import StudyEvaluateTabComponents from '../components/StudyEvaluateTabComponents';
 import AntNestTabComponents from '../components/antNest/AntNestTabComponents';
 import AntGroupTabComponents from '../components/antGroup/AntGroupTabComponents';
 import MessageMenu from '../components/layOut/MessageMenu';
 import AntGroupMenu from '../components/layOut/AntGroupMenu';
 import PersonCenterMenu from '../components/layOut/PersonCenterMenu';
 import AntNestMenu from '../components/layOut/AntNestMenu';
+<<<<<<< HEAD
 import TeachSpaceGhostMenu from '../components/TeachSpacesGhostMenu';
 import {isEmpty} from '../utils/Const';
+=======
+>>>>>>> bbcf4ff1d28739dc49a0b06034896b349c3b2768
 import {LocaleProvider} from 'antd';
 import enUS from 'antd/lib/locale-provider/en_US';
 // 推荐在入口文件全局设置 locale
@@ -186,12 +183,12 @@ const MainLayout = React.createClass({
         LP.Start(obj);
     },
 
-
     getAntNest(optType){
-        if ("getAllTopic" == optType) {
-            mainLayout.refs.antNestTabComponents.getTopics(1, 0);
-        } else {
-            mainLayout.refs.antNestTabComponents.getTopics(1, 1);
+        var pageNo;
+        if("getAllTopic"==optType){
+            mainLayout.refs.antNestTabComponents.getTopics(pageNo,0);
+        }else{
+            mainLayout.refs.antNestTabComponents.getTopics(pageNo,1);
         }
     },
     teachSpaceTab(activeMenu){
@@ -419,10 +416,6 @@ const MainLayout = React.createClass({
                                 <Icon type="team"/>
                                 <div className="tan">蚁群</div>
                             </Menu.Item>
-                            {/*<Menu.Item key="personCenter" className="padding_menu">
-                             <Icon type="user"/>
-                             <div className="tan">个人中心</div>
-                             </Menu.Item>*/}
                             <FloatButton ref="floatButton"/>
                         </Menu>
 
