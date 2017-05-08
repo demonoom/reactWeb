@@ -57,8 +57,9 @@ const MainLayout = React.createClass({
     toolbarClick: function (e) {
 
         toolbarKey = e.key;
+
         if ('teachSpace' == toolbarKey) {
-            if (toolbarKey == this.state.currentKey  ) {
+            if (toolbarKey == this.state.currentKey) {
                 this.changeGhostMenuVisible();
             } else {
                 this.setState({currentKey: e.key, resouceType: 'teachSpacePanel'});
@@ -66,18 +67,21 @@ const MainLayout = React.createClass({
             return;
         }
         this.setState({currentKey: e.key, resouceType: ''});
-        if (e.key != "KnowledgeResources") {
+
+        if (toolbarKey != "KnowledgeResources") {
             var breadcrumbArray = [{hrefLink: '#/MainLayout', hrefText: "首页"}];
-            if (this.refs.mainTabComponents != null && typeof(this.refs.mainTabComponents) != "undefined") {
+            if (this.refs.mainTabComponents) {
                 this.refs.mainTabComponents.buildBreadcrumb(breadcrumbArray, 0);
             }
         }
     },
+
+
     //获取备课计划下的课件资源
     getTeachPlans: function (optContent, breadCrumbArray) {
         //点击的菜单标识：teachScheduleId
         if (optContent == null) {
-            if (this.refs.mainTabComponents != null && typeof(this.refs.mainTabComponents) != "undefined") {
+            if (this.refs.mainTabComponents) {
                 this.refs.mainTabComponents.buildBreadcrumb(breadCrumbArray);
             }
         } else {
@@ -88,15 +92,16 @@ const MainLayout = React.createClass({
             sessionStorage.setItem("lastClickMenuChildrenCount", childrenCount);
             if (optContentArray[1] != "bySubjectId") {
                 var breadcrumbArray = [{hrefLink: '#/MainLayout', hrefText: "首页"}];
-                if (this.refs.mainTabComponents != null && typeof(this.refs.mainTabComponents) != "undefined") {
+                if (this.refs.mainTabComponents) {
                     this.refs.mainTabComponents.buildBreadcrumb(breadcrumbArray);
                 }
-            } else {
-                if (this.refs.mainTabComponents != null && typeof(this.refs.mainTabComponents) != "undefined") {
-                    this.refs.mainTabComponents.buildBreadcrumb(breadCrumbArray, childrenCount);
-                }
             }
-            if (this.refs.mainTabComponents != null && typeof(this.refs.mainTabComponents) != "undefined") {
+
+            if (this.refs.mainTabComponents) {
+                this.refs.mainTabComponents.buildBreadcrumb(breadCrumbArray, childrenCount);
+
+            }
+            if (this.refs.mainTabComponents) {
                 this.refs.mainTabComponents.getTeachPlans(optContent);
             }
         }
@@ -163,7 +168,7 @@ const MainLayout = React.createClass({
 
     callBackKnowledgeMenuBuildBreadCrume(menuText, menuLevel, menuId, openKeysStr){
         return this.refs.knowledgeMenuComponents.bulidBreadCrumbArray(menuText, menuLevel, menuId, openKeysStr);
-       
+
     },
 
     getTeacherResource(resouceType){
@@ -177,15 +182,15 @@ const MainLayout = React.createClass({
 
     getAntNest(optType){
         var pageNo;
-        if("getAllTopic"==optType){
-            this.refs.antNestTabComponents.getTopics(pageNo,0);
-        }else{
-            this.refs.antNestTabComponents.getTopics(pageNo,1);
+        if ("getAllTopic" == optType) {
+            this.refs.antNestTabComponents.getTopics(pageNo, 0);
+        } else {
+            this.refs.antNestTabComponents.getTopics(pageNo, 1);
         }
     },
     teachSpaceTab(activeMenu){
-        this.changeGhostMenuVisible({visible:false});
         this.setState({activeMiddleMenu: activeMenu});
+        this.changeGhostMenuVisible({visible: false});
     },
 
     changeGhostMenuVisible(obj){
@@ -199,17 +204,19 @@ const MainLayout = React.createClass({
 
 
     render() {
+
         const collapse = this.state.collapse;
         //根据如下判断结果，完成对页面中部位置的渲染，不同情况，渲染不同组件
         var middleComponent;
         var mainContent;
-        var tabComponent = <MainTabComponents ref="mainTabComponents" showpanle={this.showpanle}/>;
+        var tabComponent;
 
         switch (this.state.currentKey) {
-
+            default:
+                tabComponent = <MainTabComponents ref="mainTabComponents" showpanle={this.showpanle}/>;
             case 'message':
                 //消息动态
-                middleComponent = <MessageMenu></MessageMenu>;
+                middleComponent = <MessageMenu/>;
                 tabComponent = <MainTabComponents ref="mainTabComponents" showpanle={this.showpanle}/>;
                 break;
             case 'antGroup':
@@ -220,7 +227,7 @@ const MainLayout = React.createClass({
                 break;
             case 'personCenter':
                 //个人中心
-                middleComponent = <PersonCenterMenu ></PersonCenterMenu>
+                middleComponent = <PersonCenterMenu />;
                 tabComponent = <HomeWorkTabComponents ref="homeWorkTabComponents"/>;
 
                 break;
@@ -233,11 +240,10 @@ const MainLayout = React.createClass({
             case 'teachSpace':
                 //教学空间
                 middleComponent =
-                    <TeachSpaceGhostMenu visible={this.state.ghostMenuVisible} toggleGhostMenu={ this.changeGhostMenuVisible }
-                               changeTabEvent={this.teachSpaceTab}/>;
+                    <TeachSpaceGhostMenu visible={this.state.ghostMenuVisible}
+                                         toggleGhostMenu={ this.changeGhostMenuVisible }
+                                         changeTabEvent={this.teachSpaceTab}/>;
                 tabComponent = <TeachSpace currentItem={this.state.activeMiddleMenu}/>;
-
-
         }
         //
         //

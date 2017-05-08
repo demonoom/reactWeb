@@ -33,9 +33,15 @@ const MainTabComponents = React.createClass({
             currentMenuChildrenCount:-1,
             toolbarExtenderDisplay:false
         };
-
         this.breadcrumbChildren=null;
     },
+
+    componentWillMount(){
+        this.buildBreadcrumb();
+    },
+
+
+
     getTeachPlans(optContent){
         var optContentArray = optContent.split("#");
         var teachScheduleId = optContentArray[0];
@@ -85,23 +91,25 @@ const MainTabComponents = React.createClass({
 
     //生成面包屑导航
     buildBreadcrumb:function (breadcrumbArray,childrenCount) {
-        if(childrenCount!=null && typeof(childrenCount)!="undefined"){
+
+        if(childrenCount){
               this.setState({currentMenuChildrenCount:childrenCount});
         }
-
 
         if(!breadcrumbArray|| !breadcrumbArray.length){
             breadcrumbArray=[];
         }
 
-        let startNav = [{hrefLink:'#/MainLayout',hrefText:"首页",menuId:'indexlink',menuLevel:0,openKeysStr:this.menuId},{hrefLink:'#/MainLayout',hrefText:"备课计划",menuId:'resourcesLink',menuLevel:1,openKeysStr:this.menuId}];
+        let startNav = [{hrefLink:'#/MainLayout',hrefText:"首页",menuId:'indexlink',menuLevel:0,openKeysStr:this.menuId},{hrefLink:'#/MainLayout',hrefText:"知识库",menuId:'resourcesLink',menuLevel:1,openKeysStr:this.menuId}];
+
         breadcrumbArray = startNav.concat(breadcrumbArray);
 
         this.breadcrumbChildren = breadcrumbArray.map((e, i)=> {
+            debugger
             return <Breadcrumb.Item key={e.menuId}><a id={e.menuId+"*"+e.menuLevel+"*"+e.openKeysStr} onClick={this.breadClick}>{e.hrefText}</a></Breadcrumb.Item>
         });
-        this.setState({activeKey:'课件'});
-        this.setState({breadcrumbArray:breadcrumbArray});
+
+        this.setState({breadcrumbArray:breadcrumbArray,activeKey:'课件'});
         if(toolbarKey!="KnowledgeResources"){
           this.setState({currentOptType:"bySchedule"});
         }else{
@@ -113,9 +121,7 @@ const MainTabComponents = React.createClass({
 
     },
 
-    componentWillMount(){
-        this.buildBreadcrumb();
-    },
+
 
     /**
      * 课件tab名称右侧的DropDownMenu点击响应处理函数
@@ -176,7 +182,7 @@ const MainTabComponents = React.createClass({
                 <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
                 <Breadcrumb separator=">">
                     <Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
-                    { this.breadcrumbChildren}
+                    {this.breadcrumbChildren}
                 </Breadcrumb>
                 <Tabs
                     hideAdd

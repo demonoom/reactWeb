@@ -1,6 +1,7 @@
 import React from  'react';
 import {Row, Col} from 'antd';
 import MainTabComponents from './MainTabComponents';
+import ResourcesCenter from './ResourcesCenter';
 import MiddleMenuComponents from './MiddleMenuComponents';
 import KnowledgeMenuComponents from './KnowledgeMenuComponents';
 import HomeWorkMenu from './HomeWorkMenu';
@@ -30,36 +31,65 @@ const TeachSpaces = React.createClass({
 
         this.getTeachPlans = this.getTeachPlans.bind(this);
         this.getStudyEvaluate = this.getStudyEvaluate.bind(this);
+        this.getResourcesCenter = this.getResourcesCenter.bind(this);
         this.getTeacherHomeWork = this.getTeacherHomeWork.bind(this);
         this.callBackKnowledgeMenuBuildBreadCrume = this.callBackKnowledgeMenuBuildBreadCrume.bind(this);
     },
 
 
-    //获取备课计划下的课件资源
+    // 备课计划的课件资源
     getTeachPlans: function (optContent, breadCrumbArray) {
         //点击的菜单标识：teachScheduleId
         if (optContent == null) {
             this.refs.mainTabComponents.buildBreadcrumb(breadCrumbArray);
-        } else {
-
-            var optContentArray = optContent.split("#");
-            var childrenCount = optContentArray[3];
-            if (optContentArray[1] != "bySubjectId") {
-                var breadcrumbArray = [{hrefLink: '#/MainLayout', hrefText: "首页"}];
-                this.refs.mainTabComponents.buildBreadcrumb(breadcrumbArray);
-            } else {
-                this.refs.mainTabComponents.buildBreadcrumb(breadCrumbArray, childrenCount);
-            }
-            this.refs.mainTabComponents.getTeachPlans(optContent);
+            return;
         }
+
+
+        var optContentArray = optContent.split("#");
+        var childrenCount = optContentArray[3];
+
+        if (optContentArray[1] != "bySubjectId") {
+            this.refs.mainTabComponents.buildBreadcrumb();
+        } else {
+            this.refs.mainTabComponents.buildBreadcrumb(breadCrumbArray, childrenCount);
+        }
+        this.refs.mainTabComponents.getTeachPlans(optContent);
+
+    },
+
+
+    // 资源库
+    getResourcesCenter: function (optContent, breadCrumbArray) {
+
+        if (optContent == null) {
+            this.refs.knowledgeResources.buildBreadcrumb(breadCrumbArray);
+            return;
+        }
+
+
+        var optContentArray = optContent.split("#");
+        var childrenCount = optContentArray[3];
+
+        if(!this.refs.knowledgeResources){
+            return;
+        }
+
+
+        if (optContentArray[1] != "bySubjectId") {
+            this.refs.knowledgeResources.buildBreadcrumb();
+        } else {
+            this.refs.knowledgeResources.buildBreadcrumb(breadCrumbArray, childrenCount);
+        }
+       // this.refs.mainTabComponents.getTeachPlans(optContent);
+
     },
 
     componentWillMount(){
         var userIdent = sessionStorage.getItem("ident");
-        if (userIdent == null || userIdent == "") {
+        if (!userIdent) {
             location.hash = "login";
         }
-        //sessionStorage.setItem("ident","23836");
     },
 
     //获取老师的已布置作业列表
@@ -87,18 +117,14 @@ const TeachSpaces = React.createClass({
 
             default : // teachTimes
                 // 备课计划
-                middleComponent = <MiddleMenuComponents
-                    activeMenu={this.state.activeMiddleMenu}
-                    callbackParent={this.getTeachPlans}/>;
+                middleComponent = <MiddleMenuComponents activeMenu={this.state.activeMiddleMenu} callbackParent={this.getTeachPlans}/>;
                 tabComponent = <MainTabComponents ref='mainTabComponents'/>;
                 break;
             case 'KnowledgeResources':
                 // 知识库
                 middleComponent =
-                    <KnowledgeMenuComponents ref="knowledgeMenuComponents"
-                                             callbackParent={this.getTeachPlans}/>;
-                tabComponent = <MainTabComponents ref='mainTabComponents'
-                                                  callBackKnowledgeMenuBuildBreadCrume={this.callBackKnowledgeMenuBuildBreadCrume}/>;
+                    <KnowledgeMenuComponents ref="knowledgeMenuComponents" callbackParent={this.getResourcesCenter}/>;
+                tabComponent = <ResourcesCenter ref='knowledgeResources' callBackKnowledgeMenuBuildBreadCrume={this.callBackKnowledgeMenuBuildBreadCrume}/>;
                 break;
             case 'homeWork':
                 // 布置作业，家庭作业

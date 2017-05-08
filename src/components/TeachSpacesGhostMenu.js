@@ -31,7 +31,7 @@ class GhostMenu extends React.Component {
                     <li className="multi">
                         <ul className="second">
                             <li  onClick={ event=>{this.props.changeTabEvent('teachTimes')}} >备课计划</li>
-                            <li onClick={ event=>{this.props.changeTabEvent('KnowledgeResources')}} >资源库</li>
+                            <li onClick={ event=>{ debugger; this.props.changeTabEvent('KnowledgeResources')}} >资源库</li>
                         </ul>
                     </li>
                     <li>作业</li>

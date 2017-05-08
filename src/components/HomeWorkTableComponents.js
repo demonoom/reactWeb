@@ -19,8 +19,9 @@ var subTable;
 const HomeWorkTableComponents = React.createClass({
     getInitialState() {
         subTable = this;
-        this.getDoneHomeworkList(sessionStorage.getItem("ident"), 1);
+
         return {
+            ident: sessionStorage.getItem('ident'),
             selectedRowKeys: [],
             loading: false,
             count: 0,
@@ -31,6 +32,12 @@ const HomeWorkTableComponents = React.createClass({
             dateTime: ''
         };
     },
+    componentDidMount(){
+        this.getDoneHomeworkList(this.state.ident, 1);
+
+    },
+
+
     start() {
         this.setState({loading: true});
         setTimeout(() => {

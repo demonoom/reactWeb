@@ -5,17 +5,11 @@ import {doWebService} from '../WebServiceHelper';
 import {getPageSize} from '../utils/Const';
 import ConfirmModal from './ConfirmModal';
 
-//菜单二级子菜单数组
-let lessonData = new Array();
 //一级菜单数组
 let List = new Array();
-//菜单元素，根据构建出来的该对象，对菜单进行生成
-let children;
-var mMenu;
 
 const MiddleMenuComponents = React.createClass({
     getInitialState() {
-        mMenu = this;
         return {
             currentMenu: 'goSchool',
             currentPage: 1,
@@ -26,12 +20,10 @@ const MiddleMenuComponents = React.createClass({
             selectedKey: '',
             delScheduleId: '',
         };
+        this.children=null;
     },
 
     handleClick(e) {
-        mMenu.setState({
-            currentMenu: e.key,
-        });
         var domE = e.domEvent;
         var target = domE.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
@@ -43,12 +35,13 @@ const MiddleMenuComponents = React.createClass({
             $(this).css("background-color", "");
         });
         target.style.backgroundColor = "#e5f2fe";
-        mMenu.setState({openSubMenu: e.key});
+        this.setState({currentMenu: ''+ e.key, openSubMenu: e.key});
         var optContent = e.key + "#" + "bySchedule";
-        mMenu.props.callbackParent(optContent);
+        this.props.callbackParent(optContent);
     },
 
     getLessonMenu(pageNo){
+        let _this=this;
         var param = {
             "method": 'getTeachScheduls',
             "ident": sessionStorage.getItem("ident"),
@@ -63,9 +56,8 @@ const MiddleMenuComponents = React.createClass({
                     var courseTimes = 0;//当值为0时，系统不显示具体的子菜单数量（即菜单上无徽标显示）
                     List.push([scheduleId, courseName, courseTimes]);
                 });
-                mMenu.buildMenuChildren(List);
-                var pager = ret.pager;
-                mMenu.setState({menuList: List, lessonCount: pager.rsCount});
+                _this.buildMenuChildren(List);
+                _this.setState({menuList: List, lessonCount: ret.pager.rsCount});
             },
             onError: function (error) {
                 message.error(error);
@@ -74,11 +66,11 @@ const MiddleMenuComponents = React.createClass({
     },
 
     componentWillReceiveProps(){
-        mMenu.setState({openSubMenu: this.props.activeMenu});
+        this.setState({openSubMenu: this.props.activeMenu});
     },
 
     componentDidMount(){
-        mMenu.getLessonMenu(this.state.currentPage);
+        this.getLessonMenu(this.state.currentPage);
     },
 
     /**
@@ -90,10 +82,10 @@ const MiddleMenuComponents = React.createClass({
         var keyArray = clickKey.split("#");
         if (keyArray.length == 2) {
             //修改
-            mMenu.showModal('edit', clickKey);
+            this.showModal('edit', clickKey);
         } else {
             //删除
-            mMenu.showDelScheduleConfirmModal(clickKey);
+            this.showDelScheduleConfirmModal(clickKey);
         }
     },
 
@@ -102,10 +94,10 @@ const MiddleMenuComponents = React.createClass({
      * @param menuList 菜单对象值的数组
      */
     buildMenuChildren: function (menuList) {
-        children = menuList.map((e, i) => {
+        this.children = menuList.map((e, i) => {
 
             const menu = (
-                <Menu onClick={mMenu.menuItemOnClick}>
+                <Menu onClick={this.menuItemOnClick}>
                     <Menu.Item key={e[0] + "#" + e[1]} className="popup_i_icon"><Icon className="icon_right"
                                                                                       type="edit"/>修改</Menu.Item>
                     <Menu.Item key={e[0]} className="popup_i_icon"><Icon className="icon_right"
@@ -113,11 +105,11 @@ const MiddleMenuComponents = React.createClass({
                 </Menu>
             );
             if (i == 0) {
-                mMenu.setState({
-                    currentMenu: e[0],
+                this.setState({
+                    currentMenu: ''+ e[0],
                 });
                 var optContent = e[0] + "#" + "bySchedule";
-                mMenu.props.callbackParent(optContent);
+                this.props.callbackParent(optContent);
                 //div显示的内容过长时，使用title提示
                 if (e[1].length > 10) {
                     return <Menu.Item key={e[0]} style={{backgroundColor: '#e5f2fe'}}>
@@ -153,7 +145,7 @@ const MiddleMenuComponents = React.createClass({
     },
 
     onChange(page) {
-        mMenu.getLessonMenu(page);
+        this.getLessonMenu(page);
         this.setState({
             currentPage: page,
         });
@@ -163,7 +155,8 @@ const MiddleMenuComponents = React.createClass({
      * @param key 被删除备课计划的id
      */
     deleteTeachSchedule: function () {
-        var sids = mMenu.state.delScheduleId;
+        let _this=this;
+        var sids = this.state.delScheduleId;
         var param = {
             "method": 'deleteTeachSchedules',
             "ident": sessionStorage.getItem("ident"),
@@ -176,8 +169,8 @@ const MiddleMenuComponents = React.createClass({
                 } else {
                     message.error("备课计划删除失败");
                 }
-                mMenu.closeDelScheduleConfirmModal();
-                mMenu.getLessonMenu(mMenu.state.currentPage);
+                _this.closeDelScheduleConfirmModal();
+                _this.getLessonMenu(_this.state.currentPage);
             },
             onError: function (error) {
                 message.error(error);
@@ -192,20 +185,20 @@ const MiddleMenuComponents = React.createClass({
      */
     showModal: function (optType, editSchuldeId) {
         optType = (optType == "edit" ? "edit" : "add");
-        mMenu.refs.teachingComponents.showModal(optType, editSchuldeId);
+        this.refs.teachingComponents.showModal(optType, editSchuldeId);
     },
 
     handleMenu(){
-        mMenu.getLessonMenu(mMenu.state.currentPage);
+        this.getLessonMenu(this.state.currentPage);
     },
 
     showDelScheduleConfirmModal(scheduleId){
-        mMenu.setState({"delScheduleId": scheduleId});
-        mMenu.refs.delScheduleConfirmModal.changeConfirmModalVisible(true);
+        this.setState({"delScheduleId": scheduleId});
+        this.refs.delScheduleConfirmModal.changeConfirmModalVisible(true);
     },
 
     closeDelScheduleConfirmModal(){
-        mMenu.refs.delScheduleConfirmModal.changeConfirmModalVisible(false);
+        this.refs.delScheduleConfirmModal.changeConfirmModalVisible(false);
     },
 
     render() {
@@ -214,20 +207,20 @@ const MiddleMenuComponents = React.createClass({
 
                 <ConfirmModal ref="delScheduleConfirmModal"
                               title="确定要删除该备课计划?"
-                              onConfirmModalCancel={mMenu.closeDelScheduleConfirmModal}
-                              onConfirmModalOK={mMenu.deleteTeachSchedule}
+                              onConfirmModalCancel={this.closeDelScheduleConfirmModal}
+                              onConfirmModalOK={this.deleteTeachSchedule}
                 ></ConfirmModal>
                 <div className="menu_til"><Button type="primary" icon="plus-circle" onClick={this.showModal}
                                                   className='add_study-d add_study-d-le1'>添加备课计划</Button></div>
                 <TeachingComponents ref="teachingComponents" callbackParent={this.handleMenu}/>
                 <Menu ref="middleMenu" onClick={this.handleClick}
                       className="cont_t2"
-                      defaultOpenKeys={[mMenu.state.currentMenu]}
-                      openKeys={[this.state.currentMenu]}
-                      selectedKeys={[mMenu.state.currentMenu]}
+                      defaultOpenKeys={[''+this.state.currentMenu]}
+                      openKeys={[''+ this.state.currentMenu]}
+                      selectedKeys={[''+this.state.currentMenu]}
                       mode="inline"
                 >
-                    {children}
+                    {this.children}
 
                 </Menu>
                 <Pagination size="small" total={this.state.lessonCount} pageSize={getPageSize()}
