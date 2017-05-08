@@ -3492,23 +3492,22 @@ color:#ffbf00
 
 .ghostMenu .headler{
 	position: absolute;
-	width: 32px;
-	height: 32px;
-	margin-top: -40px;
-	top: 50%;
-	right: -32px;
-	border-radius: 0px 8px 8px 0px;
-	background: #309FFB;
-	color: #fff;
-	padding:6px 4px;
-	cursor:pointer;
-
+    width: 36px;
+    height: 36px;
+    margin-top: -40px;
+    top: 50%;
+    right: -36px;
+    border-radius: 0px 8px 8px 0px;
+    background: #309FFB;
+    color: #fff;
+    padding: 6px 4px;
+    cursor: pointer;
 }
 .ghostMenu .headler:hover{
 	background:#1E90EF
 }
 .ghostMenuHide .headler i{
-	font-size:20px;
+	font-size:24px;
 	transform:rotate(180deg);
 	-ms-transform:rotate(180deg); /* Internet Explorer */
 	-moz-transform:rotate(180deg); /* Firefox */
@@ -3516,7 +3515,7 @@ color:#ffbf00
 	-o-transform:rotate(180deg); /* Opera */
 }
 .ghostMenuShow .headler i{
-	font-size:20px;
+	font-size:24px;
 }
 .ghostMenu .first {
 	text-indent:12px;
