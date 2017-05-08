@@ -1,14 +1,12 @@
 import React from  'react';
 import {Menu, Icon, Row, Col} from 'antd';
 import MainTabComponents from '../components/MainTabComponents';
-import MiddleMenuComponents from '../components/MiddleMenuComponents';
 import HeaderComponents from '../components/HeaderComponents';
 import UserCardModalComponents from '../components/UserCardModalComponents';
 import FloatButton  from '../components/FloatButton';
 import MyMTV  from '../components/MyMTV';
 import MyFollows  from '../components/MyFollows';
 import MyFavorites  from '../components/Favorites';
-import TeachSpace  from '../components/TeachSpaces';
 import ResetStudentAccountKey  from '../components/ResetStudentAccountKey';
 import HomeWorkTabComponents from '../components/HomeWorkTabComponents';
 import TeacherResource from '../components/TeacherInfos/TeacherResource';
@@ -19,13 +17,9 @@ import MessageMenu from '../components/layOut/MessageMenu';
 import AntGroupMenu from '../components/layOut/AntGroupMenu';
 import PersonCenterMenu from '../components/layOut/PersonCenterMenu';
 import AntNestMenu from '../components/layOut/AntNestMenu';
-<<<<<<< HEAD
+import TeachSpace  from '../components/TeachSpaces';
 import TeachSpaceGhostMenu from '../components/TeachSpacesGhostMenu';
-import {isEmpty} from '../utils/Const';
-=======
->>>>>>> bbcf4ff1d28739dc49a0b06034896b349c3b2768
 import {LocaleProvider} from 'antd';
-import enUS from 'antd/lib/locale-provider/en_US';
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
@@ -36,11 +30,9 @@ const store = createStore(function () {
 
 });
 
-var mainLayout;
 const MainLayout = React.createClass({
     proxyObj: null,
     getInitialState() {
-        mainLayout = this;
         return {
             collapse: true,
             ghostMenuVisible: true,
@@ -76,8 +68,8 @@ const MainLayout = React.createClass({
         this.setState({currentKey: e.key, resouceType: ''});
         if (e.key != "KnowledgeResources") {
             var breadcrumbArray = [{hrefLink: '#/MainLayout', hrefText: "首页"}];
-            if (mainLayout.refs.mainTabComponents != null && typeof(mainLayout.refs.mainTabComponents) != "undefined") {
-                mainLayout.refs.mainTabComponents.buildBreadcrumb(breadcrumbArray, 0);
+            if (this.refs.mainTabComponents != null && typeof(this.refs.mainTabComponents) != "undefined") {
+                this.refs.mainTabComponents.buildBreadcrumb(breadcrumbArray, 0);
             }
         }
     },
@@ -85,8 +77,8 @@ const MainLayout = React.createClass({
     getTeachPlans: function (optContent, breadCrumbArray) {
         //点击的菜单标识：teachScheduleId
         if (optContent == null) {
-            if (mainLayout.refs.mainTabComponents != null && typeof(mainLayout.refs.mainTabComponents) != "undefined") {
-                mainLayout.refs.mainTabComponents.buildBreadcrumb(breadCrumbArray);
+            if (this.refs.mainTabComponents != null && typeof(this.refs.mainTabComponents) != "undefined") {
+                this.refs.mainTabComponents.buildBreadcrumb(breadCrumbArray);
             }
         } else {
 
@@ -96,16 +88,16 @@ const MainLayout = React.createClass({
             sessionStorage.setItem("lastClickMenuChildrenCount", childrenCount);
             if (optContentArray[1] != "bySubjectId") {
                 var breadcrumbArray = [{hrefLink: '#/MainLayout', hrefText: "首页"}];
-                if (mainLayout.refs.mainTabComponents != null && typeof(mainLayout.refs.mainTabComponents) != "undefined") {
-                    mainLayout.refs.mainTabComponents.buildBreadcrumb(breadcrumbArray);
+                if (this.refs.mainTabComponents != null && typeof(this.refs.mainTabComponents) != "undefined") {
+                    this.refs.mainTabComponents.buildBreadcrumb(breadcrumbArray);
                 }
             } else {
-                if (mainLayout.refs.mainTabComponents != null && typeof(mainLayout.refs.mainTabComponents) != "undefined") {
-                    mainLayout.refs.mainTabComponents.buildBreadcrumb(breadCrumbArray, childrenCount);
+                if (this.refs.mainTabComponents != null && typeof(this.refs.mainTabComponents) != "undefined") {
+                    this.refs.mainTabComponents.buildBreadcrumb(breadCrumbArray, childrenCount);
                 }
             }
-            if (mainLayout.refs.mainTabComponents != null && typeof(mainLayout.refs.mainTabComponents) != "undefined") {
-                mainLayout.refs.mainTabComponents.getTeachPlans(optContent);
+            if (this.refs.mainTabComponents != null && typeof(this.refs.mainTabComponents) != "undefined") {
+                this.refs.mainTabComponents.getTeachPlans(optContent);
             }
         }
     },
@@ -157,25 +149,25 @@ const MainLayout = React.createClass({
 
     //获取老师的已布置作业列表
     getTeacherHomeWork: function (optType) {
-        mainLayout.refs.homeWorkTabComponents.getTeacherHomeWork(optType);
+        this.refs.homeWorkTabComponents.getTeacherHomeWork(optType);
     },
 
     //获取试卷列表
     getExamPagerList: function (optType) {
-        mainLayout.refs.examPagerTabComponents.getExamPagerList();
+        this.refs.examPagerTabComponents.getExamPagerList();
     },
 
     getStudyEvaluate: function (optType) {
-        mainLayout.refs.studyEvaluateTabComponents.getStudyEvaluate();
+        this.refs.studyEvaluateTabComponents.getStudyEvaluate();
     },
 
     callBackKnowledgeMenuBuildBreadCrume(menuText, menuLevel, menuId, openKeysStr){
-        var breadCrumbArray = mainLayout.refs.knowledgeMenuComponents.bulidBreadCrumbArray(menuText, menuLevel, menuId, openKeysStr);
-        return breadCrumbArray;
+        return this.refs.knowledgeMenuComponents.bulidBreadCrumbArray(menuText, menuLevel, menuId, openKeysStr);
+       
     },
 
     getTeacherResource(resouceType){
-        mainLayout.setState({currentKey: "personCenter"});
+        this.setState({currentKey: "personCenter"});
     },
 
 
@@ -186,9 +178,9 @@ const MainLayout = React.createClass({
     getAntNest(optType){
         var pageNo;
         if("getAllTopic"==optType){
-            mainLayout.refs.antNestTabComponents.getTopics(pageNo,0);
+            this.refs.antNestTabComponents.getTopics(pageNo,0);
         }else{
-            mainLayout.refs.antNestTabComponents.getTopics(pageNo,1);
+            this.refs.antNestTabComponents.getTopics(pageNo,1);
         }
     },
     teachSpaceTab(activeMenu){
@@ -250,7 +242,7 @@ const MainLayout = React.createClass({
         //
         //
         //
-        switch (mainLayout.state.resouceType) {
+        switch (this.state.resouceType) {
             case '':
                 mainContent = <Row>
                     <Col span={5}>
@@ -283,7 +275,7 @@ const MainLayout = React.createClass({
                         <div className="ant-layout-container">
                             <div className="ant-layout-content">
                                 <AntNestTabComponents ref="antNestTabComponents"
-                                                      resouceType={mainLayout.state.resouceType}
+                                                      resouceType={this.state.resouceType}
                                                       onPreview={ this.showpanle }/>
                             </div>
                         </div>
@@ -298,7 +290,7 @@ const MainLayout = React.createClass({
                             <div className="ant-layout-content">
                                 <AntGroupTabComponents ref="antGroupTabComponents"
                                                        onPreview={ this.showpanle.bind(this) }
-                                                       resouceType={mainLayout.state.resouceType}/>
+                                                       resouceType={this.state.resouceType}/>
                             </div>
                         </div>
                     </Col>
@@ -331,7 +323,7 @@ const MainLayout = React.createClass({
                     <Col span={24}>
                         <div className="ant-layout-container">
                             <div className="ant-layout-content">
-                                <ResetStudentAccountKey resouceType={mainLayout.state.resouceType}/>
+                                <ResetStudentAccountKey resouceType={this.state.resouceType}/>
                             </div>
                         </div>
                     </Col>
@@ -378,7 +370,7 @@ const MainLayout = React.createClass({
                         <div className="ant-layout-container">
                             <div className="ant-layout-content">
                                 <TeacherResource ref="teacherResource" showpanle={this.showpanle}
-                                                 resouceType={mainLayout.state.resouceType}/>
+                                                 resouceType={this.state.resouceType}/>
                             </div>
                         </div>
                     </Col>
