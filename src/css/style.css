@@ -384,7 +384,7 @@ i, cite, em, var, address, dfn {
 		margin-top:15px;
 	}
 	.ant-collapse-content-box span{
-		margin-right:20px;
+		margin-right:30px;
 		display:inline-block;
 		float:left;
 	}
@@ -861,6 +861,9 @@ html, body, #root {
 	overflow:hidden;
 	display:inline-block
 }
+.ant-table-thead > tr > th.ant-table-selection-cont article, .ant-table-tbody > tr > td.ant-table-selection-cont article img{
+	max-width:100%;
+}
 .ant-table-thead > tr > th.ant-table-selection-cont2, .ant-table-tbody > tr > td.ant-table-selection-cont2{
 	max-width:440px !important;
 }
@@ -882,7 +885,7 @@ html, body, #root {
 }
 .ant-table-body{
 	height:calc(100% - 40px);
-	font-size:14px;
+	font-size:16px;
 }
 .ant-menu-item-selected {
     color: #2db7f5;
@@ -1587,7 +1590,7 @@ a {
 }
 .ant-table-thead > tr > th{
 	color:#0f70d9;
-	font-size:14px;
+	font-size:16px;
 	font-weight: normal;
 }
 .popup_i_icon{
