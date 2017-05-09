@@ -87,6 +87,7 @@ const SUbjectTable = React.createClass({
 
   getSubjectData(ident,ScheduleOrSubjectId,pageNo,optType,knowledgeName,isOwmer){
     data=[];
+    debugger
     subTable.setState({optType:optType,knowledgeName:knowledgeName,ScheduleOrSubjectId:ScheduleOrSubjectId});
     if(optType=="bySchedule"){
       subTable.getSubjectDataBySchedule(ident,ScheduleOrSubjectId,pageNo);
@@ -311,6 +312,7 @@ const SUbjectTable = React.createClass({
 
     doWebService(JSON.stringify(param), {
       onResponse : function(ret) {
+        debugger
         subjectList.splice(0);
         data.splice(0);
         var response = ret.response;
@@ -359,24 +361,25 @@ const SUbjectTable = React.createClass({
 
 
   componentDidMount(){
-    subTable.initGetSubjectInfo();
+    // subTable.initGetSubjectInfo();
   },
 
 
   initGetSubjectInfo:function (subjectParams,currentPageNo) {
-    var subjectParamArray = subTable.props.params.split("#");
-    subTable.setState({subjectParams:subTable.props.params});
-    if(subjectParams!=null && typeof(subjectParams)!="undefined" ){
+    debugger
+    var subjectParamArray = this.props.params.split("#");
+    subTable.setState({subjectParams: this.props.params});
+    if(subjectParams){
       subjectParamArray = subjectParams.split("#");
       subTable.setState({subjectParams:subjectParams});
     }
     var ident = subjectParamArray[0];
     var ScheduleOrSubjectId = subjectParamArray[1];
     var pageNo=1;
-    if(currentPageNo==null || currentPageNo==""){
+    if(!currentPageNo ){
       pageNo = subjectParamArray[2];
     }else{
-      pageNo=currentPageNo;
+      pageNo = currentPageNo || subjectParamArray[2];
     }
     var optType = subjectParamArray[3];
     var knowledgeName = subjectParamArray[4];
@@ -425,6 +428,7 @@ const SUbjectTable = React.createClass({
   },
 
   subjectEditCallBack(){
+    debugger
     subTable.getSubjectDataByKnowledge(sessionStorage.getItem("ident"),subTable.state.ScheduleOrSubjectId,subTable.state.currentPage,"Y");
   },
 

@@ -17,7 +17,6 @@ const CourseWareComponents = React.createClass({
     getInitialState() {
         courseWare = this;
         return {
-            courseListState: this.props.courseList,
             activeKey: [],
             currentPage: 1,
             totalCount: 0,
@@ -307,7 +306,7 @@ const CourseWareComponents = React.createClass({
         e.preventDefault();
         e.cancelBubble = true;
         let obj = {title: tit, url: url, width: '380px'}
-        this.props.onPreview(obj)
+        LP.Start(obj);
     },
 
     buildPanels: function (courseWareList) {
@@ -320,7 +319,6 @@ const CourseWareComponents = React.createClass({
                     if (isEmpty(e[9])==false) {
                         eysOnButton =
                             <Button icon="eye-o" style={{float: 'right'}} onClick={event => {this.view(event,e[9],e[1])} } />
-                        /*<a href={e[9]} target="_blank" title="查看" style={{float: 'right'}}><Button icon="eye-o"/></a>*/
                     }
                 }else{
                     if(isEmpty(e[3])==false){
@@ -332,9 +330,7 @@ const CourseWareComponents = React.createClass({
                     className="name_file">{e[1]}</span> </span>} key={e[1] + "#" + e[7]+"#"+e[0]}>
                     <pre>
 					 <div className="bnt2_tex">
-                         <span><span className="col1">文件类型：</span><span className="col2">{e[5]}</span></span>
-                         <span><span className="col1">课件名称：</span><span className="col2">{e[1]}</span></span>
-                         <span><span className="col1">所在知识点：</span><span className="col2">{e[6]}</span></span>
+                         <span className="bai"><span className="col1">所在知识点：</span><span className="col2">{e[6]}</span></span>
                          <span><span className="col1">创建人：</span><span className="col2">{e[2]}</span></span>
                          <span><span className="col1">上传时间：</span><span className="col2">{e[7]}</span></span>
                          <span><span className="col1">点赞次数：</span><span className="col2">{e[10]}</span></span>
@@ -342,7 +338,7 @@ const CourseWareComponents = React.createClass({
 					<div className="bnt2_right">
                          <Button style={{float: 'right'}} icon="delete" title="删除" value={e[0]}
                                  onClick={this.showDelScheduleMateriaConfirmModal}></Button>
-                        <a href={e[3]} target="_blank" title="下载" download={e[3]} style={{float: 'right'}}><Button
+                        <a href={e[3]} target="_blank" title="下载" download={e[3]} className="te_download_a"><Button
                             icon="download"/></a>
                         {eysOnButton}
 					</div>
@@ -387,20 +383,16 @@ const CourseWareComponents = React.createClass({
                     className="name_file">{e[1]}</span> </span>} key={e[1] + "#" + e[7]+"#"+e[0]}>
                     <pre>
 					<div className="bnt2_tex">
-                         <span className="col1">文件类型：{e[5]}</span>
-                         <span className="col1">课件名称：{e[1]}</span>
-                         <span className="col1">所在知识点：{e[6]}</span>
-                         <span className="col1">创建人：{e[2]}</span>
-                         <span className="col1">上传时间：{e[7]}</span>
-                         <span className="col1">点赞次数：{e[11]}</span>
+                         <span className="bai"><span className="col1">所在知识点：{e[6]}</span></span>
+                         <span><span className="col1">创建人：{e[2]}</span></span>
+                         <span><span className="col1">上传时间：{e[7]}</span></span>
+                         <span><span className="col1">点赞次数：{e[11]}</span></span>
                       </div>
 
                             <div className="bnt2_right">
-                                {/*<Button value={e.sid} onClick="" className="right_ri">引用微课</Button>*/}
                                 {delButton}
                                 <a href={e[3]} target="_blank" title="下载" download={e[3]}
-                                   style={{float: 'right'}}><Button icon="download"/></a>
-                                {/*<Button style={{ float:'right'}} icon="download"  title="下载" value={e[3]} onClick={courseWare.downLoadFile}></Button>*/}
+                                   className="te_download_a"><Button icon="download"/></a>
                                 <Button style={{float: 'right'}} type="" icon="export" title="使用" value={e[0]}
                                         onClick={this.showModal}></Button>
                                 {eysOnButton}

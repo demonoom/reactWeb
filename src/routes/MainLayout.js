@@ -1,7 +1,6 @@
 import React from  'react';
 import {Menu, Icon, Row, Col} from 'antd';
 import MainTabComponents from '../components/MainTabComponents';
-import MiddleMenuComponents from '../components/MiddleMenuComponents';
 import HeaderComponents from '../components/HeaderComponents';
 import UserCardModalComponents from '../components/UserCardModalComponents';
 import FloatButton  from '../components/FloatButton';
@@ -22,6 +21,8 @@ import PersonCenterComponents from '../components/antGroup/PersonCenterComponent
 import {LocaleProvider} from 'antd';
 import {doWebService} from '../WebServiceHelper';
 import enUS from 'antd/lib/locale-provider/en_US';
+import TeachSpace  from '../components/TeachSpaces';
+import TeachSpaceGhostMenu from '../components/TeachSpacesGhostMenu';
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
@@ -32,20 +33,20 @@ const store = createStore(function () {
 
 });
 
-var mainLayout;
 const MainLayout = React.createClass({
     proxyObj: null,
     getInitialState() {
-        mainLayout = this;
         return {
             collapse: true,
-            activeMiddleMenu: 'sub1',
+            ghostMenuVisible: true,
+            activeMiddleMenu: '',
             currentKey: 'message',
             openKeysStr: '',
             locale: 'zh-cn',
             resouceType: '',
             ifr: {},
         };
+        this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
         this.switchSection = this.switchSection.bind(this)
         this.showpanle = this.showpanle.bind(this)
     },
@@ -57,21 +58,34 @@ const MainLayout = React.createClass({
         })
     },
     toolbarClick: function (e) {
+
         toolbarKey = e.key;
+
+        if ('teachSpace' == toolbarKey) {
+            if (toolbarKey == this.state.currentKey) {
+                this.changeGhostMenuVisible();
+            } else {
+                this.setState({currentKey: e.key, resouceType: 'teachSpacePanel'});
+            }
+            return;
+        }
         this.setState({currentKey: e.key, resouceType: ''});
-        if (e.key != "KnowledgeResources") {
+
+        if (toolbarKey != "KnowledgeResources") {
             var breadcrumbArray = [{hrefLink: '#/MainLayout', hrefText: "首页"}];
-            if (mainLayout.refs.mainTabComponents != null && typeof(mainLayout.refs.mainTabComponents) != "undefined") {
-                mainLayout.refs.mainTabComponents.buildBreadcrumb(breadcrumbArray, 0);
+            if (this.refs.mainTabComponents) {
+                this.refs.mainTabComponents.buildBreadcrumb(breadcrumbArray, 0);
             }
         }
     },
+
+
     //获取备课计划下的课件资源
     getTeachPlans: function (optContent, breadCrumbArray) {
         //点击的菜单标识：teachScheduleId
         if (optContent == null) {
-            if (mainLayout.refs.mainTabComponents != null && typeof(mainLayout.refs.mainTabComponents) != "undefined") {
-                mainLayout.refs.mainTabComponents.buildBreadcrumb(breadCrumbArray);
+            if (this.refs.mainTabComponents) {
+                this.refs.mainTabComponents.buildBreadcrumb(breadCrumbArray);
             }
         } else {
 
@@ -81,16 +95,17 @@ const MainLayout = React.createClass({
             sessionStorage.setItem("lastClickMenuChildrenCount", childrenCount);
             if (optContentArray[1] != "bySubjectId") {
                 var breadcrumbArray = [{hrefLink: '#/MainLayout', hrefText: "首页"}];
-                if (mainLayout.refs.mainTabComponents != null && typeof(mainLayout.refs.mainTabComponents) != "undefined") {
-                    mainLayout.refs.mainTabComponents.buildBreadcrumb(breadcrumbArray);
-                }
-            } else {
-                if (mainLayout.refs.mainTabComponents != null && typeof(mainLayout.refs.mainTabComponents) != "undefined") {
-                    mainLayout.refs.mainTabComponents.buildBreadcrumb(breadCrumbArray, childrenCount);
+                if (this.refs.mainTabComponents) {
+                    this.refs.mainTabComponents.buildBreadcrumb(breadcrumbArray);
                 }
             }
-            if (mainLayout.refs.mainTabComponents != null && typeof(mainLayout.refs.mainTabComponents) != "undefined") {
-                mainLayout.refs.mainTabComponents.getTeachPlans(optContent);
+
+            if (this.refs.mainTabComponents) {
+                this.refs.mainTabComponents.buildBreadcrumb(breadCrumbArray, childrenCount);
+
+            }
+            if (this.refs.mainTabComponents) {
+                this.refs.mainTabComponents.getTeachPlans(optContent);
             }
         }
     },
@@ -142,25 +157,25 @@ const MainLayout = React.createClass({
 
     //获取老师的已布置作业列表
     getTeacherHomeWork: function (optType) {
-        mainLayout.refs.homeWorkTabComponents.getTeacherHomeWork(optType);
+        this.refs.homeWorkTabComponents.getTeacherHomeWork(optType);
     },
 
     //获取试卷列表
     getExamPagerList: function (optType) {
-        mainLayout.refs.examPagerTabComponents.getExamPagerList();
+        this.refs.examPagerTabComponents.getExamPagerList();
     },
 
     getStudyEvaluate: function (optType) {
-        mainLayout.refs.studyEvaluateTabComponents.getStudyEvaluate();
+        this.refs.studyEvaluateTabComponents.getStudyEvaluate();
     },
 
     callBackKnowledgeMenuBuildBreadCrume(menuText, menuLevel, menuId, openKeysStr){
-        var breadCrumbArray = mainLayout.refs.knowledgeMenuComponents.bulidBreadCrumbArray(menuText, menuLevel, menuId, openKeysStr);
-        return breadCrumbArray;
+        return this.refs.knowledgeMenuComponents.bulidBreadCrumbArray(menuText, menuLevel, menuId, openKeysStr);
+
     },
 
     getTeacherResource(resouceType){
-        mainLayout.setState({currentKey: "personCenter"});
+        this.setState({currentKey: "personCenter"});
     },
 
 
@@ -170,42 +185,62 @@ const MainLayout = React.createClass({
 
     getAntNest(optType){
         var pageNo;
-        if("getAllTopic"==optType){
-            mainLayout.refs.antNestTabComponents.getTopics(pageNo,0);
-        }else{
-            mainLayout.refs.antNestTabComponents.getTopics(pageNo,1);
+        if ("getAllTopic" == optType) {
+            this.refs.antNestTabComponents.getTopics(pageNo, 0);
+        } else {
+            this.refs.antNestTabComponents.getTopics(pageNo, 1);
         }
     },
+    teachSpaceTab(activeMenu,beActive){
+        this.setState({activeMiddleMenu: activeMenu});
+        this.changeGhostMenuVisible({visible: false,beActive: beActive});
+    },
+
+    changeGhostMenuVisible(obj){
+
+
+        if (obj) {
+            if(!obj.beActive) return;
+            this.setState({ghostMenuVisible: obj.visible});
+        } else {
+
+            let visible = !this.state.ghostMenuVisible;
+            this.setState({ghostMenuVisible: visible});
+        }
+    },
+
 
     /**
      * 获取个人中心需要的数据,老师和学生可通用,后期需要什么再添加
      */
     getPersonalCenterData(userId){
-        mainLayout.refs.personCenterComponents.getPersonalCenterData(userId);
+        this.refs.personCenterComponents.getPersonalCenterData(userId);
     },
 
     setFirstPerson(userContactsData){
         var userJson = userContactsData[0];
-        mainLayout.setState({"userContactsData":userContactsData});
-        mainLayout.getPersonalCenterData(userJson.userObj.colUid);
+        this.setState({"userContactsData":userContactsData});
+        this.getPersonalCenterData(userJson.userObj.colUid);
     },
 
     getGroupInfo(){
-        mainLayout.refs.personCenterComponents.getUserChatGroup();
+        this.refs.personCenterComponents.getUserChatGroup();
     },
 
     render() {
+
         const collapse = this.state.collapse;
         //根据如下判断结果，完成对页面中部位置的渲染，不同情况，渲染不同组件
         var middleComponent;
         var mainContent;
-        var tabComponent = <MainTabComponents ref="mainTabComponents" showpanle={this.showpanle}/>;
+        var tabComponent;
 
         switch (this.state.currentKey) {
-
+            default:
+                tabComponent = <MainTabComponents ref="mainTabComponents" showpanle={this.showpanle}/>;
             case 'message':
                 //消息动态
-                middleComponent = <MessageMenu></MessageMenu>;
+                middleComponent = <MessageMenu/>;
                 tabComponent = <MainTabComponents ref="mainTabComponents" showpanle={this.showpanle}/>;
                 break;
             case 'antGroup':
@@ -215,37 +250,35 @@ const MainLayout = React.createClass({
                                                 callbackGetGroupInfo={this.getGroupInfo}
                 ></AntGroupMenu>;
                 tabComponent = <PersonCenterComponents ref="personCenterComponents"
-                                                       userInfo={mainLayout.state.userObj}
-                                                       userContactsData={mainLayout.state.userContactsData}
+                                                       userInfo={this.state.userObj}
+                                                       userContactsData={this.state.userContactsData}
                                                        onPreview={ this.showpanle }
                 />;
                 break;
             case 'personCenter':
                 //个人中心
-                middleComponent = <PersonCenterMenu ></PersonCenterMenu>
+                middleComponent = <PersonCenterMenu />;
                 tabComponent = <HomeWorkTabComponents ref="homeWorkTabComponents"/>;
 
                 break;
             case 'antNest':
                 //蚁巢
-                middleComponent = <AntNestMenu callbackParent={this.getAntNest}></AntNestMenu>;
+                middleComponent = <AntNestMenu callbackParent={this.getAntNest}/>;
                 tabComponent = <AntNestTabComponents ref="antNestTabComponents" onPreview={ this.showpanle }/>;
 
                 break;
             case 'teachSpace':
                 //教学空间
                 middleComponent =
-                    <MiddleMenuComponents activeMenu={this.state.activeMiddleMenu}
-                                          callbackParent={this.getTeachPlans}/>;
-                tabComponent = <MainTabComponents ref="mainTabComponents" showpanle={this.showpanle}/>;
-
-                break;
-
+                    <TeachSpaceGhostMenu visible={this.state.ghostMenuVisible}
+                                         toggleGhostMenu={ this.changeGhostMenuVisible }
+                                         changeTabEvent={this.teachSpaceTab}/>;
+                tabComponent = <TeachSpace currentItem={this.state.activeMiddleMenu}/>;
         }
         //
         //
         //
-        switch (mainLayout.state.resouceType) {
+        switch (this.state.resouceType) {
             case '':
                 mainContent = <Row>
                     <Col span={5}>
@@ -260,19 +293,17 @@ const MainLayout = React.createClass({
                     </Col>
                 </Row>;
                 break;
-            case null:
-                mainContent = <Row>
-                    <Col span={5}>
-                        {middleComponent}
-                    </Col>
-                    <Col span={19}>
-                        <div className="ant-layout-container">
-                            <div className="ant-layout-content">
+            case 'teachSpacePanel':
+                mainContent =
+                    <Row>
+                        <Col span={24}>
+                            <div className="ant-layout-container teachSpacePanel">
                                 {tabComponent}
+                                {middleComponent}
                             </div>
-                        </div>
-                    </Col>
-                </Row>;
+                            ;
+                        </Col>
+                    </Row>;
                 break;
             case 'visitAntNest':
                 mainContent = <Row>
@@ -280,13 +311,14 @@ const MainLayout = React.createClass({
                         <div className="ant-layout-container">
                             <div className="ant-layout-content">
                                 <AntNestTabComponents ref="antNestTabComponents"
-                                                      resouceType={mainLayout.state.resouceType}
+                                                      resouceType={this.state.resouceType}
                                                       onPreview={ this.showpanle }/>
                             </div>
                         </div>
                     </Col>
                 </Row>;
                 break;
+
             case 'visitAntGroup':
                 mainContent = <Row>
                     <Col span={24}>
@@ -294,7 +326,7 @@ const MainLayout = React.createClass({
                             <div className="ant-layout-content">
                                 <AntGroupTabComponents ref="antGroupTabComponents"
                                                        onPreview={ this.showpanle.bind(this) }
-                                                       resouceType={mainLayout.state.resouceType}/>
+                                                       resouceType={this.state.resouceType}/>
                             </div>
                         </div>
                     </Col>
@@ -327,7 +359,7 @@ const MainLayout = React.createClass({
                     <Col span={24}>
                         <div className="ant-layout-container">
                             <div className="ant-layout-content">
-                                <ResetStudentAccountKey resouceType={mainLayout.state.resouceType}/>
+                                <ResetStudentAccountKey resouceType={this.state.resouceType}/>
                             </div>
                         </div>
                     </Col>
@@ -374,7 +406,7 @@ const MainLayout = React.createClass({
                         <div className="ant-layout-container">
                             <div className="ant-layout-content">
                                 <TeacherResource ref="teacherResource" showpanle={this.showpanle}
-                                                 resouceType={mainLayout.state.resouceType}/>
+                                                 resouceType={this.state.resouceType}/>
                             </div>
                         </div>
                     </Col>
