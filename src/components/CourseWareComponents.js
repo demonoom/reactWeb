@@ -17,7 +17,6 @@ const CourseWareComponents = React.createClass({
     getInitialState() {
         courseWare = this;
         return {
-            courseListState: this.props.courseList,
             activeKey: [],
             currentPage: 1,
             totalCount: 0,
@@ -307,7 +306,7 @@ const CourseWareComponents = React.createClass({
         e.preventDefault();
         e.cancelBubble = true;
         let obj = {title: tit, url: url, width: '380px'}
-        this.props.onPreview(obj)
+        LP.Start(obj);
     },
 
     buildPanels: function (courseWareList) {

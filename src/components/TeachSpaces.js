@@ -1,6 +1,6 @@
 import React from  'react';
-import {Row, Col} from 'antd';
-import MainTabComponents from './MainTabComponents';
+import {Row, Col,Tabs} from 'antd';
+import LessonPlans from './LessonPlans';
 import ResourcesCenter from './ResourcesCenter';
 import MiddleMenuComponents from './MiddleMenuComponents';
 import KnowledgeMenuComponents from './KnowledgeMenuComponents';
@@ -11,6 +11,8 @@ import StudyEvaluateMenu from './StudyEvaluateMenu';
 import StudyEvaluateTabComponents from './StudyEvaluateTabComponents';
 import ExamMenu from './exam/ExamMenu';
 import ExamPagerTabComponents from './exam/ExamPagerTabComponents';
+import ExamPagerTableComponents from './exam/ExamPagerTableComponents';
+const TabPane = Tabs.TabPane;
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
@@ -30,6 +32,7 @@ const TeachSpaces = React.createClass({
         };
 
         this.getTeachPlans = this.getTeachPlans.bind(this);
+        this.getExamPagerList = this.getExamPagerList.bind(this);
         this.getStudyEvaluate = this.getStudyEvaluate.bind(this);
         this.getResourcesCenter = this.getResourcesCenter.bind(this);
         this.getTeacherHomeWork = this.getTeacherHomeWork.bind(this);
@@ -50,11 +53,11 @@ const TeachSpaces = React.createClass({
         var childrenCount = optContentArray[3];
 
         if (optContentArray[1] != "bySubjectId") {
-            this.refs.mainTabComponents.buildBreadcrumb();
+            this.refs.LessonPlans.buildBreadcrumb();
         } else {
-            this.refs.mainTabComponents.buildBreadcrumb(breadCrumbArray, childrenCount);
+            this.refs.LessonPlans.buildBreadcrumb(breadCrumbArray, childrenCount);
         }
-        this.refs.mainTabComponents.getTeachPlans(optContent);
+        this.refs.LessonPlans.getTeachPlans(optContent);
 
     },
 
@@ -85,6 +88,9 @@ const TeachSpaces = React.createClass({
 
     },
 
+
+
+
     componentWillMount(){
         var userIdent = sessionStorage.getItem("ident");
         if (!userIdent) {
@@ -105,7 +111,15 @@ const TeachSpaces = React.createClass({
         return this.refs.knowledgeMenuComponents.bulidBreadCrumbArray(menuText, menuLevel, menuId, openKeysStr);
 
     },
-
+    /**
+     * 获取单个试卷的信息，用来完成试卷信息的修改操作
+     * 需要切换视图到试卷修改页面
+     * @param key
+     */
+    getExamPagerInfo(subjectInfoJson){
+        this.refs.examPagerTabComponents.getExamPagerInfo(subjectInfoJson);
+       // this.setState({activeKey:'修改试卷',currentOpt:'updateExamPager',"updateSubjectInfo":subjectInfoJson});
+    },
 
     render() {
 
@@ -116,15 +130,15 @@ const TeachSpaces = React.createClass({
         switch (this.props.currentItem) {
 
             default : // teachTimes
-                // 备课计划
+                // 备课计划 LessonPlan  Schedule
                 middleComponent = <MiddleMenuComponents activeMenu={this.state.activeMiddleMenu} callbackParent={this.getTeachPlans}/>;
-                tabComponent = <MainTabComponents ref='mainTabComponents'/>;
+                tabComponent = <LessonPlans ref='LessonPlans'/>;
                 break;
             case 'KnowledgeResources':
                 // 知识库
                 middleComponent =
-                    <KnowledgeMenuComponents ref="knowledgeMenuComponents" callbackParent={this.getResourcesCenter}/>;
-                tabComponent = <ResourcesCenter ref='knowledgeResources' callBackKnowledgeMenuBuildBreadCrume={this.callBackKnowledgeMenuBuildBreadCrume}/>;
+                    <KnowledgeMenuComponents   callbackParent={this.getResourcesCenter}/>;
+                tabComponent = <ResourcesCenter ref='knowledgeResources'  />;
                 break;
             case 'homeWork':
                 // 布置作业，家庭作业
@@ -138,8 +152,8 @@ const TeachSpaces = React.createClass({
                 break;
             case 'examination':
                 // 组卷
-                middleComponent = <ExamMenu />;
-                tabComponent = <ExamPagerTabComponents />;
+               // middleComponent =  <ExamPagerTableComponents ref="examPagerTable" callBackParent={this.getExamPagerInfo} />;
+                tabComponent = <ExamPagerTabComponents ref="examPagerTabComponents" />;
                 break;
 
         }

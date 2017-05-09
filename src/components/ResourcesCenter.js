@@ -35,7 +35,6 @@ const MainTabComponents = React.createClass({
         };
         this.breadcrumbChildren=null;
     },
-
     componentWillMount(){
         this.buildBreadcrumb();
     },
@@ -85,7 +84,7 @@ const MainTabComponents = React.createClass({
         var openKeysStr = keyArray[2];
         var optContent = keyArray[0]+"#"+"bySubjectId"+"#"+target.textContent;
         this.getTeachPlans(optContent);
-        var breadCrumbArray = this.props.callBackKnowledgeMenuBuildBreadCrume(target.textContent,menuLevel,menuId,openKeysStr);
+
         this.buildBreadcrumb(breadCrumbArray);
     },
 
@@ -100,13 +99,15 @@ const MainTabComponents = React.createClass({
             breadcrumbArray=[];
         }
 
-        let startNav = [{hrefLink:'#/MainLayout',hrefText:"首页",menuId:'indexlink',menuLevel:0,openKeysStr:this.menuId},{hrefLink:'#/MainLayout',hrefText:"知识库",menuId:'resourcesLink',menuLevel:1,openKeysStr:this.menuId}];
+        let startNav = [
+            {hrefLink:'#/MainLayout',hrefText:"首页",menuId:'indexlink',menuLevel:0,openKeysStr:this.menuId},
+            {hrefLink:'#/MainLayout',hrefText:"知识库",menuId:'resourcesLink',menuLevel:1,openKeysStr:this.menuId}
+            ];
 
         breadcrumbArray = startNav.concat(breadcrumbArray);
 
         this.breadcrumbChildren = breadcrumbArray.map((e, i)=> {
-            debugger
-            return <Breadcrumb.Item key={e.menuId}><a id={e.menuId+"*"+e.menuLevel+"*"+e.openKeysStr} onClick={this.breadClick}>{e.hrefText}</a></Breadcrumb.Item>
+            return <Breadcrumb.Item key={e.menuId}><a id={e.menuId+"*"+e.menuLevel+"*"+e.openKeysStr}  >{e.hrefText}</a></Breadcrumb.Item>
         });
 
         this.setState({breadcrumbArray:breadcrumbArray,activeKey:'课件'});
@@ -155,27 +156,53 @@ const MainTabComponents = React.createClass({
     render() {
         var tabPanel;
         var subjectTabPanel;
-        var displayType='none';
+        var toolbarExtra = null;
         const menu = (
             <Menu onClick={this.menuItemOnClick}>
                 <Menu.Item key="self">只看自己</Menu.Item>
                 <Menu.Item key="other">查看他人</Menu.Item>
             </Menu>
         );
-        if(this.state.currentOptType=="bySubjectId" && sessionStorage.getItem("lastClickMenuChildrenCount")==0 && sessionStorage.getItem("lastClickMenuId")!=null ){
-            displayType='block';
-            tabPanel=<TabPane tab={<span>课件<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link icon_filter" href="#"><Icon type="down-circle-o"/></a></Dropdown></span>} key="课件"><CourseWareComponents ref="courseWare" onPreview={ this.props.showpanle }/></TabPane>;
-            subjectTabPanel=<TabPane tab={<span>题目<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link icon_filter" href="#"><Icon type="down-circle-o" /></a></Dropdown></span>} key="题目"><SubjectTable  ref="subTable" params={this.state.subjectParams}/></TabPane>;
-        }else if(this.state.currentOptType=="bySubjectId"){
-            displayType='none';
-            tabPanel=<TabPane tab={<span>课件<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link icon_filter" href="#"><Icon type="down-circle-o"/></a></Dropdown></span>} key="课件"><CourseWareComponents ref="courseWare" onPreview={ this.props.showpanle }/></TabPane>;
-            subjectTabPanel=<TabPane tab={<span>题目<Dropdown overlay={menu}  trigger={['click']}  className='del_right'><a className="ant-dropdown-link icon_filter" href="#"><Icon type="down-circle-o" /></a></Dropdown></span>} key="题目"><SubjectTable  ref="subTable" params={this.state.subjectParams}/></TabPane>;
-        }else{
-            displayType='none';
-            tabPanel=<TabPane tab="课件" key="课件"><CourseWareComponents onPreview={ this.props.showpanle } ref="courseWare"/></TabPane>;
-            subjectTabPanel=<TabPane tab="题目" key="题目"><SubjectTable  ref="subTable" params={this.state.subjectParams}/></TabPane>
+
+        console.log( this.state.currentOptType );
+
+        switch (this.state.currentOptType) {
+            case 'bySubjectId':
+                tabPanel = <TabPane  key="课件" tab={<span>课件<Dropdown overlay={menu} trigger={['click']} className='del_right'>
+                            <a className="ant-dropdown-link icon_filter" href="#">
+                                <Icon type="down-circle-o"/></a></Dropdown></span>}  >
+                    <CourseWareComponents ref="courseWare" />
+                </TabPane>;
+
+                subjectTabPanel =
+                    <TabPane  key="题目" tab={<span>题目<Dropdown overlay={menu} trigger={['click']} className='del_right'>
+                <a className="ant-dropdown-link icon_filter" href="#"><Icon
+                    type="down-circle-o"/></a></Dropdown></span>} >
+                        <SubjectTable ref="subTable" params={this.state.subjectParams}/></TabPane>;
+                break;
+
+
+            case 'bySchedule':
+                tabPanel = <TabPane tab="课件" key="课件" ><CourseWareComponents ref="courseWare" /></TabPane>;
+                subjectTabPanel =
+                    <TabPane tab="题目"  key="题目" >
+                        <SubjectTable ref="subTable" params={this.state.subjectParams}/>
+                    </TabPane>
+                break;
+
+
         }
-        var toolbarExtra = <div className="ant-tabs-right" style={{display:displayType}}><CourseWareUploadComponents courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}></CourseWareUploadComponents><SubjectUploadByTextboxio courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}></SubjectUploadByTextboxio></div>;
+
+
+        if (this.state.currentOptType == "bySubjectId" && sessionStorage.getItem("lastClickMenuChildrenCount") == 0 && sessionStorage.getItem("lastClickMenuId") != null) {
+            toolbarExtra = <div className="ant-tabs-right" >
+                <CourseWareUploadComponents courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}/>
+                <SubjectUploadByTextboxio courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}/>
+            </div>;
+        }
+
+
+
 
         return (
             <div>

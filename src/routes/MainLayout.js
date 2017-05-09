@@ -188,15 +188,19 @@ const MainLayout = React.createClass({
             this.refs.antNestTabComponents.getTopics(pageNo, 1);
         }
     },
-    teachSpaceTab(activeMenu){
+    teachSpaceTab(activeMenu,beActive){
         this.setState({activeMiddleMenu: activeMenu});
-        this.changeGhostMenuVisible({visible: false});
+        this.changeGhostMenuVisible({visible: false,beActive: beActive});
     },
 
     changeGhostMenuVisible(obj){
+
+
         if (obj) {
+            if(!obj.beActive) return;
             this.setState({ghostMenuVisible: obj.visible});
         } else {
+
             let visible = !this.state.ghostMenuVisible;
             this.setState({ghostMenuVisible: visible});
         }
