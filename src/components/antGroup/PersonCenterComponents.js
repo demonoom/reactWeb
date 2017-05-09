@@ -861,13 +861,17 @@ const PersonCenterComponents = React.createClass({
         if(isEmpty(updateGroupId)==false){
 
         }else{
-            var title = personCenter.state.chatGroupTitle.trim();
-            if(title.length==0){
+            var title = personCenter.state.chatGroupTitle;
+            if(isEmpty(title)){
                 message.error("请输入群组名称");
                 return;
             }
             if(title.length>10){
                 message.error("群组名称不能超过10个字符");
+                return;
+            }
+            if(isEmpty(memberIds)){
+                message.error("请选择群成员");
                 return;
             }
             var param = {
