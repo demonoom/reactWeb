@@ -18,7 +18,9 @@ import MessageMenu from '../components/layOut/MessageMenu';
 import AntGroupMenu from '../components/layOut/AntGroupMenu';
 import PersonCenterMenu from '../components/layOut/PersonCenterMenu';
 import AntNestMenu from '../components/layOut/AntNestMenu';
+import PersonCenterComponents from '../components/antGroup/PersonCenterComponents';
 import {LocaleProvider} from 'antd';
+import {doWebService} from '../WebServiceHelper';
 import enUS from 'antd/lib/locale-provider/en_US';
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
@@ -175,6 +177,23 @@ const MainLayout = React.createClass({
         }
     },
 
+    /**
+     * 获取个人中心需要的数据,老师和学生可通用,后期需要什么再添加
+     */
+    getPersonalCenterData(userId){
+        mainLayout.refs.personCenterComponents.getPersonalCenterData(userId);
+    },
+
+    setFirstPerson(userContactsData){
+        var userJson = userContactsData[0];
+        mainLayout.setState({"userContactsData":userContactsData});
+        mainLayout.getPersonalCenterData(userJson.userObj.colUid);
+    },
+
+    getGroupInfo(){
+        mainLayout.refs.personCenterComponents.getUserChatGroup();
+    },
+
     render() {
         const collapse = this.state.collapse;
         //根据如下判断结果，完成对页面中部位置的渲染，不同情况，渲染不同组件
@@ -191,9 +210,15 @@ const MainLayout = React.createClass({
                 break;
             case 'antGroup':
                 //蚁群
-                middleComponent = <AntGroupMenu ref="antGroupMenu"></AntGroupMenu>;
-                tabComponent = <MainTabComponents showpanle={this.showpanle} ref="mainTabComponents"
-                                                  callBackKnowledgeMenuBuildBreadCrume={this.callBackKnowledgeMenuBuildBreadCrume}/>;
+                middleComponent = <AntGroupMenu ref="antGroupMenu" callbackSetFirstPerson={this.setFirstPerson}
+                                                callbackPersonCenterData={this.getPersonalCenterData}
+                                                callbackGetGroupInfo={this.getGroupInfo}
+                ></AntGroupMenu>;
+                tabComponent = <PersonCenterComponents ref="personCenterComponents"
+                                                       userInfo={mainLayout.state.userObj}
+                                                       userContactsData={mainLayout.state.userContactsData}
+                                                       onPreview={ this.showpanle }
+                />;
                 break;
             case 'personCenter':
                 //个人中心

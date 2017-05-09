@@ -43,7 +43,7 @@
     "redux-devtools": "^3.3.2"
   },
   "scripts": {
-    "start": "dora --plugins \"proxy?port=8090&watchDirs=./mock,webpack,webpack-hmr\"",
+    "start": "dora --plugins \"proxy?port=8090&watchDirs=./mock,webpack\"",
     "build": "atool-build",
     "test": "atool-test-mocha ./src/**/*-test.js"
   }
