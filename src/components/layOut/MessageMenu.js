@@ -24,7 +24,7 @@ const MessageMenu = React.createClass({
     return (
         <div>
           <div className="menu_til">消息动态</div>
-            <Table showHeader={false} columns={columns} dataSource={data} />
+            <Table showHeader={false} columns={columns} dataSource={data} className="yichao_menu"/>
         </div>
     );
   },

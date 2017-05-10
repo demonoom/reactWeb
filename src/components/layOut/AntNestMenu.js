@@ -49,7 +49,7 @@ const AntNestMenu = React.createClass({
             <div>
                 <div className="menu_til">蚁巢</div>
                 <Table onRowClick={mMenu.getAntNest} showHeader={false} columns={columns} dataSource={data}
-                       rowClassName={mMenu.getRowClassName}/>
+                       rowClassName={mMenu.getRowClassName} className="yichao_menu"/>
             </div>
         );
     },

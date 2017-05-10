@@ -1,5 +1,5 @@
 html, body{
-	font-family:"Tahoma","Hiragino Sans GB","Microsoft YaHei","微软雅黑","STHeiti","WenQuanYi Micro Hei",SimSun,sans-serif, "Apple Color Emoji" !important;
+	font-family:"Microsoft YaHei", "Tahoma" !important;
 	background:url(../../src/components/images/bg_6.png);
 	background-size:cover;
 	margin:0;
@@ -12,7 +12,7 @@ ul, li{
 	list-style:none
 }
 code, kbd, pre, samp{
-	font-family:"Tahoma","Hiragino Sans GB","Microsoft YaHei","微软雅黑","STHeiti","WenQuanYi Micro Hei",SimSun,sans-serif, "Apple Color Emoji" !important;
+	font-family:"Microsoft YaHei", "Tahoma" !important;
 }
 .logo_layout{
 	margin: 8px 0px 0px;
@@ -789,7 +789,7 @@ html, body, #root {
 	background-position:0 -150px;
 }
 .menu_til{
-	font-size:18px;
+	font-size:16px;
 	line-height:63px;
 	height:63px;
 	padding: 0 0 0 24px;
@@ -895,7 +895,7 @@ html, body, #root {
 }
 .ant-btn {
 	padding:4px 8px;
-	font-size:13px !important;
+	font-size:14px !important;
 	border-radius:4px;
 }
 .ant-input{
@@ -1394,8 +1394,9 @@ a {
 .maaee_group span{
 	position:relative;
 	top:-12px;
-	font-size: 14px;
-	cursor:pointer
+	font-size: 16px;
+	cursor:pointer;
+	color: #333;
 }
 .maaeegroup{
 	height: calc(100% - 117px );
@@ -1407,10 +1408,12 @@ a {
 	height:100%;
 }
 .maaeegroup .ant-table-tbody > tr > td img{
-	height:38px !important
+	height:38px !important;
+	float: left;
 }
 .maaeegroup .ant-table-tbody > tr > td:first-child{
 	width:38px;
+	
 }
 .maaeegroup .ant-table-tbody > tr > td, .group_table_u .ant-table-tbody > tr > td{
 	padding:8px !important
@@ -2003,7 +2006,7 @@ li.ant-menu-submenu > ul > li.ant-menu-submenu{
 	margin-left:58px;
 }
 .antnest-card{
-	margin-bottom:15px;
+	margin:0 20px 15px 20px;
 	border-bottom:1px solid #e9e9e9;
 	-webkit-border-radius:0;
 	border-radius:0;
@@ -2045,7 +2048,7 @@ a.topics:hover{
 	color:#44A6FF
 }
 .antnest-card .ant-card-body{
-	padding:0 20px 15px 20px
+	padding:0 0 15px 0 
 }
 .antnest-card .ant-card-body ul{
 	margin-left:60px;
@@ -2385,7 +2388,8 @@ p.group_double + div.clearfix > div:first-child .ant-table-header{
 	margin-bottom:0 !important
 }
 p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maaeegroup .ant-table-tbody > tr{
-	cursor:pointer
+	cursor:pointer;
+	color: #333;
 }
 .maaeegroup .ant-table-scroll .ant-table-header{
 	margin-bottom:0 !important;
@@ -3537,7 +3541,7 @@ color:#ffbf00
     padding: 12px 0px;
     font-size: 15px;
     font-family: "Microsoft YaHei";
-    color: #333;
+    color: #666;
 }
 .ghostMenu li i{
 	margin-right:8px;
@@ -3556,8 +3560,8 @@ color:#ffbf00
 
 }
 .ghostMenu .second li{
-	font-size: 15px;
-    color: #666;
+	font-size: 16px;
+    color: #333;
 	background: #FCFCFC;
 }
 .ghostMenu .second li:hover {
@@ -3573,7 +3577,7 @@ color:#ffbf00
 
 .tableRow{
 	background-color: #E5F2FE;
-	color:#2db7f5
+	color:#333
 }
 .tableRow td{
 	border-bottom:none
@@ -3590,4 +3594,12 @@ color:#ffbf00
 }
 .maaee_group_pa{
 	padding:24px 24px 0 24px;
+}
+.yichao_menu{
+	height:calc(100% - 63px)
+}
+.yichao_menu .ant-table-tbody > tr > td{
+	padding:12px 24px !important;
+	border-bottom:none;
+	cursor:pointer
 }

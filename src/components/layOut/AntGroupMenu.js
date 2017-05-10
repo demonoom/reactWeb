@@ -40,7 +40,7 @@ const AntGroupMenu = React.createClass({
         response.forEach(function (e) {
           var userId = e.colUid;
           var userName = e.userName;
-          var imgTag = <div><img src={e.avatar}  className="antnest_38_img" height="38" ></img></div>;
+          var imgTag = <img src={e.avatar}  className="antnest_38_img" height="38" ></img>;
           var userJson = {key:userId,userContacts:userName,userObj:e,"userHeadIcon":imgTag};
           if(userId != sessionStorage.getItem("ident")){
             userContactsData.push(userJson);
@@ -92,7 +92,7 @@ const AntGroupMenu = React.createClass({
           <div className="menu_til">
             蚁群
           </div>
-          <div className="maaee_group" onClick={mMenu.getUserChatGroup}>
+          <div className="maaee_group affix_bottom_tc" onClick={mMenu.getUserChatGroup}>
             <img src={require('../images/groupTitle.png')} className="antnest_38_img" />
             <span className=""　icon="usergroup-add">我的群组</span>
           </div>
