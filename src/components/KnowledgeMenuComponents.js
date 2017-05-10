@@ -4,44 +4,40 @@ import {doWebService} from '../WebServiceHelper';
 import BindKnowledgeComponents from './BindKnowledgeComponents';
 const SubMenu = Menu.SubMenu;
 
-//一级菜单数组
-//菜单元素，根据构建出来的该对象，对菜单进行生成
 
-var breadCrumbArray = new Array();
-var openKeys = [];
-var openKeysStr = "";
+class KnowledgeMenuComponents extends React.Component{
 
-const KnowledgeMenuComponents = React.createClass({
-    getInitialState() {
-        return {
+    constructor(props) {
+        super(props);
+        this.state = {
             currentMenu: '',
             currentPage: 1,
-            openSubMenu: [],
             show: 1,
             lessonCount: 0,
             menuList: [],
             totalCount: 0,
             fatherMenuName: '',
-            breadCrumbArray: [],
-            noHaveKnowledgeTip: '',
-        };
+            noHaveKnowledgeTip: ''
+        }
         this.children = null;
-    },
+        this.openKeys = [];
+        this.breadCrumbArray = [];
+        this.buildOpenMenuKeysArray =  this.buildOpenMenuKeysArray.bind(this);
+        this.subMenuTitleClick =  this.subMenuTitleClick.bind(this);
+    }
 
     componentWillMount(){
         this.getLessonMenu();
-        // this.initOpenSubMenu();
-    },
+      //  this.initOpenSubMenu();
+    }
 
-    componentDidMount(){
-    },
+
 
     initOpenSubMenu(){
+
         var openKeysStr = sessionStorage.getItem("openKeysStr");
 
-        if (openKeysStr) {
-            this.setState({openSubMenu: openKeysStr});
-        }
+
         var openKeysArray = [];
         if (openKeysStr) {
             openKeysArray = openKeysStr.split(",");
@@ -67,10 +63,10 @@ const KnowledgeMenuComponents = React.createClass({
                 });
                 var optContent = sessionStorage.getItem("lastClickMenuId") + "#" + "bySubjectId" + "#" + sessionStorage.getItem("lastClickMenuName") + "#" + childrenCount;
 
-                this.props.callbackParent(optContent, breadCrumbArray);
+                this.props.callbackParent(optContent, this.breadCrumbArray);
             }
         }
-    },
+    }
 
     //菜单被选择时执行的函数
     subMenuTitleClick(e){
@@ -92,15 +88,15 @@ const KnowledgeMenuComponents = React.createClass({
         var menuLevel = menuKeyArray[2];
         var menuName = menuKeyArray[3];
         var fatherMenuName = menuKeyArray[4];
+
         this.buildOpenMenuKeysArray(e.key, menuLevel);
-        openKeysStr = "";
-        openKeysStr = openKeys.join(',');
+      let  openKeysStr = this.openKeys.join(',');
         // defaultOpenKeys={['81#3#0#数学#','86#13#1#小学#数学','89#7#2#一年级上#小学']}
         // openKeys={['81#3#0#数学#','86#13#1#小学#数学','89#7#2#一年级上#小学']}
         //全局存放用户在知识点导航下的访问路径，退出时将此值保存到数据库，下次登录时获取
         sessionStorage.setItem("openKeysStr", openKeysStr);
         this.setState({
-            currentMenu: e.key, openSubMenu: openKeysStr
+            currentMenu: e.key
         });
         if (menuLevel != 0 && childrenCount == 0) {
             this.bulidBreadCrumbArray(fatherMenuName, menuLevel - 1, menuId, openKeysStr);
@@ -110,12 +106,13 @@ const KnowledgeMenuComponents = React.createClass({
         sessionStorage.setItem("lastClickMenuName", menuName);
         sessionStorage.setItem("lastClickMenuId", menuId);
         var optContent = menuId + "#" + "bySubjectId" + "#" + menuName + "#" + childrenCount;
-        this.props.callbackParent(optContent, breadCrumbArray);
-    },
+        this.props.callbackParent(optContent, this.breadCrumbArray);
+    }
     //判断当前点击的菜单key是否已经在被点击key的数组中
     checkCurrentMenuKeyIsExist(currentClickKey){
-        for (var i = 0; i < openKeys.length; i++) {
-            var existKeyArray = openKeys[i].split("#");
+
+        for (var i = 0; i < this.openKeys.length; i++) {
+            var existKeyArray = this.openKeys[i].split("#");
             var menuId = existKeyArray[0];
             var menuName = existKeyArray[2];
 
@@ -128,75 +125,72 @@ const KnowledgeMenuComponents = React.createClass({
             }
         }
         return false;
-    },
+    }
 
     //构建被点击菜单key的数组
     buildOpenMenuKeysArray(currentClickKey, menuLevel){
         if (menuLevel == 0) {
-            openKeys.splice(0, openKeys.length);
-            openKeys.push(currentClickKey);
+            this.openKeys.push(currentClickKey);
         } else {
             var isExist = this.checkCurrentMenuKeyIsExist(currentClickKey);
             if (isExist == false) {
-                openKeys.push(currentClickKey);
+                this.openKeys.push(currentClickKey);
             }
         }
-    },
+    }
 
-    bulidBreadCrumbArray: function (menuText, menuLevel, menuId, openKeys) {
+    bulidBreadCrumbArray (menuText, menuLevel, menuId, openKeys) {
         var breadJson = {
             hrefLink: '#/MainLayout',
             hrefText: menuText,
             menuLevel: menuLevel,
             menuId: menuId,
-            openKeysStr: openKeys
+            openKeysStr: this.openKeys
         };
         if (menuLevel == 0) {
-            breadCrumbArray = new Array();
-            breadCrumbArray.push(breadJson);
+            this.breadCrumbArray = [];
+            this.breadCrumbArray.push(breadJson);
         } else {
-            this.checkSameLevelBread(breadJson, breadCrumbArray);
+            this.checkSameLevelBread(breadJson, this.breadCrumbArray);
         }
 
         //全局存放用户在知识点导航下的访问路径，退出时将此值保存到数据库，下次登录时获取
-        sessionStorage.setItem("openKeysStr", openKeys);
-        this.setState({breadCrumbArray: breadCrumbArray, openSubMenu: openKeys});
-        return breadCrumbArray;
-    },
+        sessionStorage.setItem("openKeysStr", this.openKeys);
+        this.setState({breadCrumbArray: this.breadCrumbArray });
+        return this.breadCrumbArray;
+    }
 
-    refreshOpenMenu(openKeys){
 
-    },
 
-    checkIsFatherLevel(breadJson, breadCrumbArray){
+    checkIsFatherLevel(breadJson, breadCrumbArr){
         var index = -1;
-        for (var i = 0; i < breadCrumbArray.length; i++) {
+        for (var i = 0; i < breadCrumbArr.length; i++) {
             //如果是相同层次的菜单，则返回当前的菜单索引位置
-            if (breadJson.menuLevel == breadCrumbArray[i].menuLevel) {
+            if (breadJson.menuLevel == breadCrumbArr[i].menuLevel) {
                 index = i;
                 break;
             }
         }
         if (index != -1) {
             //如果点击的是同级菜单，则替换当前的菜单，并删除之后的所有菜单项目
-            breadCrumbArray[index] = breadJson;
-            for (var i = 0; i < breadCrumbArray.length; i++) {
+            breadCrumbArr[index] = breadJson;
+            for (var i = 0; i < breadCrumbArr.length; i++) {
                 if (i > index) {
-                    breadCrumbArray.splice(i, 1);
+                    breadCrumbArr.splice(i, 1);
                 }
             }
-            breadCrumbArray.push(breadJson);
+            breadCrumbArr.push(breadJson);
         } else {
-            breadCrumbArray.push(breadJson);
+            breadCrumbArr.push(breadJson);
         }
-        return breadCrumbArray;
-    },
+        return breadCrumbArr;
+    }
 
-    checkSameLevelBread: function (breadJson, breadCrumbArray) {
+    checkSameLevelBread (breadJson, breadCrumbArr) {
         var index = -1;
-        for (var i = 0; i < breadCrumbArray.length; i++) {
+        for (var i = 0; i < breadCrumbArr.length; i++) {
             //如果是相同层次的菜单，则返回当前的菜单索引位置
-            if (breadJson.menuLevel <= breadCrumbArray[i].menuLevel) {
+            if (breadJson.menuLevel <= breadCrumbArr[i].menuLevel) {
                 index = i;
                 break;
             }
@@ -204,19 +198,19 @@ const KnowledgeMenuComponents = React.createClass({
         var removeArray = [];
         if (index != -1) {
             //如果点击的是同级菜单，则替换当前的菜单，并删除之后的所有菜单项目
-            breadCrumbArray[index] = breadJson;
-            for (var i = 0; i < breadCrumbArray.length; i++) {
+            breadCrumbArr[index] = breadJson;
+            for (var i = 0; i < breadCrumbArr.length; i++) {
                 if (i > index) {
                     removeArray.push(i);
                 }
             }
-            breadCrumbArray.splice(removeArray[0], removeArray.length);
+            breadCrumbArr.splice(removeArray[0], removeArray.length);
         } else {
-            breadCrumbArray.push(breadJson);
+            breadCrumbArr.push(breadJson);
         }
 
-        return breadCrumbArray;
-    },
+        return breadCrumbArr;
+    }
 
     getLessonMenu(){
         let _this = this;
@@ -243,9 +237,9 @@ const KnowledgeMenuComponents = React.createClass({
                 message.error(error);
             }
         });
-    },
+    }
 
-    buildMenuChildren: function (menuList) {
+    buildMenuChildren (menuList) {
         var menuContent;
         this.children = menuList.map((e, i) => {
             menuContent = (e[0] != null ? e[0] : e);
@@ -288,29 +282,29 @@ const KnowledgeMenuComponents = React.createClass({
                 }
             </SubMenu>
         });
-    },
+    }
 
-    hasChild: function (menuContent) {
+    hasChild (menuContent) {
         if (menuContent.children.length != 0) {
             return true;
         } else {
             return false;
         }
-    },
+    }
 
     handleClick(e) {
         this.setState({
             currentMenu: e.key,
         });
-    },
+    }
 
-    showModal: function (optType, editSchuldeId) {
+    showModal (optType, editSchuldeId) {
         this.refs.bindKnowledgeComponent.showModal();
-    },
+    }
 
     handleMenu(){
         this.getLessonMenu();
-    },
+    }
 
     render() {
         return (
@@ -330,6 +324,6 @@ const KnowledgeMenuComponents = React.createClass({
                 </Menu>
             </div>
         );
-    },
-});
+    }
+};
 export default KnowledgeMenuComponents;
