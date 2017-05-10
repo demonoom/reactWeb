@@ -17,9 +17,12 @@ import MessageMenu from '../components/layOut/MessageMenu';
 import AntGroupMenu from '../components/layOut/AntGroupMenu';
 import PersonCenterMenu from '../components/layOut/PersonCenterMenu';
 import AntNestMenu from '../components/layOut/AntNestMenu';
+import PersonCenterComponents from '../components/antGroup/PersonCenterComponents';
+import {LocaleProvider} from 'antd';
+import {doWebService} from '../WebServiceHelper';
+import enUS from 'antd/lib/locale-provider/en_US';
 import TeachSpace  from '../components/TeachSpaces';
 import TeachSpaceGhostMenu from '../components/TeachSpacesGhostMenu';
-import {LocaleProvider} from 'antd';
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
@@ -207,6 +210,23 @@ const MainLayout = React.createClass({
     },
 
 
+    /**
+     * 获取个人中心需要的数据,老师和学生可通用,后期需要什么再添加
+     */
+    getPersonalCenterData(userId){
+        this.refs.personCenterComponents.getPersonalCenterData(userId);
+    },
+
+    setFirstPerson(userContactsData){
+        var userJson = userContactsData[0];
+        this.setState({"userContactsData":userContactsData});
+        this.getPersonalCenterData(userJson.userObj.colUid);
+    },
+
+    getGroupInfo(){
+        this.refs.personCenterComponents.getUserChatGroup();
+    },
+
     render() {
 
         const collapse = this.state.collapse;
@@ -225,9 +245,15 @@ const MainLayout = React.createClass({
                 break;
             case 'antGroup':
                 //蚁群
-                middleComponent = <AntGroupMenu ref="antGroupMenu"/>;
-                tabComponent = <MainTabComponents showpanle={this.showpanle} ref="mainTabComponents"
-                                                  callBackKnowledgeMenuBuildBreadCrume={this.callBackKnowledgeMenuBuildBreadCrume}/>;
+                middleComponent = <AntGroupMenu ref="antGroupMenu" callbackSetFirstPerson={this.setFirstPerson}
+                                                callbackPersonCenterData={this.getPersonalCenterData}
+                                                callbackGetGroupInfo={this.getGroupInfo}
+                ></AntGroupMenu>;
+                tabComponent = <PersonCenterComponents ref="personCenterComponents"
+                                                       userInfo={this.state.userObj}
+                                                       userContactsData={this.state.userContactsData}
+                                                       onPreview={ this.showpanle }
+                />;
                 break;
             case 'personCenter':
                 //个人中心
