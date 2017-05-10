@@ -1247,7 +1247,7 @@ const AntNestTabComponents = React.createClass({
         var optionButton;
         var topicList;
         if(antNest.state.optType=="getTopicById"){
-            optionButton = <div className="ant-tabs-right"><Button onClick={antNest.returnTopicList}>返回</Button></div>;
+            optionButton = <div className="ant-tabs-right talk_ant_btn1"><Button onClick={antNest.returnTopicList}>返回</Button></div>;
         }else{
             optionButton = <div className="ant-tabs-right talk_ant_btn1"><Button value="talk" onClick={antNest.showaddTopicModal} className="antnest_talk">发表说说</Button><Button value="topic" onClick={antNest.showaddTopicModal}>发表话题</Button></div>;
         }

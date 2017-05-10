@@ -705,7 +705,7 @@ const PersonCenterComponents = React.createClass({
                         var groupMemebersPhoto=[];
                         for(var i=0;i<e.members.length;i++){
                             var member = e.members[i];
-                            var memberAvatarTag = <div><img src={member.avatar} ></img></div>;
+                            var memberAvatarTag = <img src={member.avatar} ></img>;
                             groupMemebersPhoto.push(memberAvatarTag);
                             if(i>=3){
                                 break;
@@ -1402,7 +1402,7 @@ const PersonCenterComponents = React.createClass({
         var personDate;
         var userPhoneCard;
         if (isEmpty(personCenter.state.userInfo) == false && personCenter.state.optType == "userDetail") {
-            personDate = <div>
+            personDate = <div className="maaee_group_pa">
                 <Card className="bai">
                     {userPhotoTag}
 

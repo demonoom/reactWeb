@@ -578,7 +578,8 @@ i, cite, em, var, address, dfn {
     float: none;
 	width: calc(100% - 240px);
 	height:100%;
-	top:0
+	top:0;
+	background:#fff;
 }
 .ant-form-item-control {
 	text-align:left
@@ -1376,6 +1377,9 @@ a {
     color: #999;
     width: 69px;
 }
+.group_table_u table tr td:nth-child(4){
+    width: 55px;
+}
 .maaee_group{
     height: 54px !important;
     border-bottom: 1px solid #e9e9e9;
@@ -1394,7 +1398,7 @@ a {
 	cursor:pointer
 }
 .maaeegroup{
-	height: calc(100% - 62px );
+	height: calc(100% - 117px );
 }
 .maaeegroup > div:first-child{
 	height:100%
@@ -3492,15 +3496,15 @@ color:#ffbf00
 
 .ghostMenu .headler{
 	position: absolute;
-    width: 36px;
-    height: 36px;
+    width: 28px;
+    height: 30px;
     margin-top: -40px;
     top: 50%;
-    right: -36px;
-    border-radius: 0px 8px 8px 0px;
+    right: -29px;
+    border-radius: 0px 6px 6px 0px;
     background: #309FFB;
     color: #fff;
-    padding: 6px 4px;
+    padding: 5px 2px;
     cursor: pointer;
 }
 .ghostMenu .headler:hover{
@@ -3530,16 +3534,21 @@ color:#ffbf00
 
 .ghostMenu li {
 	display: block;
-	padding: 12px 0px;
-	font-size: 16px;
-	font-family: "Microsoft YaHei";
-	color:#333
+    padding: 12px 0px;
+    font-size: 15px;
+    font-family: "Microsoft YaHei";
+    color: #333;
 }
 .ghostMenu li i{
 	margin-right:8px;
 }
 .ghostMenu .first > li {
 	padding: 10px 0px 10px 0px;
+	border-bottom: 1px solid #f3f3f3;
+    background: #f8f8f8;
+}
+.ghostMenu .first > li:last-child{
+	border-bottom:none;
 }
 .ghostMenu .first .multi {
 
@@ -3549,6 +3558,7 @@ color:#ffbf00
 .ghostMenu .second li{
 	font-size: 15px;
     color: #666;
+	background: #FCFCFC;
 }
 .ghostMenu .second li:hover {
 	 background-color: #f2f8fe;
@@ -3556,14 +3566,17 @@ color:#ffbf00
 	cursor: pointer;
 
 }
-
 .te_download_a{
 	float:right;
 	line-height:1px
 }
 
 .tableRow{
-	background-color: #e5f2fe;
+	background-color: #E5F2FE;
+	color:#2db7f5
+}
+.tableRow td{
+	border-bottom:none
 }
 .talk_ant_btn{
 	position:relative;
@@ -3575,4 +3588,6 @@ color:#ffbf00
     top: 2px;
     right: 20px;
 }
-
+.maaee_group_pa{
+	padding:24px 24px 0 24px;
+}

@@ -1814,7 +1814,7 @@ const AntGroupTabComponents = React.createClass({
                                 <img src={require('../images/groupTitle.png')} className="antnest_38_img" />
                                 <span className=""　icon="usergroup-add">我的群组</span>
                             </div>
-                            <Table className="maaeegroup" onRowClick={antGroup.getPersonCenterInfo} showHeader={false} scroll={{ x: true, y: 430}} columns={columns} dataSource={antGroup.state.userContactsData} pagination={false}/>
+                            <Table className="maaeegroup" onRowClick={antGroup.getPersonCenterInfo} showHeader={false} scroll={{ x: true, y: 480}} columns={columns} dataSource={antGroup.state.userContactsData} pagination={false}/>
                     </TabPane>
                 </Tabs>;
         }else if(antGroup.state.optType=="personCenter"){
