@@ -3,10 +3,11 @@
  */
 
 import React  from 'react';
-import MyMTV  from '../components/MyMTV';
-import MyFollows  from '../components/MyFollows';
-import MyFavorites  from '../components/Favorites';
-import ResetStudentAccountKey  from '../components/ResetStudentAccountKey';
+import MyMTV  from './MyMTV';
+import UserInfo  from './UserInfo';
+import MyFollows  from './MyFollows';
+import MyFavorites  from './Favorites';
+import ResetStudentAccountKey  from './ResetStudentAccountKey';
 import TeacherAllSubjects from '../components/TeacherInfos/TeacherAllSubjects';
 import TeacherAllCourseWare from '../components/TeacherInfos/TeacherAllCourseWare';
 
@@ -23,6 +24,10 @@ class PersonCenter extends React.Component {
 
         switch (this.props.params) {
             default :
+                face = <UserInfo />;
+                break;
+
+            case 'myResource':
                 face = <TeacherAllCourseWare />;
                 break;
             case 'mySubject':
