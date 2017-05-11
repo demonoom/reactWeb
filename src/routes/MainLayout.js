@@ -215,7 +215,16 @@ const MainLayout = React.createClass({
      */
     sendGroupMessage(groupObj){
         console.log("mainLayout:"+groupObj.name);
-        this.setState({currentKey: 'message', resouceType: '',"groupObj":groupObj,"messageType":'groupMessage'});
+        var contentJson = {"content": '', "createTime": ''};
+        var contentArray = [contentJson];
+        var userJson = {
+            key: groupObj.chatGroupId,
+            "fromUser": groupObj,
+            contentArray: contentArray,
+            "messageToType": 4,
+            "toChatGroup": groupObj
+        };
+        this.setState({currentKey: 'message', resouceType: '',"groupObj":groupObj,"messageType":'groupMessage',userJson});
     },
 
     /**
@@ -223,11 +232,23 @@ const MainLayout = React.createClass({
      */
     sendMessage(userInfo){
         console.log("userInfo:"+userInfo.user.colUid);
-        this.setState({currentKey: 'message', resouceType: '',"userInfo":userInfo.user,"messageType":'message'});
+        var contentJson = {"content": '', "createTime": ''};
+        var contentArray = [contentJson];
+        var userJson = {
+            key: userInfo.user.colUid,
+            "fromUser": userInfo.user,
+            contentArray: contentArray,
+            "messageToType": 1
+        };
+        this.setState({currentKey: 'message', resouceType: '',"userInfo":userInfo.user,"messageType":'message',userJson});
         // this.turnToMessagePage(userInfo.user);
 
     },
-
+    /**
+     * 点击消息动态联系人列表时，进入消息列表
+     * 根据当前点击的消息对象不同，分别进入个人消息和群组消息界面
+     * @param fromObj
+     */
     turnToMessagePage(fromObj){
         if(fromObj.messageType == 1){
             // 个人消息
@@ -252,7 +273,9 @@ const MainLayout = React.createClass({
                 tabComponent = <MainTabComponents ref="mainTabComponents" showpanle={this.showpanle}/>;
             case 'message':
                 //消息动态
-                middleComponent = <MessageMenu onUserClick={this.turnToMessagePage}/>;
+                middleComponent = <MessageMenu onUserClick={this.turnToMessagePage}
+                                  userJson={this.state.userJson}
+                />;
                 tabComponent = <AntGroupTabComponents ref="antGroupTabComponents" showpanle={this.showpanle}
                                userInfo={this.state.userInfo}
                                groupObj={this.state.groupObj}

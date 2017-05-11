@@ -12,6 +12,7 @@ const columns = [{
 }];
 
 var messageData = [];
+var userMessageData = [];
 const MessageMenu = React.createClass({
     getInitialState() {
         mMenu = this;
@@ -21,14 +22,19 @@ const MessageMenu = React.createClass({
     },
 
     componentDidMount(){
-        mMenu.getUserRecentMessages()
+        mMenu.getUserRecentMessages();
     },
 
     /**
      * 获取用户最新消息列表
      */
     getUserRecentMessages(){
-        var userMessageData = [];
+        userMessageData.splice(0);
+        messageData.splice(0);
+        var propsUserJson = mMenu.props.userJson;
+        if(isEmpty(propsUserJson)==false){
+            messageData.push(propsUserJson);
+        }
         var param = {
             "method": 'getUserRecentMessages',
             "userId": sessionStorage.getItem("ident"),
@@ -37,9 +43,13 @@ const MessageMenu = React.createClass({
             onResponse: function (ret) {
                 var response = ret.response;
                 var i = 0;
-                if (isEmpty(response) == false) {
-                    messageData.splice(0);
+                if (isEmpty(response) == false || isEmpty(messageData)==false) {
+                    //messageData.splice(0);
                     response.forEach(function (e) {
+                        //临时处理
+                        /*if(e.toType==1){
+
+                        }*/
                         mMenu.setMessageArrayForOnePerson(e);
                     });
                     messageData.forEach(function (message) {
@@ -53,7 +63,6 @@ const MessageMenu = React.createClass({
                             var lastContentInfo = contentArray[contentArray.length - 1];
                             var lastContentText = lastContentInfo.content;
                             var lastCreateTime = lastContentInfo.createTime;
-                            var messageCount = contentArray.length;
                             var imgTag;
                             if (messageType == 1) {
                                 imgTag = <div>
@@ -73,7 +82,7 @@ const MessageMenu = React.createClass({
                                     <div>{lastCreateTime}</div>
                                 </div>
                             </Badge>;
-                            var userJson = {key: colUid, "fromUser": fromUser, messageContent: messageContentTag};
+                            var userJson;
                             if (messageType == 1) {
                                 userJson = {
                                     key: colUid,
@@ -90,10 +99,9 @@ const MessageMenu = React.createClass({
                                     "toChatGroup": toChatGroup
                                 };
                             }
-                            /*if (colUid != sessionStorage.getItem("ident")) {
-
-                            }*/
-                            userMessageData.push(userJson);
+                            if (colUid != parseInt(sessionStorage.getItem("ident"))) {
+                                userMessageData.push(userJson);
+                            }
                             if (i == 0) {
                                 mMenu.setState({selectRowKey: colUid});
                             }
@@ -102,8 +110,6 @@ const MessageMenu = React.createClass({
                     })
                     mMenu.setState({"userMessageData": userMessageData});
                 }
-                /* mMenu.setState({"userMessageData":userMessageData});
-                 mMenu.props.callbackSetFirstPerson(userContactsData);*/
             },
             onError: function (error) {
                 message.error(error);
