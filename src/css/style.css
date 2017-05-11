@@ -7,6 +7,7 @@ html, body{
 	-moz-user-select: none;
     cursor: default;
     -webkit-user-select: none;
+	font-size:16px;
 }
 ul, li{
 	list-style:none
@@ -699,7 +700,6 @@ html, body, #root {
 	color:#309ffb !important
 }
  .ant-collapse-header{
-	font-size:16px !important;
 	font-weight: bold;
 	color: #3a54a4 !important;
 }
@@ -707,7 +707,6 @@ html, body, #root {
 .bnt2_tex{
 	width:calc(100% - 160px);
 	float:left;
-	font-size:16px;
 }
 .bnt2_tex span.col1{
 	color:#666;
@@ -789,7 +788,6 @@ html, body, #root {
 	background-position:0 -150px;
 }
 .menu_til{
-	font-size:16px;
 	line-height:63px;
 	height:63px;
 	padding: 0 0 0 24px;
@@ -1035,7 +1033,6 @@ html, body, #root {
 }
 .login_buton{
 	width:100%;
-	font-size:16px;
 	height:36px;
 	line-height:34px;
 	padding:0 !important;
@@ -1083,7 +1080,7 @@ a:hover{
 
 }
 .ant-table-fixed-header .ant-table-scroll .ant-table-header{
-	font-size:16px;
+	
 }
 .ant-checkbox-wrapper{
 	display:inline-block;
@@ -1324,7 +1321,6 @@ p.user_cont span.name1{
 	padding:3px 8px !important;
 }
 .ant-modal-title{
-	font-size:16px !important;
 	    font-weight: normal;
 }
 label {
@@ -2061,7 +2057,7 @@ a.topics:hover{
     overflow: hidden;
     line-height: 23px;
     word-wrap: break-word;
-	font-size:14px;
+	font-size:16px;
 	color:#727272;
 }
 .antnest-card .ant-card-body ul li.topics_bot{
