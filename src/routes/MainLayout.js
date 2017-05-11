@@ -232,7 +232,7 @@ const MainLayout = React.createClass({
      */
     sendGroupMessage(groupObj){
         console.log("mainLayout:"+groupObj.name);
-        this.setState({currentKey: 'message', resouceType: ''});
+        this.setState({currentKey: 'message', resouceType: '',"groupObj":groupObj,"messageType":'groupMessage'});
     },
 
     /**
@@ -240,7 +240,7 @@ const MainLayout = React.createClass({
      */
     sendMessage(userInfo){
         console.log("userInfo:"+userInfo.user.colUid);
-        this.setState({currentKey: 'message', resouceType: '',"userInfo":userInfo.user});
+        this.setState({currentKey: 'message', resouceType: '',"userInfo":userInfo.user,"messageType":'message'});
         // this.turnToMessagePage(userInfo.user);
 
     },
@@ -272,6 +272,8 @@ const MainLayout = React.createClass({
                 middleComponent = <MessageMenu onUserClick={this.turnToMessagePage}/>;
                 tabComponent = <AntGroupTabComponents ref="antGroupTabComponents" showpanle={this.showpanle}
                                userInfo={this.state.userInfo}
+                               groupObj={this.state.groupObj}
+                               messageType={this.state.messageType}
                 />;
                 break;
             case 'antGroup':

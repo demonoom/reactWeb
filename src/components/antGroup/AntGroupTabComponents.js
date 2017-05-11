@@ -86,10 +86,14 @@ const AntGroupTabComponents = React.createClass({
             "data": {"machineType": "web", "userId": Number.parseInt(loginUserId), "machine": machineId,"password":password,"version":0.1}
         };
         ms.connect(pro);
-        console.log("user:"+antGroup.props.userInfo);
+        var messageType = antGroup.props.messageType;
         var propsUserInfo = antGroup.props.userInfo;
-        if(isEmpty(propsUserInfo)==false){
-            antGroup.getUser2UserMessages(antGroup.props.userInfo);
+        if(isEmpty(messageType)==false){
+            if(messageType=="message"){
+                antGroup.getUser2UserMessages(propsUserInfo);
+            }else{
+                antGroup.sendGroupMessage(antGroup.props.groupObj);
+            }
         }
         // antGroup.getAntGroup();
     },
@@ -676,10 +680,10 @@ const AntGroupTabComponents = React.createClass({
                 </TabPane>
             </Tabs>;
         } else if (antGroup.state.optType == "sendGroupMessage") {
-            returnToolBar = <div className="ant-tabs-right">
+            /*returnToolBar = <div className="ant-tabs-right">
                 <Button onClick={antGroup.setChatGroup} className="antnest_talk">设置</Button>
                 <Button onClick={antGroup.getUserChatGroup}>返回</Button>
-            </div>;
+            </div>;*/
             welcomeTitle = antGroup.state.currentGroupObj.name;
             var messageTagArray = [];
             var messageList = antGroup.state.messageList;
@@ -743,7 +747,6 @@ const AntGroupTabComponents = React.createClass({
                 ref="personGroupTab"
                 activeKey={this.state.activeKey}
                 defaultActiveKey={this.state.defaultActiveKey}
-                tabBarExtraContent={returnToolBar}
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
