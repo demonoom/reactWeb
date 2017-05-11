@@ -228,9 +228,6 @@ const MainLayout = React.createClass({
      * 好友对好友的消息发送
      */
     sendMessage(userInfo){
-<<<<<<< HEAD
-        this.setState({currentKey: 'message', resouceType: '',"userInfo":userInfo.user,"messageType":'message'});
-=======
         console.log("userInfo:"+userInfo.user.colUid);
         var contentJson = {"content": '', "createTime": ''};
         var contentArray = [contentJson];
@@ -241,8 +238,6 @@ const MainLayout = React.createClass({
             "messageToType": 1
         };
         this.setState({currentKey: 'message', resouceType: '',"userInfo":userInfo.user,"messageType":'message',userJson});
->>>>>>> ac16e24805112b1c6bce791f95706263cf866553
-        // this.turnToMessagePage(userInfo.user);
 
     },
     /**
@@ -274,16 +269,11 @@ const MainLayout = React.createClass({
                 tabComponent = <MainTabComponents ref="mainTabComponents"  />;
             case 'message':
                 //消息动态
-<<<<<<< HEAD
-                middleComponent = <MessageMenu onUserClick={this.turnToMessagePage}/>;
-                tabComponent = <AntGroupTabComponents ref="antGroupTabComponents"
-=======
                 middleComponent = <MessageMenu onUserClick={this.turnToMessagePage}
                                   userJson={this.state.userJson}
                                   onLoad={this.turnToMessagePage}
                 />;
                 tabComponent = <AntGroupTabComponents ref="antGroupTabComponents" showpanle={this.showpanle}
->>>>>>> ac16e24805112b1c6bce791f95706263cf866553
                                userInfo={this.state.userInfo}
                                groupObj={this.state.groupObj}
                                messageType={this.state.messageType}
