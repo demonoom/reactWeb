@@ -146,7 +146,8 @@ const PersonCenterComponents = React.createClass({
      * 发消息
      */
     sendMessage(e){
-        personCenter.props.callBackTurnToMessagePage(personCenter.state.userInfo.user);
+        //personCenter.props.callBackTurnToMessagePage(personCenter.state.userInfo.user);
+        personCenter.props.onSendMessage(personCenter.state.userInfo);
     },
     /**
      * 学生的提问
@@ -769,8 +770,15 @@ const PersonCenterComponents = React.createClass({
         });
     },
 
-    sendGroupMessage(){
-
+    /**
+     * 点击群组列表表格行时，获取当前行对应的记录信息
+     * @param record　当前行的群组信息
+     * @param index　当前行的索引顺序，从０开始
+     */
+    sendGroupMessage(record, index){
+        // antGroup.getChatGroupMessages(record.groupObj);
+        // antGroup.turnToChatGroupMessagePage(groupObj);
+        personCenter.props.onSendGroupMessage(record.groupObj);
     },
 
     /**
