@@ -21,7 +21,7 @@ class PersonCenter extends React.Component {
     render() {
 
         let face = '';
-debugger
+
         switch (this.props.params) {
             default :
                 face = <TeacherResource   />;
