@@ -216,6 +216,7 @@ const MessageMenu = React.createClass({
             <div>
                 <div className="menu_til">消息动态</div>
                 <Table showHeader={false} columns={columns} dataSource={mMenu.state.userMessageData}
+                       scroll={{ x: true, y: 430}}
                        rowClassName={mMenu.getRowClassName}
                        onRowClick={mMenu.turnToMessagePage}
                 />
