@@ -109,6 +109,10 @@ const MainTabComponents = React.createClass({
         }
     },
 
+    showpanle(obj){
+        LP.Start(obj);
+    },
+
     setCurrentOptType(toolbarKey){
 
     },
@@ -163,7 +167,7 @@ const MainTabComponents = React.createClass({
                 <a className="ant-dropdown-link icon_filter" href="#"><Icon type="down-circle-o"/></a>
             </Dropdown></span>}
                  key="课件">
-                <CourseWareComponents ref="courseWare" onPreview={ this.props.showpanle }/>
+                <CourseWareComponents ref="courseWare" onPreview={ this.showpanle }/>
             </TabPane>;
             subjectTabPanel=<TabPane tab={<span>题目<Dropdown overlay={menu}  trigger={['click']}  className='del_right'>
                 <a className="ant-dropdown-link icon_filter" href="#"><Icon type="down-circle-o" /></a></Dropdown></span>} key="题目">
@@ -172,13 +176,13 @@ const MainTabComponents = React.createClass({
             displayType='none';
             tabPanel=<TabPane tab={<span>课件<Dropdown overlay={menu}  trigger={['click']}  className='del_right'>
                 <a className="ant-dropdown-link icon_filter" href="#"><Icon type="down-circle-o"/></a></Dropdown></span>} key="课件">
-                <CourseWareComponents ref="courseWare" onPreview={ this.props.showpanle }/></TabPane>;
+                <CourseWareComponents ref="courseWare" onPreview={ this.showpanle }/></TabPane>;
             subjectTabPanel=<TabPane tab={<span>题目<Dropdown overlay={menu}  trigger={['click']}  className='del_right'>
                 <a className="ant-dropdown-link icon_filter" href="#"><Icon type="down-circle-o" /></a></Dropdown></span>} key="题目">
                 <SubjectTable  ref="subTable" params={this.state.subjectParams}/></TabPane>;
         }else{
             displayType='none';
-            tabPanel=<TabPane tab="课件" key="课件"><CourseWareComponents onPreview={ this.props.showpanle } ref="courseWare"/></TabPane>;
+            tabPanel=<TabPane tab="课件" key="课件"><CourseWareComponents onPreview={ this.showpanle } ref="courseWare"/></TabPane>;
             subjectTabPanel=<TabPane tab="题目" key="题目"><SubjectTable  ref="subTable" params={this.state.subjectParams}/></TabPane>
         }
         var toolbarExtra = <div className="ant-tabs-right" style={{display:displayType}}><CourseWareUploadComponents courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams} />

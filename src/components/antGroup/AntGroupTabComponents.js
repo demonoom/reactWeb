@@ -100,13 +100,10 @@ const AntGroupTabComponents = React.createClass({
         // antGroup.getAntGroup();
     },
 
-    /*componentDidMount(){
-        console.log("user did:"+antGroup.props.userInfo);
-    },*/
-
-    componentWillReceiveProps(nextProps){
-        console.log("rec:"+nextProps.userInfo);
+    showpanle(obj){
+        LP.Start(obj);
     },
+
 
     shouldComponentUpdate(){
         if (this.state.isreader) {

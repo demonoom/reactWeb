@@ -93,7 +93,10 @@ const AntNestTabComponents = React.createClass({
         e.preventDefault();
         e.cancelBubble = true;
         let obj = {title: tit, url: url, width: '380px'}
-        this.props.onPreview(obj)
+        this.showpanle(obj)
+    },
+    showpanle(obj){
+        LP.Start(obj);
     },
 
     /**

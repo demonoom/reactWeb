@@ -596,6 +596,10 @@ const PersonCenterComponents = React.createClass({
         }
     },
 
+    showpanle(obj){
+        LP.Start(obj);
+    },
+
     view: function (objref) {
         if (!objref.liveVideos[0]) {
             message.info("无效的视频！");
@@ -608,7 +612,7 @@ const PersonCenterComponents = React.createClass({
             htmlMode: true,
             width: '400px',
         }
-        personCenter.props.onPreview(obj)
+        this.showpanle(obj)
     },
     /**
      * 预览资源文件
@@ -625,7 +629,7 @@ const PersonCenterComponents = React.createClass({
         e.preventDefault();
         e.cancelBubble = true;
         let obj = {title: tit, url: url, width: '380px'}
-        this.props.onPreview(obj)
+        this.showpanle(obj)
     },
 
     /**

@@ -44,7 +44,6 @@ const MainLayout = React.createClass({
             ifr: {},
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
-        this.showpanle = this.showpanle.bind(this)
     },
 
 
@@ -162,9 +161,7 @@ const MainLayout = React.createClass({
     },
 
 
-    showpanle(obj){
-        LP.Start(obj);
-    },
+
 
     getAntNest(optType){
         var pageNo;
@@ -222,7 +219,6 @@ const MainLayout = React.createClass({
      * 好友对好友的消息发送
      */
     sendMessage(userInfo){
-        console.log("userInfo:"+userInfo.user.colUid);
         this.setState({currentKey: 'message', resouceType: '',"userInfo":userInfo.user,"messageType":'message'});
         // this.turnToMessagePage(userInfo.user);
 
@@ -249,11 +245,11 @@ const MainLayout = React.createClass({
 
         switch (this.state.currentKey) {
             default:
-                tabComponent = <MainTabComponents ref="mainTabComponents" showpanle={this.showpanle}/>;
+                tabComponent = <MainTabComponents ref="mainTabComponents"  />;
             case 'message':
                 //消息动态
                 middleComponent = <MessageMenu onUserClick={this.turnToMessagePage}/>;
-                tabComponent = <AntGroupTabComponents ref="antGroupTabComponents" showpanle={this.showpanle}
+                tabComponent = <AntGroupTabComponents ref="antGroupTabComponents"
                                userInfo={this.state.userInfo}
                                groupObj={this.state.groupObj}
                                messageType={this.state.messageType}
@@ -269,7 +265,6 @@ const MainLayout = React.createClass({
                 tabComponent = <PersonCenterComponents ref="personCenterComponents"
                                                        userInfo={this.state.userObj}
                                                        userContactsData={this.state.userContactsData}
-                                                       onPreview={ this.showpanle }
                                                        onSendGroupMessage={this.sendGroupMessage}
                                                        onSendMessage={this.sendMessage}
                 />;
@@ -283,7 +278,7 @@ const MainLayout = React.createClass({
             case 'antNest':
                 //蚁巢
                 middleComponent = <AntNestMenu callbackParent={this.getAntNest}/>;
-                tabComponent = <AntNestTabComponents ref="antNestTabComponents" onPreview={ this.showpanle }/>;
+                tabComponent = <AntNestTabComponents ref="antNestTabComponents"  />;
 
                 break;
             case 'teachSpace':
