@@ -36,7 +36,7 @@ class LessonPlans extends React.Component {
 
 
     componentWillMount() {
-        debugger
+      
         if (this.props.refData) {
             this.buildBreadcrumb(this.props.refData.optContent.split("#"));
         } else {
@@ -57,11 +57,11 @@ class LessonPlans extends React.Component {
 
 
     getTeachPlans(optContent) {
-        debugger
+      
         optContent = optContent || this.props.refData ? this.props.refData.optContent : null;
         if (!optContent)   return;
 
-        debugger
+      
         var optContentArray = optContent.split("#");
         var teachScheduleId = optContentArray[0];
         var optType = optContentArray[1];
@@ -79,7 +79,7 @@ class LessonPlans extends React.Component {
     }
 
     onChange(activeKey) {
-        debugger
+      
         if (activeKey == "题目") {
             this.setState({activeKey: '题目'});
             var subjectParams = sessionStorage.getItem("ident") + "#" + this.state.currentTeachScheduleId + "#" + 1 + "#" + this.state.currentOptType + "#" + this.state.currentKnowledgeName + "#" + this.state.subjectDataFilter;
@@ -184,7 +184,7 @@ class LessonPlans extends React.Component {
      * 课件上传成功后的回调函数
      */
     courseUploadCallBack() {
-        debugger
+      
         if (this.state.activeKey == "题目") {
             var subjectParams = sessionStorage.getItem("ident") + "#" + this.state.currentTeachScheduleId + "#" + 1 + "#" + this.state.currentOptType + "#" + this.state.currentKnowledgeName + "#" + this.state.subjectDataFilter + "#fromUpload";
             this.setState({subjectParams:subjectParams});

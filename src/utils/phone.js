@@ -29,7 +29,7 @@ class WebCall {
 
     playVideoJSON(jsonObject) {
         var obj = eval('(' + str + ')')
-        debugger
+        
         var flvsrc = obj.liveVideos[0].path;
 
     }

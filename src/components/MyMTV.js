@@ -1,5 +1,5 @@
 import React from 'react';
-import {Card, Button,message,Breadcrumb,Icon} from 'antd';
+import {Card, Button, message, Breadcrumb, Icon} from 'antd';
 import {getLocalTime} from '../utils/utils';
 import {doWebService} from '../WebServiceHelper';
 
@@ -13,7 +13,7 @@ class MyMTV extends React.Component {
             ident: this.props.userid || sessionStorage.getItem("ident"),
             data: [],
             pageNo: 1,
-             method:'getLiveInfoByUid'
+            method: 'getLiveInfoByUid'
         };
         this.changeState = this.changeState.bind(this);
     }
@@ -22,7 +22,7 @@ class MyMTV extends React.Component {
         this.tabClick(1);
     }
 
-    getDate(fn, param) {
+    getLiveInfoByUid(fn, param) {
         var args = {
             "method": param.method,
             "userId": param.ident,
@@ -32,7 +32,7 @@ class MyMTV extends React.Component {
         var _this = this;
         doWebService(JSON.stringify(args), {
             onResponse: function (res) {
-                debugger
+
                 if (!res.success) {
                     message.error(res.msg);
                     return;
@@ -40,7 +40,7 @@ class MyMTV extends React.Component {
                 if (res.pager.rsCount) {
                     args.data = res.response || [];
                     args.pager = res.pager || [];
-                    debugger
+
                     if (fn) fn.call(_this, args);
                 }
             },
@@ -50,10 +50,15 @@ class MyMTV extends React.Component {
         });
     }
 
-    changeState(args){
+    changeState(args) {
 
         this.setState({...args});
 
+    }
+
+
+    getLocalTime(nS) {
+        return new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/, ' ');
     }
 
     tabClick(type) {
@@ -63,21 +68,25 @@ class MyMTV extends React.Component {
             ident: this.state.ident,
             pageNo: this.state.pageNo
         }
-        this.getDate(this.changeState, param);
+        this.getLiveInfoByUid(this.changeState, param);
     }
 
-    cancelFav(address, fn) {
-        var _self = this;
-        var args = {
-            "method": 'removeFavorite',
-            "userId": _self.state.ident,
-            "address": address
+    deleteLiveVideos(id) {
+        let _this = this;
+        var param = {
+            "method": 'delLiveInfo',
+            "userId": this.state.ident,
+            "liveIds": id
         };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.success) {
+                    message.success("直播课删除成功");
+                } else {
+                    message.error("直播课删除失败");
+                }
 
-        doWebService(JSON.stringify(args), {
-            onResponse: function (res) {
-                message.info(res.msg);
-                if (!!fn) fn(_self.props.param.type);
+                _this.getLiveInfoByUid(_this.state.ident, 1);
             },
             onError: function (error) {
                 message.error(error);
@@ -85,37 +94,89 @@ class MyMTV extends React.Component {
         });
     }
 
-    buildFavShipionUi( ) {
+    onPreview(obj) {
+        LP.Start(obj);
+    }
 
-       let  courseWareList = this.state.data;
-            coursePanelChildren = null;
+
+    view(objref) {
+
+        if (!objref.liveVideos[0]) {
+            message.info("无效的视频！");
+            return;
+        }
+
+        let obj = {
+            title: objref.title,
+            url: "",
+            param: objref.liveVideos,
+            htmlMode: true,
+            width: '400px',
+        }
+
+        this.onPreview(obj)
+
+    }
+
+    buildFavShipionUi() {
+
+        let courseWareList = this.state.data;
+        coursePanelChildren = null;
 
         if (!courseWareList || !courseWareList.length) {
             coursePanelChildren = <img className="noDataTipImg" src={require('./images/noDataTipImg.png')}/>;
             return;
         }
-
+        var userLiveData = [];
         coursePanelChildren = courseWareList.map((e, i) => {
-debugger
-            let content = e.content;
-            let refkey = e.type + "#" + e.favoriteId;
 
-            return <Card style={{width: 240, display: 'inline-block'}} bodyStyle={{padding: '5px'}} key={refkey}>
-                <div className="custom-image">
-                    <a href={e.address} target="_blank"> <img alt="example" width="100%" src={e.cover}/></a>
+            let liveCover = e.liveCover;
+            let cover = liveCover.cover;
+            let liveVideos = e.liveVideos;
+            let schoolName = e.schoolName;
+            let startTime = this.getLocalTime(e.startTime);
+            let title = e.title;
+            let user = e.user;
+            let userName = user.userName;
+            let courseName = e.courseName;
+            let id = e.id;
+            let keyIcon = '';
+            if (e.password) {
+                keyIcon = <span className="right_ri focus_btn key_span"><i className="iconfont key">&#xe621;</i></span>;
+            }
+            let delButton;
+            if (user.colUid == sessionStorage.getItem("ident")) {
+                //如果是当前用户，可以删除自己的直播课
+                delButton = <Button icon="delete" className="right_ri star_del" onClick={  () => {
+                    this.deleteLiveVideos(id, e)
+                } }></Button>
+            }
+            let liveCard = <Card className="live">
+                <p className="h3">{title}</p>
+                <div className="live_img" id={id} onClick={ () => {
+                    this.view(e)
+                } }>
+                    <img className="attention_img" width="100%" src={cover}/>
+                    <div className="live_green"><span>{schoolName}</span></div>
                 </div>
                 <div className="custom-card">
-                    <p><a target="_blank" title="查看" href={e.address}><Button icon="eye-o"/></a>
-                        <a target="_blank" title="取消收藏"
-                           onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}><Button
-                            icon="star"/></a>
-                    </p>
-                    <h3>{content}</h3>
-                    <p>学校：{e.liveInfo.schoolName}</p>
-                    <p>上传者：{e.liveInfo.user.userName}</p>
-                    <p>时间：{getLocalTime(e.liveInfo.startTime)}</p>
+                    <ul className="live_cont">
+                        <li className="li_live_span_3">
+                            <span className="attention_img2"><img src={user.avatar}></img></span>
+                            <span className="live_span_1 live_span_3">{userName}</span>
+                            <span className="right_ri live_span_2">{startTime}</span>
+                        </li>
+                        <li>
+                            <span className="live_color live_orange">{courseName}</span>
+                            {keyIcon}
+                            {delButton}
+                        </li>
+                    </ul>
                 </div>
-            </Card>
+            </Card>;
+            userLiveData.push(liveCard);
+            return liveCard;
+
 
         });
 
@@ -139,7 +200,7 @@ debugger
             <Breadcrumb.Item href="#/MainLayout">我的直播课</Breadcrumb.Item>
         </Breadcrumb>;
 
-        if(this.props.hideBreadcrumb){
+        if (this.props.hideBreadcrumb) {
             breadcrumb = null;
         }
 

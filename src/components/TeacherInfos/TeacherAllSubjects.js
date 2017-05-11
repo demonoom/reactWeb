@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react';
-import { Table, Button,Popover,message } from 'antd';
+import { Table, Button,Popover,message, Breadcrumb, Icon } from 'antd';
+import ConfirmModal from '../ConfirmModal';
+import {getPageSize} from '../../utils/Const';
+import { doWebService } from '../../WebServiceHelper';
 import UseKnowledgeComponents from '../UseKnowledgeComponents';
 import SubjectEditByTextboxioTabComponents from '../SubjectEditByTextboxioTabComponents';
-import { doWebService } from '../../WebServiceHelper';
-import {getPageSize} from '../../utils/Const';
-import ConfirmModal from '../ConfirmModal';
 
 const columns = [{
   title: '出题人',
@@ -213,14 +213,19 @@ const TeacherAllSubjects = React.createClass({
     const hasSelected = selectedRowKeys.length > 0;
     return (
         <div className='ant-tabs ant-tabs-top ant-tabs-line'>
+          <Breadcrumb separator=">">
+            <Breadcrumb.Item><Icon type="home"/></Breadcrumb.Item>
+            <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
+            <Breadcrumb.Item href="#/MainLayout">我的题目</Breadcrumb.Item>
+          </Breadcrumb>
           <ConfirmModal ref="confirmModal"
                         title="确定要删除该题目?"
                         onConfirmModalCancel={subTable.closeConfirmModal}
                         onConfirmModalOK={subTable.delMySubjects}
-          ></ConfirmModal>
+          />
 		  <div className='ant-tabs-tabpane ant-tabs-tabpane-active'>
-          <SubjectEditByTextboxioTabComponents ref="subjectEditTabComponents" subjectEditCallBack={subTable.subjectEditCallBack}></SubjectEditByTextboxioTabComponents>
-          <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
+          <SubjectEditByTextboxioTabComponents ref="subjectEditTabComponents" subjectEditCallBack={subTable.subjectEditCallBack}/>
+          <UseKnowledgeComponents ref="useKnowledgeComponents"/>
           <Table columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: getPageSize(),onChange:subTable.pageOnChange }} scroll={{ y: 400}}/>
 		  </div>
         </div>

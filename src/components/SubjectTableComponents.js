@@ -343,7 +343,7 @@ class SUbjectTable extends React.Component{
 
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-debugger
+
                 subjectList.splice(0);
                 data.splice(0);
                 var response = ret.response;
@@ -405,7 +405,7 @@ debugger
 
 
     initGetSubjectInfo (subjectParams, currentPageNo) {
-        debugger
+        
         var subjectParamArray = this.props.params.split("#");
         this.setState({subjectParams: this.props.params});
         if (subjectParams) {

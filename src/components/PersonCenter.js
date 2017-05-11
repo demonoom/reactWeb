@@ -5,26 +5,28 @@
 import React  from 'react';
 import MyMTV  from '../components/MyMTV';
 import MyFollows  from '../components/MyFollows';
-import TeacherResource from '../components/TeacherInfos/TeacherResource';
-import ResetStudentAccountKey  from '../components/ResetStudentAccountKey';
 import MyFavorites  from '../components/Favorites';
+import ResetStudentAccountKey  from '../components/ResetStudentAccountKey';
+import TeacherAllSubjects from '../components/TeacherInfos/TeacherAllSubjects';
+import TeacherAllCourseWare from '../components/TeacherInfos/TeacherAllCourseWare';
 
 class PersonCenter extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {};
-
-
     }
 
     render() {
 
         let face = '';
-debugger
+
         switch (this.props.params) {
             default :
-                face = <TeacherResource   />;
+                face = <TeacherAllCourseWare />;
+                break;
+            case 'mySubject':
+                face = <TeacherAllSubjects />;
                 break;
 
             case 'myFavorites':
@@ -42,11 +44,6 @@ debugger
             case 'findStudentPwd':
                 face = <ResetStudentAccountKey />;
                 break;
-
-            case 'mySubject':
-                face = <MyFollows />;
-                break;
-
         }
 
 
