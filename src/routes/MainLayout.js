@@ -17,6 +17,7 @@ import PersonCenterComponents from '../components/antGroup/PersonCenterComponent
 import {LocaleProvider} from 'antd';
 import TeachSpace  from '../components/TeachSpaces';
 import TeachSpaceGhostMenu from '../components/TeachSpacesGhostMenu';
+import {MsgConnection} from '../utils/msg_websocket_connection';
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
@@ -26,7 +27,8 @@ import {createStore} from 'redux';
 const store = createStore(function () {
 
 });
-
+//消息通信js
+var ms;
 const MainLayout = React.createClass({
     proxyObj: null,
     getInitialState() {
@@ -109,6 +111,15 @@ const MainLayout = React.createClass({
         if (userIdent == null || userIdent == "") {
             location.hash = "login";
         }
+        ms = new MsgConnection();
+        var loginUserId = sessionStorage.getItem("ident");
+        var machineId = sessionStorage.getItem("machineId");
+        var password = sessionStorage.getItem("loginPassword");
+        var pro = {
+            "command": "messagerConnect",
+            "data": {"machineType": "web", "userId": Number.parseInt(loginUserId), "machine": machineId,"password":password,"version":0.1}
+        };
+        ms.connect(pro);
     },
     // 呼叫本组件中的实例任何方法 dapeng
     componentDidUpdate(){
@@ -246,6 +257,7 @@ const MainLayout = React.createClass({
                                userInfo={this.state.userInfo}
                                groupObj={this.state.groupObj}
                                messageType={this.state.messageType}
+                               messageUtilObj={ms}
                 />;
                 break;
             case 'antGroup':

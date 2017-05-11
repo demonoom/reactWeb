@@ -77,7 +77,7 @@ const AntGroupTabComponents = React.createClass({
     },
 
     componentWillMount(){
-        ms = new MsgConnection();
+        /*ms = new MsgConnection();
         var loginUserId = sessionStorage.getItem("ident");
         var machineId = sessionStorage.getItem("machineId");
         var password = sessionStorage.getItem("loginPassword");
@@ -85,7 +85,9 @@ const AntGroupTabComponents = React.createClass({
             "command": "messagerConnect",
             "data": {"machineType": "web", "userId": Number.parseInt(loginUserId), "machine": machineId,"password":password,"version":0.1}
         };
-        ms.connect(pro);
+        ms.connect(pro);*/
+        ms = antGroup.props.messageUtilObj;
+        console.log("ms ant:"+ms);
         var messageType = antGroup.props.messageType;
         var propsUserInfo = antGroup.props.userInfo;
         if(isEmpty(messageType)==false){

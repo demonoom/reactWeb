@@ -126,7 +126,7 @@ const MessageMenu = React.createClass({
         var contentJson = {"content": content, "createTime": createTime};
         if (messageObj.toType == 1) {
             //个人消息
-            if (colUid != parseInt(sessionStorage.getItem("ident")) && messageIndex == -1) {
+            if (messageIndex == -1) {
                 var contentArray = [contentJson];
                 var userJson = {
                     key: colUid,
