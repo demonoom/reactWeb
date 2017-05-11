@@ -23,7 +23,6 @@ class MyMTV extends React.Component {
     }
 
     getDate(fn, param) {
-        debugger
         var args = {
             "method": param.method,
             "userId": param.ident,
@@ -97,7 +96,7 @@ class MyMTV extends React.Component {
         }
 
         coursePanelChildren = courseWareList.map((e, i) => {
-
+debugger
             let content = e.content;
             let refkey = e.type + "#" + e.favoriteId;
 

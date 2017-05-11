@@ -2,25 +2,19 @@ import React from  'react';
 import {Menu, Icon, Row, Col} from 'antd';
 import MainTabComponents from '../components/MainTabComponents';
 import HeaderComponents from '../components/HeaderComponents';
-import UserCardModalComponents from '../components/UserCardModalComponents';
+import UserFace from '../components/UserCardModalComponents';
 import FloatButton  from '../components/FloatButton';
-import MyMTV  from '../components/MyMTV';
-import MyFollows  from '../components/MyFollows';
-import MyFavorites  from '../components/Favorites';
-import ResetStudentAccountKey  from '../components/ResetStudentAccountKey';
-import HomeWorkTabComponents from '../components/HomeWorkTabComponents';
-import TeacherResource from '../components/TeacherInfos/TeacherResource';
+
+import PersonCenterMenu from '../components/layOut/PersonCenterMenu';
+import PersonCenter  from '../components/PersonCenter';
 import moment from 'moment';
 import AntNestTabComponents from '../components/antNest/AntNestTabComponents';
 import AntGroupTabComponents from '../components/antGroup/AntGroupTabComponents';
 import MessageMenu from '../components/layOut/MessageMenu';
 import AntGroupMenu from '../components/layOut/AntGroupMenu';
-import PersonCenterMenu from '../components/layOut/PersonCenterMenu';
 import AntNestMenu from '../components/layOut/AntNestMenu';
 import PersonCenterComponents from '../components/antGroup/PersonCenterComponents';
 import {LocaleProvider} from 'antd';
-import {doWebService} from '../WebServiceHelper';
-import enUS from 'antd/lib/locale-provider/en_US';
 import TeachSpace  from '../components/TeachSpaces';
 import TeachSpaceGhostMenu from '../components/TeachSpacesGhostMenu';
 // 推荐在入口文件全局设置 locale
@@ -40,6 +34,7 @@ const MainLayout = React.createClass({
             collapse: true,
             ghostMenuVisible: true,
             activeMiddleMenu: '',
+            personCenterParams: '',
             currentKey: 'message',
             openKeysStr: '',
             locale: 'zh-cn',
@@ -47,7 +42,6 @@ const MainLayout = React.createClass({
             ifr: {},
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
-        this.switchSection = this.switchSection.bind(this)
         this.showpanle = this.showpanle.bind(this)
     },
 
@@ -65,7 +59,7 @@ const MainLayout = React.createClass({
             if (toolbarKey == this.state.currentKey) {
                 this.changeGhostMenuVisible();
             } else {
-                this.setState({currentKey: e.key, resouceType: 'teachSpacePanel'});
+                this.setState({currentKey: e.key, resouceType: 'B'});
             }
             return;
         }
@@ -136,29 +130,7 @@ const MainLayout = React.createClass({
             this.proxyObj = null;
         }
     },
-    // 切换组件页面
-    switchSection(obj){
-        if (typeof obj == 'string') {
-            this.setState({resouceType: obj});
-            return;
-        }
-        this.proxyObj = obj;
-        this.setState({resouceType: obj.resouceType});
-    },
 
-    callEvent(param){
-        if (!param || !param.linkpart) return;
-        let paramref = param.linkpart.shift();
-        this.autoeventparam = param;
-        this[paramref[0]](paramref[1], param);
-
-    },
-
-
-    //获取老师的已布置作业列表
-    getTeacherHomeWork: function (optType) {
-        this.refs.homeWorkTabComponents.getTeacherHomeWork(optType);
-    },
 
     //获取试卷列表
     getExamPagerList: function (optType) {
@@ -174,8 +146,8 @@ const MainLayout = React.createClass({
 
     },
 
-    getTeacherResource(resouceType){
-        this.setState({currentKey: "personCenter"});
+    getTeacherResource(params){
+        this.setState({resouceType: '',currentKey: "personCenter",personCenterParams:params});
     },
 
 
@@ -292,8 +264,8 @@ const MainLayout = React.createClass({
                 break;
             case 'personCenter':
                 //个人中心
-                middleComponent = <PersonCenterMenu />;
-                tabComponent = <HomeWorkTabComponents ref="homeWorkTabComponents"/>;
+                middleComponent = <PersonCenterMenu callbackParent={this.getTeacherResource}/>;
+               tabComponent = <PersonCenter params={this.state.personCenterParams}  />;
 
                 break;
             case 'antNest':
@@ -313,8 +285,11 @@ const MainLayout = React.createClass({
         //
         //
         //
+        /*
+        就是页面右侧的结构，目前只有两种默认左右分
+         */
         switch (this.state.resouceType) {
-            case '':
+            default :
                 mainContent = <Row>
                     <Col span={5}>
                         {middleComponent}
@@ -328,7 +303,7 @@ const MainLayout = React.createClass({
                     </Col>
                 </Row>;
                 break;
-            case 'teachSpacePanel':
+            case 'B':
                 mainContent =
                     <Row>
                         <Col span={24}>
@@ -340,114 +315,6 @@ const MainLayout = React.createClass({
                         </Col>
                     </Row>;
                 break;
-            case 'visitAntNest':
-                mainContent = <Row>
-                    <Col span={24}>
-                        <div className="ant-layout-container">
-                            <div className="ant-layout-content">
-                                <AntNestTabComponents ref="antNestTabComponents"
-                                                      resouceType={this.state.resouceType}
-                                                      onPreview={ this.showpanle }/>
-                            </div>
-                        </div>
-                    </Col>
-                </Row>;
-                break;
-
-            case 'visitAntGroup':
-                mainContent = <Row>
-                    <Col span={24}>
-                        <div className="ant-layout-container">
-                            <div className="ant-layout-content">
-                                <AntGroupTabComponents ref="antGroupTabComponents"
-                                                       onPreview={ this.showpanle.bind(this) }
-                                                       resouceType={this.state.resouceType}/>
-                            </div>
-                        </div>
-                    </Col>
-                </Row>;
-                break;
-            case 'myFavrites':
-                mainContent = <Row>
-                    <Col span={24}>
-                        <div className="ant-layout-container">
-                            <div className="ant-layout-content">
-                                <MyFavorites  />
-                            </div>
-                        </div>
-                    </Col>
-                </Row>;
-                break;
-            case 'myMTV':
-                mainContent = <Row>
-                    <Col span={24}>
-                        <div className="ant-layout-container">
-                            <div className="ant-layout-content">
-                                <MyMTV  />
-                            </div>
-                        </div>
-                    </Col>
-                </Row>;
-                break;
-            case 'resetStudentAccountKey':
-                mainContent = <Row>
-                    <Col span={24}>
-                        <div className="ant-layout-container">
-                            <div className="ant-layout-content">
-                                <ResetStudentAccountKey resouceType={this.state.resouceType}/>
-                            </div>
-                        </div>
-                    </Col>
-                </Row>;
-                break;
-            case 'myFollows':
-                mainContent = <Row>
-                    <Col span={24}>
-                        <div className="ant-layout-container">
-                            <div className="ant-layout-content">
-                                <MyFollows />
-                            </div>
-                        </div>
-                    </Col>
-                </Row>;
-                break;
-            case 'visitMyFavorites':
-                mainContent = <Row>
-                    <Col span={24}>
-                        <div className="ant-layout-container">
-                            <div className="ant-layout-content">
-                                <MyFavorites />
-                            </div>
-                        </div>
-                    </Col>
-                </Row>;
-
-                break;
-            case 'visitMyDirect':
-                mainContent = <Row>
-                    <Col span={24}>
-                        <div className="ant-layout-container">
-                            <div className="ant-layout-content">
-                                <MyFavorites />
-                            </div>
-                        </div>
-                    </Col>
-                </Row>;
-
-                break;
-            default :
-                mainContent = <Row>
-                    <Col span={24}>
-                        <div className="ant-layout-container">
-                            <div className="ant-layout-content">
-                                <TeacherResource ref="teacherResource" showpanle={this.showpanle}
-                                                 resouceType={this.state.resouceType}/>
-                            </div>
-                        </div>
-                    </Col>
-                </Row>;
-                break;
-
         }
         //
         //
@@ -458,8 +325,7 @@ const MainLayout = React.createClass({
 
                     <aside className="ant-layout-sider">
                         <div className="ant-layout-logo">
-                            <UserCardModalComponents callbackParent={this.getTeacherResource}
-                                                     callEvent={this.switchSection}/>
+                            <UserFace callbackParent={this.getTeacherResource}  />
                         </div>
                         <Menu mode="inline" theme="dark"
                               defaultSelectedKeys={[this.state.currentKey]}
@@ -492,20 +358,14 @@ const MainLayout = React.createClass({
 
                     <div className="ant-layout-main">
                         <div className="ant-layout-header">
-
                             <HeaderComponents/>
-
                         </div>
 
                         <div className="ant-layout-operation">
                             {mainContent}
                         </div>
-
                     </div>
-
                     <div className="panleArea"></div>
-
-
                 </div>
             </LocaleProvider>
         );

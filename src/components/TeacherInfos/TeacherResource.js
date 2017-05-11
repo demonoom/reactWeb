@@ -24,11 +24,15 @@ const TeacherResource = React.createClass({
         };
     },
 
+    showpanle(obj){
+        LP.Start(obj);
+    },
+
     render() {
         var mainComponent;
         var breadMenuTip;
         if (this.props.resouceType == "getCourseWares") {
-            mainComponent = <TeacherAllCourseWare onPreview={ this.props.showpanle } ref="courseWare"/>;
+            mainComponent = <TeacherAllCourseWare onPreview={ this.showpanle } ref="courseWare"/>;
             breadMenuTip = "我的资源";
         } else if (this.props.resouceType == "getSubjects") {
             mainComponent = <TeacherAllSubjects ref="teacherAllSubjects"></TeacherAllSubjects>;

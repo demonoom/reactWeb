@@ -455,7 +455,7 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                     </Col>
                 </Row>
             </div>
-        )
+        );
         //根据当前激活的面板的不同，向页面上渲染不同的保存按钮，用以完成不同类型题目的添加操作
         var currentActiveKey = subjectUpload.state.activeKey;
         var buttons = <div>

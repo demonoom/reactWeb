@@ -92,10 +92,10 @@ class ResourcesCenter extends React.Component{
     }
 
     onChange(activeKey) {
+        
         if (activeKey == "题目") {
-            this.setState({activeKey: '题目'});
             var subjectParams = sessionStorage.getItem("ident") + "#" + this.state.currentTeachScheduleId + "#" + 1 + "#" + this.state.currentOptType + "#" + this.state.currentKnowledgeName + "#" + this.state.subjectDataFilter;
-            this.refs.subTable.initGetSubjectInfo(subjectParams);
+            this.setState({subjectParams:subjectParams,activeKey: '题目'});
         } else {
             this.refs.courseWare.getTeachPlans(sessionStorage.getItem("ident"), this.state.currentTeachScheduleId, this.state.currentOptType, 1, this.state.currentKnowledgeName, this.state.dataFilter);
             this.setState({activeKey: '课件'});
@@ -164,12 +164,11 @@ class ResourcesCenter extends React.Component{
     menuItemOnClick ({key}) {
         var clickKey = `${key}`;
         if (this.state.activeKey == "课件") {
-            this.setState({dataFilter: clickKey});
             this.refs.courseWare.getTeachPlans(sessionStorage.getItem("ident"), this.state.currentTeachScheduleId, this.state.currentOptType, 1, this.state.currentKnowledgeName, clickKey);
+            this.setState({dataFilter: clickKey});
         } else {
-            this.setState({subjectDataFilter: clickKey});
             var subjectParams = sessionStorage.getItem("ident") + "#" + this.state.currentTeachScheduleId + "#" + 1 + "#" + this.state.currentOptType + "#" + this.state.currentKnowledgeName + "#" + clickKey;
-            this.refs.subTable.initGetSubjectInfo(subjectParams);
+            this.setState({subjectParams:subjectParams,subjectDataFilter: clickKey});
         }
     }
 
@@ -179,7 +178,7 @@ class ResourcesCenter extends React.Component{
     courseUploadCallBack(){
         if (this.state.activeKey == "题目") {
             var subjectParams = sessionStorage.getItem("ident") + "#" + this.state.currentTeachScheduleId + "#" + 1 + "#" + this.state.currentOptType + "#" + this.state.currentKnowledgeName + "#" + this.state.subjectDataFilter + "#fromUpload";
-            this.refs.subTable.initGetSubjectInfo(subjectParams);
+            this.setState({subjectParams:subjectParams});
         } else {
             this.refs.courseWare.getTeachPlans(sessionStorage.getItem("ident"), this.state.currentTeachScheduleId, this.state.currentOptType, 1, this.state.currentKnowledgeName, this.state.dataFilter, "fromUpload");
         }
@@ -213,7 +212,7 @@ class ResourcesCenter extends React.Component{
                     <TabPane key="题目" tab={<span>题目<Dropdown overlay={menu} trigger={['click']} className='del_right'>
                 <a className="ant-dropdown-link icon_filter" href="#"><Icon
                     type="down-circle-o"/></a></Dropdown></span>}>
-                        <SubjectTable ref="subTable" params={this.state.subjectParams}/></TabPane>;
+                        <SubjectTable   params={this.state.subjectParams}/></TabPane>;
                 break;
 
 
@@ -221,7 +220,7 @@ class ResourcesCenter extends React.Component{
                 tabPanel = <TabPane tab="课件" key="课件"><CourseWareComponents ref="courseWare"/></TabPane>;
                 subjectTabPanel =
                     <TabPane tab="题目" key="题目">
-                        <SubjectTable ref="subTable" params={this.state.subjectParams}/>
+                        <SubjectTable   params={this.state.subjectParams}/>
                     </TabPane>
                 break;
 
