@@ -1,5 +1,5 @@
 import React from  'react';
-import {Row, Col,Tabs} from 'antd';
+import {Row, Col, Tabs} from 'antd';
 import LessonPlans from './LessonPlans';
 import ResourcesCenter from './ResourcesCenter';
 import MiddleMenuComponents from './MiddleMenuComponents';
@@ -21,105 +21,97 @@ import {createStore} from 'redux';
 const store = createStore(function () {
 });
 
-const TeachSpaces = React.createClass({
-    getInitialState() {
-        return {
+class TeachSpaces extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            refData: null,
             collapse: true,
             activeMiddleMenu: 'sub1',
             currentKey: this.props.currentItem,
             openKeysStr: '',
             locale: 'zh-cn',
-        };
-
-        this.getTeachPlans = this.getTeachPlans.bind(this);
-        this.getExamPagerList = this.getExamPagerList.bind(this);
+            showArgs: ''
+        }
+        this.getLessonPlans = this.getLessonPlans.bind(this);
         this.getStudyEvaluate = this.getStudyEvaluate.bind(this);
         this.getResourcesCenter = this.getResourcesCenter.bind(this);
         this.getTeacherHomeWork = this.getTeacherHomeWork.bind(this);
         this.callBackKnowledgeMenuBuildBreadCrume = this.callBackKnowledgeMenuBuildBreadCrume.bind(this);
-    },
+    }
 
 
-    // 备课计划的课件资源
-    getTeachPlans: function (optContent, breadCrumbArray) {
-        //点击的菜单标识：teachScheduleId
-        if (optContent == null) {
-            this.refs.mainTabComponents.buildBreadcrumb(breadCrumbArray);
-            return;
-        }
-
-
-        var optContentArray = optContent.split("#");
-        var childrenCount = optContentArray[3];
-
-        if (optContentArray[1] != "bySubjectId") {
-            this.refs.LessonPlans.buildBreadcrumb();
-        } else {
-            this.refs.LessonPlans.buildBreadcrumb(breadCrumbArray, childrenCount);
-        }
-        this.refs.LessonPlans.getTeachPlans(optContent);
-
-    },
-
-
-    // 资源库
-    getResourcesCenter: function (optContent, breadCrumbArray) {
-
-        if (optContent == null) {
-            this.refs.knowledgeResources.buildBreadcrumb(breadCrumbArray);
-            return;
-        }
-
-
-        var optContentArray = optContent.split("#");
-        var childrenCount = optContentArray[3];
-
-        if(!this.refs.knowledgeResources){
-            return;
-        }
-
-
-        if (optContentArray[1] != "bySubjectId") {
-            this.refs.knowledgeResources.buildBreadcrumb();
-        } else {
-            this.refs.knowledgeResources.buildBreadcrumb(breadCrumbArray, childrenCount);
-        }
-       // this.refs.mainTabComponents.getTeachPlans(optContent);
-
-    },
-
-
-
-
-    componentWillMount(){
+    componentWillMount() {
         var userIdent = sessionStorage.getItem("ident");
         if (!userIdent) {
             location.hash = "login";
         }
-    },
+    }
 
     //获取老师的已布置作业列表
-    getTeacherHomeWork: function (optType) {
+    getTeacherHomeWork(optType) {
         this.refs.homeWorkTabComponents.getTeacherHomeWork(optType);
-    },
+    }
 
-    getStudyEvaluate: function (optType) {
+    getStudyEvaluate(optType) {
         this.refs.studyEvaluateTabComponents.getStudyEvaluate();
-    },
+    }
 
-    callBackKnowledgeMenuBuildBreadCrume(menuText, menuLevel, menuId, openKeysStr){
+    callBackKnowledgeMenuBuildBreadCrume(menuText, menuLevel, menuId, openKeysStr) {
         return this.refs.knowledgeMenuComponents.bulidBreadCrumbArray(menuText, menuLevel, menuId, openKeysStr);
 
-    },
+    }
+
     /**
      * 获取单个试卷的信息，用来完成试卷信息的修改操作
      * 需要切换视图到试卷修改页面
      * @param key
      */
-    getExamPagerInfo(subjectInfoJson){
+    getExamPagerInfo(subjectInfoJson) {
         this.refs.examPagerTabComponents.getExamPagerInfo(subjectInfoJson);
-       // this.setState({activeKey:'修改试卷',currentOpt:'updateExamPager',"updateSubjectInfo":subjectInfoJson});
-    },
+        // this.setState({activeKey:'修改试卷',currentOpt:'updateExamPager',"updateSubjectInfo":subjectInfoJson});
+    }
+
+
+
+    // 资源库
+    getResourcesCenter(optContent, breadCrumbArray) {
+
+        var optContentArray = optContent.split("#");
+        var childrenCount = optContentArray[3];
+        if (optContentArray[1] != "bySubjectId") {
+            this.refs.tabComponent.buildBreadcrumb();
+        } else {
+            this.refs.tabComponent.buildBreadcrumb(breadCrumbArray, childrenCount);
+        }
+        this.refs.tabComponent.getTeachPlans(optContent);
+    }
+
+
+    // 备课计划的课件资源
+    getLessonPlans(optContent, breadCrumbArray) {
+        debugger
+
+        var optContentArray = optContent.split("#");
+        var childrenCount = optContentArray[3];
+
+        let obj = {optContent: optContent, breadCrumbArr: breadCrumbArray ? breadCrumbArray : 0};
+
+        this.setState({refData: obj});
+
+        /*
+         if (optContentArray[1] != "bySubjectId") {
+         this.refs.lessonPlans.buildBreadcrumb();
+         } else {
+         this.refs.lessonPlans.buildBreadcrumb(breadCrumbArray, childrenCount);
+         }
+         this.refs.lessonPlans.getTeachPlans(optContent);
+         */
+    }
+
+
+
 
     render() {
 
@@ -131,29 +123,28 @@ const TeachSpaces = React.createClass({
 
             default : // teachTimes
                 // 备课计划 LessonPlan  Schedule
-                middleComponent = <MiddleMenuComponents activeMenu={this.state.activeMiddleMenu} callbackParent={this.getTeachPlans}/>;
-                tabComponent = <LessonPlans ref='LessonPlans'/>;
+                middleComponent = <MiddleMenuComponents callbackParent={this.getLessonPlans }/>;
+                tabComponent = <LessonPlans  refData={this.state.refData} />;
                 break;
             case 'KnowledgeResources':
                 // 知识库
-                middleComponent =
-                    <KnowledgeMenuComponents   callbackParent={this.getResourcesCenter}/>;
-                tabComponent = <ResourcesCenter ref='knowledgeResources'  />;
+                middleComponent = <KnowledgeMenuComponents callbackParent={this.getResourcesCenter }/>;
+                tabComponent = <ResourcesCenter ref='tabComponent' />;
                 break;
             case 'homeWork':
                 // 布置作业，家庭作业
-                middleComponent = <HomeWorkMenu callbackParent={this.getTeacherHomeWork}/>
+                //   middleComponent = <HomeWorkMenu callbackParent={this.getTeacherHomeWork}/>
                 tabComponent = <HomeWorkTabComponents ref="homeWorkTabComponents"/>;
                 break;
             case 'studyEvaluate':
                 // 学习评价
-                middleComponent = <StudyEvaluateMenu callbackParent={this.getStudyEvaluate}/>
+                //  middleComponent = <StudyEvaluateMenu callbackParent={this.getStudyEvaluate}/>
                 tabComponent = <StudyEvaluateTabComponents ref="studyEvaluateTabComponents"/>;
                 break;
             case 'examination':
                 // 组卷
-               // middleComponent =  <ExamPagerTableComponents ref="examPagerTable" callBackParent={this.getExamPagerInfo} />;
-                tabComponent = <ExamPagerTabComponents ref="examPagerTabComponents" />;
+                // middleComponent =  <ExamPagerTableComponents ref="examPagerTable" callBackParent={this.getExamPagerInfo} />;
+                tabComponent = <ExamPagerTabComponents ref="examPagerTabComponents"/>;
                 break;
 
         }
@@ -173,7 +164,9 @@ const TeachSpaces = React.createClass({
                 </Col>
             </Row>
         );
-    },
-});
+    }
+}
+;
 export default TeachSpaces;
+
   

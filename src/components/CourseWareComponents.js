@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import { Checkbox, Collapse,  Button, Pagination, message} from 'antd';
+import {Checkbox, Collapse, Button, Pagination, message} from 'antd';
 import UseKnowledgeComponents from './UseKnowledgeComponents';
 import {doWebService} from '../WebServiceHelper';
 import {getPageSize} from '../utils/Const';
@@ -8,42 +8,40 @@ import ConfirmModal from './ConfirmModal';
 const Panel = Collapse.Panel;
 
 
-var courseWare;
-var courseWareList;
-var activeKey = new Array();
-var coursePanelChildren;
 const CourseWareComponents = React.createClass({
+     activeKey : [],
+     coursePanelChildren: null,
 
     getInitialState() {
-        courseWare = this;
+
         return {
-            activeKey: [],
             currentPage: 1,
             totalCount: 0,
-            ident: '',
+            ident: sessionStorage.getItem("ident"),
             teachScheduleId: '',
             optType: '',
             knowledgeName: '',
             dataFilter: 'self',
             isDeleteAllSubject: false,   //是否同步删除资源库下的题目
         };
+
     },
 
-    initCourseWareList(){
-        courseWare.setState({courseListState: []});
-        courseWare.setState({totalCount: 0});
+    componentWillMount(){
+        this.setState({courseListState: [],totalCount: 0});
     },
 
 
 
-    getTeachPlans(ident, teachScheduleId, optType, pageNo, knowledgeName, dataFilter,comeFrom){
-        courseWare.setState({
+    getTeachPlans(ident, teachScheduleId, optType, pageNo, knowledgeName, dataFilter, comeFrom){
+        this.setState({
             ident: ident,
             teachScheduleId: teachScheduleId,
             optType: optType,
             knowledgeName: knowledgeName,
             dataFilter: dataFilter
         })
+        let _this = this;
         var param;
         if (optType == "bySchedule") {
             param = {
@@ -53,7 +51,8 @@ const CourseWareComponents = React.createClass({
             };
             doWebService(JSON.stringify(param), {
                 onResponse: function (ret) {
-                    courseWareList = new Array();
+                    let courseWareList = [];
+                    _this.activeKey = [];
                     courseWareList.splice(0);
                     var response = ret.response;
                     response.forEach(function (e) {
@@ -82,16 +81,16 @@ const CourseWareComponents = React.createClass({
                         } else if (fileType == "mp3") {
                             fileTypeLogo = "icon_geshi icon_mp3";
                         }
-                        var createTime = courseWare.getLocalTime(e.createTime);
-                        activeKey.push(fileName + "#" + createTime+"#"+id);
+                        var createTime = _this.getLocalTime(e.createTime);
+                        _this.activeKey.push(fileName + "#" + createTime + "#" + id);
                         courseWareList.push([id, fileName, userName, path, pdfPath, fileType, pointId, createTime, fileTypeLogo, htmlPath, collectCount]);
                     });
-                    courseWare.buildPanels(courseWareList);
-                    courseWare.setState({courseListState: courseWareList});
+                    _this.buildPanels(courseWareList);
+                    _this.setState({courseListState: courseWareList});
                     var pager = ret.pager;
-                    courseWare.setState({totalCount: parseInt(pager.rsCount)});
-                    if(isEmpty(comeFrom)==false && "fromUpload"==comeFrom){
-                        courseWare.setState({"currentPage":1});
+                    _this.setState({totalCount: parseInt(pager.rsCount)});
+                    if (isEmpty(comeFrom) == false && "fromUpload" == comeFrom) {
+                        _this.setState({"currentPage": 1});
                     }
                 },
                 onError: function (error) {
@@ -115,7 +114,8 @@ const CourseWareComponents = React.createClass({
             };
             doWebService(JSON.stringify(param), {
                 onResponse: function (ret) {
-                    courseWareList = new Array();
+                    let courseWareList = [];
+                    _this.activeKey = [];
                     courseWareList.splice(0);
                     var response = ret.response;
                     response.forEach(function (e) {
@@ -128,7 +128,7 @@ const CourseWareComponents = React.createClass({
                         var pdfPath = e.pdfPath;
                         var fileType = fileName.substring(fileName.lastIndexOf(".") + 1);
                         var pointId = e.point.content;
-                        var createTime = courseWare.getLocalTime(e.createTime);
+                        var createTime = _this.getLocalTime(e.createTime);
                         var fileTypeLogo;
                         var type = e.type;
                         var htmlPath = "";
@@ -148,15 +148,15 @@ const CourseWareComponents = React.createClass({
                         } else if (fileType == "mp3") {
                             fileTypeLogo = "icon_geshi icon_mp3";
                         }
-                        activeKey.push(fileName + "#" + createTime+"#"+id);
+                        _this.activeKey.push(fileName + "#" + createTime + "#" + id);
                         courseWareList.push([id, fileName, userName, path, pdfPath, fileType, pointId, createTime, fileTypeLogo, htmlPath, type, collectCount, userId]);
                     });
-                    courseWare.buildKonwledgePanels(courseWareList);
-                    courseWare.setState({courseListState: courseWareList});
+                    _this.buildKonwledgePanels(courseWareList);
+                    _this.setState({courseListState: courseWareList});
                     var pager = ret.pager;
-                    courseWare.setState({totalCount: parseInt(pager.rsCount)});
-                    if(isEmpty(comeFrom)==false && "fromUpload"==comeFrom){
-                        courseWare.setState({"currentPage":1});
+                    _this.setState({totalCount: parseInt(pager.rsCount)});
+                    if (isEmpty(comeFrom) == false && "fromUpload" == comeFrom) {
+                        _this.setState({"currentPage": 1});
                     }
                 },
                 onError: function (error) {
@@ -172,7 +172,7 @@ const CourseWareComponents = React.createClass({
     },
 
     onChange(page) {
-        courseWare.getTeachPlans(courseWare.state.ident, courseWare.state.teachScheduleId, courseWare.state.optType, page, courseWare.state.knowledgeName, courseWare.state.dataFilter);
+        this.getTeachPlans(this.state.ident, this.state.teachScheduleId, this.state.optType, page, this.state.knowledgeName, this.state.dataFilter);
         this.setState({
             currentPage: page,
         });
@@ -187,11 +187,11 @@ const CourseWareComponents = React.createClass({
             target = e.target;
         }
         var currentSchedule = target.value;
-        this.refs.useKnowledgeComponents.showModal(currentSchedule, "courseWare", courseWare.state.knowledgeName);
+        this.refs.useKnowledgeComponents.showModal(currentSchedule, "courseWare", this.state.knowledgeName);
     },
 
     isDeleteAll(e){
-        courseWare.setState({isDeleteAllSubject: e.target.checked});
+        this.setState({isDeleteAllSubject: e.target.checked});
     },
 
     showDelScheduleMateriaConfirmModal(e){
@@ -202,29 +202,30 @@ const CourseWareComponents = React.createClass({
             target = e.target;
         }
         var materialIds = target.value;
-        courseWare.setState({"delMaterialIds":materialIds});
-        courseWare.refs.delScheduleMateriaConfirmModal.changeConfirmModalVisible(true);
+        this.setState({"delMaterialIds": materialIds});
+        this.refs.delScheduleMateriaConfirmModal.changeConfirmModalVisible(true);
     },
 
     closeDelScheduleMateriaConfirmModal(){
-        courseWare.refs.delScheduleMateriaConfirmModal.changeConfirmModalVisible(false);
+        this.refs.delScheduleMateriaConfirmModal.changeConfirmModalVisible(false);
     },
 
     deleteScheduleMaterials(){
-        courseWare.deleteScheduleMaterialsById(courseWare.state.delMaterialIds);
-        courseWare.closeDelScheduleMateriaConfirmModal();
+        this.deleteScheduleMaterialsById(this.state.delMaterialIds);
+        this.closeDelScheduleMateriaConfirmModal();
     },
 
     //删除教学进度下的材料（课件）
     deleteScheduleMaterialsById(materialIds){
-        if (courseWare.state.isDeleteAllSubject) {
+        let _this = this;
+        if (this.state.isDeleteAllSubject) {
             //同步删除资源库下的资源
-            courseWare.setState({isDeleteAllSubject: false});
+            this.setState({isDeleteAllSubject: false});
         } else {
             var param = {
                 "method": 'deleteScheduleMaterials',
                 "ident": sessionStorage.getItem("ident"),
-                "scheduleId": courseWare.state.teachScheduleId,
+                "scheduleId": this.state.teachScheduleId,
                 "materialIds": materialIds
             };
             doWebService(JSON.stringify(param), {
@@ -234,7 +235,7 @@ const CourseWareComponents = React.createClass({
                     } else {
                         message.error("课件删除失败");
                     }
-                    courseWare.getTeachPlans(sessionStorage.getItem("ident"), courseWare.state.teachScheduleId, "bySchedule", courseWare.state.currentPage, courseWare.state.knowledgeName)
+                    _this.getTeachPlans(sessionStorage.getItem("ident"), _this.state.teachScheduleId, "bySchedule", _this.state.currentPage, _this.state.knowledgeName)
                 },
                 onError: function (error) {
                     message.error(error);
@@ -251,23 +252,24 @@ const CourseWareComponents = React.createClass({
             target = e.target;
         }
         var materialIds = target.value;
-        courseWare.setState({"delMaterialIds":materialIds});
-        courseWare.refs.confirmModal.changeConfirmModalVisible(true);
+        this.setState({"delMaterialIds": materialIds});
+        this.refs.confirmModal.changeConfirmModalVisible(true);
     },
 
     closeConfirmModal(){
-        courseWare.refs.confirmModal.changeConfirmModalVisible(false);
+        this.refs.confirmModal.changeConfirmModalVisible(false);
     },
 
     batchDeleteMaterial(){
-        courseWare.batchDeleteMaterialById(courseWare.state.delMaterialIds);
-        courseWare.closeConfirmModal();
+        this.batchDeleteMaterialById(this.state.delMaterialIds);
+        this.closeConfirmModal();
     },
 
     //删除资源库下的材料（课件）
     batchDeleteMaterialById(materialIds){
+        let _this = this;
         var param;
-        if (courseWare.state.isDeleteAllSubject) {
+        if (this.state.isDeleteAllSubject) {
             param = {
                 "method": 'deleteScheduleAndKnowledgeMaterials',
                 "userId": sessionStorage.getItem("ident"),
@@ -287,13 +289,13 @@ const CourseWareComponents = React.createClass({
                 } else {
                     message.error("课件删除失败");
                 }
-                courseWare.getTeachPlans(courseWare.state.ident, courseWare.state.teachScheduleId, courseWare.state.optType, courseWare.state.currentPage);
+                _this.getTeachPlans(_this.state.ident, _this.state.teachScheduleId, _this.state.optType, _this.state.currentPage);
             },
             onError: function (error) {
                 message.error(error);
             }
         });
-        courseWare.setState({isDeleteAllSubject: false});
+        this.setState({isDeleteAllSubject: false});
 
     },
 
@@ -311,23 +313,27 @@ const CourseWareComponents = React.createClass({
 
     buildPanels: function (courseWareList) {
         if (courseWareList.length == 0) {
-            coursePanelChildren = <img className="noDataTipImg" src={require('./images/noDataTipImg.png')}/>;
+            this.coursePanelChildren = <img className="noDataTipImg" src={require('./images/noDataTipImg.png')}/>;
         } else {
-            coursePanelChildren = courseWareList.map((e, i)=> {
+            this.coursePanelChildren = courseWareList.map((e, i) => {
                 var eysOnButton;
-                if(isEmpty(e[5])==false && ("pptx"==e[5] || "ppt"==e[5])){
-                    if (isEmpty(e[9])==false) {
+                if (isEmpty(e[5]) == false && ("pptx" == e[5] || "ppt" == e[5])) {
+                    if (isEmpty(e[9]) == false) {
                         eysOnButton =
-                            <Button icon="eye-o" style={{float: 'right'}} onClick={event => {this.view(event,e[9],e[1])} } />
+                            <Button icon="eye-o" style={{float: 'right'}} onClick={event => {
+                                this.view(event, e[9], e[1])
+                            } }/>
                     }
-                }else{
-                    if(isEmpty(e[3])==false){
+                } else {
+                    if (isEmpty(e[3]) == false) {
                         eysOnButton =
-                            <Button icon="eye-o" style={{float: 'right'}} onClick={event => {this.view(event,e[3],e[1])} } />
+                            <Button icon="eye-o" style={{float: 'right'}} onClick={event => {
+                                this.view(event, e[3], e[1])
+                            } }/>
                     }
                 }
                 return <Panel header={<span><span type="" className={e[8]}></span><span
-                    className="name_file">{e[1]}</span> </span>} key={e[1] + "#" + e[7]+"#"+e[0]}>
+                    className="name_file">{e[1]}</span> </span>} key={e[1] + "#" + e[7] + "#" + e[0]}>
                     <pre>
 					 <div className="bnt2_tex">
                          <span className="bai"><span className="col1">所在知识点：</span><span className="col2">{e[6]}</span></span>
@@ -358,29 +364,34 @@ const CourseWareComponents = React.createClass({
 
     buildKonwledgePanels: function (courseWareList) {
         if (courseWareList.length == 0) {
-            coursePanelChildren = <img className="noDataTipImg"   onClick={$.openPhotoGallery} src={require('./images/noDataTipImg.png')}/>;
+            this.coursePanelChildren =
+                <img className="noDataTipImg" onClick={$.openPhotoGallery} src={require('./images/noDataTipImg.png')}/>;
         } else {
-            coursePanelChildren = courseWareList.map((e, i)=> {
+            this.coursePanelChildren = courseWareList.map((e, i) => {
                 var eysOnButton;
                 var delButton;
-                if(isEmpty(e[5])==false && ("pptx"==e[5] || "ppt"==e[5])) {
+                if (isEmpty(e[5]) == false && ("pptx" == e[5] || "ppt" == e[5])) {
                     if (e[9] != null && e[9] != "") {
                         eysOnButton =
-                            <Button icon="eye-o" style={{float: 'right'}} onClick={event => {this.view(event,e[9],e[1])} } />
+                            <Button icon="eye-o" style={{float: 'right'}} onClick={event => {
+                                this.view(event, e[9], e[1])
+                            } }/>
                     }
                 }
                 else {
-                    if(isEmpty(e[3])==false){
+                    if (isEmpty(e[3]) == false) {
                         eysOnButton =
-                            <Button icon="eye-o" style={{float: 'right'}} onClick={event => {this.view(event,e[3],e[1])} } />
+                            <Button icon="eye-o" style={{float: 'right'}} onClick={event => {
+                                this.view(event, e[3], e[1])
+                            } }/>
                     }
                 }
                 if (e[12] != null && e[12] == sessionStorage.getItem("ident")) {
                     delButton = <Button style={{float: 'right'}} icon="delete" title="删除" value={e[0]}
-                                        onClick={courseWare.showConfirmModal}></Button>
+                                        onClick={this.showConfirmModal}></Button>
                 }
                 return <Panel header={<span><span type="" className={e[8]}></span><span
-                    className="name_file">{e[1]}</span> </span>} key={e[1] + "#" + e[7]+"#"+e[0]}>
+                    className="name_file">{e[1]}</span> </span>} key={e[1] + "#" + e[7] + "#" + e[0]}>
                     <pre>
 					<div className="bnt2_tex">
                          <span className="bai"><span className="col1">所在知识点：{e[6]}</span></span>
@@ -412,29 +423,29 @@ const CourseWareComponents = React.createClass({
                 $(this).css("background-color", "");
             }
         });
-        var title=<span>
+        var title = <span>
             <span className="antnest_talk">确定要删除该课件?</span>
-            <Checkbox onChange={courseWare.isDeleteAll}>同步删除备课计划下的课件</Checkbox>
+            <Checkbox onChange={this.isDeleteAll}>同步删除备课计划下的课件</Checkbox>
         </span>;
         return (
             <div>
                 <ConfirmModal ref="confirmModal"
                               title={title}
-                              onConfirmModalCancel={courseWare.closeConfirmModal}
-                              onConfirmModalOK={courseWare.batchDeleteMaterial}
+                              onConfirmModalCancel={this.closeConfirmModal}
+                              onConfirmModalOK={this.batchDeleteMaterial}
                 ></ConfirmModal>
                 <ConfirmModal ref="delScheduleMateriaConfirmModal"
                               title="确定要删除该课件?"
-                              onConfirmModalCancel={courseWare.closeDelScheduleMateriaConfirmModal}
-                              onConfirmModalOK={courseWare.deleteScheduleMaterials}
+                              onConfirmModalCancel={this.closeDelScheduleMateriaConfirmModal}
+                              onConfirmModalOK={this.deleteScheduleMaterials}
                 ></ConfirmModal>
                 <div>
                     <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
-                    <Collapse defaultActiveKey={activeKey} activeKey={activeKey} ref="collapse"  >
-                        {coursePanelChildren}
+                    <Collapse activeKey={this.activeKey} ref="collapse">
+                        {this.coursePanelChildren}
                     </Collapse>
                 </div>
-                <Pagination total={courseWare.state.totalCount} pageSize={getPageSize()} current={courseWare.state.currentPage}
+                <Pagination total={this.state.totalCount} pageSize={getPageSize()} current={this.state.currentPage}
                             onChange={this.onChange}/>
             </div>
         );
