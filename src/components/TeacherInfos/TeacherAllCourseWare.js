@@ -1,59 +1,60 @@
-import React, { PropTypes } from 'react';
-import { Collapse,Button,Pagination,message } from 'antd';
-import { doWebService } from '../../WebServiceHelper';
-import {getPageSize} from '../../utils/Const';
+import React, {PropTypes} from 'react';
+import {Collapse, Button, Pagination, message, Breadcrumb, Icon} from 'antd';
 import {isEmpty} from '../../utils/Const';
-import UseKnowledgeComponents from '../UseKnowledgeComponents';
 import ConfirmModal from '../ConfirmModal';
+import {getPageSize} from '../../utils/Const';
+import {doWebService} from '../../WebServiceHelper';
+import UseKnowledgeComponents from '../UseKnowledgeComponents';
 
 const Panel = Collapse.Panel;
 
 
 var courseWare;
 var courseWareList;
-var activeKey = new Array();
+var activeKey = [];
 var coursePanelChildren;
 const TeacherAllCourseWare = React.createClass({
 
     getInitialState() {
         courseWare = this;
         return {
-            courseListState:this.props.courseList,
-            activeKey:[],
-            currentPage:1,
-            totalCount:0,
-            ident:'',
-            teachScheduleId:'',
-            optType:'',
-            knowledgeName:'',
-            dataFilter:'self'
+            courseListState: this.props.courseList,
+            activeKey: [],
+            currentPage: 1,
+            totalCount: 0,
+            ident: '',
+            teachScheduleId: '',
+            optType: '',
+            knowledgeName: '',
+            dataFilter: 'self'
         };
     },
 
     initCourseWareList(){
-        courseWare.setState({courseListState:[]});
-        courseWare.setState({totalCount:0});
+        this.setState({courseListState: []});
+        this.setState({totalCount: 0});
     },
 
     componentDidMount(){
         var initPageNo = 1;
-        courseWare.getTeachPlans(sessionStorage.getItem("ident"),initPageNo);
+        this.getTeachPlans(sessionStorage.getItem("ident"), initPageNo);
     },
 
 
-    getTeachPlans(ident,pageNo){
-        courseWare.setState({
-            ident:ident,
+    getTeachPlans(ident, pageNo){
+        let _this = this;
+        this.setState({
+            ident: ident,
         })
         var param = {
-            "method":'getMaterialsByUid',
-            "userId":ident,
-            "mtype":"-1",
-            "pageNo":pageNo,
+            "method": 'getMaterialsByUid',
+            "userId": ident,
+            "mtype": "-1",
+            "pageNo": pageNo,
         };
         doWebService(JSON.stringify(param), {
-            onResponse : function(ret) {
-                courseWareList=new Array();
+            onResponse: function (ret) {
+                courseWareList = new Array();
                 courseWareList.splice(0);
                 var response = ret.response;
                 response.forEach(function (e) {
@@ -64,59 +65,59 @@ const TeacherAllCourseWare = React.createClass({
                     var userName = e.user.userName;
                     var path = e.path;
                     var pdfPath = e.pdfPath;
-                    var fileType=fileName.substring(fileName.lastIndexOf(".")+1);
+                    var fileType = fileName.substring(fileName.lastIndexOf(".") + 1);
                     var pointId = e.pointId;
                     var pointContent = '';
 
-                    if(!pointId){
-                         pointContent = '其它';
-                    }else{
-                        if(isEmpty(e.point)==false){
+                    if (!pointId) {
+                        pointContent = '其它';
+                    } else {
+                        if (isEmpty(e.point) == false) {
                             pointContent = e.point.content;
                         }
                     }
-                    var createTime = courseWare.getLocalTime(e.createTime);
+                    var createTime = _this.getLocalTime(e.createTime);
                     var fileTypeLogo;
                     var type = e.type;
-                    var htmlPath="";
+                    var htmlPath = "";
                     var collectCount = e.collectCount; //收藏次数即现今的点赞次数
-                    if(fileType=="ppt"){
+                    if (fileType == "ppt") {
                         fileTypeLogo = "icon_geshi icon_ppt";
                         htmlPath = e.htmlPath;
-                    }else if(fileType=="mp4"){
+                    } else if (fileType == "mp4") {
                         fileTypeLogo = "icon_geshi icon_mp4";
-                    }else if(fileType=="flv"){
+                    } else if (fileType == "flv") {
                         fileTypeLogo = "icon_geshi icon_flv";
-                    }else if(fileType=="pdf"){
+                    } else if (fileType == "pdf") {
                         fileTypeLogo = "icon_geshi icon_pdf";
-                    }else if(fileType=="pptx"){
+                    } else if (fileType == "pptx") {
                         fileTypeLogo = "icon_geshi icon_pptx";
                         htmlPath = e.htmlPath;
-                    }else if(fileType=="mp3"){
+                    } else if (fileType == "mp3") {
                         fileTypeLogo = "icon_geshi icon_mp3";
                     }
-                    activeKey.push(fileName+"#"+createTime+"#"+id);
-                    courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointContent,createTime,fileTypeLogo,htmlPath,type,collectCount,userId]);
+                    activeKey.push(fileName + "#" + createTime + "#" + id);
+                    courseWareList.push([id, fileName, userName, path, pdfPath, fileType, pointContent, createTime, fileTypeLogo, htmlPath, type, collectCount, userId]);
                 });
-                courseWare.buildKonwledgePanels(courseWareList);
-                courseWare.setState({courseListState:courseWareList});
+                _this.buildKonwledgePanels(courseWareList);
+                _this.setState({courseListState: courseWareList});
                 var pager = ret.pager;
-                courseWare.setState({totalCount:parseInt(pager.rsCount)});
+                _this.setState({totalCount: parseInt(pager.rsCount)});
             },
-            onError : function(error) {
+            onError: function (error) {
                 message.error(error);
             }
 
         });
     },
-    getLocalTime:function (nS) {
-        var newDate = new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/,' ');
+    getLocalTime: function (nS) {
+        var newDate = new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/, ' ');
         return newDate;
     },
 
     //分页响应事件
     onChange(page) {
-        courseWare.getTeachPlans(sessionStorage.getItem("ident"),page);
+        this.getTeachPlans(sessionStorage.getItem("ident"), page);
         this.setState({
             currentPage: page,
         });
@@ -124,38 +125,39 @@ const TeacherAllCourseWare = React.createClass({
 
     //删除资源库下的材料（课件）
     batchDeleteMaterial(){
-        var materialIds = courseWare.state.delMaterialIds;
+        let _this = this;
+        var materialIds = this.state.delMaterialIds;
         var param = {
-            "method":'batchDeleteMaterial',
-            "ident":sessionStorage.getItem("ident"),
-            "mids":materialIds
+            "method": 'batchDeleteMaterial',
+            "ident": sessionStorage.getItem("ident"),
+            "mids": materialIds
         };
         doWebService(JSON.stringify(param), {
-            onResponse : function(ret) {
-                if(ret.msg=="调用成功" && ret.response==true){
-                    message.success("课件删除成功");
-                }else{
-                    message.error("课件删除失败");
+            onResponse: function (ret) {
+                if (ret.response) {
+                    message.success("删除成功");
+                } else {
+                    message.error("删除失败");
                 }
-                courseWare.closeConfirmModal();
-                courseWare.getTeachPlans(sessionStorage.getItem("ident"),courseWare.state.currentPage);
+                _this.closeConfirmModal();
+                _this.getTeachPlans(sessionStorage.getItem("ident"), _this.state.currentPage);
             },
-            onError : function(error) {
+            onError: function (error) {
                 message.error(error);
             }
         });
     },
 
     //显示使用至备课计划的弹窗
-    showModal:function (e) {
+    showModal: function (e) {
         var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
             target = e.target;
         }
         var currentSchedule = target.value;
-        this.refs.useKnowledgeComponents.showModal(currentSchedule,"TeacherAllCourseWare",courseWare.state.knowledgeName);
+        this.refs.useKnowledgeComponents.showModal(currentSchedule, "TeacherAllCourseWare", this.state.knowledgeName);
     },
 
     view: function (e, url, tit) {
@@ -167,27 +169,38 @@ const TeacherAllCourseWare = React.createClass({
         e.preventDefault();
         e.cancelBubble = true;
         let obj = {title: tit, url: url, width: '380px'}
-        this.props.onPreview(obj)
+        this.showpanle(obj)
     },
 
-    buildKonwledgePanels:function (courseWareList) {
-        if(courseWareList.length==0){
-            coursePanelChildren = <img  className="noDataTipImg" src={require('../images/noDataTipImg.png')} />;
-        }else{
-            coursePanelChildren = courseWareList.map((e, i)=> {
-                var eysOnButton ;
+
+    showpanle(obj){
+        LP.Start(obj);
+    },
+
+    buildKonwledgePanels: function (courseWareList) {
+        if (courseWareList.length == 0) {
+            coursePanelChildren = <img className="noDataTipImg" src={require('../images/noDataTipImg.png')}/>;
+        } else {
+            coursePanelChildren = courseWareList.map((e, i) => {
+                var eysOnButton;
                 var delButton;
                 if (e[9] != null && e[9] != "") {
                     eysOnButton =
-                        <Button icon="eye-o" style={{float: 'right'}} onClick={event => {this.view(event,e[9],e[1])} } />
-                }else if(isEmpty(e[3])==false){
+                        <Button icon="eye-o" style={{float: 'right'}} onClick={event => {
+                            this.view(event, e[9], e[1])
+                        } }/>
+                } else if (isEmpty(e[3]) == false) {
                     eysOnButton =
-                        <Button icon="eye-o" style={{float: 'right'}} onClick={event => {this.view(event,e[3],e[1])} } />
+                        <Button icon="eye-o" style={{float: 'right'}} onClick={event => {
+                            this.view(event, e[3], e[1])
+                        } }/>
                 }
-                if(e[12]!=null && e[12]==sessionStorage.getItem("ident")){
-                    delButton = <Button style={{ float:'right'}} icon="delete" title="删除" value={e[0]} onClick={courseWare.showConfirmModal}></Button>
+                if (e[12] != null && e[12] == sessionStorage.getItem("ident")) {
+                    delButton = <Button style={{float: 'right'}} icon="delete" title="删除" value={e[0]}
+                                        onClick={this.showConfirmModal}></Button>
                 }
-                return <Panel header={<span><span type="" className={e[8]}></span><span className="name_file">{e[1]}</span> </span>}  key={e[1]+"#"+e[7]+"#"+e[0]}>
+                return <Panel header={<span><span type="" className={e[8]}></span><span
+                    className="name_file">{e[1]}</span> </span>} key={e[1] + "#" + e[7] + "#" + e[0]}>
                     <pre>
 					<div className="bnt2_tex">
                          <span className="col1">文件类型：{e[5]}</span>
@@ -200,9 +213,11 @@ const TeacherAllCourseWare = React.createClass({
 
                             <div className="bnt2_right">
                                 {delButton}
-                                {/*<Button style={{ float:'right'}} icon="download"  title="下载" value={e[3]} onClick={courseWare.downLoadFile}></Button>*/}
-                                <a href={e[3]} target="_blank" title="下载" download={e[3]} style={{ float:'right'}}><Button icon="download"/></a>
-                                <Button style={{ float:'right'}} type=""  icon="export" title="使用"  value={e[0]} onClick={this.showModal}></Button>
+                                {/*<Button style={{ float:'right'}} icon="download"  title="下载" value={e[3]} onClick={this.downLoadFile}></Button>*/}
+                                <a href={e[3]} target="_blank" title="下载" download={e[3]}
+                                   style={{float: 'right'}}><Button icon="download"/></a>
+                                <Button style={{float: 'right'}} type="" icon="export" title="使用" value={e[0]}
+                                        onClick={this.showModal}></Button>
                                 {eysOnButton}
                             </div>
 
@@ -214,42 +229,49 @@ const TeacherAllCourseWare = React.createClass({
 
     showConfirmModal(e){
         var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
             target = e.target;
         }
         var materialIds = target.value;
-        courseWare.setState({"delMaterialIds":materialIds});
-        courseWare.refs.confirmModal.changeConfirmModalVisible(true);
+        this.setState({"delMaterialIds": materialIds});
+        this.refs.confirmModal.changeConfirmModalVisible(true);
     },
 
     closeConfirmModal(){
-        courseWare.refs.confirmModal.changeConfirmModalVisible(false);
+        this.refs.confirmModal.changeConfirmModalVisible(false);
     },
 
     render: function () {
-        $(".ant-menu-submenu-title").each(function(){
-            if($(this)[0].textContent==sessionStorage.getItem("lastClickMenuName")){
-                $(this).css("background-color","#e5f2fe");
-            }else{
-                $(this).css("background-color","");
+        $(".ant-menu-submenu-title").each(function () {
+            if ($(this)[0].textContent == sessionStorage.getItem("lastClickMenuName")) {
+                $(this).css("background-color", "#e5f2fe");
+            } else {
+                $(this).css("background-color", "");
             }
         });
-        return (
-            <div className='ant-tabs ant-tabs-top ant-tabs-line'>
-                <ConfirmModal ref="confirmModal"
-                              title="确定要删除该课件?"
-                              onConfirmModalCancel={courseWare.closeConfirmModal}
-                              onConfirmModalOK={courseWare.batchDeleteMaterial}
-                ></ConfirmModal>
-                <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
-			    <div className='ant-tabs-tabpane ant-tabs-tabpane-active'>
-                <Collapse defaultActiveKey={activeKey} activeKey={activeKey} ref="collapse" onChange={callback}>
-                    {coursePanelChildren}
-                </Collapse>
-				</div>
-                <Pagination total={courseWare.state.totalCount} pageSize={getPageSize()} current={courseWare.state.currentPage} onChange={this.onChange}/>
+        return (<div>
+                <Breadcrumb separator=">">
+                    <Breadcrumb.Item><Icon type="home"/></Breadcrumb.Item>
+                    <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
+                    <Breadcrumb.Item href="#/MainLayout">我的资源</Breadcrumb.Item>
+                </Breadcrumb>
+                <div className='ant-tabs ant-tabs-top ant-tabs-line'>
+                    <ConfirmModal ref="confirmModal"
+                                  title="确定要删除该课件?"
+                                  onConfirmModalCancel={this.closeConfirmModal}
+                                  onConfirmModalOK={this.batchDeleteMaterial}
+                    />
+                    <UseKnowledgeComponents ref="useKnowledgeComponents" />
+                    <div className='ant-tabs-tabpane ant-tabs-tabpane-active'>
+                        <Collapse defaultActiveKey={activeKey} activeKey={activeKey} ref="collapse">
+                            {coursePanelChildren}
+                        </Collapse>
+                    </div>
+                    <Pagination total={this.state.totalCount} pageSize={getPageSize()} current={this.state.currentPage}
+                                onChange={this.onChange}/>
+                </div>
             </div>
         );
     },

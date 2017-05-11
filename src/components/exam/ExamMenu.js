@@ -14,7 +14,7 @@ const ExamMenu = React.createClass({
     },
 
     handleClick(e) {
-        debugger
+
         var domE = e.domEvent;
         var target = domE.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {

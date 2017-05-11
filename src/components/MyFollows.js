@@ -264,8 +264,9 @@ class MyFollows extends React.Component {
 
             // 关注列表
             case this.state.followsListVisible:
+
                 this.originHeight='enhance';
-                debugger
+
                 if (this.notInterProsonCenter()) {
                     this.gobackBtn =
                         <div className="ant-tabs-extra-content">

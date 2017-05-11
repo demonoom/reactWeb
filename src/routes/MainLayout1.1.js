@@ -343,8 +343,7 @@ const MainLayout = React.createClass({
                   <Col span={24}>
                     <div className="ant-layout-container">
                       <div className="ant-layout-content">
-                        <TeacherResource ref="teacherResource" showpanle={this.showpanle}
-                                         resouceType={mainLayout.state.resouceType}/>
+                        <TeacherResource ref="teacherResource" />
                       </div>
                     </div>
                   </Col>

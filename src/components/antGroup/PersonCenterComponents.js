@@ -564,7 +564,7 @@ const PersonCenterComponents = React.createClass({
     },
 
     confirmVideoPwd: function (obj) {
-        debugger;
+
         if (parseInt(sessionStorage.getItem("ident")) == personCenter.state.userInfo.user.colUid) {
             return personCenter.view(obj);
         }
