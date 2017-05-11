@@ -709,7 +709,7 @@ html, body, #root {
 	float:left;
 }
 .bnt2_tex span.col1{
-	color:#666;
+	color:#b3b3b3;
 	word-break:break-all;
 	word-wrap:break-word;
 	white-space: pre-wrap;
@@ -2091,6 +2091,7 @@ a.topics:hover{
 .topics_time{
 	color:#999;
 	margin-right:12px;
+	font-size:14px;
 }
 .topics_dianzan{
 	float:right;
@@ -2542,16 +2543,16 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 }
 
 .person_13{
-	font-size:13px !important;
+	font-size:16px !important;
 }
 .gary_person{
 	color:#aeaeb2;
-	padding:4px 0;
+	padding:8px 0;
 	text-align: center
 }
 .black_person{
-	color:#222;
-	padding:4px 0;
+	color:#666;
+	padding:8px 0;
 }
 .person_cor{
 	border-radius:50%;
@@ -3596,4 +3597,7 @@ color:#ffbf00
 	padding:12px 24px !important;
 	border-bottom:none;
 	cursor:pointer
+}
+.ant-card-head-title, .ant-card{
+	font-size:16px;
 }
