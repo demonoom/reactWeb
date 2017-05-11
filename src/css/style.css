@@ -2385,7 +2385,6 @@ p.group_double + div.clearfix > div:first-child .ant-table-header{
 }
 p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maaeegroup .ant-table-tbody > tr{
 	cursor:pointer;
-	color: #333;
 }
 .maaeegroup .ant-table-scroll .ant-table-header{
 	margin-bottom:0 !important;
@@ -3573,7 +3572,6 @@ color:#ffbf00
 
 .tableRow{
 	background-color: #E5F2FE;
-	color:#333
 }
 .tableRow td{
 	border-bottom:none
