@@ -77,8 +77,8 @@ const FloatButton = React.createClass({
     render() {
         const menu = (
             <Menu onClick={floatButton.menuItemOnClick} className="dropdown-menu-tc">
-                <Menu.Item key="modifyPassword" className="popup_i_icon"><Icon className="icon_right" type="edit" />修改密码</Menu.Item>
-                <Menu.Item key="existSystem" className="popup_i_icon"><Icon className="icon_right" type="delete" />退出系统</Menu.Item>
+                {/*<Menu.Item key="modifyPassword" className="popup_i_icon"><Icon className="icon_right" type="edit" />修改密码</Menu.Item>*/}
+                <Menu.Item key="existSystem" className="popup_i_icon"><Icon className="icon_right" type="logout" />退出系统</Menu.Item>
             </Menu>
         );
         return (
