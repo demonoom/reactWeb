@@ -63,7 +63,7 @@ class MiddleMenuComponents extends React.Component{
 
 
     handleClick(e) {
-        debugger
+        
         this.setState({currentMenu: ''+ e.key, openSubMenu: e.key});
         var optContent = e.key + "#" + "bySchedule";
         this.props.callbackParent(optContent);
@@ -94,7 +94,7 @@ class MiddleMenuComponents extends React.Component{
      */
     buildMenuChildren (menuList) {
         this.children = menuList.map((e, i) => {
-debugger
+
             const menu = (
                 <Menu onClick={this.menuItemOnClick}>
                     <Menu.Item key={e[0] + "#" + e[1]} className="popup_i_icon"><Icon className="icon_right"
