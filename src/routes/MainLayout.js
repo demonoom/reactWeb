@@ -275,6 +275,7 @@ const MainLayout = React.createClass({
                 //消息动态
                 middleComponent = <MessageMenu onUserClick={this.turnToMessagePage}
                                   userJson={this.state.userJson}
+                                  onLoad={this.turnToMessagePage}
                 />;
                 tabComponent = <AntGroupTabComponents ref="antGroupTabComponents" showpanle={this.showpanle}
                                userInfo={this.state.userInfo}
