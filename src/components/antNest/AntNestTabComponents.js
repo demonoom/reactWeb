@@ -1285,7 +1285,7 @@ const AntNestTabComponents = React.createClass({
                 </div>;
         }
         topicList =
-            <div className="topics_rela">
+            <div className="favorite_scroll">
                 <div className="antnest_cont topics_calc" style={{overflow:'scroll'}}>
                     {antNest.state.topicCardList}
                 </div>

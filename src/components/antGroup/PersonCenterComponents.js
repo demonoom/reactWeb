@@ -728,7 +728,7 @@ const PersonCenterComponents = React.createClass({
                         }
                         var groupName = chatGroupName;
                         var groupSet = <Button icon="setting" onClick={personCenter.setChatGroup.bind(personCenter,e)}></Button>;
-                        var groupNameTag = <a onClick={personCenter.sendGroupMessage.bind(personCenter,e)}>{groupName}</a>
+                        var groupNameTag = <a className="font_gray_666" onClick={personCenter.sendGroupMessage.bind(personCenter,e)}>{groupName}</a>
                         var chatGroupJson = {key:chatGroupId,groupPhoto:imgTag,'groupName':groupNameTag,"groupObj":e,"userCount":membersCount+"人","groupSet":groupSet};
                         charGroupArray.push(chatGroupJson);
                     });
@@ -1300,9 +1300,9 @@ const PersonCenterComponents = React.createClass({
             var user = personCenter.state.userInfo.user;
             var userName = user.userName;
             if (isEmpty(user.avatar) == false) {
-                userPhotoTag = <span className="person_user_bg">
+                userPhotoTag = <span className="person_user_bg person_user_bg2">
                 <img src={user.avatar} className="person_user"/>
-                    <div style={{marginLeft:'10px'}}>{userName}</div>
+                    <div className="person_btn_name">{userName}</div>
             </span>;
                 <div></div>
             }
@@ -1335,11 +1335,11 @@ const PersonCenterComponents = React.createClass({
                 userInfoCard = <Card title={personCenter.state.userInfo.user.userName + '的个人名片'} className="bai" style={{margintop:'15px'}}>
                     <Row className="person_13">
                         <p className="user_cont">
-							<span className="user_til_name">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;校：</span>
+							<span className="user_til_name">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;校：</span>
 							<span className="black_person">{personCenter.state.userInfo.school}</span>
 						</p>
 						<p className="user_cont">
-							<span className="user_til_name">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span>
+							<span className="user_til_name">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span>
 							<span className="black_person ">{personCenter.state.userInfo.grade}</span>
 						</p>
 						<p className="user_cont">
@@ -1844,11 +1844,28 @@ const PersonCenterComponents = React.createClass({
             </Tabs>;
         }else if(personCenter.state.optType=="getUserChatGroup"){
             var welcomeTitle= "我的群聊";
-            personDate = <div>
+
+            /*personDate= <Tabs
+                hideAdd
+                ref = "mainTab"
+                tabBarExtraContent={createChatToolBar}
+                transitionName=""  //禁用Tabs的动画效果
+            >
+                <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
+                    <div>
+                        <ul className="group_table">
+                            <Table className="group_table_u" showHeader={false} scroll={{ x: true, y: 500 }} columns={userGroupsColumns} dataSource={personCenter.state.userGroupsData} pagination={{ total:personCenter.state.totalChatGroupCount,pageSize: getPageSize(),onChange:personCenter.onChatGroupPageChange }}/>
+                        </ul>
+                    </div>
+                </TabPane>
+            </Tabs>;*/
+            personDate = <div className="myfollow_zb">
                 <div className="public—til—blue">{welcomeTitle}</div>
+				<div className="favorite_scroll">
                 <ul className="group_table">
-                    <Table className="group_table_u" showHeader={false} scroll={{ x: true, y: 500 }} columns={userGroupsColumns} dataSource={personCenter.state.userGroupsData} pagination={{ total:personCenter.state.totalChatGroupCount,pageSize: getPageSize(),onChange:personCenter.onChatGroupPageChange }}/>
+                    <Table className="group_table_u" showHeader={false} scroll={{ x: true, }} columns={userGroupsColumns} dataSource={personCenter.state.userGroupsData} pagination={{ total:personCenter.state.totalChatGroupCount,pageSize: getPageSize(),onChange:personCenter.onChatGroupPageChange }}/>
                 </ul>
+				</div>
             </div>;
         }else if(personCenter.state.optType=="showGroupInfo"){
             var welcomeTitle = "群设置";
@@ -1892,7 +1909,7 @@ const PersonCenterComponents = React.createClass({
 
             personDate = <div className="group_cont">
                     <div className="public—til—blue">{returnChatGroupMessagePageToolBar}{welcomeTitle}</div>
-                    <div className="del_out">
+                    <div className="favorite_scroll del_out">
                         <ul className="integral_top">
                             <span className="integral_face"><img src={personCenter.state.currentGroupObj.owner.avatar} className="person_user"/></span>
                             <div className="class_right color_gary_f">{personCenter.state.currentGroupObj.name}</div>
