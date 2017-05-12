@@ -99,16 +99,27 @@ const MessageMenu = React.createClass({
                                     "toChatGroup": toChatGroup
                                 };
                             }
-                            if (colUid != parseInt(sessionStorage.getItem("ident"))) {
+                            if(messageType==1){
+                                if (colUid != parseInt(sessionStorage.getItem("ident"))) {
+                                    userMessageData.push(userJson);
+                                }
+                            }else{
                                 userMessageData.push(userJson);
                             }
-                            if (i == 0) {
-                                mMenu.setState({selectRowKey: colUid});
-                            }
-                            i++;
                         }
+                        if (i == 0) {
+                            if (messageType == 1) {
+                                mMenu.setState({selectRowKey: colUid});
+                            }else{
+                                mMenu.setState({selectRowKey: toChatGroup.chatGroupId});
+                            }
+                        }
+                        i++;
                     })
                     mMenu.setState({"userMessageData": userMessageData});
+                    if(isEmpty(userMessageData)==false){
+                        mMenu.props.onLoad(userMessageData[0]);
+                    }
                 }
             },
             onError: function (error) {
@@ -127,10 +138,15 @@ const MessageMenu = React.createClass({
         var content = messageObj.content;
         var colUid = fromUser.colUid;
         var createTime = getLocalTime(messageObj.createTime);
-        var messageIndex = mMenu.checkMessageIsExist(colUid);
+        var messageIndex = -1;
         var messageToType = messageObj.toType;
         var contentJson = {"content": content, "createTime": createTime};
-        if (messageObj.toType == 1) {
+        if (messageToType == 1) {
+            messageIndex = mMenu.checkMessageIsExist(colUid);
+        }else{
+            messageIndex = mMenu.checkMessageIsExist(messageObj.toChatGroup.chatGroupId);
+        }
+        if (messageToType == 1) {
             //个人消息
             if (messageIndex == -1) {
                 var contentArray = [contentJson];
@@ -200,6 +216,7 @@ const MessageMenu = React.createClass({
             <div>
                 <div className="menu_til">消息动态</div>
                 <Table showHeader={false} columns={columns} dataSource={mMenu.state.userMessageData}
+                       scroll={{ x: true, y: 430}}
                        rowClassName={mMenu.getRowClassName}
                        onRowClick={mMenu.turnToMessagePage}
                 />

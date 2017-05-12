@@ -1,3 +1,6 @@
+import React, {PropTypes} from 'react';
+import {Modal, Button } from 'antd';
+
 export function MsgConnection(){
 	this.msgWsListener = null;
 	this.WS_URL = "ws://192.168.1.59:8889/Excoord_MessageServer/message";
@@ -50,7 +53,7 @@ export function MsgConnection(){
         	connection.connected = false;
         	connection.reconnect();
         	console.log("收到服务器的 onclose .");
-        }; 
+        };
         // 打开WebSocket
         connection.ws.onopen = function(event) { 
         	connection.connecting = false;
@@ -61,6 +64,18 @@ export function MsgConnection(){
         connection.ws.onerror =function(event){
         	connection.connecting = false;
         	console.log("收到服务器的 onerror ....");
+			Modal.error({
+				transitionName:"",  //禁用modal的动画效果
+				title: '系统异常通知',
+				content: '很抱歉，服务器出现异常，系统即将退出，请重新登录',
+				onOk() {
+					sessionStorage.removeItem("ident");
+					sessionStorage.removeItem("loginUser");
+					sessionStorage.removeItem("machineId");
+					location.hash="Login";
+					LP.delAll();
+				},
+			});
         };
 	};
 	

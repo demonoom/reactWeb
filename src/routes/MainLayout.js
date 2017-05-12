@@ -118,7 +118,13 @@ const MainLayout = React.createClass({
         var password = sessionStorage.getItem("loginPassword");
         var pro = {
             "command": "messagerConnect",
-            "data": {"machineType": "web", "userId": Number.parseInt(loginUserId), "machine": machineId,"password":password,"version":0.1}
+            "data": {
+                "machineType": "web",
+                "userId": Number.parseInt(loginUserId),
+                "machine": machineId,
+                "password": password,
+                "version": 0.1
+            }
         };
         ms.connect(pro);
     },
@@ -159,10 +165,8 @@ const MainLayout = React.createClass({
     },
 
     getTeacherResource(params){
-        this.setState({resouceType: '',currentKey: "personCenter",personCenterParams:params});
+        this.setState({resouceType: '', currentKey: "personCenter", personCenterParams: params});
     },
-
-
 
 
     getAntNest(optType){
@@ -173,16 +177,16 @@ const MainLayout = React.createClass({
             this.refs.antNestTabComponents.getTopics(pageNo, 1);
         }
     },
-    teachSpaceTab(activeMenu,beActive){
+    teachSpaceTab(activeMenu, beActive){
         this.setState({activeMiddleMenu: activeMenu});
-        this.changeGhostMenuVisible({visible: false,beActive: beActive});
+        this.changeGhostMenuVisible({visible: false, beActive: beActive});
     },
 
     changeGhostMenuVisible(obj){
 
 
         if (obj) {
-            if(!obj.beActive) return;
+            if (!obj.beActive) return;
             this.setState({ghostMenuVisible: obj.visible});
         } else {
 
@@ -201,7 +205,7 @@ const MainLayout = React.createClass({
 
     setFirstPerson(userContactsData){
         var userJson = userContactsData[0];
-        this.setState({"userContactsData":userContactsData});
+        this.setState({"userContactsData": userContactsData});
         this.getPersonalCenterData(userJson.userObj.colUid);
     },
 
@@ -213,7 +217,7 @@ const MainLayout = React.createClass({
      * @param groupObj
      */
     sendGroupMessage(groupObj){
-        console.log("mainLayout:"+groupObj.name);
+        console.log("mainLayout:" + groupObj.name);
         var contentJson = {"content": '', "createTime": ''};
         var contentArray = [contentJson];
         var userJson = {
@@ -223,15 +227,19 @@ const MainLayout = React.createClass({
             "messageToType": 4,
             "toChatGroup": groupObj
         };
-        this.setState({currentKey: 'message', resouceType: '',"groupObj":groupObj,"messageType":'groupMessage',userJson});
+        this.setState({
+            currentKey: 'message',
+            resouceType: '',
+            "groupObj": groupObj,
+            "messageType": 'groupMessage',
+            userJson
+        });
     },
 
     /**
      * 好友对好友的消息发送
      */
     sendMessage(userInfo){
-
-        console.log("userInfo:"+userInfo.user.colUid);
         var contentJson = {"content": '', "createTime": ''};
         var contentArray = [contentJson];
         var userJson = {
@@ -240,8 +248,13 @@ const MainLayout = React.createClass({
             contentArray: contentArray,
             "messageToType": 1
         };
-        this.setState({currentKey: 'message', resouceType: '',"userInfo":userInfo.user,"messageType":'message',userJson});
-        // this.turnToMessagePage(userInfo.user);
+        this.setState({
+            currentKey: 'message',
+            resouceType: '',
+            "userInfo": userInfo.user,
+            "messageType": 'message',
+            userJson
+        });
 
     },
     /**
@@ -250,10 +263,10 @@ const MainLayout = React.createClass({
      * @param fromObj
      */
     turnToMessagePage(fromObj){
-        if(fromObj.messageType == 1){
+        if (fromObj.messageType == 1) {
             // 个人消息
             this.refs.antGroupTabComponents.getUser2UserMessages(fromObj.fromUser);
-        }else{
+        } else {
             // 群组消息
             this.refs.antGroupTabComponents.sendGroupMessage(fromObj.toChatGroup);
         }
@@ -270,42 +283,39 @@ const MainLayout = React.createClass({
 
         switch (this.state.currentKey) {
             default:
-                tabComponent = <MainTabComponents ref="mainTabComponents"  />;
+                tabComponent = <MainTabComponents ref="mainTabComponents"/>;
             case 'message':
                 //消息动态
-
                 middleComponent = <MessageMenu onUserClick={this.turnToMessagePage}
-                                  userJson={this.state.userJson} />;
+                                               userJson={this.state.userJson}
+                                               onLoad={this.turnToMessagePage}/>;
                 tabComponent = <AntGroupTabComponents ref="antGroupTabComponents"
-                               userInfo={this.state.userInfo}
-                               groupObj={this.state.groupObj}
-                               messageType={this.state.messageType}
-                               messageUtilObj={ms}
-                />;
+                                                      userInfo={this.state.userInfo}
+                                                      groupObj={this.state.groupObj}
+                                                      messageType={this.state.messageType}
+                                                      messageUtilObj={ms}/>;
                 break;
             case 'antGroup':
                 //蚁群
                 middleComponent = <AntGroupMenu ref="antGroupMenu" callbackSetFirstPerson={this.setFirstPerson}
                                                 callbackPersonCenterData={this.getPersonalCenterData}
-                                                callbackGetGroupInfo={this.getGroupInfo}
-                ></AntGroupMenu>;
+                                                callbackGetGroupInfo={this.getGroupInfo}/>;
                 tabComponent = <PersonCenterComponents ref="personCenterComponents"
                                                        userInfo={this.state.userObj}
                                                        userContactsData={this.state.userContactsData}
                                                        onSendGroupMessage={this.sendGroupMessage}
-                                                       onSendMessage={this.sendMessage}
-                />;
+                                                       onSendMessage={this.sendMessage}/>;
                 break;
             case 'personCenter':
                 //个人中心
                 middleComponent = <PersonCenterMenu callbackParent={this.getTeacherResource}/>;
-               tabComponent = <PersonCenter params={this.state.personCenterParams}  />;
+                tabComponent = <PersonCenter params={this.state.personCenterParams}/>;
 
                 break;
             case 'antNest':
                 //蚁巢
                 middleComponent = <AntNestMenu callbackParent={this.getAntNest}/>;
-                tabComponent = <AntNestTabComponents ref="antNestTabComponents"  />;
+                tabComponent = <AntNestTabComponents ref="antNestTabComponents"/>;
 
                 break;
             case 'teachSpace':
@@ -320,7 +330,7 @@ const MainLayout = React.createClass({
         //
         //
         /*
-        就是页面右侧的结构，目前只有两种默认左右分
+         就是页面右侧的结构，目前只有两种默认左右分
          */
         switch (this.state.resouceType) {
             default :
@@ -345,7 +355,6 @@ const MainLayout = React.createClass({
                                 {tabComponent}
                                 {middleComponent}
                             </div>
-                            ;
                         </Col>
                     </Row>;
                 break;
@@ -359,7 +368,7 @@ const MainLayout = React.createClass({
 
                     <aside className="ant-layout-sider">
                         <div className="ant-layout-logo">
-                            <UserFace callbackParent={this.getTeacherResource}  />
+                            <UserFace callbackParent={this.getTeacherResource}/>
                         </div>
                         <Menu mode="inline" theme="dark"
                               defaultSelectedKeys={[this.state.currentKey]}
