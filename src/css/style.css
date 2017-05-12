@@ -2358,6 +2358,10 @@ span.person_user_bg{
     background-position: center center;
 	padding:2px;
 }
+.pers_bo_ra{
+	border:none !important;
+	padding:0 !important;	
+}
 .person_btn{
 	margin-left: 24px;
     position: relative;
@@ -2505,8 +2509,8 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     word-wrap: normal;
     margin: 1px 0 4px;
     color: #7d7d7e;
-    font-size: 12px;
-    line-height: 16px;
+    font-size: 14px;
+    line-height: 20px;
 }
 .custom-card .name{
 	overflow: hidden;
@@ -2841,9 +2845,9 @@ ul.integral li i{
 	padding:8px 12px;
 }
 .focus, .focus_lb{
-	margin: 15px;
+	margin: 10px 15px 10px 4px;
     float: left;
-    width: 300px;
+    width: 265px;
 }
 .favorite_scroll .focus:first-child{
 	margin-left:76px
@@ -2873,7 +2877,7 @@ a.antnest_name:hover{
 .focus_2{
 	display: inline-block;
     margin: 0 0 0 12px;
-    width: 174px;
+    width: 166px;
 }
 .focus_4{
 	width:200px;
@@ -2892,7 +2896,9 @@ a.color_gary_f, .color_gary_f{
 .focus_3{
 	word-break: break-all; 
 	word-wrap:break-word;
-	white-space: pre-wrap;
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .live{
@@ -3658,4 +3664,7 @@ color:#ffbf00
 .time{
 	color:#a0a0a0;
 	font-size:12px;
+}
+.guanzhu .ant-card-body{
+	padding:12px;
 }

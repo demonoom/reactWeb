@@ -236,7 +236,7 @@ const PersonCenterComponents = React.createClass({
                             <span className="person_user_bg upexam_float">
                                 <a target="_blank"><img
                                     alt={userName + '头像'} width="100%" src={e.user.avatar}
-                                    className="person_user"/></a>
+                                    className="person_user pers_bo_ra"/></a>
                             </span>
                             <div className="custom-card focus_2">
                                 <div className="focus_1">
@@ -1821,7 +1821,7 @@ const PersonCenterComponents = React.createClass({
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab={welcomeTitle} key="userFollows" className="topics_rela">
-                    <div className="person_attention favorite_pa_le" >
+                    <div className="person_attention guanzhu" >
                         {personCenter.state.followsUserArray}
                     </div>
                 </TabPane>
