@@ -220,19 +220,8 @@ class MyMTV extends React.Component {
     render() {
 
         this.buildFavShipionUi();
-
-        let breadcrumb = <Breadcrumb separator=">">
-            <Breadcrumb.Item><Icon type="home"/></Breadcrumb.Item>
-            <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
-            <Breadcrumb.Item href="#/MainLayout">我的直播课</Breadcrumb.Item>
-        </Breadcrumb>;
-
-        if (this.props.hideBreadcrumb) {
-            breadcrumb = null;
-        }
-
         return ( <div>
-                {breadcrumb}
+                <div className="public—til—blue">我的直播课</div>
                 <div className="favorite_scroll favorite_up favorite_le_h">{coursePanelChildren}</div>
             </div>
         );

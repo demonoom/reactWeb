@@ -97,11 +97,7 @@ class ResetStudentAccountKey extends React.Component {
         this.getTemplate();
 
         return (<div>
-                <Breadcrumb separator=">">
-                    <Breadcrumb.Item><Icon type="home"/></Breadcrumb.Item>
-                    <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
-                    <Breadcrumb.Item href="#/MainLayout">找回学生密码</Breadcrumb.Item>
-                </Breadcrumb>
+                <div className="public—til—blue">找回学生密码</div>
                 <Row style={{height: 100}}/>
                  <div className="ques_list_new">
                         <div className="password_cow ant-row ant-form-item">

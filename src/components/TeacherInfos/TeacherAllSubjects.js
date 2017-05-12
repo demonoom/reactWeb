@@ -213,11 +213,7 @@ const TeacherAllSubjects = React.createClass({
     const hasSelected = selectedRowKeys.length > 0;
     return (
         <div className='ant-tabs ant-tabs-top ant-tabs-line'>
-          <Breadcrumb separator=">">
-            <Breadcrumb.Item><Icon type="home"/></Breadcrumb.Item>
-            <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
-            <Breadcrumb.Item href="#/MainLayout">我的题目</Breadcrumb.Item>
-          </Breadcrumb>
+          <div className="public—til—blue">我的题目</div>
           <ConfirmModal ref="confirmModal"
                         title="确定要删除该题目?"
                         onConfirmModalCancel={subTable.closeConfirmModal}

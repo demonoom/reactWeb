@@ -252,11 +252,7 @@ const TeacherAllCourseWare = React.createClass({
             }
         });
         return (<div>
-                <Breadcrumb separator=">">
-                    <Breadcrumb.Item><Icon type="home"/></Breadcrumb.Item>
-                    <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
-                    <Breadcrumb.Item href="#/MainLayout">我的资源</Breadcrumb.Item>
-                </Breadcrumb>
+                <div className="public—til—blue">我的资源</div>
 				<div className="favorite_scroll">
 					<div className='ant-tabs ant-tabs-top ant-tabs-line'>
 						<ConfirmModal ref="confirmModal"

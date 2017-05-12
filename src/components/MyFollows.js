@@ -280,11 +280,7 @@ class MyFollows extends React.Component {
         this.buildContent();
         return (
             <div >
-                <Breadcrumb separator=">">
-                    <Breadcrumb.Item><Icon type="home"/></Breadcrumb.Item>
-                    <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
-                    <Breadcrumb.Item href="#/MainLayout">我的关注</Breadcrumb.Item>
-                </Breadcrumb>
+                <div className="public—til—blue">我的关注</div>
                 <div className="favorite_scroll favorite_le_h guanzhu">
                     <div className="ant-tabs-bar">
                         { this.title}
