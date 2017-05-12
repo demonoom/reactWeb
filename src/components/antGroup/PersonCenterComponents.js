@@ -1732,7 +1732,6 @@ const PersonCenterComponents = React.createClass({
                 ref="studentStudyTrackTab"
                 activeKey={this.state.activeKey}
                 defaultActiveKey={this.state.defaultActiveKey}
-                tabBarExtraContent={returnPersonCenterToolBar}
                 transitionName=""  //禁用Tabs的动画效果
                 onChange={personCenter.platformRulePageChange}
             >
@@ -1758,32 +1757,26 @@ const PersonCenterComponents = React.createClass({
             </Tabs>;
 
             personDate = <div className="group_cont">
+                <div className="public—til—blue">{returnPersonCenterToolBar}平台规则</div>
                 {userPhoneCard}
                 {tabComponent}
             </div>;
         }else if(personCenter.state.optType=="getScoreOrLevelPage"){
 
             var currentPageLink;
+            var toolbarTitle;
             //var returnPersonCenterToolBar = <div className="ant-tabs-right"><Button onClick={personCenter.returnPersonCenter}>返回</Button></div>;
             if(personCenter.state.urlType=="score"){
+                toolbarTitle="的积分";
                 currentPageLink = "http://www.maaee.com:80/Excoord_PhoneService/user/getUserScores/" + personCenter.state.userInfo.user.colUid;
             }else{
+                toolbarTitle="的等级";
                 currentPageLink = "http://www.maaee.com:80/Excoord_PhoneService/user/personalGrade/" + personCenter.state.userInfo.user.colUid;
             }
-            var tabComponent = <Tabs
-                hideAdd
-                ref = "studentStudyTrackTab"
-                activeKey={this.state.activeKey}
-                defaultActiveKey={this.state.defaultActiveKey}
-                tabBarExtraContent={returnPersonCenterToolBar}
-                transitionName=""  //禁用Tabs的动画效果
-            >
-                <TabPane tab="我的积分" key="userScores">
-                    <div className="topics_le"><iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe></div>
-                </TabPane>
-            </Tabs>;
-
-            personDate = tabComponent;
+            personDate = <div>
+                <div className="public—til—blue">{returnPersonCenterToolBar}{personCenter.state.userInfo.user.userName+toolbarTitle}</div>
+                <div className="topics_le"><iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe></div>
+            </div>;
         }else if(personCenter.state.optType=="turnToAsk"){
             var currentPageLink = "http://www.maaee.com:80/Excoord_PhoneService/quiz/getUserAskedQuiz/" + personCenter.state.userInfo.user.colUid;
             /*tabComponent = <Tabs
@@ -1910,20 +1903,6 @@ const PersonCenterComponents = React.createClass({
             </Tabs>;
         }else if(personCenter.state.optType=="getUserChatGroup"){
             var welcomeTitle= "我的群聊";
-            /*personDate= <Tabs
-                hideAdd
-                ref = "mainTab"
-                tabBarExtraContent={createChatToolBar}
-                transitionName=""  //禁用Tabs的动画效果
-            >
-                <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
-                    <div>
-                        <ul className="group_table">
-                            <Table className="group_table_u" showHeader={false} scroll={{ x: true, y: 500 }} columns={userGroupsColumns} dataSource={personCenter.state.userGroupsData} pagination={{ total:personCenter.state.totalChatGroupCount,pageSize: getPageSize(),onChange:personCenter.onChatGroupPageChange }}/>
-                        </ul>
-                    </div>
-                </TabPane>
-            </Tabs>;*/
             personDate = <div>
                 <div className="public—til—blue">{welcomeTitle}</div>
                 <ul className="group_table">
