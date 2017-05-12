@@ -1,8 +1,9 @@
 import React, {PropTypes} from 'react';
-import {Tabs, Breadcrumb, Icon, Button, Radio} from 'antd';
+import {Tabs, Breadcrumb, Icon, Button} from 'antd';
 import ExamPagerTableComponents from './ExamPagerTableComponents';
 import CreateExamPagerComponents from './CreateExamPagerComponents';
 import UpdateExamPagerComponents from './UpdateExamPagerComponents';
+import UseKnowledgeComponents from '../UseKnowledgeComponents';
 
 
 const TabPane = Tabs.TabPane;
@@ -17,7 +18,7 @@ const ExamPagerTabComponents = React.createClass({
             currentSubjectId: '',
             activeKey: '试卷列表',
             defaultActiveKey: '试卷列表',
-            currentOpt: 'examPagerList',
+            currentOpt: 'examPagerList', // createExamPager , examPagerList
             currentTeachScheduleId: '',
             updateSubjectInfo: '',
         };
@@ -57,8 +58,7 @@ const ExamPagerTabComponents = React.createClass({
                 break;
             case 'createExamPager':
                 tabPanel = <TabPane tab="组卷" key="组卷">
-                    <CreateExamPagerComponents ref="createExamPagerComponents"
-                                               callbackParent={this.getExamPagerList} />
+                    <CreateExamPagerComponents  callbackParent={this.getExamPagerList} />
                 </TabPane>;
                 break;
             case 'updateExamPager':
@@ -73,6 +73,7 @@ const ExamPagerTabComponents = React.createClass({
 
             return (
                 <div>
+                    <UseKnowledgeComponents  />
                     <Breadcrumb separator=">">
                         <Breadcrumb.Item ><Icon type="home"/></Breadcrumb.Item>
                         <Breadcrumb.Item href="#/MainLayout">首页</Breadcrumb.Item>
@@ -81,13 +82,10 @@ const ExamPagerTabComponents = React.createClass({
                         hideAdd
                         onChange={this.onChange}
                         onEdit={this.onEdit}
-                        ref="mainTab"
                         activeKey={this.state.activeKey}
                         defaultActiveKey={this.state.defaultActiveKey}
                         transitionName=""
-                        tabBarExtraContent={<div className="ant-tabs-right"><Button type="primary"
-                                                                                    onClick={this.createExam}
-                                                                                    className="add_study">增加组卷</Button></div>}
+                        tabBarExtraContent={<div className="ant-tabs-right"><Button type="primary" onClick={this.createExamPager} className="add_study">组卷</Button></div>}
                     >
                         {tabPanel}
                     </Tabs>

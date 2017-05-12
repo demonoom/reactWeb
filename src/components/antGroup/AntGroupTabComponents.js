@@ -87,7 +87,7 @@ const AntGroupTabComponents = React.createClass({
         };
         ms.connect(pro);*/
         ms = antGroup.props.messageUtilObj;
-        console.log("ms ant:"+ms);
+
         var messageType = antGroup.props.messageType;
         var propsUserInfo = antGroup.props.userInfo;
         if(isEmpty(messageType)==false){

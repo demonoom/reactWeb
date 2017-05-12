@@ -22,11 +22,9 @@ export function MsgConnection(){
 			//如果服务器在发送ping命令,则赶紧回复PONG命令
 			if(event.data == connection.PING_COMMAND){
 				connection.send(connection.PONG_COMMAND);
-				console.log("收到服务器的 ping , 给服务器回复 pong...");
 				return;
 			}
 			if(event.data == connection.PONG_COMMAND){
-				console.log("收到服务器的 pong");
 				return;
 			}
 			if(connection.msgWsListener != null){
@@ -52,18 +50,15 @@ export function MsgConnection(){
         	connection.connecting = false;
         	connection.connected = false;
         	connection.reconnect();
-        	console.log("收到服务器的 onclose .");
         };
         // 打开WebSocket
         connection.ws.onopen = function(event) { 
         	connection.connecting = false;
         	connection.connected = true;
         	connection.send(loginProtocol);
-        	console.log("连接到服务器 ....");
-        }; 
+        };
         connection.ws.onerror =function(event){
         	connection.connecting = false;
-        	console.log("收到服务器的 onerror ....");
 			Modal.error({
 				transitionName:"",  //禁用modal的动画效果
 				title: '系统异常通知',
@@ -86,7 +81,6 @@ export function MsgConnection(){
 			setTimeout(function (){
 				connection.connect(connection.loginProtocol);
 				connection.reconnect();
-				console.log("重连中 ...");
 			}, 1000*10);
     	}
 	};
@@ -104,7 +98,6 @@ export function MsgConnection(){
 		var pingCommand = connection.PING_COMMAND;
 		setTimeout(function (){
 			connection.send(pingCommand);
-			console.log("客户端发送ping命令 , 希望服务器回答pong...");
 			connection.heartBeat();
 		}, 1000*10);
 	};
