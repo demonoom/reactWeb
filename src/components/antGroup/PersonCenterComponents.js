@@ -1911,7 +1911,7 @@ const PersonCenterComponents = React.createClass({
             </Tabs>;
         }else if(personCenter.state.optType=="getUserChatGroup"){
             var welcomeTitle= "我的群聊";
-            personDate= <Tabs
+            /*personDate= <Tabs
                 hideAdd
                 ref = "mainTab"
                 tabBarExtraContent={createChatToolBar}
@@ -1924,7 +1924,13 @@ const PersonCenterComponents = React.createClass({
                         </ul>
                     </div>
                 </TabPane>
-            </Tabs>;
+            </Tabs>;*/
+            personDate = <div>
+                <div className="public—til—blue">{welcomeTitle}</div>
+                <ul className="group_table">
+                    <Table className="group_table_u" showHeader={false} scroll={{ x: true, y: 500 }} columns={userGroupsColumns} dataSource={personCenter.state.userGroupsData} pagination={{ total:personCenter.state.totalChatGroupCount,pageSize: getPageSize(),onChange:personCenter.onChatGroupPageChange }}/>
+                </ul>
+            </div>;
         }else if(personCenter.state.optType=="showGroupInfo"){
             var welcomeTitle = "群设置";
             const { loading, selectedRowKeys } = this.state;
