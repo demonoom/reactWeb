@@ -23,6 +23,10 @@ code, kbd, pre, samp{
 div, a, span, input{
 	outline:none;
 }
+.font_gray_33{
+	color:#333;
+	font-size: 16px !important;
+}
 
 i, cite, em, var, address, dfn {
     font-style: normal;
@@ -264,7 +268,7 @@ i, cite, em, var, address, dfn {
 
     .ant-layout-aside .ant-layout-content {
       background: #fff;
-      padding:0 0 24px 0;
+      padding:0;
 	  height:100%
     }
 	.ant-layout-content > div:first-child{
@@ -687,11 +691,11 @@ html, body, #root {
 	}
 
 .ant-tabs{
-	height:calc(100% - 18px);
+	height:100%;
 	padding:0;
 }
 .ant-tabs-content {
-	height:calc(100% - 53px);
+	height:calc(100% - 50px);
 	margin:0;
     padding: 0;
     width: 100% ;
@@ -1265,11 +1269,12 @@ p.user_cont{
 p.user_cont_cen{
 	text-align:left
 }
-p.user_cont span.name{
-	color:#a6a6a6;
-	width:65px;
-	margin-right:10px;
-	font-size:14px;	
+p.user_cont span.name, .user_til_name{
+	 color: #a6a6a6;
+    width: 125px;
+    margin-right: 30px;
+    text-align: right;
+    display: inline-block;
 }
 .rc-upload{
 	top:0 !important;
@@ -2353,6 +2358,10 @@ span.person_user_bg{
     background-position: center center;
 	padding:2px;
 }
+.pers_bo_ra{
+	border:none !important;
+	padding:0 !important;	
+}
 .person_btn{
 	margin-left: 24px;
     position: relative;
@@ -2500,8 +2509,8 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     word-wrap: normal;
     margin: 1px 0 4px;
     color: #7d7d7e;
-    font-size: 12px;
-    line-height: 16px;
+    font-size: 14px;
+    line-height: 20px;
 }
 .custom-card .name{
 	overflow: hidden;
@@ -2836,16 +2845,11 @@ ul.integral li i{
 	padding:8px 12px;
 }
 .focus, .focus_lb{
-	margin: 15px;
+	margin: 10px 15px 10px 4px;
     float: left;
-    width: 300px;
+    width: 265px;
 }
-.favorite_scroll .focus:first-child{
-	margin-left:76px
-}
-.favorite_scroll .focus:nth-child(3n+1){
-	margin-left:76px
-}
+
 .focus_btn{
 	padding:2px 5px !important;
 }
@@ -2868,7 +2872,7 @@ a.antnest_name:hover{
 .focus_2{
 	display: inline-block;
     margin: 0 0 0 12px;
-    width: 174px;
+    width: 188px;
 }
 .focus_4{
 	width:200px;
@@ -2887,12 +2891,14 @@ a.color_gary_f, .color_gary_f{
 .focus_3{
 	word-break: break-all; 
 	word-wrap:break-word;
-	white-space: pre-wrap;
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .live{
-	width:300px;
-	margin: 15px;
+	width:265px;
+	margin: 10px 15px 10px 4px;
     float: left;
 	border-radius: 0 0 6px 6px;
 }
@@ -2900,7 +2906,7 @@ a.color_gary_f, .color_gary_f{
 	padding:0 !important
 }
 .live_img{
-	height:165px;
+	height:140px;
 	position:relative;
 	cursor:pointer
 }
@@ -2977,6 +2983,7 @@ a.color_gary_f, .color_gary_f{
     color: #fff;
     height: 20px;
     display: inline-block;
+	line-height: 16px;
 }
 .live_green{
 	background-color: rgba(0,0,0,0.5);/* IE9、标准浏览器、IE6和部分IE7内核的浏览器(如QQ浏览器)会读懂 */
@@ -2997,6 +3004,7 @@ a.color_gary_f, .color_gary_f{
 }
 .live_green span{
   color: #FFFFFF;
+  font-size: 15px;
 }
 @media \0screen\,screen\9 {/* 只支持IE6、7、8 */
   .live_green{
@@ -3226,10 +3234,13 @@ a.color_gary_f, .color_gary_f{
 	top:6px;
 }
 .favorite_scroll{
-	height:100%	
+	height:calc(100% - 46px);
 }
 .favorite_up{
 	overflow:auto
+}
+.favorite_le_h{
+	padding:8px 0 0 16px;
 }
 .favorite_pa_le{
 	margin-left:40px;
@@ -3458,7 +3469,7 @@ color:#ffbf00
 	left:0
 }
 .enhance{
-	height:calc(100% - 67px) !important
+	height:calc(100% - 49px) !important
 }
 
 
@@ -3604,13 +3615,30 @@ color:#ffbf00
 .maaee_group_pa{
 	padding:24px 24px 0 24px;
 }
-.yichao_menu{
+.yichao_menu, .message_menu{
 	height:calc(100% - 63px)
+}
+.yichao_menu .ant-table-body, .yichao_menu .ant-table-fixed-header .ant-table-body, .message_menu .ant-table-body, .message_menu .ant-table-fixed-header .ant-table-body{
+	height:100%;
+	overflow-y:auto ;
 }
 .yichao_menu .ant-table-tbody > tr > td{
 	padding:12px 24px !important;
 	border-bottom:none;
 	cursor:pointer
+}
+.message_menu .ant-table-tbody > tr > td{
+	padding:8px !important;
+	border-bottom:none;
+	cursor:pointer
+}
+.message_menu .ant-table-tbody > tr > td span.ant-badge{
+	width:100%;
+}
+
+.message_menu .ant-table-fixed-header .ant-table-scroll .ant-table-header{
+	width: 100%;
+	margin-bottom:0 !important
 }
 .ant-card-head-title, .ant-card{
 	font-size:16px;
@@ -3623,4 +3651,20 @@ color:#ffbf00
 	text-align:center;
 	color:#0078e4;
 	position:relative
+}
+.mes_u_l{
+	margin-left:46px;
+}
+.mes_u_l div{
+	padding:2px 0 4px 0;
+}
+.mes_u_l div span:first-child{
+	color:#424242
+}
+.time{
+	color:#a0a0a0;
+	font-size:12px;
+}
+.guanzhu .ant-card-body{
+	padding:12px;
 }

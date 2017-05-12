@@ -231,10 +231,8 @@ class MyFollows extends React.Component {
             let refkey = e.uid + "#" + e.courseId;
 
             return <Card key={refkey} className="focus">
-                    <span className="person_user_bg upexam_float">
-                        <a onClick={this.intoProsoncenter.bind(this, e.user)} target="_blank">
-                            <img alt={e.user.userName + '头像'} width="100%" src={e.user.avatar} className="person_user"/></a>
-                    </span>
+                        <a onClick={this.intoProsoncenter.bind(this, e.user)} target="_blank" className="attention_img">
+                            <img alt={e.user.userName + '头像'} width="100%" src={e.user.avatar} /></a>
                 <div className="custom-card focus_2">
                     <div className="focus_1">
                         <span className="antnest_name focus_3"
@@ -282,12 +280,8 @@ class MyFollows extends React.Component {
         this.buildContent();
         return (
             <div >
-                <Breadcrumb separator=">">
-                    <Breadcrumb.Item><Icon type="home"/></Breadcrumb.Item>
-                    <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
-                    <Breadcrumb.Item href="#/MainLayout">我的关注</Breadcrumb.Item>
-                </Breadcrumb>
-                <div className="group_cont">
+                <div className="public—til—blue">我的关注</div>
+                <div className="favorite_scroll favorite_le_h guanzhu">
                     <div className="ant-tabs-bar">
                         { this.title}
                         { this.gobackBtn}

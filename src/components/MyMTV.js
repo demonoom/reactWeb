@@ -193,7 +193,7 @@ class MyMTV extends React.Component {
                         <li className="li_live_span_3">
                             <span className="attention_img2"><img src={user.avatar}></img></span>
                             <span className="live_span_1 live_span_3">{userName}</span>
-                            <span className="right_ri live_span_2">{startTime}</span>
+                            <span className="right_ri live_span_2 time">{startTime}</span>
                         </li>
                         <li>
                             <span className="live_color live_orange">{courseName}</span>
@@ -223,20 +223,9 @@ class MyMTV extends React.Component {
     render() {
 
         this.buildFavShipionUi();
-
-        let breadcrumb = <Breadcrumb separator=">">
-            <Breadcrumb.Item><Icon type="home"/></Breadcrumb.Item>
-            <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
-            <Breadcrumb.Item href="#/MainLayout">我的直播课</Breadcrumb.Item>
-        </Breadcrumb>;
-
-        if (this.props.hideBreadcrumb) {
-            breadcrumb = null;
-        }
-
         return ( <div>
-                {breadcrumb}
-                {coursePanelChildren}
+                <div className="public—til—blue">我的直播课</div>
+                <div className="favorite_scroll favorite_up favorite_le_h">{coursePanelChildren}</div>
             </div>
         );
     }

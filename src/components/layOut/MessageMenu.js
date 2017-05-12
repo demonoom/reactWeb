@@ -65,21 +65,22 @@ const MessageMenu = React.createClass({
                             var lastCreateTime = lastContentInfo.createTime;
                             var imgTag;
                             if (messageType == 1) {
-                                imgTag = <div>
-                                    <img src={fromUser.avatar} className="antnest_38_img" height="38"></img>
-                                    <div>{fromUser.userName}</div>
+                                imgTag = <div className="666">
+                                    <span className="antnest_user"><img src={fromUser.avatar} height="38"></img></span>
+                                    <div className="mes_u_l">
+										<div><span>{fromUser.userName}</span><span className="time right_ri">{lastCreateTime}</span></div>
+										<div className="date_tr">{lastContentText}</div>
+									</div>
                                 </div>;
                             } else {
                                 imgTag = <div>
                                     <img src={toChatGroup.avatar} className="antnest_38_img" height="38"></img>
-                                    <div>{toChatGroup.name}</div>
+                                    <div>{toChatGroup.name}<div>{lastCreateTime}</div></div>
                                 </div>;
                             }
                             var messageContentTag = <Badge dot={mMenu.state.badgeShow}>
                                 <div>
                                     {imgTag}
-                                    <div>{lastContentText}</div>
-                                    <div>{lastCreateTime}</div>
                                 </div>
                             </Badge>;
                             var userJson;
@@ -215,10 +216,10 @@ const MessageMenu = React.createClass({
         return (
             <div>
                 <div className="menu_til">消息动态</div>
-                <Table showHeader={false} columns={columns} dataSource={mMenu.state.userMessageData}
-                       scroll={{ x: true, y: 430}}
+                <Table className="message_menu" showHeader={false} columns={columns} dataSource={mMenu.state.userMessageData}
                        rowClassName={mMenu.getRowClassName}
                        onRowClick={mMenu.turnToMessagePage}
+                       pagination={false}
                 />
             </div>
         );
