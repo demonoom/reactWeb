@@ -710,7 +710,7 @@ const PersonCenterComponents = React.createClass({
                         var groupMemebersPhoto=[];
                         for(var i=0;i<e.members.length;i++){
                             var member = e.members[i];
-                            var memberAvatarTag = <div><img src={member.avatar} ></img></div>;
+                            var memberAvatarTag = <img src={member.avatar} ></img>;
                             groupMemebersPhoto.push(memberAvatarTag);
                             if(i>=3){
                                 break;
@@ -1300,7 +1300,7 @@ const PersonCenterComponents = React.createClass({
 
     render() {
         var userPhotoTag;
-        var returnPersonCenterToolBar = <div className="ant-tabs-right"><Button onClick={personCenter.returnPersonCenter}>返回</Button></div>;
+        var returnPersonCenterToolBar = <div className="ant-tabs-right"><Button onClick={personCenter.returnPersonCenter}><Icon type="left" /></Button></div>;
         var createChatToolBar = <div className="ant-tabs-right"><Button onClick={personCenter.showCreateChatGroup}>创建群聊</Button></div>;
         var returnChatGroupMessagePageToolBar = <div className="ant-tabs-right"><Button onClick={personCenter.returnToChatGroupMessagePage}>返回</Button></div>;
         if (isEmpty(personCenter.state.userInfo) == false && personCenter.state.optType == "userDetail") {
@@ -1414,7 +1414,7 @@ const PersonCenterComponents = React.createClass({
         var personDate;
         var userPhoneCard;
         if (isEmpty(personCenter.state.userInfo) == false && personCenter.state.optType == "userDetail") {
-            personDate = <div>
+            personDate = <div className="maaee_group_pa">
                 <Card className="bai">
                     {userPhotoTag}
 
@@ -1802,7 +1802,7 @@ const PersonCenterComponents = React.createClass({
             personDate = tabComponent;
         }else if(personCenter.state.optType=="userFavorite"){
             personDate = <div>
-                    {returnPersonCenterToolBar}
+                    <div className="public—til—blue">{returnPersonCenterToolBar}标题显示</div>
                     <Favorites userid={personCenter.state.studentId} breadcrumbVisible={false}
                            onPreview={ this.props.onPreview }></Favorites>
                 </div>

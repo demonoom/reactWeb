@@ -270,7 +270,7 @@ class MyFollows extends React.Component {
                 if (this.notInterProsonCenter()) {
                     this.gobackBtn =
                         <div className="ant-tabs-extra-content">
-                            <div className="ant-tabs-right"><Button onClick={this.returnPersonCenter}>返回</Button></div>
+                            <div className="ant-tabs-right talk_ant_btn1"><Button onClick={this.returnPersonCenter}>返回000</Button></div>
                         </div>;
                 }
                 this._buildMyFollowsList();

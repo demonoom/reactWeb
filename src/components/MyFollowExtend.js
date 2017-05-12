@@ -1801,8 +1801,8 @@ const MyFollowExtend = React.createClass({
         var breadMenuTip = "蚁群";
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         var welcomeTitle = "欢迎" + loginUser.userName + "登录";
-        var returnToolBar = <div className="ant-tabs-right"><Button onClick={this.props.returnMyFollows }>返回</Button></div>;
-        var returnPersonCenterToolBar = <div className="ant-tabs-right"><Button onClick={this.returnPersonCenter}>返回</Button></div>;
+        var returnToolBar = <div className="ant-tabs-right talk_ant_btn1"><Button onClick={this.props.returnMyFollows }>返回</Button></div>;
+        var returnPersonCenterToolBar = <div className="ant-tabs-right talk_ant_btn1"><Button onClick={this.returnPersonCenter}>返回</Button></div>;
         var tabComponent;
         var userPhoneCard;
         var isVisible = false;
@@ -1810,7 +1810,7 @@ const MyFollowExtend = React.createClass({
         switch (this.state.optType) {
 
             case 'personCenter':
-                let returnBtn = <div className="ant-tabs-right"><Button onClick={this.props.returnParentFollows }>返回</Button></div>;
+                let returnBtn = <div className="ant-tabs-right talk_ant_btn1"><Button onClick={this.props.returnParentFollows }>返回</Button></div>;
                 welcomeTitle = this.state.currentPerson.user.userName + "的个人中心";
                 tabComponent = <Tabs
                     hideAdd

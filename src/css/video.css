@@ -1511,9 +1511,11 @@ video::-webkit-media-text-track-display {
     }
 }
 .multi .list-group{
-	background:#333;
-	width:100%;
+	background: #333;
+    width: 100%;
     min-height: 30px;
+    overflow-y: auto;
+    max-height: 60px;
 }
 .multi a{
 	position: relative;

@@ -1,5 +1,5 @@
 html, body{
-	font-family:"Tahoma","Hiragino Sans GB","Microsoft YaHei","微软雅黑","STHeiti","WenQuanYi Micro Hei",SimSun,sans-serif, "Apple Color Emoji" !important;
+	font-family:"Microsoft YaHei", "Tahoma" !important;
 	background:url(../../src/components/images/bg_6.png);
 	background-size:cover;
 	margin:0;
@@ -7,12 +7,13 @@ html, body{
 	-moz-user-select: none;
     cursor: default;
     -webkit-user-select: none;
+	font-size:16px;
 }
 ul, li{
 	list-style:none
 }
 code, kbd, pre, samp{
-	font-family:"Tahoma","Hiragino Sans GB","Microsoft YaHei","微软雅黑","STHeiti","WenQuanYi Micro Hei",SimSun,sans-serif, "Apple Color Emoji" !important;
+	font-family:"Microsoft YaHei", "Tahoma" !important;
 }
 .logo_layout{
 	margin: 8px 0px 0px;
@@ -349,11 +350,25 @@ i, cite, em, var, address, dfn {
 		display:inline-block;
 		padding: 0 0 0 12px
 	}
-	.ant-tabs-right{
-		width:210px;
-		text-align:right;
-		margin-top:7px
-		}
+.ant-tabs-right{
+	width: 210px;
+    text-align: left;
+    margin-top: 14px;
+    position: absolute;
+    left: 8px;
+    line-height: 1px;
+}
+.ant-tabs-right button, .ant-tabs-right button:hover, .ant-tabs-right button:active{
+	border: none;
+    background: none;
+    padding: 0;
+    line-height: 1px;
+}
+.ant-tabs-right button i{
+	font-size: 22px;
+    color: #0078e4;
+    font-weight: normal;
+}
 	.ant-scroll-number{
 		margin-left:10px;
 		float:left;
@@ -578,7 +593,8 @@ i, cite, em, var, address, dfn {
     float: none;
 	width: calc(100% - 240px);
 	height:100%;
-	top:0
+	top:0;
+	background:#fff;
 }
 .ant-form-item-control {
 	text-align:left
@@ -698,7 +714,6 @@ html, body, #root {
 	color:#309ffb !important
 }
  .ant-collapse-header{
-	font-size:16px !important;
 	font-weight: bold;
 	color: #3a54a4 !important;
 }
@@ -706,10 +721,9 @@ html, body, #root {
 .bnt2_tex{
 	width:calc(100% - 160px);
 	float:left;
-	font-size:16px;
 }
 .bnt2_tex span.col1{
-	color:#666;
+	color:#b3b3b3;
 	word-break:break-all;
 	word-wrap:break-word;
 	white-space: pre-wrap;
@@ -788,7 +802,6 @@ html, body, #root {
 	background-position:0 -150px;
 }
 .menu_til{
-	font-size:18px;
 	line-height:63px;
 	height:63px;
 	padding: 0 0 0 24px;
@@ -894,7 +907,7 @@ html, body, #root {
 }
 .ant-btn {
 	padding:4px 8px;
-	font-size:13px !important;
+	font-size:14px !important;
 	border-radius:4px;
 }
 .ant-input{
@@ -1034,7 +1047,6 @@ html, body, #root {
 }
 .login_buton{
 	width:100%;
-	font-size:16px;
 	height:36px;
 	line-height:34px;
 	padding:0 !important;
@@ -1082,7 +1094,7 @@ a:hover{
 
 }
 .ant-table-fixed-header .ant-table-scroll .ant-table-header{
-	font-size:16px;
+	
 }
 .ant-checkbox-wrapper{
 	display:inline-block;
@@ -1323,7 +1335,6 @@ p.user_cont span.name1{
 	padding:3px 8px !important;
 }
 .ant-modal-title{
-	font-size:16px !important;
 	    font-weight: normal;
 }
 label {
@@ -1376,6 +1387,9 @@ a {
     color: #999;
     width: 69px;
 }
+.group_table_u table tr td:nth-child(4){
+    width: 55px;
+}
 .maaee_group{
     height: 54px !important;
     border-bottom: 1px solid #e9e9e9;
@@ -1390,11 +1404,12 @@ a {
 .maaee_group span{
 	position:relative;
 	top:-12px;
-	font-size: 14px;
-	cursor:pointer
+	font-size: 16px;
+	cursor:pointer;
+	color: #333;
 }
 .maaeegroup{
-	height: calc(100% - 62px );
+	height: calc(100% - 117px );
 }
 .maaeegroup > div:first-child{
 	height:100%
@@ -1403,10 +1418,12 @@ a {
 	height:100%;
 }
 .maaeegroup .ant-table-tbody > tr > td img{
-	height:38px !important
+	height:38px !important;
+	float: left;
 }
 .maaeegroup .ant-table-tbody > tr > td:first-child{
 	width:38px;
+	
 }
 .maaeegroup .ant-table-tbody > tr > td, .group_table_u .ant-table-tbody > tr > td{
 	padding:8px !important
@@ -1999,7 +2016,7 @@ li.ant-menu-submenu > ul > li.ant-menu-submenu{
 	margin-left:58px;
 }
 .antnest-card{
-	margin-bottom:15px;
+	margin:0 20px 15px 20px;
 	border-bottom:1px solid #e9e9e9;
 	-webkit-border-radius:0;
 	border-radius:0;
@@ -2041,7 +2058,7 @@ a.topics:hover{
 	color:#44A6FF
 }
 .antnest-card .ant-card-body{
-	padding:0 20px 15px 20px
+	padding:0 0 15px 0 
 }
 .antnest-card .ant-card-body ul{
 	margin-left:60px;
@@ -2054,7 +2071,7 @@ a.topics:hover{
     overflow: hidden;
     line-height: 23px;
     word-wrap: break-word;
-	font-size:14px;
+	font-size:16px;
 	color:#727272;
 }
 .antnest-card .ant-card-body ul li.topics_bot{
@@ -2088,6 +2105,7 @@ a.topics:hover{
 .topics_time{
 	color:#999;
 	margin-right:12px;
+	font-size:14px;
 }
 .topics_dianzan{
 	float:right;
@@ -2381,7 +2399,7 @@ p.group_double + div.clearfix > div:first-child .ant-table-header{
 	margin-bottom:0 !important
 }
 p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maaeegroup .ant-table-tbody > tr{
-	cursor:pointer
+	cursor:pointer;
 }
 .maaeegroup .ant-table-scroll .ant-table-header{
 	margin-bottom:0 !important;
@@ -2539,16 +2557,16 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 }
 
 .person_13{
-	font-size:13px !important;
+	font-size:16px !important;
 }
 .gary_person{
 	color:#aeaeb2;
-	padding:4px 0;
+	padding:8px 0;
 	text-align: center
 }
 .black_person{
-	color:#222;
-	padding:4px 0;
+	color:#666;
+	padding:8px 0;
 }
 .person_cor{
 	border-radius:50%;
@@ -3492,15 +3510,15 @@ color:#ffbf00
 
 .ghostMenu .headler{
 	position: absolute;
-    width: 36px;
-    height: 36px;
+    width: 28px;
+    height: 30px;
     margin-top: -40px;
     top: 50%;
-    right: -36px;
-    border-radius: 0px 8px 8px 0px;
+    right: -29px;
+    border-radius: 0px 6px 6px 0px;
     background: #309FFB;
     color: #fff;
-    padding: 6px 4px;
+    padding: 5px 2px;
     cursor: pointer;
 }
 .ghostMenu .headler:hover{
@@ -3530,16 +3548,21 @@ color:#ffbf00
 
 .ghostMenu li {
 	display: block;
-	padding: 12px 0px;
-	font-size: 16px;
-	font-family: "Microsoft YaHei";
-	color:#333
+    padding: 12px 0px;
+    font-size: 15px;
+    font-family: "Microsoft YaHei";
+    color: #666;
 }
 .ghostMenu li i{
 	margin-right:8px;
 }
 .ghostMenu .first > li {
 	padding: 10px 0px 10px 0px;
+	border-bottom: 1px solid #f3f3f3;
+    background: #f8f8f8;
+}
+.ghostMenu .first > li:last-child{
+	border-bottom:none;
 }
 .ghostMenu .first .multi {
 
@@ -3547,8 +3570,9 @@ color:#ffbf00
 
 }
 .ghostMenu .second li{
-	font-size: 15px;
-    color: #666;
+	font-size: 16px;
+    color: #333;
+	background: #FCFCFC;
 }
 .ghostMenu .second li:hover {
 	 background-color: #f2f8fe;
@@ -3556,14 +3580,16 @@ color:#ffbf00
 	cursor: pointer;
 
 }
-
 .te_download_a{
 	float:right;
 	line-height:1px
 }
 
 .tableRow{
-	background-color: #e5f2fe;
+	background-color: #E5F2FE;
+}
+.tableRow td{
+	border-bottom:none
 }
 .talk_ant_btn{
 	position:relative;
@@ -3575,4 +3601,26 @@ color:#ffbf00
     top: 2px;
     right: 20px;
 }
-
+.maaee_group_pa{
+	padding:24px 24px 0 24px;
+}
+.yichao_menu{
+	height:calc(100% - 63px)
+}
+.yichao_menu .ant-table-tbody > tr > td{
+	padding:12px 24px !important;
+	border-bottom:none;
+	cursor:pointer
+}
+.ant-card-head-title, .ant-card{
+	font-size:16px;
+}
+.public—til—blue{
+	background:#e4f2ff;
+	width:100%;
+	height:46px;
+	line-height:46px;
+	text-align:center;
+	color:#0078e4;
+	position:relative
+}
