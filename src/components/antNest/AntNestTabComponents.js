@@ -340,7 +340,7 @@ const AntNestTabComponents = React.createClass({
                 })
                 var delBtnInReplayCard;
                 if(topicReplayInfo.fromUser.colUtype=="STUD" || (topicReplayInfo.fromUser.colUtype=="TEAC" && topicReplayInfo.fromUser.colUid == sessionStorage.getItem("ident"))){
-                    delBtnInReplayCard = <Button value={topicReplayInfo.id} icon="delete" onClick={antNest.deleteTopic.bind(antNest,topicReplayInfo.id)} className="topics_btn antnest_talk teopics_spa">删除111</Button>;
+                    delBtnInReplayCard = <Button value={topicReplayInfo.id} icon="delete" onClick={antNest.deleteTopic.bind(antNest,topicReplayInfo.id)} className="topics_btn antnest_talk teopics_spa">删除</Button>;
                 }
                 var praiseBtn;
                 if(topicObj.fromUser.colUtype=="TEAC" && topicObj.fromUser.colUid == sessionStorage.getItem("ident")){
@@ -1264,7 +1264,7 @@ const AntNestTabComponents = React.createClass({
                 </div>;
         }
         topicList =
-            <div className="topics_rela">
+            <div className="favorite_scroll">
                 <div className="antnest_cont topics_calc" style={{overflow:'scroll'}}>
                     {antNest.state.topicCardList}
                 </div>
