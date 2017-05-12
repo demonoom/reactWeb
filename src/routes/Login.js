@@ -97,6 +97,7 @@ const Login = Form.create()(React.createClass({
                         sessionStorage.setItem("ident", response.colUid);
                         var loginUserJson = JSON.stringify(response);
                         sessionStorage.setItem("loginUser",loginUserJson);
+                        sessionStorage.setItem("loginPassword",userPassword);
                         var machineId = loginComponent.createMachineId();
                         sessionStorage.setItem("machineId",machineId);
                         loginComponent.getHistoryAccessPointId(response.colUid);

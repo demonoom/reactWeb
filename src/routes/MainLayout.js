@@ -226,6 +226,35 @@ const MainLayout = React.createClass({
     getGroupInfo(){
         this.refs.personCenterComponents.getUserChatGroup();
     },
+    /**
+     * 回调发送群组消息
+     * @param groupObj
+     */
+    sendGroupMessage(groupObj){
+        console.log("mainLayout:"+groupObj.name);
+        this.setState({currentKey: 'message', resouceType: ''});
+    },
+
+    /**
+     * 好友对好友的消息发送
+     */
+    sendMessage(userInfo){
+        console.log("userInfo:"+userInfo.user.colUid);
+        this.setState({currentKey: 'message', resouceType: '',"userInfo":userInfo.user});
+        // this.turnToMessagePage(userInfo.user);
+
+    },
+
+    turnToMessagePage(fromObj){
+        if(fromObj.messageType == 1){
+            // 个人消息
+            this.refs.antGroupTabComponents.getUser2UserMessages(fromObj.fromUser);
+        }else{
+            // 群组消息
+            this.refs.antGroupTabComponents.sendGroupMessage(fromObj.toChatGroup);
+        }
+
+    },
 
     render() {
 
@@ -240,8 +269,10 @@ const MainLayout = React.createClass({
                 tabComponent = <MainTabComponents ref="mainTabComponents" showpanle={this.showpanle}/>;
             case 'message':
                 //消息动态
-                middleComponent = <MessageMenu/>;
-                tabComponent = <MainTabComponents ref="mainTabComponents" showpanle={this.showpanle}/>;
+                middleComponent = <MessageMenu onUserClick={this.turnToMessagePage}/>;
+                tabComponent = <AntGroupTabComponents ref="antGroupTabComponents" showpanle={this.showpanle}
+                               userInfo={this.state.userInfo}
+                />;
                 break;
             case 'antGroup':
                 //蚁群
@@ -253,6 +284,8 @@ const MainLayout = React.createClass({
                                                        userInfo={this.state.userObj}
                                                        userContactsData={this.state.userContactsData}
                                                        onPreview={ this.showpanle }
+                                                       onSendGroupMessage={this.sendGroupMessage}
+                                                       onSendMessage={this.sendMessage}
                 />;
                 break;
             case 'personCenter':
@@ -426,7 +459,9 @@ const MainLayout = React.createClass({
                             <UserCardModalComponents callbackParent={this.getTeacherResource}
                                                      callEvent={this.switchSection}/>
                         </div>
-                        <Menu mode="inline" theme="dark" defaultSelectedKeys={[this.state.currentKey]}
+                        <Menu mode="inline" theme="dark"
+                              defaultSelectedKeys={[this.state.currentKey]}
+                              selectedKeys={[this.state.currentKey]}
                               onClick={this.toolbarClick}>
                             <Menu.Item key="message" className="padding_menu">
                                 <Icon type="message"/>
