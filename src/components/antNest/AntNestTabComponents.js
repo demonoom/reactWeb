@@ -872,6 +872,11 @@ const AntNestTabComponents = React.createClass({
         if(isEmpty(inputContent)){
             message.error("评论内容不允许为空,请重新输入",5);
             return;
+        }else{
+            inputContent = inputContent.replace(/\'/g, "\\'");  //' 替换成  \'
+            inputContent = inputContent.replace(/\"/g, "\\\""); //" 替换成\"
+            inputContent = inputContent.replace(/</g, "\\\<"); //< 替换成\<
+            inputContent = inputContent.replace(/>/g,"\\\>"); //> 替换成\>
         }
         var toUserId = -1;
         if(isEmpty(antNest.state.toUserId)==false){
@@ -1018,6 +1023,11 @@ const AntNestTabComponents = React.createClass({
         if(isEmpty(inputContent)){
             message.error("内容不允许为空,请重新输入",5);
             return;
+        }else{
+            inputContent = inputContent.replace(/\'/g, "\\'");  //' 替换成  \'
+            inputContent = inputContent.replace(/\"/g, "\\\""); //" 替换成\"
+            inputContent = inputContent.replace(/</g, "\\\<"); //< 替换成\<
+            inputContent = inputContent.replace(/>/g,"\\\>"); //> 替换成\>
         }
         var createTime = (new Date()).valueOf();
         var uuid = antNest.createUUID();
@@ -1040,7 +1050,12 @@ const AntNestTabComponents = React.createClass({
         };
         if(isEmpty(antNest.state.topicTitle)==false){
             topicJson.type = 1;
-            topicJson.title=antNest.state.topicTitle;
+            var title = antNest.state.topicTitle;
+            title = title.replace(/\'/g, "\\'");  //' 替换成  \'
+            title = title.replace(/\"/g, "\\\""); //" 替换成\"
+            title = title.replace(/</g, "\\\<"); //< 替换成\<
+            title = title.replace(/>/g,"\\\>"); //> 替换成\>
+            topicJson.title=title;
         }else{
             topicJson.type = 0;
         }
@@ -1176,6 +1191,12 @@ const AntNestTabComponents = React.createClass({
             inputContent = $("#emotionInput").val();
         }else{
             inputContent = emotionInput;
+        }
+        if(isEmpty(inputContent)==false){
+            inputContent = inputContent.replace(/\'/g, "\\'");  //' 替换成  \'
+            inputContent = inputContent.replace(/\"/g, "\\\""); //" 替换成\"
+            inputContent = inputContent.replace(/</g, "\\\<"); //< 替换成\<
+            inputContent = inputContent.replace(/>/g,"\\\>"); //> 替换成\>
         }
         var createTime = (new Date()).valueOf();
         var uuid = antNest.createUUID();

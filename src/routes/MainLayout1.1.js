@@ -1,7 +1,7 @@
 import React from  'react';
 import {Menu, Icon, Row, Col} from 'antd';
 import MainTabComponents from '../components/MainTabComponents';
-import MiddleMenuComponents from '../components/MiddleMenuComponents';
+import MiddleMenuComponents from '../components/LessonPlanMenus';
 import HeaderComponents from '../components/HeaderComponents';
 import UserCardModalComponents from '../components/UserCardModalComponents';
 import FloatButton  from '../components/FloatButton';

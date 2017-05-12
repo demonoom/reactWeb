@@ -217,7 +217,6 @@ const MainLayout = React.createClass({
      * @param groupObj
      */
     sendGroupMessage(groupObj){
-        console.log("mainLayout:" + groupObj.name);
         var contentJson = {"content": '', "createTime": ''};
         var contentArray = [contentJson];
         var userJson = {
@@ -409,6 +408,7 @@ const MainLayout = React.createClass({
                         </div>
                     </div>
                     <div className="panleArea"></div>
+                    <div className="downloadArea"></div>
                 </div>
             </LocaleProvider>
         );

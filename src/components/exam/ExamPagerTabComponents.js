@@ -1,8 +1,9 @@
 import React, {PropTypes} from 'react';
-import {Tabs, Breadcrumb, Icon, Button, Radio} from 'antd';
+import {Tabs, Breadcrumb, Icon, Button} from 'antd';
 import ExamPagerTableComponents from './ExamPagerTableComponents';
 import CreateExamPagerComponents from './CreateExamPagerComponents';
 import UpdateExamPagerComponents from './UpdateExamPagerComponents';
+import UseKnowledgeComponents from '../UseKnowledgeComponents';
 
 
 const TabPane = Tabs.TabPane;
@@ -11,13 +12,12 @@ const ExamPagerTabComponents = React.createClass({
     getInitialState() {
         return {
             currentIdent: 0,
-            isNewPage: false,
             subjectParams: '',
             currentOptType: '',
             currentSubjectId: '',
             activeKey: '试卷列表',
             defaultActiveKey: '试卷列表',
-            currentOpt: 'examPagerList',
+            currentOpt: 'examPagerList', // createExamPager , examPagerList
             currentTeachScheduleId: '',
             updateSubjectInfo: '',
         };
@@ -32,12 +32,12 @@ const ExamPagerTabComponents = React.createClass({
     },
 
     getExamPagerList(){
-        this.setState({activeKey: '试卷列表', currentOpt: 'examPagerList' });
-        this.refs.examPagerTable.getExamPagerList(sessionStorage.getItem("ident"),1);
+        this.setState({activeKey: '试卷列表', currentOpt: 'examPagerList'});
+        this.refs.examPagerTable.getExamPagerList(sessionStorage.getItem("ident"), 1);
     },
 
     createExam(){
-        this.setState({activeKey: '组卷', currentOpt: 'createExamPager', isNewPage: true});
+        this.setState({activeKey: '组卷', currentOpt: 'createExamPager'});
     },
 
     updateExam(subjectInfoJson){
@@ -47,54 +47,35 @@ const ExamPagerTabComponents = React.createClass({
     render() {
 
         var tabPanel;
+        var secondBtn;
 
         switch (this.state.currentOpt) {
 
             case 'examPagerList':
-                    tabPanel = <TabPane tab="试卷列表" key="试卷列表">
-                        <ExamPagerTableComponents ref="examPagerTable"   callBackParent={this.updateExam} />
-                    </TabPane>;
+                tabPanel = <ExamPagerTableComponents ref="examPagerTable" callBackParent={this.updateExam}/>
+                secondBtn = <Button type="primary" onClick={this.createExam} className="add_study">创建组卷</Button>
                 break;
+
             case 'createExamPager':
-                tabPanel = <TabPane tab="组卷" key="组卷">
-                    <CreateExamPagerComponents ref="createExamPagerComponents"
-                                               callbackParent={this.getExamPagerList} />
-                </TabPane>;
+                tabPanel = <CreateExamPagerComponents callbackParent={this.getExamPagerList}/>
+                secondBtn = <Button type="primary" onClick={this.getExamPagerList} className="add_study">组卷列表</Button>
                 break;
             case 'updateExamPager':
-                tabPanel = <TabPane tab="修改试卷" key="修改试卷">
-                    <UpdateExamPagerComponents ref="updateExamPagerComponents" params={this.state.updateSubjectInfo}
-                                               callbackParent={this.getExamPagerList} />
-                </TabPane>;
+                tabPanel = <UpdateExamPagerComponents params={this.state.updateSubjectInfo} callbackParent={this.getExamPagerList}/>
+                secondBtn = <Button type="primary" onClick={this.getExamPagerList} className="add_study">组卷列表</Button>
                 break;
 
         }
 
 
-            return (
-                <div>
-                    <Breadcrumb separator=">">
-                        <Breadcrumb.Item ><Icon type="home"/></Breadcrumb.Item>
-                        <Breadcrumb.Item href="#/MainLayout">首页</Breadcrumb.Item>
-                    </Breadcrumb>
-                    <Tabs
-                        hideAdd
-                        onChange={this.onChange}
-                        onEdit={this.onEdit}
-                        ref="mainTab"
-                        activeKey={this.state.activeKey}
-                        defaultActiveKey={this.state.defaultActiveKey}
-                        transitionName=""
-                        tabBarExtraContent={<div className="ant-tabs-right"><Button type="primary"
-                                                                                    onClick={this.createExam}
-                                                                                    className="add_study">增加组卷</Button></div>}
-                    >
-                        {tabPanel}
-                    </Tabs>
-                </div>
+        return (
+            <div>
+                <h3>{this.state.activeKey}</h3>
+                {secondBtn}
+                {tabPanel}
+            </div>
 
-            );
-
+        );
 
 
     },

@@ -222,6 +222,7 @@ const MessageMenu = React.createClass({
                 <Table className="message_menu" showHeader={false} columns={columns} dataSource={mMenu.state.userMessageData}
                        rowClassName={mMenu.getRowClassName}
                        onRowClick={mMenu.turnToMessagePage}
+                       pagination={false}
                 />
             </div>
         );

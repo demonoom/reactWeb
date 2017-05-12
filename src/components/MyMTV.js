@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import {Card, Button, message, Breadcrumb, Icon} from 'antd';
 import {getLocalTime} from '../utils/utils';
 import {doWebService} from '../WebServiceHelper';
@@ -109,11 +110,13 @@ class MyMTV extends React.Component {
             message.info('无效的视频地址！');
             return;
         }
-
+        let ifrArr = [];
         for (let i = 0; i < arr.liveVideos.length; i++) {
             let obj = arr.liveVideos[i];
-            location.href = obj.path;
+
+            ifrArr.push(<iframe src={obj.path} key={'download_' + i}/> );
         }
+        ReactDOM.render(<div>{ifrArr}</div>, document.querySelector('.downloadArea'));
     }
 
     onPreview(obj) {
@@ -156,7 +159,7 @@ class MyMTV extends React.Component {
             let cover = liveCover.cover;
             let liveVideos = e.liveVideos;
             let schoolName = e.schoolName;
-            let startTime = this.getLocalTime(e.startTime);
+            let startTime = getLocalTime(e.startTime);
             let title = e.title;
             let user = e.user;
             let userName = user.userName;
@@ -220,19 +223,8 @@ class MyMTV extends React.Component {
     render() {
 
         this.buildFavShipionUi();
-
-        let breadcrumb = <Breadcrumb separator=">">
-            <Breadcrumb.Item><Icon type="home"/></Breadcrumb.Item>
-            <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
-            <Breadcrumb.Item href="#/MainLayout">我的直播课</Breadcrumb.Item>
-        </Breadcrumb>;
-
-        if (this.props.hideBreadcrumb) {
-            breadcrumb = null;
-        }
-
         return ( <div>
-                {breadcrumb}
+                <div className="public—til—blue">我的直播课</div>
                 <div className="favorite_scroll favorite_up favorite_le_h">{coursePanelChildren}</div>
             </div>
         );

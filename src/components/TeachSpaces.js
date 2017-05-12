@@ -2,7 +2,7 @@ import React from  'react';
 import {Row, Col, Tabs} from 'antd';
 import LessonPlans from './LessonPlans';
 import ResourcesCenter from './ResourcesCenter';
-import MiddleMenuComponents from './MiddleMenuComponents';
+import LessonPlanMenus from './LessonPlanMenus';
 import KnowledgeMenuComponents from './KnowledgeMenuComponents';
 import HomeWorkMenu from './HomeWorkMenu';
 import HomeWorkTabComponents from './HomeWorkTabComponents';
@@ -110,7 +110,7 @@ class TeachSpaces extends React.Component {
 
             default : // teachTimes
                 // 备课计划 LessonPlan  Schedule
-                middleComponent = <MiddleMenuComponents callbackParent={this.getLessonPlans }/>;
+                middleComponent = <LessonPlanMenus callbackParent={this.getLessonPlans }/>;
                 tabComponent = <LessonPlans  refData={this.state.refData} />;
                 break;
             case 'KnowledgeResources':
@@ -120,17 +120,17 @@ class TeachSpaces extends React.Component {
                 break;
             case 'homeWork':
                 // 布置作业，家庭作业
-                //   middleComponent = <HomeWorkMenu callbackParent={this.getTeacherHomeWork}/>
+              //    middleComponent = <HomeWorkMenu callbackParent={this.getTeacherHomeWork}/>
                 tabComponent = <HomeWorkTabComponents ref="homeWorkTabComponents"/>;
                 break;
             case 'studyEvaluate':
                 // 学习评价
-                //  middleComponent = <StudyEvaluateMenu callbackParent={this.getStudyEvaluate}/>
+               //    middleComponent = <StudyEvaluateMenu callbackParent={this.getStudyEvaluate}/>
                 tabComponent = <StudyEvaluateTabComponents ref="studyEvaluateTabComponents"/>;
                 break;
             case 'examination':
                 // 组卷
-                // middleComponent =  <ExamPagerTableComponents ref="examPagerTable" callBackParent={this.getExamPagerInfo} />;
+               // middleComponent =  <ExamPagerTableComponents ref="examPagerTable" callBackParent={this.getExamPagerInfo} />;
                 tabComponent = <ExamPagerTabComponents ref="examPagerTabComponents"/>;
                 break;
 
