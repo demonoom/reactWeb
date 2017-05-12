@@ -1,67 +1,25 @@
-import React, { PropTypes } from 'react';
-import { Tabs, Breadcrumb, Icon, Button } from 'antd';
-import UseKnowledgeComponents from './UseKnowledgeComponents';
+import React  from 'react';
 
-
-
-
-const TabPane = Tabs.TabPane;
-//定义js函数，完成删除前的确认提示操作
-function deleteConfirm() {
-    var count =5;
-    var rs = confirm("确定要删除这"+count+"条记录吗？");
-}
-
-
-var mt;
 
 const StudyEvaluateTabComponents = React.createClass({
 
     getInitialState() {
         return {
-            currentIdent:0,
-            currentTeachScheduleId:'',
-            currentSubjectId:'',
-            currentOptType:'',
-            defaultActiveKey:'学情分析',
-            activeKey:'学情分析',
-            subjectParams:'',
-            currentPageLink:"http://www.maaee.com:80/Excoord_PhoneService/subjectReport/xueqingfenxi/" + sessionStorage.getItem("ident"),
+            initUrl: "/proxy/Excoord_PhoneService/subjectReport/xueqingfenxi/" + sessionStorage.getItem("ident"),
         };
     },
 
 
-    getStudyEvaluate(optContent){
-        this.setState({currentOpt:'studyEvaluate',});
-        this.setState({activeKey:'学情分析'});
-    },
     goBack(){
-        this.refs.study.contentWindow.location.replace(this.state.currentPageLink);
+        this.refs.study.contentWindow.location.replace(this.state.initUrl);
     },
 
     render() {
-
         return (
             <div>
-                <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
-                <Breadcrumb separator=">">
-                    <Breadcrumb.Item ><Icon type="home" /></Breadcrumb.Item>
-                    <Breadcrumb.Item href="#/MainLayout">首页</Breadcrumb.Item>
-                </Breadcrumb>
-                <Tabs
-                    hideAdd
-                    onChange={this.onChange}
-                    onEdit={this.onEdit}
-                    ref = "mainTab"
-                    activeKey={this.state.activeKey}
-                    defaultActiveKey={this.state.defaultActiveKey}
-                    tabBarExtraContent={<div className="ant-tabs-right"><Button type="primary" onClick={this.goBack} className="add_study">返回</Button></div>}
-                >
-                    <TabPane tab="学情分析" key="学情分析">
-                        <iframe ref="study" src={this.state.currentPageLink} className="analyze_iframe"></iframe>
-                    </TabPane>
-
-                </Tabs>
+                <h3 className="public—til—blue">学情分析</h3>
+                <button onClick={this.goBack} className="add_study">返回</button>
+                <iframe ref="study" src={this.state.initUrl} className="analyze_iframe"/>
             </div>
         );
     },

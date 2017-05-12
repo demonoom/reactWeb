@@ -221,18 +221,13 @@ class MyFollows extends React.Component {
             this.htmlTempletContent = <img className="noDataTipImg" src={require('./images/noDataTipImg.png')}/>;
             return;
         }
-        this.title = <div className="favorite_scroll line_block">
-            <div className="follow_me_til">
-                <div className="ant-tabs-ink-bar follow_blue_line"></div>
-                {this.userinfo.userName}关注列表
-            </div>
-        </div>;
+        this.title = <h3 className="public—til—blue"> {this.userinfo.userName}关注列表 </h3>;
         this.htmlTempletContent = dataArray.map((e, i) => {
             let refkey = e.uid + "#" + e.courseId;
 
             return <Card key={refkey} className="focus">
-                        <a onClick={this.intoProsoncenter.bind(this, e.user)} target="_blank" className="attention_img">
-                            <img alt={e.user.userName + '头像'} width="100%" src={e.user.avatar} /></a>
+                <a onClick={this.intoProsoncenter.bind(this, e.user)} target="_blank" className="attention_img">
+                    <img alt={e.user.userName + '头像'} width="100%" src={e.user.avatar}/></a>
                 <div className="custom-card focus_2">
                     <div className="focus_1">
                         <span className="antnest_name focus_3"
@@ -249,7 +244,7 @@ class MyFollows extends React.Component {
     buildContent() {
         this.htmlTempletContent = null;
         this.gobackBtn = '';
-        this.originHeight='';
+        this.originHeight = '';
         switch (true) {
             // 个人信息
             case this.state.prosonCenterVisible:
@@ -263,12 +258,12 @@ class MyFollows extends React.Component {
             // 关注列表
             case this.state.followsListVisible:
 
-                this.originHeight='enhance';
+                this.originHeight = 'enhance';
 
                 if (this.notInterProsonCenter()) {
-                    this.gobackBtn =
-                        <div className="ant-tabs-extra-content">
-                            <div className="ant-tabs-right talk_ant_btn1"><Button onClick={this.returnPersonCenter}>返回000</Button></div>
+                    this.gobackBtn = <div className="ant-tabs-extra-content">
+                            <div className="ant-tabs-right talk_ant_btn1"><Button
+                                onClick={this.returnPersonCenter}>返回</Button></div>
                         </div>;
                 }
                 this._buildMyFollowsList();
@@ -279,15 +274,10 @@ class MyFollows extends React.Component {
     render() {
         this.buildContent();
         return (
-            <div >
-                <div className="public—til—blue">我的关注</div>
-                <div className="favorite_scroll favorite_le_h guanzhu">
-                    <div className="ant-tabs-bar">
-                        { this.title}
-                        { this.gobackBtn}
-                    </div>
-                    <div className={' favorite_up favorite_scroll ' + this.originHeight}>{ this.htmlTempletContent }</div>
-                </div>
+            <div>
+                { this.title}
+                { this.gobackBtn}
+            <div className={' favorite_up favorite_scroll ' + this.originHeight}>{ this.htmlTempletContent }</div>
             </div>
         );
     }

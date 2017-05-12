@@ -1,17 +1,15 @@
-import React, { PropTypes } from 'react';
-import { Tabs, Breadcrumb, Icon, Button } from 'antd';
+import React, {PropTypes} from 'react';
+import {Tabs, Breadcrumb, Icon, Button} from 'antd';
 import HomeWorkTableComponents from './HomeWorkTableComponents';
 import UseKnowledgeComponents from './UseKnowledgeComponents';
 import AssignHomeWorkComponents from './AssignHomeWorkComponents';
 
 
-
-
 const TabPane = Tabs.TabPane;
 //定义js函数，完成删除前的确认提示操作
 function deleteConfirm() {
-    var count =5;
-    var rs = confirm("确定要删除这"+count+"条记录吗？");
+    var count = 5;
+    var rs = confirm("确定要删除这" + count + "条记录吗？");
 }
 
 
@@ -19,64 +17,46 @@ const HomeWorkTabComponents = React.createClass({
 
     getInitialState() {
         return {
-            currentIdent:0,
-            currentTeachScheduleId:'',
-            currentSubjectId:'',
-            currentOptType:'',
-            defaultActiveKey:'作业列表',
-            activeKey:'作业列表',
-            subjectParams:'',
-            currentOpt:'checkHomeWorkList',
-            isNewPage:false,
+            currentIdent: 0,
+            currentTeachScheduleId: '',
+            currentSubjectId: '',
+            currentOptType: '',
+            defaultActiveKey: '作业列表',
+            activeKey: '作业列表',
+            subjectParams: '',
+            currentOpt: 'checkHomeWorkList',
+            isNewPage: false,
         };
     },
 
-    getTeacherHomeWork(optContent){
-        this.setState({currentOpt:'checkHomeWorkList',});
-        this.setState({activeKey:'作业列表'});
-        this.refs.homeWorkTable.getDoneHomeworkList(sessionStorage.getItem("ident"),1);
+    getTeacherHomeWork(){
+        this.setState({activeKey: '作业列表', currentOpt: 'checkHomeWorkList',});
+        this.refs.homeWorkTable.getDoneHomeworkList(sessionStorage.getItem("ident"), 1);
     },
 
     assignHomeWork(){
-        this.setState({currentOpt:'assignHomeWork',});
-        this.setState({activeKey:'布置作业',isNewPage:true});
-        if(this.refs.assignHomeWorkCom!=null && typeof (this.refs.assignHomeWorkCom)!="undefined"){
-          this.refs.assignHomeWorkCom.getInitialState();
-        }
+        this.setState({activeKey: '布置作业', currentOpt: 'assignHomeWork'});
+        this.refs.assignHomeWorkCom.getInitialState();
     },
 
     render() {
 
         var tabPanel;
-        if(this.state.currentOpt=="checkHomeWorkList"){
-            tabPanel = <TabPane tab="作业列表" key="作业列表">
-                <HomeWorkTableComponents ref="homeWorkTable"/>
-            </TabPane>;
-        }else{
-            tabPanel = <TabPane tab="布置作业" key="布置作业">
-                <AssignHomeWorkComponents ref="assignHomeWorkCom" params={this.state.isNewPage}  callbackParent={this.getTeacherHomeWork}></AssignHomeWorkComponents>
-            </TabPane>;
+        var returnBtn;
+        if (this.state.currentOpt == "checkHomeWorkList") {
+            tabPanel = <HomeWorkTableComponents ref="homeWorkTable"/>;
+            returnBtn = <Button type="primary" onClick={this.assignHomeWork} className="add_study">布置作业</Button>;
+        } else {
+            tabPanel = <AssignHomeWorkComponents ref="assignHomeWorkCom" params={this.state.isNewPage}
+                                                 callbackParent={this.getTeacherHomeWork}/>;
+            returnBtn = <Button type="primary" onClick={this.getTeacherHomeWork} className="add_study">作业列表</Button>;
         }
 
         return (
             <div>
-                <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
-                <Breadcrumb separator=">">
-                    <Breadcrumb.Item ><Icon type="home" /></Breadcrumb.Item>
-                    <Breadcrumb.Item href="#/MainLayout">首页</Breadcrumb.Item>
-                </Breadcrumb>
-                <Tabs
-                    hideAdd
-                    onChange={this.onChange}
-                    onEdit={this.onEdit}
-                    ref = "mainTab"
-                    activeKey={this.state.activeKey}
-                    defaultActiveKey={this.state.defaultActiveKey}
-                    transitionName=""  //禁用Tabs的动画效果
-                    tabBarExtraContent={<div className="ant-tabs-right"><Button type="primary" onClick={this.assignHomeWork} className="add_study">布置作业</Button></div>}
-                >
-                    {tabPanel}
-                </Tabs>
+                <h3 className="public—til—blue">{this.state.activeKey}</h3>
+                {returnBtn}
+                {tabPanel}
             </div>
         );
     },

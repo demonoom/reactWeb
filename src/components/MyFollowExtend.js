@@ -1805,24 +1805,13 @@ const MyFollowExtend = React.createClass({
         var returnPersonCenterToolBar = <div className="ant-tabs-right talk_ant_btn1"><Button onClick={this.returnPersonCenter}>返回</Button></div>;
         var tabComponent;
         var userPhoneCard;
-        var isVisible = false;
+        let returnBtn=null;
 
         switch (this.state.optType) {
 
             case 'personCenter':
-                let returnBtn = <div className="ant-tabs-right talk_ant_btn1"><Button onClick={this.props.returnParentFollows }>返回</Button></div>;
-                welcomeTitle = this.state.currentPerson.user.userName + "的个人中心";
-                tabComponent = <Tabs
-                    hideAdd
-                    ref="personCenterTab"
-                    activeKey={this.state.activeKey}
-                    defaultActiveKey={this.state.defaultActiveKey}
-                    tabBarExtraContent={returnBtn}
-                    transitionName=""
-                >
-                    <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
-                        <div className="person_padding">
-                            <MyFollowPersonCenter ref="personCenter"
+                returnBtn = <div><h3 className="public—til—blue">{this.state.currentPerson.user.userName + "的个人中心"}</h3><Button onClick={this.props.returnParentFollows }>返回</Button></div>;
+                tabComponent = <MyFollowPersonCenter ref="personCenter"
                                                   userInfo={this.props.userinfo}
                                                   userContactsData={this.state.userContactsData}
                                                   callBackTurnToMessagePage={this.getUser2UserMessages}
@@ -1834,10 +1823,7 @@ const MyFollowExtend = React.createClass({
                                                   callBackGetMyCourseWares={this.callBackGetMyCourseWares}
                                                   callBackGetLiveInfo={this.gitUserLiveInfo}
                                                   callBackTurnToPlatformRulePage={this.callBackTurnToPlatformRulePage}
-                            />
-                        </div>
-                    </TabPane>
-                </Tabs>;
+                            />;
                 break;
 
             case 'sendMessage':
@@ -2294,6 +2280,7 @@ const MyFollowExtend = React.createClass({
             <div className="myfollow_zb">
                 <UseKnowledgeComponents ref="useKnowledgeComponents"/>
                 <div className="group_cont">
+                    {returnBtn}
                     {userPhoneCard}
                     {tabComponent}
                 </div>

@@ -70,7 +70,7 @@ const ExamPagerTabComponents = React.createClass({
 
         return (
             <div>
-                <h3>{this.state.activeKey}</h3>
+                <h3 className="public—til—blue">{this.state.activeKey}</h3>
                 {secondBtn}
                 {tabPanel}
             </div>
