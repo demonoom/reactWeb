@@ -116,15 +116,15 @@ const UserInfo = React.createClass({
 
         };
 
-        return <div>
+        return <div className="gary_person">
             <Upload {...uploadProps}>
                 {
-                    this.state.userHeadIcon ? <img src={this.state.userHeadIcon} className="img_us"/> :
+                    this.state.userHeadIcon ? <img src={this.state.userHeadIcon} className="person_user"/> :
                         <Icon type="plus" className="avatar-uploader-trigger"/>
                 }
             </Upload>
             <br/>
-            <span className="date_tr">{this.state.userName} </span>
+            <span className="font_gray_33 date_tr">{this.state.userName} </span>
             {/*{ this.state.userHeadIcon ? <img src={this.state.userHeadIcon} className="blur"/> : null }*/}
         </div>;
     },
@@ -133,20 +133,22 @@ const UserInfo = React.createClass({
     render() {
 
         return (
-            <div  >
-
+            <div className="maaee_group_pa password_cow">
                 {this.getTitle()}
-                <p className="user_cont model_to"><span className="name">学校名称：</span><span
+				<div className="ant-card ant-card-bordered ant-card-body password_cow">
+					<p className="user_cont"><span className="name ant-col-3">学校名称：</span><span
                     className="name1">{this.state.schoolName}</span></p>
-                <p className="user_cont"><span className="name">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <p className="user_cont"><span className="name">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     区：</span><span
                     className="name1">{this.state.schoolAddress}</span></p>
-                <p className="user_cont"><span className="name">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <p className="user_cont"><span className="name">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     名：</span><span
                     className="name1">{this.state.userName}</span></p>
-                <p className="user_cont"><span className="name">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <p className="user_cont"><span className="name">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     目：</span><span
                     className="name1">{this.state.courseName}</span></p>
+				</div>
+                
 
             </div>
         );
