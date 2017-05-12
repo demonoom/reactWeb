@@ -1312,7 +1312,7 @@ const PersonCenterComponents = React.createClass({
         var userPhotoTag;
         var returnPersonCenterToolBar = <div className="ant-tabs-right"><Button onClick={personCenter.returnPersonCenter}><Icon type="left" /></Button></div>;
         var createChatToolBar = <div className="ant-tabs-right"><Button onClick={personCenter.showCreateChatGroup}>创建群聊</Button></div>;
-        var returnChatGroupMessagePageToolBar = <div className="ant-tabs-right"><Button onClick={personCenter.returnToChatGroupMessagePage}>返回</Button></div>;
+        var returnChatGroupMessagePageToolBar = <div className="ant-tabs-right"><Button onClick={personCenter.returnToChatGroupMessagePage}><Icon type="left" /></Button></div>;
         if (isEmpty(personCenter.state.userInfo) == false && personCenter.state.optType == "userDetail") {
             var user = personCenter.state.userInfo.user;
             var userName = user.userName;
@@ -1965,7 +1965,7 @@ const PersonCenterComponents = React.createClass({
                 memberLiTag.push(liTag);
             });
 
-            personDate = <Tabs
+            /*personDate = <Tabs
                 hideAdd
                 ref = "mainTab"
                 tabBarExtraContent={returnChatGroupMessagePageToolBar}
@@ -1982,14 +1982,33 @@ const PersonCenterComponents = React.createClass({
                             <li className="color_gary_f"><span>群聊成员：{personCenter.state.currentMemberArray.length}人</span>{topButton}</li>
                             <li className="user_hei">
                                 {memberLiTag}
-                                {/*<Table  style={{width:'300px'}} rowSelection={rowSelection} columns={groupUserTableColumns} dataSource={personCenter.state.currentMemberArray} scroll={{ x: true, y: 400 }} ></Table>*/}
+                                {/!*<Table  style={{width:'300px'}} rowSelection={rowSelection} columns={groupUserTableColumns} dataSource={personCenter.state.currentMemberArray} scroll={{ x: true, y: 400 }} ></Table>*!/}
                             </li>
                             <li className="color_gary_f">群聊名称：{personCenter.state.currentGroupObj.name}</li>
                             <li className="btm"><Button onClick={personCenter.showExitChatGroupConfirmModal} className="group_red_btn">删除并退出</Button>{dissolutionChatGroupButton}</li>
                         </ul>
                     </div>
                 </TabPane>
-            </Tabs>;
+            </Tabs>;*/
+            personDate = <div>
+                    <div className="public—til—blue">{returnChatGroupMessagePageToolBar}{welcomeTitle}</div>
+                    <div className="del_out">
+                        <ul className="integral_top">
+                            <span className="integral_face"><img src={personCenter.state.currentGroupObj.owner.avatar} className="person_user"/></span>
+                            <div className="class_right color_gary_f">{personCenter.state.currentGroupObj.name}</div>
+                            <div className="integral_line"></div>
+                        </ul>
+                        <ul className="group_fr_ul">
+                            <li className="color_gary_f"><span>群聊成员：{personCenter.state.currentMemberArray.length}人</span>{topButton}</li>
+                            <li className="user_hei">
+                                {memberLiTag}
+                                {/*<Table  style={{width:'300px'}} rowSelection={rowSelection} columns={groupUserTableColumns} dataSource={personCenter.state.currentMemberArray} scroll={{ x: true, y: 400 }} ></Table>*/}
+                            </li>
+                            <li className="color_gary_f">群聊名称：{personCenter.state.currentGroupObj.name}</li>
+                            <li className="btm"><Button onClick={personCenter.showExitChatGroupConfirmModal} className="group_red_btn">删除并退出</Button>{dissolutionChatGroupButton}</li>
+                        </ul>
+                    </div>
+                </div>;
         }else {
             personDate = <div>
                 <Card className="bai">
