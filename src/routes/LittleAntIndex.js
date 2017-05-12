@@ -22,18 +22,23 @@ import {MsgConnection} from '../utils/msg_websocket_connection';
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
 import {createStore} from 'redux';
+import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
+import {createStore} from 'redux';
+import {Provider, connect} from 'react-redux';
 
 
-const store = createStore(function () {
+const topState = createStore(function () {
 
 });
+
+
 //消息通信js
 var ms;
-
-const MainLayout = React.createClass({
-    proxyObj: null,
-    getInitialState() {
-        return {
+class MainLayout extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
             collapse: true,
             ghostMenuVisible: true,
             activeMiddleMenu: '',
@@ -44,16 +49,19 @@ const MainLayout = React.createClass({
             resouceType: '',
             ifr: {},
         };
-        this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
-    },
+        this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this);
+        this.proxyObj = null;
+    }
 
 
     onCollapseChange() {
         this.setState({
             collapse: !this.state.collapse,
         })
-    },
-    toolbarClick: function (e) {
+    }
+
+
+    toolbarClick(e) {
 
         toolbarKey = e.key;
 
@@ -74,11 +82,11 @@ const MainLayout = React.createClass({
                 this.refs.mainTabComponents.buildBreadcrumb(breadcrumbArray, 0);
             }
         }
-    },
+    }
 
 
     //获取备课计划下的课件资源
-    getTeachPlans: function (optContent, breadCrumbArray) {
+    getTeachPlans(optContent, breadCrumbArray) {
         //点击的菜单标识：teachScheduleId
         if (optContent == null) {
             if (this.refs.mainTabComponents) {
@@ -105,9 +113,9 @@ const MainLayout = React.createClass({
                 this.refs.mainTabComponents.getTeachPlans(optContent);
             }
         }
-    },
+    }
 
-    componentWillMount(){
+    componentWillMount() {
         var userIdent = sessionStorage.getItem("ident");
         if (userIdent == null || userIdent == "") {
             location.hash = "login";
@@ -118,12 +126,20 @@ const MainLayout = React.createClass({
         var password = sessionStorage.getItem("loginPassword");
         var pro = {
             "command": "messagerConnect",
-            "data": {"machineType": "web", "userId": Number.parseInt(loginUserId), "machine": machineId,"password":password,"version":0.1}
+            "data": {
+                "machineType": "web",
+                "userId": Number.parseInt(loginUserId),
+                "machine": machineId,
+                "password": password,
+                "version": 0.1
+            }
         };
         ms.connect(pro);
-    },
+    }
+
+
     // 呼叫本组件中的实例任何方法 dapeng
-    componentDidUpdate(){
+    componentDidUpdate() {
         if (this.autoeventparam) {
             // ['antGroupTabComponents', 'param', 'antGroupTabComponents'],
             let param = this.autoeventparam.linkpart.shift();
@@ -141,79 +157,82 @@ const MainLayout = React.createClass({
             this.refs[obj.ref][obj.methond].call(this.refs[obj.ref], obj.param);
             this.proxyObj = null;
         }
-    },
+    }
 
 
     //获取试卷列表
-    getExamPagerList: function (optType) {
+    getExamPagerList(optType) {
         this.refs.examPagerTabComponents.getExamPagerList();
-    },
+    }
 
-    getStudyEvaluate: function (optType) {
+    getStudyEvaluate(optType) {
         this.refs.studyEvaluateTabComponents.getStudyEvaluate();
-    },
+    }
 
-    callBackKnowledgeMenuBuildBreadCrume(menuText, menuLevel, menuId, openKeysStr){
+    callBackKnowledgeMenuBuildBreadCrume(menuText, menuLevel, menuId, openKeysStr) {
         return this.refs.knowledgeMenuComponents.bulidBreadCrumbArray(menuText, menuLevel, menuId, openKeysStr);
 
-    },
+    }
 
-    getTeacherResource(params){
-        this.setState({resouceType: '',currentKey: "personCenter",personCenterParams:params});
-    },
-
-
+    getTeacherResource(params) {
+        this.setState({resouceType: '', currentKey: "personCenter", personCenterParams: params});
+    }
 
 
-    getAntNest(optType){
+    getAntNest(optType) {
         var pageNo;
         if ("getAllTopic" == optType) {
             this.refs.antNestTabComponents.getTopics(pageNo, 0);
         } else {
             this.refs.antNestTabComponents.getTopics(pageNo, 1);
         }
-    },
-    teachSpaceTab(activeMenu,beActive){
-        this.setState({activeMiddleMenu: activeMenu});
-        this.changeGhostMenuVisible({visible: false,beActive: beActive});
-    },
+    }
 
-    changeGhostMenuVisible(obj){
+    teachSpaceTab(activeMenu, beActive) {
+        this.setState({activeMiddleMenu: activeMenu});
+        this.changeGhostMenuVisible({visible: false, beActive: beActive});
+    }
+
+    changeGhostMenuVisible(obj) {
 
 
         if (obj) {
-            if(!obj.beActive) return;
+            if (!obj.beActive) return;
             this.setState({ghostMenuVisible: obj.visible});
         } else {
 
             let visible = !this.state.ghostMenuVisible;
             this.setState({ghostMenuVisible: visible});
         }
-    },
+    }
 
 
     /**
      * 获取个人中心需要的数据,老师和学生可通用,后期需要什么再添加
      */
-    getPersonalCenterData(userId){
+    getPersonalCenterData(userId) {
         this.refs.personCenterComponents.getPersonalCenterData(userId);
-    },
+    }
 
-    setFirstPerson(userContactsData){
+
+    setFirstPerson(userContactsData) {
         var userJson = userContactsData[0];
-        this.setState({"userContactsData":userContactsData});
+        this.setState({"userContactsData": userContactsData});
         this.getPersonalCenterData(userJson.userObj.colUid);
-    },
+    }
 
-    getGroupInfo(){
+
+    getGroupInfo() {
         this.refs.personCenterComponents.getUserChatGroup();
-    },
+    }
+
+
     /**
      * 回调发送群组消息
      * @param groupObj
      */
-    sendGroupMessage(groupObj){
-        console.log("mainLayout:"+groupObj.name);
+    sendGroupMessage(groupObj) {
+        console.log("mainLayout:" + groupObj.name);
         var contentJson = {"content": '', "createTime": ''};
         var contentArray = [contentJson];
         var userJson = {
@@ -223,15 +242,22 @@ const MainLayout = React.createClass({
             "messageToType": 4,
             "toChatGroup": groupObj
         };
-        this.setState({currentKey: 'message', resouceType: '',"groupObj":groupObj,"messageType":'groupMessage',userJson});
-    },
+        this.setState({
+            currentKey: 'message',
+            resouceType: '',
+            "groupObj": groupObj,
+            "messageType": 'groupMessage',
+            userJson
+        });
+    }
+
 
     /**
      * 好友对好友的消息发送
      */
-    sendMessage(userInfo){
+    sendMessage(userInfo) {
 
-        console.log("userInfo:"+userInfo.user.colUid);
+        console.log("userInfo:" + userInfo.user.colUid);
         var contentJson = {"content": '', "createTime": ''};
         var contentArray = [contentJson];
         var userJson = {
@@ -240,25 +266,33 @@ const MainLayout = React.createClass({
             contentArray: contentArray,
             "messageToType": 1
         };
-        this.setState({currentKey: 'message', resouceType: '',"userInfo":userInfo.user,"messageType":'message',userJson});
+        this.setState({
+            currentKey: 'message',
+            resouceType: '',
+            "userInfo": userInfo.user,
+            "messageType": 'message',
+            userJson
+        });
         // this.turnToMessagePage(userInfo.user);
 
-    },
+    }
+
+
     /**
      * 点击消息动态联系人列表时，进入消息列表
      * 根据当前点击的消息对象不同，分别进入个人消息和群组消息界面
      * @param fromObj
      */
-    turnToMessagePage(fromObj){
-        if(fromObj.messageType == 1){
+    turnToMessagePage(fromObj) {
+        if (fromObj.messageType == 1) {
             // 个人消息
             this.refs.antGroupTabComponents.getUser2UserMessages(fromObj.fromUser);
-        }else{
+        } else {
             // 群组消息
             this.refs.antGroupTabComponents.sendGroupMessage(fromObj.toChatGroup);
         }
 
-    },
+    }
 
     render() {
 
@@ -270,17 +304,17 @@ const MainLayout = React.createClass({
 
         switch (this.state.currentKey) {
             default:
-                tabComponent = <MainTabComponents ref="mainTabComponents"  />;
+                tabComponent = <MainTabComponents ref="mainTabComponents"/>;
             case 'message':
                 //消息动态
 
                 middleComponent = <MessageMenu onUserClick={this.turnToMessagePage}
-                                  userJson={this.state.userJson} />;
+                                               userJson={this.state.userJson}/>;
                 tabComponent = <AntGroupTabComponents ref="antGroupTabComponents"
-                               userInfo={this.state.userInfo}
-                               groupObj={this.state.groupObj}
-                               messageType={this.state.messageType}
-                               messageUtilObj={ms}
+                                                      userInfo={this.state.userInfo}
+                                                      groupObj={this.state.groupObj}
+                                                      messageType={this.state.messageType}
+                                                      messageUtilObj={ms}
                 />;
                 break;
             case 'antGroup':
@@ -299,13 +333,13 @@ const MainLayout = React.createClass({
             case 'personCenter':
                 //个人中心
                 middleComponent = <PersonCenterMenu callbackParent={this.getTeacherResource}/>;
-               tabComponent = <PersonCenter params={this.state.personCenterParams}  />;
+                tabComponent = <PersonCenter params={this.state.personCenterParams}/>;
 
                 break;
             case 'antNest':
                 //蚁巢
                 middleComponent = <AntNestMenu callbackParent={this.getAntNest}/>;
-                tabComponent = <AntNestTabComponents ref="antNestTabComponents"  />;
+                tabComponent = <AntNestTabComponents ref="antNestTabComponents"/>;
 
                 break;
             case 'teachSpace':
@@ -320,7 +354,7 @@ const MainLayout = React.createClass({
         //
         //
         /*
-        就是页面右侧的结构，目前只有两种默认左右分
+         就是页面右侧的结构，目前只有两种默认左右分
          */
         switch (this.state.resouceType) {
             default :
@@ -354,58 +388,60 @@ const MainLayout = React.createClass({
         //
         //
         return (
-            <LocaleProvider locale={this.state.locale}>
-                <div className={collapse ? "ant-layout-aside ant-layout-aside-collapse" : "ant-layout-aside"}>
+            <Provider state={topState}>
+                <LocaleProvider locale={this.state.locale}>
+                    <div className={collapse ? "ant-layout-aside ant-layout-aside-collapse" : "ant-layout-aside"}>
 
-                    <aside className="ant-layout-sider">
-                        <div className="ant-layout-logo">
-                            <UserFace callbackParent={this.getTeacherResource}  />
+                        <aside className="ant-layout-sider">
+                            <div className="ant-layout-logo">
+                                <UserFace callbackParent={this.getTeacherResource}/>
+                            </div>
+                            <Menu mode="inline" theme="dark"
+                                  defaultSelectedKeys={[this.state.currentKey]}
+                                  selectedKeys={[this.state.currentKey]}
+                                  onClick={this.toolbarClick}>
+                                <Menu.Item key="message" className="padding_menu">
+                                    <Icon type="message"/>
+                                    <div className="tan">动态</div>
+                                </Menu.Item>
+                                <Menu.Item key="antNest" className="padding_menu">
+                                    <i className="icon_yichao"></i>
+                                    <div className="tan">蚁巢</div>
+                                </Menu.Item>
+                                <Menu.Item key="teachSpace" className="padding_menu">
+                                    <Icon type="cloud"/>
+                                    <div className="tan">教学空间</div>
+                                </Menu.Item>
+                                <Menu.Item key="antGroup" className="padding_menu">
+                                    <Icon type="team"/>
+                                    <div className="tan">蚁群</div>
+                                </Menu.Item>
+                                <FloatButton ref="floatButton"/>
+                            </Menu>
+
+                            <div className="ant-aside-action">
+
+                            </div>
+
+                        </aside>
+
+                        <div className="ant-layout-main">
+                            <div className="ant-layout-header">
+                                <HeaderComponents/>
+                            </div>
+
+                            <div className="ant-layout-operation">
+                                {mainContent}
+                            </div>
                         </div>
-                        <Menu mode="inline" theme="dark"
-                              defaultSelectedKeys={[this.state.currentKey]}
-                              selectedKeys={[this.state.currentKey]}
-                              onClick={this.toolbarClick}>
-                            <Menu.Item key="message" className="padding_menu">
-                                <Icon type="message"/>
-                                <div className="tan">动态</div>
-                            </Menu.Item>
-                            <Menu.Item key="antNest" className="padding_menu">
-                                <i className="icon_yichao"></i>
-                                <div className="tan">蚁巢</div>
-                            </Menu.Item>
-                            <Menu.Item key="teachSpace" className="padding_menu">
-                                <Icon type="cloud"/>
-                                <div className="tan">教学空间</div>
-                            </Menu.Item>
-                            <Menu.Item key="antGroup" className="padding_menu">
-                                <Icon type="team"/>
-                                <div className="tan">蚁群</div>
-                            </Menu.Item>
-                            <FloatButton ref="floatButton"/>
-                        </Menu>
-
-                        <div className="ant-aside-action">
-
-                        </div>
-
-                    </aside>
-
-                    <div className="ant-layout-main">
-                        <div className="ant-layout-header">
-                            <HeaderComponents/>
-                        </div>
-
-                        <div className="ant-layout-operation">
-                            {mainContent}
-                        </div>
+                        <div className="panleArea"></div>
                     </div>
-                    <div className="panleArea"></div>
-                </div>
-            </LocaleProvider>
+                </LocaleProvider>
+            </Provider>
         );
-    },
+    }
 
-});
+}
+;
 
 export default MainLayout;
-
