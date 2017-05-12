@@ -15,6 +15,7 @@ const UserInfo = React.createClass({
             schoolAddress: '',
             imageUrl: ''
         };
+        this.changeFace = this.changeFace.bind(this);
     },
 
     componentWillMount(){
@@ -80,6 +81,7 @@ const UserInfo = React.createClass({
     },
 
     getTitle(){
+        let _this=this;
         let uploadProps = {
             action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
             showUploadList: false,
@@ -96,13 +98,13 @@ const UserInfo = React.createClass({
                 switch (info.file.status) {
                     case "uploading":
                         var percent = info.file.percent;
-                        this.setState({uploadPercent: percent, progressState: 'block'});
+                        _this.setState({uploadPercent: percent, progressState: 'block'});
                         break;
                     case "removed":
 
                         break;
                     case "done":
-                        this.changeFace(info.file);
+                        _this.changeFace(info.file);
                         break;
                     case "error":
                         message.error(`${info.file.name} 文件上传失败.`, 5);
@@ -123,7 +125,7 @@ const UserInfo = React.createClass({
             </Upload>
             <br/>
             <span className="date_tr">{this.state.userName} </span>
-            { this.state.userHeadIcon ? <img src={this.state.userHeadIcon} className="blur"/> : null }
+            {/*{ this.state.userHeadIcon ? <img src={this.state.userHeadIcon} className="blur"/> : null }*/}
         </div>;
     },
 
@@ -132,7 +134,7 @@ const UserInfo = React.createClass({
 
         return (
             <div  >
-                <img src={this.state.userHeadIcon} onClick={this.showModal}/>
+
                 {this.getTitle()}
                 <p className="user_cont model_to"><span className="name">学校名称：</span><span
                     className="name1">{this.state.schoolName}</span></p>

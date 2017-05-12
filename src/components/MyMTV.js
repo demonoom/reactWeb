@@ -16,13 +16,20 @@ class MyMTV extends React.Component {
             method: 'getLiveInfoByUid'
         };
         this.changeState = this.changeState.bind(this);
+        this._updateLiveInfos = this._updateLiveInfos.bind(this);
     }
 
     componentWillMount() {
-        this.tabClick(1);
+        this._updateLiveInfos();
     }
 
     getLiveInfoByUid(fn, param) {
+        param = param || {
+                method: this.state.method,
+                ident: this.state.ident,
+                pageNo: this.state.pageNo
+            };
+
         var args = {
             "method": param.method,
             "userId": param.ident,
@@ -61,8 +68,8 @@ class MyMTV extends React.Component {
         return new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/, ' ');
     }
 
-    tabClick(type) {
 
+    _updateLiveInfos() {
         var param = {
             method: this.state.method,
             ident: this.state.ident,
@@ -78,6 +85,7 @@ class MyMTV extends React.Component {
             "userId": this.state.ident,
             "liveIds": id
         };
+
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.success) {
@@ -86,12 +94,26 @@ class MyMTV extends React.Component {
                     message.error("直播课删除失败");
                 }
 
-                _this.getLiveInfoByUid(_this.state.ident, 1);
+                _this._updateLiveInfos();
             },
             onError: function (error) {
                 message.error(error);
             }
         });
+    }
+
+
+    downloadLiveVideos(arr) {
+
+        if (!arr.liveVideos.length) {
+            message.info('无效的视频地址！');
+            return;
+        }
+
+        for (let i = 0; i < arr.liveVideos.length; i++) {
+            let obj = arr.liveVideos[i];
+            location.href = obj.path;
+        }
     }
 
     onPreview(obj) {
@@ -140,16 +162,20 @@ class MyMTV extends React.Component {
             let userName = user.userName;
             let courseName = e.courseName;
             let id = e.id;
-            let keyIcon = '';
+            let keyIcon;
+            let delButton;
+            let downloadBtn;
             if (e.password) {
                 keyIcon = <span className="right_ri focus_btn key_span"><i className="iconfont key">&#xe621;</i></span>;
             }
-            let delButton;
             if (user.colUid == sessionStorage.getItem("ident")) {
                 //如果是当前用户，可以删除自己的直播课
-                delButton = <Button icon="delete" className="right_ri star_del" onClick={  () => {
-                    this.deleteLiveVideos(id, e)
-                } }></Button>
+                delButton = <Button icon="delete" className="right_ri star_del" onClick={ () => {
+                    this.deleteLiveVideos(id)
+                } }/>
+                downloadBtn = <Button icon="download" className="right_ri star_del" onClick={ () => {
+                    this.downloadLiveVideos(e)
+                } }/>
             }
             let liveCard = <Card className="live">
                 <p className="h3">{title}</p>
@@ -170,6 +196,7 @@ class MyMTV extends React.Component {
                             <span className="live_color live_orange">{courseName}</span>
                             {keyIcon}
                             {delButton}
+                            {downloadBtn}
                         </li>
                     </ul>
                 </div>
