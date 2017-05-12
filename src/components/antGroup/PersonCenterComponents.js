@@ -714,24 +714,25 @@ const PersonCenterComponents = React.createClass({
                             }
                         }
                         //var imgTag = <div ><img src={ownerPhoto}  className="antnest_38_img" ></img></div>;
-                        var imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
+                        var imgTag = <div className="maaee_group_face" onClick={personCenter.sendGroupMessage.bind(personCenter,e)}>{groupMemebersPhoto}</div>;
                         switch (groupMemebersPhoto.length){
                             case 1:
-                                imgTag = <div className="maaee_group_face1">{groupMemebersPhoto}</div>;
+                                imgTag = <div className="maaee_group_face1" onClick={personCenter.sendGroupMessage.bind(personCenter,e)}>{groupMemebersPhoto}</div>;
                                 break;
                             case 2:
-                                imgTag = <div className="maaee_group_face2">{groupMemebersPhoto}</div>;
+                                imgTag = <div className="maaee_group_face2" onClick={personCenter.sendGroupMessage.bind(personCenter,e)}>{groupMemebersPhoto}</div>;
                                 break;
                             case 3:
-                                imgTag = <div className="maaee_group_face3">{groupMemebersPhoto}</div>;
+                                imgTag = <div className="maaee_group_face3" onClick={personCenter.sendGroupMessage.bind(personCenter,e)}>{groupMemebersPhoto}</div>;
                                 break;
                             case 4:
-                                imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
+                                imgTag = <div className="maaee_group_face" onClick={personCenter.sendGroupMessage.bind(personCenter,e)}>{groupMemebersPhoto}</div>;
                                 break;
                         }
                         var groupName = chatGroupName;
-                        var groupSet = <Button icon="setting" onClick={personCenter.setChatGroup.bind(personCenter,e)}></Button>
-                        var chatGroupJson = {key:chatGroupId,groupPhoto:imgTag,'groupName':groupName,"groupObj":e,"userCount":membersCount+"人","groupSet":groupSet};
+                        var groupSet = <Button icon="setting" onClick={personCenter.setChatGroup.bind(personCenter,e)}></Button>;
+                        var groupNameTag = <a onClick={personCenter.sendGroupMessage.bind(personCenter,e)}>{groupName}</a>
+                        var chatGroupJson = {key:chatGroupId,groupPhoto:imgTag,'groupName':groupNameTag,"groupObj":e,"userCount":membersCount+"人","groupSet":groupSet};
                         charGroupArray.push(chatGroupJson);
                     });
                     personCenter.setState({"userGroupsData":charGroupArray});
@@ -776,10 +777,19 @@ const PersonCenterComponents = React.createClass({
      * @param record　当前行的群组信息
      * @param index　当前行的索引顺序，从０开始
      */
-    sendGroupMessage(record, index){
+/*    sendGroupMessage(record, index){
         // antGroup.getChatGroupMessages(record.groupObj);
         // antGroup.turnToChatGroupMessagePage(groupObj);
         personCenter.props.onSendGroupMessage(record.groupObj);
+    },*/
+
+    /**
+     * 点击群组列表表格行时，获取当前行对应的记录信息
+     * @param record　当前行的群组信息
+     * @param index　当前行的索引顺序，从０开始
+     */
+    sendGroupMessage(groupObj){
+        personCenter.props.onSendGroupMessage(groupObj);
     },
 
     /**
@@ -1299,13 +1309,14 @@ const PersonCenterComponents = React.createClass({
         var userPhotoTag;
         var returnPersonCenterToolBar = <div className="ant-tabs-right"><Button onClick={personCenter.returnPersonCenter}><Icon type="left" /></Button></div>;
         var createChatToolBar = <div className="ant-tabs-right"><Button onClick={personCenter.showCreateChatGroup}>创建群聊</Button></div>;
-        var returnChatGroupMessagePageToolBar = <div className="ant-tabs-right"><Button onClick={personCenter.returnToChatGroupMessagePage}>返回</Button></div>;
+        var returnChatGroupMessagePageToolBar = <div className="ant-tabs-right"><Button onClick={personCenter.returnToChatGroupMessagePage}><Icon type="left" /></Button></div>;
         if (isEmpty(personCenter.state.userInfo) == false && personCenter.state.optType == "userDetail") {
             var user = personCenter.state.userInfo.user;
             var userName = user.userName;
             if (isEmpty(user.avatar) == false) {
                 userPhotoTag = <span className="person_user_bg">
                 <img src={user.avatar} className="person_user"/>
+                    <div style={{marginLeft:'10px'}}>{userName}</div>
             </span>;
                 <div></div>
             }
@@ -1335,7 +1346,7 @@ const PersonCenterComponents = React.createClass({
                         <div>关注</div>
                     </Button>
                 </div>;
-                userInfoCard = <Card title={personCenter.state.userInfo.user.userName + '的个人名片'} className="bai">
+                userInfoCard = <Card title={personCenter.state.userInfo.user.userName + '的个人名片'} className="bai" style={{margintop:'15px'}}>
                     <Row className="person_13">
                         <p className="user_cont">
 							<span className="user_til_name">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;校：</span>
@@ -1415,7 +1426,9 @@ const PersonCenterComponents = React.createClass({
         var personDate;
         var userPhoneCard;
         if (isEmpty(personCenter.state.userInfo) == false && personCenter.state.optType == "userDetail") {
-            personDate = <div className="maaee_group_pa">
+            personDate = <div className="group_cont favorite_up">
+                <div className="public—til—blue">{personCenter.state.userInfo.user.userName+'的个人中心'}</div>
+				<div className="maaee_group_pa">
                 <Card className="bai">
                     {userPhotoTag}
 
@@ -1434,10 +1447,11 @@ const PersonCenterComponents = React.createClass({
 
 
                 </Card>
+				</div>
 
-                <div>{userLinkCard}
+                <div className="maaee_group_pa">
+					{userLinkCard}
                     {userInfoCard}
-
                 </div>
             </div>;
         } else if (isEmpty(personCenter.state.userInfo) == false && personCenter.state.optType == "scoreDetail") {
@@ -1772,7 +1786,7 @@ const PersonCenterComponents = React.createClass({
             personDate = tabComponent;
         }else if(personCenter.state.optType=="turnToAsk"){
             var currentPageLink = "http://www.maaee.com:80/Excoord_PhoneService/quiz/getUserAskedQuiz/" + personCenter.state.userInfo.user.colUid;
-            tabComponent = <Tabs
+            /*tabComponent = <Tabs
                 hideAdd
                 ref = "studentAskTab"
                 activeKey={this.state.activeKey}
@@ -1784,11 +1798,15 @@ const PersonCenterComponents = React.createClass({
                     <iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe>
                 </TabPane>
             </Tabs>;
-            personDate = tabComponent;
+            personDate = tabComponent;*/
+            personDate = <div className="group_cont">
+                <div className="public—til—blue">{returnPersonCenterToolBar}{personCenter.state.userInfo.user.userName+'发起过的提问'}</div>
+                <iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe>
+            </div>
         }
         else if(personCenter.state.optType=="turnStudyTrack"){
             var currentPageLink = "http://www.maaee.com:80/Excoord_PhoneService/user/studytrack/" + personCenter.state.userInfo.user.colUid;
-            tabComponent = <Tabs
+            /*tabComponent = <Tabs
                 hideAdd
                 ref = "studentStudyTrackTab"
                 activeKey={this.state.activeKey}
@@ -1800,16 +1818,26 @@ const PersonCenterComponents = React.createClass({
                     <iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe>
                 </TabPane>
             </Tabs>;
-            personDate = tabComponent;
+            personDate = tabComponent;*/
+            personDate = <div className="group_cont">
+                <div className="public—til—blue">{returnPersonCenterToolBar}{personCenter.state.userInfo.user.userName+'的学习轨迹'}</div>
+                <iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe>
+            </div>
         }else if(personCenter.state.optType=="userFavorite"){
             personDate = <div className="myfollow_zb">
-                    <div className="public—til—blue">{returnPersonCenterToolBar}标题显示</div>
+                    <div className="public—til—blue">{returnPersonCenterToolBar}{personCenter.state.userInfo.user.userName+'的收藏'}</div>
                     <Favorites userid={personCenter.state.studentId} breadcrumbVisible={false}
                            onPreview={ this.props.onPreview }></Favorites>
                 </div>
         }else if(personCenter.state.optType=="getMyFollows"){
             var welcomeTitle=personCenter.state.userInfo.user.userName+"的关注";
-            personDate= <Tabs
+            personDate = <div className="group_cont">
+                <div className="public—til—blue">{returnPersonCenterToolBar}{welcomeTitle}</div>
+                <div className="person_attention guanzhu favorite_scroll favorite_le_h" >
+                {personCenter.state.followsUserArray}
+                </div>
+            </div>;
+            /*personDate= <Tabs
                 hideAdd
                 ref = "mainTab"
                 activeKey={this.state.activeKey}
@@ -1822,7 +1850,7 @@ const PersonCenterComponents = React.createClass({
                         {personCenter.state.followsUserArray}
                     </div>
                 </TabPane>
-            </Tabs>;
+            </Tabs>;*/
         }else if(personCenter.state.optType=="getLiveInfoByUid"){
             var  welcomeTitle=personCenter.state.userInfo.user.userName+"的直播课";
             var returnPersonCenterBar;
@@ -1891,7 +1919,7 @@ const PersonCenterComponents = React.createClass({
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div>
                         <ul className="group_table">
-                            <Table className="group_table_u" onRowClick={personCenter.sendGroupMessage} showHeader={false} scroll={{ x: true, y: 500 }} columns={userGroupsColumns} dataSource={personCenter.state.userGroupsData} pagination={{ total:personCenter.state.totalChatGroupCount,pageSize: getPageSize(),onChange:personCenter.onChatGroupPageChange }}/>
+                            <Table className="group_table_u" showHeader={false} scroll={{ x: true, y: 500 }} columns={userGroupsColumns} dataSource={personCenter.state.userGroupsData} pagination={{ total:personCenter.state.totalChatGroupCount,pageSize: getPageSize(),onChange:personCenter.onChatGroupPageChange }}/>
                         </ul>
                     </div>
                 </TabPane>
@@ -1936,7 +1964,7 @@ const PersonCenterComponents = React.createClass({
                 memberLiTag.push(liTag);
             });
 
-            personDate = <Tabs
+            /*personDate = <Tabs
                 hideAdd
                 ref = "mainTab"
                 tabBarExtraContent={returnChatGroupMessagePageToolBar}
@@ -1953,14 +1981,33 @@ const PersonCenterComponents = React.createClass({
                             <li className="color_gary_f"><span>群聊成员：{personCenter.state.currentMemberArray.length}人</span>{topButton}</li>
                             <li className="user_hei">
                                 {memberLiTag}
-                                {/*<Table  style={{width:'300px'}} rowSelection={rowSelection} columns={groupUserTableColumns} dataSource={personCenter.state.currentMemberArray} scroll={{ x: true, y: 400 }} ></Table>*/}
+                                {/!*<Table  style={{width:'300px'}} rowSelection={rowSelection} columns={groupUserTableColumns} dataSource={personCenter.state.currentMemberArray} scroll={{ x: true, y: 400 }} ></Table>*!/}
                             </li>
                             <li className="color_gary_f">群聊名称：{personCenter.state.currentGroupObj.name}</li>
                             <li className="btm"><Button onClick={personCenter.showExitChatGroupConfirmModal} className="group_red_btn">删除并退出</Button>{dissolutionChatGroupButton}</li>
                         </ul>
                     </div>
                 </TabPane>
-            </Tabs>;
+            </Tabs>;*/
+            personDate = <div className="group_cont">
+                    <div className="public—til—blue">{returnChatGroupMessagePageToolBar}{welcomeTitle}</div>
+                    <div className="del_out">
+                        <ul className="integral_top">
+                            <span className="integral_face"><img src={personCenter.state.currentGroupObj.owner.avatar} className="person_user"/></span>
+                            <div className="class_right color_gary_f">{personCenter.state.currentGroupObj.name}</div>
+                            <div className="integral_line"></div>
+                        </ul>
+                        <ul className="group_fr_ul">
+                            <li className="color_gary_f"><span>群聊成员：{personCenter.state.currentMemberArray.length}人</span>{topButton}</li>
+                            <li className="user_hei">
+                                {memberLiTag}
+                                {/*<Table  style={{width:'300px'}} rowSelection={rowSelection} columns={groupUserTableColumns} dataSource={personCenter.state.currentMemberArray} scroll={{ x: true, y: 400 }} ></Table>*/}
+                            </li>
+                            <li className="color_gary_f">群聊名称：{personCenter.state.currentGroupObj.name}</li>
+                            <li className="btm"><Button onClick={personCenter.showExitChatGroupConfirmModal} className="group_red_btn">删除并退出</Button>{dissolutionChatGroupButton}</li>
+                        </ul>
+                    </div>
+                </div>;
         }else {
             personDate = <div>
                 <Card className="bai">

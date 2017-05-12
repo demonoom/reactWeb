@@ -2,8 +2,8 @@
  * Created by devnote on 16-12-2.
  */
 //导出常量
- export const WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
-// export const WEBSERVICE_URL = "http://192.168.1.59:9006/Excoord_ApiServer/webservice";
+  export const WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
+//export const WEBSERVICE_URL = "http://192.168.1.59:9006/Excoord_ApiServer/webservice";
 // var requesting = false;
 
 export function doWebService(data, listener) {
