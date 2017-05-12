@@ -1,63 +1,71 @@
-import React, {Component, PropTypes} from 'react'
-import ReactDOM from 'react-dom'
-import {createStore} from 'redux'
-import {Provider, connect} from 'react-redux'
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+import { createStore } from 'redux';
+import { Provider, connect } from 'react-redux';
 
-// 1 React component
-class Counter extends Component {
+
+//定义组件
+class App extends Component{
     render() {
-        const {value, onIncreaseClick} = this.props
+        const {text, onChangeText, onButtonClick} = this.props;
         return (
             <div>
-                <span>{value}</span>
-                <button onClick={onIncreaseClick}>Increase</button>
+                <h1 onClick={onChangeText}> {text} </h1>
+                <button onClick={onButtonClick}>click me</button>
             </div>
-        )
+        );
     }
 }
 
-Counter.propTypes = {
-    value: PropTypes.number.isRequired,
-    onIncreaseClick: PropTypes.func.isRequired
+
+//action
+const changeTextAction = {
+    type:'CHANGE_TEXT'
+}
+const buttonClickAction = {
+    type:'BUTTON_CLICK'
 }
 
-// Action
-const increaseAction = {type: 'increase'}
 
-// Reducer
-function counter(state = {count: 0}, action) {
-    const count = state.count
+//reducer
+const initialState = {
+    text: 'Hello'
+}
+const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case 'increase':
-            return {count: count + 1}
+        case 'CHANGE_TEXT':
+            return {
+                text: state.text=='Hello' ? 'world':'Hello'
+            }
+        case 'BUTTON_CLICK':
+            return {
+                text: 'Hello world'
+            }
         default:
-            return state
+            return initialState;
     }
 }
 
-// Store
-const store = createStore(counter)
+//store
+let store = createStore(reducer);
 
-// Map Redux state to component props
+//map Redux state to props
 function mapStateToProps(state) {
-    return {
-        value: state.count
+    return { text: state.text }
+}
+
+// map Redux actions to props
+function mapDispatchToProps(dispatch){
+    return{
+        onButtonClick:()=>dispatch(buttonClickAction),
+        onChangeText:()=>dispatch(changeTextAction)
     }
 }
 
-// Map Redux actions to component props
-function mapDispatchToProps(dispatch) {
-    return {
-        onIncreaseClick: () => dispatch(increaseAction)
-    }
-}
+//连接组件
+App = connect(mapStateToProps, mapDispatchToProps)(App)
 
-// 2 Connected Component
-const App = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Counter)
-
+//渲染组件
 ReactDOM.render(
     <Provider store={store}>
         <App />
