@@ -55,11 +55,10 @@ const MainLayout = React.createClass({
     },
     toolbarClick: function (e) {
 
-        toolbarKey = e.key;
 
-        if ('teachSpace' == toolbarKey) {
+        if ('teachSpace' == e.key) {
 
-            if (toolbarKey == this.state.currentKey) {
+            if (e.key == this.state.currentKey) {
                 this.changeGhostMenuVisible();
             } else {
                 this.setState({currentKey: e.key, resouceType: 'B'});
@@ -68,7 +67,7 @@ const MainLayout = React.createClass({
         }
         this.setState({currentKey: e.key, resouceType: ''});
 
-        if (toolbarKey != "KnowledgeResources") {
+        if (e.key != "KnowledgeResources") {
             var breadcrumbArray = [{hrefLink: '#/MainLayout', hrefText: "首页"}];
             if (this.refs.mainTabComponents) {
                 this.refs.mainTabComponents.buildBreadcrumb(breadcrumbArray, 0);
@@ -320,9 +319,7 @@ const MainLayout = React.createClass({
             case 'teachSpace':
                 //教学空间
                 middleComponent =
-                    <TeachSpaceGhostMenu visible={this.state.ghostMenuVisible}
-                                         toggleGhostMenu={ this.changeGhostMenuVisible }
-                                         changeTabEvent={this.teachSpaceTab}/>;
+                    <TeachSpaceGhostMenu visible={this.state.ghostMenuVisible} toggleGhostMenu={ this.changeGhostMenuVisible } changeTabEvent={this.teachSpaceTab}/>;
                 tabComponent = <TeachSpace currentItem={this.state.activeMiddleMenu}/>;
         }
         //

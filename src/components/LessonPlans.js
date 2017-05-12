@@ -289,6 +289,7 @@ debugger
                     <Breadcrumb.Item><Icon type="home"/></Breadcrumb.Item>
                     { this.breadcrumbChildren}
                 </Breadcrumb>
+				 <div className="favorite_scroll">
                 <Tabs
                     hideAdd
                     onChange={this.onChange}
@@ -301,6 +302,7 @@ debugger
                     {tabPanel}
                     {subjectTabPanel}
                 </Tabs>
+				</div>
             </div>
         );
     }

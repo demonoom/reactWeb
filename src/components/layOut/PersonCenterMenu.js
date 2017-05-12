@@ -47,7 +47,7 @@ class PersonCenterMenu extends React.Component {
                     <Menu.Item key="myFavorites">我的收藏</Menu.Item>
                     <Menu.Item key="myFollows">我的关注</Menu.Item>
                     <Menu.Item key="myMTV">我的直播课</Menu.Item>
-                    <Menu.Item key="findStudentPwd">找回学生密码</Menu.Item>
+                    {/*<Menu.Item key="findStudentPwd">找回学生密码</Menu.Item>*/}
                 </Menu>
 
 

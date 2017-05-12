@@ -370,6 +370,7 @@ i, cite, em, var, address, dfn {
     background: none;
     padding: 0;
     line-height: 1px;
+	outline:none
 }
 .ant-tabs-right button i{
 	font-size: 22px;
@@ -435,10 +436,6 @@ i, cite, em, var, address, dfn {
 		min-height:calc(100% - 50px);
 		overflow-y: auto;
 		overflow-x:hidden;
-		position: absolute;
-		top: 0;
-		width:calc(100% - 16px) !important;
-
 		border:none !important
 	}
 	.add_study{
@@ -3687,4 +3684,10 @@ color:#ffbf00
 }
 .guanzhu .ant-card-body{
 	padding:12px;
+}
+.right_btn_new{
+	display: inline-block;
+    position: absolute;
+    right: 12px;
+    top: -2px;
 }

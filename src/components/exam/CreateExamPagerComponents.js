@@ -1465,7 +1465,7 @@ const CreateExamPagerComponents = React.createClass({
 
     render() {
         return (
-            <div>
+            <div className="follow_my">
                 <ConfirmModal ref="confirmModal"
                               title="确定要删除该题目?"
                               onConfirmModalCancel={createExamPager.closeConfirmModal}
@@ -1549,6 +1549,7 @@ const CreateExamPagerComponents = React.createClass({
                     </div>
 
                 </Modal>
+				
                 <div className="ant-collapse ant-modal-footer homework">
                     <Row className="ant-form-item">
                         <Col span={3}  className="right_upexam">
