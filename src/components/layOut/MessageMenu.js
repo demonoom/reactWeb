@@ -65,7 +65,7 @@ const MessageMenu = React.createClass({
                             var lastCreateTime = lastContentInfo.createTime;
                             var imgTag;
                             if (messageType == 1) {
-                                imgTag = <div className="666">
+                                imgTag = <div>
                                     <span className="antnest_user"><img src={fromUser.avatar} height="38"></img></span>
                                     <div className="mes_u_l">
 										<div><span>{fromUser.userName}</span><span className="time right_ri">{lastCreateTime}</span></div>
@@ -74,8 +74,11 @@ const MessageMenu = React.createClass({
                                 </div>;
                             } else {
                                 imgTag = <div>
-                                    <img src={toChatGroup.avatar} className="antnest_38_img" height="38"></img>
-                                    <div>{toChatGroup.name}<div>{lastCreateTime}</div></div>
+                                    <span className="antnest_user"><img src={toChatGroup.avatar} className="antnest_38_img" height="38"></img></span>
+                                    <div className="mes_u_l">
+										<div><span>{toChatGroup.name}</span><span className="time right_ri">{lastCreateTime}</span></div>
+										<div className="date_tr">{lastContentText}</div>
+									</div>
                                 </div>;
                             }
                             var messageContentTag = <Badge dot={mMenu.state.badgeShow}>

@@ -146,7 +146,6 @@ const PersonCenterComponents = React.createClass({
      * 发消息
      */
     sendMessage(e){
-        //personCenter.props.callBackTurnToMessagePage(personCenter.state.userInfo.user);
         personCenter.props.onSendMessage(personCenter.state.userInfo);
     },
     /**
@@ -341,7 +340,6 @@ const PersonCenterComponents = React.createClass({
      * 获取我的资源
      */
     getMyCourseWares(){
-        //personCenter.props.callBackGetMyCourseWares(personCenter.state.userInfo.user);
         personCenter.getTeachPlans(personCenter.state.userInfo.user.colUid,1);
     },
 
@@ -713,7 +711,6 @@ const PersonCenterComponents = React.createClass({
                                 break;
                             }
                         }
-                        //var imgTag = <div ><img src={ownerPhoto}  className="antnest_38_img" ></img></div>;
                         var imgTag = <div className="maaee_group_face" onClick={personCenter.sendGroupMessage.bind(personCenter,e)}>{groupMemebersPhoto}</div>;
                         switch (groupMemebersPhoto.length){
                             case 1:
@@ -731,7 +728,7 @@ const PersonCenterComponents = React.createClass({
                         }
                         var groupName = chatGroupName;
                         var groupSet = <Button icon="setting" onClick={personCenter.setChatGroup.bind(personCenter,e)}></Button>;
-                        var groupNameTag = <a onClick={personCenter.sendGroupMessage.bind(personCenter,e)}>{groupName}</a>
+                        var groupNameTag = <a className="font_gray_666" onClick={personCenter.sendGroupMessage.bind(personCenter,e)}>{groupName}</a>
                         var chatGroupJson = {key:chatGroupId,groupPhoto:imgTag,'groupName':groupNameTag,"groupObj":e,"userCount":membersCount+"人","groupSet":groupSet};
                         charGroupArray.push(chatGroupJson);
                     });
@@ -771,17 +768,6 @@ const PersonCenterComponents = React.createClass({
             currentChatGroupPage: page,
         });
     },
-
-    /**
-     * 点击群组列表表格行时，获取当前行对应的记录信息
-     * @param record　当前行的群组信息
-     * @param index　当前行的索引顺序，从０开始
-     */
-/*    sendGroupMessage(record, index){
-        // antGroup.getChatGroupMessages(record.groupObj);
-        // antGroup.turnToChatGroupMessagePage(groupObj);
-        personCenter.props.onSendGroupMessage(record.groupObj);
-    },*/
 
     /**
      * 点击群组列表表格行时，获取当前行对应的记录信息
@@ -1314,9 +1300,9 @@ const PersonCenterComponents = React.createClass({
             var user = personCenter.state.userInfo.user;
             var userName = user.userName;
             if (isEmpty(user.avatar) == false) {
-                userPhotoTag = <span className="person_user_bg">
+                userPhotoTag = <span className="person_user_bg person_user_bg2">
                 <img src={user.avatar} className="person_user"/>
-                    <div style={{marginLeft:'10px'}}>{userName}</div>
+                    <div className="person_btn_name">{userName}</div>
             </span>;
                 <div></div>
             }
@@ -1349,11 +1335,11 @@ const PersonCenterComponents = React.createClass({
                 userInfoCard = <Card title={personCenter.state.userInfo.user.userName + '的个人名片'} className="bai" style={{margintop:'15px'}}>
                     <Row className="person_13">
                         <p className="user_cont">
-							<span className="user_til_name">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;校：</span>
+							<span className="user_til_name">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;校：</span>
 							<span className="black_person">{personCenter.state.userInfo.school}</span>
 						</p>
 						<p className="user_cont">
-							<span className="user_til_name">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span>
+							<span className="user_til_name">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span>
 							<span className="black_person ">{personCenter.state.userInfo.grade}</span>
 						</p>
 						<p className="user_cont">
@@ -1732,7 +1718,6 @@ const PersonCenterComponents = React.createClass({
                 ref="studentStudyTrackTab"
                 activeKey={this.state.activeKey}
                 defaultActiveKey={this.state.defaultActiveKey}
-                tabBarExtraContent={returnPersonCenterToolBar}
                 transitionName=""  //禁用Tabs的动画效果
                 onChange={personCenter.platformRulePageChange}
             >
@@ -1758,47 +1743,27 @@ const PersonCenterComponents = React.createClass({
             </Tabs>;
 
             personDate = <div className="group_cont">
+                <div className="public—til—blue">{returnPersonCenterToolBar}平台规则</div>
                 {userPhoneCard}
                 {tabComponent}
             </div>;
         }else if(personCenter.state.optType=="getScoreOrLevelPage"){
 
             var currentPageLink;
-            //var returnPersonCenterToolBar = <div className="ant-tabs-right"><Button onClick={personCenter.returnPersonCenter}>返回</Button></div>;
+            var toolbarTitle;
             if(personCenter.state.urlType=="score"){
+                toolbarTitle="的积分";
                 currentPageLink = "http://www.maaee.com:80/Excoord_PhoneService/user/getUserScores/" + personCenter.state.userInfo.user.colUid;
             }else{
+                toolbarTitle="的等级";
                 currentPageLink = "http://www.maaee.com:80/Excoord_PhoneService/user/personalGrade/" + personCenter.state.userInfo.user.colUid;
             }
-            var tabComponent = <Tabs
-                hideAdd
-                ref = "studentStudyTrackTab"
-                activeKey={this.state.activeKey}
-                defaultActiveKey={this.state.defaultActiveKey}
-                tabBarExtraContent={returnPersonCenterToolBar}
-                transitionName=""  //禁用Tabs的动画效果
-            >
-                <TabPane tab="我的积分" key="userScores">
-                    <div className="topics_le"><iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe></div>
-                </TabPane>
-            </Tabs>;
-
-            personDate = tabComponent;
+            personDate = <div>
+                <div className="public—til—blue">{returnPersonCenterToolBar}{personCenter.state.userInfo.user.userName+toolbarTitle}</div>
+                <div className="topics_le"><iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe></div>
+            </div>;
         }else if(personCenter.state.optType=="turnToAsk"){
             var currentPageLink = "http://www.maaee.com:80/Excoord_PhoneService/quiz/getUserAskedQuiz/" + personCenter.state.userInfo.user.colUid;
-            /*tabComponent = <Tabs
-                hideAdd
-                ref = "studentAskTab"
-                activeKey={this.state.activeKey}
-                defaultActiveKey={this.state.defaultActiveKey}
-                tabBarExtraContent={returnPersonCenterToolBar}
-                transitionName=""  //禁用Tabs的动画效果
-            >
-                <TabPane tab="我发起过的提问" key="我发起过的提问">
-                    <iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe>
-                </TabPane>
-            </Tabs>;
-            personDate = tabComponent;*/
             personDate = <div className="group_cont">
                 <div className="public—til—blue">{returnPersonCenterToolBar}{personCenter.state.userInfo.user.userName+'发起过的提问'}</div>
                 <iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe>
@@ -1806,19 +1771,6 @@ const PersonCenterComponents = React.createClass({
         }
         else if(personCenter.state.optType=="turnStudyTrack"){
             var currentPageLink = "http://www.maaee.com:80/Excoord_PhoneService/user/studytrack/" + personCenter.state.userInfo.user.colUid;
-            /*tabComponent = <Tabs
-                hideAdd
-                ref = "studentStudyTrackTab"
-                activeKey={this.state.activeKey}
-                defaultActiveKey={this.state.defaultActiveKey}
-                tabBarExtraContent={returnPersonCenterToolBar}
-                transitionName=""  //禁用Tabs的动画效果
-            >
-                <TabPane tab="学习轨迹" key="studyTrack">
-                    <iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe>
-                </TabPane>
-            </Tabs>;
-            personDate = tabComponent;*/
             personDate = <div className="group_cont">
                 <div className="public—til—blue">{returnPersonCenterToolBar}{personCenter.state.userInfo.user.userName+'的学习轨迹'}</div>
                 <iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe>
@@ -1837,26 +1789,9 @@ const PersonCenterComponents = React.createClass({
                 {personCenter.state.followsUserArray}
                 </div>
             </div>;
-            /*personDate= <Tabs
-                hideAdd
-                ref = "mainTab"
-                activeKey={this.state.activeKey}
-                defaultActiveKey={this.state.defaultActiveKey}
-                tabBarExtraContent={returnPersonCenterToolBar}
-                transitionName=""  //禁用Tabs的动画效果
-            >
-                <TabPane tab={welcomeTitle} key="userFollows" className="topics_rela">
-                    <div className="person_attention guanzhu" >
-                        {personCenter.state.followsUserArray}
-                    </div>
-                </TabPane>
-            </Tabs>;*/
         }else if(personCenter.state.optType=="getLiveInfoByUid"){
             var  welcomeTitle=personCenter.state.userInfo.user.userName+"的直播课";
             var returnPersonCenterBar;
-            /*if(isVisible){
-                returnPersonCenterBar = <div className="ant-tabs-right"><Button onClick={personCenter.returnPersonCenter}>返回</Button></div>;
-            }*/
             personDate= <Tabs
                 hideAdd
                 ref = "mainTab"
@@ -1895,7 +1830,6 @@ const PersonCenterComponents = React.createClass({
             </Tabs>;
         }else if(personCenter.state.optType=="getUserSubjects"){
             var welcomeTitle=personCenter.state.userInfo.user.userName+"的题目";
-            //var returnPersonCenterToolBar = <div className="ant-tabs-right"><Button onClick={personCenter.returnPersonCenter}>返回</Button></div>;
             personDate= <Tabs
                 hideAdd
                 ref = "mainTab"
@@ -1910,6 +1844,7 @@ const PersonCenterComponents = React.createClass({
             </Tabs>;
         }else if(personCenter.state.optType=="getUserChatGroup"){
             var welcomeTitle= "我的群聊";
+
             /*personDate= <Tabs
                 hideAdd
                 ref = "mainTab"
@@ -1924,11 +1859,13 @@ const PersonCenterComponents = React.createClass({
                     </div>
                 </TabPane>
             </Tabs>;*/
-            personDate = <div>
+            personDate = <div className="myfollow_zb">
                 <div className="public—til—blue">{welcomeTitle}</div>
+				<div className="favorite_scroll">
                 <ul className="group_table">
-                    <Table className="group_table_u" showHeader={false} scroll={{ x: true, y: 500 }} columns={userGroupsColumns} dataSource={personCenter.state.userGroupsData} pagination={{ total:personCenter.state.totalChatGroupCount,pageSize: getPageSize(),onChange:personCenter.onChatGroupPageChange }}/>
+                    <Table className="group_table_u" showHeader={false} scroll={{ x: true, }} columns={userGroupsColumns} dataSource={personCenter.state.userGroupsData} pagination={{ total:personCenter.state.totalChatGroupCount,pageSize: getPageSize(),onChange:personCenter.onChatGroupPageChange }}/>
                 </ul>
+				</div>
             </div>;
         }else if(personCenter.state.optType=="showGroupInfo"){
             var welcomeTitle = "群设置";
@@ -1970,34 +1907,9 @@ const PersonCenterComponents = React.createClass({
                 memberLiTag.push(liTag);
             });
 
-            /*personDate = <Tabs
-                hideAdd
-                ref = "mainTab"
-                tabBarExtraContent={returnChatGroupMessagePageToolBar}
-                transitionName=""  //禁用Tabs的动画效果
-            >
-                <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
-                    <div className="del_out">
-                        <ul className="integral_top">
-                            <span className="integral_face"><img src={personCenter.state.currentGroupObj.owner.avatar} className="person_user"/></span>
-                            <div className="class_right color_gary_f">{personCenter.state.currentGroupObj.name}</div>
-                            <div className="integral_line"></div>
-                        </ul>
-                        <ul className="group_fr_ul">
-                            <li className="color_gary_f"><span>群聊成员：{personCenter.state.currentMemberArray.length}人</span>{topButton}</li>
-                            <li className="user_hei">
-                                {memberLiTag}
-                                {/!*<Table  style={{width:'300px'}} rowSelection={rowSelection} columns={groupUserTableColumns} dataSource={personCenter.state.currentMemberArray} scroll={{ x: true, y: 400 }} ></Table>*!/}
-                            </li>
-                            <li className="color_gary_f">群聊名称：{personCenter.state.currentGroupObj.name}</li>
-                            <li className="btm"><Button onClick={personCenter.showExitChatGroupConfirmModal} className="group_red_btn">删除并退出</Button>{dissolutionChatGroupButton}</li>
-                        </ul>
-                    </div>
-                </TabPane>
-            </Tabs>;*/
             personDate = <div className="group_cont">
                     <div className="public—til—blue">{returnChatGroupMessagePageToolBar}{welcomeTitle}</div>
-                    <div className="del_out">
+                    <div className="favorite_scroll del_out">
                         <ul className="integral_top">
                             <span className="integral_face"><img src={personCenter.state.currentGroupObj.owner.avatar} className="person_user"/></span>
                             <div className="class_right color_gary_f">{personCenter.state.currentGroupObj.name}</div>
@@ -2007,7 +1919,6 @@ const PersonCenterComponents = React.createClass({
                             <li className="color_gary_f"><span>群聊成员：{personCenter.state.currentMemberArray.length}人</span>{topButton}</li>
                             <li className="user_hei">
                                 {memberLiTag}
-                                {/*<Table  style={{width:'300px'}} rowSelection={rowSelection} columns={groupUserTableColumns} dataSource={personCenter.state.currentMemberArray} scroll={{ x: true, y: 400 }} ></Table>*/}
                             </li>
                             <li className="color_gary_f">群聊名称：{personCenter.state.currentGroupObj.name}</li>
                             <li className="btm"><Button onClick={personCenter.showExitChatGroupConfirmModal} className="group_red_btn">删除并退出</Button>{dissolutionChatGroupButton}</li>

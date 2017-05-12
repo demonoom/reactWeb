@@ -8,6 +8,7 @@ import SubjectItem from './FavoriteSubjectItems';
 import ShippinItem from './FavoriteShipinItems';
 import OtherItem from './FavoriteOtherItems';
 import {doWebService} from '../WebServiceHelper';
+import {isEmpty} from '../utils/Const';
 const TabPane = Tabs.TabPane;
 
 
@@ -17,7 +18,7 @@ class Favorites extends React.Component {
         super(props);
         this.state = {
             ident: this.props.userid || sessionStorage.getItem("ident"),
-            breadcrumbVisible: this.props.breadcrumbVisible,
+            breadcrumbVisible: true,
             method: 'getUserFavorite',
             type: 1,
             pageNo: 1,
@@ -152,9 +153,13 @@ class Favorites extends React.Component {
     }
 
     render() {
+        var toolbar;
+        if(this.props.breadcrumbVisible!=false){
+            toolbar = <div className="public—til—blue">我的收藏</div>;
+        }
         return (
             <div className="favorite_scroll">
-                <div className="public—til—blue">我的收藏</div>
+                {toolbar}
                 <Tabs onTabClick={this.tabClick} defaultActiveKey={this.state.activeKey}>
 
                     <TabPane tab={this.FAVTYPE[1][2]} key='1' className="topics_rela">
