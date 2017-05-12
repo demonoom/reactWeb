@@ -120,17 +120,17 @@ class TeachSpaces extends React.Component {
                 break;
             case 'homeWork':
                 // 布置作业，家庭作业
-                  middleComponent = <HomeWorkMenu callbackParent={this.getTeacherHomeWork}/>
+              //    middleComponent = <HomeWorkMenu callbackParent={this.getTeacherHomeWork}/>
                 tabComponent = <HomeWorkTabComponents ref="homeWorkTabComponents"/>;
                 break;
             case 'studyEvaluate':
                 // 学习评价
-                   middleComponent = <StudyEvaluateMenu callbackParent={this.getStudyEvaluate}/>
+               //    middleComponent = <StudyEvaluateMenu callbackParent={this.getStudyEvaluate}/>
                 tabComponent = <StudyEvaluateTabComponents ref="studyEvaluateTabComponents"/>;
                 break;
             case 'examination':
                 // 组卷
-                middleComponent =  <ExamPagerTableComponents ref="examPagerTable" callBackParent={this.getExamPagerInfo} />;
+               // middleComponent =  <ExamPagerTableComponents ref="examPagerTable" callBackParent={this.getExamPagerInfo} />;
                 tabComponent = <ExamPagerTabComponents ref="examPagerTabComponents"/>;
                 break;
 
