@@ -1341,14 +1341,18 @@ const PersonCenterComponents = React.createClass({
                 </div>;
                 userInfoCard = <Card title={personCenter.state.userInfo.user.userName + '的个人名片'} className="bai">
                     <Row className="person_13">
-                        <Col span={3} className="gary_person">学&nbsp;&nbsp;&nbsp;&nbsp;校：</Col>
-                        <Col span={21} className="black_person">{personCenter.state.userInfo.school}</Col>
-                        <Col span={3} className="gary_person">年&nbsp;&nbsp;&nbsp;&nbsp;级：</Col>
-                        <Col span={21} className="black_person ">{personCenter.state.userInfo.grade}</Col>
-                    </Row>
-                    <Row>
-                        <Col span={3} className="gary_person">个人简介：</Col>
-                        <Col span={21} className="black_person">{intro}</Col>
+                        <p className="user_cont">
+							<span className="user_til_name">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;校：</span>
+							<span className="black_person">{personCenter.state.userInfo.school}</span>
+						</p>
+						<p className="user_cont">
+							<span className="user_til_name">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span>
+							<span className="black_person ">{personCenter.state.userInfo.grade}</span>
+						</p>
+						<p className="user_cont">
+							<span className="user_til_name">个人简介：</span>
+							<span className="black_person ">{intro}</span>
+						</p>
                     </Row>
                 </Card>;
             } else {
