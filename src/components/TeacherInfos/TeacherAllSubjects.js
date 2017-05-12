@@ -234,6 +234,7 @@ const TeacherAllSubjects = React.createClass({
                               onConfirmModalCancel={this.closeConfirmModal}
                               onConfirmModalOK={this.delMySubjects}
                 />
+				<div className="favorite_scroll">
                 <div className='ant-tabs-tabpane ant-tabs-tabpane-active'>
                     <SubjectEditByTextboxioTabComponents ref="subjectEditTabComponents"
                                                          subjectEditCallBack={this.subjectEditCallBack}/>
@@ -244,6 +245,7 @@ const TeacherAllSubjects = React.createClass({
                         onChange: this.pageOnChange
                     }} scroll={{y: 400}}/>
                 </div>
+				</div>
             </div>
         );
     },

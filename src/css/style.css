@@ -867,7 +867,7 @@ html, body, #root {
 	text-align:center;
 }
 .ant-table-thead > tr > th.ant-table-selection-score3, .ant-table-tbody > tr > td.ant-table-selection-score3{
-	width:146px;
+	width:150px;
 	text-align:center;
 }
 .ant-table-thead > tr > th.ant-table-selection-smallclass, .ant-table-tbody > tr > td.ant-table-selection-smallclass{
@@ -2883,7 +2883,7 @@ ul.integral li i{
     text-overflow: ellipsis;
     white-space: nowrap;
     display: inline-block;
-    width: 160px;
+    width: 150px;
 	cursor:pointer
 }
 a.antnest_name:hover{
