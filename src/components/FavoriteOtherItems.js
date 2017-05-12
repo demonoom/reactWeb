@@ -96,7 +96,7 @@ const FavoriteOtherItems = React.createClass({
 
             return <Card key={e.id} className="focus_lb">
 						<a target="_blank" onClick={event => {this.view(event,this.getUrl(e),e.content)} } className="attention_img"><img src={e.cover} width="100%"/></a>
-						<div className="custom-card focus_2 focus_4">
+						<div className="custom-card focus_2">
 							<div className="focus_1">
 								<a  onClick={event => {this.view(event,this.getUrl(e),e.content)} }  className="antnest_name focus_3" >{content}</a>
                                 {cancelBtn}
@@ -115,7 +115,7 @@ const FavoriteOtherItems = React.createClass({
         this.buildFavOtherUi(this.props.param.data);
         return (
             <div className="favorite_scroll">
-            <div className="favorite_up favorite_pa_le topics_calc">
+            <div className="favorite_up guanzhu topics_calc">
                 {coursePanelChildren}
             </div>
                     <Pagination total={this.props.param.totalCount} pageSize={getPageSize()} current={this.props.param.currentPage} onChange={this.props.pageChange} />

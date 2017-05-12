@@ -190,7 +190,7 @@ class MyMTV extends React.Component {
                         <li className="li_live_span_3">
                             <span className="attention_img2"><img src={user.avatar}></img></span>
                             <span className="live_span_1 live_span_3">{userName}</span>
-                            <span className="right_ri live_span_2">{startTime}</span>
+                            <span className="right_ri live_span_2 time">{startTime}</span>
                         </li>
                         <li>
                             <span className="live_color live_orange">{courseName}</span>
@@ -233,7 +233,7 @@ class MyMTV extends React.Component {
 
         return ( <div>
                 {breadcrumb}
-                {coursePanelChildren}
+                <div className="favorite_scroll favorite_up favorite_le_h">{coursePanelChildren}</div>
             </div>
         );
     }

@@ -233,11 +233,8 @@ const PersonCenterComponents = React.createClass({
                         var userJson = {key:followUser.colUid,"userName":userName,"courseName":courseName,userHeaderIcon:userHeaderIcon,"userObj":followUser};
                         // followsUserArray.push(userJson);
                         var followsCard = <Card key={followUser.colUid} id={followUser} className="focus" onClick={personCenter.getPersonalCenterData.bind(personCenter,followUser.colUid)}>
-                            <span className="person_user_bg upexam_float">
-                                <a target="_blank"><img
-                                    alt={userName + '头像'} width="100%" src={e.user.avatar}
-                                    className="person_user"/></a>
-                            </span>
+                                <a target="_blank" className="attention_img">
+								<img alt={userName + '头像'} width="100%" src={e.user.avatar}/></a>
                             <div className="custom-card focus_2">
                                 <div className="focus_1">
                                     <span className="antnest_name focus_3">{e.user.userName}</span>
@@ -1429,8 +1426,9 @@ const PersonCenterComponents = React.createClass({
         var personDate;
         var userPhoneCard;
         if (isEmpty(personCenter.state.userInfo) == false && personCenter.state.optType == "userDetail") {
-            personDate = <div className="maaee_group_pa">
+            personDate = <div className="group_cont favorite_up">
                 <div className="public—til—blue">{personCenter.state.userInfo.user.userName+'的个人中心'}</div>
+				<div className="maaee_group_pa">
                 <Card className="bai">
                     {userPhotoTag}
 
@@ -1449,10 +1447,11 @@ const PersonCenterComponents = React.createClass({
 
 
                 </Card>
+				</div>
 
-                <div>{userLinkCard}
+                <div className="maaee_group_pa">
+					{userLinkCard}
                     {userInfoCard}
-
                 </div>
             </div>;
         } else if (isEmpty(personCenter.state.userInfo) == false && personCenter.state.optType == "scoreDetail") {
@@ -1800,7 +1799,7 @@ const PersonCenterComponents = React.createClass({
                 </TabPane>
             </Tabs>;
             personDate = tabComponent;*/
-            personDate = <div style={{height:'502px'}}>
+            personDate = <div className="group_cont">
                 <div className="public—til—blue">{returnPersonCenterToolBar}{personCenter.state.userInfo.user.userName+'发起过的提问'}</div>
                 <iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe>
             </div>
@@ -1820,21 +1819,21 @@ const PersonCenterComponents = React.createClass({
                 </TabPane>
             </Tabs>;
             personDate = tabComponent;*/
-            personDate = <div style={{height:'502px'}}>
+            personDate = <div className="group_cont">
                 <div className="public—til—blue">{returnPersonCenterToolBar}{personCenter.state.userInfo.user.userName+'的学习轨迹'}</div>
                 <iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe>
             </div>
         }else if(personCenter.state.optType=="userFavorite"){
-            personDate = <div style={{height:'525px'}}>
+            personDate = <div className="myfollow_zb">
                     <div className="public—til—blue">{returnPersonCenterToolBar}{personCenter.state.userInfo.user.userName+'的收藏'}</div>
                     <Favorites userid={personCenter.state.studentId} breadcrumbVisible={false}
                            onPreview={ this.props.onPreview }></Favorites>
                 </div>
         }else if(personCenter.state.optType=="getMyFollows"){
             var welcomeTitle=personCenter.state.userInfo.user.userName+"的关注";
-            personDate = <div style={{height:'502px'}}>
+            personDate = <div className="group_cont">
                 <div className="public—til—blue">{returnPersonCenterToolBar}{welcomeTitle}</div>
-                <div className="person_attention favorite_pa_le" >
+                <div className="person_attention guanzhu favorite_scroll favorite_le_h" >
                 {personCenter.state.followsUserArray}
                 </div>
             </div>;
@@ -1847,7 +1846,7 @@ const PersonCenterComponents = React.createClass({
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab={welcomeTitle} key="userFollows" className="topics_rela">
-                    <div className="person_attention favorite_pa_le" >
+                    <div className="person_attention guanzhu" >
                         {personCenter.state.followsUserArray}
                     </div>
                 </TabPane>
@@ -1996,7 +1995,7 @@ const PersonCenterComponents = React.createClass({
                     </div>
                 </TabPane>
             </Tabs>;*/
-            personDate = <div>
+            personDate = <div className="group_cont">
                     <div className="public—til—blue">{returnChatGroupMessagePageToolBar}{welcomeTitle}</div>
                     <div className="del_out">
                         <ul className="integral_top">
