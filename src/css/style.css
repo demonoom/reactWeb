@@ -2849,12 +2849,7 @@ ul.integral li i{
     float: left;
     width: 265px;
 }
-.favorite_scroll .focus:first-child{
-	margin-left:76px
-}
-.favorite_scroll .focus:nth-child(3n+1){
-	margin-left:76px
-}
+
 .focus_btn{
 	padding:2px 5px !important;
 }
@@ -2877,7 +2872,7 @@ a.antnest_name:hover{
 .focus_2{
 	display: inline-block;
     margin: 0 0 0 12px;
-    width: 166px;
+    width: 188px;
 }
 .focus_4{
 	width:200px;
@@ -2902,8 +2897,8 @@ a.color_gary_f, .color_gary_f{
 }
 
 .live{
-	width:300px;
-	margin: 15px;
+	width:265px;
+	margin: 10px 15px 10px 4px;
     float: left;
 	border-radius: 0 0 6px 6px;
 }
@@ -2911,7 +2906,7 @@ a.color_gary_f, .color_gary_f{
 	padding:0 !important
 }
 .live_img{
-	height:165px;
+	height:140px;
 	position:relative;
 	cursor:pointer
 }
@@ -2988,6 +2983,7 @@ a.color_gary_f, .color_gary_f{
     color: #fff;
     height: 20px;
     display: inline-block;
+	line-height: 16px;
 }
 .live_green{
 	background-color: rgba(0,0,0,0.5);/* IE9、标准浏览器、IE6和部分IE7内核的浏览器(如QQ浏览器)会读懂 */
@@ -3008,6 +3004,7 @@ a.color_gary_f, .color_gary_f{
 }
 .live_green span{
   color: #FFFFFF;
+  font-size: 15px;
 }
 @media \0screen\,screen\9 {/* 只支持IE6、7、8 */
   .live_green{
@@ -3237,10 +3234,13 @@ a.color_gary_f, .color_gary_f{
 	top:6px;
 }
 .favorite_scroll{
-	height:100%	
+	height:calc(100% - 46px);
 }
 .favorite_up{
 	overflow:auto
+}
+.favorite_le_h{
+	padding:8px 0 0 16px;
 }
 .favorite_pa_le{
 	margin-left:40px;
@@ -3469,7 +3469,7 @@ color:#ffbf00
 	left:0
 }
 .enhance{
-	height:calc(100% - 67px) !important
+	height:calc(100% - 49px) !important
 }
 
 

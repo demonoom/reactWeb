@@ -52,7 +52,7 @@ const TeacherResource = React.createClass({
                     <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
                     <Breadcrumb.Item href="#/MainLayout">{breadMenuTip}</Breadcrumb.Item>
                 </Breadcrumb>
-                {mainComponent}
+                <div>{mainComponent}</div>
             </div>
         );
     },

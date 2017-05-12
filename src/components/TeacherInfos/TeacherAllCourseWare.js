@@ -257,18 +257,20 @@ const TeacherAllCourseWare = React.createClass({
                     <Breadcrumb.Item href="#/MainLayout">个人中心</Breadcrumb.Item>
                     <Breadcrumb.Item href="#/MainLayout">我的资源</Breadcrumb.Item>
                 </Breadcrumb>
-                <div className='ant-tabs ant-tabs-top ant-tabs-line'>
-                    <ConfirmModal ref="confirmModal"
-                                  title="确定要删除该课件?"
-                                  onConfirmModalCancel={this.closeConfirmModal}
-                                  onConfirmModalOK={this.batchDeleteMaterial}
-                    />
-                    <UseKnowledgeComponents ref="useKnowledgeComponents" />
-                    <div className='ant-tabs-tabpane ant-tabs-tabpane-active'>
-                        <Collapse defaultActiveKey={activeKey} activeKey={activeKey} ref="collapse">
-                            {coursePanelChildren}
-                        </Collapse>
-                    </div>
+				<div className="favorite_scroll">
+					<div className='ant-tabs ant-tabs-top ant-tabs-line'>
+						<ConfirmModal ref="confirmModal"
+									  title="确定要删除该课件?"
+									  onConfirmModalCancel={this.closeConfirmModal}
+									  onConfirmModalOK={this.batchDeleteMaterial}
+						/>
+						<UseKnowledgeComponents ref="useKnowledgeComponents" />
+						<div className='ant-tabs-tabpane ant-tabs-tabpane-active'>
+							<Collapse defaultActiveKey={activeKey} activeKey={activeKey} ref="collapse">
+								{coursePanelChildren}
+							</Collapse>
+						</div>
+					</div>
                     <Pagination total={this.state.totalCount} pageSize={getPageSize()} current={this.state.currentPage}
                                 onChange={this.onChange}/>
                 </div>

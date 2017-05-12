@@ -233,11 +233,8 @@ const PersonCenterComponents = React.createClass({
                         var userJson = {key:followUser.colUid,"userName":userName,"courseName":courseName,userHeaderIcon:userHeaderIcon,"userObj":followUser};
                         // followsUserArray.push(userJson);
                         var followsCard = <Card key={followUser.colUid} id={followUser} className="focus" onClick={personCenter.getPersonalCenterData.bind(personCenter,followUser.colUid)}>
-                            <span className="person_user_bg upexam_float">
-                                <a target="_blank"><img
-                                    alt={userName + '头像'} width="100%" src={e.user.avatar}
-                                    className="person_user pers_bo_ra"/></a>
-                            </span>
+                                <a target="_blank" className="attention_img">
+								<img alt={userName + '头像'} width="100%" src={e.user.avatar}/></a>
                             <div className="custom-card focus_2">
                                 <div className="focus_1">
                                     <span className="antnest_name focus_3">{e.user.userName}</span>
@@ -1805,7 +1802,7 @@ const PersonCenterComponents = React.createClass({
             </Tabs>;
             personDate = tabComponent;
         }else if(personCenter.state.optType=="userFavorite"){
-            personDate = <div>
+            personDate = <div className="myfollow_zb">
                     <div className="public—til—blue">{returnPersonCenterToolBar}标题显示</div>
                     <Favorites userid={personCenter.state.studentId} breadcrumbVisible={false}
                            onPreview={ this.props.onPreview }></Favorites>

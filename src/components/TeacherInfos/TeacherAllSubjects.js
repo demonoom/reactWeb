@@ -223,10 +223,12 @@ const TeacherAllSubjects = React.createClass({
                         onConfirmModalCancel={subTable.closeConfirmModal}
                         onConfirmModalOK={subTable.delMySubjects}
           />
-		  <div className='ant-tabs-tabpane ant-tabs-tabpane-active'>
-          <SubjectEditByTextboxioTabComponents ref="subjectEditTabComponents" subjectEditCallBack={subTable.subjectEditCallBack}/>
-          <UseKnowledgeComponents ref="useKnowledgeComponents"/>
-          <Table columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: getPageSize(),onChange:subTable.pageOnChange }} scroll={{ y: 400}}/>
+		  <div className="favorite_scroll">
+			  <div className='ant-tabs-tabpane ant-tabs-tabpane-active'>
+			  <SubjectEditByTextboxioTabComponents ref="subjectEditTabComponents" subjectEditCallBack={subTable.subjectEditCallBack}/>
+			  <UseKnowledgeComponents ref="useKnowledgeComponents"/>
+			  <Table columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: getPageSize(),onChange:subTable.pageOnChange }} scroll={{ y: 400}}/>
+			  </div>
 		  </div>
         </div>
     );
