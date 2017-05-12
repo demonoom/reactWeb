@@ -1250,9 +1250,18 @@ const AntNestTabComponents = React.createClass({
         var optionButton;
         var topicList;
         if(antNest.state.optType=="getTopicById"){
-            optionButton = <div className="ant-tabs-right talk_ant_btn1"><Button onClick={antNest.returnTopicList}>返回</Button></div>;
+            optionButton = <div className="public—til—blue">
+                <div className="ant-tabs-right talk_ant_btn1">
+                    <Button onClick={antNest.returnTopicList}><Icon type="left" /></Button>
+                </div>话题详情</div>;
         }else{
-            optionButton = <div className="ant-tabs-right talk_ant_btn1"><Button value="talk" onClick={antNest.showaddTopicModal} className="antnest_talk">发表说说</Button><Button value="topic" onClick={antNest.showaddTopicModal}>发表话题</Button></div>;
+            optionButton = <div className="public—til—blue">
+                    <div className="ant-tabs-right talk_ant_btn1">
+                        <Button value="talk" onClick={antNest.showaddTopicModal} className="antnest_talk">发表说说</Button>
+                        <Button value="topic" onClick={antNest.showaddTopicModal}>发表话题</Button>
+                    </div>
+                    {breadMenuTip}
+                </div>;
         }
         topicList =
             <div className="topics_rela">
@@ -1348,7 +1357,7 @@ const AntNestTabComponents = React.createClass({
                         <Breadcrumb.Item href="#/MainLayout">蚁巢</Breadcrumb.Item>
                         <Breadcrumb.Item href="#/MainLayout">{breadMenuTip}</Breadcrumb.Item>
                     </Breadcrumb>*/}
-                    <div className="public—til—blue">{breadMenuTip}</div>
+
                     {optionButton}
                 </div>
                 {topicList}

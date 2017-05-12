@@ -717,24 +717,25 @@ const PersonCenterComponents = React.createClass({
                             }
                         }
                         //var imgTag = <div ><img src={ownerPhoto}  className="antnest_38_img" ></img></div>;
-                        var imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
+                        var imgTag = <div className="maaee_group_face" onClick={personCenter.sendGroupMessage.bind(personCenter,e)}>{groupMemebersPhoto}</div>;
                         switch (groupMemebersPhoto.length){
                             case 1:
-                                imgTag = <div className="maaee_group_face1">{groupMemebersPhoto}</div>;
+                                imgTag = <div className="maaee_group_face1" onClick={personCenter.sendGroupMessage.bind(personCenter,e)}>{groupMemebersPhoto}</div>;
                                 break;
                             case 2:
-                                imgTag = <div className="maaee_group_face2">{groupMemebersPhoto}</div>;
+                                imgTag = <div className="maaee_group_face2" onClick={personCenter.sendGroupMessage.bind(personCenter,e)}>{groupMemebersPhoto}</div>;
                                 break;
                             case 3:
-                                imgTag = <div className="maaee_group_face3">{groupMemebersPhoto}</div>;
+                                imgTag = <div className="maaee_group_face3" onClick={personCenter.sendGroupMessage.bind(personCenter,e)}>{groupMemebersPhoto}</div>;
                                 break;
                             case 4:
-                                imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
+                                imgTag = <div className="maaee_group_face" onClick={personCenter.sendGroupMessage.bind(personCenter,e)}>{groupMemebersPhoto}</div>;
                                 break;
                         }
                         var groupName = chatGroupName;
-                        var groupSet = <Button icon="setting" onClick={personCenter.setChatGroup.bind(personCenter,e)}></Button>
-                        var chatGroupJson = {key:chatGroupId,groupPhoto:imgTag,'groupName':groupName,"groupObj":e,"userCount":membersCount+"人","groupSet":groupSet};
+                        var groupSet = <Button icon="setting" onClick={personCenter.setChatGroup.bind(personCenter,e)}></Button>;
+                        var groupNameTag = <a onClick={personCenter.sendGroupMessage.bind(personCenter,e)}>{groupName}</a>
+                        var chatGroupJson = {key:chatGroupId,groupPhoto:imgTag,'groupName':groupNameTag,"groupObj":e,"userCount":membersCount+"人","groupSet":groupSet};
                         charGroupArray.push(chatGroupJson);
                     });
                     personCenter.setState({"userGroupsData":charGroupArray});
@@ -779,10 +780,19 @@ const PersonCenterComponents = React.createClass({
      * @param record　当前行的群组信息
      * @param index　当前行的索引顺序，从０开始
      */
-    sendGroupMessage(record, index){
+/*    sendGroupMessage(record, index){
         // antGroup.getChatGroupMessages(record.groupObj);
         // antGroup.turnToChatGroupMessagePage(groupObj);
         personCenter.props.onSendGroupMessage(record.groupObj);
+    },*/
+
+    /**
+     * 点击群组列表表格行时，获取当前行对应的记录信息
+     * @param record　当前行的群组信息
+     * @param index　当前行的索引顺序，从０开始
+     */
+    sendGroupMessage(groupObj){
+        personCenter.props.onSendGroupMessage(groupObj);
     },
 
     /**
@@ -1339,7 +1349,7 @@ const PersonCenterComponents = React.createClass({
                         <div>关注</div>
                     </Button>
                 </div>;
-                userInfoCard = <Card title={personCenter.state.userInfo.user.userName + '的个人名片'} className="bai">
+                userInfoCard = <Card title={personCenter.state.userInfo.user.userName + '的个人名片'} className="bai" style={{margintop:'15px'}}>
                     <Row className="person_13">
                         <p className="user_cont">
 							<span className="user_til_name">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;校：</span>
@@ -1910,7 +1920,7 @@ const PersonCenterComponents = React.createClass({
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div>
                         <ul className="group_table">
-                            <Table className="group_table_u" onRowClick={personCenter.sendGroupMessage} showHeader={false} scroll={{ x: true, y: 500 }} columns={userGroupsColumns} dataSource={personCenter.state.userGroupsData} pagination={{ total:personCenter.state.totalChatGroupCount,pageSize: getPageSize(),onChange:personCenter.onChatGroupPageChange }}/>
+                            <Table className="group_table_u" showHeader={false} scroll={{ x: true, y: 500 }} columns={userGroupsColumns} dataSource={personCenter.state.userGroupsData} pagination={{ total:personCenter.state.totalChatGroupCount,pageSize: getPageSize(),onChange:personCenter.onChatGroupPageChange }}/>
                         </ul>
                     </div>
                 </TabPane>
