@@ -210,7 +210,6 @@ const TeacherAllSubjects = React.createClass({
         } else {
             target = e.target;
         }
-<<<<<<< HEAD
         var subjectIds = target.value;
         this.setState({"delSubjectIds": subjectIds});
         this.refs.confirmModal.changeConfirmModalVisible(true);
@@ -252,82 +251,8 @@ const TeacherAllSubjects = React.createClass({
             </div>
         );
     },
-=======
-        subTable.closeConfirmModal();
-        subTable.getUserSubjectsByUid(sessionStorage.getItem("ident"),subTable.state.currentPage);
-      },
-      onError : function(error) {
-        message.error(error);
-      }
+
     });
-  },
 
-  //题目修改功能
-  showModifySubjectModal:function (e) {
-    var target = e.target;
-    if(navigator.userAgent.indexOf("Chrome") > -1){
-      target=e.currentTarget;
-    }else{
-      target = e.target;
-    }
-    var currentSubjectInfo = target.value;
-    subTable.refs.subjectEditTabComponents.showModal(currentSubjectInfo);
-  },
-
-  //弹出题目使用至备课计划的窗口
-  showModal:function (e) {
-    var target = e.target;
-    if(navigator.userAgent.indexOf("Chrome") > -1){
-      target=e.currentTarget;
-    }else{
-      target = e.target;
-    }
-    var currentKnowledge = target.value;
-    subTable.refs.useKnowledgeComponents.showModal(currentKnowledge,"TeacherAllSubjects",subTable.state.knowledgeName);
-  },
-
-  showConfirmModal(e) {
-    var target = e.target;
-    if(navigator.userAgent.indexOf("Chrome") > -1){
-      target=e.currentTarget;
-    }else{
-      target = e.target;
-    }
-    var subjectIds = target.value;
-    subTable.setState({"delSubjectIds":subjectIds});
-    subTable.refs.confirmModal.changeConfirmModalVisible(true);
-  },
-
-  closeConfirmModal(){
-    subTable.refs.confirmModal.changeConfirmModalVisible(false);
-  },
-
-  render() {
-    const { loading, selectedRowKeys } = this.state;
-    const rowSelection = {
-      selectedRowKeys,
-      onChange: this.onSelectChange,
-    };
-    const hasSelected = selectedRowKeys.length > 0;
-    return (
-        <div className='ant-tabs ant-tabs-top ant-tabs-line'>
-          <div className="public—til—blue">我的题目</div>
-          <ConfirmModal ref="confirmModal"
-                        title="确定要删除该题目?"
-                        onConfirmModalCancel={subTable.closeConfirmModal}
-                        onConfirmModalOK={subTable.delMySubjects}
-          />
-		  <div className="favorite_scroll">
-			  <div className='ant-tabs-tabpane ant-tabs-tabpane-active'>
-			  <SubjectEditByTextboxioTabComponents ref="subjectEditTabComponents" subjectEditCallBack={subTable.subjectEditCallBack}/>
-			  <UseKnowledgeComponents ref="useKnowledgeComponents"/>
-			  <Table columns={columns} dataSource={data} pagination={{ total:subTable.state.totalCount,pageSize: getPageSize(),onChange:subTable.pageOnChange }} scroll={{ y: 400}}/>
-			  </div>
-		  </div>
-        </div>
-    );
-  },
->>>>>>> 0a866c3392a0278506607bfedb95a7795626a72e
-});
 
 export default TeacherAllSubjects;

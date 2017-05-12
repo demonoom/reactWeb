@@ -18,7 +18,7 @@ const ExamPagerTabComponents = React.createClass({
             currentSubjectId: '',
             activeKey: '试卷列表',
             defaultActiveKey: '试卷列表',
-            currentOpt: 'createExamPager', // createExamPager , examPagerList
+            currentOpt: 'examPagerList', // createExamPager , examPagerList
             currentTeachScheduleId: '',
             updateSubjectInfo: '',
         };
