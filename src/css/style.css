@@ -350,11 +350,25 @@ i, cite, em, var, address, dfn {
 		display:inline-block;
 		padding: 0 0 0 12px
 	}
-	.ant-tabs-right{
-		width:210px;
-		text-align:right;
-		margin-top:7px
-		}
+.ant-tabs-right{
+	width: 210px;
+    text-align: left;
+    margin-top: 14px;
+    position: absolute;
+    left: 8px;
+    line-height: 1px;
+}
+.ant-tabs-right button, .ant-tabs-right button:hover, .ant-tabs-right button:active{
+	border: none;
+    background: none;
+    padding: 0;
+    line-height: 1px;
+}
+.ant-tabs-right button i{
+	font-size: 22px;
+    color: #0078e4;
+    font-weight: normal;
+}
 	.ant-scroll-number{
 		margin-left:10px;
 		float:left;
@@ -3600,4 +3614,13 @@ color:#ffbf00
 }
 .ant-card-head-title, .ant-card{
 	font-size:16px;
+}
+.public—til—blue{
+	background:#e4f2ff;
+	width:100%;
+	height:46px;
+	line-height:46px;
+	text-align:center;
+	color:#0078e4;
+	position:relative
 }

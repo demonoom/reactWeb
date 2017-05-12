@@ -1300,7 +1300,7 @@ const PersonCenterComponents = React.createClass({
 
     render() {
         var userPhotoTag;
-        var returnPersonCenterToolBar = <div className="ant-tabs-right"><Button onClick={personCenter.returnPersonCenter}>返回</Button></div>;
+        var returnPersonCenterToolBar = <div className="ant-tabs-right"><Button onClick={personCenter.returnPersonCenter}><Icon type="left" /></Button></div>;
         var createChatToolBar = <div className="ant-tabs-right"><Button onClick={personCenter.showCreateChatGroup}>创建群聊</Button></div>;
         var returnChatGroupMessagePageToolBar = <div className="ant-tabs-right"><Button onClick={personCenter.returnToChatGroupMessagePage}>返回</Button></div>;
         if (isEmpty(personCenter.state.userInfo) == false && personCenter.state.optType == "userDetail") {
@@ -1802,7 +1802,7 @@ const PersonCenterComponents = React.createClass({
             personDate = tabComponent;
         }else if(personCenter.state.optType=="userFavorite"){
             personDate = <div>
-                    {returnPersonCenterToolBar}
+                    <div className="public—til—blue">{returnPersonCenterToolBar}标题显示</div>
                     <Favorites userid={personCenter.state.studentId} breadcrumbVisible={false}
                            onPreview={ this.props.onPreview }></Favorites>
                 </div>
