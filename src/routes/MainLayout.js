@@ -386,7 +386,7 @@ const MainLayout = React.createClass({
                                 <Icon type="team"/>
                                 <div className="tan">蚁群</div>
                             </Menu.Item>
-                            <FloatButton ref="floatButton"/>
+                            <FloatButton ref="floatButton" messageUtilObj={ms}/>
                         </Menu>
 
                         <div className="ant-aside-action">

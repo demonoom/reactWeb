@@ -30,6 +30,7 @@ var courseWareList;
 var activeKey = new Array();
 var coursePanelChildren;
 var liveInfosPanelChildren;
+// var errorModalIsShow = false;
 const AntGroupTabComponents = React.createClass({
 
     getInitialState() {
@@ -65,6 +66,7 @@ const AntGroupTabComponents = React.createClass({
             totalSubjectCount: 0,     //题目页面的资源总数
             totalChatGroupCount: 0,  //当前用户的群组总数
             currentChatGroupPage: 1,    //群组列表页面的当前页码
+            errorModalIsShow:false,
         };
 
     },
@@ -77,17 +79,7 @@ const AntGroupTabComponents = React.createClass({
     },
 
     componentWillMount(){
-        /*ms = new MsgConnection();
-        var loginUserId = sessionStorage.getItem("ident");
-        var machineId = sessionStorage.getItem("machineId");
-        var password = sessionStorage.getItem("loginPassword");
-        var pro = {
-            "command": "messagerConnect",
-            "data": {"machineType": "web", "userId": Number.parseInt(loginUserId), "machine": machineId,"password":password,"version":0.1}
-        };
-        ms.connect(pro);*/
         ms = antGroup.props.messageUtilObj;
-
         var messageType = antGroup.props.messageType;
         var propsUserInfo = antGroup.props.userInfo;
         if(isEmpty(messageType)==false){
@@ -136,7 +128,22 @@ const AntGroupTabComponents = React.createClass({
         messageList.splice(0);
         ms.msgWsListener = {
             onError: function (errorMsg) {
-
+                if(this.state.errorModalIsShow==false){
+                    this.setState({"errorModalIsShow":true});
+                    ms.closeConnection();
+                    Modal.error({
+                        transitionName:"",  //禁用modal的动画效果
+                        title: '系统异常通知',
+                        content: errorMsg,
+                        onOk() {
+                            sessionStorage.removeItem("ident");
+                            sessionStorage.removeItem("loginUser");
+                            sessionStorage.removeItem("machineId");
+                            location.hash="Login";
+                            LP.delAll();
+                        },
+                    });
+                }
             }, onWarn: function (warnMsg) {
 
             }, onMessage: function (info) {
@@ -236,7 +243,22 @@ const AntGroupTabComponents = React.createClass({
         messageList.splice(0);
         ms.msgWsListener = {
             onError: function (errorMsg) {
-
+                if(this.state.errorModalIsShow==false){
+                    this.setState({"errorModalIsShow":true});
+                    ms.closeConnection();
+                    Modal.error({
+                        transitionName:"",  //禁用modal的动画效果
+                        title: '系统异常通知',
+                        content: errorMsg,
+                        onOk() {
+                            sessionStorage.removeItem("ident");
+                            sessionStorage.removeItem("loginUser");
+                            sessionStorage.removeItem("machineId");
+                            LP.delAll();
+                            location.hash="Login";
+                        },
+                    });
+                }
             }, onWarn: function (warnMsg) {
 
             }, onMessage: function (info) {

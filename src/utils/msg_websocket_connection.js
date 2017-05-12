@@ -3,14 +3,16 @@ import {Modal, Button } from 'antd';
 
 export function MsgConnection(){
 	this.msgWsListener = null;
-	this.WS_URL = "ws://192.168.1.59:8889/Excoord_MessageServer/message";
-	// this.WS_URL = "ws://www.maaee.com:8889/Excoord_MessageServer/message";
+	// this.WS_URL = "ws://192.168.1.59:8889/Excoord_MessageServer/message";
+	this.WS_URL = "ws://www.maaee.com:8889/Excoord_MessageServer/message";
 	this.ws = null;
 	this.PING_COMMAND = "ping_0123456789_abcdefg";
 	this.PONG_COMMAND = "pong_0123456789_abcdefg";
 	this.loginProtocol = null;
 	this.connected = false;
 	this.connecting = false;
+	this.reconnectTimeout;
+	this.heartBeatTimeout;
 	this.connect = function(loginProtocol){
 		var connection = this;
 		connection.connecting = true;
@@ -22,9 +24,11 @@ export function MsgConnection(){
 			//如果服务器在发送ping命令,则赶紧回复PONG命令
 			if(event.data == connection.PING_COMMAND){
 				connection.send(connection.PONG_COMMAND);
+				console.log("收到服务器的 ping , 给服务器回复 pong...");
 				return;
 			}
 			if(event.data == connection.PONG_COMMAND){
+				console.log("收到服务器的 pong");
 				return;
 			}
 			if(connection.msgWsListener != null){
@@ -50,37 +54,37 @@ export function MsgConnection(){
         	connection.connecting = false;
         	connection.connected = false;
         	connection.reconnect();
+        	console.log("收到服务器的 onclose .");
         };
         // 打开WebSocket
         connection.ws.onopen = function(event) { 
         	connection.connecting = false;
         	connection.connected = true;
         	connection.send(loginProtocol);
+        	console.log("连接到服务器 ....");
         };
         connection.ws.onerror =function(event){
         	connection.connecting = false;
-			Modal.error({
-				transitionName:"",  //禁用modal的动画效果
-				title: '系统异常通知',
-				content: '很抱歉，服务器出现异常，系统即将退出，请重新登录',
-				onOk() {
-					sessionStorage.removeItem("ident");
-					sessionStorage.removeItem("loginUser");
-					sessionStorage.removeItem("machineId");
-					location.hash="Login";
-					LP.delAll();
-				},
-			});
+        	console.log("收到服务器的 onerror ....");
         };
+	};
+
+	this.closeConnection = function () {
+		var connection = this;
+		connection.loginProtocol = null;
+		clearTimeout(connection.reconnectTimeout);
+		clearTimeout(connection.heartBeatTimeout);
+		connection.ws.close();
 	};
 	
 	//每次重连间隔为20秒
 	this.reconnect = function(){
 		var connection = this;
 		if(connection.loginProtocol != null && !connection.connected && !connection.connecting){
-			setTimeout(function (){
+			connection.reconnectTimeout = setTimeout(function (){
 				connection.connect(connection.loginProtocol);
 				connection.reconnect();
+				console.log("重连中 ...");
 			}, 1000*10);
     	}
 	};
@@ -96,8 +100,9 @@ export function MsgConnection(){
 	this.heartBeat = function(){
 		var connection = this;
 		var pingCommand = connection.PING_COMMAND;
-		setTimeout(function (){
+		connection.heartBeatTimeout = setTimeout(function (){
 			connection.send(pingCommand);
+			console.log("客户端发送ping命令 , 希望服务器回答pong...");
 			connection.heartBeat();
 		}, 1000*10);
 	};
