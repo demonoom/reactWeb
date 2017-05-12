@@ -50,11 +50,12 @@ const columns = [{
 
 var data = [];
 var subjectList = [];
-var subTable;
-const SUbjectTable = React.createClass({
-    getInitialState() {
-        subTable = this;
-        return {
+class SUbjectTable extends React.Component{
+
+
+    constructor(props) {
+        super(props);
+        this.state = {
             selectedRowKeys: [],
             selectedRowKeysStr: '',
             loading: false,
@@ -68,9 +69,28 @@ const SUbjectTable = React.createClass({
             data: data,
             subjectParams: '',
             isOwmer: 'N',
-            isDeleteAllSubject: false,   //是否同步删除资源库下的题目
-        };
-    },
+            isDeleteAllSubject: false,
+
+
+
+        }
+
+    }
+
+
+    componentDidMount(){
+         this.initGetSubjectInfo(this.props.params);
+    }
+
+
+
+    componentWillReceiveProps(nextProps) {
+
+        let obj = nextProps || this.props.params ? this.props.params : null;
+        if (!obj)   return;
+        this.initGetSubjectInfo(obj)
+    }
+
     start() {
         this.setState({loading: true});
         setTimeout(() => {
@@ -79,11 +99,12 @@ const SUbjectTable = React.createClass({
                 loading: false,
             });
         }, 1000);
-    },
+    }
+
     onSelectChange(selectedRowKeys) {
         var selectedRowKeysStr = selectedRowKeys.join(",");
         this.setState({selectedRowKeys, selectedRowKeysStr});
-    },
+    }
 
     getSubjectData(ident, ScheduleOrSubjectId, pageNo, optType, knowledgeName, isOwmer){
         data = [];
@@ -93,9 +114,9 @@ const SUbjectTable = React.createClass({
         } else {
             this.getSubjectDataByKnowledge(ident, ScheduleOrSubjectId, pageNo, isOwmer);
         }
-    },
+    }
 
-    getSubjectDataBySchedule: function (ident, ScheduleOrSubjectId, pageNo) {
+    getSubjectDataBySchedule (ident, ScheduleOrSubjectId, pageNo) {
         let _this = this;
         var param = {
             "method": 'getClassSubjects',
@@ -149,16 +170,16 @@ const SUbjectTable = React.createClass({
             }
 
         });
-    },
+    }
 
-    editSubject: function (e) {
+    editSubject (e) {
 
-    },
+    }
 
     isDeleteAll(e){
 
         this.setState({isDeleteAllSubject: e.target.checked});
-    },
+    }
 
     showDelSubjectConfirmModal(e){
         var target = e.target;
@@ -170,11 +191,11 @@ const SUbjectTable = React.createClass({
         var subjectIds = target.value;
         this.setState({"delSubjectId": subjectIds});
         this.refs.delSubjectConfirmModal.changeConfirmModalVisible(true);
-    },
+    }
 
     closeDelSubjectConfirmModal(){
         this.refs.delSubjectConfirmModal.changeConfirmModalVisible(false);
-    },
+    }
 
     showConfirmModal(e){
         var target = e.target;
@@ -186,27 +207,27 @@ const SUbjectTable = React.createClass({
         var subjectIds = target.value;
         this.setState({"delSubjectId": subjectIds});
         this.refs.confirmModal.changeConfirmModalVisible(true);
-    },
+    }
 
     closeConfirmModal(){
         this.refs.confirmModal.changeConfirmModalVisible(false);
-    },
+    }
 
     showDelAllSubjectConfirmModal(){
         this.refs.delAllSubjectConfirmModal.changeConfirmModalVisible(true);
-    },
+    }
 
     closeDelAllSubjectConfirmModal(){
         this.refs.delAllSubjectConfirmModal.changeConfirmModalVisible(false);
-    },
+    }
 
     showdelAllSubjectInScheduleConfirmModal(){
         this.refs.delAllSubjectInScheduleConfirmModal.changeConfirmModalVisible(true);
-    },
+    }
 
     closeDelAllSubjectInScheduleConfirmModal(){
         this.refs.delAllSubjectInScheduleConfirmModal.changeConfirmModalVisible(false);
-    },
+    }
 
 
     /**
@@ -235,7 +256,7 @@ const SUbjectTable = React.createClass({
                 message.error(error);
             }
         });
-    },
+    }
 
     /**
      * 批量或单独删除资源库下的题目
@@ -273,13 +294,13 @@ const SUbjectTable = React.createClass({
             }
         });
         this.setState({isDeleteAllSubject: false});
-    },
+    }
 
     //删除备课计划下的题目
-    deleteSubject: function (e) {
+    deleteSubject (e) {
         this.deleteSubjectsByConditonForSchedule(this.state.delSubjectId);
         this.closeConfirmModal();
-    },
+    }
 
     /**
      * 根据复选框的选择，批量删除资源库下的题目
@@ -295,13 +316,13 @@ const SUbjectTable = React.createClass({
             this.closeDelAllSubjectConfirmModal();
         }
         this.setState({selectedRowKeysStr: '', selectedRowKeys: []});
-    },
+    }
 
     //删除资源库下的题目
-    delMySubjects: function () {
+    delMySubjects () {
         this.deleteSubjectsByConditon(this.state.delSubjectId);
         this.closeDelSubjectConfirmModal();
-    },
+    }
 
     /**
      * 根据资源库的知识点id获取知识点下的题目
@@ -310,7 +331,7 @@ const SUbjectTable = React.createClass({
      * @param pageNo
      * @param isOwmer
      */
-    getSubjectDataByKnowledge: function (ident, ScheduleOrSubjectId, pageNo, isOwmer) {
+    getSubjectDataByKnowledge (ident, ScheduleOrSubjectId, pageNo, isOwmer) {
         let _this = this;
         var param = {
             "method": 'getUserSubjectsByKnowledgePoint',
@@ -379,16 +400,12 @@ const SUbjectTable = React.createClass({
             }
 
         });
-    },
+    }
 
 
-    componentDidMount(){
-        // this.initGetSubjectInfo();
-    },
 
-
-    initGetSubjectInfo: function (subjectParams, currentPageNo) {
-        debugger
+    initGetSubjectInfo (subjectParams, currentPageNo) {
+        
         var subjectParamArray = this.props.params.split("#");
         this.setState({subjectParams: this.props.params});
         if (subjectParams) {
@@ -418,9 +435,9 @@ const SUbjectTable = React.createClass({
         } else {
             this.setState({isOwmer, currentPage: parseInt(pageNo)});
         }
-    },
+    }
 
-    showModal: function (e) {
+    showModal (e) {
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             target = e.currentTarget;
@@ -429,9 +446,9 @@ const SUbjectTable = React.createClass({
         }
         var currentKnowledge = target.value;
         this.refs.useKnowledgeComponents.showModal(currentKnowledge, "knowledgeSubject", this.state.knowledgeName);
-    },
+    }
 
-    showModifySubjectModal: function (e) {
+    showModifySubjectModal (e) {
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             target = e.currentTarget;
@@ -440,19 +457,19 @@ const SUbjectTable = React.createClass({
         }
         var currentSubjectInfo = target.value;
         this.refs.subjectEditTabComponents.showModal(currentSubjectInfo);
-    },
+    }
 
     pageOnChange(pageNo) {
         this.initGetSubjectInfo(this.state.subjectParams, pageNo);
         this.setState({
             currentPage: pageNo,
         });
-    },
+    }
 
     subjectEditCallBack(){
 
         this.getSubjectDataByKnowledge(sessionStorage.getItem("ident"), this.state.ScheduleOrSubjectId, this.state.currentPage, "Y");
-    },
+    }
 
     render() {
         const {loading, selectedRowKeys} = this.state;
@@ -538,7 +555,7 @@ const SUbjectTable = React.createClass({
                 {subjectTable}
             </div>
         );
-    },
-});
+    }
+};
 
 export default SUbjectTable;

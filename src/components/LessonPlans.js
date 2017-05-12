@@ -36,7 +36,7 @@ class LessonPlans extends React.Component {
 
 
     componentWillMount() {
-        debugger
+      
         if (this.props.refData) {
             this.buildBreadcrumb(this.props.refData.optContent.split("#"));
         } else {
@@ -57,11 +57,11 @@ class LessonPlans extends React.Component {
 
 
     getTeachPlans(optContent) {
-        debugger
+      
         optContent = optContent || this.props.refData ? this.props.refData.optContent : null;
         if (!optContent)   return;
 
-        debugger
+      
         var optContentArray = optContent.split("#");
         var teachScheduleId = optContentArray[0];
         var optType = optContentArray[1];
@@ -79,11 +79,11 @@ class LessonPlans extends React.Component {
     }
 
     onChange(activeKey) {
-
+      
         if (activeKey == "题目") {
             this.setState({activeKey: '题目'});
             var subjectParams = sessionStorage.getItem("ident") + "#" + this.state.currentTeachScheduleId + "#" + 1 + "#" + this.state.currentOptType + "#" + this.state.currentKnowledgeName + "#" + this.state.subjectDataFilter;
-            this.refs.subTable.initGetSubjectInfo(subjectParams);
+            this.setState({subjectParams:subjectParams});
         } else {
             this.refs.courseWare.getTeachPlans(sessionStorage.getItem("ident"), this.state.currentTeachScheduleId, this.state.currentOptType, 1, this.state.currentKnowledgeName, this.state.dataFilter);
             this.setState({activeKey: '课件'});
@@ -167,7 +167,7 @@ class LessonPlans extends React.Component {
      * @param key 被点击menu item的key
      */
     menuItemOnClick({key}) {
-        debugger
+        
         var clickKey = `${key}`;
         if (this.state.activeKey == "课件") {
             this.setState({dataFilter: clickKey});
@@ -175,7 +175,7 @@ class LessonPlans extends React.Component {
         } else {
             this.setState({subjectDataFilter: clickKey});
             var subjectParams = sessionStorage.getItem("ident") + "#" + this.state.currentTeachScheduleId + "#" + 1 + "#" + this.state.currentOptType + "#" + this.state.currentKnowledgeName + "#" + clickKey;
-            this.refs.subTable.initGetSubjectInfo(subjectParams);
+            this.setState({subjectParams:subjectParams});
         }
     }
 
@@ -184,9 +184,10 @@ class LessonPlans extends React.Component {
      * 课件上传成功后的回调函数
      */
     courseUploadCallBack() {
+      
         if (this.state.activeKey == "题目") {
             var subjectParams = sessionStorage.getItem("ident") + "#" + this.state.currentTeachScheduleId + "#" + 1 + "#" + this.state.currentOptType + "#" + this.state.currentKnowledgeName + "#" + this.state.subjectDataFilter + "#fromUpload";
-            this.refs.subTable.initGetSubjectInfo(subjectParams);
+            this.setState({subjectParams:subjectParams});
         } else {
             this.refs.courseWare.getTeachPlans(sessionStorage.getItem("ident"), this.state.currentTeachScheduleId, this.state.currentOptType, 1, this.state.currentKnowledgeName, this.state.dataFilter, "fromUpload");
         }
@@ -219,15 +220,14 @@ class LessonPlans extends React.Component {
                     <TabPane key="题目" tab={<span>我的题目<Dropdown overlay={menu} trigger={['click']} className='del_right'>
                 <a className="ant-dropdown-link icon_filter" href="#"><Icon
                     type="down-circle-o"/></a></Dropdown></span>}>
-                        <SubjectTable ref="subTable" params={this.state.subjectParams}/></TabPane>;
+                        <SubjectTable ref="subTable11" params={this.state.subjectParams}/></TabPane>;
                 break;
 
 
             case 'bySchedule':
                 tabPanel = <TabPane tab="我的资源" key="课件"><CourseWareComponents ref="courseWare"/></TabPane>;
                 subjectTabPanel =
-                    <TabPane tab="我的题目" key="题目"><SubjectTable ref="subTable"
-                                                               params={this.state.subjectParams}/></TabPane>
+                    <TabPane tab="我的题目" key="题目"><SubjectTable ref="subTable11" params={this.state.subjectParams}/></TabPane>
                 break;
 
 

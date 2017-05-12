@@ -2292,7 +2292,7 @@ const MyFollowExtend = React.createClass({
 
         return (
             <div className="myfollow_zb">
-                <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
+                <UseKnowledgeComponents ref="useKnowledgeComponents"/>
                 <div className="group_cont">
                     {userPhoneCard}
                     {tabComponent}

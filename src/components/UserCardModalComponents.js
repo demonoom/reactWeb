@@ -101,21 +101,7 @@ const UserCardModalComponents = React.createClass({
         teacherInfo.props.callbackParent("getSubjects");
         teacherInfo.setState({visible: false});
     },
-    /**
-     * 蚁巢入口
-     */
-    searchAntNest(){
-        teacherInfo.props.callbackParent("visitAntNest");
-        teacherInfo.setState({visible: false});
-    },
 
-    /**
-     * 蚁群入口
-     */
-    searchAntGroup(){
-        teacherInfo.props.callbackParent("visitAntGroup");
-        teacherInfo.setState({visible: false});
-    },
 
     myFavrites(){
         this.props.callbackParent("myFavrites");
@@ -215,24 +201,7 @@ const UserCardModalComponents = React.createClass({
         return (
             <div className="layout_logo">
                 <img src={this.state.userHeadIcon} onClick={this.turnToPersoncenter}/>
-                {/*<Modal
-                    visible={this.state.visible}
-                    title={<div className="user_cont1">{this.getTitle()} </div>}
-                    onCancel={teacherInfo.handleCancel}
-                    className="model_wi"
-                    transitionName=""
-                    maskClosable={false} //设置不允许点击蒙层关闭
-                    footer={[]}
-                >
-                    <p className="user_cont model_to"><span className="name">学校名称：</span><span
-                        className="name1">{teacherInfo.state.schoolName}</span></p>
-                    <p className="user_cont"><span className="name">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;区：</span><span
-                        className="name1">{teacherInfo.state.schoolAddress}</span></p>
-                    <p className="user_cont"><span className="name">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</span><span
-                        className="name1">{teacherInfo.state.userName}</span></p>
-                    <p className="user_cont"><span className="name">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：</span><span
-                        className="name1">{teacherInfo.state.courseName}</span></p>
-                    <p className="user_cont user_cont_cen">
+                {/* <p className="user_cont user_cont_cen">
                         <Button type="primary" htmlType="submit"
                                 className="login-form-button class_right user_btn add_study add_study-f"
                                 onClick={teacherInfo.searchOwnerCourseWare}>
@@ -242,11 +211,6 @@ const UserCardModalComponents = React.createClass({
                                 className="login-form-button class_right user_btn topics_btn_le"
                                 onClick={teacherInfo.searchOwnerSubject}>
                             我的题目
-                        </Button>
-                        <Button type="primary" htmlType="submit"
-                                className="login-form-button class_right user_btn topics_btn_le "
-                                onClick={teacherInfo.searchAntGroup}>
-                            蚁群
                         </Button>
 
                         <Button type="primary" htmlType="submit"
@@ -269,7 +233,7 @@ const UserCardModalComponents = React.createClass({
                             我的直播课
                         </Button>
                     </p>
-                </Modal>*/}
+               */}
             </div>
         );
     },

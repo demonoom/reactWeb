@@ -24,6 +24,8 @@ const FavoriteShipinItems = React.createClass({
         };
         this.coursePanelChildren = {};
         this.videoPwdModalHandleOk = this.videoPwdModalHandleOk.bind(this);
+        this.buildFavShipionUi = this.buildFavShipionUi.bind(this);
+        this.confirmVideoPwd = this.confirmVideoPwd.bind(this);
         this.view = this.view.bind(this);
     },
 
@@ -51,7 +53,8 @@ const FavoriteShipinItems = React.createClass({
 
         }
 
-        this.props.onPreview(obj)
+        this.props.onPreview(obj);
+
 
     },
 
@@ -112,7 +115,7 @@ const FavoriteShipinItems = React.createClass({
                 <div >
                     <p className="live_h3">{content}</p>
                     <div className="live_img">
-                        <a onClick={this.confirmVideoPwd.bind(this, e) } target="_blank">
+                        <a onClick={()=>{this.confirmVideoPwd(e)} } target="_blank">
                             <img alt="example" className="attention_img" width="100%" src={e.cover}/>
                         </a>
                         <div className="live_green"><span>{e.liveInfo.user.schoolName}</span></div>
@@ -128,7 +131,7 @@ const FavoriteShipinItems = React.createClass({
                             <li>
                                 <span className="live_color live_orange">{e.liveInfo.courseName}</span>
                                 <a className={showCancelBtn ? 'show' : 'hide'  } target="_blank" title="取消收藏"
-                                   onClick={this.props.onCancelfavrite.bind(this, e.address, this.props.upgradeData)}>
+                                   onClick={()=>{this.props.onCancelfavrite(  e.address, this.props.upgradeData)}} >
                                     <span className="right_ri focus_btn star_span"><i
                                         className="iconfont star">&#xe646;</i></span>
                                 </a>

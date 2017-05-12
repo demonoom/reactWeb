@@ -12,23 +12,8 @@ const columns = [{
 }];
 
 var messageData = [];
+var userMessageData = [];
 const MessageMenu = React.createClass({
-<<<<<<< HEAD
-  getInitialState() {
-    mMenu = this;
-    return {
-    };
-  },
-
-  render() {
-    return (
-        <div>
-          <div className="menu_til">消息动态</div>
-            <Table showHeader={false} columns={columns} dataSource={data} className="yichao_menu"/>
-        </div>
-    );
-  },
-=======
     getInitialState() {
         mMenu = this;
         return {
@@ -37,14 +22,19 @@ const MessageMenu = React.createClass({
     },
 
     componentDidMount(){
-        mMenu.getUserRecentMessages()
+        mMenu.getUserRecentMessages();
     },
 
     /**
      * 获取用户最新消息列表
      */
     getUserRecentMessages(){
-        var userMessageData = [];
+        userMessageData.splice(0);
+        messageData.splice(0);
+        var propsUserJson = mMenu.props.userJson;
+        if(isEmpty(propsUserJson)==false){
+            messageData.push(propsUserJson);
+        }
         var param = {
             "method": 'getUserRecentMessages',
             "userId": sessionStorage.getItem("ident"),
@@ -53,9 +43,13 @@ const MessageMenu = React.createClass({
             onResponse: function (ret) {
                 var response = ret.response;
                 var i = 0;
-                if (isEmpty(response) == false) {
-                    messageData.splice(0);
+                if (isEmpty(response) == false || isEmpty(messageData)==false) {
+                    //messageData.splice(0);
                     response.forEach(function (e) {
+                        //临时处理
+                        /*if(e.toType==1){
+
+                        }*/
                         mMenu.setMessageArrayForOnePerson(e);
                     });
                     messageData.forEach(function (message) {
@@ -69,7 +63,6 @@ const MessageMenu = React.createClass({
                             var lastContentInfo = contentArray[contentArray.length - 1];
                             var lastContentText = lastContentInfo.content;
                             var lastCreateTime = lastContentInfo.createTime;
-                            var messageCount = contentArray.length;
                             var imgTag;
                             if (messageType == 1) {
                                 imgTag = <div>
@@ -89,7 +82,7 @@ const MessageMenu = React.createClass({
                                     <div>{lastCreateTime}</div>
                                 </div>
                             </Badge>;
-                            var userJson = {key: colUid, "fromUser": fromUser, messageContent: messageContentTag};
+                            var userJson;
                             if (messageType == 1) {
                                 userJson = {
                                     key: colUid,
@@ -106,20 +99,28 @@ const MessageMenu = React.createClass({
                                     "toChatGroup": toChatGroup
                                 };
                             }
-                            /*if (colUid != sessionStorage.getItem("ident")) {
-
-                            }*/
-                            userMessageData.push(userJson);
-                            if (i == 0) {
-                                mMenu.setState({selectRowKey: colUid});
+                            if(messageType==1){
+                                if (colUid != parseInt(sessionStorage.getItem("ident"))) {
+                                    userMessageData.push(userJson);
+                                }
+                            }else{
+                                userMessageData.push(userJson);
                             }
-                            i++;
                         }
+                        if (i == 0) {
+                            if (messageType == 1) {
+                                mMenu.setState({selectRowKey: colUid});
+                            }else{
+                                mMenu.setState({selectRowKey: toChatGroup.chatGroupId});
+                            }
+                        }
+                        i++;
                     })
                     mMenu.setState({"userMessageData": userMessageData});
+                    if(isEmpty(userMessageData)==false){
+                        mMenu.props.onLoad(userMessageData[0]);
+                    }
                 }
-                /* mMenu.setState({"userMessageData":userMessageData});
-                 mMenu.props.callbackSetFirstPerson(userContactsData);*/
             },
             onError: function (error) {
                 message.error(error);
@@ -137,12 +138,17 @@ const MessageMenu = React.createClass({
         var content = messageObj.content;
         var colUid = fromUser.colUid;
         var createTime = getLocalTime(messageObj.createTime);
-        var messageIndex = mMenu.checkMessageIsExist(colUid);
+        var messageIndex = -1;
         var messageToType = messageObj.toType;
         var contentJson = {"content": content, "createTime": createTime};
-        if (messageObj.toType == 1) {
+        if (messageToType == 1) {
+            messageIndex = mMenu.checkMessageIsExist(colUid);
+        }else{
+            messageIndex = mMenu.checkMessageIsExist(messageObj.toChatGroup.chatGroupId);
+        }
+        if (messageToType == 1) {
             //个人消息
-            if (colUid != parseInt(sessionStorage.getItem("ident")) && messageIndex == -1) {
+            if (messageIndex == -1) {
                 var contentArray = [contentJson];
                 var userJson = {
                     key: colUid,
@@ -210,12 +216,12 @@ const MessageMenu = React.createClass({
             <div>
                 <div className="menu_til">消息动态</div>
                 <Table showHeader={false} columns={columns} dataSource={mMenu.state.userMessageData}
+                       scroll={{ x: true, y: 430}}
                        rowClassName={mMenu.getRowClassName}
                        onRowClick={mMenu.turnToMessagePage}
                 />
             </div>
         );
     },
->>>>>>> 09e5508e89ff8ad54dc648f477f0f9e81d716959
 });
 export default MessageMenu;
