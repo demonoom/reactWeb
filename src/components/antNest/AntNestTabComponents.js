@@ -1342,12 +1342,13 @@ const AntNestTabComponents = React.createClass({
                               onConfirmModalOK={antNest.setTopicToTop}
                 ></ConfirmModal>
                 <div className="talk_ant_btn">
-                    <Breadcrumb separator=">">
+                    {/*<Breadcrumb separator=">">
                         <Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
                         <Breadcrumb.Item href="#/MainLayout">首页</Breadcrumb.Item>
                         <Breadcrumb.Item href="#/MainLayout">蚁巢</Breadcrumb.Item>
                         <Breadcrumb.Item href="#/MainLayout">{breadMenuTip}</Breadcrumb.Item>
-                    </Breadcrumb>
+                    </Breadcrumb>*/}
+                    <div className="public—til—blue">{breadMenuTip}</div>
                     {optionButton}
                 </div>
                 {topicList}

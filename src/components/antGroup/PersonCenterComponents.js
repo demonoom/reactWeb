@@ -1309,6 +1309,7 @@ const PersonCenterComponents = React.createClass({
             if (isEmpty(user.avatar) == false) {
                 userPhotoTag = <span className="person_user_bg">
                 <img src={user.avatar} className="person_user"/>
+                    <div style={{marginLeft:'10px'}}>{userName}</div>
             </span>;
                 <div></div>
             }
@@ -1415,6 +1416,7 @@ const PersonCenterComponents = React.createClass({
         var userPhoneCard;
         if (isEmpty(personCenter.state.userInfo) == false && personCenter.state.optType == "userDetail") {
             personDate = <div className="maaee_group_pa">
+                <div className="public—til—blue">{personCenter.state.userInfo.user.userName+'的个人中心'}</div>
                 <Card className="bai">
                     {userPhotoTag}
 
@@ -1771,7 +1773,7 @@ const PersonCenterComponents = React.createClass({
             personDate = tabComponent;
         }else if(personCenter.state.optType=="turnToAsk"){
             var currentPageLink = "http://www.maaee.com:80/Excoord_PhoneService/quiz/getUserAskedQuiz/" + personCenter.state.userInfo.user.colUid;
-            tabComponent = <Tabs
+            /*tabComponent = <Tabs
                 hideAdd
                 ref = "studentAskTab"
                 activeKey={this.state.activeKey}
@@ -1783,11 +1785,15 @@ const PersonCenterComponents = React.createClass({
                     <iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe>
                 </TabPane>
             </Tabs>;
-            personDate = tabComponent;
+            personDate = tabComponent;*/
+            personDate = <div style={{height:'502px'}}>
+                <div className="public—til—blue">{returnPersonCenterToolBar}{personCenter.state.userInfo.user.userName+'发起过的提问'}</div>
+                <iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe>
+            </div>
         }
         else if(personCenter.state.optType=="turnStudyTrack"){
             var currentPageLink = "http://www.maaee.com:80/Excoord_PhoneService/user/studytrack/" + personCenter.state.userInfo.user.colUid;
-            tabComponent = <Tabs
+            /*tabComponent = <Tabs
                 hideAdd
                 ref = "studentStudyTrackTab"
                 activeKey={this.state.activeKey}
@@ -1799,16 +1805,26 @@ const PersonCenterComponents = React.createClass({
                     <iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe>
                 </TabPane>
             </Tabs>;
-            personDate = tabComponent;
+            personDate = tabComponent;*/
+            personDate = <div style={{height:'502px'}}>
+                <div className="public—til—blue">{returnPersonCenterToolBar}{personCenter.state.userInfo.user.userName+'的学习轨迹'}</div>
+                <iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe>
+            </div>
         }else if(personCenter.state.optType=="userFavorite"){
-            personDate = <div>
-                    <div className="public—til—blue">{returnPersonCenterToolBar}标题显示</div>
+            personDate = <div style={{height:'525px'}}>
+                    <div className="public—til—blue">{returnPersonCenterToolBar}{personCenter.state.userInfo.user.userName+'的收藏'}</div>
                     <Favorites userid={personCenter.state.studentId} breadcrumbVisible={false}
                            onPreview={ this.props.onPreview }></Favorites>
                 </div>
         }else if(personCenter.state.optType=="getMyFollows"){
             var welcomeTitle=personCenter.state.userInfo.user.userName+"的关注";
-            personDate= <Tabs
+            personDate = <div style={{height:'502px'}}>
+                <div className="public—til—blue">{returnPersonCenterToolBar}{welcomeTitle}</div>
+                <div className="person_attention favorite_pa_le" >
+                {personCenter.state.followsUserArray}
+                </div>
+            </div>;
+            /*personDate= <Tabs
                 hideAdd
                 ref = "mainTab"
                 activeKey={this.state.activeKey}
@@ -1821,7 +1837,7 @@ const PersonCenterComponents = React.createClass({
                         {personCenter.state.followsUserArray}
                     </div>
                 </TabPane>
-            </Tabs>;
+            </Tabs>;*/
         }else if(personCenter.state.optType=="getLiveInfoByUid"){
             var  welcomeTitle=personCenter.state.userInfo.user.userName+"的直播课";
             var returnPersonCenterBar;
