@@ -25,6 +25,7 @@ class LessonPlans extends React.Component {
             currentKnowledgeName: '',
             dataFilter: 'self',
             subjectDataFilter: 'self',
+            courseWareParams: null,
             currentMenuChildrenCount: -1,
             toolbarExtenderDisplay: false
 
@@ -67,12 +68,23 @@ class LessonPlans extends React.Component {
         var optType = optContentArray[1];
         var knowledgeName = optContentArray[2];
         var pageNo = 1;
-        this.refs.courseWare.getTeachPlans(sessionStorage.getItem("ident"), teachScheduleId, optType, pageNo, knowledgeName, this.state.dataFilter);
+debugger
+        let params={
+            ident: sessionStorage.getItem("ident"),
+            teachScheduleId: teachScheduleId,
+            optType: optType,
+            pageNo: pageNo,
+            knowledgeName: knowledgeName,
+            dataFilter: this.state.dataFilter,
+            comeFrom: null,
+        }
+
         this.setState({
             activeKey: '课件',
             currentKnowledgeName: knowledgeName,
             currentTeachScheduleId: teachScheduleId,
             currentOptType: optType,
+            courseWareParams: params,
             subjectParams: sessionStorage.getItem("ident") + "#" + teachScheduleId + "#" + 1 + "#" + optType + "#" + knowledgeName + "#" + this.state.dataFilter
 
         });
@@ -85,8 +97,18 @@ class LessonPlans extends React.Component {
             var subjectParams = sessionStorage.getItem("ident") + "#" + this.state.currentTeachScheduleId + "#" + 1 + "#" + this.state.currentOptType + "#" + this.state.currentKnowledgeName + "#" + this.state.subjectDataFilter;
             this.setState({subjectParams:subjectParams});
         } else {
-            this.refs.courseWare.getTeachPlans(sessionStorage.getItem("ident"), this.state.currentTeachScheduleId, this.state.currentOptType, 1, this.state.currentKnowledgeName, this.state.dataFilter);
-            this.setState({activeKey: '课件'});
+
+            let params={
+                ident: sessionStorage.getItem("ident"),
+                teachScheduleId: this.state.currentTeachScheduleId,
+                optType: this.state.currentOptType,
+                pageNo: 1,
+                knowledgeName: this.state.currentKnowledgeName,
+                dataFilter: this.state.currentKnowledgeName,
+                comeFrom: this.state.dataFilter,
+            }
+            debugger
+            this.setState({activeKey: '课件',courseWareParams: params});
         }
     }
 
@@ -157,9 +179,7 @@ class LessonPlans extends React.Component {
         }
     }
 
-    setCurrentOptType(toolbarKey) {
 
-    }
 
 
     /**
@@ -171,7 +191,17 @@ class LessonPlans extends React.Component {
         var clickKey = `${key}`;
         if (this.state.activeKey == "课件") {
             this.setState({dataFilter: clickKey});
-            this.refs.courseWare.getTeachPlans(sessionStorage.getItem("ident"), this.state.currentTeachScheduleId, this.state.currentOptType, 1, this.state.currentKnowledgeName, clickKey);
+            let params={
+                ident: sessionStorage.getItem("ident"),
+                teachScheduleId: this.state.currentTeachScheduleId,
+                optType: this.state.currentOptType,
+                pageNo: 1,
+                knowledgeName: this.state.currentKnowledgeName,
+                dataFilter: clickKey,
+                comeFrom: this.state.dataFilter,
+            }
+            debugger
+            this.setState({activeKey: '课件',courseWareParams: params});
         } else {
             this.setState({subjectDataFilter: clickKey});
             var subjectParams = sessionStorage.getItem("ident") + "#" + this.state.currentTeachScheduleId + "#" + 1 + "#" + this.state.currentOptType + "#" + this.state.currentKnowledgeName + "#" + clickKey;
@@ -189,7 +219,17 @@ class LessonPlans extends React.Component {
             var subjectParams = sessionStorage.getItem("ident") + "#" + this.state.currentTeachScheduleId + "#" + 1 + "#" + this.state.currentOptType + "#" + this.state.currentKnowledgeName + "#" + this.state.subjectDataFilter + "#fromUpload";
             this.setState({subjectParams:subjectParams});
         } else {
-            this.refs.courseWare.getTeachPlans(sessionStorage.getItem("ident"), this.state.currentTeachScheduleId, this.state.currentOptType, 1, this.state.currentKnowledgeName, this.state.dataFilter, "fromUpload");
+            let params={
+                ident: sessionStorage.getItem("ident"),
+                teachScheduleId: this.state.currentTeachScheduleId,
+                optType: this.state.currentOptType,
+                pageNo: 1,
+                knowledgeName: this.state.currentKnowledgeName,
+                dataFilter: this.state.dataFilter,
+                comeFrom: "fromUpload",
+            }
+debugger
+            this.setState({activeKey: '课件',courseWareParams: params});
         }
     }
 
@@ -205,7 +245,6 @@ class LessonPlans extends React.Component {
             </Menu>
         );
 
-        console.log(this.state.currentOptType);
 
         switch (this.state.currentOptType) {
             case 'bySubjectId':
@@ -213,21 +252,22 @@ class LessonPlans extends React.Component {
                     <TabPane key="课件" tab={<span>我的资源<Dropdown overlay={menu} trigger={['click']} className='del_right'>
                             <a className="ant-dropdown-link icon_filter" href="#">
                                 <Icon type="down-circle-o"/></a></Dropdown></span>}>
-                        <CourseWareComponents ref="courseWare"/>
+                        <CourseWareComponents params={this.state.courseWareParams} />
                     </TabPane>;
 
                 subjectTabPanel =
                     <TabPane key="题目" tab={<span>我的题目<Dropdown overlay={menu} trigger={['click']} className='del_right'>
                 <a className="ant-dropdown-link icon_filter" href="#"><Icon
                     type="down-circle-o"/></a></Dropdown></span>}>
-                        <SubjectTable ref="subTable11" params={this.state.subjectParams}/></TabPane>;
+                        <SubjectTable   params={this.state.subjectParams}/>
+                    </TabPane>;
                 break;
 
 
             case 'bySchedule':
-                tabPanel = <TabPane tab="我的资源" key="课件"><CourseWareComponents ref="courseWare"/></TabPane>;
+                tabPanel = <TabPane tab="我的资源" key="课件"><CourseWareComponents params={this.state.courseWareParams}  /></TabPane>;
                 subjectTabPanel =
-                    <TabPane tab="我的题目" key="题目"><SubjectTable ref="subTable11" params={this.state.subjectParams}/></TabPane>
+                    <TabPane tab="我的题目" key="题目"><SubjectTable   params={this.state.subjectParams}/></TabPane>
                 break;
 
 
@@ -236,17 +276,15 @@ class LessonPlans extends React.Component {
 
         if (this.state.currentOptType == "bySubjectId" && sessionStorage.getItem("lastClickMenuChildrenCount") == 0 && sessionStorage.getItem("lastClickMenuId") != null) {
             toolbarExtra = <div className="ant-tabs-right">
-                <CourseWareUploadComponents courseUploadCallBack={this.courseUploadCallBack}
-                                            params={this.state.subjectParams}/>
-                <SubjectUploadByTextboxio courseUploadCallBack={this.courseUploadCallBack}
-                                          params={this.state.subjectParams}/>
+                <CourseWareUploadComponents courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}/>
+                <SubjectUploadByTextboxio courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}/>
             </div>;
         }
 
 
         return (
             <div>
-                <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
+                <UseKnowledgeComponents ref="useKnowledgeComponents" />
                 <Breadcrumb separator=">">
                     <Breadcrumb.Item><Icon type="home"/></Breadcrumb.Item>
                     { this.breadcrumbChildren}
@@ -255,7 +293,6 @@ class LessonPlans extends React.Component {
                     hideAdd
                     onChange={this.onChange}
                     onEdit={this.onEdit}
-                    ref="mainTab"
                     activeKey={this.state.activeKey}
                     defaultActiveKey={this.state.defaultActiveKey}
                     tabBarExtraContent={toolbarExtra}

@@ -26,7 +26,6 @@ const CreateExamPagerComponents = React.createClass({
         return {
             visible: false,
             optType: 'add',
-            editSchuldeId: createExamPager.props.editSchuldeId,
             checkedList: [],
             indeterminate: true,
             subjectTypeValue: '0',       //答题卡的题目类型，默认为选择题

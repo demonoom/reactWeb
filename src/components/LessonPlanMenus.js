@@ -6,7 +6,7 @@ import {getPageSize} from '../utils/Const';
 import ConfirmModal from './ConfirmModal';
 
 
-class MiddleMenuComponents extends React.Component{
+class LessonPlanMenus extends React.Component{
 
     constructor(props){
         super(props);
@@ -104,10 +104,9 @@ class MiddleMenuComponents extends React.Component{
                 </Menu>
             );
             if (i == 0) {
-                this.setState({
-                    currentMenu: ''+ e[0],
-                });
-                var optContent = e[0] + "#" + "bySchedule";
+
+                this.setState({ currentMenu: ''+ e[0] });
+                var optContent = e[0] + "#" + "bySchedule" + '#' + e[1]+ '#' + e[2];
                 this.props.callbackParent(optContent);
                 //div显示的内容过长时，使用title提示
                 if (e[1].length > 10) {
@@ -233,4 +232,4 @@ class MiddleMenuComponents extends React.Component{
     }
 };
 
-export default MiddleMenuComponents;
+export default LessonPlanMenus;

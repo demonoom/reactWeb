@@ -32,6 +32,13 @@ const CourseWareComponents = React.createClass({
     },
 
 
+    componentWillReceiveProps(nextProps) {
+        let obj = nextProps || this.props.params ? this.props.params : null;
+        if (!obj)   return;
+
+        this.getTeachPlans(obj.ident,obj.teachScheduleId,obj.optType,obj.pageNo,obj.knowledgeName,obj.dataFilter,obj.comeFrom);
+    },
+
 
     getTeachPlans(ident, teachScheduleId, optType, pageNo, knowledgeName, dataFilter, comeFrom){
         this.setState({
@@ -43,6 +50,7 @@ const CourseWareComponents = React.createClass({
         })
         let _this = this;
         var param;
+        debugger
         if (optType == "bySchedule") {
             param = {
                 "method": 'getMaterialsBySheduleId',
@@ -110,8 +118,9 @@ const CourseWareComponents = React.createClass({
                 "userId": userId,
                 "pointId": teachScheduleId,
                 "type": "-1",
-                "pageNo": pageNo,
+                "pageNo": pageNo || 1,
             };
+
             doWebService(JSON.stringify(param), {
                 onResponse: function (ret) {
                     let courseWareList = [];
