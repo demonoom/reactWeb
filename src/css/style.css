@@ -3420,7 +3420,8 @@ color:#ffbf00
 	border-radius:50%;
 	background:#8fc967;
 	padding:1px 0 0 3px  !important;
-	text-align:center
+	text-align:center;
+	display:inline-block
 }
 .star_span{
 	width:20px;
