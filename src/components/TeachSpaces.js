@@ -80,6 +80,7 @@ class TeachSpaces extends React.Component {
 
         var optContentArray = optContent.split("#");
         var childrenCount = optContentArray[3];
+        sessionStorage.setItem("lastClickMenuChildrenCount", parseInt(childrenCount));
         if (optContentArray[1] != "bySubjectId") {
             this.refs.tabComponent.buildBreadcrumb();
         } else {

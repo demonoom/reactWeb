@@ -153,7 +153,9 @@ const MainTabComponents = React.createClass({
     render() {
         var tabPanel;
         var subjectTabPanel;
+        debugger
         var displayType='none';
+        console.log("displayType================="+displayType);
         const menu = (
             <Menu onClick={this.menuItemOnClick}>
                 <Menu.Item key="self">只看自己</Menu.Item>
