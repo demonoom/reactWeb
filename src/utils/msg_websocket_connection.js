@@ -1,5 +1,4 @@
 import React, {PropTypes} from 'react';
-import {Modal, Button } from 'antd';
 
 export function MsgConnection(){
 	this.msgWsListener = null;

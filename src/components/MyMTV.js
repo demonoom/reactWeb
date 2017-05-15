@@ -173,10 +173,10 @@ class MyMTV extends React.Component {
             }
             if (user.colUid == sessionStorage.getItem("ident")) {
                 //如果是当前用户，可以删除自己的直播课
-                delButton = <Button icon="delete" className="right_ri star_del" onClick={ () => {
+                delButton = <Button icon="delete" className="star_del" onClick={ () => {
                     this.deleteLiveVideos(id)
                 } }/>
-                downloadBtn = <Button icon="download" className="right_ri star_del" onClick={ () => {
+                downloadBtn = <Button icon="download" className="star_del" onClick={ () => {
                     this.downloadLiveVideos(e)
                 } }/>
             }
@@ -193,13 +193,13 @@ class MyMTV extends React.Component {
                         <li className="li_live_span_3">
                             <span className="attention_img2"><img src={user.avatar}></img></span>
                             <span className="live_span_1 live_span_3">{userName}</span>
-                            <span className="right_ri live_span_2 time">{startTime}</span>
+							<span className="live_color live_orange right_ri live_span_2">{courseName}</span>    
                         </li>
                         <li>
-                            <span className="live_color live_orange">{courseName}</span>
                             {keyIcon}
                             {delButton}
                             {downloadBtn}
+							<span className="time right_ri">{startTime}</span>
                         </li>
                     </ul>
                 </div>

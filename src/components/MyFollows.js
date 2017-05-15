@@ -179,12 +179,15 @@ class MyFollows extends React.Component {
 
     // 返回个人中心
     returnPersonCenter() {
+
         if (!this.currentUser) {
             this.currentUser = this._getCurrentLoginUserInfo();
             this.previouUsers = [];
+        } else {
+            this.currentUser = this.previouUsers.pop();
         }
+            this.viewProsenInfo(this.currentUser);
 
-        this.viewProsenInfo(this.currentUser);
     }
 
     // 返回有多级的个人中心
@@ -245,7 +248,7 @@ class MyFollows extends React.Component {
         if (!this.notInterProsonCenter()) {
             this.title = <h3 className="public—til—blue">
                 <div className="ant-tabs-right">
-                    <Button onClick={this.returnParentPersonCenter}><Icon type="left"/></Button>
+                    <Button onClick={this.returnPersonCenter}><Icon type="left"/></Button>
                 </div>
                 {this.userinfo.userName}关注列表</h3>;
         } else {
