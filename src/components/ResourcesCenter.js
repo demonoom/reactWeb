@@ -35,7 +35,11 @@ class ResourcesCenter extends React.Component{
         this.onChange = this.onChange.bind(this);
         this.showContent = this.showContent.bind(this);
         this.getTeachPlans = this.getTeachPlans.bind(this);
-
+        this.showModal = this.showModal.bind(this);
+        this.buildBreadcrumb= this.buildBreadcrumb.bind(this);
+        this.menuItemOnClick = this.menuItemOnClick.bind(this);
+        this.courseUploadCallBack = this.courseUploadCallBack.bind(this);
+        this.render = this.render.bind(this);
     }
 
 
