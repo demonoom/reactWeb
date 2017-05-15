@@ -113,7 +113,7 @@ class LessonPlanMenus extends React.Component{
                 _this.props.callbackParent(optContent);
                 //div显示的内容过长时，使用title提示
                 if (e[1].length > 10) {
-                    return <Menu.Item key={e[0]} style={{backgroundColor: '#e5f2fe'}}>
+                    return <Menu.Item key={e[0]} >
                         <div title={e[1]} className="submenu_left_hidden title_1">{e[1]}</div>
                         <Dropdown overlay={menu} trigger={['click']} className='del_right'><i
                             className="iconfont iconfont_more">&#xe60e;</i></Dropdown>

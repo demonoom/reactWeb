@@ -62,7 +62,7 @@ const HomeWorkTabComponents = React.createClass({
 
         return (
             <div>
-                <h3 className="public—til—blue">{returnBtn}{this.state.activeKey}</h3>
+                <h3 className="public—til—blue">{returnBtn}{this.state.activeKey}{returnBtn2}</h3>
                  <div className="favorite_scroll">{tabPanel}</div>
             </div>
         );
