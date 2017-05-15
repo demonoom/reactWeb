@@ -415,7 +415,6 @@ const AssignHomeWorkComponents = React.createClass({
                             <div>
                                 <Row>
                                     <Col span={24}>
-                                        <div>
                                             <Button type="add_study add_study-b"
                                                     onClick={assignHomeWork.showSubjectModal}><Icon
                                                 type="check-circle-o"/>选择题目</Button>
@@ -424,7 +423,7 @@ const AssignHomeWorkComponents = React.createClass({
                                                     onClick={assignHomeWork.removeAllSelectedSubject}>删除已选题目</Button>
                                                 {hasSelected ? `已选中 ${assignHomeWork.state.selectedSubjectKeysForTable.length} 条记录` : ''}
                                             </div>
-                                            <Table rowSelection={selectedSubjectRowSelection}
+                                            <div><Table rowSelection={selectedSubjectRowSelection}
                                                    columns={selectedSubjectColumns}
                                                    dataSource={assignHomeWork.state.selectedSubjectData} pagination={{
                                                 total: assignHomeWork.state.selectedSubjectTotalCount,
