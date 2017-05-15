@@ -227,7 +227,7 @@ const TeacherAllSubjects = React.createClass({
         };
         const hasSelected = selectedRowKeys.length > 0;
         return (
-            <div className='ant-tabs ant-tabs-top ant-tabs-line'>
+            <div className='ant-tabs ant-tabs-top ant-tabs-line8888888'>
                 <div className="public—til—blue">我的题目</div>
                 <ConfirmModal ref="confirmModal"
                               title="确定要删除该题目?"
