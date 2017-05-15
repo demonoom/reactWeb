@@ -49,7 +49,7 @@ class GhostMenu extends React.Component {
 
 
     // teachingAdmin panel
-    showpanel() {
+    showpanel(event) {
 
         this.onMenu(event);
 
