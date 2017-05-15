@@ -1318,7 +1318,7 @@ const AntGroupTabComponents = React.createClass({
 
 
     view: function (objref) {
-        debugger
+
         if (!objref.liveVideos[0]) {
             message.info("无效的视频！");
             return;

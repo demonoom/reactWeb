@@ -243,6 +243,11 @@ const MyFollowExtend = React.createClass({
         return uuid;
     },
 
+    // 侧边预览
+    onPreview(obj) {
+        LP.Start(obj);
+    },
+
     /**
      * 进入收发消息的窗口
      * @param user
@@ -1316,8 +1321,8 @@ const MyFollowExtend = React.createClass({
     },
 
     view: function (e, videosObj, title) {
-        let obj = {mode: 'html', flvjs: flvjsobj, param: videosObj, title: title, url: "", width: '380px',}
-        this.props.onPreview(obj)
+        let obj = {mode: 'html', flvjs: flvjsobj, param: videosObj, title: title, url: "", width: '380px'}
+        this.onPreview(obj)
     },
 
 
