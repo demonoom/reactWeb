@@ -70,9 +70,8 @@ const ExamPagerTabComponents = React.createClass({
 
         return (
             <div>
-                <h3 className="public—til—blue">{this.state.activeKey}</h3>
-                {secondBtn}
-                {tabPanel}
+                <h3 className="public—til—blue">{this.state.activeKey}<span className="right_btn_new">{secondBtn}</span></h3>
+                 <div className="favorite_scroll">{tabPanel}</div>
             </div>
 
         );

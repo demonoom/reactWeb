@@ -1866,7 +1866,7 @@ const UpdateExamPagerComponents = React.createClass({
 
     render() {
         return (
-            <div>
+            <div className="follow_my">
                 <ConfirmModal ref="confirmModal"
                               title="确定要删除该题目?"
                               onConfirmModalCancel={createExamPager.closeConfirmModal}

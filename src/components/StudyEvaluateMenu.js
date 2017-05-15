@@ -48,8 +48,7 @@ const StudyEvaluateMenu = React.createClass({
                       selectedKeys={['studyEvaluate']}
                       mode="inline"
                 >
-                    <Menu.Item key="studyEvaluate" style={{backgroundColor: '#e5f2fe'}}> <span><Icon type="mail"
-                                                                                                     className='le_1'/><span>学情分析</span></span>
+                    <Menu.Item key="studyEvaluate" style={{backgroundColor: '#e5f2fe'}}> <span><Icon type="mail" className='le_1'/><span>学情分析</span></span>
                     </Menu.Item>
                 </Menu>
             </div>

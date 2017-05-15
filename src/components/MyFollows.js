@@ -277,7 +277,7 @@ class MyFollows extends React.Component {
             <div>
                 { this.title}
                 { this.gobackBtn}
-            <div className={' favorite_up favorite_scroll ' + this.originHeight}>{ this.htmlTempletContent }</div>
+            <div className={' favorite_up favorite_scroll favorite_le_h guanzhu ' + this.originHeight}>{ this.htmlTempletContent }</div>
             </div>
         );
     }

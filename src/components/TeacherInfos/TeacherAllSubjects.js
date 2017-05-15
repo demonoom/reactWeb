@@ -227,13 +227,14 @@ const TeacherAllSubjects = React.createClass({
         };
         const hasSelected = selectedRowKeys.length > 0;
         return (
-            <div className='ant-tabs ant-tabs-top ant-tabs-line'>
+            <div className='ant-tabs ant-tabs-top ant-tabs-line8888888'>
                 <div className="public—til—blue">我的题目</div>
                 <ConfirmModal ref="confirmModal"
                               title="确定要删除该题目?"
                               onConfirmModalCancel={this.closeConfirmModal}
                               onConfirmModalOK={this.delMySubjects}
                 />
+				<div className="favorite_scroll">
                 <div className='ant-tabs-tabpane ant-tabs-tabpane-active'>
                     <SubjectEditByTextboxioTabComponents ref="subjectEditTabComponents"
                                                          subjectEditCallBack={this.subjectEditCallBack}/>
@@ -244,6 +245,7 @@ const TeacherAllSubjects = React.createClass({
                         onChange: this.pageOnChange
                     }} scroll={{y: 400}}/>
                 </div>
+				</div>
             </div>
         );
     },
