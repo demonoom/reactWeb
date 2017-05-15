@@ -727,7 +727,7 @@ html, body, #root {
 	float:left;
 }
 .bnt2_tex span.col1{
-	color:#b3b3b3;
+	color:#999;
 	word-break:break-all;
 	word-wrap:break-word;
 	white-space: pre-wrap;
