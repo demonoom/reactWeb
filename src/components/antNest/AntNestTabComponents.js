@@ -130,11 +130,11 @@ const AntNestTabComponents = React.createClass({
         var attachMentsArray=[];
         //遍历点赞和回复的信息
         //如果当前用户未点赞，则使用空心按钮表示，按钮点击功能表示“取消点赞”
-        var praiseButton=<Button className="topics_btn antnest_talk teopics_spa" icon="like-o" value={topicObj.id} onClick={antNest.praiseForTopic}>点赞</Button>;
+        var praiseButton=<Button className="topics_btn antnest_talk teopics_spa " icon="like-o" value={topicObj.id} onClick={antNest.praiseForTopic}>点赞</Button>;
         topicObj.comments.forEach(function (e) {
             if(e.type==1){
                 //点赞
-                var likeUserInfo = <span style={{marginRight:'10px'}}>{e.user.userName}</span>;
+                var likeUserInfo = <span className="yichao_blue" style={{marginRight:'10px'}}>{e.user.userName}</span>;
                 likeUsersArray.push(likeUserInfo);
                 likeUsersInfoArray.push(e.user);
             }else{
@@ -202,7 +202,7 @@ const AntNestTabComponents = React.createClass({
         if(likeUsersArray.length!=0 && answerUsersArray.length!=0){
             replayCard = <div>
                 <ul className="toppics_ul_bg topics_bor_bot">
-                    <span><Button icon="like" className="topics_btn"></Button> {likeUsersArray}</span>
+                    <span><Button icon="like" className="topics_btn yichao_blue"></Button> {likeUsersArray}</span>
                 </ul>
                 <ul className="toppics_ul_bg">
                     {answerUsersArray}
@@ -255,7 +255,7 @@ const AntNestTabComponents = React.createClass({
                 topicReplayInfo.comments.forEach(function (e) {
                     if(e.type==1){
                         //点赞
-                        var likeUserInfo = <span style={{marginRight:'10px'}}>{e.user.userName}</span>;
+                        var likeUserInfo = <span className="yichao_blue" style={{marginRight:'10px'}}>{e.user.userName}</span>;
                         replayLikeUsersArray.push(likeUserInfo);
                         replayLikeUsersInfoArray.push(e.user);
                     }else{
@@ -349,7 +349,7 @@ const AntNestTabComponents = React.createClass({
                 var topicReplayCard = <div  style={{ marginBottom: '15px' }}>
                     <div style={{marginLeft:'0'}} className="antnest_user">{replayUserHeadPhoto}</div>
                     <ul>
-					    <li className="antnest_name">{topicReplayInfo.fromUser.userName}</li>
+					    <li className="antnest_name yichao_blue">{topicReplayInfo.fromUser.userName}</li>
                        <li>  {topicReplayInfo.content}</li>
                         <li >{replayAttachMentsArray}</li>
 						<li className="topics_bot"><span className="topics_time">{getLocalTime(topicReplayInfo.createTime)}</span><span className="topics_dianzan">
@@ -370,7 +370,7 @@ const AntNestTabComponents = React.createClass({
 		 <div className="antnest_user">{userHeadPhoto}</div>
              <ul>
                  <li>
-                         <span className="antnest_name">{topicObj.fromUser.userName}</span>
+                         <span className="antnest_name yichao_blue">{topicObj.fromUser.userName}</span>
                          <span>{topicTitle}</span>
                  </li>
                  <li className="topics_cont">
@@ -1272,12 +1272,12 @@ const AntNestTabComponents = React.createClass({
         var topicList;
         if(antNest.state.optType=="getTopicById"){
             optionButton = <div className="public—til—blue">
-                <div className="ant-tabs-right talk_ant_btn1">
+                <div className="ant-tabs-right">
                     <Button onClick={antNest.returnTopicList}><Icon type="left" /></Button>
                 </div>话题详情</div>;
         }else{
             optionButton = <div className="public—til—blue">
-                    <div className="ant-tabs-right talk_ant_btn1">
+                    <div className="talk_ant_btn1">
                         <Button value="talk" onClick={antNest.showaddTopicModal} className="antnest_talk">发表说说</Button>
                         <Button value="topic" onClick={antNest.showaddTopicModal}>发表话题</Button>
                     </div>

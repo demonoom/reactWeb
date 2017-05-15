@@ -2073,12 +2073,12 @@ a.topics:hover{
 	margin-bottom:2px;
 }
 .antnest-card .ant-card-body ul li.topics_cont{
-	padding: 1px 0 3px;
+	padding: 6px 0 8px;
     overflow: hidden;
     line-height: 23px;
     word-wrap: break-word;
 	font-size:16px;
-	color:#666;
+	color:#424242
 }
 .antnest-card .ant-card-body ul li.topics_bot{
 	margin:7px 0; 
@@ -2111,7 +2111,7 @@ a.topics:hover{
 .topics_time{
 	margin-right:12px;
 	color:#a0a0a0;
-	font-size:12px;
+	font-size:14px;
 }
 .topics_dianzan{
 	float:right;
@@ -2146,6 +2146,9 @@ a.topics:hover{
 	line-height:23px;
 	
 } 
+.topics_comment span{
+	font-size:14px;
+}
 .topics_btn{
 	border:none;
 	padding:0 !important;
@@ -3629,8 +3632,8 @@ color:#ffbf00
 .talk_ant_btn1{
 	display: inline-block;
     position: absolute;
-    top: 2px;
-    right: 20px;
+    top: -1px;
+    right: 12px;
 }
 .maaee_group_pa{
 	padding:24px 24px 0 24px;
@@ -3683,7 +3686,7 @@ color:#ffbf00
 	margin-left:46px;
 }
 .mes_u_l div{
-	padding:5px 0 0 0;
+	padding:4px 0 0 0;
 	height: 21px;
 }
 .mes_u_l div span:first-child{
@@ -3696,12 +3699,12 @@ color:#ffbf00
 	font-size:12px;
 }
 .time_w{
-	width:60px;
+	width:40px;
 	overflow:hidden;
 	text-align: right;
 }
 .message_name{
-	width:100px;
+	width:125px;
 	overflow:hidden;
 	text-overflow:ellipsis;
 	white-space:nowrap;
@@ -3722,4 +3725,8 @@ color:#ffbf00
     position: absolute;
     right: 12px;
     top: -2px;
+}
+.yichao_blue{
+	color:#607fa6 !important;
+	font-size:14px;
 }

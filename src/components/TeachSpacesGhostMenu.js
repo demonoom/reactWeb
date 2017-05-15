@@ -49,7 +49,7 @@ class GhostMenu extends React.Component {
 
 
     // teachingAdmin panel
-    showpanel() {
+    showpanel(event) {
 
         this.onMenu(event);
 
@@ -115,7 +115,7 @@ class GhostMenu extends React.Component {
                             </li>
                         </ul>
                     </li>
-                    <li><Icon type="exception"/>其它</li>
+                    <li><Icon type="exception"/>更多</li>
                     <li className="multi">
                         <ul className="second">
                             <li onClick={ event => {

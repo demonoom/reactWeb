@@ -190,7 +190,7 @@ class ResourcesCenter extends React.Component{
         var tabPanel;
         var subjectTabPanel;
         var toolbarExtra = null;
-        debugger
+
         const menu = (
             <Menu onClick={this.menuItemOnClick}>
                 <Menu.Item key="self">只看自己</Menu.Item>

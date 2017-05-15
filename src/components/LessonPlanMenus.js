@@ -143,7 +143,7 @@ class LessonPlanMenus extends React.Component{
             }
 
         });
-        debugger
+
         this.setState({menuChildren:_this.children});
     }
 
@@ -195,7 +195,7 @@ class LessonPlanMenus extends React.Component{
 
 
     handleMenu(){
-        debugger
+
         this.getLessonMenu(this.state.currentPage);
     }
 
