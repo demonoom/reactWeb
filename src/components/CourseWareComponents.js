@@ -8,13 +8,11 @@ import ConfirmModal from './ConfirmModal';
 const Panel = Collapse.Panel;
 
 
-const CourseWareComponents = React.createClass({
-     activeKey : [],
-     coursePanelChildren: null,
+class CourseWare extends React.Component {
 
-    getInitialState() {
-
-        return {
+    constructor(props) {
+        super(props);
+        this.state = {
             currentPage: 1,
             totalCount: 0,
             ident: sessionStorage.getItem("ident"),
@@ -22,22 +20,29 @@ const CourseWareComponents = React.createClass({
             optType: '',
             knowledgeName: '',
             dataFilter: 'self',
-            isDeleteAllSubject: false,   //是否同步删除资源库下的题目
-        };
+            isDeleteAllSubject: false
 
-    },
+        }
+
+        this.activeKey = [];
+        this.coursePanelChildren = null;
+
+    }
+
+
 
     componentWillMount(){
+
         this.setState({courseListState: [],totalCount: 0});
-    },
+    }
 
 
     componentWillReceiveProps(nextProps) {
-        let obj = nextProps || this.props.params ? this.props.params : null;
+        // 4
+        let obj = nextProps.params  ? nextProps.params : this.props.params;
         if (!obj)   return;
-
         this.getTeachPlans(obj.ident,obj.teachScheduleId,obj.optType,obj.pageNo,obj.knowledgeName,obj.dataFilter,obj.comeFrom);
-    },
+    }
 
 
     getTeachPlans(ident, teachScheduleId, optType, pageNo, knowledgeName, dataFilter, comeFrom){
@@ -59,6 +64,7 @@ const CourseWareComponents = React.createClass({
             };
             doWebService(JSON.stringify(param), {
                 onResponse: function (ret) {
+                    debugger
                     let courseWareList = [];
                     _this.activeKey = [];
                     courseWareList.splice(0);
@@ -122,7 +128,11 @@ const CourseWareComponents = React.createClass({
             };
 
             doWebService(JSON.stringify(param), {
+
+
                 onResponse: function (ret) {
+                    debugger
+
                     let courseWareList = [];
                     _this.activeKey = [];
                     courseWareList.splice(0);
@@ -174,11 +184,13 @@ const CourseWareComponents = React.createClass({
 
             });
         }
-    },
-    getLocalTime: function (nS) {
+    }
+
+
+    getLocalTime (nS) {
         var newDate = new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/, ' ');
         return newDate;
-    },
+    }
 
     onChange(page) {
         this.getTeachPlans(this.state.ident, this.state.teachScheduleId, this.state.optType, page, this.state.knowledgeName, this.state.dataFilter);
@@ -186,9 +198,9 @@ const CourseWareComponents = React.createClass({
             currentPage: page,
         });
 
-    },
+    }
 
-    showModal: function (e) {
+    showModal (e) {
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             target = e.currentTarget;
@@ -197,11 +209,11 @@ const CourseWareComponents = React.createClass({
         }
         var currentSchedule = target.value;
         this.refs.useKnowledgeComponents.showModal(currentSchedule, "courseWare", this.state.knowledgeName);
-    },
+    }
 
     isDeleteAll(e){
         this.setState({isDeleteAllSubject: e.target.checked});
-    },
+    }
 
     showDelScheduleMateriaConfirmModal(e){
         var target = e.target;
@@ -213,16 +225,17 @@ const CourseWareComponents = React.createClass({
         var materialIds = target.value;
         this.setState({"delMaterialIds": materialIds});
         this.refs.delScheduleMateriaConfirmModal.changeConfirmModalVisible(true);
-    },
+    }
 
     closeDelScheduleMateriaConfirmModal(){
         this.refs.delScheduleMateriaConfirmModal.changeConfirmModalVisible(false);
-    },
+    }
+
 
     deleteScheduleMaterials(){
         this.deleteScheduleMaterialsById(this.state.delMaterialIds);
         this.closeDelScheduleMateriaConfirmModal();
-    },
+    }
 
     //删除教学进度下的材料（课件）
     deleteScheduleMaterialsById(materialIds){
@@ -251,7 +264,7 @@ const CourseWareComponents = React.createClass({
                 }
             });
         }
-    },
+    }
 
     showConfirmModal(e){
         var target = e.target;
@@ -263,16 +276,16 @@ const CourseWareComponents = React.createClass({
         var materialIds = target.value;
         this.setState({"delMaterialIds": materialIds});
         this.refs.confirmModal.changeConfirmModalVisible(true);
-    },
+    }
 
     closeConfirmModal(){
         this.refs.confirmModal.changeConfirmModalVisible(false);
-    },
+    }
 
     batchDeleteMaterial(){
         this.batchDeleteMaterialById(this.state.delMaterialIds);
         this.closeConfirmModal();
-    },
+    }
 
     //删除资源库下的材料（课件）
     batchDeleteMaterialById(materialIds){
@@ -306,9 +319,9 @@ const CourseWareComponents = React.createClass({
         });
         this.setState({isDeleteAllSubject: false});
 
-    },
+    }
 
-    view: function (e, url, tit) {
+    view (e, url, tit) {
         e = e || window.event;
         if (e.nativeEvent) {
             e.nativeEvent.stopImmediatePropagation();
@@ -318,9 +331,9 @@ const CourseWareComponents = React.createClass({
         e.cancelBubble = true;
         let obj = {title: tit, url: url, width: '380px'}
         LP.Start(obj);
-    },
+    }
 
-    buildPanels: function (courseWareList) {
+    buildPanels (courseWareList) {
         if (courseWareList.length == 0) {
             this.coursePanelChildren = <img className="noDataTipImg" src={require('./images/noDataTipImg.png')}/>;
         } else {
@@ -361,17 +374,18 @@ const CourseWareComponents = React.createClass({
                 </Panel>
             });
         }
-    },
+    }
 
-    downLoadFile: function (e) {
+
+    downLoadFile (e) {
         window.open(e.target.value);
-    },
+    }
 
-    viewFile: function (e) {
+    viewFile (e) {
         window.location.href = e.target.value;
-    },
+    }
 
-    buildKonwledgePanels: function (courseWareList) {
+    buildKonwledgePanels (courseWareList) {
         if (courseWareList.length == 0) {
             this.coursePanelChildren =
                 <img className="noDataTipImg" onClick={$.openPhotoGallery} src={require('./images/noDataTipImg.png')}/>;
@@ -422,9 +436,9 @@ const CourseWareComponents = React.createClass({
                 </Panel>
             });
         }
-    },
+    }
 
-    render: function () {
+    render () {
         $(".ant-menu-submenu-title").each(function () {
             if ($(this)[0].textContent == sessionStorage.getItem("lastClickMenuName")) {
                 $(this).css("background-color", "#e5f2fe");
@@ -458,8 +472,8 @@ const CourseWareComponents = React.createClass({
                             onChange={this.onChange}/>
             </div>
         );
-    },
+    }
 
-});
+};
 
-export default CourseWareComponents;
+export default CourseWare;

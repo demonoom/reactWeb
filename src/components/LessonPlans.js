@@ -37,7 +37,7 @@ class LessonPlans extends React.Component {
 
 
     componentWillMount() {
-      
+
         if (this.props.refData) {
             this.buildBreadcrumb(this.props.refData.optContent.split("#"));
         } else {
@@ -49,7 +49,7 @@ class LessonPlans extends React.Component {
 
 
     componentWillReceiveProps(nextProps) {
-       let obj = nextProps || this.props.refData ? this.props.refData : null;
+        let obj = nextProps || this.props.refData ? this.props.refData : null;
         if (!obj)   return;
 
         this.buildBreadcrumb(obj.optContent.split("#"));
@@ -58,17 +58,17 @@ class LessonPlans extends React.Component {
 
 
     getTeachPlans(optContent) {
-      
+
         optContent = optContent || this.props.refData ? this.props.refData.optContent : null;
         if (!optContent)   return;
 
-      
+
         var optContentArray = optContent.split("#");
         var teachScheduleId = optContentArray[0];
         var optType = optContentArray[1];
         var knowledgeName = optContentArray[2];
         var pageNo = 1;
-debugger
+
         let params={
             ident: sessionStorage.getItem("ident"),
             teachScheduleId: teachScheduleId,
@@ -91,7 +91,7 @@ debugger
     }
 
     onChange(activeKey) {
-      
+
         if (activeKey == "题目") {
             this.setState({activeKey: '题目'});
             var subjectParams = sessionStorage.getItem("ident") + "#" + this.state.currentTeachScheduleId + "#" + 1 + "#" + this.state.currentOptType + "#" + this.state.currentKnowledgeName + "#" + this.state.subjectDataFilter;
@@ -107,7 +107,7 @@ debugger
                 dataFilter: this.state.currentKnowledgeName,
                 comeFrom: this.state.dataFilter,
             }
-            debugger
+
             this.setState({activeKey: '课件',courseWareParams: params});
         }
     }
@@ -166,7 +166,7 @@ debugger
 
         this.breadcrumbChildren = breadcrumbArray.map((e, i) => {
             let keyref = e.menuId + "*" + e.menuLevel + "*" + e.openKeysStr;
-           let htm =  <Breadcrumb.Item key={keyref}><a id={keyref}>{e.hrefText}</a></Breadcrumb.Item>;
+            let htm =  <Breadcrumb.Item key={keyref}><a id={keyref}>{e.hrefText}</a></Breadcrumb.Item>;
             return htm;
         });
 
@@ -187,7 +187,7 @@ debugger
      * @param key 被点击menu item的key
      */
     menuItemOnClick({key}) {
-        
+
         var clickKey = `${key}`;
         if (this.state.activeKey == "课件") {
             this.setState({dataFilter: clickKey});
@@ -200,7 +200,7 @@ debugger
                 dataFilter: clickKey,
                 comeFrom: this.state.dataFilter,
             }
-            debugger
+
             this.setState({activeKey: '课件',courseWareParams: params});
         } else {
             this.setState({subjectDataFilter: clickKey});
@@ -214,7 +214,7 @@ debugger
      * 课件上传成功后的回调函数
      */
     courseUploadCallBack() {
-      
+
         if (this.state.activeKey == "题目") {
             var subjectParams = sessionStorage.getItem("ident") + "#" + this.state.currentTeachScheduleId + "#" + 1 + "#" + this.state.currentOptType + "#" + this.state.currentKnowledgeName + "#" + this.state.subjectDataFilter + "#fromUpload";
             this.setState({subjectParams:subjectParams});
@@ -228,7 +228,7 @@ debugger
                 dataFilter: this.state.dataFilter,
                 comeFrom: "fromUpload",
             }
-debugger
+
             this.setState({activeKey: '课件',courseWareParams: params});
         }
     }

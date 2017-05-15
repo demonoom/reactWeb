@@ -74,7 +74,6 @@
         exitFull();
 
     }
-
     littlePanle.prototype.closepanle = function (id) {
         let tmp = [];
         LP.mgr.map(function (item, index) {
@@ -92,13 +91,36 @@
         }
     }
 
-    littlePanle.prototype._showIframeTemplet = function (obj) {
-        var objtemplet = this._iframeTemplet(obj);
+
+    littlePanle.prototype._teachAdminIframe_HtmlTemplet = function (obj) {
+
+        let id = UUID(8, 16);
+        this.id = id;
+        this.ifrid = 'ifr' + id;
+        this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show">
+                <div class="header draggable">
+                <h3 class="title">${ obj.title }</h3>
+                    <div class="little-tilte">
+                        <a class="close"><i className="iconfont iconfont_close">&#xe615;</i></a>
+                        <a class="zoom"><i className="iconfont iconfont_more">&#xe67e;</i></a>
+                        <a class="back"><i className="iconfont iconfont_more1">&lt;</i></a>
+                        <a class="forward"><i className="iconfont iconfont_more2">&gt;</i></a>
+                        
+                    </div>
+                </div>
+                <div class="content">
+                    <section class="littleAnt-iframe-panle">
+                        <iframe  border={0} id="${this.ifrid}"  src="${ obj.url }"  ></iframe>
+                    </section>
+                </div>
+                </div>`;
+
+
         let styleObj = this.calcPos(this.param.stylePage, this.param.stylePage.zIndex, this.param.orderIndex);
 
-        objtemplet.htm = $(objtemplet.htm).css(styleObj);
-        $(document.body).append(objtemplet.htm);
-        this.el = $('#' + objtemplet.id);
+        this.htm = $(this.htm).css(styleObj);
+        $(document.body).append(this.htm);
+        this.el = $('#' + this.id);
         $(this.el).drag();
         $(this.el).find('.close').on('click', this.closepanle.bind(this, this.id));
         $(this.el).find('.zoom').on('click', this.zoomview.bind(this, this.id));
@@ -106,14 +128,16 @@
         $(this.el).find('.forward').on('click', this.historyControler.bind(this, this.id, 1));
         $(this.el).find('.enterFull').on('click', enterFull);
         $(this.el).find('.exitFull').on('click', exitFull);
-        this.ifrel = $('#' + objtemplet.ifrid);
+        this.ifrel = $('#' + this.ifrid);
 
-        this.ifrel.on('load', this._iframeonloadevent.bind(this, objtemplet.ifrid));
+        this.ifrel.on('load', this._iframeonloadevent.bind(this, this.ifrid));
 
         return this;
     }
-    littlePanle.prototype._iframeTemplet = function (obj) {
 
+
+
+    littlePanle.prototype._showIframeTemplet = function (obj) {
         let id = UUID(8, 16);
         this.id = id;
         this.ifrid = 'ifr' + id;
@@ -133,8 +157,26 @@
                 </div>
                 </div>`;
 
-        return {htm: this.htm, id: this.id, ifrid: this.ifrid};
+        var objtemplet = {htm: this.htm, id: this.id, ifrid: this.ifrid};
+        let styleObj = this.calcPos(this.param.stylePage, this.param.stylePage.zIndex, this.param.orderIndex);
+
+        objtemplet.htm = $(objtemplet.htm).css(styleObj);
+        $(document.body).append(objtemplet.htm);
+        this.el = $('#' + objtemplet.id);
+        $(this.el).drag();
+        $(this.el).find('.close').on('click', this.closepanle.bind(this, this.id));
+        $(this.el).find('.zoom').on('click', this.zoomview.bind(this, this.id));
+        $(this.el).find('.back').on('click', this.historyControler.bind(this, this.id, -1));
+        $(this.el).find('.forward').on('click', this.historyControler.bind(this, this.id, 1));
+        $(this.el).find('.enterFull').on('click', enterFull);
+        $(this.el).find('.exitFull').on('click', exitFull);
+        this.ifrel = $('#' + objtemplet.ifrid);
+
+        this.ifrel.on('load', this._iframeonloadevent.bind(this, objtemplet.ifrid));
+
+        return this;
     }
+
     littlePanle.prototype._iframeonloadevent = function (id, event) {
 
         event.target.contentWindow.phone = phone;
@@ -143,8 +185,50 @@
 
     littlePanle.prototype._showHtmlFlv = function (obj) {
 
-        let resultObj = this._HtmlFlvTemplet();
-        var htm = resultObj.htm;
+        let id = UUID(8, 16);
+        this.id = id;
+        let vid = 'v' + this.id;
+        let videoArr = this.param.videosObj;
+        if ((videoArr instanceof Array) == false) {
+            videoArr = videoArr.liveInfo.liveVideos;
+        }
+        let listBtn = [];
+        window.srcList = [];
+        let classChange = 'single';
+
+        if (videoArr.length > 1) {
+            classChange = 'multi';
+            videoArr.map(function (video, i) {
+                i++;
+                window.srcList.push({type: 'video/x-flv', src: video.path});
+                listBtn.push("<a class='listBtn' >" + i + "</a>");
+            });
+        } else {
+            let flv = videoArr[0];
+            window.srcList.push({type: 'video/x-flv', src: flv.path});
+        }
+
+
+        let htm = `<div id="${id}" class="dialog little-layout-aside-r-show">
+                <div class="header draggable">
+                <h3 class="title">${ this.param.title }</h3>
+                    <div class="little-tilte">
+                        <a class="close"><i className="iconfont iconfont_close">&#xe615;</i></a>
+                    </div>
+                </div>
+                <div class="content">
+                    <section class="littleAnt-iframe-panle ${classChange}">
+                       <video id="${vid}" class="video-js vjs-default-skin vjs-big-play-centered"
+                       src="${window.srcList[0].src}"   data-setup='{}'></video>
+                       <div class="list-group" >${listBtn.join('')}</div>
+                    </section>
+                </div>
+                </div>`;
+
+
+        Obj = {htm: htm, id: vid, srcList: window.srcList, listBtn: listBtn};
+
+
         let styleObj = this.calcPos(this.param.stylePage, this.param.stylePage.zIndex, this.param.orderIndex);
         htm = $(htm).css(styleObj);
         $(document.body).append(htm);
@@ -162,21 +246,20 @@
             techOrder: ['html5', 'flash']
         };
 
-        var playerA = videojs(resultObj.id, options, function () {
+        var playerA = videojs(this.id, options, function () {
             this.play();
             this.on('ended', function () {
             });
         });
 
         $('.list-group a').on("click", function () {
-            let newsrc = resultObj.srcList[parseInt($(this).text()) - 1];
+            let newsrc = this.id.srcList[parseInt($(this).text()) - 1];
             playerA.src(newsrc);
         });
 
 
         return this;
     }
-
     littlePanle.prototype._HtmlFlvTemplet = function () {
 
         let id = UUID(8, 16);
@@ -224,10 +307,13 @@
 
     littlePanle.prototype.GetLP = function (obj, oldArray) {
 
-        this.param.url = obj.url;
+        this.param.mode = obj.mode || '';
+        this.param.htmlMode = obj.htmlMode || '';
+        this.param.width = obj.width || '';
+        this.param.videosObj = obj.param;
         this.param.title = obj.title;
         this.param.flvjs = obj.flvjs;
-        this.param.videosObj = obj.param;
+        this.param.url = this._setProxyInfo(obj.url);
 
         let maxIndex = () => {
             let refindex = 0;
@@ -246,33 +332,35 @@
 
         this.param.orderIndex = oldArray.length;
         this.param.stylePage.zIndex = maxIndex();
-        obj.width = obj.width || '';
-        this.param.stylePage.width = parseInt(obj.width.replace(/[a-z]*/img, ''));
-        if (obj.htmlMode) {
-            this._showHtmlFlv(obj);
-        } else {
-            this._showIframeTemplet(this._setProxyInfo(obj));
+        this.param.stylePage.width = parseInt(this.param.width.replace(/[a-z]*/img, ''));
+        //
+        //
+
+        switch (this.param.mode) {
+            default:
+                this._showIframeTemplet(this.param);
+            case 'teachingAdmin':
+                this._teachAdminIframe_HtmlTemplet(this.param);
+                break;
+            case 'html':
+                this._showHtmlFlv(this.param);
+                break;
+
         }
+
         return this;
     }
-    littlePanle.prototype._setProxyInfo = function (obj) {
+    littlePanle.prototype._setProxyInfo = function (url) {
 
-        if (/www\.maaee\.com/img.test(obj.url)) {
-            let refurl = obj.url.split('www.maaee.com')[1];
-            obj.url = '/proxy' + refurl;
-            return obj;
-
+        if (/www\.maaee\.com/img.test(url)) {
+            return '/proxy' + url.split('www.maaee.com')[1];
         }
 
-        if (/60\.205\.86\.217:8585/img.test(obj.url)) {
-            let refurl = obj.url.split('60.205.86.217:8585')[1];
-            obj.url = '/proxy' + refurl;
-            return obj;
-
+        if (/60\.205\.86\.217/img.test(url)) {
+            return '/proxy' + url.split('60.205.86.217:8585')[1];
         }
 
-        return obj;
-
+        return url;
     }
 
 
@@ -284,7 +372,7 @@
 
         let tmpInterval = orderIndex * 45;
         //
-        if(!refStyle.width){
+        if (!refStyle.width) {
             refStyle.width = 380;
         }
         let leftRef = (refOff.left + refW) - refStyle.width;
@@ -313,25 +401,25 @@
     // 保持android ios 一直体验的接口实现
     var phone = {
         showLoading() {
-            
+
 
         },
 
         showLoading(cancelAble) {
-            
+
 
         },
 
         dismissLoading() {
-            
+
         },
 
         showMessage(message) {
-            
+
         },
 
         playAudio(url) {
-            
+
         },
 
         playVideoM(jsonObject) {
@@ -341,15 +429,15 @@
 
         playVideoJSON(jsonObject) {
             var obj = eval('(' + jsonObject + ')');
-            top.LP.Start({url: '', title:obj.title,htmlMode:true,param:obj.liveVideos});
+            top.LP.Start({url: '', title: obj.title, htmlMode: true, param: obj.liveVideos});
         },
 
         showImage(url) {
-            
+
         },
 
         showImage(url, currentUrl) {
-            
+
         },
 
         showPdf(pdfUrl) {
@@ -364,14 +452,14 @@
         },
 
         finish() {
-            
+
         },
 
         /**
          * 结束本activity并且刷新前一个fragment
          */
         finishForRefresh() {
-            
+
         },
 
         /**
@@ -380,7 +468,7 @@
          * @param cmd
          */
         finishForExecute(cmd) {
-            
+
         },
 
         /**
@@ -389,7 +477,7 @@
          * @param url
          */
         finishForNewPage(url) {
-            
+
         },
 
         /**
@@ -398,11 +486,11 @@
          * @param shareAble
          */
         setShareAble(shareAble) {
-            
+
         },
 
         teacherJoinClass(vid) {
-            
+
         },
 
         /**
@@ -411,15 +499,15 @@
          * @param refreshAble
          */
         setRefreshAble(refreshAble) {
-            
+
         },
 
         showSubjectWeikeMaterials(subjectId) {
-            
+
         },
 
         addSubjectWeikeMaterialInput(subjectId) {
-            
+
         }
 
 

@@ -48,7 +48,7 @@ const FavoriteShipinItems = React.createClass({
             title: objref.content,
             url: url,
             param: objref,
-            htmlMode: true,
+            mode: 'html',
             width: '400px',
 
         }

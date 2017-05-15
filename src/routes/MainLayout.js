@@ -76,6 +76,7 @@ const MainLayout = React.createClass({
     },
 
 
+     // 不用了
     //获取备课计划下的课件资源
     getTeachPlans: function (optContent, breadCrumbArray) {
         //点击的菜单标识：teachScheduleId
@@ -127,6 +128,7 @@ const MainLayout = React.createClass({
         };
         ms.connect(pro);
     },
+    // 不用了
     // 呼叫本组件中的实例任何方法 dapeng
     componentDidUpdate(){
         if (this.autoeventparam) {
@@ -164,6 +166,7 @@ const MainLayout = React.createClass({
     },
 
     getTeacherResource(params){
+
         this.setState({resouceType: '', currentKey: "personCenter", personCenterParams: params});
     },
 
@@ -177,8 +180,10 @@ const MainLayout = React.createClass({
         }
     },
     teachSpaceTab(activeMenu, beActive){
-        this.setState({activeMiddleMenu: activeMenu});
+
+        // 2
         this.changeGhostMenuVisible({visible: false, beActive: beActive});
+        this.setState({activeMiddleMenu: activeMenu});
     },
 
     changeGhostMenuVisible(obj){
@@ -319,7 +324,9 @@ const MainLayout = React.createClass({
             case 'teachSpace':
                 //教学空间
                 middleComponent =
-                    <TeachSpaceGhostMenu visible={this.state.ghostMenuVisible} toggleGhostMenu={ this.changeGhostMenuVisible } changeTabEvent={this.teachSpaceTab}/>;
+                    <TeachSpaceGhostMenu visible={this.state.ghostMenuVisible}
+                                         toggleGhostMenu={ this.changeGhostMenuVisible }
+                                         changeTabEvent={this.teachSpaceTab}/>;
                 tabComponent = <TeachSpace currentItem={this.state.activeMiddleMenu}/>;
         }
         //
