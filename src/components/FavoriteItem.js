@@ -208,11 +208,11 @@ const FavoriteItem = React.createClass({
             height: "360px"
         };
 
-        return ( <div>
-            <div>
+        return ( <div className="ant-collapse talk_ant_btn">
+
                 <Collapse defaultActiveKey={this.activeKey} activeKey={this.activeKey}
                           style={CollapseStyle}>{ this.coursePanelChildren }</Collapse>
-            </div>
+
             <Pagination total={this.props.param.totalCount} pageSize={getPageSize()}
                         current={this.props.param.currentPage} onChange={this.props.pageChange}/>
         </div> );
