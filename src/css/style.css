@@ -906,6 +906,7 @@ html, body, #root {
 }
 .ant-menu-item-selected {
     color: #2db7f5;
+	background:#E5F2FE;
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
 }
@@ -3553,14 +3554,14 @@ color:#ffbf00
     border-radius: 0px 6px 6px 0px;
     background: #309FFB;
     color: #fff;
-    padding: 5px 2px;
+    padding: 4px 2px;
     cursor: pointer;
 }
 .ghostMenu .headler:hover{
 	background:#1E90EF
 }
 .ghostMenuHide .headler i{
-	font-size:24px;
+	font-size:20px;
 	transform:rotate(180deg);
 	-ms-transform:rotate(180deg); /* Internet Explorer */
 	-moz-transform:rotate(180deg); /* Firefox */
@@ -3568,7 +3569,7 @@ color:#ffbf00
 	-o-transform:rotate(180deg); /* Opera */
 }
 .ghostMenuShow .headler i{
-	font-size:24px;
+	font-size:20px;
 }
 .ghostMenu .first {
 	text-indent:12px;
