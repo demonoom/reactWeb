@@ -2555,6 +2555,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 	border-radius:0;
 	height:100px;
 	border-right:none;
+	margin-left:-1px
 }
 .group_send_btn{
 	width:80px;
@@ -3635,6 +3636,13 @@ color:#ffbf00
 .yichao_menu, .message_menu{
 	height:calc(100% - 63px)
 }
+
+.message_menu > div{
+	height:100% !important
+}
+.message_menu .ant-table-content{
+	overflow-y:auto
+}
 .yichao_menu .ant-table-body, .yichao_menu .ant-table-fixed-header .ant-table-body, .message_menu .ant-table-body, .message_menu .ant-table-fixed-header .ant-table-body{
 	height:100%;
 	overflow-y:auto ;
@@ -3674,13 +3682,33 @@ color:#ffbf00
 }
 .mes_u_l div{
 	padding:5px 0 0 0;
+	height: 21px;
 }
 .mes_u_l div span:first-child{
-	color:#424242
+	color:#424242;
+	font-size:13px;
+	float:left
 }
 .time{
 	color:#a0a0a0;
 	font-size:12px;
+}
+.time_w{
+	width:60px;
+	overflow:hidden;
+	text-align: right;
+}
+.message_name{
+	width:100px;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+}
+.message_cont_w{
+	width:100%;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space:nowrap;
 }
 .guanzhu .ant-card-body{
 	padding:12px;
