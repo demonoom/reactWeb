@@ -85,23 +85,23 @@ const MessageMenu = React.createClass({
                                         break;
                                     }
                                 }
-                                var groupMemebersPhotoTag = <div className="maaee_group_face" >{groupMemebersPhoto}</div>;
+                                var groupMemebersPhotoTag = <div className="maaee_group_face upexam_float" >{groupMemebersPhoto}</div>;
                                 switch (groupMemebersPhoto.length){
                                     case 1:
-                                        groupMemebersPhotoTag = <div className="maaee_group_face1" >{groupMemebersPhoto}</div>;
+                                        groupMemebersPhotoTag = <div className="maaee_group_face1 upexam_float" >{groupMemebersPhoto}</div>;
                                         break;
                                     case 2:
-                                        groupMemebersPhotoTag = <div className="maaee_group_face2" >{groupMemebersPhoto}</div>;
+                                        groupMemebersPhotoTag = <div className="maaee_group_face2 upexam_float" >{groupMemebersPhoto}</div>;
                                         break;
                                     case 3:
-                                        groupMemebersPhotoTag = <div className="maaee_group_face3" >{groupMemebersPhoto}</div>;
+                                        groupMemebersPhotoTag = <div className="maaee_group_face3 upexam_float" >{groupMemebersPhoto}</div>;
                                         break;
                                     case 4:
-                                        groupMemebersPhotoTag = <div className="maaee_group_face" >{groupMemebersPhoto}</div>;
+                                        groupMemebersPhotoTag = <div className="maaee_group_face upexam_float" >{groupMemebersPhoto}</div>;
                                         break;
                                 }
                                 imgTag = <div>
-                                    <span className="antnest_user">{groupMemebersPhotoTag}</span>
+                                    {groupMemebersPhotoTag}
                                     <div className="mes_u_l">
 										<div><span className="message_name">{toChatGroup.name}</span><span className="time right_ri time_w">{lastCreateTime}</span></div>
 										<div className="message_cont_w">{lastContentText}</div>

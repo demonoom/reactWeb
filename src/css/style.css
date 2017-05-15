@@ -443,6 +443,7 @@ i, cite, em, var, address, dfn {
 		background:#fd8069;
 		border:1px solid #fd8069;
 		padding:4px 12px !important;
+		
 	}
 .add_study:hover{
 		background:#ff9d8b;
@@ -3745,3 +3746,26 @@ color:#ffbf00
 	width:120px;
 	height:120px;
 }
+.btn1 .btn1, .btn2 .btn2{
+	display:inline-block;`
+	
+}
+span.btn1, span.btn2, div.btn1, div.btn2{
+	display:none;
+	display:inline-block;
+}
+div.btn1{
+	float:left;
+}
+.add_study_ho{
+		margin:0;
+		background:#fd8069;
+		border:1px solid #fd8069;
+		padding:4px 12px !important;
+		border-radius:6px;
+		
+	}
+.add_study_ho:hover{
+		background:#ff9d8b;
+		border:1px solid #ff9d8b
+	}
