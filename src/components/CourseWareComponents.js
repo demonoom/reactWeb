@@ -26,7 +26,23 @@ class CourseWare extends React.Component {
 
         this.activeKey = [];
         this.coursePanelChildren = null;
-
+        this.showConfirmModal = this.showConfirmModal.bind(this);
+        this.batchDeleteMaterialById = this.batchDeleteMaterialById.bind(this);
+        this.getTeachPlans = this.getTeachPlans.bind(this);
+        this.getLocalTime = this.getLocalTime.bind(this);
+        this.onChange = this.onChange.bind(this);
+        this.showModal = this.showModal.bind(this);
+        this.isDeleteAll = this.isDeleteAll.bind(this);
+        this.showDelScheduleMateriaConfirmModal = this.showDelScheduleMateriaConfirmModal.bind(this);
+        this.closeDelScheduleMateriaConfirmModal = this.closeDelScheduleMateriaConfirmModal.bind(this);
+        this.deleteScheduleMaterials = this.deleteScheduleMaterials.bind(this);
+        this.deleteScheduleMaterialsById = this.deleteScheduleMaterialsById.bind(this);
+        this.closeConfirmModal = this.closeConfirmModal.bind(this);
+        this.batchDeleteMaterial = this.batchDeleteMaterial.bind(this);
+        this.view = this.view.bind(this);
+        this.buildPanels = this.buildPanels.bind(this);
+        this.buildKonwledgePanels = this.buildKonwledgePanels.bind(this);
+        this.render = this.render.bind(this);
     }
 
 
@@ -267,6 +283,7 @@ class CourseWare extends React.Component {
     }
 
     showConfirmModal(e){
+        var _this = this;
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             target = e.currentTarget;
@@ -274,8 +291,8 @@ class CourseWare extends React.Component {
             target = e.target;
         }
         var materialIds = target.value;
-        this.setState({"delMaterialIds": materialIds});
-        this.refs.confirmModal.changeConfirmModalVisible(true);
+        _this.setState({"delMaterialIds": materialIds});
+        _this.refs.confirmModal.changeConfirmModalVisible(true);
     }
 
     closeConfirmModal(){
@@ -374,15 +391,6 @@ class CourseWare extends React.Component {
                 </Panel>
             });
         }
-    }
-
-
-    downLoadFile (e) {
-        window.open(e.target.value);
-    }
-
-    viewFile (e) {
-        window.location.href = e.target.value;
     }
 
     buildKonwledgePanels (courseWareList) {
