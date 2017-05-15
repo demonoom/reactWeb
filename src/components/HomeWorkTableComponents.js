@@ -99,6 +99,7 @@ const HomeWorkTableComponents = React.createClass({
         subTable.buildPageView(optSource);
         subTable.getHomeworkSubjects(ident, clazzId, dateTime, pageNo);
         subTable.setState({currentView: 'subjectDetailList', clazzId: clazzId, dateTime: dateTime});
+        subTable.props.onSearchClick();
     },
 
     //点击导航时，进入的作业列表
