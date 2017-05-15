@@ -124,12 +124,13 @@ const AntGroupTabComponents = React.createClass({
      * @param user
      */
     turnToMessagePage(user){
+        var _this = this;
         var userId = user.colUid;
         messageList.splice(0);
         ms.msgWsListener = {
             onError: function (errorMsg) {
-                if(this.state.errorModalIsShow==false){
-                    this.setState({"errorModalIsShow":true});
+                if(_this.state.errorModalIsShow==false){
+                    _this.setState({"errorModalIsShow":true});
                     ms.closeConnection();
                     Modal.error({
                         transitionName:"",  //禁用modal的动画效果
@@ -239,12 +240,12 @@ const AntGroupTabComponents = React.createClass({
     },
 
     turnToChatGroupMessagePage(groupObj){
-
+        var _this = this;
         messageList.splice(0);
         ms.msgWsListener = {
             onError: function (errorMsg) {
-                if(this.state.errorModalIsShow==false){
-                    this.setState({"errorModalIsShow":true});
+                if(_this.state.errorModalIsShow==false){
+                    _this.setState({"errorModalIsShow":true});
                     ms.closeConnection();
                     Modal.error({
                         transitionName:"",  //禁用modal的动画效果

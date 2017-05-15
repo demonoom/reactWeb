@@ -39,17 +39,25 @@ const HomeWorkTabComponents = React.createClass({
         this.refs.assignHomeWorkCom.getInitialState();
     },
 
+    changeToolbar(){
+        this.setState({activeKey: '作业详情'});
+    },
+
     render() {
 
         var tabPanel;
         var returnBtn;
         if (this.state.currentOpt == "checkHomeWorkList") {
-            tabPanel = <HomeWorkTableComponents ref="homeWorkTable"/>;
-            returnBtn = <Button type="primary" onClick={this.assignHomeWork} className="add_study">布置作业</Button>;
+            tabPanel = <HomeWorkTableComponents ref="homeWorkTable" onSearchClick={this.changeToolbar}/>;
+            if(this.state.activeKey=="作业详情"){
+                returnBtn = <Button type="primary" onClick={this.getTeacherHomeWork} className="add_study"><Icon type="left" /></Button>;
+            }else{
+                returnBtn = <Button type="primary" onClick={this.assignHomeWork} className="add_study">布置作业</Button>;
+            }
         } else {
             tabPanel = <AssignHomeWorkComponents ref="assignHomeWorkCom" params={this.state.isNewPage}
                                                  callbackParent={this.getTeacherHomeWork}/>;
-            returnBtn = <Button type="primary" onClick={this.getTeacherHomeWork} className="add_study">作业列表</Button>;
+            returnBtn = <Button type="primary" onClick={this.getTeacherHomeWork} className="add_study"><Icon type="left" /></Button>;
         }
 
         return (

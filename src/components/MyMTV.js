@@ -135,7 +135,7 @@ class MyMTV extends React.Component {
             title: objref.title,
             url: "",
             param: objref.liveVideos,
-            htmlMode: true,
+            mode: 'html',
             width: '400px',
         }
 

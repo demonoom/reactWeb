@@ -1318,7 +1318,7 @@ const MyFollowExtend = React.createClass({
     },
 
     view: function (e, videosObj, title) {
-        let obj = {htmlMode: true, flvjs: flvjsobj, param: videosObj, title: title, url: "", width: '380px',}
+        let obj = {mode: 'html', flvjs: flvjsobj, param: videosObj, title: title, url: "", width: '380px',}
         this.props.onPreview(obj)
     },
 

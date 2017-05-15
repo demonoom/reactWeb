@@ -24,6 +24,8 @@ class KnowledgeMenuComponents extends React.Component{
         this.breadCrumbArray = [];
         this.buildOpenMenuKeysArray =  this.buildOpenMenuKeysArray.bind(this);
         this.subMenuTitleClick =  this.subMenuTitleClick.bind(this);
+        this.showModal =  this.showModal.bind(this);
+        this.handleMenu =  this.handleMenu.bind(this);
     }
 
     componentWillMount(){

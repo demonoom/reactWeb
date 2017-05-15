@@ -18,6 +18,7 @@ class LessonPlanMenus extends React.Component{
             menuList: [],
             selectedKey: '',
             delScheduleId: '',
+            menuChildren:[],
         }
 
         this.children=null;
@@ -28,6 +29,7 @@ class LessonPlanMenus extends React.Component{
         this.buildMenuChildren=this.buildMenuChildren.bind(this);
         this.deleteTeachSchedule=this.deleteTeachSchedule.bind(this);
         this.showDelScheduleConfirmModal=this.showDelScheduleConfirmModal.bind(this);
+        this.handleMenu = this.handleMenu.bind(this);
     }
 
 
@@ -63,7 +65,7 @@ class LessonPlanMenus extends React.Component{
 
 
     handleClick(e) {
-        
+
         this.setState({currentMenu: ''+ e.key, openSubMenu: e.key});
         var optContent = e.key + "#" + "bySchedule";
         this.props.callbackParent(optContent);
@@ -93,10 +95,11 @@ class LessonPlanMenus extends React.Component{
      * @param menuList 菜单对象值的数组
      */
     buildMenuChildren (menuList) {
-        this.children = menuList.map((e, i) => {
+        var _this = this;
+        _this.children = menuList.map((e, i) => {
 
             const menu = (
-                <Menu onClick={this.menuItemOnClick}>
+                <Menu onClick={_this.menuItemOnClick}>
                     <Menu.Item key={e[0] + "#" + e[1]} className="popup_i_icon"><Icon className="icon_right"
                                                                                       type="edit"/>修改</Menu.Item>
                     <Menu.Item key={e[0]} className="popup_i_icon"><Icon className="icon_right"
@@ -105,9 +108,9 @@ class LessonPlanMenus extends React.Component{
             );
             if (i == 0) {
 
-                this.setState({ currentMenu: ''+ e[0] });
+                _this.setState({ currentMenu: ''+ e[0] });
                 var optContent = e[0] + "#" + "bySchedule" + '#' + e[1]+ '#' + e[2];
-                this.props.callbackParent(optContent);
+                _this.props.callbackParent(optContent);
                 //div显示的内容过长时，使用title提示
                 if (e[1].length > 10) {
                     return <Menu.Item key={e[0]} style={{backgroundColor: '#e5f2fe'}}>
@@ -140,6 +143,8 @@ class LessonPlanMenus extends React.Component{
             }
 
         });
+        debugger
+        this.setState({menuChildren:_this.children});
     }
 
     onChange(page) {
@@ -190,6 +195,7 @@ class LessonPlanMenus extends React.Component{
 
 
     handleMenu(){
+        debugger
         this.getLessonMenu(this.state.currentPage);
     }
 
@@ -222,7 +228,7 @@ class LessonPlanMenus extends React.Component{
                       selectedKeys={[''+this.state.currentMenu]}
                       mode="inline"
                 >
-                    {this.children}
+                    {this.state.menuChildren}
 
                 </Menu>
                 <Pagination size="small" total={this.state.lessonCount} pageSize={getPageSize()}

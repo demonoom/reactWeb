@@ -1328,7 +1328,7 @@ const AntGroupTabComponents = React.createClass({
             title: objref.title,
             url: "",
             param: objref.liveVideos,
-            htmlMode: true,
+            mode: 'html',
             width: '400px',
 
         }

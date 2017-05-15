@@ -34,6 +34,8 @@ class TeachSpaces extends React.Component {
             locale: 'zh-cn',
             showArgs: ''
         }
+        this.middleComponent;
+        this.tabComponent;
         this.getLessonPlans = this.getLessonPlans.bind(this);
         this.getStudyEvaluate = this.getStudyEvaluate.bind(this);
         this.getResourcesCenter = this.getResourcesCenter.bind(this);
@@ -80,6 +82,7 @@ class TeachSpaces extends React.Component {
 
         var optContentArray = optContent.split("#");
         var childrenCount = optContentArray[3];
+        sessionStorage.setItem("lastClickMenuChildrenCount", parseInt(childrenCount));
         if (optContentArray[1] != "bySubjectId") {
             this.refs.tabComponent.buildBreadcrumb();
         } else {
@@ -103,35 +106,38 @@ class TeachSpaces extends React.Component {
     render() {
 
         //根据如下判断结果，完成对页面中部位置的渲染，不同情况，渲染不同组件
-        var middleComponent;
-        var tabComponent;
+
 
         switch (this.props.currentItem) {
 
             default : // teachTimes
                 // 备课计划 LessonPlan  Schedule
-                middleComponent = <LessonPlanMenus callbackParent={this.getLessonPlans }/>;
-                tabComponent = <LessonPlans  refData={this.state.refData} />;
+                this.middleComponent = <LessonPlanMenus callbackParent={this.getLessonPlans }/>;
+                this.tabComponent = <LessonPlans  refData={this.state.refData} />;
                 break;
             case 'KnowledgeResources':
                 // 知识库
-                middleComponent = <KnowledgeMenuComponents callbackParent={this.getResourcesCenter }/>;
-                tabComponent = <ResourcesCenter ref='tabComponent' />;
+                this.middleComponent = <KnowledgeMenuComponents callbackParent={this.getResourcesCenter }/>;
+                this.tabComponent = <ResourcesCenter ref='tabComponent' />;
                 break;
             case 'homeWork':
                 // 布置作业，家庭作业
-              //    middleComponent = <HomeWorkMenu callbackParent={this.getTeacherHomeWork}/>
-                tabComponent = <HomeWorkTabComponents ref="homeWorkTabComponents"/>;
+                //    middleComponent = <HomeWorkMenu callbackParent={this.getTeacherHomeWork}/>
+                this.tabComponent = <HomeWorkTabComponents ref="homeWorkTabComponents"/>;
                 break;
             case 'studyEvaluate':
                 // 学习评价
-               //    middleComponent = <StudyEvaluateMenu callbackParent={this.getStudyEvaluate}/>
-                tabComponent = <StudyEvaluateTabComponents ref="studyEvaluateTabComponents"/>;
+                //    middleComponent = <StudyEvaluateMenu callbackParent={this.getStudyEvaluate}/>
+                this.tabComponent = <StudyEvaluateTabComponents ref="studyEvaluateTabComponents"/>;
                 break;
             case 'examination':
                 // 组卷
-               // middleComponent =  <ExamPagerTableComponents ref="examPagerTable" callBackParent={this.getExamPagerInfo} />;
-                tabComponent = <ExamPagerTabComponents ref="examPagerTabComponents"/>;
+                // middleComponent =  <ExamPagerTableComponents ref="examPagerTable" callBackParent={this.getExamPagerInfo} />;
+                this.tabComponent = <ExamPagerTabComponents ref="examPagerTabComponents"/>;
+                break;
+            case 'teachingAdmin':
+                // 教学管理
+                // 沿用上次的内容
                 break;
 
         }
@@ -140,12 +146,12 @@ class TeachSpaces extends React.Component {
         return (
             <Row>
                 <Col span={5}>
-                    {middleComponent}
+                    {this.middleComponent}
                 </Col>
                 <Col span={19}>
                     <div className="ant-layout-container">
                         <div className="ant-layout-content">
-                            {tabComponent}
+                            {this.tabComponent}
                         </div>
                     </div>
                 </Col>
