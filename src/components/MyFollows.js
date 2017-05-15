@@ -221,7 +221,8 @@ class MyFollows extends React.Component {
             this.htmlTempletContent = <img className="noDataTipImg" src={require('./images/noDataTipImg.png')}/>;
             return;
         }
-        this.title = <h3 className="public—til—blue"> {this.userinfo.userName}关注列表 </h3>;
+        this.title = <h3 className="public—til—blue"><div className="ant-tabs-right">
+						<Button onClick={this.returnPersonCenter}><Icon type="left" /></Button></div>{this.userinfo.userName}关注列表</h3>;
         this.htmlTempletContent = dataArray.map((e, i) => {
             let refkey = e.uid + "#" + e.courseId;
 
@@ -262,8 +263,9 @@ class MyFollows extends React.Component {
 
                 if (this.notInterProsonCenter()) {
                     this.gobackBtn = <div className="ant-tabs-extra-content">
-                            <div className="ant-tabs-right talk_ant_btn1"><Button
-                                onClick={this.returnPersonCenter}>返回</Button></div>
+								<div className="ant-tabs-right">
+									<Button onClick={this.returnPersonCenter}><Icon type="left" /></Button>
+								</div>
                         </div>;
                 }
                 this._buildMyFollowsList();

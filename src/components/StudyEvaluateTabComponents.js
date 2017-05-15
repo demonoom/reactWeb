@@ -18,7 +18,7 @@ const StudyEvaluateTabComponents = React.createClass({
     render() {
         return (
             <div>
-                <h3 className="public—til—blue"><div className="ant-tabs-right"><button onClick={this.goBack} ><Icon type="left" /></button></div>学情分析</h3>
+                <h3 className="public—til—blue"><div className="ant-tabs-right"><Button onClick={this.goBack} ><Icon type="left" /></Button></div>学情分析</h3>
                 <iframe ref="study" src={this.state.initUrl} className="analyze_iframe"/>
             </div>
         );

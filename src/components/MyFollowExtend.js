@@ -1810,7 +1810,8 @@ const MyFollowExtend = React.createClass({
         switch (this.state.optType) {
 
             case 'personCenter':
-                returnBtn = <div><h3 className="public—til—blue">{this.state.currentPerson.user.userName + "的个人中心"}</h3><Button onClick={this.props.returnParentFollows }>返回</Button></div>;
+                returnBtn = <h3 className="public—til—blue"><div className="ant-tabs-right">
+							<Button onClick={this.props.returnParentFollows}><Icon type="left" /></Button></div>{this.state.currentPerson.user.userName + "的个人中心"}</h3>;
                 tabComponent = <MyFollowPersonCenter ref="personCenter"
                                                   userInfo={this.props.userinfo}
                                                   userContactsData={this.state.userContactsData}
