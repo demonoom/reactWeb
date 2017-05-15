@@ -65,7 +65,7 @@ class LessonPlanMenus extends React.Component{
 
 
     handleClick(e) {
-        
+
         this.setState({currentMenu: ''+ e.key, openSubMenu: e.key});
         var optContent = e.key + "#" + "bySchedule";
         this.props.callbackParent(optContent);
