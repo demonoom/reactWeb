@@ -19,6 +19,7 @@ const FloatButton = React.createClass({
 
     logOut(){
         var openKeysStr = sessionStorage.getItem("openKeysStr");
+        var ms = floatButton.props.messageUtilObj;
         if(isEmpty(openKeysStr)==false){
             //已有访问记录，本地移除后，保存到数据库
             var userId = sessionStorage.getItem("ident");
@@ -29,7 +30,8 @@ const FloatButton = React.createClass({
             sessionStorage.removeItem("machineId");
             location.hash="Login";
         }
-            LP.delAll();
+        ms.closeConnection();
+        LP.delAll();
     },
 
     saveHistoryAccessPointId(userId,pointId){
