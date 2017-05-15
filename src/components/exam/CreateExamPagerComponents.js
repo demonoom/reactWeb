@@ -437,6 +437,25 @@ const CreateExamPagerComponents = React.createClass({
                 }
             }
         }
+        var idArray = $(".input_number");
+        for (var i = 0; i < idArray.length; i++) {
+            var idObj = idArray[i];
+            console.log(idObj.id);
+            if (createExamPager.isEmpty(idObj.id) == false) {
+                // answerTitle + "#" + num + "#input#" + answerSubjectType
+                var spanIdArray = idObj.id.split("#");
+                var spanAnswerTitle = spanIdArray[0];
+                var spanAnswerNum= spanIdArray[1];
+                var spanSubjectType = parseInt(spanIdArray[3]);
+                if (answerTitle == spanAnswerTitle && spanSubjectType == parseInt(answerSubjectType)) {
+                    var spanAnswerNum = parseInt(spanAnswerNum);
+                    if (spanAnswerNum > startNo) {
+                        spanAnswerNum = spanAnswerNum - 1;
+                        idObj.id = spanAnswerTitle+"#"+spanAnswerNum+"#"+spanIdArray[2]+"#"+spanSubjectType;
+                    }
+                }
+            }
+        }
     },
     /**
      * 刷新删除按钮的题目信息
@@ -668,7 +687,8 @@ const CreateExamPagerComponents = React.createClass({
             <Row className="ant-form-item">
                 <Col span={3} className="right_upexam"><span className="upexam_number" id={answerTitle+"#"+answerSubjectType+"#"+num+"#numSpan"}>{num}</span>答案：</Col>
                 <Col span={18}>
-                    <Input  id={answerTitle+"#"+num+"#blank#"+answerSubjectType} type="textarea" rows={2} onChange={createExamPager.blankOnChange}/>
+                    <Input  id={answerTitle+"#"+num+"#blank#"+answerSubjectType} type="textarea" rows={2} className="input_number"
+                            onChange={createExamPager.blankOnChange}/>
                 </Col>
                 <div className="topic_del_ri">
                     <button key={answerTitle+"#"+num+"delBtn"}  value={answerTitle+"#"+num+"#"+answerSubjectType} onClick={createExamPager.showConfirmModal} className="delSubjectBtn btn_gray_exam examination_btn_gray">
@@ -711,7 +731,8 @@ const CreateExamPagerComponents = React.createClass({
             <Row className="ant-form-item">
                 <Col span={3} className="right_upexam"><span className="upexam_number" id={answerTitle+"#"+answerSubjectType+"#"+num+"#numSpan"}>{num}</span>答案：</Col>
                 <Col span={18}>
-                    <Input  id={answerTitle+"#"+num+"#simpleAnswer#"+answerSubjectType} type="textarea" rows={5} onChange={createExamPager.blankOnChange}/>
+                    <Input  id={answerTitle+"#"+num+"#simpleAnswer#"+answerSubjectType} type="textarea"  className="input_number"
+                            rows={5} onChange={createExamPager.blankOnChange}/>
                 </Col>
                 <div className="topic_del_ri">
                     <button key={answerTitle+"#"+num+"delBtn"}  value={answerTitle+"#"+num+"#"+answerSubjectType} onClick={createExamPager.showConfirmModal} className="delSubjectBtn btn_gray_exam examination_btn_gray">

@@ -253,7 +253,8 @@ const MyFollowPersonCenter = React.createClass({
                     {userPhotoTag}
 
                     <span className="person_btn">
-                        <Button className="antnest_talk antnest_icon_radius" 　value="score" onClick={this.turnToPlatformRulePage}><i className="iconfont iconfont_jifen">&#xe608;</i><span className="iocnfont_sp_jifen">{this.state.userInfo.score}</span>积分</Button>
+                        <Button className="antnest_talk antnest_icon_radius" 　value="score" onClick={this.turnToPlatformRulePage}><i className="iconfont iconfont_jifen">&#xe608;</i>
+                            <span className="iocnfont_sp_jifen">{this.state.userInfo.score}</span>积分</Button>
 						<Button className="antnest_icon_blue_radius" value="level" onClick={this.turnToPlatformRulePage} >{this.state.userInfo.level.name}</Button>
                     </span>
                     <span className="person_btn_ri">

@@ -84,16 +84,18 @@ class TeachSpaces extends React.Component {
         var childrenCount = optContentArray[3];
         sessionStorage.setItem("lastClickMenuChildrenCount", parseInt(childrenCount));
         if (optContentArray[1] != "bySubjectId") {
-            this.refs.tabComponent.buildBreadcrumb();
+            this.refs.resourcesCenter.buildBreadcrumb();
         } else {
-            this.refs.tabComponent.buildBreadcrumb(breadCrumbArray, childrenCount);
+            this.refs.resourcesCenter.buildBreadcrumb(breadCrumbArray, childrenCount);
         }
-        this.refs.tabComponent.getTeachPlans(optContent);
+        this.refs.resourcesCenter.getTeachPlans(optContent);
     }
 
 
     // 备课计划的课件资源
     getLessonPlans(optContent, breadCrumbArray) {
+
+
         var optContentArray = optContent.split("#");
         var childrenCount = optContentArray[3];
         let obj = {optContent: optContent, breadCrumbArr: breadCrumbArray ? breadCrumbArray : 0};
@@ -111,6 +113,7 @@ class TeachSpaces extends React.Component {
         switch (this.props.currentItem) {
 
             default : // teachTimes
+
                 // 备课计划 LessonPlan  Schedule
                 this.middleComponent = <LessonPlanMenus callbackParent={this.getLessonPlans }/>;
                 this.tabComponent = <LessonPlans  refData={this.state.refData} />;
@@ -118,7 +121,7 @@ class TeachSpaces extends React.Component {
             case 'KnowledgeResources':
                 // 知识库
                 this.middleComponent = <KnowledgeMenuComponents callbackParent={this.getResourcesCenter }/>;
-                this.tabComponent = <ResourcesCenter ref='tabComponent' />;
+                this.tabComponent = <ResourcesCenter ref='resourcesCenter' />;
                 break;
             case 'homeWork':
                 // 布置作业，家庭作业

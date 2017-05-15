@@ -55,7 +55,7 @@ class CourseWare extends React.Component {
         })
         let _this = this;
         var param;
-        debugger
+
         if (optType == "bySchedule") {
             param = {
                 "method": 'getMaterialsBySheduleId',
@@ -64,7 +64,7 @@ class CourseWare extends React.Component {
             };
             doWebService(JSON.stringify(param), {
                 onResponse: function (ret) {
-                    debugger
+
                     let courseWareList = [];
                     _this.activeKey = [];
                     courseWareList.splice(0);
@@ -131,7 +131,7 @@ class CourseWare extends React.Component {
 
 
                 onResponse: function (ret) {
-                    debugger
+
 
                     let courseWareList = [];
                     _this.activeKey = [];

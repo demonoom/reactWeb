@@ -167,7 +167,6 @@ const MyFollowExtend = React.createClass({
     },
 
 
-
     /**
      * 点击联系人列表表格行时，获取当前行对应的记录信息
      * @param record　当前行的用户信息
@@ -1273,13 +1272,14 @@ const MyFollowExtend = React.createClass({
             coursePanelChildren = <img className="noDataTipImg" src={require('./images/noDataTipImg.png')}/>;
         } else {
             coursePanelChildren = courseWareList.map((e, i) => {
+                let keyRef = e[1] + "#" + e[7] + "#" + e[0];
                 var eysOnButton;
                 if (e[9] != null && e[9] != "") {
                     eysOnButton =
                         <a href={e[9]} target="_blank" title="查看" style={{float: 'right'}}><Button icon="eye-o"/></a>
                 }
-                return <Panel header={<span><span type="" className={e[8]}></span><span
-                    className="name_file">{e[1]}</span> </span>} key={e[1] + "#" + e[7] + "#" + e[0]}>
+                return <Panel key={ keyRef } header={<span key={ keyRef }><span type="" className={e[8]}></span><span
+                    className="name_file">{e[1]}</span> </span>}>
                     <pre>
 					<div className="bnt2_tex">
                          <span className="col1">文件类型：{e[5]}</span>
@@ -1308,8 +1308,6 @@ const MyFollowExtend = React.createClass({
         var newDate = new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/, ' ');
         return newDate;
     },
-
-
 
 
     gitUserLiveInfo(obj){
@@ -1798,33 +1796,36 @@ const MyFollowExtend = React.createClass({
     },
     render() {
 
-        var breadMenuTip = "蚁群";
-        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
-        var welcomeTitle = "欢迎" + loginUser.userName + "登录";
-        var returnToolBar = <div className="ant-tabs-right talk_ant_btn1"><Button onClick={this.props.returnMyFollows }>返回</Button></div>;
-        var returnPersonCenterToolBar = <div className="ant-tabs-right talk_ant_btn1"><Button onClick={this.returnPersonCenter}>返回</Button></div>;
+        var welcomeTitle ;
+        var returnToolBar = <div className="ant-tabs-right talk_ant_btn1"><Button onClick={this.props.returnMyFollows }>返回</Button>
+        </div>;
+        var returnPersonCenterToolBar = <div className="ant-tabs-right talk_ant_btn1"><Button
+            onClick={this.returnPersonCenter}>返回</Button></div>;
         var tabComponent;
         var userPhoneCard;
-        let returnBtn=null;
+        let returnBtn = null;
 
         switch (this.state.optType) {
 
             case 'personCenter':
-                returnBtn = <h3 className="public—til—blue"><div className="ant-tabs-right">
-							<Button onClick={this.props.returnParentFollows}><Icon type="left" /></Button></div>{this.state.currentPerson.user.userName + "的个人中心"}</h3>;
+                returnBtn = <h3 className="public—til—blue">
+                    <div className="ant-tabs-right">
+                        <Button onClick={this.props.returnParentFollows}><Icon type="left"/></Button>
+                    </div>
+                    {this.state.currentPerson.user.userName + "的个人中心"}</h3>;
                 tabComponent = <MyFollowPersonCenter ref="personCenter"
-                                                  userInfo={this.props.userinfo}
-                                                  userContactsData={this.state.userContactsData}
-                                                  callBackTurnToMessagePage={this.getUser2UserMessages}
-                                                  callBackTurnToAsk={this.callBackTurnToAsk}
-                                                  callBackStudyTrack={this.callBackStudyTrack}
-                                                  intoMyFollows={this.props.intoMyFollows}
-                                                  callBackGetUserFavorite={this.callBackGetUserFavorite}
-                                                  callBackGetMySubjects={this.callBackGetMySubjects}
-                                                  callBackGetMyCourseWares={this.callBackGetMyCourseWares}
-                                                  callBackGetLiveInfo={this.gitUserLiveInfo}
-                                                  callBackTurnToPlatformRulePage={this.callBackTurnToPlatformRulePage}
-                            />;
+                                                     userInfo={this.props.userinfo}
+                                                     userContactsData={this.state.userContactsData}
+                                                     callBackTurnToMessagePage={this.getUser2UserMessages}
+                                                     callBackTurnToAsk={this.callBackTurnToAsk}
+                                                     callBackStudyTrack={this.callBackStudyTrack}
+                                                     intoMyFollows={this.props.intoMyFollows}
+                                                     callBackGetUserFavorite={this.callBackGetUserFavorite}
+                                                     callBackGetMySubjects={this.callBackGetMySubjects}
+                                                     callBackGetMyCourseWares={this.callBackGetMyCourseWares}
+                                                     callBackGetLiveInfo={this.gitUserLiveInfo}
+                                                     callBackTurnToPlatformRulePage={this.callBackTurnToPlatformRulePage}
+                />;
                 break;
 
             case 'sendMessage':
@@ -2102,73 +2103,56 @@ const MyFollowExtend = React.createClass({
                 break;
 
             case 'getUserSubjects':
-                welcomeTitle = this.state.currentUser.userName + "的题目";
-                var returnPersonCenterToolBar = <div className="ant-tabs-right"><Button
-                    onClick={this.returnPersonCenter}>返回</Button></div>;
-                tabComponent = <Tabs
-                    hideAdd
-                    ref="mainTab"
-                    activeKey={this.state.activeKey}
-                    defaultActiveKey={this.state.defaultActiveKey}
-                    tabBarExtraContent={returnPersonCenterToolBar}
-                    transitionName=""  //禁用Tabs的动画效果
-                >
-                    <TabPane tab={welcomeTitle} key="userSubjects" className="topics_rela">
+
+                tabComponent = <div >
+                        <h3 className="public—til—blue">
+                            <div className="ant-tabs-right">
+                                <button onClick={this.props.returnParentFollows}><Icon type="left"/></button>
+                            </div>
+                            {this.state.currentPerson.user.userName + "的直播课"}</h3>
                         <Table columns={subjectTableColumns} dataSource={data} pagination={{
                             total: this.state.totalSubjectCount,
                             pageSize: getPageSize(),
                             onChange: this.onSubjectPageChange
                         }} scroll={{y: 400}}/>
-                    </TabPane>
-                </Tabs>;
+                    </div>;
                 break;
 
             case 'getUserCourseWares':
-                welcomeTitle = this.state.currentUser.userName + "的资源";
-                var returnPersonCenterToolBar = <div className="ant-tabs-right">
-                    <Button onClick={this.returnPersonCenter}>返回</Button></div>;
-                tabComponent = <Tabs hideAdd ref="mainTab"
-                                     activeKey={this.state.activeKey}
-                                     defaultActiveKey={this.state.defaultActiveKey}
-                                     tabBarExtraContent={returnPersonCenterToolBar}
-                                     transitionName="">
-                    <TabPane tab={welcomeTitle} key="userCourseWares" className="topics_rela">
-                        <div className='ant-tabs ant-tabs-top ant-tabs-line4444'>
-                            <div className='ant-tabs-tabpane ant-tabs-tabpane-active'>
-                                <Collapse defaultActiveKey={activeKey} activeKey={activeKey} ref="collapse">
-                                    {coursePanelChildren}
-                                </Collapse>
+
+                tabComponent = <div >
+                        <h3 className="public—til—blue">
+                            <div className="ant-tabs-right">
+                                <button onClick={this.props.returnParentFollows}><Icon type="left"/></button>
                             </div>
-                            <Pagination total={this.state.totalCourseWareCount} pageSize={getPageSize()}
-                                        current={this.state.currentCourseWarePage} onChange={this.onCourseWareChange}/>
+                            {this.state.currentPerson.user.userName + "的资源"}</h3>
+                        <div className='ant-tabs-tabpane ant-tabs-tabpane-active'>
+                            <Collapse defaultActiveKey={activeKey} activeKey={activeKey} ref="collapse">
+                                {coursePanelChildren}
+                            </Collapse>
                         </div>
-                    </TabPane>
-                </Tabs>;
+                        <Pagination total={this.state.totalCourseWareCount} pageSize={getPageSize()}
+                                    current={this.state.currentCourseWarePage} onChange={this.onCourseWareChange}/>
+                    </div>;
+
 
                 break;
 
             case 'getLiveInfoByUid':
 
-                welcomeTitle = this.state.currentUser.userName + "的直播课";
-                var returnPersonCenterBar  = <div className="ant-tabs-right"><Button onClick={this.returnPersonCenter}>返回</Button></div>;
-
-                 tabComponent = <Tabs
-                         hideAdd
-                         ref="mainTab"
-                         activeKey={this.state.activeKey}
-                         defaultActiveKey={this.state.defaultActiveKey}
-                         tabBarExtraContent={returnPersonCenterBar}
-                         transitionName=""
-                         >
-                         <TabPane tab={welcomeTitle} key="userLiveInfos" className="topics_rela ">
-                         <div className='ant-tabs ant-tabs-top ant-tabs-line topics_calc favorite_pa_le'
+                tabComponent = <div >
+                    <h3 className="public—til—blue">
+                        <div className="ant-tabs-right">
+                            <button onClick={this.props.returnParentFollows}><Icon type="left"/></button>
+                        </div>
+                        {this.state.currentPerson.user.userName + "的直播课"}</h3>
+                    <div className='ant-tabs ant-tabs-top ant-tabs-line topics_calc favorite_pa_le'
                          style={{'overflow': 'auto'}}>
-                         {this.state.userLiveData}
-                         </div>
-                         <Pagination total={this.state.totalLiveCount} pageSize={getPageSize()}
-                         current={this.state.currentLivePage} onChange={this.onLiveInfoPageChange}/>
-                         </TabPane>
-                         </Tabs>;
+                        {this.state.userLiveData}
+                    </div>
+                    <Pagination total={this.state.totalLiveCount} pageSize={getPageSize()}
+                                current={this.state.currentLivePage} onChange={this.onLiveInfoPageChange}/>
+                </div>;
                 break;
 
             case 'getScoreOrLevelPage':
