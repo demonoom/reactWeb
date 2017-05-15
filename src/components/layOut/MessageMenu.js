@@ -2,7 +2,9 @@ import React, {PropTypes, Link} from 'react';
 import {Table, Badge} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import {isEmpty} from '../../utils/Const';
-import {getLocalTime} from '../../utils/utils';
+import {formatMD} from '../../utils/utils';
+import {formatHM} from '../../utils/utils';
+import {isToday} from '../../utils/utils';
 
 var mMenu;
 const columns = [{
@@ -141,7 +143,15 @@ const MessageMenu = React.createClass({
         var fromUser = messageObj.fromUser;
         var content = messageObj.content;
         var colUid = fromUser.colUid;
-        var createTime = getLocalTime(messageObj.createTime);
+        var isCurrentDay = isToday(messageObj.createTime);
+        var createTime;
+        if(isCurrentDay){
+            //如果是当天的消息，只显示时间
+            createTime = formatHM(messageObj.createTime);
+        }else{
+            //非当天时间，显示的是月-日
+            createTime = formatMD(messageObj.createTime);
+        }
         var messageIndex = -1;
         var messageToType = messageObj.toType;
         var contentJson = {"content": content, "createTime": createTime};
