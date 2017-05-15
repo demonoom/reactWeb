@@ -46,28 +46,26 @@ const HomeWorkTabComponents = React.createClass({
     render() {
 
         var tabPanel;
-        let returnBtn =  'btn1';
+        let returnBtn = 'btn1';
         if (this.state.currentOpt == "checkHomeWorkList") {
             tabPanel = <HomeWorkTableComponents ref="homeWorkTable" onSearchClick={this.changeToolbar}/>;
-            if(this.state.activeKey!="作业详情"){
-                returnBtn ='btn2'
+            if (this.state.activeKey != "作业详情") {
+                returnBtn = 'btn2'
+            } else {
+                tabPanel = <AssignHomeWorkComponents ref="assignHomeWorkCom" params={this.state.isNewPage} callbackParent={this.getTeacherHomeWork}/>;
             }
-        } else {
-            tabPanel = <AssignHomeWorkComponents ref="assignHomeWorkCom" params={this.state.isNewPage}
-                                                 callbackParent={this.getTeacherHomeWork}/>;
-        }
 
-        return (
-            <div>
-                <h3 className={" public—til—blue"}>{this.state.activeKey}<div className={returnBtn}>
-                    <span className="btn1 ant-tabs-right"><button  onClick={this.getTeacherHomeWork} ><Icon type="left" /></button></span>
-                    <span className="btn2 talk_ant_btn1"><button className="ant-btn ant-btn-primary add_study"  onClick={this.assignHomeWork} >布置作业</button></span>
+            return (
+                <div>
+                    <h3 className={returnBtn + " public—til—blue"}>{this.state.activeKey}
+                        <button className="btn1" onClick={this.getTeacherHomeWork}><Icon type="left"/></button>
+                        <button className="btn2" onClick={this.assignHomeWork}>布置作业</button>
+                    </h3>
+                    <div className="favorite_scroll">{tabPanel}</div>
                 </div>
-				</h3>
-                 <div className="favorite_scroll">{tabPanel}</div>
-            </div>
-        );
-    },
+            );
+        }
+    }
 });
 
 export default HomeWorkTabComponents;
