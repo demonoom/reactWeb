@@ -49,36 +49,21 @@ const HomeWorkTabComponents = React.createClass({
         let returnBtn =  'btn1';
         if (this.state.currentOpt == "checkHomeWorkList") {
             tabPanel = <HomeWorkTableComponents ref="homeWorkTable" onSearchClick={this.changeToolbar}/>;
-<<<<<<< HEAD
             if(this.state.activeKey!="作业详情"){
                 returnBtn ='btn2'
-=======
-            if(this.state.activeKey=="作业详情"){
-                returnBtn = <span className="ant-tabs-right"><Button onClick={this.getTeacherHomeWork} ><Icon type="left" /></Button></span>;
-            }else{
-                returnBtn = <span className="talk_ant_btn1"><Button type="primary" onClick={this.assignHomeWork} className="add_study">布置作业</Button></span>;
->>>>>>> bf2ee54f5bb93ac34c8a71ca7dc4687bfaedb71e
             }
         } else {
             tabPanel = <AssignHomeWorkComponents ref="assignHomeWorkCom" params={this.state.isNewPage}
                                                  callbackParent={this.getTeacherHomeWork}/>;
-<<<<<<< HEAD
-
-=======
-            returnBtn = <span className="ant-tabs-right"><Button onClick={this.getTeacherHomeWork} ><Icon type="left" /></Button></span>;
->>>>>>> bf2ee54f5bb93ac34c8a71ca7dc4687bfaedb71e
         }
 
         return (
             <div>
-<<<<<<< HEAD
-                <h3 className={returnBtn + " public—til—blue"}>{this.state.activeKey}
-                    <button className="btn1"  onClick={this.getTeacherHomeWork} ><Icon type="left" /></button>
-                    <button className="btn2"  onClick={this.assignHomeWork} >布置作业</button>
-                </h3>
-=======
-                <h3 className="public—til—blue">{returnBtn}{this.state.activeKey}{returnBtn2}</h3>
->>>>>>> bf2ee54f5bb93ac34c8a71ca7dc4687bfaedb71e
+                <h3 className={" public—til—blue"}>{this.state.activeKey}<div className={returnBtn}>
+                    <span className="btn1 ant-tabs-right"><button  onClick={this.getTeacherHomeWork} ><Icon type="left" /></button></span>
+                    <span className="btn2 talk_ant_btn1"><button className="ant-btn ant-btn-primary add_study"  onClick={this.assignHomeWork} >布置作业</button></span>
+                </div>
+				</h3>
                  <div className="favorite_scroll">{tabPanel}</div>
             </div>
         );
