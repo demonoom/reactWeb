@@ -70,11 +70,33 @@ class SUbjectTable extends React.Component{
             subjectParams: '',
             isOwmer: 'N',
             isDeleteAllSubject: false,
-
-
-
         }
-
+        this.start = this.start.bind(this);
+        this.onSelectChange = this.onSelectChange.bind(this);
+        this.getSubjectData=this.getSubjectData.bind(this);
+        this.getSubjectDataBySchedule = this.getSubjectDataBySchedule.bind(this);
+        this.editSubject = this.editSubject.bind(this);
+        this.isDeleteAll = this.isDeleteAll.bind(this);
+        this.showDelSubjectConfirmModal = this.showDelSubjectConfirmModal.bind(this);
+        this.closeDelSubjectConfirmModal = this.closeDelSubjectConfirmModal.bind(this);
+        this.showConfirmModal = this.showConfirmModal.bind(this);
+        this.closeConfirmModal = this.closeConfirmModal.bind(this);
+        this.showDelAllSubjectConfirmModal = this.showDelAllSubjectConfirmModal.bind(this);
+        this.closeDelAllSubjectConfirmModal = this.closeDelAllSubjectConfirmModal.bind(this);
+        this.showdelAllSubjectInScheduleConfirmModal = this.showdelAllSubjectInScheduleConfirmModal.bind(this);
+        this.closeDelAllSubjectInScheduleConfirmModal = this.closeDelAllSubjectInScheduleConfirmModal.bind(this);
+        this.deleteSubjectsByConditonForSchedule = this.deleteSubjectsByConditonForSchedule.bind(this);
+        this.deleteSubjectsByConditon = this.deleteSubjectsByConditon.bind(this);
+        this.deleteSubject = this.deleteSubject.bind(this);
+        this.deleteAllSelectedSubjectS = this.deleteAllSelectedSubjectS.bind(this);
+        this.delMySubjects = this.delMySubjects.bind(this);
+        this.getSubjectDataByKnowledge = this.getSubjectDataByKnowledge.bind(this);
+        this.initGetSubjectInfo = this.initGetSubjectInfo.bind(this);
+        this.showModal = this.showModal.bind(this);
+        this.showModifySubjectModal = this.showModifySubjectModal.bind(this);
+        this.pageOnChange = this.pageOnChange.bind(this);
+        this.subjectEditCallBack = this.subjectEditCallBack.bind(this);
+        this.render = this.render.bind(this);
     }
 
 

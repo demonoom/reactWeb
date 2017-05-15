@@ -27,9 +27,12 @@ class LessonPlanMenus extends React.Component{
         this.getLessonMenu=this.getLessonMenu.bind(this);
         this.menuItemOnClick=this.menuItemOnClick.bind(this);
         this.buildMenuChildren=this.buildMenuChildren.bind(this);
+        this.onChange = this.onChange.bind(this);
         this.deleteTeachSchedule=this.deleteTeachSchedule.bind(this);
         this.showDelScheduleConfirmModal=this.showDelScheduleConfirmModal.bind(this);
         this.handleMenu = this.handleMenu.bind(this);
+        this.closeDelScheduleConfirmModal = this.closeDelScheduleConfirmModal.bind(this);
+        this.render = this.render.bind(this);
     }
 
 
