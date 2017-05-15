@@ -230,7 +230,7 @@ class ResourcesCenter extends React.Component{
 
 
         if (this.state.currentOptType == "bySubjectId" && sessionStorage.getItem("lastClickMenuChildrenCount") == 0 && sessionStorage.getItem("lastClickMenuId") != null) {
-            toolbarExtra = <div className="ant-tabs-right">
+            toolbarExtra = <div className="talk_ant_btn1_1">
                 <CourseWareUploadComponents courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}/>
                 <SubjectUploadByTextboxio courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}/>
             </div>;

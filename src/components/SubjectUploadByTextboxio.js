@@ -675,9 +675,8 @@ const SubjectUploadTabComponents = React.createClass({
                 3、文档中的数学公式请单独粘贴上传</div>;
 
         return (
-            <div className="toobar right_ri">
-                <Button type="primary" icon="plus-circle" onClick={this.showModal} title="上传题目"
-                        className="add_study add_study-b">添加题目</Button>
+            <div className="toobar right_ri ">
+                <Button type="primary" icon="plus-circle" onClick={this.showModal} title="上传题目" className="add_study add_study-b">添加题目</Button>
                 <Modal
                     visible={this.state.visible}
                     title="添加题目"
@@ -688,7 +687,7 @@ const SubjectUploadTabComponents = React.createClass({
                     maskClosable={false} //设置不允许点击蒙层关闭
                     transitionName=""  //禁用modal的动画效果
                     footer={[
-                        <div>
+                        <div >
                             {buttons}
                         </div>
                     ]}

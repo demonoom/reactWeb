@@ -119,7 +119,7 @@ const UserInfo = React.createClass({
         return <div className="gary_person">
             <Upload {...uploadProps}>
                 {
-                    this.state.userHeadIcon ? <img src={this.state.userHeadIcon} className="person_user"/> :
+                    this.state.userHeadIcon ? <img src={this.state.userHeadIcon} className="person_user userinfo_name"/> :
                         <Icon type="plus" className="avatar-uploader-trigger"/>
                 }
             </Upload>
