@@ -2014,7 +2014,7 @@ li.ant-menu-submenu > ul > li.ant-menu-submenu{
 	cursor:pointer;
 }
 .antnest_name{
-	color:#333 !important;
+	color:#8E97A6 !important;
 	font-size:14px;
 	margin-right:12px;
 }
@@ -2078,7 +2078,7 @@ a.topics:hover{
     line-height: 23px;
     word-wrap: break-word;
 	font-size:16px;
-	color:#727272;
+	color:#666;
 }
 .antnest-card .ant-card-body ul li.topics_bot{
 	margin:7px 0; 
@@ -2109,9 +2109,9 @@ a.topics:hover{
 	transform: perspective(1px) translate(-50%,-50%);
 }
 .topics_time{
-	color:#999;
 	margin-right:12px;
-	font-size:14px;
+	color:#a0a0a0;
+	font-size:12px;
 }
 .topics_dianzan{
 	float:right;
@@ -2458,11 +2458,13 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 	display: inline-block;
     float: left;
     padding-left: 50px;
-	color:#8E97A6
+	color:#8E97A6;
+	font-size:12px
 }
 .group_talk ul li.right div.u-name span{
 	padding-right: 50px;
-	color:#8E97A6
+	color:#8E97A6;
+	font-size:12px
 }
 .group_talk ul li div.talk-cont{
 	display: flex;
@@ -3709,6 +3711,8 @@ color:#ffbf00
 	overflow:hidden;
 	text-overflow:ellipsis;
 	white-space:nowrap;
+	color:#888;
+	font-size:12px;
 }
 .guanzhu .ant-card-body{
 	padding:12px;
