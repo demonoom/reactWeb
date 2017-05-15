@@ -68,7 +68,7 @@ const MessageMenu = React.createClass({
                             var imgTag;
                             if (messageType == 1) {
                                 imgTag = <div>
-                                    <span ><img src={fromUser.avatar} ></img></span>
+                                    <span className="antnest_user"><img src={fromUser.avatar} height="38"></img></span>
                                     <div className="mes_u_l">
 										<div><span className="message_name">{fromUser.userName}</span><span className="time right_ri time_w">{lastCreateTime}</span></div>
 										<div className="message_cont_w">{lastContentText}</div>
