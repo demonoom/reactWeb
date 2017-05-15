@@ -1077,7 +1077,7 @@ const AntNestTabComponents = React.createClass({
                     antNest.getTopics(antNest.state.currentTeacherPage, getOnlyTeacherTopic());
                 }
                 antNest.initMyEmotionInput();
-                antNest.setState({addTopicModalVisible: false});
+                antNest.setState({addTopicModalVisible: false,topicImgUrl:[]});
             },
             onError: function (error) {
                 message.error(error);
@@ -1091,7 +1091,7 @@ const AntNestTabComponents = React.createClass({
      */
     addTopicModalHandleCancel(){
         antNest.initMyEmotionInput();
-        antNest.setState({addTopicModalVisible: false});
+        antNest.setState({addTopicModalVisible: false,topicImgUrl:[]});
     },
 
     /**
