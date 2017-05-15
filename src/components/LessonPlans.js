@@ -37,14 +37,7 @@ class LessonPlans extends React.Component {
 
 
     componentWillMount() {
-
-        if (this.props.refData) {
-            this.buildBreadcrumb(this.props.refData.optContent.split("#"));
-        } else {
             this.buildBreadcrumb();
-        }
-
-        this.getTeachPlans();
     }
 
 
