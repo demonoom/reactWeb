@@ -218,13 +218,13 @@ const HomeWorkTableComponents = React.createClass({
             onChange: this.onSelectChange,
         };
         return (
-            <div >
+      
                 <Table rowSelection={rowSelection} columns={columns} dataSource={data} pagination={{
                     total: subTable.state.totalCount,
                     pageSize: getPageSize(),
                     onChange: subTable.pageOnChange
                 }} scroll={{y: 400}}/>
-            </div>
+
         );
     },
 });

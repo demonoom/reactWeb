@@ -205,11 +205,11 @@ const ExamPagerTableComponents = React.createClass({
     render() {
 
         return (
-            <div >
+           
                 <Table columns={columns} dataSource={this.data}
                        pagination={{total: this.state.totalCount, pageSize: getPageSize(), onChange: this.pageOnChange}}
                        scroll={{y: 400}}/>
-            </div>
+            
         );
     },
 });

@@ -159,7 +159,7 @@ class Favorites extends React.Component {
         }
         return (
             <div className="favorite_scroll">
-                {toolbar}
+			{toolbar}
                 <Tabs onTabClick={this.tabClick} defaultActiveKey={this.state.activeKey}>
 
                     <TabPane tab={this.FAVTYPE[1][2]} key='1' className="topics_rela">
@@ -209,7 +209,7 @@ class Favorites extends React.Component {
                                    pageChange={this.pageChange}/>
                     </TabPane>
                 </Tabs>
-            </div>
+				</div>
         );
     }
 }

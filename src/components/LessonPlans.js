@@ -289,6 +289,7 @@ class LessonPlans extends React.Component {
                     <Breadcrumb.Item><Icon type="home"/></Breadcrumb.Item>
                     { this.breadcrumbChildren}
                 </Breadcrumb>
+				 <div className="favorite_scroll">
                 <Tabs
                     hideAdd
                     onChange={this.onChange}
@@ -301,6 +302,7 @@ class LessonPlans extends React.Component {
                     {tabPanel}
                     {subjectTabPanel}
                 </Tabs>
+				</div>
             </div>
         );
     }

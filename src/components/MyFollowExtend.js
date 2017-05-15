@@ -2132,7 +2132,7 @@ const MyFollowExtend = React.createClass({
                                      tabBarExtraContent={returnPersonCenterToolBar}
                                      transitionName="">
                     <TabPane tab={welcomeTitle} key="userCourseWares" className="topics_rela">
-                        <div className='ant-tabs ant-tabs-top ant-tabs-line'>
+                        <div className='ant-tabs ant-tabs-top ant-tabs-line4444'>
                             <div className='ant-tabs-tabpane ant-tabs-tabpane-active'>
                                 <Collapse defaultActiveKey={activeKey} activeKey={activeKey} ref="collapse">
                                     {coursePanelChildren}

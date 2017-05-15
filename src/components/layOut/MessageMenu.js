@@ -2,7 +2,9 @@ import React, {PropTypes, Link} from 'react';
 import {Table, Badge} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import {isEmpty} from '../../utils/Const';
-import {getLocalTime} from '../../utils/utils';
+import {formatMD} from '../../utils/utils';
+import {formatHM} from '../../utils/utils';
+import {isToday} from '../../utils/utils';
 
 var mMenu;
 const columns = [{
@@ -68,16 +70,16 @@ const MessageMenu = React.createClass({
                                 imgTag = <div>
                                     <span className="antnest_user"><img src={fromUser.avatar} height="38"></img></span>
                                     <div className="mes_u_l">
-										<div><span>{fromUser.userName}</span><span className="time right_ri">{lastCreateTime}</span></div>
-										<div className="date_tr">{lastContentText}</div>
+										<div><span className="message_name">{fromUser.userName}</span><span className="time right_ri time_w">{lastCreateTime}</span></div>
+										<div className="message_cont_w">{lastContentText}</div>
 									</div>
                                 </div>;
                             } else {
                                 imgTag = <div>
                                     <span className="antnest_user"><img src={toChatGroup.avatar} className="antnest_38_img" height="38"></img></span>
                                     <div className="mes_u_l">
-										<div><span>{toChatGroup.name}</span><span className="time right_ri">{lastCreateTime}</span></div>
-										<div className="date_tr">{lastContentText}</div>
+										<div><span className="message_name">{toChatGroup.name}</span><span className="time right_ri time_w">{lastCreateTime}</span></div>
+										<div className="message_cont_w">{lastContentText}</div>
 									</div>
                                 </div>;
                             }
@@ -141,7 +143,15 @@ const MessageMenu = React.createClass({
         var fromUser = messageObj.fromUser;
         var content = messageObj.content;
         var colUid = fromUser.colUid;
-        var createTime = getLocalTime(messageObj.createTime);
+        var isCurrentDay = isToday(messageObj.createTime);
+        var createTime;
+        if(isCurrentDay){
+            //如果是当天的消息，只显示时间
+            createTime = formatHM(messageObj.createTime);
+        }else{
+            //非当天时间，显示的是月-日
+            createTime = formatMD(messageObj.createTime);
+        }
         var messageIndex = -1;
         var messageToType = messageObj.toType;
         var contentJson = {"content": content, "createTime": createTime};

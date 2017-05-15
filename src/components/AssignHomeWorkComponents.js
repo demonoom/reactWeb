@@ -385,7 +385,7 @@ const AssignHomeWorkComponents = React.createClass({
         };
         const hasSelected = assignHomeWork.state.selectedSubjectKeysForTable.length > 0;
         return (
-            <div>
+            <div className="follow_my">
                 <div className="ant-collapse ant-modal-footer homework">
 
                     <Row className="ant-form-item">

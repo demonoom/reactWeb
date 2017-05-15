@@ -370,6 +370,7 @@ i, cite, em, var, address, dfn {
     background: none;
     padding: 0;
     line-height: 1px;
+	outline:none
 }
 .ant-tabs-right button i{
 	font-size: 22px;
@@ -435,10 +436,6 @@ i, cite, em, var, address, dfn {
 		min-height:calc(100% - 50px);
 		overflow-y: auto;
 		overflow-x:hidden;
-		position: absolute;
-		top: 0;
-		width:calc(100% - 16px) !important;
-
 		border:none !important
 	}
 	.add_study{
@@ -730,7 +727,7 @@ html, body, #root {
 	float:left;
 }
 .bnt2_tex span.col1{
-	color:#b3b3b3;
+	color:#999;
 	word-break:break-all;
 	word-wrap:break-word;
 	white-space: pre-wrap;
@@ -867,7 +864,7 @@ html, body, #root {
 	text-align:center;
 }
 .ant-table-thead > tr > th.ant-table-selection-score3, .ant-table-tbody > tr > td.ant-table-selection-score3{
-	width:146px;
+	width:150px;
 	text-align:center;
 }
 .ant-table-thead > tr > th.ant-table-selection-smallclass, .ant-table-tbody > tr > td.ant-table-selection-smallclass{
@@ -2017,7 +2014,7 @@ li.ant-menu-submenu > ul > li.ant-menu-submenu{
 	cursor:pointer;
 }
 .antnest_name{
-	color:#333 !important;
+	color:#8E97A6 !important;
 	font-size:14px;
 	margin-right:12px;
 }
@@ -2081,7 +2078,7 @@ a.topics:hover{
     line-height: 23px;
     word-wrap: break-word;
 	font-size:16px;
-	color:#727272;
+	color:#666;
 }
 .antnest-card .ant-card-body ul li.topics_bot{
 	margin:7px 0; 
@@ -2112,9 +2109,9 @@ a.topics:hover{
 	transform: perspective(1px) translate(-50%,-50%);
 }
 .topics_time{
-	color:#999;
 	margin-right:12px;
-	font-size:14px;
+	color:#a0a0a0;
+	font-size:12px;
 }
 .topics_dianzan{
 	float:right;
@@ -2461,11 +2458,13 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 	display: inline-block;
     float: left;
     padding-left: 50px;
-	color:#8E97A6
+	color:#8E97A6;
+	font-size:12px
 }
 .group_talk ul li.right div.u-name span{
 	padding-right: 50px;
-	color:#8E97A6
+	color:#8E97A6;
+	font-size:12px
 }
 .group_talk ul li div.talk-cont{
 	display: flex;
@@ -2558,6 +2557,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 	border-radius:0;
 	height:100px;
 	border-right:none;
+	margin-left:-1px
 }
 .group_send_btn{
 	width:80px;
@@ -2883,7 +2883,7 @@ ul.integral li i{
     text-overflow: ellipsis;
     white-space: nowrap;
     display: inline-block;
-    width: 160px;
+    width: 150px;
 	cursor:pointer
 }
 a.antnest_name:hover{
@@ -3638,6 +3638,13 @@ color:#ffbf00
 .yichao_menu, .message_menu{
 	height:calc(100% - 63px)
 }
+
+.message_menu > div{
+	height:100% !important
+}
+.message_menu .ant-table-content{
+	overflow-y:auto
+}
 .yichao_menu .ant-table-body, .yichao_menu .ant-table-fixed-header .ant-table-body, .message_menu .ant-table-body, .message_menu .ant-table-fixed-header .ant-table-body{
 	height:100%;
 	overflow-y:auto ;
@@ -3677,14 +3684,42 @@ color:#ffbf00
 }
 .mes_u_l div{
 	padding:5px 0 0 0;
+	height: 21px;
 }
 .mes_u_l div span:first-child{
-	color:#424242
+	color:#424242;
+	font-size:13px;
+	float:left
 }
 .time{
 	color:#a0a0a0;
 	font-size:12px;
 }
+.time_w{
+	width:60px;
+	overflow:hidden;
+	text-align: right;
+}
+.message_name{
+	width:100px;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+}
+.message_cont_w{
+	width:100%;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+	color:#888;
+	font-size:12px;
+}
 .guanzhu .ant-card-body{
 	padding:12px;
+}
+.right_btn_new{
+	display: inline-block;
+    position: absolute;
+    right: 12px;
+    top: -2px;
 }

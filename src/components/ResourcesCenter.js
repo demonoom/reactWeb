@@ -190,6 +190,7 @@ class ResourcesCenter extends React.Component{
         var tabPanel;
         var subjectTabPanel;
         var toolbarExtra = null;
+        debugger
         const menu = (
             <Menu onClick={this.menuItemOnClick}>
                 <Menu.Item key="self">只看自己</Menu.Item>
@@ -243,6 +244,7 @@ class ResourcesCenter extends React.Component{
                     <Breadcrumb.Item><Icon type="home"/></Breadcrumb.Item>
                     {this.breadcrumbChildren}
                 </Breadcrumb>
+				<div className="favorite_scroll">
                 <Tabs
                     hideAdd
                     onChange={this.onChange}
@@ -257,6 +259,7 @@ class ResourcesCenter extends React.Component{
                     {subjectTabPanel}
                 </Tabs>
             </div>
+			</div>
         );
     }
 };
