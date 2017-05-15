@@ -224,10 +224,8 @@ class KnowledgeMenuComponents extends React.Component{
             onResponse: function (ret) {
 
                 if (!ret.response || !ret.response.length) {
-                    if (List == null || List.length == 0) {
                         this.children = "";
                         _this.setState({noHaveKnowledgeTip: <div className="binding_a">您目前还没有知识点，请先点击下方按钮绑定知识点</div>});
-                    }
                     return message.info(ret.msg);
                 }
 

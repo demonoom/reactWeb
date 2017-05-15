@@ -1677,6 +1677,7 @@ a {
     margin: 4px 5px 0 5px;
     border-radius: 4px;
 	position:relative;
+	font-size:14px;
 
 }
 .binding_a:after, .binding_a:before {
@@ -3230,9 +3231,9 @@ a.color_gary_f, .color_gary_f{
 }
 
 .littleAnt-iframe-panle {
-	height: calc(100% - 45px);
-	height: -moz-calc(100% - 45px);
-	height: -webkit-calc(100% - 45px);
+	height: calc(100% - 45px) !important;
+	height: -moz-calc(100% - 45px) !important;
+	height: -webkit-calc(100% - 45px) !important;
 }
 @keyframes showBox {
 	from {
@@ -3762,7 +3763,6 @@ div.btn1{
 		background:#fd8069;
 		border:1px solid #fd8069;
 		padding:4px 12px !important;
-		border-radius:6px;
 		
 	}
 .add_study_ho:hover{

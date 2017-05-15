@@ -50,8 +50,10 @@ const HomeWorkTabComponents = React.createClass({
         var toolbar;
         if (this.state.currentOpt == "checkHomeWorkList") {
             tabPanel = <HomeWorkTableComponents ref="homeWorkTable" onSearchClick={this.changeToolbar}/>;
-            if(this.state.activeKey!="作业详情"){
-                returnBtn ='btn2'
+            if (this.state.activeKey != "作业详情") {
+                returnBtn = 'btn2'
+            } else {
+                tabPanel = <AssignHomeWorkComponents ref="assignHomeWorkCom" params={this.state.isNewPage} callbackParent={this.getTeacherHomeWork}/>;
             }
             toolbar = <h3 className={" public—til—blue"}>{this.state.activeKey}<div className={returnBtn}>
                 <span className="btn1 ant-tabs-right"><button  onClick={this.getTeacherHomeWork} ><Icon type="left" /></button></span>
