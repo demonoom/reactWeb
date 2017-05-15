@@ -75,8 +75,33 @@ const MessageMenu = React.createClass({
 									</div>
                                 </div>;
                             } else {
+                                var membersCount = toChatGroup.members.length;
+                                var groupMemebersPhoto=[];
+                                for(var i=0;i<membersCount;i++){
+                                    var member = toChatGroup.members[i];
+                                    var memberAvatarTag = <img src={member.avatar} ></img>;
+                                    groupMemebersPhoto.push(memberAvatarTag);
+                                    if(i>=3){
+                                        break;
+                                    }
+                                }
+                                var groupMemebersPhotoTag = <div className="maaee_group_face" >{groupMemebersPhoto}</div>;
+                                switch (groupMemebersPhoto.length){
+                                    case 1:
+                                        groupMemebersPhotoTag = <div className="maaee_group_face1" >{groupMemebersPhoto}</div>;
+                                        break;
+                                    case 2:
+                                        groupMemebersPhotoTag = <div className="maaee_group_face2" >{groupMemebersPhoto}</div>;
+                                        break;
+                                    case 3:
+                                        groupMemebersPhotoTag = <div className="maaee_group_face3" >{groupMemebersPhoto}</div>;
+                                        break;
+                                    case 4:
+                                        groupMemebersPhotoTag = <div className="maaee_group_face" >{groupMemebersPhoto}</div>;
+                                        break;
+                                }
                                 imgTag = <div>
-                                    <span className="antnest_user"><img src={toChatGroup.avatar} className="antnest_38_img" height="38"></img></span>
+                                    <span className="antnest_user">{groupMemebersPhotoTag}</span>
                                     <div className="mes_u_l">
 										<div><span className="message_name">{toChatGroup.name}</span><span className="time right_ri time_w">{lastCreateTime}</span></div>
 										<div className="message_cont_w">{lastContentText}</div>

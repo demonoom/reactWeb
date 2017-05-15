@@ -50,8 +50,7 @@ const HomeWorkMenu = React.createClass({
                       selectedKeys={['assignHomeWork']}
                       mode="inline"
                 >
-                    <Menu.Item key="assignHomeWork" style={{backgroundColor: '#e5f2fe'}}> <span><Icon type="mail"
-                                                                                                      className='le_1'/><span>布置作业</span></span>
+                    <Menu.Item key="assignHomeWork" style={{backgroundColor: '#e5f2fe'}}> <span><Icon type="mail" className='le_1'/><span>布置作业</span></span>
                     </Menu.Item>
                 </Menu>
             </div>

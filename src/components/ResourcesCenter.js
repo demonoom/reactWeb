@@ -35,7 +35,11 @@ class ResourcesCenter extends React.Component{
         this.onChange = this.onChange.bind(this);
         this.showContent = this.showContent.bind(this);
         this.getTeachPlans = this.getTeachPlans.bind(this);
-
+        this.showModal = this.showModal.bind(this);
+        this.buildBreadcrumb= this.buildBreadcrumb.bind(this);
+        this.menuItemOnClick = this.menuItemOnClick.bind(this);
+        this.courseUploadCallBack = this.courseUploadCallBack.bind(this);
+        this.render = this.render.bind(this);
     }
 
 
@@ -230,7 +234,7 @@ class ResourcesCenter extends React.Component{
 
 
         if (this.state.currentOptType == "bySubjectId" && sessionStorage.getItem("lastClickMenuChildrenCount") == 0 && sessionStorage.getItem("lastClickMenuId") != null) {
-            toolbarExtra = <div className="ant-tabs-right">
+            toolbarExtra = <div className="talk_ant_btn1_1">
                 <CourseWareUploadComponents courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}/>
                 <SubjectUploadByTextboxio courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}/>
             </div>;
