@@ -9,7 +9,7 @@ class GhostMenu extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            ident : sessionStorage.getItem('iden'),
+            ident : sessionStorage.getItem("ident"),
             beActive: true, // 是活动的，可伸缩的
         }
         this.changeMenu = this.changeMenu.bind(this);

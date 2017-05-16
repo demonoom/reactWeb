@@ -119,9 +119,6 @@ class MyMTV extends React.Component {
         ReactDOM.render(<div>{ifrArr}</div>, document.querySelector('.downloadArea'));
     }
 
-    onPreview(obj) {
-        LP.Start(obj);
-    }
 
 
     view(objref) {
@@ -139,7 +136,7 @@ class MyMTV extends React.Component {
             width: '400px',
         }
 
-        this.onPreview(obj)
+        LP.Start(obj);
 
     }
 
@@ -173,10 +170,10 @@ class MyMTV extends React.Component {
             }
             if (user.colUid == sessionStorage.getItem("ident")) {
                 //如果是当前用户，可以删除自己的直播课
-                delButton = <Button icon="delete" className="star_del" onClick={ () => {
+                delButton = <button icon="delete" className="star_del" onClick={ () => {
                     this.deleteLiveVideos(id)
                 } }/>
-                downloadBtn = <Button icon="download" className="star_del" onClick={ () => {
+                downloadBtn = <button icon="download" className="star_del" onClick={ () => {
                     this.downloadLiveVideos(e)
                 } }/>
             }

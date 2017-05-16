@@ -77,24 +77,23 @@ const FavoriteItem = React.createClass({
     },
 
     view: function (e, url, tit) {
-        e = e || window.event;
-        if (e.nativeEvent) {
-            e.nativeEvent.stopImmediatePropagation();
-        }
-        e.stopPropagation();
-        e.preventDefault();
-        e.cancelBubble = true;
-        let urlArr = url.split('/Excoord_For_Education/')[1];
-        if(urlArr){
-        url = "/proxy/Excoord_For_Education/" + urlArr;
-        }
+
+
 
         let obj = {
             title: tit,
             url: url,
             width: '400px'
         }
-        this.props.onPreview(obj)
+        this.props.onPreview(obj);
+
+        // e = e || window.event;
+        // if (e.nativeEvent) {
+        //     e.nativeEvent.stopImmediatePropagation();
+        // }
+        // e.stopPropagation();
+        // e.preventDefault();
+        // e.cancelBubble = true;
     },
 
     getUrl(eObj){

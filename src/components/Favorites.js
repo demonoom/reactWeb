@@ -148,6 +148,7 @@ class Favorites extends React.Component {
         });
     }
 
+
     onPreview(obj){
     LP.Start(obj);
     }
