@@ -1377,11 +1377,11 @@ const PersonCenterComponents = React.createClass({
 							<span className="black_person">{personCenter.state.userInfo.school}</span>
 						</p>
 						<p className="user_cont">
-							<span className="user_til_name">科&nbsp;&nbsp;&nbsp;&nbsp;目：</span>
+							<span className="user_til_name">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：</span>
 							<span className="black_person">{personCenter.state.userInfo.course}</span>
 						</p>
 						<p className="user_cont">
-							<span className="user_til_name">年&nbsp;&nbsp;&nbsp;&nbsp;级：</span>
+							<span className="user_til_name">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span>
 							<span className="black_person">{personCenter.state.userInfo.grade}</span>
 						</p>
 						<p className="user_cont">
