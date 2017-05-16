@@ -183,15 +183,16 @@
         let id = UUID(8, 16);
         this.id = id;
         let vid = 'v' + this.id;
-        let videoArr = obj.videosObj;
-        if ((videoArr instanceof Array) == false) {
+        let videoArr = obj.videosObj || [obj];
+
+        if ( !(videoArr instanceof Array)) {
             videoArr = videoArr.liveInfo.liveVideos;
         }
         let listBtn = [];
         window.srcList = [];
         let classChange = 'single';
 
-        if (videoArr.length > 1) {
+        if(  videoArr.length > 1) {
             classChange = 'multi';
             videoArr.map(function (video, i) {
                 i++;
@@ -200,7 +201,7 @@
             });
         } else {
             let flv = videoArr[0];
-            window.srcList.push({type: 'video/x-flv', src: flv.path});
+            window.srcList.push({type: 'video/x-flv', src: flv.path || flv.url});
         }
 
 
@@ -221,14 +222,15 @@
                 </div>`;
 
 
+        let resultObj = {htm: htm, id: vid, srcList: window.srcList, listBtn: listBtn};
 
+        var htmlContent = resultObj.htm;
         let styleObj = this.calcPos(obj.stylePage, obj.stylePage.zIndex, obj.orderIndex);
-        let htmEl = $(htm).css(styleObj);
-        $(document.body).append(htmEl);
+        htmlContent = $(htmlContent).css(styleObj);
+        $(document.body).append(htmlContent);
         this.el = $('#' + this.id);
         $(this.el).drag();
         $(this.el).find('.close').on('click', this.closepanle.bind(this, this.id));
-
 
         var options = {
             sourceOrder: true,
@@ -239,19 +241,20 @@
             techOrder: ['html5', 'flash']
         };
 
-        var playerA = videojs(this.id, options, function () {
+        var playerA = videojs(resultObj.id, options, function () {
             this.play();
             this.on('ended', function () {
             });
         });
 
         $('.list-group a').on("click", function () {
-            let newsrc = this.id.srcList[parseInt($(this).text()) - 1];
+            let newsrc = resultObj.srcList[parseInt($(this).text()) - 1];
             playerA.src(newsrc);
         });
 
 
         return this;
+
     }
 
 
@@ -369,16 +372,13 @@
         //
         //
 
-
         switch (this.param.mode) {
             default:
                 this._showMP4PPTPDFTemplet(this.param);
                 break;
-            case 'html':
-                this._showMP4PPTPDFTemplet(this.param);
-                break;
             case 'flv':
-                this._showHtmlFlv_old(this.param);
+                this._showHtmlFlv(this.param);
+               // this._showHtmlFlv_old(this.param);
                 break;
             case 'teachingAdmin':
                 this._teachAdminIframe_HtmlTemplet(this.param);

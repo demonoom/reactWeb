@@ -222,7 +222,9 @@ class ResourcesCenter extends React.Component{
 
 
             case 'bySchedule':
-                tabPanel = <TabPane tab="课件" key="课件"><CourseWareComponents ref="courseWare"/></TabPane>;
+                tabPanel = <TabPane tab="课件" key="课件">
+                    <CourseWareComponents ref="courseWare"/>
+                </TabPane>;
                 subjectTabPanel =
                     <TabPane tab="题目" key="题目">
                         <SubjectTable   params={this.state.subjectParams}/>
