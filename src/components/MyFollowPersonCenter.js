@@ -218,15 +218,15 @@ const MyFollowPersonCenter = React.createClass({
 
             userInfoCard = <Card title={this.state.userInfo.user.userName+'的名片'}  className="bai">
                 <Row className="person_13">
-                    <Col span={3} className="gary_person">学&nbsp;&nbsp;&nbsp;&nbsp;校：</Col>
+                    <Col span={3} className="gary_person">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;校：</Col>
                     <Col span={21} className="black_person">{this.state.userInfo.school}</Col>
-                    <Col span={3} className="gary_person">科&nbsp;&nbsp;&nbsp;&nbsp;目：</Col>
+                    <Col span={3} className="gary_person">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：</Col>
                     <Col span={21} className="black_person">{this.state.userInfo.course}</Col>
-                    <Col span={3} className="gary_person">年&nbsp;&nbsp;&nbsp;&nbsp;级：</Col>
+                    <Col span={3} className="gary_person">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</Col>
                     <Col span={21} className="black_person">{this.state.userInfo.grade}</Col>
                 </Row>
                 <Row>
-                    <Col span={3} className="gary_person">{userName+'简介：'}</Col>
+                    <Col span={3} className="gary_person">个人简介：</Col>
                     <Col span={21} className="black_person">{intro}</Col>
                 </Row>
             </Card>;
@@ -248,7 +248,7 @@ const MyFollowPersonCenter = React.createClass({
         }
 
         return (
-            <div>
+            <div className="maaee_group_pa">
                 <Card className="bai">
                     {userPhotoTag}
 
@@ -261,15 +261,13 @@ const MyFollowPersonCenter = React.createClass({
                      {sendMessageButton}
                         {followButton}
 					 </span>
-
-
                 </Card>
-
-                <div>
+				
+                <div className="maaee_group_pa">
 					{userLinkCard}
                     {userInfoCard}
                 </div>
-            </div>
+         </div>   
         );
     },
 });
