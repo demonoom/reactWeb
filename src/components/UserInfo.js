@@ -133,9 +133,10 @@ const UserInfo = React.createClass({
     render() {
 
         return (
-            <div className="maaee_group_pa password_cow">
+			<div className="userinfo_bg">
+            <div className="">
                 {this.getTitle()}
-				<div className="ant-card ant-card-bordered ant-card-body password_cow">
+				<div className="ant-card ant-card-bordered ant-card-body password_cow pers_bo_ra">
 					<p className="user_cont"><span className="name ant-col-3">学校名称：</span><span
                     className="name1">{this.state.schoolName}</span></p>
                 <p className="user_cont"><span className="name">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -151,6 +152,7 @@ const UserInfo = React.createClass({
                 
 
             </div>
+			</div>
         );
     },
 });
