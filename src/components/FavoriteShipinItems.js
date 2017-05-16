@@ -42,15 +42,12 @@ const FavoriteShipinItems = React.createClass({
             return;
         }
 
-        let url = objref.liveInfo.liveVideos[0].path;
+        let liveVideos = objref.liveInfo.liveVideos;
 
         let obj = {
             title: objref.content,
-            url: url,
-            param: objref,
-            mode: 'html',
-            width: '400px',
-
+            param: liveVideos,
+            mode: 'flv',
         }
 
         this.props.onPreview(obj);

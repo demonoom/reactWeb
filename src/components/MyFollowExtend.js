@@ -243,10 +243,7 @@ const MyFollowExtend = React.createClass({
         return uuid;
     },
 
-    // 侧边预览
-    onPreview(obj) {
-        LP.Start(obj);
-    },
+
 
     /**
      * 进入收发消息的窗口
@@ -1320,9 +1317,10 @@ const MyFollowExtend = React.createClass({
         this.getLiveInfoByUid(obj.colUid, 1);
     },
 
-    view: function (e, videosObj, title) {
-        let obj = {mode: 'html', flvjs: flvjsobj, param: videosObj, title: title, url: "", width: '380px'}
-        this.onPreview(obj)
+    onPreview (e, videosObj, title) {
+
+        let obj = {mode: 'flv', param: videosObj, title: title}
+        LP.Start(obj);
     },
 
 
@@ -1359,10 +1357,12 @@ const MyFollowExtend = React.createClass({
                         if (isEmpty(password) == false) {
                             keyIcon = <Icon type="key"/>;
                         }
+
+
                         var liveCard = <Card className="live">
                             <p className="h3">{title}</p>
                             <div className="live_img" id={id} onClick={event => {
-                                _this.view(event, liveVideos, title)
+                                _this.onPreview(event, liveVideos, title)
                             } }>
                                 <img className="attention_img" width="100%" src={cover}/>
                                 <div className="live_green"><span>{schoolName}</span></div>
@@ -2144,7 +2144,7 @@ const MyFollowExtend = React.createClass({
                 break;
 
             case 'getLiveInfoByUid':
-debugger
+
                 tabComponent = <div >
                     <h3 className="public—til—blue">
                         <div className="ant-tabs-right">
@@ -2206,8 +2206,7 @@ debugger
                 break;
 
             case 'userFavorite':
-                tabComponent = <Favorites userid={this.state.studentId} breadcrumbVisible={false}
-                                          onPreview={ this.props.onPreview }></Favorites>;
+                tabComponent = <Favorites userid={this.state.studentId} breadcrumbVisible={false} />;
                 break;
 
             case 'getPlatformRulePage':

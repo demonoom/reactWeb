@@ -75,6 +75,7 @@
 
     }
     littlePanle.prototype.closepanle = function (id) {
+
         let tmp = [];
         LP.mgr.map(function (item, index) {
             if (item.id == id) {
@@ -177,31 +178,27 @@
     }
 
 
-
     littlePanle.prototype._showHtmlFlv = function (obj) {
 
         let id = UUID(8, 16);
         this.id = id;
         let vid = 'v' + this.id;
-        let videoArr = obj.videosObj || [obj];
-
-        if ( !(videoArr instanceof Array)) {
-            videoArr = videoArr.liveInfo.liveVideos;
-        }
+        let videoArr = obj.param || [obj];
+//
         let listBtn = [];
-        window.srcList = [];
+        let srcList = [];
         let classChange = 'single';
 
-        if(  videoArr.length > 1) {
+        if (videoArr.length > 1) {
             classChange = 'multi';
             videoArr.map(function (video, i) {
                 i++;
-                window.srcList.push({type: 'video/x-flv', src: video.path});
+                srcList.push({type: 'video/x-flv', src: video.path});
                 listBtn.push("<a class='listBtn' >" + i + "</a>");
             });
         } else {
             let flv = videoArr[0];
-            window.srcList.push({type: 'video/x-flv', src: flv.path || flv.url});
+            srcList.push({type: 'video/x-flv', src: flv.path || flv.url});
         }
 
 
@@ -215,16 +212,14 @@
                 <div class="content">
                     <section class="littleAnt-iframe-panle ${classChange}">
                        <video id="${vid}" class="video-js vjs-default-skin vjs-big-play-centered"
-                       src="${window.srcList[0].src}"   data-setup='{}'></video>
-                       <div class="list-group" >${listBtn.join('')}</div>
+                       src="${srcList[0].src}"   data-setup='{}'></video>
+                       <div class="list-group" >${ listBtn.length ? listBtn.join('') : '' }</div>
                     </section>
                 </div>
                 </div>`;
 
 
-        let resultObj = {htm: htm, id: vid, srcList: window.srcList, listBtn: listBtn};
-
-        var htmlContent = resultObj.htm;
+        var htmlContent = htm;
         let styleObj = this.calcPos(obj.stylePage, obj.stylePage.zIndex, obj.orderIndex);
         htmlContent = $(htmlContent).css(styleObj);
         $(document.body).append(htmlContent);
@@ -235,21 +230,21 @@
         var options = {
             sourceOrder: true,
             controls: true,
-            preload: "auto",
             autoplay: true,
-            sources: window.srcList,
+            preload: "auto",
+            sources: srcList,
             techOrder: ['html5', 'flash']
         };
 
-        var playerA = videojs(resultObj.id, options, function () {
-            this.play();
-            this.on('ended', function () {
+        var playerA = videojs(vid, options, function () {
+            playerA.play();
+            playerA.on('ended', function () {
             });
         });
 
         $('.list-group a').on("click", function () {
-            let newsrc = resultObj.srcList[parseInt($(this).text()) - 1];
-            playerA.src(newsrc);
+            let nextVideo = srcList[parseInt($(this).text()) - 1];
+            playerA.src(nextVideo);
         });
 
 
@@ -257,98 +252,13 @@
 
     }
 
-
-
-
-    littlePanle.prototype._showHtmlFlv_old = function (obj) {
-
-        let resultObj = this._HtmlFlvTemplet_old();
-        var htm = resultObj.htm;
-        let styleObj = this.calcPos(this.param.stylePage, this.param.stylePage.zIndex, this.param.orderIndex);
-        htm = $(htm).css(styleObj);
-        $(document.body).append(htm);
-        this.el = $('#' + this.id);
-        $(this.el).drag();
-        $(this.el).find('.close').on('click', this.closepanle.bind(this, this.id));
-
-
-        var options = {
-            sourceOrder: true,
-            controls: true,
-            preload: "auto",
-            autoplay: true,
-            sources: window.srcList,
-            techOrder: ['html5', 'flash']
-        };
-
-        var playerA = videojs(resultObj.id, options, function () {
-            this.play();
-            this.on('ended', function () {
-            });
-        });
-
-        $('.list-group a').on("click", function () {
-            let newsrc = resultObj.srcList[parseInt($(this).text()) - 1];
-            playerA.src(newsrc);
-        });
-
-
-        return this;
-    }
-
-    littlePanle.prototype._HtmlFlvTemplet_old = function () {
-
-        let id = UUID(8, 16);
-        this.id = id;
-        let vid = 'v' + this.id;
-        let videoArr = this.param.videosObj;
-        if ((videoArr instanceof Array) == false) {
-            videoArr = videoArr.liveInfo.liveVideos;
-        }
-        let listBtn = [];
-        window.srcList = [];
-        let classChange = 'single';
-
-        if (videoArr.length > 1) {
-            classChange = 'multi';
-            videoArr.map(function (video, i) {
-                i++;
-                window.srcList.push({type: 'video/x-flv', src: video.path});
-                listBtn.push("<a class='listBtn' >" + i + "</a>");
-            });
-        } else {
-            let flv = videoArr[0];
-            window.srcList.push({type: 'video/x-flv', src: flv.path});
-        }
-
-
-        let htm = `<div id="${id}" class="dialog little-layout-aside-r-show">
-                <div class="header draggable">
-                <h3 class="title">${ this.param.title }</h3>
-                    <div class="little-tilte">
-                        <a class="close"><i className="iconfont iconfont_close">&#xe615;</i></a>
-                    </div>
-                </div>
-                <div class="content">
-                    <section class="littleAnt-iframe-panle ${classChange}">
-                       <video id="${vid}" class="video-js vjs-default-skin vjs-big-play-centered"
-                       src="${window.srcList[0].src}"   data-setup='{}'></video>
-                       <div class="list-group" >${listBtn.join('')}</div>
-                    </section>
-                </div>
-                </div>`;
-
-        return {htm: htm, id: vid, srcList: window.srcList, listBtn: listBtn};
-    }
 
     littlePanle.prototype.GetLP = function (obj, oldArray) {
 
-        this.param.mode = obj.mode || '';
-        this.param.htmlMode = obj.htmlMode || '';
+        this.param.mode = obj.mode || obj.htmlMode || '';
         this.param.width = obj.width || '';
-        this.param.videosObj = obj.param;
+        this.param.param = obj.param;
         this.param.title = obj.title;
-        this.param.flvjs = obj.flvjs;
         this.param.url = this._setProxyInfo(obj.url);
 
         let maxIndex = () => {
@@ -363,7 +273,6 @@
 
             })
             return refindex;
-
         }
 
         this.param.orderIndex = oldArray.length;
@@ -378,7 +287,7 @@
                 break;
             case 'flv':
                 this._showHtmlFlv(this.param);
-               // this._showHtmlFlv_old(this.param);
+                // this._showHtmlFlv_old(this.param);
                 break;
             case 'teachingAdmin':
                 this._teachAdminIframe_HtmlTemplet(this.param);
@@ -389,6 +298,8 @@
         return this;
     }
     littlePanle.prototype._setProxyInfo = function (url) {
+
+        if (!url) return '';
 
         if (/www\.maaee\.com/img.test(url)) {
             return '/proxy' + url.split('www.maaee.com')[1];
