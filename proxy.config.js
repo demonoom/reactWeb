@@ -5,5 +5,7 @@ module.exports = {
     'GET /proxy/ant_service/(.*)':              'http://www.maaee.com/ant_service/',
     'GET /proxy/Excoord_PC/(.*)':               'http://www.maaee.com/Excoord_PC/',
     'GET /proxy/live2/(.*)':                    'http://60.205.86.217:8585/live2/',
+    'GET /proxy/upload4/(.*)':                    'http://60.205.86.217/upload4/',
+
 
 };

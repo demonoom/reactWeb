@@ -136,8 +136,7 @@
     }
 
 
-
-    littlePanle.prototype._showIframeTemplet = function (obj) {
+    littlePanle.prototype._showMP4PPTPDFTemplet = function (obj) {
         let id = UUID(8, 16);
         this.id = id;
         this.ifrid = 'ifr' + id;
@@ -177,18 +176,14 @@
         return this;
     }
 
-    littlePanle.prototype._iframeonloadevent = function (id, event) {
 
-        event.target.contentWindow.phone = phone;
-
-    }
 
     littlePanle.prototype._showHtmlFlv = function (obj) {
 
         let id = UUID(8, 16);
         this.id = id;
         let vid = 'v' + this.id;
-        let videoArr = this.param.videosObj;
+        let videoArr = obj.videosObj;
         if ((videoArr instanceof Array) == false) {
             videoArr = videoArr.liveInfo.liveVideos;
         }
@@ -211,7 +206,7 @@
 
         let htm = `<div id="${id}" class="dialog little-layout-aside-r-show">
                 <div class="header draggable">
-                <h3 class="title">${ this.param.title }</h3>
+                <h3 class="title">${ obj.title }</h3>
                     <div class="little-tilte">
                         <a class="close"><i className="iconfont iconfont_close">&#xe615;</i></a>
                     </div>
@@ -226,12 +221,10 @@
                 </div>`;
 
 
-        Obj = {htm: htm, id: vid, srcList: window.srcList, listBtn: listBtn};
 
-
-        let styleObj = this.calcPos(this.param.stylePage, this.param.stylePage.zIndex, this.param.orderIndex);
-        htm = $(htm).css(styleObj);
-        $(document.body).append(htm);
+        let styleObj = this.calcPos(obj.stylePage, obj.stylePage.zIndex, obj.orderIndex);
+        let htmEl = $(htm).css(styleObj);
+        $(document.body).append(htmEl);
         this.el = $('#' + this.id);
         $(this.el).drag();
         $(this.el).find('.close').on('click', this.closepanle.bind(this, this.id));
@@ -260,7 +253,47 @@
 
         return this;
     }
-    littlePanle.prototype._HtmlFlvTemplet = function () {
+
+
+
+
+    littlePanle.prototype._showHtmlFlv_old = function (obj) {
+
+        let resultObj = this._HtmlFlvTemplet_old();
+        var htm = resultObj.htm;
+        let styleObj = this.calcPos(this.param.stylePage, this.param.stylePage.zIndex, this.param.orderIndex);
+        htm = $(htm).css(styleObj);
+        $(document.body).append(htm);
+        this.el = $('#' + this.id);
+        $(this.el).drag();
+        $(this.el).find('.close').on('click', this.closepanle.bind(this, this.id));
+
+
+        var options = {
+            sourceOrder: true,
+            controls: true,
+            preload: "auto",
+            autoplay: true,
+            sources: window.srcList,
+            techOrder: ['html5', 'flash']
+        };
+
+        var playerA = videojs(resultObj.id, options, function () {
+            this.play();
+            this.on('ended', function () {
+            });
+        });
+
+        $('.list-group a').on("click", function () {
+            let newsrc = resultObj.srcList[parseInt($(this).text()) - 1];
+            playerA.src(newsrc);
+        });
+
+
+        return this;
+    }
+
+    littlePanle.prototype._HtmlFlvTemplet_old = function () {
 
         let id = UUID(8, 16);
         this.id = id;
@@ -336,14 +369,19 @@
         //
         //
 
+
         switch (this.param.mode) {
             default:
-                this._showIframeTemplet(this.param);
-            case 'teachingAdmin':
-                this._teachAdminIframe_HtmlTemplet(this.param);
+                this._showMP4PPTPDFTemplet(this.param);
                 break;
             case 'html':
-                this._showHtmlFlv(this.param);
+                this._showMP4PPTPDFTemplet(this.param);
+                break;
+            case 'flv':
+                this._showHtmlFlv_old(this.param);
+                break;
+            case 'teachingAdmin':
+                this._teachAdminIframe_HtmlTemplet(this.param);
                 break;
 
         }
@@ -356,8 +394,12 @@
             return '/proxy' + url.split('www.maaee.com')[1];
         }
 
-        if (/60\.205\.86\.217/img.test(url)) {
+        if (/60\.205\.86\.217:8585/img.test(url)) {
             return '/proxy' + url.split('60.205.86.217:8585')[1];
+        }
+
+        if (/60\.205\.86\.217/img.test(url)) {
+            return '/proxy' + url.split('60.205.86.217')[1];
         }
 
         return url;
@@ -387,6 +429,12 @@
         refStyle.zIndex = index++;
 
         return refStyle
+
+    }
+
+    littlePanle.prototype._iframeonloadevent = function (id, event) {
+
+        event.target.contentWindow.phone = phone;
 
     }
 

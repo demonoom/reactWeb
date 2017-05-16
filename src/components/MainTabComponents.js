@@ -153,7 +153,7 @@ const MainTabComponents = React.createClass({
     render() {
         var tabPanel;
         var subjectTabPanel;
-        debugger
+
         var displayType='none';
         console.log("displayType================="+displayType);
         const menu = (
