@@ -46,22 +46,21 @@ class CourseWare extends React.Component {
     }
 
 
+    componentWillMount() {
 
-    componentWillMount(){
-
-        this.setState({courseListState: [],totalCount: 0});
+        this.setState({courseListState: [], totalCount: 0});
     }
 
 
     componentWillReceiveProps(nextProps) {
         // 4
-        let obj = nextProps.params  ? nextProps.params : this.props.params;
+        let obj = nextProps.params ? nextProps.params : this.props.params;
         if (!obj)   return;
-        this.getTeachPlans(obj.ident,obj.teachScheduleId,obj.optType,obj.pageNo,obj.knowledgeName,obj.dataFilter,obj.comeFrom);
+        this.getTeachPlans(obj.ident, obj.teachScheduleId, obj.optType, obj.pageNo, obj.knowledgeName, obj.dataFilter, obj.comeFrom);
     }
 
 
-    getTeachPlans(ident, teachScheduleId, optType, pageNo, knowledgeName, dataFilter, comeFrom){
+    getTeachPlans(ident, teachScheduleId, optType, pageNo, knowledgeName, dataFilter, comeFrom) {
         this.setState({
             ident: ident,
             teachScheduleId: teachScheduleId,
@@ -203,7 +202,7 @@ class CourseWare extends React.Component {
     }
 
 
-    getLocalTime (nS) {
+    getLocalTime(nS) {
         var newDate = new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/, ' ');
         return newDate;
     }
@@ -216,7 +215,7 @@ class CourseWare extends React.Component {
 
     }
 
-    showModal (e) {
+    showModal(e) {
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             target = e.currentTarget;
@@ -227,11 +226,11 @@ class CourseWare extends React.Component {
         this.refs.useKnowledgeComponents.showModal(currentSchedule, "courseWare", this.state.knowledgeName);
     }
 
-    isDeleteAll(e){
+    isDeleteAll(e) {
         this.setState({isDeleteAllSubject: e.target.checked});
     }
 
-    showDelScheduleMateriaConfirmModal(e){
+    showDelScheduleMateriaConfirmModal(e) {
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             target = e.currentTarget;
@@ -243,18 +242,18 @@ class CourseWare extends React.Component {
         this.refs.delScheduleMateriaConfirmModal.changeConfirmModalVisible(true);
     }
 
-    closeDelScheduleMateriaConfirmModal(){
+    closeDelScheduleMateriaConfirmModal() {
         this.refs.delScheduleMateriaConfirmModal.changeConfirmModalVisible(false);
     }
 
 
-    deleteScheduleMaterials(){
+    deleteScheduleMaterials() {
         this.deleteScheduleMaterialsById(this.state.delMaterialIds);
         this.closeDelScheduleMateriaConfirmModal();
     }
 
     //删除教学进度下的材料（课件）
-    deleteScheduleMaterialsById(materialIds){
+    deleteScheduleMaterialsById(materialIds) {
         let _this = this;
         if (this.state.isDeleteAllSubject) {
             //同步删除资源库下的资源
@@ -282,7 +281,7 @@ class CourseWare extends React.Component {
         }
     }
 
-    showConfirmModal(e){
+    showConfirmModal(e) {
         var _this = this;
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
@@ -295,17 +294,17 @@ class CourseWare extends React.Component {
         _this.refs.confirmModal.changeConfirmModalVisible(true);
     }
 
-    closeConfirmModal(){
+    closeConfirmModal() {
         this.refs.confirmModal.changeConfirmModalVisible(false);
     }
 
-    batchDeleteMaterial(){
+    batchDeleteMaterial() {
         this.batchDeleteMaterialById(this.state.delMaterialIds);
         this.closeConfirmModal();
     }
 
     //删除资源库下的材料（课件）
-    batchDeleteMaterialById(materialIds){
+    batchDeleteMaterialById(materialIds) {
         let _this = this;
         var param;
         if (this.state.isDeleteAllSubject) {
@@ -338,7 +337,8 @@ class CourseWare extends React.Component {
 
     }
 
-    view (e, url, tit) {
+    view(e, url, tit) {
+
         e = e || window.event;
         if (e.nativeEvent) {
             e.nativeEvent.stopImmediatePropagation();
@@ -346,36 +346,81 @@ class CourseWare extends React.Component {
         e.stopPropagation();
         e.preventDefault();
         e.cancelBubble = true;
-        let obj = {title: tit, url: url, width: '380px'}
+
+        let mode = (tit) =>{
+            let refArr =  tit.split('.');
+            let type = refArr[ refArr.length-1];
+            return type;
+        }
+
+        let obj = {mode:mode(tit),title: tit, url: url, width: '380px'};
+
+
         LP.Start(obj);
     }
 
-    buildPanels (courseWareList) {
+    buildPanels(courseWareList) {
         if (courseWareList.length == 0) {
             this.coursePanelChildren = <img className="noDataTipImg" src={require('./images/noDataTipImg.png')}/>;
         } else {
             this.coursePanelChildren = courseWareList.map((e, i) => {
+
                 var eysOnButton;
-                if (isEmpty(e[5]) == false && ("pptx" == e[5] || "ppt" == e[5])) {
-                    if (isEmpty(e[9]) == false) {
-                        eysOnButton =
-                            <Button icon="eye-o" style={{float: 'right'}} onClick={event => {
-                                this.view(event, e[9], e[1])
-                            } }/>
-                    }
-                } else {
-                    if (isEmpty(e[3]) == false) {
-                        eysOnButton =
-                            <Button icon="eye-o" style={{float: 'right'}} onClick={event => {
-                                this.view(event, e[3], e[1])
-                            } }/>
-                    }
+
+
+                switch (e[5]) {
+                    case 'pptx':
+                        if (isEmpty(e[9]) == false) {
+                            eysOnButton =
+                                <Button icon="eye-o" style={{float: 'right'}} onClick={event => {
+                                    this.view(event, e[9], e[1])
+                                } }/>
+                        }
+                        break;
+
+                    case 'ppt':
+                        if (isEmpty(e[9]) == false) {
+                            eysOnButton =
+                                <Button icon="eye-o" style={{float: 'right'}} onClick={event => {
+                                    this.view(event, e[9], e[1])
+                                } }/>
+                        }
+                        break;
+
+                    case 'flv':
+                        if (isEmpty(e[9]) == false) {
+                            eysOnButton =
+                                <Button icon="eye-o" style={{float: 'right'}} onClick={event => {
+                                    this.view(event, e[9], e[1])
+                                } }/>
+                        }
+                        break;
+                    case 'mp4':
+                        if (isEmpty(e[9]) == false) {
+                            eysOnButton =
+                                <Button icon="eye-o" style={{float: 'right'}} onClick={event => {
+                                    this.view(event, e[9], e[1])
+                                } }/>
+                        }
+                        break;
+                    default:
+                        if (isEmpty(e[9]) == false) {
+                            eysOnButton =
+                                <Button icon="eye-o" style={{float: 'right'}} onClick={event => {
+                                    this.view(event, e[9], e[1])
+                                } }/>
+                        }
+                        break;
+
                 }
+
+
                 return <Panel header={<span><span type="" className={e[8]}></span><span
                     className="name_file">{e[1]}</span> </span>} key={e[1] + "#" + e[7] + "#" + e[0]}>
                     <pre>
 					 <div className="bnt2_tex">
-                         <span className="bai"><span className="col1">知识点：</span><span className="col2">{e[6]}</span></span>
+                         <span className="bai"><span className="col1">知识点：</span><span
+                             className="col2">{e[6]}</span></span>
                          <span><span className="col1">创建人：</span><span className="col2">{e[2]}</span></span>
                          <span><span className="col1">上传时间：</span><span className="col2">{e[7]}</span></span>
                          <span><span className="col1">点赞次数：</span><span className="col2">{e[10]}</span></span>
@@ -393,7 +438,7 @@ class CourseWare extends React.Component {
         }
     }
 
-    buildKonwledgePanels (courseWareList) {
+    buildKonwledgePanels(courseWareList) {
         if (courseWareList.length == 0) {
             this.coursePanelChildren =
                 <img className="noDataTipImg" onClick={$.openPhotoGallery} src={require('./images/noDataTipImg.png')}/>;
@@ -425,7 +470,8 @@ class CourseWare extends React.Component {
                     className="name_file">{e[1]}</span> </span>} key={e[1] + "#" + e[7] + "#" + e[0]}>
                     <pre>
 					<div className="bnt2_tex">
-                         <span className="bai"><span className="col1">知识点：</span><span className="col2">{e[6]}</span></span>
+                         <span className="bai"><span className="col1">知识点：</span><span
+                             className="col2">{e[6]}</span></span>
                          <span><span className="col1">创建人：</span><span className="col2">{e[2]}</span></span>
                          <span><span className="col1">上传时间：</span><span className="col2">{e[7]}</span></span>
                          <span><span className="col1">点赞次数：</span><span className="col2">{e[11]}</span></span>
@@ -446,7 +492,7 @@ class CourseWare extends React.Component {
         }
     }
 
-    render () {
+    render() {
         $(".ant-menu-submenu-title").each(function () {
             if ($(this)[0].textContent == sessionStorage.getItem("lastClickMenuName")) {
                 $(this).css("background-color", "#e5f2fe");
@@ -482,6 +528,7 @@ class CourseWare extends React.Component {
         );
     }
 
-};
+}
+;
 
 export default CourseWare;

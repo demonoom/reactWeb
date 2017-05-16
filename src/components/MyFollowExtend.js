@@ -2144,7 +2144,7 @@ const MyFollowExtend = React.createClass({
                 break;
 
             case 'getLiveInfoByUid':
-
+debugger
                 tabComponent = <div >
                     <h3 className="public—til—blue">
                         <div className="ant-tabs-right">

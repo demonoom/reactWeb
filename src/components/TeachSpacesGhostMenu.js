@@ -9,6 +9,7 @@ class GhostMenu extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            ident : sessionStorage.getItem('iden'),
             beActive: true, // 是活动的，可伸缩的
         }
         this.changeMenu = this.changeMenu.bind(this);
@@ -56,7 +57,7 @@ class GhostMenu extends React.Component {
         let param = {
             mode: 'teachingAdmin',
             title: '教学管理',
-            url: 'http://www.maaee.com/Excoord_PhoneService/permission/permissionList/23836',
+            url: 'http://www.maaee.com/Excoord_PhoneService/permission/permissionList/' + this.state.ident,
         }
 
         LP.Start(param);
