@@ -188,11 +188,11 @@ i, cite, em, var, address, dfn {
     }
 
     .ant-layout-aside-collapse .ant-layout-sider > .ant-menu > .ant-menu-item:hover {
-      background: #46aafd;
+      background: none;
 	  color:#fff;
     }
 .ant-layout-aside-collapse .ant-layout-sider > .ant-menu > .ant-menu-item:active {
-      background: #309ffb;
+      background: none;
 	  color:#fff;
     }
 	
@@ -211,6 +211,7 @@ i, cite, em, var, address, dfn {
 	  border-radius:4px;
 	  padding:0 8px;
 	  z-index:1000;
+	  font-size:14px;
     }
 
     .ant-layout-aside-collapse .ant-layout-sider > .ant-menu > .ant-menu-item:hover .nav-text {
@@ -660,7 +661,7 @@ html, body, #root {
 }
 .ant-menu-dark.ant-menu-inline .ant-menu-item-selected{
 	color: #fff;
-	background:#309ffb;
+	background:none;
     box-sizing: border-box;
 	-moz-box-sizing:border-box; /* Firefox */
    -webkit-box-sizing:border-box; /* Safari */
@@ -668,7 +669,7 @@ html, body, #root {
 }
 .ant-menu-dark.ant-menu-inline .ant-menu-item-active{
 	color: #fff;
-	background:#309ffb;
+	background:none;
     box-sizing: border-box;
 	-moz-box-sizing:border-box; /* Firefox */
    -webkit-box-sizing:border-box; /* Safari */
@@ -679,7 +680,7 @@ html, body, #root {
 	
 }
 .ant-menu-submenu-title:hover, .ant-menu-submenu-title:active{
-	background:#309ffb;
+	background:none;
 	font-weight: normal;
 	box-sizing:border-box;
     -moz-box-sizing:border-box; /* Firefox */
@@ -813,10 +814,11 @@ html, body, #root {
     border-bottom: 1px solid #dfe0e3;
 }
 .ant-menu-dark.ant-menu-inline li {
-	height:64px;
-	padding-left:22px;
-	line-height:64px;
-	margin:0 !important;
+	height:28px;
+	margin-left:15px !important;
+	line-height:28px;
+	width:28px;
+	padding-left:0 !important
 
 	
 }
@@ -2591,7 +2593,36 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 	background:url(../components/images/icon_yichao.png) no-repeat 0 -48px;
 
 }
-
+.icon_menu_ios{
+	background:url(../components/images/icon_menu_ios.png) no-repeat;
+	width:28px;
+	height:28px;
+	display:inline-block;
+}
+.icon_message{
+	background-position:0 0;
+}
+.ant-menu-item-selected .icon_message{
+	background-position: 0 -50px;
+}
+.icon_yichao1{
+	background-position: 0 -100px;
+}
+.ant-menu-item-selected .icon_yichao1{
+	background-position: 0 -150px;
+}
+.icon_jiaoxue{
+	background-position: 0 -200px;
+}
+.ant-menu-item-selected .icon_jiaoxue{
+	background-position: 0 -250px;
+}
+.icon_antgroup{
+	background-position: 0 -300px;
+}
+.ant-menu-item-selected .icon_antgroup{
+	background-position: 0 -350px;
+}
 .person_13{
 	font-size:16px !important;
 }
