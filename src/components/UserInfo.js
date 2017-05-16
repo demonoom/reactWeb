@@ -119,7 +119,7 @@ const UserInfo = React.createClass({
         return <div className="gary_person">
             <Upload {...uploadProps}>
                 {
-                    this.state.userHeadIcon ? <img src={this.state.userHeadIcon} className="person_user userinfo_name"/> :
+                    this.state.userHeadIcon ? <img src={this.state.userHeadIcon} className="userinfo_name userinfo_face user_with_border4 affix_bottom_tc"/> :
                         <Icon type="plus" className="avatar-uploader-trigger"/>
                 }
             </Upload>
@@ -133,9 +133,10 @@ const UserInfo = React.createClass({
     render() {
 
         return (
-            <div className="maaee_group_pa password_cow">
+			<div className="userinfo_bg">
+            <div className="">
                 {this.getTitle()}
-				<div className="ant-card ant-card-bordered ant-card-body password_cow">
+				<div className="userinfo_top">
 					<p className="user_cont"><span className="name ant-col-3">学校名称：</span><span
                     className="name1">{this.state.schoolName}</span></p>
                 <p className="user_cont"><span className="name">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -151,6 +152,7 @@ const UserInfo = React.createClass({
                 
 
             </div>
+			</div>
         );
     },
 });

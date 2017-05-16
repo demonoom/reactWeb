@@ -378,19 +378,19 @@ const MainLayout = React.createClass({
                               selectedKeys={[this.state.currentKey]}
                               onClick={this.toolbarClick}>
                             <Menu.Item key="message" className="padding_menu">
-                                <Icon type="message"/>
+                                <i className="icon_menu_ios icon_message"></i>
                                 <div className="tan">动态</div>
                             </Menu.Item>
                             <Menu.Item key="antNest" className="padding_menu">
-                                <i className="icon_yichao"></i>
+                                <i className="icon_menu_ios icon_yichao1"></i>
                                 <div className="tan">蚁巢</div>
                             </Menu.Item>
                             <Menu.Item key="teachSpace" className="padding_menu">
-                                <Icon type="cloud"/>
+                                <i className="icon_menu_ios icon_jiaoxue"></i>
                                 <div className="tan">教学空间</div>
                             </Menu.Item>
                             <Menu.Item key="antGroup" className="padding_menu">
-                                <Icon type="team"/>
+                                <i className="icon_menu_ios icon_antgroup"></i>
                                 <div className="tan">蚁群</div>
                             </Menu.Item>
                             <FloatButton ref="floatButton" messageUtilObj={ms}/>

@@ -2151,7 +2151,7 @@ const MyFollowExtend = React.createClass({
                             <button onClick={this.props.returnParentFollows}><Icon type="left"/></button>
                         </div>
                         {this.state.currentPerson.user.userName + "的直播课"}</h3>
-                    <div className='ant-tabs ant-tabs-top ant-tabs-line topics_calc favorite_pa_le'
+                    <div className='ant-tabs ant-tabs-top ant-tabs-line topics_calc'
                          style={{'overflow': 'auto'}}>
                         {this.state.userLiveData}
                     </div>
