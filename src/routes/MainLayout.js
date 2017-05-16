@@ -266,12 +266,13 @@ const MainLayout = React.createClass({
      * @param fromObj
      */
     turnToMessagePage(fromObj){
+        var timeNode = (new Date()).valueOf();
         if (fromObj.messageType == 1) {
             // 个人消息
             this.refs.antGroupTabComponents.getUser2UserMessages(fromObj.fromUser);
         } else {
             // 群组消息
-            this.refs.antGroupTabComponents.sendGroupMessage(fromObj.toChatGroup);
+            this.refs.antGroupTabComponents.sendGroupMessage(fromObj.toChatGroup,timeNode);
         }
 
     },
