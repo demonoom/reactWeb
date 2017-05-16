@@ -122,7 +122,7 @@ class LessonPlanMenus extends React.Component{
                             className="iconfont iconfont_more">&#xe60e;</i></Dropdown>
                     </Menu.Item>
                 } else {
-                    return <Menu.Item key={e[0]} style={{backgroundColor: '#e5f2fe'}}>
+                    return <Menu.Item key={e[0]}>
                         <div className="submenu_left_hidden">{e[1]}</div>
                         <Dropdown overlay={menu} trigger={['click']} className='del_right'><i
                             className="iconfont iconfont_more">&#xe60e;</i></Dropdown>
