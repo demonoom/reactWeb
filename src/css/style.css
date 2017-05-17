@@ -1540,11 +1540,11 @@ a {
 }
 @font-face {
   font-family: 'iconfont';  /* project id 197083 */
-  src: url('//at.alicdn.com/t/font_y0cgkitpd0psc3di.eot');
-  src: url('//at.alicdn.com/t/font_y0cgkitpd0psc3di.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_y0cgkitpd0psc3di.woff') format('woff'),
-  url('//at.alicdn.com/t/font_y0cgkitpd0psc3di.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_y0cgkitpd0psc3di.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_hcx1hsv8rw45cdi.eot');
+  src: url('//at.alicdn.com/t/font_hcx1hsv8rw45cdi.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_hcx1hsv8rw45cdi.woff') format('woff'),
+  url('//at.alicdn.com/t/font_hcx1hsv8rw45cdi.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_hcx1hsv8rw45cdi.svg#iconfont') format('svg');
 }
 .iconfont{
 	font-family:"iconfont" !important;
@@ -3634,8 +3634,10 @@ color:#ffbf00
     font-family: "Microsoft YaHei";
     color: #666;
 }
-.ghostMenu li i{
+.ghostMenu li i, .menu_left_i{
 	margin-right:8px;
+	font-size:15px;
+	color:#666;
 }
 .ghostMenu .first > li {
 	padding: 10px 0px 10px 0px;

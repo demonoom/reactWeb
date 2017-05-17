@@ -42,11 +42,11 @@ class PersonCenterMenu extends React.Component {
                     defaultSelectedKeys={['1']}
                     mode="vertical"
                 >
-                    <Menu.Item key="myResource">我的资源</Menu.Item>
-                    <Menu.Item key="mySubject">我的题目</Menu.Item>
-                    <Menu.Item key="myFavorites">我的收藏</Menu.Item>
-                    <Menu.Item key="myFollows">我的关注</Menu.Item>
-                    <Menu.Item key="myMTV">我的直播课</Menu.Item>
+                    <Menu.Item key="myResource"><i className="iconfont menu_left_i">&#xe628;</i>我的资源</Menu.Item>
+                    <Menu.Item key="mySubject"><i className="iconfont menu_left_i">&#xe633;</i>我的题目</Menu.Item>
+                    <Menu.Item key="myFavorites"><i className="iconfont menu_left_i">&#xe60a;</i>我的收藏</Menu.Item>
+                    <Menu.Item key="myFollows"><i className="iconfont menu_left_i">&#xe609;</i>我的关注</Menu.Item>
+                    <Menu.Item key="myMTV"><Icon type="video-camera" className="menu_left_i" />我的直播课</Menu.Item>
                     {/*<Menu.Item key="findStudentPwd">找回学生密码</Menu.Item>*/}
                 </Menu>
 
