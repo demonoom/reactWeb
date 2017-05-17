@@ -1284,7 +1284,7 @@ const MyFollowExtend = React.createClass({
                     className="name_file">{e[1]}</span> </span>}>
                     <pre>
 					<div className="bnt2_tex">
-                         <span className="col1">所在知识点：{e[6]}</span>
+                         <span className="bai"><span className="col1">知识点：{e[6]}</span></span>
                          <span className="col1">创建人：{e[2]}</span>
                          <span className="col1">上传时间：{e[7]}</span>
                          <span className="col1">点赞次数：{e[11]}</span>

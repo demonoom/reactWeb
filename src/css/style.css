@@ -733,13 +733,13 @@ html, body, #root {
 	float:left;
 }
 .bnt2_tex span.col1{
-	color:#999;
+	color:#666;
 	word-break:break-all;
 	word-wrap:break-word;
 	white-space: pre-wrap;
 }
 .bnt2_tex span.col2{
-	color:#666;
+	color:#999;
 	word-break:break-all;
 	word-wrap:break-word;
 	white-space: pre-wrap;
@@ -1540,11 +1540,11 @@ a {
 }
 @font-face {
   font-family: 'iconfont';  /* project id 197083 */
-  src: url('//at.alicdn.com/t/font_hcx1hsv8rw45cdi.eot');
-  src: url('//at.alicdn.com/t/font_hcx1hsv8rw45cdi.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_hcx1hsv8rw45cdi.woff') format('woff'),
-  url('//at.alicdn.com/t/font_hcx1hsv8rw45cdi.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_hcx1hsv8rw45cdi.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_ib0gy5a3dgr5dn29.eot');
+  src: url('//at.alicdn.com/t/font_ib0gy5a3dgr5dn29.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_ib0gy5a3dgr5dn29.woff') format('woff'),
+  url('//at.alicdn.com/t/font_ib0gy5a3dgr5dn29.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_ib0gy5a3dgr5dn29.svg#iconfont') format('svg');
 }
 .iconfont{
 	font-family:"iconfont" !important;
@@ -2044,7 +2044,7 @@ li.ant-menu-submenu > ul > li.ant-menu-submenu{
 	border-bottom:none;
 }
 .antnest_cont .antnest-card:last-child .ant-card-body{
-	padding: 0 20px 0 20px;
+	padding: 0 0 0 0px;
 }
 .antnest_talk{
 	margin-right:12px;
@@ -2089,7 +2089,7 @@ a.topics:hover{
     overflow: hidden;
     line-height: 23px;
     word-wrap: break-word;
-	font-size:16px;
+	font-size:14px;
 	color:#424242
 }
 .antnest-card .ant-card-body ul li.topics_bot{
@@ -2191,7 +2191,9 @@ a.topics:hover{
 .topics_r-line{
 	border-right:1px solid #e5e5e5;
 	margin-right:12px;
+	margin-left:12px;
 	height:10px;
+	display:inline-block
 }
 .topics_oranges{
 	color:#ff804f
@@ -3375,7 +3377,8 @@ a.color_gary_f, .color_gary_f{
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	width:40px;
-	overflow:hidden
+	overflow:hidden;
+	font-size: 14px;
 }
 .group_fr_ul li{
 	margin:15px 20px 0 20px;

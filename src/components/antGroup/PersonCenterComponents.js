@@ -442,7 +442,7 @@ const PersonCenterComponents = React.createClass({
                 return <Panel header={<span><span type="" className={e[8]}></span><span className="name_file">{e[1]}</span> </span>}  key={e[1]+"#"+e[7]+"#"+e[0]}>
                     <pre>
 					<div className="bnt2_tex">
-                         <span className="col1">所在知识点：{e[6]}</span>
+                         <span className="bai"><span className="col1">知识点：{e[6]}</span></span>
                          <span className="col1">创建人：{e[2]}</span>
                          <span className="col1">上传时间：{e[7]}</span>
                          <span className="col1">点赞次数：{e[11]}</span>

@@ -419,11 +419,10 @@ class CourseWare extends React.Component {
                     className="name_file">{e[1]}</span> </span>} key={e[1] + "#" + e[7] + "#" + e[0]}>
                     <pre>
 					 <div className="bnt2_tex">
-                         <span className="bai"><span className="col1">知识点：</span><span
-                             className="col2">{e[6]}</span></span>
-                         <span><span className="col1">创建人：</span><span className="col2">{e[2]}</span></span>
-                         <span><span className="col1">上传时间：</span><span className="col2">{e[7]}</span></span>
-                         <span><span className="col1">点赞次数：</span><span className="col2">{e[10]}</span></span>
+                         <span className="bai"><span className="col1">知识点：{e[6]}</span></span>
+                         <span><span className="col1">创建人：{e[2]}</span></span>
+                         <span><span className="col1">上传时间：{e[7]}</span></span>
+                         <span><span className="col1">点赞次数：{e[10]}</span></span>
 					</div>
 					<div className="bnt2_right">
                          <Button style={{float: 'right'}} icon="delete" title="删除" value={e[0]}
@@ -470,11 +469,10 @@ class CourseWare extends React.Component {
                     className="name_file">{e[1]}</span> </span>} key={e[1] + "#" + e[7] + "#" + e[0]}>
                     <pre>
 					<div className="bnt2_tex">
-                         <span className="bai"><span className="col1">知识点：</span><span
-                             className="col2">{e[6]}</span></span>
-                         <span><span className="col1">创建人：</span><span className="col2">{e[2]}</span></span>
-                         <span><span className="col1">上传时间：</span><span className="col2">{e[7]}</span></span>
-                         <span><span className="col1">点赞次数：</span><span className="col2">{e[11]}</span></span>
+                         <span className="bai"><span className="col1">知识点：{e[6]}</span></span>
+                         <span className="col1">创建人：{e[2]}</span>
+                         <span className="col1">上传时间：{e[7]}</span>
+                         <span className="col1">点赞次数：{e[11]}</span>
                       </div>
 
                             <div className="bnt2_right">
