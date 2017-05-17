@@ -302,19 +302,17 @@ class MyFollows extends React.Component {
                 //     </div>;
                 // }
                 this._buildMyFollowsList();
+
+                this.htmlTempletContent =<div>{ this.title} <div className={' favorite_up favorite_scroll favorite_le_h guanzhu ' + this.originHeight}>{ this.htmlTempletContent }</div></div>;
                 break;
         }
     }
 
     render() {
         this.buildContent();
-        return (
-            <div>
-                { this.title}
-                {/*{ this.gobackBtn}*/}
-                <div
-                    className={' favorite_up favorite_scroll favorite_le_h guanzhu ' + this.originHeight}>{ this.htmlTempletContent }</div>
-            </div>
+        return ( <div>
+                { this.htmlTempletContent }</div>
+
         );
     }
 }

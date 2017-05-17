@@ -173,8 +173,16 @@
         this.ifrel = $('#' + objtemplet.ifrid);
 
         this.ifrel.on('load', this._iframeonloadevent.bind(this, objtemplet.ifrid));
+        this.ifrel.on('unload', this.__iframeBeforeUnLoadEvent.bind(this, objtemplet.ifrid));
 
         return this;
+    }
+
+
+    littlePanle.prototype.__iframeBeforeUnLoadEvent = function (event) {
+debugger
+        alert('sdf');
+        return false;
     }
 
 

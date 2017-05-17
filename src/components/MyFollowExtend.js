@@ -1804,8 +1804,7 @@ const MyFollowExtend = React.createClass({
         var welcomeTitle ;
         var returnToolBar = <div className="ant-tabs-right talk_ant_btn1"><Button onClick={this.props.returnMyFollows }>返回</Button>
         </div>;
-        var returnPersonCenterToolBar = <div className="ant-tabs-right talk_ant_btn1"><Button
-            onClick={this.returnPersonCenter}>返回</Button></div>;
+        var returnPersonCenterToolBar = <div className="ant-tabs-right talk_ant_btn1"><button onClick={this.returnPersonCenter}>返回</button></div>;
         var tabComponent;
         var userPhoneCard;
         let returnBtn = null;
@@ -1815,7 +1814,7 @@ const MyFollowExtend = React.createClass({
             case 'personCenter':
                 returnBtn = <h3 className="public—til—blue">
                     <div className="ant-tabs-right">
-                        <Button onClick={this.props.returnParentFollows}><Icon type="left"/></Button>
+                        <button onClick={this.props.returnParentFollows}><Icon type="left"/></button>
                     </div>
                     {this.state.currentPerson.user.userName + "的个人中心"}</h3>;
                 tabComponent = <MyFollowPersonCenter ref="personCenter"
@@ -2265,15 +2264,16 @@ const MyFollowExtend = React.createClass({
 
         }
 
-        return (
+        return (<div>
+                {returnBtn}
             <div className="myfollow_zb">
                 <UseKnowledgeComponents ref="useKnowledgeComponents"/>
                 <div className="group_cont">
-                    {returnBtn}
+
                     {userPhoneCard}
                     {tabComponent}
                 </div>
-            </div>
+            </div></div>
         );
     },
 });
