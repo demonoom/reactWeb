@@ -1812,7 +1812,7 @@ const MyFollowExtend = React.createClass({
             case 'personCenter':
                 returnBtn = <h3 className="public—til—blue">
                     <div className="ant-tabs-right">
-                        <button onClick={this.props.returnParentFollows}><Icon type="left"/></button>
+                        <button onClick={this.props.returnParentFollows} className="affix_bottom_tc"><Icon type="left"/></button>
                     </div>
                     {this.state.currentPerson.user.userName + "的个人中心"}</h3>;
                 tabComponent = <MyFollowPersonCenter ref="personCenter"
@@ -2106,10 +2106,10 @@ const MyFollowExtend = React.createClass({
 
             case 'getUserSubjects':
 
-                tabComponent = <div >
+                tabComponent = <div>
                         <h3 className="public—til—blue">
                             <div className="ant-tabs-right">
-                                <button onClick={this.props.returnParentFollows}><Icon type="left"/></button>
+                                <button onClick={this.props.returnParentFollows} className="affix_bottom_tc"><Icon type="left"/></button>
                             </div>
                             {this.state.currentPerson.user.userName + "的直播课"}</h3>
                         <Table columns={subjectTableColumns} dataSource={data} pagination={{
@@ -2122,13 +2122,13 @@ const MyFollowExtend = React.createClass({
 
             case 'getUserCourseWares':
 
-                tabComponent = <div >
+                tabComponent = <div  className="follow_my">
                         <h3 className="public—til—blue">
                             <div className="ant-tabs-right">
-                                <button onClick={this.props.returnParentFollows}><Icon type="left"/></button>
+                                <button onClick={this.props.returnParentFollows} className="affix_bottom_tc"><Icon type="left"/></button>
                             </div>
                             {this.state.currentPerson.user.userName + "的资源"}</h3>
-                        <div className='ant-tabs-tabpane ant-tabs-tabpane-active'>
+                        <div className='ant-tabs-tabpane ant-tabs-tabpane-active topics_calc favorite_up'>
                             <Collapse defaultActiveKey={activeKey} activeKey={activeKey} ref="collapse">
                                 {coursePanelChildren}
                             </Collapse>
@@ -2142,14 +2142,13 @@ const MyFollowExtend = React.createClass({
 
             case 'getLiveInfoByUid':
 
-                tabComponent = <div >
+                tabComponent = <div  className="follow_my">
                     <h3 className="public—til—blue">
                         <div className="ant-tabs-right">
-                            <button onClick={this.props.returnParentFollows}><Icon type="left"/></button>
+                            <button onClick={this.props.returnParentFollows} className="affix_bottom_tc"><Icon type="left"/></button>
                         </div>
                         {this.state.currentPerson.user.userName + "的直播课"}</h3>
-                    <div className='ant-tabs ant-tabs-top ant-tabs-line topics_calc'
-                         style={{'overflow': 'auto'}}>
+                    <div className='ant-tabs ant-tabs-top ant-tabs-line topics_calc favorite_up'>
                         {this.state.userLiveData}
                     </div>
                     <Pagination total={this.state.totalLiveCount} pageSize={getPageSize()}
@@ -2262,16 +2261,16 @@ const MyFollowExtend = React.createClass({
 
         }
 
-        return (<div>
+        return (<div className="follow_my">
                 {returnBtn}
-            <div className="myfollow_zb">
+            <div className="favorite_scroll">
                 <UseKnowledgeComponents ref="useKnowledgeComponents"/>
                 <div className="group_cont">
-
                     {userPhoneCard}
                     {tabComponent}
                 </div>
-            </div></div>
+            </div>
+			</div>
         );
     },
 });

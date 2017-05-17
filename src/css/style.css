@@ -3358,7 +3358,7 @@ a.color_gary_f, .color_gary_f{
 }
 
 .group_fr{
-	width: 40px;
+	width: 42px;
     text-align: center;
     display: inline-block;
     height: 68px;
@@ -3376,7 +3376,7 @@ a.color_gary_f, .color_gary_f{
 	display:block;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-	width:40px;
+	width:42px;
 	overflow:hidden;
 	font-size: 14px;
 }
@@ -3537,7 +3537,7 @@ color:#ffbf00
 	left:0
 }
 .enhance{
-	height:calc(100% - 49px) !important
+	height:calc(100% - 46px) !important
 }
 
 

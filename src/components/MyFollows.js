@@ -303,7 +303,7 @@ class MyFollows extends React.Component {
                 // }
                 this._buildMyFollowsList();
 
-                this.htmlTempletContent =<div>{ this.title} <div className={' favorite_up favorite_scroll favorite_le_h guanzhu ' + this.originHeight}>{ this.htmlTempletContent }</div></div>;
+                this.htmlTempletContent =<div className="follow_my">{ this.title} <div className={' favorite_up favorite_le_h guanzhu ' + this.originHeight}>{ this.htmlTempletContent }</div></div>;
                 break;
         }
     }
