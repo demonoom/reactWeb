@@ -156,10 +156,8 @@ const FavoriteItem = React.createClass({
 
                     return <Panel header={<span>{content}</span>} key={ key }>
                         <div className="bnt2_tex">
-                                <span><span className="col1">创建人：</span><span
-                                    className="col2">{e.material.user.userName}</span></span>
-                            <span><span className="col1">上传时间：</span><span
-                                className="col2">{getLocalTime(e.material.createTime)}</span></span>
+                                <span className="col1">创建人：{e.material.user.userName}</span>
+                            <span className="col1">上传时间：{getLocalTime(e.material.createTime)}</span>
                         </div>
                         <div className="bnt2_right">
                             <a target="_blank" title="查看" className="right_ri" onClick={event => {

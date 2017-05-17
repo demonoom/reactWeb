@@ -63,6 +63,7 @@ const ExamPagerTableComponents = React.createClass({
             columns = [{
                 title: '试卷名称',
                 dataIndex: 'title',
+				className: 'left-12',
             }, {
                 title: '操作',
                 className: 'ant-table-selection-topic',

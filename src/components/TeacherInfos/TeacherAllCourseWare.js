@@ -203,9 +203,7 @@ const TeacherAllCourseWare = React.createClass({
                     className="name_file">{e[1]}</span> </span>} key={e[1] + "#" + e[7] + "#" + e[0]}>
                     <pre>
 					<div className="bnt2_tex">
-                         <span className="col1">文件类型：{e[5]}</span>
-                         <span className="col1">课件名称：{e[1]}</span>
-                         <span className="col1">所在知识点：{e[6]}</span>
+                         <span className="bai"><span className="col1">知识点：{e[6]}</span></span>
                          <span className="col1">创建人：{e[2]}</span>
                          <span className="col1">上传时间：{e[7]}</span>
                          <span className="col1">点赞次数：{e[11]}</span>
