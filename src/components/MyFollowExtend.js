@@ -59,7 +59,7 @@ var followUserColumns = [
 
 var subjectTableColumns = [{
     title: '出题人',
-    className: 'ant-table-selection-user',
+    className: 'ant-table-selection-user2 left-12',
     dataIndex: 'name',
 }, {
     title: '内容',
@@ -92,7 +92,7 @@ var subjectTableColumns = [{
     dataIndex: 'subjectScore',
 }, {
     title: '操作',
-    className: 'ant-table-selection-score3',
+    className: 'ant-table-selection-score',
     dataIndex: 'subjectOpt',
 },
 ];
@@ -2106,7 +2106,7 @@ const MyFollowExtend = React.createClass({
 
             case 'getUserSubjects':
 
-                tabComponent = <div>
+                tabComponent = <div className="follow_my">
                         <h3 className="public—til—blue">
                             <div className="ant-tabs-right">
                                 <button onClick={this.props.returnParentFollows} className="affix_bottom_tc"><Icon type="left"/></button>
@@ -2122,13 +2122,13 @@ const MyFollowExtend = React.createClass({
 
             case 'getUserCourseWares':
 
-                tabComponent = <div  className="follow_my">
+                tabComponent = <div className="follow_my">
                         <h3 className="public—til—blue">
                             <div className="ant-tabs-right">
                                 <button onClick={this.props.returnParentFollows} className="affix_bottom_tc"><Icon type="left"/></button>
                             </div>
                             {this.state.currentPerson.user.userName + "的资源"}</h3>
-                        <div className='ant-tabs-tabpane ant-tabs-tabpane-active topics_calc favorite_up'>
+                        <div className='ant-tabs-tabpane ant-tabs-tabpane-active topics_calc favorite_up favorite_le_h'>
                             <Collapse defaultActiveKey={activeKey} activeKey={activeKey} ref="collapse">
                                 {coursePanelChildren}
                             </Collapse>
@@ -2148,7 +2148,7 @@ const MyFollowExtend = React.createClass({
                             <button onClick={this.props.returnParentFollows} className="affix_bottom_tc"><Icon type="left"/></button>
                         </div>
                         {this.state.currentPerson.user.userName + "的直播课"}</h3>
-                    <div className='ant-tabs ant-tabs-top ant-tabs-line topics_calc favorite_up'>
+                    <div className='ant-tabs ant-tabs-top ant-tabs-line topics_calc favorite_up favorite_le_h'>
                         {this.state.userLiveData}
                     </div>
                     <Pagination total={this.state.totalLiveCount} pageSize={getPageSize()}

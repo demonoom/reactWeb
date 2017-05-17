@@ -863,6 +863,9 @@ html, body, #root {
 .ant-table-thead > tr > th.ant-table-selection-user, .ant-table-tbody > tr > td.ant-table-selection-user{
 	width:90px
 }
+.ant-table-thead > tr > th.ant-table-selection-user, .ant-table-tbody > tr > td.ant-table-selection-user2{
+	width:100px
+}
 .ant-table-thead > tr > th.ant-table-selection-topic, .ant-table-tbody > tr > td.ant-table-selection-topic{
 	width:80px;
 	text-align:center
@@ -871,6 +874,7 @@ html, body, #root {
 	width:80px;
 	text-align:center;
 }
+
 .ant-table-thead > tr > th.ant-table-selection-score3, .ant-table-tbody > tr > td.ant-table-selection-score3{
 	width:150px;
 	text-align:center;
@@ -3303,7 +3307,8 @@ a.color_gary_f, .color_gary_f{
 	height:calc(100% - 46px);
 }
 .favorite_up{
-	overflow:auto
+	overflow:auto;
+	
 }
 .favorite_le_h{
 	padding:8px 0 0 16px;

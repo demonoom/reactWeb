@@ -9,7 +9,7 @@ import SubjectEditByTextboxioTabComponents from '../SubjectEditByTextboxioTabCom
 const columns = [
     {
         title: '出题人',
-        className: 'ant-table-selection-user',
+        className: 'ant-table-selection-user2 left-12',
         dataIndex: 'name',
     }, {
         title: '内容',
@@ -235,7 +235,7 @@ const TeacherAllSubjects = React.createClass({
                               onConfirmModalOK={this.delMySubjects}
                 />
 				<div className="favorite_scroll">
-                <div className='ant-tabs-tabpane ant-tabs-tabpane-active'>
+                <div className='ant-tabs-tabpane ant-tabs-tabpane-active pers_bo_ra'>
                     <SubjectEditByTextboxioTabComponents ref="subjectEditTabComponents"
                                                          subjectEditCallBack={this.subjectEditCallBack}/>
                     <UseKnowledgeComponents ref="useKnowledgeComponents"/>
