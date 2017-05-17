@@ -1,5 +1,5 @@
 import React, {PropTypes, Link} from 'react';
-import {Table} from 'antd';
+import {Table,Icon} from 'antd';
 
 var mMenu;
 const columns = [{
@@ -10,10 +10,10 @@ const columns = [{
 
 const data = [{
     key: 'getAllTopic',
-    option: '全部',
+    option: <div><Icon type="file" /><span>全部</span></div>,
 }, {
     key: 'onlyTeacherTopic',
-    option: '只看老师',
+    option: <div><Icon type="delete" /><span>只看老师</span></div>,
 }];
 
 const AntNestMenu = React.createClass({
