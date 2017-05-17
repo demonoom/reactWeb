@@ -733,13 +733,13 @@ html, body, #root {
 	float:left;
 }
 .bnt2_tex span.col1{
-	color:#999;
+	color:#666;
 	word-break:break-all;
 	word-wrap:break-word;
 	white-space: pre-wrap;
 }
 .bnt2_tex span.col2{
-	color:#666;
+	color:#999;
 	word-break:break-all;
 	word-wrap:break-word;
 	white-space: pre-wrap;
@@ -856,6 +856,9 @@ html, body, #root {
 .ant-table-thead > tr > th.ant-table-selection-column, .ant-table-tbody > tr > td.ant-table-selection-column{
 	width:40px;
 	text-align:center;
+}
+.ant-table-thead > tr > th.left-12, .ant-table-tbody > tr > td.left-12{
+	padding-left:30px;
 }
 .ant-table-thead > tr > th.ant-table-selection-user, .ant-table-tbody > tr > td.ant-table-selection-user{
 	width:90px
@@ -1537,11 +1540,11 @@ a {
 }
 @font-face {
   font-family: 'iconfont';  /* project id 197083 */
-  src: url('//at.alicdn.com/t/font_y0cgkitpd0psc3di.eot');
-  src: url('//at.alicdn.com/t/font_y0cgkitpd0psc3di.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_y0cgkitpd0psc3di.woff') format('woff'),
-  url('//at.alicdn.com/t/font_y0cgkitpd0psc3di.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_y0cgkitpd0psc3di.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_ib0gy5a3dgr5dn29.eot');
+  src: url('//at.alicdn.com/t/font_ib0gy5a3dgr5dn29.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_ib0gy5a3dgr5dn29.woff') format('woff'),
+  url('//at.alicdn.com/t/font_ib0gy5a3dgr5dn29.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_ib0gy5a3dgr5dn29.svg#iconfont') format('svg');
 }
 .iconfont{
 	font-family:"iconfont" !important;
@@ -2041,7 +2044,7 @@ li.ant-menu-submenu > ul > li.ant-menu-submenu{
 	border-bottom:none;
 }
 .antnest_cont .antnest-card:last-child .ant-card-body{
-	padding: 0 20px 0 20px;
+	padding: 0 0 0 0px;
 }
 .antnest_talk{
 	margin-right:12px;
@@ -2086,7 +2089,7 @@ a.topics:hover{
     overflow: hidden;
     line-height: 23px;
     word-wrap: break-word;
-	font-size:16px;
+	font-size:14px;
 	color:#424242
 }
 .antnest-card .ant-card-body ul li.topics_bot{
@@ -2188,7 +2191,9 @@ a.topics:hover{
 .topics_r-line{
 	border-right:1px solid #e5e5e5;
 	margin-right:12px;
+	margin-left:12px;
 	height:10px;
+	display:inline-block
 }
 .topics_oranges{
 	color:#ff804f
@@ -3372,7 +3377,8 @@ a.color_gary_f, .color_gary_f{
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	width:40px;
-	overflow:hidden
+	overflow:hidden;
+	font-size: 14px;
 }
 .group_fr_ul li{
 	margin:15px 20px 0 20px;
@@ -3631,8 +3637,10 @@ color:#ffbf00
     font-family: "Microsoft YaHei";
     color: #666;
 }
-.ghostMenu li i{
+.ghostMenu li i, .menu_left_i{
 	margin-right:8px;
+	font-size:15px;
+	color:#666;
 }
 .ghostMenu .first > li {
 	padding: 10px 0px 10px 0px;

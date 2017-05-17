@@ -147,11 +147,11 @@ const AntNestTabComponents = React.createClass({
                 }
                 var delBtn;
                 if(e.user.colUtype=="STUD" || (e.user.colUtype=="TEAC" && e.user.colUid == sessionStorage.getItem("ident"))){
-                    delBtn = <Button value={e.id} className="topics_btn antnest_talk topics_a topics_a—bnt teopics_spa topics_le"  type="dashed" onClick={antNest.showDeleteTopicCommentModal}>删除</Button>;
+                    delBtn = <Button value={e.id} className="topics_btn topics_a topics_a—bnt teopics_spa topics_le"  type="dashed" onClick={antNest.showDeleteTopicCommentModal}>删除</Button>;
                 }
                 var answerUserInfo = <li className="topics_comment">
-                    {replayUserTitle}
-                    <span>{e.content}</span>
+                    <span className="yichao_blue">{replayUserTitle}</span>
+                    <span className="font-14">{e.content}</span>
                     <span className="topics_reply">
                         {delBtn}
 						<span className="topics_r-line"></span>
@@ -226,7 +226,7 @@ const AntNestTabComponents = React.createClass({
         if(useType==0){
             //STUD
             if(topicObj.fromUser.colUtype=="STUD" || (topicObj.fromUser.colUtype=="TEAC" && topicObj.fromUser.colUid == sessionStorage.getItem("ident"))){
-               delButton = <Button value={topicObj.id} icon="delete" className="ant-btn topics_btn antnest_talk teopics_spa" onClick={antNest.showDeleteTopicModal}>删除</Button>;
+               delButton = <Button value={topicObj.id} icon="delete" className="ant-btn topics_btn teopics_spa" onClick={antNest.showDeleteTopicModal}>删除</Button>;
             }
         }
         //参与人数显示card
@@ -268,7 +268,7 @@ const AntNestTabComponents = React.createClass({
                         }
                         var delBtnInRelpay;
                         if(e.user.colUtype=="STUD" || (e.user.colUtype=="TEAC" && e.user.colUid == sessionStorage.getItem("ident"))){
-                            delBtnInRelpay = <Button value={e.id}  type="dashed"  className="topics_btn antnest_talk topics_a topics_a—bnt teopics_spa topics_le" onClick={antNest.deleteTopicComment}>删除</Button>;
+                            delBtnInRelpay = <Button value={e.id}  type="dashed"  className="topics_btn topics_a topics_a—bnt teopics_spa topics_le" onClick={antNest.deleteTopicComment}>删除</Button>;
                         }
                         var answerUserInfo = <li className="topics_comment">
                             {replayUserTitle}
@@ -340,7 +340,7 @@ const AntNestTabComponents = React.createClass({
                 })
                 var delBtnInReplayCard;
                 if(topicReplayInfo.fromUser.colUtype=="STUD" || (topicReplayInfo.fromUser.colUtype=="TEAC" && topicReplayInfo.fromUser.colUid == sessionStorage.getItem("ident"))){
-                    delBtnInReplayCard = <Button value={topicReplayInfo.id} icon="delete" onClick={antNest.deleteTopic.bind(antNest,topicReplayInfo.id)} className="topics_btn antnest_talk teopics_spa">删除</Button>;
+                    delBtnInReplayCard = <Button value={topicReplayInfo.id} icon="delete" onClick={antNest.deleteTopic.bind(antNest,topicReplayInfo.id)} className="topics_btn  teopics_spa">删除</Button>;
                 }
                 var praiseBtn;
                 if(topicObj.fromUser.colUtype=="TEAC" && topicObj.fromUser.colUid == sessionStorage.getItem("ident")){
