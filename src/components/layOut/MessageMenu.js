@@ -165,60 +165,61 @@ const MessageMenu = React.createClass({
      * 如：{{colUid:23836,userName:'王丹'},[{content:'123'}{content:'test'}]}
      */
     setMessageArrayForOnePerson(messageObj){
-        var fromUser = messageObj.fromUser;
-        var content = messageObj.content;
-        var colUid = fromUser.colUid;
-        var isCurrentDay = isToday(messageObj.createTime);
-        var createTime;
-        if(isCurrentDay){
-            //如果是当天的消息，只显示时间
-            createTime = formatHM(messageObj.createTime);
-        }else{
-            //非当天时间，显示的是月-日
-            createTime = formatMD(messageObj.createTime);
-        }
-        var messageIndex = -1;
-        var messageToType = messageObj.toType;
-        var contentJson = {"content": content, "createTime": createTime};
-        if (messageToType == 1) {
-            messageIndex = mMenu.checkMessageIsExist(colUid);
-        }else{
-            messageIndex = mMenu.checkMessageIsExist(messageObj.toChatGroup.chatGroupId);
-        }
-        if (messageToType == 1) {
-            //个人消息
-            if (messageIndex == -1) {
-                var contentArray = [contentJson];
-                var userJson = {
-                    key: colUid,
-                    "fromUser": fromUser,
-                    contentArray: contentArray,
-                    "messageToType": messageToType
-                };
-                messageData.push(userJson);
-            } else {
-                messageData[messageIndex].contentArray.push(contentJson);
+        if(messageObj.command=="message"){
+            var fromUser = messageObj.fromUser;
+            var content = messageObj.content;
+            var colUid = fromUser.colUid;
+            var isCurrentDay = isToday(messageObj.createTime);
+            var createTime;
+            if(isCurrentDay){
+                //如果是当天的消息，只显示时间
+                createTime = formatHM(messageObj.createTime);
+            }else{
+                //非当天时间，显示的是月-日
+                createTime = formatMD(messageObj.createTime);
             }
-        } else {
-            //群组消息
-            var toChatGroup = messageObj.toChatGroup;
-            var chatGroupId = toChatGroup.chatGroupId;
-            var groupName = toChatGroup.name;
-            if (messageIndex == -1) {
-                var contentArray = [contentJson];
-                var userJson = {
-                    key: chatGroupId,
-                    "fromUser": fromUser,
-                    contentArray: contentArray,
-                    "messageToType": messageToType,
-                    "toChatGroup": toChatGroup
-                };
-                messageData.push(userJson);
+            var messageIndex = -1;
+            var messageToType = messageObj.toType;
+            var contentJson = {"content": content, "createTime": createTime};
+            if (messageToType == 1) {
+                messageIndex = mMenu.checkMessageIsExist(colUid);
+            }else{
+                messageIndex = mMenu.checkMessageIsExist(messageObj.toChatGroup.chatGroupId);
+            }
+            if (messageToType == 1) {
+                //个人消息
+                if (messageIndex == -1) {
+                    var contentArray = [contentJson];
+                    var userJson = {
+                        key: colUid,
+                        "fromUser": fromUser,
+                        contentArray: contentArray,
+                        "messageToType": messageToType
+                    };
+                    messageData.push(userJson);
+                } else {
+                    messageData[messageIndex].contentArray.push(contentJson);
+                }
             } else {
-                messageData[messageIndex].contentArray.push(contentJson);
+                //群组消息
+                var toChatGroup = messageObj.toChatGroup;
+                var chatGroupId = toChatGroup.chatGroupId;
+                var groupName = toChatGroup.name;
+                if (messageIndex == -1) {
+                    var contentArray = [contentJson];
+                    var userJson = {
+                        key: chatGroupId,
+                        "fromUser": fromUser,
+                        contentArray: contentArray,
+                        "messageToType": messageToType,
+                        "toChatGroup": toChatGroup
+                    };
+                    messageData.push(userJson);
+                } else {
+                    messageData[messageIndex].contentArray.push(contentJson);
+                }
             }
         }
-
     },
 
     checkMessageIsExist(userId){
