@@ -105,7 +105,9 @@ const AntGroupTabComponents = React.createClass({
     },
 
     componentDidMount(){
-        //document.onkeydown=this.checkKeyType;
+        // document.onkeydown=this.checkKeyType;
+        /*$("#emotionInput").bind("keydown",antGroup.checkKeyType);
+        $(".emoji-wysiwyg-editor").bind("keydown",antGroup.checkKeyType);*/
     },
 
     handleScroll(e){
@@ -121,7 +123,7 @@ const AntGroupTabComponents = React.createClass({
         var scrollTop = target.scrollTop;
         if(scrollTop == 0){
             antGroup.setState({"isDirectToBottom":false});
-            if(antGroup.state.messageType=="groupMessage"){
+            if(antGroup.state.messageComeFrom=="groupMessage"){
                 debugger
                 antGroup.reGetChatMessage(antGroup.state.currentGroupObj,antGroup.state.firstMessageCreateTime);
             }else{
@@ -135,15 +137,14 @@ const AntGroupTabComponents = React.createClass({
         scrollType="defined";
     },
 
-    checkKeyType(e){
-        console.log("keyCode:"+e.keyCode);
-        console.log(document.activeElement.className);
-        console.log(document.activeElement.className.indexOf("emoji"));
-        var activeElement = document.activeElement.className.indexOf("emoji");
-        if(e.keyCode==13 && activeElement!=-1){
-            //文本框上点击回车键
-
+    checkKeyType(){
+        var sendType;
+        if(antGroup.state.messageComeFrom=="groupMessage"){
+            sendType="groupSend";
+        }else{
+            sendType="";
         }
+        antGroup.messageSendByType(sendType);
     },
 
     showpanle(obj){
@@ -456,6 +457,10 @@ const AntGroupTabComponents = React.createClass({
             target = e.target;
         }
         var sendType = target.value;
+        antGroup.messageSendByType(sendType);
+    },
+
+    messageSendByType(sendType){
         var messageContent = antGroup.getEmotionInputById();
         if (isEmpty(messageContent)) {
             message.error("消息内容不允许为空!");
@@ -489,18 +494,13 @@ const AntGroupTabComponents = React.createClass({
      * @returns {string}
      */
     getEmotionInputById(){
-        var emotionInput = "";
-        var emotionInputArray = $("textarea[id='emotionInput']");
-        if (isEmpty(emotionInputArray) == false) {
-            for (var i = 0; i < emotionInputArray.length; i++) {
-                var emotionObj = emotionInputArray[i];
-                if (isEmpty(emotionObj.value) == false) {
-                    emotionInput = emotionObj.value;
-                    break;
-                }
-            }
+        var messageContent = $(".emoji-wysiwyg-editor")[0].innerHTML;
+        if(messageContent.indexOf("emojiPicker")!=-1){
+            messageContent = $("#emotionInput")[0].value;
+        }else{
+            messageContent = $(".emoji-wysiwyg-editor")[0].innerText;
         }
-        return emotionInput;
+        return messageContent;
     },
 
     /**
@@ -514,6 +514,7 @@ const AntGroupTabComponents = React.createClass({
             for (var i = 0; i < emotionArray.length; i++) {
                 emotionArray[i].innerHTML = "";
                 emotionArray[i].innerText = "";
+                emotionArray[i].onKeyDown = this.checkKeyType;
             }
         }
     },
@@ -531,7 +532,7 @@ const AntGroupTabComponents = React.createClass({
         debugger
         messageList.splice(0);
         scrollType="auto";
-        antGroup.setState({"isDirectToBottom":true,"messageType":"groupMessage"});
+        antGroup.setState({"isDirectToBottom":true,"messageComeFrom":"groupMessage"});
         antGroup.reGetChatMessage(groupObj,timeNode);
     },
 
@@ -624,7 +625,7 @@ const AntGroupTabComponents = React.createClass({
      */
     getPersonMessage(userObj,timeNode){
         messageList.splice(0);
-        antGroup.setState({"isDirectToBottom":true,"messageType":"personMessage"});
+        antGroup.setState({"isDirectToBottom":true,"messageComeFrom":"personMessage"});
         antGroup.getUser2UserMessages(userObj,timeNode)
     },
 
@@ -777,7 +778,7 @@ const AntGroupTabComponents = React.createClass({
             if (antGroup.state.currentUser.colUtype != "SGZH") {
                 emotionInput = <Row className="group_send">
                     <Col className="group_send_talk">
-                        <EmotionInputComponents></EmotionInputComponents>
+                        <EmotionInputComponents onKeyDown={this.checkKeyType}></EmotionInputComponents>
                     </Col>
                     <Col className="group_send_btn">
                         <Button onClick={antGroup.sendMessage}>发送</Button>
@@ -881,7 +882,7 @@ const AntGroupTabComponents = React.createClass({
                         </div>
                         <Row className="group_send">
                             <Col className="group_send_talk">
-                                <EmotionInputComponents></EmotionInputComponents>
+                                <EmotionInputComponents onKeyDown={this.checkKeyType}></EmotionInputComponents>
                             </Col>
                             <Col className="group_send_btn">
                                 <Button value="groupSend" onClick={antGroup.sendMessage}>发送</Button>
