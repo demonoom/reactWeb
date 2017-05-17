@@ -17,6 +17,14 @@ var EmotionInputComponents = React.createClass({
 
     ga('create', 'UA-49610253-3', 'auto');
     ga('send', 'pageview');
+    $("#emotionInput").bind("keydown",this.sendMessage);
+    $(".emoji-wysiwyg-editor").bind("keydown",this.sendMessage);
+  },
+
+  sendMessage(e){
+    if(e.ctrlKey && e.keyCode==13){
+      this.props.onKeyDown();
+    }
   },
 
 

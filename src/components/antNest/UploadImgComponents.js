@@ -23,7 +23,7 @@ const UploadImgComponents = React.createClass({
       * @param nextProps
      */
     componentWillReceiveProps(nextProps){
-        if(isEmpty(nextProps)==false && nextProps.fileList.length==0){
+        if(isEmpty(nextProps)==false && (typeof(nextProps.fileList)=="undefined" || nextProps.fileList.length==0)){
             antUpload.setState({fileList:[]});
         }
     },

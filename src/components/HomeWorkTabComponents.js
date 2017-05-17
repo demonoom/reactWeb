@@ -40,7 +40,7 @@ const HomeWorkTabComponents = React.createClass({
     },
 
     changeToolbar(){
-        this.setState({activeKey: '作业详情'});
+        this.setState({activeKey: '作业详情',currentOpt: 'subjectList'});
     },
 
     render() {
@@ -56,22 +56,21 @@ const HomeWorkTabComponents = React.createClass({
                 tabPanel = <AssignHomeWorkComponents ref="assignHomeWorkCom" params={this.state.isNewPage}
                                                      callbackParent={this.getTeacherHomeWork}/>;
             }
-            toolbar = <h3 className={" public—til—blue"}>{this.state.activeKey}
-                <div className={returnBtn}>
-                    <span className="btn1 ant-tabs-right"><button onClick={this.getTeacherHomeWork}><Icon type="left"/></button></span>
-                    <span className="btn2 talk_ant_btn1"><button className="ant-btn ant-btn-primary add_study"
-                                                                 onClick={this.assignHomeWork}>布置作业</button></span>
-                </div>
-            </h3>;
         } else {
-            tabPanel = <AssignHomeWorkComponents ref="assignHomeWorkCom" params={this.state.isNewPage}
-                                                 callbackParent={this.getTeacherHomeWork}/>;
-            toolbar = <h3 className={" public—til—blue"}>{this.state.activeKey}
-                <div className={returnBtn}>
-                    <span className="btn1 ant-tabs-right"><button onClick={this.getTeacherHomeWork}><Icon type="left"/></button></span>
-                </div>
-            </h3>;
+            if (this.state.activeKey != "作业详情") {
+                tabPanel = <AssignHomeWorkComponents ref="assignHomeWorkCom" params={this.state.isNewPage}
+                                                     callbackParent={this.getTeacherHomeWork}/>;
+            } else {
+                tabPanel = <HomeWorkTableComponents ref="homeWorkTable" onSearchClick={this.changeToolbar}/>;
+            }
         }
+        toolbar = <h3 className={" public—til—blue"}>{this.state.activeKey}
+            <div className={returnBtn}>
+                <span className="btn1 ant-tabs-right"><button onClick={this.getTeacherHomeWork}><Icon type="left"/></button></span>
+                <span className="btn2 talk_ant_btn1"><button className="ant-btn ant-btn-primary add_study"
+                                                             onClick={this.assignHomeWork}>布置作业</button></span>
+            </div>
+        </h3>;
 
         return (
             <div>

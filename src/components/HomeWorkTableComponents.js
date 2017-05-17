@@ -29,7 +29,8 @@ const HomeWorkTableComponents = React.createClass({
             currentPage: 1,
             currentView: 'homeWorkList',
             clazzId: '',
-            dateTime: ''
+            dateTime: '',
+            tableData:[]
         };
     },
     componentDidMount(){
@@ -81,7 +82,7 @@ const HomeWorkTableComponents = React.createClass({
     },
 
     //点击查看时,进入题目列表
-    getSubjectData(e, handler){
+    getSubjectData(e){
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             target = e.currentTarget;
@@ -140,7 +141,7 @@ const HomeWorkTableComponents = React.createClass({
                 });
                 var pager = ret.pager;
                 subTable.setState({totalCount: parseInt(pager.rsCount)});
-                subTable.setState({currentView: 'homeWorkList'});
+                subTable.setState({currentView: 'homeWorkList',"tableData":data});
             },
             onError: function (error) {
                 message.error(error);
@@ -190,7 +191,7 @@ const HomeWorkTableComponents = React.createClass({
                 });
                 var pager = ret.pager;
                 subTable.setState({totalCount: parseInt(pager.rsCount)});
-                subTable.setState({currentView: 'subjectList'});
+                subTable.setState({currentView: 'subjectList',"tableData":data});
             },
             onError: function (error) {
                 message.error(error);
@@ -220,7 +221,7 @@ const HomeWorkTableComponents = React.createClass({
         };
         return (
       
-                <Table rowSelection={rowSelection} columns={columns} dataSource={data} pagination={{
+                <Table columns={columns} dataSource={subTable.state.tableData} pagination={{
                     total: subTable.state.totalCount,
                     pageSize: getPageSize(),
                     onChange: subTable.pageOnChange
