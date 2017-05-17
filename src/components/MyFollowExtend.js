@@ -1002,7 +1002,7 @@ const MyFollowExtend = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                if (ret.msg == "调用成功" && ret.success == true && response == true) {
+                if ( ret.success ) {
                     message.success(successTip);
                 } else {
                     message.success(errorTip);
@@ -1405,18 +1405,17 @@ const MyFollowExtend = React.createClass({
     /**
      * 进入平台规则说明页面
      */
-    callBackTurnToPlatformRulePage(userInfo, urlType){
-        if (isEmpty(urlType) == false && urlType == "level") {
-            this.setState({
-                "optType": "getScoreOrLevelPage",
-                "currentUser": userInfo,
-                "activeKey": "userScores",
-                "urlType": urlType
-            });
+    callBackTurnToPlatformRulePage(urlType){
+
+        let userInfo = this.props.userinfo;
+
+        if ( urlType == "level") {
+            this.setState({ "optType": "getScoreOrLevelPage", "currentUser": userInfo, "activeKey": "userScores", "urlType": 'level' });
         } else {
-            this.setState({"optType": "getPlatformRulePage", "currentUser": userInfo, "activeKey": "platformRulePage"});
+            this.setState({"optType": "getPlatformRulePage", "currentUser": userInfo, "activeKey": "platformRulePage", "urlType": 'score'});
         }
     },
+
     /**
      * 平台规则页面tab切换响应函数
      * @param key
@@ -1424,13 +1423,7 @@ const MyFollowExtend = React.createClass({
     platformRulePageChange(key){
         this.setState({"optType": "getPlatformRulePage", "activeKey": key});
     },
-    /**
-     * 跳转到积分详情或等级说明的页面
-     * @param e
-     */
-    turnToScoreDetailPage(){
-        this.setState({"optType": "getScoreOrLevelPage", "activeKey": "userScores", "urlType": "score"});
-    },
+
     /**
      * 跳转到直播详情页面
      */
@@ -2157,6 +2150,7 @@ const MyFollowExtend = React.createClass({
                 break;
 
             case 'getScoreOrLevelPage':
+                debugger
                 var currentPageLink;
                 returnPersonCenterToolBar = <div className="ant-tabs-right"><Button
                     onClick={this.callBackTurnToPlatformRulePage.bind(antGroup, this.state.currentUser, "score")}>返回</Button>
@@ -2177,7 +2171,7 @@ const MyFollowExtend = React.createClass({
                 >
                     <TabPane tab="我的积分" key="userScores">
                         <div className="topics_le">
-                            <iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe>
+                            <iframe ref="study" src={currentPageLink} className="analyze_iframe"/>
                         </div>
                     </TabPane>
                 </Tabs>;
@@ -2185,8 +2179,7 @@ const MyFollowExtend = React.createClass({
 
             case 'turnToLiveInfoShowPage':
                 var currentPageLink = "http://www.maaee.com:80/Excoord_PC/liveinfo/show/" + sessionStorage.getItem("ident") + "/" + this.state.liveInfoId;
-                var liveInfoShowIframe = <iframe id="liveInfoIframe" ref="study" src={currentPageLink}
-                                                 className="analyze_iframe"></iframe>;
+                var liveInfoShowIframe = <iframe id="liveInfoIframe" ref="study" src={currentPageLink} className="analyze_iframe"/>;
                 tabComponent = <Tabs
                     hideAdd
                     ref="studentStudyTrackTab"
@@ -2206,7 +2199,7 @@ const MyFollowExtend = React.createClass({
                 break;
 
             case 'getPlatformRulePage':
-
+debugger
                 userPhoneCard = <div className="integral_top">
                 <span className="integral_face">
                     <img className="person_user" src={this.state.currentUser.user.avatar}></img>
@@ -2215,7 +2208,7 @@ const MyFollowExtend = React.createClass({
                         {this.state.currentUser.user.userName}
                     </div>
                     <div className="class_right">
-                        <Button onClick={this.turnToScoreDetailPage}
+                        <Button onClick={ ()=>{ this.callBackTurnToPlatformRulePage('score') } }
                                 className="yellow_btn">{this.state.currentUser.score}积分</Button>
                     </div>
                     <div className="integral_line"></div>

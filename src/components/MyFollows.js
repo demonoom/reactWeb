@@ -1,7 +1,7 @@
 /**
  * Created by madapeng on 17-4-5.
  */
-import {Breadcrumb, Icon, message, Card, Button} from 'antd';
+import {Breadcrumb, Icon, message, Card,Pagination, Button} from 'antd';
 import React from 'react';
 import {doWebService} from '../WebServiceHelper';
 import MyFollowExtend from './MyFollowExtend';
@@ -88,6 +88,7 @@ class MyFollows extends React.Component {
                         message.info('没有关注的内容！');
                         return;
                     }
+
                     _this.setState({
                         followsListVisible: true,
                         prosonCenterVisible: false,
@@ -293,17 +294,16 @@ class MyFollows extends React.Component {
             case this.state.followsListVisible:
 
                 this.originHeight = 'enhance';
-
-                // if (this.notInterProsonCenter()) {
-                //     this.gobackBtn = <div className="ant-tabs-extra-content">
-                //         <div className="ant-tabs-right">
-                //             <Button onClick={this.returnPersonCenter}><Icon type="left"/></Button>
-                //         </div>
-                //     </div>;
-                // }
                 this._buildMyFollowsList();
 
+
                 this.htmlTempletContent =<div className="follow_my">{ this.title} <div className={' favorite_up favorite_le_h guanzhu ' + this.originHeight}>{ this.htmlTempletContent }</div></div>;
+
+                // this.htmlTempletContent =<div>{ this.title}
+                // <div className={' favorite_up favorite_scroll favorite_le_h guanzhu ' + this.originHeight}>{ this.htmlTempletContent }</div>
+                //     <Pagination total={this.param.totalCount} pageSize={getPageSize()} current={this.props.param.currentPage} onChange={this.pageChange} />
+                // </div>;
+
                 break;
         }
     }
@@ -311,6 +311,7 @@ class MyFollows extends React.Component {
     render() {
         this.buildContent();
         return ( <div>
+ 
                 { this.htmlTempletContent }</div>
 
         );
