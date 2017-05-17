@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import {Tabs, Breadcrumb, Icon, Card, Button, Row, Col, Table, Transfer} from 'antd';
-import {Menu, Dropdown, message, Pagination, Tag, Modal, Popover, Input, Collapse} from 'antd';
+import {Menu, Dropdown, message, Pagination, Tag, Modal, Popover, Input, Collapse,notification} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import PersonCenterComponents from './PersonCenterComponents';
 import EmotionInputComponents from './EmotionInputComponents';
@@ -31,6 +31,8 @@ var activeKey = new Array();
 var coursePanelChildren;
 var liveInfosPanelChildren;
 // var errorModalIsShow = false;
+var topScrollHeight=0;
+var scrollType="auto";
 const AntGroupTabComponents = React.createClass({
 
     getInitialState() {
@@ -67,6 +69,7 @@ const AntGroupTabComponents = React.createClass({
             totalChatGroupCount: 0,  //当前用户的群组总数
             currentChatGroupPage: 1,    //群组列表页面的当前页码
             errorModalIsShow:false,
+            isDirectToBottom:true
         };
 
     },
@@ -89,7 +92,58 @@ const AntGroupTabComponents = React.createClass({
                 antGroup.sendGroupMessage(antGroup.props.groupObj);
             }
         }
-        // antGroup.getAntGroup();
+    },
+
+    componentDidUpdate(){
+        var gt = $('#groupTalk');
+        if(typeof(gt)==="object" && typeof(gt).length==="number" && gt.length!=0){
+            topScrollHeight = gt[0].scrollHeight;
+            if(antGroup.state.isDirectToBottom){
+                gt.scrollTop(parseInt(gt[0].scrollHeight));
+            }
+        }
+    },
+
+    componentDidMount(){
+        //document.onkeydown=this.checkKeyType;
+    },
+
+    handleScroll(e){
+        if(scrollType=="auto"){
+            return;
+        }
+        var target = e.target;
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
+            target = e.target;
+        }
+        var scrollTop = target.scrollTop;
+        if(scrollTop == 0){
+            antGroup.setState({"isDirectToBottom":false});
+            if(antGroup.state.messageType=="groupMessage"){
+                debugger
+                antGroup.reGetChatMessage(antGroup.state.currentGroupObj,antGroup.state.firstMessageCreateTime);
+            }else{
+                debugger
+                antGroup.getUser2UserMessages(antGroup.state.currentUser,antGroup.state.firstMessageCreateTime);
+            }
+        }
+    },
+
+    handleScrollType(e){
+        scrollType="defined";
+    },
+
+    checkKeyType(e){
+        console.log("keyCode:"+e.keyCode);
+        console.log(document.activeElement.className);
+        console.log(document.activeElement.className.indexOf("emoji"));
+        var activeElement = document.activeElement.className.indexOf("emoji");
+        if(e.keyCode==13 && activeElement!=-1){
+            //文本框上点击回车键
+
+        }
     },
 
     showpanle(obj){
@@ -241,7 +295,7 @@ const AntGroupTabComponents = React.createClass({
 
     turnToChatGroupMessagePage(groupObj){
         var _this = this;
-        messageList.splice(0);
+        //messageList.splice(0);
         ms.msgWsListener = {
             onError: function (errorMsg) {
                 if(_this.state.errorModalIsShow==false){
@@ -427,7 +481,7 @@ const AntGroupTabComponents = React.createClass({
         }
         ms.send(commandJson);
         antGroup.initMyEmotionInput();
-        antGroup.setState({"messageList": messageList});
+        antGroup.setState({"messageList": messageList,"isDirectToBottom":true});
     },
 
     /**
@@ -473,16 +527,42 @@ const AntGroupTabComponents = React.createClass({
      * @param record　当前行的群组信息
      * @param index　当前行的索引顺序，从０开始
      */
-    sendGroupMessage(groupObj){
-        antGroup.getChatGroupMessages(groupObj);
+    sendGroupMessage(groupObj,timeNode){
+        debugger
+        messageList.splice(0);
+        scrollType="auto";
+        antGroup.setState({"isDirectToBottom":true,"messageType":"groupMessage"});
+        antGroup.reGetChatMessage(groupObj,timeNode);
+    },
+
+    reGetChatMessage(groupObj,timeNode){
+        debugger
+        antGroup.getChatGroupMessages(groupObj,timeNode);
         antGroup.turnToChatGroupMessagePage(groupObj);
+    },
+
+    /**
+     * 弹出消息提示
+     * 当获取不到更早的消息列表时，给出提示信息
+     * @param response
+     */
+    tipNotic(response){
+        if(typeof(response)!="undefined" && response.length==0){
+            notification['warning']({
+                description: '没有更多消息了',
+                style: {
+                    top:120,
+                    width: 600,
+                    marginLeft: 35 - 600,
+                },
+            });
+        }
     },
 
     /**
      * 获取群聊天信息
      */
-    getChatGroupMessages(groupObj){
-        var timeNode = (new Date()).valueOf();
+    getChatGroupMessages(groupObj,timeNode){
         var param = {
             "method": 'getChatGroupMessages',
             "chatGroupId": groupObj.chatGroupId,
@@ -491,9 +571,15 @@ const AntGroupTabComponents = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.msg == "调用成功" && ret.success == true) {
+                    var i=0;
+                    antGroup.tipNotic(ret.response);
                     ret.response.forEach(function (e) {
                         if (e.command == "message") {
                             var messageOfSinge = e;
+                            if(i==ret.response.length-1){
+                                antGroup.setState({"firstMessageCreateTime": messageOfSinge.createTime});
+                            }
+                            i++;
                             var uuidsArray = [];
                             var fromUser = messageOfSinge.fromUser;
                             var colUtype = fromUser.colUtype;
@@ -531,13 +617,22 @@ const AntGroupTabComponents = React.createClass({
             }
         });
     },
+    /**
+     * 点击消息列表，进入消息的列表窗口
+     * @param userObj
+     * @param timeNode
+     */
+    getPersonMessage(userObj,timeNode){
+        messageList.splice(0);
+        antGroup.setState({"isDirectToBottom":true,"messageType":"personMessage"});
+        antGroup.getUser2UserMessages(userObj,timeNode)
+    },
 
     /**
      * 获取群聊天信息
      */
-    getUser2UserMessages(userObj){
+    getUser2UserMessages(userObj,timeNode){
         antGroup.turnToMessagePage(userObj);
-        var timeNode = (new Date()).valueOf();
         var param = {
             "method": 'getUser2UserMessages',
             "user1Id": userObj.colUid,
@@ -547,9 +642,15 @@ const AntGroupTabComponents = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.msg == "调用成功" && ret.success == true) {
+                    var i = 0;
+                    antGroup.tipNotic(ret.response);
                     ret.response.forEach(function (e) {
                         if (e.command == "message") {
                             var messageOfSinge = e;
+                            if(i==ret.response.length-1){
+                                antGroup.setState({"firstMessageCreateTime": messageOfSinge.createTime});
+                            }
+                            i++;
                             var uuidsArray = [];
                             var fromUser = messageOfSinge.fromUser;
                             var colUtype = fromUser.colUtype;
@@ -692,7 +793,7 @@ const AntGroupTabComponents = React.createClass({
             >
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div id="personTalk">
-                        <div className="group_talk">
+                        <div className="group_talk" id="groupTalk" onMouseOver={this.handleScrollType.bind(this,Event)} onScroll={this.handleScroll}>
                             <ul>
                                 {messageTagArray}
                             </ul>
@@ -773,7 +874,7 @@ const AntGroupTabComponents = React.createClass({
             >
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div>
-                        <div className="group_talk">
+                        <div className="group_talk" id="groupTalk" onMouseOver={this.handleScrollType.bind(this,Event)}  onScroll={this.handleScroll}>
                             <ul>
                                 {messageTagArray}
                             </ul>
