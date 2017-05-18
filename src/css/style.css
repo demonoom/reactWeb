@@ -3167,7 +3167,7 @@ a.color_gary_f, .color_gary_f{
 }
 .little-layout-aside-r-show h3.title {
 	display: inline-block;
-    color: #222;
+    color: #0078e4;
     height: 100%;
     text-align: left;
     font-size: 14px;
@@ -3691,6 +3691,7 @@ color:#ffbf00
 
 .tableRow{
 	background-color: #E5F2FE;
+	color: #2db7f5;
 }
 .tableRow td{
 	border-bottom:none
@@ -3860,6 +3861,14 @@ div.btn1{
 	margin-top:-1px;
 	padding: 70px 40px 0 40px;
     margin-left: 4px;
+}
+.userinfo_bg_1{
+	padding:70px 0 0 0;
+	text-align:center;
+}
+.userinfo_bg_1 span{
+	top: 150px;
+    position: relative;
 }
 .userinfo_top{
 	margin-top:80px

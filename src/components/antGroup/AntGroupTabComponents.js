@@ -890,7 +890,7 @@ const AntGroupTabComponents = React.createClass({
                 </TabPane>
             </Tabs>;
         }else{
-            tabComponent=<div>科技改变未来，教育成就梦想</div>;
+            tabComponent=<div className="userinfo_bg userinfo_bg_1"><span>科技改变未来，教育成就梦想</span></div>;
         }
 
         return (
