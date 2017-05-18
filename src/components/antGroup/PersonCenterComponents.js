@@ -59,6 +59,7 @@ var subjectTableColumns  = [{
 var userGroupsColumns = [ {
     title: '群聊头像',
     dataIndex: 'groupPhoto',
+	className: 'left-12',
 },{
     title: '群聊名称',
     dataIndex: 'groupName',

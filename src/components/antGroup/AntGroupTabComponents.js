@@ -86,14 +86,15 @@ const AntGroupTabComponents = React.createClass({
         var messageType = antGroup.props.messageType;
         var propsUserInfo = antGroup.props.userInfo;
         var actionFrom = antGroup.props.actionFrom;
+        var timeNode = (new Date()).valueOf();
         if(isEmpty(messageType)==false){
             if(messageType=="message"){
-                antGroup.getUser2UserMessages(propsUserInfo);
+                antGroup.getUser2UserMessages(propsUserInfo,timeNode);
                 if(isEmpty(actionFrom)==false){
                     antGroup.turnToMessagePage(propsUserInfo);
                 }
             }else{
-                antGroup.sendGroupMessage(antGroup.props.groupObj);
+                antGroup.sendGroupMessage(antGroup.props.groupObj,timeNode);
                 if(isEmpty(actionFrom)==false){
                     antGroup.turnToChatGroupMessagePage(antGroup.props.groupObj);
                 }
@@ -128,13 +129,11 @@ const AntGroupTabComponents = React.createClass({
             target = e.target;
         }
         var scrollTop = target.scrollTop;
-        if(scrollTop == 0){
+        if(scrollTop == 0 ){
             antGroup.setState({"isDirectToBottom":false});
             if(antGroup.state.messageComeFrom=="groupMessage"){
-
                 antGroup.reGetChatMessage(antGroup.state.currentGroupObj,antGroup.state.firstMessageCreateTime);
             }else{
-
                 antGroup.getUser2UserMessages(antGroup.state.currentUser,antGroup.state.firstMessageCreateTime);
             }
         }
@@ -563,7 +562,7 @@ const AntGroupTabComponents = React.createClass({
     		message: '',
    			description: '没有更多消息了',
     		icon: <Icon type="meh"  style={{ color: '#108ee9' , top:'-7px', position:'relative' }}/>,
-			
+
  			 });
         }
     },
@@ -690,6 +689,14 @@ const AntGroupTabComponents = React.createClass({
                         }
                     });
                 }
+                /*var gt = $('#groupTalk');
+                if(typeof(gt)==="object" && typeof(gt).length==="number" && gt.length!=0){
+                    topScrollHeight = gt[0].scrollHeight;
+                    console.log("getUser--------->"+topScrollHeight);
+                    if(antGroup.state.isDirectToBottom==false){
+                        gt.scrollTop(parseInt(gt[0].scrollHeight)*2-10);
+                    }
+                }*/
             },
             onError: function (error) {
                 message.error(error);

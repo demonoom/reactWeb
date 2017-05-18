@@ -857,8 +857,8 @@ html, body, #root {
 	width:40px;
 	text-align:center;
 }
-.ant-table-thead > tr > th.left-12, .ant-table-tbody > tr > td.left-12{
-	padding-left:30px;
+.ant-table-thead > tr > th.left-12, .ant-table-tbody > tr > td.left-12, .group_table .ant-table-tbody > tr > td.left-12{
+	padding-left:24px !important;
 }
 .ant-table-thead > tr > th.ant-table-selection-user, .ant-table-tbody > tr > td.ant-table-selection-user{
 	width:90px
@@ -3476,7 +3476,6 @@ color:#ffbf00
 	height:20px;
 	border-radius:50%;
 	background:#8fc967;
-	padding:1px 0 0 3px  !important;
 	text-align:center;
 	display:inline-block
 }
@@ -3863,7 +3862,7 @@ div.btn1{
 	height:239px;
 	margin-top:-1px;
 	padding: 70px 40px 0 40px;
-    margin-left: 4px;
+    margin-left: 0;
 }
 .userinfo_bg_1{
 	padding:70px 0 0 0;
