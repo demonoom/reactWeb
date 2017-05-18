@@ -10,10 +10,10 @@ const columns = [{
 
 const data = [{
     key: 'getAllTopic',
-    option: <div><Icon type="file" /><span>全部</span></div>,
+    option: <div><Icon type="appstore-o" className="menu_left_i" /><span>全部</span></div>,
 }, {
     key: 'onlyTeacherTopic',
-    option: <div><Icon type="delete" /><span>只看老师</span></div>,
+    option: <div><i className="iconfont menu_left_i">&#xe7e0;</i><span>只看老师</span></div>,
 }];
 
 const AntNestMenu = React.createClass({

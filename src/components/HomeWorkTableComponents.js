@@ -57,10 +57,10 @@ const HomeWorkTableComponents = React.createClass({
             columns = [{
                 title: '内容',
                 dataIndex: 'subjectContent',
-                className: 'ant-table-selection-cont3'
+                className: 'ant-table-selection-cont3 left-12'
             }, {
                 title: '类型',
-                className: 'ant-table-selection-topic',
+                className: 'ant-table-selection-user2',
                 dataIndex: 'subjectType',
             }
             ];
@@ -68,10 +68,11 @@ const HomeWorkTableComponents = React.createClass({
             columns = [{
                 title: '标题',
                 dataIndex: 'title',
+				className: 'left-12',
             }, {
                 title: '日期',
                 dataIndex: 'useDate',
-                className: 'ant-table-selection-smallclass',
+                className: 'ant-table-selection-user2',
             }, {
                 title: '操作',
                 className: 'ant-table-selection-topic',

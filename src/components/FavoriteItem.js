@@ -205,7 +205,7 @@ const FavoriteItem = React.createClass({
             height: "360px"
         };
 
-        return ( <div className="ant-collapse talk_ant_btn">
+        return ( <div className="talk_ant_btn">
 
                 <Collapse defaultActiveKey={this.activeKey} activeKey={this.activeKey}
                           style={CollapseStyle}>{ this.coursePanelChildren }</Collapse>

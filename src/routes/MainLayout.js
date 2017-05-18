@@ -269,7 +269,7 @@ const MainLayout = React.createClass({
         var timeNode = (new Date()).valueOf();
         if (fromObj.messageType == 1) {
             // 个人消息
-            this.refs.antGroupTabComponents.getUser2UserMessages(fromObj.fromUser);
+            this.refs.antGroupTabComponents.getPersonMessage(fromObj.fromUser,timeNode);
         } else {
             // 群组消息
             this.refs.antGroupTabComponents.sendGroupMessage(fromObj.toChatGroup,timeNode);

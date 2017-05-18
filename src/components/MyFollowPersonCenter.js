@@ -258,7 +258,7 @@ const MyFollowPersonCenter = React.createClass({
 					 </span>
                 </Card>
 				
-                <div className="maaee_group_pa">
+                <div >
 					{userLinkCard}
                     {userInfoCard}
                 </div>

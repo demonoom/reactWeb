@@ -549,14 +549,12 @@ const AntGroupTabComponents = React.createClass({
      */
     tipNotic(response){
         if(typeof(response)!="undefined" && response.length==0){
-            notification['warning']({
-                description: '没有更多消息了',
-                style: {
-                    top:120,
-                    width: 600,
-                    marginLeft: 35 - 600,
-                },
-            });
+			notification.open({
+    		message: '',
+   			description: '没有更多消息了',
+    		icon: <Icon type="meh"  style={{ color: '#108ee9' , top:'-7px', position:'relative' }}/>,
+			
+ 			 });
         }
     },
 
@@ -626,14 +624,14 @@ const AntGroupTabComponents = React.createClass({
     getPersonMessage(userObj,timeNode){
         messageList.splice(0);
         antGroup.setState({"isDirectToBottom":true,"messageComeFrom":"personMessage"});
-        antGroup.getUser2UserMessages(userObj,timeNode)
+        antGroup.getUser2UserMessages(userObj,timeNode);
+        antGroup.turnToMessagePage(userObj);
     },
 
     /**
-     * 获取群聊天信息
+     * 获取个人的聊天信息
      */
     getUser2UserMessages(userObj,timeNode){
-        antGroup.turnToMessagePage(userObj);
         var param = {
             "method": 'getUser2UserMessages',
             "user1Id": userObj.colUid,

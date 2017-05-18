@@ -249,7 +249,7 @@ class MyFollows extends React.Component {
         if (this.notInterProsonCenter()) {
             this.title = <h3 className="public—til—blue">
                 <div className="ant-tabs-right">
-                    <button onClick={this.returnPersonCenter}><Icon type="left"/></button>
+                    <button onClick={this.returnPersonCenter} className="affix_bottom_tc"><Icon type="left"/></button>
                 </div>
                 {this.userinfo.userName}关注列表</h3>;
         } else {
@@ -292,6 +292,7 @@ class MyFollows extends React.Component {
             case this.state.followsListVisible:
                 this.originHeight = 'enhance';
                 this._buildMyFollowsList();
+                this.htmlTempletContent =<div className="follow_my">{ this.title} <div className={' favorite_up favorite_le_h guanzhu ' + this.originHeight}>{ this.htmlTempletContent }</div></div>;
                 break;
         }
     }
@@ -299,7 +300,7 @@ class MyFollows extends React.Component {
     render() {
         this.buildContent();
         return ( <div>
-                { this.title}
+ 
                 { this.htmlTempletContent }</div>
 
         );
