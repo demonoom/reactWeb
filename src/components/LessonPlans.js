@@ -37,32 +37,36 @@ class LessonPlans extends React.Component {
 
 
     componentWillMount() {
-            this.buildBreadcrumb();
+        this.buildBreadcrumb();
     }
 
 
-    componentWillReceiveProps(nextProps) {
-        let obj = nextProps || this.props.refData ? this.props.refData : null;
-        if (!obj)   return;
 
-        this.buildBreadcrumb(obj.optContent.split("#"));
-        this.getTeachPlans(obj.optContent);
+    componentWillReceiveProps(nextProps) {
+
+        //  let obj = nextProps || this.props.refData ? this.props.refData : null;
+        if (!nextProps.refData)   return;
+
+        this.buildBreadcrumb(nextProps.refData.optContent.split("#"));
+        this.getTeachPlans(nextProps.refData.optContent);
     }
 
 
     getTeachPlans(optContent) {
+        if (!optContent){
+            if (this.props.refData.optContent){
+                optContent = this.props.refData.optContent;
+            }
+        }
 
-        optContent = optContent || this.props.refData ? this.props.refData.optContent : null;
-        if (!optContent)   return;
-
-
+        if (!optContent) return;
         var optContentArray = optContent.split("#");
         var teachScheduleId = optContentArray[0];
         var optType = optContentArray[1];
         var knowledgeName = optContentArray[2];
         var pageNo = 1;
 
-        let params={
+        let params = {
             ident: sessionStorage.getItem("ident"),
             teachScheduleId: teachScheduleId,
             optType: optType,
@@ -88,10 +92,10 @@ class LessonPlans extends React.Component {
         if (activeKey == "题目") {
             this.setState({activeKey: '题目'});
             var subjectParams = sessionStorage.getItem("ident") + "#" + this.state.currentTeachScheduleId + "#" + 1 + "#" + this.state.currentOptType + "#" + this.state.currentKnowledgeName + "#" + this.state.subjectDataFilter;
-            this.setState({subjectParams:subjectParams});
+            this.setState({subjectParams: subjectParams});
         } else {
 
-            let params={
+            let params = {
                 ident: sessionStorage.getItem("ident"),
                 teachScheduleId: this.state.currentTeachScheduleId,
                 optType: this.state.currentOptType,
@@ -101,7 +105,7 @@ class LessonPlans extends React.Component {
                 comeFrom: this.state.dataFilter,
             }
 
-            this.setState({activeKey: '课件',courseWareParams: params});
+            this.setState({activeKey: '课件', courseWareParams: params});
         }
     }
 
@@ -127,7 +131,7 @@ class LessonPlans extends React.Component {
         this.buildBreadcrumb(breadCrumbArray);
     }
 
-    //生成面包屑导航
+//生成面包屑导航
     buildBreadcrumb(breadcrumbArray, childrenCount) {
 
 
@@ -155,15 +159,26 @@ class LessonPlans extends React.Component {
             menuLevel: 1,
             openKeysStr: this.menuId
         }];
-        breadcrumbArray = startNav.concat(breadcrumbArray);
 
-        this.breadcrumbChildren = breadcrumbArray.map((e, i) => {
+
+        if (breadcrumbArray.length) {
+            let refArr = {
+                hrefLink: '#',
+                hrefText: breadcrumbArray[2],
+                menuId: breadcrumbArray[1],
+                menuLevel: 2,
+                openKeysStr: breadcrumbArray[0],
+            };
+            startNav = startNav.concat(refArr);
+        }
+
+        this.breadcrumbChildren = startNav.map((e, i) => {
             let keyref = e.menuId + "*" + e.menuLevel + "*" + e.openKeysStr;
-            let htm =  <Breadcrumb.Item key={keyref}><a id={keyref}>{e.hrefText}</a></Breadcrumb.Item>;
+            let htm = <Breadcrumb.Item key={keyref}><a id={keyref}>{e.hrefText}</a></Breadcrumb.Item>;
             return htm;
         });
 
-        this.setState({activeKey: '课件', breadcrumbArray: breadcrumbArray});
+        this.setState({activeKey: '课件', breadcrumbArray: startNav});
 
         if (toolbarKey != "KnowledgeResources") {
             this.setState({currentOptType: "bySchedule"});
@@ -171,8 +186,6 @@ class LessonPlans extends React.Component {
             this.setState({currentOptType: "bySubjectId"});
         }
     }
-
-
 
 
     /**
@@ -184,7 +197,7 @@ class LessonPlans extends React.Component {
         var clickKey = `${key}`;
         if (this.state.activeKey == "课件") {
             this.setState({dataFilter: clickKey});
-            let params={
+            let params = {
                 ident: sessionStorage.getItem("ident"),
                 teachScheduleId: this.state.currentTeachScheduleId,
                 optType: this.state.currentOptType,
@@ -194,11 +207,11 @@ class LessonPlans extends React.Component {
                 comeFrom: this.state.dataFilter,
             }
 
-            this.setState({activeKey: '课件',courseWareParams: params});
+            this.setState({activeKey: '课件', courseWareParams: params});
         } else {
             this.setState({subjectDataFilter: clickKey});
             var subjectParams = sessionStorage.getItem("ident") + "#" + this.state.currentTeachScheduleId + "#" + 1 + "#" + this.state.currentOptType + "#" + this.state.currentKnowledgeName + "#" + clickKey;
-            this.setState({subjectParams:subjectParams});
+            this.setState({subjectParams: subjectParams});
         }
     }
 
@@ -210,9 +223,9 @@ class LessonPlans extends React.Component {
 
         if (this.state.activeKey == "题目") {
             var subjectParams = sessionStorage.getItem("ident") + "#" + this.state.currentTeachScheduleId + "#" + 1 + "#" + this.state.currentOptType + "#" + this.state.currentKnowledgeName + "#" + this.state.subjectDataFilter + "#fromUpload";
-            this.setState({subjectParams:subjectParams});
+            this.setState({subjectParams: subjectParams});
         } else {
-            let params={
+            let params = {
                 ident: sessionStorage.getItem("ident"),
                 teachScheduleId: this.state.currentTeachScheduleId,
                 optType: this.state.currentOptType,
@@ -222,7 +235,7 @@ class LessonPlans extends React.Component {
                 comeFrom: "fromUpload",
             }
 
-            this.setState({activeKey: '课件',courseWareParams: params});
+            this.setState({activeKey: '课件', courseWareParams: params});
         }
     }
 
@@ -245,22 +258,23 @@ class LessonPlans extends React.Component {
                     <TabPane key="课件" tab={<span>我的资源<Dropdown overlay={menu} trigger={['click']} className='del_right'>
                             <a className="ant-dropdown-link icon_filter" href="#">
                                 <Icon type="down-circle-o"/></a></Dropdown></span>}>
-                        <CourseWareComponents params={this.state.courseWareParams} />
+                        <CourseWareComponents params={this.state.courseWareParams}/>
                     </TabPane>;
 
                 subjectTabPanel =
                     <TabPane key="题目" tab={<span>我的题目<Dropdown overlay={menu} trigger={['click']} className='del_right'>
                 <a className="ant-dropdown-link icon_filter" href="#"><Icon
                     type="down-circle-o"/></a></Dropdown></span>}>
-                        <SubjectTable   params={this.state.subjectParams}/>
+                        <SubjectTable params={this.state.subjectParams}/>
                     </TabPane>;
                 break;
 
 
             case 'bySchedule':
-                tabPanel = <TabPane tab="我的资源" key="课件"><CourseWareComponents params={this.state.courseWareParams}  /></TabPane>;
+                tabPanel =
+                    <TabPane tab="我的资源" key="课件"><CourseWareComponents params={this.state.courseWareParams}/></TabPane>;
                 subjectTabPanel =
-                    <TabPane tab="我的题目" key="题目"><SubjectTable   params={this.state.subjectParams}/></TabPane>
+                    <TabPane tab="我的题目" key="题目"><SubjectTable params={this.state.subjectParams}/></TabPane>
                 break;
 
 
@@ -269,33 +283,35 @@ class LessonPlans extends React.Component {
 
         if (this.state.currentOptType == "bySubjectId" && sessionStorage.getItem("lastClickMenuChildrenCount") == 0 && sessionStorage.getItem("lastClickMenuId") != null) {
             toolbarExtra = <div className="ant-tabs-right">
-                <CourseWareUploadComponents courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}/>
-                <SubjectUploadByTextboxio courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}/>
+                <CourseWareUploadComponents courseUploadCallBack={this.courseUploadCallBack}
+                                            params={this.state.subjectParams}/>
+                <SubjectUploadByTextboxio courseUploadCallBack={this.courseUploadCallBack}
+                                          params={this.state.subjectParams}/>
             </div>;
         }
 
 
         return (
             <div>
-                <UseKnowledgeComponents ref="useKnowledgeComponents" />
+                <UseKnowledgeComponents ref="useKnowledgeComponents"/>
                 <Breadcrumb separator=">">
                     <Breadcrumb.Item><Icon type="home"/></Breadcrumb.Item>
                     { this.breadcrumbChildren}
                 </Breadcrumb>
-				 <div className="favorite_scroll">
-                <Tabs
-                    hideAdd
-                    onChange={this.onChange}
-                    onEdit={this.onEdit}
-                    activeKey={this.state.activeKey}
-                    defaultActiveKey={this.state.defaultActiveKey}
-                    tabBarExtraContent={toolbarExtra}
-                    transitionName=""  //禁用Tabs的动画效果
-                >
-                    {tabPanel}
-                    {subjectTabPanel}
-                </Tabs>
-				</div>
+                <div className="favorite_scroll">
+                    <Tabs
+                        hideAdd
+                        onChange={this.onChange}
+                        onEdit={this.onEdit}
+                        activeKey={this.state.activeKey}
+                        defaultActiveKey={this.state.defaultActiveKey}
+                        tabBarExtraContent={toolbarExtra}
+                        transitionName=""
+                    >
+                        {tabPanel}
+                        {subjectTabPanel}
+                    </Tabs>
+                </div>
             </div>
         );
     }

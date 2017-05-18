@@ -66,7 +66,7 @@ const HomeWorkTabComponents = React.createClass({
         }
         toolbar = <h3 className={" public—til—blue"}>{this.state.activeKey}
             <div className={returnBtn}>
-                <span className="btn1 ant-tabs-right"><button onClick={this.getTeacherHomeWork}><Icon type="left"/></button></span>
+                <span className="btn1 ant-tabs-right"><button onClick={this.getTeacherHomeWork} className="affix_bottom_tc"><Icon type="left"/></button></span>
                 <span className="btn2 talk_ant_btn1"><button className="ant-btn ant-btn-primary add_study"
                                                              onClick={this.assignHomeWork}>布置作业</button></span>
             </div>

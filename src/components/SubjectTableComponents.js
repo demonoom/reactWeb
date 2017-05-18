@@ -540,10 +540,10 @@ class SUbjectTable extends React.Component{
                 <span>确定要删除选定的题目?</span>
             </div>;
         } else {
-            title = <div>
-                <span>确定要删除选定的题目?</span>
+            title = <span >
+                <span className="antnest_talk">确定要删除选定的题目?</span>
                 <Checkbox defaultChecked={false} onChange={this.isDeleteAll}>同步删除备课计划下的题目</Checkbox>
-            </div>;
+            </span>;
         }
 
         return (

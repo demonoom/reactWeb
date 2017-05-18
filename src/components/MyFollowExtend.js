@@ -1321,6 +1321,10 @@ const MyFollowExtend = React.createClass({
         LP.Start(obj);
     },
 
+    view(obj){
+        LP.Start(obj);
+    },
+
 
     /**
      * 根据用户的id，获取当前用户的直播课
@@ -1409,11 +1413,18 @@ const MyFollowExtend = React.createClass({
 
         let userInfo = this.props.userinfo;
 
+        let url
+        let title;
         if ( urlType == "level") {
-            this.setState({ "optType": "getScoreOrLevelPage", "currentUser": userInfo, "activeKey": "userScores", "urlType": 'level' });
+              url = "http://www.maaee.com/Excoord_PhoneService/user/personalGrade/" + this.state.currentUser.user.colUid;
+            title =  userInfo.user.userName + "的等级";
+          //  this.setState({ "optType": "getScoreOrLevelPage", "currentUser": userInfo, "activeKey": "userScores", "urlType": 'level' });
         } else {
-            this.setState({"optType": "getPlatformRulePage", "currentUser": userInfo, "activeKey": "platformRulePage", "urlType": 'score'});
+            url = "http://www.maaee.com/Excoord_PhoneService/user/getUserScores/" + this.state.currentUser.user.colUid;
+            title =   userInfo.user.userName + "的积分";
+           // this.setState({"optType": "getPlatformRulePage", "currentUser": userInfo, "activeKey": "platformRulePage", "urlType": 'score'});
         }
+        this.view({mode:'html', url: url, title: title });
     },
 
     /**
@@ -2104,7 +2115,7 @@ const MyFollowExtend = React.createClass({
                             <div className="ant-tabs-right">
                                 <button onClick={this.props.returnParentFollows} className="affix_bottom_tc"><Icon type="left"/></button>
                             </div>
-                            {this.state.currentPerson.user.userName + "的直播课"}</h3>
+                            {this.state.currentPerson.user.userName + "的题库"}</h3>
                         <Table columns={subjectTableColumns} dataSource={data} pagination={{
                             total: this.state.totalSubjectCount,
                             pageSize: getPageSize(),
@@ -2149,35 +2160,9 @@ const MyFollowExtend = React.createClass({
                 </div>;
                 break;
 
-            case 'getScoreOrLevelPage':
-                debugger
-                var currentPageLink;
-                returnPersonCenterToolBar = <div className="ant-tabs-right"><Button
-                    onClick={this.callBackTurnToPlatformRulePage.bind(antGroup, this.state.currentUser, "score")}>返回</Button>
-                </div>;
-                if (this.state.urlType == "score") {
-                    currentPageLink = "http://www.maaee.com:80/Excoord_PhoneService/user/getUserScores/" + this.state.currentUser.user.colUid;
-                } else {
-                    currentPageLink = "http://www.maaee.com:80/Excoord_PhoneService/user/personalGrade/" + this.state.currentUser.user.colUid;
-                }
-                welcomeTitle = "我的积分";
-                tabComponent = <Tabs
-                    hideAdd
-                    ref="studentStudyTrackTab"
-                    activeKey={this.state.activeKey}
-                    defaultActiveKey={this.state.defaultActiveKey}
-                    tabBarExtraContent={returnPersonCenterToolBar}
-                    transitionName=""  //禁用Tabs的动画效果
-                >
-                    <TabPane tab="我的积分" key="userScores">
-                        <div className="topics_le">
-                            <iframe ref="study" src={currentPageLink} className="analyze_iframe"/>
-                        </div>
-                    </TabPane>
-                </Tabs>;
-                break;
 
             case 'turnToLiveInfoShowPage':
+                
                 var currentPageLink = "http://www.maaee.com:80/Excoord_PC/liveinfo/show/" + sessionStorage.getItem("ident") + "/" + this.state.liveInfoId;
                 var liveInfoShowIframe = <iframe id="liveInfoIframe" ref="study" src={currentPageLink} className="analyze_iframe"/>;
                 tabComponent = <Tabs
@@ -2199,7 +2184,7 @@ const MyFollowExtend = React.createClass({
                 break;
 
             case 'getPlatformRulePage':
-debugger
+
                 userPhoneCard = <div className="integral_top">
                 <span className="integral_face">
                     <img className="person_user" src={this.state.currentUser.user.avatar}></img>

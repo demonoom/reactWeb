@@ -124,10 +124,10 @@ const AntGroupTabComponents = React.createClass({
         if(scrollTop == 0){
             antGroup.setState({"isDirectToBottom":false});
             if(antGroup.state.messageComeFrom=="groupMessage"){
-                debugger
+
                 antGroup.reGetChatMessage(antGroup.state.currentGroupObj,antGroup.state.firstMessageCreateTime);
             }else{
-                debugger
+
                 antGroup.getUser2UserMessages(antGroup.state.currentUser,antGroup.state.firstMessageCreateTime);
             }
         }
@@ -529,7 +529,7 @@ const AntGroupTabComponents = React.createClass({
      * @param index　当前行的索引顺序，从０开始
      */
     sendGroupMessage(groupObj,timeNode){
-        debugger
+
         messageList.splice(0);
         scrollType="auto";
         antGroup.setState({"isDirectToBottom":true,"messageComeFrom":"groupMessage"});
@@ -537,7 +537,7 @@ const AntGroupTabComponents = React.createClass({
     },
 
     reGetChatMessage(groupObj,timeNode){
-        debugger
+
         antGroup.getChatGroupMessages(groupObj,timeNode);
         antGroup.turnToChatGroupMessagePage(groupObj);
     },
@@ -549,14 +549,12 @@ const AntGroupTabComponents = React.createClass({
      */
     tipNotic(response){
         if(typeof(response)!="undefined" && response.length==0){
-            notification['warning']({
-                description: '没有更多消息了',
-                style: {
-                    top:120,
-                    width: 600,
-                    marginLeft: 35 - 600,
-                },
-            });
+			notification.open({
+    		message: '',
+   			description: '没有更多消息了',
+    		icon: <Icon type="meh"  style={{ color: '#108ee9' , top:'-7px', position:'relative' }}/>,
+			
+ 			 });
         }
     },
 
