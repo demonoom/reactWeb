@@ -23,11 +23,11 @@ class MyFollows extends React.Component {
         this.currentUser = this._getCurrentLoginUserInfo();
         this.gobackBtn = null;
         this.htmlTempletContent = {};
+        this.isMyUserId = this.isMyUserId.bind(this);
         this.getMyFollows = this.getMyFollows.bind(this);
         this.intoFollowsList = this.intoFollowsList.bind(this);
         this.intoProsoncenter = this.intoProsoncenter.bind(this);
         this.returnPersonCenter = this.returnPersonCenter.bind(this);
-        this.notInterProsonCenter = this.notInterProsonCenter.bind(this);
         this.returnParentFollowsList = this.returnParentFollowsList.bind(this);
         this._getCurrentLoginUserInfo = this._getCurrentLoginUserInfo.bind(this);
     }
@@ -218,14 +218,19 @@ class MyFollows extends React.Component {
     }
 
 
-    // 登录的操作用户不能返回个人中心
-    notInterProsonCenter(uid) {
-        debugger
-        let refUser = this._getCurrentLoginUserInfo();
-        if (refUser.colUid == uid) {
-            return false;
+    // 是自己id
+    isMyUserId() {
+        if (!this.currentUser || !this.currentUser.colUid) {
+            this.currentUser = this._getCurrentLoginUserInfo();
         }
-        return true;
+
+        if (this.previouUsers.length) {
+            return true; // 返回到个人中心
+        }
+        if (this.currentUser.colUid != this.state.ident) {
+            return true; // 返回到个人中心
+        }
+        return false; // 不返回到自己个人中心
     }
 
     // 侧边预览
@@ -241,14 +246,14 @@ class MyFollows extends React.Component {
         }
 
         //
-        if (this.notInterProsonCenter()) {
+        if (!this.isMyUserId()) {
+            this.title = <h3 className="public—til—blue">{this.userinfo.userName}关注列表</h3>;
+        } else {
             this.title = <h3 className="public—til—blue">
                 <div className="ant-tabs-right">
                     <button onClick={this.returnPersonCenter} className="affix_bottom_tc"><Icon type="left"/></button>
                 </div>
                 {this.userinfo.userName}关注列表</h3>;
-        } else {
-            this.title = <h3 className="public—til—blue">{this.userinfo.userName}关注列表</h3>;
         }
 
         //
