@@ -129,7 +129,7 @@ const AntGroupTabComponents = React.createClass({
             target = e.target;
         }
         var scrollTop = target.scrollTop;
-        if(scrollTop == 0 ){
+        if(scrollTop <= 1  ){
             antGroup.setState({"isDirectToBottom":false});
             if(antGroup.state.messageComeFrom=="groupMessage"){
                 antGroup.reGetChatMessage(antGroup.state.currentGroupObj,antGroup.state.firstMessageCreateTime);

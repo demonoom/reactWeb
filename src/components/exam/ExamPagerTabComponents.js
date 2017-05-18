@@ -48,21 +48,21 @@ const ExamPagerTabComponents = React.createClass({
 
         var tabPanel;
         var secondBtn;
-
+		var add_study;
         switch (this.state.currentOpt) {
 
             case 'examPagerList':
                 tabPanel = <ExamPagerTableComponents ref="examPagerTable" callBackParent={this.updateExam}/>
-                secondBtn = <Button type="primary" onClick={this.createExam} className="add_study">创建组卷</Button>
+                add_study = <Button type="primary" onClick={this.createExam} className="add_study">创建组卷</Button>
                 break;
 
             case 'createExamPager':
                 tabPanel = <CreateExamPagerComponents callbackParent={this.getExamPagerList}/>
-                secondBtn = <Button type="primary" onClick={this.getExamPagerList} className="add_study">&lt;</Button>
+                secondBtn = <Button onClick={this.getExamPagerList} ><Icon type="left"/></Button>
                 break;
             case 'updateExamPager':
                 tabPanel = <UpdateExamPagerComponents params={this.state.updateSubjectInfo} callbackParent={this.getExamPagerList}/>
-                secondBtn = <Button type="primary" onClick={this.getExamPagerList} className="add_study">&lt;</Button>
+                secondBtn = <Button  onClick={this.getExamPagerList} ><Icon type="left"/></Button>
                 break;
 
         }
@@ -70,7 +70,7 @@ const ExamPagerTabComponents = React.createClass({
 
         return (
             <div>
-                <h3 className="public—til—blue"><span className="right_btn_new">{secondBtn}</span><span>{this.state.activeKey}</span></h3>
+                <h3 className="public—til—blue"><span className="ant-tabs-right">{secondBtn}</span><span>{this.state.activeKey}</span><span className="right_btn_new">{add_study}</span></h3>
                  <div className="favorite_scroll">{tabPanel}</div>
             </div>
 
