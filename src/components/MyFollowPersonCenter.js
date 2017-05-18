@@ -150,19 +150,7 @@ const MyFollowPersonCenter = React.createClass({
     getLiveInfo(){
         this.props.callBackGetLiveInfo(this.props.userInfo.user);
     },
-    /**
-     * 进入系统平台规则显示页面
-     */
-    turnToPlatformRulePage(e){
-        var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
-            target = e.target;
-        }
-        var urlType = target.value;
-        this.props.callBackTurnToPlatformRulePage(this.props.userInfo,urlType);
-    },
+
 
     intoMyFollows(){
 
@@ -205,7 +193,8 @@ const MyFollowPersonCenter = React.createClass({
                     <Col span={21} className="black_person">{intro}</Col>
                 </Row>
             </Card>;
-        }else{
+        }
+        else{
             if(isEmpty(intro)){
                 intro="该老师很忙，还没编辑个人简介";
             }
@@ -253,9 +242,15 @@ const MyFollowPersonCenter = React.createClass({
                     {userPhotoTag}
 
                     <span className="person_btn">
-                        <Button className="antnest_talk antnest_icon_radius" 　value="score" onClick={this.turnToPlatformRulePage}><i className="iconfont iconfont_jifen">&#xe608;</i>
-                            <span className="iocnfont_sp_jifen">{this.state.userInfo.score}</span>积分</Button>
-						<Button className="antnest_icon_blue_radius" value="level" onClick={this.turnToPlatformRulePage} >{this.state.userInfo.level.name}</Button>
+                        <button className="antnest_talk antnest_icon_radius"   onClick={ ()=>{
+                            this.props.callBackTurnToPlatformRulePage( 'score');
+                        }
+                        }><i className="iconfont iconfont_jifen">&#xe608;</i>
+                            <span className="iocnfont_sp_jifen">{this.state.userInfo.score}</span>积分</button>
+						<button className="antnest_icon_blue_radius"   onClick={ ()=>{
+                            this.props.callBackTurnToPlatformRulePage( 'level');
+						}
+						} >{this.state.userInfo.level.name}</button>
                     </span>
                     <span className="person_btn_ri">
                      {sendMessageButton}

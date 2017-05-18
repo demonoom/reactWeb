@@ -55,7 +55,7 @@ const FavoriteSubjectItems = React.createClass({
             dataIndex: 'subjectScore',
         }, {
             title: '操作',
-            className: 'ant-table-selection-score3',
+            className: 'ant-table-selection-score',
             dataIndex: 'subjectOpt',
         },
     ],
@@ -184,7 +184,7 @@ const FavoriteSubjectItems = React.createClass({
                             pageSize: getPageSize(),
                             onChange: this.pageOnChange
                         }}
-                        scroll={{y: 400}}/>
+                        scroll={{y: 390}}/>
 
         );
     },
