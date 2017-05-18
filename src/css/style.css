@@ -3485,8 +3485,8 @@ color:#ffbf00
 	height:20px;
 	border-radius:50%;
 	background:#ffcc00;
-	padding:1px 0 0 1px !important ;
-	margin-left:8px;
+	padding:0 0 0 1px !important ;
+	margin-right:8px;
 	text-align:center
 }
 .star_del{
@@ -3692,7 +3692,7 @@ color:#ffbf00
 	line-height:1px
 }
 
-.tableRow{
+.tableRow, .tableRow i{
 	background-color: #E5F2FE;
 	color: #2db7f5;
 }
