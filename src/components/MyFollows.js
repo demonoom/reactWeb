@@ -219,18 +219,13 @@ class MyFollows extends React.Component {
 
 
     // 登录的操作用户不能返回个人中心
-    notInterProsonCenter() {
-        if (!this.currentUser || !this.currentUser.colUid) {
-            this.currentUser = this._getCurrentLoginUserInfo();
+    notInterProsonCenter(uid) {
+        debugger
+        let refUser = this._getCurrentLoginUserInfo();
+        if (refUser.colUid == uid) {
+            return false;
         }
-
-        if (this.previouUsers.length) {
-            return true; // 返回到个人中心
-        }
-        if (this.currentUser.colUid != this.state.ident) {
-            return true; // 返回到个人中心
-        }
-        return false; // 不返回到自己个人中心
+        return true;
     }
 
     // 侧边预览
@@ -292,7 +287,10 @@ class MyFollows extends React.Component {
             case this.state.followsListVisible:
                 this.originHeight = 'enhance';
                 this._buildMyFollowsList();
-                this.htmlTempletContent =<div className="follow_my">{ this.title} <div className={' favorite_up favorite_le_h guanzhu ' + this.originHeight}>{ this.htmlTempletContent }</div></div>;
+                this.htmlTempletContent = <div className="follow_my">{ this.title}
+                    <div
+                        className={' favorite_up favorite_le_h guanzhu ' + this.originHeight}>{ this.htmlTempletContent }</div>
+                </div>;
                 break;
         }
     }
@@ -300,7 +298,7 @@ class MyFollows extends React.Component {
     render() {
         this.buildContent();
         return ( <div>
- 
+
                 { this.htmlTempletContent }</div>
 
         );

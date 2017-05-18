@@ -127,9 +127,9 @@ const FavoriteShipinItems = React.createClass({
                             <li>
                                 <a className={showCancelBtn ? 'show' : 'hide'  } target="_blank" title="取消收藏"
                                    onClick={()=>{this.props.onCancelfavrite(  e.address, this.props.upgradeData)}} >
-                                    <span className="focus_btn star_span upexam_float"><i className="iconfont star">&#xe646;</i></span>
+                                    <span className="star_span upexam_float"><i className="iconfont star">&#xe646;</i></span>
                                 </a>
-                                <span className={showKeyIcon ? 'focus_btn key_span show' : 'focus_btn key_span hide'  }><i className="iconfont key">&#xe621;</i></span>
+                                <span className={showKeyIcon ? 'key_span show' : 'key_span hide'  }><i className="iconfont key">&#xe621;</i></span>
 								<span className="time right_ri">{getLocalTime(e.liveInfo.startTime)}</span>
                             </li>
                         </ul>
