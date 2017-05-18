@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Card, Button, message, Breadcrumb, Icon} from 'antd';
+import {Card, Button, message, Breadcrumb, Icon,Pagination} from 'antd';
 import {getLocalTime} from '../utils/utils';
+import {getPageSize} from '../utils/Const';
 import {doWebService} from '../WebServiceHelper';
 
 let coursePanelChildren;
@@ -14,6 +15,7 @@ class MyMTV extends React.Component {
             ident: this.props.userid || sessionStorage.getItem("ident"),
             data: [],
             pageNo: 1,
+            pager:{pageNo:1,rsCount:30},
             method: 'getLiveInfoByUid'
         };
         this.changeState = this.changeState.bind(this);
@@ -70,11 +72,11 @@ class MyMTV extends React.Component {
     }
 
 
-    _updateLiveInfos() {
+    _updateLiveInfos(pageNo) {
         var param = {
             method: this.state.method,
             ident: this.state.ident,
-            pageNo: this.state.pageNo
+            pageNo: pageNo || this.state.pageNo
         }
         this.getLiveInfoByUid(this.changeState, param);
     }
@@ -224,6 +226,10 @@ class MyMTV extends React.Component {
         return ( <div>
                 <div className="public—til—blue">我的直播课</div>
                 <div className="favorite_scroll favorite_up favorite_le_h">{coursePanelChildren}</div>
+                <Pagination total={this.state.pager.rsCount}
+                            pageSize={getPageSize()}
+                            current={this.state.pager.pageNo}
+                            onChange={this._updateLiveInfos}/>
             </div>
         );
     }
