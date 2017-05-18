@@ -58,11 +58,11 @@ const ExamPagerTabComponents = React.createClass({
 
             case 'createExamPager':
                 tabPanel = <CreateExamPagerComponents callbackParent={this.getExamPagerList}/>
-                secondBtn = <Button type="primary" onClick={this.getExamPagerList} className="add_study">组卷列表</Button>
+                secondBtn = <Button type="primary" onClick={this.getExamPagerList} className="add_study">&lt;</Button>
                 break;
             case 'updateExamPager':
                 tabPanel = <UpdateExamPagerComponents params={this.state.updateSubjectInfo} callbackParent={this.getExamPagerList}/>
-                secondBtn = <Button type="primary" onClick={this.getExamPagerList} className="add_study">组卷列表</Button>
+                secondBtn = <Button type="primary" onClick={this.getExamPagerList} className="add_study">&lt;</Button>
                 break;
 
         }
@@ -70,7 +70,7 @@ const ExamPagerTabComponents = React.createClass({
 
         return (
             <div>
-                <h3 className="public—til—blue">{this.state.activeKey}<span className="right_btn_new">{secondBtn}</span></h3>
+                <h3 className="public—til—blue"><span className="right_btn_new">{secondBtn}</span><span>{this.state.activeKey}</span></h3>
                  <div className="favorite_scroll">{tabPanel}</div>
             </div>
 
