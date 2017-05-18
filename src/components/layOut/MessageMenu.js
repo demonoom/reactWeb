@@ -19,7 +19,8 @@ const MessageMenu = React.createClass({
     getInitialState() {
         mMenu = this;
         return {
-            badgeShow: false
+            badgeShow: false,
+            tableIsClick:false,
         };
     },
 
@@ -148,7 +149,7 @@ const MessageMenu = React.createClass({
                         i++;
                     })
                     mMenu.setState({"userMessageData": userMessageData});
-                    if(isEmpty(userMessageData)==false){
+                    if(isEmpty(userMessageData)==false && mMenu.state.tableIsClick==false){
                         mMenu.props.onLoad(userMessageData[0]);
                     }
                 }
@@ -168,7 +169,7 @@ const MessageMenu = React.createClass({
         if(messageObj.command=="message"){
             var fromUser = messageObj.fromUser;
             var content = messageObj.content;
-            var colUid = fromUser.colUid;
+
             var isCurrentDay = isToday(messageObj.createTime);
             var createTime;
             if(isCurrentDay){
@@ -182,17 +183,20 @@ const MessageMenu = React.createClass({
             var messageToType = messageObj.toType;
             var contentJson = {"content": content, "createTime": createTime};
             if (messageToType == 1) {
+                var showUser;
+                if(colUid == sessionStorage.getItem("ident")){
+                    showUser = fromUser;
+                }else{
+                    showUser = messageObj.toUser;
+                }
+                var colUid = showUser.colUid;
                 messageIndex = mMenu.checkMessageIsExist(colUid);
-            }else{
-                messageIndex = mMenu.checkMessageIsExist(messageObj.toChatGroup.chatGroupId);
-            }
-            if (messageToType == 1) {
                 //个人消息
                 if (messageIndex == -1) {
                     var contentArray = [contentJson];
                     var userJson = {
                         key: colUid,
-                        "fromUser": fromUser,
+                        "fromUser": showUser,
                         contentArray: contentArray,
                         "messageToType": messageToType
                     };
@@ -205,6 +209,7 @@ const MessageMenu = React.createClass({
                 var toChatGroup = messageObj.toChatGroup;
                 var chatGroupId = toChatGroup.chatGroupId;
                 var groupName = toChatGroup.name;
+                messageIndex = mMenu.checkMessageIsExist(messageObj.toChatGroup.chatGroupId);
                 if (messageIndex == -1) {
                     var contentArray = [contentJson];
                     var userJson = {
@@ -247,7 +252,7 @@ const MessageMenu = React.createClass({
     },
 
     turnToMessagePage(record, index){
-        mMenu.setState({selectRowKey: record.key, badgeShow: false});
+        mMenu.setState({selectRowKey: record.key, badgeShow: false,tableIsClick:true});
         mMenu.props.onUserClick(record);
     },
 
