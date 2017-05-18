@@ -2104,7 +2104,7 @@ const MyFollowExtend = React.createClass({
                             <div className="ant-tabs-right">
                                 <button onClick={this.props.returnParentFollows} className="affix_bottom_tc"><Icon type="left"/></button>
                             </div>
-                            {this.state.currentPerson.user.userName + "的直播课"}</h3>
+                            {this.state.currentPerson.user.userName + "的题库"}</h3>
                         <Table columns={subjectTableColumns} dataSource={data} pagination={{
                             total: this.state.totalSubjectCount,
                             pageSize: getPageSize(),

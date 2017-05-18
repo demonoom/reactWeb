@@ -1439,7 +1439,7 @@ const PersonCenterComponents = React.createClass({
                 </Card>
 				</div>
 
-                <div className="maaee_group_pa">
+                <div className="">
 					{userLinkCard}
                     {userInfoCard}
                 </div>

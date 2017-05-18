@@ -249,7 +249,7 @@ class MyFollows extends React.Component {
         if (this.notInterProsonCenter()) {
             this.title = <h3 className="public—til—blue">
                 <div className="ant-tabs-right">
-                    <button onClick={this.returnPersonCenter}><Icon type="left"/></button>
+                    <button onClick={this.returnPersonCenter} className="affix_bottom_tc"><Icon type="left"/></button>
                 </div>
                 {this.userinfo.userName}关注列表</h3>;
         } else {
