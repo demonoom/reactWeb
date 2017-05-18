@@ -624,14 +624,14 @@ const AntGroupTabComponents = React.createClass({
     getPersonMessage(userObj,timeNode){
         messageList.splice(0);
         antGroup.setState({"isDirectToBottom":true,"messageComeFrom":"personMessage"});
-        antGroup.getUser2UserMessages(userObj,timeNode)
+        antGroup.getUser2UserMessages(userObj,timeNode);
+        antGroup.turnToMessagePage(userObj);
     },
 
     /**
-     * 获取群聊天信息
+     * 获取个人的聊天信息
      */
     getUser2UserMessages(userObj,timeNode){
-        antGroup.turnToMessagePage(userObj);
         var param = {
             "method": 'getUser2UserMessages',
             "user1Id": userObj.colUid,
