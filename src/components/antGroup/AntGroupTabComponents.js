@@ -85,11 +85,18 @@ const AntGroupTabComponents = React.createClass({
         ms = antGroup.props.messageUtilObj;
         var messageType = antGroup.props.messageType;
         var propsUserInfo = antGroup.props.userInfo;
+        var actionFrom = antGroup.props.actionFrom;
         if(isEmpty(messageType)==false){
             if(messageType=="message"){
                 antGroup.getUser2UserMessages(propsUserInfo);
+                if(isEmpty(actionFrom)==false){
+                    antGroup.turnToMessagePage(propsUserInfo);
+                }
             }else{
                 antGroup.sendGroupMessage(antGroup.props.groupObj);
+                if(isEmpty(actionFrom)==false){
+                    antGroup.turnToChatGroupMessagePage(antGroup.props.groupObj);
+                }
             }
         }
     },
@@ -255,7 +262,7 @@ const AntGroupTabComponents = React.createClass({
                             var fromUser = messageOfSinge.fromUser;
                             var colUtype = fromUser.colUtype;
                             var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
-                            if (("SGZH" == colUtype || fromUser.colUid != loginUser.colUid) && messageOfSinge.toType == 1) {
+                            if (("SGZH" == colUtype || fromUser.colUid != loginUser.colUid) && messageOfSinge.toUser.colUid == antGroup.state.currentUser.colUid && messageOfSinge.toType == 1) {
                                 var uuid = messageOfSinge.uuid;
                                 uuidsArray.push(uuid);
                                 var content = messageOfSinge.content;
@@ -370,7 +377,10 @@ const AntGroupTabComponents = React.createClass({
                             var fromUser = messageOfSinge.fromUser;
                             var colUtype = fromUser.colUtype;
                             var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
-                            if (("SGZH" == colUtype || fromUser.colUid != loginUser.colUid) && messageOfSinge.toType == 4) {
+                            // antGroup.state.currentGroupObj
+                            if (("SGZH" == colUtype || fromUser.colUid != loginUser.colUid)
+                                && antGroup.state.currentGroupObj.chatGroupId == messageOfSinge.toChatGroup.chatGroupId
+                                && messageOfSinge.toType == 4) {
                                 var uuid = messageOfSinge.uuid;
                                 uuidsArray.push(uuid);
                                 var content = messageOfSinge.content;
@@ -802,10 +812,6 @@ const AntGroupTabComponents = React.createClass({
                 </TabPane>
             </Tabs>;
         } else if (antGroup.state.optType == "sendGroupMessage") {
-            /*returnToolBar = <div className="ant-tabs-right">
-                <Button onClick={antGroup.setChatGroup} className="antnest_talk">设置</Button>
-                <Button onClick={antGroup.getUserChatGroup}>返回</Button>
-            </div>;*/
             welcomeTitle = antGroup.state.currentGroupObj.name;
             var messageTagArray = [];
             var messageList = antGroup.state.messageList;

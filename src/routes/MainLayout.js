@@ -235,6 +235,7 @@ const MainLayout = React.createClass({
             resouceType: '',
             "groupObj": groupObj,
             "messageType": 'groupMessage',
+            "actionFrom":"personCenterGroupList",
             userJson
         });
     },
@@ -256,6 +257,7 @@ const MainLayout = React.createClass({
             resouceType: '',
             "userInfo": userInfo.user,
             "messageType": 'message',
+            "actionFrom":"personCenter",
             userJson
         });
 
@@ -296,6 +298,7 @@ const MainLayout = React.createClass({
                 tabComponent = <AntGroupTabComponents ref="antGroupTabComponents"
                                                       userInfo={this.state.userInfo}
                                                       groupObj={this.state.groupObj}
+                                                      actionFrom={this.state.actionFrom}
                                                       messageType={this.state.messageType}
                                                       messageUtilObj={ms}/>;
                 break;
