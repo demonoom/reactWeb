@@ -789,7 +789,7 @@ const AntGroupTabComponents = React.createClass({
                         <EmotionInputComponents onKeyDown={this.checkKeyType}></EmotionInputComponents>
                     </Col>
                     <Col className="group_send_btn">
-                        <Button onClick={antGroup.sendMessage}><div>发送<p></p>(Ctrl+Enter)</div></Button>
+                        <Button onClick={antGroup.sendMessage}><div>发送<p className="password_ts">(Ctrl+Enter)</p></div></Button>
                     </Col>
                 </Row>;
             }
@@ -889,14 +889,14 @@ const AntGroupTabComponents = React.createClass({
                                 <EmotionInputComponents onKeyDown={this.checkKeyType}></EmotionInputComponents>
                             </Col>
                             <Col className="group_send_btn">
-                                <Button value="groupSend" onClick={antGroup.sendMessage}><div>发送<p></p>(Ctrl+Enter)</div></Button>
+                                <Button value="groupSend" onClick={antGroup.sendMessage}><div>发送<p className="password_ts">(Ctrl+Enter)</p></div></Button>
                             </Col>
                         </Row>
                     </div>
                 </TabPane>
             </Tabs>;
         }else{
-            tabComponent=<div>科技改变未来，教育成就梦想</div>;
+            tabComponent=<div className="userinfo_bg userinfo_bg_1"><span>科技改变未来，教育成就梦想</span></div>;
         }
 
         return (

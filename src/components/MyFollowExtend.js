@@ -1374,12 +1374,12 @@ const MyFollowExtend = React.createClass({
                                     <li className="li_live_span_3">
                                         <span className="attention_img2"><img src={user.avatar}></img></span>
                                         <span className="live_span_1 live_span_3">{userName}</span>
-                                        <span className="right_ri live_span_2">{startTime}</span>
+										<span className="live_color live_orange right_ri live_span_2">{courseName}</span>
+                                        
                                     </li>
-                                    <li>
-                                        <span className="live_color live_orange">{courseName}</span>
-                                        <span className="right_ri focus_btn key_span"><i
-                                            className="iconfont key">&#xe621;</i></span>
+                                    <li> 
+                                        <span className="focus_btn key_span"><i className="iconfont key">&#xe621;</i></span>
+										<span className="time right_ri">{startTime}</span>
                                     </li>
                                 </ul>
                             </div>
