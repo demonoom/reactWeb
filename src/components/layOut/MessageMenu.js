@@ -26,12 +26,21 @@ const MessageMenu = React.createClass({
 
     componentDidMount(){
         mMenu.getUserRecentMessages();
+        //mMenu.refreshMessage();
     },
+
+    /*refreshMessage(){
+        console.log("ref");
+        setInterval(function () {
+            mMenu.getUserRecentMessages();
+        },1000*30);
+    },*/
 
     /**
      * 获取用户最新消息列表
      */
     getUserRecentMessages(){
+        console.log("==========getUserRecentMessages=============");
         userMessageData.splice(0);
         messageData.splice(0);
         var propsUserJson = mMenu.props.userJson;
@@ -149,9 +158,9 @@ const MessageMenu = React.createClass({
                         i++;
                     })
                     mMenu.setState({"userMessageData": userMessageData});
-                    if(isEmpty(userMessageData)==false && mMenu.state.tableIsClick==false){
+                    /*if(isEmpty(userMessageData)==false && mMenu.state.tableIsClick==false){
                         mMenu.props.onLoad(userMessageData[0]);
-                    }
+                    }*/
                 }
             },
             onError: function (error) {
@@ -184,7 +193,7 @@ const MessageMenu = React.createClass({
             var contentJson = {"content": content, "createTime": createTime};
             if (messageToType == 1) {
                 var showUser;
-                if(colUid == sessionStorage.getItem("ident")){
+                if(fromUser.colUid != sessionStorage.getItem("ident")){
                     showUser = fromUser;
                 }else{
                     showUser = messageObj.toUser;

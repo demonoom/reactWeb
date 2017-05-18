@@ -194,8 +194,7 @@ class MyMTV extends React.Component {
                             <span className="live_span_1 live_span_3">{userName}</span>
 							<span className="live_color live_orange right_ri live_span_2">{courseName}</span>    
                         </li>
-                        <li>
-                            
+                        <li> 
                             {delButton}
                             {downloadBtn}
 							{keyIcon}

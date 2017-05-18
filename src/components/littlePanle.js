@@ -102,7 +102,7 @@
                 <div class="header draggable">
                 <h3 class="title">${ obj.title }</h3>
                     <div class="little-tilte">
-                        <a class="back"><i className="iconfont iconfont_close">&lt;</i></a>
+                        <a class="back"><i class="anticon anticon-left "></i></a>
                     </div>
                 </div>
                 <div class="content">
