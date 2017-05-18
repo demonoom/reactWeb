@@ -701,7 +701,7 @@ html, body, #root {
 	padding:0;
 }
 .ant-tabs-content {
-	height:calc(100% - 50px);
+	height:calc(100% - 49px);
 	margin:0;
     padding: 0;
     width: 100% ;
@@ -3711,6 +3711,9 @@ color:#ffbf00
 }
 .maaee_group_pa{
 	padding:24px 24px 0 24px;
+}
+.maaee_group_pa_0{
+	padding-top:0;
 }
 .yichao_menu, .message_menu{
 	height:calc(100% - 63px)
