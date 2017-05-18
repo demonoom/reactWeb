@@ -330,6 +330,10 @@
             return '/proxy' + url.split('www.maaee.com')[1];
         }
 
+        if (/www\.maaee\.com\:80/img.test(url)) {
+            return '/proxy' + url.split('www.maaee.com:80')[1];
+        }
+
         if (/60\.205\.86\.217:8585/img.test(url)) {
             return '/proxy' + url.split('60.205.86.217:8585')[1];
         }
