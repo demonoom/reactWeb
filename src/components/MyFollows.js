@@ -1,7 +1,7 @@
 /**
  * Created by madapeng on 17-4-5.
  */
-import {Breadcrumb, Icon, message, Card,Pagination, Button} from 'antd';
+import {Breadcrumb, Icon, message, Card, Pagination, Button} from 'antd';
 import React from 'react';
 import {doWebService} from '../WebServiceHelper';
 import MyFollowExtend from './MyFollowExtend';
@@ -159,9 +159,16 @@ class MyFollows extends React.Component {
         this.getMyFollows(userobj)
     }
 
+    // 进入个人中心
+    intoProsoncenter(userinfo) {
+        this.viewProsenInfo(userinfo);
+        this.previouUsers.push(userinfo);
+        this.currentUser = userinfo;
+    }
+
     // 返回父级关注列表
     returnParentFollowsList() {
-
+        debugger
         this.currentUser = this.previouUsers.pop();
         if (!this.currentUser) {
             this.userinfo = this._getCurrentLoginUserInfo();
@@ -180,20 +187,20 @@ class MyFollows extends React.Component {
 
     // 返回个人中心
     returnPersonCenter() {
-
+        debugger
         if (!this.currentUser) {
             this.currentUser = this._getCurrentLoginUserInfo();
             this.previouUsers = [];
         } else {
             this.currentUser = this.previouUsers.pop();
         }
-            this.viewProsenInfo(this.currentUser);
+        this.viewProsenInfo(this.currentUser);
 
     }
 
     // 返回有多级的个人中心
     returnParentPersonCenter() {
-
+        debugger
         this.currentUser = this.previouUsers.pop();
         if (!this.currentUser) {
             this.currentUser = this._getCurrentLoginUserInfo();
@@ -208,13 +215,6 @@ class MyFollows extends React.Component {
             this.viewProsenInfo(this.currentUser);
         }
 
-    }
-
-    // 进入个人中心
-    intoProsoncenter(userinfo) {
-        this.viewProsenInfo(userinfo);
-        this.previouUsers.push(userinfo);
-        this.currentUser = userinfo;
     }
 
 
@@ -286,20 +286,12 @@ class MyFollows extends React.Component {
                 this.title = null;
                 this.htmlTempletContent = <MyFollowExtend userinfo={this.state.userinfo}
                                                           intoMyFollows={this.intoFollowsList}
-                                                          returnParentFollows={this.returnParentFollowsList}
-                                                          onPreview={ this.onPreview }/>;
+                                                          returnParentFollows={this.returnParentFollowsList}/>;
                 break;
-
             // 关注列表
             case this.state.followsListVisible:
-
                 this.originHeight = 'enhance';
                 this._buildMyFollowsList();
-
-                // this.htmlTempletContent =<div>{ this.title}
-                // <div className={' favorite_up favorite_scroll favorite_le_h guanzhu ' + this.originHeight}>{ this.htmlTempletContent }</div>
-                //     <Pagination total={this.param.totalCount} pageSize={getPageSize()} current={this.props.param.currentPage} onChange={this.pageChange} />
-                // </div>;
                 break;
         }
     }

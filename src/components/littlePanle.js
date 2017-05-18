@@ -98,15 +98,11 @@
         let id = UUID(8, 16);
         this.id = id;
         this.ifrid = 'ifr' + id;
-        this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show">
+        this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show teachingAdmin">
                 <div class="header draggable">
                 <h3 class="title">${ obj.title }</h3>
                     <div class="little-tilte">
-                        <a class="close"><i className="iconfont iconfont_close">&#xe615;</i></a>
-                        <a class="zoom"><i className="iconfont iconfont_more">&#xe67e;</i></a>
-                        <a class="back"><i className="iconfont iconfont_more1">&lt;</i></a>
-                        <a class="forward"><i className="iconfont iconfont_more2">&gt;</i></a>
-                        
+                        <a class="back"><i className="iconfont iconfont_close">&lt;</i></a>
                     </div>
                 </div>
                 <div class="content">
@@ -116,24 +112,48 @@
                 </div>
                 </div>`;
 
+        let styleObj = (refStyle, index, orderIndex) => {
 
-        let styleObj = this.calcPos(this.param.stylePage, this.param.stylePage.zIndex, this.param.orderIndex);
+            // 计算出复位的位置
+            var refOff = $('.ant-layout-operation').offset();
+            var refW = $('.ant-layout-operation').width();
 
-        this.htm = $(this.htm).css(styleObj);
+            let tmpInterval = 0;
+            //
+            if (!refStyle.width) {
+                refStyle.width = 380;
+            }
+            let leftRef = (refOff.left + refW) - refStyle.width;
+            //  leftRef = leftRef + tmpInterval;
+            refStyle.left = parseInt(leftRef.toFixed());
+            //
+            let topRef = refOff.top + tmpInterval;
+            topRef = topRef - $(document.body).height();
+            topRef = topRef - refStyle.height * orderIndex;
+            refStyle.top = parseInt(topRef.toFixed());
+            //
+            refStyle.zIndex = index++;
+
+            return refStyle
+
+        }
+
+        this.htm = $(this.htm).css(styleObj(this.param.stylePage, this.param.stylePage.zIndex, this.param.orderIndex));
         $(document.body).append(this.htm);
         this.el = $('#' + this.id);
-        $(this.el).drag();
-        $(this.el).find('.close').on('click', this.closepanle.bind(this, this.id));
-        $(this.el).find('.zoom').on('click', this.zoomview.bind(this, this.id));
-        $(this.el).find('.back').on('click', this.historyControler.bind(this, this.id, -1));
-        $(this.el).find('.forward').on('click', this.historyControler.bind(this, this.id, 1));
-        $(this.el).find('.enterFull').on('click', enterFull);
-        $(this.el).find('.exitFull').on('click', exitFull);
+        if (obj.drag) {
+            $(this.el).drag();
+        }
+
+        $(this.el).find('.back').on('click', this.closepanle.bind(this, this.id));
         this.ifrel = $('#' + this.ifrid);
-
-        this.ifrel.on('load', this._iframeonloadevent.bind(this, this.ifrid));
-
+        this.ifrel.on('load', this._teachAdminIframeOnLoadevent.bind(this, this.id, this.ifrid));
         return this;
+    }
+    littlePanle.prototype._teachAdminIframeOnLoadevent = function (id, ifrid, event) {
+
+        event.target.contentWindow.phone = phone;
+        $('#' + id + ' h3').text(event.target.contentWindow.document.title);
     }
 
 
@@ -171,20 +191,17 @@
         $(this.el).find('.enterFull').on('click', enterFull);
         $(this.el).find('.exitFull').on('click', exitFull);
         this.ifrel = $('#' + objtemplet.ifrid);
-
+        
         this.ifrel.on('load', this._iframeonloadevent.bind(this, objtemplet.ifrid));
-        this.ifrel.on('unload', this.__iframeBeforeUnLoadEvent.bind(this, objtemplet.ifrid));
+
 
         return this;
     }
 
+    littlePanle.prototype._iframeonloadevent = function (id, event) {
+        event.target.contentWindow.phone = phone;
 
-    littlePanle.prototype.__iframeBeforeUnLoadEvent = function (event) {
-debugger
-        alert('sdf');
-        return false;
     }
-
 
     littlePanle.prototype._showHtmlFlv = function (obj) {
 
@@ -260,13 +277,13 @@ debugger
 
     }
 
-
     littlePanle.prototype.GetLP = function (obj, oldArray) {
 
         this.param.mode = obj.mode || obj.htmlMode || '';
         this.param.width = obj.width || '';
         this.param.param = obj.param;
         this.param.title = obj.title;
+        this.param.drag = obj.drag;
         this.param.url = this._setProxyInfo(obj.url);
 
         let maxIndex = () => {
@@ -320,7 +337,14 @@ debugger
         if (/60\.205\.86\.217/img.test(url)) {
             return '/proxy' + url.split('60.205.86.217')[1];
         }
-
+        //192.168.1.59:8080
+        if (/192\.168\.1\.59\:8080/img.test(url)) {
+            return '/proxy' + url.split('192.168.1.59:8080')[1];
+        }
+        //192.168.1.59:8080
+        if (/192\.168\.1\.34\:8080/img.test(url)) {
+            return '/proxy' + url.split('192.168.1.34:8080')[1];
+        }
         return url;
     }
 
@@ -351,132 +375,11 @@ debugger
 
     }
 
-    littlePanle.prototype._iframeonloadevent = function (id, event) {
-
-        event.target.contentWindow.phone = phone;
-
-    }
-
 
     littlePanle.prototype.historyControler = function (id, num) {
 
         var ifr = $('#ifr' + id)[0];
         ifr.contentWindow.history.go(num);
-
-    }
-
-    // 保持android ios 一直体验的接口实现
-    var phone = {
-        showLoading() {
-
-
-        },
-
-        showLoading(cancelAble) {
-
-
-        },
-
-        dismissLoading() {
-
-        },
-
-        showMessage(message) {
-
-        },
-
-        playAudio(url) {
-
-        },
-
-        playVideoM(jsonObject) {
-
-
-        },
-
-        playVideoJSON(jsonObject) {
-            var obj = eval('(' + jsonObject + ')');
-            top.LP.Start({url: '', title: obj.title, htmlMode: true, param: obj.liveVideos});
-        },
-
-        showImage(url) {
-
-        },
-
-        showImage(url, currentUrl) {
-
-        },
-
-        showPdf(pdfUrl) {
-
-            top.LP.Start({url: pdfUrl, title: ''});
-        },
-
-        playVideo(videoPath) {
-
-            top.LP.Start({url: videoPath, title: ''});
-
-        },
-
-        finish() {
-
-        },
-
-        /**
-         * 结束本activity并且刷新前一个fragment
-         */
-        finishForRefresh() {
-
-        },
-
-        /**
-         * 结束本fragment并且在前一个fragment执行一段脚本
-         *
-         * @param cmd
-         */
-        finishForExecute(cmd) {
-
-        },
-
-        /**
-         * 结束并开启一个新页面
-         *
-         * @param url
-         */
-        finishForNewPage(url) {
-
-        },
-
-        /**
-         * 是否显示分享按钮
-         *
-         * @param shareAble
-         */
-        setShareAble(shareAble) {
-
-        },
-
-        teacherJoinClass(vid) {
-
-        },
-
-        /**
-         * 是否可以下拉刷新
-         *
-         * @param refreshAble
-         */
-        setRefreshAble(refreshAble) {
-
-        },
-
-        showSubjectWeikeMaterials(subjectId) {
-
-        },
-
-        addSubjectWeikeMaterialInput(subjectId) {
-
-        }
-
 
     }
 
@@ -488,24 +391,31 @@ debugger
         Start(objParam){
             this.GetLP(objParam);
         },
-        GetLP(objParam) {
 
-            if ((this.mgr.length - this.hideArr.length) >= 3) {
-                alert('弹窗打开太多！');
-                return;
+        GetLP(objParam) {
+            if (objParam.mode != 'teachingAdmin') {
+
+                if ((this.mgr.length - this.hideArr.length) >= 3) {
+                    alert('弹窗打开太多！');
+                    return;
+                }
+                let objA = new littlePanle().GetLP(objParam, this.mgr);
+                this.mgr.push(objA);
+                this.addOrderBtn();
+                return objA;
+
+            } else {
+                let objA = new littlePanle().GetLP(objParam, this.mgr);
+                this.mgr.push(objA);
+                return objA;
             }
-            let objA = new littlePanle().GetLP(objParam, this.mgr);
-            this.mgr.push(objA);
-            this.addOrderBtn();
-            return objA;
         },
         addOrderBtn(){
-            if (!$('.ant-layout-header .lpmgrbtn').length) {
-                $('.ant-layout-header > div').append("<div class='lpmgrbtn'>" +
-                    "<a onclick='LP.orderAll()' class='no_le'><i class='iconfont'>&#xe67a;</i><span>复位</span></a>" +
-                    "<a onclick='LP.delAll()' class='del'><i class='iconfont'>&#xe6b4;</i><span>关闭</span></a>" +
-                    "</div>");
-            }
+            if ($('.ant-layout-header .lpmgrbtn').length) return;
+            $('.ant-layout-header > div').append("<div class='lpmgrbtn'>" +
+                "<a onclick='LP.orderAll()' class='no_le'><i class='iconfont'>&#xe67a;</i><span>复位</span></a>" +
+                "<a onclick='LP.delAll()' class='del'><i class='iconfont'>&#xe6b4;</i><span>关闭</span></a>" +
+                "</div>");
         },
         delAll(){
             $('.dialog.little-layout-aside-r-show').remove();
@@ -630,5 +540,145 @@ function enterFull(el) {
 }
 function replaceUnit(str) {
     return parseInt(str.replace(/[a-z]*/img, ''))
+
+}
+
+
+// 保持android ios 一直体验的接口实现
+var phone = {
+    // callHandler ({method: xxxx, callbackId: xxxxxx, url: xxxxx})
+    callHandler(refObj, ifrobj)
+    {
+
+        let obj = refObj;
+        //  let obj = eval('(' + ref + ')');
+
+        if (!this[obj.method]) {
+            console.error(':::::::::::iframe inter method not implment.:::::::::::ref:');
+            console.error(ref);
+            return;
+        }
+        let result = this[obj.method](obj);
+
+        if (result && obj.callbackId) {
+            ifrobj.contentWindow[obj.callbackId](result);
+        }
+    },
+
+    openNewPage(args){
+        let obj = {mode: 'teachingAdmin', url: args.url};
+        LP.Start(obj);
+    },
+
+    showLoading() {
+
+
+    },
+
+    showLoading(cancelAble) {
+
+
+    },
+
+    dismissLoading() {
+
+    },
+
+    showMessage(message) {
+
+    },
+
+    playAudio(url) {
+
+    },
+
+    playVideoM(jsonObject) {
+
+
+    },
+
+    playVideoJSON(jsonObject) {
+        var obj = eval('(' + jsonObject + ')');
+        top.LP.Start({url: '', title: obj.title, htmlMode: true, param: obj.liveVideos});
+    },
+
+    showImage(url) {
+
+    },
+
+    showImage(url, currentUrl) {
+
+    },
+
+    showPdf(pdfUrl) {
+
+        top.LP.Start({url: pdfUrl, title: ''});
+    },
+
+    playVideo(videoPath) {
+
+        top.LP.Start({url: videoPath, title: ''});
+
+    },
+
+    finish() {
+
+    },
+
+    /**
+     * 结束本activity并且刷新前一个fragment
+     */
+    finishForRefresh() {
+
+    },
+
+    /**
+     * 结束本fragment并且在前一个fragment执行一段脚本
+     *
+     * @param cmd
+     */
+    finishForExecute(cmd) {
+
+    },
+
+    /**
+     * 结束并开启一个新页面
+     *
+     * @param url
+     */
+    finishForNewPage(url) {
+
+    },
+
+    /**
+     * 是否显示分享按钮
+     *
+     * @param shareAble
+     */
+    setShareAble(shareAble) {
+
+    },
+
+    teacherJoinClass(vid) {
+
+    },
+
+    /**
+     * 是否可以下拉刷新
+     *
+     * @param refreshAble
+     */
+    setRefreshAble(refreshAble) {
+
+    },
+
+    showSubjectWeikeMaterials(subjectId) {
+
+    },
+
+    addSubjectWeikeMaterialInput(subjectId) {
+
+    }
+
 
 }

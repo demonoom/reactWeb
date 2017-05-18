@@ -95,7 +95,6 @@ class TeachSpaces extends React.Component {
     // 备课计划的课件资源
     getLessonPlans(optContent, breadCrumbArray) {
 
-
         var optContentArray = optContent.split("#");
         var childrenCount = optContentArray[3];
         let obj = {optContent: optContent, breadCrumbArr: breadCrumbArray ? breadCrumbArray : 0};

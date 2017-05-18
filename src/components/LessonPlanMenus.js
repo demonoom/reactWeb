@@ -47,17 +47,20 @@ class LessonPlanMenus extends React.Component{
             "ident": sessionStorage.getItem("ident"),
             "pageNo": pageNo
         };
+
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 let List = [];
                 ret.response.forEach(function (e) {
+
                     var scheduleId = e.colTsId;
                     var courseName = e.colTitle;
                     var courseTimes = 0;//当值为0时，系统不显示具体的子菜单数量（即菜单上无徽标显示）
                     List.push([scheduleId, courseName, courseTimes]);
                 });
-                _this.setState({menuList: List, lessonCount: ret.pager.rsCount});
+
                 _this.buildMenuChildren(List);
+                _this.setState({menuList: List, lessonCount: ret.pager.rsCount});
             },
             onError: function (error) {
                 message.error(error);
@@ -82,6 +85,7 @@ class LessonPlanMenus extends React.Component{
      * @param key 被点击menu item的key
      */
     menuItemOnClick ({key}) {
+
         var clickKey = `${key}`;
         var keyArray = clickKey.split("#");
         if (keyArray.length == 2) {
