@@ -224,7 +224,7 @@ class MyMTV extends React.Component {
         this.buildFavShipionUi();
         return ( <div>
                 <div className="public—til—blue">我的直播课</div>
-                <div className="favorite_scroll favorite_up favorite_le_h">{coursePanelChildren}</div>
+                <div className="favorite_scroll2 favorite_up favorite_le_h">{coursePanelChildren}</div>
                 <Pagination total={this.state.pager.rsCount}
                             pageSize={getPageSize()}
                             current={this.state.pager.pageNo}

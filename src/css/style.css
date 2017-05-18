@@ -3315,6 +3315,9 @@ a.color_gary_f, .color_gary_f{
 .favorite_scroll{
 	height:calc(100% - 46px);
 }
+.favorite_scroll2{
+	height: calc(100% - 91px);
+}    
 .favorite_up{
 	overflow:auto;
 	
