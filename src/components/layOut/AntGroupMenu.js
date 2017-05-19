@@ -96,8 +96,7 @@ const AntGroupMenu = React.createClass({
             <img src={require('../images/groupTitle.png')} className="antnest_38_img" />
             <span className=""　icon="usergroup-add">我的群组</span>
           </div>
-          <Table className="maaeegroup" onRowClick={mMenu.getPersonCenterInfo} showHeader={false}
-                 scroll={{ x: true, y:true}} columns={columns} dataSource={mMenu.state.userContactsData}
+          <Table className="maaeegroup yiqun" onRowClick={mMenu.getPersonCenterInfo} showHeader={false}  columns={columns} dataSource={mMenu.state.userContactsData}
                  pagination={false} rowClassName={mMenu.getRowClassName}/>
         </div>
     );

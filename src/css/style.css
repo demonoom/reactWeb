@@ -3865,11 +3865,16 @@ div.btn1{
     margin-left: 0;
 }
 .userinfo_bg_1{
-	padding:70px 0 0 0;
-	text-align:center;
+	background:url(../../src/components/images/message_icon.png) no-repeat center 0;
+	width: 400px;
+    height: 318px;
+    position: relative;
+    margin: 0 auto;
+    top: 80px;
+	text-align: center;
 }
 .userinfo_bg_1 span{
-	top: 150px;
+	top: 342px;
     position: relative;
 }
 .userinfo_top{
@@ -3891,4 +3896,10 @@ div.btn1{
     font-size: 22px;
     color: #0078e4;
     font-weight: normal;
+}
+.yiqun .ant-table-content{
+	overflow-y:auto
+}
+.favorite_my{
+	height:100%;
 }

@@ -501,7 +501,7 @@ const PersonCenterComponents = React.createClass({
                         var id = e.id;
                         var keyIcon='';
                         if(e.password){
-                            keyIcon = <span className="right_ri focus_btn key_span"><i className="iconfont key">&#xe621;</i></span>;
+                            keyIcon = <span className="right_ri key_span"><i className="iconfont key">&#xe621;</i></span>;
                         }
                         var delButton;
                         if(user.colUid == sessionStorage.getItem("ident")){

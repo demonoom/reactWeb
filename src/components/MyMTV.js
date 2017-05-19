@@ -168,7 +168,7 @@ class MyMTV extends React.Component {
             let delButton;
             let downloadBtn;
             if (e.password) {
-                keyIcon = <span className="focus_btn key_span"><i className="iconfont key">&#xe621;</i></span>;
+                keyIcon = <span className="key_span"><i className="iconfont key">&#xe621;</i></span>;
             }
             if (user.colUid == sessionStorage.getItem("ident")) {
                 //如果是当前用户，可以删除自己的直播课
