@@ -1378,7 +1378,7 @@ const MyFollowExtend = React.createClass({
                                         
                                     </li>
                                     <li> 
-                                        <span className="focus_btn key_span"><i className="iconfont key">&#xe621;</i></span>
+                                        <span className="key_span"><i className="iconfont key">&#xe621;</i></span>
 										<span className="time right_ri">{startTime}</span>
                                     </li>
                                 </ul>
