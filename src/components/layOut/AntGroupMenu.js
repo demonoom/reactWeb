@@ -97,7 +97,7 @@ const AntGroupMenu = React.createClass({
             <span className=""　icon="usergroup-add">我的群组</span>
           </div>
           <Table className="maaeegroup" onRowClick={mMenu.getPersonCenterInfo} showHeader={false}
-                 scroll={{ x: true, y: 480}} columns={columns} dataSource={mMenu.state.userContactsData}
+                 scroll={{ x: true, y:true}} columns={columns} dataSource={mMenu.state.userContactsData}
                  pagination={false} rowClassName={mMenu.getRowClassName}/>
         </div>
     );
