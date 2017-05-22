@@ -384,7 +384,7 @@ const StudentMainLayout = React.createClass({
                     </Row>;
                 break;
             case 'C':
-                mainContent = <div className={this.state.optType + 'ant-layout-container'}>
+                mainContent = <div className={this.state.currentKey + ' ant-layout-container'}>
                     {tabComponent}
                 </div>
                 break;

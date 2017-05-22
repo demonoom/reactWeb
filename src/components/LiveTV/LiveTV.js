@@ -138,7 +138,7 @@ class LiveTV extends React.Component {
             </ul>
         </div>;
 
-        let livePanel = <div className="ant-layout-content">
+        let livePanel = <div>
             {this.livesUi}
             <Pagination total={this.state.pageCount} pageSize={getPageSize()} onchange={this._getLives} />
         </div>;
