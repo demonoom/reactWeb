@@ -13,7 +13,7 @@ const Panel = Collapse.Panel;
 
 var courseWareList;
 var coursePanelChildren;
-var activeKey = new Array();
+var activeKey = [];
 var subjectList=[];
 var data = [];
 var subjectTableColumns  = [{
@@ -1758,24 +1758,24 @@ const PersonCenterComponents = React.createClass({
             var toolbarTitle;
             if(personCenter.state.urlType=="score"){
                 toolbarTitle="的积分";
-                currentPageLink = "http://www.maaee.com:80/Excoord_PhoneService/user/getUserScores/" + personCenter.state.userInfo.user.colUid;
+                currentPageLink = "http://www.maaee.com/Excoord_PhoneService/user/getUserScores/" + personCenter.state.userInfo.user.colUid;
             }else{
                 toolbarTitle="的等级";
-                currentPageLink = "http://www.maaee.com:80/Excoord_PhoneService/user/personalGrade/" + personCenter.state.userInfo.user.colUid;
+                currentPageLink = "http://www.maaee.com/Excoord_PhoneService/user/personalGrade/" + personCenter.state.userInfo.user.colUid;
             }
             personDate = <div>
                 <div className="public—til—blue">{returnPersonCenterToolBar}{personCenter.state.userInfo.user.userName+toolbarTitle}</div>
                 <div className="topics_le"><iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe></div>
             </div>;
         }else if(personCenter.state.optType=="turnToAsk"){
-            var currentPageLink = "http://www.maaee.com:80/Excoord_PhoneService/quiz/getUserAskedQuiz/" + personCenter.state.userInfo.user.colUid;
+            var currentPageLink = "http://www.maaee.com/Excoord_PhoneService/quiz/getUserAskedQuiz/" + personCenter.state.userInfo.user.colUid;
             personDate = <div className="group_cont">
                 <div className="public—til—blue">{returnPersonCenterToolBar}{personCenter.state.userInfo.user.userName+'发起过的提问'}</div>
                 <iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe>
             </div>
         }
         else if(personCenter.state.optType=="turnStudyTrack"){
-            var currentPageLink = "http://www.maaee.com:80/Excoord_PhoneService/user/studytrack/" + personCenter.state.userInfo.user.colUid;
+            var currentPageLink = "http://www.maaee.com/Excoord_PhoneService/user/studytrack/" + personCenter.state.userInfo.user.colUid;
             personDate = <div className="group_cont">
                 <div className="public—til—blue">{returnPersonCenterToolBar}{personCenter.state.userInfo.user.userName+'的学习轨迹'}</div>
                 <iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe>
@@ -1978,18 +1978,15 @@ const PersonCenterComponents = React.createClass({
                 <ConfirmModal ref="confirmModal"
                               title="确定要移除选中的群成员?"
                               onConfirmModalCancel={personCenter.closeConfirmModal}
-                              onConfirmModalOK={personCenter.deleteSelectedMember}
-                ></ConfirmModal>
+                              onConfirmModalOK={personCenter.deleteSelectedMember} />
                 <ConfirmModal ref="dissolutionChatGroupConfirmModal"
                               title="确定要解散该群组?"
                               onConfirmModalCancel={personCenter.closeDissolutionChatGroupConfirmModal}
-                              onConfirmModalOK={personCenter.dissolutionChatGroup}
-                ></ConfirmModal>
+                              onConfirmModalOK={personCenter.dissolutionChatGroup} />
                 <ConfirmModal ref="exitChatGroupConfirmModal"
                               title="确定要退出该群组?"
                               onConfirmModalCancel={personCenter.closeExitChatGroupConfirmModal}
-                              onConfirmModalOK={personCenter.exitChatGroup}
-                ></ConfirmModal>
+                              onConfirmModalOK={personCenter.exitChatGroup} />
 
                 <Modal
                     visible={personCenter.state.createChatGroupModalVisible}
@@ -2027,7 +2024,7 @@ const PersonCenterComponents = React.createClass({
 
                 </Modal>
 
-                <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
+                <UseKnowledgeComponents ref="useKnowledgeComponents" />
                 {personDate}
             </div>
         );

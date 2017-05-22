@@ -147,6 +147,13 @@ const MyFollowExtend = React.createClass({
         };
 
     },
+
+    componentWillReceiveProps: function(nextProps) {
+
+        let user = nextProps.userinfo;
+        this.setState({ optType:'personCenter', currentUser : user });
+
+    },
     /**
      * 话题tab切换响应函数
      * @param activeKey
@@ -242,7 +249,6 @@ const MyFollowExtend = React.createClass({
         var uuid = s.join("");
         return uuid;
     },
-
 
 
     /**
@@ -1002,7 +1008,7 @@ const MyFollowExtend = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                if ( ret.success ) {
+                if (ret.success) {
                     message.success(successTip);
                 } else {
                     message.success(errorTip);
@@ -1107,49 +1113,51 @@ const MyFollowExtend = React.createClass({
 
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+
                 subjectList.splice(0);
                 data.splice(0);
                 var response = ret.response;
-                if (response == null || response.length == 0) {
-                    _this.setState({totalCount: 0});
-                } else {
-                    response.forEach(function (e) {
-                        var key = e.id;
-                        var name = e.user.userName;
-                        var popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>' + e.content + '<hr/><span class="answer_til answer_til_2">答案：</span>' + e.answer + '</div>';
-                        var content = <Popover placement="rightTop"
-                                               content={<article id='contentHtml' className='content Popover_width'
-                                                                 dangerouslySetInnerHTML={{__html: popOverContent}}></article>}>
-                            <article id='contentHtml' className='content'
-                                     dangerouslySetInnerHTML={{__html: e.content}}></article>
-                        </Popover>;
-                        var subjectType = e.typeName;
-                        var subjectScore = e.score;
-                        if (parseInt(e.score) < 0) {
-                            subjectScore = '--';
-                        }
-                        var answer = e.answer;
-                        var userId = e.user.colUid;
-                        var subjectOpt = <div><Button style={{}} type="" value={e.id} onClick={_this.showModal}
-                                                      icon="export" title="使用" className="score3_i"></Button></div>;
-                        data.push({
-                            key: key,
-                            name: name,
-                            content: content,
-                            subjectType: subjectType,
-                            subjectScore: subjectScore,
-                            subjectOpt: subjectOpt,
-                            answer: answer
-                        });
-                        var pager = ret.pager;
-                        _this.setState({
-                            totalSubjectCount: parseInt(pager.rsCount),
-                            "currentUser": e.user,
-                            "optType": "getUserSubjects",
-                            "activeKey": 'userSubjects'
-                        });
-                    });
+                if (ret.success && !response.length) {
+                    message.info('没有题库内容！');
+                    return;
                 }
+                response.forEach(function (e) {
+                    var key = e.id;
+                    var name = e.user.userName;
+                    var popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>' + e.content + '<hr/><span class="answer_til answer_til_2">答案：</span>' + e.answer + '</div>';
+                    var content = <Popover placement="rightTop"
+                                           content={<article id='contentHtml' className='content Popover_width'
+                                                             dangerouslySetInnerHTML={{__html: popOverContent}}></article>}>
+                        <article id='contentHtml' className='content'
+                                 dangerouslySetInnerHTML={{__html: e.content}}></article>
+                    </Popover>;
+                    var subjectType = e.typeName;
+                    var subjectScore = e.score;
+                    if (parseInt(e.score) < 0) {
+                        subjectScore = '--';
+                    }
+                    var answer = e.answer;
+                    var userId = e.user.colUid;
+                    var subjectOpt = <div><Button style={{}} type="" value={e.id} onClick={_this.showModal}
+                                                  icon="export" title="使用" className="score3_i"></Button></div>;
+                    data.push({
+                        key: key,
+                        name: name,
+                        content: content,
+                        subjectType: subjectType,
+                        subjectScore: subjectScore,
+                        subjectOpt: subjectOpt,
+                        answer: answer
+                    });
+                    var pager = ret.pager;
+                    _this.setState({
+                        totalSubjectCount: parseInt(pager.rsCount),
+                        currentUser: e.user,
+                        optType: "getUserSubjects",
+                        activeKey: 'userSubjects'
+                    });
+                });
+
             },
             onError: function (error) {
                 message.error(error);
@@ -1186,6 +1194,7 @@ const MyFollowExtend = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 courseWareList = [];
+
                 let user;
                 if (!ret.success) {
                     message.info(ret.msg);
@@ -1340,26 +1349,29 @@ const MyFollowExtend = React.createClass({
         var userLiveData = [];
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                if (ret.success) {
-                    let user;
-                    var response = ret.response;
-                    response.forEach(function (e) {
-                        var liveCover = e.liveCover;
-                        var cover = liveCover.cover;
-                        var liveVideos = e.liveVideos;
-                        var schoolName = e.schoolName;
-                        var startTime = _this.getLocalTime(e.startTime);
-                        var title = e.title;
-                        user = e.user;
-                        var userName = user.userName;
-                        var courseName = e.courseName;
-                        var password = e.password;
-                        var id = e.id;
-                        var keyIcon;
-                        if (isEmpty(password) == false) {
-                            keyIcon = <Icon type="key"/>;
-                        }
+                if (!ret.response || !ret.response.length ) {
+                    message.info('没有直播内容！');
+                    return;
+                }
 
+                let user;
+                var response = ret.response;
+                response.forEach(function (e) {
+                    var liveCover = e.liveCover;
+                    var cover = liveCover.cover;
+                    var liveVideos = e.liveVideos;
+                    var schoolName = e.schoolName;
+                    var startTime = _this.getLocalTime(e.startTime);
+                    var title = e.title;
+                    user = e.user;
+                    var userName = user.userName;
+                    var courseName = e.courseName;
+                    var password = e.password;
+                    var id = e.id;
+                    var keyIcon;
+                    if (isEmpty(password) == false) {
+                        keyIcon = <Icon type="key"/>;
+                    }
 
                         var liveCard = <Card className="live">
                             <p className="h3">{title}</p>
@@ -1387,16 +1399,18 @@ const MyFollowExtend = React.createClass({
                         userLiveData.push(liveCard);
                     });
 
-                    _this.setState({
-                        totalLiveCount: parseInt(ret.pager.rsCount),
-                        currentUser: user,
-                        userLiveData: userLiveData,
-                        optType: "getLiveInfoByUid",
-                        activeKey: "userLiveInfos",
-                        returnBtnIsShow: true,
-                        isVisible: true,
-                    });
-                }
+
+
+
+                _this.setState({
+                    totalLiveCount: parseInt(ret.pager.rsCount),
+                    currentUser: user,
+                    userLiveData: userLiveData,
+                    optType: "getLiveInfoByUid",
+                    activeKey: "userLiveInfos",
+                    returnBtnIsShow: true,
+                    isVisible: true,
+                });
 
 
             },
@@ -1415,16 +1429,16 @@ const MyFollowExtend = React.createClass({
 
         let url
         let title;
-        if ( urlType == "level") {
-              url = "http://www.maaee.com/Excoord_PhoneService/user/personalGrade/" + this.state.currentUser.user.colUid;
-            title =  userInfo.user.userName + "的等级";
-          //  this.setState({ "optType": "getScoreOrLevelPage", "currentUser": userInfo, "activeKey": "userScores", "urlType": 'level' });
+        if (urlType == "level") {
+            url = "http://www.maaee.com/Excoord_PhoneService/user/personalGrade/" + this.state.currentUser.user.colUid;
+            title = userInfo.user.userName + "的等级";
+            //  this.setState({ "optType": "getScoreOrLevelPage", "currentUser": userInfo, "activeKey": "userScores", "urlType": 'level' });
         } else {
             url = "http://www.maaee.com/Excoord_PhoneService/user/getUserScores/" + this.state.currentUser.user.colUid;
-            title =   userInfo.user.userName + "的积分";
-           // this.setState({"optType": "getPlatformRulePage", "currentUser": userInfo, "activeKey": "platformRulePage", "urlType": 'score'});
+            title = userInfo.user.userName + "的积分";
+            // this.setState({"optType": "getPlatformRulePage", "currentUser": userInfo, "activeKey": "platformRulePage", "urlType": 'score'});
         }
-        this.view({mode:'html', url: url, title: title });
+        this.view({mode: 'html', url: url, title: title});
     },
 
     /**
@@ -1543,6 +1557,9 @@ const MyFollowExtend = React.createClass({
         this.refs.exitChatGroupConfirmModal.changeConfirmModalVisible(false);
     },
 
+    changeMyCenter(){
+        this.setState({optType: "personCenter"});
+    },
 
     stuUpgrade(){
         return <ul className="topics_le integral integral_scroll">
@@ -1803,10 +1820,12 @@ const MyFollowExtend = React.createClass({
     },
     render() {
 
-        var welcomeTitle ;
+        var welcomeTitle;
         var returnToolBar = <div className="ant-tabs-right talk_ant_btn1"><Button onClick={this.props.returnMyFollows }>返回</Button>
         </div>;
-        var returnPersonCenterToolBar = <div className="ant-tabs-right talk_ant_btn1"><button onClick={this.returnPersonCenter}>返回</button></div>;
+        var returnPersonCenterToolBar = <div className="ant-tabs-right talk_ant_btn1">
+            <button onClick={this.returnPersonCenter}>返回</button>
+        </div>;
         var tabComponent;
         var userPhoneCard;
         let returnBtn = null;
@@ -1814,13 +1833,14 @@ const MyFollowExtend = React.createClass({
         switch (this.state.optType) {
 
             case 'personCenter':
+
                 returnBtn = <h3 className="public—til—blue">
                     <div className="ant-tabs-right">
-                        <button onClick={this.props.returnParentFollows} className="affix_bottom_tc"><Icon type="left"/></button>
+                        <button onClick={this.props.returnParentPersonCenter} className="affix_bottom_tc"><Icon
+                            type="left"/></button>
                     </div>
-                    {this.state.currentPerson.user.userName + "的个人中心"}</h3>;
-                tabComponent = <MyFollowPersonCenter ref="personCenter"
-                                                     userInfo={this.props.userinfo}
+                    {this.props.userinfo.user.userName + "的个人中心"}</h3>;
+                tabComponent = <MyFollowPersonCenter userInfo={this.props.userinfo}
                                                      userContactsData={this.state.userContactsData}
                                                      callBackTurnToMessagePage={this.getUser2UserMessages}
                                                      callBackTurnToAsk={this.callBackTurnToAsk}
@@ -2111,45 +2131,48 @@ const MyFollowExtend = React.createClass({
             case 'getUserSubjects':
 
                 tabComponent = <div className="follow_my">
-                        <h3 className="public—til—blue">
-                            <div className="ant-tabs-right">
-                                <button onClick={this.props.returnParentFollows} className="affix_bottom_tc"><Icon type="left"/></button>
-                            </div>
-                            {this.state.currentPerson.user.userName + "的题库"}</h3>
-                        <Table columns={subjectTableColumns} dataSource={data} pagination={{
-                            total: this.state.totalSubjectCount,
-                            pageSize: getPageSize(),
-                            onChange: this.onSubjectPageChange
-                        }} scroll={{y: 400}}/>
-                    </div>;
+                    <h3 className="public—til—blue">
+                        <div className="ant-tabs-right">
+                            <button onClick={this.changeMyCenter} className="affix_bottom_tc"><Icon type="left"/>
+                            </button>
+                        </div>
+                        {this.state.currentPerson.user.userName + "的题库"}</h3>
+                    <Table columns={subjectTableColumns} dataSource={data} pagination={{
+                        total: this.state.totalSubjectCount,
+                        pageSize: getPageSize(),
+                        onChange: this.onSubjectPageChange
+                    }} scroll={{y: 400}}/>
+                </div>;
                 break;
 
             case 'getUserCourseWares':
 
                 tabComponent = <div className="follow_my">
-                        <h3 className="public—til—blue">
-                            <div className="ant-tabs-right">
-                                <button onClick={this.props.returnParentFollows} className="affix_bottom_tc"><Icon type="left"/></button>
-                            </div>
-                            {this.state.currentPerson.user.userName + "的资源"}</h3>
-                        <div className='ant-tabs-tabpane ant-tabs-tabpane-active topics_calc favorite_up favorite_le_h'>
-                            <Collapse defaultActiveKey={activeKey} activeKey={activeKey} ref="collapse">
-                                {coursePanelChildren}
-                            </Collapse>
+                    <h3 className="public—til—blue">
+                        <div className="ant-tabs-right">
+                            <button onClick={this.changeMyCenter} className="affix_bottom_tc"><Icon type="left"/>
+                            </button>
                         </div>
-                        <Pagination total={this.state.totalCourseWareCount} pageSize={getPageSize()}
-                                    current={this.state.currentCourseWarePage} onChange={this.onCourseWareChange}/>
-                    </div>;
+                        {this.state.currentPerson.user.userName + "的资源"}</h3>
+                    <div className='ant-tabs-tabpane ant-tabs-tabpane-active topics_calc favorite_up favorite_le_h'>
+                        <Collapse defaultActiveKey={activeKey} activeKey={activeKey} ref="collapse">
+                            {coursePanelChildren}
+                        </Collapse>
+                    </div>
+                    <Pagination total={this.state.totalCourseWareCount} pageSize={getPageSize()}
+                                current={this.state.currentCourseWarePage} onChange={this.onCourseWareChange}/>
+                </div>;
 
 
                 break;
 
             case 'getLiveInfoByUid':
 
-                tabComponent = <div  className="follow_my">
+                tabComponent = <div className="follow_my">
                     <h3 className="public—til—blue">
                         <div className="ant-tabs-right">
-                            <button onClick={this.props.returnParentFollows} className="affix_bottom_tc"><Icon type="left"/></button>
+                            <button onClick={this.changeMyCenter} className="affix_bottom_tc"><Icon type="left"/>
+                            </button>
                         </div>
                         {this.state.currentPerson.user.userName + "的直播课"}</h3>
                     <div className='ant-tabs ant-tabs-top ant-tabs-line topics_calc favorite_up favorite_le_h'>
@@ -2162,9 +2185,10 @@ const MyFollowExtend = React.createClass({
 
 
             case 'turnToLiveInfoShowPage':
-                
+
                 var currentPageLink = "http://www.maaee.com:80/Excoord_PC/liveinfo/show/" + sessionStorage.getItem("ident") + "/" + this.state.liveInfoId;
-                var liveInfoShowIframe = <iframe id="liveInfoIframe" ref="study" src={currentPageLink} className="analyze_iframe"/>;
+                var liveInfoShowIframe = <iframe id="liveInfoIframe" ref="study" src={currentPageLink}
+                                                 className="analyze_iframe"/>;
                 tabComponent = <Tabs
                     hideAdd
                     ref="studentStudyTrackTab"
@@ -2180,7 +2204,7 @@ const MyFollowExtend = React.createClass({
                 break;
 
             case 'userFavorite':
-                tabComponent = <Favorites userid={this.state.studentId} breadcrumbVisible={false} />;
+                tabComponent = <Favorites userid={this.state.studentId} breadcrumbVisible={false}/>;
                 break;
 
             case 'getPlatformRulePage':
@@ -2193,7 +2217,9 @@ const MyFollowExtend = React.createClass({
                         {this.state.currentUser.user.userName}
                     </div>
                     <div className="class_right">
-                        <Button onClick={ ()=>{ this.callBackTurnToPlatformRulePage('score') } }
+                        <Button onClick={ () => {
+                            this.callBackTurnToPlatformRulePage('score')
+                        } }
                                 className="yellow_btn">{this.state.currentUser.score}积分</Button>
                     </div>
                     <div className="integral_line"></div>
@@ -2241,14 +2267,14 @@ const MyFollowExtend = React.createClass({
 
         return (<div className="follow_my">
                 {returnBtn}
-            <div className="favorite_scroll">
-                <UseKnowledgeComponents ref="useKnowledgeComponents"/>
-                <div className="group_cont">
-                    {userPhoneCard}
-                    {tabComponent}
+                <div className="favorite_scroll">
+                    <UseKnowledgeComponents ref="useKnowledgeComponents"/>
+                    <div className="group_cont">
+                        {userPhoneCard}
+                        {tabComponent}
+                    </div>
                 </div>
             </div>
-			</div>
         );
     },
 });

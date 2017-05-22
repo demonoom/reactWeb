@@ -19,17 +19,16 @@ class MyFollows extends React.Component {
             userinfo: [],
             userList: [],
         };
-        this.previouUsers = [];
-        this.currentUser = this._getCurrentLoginUserInfo();
         this.gobackBtn = null;
+        this.previouUsers = [];
         this.htmlTempletContent = {};
+        this.currentUser = this._getCurrentLoginUserInfo();
         this.isMyUserId = this.isMyUserId.bind(this);
         this.getMyFollows = this.getMyFollows.bind(this);
-        this.intoFollowsList = this.intoFollowsList.bind(this);
         this.intoProsoncenter = this.intoProsoncenter.bind(this);
-        this.returnPersonCenter = this.returnPersonCenter.bind(this);
-        this.returnParentFollowsList = this.returnParentFollowsList.bind(this);
+        this.returnParentPersonCenter = this.returnParentPersonCenter.bind(this);
         this._getCurrentLoginUserInfo = this._getCurrentLoginUserInfo.bind(this);
+        this.returnCurrentUserPersonCenter = this.returnCurrentUserPersonCenter.bind(this);
     }
 
 
@@ -72,7 +71,7 @@ class MyFollows extends React.Component {
         let userid = null;
         if (userobj.colUid) {
             userid = userobj.colUid;
-            this.userinfo = userobj;
+            this.currentUser = userobj;
         }
 
         var param = {
@@ -104,6 +103,8 @@ class MyFollows extends React.Component {
             }
         });
     }
+
+    // 进入关注列表
 
     // 取消关注
     unFollow(toUser) {
@@ -154,10 +155,6 @@ class MyFollows extends React.Component {
         });
     }
 
-    // 进入关注列表
-    intoFollowsList(userobj) {
-        this.getMyFollows(userobj)
-    }
 
     // 进入个人中心
     intoProsoncenter(userinfo) {
@@ -166,53 +163,28 @@ class MyFollows extends React.Component {
         this.currentUser = userinfo;
     }
 
-    // 返回父级关注列表
-    returnParentFollowsList() {
-        debugger
-        this.currentUser = this.previouUsers.pop();
-        if (!this.currentUser) {
-            this.userinfo = this._getCurrentLoginUserInfo();
-            this.getMyFollows(this.userinfo);
-            return;
-        }
-        if (this.previouUsers.length) {
-            this.currentUser = this.previouUsers.pop();
-            this.getMyFollows(this.currentUser);
-        } else {
-            this.userinfo = this._getCurrentLoginUserInfo();
-            this.getMyFollows(this.userinfo);
-        }
+    returnCurrentUserPersonCenter() {
 
-    }
-
-    // 返回个人中心
-    returnPersonCenter() {
-        debugger
-        if (!this.currentUser) {
-            this.currentUser = this._getCurrentLoginUserInfo();
-            this.previouUsers = [];
-        } else {
-            this.currentUser = this.previouUsers.pop();
-        }
         this.viewProsenInfo(this.currentUser);
-
     }
+
 
     // 返回有多级的个人中心
     returnParentPersonCenter() {
-        debugger
-        this.currentUser = this.previouUsers.pop();
-        if (!this.currentUser) {
-            this.currentUser = this._getCurrentLoginUserInfo();
-            this.viewProsenInfo(this.currentUser);
-            return;
-        }
+
         if (this.previouUsers.length) {
-            this.currentUser = this.previouUsers.pop();
-            this.viewProsenInfo(this.currentUser);
+
+            let refUser = this.previouUsers.pop();
+            if (refUser.colUid == this.currentUser.colUid) {
+                this.returnParentPersonCenter();
+            } else {
+                this.intoProsoncenter(refUser);
+            }
+
         } else {
             this.currentUser = this._getCurrentLoginUserInfo();
-            this.viewProsenInfo(this.currentUser);
+            this.getMyFollows(this.currentUser);
+
         }
 
     }
@@ -220,17 +192,14 @@ class MyFollows extends React.Component {
 
     // 是自己id
     isMyUserId() {
-        if (!this.currentUser || !this.currentUser.colUid) {
-            this.currentUser = this._getCurrentLoginUserInfo();
-        }
 
         if (this.previouUsers.length) {
-            return true; // 返回到个人中心
+            return false; // 返回到个人中心
         }
-        if (this.currentUser.colUid != this.state.ident) {
-            return true; // 返回到个人中心
+        if (this.currentUser.colUid != this._getCurrentLoginUserInfo().colUid) {
+            return false; // 返回到个人中心
         }
-        return false; // 不返回到自己个人中心
+        return true; // 不返回到自己个人中心
     }
 
     // 侧边预览
@@ -246,14 +215,14 @@ class MyFollows extends React.Component {
         }
 
         //
-        if (!this.isMyUserId()) {
-            this.title = <h3 className="public—til—blue">{this.userinfo.userName}关注列表</h3>;
+        if (this.isMyUserId()) {
+            this.title = <h3 className="public—til—blue">{this.currentUser.userName}关注列表</h3>;
         } else {
             this.title = <h3 className="public—til—blue">
                 <div className="ant-tabs-right">
-                    <button onClick={this.returnPersonCenter} className="affix_bottom_tc"><Icon type="left"/></button>
+                    <button onClick={this.returnCurrentUserPersonCenter} className="affix_bottom_tc"><Icon type="left"/></button>
                 </div>
-                {this.userinfo.userName}关注列表</h3>;
+                {this.currentUser.userName}关注列表</h3>;
         }
 
         //
@@ -285,8 +254,8 @@ class MyFollows extends React.Component {
             case this.state.prosonCenterVisible:
                 this.title = null;
                 this.htmlTempletContent = <MyFollowExtend userinfo={this.state.userinfo}
-                                                          intoMyFollows={this.intoFollowsList}
-                                                          returnParentFollows={this.returnParentFollowsList}/>;
+                                                          intoMyFollows={this.getMyFollows}
+                                                          returnParentPersonCenter={this.returnParentPersonCenter}/>;
                 break;
             // 关注列表
             case this.state.followsListVisible:

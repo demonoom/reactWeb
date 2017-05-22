@@ -16,6 +16,14 @@ const MyFollowPersonCenter = React.createClass({
         };
     },
 
+
+    componentWillReceiveProps: function(nextProps) {
+
+        this.setState({ userInfo : nextProps.userInfo });
+
+    },
+
+
     /**
      * 判断当前个人中心显示的人员是否是当前用户的联系人
      */
@@ -134,6 +142,7 @@ const MyFollowPersonCenter = React.createClass({
      * 获取我的题目
      */
     getMySubjects(){
+
         this.props.callBackGetMySubjects(this.props.userInfo.user);
     },
 
@@ -158,8 +167,10 @@ const MyFollowPersonCenter = React.createClass({
     },
 
     render() {
+
+
         var userPhotoTag;
-        var user = this.state.userInfo.user;
+        var user = this.props.userInfo.user;
         var userName = user.userName;
         if(isEmpty(user.avatar)==false){
             userPhotoTag = <span className="person_user_bg">
