@@ -88,7 +88,7 @@ const Login = Form.create()(React.createClass({
                         loginFailedCount++;
                         loginComponent.setState({loginFailedCount:loginFailedCount});
                         message.error("用户已被禁用,请联系管理员！");
-                    }else if(response.colUtype!="TEAC"){
+                    }else if(response.colUtype!="TEAC" && response.colUtype!="STUD" ){
                         loginFailedCount++;
                         loginComponent.setState({loginFailedCount:loginFailedCount});
                         message.error("用户身份不正确,请重新输入！");
@@ -101,7 +101,12 @@ const Login = Form.create()(React.createClass({
                         var machineId = loginComponent.createMachineId();
                         sessionStorage.setItem("machineId",machineId);
                         loginComponent.getHistoryAccessPointId(response.colUid);
-                        location.hash="MainLayout";
+                        if(response.colUtype == "TEAC"){
+                            location.hash="MainLayout";
+                        }else{
+                            location.hash="StudentMainLayout";
+                        }
+
                     }
                 }
             },
