@@ -36,6 +36,7 @@ var liveInfosPanelChildren;
 // var errorModalIsShow = false;
 var topScrollHeight=0;
 var scrollType="auto";
+var receiveMessageArray=[];
 const AntGroupTabComponents = React.createClass({
 
     getInitialState() {
@@ -187,6 +188,18 @@ const AntGroupTabComponents = React.createClass({
         return uuid;
     },
 
+    checkSameMessageIsExist(currentUUID){
+        var isExits = false;
+        for(var i=0;i<receiveMessageArray.length;i++){
+            var messageUUId = receiveMessageArray[i];
+            if(currentUUID == messageUUId){
+                isExits= true;
+                break;
+            }
+        }
+        return isExits;
+    },
+
     /**
      * 进入收发消息的窗口
      * @param user
@@ -269,7 +282,6 @@ const AntGroupTabComponents = React.createClass({
                                         "imgTagArray": imgTagArrayReturn,
                                         "messageReturnJson": messageReturnJson
                                     };
-                                    //messageList.splice(0, 0, message);
                                     messageList.push(message);
                                 }
                             }
@@ -286,17 +298,40 @@ const AntGroupTabComponents = React.createClass({
                         var data = info.data;
                         showImg = "";
                         var messageOfSinge = data.message;
-                        var uuidsArray = [];
-                        var uuid = messageOfSinge.uuid;
-                        uuidsArray.push(uuid);
                         var fromUser = messageOfSinge.fromUser;
                         var colUtype = fromUser.colUtype;
                         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
                         var content = messageOfSinge.content;
-                        if(messageOfSinge.toType == 1){
+                        var uuidsArray = [];
+                        var uuid = messageOfSinge.uuid;
+                        uuidsArray.push(uuid);
+                        var isExist = antGroup.checkSameMessageIsExist(uuid);
+                        if(isExist){
+                            return;
+                        }else{
+                            receiveMessageArray.push(uuid);
+                        }
+                        if (uuidsArray.length != 0) {
+                            var receivedCommand = {
+                                "command": "messageRecievedResponse",
+                                "data": {"uuids": uuidsArray}
+                            };
+                            ms.send(receivedCommand);
+                        }
+                        var isCurrentDay = isToday(messageOfSinge.createTime);
+                        var createTime;
+                        if(isCurrentDay){
+                            //如果是当天的消息，只显示时间
+                            createTime = formatHM(messageOfSinge.createTime);
+                        }else{
+                            //非当天时间，显示的是月-日
+                            createTime = formatMD(messageOfSinge.createTime);
+                        }
+                        var contentJson = {"content": content, "createTime":createTime};
+                        var contentArray = [contentJson];
+                        if(messageOfSinge.toType == 1 && typeof (content)!='undefined'){
                             //个人单条消息
-                            if (("SGZH" == colUtype || fromUser.colUid != loginUser.colUid) &&
-                                fromUser.colUid == antGroup.state.currentUser.colUid) {
+                            if (isEmpty(antGroup.state.currentUser) == false && messageOfSinge.toUser.colUid == antGroup.state.currentUser.colUid) {
                                 imgTagArray.splice(0);
                                 var imgTagArrayReturn = [];
                                 var messageReturnJson = antGroup.getImgTag(content);
@@ -314,32 +349,26 @@ const AntGroupTabComponents = React.createClass({
                                 };
                                 messageList.splice(0, 0, messageShow);
                                 // messageList.push(messageShow);
-                            }else{
-                                var isCurrentDay = isToday(messageOfSinge.createTime);
-                                var createTime;
-                                if(isCurrentDay){
-                                    //如果是当天的消息，只显示时间
-                                    createTime = formatHM(messageOfSinge.createTime);
-                                }else{
-                                    //非当天时间，显示的是月-日
-                                    createTime = formatMD(messageOfSinge.createTime);
-                                }
-                                var contentJson = {"content": content, "createTime":createTime};
-                                var contentArray = [contentJson];
                                 var userJson = {
-                                    key: fromUser.colUid,
-                                    "fromUser": fromUser,
+                                    key: messageOfSinge.toUser.colUid,
+                                    "fromUser": messageOfSinge.toUser,
+                                    contentArray: contentArray,
+                                    "messageToType": 1
+                                };
+                                antGroup.props.onNewMessage(userJson);
+                            }else{
+                                var userJson = {
+                                    key: messageOfSinge.toUser.colUid,
+                                    "fromUser": messageOfSinge.toUser,
                                     contentArray: contentArray,
                                     "messageToType": 1
                                 };
                                 antGroup.props.onNewMessage(userJson);
                             }
-                        }else if(messageOfSinge.toType == 4){
+                        }else if(messageOfSinge.toType == 4 && typeof (content)!='undefined'){
                             //群组单条消息
-                            if (("SGZH" == colUtype || fromUser.colUid != loginUser.colUid)
-                                && isEmpty(antGroup.state.currentGroupObj)==false
-                                && antGroup.state.currentGroupObj.chatGroupId == messageOfSinge.toChatGroup.chatGroupId
-                                && messageOfSinge.toType == 4) {
+                            if (isEmpty(antGroup.state.currentGroupObj)==false
+                                && antGroup.state.currentGroupObj.chatGroupId == messageOfSinge.toChatGroup.chatGroupId) {
                                 imgTagArray.splice(0);
                                 var imgTagArrayReturn = [];
                                 var messageReturnJson = antGroup.getImgTag(messageOfSinge.content);
@@ -356,18 +385,15 @@ const AntGroupTabComponents = React.createClass({
                                     "messageReturnJson": messageReturnJson
                                 };
                                 messageList.splice(0, 0, messageShow);
+                                var userJson = {
+                                    key: messageOfSinge.toChatGroup.chatGroupId,
+                                    "fromUser": fromUser,
+                                    "toChatGroup":messageOfSinge.toChatGroup,
+                                    contentArray: contentArray,
+                                    "messageToType": 4
+                                };
+                                antGroup.props.onNewMessage(userJson);
                             }else{
-                                var isCurrentDay = isToday(messageOfSinge.createTime);
-                                var createTime;
-                                if(isCurrentDay){
-                                    //如果是当天的消息，只显示时间
-                                    createTime = formatHM(messageOfSinge.createTime);
-                                }else{
-                                    //非当天时间，显示的是月-日
-                                    createTime = formatMD(messageOfSinge.createTime);
-                                }
-                                var contentJson = {"content": content, "createTime":createTime};
-                                var contentArray = [contentJson];
                                 var userJson = {
                                     key: messageOfSinge.toChatGroup.chatGroupId,
                                     "fromUser": fromUser,
@@ -377,13 +403,6 @@ const AntGroupTabComponents = React.createClass({
                                 };
                                 antGroup.props.onNewMessage(userJson);
                             }
-                        }
-                        if (uuidsArray.length != 0) {
-                            var receivedCommand = {
-                                "command": "messageRecievedResponse",
-                                "data": {"uuids": uuidsArray}
-                            };
-                            ms.send(receivedCommand);
                         }
                         antGroup.setState({"messageList": messageList});
                     }
@@ -467,15 +486,25 @@ const AntGroupTabComponents = React.createClass({
             messageJson.toType = 4;
         }
         var commandJson = {"command": "message", "data": {"message": messageJson}};
-        if (isEmpty(sendType) == false && sendType == "groupSend") {
-            // messageList.push(messageJson);
-            messageList.splice(0, 0, messageJson);
-        } else {
-            messageList.splice(0, 0, messageJson);
-        }
         ms.send(commandJson);
         antGroup.initMyEmotionInput();
-        antGroup.setState({"messageList": messageList,"isDirectToBottom":true});
+        if (isEmpty(sendType) == false && sendType == "groupSend") {
+            antGroup.setState({"isDirectToBottom":true});
+        } else {
+            messageList.splice(0, 0, messageJson);
+            // 更新左侧消息动态列表
+            var showCreateTime = formatHM(createTime);
+            var contentJson = {"content": messageContent, "createTime":showCreateTime};
+            var contentArray = [contentJson];
+            var userJson = {
+                key: antGroup.state.currentUser.colUid,
+                "fromUser": antGroup.state.currentUser,
+                contentArray: contentArray,
+                "messageToType": 1
+            };
+            antGroup.props.onNewMessage(userJson);
+            antGroup.setState({"messageList": messageList,"isDirectToBottom":true});
+        }
     },
 
     /**
@@ -521,7 +550,7 @@ const AntGroupTabComponents = React.createClass({
 
         messageList.splice(0);
         scrollType="auto";
-        antGroup.setState({"isDirectToBottom":true,"messageComeFrom":"groupMessage"});
+        antGroup.setState({"isDirectToBottom":true,"messageComeFrom":"groupMessage","currentUser":''});
         antGroup.reGetChatMessage(groupObj,timeNode);
     },
 
@@ -595,7 +624,6 @@ const AntGroupTabComponents = React.createClass({
                                     "messageReturnJson": messageReturnJson
                                 };
                                 messageList.push(message);
-                                // messageList.splice(0, 0, message);
                             }
                         }
                     });
@@ -614,7 +642,7 @@ const AntGroupTabComponents = React.createClass({
      */
     getPersonMessage(userObj,timeNode){
         messageList.splice(0);
-        antGroup.setState({"isDirectToBottom":true,"messageComeFrom":"personMessage"});
+        antGroup.setState({"isDirectToBottom":true,"messageComeFrom":"personMessage","currentGroupObj":''});
         antGroup.getUser2UserMessages(userObj,timeNode);
         var messageType = "message";
         antGroup.turnToMessagePage(userObj,messageType);
@@ -694,7 +722,6 @@ const AntGroupTabComponents = React.createClass({
         var currentGroupObj = antGroup.state.currentGroupObj;
         //返回群组窗口时，重新获取最近的聊天记录
         antGroup.getChatGroupMessages(currentGroupObj);
-        // antGroup.turnToChatGroupMessagePage(currentGroupObj);
         var messageType="groupMessage";
         antGroup.turnToMessagePage(currentGroupObj,messageType);
     },
