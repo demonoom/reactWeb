@@ -1113,10 +1113,11 @@ const MyFollowExtend = React.createClass({
 
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+
                 subjectList.splice(0);
                 data.splice(0);
                 var response = ret.response;
-                if (!response) {
+                if (ret.success && !response.length) {
                     message.info('没有题库内容！');
                     return;
                 }
@@ -1372,34 +1373,34 @@ const MyFollowExtend = React.createClass({
                         keyIcon = <Icon type="key"/>;
                     }
 
+                        var liveCard = <Card className="live">
+                            <p className="h3">{title}</p>
+                            <div className="live_img" id={id} onClick={event => {
+                                _this.onPreview(event, liveVideos, title)
+                            } }>
+                                <img className="attention_img" width="100%" src={cover}/>
+                                <div className="live_green"><span>{schoolName}</span></div>
+                            </div>
+                            <div className="custom-card">
+                                <ul className="live_cont">
+                                    <li className="li_live_span_3">
+                                        <span className="attention_img2"><img src={user.avatar}></img></span>
+                                        <span className="live_span_1 live_span_3">{userName}</span>
+										<span className="live_color live_orange right_ri live_span_2">{courseName}</span>
+                                        
+                                    </li>
+                                    <li> 
+                                        <span className="key_span"><i className="iconfont key">&#xe621;</i></span>
+										<span className="time right_ri">{startTime}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </Card>;
+                        userLiveData.push(liveCard);
+                    });
 
-                    var liveCard = <Card className="live">
-                        <p className="h3">{title}</p>
-                        <div className="live_img" id={id} onClick={event => {
-                            _this.onPreview(event, liveVideos, title)
-                        } }>
-                            <img className="attention_img" width="100%" src={cover}/>
-                            <div className="live_green"><span>{schoolName}</span></div>
-                        </div>
-                        <div className="custom-card">
-                            <ul className="live_cont">
-                                <li className="li_live_span_3">
-                                    <span className="attention_img2"><img src={user.avatar}></img></span>
-                                    <span className="live_span_1 live_span_3">{userName}</span>
-                                    <span
-                                        className="live_color live_orange right_ri live_span_2">{courseName}</span>
 
-                                </li>
-                                <li>
-                                        <span className="focus_btn key_span"><i
-                                            className="iconfont key">&#xe621;</i></span>
-                                    <span className="time right_ri">{startTime}</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </Card>;
-                    userLiveData.push(liveCard);
-                });
+
 
                 _this.setState({
                     totalLiveCount: parseInt(ret.pager.rsCount),
@@ -1838,7 +1839,7 @@ const MyFollowExtend = React.createClass({
                         <button onClick={this.props.returnParentPersonCenter} className="affix_bottom_tc"><Icon
                             type="left"/></button>
                     </div>
-                    {this.state.currentPerson.user.userName + "的个人中心"}</h3>;
+                    {this.props.userinfo.user.userName + "的个人中心"}</h3>;
                 tabComponent = <MyFollowPersonCenter userInfo={this.props.userinfo}
                                                      userContactsData={this.state.userContactsData}
                                                      callBackTurnToMessagePage={this.getUser2UserMessages}

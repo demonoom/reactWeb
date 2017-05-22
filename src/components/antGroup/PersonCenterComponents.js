@@ -501,7 +501,7 @@ const PersonCenterComponents = React.createClass({
                         var id = e.id;
                         var keyIcon='';
                         if(e.password){
-                            keyIcon = <span className="right_ri focus_btn key_span"><i className="iconfont key">&#xe621;</i></span>;
+                            keyIcon = <span className="right_ri key_span"><i className="iconfont key">&#xe621;</i></span>;
                         }
                         var delButton;
                         if(user.colUid == sessionStorage.getItem("ident")){
@@ -1978,18 +1978,15 @@ const PersonCenterComponents = React.createClass({
                 <ConfirmModal ref="confirmModal"
                               title="确定要移除选中的群成员?"
                               onConfirmModalCancel={personCenter.closeConfirmModal}
-                              onConfirmModalOK={personCenter.deleteSelectedMember}
-                ></ConfirmModal>
+                              onConfirmModalOK={personCenter.deleteSelectedMember} />
                 <ConfirmModal ref="dissolutionChatGroupConfirmModal"
                               title="确定要解散该群组?"
                               onConfirmModalCancel={personCenter.closeDissolutionChatGroupConfirmModal}
-                              onConfirmModalOK={personCenter.dissolutionChatGroup}
-                ></ConfirmModal>
+                              onConfirmModalOK={personCenter.dissolutionChatGroup} />
                 <ConfirmModal ref="exitChatGroupConfirmModal"
                               title="确定要退出该群组?"
                               onConfirmModalCancel={personCenter.closeExitChatGroupConfirmModal}
-                              onConfirmModalOK={personCenter.exitChatGroup}
-                ></ConfirmModal>
+                              onConfirmModalOK={personCenter.exitChatGroup} />
 
                 <Modal
                     visible={personCenter.state.createChatGroupModalVisible}

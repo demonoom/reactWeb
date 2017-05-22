@@ -26,9 +26,9 @@ class MyFollows extends React.Component {
         this.isMyUserId = this.isMyUserId.bind(this);
         this.getMyFollows = this.getMyFollows.bind(this);
         this.intoProsoncenter = this.intoProsoncenter.bind(this);
-        this.returnPersonCenter = this.returnPersonCenter.bind(this);
         this.returnParentPersonCenter = this.returnParentPersonCenter.bind(this);
         this._getCurrentLoginUserInfo = this._getCurrentLoginUserInfo.bind(this);
+        this.returnCurrentUserPersonCenter = this.returnCurrentUserPersonCenter.bind(this);
     }
 
 
@@ -163,7 +163,7 @@ class MyFollows extends React.Component {
         this.currentUser = userinfo;
     }
 
-    returnPersonCenter() {
+    returnCurrentUserPersonCenter() {
 
         this.viewProsenInfo(this.currentUser);
     }
@@ -173,9 +173,13 @@ class MyFollows extends React.Component {
     returnParentPersonCenter() {
 
         if (this.previouUsers.length) {
-            let refUser = this.previouUsers.pop();
 
-                this.viewProsenInfo(this.currentUser);
+            let refUser = this.previouUsers.pop();
+            if (refUser.colUid == this.currentUser.colUid) {
+                this.returnParentPersonCenter();
+            } else {
+                this.intoProsoncenter(refUser);
+            }
 
         } else {
             this.currentUser = this._getCurrentLoginUserInfo();
@@ -216,7 +220,7 @@ class MyFollows extends React.Component {
         } else {
             this.title = <h3 className="public—til—blue">
                 <div className="ant-tabs-right">
-                    <button onClick={this.returnPersonCenter} className="affix_bottom_tc"><Icon type="left"/></button>
+                    <button onClick={this.returnCurrentUserPersonCenter} className="affix_bottom_tc"><Icon type="left"/></button>
                 </div>
                 {this.currentUser.userName}关注列表</h3>;
         }
@@ -251,7 +255,7 @@ class MyFollows extends React.Component {
                 this.title = null;
                 this.htmlTempletContent = <MyFollowExtend userinfo={this.state.userinfo}
                                                           intoMyFollows={this.getMyFollows}
-                                                          returnParentPersonCenter={this.returnParentPersonCenter} />;
+                                                          returnParentPersonCenter={this.returnParentPersonCenter}/>;
                 break;
             // 关注列表
             case this.state.followsListVisible:

@@ -23,6 +23,7 @@ const MyFollowPersonCenter = React.createClass({
 
     },
 
+
     /**
      * 判断当前个人中心显示的人员是否是当前用户的联系人
      */
@@ -167,7 +168,7 @@ const MyFollowPersonCenter = React.createClass({
 
     render() {
 
-        debugger
+
         var userPhotoTag;
         var user = this.props.userInfo.user;
         var userName = user.userName;

@@ -11,6 +11,9 @@ import {getLocalTime} from '../../utils/utils';
 import {isEmpty} from '../../utils/Const';
 import {phone} from '../../utils/phone';
 import {getImgName} from '../../utils/Const';
+import {formatMD} from '../../utils/utils';
+import {formatHM} from '../../utils/utils';
+import {isToday} from '../../utils/utils';
 import {MsgConnection} from '../../utils/msg_websocket_connection';
 import ConfirmModal from '../ConfirmModal';
 
@@ -89,14 +92,17 @@ const AntGroupTabComponents = React.createClass({
         var timeNode = (new Date()).valueOf();
         if(isEmpty(messageType)==false){
             if(messageType=="message"){
+                antGroup.setState({"optType":"sendMessage"});
                 antGroup.getUser2UserMessages(propsUserInfo,timeNode);
                 if(isEmpty(actionFrom)==false){
-                    antGroup.turnToMessagePage(propsUserInfo);
+                    antGroup.turnToMessagePage(propsUserInfo,messageType);
                 }
             }else{
+                antGroup.setState({"optType":"sendGroupMessage"});
                 antGroup.sendGroupMessage(antGroup.props.groupObj,timeNode);
                 if(isEmpty(actionFrom)==false){
-                    antGroup.turnToChatGroupMessagePage(antGroup.props.groupObj);
+                    // antGroup.turnToChatGroupMessagePage(antGroup.props.groupObj);
+                    antGroup.turnToMessagePage(antGroup.props.groupObj,messageType);
                 }
             }
         }
@@ -132,7 +138,8 @@ const AntGroupTabComponents = React.createClass({
         if(scrollTop <= 1  ){
             antGroup.setState({"isDirectToBottom":false});
             if(antGroup.state.messageComeFrom=="groupMessage"){
-                antGroup.reGetChatMessage(antGroup.state.currentGroupObj,antGroup.state.firstMessageCreateTime);
+                antGroup.getChatGroupMessages(antGroup.state.currentGroupObj,antGroup.state.firstMessageCreateTime);
+                // antGroup.reGetChatMessage(antGroup.state.currentGroupObj,antGroup.state.firstMessageCreateTime);
             }else{
                 antGroup.getUser2UserMessages(antGroup.state.currentUser,antGroup.state.firstMessageCreateTime);
             }
@@ -184,9 +191,9 @@ const AntGroupTabComponents = React.createClass({
      * 进入收发消息的窗口
      * @param user
      */
-    turnToMessagePage(user){
+    turnToMessagePage(operatorObj,messageType){
         var _this = this;
-        var userId = user.colUid;
+        var userId;
         messageList.splice(0);
         ms.msgWsListener = {
             onError: function (errorMsg) {
@@ -209,32 +216,39 @@ const AntGroupTabComponents = React.createClass({
             }, onWarn: function (warnMsg) {
 
             }, onMessage: function (info) {
+                var groupObj;
                 if (antGroup.state.optType == "sendMessage") {
-                    //获取messageList
-                    var command = info.command;
-
-                    if (isEmpty(command) == false) {
-                        if (command == "messageList") {
-                            var data = info.data;
-                            var messageArray = data.messages;
-                            var uuidsArray = [];
-                            messageArray.forEach(function (e) {
-                                var fromUser = e.fromUser;
-                                var colUtype = fromUser.colUtype;
-                                if (("SGZH" == colUtype || fromUser.colUid == userId) && e.toType == 1) {
-                                    var uuid = e.uuid;
-                                    uuidsArray.push(uuid);
+                    //如果是个人消息通信，传入的对象应该是用户对象
+                    userId = operatorObj.colUid;
+                }else{
+                    //如果是群组消息通信，传入的对象应该是群组对象
+                    groupObj = operatorObj;
+                }
+                //获取messageList
+                var command = info.command;
+                if (isEmpty(command) == false) {
+                    if (command == "messageList") {
+                        showImg = "";
+                        var data = info.data;
+                        var messageArray = data.messages;
+                        var uuidsArray = [];
+                        messageArray.forEach(function (e) {
+                            var fromUser = e.fromUser;
+                            var colUtype = fromUser.colUtype;
+                            var content = e.content;
+                            var uuid = e.uuid;
+                            uuidsArray.push(uuid);
+                            var messageReturnJson = antGroup.getImgTag(content);
+                            var imgTagArrayReturn = [];
+                            if (messageReturnJson.messageType == "text") {
+                                content = messageReturnJson.textMessage;
+                            } else if (messageReturnJson.messageType == "imgTag") {
+                                imgTagArrayReturn = messageReturnJson.imgMessage;
+                            }
+                            if(e.toType == 1){
+                                //个人消息
+                                if (("SGZH" == colUtype || fromUser.colUid == userId)) {
                                     imgTagArray.splice(0);
-                                    showImg = "";
-                                    var content = e.content;
-                                    /*var imgTagArrayReturn = antGroup.getImgTag(e.content);*/
-                                    var imgTagArrayReturn = [];
-                                    var messageReturnJson = antGroup.getImgTag(e.content);
-                                    if (messageReturnJson.messageType == "text") {
-                                        content = messageReturnJson.textMessage;
-                                    } else if (messageReturnJson.messageType == "imgTag") {
-                                        imgTagArrayReturn = messageReturnJson.imgMessage;
-                                    }
                                     var message = {
                                         'fromUser': fromUser,
                                         'content': content,
@@ -243,30 +257,90 @@ const AntGroupTabComponents = React.createClass({
                                         "messageReturnJson": messageReturnJson
                                     };
                                     messageList.push(message);
-                                    // messageList.splice(0,0,message);
                                 }
-                            });
-                            if (uuidsArray.length != 0) {
-                                var receivedCommand = {
-                                    "command": "messageRecievedResponse",
-                                    "data": {"uuids": uuidsArray}
-                                };
-                                ms.send(receivedCommand);
+                            }else if(e.toType == 4){
+                                //处理聊天的群组消息
+                                if (("SGZH" == colUtype || isEmpty(groupObj)==false && groupObj.chatGroupId == e.toId )) {
+                                    imgTagArray.splice(0);
+                                    var message = {
+                                        'fromUser': fromUser,
+                                        'content': content,
+                                        "messageType": "getMessage",
+                                        "imgTagArray": imgTagArrayReturn,
+                                        "messageReturnJson": messageReturnJson
+                                    };
+                                    //messageList.splice(0, 0, message);
+                                    messageList.push(message);
+                                }
                             }
-                            antGroup.setState({"messageList": messageList});
-                        } else if (command == "message") {
-                            var data = info.data;
-                            var messageOfSinge = data.message;
-                            var uuidsArray = [];
-                            var fromUser = messageOfSinge.fromUser;
-                            var colUtype = fromUser.colUtype;
-                            var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
-                            if (("SGZH" == colUtype || fromUser.colUid != loginUser.colUid) && messageOfSinge.toUser.colUid == antGroup.state.currentUser.colUid && messageOfSinge.toType == 1) {
-                                var uuid = messageOfSinge.uuid;
-                                uuidsArray.push(uuid);
-                                var content = messageOfSinge.content;
+                        });
+                        if (uuidsArray.length != 0) {
+                            var receivedCommand = {
+                                "command": "messageRecievedResponse",
+                                "data": {"uuids": uuidsArray}
+                            };
+                            ms.send(receivedCommand);
+                        }
+                        antGroup.setState({"messageList": messageList});
+                    } else if (command == "message") {
+                        var data = info.data;
+                        showImg = "";
+                        var messageOfSinge = data.message;
+                        var uuidsArray = [];
+                        var uuid = messageOfSinge.uuid;
+                        uuidsArray.push(uuid);
+                        var fromUser = messageOfSinge.fromUser;
+                        var colUtype = fromUser.colUtype;
+                        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+                        var content = messageOfSinge.content;
+                        if(messageOfSinge.toType == 1){
+                            //个人单条消息
+                            if (("SGZH" == colUtype || fromUser.colUid != loginUser.colUid) &&
+                                fromUser.colUid == antGroup.state.currentUser.colUid) {
                                 imgTagArray.splice(0);
-                                showImg = "";
+                                var imgTagArrayReturn = [];
+                                var messageReturnJson = antGroup.getImgTag(content);
+                                if (messageReturnJson.messageType == "text") {
+                                    content = messageReturnJson.textMessage;
+                                } else if (messageReturnJson.messageType == "imgTag") {
+                                    imgTagArrayReturn = messageReturnJson.imgMessage;
+                                }
+                                var messageShow = {
+                                    'fromUser': fromUser,
+                                    'content': content,
+                                    "messageType": "getMessage",
+                                    "imgTagArray": imgTagArrayReturn,
+                                    "messageReturnJson": messageReturnJson
+                                };
+                                messageList.splice(0, 0, messageShow);
+                                // messageList.push(messageShow);
+                            }else{
+                                var isCurrentDay = isToday(messageOfSinge.createTime);
+                                var createTime;
+                                if(isCurrentDay){
+                                    //如果是当天的消息，只显示时间
+                                    createTime = formatHM(messageOfSinge.createTime);
+                                }else{
+                                    //非当天时间，显示的是月-日
+                                    createTime = formatMD(messageOfSinge.createTime);
+                                }
+                                var contentJson = {"content": content, "createTime":createTime};
+                                var contentArray = [contentJson];
+                                var userJson = {
+                                    key: fromUser.colUid,
+                                    "fromUser": fromUser,
+                                    contentArray: contentArray,
+                                    "messageToType": 1
+                                };
+                                antGroup.props.onNewMessage(userJson);
+                            }
+                        }else if(messageOfSinge.toType == 4){
+                            //群组单条消息
+                            if (("SGZH" == colUtype || fromUser.colUid != loginUser.colUid)
+                                && isEmpty(antGroup.state.currentGroupObj)==false
+                                && antGroup.state.currentGroupObj.chatGroupId == messageOfSinge.toChatGroup.chatGroupId
+                                && messageOfSinge.toType == 4) {
+                                imgTagArray.splice(0);
                                 var imgTagArrayReturn = [];
                                 var messageReturnJson = antGroup.getImgTag(messageOfSinge.content);
                                 if (messageReturnJson.messageType == "text") {
@@ -282,142 +356,47 @@ const AntGroupTabComponents = React.createClass({
                                     "messageReturnJson": messageReturnJson
                                 };
                                 messageList.splice(0, 0, messageShow);
-                                if (uuidsArray.length != 0) {
-                                    var receivedCommand = {
-                                        "command": "messageRecievedResponse",
-                                        "data": {"uuids": uuidsArray}
-                                    };
-                                    ms.send(receivedCommand);
+                            }else{
+                                var isCurrentDay = isToday(messageOfSinge.createTime);
+                                var createTime;
+                                if(isCurrentDay){
+                                    //如果是当天的消息，只显示时间
+                                    createTime = formatHM(messageOfSinge.createTime);
+                                }else{
+                                    //非当天时间，显示的是月-日
+                                    createTime = formatMD(messageOfSinge.createTime);
                                 }
+                                var contentJson = {"content": content, "createTime":createTime};
+                                var contentArray = [contentJson];
+                                var userJson = {
+                                    key: messageOfSinge.toChatGroup.chatGroupId,
+                                    "fromUser": fromUser,
+                                    "toChatGroup":messageOfSinge.toChatGroup,
+                                    contentArray: contentArray,
+                                    "messageToType": 4
+                                };
+                                antGroup.props.onNewMessage(userJson);
                             }
-                            antGroup.setState({"messageList": messageList});
                         }
+                        if (uuidsArray.length != 0) {
+                            var receivedCommand = {
+                                "command": "messageRecievedResponse",
+                                "data": {"uuids": uuidsArray}
+                            };
+                            ms.send(receivedCommand);
+                        }
+                        antGroup.setState({"messageList": messageList});
                     }
                 }
             }
         };
-
-        antGroup.setState({"optType": "sendMessage", "userIdOfCurrentTalk": userId, "currentUser": user});
-    },
-
-    turnToChatGroupMessagePage(groupObj){
-        var _this = this;
-        //messageList.splice(0);
-        ms.msgWsListener = {
-            onError: function (errorMsg) {
-                if(_this.state.errorModalIsShow==false){
-                    _this.setState({"errorModalIsShow":true});
-                    ms.closeConnection();
-                    Modal.error({
-                        transitionName:"",  //禁用modal的动画效果
-                        title: '系统异常通知',
-                        content: errorMsg,
-                        onOk() {
-                            sessionStorage.removeItem("ident");
-                            sessionStorage.removeItem("loginUser");
-                            sessionStorage.removeItem("machineId");
-                            LP.delAll();
-                            location.hash="Login";
-                        },
-                    });
-                }
-            }, onWarn: function (warnMsg) {
-
-            }, onMessage: function (info) {
-                //获取messageList
-                var command = info.command;
-
-                if (antGroup.state.optType == "sendGroupMessage") {
-                    if (isEmpty(command) == false) {
-                        if (command == "messageList") {
-                            var data = info.data;
-                            var messageArray = data.messages;
-                            var uuidsArray = [];
-                            messageArray.forEach(function (e) {
-                                var fromUser = e.fromUser;
-                                var colUtype = fromUser.colUtype;
-                                //处理聊天的群组消息
-                                if (("SGZH" == colUtype || groupObj.chatGroupId == e.toId ) && e.toType == 4) {
-                                    var uuid = e.uuid;
-                                    uuidsArray.push(uuid);
-                                    imgTagArray.splice(0);
-                                    showImg = "";
-                                    var content = e.content;
-                                    var imgTagArrayReturn = [];
-                                    var messageReturnJson = antGroup.getImgTag(e.content);
-                                    if (messageReturnJson.messageType == "text") {
-                                        content = messageReturnJson.textMessage;
-                                    } else if (messageReturnJson.messageType == "imgTag") {
-                                        imgTagArrayReturn = messageReturnJson.imgMessage;
-                                    }
-                                    var message = {
-                                        'fromUser': fromUser,
-                                        'content': content,
-                                        "messageType": "getMessage",
-                                        "imgTagArray": imgTagArrayReturn,
-                                        "messageReturnJson": messageReturnJson
-                                    };
-                                    // messageList.push(message);
-                                    messageList.splice(0, 0, message);
-                                }
-                            });
-                            if (uuidsArray.length != 0) {
-                                var receivedCommand = {
-                                    "command": "messageRecievedResponse",
-                                    "data": {"uuids": uuidsArray}
-                                };
-                                ms.send(receivedCommand);
-                            }
-                            antGroup.setState({"messageList": messageList});
-                        } else if (command == "message") {
-                            var data = info.data;
-                            var messageOfSinge = data.message;
-                            var uuidsArray = [];
-                            var fromUser = messageOfSinge.fromUser;
-                            var colUtype = fromUser.colUtype;
-                            var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
-                            // antGroup.state.currentGroupObj
-                            if (("SGZH" == colUtype || fromUser.colUid != loginUser.colUid)
-                                && antGroup.state.currentGroupObj.chatGroupId == messageOfSinge.toChatGroup.chatGroupId
-                                && messageOfSinge.toType == 4) {
-                                var uuid = messageOfSinge.uuid;
-                                uuidsArray.push(uuid);
-                                var content = messageOfSinge.content;
-                                imgTagArray.splice(0);
-                                showImg = "";
-                                //var imgTagArrayReturn = antGroup.getImgTag(messageOfSinge.content);
-                                var imgTagArrayReturn = [];
-                                var messageReturnJson = antGroup.getImgTag(messageOfSinge.content);
-                                if (messageReturnJson.messageType == "text") {
-                                    content = messageReturnJson.textMessage;
-                                } else if (messageReturnJson.messageType == "imgTag") {
-                                    imgTagArrayReturn = messageReturnJson.imgMessage;
-                                }
-                                var messageShow = {
-                                    'fromUser': fromUser,
-                                    'content': content,
-                                    "messageType": "getMessage",
-                                    "imgTagArray": imgTagArrayReturn,
-                                    "messageReturnJson": messageReturnJson
-                                };
-                                messageList.push(messageShow);
-                                // messageList.splice(0,0,messageShow);
-                                if (uuidsArray.length != 0) {
-                                    var receivedCommand = {
-                                        "command": "messageRecievedResponse",
-                                        "data": {"uuids": uuidsArray}
-                                    };
-                                    ms.send(receivedCommand);
-                                }
-                            }
-                            antGroup.setState({"messageList": messageList});
-                        }
-                    }
-                }
-            }
-        };
-
-        antGroup.setState({"optType": "sendGroupMessage", "currentGroupObj": groupObj});
+        if (messageType=="message") {
+            //如果是个人消息通信，传入的对象应该是用户对象
+            antGroup.setState({"optType": "sendMessage", "userIdOfCurrentTalk": operatorObj.colUid, "currentUser": operatorObj});
+        }else{
+            //如果是个人消息通信，传入的对象应该是群组对象
+            antGroup.setState({"optType": "sendGroupMessage", "currentGroupObj": operatorObj});
+        }
     },
 
     getImgTag(str){
@@ -489,7 +468,8 @@ const AntGroupTabComponents = React.createClass({
         }
         var commandJson = {"command": "message", "data": {"message": messageJson}};
         if (isEmpty(sendType) == false && sendType == "groupSend") {
-            messageList.push(messageJson);
+            // messageList.push(messageJson);
+            messageList.splice(0, 0, messageJson);
         } else {
             messageList.splice(0, 0, messageJson);
         }
@@ -548,7 +528,9 @@ const AntGroupTabComponents = React.createClass({
     reGetChatMessage(groupObj,timeNode){
 
         antGroup.getChatGroupMessages(groupObj,timeNode);
-        antGroup.turnToChatGroupMessagePage(groupObj);
+        // antGroup.turnToChatGroupMessagePage(groupObj);
+        var messageType = "groupMessage";
+        antGroup.turnToMessagePage(groupObj,messageType);
     },
 
     /**
@@ -612,12 +594,12 @@ const AntGroupTabComponents = React.createClass({
                                     "imgTagArray": imgTagArrayReturn,
                                     "messageReturnJson": messageReturnJson
                                 };
-                                // messageList.push(message);
-                                messageList.splice(0, 0, message);
+                                messageList.push(message);
+                                // messageList.splice(0, 0, message);
                             }
-                            antGroup.setState({"messageList": messageList});
                         }
                     });
+                    antGroup.setState({"messageList": messageList});
                 }
             },
             onError: function (error) {
@@ -634,7 +616,8 @@ const AntGroupTabComponents = React.createClass({
         messageList.splice(0);
         antGroup.setState({"isDirectToBottom":true,"messageComeFrom":"personMessage"});
         antGroup.getUser2UserMessages(userObj,timeNode);
-        antGroup.turnToMessagePage(userObj);
+        var messageType = "message";
+        antGroup.turnToMessagePage(userObj,messageType);
     },
 
     /**
@@ -711,7 +694,9 @@ const AntGroupTabComponents = React.createClass({
         var currentGroupObj = antGroup.state.currentGroupObj;
         //返回群组窗口时，重新获取最近的聊天记录
         antGroup.getChatGroupMessages(currentGroupObj);
-        antGroup.turnToChatGroupMessagePage(currentGroupObj);
+        // antGroup.turnToChatGroupMessagePage(currentGroupObj);
+        var messageType="groupMessage";
+        antGroup.turnToMessagePage(currentGroupObj,messageType);
     },
 
     render() {
@@ -725,7 +710,7 @@ const AntGroupTabComponents = React.createClass({
             <Breadcrumb.Item><Icon type="home"/></Breadcrumb.Item>
             <Breadcrumb.Item href="#/MainLayout">动态</Breadcrumb.Item>
         </Breadcrumb>;
-        if (antGroup.state.optType == "sendMessage") {
+        if (antGroup.state.optType == "sendMessage" || antGroup.state.optType == "sendGroupMessage") {
             var messageTagArray = [];
             messageTagArray.splice(0);
             var messageList = antGroup.state.messageList;
@@ -786,17 +771,30 @@ const AntGroupTabComponents = React.createClass({
                     messageTagArray.push(messageTag);
                 }
             }
-            if (isEmpty(antGroup.state.currentUser.userName) == false) {
-                welcomeTitle = antGroup.state.currentUser.userName;
-            }
+            var sendBtn;
             var emotionInput;
-            if (antGroup.state.currentUser.colUtype != "SGZH") {
+            if (antGroup.state.optType == "sendMessage" && isEmpty(antGroup.state.currentUser.userName) == false) {
+                welcomeTitle = antGroup.state.currentUser.userName;
+                sendBtn = <Button onClick={antGroup.sendMessage}><div>发送<p className="password_ts">(Ctrl+Enter)</p></div></Button>;
+                if (antGroup.state.currentUser.colUtype != "SGZH") {
+                    emotionInput = <Row className="group_send">
+                        <Col className="group_send_talk">
+                            <EmotionInputComponents onKeyDown={this.checkKeyType}></EmotionInputComponents>
+                        </Col>
+                        <Col className="group_send_btn">
+                            {sendBtn}
+                        </Col>
+                    </Row>;
+                }
+            }else{
+                welcomeTitle = antGroup.state.currentGroupObj.name;
+                sendBtn = <Button value="groupSend" onClick={antGroup.sendMessage}><div>发送<p className="password_ts">(Ctrl+Enter)</p></div></Button>
                 emotionInput = <Row className="group_send">
                     <Col className="group_send_talk">
                         <EmotionInputComponents onKeyDown={this.checkKeyType}></EmotionInputComponents>
                     </Col>
                     <Col className="group_send_btn">
-                        <Button onClick={antGroup.sendMessage}><div>发送<p className="password_ts">(Ctrl+Enter)</p></div></Button>
+                        {sendBtn}
                     </Col>
                 </Row>;
             }
@@ -818,92 +816,8 @@ const AntGroupTabComponents = React.createClass({
                     </div>
                 </TabPane>
             </Tabs>;
-        } else if (antGroup.state.optType == "sendGroupMessage") {
-            welcomeTitle = antGroup.state.currentGroupObj.name;
-            var messageTagArray = [];
-            var messageList = antGroup.state.messageList;
-            if (isEmpty(messageList) == false && messageList.length > 0) {
-                messageList.forEach(function (e) {
-                    var content = e.content;
-                    var fromUser = e.fromUser.userName;
-                    var userPhoneIcon;
-                    if (isEmpty(e.fromUser.avatar)) {
-                        userPhoneIcon = <img src={require('../images/maaee_face.png')}></img>;
-                    } else {
-                        userPhoneIcon = <img src={e.fromUser.avatar}></img>;
-                    }
-                    var messageType = e.messageType;
-                    var messageTag;
-                    if (isEmpty(messageType) == false && messageType == "getMessage") {
-                        if (isEmpty(e.messageReturnJson) == false && isEmpty(e.messageReturnJson.messageType) == false) {
-                            if (e.messageReturnJson.messageType == "text") {
-                                if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
-                                    messageTag = <li className="right" style={{'textAlign': 'right'}}>
-                                        <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span
-                                            className="borderballoon">{e.content}</span></div>
-                                    </li>;
-                                } else {
-                                    messageTag = <li style={{'textAlign': 'left'}}>
-                                        <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span
-                                            className="borderballoon_le">{e.content}</span></div>
-                                    </li>;
-                                }
-                            } else if (e.messageReturnJson.messageType == "imgTag") {
-                                if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
-                                    messageTag = <li className="right" style={{'textAlign': 'right'}}>
-                                        <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span
-                                            className="borderballoon">{e.imgTagArray}</span></div>
-                                    </li>;
-                                } else {
-                                    messageTag = <li style={{'textAlign': 'left'}}>
-                                        <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span
-                                            className="borderballoon_le">{e.imgTagArray}</span></div>
-                                    </li>;
-                                }
-                            }
-
-                        }
-                    } else {
-                        messageTag = <li className="right" style={{'textAlign': 'right'}}>
-                            <div className="u-name"><span>{fromUser}</span></div>
-                            <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span
-                                className="borderballoon">{content}</span></div>
-                        </li>;
-                    }
-                    messageTagArray.push(messageTag);
-                })
-            }
-            tabComponent = <Tabs
-                hideAdd
-                ref="personGroupTab"
-                activeKey={this.state.activeKey}
-                defaultActiveKey={this.state.defaultActiveKey}
-                transitionName=""  //禁用Tabs的动画效果
-            >
-                <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
-                    <div>
-                        <div className="group_talk" id="groupTalk" onMouseOver={this.handleScrollType.bind(this,Event)}  onScroll={this.handleScroll}>
-                            <ul>
-                                {messageTagArray}
-                            </ul>
-                        </div>
-                        <Row className="group_send">
-                            <Col className="group_send_talk">
-                                <EmotionInputComponents onKeyDown={this.checkKeyType}></EmotionInputComponents>
-                            </Col>
-                            <Col className="group_send_btn">
-                                <Button value="groupSend" onClick={antGroup.sendMessage}><div>发送<p className="password_ts">(Ctrl+Enter)</p></div></Button>
-                            </Col>
-                        </Row>
-                    </div>
-                </TabPane>
-            </Tabs>;
         }else{
-            tabComponent=<div className="userinfo_bg userinfo_bg_1"><span>科技改变未来，教育成就梦想</span></div>;
+            tabComponent=<div className="userinfo_bg_1"><span>科技改变未来，教育成就梦想</span></div>;
         }
 
         return (

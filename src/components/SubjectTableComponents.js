@@ -506,12 +506,12 @@ class SUbjectTable extends React.Component{
             if (this.state.optType == "bySchedule") {
                 delBtn = <div><Button type="primary" onClick={this.showdelAllSubjectInScheduleConfirmModal}
                                       disabled={!hasSelected} loading={loading}
-                >批量删除</Button><span
+                >批量删除</Button><span className="password_ts"
                     style={{marginLeft: 8}}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span></div>;
             } else {
                 delBtn = <div><Button type="primary" onClick={this.showDelAllSubjectConfirmModal}
                                       disabled={!hasSelected} loading={loading}
-                >批量删除</Button><span
+                >批量删除</Button><span className="password_ts"
                     style={{marginLeft: 8}}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span></div>;
             }
             subjectTable =

@@ -260,8 +260,22 @@ const MainLayout = React.createClass({
             "actionFrom":"personCenter",
             userJson
         });
-
     },
+
+    /**
+     * 好友对好友的消息发送
+     */
+    receiveNewMessage(userJson){
+        this.setState({
+            currentKey: 'message',
+            resouceType: '',
+            "userInfo": userJson.fromUser,
+            "messageType": 'message',
+            "actionFrom":"backgroudMessage",
+            "userJson":userJson
+        });
+    },
+
     /**
      * 点击消息动态联系人列表时，进入消息列表
      * 根据当前点击的消息对象不同，分别进入个人消息和群组消息界面
@@ -300,7 +314,9 @@ const MainLayout = React.createClass({
                                                       groupObj={this.state.groupObj}
                                                       actionFrom={this.state.actionFrom}
                                                       messageType={this.state.messageType}
-                                                      messageUtilObj={ms}/>;
+                                                      messageUtilObj={ms}
+                                                      onNewMessage={this.receiveNewMessage}
+                />;
                 break;
             case 'antGroup':
                 //蚁群

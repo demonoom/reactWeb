@@ -29,6 +29,32 @@ const MessageMenu = React.createClass({
         //mMenu.refreshMessage();
     },
 
+    componentWillReceiveProps(nextProps){
+        if(isEmpty(nextProps)==false && (typeof(nextProps.userJson)!="undefined")){
+            // messageData.push(nextProps.userJson);
+            userMessageData.splice(0);
+            var index = mMenu.checkUserJsonIsExist(nextProps.userJson);
+            if(index==-1){
+                messageData.splice(0,0,nextProps.userJson);
+            }else{
+                messageData[index] = nextProps.userJson;
+            }
+            mMenu.showMessageData();
+        }
+    },
+
+    checkUserJsonIsExist(newMessageObj){
+        var index = -1;
+        for (var i = 0; i < messageData.length; i++) {
+            var messageObj = messageData[i];
+            if (messageObj.key == newMessageObj.key) {
+                index = i;
+                break;
+            }
+        }
+        return index;
+    },
+
     /*refreshMessage(){
         console.log("ref");
         setInterval(function () {
@@ -40,7 +66,6 @@ const MessageMenu = React.createClass({
      * 获取用户最新消息列表
      */
     getUserRecentMessages(){
-        console.log("==========getUserRecentMessages=============");
         userMessageData.splice(0);
         messageData.splice(0);
         var propsUserJson = mMenu.props.userJson;
@@ -64,100 +89,7 @@ const MessageMenu = React.createClass({
                         }*/
                         mMenu.setMessageArrayForOnePerson(e);
                     });
-                    messageData.forEach(function (message) {
-                        var fromUser = message.fromUser;
-                        var colUid = fromUser.colUid;
-                        var contentArray = message.contentArray;
-                        var messageType = message.messageToType;
-                        var toChatGroup = message.toChatGroup;
-                        if (isEmpty(contentArray) == false && contentArray.length > 0) {
-                            // 只显示具有消息内容的数据,且只显示最后一条消息记录
-                            var lastContentInfo = contentArray[contentArray.length - 1];
-                            var lastContentText = lastContentInfo.content;
-                            var lastCreateTime = lastContentInfo.createTime;
-                            var imgTag;
-                            if (messageType == 1) {
-                                imgTag = <div>
-                                    <span className="antnest_user"><img src={fromUser.avatar} height="38"></img></span>
-                                    <div className="mes_u_l">
-										<div><span className="message_name">{fromUser.userName}</span><span className="time right_ri time_w">{lastCreateTime}</span></div>
-										<div className="message_cont_w">{lastContentText}</div>
-									</div>
-                                </div>;
-                            } else {
-                                var membersCount = toChatGroup.members.length;
-                                var groupMemebersPhoto=[];
-                                for(var i=0;i<membersCount;i++){
-                                    var member = toChatGroup.members[i];
-                                    var memberAvatarTag = <img src={member.avatar} ></img>;
-                                    groupMemebersPhoto.push(memberAvatarTag);
-                                    if(i>=3){
-                                        break;
-                                    }
-                                }
-                                var groupMemebersPhotoTag = <div className="maaee_group_face upexam_float" >{groupMemebersPhoto}</div>;
-                                switch (groupMemebersPhoto.length){
-                                    case 1:
-                                        groupMemebersPhotoTag = <div className="maaee_group_face1 upexam_float" >{groupMemebersPhoto}</div>;
-                                        break;
-                                    case 2:
-                                        groupMemebersPhotoTag = <div className="maaee_group_face2 upexam_float" >{groupMemebersPhoto}</div>;
-                                        break;
-                                    case 3:
-                                        groupMemebersPhotoTag = <div className="maaee_group_face3 upexam_float" >{groupMemebersPhoto}</div>;
-                                        break;
-                                    case 4:
-                                        groupMemebersPhotoTag = <div className="maaee_group_face upexam_float" >{groupMemebersPhoto}</div>;
-                                        break;
-                                }
-                                imgTag = <div>
-                                    {groupMemebersPhotoTag}
-                                    <div className="mes_u_l">
-										<div><span className="message_name">{toChatGroup.name}</span><span className="time right_ri time_w">{lastCreateTime}</span></div>
-										<div className="message_cont_w">{lastContentText}</div>
-									</div>
-                                </div>;
-                            }
-                            var messageContentTag = <Badge dot={mMenu.state.badgeShow}>
-                                <div>
-                                    {imgTag}
-                                </div>
-                            </Badge>;
-                            var userJson;
-                            if (messageType == 1) {
-                                userJson = {
-                                    key: colUid,
-                                    "fromUser": fromUser,
-                                    messageContent: messageContentTag,
-                                    "messageType": messageType
-                                };
-                            } else {
-                                userJson = {
-                                    key: toChatGroup.chatGroupId,
-                                    "fromUser": fromUser,
-                                    messageContent: messageContentTag,
-                                    "messageType": messageType,
-                                    "toChatGroup": toChatGroup
-                                };
-                            }
-                            if(messageType==1){
-                                if (colUid != parseInt(sessionStorage.getItem("ident"))) {
-                                    userMessageData.push(userJson);
-                                }
-                            }else{
-                                userMessageData.push(userJson);
-                            }
-                        }
-                        if (i == 0) {
-                            if (messageType == 1) {
-                                mMenu.setState({selectRowKey: colUid});
-                            }else{
-                                mMenu.setState({selectRowKey: toChatGroup.chatGroupId});
-                            }
-                        }
-                        i++;
-                    })
-                    mMenu.setState({"userMessageData": userMessageData});
+                    mMenu.showMessageData();
                     /*if(isEmpty(userMessageData)==false && mMenu.state.tableIsClick==false){
                         mMenu.props.onLoad(userMessageData[0]);
                     }*/
@@ -167,6 +99,103 @@ const MessageMenu = React.createClass({
                 message.error(error);
             }
         });
+    },
+
+    showMessageData(){
+        messageData.forEach(function (message) {
+            var fromUser = message.fromUser;
+            var colUid = fromUser.colUid;
+            var contentArray = message.contentArray;
+            var messageType = message.messageToType;
+            var toChatGroup = message.toChatGroup;
+            if (isEmpty(contentArray) == false && contentArray.length > 0) {
+                // 只显示具有消息内容的数据,且只显示最后一条消息记录
+                var lastContentInfo = contentArray[contentArray.length - 1];
+                var lastContentText = lastContentInfo.content;
+                var lastCreateTime = lastContentInfo.createTime;
+                var imgTag;
+                if (messageType == 1) {
+                    imgTag = <div>
+                        <span className="antnest_user"><img src={fromUser.avatar} height="38"></img></span>
+                        <div className="mes_u_l">
+                            <div><span className="message_name">{fromUser.userName}</span><span className="time right_ri time_w">{lastCreateTime}</span></div>
+                            <div className="message_cont_w">{lastContentText}</div>
+                        </div>
+                    </div>;
+                } else {
+                    var membersCount = toChatGroup.members.length;
+                    var groupMemebersPhoto=[];
+                    for(var i=0;i<membersCount;i++){
+                        var member = toChatGroup.members[i];
+                        var memberAvatarTag = <img src={member.avatar} ></img>;
+                        groupMemebersPhoto.push(memberAvatarTag);
+                        if(i>=3){
+                            break;
+                        }
+                    }
+                    var groupMemebersPhotoTag = <div className="maaee_group_face upexam_float" >{groupMemebersPhoto}</div>;
+                    switch (groupMemebersPhoto.length){
+                        case 1:
+                            groupMemebersPhotoTag = <div className="maaee_group_face1 upexam_float" >{groupMemebersPhoto}</div>;
+                            break;
+                        case 2:
+                            groupMemebersPhotoTag = <div className="maaee_group_face2 upexam_float" >{groupMemebersPhoto}</div>;
+                            break;
+                        case 3:
+                            groupMemebersPhotoTag = <div className="maaee_group_face3 upexam_float" >{groupMemebersPhoto}</div>;
+                            break;
+                        case 4:
+                            groupMemebersPhotoTag = <div className="maaee_group_face upexam_float" >{groupMemebersPhoto}</div>;
+                            break;
+                    }
+                    imgTag = <div>
+                        {groupMemebersPhotoTag}
+                        <div className="mes_u_l">
+                            <div><span className="message_name">{toChatGroup.name}</span><span className="time right_ri time_w">{lastCreateTime}</span></div>
+                            <div className="message_cont_w">{lastContentText}</div>
+                        </div>
+                    </div>;
+                }
+                var messageContentTag = <Badge dot={mMenu.state.badgeShow}>
+                    <div>
+                        {imgTag}
+                    </div>
+                </Badge>;
+                var userJson;
+                if (messageType == 1) {
+                    userJson = {
+                        key: colUid,
+                        "fromUser": fromUser,
+                        messageContent: messageContentTag,
+                        "messageType": messageType
+                    };
+                } else {
+                    userJson = {
+                        key: toChatGroup.chatGroupId,
+                        "fromUser": fromUser,
+                        messageContent: messageContentTag,
+                        "messageType": messageType,
+                        "toChatGroup": toChatGroup
+                    };
+                }
+                if(messageType==1){
+                    if (colUid != parseInt(sessionStorage.getItem("ident"))) {
+                        userMessageData.push(userJson);
+                    }
+                }else{
+                    userMessageData.push(userJson);
+                }
+            }
+            if (i == 0) {
+                if (messageType == 1) {
+                    mMenu.setState({selectRowKey: colUid});
+                }else{
+                    mMenu.setState({selectRowKey: toChatGroup.chatGroupId});
+                }
+            }
+            i++;
+        })
+        mMenu.setState({"userMessageData": userMessageData});
     },
 
     /**
