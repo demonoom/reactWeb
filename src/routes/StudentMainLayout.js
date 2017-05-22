@@ -22,6 +22,7 @@ import {MsgConnection} from '../utils/msg_websocket_connection';
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
 import {createStore} from 'redux';
+import LiveTV from "../components/LiveTV/LiveTV";
 
 
 const store = createStore(function () {
@@ -38,10 +39,10 @@ const StudentMainLayout = React.createClass({
             ghostMenuVisible: true,
             activeMiddleMenu: '',
             personCenterParams: '',
-            currentKey: 'message',
+            currentKey: 'classRoom',
             openKeysStr: '',
             locale: 'zh-cn',
-            resouceType: '',
+            resouceType: 'C',
             ifr: {},
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
@@ -64,6 +65,9 @@ const StudentMainLayout = React.createClass({
                 this.setState({currentKey: e.key, resouceType: 'B'});
             }
             return;
+        }
+        if ('classRoom' == e.key) {
+            this.setState({currentKey: e.key, resouceType: 'C'});
         }
         this.setState({currentKey: e.key, resouceType: ''});
 
@@ -343,8 +347,7 @@ const StudentMainLayout = React.createClass({
                 break;
             case 'classRoom':
                 //教学空间
-                middleComponent = <div>课堂中间操作菜单</div>;
-                tabComponent = <div>课堂主页面</div>;
+                tabComponent = <LiveTV/>;
         }
         //
         //
@@ -377,6 +380,11 @@ const StudentMainLayout = React.createClass({
                             </div>
                         </Col>
                     </Row>;
+                break;
+            case 'C':
+                mainContent = <div className={this.state.optType + 'ant-layout-container'}>
+                    {tabComponent}
+                </div>
                 break;
         }
         //
@@ -423,7 +431,6 @@ const StudentMainLayout = React.createClass({
                         <div className="ant-layout-header">
                             <HeaderComponents/>
                         </div>
-
                         <div className="ant-layout-operation">
                             {mainContent}
                         </div>
