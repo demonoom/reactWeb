@@ -26,28 +26,33 @@ const UserInfo = React.createClass({
 
         let _this = this;
         var param = {
-            "method": 'getTeacherInfo',
-            "ident": ident,
+            "method": 'getPersonalCenterData',
+            "userId": ident,
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                var response = ret.response;
-                if (response) {
-                    var userName = response.user.userName;//用户名
-                    var userHeadIcon = response.user.avatar;//头像
-                    var courseName = response.course.colCourse;//科目
-                    var schoolName = response.school.name;//学校名称
-                    var schoolAddress = response.school.address;
-                    _this.user = response.user;
+                // var response = ret.response;
+                var userInfo = ret.response;
+                if (userInfo) {
+                    var userName = userInfo.user.userName;//用户名
+                    var userHeadIcon = userInfo.user.avatar;//头像
+                    var courseName;
+                    if(userInfo.user.colUtype=="TEAC"){
+                        courseName = userInfo.course;//科目
+                    }
+                    var schoolName = userInfo.school;//学校名称
+                    var grade = userInfo.grade;
+                    _this.user = userInfo.user;
                     _this.setState({
                         userName: userName,
                         userHeadIcon: userHeadIcon,
+                        userType:userInfo.user.colUtype,
                         courseName: courseName,
                         schoolName: schoolName,
-                        schoolAddress: schoolAddress
+                        grade: grade
                     });
                 } else {
-                    message.error("老师信息获取失败");
+                    message.error("个人信息获取失败");
                 }
             },
             onError: function (error) {
@@ -132,6 +137,17 @@ const UserInfo = React.createClass({
 
     render() {
 
+        var courseOrGrade;
+        if(this.state.userType=="TEAC"){
+            courseOrGrade = <p className="user_cont"><span className="name">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                目：</span><span
+                className="name1">{this.state.courseName}</span></p>;
+        }else{
+            courseOrGrade = <p className="user_cont"><span className="name">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                级：</span><span
+                className="name1">{this.state.grade}</span></p>;
+        }
+
         return (
 			<div className="userinfo_bg">
             <div className="">
@@ -139,15 +155,10 @@ const UserInfo = React.createClass({
 				<div className="userinfo_top">
 					<p className="user_cont"><span className="name ant-col-3">学校名称：</span><span
                     className="name1">{this.state.schoolName}</span></p>
-                <p className="user_cont"><span className="name">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    区：</span><span
-                    className="name1">{this.state.schoolAddress}</span></p>
                 <p className="user_cont"><span className="name">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     名：</span><span
                     className="name1">{this.state.userName}</span></p>
-                <p className="user_cont"><span className="name">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    目：</span><span
-                    className="name1">{this.state.courseName}</span></p>
+                {courseOrGrade}
 				</div>
                 
 

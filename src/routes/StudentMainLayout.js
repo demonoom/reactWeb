@@ -5,7 +5,7 @@ import HeaderComponents from '../components/HeaderComponents';
 import UserFace from '../components/UserCardModalComponents';
 import FloatButton  from '../components/FloatButton';
 
-import PersonCenterMenu from '../components/layOut/PersonCenterMenu';
+import StudentPersonCenterMenu from '../components/layOut/StudentPersonCenterMenu';
 import PersonCenter  from '../components/PersonCenter';
 import moment from 'moment';
 import AntNestTabComponents from '../components/antNest/AntNestTabComponents';
@@ -171,7 +171,7 @@ const StudentMainLayout = React.createClass({
 
     },
 
-    getTeacherResource(params){
+    getStudentResource(params){
 
         this.setState({resouceType: '', currentKey: "personCenter", personCenterParams: params});
     },
@@ -337,7 +337,7 @@ const StudentMainLayout = React.createClass({
                 break;
             case 'personCenter':
                 //个人中心
-                middleComponent = <PersonCenterMenu callbackParent={this.getTeacherResource}/>;
+                middleComponent = <StudentPersonCenterMenu callbackParent={this.getTeacherResource}/>;
                 tabComponent = <PersonCenter params={this.state.personCenterParams}/>;
 
                 break;
@@ -398,7 +398,7 @@ const StudentMainLayout = React.createClass({
 
                     <aside className="ant-layout-sider">
                         <div className="ant-layout-logo">
-                            <UserFace callbackParent={this.getTeacherResource}/>
+                            <UserFace callbackParent={this.getStudentResource}/>
                         </div>
                         <Menu mode="inline" theme="dark"
                               defaultSelectedKeys={[this.state.currentKey]}
