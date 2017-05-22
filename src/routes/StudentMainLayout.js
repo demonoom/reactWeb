@@ -76,7 +76,7 @@ const StudentMainLayout = React.createClass({
     },
 
 
-     // 不用了
+    // 不用了
     //获取备课计划下的课件资源
     getTeachPlans: function (optContent, breadCrumbArray) {
         //点击的菜单标识：teachScheduleId
@@ -235,7 +235,7 @@ const StudentMainLayout = React.createClass({
             resouceType: '',
             "groupObj": groupObj,
             "messageType": 'groupMessage',
-            "actionFrom":"personCenterGroupList",
+            "actionFrom": "personCenterGroupList",
             userJson
         });
     },
@@ -257,7 +257,7 @@ const StudentMainLayout = React.createClass({
             resouceType: '',
             "userInfo": userInfo.user,
             "messageType": 'message',
-            "actionFrom":"personCenter",
+            "actionFrom": "personCenter",
             userJson
         });
     },
@@ -271,8 +271,8 @@ const StudentMainLayout = React.createClass({
             resouceType: '',
             "userInfo": userJson.fromUser,
             "messageType": 'message',
-            "actionFrom":"backgroudMessage",
-            "userJson":userJson
+            "actionFrom": "backgroudMessage",
+            "userJson": userJson
         });
     },
 
@@ -285,10 +285,10 @@ const StudentMainLayout = React.createClass({
         var timeNode = (new Date()).valueOf();
         if (fromObj.messageType == 1) {
             // 个人消息
-            this.refs.antGroupTabComponents.getPersonMessage(fromObj.fromUser,timeNode);
+            this.refs.antGroupTabComponents.getPersonMessage(fromObj.fromUser, timeNode);
         } else {
             // 群组消息
-            this.refs.antGroupTabComponents.sendGroupMessage(fromObj.toChatGroup,timeNode);
+            this.refs.antGroupTabComponents.sendGroupMessage(fromObj.toChatGroup, timeNode);
         }
 
     },
@@ -343,7 +343,7 @@ const StudentMainLayout = React.createClass({
                 break;
             case 'classRoom':
                 //教学空间
-                middleComponent =<div>课堂中间操作菜单</div>;
+                middleComponent = <div>课堂中间操作菜单</div>;
                 tabComponent = <div>课堂主页面</div>;
         }
         //
