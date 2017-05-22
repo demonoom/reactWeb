@@ -68,7 +68,9 @@ const StudentMainLayout = React.createClass({
         }
         if ('classRoom' == e.key) {
             this.setState({currentKey: e.key, resouceType: 'C'});
+            return;
         }
+
         this.setState({currentKey: e.key, resouceType: ''});
 
         if (e.key != "KnowledgeResources") {

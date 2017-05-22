@@ -6,6 +6,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Card, Row, message, Col, Icon, Pagination} from 'antd';
 import {getPageSize} from '../../utils/Const';
+import {getLocalTime} from '../../utils/utils';
 import {doWebService} from '../../WebServiceHelper';
 
 
@@ -18,6 +19,7 @@ class LiveTV extends React.Component {
             lives: [],
             pageNo: 1,
         };
+        this.view = this.view.bind(this);
         this._getLives = this._getLives.bind(this);
         this._buildLivesUi = this._buildLivesUi.bind(this);
     }
@@ -54,6 +56,7 @@ class LiveTV extends React.Component {
     _buildLivesUi(dataArr) {
 
         this.livesUi = null;
+        let _this=this;
 
         if (!dataArr || !dataArr.length) {
             this.livesUi = <img className="noDataTipImg" src={require('../images/noDataTipImg.png')}/>;
@@ -77,10 +80,10 @@ class LiveTV extends React.Component {
                 keyIcon = <span className="key_span"><i className="iconfont key">&#xe621;</i></span>;
             }
 
-            return <Card className="live">
+            return <Card className="live" key={id} >
                 <p className="h3">{title}</p>
                 <div className="live_img" id={id} onClick={ () => {
-                    this.view(e)
+                    _this.view(item)
                 } }>
                     <img className="attention_img" width="100%" src={cover}/>
                     <div className="live_green"><span>{schoolName}</span></div>
@@ -104,6 +107,25 @@ class LiveTV extends React.Component {
 
     }
 
+
+    view(objref) {
+
+        if (!objref.liveVideos[0]) {
+            message.info("无效的视频！");
+            return;
+        }
+
+        let obj = {
+            title: objref.title,
+            url: "",
+            param: objref.liveVideos,
+            mode: 'flv',
+            width: '400px',
+        }
+
+        LP.Start(obj);
+
+    }
 
     render() {
         this._buildLivesUi(this.state.lives);
