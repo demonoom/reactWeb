@@ -296,17 +296,28 @@
                     </section>
                     <section class="panle">
                       <div  id="${this.ifrpanleid}" ></div>
-                      <div class="danmuArea" ></div>
+                      <div class="showDanmuArea " ></div>
                         <div class="floatBtn" >
-                            <span class="lz" >礼赞</span>
-                            <span class="dm">弹幕</span>
+                            <span class="lz"  >礼赞</span>
+                            <span class="dm"  >弹幕</span>
+                        </div>
+                        <div class="inputShowDanmuArea" >
+                            <textarea placeholder="输入弹幕内容！" ></textarea>
+                            <button id="sendWhitePanel" >发送弹幕</button>
                         </div>
                     </section>
-                    <section class="public" ><div class="public_content" ></div><div class="danmuArea" ></div></section>
-                    <section class="tab">
+                    <section class="public" >
+                        <div class="danmuArea" ></div>
+                        <div class="inputShowDanmuArea" >
+                            <textarea placeholder="输入弹幕内容！" ></textarea>
+                            <button id="sendWhitePanel" >发公屏</button>
+                            <button id="sendWhitePanel" >发图片</button>
+                        </div>
+                    </section>
+                    <section class="liveTV tab">
                         <ul>
-                        <li>白板</li>
-                        <li>公屏</li>
+                        <li class="panleBtn" >白板</li>
+                        <li class="publicBtn" >公屏</li>
                         </ul>
                     </section>
                 </div>
@@ -326,7 +337,8 @@
         $(document.body).append(this.htm);
         this.el = $('#' + this.id);
         $(this.el).find('.back').on('click', this.closepanle.bind(this, this.id));
-
+        $(this.el).find('.liveTV.tab li').on('click', this.changePanel);
+//
 //
 //
         videojs.options.flash.swf = "static/video-js.swf";
@@ -335,10 +347,33 @@
         obj.param.warpid = this.id;
 
         this.websocket(obj.param);
-
         return this;
     }
 
+
+    // 白板公屏切换
+    littlePanle.prototype.changePanel = function (event) {
+        debugger
+
+        event = event || window.event;
+        let el = $(event.target);
+
+        switch ($(el).attr('class')) {
+            case 'panleBtn':
+                $('section.public').css({visibility: 'hidden'});
+                $('section.panle').css({visibility: 'visible'});
+                break;
+            case 'publicBtn':
+                $('section.panle').css({visibility: 'hidden'});
+                $('section.public').css({visibility: 'visible'});
+                break;
+
+        }
+
+        $('.liveTV.tab li').removeClass('on');
+        $(el).addClass('on');
+
+    }
 
     littlePanle.prototype.websocket = function (obj) {
         var connection = new ClazzConnection();
@@ -347,11 +382,10 @@
         connection.clazzWsListener = {
 
             onError: function (errorMsg) {
-
                 //强制退出课堂
-                // alert(errorMsg);
-                __this.closepanle(obj.warpid);
+                debugger
                 alert('强制退出课堂');
+                __this.closepanle(obj.warpid);
 
             }, onWarn: function (warnMsg) {
 
@@ -366,26 +400,21 @@
 
                         break;
                     case'classOver':
-                        __this.closepanle(obj.warpid);
                         alert('下课了!');
+                        __this.closepanle(obj.warpid);
                         break;
                     case 'studentLogin': // 显示直播视频
                         htm = ` <video   id="v${obj.ifrliveid}" class="video-js vjs-default-skin vjs-big-play-centered"
                                controls preload="auto" poster="" width="300" height="300"
                                data-setup='{}'>
                                 <source  src="${info.data.play_rtmp_url}"   type='rtmp/flv'  /></video>`;
-
                         $('#' + obj.ifrpanleid).html(htm);
-
-
                         var player = videojs('v' + obj.ifrliveid, {}, function onPlayerReady() {
-                              this.play();
+                            this.play();
                             this.on('ended', function () {
-                                videojs.log('Awww...over so soon?!');
+                                // videojs.log('Awww...over so soon?!');
                             });
                         });
-
-
                         break;
                     case 'classDanmu':
 
