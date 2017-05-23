@@ -20,8 +20,10 @@ class LiveTV extends React.Component {
             pageNo: 1,
         };
         this.view = this.view.bind(this);
+        this.change = this.change.bind(this);
         this._getLives = this._getLives.bind(this);
         this._buildLivesUi = this._buildLivesUi.bind(this);
+        this._getHistoryLives = this._getHistoryLives.bind(this);
     }
 
     componentWillMount() {
@@ -43,7 +45,32 @@ class LiveTV extends React.Component {
                     message.info("没有直播课堂！");
                     return;
                 }
-                 if (fn) fn(res.response);
+                if (fn) fn(res.response);
+                _this.setState({lives: res.response, ...res.pager});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    }
+
+    _getHistoryLives(cityCode,schoolId,kemu,pageNo, fn) {
+        let _this = this;
+        var param = {
+            "method": 'getLivedLiveInfos',
+            "cityCode": xxxxx,
+            "schoolId": xxxxxxxx,
+            "kemu": xxxxx,
+            "pageNo": pageNo || 1,
+        };
+
+        doWebService(JSON.stringify(param), {
+            onResponse: function (res) {
+                if (res.success && !res.response.length) {
+                    message.info("没有直播课堂！");
+                    return;
+                }
+                if (fn) fn(res.response);
                 _this.setState({lives: res.response, ...res.pager});
             },
             onError: function (error) {
@@ -56,7 +83,7 @@ class LiveTV extends React.Component {
     _buildLivesUi(dataArr) {
 
         this.livesUi = null;
-        let _this=this;
+        let _this = this;
 
         if (!dataArr || !dataArr.length) {
             this.livesUi = <img className="noDataTipImg" src={require('../images/noDataTipImg.png')}/>;
@@ -80,7 +107,7 @@ class LiveTV extends React.Component {
                 keyIcon = <span className="key_span"><i className="iconfont key">&#xe621;</i></span>;
             }
 
-            return <Card className="live" key={id} >
+            return <Card className="live" key={id}>
                 <p className="h3">{title}</p>
                 <div className="live_img" id={id} onClick={ () => {
                     _this.view(item)
@@ -110,20 +137,35 @@ class LiveTV extends React.Component {
 
     view(objref) {
 
-        if (!objref.liveVideos[0]) {
-            message.info("无效的视频！");
-            return;
-        }
+        // if (!objref.liveVideos[0]) {
+        //     message.info("无效的视频！");
+        //     return;
+        // }
 
         let obj = {
             title: objref.title,
             url: "",
-            param: objref.liveVideos,
-            mode: 'flv',
-            width: '400px',
+            param: 'XXXXXXX直播课堂',
+            mode: 'liveTV',
         }
 
         LP.Start(obj);
+
+    }
+
+
+    change(type) {
+
+
+        switch (type) {
+            case 'live':
+                this._getLives(1);
+                break;
+            case 'history':
+                this._getHistoryLives(1);
+                break;
+        }
+
 
     }
 
@@ -133,14 +175,20 @@ class LiveTV extends React.Component {
         let liveNav = <div>
             <div className="menu_til">学习空间</div>
             <ul>
-                <li className="ant-menu-item">直播课堂</li>
-                <li className="ant-menu-item">历史回顾</li>
+                <li onClick={() => {
+                    this.change('live')
+                }}>直播课堂
+                </li>
+                <li onClick={() => {
+                    this.change('history')
+                }}>历史回顾
+                </li>
             </ul>
         </div>;
 
         let livePanel = <div>
             {this.livesUi}
-            <Pagination total={this.state.pageCount} pageSize={getPageSize()} onchange={this._getLives} />
+            <Pagination total={this.state.pageCount} pageSize={getPageSize()} onchange={this._getLives}/>
         </div>;
 
         return (
