@@ -292,10 +292,14 @@
                 </div>
                 <div class="content">
                     <section class="live">
-                        <iframe  border=0 id="${this.ifrliveid}"  src="${ obj.url }"  />
+                         <video   id="${this.ifrliveid}" class="video-js vjs-default-skin vjs-big-play-centered"
+                               controls preload="auto" poster="" width="300" height="300"
+                               data-setup='{html5:{nativeTextTracks:false}}'>
+                                <source  src="rtmp://101.201.45.125:1935/live2/23836"   type='rtmp/flv'  />
+                        </video>
                     </section>
                     <section class="panle">
-                        <iframe  border=0 id="${this.ifrpanleid}"  src="${ obj.url }"  />
+                        <iframe  border=0 id="${this.ifrpanleid}"   />
                         <div class="floatBtn" >
                             <span class="lz" >礼赞</span>
                             <span class="dm">弹幕</span>
@@ -310,29 +314,100 @@
                 </div>
                 </div>`;
 
-        let styleObj = (refStyle, index, orderIndex) => {
+        let styleObj = (refStyle) => {
             refStyle.left = 0;
             refStyle.top = 0;
             refStyle.position = 'fixed';
             refStyle.width = '100%';
             refStyle.height = '100%';
-            refStyle.zIndex = 1;
+            refStyle.zIndex = 10;
             return refStyle
         }
 
-        this.htm = $(this.htm).css(styleObj(this.param.stylePage, this.param.stylePage.zIndex, this.param.orderIndex));
+        this.htm = $(this.htm).css(styleObj(this.param.stylePage));
         $(document.body).append(this.htm);
         this.el = $('#' + this.id);
         $(this.el).find('.back').on('click', this.closepanle.bind(this, this.id));
-        this.ifrel = $('#' + this.ifrid);
-        this.ifrel.on('load', this._liveTV_UI_templet_iframe_event.bind(this, this.id, this.ifrid));
+
+//
+//
+        videojs.options.flash.swf = "static/video-js.swf";
+        obj.param.ifrliveid = this.ifrliveid;
+        obj.param.ifrpanleid = this.ifrpanleid;
+
+        this.websocket(obj.param);
+
         return this;
+    }
+
+
+    littlePanle.prototype.websocket = function (obj) {
+        var connection = new ClazzConnection();
+
+        connection.clazzWsListener = {
+
+            onError: function (errorMsg) {
+                debugger
+                //强制退出课堂
+                alert(errorMsg);
+
+
+            }, onWarn: function (warnMsg) {
+                debugger
+                //显示warning
+                alert(warnMsg);
+            }, onMessage: function (info) {
+                debugger
+                switch (info.command) {
+                    case 'studentLogin':
+
+// 显示直播视频
+
+                    //    $('#'+obj.ifrliveid).attr('src',info.data.play_rtmp_url)
+
+                        var options = {
+                            sourceOrder: true,
+                            controls: true,
+                            autoplay: true,
+                            preload: "auto",
+                            techOrder: ['flash', 'html5']
+                        };
+                        var playerA = videojs(obj.ifrliveid, options, function () {
+                            playerA.play();
+                            playerA.on('ended', function () {
+                            });
+                        });
+                     //   playerA.src(info.data.play_rtmp_url);
+
+
+                        break;
+
+                    case 'classDanmu':
+
+// 弹幕
+                        break;
+
+
+                    case 'pushHandout':
+
+// 图片
+                        break;
+
+
+                }
+
+            }
+        };
+
+        connection.connect({command: 'studentLogin', data: {userId:  parseInt( obj.uid), vid: obj.vid}});
     }
 
     littlePanle.prototype._liveTV_UI_templet_iframe_event = function (id, ifrid, event) {
 
-        event.target.contentWindow.phone = phone;
-        $("#" + id + ' h3').text(event.target.contentWindow.document.title);
+        this.websocket();
+
+        //  event.target.contentWindow.phone = phone;
+        //  $("#" + id + ' h3').text(event.target.contentWindow.document.title);
     }
 
 

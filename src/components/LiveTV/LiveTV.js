@@ -144,8 +144,9 @@ class LiveTV extends React.Component {
 
         let obj = {
             title: objref.title,
-            url: "",
-            param: 'XXXXXXX直播课堂',
+            livelurl: "",
+            panelurl: "",
+            param: {uid:this.state.ident,vid:objref.vid},
             mode: 'liveTV',
         }
 
