@@ -93,7 +93,7 @@
     }
 
 
-    littlePanle.prototype._teachAdminIframe_HtmlTemplet = function (obj) {
+    littlePanle.prototype._teachAdmin_UI_templet = function (obj) {
 
         let id = UUID(8, 16);
         this.id = id;
@@ -147,17 +147,17 @@
 
         $(this.el).find('.back').on('click', this.closepanle.bind(this, this.id));
         this.ifrel = $('#' + this.ifrid);
-        this.ifrel.on('load', this._teachAdminIframeOnLoadevent.bind(this, this.id, this.ifrid));
+        this.ifrel.on('load', this._teachAdmin_UI_templet_iframe_event.bind(this, this.id, this.ifrid));
         return this;
     }
-    littlePanle.prototype._teachAdminIframeOnLoadevent = function (id, ifrid, event) {
+    littlePanle.prototype._teachAdmin_UI_templet_iframe_event = function (id, ifrid, event) {
 
         event.target.contentWindow.phone = phone;
         $('#' + id + ' h3').text(event.target.contentWindow.document.title);
     }
 
-
-    littlePanle.prototype._showMP4PPTPDFTemplet = function (obj) {
+//
+    littlePanle.prototype._default_UI_templet = function (obj) {
         let id = UUID(8, 16);
         this.id = id;
         this.ifrid = 'ifr' + id;
@@ -191,19 +191,18 @@
         $(this.el).find('.enterFull').on('click', enterFull);
         $(this.el).find('.exitFull').on('click', exitFull);
         this.ifrel = $('#' + objtemplet.ifrid);
-        
-        this.ifrel.on('load', this._iframeonloadevent.bind(this, objtemplet.ifrid));
+
+        this.ifrel.on('load', this._default_UI_templet_iframe_event.bind(this, objtemplet.ifrid));
 
 
         return this;
     }
 
-    littlePanle.prototype._iframeonloadevent = function (id, event) {
+    littlePanle.prototype._default_UI_templet_iframe_event = function (id, event) {
         event.target.contentWindow.phone = phone;
-
     }
 
-    littlePanle.prototype._showHtmlFlv = function (obj) {
+    littlePanle.prototype._flv_UI_templet = function (obj) {
 
         let id = UUID(8, 16);
         this.id = id;
@@ -277,6 +276,66 @@
 
     }
 
+
+    littlePanle.prototype._liveTV_UI_templet = function (obj) {
+
+        let id = UUID(8, 16);
+        this.id = id;
+        this.ifrliveid = 'live' + id;
+        this.ifrpanleid = 'panle' + id;
+        this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show ${obj.mode}">
+                <div class="header">
+                <h3 class="title">${ obj.title }</h3>
+                    <div class="little-tilte">
+                        <a class="back"><i class="anticon anticon-left "></i></a>
+                    </div>
+                </div>
+                <div class="content">
+                    <section class="live">
+                        <iframe  border=0 id="${this.ifrliveid}"  src="${ obj.url }"  />
+                    </section>
+                    <section class="panle">
+                        <iframe  border=0 id="${this.ifrpanleid}"  src="${ obj.url }"  />
+                        <div class="floatBtn" >
+                            <span class="lz" >礼赞</span>
+                            <span class="dm">弹幕</span>
+                        </div>
+                    </section>
+                    <section class="tab">
+                        <ul>
+                        <li>白板</li>
+                        <li>公屏</li>
+                        </ul>
+                    </section>
+                </div>
+                </div>`;
+
+        let styleObj = (refStyle, index, orderIndex) => {
+            refStyle.left = 0;
+            refStyle.top = 0;
+            refStyle.position = 'fixed';
+            refStyle.width = '100%';
+            refStyle.height = '100%';
+            refStyle.zIndex = 1;
+            return refStyle
+        }
+
+        this.htm = $(this.htm).css(styleObj(this.param.stylePage, this.param.stylePage.zIndex, this.param.orderIndex));
+        $(document.body).append(this.htm);
+        this.el = $('#' + this.id);
+        $(this.el).find('.back').on('click', this.closepanle.bind(this, this.id));
+        this.ifrel = $('#' + this.ifrid);
+        this.ifrel.on('load', this._liveTV_UI_templet_iframe_event.bind(this, this.id, this.ifrid));
+        return this;
+    }
+
+    littlePanle.prototype._liveTV_UI_templet_iframe_event = function (id, ifrid, event) {
+
+        event.target.contentWindow.phone = phone;
+        $("#" + id + ' h3').text(event.target.contentWindow.document.title);
+    }
+
+
     littlePanle.prototype.GetLP = function (obj, oldArray) {
 
         this.param.mode = obj.mode || obj.htmlMode || '';
@@ -308,14 +367,16 @@
 
         switch (this.param.mode) {
             default:
-                this._showMP4PPTPDFTemplet(this.param);
+                this._default_UI_templet(this.param);
                 break;
             case 'flv':
-                this._showHtmlFlv(this.param);
-                // this._showHtmlFlv_old(this.param);
+                this._flv_UI_templet(this.param);
                 break;
             case 'teachingAdmin':
-                this._teachAdminIframe_HtmlTemplet(this.param);
+                this._teachAdmin_UI_templet(this.param);
+                break;
+            case 'liveTV':
+                this._liveTV_UI_templet(this.param);
                 break;
 
         }
@@ -325,7 +386,6 @@
     littlePanle.prototype._setProxyInfo = function (url) {
 
         if (!url) return '';
-
 
 
         if (/www\.maaee\.com\:80/img.test(url)) {
@@ -400,22 +460,33 @@
         },
 
         GetLP(objParam) {
-            if (objParam.mode != 'teachingAdmin') {
+            let _this = this;
+            let objA;
+            switch (objParam) {
+                case'teachingAdmin':
+                    objA = new littlePanle().GetLP(objParam, _this.mgr);
+                    break;
 
-                if ((this.mgr.length - this.hideArr.length) >= 3) {
-                    alert('弹窗打开太多！');
-                    return;
-                }
-                let objA = new littlePanle().GetLP(objParam, this.mgr);
-                this.mgr.push(objA);
-                this.addOrderBtn();
-                return objA;
+                case'liveTV':
 
-            } else {
-                let objA = new littlePanle().GetLP(objParam, this.mgr);
-                this.mgr.push(objA);
-                return objA;
+                    if (_this.mgr.length) {
+                        alert('打开太多！');
+                        return;
+                    }
+                    objA = new littlePanle().GetLP(objParam, _this.mgr);
+                    break;
+
+                default :
+                    if ((this.mgr.length - _this.hideArr.length) >= 3) {
+                        alert('打开太多！');
+                        return;
+                    }
+                    objA = new littlePanle().GetLP(objParam, _this.mgr);
+                    _this.addOrderBtn();
             }
+            this.mgr.push(objA);
+            return objA;
+
         },
         addOrderBtn(){
             if ($('.ant-layout-header .lpmgrbtn').length) return;
