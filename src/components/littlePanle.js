@@ -304,8 +304,14 @@
                     </section>
                     <section class="tab">
                         <ul>
-                        <li>白板</li>
-                        <li>公屏</li>
+                        <li class="ant-menu-item-selected">
+							<i class="icon_menu_ios icon_yichao1"></i>
+							<div class="tan">白板</div>
+						</li>
+                        <li>
+							<i class="icon_menu_ios icon_yichao1"></i>
+							<div class="tan">公屏</div>
+						</li>
                         </ul>
                     </section>
                 </div>
