@@ -284,11 +284,12 @@
         this.ifrliveid = 'live' + id;
         this.ifrpanleid = 'panle' + id;
         this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show ${obj.mode}">
-                <div class="header">
-                <h3 class="title">${ obj.title }</h3>
-                    <div class="little-tilte">
-                        <a class="back"><i class="anticon anticon-left "></i></a>
+                <div class="public—til—blue">
+					<div class="little-tilte">
+                    	<a class="back"><i class="anticon anticon-left "></i></a>
                     </div>
+                	<span>${ obj.title }</span>
+                    
                 </div>
                 <div class="content">
                     <section class="live">

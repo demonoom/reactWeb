@@ -174,21 +174,22 @@ class LiveTV extends React.Component {
         this._buildLivesUi(this.state.lives);
 
         let liveNav = <div>
-            <div className="menu_til">学习空间</div>
-            <ul>
-                <li onClick={() => {
+            <div className="menu_til">营养池</div>
+            <ul className="pabulum">
+                <li className="select" onClick={() => {
                     this.change('live')
-                }}>直播课堂
+                }}><i className="iconfont menu_left_i">&#xe609;</i>直播课堂
                 </li>
                 <li onClick={() => {
                     this.change('history')
-                }}>历史回顾
+                }}><i className="iconfont menu_left_i">&#xe602;</i>历史回顾
                 </li>
             </ul>
         </div>;
 
         let livePanel = <div>
-            {this.livesUi}
+			<div className="public—til—blue">直播课堂</div>
+            <div className="favorite_scroll2 favorite_up favorite_le_h">{this.livesUi}</div>
             <Pagination total={this.state.pageCount} pageSize={getPageSize()} onchange={this._getLives}/>
         </div>;
 
