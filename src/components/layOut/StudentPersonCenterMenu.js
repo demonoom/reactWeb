@@ -45,7 +45,6 @@ class StudentPersonCenterMenu extends React.Component {
                     <Menu.Item key="myAskList"><i className="iconfont menu_left_i">&#xe628;</i>我的提问</Menu.Item>
                     <Menu.Item key="myStudyTrack"><i className="iconfont menu_left_i">&#xe6f8;</i>我的学习轨迹</Menu.Item>
                     <Menu.Item key="myFollows"><Icon type="heart-o" className="menu_left_i" />我的关注</Menu.Item>
-                    {/*<Menu.Item key="findStudentPwd">找回学生密码</Menu.Item>*/}
                 </Menu>
 
             </div>
