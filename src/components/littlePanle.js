@@ -100,7 +100,7 @@
         this.ifrid = 'ifr' + id;
         this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show teachingAdmin">
                 <div class="header draggable">
-                <span class="title">${ obj.title }</span>
+                <h3 class="title">${ obj.title }</h3>
                     <div class="little-tilte">
                         <a class="back"><i class="anticon anticon-left "></i></a>
                     </div>
@@ -285,10 +285,11 @@
         this.ifrpanleid = 'panle' + id;
         this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show ${obj.mode}">
                 <div class="public—til—blue">
-                	<h3>${ obj.title }</h3>
-                    <div class="ant-tabs-right">
-                   	 <a class="back"><i class="anticon anticon-left "></i></a>
+					<div class="little-tilte">
+                    	<a class="back"><i class="anticon anticon-left "></i></a>
                     </div>
+                	<span>${ obj.title }</span>
+                    
                 </div>
                 <div class="content">
                     <section class="live">

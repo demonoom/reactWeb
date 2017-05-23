@@ -5,3 +5,37 @@
 	background:#E5F2FE;
 	color: #2db7f5;
 }
+.liveTV .content{
+	display:flex;
+	display:-webkit-flex;
+	flex-direction:row;
+	flex-wrap: nowrap
+}
+.liveTV .live, .liveTV .panle, .liveTV .tab{
+	display: inline-flex;
+}
+.liveTV .live{
+	width:300px;
+	margin:0;
+	padding:0;
+	background:#000
+}
+.liveTV .panle{
+	width:100%;
+	text-align:center;
+	position: relative;
+	height:100%
+}
+.liveTV .panle iframe{
+	height:100%;
+	width:100%;
+}
+.liveTV .panle .floatBtn{
+	position: absolute;
+    right: 30px;
+    bottom: 60px;
+}
+.liveTV .tab{
+	width:80px;
+	background:#eeeff4
+}

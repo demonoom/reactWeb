@@ -3182,7 +3182,23 @@ a.color_gary_f, .color_gary_f{
     text-indent: 18px;
 
 }
-
+.liveTV .little-tilte{
+	text-align: left;
+    margin-top: 2px;
+    position: absolute;
+    left: 12px;
+    line-height: 1px;
+    width: 50px;
+    height: 32px;
+}
+.liveTV .little-tilte .back{
+	left:0
+}
+.liveTV .little-tilte a i{
+	font-size: 22px;
+    color: #0078e4;
+    font-weight: normal;
+}
 .little-layout-aside-r-show .close,
 .little-layout-aside-r-show .zoom,
 .little-layout-aside-r-show .back,
