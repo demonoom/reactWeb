@@ -415,12 +415,22 @@ const AntCloudTableComponents = React.createClass({
 
     },
 
+    showdelAllDirectoryConfirmModal(){
+
+    },
+
     render() {
-        const {loading, selectedRowKeys} = this.state;
+        const {loading, selectedRowKeys} = cloudTable.state;
         const rowSelection = {
             selectedRowKeys,
             onChange: this.onSelectChange,
         };
+        const hasSelected = selectedRowKeys.length > 0;
+        var delBtn = <div><Button type="primary" onClick={cloudTable.showdelAllDirectoryConfirmModal}
+                                  disabled={!hasSelected} loading={loading}
+        >批量删除</Button><span className="password_ts"
+                            style={{marginLeft: 8}}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span></div>;
+
         var tipTitle;
         if(cloudTable.state.getFileType=="myFile"){
             tipTitle="我的文件";
@@ -468,7 +478,10 @@ const AntCloudTableComponents = React.createClass({
                     </Modal>
                     {toolbar}
                     <div className="favorite_scroll">
-					<Table columns={columns} dataSource={cloudTable.state.tableData} pagination={{
+                        <div className="pl_del">
+                            {delBtn}
+                        </div>
+					<Table  rowSelection={rowSelection} columns={columns} dataSource={cloudTable.state.tableData} pagination={{
                         total: cloudTable.state.totalCount,
                         pageSize: getPageSize(),
                         onChange: cloudTable.pageOnChange
