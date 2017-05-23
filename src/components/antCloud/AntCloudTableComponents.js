@@ -238,7 +238,7 @@ const AntCloudTableComponents = React.createClass({
             if(directory){
                 fileLogo=<div>
                     <Icon type="folder" />
-                    {name}
+                    <a className="font_gray_666" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e)}>{name}</a>
                 </div>;
             }else{
                 fileLogo=<div>
@@ -263,6 +263,12 @@ const AntCloudTableComponents = React.createClass({
         var pager = ret.pager;
         cloudTable.setState({totalCount: parseInt(pager.rsCount)});
         cloudTable.setState({"tableData":data});
+    },
+    /**
+     * 如果是文件夹，则可以点击文件夹名称，进入文件夹内部
+     */
+    intoDirectoryInner(directoryObj){
+        console.log(directoryObj.name);
     },
     /**
      * 修改文件夹的名称（重命名）
@@ -382,8 +388,8 @@ const AntCloudTableComponents = React.createClass({
         var uploadButton;
         //判断是否是超级管理员
         if(cloudTable.state.currentUserIsSuperManager){
-            newButton=<Button value="newDirectory"  className="antnest_talk">新建</Button>;
-            uploadButton=<Button value="uploadFile">上传</Button>;
+            newButton=<Button value="newDirectory"  className="antnest_talk">新建文件夹</Button>;
+            uploadButton=<Button value="uploadFile">上传文件</Button>;
         }
         var toolbar = <div className="public—til—blue">
             <div className="talk_ant_btn1">
