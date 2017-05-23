@@ -414,7 +414,7 @@ const StudentMainLayout = React.createClass({
                             </Menu.Item>
                             <Menu.Item key="classRoom" className="padding_menu">
                                 <i className="icon_menu_ios icon_jiaoxue"></i>
-                                <div className="tan">课堂</div>
+                                <div className="tan">营养池</div>
                             </Menu.Item>
                             <Menu.Item key="antGroup" className="padding_menu">
                                 <i className="icon_menu_ios icon_antgroup"></i>

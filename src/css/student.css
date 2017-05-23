@@ -1,0 +1,7 @@
+.pabulum li{
+	padding:12px 24px;
+}
+.pabulum li.select, .pabulum li.select i{
+	background:#E5F2FE;
+	color: #2db7f5;
+}
