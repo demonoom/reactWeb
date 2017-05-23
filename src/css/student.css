@@ -20,7 +20,12 @@
 	padding:0;
 	background:#000
 }
-.liveTV .panle{
+.liveTV .cont{
+	width:100%;
+	position: relative;
+	height:100%
+}
+.liveTV .panle, .liveTV .public{
 	width:100%;
 	text-align:center;
 	position: relative;
@@ -70,4 +75,7 @@
     z-index: 1000;
     font-size: 14px;
     float: left;
+}
+.sendst{
+	margin:0 auto;
 }
