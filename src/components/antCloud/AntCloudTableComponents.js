@@ -167,6 +167,37 @@ const AntCloudTableComponents = React.createClass({
             }
         });
     },
+
+    /**
+     * 点击文件夹名称，进入文件夹内部的文件列表
+     * @param operateUserId
+     * @param cloudFileId
+     * @param queryConditionJson
+     * @param pageNo
+     */
+    listFiles: function (operateUserId, cloudFileId,queryConditionJson,pageNo) {
+        data = [];
+        cloudTable.setState({currentView: 'subjectList', totalCount: 0});
+        cloudTable.buildPageView();
+        var param = {
+            "method": 'listFiles',
+            "operateUserId": operateUserId,
+            "cloudFileId": cloudFileId,
+            "queryConditionJson":queryConditionJson,
+            "pageNo":pageNo
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if(response){
+                    cloudTable.buildTableDataByResponse(ret);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
     /**
      * 是否是学校云盘的超级管理者
      * @param userId
@@ -269,6 +300,9 @@ const AntCloudTableComponents = React.createClass({
      */
     intoDirectoryInner(directoryObj){
         console.log(directoryObj.name);
+        var initPageNo =1 ;
+        var queryConditionJson="";
+        cloudTable.listFiles(cloudTable.state.ident,directoryObj.id,'',initPageNo);
     },
     /**
      * 修改文件夹的名称（重命名）
@@ -372,6 +406,13 @@ const AntCloudTableComponents = React.createClass({
         cloudTable.setState({"editDirectoryName":editDirectoryName});
     },
 
+    /**
+     * 返回上级目录
+     */
+    returnParent(){
+
+    },
+
     render() {
         const {loading, selectedRowKeys} = this.state;
         const rowSelection = {
@@ -391,7 +432,11 @@ const AntCloudTableComponents = React.createClass({
             newButton=<Button value="newDirectory"  className="antnest_talk">新建文件夹</Button>;
             uploadButton=<Button value="uploadFile">上传文件</Button>;
         }
+
+        var returnParentToolBar = <div className="ant-tabs-right"><Button onClick={cloudTable.returnParent}><Icon type="left" /></Button></div>;
+
         var toolbar = <div className="public—til—blue">
+            {returnParentToolBar}
             <div className="talk_ant_btn1">
                 {newButton}
                 {uploadButton}
