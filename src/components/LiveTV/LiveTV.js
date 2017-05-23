@@ -187,7 +187,8 @@ class LiveTV extends React.Component {
         </div>;
 
         let livePanel = <div>
-            {this.livesUi}
+			<div className="public—til—blue">直播课堂</div>
+            <div className="favorite_scroll2 favorite_up favorite_le_h">{this.livesUi}</div>
             <Pagination total={this.state.pageCount} pageSize={getPageSize()} onchange={this._getLives}/>
         </div>;
 
