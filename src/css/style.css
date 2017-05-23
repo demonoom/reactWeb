@@ -1197,7 +1197,7 @@ article.content_3 img{
 	}
 .analyze_iframe{
 	width:100%;
-	height:530px;
+	height:calc(100% - 46px);
 	overflow-y:auto;
 	border:none;
 }

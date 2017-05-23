@@ -294,19 +294,31 @@
                 <div class="content">
                     <section class="live" id="${this.ifrliveid}">
                     </section>
-                    <section class="panle">
-                      <div  id="${this.ifrpanleid}" ></div>
-                      <div class="danmuArea" ></div>
-                        <div class="floatBtn" >
-                            <span class="lz" >礼赞</span>
-                            <span class="dm">弹幕</span>
-                        </div>
-                    </section>
-                    <section class="public" ><div class="public_content" ></div><div class="danmuArea" ></div></section>
+					<div class="cont">
+						<section class="panle">
+                      		<div id="${this.ifrpanleid}" class="sendst" ></div>
+                      		<div class="danmuArea" ></div>
+                        	<div class="floatBtn" >
+                            	<span class="lz" >礼赞</span>
+                            	<span class="dm">弹幕</span>
+                        	</div>
+                    	</section>
+                    	<section class="public" >
+							<div class="public_content" ></div>
+							<div class="danmuArea" ></div>
+						</section>
+					</div>
+                    
                     <section class="tab">
                         <ul>
-                        <li>白板</li>
-                        <li>公屏</li>
+                        <li class="ant-menu-item-selected">
+							<i class="icon_menu_ios icon_yichao1"></i>
+							<div class="tan">白板</div>
+						</li>
+                        <li>
+							<i class="icon_menu_ios icon_yichao1"></i>
+							<div class="tan">公屏</div>
+						</li>
                         </ul>
                     </section>
                 </div>
