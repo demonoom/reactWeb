@@ -9,7 +9,7 @@ var columns = [{
     dataIndex: 'title',
 }, {
     title: '操作',
-    className: 'ant-table-selection-topic',
+    className: 'ant-table-selection-user',
     dataIndex: 'subjectOpt',
 },
 ];
@@ -278,7 +278,7 @@ const AntCloudTableComponents = React.createClass({
                 </div>;
             }
             var subjectOpt = <div>
-                <Button type="button" value={key} text={key} onClick={cloudTable.editDirectoryName.bind(cloudTable,e)}
+                <Button type="button" className="score3_i" value={key} text={key} onClick={cloudTable.editDirectoryName.bind(cloudTable,e)}
                         icon="edit"></Button>
                 <Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
                         icon="delete"></Button>
