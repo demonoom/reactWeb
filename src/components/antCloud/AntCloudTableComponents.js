@@ -457,7 +457,7 @@ const AntCloudTableComponents = React.createClass({
                            onOk={cloudTable.reNameModalHandleOk}
                            onCancel={cloudTable.reNameModalHandleCancel}
                     >
-                        <div>
+                    	<div>
                             <Row>
                                 <Col span={3} className="right_look">名称：</Col>
                                 <Col span={20}>
@@ -467,11 +467,13 @@ const AntCloudTableComponents = React.createClass({
                         </div>
                     </Modal>
                     {toolbar}
-                    <Table columns={columns} dataSource={cloudTable.state.tableData} pagination={{
+                    <div className="favorite_scroll">
+					<Table columns={columns} dataSource={cloudTable.state.tableData} pagination={{
                         total: cloudTable.state.totalCount,
                         pageSize: getPageSize(),
                         onChange: cloudTable.pageOnChange
                     }} scroll={{y: 400}}/>
+					</div>
                 </div>
 
         );
