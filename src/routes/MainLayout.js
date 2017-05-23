@@ -14,6 +14,8 @@ import MessageMenu from '../components/layOut/MessageMenu';
 import AntGroupMenu from '../components/layOut/AntGroupMenu';
 import AntNestMenu from '../components/layOut/AntNestMenu';
 import PersonCenterComponents from '../components/antGroup/PersonCenterComponents';
+import AntCloudMenu from '../components/layOut/AntCloudMenu';
+import AntCloudTableComponents from '../components/antCloud/AntCloudTableComponents';
 import {LocaleProvider} from 'antd';
 import TeachSpace  from '../components/TeachSpaces';
 import TeachSpaceGhostMenu from '../components/TeachSpacesGhostMenu';
@@ -293,6 +295,16 @@ const MainLayout = React.createClass({
 
     },
 
+    getAntCloud(optType){
+        var pageNo;
+        this.refs.antCloudTable.getFileByType(optType);
+        /*if ("myFile" == optType) {
+            this.refs.antCloudTable.getTopics(pageNo, 0);
+        } else {
+            //this.refs.antCloudTable.getTopics(pageNo, 1);
+        }*/
+    },
+
     render() {
 
         const collapse = this.state.collapse;
@@ -348,6 +360,12 @@ const MainLayout = React.createClass({
                                          toggleGhostMenu={ this.changeGhostMenuVisible }
                                          changeTabEvent={this.teachSpaceTab}/>;
                 tabComponent = <TeachSpace currentItem={this.state.activeMiddleMenu}/>;
+                break;
+            case 'antCloud':
+                //蚁巢
+                middleComponent = <AntCloudMenu callbackParent={this.getAntCloud}/>;
+                tabComponent = <AntCloudTableComponents ref="antCloudTable"></AntCloudTableComponents>;
+                break;
         }
         //
         //
@@ -412,6 +430,10 @@ const MainLayout = React.createClass({
                             <Menu.Item key="antGroup" className="padding_menu">
                                 <i className="icon_menu_ios icon_antgroup"></i>
                                 <div className="tan">蚁群</div>
+                            </Menu.Item>
+                            <Menu.Item key="antCloud" className="padding_menu">
+                                <i className="icon_menu_ios icon_yichao1"></i>
+                                <div className="tan">蚁盘</div>
                             </Menu.Item>
                             <FloatButton ref="floatButton" messageUtilObj={ms}/>
                         </Menu>
