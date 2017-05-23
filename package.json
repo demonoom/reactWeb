@@ -25,7 +25,8 @@
     "react-redux": "^5.0.4",
     "reqwest": "^2.0.5",
     "routes": "^2.1.0",
-    "ueditor": "^1.2.0"
+    "ueditor": "^1.2.0",
+    "videojs-flash": "^1.1.0"
   },
   "devDependencies": {
     "atool-build": "^0.8.0",

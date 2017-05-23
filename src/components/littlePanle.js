@@ -292,20 +292,17 @@
                     
                 </div>
                 <div class="content">
-                    <section class="live">
-                         <video   id="${this.ifrliveid}" class="video-js vjs-default-skin vjs-big-play-centered"
-                               controls preload="auto" poster="" width="300" height="300"
-                               data-setup='{html5:{nativeTextTracks:false}}'>
-                                <source  src="rtmp://101.201.45.125:1935/live2/23836"   type='rtmp/flv'  />
-                        </video>
+                    <section class="live" id="${this.ifrliveid}">
                     </section>
                     <section class="panle">
-                        <iframe  border=0 id="${this.ifrpanleid}"   />
+                      <div  id="${this.ifrpanleid}" ></div>
+                      <div class="danmuArea" ></div>
                         <div class="floatBtn" >
                             <span class="lz" >礼赞</span>
                             <span class="dm">弹幕</span>
                         </div>
                     </section>
+                    <section class="public" ><div class="public_content" ></div><div class="danmuArea" ></div></section>
                     <section class="tab">
                         <ul>
                         <li>白板</li>
@@ -335,6 +332,7 @@
         videojs.options.flash.swf = "static/video-js.swf";
         obj.param.ifrliveid = this.ifrliveid;
         obj.param.ifrpanleid = this.ifrpanleid;
+        obj.param.warpid = this.id;
 
         this.websocket(obj.param);
 
@@ -344,54 +342,70 @@
 
     littlePanle.prototype.websocket = function (obj) {
         var connection = new ClazzConnection();
+        let __this = this;
 
         connection.clazzWsListener = {
 
             onError: function (errorMsg) {
-                debugger
-                //强制退出课堂
-                alert(errorMsg);
 
+                //强制退出课堂
+                // alert(errorMsg);
+                __this.closepanle(obj.warpid);
+                alert('强制退出课堂');
 
             }, onWarn: function (warnMsg) {
-                debugger
+
                 //显示warning
                 alert(warnMsg);
             }, onMessage: function (info) {
-                debugger
+                let htm = '';
                 switch (info.command) {
-                    case 'studentLogin':
+                    case 'pushHandout': // 图片
+                        htm = `<img src='${info.data.url}'/>`;
+                        $('#' + obj.ifrpanleid).html(htm);
 
-// 显示直播视频
+                        break;
+                    case'classOver':
+                        __this.closepanle(obj.warpid);
+                        alert('下课了!');
+                        break;
+                    case 'studentLogin': // 显示直播视频
+                        htm = ` <video   id="v${obj.ifrliveid}" class="video-js vjs-default-skin vjs-big-play-centered"
+                               controls preload="auto" poster="" width="300" height="300"
+                               data-setup='{}'>
+                                <source  src="${info.data.play_rtmp_url}"   type='rtmp/flv'  /></video>`;
 
-                    //    $('#'+obj.ifrliveid).attr('src',info.data.play_rtmp_url)
+                        $('#' + obj.ifrpanleid).html(htm);
 
-                        var options = {
-                            sourceOrder: true,
-                            controls: true,
-                            autoplay: true,
-                            preload: "auto",
-                            techOrder: ['flash', 'html5']
-                        };
-                        var playerA = videojs(obj.ifrliveid, options, function () {
-                            playerA.play();
-                            playerA.on('ended', function () {
+
+                        var player = videojs('v' + obj.ifrliveid, {}, function onPlayerReady() {
+                              this.play();
+                            this.on('ended', function () {
+                                videojs.log('Awww...over so soon?!');
                             });
                         });
-                     //   playerA.src(info.data.play_rtmp_url);
 
 
                         break;
-
                     case 'classDanmu':
 
-// 弹幕
+                        let sayText1 = `<p>${info.data.message.content}</p>`;
+                        let fromUserName1 = `<p>${info.data.message.fromUser.userName}</p>`;
+                        let userFace = `<img src="${info.data.message.fromUser.avatar}" />`;
+
+                        if (info.data.message.attachment) {
+                            sayText1 = `<img style="width:120px;height:auto;"  src="${info.data.message.attachment.address}"/>`;
+                        }
+                        htm = `<div class="sayLine"><div class="sayHeader" >${userFace}</div><div class="sayCon" >${fromUserName1}${sayText1}</div></div>`;
+                        $('.public .danmuArea').append(htm);
                         break;
 
+                    case'simpleClassDanmu': // 弹幕
 
-                    case 'pushHandout':
-
-// 图片
+                        let sayText = `<p>${info.data.message.content}</p>`;
+                        let fromUser = `<p>${info.data.message.fromUser.userName}</p>`;
+                        htm = `<div class="sayLine">${fromUser}${sayText}</div>`;
+                        $('.panle .danmuArea').append(htm);
                         break;
 
 
@@ -400,7 +414,7 @@
             }
         };
 
-        connection.connect({command: 'studentLogin', data: {userId:  parseInt( obj.uid), vid: obj.vid}});
+        connection.connect({command: 'studentLogin', data: {userId: parseInt(obj.uid), vid: obj.vid}});
     }
 
     littlePanle.prototype._liveTV_UI_templet_iframe_event = function (id, ifrid, event) {
