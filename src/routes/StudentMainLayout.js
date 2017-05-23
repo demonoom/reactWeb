@@ -6,7 +6,7 @@ import UserFace from '../components/UserCardModalComponents';
 import FloatButton  from '../components/FloatButton';
 
 import StudentPersonCenterMenu from '../components/layOut/StudentPersonCenterMenu';
-import PersonCenter  from '../components/PersonCenter';
+import StudentPersonCenter  from '../components/studentComponents/StudentPersonCenter';
 import moment from 'moment';
 import AntNestTabComponents from '../components/antNest/AntNestTabComponents';
 import AntGroupTabComponents from '../components/antGroup/AntGroupTabComponents';
@@ -337,8 +337,8 @@ const StudentMainLayout = React.createClass({
                 break;
             case 'personCenter':
                 //个人中心
-                middleComponent = <StudentPersonCenterMenu callbackParent={this.getTeacherResource}/>;
-                tabComponent = <PersonCenter params={this.state.personCenterParams}/>;
+                middleComponent = <StudentPersonCenterMenu callbackParent={this.getStudentResource}/>;
+                tabComponent = <StudentPersonCenter params={this.state.personCenterParams}/>;
 
                 break;
             case 'antNest':
