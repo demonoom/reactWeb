@@ -33,6 +33,7 @@ const AntCloudTableComponents = React.createClass({
             dateTime: '',
             tableData:[],
             getFileType:'myFile',
+            parentDirectoryId:0
         };
     },
     componentDidMount(){
@@ -48,7 +49,7 @@ const AntCloudTableComponents = React.createClass({
         }else{
             cloudTable.getUserChatGroupRootCloudFiles(this.state.ident, initPageNo);
         }
-        cloudTable.setState({"getFileType":fileType});
+        cloudTable.setState({"getFileType":fileType,parentDirectoryId:0});
     },
 
 
@@ -302,6 +303,7 @@ const AntCloudTableComponents = React.createClass({
         console.log(directoryObj.name);
         var initPageNo =1 ;
         var queryConditionJson="";
+        cloudTable.setState({"parentDirectoryId":directoryObj.id});
         cloudTable.listFiles(cloudTable.state.ident,directoryObj.id,'',initPageNo);
     },
     /**
@@ -413,12 +415,22 @@ const AntCloudTableComponents = React.createClass({
 
     },
 
+    showdelAllDirectoryConfirmModal(){
+
+    },
+
     render() {
-        const {loading, selectedRowKeys} = this.state;
+        const {loading, selectedRowKeys} = cloudTable.state;
         const rowSelection = {
             selectedRowKeys,
             onChange: this.onSelectChange,
         };
+        const hasSelected = selectedRowKeys.length > 0;
+        var delBtn = <div><Button type="primary" onClick={cloudTable.showdelAllDirectoryConfirmModal}
+                                  disabled={!hasSelected} loading={loading}
+        >批量删除</Button><span className="password_ts"
+                            style={{marginLeft: 8}}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span></div>;
+
         var tipTitle;
         if(cloudTable.state.getFileType=="myFile"){
             tipTitle="我的文件";
@@ -433,7 +445,10 @@ const AntCloudTableComponents = React.createClass({
             uploadButton=<Button value="uploadFile">上传文件</Button>;
         }
 
-        var returnParentToolBar = <div className="ant-tabs-right"><Button onClick={cloudTable.returnParent}><Icon type="left" /></Button></div>;
+        var returnParentToolBar;
+        if(cloudTable.state.parentDirectoryId!=0){
+            returnParentToolBar = <div className="ant-tabs-right"><Button onClick={cloudTable.returnParent}><Icon type="left" /></Button></div>;
+        }
 
         var toolbar = <div className="public—til—blue">
             {returnParentToolBar}
@@ -463,7 +478,10 @@ const AntCloudTableComponents = React.createClass({
                     </Modal>
                     {toolbar}
                     <div className="favorite_scroll">
-					<Table columns={columns} dataSource={cloudTable.state.tableData} pagination={{
+                        <div className="pl_del">
+                            {delBtn}
+                        </div>
+					<Table  rowSelection={rowSelection} columns={columns} dataSource={cloudTable.state.tableData} pagination={{
                         total: cloudTable.state.totalCount,
                         pageSize: getPageSize(),
                         onChange: cloudTable.pageOnChange
