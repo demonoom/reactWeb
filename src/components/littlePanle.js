@@ -284,23 +284,25 @@
         this.ifrliveid = 'live' + id;
         this.ifrpanleid = 'panle' + id;
         this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show ${obj.mode}">
-                <div class="header">
-                <h3 class="title">${ obj.title }</h3>
-                    <div class="little-tilte">
-                        <a class="back"><i class="anticon anticon-left "></i></a>
+                <div class="public—til—blue">
+					<div class="little-tilte">
+                    	<a class="back"><i class="anticon anticon-left "></i></a>
                     </div>
+                	<span>${ obj.title }</span>
+                    
                 </div>
                 <div class="content">
-                    <section class="live">
-                        <iframe  border=0 id="${this.ifrliveid}"  src="${ obj.url }"  />
+                    <section class="live" id="${this.ifrliveid}">
                     </section>
                     <section class="panle">
-                        <iframe  border=0 id="${this.ifrpanleid}"  src="${ obj.url }"  />
+                      <div  id="${this.ifrpanleid}" ></div>
+                      <div class="danmuArea" ></div>
                         <div class="floatBtn" >
                             <span class="lz" >礼赞</span>
                             <span class="dm">弹幕</span>
                         </div>
                     </section>
+                    <section class="public" ><div class="public_content" ></div><div class="danmuArea" ></div></section>
                     <section class="tab">
                         <ul>
                         <li>白板</li>
@@ -310,29 +312,117 @@
                 </div>
                 </div>`;
 
-        let styleObj = (refStyle, index, orderIndex) => {
+        let styleObj = (refStyle) => {
             refStyle.left = 0;
             refStyle.top = 0;
             refStyle.position = 'fixed';
             refStyle.width = '100%';
             refStyle.height = '100%';
-            refStyle.zIndex = 1;
+            refStyle.zIndex = 10;
             return refStyle
         }
 
-        this.htm = $(this.htm).css(styleObj(this.param.stylePage, this.param.stylePage.zIndex, this.param.orderIndex));
+        this.htm = $(this.htm).css(styleObj(this.param.stylePage));
         $(document.body).append(this.htm);
         this.el = $('#' + this.id);
         $(this.el).find('.back').on('click', this.closepanle.bind(this, this.id));
-        this.ifrel = $('#' + this.ifrid);
-        this.ifrel.on('load', this._liveTV_UI_templet_iframe_event.bind(this, this.id, this.ifrid));
+
+//
+//
+        videojs.options.flash.swf = "static/video-js.swf";
+        obj.param.ifrliveid = this.ifrliveid;
+        obj.param.ifrpanleid = this.ifrpanleid;
+        obj.param.warpid = this.id;
+
+        this.websocket(obj.param);
+
         return this;
+    }
+
+
+    littlePanle.prototype.websocket = function (obj) {
+        var connection = new ClazzConnection();
+        let __this = this;
+
+        connection.clazzWsListener = {
+
+            onError: function (errorMsg) {
+
+                //强制退出课堂
+                // alert(errorMsg);
+                __this.closepanle(obj.warpid);
+                alert('强制退出课堂');
+
+            }, onWarn: function (warnMsg) {
+
+                //显示warning
+                alert(warnMsg);
+            }, onMessage: function (info) {
+                let htm = '';
+                switch (info.command) {
+                    case 'pushHandout': // 图片
+                        htm = `<img src='${info.data.url}'/>`;
+                        $('#' + obj.ifrpanleid).html(htm);
+
+                        break;
+                    case'classOver':
+                        __this.closepanle(obj.warpid);
+                        alert('下课了!');
+                        break;
+                    case 'studentLogin': // 显示直播视频
+                        htm = ` <video   id="v${obj.ifrliveid}" class="video-js vjs-default-skin vjs-big-play-centered"
+                               controls preload="auto" poster="" width="300" height="300"
+                               data-setup='{}'>
+                                <source  src="${info.data.play_rtmp_url}"   type='rtmp/flv'  /></video>`;
+
+                        $('#' + obj.ifrpanleid).html(htm);
+
+
+                        var player = videojs('v' + obj.ifrliveid, {}, function onPlayerReady() {
+                              this.play();
+                            this.on('ended', function () {
+                                videojs.log('Awww...over so soon?!');
+                            });
+                        });
+
+
+                        break;
+                    case 'classDanmu':
+
+                        let sayText1 = `<p>${info.data.message.content}</p>`;
+                        let fromUserName1 = `<p>${info.data.message.fromUser.userName}</p>`;
+                        let userFace = `<img src="${info.data.message.fromUser.avatar}" />`;
+
+                        if (info.data.message.attachment) {
+                            sayText1 = `<img style="width:120px;height:auto;"  src="${info.data.message.attachment.address}"/>`;
+                        }
+                        htm = `<div class="sayLine"><div class="sayHeader" >${userFace}</div><div class="sayCon" >${fromUserName1}${sayText1}</div></div>`;
+                        $('.public .danmuArea').append(htm);
+                        break;
+
+                    case'simpleClassDanmu': // 弹幕
+
+                        let sayText = `<p>${info.data.message.content}</p>`;
+                        let fromUser = `<p>${info.data.message.fromUser.userName}</p>`;
+                        htm = `<div class="sayLine">${fromUser}${sayText}</div>`;
+                        $('.panle .danmuArea').append(htm);
+                        break;
+
+
+                }
+
+            }
+        };
+
+        connection.connect({command: 'studentLogin', data: {userId: parseInt(obj.uid), vid: obj.vid}});
     }
 
     littlePanle.prototype._liveTV_UI_templet_iframe_event = function (id, ifrid, event) {
 
-        event.target.contentWindow.phone = phone;
-        $("#" + id + ' h3').text(event.target.contentWindow.document.title);
+        this.websocket();
+
+        //  event.target.contentWindow.phone = phone;
+        //  $("#" + id + ' h3').text(event.target.contentWindow.document.title);
     }
 
 
