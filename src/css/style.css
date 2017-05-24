@@ -20,7 +20,7 @@ code, kbd, pre, samp{
     position: absolute;
     left: 0px;
 }
-div, a, span, input, button{
+div, a, span, input, button, textarea, marquee{
 	outline:none;
 }
 .font_gray_33{
@@ -2475,7 +2475,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 	float: right;
     width: 100%;
 }
-.group_talk ul li div.u-name{
+.group_talk ul li div.u-name, .public .sayLine p.u-name{
 	min-height: 21px;
     display: flex;
 }
@@ -2483,7 +2483,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 	flex-direction: row-reverse;
 }
     
-.group_talk ul li div.u-name span{
+.group_talk ul li div.u-name span, .public .sayLine p.u-name span{
 	display: inline-block;
     float: left;
     padding-left: 50px;
@@ -2495,7 +2495,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 	color:#8E97A6;
 	font-size:12px
 }
-.group_talk ul li div.talk-cont{
+.group_talk ul li div.talk-cont, .public .sayLine div.saycont{
 	display: flex;
     flex-direction: row;
 }
@@ -2506,10 +2506,10 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 .attention_img{
 	 float:left
 }
-.group_talk ul li span.name{
+.group_talk ul li span.name, .public .sayLine div.saycont .sayHeader{
 	height:38px;
 }
-.group_talk ul li span.name img, .attention_img img{
+.group_talk ul li span.name img, .attention_img img, .public .sayLine div.saycont .sayHeader img{
 	position:relative;
 	background:#none;
 	top:0;
@@ -2642,6 +2642,18 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 }
 .ant-menu-item-selected .icon_antgroup{
 	background-position: 0 -350px;
+}
+.icon_baiban{
+	background-position: 0 -400px;
+}
+.ant-menu-item-selected .icon_baiban{
+	background-position: 0 -450px;
+}
+.icon_gongpin{
+	background-position: 0 -500px;
+}
+.ant-menu-item-selected .icon_gongpin{
+	background-position: 0 -550px;
 }
 .person_13{
 	font-size:16px !important;
@@ -2816,7 +2828,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     height: 38px !important;
     width: auto !important;
 }
-.borderballoon_le{
+.borderballoon_le, .public .sayLine div.saycont .sayCon{
     background: #f2f2f2;
     border-radius: 4px;
     position: relative;
@@ -2832,7 +2844,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 	font-size:14px;
 	line-height:24px;
 }
-.borderballoon_le:after{
+.borderballoon_le:after, .public .sayLine div.saycont .sayCon:after{
     content: "";
     position: absolute;
     border-style: solid;
