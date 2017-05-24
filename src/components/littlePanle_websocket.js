@@ -1,7 +1,8 @@
 function ClazzConnection(host){
     this.clazzWsListener = null;
-    this.domain = host || '192.168.2.104'; // test  7888
-    this.WS_URL = "ws://"+this.domain+":8888/Excoord_PushServer/class";
+    this.domain = host || '192.168.1.34'; // test  7888
+	// this.domain = host || 'www.maaee.com:7888'; // test  7888
+    this.WS_URL = "ws://"+this.domain+"/Excoord_PushServer/class";
     //this.WS_URL = "ws://"+this.domain+":8888/Excoord_PushServer/class";
     this.ws = null;
     this.PING_COMMAND = "ping_0123456789_abcdefg";

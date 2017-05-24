@@ -1,7 +1,7 @@
 /**
  * Created by madapeng on 17-4-17.
  */
-
+import {doWebService} from '../WebServiceHelper';
 
 ;(function ($) {
 
@@ -362,8 +362,8 @@
 
                 //强制退出课堂
                 // alert(errorMsg);
-                __this.closepanle(obj.warpid);
-                alert('强制退出课堂');
+               // __this.closepanle(obj.warpid);
+              //  alert('强制退出课堂');
 
             }, onWarn: function (warnMsg) {
 
