@@ -1,15 +1,17 @@
 import React, {PropTypes} from 'react';
 import {Table, Button, Popover, message,Icon,Input,Modal,Row,Col} from 'antd';
+import ConfirmModal from '../ConfirmModal';
 import {doWebService} from '../../WebServiceHelper';
 import {getPageSize} from '../../utils/Const';
 import {getLocalTime} from '../../utils/utils';
+import {isEmpty} from '../../utils/Const';
 
 var columns = [{
     title: '标题',
     dataIndex: 'title',
 }, {
     title: '操作',
-    className: 'ant-table-selection-topic',
+    className: 'ant-table-selection-user',
     dataIndex: 'subjectOpt',
 },
 ];
@@ -33,7 +35,8 @@ const AntCloudTableComponents = React.createClass({
             dateTime: '',
             tableData:[],
             getFileType:'myFile',
-            parentDirectoryId:0
+            parentDirectoryId:-1,
+            mkdirModalVisible:false,
         };
     },
     componentDidMount(){
@@ -49,7 +52,7 @@ const AntCloudTableComponents = React.createClass({
         }else{
             cloudTable.getUserChatGroupRootCloudFiles(this.state.ident, initPageNo);
         }
-        cloudTable.setState({"getFileType":fileType,parentDirectoryId:0});
+        cloudTable.setState({"getFileType":fileType,parentDirectoryId:-1});
     },
 
 
@@ -99,28 +102,6 @@ const AntCloudTableComponents = React.createClass({
             },
             ];
         }
-    },
-
-    //点击查看时,进入题目列表
-    getSubjectData(e){
-        var target = e.target;
-        if (navigator.userAgent.indexOf("Chrome") > -1) {
-            target = e.currentTarget;
-        } else {
-            target = e.target;
-        }
-        data = [];
-        var value = target.value;
-        var valueArray = value.split("#");
-        var ident = valueArray[0];
-        var clazzId = valueArray[1];
-        var dateTime = valueArray[2];
-        var optSource = valueArray[3];
-        var pageNo = 1;
-        cloudTable.buildPageView(optSource);
-        cloudTable.getHomeworkSubjects(ident, clazzId, dateTime, pageNo);
-        cloudTable.setState({currentView: 'subjectDetailList', clazzId: clazzId, dateTime: dateTime});
-        cloudTable.props.onSearchClick();
     },
 
     //点击导航时，进入的我的文件列表
@@ -221,6 +202,12 @@ const AntCloudTableComponents = React.createClass({
         });
     },
 
+    /**
+     * 文件夹重命名
+     * @param operateUserId
+     * @param cloudFileId
+     * @param name
+     */
     renameCloudFile(operateUserId,cloudFileId,name){
         var param = {
             "method": 'renameCloudFile',
@@ -238,8 +225,10 @@ const AntCloudTableComponents = React.createClass({
                     }else{
                         cloudTable.getUserChatGroupRootCloudFiles(this.state.ident, initPageNo);
                     }
+                    message.success("重命名成功");
+                }else{
+                    message.error("重命名失败");
                 }
-                message.success("重命名成功");
                 cloudTable.setState({"reNameModalVisible":false});
             },
             onError: function (error) {
@@ -247,7 +236,10 @@ const AntCloudTableComponents = React.createClass({
             }
         });
     },
-
+    /**
+     * 构建表格的数据
+     * @param ret
+     */
     buildTableDataByResponse(ret){
         ret.response.forEach(function (e) {
             var key=e.id;
@@ -279,7 +271,7 @@ const AntCloudTableComponents = React.createClass({
                 </div>;
             }
             var subjectOpt = <div>
-                <Button type="button" value={key} text={key} onClick={cloudTable.editDirectoryName.bind(cloudTable,e)}
+                <Button type="button" className="score3_i" value={key} text={key} onClick={cloudTable.editDirectoryName.bind(cloudTable,e)}
                         icon="edit"></Button>
                 <Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
                         icon="delete"></Button>
@@ -308,6 +300,7 @@ const AntCloudTableComponents = React.createClass({
     },
     /**
      * 修改文件夹的名称（重命名）
+     * 显示修改操作的modal窗口
      * @param fileObject
      */
     editDirectoryName(fileObject){
@@ -321,59 +314,84 @@ const AntCloudTableComponents = React.createClass({
      * @param fileObject
      */
     deleteFileOrDirectory(fileObject){
-        console.log("key:"+fileObject.id);
+        console.log("del key:"+fileObject.id);
+        cloudTable.setState({"delCloudFileIds":fileObject.id});
+        cloudTable.refs.confirmModal.changeConfirmModalVisible(true);
     },
-
-    //点击作业列表中的查看时，进入题目列表
-    getHomeworkSubjects: function (ident, clazzId, dateTime, pageNo) {
+    /**
+     * 创建文件夹
+     * TODO 此处应该将返回的response直接追加到当前的table中
+     */
+    makeDirectory(){
         var param = {
-            "method": 'getHomeworkSubjects',
-            "ident": ident,
-            "clazzId": clazzId,
-            "dateTime": dateTime,
-            "pageNo": pageNo
+            "method": 'mkdir',
+            "operateUserId": cloudTable.state.ident,
+            "parentCloudFileId":cloudTable.state.parentDirectoryId,
+            "name":cloudTable.state.editDirectoryName
         };
-
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                subjectList = new Array();
-                var response = ret.response;
-                response.forEach(function (e) {
-                    var id = e.id;
-                    var popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>' + e.content + '<hr/><span class="answer_til answer_til_2">答案：</span>' + e.answer + '</div>';
-                    var content = <Popover placement="rightTop"
-                                           content={<article id='contentHtml' className='content Popover_width'
-                                                             dangerouslySetInnerHTML={{__html: popOverContent}}></article>}>
-                        <article id='contentHtml' className='content Popover_width'
-                                 dangerouslySetInnerHTML={{__html: e.content}}></article>
-                    </Popover>;
-                    var subjectType = e.subjectType;
-                    var typeName = e.typeName;
-                    var score = e.score;
-                    data.push({
-                        key: id,
-                        subjectContent: content,
-                        subjectType: typeName,
-                        subjectScore: score,
-                    });
-                });
-                var pager = ret.pager;
-                cloudTable.setState({totalCount: parseInt(pager.rsCount)});
-                cloudTable.setState({currentView: 'subjectList',"tableData":data});
+                if(ret.success==true && ret.msg=="调用成功" && isEmpty(ret.response)==false){
+                    var initPageNo = 1;
+                    if(cloudTable.state.getFileType=="myFile"){
+                        cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo);
+                    }else{
+                        cloudTable.getUserChatGroupRootCloudFiles(this.state.ident, initPageNo);
+                    }
+                    message.success("文件夹创建成功");
+                }else{
+                    message.error("文件夹创建失败");
+                }
+                cloudTable.setState({"mkdirModalVisible":false});
             },
             onError: function (error) {
                 message.error(error);
             }
-
         });
     },
 
+    /**
+     * 删除文件夹或文件
+     * 支持批量操作，多个id用逗号分割
+     */
+    deleteCloudFiles(){
+        var param = {
+            "method": 'deleteCloudFiles',
+            "operateUserId": cloudTable.state.ident,
+            "cloudFileIds":cloudTable.state.delCloudFileIds,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if(ret.success==true && ret.msg=="调用成功" && ret.response==true){
+                    var initPageNo = 1;
+                    if(cloudTable.state.getFileType=="myFile"){
+                        cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo);
+                    }else{
+                        cloudTable.getUserChatGroupRootCloudFiles(this.state.ident, initPageNo);
+                    }
+                    message.success("删除成功");
+                }else{
+                    message.error("删除成功");
+                }
+                cloudTable.refs.confirmModal.changeConfirmModalVisible(false);
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 表格分页响应函数
+     * 需要注意该表格承载了不同的数据，需要根据情况进行分页
+     * @param pageNo
+     */
     pageOnChange(pageNo) {
         var currentView = cloudTable.state.currentView;
         if (currentView == "homeWorkList") {
             cloudTable.getUserRootCloudFiles(sessionStorage.getItem("ident"), pageNo);
         } else {
-            cloudTable.getHomeworkSubjects(sessionStorage.getItem("ident"), cloudTable.state.clazzId, cloudTable.state.dateTime, pageNo)
+
         }
 
         this.setState({
@@ -409,6 +427,26 @@ const AntCloudTableComponents = React.createClass({
     },
 
     /**
+     * 显示新建文件夹的窗口
+     */
+    showMkdirModal(){
+        cloudTable.setState({"mkdirModalVisible":true,"editDirectoryName":''});
+    },
+
+    /**
+     * 关闭新建文件夹的窗口
+     */
+    mkdirModalHandleCancel(){
+        cloudTable.setState({"mkdirModalVisible":false});
+    },
+    /**
+     * 关闭删除确认的弹窗
+     */
+    closeConfirmModal() {
+        cloudTable.refs.confirmModal.changeConfirmModalVisible(false);
+    },
+
+    /**
      * 返回上级目录
      */
     returnParent(){
@@ -441,18 +479,21 @@ const AntCloudTableComponents = React.createClass({
         var uploadButton;
         //判断是否是超级管理员
         if(cloudTable.state.currentUserIsSuperManager){
-            newButton=<Button value="newDirectory"  className="antnest_talk">新建文件夹</Button>;
+            newButton=<Button value="newDirectory"  className="antnest_talk" onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;
             uploadButton=<Button value="uploadFile">上传文件</Button>;
         }
 
         var returnParentToolBar;
-        if(cloudTable.state.parentDirectoryId!=0){
+        if(cloudTable.state.parentDirectoryId!=-1){
             returnParentToolBar = <div className="ant-tabs-right"><Button onClick={cloudTable.returnParent}><Icon type="left" /></Button></div>;
         }
 
         var toolbar = <div className="public—til—blue">
             {returnParentToolBar}
             <div className="talk_ant_btn1">
+			<div className="pl_del">
+                            {delBtn}
+                        </div>
                 {newButton}
                 {uploadButton}
             </div>
@@ -476,11 +517,30 @@ const AntCloudTableComponents = React.createClass({
                             </Row>
                         </div>
                     </Modal>
+                    <Modal title="新建文件夹"
+                           visible={cloudTable.state.mkdirModalVisible}
+                           transitionName=""  //禁用modal的动画效果
+                           maskClosable={false} //设置不允许点击蒙层关闭
+                           onOk={cloudTable.makeDirectory}
+                           onCancel={cloudTable.mkdirModalHandleCancel}
+                    >
+                        <div>
+                            <Row>
+                                <Col span={3} className="right_look">名称：</Col>
+                                <Col span={20}>
+                                    <Input value={cloudTable.state.editDirectoryName} onChange={cloudTable.directoryNameInputChange}/>
+                                </Col>
+                            </Row>
+                        </div>
+                    </Modal>
+                    <ConfirmModal ref="confirmModal"
+                                  title="确定要删除选中的文件/文件夹"
+                                  onConfirmModalCancel={this.closeConfirmModal}
+                                  onConfirmModalOK={this.deleteCloudFiles}
+                    ></ConfirmModal>
                     {toolbar}
                     <div className="favorite_scroll">
-                        <div className="pl_del">
-                            {delBtn}
-                        </div>
+                        
 					<Table  rowSelection={rowSelection} columns={columns} dataSource={cloudTable.state.tableData} pagination={{
                         total: cloudTable.state.totalCount,
                         pageSize: getPageSize(),

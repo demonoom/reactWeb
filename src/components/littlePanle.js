@@ -1,7 +1,7 @@
 /**
  * Created by madapeng on 17-4-17.
  */
-
+ 
 
 ;(function ($) {
 
@@ -336,7 +336,7 @@
         }
 
         this.htm = $(this.htm).css(styleObj(this.param.stylePage));
-        $(document.body).append(this.htm);
+     $('.ant-layout-operation').append(this.htm);
         this.el = $('#' + this.id);
         $(this.el).find('.back').on('click', this.closepanle.bind(this, this.id));
         $(this.el).find('.liveTV.tab li').on('click', this.changePanel);
@@ -458,10 +458,14 @@
 
             onError: function (errorMsg) {
                 //强制退出课堂
+<<<<<<< HEAD
                 debugger
                 alert('强制退出课堂');
                 //  __this.closepanle(obj.warpid);
 
+=======
+ 
+>>>>>>> 8bd8047299665bcd2840310d012bdd56fb20cb89
             }, onWarn: function (warnMsg) {
 
                 //显示warning

@@ -5,6 +5,10 @@
 	background:#E5F2FE;
 	color: #2db7f5;
 }
+.liveTV{
+	top: 54px !important;
+    height: calc(100% - 54px) !important;
+}
 .liveTV .content{
 	display:flex;
 	display:-webkit-flex;
