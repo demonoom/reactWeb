@@ -1542,3 +1542,9 @@ video::-webkit-media-text-track-display {
 .multi .video-js{
 	height: calc(100% - 30px);
 }
+.live .video-js .vjs-progress-control{
+	display:none !important
+}
+.live .video-js .vjs-time-control{
+	margin-left:100px;
+}

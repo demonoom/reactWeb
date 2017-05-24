@@ -22,9 +22,20 @@
 	width:300px;
 	margin:0;
 	padding:0;
-	background: #999;
+	background: #191919;
     height: 100%;
     border-radius: 0;
+	position: relative;
+}
+.liveTV .live .video-js{
+	position: absolute;
+	top:50%;
+	left:50%;
+	transform:translate(-50%, -50%);
+	-ms-transform:translate(-50%, -50%); /* IE 9 */
+	-moz-transform:translate(-50%, -50%); /* Firefox */
+	-webkit-transform:translate(-50%, -50%); /* Safari 和 Chrome */
+	-o-transform:translate(-50%, -50%);
 }
 .liveTV .cont{
 	width:100%;
@@ -45,6 +56,7 @@
 	position: absolute;
     right: 30px;
     bottom: 60px;
+	display:none
 }
 .liveTV .tab{
 	width:80px;
@@ -54,13 +66,14 @@
     top: 0 !important;
     height: 100% !important;
 	border-right: 1px solid #dfe0e3;
+	z-index:2
 }
 .liveTV .tab ul{
 	width:100%
 }
 .liveTV .tab ul li{
 	height: 25px;
-    margin-left: 18px !important;
+    margin-left: 26px !important;
     width: 28px;
     padding-left: 0 !important;
     float: left;
@@ -69,28 +82,28 @@
 	cursor:pointer
 }
 .liveTV .tab ul li div.tan{
-	display:none;
+	display:none
 }
 
 .liveTV .tab ul li:hover div.tan{
 	background: #000;
     color: #fff;
     position: absolute;
-    left: -50px;
+    left: 34px;
     top: 0px;
     height: 25px;
     line-height: 25px;
-    display: inline-block;
+    display: block;
     border-radius: 4px;
     padding: 0 8px;
-    z-index: 1000;
+    z-index: 3000;
     font-size: 14px;
-    float: left;
+    width: 50px;
 }
 .liveTV .right_cont{
 	position: absolute;
     height: 100%;
-    left: 80px;
+    left: 81px;
     margin-left: 0 !important;
     width: calc(100% - 81px);
 }
@@ -110,13 +123,39 @@
 }
 .showDanmuArea{
     position: absolute;
-    bottom: 80px;
+    bottom: 50px;
     width: 100%;
     height: 100px;
 }
-.sayLine{
+.panle .showDanmuArea{
+    height: 140px;
+	overflow: hidden;
+}
+.public .showDanmuArea{
+	height:calc(100% - 50px);
+	overflow-y: auto;
+    overflow-x: hidden;
+}
+.panle .sayLine{
 	display: inline-block;
     margin-right: 30px;
+    color: #333;
+    font-size: 15px;
+    font-weight: normal;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin: 0 20px;
+    text-align: left;
+    background: #e8e8e8;
+}
+.public .sayLine{
+	display: block;
+    color: #333;
+    font-size: 15px;
+    font-weight: normal;
+    padding: 4px 8px;
+    margin: 5px 20px;
+	text-align: left;
 }
 .sayLine p{
 	display: inline-block;
@@ -128,14 +167,27 @@
     width: 100%;
 	background: #000;
 	padding: 8px 20px;
+	text-align:left;
+	font-size: 15px;
+	left:0
 }
-.inpputArea textarea{
+.inputArea textarea{
 	height: 34px;
     border-radius: 4px;
     background: #575757;
+    line-height: 34px;
+    text-indent: 8px;
+    color: #eee;
+    border: none;
+}
+.textarea_1{
+	 width: calc(100% - 100px);
+}
+.textarea_2{
+	 width: calc(100% - 164px);
 }
 .inputArea button{
-	color: #fff;
+	color: #f9f9f9;
     background: #575757;
     border: none;
     border-radius: 4px;
@@ -143,4 +195,21 @@
     line-height: 34px;
     float: right;
     padding: 0 12px;
+	cursor: pointer;
+	margin-left: 12px;
+}
+.inputArea button:hover{
+	background:#7b7b7b
+}
+.liveTV .panle iframe{
+	height:calc(100% - 50px) !important;
+	z-index:2
+}
+.marquee{
+　　white-space: nowrap;
+	overflow: -webkit-marquee;
+    -webkit-marquee-style: scroll;
+    -webkit-marquee-repetition: infinite;
+    -webkit-marquee-direction: left;
+    -webkit-marquee-speed:normal;
 }
