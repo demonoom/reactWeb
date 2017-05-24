@@ -2,7 +2,17 @@
  * Created by madapeng on 17-4-8.
  */
 export function getLocalTime(nS) {
-    return new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/, ' ');
+    var da = new Date(parseInt(nS));
+    var year = da.getFullYear();
+    var month = da.getMonth()+1;
+    var date = da.getDate();
+    var hour = da.getHours()+":";
+    var minutes = da.getMinutes()+":";
+    var sencond = da.getSeconds();
+    var dayStr = [year,month,date].join('-');
+    var dateStr = dayStr +" "+ hour + minutes+sencond;
+    return dateStr;
+    // return new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/, ' ');
 }
 
 export function formatYMD(nS) {

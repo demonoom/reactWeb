@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
-import {Table, Button, Popover, message,Icon,Input,Modal,Row,Col} from 'antd';
+import {Table, Button, Progress, message,Icon,Input,Modal,Row,Col} from 'antd';
 import ConfirmModal from '../ConfirmModal';
+import CloudFileUploadComponents from './CloudFileUploadComponents';
 import {doWebService} from '../../WebServiceHelper';
 import {getPageSize} from '../../utils/Const';
 import {getLocalTime} from '../../utils/utils';
@@ -18,6 +19,7 @@ var columns = [{
 
 var data = [];
 var subjectList;
+var uploadFileList=[];
 var cloudTable;
 const AntCloudTableComponents = React.createClass({
     getInitialState() {
@@ -36,7 +38,10 @@ const AntCloudTableComponents = React.createClass({
             tableData:[],
             getFileType:'myFile',
             parentDirectoryId:-1,
+            currentDirectoryId:-1,
             mkdirModalVisible:false,
+            uploadPercent:0,
+            progressState:'none',
         };
     },
     componentDidMount(){
@@ -173,6 +178,7 @@ const AntCloudTableComponents = React.createClass({
                 var response = ret.response;
                 if(response){
                     cloudTable.buildTableDataByResponse(ret);
+                    cloudTable.setState({"currentDirectoryId":cloudFileId});
                 }
             },
             onError: function (error) {
@@ -241,7 +247,15 @@ const AntCloudTableComponents = React.createClass({
      * @param ret
      */
     buildTableDataByResponse(ret){
+        var i=0;
         ret.response.forEach(function (e) {
+            if(i==0){
+                if(e.parent){
+                    var parentDirectoryId = e.parent.parentId;
+                    cloudTable.setState({"parentDirectoryId":parentDirectoryId});
+                }
+            }
+            i++
             var key=e.id;
             var createTime =e.createTime;
             var createUid = e.createUid;
@@ -275,6 +289,10 @@ const AntCloudTableComponents = React.createClass({
                         icon="edit"></Button>
                 <Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
                         icon="delete"></Button>
+                <Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
+                        icon="share-alt"></Button>
+                <Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
+                        icon="export"></Button>
             </div>;
             data.push({
                 key: key,
@@ -295,8 +313,8 @@ const AntCloudTableComponents = React.createClass({
         console.log(directoryObj.name);
         var initPageNo =1 ;
         var queryConditionJson="";
-        cloudTable.setState({"parentDirectoryId":directoryObj.id});
-        cloudTable.listFiles(cloudTable.state.ident,directoryObj.id,'',initPageNo);
+        cloudTable.setState({"parentDirectoryId":directoryObj.parentId,"currentDirectoryId":directoryObj.id});
+        cloudTable.listFiles(cloudTable.state.ident,directoryObj.id,queryConditionJson,initPageNo);
     },
     /**
      * 修改文件夹的名称（重命名）
@@ -326,7 +344,7 @@ const AntCloudTableComponents = React.createClass({
         var param = {
             "method": 'mkdir',
             "operateUserId": cloudTable.state.ident,
-            "parentCloudFileId":cloudTable.state.parentDirectoryId,
+            "parentCloudFileId":cloudTable.state.currentDirectoryId,
             "name":cloudTable.state.editDirectoryName
         };
         doWebService(JSON.stringify(param), {
@@ -371,7 +389,7 @@ const AntCloudTableComponents = React.createClass({
                     }
                     message.success("删除成功");
                 }else{
-                    message.error("删除成功");
+                    message.error("删除失败");
                 }
                 cloudTable.refs.confirmModal.changeConfirmModalVisible(false);
             },
@@ -447,10 +465,136 @@ const AntCloudTableComponents = React.createClass({
     },
 
     /**
+     * 关闭上传文件弹窗
+     */
+    cloudFileUploadModalHandleCancel(){
+        cloudTable.setState({"cloudFileUploadModalVisible":false});
+    },
+
+    //点击保存按钮，向蚁盘指定文件夹上传文件
+    uploadFile(){
+        if(uploadFileList.length==0){
+            message.warning("请选择上传的文件,谢谢！");
+        }else{
+            var formData = new FormData();
+            formData.append("file",uploadFileList[0]);
+            formData.append("name",uploadFileList[0].name);
+            $.ajax({
+                type: "POST",
+                url: "http://101.201.45.125:8890/Excoord_Upload_Server/file/upload",
+                enctype: 'multipart/form-data',
+                data: formData,
+                // 告诉jQuery不要去处理发送的数据
+                processData : false,
+                // 告诉jQuery不要去设置Content-Type请求头
+                contentType : false,
+                xhr: function(){        //这是关键  获取原生的xhr对象  做以前做的所有事情
+                    var xhr = jQuery.ajaxSettings.xhr();
+                    xhr.upload.onload = function (){
+                        cloudTable.setState({progressState:'none'});
+                    }
+                    xhr.upload.onprogress = function (ev) {
+                        if(ev.lengthComputable) {
+                            var percent = 100 * ev.loaded/ev.total;
+                            cloudTable.setState({uploadPercent:Math.round(percent),progressState:'block'});
+                        }
+                    }
+                    return xhr;
+                },
+                success: function (responseStr) {
+                    if(responseStr!=""){
+                        var fileUrl=responseStr;
+                        //TODO 调用本地上传文件的方法
+                        cloudTable.createCloudFile(fileUrl,uploadFileList[0]);
+                        //cloudTable.setState({ cloudFileUploadModalVisible: false });
+                        //TODO 上传成功后，重新获取数据
+                        //cloudTable.props.courseUploadCallBack();
+                    }
+                },
+                error : function(responseStr) {
+                    cloudTable.setState({ cloudFileUploadModalVisible: false });
+                }
+            });
+
+        }
+    },
+    /**
+     * 处理上传组件已上传的文件列表
+     * @param fileList
+     */
+    handleFileSubmit(fileList){
+        if(fileList==null || fileList.length==0){
+            uploadFileList.splice(0,uploadFileList.length);
+        }
+        for(var i=0;i<fileList.length;i++){
+            var fileJson = fileList[i];
+            var fileObj = fileJson.fileObj;
+            uploadFileList.push(fileObj[0]);
+        }
+    },
+    /**
+     * 显示文件上传的窗口
+     */
+    showUploadFileModal() {
+        uploadFileList.splice(0,uploadFileList.length);
+        cloudTable.setState({
+            cloudFileUploadModalVisible: true,uploadPercent:0,progressState:'none'
+        });
+        //弹出文件上传窗口时，初始化窗口数据
+        cloudTable.refs.fileUploadCom.initFileUploadPage();
+    },
+
+    /**
+     * 向指定文件夹上传文件
+     */
+    createCloudFile(fileUrl,fileObj){
+        var param = {
+            "method": 'createCloudFile',
+            "operateUserId": cloudTable.state.ident,
+            "parentCloudFileId":cloudTable.state.currentDirectoryId,
+            "name":fileObj.name,
+            "path":fileUrl,
+            "length":fileObj.size
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if(ret.success==true && ret.msg=="调用成功" && isEmpty(ret.response)==false){
+                    var initPageNo = 1;
+                    //TODO 这里还需要判断是根目录还是子文件夹，根据不同情况，进入不同的目录
+                    if(cloudTable.state.getFileType=="myFile"){
+                        cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo);
+                    }else{
+                        cloudTable.getUserChatGroupRootCloudFiles(this.state.ident, initPageNo);
+                    }
+                    message.success("文件上传成功");
+                }else{
+                    message.error("文件上传失败");
+                }
+                cloudTable.setState({ cloudFileUploadModalVisible: false });
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
      * 返回上级目录
      */
     returnParent(){
+        var initPageNo=1;
+        if(cloudTable.state.getFileType=="myFile"){
+            if(cloudTable.state.parentDirectoryId==0){
+                cloudTable.setState({"parentDirectoryId":-1,"currentDirectoryId":0});
+                cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo);
+            }else{
+                var queryConditionJson="";
 
+                cloudTable.listFiles(cloudTable.state.ident,cloudTable.state.parentDirectoryId,queryConditionJson,initPageNo);
+            }
+        }else{
+            cloudTable.getUserChatGroupRootCloudFiles(this.state.ident, initPageNo);
+        }
     },
 
     showdelAllDirectoryConfirmModal(){
@@ -477,10 +621,14 @@ const AntCloudTableComponents = React.createClass({
         }
         var newButton;
         var uploadButton;
+        var setManagerButton;
+        var setUserButton;
         //判断是否是超级管理员
         if(cloudTable.state.currentUserIsSuperManager){
             newButton=<Button value="newDirectory"  className="antnest_talk" onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;
-            uploadButton=<Button value="uploadFile">上传文件</Button>;
+            uploadButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
+            setManagerButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>分配管理者</Button>;
+            setUserButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>分配使用者</Button>;
         }
 
         var returnParentToolBar;
@@ -496,9 +644,13 @@ const AntCloudTableComponents = React.createClass({
                         </div>
                 {newButton}
                 {uploadButton}
+                {setManagerButton}
+                {setUserButton}
             </div>
             {tipTitle}
         </div>;
+        //根据该状态值，来决定上传进度条是否显示
+        var progressState = cloudTable.state.progressState;
         return (
                 <div>
                     <Modal title="重命名"
@@ -538,6 +690,39 @@ const AntCloudTableComponents = React.createClass({
                                   onConfirmModalCancel={this.closeConfirmModal}
                                   onConfirmModalOK={this.deleteCloudFiles}
                     ></ConfirmModal>
+
+                    <Modal
+                        visible={cloudTable.state.cloudFileUploadModalVisible}
+                        title="上传文件"
+                        className="modol_width"
+                        maskClosable={false} //设置不允许点击蒙层关闭
+                        onCancel={cloudTable.cloudFileUploadModalHandleCancel}
+                        transitionName=""  //禁用modal的动画效果
+                        footer={[
+                            <div>
+                                <Button type="primary" htmlType="submit" className="login-form-button" onClick={cloudTable.uploadFile}>
+                                    保存
+                                </Button>
+                                <Button type="ghost" htmlType="reset" className="login-form-button" onClick={cloudTable.cloudFileUploadModalHandleCancel}>
+                                    取消
+                                </Button>
+                            </div>
+                        ]}
+                    >
+                        <Row>
+                            <Col span={4}>上传文件：</Col>
+                            <Col span={20}>
+                                <div>
+                                    <CloudFileUploadComponents ref="fileUploadCom" fatherState={cloudTable.state.cloudFileUploadModalVisible} callBackParent={cloudTable.handleFileSubmit}/>
+                                </div>
+                                <div style={{display:progressState}}>
+                                    <Progress percent={cloudTable.state.uploadPercent} width={80} strokeWidth={4} />
+                                </div>
+                            </Col>
+
+                        </Row>
+                    </Modal>
+
                     {toolbar}
                     <div className="favorite_scroll">
                         
