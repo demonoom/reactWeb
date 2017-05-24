@@ -453,6 +453,9 @@ const AntCloudTableComponents = React.createClass({
         var toolbar = <div className="public—til—blue">
             {returnParentToolBar}
             <div className="talk_ant_btn1">
+			<div className="pl_del">
+                            {delBtn}
+                        </div>
                 {newButton}
                 {uploadButton}
             </div>
@@ -478,9 +481,7 @@ const AntCloudTableComponents = React.createClass({
                     </Modal>
                     {toolbar}
                     <div className="favorite_scroll">
-                        <div className="pl_del">
-                            {delBtn}
-                        </div>
+                        
 					<Table  rowSelection={rowSelection} columns={columns} dataSource={cloudTable.state.tableData} pagination={{
                         total: cloudTable.state.totalCount,
                         pageSize: getPageSize(),
