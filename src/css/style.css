@@ -2475,41 +2475,41 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 	float: right;
     width: 100%;
 }
-.group_talk ul li div.u-name, .public .sayLine p.u-name{
+.group_talk ul li div.u-name, .public .sayLine.left p.u-name{
 	min-height: 21px;
     display: flex;
 }
-.group_talk ul li.right div.u-name{
+.group_talk ul li.right div.u-name, .public .sayLine.right p.u-name{
 	flex-direction: row-reverse;
 }
     
-.group_talk ul li div.u-name span, .public .sayLine p.u-name span{
+.group_talk ul li div.u-name span, .public .sayLine.left p.u-name span{
 	display: inline-block;
     float: left;
     padding-left: 50px;
 	color:#8E97A6;
 	font-size:12px
 }
-.group_talk ul li.right div.u-name span{
+.group_talk ul li.right div.u-name span, .public .sayLine.right p.u-name span{
 	padding-right: 50px;
 	color:#8E97A6;
 	font-size:12px
 }
-.group_talk ul li div.talk-cont, .public .sayLine div.saycont{
+.group_talk ul li div.talk-cont, .public .sayLine.left div.saycont{
 	display: flex;
     flex-direction: row;
 }
-.group_talk ul li.right div.talk-cont{
+.group_talk ul li.right div.talk-cont, .public .sayLine.right div.saycont{
 	display: flex;
     flex-direction: row-reverse;
 }
 .attention_img{
 	 float:left
 }
-.group_talk ul li span.name, .public .sayLine div.saycont .sayHeader{
+.group_talk ul li span.name, .public .sayLine.left div.saycont .sayHeader{
 	height:38px;
 }
-.group_talk ul li span.name img, .attention_img img, .public .sayLine div.saycont .sayHeader img{
+.group_talk ul li span.name img, .attention_img img, .public .sayLine.left div.saycont .sayHeader img{
 	position:relative;
 	background:#none;
 	top:0;
@@ -2797,7 +2797,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 .person_attention table tr td:first-child, .person_attention table tr th:first-child{
 	width:400px;
 }
-.borderballoon {
+.borderballoon, .public .sayLine.right div.saycont .sayCon{
     background: #40baff;
     border-radius: 4px;
     position: relative;
@@ -2813,6 +2813,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     flex-direction: row-reverse;
 	font-size:14px;
 	line-height:24px;
+	margin-left: 0;
 }
 .borderballoon:after{
     content: "";
@@ -2823,12 +2824,18 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     top: 8px;
     right: -12px;
 }
-.borderballoon img{
+
+.borderballoon img, .public .sayLine.left .sayCon img, .public .sayLine.right .sayCon img{
     padding: 0 5px;
     height: 38px !important;
     width: auto !important;
 }
-.borderballoon_le, .public .sayLine div.saycont .sayCon{
+.public .sayLine.left .sayCon img, .public .sayLine.right .sayCon img{
+    padding: 0 5px;
+    height: 120px !important;
+    width: auto !important;
+}
+.borderballoon_le, .public .sayLine.left div.saycont .sayCon{
     background: #f2f2f2;
     border-radius: 4px;
     position: relative;
@@ -2844,7 +2851,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 	font-size:14px;
 	line-height:24px;
 }
-.borderballoon_le:after, .public .sayLine div.saycont .sayCon:after{
+.borderballoon_le:after{
     content: "";
     position: absolute;
     border-style: solid;
@@ -2852,6 +2859,24 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     border-width: 6px;
     top: 8px;
     left:-12px;
+}
+.public .sayLine.left .sayCon:after{
+    content: "";
+    position: absolute;
+    border-style: solid;
+    border-color: transparent #f2f2f2 transparent transparent;
+    border-width: 6px;
+    top: 8px;
+    left:-12px;
+}
+.public .sayLine.right .sayCon:after{
+    content: "";
+    position: absolute;
+    border-style: solid;
+    border-color:  transparent transparent transparent #40baff;
+    border-width: 6px;
+    top: 8px;
+    right: -12px !important;
 }
 .level_list_pa{
 	padding:15px 25px !important;
