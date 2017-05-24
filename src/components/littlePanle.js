@@ -282,46 +282,55 @@
         let id = UUID(8, 16);
         this.id = id;
         this.ifrliveid = 'live' + id;
-        this.ifrpanleid = 'panle' + id;
+        this.pptIframeName = 'panle' + id;
+        this.showTuiPing = 'showTuiPing';
         this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show ${obj.mode}">
-                <div class="public—til—blue">
-					<div class="little-tilte">
-                    	<a class="back"><i class="anticon anticon-left "></i></a>
-                    </div>
-                	<span>${ obj.title }</span>
-                    
-                </div>
                 <div class="content">
-                    <section class="live" id="${this.ifrliveid}">
-                    </section>
-<div class="activity">
-                    <section class="panle">
-                      <div  id="${this.ifrpanleid}" ></div>
-                      <div class="showDanmuArea " ></div>
-                        <div class="floatBtn" >
-                            <span class="lz"  >礼赞</span>
-                            <span class="dm"  >弹幕</span>
-                        </div>
-                        <div class="inputShowDanmuArea" >
-                            <textarea placeholder="输入弹幕内容！" ></textarea>
-                            <button  ref="sendPanleText" >发送弹幕</button>
-                        </div>
-                    </section>
-                    <section class="public" >
-                        <div class="showDanmuArea" ></div>
-                        <div class="inputShowDanmuArea" >
-                            <textarea placeholder="输入弹幕内容！" ></textarea>
-                            <button ref="sendPublicImg" >发图片</button>
-                            <button ref="sendPublicText"  >发公屏</button>
-                        </div>
-                    </section>
-  </div>
                     <section class="liveTV tab">
                         <ul>
                         <li class="panleBtn" ref="panleBtn" ><i class="icon_menu_ios icon_yichao1"></i>白板</li>
                         <li class="publicBtn" ref="publicBtn"  ><i class="icon_menu_ios icon_yichao1"></i>公屏</li>
                         </ul>
                     </section>
+					<div class="right_cont">
+						<div class="public—til—blue">
+							<div class="little-tilte">
+                    			<a class="back"><i class="anticon anticon-left "></i></a>
+                    		</div>
+                			<span>${ obj.title }</span>
+               			 </div>
+						 <div class="favorite_scroll">
+						 	<section class="live" id="${this.ifrliveid}">
+                   			</section>
+							<div class="activity">
+								<section class="panle">
+									<iframe  id="${this.pptIframeName}"  name="${this.pptIframeName}"  />
+									<div  id="${this.pptIframeName}" class="${this.pptIframeName}" ></div>
+										  <div id="${this.ifrpanleid}" class="panle_book"></div>
+										  <div class="showDanmuArea" ></div>
+											<div class="floatBtn" >
+												<span class="lz"  ><img src="../../src/components/images/lizan.png" width="50" height="50" /></span>
+												<span class="dm"  ><img src="../../src/components/images/danmu.png" width="50" height="50" /></span>
+											</div>
+											<div class="inputArea" >
+												<textarea placeholder="输入弹幕内容！" ></textarea>
+												<button  ref="sendPanleText" >发送弹幕</button>
+											</div>
+								</section>
+								<section class="public" >
+									<div class="showDanmuArea" ></div>
+									<div class="inputArea" >
+										<textarea placeholder="输入弹幕内容！" ></textarea>
+										<button ref="sendPublicImg" >发图片</button>
+										<button ref="sendPublicText"  >发公屏</button>
+									</div>
+								</section>
+  							</div>
+						 </div>
+					</div>
+                    
+
+                    
                 </div>
                 </div>`;
 
@@ -336,17 +345,18 @@
         }
 
         this.htm = $(this.htm).css(styleObj(this.param.stylePage));
-        $(document.body).append(this.htm);
+        $('.ant-layout-operation').append(this.htm);
         this.el = $('#' + this.id);
         $(this.el).find('.back').on('click', this.closepanle.bind(this, this.id));
         $(this.el).find('.liveTV.tab li').on('click', this.changePanel);
-        $(this.el).find('.activity .panel button,.activity .public button').on('click', this.sendContent.bind(this, this.param));
+        $(this.el).find('.activity .inputArea button').on('click', this.sendContent.bind(this, this.param));
 //
 //
 //
         videojs.options.flash.swf = "static/video-js.swf";
         obj.param.ifrliveid = this.ifrliveid;
-        obj.param.ifrpanleid = this.ifrpanleid;
+        obj.param.pptIframeName = this.pptIframeName;
+        obj.param.showTuiPing = this.showTuiPing;
         obj.param.warpid = this.id;
 
         this.websocket(obj.param);
@@ -355,90 +365,99 @@
 
     // 发送内容
     littlePanle.prototype.sendContent = function (param, event) {
-        debugger
+
 
         event = event || window.event;
         let el = $(event.target);
 
         let con = {}
+        let user = eval("(" + sessionStorage.getItem('loginUser') + ")");
 
         switch ($(el).attr('ref')) {
             case 'sendPanleText':
 
                 con = {command: "simpleClassDanmu", data: {content: "天气可以"}};
-
-                connection.connect({command: 'studentLogin', data: {userId: parseInt(obj.uid), vid: obj.vid}});
-
+                LP.LiveTVSocket.send(con);
+                $('.liveTV.tab li').removeClass('on');
+                $(el).addClass('on');
+                return;
                 break;
             case 'sendPublicText':
                 con = {
-                    command: "classDanmu",
-                    data: {
-                        message: {
-                            command: "message",
-                            content: "哦哦哦哦哦哦哦",
-                            createTime: new Date().getTime(),
-                            state: 2,
-                            toId: param.vid,
-                            toType: 3,
-                            uuid: UUID(32, 16), // 自定义
+                    "command": "message",
+                    "data": {
+                        "message": {
+                            "command": "message",
+                            "content": "图图",
+                            "createTime": new Date().getTime(),
+                            fromUser: user,
+                            "state": 2,
+                            "toId": param.param.vid,
+                            "toType": 3,
+                            "uuid": UUID(32, 16),
                         }
                     }
                 };
 
-
+                debugger
+                ms.send(con);
+                $('.liveTV.tab li').removeClass('on');
+                $(el).addClass('on');
                 break;
             case 'sendPublicImg':
 
                 con = {
-                    command: "classDanmu",
-                    data: {
-                        message: {
-                            attachment: {
-                                "address": "http://192.168.2.104:8080/upload4/2017-05-23/17/04d1577a-4c19-44e1-9607-e9d79012915e.webp",
-                                "createTime": 1495532832083,
-                                "type": 1
+                    "command": "message",
+                    "data": {
+                        "message": {
+                            "attachment": {
+                                "address": "http://192.168.2.104:8080/upload4/2017-05-24/11/79a4b8c2-a152-4638-bb8a-f2d50e67d200.webp",
+                                createTime: new Date().getTime(),
+                                type: 1,
+                                user: user,
                             },
-                            command: "message",
-                            content: "哦哦哦哦哦哦哦",
-                            createTime: new Date().getTime(),
-                            state: 2,
-                            toId: param.vid,
+                            "command": "message",
+                            "content": "",
+                            "createTime": new Date().getTime(),
+                            fromUser: user,
+                            "state": 2,
+                            "toId": param.param.vid,
                             toType: 3,
-                            uuid: UUID(32, 16), // 自定义
+                            "uuid": UUID(32, 16),
                         }
                     }
                 };
-
+                debugger
+                ms.send(con);
+                $('.liveTV.tab li').removeClass('on');
+                $(el).addClass('on');
 
                 break;
 
         }
 
-        $('.liveTV.tab li').removeClass('on');
-        $(el).addClass('on');
 
     }
 
 
     // 白板公屏切换
     littlePanle.prototype.changePanel = function (event) {
-        debugger
+
 
         event = event || window.event;
         let el = event.target;
-        if(el.nodeName!='li'){
+        if (el.nodeName != 'li') {
             el = $(el.parentNode);
         }
 
         switch ($(el).attr('ref')) {
             case 'panleBtn':
-                $('section.public').css({visibility: 'hidden'});
-                $('section.panle').css({visibility: 'visible'});
+                $('section.public').css({display: 'none'});
+                $('section.panle').css({display: 'block'});
                 break;
             case 'publicBtn':
-                $('section.panle').css({visibility: 'hidden'});
-                $('section.public').css({visibility: 'visible'});
+                $('section.panle').css({display: 'none'});
+                $('section.public').css({display: 'block'});
                 break;
 
         }
@@ -450,15 +469,14 @@
 
     littlePanle.prototype.websocket = function (obj) {
         var connection = new ClazzConnection();
+        LP.LiveTVSocket = connection;
         let __this = this;
 
         connection.clazzWsListener = {
 
             onError: function (errorMsg) {
                 //强制退出课堂
-
-                alert('强制退出课堂');
-                //  __this.closepanle(obj.warpid);
+                __this.closepanle(obj.id)
 
             }, onWarn: function (warnMsg) {
 
@@ -470,7 +488,8 @@
                 switch (info.command) {
                     case 'pushHandout': // 图片
                         htm = `<img src='${info.data.url}'/>`;
-                        $('#' + obj.ifrpanleid).html(htm);
+                        $('#' + obj.param.showTuiPing).html(htm).css({'z-index':1});
+                        $('#' + obj.param.pptIframeName).css({'z-index':0});
 
                         break;
                     case'classOver':
@@ -482,7 +501,7 @@
                                controls preload="auto" poster="" width="300" height="300"
                                data-setup='{}'>
                                 <source  src="${info.data.play_rtmp_url}"   type='rtmp/flv'  /></video>`;
-                        $('#' + obj.ifrpanleid).html(htm);
+                        $('#' + obj.ifrliveid).html(htm);
                         var player = videojs('v' + obj.ifrliveid, {}, function onPlayerReady() {
                             this.play();
                             this.on('ended', function () {
@@ -502,7 +521,6 @@
                         htm = `<div class="sayLine"><div class="sayHeader" >${userFace}</div><div class="sayCon" >${fromUserName1}${sayText1}</div></div>`;
                         $('.public .showDanmuArea').append(htm);
                         break;
-
                     case'simpleClassDanmu': // 弹幕
 
                         let sayText = `<p>${info.data.message.content}</p>`;
@@ -511,6 +529,9 @@
                         $('.panle .showDanmuArea').append(htm);
                         break;
 
+                    default :
+                        __this.parsePPT.call(__this, obj,info );
+                        break;
 
                 }
 
@@ -518,6 +539,86 @@
         };
 
         connection.connect({command: 'studentLogin', data: {userId: parseInt(obj.uid), vid: obj.vid}});
+    }
+
+
+    littlePanle.prototype.parsePPT = function (param, info) {
+
+        let _self = this;
+        let command = info.command;
+        let pptIframeName = param.pptIframeName;
+        let showTuiPing = param.showTuiPing;
+
+
+
+        //课堂ppt操作
+        if (command == "class_ppt") {
+            var control = info.data.control;
+
+
+            //1:play 2:pre 3:next 4:click 5:close
+            switch (control) {
+                case 1:
+                    playPPT( _self._setProxyInfo(  info.data.html ));
+                    break;
+                case 2:
+                    pptPre();
+                    break;
+                case 3:
+                    pptNext();
+                    break;
+                case 4:
+                    pptClick();
+                    break;
+                case 5:
+                    closePPT();
+                    break;
+                case 6:
+                    pptPreAni();
+                    break;
+            }
+        }
+
+        //检测ppt是否同步
+
+        if (command == "pptCheckPage") {
+            var current = info.data.currentPage;
+            pptCheckPage(current);
+        }
+
+
+        function playPPT(html) {
+            $("#" + pptIframeName).attr("src", html + "?v=1").css({'z-index':1});
+            $('#' + showTuiPing).css({'z-index':0});
+        }
+
+
+        function closePPT() {
+
+        }
+
+
+        function pptPre() {
+            window.frames[pptIframeName].window.pre();
+        }
+
+        function pptPreAni() {
+            window.frames[pptIframeName].window.preAni();
+        }
+
+        function pptNext() {
+            window.frames[pptIframeName].window.next();
+        }
+
+        function pptClick() {
+            window.frames[pptIframeName].window.click();
+        }
+
+
+        function pptCheckPage(currentPage) {
+            window.frames[pptIframeName].window.checkSlide(currentPage);
+        }
+
     }
 
 
@@ -571,7 +672,7 @@
     littlePanle.prototype._setProxyInfo = function (url) {
 
         if (!url) return '';
-
+debugger
 
         if (/www\.maaee\.com\:80/img.test(url)) {
             return '/proxy' + url.split('www.maaee.com:80')[1];

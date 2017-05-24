@@ -12,7 +12,7 @@ var columns = [{
     dataIndex: 'title',
 }, {
     title: '操作',
-    className: 'ant-table-selection-topic',
+    className: 'ant-table-selection-user',
     dataIndex: 'subjectOpt',
 },
 ];
@@ -277,7 +277,7 @@ const AntCloudTableComponents = React.createClass({
                 </div>;
             }
             var subjectOpt = <div>
-                <Button type="button" value={key} text={key} onClick={cloudTable.editDirectoryName.bind(cloudTable,e)}
+                <Button type="button" className="score3_i" value={key} text={key} onClick={cloudTable.editDirectoryName.bind(cloudTable,e)}
                         icon="edit"></Button>
                 <Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
                         icon="delete"></Button>
@@ -623,6 +623,9 @@ const AntCloudTableComponents = React.createClass({
         var toolbar = <div className="public—til—blue">
             {returnParentToolBar}
             <div className="talk_ant_btn1">
+			<div className="pl_del">
+                            {delBtn}
+                        </div>
                 {newButton}
                 {uploadButton}
             </div>
@@ -704,9 +707,7 @@ const AntCloudTableComponents = React.createClass({
 
                     {toolbar}
                     <div className="favorite_scroll">
-                        <div className="pl_del">
-                            {delBtn}
-                        </div>
+                        
 					<Table  rowSelection={rowSelection} columns={columns} dataSource={cloudTable.state.tableData} pagination={{
                         total: cloudTable.state.totalCount,
                         pageSize: getPageSize(),
