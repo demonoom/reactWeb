@@ -302,14 +302,14 @@
                             <span class="lz"  >礼赞</span>
                             <span class="dm"  >弹幕</span>
                         </div>
-                        <div class="inputShowDanmuArea" >
+                        <div class="inputArea" >
                             <textarea placeholder="输入弹幕内容！" ></textarea>
                             <button  ref="sendPanleText" >发送弹幕</button>
                         </div>
                     </section>
                     <section class="public" >
                         <div class="showDanmuArea" ></div>
-                        <div class="inputShowDanmuArea" >
+                        <div class="inputArea" >
                             <textarea placeholder="输入弹幕内容！" ></textarea>
                             <button ref="sendPublicImg" >发图片</button>
                             <button ref="sendPublicText"  >发公屏</button>
@@ -340,7 +340,7 @@
         this.el = $('#' + this.id);
         $(this.el).find('.back').on('click', this.closepanle.bind(this, this.id));
         $(this.el).find('.liveTV.tab li').on('click', this.changePanel);
-        $(this.el).find('.activity .panel button,.activity .public button').on('click', this.sendContent.bind(this, this.param));
+        $(this.el).find('.activity .inputArea button').on('click', this.sendContent.bind(this, this.param));
 //
 //
 //
@@ -355,7 +355,7 @@
 
     // 发送内容
     littlePanle.prototype.sendContent = function (param, event) {
-        debugger
+
 
         event = event || window.event;
         let el = $(event.target);
@@ -367,7 +367,6 @@
 
                 con = {command: "simpleClassDanmu", data: {content: "天气可以"}};
 
-                connection.connect({command: 'studentLogin', data: {userId: parseInt(obj.uid), vid: obj.vid}});
 
                 break;
             case 'sendPublicText':
@@ -379,13 +378,12 @@
                             content: "哦哦哦哦哦哦哦",
                             createTime: new Date().getTime(),
                             state: 2,
-                            toId: param.vid,
+                            toId: param.param.vid,
                             toType: 3,
-                            uuid: UUID(32, 16), // 自定义
+                            uuid: UUID(32, 16),
                         }
                     }
                 };
-
 
                 break;
             case 'sendPublicImg':
@@ -395,17 +393,17 @@
                     data: {
                         message: {
                             attachment: {
-                                "address": "http://192.168.2.104:8080/upload4/2017-05-23/17/04d1577a-4c19-44e1-9607-e9d79012915e.webp",
-                                "createTime": 1495532832083,
-                                "type": 1
+                                address: "http://192.168.2.104:8080/upload4/2017-05-23/17/04d1577a-4c19-44e1-9607-e9d79012915e.webp",
+                                createTime: 1495532832083,
+                                type: 1
                             },
                             command: "message",
                             content: "哦哦哦哦哦哦哦",
                             createTime: new Date().getTime(),
                             state: 2,
-                            toId: param.vid,
+                            toId: param.param.vid,
                             toType: 3,
-                            uuid: UUID(32, 16), // 自定义
+                            uuid: UUID(32, 16),
                         }
                     }
                 };
@@ -415,6 +413,9 @@
 
         }
 
+        debugger
+        LP.LiveTVSocket.send(con);
+
         $('.liveTV.tab li').removeClass('on');
         $(el).addClass('on');
 
@@ -423,11 +424,11 @@
 
     // 白板公屏切换
     littlePanle.prototype.changePanel = function (event) {
-        debugger
+
 
         event = event || window.event;
         let el = event.target;
-        if(el.nodeName!='li'){
+        if (el.nodeName != 'li') {
             el = $(el.parentNode);
         }
 
@@ -450,13 +451,14 @@
 
     littlePanle.prototype.websocket = function (obj) {
         var connection = new ClazzConnection();
+        LP.LiveTVSocket = connection;
         let __this = this;
 
         connection.clazzWsListener = {
 
             onError: function (errorMsg) {
                 //强制退出课堂
-
+                debugger
                 alert('强制退出课堂');
                 //  __this.closepanle(obj.warpid);
 

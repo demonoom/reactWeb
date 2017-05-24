@@ -11,22 +11,23 @@ function ClazzConnection(host){
     this.connected = false;
     this.connecting = false;
     this.connect = function(loginProtocol){
-        debugger
+
         var connection = this;
         connection.connecting = true;
         connection.loginProtocol = loginProtocol;
         connection.ws=new WebSocket(connection.WS_URL);
         //监听消息
         connection.ws.onmessage = function(event) {
+            debugger
             connection.connecting = false;
             //如果服务器在发送ping命令,则赶紧回复PONG命令
             if(event.data == connection.PING_COMMAND){
                 connection.send(connection.PONG_COMMAND);
-                console.log("收到服务器的 ping , 给服务器回复 pong...");
+             //   console.log("收到服务器的 ping , 给服务器回复 pong...");
                 return;
             }
             if(event.data == connection.PONG_COMMAND){
-                console.log("收到服务器的 pong");
+             //   console.log("收到服务器的 pong");
                 return;
             }
             if(connection.clazzWsListener != null){
@@ -62,14 +63,14 @@ function ClazzConnection(host){
             connection.connecting = false;
             connection.connected = false;
             connection.reconnect();
-            console.log("收到服务器的 onclose .");
+         //   console.log("收到服务器的 onclose .");
         };
         // 打开WebSocket
         connection.ws.onopen = function(event) {
             connection.connecting = false;
             connection.connected = true;
             connection.send(loginProtocol);
-            console.log("连接到服务器 ....");
+         //   console.log("连接到服务器 ....");
         };
         connection.ws.onerror =function(event){
             connection.connecting = false;
@@ -90,6 +91,7 @@ function ClazzConnection(host){
     };
 
     this.send = function(jsonProtocal){
+        debugger
         var connection = this;
         if(!connection.connecting && connection.connected){
             connection.ws.send(JSON.stringify(jsonProtocal));
