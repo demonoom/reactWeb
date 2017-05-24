@@ -284,44 +284,50 @@
         this.ifrliveid = 'live' + id;
         this.ifrpanleid = 'panle' + id;
         this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show ${obj.mode}">
-                <div class="public—til—blue">
-					<div class="little-tilte">
-                    	<a class="back"><i class="anticon anticon-left "></i></a>
-                    </div>
-                	<span>${ obj.title }</span>
-                    
-                </div>
                 <div class="content">
-                    <section class="live" id="${this.ifrliveid}">
-                    </section>
-<div class="activity">
-                    <section class="panle">
-                      <div  id="${this.ifrpanleid}" ></div>
-                      <div class="showDanmuArea " ></div>
-                        <div class="floatBtn" >
-                            <span class="lz"  >礼赞</span>
-                            <span class="dm"  >弹幕</span>
-                        </div>
-                        <div class="inputArea" >
-                            <textarea placeholder="输入弹幕内容！" ></textarea>
-                            <button  ref="sendPanleText" >发送弹幕</button>
-                        </div>
-                    </section>
-                    <section class="public" >
-                        <div class="showDanmuArea" ></div>
-                        <div class="inputArea" >
-                            <textarea placeholder="输入弹幕内容！" ></textarea>
-                            <button ref="sendPublicImg" >发图片</button>
-                            <button ref="sendPublicText"  >发公屏</button>
-                        </div>
-                    </section>
-  </div>
-                    <section class="liveTV tab">
+					<section class="liveTV tab">
                         <ul>
                         <li class="panleBtn" ref="panleBtn" ><i class="icon_menu_ios icon_yichao1"></i>白板</li>
                         <li class="publicBtn" ref="publicBtn"  ><i class="icon_menu_ios icon_yichao1"></i>公屏</li>
                         </ul>
                     </section>
+					<div class="right_cont">
+						<div class="public—til—blue">
+							<div class="little-tilte">
+                    			<a class="back"><i class="anticon anticon-left "></i></a>
+                    		</div>
+                			<span>${ obj.title }</span>
+               			 </div>
+						 <div class="favorite_scroll">
+						 	<section class="live" id="${this.ifrliveid}">
+                   			</section>
+							<div class="activity">
+								<section class="panle">
+								  <div id="${this.ifrpanleid}" class="panle_book"></div>
+								  <div class="showDanmuArea" ></div>
+									<div class="floatBtn" >
+										<span class="lz"  ><img src="../../src/components/images/lizan.png" width="50" height="50" /></span>
+										<span class="dm"  ><img src="../../src/components/images/danmu.png" width="50" height="50" /></span>
+									</div>
+									<div class="inputArea" >
+										<textarea placeholder="输入弹幕内容！" ></textarea>
+										<button  ref="sendPanleText" >发送弹幕</button>
+									</div>
+								</section>
+								<section class="public" >
+									<div class="showDanmuArea" ></div>
+									<div class="inputArea" >
+										<textarea placeholder="输入弹幕内容！" ></textarea>
+										<button ref="sendPublicImg" >发图片</button>
+										<button ref="sendPublicText"  >发公屏</button>
+									</div>
+								</section>
+  							</div>
+						 </div>
+					</div>
+                    
+
+                    
                 </div>
                 </div>`;
 
