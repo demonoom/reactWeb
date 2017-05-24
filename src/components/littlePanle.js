@@ -1,7 +1,7 @@
 /**
  * Created by madapeng on 17-4-17.
  */
- 
+
 
 ;(function ($) {
 
@@ -336,7 +336,7 @@
         }
 
         this.htm = $(this.htm).css(styleObj(this.param.stylePage));
-     $('.ant-layout-operation').append(this.htm);
+        $('.ant-layout-operation').append(this.htm);
         this.el = $('#' + this.id);
         $(this.el).find('.back').on('click', this.closepanle.bind(this, this.id));
         $(this.el).find('.liveTV.tab li').on('click', this.changePanel);
@@ -366,58 +366,66 @@
             case 'sendPanleText':
 
                 con = {command: "simpleClassDanmu", data: {content: "天气可以"}};
-
-
+                LP.LiveTVSocket.send(con);
+                $('.liveTV.tab li').removeClass('on');
+                $(el).addClass('on');
+                return;
                 break;
             case 'sendPublicText':
                 con = {
-                    command: "classDanmu",
-                    data: {
-                        message: {
-                            command: "message",
-                            content: "哦哦哦哦哦哦哦",
-                            createTime: new Date().getTime(),
-                            state: 2,
-                            toId: param.param.vid,
-                            toType: 3,
-                            uuid: UUID(32, 16),
+                    "command": "message",
+                    "data": {
+                        "message": {
+                            "command": "message",
+                            "content": "图图",
+                            "createTime": new Date().getTime(),
+                            fromUser: sessionStorage.getItem('loginUser'),
+                            "state": 2,
+                            "toId": param.param.vid,
+                            "toType": 3,
+                            "uuid": UUID(32, 16),
                         }
                     }
                 };
 
+                debugger
+                ms.send(con);
+                $('.liveTV.tab li').removeClass('on');
+                $(el).addClass('on');
                 break;
             case 'sendPublicImg':
 
                 con = {
-                    command: "classDanmu",
-                    data: {
-                        message: {
-                            attachment: {
-                                address: "http://192.168.2.104:8080/upload4/2017-05-23/17/04d1577a-4c19-44e1-9607-e9d79012915e.webp",
-                                createTime: 1495532832083,
-                                type: 1
+                    "command": "message",
+                    "data": {
+                        "message": {
+                            "attachment": {
+                                "address": "http://192.168.2.104:8080/upload4/2017-05-24/11/79a4b8c2-a152-4638-bb8a-f2d50e67d200.webp",
+                                createTime: new Date().getTime(),
+                                type: 1,
+                                user: sessionStorage.getItem('loginUser'),
                             },
-                            command: "message",
-                            content: "哦哦哦哦哦哦哦",
-                            createTime: new Date().getTime(),
-                            state: 2,
-                            toId: param.param.vid,
+                            "command": "message",
+                            "content": "",
+                            "createTime": new Date().getTime(),
+                            fromUser: sessionStorage.getItem('loginUser'),
+                            "state": 2,
+                            "toId": param.param.vid,
                             toType: 3,
-                            uuid: UUID(32, 16),
+                            "uuid": UUID(32, 16),
                         }
                     }
                 };
-
+                debugger
+                ms.send(con);
+                $('.liveTV.tab li').removeClass('on');
+                $(el).addClass('on');
 
                 break;
 
         }
 
-        debugger
-        LP.LiveTVSocket.send(con);
 
-        $('.liveTV.tab li').removeClass('on');
-        $(el).addClass('on');
 
     }
 
@@ -458,14 +466,8 @@
 
             onError: function (errorMsg) {
                 //强制退出课堂
-<<<<<<< HEAD
-                debugger
-                alert('强制退出课堂');
-                //  __this.closepanle(obj.warpid);
+                __this.closepanle(obj.id)
 
-=======
- 
->>>>>>> 8bd8047299665bcd2840310d012bdd56fb20cb89
             }, onWarn: function (warnMsg) {
 
                 //显示warning

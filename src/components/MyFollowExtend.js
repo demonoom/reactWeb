@@ -257,7 +257,7 @@ const MyFollowExtend = React.createClass({
      */
     turnToMessagePage(user){
         var userId = user.colUid;
-        ms = new MsgConnection();
+
         messageList.splice(0);
         var loginUserId = sessionStorage.getItem("ident");
         var machineId = sessionStorage.getItem("machineId");
@@ -365,7 +365,7 @@ const MyFollowExtend = React.createClass({
     },
 
     turnToChatGroupMessagePage(groupObj){
-        ms = new MsgConnection();
+
         messageList.splice(0);
         var loginUserId = sessionStorage.getItem("ident");
         var machineId = sessionStorage.getItem("machineId");

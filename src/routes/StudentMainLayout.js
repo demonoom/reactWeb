@@ -29,7 +29,7 @@ const store = createStore(function () {
 
 });
 //消息通信js
-var ms;
+window.ms = null;
 
 const StudentMainLayout = React.createClass({
     proxyObj: null,
@@ -118,7 +118,7 @@ const StudentMainLayout = React.createClass({
         if (userIdent == null || userIdent == "") {
             location.hash = "login";
         }
-        ms = new MsgConnection();
+
         var loginUserId = sessionStorage.getItem("ident");
         var machineId = sessionStorage.getItem("machineId");
         var password = sessionStorage.getItem("loginPassword");
@@ -132,6 +132,7 @@ const StudentMainLayout = React.createClass({
                 "version": 0.1
             }
         };
+        ms =  new MsgConnection();
         ms.connect(pro);
     },
     // 不用了
