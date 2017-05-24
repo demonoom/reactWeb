@@ -281,6 +281,10 @@ const AntCloudTableComponents = React.createClass({
                         icon="edit"></Button>
                 <Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
                         icon="delete"></Button>
+                <Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
+                        icon="share-alt"></Button>
+                <Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
+                        icon="export"></Button>
             </div>;
             data.push({
                 key: key,
@@ -609,10 +613,14 @@ const AntCloudTableComponents = React.createClass({
         }
         var newButton;
         var uploadButton;
+        var setManagerButton;
+        var setUserButton;
         //判断是否是超级管理员
         if(cloudTable.state.currentUserIsSuperManager){
             newButton=<Button value="newDirectory"  className="antnest_talk" onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;
             uploadButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
+            setManagerButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>分配管理者</Button>;
+            setUserButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>分配使用者</Button>;
         }
 
         var returnParentToolBar;
@@ -628,6 +636,8 @@ const AntCloudTableComponents = React.createClass({
                         </div>
                 {newButton}
                 {uploadButton}
+                {setManagerButton}
+                {setUserButton}
             </div>
             {tipTitle}
         </div>;
