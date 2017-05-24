@@ -20,7 +20,12 @@
 	padding:0;
 	background:#000
 }
-.liveTV .panle{
+.liveTV .cont{
+	width:100%;
+	position: relative;
+	height:100%
+}
+.liveTV .panle, .liveTV .public{
 	width:100%;
 	text-align:center;
 	position: relative;
@@ -38,4 +43,39 @@
 .liveTV .tab{
 	width:80px;
 	background:#eeeff4
+}
+.liveTV .tab ul{
+	width:100%
+}
+.liveTV .tab ul li{
+	height: 25px;
+    margin-left: 18px !important;
+    width: 28px;
+    padding-left: 0 !important;
+    float: left;
+	margin-top:28px;
+	position:relative;
+	cursor:pointer
+}
+.liveTV .tab ul li div.tan{
+	display:none;
+}
+
+.liveTV .tab ul li:hover div.tan{
+	background: #000;
+    color: #fff;
+    position: absolute;
+    left: -50px;
+    top: 0px;
+    height: 25px;
+    line-height: 25px;
+    display: inline-block;
+    border-radius: 4px;
+    padding: 0 8px;
+    z-index: 1000;
+    font-size: 14px;
+    float: left;
+}
+.sendst{
+	margin:0 auto;
 }

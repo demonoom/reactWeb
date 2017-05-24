@@ -294,6 +294,7 @@
                 <div class="content">
                     <section class="live" id="${this.ifrliveid}">
                     </section>
+<div class="activity">
                     <section class="panle">
                       <div  id="${this.ifrpanleid}" ></div>
                       <div class="showDanmuArea " ></div>
@@ -303,21 +304,22 @@
                         </div>
                         <div class="inputShowDanmuArea" >
                             <textarea placeholder="输入弹幕内容！" ></textarea>
-                            <button id="sendWhitePanel" >发送弹幕</button>
+                            <button  ref="sendPanleText" >发送弹幕</button>
                         </div>
                     </section>
                     <section class="public" >
-                        <div class="danmuArea" ></div>
+                        <div class="showDanmuArea" ></div>
                         <div class="inputShowDanmuArea" >
                             <textarea placeholder="输入弹幕内容！" ></textarea>
-                            <button id="sendWhitePanel" >发公屏</button>
-                            <button id="sendWhitePanel" >发图片</button>
+                            <button ref="sendPublicImg" >发图片</button>
+                            <button ref="sendPublicText"  >发公屏</button>
                         </div>
                     </section>
+  </div>
                     <section class="liveTV tab">
                         <ul>
-                        <li class="panleBtn" >白板</li>
-                        <li class="publicBtn" >公屏</li>
+                        <li class="panleBtn" ref="panleBtn" ><i class="icon_menu_ios icon_yichao1"></i>白板</li>
+                        <li class="publicBtn" ref="publicBtn"  ><i class="icon_menu_ios icon_yichao1"></i>公屏</li>
                         </ul>
                     </section>
                 </div>
@@ -338,6 +340,7 @@
         this.el = $('#' + this.id);
         $(this.el).find('.back').on('click', this.closepanle.bind(this, this.id));
         $(this.el).find('.liveTV.tab li').on('click', this.changePanel);
+        $(this.el).find('.activity .panel button,.activity .public button').on('click', this.sendContent.bind(this, this.param));
 //
 //
 //
@@ -350,15 +353,85 @@
         return this;
     }
 
+    // 发送内容
+    littlePanle.prototype.sendContent = function (param, event) {
+        debugger
+
+        event = event || window.event;
+        let el = $(event.target);
+
+        let con = {}
+
+        switch ($(el).attr('ref')) {
+            case 'sendPanleText':
+
+                con = {command: "simpleClassDanmu", data: {content: "天气可以"}};
+
+                connection.connect({command: 'studentLogin', data: {userId: parseInt(obj.uid), vid: obj.vid}});
+
+                break;
+            case 'sendPublicText':
+                con = {
+                    command: "classDanmu",
+                    data: {
+                        message: {
+                            command: "message",
+                            content: "哦哦哦哦哦哦哦",
+                            createTime: new Date().getTime(),
+                            state: 2,
+                            toId: param.vid,
+                            toType: 3,
+                            uuid: UUID(32, 16), // 自定义
+                        }
+                    }
+                };
+
+
+                break;
+            case 'sendPublicImg':
+
+                con = {
+                    command: "classDanmu",
+                    data: {
+                        message: {
+                            attachment: {
+                                "address": "http://192.168.2.104:8080/upload4/2017-05-23/17/04d1577a-4c19-44e1-9607-e9d79012915e.webp",
+                                "createTime": 1495532832083,
+                                "type": 1
+                            },
+                            command: "message",
+                            content: "哦哦哦哦哦哦哦",
+                            createTime: new Date().getTime(),
+                            state: 2,
+                            toId: param.vid,
+                            toType: 3,
+                            uuid: UUID(32, 16), // 自定义
+                        }
+                    }
+                };
+
+
+                break;
+
+        }
+
+        $('.liveTV.tab li').removeClass('on');
+        $(el).addClass('on');
+
+    }
+
 
     // 白板公屏切换
     littlePanle.prototype.changePanel = function (event) {
         debugger
 
         event = event || window.event;
-        let el = $(event.target);
+        let el = event.target;
+        if(el.nodeName!='li'){
+            el = $(el.parentNode);
+        }
 
-        switch ($(el).attr('class')) {
+        switch ($(el).attr('ref')) {
             case 'panleBtn':
                 $('section.public').css({visibility: 'hidden'});
                 $('section.panle').css({visibility: 'visible'});
@@ -383,15 +456,16 @@
 
             onError: function (errorMsg) {
                 //强制退出课堂
-                debugger
+
                 alert('强制退出课堂');
-                __this.closepanle(obj.warpid);
+                //  __this.closepanle(obj.warpid);
 
             }, onWarn: function (warnMsg) {
 
                 //显示warning
                 alert(warnMsg);
             }, onMessage: function (info) {
+
                 let htm = '';
                 switch (info.command) {
                     case 'pushHandout': // 图片
@@ -426,7 +500,7 @@
                             sayText1 = `<img style="width:120px;height:auto;"  src="${info.data.message.attachment.address}"/>`;
                         }
                         htm = `<div class="sayLine"><div class="sayHeader" >${userFace}</div><div class="sayCon" >${fromUserName1}${sayText1}</div></div>`;
-                        $('.public .danmuArea').append(htm);
+                        $('.public .showDanmuArea').append(htm);
                         break;
 
                     case'simpleClassDanmu': // 弹幕
@@ -434,7 +508,7 @@
                         let sayText = `<p>${info.data.message.content}</p>`;
                         let fromUser = `<p>${info.data.message.fromUser.userName}</p>`;
                         htm = `<div class="sayLine">${fromUser}${sayText}</div>`;
-                        $('.panle .danmuArea').append(htm);
+                        $('.panle .showDanmuArea').append(htm);
                         break;
 
 
@@ -444,14 +518,6 @@
         };
 
         connection.connect({command: 'studentLogin', data: {userId: parseInt(obj.uid), vid: obj.vid}});
-    }
-
-    littlePanle.prototype._liveTV_UI_templet_iframe_event = function (id, ifrid, event) {
-
-        this.websocket();
-
-        //  event.target.contentWindow.phone = phone;
-        //  $("#" + id + ' h3').text(event.target.contentWindow.document.title);
     }
 
 
@@ -751,7 +817,6 @@ var phone = {
         //  let obj = eval('(' + ref + ')');
 
         if (!this[obj.method]) {
-            console.error(':::::::::::iframe inter method not implment.:::::::::::ref:');
             console.error(ref);
             return;
         }

@@ -1,7 +1,7 @@
 function ClazzConnection(host){
     this.clazzWsListener = null;
-    this.domain = host || '192.168.2.104'; // test  7888
-    this.WS_URL = "ws://"+this.domain+":8888/Excoord_PushServer/class";
+    this.domain = host || '192.168.2.104:8888';
+    this.WS_URL = "ws://"+this.domain+"/Excoord_PushServer/class";
     //this.WS_URL = "ws://"+this.domain+":8888/Excoord_PushServer/class";
     this.ws = null;
     this.PING_COMMAND = "ping_0123456789_abcdefg";
@@ -10,18 +10,14 @@ function ClazzConnection(host){
     this.loginProtocol = null;
     this.connected = false;
     this.connecting = false;
-        this.connect = function(loginProtocol){
+    this.connect = function(loginProtocol){
+        debugger
         var connection = this;
         connection.connecting = true;
-        connection.loginProtocol = loginProtocol ;
-        if (!window.WebSocket) {
-            alert("Your browser does not support Web Socket.");
-            return;
-        }
+        connection.loginProtocol = loginProtocol;
         connection.ws=new WebSocket(connection.WS_URL);
         //监听消息
         connection.ws.onmessage = function(event) {
-
             connection.connecting = false;
             //如果服务器在发送ping命令,则赶紧回复PONG命令
             if(event.data == connection.PING_COMMAND){
@@ -61,7 +57,7 @@ function ClazzConnection(host){
                 }
             }
         };
-        // 打开WebSocket 
+        // 打开WebSocket
         connection.ws.onclose = function(event) {
             connection.connecting = false;
             connection.connected = false;
@@ -81,7 +77,7 @@ function ClazzConnection(host){
         };
     };
 
-    //每次重连间隔为10秒
+    //每次重连间隔为20秒
     this.reconnect = function(){
         var connection = this;
         if(!connection.classOver && connection.loginProtocol != null && !connection.connected && !connection.connecting){
@@ -104,17 +100,11 @@ function ClazzConnection(host){
     this.heartBeat = function(){
         var connection = this;
         var pingCommand = connection.PING_COMMAND;
-        this.t = setTimeout(function (){
+        setTimeout(function (){
             connection.send(pingCommand);
             console.log("客户端发送ping命令 , 希望服务器回答pong...");
             connection.heartBeat();
         }, 1000*10);
-    };
-
-    this.close = function(){
-        window.clearTimeout(this.t);
-        this.ws.close();
-
     };
 
     //此对象一创建就开始心跳检测
