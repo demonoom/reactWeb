@@ -247,7 +247,15 @@ const AntCloudTableComponents = React.createClass({
      * @param ret
      */
     buildTableDataByResponse(ret){
+        var i=0;
         ret.response.forEach(function (e) {
+            if(i==0){
+                if(e.parent){
+                    var parentDirectoryId = e.parent.parentId;
+                    cloudTable.setState({"parentDirectoryId":parentDirectoryId});
+                }
+            }
+            i++
             var key=e.id;
             var createTime =e.createTime;
             var createUid = e.createUid;
