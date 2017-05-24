@@ -20,7 +20,7 @@ function ClazzConnection(host){
         connection.ws=new WebSocket(connection.WS_URL);
         //监听消息
         connection.ws.onmessage = function(event) {
-            debugger
+
             connection.connecting = false;
             //如果服务器在发送ping命令,则赶紧回复PONG命令
             if(event.data == connection.PING_COMMAND){
@@ -83,7 +83,7 @@ function ClazzConnection(host){
 
 
     this.send = function(jsonProtocal){
-        debugger
+
         if(!this.connecting && this.connected){
             this.ws.send(JSON.stringify(jsonProtocal));
         }
