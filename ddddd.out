@@ -1,0 +1,43 @@
+{
+    "command": "classDanmu",
+    "data": {
+        "message": {
+            "command": "message",
+         -   "content": "哦哦哦哦哦哦哦",
+        -    "createTime": 1495533194596,
+            "state": 2,
+         -   "toId": vid,
+            "toType": 3,
+         -   "uuid": "1d637837-719b-4832-8af5-63b88190c42c", // 自定义
+        }
+    }
+}
+
+
+
+{"command":"simpleClassDanmu","data":{"content":"天气可以"}}
+
+
+
+//
+
+
+{
+    "command": "classDanmu",
+    "data": {
+        "message": {
+        "attachment": {
+                        "address": "http://192.168.2.104:8080/upload4/2017-05-23/17/04d1577a-4c19-44e1-9607-e9d79012915e.webp",
+                        "createTime": 1495532832083,
+                        "type": 1
+                    },
+            "command": "message",
+         -   "content": '',
+        -    "createTime": 1495533194596,
+            "state": 2,
+         -   "toId": vid,
+            "toType": 3,
+         -   "uuid": "1d637837-719b-4832-8af5-63b88190c42c", // 自定义
+        }
+    }
+}
