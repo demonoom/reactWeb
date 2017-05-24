@@ -1,11 +1,13 @@
 import React, {PropTypes} from 'react';
-import {Table, Button, Progress, message,Icon,Input,Modal,Row,Col} from 'antd';
+import {Table, Button, Progress, message,Icon,Input,Modal,Row,Col,Radio} from 'antd';
 import ConfirmModal from '../ConfirmModal';
 import CloudFileUploadComponents from './CloudFileUploadComponents';
 import {doWebService} from '../../WebServiceHelper';
 import {getPageSize} from '../../utils/Const';
 import {getLocalTime} from '../../utils/utils';
 import {isEmpty} from '../../utils/Const';
+
+const RadioGroup = Radio.Group;
 
 var columns = [{
     title: '标题',
@@ -14,6 +16,16 @@ var columns = [{
     title: '操作',
     className: 'ant-table-selection-user',
     dataIndex: 'subjectOpt',
+},
+];
+
+var permissionTableColumns = [{
+    title: '用户',
+    dataIndex: 'userName',
+}, {
+    title: '操作',
+    className: 'ant-table-selection-user',
+    dataIndex: 'permissionOpt',
 },
 ];
 
@@ -42,6 +54,9 @@ const AntCloudTableComponents = React.createClass({
             mkdirModalVisible:false,
             uploadPercent:0,
             progressState:'none',
+            permissionModalVisible:false,     //设置权限窗口的状态控制
+            permissionTypeValue:1,      //默认的权限类型
+            userAccount:'',     //搜索用户文本框的初始值
         };
     },
     componentDidMount(){
@@ -293,6 +308,8 @@ const AntCloudTableComponents = React.createClass({
                         icon="share-alt"></Button>
                 <Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
                         icon="export"></Button>
+                <Button type="button" value={key} text={key} onClick={cloudTable.showPermissionModal.bind(cloudTable,e)}
+                        icon="setting"></Button>
             </div>;
             data.push({
                 key: key,
@@ -589,16 +606,161 @@ const AntCloudTableComponents = React.createClass({
                 cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo);
             }else{
                 var queryConditionJson="";
-
-                cloudTable.listFiles(cloudTable.state.ident,cloudTable.state.parentDirectoryId,queryConditionJson,initPageNo);
+                cloudTable.listFiles(cloudTable.state.ident,
+                    cloudTable.state.parentDirectoryId,queryConditionJson,initPageNo);
             }
         }else{
             cloudTable.getUserChatGroupRootCloudFiles(this.state.ident, initPageNo);
         }
     },
 
+    /**
+     * 显示设置权限的窗口
+     */
+    showPermissionModal(fileObject){
+        console.log("setting key:"+fileObject.id);
+        //当前要执行设置权限操作的文件夹id
+        cloudTable.setState({"settingCloudFileIds":fileObject.id});
+        cloudTable.setState({"permissionModalVisible":true,permissionTypeValue:1,permissionTableData:[],userAccount:''});
+    },
+
+    /**
+     * 设置权限窗口的确定操作
+     */
+    permissionModalHandleOk(){
+        var param = {
+            "method": 'assignPermission',
+            "operateUseId": cloudTable.state.ident,
+            "cloudFileId":cloudTable.state.settingCloudFileIds,
+            "userId":cloudTable.state.userAccount,
+            "permission":cloudTable.state.permissionTypeValue,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if(ret.success==true && ret.msg=="调用成功" && ret.response==true){
+                    var initPageNo = 1;
+                    //TODO 这里还需要判断是根目录还是子文件夹，根据不同情况，进入不同的目录
+                    if(cloudTable.state.getFileType=="myFile"){
+                        cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo);
+                    }else{
+                        cloudTable.getUserChatGroupRootCloudFiles(this.state.ident, initPageNo);
+                    }
+                    message.success("权限设置成功");
+                }else{
+                    message.error("权限设置失败");
+                }
+                cloudTable.setState({ permissionModalVisible: false });
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 设置权限窗口的取消操作
+     */
+    permissionModalHandleCancel(){
+        cloudTable.setState({"permissionModalVisible":false});
+    },
+
+    /**
+     * 执行批量删除操作
+     */
     showdelAllDirectoryConfirmModal(){
 
+    },
+
+    /**
+     * 权限类型切换响应函数
+     * @param e
+     */
+    onPermissionTypeChange(e){
+        cloudTable.setState({
+            permissionTypeValue: e.target.value,
+        });
+        var param = {
+            "method": 'getCloudFilePermissionByIdAndPermission',
+            "operateUserId": cloudTable.state.ident,
+            "cloudFileId":cloudTable.state.settingCloudFileIds,
+            "permission":e.target.value,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if(ret.success==true && ret.msg=="调用成功"){
+                    console.log(ret.response);
+                    var permissionTableData=[];
+                    var permissionResponse = ret.response;
+                    if(isEmpty(permissionResponse)==false && permissionResponse.length>0){
+
+                        permissionResponse.forEach(function (e) {
+                            var id = e.id;
+                            var permission = e.permission;
+                            var user = e.user;
+                            var permissionOpt=<div>
+                                <Button onClick={cloudTable.removePermission.bind(cloudTable,id)} icon="delete"></Button>
+                            </div>;
+                            var userJson = {
+                                key: id,
+                                userName:user.userName,
+                                permission: permission,
+                                user:user,
+                                permissionOpt:permissionOpt
+                            };
+                            permissionTableData.push(userJson);
+                        });
+                    }
+                    cloudTable.setState({"permissionTableData":permissionTableData});
+                }else{
+                    message.error("权限信息获取失败");
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    userAccountInputChange(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var userAccount = target.value;
+        cloudTable.setState({"userAccount":userAccount});
+    },
+    /**
+     * 移除权限
+     */
+    removePermission(delPermissionId){
+        console.log("delPermissionId:"+delPermissionId);
+        var param = {
+            "method": 'removeCloudFilePermissions',
+            "operateUseId": cloudTable.state.ident,
+            "cloudFilePermissionIds":delPermissionId
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if(ret.success==true && ret.msg=="调用成功" && ret.response==true){
+                    var initPageNo = 1;
+                    //TODO 这里还需要判断是根目录还是子文件夹，根据不同情况，进入不同的目录
+                    if(cloudTable.state.getFileType=="myFile"){
+                        cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo);
+                    }else{
+                        cloudTable.getUserChatGroupRootCloudFiles(this.state.ident, initPageNo);
+                    }
+                    message.success("权限设置成功");
+                }else{
+                    message.error("权限设置失败");
+                }
+                cloudTable.setState({ permissionModalVisible: false });
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     render() {
@@ -627,8 +789,6 @@ const AntCloudTableComponents = React.createClass({
         if(cloudTable.state.currentUserIsSuperManager){
             newButton=<Button value="newDirectory"  className="antnest_talk" onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;
             uploadButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
-            setManagerButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>分配管理者</Button>;
-            setUserButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>分配使用者</Button>;
         }
 
         var returnParentToolBar;
@@ -651,6 +811,11 @@ const AntCloudTableComponents = React.createClass({
         </div>;
         //根据该状态值，来决定上传进度条是否显示
         var progressState = cloudTable.state.progressState;
+        const radioStyle = {
+            display: 'block',
+            height: '30px',
+            lineHeight: '30px',
+        };
         return (
                 <div>
                     <Modal title="重命名"
@@ -721,6 +886,42 @@ const AntCloudTableComponents = React.createClass({
                             </Col>
 
                         </Row>
+                    </Modal>
+
+                    <Modal title="权限管理"
+                           visible={cloudTable.state.permissionModalVisible}
+                           transitionName=""  //禁用modal的动画效果
+                           maskClosable={false} //设置不允许点击蒙层关闭
+                           onOk={cloudTable.permissionModalHandleOk}
+                           onCancel={cloudTable.permissionModalHandleCancel}
+                    >
+                        <div>
+                            <Row>
+                                <Col span={3} className="right_look">权限类型：</Col>
+                                <Col span={20}>
+                                    <RadioGroup onChange={cloudTable.onPermissionTypeChange} value={cloudTable.state.permissionTypeValue}>
+                                        <Radio  style={radioStyle} value={1}>校级管理员</Radio>
+                                        <Radio  style={radioStyle} value={2}>管理者</Radio>
+                                        <Radio  style={radioStyle} value={3}>使用者</Radio>
+                                    </RadioGroup>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col span={3} className="right_look">用户账号：</Col>
+                                <Col span={20}>
+                                    <Input value={cloudTable.state.userAccount} onChange={cloudTable.userAccountInputChange}/>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col span={3} className="right_look"></Col>
+                                <Col span={20}>
+                                    <Table showHeader={false} columns={permissionTableColumns} dataSource={cloudTable.state.permissionTableData}
+                                           pagination={false}
+                                    />
+                                </Col>
+                            </Row>
+
+                        </div>
                     </Modal>
 
                     {toolbar}
