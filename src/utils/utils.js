@@ -62,3 +62,19 @@ export function showLargeImg(e) {
     }
     $.openPhotoGallery(target)
 }
+
+export function bubbleSort(array){
+    var i = 0,
+        len = array.length,
+        j, d;
+    for (; i < len; i++) {
+        for (j = 0; j < len; j++) {
+            if (array[i] < array[j]) {
+                d = array[j];
+                array[j] = array[i];
+                array[i] = d;
+            }
+        }
+    }
+    return array;
+}

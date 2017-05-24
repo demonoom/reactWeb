@@ -6,6 +6,7 @@ import {doWebService} from '../../WebServiceHelper';
 import {getPageSize} from '../../utils/Const';
 import {getLocalTime} from '../../utils/utils';
 import {isEmpty} from '../../utils/Const';
+import {bubbleSort} from '../../utils/utils';
 
 const RadioGroup = Radio.Group;
 
@@ -299,17 +300,45 @@ const AntCloudTableComponents = React.createClass({
                     {name}
                 </div>;
             }
+            var maxPermission = cloudTable.getMaxPermission(permissionsArray);
+            var editButton;
+            var deleteButton;
+            var shareButton;
+            var moveButton;
+            var settinButton;
+            switch (maxPermission){
+                case 1:
+                case 2:
+                    editButton=<Button type="button" className="score3_i" value={key} text={key} onClick={cloudTable.editDirectoryName.bind(cloudTable,e)}
+                                       icon="edit"></Button>;
+                    deleteButton=<Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
+                                         icon="delete"></Button>;
+                    shareButton=<Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
+                                        icon="share-alt"></Button>;
+                    moveButton=<Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
+                                       icon="export"></Button>;
+                    settinButton=<Button type="button" value={key} text={key} onClick={cloudTable.showPermissionModal.bind(cloudTable,e)}
+                                         icon="setting"></Button>;
+                    break;
+                case 3:
+                    editButton=<Button type="button" className="score3_i" value={key} text={key} onClick={cloudTable.editDirectoryName.bind(cloudTable,e)}
+                                       icon="edit"></Button>;
+                    deleteButton=<Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
+                                         icon="delete"></Button>;
+                    shareButton=<Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
+                                        icon="share-alt"></Button>;
+                    moveButton=<Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
+                                       icon="export"></Button>;
+                    settinButton="";
+                    break;
+            }
+
             var subjectOpt = <div>
-                <Button type="button" className="score3_i" value={key} text={key} onClick={cloudTable.editDirectoryName.bind(cloudTable,e)}
-                        icon="edit"></Button>
-                <Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
-                        icon="delete"></Button>
-                <Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
-                        icon="share-alt"></Button>
-                <Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
-                        icon="export"></Button>
-                <Button type="button" value={key} text={key} onClick={cloudTable.showPermissionModal.bind(cloudTable,e)}
-                        icon="setting"></Button>
+                {editButton}
+                {deleteButton}
+                {shareButton}
+                {moveButton}
+                {settinButton}
             </div>;
             data.push({
                 key: key,
@@ -323,6 +352,25 @@ const AntCloudTableComponents = React.createClass({
         cloudTable.setState({totalCount: parseInt(pager.rsCount)});
         cloudTable.setState({"tableData":data});
     },
+
+    /**
+     * 获取最大的权限
+     * 权限的排序为1最大，3最小
+     * @param permissionsArray
+     * @returns {*}
+     */
+    getMaxPermission(permissionsArray){
+        var maxPermission;
+        var permissionIdArray=[];
+        permissionsArray.forEach(function (e) {
+            var permission = e.permission;
+            permissionIdArray.push(permission);
+        });
+        permissionIdArray = bubbleSort(permissionIdArray);
+        maxPermission = permissionIdArray[0];
+        return maxPermission;
+    },
+
     /**
      * 如果是文件夹，则可以点击文件夹名称，进入文件夹内部
      */
@@ -619,8 +667,10 @@ const AntCloudTableComponents = React.createClass({
      */
     showPermissionModal(fileObject){
         console.log("setting key:"+fileObject.id);
+        var permissionsArray = fileObject.permissions;
+        var maxPermission = cloudTable.getMaxPermission(permissionsArray);
         //当前要执行设置权限操作的文件夹id
-        cloudTable.setState({"settingCloudFileIds":fileObject.id});
+        cloudTable.setState({"settingCloudFileIds":fileObject.id,"settingCloudFileMaxPermission":maxPermission});
         cloudTable.setState({"permissionModalVisible":true,permissionTypeValue:1,permissionTableData:[],userAccount:''});
     },
 
@@ -816,6 +866,31 @@ const AntCloudTableComponents = React.createClass({
             height: '30px',
             lineHeight: '30px',
         };
+
+        var radioGroup;
+        switch (cloudTable.state.settingCloudFileMaxPermission){
+            case 1:
+                if(cloudTable.state.currentUserIsSuperManager){
+                    //超级管理员
+                    radioGroup = <RadioGroup onChange={cloudTable.onPermissionTypeChange} value={cloudTable.state.permissionTypeValue}>
+                        <Radio  style={radioStyle} value={1}>校级管理员</Radio>
+                        <Radio  style={radioStyle} value={2}>管理者</Radio>
+                        <Radio  style={radioStyle} value={3}>使用者</Radio>
+                    </RadioGroup>;
+                }else{
+                    radioGroup = <RadioGroup onChange={cloudTable.onPermissionTypeChange} value={cloudTable.state.permissionTypeValue}>
+                        <Radio  style={radioStyle} value={2}>管理者</Radio>
+                        <Radio  style={radioStyle} value={3}>使用者</Radio>
+                    </RadioGroup>;
+                }
+                break;
+            case 2:
+                radioGroup = <RadioGroup onChange={cloudTable.onPermissionTypeChange} value={cloudTable.state.permissionTypeValue}>
+                    <Radio  style={radioStyle} value={3}>使用者</Radio>
+                </RadioGroup>
+                break;
+        }
+
         return (
                 <div>
                     <Modal title="重命名"
@@ -899,11 +974,7 @@ const AntCloudTableComponents = React.createClass({
                             <Row>
                                 <Col span={3} className="right_look">权限类型：</Col>
                                 <Col span={20}>
-                                    <RadioGroup onChange={cloudTable.onPermissionTypeChange} value={cloudTable.state.permissionTypeValue}>
-                                        <Radio  style={radioStyle} value={1}>校级管理员</Radio>
-                                        <Radio  style={radioStyle} value={2}>管理者</Radio>
-                                        <Radio  style={radioStyle} value={3}>使用者</Radio>
-                                    </RadioGroup>
+                                    {radioGroup}
                                 </Col>
                             </Row>
                             <Row>
