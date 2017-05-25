@@ -365,7 +365,9 @@ const MainLayout = React.createClass({
             case 'antCloud':
                 //蚁巢
                 middleComponent = <AntCloudMenu callbackParent={this.getAntCloud}/>;
-                tabComponent = <AntCloudTableComponents ref="antCloudTable"></AntCloudTableComponents>;
+                tabComponent = <AntCloudTableComponents ref="antCloudTable"
+                                                        messageUtilObj={ms}
+                            ></AntCloudTableComponents>;
                 break;
         }
         //
