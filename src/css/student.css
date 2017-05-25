@@ -6,14 +6,24 @@
 	color: #2db7f5;
 }
 .liveTV{
-	top: 54px !important;
-    height: calc(100% - 54px) !important;
+	top: 0;
+    height:100% !important;
+	left: -1px !important;
+    right: 0 !important;
+}
+.liveTV .public—til—blue{
+	background: #0084ff;
+    height: 54px;
+	color:#fff;
+	line-height:54px;
 }
 .liveTV .content{
 	display:flex;
 	display:-webkit-flex;
 	flex-direction:row;
-	flex-wrap: nowrap
+	flex-wrap: nowrap;
+	height: calc(100% - 54px) !important;
+    min-height: 548px;
 }
 .liveTV .live, .liveTV .panle, .liveTV .tab{
 	display: inline-flex;
