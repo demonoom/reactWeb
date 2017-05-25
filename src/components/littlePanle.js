@@ -305,8 +305,7 @@
 							<div class="activity">
 								<section class="panle">
 									<iframe  id="${this.pptIframeName}"  name="${this.pptIframeName}"  />
-									<div  id="${this.pptIframeName}" class="${this.pptIframeName}" ></div>
-										  <div id="${this.ifrpanleid}" class="panle_book"></div>
+									<div  id="${this.showTuiPing}" class="panle_book ${this.showTuiPing}" ></div>
 										  <div class="showDanmuArea" ></div>
 											<div class="floatBtn" >
 												<span class="lz"  ><img src="../../src/components/images/lizan.png" width="50" height="50" /></span>
@@ -467,6 +466,22 @@
 
     }
 
+    littlePanle.prototype.commitClose=function(id){
+
+
+            var msg = "您确定要退出课堂？";
+
+            if (confirm(msg)){
+                __this.closepanle(id);
+                return true;
+            }else{
+                return false;
+            }
+
+
+
+    }
+
     littlePanle.prototype.websocket = function (obj) {
         var connection = new ClazzConnection();
         LP.LiveTVSocket = connection;
@@ -488,13 +503,13 @@
                 switch (info.command) {
                     case 'pushHandout': // 图片
                         htm = `<img src='${info.data.url}'/>`;
-                        $('#' + obj.param.showTuiPing).html(htm).css({'z-index':1});
-                        $('#' + obj.param.pptIframeName).css({'z-index':0});
+                        $('#' + obj.showTuiPing).html(htm).css({'z-index':1});
+                        $('#' + obj.pptIframeName).css({'z-index':0});
 
                         break;
                     case'classOver':
                         alert('下课了!');
-                        __this.closepanle(obj.warpid);
+                        __this.commitClose(obj.warpid);
                         break;
                     case 'studentLogin': // 显示直播视频
                         htm = ` <video   id="v${obj.ifrliveid}" class="video-js vjs-default-skin vjs-big-play-centered"
@@ -672,7 +687,7 @@
     littlePanle.prototype._setProxyInfo = function (url) {
 
         if (!url) return '';
-debugger
+
 
         if (/www\.maaee\.com\:80/img.test(url)) {
             return '/proxy' + url.split('www.maaee.com:80')[1];
