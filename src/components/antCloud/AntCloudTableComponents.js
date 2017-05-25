@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {Table, Button, Progress, message,Icon,Input,Modal,Row,Col,Radio} from 'antd';
+import {Table, Button, Progress, message,Icon,Input,Modal,Row,Col,Radio,Cascader} from 'antd';
 import ConfirmModal from '../ConfirmModal';
 import CloudFileUploadComponents from './CloudFileUploadComponents';
 import {doWebService} from '../../WebServiceHelper';
@@ -28,6 +28,16 @@ var permissionTableColumns = [{
     className: 'ant-table-selection-user',
     dataIndex: 'permissionOpt',
 },
+];
+
+var targetDirColumns = [{
+    title: '文件夹名称',
+    dataIndex: 'dirName',
+}, {
+    title: '操作',
+    className: 'ant-table-selection-user',
+    dataIndex: 'moveDirOpt',
+}
 ];
 
 var data = [];
@@ -140,6 +150,7 @@ const AntCloudTableComponents = React.createClass({
                 var response = ret.response;
                 if(response){
                     cloudTable.buildTableDataByResponse(ret);
+                    cloudTable.buildTargetDirData(ret);
                 }
             },
             onError: function (error) {
@@ -163,12 +174,37 @@ const AntCloudTableComponents = React.createClass({
                 var response = ret.response;
                 if(response){
                     cloudTable.buildTableDataByResponse(ret);
+                    cloudTable.buildTargetDirData(ret);
                 }
             },
             onError: function (error) {
                 message.error(error);
             }
         });
+    },
+
+    buildTargetDirData(ret){
+        var targetDirDataArray= [];
+        ret.response.forEach(function (e) {
+            var key = e.id;
+            var name = e.name;
+            var dirName = <a className="font_gray_666" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e,"moveDirModal")}>{name}</a>;
+            var moveDirOpt;
+            if(e.directory==true){
+                moveDirOpt=<div>
+                    <Button onClick={cloudTable.moveFileToTargetDir.bind(cloudTable,key)}>确定</Button>
+                </div>;
+            }else{
+                dirName = name;
+            }
+            var dataJson= {
+                key: key,
+                dirName: dirName,
+                moveDirOpt:moveDirOpt
+            };
+            targetDirDataArray.push(dataJson);
+        })
+        cloudTable.setState({"targetDirDataArray":targetDirDataArray});
     },
 
     /**
@@ -178,7 +214,7 @@ const AntCloudTableComponents = React.createClass({
      * @param queryConditionJson
      * @param pageNo
      */
-    listFiles: function (operateUserId, cloudFileId,queryConditionJson,pageNo) {
+    listFiles: function (operateUserId, cloudFileId,queryConditionJson,pageNo,optSrc) {
         data = [];
         cloudTable.setState({currentView: 'subjectList', totalCount: 0});
         cloudTable.buildPageView();
@@ -193,7 +229,11 @@ const AntCloudTableComponents = React.createClass({
             onResponse: function (ret) {
                 var response = ret.response;
                 if(response){
-                    cloudTable.buildTableDataByResponse(ret);
+                    if(isEmpty(optSrc)==false && optSrc=="mainTable"){
+                        cloudTable.buildTableDataByResponse(ret);
+                    }else{
+                        cloudTable.buildTargetDirData(ret);
+                    }
                     cloudTable.setState({"currentDirectoryId":cloudFileId});
                 }
             },
@@ -292,7 +332,7 @@ const AntCloudTableComponents = React.createClass({
             if(directory){
                 fileLogo=<div>
                     <Icon type="folder" />
-                    <a className="font_gray_666" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e)}>{name}</a>
+                    <a className="font_gray_666" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e,"mainTable")}>{name}</a>
                 </div>;
             }else{
                 fileLogo=<div>
@@ -315,7 +355,7 @@ const AntCloudTableComponents = React.createClass({
                                          icon="delete"></Button>;
                     shareButton=<Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
                                         icon="share-alt"></Button>;
-                    moveButton=<Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
+                    moveButton=<Button type="button" value={key} text={key} onClick={cloudTable.showMoveFileModal.bind(cloudTable,e)}
                                        icon="export"></Button>;
                     settinButton=<Button type="button" value={key} text={key} onClick={cloudTable.showPermissionModal.bind(cloudTable,e)}
                                          icon="setting"></Button>;
@@ -327,7 +367,7 @@ const AntCloudTableComponents = React.createClass({
                                          icon="delete"></Button>;
                     shareButton=<Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
                                         icon="share-alt"></Button>;
-                    moveButton=<Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
+                    moveButton=<Button type="button" value={key} text={key} onClick={cloudTable.showMoveFileModal.bind(cloudTable,e)}
                                        icon="export"></Button>;
                     settinButton="";
                     break;
@@ -374,12 +414,12 @@ const AntCloudTableComponents = React.createClass({
     /**
      * 如果是文件夹，则可以点击文件夹名称，进入文件夹内部
      */
-    intoDirectoryInner(directoryObj){
-        console.log(directoryObj.name);
+    intoDirectoryInner(directoryObj,optSrc){
+        console.log("optSrc:"+optSrc);
         var initPageNo =1 ;
         var queryConditionJson="";
         cloudTable.setState({"parentDirectoryId":directoryObj.parentId,"currentDirectoryId":directoryObj.id});
-        cloudTable.listFiles(cloudTable.state.ident,directoryObj.id,queryConditionJson,initPageNo);
+        cloudTable.listFiles(cloudTable.state.ident,directoryObj.id,queryConditionJson,initPageNo,optSrc);
     },
     /**
      * 修改文件夹的名称（重命名）
@@ -812,6 +852,57 @@ const AntCloudTableComponents = React.createClass({
             }
         });
     },
+    /**
+     * 显示移动文件的窗口
+     */
+    showMoveFileModal(fileObject){
+        console.log("moveFileId key:"+fileObject.id);
+
+        cloudTable.setState({ moveFileModalVisible: true,"moveFileId":fileObject.id });
+    },
+
+    /**
+     * 关闭移动文件的窗口
+     */
+    moveFileModalHandleCancel(){
+        cloudTable.setState({ moveFileModalVisible: false });
+    },
+
+    moveFileToTargetDir(toCloudFileId){
+        cloudTable.moveCloudFiles(cloudTable.state.moveFileId,toCloudFileId);
+    },
+
+    /**
+     * 完成文件向目标文件夹的移动
+     */
+    moveCloudFiles(fromCloudFileIds,toCloudFileId){
+        var param = {
+            "method": 'moveCloudFiles',
+            "operateUserId": cloudTable.state.ident,
+            "fromCloudFileIds":fromCloudFileIds,
+            "toCloudFileId":toCloudFileId
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if(ret.success==true && ret.msg=="调用成功" && ret.response==true){
+                    var initPageNo = 1;
+                    //TODO 这里还需要判断是根目录还是子文件夹，根据不同情况，进入不同的目录
+                    if(cloudTable.state.getFileType=="myFile"){
+                        cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo);
+                    }else{
+                        cloudTable.getUserChatGroupRootCloudFiles(this.state.ident, initPageNo);
+                    }
+                    message.success("移动成功");
+                }else{
+                    message.error("移动失败");
+                }
+                cloudTable.setState({ moveFileModalVisible: false });
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
 
     render() {
         const {loading, selectedRowKeys} = cloudTable.state;
@@ -859,6 +950,9 @@ const AntCloudTableComponents = React.createClass({
             </div>
             {tipTitle}
         </div>;
+        var returnToolbarInMoveModal=<div className="public—til—blue">
+            <div className="ant-tabs-right"><Button onClick={cloudTable.returnParent}><Icon type="left" /></Button></div>
+        </div>
         //根据该状态值，来决定上传进度条是否显示
         var progressState = cloudTable.state.progressState;
         const radioStyle = {
@@ -992,6 +1086,29 @@ const AntCloudTableComponents = React.createClass({
                                 </Col>
                             </Row>
 
+                        </div>
+                    </Modal>
+
+                    <Modal title="移动文件"
+                           visible={cloudTable.state.moveFileModalVisible}
+                           transitionName=""  //禁用modal的动画效果
+                           maskClosable={false} //设置不允许点击蒙层关闭
+                           onCancel={cloudTable.moveFileModalHandleCancel}
+                           footer={null}
+                    >
+                        <div>
+                            <Row>
+                                <Col span={3} className="right_look">目标文件夹：</Col>
+                                <Col span={20}>
+                                    {returnToolbarInMoveModal}
+                                    <Table  columns={targetDirColumns}  showHeader={false} dataSource={cloudTable.state.targetDirDataArray}
+                                        pagination={{
+                                        total: cloudTable.state.totalCount,
+                                        pageSize: getPageSize(),
+                                        onChange: cloudTable.pageOnChange
+                                    }} scroll={{y: 300}}/>
+                                </Col>
+                            </Row>
                         </div>
                     </Modal>
 
