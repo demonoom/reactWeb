@@ -76,7 +76,7 @@ const AntCloudTableComponents = React.createClass({
             uploadPercent:0,
             progressState:'none',
             permissionModalVisible:false,     //设置权限窗口的状态控制
-            permissionTypeValue:1,      //默认的权限类型
+            permissionTypeValue:-1,      //默认的权限类型
             userAccount:'',     //搜索用户文本框的初始值
             userContactsData:[],
         };
@@ -245,8 +245,13 @@ const AntCloudTableComponents = React.createClass({
      */
     listFiles: function (operateUserId, cloudFileId,queryConditionJson,pageNo,optSrc) {
         data = [];
-        cloudTable.setState({currentView: 'subjectList', totalCount: 0});
+        cloudTable.setState({totalCount: 0});
         cloudTable.buildPageView();
+        if(isEmpty(optSrc)==false && optSrc=="mainTable"){
+            cloudTable.setState({"currentDirectoryId":cloudFileId});
+        }else{
+            cloudTable.setState({"currentDirectoryIdAtMoveModal":cloudFileId});
+        }
         var param = {
             "method": 'listFiles',
             "operateUserId": operateUserId,
@@ -260,12 +265,12 @@ const AntCloudTableComponents = React.createClass({
                 if(response){
                     if(isEmpty(optSrc)==false && optSrc=="mainTable"){
                         cloudTable.buildTableDataByResponse(ret);
-                        cloudTable.setState({"currentDirectoryId":cloudFileId});
                     }else{
                         cloudTable.buildTargetDirData(ret);
-                        cloudTable.setState({"currentDirectoryIdAtMoveModal":cloudFileId});
                     }
-
+                }else{
+                    var parentDirectoryId = e.parent.parentId;
+                    cloudTable.setState({"parentDirectoryId":parentDirectoryId});
                 }
             },
             onError: function (error) {
@@ -447,6 +452,9 @@ const AntCloudTableComponents = React.createClass({
      */
     intoDirectoryInner(directoryObj,optSrc){
         console.log("optSrc:"+optSrc);
+        var permissionsArray = directoryObj.permissions;
+        var maxPermission = cloudTable.getMaxPermission(permissionsArray);
+        cloudTable.setState({"currentDirMaxPermission":maxPermission});
         var initPageNo =1 ;
         var queryConditionJson="";
         if(isEmpty(optSrc)==false && optSrc=="mainTable"){
@@ -1141,6 +1149,18 @@ const AntCloudTableComponents = React.createClass({
         if(cloudTable.state.currentUserIsSuperManager){
             newButton=<Button value="newDirectory"  className="antnest_talk" onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;
             uploadButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
+        }else{
+            //非超管
+            if(cloudTable.state.currentDirectoryId!=-1){
+                if(cloudTable.state.currentDirMaxPermission!=3){
+                    newButton=<Button value="newDirectory"  className="antnest_talk" onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;
+                    uploadButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
+                }else{
+                    newButton="";
+                    //使用者只有上传的权限
+                    uploadButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
+                }
+            }
         }
 
         var returnParentToolBar;
