@@ -121,7 +121,7 @@ const AntCloudTableComponents = React.createClass({
             }, {
                 title: '更新时间',
                 dataIndex: 'createTime',
-                className: 'ant-table-selection-user2',
+                className: 'ant-table-selection-user2 time',
             }, {
                 title: '创建者',
                 dataIndex: 'creator',
