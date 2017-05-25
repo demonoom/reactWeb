@@ -285,6 +285,12 @@
         this.ajaxUploadBtn = 'ajaxUpload_btn_' + id;
         this.showTuiPing = 'showTuiPing';
         this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show ${obj.mode}">
+		<div class="public—til—blue">
+							<div class="little-tilte">
+                    			<a class="back"><i class="anticon anticon-left "></i></a>
+                    		</div>
+                			<span>${ obj.title }</span>
+               			 </div>
                 <div class="content">
                     <section class="liveTV tab">
                         <ul>
@@ -298,16 +304,8 @@
                             </li>
                         </ul>
                     </section>
-					<div class="right_cont">
 					
-						<div class="public—til—blue">
-							<div class="little-tilte">
-                    			<a class="back"><i class="anticon anticon-left "></i></a>
-                    		</div>
-                			<span>${ obj.title }</span>
-               			 </div>
-               			 
-						 <div class="favorite_scroll">
+					<div class="right_cont">
 						 	<section class="live" id="${this.ifrliveid}">
                    			</section>
 							<div class="activity">
@@ -327,13 +325,17 @@
 								<section class="public" >
 									<div class="showDanmuArea" ></div>
 									<div class="inputArea" >
+<<<<<<< HEAD
 									<div contenteditable="true" style="width: 200px; height: 100px; background-color: #fa0;"  ></div>
 										<textarea placeholder="输入弹幕内容！" class="textarea_2" id="InputTxtToPublic" ></textarea>
                                         <input type="file" ref="sendPublicImg" id="${this.ajaxUploadBtn}" >发图片</input>
+=======
+										<textarea placeholder="输入公屏内容！" class="textarea_2" id="InputTxtToPublic" ></textarea>
+										<button ref="sendPublicImg" >发图片</button>
+>>>>>>> 50ce888617b11f13fbc9dc56119a41d1161d084d
 										<button ref="sendPublicText"  >发公屏</button>
 									</div>
 								</section>
-  							</div>
 						 </div>
 					</div>
                     
@@ -561,7 +563,7 @@
                         if (info.data.message.attachment) {
                             sayText1 = `<img style="width:120px;height:auto;"  src="${info.data.message.attachment.address}"/>`;
                         }
-                        htm = `<div class="sayLine ${refClass}"><div class="username" >${fromUserName1}</div><div class="sayHeader" >${userFace}</div><div class="sayCon" >${sayText1}</div></div>`;
+                        htm = `<div class="sayLine ${refClass}"><div class="username" >${fromUserName1}</div><div class="saycont"><div class="sayHeader" >${userFace}</div><div class="sayCon" >${sayText1}</div></div>`;
                         $('.public .showDanmuArea').append(htm);
                         break;
                     case'simpleClassDanmu': // 弹幕

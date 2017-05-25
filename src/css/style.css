@@ -3222,7 +3222,7 @@ a.color_gary_f, .color_gary_f{
 }
 .liveTV .little-tilte{
 	text-align: left;
-    margin-top: 2px;
+    margin-top: 6px;
     position: absolute;
     left: 12px;
     line-height: 1px;
@@ -3234,7 +3234,7 @@ a.color_gary_f, .color_gary_f{
 }
 .liveTV .little-tilte a i{
 	font-size: 22px;
-    color: #0078e4;
+    color: #fff;
     font-weight: normal;
 }
 .little-layout-aside-r-show .close,

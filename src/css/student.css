@@ -6,14 +6,24 @@
 	color: #2db7f5;
 }
 .liveTV{
-	top: 54px !important;
-    height: calc(100% - 54px) !important;
+	top: 0;
+    height:100% !important;
+	left: -1px !important;
+    right: 0 !important;
+}
+.liveTV .public—til—blue{
+	background: #0084ff;
+    height: 54px;
+	color:#fff;
+	line-height:54px;
 }
 .liveTV .content{
 	display:flex;
 	display:-webkit-flex;
 	flex-direction:row;
-	flex-wrap: nowrap
+	flex-wrap: nowrap;
+	height: calc(100% - 54px) !important;
+    min-height: 548px;
 }
 .liveTV .live, .liveTV .panle, .liveTV .tab{
 	display: inline-flex;
@@ -59,21 +69,18 @@
 	display:none
 }
 .liveTV .tab{
-	width:80px;
-	background:#eeeff4;
-	position: absolute;
-    left: 0;
-    top: 0 !important;
+	width: 64px;
+    background: #eeeff4;
     height: 100% !important;
-	border-right: 1px solid #dfe0e3;
-	z-index:2
+    border-right: 1px solid #dfe0e3;
+    z-index: 2;
 }
 .liveTV .tab ul{
 	width:100%
 }
 .liveTV .tab ul li{
 	height: 25px;
-    margin-left: 26px !important;
+    margin-left: 18px !important;
     width: 28px;
     padding-left: 0 !important;
     float: left;
@@ -81,11 +88,11 @@
 	position:relative;
 	cursor:pointer
 }
-.liveTV .tab ul li div.tan{
+.liveTV .tab ul li span.tan{
 	display:none
 }
 
-.liveTV .tab ul li:hover div.tan{
+.liveTV .tab ul li:hover span.tan{
 	background: #000;
     color: #fff;
     position: absolute;
@@ -101,11 +108,9 @@
     width: 50px;
 }
 .liveTV .right_cont{
-	position: absolute;
-    height: 100%;
-    left: 81px;
-    margin-left: 0 !important;
-    width: calc(100% - 81px);
+	height: 100%;
+    margin-left: 0;
+    width: 100%;
 }
 .sendst{
 	margin:0 auto;
@@ -149,14 +154,14 @@
     background: #e8e8e8;
 }
 .public .sayLine.left{
-	display: block;
-    color: #333;
-    font-size: 15px;
-    font-weight: normal;
-    padding: 4px 8px;
-    margin: 5px 20px;
-	text-align: left;
+	padding: 10px 20px;
+    float: left;
+    display: block;
+    margin: 5px 0;
+    width: 100%;
+    text-align: left;
 }
+
 .public .sayLine.right{
 	padding: 10px 20px;
     float: right;
