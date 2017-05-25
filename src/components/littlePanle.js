@@ -306,33 +306,33 @@
                     </section>
 					
 					<div class="right_cont">
-						 	<section class="live" id="${this.ifrliveid}">
-                   			</section>
-							<div class="activity">
+						 	<div class="activity">
 								<section class="panle">
 									<iframe  id="${this.pptIframeName}"  name="${this.pptIframeName}"  />
-									<div  id="${this.showTuiPing}" class="panle_book ${this.showTuiPing}" ></div>
+									<div class="danmu_pic"><img src="../../src/components/images/danmu_pic.png"  height="208" /></div>
+									<div id="${this.showTuiPing}" class="panle_book ${this.showTuiPing}" ></div>
 										  <div class="showDanmuArea" ></div>
-											<div class="floatBtn" >
-												<span class="lz"  ><img src="../../src/components/images/lizan.png" width="50" height="50" /></span>
-												<span class="dm"  ><img src="../../src/components/images/danmu.png" width="50" height="50" /></span>
-											</div>
 											<div class="inputArea" >
-												<textarea placeholder="输入弹幕内容！" class="textarea_1"  id="InputTxtToPanel" ></textarea>
+												<input placeholder="输入弹幕内容！" class="textarea_1"  id="InputTxtToPanel" ></input>
 												<button  ref="sendPanleText" >发送弹幕</button>
 											</div>
 								</section>
 								<section class="public" >
-									<div class="showDanmuArea" ></div>
+									<div class="showDanmuArea" >
+										<div class="danmu_pic"><img src="../../src/components/images/gongping_pic.png"  height="286" /></div>
+									</div>
 									<div class="inputArea" >
-									<div contenteditable="true" style="width: 200px; height: 100px; background-color: #fa0;"  ></div>
-										<textarea placeholder="输入公屏内容！" class="textarea_2" id="InputTxtToPublic" ></textarea>
-                                        <input type="file" ref="sendPublicImg" id="${this.ajaxUploadBtn}" >发图片</input>
-
-										<button ref="sendPublicText"  >发公屏</button>
+									<div contenteditable="true" style="width: 200px; height: 100px; background-color: #fa0; display:none"  ></div>
+										<input placeholder="输入公屏内容！" class="textarea_2" id="InputTxtToPublic" ></input>
+										<button ref="sendPublicText" >发公屏</button>
+                                        <span class="file_btn st_file_wrap"><input type="file" ref="sendPublicImg" id="${this.ajaxUploadBtn}" class="st_file"></input><span class="st_file_tex">发图片</span></span>
+										
 									</div>
 								</section>
 						 </div>
+						 <section class="live" id="${this.ifrliveid}">
+                   		 </section>
+
 					</div>
                     
 

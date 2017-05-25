@@ -8,9 +8,11 @@
 .liveTV{
 	top: 0;
     height:100% !important;
-	left: -1px !important;
+	left: 0px !important;
     right: 0 !important;
+	border-left:none !important
 }
+
 .liveTV .public—til—blue{
 	background: #0084ff;
     height: 54px;
@@ -37,7 +39,7 @@
     border-radius: 0;
 	position: relative;
 }
-.liveTV .live .video-js{
+.liveTV .live .video-js, .danmu_pic{
 	position: absolute;
 	top:50%;
 	left:50%;
@@ -46,6 +48,9 @@
 	-moz-transform:translate(-50%, -50%); /* Firefox */
 	-webkit-transform:translate(-50%, -50%); /* Safari 和 Chrome */
     height: 100%;
+}
+.danmu_pic{
+	height:300px !important;
 }
 .liveTV .cont{
 	width:100%;
@@ -110,15 +115,16 @@
 .liveTV .right_cont{
 	height: 100%;
     margin-left: 0;
-    width: 100%;
+    width: calc(100% - 64px);
 }
 .sendst{
 	margin:0 auto;
 }
 .activity{
 	width: calc(100% - 300px);
-    margin-left: 300px;
+    margin-left:0;
     height: 100%;
+	float: left;
 }
 .liveTV .public{
 	display:none;
@@ -140,6 +146,8 @@
 	height:calc(100% - 50px);
 	overflow-y: auto;
     overflow-x: hidden;
+	position: relative;
+	top:0
 }
 .panle .sayLine{
 	display: inline-block;
@@ -178,20 +186,20 @@
     bottom: 0;
     height: 50px;
     width: 100%;
-	background: #000;
+	background: #e4f2ff;
 	padding: 8px 20px;
 	text-align:left;
 	font-size: 15px;
 	left:0
 }
-.inputArea textarea{
+.inputArea .textarea_1, .inputArea .textarea_2{
 	height: 34px;
     border-radius: 4px;
-    background: #575757;
-    line-height: 34px;
+    background: #fff;
+    line-height: 32px;
     text-indent: 8px;
-    color: #eee;
-    border: none;
+    color: #999;
+    border: 1px solid #4a90e2;
 }
 .textarea_1{
 	 width: calc(100% - 100px);
@@ -199,24 +207,26 @@
 .textarea_2{
 	 width: calc(100% - 164px);
 }
-.inputArea button{
-	color: #f9f9f9;
-    background: #575757;
+.inputArea button, .file_btn{
+	color: #fff;
+    background: #0084ff;
     border: none;
     border-radius: 4px;
     height: 34px;
     line-height: 34px;
     float: right;
     padding: 0 12px;
-	cursor: pointer;
-	margin-left: 12px;
+    cursor: pointer;
+    margin-left: 12px;
+   
 }
-.inputArea button:hover{
-	background:#7b7b7b
+.inputArea button:hover, .file_btn:hover{
+	background:#2696ff
 }
 .liveTV .panle iframe{
 	height:calc(100% - 50px) !important;
-	z-index:2
+	z-index:2;
+	position: relative;
 }
 .marquee{
 　　white-space: nowrap;
@@ -226,3 +236,20 @@
     -webkit-marquee-direction: left;
     -webkit-marquee-speed:normal;
 }
+.st_file{
+	position: absolute;
+    top: 8px;
+    right: 102px;
+    width: 70px;
+    height: 34px;
+    filter: alpha(opacity=0);
+    -moz-opacity: 0;
+    opacity: 0;
+}
+.st_file_tex{
+	position: relative;
+    left: 1px;
+}
+.st_file_wrap{
+	 width: 70px;
+	}
