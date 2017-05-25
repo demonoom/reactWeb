@@ -472,7 +472,7 @@ const AntCloudTableComponents = React.createClass({
         var initPageNo =1 ;
         var queryConditionJson="";
         if(isEmpty(optSrc)==false && optSrc=="mainTable"){
-            cloudTable.setState({"parentDirectoryId":directoryObj.parentId,"currentDirectoryId":directoryObj.id});
+            cloudTable.setState({"parentDirectoryId":directoryObj.parentId,"currentDirectoryId":directoryObj.id,"currentDirectoryCreatorId":directoryObj.creator.colUid});
         }else{
             cloudTable.setState({"parentDirectoryIdAtMoveModal":directoryObj.parentId,
                 "currentDirectoryIdAtMoveModal":directoryObj.id});
@@ -1166,7 +1166,8 @@ const AntCloudTableComponents = React.createClass({
         }else{
             //非超管
             if(cloudTable.state.currentDirectoryId!=-1){
-                if(cloudTable.state.currentDirMaxPermission!=3){
+                if(cloudTable.state.currentDirMaxPermission!=3
+                    || cloudTable.state.currentDirectoryCreatorId==sessionStorage.getItem("ident")){
                     newButton=<Button value="newDirectory"  className="antnest_talk" onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;
                     uploadButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
                 }else{
