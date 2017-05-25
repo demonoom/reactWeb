@@ -284,6 +284,12 @@
         this.pptIframeName = 'panle' + id;
         this.showTuiPing = 'showTuiPing';
         this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show ${obj.mode}">
+		<div class="public—til—blue">
+							<div class="little-tilte">
+                    			<a class="back"><i class="anticon anticon-left "></i></a>
+                    		</div>
+                			<span>${ obj.title }</span>
+               			 </div>
                 <div class="content">
                     <section class="liveTV tab">
                         <ul>
@@ -297,16 +303,8 @@
                             </li>
                         </ul>
                     </section>
-					<div class="right_cont">
 					
-						<div class="public—til—blue">
-							<div class="little-tilte">
-                    			<a class="back"><i class="anticon anticon-left "></i></a>
-                    		</div>
-                			<span>${ obj.title }</span>
-               			 </div>
-               			 
-						 <div class="favorite_scroll">
+					<div class="right_cont">
 						 	<section class="live" id="${this.ifrliveid}">
                    			</section>
 							<div class="activity">
@@ -331,7 +329,6 @@
 										<button ref="sendPublicText"  >发公屏</button>
 									</div>
 								</section>
-  							</div>
 						 </div>
 					</div>
                     
