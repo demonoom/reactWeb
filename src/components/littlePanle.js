@@ -166,8 +166,7 @@
                 <h3 class="title">${ obj.title }</h3>
                     <div class="little-tilte">
                         <a class="close"><i className="iconfont iconfont_close">&#xe615;</i></a>
-                        <a class="zoom"><i className="iconfont iconfont_more">&#xe67e;</i></a>
-                        
+                        <a class="zoom"><i className="iconfont iconfont_more">&#xe67e;</i></a> 
                     </div>
                 </div>
                 <div class="content">
@@ -288,8 +287,14 @@
                 <div class="content">
                     <section class="liveTV tab">
                         <ul>
-                        <li class="panleBtn" ref="panleBtn" ><i class="icon_menu_ios icon_yichao1"></i>白板</li>
-                        <li class="publicBtn" ref="publicBtn"  ><i class="icon_menu_ios icon_yichao1"></i>公屏</li>
+                        <li class="panleBtn" ref="panleBtn" >
+							<i class="icon_menu_ios icon_baiban"></i>
+							<div class="tan">白板</div>
+						</li>
+                        <li class="publicBtn ant-menu-item-selected" ref="publicBtn"  >
+							<i class="icon_menu_ios icon_gongpin"></i>
+							<div class="tan">公屏</div>
+						</li>
                         </ul>
                     </section>
 					<div class="right_cont">
@@ -312,14 +317,14 @@
 												<span class="dm"  ><img src="../../src/components/images/danmu.png" width="50" height="50" /></span>
 											</div>
 											<div class="inputArea" >
-												<textarea placeholder="输入弹幕内容！" ></textarea>
+												<textarea placeholder="输入弹幕内容！" class="textarea_1" ></textarea>
 												<button  ref="sendPanleText" >发送弹幕</button>
 											</div>
 								</section>
 								<section class="public" >
 									<div class="showDanmuArea" ></div>
 									<div class="inputArea" >
-										<textarea placeholder="输入弹幕内容！" ></textarea>
+										<textarea placeholder="输入弹幕内容！" class="textarea_2"></textarea>
 										<button ref="sendPublicImg" >发图片</button>
 										<button ref="sendPublicText"  >发公屏</button>
 									</div>
@@ -512,6 +517,8 @@
                         __this.commitClose(obj.warpid);
                         break;
                     case 'studentLogin': // 显示直播视频
+					debugger
+					info.data.play_rtmp_url = 'rtmp://60.205.86.217:1935/live2/54208';
                         htm = ` <video   id="v${obj.ifrliveid}" class="video-js vjs-default-skin vjs-big-play-centered"
                                controls preload="auto" poster="" width="300" height="300"
                                data-setup='{}'>
@@ -527,20 +534,20 @@
                     case 'classDanmu':
 
                         let sayText1 = `<p>${info.data.message.content}</p>`;
-                        let fromUserName1 = `<p>${info.data.message.fromUser.userName}</p>`;
+                        let fromUserName1 = `<p class="u-name">${info.data.message.fromUser.userName}</p>`;
                         let userFace = `<img src="${info.data.message.fromUser.avatar}" />`;
 
                         if (info.data.message.attachment) {
                             sayText1 = `<img style="width:120px;height:auto;"  src="${info.data.message.attachment.address}"/>`;
                         }
-                        htm = `<div class="sayLine"><div class="sayHeader" >${userFace}</div><div class="sayCon" >${fromUserName1}${sayText1}</div></div>`;
+                        htm = `<div class="sayLine right">${fromUserName1}<div class="saycont"><div class="sayHeader" >${userFace}</div><div class="sayCon" >${sayText1}</div></div></div>`;
                         $('.public .showDanmuArea').append(htm);
                         break;
                     case'simpleClassDanmu': // 弹幕
 
                         let sayText = `<p>${info.data.message.content}</p>`;
-                        let fromUser = `<p>${info.data.message.fromUser.userName}</p>`;
-                        htm = `<div class="sayLine">${fromUser}${sayText}</div>`;
+                        let fromUser = `<p>${info.data.message.fromUser.userName}：</p>`;
+                        htm = `<marquee behavior="scroll" contenteditable="true" onstart="this.firstChild.innerHTML+=this.firstChild.innerHTML;" scrollamount="5" onmouseover="this.stop();" onmouseout="this.start();"><div class="sayLine">${fromUser}${sayText}</div></marquee>`;
                         $('.panle .showDanmuArea').append(htm);
                         break;
 

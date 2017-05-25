@@ -20,7 +20,7 @@ code, kbd, pre, samp{
     position: absolute;
     left: 0px;
 }
-div, a, span, input, button{
+div, a, span, input, button, textarea, marquee{
 	outline:none;
 }
 .font_gray_33{
@@ -2007,6 +2007,7 @@ li.ant-menu-submenu > ul > li.ant-menu-submenu{
 }
 .pl_del{
 	margin-bottom:8px;
+	display: inline-block;
 }
 .pl_hei{
 	height:calc(100% - 36px)
@@ -2474,41 +2475,41 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 	float: right;
     width: 100%;
 }
-.group_talk ul li div.u-name{
+.group_talk ul li div.u-name, .public .sayLine.left p.u-name{
 	min-height: 21px;
     display: flex;
 }
-.group_talk ul li.right div.u-name{
+.group_talk ul li.right div.u-name, .public .sayLine.right p.u-name{
 	flex-direction: row-reverse;
 }
     
-.group_talk ul li div.u-name span{
+.group_talk ul li div.u-name span, .public .sayLine.left p.u-name span{
 	display: inline-block;
     float: left;
     padding-left: 50px;
 	color:#8E97A6;
 	font-size:12px
 }
-.group_talk ul li.right div.u-name span{
+.group_talk ul li.right div.u-name span, .public .sayLine.right p.u-name span{
 	padding-right: 50px;
 	color:#8E97A6;
 	font-size:12px
 }
-.group_talk ul li div.talk-cont{
+.group_talk ul li div.talk-cont, .public .sayLine.left div.saycont{
 	display: flex;
     flex-direction: row;
 }
-.group_talk ul li.right div.talk-cont{
+.group_talk ul li.right div.talk-cont, .public .sayLine.right div.saycont{
 	display: flex;
     flex-direction: row-reverse;
 }
 .attention_img{
 	 float:left
 }
-.group_talk ul li span.name{
+.group_talk ul li span.name, .public .sayLine.left div.saycont .sayHeader{
 	height:38px;
 }
-.group_talk ul li span.name img, .attention_img img{
+.group_talk ul li span.name img, .attention_img img, .public .sayLine.left div.saycont .sayHeader img{
 	position:relative;
 	background:#none;
 	top:0;
@@ -2641,6 +2642,18 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 }
 .ant-menu-item-selected .icon_antgroup{
 	background-position: 0 -350px;
+}
+.icon_baiban{
+	background-position: 0 -400px;
+}
+.ant-menu-item-selected .icon_baiban{
+	background-position: 0 -450px;
+}
+.icon_gongpin{
+	background-position: 0 -500px;
+}
+.ant-menu-item-selected .icon_gongpin{
+	background-position: 0 -550px;
 }
 .person_13{
 	font-size:16px !important;
@@ -2784,7 +2797,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 .person_attention table tr td:first-child, .person_attention table tr th:first-child{
 	width:400px;
 }
-.borderballoon {
+.borderballoon, .public .sayLine.right div.saycont .sayCon{
     background: #40baff;
     border-radius: 4px;
     position: relative;
@@ -2800,6 +2813,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     flex-direction: row-reverse;
 	font-size:14px;
 	line-height:24px;
+	margin-left: 0;
 }
 .borderballoon:after{
     content: "";
@@ -2810,12 +2824,18 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     top: 8px;
     right: -12px;
 }
-.borderballoon img{
+
+.borderballoon img, .public .sayLine.left .sayCon img, .public .sayLine.right .sayCon img{
     padding: 0 5px;
     height: 38px !important;
     width: auto !important;
 }
-.borderballoon_le{
+.public .sayLine.left .sayCon img, .public .sayLine.right .sayCon img{
+    padding: 0 5px;
+    height: 120px !important;
+    width: auto !important;
+}
+.borderballoon_le, .public .sayLine.left div.saycont .sayCon{
     background: #f2f2f2;
     border-radius: 4px;
     position: relative;
@@ -2839,6 +2859,24 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     border-width: 6px;
     top: 8px;
     left:-12px;
+}
+.public .sayLine.left .sayCon:after{
+    content: "";
+    position: absolute;
+    border-style: solid;
+    border-color: transparent #f2f2f2 transparent transparent;
+    border-width: 6px;
+    top: 8px;
+    left:-12px;
+}
+.public .sayLine.right .sayCon:after{
+    content: "";
+    position: absolute;
+    border-style: solid;
+    border-color:  transparent transparent transparent #40baff;
+    border-width: 6px;
+    top: 8px;
+    right: -12px !important;
 }
 .level_list_pa{
 	padding:15px 25px !important;
