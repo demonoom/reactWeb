@@ -525,7 +525,7 @@
                         if (info.data.message.attachment) {
                             sayText1 = `<img style="width:120px;height:auto;"  src="${info.data.message.attachment.address}"/>`;
                         }
-                        htm = `<div class="sayLine left">${fromUserName1}<div class="saycont"><div class="sayHeader" >${userFace}</div><div class="sayCon" >${sayText1}</div></div></div>`;
+                        htm = `<div class="sayLine right">${fromUserName1}<div class="saycont"><div class="sayHeader" >${userFace}</div><div class="sayCon" >${sayText1}</div></div></div>`;
                         $('.public .showDanmuArea').append(htm);
                         break;
                     case'simpleClassDanmu': // 弹幕
