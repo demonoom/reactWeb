@@ -59,21 +59,18 @@
 	display:none
 }
 .liveTV .tab{
-	width:80px;
-	background:#eeeff4;
-	position: absolute;
-    left: 0;
-    top: 0 !important;
+	width: 64px;
+    background: #eeeff4;
     height: 100% !important;
-	border-right: 1px solid #dfe0e3;
-	z-index:2
+    border-right: 1px solid #dfe0e3;
+    z-index: 2;
 }
 .liveTV .tab ul{
 	width:100%
 }
 .liveTV .tab ul li{
 	height: 25px;
-    margin-left: 26px !important;
+    margin-left: 18px !important;
     width: 28px;
     padding-left: 0 !important;
     float: left;
@@ -101,11 +98,9 @@
     width: 50px;
 }
 .liveTV .right_cont{
-	position: absolute;
-    height: 100%;
-    left: 81px;
-    margin-left: 0 !important;
-    width: calc(100% - 81px);
+	height: 100%;
+    margin-left: 0;
+    width: 100%;
 }
 .sendst{
 	margin:0 auto;
