@@ -6,7 +6,7 @@ export function MsgConnection(){
 //  this.WS_URL = "ws://192.168.1.59:8889/Excoord_MessageServer/message";
   this.WS_URL = "ws://192.168.2.104:8889/Excoord_MessageServer/message";
 	this.ws = null;
-	this.PING_COMMAND = "ping_0123456789_abcdefg";
+	this.PING_COMMAND = "ping_0123456789_abcdefg"; 
 	this.PONG_COMMAND = "pong_0123456789_abcdefg";
 	this.loginProtocol = null;
 	this.connected = false;
@@ -102,7 +102,7 @@ export function MsgConnection(){
 		var pingCommand = connection.PING_COMMAND;
 		connection.heartBeatTimeout = setTimeout(function (){
 			connection.send(pingCommand);
-			console.log("客户端发送ping命令 , 希望服务器回答pong...");
+			// console.log("客户端发送ping命令 , 希望服务器回答pong...");
 			connection.heartBeat();
 		}, 1000*10);
 	};

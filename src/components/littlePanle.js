@@ -282,6 +282,7 @@
         this.id = id;
         this.ifrliveid = 'live' + id;
         this.pptIframeName = 'panle' + id;
+        this.ajaxUploadBtn = 'ajaxUpload_btn_' + id;
         this.showTuiPing = 'showTuiPing';
         this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show ${obj.mode}">
                 <div class="content">
@@ -326,8 +327,9 @@
 								<section class="public" >
 									<div class="showDanmuArea" ></div>
 									<div class="inputArea" >
+									<div contenteditable="true" style="width: 200px; height: 100px; background-color: #fa0;"  ></div>
 										<textarea placeholder="输入弹幕内容！" class="textarea_2" id="InputTxtToPublic" ></textarea>
-										<button ref="sendPublicImg" >发图片</button>
+                                        <input type="file" ref="sendPublicImg" id="${this.ajaxUploadBtn}" >发图片</input>
 										<button ref="sendPublicText"  >发公屏</button>
 									</div>
 								</section>
@@ -356,8 +358,7 @@
         $(this.el).find('.back').on('click', this.closepanle.bind(this, this.id));
         $(this.el).find('.liveTV.tab li').on('click', this.changePanel);
         $(this.el).find('.activity .inputArea button').on('click', this.sendContent.bind(this, this.param));
-//
-//
+        this._initBtnUploadBtn(this.ajaxUploadBtn,obj.param);
 //
         videojs.options.flash.swf = "static/video-js.swf";
         obj.param.ifrliveid = this.ifrliveid;
@@ -383,21 +384,20 @@
             case 'sendPanleText':
 
                 let tmpTxt1 = $('#InputTxtToPanel').val();
-                if(!tmpTxt1){
+                if (!tmpTxt1) {
                     return;
                 }
                 $('#InputTxtToPanel').val('');
 
                 con = {command: "simpleClassDanmu", data: {content: tmpTxt1}};
                 LP.LiveTVSocket.send(con);
-                $('.liveTV.tab li').removeClass('on');
-                $(el).addClass('on');
+
                 return;
                 break;
             case 'sendPublicText':
 
                 let tmpTxt2 = $('#InputTxtToPublic').val();
-                if(!tmpTxt2){
+                if (!tmpTxt2) {
                     return;
                 }
                 $('#InputTxtToPublic').val('');
@@ -420,37 +420,10 @@
 
 
                 ms.send(con);
-                $('.liveTV.tab li').removeClass('on');
-                $(el).addClass('on');
+
                 break;
             case 'sendPublicImg':
 
-
-                con = {
-                    "command": "message",
-                    "data": {
-                        "message": {
-                            "attachment": {
-                                "address": "http://192.168.2.104:8080/upload4/2017-05-24/11/79a4b8c2-a152-4638-bb8a-f2d50e67d200.webp",
-                                createTime: new Date().getTime(),
-                                type: 1,
-                                user: user,
-                            },
-                            "command": "message",
-                            "content": '',
-                            "createTime": new Date().getTime(),
-                            fromUser: user,
-                            "state": 2,
-                            "toId": param.param.vid,
-                            toType: 3,
-                            "uuid": UUID(32, 16),
-                        }
-                    }
-                };
-
-                ms.send(con);
-                $('.liveTV.tab li').removeClass('on');
-                $(el).addClass('on');
 
                 break;
 
@@ -459,6 +432,68 @@
 
     }
 
+
+//fileupload 图片上传
+    littlePanle.prototype._initBtnUploadBtn = function (elId,param) {
+
+
+        let sendImg = function(url){
+            if (!url) return;
+            let user = eval("(" + sessionStorage.getItem('loginUser') + ")");
+            let con = {
+                "command": "message",
+                "data": {
+                    "message": {
+                        "attachment": {
+                            "address": url,
+                            createTime: new Date().getTime(),
+                            type: 1,
+                            user: user,
+                        },
+                        "command": "message",
+                        "content": '',
+                        "createTime": new Date().getTime(),
+                        fromUser: user,
+                        "state": 2,
+                        "toId": param.vid,
+                        toType: 3,
+                        "uuid": UUID(32, 16),
+                    }
+                }
+            };
+
+            ms.send(con);
+
+        }
+
+
+       var url = 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload';
+
+        $('#' + elId).fileupload({
+            url: url,
+            dataType: 'json',
+            done: function (e, data) {
+               // sendImg(url);
+            },
+            success: function (url, status)  //服务器成功响应处理函数
+            {
+                sendImg(url);
+            },
+            progressall: function (e, data) {
+
+
+            },
+            error: function (url, status, e)//服务器响应失败处理函数
+            {
+                sendImg(url);
+            }
+
+        })
+            .prop('disabled', !$.support.fileInput)
+            .parent().addClass($.support.fileInput ? undefined : 'disabled');
+
+
+    }
 
 
 
@@ -487,8 +522,8 @@
                 switch (info.command) {
                     case 'pushHandout': // 图片
                         htm = `<img src='${info.data.url}'/>`;
-                        $('#' + obj.showTuiPing).html(htm).css({'z-index':1});
-                        $('#' + obj.pptIframeName).css({'z-index':0});
+                        $('#' + obj.showTuiPing).html(htm).css({'z-index': 1});
+                        $('#' + obj.pptIframeName).css({'z-index': 0});
 
                         break;
                     case'classOver':
@@ -497,7 +532,7 @@
                         break;
                     case 'studentLogin': // 显示直播视频
 
-				//	info.data.play_rtmp_url = 'rtmp://60.205.86.217:1935/live2/54208';
+                        //	info.data.play_rtmp_url = 'rtmp://60.205.86.217:1935/live2/54208';
                         htm = ` <video   id="v${obj.ifrliveid}" class="video-js vjs-default-skin vjs-big-play-centered"
                                controls preload="auto" poster="" width="300" height="300"
                                data-setup='{}'>
@@ -513,11 +548,11 @@
                     case 'classDanmu':
 
                         let sayText1 = `<p>${info.data.message.content}</p>`;
-                        let loginUser = eval('('+ sessionStorage.getItem('loginUser')+')');
-                        let fromUser1 =  info.data.message.fromUser;
+                        let loginUser = eval('(' + sessionStorage.getItem('loginUser') + ')');
+                        let fromUser1 = info.data.message.fromUser;
                         let refClass = 'left';
 
-                        if(fromUser1.colUid==loginUser.colUid){
+                        if (fromUser1.colUid == loginUser.colUid) {
                             refClass = 'right';
                         }
                         let fromUserName1 = `<p class="u-name">${fromUser1.userName}</p>`;
@@ -538,7 +573,7 @@
                         break;
 
                     default :
-                        __this.parsePPT.call(__this, obj,info );
+                        __this.parsePPT.call(__this, obj, info);
                         break;
 
                 }
@@ -558,7 +593,6 @@
         let showTuiPing = param.showTuiPing;
 
 
-
         //课堂ppt操作
         if (command == "class_ppt") {
             var control = info.data.control;
@@ -567,7 +601,7 @@
             //1:play 2:pre 3:next 4:click 5:close
             switch (control) {
                 case 1:
-                    playPPT( _self._setProxyInfo(  info.data.html ));
+                    playPPT(_self._setProxyInfo(info.data.html));
                     break;
                 case 2:
                     pptPre();
@@ -596,8 +630,8 @@
 
 
         function playPPT(html) {
-            $("#" + pptIframeName).attr("src", html + "?v=1").css({'z-index':1});
-            $('#' + showTuiPing).css({'z-index':0});
+            $("#" + pptIframeName).attr("src", html + "?v=1").css({'z-index': 1});
+            $('#' + showTuiPing).css({'z-index': 0});
         }
 
 
@@ -656,12 +690,12 @@
 
     }
 
-    littlePanle.prototype.commitClose=function(id){
+    littlePanle.prototype.commitClose = function (id) {
         var msg = "您确定要退出课堂？";
-        if (confirm(msg)){
+        if (confirm(msg)) {
             this.closepanle(id);
             return true;
-        }else{
+        } else {
             return false;
         }
     }
