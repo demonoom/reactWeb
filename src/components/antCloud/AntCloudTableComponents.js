@@ -695,7 +695,7 @@ const AntCloudTableComponents = React.createClass({
             }else{
                 var queryConditionJson="";
                 cloudTable.listFiles(cloudTable.state.ident,
-                    cloudTable.state.parentDirectoryId,queryConditionJson,initPageNo);
+                    cloudTable.state.parentDirectoryId,queryConditionJson,initPageNo,"mainTable");
             }
         }else{
             cloudTable.getUserChatGroupRootCloudFiles(this.state.ident, initPageNo);
@@ -933,7 +933,8 @@ const AntCloudTableComponents = React.createClass({
         }
 
         var returnParentToolBar;
-        if(cloudTable.state.parentDirectoryId!=-1){
+        console.log("------>"+cloudTable.state.parentDirectoryId);
+        if(cloudTable.state.parentDirectoryId!=-1 && cloudTable.state.currentDirectoryId!=-1){
             returnParentToolBar = <div className="ant-tabs-right"><Button onClick={cloudTable.returnParent}><Icon type="left" /></Button></div>;
         }
 
