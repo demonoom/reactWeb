@@ -118,7 +118,7 @@ const AntCloudTableComponents = React.createClass({
             columns = [{
                 title: '内容',
                 dataIndex: 'subjectContent',
-                className: 'ant-table-selection-cont3 left-12'
+                className: 'ant-table-selection-cont3 '
             }, {
                 title: '类型',
                 className: 'ant-table-selection-user2',
@@ -129,18 +129,18 @@ const AntCloudTableComponents = React.createClass({
             columns = [{
                 title: '名称',
                 dataIndex: 'title',
-				className: 'left-12',
+				className: '',
+            },{
+                title: '创建者',
+                dataIndex: 'creator',
+                className: 'ant-table-selection-user2 class_right date_tr',
             }, {
                 title: '更新时间',
                 dataIndex: 'createTime',
-                className: 'ant-table-selection-user2 time',
-            }, {
-                title: '创建者',
-                dataIndex: 'creator',
-                className: 'ant-table-selection-user2',
+                className: 'ant-table-selection-time class_right time',
             }, {
                 title: '操作',
-                className: 'ant-table-selection-topic',
+                className: 'ant-table-selection-smallclass class_right',
                 dataIndex: 'subjectOpt',
             },
             ];
@@ -1411,7 +1411,7 @@ const AntCloudTableComponents = React.createClass({
                     {toolbar}
                     <div className="favorite_scroll">
                         
-					<Table  rowSelection={rowSelection} columns={columns} dataSource={cloudTable.state.tableData} pagination={{
+					<Table className="cloud_box" rowSelection={rowSelection} columns={columns} dataSource={cloudTable.state.tableData} pagination={{
                         total: cloudTable.state.totalCount,
                         pageSize: getPageSize(),
                         onChange: cloudTable.pageOnChange
