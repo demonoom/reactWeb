@@ -78,11 +78,11 @@
 	position:relative;
 	cursor:pointer
 }
-.liveTV .tab ul li div.tan{
+.liveTV .tab ul li span.tan{
 	display:none
 }
 
-.liveTV .tab ul li:hover div.tan{
+.liveTV .tab ul li:hover span.tan{
 	background: #000;
     color: #fff;
     position: absolute;
@@ -144,14 +144,14 @@
     background: #e8e8e8;
 }
 .public .sayLine.left{
-	display: block;
-    color: #333;
-    font-size: 15px;
-    font-weight: normal;
-    padding: 4px 8px;
-    margin: 5px 20px;
-	text-align: left;
+	padding: 10px 20px;
+    float: left;
+    display: block;
+    margin: 5px 0;
+    width: 100%;
+    text-align: left;
 }
+
 .public .sayLine.right{
 	padding: 10px 20px;
     float: right;

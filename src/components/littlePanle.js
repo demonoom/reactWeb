@@ -326,7 +326,7 @@
 								<section class="public" >
 									<div class="showDanmuArea" ></div>
 									<div class="inputArea" >
-										<textarea placeholder="输入弹幕内容！" class="textarea_2" id="InputTxtToPublic" ></textarea>
+										<textarea placeholder="输入公屏内容！" class="textarea_2" id="InputTxtToPublic" ></textarea>
 										<button ref="sendPublicImg" >发图片</button>
 										<button ref="sendPublicText"  >发公屏</button>
 									</div>
@@ -526,7 +526,7 @@
                         if (info.data.message.attachment) {
                             sayText1 = `<img style="width:120px;height:auto;"  src="${info.data.message.attachment.address}"/>`;
                         }
-                        htm = `<div class="sayLine ${refClass}"><div class="username" >${fromUserName1}</div><div class="sayHeader" >${userFace}</div><div class="sayCon" >${sayText1}</div></div>`;
+                        htm = `<div class="sayLine ${refClass}"><div class="username" >${fromUserName1}</div><div class="saycont"><div class="sayHeader" >${userFace}</div><div class="sayCon" >${sayText1}</div></div>`;
                         $('.public .showDanmuArea').append(htm);
                         break;
                     case'simpleClassDanmu': // 弹幕
