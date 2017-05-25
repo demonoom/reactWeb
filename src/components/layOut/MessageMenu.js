@@ -245,21 +245,23 @@ const MessageMenu = React.createClass({
             } else {
                 //群组消息
                 var toChatGroup = messageObj.toChatGroup;
-                var chatGroupId = toChatGroup.chatGroupId;
-                var groupName = toChatGroup.name;
-                messageIndex = mMenu.checkMessageIsExist(messageObj.toChatGroup.chatGroupId);
-                if (messageIndex == -1) {
-                    var contentArray = [contentJson];
-                    var userJson = {
-                        key: chatGroupId,
-                        "fromUser": fromUser,
-                        contentArray: contentArray,
-                        "messageToType": messageToType,
-                        "toChatGroup": toChatGroup
-                    };
-                    messageData.push(userJson);
-                } else {
-                    messageData[messageIndex].contentArray.push(contentJson);
+                if(isEmpty(toChatGroup)==false){
+                    var chatGroupId = toChatGroup.chatGroupId;
+                    var groupName = toChatGroup.name;
+                    messageIndex = mMenu.checkMessageIsExist(messageObj.toChatGroup.chatGroupId);
+                    if (messageIndex == -1) {
+                        var contentArray = [contentJson];
+                        var userJson = {
+                            key: chatGroupId,
+                            "fromUser": fromUser,
+                            contentArray: contentArray,
+                            "messageToType": messageToType,
+                            "toChatGroup": toChatGroup
+                        };
+                        messageData.push(userJson);
+                    } else {
+                        messageData[messageIndex].contentArray.push(contentJson);
+                    }
                 }
             }
         }
