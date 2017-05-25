@@ -287,23 +287,25 @@
                 <div class="content">
                     <section class="liveTV tab">
                         <ul>
-                        <li class="panleBtn" ref="panleBtn" >
-							<i class="icon_menu_ios icon_baiban"></i>
-							<div class="tan">白板</div>
-						</li>
-                        <li class="publicBtn ant-menu-item-selected" ref="publicBtn"  >
-							<i class="icon_menu_ios icon_gongpin"></i>
-							<div class="tan">公屏</div>
-						</li>
+                            <li class="panleBtn ant-menu-item-selected" ref="panleBtn" >
+                                <i class="icon_menu_ios icon_baiban"></i>
+                                <span class="tan">白板</span>
+                            </li>
+                            <li class="publicBtn" ref="publicBtn"  >
+                                <i class="icon_menu_ios icon_gongpin"></i>
+                                <span class="tan">公屏</span>
+                            </li>
                         </ul>
                     </section>
 					<div class="right_cont">
+					
 						<div class="public—til—blue">
 							<div class="little-tilte">
                     			<a class="back"><i class="anticon anticon-left "></i></a>
                     		</div>
                 			<span>${ obj.title }</span>
                			 </div>
+               			 
 						 <div class="favorite_scroll">
 						 	<section class="live" id="${this.ifrliveid}">
                    			</section>
@@ -317,14 +319,14 @@
 												<span class="dm"  ><img src="../../src/components/images/danmu.png" width="50" height="50" /></span>
 											</div>
 											<div class="inputArea" >
-												<textarea placeholder="输入弹幕内容！" class="textarea_1" ></textarea>
+												<textarea placeholder="输入弹幕内容！" class="textarea_1"  id="InputTxtToPanel" ></textarea>
 												<button  ref="sendPanleText" >发送弹幕</button>
 											</div>
 								</section>
 								<section class="public" >
 									<div class="showDanmuArea" ></div>
 									<div class="inputArea" >
-										<textarea placeholder="输入弹幕内容！" class="textarea_2"></textarea>
+										<textarea placeholder="输入弹幕内容！" class="textarea_2" id="InputTxtToPublic" ></textarea>
 										<button ref="sendPublicImg" >发图片</button>
 										<button ref="sendPublicText"  >发公屏</button>
 									</div>
@@ -380,19 +382,32 @@
         switch ($(el).attr('ref')) {
             case 'sendPanleText':
 
-                con = {command: "simpleClassDanmu", data: {content: "天气可以"}};
+                let tmpTxt1 = $('#InputTxtToPanel').val();
+                if(!tmpTxt1){
+                    return;
+                }
+                $('#InputTxtToPanel').val('');
+
+                con = {command: "simpleClassDanmu", data: {content: tmpTxt1}};
                 LP.LiveTVSocket.send(con);
                 $('.liveTV.tab li').removeClass('on');
                 $(el).addClass('on');
                 return;
                 break;
             case 'sendPublicText':
+
+                let tmpTxt2 = $('#InputTxtToPublic').val();
+                if(!tmpTxt2){
+                    return;
+                }
+                $('#InputTxtToPublic').val('');
+
                 con = {
                     "command": "message",
                     "data": {
                         "message": {
                             "command": "message",
-                            "content": "图图",
+                            "content": tmpTxt2,
                             "createTime": new Date().getTime(),
                             fromUser: user,
                             "state": 2,
@@ -403,12 +418,13 @@
                     }
                 };
 
-                debugger
+
                 ms.send(con);
                 $('.liveTV.tab li').removeClass('on');
                 $(el).addClass('on');
                 break;
             case 'sendPublicImg':
+
 
                 con = {
                     "command": "message",
@@ -421,7 +437,7 @@
                                 user: user,
                             },
                             "command": "message",
-                            "content": "",
+                            "content": '',
                             "createTime": new Date().getTime(),
                             fromUser: user,
                             "state": 2,
@@ -431,7 +447,7 @@
                         }
                     }
                 };
-                debugger
+
                 ms.send(con);
                 $('.liveTV.tab li').removeClass('on');
                 $(el).addClass('on');
@@ -444,48 +460,7 @@
     }
 
 
-    // 白板公屏切换
-    littlePanle.prototype.changePanel = function (event) {
 
-
-        event = event || window.event;
-        let el = event.target;
-        if (el.nodeName != 'li') {
-            el = $(el.parentNode);
-        }
-
-        switch ($(el).attr('ref')) {
-            case 'panleBtn':
-                $('section.public').css({display: 'none'});
-                $('section.panle').css({display: 'block'});
-                break;
-            case 'publicBtn':
-                $('section.panle').css({display: 'none'});
-                $('section.public').css({display: 'block'});
-                break;
-
-        }
-
-        $('.liveTV.tab li').removeClass('on');
-        $(el).addClass('on');
-
-    }
-
-    littlePanle.prototype.commitClose=function(id){
-
-
-            var msg = "您确定要退出课堂？";
-
-            if (confirm(msg)){
-                __this.closepanle(id);
-                return true;
-            }else{
-                return false;
-            }
-
-
-
-    }
 
     littlePanle.prototype.websocket = function (obj) {
         var connection = new ClazzConnection();
@@ -498,11 +473,15 @@
                 //强制退出课堂
                 __this.closepanle(obj.id)
 
-            }, onWarn: function (warnMsg) {
+            },
 
-                //显示warning
+            onWarn: function (warnMsg) {
+
+
                 alert(warnMsg);
-            }, onMessage: function (info) {
+            },
+            // 显示消息
+            onMessage: function (info) {
 
                 let htm = '';
                 switch (info.command) {
@@ -517,8 +496,8 @@
                         __this.commitClose(obj.warpid);
                         break;
                     case 'studentLogin': // 显示直播视频
-					debugger
-					info.data.play_rtmp_url = 'rtmp://60.205.86.217:1935/live2/54208';
+
+				//	info.data.play_rtmp_url = 'rtmp://60.205.86.217:1935/live2/54208';
                         htm = ` <video   id="v${obj.ifrliveid}" class="video-js vjs-default-skin vjs-big-play-centered"
                                controls preload="auto" poster="" width="300" height="300"
                                data-setup='{}'>
@@ -534,13 +513,20 @@
                     case 'classDanmu':
 
                         let sayText1 = `<p>${info.data.message.content}</p>`;
-                        let fromUserName1 = `<p class="u-name">${info.data.message.fromUser.userName}</p>`;
-                        let userFace = `<img src="${info.data.message.fromUser.avatar}" />`;
+                        let loginUser = eval('('+ sessionStorage.getItem('loginUser')+')');
+                        let fromUser1 =  info.data.message.fromUser;
+                        let refClass = 'left';
+
+                        if(fromUser1.colUid==loginUser.colUid){
+                            refClass = 'right';
+                        }
+                        let fromUserName1 = `<p class="u-name">${fromUser1.userName}</p>`;
+                        let userFace = `<img src="${fromUser1.avatar}" />`;
 
                         if (info.data.message.attachment) {
                             sayText1 = `<img style="width:120px;height:auto;"  src="${info.data.message.attachment.address}"/>`;
                         }
-                        htm = `<div class="sayLine right">${fromUserName1}<div class="saycont"><div class="sayHeader" >${userFace}</div><div class="sayCon" >${sayText1}</div></div></div>`;
+                        htm = `<div class="sayLine ${refClass}"><div class="username" >${fromUserName1}</div><div class="sayHeader" >${userFace}</div><div class="sayCon" >${sayText1}</div></div>`;
                         $('.public .showDanmuArea').append(htm);
                         break;
                     case'simpleClassDanmu': // 弹幕
@@ -641,6 +627,43 @@
             window.frames[pptIframeName].window.checkSlide(currentPage);
         }
 
+    }
+
+    // 白板公屏切换
+    littlePanle.prototype.changePanel = function (event) {
+
+
+        event = event || window.event;
+        let el = event.target;
+        if (el.nodeName != 'li') {
+            el = $(el.parentNode);
+        }
+
+        switch ($(el).attr('ref')) {
+            case 'panleBtn':
+                $('.activity .public').css({display: 'none'});
+                $('.activity .panle').css({display: 'block'});
+                break;
+            case 'publicBtn':
+                $('.activity .panle').css({display: 'none'});
+                $('.activity .public').css({display: 'block'});
+                break;
+
+        }
+
+        $('.liveTV.tab li').removeClass('ant-menu-item-selected');
+        $(el).addClass('ant-menu-item-selected');
+
+    }
+
+    littlePanle.prototype.commitClose=function(id){
+        var msg = "您确定要退出课堂？";
+        if (confirm(msg)){
+            this.closepanle(id);
+            return true;
+        }else{
+            return false;
+        }
     }
 
 
@@ -770,12 +793,13 @@
         GetLP(objParam) {
             let _this = this;
             let objA;
-            switch (objParam) {
-                case'teachingAdmin':
+
+            switch (objParam.mode) {
+                case 'teachingAdmin':
                     objA = new littlePanle().GetLP(objParam, _this.mgr);
                     break;
 
-                case'liveTV':
+                case 'liveTV':
 
                     if (_this.mgr.length) {
                         alert('打开太多！');
