@@ -136,7 +136,7 @@ const AntCloudTableComponents = React.createClass({
     },
 
     //点击导航时，进入的我的文件列表
-    getUserRootCloudFiles: function (userId, pageNo) {
+    getUserRootCloudFiles: function (userId, pageNo,optSrc) {
         data = [];
         cloudTable.setState({currentView: 'subjectList', totalCount: 0});
         cloudTable.buildPageView();
@@ -149,8 +149,14 @@ const AntCloudTableComponents = React.createClass({
             onResponse: function (ret) {
                 var response = ret.response;
                 if(response){
-                    cloudTable.buildTableDataByResponse(ret);
-                    cloudTable.buildTargetDirData(ret);
+                    if(isEmpty(optSrc)==false && optSrc=="mainTable"){
+                        cloudTable.buildTableDataByResponse(ret);
+                    }else if(optSrc=="moveDirModal"){
+                        cloudTable.buildTargetDirData(ret);
+                    }else {
+                        cloudTable.buildTableDataByResponse(ret);
+                        cloudTable.buildTargetDirData(ret);
+                    }
                 }
             },
             onError: function (error) {
@@ -185,7 +191,15 @@ const AntCloudTableComponents = React.createClass({
 
     buildTargetDirData(ret){
         var targetDirDataArray= [];
+        var i=0;
         ret.response.forEach(function (e) {
+            if(i==0){
+                if(e.parent){
+                    var parentDirectoryId = e.parent.parentId;
+                    cloudTable.setState({"parentDirectoryIdAtMoveModal":parentDirectoryId});
+                }
+            }
+            i++
             var key = e.id;
             var name = e.name;
             var dirName = <a className="font_gray_666" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e,"moveDirModal")}>{name}</a>;
@@ -231,10 +245,12 @@ const AntCloudTableComponents = React.createClass({
                 if(response){
                     if(isEmpty(optSrc)==false && optSrc=="mainTable"){
                         cloudTable.buildTableDataByResponse(ret);
+                        cloudTable.setState({"currentDirectoryId":cloudFileId});
                     }else{
                         cloudTable.buildTargetDirData(ret);
+                        cloudTable.setState({"currentDirectoryIdAtMoveModal":cloudFileId});
                     }
-                    cloudTable.setState({"currentDirectoryId":cloudFileId});
+
                 }
             },
             onError: function (error) {
@@ -283,7 +299,7 @@ const AntCloudTableComponents = React.createClass({
                 if(ret.success==true && ret.msg=="调用成功" && ret.response == true){
                     var initPageNo = 1;
                     if(cloudTable.state.getFileType=="myFile"){
-                        cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo);
+                        cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo,"mainTable");
                     }else{
                         cloudTable.getUserChatGroupRootCloudFiles(this.state.ident, initPageNo);
                     }
@@ -418,7 +434,12 @@ const AntCloudTableComponents = React.createClass({
         console.log("optSrc:"+optSrc);
         var initPageNo =1 ;
         var queryConditionJson="";
-        cloudTable.setState({"parentDirectoryId":directoryObj.parentId,"currentDirectoryId":directoryObj.id});
+        if(isEmpty(optSrc)==false && optSrc=="mainTable"){
+            cloudTable.setState({"parentDirectoryId":directoryObj.parentId,"currentDirectoryId":directoryObj.id});
+        }else{
+            cloudTable.setState({"parentDirectoryIdAtMoveModal":directoryObj.parentId,
+                "currentDirectoryIdAtMoveModal":directoryObj.id});
+        }
         cloudTable.listFiles(cloudTable.state.ident,directoryObj.id,queryConditionJson,initPageNo,optSrc);
     },
     /**
@@ -690,12 +711,28 @@ const AntCloudTableComponents = React.createClass({
         var initPageNo=1;
         if(cloudTable.state.getFileType=="myFile"){
             if(cloudTable.state.parentDirectoryId==0){
-                cloudTable.setState({"parentDirectoryId":-1,"currentDirectoryId":0});
-                cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo);
+                cloudTable.setState({"parentDirectoryId":-1,"currentDirectoryId":-1});
+                cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo,"mainTable");
             }else{
                 var queryConditionJson="";
                 cloudTable.listFiles(cloudTable.state.ident,
                     cloudTable.state.parentDirectoryId,queryConditionJson,initPageNo,"mainTable");
+            }
+        }else{
+            cloudTable.getUserChatGroupRootCloudFiles(this.state.ident, initPageNo);
+        }
+    },
+
+    returnParentAtMoveModal(){
+        var initPageNo=1;
+        if(cloudTable.state.getFileType=="myFile"){
+            if(cloudTable.state.parentDirectoryIdAtMoveModal==0){
+                cloudTable.setState({"parentDirectoryIdAtMoveModal":-1,"currentDirectoryIdAtMoveModal":-1});
+                cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo,"moveDirModal");
+            }else{
+                var queryConditionJson="";
+                cloudTable.listFiles(cloudTable.state.ident,
+                    cloudTable.state.parentDirectoryIdAtMoveModal,queryConditionJson,initPageNo,"moveDirModal");
             }
         }else{
             cloudTable.getUserChatGroupRootCloudFiles(this.state.ident, initPageNo);
@@ -952,7 +989,7 @@ const AntCloudTableComponents = React.createClass({
             {tipTitle}
         </div>;
         var returnToolbarInMoveModal=<div className="public—til—blue">
-            <div className="ant-tabs-right"><Button onClick={cloudTable.returnParent}><Icon type="left" /></Button></div>
+            <div className="ant-tabs-right"><Button onClick={cloudTable.returnParentAtMoveModal}><Icon type="left" /></Button></div>
         </div>
         //根据该状态值，来决定上传进度条是否显示
         var progressState = cloudTable.state.progressState;
