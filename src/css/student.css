@@ -35,7 +35,7 @@
 	-ms-transform:translate(-50%, -50%); /* IE 9 */
 	-moz-transform:translate(-50%, -50%); /* Firefox */
 	-webkit-transform:translate(-50%, -50%); /* Safari 和 Chrome */
-	-o-transform:translate(-50%, -50%);
+    height: 100%;
 }
 .liveTV .cont{
 	width:100%;
@@ -148,7 +148,7 @@
     text-align: left;
     background: #e8e8e8;
 }
-.public .sayLine{
+.public .sayLine.left{
 	display: block;
     color: #333;
     font-size: 15px;
@@ -156,6 +156,14 @@
     padding: 4px 8px;
     margin: 5px 20px;
 	text-align: left;
+}
+.public .sayLine.right{
+	padding: 10px 20px;
+    float: right;
+    display: block;
+    margin: 5px 0;
+    width: 100%;
+	text-align: right;
 }
 .sayLine p{
 	display: inline-block;
