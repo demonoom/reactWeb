@@ -382,31 +382,45 @@ const AntCloudTableComponents = React.createClass({
             var shareButton;
             var moveButton;
             var settinButton;
-            switch (maxPermission){
-                case 1:
-                case 2:
-                    editButton=<Button type="button" className="score3_i" value={key} text={key} onClick={cloudTable.editDirectoryName.bind(cloudTable,e)}
-                                       icon="edit"></Button>;
-                    deleteButton=<Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
-                                         icon="delete"></Button>;
-                    shareButton=<Button type="button" value={key} text={key} onClick={cloudTable.showShareModal.bind(cloudTable,e)}
-                                        icon="share-alt"></Button>;
-                    moveButton=<Button type="button" value={key} text={key} onClick={cloudTable.showMoveFileModal.bind(cloudTable,e)}
-                                       icon="export"></Button>;
-                    settinButton=<Button type="button" value={key} text={key} onClick={cloudTable.showPermissionModal.bind(cloudTable,e)}
-                                         icon="setting"></Button>;
-                    break;
-                case 3:
-                    editButton=<Button type="button" className="score3_i" value={key} text={key} onClick={cloudTable.editDirectoryName.bind(cloudTable,e)}
-                                       icon="edit"></Button>;
-                    deleteButton=<Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
-                                         icon="delete"></Button>;
-                    shareButton=<Button type="button" value={key} text={key} onClick={cloudTable.showShareModal.bind(cloudTable,e)}
-                                        icon="share-alt"></Button>;
-                    moveButton=<Button type="button" value={key} text={key} onClick={cloudTable.showMoveFileModal.bind(cloudTable,e)}
-                                       icon="export"></Button>;
-                    settinButton="";
-                    break;
+            if(e.creator.colUid == sessionStorage.getItem("ident")){
+                //自己创建的文件夹或文件，拥有最大权限
+                editButton=<Button type="button" className="score3_i" value={key} text={key} onClick={cloudTable.editDirectoryName.bind(cloudTable,e)}
+                                   icon="edit"></Button>;
+                deleteButton=<Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
+                                     icon="delete"></Button>;
+                shareButton=<Button type="button" value={key} text={key} onClick={cloudTable.showShareModal.bind(cloudTable,e)}
+                                    icon="share-alt"></Button>;
+                moveButton=<Button type="button" value={key} text={key} onClick={cloudTable.showMoveFileModal.bind(cloudTable,e)}
+                                   icon="export"></Button>;
+                settinButton=<Button type="button" value={key} text={key} onClick={cloudTable.showPermissionModal.bind(cloudTable,e)}
+                                     icon="setting"></Button>;
+            }else{
+                switch (maxPermission){
+                    case 1:
+                    case 2:
+                        editButton=<Button type="button" className="score3_i" value={key} text={key} onClick={cloudTable.editDirectoryName.bind(cloudTable,e)}
+                                           icon="edit"></Button>;
+                        deleteButton=<Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
+                                             icon="delete"></Button>;
+                        shareButton=<Button type="button" value={key} text={key} onClick={cloudTable.showShareModal.bind(cloudTable,e)}
+                                            icon="share-alt"></Button>;
+                        moveButton=<Button type="button" value={key} text={key} onClick={cloudTable.showMoveFileModal.bind(cloudTable,e)}
+                                           icon="export"></Button>;
+                        settinButton=<Button type="button" value={key} text={key} onClick={cloudTable.showPermissionModal.bind(cloudTable,e)}
+                                             icon="setting"></Button>;
+                        break;
+                    case 3:
+                        editButton=<Button type="button" className="score3_i" value={key} text={key} onClick={cloudTable.editDirectoryName.bind(cloudTable,e)}
+                                           icon="edit"></Button>;
+                        deleteButton=<Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
+                                             icon="delete"></Button>;
+                        shareButton=<Button type="button" value={key} text={key} onClick={cloudTable.showShareModal.bind(cloudTable,e)}
+                                            icon="share-alt"></Button>;
+                        moveButton=<Button type="button" value={key} text={key} onClick={cloudTable.showMoveFileModal.bind(cloudTable,e)}
+                                           icon="export"></Button>;
+                        settinButton="";
+                        break;
+                }
             }
 
             var subjectOpt = <div>
