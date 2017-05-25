@@ -106,7 +106,7 @@ function ClazzConnection(host){
         var _this = this;
         setTimeout(function (){
             _this.send(_this.PING_COMMAND);
-            console.log("客户端发送ping命令 , 希望服务器回答pong...");
+          //  console.log("客户端发送ping命令 , 希望服务器回答pong...");
             _this.heartBeat();
         }, 1000*10);
     };
