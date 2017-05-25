@@ -325,14 +325,10 @@
 								<section class="public" >
 									<div class="showDanmuArea" ></div>
 									<div class="inputArea" >
-<<<<<<< HEAD
 									<div contenteditable="true" style="width: 200px; height: 100px; background-color: #fa0;"  ></div>
-										<textarea placeholder="输入弹幕内容！" class="textarea_2" id="InputTxtToPublic" ></textarea>
-                                        <input type="file" ref="sendPublicImg" id="${this.ajaxUploadBtn}" >发图片</input>
-=======
 										<textarea placeholder="输入公屏内容！" class="textarea_2" id="InputTxtToPublic" ></textarea>
-										<button ref="sendPublicImg" >发图片</button>
->>>>>>> 50ce888617b11f13fbc9dc56119a41d1161d084d
+                                        <input type="file" ref="sendPublicImg" id="${this.ajaxUploadBtn}" >发图片</input>
+
 										<button ref="sendPublicText"  >发公屏</button>
 									</div>
 								</section>
