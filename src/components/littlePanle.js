@@ -559,7 +559,7 @@ debugger
 
                         let sayText = info.data.message.content ;
                         let fromUser = info.data.message.fromUser.userName;
-                        htm = `<li><p class="sayLine"><span>${fromUser}:&nbsp;</span><span>${sayText}</span></p></li>`;
+                        htm = `<li><div class="sayLine"><span>${fromUser}:&nbsp;</span>${sayText}</div></li>`;
                       let lis =  $('.panle .showDanmuArea li');
                       if(lis.length == 5){
                           $(lis[0]).remove();

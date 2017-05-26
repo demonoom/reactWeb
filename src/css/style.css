@@ -3997,3 +3997,39 @@ div.btn1{
 .cloud_icon_file{
 	background-position:0 0;
 }
+.cloud_icon_apx{
+	background-position:0 -50px;
+}
+.cloud_icon_png{
+	background-position:0 0;
+}
+.cloud_icon_jpg{
+	background-position:0 0;
+}
+.cloud_icon_mp3{
+	background-position:0 -300px;
+}
+.cloud_icon_mp4{
+	background-position:0 -350px;
+}
+.cloud_icon_pdf{
+	background-position:0 0;
+}
+.cloud_icon_ppt{
+	background-position:0 -100px;
+}
+.cloud_icon_pdf{
+	background-position:0 -150px;
+}
+.cloud_icon_doc{
+	background-position:0 0;
+}
+.cloud_icon_xls{
+	background-position:0 0;
+}
+.cloud_icon_wps{
+	background-position:0 -200px;
+}
+.cloud_icon_other{
+	background-position:0 -250px;
+}
