@@ -129,15 +129,15 @@ const AntCloudTableComponents = React.createClass({
             columns = [{
                 title: '名称',
                 dataIndex: 'title',
-				className: '',
+				className: 'ant-table-selection-designation',
             },{
                 title: '创建者',
                 dataIndex: 'creator',
-                className: 'ant-table-selection-user2 class_right date_tr',
+                className: 'ant-table-selection-time class_right date_tr',
             }, {
                 title: '更新时间',
                 dataIndex: 'createTime',
-                className: 'ant-table-selection-time class_right time',
+                className: 'ant-table-selection-smallclass class_right time',
             }, {
                 title: '操作',
                 className: 'ant-table-selection-smallclass class_right',
@@ -367,7 +367,7 @@ const AntCloudTableComponents = React.createClass({
             var fileLogo;
             if(directory){
                 fileLogo=<div>
-                    <Icon type="folder" />
+                    <img src="../src/components/images/APK.png" width="24"/>
                     <a className="font_gray_666" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e,"mainTable")}>{name}</a>
                 </div>;
             }else{
