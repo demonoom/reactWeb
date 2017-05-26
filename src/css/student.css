@@ -129,8 +129,12 @@
 .liveTV .public{
 	display:none;
 }
+.panle_book{
+	width:100%;
+	text-align:center
+}
 .panle_book, .panle_book img{
-	height:calc(100% - 50px);
+	height: 100%;
 }
 .showDanmuArea{
     position: absolute;
