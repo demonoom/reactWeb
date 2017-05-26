@@ -575,9 +575,19 @@
                        }
                         break;
 
+<<<<<<< HEAD
                     case 'pushHandout': // 图片
                         
                         htm = `<img src='${info.data.url}'/>`;
+=======
+                        let sayText = info.data.message.content ;
+                        let fromUser = info.data.message.fromUser.userName;
+                        htm = `<li><div class="sayLine"><span>${fromUser}:&nbsp;</span>${sayText}</div></li>`;
+                      let lis =  $('.panle .showDanmuArea li');
+                      if(lis.length == 5){
+                          $(lis[0]).remove();
+                      }
+>>>>>>> cfc75f7a1f1963b61fd2e761c90209c4d240e975
 
                         $('#' + obj.showTuiPing).show().html(htm);
                         $('#' + obj.pptIframeName).hide();

@@ -375,34 +375,34 @@ const AntCloudTableComponents = React.createClass({
                 var fileTypeLog;
                 switch (fileType){
                     case "png":
-                        fileTypeLog = <i className="cloud_icon cloud_icon_file"></i>;
+                        fileTypeLog = <i className="cloud_icon cloud_icon_png"></i>;
                         break;
                     case "jpg":
-                        fileTypeLog = <i className="cloud_icon cloud_icon_file"></i>;
+                        fileTypeLog = <i className="cloud_icon cloud_icon_jpg"></i>;
                         break;
                     case "mp3":
-                        fileTypeLog = <i className="cloud_icon cloud_icon_file"></i>;
+                        fileTypeLog = <i className="cloud_icon cloud_icon_mp3"></i>;
                         break;
                     case "pdf":
-                        fileTypeLog = <i className="cloud_icon cloud_icon_file"></i>;
+                        fileTypeLog = <i className="cloud_icon cloud_icon_pdf"></i>;
                         break;
                     case "ppt":
                     case "pptx":
-                        fileTypeLog = <i className="cloud_icon cloud_icon_file"></i>;
+                        fileTypeLog = <i className="cloud_icon cloud_icon_ppt"></i>;
                         break;
                     case "doc":
                     case "docx":
-                        fileTypeLog = <i className="cloud_icon cloud_icon_file"></i>;
+                        fileTypeLog = <i className="cloud_icon cloud_icon_doc"></i>;
                         break;
                     case "xls":
                     case "xlsx":
-                        fileTypeLog = <i className="cloud_icon cloud_icon_file"></i>;
+                        fileTypeLog = <i className="cloud_icon cloud_icon_xls"></i>;
                         break;
                     case "wps":
-                        fileTypeLog = <i className="cloud_icon cloud_icon_file"></i>;
+                        fileTypeLog = <i className="cloud_icon cloud_icon_wps"></i>;
                         break;
                     default:
-                        fileTypeLog = <i className="cloud_icon cloud_icon_file"></i>;
+                        fileTypeLog = <i className="cloud_icon cloud_icon_other"></i>;
                         break;
                 }
                 fileLogo=<div>
@@ -1462,9 +1462,10 @@ const AntCloudTableComponents = React.createClass({
 
                     {toolbar}
                     <div className="favorite_scroll">
-                        <div className="pl_del">
+                        {/*<div className="pl_del">
                             {delBtn}
-                        </div>
+                        </div>*/}
+                        {delBtn}
                         <Table className="cloud_box" rowSelection={rowSelection} columns={columns} dataSource={cloudTable.state.tableData} pagination={{
                             total: cloudTable.state.totalCount,
                             pageSize: getPageSize(),
