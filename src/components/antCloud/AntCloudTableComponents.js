@@ -1118,7 +1118,7 @@ const AntCloudTableComponents = React.createClass({
                     var userId = e.colUid;
                     var userName = e.userName;
                     var imgTag = <img src={e.avatar}  className="antnest_38_img" height="38" ></img>;
-                    var userNameTag=<div>{imgTag}{userName}</div>;
+                    var userNameTag=<div>{imgTag}<span>{userName}</span></div>;
                     var userJson ={ label: userNameTag, value: userId};
                     if(userId != sessionStorage.getItem("ident")){
                         concatOptions.push(userJson);
@@ -1517,7 +1517,7 @@ const AntCloudTableComponents = React.createClass({
                                 <Col span={12} className="share_til">这一刻的想法：</Col>
                             </Row>
                             <Row>
-                                <Col span={11} className="upexam_float" style={{height:'400px'}}>
+                                <Col span={11} className="upexam_float cloud_share_cont" >
                                     <Collapse bordered={false} defaultActiveKey={['2']} onChange={cloudTable.collapseChange}>
                                         <Panel header="我的群组" key="1">
                                             <CheckboxGroup options={cloudTable.state.groupOptions} onChange={cloudTable.groupOptionsOnChange} />

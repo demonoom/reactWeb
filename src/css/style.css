@@ -3988,16 +3988,18 @@ div.btn1{
 .cloud_box table tr th .ant-checkbox, .cloud_box table tr td .ant-checkbox{
 	margin-left:12px;
 }
-.cloud_box .ant-table-tbody > tr > td.cloud_name span a{
+.cloud_box .ant-table-tbody > tr > td.cloud_name div a{
 	font-weight: normal !important;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     display: inline-block;
-    width:calc(100% - 36px);
+    width:365px;
 	cursor:pointer;
 }
 .cloud_text{
+    position: relative;
+    top: 4px;
 }
 .cloud_icon{
 	background:url(../components/images/cloud_icon.png) no-repeat;
@@ -4051,8 +4053,13 @@ div.btn1{
 	font-size: 14px;
     margin-bottom: 8px;
 }
-.share_cont{
-	border:1px solid #cfcfd0
+.cloud_share_cont{
+	border:1px solid #cfcfd0;
+	height:300px;
+}
+.cloud_share_cont .ant-collapse{
+	min-height:100%;
+	height:100%;
 }
 li.liveTV:hover, li.history:hover{
 	background:#eaf8fe;
@@ -4061,4 +4068,32 @@ li.liveTV:hover, li.history:hover{
 ul.liveTV_tab .liveTV, ul.liveTV_tab .liveTV i, ul.history_tab .history, ul.history_tab .history i{
 	background-color: #E5F2FE;
     color: #2db7f5;
+}
+.cloud_share_cont .ant-checkbox{
+	margin-right:4px;
+	top:6px;
+}
+.cloud_share_cont .ant-checkbox-wrapper{
+	display: inline-block;
+    width: 100%;
+    padding-right: 0px;
+}
+.cloud_share_cont .ant-collapse-content-box span:nth-child(2){
+	width: calc(100% - 26px);
+    margin-right: 0;
+}
+.cloud_share_cont .ant-collapse-content-box span:nth-child(2) div{
+	height: 38px;
+    line-height: 38px;
+}
+.cloud_share_cont .ant-collapse-content-box span:nth-child(2) div img{
+	float:left
+}
+.cloud_share_cont .ant-collapse-content-box span:nth-child(2) div span{
+    margin-right: 0;
+    width: 145px;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space: nowrap;	
+	margin-left: 12px;
 }
