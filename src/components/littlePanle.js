@@ -467,7 +467,7 @@
             },
             success: function (url, status)  //服务器成功响应处理函数
             {
-                debugger
+                
                 sendImg(url);
             },
             progressall: function (e, data) {
@@ -476,7 +476,7 @@
             },
             error: function (url, status, e)//服务器响应失败处理函数
             {
-                debugger
+                
                 sendImg(url);
             }
 
@@ -511,15 +511,8 @@
 
                 let htm = '';
                 switch (info.command) {
-                    case 'pushHandout': // 图片
-                        debugger
-                        htm = `<img src='${info.data.url}'/>`;
-                        $('#' + obj.showTuiPing).show().html(htm);
-                        $('#' + obj.pptIframeName).hide();
-                        $('.panle .danmu_pic').remove();
-                        break;
                     case'classOver':
-                      //  alert('下课了!');
+                        //  alert('下课了!');
                         __this.commitClose(obj.warpid);
                         break;
                     case 'studentLogin': // 显示直播视频
@@ -537,8 +530,23 @@
                             });
                         });
                         break;
+                    case'simpleClassDanmu': // 弹幕
+
+                        let sayText = info.data.message.content ;
+                        let fromUser = info.data.message.fromUser.userName;
+                        htm = `<li><p class="sayLine"><span>${fromUser}:&nbsp;</span><span>${sayText}</span></p></li>`;
+
+                        let lis =  $('.panle .showDanmuArea li');
+                        if(lis.length == 5){
+                            $(lis[0]).remove();
+                        }
+                        $('.panle .danmu_pic').remove();
+                        $('.panle .showDanmuArea').append(htm);
+                        break;
+
                     case 'classDanmu':
-debugger
+
+
                         let sayText1 = `<p>${info.data.message.content}</p>`;
                         let loginUser = eval('(' + sessionStorage.getItem('loginUser') + ')');
                         let fromUser1 = info.data.message.fromUser;
@@ -551,37 +559,81 @@ debugger
                         if (info.data.message.attachment) {
                             sayText1 = `<img style="width:120px;height:auto;" class="topics_zanImg"  onclick="showLargeImg()"  src="${info.data.message.attachment.address}"/>`;
                         }
+
                         htm = `<div class="sayLine ${refClass}"><div class="username" >${fromUserName1}</div><div class="saycont"><div class="sayHeader" >${userFace}</div><div class="sayCon" >${sayText1}</div></div>`;
                         $('.public .danmu_pic').remove();
-                        $('.public .showDanmuArea').append(htm);
-                        break;
-                    case'simpleClassDanmu': // 弹幕
+                       let showDanmuArea =  $('.public .showDanmuArea');
 
+                       let danmuArea = showDanmuArea[0];
+                       let currentScrollTop = danmuArea.scrollTop;
+                       let maxScrollTop = danmuArea.scrollHeight.toFixed() - danmuArea.clientHeight.toFixed();
+                       if(currentScrollTop >=  maxScrollTop ){
+                           showDanmuArea.append(htm);
+                           danmuArea.scrollTop = danmuArea.scrollHeight.toFixed();
+                       }else{
+                           showDanmuArea.append(htm);
+                       }
+                        break;
+
+<<<<<<< HEAD
+                    case 'pushHandout': // 图片
+                        
+                        htm = `<img src='${info.data.url}'/>`;
+=======
                         let sayText = info.data.message.content ;
                         let fromUser = info.data.message.fromUser.userName;
-                        htm = `<li><p class="sayLine"><span>${fromUser}:&nbsp;</span><span>${sayText}</span></p></li>`;
+                        htm = `<li><div class="sayLine"><span>${fromUser}:&nbsp;</span>${sayText}</div></li>`;
                       let lis =  $('.panle .showDanmuArea li');
                       if(lis.length == 5){
                           $(lis[0]).remove();
                       }
+>>>>>>> cfc75f7a1f1963b61fd2e761c90209c4d240e975
 
+                        $('#' + obj.showTuiPing).show().html(htm);
+                        $('#' + obj.pptIframeName).hide();
                         $('.panle .danmu_pic').remove();
-                        $('.panle .showDanmuArea').append(htm);
                         break;
                     default :
                         __this.parsePPT.call(__this, obj, info);
+
                         break;
                 }
             }
         };
         connection.connect({command: 'studentLogin', data: {userId: parseInt(obj.uid), vid: obj.vid}});
+        this.insertClassroom(obj.vid);
+    }
+
+// 后进的学生，显示的ppt
+    littlePanle.prototype.insertClassroom =  function (vid){
+        let _this=this;
+        var param = {method:'getVclassPPTOpenInfo',vid : vid+''};
+        doWebService(JSON.stringify(param), {
+            onResponse : function(result) {
+                if(!result.success){
+                  // alert(result.msg);
+                    return;
+                }
+                var openInfo = result.response;
+                if(openInfo != null){
+                    //打开课堂中的ppt
+                    _this.playPPT(openInfo.pptUrl);
+                    //更换当前页
+                    setTimeout(function(){
+                        _this.pptCheckPage(openInfo.currentPage);
+                    }, 1000);
+                }
+            },
+            onError : function(error) {
+              //  alert(error);
+            }
+        });
+
     }
 
 
-
-
     littlePanle.prototype.parsePPT = function (param, info) {
-debugger
+
         let _self = this;
         let command = info.command;
         let pptIframeName = param.pptIframeName;
@@ -1056,7 +1108,7 @@ var UploadFile1 = function (readerResult) {
     xhr.open("POST", url, true);
     xhr.setRequestHeader('enctype', 'multipart/form-data');
  //   xhr.setRequestHeader('Content-Type', 'image/png');
-    // debugger
+    // 
 
     let fd = new FormData();
     fd.append('fileName', new Date().getTime() + '.jpg');
@@ -1079,7 +1131,7 @@ var UploadFile1 = function (readerResult) {
     xhr.send(fd);
 
     xhr.onreadystatechange = function () {
-        //  debugger
+        //  
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {
                 console.log("response: " + xhr.responseText);
@@ -1106,6 +1158,7 @@ var imgReader = function (item) {
     reader.readAsDataURL(file);
 };
 function showLargeImg(e) {
+    e = e || window.event;
     var target = e.target;
     if (navigator.userAgent.indexOf("Chrome") > -1) {
         target = e.currentTarget;
@@ -1251,4 +1304,47 @@ var phone = {
     }
 
 
+}
+
+function doWebService(data, listener) {
+    WEBSERVICE_URL = "http://192.168.2.104:9006/Excoord_ApiServer/webservice";
+    var pro = document.getElementById("pro");
+    //进度条的宽度，用来模拟进度条的进度
+    var width = 0;
+    //计时器对象，通过计时器对象，完成定时的进度条刷新
+    var timer;
+    var requestCount = 0;
+    if (pro != null) {
+        //每次访问设定初始值
+        pro.style.width = "0%";
+        //设置显示状态为显示
+        pro.style.display = 'block';
+        //开启定时器
+        timer = setInterval(
+            () => {
+                //定时器每隔一定毫秒时间宽度+20
+                width += 1;
+                requestCount++;
+                //在后台结果未返回前，即使计时器计算的宽度大于了100，也将进度条控制在100以内（此处设置了95），以表现未走完的状态
+                if (width >= 100 || requestCount > 1000) {
+                    pro.style.width = "100%";
+                    pro.style.display = 'none';
+                    //清除定时器
+                    clearInterval(timer);
+                }
+                //设置进度条的宽度
+                pro.style.width = width + "%";
+            },
+            8
+        );
+    }
+    $.post(WEBSERVICE_URL, {
+        params: data
+    }, function (result, status) {
+        if (status == "success") {
+            listener.onResponse(result);
+        } else {
+            listener.onError(result);
+        }
+    }, "json");
 }

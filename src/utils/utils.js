@@ -60,7 +60,7 @@ export function showLargeImg(e) {
     } else {
         target = e.target;
     }
-    debugger
+
     $.openPhotoGallery(target)
 }
 

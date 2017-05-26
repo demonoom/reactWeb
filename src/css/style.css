@@ -3960,6 +3960,14 @@ div.btn1{
 .favorite_my{
 	height:100%;
 }
+.cloud_tool{
+	height: 40px;
+    padding-top: 4px;
+    margin-left: 20px;
+}
+.cloud_box{
+	height: calc(100% - 40px);
+}
 .cloud_box table tr td.ant-table-selection-smallclass button{
 	border:none;
 	background: none;
@@ -3967,7 +3975,7 @@ div.btn1{
 	margin:0
 	
 }
-.cloud_box .ant-table-thead > tr > th, .ant-table-tbody > tr > td {
+.cloud_box .ant-table-thead > tr > th, .cloud_box .ant-table-tbody > tr > td {
 	padding: 16px 0px 16px 8px;
     text-align: left !important;
 }
@@ -3996,4 +4004,47 @@ div.btn1{
 }
 .cloud_icon_file{
 	background-position:0 0;
+}
+.cloud_icon_apx{
+	background-position:0 -50px;
+}
+.cloud_icon_png{
+	background-position:0 0;
+}
+.cloud_icon_jpg{
+	background-position:0 0;
+}
+.cloud_icon_mp3{
+	background-position:0 -300px;
+}
+.cloud_icon_mp4{
+	background-position:0 -350px;
+}
+.cloud_icon_pdf{
+	background-position:0 0;
+}
+.cloud_icon_ppt{
+	background-position:0 -100px;
+}
+.cloud_icon_pdf{
+	background-position:0 -150px;
+}
+.cloud_icon_doc{
+	background-position:0 0;
+}
+.cloud_icon_xls{
+	background-position:0 0;
+}
+.cloud_icon_wps{
+	background-position:0 -200px;
+}
+.cloud_icon_other{
+	background-position:0 -250px;
+}
+.share_til{
+	font-size: 14px;
+    margin-bottom: 8px;
+}
+.share_cont{
+	border:1px solid #cfcfd0
 }
