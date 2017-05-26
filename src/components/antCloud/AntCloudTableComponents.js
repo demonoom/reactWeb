@@ -375,34 +375,34 @@ const AntCloudTableComponents = React.createClass({
                 var fileTypeLog;
                 switch (fileType){
                     case "png":
-                        fileTypeLog = <img src="../src/components/images/APK.png" width="24"/>;
+                        fileTypeLog = <i className="cloud_icon cloud_icon_file"></i>;
                         break;
                     case "jpg":
-                        fileTypeLog = <img src="../src/components/images/APK.png" width="24"/>;
+                        fileTypeLog = <i className="cloud_icon cloud_icon_file"></i>;
                         break;
                     case "mp3":
-                        fileTypeLog = <img src="../src/components/images/APK.png" width="24"/>;
+                        fileTypeLog = <i className="cloud_icon cloud_icon_file"></i>;
                         break;
                     case "pdf":
-                        fileTypeLog = <img src="../src/components/images/APK.png" width="24"/>;
+                        fileTypeLog = <i className="cloud_icon cloud_icon_file"></i>;
                         break;
                     case "ppt":
                     case "pptx":
-                        fileTypeLog = <img src="../src/components/images/APK.png" width="24"/>;
+                        fileTypeLog = <i className="cloud_icon cloud_icon_file"></i>;
                         break;
                     case "doc":
                     case "docx":
-                        fileTypeLog = <img src="../src/components/images/APK.png" width="24"/>;
+                        fileTypeLog = <i className="cloud_icon cloud_icon_file"></i>;
                         break;
                     case "xls":
                     case "xlsx":
-                        fileTypeLog = <img src="../src/components/images/APK.png" width="24"/>;
+                        fileTypeLog = <i className="cloud_icon cloud_icon_file"></i>;
                         break;
                     case "wps":
-                        fileTypeLog = <img src="../src/components/images/APK.png" width="24"/>;
+                        fileTypeLog = <i className="cloud_icon cloud_icon_file"></i>;
                         break;
                     default:
-                        fileTypeLog = <Icon type="file" />;
+                        fileTypeLog = <i className="cloud_icon cloud_icon_file"></i>;
                         break;
                 }
                 fileLogo=<div>
