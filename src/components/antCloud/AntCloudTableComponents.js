@@ -1462,9 +1462,10 @@ const AntCloudTableComponents = React.createClass({
 
                     {toolbar}
                     <div className="favorite_scroll">
-                        <div className="pl_del">
+                        {/*<div className="pl_del">
                             {delBtn}
-                        </div>
+                        </div>*/}
+                        {delBtn}
                         <Table className="cloud_box" rowSelection={rowSelection} columns={columns} dataSource={cloudTable.state.tableData} pagination={{
                             total: cloudTable.state.totalCount,
                             pageSize: getPageSize(),
