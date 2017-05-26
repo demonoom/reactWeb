@@ -321,18 +321,13 @@
 												<textarea placeholder="输入弹幕内容！" class="textarea_1"  id="InputTxtToPanel" ></textarea>
 												<button  ref="sendPanleText" >发送弹幕</button>
 											</div>
+											<form id="refForm" ><input type="file" name="file" ><input type="file" name="fileName" > </form>
 								</section>
 								<section class="public" >
 									<div class="showDanmuArea" ></div>
 									<div class="inputArea" >
-<<<<<<< HEAD
-									<div contenteditable="true" style="width: 200px; height: 100px; background-color: #fa0;"  ></div>
-										<textarea placeholder="输入弹幕内容！" class="textarea_2" id="InputTxtToPublic" ></textarea>
-                                        <input type="file" ref="sendPublicImg" id="${this.ajaxUploadBtn}" >发图片</input>
-=======
 										<textarea placeholder="输入公屏内容！" class="textarea_2" id="InputTxtToPublic" ></textarea>
 										<button ref="sendPublicImg" >发图片</button>
->>>>>>> 50ce888617b11f13fbc9dc56119a41d1161d084d
 										<button ref="sendPublicText"  >发公屏</button>
 									</div>
 								</section>
@@ -360,7 +355,7 @@
         $(this.el).find('.back').on('click', this.closepanle.bind(this, this.id));
         $(this.el).find('.liveTV.tab li').on('click', this.changePanel);
         $(this.el).find('.activity .inputArea button').on('click', this.sendContent.bind(this, this.param));
-        this._initBtnUploadBtn(this.ajaxUploadBtn,obj.param);
+        this._initBtnUploadBtn(this.ajaxUploadBtn, obj.param);
 //
         videojs.options.flash.swf = "static/video-js.swf";
         obj.param.ifrliveid = this.ifrliveid;
@@ -436,10 +431,10 @@
 
 
 //fileupload 图片上传
-    littlePanle.prototype._initBtnUploadBtn = function (elId,param) {
+    littlePanle.prototype._initBtnUploadBtn = function (elId, param) {
 
 
-        let sendImg = function(url){
+        let sendImg = function (url) {
             if (!url) return;
             let user = eval("(" + sessionStorage.getItem('loginUser') + ")");
             let con = {
@@ -469,13 +464,13 @@
         }
 
 
-       var url = 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload';
+        var url = 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload';
 
         $('#' + elId).fileupload({
             url: url,
             dataType: 'json',
             done: function (e, data) {
-               // sendImg(url);
+                // sendImg(url);
             },
             success: function (url, status)  //服务器成功响应处理函数
             {
@@ -496,7 +491,6 @@
 
 
     }
-
 
 
     littlePanle.prototype.websocket = function (obj) {
@@ -989,6 +983,105 @@ function replaceUnit(str) {
 
 }
 
+
+function onPasteFunction(event) {
+    event = event || window.event;
+
+    // 添加到事件对象中的访问系统剪贴板的接口
+    var clipboardData = event.clipboardData,
+        i = 0,
+        items, item, types;
+
+    if (clipboardData) {
+        items = clipboardData.items;
+
+        if (!items) {
+            return;
+        }
+
+        item = items[0];
+        // 保存在剪贴板中的数据类型
+        types = clipboardData.types || [];
+
+        for (; i < types.length; i++) {
+            if (types[i] === 'Files') {
+                item = items[i];
+                break;
+            }
+        }
+
+        // 判断是否为图片数据
+        if (item && item.kind === 'file' && item.type.match(/^image\//i)) {
+            // 读取该图片
+            imgReader(item);
+        }
+    }
+
+
+}
+
+var UploadFile1 = function (readerResult) {
+     let url = 'http://192.168.1.34:8890/Excoord_Upload_Server/file/upload';
+ //    let url = '/proxy/upload/1/34/8890';
+  //  let url = 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload';
+  //  let url = '/proxy/upload/45/125/8890';
+ //   let url = 'http://192.168.2.104:8890/Excoord_Upload_Server/file/upload';
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url,true);
+  //  xhr.overrideMimeType("application/octet-stream");
+  //  xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');
+    xhr.setRequestHeader('enctype','multipart/form-data');
+     xhr.setRequestHeader('Content-Type','image/png');
+   // debugger
+
+   let fd = new FormData();
+   fd.append('fileName', new Date().getTime() + '.jpg');
+   fd.append('file', readerResult  );
+
+
+    if(!XMLHttpRequest.prototype.sendAsBinary){
+        XMLHttpRequest.prototype.sendAsBinary = function(datastr) {
+            function byteValue(x) {
+                return x.charCodeAt(0) & 0xff;
+            }
+            var ords = Array.prototype.map.call(datastr, byteValue);
+            var ui8a = new Uint8Array(ords);
+            this.send(ui8a.buffer);
+        };
+    }
+   // xhr.sendAsBinary(readerResult);
+
+    xhr.send(fd);
+
+    xhr.onreadystatechange = function () {
+      //  debugger
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+                console.log("response: " + xhr.responseText);
+            }
+
+        }
+    }
+}
+
+
+
+
+var imgReader = function (item) {
+
+    var reader = new FileReader();
+    // 读取文件后将其显示在网页中
+    reader.onload = function (e) {
+        var img = new Image();
+
+        img.src = e.target.result;
+        UploadFile1(e.target.result);
+        document.body.appendChild(img);
+    };
+    var file = item.getAsFile();
+    // 读取文件
+    reader.readAsDataURL(file);
+};
 
 // 保持android ios 一直体验的接口实现
 var phone = {
