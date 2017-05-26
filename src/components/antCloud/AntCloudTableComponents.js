@@ -369,8 +369,44 @@ const AntCloudTableComponents = React.createClass({
                     <a className="font_gray_666" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e,"mainTable")}>{name}</a>
                 </div>;
             }else{
+                var lastPointIndex = name.lastIndexOf(".");
+                //通过截取文件后缀名的形式，完成对上传文件类型的判断
+                var fileType = name.substring(lastPointIndex+1);
+                var fileTypeLog;
+                switch (fileType){
+                    case "png":
+                        fileTypeLog = <img src="../src/components/images/APK.png" width="24"/>;
+                        break;
+                    case "jpg":
+                        fileTypeLog = <img src="../src/components/images/APK.png" width="24"/>;
+                        break;
+                    case "mp3":
+                        fileTypeLog = <img src="../src/components/images/APK.png" width="24"/>;
+                        break;
+                    case "pdf":
+                        fileTypeLog = <img src="../src/components/images/APK.png" width="24"/>;
+                        break;
+                    case "ppt":
+                    case "pptx":
+                        fileTypeLog = <img src="../src/components/images/APK.png" width="24"/>;
+                        break;
+                    case "doc":
+                    case "docx":
+                        fileTypeLog = <img src="../src/components/images/APK.png" width="24"/>;
+                        break;
+                    case "xls":
+                    case "xlsx":
+                        fileTypeLog = <img src="../src/components/images/APK.png" width="24"/>;
+                        break;
+                    case "wps":
+                        fileTypeLog = <img src="../src/components/images/APK.png" width="24"/>;
+                        break;
+                    default:
+                        fileTypeLog = <Icon type="file" />;
+                        break;
+                }
                 fileLogo=<div>
-                    <Icon type="file" />
+                    {fileTypeLog}
                     {name}
                 </div>;
             }
