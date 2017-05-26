@@ -3985,9 +3985,16 @@ div.btn1{
     width: 300px;
 	cursor:pointer
 }
+.cloud_text{
+	position:relative;
+	top:5px;
+}
 .cloud_icon{
 	background:url(../components/images/cloud_icon.png) no-repeat;
 	width:24px;
+	height: 24px;
+    display: inline-block;
+    margin-right: 12px;
 }
 .cloud_icon_file{
 	background-position:0 0;
