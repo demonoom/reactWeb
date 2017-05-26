@@ -150,7 +150,7 @@ const AntCloudTableComponents = React.createClass({
     //点击导航时，进入的我的文件列表
     getUserRootCloudFiles: function (userId, pageNo,optSrc) {
         data = [];
-        cloudTable.setState({currentView: 'subjectList', totalCount: 0});
+        cloudTable.setState({currentDirectoryId: -1, totalCount: 0});
         cloudTable.buildPageView();
         var param = {
             "method": 'getUserRootCloudFiles',
@@ -180,7 +180,7 @@ const AntCloudTableComponents = React.createClass({
     //点击导航时，获取用户的根群文件夹
     getUserChatGroupRootCloudFiles: function (userId, pageNo) {
         data = [];
-        cloudTable.setState({currentView: 'subjectList', totalCount: 0});
+        cloudTable.setState({currentDirectoryId: -1, totalCount: 0});
         cloudTable.buildPageView();
         var param = {
             "method": 'getUserChatGroupRootCloudFiles',
@@ -381,7 +381,7 @@ const AntCloudTableComponents = React.createClass({
             var moveButton;
             var settinButton;
             //判断是否是第一层文件夹
-            if(parentId==0){
+            if(cloudTable.state.currentDirectoryId==-1){
                 // 判断是否是超级管理员
                 if(cloudTable.state.currentUserIsSuperManager){
                     //超管在第一层具备所有文件夹操作权限，非超管无任何操作权限
