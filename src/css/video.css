@@ -47,7 +47,9 @@
     font-weight: 400;
     font-style: normal
 }
-
+.live .vjs-icon-pause, .video-js .vjs-play-control.vjs-playing{
+	display:none
+}
 .vjs-icon-pause:before, .video-js .vjs-play-control.vjs-playing:before {
     content: "\f103"
 }

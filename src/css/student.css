@@ -129,8 +129,14 @@
 .liveTV .public{
 	display:none;
 }
-.panle_book, .panle_book img{
-	height:100%;
+.panle_book{
+	width:100%;
+	text-align:center;
+	height:calc(100% - 50px);
+	z-index: 2;
+}
+.panle_book img{
+	height: 100%;
 }
 .showDanmuArea{
     position: absolute;
@@ -141,6 +147,8 @@
 .panle .showDanmuArea{
     height: 140px;
 	overflow: hidden;
+	left:0;
+	z-index: 2;
 }
 .public .showDanmuArea{
 	height:calc(100% - 50px);
@@ -224,9 +232,10 @@
 	background:#2696ff
 }
 .liveTV .panle iframe{
-	height:calc(100% - 50px) !important;
-	z-index:2;
-	position: relative;
+    height: calc(100% - 50px) !important;
+    z-index: 2;
+    position: absolute;
+    width: 100%;
 }
 .marquee{
 　　white-space: nowrap;
@@ -239,7 +248,7 @@
 .st_file{
 	position: absolute;
     top: 8px;
-    right: 102px;
+    right: 20px;
     width: 70px;
     height: 34px;
     filter: alpha(opacity=0);
@@ -252,4 +261,7 @@
 }
 .st_file_wrap{
 	 width: 70px;
-	}
+}
+.st_file_wrap input[type="file"], .st_file_wrap input[type="file" i]{
+	cursor:pointer
+}
