@@ -316,27 +316,24 @@
 												<input placeholder="输入弹幕内容！" class="textarea_1"  id="InputTxtToPanel" ></input>
 												<button  ref="sendPanleText" >发送弹幕</button>
 											</div>
-											<form id="refForm" ><input type="file" name="file" ><input type="file" name="fileName" > </form>
 								</section>
 								<section class="public" >
 									<div class="showDanmuArea" >
 										<div class="danmu_pic"><img src="../../src/components/images/gongping_pic.png"  height="286" /></div>
 									</div>
 									<div class="inputArea" >
-									<div contenteditable="true" style="width: 200px; height: 100px; background-color: #fa0; display:none"  ></div>
-										<input placeholder="输入公屏内容！" class="textarea_2" id="InputTxtToPublic" />
-										<button ref="sendPublicText" >发公屏</button>
-                                        <span class="file_btn st_file_wrap"><input type="file" ref="sendPublicImg" id="${this.ajaxUploadBtn}" class="st_file"/><span class="st_file_tex">发图片</span></span>
+										<textarea placeholder="输入文字内容！" class="textarea_2" id="InputTxtToPublic" ></textarea>
+										<button id="sendPublicText" ref="sendPublicText" >发文字</button>
+                                        <span class="file_btn st_file_wrap">
+                                        <span class="st_file_tex">发图片</span>
+                                        <input type="file"   id="${this.ajaxUploadBtn}" class="st_file"/>
+                                        </span>
 									</div>
 								</section>
 						 </div>
 						 <section class="live" id="${this.ifrliveid}">
                    		 </section>
-
 					</div>
-                    
-
-                    
                 </div>
                 </div>`;
 
@@ -357,8 +354,14 @@
         $(this.el).find('.liveTV.tab li').on('click', this.changePanel);
         $(this.el).find('.activity .inputArea button').on('click', this.sendContent.bind(this, this.param));
         this._initBtnUploadBtn(this.ajaxUploadBtn, obj.param);
+        document.onpaste = onPasteFunction;
 //
-        videojs.options.flash.swf = "static/video-js.swf";
+//         videojs.setGlobalOptions({
+//             flash: {
+//                 swf: 'static/video-js.swf'
+//             }
+//         });
+//
         obj.param.ifrliveid = this.ifrliveid;
         obj.param.pptIframeName = this.pptIframeName;
         obj.param.showTuiPing = this.showTuiPing;
@@ -380,7 +383,6 @@
 
         switch ($(el).attr('ref')) {
             case 'sendPanleText':
-
                 let tmpTxt1 = $('#InputTxtToPanel').val();
                 if (!tmpTxt1) {
                     return;
@@ -416,18 +418,9 @@
                     }
                 };
 
-
                 ms.send(con);
-
                 break;
-            case 'sendPublicImg':
-
-
-                break;
-
         }
-
-
     }
 
 
@@ -436,6 +429,7 @@
 
 
         let sendImg = function (url) {
+
             if (!url) return;
             let user = eval("(" + sessionStorage.getItem('loginUser') + ")");
             let con = {
@@ -459,22 +453,20 @@
                     }
                 }
             };
-
             ms.send(con);
-
         }
 
-
-        var url = 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload';
+        var action = 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload';
 
         $('#' + elId).fileupload({
-            url: url,
-            dataType: 'json',
+            url: action,
+            dataType: 'text',
             done: function (e, data) {
                 // sendImg(url);
             },
             success: function (url, status)  //服务器成功响应处理函数
             {
+                debugger
                 sendImg(url);
             },
             progressall: function (e, data) {
@@ -483,6 +475,7 @@
             },
             error: function (url, status, e)//服务器响应失败处理函数
             {
+                debugger
                 sendImg(url);
             }
 
@@ -528,8 +521,8 @@
                         __this.commitClose(obj.warpid);
                         break;
                     case 'studentLogin': // 显示直播视频
+                        info.data.play_rtmp_url = 'rtmp://60.205.86.217:1935/live2/54208';
 
-                        //	info.data.play_rtmp_url = 'rtmp://60.205.86.217:1935/live2/54208';
                         htm = ` <video   id="v${obj.ifrliveid}" class="video-js vjs-default-skin vjs-big-play-centered"
                                controls preload="auto" poster="" width="300" height="300"
                                data-setup='{}'>
@@ -666,11 +659,16 @@
 
         event = event || window.event;
         let el = event.target;
-        if (el.nodeName != 'li') {
-            el = $(el.parentNode);
+        let li = null;
+
+        if (el.nodeName.toLowerCase() != 'li') {
+            li = $(el.parentNode)[0];
+        }else{
+            li = el;
         }
 
-        switch ($(el).attr('ref')) {
+
+        switch ($(li).attr('ref')) {
             case 'panleBtn':
                 $('.activity .public').css({display: 'none'});
                 $('.activity .panle').css({display: 'block'});
@@ -683,7 +681,7 @@
         }
 
         $('.liveTV.tab li').removeClass('ant-menu-item-selected');
-        $(el).addClass('ant-menu-item-selected');
+        $(li).addClass('ant-menu-item-selected');
 
     }
 

@@ -55,12 +55,10 @@ class LiveTV extends React.Component {
     }
 
     _getHistoryLives(cityCode,schoolId,kemu,pageNo, fn) {
+        debugger
         let _this = this;
         var param = {
             "method": 'getLivedLiveInfos',
-            "cityCode": xxxxx,
-            "schoolId": xxxxxxxx,
-            "kemu": xxxxx,
             "pageNo": pageNo || 1,
         };
 
@@ -137,13 +135,11 @@ class LiveTV extends React.Component {
 
     view(objref) {
 
-        // if (!objref.liveVideos[0]) {
-        //     message.info("无效的视频！");
-        //     return;
-        // }
+
+      let title =  objref.liveCover.user.userName + '正在直播';
 
         let obj = {
-            title: objref.title,
+            title: title,
             livelurl: "",
             panelurl: "",
             param: {uid:this.state.ident,vid:objref.vid},
