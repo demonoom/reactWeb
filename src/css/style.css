@@ -881,10 +881,10 @@ html, body, #root {
 	text-align:center;
 }
 .ant-table-thead > tr > th.ant-table-selection-smallclass, .ant-table-tbody > tr > td.ant-table-selection-smallclass{
-	width:180px
+	width:160px
 }
 .ant-table-thead > tr > th.ant-table-selection-time, .ant-table-tbody > tr > td.ant-table-selection-time{
-	width:130px;
+	width:120px;
 }
 .ant-table-thead > tr > th.ant-table-selection-cont, .ant-table-tbody > tr > td.ant-table-selection-cont{
 	max-width:210px !important;
@@ -1306,7 +1306,7 @@ p.user_cont span.name, .user_til_name{
 	
 p.user_cont span.name1{
 	color:#474747;
-	
+	 display: inline-block;
 }
 .blur {
     filter: url('blur.svg#blur'); /* FireFox, Chrome, Opera */
@@ -2977,7 +2977,7 @@ ul.integral li i{
 	height:25px;
 	line-height:22px;
 }
-.focus_1 span.antnest_name, .focus_1 a.antnest_name{
+.focus_1 span.antnest_name, .focus_1 a.antnest_name,{
 	font-weight: normal !important;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -2986,6 +2986,7 @@ ul.integral li i{
     max-width: 100%;
 	cursor:pointer
 }
+
 a.antnest_name:hover{
 	text-decoration:none
 }
@@ -3967,4 +3968,20 @@ div.btn1{
     padding: 0;
 	margin:0
 	
+}
+.cloud_box .ant-table-thead > tr > th, .ant-table-tbody > tr > td {
+	padding: 16px 0px 16px 8px;
+    text-align: left !important;
+}
+.cloud_box table tr th .ant-checkbox, .cloud_box table tr td .ant-checkbox{
+	margin-left:12px;
+}
+.cloud_box .ant-table-tbody > tr > td.ant-table-selection-designation div a{
+	font-weight: normal !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    width: 300px;
+	cursor:pointer
 }
