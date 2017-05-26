@@ -19,7 +19,7 @@ class LiveTV extends React.Component {
             lives: [],
             pageNo: 1,
         };
-        this.currentTab = 'liveTV';
+        this.currentTab = 'liveTV_tab';
         this.view = this.view.bind(this);
         this.change = this.change.bind(this);
         this._getLives = this._getLives.bind(this);
@@ -110,7 +110,7 @@ class LiveTV extends React.Component {
             return <Card className="live" key={id}>
                 <p className="h3">{title}</p>
                 <div className="live_img" id={id} onClick={ () => {
-                    _this.view(item)
+                    _this.view(item,_this.currentTab)
                 } }>
                     <img className="attention_img" width="100%" src={cover}/>
                     <div className="live_green"><span>{schoolName}</span></div>
@@ -135,7 +135,7 @@ class LiveTV extends React.Component {
     }
 
 
-    view(objref,history) {
+    view(objref,tab) {
         let _this = this;
         let title = objref.liveCover.user.userName + '正在直播';
         let obj = {
@@ -143,9 +143,8 @@ class LiveTV extends React.Component {
             livelurl: "",
             panelurl: "",
             param: {uid: this.state.ident, vid: objref.vid},
-            mode: 'liveTV',
+            mode: tab.replace('_tab','')
         }
-
         if (objref.password) {
             let password = objref.password;
             // 显示弹窗
@@ -176,9 +175,10 @@ class LiveTV extends React.Component {
 
     change(type) {
 
-        this.currentTab = type;
+        this.currentTab = type+'_tab';
         switch (type) {
             case 'liveTV':
+
                 this._getLives(1);
                 break;
             case 'history':
