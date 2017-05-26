@@ -150,7 +150,7 @@ const AntCloudTableComponents = React.createClass({
     //点击导航时，进入的我的文件列表
     getUserRootCloudFiles: function (userId, pageNo,optSrc) {
         data = [];
-        cloudTable.setState({currentView: 'subjectList', totalCount: 0});
+        cloudTable.setState({currentDirectoryId: -1, totalCount: 0});
         cloudTable.buildPageView();
         var param = {
             "method": 'getUserRootCloudFiles',
@@ -180,7 +180,7 @@ const AntCloudTableComponents = React.createClass({
     //点击导航时，获取用户的根群文件夹
     getUserChatGroupRootCloudFiles: function (userId, pageNo) {
         data = [];
-        cloudTable.setState({currentView: 'subjectList', totalCount: 0});
+        cloudTable.setState({currentDirectoryId: -1, totalCount: 0});
         cloudTable.buildPageView();
         var param = {
             "method": 'getUserChatGroupRootCloudFiles',
@@ -365,12 +365,48 @@ const AntCloudTableComponents = React.createClass({
             var fileLogo;
             if(directory){
                 fileLogo=<div>
-                    <img src="../src/components/images/APK.png" width="24"/>
+                    <i className="cloud_icon cloud_icon_file"></i>
                     <a className="font_gray_666" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e,"mainTable")}>{name}</a>
                 </div>;
             }else{
+                var lastPointIndex = name.lastIndexOf(".");
+                //通过截取文件后缀名的形式，完成对上传文件类型的判断
+                var fileType = name.substring(lastPointIndex+1);
+                var fileTypeLog;
+                switch (fileType){
+                    case "png":
+                        fileTypeLog = <img src="../src/components/images/APK.png" width="24"/>;
+                        break;
+                    case "jpg":
+                        fileTypeLog = <img src="../src/components/images/APK.png" width="24"/>;
+                        break;
+                    case "mp3":
+                        fileTypeLog = <img src="../src/components/images/APK.png" width="24"/>;
+                        break;
+                    case "pdf":
+                        fileTypeLog = <img src="../src/components/images/APK.png" width="24"/>;
+                        break;
+                    case "ppt":
+                    case "pptx":
+                        fileTypeLog = <img src="../src/components/images/APK.png" width="24"/>;
+                        break;
+                    case "doc":
+                    case "docx":
+                        fileTypeLog = <img src="../src/components/images/APK.png" width="24"/>;
+                        break;
+                    case "xls":
+                    case "xlsx":
+                        fileTypeLog = <img src="../src/components/images/APK.png" width="24"/>;
+                        break;
+                    case "wps":
+                        fileTypeLog = <img src="../src/components/images/APK.png" width="24"/>;
+                        break;
+                    default:
+                        fileTypeLog = <Icon type="file" />;
+                        break;
+                }
                 fileLogo=<div>
-                    <Icon type="file" />
+                    {fileTypeLog}
                     {name}
                 </div>;
             }
@@ -381,7 +417,7 @@ const AntCloudTableComponents = React.createClass({
             var moveButton;
             var settinButton;
             //判断是否是第一层文件夹
-            if(parentId==0){
+            if(cloudTable.state.currentDirectoryId==-1){
                 // 判断是否是超级管理员
                 if(cloudTable.state.currentUserIsSuperManager){
                     //超管在第一层具备所有文件夹操作权限，非超管无任何操作权限

@@ -239,7 +239,7 @@
 .st_file{
 	position: absolute;
     top: 8px;
-    right: 102px;
+    right: 20px;
     width: 70px;
     height: 34px;
     filter: alpha(opacity=0);
@@ -252,4 +252,7 @@
 }
 .st_file_wrap{
 	 width: 70px;
-	}
+}
+.st_file_wrap input[type="file"], .st_file_wrap input[type="file" i]{
+	cursor:pointer
+}
