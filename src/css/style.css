@@ -3985,3 +3985,10 @@ div.btn1{
     width: 300px;
 	cursor:pointer
 }
+.cloud_icon{
+	background:url(../components/images/cloud_icon.png) no-repeat;
+	width:24px;
+}
+.cloud_icon_file{
+	background-position:0 0;
+}

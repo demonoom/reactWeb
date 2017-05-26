@@ -365,7 +365,7 @@ const AntCloudTableComponents = React.createClass({
             var fileLogo;
             if(directory){
                 fileLogo=<div>
-                    <img src="../src/components/images/APK.png" width="24"/>
+                    <i className="cloud_icon cloud_icon_file"></i>
                     <a className="font_gray_666" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e,"mainTable")}>{name}</a>
                 </div>;
             }else{
