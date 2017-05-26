@@ -799,6 +799,10 @@
             case 'liveTV':
                 this._liveTV_UI_templet(this.param);
                 break;
+            case 'history':
+
+                this._liveTV_UI_templet(this.param);
+                break;
 
         }
 
@@ -896,7 +900,7 @@
                     }
                     objA = new littlePanle().GetLP(objParam, _this.mgr);
                     break;
-                case 'liveTVHistory':
+                case 'history':
                     if (_this.mgr.length) {
                         alert('打开太多！');
                         return;
