@@ -1200,13 +1200,10 @@ const AntCloudTableComponents = React.createClass({
         var toolbar = <div className="public—til—blue">
             {returnParentToolBar}
             <div className="talk_ant_btn1">
-			<div className="pl_del">
-                            {delBtn}
-                        </div>
                 {newButton}
                 {uploadButton}
-                {setManagerButton}
-                {setUserButton}
+               {/* {setManagerButton}
+                {setUserButton}*/}
             </div>
             {tipTitle}
         </div>;
@@ -1423,12 +1420,14 @@ const AntCloudTableComponents = React.createClass({
 
                     {toolbar}
                     <div className="favorite_scroll">
-                        
-					<Table className="cloud_box" rowSelection={rowSelection} columns={columns} dataSource={cloudTable.state.tableData} pagination={{
-                        total: cloudTable.state.totalCount,
-                        pageSize: getPageSize(),
-                        onChange: cloudTable.pageOnChange
-                    }} scroll={{y: 400}}/>
+                        <div className="pl_del">
+                            {delBtn}
+                        </div>
+                        <Table className="cloud_box" rowSelection={rowSelection} columns={columns} dataSource={cloudTable.state.tableData} pagination={{
+                            total: cloudTable.state.totalCount,
+                            pageSize: getPageSize(),
+                            onChange: cloudTable.pageOnChange
+                        }} scroll={{y: 400}}/>
 					</div>
                 </div>
 
