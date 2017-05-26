@@ -4,7 +4,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Card, Row, message, Col, Icon, Pagination} from 'antd';
+import {Card, Row, message, Col, Icon, Input, Modal, Pagination} from 'antd';
 import {getPageSize} from '../../utils/Const';
 import {getLocalTime} from '../../utils/utils';
 import {doWebService} from '../../WebServiceHelper';
@@ -19,11 +19,13 @@ class LiveTV extends React.Component {
             lives: [],
             pageNo: 1,
         };
+        this.currentTab = 'liveTV';
         this.view = this.view.bind(this);
         this.change = this.change.bind(this);
         this._getLives = this._getLives.bind(this);
         this._buildLivesUi = this._buildLivesUi.bind(this);
         this._getHistoryLives = this._getHistoryLives.bind(this);
+        this.videoPwdModalHandleOk = this.videoPwdModalHandleOk.bind(this);
     }
 
     componentWillMount() {
@@ -54,8 +56,8 @@ class LiveTV extends React.Component {
         });
     }
 
-    _getHistoryLives(cityCode,schoolId,kemu,pageNo, fn) {
-        debugger
+    _getHistoryLives(cityCode, schoolId, kemu, pageNo, fn) {
+
         let _this = this;
         var param = {
             "method": 'getLivedLiveInfos',
@@ -133,29 +135,50 @@ class LiveTV extends React.Component {
     }
 
 
-    view(objref) {
-
-
-      let title =  objref.liveCover.user.userName + '正在直播';
-
+    view(objref,history) {
+        let _this = this;
+        let title = objref.liveCover.user.userName + '正在直播';
         let obj = {
             title: title,
             livelurl: "",
             panelurl: "",
-            param: {uid:this.state.ident,vid:objref.vid},
+            param: {uid: this.state.ident, vid: objref.vid},
             mode: 'liveTV',
         }
 
-        LP.Start(obj);
+        if (objref.password) {
+            let password = objref.password;
+            // 显示弹窗
+            Modal.confirm({
+                title: '请输入密码',
+                content: <Input id="tmppwd"/>,
+                okText: '确定',
+                cancelText: '取消',
+                onOk: _this.videoPwdModalHandleOk.bind(_this, password, obj),
+            });
+
+        } else {
+            LP.Start(obj);
+        }
+
 
     }
 
+    videoPwdModalHandleOk(pwd, obj) {
+
+        if (pwd == $('#tmppwd').val()) {
+            LP.Start(obj);
+        } else {
+            message.warn('密码错误!')
+        }
+
+    }
 
     change(type) {
 
-
+        this.currentTab = type;
         switch (type) {
-            case 'live':
+            case 'liveTV':
                 this._getLives(1);
                 break;
             case 'history':
@@ -171,12 +194,12 @@ class LiveTV extends React.Component {
 
         let liveNav = <div>
             <div className="menu_til">营养池</div>
-            <ul className="pabulum">
-                <li className="select" onClick={() => {
-                    this.change('live')
+            <ul className={this.currentTab + " pabulum"} >
+                <li className='liveTV' onClick={() => {
+                    this.change('liveTV')
                 }}><i className="iconfont menu_left_i">&#xe609;</i>直播课堂
                 </li>
-                <li onClick={() => {
+                <li className='history' onClick={() => {
                     this.change('history')
                 }}><i className="iconfont menu_left_i">&#xe602;</i>历史回顾
                 </li>
@@ -184,7 +207,7 @@ class LiveTV extends React.Component {
         </div>;
 
         let livePanel = <div>
-			<div className="public—til—blue">直播课堂</div>
+            <div className="public—til—blue">直播课堂</div>
             <div className="favorite_scroll2 favorite_up favorite_le_h">{this.livesUi}</div>
             <Pagination total={this.state.pageCount} pageSize={getPageSize()} onchange={this._getLives}/>
         </div>;

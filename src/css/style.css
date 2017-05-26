@@ -3996,7 +3996,6 @@ div.btn1{
     display: inline-block;
     width:calc(100% - 36px);
 	cursor:pointer;
-	width: calc(100% - 560px);
 }
 .cloud_text{
 }

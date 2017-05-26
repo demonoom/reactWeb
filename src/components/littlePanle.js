@@ -152,9 +152,8 @@
         return this;
     }
     littlePanle.prototype._teachAdmin_UI_templet_iframe_event = function (id, ifrid, event) {
-
         event.target.contentWindow.phone = phone;
-        $('#' + id + ' h3').text(event.target.contentWindow.document.title);
+        $("#" + id + " h3").text(event.target.contentWindow.document.title);
     }
 
 //
@@ -351,18 +350,11 @@
         this.htm = $(this.htm).css(styleObj(this.param.stylePage));
         $('.ant-layout-operation').append(this.htm);
         this.el = $('#' + this.id);
-        $(this.el).find('.back').on('click', this.closepanle.bind(this, this.id));
+        $(this.el).find('.back').on('click', this.commitClose.bind(this, this.id));
         $(this.el).find('.liveTV.tab li').on('click', this.changePanel);
         $(this.el).find('.activity .inputArea button').on('click', this.sendContent.bind(this, this.param));
         this._initBtnUploadBtn(this.ajaxUploadBtn, obj.param);
         utilsCommon.bind(document,'paste',onPasteFunction );
-//
-//         videojs.setGlobalOptions({
-//             flash: {
-//                 swf: 'static/video-js.swf'
-//             }
-//         });
-//
         obj.param.ifrliveid = this.ifrliveid;
         obj.param.pptIframeName = this.pptIframeName;
         obj.param.showTuiPing = this.showTuiPing;
@@ -374,14 +366,14 @@
 
     // 发送内容
     littlePanle.prototype.sendContent = function (param, event) {
-
-
         event = event || window.event;
         let el = $(event.target);
-
         let con = {}
         let user = eval("(" + sessionStorage.getItem('loginUser') + ")");
-
+        if(window.screen_lock){
+            alert('老师已开启禁言！');
+            return;
+        }
         switch ($(el).attr('ref')) {
             case 'sendPanleText':
                 let tmpTxt1 = $('#InputTxtToPanel').val();
@@ -465,9 +457,21 @@
             done: function (e, data) {
                 // sendImg(url);
             },
+            submit:function(){
+
+                if(window.screen_lock){
+                    alert('老师已开启禁言！');
+                    return false;
+                }else{
+                    return true;
+                }
+            },
             success: function (url, status)  //服务器成功响应处理函数
             {
-                
+                if(window.screen_lock){
+                    alert('老师已开启禁言！');
+                    return;
+                }
                 sendImg(url);
             },
             progressall: function (e, data) {
@@ -483,7 +487,6 @@
         })
             .prop('disabled', !$.support.fileInput)
             .parent().addClass($.support.fileInput ? undefined : 'disabled');
-
 
     }
 
@@ -502,22 +505,33 @@
             },
 
             onWarn: function (warnMsg) {
-
-
                 alert(warnMsg);
+            },
+            screenLock:function(){
+                if(window.screen_lock){
+                    return true;
+                }
+                return false;
             },
             // 显示消息
             onMessage: function (info) {
 
                 let htm = '';
                 switch (info.command) {
+                    case 'screen_lock':
+                        window.screen_lock = info.data.screen_lock;
+                        if(info.data.screen_lock){
+                            alert('开启禁言！');
+                        }else{
+                            alert('关闭禁言！');
+                        }
+                        break;
                     case'classOver':
-                        //  alert('下课了!');
                         __this.commitClose(obj.warpid);
                         break;
                     case 'studentLogin': // 显示直播视频
                         info.data.play_rtmp_url = 'rtmp://60.205.86.217:1935/live2/54208';
-
+                        window.screen_lock = info.data.screen_lock;
                         htm = ` <video   id="v${obj.ifrliveid}" class="video-js vjs-default-skin vjs-big-play-centered"
                                controls preload="auto" poster="" width="300" height="300"
                                data-setup='{}'>
@@ -531,7 +545,7 @@
                         });
                         break;
                     case'simpleClassDanmu': // 弹幕
-
+                        if(this.screenLock()) return;
                         let sayText = info.data.message.content ;
                         let fromUser = info.data.message.fromUser.userName;
                         htm = `<li><p class="sayLine"><span>${fromUser}:&nbsp;</span><span>${sayText}</span></p></li>`;
@@ -545,8 +559,7 @@
                         break;
 
                     case 'classDanmu':
-
-
+                        if(this.screenLock()) return;
                         let sayText1 = `<p>${info.data.message.content}</p>`;
                         let loginUser = eval('(' + sessionStorage.getItem('loginUser') + ')');
                         let fromUser1 = info.data.message.fromUser;
@@ -574,25 +587,15 @@
                            showDanmuArea.append(htm);
                        }
                         break;
-
-<<<<<<< HEAD
                     case 'pushHandout': // 图片
-                        
+                        if(this.screenLock()) return;
                         htm = `<img src='${info.data.url}'/>`;
-=======
-                        let sayText = info.data.message.content ;
-                        let fromUser = info.data.message.fromUser.userName;
-                        htm = `<li><div class="sayLine"><span>${fromUser}:&nbsp;</span>${sayText}</div></li>`;
-                      let lis =  $('.panle .showDanmuArea li');
-                      if(lis.length == 5){
-                          $(lis[0]).remove();
-                      }
->>>>>>> cfc75f7a1f1963b61fd2e761c90209c4d240e975
-
                         $('#' + obj.showTuiPing).show().html(htm);
                         $('#' + obj.pptIframeName).hide();
                         $('.panle .danmu_pic').remove();
                         break;
+
+
                     default :
                         __this.parsePPT.call(__this, obj, info);
 
@@ -601,13 +604,13 @@
             }
         };
         connection.connect({command: 'studentLogin', data: {userId: parseInt(obj.uid), vid: obj.vid}});
-        this.insertClassroom(obj.vid);
+        this.insertClassroom(obj);
     }
 
 // 后进的学生，显示的ppt
-    littlePanle.prototype.insertClassroom =  function (vid){
+    littlePanle.prototype.insertClassroom =  function (obj){
         let _this=this;
-        var param = {method:'getVclassPPTOpenInfo',vid : vid+''};
+        var param = {method:'getVclassPPTOpenInfo',vid : obj.vid+''};
         doWebService(JSON.stringify(param), {
             onResponse : function(result) {
                 if(!result.success){
@@ -617,11 +620,12 @@
                 var openInfo = result.response;
                 if(openInfo != null){
                     //打开课堂中的ppt
-                    _this.playPPT(openInfo.pptUrl);
+                    $("#" + obj.pptIframeName).show().attr("src", _this._setProxyInfo( openInfo.pptUrl) + "?v=1").css({'z-index': 1});
+                    $('#' + obj.showTuiPing).hide();
                     //更换当前页
-                    setTimeout(function(){
-                        _this.pptCheckPage(openInfo.currentPage);
-                    }, 1000);
+                    $("#" + obj.pptIframeName).on('load',function(){
+                        this.contentWindow.checkSlide(openInfo.currentPage);
+                    })
                 }
             },
             onError : function(error) {
@@ -886,7 +890,13 @@
                     break;
 
                 case 'liveTV':
-
+                    if (_this.mgr.length) {
+                        alert('打开太多！');
+                        return;
+                    }
+                    objA = new littlePanle().GetLP(objParam, _this.mgr);
+                    break;
+                case 'liveTVHistory':
                     if (_this.mgr.length) {
                         alert('打开太多！');
                         return;

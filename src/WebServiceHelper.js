@@ -3,8 +3,8 @@
  */
 //导出常量
 //  export const WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
- export const WEBSERVICE_URL = "http://192.168.1.34:9006/Excoord_ApiServer/webservice";
- // export const WEBSERVICE_URL = "http://192.168.2.104:9006/Excoord_ApiServer/webservice";
+ // export const WEBSERVICE_URL = "http://192.168.1.34:9006/Excoord_ApiServer/webservice";
+ export const WEBSERVICE_URL = "http://192.168.2.104:9006/Excoord_ApiServer/webservice";
 
 export function doWebService(data, listener) {
     var pro = document.getElementById("pro");

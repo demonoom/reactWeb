@@ -12,11 +12,20 @@ import {bubbleSort} from '../../utils/utils';
 const RadioGroup = Radio.Group;
 
 var columns = [{
-    title: '标题',
+    title: '名称',
     dataIndex: 'title',
+    className: 'cloud_name',
+},{
+    title: '创建者',
+    dataIndex: 'creator',
+    className: 'ant-table-selection-user2 class_right date_tr',
+}, {
+    title: '更新时间',
+    dataIndex: 'createTime',
+    className: 'ant-135 class_right time',
 }, {
     title: '操作',
-    className: 'ant-table-selection-user',
+    className: 'ant-table-selection-smallclass class_right',
     dataIndex: 'subjectOpt',
 },
 ];
@@ -79,6 +88,7 @@ const AntCloudTableComponents = React.createClass({
             permissionTypeValue:-1,      //默认的权限类型
             userAccount:'',     //搜索用户文本框的初始值
             userContactsData:[],
+            delBtnReadOnly:true
         };
     },
     componentDidMount(){
@@ -108,50 +118,64 @@ const AntCloudTableComponents = React.createClass({
             });
         }, 1000);
     },
-
+    /**
+     * 表格数据批量选中的响应函数
+     * //选中时，需要判断当前选中的数据中，是否有不可删除权限的
+     * @param selectedRowKeys
+     */
     onSelectChange(selectedRowKeys) {
+        if(cloudTable.state.getFileType!="myFile"){
+            //群文件中，群组可以删除任意文件，非群主只能删除自己的文件
+            //判断是否是第一层文件夹
+            if(cloudTable.state.currentDirectoryId==-1){
+                // 判断是否是超级管理员
+                if(cloudTable.state.currentUserIsSuperManager){
+                    //超管在第一层具备所有文件夹操作权限，非超管无任何操作权限
+                    cloudTable.setState({"delBtnReadOnly":false});
+                }
+            }else{
+                for(var i=0;i<selectedRowKeys.length;i++){
+                    var delKey = selectedRowKeys[i];
+                    var fileObj = cloudTable.getCloudFilePermissionById(delKey);
+                    //非第一层文件夹，根据分配的权限决定
+                    if(fileObj.creator.colUid == sessionStorage.getItem("ident")){
+                        //自己创建的文件夹或文件，拥有最大权限
+                        cloudTable.setState({"delBtnReadOnly":false});
+                    }else{
+                        cloudTable.setState({"delBtnReadOnly":true});
+                    }
+                }
+            }
+        }
+        if(selectedRowKeys.length==0){
+            cloudTable.setState({"delBtnReadOnly":true});
+        }
         cloudTable.setState({selectedRowKeys});
     },
 
-    buildPageView(optSource){
-        if (optSource == "查看") {
-            columns = [{
-                title: '内容',
-                dataIndex: 'subjectContent',
-                className: 'ant-table-selection-cont3 '
-            }, {
-                title: '类型',
-                className: 'ant-table-selection-user2',
-                dataIndex: 'subjectType',
+
+    /**
+     * 获取此文件夹的所有的拥有者权限
+     */
+    getCloudFilePermissionById(cloudFileId){
+        var fileObj;
+        var cloudFileArray = cloudTable.state.cloudFileArray;
+        for(var i=0;i<cloudFileArray.length;i++){
+            var cloudFile = cloudFileArray[i];
+            var fileId = cloudFile.fileId;
+            var cloudFileObj = cloudFile.cloudFileObj;
+            if(cloudFileId==fileId){
+                fileObj = cloudFileObj;
+                break;
             }
-            ];
-        } else {
-            columns = [{
-                title: '名称',
-                dataIndex: 'title',
-				className: 'cloud_name',
-            },{
-                title: '创建者',
-                dataIndex: 'creator',
-                className: 'ant-table-selection-user2 class_right date_tr',
-            }, {
-                title: '更新时间',
-                dataIndex: 'createTime',
-                className: 'ant-135 class_right time',
-            }, {
-                title: '操作',
-                className: 'ant-table-selection-smallclass class_right',
-                dataIndex: 'subjectOpt',
-            },
-            ];
         }
+        return fileObj;
     },
 
     //点击导航时，进入的我的文件列表
     getUserRootCloudFiles: function (userId, pageNo,optSrc) {
         data = [];
         cloudTable.setState({currentDirectoryId: -1, totalCount: 0});
-        cloudTable.buildPageView();
         var param = {
             "method": 'getUserRootCloudFiles',
             "userId": userId,
@@ -181,7 +205,6 @@ const AntCloudTableComponents = React.createClass({
     getUserChatGroupRootCloudFiles: function (userId, pageNo) {
         data = [];
         cloudTable.setState({currentDirectoryId: -1, totalCount: 0});
-        cloudTable.buildPageView();
         var param = {
             "method": 'getUserChatGroupRootCloudFiles',
             "userId": userId,
@@ -246,7 +269,6 @@ const AntCloudTableComponents = React.createClass({
     listFiles: function (operateUserId, cloudFileId,queryConditionJson,pageNo,optSrc) {
         data = [];
         cloudTable.setState({totalCount: 0});
-        cloudTable.buildPageView();
         if(isEmpty(optSrc)==false && optSrc=="mainTable"){
             cloudTable.setState({"currentDirectoryId":cloudFileId});
         }else{
@@ -338,6 +360,7 @@ const AntCloudTableComponents = React.createClass({
      */
     buildTableDataByResponse(ret){
         var i=0;
+        var cloudFileArray=[];
         ret.response.forEach(function (e) {
             if(i==0){
                 if(e.parent){
@@ -411,6 +434,8 @@ const AntCloudTableComponents = React.createClass({
                 </div>;
             }
             var maxPermission = cloudTable.getMaxPermission(permissionsArray);
+            var cloudFileJsonForEveryFile={"fileId":key,"cloudFileObj":e};
+            cloudFileArray.push(cloudFileJsonForEveryFile);
             var editButton;
             var deleteButton;
             var shareButton;
@@ -491,8 +516,7 @@ const AntCloudTableComponents = React.createClass({
             });
         });
         var pager = ret.pager;
-        cloudTable.setState({totalCount: parseInt(pager.rsCount)});
-        cloudTable.setState({"tableData":data});
+        cloudTable.setState({"tableData":data,cloudFileArray,totalCount: parseInt(pager.rsCount)});
     },
 
     /**
@@ -586,20 +610,22 @@ const AntCloudTableComponents = React.createClass({
      * 支持批量操作，多个id用逗号分割
      */
     deleteCloudFiles(){
+        var delIds;
+        if(cloudTable.state.delType=="muliti"){
+            //批量删除
+            delIds = cloudTable.state.selectedRowKeys.join(",");
+        }else{
+            delIds=cloudTable.state.delCloudFileIds;
+        }
         var param = {
             "method": 'deleteCloudFiles',
             "operateUserId": cloudTable.state.ident,
-            "cloudFileIds":cloudTable.state.delCloudFileIds,
+            "cloudFileIds":delIds,
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if(ret.success==true && ret.msg=="调用成功" && ret.response==true){
                     var initPageNo = 1;
-                    /*if(cloudTable.state.getFileType=="myFile"){
-                        cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo);
-                    }else{
-                        cloudTable.getUserChatGroupRootCloudFiles(cloudTable.state.ident, initPageNo);
-                    }*/
                     var queryConditionJson="";
                     cloudTable.listFiles(cloudTable.state.ident,
                         cloudTable.state.currentDirectoryId,queryConditionJson,initPageNo,"mainTable");
@@ -1207,7 +1233,7 @@ const AntCloudTableComponents = React.createClass({
             newButton=<Button value="newDirectory"  className="antnest_talk" onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;
             //uploadButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
             delBtn = <div className="cloud_tool"><Button type="primary" onClick={cloudTable.showdelAllDirectoryConfirmModal}
-                                  disabled={!hasSelected} loading={loading}
+                                  disabled={!hasSelected && cloudTable.state.delBtnReadOnly} loading={loading}
             >批量删除</Button><span className="password_ts"
                                 style={{marginLeft: 8}}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span></div>;
         }else{
