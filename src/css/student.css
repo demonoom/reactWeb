@@ -131,9 +131,11 @@
 }
 .panle_book{
 	width:100%;
-	text-align:center
+	text-align:center;
+	height:calc(100% - 50px);
+	z-index: 2;
 }
-.panle_book, .panle_book img{
+.panle_book img{
 	height: 100%;
 }
 .showDanmuArea{
