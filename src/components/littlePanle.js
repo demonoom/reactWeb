@@ -90,7 +90,7 @@
             $('#' + id).css({visibility: 'hidden'});
             $('#ifr' + id).removeAttr('src');
         }
-        utilsCommon.unbind(document,'paste',onPasteFunction );
+        utilsCommon.unbind(document, 'paste', onPasteFunction);
     }
 
 
@@ -284,7 +284,8 @@
         this.pptIframeName = 'panle' + id;
         this.ajaxUploadBtn = 'ajaxUpload_btn_' + id;
         this.showTuiPing = 'showTuiPing';
-        this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show ${obj.mode}">
+        this.mode = obj.mode;
+        this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show ${this.mode}">
 		<div class="public—til—blue">
 							<div class="little-tilte">
                     			<a class="back"><i class="anticon anticon-left "></i></a>
@@ -350,11 +351,18 @@
         this.htm = $(this.htm).css(styleObj(this.param.stylePage));
         $('.ant-layout-operation').append(this.htm);
         this.el = $('#' + this.id);
-        $(this.el).find('.back').on('click', this.commitClose.bind(this, this.id));
+
+        if (this.mode == 'history') {
+            $(this.el).find('.back').on('click', this.closepanle(this, this.id));
+            return this;
+        } else {
+            $(this.el).find('.back').on('click', this.commitClose.bind(this, this.id));
+        }
+
         $(this.el).find('.liveTV.tab li').on('click', this.changePanel);
         $(this.el).find('.activity .inputArea button').on('click', this.sendContent.bind(this, this.param));
         this._initBtnUploadBtn(this.ajaxUploadBtn, obj.param);
-        utilsCommon.bind(document,'paste',onPasteFunction );
+        utilsCommon.bind(document, 'paste', onPasteFunction);
         obj.param.ifrliveid = this.ifrliveid;
         obj.param.pptIframeName = this.pptIframeName;
         obj.param.showTuiPing = this.showTuiPing;
@@ -370,7 +378,7 @@
         let el = $(event.target);
         let con = {}
         let user = eval("(" + sessionStorage.getItem('loginUser') + ")");
-        if(window.screen_lock){
+        if (window.screen_lock) {
             alert('老师已开启禁言！');
             return;
         }
@@ -457,18 +465,18 @@
             done: function (e, data) {
                 // sendImg(url);
             },
-            submit:function(){
+            submit: function () {
 
-                if(window.screen_lock){
+                if (window.screen_lock) {
                     alert('老师已开启禁言！');
                     return false;
-                }else{
+                } else {
                     return true;
                 }
             },
             success: function (url, status)  //服务器成功响应处理函数
             {
-                if(window.screen_lock){
+                if (window.screen_lock) {
                     alert('老师已开启禁言！');
                     return;
                 }
@@ -480,7 +488,7 @@
             },
             error: function (url, status, e)//服务器响应失败处理函数
             {
-                
+
                 sendImg(url);
             }
 
@@ -507,8 +515,8 @@
             onWarn: function (warnMsg) {
                 alert(warnMsg);
             },
-            screenLock:function(){
-                if(window.screen_lock){
+            screenLock: function () {
+                if (window.screen_lock) {
                     return true;
                 }
                 return false;
@@ -520,9 +528,9 @@
                 switch (info.command) {
                     case 'screen_lock':
                         window.screen_lock = info.data.screen_lock;
-                        if(info.data.screen_lock){
+                        if (info.data.screen_lock) {
                             alert('开启禁言！');
-                        }else{
+                        } else {
                             alert('关闭禁言！');
                         }
                         break;
@@ -545,13 +553,13 @@
                         });
                         break;
                     case'simpleClassDanmu': // 弹幕
-                        if(this.screenLock()) return;
-                        let sayText = info.data.message.content ;
+                        if (this.screenLock()) return;
+                        let sayText = info.data.message.content;
                         let fromUser = info.data.message.fromUser.userName;
                         htm = `<li><p class="sayLine"><span>${fromUser}:&nbsp;</span><span>${sayText}</span></p></li>`;
 
-                        let lis =  $('.panle .showDanmuArea li');
-                        if(lis.length == 5){
+                        let lis = $('.panle .showDanmuArea li');
+                        if (lis.length == 5) {
                             $(lis[0]).remove();
                         }
                         $('.panle .danmu_pic').remove();
@@ -559,7 +567,7 @@
                         break;
 
                     case 'classDanmu':
-                        if(this.screenLock()) return;
+                        if (this.screenLock()) return;
                         let sayText1 = `<p>${info.data.message.content}</p>`;
                         let loginUser = eval('(' + sessionStorage.getItem('loginUser') + ')');
                         let fromUser1 = info.data.message.fromUser;
@@ -575,20 +583,20 @@
 
                         htm = `<div class="sayLine ${refClass}"><div class="username" >${fromUserName1}</div><div class="saycont"><div class="sayHeader" >${userFace}</div><div class="sayCon" >${sayText1}</div></div>`;
                         $('.public .danmu_pic').remove();
-                       let showDanmuArea =  $('.public .showDanmuArea');
+                        let showDanmuArea = $('.public .showDanmuArea');
 
-                       let danmuArea = showDanmuArea[0];
-                       let currentScrollTop = danmuArea.scrollTop;
-                       let maxScrollTop = danmuArea.scrollHeight.toFixed() - danmuArea.clientHeight.toFixed();
-                       if(currentScrollTop >=  maxScrollTop ){
-                           showDanmuArea.append(htm);
-                           danmuArea.scrollTop = danmuArea.scrollHeight.toFixed();
-                       }else{
-                           showDanmuArea.append(htm);
-                       }
+                        let danmuArea = showDanmuArea[0];
+                        let currentScrollTop = danmuArea.scrollTop;
+                        let maxScrollTop = danmuArea.scrollHeight.toFixed() - danmuArea.clientHeight.toFixed();
+                        if (currentScrollTop >= maxScrollTop) {
+                            showDanmuArea.append(htm);
+                            danmuArea.scrollTop = danmuArea.scrollHeight.toFixed();
+                        } else {
+                            showDanmuArea.append(htm);
+                        }
                         break;
                     case 'pushHandout': // 图片
-                        if(this.screenLock()) return;
+                        if (this.screenLock()) return;
                         htm = `<img src='${info.data.url}'/>`;
                         $('#' + obj.showTuiPing).show().html(htm);
                         $('#' + obj.pptIframeName).hide();
@@ -608,28 +616,28 @@
     }
 
 // 后进的学生，显示的ppt
-    littlePanle.prototype.insertClassroom =  function (obj){
-        let _this=this;
-        var param = {method:'getVclassPPTOpenInfo',vid : obj.vid+''};
+    littlePanle.prototype.insertClassroom = function (obj) {
+        let _this = this;
+        var param = {method: 'getVclassPPTOpenInfo', vid: obj.vid + ''};
         doWebService(JSON.stringify(param), {
-            onResponse : function(result) {
-                if(!result.success){
-                  // alert(result.msg);
+            onResponse: function (result) {
+                if (!result.success) {
+                    // alert(result.msg);
                     return;
                 }
                 var openInfo = result.response;
-                if(openInfo != null){
+                if (openInfo != null) {
                     //打开课堂中的ppt
-                    $("#" + obj.pptIframeName).show().attr("src", _this._setProxyInfo( openInfo.pptUrl) + "?v=1").css({'z-index': 1});
+                    $("#" + obj.pptIframeName).show().attr("src", _this._setProxyInfo(openInfo.pptUrl) + "?v=1").css({'z-index': 1});
                     $('#' + obj.showTuiPing).hide();
                     //更换当前页
-                    $("#" + obj.pptIframeName).on('load',function(){
+                    $("#" + obj.pptIframeName).on('load', function () {
                         this.contentWindow.checkSlide(openInfo.currentPage);
                     })
                 }
             },
-            onError : function(error) {
-              //  alert(error);
+            onError: function (error) {
+                //  alert(error);
             }
         });
 
@@ -800,7 +808,6 @@
                 this._liveTV_UI_templet(this.param);
                 break;
             case 'history':
-
                 this._liveTV_UI_templet(this.param);
                 break;
 
@@ -894,17 +901,11 @@
                     break;
 
                 case 'liveTV':
-                    if (_this.mgr.length) {
-                        alert('打开太多！');
-                        return;
-                    }
+                    _this.delAll();
                     objA = new littlePanle().GetLP(objParam, _this.mgr);
                     break;
                 case 'history':
-                    if (_this.mgr.length) {
-                        alert('打开太多！');
-                        return;
-                    }
+                    _this.delAll();
                     objA = new littlePanle().GetLP(objParam, _this.mgr);
                     break;
 
@@ -913,6 +914,7 @@
                         alert('打开太多！');
                         return;
                     }
+
                     objA = new littlePanle().GetLP(objParam, _this.mgr);
                     _this.addOrderBtn();
             }
@@ -1103,7 +1105,7 @@ function onPasteFunction(event) {
         // 判断是否为图片数据
         if (item && item.kind === 'file' && item.type.match(/^image\//i)) {
             // 读取该图片
-           // imgReader(item);
+            // imgReader(item);
             var file = item.getAsFile();
             UploadFile1(file);
         }
@@ -1113,15 +1115,15 @@ function onPasteFunction(event) {
 }
 
 var UploadFile1 = function (readerResult) {
-   // let url = 'http://192.168.1.34:8890/Excoord_Upload_Server/file/upload';
+    // let url = 'http://192.168.1.34:8890/Excoord_Upload_Server/file/upload';
     //    let url = '/proxy/upload/1/34/8890';
-   //  let url = 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload';
-   let url = '/proxy/upload/45/125/8890';
+    //  let url = 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload';
+    let url = '/proxy/upload/45/125/8890';
     //   let url = 'http://192.168.2.104:8890/Excoord_Upload_Server/file/upload';
     var xhr = new XMLHttpRequest();
     xhr.open("POST", url, true);
     xhr.setRequestHeader('enctype', 'multipart/form-data');
- //   xhr.setRequestHeader('Content-Type', 'image/png');
+    //   xhr.setRequestHeader('Content-Type', 'image/png');
     // 
 
     let fd = new FormData();

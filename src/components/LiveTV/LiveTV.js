@@ -138,12 +138,17 @@ class LiveTV extends React.Component {
     view(objref,tab) {
         let _this = this;
         let title = objref.liveCover.user.userName + '正在直播';
+        let mode = tab.replace('_tab','');
+        if(mode=='history'){
+            title = objref.title;
+        }
+
         let obj = {
             title: title,
             livelurl: "",
             panelurl: "",
             param: {uid: this.state.ident, vid: objref.vid},
-            mode: tab.replace('_tab','')
+            mode:mode
         }
         if (objref.password) {
             let password = objref.password;
