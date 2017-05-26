@@ -130,7 +130,7 @@
 	display:none;
 }
 .panle_book, .panle_book img{
-	height:100%;
+	height:calc(100% - 50px);
 }
 .showDanmuArea{
     position: absolute;
@@ -141,6 +141,8 @@
 .panle .showDanmuArea{
     height: 140px;
 	overflow: hidden;
+	left:0;
+	z-index: 2;
 }
 .public .showDanmuArea{
 	height:calc(100% - 50px);
@@ -224,9 +226,10 @@
 	background:#2696ff
 }
 .liveTV .panle iframe{
-	height:calc(100% - 50px) !important;
-	z-index:2;
-	position: relative;
+    height: calc(100% - 50px) !important;
+    z-index: 2;
+    position: absolute;
+    width: 100%;
 }
 .marquee{
 　　white-space: nowrap;
