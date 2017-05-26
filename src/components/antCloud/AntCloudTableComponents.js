@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {Table, Button, Progress, message,Icon,Input,Modal,Row,Col,Radio,Cascader} from 'antd';
+import {Table, Button, Progress, message,Icon,Input,Modal,Row,Col,Radio,Cascader,Collapse,Checkbox} from 'antd';
 import ConfirmModal from '../ConfirmModal';
 import CloudFileUploadComponents from './CloudFileUploadComponents';
 import {doWebService} from '../../WebServiceHelper';
@@ -10,6 +10,8 @@ import {isEmpty} from '../../utils/Const';
 import {bubbleSort} from '../../utils/utils';
 
 const RadioGroup = Radio.Group;
+const Panel = Collapse.Panel;
+const CheckboxGroup = Checkbox.Group;
 
 var columns = [{
     title: '名称',
@@ -50,16 +52,7 @@ var targetDirColumns = [{
 }
 ];
 
-var groupColumns = [ {
-    title:'头像',
-    dataIndex:'userHeadIcon'
-},{
-    title: '联系人',
-    dataIndex: 'userContacts',
-}];
-
 var data = [];
-var subjectList;
 var uploadFileList=[];
 var cloudTable;
 var ms;
@@ -88,7 +81,9 @@ const AntCloudTableComponents = React.createClass({
             permissionTypeValue:-1,      //默认的权限类型
             userAccount:'',     //搜索用户文本框的初始值
             userContactsData:[],
-            delBtnReadOnly:true
+            delBtnReadOnly:true,
+            concatOptions:[],
+            groupOptions:[],
         };
     },
     componentDidMount(){
@@ -748,9 +743,6 @@ const AntCloudTableComponents = React.createClass({
                         var fileUrl=responseStr;
                         //TODO 调用本地上传文件的方法
                         cloudTable.createCloudFile(fileUrl,uploadFileList[0]);
-                        //cloudTable.setState({ cloudFileUploadModalVisible: false });
-                        //TODO 上传成功后，重新获取数据
-                        //cloudTable.props.courseUploadCallBack();
                     }
                 },
                 error : function(responseStr) {
@@ -983,12 +975,6 @@ const AntCloudTableComponents = React.createClass({
             onResponse: function (ret) {
                 if(ret.success==true && ret.msg=="调用成功" && ret.response==true){
                     var initPageNo = 1;
-                    //TODO 这里还需要判断是根目录还是子文件夹，根据不同情况，进入不同的目录
-                    /*if(cloudTable.state.getFileType=="myFile"){
-                        cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo);
-                    }else{
-                        cloudTable.getUserChatGroupRootCloudFiles(cloudTable.state.ident, initPageNo);
-                    }*/
                     var queryConditionJson="";
                     cloudTable.listFiles(cloudTable.state.ident,
                         cloudTable.state.currentDirectoryId,queryConditionJson,initPageNo,"mainTable");
@@ -1061,7 +1047,6 @@ const AntCloudTableComponents = React.createClass({
      * 获取联系人列表
      */
     getAntGroup(){
-        var userContactsData=[];
         var param = {
             "method": 'getUserContacts',
             "ident": sessionStorage.getItem("ident"),
@@ -1070,20 +1055,18 @@ const AntCloudTableComponents = React.createClass({
             onResponse: function (ret) {
                 var response = ret.response;
                 var i=0;
+                var concatOptions=[];
                 response.forEach(function (e) {
                     var userId = e.colUid;
                     var userName = e.userName;
                     var imgTag = <img src={e.avatar}  className="antnest_38_img" height="38" ></img>;
-                    var userJson = {key:userId,userContacts:userName,userObj:e,"userHeadIcon":imgTag};
+                    var userNameTag=<div>{imgTag}{userName}</div>;
+                    var userJson ={ label: userNameTag, value: userId};
                     if(userId != sessionStorage.getItem("ident")){
-                        userContactsData.push(userJson);
+                        concatOptions.push(userJson);
                     }
-                    /*if(i==0){
-                        mMenu.setState({selectRowKey:userId});
-                    }*/
-                    i++;
                 });
-                cloudTable.setState({"userContactsData":userContactsData});
+                cloudTable.setState({"concatOptions":concatOptions});
             },
             onError: function (error) {
                 message.error(error);
@@ -1101,7 +1084,8 @@ const AntCloudTableComponents = React.createClass({
             onResponse: function (ret) {
                 if(ret.msg=="调用成功" && ret.success==true){
                     var response = ret.response;
-                    var charGroupArray = [];
+                    // var charGroupArray = [];
+                    var groupOptions=[];
                     response.forEach(function (e) {
                         var chatGroupId = e.chatGroupId;
                         var chatGroupName = e.name;
@@ -1131,11 +1115,11 @@ const AntCloudTableComponents = React.createClass({
                                 break;
                         }
                         var groupName = chatGroupName;
-                        var groupNameTag = <a className="font_gray_666">{groupName}</a>
-                        var chatGroupJson = {key:chatGroupId,userContacts:groupName,userObj:e,"userHeadIcon":imgTag};
-                        charGroupArray.push(chatGroupJson);
+                        var groupNameTag = <div>{imgTag}{groupName}</div>
+                        var groupJson ={ label: groupNameTag, value: chatGroupId};
+                        groupOptions.push(groupJson);
                     });
-                    cloudTable.setState({"userContactsData":charGroupArray});
+                    cloudTable.setState({"groupOptions":groupOptions});
                 }
                 //var pager = ret.pager;
                 //cloudTable.setState({"optType":"getUserChatGroup","totalChatGroupCount":parseInt(pager.rsCount)});
@@ -1183,17 +1167,14 @@ const AntCloudTableComponents = React.createClass({
      * 分享文件
      */
     shareFile(){
-        var shareFileId = cloudTable.state.shareCloudFileIds;
-        var shareToUser = cloudTable.state.selectedRowKeysOfShare;
+        var checkedConcatOptions = cloudTable.state.checkedConcatOptions;
+        var checkedGroupOptions = cloudTable.state.checkedGroupOptions;
+        var shareToUserArray = checkedConcatOptions.concat(checkedGroupOptions);
         var nowThinking = cloudTable.state.nowThinking;
         var shareFile = cloudTable.state.shareCloudFile;
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         var uuid = createUUID();
         var createTime = (new Date()).valueOf();
-        var shareToUserArray=[];
-        if(isEmpty(shareToUser)==false){
-            shareToUserArray = shareToUser.split(",");
-        }
         var attachement={"address":shareFile.path,"user":loginUser,"createTime":shareFile.createTime};
         shareToUserArray.forEach(function (e) {
             var messageJson = {
@@ -1206,6 +1187,30 @@ const AntCloudTableComponents = React.createClass({
         });
         cloudTable.setState({shareModalVisible:false});
 
+    },
+
+    /**
+     * 我的好友复选框被选中时的响应
+     * @param checkedValues
+     */
+    concatOptionsOnChange(checkedValues) {
+        console.log('checked = ', checkedValues);
+        cloudTable.setState({"checkedConcatOptions":checkedValues});
+    },
+    /**
+     * 我的好友复选框被选中时的响应
+     * @param checkedValues
+     */
+    groupOptionsOnChange(checkedValues) {
+        console.log('checked = ', checkedValues);
+        cloudTable.setState({"checkedGroupOptions":checkedValues});
+    },
+
+    collapseChange(key){
+        /*if(key==1){
+            cloudTable.getUserChatGroupById(1);
+        }*/
+        cloudTable.getUserChatGroupById(1);
     },
 
     render() {
@@ -1225,8 +1230,6 @@ const AntCloudTableComponents = React.createClass({
         }
         var newButton;
         var uploadButton;
-        var setManagerButton;
-        var setUserButton;
         //判断是否是超级管理员
         if(cloudTable.state.currentUserIsSuperManager){
             //第一级文件夹，只有超管有上传和新建的权限
@@ -1270,8 +1273,6 @@ const AntCloudTableComponents = React.createClass({
             <div className="talk_ant_btn1">
                 {newButton}
                 {uploadButton}
-               {/* {setManagerButton}
-                {setUserButton}*/}
             </div>
             {tipTitle}
         </div>;
@@ -1458,18 +1459,15 @@ const AntCloudTableComponents = React.createClass({
                                 <Col span={12} className="share_til">这一刻的想法：</Col>
                             </Row>
                             <Row>
-                                <Col span={11} className="upexam_float">
-                                    {returnToolbarInShareModal}
-                                    <div>
-                                        <div className="maaee_group affix_bottom_tc" onClick={cloudTable.getUserChatGroupById.bind(cloudTable,1)}>
-                                            <img src={require('../images/groupTitle.png')} className="antnest_38_img" />
-                                            <span className=""　icon="usergroup-add">我的群组</span>
-                                        </div>
-                                        <Table rowSelection={rowSelectionOfShare} className="maaeegroup yiqun"
-                                               showHeader={false}
-                                               columns={groupColumns} dataSource={cloudTable.state.userContactsData}
-                                               pagination={false} scroll={{y: 200}}/>
-                                    </div>
+                                <Col span={11} className="upexam_float" style={{height:'400px'}}>
+                                    <Collapse bordered={false} defaultActiveKey={['2']} onChange={cloudTable.collapseChange}>
+                                        <Panel header="我的群组" key="1">
+                                            <CheckboxGroup options={cloudTable.state.groupOptions} onChange={cloudTable.groupOptionsOnChange} />
+                                        </Panel>
+                                        <Panel header="我的好友" key="2">
+                                            <CheckboxGroup options={cloudTable.state.concatOptions} onChange={cloudTable.concatOptionsOnChange} />
+                                        </Panel>
+                                    </Collapse>
                                 </Col>
                                 <Col span={12} className="topics_dianzan">
                                     <div>
