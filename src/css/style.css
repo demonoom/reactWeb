@@ -3228,7 +3228,7 @@ a.color_gary_f, .color_gary_f{
     text-indent: 18px;
 
 }
-.liveTV .little-tilte{
+.liveTV .little-tilte, .history .little-tilte{
 	text-align: left;
     margin-top: 6px;
     position: absolute;
@@ -3237,10 +3237,10 @@ a.color_gary_f, .color_gary_f{
     width: 50px;
     height: 32px;
 }
-.liveTV .little-tilte .back{
+.liveTV .little-tilte .back, .history .little-tilte .back{
 	left:0
 }
-.liveTV .little-tilte a i{
+.liveTV .little-tilte a i, .history .little-tilte a i{
 	font-size: 22px;
     color: #fff;
     font-weight: normal;
@@ -4053,4 +4053,12 @@ div.btn1{
 }
 .share_cont{
 	border:1px solid #cfcfd0
+}
+li.liveTV:hover, li.history:hover{
+	background:#eaf8fe;
+	cursor:pointer
+}
+ul.liveTV_tab .liveTV, ul.liveTV_tab .liveTV i, ul.history_tab .history, ul.history_tab .history i{
+	background-color: #E5F2FE;
+    color: #2db7f5;
 }
