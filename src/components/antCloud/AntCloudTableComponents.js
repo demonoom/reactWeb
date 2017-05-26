@@ -235,7 +235,12 @@ const AntCloudTableComponents = React.createClass({
             i++
             var key = e.id;
             var name = e.name;
-            var dirName = <a className="font_gray_666" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e,"moveDirModal")}>{name}</a>;
+            var directory = e.directory;
+            var fileLogo = cloudTable.buildFileLogo(name,directory,e);
+
+            var dirName = <a className="font_gray_666" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e,"moveDirModal")}>
+                {fileLogo}
+            </a>;
             var moveDirOpt;
             if(e.directory==true){
                 moveDirOpt=<div>
@@ -252,6 +257,58 @@ const AntCloudTableComponents = React.createClass({
             targetDirDataArray.push(dataJson);
         })
         cloudTable.setState({"targetDirDataArray":targetDirDataArray});
+    },
+
+    buildFileLogo(name,directory,e){
+        var fileLogo;
+        if(directory){
+            fileLogo=<div className="cloud_text">
+                <i className="cloud_icon cloud_icon_file"></i>
+                <a className="font_gray_666" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e,"mainTable")}>{name}</a>
+            </div>;
+        }else{
+            var lastPointIndex = name.lastIndexOf(".");
+            //通过截取文件后缀名的形式，完成对上传文件类型的判断
+            var fileType = name.substring(lastPointIndex+1);
+            var fileTypeLog;
+            switch (fileType){
+                case "png":
+                    fileTypeLog = <i className="cloud_icon cloud_icon_png"></i>;
+                    break;
+                case "jpg":
+                    fileTypeLog = <i className="cloud_icon cloud_icon_jpg"></i>;
+                    break;
+                case "mp3":
+                    fileTypeLog = <i className="cloud_icon cloud_icon_mp3"></i>;
+                    break;
+                case "pdf":
+                    fileTypeLog = <i className="cloud_icon cloud_icon_pdf"></i>;
+                    break;
+                case "ppt":
+                case "pptx":
+                    fileTypeLog = <i className="cloud_icon cloud_icon_ppt"></i>;
+                    break;
+                case "doc":
+                case "docx":
+                    fileTypeLog = <i className="cloud_icon cloud_icon_doc"></i>;
+                    break;
+                case "xls":
+                case "xlsx":
+                    fileTypeLog = <i className="cloud_icon cloud_icon_xls"></i>;
+                    break;
+                case "wps":
+                    fileTypeLog = <i className="cloud_icon cloud_icon_wps"></i>;
+                    break;
+                default:
+                    fileTypeLog = <i className="cloud_icon cloud_icon_other"></i>;
+                    break;
+            }
+            fileLogo=<div>
+                {fileTypeLog}
+                {name}
+            </div>;
+        }
+        return fileLogo;
     },
 
     /**
@@ -428,6 +485,7 @@ const AntCloudTableComponents = React.createClass({
                     {name}
                 </div>;
             }
+            var fileLogo = cloudTable.buildFileLogo(name,directory,e);
             var maxPermission = cloudTable.getMaxPermission(permissionsArray);
             var cloudFileJsonForEveryFile={"fileId":key,"cloudFileObj":e};
             cloudFileArray.push(cloudFileJsonForEveryFile);
