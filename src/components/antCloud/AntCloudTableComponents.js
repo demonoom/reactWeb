@@ -76,7 +76,7 @@ const AntCloudTableComponents = React.createClass({
             uploadPercent:0,
             progressState:'none',
             permissionModalVisible:false,     //设置权限窗口的状态控制
-            permissionTypeValue:1,      //默认的权限类型
+            permissionTypeValue:-1,      //默认的权限类型
             userAccount:'',     //搜索用户文本框的初始值
             userContactsData:[],
         };
@@ -118,7 +118,7 @@ const AntCloudTableComponents = React.createClass({
             columns = [{
                 title: '内容',
                 dataIndex: 'subjectContent',
-                className: 'ant-table-selection-cont3 left-12'
+                className: 'ant-table-selection-cont3 '
             }, {
                 title: '类型',
                 className: 'ant-table-selection-user2',
@@ -129,18 +129,18 @@ const AntCloudTableComponents = React.createClass({
             columns = [{
                 title: '名称',
                 dataIndex: 'title',
-				className: 'left-12',
+				className: '',
+            },{
+                title: '创建者',
+                dataIndex: 'creator',
+                className: 'ant-table-selection-user2 class_right date_tr',
             }, {
                 title: '更新时间',
                 dataIndex: 'createTime',
-                className: 'ant-table-selection-user2 time',
-            }, {
-                title: '创建者',
-                dataIndex: 'creator',
-                className: 'ant-table-selection-user2',
+                className: 'ant-table-selection-time class_right time',
             }, {
                 title: '操作',
-                className: 'ant-table-selection-topic',
+                className: 'ant-table-selection-smallclass class_right',
                 dataIndex: 'subjectOpt',
             },
             ];
@@ -245,8 +245,13 @@ const AntCloudTableComponents = React.createClass({
      */
     listFiles: function (operateUserId, cloudFileId,queryConditionJson,pageNo,optSrc) {
         data = [];
-        cloudTable.setState({currentView: 'subjectList', totalCount: 0});
+        cloudTable.setState({totalCount: 0});
         cloudTable.buildPageView();
+        if(isEmpty(optSrc)==false && optSrc=="mainTable"){
+            cloudTable.setState({"currentDirectoryId":cloudFileId});
+        }else{
+            cloudTable.setState({"currentDirectoryIdAtMoveModal":cloudFileId});
+        }
         var param = {
             "method": 'listFiles',
             "operateUserId": operateUserId,
@@ -260,12 +265,12 @@ const AntCloudTableComponents = React.createClass({
                 if(response){
                     if(isEmpty(optSrc)==false && optSrc=="mainTable"){
                         cloudTable.buildTableDataByResponse(ret);
-                        cloudTable.setState({"currentDirectoryId":cloudFileId});
                     }else{
                         cloudTable.buildTargetDirData(ret);
-                        cloudTable.setState({"currentDirectoryIdAtMoveModal":cloudFileId});
                     }
-
+                }else{
+                    var parentDirectoryId = e.parent.parentId;
+                    cloudTable.setState({"parentDirectoryId":parentDirectoryId});
                 }
             },
             onError: function (error) {
@@ -377,31 +382,45 @@ const AntCloudTableComponents = React.createClass({
             var shareButton;
             var moveButton;
             var settinButton;
-            switch (maxPermission){
-                case 1:
-                case 2:
-                    editButton=<Button type="button" className="score3_i" value={key} text={key} onClick={cloudTable.editDirectoryName.bind(cloudTable,e)}
-                                       icon="edit"></Button>;
-                    deleteButton=<Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
-                                         icon="delete"></Button>;
-                    shareButton=<Button type="button" value={key} text={key} onClick={cloudTable.showShareModal.bind(cloudTable,e)}
-                                        icon="share-alt"></Button>;
-                    moveButton=<Button type="button" value={key} text={key} onClick={cloudTable.showMoveFileModal.bind(cloudTable,e)}
-                                       icon="export"></Button>;
-                    settinButton=<Button type="button" value={key} text={key} onClick={cloudTable.showPermissionModal.bind(cloudTable,e)}
-                                         icon="setting"></Button>;
-                    break;
-                case 3:
-                    editButton=<Button type="button" className="score3_i" value={key} text={key} onClick={cloudTable.editDirectoryName.bind(cloudTable,e)}
-                                       icon="edit"></Button>;
-                    deleteButton=<Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
-                                         icon="delete"></Button>;
-                    shareButton=<Button type="button" value={key} text={key} onClick={cloudTable.showShareModal.bind(cloudTable,e)}
-                                        icon="share-alt"></Button>;
-                    moveButton=<Button type="button" value={key} text={key} onClick={cloudTable.showMoveFileModal.bind(cloudTable,e)}
-                                       icon="export"></Button>;
-                    settinButton="";
-                    break;
+            if(e.creator.colUid == sessionStorage.getItem("ident")){
+                //自己创建的文件夹或文件，拥有最大权限
+                editButton=<Button type="button" className="score3_i" value={key} text={key} onClick={cloudTable.editDirectoryName.bind(cloudTable,e)}
+                                   icon="edit"></Button>;
+                deleteButton=<Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
+                                     icon="delete"></Button>;
+                shareButton=<Button type="button" value={key} text={key} onClick={cloudTable.showShareModal.bind(cloudTable,e)}
+                                    icon="share-alt"></Button>;
+                moveButton=<Button type="button" value={key} text={key} onClick={cloudTable.showMoveFileModal.bind(cloudTable,e)}
+                                   icon="export"></Button>;
+                settinButton=<Button type="button" value={key} text={key} onClick={cloudTable.showPermissionModal.bind(cloudTable,e)}
+                                     icon="setting"></Button>;
+            }else{
+                switch (maxPermission){
+                    case 1:
+                    case 2:
+                        editButton=<Button type="button" className="score3_i" value={key} text={key} onClick={cloudTable.editDirectoryName.bind(cloudTable,e)}
+                                           icon="edit"></Button>;
+                        deleteButton=<Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
+                                             icon="delete"></Button>;
+                        shareButton=<Button type="button" value={key} text={key} onClick={cloudTable.showShareModal.bind(cloudTable,e)}
+                                            icon="share-alt"></Button>;
+                        moveButton=<Button type="button" value={key} text={key} onClick={cloudTable.showMoveFileModal.bind(cloudTable,e)}
+                                           icon="export"></Button>;
+                        settinButton=<Button type="button" value={key} text={key} onClick={cloudTable.showPermissionModal.bind(cloudTable,e)}
+                                             icon="setting"></Button>;
+                        break;
+                    case 3:
+                        editButton=<Button type="button" className="score3_i" value={key} text={key} onClick={cloudTable.editDirectoryName.bind(cloudTable,e)}
+                                           icon="edit"></Button>;
+                        deleteButton=<Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
+                                             icon="delete"></Button>;
+                        shareButton=<Button type="button" value={key} text={key} onClick={cloudTable.showShareModal.bind(cloudTable,e)}
+                                            icon="share-alt"></Button>;
+                        moveButton=<Button type="button" value={key} text={key} onClick={cloudTable.showMoveFileModal.bind(cloudTable,e)}
+                                           icon="export"></Button>;
+                        settinButton="";
+                        break;
+                }
             }
 
             var subjectOpt = <div>
@@ -447,10 +466,13 @@ const AntCloudTableComponents = React.createClass({
      */
     intoDirectoryInner(directoryObj,optSrc){
         console.log("optSrc:"+optSrc);
+        var permissionsArray = directoryObj.permissions;
+        var maxPermission = cloudTable.getMaxPermission(permissionsArray);
+        cloudTable.setState({"currentDirMaxPermission":maxPermission});
         var initPageNo =1 ;
         var queryConditionJson="";
         if(isEmpty(optSrc)==false && optSrc=="mainTable"){
-            cloudTable.setState({"parentDirectoryId":directoryObj.parentId,"currentDirectoryId":directoryObj.id});
+            cloudTable.setState({"parentDirectoryId":directoryObj.parentId,"currentDirectoryId":directoryObj.id,"currentDirectoryCreatorId":directoryObj.creator.colUid});
         }else{
             cloudTable.setState({"parentDirectoryIdAtMoveModal":directoryObj.parentId,
                 "currentDirectoryIdAtMoveModal":directoryObj.id});
@@ -1141,6 +1163,19 @@ const AntCloudTableComponents = React.createClass({
         if(cloudTable.state.currentUserIsSuperManager){
             newButton=<Button value="newDirectory"  className="antnest_talk" onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;
             uploadButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
+        }else{
+            //非超管
+            if(cloudTable.state.currentDirectoryId!=-1){
+                if(cloudTable.state.currentDirMaxPermission!=3
+                    || cloudTable.state.currentDirectoryCreatorId==sessionStorage.getItem("ident")){
+                    newButton=<Button value="newDirectory"  className="antnest_talk" onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;
+                    uploadButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
+                }else{
+                    newButton="";
+                    //使用者只有上传的权限
+                    uploadButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
+                }
+            }
         }
 
         var returnParentToolBar;
@@ -1376,7 +1411,7 @@ const AntCloudTableComponents = React.createClass({
                     {toolbar}
                     <div className="favorite_scroll">
                         
-					<Table  rowSelection={rowSelection} columns={columns} dataSource={cloudTable.state.tableData} pagination={{
+					<Table className="cloud_box" rowSelection={rowSelection} columns={columns} dataSource={cloudTable.state.tableData} pagination={{
                         total: cloudTable.state.totalCount,
                         pageSize: getPageSize(),
                         onChange: cloudTable.pageOnChange
