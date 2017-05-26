@@ -1206,7 +1206,7 @@ const AntCloudTableComponents = React.createClass({
             //第一级文件夹，只有超管有上传和新建的权限
             newButton=<Button value="newDirectory"  className="antnest_talk" onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;
             //uploadButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
-            delBtn = <div><Button type="primary" onClick={cloudTable.showdelAllDirectoryConfirmModal}
+            delBtn = <div className="cloud_tool"><Button type="primary" onClick={cloudTable.showdelAllDirectoryConfirmModal}
                                   disabled={!hasSelected} loading={loading}
             >批量删除</Button><span className="password_ts"
                                 style={{marginLeft: 8}}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span></div>;
@@ -1226,7 +1226,7 @@ const AntCloudTableComponents = React.createClass({
                     //使用者只有上传的权限
                     uploadButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
                 }*/
-                delBtn = <div><Button type="primary" onClick={cloudTable.showdelAllDirectoryConfirmModal}
+                delBtn = <div className="cloud_tool"><Button type="primary" onClick={cloudTable.showdelAllDirectoryConfirmModal}
                                       disabled={!hasSelected} loading={loading}
                 >批量删除</Button><span className="password_ts"
                                     style={{marginLeft: 8}}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span></div>;
@@ -1429,12 +1429,11 @@ const AntCloudTableComponents = React.createClass({
                     >
                         <div>
                             <Row>
-                                <Col span={12}>分享给：</Col>
-                                <Col span={12}>这一刻的想法：</Col>
+                                <Col span={12} className="share_til">选择好友分享文件：</Col>
+                                <Col span={12} className="share_til">这一刻的想法：</Col>
                             </Row>
                             <Row>
-                                <Col span={3}></Col>
-                                <Col span={9}>
+                                <Col span={11} className="upexam_float">
                                     {returnToolbarInShareModal}
                                     <div>
                                         <div className="maaee_group affix_bottom_tc" onClick={cloudTable.getUserChatGroupById.bind(cloudTable,1)}>
@@ -1447,8 +1446,7 @@ const AntCloudTableComponents = React.createClass({
                                                pagination={false} scroll={{y: 200}}/>
                                     </div>
                                 </Col>
-                                <Col span={3}></Col>
-                                <Col span={9}>
+                                <Col span={12} className="topics_dianzan">
                                     <div>
                                         <Input type="textarea"rows={14} value={cloudTable.state.nowThinking} onChange={cloudTable.nowThinkingInputChange}/>
                                         <div>
