@@ -2509,10 +2509,10 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 .attention_img{
 	 float:left
 }
-.group_talk ul li span.name, .public .sayLine.left div.saycont .sayHeader{
+.group_talk ul li span.name, .public .sayLine.left div.saycont .sayHeader, .public .sayLine.right div.saycont .sayHeader{
 	height:38px;
 }
-.group_talk ul li span.name img, .attention_img img, .public .sayLine.left div.saycont .sayHeader img{
+.group_talk ul li span.name img, .attention_img img, .public .sayLine.left div.saycont .sayHeader img, .public .sayLine.right div.saycont .sayHeader img{
 	position:relative;
 	background:#none;
 	top:0;

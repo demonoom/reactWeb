@@ -323,11 +323,11 @@
 									</div>
 									<div class="inputArea" >
 										<textarea placeholder="输入文字内容！" class="textarea_2" id="InputTxtToPublic" ></textarea>
-										<button id="sendPublicText" ref="sendPublicText" >发文字</button>
                                         <span class="file_btn st_file_wrap">
                                         <span class="st_file_tex">发图片</span>
                                         <input type="file"   id="${this.ajaxUploadBtn}" class="st_file"/>
                                         </span>
+										<button id="sendPublicText" ref="sendPublicText" >发文字</button>
 									</div>
 								</section>
 						 </div>
