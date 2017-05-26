@@ -312,7 +312,7 @@
 									<iframe  id="${this.pptIframeName}"  name="${this.pptIframeName}"  />
 									<div class="danmu_pic"><img src="../../src/components/images/danmu_pic.png"  height="208" /></div>
 									<div id="${this.showTuiPing}" class="panle_book ${this.showTuiPing}" ></div>
-                                      <div class="showDanmuArea" ></div>
+                                      <ul class="showDanmuArea" ></ul>
                                         <div class="inputArea" >
                                             <input placeholder="输入弹幕内容！" class="textarea_1"  id="InputTxtToPanel" ></input>
                                             <button  ref="sendPanleText" >发送弹幕</button>
@@ -516,7 +516,7 @@
                         htm = `<img src='${info.data.url}'/>`;
                         $('#' + obj.showTuiPing).show().html(htm);
                         $('#' + obj.pptIframeName).hide();
-
+                        $('.panle .danmu_pic').remove();
                         break;
                     case'classOver':
                       //  alert('下课了!');
@@ -538,7 +538,7 @@
                         });
                         break;
                     case 'classDanmu':
-
+debugger
                         let sayText1 = `<p>${info.data.message.content}</p>`;
                         let loginUser = eval('(' + sessionStorage.getItem('loginUser') + ')');
                         let fromUser1 = info.data.message.fromUser;
@@ -557,9 +557,14 @@
                         break;
                     case'simpleClassDanmu': // 弹幕
 
-                        let sayText = `<p>${info.data.message.content}</p>`;
-                        let fromUser = `<p>${info.data.message.fromUser.userName}：</p>`;
-                        htm = `<marquee behavior="scroll" contenteditable="true" onstart="this.firstChild.innerHTML+=this.firstChild.innerHTML;" scrollamount="5" onmouseover="this.stop();" onmouseout="this.start();"><div class="sayLine">${fromUser}${sayText}</div></marquee>`;
+                        let sayText = info.data.message.content ;
+                        let fromUser = info.data.message.fromUser.userName;
+                        htm = `<li><p class="sayLine"><span>${fromUser}:&nbsp;</span><span>${sayText}</span></p></li>`;
+                      let lis =  $('.panle .showDanmuArea li');
+                      if(lis.length == 5){
+                          $(lis[0]).remove();
+                      }
+
                         $('.panle .danmu_pic').remove();
                         $('.panle .showDanmuArea').append(htm);
                         break;
@@ -571,6 +576,8 @@
         };
         connection.connect({command: 'studentLogin', data: {userId: parseInt(obj.uid), vid: obj.vid}});
     }
+
+
 
 
     littlePanle.prototype.parsePPT = function (param, info) {
@@ -1042,8 +1049,8 @@ function onPasteFunction(event) {
 var UploadFile1 = function (readerResult) {
    // let url = 'http://192.168.1.34:8890/Excoord_Upload_Server/file/upload';
     //    let url = '/proxy/upload/1/34/8890';
-     let url = 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload';
-    //  let url = '/proxy/upload/45/125/8890';
+   //  let url = 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload';
+   let url = '/proxy/upload/45/125/8890';
     //   let url = 'http://192.168.2.104:8890/Excoord_Upload_Server/file/upload';
     var xhr = new XMLHttpRequest();
     xhr.open("POST", url, true);
