@@ -236,6 +236,7 @@
     z-index: 2;
     position: absolute;
     width: 100%;
+	left:0	
 }
 .marquee{
 　　white-space: nowrap;
