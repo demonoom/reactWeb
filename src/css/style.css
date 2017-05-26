@@ -881,6 +881,12 @@ html, body, #root {
 .ant-table-thead > tr > th.ant-table-selection-smallclass, .ant-table-tbody > tr > td.ant-table-selection-smallclass{
 	width:160px
 }
+.ant-table-thead > tr > th.ant-135, .ant-table-tbody > tr > td.ant-135{
+	width:135px
+}
+.ant-table-thead > tr > th.cloud_name, .ant-table-tbody > tr > td.cloud_name{
+	width:calc(100% - 520px)
+}
 .ant-table-thead > tr > th.ant-table-selection-time, .ant-table-tbody > tr > td.ant-table-selection-time{
 	width:120px;
 }
@@ -3982,18 +3988,17 @@ div.btn1{
 .cloud_box table tr th .ant-checkbox, .cloud_box table tr td .ant-checkbox{
 	margin-left:12px;
 }
-.cloud_box .ant-table-tbody > tr > td.ant-table-selection-designation div a{
+.cloud_box .ant-table-tbody > tr > td.cloud_name span a{
 	font-weight: normal !important;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     display: inline-block;
-    width: 300px;
-	cursor:pointer
+    width:calc(100% - 36px);
+	cursor:pointer;
+	width: calc(100% - 560px);
 }
 .cloud_text{
-	position:relative;
-	top:5px;
 }
 .cloud_icon{
 	background:url(../components/images/cloud_icon.png) no-repeat;
@@ -4001,6 +4006,8 @@ div.btn1{
 	height: 24px;
     display: inline-block;
     margin-right: 12px;
+	position: relative;
+    top: 3px;
 }
 .cloud_icon_file{
 	background-position:0 0;

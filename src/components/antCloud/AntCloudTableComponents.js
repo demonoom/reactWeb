@@ -129,15 +129,15 @@ const AntCloudTableComponents = React.createClass({
             columns = [{
                 title: '名称',
                 dataIndex: 'title',
-				className: 'ant-table-selection-designation',
+				className: 'cloud_name',
             },{
                 title: '创建者',
                 dataIndex: 'creator',
-                className: 'ant-table-selection-time class_right date_tr',
+                className: 'ant-table-selection-user2 class_right date_tr',
             }, {
                 title: '更新时间',
                 dataIndex: 'createTime',
-                className: 'ant-table-selection-smallclass class_right time',
+                className: 'ant-135 class_right time',
             }, {
                 title: '操作',
                 className: 'ant-table-selection-smallclass class_right',
@@ -364,10 +364,10 @@ const AntCloudTableComponents = React.createClass({
 
             var fileLogo;
             if(directory){
-                fileLogo=<div className="cloud_text">
+                fileLogo=<span className="cloud_text">
                     <i className="cloud_icon cloud_icon_file"></i>
                     <a className="font_gray_666" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e,"mainTable")}>{name}</a>
-                </div>;
+                </span>;
             }else{
                 var lastPointIndex = name.lastIndexOf(".");
                 //通过截取文件后缀名的形式，完成对上传文件类型的判断
@@ -1406,7 +1406,6 @@ const AntCloudTableComponents = React.createClass({
                     >
                         <div>
                             <Row>
-                                <Col span={3} className="right_look">目标文件夹：</Col>
                                 <Col span={20}>
                                     {returnToolbarInMoveModal}
                                     <Table  columns={targetDirColumns}  showHeader={false} dataSource={cloudTable.state.targetDirDataArray}
