@@ -6,8 +6,6 @@
 //  export const WEBSERVICE_URL = "http://192.168.1.34:9006/Excoord_ApiServer/webservice";
 export const WEBSERVICE_URL = "http://192.168.2.104:9006/Excoord_ApiServer/webservice";
 
-// var requesting = false;
-
 export function doWebService(data, listener) {
     var pro = document.getElementById("pro");
     //进度条的宽度，用来模拟进度条的进度

@@ -548,7 +548,7 @@ const AntCloudTableComponents = React.createClass({
      */
     deleteFileOrDirectory(fileObject){
         console.log("del key:"+fileObject.id);
-        cloudTable.setState({"delCloudFileIds":fileObject.id});
+        cloudTable.setState({"delCloudFileIds":fileObject.id,"delType":"single"});
         cloudTable.refs.confirmModal.changeConfirmModalVisible(true);
     },
     /**
@@ -879,7 +879,8 @@ const AntCloudTableComponents = React.createClass({
      * 执行批量删除操作
      */
     showdelAllDirectoryConfirmModal(){
-
+        cloudTable.setState({"delType":"muliti"});
+        cloudTable.refs.confirmModal.changeConfirmModalVisible(true);
     },
 
     /**
@@ -1188,10 +1189,7 @@ const AntCloudTableComponents = React.createClass({
             onChange: cloudTable.onSelectChange,
         };
         const hasSelected = selectedRowKeys.length > 0;
-        var delBtn = <div><Button type="primary" onClick={cloudTable.showdelAllDirectoryConfirmModal}
-                                  disabled={!hasSelected} loading={loading}
-        >批量删除</Button><span className="password_ts"
-                            style={{marginLeft: 8}}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span></div>;
+        var delBtn;
 
         var tipTitle;
         if(cloudTable.state.getFileType=="myFile"){
@@ -1208,6 +1206,10 @@ const AntCloudTableComponents = React.createClass({
             //第一级文件夹，只有超管有上传和新建的权限
             newButton=<Button value="newDirectory"  className="antnest_talk" onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;
             //uploadButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
+            delBtn = <div><Button type="primary" onClick={cloudTable.showdelAllDirectoryConfirmModal}
+                                  disabled={!hasSelected} loading={loading}
+            >批量删除</Button><span className="password_ts"
+                                style={{marginLeft: 8}}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span></div>;
         }else{
             //非超管
             if(cloudTable.state.currentDirectoryId!=-1){
@@ -1224,6 +1226,10 @@ const AntCloudTableComponents = React.createClass({
                     //使用者只有上传的权限
                     uploadButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
                 }*/
+                delBtn = <div><Button type="primary" onClick={cloudTable.showdelAllDirectoryConfirmModal}
+                                      disabled={!hasSelected} loading={loading}
+                >批量删除</Button><span className="password_ts"
+                                    style={{marginLeft: 8}}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span></div>;
             }
         }
 
