@@ -90,6 +90,7 @@
             $('#' + id).css({visibility: 'hidden'});
             $('#ifr' + id).removeAttr('src');
         }
+        utilsCommon.unbind(document,'paste',onPasteFunction );
     }
 
 
@@ -311,11 +312,11 @@
 									<iframe  id="${this.pptIframeName}"  name="${this.pptIframeName}"  />
 									<div class="danmu_pic"><img src="../../src/components/images/danmu_pic.png"  height="208" /></div>
 									<div id="${this.showTuiPing}" class="panle_book ${this.showTuiPing}" ></div>
-										  <div class="showDanmuArea" ></div>
-											<div class="inputArea" >
-												<input placeholder="输入弹幕内容！" class="textarea_1"  id="InputTxtToPanel" ></input>
-												<button  ref="sendPanleText" >发送弹幕</button>
-											</div>
+                                      <div class="showDanmuArea" ></div>
+                                        <div class="inputArea" >
+                                            <input placeholder="输入弹幕内容！" class="textarea_1"  id="InputTxtToPanel" ></input>
+                                            <button  ref="sendPanleText" >发送弹幕</button>
+                                        </div>
 								</section>
 								<section class="public" >
 									<div class="showDanmuArea" >
@@ -324,8 +325,8 @@
 									<div class="inputArea" >
 										<textarea placeholder="输入文字内容！" class="textarea_2" id="InputTxtToPublic" ></textarea>
                                         <span class="file_btn st_file_wrap">
-                                        <span class="st_file_tex">发图片</span>
-                                        <input type="file"   id="${this.ajaxUploadBtn}" class="st_file"/>
+                                            <span class="st_file_tex">发图片</span>
+                                            <input type="file"   id="${this.ajaxUploadBtn}" class="st_file"/>
                                         </span>
 										<button id="sendPublicText" ref="sendPublicText" >发文字</button>
 									</div>
@@ -354,7 +355,7 @@
         $(this.el).find('.liveTV.tab li').on('click', this.changePanel);
         $(this.el).find('.activity .inputArea button').on('click', this.sendContent.bind(this, this.param));
         this._initBtnUploadBtn(this.ajaxUploadBtn, obj.param);
-        document.onpaste = onPasteFunction;
+        utilsCommon.bind(document,'paste',onPasteFunction );
 //
 //         videojs.setGlobalOptions({
 //             flash: {
@@ -511,13 +512,14 @@
                 let htm = '';
                 switch (info.command) {
                     case 'pushHandout': // 图片
+                        debugger
                         htm = `<img src='${info.data.url}'/>`;
-                        $('#' + obj.showTuiPing).html(htm).css({'z-index': 1});
-                        $('#' + obj.pptIframeName).css({'z-index': 0});
+                        $('#' + obj.showTuiPing).show().html(htm);
+                        $('#' + obj.pptIframeName).hide();
 
                         break;
                     case'classOver':
-                        alert('下课了!');
+                      //  alert('下课了!');
                         __this.commitClose(obj.warpid);
                         break;
                     case 'studentLogin': // 显示直播视频
@@ -541,17 +543,16 @@
                         let loginUser = eval('(' + sessionStorage.getItem('loginUser') + ')');
                         let fromUser1 = info.data.message.fromUser;
                         let refClass = 'left';
-
                         if (fromUser1.colUid == loginUser.colUid) {
                             refClass = 'right';
                         }
                         let fromUserName1 = `<p class="u-name">${fromUser1.userName}</p>`;
                         let userFace = `<img src="${fromUser1.avatar}" />`;
-
                         if (info.data.message.attachment) {
-                            sayText1 = `<img style="width:120px;height:auto;"  src="${info.data.message.attachment.address}"/>`;
+                            sayText1 = `<img style="width:120px;height:auto;" class="topics_zanImg"  onclick="showLargeImg()"  src="${info.data.message.attachment.address}"/>`;
                         }
                         htm = `<div class="sayLine ${refClass}"><div class="username" >${fromUserName1}</div><div class="saycont"><div class="sayHeader" >${userFace}</div><div class="sayCon" >${sayText1}</div></div>`;
+                        $('.public .danmu_pic').remove();
                         $('.public .showDanmuArea').append(htm);
                         break;
                     case'simpleClassDanmu': // 弹幕
@@ -559,24 +560,21 @@
                         let sayText = `<p>${info.data.message.content}</p>`;
                         let fromUser = `<p>${info.data.message.fromUser.userName}：</p>`;
                         htm = `<marquee behavior="scroll" contenteditable="true" onstart="this.firstChild.innerHTML+=this.firstChild.innerHTML;" scrollamount="5" onmouseover="this.stop();" onmouseout="this.start();"><div class="sayLine">${fromUser}${sayText}</div></marquee>`;
+                        $('.panle .danmu_pic').remove();
                         $('.panle .showDanmuArea').append(htm);
                         break;
-
                     default :
                         __this.parsePPT.call(__this, obj, info);
                         break;
-
                 }
-
             }
         };
-
         connection.connect({command: 'studentLogin', data: {userId: parseInt(obj.uid), vid: obj.vid}});
     }
 
 
     littlePanle.prototype.parsePPT = function (param, info) {
-
+debugger
         let _self = this;
         let command = info.command;
         let pptIframeName = param.pptIframeName;
@@ -620,8 +618,8 @@
 
 
         function playPPT(html) {
-            $("#" + pptIframeName).attr("src", html + "?v=1").css({'z-index': 1});
-            $('#' + showTuiPing).css({'z-index': 0});
+            $("#" + pptIframeName).show().attr("src", html + "?v=1").css({'z-index': 1});
+            $('#' + showTuiPing).hide();
         }
 
 
@@ -663,7 +661,7 @@
 
         if (el.nodeName.toLowerCase() != 'li') {
             li = $(el.parentNode)[0];
-        }else{
+        } else {
             li = el;
         }
 
@@ -981,6 +979,26 @@ function replaceUnit(str) {
     return parseInt(str.replace(/[a-z]*/img, ''))
 
 }
+var utilsCommon = (function () {
+    function addEvents(target, type, func) {
+        if (target.addEventListener) //非ie 和ie9
+            target.addEventListener(type, func, false);
+        else if (target.attachEvent) //ie6到ie8
+            target.attachEvent("on" + type, func);
+        else target["on" + type] = func; //ie5
+    };
+    function removeEvents(target, type, func) {
+        if (target.removeEventListener)
+            target.removeEventListener(type, func, false);
+        else if (target.detachEvent)
+            target.detachEvent("on" + type, func);
+        else target["on" + type] = null;
+    };
+    return {
+        bind: addEvents,
+        unbind: removeEvents
+    }
+})();
 
 
 function onPasteFunction(event) {
@@ -1012,7 +1030,9 @@ function onPasteFunction(event) {
         // 判断是否为图片数据
         if (item && item.kind === 'file' && item.type.match(/^image\//i)) {
             // 读取该图片
-            imgReader(item);
+           // imgReader(item);
+            var file = item.getAsFile();
+            UploadFile1(file);
         }
     }
 
@@ -1020,40 +1040,39 @@ function onPasteFunction(event) {
 }
 
 var UploadFile1 = function (readerResult) {
-     let url = 'http://192.168.1.34:8890/Excoord_Upload_Server/file/upload';
- //    let url = '/proxy/upload/1/34/8890';
-  //  let url = 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload';
-  //  let url = '/proxy/upload/45/125/8890';
- //   let url = 'http://192.168.2.104:8890/Excoord_Upload_Server/file/upload';
+   // let url = 'http://192.168.1.34:8890/Excoord_Upload_Server/file/upload';
+    //    let url = '/proxy/upload/1/34/8890';
+     let url = 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload';
+    //  let url = '/proxy/upload/45/125/8890';
+    //   let url = 'http://192.168.2.104:8890/Excoord_Upload_Server/file/upload';
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", url,true);
-  //  xhr.overrideMimeType("application/octet-stream");
-  //  xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');
-    xhr.setRequestHeader('enctype','multipart/form-data');
-     xhr.setRequestHeader('Content-Type','image/png');
-   // debugger
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader('enctype', 'multipart/form-data');
+ //   xhr.setRequestHeader('Content-Type', 'image/png');
+    // debugger
 
-   let fd = new FormData();
-   fd.append('fileName', new Date().getTime() + '.jpg');
-   fd.append('file', readerResult  );
+    let fd = new FormData();
+    fd.append('fileName', new Date().getTime() + '.jpg');
+    fd.append('file', readerResult);
 
 
-    if(!XMLHttpRequest.prototype.sendAsBinary){
-        XMLHttpRequest.prototype.sendAsBinary = function(datastr) {
+    if (!XMLHttpRequest.prototype.sendAsBinary) {
+        XMLHttpRequest.prototype.sendAsBinary = function (datastr) {
             function byteValue(x) {
                 return x.charCodeAt(0) & 0xff;
             }
+
             var ords = Array.prototype.map.call(datastr, byteValue);
             var ui8a = new Uint8Array(ords);
             this.send(ui8a.buffer);
         };
     }
-   // xhr.sendAsBinary(readerResult);
+    // xhr.sendAsBinary(readerResult);
 
     xhr.send(fd);
 
     xhr.onreadystatechange = function () {
-      //  debugger
+        //  debugger
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {
                 console.log("response: " + xhr.responseText);
@@ -1064,24 +1083,31 @@ var UploadFile1 = function (readerResult) {
 }
 
 
-
-
 var imgReader = function (item) {
 
     var reader = new FileReader();
     // 读取文件后将其显示在网页中
     reader.onload = function (e) {
         var img = new Image();
-
         img.src = e.target.result;
-        UploadFile1(e.target.result);
+
         document.body.appendChild(img);
     };
     var file = item.getAsFile();
+
     // 读取文件
     reader.readAsDataURL(file);
 };
+function showLargeImg(e) {
+    var target = e.target;
+    if (navigator.userAgent.indexOf("Chrome") > -1) {
+        target = e.currentTarget;
+    } else {
+        target = e.target;
+    }
 
+    $.openPhotoGallery(target)
+}
 // 保持android ios 一直体验的接口实现
 var phone = {
     // callHandler ({method: xxxx, callbackId: xxxxxx, url: xxxxx})
