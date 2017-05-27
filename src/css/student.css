@@ -301,3 +301,25 @@
 .st_file_wrap input[type="file"], .st_file_wrap input[type="file" i]{
 	cursor:pointer
 }
+.history .showTuiPing{
+	overflow-y:auto;
+}
+.history .showTuiPing .tuitu{
+	width:848px;
+	margin:0 auto;
+}
+.history .showTuiPing .topics_zanImg{
+	width: 180px;
+    height: 232px;
+    padding: 3px;
+    border: 1px solid #d9d9d9;
+    margin: 15px;
+    text-align: center;
+	float:left;
+}
+.history .showTuiPing .topics_zanImg:hover{
+	 border: 1px solid #60A9FF
+}
+.history .littleAnt-iframe-panle{
+	height:100% !important
+}

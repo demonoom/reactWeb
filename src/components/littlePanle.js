@@ -401,7 +401,7 @@
         }
         for (let i = 0; i < obj.param.tuipingImgArr.length; i++) {
             let imgData = obj.param.tuipingImgArr[i];
-            this.thistTuiPingUi.push(`<img style="width:120px;height:auto;" class="topics_zanImg"  onclick="showLargeImg(this)"  src="${imgData.path}"/>`);
+            this.thistTuiPingUi.push(`<img class="topics_zanImg"  onclick="showLargeImg(this)"  src="${imgData.path}"/>`);
         }
 
         this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show ${this.mode}">
@@ -416,7 +416,7 @@
 						 	<div class="activity">
 								<section class="panle">
 									<!-- <iframe  id="${this.pptIframeName}"  name="${this.pptIframeName}"  /> -->
-									<div id="${this.showTuiPing}" class="panle_book ${this.showTuiPing}" >${this.thistTuiPingUi.join('')}</div>
+									<div id="${this.showTuiPing}" class="panle_book ${this.showTuiPing}" ><div class="tuitu">${this.thistTuiPingUi.join('')}</div></div>
 								</section>
 						 </div>
 						 <section id="${this.ifrliveid}" class="live littleAnt-iframe-panle ${classChange}">

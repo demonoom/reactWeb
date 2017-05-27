@@ -47,8 +47,11 @@
     font-weight: 400;
     font-style: normal
 }
-.live .vjs-icon-pause, .video-js .vjs-play-control.vjs-playing{
+.liveTV .live .vjs-icon-pause, .video-js .vjs-play-control.vjs-playing{
 	display:none
+}
+.history .live .vjs-icon-pause, .video-js .vjs-play-control.vjs-playing{
+	display:block
 }
 .vjs-icon-pause:before, .video-js .vjs-play-control.vjs-playing:before {
     content: "\f103"
@@ -1545,10 +1548,10 @@ video::-webkit-media-text-track-display {
 .multi .video-js{
 	height: calc(100% - 30px);
 }
-.live .video-js .vjs-progress-control, .live .video-js .vjs-time-control{
+.liveTV .live .video-js .vjs-progress-control, .live .video-js .vjs-time-control{
 	display:none !important
 }
-.live .video-js .vjs-fullscreen-control{
+.liveTV .live .video-js .vjs-fullscreen-control{
 	position:absolute;
 	right:0
 }
