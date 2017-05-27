@@ -434,10 +434,10 @@ const MainLayout = React.createClass({
                                 <i className="icon_menu_ios icon_antgroup"></i>
                                 <div className="tan">蚁群</div>
                             </Menu.Item>
-                            <Menu.Item key="antCloud" className="padding_menu">
+                            {/*<Menu.Item key="antCloud" className="padding_menu">
                                 <i className="icon_menu_ios icon_yichao1"></i>
                                 <div className="tan">蚁盘</div>
-                            </Menu.Item>
+                            </Menu.Item>*/}
                             <FloatButton ref="floatButton" messageUtilObj={ms}/>
                         </Menu>
 
