@@ -320,3 +320,6 @@
 .history .showTuiPing .topics_zanImg:hover{
 	 border: 1px solid #60A9FF
 }
+.history .littleAnt-iframe-panle{
+	height:100% !important
+}
