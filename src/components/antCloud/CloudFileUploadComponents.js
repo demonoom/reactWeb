@@ -200,7 +200,7 @@ const CloudFileUploadComponents = React.createClass({
             <div>
                 <Row>
                     <div className="upload_area" onDragOver={this.dragOver} onDrop={this.sbumitFile}>
-                        <input type="file" name="fileField" className="file" id="fileField" size="28" onChange={this.selectFile} style={{display:'none'}} />
+                        <input type="file" name="fileField" webkitdirectory className="file" id="fileField" size="28" onChange={this.selectFile} style={{display:'none'}} />
                         <Button type="primary" icon="plus" className="add_bnt" size={5} onClick={this.F_Open_dialog}></Button>
                         <span style={{align:'center'}}>请将文件拖拽到此区域实现上传</span>
                     </div>
