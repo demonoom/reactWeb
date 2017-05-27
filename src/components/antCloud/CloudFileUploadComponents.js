@@ -46,39 +46,42 @@ const CloudFileUploadComponents = React.createClass({
         if(files.length<=0){
             message.warning("请选择或拖拽待上传的文件,谢谢！");
         }else{
-            var fileName = files[0].name;
-            var lastPointIndex = fileName.lastIndexOf(".");
-            var fileMimeType = files[0].type;
-            //通过截取文件后缀名的形式，完成对上传文件类型的判断
-            var fileType = fileName.substring(lastPointIndex+1);
-            var fileSize = files[0].size;
-            var isExit = this.checkCurrentFileIsSubmit(fileName);
-            var isMuliti = this.checkSubmitFileCount();
-            if(isMuliti==true){
-                message.warning("请勿同时上传多个文件,谢谢！");
-            }else if(isExit==true){
-                message.warning("请勿重复上传,谢谢!");
-            }else if(!this.checkIsRightFileTypeByEndWith(fileType)){
-                /*message.warning("本系统只支持后缀名为ppt、pptx、pdf、mp3、mp4、flv文件的上传操作,请重新上传,谢谢!",10);*/
-                message.warning("本系统只支持后缀名为ppt、pptx、pdf、mp4、flv文件的上传操作,请重新上传,谢谢!",10);
-            }else if(fileSize >= 104857600){
-                message.warning("请勿上传超过100M的文件，谢谢!");
-            }else{
-                var fileJson = { label: fileName,value:fileName,fileObj:files };
-                submitFileOptions.push(fileJson);
-                this.setState({submitFileCheckedList:[],submitFileOptions:submitFileOptions});
-                //回调，将已上传的文件列表传给父组件
-                this.props.callBackParent(submitFileOptions);
+            for(var i=0;i<files.length;i++){
+                var file = files[i];
+                var fileName = file.name;
+                var lastPointIndex = fileName.lastIndexOf(".");
+                var fileMimeType = file.type;
+                //通过截取文件后缀名的形式，完成对上传文件类型的判断
+                var fileType = fileName.substring(lastPointIndex+1);
+                var fileSize = file.size;
+                var isExit = this.checkCurrentFileIsSubmit(fileName);
+                var isMuliti = this.checkSubmitFileCount();
+                if(isMuliti==true){
+                    message.warning("请勿同时上传多个文件,谢谢！");
+                }else if(isExit==true){
+                    message.warning("请勿重复上传,谢谢!");
+                }else if(!this.checkIsRightFileTypeByEndWith(fileType)){
+                    /*message.warning("本系统只支持后缀名为ppt、pptx、pdf、mp3、mp4、flv文件的上传操作,请重新上传,谢谢!",10);*/
+                    message.warning("本系统只支持后缀名为ppt、pptx、pdf、mp4、flv文件的上传操作,请重新上传,谢谢!",10);
+                }else if(fileSize >= 104857600){
+                    message.warning("请勿上传超过100M的文件，谢谢!");
+                }else{
+                    var fileJson = { label: fileName,value:fileName,fileObj:file };
+                    submitFileOptions.push(fileJson);
+                }
             }
+            this.setState({submitFileCheckedList:[],submitFileOptions:submitFileOptions});
+            //回调，将已上传的文件列表传给父组件
+            this.props.callBackParent(submitFileOptions);
         }
     },
 
     //判断已上传文件个数，目前只允许单文件上传
     checkSubmitFileCount(){
         var isOk=false;
-        if(this.state.submitFileOptions.length>=1){
+        /*if(this.state.submitFileOptions.length>=1){
             isOk=true;
-        }
+        }*/
         return isOk;
     },
 
@@ -200,7 +203,7 @@ const CloudFileUploadComponents = React.createClass({
             <div>
                 <Row>
                     <div className="upload_area" onDragOver={this.dragOver} onDrop={this.sbumitFile}>
-                        <input type="file" name="fileField" webkitdirectory className="file" id="fileField" size="28" onChange={this.selectFile} style={{display:'none'}} />
+                        <input type="file" name="fileField" webkitdirectory multiple className="file" id="fileField" size="28" onChange={this.selectFile} style={{display:'none'}} />
                         <Button type="primary" icon="plus" className="add_bnt" size={5} onClick={this.F_Open_dialog}></Button>
                         <span style={{align:'center'}}>请将文件拖拽到此区域实现上传</span>
                     </div>

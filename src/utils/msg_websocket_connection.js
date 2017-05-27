@@ -4,7 +4,7 @@ import {IS_LIVE_DEBUG} from './Const';
 
 export function MsgConnection(){
 	this.msgWsListener = null;
-	this.REMOTE_URL = "ws://www.maaee.com:8889/Excoord_MessageServer/message";
+	this.REMOTE_URL = "wss://www.maaee.com:7889/Excoord_MessageServer/message";
 	this.LOCAL_URL = "ws://192.168.1.34:8889/Excoord_MessageServer/message";
    	this.LOCAL_URL_LIVE = "ws://192.168.2.104:8889/Excoord_MessageServer/message";
 	this.WS_URL = IS_DEBUG ? (IS_LIVE_DEBUG ? this.LOCAL_URL_LIVE : this.LOCAL_URL) : this.REMOTE_URL;

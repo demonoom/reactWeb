@@ -663,6 +663,7 @@ const AntCloudTableComponents = React.createClass({
                 }else{
                     message.error(ret.msg);
                 }
+                cloudTable.setState({"selectedRowKeys":[]});
                 cloudTable.refs.confirmModal.changeConfirmModalVisible(false);
             },
             onError: function (error) {
@@ -749,8 +750,10 @@ const AntCloudTableComponents = React.createClass({
             message.warning("请选择上传的文件,谢谢！");
         }else{
             var formData = new FormData();
-            formData.append("file",uploadFileList[0]);
-            formData.append("name",uploadFileList[0].name);
+            for(var i=0;i<uploadFileList.length;i++){
+                formData.append("file"+i,uploadFileList[i]);
+                formData.append("name"+i,uploadFileList[i].name);
+            }
             $.ajax({
                 type: "POST",
                 url: "http://101.201.45.125:8890/Excoord_Upload_Server/file/upload",
@@ -798,7 +801,7 @@ const AntCloudTableComponents = React.createClass({
         for(var i=0;i<fileList.length;i++){
             var fileJson = fileList[i];
             var fileObj = fileJson.fileObj;
-            uploadFileList.push(fileObj[0]);
+            uploadFileList.push(fileObj);
         }
     },
     /**
