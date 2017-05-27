@@ -4,13 +4,20 @@
 import {IS_DEBUG} from './utils/Const';
 import {IS_LIVE_DEBUG} from './utils/Const';
 //导出常量
+<<<<<<< HEAD
 //  export const WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
 // export const WEBSERVICE_URL = "http://192.168.1.34:9006/Excoord_ApiServer/webservice";
 //export const WEBSERVICE_URL = "http://192.168.2.104:9006/Excoord_ApiServer/webservice";
+=======
+>>>>>>> 3d20356b4cf67f08e969d9627858af5463d5b424
 const REMOTE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
 const LOCAL_URL = "http://192.168.1.34:9006/Excoord_ApiServer/webservice";
 const LOCAL_URL_LIVE = "http://192.168.2.104:9006/Excoord_ApiServer/webservice";
 const WEBSERVICE_URL = IS_DEBUG ? (IS_LIVE_DEBUG ? LOCAL_URL_LIVE : LOCAL_URL) : REMOTE_URL;
+<<<<<<< HEAD
+=======
+console.log("WEBSERVICE_URL:" + WEBSERVICE_URL);
+>>>>>>> 3d20356b4cf67f08e969d9627858af5463d5b424
 
 export function doWebService(data, listener) {
     var pro = document.getElementById("pro");
