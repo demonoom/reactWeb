@@ -19,12 +19,14 @@ class LiveTV extends React.Component {
             pageNo: 1,
             rsCount: 0,
         };
+        this.userinfo = eval('(' + sessionStorage.getItem('loginUser') + ')');
         this.titleUi = null;
         this.searchUi = null;
         this.currentTab = 'liveTV_tab';
         this.view = this.view.bind(this);
         this.change = this.change.bind(this);
         this._getLives = this._getLives.bind(this);
+        window._changeGetLives = this.change;
         this._changePage = this._changePage.bind(this);
         this._buildLivesUi = this._buildLivesUi.bind(this);
         this._buildListTitle = this._buildListTitle.bind(this);
@@ -39,6 +41,7 @@ class LiveTV extends React.Component {
 
     componentWillMount() {
         this._getLives(1);
+
 
     }
 
@@ -207,7 +210,7 @@ class LiveTV extends React.Component {
         let _this = this;
         let title = null;
         let mode = this.currentTab.replace('_tab', '');
-debugger
+
         switch (mode){
             case 'history':
                 this._viewHistoryLiveTV(objref);
@@ -270,7 +273,7 @@ debugger
                 this._getLives(1);
                 break;
             case 'history':
-                this._getHistoryLives2(1);
+                this._searchHistoryLives(1);
                 break;
         }
 
@@ -284,23 +287,24 @@ debugger
                 this._getLives(pageno);
                 break;
             case 'history_tab':
-                this._getHistoryLives2(pageno);
+                this._searchHistoryLives(pageno);
                 break;
         }
     }
 
-    _searchHistoryLives(e) {
+    _searchHistoryLives(pageNo) {
         let _this = this;
         let txt = $('#searchTxt').val();
         if (!txt) {
-            return;
+
+            txt = this.userinfo.schoolName;
         }
 
         var param = {
           //  "method": 'searchLiveInfosByKeywords',
             "method": 'searchLiveInfosBeanByKeywords',
-            "keywords": txt,
-            "pageNo": 1,
+            "keywords":  txt,
+            "pageNo": pageNo || 1,
         };
 
         doWebService(JSON.stringify(param), {
@@ -358,7 +362,7 @@ debugger
         //
         //
         this.livesUi = dataArr.map(function (item) {
-debugger
+
             let id = item.liveInfoId;
             let liveInfoTitle = item.liveInfoTitle;
             let schoolName = item.schoolName;

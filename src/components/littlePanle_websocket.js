@@ -17,7 +17,8 @@ function ClazzConnection(host){
         var connection = this;
         connection.connecting = true;
         connection.loginProtocol = loginProtocol;
-        connection.ws=new WebSocket(connection.WS_URL);
+      window.liveTVWS =  connection.ws=new WebSocket(connection.WS_URL);
+
         //监听消息
         connection.ws.onmessage = function(event) {
 

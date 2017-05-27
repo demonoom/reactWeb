@@ -75,6 +75,10 @@
 
     }
     littlePanle.prototype.closepanle = function (id) {
+        if (window.liveTVWS) {
+            window.liveTVWS.close();
+        }
+
 
         let tmp = [];
         LP.mgr.map(function (item, index) {
@@ -398,7 +402,7 @@
 
 
         this.thistTuiPingUi = [];
-        if (!obj.param.tuipingImgArr) {
+        if (!obj.param.tuipingImgArr.length) {
             this.thistTuiPingUi.push(`<div class="danmu_pic"><img src="../../src/components/images/danmu_pic.png" height="208"></div>`);
         }
         for (let i = 0; i < obj.param.tuipingImgArr.length; i++) {
@@ -417,7 +421,6 @@
 					<div class="right_cont">
 						 	<div class="activity">
 								<section class="panle">
-								<div class="danmu_pic"><img src="../../src/components/images/danmu_pic.png" height="208"></div>
 									<!-- <iframe  id="${this.pptIframeName}"  name="${this.pptIframeName}"  /> -->
 									<div id="${this.showTuiPing}" class="panle_book ${this.showTuiPing}" ><div class="tuitu">${this.thistTuiPingUi.join('')}</div></div>
 								</section>
@@ -473,10 +476,10 @@
     }
 
     littlePanle.prototype.reflashLiveTv = function (videoId) {
-       var  video_1 = $('#'+videoId).find('video')[0];
-       if(video_1.readyState>3){
-           video_1.load();
-       }
+        var video_1 = $('#' + videoId).find('video')[0];
+        if (video_1.readyState > 3) {
+            video_1.load();
+        }
 
     }
 
@@ -608,6 +611,7 @@
 
     littlePanle.prototype.websocket = function (obj) {
         var connection = new ClazzConnection();
+
         LP.LiveTVSocket = connection;
         let __this = this;
 
@@ -642,7 +646,12 @@
                         }
                         break;
                     case'classOver':
-                        __this.commitClose(obj.warpid);
+                        log.info('下课了！');
+                        // __this.commitClose(obj.warpid);
+                        __this.closepanle(obj.warpid);
+                        setTimeout(function () {
+                            window._changeGetLives('history');
+                        }, 500);
                         break;
                     case 'studentLogin': // 显示直播视频
                         //     info.data.play_rtmp_url = 'rtmp://60.205.86.217:1935/live2/54208';
@@ -731,7 +740,7 @@
                 if (!result.success) {
                     return;
                 }
-                debugger
+
                 var openInfo = result.response;
                 if (!openInfo) return;
                 //打开课堂中的ppt
