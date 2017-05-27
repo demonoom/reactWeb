@@ -1173,7 +1173,7 @@ const AntCloudTableComponents = React.createClass({
                                 break;
                         }
                         var groupName = chatGroupName;
-                        var groupNameTag = <div>{imgTag}{groupName}</div>
+                        var groupNameTag = <div>{imgTag}<span>{groupName}</span></div>
                         var groupJson ={ label: groupNameTag, value: chatGroupId};
                         groupOptions.push(groupJson);
                     });
@@ -1529,7 +1529,7 @@ const AntCloudTableComponents = React.createClass({
                                 </Col>
                                 <Col span={12} className="topics_dianzan">
                                     <div>
-                                        <Input type="textarea"rows={14} value={cloudTable.state.nowThinking} onChange={cloudTable.nowThinkingInputChange}/>
+                                        <Input type="textarea"rows={14} placeholder="这是一个云盘分享的文件" value={cloudTable.state.nowThinking} onChange={cloudTable.nowThinkingInputChange}/>
                                         <div>
                                             <Icon type="link" /><span>这是一个云盘分享的文件</span>
                                         </div>
