@@ -1491,7 +1491,9 @@ const AntCloudTableComponents = React.createClass({
                         <div>
                             <Row>
                                 <Col span={12} className="share_til">选择好友分享文件：</Col>
-                                <Col span={12} className="share_til">这一刻的想法：</Col>
+                                <Col span={12} className="share_til">这一刻的想法：
+									<span className="right_ri"><Icon type="link" /><span>这是一个云盘分享的文件</span></span>
+								</Col>
                             </Row>
                             <Row>
                                 <Col span={11} className="upexam_float cloud_share_cont" >
@@ -1507,9 +1509,6 @@ const AntCloudTableComponents = React.createClass({
                                 <Col span={12} className="topics_dianzan">
                                     <div>
                                         <Input type="textarea"rows={14} placeholder="这是一个云盘分享的文件" value={cloudTable.state.nowThinking} onChange={cloudTable.nowThinkingInputChange}/>
-                                        <div>
-                                            <Icon type="link" /><span>这是一个云盘分享的文件</span>
-                                        </div>
                                     </div>
                                 </Col>
                             </Row>
