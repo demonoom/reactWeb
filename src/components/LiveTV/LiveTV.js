@@ -18,11 +18,13 @@ class LiveTV extends React.Component {
             ident: this.props.userid || sessionStorage.getItem("ident"),
             lives: [],
             pageNo: 1,
+            rsCount: 0,
         };
         this.currentTab = 'liveTV_tab';
         this.view = this.view.bind(this);
         this.change = this.change.bind(this);
         this._getLives = this._getLives.bind(this);
+        this._changePage = this._changePage.bind(this);
         this._buildLivesUi = this._buildLivesUi.bind(this);
         this._getHistoryLives = this._getHistoryLives.bind(this);
         this._okViewHistoryLive3 = this._okViewHistoryLive3.bind(this);
@@ -45,6 +47,7 @@ class LiveTV extends React.Component {
 
         doWebService(JSON.stringify(param), {
             onResponse: function (res) {
+
                 if (res.success && !res.response.length) {
                     message.info("没有直播课堂！");
                     return;
@@ -58,7 +61,38 @@ class LiveTV extends React.Component {
         });
     }
 
-    _getHistoryLives(cityCode, schoolId, kemu, pageNo, fn) {
+    // 历史回顾
+    _getHistoryLives2( pageNo, fn) {
+
+        let _this = this;
+        var param = {
+            "method": 'getLivedLiveInfos',
+            "pageNo": pageNo || 1,
+            "cityCode": '',
+            "schoolId": '',
+            "kemu": '',
+        };
+
+        doWebService(JSON.stringify(param), {
+            onResponse: function (res) {
+
+                if (res.success && !res.response.length) {
+                    message.info("没有历史回顾！");
+                    return;
+                }
+                if (fn) fn(res.response);
+                _this.setState({lives: res.response, ...res.pager});
+
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    }
+
+
+// 获取所有直播过的直播主题
+    _getHistoryLives( pageNo, fn) {
 
         let _this = this;
         var param = {
@@ -68,8 +102,9 @@ class LiveTV extends React.Component {
 
         doWebService(JSON.stringify(param), {
             onResponse: function (res) {
+                
                 if (res.success && !res.response.length) {
-                    message.info("没有直播课堂！");
+                    message.info("没有历史回顾！");
                     return;
                 }
                 if (fn) fn(res.response);
@@ -82,8 +117,8 @@ class LiveTV extends React.Component {
     }
 
 
-    _buildLivesUi(dataArr) {
-
+    _buildLivesUi( ) {
+       let dataArr =   this.state.lives;
         this.livesUi = null;
         let _this = this;
 
@@ -136,20 +171,17 @@ class LiveTV extends React.Component {
 
     }
 
+    // 历史回顾推送的图片
     _getHistoryLiveInfos(objParam, fn) {
         let _this = this;
         var param = {
             "method": 'getHandOutsByVid',
             "vid": objParam.vid,
-            "pageNo": -1,
+            "pageNo": 1,
         };
 
         doWebService(JSON.stringify(param), {
             onResponse: function (res) {
-                if (res.success && !res.response.length) {
-                    message.info("没有直播课堂！");
-                    return;
-                }
                 if (fn) fn(objParam, res.response);
             },
             onError: function (error) {
@@ -165,7 +197,7 @@ class LiveTV extends React.Component {
             title: objref.title,
             livelurl: "",
             panelurl: "",
-            param: {uid: this.state.ident, vid: objref.vid, tuipingImgArr:dataArr, objref:objref },
+            param: {uid: this.state.ident, vid: objref.vid, tuipingImgArr:dataArr, objref:objref,LivedVideos: objref.liveVideos },
             mode: 'history'
         }
 
@@ -183,6 +215,7 @@ class LiveTV extends React.Component {
     }
 
     _viewHistoryLiveTV(objref) {
+
         let _this = this;
         if (objref.password) {
             let password = objref.password;
@@ -250,7 +283,7 @@ class LiveTV extends React.Component {
     }
 
     change(type) {
-
+        
         this.currentTab = type + '_tab';
         switch (type) {
             case 'liveTV':
@@ -258,15 +291,27 @@ class LiveTV extends React.Component {
                 this._getLives(1);
                 break;
             case 'history':
-                this._getHistoryLives(1);
+                this._getHistoryLives2(1);
                 break;
         }
 
 
     }
 
+    _changePage(pageno){
+
+        switch (this.currentTab) {
+            case 'liveTV_tab':
+                this._getLives(pageno);
+                break;
+            case 'history_tab':
+                this._getHistoryLives2(pageno);
+                break;
+        }
+    }
+
     render() {
-        this._buildLivesUi(this.state.lives);
+        this._buildLivesUi();
 
         let liveNav = <div>
             <div className="menu_til">营养池</div>
@@ -283,9 +328,9 @@ class LiveTV extends React.Component {
         </div>;
 
         let livePanel = <div>
-            <div className="public—til—blue">直播课堂</div>
+            {/*<div className="public—til—blue">直播课堂</div>*/}
             <div className="favorite_scroll2 favorite_up favorite_le_h">{this.livesUi}</div>
-            <Pagination total={this.state.pageCount} pageSize={getPageSize()} onchange={this._getLives}/>
+                <Pagination total={this.state.rsCount} pageSize={getPageSize()} current={this.state.pageNo} onChange={this._changePage} />
         </div>;
 
         return (

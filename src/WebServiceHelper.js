@@ -10,6 +10,7 @@ const LOCAL_URL_LIVE = "http://192.168.2.104:9006/Excoord_ApiServer/webservice";
 const WEBSERVICE_URL = IS_DEBUG ? (IS_LIVE_DEBUG ? LOCAL_URL_LIVE : LOCAL_URL) : REMOTE_URL;
 console.log("WEBSERVICE_URL:" + WEBSERVICE_URL);
 
+
 export function doWebService(data, listener) {
     var pro = document.getElementById("pro");
     //进度条的宽度，用来模拟进度条的进度

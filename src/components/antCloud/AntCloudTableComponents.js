@@ -1153,7 +1153,7 @@ const AntCloudTableComponents = React.createClass({
                                 break;
                         }
                         var groupName = chatGroupName;
-                        var groupNameTag = <div>{imgTag}{groupName}</div>
+                        var groupNameTag = <div>{imgTag}<span>{groupName}</span></div>
                         var groupJson ={ label: groupNameTag, value: chatGroupId};
                         groupOptions.push(groupJson);
                     });
@@ -1494,7 +1494,9 @@ const AntCloudTableComponents = React.createClass({
                         <div>
                             <Row>
                                 <Col span={12} className="share_til">选择好友分享文件：</Col>
-                                <Col span={12} className="share_til">这一刻的想法：</Col>
+                                <Col span={12} className="share_til">这一刻的想法：
+									<span className="right_ri"><Icon type="link" /><span>这是一个云盘分享的文件</span></span>
+								</Col>
                             </Row>
                             <Row>
                                 <Col span={11} className="upexam_float cloud_share_cont" >
@@ -1509,10 +1511,7 @@ const AntCloudTableComponents = React.createClass({
                                 </Col>
                                 <Col span={12} className="topics_dianzan">
                                     <div>
-                                        <Input type="textarea"rows={14} value={cloudTable.state.nowThinking} onChange={cloudTable.nowThinkingInputChange}/>
-                                        <div>
-                                            <Icon type="link" /><span>这是一个云盘分享的文件</span>
-                                        </div>
+                                        <Input type="textarea"rows={14} placeholder="这是一个云盘分享的文件" value={cloudTable.state.nowThinking} onChange={cloudTable.nowThinkingInputChange}/>
                                     </div>
                                 </Col>
                             </Row>

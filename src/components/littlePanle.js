@@ -207,7 +207,6 @@
         this.id = id;
         let vid = 'v' + this.id;
         let videoArr = obj.param || [obj];
-//
         let listBtn = [];
         let srcList = [];
         let classChange = 'single';
@@ -370,7 +369,7 @@
 
 
     littlePanle.prototype._liveTVHistory_UI_templet = function (obj) {
-        debugger
+
         let id = UUID(8, 16);
         this.id = id;
         this.ifrliveid = 'live' + id;
@@ -378,11 +377,32 @@
         this.ajaxUploadBtn = 'ajaxUpload_btn_' + id;
         this.showTuiPing = 'showTuiPing';
         this.mode = obj.mode;
+        let vid = 'v' + this.id;
+        let videoArr = obj.param.objref.liveVideos;
+        let listBtn = [];
+        let srcList = [];
+        let classChange = 'single';
+        if (videoArr.length > 1) {
+            classChange = 'multi';
+            videoArr.map(function (video, i) {
+                i++;
+                srcList.push({type: 'video/x-flv', src: video.path});
+                listBtn.push("<a class='listBtn' >" + i + "</a>");
+            });
+        } else {
+            let flv = videoArr[0];
+            srcList.push({type: 'video/x-flv', src: flv.path || flv.url});
+        }
+
+
 
         this.thistTuiPingUi = [];
+        if(!obj.param.tuipingImgArr){
+            this.thistTuiPingUi.push(`<div class="danmu_pic"><img src="../../src/components/images/danmu_pic.png" height="208"></div>`);
+        }
         for(let i=0;i<obj.param.tuipingImgArr.length;i++){
             let imgData = obj.param.tuipingImgArr[i];
-            this.thistTuiPingUi.push(`<img style="width:120px;height:auto;" class="topics_zanImg"  onclick="showLargeImg(this)"  src="${imgData.path}"/>`);
+            this.thistTuiPingUi.push(`<img class="topics_zanImg"  onclick="showLargeImg(this)"  src="${imgData.path}"/>`);
         }
 
         this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show ${this.mode}">
@@ -397,10 +417,14 @@
 						 	<div class="activity">
 								<section class="panle">
 									<!-- <iframe  id="${this.pptIframeName}"  name="${this.pptIframeName}"  /> -->
-									<div id="${this.showTuiPing}" class="panle_book ${this.showTuiPing}" >${this.thistTuiPingUi.join('')}</div>
+									<div id="${this.showTuiPing}" class="panle_book ${this.showTuiPing}" ><div class="tuitu">${this.thistTuiPingUi.join('')}</div></div>
 								</section>
 						 </div>
-						 <section class="live" id="${this.ifrliveid}"></section>
+						 <section id="${this.ifrliveid}" class="live littleAnt-iframe-panle ${classChange}">
+                       <video id="${vid}" class="video-js vjs-default-skin vjs-big-play-centered"
+                       src="${srcList[0].src}"   data-setup='{}'></video>
+                       <div class="list-group" >${ listBtn.length ? listBtn.join('') : '' }</div>
+                    </section>
 					</div>
                 </div>
                 </div>`;
@@ -419,6 +443,27 @@
         $('.ant-layout-operation').append(this.htm);
         this.el = $('#' + this.id);
         $(this.el).find('.back').on('click', this.closepanle.bind(this, this.id));
+
+
+        var options = {
+            sourceOrder: true,
+            controls: true,
+            autoplay: true,
+            preload: "auto",
+            sources: srcList,
+            techOrder: ['html5', 'flash']
+        };
+
+        var playerA = videojs(vid, options, function () {
+            playerA.play();
+            playerA.on('ended', function () {
+            });
+        });
+
+        $('.list-group a').on("click", function () {
+            let nextVideo = srcList[parseInt($(this).text()) - 1];
+            playerA.src(nextVideo);
+        });
 
         return this;
     }
@@ -574,7 +619,7 @@
             },
             // 显示消息
             onMessage: function (info) {
-                debugger
+                
                 let htm = '';
                 switch (info.command) {
                     case 'screen_lock':

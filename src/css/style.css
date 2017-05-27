@@ -4055,7 +4055,7 @@ div.btn1{
 }
 .cloud_share_cont{
 	border:1px solid #cfcfd0;
-	height:300px;
+	height:260px;
 }
 .cloud_share_cont .ant-collapse{
 	min-height:100%;
@@ -4096,4 +4096,11 @@ ul.liveTV_tab .liveTV, ul.liveTV_tab .liveTV i, ul.history_tab .history, ul.hist
 	text-overflow:ellipsis;
 	white-space: nowrap;	
 	margin-left: 12px;
+}
+.cloud_share_cont .ant-collapse-content-box span:nth-child(2) div .maaee_group_face, .cloud_share_cont .ant-collapse-content-box span:nth-child(2) div .maaee_group_face1, .cloud_share_cont .ant-collapse-content-box span:nth-child(2) div .maaee_group_face2, .cloud_share_cont .ant-collapse-content-box span:nth-child(2) div .maaee_group_face3{
+	float: left;
+}
+.cloud_share_cont .ant-collapse > .ant-collapse-item > .ant-collapse-header{
+	color: #333 !important;
+    font-size: 14px;
 }
