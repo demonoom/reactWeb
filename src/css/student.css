@@ -154,7 +154,7 @@
     height: 100px;
 }
 .panle .showDanmuArea{
-    height: 140px;
+    height: 177px;
 	overflow: hidden;
 	left:0;
 	z-index: 2;
@@ -323,4 +323,15 @@
 }
 .history .littleAnt-iframe-panle{
 	height:100% !important
+}
+.history_tab .search{
+	position: absolute;
+    right: 12px;
+    top: 0;
+}
+.history_tab .search .ant-input{
+	width: 360px;
+    margin-right: -1px;
+    height: 30px;
+	margin-right:8px
 }

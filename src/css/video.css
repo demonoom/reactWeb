@@ -50,7 +50,7 @@
 .liveTV .live .vjs-icon-pause, .video-js .vjs-play-control.vjs-playing{
 	display:none
 }
-.history .live .vjs-icon-pause, .video-js .vjs-play-control.vjs-playing{
+.history .live .vjs-icon-pause, .history .video-js .vjs-play-control.vjs-playing{
 	display:block
 }
 .vjs-icon-pause:before, .video-js .vjs-play-control.vjs-playing:before {
@@ -1543,7 +1543,7 @@ video::-webkit-media-text-track-display {
 	text-decoration:none
 }
 .single .video-js{
-	height:552px
+	height:100%
 }
 .multi .video-js{
 	height: calc(100% - 30px);
