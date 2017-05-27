@@ -331,7 +331,7 @@ const AntGroupTabComponents = React.createClass({
                         var contentArray = [contentJson];
                         if(messageOfSinge.toType == 1 && typeof (content)!='undefined'){
                             //个人单条消息
-                            if (isEmpty(antGroup.state.currentUser) == false && messageOfSinge.toUser.colUid == antGroup.state.currentUser.colUid) {
+                            if (isEmpty(antGroup.state.currentUser) == false && messageOfSinge.fromUser.colUid == antGroup.state.currentUser.colUid) {
                                 imgTagArray.splice(0);
                                 var imgTagArrayReturn = [];
                                 var messageReturnJson = antGroup.getImgTag(content);
