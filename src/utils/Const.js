@@ -5,7 +5,7 @@
 //分页规则中的每页记录数
 export const PAGE_SIZE = 30;
 export const ALL_TOPIC = 0;
-export const IS_DEBUG = true;   //是否是本地调试模式（true：使用本地测试地址；false：使用远程地址）
+export const IS_DEBUG = false;   // true 本地测试 , false：远程地址
 export const IS_LIVE_DEBUG = false;  //是否是直播调试模式（true：使用本地直播测试地址；false：使用本地webservice测试地址）
 export const ONLY_TEACHER_TOPIC = 1;
 var baseEmotionMap = new Map();
