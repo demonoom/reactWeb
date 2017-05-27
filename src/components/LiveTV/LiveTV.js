@@ -24,6 +24,7 @@ class LiveTV extends React.Component {
         this.view = this.view.bind(this);
         this.change = this.change.bind(this);
         this._getLives = this._getLives.bind(this);
+        this._changePage = this._changePage.bind(this);
         this._buildLivesUi = this._buildLivesUi.bind(this);
         this._getHistoryLives = this._getHistoryLives.bind(this);
         this._okViewHistoryLive3 = this._okViewHistoryLive3.bind(this);
@@ -297,6 +298,18 @@ class LiveTV extends React.Component {
 
     }
 
+    _changePage(pageno){
+
+        switch (this.currentTab) {
+            case 'liveTV_tab':
+                this._getLives(pageno);
+                break;
+            case 'history_tab':
+                this._getHistoryLives2(pageno);
+                break;
+        }
+    }
+
     render() {
         this._buildLivesUi();
 
@@ -315,9 +328,9 @@ class LiveTV extends React.Component {
         </div>;
 
         let livePanel = <div>
-            <div className="public—til—blue">直播课堂</div>
+            {/*<div className="public—til—blue">直播课堂</div>*/}
             <div className="favorite_scroll2 favorite_up favorite_le_h">{this.livesUi}</div>
-            <Pagination total={this.state.rsCount} pageSize={getPageSize()} onchange={this._getLives}/>
+                <Pagination total={this.state.rsCount} pageSize={getPageSize()} current={this.state.pageNo} onChange={this._changePage} />
         </div>;
 
         return (
