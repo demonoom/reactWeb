@@ -317,7 +317,7 @@
 									<div id="${this.showTuiPing}" class="panle_book ${this.showTuiPing}" ></div>
                                       <ul class="showDanmuArea" ></ul>
                                         <div class="inputArea" >
-                                            <input placeholder="输入弹幕内容！" class="textarea_1"  id="InputTxtToPanel" ></input>
+                                            <input placeholder="输入弹幕内容！" class="textarea_1"  id="InputTxtToPanel" maxlength="20" ></input>
                                             <button  ref="sendPanleText" >发送弹幕</button>
                                         </div>
 								</section>
@@ -619,7 +619,11 @@
 
             onError: function (errorMsg) {
                 //强制退出课堂
-                __this.closepanle(obj.id)
+                log.info(errorMsg);
+                __this.closepanle(obj.warpid);
+                setTimeout(function () {
+                    window._changeGetLives('liveTV');
+                }, 500);
 
             },
 
@@ -647,7 +651,6 @@
                         break;
                     case'classOver':
                         log.info('下课了！');
-                        // __this.commitClose(obj.warpid);
                         __this.closepanle(obj.warpid);
                         setTimeout(function () {
                             window._changeGetLives('history');
@@ -669,6 +672,7 @@
                         });
                         break;
                     case'simpleClassDanmu': // 弹幕
+                        clearInterval(window.simpleClassDanmuT);
                         if (this.screenLock()) return;
                         let sayText = info.data.message.content;
                         let fromUser = info.data.message.fromUser.userName;
@@ -680,6 +684,14 @@
                         }
                         $('.panle .danmu_pic').remove();
                         $('.panle .showDanmuArea').append(htm);
+
+                      window.simpleClassDanmuT =  setInterval(function(){
+                            let lis = $('.panle .showDanmuArea li');
+                            if (lis.length) {
+                                $(lis[0]).remove();
+                            }
+                        },5000);
+
                         break;
 
                     case 'classDanmu':
