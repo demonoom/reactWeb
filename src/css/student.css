@@ -42,7 +42,7 @@
     border-radius: 0;
 	position: relative;
 }
-.liveTV .live .video-js, .danmu_pic, .history .live .video-js, .danmu_pic{
+.liveTV .live .video-js, .danmu_pic, .history .live .danmu_pic{
 	position: absolute;
 	top:50%;
 	left:50%;
@@ -303,6 +303,7 @@
 }
 .history .showTuiPing{
 	overflow-y:auto;
+	overflow-x:hidden
 }
 .history .showTuiPing .tuitu{
 	width:848px;

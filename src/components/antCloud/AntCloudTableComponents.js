@@ -238,9 +238,9 @@ const AntCloudTableComponents = React.createClass({
             var directory = e.directory;
             var fileLogo = cloudTable.buildFileLogo(name,directory,e);
 
-            var dirName = <a className="font_gray_666" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e,"moveDirModal")}>
+            var dirName = <span className="font_gray_666" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e,"moveDirModal")}>
                 {fileLogo}
-            </a>;
+            </span>;
             var moveDirOpt;
             if(e.directory==true){
                 moveDirOpt=<div>
@@ -262,10 +262,10 @@ const AntCloudTableComponents = React.createClass({
     buildFileLogo(name,directory,e){
         var fileLogo;
         if(directory){
-            fileLogo=<div className="cloud_text">
+            fileLogo=<span className="cloud_text">
                 <i className="cloud_icon cloud_icon_file"></i>
-                <a className="font_gray_666" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e,"mainTable")}>{name}</a>
-            </div>;
+                <span className="font_gray_666" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e,"mainTable")}>{name}</span>
+            </span>;
         }else{
             var lastPointIndex = name.lastIndexOf(".");
             //通过截取文件后缀名的形式，完成对上传文件类型的判断
@@ -444,7 +444,7 @@ const AntCloudTableComponents = React.createClass({
             if(directory){
                 fileLogo=<span className="cloud_text">
                     <i className="cloud_icon cloud_icon_file"></i>
-                    <a className="font_gray_666" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e,"mainTable")}>{name}</a>
+                    <span className="font_gray_666" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e,"mainTable")}>{name}</span>
                 </span>;
             }else{
                 downloadButton=<a href={path} target="_blank" title="下载" download={path} className="te_download_a">
@@ -1468,7 +1468,7 @@ const AntCloudTableComponents = React.createClass({
                     >
                         <div>
                             <Row>
-                                <Col span={20}>
+                                <Col span={24}>
                                     {returnToolbarInMoveModal}
                                     <Table  columns={targetDirColumns}  showHeader={false} dataSource={cloudTable.state.targetDirDataArray}
                                         pagination={{
@@ -1481,7 +1481,7 @@ const AntCloudTableComponents = React.createClass({
                         </div>
                     </Modal>
 
-                    <Modal title="分享文件"
+                    <Modal title="分享文件" className="cloud_share_Modal"
                            visible={cloudTable.state.shareModalVisible}
                            transitionName=""  //禁用modal的动画效果
                            maskClosable={false} //设置不允许点击蒙层关闭
@@ -1492,7 +1492,7 @@ const AntCloudTableComponents = React.createClass({
                             <Row>
                                 <Col span={12} className="share_til">选择好友分享文件：</Col>
                                 <Col span={12} className="share_til">这一刻的想法：
-									<span className="right_ri"><Icon type="link" /><span>这是一个云盘分享的文件</span></span>
+									<span className="right_ri cloud_share_prompt"><Icon type="link" /><span>这是一个云盘分享的文件</span></span>
 								</Col>
                             </Row>
                             <Row>
