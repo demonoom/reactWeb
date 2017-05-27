@@ -34,7 +34,7 @@ header{
 }
 .winControl span {
     display: inline-block;
-    padding: 4px 6px;
+    padding: 24px;
     cursor: pointer;
     line-height: 10px;
 }
