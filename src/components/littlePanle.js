@@ -352,12 +352,8 @@
         $('.ant-layout-operation').append(this.htm);
         this.el = $('#' + this.id);
 
-        if (this.mode == 'history') {
-            $(this.el).find('.back').on('click', this.closepanle(this, this.id));
-            return this;
-        } else {
-            $(this.el).find('.back').on('click', this.commitClose.bind(this, this.id));
-        }
+
+        $(this.el).find('.back').on('click', this.commitClose.bind(this, this.id));
 
         $(this.el).find('.liveTV.tab li').on('click', this.changePanel);
         $(this.el).find('.activity .inputArea button').on('click', this.sendContent.bind(this, this.param));
@@ -369,6 +365,61 @@
         obj.param.warpid = this.id;
 
         this.websocket(obj.param);
+        return this;
+    }
+
+
+    littlePanle.prototype._liveTVHistory_UI_templet = function (obj) {
+        debugger
+        let id = UUID(8, 16);
+        this.id = id;
+        this.ifrliveid = 'live' + id;
+        this.pptIframeName = 'panle' + id;
+        this.ajaxUploadBtn = 'ajaxUpload_btn_' + id;
+        this.showTuiPing = 'showTuiPing';
+        this.mode = obj.mode;
+
+        this.thistTuiPingUi = [];
+        for(let i=0;i<obj.param.tuipingImgArr.length;i++){
+            let imgData = obj.param.tuipingImgArr[i];
+            this.thistTuiPingUi.push(`<img style="width:120px;height:auto;" class="topics_zanImg"  onclick="showLargeImg(this)"  src="${imgData.path}"/>`);
+        }
+
+        this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show ${this.mode}">
+		                  <div class="public—til—blue">
+							<div class="little-tilte">
+                    			<a class="back"><i class="anticon anticon-left "></i></a>
+                    		</div>
+                			<span>${ obj.title }</span>
+               			 </div>
+                <div class="content">
+					<div class="right_cont">
+						 	<div class="activity">
+								<section class="panle">
+									<!-- <iframe  id="${this.pptIframeName}"  name="${this.pptIframeName}"  /> -->
+									<div id="${this.showTuiPing}" class="panle_book ${this.showTuiPing}" >${this.thistTuiPingUi.join('')}</div>
+								</section>
+						 </div>
+						 <section class="live" id="${this.ifrliveid}"></section>
+					</div>
+                </div>
+                </div>`;
+
+        let styleObj = (refStyle) => {
+            refStyle.left = 0;
+            refStyle.top = 0;
+            refStyle.position = 'fixed';
+            refStyle.width = '100%';
+            refStyle.height = '100%';
+            refStyle.zIndex = 10;
+            return refStyle
+        }
+
+        this.htm = $(this.htm).css(styleObj(this.param.stylePage));
+        $('.ant-layout-operation').append(this.htm);
+        this.el = $('#' + this.id);
+        $(this.el).find('.back').on('click', this.closepanle.bind(this, this.id));
+
         return this;
     }
 
@@ -523,7 +574,7 @@
             },
             // 显示消息
             onMessage: function (info) {
-
+                debugger
                 let htm = '';
                 switch (info.command) {
                     case 'screen_lock':
@@ -578,7 +629,7 @@
                         let fromUserName1 = `<p class="u-name">${fromUser1.userName}</p>`;
                         let userFace = `<img src="${fromUser1.avatar}" />`;
                         if (info.data.message.attachment) {
-                            sayText1 = `<img style="width:120px;height:auto;" class="topics_zanImg"  onclick="showLargeImg()"  src="${info.data.message.attachment.address}"/>`;
+                            sayText1 = `<img style="width:120px;height:auto;" class="topics_zanImg"    onclick="showLargeImg(this,'.public')"  src="${info.data.message.attachment.address}"/>`;
                         }
 
                         htm = `<div class="sayLine ${refClass}"><div class="username" >${fromUserName1}</div><div class="saycont"><div class="sayHeader" >${userFace}</div><div class="sayCon" >${sayText1}</div></div>`;
@@ -808,7 +859,8 @@
                 this._liveTV_UI_templet(this.param);
                 break;
             case 'history':
-                this._liveTV_UI_templet(this.param);
+                // this._liveTV_UI_templet(this.param);
+                this._liveTVHistory_UI_templet(this.param);
                 break;
 
         }
@@ -1173,16 +1225,8 @@ var imgReader = function (item) {
     // 读取文件
     reader.readAsDataURL(file);
 };
-function showLargeImg(e) {
-    e = e || window.event;
-    var target = e.target;
-    if (navigator.userAgent.indexOf("Chrome") > -1) {
-        target = e.currentTarget;
-    } else {
-        target = e.target;
-    }
-
-    $.openPhotoGallery(target)
+function showLargeImg(el,parentSelector) {
+    $.openPhotoGallery(el,parentSelector)
 }
 // 保持android ios 一直体验的接口实现
 var phone = {

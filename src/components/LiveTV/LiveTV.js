@@ -25,7 +25,9 @@ class LiveTV extends React.Component {
         this._getLives = this._getLives.bind(this);
         this._buildLivesUi = this._buildLivesUi.bind(this);
         this._getHistoryLives = this._getHistoryLives.bind(this);
+        this._okViewHistoryLive3 = this._okViewHistoryLive3.bind(this);
         this.videoPwdModalHandleOk = this.videoPwdModalHandleOk.bind(this);
+        this._validateHistoryLiveTvPwd = this._validateHistoryLiveTvPwd.bind(this);
     }
 
     componentWillMount() {
@@ -110,7 +112,7 @@ class LiveTV extends React.Component {
             return <Card className="live" key={id}>
                 <p className="h3">{title}</p>
                 <div className="live_img" id={id} onClick={ () => {
-                    _this.view(item,_this.currentTab)
+                    _this.view(item, _this.currentTab)
                 } }>
                     <img className="attention_img" width="100%" src={cover}/>
                     <div className="live_green"><span>{schoolName}</span></div>
@@ -134,13 +136,82 @@ class LiveTV extends React.Component {
 
     }
 
-
-    view(objref,tab) {
+    _getHistoryLiveInfos(objParam, fn) {
         let _this = this;
-        let title = objref.liveCover.user.userName + '正在直播';
-        let mode = tab.replace('_tab','');
-        if(mode=='history'){
-            title = objref.title;
+        var param = {
+            "method": 'getHandOutsByVid',
+            "vid": objParam.vid,
+            "pageNo": -1,
+        };
+
+        doWebService(JSON.stringify(param), {
+            onResponse: function (res) {
+                if (res.success && !res.response.length) {
+                    message.info("没有直播课堂！");
+                    return;
+                }
+                if (fn) fn(objParam, res.response);
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+
+    }
+
+    _okViewHistoryLive3( objref,dataArr){
+
+        let obj = {
+            title: objref.title,
+            livelurl: "",
+            panelurl: "",
+            param: {uid: this.state.ident, vid: objref.vid, tuipingImgArr:dataArr, objref:objref },
+            mode: 'history'
+        }
+
+
+        LP.Start(obj);
+
+    }
+
+    _validateHistoryLiveTvPwd( objref,pwd) {
+        if (pwd == $('#tmppwd2').val()) {
+            this._getHistoryLiveInfos(objref, this._okViewHistoryLive3 );
+        } else {
+            message.warn('密码错误!')
+        }
+    }
+
+    _viewHistoryLiveTV(objref) {
+        let _this = this;
+        if (objref.password) {
+            let password = objref.password;
+            // 显示弹窗
+            Modal.confirm({
+                title: '请输入密码',
+                content: <Input id="tmppwd2"/>,
+                okText: '确定',
+                cancelText: '取消',
+                onOk: _this._validateHistoryLiveTvPwd.bind(_this,  objref, password),
+            });
+
+        } else {
+            this._getHistoryLiveInfos(objref, this._okViewHistoryLive3 );
+        }
+
+
+    }
+
+    view(objref, tab) {
+        let _this = this;
+        let title = null;
+        let mode = tab.replace('_tab', '');
+
+        if (mode == 'history') {
+            this._viewHistoryLiveTV(objref);
+            return;
+        } else {
+            title = objref.liveCover.user.userName + '正在直播';
         }
 
         let obj = {
@@ -148,7 +219,7 @@ class LiveTV extends React.Component {
             livelurl: "",
             panelurl: "",
             param: {uid: this.state.ident, vid: objref.vid},
-            mode:mode
+            mode: mode
         }
         if (objref.password) {
             let password = objref.password;
@@ -180,7 +251,7 @@ class LiveTV extends React.Component {
 
     change(type) {
 
-        this.currentTab = type+'_tab';
+        this.currentTab = type + '_tab';
         switch (type) {
             case 'liveTV':
 
@@ -199,7 +270,7 @@ class LiveTV extends React.Component {
 
         let liveNav = <div>
             <div className="menu_til">营养池</div>
-            <ul className={this.currentTab + " pabulum"} >
+            <ul className={this.currentTab + " pabulum"}>
                 <li className='liveTV' onClick={() => {
                     this.change('liveTV')
                 }}><i className="iconfont menu_left_i">&#xe609;</i>直播课堂
