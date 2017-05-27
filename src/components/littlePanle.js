@@ -76,7 +76,7 @@
     }
     littlePanle.prototype.closepanle = function (id) {
         if (window.liveTVWS) {
-            window.liveTVWS.close();
+            window.liveTVWS._close();
         }
 
 
