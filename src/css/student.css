@@ -269,6 +269,18 @@
     width: 100%;
 	left:0	
 }
+
+.liveTV .panle .maskPPT{
+	width: 100%;
+	height: calc(100% - 50px);
+	position: absolute;
+	background-color: white;
+	opacity: 0;
+	top: 0;
+	left: 0;
+	z-index: 2;
+}
+
 .history .panle iframe{
     height: 100% !important;
 }

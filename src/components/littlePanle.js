@@ -313,6 +313,7 @@
 						 	<div class="activity">
 								<section class="panle">
 									<iframe  id="${this.pptIframeName}"  name="${this.pptIframeName}"  />
+									<div class="maskPPT" ></div>
 									<div class="danmu_pic"><img src="../../src/components/images/danmu_pic.png"  height="208" /></div>
 									<div id="${this.showTuiPing}" class="panle_book ${this.showTuiPing}" ></div>
                                       <ul class="showDanmuArea" ></ul>
@@ -1517,4 +1518,13 @@ function doWebService(data, listener) {
             listener.onError(result);
         }
     }, "json");
+}
+
+function changeStatus(videoEl){
+   let roateNum = roateNum || 0;
+    roateNum += 90;
+    if(roateNum==360){
+        roateNum =0;
+    }
+   $(videoEl)[0].style.transform = "rotate("+ roateNum +"deg)";
 }

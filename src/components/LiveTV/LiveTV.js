@@ -131,7 +131,7 @@ class LiveTV extends React.Component {
         var param = {
             "method": 'getHandOutsByVid',
             "vid": objParam.vid,
-            "pageNo": 1,
+            "pageNo": '-1',
         };
 
         doWebService(JSON.stringify(param), {
