@@ -185,7 +185,8 @@ class LiveTV extends React.Component {
                 onOk: _this._validateHistoryLiveTvPwd.bind(_this, objref, password),
             });
 
-        } else {
+
+        }else {
             this._getHistoryLiveInfos(objref, this._okViewHistoryLive3);
         }
 
@@ -206,7 +207,7 @@ class LiveTV extends React.Component {
         let _this = this;
         let title = null;
         let mode = this.currentTab.replace('_tab', '');
-
+debugger
         switch (mode){
             case 'history':
                 this._viewHistoryLiveTV(objref);

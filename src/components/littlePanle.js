@@ -234,7 +234,7 @@
                 <div class="content">
                     <section class="littleAnt-iframe-panle ${classChange}">
                        <video id="${vid}" class="video-js vjs-default-skin vjs-big-play-centered"
-                       src="${srcList[0].src}"   data-setup='{}'></video>
+                       src="${srcList[0].src}"   data-setup='{}'></video> 
                        <div class="list-group" >${ listBtn.length ? listBtn.join('') : '' }</div>
                     </section>
                 </div>
@@ -331,6 +331,7 @@
 									</div>
 								</section>
 						 </div>
+						
 						 <section class="live" id="${this.ifrliveid}">
                    		 </section>
 					</div>
@@ -356,6 +357,7 @@
 
         $(this.el).find('.liveTV.tab li').on('click', this.changePanel);
         $(this.el).find('.activity .inputArea button').on('click', this.sendContent.bind(this, this.param));
+        $(this.el).find('#reflash').on('click', this.reflashLiveTv.bind(this, this.ifrliveid));
         this._initBtnUploadBtn(this.ajaxUploadBtn, obj.param);
         utilsCommon.bind(document, 'paste', onPasteFunction);
         obj.param.ifrliveid = this.ifrliveid;
@@ -422,6 +424,7 @@
 						 <section id="${this.ifrliveid}" class="live littleAnt-iframe-panle ${classChange}">
                        <video id="${vid}" class="video-js vjs-default-skin vjs-big-play-centered"
                        src="${srcList[0].src}"   data-setup='{}'></video>
+                      
                        <div class="list-group" >${ listBtn.length ? listBtn.join('') : '' }</div>
                     </section>
 					</div>
@@ -442,6 +445,7 @@
         $('.ant-layout-operation').append(this.htm);
         this.el = $('#' + this.id);
         $(this.el).find('.back').on('click', this.closepanle.bind(this, this.id));
+        $(this.el).find('#reflash').on('click', this.reflashLiveTv.bind(this, this.ifrliveid));
 
 
         var options = {
@@ -454,10 +458,10 @@
         };
 
         var playerA = videojs(vid, options, function () {
-            playerA.play();
             playerA.on('ended', function () {
             });
         });
+        playerA.play();
 
         $('.list-group a').on("click", function () {
             let nextVideo = srcList[parseInt($(this).text()) - 1];
@@ -465,6 +469,14 @@
         });
 
         return this;
+    }
+
+    littlePanle.prototype.reflashLiveTv = function (videoId) {
+       var  video_1 = $('#'+videoId).find('video')[0];
+       if(video_1.readyState>3){
+           video_1.load();
+       }
+
     }
 
     // 发送内容
@@ -513,7 +525,6 @@
                         }
                     }
                 };
-
                 ms.send(con);
                 break;
         }
@@ -633,7 +644,7 @@
                         __this.commitClose(obj.warpid);
                         break;
                     case 'studentLogin': // 显示直播视频
-                        info.data.play_rtmp_url = 'rtmp://60.205.86.217:1935/live2/54208';
+                        //     info.data.play_rtmp_url = 'rtmp://60.205.86.217:1935/live2/54208';
                         window.screen_lock = info.data.screen_lock;
                         htm = ` <video   id="v${obj.ifrliveid}" class="video-js vjs-default-skin vjs-big-play-centered"
                                controls preload="auto" poster="" width="300" height="300"
@@ -717,19 +728,19 @@
         doWebService(JSON.stringify(param), {
             onResponse: function (result) {
                 if (!result.success) {
-                    // alert(result.msg);
                     return;
                 }
+                debugger
                 var openInfo = result.response;
-                if (openInfo != null) {
-                    //打开课堂中的ppt
-                    $("#" + obj.pptIframeName).show().attr("src", _this._setProxyInfo(openInfo.pptUrl) + "?v=1").css({'z-index': 1});
-                    $('#' + obj.showTuiPing).hide();
-                    //更换当前页
-                    $("#" + obj.pptIframeName).on('load', function () {
-                        this.contentWindow.checkSlide(openInfo.currentPage);
-                    })
-                }
+                if (!openInfo) return;
+                //打开课堂中的ppt
+                $("#" + obj.pptIframeName).show().attr("src", _this._setProxyInfo(openInfo.pptUrl) + "?v=1").css({'z-index': 1});
+                $('#' + obj.showTuiPing).hide();
+                //更换当前页
+                $("#" + obj.pptIframeName).on('load', function () {
+                    this.contentWindow.checkSlide(openInfo.currentPage);
+                })
+
             },
             onError: function (error) {
                 //  alert(error);
@@ -850,9 +861,9 @@
     }
 
     littlePanle.prototype.commitClose = function (id) {
-        let _this=this;
+        let _this = this;
         var msg = "您确定要退出课堂？";
-        contemosConfirm(msg,function(){
+        contemosConfirm(msg, function () {
             _this.closepanle(id);
         });
 
@@ -1269,7 +1280,7 @@ var imgReader = function (item) {
     reader.readAsDataURL(file);
 };
 
-function contemosConfirm(msg,okFn, cancelfn) {
+function contemosConfirm(msg, okFn, cancelfn) {
 
     let okfnRef = function () {
         if (okFn) {
@@ -1444,7 +1455,7 @@ var phone = {
 }
 
 function doWebService(data, listener) {
-    WEBSERVICE_URL = "http://192.168.2.104:9006/Excoord_ApiServer/webservice";
+    WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
     var pro = document.getElementById("pro");
     //进度条的宽度，用来模拟进度条的进度
     var width = 0;
