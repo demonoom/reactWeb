@@ -865,6 +865,10 @@ html, body, #root {
 	width:100px;
 	text-align:center;
 }
+.cloud_box .ant-table-thead > tr > th.ant-table-selection-user2, .cloud_box .ant-table-tbody > tr > td.ant-table-selection-user2{
+	width:13%;
+	text-align:center;
+}
 .ant-table-thead > tr > th.ant-table-selection-topic, .ant-table-tbody > tr > td.ant-table-selection-topic{
 	width:80px;
 	text-align:center
@@ -881,11 +885,19 @@ html, body, #root {
 .ant-table-thead > tr > th.ant-table-selection-smallclass, .ant-table-tbody > tr > td.ant-table-selection-smallclass{
 	width:160px
 }
+element.style {
+}
+.cloud_box .ant-table-thead > tr > th.ant-table-selection-smallclass, .cloud_box .ant-table-tbody > tr > td.ant-table-selection-smallclass{
+	width:20%
+}
 .ant-table-thead > tr > th.ant-135, .ant-table-tbody > tr > td.ant-135{
 	width:135px
 }
+.cloud_box .ant-table-thead > tr > th.ant-135, .cloud_box .ant-table-tbody > tr > td.ant-135{
+	width:16%
+}
 .ant-table-thead > tr > th.cloud_name, .ant-table-tbody > tr > td.cloud_name{
-	width:calc(100% - 520px)
+	width:50%;
 }
 .ant-table-thead > tr > th.ant-table-selection-time, .ant-table-tbody > tr > td.ant-table-selection-time{
 	width:120px;
@@ -3988,18 +4000,20 @@ div.btn1{
 .cloud_box table tr th .ant-checkbox, .cloud_box table tr td .ant-checkbox{
 	margin-left:12px;
 }
-.cloud_box .ant-table-tbody > tr > td.cloud_name div a{
+.cloud_box .ant-table-tbody > tr > td.cloud_name span.cloud_text span{
 	font-weight: normal !important;
-    overflow: hidden;
+	width: calc(100% - 50px) !important;
+	cursor:pointer;
+	overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    display: inline-block;
-    width:365px;
-	cursor:pointer;
+    position: absolute;
 }
 .cloud_text{
     position: relative;
     top: 4px;
+	width: 100%;
+    float: left;
 }
 .cloud_icon{
 	background:url(../components/images/cloud_icon.png) no-repeat;
@@ -4103,4 +4117,11 @@ ul.liveTV_tab .liveTV, ul.liveTV_tab .liveTV i, ul.history_tab .history, ul.hist
 .cloud_share_cont .ant-collapse > .ant-collapse-item > .ant-collapse-header{
 	color: #333 !important;
     font-size: 14px;
+}
+.cloud_share_prompt{
+	color:#a6a6a6;
+	font-size:12px;
+}
+.cloud_share_Modal{
+	height:462px
 }

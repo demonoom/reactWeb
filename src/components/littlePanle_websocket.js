@@ -4,7 +4,7 @@ function ClazzConnection(host){
    // this.domain = host || '192.168.1.34:7888';
   //  this.domain = host || '192.168.2.104:8888';
   //  this.WS_URL = "ws://"+this.domain+"/Excoord_PushServer/class";
-  this.WS_URL = "wss://www.maaee.com:8888/Excoord_PushServer/class";
+  this.WS_URL = "wss://www.maaee.com:7888/Excoord_PushServer/class";
     this.ws = null;
     this.PING_COMMAND = "ping_0123456789_abcdefg";
     this.PONG_COMMAND = "pong_0123456789_abcdefg";
@@ -17,7 +17,8 @@ function ClazzConnection(host){
         var connection = this;
         connection.connecting = true;
         connection.loginProtocol = loginProtocol;
-        connection.ws=new WebSocket(connection.WS_URL);
+      window.liveTVWS =  connection.ws=new WebSocket(connection.WS_URL);
+
         //监听消息
         connection.ws.onmessage = function(event) {
 

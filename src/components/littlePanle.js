@@ -75,6 +75,10 @@
 
     }
     littlePanle.prototype.closepanle = function (id) {
+        if (window.liveTVWS) {
+            window.liveTVWS.close();
+        }
+
 
         let tmp = [];
         LP.mgr.map(function (item, index) {
@@ -234,7 +238,7 @@
                 <div class="content">
                     <section class="littleAnt-iframe-panle ${classChange}">
                        <video id="${vid}" class="video-js vjs-default-skin vjs-big-play-centered"
-                       src="${srcList[0].src}"   data-setup='{}'></video>
+                       src="${srcList[0].src}"   data-setup='{}'></video> 
                        <div class="list-group" >${ listBtn.length ? listBtn.join('') : '' }</div>
                     </section>
                 </div>
@@ -331,6 +335,7 @@
 									</div>
 								</section>
 						 </div>
+						
 						 <section class="live" id="${this.ifrliveid}">
                    		 </section>
 					</div>
@@ -356,6 +361,7 @@
 
         $(this.el).find('.liveTV.tab li').on('click', this.changePanel);
         $(this.el).find('.activity .inputArea button').on('click', this.sendContent.bind(this, this.param));
+        $(this.el).find('#reflash').on('click', this.reflashLiveTv.bind(this, this.ifrliveid));
         this._initBtnUploadBtn(this.ajaxUploadBtn, obj.param);
         utilsCommon.bind(document, 'paste', onPasteFunction);
         obj.param.ifrliveid = this.ifrliveid;
@@ -395,12 +401,11 @@
         }
 
 
-
         this.thistTuiPingUi = [];
-        if(!obj.param.tuipingImgArr){
+        if (!obj.param.tuipingImgArr.length) {
             this.thistTuiPingUi.push(`<div class="danmu_pic"><img src="../../src/components/images/danmu_pic.png" height="208"></div>`);
         }
-        for(let i=0;i<obj.param.tuipingImgArr.length;i++){
+        for (let i = 0; i < obj.param.tuipingImgArr.length; i++) {
             let imgData = obj.param.tuipingImgArr[i];
             this.thistTuiPingUi.push(`<img class="topics_zanImg"  onclick="showLargeImg(this)"  src="${imgData.path}"/>`);
         }
@@ -423,6 +428,7 @@
 						 <section id="${this.ifrliveid}" class="live littleAnt-iframe-panle ${classChange}">
                        <video id="${vid}" class="video-js vjs-default-skin vjs-big-play-centered"
                        src="${srcList[0].src}"   data-setup='{}'></video>
+                      
                        <div class="list-group" >${ listBtn.length ? listBtn.join('') : '' }</div>
                     </section>
 					</div>
@@ -443,6 +449,7 @@
         $('.ant-layout-operation').append(this.htm);
         this.el = $('#' + this.id);
         $(this.el).find('.back').on('click', this.closepanle.bind(this, this.id));
+        $(this.el).find('#reflash').on('click', this.reflashLiveTv.bind(this, this.ifrliveid));
 
 
         var options = {
@@ -455,10 +462,10 @@
         };
 
         var playerA = videojs(vid, options, function () {
-            playerA.play();
             playerA.on('ended', function () {
             });
         });
+        playerA.play();
 
         $('.list-group a').on("click", function () {
             let nextVideo = srcList[parseInt($(this).text()) - 1];
@@ -468,6 +475,14 @@
         return this;
     }
 
+    littlePanle.prototype.reflashLiveTv = function (videoId) {
+        var video_1 = $('#' + videoId).find('video')[0];
+        if (video_1.readyState > 3) {
+            video_1.load();
+        }
+
+    }
+
     // 发送内容
     littlePanle.prototype.sendContent = function (param, event) {
         event = event || window.event;
@@ -475,7 +490,7 @@
         let con = {}
         let user = eval("(" + sessionStorage.getItem('loginUser') + ")");
         if (window.screen_lock) {
-            alert('老师已开启禁言！');
+            log.info('老师已开启禁言！');
             return;
         }
         switch ($(el).attr('ref')) {
@@ -514,7 +529,6 @@
                         }
                     }
                 };
-
                 ms.send(con);
                 break;
         }
@@ -564,7 +578,7 @@
             submit: function () {
 
                 if (window.screen_lock) {
-                    alert('老师已开启禁言！');
+                    log.info('老师已开启禁言！');
                     return false;
                 } else {
                     return true;
@@ -573,7 +587,7 @@
             success: function (url, status)  //服务器成功响应处理函数
             {
                 if (window.screen_lock) {
-                    alert('老师已开启禁言！');
+                    log.info('老师已开启禁言！');
                     return;
                 }
                 sendImg(url);
@@ -597,6 +611,7 @@
 
     littlePanle.prototype.websocket = function (obj) {
         var connection = new ClazzConnection();
+
         LP.LiveTVSocket = connection;
         let __this = this;
 
@@ -609,7 +624,7 @@
             },
 
             onWarn: function (warnMsg) {
-                alert(warnMsg);
+                log.warn(warnMsg);
             },
             screenLock: function () {
                 if (window.screen_lock) {
@@ -619,22 +634,27 @@
             },
             // 显示消息
             onMessage: function (info) {
-                
+
                 let htm = '';
                 switch (info.command) {
                     case 'screen_lock':
                         window.screen_lock = info.data.screen_lock;
                         if (info.data.screen_lock) {
-                            alert('开启禁言！');
+                            log.info('开启禁言！');
                         } else {
-                            alert('关闭禁言！');
+                            log.info('关闭禁言！');
                         }
                         break;
                     case'classOver':
-                        __this.commitClose(obj.warpid);
+                        log.info('下课了！');
+                        // __this.commitClose(obj.warpid);
+                        __this.closepanle(obj.warpid);
+                        setTimeout(function () {
+                            window._changeGetLives('history');
+                        }, 500);
                         break;
                     case 'studentLogin': // 显示直播视频
-                        info.data.play_rtmp_url = 'rtmp://60.205.86.217:1935/live2/54208';
+                        //     info.data.play_rtmp_url = 'rtmp://60.205.86.217:1935/live2/54208';
                         window.screen_lock = info.data.screen_lock;
                         htm = ` <video   id="v${obj.ifrliveid}" class="video-js vjs-default-skin vjs-big-play-centered"
                                controls preload="auto" poster="" width="300" height="300"
@@ -718,19 +738,19 @@
         doWebService(JSON.stringify(param), {
             onResponse: function (result) {
                 if (!result.success) {
-                    // alert(result.msg);
                     return;
                 }
+
                 var openInfo = result.response;
-                if (openInfo != null) {
-                    //打开课堂中的ppt
-                    $("#" + obj.pptIframeName).show().attr("src", _this._setProxyInfo(openInfo.pptUrl) + "?v=1").css({'z-index': 1});
-                    $('#' + obj.showTuiPing).hide();
-                    //更换当前页
-                    $("#" + obj.pptIframeName).on('load', function () {
-                        this.contentWindow.checkSlide(openInfo.currentPage);
-                    })
-                }
+                if (!openInfo) return;
+                //打开课堂中的ppt
+                $("#" + obj.pptIframeName).show().attr("src", _this._setProxyInfo(openInfo.pptUrl) + "?v=1").css({'z-index': 1});
+                $('#' + obj.showTuiPing).hide();
+                //更换当前页
+                $("#" + obj.pptIframeName).on('load', function () {
+                    this.contentWindow.checkSlide(openInfo.currentPage);
+                })
+
             },
             onError: function (error) {
                 //  alert(error);
@@ -851,13 +871,12 @@
     }
 
     littlePanle.prototype.commitClose = function (id) {
+        let _this = this;
         var msg = "您确定要退出课堂？";
-        if (confirm(msg)) {
-            this.closepanle(id);
-            return true;
-        } else {
-            return false;
-        }
+        contemosConfirm(msg, function () {
+            _this.closepanle(id);
+        });
+
     }
 
 
@@ -1008,7 +1027,7 @@
 
                 default :
                     if ((this.mgr.length - _this.hideArr.length) >= 3) {
-                        alert('打开太多！');
+                        log.info('打开太多！');
                         return;
                     }
 
@@ -1270,8 +1289,42 @@ var imgReader = function (item) {
     // 读取文件
     reader.readAsDataURL(file);
 };
-function showLargeImg(el,parentSelector) {
-    $.openPhotoGallery(el,parentSelector)
+
+function contemosConfirm(msg, okFn, cancelfn) {
+
+    let okfnRef = function () {
+        if (okFn) {
+            okFn();
+        }
+        $('#modal_dialog').remove();
+    };
+    let cancelfnRef = function () {
+        if (cancelfn) {
+            cancelfn();
+        }
+        $('#modal_dialog').remove();
+    };
+
+
+    let htm = `<div id="modal_dialog"><div   class="ant-modal-mask"></div><div tabindex="-1" class="ant-modal-wrap " role="dialog">
+<div role="document" class="ant-modal " style="width: 440px;"><div class="ant-modal-content">
+<button aria-label="Close" class="ant-modal-close"><span class="ant-modal-close-x"></span></button>
+<div class="ant-modal-body"><div class="class_right"><i class="anticon anticon-question-circle icon_Alert icon_orange"></i>
+<span style="font-size: 14px;">${msg}</span></div></div><div class="ant-modal-footer">
+<button type="button" id="cancelBtn"   class="ant-btn ant-btn-ghost ant-btn-lg"><span>取 消</span></button>
+<button type="button" id="okBtn"    class="ant-btn ant-btn-primary ant-btn-lg"><span>确 定</span></button></div></div>
+<div tabindex="0" style="width: 0px; height: 0px; overflow: hidden;">sentinel</div></div></div></div>`;
+    if (!$('#modal_dialog')[0]) {
+        $(document.body).append(htm);
+    } else {
+        $('#modal_dialog').show();
+    }
+    $('#modal_dialog #cancelBtn').one('click', cancelfnRef);
+    $('#modal_dialog #okBtn').one('click', okfnRef);
+}
+
+function showLargeImg(el, parentSelector) {
+    $.openPhotoGallery(el, parentSelector)
 }
 // 保持android ios 一直体验的接口实现
 var phone = {
@@ -1412,7 +1465,7 @@ var phone = {
 }
 
 function doWebService(data, listener) {
-    WEBSERVICE_URL = "http://192.168.2.104:9006/Excoord_ApiServer/webservice";
+    WEBSERVICE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
     var pro = document.getElementById("pro");
     //进度条的宽度，用来模拟进度条的进度
     var width = 0;
