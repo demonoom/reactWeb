@@ -237,6 +237,7 @@ class LiveTV extends React.Component {
             // 显示弹窗
             Modal.confirm({
                 title: '请输入密码',
+				className:'4444444',
                 content: <Input id="tmppwd"/>,
                 okText: '确定',
                 cancelText: '取消',

@@ -415,7 +415,7 @@
 					<div class="right_cont">
 						 	<div class="activity">
 								<section class="panle">
-									<div class="danmu_pic"><img src="../../src/components/images/danmu_pic.png" height="208"></div>
+								<div class="danmu_pic"><img src="../../src/components/images/danmu_pic.png" height="208"></div>
 									<!-- <iframe  id="${this.pptIframeName}"  name="${this.pptIframeName}"  /> -->
 									<div id="${this.showTuiPing}" class="panle_book ${this.showTuiPing}" ><div class="tuitu">${this.thistTuiPingUi.join('')}</div></div>
 								</section>
