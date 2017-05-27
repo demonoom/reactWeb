@@ -395,12 +395,11 @@
         }
 
 
-
         this.thistTuiPingUi = [];
-        if(!obj.param.tuipingImgArr){
+        if (!obj.param.tuipingImgArr) {
             this.thistTuiPingUi.push(`<div class="danmu_pic"><img src="../../src/components/images/danmu_pic.png" height="208"></div>`);
         }
-        for(let i=0;i<obj.param.tuipingImgArr.length;i++){
+        for (let i = 0; i < obj.param.tuipingImgArr.length; i++) {
             let imgData = obj.param.tuipingImgArr[i];
             this.thistTuiPingUi.push(`<img style="width:120px;height:auto;" class="topics_zanImg"  onclick="showLargeImg(this)"  src="${imgData.path}"/>`);
         }
@@ -475,7 +474,7 @@
         let con = {}
         let user = eval("(" + sessionStorage.getItem('loginUser') + ")");
         if (window.screen_lock) {
-            alert('老师已开启禁言！');
+            log.info('老师已开启禁言！');
             return;
         }
         switch ($(el).attr('ref')) {
@@ -564,7 +563,7 @@
             submit: function () {
 
                 if (window.screen_lock) {
-                    alert('老师已开启禁言！');
+                    log.info('老师已开启禁言！');
                     return false;
                 } else {
                     return true;
@@ -573,7 +572,7 @@
             success: function (url, status)  //服务器成功响应处理函数
             {
                 if (window.screen_lock) {
-                    alert('老师已开启禁言！');
+                    log.info('老师已开启禁言！');
                     return;
                 }
                 sendImg(url);
@@ -609,7 +608,7 @@
             },
 
             onWarn: function (warnMsg) {
-                alert(warnMsg);
+                log.warn(warnMsg);
             },
             screenLock: function () {
                 if (window.screen_lock) {
@@ -619,15 +618,15 @@
             },
             // 显示消息
             onMessage: function (info) {
-                
+
                 let htm = '';
                 switch (info.command) {
                     case 'screen_lock':
                         window.screen_lock = info.data.screen_lock;
                         if (info.data.screen_lock) {
-                            alert('开启禁言！');
+                            log.info('开启禁言！');
                         } else {
-                            alert('关闭禁言！');
+                            log.info('关闭禁言！');
                         }
                         break;
                     case'classOver':
@@ -851,13 +850,12 @@
     }
 
     littlePanle.prototype.commitClose = function (id) {
+        let _this=this;
         var msg = "您确定要退出课堂？";
-        if (confirm(msg)) {
-            this.closepanle(id);
-            return true;
-        } else {
-            return false;
-        }
+        contemosConfirm(msg,function(){
+            _this.closepanle(id);
+        });
+
     }
 
 
@@ -1008,7 +1006,7 @@
 
                 default :
                     if ((this.mgr.length - _this.hideArr.length) >= 3) {
-                        alert('打开太多！');
+                        log.info('打开太多！');
                         return;
                     }
 
@@ -1270,8 +1268,42 @@ var imgReader = function (item) {
     // 读取文件
     reader.readAsDataURL(file);
 };
-function showLargeImg(el,parentSelector) {
-    $.openPhotoGallery(el,parentSelector)
+
+function contemosConfirm(msg,okFn, cancelfn) {
+
+    let okfnRef = function () {
+        if (okFn) {
+            okFn();
+        }
+        $('#modal_dialog').remove();
+    };
+    let cancelfnRef = function () {
+        if (cancelfn) {
+            cancelfn();
+        }
+        $('#modal_dialog').remove();
+    };
+
+
+    let htm = `<div id="modal_dialog"><div   class="ant-modal-mask"></div><div tabindex="-1" class="ant-modal-wrap " role="dialog">
+<div role="document" class="ant-modal " style="width: 440px;"><div class="ant-modal-content">
+<button aria-label="Close" class="ant-modal-close"><span class="ant-modal-close-x"></span></button>
+<div class="ant-modal-body"><div class="class_right"><i class="anticon anticon-question-circle icon_Alert icon_orange"></i>
+<span style="font-size: 14px;">${msg}</span></div></div><div class="ant-modal-footer">
+<button type="button" id="cancelBtn"   class="ant-btn ant-btn-ghost ant-btn-lg"><span>取 消</span></button>
+<button type="button" id="okBtn"    class="ant-btn ant-btn-primary ant-btn-lg"><span>确 定</span></button></div></div>
+<div tabindex="0" style="width: 0px; height: 0px; overflow: hidden;">sentinel</div></div></div></div>`;
+    if (!$('#modal_dialog')[0]) {
+        $(document.body).append(htm);
+    } else {
+        $('#modal_dialog').show();
+    }
+    $('#modal_dialog #cancelBtn').one('click', cancelfnRef);
+    $('#modal_dialog #okBtn').one('click', okfnRef);
+}
+
+function showLargeImg(el, parentSelector) {
+    $.openPhotoGallery(el, parentSelector)
 }
 // 保持android ios 一直体验的接口实现
 var phone = {
