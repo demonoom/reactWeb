@@ -238,6 +238,7 @@ debugger
             // 显示弹窗
             Modal.confirm({
                 title: '请输入密码',
+				className:'4444444',
                 content: <Input id="tmppwd"/>,
                 okText: '确定',
                 cancelText: '取消',
@@ -322,15 +323,16 @@ debugger
                 this.titleUi = <div className="public—til—blue">直播课堂</div>;
                 break;
             case 'history_tab':
-                this.titleUi = <div className="public—til—blue">历史课堂回顾</div>;
-                this.searchUi = <div>
-                    <Input id="searchTxt" type="text" placeholder="请输入历史课堂标题！" onPressEnter={(e) => {
-                        this._searchHistoryLives()
-                    }}/>
-                    <Button icon="search" onClick={(e) => {
-                        this._searchHistoryLives()
-                    }}>搜索</Button>
-                </div>;
+				this.titleUi = <div className="public—til—blue">
+					<div className="search">
+                    	<Input id="searchTxt" type="text" placeholder="请输入历史课堂标题！" onPressEnter={(e) => {
+                        	this._searchHistoryLives()
+                   		 }}/>
+                    	<Button icon="search" onClick={(e) => {
+                        	this._searchHistoryLives()
+                    	}}>搜索</Button>
+                	</div>
+				</div>;
                 break;
             case 'historySearch_tab':
                 this.titleUi = <div className="public—til—blue">历史课堂回顾搜索列表</div>;
@@ -452,7 +454,7 @@ debugger
                 </li>
                 <li className='history' onClick={() => {
                     this.change('history')
-                }}><i className="iconfont menu_left_i">&#xe602;</i>历史回顾
+                }}><i className="iconfont menu_left_i">&#xe602;</i>直播回顾
                 </li>
             </ul>
         </div>;
