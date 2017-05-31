@@ -225,38 +225,40 @@ const AntCloudTableComponents = React.createClass({
     buildTargetDirData(ret){
         var targetDirDataArray= [];
         var i=0;
-        ret.response.forEach(function (e) {
-            if(i==0){
-                if(e.parent){
-                    var parentDirectoryId = e.parent.parentId;
-                    cloudTable.setState({"parentDirectoryIdAtMoveModal":parentDirectoryId});
+        if(ret.msg=="调用成功" && ret.success==true && isEmpty(ret.response)==false){
+            ret.response.forEach(function (e) {
+                if(i==0){
+                    if(e.parent){
+                        var parentDirectoryId = e.parent.parentId;
+                        cloudTable.setState({"parentDirectoryIdAtMoveModal":parentDirectoryId});
+                    }
                 }
-            }
-            i++
-            var key = e.id;
-            var name = e.name;
-            var directory = e.directory;
-            var fileLogo = cloudTable.buildFileLogo(name,directory,e);
+                i++
+                var key = e.id;
+                var name = e.name;
+                var directory = e.directory;
+                var fileLogo = cloudTable.buildFileLogo(name,directory,e);
 
-            var dirName = <span className="font_gray_666" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e,"moveDirModal")}>
+                var dirName = <span className="font_gray_666" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e,"moveDirModal")}>
                 {fileLogo}
             </span>;
-            var moveDirOpt;
-            if(e.directory==true){
-                moveDirOpt=<div>
-                    <Button onClick={cloudTable.moveFileToTargetDir.bind(cloudTable,key)}>确定</Button>
-                </div>;
-            }else{
-                dirName = name;
-            }
-            var dataJson= {
-                key: key,
-                dirName: dirName,
-                moveDirOpt:moveDirOpt
-            };
-            targetDirDataArray.push(dataJson);
-        })
-        cloudTable.setState({"targetDirDataArray":targetDirDataArray});
+                var moveDirOpt;
+                if(e.directory==true){
+                    moveDirOpt=<div>
+                        <Button onClick={cloudTable.moveFileToTargetDir.bind(cloudTable,key)}>确定</Button>
+                    </div>;
+                }else{
+                    dirName = name;
+                }
+                var dataJson= {
+                    key: key,
+                    dirName: dirName,
+                    moveDirOpt:moveDirOpt
+                };
+                targetDirDataArray.push(dataJson);
+            })
+            cloudTable.setState({"targetDirDataArray":targetDirDataArray});
+        }
     },
 
     buildFileLogo(name,directory,e){
@@ -413,140 +415,142 @@ const AntCloudTableComponents = React.createClass({
     buildTableDataByResponse(ret){
         var i=0;
         var cloudFileArray=[];
-        ret.response.forEach(function (e) {
-            if(i==0){
-                if(e.parent){
-                    var parentDirectoryId = e.parent.parentId;
-                    cloudTable.setState({"parentDirectoryId":parentDirectoryId});
+        if(ret.msg=="调用成功" && ret.success==true && isEmpty(ret.response)==false){
+            ret.response.forEach(function (e) {
+                if(i==0){
+                    if(e.parent){
+                        var parentDirectoryId = e.parent.parentId;
+                        cloudTable.setState({"parentDirectoryId":parentDirectoryId});
+                    }
                 }
-            }
-            i++
-            var key=e.id;
-            var createTime =e.createTime;
-            var createUid = e.createUid;
-            var creator = e.creator;
-            var directory = e.directory;
-            var file = e.file;
-            var fileType = e.fileType;
-            var fromId = e.fromId;
-            var fromType = e.fromType;
-            var length = e.length;
-            var name = e.name;
-            var parentId = e.parentId;
-            var permissionsArray = e.permissions;
-            var schoolId = e.schoolId;
-            var valid = e.valid;
-            var path = e.path;
-            console.log("path---------->"+path);
+                i++
+                var key=e.id;
+                var createTime =e.createTime;
+                var createUid = e.createUid;
+                var creator = e.creator;
+                var directory = e.directory;
+                var file = e.file;
+                var fileType = e.fileType;
+                var fromId = e.fromId;
+                var fromType = e.fromType;
+                var length = e.length;
+                var name = e.name;
+                var parentId = e.parentId;
+                var permissionsArray = e.permissions;
+                var schoolId = e.schoolId;
+                var valid = e.valid;
+                var path = e.path;
+                console.log("path---------->"+path);
 
-            var fileLogo;
-            var downloadButton;
-            if(directory){
-                fileLogo=<span className="cloud_text">
+                var fileLogo;
+                var downloadButton;
+                if(directory){
+                    fileLogo=<span className="cloud_text">
                     <i className="cloud_icon cloud_icon_file"></i>
                     <span className="font_gray_666" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e,"mainTable")}>{name}</span>
                 </span>;
-            }else{
-                downloadButton=<a href={path} target="_blank" title="下载" download={path} className="te_download_a">
-                    <Button icon="download"/></a>;
-                var lastPointIndex = name.lastIndexOf(".");
-                //通过截取文件后缀名的形式，完成对上传文件类型的判断
-                var fileType = name.substring(lastPointIndex+1);
-                var fileTypeLog;
-                switch (fileType){
-                    case "png":
-                        fileTypeLog = <i className="cloud_icon cloud_icon_png"></i>;
-                        break;
-                    case "jpg":
-                        fileTypeLog = <i className="cloud_icon cloud_icon_jpg"></i>;
-                        break;
-                    case "mp3":
-                        fileTypeLog = <i className="cloud_icon cloud_icon_mp3"></i>;
-                        break;
-                    case "pdf":
-                        fileTypeLog = <i className="cloud_icon cloud_icon_pdf"></i>;
-                        break;
-                    case "ppt":
-                    case "pptx":
-                        fileTypeLog = <i className="cloud_icon cloud_icon_ppt"></i>;
-                        break;
-                    case "doc":
-                    case "docx":
-                        fileTypeLog = <i className="cloud_icon cloud_icon_doc"></i>;
-                        break;
-                    case "xls":
-                    case "xlsx":
-                        fileTypeLog = <i className="cloud_icon cloud_icon_xls"></i>;
-                        break;
-                    case "wps":
-                        fileTypeLog = <i className="cloud_icon cloud_icon_wps"></i>;
-                        break;
-                    default:
-                        fileTypeLog = <i className="cloud_icon cloud_icon_other"></i>;
-                        break;
-                }
-                fileLogo=<div>
-                    {fileTypeLog}
-                    {name}
-                </div>;
-            }
-            var fileLogo = cloudTable.buildFileLogo(name,directory,e);
-            var maxPermission = cloudTable.getMaxPermission(permissionsArray);
-            var cloudFileJsonForEveryFile={"fileId":key,"cloudFileObj":e};
-            cloudFileArray.push(cloudFileJsonForEveryFile);
-            var editButton=<Button type="button" className="score3_i" value={key} text={key} onClick={cloudTable.editDirectoryName.bind(cloudTable,e)}
-                               icon="edit"></Button>;
-            var deleteButton=<Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
-                                 icon="delete"></Button>;
-            var shareButton=<Button type="button" value={key} text={key} onClick={cloudTable.showShareModal.bind(cloudTable,e)}
-                                icon="share-alt"></Button>;
-            var moveButton=<Button type="button" value={key} text={key} onClick={cloudTable.showMoveFileModal.bind(cloudTable,e)}
-                               icon="export"></Button>;
-            var settinButton=<Button type="button" value={key} text={key} onClick={cloudTable.showPermissionModal.bind(cloudTable,e)}
-                                 icon="setting"></Button>;
-            //判断是否是第一层文件夹
-            if(cloudTable.state.currentDirectoryId==-1){
-                // 判断是否是超级管理员
-                if(!cloudTable.state.currentUserIsSuperManager){
-                    //超管在第一层具备所有文件夹操作权限，非超管无任何操作权限
-                    editButton="";
-                    deleteButton="";
-                    shareButton="";
-                    moveButton="";
-                    settinButton="";
-                }
-            }else{
-                //非第一层文件夹，根据分配的权限决定
-                if(e.creator.colUid != sessionStorage.getItem("ident")){
-                    //自己创建的文件夹或文件，拥有最大权限
-                    switch (maxPermission){
-                        case 1:
-                        case 2:
+                }else{
+                    downloadButton=<a href={path} target="_blank" title="下载" download={path} className="te_download_a">
+                        <Button icon="download"/></a>;
+                    var lastPointIndex = name.lastIndexOf(".");
+                    //通过截取文件后缀名的形式，完成对上传文件类型的判断
+                    var fileType = name.substring(lastPointIndex+1);
+                    var fileTypeLog;
+                    switch (fileType){
+                        case "png":
+                            fileTypeLog = <i className="cloud_icon cloud_icon_png"></i>;
                             break;
-                        case 3:
-                            settinButton="";
+                        case "jpg":
+                            fileTypeLog = <i className="cloud_icon cloud_icon_jpg"></i>;
+                            break;
+                        case "mp3":
+                            fileTypeLog = <i className="cloud_icon cloud_icon_mp3"></i>;
+                            break;
+                        case "pdf":
+                            fileTypeLog = <i className="cloud_icon cloud_icon_pdf"></i>;
+                            break;
+                        case "ppt":
+                        case "pptx":
+                            fileTypeLog = <i className="cloud_icon cloud_icon_ppt"></i>;
+                            break;
+                        case "doc":
+                        case "docx":
+                            fileTypeLog = <i className="cloud_icon cloud_icon_doc"></i>;
+                            break;
+                        case "xls":
+                        case "xlsx":
+                            fileTypeLog = <i className="cloud_icon cloud_icon_xls"></i>;
+                            break;
+                        case "wps":
+                            fileTypeLog = <i className="cloud_icon cloud_icon_wps"></i>;
+                            break;
+                        default:
+                            fileTypeLog = <i className="cloud_icon cloud_icon_other"></i>;
                             break;
                     }
+                    fileLogo=<div>
+                        {fileTypeLog}
+                        {name}
+                    </div>;
                 }
-            }
-            var subjectOpt = <div>
-                {editButton}
-                {deleteButton}
-                {shareButton}
-                {moveButton}
-                {downloadButton}
-                {settinButton}
-            </div>;
-            data.push({
-                key: key,
-                title: fileLogo,
-                creator:creator.userName,
-                createTime: getLocalTime(createTime),
-                subjectOpt: subjectOpt,
+                var fileLogo = cloudTable.buildFileLogo(name,directory,e);
+                var maxPermission = cloudTable.getMaxPermission(permissionsArray);
+                var cloudFileJsonForEveryFile={"fileId":key,"cloudFileObj":e};
+                cloudFileArray.push(cloudFileJsonForEveryFile);
+                var editButton=<Button type="button" className="score3_i" value={key} text={key} onClick={cloudTable.editDirectoryName.bind(cloudTable,e)}
+                                       icon="edit"></Button>;
+                var deleteButton=<Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
+                                         icon="delete"></Button>;
+                var shareButton=<Button type="button" value={key} text={key} onClick={cloudTable.showShareModal.bind(cloudTable,e)}
+                                        icon="share-alt"></Button>;
+                var moveButton=<Button type="button" value={key} text={key} onClick={cloudTable.showMoveFileModal.bind(cloudTable,e)}
+                                       icon="export"></Button>;
+                var settinButton=<Button type="button" value={key} text={key} onClick={cloudTable.showPermissionModal.bind(cloudTable,e)}
+                                         icon="setting"></Button>;
+                //判断是否是第一层文件夹
+                if(cloudTable.state.currentDirectoryId==-1){
+                    // 判断是否是超级管理员
+                    if(!cloudTable.state.currentUserIsSuperManager){
+                        //超管在第一层具备所有文件夹操作权限，非超管无任何操作权限
+                        editButton="";
+                        deleteButton="";
+                        shareButton="";
+                        moveButton="";
+                        settinButton="";
+                    }
+                }else{
+                    //非第一层文件夹，根据分配的权限决定
+                    if(e.creator.colUid != sessionStorage.getItem("ident")){
+                        //自己创建的文件夹或文件，拥有最大权限
+                        switch (maxPermission){
+                            case 1:
+                            case 2:
+                                break;
+                            case 3:
+                                settinButton="";
+                                break;
+                        }
+                    }
+                }
+                var subjectOpt = <div>
+                    {editButton}
+                    {deleteButton}
+                    {shareButton}
+                    {moveButton}
+                    {downloadButton}
+                    {settinButton}
+                </div>;
+                data.push({
+                    key: key,
+                    title: fileLogo,
+                    creator:creator.userName,
+                    createTime: getLocalTime(createTime),
+                    subjectOpt: subjectOpt,
+                });
             });
-        });
-        var pager = ret.pager;
-        cloudTable.setState({"tableData":data,cloudFileArray,totalCount: parseInt(pager.rsCount)});
+            cloudTable.setState({"tableData":data,cloudFileArray,totalCount: parseInt(pager.rsCount)});
+        }
+        //cloudTable.setState({"tableData":data,cloudFileArray,totalCount: parseInt(pager.rsCount)});
     },
 
     /**
