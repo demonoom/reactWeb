@@ -44,11 +44,41 @@ i, cite, em, var, address, dfn {
 :-ms-input-placeholder { /* Internet Explorer 10+ */
 　　color:#999 !important;
 }
-@media only screen and (min-width: 1200px) {
+@media only screen and (min-width: 1366px) {
 .ant-layout-aside {
-      position: absolute;
-	 height: 602px;
-	width:1000px;
+    position: absolute;
+	height: 602px;
+	width:1180px;
+    overflow: hidden;
+	transform:translate(-50%,-50%);
+	-ms-transform:translate(-50%,-50%); 	/* IE 9 */
+    -moz-transform:translate(-50%,-50%); 	/* Firefox */
+    -webkit-transform:translate(-50%,-50%); /* Safari 和 Chrome */
+    -o-transform:translate(-50%,-50%); 	/* Opera */
+	left:50%;
+	top:50%;	
+  	-webkit-box-shadow:rgba(0,0,0,0.15) 1px 4px 12px;
+  	-moz-box-shadow:rgba(0,0,0,0.15) 1px 4px 12px; 
+ 	 box-shadow:rgba(0,0,0,0.15) 1px 4px 12px;
+	 border-radius:4px;
+}
+    .ant-layout-aside .ant-layout-logo {
+      height: 53px;
+      transition: all 0.3s ease;
+	  padding:15px 0;
+	  text-align:center;
+
+    }
+ .ant-layout-logo{
+      background: #0084ff
+
+    }
+}
+@media only screen and (min-width: 1200px) and (max-width:1365px) {
+.ant-layout-aside {
+    position: absolute;
+	height: 540px;
+	width:1180px;
     overflow: hidden;
 	transform:translate(-50%,-50%);
 	-ms-transform:translate(-50%,-50%); 	/* IE 9 */
@@ -76,10 +106,10 @@ i, cite, em, var, address, dfn {
 }
 
 @media only screen and (min-width: 960px) and (max-width: 1199px){
-	.ant-layout-aside {
-      position: absolute;
-	 height: 650px;
-	width:1180px;
+.ant-layout-aside {
+    position: absolute;
+	height: 520px;
+	width:1000px;
     overflow: hidden;
 	transform:translate(-50%,-50%);
 	-ms-transform:translate(-50%,-50%); 	/* IE 9 */
@@ -108,8 +138,8 @@ i, cite, em, var, address, dfn {
 @media only screen and (min-width: 768px) and (max-width: 959px){
 	.ant-layout-aside {
       position: absolute;
-	 height: 650px;
-	width:1180px;
+	 height: 550px;
+	width:1000px;
     overflow: hidden;
 	transform:translate(-50%,-50%);
 	-ms-transform:translate(-50%,-50%); 	/* IE 9 */
@@ -2932,7 +2962,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 	padding:15px 25px !important;
 }
 .integral_scroll{
-	height:370px !important;
+	height:276px !important;
 	overflow-y:auto !important;
 }
 .integral_scroll2{
@@ -3719,7 +3749,7 @@ color:#ffbf00
     height: 30px;
     margin-top: -40px;
     top: 50%;
-    right: -29px;
+    right: -28px;
     border-radius: 0px 6px 6px 0px;
     background: #309FFB;
     color: #fff;

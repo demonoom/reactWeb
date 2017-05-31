@@ -1763,9 +1763,9 @@ const PersonCenterComponents = React.createClass({
                 toolbarTitle="的等级";
                 currentPageLink = "http://www.maaee.com/Excoord_PhoneService/user/personalGrade/" + personCenter.state.userInfo.user.colUid;
             }
-            personDate = <div>
+            personDate = <div className="favorite_my">
                 <div className="public—til—blue">{returnPersonCenterToolBar}{personCenter.state.userInfo.user.userName+toolbarTitle}</div>
-                <div className="topics_le"><iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe></div>
+                <div className="topics_le favorite_my"><iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe></div>
             </div>;
         }else if(personCenter.state.optType=="turnToAsk"){
             var currentPageLink = "http://www.maaee.com/Excoord_PhoneService/quiz/getUserAskedQuiz/" + personCenter.state.userInfo.user.colUid;
