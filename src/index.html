@@ -83,7 +83,6 @@
 
 <div id="root"></div>
 <div class="ant-layout-footer">
-    <BackTopButton/>
     <div id="componyInfo" style="display:block">小蚂蚁移动教学平台 版权所有 恒坐标教育集团</div>
     <script>
         var timer;
@@ -91,10 +90,10 @@
             if (sessionStorage.getItem("ident") == null || sessionStorage.getItem("ident") == "") {
                 timer = setTimeout("checkIsLogin()", 500);
                 //document.getElementById("componyInfo").innerHTML = "小蚂蚁移动教学平台 版权所有 恒坐标教育集团";
-                document.getElementById("componyInfo").style.display='block';
+                $(".ant-layout-footer").css({"display":'block'});
             } else {
                 //document.getElementById("componyInfo").innerHTML = "";
-                document.getElementById("componyInfo").style.display='none';
+                $(".ant-layout-footer").css({"display":'none'});
                 clearTimeout(timer);
             }
         }
