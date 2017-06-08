@@ -80,7 +80,7 @@ i, cite, em, var, address, dfn {
 @media only screen and (max-width:1365px) {
 .ant-layout-aside {
     position: absolute;
-	height: 530px;
+	height: 610px;
 	width:1000px;
     overflow: hidden;
 	transform:translate(-50%,-50%);
