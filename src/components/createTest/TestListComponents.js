@@ -21,9 +21,10 @@ const TestListComponents = React.createClass({
         };
     },
 
-    getTeacherHomeWork(){
-        this.setState({activeKey: '作业列表', currentOpt: 'checkHomeWorkList',});
-        this.refs.homeWorkTable.getDoneHomeworkList(sessionStorage.getItem("ident"), 1);
+    getTestList(){
+        this.setState({activeKey: '试卷列表', currentOpt: 'testTimeLine',});
+        var initPageNo=1;
+        this.refs.testTimeLineComponents.getExms(initPageNo);
     },
 
     assignHomeWork(){
@@ -39,11 +40,11 @@ const TestListComponents = React.createClass({
 
         var tabPanel;
         let returnBtn = 'btn1';
-        let assignHomeWorkBtn = <span className="btn2 talk_ant_btn1"><button className="ant-btn ant-btn-primary add_study"
-                                                                             onClick={this.assignHomeWork}>布置作业</button></span>;
+        let assignExamsBtn = <span className="btn2 talk_ant_btn1"><button className="ant-btn ant-btn-primary add_study"
+                                                                             onClick={this.assignHomeWork}>布置试卷</button></span>;
         var toolbar;
         if (this.state.currentOpt == "testTimeLine") {
-            returnBtn = 'btn2'
+            returnBtn = 'btn1'
             tabPanel = <TestTimeLineComponents ref="testTimeLineComponents"/>;
         } else {
             
@@ -53,7 +54,7 @@ const TestListComponents = React.createClass({
                 <span className="btn1 ant-tabs-right"><button onClick={this.getTeacherHomeWork}
                                                               className="affix_bottom_tc"><Icon
                     type="left"/></button></span>
-                {assignHomeWorkBtn}
+                {assignExamsBtn}
             </div>
         </h3>;
 
