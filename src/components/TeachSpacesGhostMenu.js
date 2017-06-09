@@ -114,6 +114,10 @@ class GhostMenu extends React.Component {
                                 this.changeMenu(event, 'examination', false)
                             }}>组卷
                             </li>
+                            <li onClick={ event => {
+                                this.changeMenu(event, 'test', false)
+                            }}>考试
+                            </li>
                         </ul>
                     </li>
                     <li><Icon type="exception"/>更多</li>
