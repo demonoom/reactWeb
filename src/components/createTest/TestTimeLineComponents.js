@@ -105,11 +105,15 @@ const TestTimeLineComponents = React.createClass({
         examsArray.forEach(function (eveyDayJson) {
             var currentItemSubDivArray=[];
             eveyDayJson.examJson.forEach(function (examJsonArray) {
-                var currentItemSubDiv = <div onClick={_this.showExamDetail.bind(_this,examJsonArray.id)}>
-                    <p>{examJsonArray.paperTitle}</p>
-                    <p>班级:{examJsonArray.showClass}</p>
-                    <p>时间:{examJsonArray.showExamTime}</p>
-                </div>;
+                var currentItemSubDiv = 
+				<div className="time_content" onClick={_this.showExamDetail.bind(_this,examJsonArray.id)}>
+					<h2 className="title book_other">数学</h2>
+					<div className="description">
+						<p className="headline">{examJsonArray.paperTitle}</p>
+                    	<p>班级：{examJsonArray.showClass}</p>
+                    	<p>时间：{examJsonArray.showExamTime}</p>
+					</div> 
+				</div>;
                 currentItemSubDivArray.push(currentItemSubDiv);
             })
             var timeLineItemObj= <Timeline.Item>
@@ -145,7 +149,7 @@ const TestTimeLineComponents = React.createClass({
 
     render() {
         return (
-            <div style={{overflow:scroll}}>
+            <div className="exam_timeline">
                 <Timeline pending={<a href="#">See more</a>}>
                     {this.state.TimeLineItemArray}
                 </Timeline>

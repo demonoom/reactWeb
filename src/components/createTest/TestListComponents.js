@@ -61,7 +61,7 @@ const TestListComponents = React.createClass({
         return (
             <div>
                 {toolbar}
-                <div className="favorite_scroll">{tabPanel}</div>
+                <div className="favorite_scroll favorite_up">{tabPanel}</div>
             </div>
         );
     },
