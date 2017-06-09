@@ -1244,25 +1244,22 @@ article.content_3 img{
 .ant-tabs-nav .ant-tabs-tab:hover{
 	color:#309ffb;
 }
-	::-webkit-scrollbar {
+::-webkit-scrollbar {
 		  width: 8px;
 		  height:8px;
-	} /* 这是针对缺省样式 (必须的) */
+} /* 这是针对缺省样式 (必须的) */
 
 
-	::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
 		  background-color: #ccc; 
 		  border-radius: 9px;
 		  -webkit-border-radius: 9px;
-	} /* 滑块颜色 */
+} /* 滑块颜色 */
 
-	::-webkit-scrollbar-button {
+::-webkit-scrollbar-button {
 		  background-color: initial;
-	} /* 滑轨两头的监听按钮颜色 */
+} /* 滑轨两头的监听按钮颜色 */
 
-	/* ::-webkit-scrollbar-corner {
-		  background-color: none;
-	} 横向滚动条和纵向滚动条相交处尖角的颜色 */
 .ant-table-fixed-header .ant-table-scroll .ant-table-header{
 	    overflow: hidden;
 		width: calc(100% - 8px);
