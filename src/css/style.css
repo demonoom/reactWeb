@@ -4138,7 +4138,7 @@ ul.liveTV_tab .liveTV, ul.liveTV_tab .liveTV i, ul.history_tab .history, ul.hist
 	height:462px
 }
 .exam_timeline{
-	width:80%;
+	width:86%;
 	margin:20px auto;
 	position:relative
 }
@@ -4156,22 +4156,30 @@ ul.liveTV_tab .liveTV, ul.liveTV_tab .liveTV i, ul.history_tab .history, ul.hist
 	left:48%;
 }
 .exam_timeline .ant-timeline-item-content{
-	top:30px;
-	padding:20px 0 30px 24px;
-	margin-bottom: 20px;
+    padding: 0 0 30px 24px;
+    top: 45px;
 }
-
+.exam_timeline .ant-timeline-item{
+	padding:0 0 18px 0
+}
+.exam_timeline .ant-timeline-item-pending .ant-timeline-item-content{
+	text-align:center;
+	padding:0 0 15px 0;
+}
 .time_cont{
 	width:100%;
 	height: 145px;
 }
 .time_content{
-	width: 40%;
+	width: 42%;
     border-radius: 6px;
 	margin-left:0;
+	position:relative;
+	margin-bottom: 8px;
+	
 }
 .time_content:nth-child(odd){
-	margin-left:350px;
+	margin-left:55%;
 }
 .time_content .title {
     padding: 6px 0 6px 14px;
@@ -4237,9 +4245,42 @@ ul.liveTV_tab .liveTV, ul.liveTV_tab .liveTV i, ul.history_tab .history, ul.hist
 }
 .date_time{
 	 position: absolute;
-    top: -24px;
+    top: -40px;
     left: 53%;
 	font-family:"Tahoma";
 	font-size:15px;
 	color:#3C95EC
+}
+.triangle_right {
+    width: 0;
+    height: 0;    
+    position: absolute;
+    z-index: 2;
+    right: 1px;
+    bottom: 1px;
+}
+.triangle_gray{
+	border-bottom: 53px solid #e3e3e3;
+    border-left: 50px solid transparent;
+	color:#666666
+}
+.triangle_yellow{
+	border-bottom: 53px solid #fffae4;
+    border-left: 50px solid transparent;
+	color:#f46a55;
+}
+.triangle_red{
+	border-bottom: 53px solid #e3e3e3;
+    border-left: 50px solid transparent;
+	color:#f46a55
+}
+.triangle_right span{
+	transform:rotate(-45deg);
+	-ms-transform:rotate(-45deg); 	/* IE 9 */
+	-moz-transform:rotate(-45deg); 	/* Firefox */
+	-webkit-transform:rotate(-45deg); /* Safari 和 Chrome */
+	-o-transform:rotate(-45deg); 
+    position: absolute;
+    left: -38px;
+    top: 26px;
 }

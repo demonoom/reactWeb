@@ -107,6 +107,7 @@ const TestTimeLineComponents = React.createClass({
             eveyDayJson.examJson.forEach(function (examJsonArray) {
                 var currentItemSubDiv = 
 				<div className="time_content" onClick={_this.showExamDetail.bind(_this,examJsonArray.id)}>
+				<div className="triangle_right triangle_yellow"><span>已结束</span></div>
 					<h2 className="title book_other">数学</h2>
 					<div className="description">
 						<p className="headline">{examJsonArray.paperTitle}</p>
