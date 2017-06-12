@@ -165,6 +165,7 @@ const TestTimeLineComponents = React.createClass({
 
     showExamDetail(examId){
         console.log("showExamDetail"+examId);
+        this.props.onTestClick(examId);
     },
 
     timeLineDataSort(array){
