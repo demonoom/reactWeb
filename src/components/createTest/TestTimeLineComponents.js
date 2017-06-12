@@ -35,6 +35,8 @@ const TestTimeLineComponents = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
+                examsArray.splice(0);
+                TimeLineItemArray.splice(0);
                 response.forEach(function (e) {
                     var id = e.id;
                     var paper = e.paper;

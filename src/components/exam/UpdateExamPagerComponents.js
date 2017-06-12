@@ -267,7 +267,11 @@ const UpdateExamPagerComponents = React.createClass({
                     message.error("试卷修改失败");
                 }
                 cardChildArray.splice(0);
-                createExamPager.props.callbackParent();
+                if(typeof(createExamPager.props.fatherPage)!="undefined" ){
+                    createExamPager.props.callbackGetPagerList();
+                }else{
+                    createExamPager.props.callbackParent();
+                }
                 // 回到试卷列表
             },
             onError: function (error) {
@@ -403,7 +407,12 @@ const UpdateExamPagerComponents = React.createClass({
      */
     handleCancel(e) {
         cardChildArray.splice(0);
-        createExamPager.props.callbackParent();
+        console.log("fatherPage:"+createExamPager.props.fatherPage);
+        if(typeof(createExamPager.props.fatherPage)!="undefined" ){
+            createExamPager.props.callbackCloseModal();
+        }else{
+            createExamPager.props.callbackParent();
+        }
     },
 
     /**

@@ -1,8 +1,7 @@
 import React, {PropTypes} from 'react';
 import {Tabs, Breadcrumb, Icon, Button} from 'antd';
-import HomeWorkTableComponents from '../HomeWorkTableComponents';
-import AssignHomeWorkComponents from '../AssignHomeWorkComponents';
 import TestTimeLineComponents from './TestTimeLineComponents';
+import AssignTestComponents from './AssignTestComponents';
 
 
 const TabPane = Tabs.TabPane;
@@ -22,14 +21,14 @@ const TestListComponents = React.createClass({
     },
 
     getTestList(){
-        this.setState({activeKey: '试卷列表', currentOpt: 'testTimeLine',});
+        this.setState({activeKey: '我的考试', currentOpt: 'testTimeLine',});
         var initPageNo=1;
         this.refs.testTimeLineComponents.getExms(initPageNo);
     },
 
-    assignHomeWork(){
-        this.setState({activeKey: '布置作业', currentOpt: 'assignHomeWork'});
-        this.refs.assignHomeWorkCom.getInitialState();
+    assignTest(){
+        this.setState({activeKey: '布置试卷', currentOpt: 'assignTest'});
+        // this.refs.assignTestComponents.getInitialState();
     },
 
     changeToolbar(){
@@ -41,13 +40,14 @@ const TestListComponents = React.createClass({
         var tabPanel;
         let returnBtn = 'btn1';
         let assignExamsBtn = <span className="btn2 talk_ant_btn1"><button className="ant-btn ant-btn-primary add_study"
-                                                                             onClick={this.assignHomeWork}>布置试卷</button></span>;
+                                                                             onClick={this.assignTest}>布置试卷</button></span>;
         var toolbar;
         if (this.state.currentOpt == "testTimeLine") {
             returnBtn = 'btn1'
             tabPanel = <TestTimeLineComponents ref="testTimeLineComponents"/>;
         } else {
-            
+            returnBtn = 'btn2'
+            tabPanel = <AssignTestComponents ref="assignTestComponents" callbackParent={this.getTestList}/>;
         }
         toolbar = <h3 className={" public—til—blue"}>{this.state.activeKey}
             <div className={returnBtn}>

@@ -43,6 +43,18 @@ export function formatHM(nS) {
     return hmStr;
 }
 
+export function getCurrentHM() {
+    var currentDate = new Date();
+    var hour = currentDate.getHours()+":";
+    var minutes = currentDate.getMinutes();
+    if(minutes<10){
+        minutes="0"+minutes;
+    }
+    var hmStr = hour+minutes;
+    console.log(hmStr);
+    return hmStr;
+}
+
 export function isToday(str) {
     var isToday=false;
     if (new Date(parseInt(str)).toDateString() === new Date().toDateString()) {
