@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import {Tabs, Breadcrumb, Icon, Button} from 'antd';
 import TestTimeLineComponents from './TestTimeLineComponents';
 import AssignTestComponents from './AssignTestComponents';
+import TestAnalysisComponents from './TestAnalysisComponents';
 
 
 const TabPane = Tabs.TabPane;
@@ -28,7 +29,11 @@ const TestListComponents = React.createClass({
 
     assignTest(){
         this.setState({activeKey: '布置试卷', currentOpt: 'assignTest'});
-        // this.refs.assignTestComponents.getInitialState();
+    },
+
+    testAnalysis(examId){
+        console.log("tongji:"+examId);
+        this.setState({activeKey: '试卷统计', currentOpt: 'testAnalysis',"examId":examId});
     },
 
     changeToolbar(){
@@ -45,13 +50,19 @@ const TestListComponents = React.createClass({
         if (this.state.currentOpt == "testTimeLine") {
             returnBtn = '';
             leftBtn="";
-            tabPanel = <TestTimeLineComponents ref="testTimeLineComponents"/>;
-        } else {
+            tabPanel = <TestTimeLineComponents ref="assignTest" onTestClick={this.testAnalysis}/>;
+        } else if (this.state.currentOpt == "assignTest"){
             returnBtn = 'btn1';
             leftBtn = <span className="btn1 ant-tabs-right"><button onClick={this.getTestList}
                                                                     className="affix_bottom_tc"><Icon
                 type="left"/></button></span>;
             tabPanel = <AssignTestComponents ref="assignTestComponents" callbackParent={this.getTestList}/>;
+        }else if (this.state.currentOpt == "testAnalysis"){
+            returnBtn = 'btn1';
+            leftBtn = <span className="btn1 ant-tabs-right"><button onClick={this.getTestList}
+                                                                    className="affix_bottom_tc"><Icon
+                type="left"/></button></span>;
+            tabPanel = <TestAnalysisComponents ref="testAnalysisComponents" exmId={this.state.examId}/>;
         }
         toolbar = <h3 className={" public—til—blue"}>{this.state.activeKey}
             <div className={returnBtn}>
