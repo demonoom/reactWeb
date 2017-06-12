@@ -4197,33 +4197,44 @@ ul.liveTV_tab .liveTV, ul.liveTV_tab .liveTV i, ul.history_tab .history, ul.hist
     font-size: 14px;
     color: #666;
     border-radius: 0 0 6px 6px;
-	border:1px solid #fbb977;
 }
-.maths{
+.time_content .description.book_other{
+	border:1px solid #f4af6a;
+}
+.time_content .description.maths{
+	border:1px solid #6fb6e3;
+}
+.time_content .description.Chinese{
+	border:1px solid #71d57f;
+}
+.time_content .description.English{
+	border:1px solid #3fd8da;
+}
+.time_content .title.maths{
 	background: #6fb6e3;
 }
-.maths:after {
+.time_content .title.maths:after {
     background: #6fb6e3;
 }
-.Chinese{
+.time_content .title.Chinese{
 	background:#71d57f
 }
-.Chinese:after {
+.time_content .title.Chinese:after {
     background: #71d57f;
 }
-.foreign_language{
+.time_content .title.English{
 	background:#3fd8da
 }
-.foreign_language:after {
+.time_content .title.English:after {
     background: #3fd8da;
 }
-.book_other{
-	background:#fbb977
+.time_content .title.book_other{
+	background:#f4af6a
 }
-.book_other:after {
-    background: #fbb977
+.time_content .title.book_other:after {
+    background: #f4af6a
 }
-.time_content:nth-child(odd) h2.title:after{
+.time_content .title.time_content:nth-child(odd) h2.title:after{
 	left:-4px;
 }
 .time_content h2.title:after{
