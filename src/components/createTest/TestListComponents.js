@@ -39,8 +39,7 @@ const TestListComponents = React.createClass({
 
         var tabPanel;
         let returnBtn = 'btn1';
-        let assignExamsBtn = <span className="btn2 talk_ant_btn1"><button className="ant-btn ant-btn-primary add_study"
-                                                                             onClick={this.assignTest}>布置试卷</button></span>;
+        let assignExamsBtn = <span className="btn2 talk_ant_btn1"><button className="ant-btn ant-btn-primary add_study" onClick={this.assignTest}>布置试卷</button></span>;
         var toolbar;
         if (this.state.currentOpt == "testTimeLine") {
             returnBtn = 'btn1'
@@ -61,7 +60,7 @@ const TestListComponents = React.createClass({
         return (
             <div>
                 {toolbar}
-                <div className="favorite_scroll">{tabPanel}</div>
+                <div className="favorite_scroll favorite_up">{tabPanel}</div>
             </div>
         );
     },
