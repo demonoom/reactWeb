@@ -370,7 +370,7 @@ const AssignTestComponents = React.createClass({
                 var keyId = Math.floor(Math.random()*1000);
                 ret.response.forEach(function (e) {
                     var jsonstr = JSON.stringify(e);
-                    var viewButton = <Button onClick={_this.editPager.bind(_this,jsonstr)}>查看</Button>;
+                    var viewButton = <Button icon="search" onClick={_this.editPager.bind(_this,jsonstr)}></Button>;
                     var radioObj = <Radio  style={radioStyle} value={e.id}>{e.title}{viewButton}</Radio>;
                     radioArray.push(radioObj);
                 });
@@ -429,11 +429,11 @@ const AssignTestComponents = React.createClass({
         const hasSelected = assignHomeWork.state.selectedSubjectKeysForTable.length > 0;
         return (
             <div className="follow_my">
-                <div className="ant-collapse ant-modal-footer homework">
+                <div className="ant-collapse ant-modal-footer homework exam_paper">
 
                     <Row className="ant-form-item">
                         <Col span={3}>
-                            <span className="date_tr text_30">考试日期:</span>
+                            <span className="date_tr text_30">考试日期：</span>
                         </Col>
                         <Col span={21} className="ant-form-item-control">
                             <span className="date_tr">
@@ -443,21 +443,21 @@ const AssignTestComponents = React.createClass({
                     </Row>
                     <Row className="ant-form-item">
                         <Col span={3}>
-                            <span className="date_tr text_30">起止时间:</span>
+                            <span className="date_tr text_30">起止时间：</span>
                         </Col>
                         <Col span={21} className="ant-form-item-control">
                             <span className="date_tr">
                                 {/*defaultValue={moment(this.state.currentTime, format)}*/}
-                                <TimePicker format={format} onChange={this.startTimeOnChange} />
-                                ~
                                 <TimePicker format={format} onChange={this.endTimeOnChange}  />
+								<span className="septal_line">-</span>
+                                <TimePicker format={format} onChange={this.startTimeOnChange} />
                             </span>
                         </Col>
                     </Row>
 
                     <Row className="ant-form-item">
                         <Col span={3}>
-                            <span className="date_tr text_30">班级:</span>
+                            <span className="date_tr text_30">班&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span>
                         </Col>
                         <Col span={21} className="ant-form-item-control">
                             <span className="date_tr"><CheckboxGroup options={assignHomeWork.state.classList}
@@ -465,16 +465,16 @@ const AssignTestComponents = React.createClass({
                         </Col>
                     </Row>
 
-                    <Row className="date_tr ant-form-item">
+                    <Row className="date_tr ant-form-item topic">
                         <Col span={3}>
-                            <span className="text_30">试卷:</span>
+                            <span className="text_30">试&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;卷：</span>
                         </Col>
-                        <Col span={21} className="ant-form-item-control">
+                        <Col span={21} className="ant-form-item-control topic_list">
                             <div>
                                 <Row>
                                     <Col span={24}>
                                         {this.state.radioGroupObj}
-                                        <span>
+                                        <span className="pagination">
                                             <Pagination defaultCurrent={this.state.currentPageOfPager} total={this.state.totalPagerCount}
                                                         pageSize={getPageSize()} current={this.state.currentPageOfPager}
                                                         onChange={this.pagerOnChange} />
@@ -506,7 +506,7 @@ const AssignTestComponents = React.createClass({
                        maskClosable={false} //设置不允许点击蒙层关闭
                        footer={[]}
                 >
-                    <div style={{height:'400px',overflow:'scroll'}}>
+                    <div style={{height:'460px',overflow:'scroll'}}>
                         <UpdateExamPagerComponents params={this.state.pagerInfoJson} fatherPage="assignTestModal"
                         callbackCloseModal={assignHomeWork.pagerModalHandleCancel}
                         callbackGetPagerList={assignHomeWork.pagerModalHandleOk}
