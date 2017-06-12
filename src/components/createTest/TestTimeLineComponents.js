@@ -117,7 +117,7 @@ const TestTimeLineComponents = React.createClass({
                 currentItemSubDivArray.push(currentItemSubDiv);
             })
             var timeLineItemObj= <Timeline.Item>
-                <p>{eveyDayJson.examDay}</p>
+                <p className="date_time">{eveyDayJson.examDay}</p>
                 {currentItemSubDivArray}
             </Timeline.Item>;
             TimeLineItemArray.push(timeLineItemObj);
@@ -150,7 +150,7 @@ const TestTimeLineComponents = React.createClass({
     render() {
         return (
             <div className="exam_timeline">
-                <Timeline pending={<a href="#">See more</a>}>
+                <Timeline pending={<a href="#">查看更多</a>}>
                     {this.state.TimeLineItemArray}
                 </Timeline>
             </div>

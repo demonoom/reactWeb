@@ -4150,13 +4150,17 @@ ul.liveTV_tab .liveTV, ul.liveTV_tab .liveTV i, ul.history_tab .history, ul.hist
 }
 .exam_timeline .ant-timeline-item-tail{
 	left:50%;
+	border-left:1px solid #e9e9e9
 }
 .exam_timeline .ant-timeline-item-head{
-	left:322px;
+	left:48%;
 }
 .exam_timeline .ant-timeline-item-content{
 	top:30px;
+	padding:20px 0 30px 24px;
+	margin-bottom: 20px;
 }
+
 .time_cont{
 	width:100%;
 	height: 145px;
@@ -4170,7 +4174,7 @@ ul.liveTV_tab .liveTV, ul.liveTV_tab .liveTV i, ul.history_tab .history, ul.hist
 	margin-left:350px;
 }
 .time_content .title {
-    padding: 8px 0 8px 10px;
+    padding: 6px 0 6px 14px;
     margin: 0;
     font-size: 14px;
     color: #fff;
@@ -4180,12 +4184,12 @@ ul.liveTV_tab .liveTV, ul.liveTV_tab .liveTV i, ul.history_tab .history, ul.hist
     position: relative;
 }
 .time_content .description{
-	padding: 12px;
+	padding: 6px 14px;
     margin: 0;
     font-size: 14px;
-    color: #656565;
-    background: #f6f6f6;
+    color: #666;
     border-radius: 0 0 6px 6px;
+	border:1px solid #fbb977;
 }
 .maths{
 	background: #6fb6e3;
@@ -4230,4 +4234,12 @@ ul.liveTV_tab .liveTV, ul.liveTV_tab .liveTV i, ul.history_tab .history, ul.hist
 .time_content .description p.headline{
 	font-size:15px;
 	color:#000;
+}
+.date_time{
+	 position: absolute;
+    top: -24px;
+    left: 53%;
+	font-family:"Tahoma";
+	font-size:15px;
+	color:#3C95EC
 }
