@@ -38,21 +38,24 @@ const TestListComponents = React.createClass({
     render() {
 
         var tabPanel;
-        let returnBtn = 'btn1';
+        let returnBtn = '';
         let assignExamsBtn = <span className="btn2 talk_ant_btn1"><button className="ant-btn ant-btn-primary add_study" onClick={this.assignTest}>布置试卷</button></span>;
         var toolbar;
+        var leftBtn;
         if (this.state.currentOpt == "testTimeLine") {
-            returnBtn = 'btn1'
+            returnBtn = '';
+            leftBtn="";
             tabPanel = <TestTimeLineComponents ref="testTimeLineComponents"/>;
         } else {
-            returnBtn = 'btn2'
+            returnBtn = 'btn1';
+            leftBtn = <span className="btn1 ant-tabs-right"><button onClick={this.getTestList}
+                                                                    className="affix_bottom_tc"><Icon
+                type="left"/></button></span>;
             tabPanel = <AssignTestComponents ref="assignTestComponents" callbackParent={this.getTestList}/>;
         }
         toolbar = <h3 className={" public—til—blue"}>{this.state.activeKey}
             <div className={returnBtn}>
-                <span className="btn1 ant-tabs-right"><button onClick={this.getTeacherHomeWork}
-                                                              className="affix_bottom_tc"><Icon
-                    type="left"/></button></span>
+                {leftBtn}
                 {assignExamsBtn}
             </div>
         </h3>;
