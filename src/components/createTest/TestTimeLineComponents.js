@@ -44,6 +44,7 @@ const TestTimeLineComponents = React.createClass({
                     response.forEach(function (e) {
                         var id = e.id;
                         var paper = e.paper;
+                        var paperId = e.paperId;
                         var paperTitle = paper.title;
                         var clazz = e.clazz;
                         var clazzName = clazz.name;
@@ -60,7 +61,7 @@ const TestTimeLineComponents = React.createClass({
                         var examEndTime = formatHM(endTime);
                         var showExamTime = examStartTime+"-"+examEndTime;
                         console.log(examDay+"\t"+courseName+"\t"+showClass+"\t"+showExamTime+"\t"+paperTitle);
-                        _this.buildExamsArray(examDay,courseName,showClass,showExamTime,paperTitle,id,examStartTime,examEndTime);
+                        _this.buildExamsArray(examDay,courseName,showClass,showExamTime,paperTitle,id,examStartTime,examEndTime,paperId);
                     });
                     //examsArray = _this.timeLineDataSort(examsArray);
                     _this.buildTimeLineItem();
@@ -75,8 +76,8 @@ const TestTimeLineComponents = React.createClass({
         });
     },
 
-    buildExamsArray(examDay,courseName,showClass,showExamTime,paperTitle,id,examStartTime,examEndTime){
-        var everyExamJson={"id":id,"courseName":courseName,"showClass":showClass,"showExamTime":showExamTime,"paperTitle":paperTitle,"examStartTime":examStartTime,"examEndTime":examEndTime};
+    buildExamsArray(examDay,courseName,showClass,showExamTime,paperTitle,id,examStartTime,examEndTime,paperId){
+        var everyExamJson={"id":id,"courseName":courseName,"showClass":showClass,"showExamTime":showExamTime,"paperTitle":paperTitle,"paperId":paperId,"examStartTime":examStartTime,"examEndTime":examEndTime};
         var eveyDayJson = {"examDay":examDay,"examJson":[everyExamJson]};
         var isExist = false;
         for(var i=0;i<examsArray.length;i++){
@@ -143,7 +144,7 @@ const TestTimeLineComponents = React.createClass({
                         break;
                 }
                 var currentItemSubDiv = 
-				<div className="time_content" onClick={_this.showExamDetail.bind(_this,examJsonArray.id)}>
+				<div className="time_content" onClick={_this.showExamDetail.bind(_this,examJsonArray.id,examJsonArray.paperId)}>
 				<div className="triangle_right triangle_yellow"><span>{tipInfo}</span></div>
 					<h2 className={titleClassName}>{examJsonArray.courseName}</h2>
 					<div className={contentClassName}>
@@ -163,9 +164,9 @@ const TestTimeLineComponents = React.createClass({
         _this.setState({TimeLineItemArray});
     },
 
-    showExamDetail(examId){
-        console.log("showExamDetail"+examId);
-        this.props.onTestClick(examId);
+    showExamDetail(examId,paperId){
+        console.log("showExamDetail"+examId+"\t"+paperId);
+        this.props.onTestClick(examId,paperId);
     },
 
     timeLineDataSort(array){

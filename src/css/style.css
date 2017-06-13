@@ -4335,11 +4335,27 @@ span.pagination{
 	margin:0 8px;
 	color: #999;
 }
+.exam_statistics{
+	margin-top:20px;
+}
 .exam_statistics .ant-steps{
-	padding:12px 0;	
+	padding: 12px 0 0 0;
+    border-bottom: 2px solid #eee;
+	margin-bottom: 25px;
 }
 .exam_ranking{
 	position:relative;
+	text-align: center;
+	top: -24px;
+}
+.exam_blue{
+	color:#41cfe3
+}
+.exam_gray{
+	color:#3f3f3f
+}
+.exam_orange{
+	color:#fac700
 }
 .icon_champion{
 	width:24px;
@@ -4347,6 +4363,91 @@ span.pagination{
 	background:url(../components/images/champion.png) no-repeat;
 	display: inline-block;
 	position: relative;
-    top: -15px;
-    left: 42px;
+}
+.icon_mean{
+	width:18px;
+	height:18px;
+	background:url(../components/images/mean.png) no-repeat;
+	display: inline-block;
+	position: relative;
+}
+.icon_lowest{
+	width:18px;
+	height:18px;
+	background:url(../components/images/lowest.png) no-repeat;
+	display: inline-block;
+	position: relative;
+}
+.icon_grade{
+	width:38px;
+	height:38px;
+	background:url(../components/images/grade.png) no-repeat;
+	display: inline-block;
+	position: relative;
+}
+.icon_particulars{
+	width:42px;
+	height:38px;
+	background:url(../components/images/particulars.png) no-repeat;
+	display: inline-block;
+	position: relative;
+}
+.icon_compare{
+	width:40px;
+	height:38px;
+	background:url(../components/images/compare.png) no-repeat;
+	display: inline-block;
+	position: relative;
+}
+.i_roundness{
+	background:#f9c27f;
+	width:30px;
+	height:30px;
+	border-radius:50%;
+	text-align: center;
+	margin-top: -6px;
+}
+.i_roundness a{
+	color: #fff;
+    line-height: 30px;
+}
+.exam_tab{
+	text-align: center;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #eee;
+    padding: 0 0 15px 0;
+}
+.exam_tab a{
+	width: 33.33%;
+    display: inline-block;
+    text-align: center;
+	border-right:1px solid #d3d3d3
+}
+.exam_tab a:nth-child(3){
+	border-right:none;
+}
+.exam-correct_til{
+	padding: 8px 0;
+	border-bottom:1px solid #e0e0e0;
+	margin-bottom: 15px;
+}
+.exam-correct_ul ul li{
+	margin-bottom:8px;
+	padding: 0 12px;
+}
+.exam-particulars_title{
+	text-align:center;
+	margin-bottom:12px;
+}
+.exam-particulars_time{
+	color:#999;
+	font-size:14px;
+}
+.exam-particulars_cont{
+	width:90%;
+	margin:0 auto;
+}
+.exam-particulars_cont .upexam_topic{
+	width:100%;
+	margin: 0 auto 20px auto;
 }
