@@ -1911,7 +1911,7 @@ li.ant-menu-submenu > ul > li.ant-menu-submenu{
     text-align: left;
 }
 .upexam_topic{
-	width:650px;
+	width:86%;
 	margin:20px auto 0 auto;
 	text-align:left
 }
@@ -4334,4 +4334,19 @@ span.pagination{
 .septal_line{
 	margin:0 8px;
 	color: #999;
+}
+.exam_statistics .ant-steps{
+	padding:12px 0;	
+}
+.exam_ranking{
+	position:relative;
+}
+.icon_champion{
+	width:24px;
+	height:18px;
+	background:url(../components/images/champion.png) no-repeat;
+	display: inline-block;
+	position: relative;
+    top: -15px;
+    left: 42px;
 }

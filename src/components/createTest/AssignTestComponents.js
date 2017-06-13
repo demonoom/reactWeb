@@ -448,9 +448,9 @@ const AssignTestComponents = React.createClass({
                         <Col span={21} className="ant-form-item-control">
                             <span className="date_tr">
                                 {/*defaultValue={moment(this.state.currentTime, format)}*/}
-                                <TimePicker format={format} onChange={this.endTimeOnChange}  />
-								<span className="septal_line">-</span>
                                 <TimePicker format={format} onChange={this.startTimeOnChange} />
+								<span className="septal_line">-</span>
+								<TimePicker format={format} onChange={this.endTimeOnChange}  />
                             </span>
                         </Col>
                     </Row>

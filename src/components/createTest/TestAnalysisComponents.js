@@ -108,11 +108,12 @@ const TestAnalysisComponents = React.createClass({
     },
 
     render() {
-        var maxScoreDiv=<div>
+        var maxScoreDiv=<div className="exam_ranking">
+			<span className="icon_champion"></span>
             <a href="#/MainLayout" onClick={this.getMaxUser}>
                 <span>最高分{this.state.highestScore}分</span>
-                <span>({this.state.highestScoreNamesCount})人</span>
             </a>
+			<div>({this.state.highestScoreNamesCount})人</div>
         </div>;
         var avgScoreDiv=<div>
             <span>平均{this.state.averageScore}分</span>
@@ -130,8 +131,7 @@ const TestAnalysisComponents = React.createClass({
             <span>({this.state.average2lowestNamesCount})人</span>
         </div>;
         return (
-            <div>
-                <div>
+            <div  className="level_list_pa ">
                     <Steps>
                         <Step status="finish" title={maxScoreDiv} icon={<Icon type="arrow-up" />} />
                         <Step status="finish" title={average2highestNamesCountDiv} icon={<Icon type="user" />} />
@@ -139,7 +139,6 @@ const TestAnalysisComponents = React.createClass({
                         <Step status="finish" title={average2lowestNamesCountDiv} icon={<Icon type="user" />} />
                         <Step status="finish" title={minScoreDiv} icon={<Icon type="arrow-down" />} />
                     </Steps>
-                </div>
                 <div>
                     <Button icon="bar-chart">成绩排名</Button>
                     <Button icon="pie-chart">试卷详情</Button>
