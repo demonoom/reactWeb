@@ -3,6 +3,8 @@ import {Tabs, Breadcrumb, Icon, Button} from 'antd';
 import TestTimeLineComponents from './TestTimeLineComponents';
 import AssignTestComponents from './AssignTestComponents';
 import TestAnalysisComponents from './TestAnalysisComponents';
+import TestScoreRankingsComponents from './TestScoreRankingsComponents';
+import TestQuestionStatisticsComponents from './TestQuestionStatisticsComponents';
 
 
 const TabPane = Tabs.TabPane;
@@ -36,8 +38,13 @@ const TestListComponents = React.createClass({
         this.setState({activeKey: '试卷统计', currentOpt: 'testAnalysis',"examId":examId});
     },
 
-    changeToolbar(){
-        this.setState({activeKey: '作业详情', currentOpt: 'subjectList'});
+    getExmScoreRankings(exmId){
+        console.log("排名:"+exmId);
+        this.setState({activeKey: '成绩排名', currentOpt: 'testScoreRankings',"examId":exmId});
+    },
+
+    getExmQuestionStatistics(exmId){
+        this.setState({activeKey: '试卷详情', currentOpt: 'exmQuestionStatistics',"examId":exmId});
     },
 
     render() {
@@ -62,8 +69,24 @@ const TestListComponents = React.createClass({
             leftBtn = <span className="btn1 ant-tabs-right"><button onClick={this.getTestList}
                                                                     className="affix_bottom_tc"><Icon
                 type="left"/></button></span>;
-            tabPanel = <TestAnalysisComponents ref="testAnalysisComponents" exmId={this.state.examId}/>;
+            tabPanel = <TestAnalysisComponents ref="testAnalysisComponents" exmId={this.state.examId}
+                onSortedButtonClick={this.getExmScoreRankings}
+                onExmQuestionStatisticsClick={this.getExmQuestionStatistics}
+            />;
+        }else if(this.state.currentOpt == "testScoreRankings"){
+            returnBtn = 'btn1';
+            leftBtn = <span className="btn1 ant-tabs-right"><button onClick={this.testAnalysis.bind(this,this.state.examId)}
+                                                                    className="affix_bottom_tc"><Icon
+                type="left"/></button></span>;
+            tabPanel = <TestScoreRankingsComponents ref="testScoreRankingsComponents" exmId={this.state.examId}/>;
+        }else if(this.state.currentOpt == "exmQuestionStatistics"){
+            returnBtn = 'btn1';
+            leftBtn = <span className="btn1 ant-tabs-right"><button onClick={this.testAnalysis.bind(this,this.state.examId)}
+                                                                    className="affix_bottom_tc"><Icon
+                type="left"/></button></span>;
+            tabPanel = <TestQuestionStatisticsComponents ref="testQuestionStatisticsComponents" exmId={this.state.examId}/>;
         }
+
         toolbar = <h3 className={" public—til—blue"}>{this.state.activeKey}
             <div className={returnBtn}>
                 {leftBtn}
