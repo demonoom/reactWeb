@@ -9,7 +9,7 @@ const Panel = Collapse.Panel;
 
 var examsArray=[];
 var TimeLineItemArray=[];
-const TestScoreRankingsComponents = React.createClass({
+const TestCheckComponents = React.createClass({
     getInitialState() {
         return {
             ident: sessionStorage.getItem('ident'),
@@ -47,12 +47,13 @@ const TestScoreRankingsComponents = React.createClass({
                         if(submited){
                             var userLi=<li onClick={_this.seeAnswer.bind(_this,userObj,submited)}>
                                 <span><img src={avatar} height="38"></img>{userObj.userName}</span>
-                                <span>{score}分</span>
+                                <span>去批改</span>
                             </li>;
                             submitedUserArray.push(userLi)
                         }else {
                             var userLi=<li onClick={_this.seeAnswer.bind(_this,userObj,submited)}>
                                 <span><img src={avatar} height="38"></img>{userObj.userName}</span>
+                                <span>未提交</span>
                             </li>;
                             noSubmitUserArray.push(userLi)
                         }
@@ -73,7 +74,6 @@ const TestScoreRankingsComponents = React.createClass({
         if(submited==false){
             message.warning("此学生未提交");
         }else{
-            // message.warning("提交"+userObj.userName);
             this.props.onCheckButtonClick(this.props.exmId,userObj);
         }
     },
@@ -83,25 +83,15 @@ const TestScoreRankingsComponents = React.createClass({
     },
 
     render() {
-        var submitedHeader=<span>已提交({this.state.submitedUserCount}人)</span>;
-        var noSubmitHeader=<span>未提交({this.state.noSubmitUserCount}人)</span>;
         return (
             <div>
-                <Collapse defaultActiveKey={['1','2']} activeKey={['1','2']} onChange={this.state.collapseOnChange}>
-                    <Panel header={submitedHeader} key="1">
-                        <ul>
-                            {this.state.submitedUserArray}
-                        </ul>
-                    </Panel>
-                    <Panel header={noSubmitHeader} key="2">
-                        <ul>
-                            {this.state.noSubmitUserArray}
-                        </ul>
-                    </Panel>
-                </Collapse>
+                <ul>
+                    {this.state.submitedUserArray}
+                    {this.state.noSubmitUserArray}
+                </ul>
             </div>
         );
     },
 });
 
-export default TestScoreRankingsComponents;
+export default TestCheckComponents;
