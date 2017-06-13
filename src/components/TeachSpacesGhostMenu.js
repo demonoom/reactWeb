@@ -65,15 +65,22 @@ class GhostMenu extends React.Component {
 
 
     render() {
+        //在菜单处于非活动状态下,隐藏向左的按钮,以免遮挡右侧区域,影响操作
+        var hideButton;
+        if(this.state.beActive){
+            hideButton=<div className="headler" onClick={event => {
+                this.toggleGhostMenu(event);
+            }}><Icon type="left"/></div>;
+        }else{
+            hideButton="";
+        }
 
         return (
             <div className={this.props.visible ? 'ghostMenu ghostMenuShow' : 'ghostMenu ghostMenuHide' }
                  onClick={event => {
                      this.props.toggleGhostMenu({visible: false});
                  }}>
-                <div className="headler" onClick={event => {
-                    this.toggleGhostMenu(event);
-                }}><Icon type="left"/></div>
+                {hideButton}
                 <div className="menu_til">教学空间</div>
                 <ul className="first">
                     <li ><Icon type="book"/>备课</li>
