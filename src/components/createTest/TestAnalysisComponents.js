@@ -13,6 +13,7 @@ const TestAnalysisComponents = React.createClass({
         return {
             ident: sessionStorage.getItem('ident'),
             tipModalVisible:false,
+            paperId:'',
         };
     },
 
@@ -187,6 +188,12 @@ const TestAnalysisComponents = React.createClass({
     getExmQuestionStatistics(){
         this.props.onExmQuestionStatisticsClick(this.props.exmId);
     },
+    /**
+     * 平行班比较
+     */
+    getExmPushByPaperId(){
+        this.props.onExmPushClick(this.props.paperId);
+    },
 
     render() {
         var maxScoreDiv=<div>
@@ -228,7 +235,7 @@ const TestAnalysisComponents = React.createClass({
                 <div>
                     <Button icon="bar-chart" onClick={this.getExmScoreRankings}>成绩排名</Button>
                     <Button icon="pie-chart" onClick={this.getExmQuestionStatistics}>试卷详情</Button>
-                    <Button icon="line-chart">平行班比较</Button>
+                    <Button icon="line-chart" onClick={this.getExmPushByPaperId}>平行班比较</Button>
                 </div>
                 <div>
                     <span>推荐讲解题目(正确率小于60%)</span>

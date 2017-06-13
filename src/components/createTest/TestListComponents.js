@@ -5,7 +5,7 @@ import AssignTestComponents from './AssignTestComponents';
 import TestAnalysisComponents from './TestAnalysisComponents';
 import TestScoreRankingsComponents from './TestScoreRankingsComponents';
 import TestQuestionStatisticsComponents from './TestQuestionStatisticsComponents';
-
+import TestPushComponents from './TestPushComponents';
 
 const TabPane = Tabs.TabPane;
 //定义js函数，完成删除前的确认提示操作
@@ -26,16 +26,16 @@ const TestListComponents = React.createClass({
     getTestList(){
         this.setState({activeKey: '我的考试', currentOpt: 'testTimeLine',});
         var initPageNo=1;
-        this.refs.testTimeLineComponents.getExms(initPageNo);
+        // this.refs.testTimeLineComponents.getExms(initPageNo);
     },
 
     assignTest(){
         this.setState({activeKey: '布置试卷', currentOpt: 'assignTest'});
     },
 
-    testAnalysis(examId){
-        console.log("tongji:"+examId);
-        this.setState({activeKey: '试卷统计', currentOpt: 'testAnalysis',"examId":examId});
+    testAnalysis(examId,paperId){
+        console.log("tongji:"+examId+"\t"+paperId);
+        this.setState({activeKey: '试卷统计', currentOpt: 'testAnalysis',"examId":examId,"paperId":paperId});
     },
 
     getExmScoreRankings(exmId){
@@ -45,6 +45,10 @@ const TestListComponents = React.createClass({
 
     getExmQuestionStatistics(exmId){
         this.setState({activeKey: '试卷详情', currentOpt: 'exmQuestionStatistics',"examId":exmId});
+    },
+
+    getExmPushByPaperId(paperId){
+        this.setState({activeKey: '班级比较', currentOpt: 'exmPushByPaperId',"paperId":paperId});
     },
 
     render() {
@@ -69,9 +73,11 @@ const TestListComponents = React.createClass({
             leftBtn = <span className="btn1 ant-tabs-right"><button onClick={this.getTestList}
                                                                     className="affix_bottom_tc"><Icon
                 type="left"/></button></span>;
-            tabPanel = <TestAnalysisComponents ref="testAnalysisComponents" exmId={this.state.examId}
+            tabPanel = <TestAnalysisComponents ref="testAnalysisComponents"
+                exmId={this.state.examId} paperId={this.state.paperId}
                 onSortedButtonClick={this.getExmScoreRankings}
                 onExmQuestionStatisticsClick={this.getExmQuestionStatistics}
+                onExmPushClick={this.getExmPushByPaperId}
             />;
         }else if(this.state.currentOpt == "testScoreRankings"){
             returnBtn = 'btn1';
@@ -85,6 +91,12 @@ const TestListComponents = React.createClass({
                                                                     className="affix_bottom_tc"><Icon
                 type="left"/></button></span>;
             tabPanel = <TestQuestionStatisticsComponents ref="testQuestionStatisticsComponents" exmId={this.state.examId}/>;
+        }else if(this.state.currentOpt == "exmPushByPaperId"){
+            returnBtn = 'btn1';
+            leftBtn = <span className="btn1 ant-tabs-right"><button onClick={this.testAnalysis.bind(this,this.state.examId)}
+                                                                    className="affix_bottom_tc"><Icon
+                type="left"/></button></span>;
+            tabPanel = <TestPushComponents ref="testQuestionStatisticsComponents" paperId={this.state.paperId}/>;
         }
 
         toolbar = <h3 className={" public—til—blue"}>{this.state.activeKey}
