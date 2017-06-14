@@ -7,6 +7,8 @@ import {Card, Row, message, Col, Input, Button, Modal, Pagination} from 'antd';
 import {getPageSize} from '../../utils/Const';
 import {getLocalTime} from '../../utils/utils';
 import {doWebService} from '../../WebServiceHelper';
+import TestTimeLineComponents from '../createTest/TestTimeLineComponents';
+import TestListComponents from '../createTest/TestListComponents';
 
 
 class LiveTV extends React.Component {
@@ -275,9 +277,17 @@ class LiveTV extends React.Component {
             case 'history':
                 this._searchHistoryLives(1);
                 break;
+            case 'exam':
+                this.turnToTestTimeLine();
+                break;
         }
+    }
 
-
+    /**
+     * 转向到考试功能页面
+     */
+    turnToTestTimeLine(){
+        this.setState({"currentOpt":'exam'});
     }
 
 
@@ -460,16 +470,29 @@ class LiveTV extends React.Component {
                     this.change('history')
                 }}><i className="iconfont menu_left_i">&#xe602;</i>直播回顾
                 </li>
+                <li className='history' onClick={() => {
+                    this.change('exam')
+                }}><i className="iconfont menu_left_i">&#xe602;</i>考试
+                </li>
             </ul>
         </div>;
 
-        let livePanel = <div className={this.currentTab} >
-            { this.titleUi  }
-            { this.searchUi  }
-            <div id="searchBeforePanel" className="favorite_scroll2 favorite_up favorite_le_h">{this.livesUi}</div>
-            <Pagination total={this.state.rsCount} pageSize={getPageSize()} current={this.state.pageNo}
-                        onChange={this._changePage}/>
-        </div>;
+        var mainPanel;
+        if(typeof(this.state.currentOpt)!="undefined" &&  this.state.currentOpt=="exam"){
+            mainPanel = <div className="favorite_scroll favorite_up">
+                <TestListComponents></TestListComponents>
+                </div>;
+        }else{
+            mainPanel = <div className={this.currentTab} >
+                { this.titleUi  }
+                { this.searchUi  }
+                <div id="searchBeforePanel" className="favorite_scroll2 favorite_up favorite_le_h">{this.livesUi}</div>
+                <Pagination total={this.state.rsCount} pageSize={getPageSize()} current={this.state.pageNo}
+                            onChange={this._changePage}/>
+            </div>;
+        }
+
+
 
         return (
             <Row>
@@ -477,7 +500,7 @@ class LiveTV extends React.Component {
                     {liveNav}
                 </Col>
                 <Col span={19}>
-                    {livePanel}
+                    {mainPanel}
                 </Col>
             </Row>
         );
