@@ -46,14 +46,16 @@ const TestCheckComponents = React.createClass({
                         var avatar = userObj.avatar;
                         if(submited){
                             var userLi=<li onClick={_this.seeAnswer.bind(_this,userObj,submited)}>
-                                <span><img src={avatar} height="38"></img>{userObj.userName}</span>
-                                <span>去批改</span>
+                                <span className="attention_img"><img className="attention_img" src={avatar} height="38"></img></span>
+								<span className="correct_name">{userObj.userName}</span>
+                                <span className="result"><span>去批改</span></span>
                             </li>;
                             submitedUserArray.push(userLi)
                         }else {
                             var userLi=<li onClick={_this.seeAnswer.bind(_this,userObj,submited)}>
-                                <span><img src={avatar} height="38"></img>{userObj.userName}</span>
-                                <span>未提交</span>
+                                <span className="attention_img"><img  className="attention_img" src={avatar} height="38"></img></span>
+								<span className="correct_name">{userObj.userName}</span>
+                                <span className="result"><span>未提交</span></span>
                             </li>;
                             noSubmitUserArray.push(userLi)
                         }
@@ -84,7 +86,7 @@ const TestCheckComponents = React.createClass({
 
     render() {
         return (
-            <div>
+            <div className="correct_exam">
                 <ul>
                     {this.state.submitedUserArray}
                     {this.state.noSubmitUserArray}

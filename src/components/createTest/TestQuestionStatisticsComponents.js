@@ -135,46 +135,47 @@ const TestQuestionStatisticsComponents = React.createClass({
         var optionESelectUsers = optionStatistics.optionESelectUsers;
         var optionFSelectPercent = optionStatistics.optionFSelectPercent;
         var optionFSelectUsers = optionStatistics.optionFSelectUsers;
-        var everyRow=<Card key={type+index} className="upexam_topic" >
+        var everyRow=<div className="exam_card"><Card key={type+index} className="upexam_topic" >
             <Row>
-                <Col span={24}>{index}.正确答案:{textAnswer}</Col>
+                <Col span={24}>{index}.&nbsp;&nbsp;正确答案：{textAnswer}</Col>
             </Row>
             <Row>
-                <Col span={4}></Col>
+                <Col span={6}></Col>
                 <Col span={3}>A</Col>
                 <Col span={3}>B</Col>
                 <Col span={3}>C</Col>
                 <Col span={3}>D</Col>
                 <Col span={3}>E</Col>
-                <Col span={2}>F</Col>
+                <Col span={3}>F</Col>
             </Row>
             <Row>
-                <Col span={4}>选此项</Col>
+                <Col span={6}>选此项</Col>
                 {/*getchoicedUser*/}
                 <Col span={3}><a onClick={_this.getchoicedUser.bind(_this,optionASelectUsers)}>{optionASelectUsers.length}</a></Col>
                 <Col span={3}><a onClick={_this.getchoicedUser.bind(_this,optionBSelectUsers)}>{optionBSelectUsers.length}</a></Col>
                 <Col span={3}><a onClick={_this.getchoicedUser.bind(_this,optionCSelectUsers)}>{optionCSelectUsers.length}</a></Col>
                 <Col span={3}><a onClick={_this.getchoicedUser.bind(_this,optionDSelectUsers)}>{optionDSelectUsers.length}</a></Col>
                 <Col span={3}><a onClick={_this.getchoicedUser.bind(_this,optionESelectUsers)}>{optionESelectUsers.length}</a></Col>
-                <Col span={2}><a onClick={_this.getchoicedUser.bind(_this,optionFSelectUsers)}>{optionFSelectUsers.length}</a></Col>
+                <Col span={3}><a onClick={_this.getchoicedUser.bind(_this,optionFSelectUsers)}>{optionFSelectUsers.length}</a></Col>
             </Row>
             <Row>
-                <Col span={4}>选择率(%)</Col>
+                <Col span={6}>选择率(%)</Col>
                 <Col span={3}>{optionASelectPercent}</Col>
                 <Col span={3}>{optionBSelectPercent}</Col>
                 <Col span={3}>{optionCSelectPercent}</Col>
                 <Col span={3}>{optionDSelectPercent}</Col>
                 <Col span={3}>{optionESelectPercent}</Col>
-                <Col span={2}>{optionFSelectPercent}</Col>
+                <Col span={3}>{optionFSelectPercent}</Col>
             </Row>
-            <Row>
+        </Card>
+		<div className="line_block">
                 <Col span={24}>
-                    <Button onClick={_this.getRightUser.bind(_this,rightUsers)}>正确:{rightUsers.length}</Button>
-                    <Button onClick={_this.getWrongUser.bind(_this,wrongUsers)}>错误:{wrongUsers.length}</Button>
-                    <Button>正确率:{rightPercent}%</Button>
+                    <Button onClick={_this.getRightUser.bind(_this,rightUsers)} className="exam_btn_green antnest_talk">正确：{rightUsers.length}</Button>
+                    <Button onClick={_this.getWrongUser.bind(_this,wrongUsers)} className="exam_btn_blue antnest_talk">错误：{wrongUsers.length}</Button>
+                    <Button className="exam_btn_gray">正确率：{rightPercent}%</Button>
                 </Col>
-            </Row>
-        </Card>;
+            </div>
+			</div>;
         cardArray.push(everyRow);
     },
 
@@ -204,33 +205,34 @@ const TestQuestionStatisticsComponents = React.createClass({
         var optionRightSelectUsers = optionStatistics.optionRightSelectUsers;
         var optionWrongSelectPercent = optionStatistics.optionWrongSelectPercent;
         var optionWrongSelectUsers = optionStatistics.optionWrongSelectUsers;
-        var everyRow=<Card key={type+index} className="upexam_topic" style={{width: 610}}>
+        var everyRow=<div className="exam_card"><Card key={type+index} className="upexam_topic">
             <Row>
-                <Col span={24}>{index}.正确答案:{textAnswer}</Col>
+                <Col span={24}>{index}&nbsp;&nbsp;正确答案：{textAnswer}</Col>
             </Row>
             <Row>
-                <Col span={4}></Col>
+                <Col span={6}></Col>
                 <Col span={3}>正确</Col>
                 <Col span={3}>错误</Col>
             </Row>
             <Row>
-                <Col span={4}>选此项</Col>
+                <Col span={6}>选此项</Col>
                 <Col span={3}><a onClick={_this.getchoicedUser.bind(_this,optionRightSelectUsers)}>{optionRightSelectUsers.length}</a></Col>
                 <Col span={3}><a onClick={_this.getchoicedUser.bind(_this,optionWrongSelectUsers)}>{optionWrongSelectUsers.length}</a></Col>
             </Row>
             <Row>
-                <Col span={4}>选择率(%)</Col>
+                <Col span={6}>选择率(%)</Col>
                 <Col span={3}>{optionRightSelectPercent}</Col>
                 <Col span={3}>{optionWrongSelectPercent}</Col>
             </Row>
-            <Row>
-                <Col span={24}>
-                    <Button onClick={_this.getRightUser.bind(_this,rightUsers)}>正确:{rightUsers.length}</Button>
-                    <Button onClick={_this.getWrongUser.bind(_this,wrongUsers)}>错误:{wrongUsers.length}</Button>
-                    <Button>正确率:{rightPercent}%</Button>
-                </Col>
-            </Row>
-        </Card>;
+        </Card>
+		<div className="line_block">
+			<Col span={24}>
+				<Button onClick={_this.getRightUser.bind(_this,rightUsers)} className="exam_btn_green antnest_talk">正确：{rightUsers.length}</Button>
+				<Button onClick={_this.getWrongUser.bind(_this,wrongUsers)} className="exam_btn_blue antnest_talk">错误：{wrongUsers.length}</Button>
+				<Button className="exam_btn_gray">正确率：{rightPercent}%</Button>
+			</Col>
+		</div>
+		</div>;
         cardArray.push(everyRow);
     },
 
@@ -249,22 +251,23 @@ const TestQuestionStatisticsComponents = React.createClass({
         var imgObj;
         if(typeof(imageAnswer)!="undefined" && imageAnswer!=null && imageAnswer != ""){
             imgObj = <Row>
-                    <Col span={24}><img style={{width:'460px',height:'300px'}} src={imageAnswer}  onClick={showLargeImg}/></Col>
+                    <Col span={24}><span className="topics_zan"><img src={imageAnswer}  onClick={showLargeImg}/></span></Col>
                 </Row>;
         }
-        var everyRow=<Card key={type+index} className="upexam_topic" style={{width: 610}}>
+        var everyRow=<div className="exam_card"><Card key={type+index} className="upexam_topic" >
             <Row>
-                <Col span={24}>{index}.正确答案:{textAnswer}</Col>
+                <Col span={24}>{index}.&nbsp;&nbsp;正确答案：{textAnswer}</Col>
             </Row>
             {imgObj}
-            <Row>
-                <Col span={24}>
-                    <Button onClick={_this.getRightUser.bind(_this,rightUsers)}>正确:{rightUsers.length}</Button>
-                    <Button onClick={_this.getWrongUser.bind(_this,wrongUsers)}>错误:{wrongUsers.length}</Button>
-                    <Button>正确率:{rightPercent}%</Button>
-                </Col>
-            </Row>
-        </Card>;
+        </Card>
+		<div className="line_block">
+			<Col span={24}>
+				<Button onClick={_this.getRightUser.bind(_this,rightUsers)} className="exam_btn_green antnest_talk">正确：{rightUsers.length}</Button>
+				<Button onClick={_this.getWrongUser.bind(_this,wrongUsers)} className="exam_btn_blue antnest_talk">错误：{wrongUsers.length}</Button>
+				<Button className="exam_btn_gray">正确率：{rightPercent}%</Button>
+			</Col>
+		</div>
+		</div>;
         cardArray.push(everyRow);
     },
 
@@ -283,22 +286,23 @@ const TestQuestionStatisticsComponents = React.createClass({
         var imgObj;
         if(typeof(imageAnswer)!="undefined" && imageAnswer!=null && imageAnswer != "" ){
             imgObj = <Row>
-                <Col span={24}><img style={{width:'460px',height:'300px'}} src={imageAnswer}  onClick={showLargeImg}/></Col>
+                <Col span={24}><span className="topics_zan"><img src={imageAnswer}  onClick={showLargeImg}/></span></Col>
             </Row>;
         }
-        var everyRow=<Card key={type+index} className="upexam_topic" style={{width: 610}}>
+        var everyRow=<div className="exam_card"><Card key={type+index} className="upexam_topic" >
             <Row>
-                <Col span={24}>{index}.正确答案:{textAnswer}</Col>
+                <Col span={24}>{index}.&nbsp;&nbsp;正确答案：{textAnswer}</Col>
             </Row>
             {imgObj}
-            <Row>
-                <Col span={24}>
-                    <Button onClick={_this.getRightUser.bind(_this,rightUsers)}>正确:{rightUsers.length}</Button>
-                    <Button onClick={_this.getWrongUser.bind(_this,wrongUsers)}>错误:{wrongUsers.length}</Button>
-                    <Button>正确率:{rightPercent}%</Button>
-                </Col>
-            </Row>
-        </Card>;
+        </Card>
+		<div className="line_block">
+			<Col span={24}>
+				<Button onClick={_this.getRightUser.bind(_this,rightUsers)} className="exam_btn_green antnest_talk">正确：{rightUsers.length}</Button>
+				<Button onClick={_this.getWrongUser.bind(_this,wrongUsers)} className="exam_btn_blue antnest_talk">错误：{wrongUsers.length}</Button>
+				<Button className="exam_btn_gray">正确率：{rightPercent}%</Button>
+			</Col>
+		</div>
+		</div>;
         cardArray.push(everyRow);
     },
 

@@ -59,9 +59,9 @@ const TestPushComponents = React.createClass({
                         var startTime = getLocalTime(startTimeStamp);
                         var endTime = getLocalTime(endTimeStamp);
                         var exmUL=<ul>
-                            <li>{paperTitle}</li>
-                            <li>{gradeName+clazzName}</li>
-                            <li>{startTime+"~"+endTime}</li>
+                            <li className="gray_42 compare_li">{paperTitle}</li>
+                            <li className="blueness compare_li">{gradeName+clazzName}</li>
+                            <li className="exam-particulars_time compare_li">{startTime+"~"+endTime}</li>
                         </ul>;
 
                         var trJson={
@@ -98,11 +98,11 @@ const TestPushComponents = React.createClass({
                     var response = ret.response;
                     var rowArray=[];
                     var headerRow=<Row>
-                        <Col span={4}></Col>
-                        <Col span={3}>平均分对比</Col>
-                        <Col span={3}>最高分对比</Col>
-                        <Col span={4}>高于平均分人数</Col>
-                        <Col span={4}>低于平均分人数</Col>
+                        <Col span={6}>&nbsp;</Col>
+                        <Col span={188}><span className="icon_mean"></span>平均分对比</Col>
+                        <Col span={188}><span className="icon_champion"></span>最高分对比</Col>
+                        <Col span={188}><span className="icon_up_arrow"></span>高于平均分人数</Col>
+                        <Col span={188}><span className="icon_lowest"></span>低于平均分人数</Col>
                     </Row>;
                     rowArray.push(headerRow);
                     response.forEach(function (e) {
@@ -115,11 +115,11 @@ const TestPushComponents = React.createClass({
                         var lowestScore = e.lowestScore;
                         var lowestScoreNames = e.lowestScoreNames;
                         var classRow=<Row>
-                            <Col span={4}>{className}</Col>
-                            <Col span={3}>{averageScore}</Col>
-                            <Col span={3}>{highestScore}</Col>
-                            <Col span={4}>{average2highestNames.length}</Col>
-                            <Col span={4}>{average2lowestNames.length}</Col>
+                            <Col span={6}>{className}</Col>
+                            <Col span={188}>{averageScore}</Col>
+                            <Col span={188}>{highestScore}</Col>
+                            <Col span={188}>{average2highestNames.length}</Col>
+                            <Col span={188}>{average2lowestNames.length}</Col>
                         </Row>;
                         rowArray.push(classRow);
                     });
@@ -145,29 +145,22 @@ const TestPushComponents = React.createClass({
         };
         const hasSelected = selectedRowKeys.length > 0;
         return (
-            <div>
-                <div style={{ marginBottom: 16 }}>
-                    <Button
-                        type="primary"
-                        onClick={this.getExmOverallStatisticsByExmIds}
-                        disabled={!hasSelected}
-                        loading={loading}
-                    >
-                        比较
-                    </Button>
-                    <span style={{ marginLeft: 8 }}>
+            <div className="favorite_my exam_compare">
+                <div className="exam_compare_remark">
+					<Button type="primary" onClick={this.getExmOverallStatisticsByExmIds} disabled={!hasSelected} loading={loading}>比较</Button>
+					<span className="password_ts">
                         {hasSelected ? `选中 ${selectedRowKeys.length} 条记录` : ''}
                     </span>
                 </div>
                 <Table rowSelection={rowSelection} columns={columns}  showHeader={false} dataSource={this.state.tableTrJsonArray} />
-                <Modal
+                <Modal className="compare_class_modal"
                     visible={this.state.tipModalVisible}
                     title={this.state.tipTitle}
                     onCancel={this.tipModalHandleCancel}
                     transitionName=""  //禁用modal的动画效果
                     maskClosable={false} //设置不允许点击蒙层关闭
                     footer={[]}>
-                    <div>
+                    <div className="compare_class">
                         {this.state.rowArray}
                     </div>
                 </Modal>
