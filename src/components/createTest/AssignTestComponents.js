@@ -451,6 +451,7 @@ const AssignTestComponents = React.createClass({
                                 <TimePicker format={format} onChange={this.startTimeOnChange}  />
 								<span className="septal_line">-</span>
                                 <TimePicker format={format} onChange={this.endTimeOnChange} />
+
                             </span>
                         </Col>
                     </Row>
@@ -506,7 +507,7 @@ const AssignTestComponents = React.createClass({
                        maskClosable={false} //设置不允许点击蒙层关闭
                        footer={[]}
                 >
-                    <div style={{height:'460px',overflow:'scroll'}}>
+                    <div style={{height:'460px', overflow:'scroll'}}>
                         <UpdateExamPagerComponents params={this.state.pagerInfoJson} fatherPage="assignTestModal"
                         callbackCloseModal={assignHomeWork.pagerModalHandleCancel}
                         callbackGetPagerList={assignHomeWork.pagerModalHandleOk}

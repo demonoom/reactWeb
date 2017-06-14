@@ -94,7 +94,7 @@ const TestQuestionStatisticsComponents = React.createClass({
 
                         });*/
 
-                        var mainCard=<Card key={type} title={cardTitle} style={{width: 660}}>
+                        var mainCard=<Card key={type} title={cardTitle} className="exam-particulars_cont">
                             {cardArray}
                         </Card>;
                         mainCardArray.push(mainCard);
@@ -135,7 +135,7 @@ const TestQuestionStatisticsComponents = React.createClass({
         var optionESelectUsers = optionStatistics.optionESelectUsers;
         var optionFSelectPercent = optionStatistics.optionFSelectPercent;
         var optionFSelectUsers = optionStatistics.optionFSelectUsers;
-        var everyRow=<Card key={type+index} className="upexam_topic" style={{width: 610}}>
+        var everyRow=<Card key={type+index} className="upexam_topic" >
             <Row>
                 <Col span={24}>{index}.正确答案:{textAnswer}</Col>
             </Row>
@@ -365,14 +365,14 @@ const TestQuestionStatisticsComponents = React.createClass({
 
     render() {
         return (
-            <div>
-                <div>
-                    <span>
+            <div className="level_list_pa">
+                <div className="exam-particulars_title">
+                    <p>
                         {this.state.paperTitle}
-                    </span>
-                    <span>
-                        布置时间:{this.state.createTime}
-                    </span>
+                    </p>
+                    <p className="exam-particulars_time">
+                        布置时间：{this.state.createTime}
+                    </p>
                 </div>
                 <div>
                     {this.state.mainCardArray}

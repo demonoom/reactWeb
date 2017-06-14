@@ -1635,7 +1635,6 @@ const CreateExamPagerComponents = React.createClass({
                                         <Input ref="answerTitle" defaultValue={createExamPager.state.answerTitle} placeholder="请输入答题卡标题" onChange={createExamPager.answerTitleOnChange}/>
                                     </Col>
                                 </Row>
-
                                 <Row className="ant-form-item">
                                     <Col span={3} className="right_upexam">
                                         <span className="text_30">题型：</span>

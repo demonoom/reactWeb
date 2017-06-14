@@ -196,51 +196,58 @@ const TestAnalysisComponents = React.createClass({
     },
 
     render() {
-        var maxScoreDiv=<div>
-            <a href="#/MainLayout" onClick={this.getMaxUser}>
-                <span>最高分{this.state.highestScore}分</span>
-                <span>({this.state.highestScoreNamesCount})人</span>
-            </a>
+        var maxScoreDiv=<div className="exam_ranking">
+			<div className="icon_champion"></div>
+            <div className="exam_gray">最高分{this.state.highestScore}分</div>
+			<div ><a href="#/MainLayout" className="exam_blue" onClick={this.getMaxUser}>({this.state.highestScoreNamesCount}人)</a></div>
         </div>;
-        var avgScoreDiv=<div>
-            <span>平均{this.state.averageScore}分</span>
+        var avgScoreDiv=<div className="exam_ranking">
+			<div className="icon_mean"></div>
+            <div className="exam_gray">平均{this.state.averageScore}分</div>
         </div>;
-        var minScoreDiv=<div>
-            <a href="#/MainLayout" onClick={this.getMinUser}>
-                <span>最低分{this.state.lowestScore}分</span>
-                <span>({this.state.lowestScoreNamesCount})人</span>
-            </a>
+        var minScoreDiv=<div className="exam_ranking">
+			<div className="icon_lowest"></div>
+			<div className="exam_gray">最低分{this.state.lowestScore}分</div>
+            <div ><a className="exam_orange" href="#/MainLayout" onClick={this.getMinUser}>({this.state.lowestScoreNamesCount}人)</a>
+			</div>
         </div>;
-        var average2highestNamesCountDiv=<div>
+        var average2highestNamesCountDiv=<div className="i_roundness">
             <a href="#/MainLayout" onClick={this.getAverage2highestNames}>
-                <span>({this.state.average2highestNamesCount})人</span>
+                <span>{this.state.average2highestNamesCount}人</span>
             </a>
         </div>;
-        var average2lowestNamesCountDiv=<div>
+        var average2lowestNamesCountDiv=<div className="i_roundness">
             <a href="#/MainLayout" onClick={this.getAverage2lowestNames}>
-                <span>({this.state.average2lowestNamesCount})人</span>
+                <span>{this.state.average2lowestNamesCount}人</span>
             </a>
         </div>;
         return (
-            <div>
-                <div>
+            <div  className="level_list_pa exam_statistics">
                     <Steps>
-                        <Step status="finish" title={maxScoreDiv} icon={<Icon type="arrow-up" />} />
-                        <Step status="finish" title={average2highestNamesCountDiv} icon={<Icon type="user" />} />
+                        <Step status="finish" title={maxScoreDiv} icon={<Icon type="arrow-up00" />} />
+                        <Step status="finish" title={average2highestNamesCountDiv} icon={<Icon type="user00" />} />
                         <Step status="finish" title={avgScoreDiv} icon={<Icon type="safety" />} />
-                        <Step status="finish" title={average2lowestNamesCountDiv} icon={<Icon type="user" />} />
-                        <Step status="finish" title={minScoreDiv} icon={<Icon type="arrow-down" />} />
+                        <Step status="finish" title={average2lowestNamesCountDiv} icon={<Icon type="user00" />} />
+                        <Step status="finish" title={minScoreDiv} icon={<Icon type="arrow-down00" />} />
                     </Steps>
+                <div className="exam_tab">
+                    <a onClick={this.getExmScoreRankings}>
+						<div className="icon_grade"></div>
+						<div>成绩排名</div>
+					</a>
+                    <a onClick={this.getExmQuestionStatistics}>
+						<div className="icon_particulars"></div>
+						<div>试卷详情</div>
+					</a>
+                    <a  onClick={this.getExmPushByPaperId}>
+						<div className="icon_compare"></div>
+						<div>平行班比较</div>
+					</a>
                 </div>
-                <div>
-                    <Button icon="bar-chart" onClick={this.getExmScoreRankings}>成绩排名</Button>
-                    <Button icon="pie-chart" onClick={this.getExmQuestionStatistics}>试卷详情</Button>
-                    <Button icon="line-chart" onClick={this.getExmPushByPaperId}>平行班比较</Button>
-                </div>
-                <div>
+                <div className="exam-correct_til">
                     <span>推荐讲解题目(正确率小于60%)</span>
                 </div>
-                <div>
+                <div className="exam-correct_ul">
                     <ul>
                         {this.state.liArray}
                     </ul>
