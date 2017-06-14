@@ -75,7 +75,6 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
                     var questionCount=0;
                     var scores=[];
                     resultsArray.forEach(function (result) {
-                        questionCount = questionCount + 1;
                         totalScore =parseFloat(totalScore) + parseFloat(result.score);
                         scores.push(result.score);
                     });
@@ -84,6 +83,7 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
                         var questions = questionType.questions;
                         var cardArray=[];
                         questions.forEach(function (question) {
+                            questionCount = questionCount + 1;
                             var questionId = question.id;
                             var type = question.type;
                             var title = question.title;
@@ -130,24 +130,40 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
         var type = question.type;
         var textAnswer = question.textAnswer;
         var questionId = question.id;
-        results.forEach(function (result) {
-            if(questionId==result.questionId){
-                var resultAnswer = result.textAnswer;
-                var everyRow=<Card key={type+no} className="upexam_topic" style={{width: 610}}>
-                    <Row>
-                        <Col span={4}>题号</Col>
-                        <Col span={3}>标准答案</Col>
-                        <Col span={3}>学生答案</Col>
-                    </Row>
-                    <Row>
-                        <Col span={4}>{no}</Col>
-                        <Col span={3}>{textAnswer}</Col>
-                        <Col span={3}>{resultAnswer}</Col>
-                    </Row>
-                </Card>;
-                cardArray.push(everyRow);
-            }
-        });
+        if(results.length==0){
+            var everyRow=<Card key={type+no} className="upexam_topic" style={{width: 610}}>
+                <Row>
+                    <Col span={4}>题号</Col>
+                    <Col span={3}>标准答案</Col>
+                    <Col span={3}>学生答案</Col>
+                </Row>
+                <Row>
+                    <Col span={4}>{no}</Col>
+                    <Col span={3}>{textAnswer}</Col>
+                    <Col span={3}></Col>
+                </Row>
+            </Card>;
+            cardArray.push(everyRow);
+        }else{
+            results.forEach(function (result) {
+                if(questionId==result.questionId){
+                    var resultAnswer = result.textAnswer;
+                    var everyRow=<Card key={type+no} className="upexam_topic" style={{width: 610}}>
+                        <Row>
+                            <Col span={4}>题号</Col>
+                            <Col span={3}>标准答案</Col>
+                            <Col span={3}>学生答案</Col>
+                        </Row>
+                        <Row>
+                            <Col span={4}>{no}</Col>
+                            <Col span={3}>{textAnswer}</Col>
+                            <Col span={3}>{resultAnswer}</Col>
+                        </Row>
+                    </Card>;
+                    cardArray.push(everyRow);
+                }
+            });
+        }
     },
 
     buildCorrectCard(question,no,cardArray,results){
@@ -165,33 +181,49 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
                 textAnswer="正确";
                 break;
         }
-        results.forEach(function (result) {
-            if(questionId==result.questionId){
-                var resultTextAnswer = result.textAnswer;
-                var resultAnswer;
-                switch (resultTextAnswer){
-                    case "0":
-                        resultAnswer="错误";
-                        break;
-                    case "1":
-                        resultAnswer="正确";
-                        break;
+        if(results.length==0){
+            var everyRow=<Card key={type+no} className="upexam_topic" style={{width: 610}}>
+                <Row>
+                    <Col span={4}>题号</Col>
+                    <Col span={3}>标准答案</Col>
+                    <Col span={3}>学生答案</Col>
+                </Row>
+                <Row>
+                    <Col span={4}>{no}</Col>
+                    <Col span={3}>{textAnswer}</Col>
+                    <Col span={3}></Col>
+                </Row>
+            </Card>;
+            cardArray.push(everyRow);
+        }else{
+            results.forEach(function (result) {
+                if(questionId==result.questionId){
+                    var resultTextAnswer = result.textAnswer;
+                    var resultAnswer;
+                    switch (resultTextAnswer){
+                        case "0":
+                            resultAnswer="错误";
+                            break;
+                        case "1":
+                            resultAnswer="正确";
+                            break;
+                    }
+                    var everyRow=<Card key={type+no} className="upexam_topic" style={{width: 610}}>
+                        <Row>
+                            <Col span={4}>题号</Col>
+                            <Col span={3}>标准答案</Col>
+                            <Col span={3}>学生答案</Col>
+                        </Row>
+                        <Row>
+                            <Col span={4}>{no}</Col>
+                            <Col span={3}>{textAnswer}</Col>
+                            <Col span={3}>{resultAnswer}</Col>
+                        </Row>
+                    </Card>;
+                    cardArray.push(everyRow);
                 }
-                var everyRow=<Card key={type+no} className="upexam_topic" style={{width: 610}}>
-                    <Row>
-                        <Col span={4}>题号</Col>
-                        <Col span={3}>标准答案</Col>
-                        <Col span={3}>学生答案</Col>
-                    </Row>
-                    <Row>
-                        <Col span={4}>{no}</Col>
-                        <Col span={3}>{textAnswer}</Col>
-                        <Col span={3}>{resultAnswer}</Col>
-                    </Row>
-                </Card>;
-                cardArray.push(everyRow);
-            }
-        });
+            });
+        }
     },
     /**
      * 创建简答和填空的card
@@ -208,46 +240,62 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
         var imageAnswer = question.imageAnswer;
         var score = question.score;
         var questionId = question.id;
-        results.forEach(function (result) {
-            if(questionId==result.questionId){
-                var resultAnswer = result.textAnswer;
-                var resultImageAnswer = result.imageAnswer;
-                var imgObj;
-                if(typeof(imageAnswer)!="undefined" && imageAnswer!=null && imageAnswer != ""){
-                    imgObj = <Row>
-                        <Col span={24}><img style={{width:'150px',height:'150px'}} src={imageAnswer}  onClick={_this.showLargeImg}/></Col>
-                    </Row>;
+        var imgObj;
+        if(typeof(imageAnswer)!="undefined" && imageAnswer!=null && imageAnswer != ""){
+            imgObj = <Row>
+                <Col span={24}><img style={{width:'150px',height:'150px'}} src={imageAnswer}  onClick={_this.showLargeImg}/></Col>
+            </Row>;
+        }
+        if(results.length==0){
+            var everyRow=<Card key={type+no} className="upexam_topic" style={{width: 610}}>
+                <Row>
+                    <Col span={24}>{no}.正确答案:(总分:{score}分)</Col>
+                </Row>
+                <Row>
+                    <Col span={24}>{textAnswer}</Col>
+                </Row>
+                {imgObj}
+                <Row>
+                    <Col span={24}>学生答案:</Col>
+                </Row>
+            </Card>;
+            cardArray.push(everyRow);
+        }else{
+            results.forEach(function (result) {
+                if(questionId==result.questionId){
+                    var resultAnswer = result.textAnswer;
+                    var resultImageAnswer = result.imageAnswer;
+                    var studentAnswerImgObj;
+                    if(typeof(resultImageAnswer)!="undefined" && resultImageAnswer!=null && resultImageAnswer != ""){
+                        var resultImgArray=resultImageAnswer.split(",");
+                        var imgTagArray=[];
+                        resultImgArray.forEach(function (resultImg) {
+                            if(typeof(resultImg)!="undefined" && resultImg!="" ){
+                                var imgObj = <img style={{width:'150px',height:'150px'}} src={resultImg}  onClick={_this.showLargeImg}/>;
+                                imgTagArray.push(imgObj);
+                            }
+                        });
+                        studentAnswerImgObj = <Row>
+                            <Col span={24}>{imgTagArray}</Col>
+                        </Row>;
+                    }
+                    var everyRow=<Card key={type+no} className="upexam_topic" style={{width: 610}}>
+                        <Row>
+                            <Col span={24}>{no}.正确答案:(总分:{score}分)</Col>
+                        </Row>
+                        <Row>
+                            <Col span={24}>{textAnswer}</Col>
+                        </Row>
+                        {imgObj}
+                        <Row>
+                            <Col span={24}>学生答案:{resultAnswer}</Col>
+                        </Row>
+                        {studentAnswerImgObj}
+                    </Card>;
+                    cardArray.push(everyRow);
                 }
-                var studentAnswerImgObj;
-                if(typeof(resultImageAnswer)!="undefined" && resultImageAnswer!=null && resultImageAnswer != ""){
-                    var resultImgArray=resultImageAnswer.split(",");
-                    var imgTagArray=[];
-                    resultImgArray.forEach(function (resultImg) {
-                        if(typeof(resultImg)!="undefined" && resultImg!="" ){
-                            var imgObj = <img style={{width:'150px',height:'150px'}} src={resultImg}  onClick={_this.showLargeImg}/>;
-                            imgTagArray.push(imgObj);
-                        }
-                    });
-                    studentAnswerImgObj = <Row>
-                        <Col span={24}>{imgTagArray}</Col>
-                    </Row>;
-                }
-                var everyRow=<Card key={type+no} className="upexam_topic" style={{width: 610}}>
-                    <Row>
-                        <Col span={24}>{no}.正确答案:(总分:{score}分)</Col>
-                    </Row>
-                    <Row>
-                        <Col span={24}>{textAnswer}</Col>
-                    </Row>
-                    {imgObj}
-                    <Row>
-                        <Col span={24}>学生答案:{resultAnswer}</Col>
-                    </Row>
-                    {studentAnswerImgObj}
-                </Card>;
-                cardArray.push(everyRow);
-            }
-        });
+            });
+        }
     },
 
     showPaperAttachmentsModal(){

@@ -144,7 +144,7 @@ const TestTimeLineComponents = React.createClass({
                         break;
                 }
                 var currentItemSubDiv = 
-				<div className="time_content" onClick={_this.showExamDetail.bind(_this,examJsonArray.id,examJsonArray.paperId)}>
+				<div className="time_content" onClick={_this.showExamDetail.bind(_this,examJsonArray.id,examJsonArray.paperId,tipInfo)}>
 				<div className="triangle_right triangle_yellow"><span>{tipInfo}</span></div>
 					<h2 className={titleClassName}>{examJsonArray.courseName}</h2>
 					<div className={contentClassName}>
@@ -164,9 +164,21 @@ const TestTimeLineComponents = React.createClass({
         _this.setState({TimeLineItemArray});
     },
 
-    showExamDetail(examId,paperId){
+    showExamDetail(examId,paperId,tipInfo){
+        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         console.log("showExamDetail"+examId+"\t"+paperId);
-        this.props.onTestClick(examId,paperId);
+        if(loginUser.colUtype=="STUD"){
+            // if(new Date(examEndTime) < new Date()){
+            //     tipInfo="已结束";
+            // }else if(new Date(examStartTime) > new Date()){
+            //     tipInfo="未开始";
+            // }else{
+            //     tipInfo="进行中";
+            // }
+            this.props.onStudentClick(examId,paperId,tipInfo);
+        }else{
+            this.props.onTestClick(examId,paperId);
+        }
     },
 
     timeLineDataSort(array){
@@ -199,7 +211,7 @@ const TestTimeLineComponents = React.createClass({
     render() {
         return (
             <div className="exam_timeline">
-                <Timeline pending={<a href="#/MainLayout" onClick={this.getMoreExams}>查看更多</a>}>
+                <Timeline pending={<a onClick={this.getMoreExams}>查看更多</a>}>
                     {this.state.TimeLineItemArray}
                 </Timeline>
             </div>
