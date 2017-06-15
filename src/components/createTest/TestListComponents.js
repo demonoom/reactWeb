@@ -30,13 +30,16 @@ const TestListComponents = React.createClass({
         this.setState({activeKey: '我的考试', currentOpt: 'testTimeLine',});
         var initPageNo=1;
         if(typeof(this.refs.testTimeLineComponents)!="undefined" ){
-            this.refs.testTimeLineComponents.getExms(initPageNo);
+            this.refs.testTimeLineComponents.initPage();
         }
         //
     },
 
     assignTest(){
         this.setState({activeKey: '布置试卷', currentOpt: 'assignTest'});
+        if(typeof(this.refs.assignTestComponents)!="undefined" ){
+            this.refs.assignTestComponents.initPage();
+        }
     },
 
     testAnalysis(examId,paperId){
@@ -75,9 +78,15 @@ const TestListComponents = React.createClass({
             case "已结束":
                 var userObj = JSON.parse(sessionStorage.getItem("loginUser"));
                 var tipTitle = userObj.userName+"同学试题答案";
+                if(typeof(this.refs.testCheckStudentExmSubmitedResults)!="undefined" ){
+                    this.refs.testCheckStudentExmSubmitedResults.getStudentExmSubmitedResults();
+                }
                 this.setState({activeKey: tipTitle, currentOpt: 'checkStudentExmSubmitedResults',"examId":examId,"studentObj":userObj});
                 break;
             case "进行中":
+                if(typeof(this.refs.testCheckStudentExmSubmitedResults)!="undefined" ){
+                    this.refs.testCheckStudentExmSubmitedResults.getStudentExmSubmitedResults();
+                }
                 this.setState({activeKey: '考试作答', currentOpt: 'testAnswer',"examId":examId,"paperId":paperId,"paper":paper});
                 break;
         }
@@ -97,7 +106,7 @@ const TestListComponents = React.createClass({
             returnBtn = '';
             leftBtn="";
             topButton = assignExamsBtn;
-            tabPanel = <TestTimeLineComponents ref="assignTest" onTestClick={this.testAnalysis}
+            tabPanel = <TestTimeLineComponents ref="testTimeLineComponents" onTestClick={this.testAnalysis}
                 onStudentClick={this.studentAnswerOrSeeResult}/>;
         } else if (this.state.currentOpt == "assignTest"){
             //布置考试
@@ -183,7 +192,8 @@ const TestListComponents = React.createClass({
             returnBtn = 'btn1';
             topButton = "";
 
-            tabPanel = <TestCheckStudentExmSubmitedResults exmId={this.state.examId}
+            tabPanel = <TestCheckStudentExmSubmitedResults  ref="testCheckStudentExmSubmitedResults"
+                                                            exmId={this.state.examId}
                                                            studentObj={this.state.studentObj}
                                                            checkExamComeFrom={checkExamComeFrom}
                                             onCheckButtonClick={this.checkTest}
@@ -195,7 +205,7 @@ const TestListComponents = React.createClass({
             topButton = "";
             checkExamComeFrom="checkTest";
             // this.setState({"checkExamComeFrom":"checkTest"});
-            leftBtn = <span className="btn1 ant-tabs-right"><button onClick={this.testAnalysis.bind(this,this.state.examId)}
+            leftBtn = <span className="btn1 ant-tabs-right"><button onClick={this.getTestList}
                                                                     className="affix_bottom_tc"><Icon
                 type="left"/></button></span>;
             tabPanel = <TestAnswerComponents exmId={this.state.examId} paper={this.state.paper}></TestAnswerComponents>;

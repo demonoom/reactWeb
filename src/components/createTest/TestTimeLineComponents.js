@@ -17,7 +17,11 @@ const TestTimeLineComponents = React.createClass({
 
     componentDidMount(){
         var _this = this;
-        var initPageNo = 1;
+        _this.initPage();
+    },
+
+    initPage(){
+        var _this = this;
         examsArray.splice(0);
         _this.getExms(_this.state.pageNo);
     },

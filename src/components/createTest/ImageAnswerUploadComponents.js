@@ -89,7 +89,7 @@ const ImageAnswerUploadComponents = React.createClass({
                     //上传进度
                     var percent = info.file.percent;
                     _this.setState({uploadPercent:percent,progressState:'block'});
-                    info.fileList.splice(0);
+                    //info.fileList.splice(0);
                     if(info.file.status==="removed"){
                         _this.props.callBackParent(info.file,_this.state.subjectInfo,"removed");
                     }
@@ -102,6 +102,7 @@ const ImageAnswerUploadComponents = React.createClass({
                 }
             },
             onRemove(file){
+                console.log(file);
             },
         };
         return (

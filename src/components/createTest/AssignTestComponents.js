@@ -163,6 +163,10 @@ const AssignTestComponents = React.createClass({
     },
 
     componentDidMount(){
+        this.initPage();
+    },
+
+    initPage(){
         assignHomeWork.getTeacherClasses(sessionStorage.getItem("ident"));
         assignHomeWork.getExamPagerList(1);
     },

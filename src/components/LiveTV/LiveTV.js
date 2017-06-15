@@ -287,6 +287,9 @@ class LiveTV extends React.Component {
      * 转向到考试功能页面
      */
     turnToTestTimeLine(){
+        if(typeof(this.refs.testListComponents)!="undefined"){
+            this.refs.testListComponents.getTestList();
+        }
         this.setState({"currentOpt":'exam'});
     }
 
@@ -480,7 +483,7 @@ class LiveTV extends React.Component {
         var mainPanel;
         if(typeof(this.state.currentOpt)!="undefined" &&  this.state.currentOpt=="exam"){
             mainPanel = <div className="favorite_scroll favorite_up">
-                <TestListComponents></TestListComponents>
+                <TestListComponents ref="testListComponents"></TestListComponents>
                 </div>;
         }else{
             mainPanel = <div className={this.currentTab} >

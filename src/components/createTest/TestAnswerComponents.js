@@ -24,6 +24,11 @@ const TestAnswerComponents = React.createClass({
         _this.getExmPaperInfo();
     },
 
+    componentWillReceiveProps(){
+        var _this = this;
+        _this.getExmPaperInfo();
+    },
+
     /**
      * 获取本次试卷的详细信息
      */
@@ -58,19 +63,21 @@ const TestAnswerComponents = React.createClass({
                 var questionId = question.id;
                 var score = question.score;
                 var questionTitleStr = question.title;
+                var textAnswer = question.textAnswer;
+                var imageAnswer = question.imageAnswer;
                 questionTitle = questionTitleStr.split(" ")[0];
                 switch (type){
                     case 0:
-                        _this.buildChoiceCard(questionId,i,score,cardArray);
+                        _this.buildChoiceCard(questionId,i,score,cardArray,textAnswer);
                         break;
                     case 1:
-                        _this.buildCorrectCard(questionId,i,score,cardArray);
+                        _this.buildCorrectCard(questionId,i,score,cardArray,textAnswer);
                         break;
                     case 2:
-                        _this.buildFillBlankCard(questionId,i,score,cardArray);
+                        _this.buildFillBlankCard(questionId,i,score,cardArray,textAnswer,imageAnswer);
                         break;
                     case 3:
-                        _this.buildFillBlankCard(questionId,i,score,cardArray);
+                        _this.buildFillBlankCard(questionId,i,score,cardArray,textAnswer,imageAnswer);
                         break;
                 }
             }
@@ -82,7 +89,14 @@ const TestAnswerComponents = React.createClass({
         _this.setState({mainCardArray});
     },
 
-    buildChoiceCard(questionId,number,score,cardArray){
+    buildChoiceCard(questionId,number,score,cardArray,textAnswer){
+        var charArray=[];
+        if(isEmpty(textAnswer)==false){
+            for(var i=0;i<textAnswer.length;i++){
+                var selectedValue = questionId+"#"+textAnswer.charAt(i);
+                charArray.push(selectedValue);
+            }
+        }
         var _this = this;
         var selectAnswerOptions =  _this.buildSelectOptionsArray(questionId);
         var everyRow=<Card key={questionId} className="upexam_topic">
@@ -91,7 +105,7 @@ const TestAnswerComponents = React.createClass({
             </Row>
             <Row>
                 <Col span={24}>
-                    <CheckboxGroup options={selectAnswerOptions} onChange={_this.subjectAnswerOnChange} />
+                    <CheckboxGroup options={selectAnswerOptions} defaultValue={charArray} onChange={_this.subjectAnswerOnChange} />
                 </Col>
             </Row>
         </Card>;
@@ -105,15 +119,16 @@ const TestAnswerComponents = React.createClass({
      * @param score
      * @param cardArray
      */
-    buildCorrectCard(questionId,number,score,cardArray){
+    buildCorrectCard(questionId,number,score,cardArray,textAnswer){
         var _this = this;
+        var selectedValue = questionId+"#"+textAnswer;
         var everyRow=<Card key={questionId} className="upexam_topic">
             <Row>
                 <Col span={24}>{number}.({score}分)</Col>
             </Row>
             <Row>
                 <Col span={24}>
-                    <RadioGroup key={questionId} onChange={_this.correctAnswerOnChange}>
+                    <RadioGroup key={questionId} defaultValue={selectedValue} onChange={_this.correctAnswerOnChange}>
                         <Radio value={questionId+"#1"}>正确</Radio>
                         <Radio value={questionId+"#0"}>错误</Radio>
                     </RadioGroup>
@@ -130,19 +145,28 @@ const TestAnswerComponents = React.createClass({
      * @param score
      * @param cardArray
      */
-    buildFillBlankCard(questionId,number,score,cardArray){
+    buildFillBlankCard(questionId,number,score,cardArray,textAnswer,imageAnswer){
         var _this = this;
+        var fileList =[];
+        if(isEmpty(imageAnswer)==false){
+            var fileJson = {
+                uid: questionId + "#imageAnswer#",
+                url: imageAnswer,
+            }
+            fileList.push(fileJson);
+        }
         var everyRow=<Card key={questionId} className="upexam_topic">
             <Row>
                 <Col span={3}>{number}.({score}分)</Col>
                 <Col span={21}>
-                    <Input id={questionId+"#Input"} placeholder="输入答案" onChange={_this.blankAnswerOnChange} />
+                    <Input id={questionId+"#Input"} placeholder="输入答案" defaultValue={textAnswer} onChange={_this.blankAnswerOnChange} />
                 </Col>
             </Row>
             <Row>
                 <Col span={3}></Col>
                 <Col span={21}>
                     <ImageAnswerUploadComponents params={questionId+"#imageAnswer"}
+                                                 fileList={fileList}
                                                  callBackParent={_this.getImgAnswerList}>
                     </ImageAnswerUploadComponents>
                 </Col>
@@ -159,6 +183,9 @@ const TestAnswerComponents = React.createClass({
         if(isEmpty(isRemoved)==false && isRemoved=="removed"){
             imageAnswer = "";
         }
+        // var fileList = [];
+        // fileList.push(file);
+        // this.setState({fileList});
         //题目图片答案的图片来源
         var questionInfoArray = questionInfo.split("#");
         var questionId=questionInfoArray[0];
@@ -303,6 +330,26 @@ const TestAnswerComponents = React.createClass({
             exmSubmitResultJson.userId = loginUser.colUid;
             exmSubmitResultJson.exmId = exmId;
         }
+        var param = {
+            "method": 'submitExm',
+            "resultsJson": exmSubmitResultJsonArray,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if(ret.msg == "调用成功" && ret.success == true){
+                    var response = ret.response;
+                    if(response){
+                        message.success("答题卡提交成功");
+                    }else{
+                        message.error("答题卡提交失败");
+                    }
+                }
+                _this.tipModalHandleCancel();
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     render() {
