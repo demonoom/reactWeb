@@ -1,14 +1,16 @@
 import React, {PropTypes} from 'react';
-import {Timeline, Button, Popover, message,Steps,Icon,Progress,Modal,Collapse} from 'antd';
+import {Timeline, Button, Popover, message,Steps,Icon,Progress,Modal,Input} from 'antd';
+import { Checkbox,Card,Row,Col,Radio } from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import {getPageSize} from '../../utils/Const';
-import {formatYMD} from '../../utils/utils';
-import {formatHM} from '../../utils/utils';
-const Step = Steps.Step;
-const Panel = Collapse.Panel;
+import {isEmpty} from '../../utils/utils';
+import {showLargeImg} from '../../utils/utils';
+import ImageAnswerUploadComponents from './ImageAnswerUploadComponents';
 
-var examsArray=[];
-var TimeLineItemArray=[];
+const Step = Steps.Step;
+const CheckboxGroup = Checkbox.Group;
+const RadioGroup = Radio.Group;
+var exmSubmitResultJsonArray=[];
 const TestAnswerComponents = React.createClass({
     getInitialState() {
         return {
@@ -19,39 +21,319 @@ const TestAnswerComponents = React.createClass({
 
     componentDidMount(){
         var _this = this;
-        _this.getExmScoreRankings();
+        _this.getExmPaperInfo();
     },
 
     /**
-     * 获取本次考试分数排名列表
+     * 获取本次试卷的详细信息
      */
-    getExmScoreRankings(){
+    getExmPaperInfo(){
         var _this = this;
-        var param = {
-            "method": 'getExmScoreRankings',
-            "exmId": _this.props.exmId,
-        };
-
-        doWebService(JSON.stringify(param), {
-            onResponse: function (ret) {
-                if(ret.msg == "调用成功" && ret.success == true){
-                    var response = ret.response;
-                }
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-
+        var paper = _this.props.paper;
+        var title = paper.title;
+        var attachmentsArray=[];
+        var attachments = paper.attachments;
+        attachments.forEach(function (attachment) {
+            var path=attachment.path;
+            var imgObj = <img style={{width:'650px',height:'400px'}} src={path}  onClick={_this.showLargeImg}/>;
+            attachmentsArray.push(imgObj);
         });
+        _this.setState({attachmentsArray,title});
     },
 
+    buildAnswerCard(){
+        var _this = this;
+        var paper = _this.props.paper;
+        var title = paper.title;
+        var questionTypes = paper.questionTypes;
+        var mainCardArray=[];
+        questionTypes.forEach(function (questionTypeObj) {
+            var cardArray=[];
+            var type = questionTypeObj.type;
+            var typeTitle;
+            var questions = questionTypeObj.questions;
+            var questionTitle;
+            for(var i=1;i<=questions.length;i++){
+                var question = questions[i-1];
+                var questionId = question.id;
+                var score = question.score;
+                var questionTitleStr = question.title;
+                questionTitle = questionTitleStr.split(" ")[0];
+                switch (type){
+                    case 0:
+                        _this.buildChoiceCard(questionId,i,score,cardArray);
+                        break;
+                    case 1:
+                        _this.buildCorrectCard(questionId,i,score,cardArray);
+                        break;
+                    case 2:
+                        _this.buildFillBlankCard(questionId,i,score,cardArray);
+                        break;
+                    case 3:
+                        _this.buildFillBlankCard(questionId,i,score,cardArray);
+                        break;
+                }
+            }
+            var mainCard=<Card key={questionTitle} title={questionTitle} >
+                {cardArray}
+            </Card>;
+            mainCardArray.push(mainCard);
+        });
+        _this.setState({mainCardArray});
+    },
+
+    buildChoiceCard(questionId,number,score,cardArray){
+        var _this = this;
+        var selectAnswerOptions =  _this.buildSelectOptionsArray(questionId);
+        var everyRow=<Card key={questionId} className="upexam_topic">
+            <Row>
+                <Col span={24}>{number}.({score}分)</Col>
+            </Row>
+            <Row>
+                <Col span={24}>
+                    <CheckboxGroup options={selectAnswerOptions} onChange={_this.subjectAnswerOnChange} />
+                </Col>
+            </Row>
+        </Card>;
+        cardArray.push(everyRow);
+    },
+
+    /**
+     * 构建判断题的选项
+     * @param questionId
+     * @param number
+     * @param score
+     * @param cardArray
+     */
+    buildCorrectCard(questionId,number,score,cardArray){
+        var _this = this;
+        var everyRow=<Card key={questionId} className="upexam_topic">
+            <Row>
+                <Col span={24}>{number}.({score}分)</Col>
+            </Row>
+            <Row>
+                <Col span={24}>
+                    <RadioGroup key={questionId} onChange={_this.correctAnswerOnChange}>
+                        <Radio value={questionId+"#1"}>正确</Radio>
+                        <Radio value={questionId+"#0"}>错误</Radio>
+                    </RadioGroup>
+                </Col>
+            </Row>
+        </Card>;
+        cardArray.push(everyRow);
+    },
+
+    /**
+     * 构建填空和简答题的选项
+     * @param questionId
+     * @param number
+     * @param score
+     * @param cardArray
+     */
+    buildFillBlankCard(questionId,number,score,cardArray){
+        var _this = this;
+        var everyRow=<Card key={questionId} className="upexam_topic">
+            <Row>
+                <Col span={3}>{number}.({score}分)</Col>
+                <Col span={21}>
+                    <Input id={questionId+"#Input"} placeholder="输入答案" onChange={_this.blankAnswerOnChange} />
+                </Col>
+            </Row>
+            <Row>
+                <Col span={3}></Col>
+                <Col span={21}>
+                    <ImageAnswerUploadComponents params={questionId+"#imageAnswer"}
+                                                 callBackParent={_this.getImgAnswerList}>
+                    </ImageAnswerUploadComponents>
+                </Col>
+            </Row>
+        </Card>;
+        cardArray.push(everyRow);
+    },
+
+    /**
+     * 获取题目的图片答案
+     */
+    getImgAnswerList(file,questionInfo,isRemoved){
+        var imageAnswer = file.response;
+        if(isEmpty(isRemoved)==false && isRemoved=="removed"){
+            imageAnswer = "";
+        }
+        //题目图片答案的图片来源
+        var questionInfoArray = questionInfo.split("#");
+        var questionId=questionInfoArray[0];
+        var exmSubmitResultJson = {questionId,imageAnswer};
+        var answerType="imageAnswer";
+        this.buildExmSubmitResultJsonArray(exmSubmitResultJson,answerType);
+    },
+
+    /**
+     * 判断题选项改变响应
+     */
+    correctAnswerOnChange(e){
+        var target = e.target;
+        /*if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }*/
+        var subjectInfo = target.value;
+        var subjectInfoArray = subjectInfo.split("#");
+        //当前答案所属答题卡名称
+        var questionId = subjectInfoArray[0];
+        //当前题目的单选选项（正确/错误）
+        var textAnswer = subjectInfoArray[1];
+        var exmSubmitResultJson = {questionId,textAnswer};
+        var answerType="textAnswer";
+        this.buildExmSubmitResultJsonArray(exmSubmitResultJson,answerType);
+    },
+
+    /**
+     * 填空题文本域响应函数
+     * @param e
+     */
+    blankAnswerOnChange(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var subjectInfo = target.id;
+        var subjectInfoArray = subjectInfo.split("#");
+        //通过组件id获取的答题卡信息
+        var questionId= subjectInfoArray[0];
+        //填空题答案
+        var textAnswer = target.value;
+        //封装题目的所属答题卡、编号信息和题目分值
+        var exmSubmitResultJson = {questionId,textAnswer};
+        var answerType="textAnswer";
+        this.buildExmSubmitResultJsonArray(exmSubmitResultJson,answerType);
+    },
+
+    /**
+     * 创建选择题选项的数组
+     * @param num
+     * @param answerTitle
+     */
+    buildSelectOptionsArray(questionId){
+        var selectAnswerOptions=[];
+        for (var i = 1; i <= 6; i++) {
+            var optionJson;
+            switch (i) {
+                case 1:
+                    optionJson = {label: 'A', value: questionId+"#A"};
+                    break;
+                case 2:
+                    optionJson = {label: 'B', value: questionId+"#B"};
+                    break;
+                case 3:
+                    optionJson = {label: 'C', value: questionId+"#C"};
+                    break;
+                case 4:
+                    optionJson = {label: 'D', value: questionId+"#D"};
+                    break;
+                case 5:
+                    optionJson = {label: 'E', value: questionId+"#E"};
+                    break;
+                case 6:
+                    optionJson = {label: 'F', value: questionId+"#F"};
+                    break;
+            }
+            selectAnswerOptions.push(optionJson);
+        }
+        return selectAnswerOptions;
+    },
+
+    subjectAnswerOnChange(checkedValues){
+        var textAnswer='';
+        var questionId;
+        for(var i=0;i<checkedValues.length;i++){
+            var currentSelectStr = checkedValues[i];
+            var currentSelectArray = currentSelectStr.split("#");
+            //当前题目所属的答题卡标题
+            questionId = currentSelectArray[0];
+            //当前题目的选择
+            var choice = currentSelectArray[1];
+            textAnswer+=choice;
+        }
+        var exmSubmitResultJson = {questionId,textAnswer};
+        var answerType="textAnswer";
+        this.buildExmSubmitResultJsonArray(exmSubmitResultJson,answerType);
+    },
+
+    /**
+     * 构建/刷新试卷提交结果对象数组
+     */
+    buildExmSubmitResultJsonArray(exmSubmitResultJsonForAdd,answerType){
+        var isExistSameQuestion=false;
+        for(var i=0;i<exmSubmitResultJsonArray.length;i++){
+            var exmSubmitResultJson = exmSubmitResultJsonArray[i];
+            if(exmSubmitResultJson.questionId == exmSubmitResultJsonForAdd.questionId){
+                if(answerType=="textAnswer"){
+                    exmSubmitResultJson.textAnswer = exmSubmitResultJsonForAdd.textAnswer;
+                    isExistSameQuestion=true;
+                }else if(answerType=="imageAnswer"){
+                    exmSubmitResultJson.imageAnswer = exmSubmitResultJsonForAdd.imageAnswer;
+                    isExistSameQuestion=true;
+                }
+                break;
+            }
+        }
+        if(isExistSameQuestion==false){
+            exmSubmitResultJsonArray.push(exmSubmitResultJsonForAdd);
+        }
+    },
+
+    tipModalHandleCancel(){
+        this.setState({"tipModalVisible":false});
+    },
+
+    answerPaper(){
+        this.buildAnswerCard();
+        this.setState({"tipModalVisible":true});
+    },
+
+    submitAnswer(){
+        var _this = this;
+        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+        var exmId = _this.props.exmId;
+        for(var i=0;i<exmSubmitResultJsonArray.length;i++){
+            var exmSubmitResultJson = exmSubmitResultJsonArray[i];
+            exmSubmitResultJson.userId = loginUser.colUid;
+            exmSubmitResultJson.exmId = exmId;
+        }
+    },
 
     render() {
-        var submitedHeader=<span>已提交({this.state.submitedUserCount}人)</span>;
-        var noSubmitHeader=<span>未提交({this.state.noSubmitUserCount}人)</span>;
+        var modalTitle = this.state.title+"答题卡";
         return (
             <div>
-                TestAnswerComponents
+                <div>
+                    <span>
+                        <Button icon="file-text" onClick={this.answerPaper}>答题卡</Button>
+                    </span>
+                    <span>
+                        {this.state.title}
+                    </span>
+                </div>
+                <div>
+                    {this.state.attachmentsArray}
+                </div>
+                <Modal
+                    visible={this.state.tipModalVisible}
+                    title={modalTitle}
+                    onCancel={this.tipModalHandleCancel}
+                    transitionName=""  //禁用modal的动画效果
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    footer={[]}>
+                    <div style={{height:'400px',overflow:'scroll'}}>
+                        {this.state.mainCardArray}
+                    </div>
+                    <div>
+                        <Button onClick={this.submitAnswer}>提交</Button>
+                    </div>
+                </Modal>
             </div>
         );
     },

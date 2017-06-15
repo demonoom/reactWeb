@@ -66,7 +66,7 @@ const TestListComponents = React.createClass({
         this.setState({activeKey: tipTitle, currentOpt: 'checkStudentExmSubmitedResults',"examId":exmId,"studentObj":userObj});
     },
 
-    studentAnswerOrSeeResult(examId,paperId,tipInfo){
+    studentAnswerOrSeeResult(examId,paperId,tipInfo,paper){
         // this.setState({activeKey: '考试作答', currentOpt: 'testAnswer',"examId":examId,"paperId":paperId});
         switch(tipInfo){
             case "未开始":
@@ -78,7 +78,7 @@ const TestListComponents = React.createClass({
                 this.setState({activeKey: tipTitle, currentOpt: 'checkStudentExmSubmitedResults',"examId":examId,"studentObj":userObj});
                 break;
             case "进行中":
-                this.setState({activeKey: '考试作答', currentOpt: 'testAnswer',"examId":examId,"paperId":paperId});
+                this.setState({activeKey: '考试作答', currentOpt: 'testAnswer',"examId":examId,"paperId":paperId,"paper":paper});
                 break;
         }
     },
@@ -198,7 +198,7 @@ const TestListComponents = React.createClass({
             leftBtn = <span className="btn1 ant-tabs-right"><button onClick={this.testAnalysis.bind(this,this.state.examId)}
                                                                     className="affix_bottom_tc"><Icon
                 type="left"/></button></span>;
-            tabPanel = <TestAnswerComponents></TestAnswerComponents>;
+            tabPanel = <TestAnswerComponents exmId={this.state.examId} paper={this.state.paper}></TestAnswerComponents>;
         }
 
         toolbar = <h3 className={" public—til—blue"}>{this.state.activeKey}

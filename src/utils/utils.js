@@ -107,3 +107,17 @@ export function createUUID() {
     var uuid = s.join("");
     return uuid;
 }
+
+
+/**
+ * 系统非空判断
+ * @param content
+ * @returns {boolean}
+ */
+export function isEmpty(content){
+    if (content == null || content == "null" || content == "" || typeof(content) == "undefined") {
+        return true;
+    } else {
+        return false;
+    }
+}

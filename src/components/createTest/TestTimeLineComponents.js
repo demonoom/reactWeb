@@ -61,7 +61,7 @@ const TestTimeLineComponents = React.createClass({
                         var examEndTime = formatHM(endTime);
                         var showExamTime = examStartTime+"-"+examEndTime;
                         console.log(examDay+"\t"+courseName+"\t"+showClass+"\t"+showExamTime+"\t"+paperTitle);
-                        _this.buildExamsArray(examDay,courseName,showClass,showExamTime,paperTitle,id,examStartTime,examEndTime,paperId);
+                        _this.buildExamsArray(examDay,courseName,showClass,showExamTime,paperTitle,id,examStartTime,examEndTime,paperId,paper);
                     });
                     //examsArray = _this.timeLineDataSort(examsArray);
                     _this.buildTimeLineItem();
@@ -76,8 +76,8 @@ const TestTimeLineComponents = React.createClass({
         });
     },
 
-    buildExamsArray(examDay,courseName,showClass,showExamTime,paperTitle,id,examStartTime,examEndTime,paperId){
-        var everyExamJson={"id":id,"courseName":courseName,"showClass":showClass,"showExamTime":showExamTime,"paperTitle":paperTitle,"paperId":paperId,"examStartTime":examStartTime,"examEndTime":examEndTime};
+    buildExamsArray(examDay,courseName,showClass,showExamTime,paperTitle,id,examStartTime,examEndTime,paperId,paper){
+        var everyExamJson={"id":id,"courseName":courseName,"showClass":showClass,"showExamTime":showExamTime,"paper":paper,"paperTitle":paperTitle,"paperId":paperId,"examStartTime":examStartTime,"examEndTime":examEndTime};
         var eveyDayJson = {"examDay":examDay,"examJson":[everyExamJson]};
         var isExist = false;
         for(var i=0;i<examsArray.length;i++){
@@ -144,7 +144,7 @@ const TestTimeLineComponents = React.createClass({
                         break;
                 }
                 var currentItemSubDiv = 
-				<div className="time_content" onClick={_this.showExamDetail.bind(_this,examJsonArray.id,examJsonArray.paperId,tipInfo)}>
+				<div className="time_content" onClick={_this.showExamDetail.bind(_this,examJsonArray.id,examJsonArray.paperId,tipInfo,examJsonArray.paper)}>
 				<div className="triangle_right triangle_yellow"><span>{tipInfo}</span></div>
 					<h2 className={titleClassName}>{examJsonArray.courseName}</h2>
 					<div className={contentClassName}>
@@ -164,7 +164,7 @@ const TestTimeLineComponents = React.createClass({
         _this.setState({TimeLineItemArray});
     },
 
-    showExamDetail(examId,paperId,tipInfo){
+    showExamDetail(examId,paperId,tipInfo,paper){
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         console.log("showExamDetail"+examId+"\t"+paperId);
         if(loginUser.colUtype=="STUD"){
@@ -175,7 +175,7 @@ const TestTimeLineComponents = React.createClass({
             // }else{
             //     tipInfo="进行中";
             // }
-            this.props.onStudentClick(examId,paperId,tipInfo);
+            this.props.onStudentClick(examId,paperId,tipInfo,paper);
         }else{
             this.props.onTestClick(examId,paperId);
         }
