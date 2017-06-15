@@ -219,7 +219,7 @@ const TestListComponents = React.createClass({
         </h3>;
 
         return (
-            <div>
+            <div className="follow_my">
                 {toolbar}
                 <div className="favorite_scroll favorite_up">{tabPanel}</div>
             </div>

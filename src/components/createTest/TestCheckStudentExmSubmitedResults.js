@@ -107,7 +107,7 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
                                     break;
                             }
                         });
-                        var mainCard=<Card key={typeTitle} title={typeTitle} style={{width: 660}}>
+                        var mainCard=<Card className="exam-particulars_cont" key={typeTitle} title={typeTitle} >
                             {cardArray}
                         </Card>;
                         mainCardArray.push(mainCard);
@@ -131,16 +131,16 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
         var textAnswer = question.textAnswer;
         var questionId = question.id;
         if(results.length==0){
-            var everyRow=<Card key={type+no} className="upexam_topic" style={{width: 610}}>
-                <Row>
-                    <Col span={4}>题号</Col>
-                    <Col span={3}>标准答案</Col>
-                    <Col span={3}>学生答案</Col>
+            var everyRow=<Card key={type+no} className="upexam_topic">
+                <Row className="class_right">
+                    <Col span={2}>题号</Col>
+                    <Col span={14}>标准答案</Col>
+                    <Col span={6}>学生答案</Col>
                 </Row>
-                <Row>
-                    <Col span={4}>{no}</Col>
-                    <Col span={3}>{textAnswer}</Col>
-                    <Col span={3}></Col>
+                <Row className="class_right">
+                    <Col span={2}>{no}</Col>
+                    <Col span={14}>{textAnswer}</Col>
+                    <Col span={6}></Col>
                 </Row>
             </Card>;
             cardArray.push(everyRow);
@@ -148,16 +148,16 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
             results.forEach(function (result) {
                 if(questionId==result.questionId){
                     var resultAnswer = result.textAnswer;
-                    var everyRow=<Card key={type+no} className="upexam_topic" style={{width: 610}}>
-                        <Row>
-                            <Col span={4}>题号</Col>
-                            <Col span={3}>标准答案</Col>
-                            <Col span={3}>学生答案</Col>
+                    var everyRow=<Card key={type+no} className="upexam_topic">
+                        <Row className="class_right">
+                            <Col span={2}>题号</Col>
+                            <Col span={14}>标准答案</Col>
+                            <Col span={6}>学生答案</Col>
                         </Row>
-                        <Row>
-                            <Col span={4}>{no}</Col>
-                            <Col span={3}>{textAnswer}</Col>
-                            <Col span={3}>{resultAnswer}</Col>
+                        <Row className="class_right">
+                            <Col span={2}>{no}</Col>
+                            <Col span={14}>{textAnswer}</Col>
+                            <Col span={6} className="exam_grade">{resultAnswer}</Col>
                         </Row>
                     </Card>;
                     cardArray.push(everyRow);
@@ -182,16 +182,16 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
                 break;
         }
         if(results.length==0){
-            var everyRow=<Card key={type+no} className="upexam_topic" style={{width: 610}}>
+            var everyRow=<Card key={type+no} className="upexam_topic">
                 <Row>
-                    <Col span={4}>题号</Col>
-                    <Col span={3}>标准答案</Col>
-                    <Col span={3}>学生答案</Col>
+                    <Col span={2}>题号</Col>
+                    <Col span={14}>标准答案</Col>
+                    <Col span={6}>学生答案</Col>
                 </Row>
                 <Row>
-                    <Col span={4}>{no}</Col>
-                    <Col span={3}>{textAnswer}</Col>
-                    <Col span={3}></Col>
+                    <Col span={2}>{no}</Col>
+                    <Col span={14}>{textAnswer}</Col>
+                    <Col span={6}></Col>
                 </Row>
             </Card>;
             cardArray.push(everyRow);
@@ -208,16 +208,16 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
                             resultAnswer="正确";
                             break;
                     }
-                    var everyRow=<Card key={type+no} className="upexam_topic" style={{width: 610}}>
+                    var everyRow=<Card key={type+no} className="upexam_topic">
                         <Row>
-                            <Col span={4}>题号</Col>
-                            <Col span={3}>标准答案</Col>
-                            <Col span={3}>学生答案</Col>
+                            <Col span={2}>题号</Col>
+                            <Col span={14}>标准答案</Col>
+                            <Col span={6}>学生答案</Col>
                         </Row>
                         <Row>
-                            <Col span={4}>{no}</Col>
-                            <Col span={3}>{textAnswer}</Col>
-                            <Col span={3}>{resultAnswer}</Col>
+                            <Col span={2}>{no}</Col>
+                            <Col span={14}>{textAnswer}</Col>
+                            <Col span={6}>{resultAnswer}</Col>
                         </Row>
                     </Card>;
                     cardArray.push(everyRow);
@@ -247,7 +247,7 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
             </Row>;
         }
         if(results.length==0){
-            var everyRow=<Card key={type+no} className="upexam_topic" style={{width: 610}}>
+            var everyRow=<Card key={type+no} className="upexam_topic">
                 <Row>
                     <Col span={24}>{no}.正确答案:(总分:{score}分)</Col>
                 </Row>
@@ -279,16 +279,16 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
                             <Col span={24}>{imgTagArray}</Col>
                         </Row>;
                     }
-                    var everyRow=<Card key={type+no} className="upexam_topic" style={{width: 610}}>
+                    var everyRow=<Card key={type+no} className="upexam_topic">
                         <Row>
-                            <Col span={24}>{no}.正确答案:(总分:{score}分)</Col>
+                            <Col span={24}>{no}.&nbsp;&nbsp;正确答案：（总分：{score}分）</Col>
                         </Row>
                         <Row>
                             <Col span={24}>{textAnswer}</Col>
                         </Row>
                         {imgObj}
                         <Row>
-                            <Col span={24}>学生答案:{resultAnswer}</Col>
+                            <Col span={24}>学生答案：{resultAnswer}</Col>
                         </Row>
                         {studentAnswerImgObj}
                     </Card>;
@@ -339,13 +339,10 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
             batchCorrectExmResultButton="";
         }
         return (
-            <div>
-                <div>
-                    <a onClick={this.showPaperAttachmentsModal}>查看试卷</a>
-                    {this.props.studentObj.userName}同学试题答案
-                </div>
-                <div>
-                    共计:{this.state.questionCount}题 得分{this.state.totalScore}分
+            <div className="level_list_pa"><a onClick={this.showPaperAttachmentsModal} className="ant-btn ant-btn-primary add_study">查看试卷</a>
+                <div className="exam-particulars_title">
+                  <p>{this.props.studentObj.userName}同学试题答案</p>
+				  <p className="exam_grade">共计：{this.state.questionCount}题 得分{this.state.totalScore}分</p>
                 </div>
                 {this.state.mainCardArray}
                 {batchCorrectExmResultButton}

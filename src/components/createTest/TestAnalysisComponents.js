@@ -111,8 +111,8 @@ const TestAnalysisComponents = React.createClass({
             message.warning("没有学生");
         }else{
             this.state.highestScoreNames.forEach(function (e) {
-                var maxLi = <div>
-                    <img src={require('../images/maaeeLogo.jpg')}/>
+                var maxLi = <div className="group_fr">
+                    <span className="attention_img"><img src={require('../images/maaeeLogo.jpg')}/></span>
                     <span>{e}</span>
                 </div>
                 maxLiArray.push(maxLi);
@@ -130,8 +130,8 @@ const TestAnalysisComponents = React.createClass({
             message.warning("没有学生");
         }else{
             this.state.lowestScoreNames.forEach(function (e) {
-                var maxLi = <div>
-                    <img src={require('../images/maaeeLogo.jpg')}/>
+                var maxLi = <div className="group_fr">
+                    <span className="attention_img"><img src={require('../images/maaeeLogo.jpg')}/></span>
                     <span>{e}</span>
                 </div>
                 minLiArray.push(maxLi);
@@ -146,8 +146,8 @@ const TestAnalysisComponents = React.createClass({
             message.warning("没有学生");
         }else{
             this.state.average2highestNames.forEach(function (e) {
-                var biggerLi = <div>
-                    <img src={require('../images/maaeeLogo.jpg')}/>
+                var biggerLi = <div className="group_fr">
+                    <span className="attention_img"><img src={require('../images/maaeeLogo.jpg')}/></span>
                     <span>{e}</span>
                 </div>
                 bigAvageLiArray.push(biggerLi);
@@ -162,8 +162,8 @@ const TestAnalysisComponents = React.createClass({
             message.warning("没有学生");
         }else{
             this.state.average2lowestNames.forEach(function (e) {
-                var lowerLi = <div>
-                    <img src={require('../images/maaeeLogo.jpg')}/>
+                var lowerLi = <div className="group_fr">
+                    <span className="attention_img"><img src={require('../images/maaeeLogo.jpg')}/></span>
                     <span>{e}</span>
                 </div>
                 lowAvageLiArray.push(lowerLi);
@@ -230,7 +230,7 @@ const TestAnalysisComponents = React.createClass({
                         <Step status="finish" title={average2lowestNamesCountDiv} icon={<Icon type="user00" />} />
                         <Step status="finish" title={minScoreDiv} icon={<Icon type="arrow-down00" />} />
                     </Steps>
-                <div className="exam_tab">
+                <div className="examte_tab">
                     <a onClick={this.getExmScoreRankings}>
 						<div className="icon_grade"></div>
 						<div>成绩排名</div>

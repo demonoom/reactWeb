@@ -40,7 +40,7 @@ const TestAnswerComponents = React.createClass({
         var attachments = paper.attachments;
         attachments.forEach(function (attachment) {
             var path=attachment.path;
-            var imgObj = <img style={{width:'650px',height:'400px'}} src={path}  onClick={_this.showLargeImg}/>;
+            var imgObj = <img src={path}  onClick={_this.showLargeImg}/>;
             attachmentsArray.push(imgObj);
         });
         _this.setState({attachmentsArray,title});
@@ -81,7 +81,7 @@ const TestAnswerComponents = React.createClass({
                         break;
                 }
             }
-            var mainCard=<Card key={questionTitle} title={questionTitle} >
+            var mainCard=<Card key={questionTitle} title={questionTitle} className="st_exam-particulars_cont">
                 {cardArray}
             </Card>;
             mainCardArray.push(mainCard);
@@ -99,9 +99,9 @@ const TestAnswerComponents = React.createClass({
         }
         var _this = this;
         var selectAnswerOptions =  _this.buildSelectOptionsArray(questionId);
-        var everyRow=<Card key={questionId} className="upexam_topic">
+        var everyRow=<Card key={questionId}>
             <Row>
-                <Col span={24}>{number}.({score}分)</Col>
+                <Col span={24}>{number}.&nbsp;&nbsp;({score}分)</Col>
             </Row>
             <Row>
                 <Col span={24}>
@@ -122,9 +122,9 @@ const TestAnswerComponents = React.createClass({
     buildCorrectCard(questionId,number,score,cardArray,textAnswer){
         var _this = this;
         var selectedValue = questionId+"#"+textAnswer;
-        var everyRow=<Card key={questionId} className="upexam_topic">
+        var everyRow=<Card key={questionId}>
             <Row>
-                <Col span={24}>{number}.({score}分)</Col>
+                <Col span={24}>{number}.&nbsp;&nbsp;({score}分)</Col>
             </Row>
             <Row>
                 <Col span={24}>
@@ -155,7 +155,8 @@ const TestAnswerComponents = React.createClass({
             }
             fileList.push(fileJson);
         }
-        var everyRow=<Card key={questionId} className="upexam_topic">
+        var everyRow=<Card key={questionId} >
+
             <Row>
                 <Col span={3}>{number}.({score}分)</Col>
                 <Col span={21}>
@@ -355,30 +356,27 @@ const TestAnswerComponents = React.createClass({
     render() {
         var modalTitle = this.state.title+"答题卡";
         return (
-            <div>
-                <div>
-                    <span>
-                        <Button icon="file-text" onClick={this.answerPaper}>答题卡</Button>
-                    </span>
-                    <span>
-                        {this.state.title}
-                    </span>
+            <div className="level_list_pa">
+                <div className="exam-particulars_title">
+                    <p>
+                        {this.state.title} <Button icon="file-text" onClick={this.answerPaper}>答题卡</Button>
+                    </p>
                 </div>
-                <div>
+                <div className="st_exam">
                     {this.state.attachmentsArray}
                 </div>
-                <Modal
+                <Modal className="st_modal_exam"
                     visible={this.state.tipModalVisible}
                     title={modalTitle}
                     onCancel={this.tipModalHandleCancel}
                     transitionName=""  //禁用modal的动画效果
                     maskClosable={false} //设置不允许点击蒙层关闭
-                    footer={[]}>
-                    <div style={{height:'400px',overflow:'scroll'}}>
+                    footer={[<Button onClick={this.submitAnswer}>提交</Button>]}>
+                    <div style={{height:'400px', overflow:'auto'}}>
                         {this.state.mainCardArray}
                     </div>
                     <div>
-                        <Button onClick={this.submitAnswer}>提交</Button>
+                        
                     </div>
                 </Modal>
             </div>

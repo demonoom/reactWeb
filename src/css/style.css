@@ -4091,7 +4091,7 @@ li.liveTV:hover, li.history:hover{
 	background:#eaf8fe;
 	cursor:pointer
 }
-ul.liveTV_tab .liveTV, ul.liveTV_tab .liveTV i, ul.history_tab .history, ul.history_tab .history i{
+ul.liveTV_tab .liveTV, ul.liveTV_tab .liveTV i, ul.history_tab .history, ul.history_tab .history i, ul.exam_tab .exam, ul.exam_tab .exam i{
 	background-color: #E5F2FE;
     color: #2db7f5;
 }
@@ -4422,13 +4422,13 @@ span.pagination{
     line-height: 34px;
 	font-size:14px;
 }
-.exam_tab{
+.examte_tab{
 	text-align: center;
     margin-bottom: 25px;
     border-bottom: 1px solid #eee;
     padding: 0 0 15px 0;
 }
-.exam_tab a{
+.examte_tab a{
 	width: 33.33%;
     display: inline-block;
     text-align: center;
@@ -4436,11 +4436,11 @@ span.pagination{
 	font-size: 16px;
 	color:#333
 }
-.exam_tab a:hover{
+.examte_tab a:hover{
 	color:#2896fb;
 	text-decoration:none
 }
-.exam_tab a:nth-child(3){
+.examte_tab a:nth-child(3){
 	border-right:none;
 }
 .exam-correct_til{
@@ -4458,6 +4458,9 @@ span.pagination{
 	text-align:center;
 	margin-bottom:12px;
 }
+.exam-particulars_title p{
+	padding:5px 0 0 0
+}
 .exam-particulars_time{
 	color:#999;
 	font-size:14px;
@@ -4468,13 +4471,17 @@ span.pagination{
 .gray_42{
 	color:#424242
 }
-.exam-particulars_cont{
+.exam-particulars_cont, .st_exam-particulars_cont{
 	width:90%;
 	margin:24px auto 0 auto;
 }
 .exam-particulars_cont .upexam_topic{
 	width:100%;
 	margin: 0 auto 15px auto
+}
+.exam-particulars_cont .upexam_topic:last-child{
+	width:100%;
+	margin: 0 auto 0 auto
 }
 .exam-particulars_cont .upexam_topic .ant-card-body{
 	padding:0
@@ -4634,4 +4641,7 @@ span.pagination{
 .correct_name{
 	font-size:14px;
 	margin-left:12px;
+}
+.exam_grade{
+	color:#f56a55
 }
