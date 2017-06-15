@@ -5,7 +5,7 @@
 	background:#E5F2FE;
 	color: #2db7f5;
 }
-.liveTV, .history{
+.liveTV, .history, .exam{
 	top: 0;
     height:100% !important;
 	left: 0px !important;
@@ -347,4 +347,38 @@
 	margin-right:8px
 }
 .live_password{
+}
+.st_exam{
+	text-align:center;
+	border-top:1px solid #f3f3f3;
+	padding:15px 0 0 0
+}
+.st_exam img{
+	width:80%;
+	margin:15px auto 0 auto;
+}
+.st_modal_exam .ant-modal-body{
+	overflow-y:auto;
+	padding:0
+}
+.st_modal_exam .ant-modal-footer{
+	min-height:40px;
+}
+.st_exam-particulars_cont .ant-card{
+	border-radius: 0;
+}
+.st_exam-particulars_cont .ant-card-body{
+	padding:12px
+}
+.st_exam-particulars_cont .ant-card-body .ant-row:nth-child(2){
+	padding:10px 0 0 0;
+}
+.st_exam-particulars_cont .ant-card-bordered{
+	border-bottom:1px solid #e9e9e9;
+	border-left:none;
+	border-right:none;
+	border-top:none;
+}
+.st_exam-particulars_cont .ant-card-bordered:last-child{
+	border:none;
 }

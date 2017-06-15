@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import {Card, Row, message, Col, Input, Button, Modal, Pagination} from 'antd';
+import {Card, Row, message, Col, Input, Button, Icon, Modal, Pagination} from 'antd';
 import {getPageSize} from '../../utils/Const';
 import {getLocalTime} from '../../utils/utils';
 import {doWebService} from '../../WebServiceHelper';
@@ -470,9 +470,9 @@ class LiveTV extends React.Component {
                     this.change('history')
                 }}><i className="iconfont menu_left_i">&#xe602;</i>直播回顾
                 </li>
-                <li className='history' onClick={() => {
+                <li className='exam' onClick={() => {
                     this.change('exam')
-                }}><i className="iconfont menu_left_i">&#xe602;</i>考试
+                }}><Icon type="exception" className="iconfont menu_left_i"/>考试
                 </li>
             </ul>
         </div>;

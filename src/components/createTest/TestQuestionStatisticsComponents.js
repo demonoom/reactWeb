@@ -315,8 +315,8 @@ const TestQuestionStatisticsComponents = React.createClass({
             message.warning("没有学生!");
         }else{
             rightUsersArray.forEach(function (user) {
-                var userLi = <div>
-                    <img src={user.avatar} style={{width:'50px',height:'50px'}}/>
+                var userLi = <div className="group_fr">
+                    <span className="attention_img"><img src={user.avatar} /></span>
                     <span>{user.userName}</span>
                 </div>
                 userLiArray.push(userLi);
@@ -334,8 +334,8 @@ const TestQuestionStatisticsComponents = React.createClass({
             message.warning("没有学生!");
         }else{
             wrongUsersArray.forEach(function (user) {
-                var userLi = <div>
-                    <img src={user.avatar} style={{width:'50px',height:'50px'}}/>
+                var userLi = <div className="group_fr">
+                    <span className="attention_img"><img src={user.avatar} /></span>
                     <span>{user.userName}</span>
                 </div>
                 userLiArray.push(userLi);
@@ -353,8 +353,8 @@ const TestQuestionStatisticsComponents = React.createClass({
             message.warning("没有学生!");
         }else{
             choiceUsersArray.forEach(function (user) {
-                var userLi = <div>
-                    <img src={user.avatar} style={{width:'50px',height:'50px'}}/>
+                var userLi = <div className="group_fr">
+                    <span className="attention_img"><img src={user.avatar} /></span>
                     <span>{user.userName}</span>
                 </div>
                 userLiArray.push(userLi);
