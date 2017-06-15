@@ -45,14 +45,14 @@ const TestScoreRankingsComponents = React.createClass({
                         var userObj = e.user;
                         var avatar = userObj.avatar;
                         if(submited){
-                            var userLi=<li onClick={_this.seeAnswer.bind(_this,userObj,submited)}>
-                                <span><img src={avatar} height="38"></img>{userObj.userName}</span>
+                            var userLi=<li onClick={_this.seeAnswer.bind(_this,userObj,submited)} className="group_fr">
+                                <span className="attention_img"><img src={avatar} height="38"></img></span><span>{userObj.userName}</span>
                                 <span>{score}分</span>
                             </li>;
                             submitedUserArray.push(userLi)
                         }else {
-                            var userLi=<li onClick={_this.seeAnswer.bind(_this,userObj,submited)}>
-                                <span><img src={avatar} height="38"></img>{userObj.userName}</span>
+                            var userLi=<li onClick={_this.seeAnswer.bind(_this,userObj,submited)} className="group_fr">
+                                <span className="attention_img"><img src={avatar} height="38"></img></span><span>{userObj.userName}</span>
                             </li>;
                             noSubmitUserArray.push(userLi)
                         }
@@ -83,10 +83,10 @@ const TestScoreRankingsComponents = React.createClass({
     },
 
     render() {
-        var submitedHeader=<span>已提交({this.state.submitedUserCount}人)</span>;
-        var noSubmitHeader=<span>未提交({this.state.noSubmitUserCount}人)</span>;
+        var submitedHeader=<span>已提交（{this.state.submitedUserCount}人）</span>;
+        var noSubmitHeader=<span>未提交（{this.state.noSubmitUserCount}人）</span>;
         return (
-            <div>
+            <div className="score_ranking">
                 <Collapse defaultActiveKey={['1','2']} activeKey={['1','2']} onChange={this.state.collapseOnChange}>
                     <Panel header={submitedHeader} key="1">
                         <ul>
