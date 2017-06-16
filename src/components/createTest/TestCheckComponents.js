@@ -53,10 +53,8 @@ const TestCheckComponents = React.createClass({
                             submitedUserArray.push(userLi)
                         }else {
                             var userLi=<li onClick={_this.seeAnswer.bind(_this,userObj,submited)}>
-								<div className="group_fr">
-                                	<span className="attention_img"><img  className="attention_img" src={avatar} height="38"></img></span>
-									<span className="correct_name">{userObj.userName}</span>
-								</div>
+                                <span className="attention_img"><img  className="attention_img" src={avatar} height="38"></img></span>
+								<span className="correct_name">{userObj.userName}</span>
                                 <span className="result"><span>未提交</span></span>
                             </li>;
                             noSubmitUserArray.push(userLi)
@@ -91,7 +89,7 @@ const TestCheckComponents = React.createClass({
         var noSubmitHeader=<span>未提交（{this.state.noSubmitUserCount}人）</span>;
         return (
             <div className="correct_exam">
-                {/*<ul>
+               {/*<ul>
                     {this.state.submitedUserArray}
                     {this.state.noSubmitUserArray}
                 </ul>*/}

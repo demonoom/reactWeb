@@ -4626,6 +4626,18 @@ span.pagination{
     min-height: 38px;
     line-height: 38px;
 	position:relative;
+	display: inline-block;
+    width: 100%;
+}
+.correct_exam .ant-collapse-content-box span.attention_img, .correct_exam .ant-collapse-content-box span.correct_name{
+	margin-right: 0;
+    display: inline-block;
+}
+.correct_exam .ant-collapse-content-box span.correct_name{
+	float:none;
+}
+.correct_exam .ant-collapse-content > .ant-collapse-content-box{
+	padding:0;
 }
 .correct_exam ul li span.result{
 	position: absolute;
@@ -4633,6 +4645,7 @@ span.pagination{
     border-top: 40px #e3e3e3 solid;
     border-left: 55px transparent solid;
     top: 0;
+	margin-right:0;
 }
 .correct_exam ul li span.result span{
 	transform: rotate(35deg);
@@ -4652,6 +4665,7 @@ span.pagination{
     border-top: 40px #71d57f solid;
     border-left: 55px transparent solid;
     top: 0;
+	margin-right:0;
 }
 .correct_exam ul li span.result_green span{
 	transform: rotate(35deg);
