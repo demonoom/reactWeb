@@ -311,6 +311,8 @@ const TestAnswerComponents = React.createClass({
         if(isExistSameQuestion==false){
             exmSubmitResultJsonArray.push(exmSubmitResultJsonForAdd);
         }
+        //试卷答题卡改变时,做一个更新标记,退出答题窗口时,提醒用户退出,并调用保存试卷答题卡的操作
+        this.props.onAnswerCardChange(true);
     },
 
     tipModalHandleCancel(){
@@ -344,6 +346,7 @@ const TestAnswerComponents = React.createClass({
                     }else{
                         message.error("答题卡提交失败");
                     }
+                    this.props.onAnswerCardChange(false);
                 }
                 _this.tipModalHandleCancel();
             },

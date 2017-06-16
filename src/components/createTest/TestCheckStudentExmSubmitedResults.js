@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {Timeline, Button, Popover, message,Steps,Icon,Progress,Modal,Collapse,Card,Row,Col} from 'antd';
+import {Timeline, Button, Popover, message,Steps,Icon,Progress,Modal,Collapse,Card,Row,Col,Slider, Input} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import {getPageSize} from '../../utils/Const';
 import {formatYMD} from '../../utils/utils';
@@ -9,11 +9,13 @@ const Panel = Collapse.Panel;
 
 var examsArray=[];
 var TimeLineItemArray=[];
+var questionScoreJsonArray = [];
 const TestCheckStudentExmSubmitedResults = React.createClass({
     getInitialState() {
         return {
             ident: sessionStorage.getItem('ident'),
             tipModalVisible:false,
+            inputValue: 2,
         };
     },
 
@@ -73,10 +75,8 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
                     var totalScore=0;
                     //题目数量
                     var questionCount=0;
-                    var scores=[];
                     resultsArray.forEach(function (result) {
                         totalScore =parseFloat(totalScore) + parseFloat(result.score);
-                        scores.push(result.score);
                     });
                     questionTypes.forEach(function (questionType) {
                         var typeTitle = questionType.title;
@@ -113,7 +113,7 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
                         mainCardArray.push(mainCard);
                     });
                     _this.setState({
-                        mainCardArray,questionCount,totalScore,attachMentsArray,scores
+                        mainCardArray,questionCount,totalScore,attachMentsArray
                     });
                 }
             },
@@ -281,7 +281,10 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
                     }
                     var everyRow=<Card key={type+no} className="upexam_topic">
                         <Row>
-                            <Col span={24}>{no}.&nbsp;&nbsp;正确答案：（总分：{score}分）</Col>
+                            <Col span={12}>{no}.&nbsp;&nbsp;正确答案：（总分：{score}分）</Col>
+                            <Col span={10}>得分
+                                <Input id={questionId} placeholder="请输入" defaultValue={result.score} onChange={_this.scoreInputChange} />
+                            </Col>
                         </Row>
                         <Row>
                             <Col span={24}>{textAnswer}</Col>
@@ -298,6 +301,39 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
         }
     },
 
+    scoreInputChange(e){
+        var target = e.target;
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
+            target = e.target;
+        }
+        var questionId = target.id;
+        //得分
+        var score = target.value;
+        //封装题目的所属答题卡、编号信息和题目分值
+        var questionScoreJson = {questionId, score};
+        this.buildQuestionScoreJsonArray(questionScoreJson);
+    },
+
+    /**
+     * 构建/刷新试卷提交结果对象数组
+     */
+    buildQuestionScoreJsonArray(questionScoreJsonForAdd){
+        var isExistSameQuestion=false;
+        for(var i=0;i<questionScoreJsonArray.length;i++){
+            var questionScoreJson = questionScoreJsonArray[i];
+            if(questionScoreJson.questionId == questionScoreJsonForAdd.questionId){
+                questionScoreJson.score = questionScoreJsonForAdd.score;
+                isExistSameQuestion=true;
+                break;
+            }
+        }
+        if(isExistSameQuestion==false){
+            questionScoreJsonArray.push(questionScoreJsonForAdd);
+        }
+    },
+
     showPaperAttachmentsModal(){
         this.setState({"tipModalVisible":true});
     },
@@ -310,7 +346,18 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
      */
     batchCorrectExmResult(){
         var _this = this;
-        var scoreStr=_this.state.scores.join(",");
+        var scoreStr="";
+        for(var i=0;i<questionScoreJsonArray.length;i++){
+            var questionScoreJson = questionScoreJsonArray[i];
+            var questionId = questionScoreJson.questionId;
+            var score = questionScoreJson.score;
+            var questionScoreInfo = questionId+"@"+score;
+            if(i==0){
+                scoreStr=scoreStr+questionScoreInfo;
+            }else{
+                scoreStr=scoreStr+"#"+questionScoreInfo;
+            }
+        }
         var param = {
             "method": 'batchCorrectExmResult',
             "scores": scoreStr,
@@ -319,6 +366,11 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
             onResponse: function (ret) {
                 if(ret.msg == "调用成功" && ret.success == true){
                     var response = ret.response;
+                    if(response){
+                        message.success("试卷批改成功");
+                    }else{
+                        message.error("试卷批改失败");
+                    }
                 }
             },
             onError: function (error) {
@@ -331,10 +383,15 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
 
     render() {
         var batchCorrectExmResultButton;
+        var userObj = JSON.parse(sessionStorage.getItem("loginUser"));
         if(this.props.checkExamComeFrom=="checkTest"){
-            batchCorrectExmResultButton=<div>
-                <Button onClick={this.batchCorrectExmResult}>批改完成</Button>
-            </div>;
+            if(userObj.colUtype=="STUD"){
+                batchCorrectExmResultButton="";
+            }else{
+                batchCorrectExmResultButton=<div>
+                    <Button onClick={this.batchCorrectExmResult}>批改完成</Button>
+                </div>;
+            }
         }else{
             batchCorrectExmResultButton="";
         }

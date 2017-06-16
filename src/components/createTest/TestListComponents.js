@@ -9,6 +9,7 @@ import TestPushComponents from './TestPushComponents';
 import TestCheckComponents from './TestCheckComponents';
 import TestCheckStudentExmSubmitedResults from './TestCheckStudentExmSubmitedResults';
 import TestAnswerComponents from './TestAnswerComponents';
+import ConfirmModal from '../ConfirmModal';
 
 const TabPane = Tabs.TabPane;
 //定义js函数，完成删除前的确认提示操作
@@ -27,12 +28,34 @@ const TestListComponents = React.createClass({
     },
 
     getTestList(){
+        if(this.state.answerCardChangeTag==true){
+            this.showConfirmModal();
+        }else{
+            this.turnToTestTimeLine();
+        }
+    },
+
+    turnToTestTimeLine(){
         this.setState({activeKey: '我的考试', currentOpt: 'testTimeLine',});
         var initPageNo=1;
         if(typeof(this.refs.testTimeLineComponents)!="undefined" ){
             this.refs.testTimeLineComponents.initPage();
         }
-        //
+    },
+
+    submitAnswerCard(){
+        this.refs.testAnswerComponents.submitAnswer();
+        this.setState({"answerCardChangeTag":false});
+        this.closeConfirmModal();
+    },
+
+    showConfirmModal() {
+        this.refs.confirmModal.changeConfirmModalVisible(true);
+    },
+
+    closeConfirmModal() {
+        this.turnToTestTimeLine();
+        this.refs.confirmModal.changeConfirmModalVisible(false);
     },
 
     assignTest(){
@@ -92,6 +115,10 @@ const TestListComponents = React.createClass({
         }
     },
 
+    assignAnswerCardChangeTag(flag){
+        this.setState({"answerCardChangeTag":flag});
+    },
+
     render() {
 
         var tabPanel;
@@ -105,7 +132,12 @@ const TestListComponents = React.createClass({
             //考试列表
             returnBtn = '';
             leftBtn="";
-            topButton = assignExamsBtn;
+            var userObj = JSON.parse(sessionStorage.getItem("loginUser"));
+            if(userObj.colUtype=="STUD"){
+                topButton = "";
+            }else{
+                topButton = assignExamsBtn;
+            }
             tabPanel = <TestTimeLineComponents ref="testTimeLineComponents" onTestClick={this.testAnalysis}
                 onStudentClick={this.studentAnswerOrSeeResult}/>;
         } else if (this.state.currentOpt == "assignTest"){
@@ -208,7 +240,10 @@ const TestListComponents = React.createClass({
             leftBtn = <span className="btn1 ant-tabs-right"><button onClick={this.getTestList}
                                                                     className="affix_bottom_tc"><Icon
                 type="left"/></button></span>;
-            tabPanel = <TestAnswerComponents exmId={this.state.examId} paper={this.state.paper}></TestAnswerComponents>;
+            tabPanel = <TestAnswerComponents exmId={this.state.examId} paper={this.state.paper}
+                                            onAnswerCardChange={this.assignAnswerCardChangeTag}
+                                             ref="testAnswerComponents"
+                    ></TestAnswerComponents>;
         }
 
         toolbar = <h3 className={" public—til—blue"}>{this.state.activeKey}
@@ -222,6 +257,11 @@ const TestListComponents = React.createClass({
             <div className="follow_my">
                 {toolbar}
                 <div className="favorite_scroll favorite_up">{tabPanel}</div>
+                <ConfirmModal ref="confirmModal"
+                              title="是否更改上次提交?"
+                              onConfirmModalCancel={this.closeConfirmModal}
+                              onConfirmModalOK={this.submitAnswerCard}
+                ></ConfirmModal>
             </div>
         );
     },

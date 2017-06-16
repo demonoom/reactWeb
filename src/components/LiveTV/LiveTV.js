@@ -273,12 +273,15 @@ class LiveTV extends React.Component {
         switch (type) {
             case 'liveTV':
                 this._getLives(1);
+                this.setState({"currentOpt":'lives'});
                 break;
             case 'history':
                 this._searchHistoryLives(1);
+                this.setState({"currentOpt":'historyLives'});
                 break;
             case 'exam':
                 this.turnToTestTimeLine();
+                this.setState({"currentOpt":'exam'});
                 break;
         }
     }
@@ -290,7 +293,7 @@ class LiveTV extends React.Component {
         if(typeof(this.refs.testListComponents)!="undefined"){
             this.refs.testListComponents.getTestList();
         }
-        this.setState({"currentOpt":'exam'});
+        // this.setState({"currentOpt":'exam'});
     }
 
 
