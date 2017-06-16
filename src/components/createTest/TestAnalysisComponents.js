@@ -112,7 +112,7 @@ const TestAnalysisComponents = React.createClass({
         }else{
             this.state.highestScoreNames.forEach(function (e) {
                 var maxLi = <div className="group_fr">
-                    <span className="attention_img"><img src={require('../images/maaeeLogo.jpg')}/></span>
+                    <span className="attention_img"><img src={require('../images/maaee_face.png')}/></span>
                     <span>{e}</span>
                 </div>
                 maxLiArray.push(maxLi);
@@ -131,7 +131,7 @@ const TestAnalysisComponents = React.createClass({
         }else{
             this.state.lowestScoreNames.forEach(function (e) {
                 var maxLi = <div className="group_fr">
-                    <span className="attention_img"><img src={require('../images/maaeeLogo.jpg')}/></span>
+                    <span className="attention_img"><img src={require('../images/maaee_face.png')}/></span>
                     <span>{e}</span>
                 </div>
                 minLiArray.push(maxLi);
@@ -147,7 +147,7 @@ const TestAnalysisComponents = React.createClass({
         }else{
             this.state.average2highestNames.forEach(function (e) {
                 var biggerLi = <div className="group_fr">
-                    <span className="attention_img"><img src={require('../images/maaeeLogo.jpg')}/></span>
+                    <span className="attention_img"><img src={require('../images/maaee_face.png')}/></span>
                     <span>{e}</span>
                 </div>
                 bigAvageLiArray.push(biggerLi);
@@ -163,7 +163,7 @@ const TestAnalysisComponents = React.createClass({
         }else{
             this.state.average2lowestNames.forEach(function (e) {
                 var lowerLi = <div className="group_fr">
-                    <span className="attention_img"><img src={require('../images/maaeeLogo.jpg')}/></span>
+                    <span className="attention_img"><img src={require('../images/maaee_face.png')}/></span>
                     <span>{e}</span>
                 </div>
                 lowAvageLiArray.push(lowerLi);
