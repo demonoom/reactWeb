@@ -204,6 +204,10 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
                             resultAnswer="正确";
                             break;
                     }
+                    var answerClassName;
+                    if(resultAnswer!=textAnswer){
+                        answerClassName="exam_grade";
+                    }
                     var everyRow=<Card key={type+no} className="upexam_topic">
                         <Row className="class_right">
                             <Col span={2}>题号</Col>
@@ -213,7 +217,7 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
                         <Row className="class_right">
                             <Col span={2}>{no}</Col>
                             <Col span={14}>{textAnswer}</Col>
-                            <Col span={6}>{resultAnswer}</Col>
+                            <Col span={6} className={answerClassName}>{resultAnswer}</Col>
                         </Row>
                     </Card>;
                     cardArray.push(everyRow);
@@ -280,7 +284,7 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
                         <Row>
                             <Col span={12}>{no}.&nbsp;&nbsp;正确答案：（总分：{score}分）</Col>
                             <Col span={10}><span className="upexam_float">得分：</span>
-                                <span className="upexam_float"><Input id={questionId} placeholder="请输入" defaultValue={result.score} onChange={_this.scoreInputChange} style={{width:'50px'}} /></span>
+                                <span className="upexam_float"><Input id={questionId} placeholder="请输入" disabled={_this.state.scoreInputDisable}  defaultValue={result.score} onChange={_this.scoreInputChange} style={{width:'50px'}} /></span>
                             </Col>
                         </Row>
                         <Row>

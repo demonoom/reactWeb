@@ -1156,11 +1156,11 @@ const UpdateExamPagerComponents = React.createClass({
      */
     correctAnswerOnChange(e){
         var target = e.target;
-        if (navigator.userAgent.indexOf("Chrome") > -1) {
+        /*if (navigator.userAgent.indexOf("Chrome") > -1) {
             target = e.currentTarget;
         } else {
             target = e.target;
-        }
+        }*/
         var subjectInfo = target.value;
         var subjectInfoArray = subjectInfo.split("#");
         //当前答案所属答题卡名称
