@@ -204,14 +204,14 @@ const TestAnswerComponents = React.createClass({
         var everyRow=<Card key={questionId} >
 
             <Row>
-                <Col span={3}>{number}.({score}分)</Col>
-                <Col span={21}>
-                    <Input id={questionId+"#Input"} placeholder="输入答案" defaultValue={textAnswer} onChange={_this.blankAnswerOnChange} />
+                <Col span={4}>{number}.&nbsp;&nbsp;<span className="exam-particulars_time">({score}分)</span></Col>
+                <Col span={20}>
+                    <Input id={questionId+"#Input"} placeholder="输入答案"  defaultValue={textAnswer} onChange={_this.blankAnswerOnChange} />
                 </Col>
             </Row>
-            <Row>
-                <Col span={3}></Col>
-                <Col span={21}>
+            <Row className="yinyong3">
+                <Col span={4}></Col>
+                <Col span={20}>
                     <ImageAnswerUploadComponents params={questionId+"#imageAnswer"}
                                                  fileList={fileList}
                                                  callBackParent={_this.getImgAnswerList}>
@@ -408,7 +408,7 @@ const TestAnswerComponents = React.createClass({
             <div className="level_list_pa">
                 <div className="exam-particulars_title">
                     <p>
-                        {this.state.title} <Button icon="file-text" onClick={this.answerPaper}>答题卡</Button>
+                        {this.state.title} <Button icon="file-text" className=" exam_right_a" onClick={this.answerPaper}>答题卡</Button>
                     </p>
                 </div>
                 <div className="st_exam">
