@@ -48,7 +48,7 @@ const TestCheckComponents = React.createClass({
                             var userLi=<li onClick={_this.seeAnswer.bind(_this,userObj,submited)}>
                                 <span className="attention_img"><img className="attention_img" src={avatar} height="38"></img></span>
 								<span className="correct_name">{userObj.userName}</span>
-                                <span className="result"><span>去批改</span></span>
+                                <span className="result_green"><span>去批改</span></span>
                             </li>;
                             submitedUserArray.push(userLi)
                         }else {

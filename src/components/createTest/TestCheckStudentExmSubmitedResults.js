@@ -183,12 +183,12 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
         }
         if(results.length==0){
             var everyRow=<Card key={type+no} className="upexam_topic">
-                <Row>
+                <Row className="class_right">
                     <Col span={2}>题号</Col>
                     <Col span={14}>标准答案</Col>
                     <Col span={6}>学生答案</Col>
                 </Row>
-                <Row>
+                <Row className="class_right">
                     <Col span={2}>{no}</Col>
                     <Col span={14}>{textAnswer}</Col>
                     <Col span={6}></Col>
@@ -209,12 +209,12 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
                             break;
                     }
                     var everyRow=<Card key={type+no} className="upexam_topic">
-                        <Row>
+                        <Row className="class_right">
                             <Col span={2}>题号</Col>
                             <Col span={14}>标准答案</Col>
                             <Col span={6}>学生答案</Col>
                         </Row>
-                        <Row>
+                        <Row className="class_right">
                             <Col span={2}>{no}</Col>
                             <Col span={14}>{textAnswer}</Col>
                             <Col span={6}>{resultAnswer}</Col>
@@ -249,7 +249,7 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
         if(results.length==0){
             var everyRow=<Card key={type+no} className="upexam_topic">
                 <Row>
-                    <Col span={24}>{no}.正确答案:(总分:{score}分)</Col>
+                    <Col span={24}>{no}.&nbsp;&nbsp;正确答案:(总分:{score}分)</Col>
                 </Row>
                 <Row>
                     <Col span={24}>{textAnswer}</Col>
@@ -282,8 +282,8 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
                     var everyRow=<Card key={type+no} className="upexam_topic">
                         <Row>
                             <Col span={12}>{no}.&nbsp;&nbsp;正确答案：（总分：{score}分）</Col>
-                            <Col span={10}>得分
-                                <Input id={questionId} placeholder="请输入" defaultValue={result.score} onChange={_this.scoreInputChange} />
+                            <Col span={10}><span className="upexam_float">得分：</span>
+                                <span className="upexam_float"><Input id={questionId} placeholder="请输入" defaultValue={result.score} onChange={_this.scoreInputChange} /></span>
                             </Col>
                         </Row>
                         <Row>
@@ -388,18 +388,18 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
             if(userObj.colUtype=="STUD"){
                 batchCorrectExmResultButton="";
             }else{
-                batchCorrectExmResultButton=<div>
-                    <Button onClick={this.batchCorrectExmResult}>批改完成</Button>
+                batchCorrectExmResultButton=<div className="correct_finish">
+                    <Button className="exam_btn_green" onClick={this.batchCorrectExmResult}>批改完成</Button>
                 </div>;
             }
         }else{
             batchCorrectExmResultButton="";
         }
         return (
-            <div className="level_list_pa"><a onClick={this.showPaperAttachmentsModal} className="ant-btn ant-btn-primary add_study">查看试卷</a>
+            <div className="level_list_pa"><a onClick={this.showPaperAttachmentsModal} className="ant-btn ant-btn-primary add_study exam_right_a">查看试卷</a>
                 <div className="exam-particulars_title">
                   <p>{this.props.studentObj.userName}同学试题答案</p>
-				  <p className="exam_grade">共计：{this.state.questionCount}题 得分{this.state.totalScore}分</p>
+				  <p className="exam_grade date_tr">共计：{this.state.questionCount}题&nbsp;&nbsp;&nbsp;得分：{this.state.totalScore}分</p>
                 </div>
                 {this.state.mainCardArray}
                 {batchCorrectExmResultButton}

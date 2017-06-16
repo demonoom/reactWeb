@@ -147,7 +147,7 @@ const TestPushComponents = React.createClass({
         return (
             <div className="favorite_my exam_compare">
                 <div className="exam_compare_remark">
-					<Button type="primary" onClick={this.getExmOverallStatisticsByExmIds} disabled={!hasSelected} loading={loading}>比较</Button>
+					<Button type="primary" className="exam_right_a" onClick={this.getExmOverallStatisticsByExmIds} disabled={!hasSelected} loading={loading}>比较</Button>
 					<span className="password_ts">
                         {hasSelected ? `选中 ${selectedRowKeys.length} 条记录` : ''}
                     </span>

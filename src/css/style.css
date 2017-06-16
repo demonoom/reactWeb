@@ -449,7 +449,8 @@ i, cite, em, var, address, dfn {
 		min-height:calc(100% - 50px);
 		overflow-y: auto;
 		overflow-x:hidden;
-		border:none !important
+		border:none !important;
+		position:relative;
 	}
 	.add_study{
 		margin:0;
@@ -4299,17 +4300,24 @@ ul.liveTV_tab .liveTV, ul.liveTV_tab .liveTV i, ul.history_tab .history, ul.hist
 	overflow:hidden;
 }
 .exam_paper .topic{
-	height: 290px;
+	min-height: calc(100% - 200px) !important;
     overflow: hidden;
     margin-bottom: 0 !important;
+    max-height: calc(100% - 200px);
+    height: calc(100% - 200px) !important;
+    display: inline-block;
+    width: 100%;
+    float: left;
+    position: absolute;
+    left: 0;
 }
 .exam_paper .topic_list{
 	overflow:hidden;
-	height:290px;
+	height:100%;
 }
 .exam_paper .topic_list .ant-radio-group{
 	width:100%;
-	height:248px;
+	height:calc(100% - 50px);
 	overflow:auto;
 }
 .exam_paper .topic_list .ant-radio-group label{
@@ -4622,21 +4630,41 @@ span.pagination{
 .correct_exam ul li span.result{
 	position: absolute;
     right: 0;
-    border-top: 36px #e3e3e3 solid;
+    border-top: 40px #e3e3e3 solid;
     border-left: 55px transparent solid;
     top: 0;
 }
 .correct_exam ul li span.result span{
-	transform: rotate(30deg);
-    -ms-transform: rotate(30deg);
-    -moz-transform: rotate(30deg);
-    -webkit-transform: rotate(30deg);
-    -o-transform: rotate(30deg);
+	transform: rotate(35deg);
+    -ms-transform: rotate(35deg);
+    -moz-transform: rotate(35deg);
+    -webkit-transform: rotate(35deg);
+    -o-transform: rotate(35deg);
     position: absolute;
-    left: -37px;
-    top: -42px;
+    left: -36px;
+    top: -45px;
     font-size: 12px;
     z-index: 1000;
+}
+.correct_exam ul li span.result_green{
+	position: absolute;
+    right: 0;
+    border-top: 40px #71d57f solid;
+    border-left: 55px transparent solid;
+    top: 0;
+}
+.correct_exam ul li span.result_green span{
+	transform: rotate(35deg);
+    -ms-transform: rotate(35deg);
+    -moz-transform: rotate(35deg);
+    -webkit-transform: rotate(35deg);
+    -o-transform: rotate(35deg);
+    position: absolute;
+    left: -36px;
+    top: -45px;
+    font-size: 12px;
+    z-index: 1000;
+	color:#fff
 }
 .correct_name{
 	font-size:14px;
@@ -4644,4 +4672,17 @@ span.pagination{
 }
 .exam_grade{
 	color:#f56a55
+}
+.correct_finish{
+	padding:20px 0 0 0;
+	text-align:center
+}
+.exam_right_a{
+	position: absolute;
+    top: 8px;
+    right: 12px;
+}
+.max_class{
+	max-height:64px;
+	overflow:auto;
 }

@@ -62,7 +62,7 @@ const TestListComponents = React.createClass({
 
     getStudentExmSubmitedResults(exmId,userObj){
         var tipTitle = "批改"+userObj.userName+"同学的试卷";
-        this.setState({activeKey: tipTitle, currentOpt: 'checkStudentExmSubmitedResults',"examId":exmId,"studentObj":userObj});
+        this.setState({activeKey: tipTitle, currentOpt: 'checkStudentExmSubmitedResults',"examId":exmId,"studentObj"：userObj});
     },
 
     render() {

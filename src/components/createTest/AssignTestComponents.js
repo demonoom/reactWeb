@@ -464,7 +464,7 @@ const AssignTestComponents = React.createClass({
                         <Col span={3}>
                             <span className="date_tr text_30">班&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span>
                         </Col>
-                        <Col span={21} className="ant-form-item-control">
+                        <Col span={21} className="ant-form-item-control max_class">
                             <span className="date_tr"><CheckboxGroup options={assignHomeWork.state.classList}
                                                                      onChange={assignHomeWork.classListOnChange}/></span>
                         </Col>
@@ -475,7 +475,7 @@ const AssignTestComponents = React.createClass({
                             <span className="text_30">试&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;卷：</span>
                         </Col>
                         <Col span={21} className="ant-form-item-control topic_list">
-                            <div>
+                            <div className="follow_my">
                                 <Row>
                                     <Col span={24}>
                                         {this.state.radioGroupObj}
