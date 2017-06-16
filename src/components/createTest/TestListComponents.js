@@ -181,7 +181,10 @@ const TestListComponents = React.createClass({
             leftBtn = <span className="btn1 ant-tabs-right"><button onClick={this.testAnalysis.bind(this,this.state.examId)}
                                                                     className="affix_bottom_tc"><Icon
                 type="left"/></button></span>;
-            tabPanel = <TestQuestionStatisticsComponents ref="testQuestionStatisticsComponents" exmId={this.state.examId}/>;
+            tabPanel = <TestQuestionStatisticsComponents ref="testQuestionStatisticsComponents"
+                                                         exmId={this.state.examId}
+                                                         onCheckButtonClick={this.getStudentExmSubmitedResults}
+                                                         />;
         }else if(this.state.currentOpt == "exmPushByPaperId"){
             //平行班比较
             returnBtn = 'btn1';
