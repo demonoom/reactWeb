@@ -264,6 +264,7 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
         results.forEach(function (result) {
                 if(questionId==result.questionId){
 					isExistSameQuestion=true;
+                    var resultId = result.id;
                     var resultAnswer = result.textAnswer;
                     var resultImageAnswer = result.imageAnswer;
                     var studentAnswerImgObj;
@@ -284,7 +285,7 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
                         <Row>
                             <Col span={12}>{no}.&nbsp;&nbsp;正确答案：（总分：{score}分）</Col>
                             <Col span={10}><span className="upexam_float">得分：</span>
-                                <span className="upexam_float"><Input id={questionId} placeholder="请输入" disabled={_this.state.scoreInputDisable}  defaultValue={result.score} onChange={_this.scoreInputChange} style={{width:'50px'}} /></span>
+                                <span className="upexam_float"><Input id={resultId} placeholder="请输入" disabled={_this.state.scoreInputDisable}  defaultValue={result.score} onChange={_this.scoreInputChange} style={{width:'50px'}} /></span>
                             </Col>
                         </Row>
                         <Row>
@@ -323,11 +324,11 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
         } else {
             target = e.target;
         }
-        var questionId = target.id;
+        var resultId = target.id;
         //得分
         var score = target.value;
         //封装题目的所属答题卡、编号信息和题目分值
-        var questionScoreJson = {questionId, score};
+        var questionScoreJson = {resultId, score};
         this.buildQuestionScoreJsonArray(questionScoreJson);
     },
 
@@ -338,7 +339,7 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
         var isExistSameQuestion=false;
         for(var i=0;i<questionScoreJsonArray.length;i++){
             var questionScoreJson = questionScoreJsonArray[i];
-            if(questionScoreJson.questionId == questionScoreJsonForAdd.questionId){
+            if(questionScoreJson.resultId == questionScoreJsonForAdd.resultId){
                 questionScoreJson.score = questionScoreJsonForAdd.score;
                 isExistSameQuestion=true;
                 break;
@@ -364,9 +365,9 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
         var scoreStr="";
         for(var i=0;i<questionScoreJsonArray.length;i++){
             var questionScoreJson = questionScoreJsonArray[i];
-            var questionId = questionScoreJson.questionId;
+            var resultId = questionScoreJson.resultId;
             var score = questionScoreJson.score;
-            var questionScoreInfo = questionId+"@"+score;
+            var questionScoreInfo = resultId+"@"+score;
             if(i==0){
                 scoreStr=scoreStr+questionScoreInfo;
             }else{
