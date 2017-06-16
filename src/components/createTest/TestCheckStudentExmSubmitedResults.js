@@ -15,12 +15,18 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
         return {
             ident: sessionStorage.getItem('ident'),
             tipModalVisible:false,
-            inputValue: 2,
+            scoreInputDisable:false,
         };
     },
 
     componentDidMount(){
         var _this = this;
+        var userObj = JSON.parse(sessionStorage.getItem("loginUser"));
+        var scoreInputDisableValue=false;
+        if(userObj.colUtype=="STUD"){
+            scoreInputDisableValue=true;
+        }
+        _this.setState({scoreInputDisable:scoreInputDisableValue});
         _this.getStudentExmSubmitedResults();
     },
 
@@ -130,7 +136,31 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
         var type = question.type;
         var textAnswer = question.textAnswer;
         var questionId = question.id;
-        if(results.length==0){
+        var isExistSameQuestion=false;
+        results.forEach(function (result) {
+            if(questionId==result.questionId){
+                isExistSameQuestion=true;
+                var resultAnswer = result.textAnswer;
+                var answerClassName;
+                if(resultAnswer!=textAnswer){
+                    answerClassName="exam_grade";
+                }
+                var everyRow=<Card key={type+no} className="upexam_topic">
+                    <Row className="class_right">
+                        <Col span={2}>题号</Col>
+                        <Col span={14}>标准答案</Col>
+                        <Col span={6}>学生答案</Col>
+                    </Row>
+                    <Row className="class_right">
+                        <Col span={2}>{no}</Col>
+                        <Col span={14}>{textAnswer}</Col>
+                        <Col span={6} className={answerClassName}>{resultAnswer}</Col>
+                    </Row>
+                </Card>;
+                cardArray.push(everyRow);
+            }
+        });
+        if(results.length==0 || isExistSameQuestion==false){
             var everyRow=<Card key={type+no} className="upexam_topic">
                 <Row className="class_right">
                     <Col span={2}>题号</Col>
@@ -144,25 +174,6 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
                 </Row>
             </Card>;
             cardArray.push(everyRow);
-        }else{
-            results.forEach(function (result) {
-                if(questionId==result.questionId){
-                    var resultAnswer = result.textAnswer;
-                    var everyRow=<Card key={type+no} className="upexam_topic">
-                        <Row className="class_right">
-                            <Col span={2}>题号</Col>
-                            <Col span={14}>标准答案</Col>
-                            <Col span={6}>学生答案</Col>
-                        </Row>
-                        <Row className="class_right">
-                            <Col span={2}>{no}</Col>
-                            <Col span={14}>{textAnswer}</Col>
-                            <Col span={6} className="exam_grade">{resultAnswer}</Col>
-                        </Row>
-                    </Card>;
-                    cardArray.push(everyRow);
-                }
-            });
         }
     },
 
@@ -181,7 +192,36 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
                 textAnswer="正确";
                 break;
         }
-        if(results.length==0){
+        var isExistSameQuestion=false;
+        results.forEach(function (result) {
+            if(questionId==result.questionId){
+                isExistSameQuestion=true;
+                var resultTextAnswer = result.textAnswer;
+                var resultAnswer;
+                switch (resultTextAnswer){
+                    case "0":
+                        resultAnswer="错误";
+                        break;
+                    case "1":
+                        resultAnswer="正确";
+                        break;
+                }
+                var everyRow=<Card key={type+no} className="upexam_topic">
+                    <Row>
+                        <Col span={2}>题号</Col>
+                        <Col span={14}>标准答案</Col>
+                        <Col span={6}>学生答案</Col>
+                    </Row>
+                    <Row>
+                        <Col span={2}>{no}</Col>
+                        <Col span={14}>{textAnswer}</Col>
+                        <Col span={6}>{resultAnswer}</Col>
+                    </Row>
+                </Card>;
+                cardArray.push(everyRow);
+            }
+        });
+        if(results.length==0 || isExistSameQuestion==false){
             var everyRow=<Card key={type+no} className="upexam_topic">
                 <Row>
                     <Col span={2}>题号</Col>
@@ -195,34 +235,6 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
                 </Row>
             </Card>;
             cardArray.push(everyRow);
-        }else{
-            results.forEach(function (result) {
-                if(questionId==result.questionId){
-                    var resultTextAnswer = result.textAnswer;
-                    var resultAnswer;
-                    switch (resultTextAnswer){
-                        case "0":
-                            resultAnswer="错误";
-                            break;
-                        case "1":
-                            resultAnswer="正确";
-                            break;
-                    }
-                    var everyRow=<Card key={type+no} className="upexam_topic">
-                        <Row>
-                            <Col span={2}>题号</Col>
-                            <Col span={14}>标准答案</Col>
-                            <Col span={6}>学生答案</Col>
-                        </Row>
-                        <Row>
-                            <Col span={2}>{no}</Col>
-                            <Col span={14}>{textAnswer}</Col>
-                            <Col span={6}>{resultAnswer}</Col>
-                        </Row>
-                    </Card>;
-                    cardArray.push(everyRow);
-                }
-            });
         }
     },
     /**
@@ -246,7 +258,46 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
                 <Col span={24}><img style={{width:'150px',height:'150px'}} src={imageAnswer}  onClick={_this.showLargeImg}/></Col>
             </Row>;
         }
-        if(results.length==0){
+        var isExistSameQuestion=false;
+        results.forEach(function (result) {
+            if(questionId==result.questionId){
+                isExistSameQuestion=true;
+                var resultAnswer = result.textAnswer;
+                var resultImageAnswer = result.imageAnswer;
+                var studentAnswerImgObj;
+                if(typeof(resultImageAnswer)!="undefined" && resultImageAnswer!=null && resultImageAnswer != ""){
+                    var resultImgArray=resultImageAnswer.split(",");
+                    var imgTagArray=[];
+                    resultImgArray.forEach(function (resultImg) {
+                        if(typeof(resultImg)!="undefined" && resultImg!="" ){
+                            var imgObj = <img style={{width:'150px',height:'150px'}} src={resultImg}  onClick={_this.showLargeImg}/>;
+                            imgTagArray.push(imgObj);
+                        }
+                    });
+                    studentAnswerImgObj = <Row>
+                        <Col span={24}>{imgTagArray}</Col>
+                    </Row>;
+                }
+                var everyRow=<Card key={type+no} className="upexam_topic">
+                    <Row>
+                        <Col span={12}>{no}.&nbsp;&nbsp;正确答案：（总分：{score}分）</Col>
+                        <Col span={10}>得分
+                            <Input id={questionId} disabled={_this.state.scoreInputDisable} placeholder="请输入" defaultValue={result.score} onChange={_this.scoreInputChange} />
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={24}>{textAnswer}</Col>
+                    </Row>
+                    {imgObj}
+                    <Row>
+                        <Col span={24}>学生答案：{resultAnswer}</Col>
+                    </Row>
+                    {studentAnswerImgObj}
+                </Card>;
+                cardArray.push(everyRow);
+            }
+        });
+        if(results.length==0 || isExistSameQuestion==false){
             var everyRow=<Card key={type+no} className="upexam_topic">
                 <Row>
                     <Col span={24}>{no}.正确答案:(总分:{score}分)</Col>
@@ -260,44 +311,6 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
                 </Row>
             </Card>;
             cardArray.push(everyRow);
-        }else{
-            results.forEach(function (result) {
-                if(questionId==result.questionId){
-                    var resultAnswer = result.textAnswer;
-                    var resultImageAnswer = result.imageAnswer;
-                    var studentAnswerImgObj;
-                    if(typeof(resultImageAnswer)!="undefined" && resultImageAnswer!=null && resultImageAnswer != ""){
-                        var resultImgArray=resultImageAnswer.split(",");
-                        var imgTagArray=[];
-                        resultImgArray.forEach(function (resultImg) {
-                            if(typeof(resultImg)!="undefined" && resultImg!="" ){
-                                var imgObj = <img style={{width:'150px',height:'150px'}} src={resultImg}  onClick={_this.showLargeImg}/>;
-                                imgTagArray.push(imgObj);
-                            }
-                        });
-                        studentAnswerImgObj = <Row>
-                            <Col span={24}>{imgTagArray}</Col>
-                        </Row>;
-                    }
-                    var everyRow=<Card key={type+no} className="upexam_topic">
-                        <Row>
-                            <Col span={12}>{no}.&nbsp;&nbsp;正确答案：（总分：{score}分）</Col>
-                            <Col span={10}>得分
-                                <Input id={questionId} placeholder="请输入" defaultValue={result.score} onChange={_this.scoreInputChange} />
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span={24}>{textAnswer}</Col>
-                        </Row>
-                        {imgObj}
-                        <Row>
-                            <Col span={24}>学生答案：{resultAnswer}</Col>
-                        </Row>
-                        {studentAnswerImgObj}
-                    </Card>;
-                    cardArray.push(everyRow);
-                }
-            });
         }
     },
 
@@ -372,13 +385,12 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
                         message.error("试卷批改失败");
                     }
                 }
+                _this.props.onCheckButtonClick();
             },
             onError: function (error) {
                 message.error(error);
             }
-
         });
-        _this.props.onCheckButtonClick();
     },
 
     render() {

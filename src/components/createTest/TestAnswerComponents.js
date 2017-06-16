@@ -46,51 +46,80 @@ const TestAnswerComponents = React.createClass({
         _this.setState({attachmentsArray,title});
     },
 
-    buildAnswerCard(){
+    /**
+     * 获取学生在此次考试中提交的答案结果信息
+     *
+     * @param ident 学生id
+     * @param exmId 考试id
+     * @return JSONObject  里面带参数paper　为 ExmPaper对象  参数:results为 List<ExmSubmitResult>  对象
+     * @throws Exception
+     */
+    getStudentExmSubmitedResults(){
         var _this = this;
-        var paper = _this.props.paper;
-        var title = paper.title;
-        var questionTypes = paper.questionTypes;
-        var mainCardArray=[];
-        questionTypes.forEach(function (questionTypeObj) {
-            var cardArray=[];
-            var type = questionTypeObj.type;
-            var typeTitle;
-            var questions = questionTypeObj.questions;
-            var questionTitle;
-            for(var i=1;i<=questions.length;i++){
-                var question = questions[i-1];
-                var questionId = question.id;
-                var score = question.score;
-                var questionTitleStr = question.title;
-                var textAnswer = question.textAnswer;
-                var imageAnswer = question.imageAnswer;
-                questionTitle = questionTitleStr.split(" ")[0];
-                switch (type){
-                    case 0:
-                        _this.buildChoiceCard(questionId,i,score,cardArray,textAnswer);
-                        break;
-                    case 1:
-                        _this.buildCorrectCard(questionId,i,score,cardArray,textAnswer);
-                        break;
-                    case 2:
-                        _this.buildFillBlankCard(questionId,i,score,cardArray,textAnswer,imageAnswer);
-                        break;
-                    case 3:
-                        _this.buildFillBlankCard(questionId,i,score,cardArray,textAnswer,imageAnswer);
-                        break;
+        var param = {
+            "method": 'getStudentExmSubmitedResults',
+            "ident": _this.props.studentObj.colUid,
+            "exmId": _this.props.exmId
+        };
+
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if(ret.msg == "调用成功" && ret.success == true){
+                    var response = ret.response;
+                    var paper = response.paper;
+                    var resultsArray = response.results;
+                    var questionTypes = paper.questionTypes;
+                    var mainCardArray=[];
+                    questionTypes.forEach(function (questionType) {
+                        var typeTitle = questionType.title;
+                        var questions = questionType.questions;
+                        var cardArray=[];
+                        for(var i=1;i<=questions.length;i++){
+                            var question = questions[i-1];
+                            var questionId = question.id;
+                            var type = question.type;
+                            var title = question.title;
+                            var score = question.score;
+                            switch (type){
+                                case 0:
+                                    _this.buildChoiceCard(questionId,i,score,cardArray,resultsArray);
+                                    break;
+                                case 1:
+                                    _this.buildCorrectCard(questionId,i,score,cardArray,resultsArray);
+                                    break;
+                                case 2:
+                                    _this.buildFillBlankCard(questionId,i,score,cardArray,resultsArray);
+                                    break;
+                                case 3:
+                                    _this.buildFillBlankCard(questionId,i,score,cardArray,resultsArray);
+                                    break;
+                            }
+                        }
+                        var mainCard=<Card className="exam-particulars_cont" key={typeTitle} title={typeTitle} >
+                            {cardArray}
+                        </Card>;
+                        mainCardArray.push(mainCard);
+                    });
+                    _this.setState({
+                        mainCardArray
+                    });
                 }
+            },
+            onError: function (error) {
+                message.error(error);
             }
-            var mainCard=<Card key={questionTitle} title={questionTitle} className="st_exam-particulars_cont">
-                {cardArray}
-            </Card>;
-            mainCardArray.push(mainCard);
+
         });
-        _this.setState({mainCardArray});
     },
 
-    buildChoiceCard(questionId,number,score,cardArray,textAnswer){
+    buildChoiceCard(questionId,number,score,cardArray,resultsArray){
         var charArray=[];
+        var textAnswer;
+        resultsArray.forEach(function (result) {
+            if(result.questionId == questionId){
+                textAnswer = result.textAnswer;
+            }
+        });
         if(isEmpty(textAnswer)==false){
             for(var i=0;i<textAnswer.length;i++){
                 var selectedValue = questionId+"#"+textAnswer.charAt(i);
@@ -119,9 +148,18 @@ const TestAnswerComponents = React.createClass({
      * @param score
      * @param cardArray
      */
-    buildCorrectCard(questionId,number,score,cardArray,textAnswer){
+    buildCorrectCard(questionId,number,score,cardArray,resultsArray){
         var _this = this;
-        var selectedValue = questionId+"#"+textAnswer;
+        var textAnswer;
+        var selectedValue;
+        resultsArray.forEach(function (result) {
+            if(result.questionId == questionId){
+                textAnswer = result.textAnswer;
+            }
+        });
+        if(isEmpty(textAnswer)==false){
+            selectedValue = questionId+"#"+textAnswer;
+        }
         var everyRow=<Card key={questionId}>
             <Row>
                 <Col span={24}>{number}.&nbsp;&nbsp;({score}分)</Col>
@@ -145,8 +183,16 @@ const TestAnswerComponents = React.createClass({
      * @param score
      * @param cardArray
      */
-    buildFillBlankCard(questionId,number,score,cardArray,textAnswer,imageAnswer){
+    buildFillBlankCard(questionId,number,score,cardArray,resultsArray){
         var _this = this;
+        var textAnswer;
+        var imageAnswer;
+        resultsArray.forEach(function (result) {
+            if(result.questionId == questionId){
+                textAnswer = result.textAnswer;
+                imageAnswer = result.imageAnswer;
+            }
+        });
         var fileList =[];
         if(isEmpty(imageAnswer)==false){
             var fileJson = {
@@ -320,7 +366,7 @@ const TestAnswerComponents = React.createClass({
     },
 
     answerPaper(){
-        this.buildAnswerCard();
+        this.getStudentExmSubmitedResults();
         this.setState({"tipModalVisible":true});
     },
 
@@ -346,9 +392,9 @@ const TestAnswerComponents = React.createClass({
                     }else{
                         message.error("答题卡提交失败");
                     }
-                    this.props.onAnswerCardChange(false);
+                    _this.tipModalHandleCancel();
+                    _this.props.onAnswerCardChange(false);
                 }
-                _this.tipModalHandleCancel();
             },
             onError: function (error) {
                 message.error(error);

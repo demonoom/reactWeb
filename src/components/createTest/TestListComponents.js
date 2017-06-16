@@ -110,7 +110,8 @@ const TestListComponents = React.createClass({
                 if(typeof(this.refs.testCheckStudentExmSubmitedResults)!="undefined" ){
                     this.refs.testCheckStudentExmSubmitedResults.getStudentExmSubmitedResults();
                 }
-                this.setState({activeKey: '考试作答', currentOpt: 'testAnswer',"examId":examId,"paperId":paperId,"paper":paper});
+                var studentObj = JSON.parse(sessionStorage.getItem("loginUser"));
+                this.setState({activeKey: '考试作答', currentOpt: 'testAnswer',"examId":examId,"paperId":paperId,"paper":paper,"studentObj":studentObj});
                 break;
         }
     },
@@ -156,7 +157,7 @@ const TestListComponents = React.createClass({
                                                                     className="affix_bottom_tc"><Icon
                 type="left"/></button></span>;
             tabPanel = <TestAnalysisComponents ref="testAnalysisComponents"
-                exmId={this.state.examId} paperId={this.state.paperId}studentObj
+                exmId={this.state.examId} paperId={this.state.paperId}
                 onSortedButtonClick={this.getExmScoreRankings}
                 onExmQuestionStatisticsClick={this.getExmQuestionStatistics}
                 onExmPushClick={this.getExmPushByPaperId}
@@ -242,6 +243,7 @@ const TestListComponents = React.createClass({
                 type="left"/></button></span>;
             tabPanel = <TestAnswerComponents exmId={this.state.examId} paper={this.state.paper}
                                             onAnswerCardChange={this.assignAnswerCardChangeTag}
+                                             studentObj={this.state.studentObj}
                                              ref="testAnswerComponents"
                     ></TestAnswerComponents>;
         }
