@@ -27,6 +27,11 @@ const TestListComponents = React.createClass({
         };
     },
 
+    componentDidMount(){
+        var userObj = JSON.parse(sessionStorage.getItem("loginUser"));
+        this.setState({"userType":userObj.colUtype});
+    },
+
     getTestList(){
         if(this.state.answerCardChangeTag==true){
             this.showConfirmModal();
@@ -209,7 +214,7 @@ const TestListComponents = React.createClass({
         }else if(this.state.currentOpt == "checkStudentExmSubmitedResults"){
             //批改xx同学的试卷
             // checkExamComeFrom="checkTest";
-            if(typeof(this.state.studentObj)!="undefined" ){
+            if(typeof(this.state.userType)!="undefined" && this.state.userType=="STUD" ){
                 leftBtn = <span className="btn1 ant-tabs-right"><button onClick={this.getTestList}
                                                                         className="affix_bottom_tc"><Icon
                     type="left"/></button></span>;
