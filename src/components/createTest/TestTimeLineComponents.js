@@ -44,6 +44,7 @@ const TestTimeLineComponents = React.createClass({
                 if(response.length==0){
                     message.warning("没有更多的内容了!");
                 }else{
+                    examsArray.splice(0);
                     TimeLineItemArray.splice(0);
                     response.forEach(function (e) {
                         var id = e.id;
