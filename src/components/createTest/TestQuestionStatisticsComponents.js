@@ -354,18 +354,19 @@ const TestQuestionStatisticsComponents = React.createClass({
      * 显示选择指定选项的学生名单
      */
     getchoicedUser(choiceUsersArray){
+        var _this = this;
         var userLiArray = [];
         if(typeof(choiceUsersArray)!="undefined" && choiceUsersArray.length==0){
             message.warning("没有学生!");
         }else{
             choiceUsersArray.forEach(function (user) {
-                var userLi = <div className="group_fr">
+                var userLi = <div className="group_fr" onClick={_this.checkStudentExamSubmitResult.bind(_this,user)}>
                     <span className="attention_img"><img src={user.avatar} /></span>
                     <span>{user.userName}</span>
                 </div>
                 userLiArray.push(userLi);
             });
-            this.setState({"tipLiArray":userLiArray,"tipModalVisible":true,"tipTitle":"选择该选项的学生名单"});
+            _this.setState({"tipLiArray":userLiArray,"tipModalVisible":true,"tipTitle":"选择该选项的学生名单"});
         }
     },
 
