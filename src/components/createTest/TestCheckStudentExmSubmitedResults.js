@@ -280,7 +280,7 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
                         <Row>
                             <Col span={12}>{no}.&nbsp;&nbsp;正确答案：（总分：{score}分）</Col>
                             <Col span={10}><span className="upexam_float">得分：</span>
-                                <span className="upexam_float"><Input id={questionId} placeholder="请输入" defaultValue={result.score} onChange={_this.scoreInputChange} /></span>
+                                <span className="upexam_float"><Input id={questionId} placeholder="请输入" defaultValue={result.score} onChange={_this.scoreInputChange} style={{width:'50px'}} /></span>
                             </Col>
                         </Row>
                         <Row>
@@ -399,7 +399,7 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
                 batchCorrectExmResultButton="";
             }else{
                 batchCorrectExmResultButton=<div className="correct_finish">
-                    <Button className="exam_btn_green" onClick={this.batchCorrectExmResult}>批改完成 </Button>
+                    <Button className="exam_btn_green" onClick={this.batchCorrectExmResult}>批改完成</Button>
                 </div>;
             }
         }else{
@@ -420,7 +420,7 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
                     transitionName=""  //禁用modal的动画效果
                     maskClosable={false} //设置不允许点击蒙层关闭
                     footer={[]}>
-                    <div>
+                    <div className="exam_img_list">
                         {this.state.attachMentsArray}
                     </div>
                 </Modal>

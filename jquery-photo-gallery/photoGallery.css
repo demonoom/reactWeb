@@ -34,12 +34,14 @@ header{
 }
 .winControl span {
     display: inline-block;
-    padding: 24px;
+    padding: 15px;
     cursor: pointer;
+    margin: 10px;
     line-height: 10px;
 }
 .winControl span:hover {
     background: #E82B45;
+	border-radius:50%
 }
 [drag] {
     -webkit-app-region: drag;

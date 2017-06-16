@@ -45,9 +45,9 @@ const TestScoreRankingsComponents = React.createClass({
                         var userObj = e.user;
                         var avatar = userObj.avatar;
                         if(submited){
-                            var userLi=<li onClick={_this.seeAnswer.bind(_this,userObj,submited)} className="group_fr">
+                            var userLi=<li onClick={_this.seeAnswer.bind(_this,userObj,submited)} className="group_fr exam_group_fr">
                                 <span className="attention_img"><img src={avatar} height="38"></img></span><span>{userObj.userName}</span>
-                                <span>{score}分</span>
+                                <span className="exam_group_fr_grade">{score}分</span>
                             </li>;
                             submitedUserArray.push(userLi)
                         }else {

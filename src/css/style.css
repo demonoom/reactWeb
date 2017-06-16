@@ -4686,3 +4686,17 @@ span.pagination{
 	max-height:64px;
 	overflow:auto;
 }
+.exam_group_fr{
+	height:84px;
+}
+.exam_group_fr_grade{
+	color:#41cfe3
+}
+.exam_img_list{
+	width:100%;
+}
+.exam_img_list img{
+	width:170px;
+	height:170px;
+	margin:10px
+}
