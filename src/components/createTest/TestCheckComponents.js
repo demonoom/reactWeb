@@ -53,8 +53,10 @@ const TestCheckComponents = React.createClass({
                             submitedUserArray.push(userLi)
                         }else {
                             var userLi=<li onClick={_this.seeAnswer.bind(_this,userObj,submited)}>
-                                <span className="attention_img"><img  className="attention_img" src={avatar} height="38"></img></span>
-								<span className="correct_name">{userObj.userName}</span>
+								<div className="group_fr">
+                                	<span className="attention_img"><img  className="attention_img" src={avatar} height="38"></img></span>
+									<span className="correct_name">{userObj.userName}</span>
+								</div>
                                 <span className="result"><span>未提交</span></span>
                             </li>;
                             noSubmitUserArray.push(userLi)
@@ -85,12 +87,26 @@ const TestCheckComponents = React.createClass({
     },
 
     render() {
+        var submitedHeader=<span>已提交（{this.state.submitedUserCount}人）</span>;
+        var noSubmitHeader=<span>未提交（{this.state.noSubmitUserCount}人）</span>;
         return (
             <div className="correct_exam">
-                <ul>
+                {/*<ul>
                     {this.state.submitedUserArray}
                     {this.state.noSubmitUserArray}
-                </ul>
+                </ul>*/}
+                <Collapse defaultActiveKey={['1','2']} activeKey={['1','2']} onChange={this.state.collapseOnChange}>
+                    <Panel header={submitedHeader} key="1">
+                        <ul>
+                            {this.state.submitedUserArray}
+                        </ul>
+                    </Panel>
+                    <Panel header={noSubmitHeader} key="2">
+                        <ul>
+                            {this.state.noSubmitUserArray}
+                        </ul>
+                    </Panel>
+                </Collapse>
             </div>
         );
     },

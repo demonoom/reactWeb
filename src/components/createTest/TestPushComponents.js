@@ -3,6 +3,7 @@ import {Timeline, Button, Row,Col, message,Steps,Icon,Progress,Modal,Collapse,Ta
 import {doWebService} from '../../WebServiceHelper';
 import {getPageSize} from '../../utils/Const';
 import {formatYMD} from '../../utils/utils';
+import {formatHM} from '../../utils/utils';
 import {getLocalTime} from '../../utils/utils';
 const Step = Steps.Step;
 const Panel = Collapse.Panel;
@@ -56,8 +57,8 @@ const TestPushComponents = React.createClass({
                         var paperTitle = paper.title;
                         var startTimeStamp = e.startTime;
                         var endTimeStamp = e.endTime;
-                        var startTime = getLocalTime(startTimeStamp);
-                        var endTime = getLocalTime(endTimeStamp);
+                        var startTime = formatYMD(startTimeStamp)+" "+formatHM(startTimeStamp);
+                        var endTime = formatYMD(endTimeStamp)+" "+formatHM(endTimeStamp);
                         var exmUL=<ul>
                             <li className="gray_42 compare_li">{paperTitle}</li>
                             <li className="blueness compare_li">{gradeName+clazzName}</li>
@@ -70,7 +71,8 @@ const TestPushComponents = React.createClass({
                         };
                         tableTrJsonArray.push(trJson)
                     });
-                     _this.setState({tableTrJsonArray});
+                    var pager = ret.pager;
+                     _this.setState({tableTrJsonArray,totalCount: parseInt(pager.rsCount)});
                 }
             },
             onError: function (error) {
@@ -137,6 +139,15 @@ const TestPushComponents = React.createClass({
         this.setState({"tipModalVisible":false});
     },
 
+    pageOnChange(pageNo){
+        this.setState({pageNo});
+        this.getExmPushByPaperId(pageNo);
+    },
+
+    collapseOnChange(key){
+
+    },
+
     render() {
         const { loading, selectedRowKeys } = this.state;
         const rowSelection = {
@@ -152,7 +163,16 @@ const TestPushComponents = React.createClass({
                         {hasSelected ? `选中 ${selectedRowKeys.length} 条记录` : ''}
                     </span>
                 </div>
-                <Table rowSelection={rowSelection} columns={columns}  showHeader={false} dataSource={this.state.tableTrJsonArray} />
+                <Table rowSelection={rowSelection} columns={columns}  showHeader={false}
+                       dataSource={this.state.tableTrJsonArray}
+                       pagination={{
+                           total: this.state.totalCount,
+                           pageSize: getPageSize(),
+                           defaultCurrent: this.state.pageNo,
+                           current: this.state.pageNo,
+                           onChange: this.pageOnChange
+                       }}
+                />
                 <Modal className="compare_class_modal"
                     visible={this.state.tipModalVisible}
                     title={this.state.tipTitle}
