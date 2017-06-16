@@ -67,9 +67,7 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
                     var attachMentsArray=[];
                     if(typeof(attachments)!="undefined" ){
                         attachments.forEach(function (attachment) {
-                            var attachMents = <span className="topics_zan">
-                                <img className="topics_zanImg" src={attachment.path}  onClick={_this.showLargeImg}/>
-                            </span>;
+                            var attachMents = <img className="topics_zanImg" src={attachment.path}  onClick={_this.showLargeImg}/>;
                             attachMentsArray.push(attachMents);
                         });
                     }

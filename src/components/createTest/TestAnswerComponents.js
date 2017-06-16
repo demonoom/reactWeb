@@ -40,7 +40,7 @@ const TestAnswerComponents = React.createClass({
         var attachments = paper.attachments;
         attachments.forEach(function (attachment) {
             var path=attachment.path;
-            var imgObj = <img src={path}  onClick={_this.showLargeImg}/>;
+            var imgObj = <img  className="topics_zanImg" src={path}  onClick={showLargeImg}/>;
             attachmentsArray.push(imgObj);
         });
         _this.setState({attachmentsArray,title});
