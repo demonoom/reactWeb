@@ -85,12 +85,26 @@ const TestCheckComponents = React.createClass({
     },
 
     render() {
+        var submitedHeader=<span>已提交（{this.state.submitedUserCount}人）</span>;
+        var noSubmitHeader=<span>未提交（{this.state.noSubmitUserCount}人）</span>;
         return (
             <div className="correct_exam">
-                <ul>
+                {/*<ul>
                     {this.state.submitedUserArray}
                     {this.state.noSubmitUserArray}
-                </ul>
+                </ul>*/}
+                <Collapse defaultActiveKey={['1','2']} activeKey={['1','2']} onChange={this.state.collapseOnChange}>
+                    <Panel header={submitedHeader} key="1">
+                        <ul>
+                            {this.state.submitedUserArray}
+                        </ul>
+                    </Panel>
+                    <Panel header={noSubmitHeader} key="2">
+                        <ul>
+                            {this.state.noSubmitUserArray}
+                        </ul>
+                    </Panel>
+                </Collapse>
             </div>
         );
     },

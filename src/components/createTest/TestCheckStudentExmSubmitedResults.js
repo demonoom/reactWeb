@@ -3,7 +3,7 @@ import {Timeline, Button, Popover, message,Steps,Icon,Progress,Modal,Collapse,Ca
 import {doWebService} from '../../WebServiceHelper';
 import {getPageSize} from '../../utils/Const';
 import {formatYMD} from '../../utils/utils';
-import {formatHM} from '../../utils/utils';
+import {isEmpty} from '../../utils/utils';
 const Step = Steps.Step;
 const Panel = Collapse.Panel;
 
@@ -369,26 +369,30 @@ const TestCheckStudentExmSubmitedResults = React.createClass({
                 scoreStr=scoreStr+"#"+questionScoreInfo;
             }
         }
-        var param = {
-            "method": 'batchCorrectExmResult',
-            "scores": scoreStr,
-        };
-        doWebService(JSON.stringify(param), {
-            onResponse: function (ret) {
-                if(ret.msg == "调用成功" && ret.success == true){
-                    var response = ret.response;
-                    if(response){
-                        message.success("试卷批改成功");
-                    }else{
-                        message.error("试卷批改失败");
+        if(isEmpty(scoreStr)==false){
+            var param = {
+                "method": 'batchCorrectExmResult',
+                "scores": scoreStr,
+            };
+            doWebService(JSON.stringify(param), {
+                onResponse: function (ret) {
+                    if(ret.msg == "调用成功" && ret.success == true){
+                        var response = ret.response;
+                        if(response){
+                            message.success("试卷批改成功");
+                        }else{
+                            message.error("试卷批改失败");
+                        }
                     }
+                    _this.props.onCheckButtonClick();
+                },
+                onError: function (error) {
+                    message.error(error);
                 }
-                _this.props.onCheckButtonClick();
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });
+            });
+        }else{
+            _this.props.onCheckButtonClick();
+        }
     },
 
     render() {
