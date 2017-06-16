@@ -204,7 +204,7 @@ const TestAnswerComponents = React.createClass({
         var everyRow=<Card key={questionId} >
 
             <Row>
-                <Col span={4}>{number}.&nbsp;&nbsp;<span className="exam-particulars_time">({score}分)</span></Col>
+                <Col span={4}>{number}.&nbsp;&nbsp;<span className="exam-particulars_time ">({score}分)</span></Col>
                 <Col span={20}>
                     <Input id={questionId+"#Input"} placeholder="输入答案"  defaultValue={textAnswer} onChange={_this.blankAnswerOnChange} />
                 </Col>
