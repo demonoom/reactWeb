@@ -130,9 +130,9 @@ const TestAnswerComponents = React.createClass({
         }
         var _this = this;
         var selectAnswerOptions =  _this.buildSelectOptionsArray(questionId);
-        var everyRow=<Card key={questionId}>
+        var everyRow=<Card key={questionId} className="upexam_topic">
             <Row>
-                <Col span={24}>{number}.&nbsp;&nbsp;({score}分)</Col>
+                <Col span={24}>{number}.&nbsp;&nbsp;<span className="exam-particulars_time ">({score}分)</span></Col>
             </Row>
             <Row>
                 <Col span={24}>
@@ -162,9 +162,9 @@ const TestAnswerComponents = React.createClass({
         if(isEmpty(textAnswer)==false){
             selectedValue = questionId+"#"+textAnswer;
         }
-        var everyRow=<Card key={questionId}>
+        var everyRow=<Card key={questionId}  className="upexam_topic">
             <Row>
-                <Col span={24}>{number}.&nbsp;&nbsp;({score}分)</Col>
+                <Col span={24}>{number}.&nbsp;&nbsp;<span className="exam-particulars_time ">({score}分)</span></Col>
             </Row>
             <Row>
                 <Col span={24}>
@@ -203,7 +203,7 @@ const TestAnswerComponents = React.createClass({
             }
             fileList.push(fileJson);
         }
-        var everyRow=<Card key={questionId} >
+        var everyRow=<Card key={questionId} className="upexam_topic" >
 
             <Row>
                 <Col span={4}>{number}.&nbsp;&nbsp;<span className="exam-particulars_time ">({score}分)</span></Col>
