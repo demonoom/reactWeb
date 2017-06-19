@@ -27,8 +27,13 @@ const TestListComponents = React.createClass({
         };
     },
 
-    getTestList(){
-        if(this.state.answerCardChangeTag==true){
+    componentDidMount(){
+        var userObj = JSON.parse(sessionStorage.getItem("loginUser"));
+        this.setState({"userType":userObj.colUtype});
+    },
+
+    getTestList(submitType){
+        if(this.state.answerCardChangeTag==true && typeof(submitType)=="undefined" ){
             this.showConfirmModal();
         }else{
             this.turnToTestTimeLine();
@@ -92,7 +97,7 @@ const TestListComponents = React.createClass({
         this.setState({activeKey: tipTitle, currentOpt: 'checkStudentExmSubmitedResults',"examId":exmId,"studentObj":userObj});
     },
 
-    studentAnswerOrSeeResult(examId,paperId,tipInfo,paper){
+    studentAnswerOrSeeResult(examId,paperId,tipInfo,paper,examEndTime){
         // this.setState({activeKey: '考试作答', currentOpt: 'testAnswer',"examId":examId,"paperId":paperId});
         switch(tipInfo){
             case "未开始":
@@ -111,7 +116,7 @@ const TestListComponents = React.createClass({
                     this.refs.testCheckStudentExmSubmitedResults.getStudentExmSubmitedResults();
                 }
                 var studentObj = JSON.parse(sessionStorage.getItem("loginUser"));
-                this.setState({activeKey: '考试作答', currentOpt: 'testAnswer',"examId":examId,"paperId":paperId,"paper":paper,"studentObj":studentObj});
+                this.setState({activeKey: '考试作答', currentOpt: 'testAnswer',"examId":examId,"paperId":paperId,"paper":paper,"studentObj":studentObj,examEndTime});
                 break;
         }
     },
@@ -209,7 +214,7 @@ const TestListComponents = React.createClass({
         }else if(this.state.currentOpt == "checkStudentExmSubmitedResults"){
             //批改xx同学的试卷
             // checkExamComeFrom="checkTest";
-            if(typeof(this.state.studentObj)!="undefined" ){
+            if(typeof(this.state.userType)!="undefined" && this.state.userType=="STUD" ){
                 leftBtn = <span className="btn1 ant-tabs-right"><button onClick={this.getTestList}
                                                                         className="affix_bottom_tc"><Icon
                     type="left"/></button></span>;
@@ -248,6 +253,8 @@ const TestListComponents = React.createClass({
             tabPanel = <TestAnswerComponents exmId={this.state.examId} paper={this.state.paper}
                                             onAnswerCardChange={this.assignAnswerCardChangeTag}
                                              studentObj={this.state.studentObj}
+                                             examEndTime={this.state.examEndTime}
+                                             returnTestList={this.getTestList}
                                              ref="testAnswerComponents"
                     ></TestAnswerComponents>;
         }

@@ -149,7 +149,7 @@ const TestTimeLineComponents = React.createClass({
                         break;
                 }
                 var currentItemSubDiv = 
-				<div className="time_content" onClick={_this.showExamDetail.bind(_this,examJsonArray.id,examJsonArray.paperId,tipInfo,examJsonArray.paper)}>
+				<div className="time_content" onClick={_this.showExamDetail.bind(_this,examJsonArray.id,examJsonArray.paperId,tipInfo,examJsonArray.paper,examEndTime)}>
 				<div className="triangle_right triangle_yellow"><span>{tipInfo}</span></div>
 					<h2 className={titleClassName}>{examJsonArray.courseName}</h2>
 					<div className={contentClassName}>
@@ -169,7 +169,7 @@ const TestTimeLineComponents = React.createClass({
         _this.setState({TimeLineItemArray});
     },
 
-    showExamDetail(examId,paperId,tipInfo,paper){
+    showExamDetail(examId,paperId,tipInfo,paper,examEndTime){
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         console.log("showExamDetail"+examId+"\t"+paperId);
         if(loginUser.colUtype=="STUD"){
@@ -180,7 +180,7 @@ const TestTimeLineComponents = React.createClass({
             // }else{
             //     tipInfo="进行中";
             // }
-            this.props.onStudentClick(examId,paperId,tipInfo,paper);
+            this.props.onStudentClick(examId,paperId,tipInfo,paper,examEndTime);
         }else{
             this.props.onTestClick(examId,paperId);
         }

@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {Timeline, Button, Popover, message,Steps,Icon,Progress,Modal,Input} from 'antd';
+import {Timeline, Button, Popover, message,Steps,Icon,Progress,Modal,Input,notification} from 'antd';
 import { Checkbox,Card,Row,Col,Radio } from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import {getPageSize} from '../../utils/Const';
@@ -11,6 +11,7 @@ const Step = Steps.Step;
 const CheckboxGroup = Checkbox.Group;
 const RadioGroup = Radio.Group;
 var exmSubmitResultJsonArray=[];
+var time;
 const TestAnswerComponents = React.createClass({
     getInitialState() {
         return {
@@ -22,6 +23,7 @@ const TestAnswerComponents = React.createClass({
     componentDidMount(){
         var _this = this;
         _this.getExmPaperInfo();
+        _this.getRTime();
     },
 
     componentWillReceiveProps(){
@@ -402,14 +404,51 @@ const TestAnswerComponents = React.createClass({
         });
     },
 
+    getRTime(){
+        var _this = this;
+        // console.log("examEndTime"+_this.props.examEndTime);
+        var EndTime= new Date(_this.props.examEndTime);
+        var NowTime = new Date();
+        var t = EndTime.getTime() - NowTime.getTime();
+        var h = Math.floor(t / 1000 / 60 / 60 % 24);
+        var m = Math.floor(t / 1000 / 60 % 60);
+        var s = Math.floor(t / 1000 % 60);
+
+        var toEndTime=h + "时"+ m + "分"+s + "秒";
+        console.log("toEndTime:"+toEndTime);
+        if(h<=0 && m==10 && s == 0){
+            notification.open({
+                message: '考试用时提醒',
+                description: '距离考试结束还剩10分钟,考试完成时,如未提交答题卡,系统会自动提交答题卡!',
+                icon: <Icon type="meh"  style={{ color: '#108ee9' , top:'-7px', position:'relative' }}/>,
+                duration:10
+            });
+            time = setTimeout(_this.getRTime,1000);
+        }else{
+            if(h<=0 && m <=0 && s <=0){
+                clearTimeout(time);
+                message.warning("考试结束");
+                _this.submitAnswer();
+                _this.props.returnTestList('autoSubmit');
+            }else{
+                time = setTimeout(_this.getRTime,1000);
+            }
+        }
+        this.setState({toEndTime});
+    },
+
     render() {
         var modalTitle = this.state.title+"答题卡";
         return (
             <div className="level_list_pa">
                 <div className="exam-particulars_title">
                     <p>
-                        {this.state.title} <Button icon="file-text" className=" exam_right_a" onClick={this.answerPaper}>答题卡</Button>
+                        {this.state.title} 
                     </p>
+                    <p className="exam-particulars_time">
+                        <span>距离考试结束还剩：</span><span className="count_down">{this.state.toEndTime}</span>
+                    </p>
+					<Button icon="file-text" className=" exam_right_a" onClick={this.answerPaper}>答题卡</Button>
                 </div>
                 <div className="st_exam">
                     {this.state.attachmentsArray}

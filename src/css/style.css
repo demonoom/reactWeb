@@ -4469,6 +4469,10 @@ span.pagination{
 .exam-particulars_title p{
 	padding:5px 0 0 0
 }
+.exam-particulars_title p:first-child{
+	color:#000;
+}
+
 .exam-particulars_time{
 	color:#999;
 	font-size:14px;
@@ -4713,4 +4717,8 @@ span.pagination{
 	width:170px;
 	height:170px;
 	margin:10px
+}
+.count_down{
+	color: #ff0000;
+    font-size: 16px;
 }
