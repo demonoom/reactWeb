@@ -2,13 +2,14 @@ import React, { PropTypes } from 'react';
 import { Tabs, Breadcrumb, Icon,Card,Button,Row,Col,Steps,
     Input,Select,Radio,DatePicker,Checkbox} from 'antd';
 import ImageAnswerUploadComponents from './ImageAnswerUploadComponents';
+import {isEmpty} from '../../utils/utils';
 const Step = Steps.Step;
 const Option = Select.Option;
 const RadioGroup = Radio.Group;
 const { RangePicker } = DatePicker;
 
 var lessonArray=[];
-var courseInfoJson={};
+var courseInfoJson={isPublish:2};
 const CreateClassComponents = React.createClass({
 
     getInitialState() {
@@ -104,7 +105,24 @@ const CreateClassComponents = React.createClass({
         var lessonNum = lessonArray.length+1;
         // <Col span={4}>第{lessonNum}课时</Col>
         var lessonObj = <div>
-
+            <Col span={4}>
+                <Select className="lessonTeamTeacher"  defaultValue="1" style={{ width: 70 }} onChange={this.teamTeacherSelectOnChange}>
+                    <Option value="1">a</Option>
+                    <Option value="2">b</Option>
+                    <Option value="3">c</Option>
+                    <Option value="4">d</Option>
+                </Select>
+            </Col>
+            <Col span={8}>
+                <DatePicker
+                    className="lessonTime"
+                    showTime
+                    format="YYYY-MM-DD HH:mm:ss"
+                    placeholder="Select Time"
+                    onChange={this.lessonTimeOnChange}
+                    onOk={this.lessonTimeOnOk}
+                />
+            </Col>
         </div>;
         var lessonJson = {lessonNum,lessonObj};
         lessonArray.push(lessonJson);
@@ -135,13 +153,26 @@ const CreateClassComponents = React.createClass({
         });
         this.setState({lessonArray});
     },
-
+    /**
+     * 保存课程信息
+     */
     saveClassInfo(){
+        var lessonTeamTeacherTagArray = $(".lessonTeamTeacher");
+        var lessonTimeTagArray = $(".lessonTime");
 
     },
-
+    /**
+     * 立即发布复选框选中响应函数
+     * @param e
+     */
     publishClassAtNow(e) {
         console.log(`checked = ${e.target.checked}`);
+        // 是否发布　１已发布　２未发布
+        if(e.target.checked){
+            courseInfoJson.isPublish=1;
+        }else{
+            courseInfoJson.isPublish=2;
+        }
     },
 
     /**
@@ -184,26 +215,21 @@ const CreateClassComponents = React.createClass({
             target = e.target;
         }
         var videoNum = target.value;
-        //TODO 课程总课时未定义存储方式
         console.log("classTimes:"+videoNum);
         courseInfoJson.videoNum = videoNum;
         this.setState({videoNum});
     },
 
     /**
-     * 获取题目的图片答案
+     * 获取课程封面
      */
-    getImgAnswerList(file,questionInfo,isRemoved){
-        var imageAnswer = file.response;
+    getLessonImageList(file,isRemoved){
+        var lessonImage = file.response;
         if(isEmpty(isRemoved)==false && isRemoved=="removed"){
-            imageAnswer = "";
+            lessonImage = "";
         }
         //题目图片答案的图片来源
-        var questionInfoArray = questionInfo.split("#");
-        var questionId=questionInfoArray[0];
-        var exmSubmitResultJson = {questionId,imageAnswer};
-        var answerType="imageAnswer";
-        this.buildExmSubmitResultJsonArray(exmSubmitResultJson,answerType);
+        courseInfoJson.image = lessonImage;
     },
 
     lessonTitleOnChange(e){
@@ -312,7 +338,7 @@ const CreateClassComponents = React.createClass({
                     <Col span={6}>课程封面</Col>
                     <Col span={18}>
                         <ImageAnswerUploadComponents
-                                                     callBackParent={this.getImgAnswerList}>
+                                                     callBackParent={this.getLessonImageList}>
                         </ImageAnswerUploadComponents>
                     </Col>
                 </Row>
@@ -332,35 +358,12 @@ const CreateClassComponents = React.createClass({
             if(typeof(this.state.lessonArray)!="undefined" ){
                 for(var i=0;i<this.state.lessonArray.length;i++){
                     var lessonJson = this.state.lessonArray[i];
-                    var teamOptions=[];
-                    for(var i=0;i<4;i++){
-                        var optionValue=lessonJson.lessonNum+"#"+i;
-                        var optionObj = <Option value={optionValue}>{i}</Option>;
-                        teamOptions.push(optionObj);
-                    }
-                    var lessonRowObj = <Row key={lessonJson.lessonNum}>
+                    var lessonRowObj = <Row>
                         <Col span={4}>第{lessonJson.lessonNum}课时</Col>
                         <Col span={6}>
                             <Input id={lessonJson.lessonNum} onChange={this.lessonTitleOnChange}/>
                         </Col>
-                        <Col span={4}>
-                            <select className="lessonTeam">
-                                <option value="1">a</option>
-                                <option value="2">b</option>
-                                <option value="3">c</option>
-                                <option value="4">d</option>
-                            </select>
-                        </Col>
-                        <Col span={8}>
-                            <DatePicker
-                                key={lessonJson.lessonNum}
-                                showTime
-                                format="YYYY-MM-DD HH:mm:ss"
-                                placeholder="Select Time"
-                                onChange={this.lessonTimeOnChange}
-                                onOk={this.lessonTimeOnOk}
-                            />
-                        </Col>
+                        {lessonJson.lessonObj}
                         <Col span={2}>
                             <Button icon="delete" onClick={this.removeLesson.bind(this,lessonJson.lessonNum)}></Button>
                         </Col>

@@ -57,7 +57,7 @@ const AntCloudClassRoomComponents = React.createClass({
         </h3>;
 
         return (
-            <div className="follow_my">
+            <div style={{overflow:'scroll'}}>
                 {toolbar}
                 {tabPanel}
             </div>

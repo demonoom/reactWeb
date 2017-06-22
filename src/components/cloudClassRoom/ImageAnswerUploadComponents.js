@@ -91,11 +91,11 @@ const ImageAnswerUploadComponents = React.createClass({
                     _this.setState({uploadPercent:percent,progressState:'block'});
                     //info.fileList.splice(0);
                     if(info.file.status==="removed"){
-                        _this.props.callBackParent(info.file,_this.state.subjectInfo,"removed");
+                        _this.props.callBackParent(info.file,"removed");
                     }
                 }
                 if (info.file.status === 'done') {
-                    _this.props.callBackParent(info.file,_this.state.subjectInfo);
+                    _this.props.callBackParent(info.file);
                     message.success(`${info.file.name} 文件上传成功`,5);
                 } else if (info.file.status === 'error') {
                     message.error(`${info.file.name} 文件上传失败.`,5);
