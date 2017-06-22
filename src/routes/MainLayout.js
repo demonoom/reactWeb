@@ -20,6 +20,8 @@ import {LocaleProvider} from 'antd';
 import TeachSpace  from '../components/TeachSpaces';
 import TeachSpaceGhostMenu from '../components/TeachSpacesGhostMenu';
 import {MsgConnection} from '../utils/msg_websocket_connection';
+import AntCloudClassRoomMenu from '../components/layOut/AntCloudClassRoomMenu';
+import AntCloudClassRoomComponents from '../components/cloudClassRoom/AntCloudClassRoomComponents';
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
@@ -306,6 +308,15 @@ const MainLayout = React.createClass({
         }*/
     },
 
+    /**
+     * 获取云课堂的操作
+     * @param menuItemKey
+     */
+    getCloudClassRoom(menuItemKey){
+        console.log("menuItemKey:"+menuItemKey);
+        this.setState({"cloudRoomMenuItem":menuItemKey});
+    },
+
     render() {
 
         const collapse = this.state.collapse;
@@ -368,6 +379,12 @@ const MainLayout = React.createClass({
                 tabComponent = <AntCloudTableComponents ref="antCloudTable"
                                                         messageUtilObj={ms}
                             ></AntCloudTableComponents>;
+                break;
+            case 'antCloudClassRoom':
+                //云课堂
+                middleComponent = <AntCloudClassRoomMenu callbackParent={this.getCloudClassRoom}/>;
+                tabComponent = <AntCloudClassRoomComponents  currentItem={this.state.cloudRoomMenuItem}/>;
+
                 break;
         }
         //
@@ -433,6 +450,10 @@ const MainLayout = React.createClass({
                             <Menu.Item key="antGroup" className="padding_menu">
                                 <i className="icon_menu_ios icon_antgroup"></i>
                                 <div className="tan">蚁群</div>
+                            </Menu.Item>
+                            <Menu.Item key="antCloudClassRoom" className="padding_menu">
+                                <i className="icon_menu_ios icon_yichao1"></i>
+                                <div className="tan">云课堂</div>
                             </Menu.Item>
                             {/*<Menu.Item key="antCloud" className="padding_menu">
                                 <i className="icon_menu_ios icon_yichao1"></i>
