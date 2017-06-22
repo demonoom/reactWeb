@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Card,Radio,Row,Col,Button,Icon,message,Steps,Modal,Form } from 'antd';
+import { Card,Radio,Row,Col,Button,Icon,message,Steps,Modal,Form,Pagination } from 'antd';
 import {getCloudClassRoomRequestURL} from '../../utils/CloudClassRoomURLUtils';
 import {cloudClassRoomRequestByAjax} from '../../utils/CloudClassRoomURLUtils';
 import {getPageSize} from '../../utils/Const';
@@ -13,15 +13,14 @@ const AntMulitiClassComponents = React.createClass({
 
     getInitialState() {
         return {
-
+            currentPage:1,
         };
     },
 
     componentDidMount(){
         var _this = this;
         console.log("cloudRoomMenuItem"+this.props.currentItem);
-        var initPageNo = 1;
-        _this.getCourseList(initPageNo);
+        _this.getCourseList(this.state.currentPage);
     },
 
     getCourseList(pageNo){
@@ -37,12 +36,13 @@ const AntMulitiClassComponents = React.createClass({
                 if (ret.meta.success == true && ret.meta.message=="ok") {
                     message.success("成功");
                     var response=ret.data;
+                    var total = response.total;
                     var responseRows=response.rows;
                     var cardArray = [];
                     responseRows.forEach(function (row) {
                         _this.buildEveryCard(row,cardArray);
                     });
-                    _this.setState({cardArray});
+                    _this.setState({cardArray,totalCount:total});
                 } else {
                     message.error("失败");
                 }
@@ -165,6 +165,13 @@ const AntMulitiClassComponents = React.createClass({
         });
     },
 
+    pageOnChange(page) {
+        this.getCourseList(page);
+        this.setState({
+            currentPage: page,
+        });
+    },
+
     /**
      * 渲染页面
      * @returns {XML}
@@ -183,6 +190,8 @@ const AntMulitiClassComponents = React.createClass({
                 </div>
                 <div>
                     {this.state.cardArray}
+                    <Pagination total={this.state.totalCount} pageSize={getPageSize()} current={this.state.currentPage}
+                                onChange={this.pageOnChange}/>
                 </div>
 
                 <Modal title="创建系列课程" visible={this.state.createClassModalVisible}

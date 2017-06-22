@@ -106,12 +106,18 @@ const CreateClassComponents = React.createClass({
         // <Col span={4}>第{lessonNum}课时</Col>
         var lessonObj = <div>
             <Col span={4}>
-                <Select className="lessonTeamTeacher"  defaultValue="1" style={{ width: 70 }} onChange={this.teamTeacherSelectOnChange}>
+                {/*<Select className="lessonTeamTeacher"  defaultValue="1" style={{ width: 70 }} onChange={this.teamTeacherSelectOnChange}>
                     <Option value="1">a</Option>
                     <Option value="2">b</Option>
                     <Option value="3">c</Option>
                     <Option value="4">d</Option>
-                </Select>
+                </Select>*/}
+                <select className="lessonTeamTeacher">
+                    <option value="1">a</option>
+                    <option value="2">b</option>
+                    <option value="3">c</option>
+                    <option value="4">d</option>
+                </select>
             </Col>
             <Col span={8}>
                 <DatePicker
@@ -157,8 +163,29 @@ const CreateClassComponents = React.createClass({
      * 保存课程信息
      */
     saveClassInfo(){
-        var lessonTeamTeacherTagArray = $(".lessonTeamTeacher");
-        var lessonTimeTagArray = $(".lessonTime");
+        var lessonTeamTeacherTagArray = $(".lessonTeamTeacher option:selected");
+        var lessonTimeTagArray = $(".ant-calendar-range-picker");
+        var userId;
+
+        if(this.state.isTeam==1) {
+            //发布者ＩＤ 单人授课时为人员id　团队授课时为团队id
+            var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+            userId = loginUser.colUid;
+        }else{
+
+        }
+        var videoJsonArray=[];
+        for(var i=0;i<lessonTimeTagArray.length;i++){
+            var videoJson={};
+            var option = lessonTeamTeacherTagArray[i];
+            var　timeTag = lessonTimeTagArray[i];
+            var teacher = option.value;
+            var time = timeTag.textContent;
+            console.log("teacher"+teacher+"\t"+time);
+            videoJson.userID =teacher;
+            videoJson.liveTime = new Date(time).valueOf();
+            videoJsonArray.push(videoJson);
+        }
 
     },
     /**
