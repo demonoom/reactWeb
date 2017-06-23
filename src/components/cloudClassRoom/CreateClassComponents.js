@@ -398,15 +398,15 @@ const CreateClassComponents = React.createClass({
             }
             stepPanel=<div>
                 <Row>
-                    <Col span={4}>总课时</Col>
-                    <Col span={20}>
+                    <Col span={4}>总课时：</Col>
+                    <Col span={18}>
                         <Input onChange={this.classTimesOnChange}/>
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={4}>设置课表</Col>
-                    <Col span={20}>
-                        <Row>
+                    <Col span={4}>设置课表：</Col>
+                    <Col span={18}>
+                        <Row className="no_ant-row">
                             <Col span={4}>目录</Col>
                             <Col span={6}>名称</Col>
                             <Col span={4}>授课老师</Col>

@@ -4754,6 +4754,9 @@ span.pagination{
 	margin-top:15px;
 	font-size:14px;
 }
+.modal_course .no_ant-row{
+	margin-top:0
+}
 .modal_course .ant-row .ant-col-4{
 	text-align:center
 }
