@@ -3722,7 +3722,7 @@ color:#ffbf00
 .ghostMenuShow .headler i{
 	font-size:20px;
 }
-.ghostMenu .first {
+.ghostMenu .first, .cloud_class_menu .first{
 	text-indent:12px;
 	display: block;
 	height: calc(100% - 63px);
@@ -4721,4 +4721,46 @@ span.pagination{
 .count_down{
 	color: #ff0000;
     font-size: 16px;
+}
+.cloud_class_menu .cont_menu{
+	text-indent:12px;
+	display: block;
+	height: calc(100% - 63px);
+    overflow-y: auto;
+}
+
+.cloud_class_menu li div.ant-menu-submenu-title{
+	padding: 10px 0px 10px 0px;
+	border-bottom: 1px solid #f3f3f3;
+    background: #f8f8f8;
+}
+.cloud_class_menu li div.ant-menu-submenu-title span{
+	text-indent:0;
+}
+.modal_course{
+	font-size:14px;
+}
+.modal_course .ant-modal-body {
+    overflow-y: auto;
+	overflow-x:hidden;
+    padding: 0;
+}
+.modal_course .space{
+	height: 460px;
+    width: 90%;
+    margin: 24px auto 0 auto;
+}
+.modal_course .ant-row{
+	margin-top:15px;
+	font-size:14px;
+}
+.modal_course .ant-row .ant-col-4{
+	text-align:center
+}
+.modal_course .ant-radio-group .ant-row{
+	margin:10px 0;
+}
+.modal_steps{
+	width: 74%;
+    margin: 20px auto;
 }

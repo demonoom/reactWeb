@@ -531,7 +531,7 @@ const CreateClassComponents = React.createClass({
             nextButton = <Button onClick={this.changeStep.bind(this,"next")}>下一步</Button>;
             stepPanel = <div>
                 <Row>
-                    <Col span={6}>课程名称</Col>
+                    <Col span={4}>课程名称：</Col>
                     <Col span={18}>
                         <Input value={this.state.courseName} onChange={this.courseNameOnChange}/>
                     </Col>
@@ -556,7 +556,7 @@ const CreateClassComponents = React.createClass({
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={6}>课程科目</Col>
+                    <Col span={4}>课程科目：</Col>
                     <Col span={18}>
                         <Select defaultValue={this.state.defaultSubjectSelected} style={{ width: 120 }} onChange={this.courseSelectOnChange}>
                             {this.state.subjectOptionArray}
@@ -564,7 +564,7 @@ const CreateClassComponents = React.createClass({
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={6}>授课年级</Col>
+                    <Col span={4}>授课年级：</Col>
                     <Col span={18}>
                         <Select defaultValue={this.state.defaultSelected} style={{ width: 120 }} onChange={this.classLevelSelectOnChange}>
                             {this.state.classOptionArray}
@@ -572,25 +572,23 @@ const CreateClassComponents = React.createClass({
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={6}>授课形式</Col>
-                    <Col span={18}>
+                    <Col span={4}>授课形式：</Col>
+                    <Col span={18} style={{ height:160 }}>
                         <RadioGroup onChange={this.classTypeOnChange} value={this.state.isTeam}>
-                            <Radio style={radioStyle} value={1}>
-                                单人授课
-                                <Row>
-                                    <Col span={8}>选择课程类型</Col>
-                                    <Col span={16}>
-                                        <Select defaultValue="single" style={{ width: 120 }} onChange={this.courseTypeSelectOnChange}>
-                                            <Option value="1">系列课</Option>
-                                            <Option value="2">单节课</Option>
-                                        </Select>
-                                    </Col>
+                            <Radio style={radioStyle} value={1}>单人授课</Radio>
+							<Row style={{ width: 420 }}>
+                                <Col span={6} style={{ marginLeft: 22 }}>选择课程类型：</Col>
+                                <Col span={16}>
+									<Select defaultValue="single" style={{ width: 120 }} onChange={this.courseTypeSelectOnChange}>
+										<Option value="1">系列课</Option>
+										<Option value="2">单节课</Option>
+									</Select>
+								</Col>
                                 </Row>
-                            </Radio>
                             <Radio style={radioStyle} value={2}>
                                 团队授课
                                 <Row>
-                                    <Col span={8}>选择团队</Col>
+                                    <Col span={6} style={{ marginLeft: 22 }}>选择团队：</Col>
                                     <Col span={16}>
                                         <Select defaultValue={this.state.defaultTeamSelected} style={{ width: 120 }} onChange={this.teamSelectOnChange}>
                                             {this.state.teamOptionArray}
@@ -602,13 +600,13 @@ const CreateClassComponents = React.createClass({
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={6}>授课时间</Col>
+                    <Col span={4}>授课时间：</Col>
                     <Col span={18}>
                         <RangePicker onChange={this.classTimeOnChange} />
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={6}>课程封面</Col>
+                    <Col span={4}>课程封面：</Col>
                     <Col span={18}>
                         <ImageAnswerUploadComponents
                                                      callBackParent={this.getLessonImageList}>
@@ -616,7 +614,7 @@ const CreateClassComponents = React.createClass({
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={6}>课程概述</Col>
+                    <Col span={4}>课程概述：</Col>
                     <Col span={18}>
                         <Input value={this.state.courseSummary} type="textarea" rows={4} onChange={this.classSummaryOnChange}/>
                     </Col>
@@ -678,11 +676,13 @@ const CreateClassComponents = React.createClass({
         }
 
         return (
-            <div>
-                <Steps current={this.state.stepNum}>
-                    <Step title="课程信息" icon={<Icon type="credit-card" />} />
-                    <Step title="设置课表" icon={<Icon type="smile-o" />} />
-                </Steps>
+            <div >
+                <div className="modal_steps">
+					<Steps current={this.state.stepNum} >
+						<Step title="课程信息" icon={<Icon type="credit-card" />} />
+						<Step title="设置课表" icon={<Icon type="smile-o" />} />
+					</Steps>
+				</div>
                 {stepPanel}
                 <div>
                     <Row>
