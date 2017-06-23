@@ -8,7 +8,7 @@ import {formatHM} from '../../utils/utils';
 import CreateClassComponents from './CreateClassComponents';
 const RadioGroup = Radio.Group;
 const Step = Steps.Step;
-
+var whereJson={};
 const AntMulitiClassComponents = React.createClass({
 
     getInitialState() {
@@ -19,11 +19,16 @@ const AntMulitiClassComponents = React.createClass({
 
     componentDidMount(){
         var _this = this;
+        //控制显示的是单节课还是系列课
+        var isSeries = _this.props.isSeries;
+        if(typeof(isSeries)!="undefined" ){
+            whereJson.isSeries=isSeries;
+        }
         console.log("cloudRoomMenuItem"+this.props.currentItem);
-        _this.getCourseList(this.state.currentPage);
+        _this.getCourseList(this.state.currentPage,whereJson);
     },
 
-    getCourseList(pageNo){
+    getCourseList(pageNo,whereJson){
         var _this = this;
         var requestUrl = getCloudClassRoomRequestURL("courseList");
         var requestType ="POST";
@@ -31,6 +36,9 @@ const AntMulitiClassComponents = React.createClass({
             "numPerPage": getPageSize(),
             "currentPage": pageNo
         };
+        if(typeof(whereJson)!="undefined" ){
+            propertyJson.where=JSON.stringify(whereJson);
+        }
         cloudClassRoomRequestByAjax(requestUrl,propertyJson,requestType, {
             onResponse: function (ret) {
                 if (ret.meta.success == true && ret.meta.message=="ok") {
@@ -163,6 +171,13 @@ const AntMulitiClassComponents = React.createClass({
         this.setState({
             classFliterValue: e.target.value,
         });
+        var whereJson={};
+        if(e.target.value==0){
+            whereJson.is_publish="";
+        }else{
+            whereJson.is_publish=e.target.value;
+        }
+        this.getCourseList(this.state.currentPage,whereJson);
     },
 
     pageOnChange(page) {
@@ -170,6 +185,11 @@ const AntMulitiClassComponents = React.createClass({
         this.setState({
             currentPage: page,
         });
+    },
+
+    courseAddOk(){
+        this.setState({"createClassModalVisible":false});
+        this.getCourseList(1);
     },
 
     /**
@@ -182,10 +202,10 @@ const AntMulitiClassComponents = React.createClass({
             <div style={{overflow:'scroll'}}>
                 <div>
                     <RadioGroup onChange={this.classFliterOnChange} value={this.state.classFliterValue}>
-                        <Radio value="all">全部</Radio>
-                        <Radio value="published">已发布</Radio>
-                        <Radio value="noPublish">未发布</Radio>
-                        <Radio value="back">已撤回</Radio>
+                        <Radio value="0">全部</Radio>
+                        <Radio value="1">已发布</Radio>
+                        <Radio value="2">未发布</Radio>
+                        <Radio value="3">已撤回</Radio>
                     </RadioGroup>
                 </div>
                 <div>
@@ -201,7 +221,7 @@ const AntMulitiClassComponents = React.createClass({
                        footer={[]}
                 >
                     <div style={{height:'460px', overflow:'scroll'}}>
-                        <CreateClassComponents></CreateClassComponents>
+                        <CreateClassComponents onSaveOk={this.courseAddOk}></CreateClassComponents>
                     </div>
                 </Modal>
             </div>
