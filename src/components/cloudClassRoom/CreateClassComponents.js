@@ -1,26 +1,201 @@
 import React, { PropTypes } from 'react';
 import { Tabs, Breadcrumb, Icon,Card,Button,Row,Col,Steps,
-    Input,Select,Radio,DatePicker,Checkbox} from 'antd';
+    Input,Select,Radio,DatePicker,Checkbox,message} from 'antd';
 import ImageAnswerUploadComponents from './ImageAnswerUploadComponents';
 import {isEmpty} from '../../utils/utils';
+import {getCloudClassRoomRequestURL} from '../../utils/CloudClassRoomURLUtils';
+import {cloudClassRoomRequestByAjax} from '../../utils/CloudClassRoomURLUtils';
 const Step = Steps.Step;
 const Option = Select.Option;
 const RadioGroup = Radio.Group;
 const { RangePicker } = DatePicker;
 
 var lessonArray=[];
-var courseInfoJson={isPublish:2};
+var courseInfoJson={isPublish:2,isSeries:2,publisher_id:sessionStorage.getItem("ident"),isFree:1,money:0};
+var videoJsonArray=[];
+var teamJsonArray=[];
 const CreateClassComponents = React.createClass({
 
     getInitialState() {
         return {
             stepNum:0,
+            isFree:1,
+            isTeam:1
         };
     },
 
     componentDidMount(){
         console.log("cloudRoomMenuItem"+this.props.currentItem);
+        this.getAllClass();
+        this.getAllSubject();
+        this.getAllTeam();
     },
+    /**
+     * 获取所有的年级
+     */
+    getAllClass(){
+        var _this = this;
+        var requestUrl = getCloudClassRoomRequestURL("findClass");
+        var requestType ="POST";
+        var propertyJson={};
+        cloudClassRoomRequestByAjax(requestUrl,propertyJson,requestType, {
+            onResponse: function (ret) {
+                if (ret.meta.success == true && ret.meta.message=="ok") {
+                    message.success("成功");
+                    var response=ret.data;
+                    var classOptionArray=[];
+                    var defaultSelected;
+                    for(var i=0;i<response.length;i++){
+                        var classInfo = response[i];
+                        var id = classInfo.id;
+                        var name = classInfo.name;
+                        var parentid = classInfo.parentid;
+                        var optionObj = <Option key={id} value={id}>{name}</Option>;
+                        if(i==0){
+                            defaultSelected = id;
+                        }
+                        classOptionArray.push(optionObj);
+                    }
+                    _this.setState({classOptionArray,defaultSelected});
+                } else {
+                    message.error("失败");
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+    /**
+     * 获取所有的授课科目
+     */
+    getAllSubject(){
+        var _this = this;
+        var requestUrl = getCloudClassRoomRequestURL("findSubject");
+        var requestType ="POST";
+        var propertyJson={};
+        cloudClassRoomRequestByAjax(requestUrl,propertyJson,requestType, {
+            onResponse: function (ret) {
+                if (ret.meta.success == true && ret.meta.message=="ok") {
+                    message.success("成功");
+                    var response=ret.data;
+                    var subjectOptionArray=[];
+                    var defaultSubjectSelected;
+                    for(var i=0;i<response.length;i++){
+                        var subjectInfo = response[i];
+                        var id = subjectInfo.id;
+                        var name = subjectInfo.name;
+                        var parentid = subjectInfo.parentid;
+                        var optionObj = <Option key={id} value={id}>{name}</Option>;
+                        if(i==0){
+                            defaultSubjectSelected = id;
+                        }
+                        subjectOptionArray.push(optionObj);
+                    }
+                    _this.setState({subjectOptionArray,defaultSubjectSelected});
+                } else {
+                    message.error("失败");
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 获取当前老师所属的团队
+     */
+    getAllTeam(){
+        var _this = this;
+        var requestUrl = getCloudClassRoomRequestURL("findTeamByUserId");
+        var requestType ="GET";
+        requestUrl = requestUrl+"?id="+sessionStorage.getItem("ident");
+        var propertyJson={};
+        var teamJson={};
+        cloudClassRoomRequestByAjax(requestUrl,propertyJson,requestType, {
+            onResponse: function (ret) {
+                if (ret.meta.success == true && ret.meta.message=="ok") {
+                    message.success("成功");
+                    var response=ret.data;
+                    var teamOptionArray=[];
+                    var defaultTeamSelected;
+                    for(var i=0;i<response.length;i++){
+                        var teamInfo = response[i];
+                        var id = teamInfo.id;
+                        var name = teamInfo.name;
+                        var status = teamInfo.status;
+                        var users = teamInfo.users;
+                        var optionObj = <Option key={id} value={id}>{name}</Option>;
+                        if(i==0){
+                            defaultTeamSelected = id;
+                        }
+                        var teamUserOptionArray=[];
+                        for(var j=0;j<users.length;j++){
+                            var user = users[j];
+                            var colUid = user.colUid;
+                            var userName = user.userName;
+                            var userOptionObj = <option value={colUid}>{userName}</option>;
+                            teamUserOptionArray.push(userOptionObj);
+                        }
+                        teamJson.teamId=id;
+                        teamJson.teamUserOptionArray = teamUserOptionArray;
+                        teamOptionArray.push(optionObj);
+                        teamJsonArray.push(teamJson);
+                    }
+                    _this.setState({teamOptionArray,defaultTeamSelected});
+                } else {
+                    message.error("失败");
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+    /**
+     * 根据teamId获取team下的老师
+     * @param teamId
+     * @returns {Array}
+     */
+    getTeamUserOptions(teamId){
+        var teamUserOptionArray=[];
+        for(var i=0;i<teamJsonArray.length;i++){
+            var teamJson = teamJsonArray[i];
+            if(teamJson.teamId == teamId){
+                teamUserOptionArray = teamJson.teamUserOptionArray;
+                break;
+            }
+        }
+        this.setState({teamUserOptionArray});
+    },
+
+    /**
+     * 获取所有的年级
+     */
+    addCourse(){
+        var _this = this;
+        var requestUrl = getCloudClassRoomRequestURL("courseAdd");
+        var requestType ="POST";
+        var propertyJson=courseInfoJson;
+        console.log("propertyJson:"+propertyJson);
+        cloudClassRoomRequestByAjax(requestUrl,propertyJson,requestType, {
+            onResponse: function (ret) {
+                if (ret.meta.success == true && ret.meta.message=="ok") {
+                    message.success("成功");
+                    var response=ret.data;
+
+                } else {
+                    message.error("失败");
+                }
+                _this.props.onSaveOk();
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
     /**
      * 课程科目内容改变时的响应函数
      * @param value
@@ -35,7 +210,6 @@ const CreateClassComponents = React.createClass({
      */
     classLevelSelectOnChange(value) {
         console.log(`selected ${value}`);
-        //TODO 当前课程的适用年级的具体取值待确定
         courseInfoJson.courseClass=value;
     },
     /**
@@ -52,8 +226,27 @@ const CreateClassComponents = React.createClass({
             //发布者ＩＤ 单人授课时为人员id　团队授课时为团队id
             var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
             courseInfoJson.publisherId=loginUser.colUid;
+            courseInfoJson.publishType=2;
         }else{
             courseInfoJson.publisherId="";
+            courseInfoJson.publishType=1;
+        }
+    },
+    /**
+     * 课程是否免费的判断
+     * @param e
+     */
+    classIsFreeOnChange(e){
+        console.log('radio checked', e.target.value);
+        var isFree = e.target.value;
+        this.setState({
+            isFree: isFree,
+        });
+        if(isFree==1){
+            //TODO 免费时,输入金额的文本框禁用,课程金额为0
+            courseInfoJson.money=0;
+        }else{
+
         }
     },
     /**
@@ -72,6 +265,8 @@ const CreateClassComponents = React.createClass({
         console.log(`teamSelectOnChange selected ${value}`);
         //团队授课时,发布者为团队id
         courseInfoJson.publisherId=value;
+        this.getTeamUserOptions(value);
+        this.setState({"teamId":value});
     },
 
     /**
@@ -106,17 +301,12 @@ const CreateClassComponents = React.createClass({
         // <Col span={4}>第{lessonNum}课时</Col>
         var lessonObj = <div>
             <Col span={4}>
-                {/*<Select className="lessonTeamTeacher"  defaultValue="1" style={{ width: 70 }} onChange={this.teamTeacherSelectOnChange}>
-                    <Option value="1">a</Option>
-                    <Option value="2">b</Option>
-                    <Option value="3">c</Option>
-                    <Option value="4">d</Option>
-                </Select>*/}
                 <select className="lessonTeamTeacher">
-                    <option value="1">a</option>
+                    {/*<option value="1">a</option>
                     <option value="2">b</option>
                     <option value="3">c</option>
-                    <option value="4">d</option>
+                    <option value="4">d</option>*/}
+                    {this.state.teamUserOptionArray}
                 </select>
             </Col>
             <Col span={8}>
@@ -172,21 +362,22 @@ const CreateClassComponents = React.createClass({
             var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
             userId = loginUser.colUid;
         }else{
-
+            userId = this.state.teamId;
         }
-        var videoJsonArray=[];
         for(var i=0;i<lessonTimeTagArray.length;i++){
             var videoJson={};
             var option = lessonTeamTeacherTagArray[i];
             var　timeTag = lessonTimeTagArray[i];
             var teacher = option.value;
-            var time = timeTag.textContent;
+            var time = timeTag.value;
             console.log("teacher"+teacher+"\t"+time);
+            videoJson.squence = i+1;
+            videoJson.courseId = courseInfoJson.courseTypeId;
             videoJson.userID =teacher;
             videoJson.liveTime = new Date(time).valueOf();
-            videoJsonArray.push(videoJson);
+            this.buildVideosArray(videoJson);
         }
-
+        this.addCourse();
     },
     /**
      * 立即发布复选框选中响应函数
@@ -214,7 +405,23 @@ const CreateClassComponents = React.createClass({
             target = e.target;
         }
         var courseName = target.value;
+        this.setState({courseName});
         courseInfoJson.courseName=courseName;
+    },
+    /**
+     * 课程收费金额文本框内容改变时的响应
+     * @param e
+     */
+    moneyOnChange(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var money = target.value;
+        this.setState({money});
+        courseInfoJson.money=money;
     },
     /**
      * 课程概述内容响应函数
@@ -229,6 +436,7 @@ const CreateClassComponents = React.createClass({
         }
         var courseSummary = target.value;
         courseInfoJson.content = courseSummary;
+        this.setState({courseSummary});
     },
     /**
      * 总课时内容改变时的响应函数
@@ -266,8 +474,33 @@ const CreateClassComponents = React.createClass({
         }else{
             target = e.target;
         }
-        var lessonNum = target.id;
-        var lessonTitle = target.value;
+        var squence = target.id;
+        var name = target.value;
+        var videoJson = {squence,name};
+        this.buildVideosArray(videoJson,"title");
+    },
+
+    buildVideosArray(videoJson,buildType){
+        var isExistSameVideo=false;
+        for(var i=0;i<videoJsonArray.length;i++){
+            var everyVideoJson = videoJsonArray[i];
+            if(everyVideoJson.squence == videoJson.squence){
+                if(buildType=="title"){
+                    everyVideoJson.name = videoJson.name;
+                }else{
+                    everyVideoJson.squence = videoJson.squence;
+                    everyVideoJson.courseId = videoJson.courseId;
+                    everyVideoJson.userID = videoJson.userID;
+                    everyVideoJson.liveTime = videoJson.liveTime;
+                }
+                isExistSameVideo=true;
+                break;
+            }
+        }
+        if(isExistSameVideo==false){
+            videoJsonArray.push(videoJson);
+        }
+        courseInfoJson.videos = videoJsonArray;
     },
 
     teamTeacherSelectOnChange(value){
@@ -300,27 +533,38 @@ const CreateClassComponents = React.createClass({
                 <Row>
                     <Col span={4}>课程名称：</Col>
                     <Col span={18}>
-                        <Input onChange={this.courseNameOnChange}/>
+                        <Input value={this.state.courseName} onChange={this.courseNameOnChange}/>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={4}>课程费用：</Col>
+                    <Col span={18}>
+                        <RadioGroup onChange={this.classIsFreeOnChange} value={this.state.isFree}>
+                            <Radio style={radioStyle} value={1} style={{ width: 60 }}>
+                                免费
+                            </Radio>
+                            <Radio style={radioStyle} value={2} style={{ width: 60 }}>
+                                收费
+                            </Radio>
+							 <span >
+                                 <Input value={this.state.money} onChange={this.moneyOnChange} style={{ width: 160 }}/>
+                            </span>
+                        </RadioGroup>
                     </Col>
                 </Row>
                 <Row>
                     <Col span={4}>课程科目：</Col>
                     <Col span={18}>
-                        <Select defaultValue="chinese" style={{ width: 120 }} onChange={this.courseSelectOnChange}>
-                            <Option value="chinese">语文</Option>
-                            <Option value="math">数学</Option>
-                            <Option value="english">英语</Option>
-                            <Option value="history">历史</Option>
+                        <Select defaultValue={this.state.defaultSubjectSelected} style={{ width: 120 }} onChange={this.courseSelectOnChange}>
+                            {this.state.subjectOptionArray}
                         </Select>
                     </Col>
                 </Row>
                 <Row>
                     <Col span={4}>授课年级：</Col>
                     <Col span={18}>
-                        <Select defaultValue="small" style={{ width: 120 }} onChange={this.classLevelSelectOnChange}>
-                            <Option value="small">小学</Option>
-                            <Option value="middle">初中</Option>
-                            <Option value="senior">高中</Option>
+                        <Select defaultValue={this.state.defaultSelected} style={{ width: 120 }} onChange={this.classLevelSelectOnChange}>
+                            {this.state.classOptionArray}
                         </Select>
                     </Col>
                 </Row>
@@ -343,9 +587,8 @@ const CreateClassComponents = React.createClass({
                                 <Row>
                                     <Col span={6} style={{ marginLeft: 22 }}>选择团队：</Col>
                                     <Col span={16}>
-                                        <Select defaultValue="single" style={{ width: 120 }} onChange={this.teamSelectOnChange}>
-                                            <Option value="1">a团队</Option>
-                                            <Option value="2">b团队</Option>
+                                        <Select defaultValue={this.state.defaultTeamSelected} style={{ width: 120 }} onChange={this.teamSelectOnChange}>
+                                            {this.state.teamOptionArray}
                                         </Select>
                                     </Col>
                                 </Row>
@@ -370,7 +613,7 @@ const CreateClassComponents = React.createClass({
                 <Row>
                     <Col span={4}>课程概述：</Col>
                     <Col span={18}>
-                        <Input type="textarea" rows={4} onChange={this.classSummaryOnChange}/>
+                        <Input value={this.state.courseSummary} type="textarea" rows={4} onChange={this.classSummaryOnChange}/>
                     </Col>
                 </Row>
             </div>;
@@ -384,11 +627,11 @@ const CreateClassComponents = React.createClass({
                 for(var i=0;i<this.state.lessonArray.length;i++){
                     var lessonJson = this.state.lessonArray[i];
                     var lessonRowObj = <Row>
-                        <Col span={4}>第{lessonJson.lessonNum}课时</Col>
-                        <Col span={6}>
+                        <Col span={4} className="add_left">第{lessonJson.lessonNum}课时</Col>
+                        <Col span={8}>
                             <Input id={lessonJson.lessonNum} onChange={this.lessonTitleOnChange}/>
                         </Col>
-                        {lessonJson.lessonObj}
+                        <Col span={4}>{lessonJson.lessonObj}</Col>
                         <Col span={2}>
                             <Button icon="delete" onClick={this.removeLesson.bind(this,lessonJson.lessonNum)}></Button>
                         </Col>
@@ -400,29 +643,29 @@ const CreateClassComponents = React.createClass({
                 <Row>
                     <Col span={4}>总课时：</Col>
                     <Col span={18}>
-                        <Input onChange={this.classTimesOnChange}/>
+                        <Input value={this.state.videoNum} onChange={this.classTimesOnChange}/>
                     </Col>
                 </Row>
                 <Row>
                     <Col span={4}>设置课表：</Col>
-                    <Col span={18}>
-                        <Row className="no_ant-row">
-                            <Col span={4}>目录</Col>
-                            <Col span={6}>名称</Col>
+                    <Col span={20}>
+                        <Row className="no_ant-row price" >
+                            <Col span={4} className="add_left">目录</Col>
+                            <Col span={8}>名称</Col>
                             <Col span={4}>授课老师</Col>
-                            <Col span={8}>授课时间</Col>
-                            <Col span={2}>操作</Col>
+                            <Col span={4}>授课时间</Col>
+                            <Col span={4}>操作</Col>
                         </Row>
                         {everyLessonArray}
                         <Row>
                             <Col span={24}>
-                                <Button icon="add" onClick={this.addLesson}>添加目录</Button>
+                                <Button icon="add" onClick={this.addLesson} className="add_DIR add_study-b">添加目录</Button>
                             </Col>
                         </Row>
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={6}>
+                    <Col span={24} className="knowledge_ri">
                         <Checkbox onChange={this.publishClassAtNow}>立即发布</Checkbox>
                     </Col>
                 </Row>
