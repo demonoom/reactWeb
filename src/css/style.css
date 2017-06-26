@@ -1180,7 +1180,7 @@ article.content_3 img{
 	max-width:500px;
 }
 .line_block{
-	display:inline-block;
+	display:inline-block !important;
 }
 .ant-checkbox-wrapper + .ant-checkbox-wrapper{
 	margin-left:0px;
