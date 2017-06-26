@@ -5,6 +5,7 @@ import ImageAnswerUploadComponents from './ImageAnswerUploadComponents';
 import {isEmpty} from '../../utils/utils';
 import {getCloudClassRoomRequestURL} from '../../utils/CloudClassRoomURLUtils';
 import {cloudClassRoomRequestByAjax} from '../../utils/CloudClassRoomURLUtils';
+import {doWebService_CloudClassRoom} from '../../utils/CloudClassRoomURLUtils';
 import moment from 'moment';
 const dateFormat = 'YYYY/MM/DD';
 const Step = Steps.Step;
@@ -34,7 +35,7 @@ const CreateClassComponents = React.createClass({
         console.log("cloudRoomMenuItem"+this.props.currentItem);
         this.getAllClass();
         this.getAllSubject();
-        this.getAllTeam();
+        this.findTeamByUserId();
     },
     /**
      * 获取所有的年级
@@ -111,56 +112,49 @@ const CreateClassComponents = React.createClass({
         });
     },
 
-    /**
-     * 获取当前老师所属的团队
-     */
-    getAllTeam(){
+    findTeamByUserId(){
         var _this = this;
-        var requestUrl = getCloudClassRoomRequestURL("findTeamByUserId");
-        var requestType ="GET";
-        requestUrl = requestUrl+"?id="+sessionStorage.getItem("ident");
-        var propertyJson={};
+        var param = {
+            "method": 'findTeamByUserId',
+            "userId": sessionStorage.getItem("ident"),
+        };
         var teamJson={};
-        cloudClassRoomRequestByAjax(requestUrl,propertyJson,requestType, {
+        doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
-                if (ret.meta.success == true && ret.meta.message=="ok") {
-                    message.success("成功");
-                    var response=ret.data;
-                    var teamOptionArray=[];
-                    var defaultTeamSelected;
-                    for(var i=0;i<response.length;i++){
-                        var teamInfo = response[i];
-                        var id = teamInfo.id;
-                        var name = teamInfo.name;
-                        var status = teamInfo.status;
-                        var users = teamInfo.users;
-                        var optionObj = <Option key={id} value={id}>{name}</Option>;
-                        if(i==0){
-                            defaultTeamSelected = id;
-                        }
-                        var teamUserOptionArray=[];
-                        for(var j=0;j<users.length;j++){
-                            var user = users[j];
-                            var colUid = user.colUid;
-                            var userName = user.userName;
-                            var userOptionObj = <option value={colUid}>{userName}</option>;
-                            teamUserOptionArray.push(userOptionObj);
-                        }
-                        teamJson.teamId=id;
-                        teamJson.teamUserOptionArray = teamUserOptionArray;
-                        teamOptionArray.push(optionObj);
-                        teamJsonArray.push(teamJson);
+                var response = ret.response;
+                var teamOptionArray=[];
+                var defaultTeamSelected;
+                for(var i=0;i<response.length;i++){
+                    var teamInfo = response[i];
+                    var id = teamInfo.id;
+                    var name = teamInfo.name;
+                    var status = teamInfo.status;
+                    var users = teamInfo.users;
+                    var optionObj = <Option key={id} value={id}>{name}</Option>;
+                    if(i==0){
+                        defaultTeamSelected = id;
                     }
-                    _this.setState({teamOptionArray,defaultTeamSelected});
-                } else {
-                    message.error("失败");
+                    var teamUserOptionArray=[];
+                    for(var j=0;j<users.length;j++){
+                        var user = users[j];
+                        var colUid = user.colUid;
+                        var userName = user.userName;
+                        var userOptionObj = <option value={colUid}>{userName}</option>;
+                        teamUserOptionArray.push(userOptionObj);
+                    }
+                    teamJson.teamId=id;
+                    teamJson.teamUserOptionArray = teamUserOptionArray;
+                    teamOptionArray.push(optionObj);
+                    teamJsonArray.push(teamJson);
                 }
+                _this.setState({teamOptionArray,defaultTeamSelected});
             },
             onError: function (error) {
                 message.error(error);
             }
         });
     },
+
     /**
      * 根据teamId获取team下的老师
      * @param teamId

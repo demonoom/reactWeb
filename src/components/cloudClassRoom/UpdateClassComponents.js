@@ -35,9 +35,6 @@ const UpdateClassComponents = React.createClass({
     },
 
     componentWillMount(){
-        this.getAllClass();
-        this.getAllSubject();
-        this.getAllTeam();
         var updateClassObj = this.props.updateClassObj;
         this.initPageInfo(updateClassObj);
     },
@@ -122,6 +119,9 @@ const UpdateClassComponents = React.createClass({
         courseInfoJson.publisher = publisher;
         courseInfoJson.publishType = publishType;
         courseInfoJson.videos = videos;
+        this.getAllClass();
+        this.getAllSubject();
+        this.getAllTeam();
     },
 
     /**
@@ -694,7 +694,7 @@ const UpdateClassComponents = React.createClass({
                 <Row>
                     <Col span={4}>课程科目：</Col>
                     <Col span={18}>
-                        <Select defaultValue={this.state.defaultSubjectSelected} style={{ width: 120 }} onChange={this.courseSelectOnChange}>
+                        <Select defaultValue={this.state.defaultSubjectSelected} value={this.state.defaultSubjectSelected} style={{ width: 120 }} onChange={this.courseSelectOnChange}>
                             {this.state.subjectOptionArray}
                         </Select>
                     </Col>
@@ -702,7 +702,7 @@ const UpdateClassComponents = React.createClass({
                 <Row>
                     <Col span={4}>授课年级：</Col>
                     <Col span={18}>
-                        <Select defaultValue={this.state.defaultSelected} style={{ width: 120 }} onChange={this.classLevelSelectOnChange}>
+                        <Select defaultValue={this.state.defaultSelected}  value={this.state.defaultSelected} style={{ width: 120 }} onChange={this.classLevelSelectOnChange}>
                             {this.state.classOptionArray}
                         </Select>
                     </Col>
@@ -726,7 +726,7 @@ const UpdateClassComponents = React.createClass({
                                 <Row>
                                     <Col span={6} style={{ marginLeft: 22 }}>选择团队：</Col>
                                     <Col span={16}>
-                                        <Select defaultValue={this.state.defaultTeamSelected} disabled={this.state.teamDisabled}  style={{ width: 120 }} onChange={this.teamSelectOnChange}>
+                                        <Select defaultValue={this.state.defaultTeamSelected}  value={this.state.defaultTeamSelected} disabled={this.state.teamDisabled}  style={{ width: 120 }} onChange={this.teamSelectOnChange}>
                                             {this.state.teamOptionArray}
                                         </Select>
                                     </Col>
