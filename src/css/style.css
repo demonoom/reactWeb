@@ -4803,6 +4803,9 @@ span.pagination{
 	width: 74%;
     margin: 20px auto;
 }
+.modal_course .space .ant-col-4 .ant-calendar-picker{
+	width:67px !important;
+}
 .series_courses{
 }
 .series_courses .ant-radio-group, .team .ant-radio-group{

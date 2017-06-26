@@ -328,7 +328,7 @@ const CreateClassComponents = React.createClass({
             </select>
         </Col>;
         var timeObj = <Col span={4}>
-            <DatePicker
+            <DatePicker 
                 className="lessonTime"
                 showTime
                 format="YYYY-MM-DD HH:mm:ss"
