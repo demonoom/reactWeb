@@ -580,7 +580,6 @@ const CreateClassComponents = React.createClass({
         const radioStyle = {
             display: 'block',
             height: '30px',
-            width:'60px',
             lineHeight: '30px',
         };
         var classStepStatus;
@@ -605,10 +604,10 @@ const CreateClassComponents = React.createClass({
                     <Col span={4}>课程费用：</Col>
                     <Col span={18}>
                         <RadioGroup onChange={this.classIsFreeOnChange} value={this.state.isFree}>
-                            <Radio style={radioStyle} value={1}>
+                            <Radio style={radioStyle} value={1} className="line_block">
                                 免费
                             </Radio>
-                            <Radio style={radioStyle} value={2}>
+                            <Radio style={radioStyle} value={2} className="line_block">
                                 收费
                                 {/*<Row>
                                     <Col span={8}>请输入课程费用</Col>
@@ -703,7 +702,7 @@ const CreateClassComponents = React.createClass({
                             <Input id={lessonJson.lessonNum} onChange={this.lessonTitleOnChange}/>
                         </Col>
                         <Col span={4}>{lessonJson.lessonObj}</Col>
-                        <Col span={2}>
+                        <Col span={4}>
                             <Button icon="delete" onClick={this.removeLesson.bind(this,lessonJson.lessonNum)}></Button>
                         </Col>
                     </Row>;
