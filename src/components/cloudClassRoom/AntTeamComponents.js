@@ -5,6 +5,7 @@ import {getCloudClassRoomRequestURL} from '../../utils/CloudClassRoomURLUtils';
 import {cloudClassRoomRequestByAjax} from '../../utils/CloudClassRoomURLUtils';
 import {getPageSize} from '../../utils/Const';
 import {doWebService_CloudClassRoom} from '../../utils/CloudClassRoomURLUtils';
+import ConfirmModal from '../ConfirmModal';
 const RadioGroup = Radio.Group;
 
 var userTeamColumns = [ {
@@ -153,7 +154,7 @@ const AntTeamComponents = React.createClass({
                 });
             }
             if(isAtThisTeam==false){
-                requestAddBtn = <Button style={{ }} type=""  value={team.id} onClick={_this.showAddTeamModal}  icon="plus-circle-o" title="申请加入" className="score3_i"></Button>;
+                requestAddBtn = <Button style={{ }} type=""  value={team.id} onClick={_this.showAddTeamModal.bind(_this,team)}  icon="plus-circle-o" title="申请加入" className="score3_i"></Button>;
             }else{
                 requestAddBtn="";
             }
@@ -282,8 +283,9 @@ const AntTeamComponents = React.createClass({
 
     },
 
-    showAddTeamModal(){
-
+    showAddTeamModal(teamObj){
+        this.setState({teamObj});
+        this.refs.confirmModal.changeConfirmModalVisible(true);
     },
     /**
      * 过滤我创建的团队和我所在的团队
@@ -372,6 +374,18 @@ const AntTeamComponents = React.createClass({
         this.setState({"createTeamModalVisible":true});
     },
 
+    closeConfirmModal() {
+        this.refs.confirmModal.changeConfirmModalVisible(false);
+    },
+    /**
+     * 申请加入某个团队
+     */
+    requestAddThisTeam(){
+        var teamObj = this.state.teamObj;
+        console.log(teamObj.id);
+        this.closeConfirmModal();
+    },
+
     /**
      * 渲染页面
      * @returns {XML}
@@ -436,6 +450,13 @@ const AntTeamComponents = React.createClass({
                     </Row>
 
                 </Modal>
+
+                <ConfirmModal ref="confirmModal"
+                              title="确定要申请加入该团队?"
+                              onConfirmModalCancel={this.closeConfirmModal}
+                              onConfirmModalOK={this.requestAddThisTeam}
+                ></ConfirmModal>
+
             </div>
         );
     },

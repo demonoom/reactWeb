@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { Tabs, Breadcrumb, Icon,Card,Button,Row,Col,Input} from 'antd';
 import AntMulitiClassComponents from './AntMulitiClassComponents';
 import AntTeamComponents from './AntTeamComponents';
+import MyMessageComponents from './MyMessageComponents';
 
 const AntCloudClassRoomComponents = React.createClass({
 
@@ -75,6 +76,11 @@ const AntCloudClassRoomComponents = React.createClass({
                 topButton = teamBtn;
                 leftBtn = "";
                 tabPanel = <AntTeamComponents ref="antTeamComponents" type="allTeam" teamSearchKey={this.state.teamSearchKey}></AntTeamComponents>;
+                break;
+            case "myMessage":
+                topButton = "";
+                leftBtn = "";
+                tabPanel = <MyMessageComponents ref="myMessageComponents"></MyMessageComponents>;
                 break;
         }
 
