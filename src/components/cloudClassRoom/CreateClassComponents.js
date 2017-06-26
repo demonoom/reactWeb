@@ -204,6 +204,7 @@ const CreateClassComponents = React.createClass({
      */
     courseSelectOnChange(value) {
         console.log(`selected ${value}`);
+        this.setState({defaultSubjectSelected:value});
         courseInfoJson.courseTypeId=value;
     },
     /**
@@ -212,6 +213,7 @@ const CreateClassComponents = React.createClass({
      */
     classLevelSelectOnChange(value) {
         console.log(`selected ${value}`);
+        this.setState({defaultSelected:value});
         courseInfoJson.courseClass=value;
     },
     /**
@@ -277,7 +279,7 @@ const CreateClassComponents = React.createClass({
         //团队授课时,发布者为团队id
         courseInfoJson.publisherId=value;
         this.getTeamUserOptions(value);
-        this.setState({"teamId":value});
+        this.setState({"teamId":value,defaultTeamSelected:value});
     },
 
     /**
@@ -316,28 +318,26 @@ const CreateClassComponents = React.createClass({
         }
         var lessonNum = lessonArray.length+1;
         // <Col span={4}>第{lessonNum}课时</Col>
-        var lessonObj = <div>
-            <Col span={4}>
-                <select className="lessonTeamTeacher">
-                    {/*<option value="1">a</option>
-                    <option value="2">b</option>
-                    <option value="3">c</option>
-                    <option value="4">d</option>*/}
-                    {this.state.teamUserOptionArray}
-                </select>
-            </Col>
-            <Col span={8}>
-                <DatePicker
-                    className="lessonTime"
-                    showTime
-                    format="YYYY-MM-DD HH:mm:ss"
-                    placeholder="Select Time"
-                    onChange={this.lessonTimeOnChange}
-                    onOk={this.lessonTimeOnOk}
-                />
-            </Col>
-        </div>;
-        var lessonJson = {lessonNum,lessonObj};
+        var teacherObj = <Col span={4}>
+            <select className="lessonTeamTeacher">
+                {/*<option value="1">a</option>
+                 <option value="2">b</option>
+                 <option value="3">c</option>
+                 <option value="4">d</option>*/}
+                {this.state.teamUserOptionArray}
+            </select>
+        </Col>;
+        var timeObj = <Col span={4}>
+            <DatePicker
+                className="lessonTime"
+                showTime
+                format="YYYY-MM-DD HH:mm:ss"
+                placeholder="Select Time"
+                onChange={this.lessonTimeOnChange}
+                onOk={this.lessonTimeOnOk}
+            />
+        </Col>;
+        var lessonJson = {lessonNum,teacherObj,timeObj};
         lessonArray.push(lessonJson);
         this.setState({lessonArray});
     },
@@ -619,7 +619,7 @@ const CreateClassComponents = React.createClass({
                 <Row>
                     <Col span={4}>课程科目：</Col>
                     <Col span={18}>
-                        <Select defaultValue={this.state.defaultSubjectSelected} style={{ width: 120 }} onChange={this.courseSelectOnChange}>
+                        <Select defaultValue={this.state.defaultSubjectSelected} value={this.state.defaultSubjectSelected} style={{ width: 120 }} onChange={this.courseSelectOnChange}>
                             {this.state.subjectOptionArray}
                         </Select>
                     </Col>
@@ -627,7 +627,7 @@ const CreateClassComponents = React.createClass({
                 <Row>
                     <Col span={4}>授课年级：</Col>
                     <Col span={18}>
-                        <Select defaultValue={this.state.defaultSelected} style={{ width: 120 }} onChange={this.classLevelSelectOnChange}>
+                        <Select defaultValue={this.state.defaultSelected} value={this.state.defaultSelected} style={{ width: 120 }} onChange={this.classLevelSelectOnChange}>
                             {this.state.classOptionArray}
                         </Select>
                     </Col>
@@ -651,7 +651,7 @@ const CreateClassComponents = React.createClass({
                                 <Row>
                                     <Col span={6} style={{ marginLeft: 22 }}>选择团队：</Col>
                                     <Col span={16}>
-                                        <Select defaultValue={this.state.defaultTeamSelected} disabled={this.state.teamDisabled}  style={{ width: 120 }} onChange={this.teamSelectOnChange}>
+                                        <Select defaultValue={this.state.defaultTeamSelected} value={this.state.defaultTeamSelected} disabled={this.state.teamDisabled}  style={{ width: 120 }} onChange={this.teamSelectOnChange}>
                                             {this.state.teamOptionArray}
                                         </Select>
                                     </Col>
@@ -695,7 +695,8 @@ const CreateClassComponents = React.createClass({
                         <Col span={8}>
                             <Input id={lessonJson.lessonNum} onChange={this.lessonTitleOnChange}/>
                         </Col>
-                        <Col span={4}>{lessonJson.lessonObj}</Col>
+                        {lessonJson.teacherObj}
+                        {lessonJson.timeObj}
                         <Col span={4}>
                             <Button icon="delete" onClick={this.removeLesson.bind(this,lessonJson.lessonNum)}></Button>
                         </Col>

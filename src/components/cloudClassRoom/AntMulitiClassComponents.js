@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { Card,Radio,Row,Col,Button,Icon,message,Steps,Modal,Form,Pagination } from 'antd';
 import {getCloudClassRoomRequestURL} from '../../utils/CloudClassRoomURLUtils';
 import {cloudClassRoomRequestByAjax} from '../../utils/CloudClassRoomURLUtils';
+import {doWebService_CloudClassRoom} from '../../utils/CloudClassRoomURLUtils';
 import {getPageSize} from '../../utils/Const';
 import {formatYMD} from '../../utils/utils';
 import {formatHM} from '../../utils/utils';

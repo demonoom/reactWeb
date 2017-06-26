@@ -282,6 +282,7 @@ const UpdateClassComponents = React.createClass({
      */
     courseSelectOnChange(value) {
         console.log(`selected ${value}`);
+        this.setState({defaultSubjectSelected:value});
         courseInfoJson.courseTypeId=value;
     },
     /**
@@ -290,6 +291,7 @@ const UpdateClassComponents = React.createClass({
      */
     classLevelSelectOnChange(value) {
         console.log(`selected ${value}`);
+        this.setState({defaultSelected:value});
         courseInfoJson.courseClass=value;
     },
     /**
@@ -355,7 +357,7 @@ const UpdateClassComponents = React.createClass({
         //团队授课时,发布者为团队id
         courseInfoJson.publisherId=value;
         this.getTeamUserOptions(value);
-        this.setState({"teamId":value});
+        this.setState({"teamId":value,defaultTeamSelected:value});
     },
 
     /**
