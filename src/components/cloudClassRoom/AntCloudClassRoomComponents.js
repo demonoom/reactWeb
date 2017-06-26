@@ -27,6 +27,17 @@ const AntCloudClassRoomComponents = React.createClass({
         this.refs.antTeamComponents.showCreateTeamModal();
     },
 
+    searchTeamList(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var teamSearchKey = target.value;
+        this.setState({teamSearchKey});
+    },
+
     /**
      * 渲染页面
      * @returns {XML}
@@ -40,10 +51,9 @@ const AntCloudClassRoomComponents = React.createClass({
         let createClassBtn = <span className="btn2 talk_ant_btn1">
             <Button className="ant-btn ant-btn-primary add_study" onClick={this.createClass}>创建新课程</Button>
         </span>;
-        let createTeamBtn = <span className="btn2 talk_ant_btn1">
+        let teamBtn = <span className="btn2 talk_ant_btn1">
             <Button className="ant-btn ant-btn-primary add_study series_top_btn2" onClick={this.createTeam}>创建团队</Button>
-            <Button className="ant-btn ant-btn-primary add_study series_top_btn1" onClick={this.createClass}>申请加入</Button>
-            <Input placeholder="请输入关键字搜索" className="series_search"/>
+            <Input placeholder="请输入关键字搜索" className="series_search" onChange={this.searchTeamList}/>
         </span>;
         switch(this.props.currentItem){
             case "mulitiClass":
@@ -57,14 +67,14 @@ const AntCloudClassRoomComponents = React.createClass({
                 tabPanel = <AntMulitiClassComponents ref="antSingleClassComponents" isSeries="2"></AntMulitiClassComponents>;
                 break;
             case "myTeam":
-                topButton = createTeamBtn;
+                topButton = teamBtn;
                 leftBtn = "";
-                tabPanel = <AntTeamComponents ref="antTeamComponents" type="myTeam"></AntTeamComponents>;
+                tabPanel = <AntTeamComponents ref="antTeamComponents" type="myTeam" teamSearchKey={this.state.teamSearchKey}></AntTeamComponents>;
                 break;
             case "allTeam":
-                topButton = createTeamBtn;
+                topButton = teamBtn;
                 leftBtn = "";
-                tabPanel = <AntTeamComponents ref="antTeamComponents" type="allTeam"></AntTeamComponents>;
+                tabPanel = <AntTeamComponents ref="antTeamComponents" type="allTeam" teamSearchKey={this.state.teamSearchKey}></AntTeamComponents>;
                 break;
         }
 

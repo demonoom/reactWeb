@@ -42,25 +42,68 @@ const AntTeamComponents = React.createClass({
     componentWillReceiveProps(nextProps){
         var type = nextProps.type;
         this.setState({type});
-        this.findTeamInfoByType(type);
+        this.findTeamInfoByType(type,nextProps.teamSearchKey);
     },
 
-    findTeamInfoByType(type){
+    findTeamInfoByType(type,teamSearchKey){
         var _this = this;
         switch(type){
             case "myTeam":
-                _this.findTeamByUserId();
+                _this.findTeamByUserId(teamSearchKey);
                 break;
             case "allTeam":
-                _this.findTeam();
+                _this.findTeam(teamSearchKey);
                 break;
         }
     },
 
-    findTeamByUserId(){
+    findTeamByUserId(teamSearchKey){
         var _this = this;
+
         var param = {
             "method": 'findTeamByUserId',
+            "userId": sessionStorage.getItem("ident"),
+        };
+        if(isEmpty(teamSearchKey)==false){
+            param.where=JSON.stringify({"name":teamSearchKey});
+        }
+        doWebService_CloudClassRoom(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                _this.buildTeamListByResponse(response);
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    findTeam(teamSearchKey){
+        var _this = this;
+        var param = {
+            "method": 'findTeam'
+        };
+        if(isEmpty(teamSearchKey)==false){
+            param.where=JSON.stringify({"name":teamSearchKey});
+        }
+        doWebService_CloudClassRoom(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                _this.buildTeamListByResponse(response);
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 查询我创建的团队
+     */
+    findTeamByManager(){
+        var _this = this;
+        var param = {
+            "method": 'findTeamByManager',
             "userId": sessionStorage.getItem("ident"),
         };
         doWebService_CloudClassRoom(JSON.stringify(param), {
@@ -73,11 +116,14 @@ const AntTeamComponents = React.createClass({
             }
         });
     },
-
-    findTeam(){
+    /**
+     * 查询我加入的团队
+     */
+    findMyJoinTeam(){
         var _this = this;
         var param = {
-            "method": 'findTeam'
+            "method": 'findMyJoinTeam',
+            "userId": sessionStorage.getItem("ident"),
         };
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -97,7 +143,30 @@ const AntTeamComponents = React.createClass({
         var total = response.length;
         var teamTableData = [];
         response.forEach(function (team) {
-            var subjectOpt=<div><Button style={{ }} type=""  value={team.id} onClick={_this.showTeamSettingModal}  icon="setting" title="设置" className="score3_i"></Button></div>;
+            var requestAddBtn;
+            var isAtThisTeam=false;
+            if(isEmpty(team.users)){
+                team.users.forEach(function (user) {
+                    if(users.colUid==sessionStorage.getItem("ident")){
+                        isAtThisTeam=true;
+                    }
+                });
+            }
+            if(isAtThisTeam==false){
+                requestAddBtn = <Button style={{ }} type=""  value={team.id} onClick={_this.showAddTeamModal}  icon="plus-circle-o" title="申请加入" className="score3_i"></Button>;
+            }else{
+                requestAddBtn="";
+            }
+            var settingBtn;
+            if(team.manager==sessionStorage.getItem("ident")){
+                settingBtn=<Button style={{ }} type=""  value={team.id} onClick={_this.showTeamSettingModal}  icon="setting" title="设置" className="score3_i"></Button>;
+            }else{
+                settingBtn="";
+            }
+            var subjectOpt=<div>
+                {requestAddBtn}
+                {settingBtn}
+            </div>;
             var teamUsersPhoto=[];
             var imgTag = <div className="maaee_group_face">{teamUsersPhoto}</div>;
             if(isEmpty(team.users)==false ){
@@ -212,6 +281,10 @@ const AntTeamComponents = React.createClass({
     showTeamSettingModal(){
 
     },
+
+    showAddTeamModal(){
+
+    },
     /**
      * 过滤我创建的团队和我所在的团队
      * @param e
@@ -221,14 +294,14 @@ const AntTeamComponents = React.createClass({
         this.setState({
             teamTypeFliterValue: e.target.value,
         });
-        var whereJson={};
         if(e.target.value==0){
-            whereJson.manager=sessionStorage.getItem("ident");
+            this.findTeamByManager();
         }else{
-            //whereJson.is_publish=e.target.value;
+            this.findMyJoinTeam();
         }
-        //this.getCourseList(this.state.currentPage,whereJson);
     },
+
+
 
     onTeamPageChange(page){
         // this.getUserChatGroupById(page);
@@ -317,8 +390,9 @@ const AntTeamComponents = React.createClass({
         }
 
         return (
-            <div className="favorite_scroll">      
-                <div className="myfollow_zb">
+            <div className="favorite_scroll">
+                {/*className="myfollow_zb"*/}
+                <div>
                     {filterRadios}
                     <Table className="group_table group_table_u"
                            scroll={{ x: true, }} columns={userTeamColumns} showHeader={false}

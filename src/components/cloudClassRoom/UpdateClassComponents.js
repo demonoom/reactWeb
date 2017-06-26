@@ -2,11 +2,12 @@ import React, { PropTypes } from 'react';
 import { Tabs, Breadcrumb, Icon,Card,Button,Row,Col,Steps,
     Input,Select,Radio,DatePicker,Checkbox,message} from 'antd';
 import ImageAnswerUploadComponents from './ImageAnswerUploadComponents';
-import {isEmpty,formatYMD} from '../../utils/utils';
+import {isEmpty,formatYMD,getLocalTime} from '../../utils/utils';
 import {getCloudClassRoomRequestURL} from '../../utils/CloudClassRoomURLUtils';
 import {cloudClassRoomRequestByAjax} from '../../utils/CloudClassRoomURLUtils';
 import moment from 'moment';
 const dateFormat = 'YYYY/MM/DD';
+const dateFullFormat = 'YYYY-MM-DD HH:mm:ss';
 const Step = Steps.Step;
 const Option = Select.Option;
 const RadioGroup = Radio.Group;
@@ -24,6 +25,7 @@ const UpdateClassComponents = React.createClass({
             isFree:1,
             isTeam:1,
             money:0,
+            isSeries:2,
             isSeriesDisabled:false,
             teamDisabled:true
         };
@@ -119,6 +121,40 @@ const UpdateClassComponents = React.createClass({
         courseInfoJson.publisher = publisher;
         courseInfoJson.publishType = publishType;
         courseInfoJson.videos = videos;
+        if(isEmpty(videos)==false){
+            videos.forEach(function (video) {
+                var liveTime = getLocalTime(video.liveTime);
+                var teacherObj;
+                if(isTeam==1) {
+                    teacherObj = <span>{loginUser.userName}</span>;
+                }else{
+                    teacherObj = <Col span={4}>
+                        <select className="lessonTeamTeacher">
+                            {/*<option value="1">a</option>
+                             <option value="2">b</option>
+                             <option value="3">c</option>
+                             <option value="4">d</option>*/}
+                            {this.state.teamUserOptionArray}
+                        </select>
+                    </Col>;
+                }
+                var timeObj = <Col span={4}>
+                    <DatePicker
+                        defaultValue={moment({liveTime}, dateFullFormat)}
+                        value={moment({liveTime}, dateFullFormat)}
+                        className="lessonTime"
+                        showTime
+                        format="YYYY-MM-DD HH:mm:ss"
+                        placeholder="Select Time"
+                        onChange={this.lessonTimeOnChange}
+                        onOk={this.lessonTimeOnOk}
+                    />
+                </Col>;
+                var lessonJson = {lessonNum,teacherObj,timeObj};
+                lessonArray.push(lessonJson);
+                this.setState({lessonArray});
+            })
+        }
         this.getAllClass();
         this.getAllSubject();
         this.getAllTeam();
@@ -347,6 +383,7 @@ const UpdateClassComponents = React.createClass({
     courseTypeSelectOnChange(value) {
         console.log(`courseTypeSelectOnChange ${value}`);
         courseInfoJson.isSeries=value;
+        this.setState({isSeries:value});
     },
     /**
      * 授课团队改变时的响应函数
@@ -717,7 +754,7 @@ const UpdateClassComponents = React.createClass({
 							<Row style={{ width: 420 }}>
                                 <Col span={6} style={{ marginLeft: 22 }}>选择课程类型：</Col>
                                 <Col span={16}>
-									<Select defaultValue="2" style={{ width: 120 }} disabled={this.state.isSeriesDisabled} onChange={this.courseTypeSelectOnChange}>
+									<Select defaultValue={this.state.isSeries} value={this.state.isSeries} style={{ width: 120 }} disabled={this.state.isSeriesDisabled} onChange={this.courseTypeSelectOnChange}>
 										<Option value="1">系列课</Option>
 										<Option value="2">单节课</Option>
 									</Select>
