@@ -34,7 +34,7 @@ const AntCloudClassRoomMenu = React.createClass({
                     <SubMenu key="teamManager" title={<span><Icon type="appstore" /><span>团队管理</span></span>}>
                         <Menu.Item key="myTeam">我的团队</Menu.Item>
                         <Menu.Item key="allTeam">所有团队</Menu.Item>
-                        <Menu.Item key="myMessage"><i className="iconfont menu_left_i">&#xe7e0;</i>我的消息</Menu.Item>
+                        <Menu.Item key="myMessage">我的消息</Menu.Item>
                     </SubMenu>
                 </Menu>
             </div>

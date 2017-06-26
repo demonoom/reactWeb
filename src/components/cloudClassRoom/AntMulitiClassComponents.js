@@ -126,31 +126,34 @@ const AntMulitiClassComponents = React.createClass({
         var isPublish = row.isPublish;
         var isPublishStr;
         var optButtons;
+        {/*<Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,id)}></Button></Col>
+        <Col span={24}><Button icon="rollback" className="exam-particulars_title" title="撤回" onClick={_this.withDrawClass.bind(_this,id)}></Button></Col>
+        <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,id)}></Button></Col>
+        <Col span={24}><Button icon="check-circle-o" className="exam-particulars_title" title="发布" onClick={_this.publishClass.bind(_this,id)}></Button></Col>*/}
         switch(isPublish){
             case "1":
                 isPublishStr="已发布";
                 optButtons=<div>
 
-                    <Col span={24}><Button icon="edit" onClick={_this.editClass.bind(_this,row)}>编辑</Button></Col>
-
-                    <Col span={24}><Button icon="file-text" onClick={_this.getClassDetail.bind(_this,row)}>详情</Button></Col>
-                    <Col span={24}><Button icon="edit" onClick={_this.withDrawClass.bind(_this,id)}>撤回</Button></Col>
+                    <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,row)}></Button></Col>
+                    <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
+                    <Col span={24}><Button icon="rollback" className="exam-particulars_title" title="撤回" onClick={_this.withDrawClass.bind(_this,id)}></Button></Col>
                 </div>;
                 break;
             case "2":
                 isPublishStr="未发布";
                 optButtons=<div>
-                    <Col span={24}><Button icon="file-text" onClick={_this.getClassDetail.bind(_this,id)}>详情</Button></Col>
-                    <Col span={24}><Button icon="edit" onClick={_this.editClass.bind(_this,row)}>编辑</Button></Col>
-                    <Col span={24}><Button icon="edit" onClick={_this.publishClass.bind(_this,id)}>发布</Button></Col>
+                    <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
+                    <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,row)}></Button></Col>
+                    <Col span={24}><Button icon="check-circle-o" className="exam-particulars_title" title="发布" onClick={_this.publishClass.bind(_this,id)}></Button></Col>*/}
                 </div>;
                 break;
             case "3":
                 isPublishStr="已撤回";
                 optButtons=<div>
-                    <Col span={24}><Button icon="file-text" onClick={_this.getClassDetail.bind(_this,id)}>详情</Button></Col>
-                    <Col span={24}><Button icon="edit" onClick={_this.editClass.bind(_this,row)}>编辑</Button></Col>
-                    <Col span={24}><Button icon="edit" onClick={_this.publishClass.bind(_this,id)}>发布</Button></Col>
+                    <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
+                    <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,row)}></Button></Col>
+                    <Col span={24}><Button icon="check-circle-o" className="exam-particulars_title" title="发布" onClick={_this.publishClass.bind(_this,id)}></Button></Col>
                 </div>;
                 break;
         }
@@ -162,40 +165,34 @@ const AntMulitiClassComponents = React.createClass({
         if(isEmpty(users)==false){
             users.forEach(function (user) {
                 var userName= user.userName;
-                var userSpanObj = <li>{userName}</li>;
+                var userSpanObj = <span>{userName}</span>;
                 userSpanArray.push(userSpanObj);
             });
         }
         var cardObj = <Card key={id}>
             <Row>
-                <Col span={6}>
+                <Col span={4}>
                     <img alt="example" width="100%" src={image} />
                 </Col>
-                <Col span={14}>
-                    <Row>
+                <Col span={18}>
+                    <Row className="details_cont">
                         <Row>
-                            <Col span={18}>{courseName}</Col>
-                            <Col span={6}>{isPublishStr}</Col>
+                            <Col span={21} className="font_gray_33">{courseName}</Col>
+                            <Col span={3} className="series_recall">{isPublishStr}</Col>
                         </Row>
-                        <Col span={24}>￥{money}  |  共{videoNum}课时</Col>
-                        <Col span={24}>科目：{courseTypeName}</Col>
-                        <Col span={24}>主讲老师：
-                            <ul>
-                                {userSpanArray}
-                            </ul>
-                        </Col>
-                        <Col span={24}>开始时间：{startTime} </Col>
-                        <Col span={24}>结束时间：{endTime}</Col>
-                        <Col span={24}>排课时间：
-                            <ul>
+                        <Col span={24} className="price"><span className="c-jg price_between">￥{money}</span><span className="price_between gray_line"></span><span className=" price_between font-14">共{videoNum}课时</span></Col>
+                        <Col span={24}><span className="series_gray_le">科&nbsp;&nbsp;&nbsp;&nbsp;目：</span><span className="series_gray_ri">{courseTypeName}</span></Col>
+                        <Col span={24}><span className="series_gray_le">主讲老师：</span><span className="series_gray_ri">{userSpanArray}</span></Col>
+                        <Col span={24}><span className="series_gray_le">开始时间：</span><span className="series_gray_ri">{startTime}</span></Col>
+                        <Col span={24}><span className="series_gray_le">结束时间：</span><span className="series_gray_ri">{endTime}</span></Col>
+                        <Col span={24}><span className="series_gray_le">排课时间：</span><span className="series_gray_ri"><ul>
                                 {videoLiTagArray}
-                            </ul>
-                        </Col>
-                        <Col span={24}>课程概述：{content}</Col>
-                    </Row>
+                            </ul></span></Col>
+                        <Col span={24}><span className="series_gray_le">课程概述：</span><span className="series_gray_ri">{content}</span></Col>
+                </Row>
                 </Col>
-                <Col span={4}>
-                    <Row>
+                <Col span={2}>
+                    <Row className="knowledge_ri">
                         {optButtons}
                     </Row>
                 </Col>
@@ -370,21 +367,23 @@ const AntMulitiClassComponents = React.createClass({
      */
     render() {
         return (
-            <div style={{overflow:'scroll'}}>
+            <div className="favorite_scroll series_courses">
+			<div className="clearfix">
                 <div>
-                    <RadioGroup onChange={this.classFliterOnChange} value={this.state.classFliterValue}>
+                    <RadioGroup onChange={this.classFliterOnChange} value={this.state.classFliterValue}  className="series_choose">
                         <Radio value="0">全部</Radio>
                         <Radio value="1">已发布</Radio>
                         <Radio value="2">未发布</Radio>
                         <Radio value="3">已撤回</Radio>
                     </RadioGroup>
+					<div className="details">
+                    	{this.state.cardArray} 
+                	</div>
                 </div>
-                <div>
-                    {this.state.cardArray}
-                    <Pagination total={this.state.totalCount} pageSize={getPageSize()} current={this.state.currentPage}
+                
+				<Pagination total={this.state.totalCount} pageSize={getPageSize()} current={this.state.currentPage}
                                 onChange={this.pageOnChange}/>
-                </div>
-
+				</div>
                 <Modal className="modal_course" title="创建系列课程" visible={this.state.createClassModalVisible}
                        onCancel={this.createClassModalHandleCancel}
                        transitionName=""  //禁用modal的动画效果

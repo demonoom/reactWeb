@@ -159,7 +159,7 @@ const AntTeamComponents = React.createClass({
                     var responseRows=response.rows;
                     var teamTableData = [];
                     responseRows.forEach(function (team) {
-                        var subjectOpt=<div><Button style={{ }} type=""  value={team.id} onClick={_this.showTeamSettingModal}  icon="setting" title="设置" className="score3_i"></Button></div>;
+                        var subjectOpt=<Button style={{ }} type=""  value={team.id} onClick={_this.showTeamSettingModal}  icon="setting" title="设置" className="score3_i"></Button>;
                         var teamUsersPhoto=[];
                         var imgTag = <div className="maaee_group_face">{teamUsersPhoto}</div>;
                         if(isEmpty(team.users)==false ){
@@ -306,7 +306,7 @@ const AntTeamComponents = React.createClass({
     render() {
         var filterRadios;
         if(this.state.type=="myTeam"){
-            filterRadios=<div>
+            filterRadios=<div className="myfollow_zb">
                 <RadioGroup onChange={this.teamTypeFliterOnChange} value={this.state.teamTypeFliterValue}>
                     <Radio value="0">我创建的团队</Radio>
                     <Radio value="1">我加入的团队</Radio>
@@ -317,14 +317,14 @@ const AntTeamComponents = React.createClass({
         }
 
         return (
-            <div style={{overflow:'scroll'}}>
-                {filterRadios}
-                <div>
-                    <Table
+            <div className="favorite_scroll">      
+                <div className="myfollow_zb">
+                    {filterRadios}
+                    <Table className="group_table group_table_u"
                            scroll={{ x: true, }} columns={userTeamColumns} showHeader={false}
                            dataSource={this.state.userTeamData}
-                           pagination={{ total:this.state.totalCount,
-                               pageSize: getPageSize(),onChange:this.onTeamPageChange }}/>
+                      pagination={{ total:this.state.totalCount,
+                      pageSize: getPageSize(),onChange:this.onTeamPageChange }}/>
                 </div>
 
                 <Modal
