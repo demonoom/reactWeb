@@ -36,10 +36,10 @@ const UpdateClassComponents = React.createClass({
         this.initPageInfo(updateClassObj);
     },
 
-    componentWillMount(){
-        var updateClassObj = this.props.updateClassObj;
-        this.initPageInfo(updateClassObj);
-    },
+    // componentWillMount(){
+    //     var updateClassObj = this.props.updateClassObj;
+    //     this.initPageInfo(updateClassObj);
+    // },
 
     componentWillReceiveProps(nextProps){
         var updateClassObj = nextProps.updateClassObj;
@@ -95,6 +95,16 @@ const UpdateClassComponents = React.createClass({
             }
             fileList.push(fileJson);
         }
+        var isSeriesStr;
+        var videoNumInputDisable;
+        if(isSeries=="1"){
+            isSeriesStr="系列课";
+            videoNumInputDisable=false;
+        }else{
+            isSeriesStr="单节课";
+            videoNum=1;
+            videoNumInputDisable=true;
+        }
         this.setState({
             updateId:updateClassObj.id,
             courseName,isFree,money,
@@ -103,7 +113,7 @@ const UpdateClassComponents = React.createClass({
             publishType,
             defaultTeamSelected:publisher_id,
             courseSummary:content,
-            videoNum,classTimeRange,isTeam,isSeriesDisabled,isSeries,teamDisabled,fileList
+            videoNum,classTimeRange,isTeam,isSeriesDisabled,isSeries,teamDisabled,fileList,isSeriesStr,videoNumInputDisable
         });
         courseInfoJson.courseName = courseName;
         courseInfoJson.money = money;
@@ -752,13 +762,13 @@ const UpdateClassComponents = React.createClass({
                         <RadioGroup onChange={this.classTypeOnChange} value={this.state.isTeam}>
                             <Radio style={radioStyle} value={1}>单人授课</Radio>
 							<Row style={{ width: 420 }}>
-                                <Col span={6} style={{ marginLeft: 22 }}>选择课程类型：</Col>
-                                <Col span={16}>
+                                <Col span={24} style={{ marginLeft: 22 }}>选择课程类型：{this.state.isSeriesStr}</Col>
+                                {/*<Col span={16}>
 									<Select defaultValue={this.state.isSeries} value={this.state.isSeries} style={{ width: 120 }} disabled={this.state.isSeriesDisabled} onChange={this.courseTypeSelectOnChange}>
 										<Option value="1">系列课</Option>
 										<Option value="2">单节课</Option>
 									</Select>
-								</Col>
+								</Col>*/}
                                 </Row>
                             <Radio style={radioStyle} value={2}>
                                 团队授课
@@ -822,7 +832,7 @@ const UpdateClassComponents = React.createClass({
                 <Row>
                     <Col span={4}>总课时</Col>
                     <Col span={20}>
-                        <Input value={this.state.videoNum} onChange={this.classTimesOnChange}/>
+                        <Input value={this.state.videoNum}  disabled={this.state.videoNumInputDisable} onChange={this.classTimesOnChange}/>
                     </Col>
                 </Row>
                 <Row>
