@@ -4,6 +4,7 @@ import {isEmpty} from '../../utils/utils';
 import {getCloudClassRoomRequestURL} from '../../utils/CloudClassRoomURLUtils';
 import {cloudClassRoomRequestByAjax} from '../../utils/CloudClassRoomURLUtils';
 import {getPageSize} from '../../utils/Const';
+import {doWebService_CloudClassRoom} from '../../utils/CloudClassRoomURLUtils';
 const RadioGroup = Radio.Group;
 
 var userTeamColumns = [ {
@@ -33,8 +34,109 @@ const AntTeamComponents = React.createClass({
     },
 
     componentDidMount(){
-        console.log("cloudRoomMenuItem"+this.props.currentItem);
-        this.getTeamList(this.state.currentPage);
+        var type = this.props.type;
+        this.setState({type});
+        this.findTeamInfoByType(type);
+    },
+
+    componentWillReceiveProps(nextProps){
+        var type = nextProps.type;
+        this.setState({type});
+        this.findTeamInfoByType(type);
+    },
+
+    findTeamInfoByType(type){
+        var _this = this;
+        switch(type){
+            case "myTeam":
+                _this.findTeamByUserId();
+                break;
+            case "allTeam":
+                _this.findTeam();
+                break;
+        }
+    },
+
+    findTeamByUserId(){
+        var _this = this;
+        var param = {
+            "method": 'findTeamByUserId',
+            "userId": sessionStorage.getItem("ident"),
+        };
+        doWebService_CloudClassRoom(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                _this.buildTeamListByResponse(response);
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    findTeam(){
+        var _this = this;
+        var param = {
+            "method": 'findTeam'
+        };
+        doWebService_CloudClassRoom(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                _this.buildTeamListByResponse(response);
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    buildTeamListByResponse(response){
+        // var total = response.total;
+        // var responseRows=response.rows;
+        var _this = this;
+        var total = response.length;
+        var teamTableData = [];
+        response.forEach(function (team) {
+            var subjectOpt=<div><Button style={{ }} type=""  value={team.id} onClick={_this.showTeamSettingModal}  icon="setting" title="设置" className="score3_i"></Button></div>;
+            var teamUsersPhoto=[];
+            var imgTag = <div className="maaee_group_face">{teamUsersPhoto}</div>;
+            if(isEmpty(team.users)==false ){
+                for(var i=0;i<team.users.length;i++){
+                    var user = team.users[i];
+                    var userAvatarTag = <img src={user.avatar} ></img>;
+                    teamUsersPhoto.push(userAvatarTag);
+                    if(i>=3){
+                        break;
+                    }
+                }
+                switch (teamUsersPhoto.length){
+                    case 1:
+                        imgTag = <div className="maaee_group_face1">{teamUsersPhoto}</div>;
+                        break;
+                    case 2:
+                        imgTag = <div className="maaee_group_face2">{teamUsersPhoto}</div>;
+                        break;
+                    case 3:
+                        imgTag = <div className="maaee_group_face3">{teamUsersPhoto}</div>;
+                        break;
+                    case 4:
+                        imgTag = <div className="maaee_group_face">{teamUsersPhoto}</div>;
+                        break;
+                }
+            }
+            var teamUserCount=0;
+            if(isEmpty(team.users)==false){
+                teamUserCount = team.users.length;
+            }
+            teamTableData.push({
+                key: team.id,
+                teamPhoto:imgTag,
+                teamName: team.name,
+                teamCount: teamUserCount,
+                teamSet:subjectOpt
+            });
+        });
+        _this.setState({userTeamData:teamTableData,totalTeamCount:total});
     },
 
     getTeamList(pageNo,whereJson){
@@ -110,18 +212,21 @@ const AntTeamComponents = React.createClass({
     showTeamSettingModal(){
 
     },
-
+    /**
+     * 过滤我创建的团队和我所在的团队
+     * @param e
+     */
     teamTypeFliterOnChange(e){
         console.log('radio checked', e.target.value);
         this.setState({
             teamTypeFliterValue: e.target.value,
         });
-        /*var whereJson={};
+        var whereJson={};
         if(e.target.value==0){
-            whereJson.is_publish="";
+            whereJson.manager=sessionStorage.getItem("ident");
         }else{
-            whereJson.is_publish=e.target.value;
-        }*/
+            //whereJson.is_publish=e.target.value;
+        }
         //this.getCourseList(this.state.currentPage,whereJson);
     },
 
@@ -199,15 +304,21 @@ const AntTeamComponents = React.createClass({
      * @returns {XML}
      */
     render() {
+        var filterRadios;
+        if(this.state.type=="myTeam"){
+            filterRadios=<div>
+                <RadioGroup onChange={this.teamTypeFliterOnChange} value={this.state.teamTypeFliterValue}>
+                    <Radio value="0">我创建的团队</Radio>
+                    <Radio value="1">我加入的团队</Radio>
+                </RadioGroup>
+            </div>;
+        }else{
+            filterRadios="";
+        }
 
         return (
             <div style={{overflow:'scroll'}}>
-                <div>
-                    <RadioGroup onChange={this.teamTypeFliterOnChange} value={this.state.teamTypeFliterValue}>
-                        <Radio value="0">我创建的团队</Radio>
-                        <Radio value="1">我加入的团队</Radio>
-                    </RadioGroup>
-                </div>
+                {filterRadios}
                 <div>
                     <Table
                            scroll={{ x: true, }} columns={userTeamColumns} showHeader={false}

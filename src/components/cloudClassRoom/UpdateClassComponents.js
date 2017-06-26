@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { Tabs, Breadcrumb, Icon,Card,Button,Row,Col,Steps,
     Input,Select,Radio,DatePicker,Checkbox,message} from 'antd';
 import ImageAnswerUploadComponents from './ImageAnswerUploadComponents';
-import {isEmpty} from '../../utils/utils';
+import {isEmpty,formatYMD} from '../../utils/utils';
 import {getCloudClassRoomRequestURL} from '../../utils/CloudClassRoomURLUtils';
 import {cloudClassRoomRequestByAjax} from '../../utils/CloudClassRoomURLUtils';
 import moment from 'moment';
@@ -16,7 +16,7 @@ var lessonArray=[];
 var courseInfoJson={isPublish:2,isSeries:2,publisher_id:sessionStorage.getItem("ident"),isFree:1,money:0};
 var videoJsonArray=[];
 var teamJsonArray=[];
-const CreateClassComponents = React.createClass({
+const UpdateClassComponents = React.createClass({
 
     getInitialState() {
         return {
@@ -24,18 +24,106 @@ const CreateClassComponents = React.createClass({
             isFree:1,
             isTeam:1,
             money:0,
-            moneyInputDisable:true,
             isSeriesDisabled:false,
             teamDisabled:true
         };
     },
 
     componentDidMount(){
-        console.log("cloudRoomMenuItem"+this.props.currentItem);
+        var updateClassObj = this.props.updateClassObj;
+        this.initPageInfo(updateClassObj);
+    },
+
+    componentWillMount(){
         this.getAllClass();
         this.getAllSubject();
         this.getAllTeam();
+        var updateClassObj = this.props.updateClassObj;
+        this.initPageInfo(updateClassObj);
     },
+
+    componentWillReceiveProps(nextProps){
+        var updateClassObj = nextProps.updateClassObj;
+        this.initPageInfo(updateClassObj);
+    },
+
+    initPageInfo(updateClassObj){
+        var courseName = updateClassObj.courseName;
+        var money = updateClassObj.money;
+        var isFree = updateClassObj.isFree;
+        var moneyInputDisable;
+        if(money!=0){
+            isFree = 2;
+            moneyInputDisable=false;
+        }else{
+            isFree = 1;
+            moneyInputDisable=true;
+        }
+        var content = updateClassObj.content;
+        var isSeries = updateClassObj.isSeries;
+        var courseTypeId = updateClassObj.courseTypeId;
+        var courseClass = updateClassObj.courseClass;
+        var image = updateClassObj.image;
+        var videoNum = updateClassObj.videoNum;
+        var startTime = updateClassObj.startTime;
+        var endTime = updateClassObj.endTime;
+        var isPublish = updateClassObj.isPublish;
+        var publisher_id = updateClassObj.publisher_id;
+        var publisher = updateClassObj.publisher;
+        var publishType = updateClassObj.publishType;
+        var videos = updateClassObj.videos;
+        var isTeam;
+        var isSeriesDisabled;
+        var teamDisabled;
+        if(publishType==1){
+            //团队发布
+            isTeam = 2;
+            isSeriesDisabled=true;
+            teamDisabled=false;
+        }else{
+            isTeam=1;
+            isSeriesDisabled=false;
+            teamDisabled=true;
+        }
+        var startTimeYMD = formatYMD(startTime);
+        var endTimeYMD = formatYMD(endTime);
+        var classTimeRange = [moment(startTimeYMD, dateFormat), moment(endTimeYMD, dateFormat)];
+        var fileList =[];
+        if(isEmpty(image)==false){
+            var fileJson = {
+                uid: Math.random(),
+                url: image,
+            }
+            fileList.push(fileJson);
+        }
+        this.setState({
+            updateId:updateClassObj.id,
+            courseName,isFree,money,
+            defaultSubjectSelected:courseTypeId,
+            defaultSelected:courseClass,
+            publishType,
+            defaultTeamSelected:publisher_id,
+            courseSummary:content,
+            videoNum,classTimeRange,isTeam,isSeriesDisabled,isSeries,teamDisabled,fileList
+        });
+        courseInfoJson.courseName = courseName;
+        courseInfoJson.money = money;
+        courseInfoJson.isFree = isFree;
+        courseInfoJson.content = content;
+        courseInfoJson.isSeries = isSeries;
+        courseInfoJson.courseTypeId = courseTypeId;
+        courseInfoJson.courseClass = courseClass;
+        courseInfoJson.image = image;
+        courseInfoJson.videoNum = videoNum;
+        courseInfoJson.startTime = startTime;
+        courseInfoJson.endTime = endTime;
+        courseInfoJson.isPublish = isPublish;
+        courseInfoJson.publisher_id = publisher_id;
+        courseInfoJson.publisher = publisher;
+        courseInfoJson.publishType = publishType;
+        courseInfoJson.videos = videos;
+    },
+
     /**
      * 获取所有的年级
      */
@@ -50,20 +138,14 @@ const CreateClassComponents = React.createClass({
                     message.success("成功");
                     var response=ret.data;
                     var classOptionArray=[];
-                    var defaultSelected;
                     for(var i=0;i<response.length;i++){
                         var classInfo = response[i];
                         var id = classInfo.id;
                         var name = classInfo.name;
-                        var parentid = classInfo.parentid;
                         var optionObj = <Option key={id} value={id}>{name}</Option>;
-                        if(i==0){
-                            defaultSelected = id;
-                            courseInfoJson.courseClass=id;
-                        }
                         classOptionArray.push(optionObj);
                     }
-                    _this.setState({classOptionArray,defaultSelected});
+                    _this.setState({classOptionArray});
                 } else {
                     message.error("失败");
                 }
@@ -87,20 +169,14 @@ const CreateClassComponents = React.createClass({
                     message.success("成功");
                     var response=ret.data;
                     var subjectOptionArray=[];
-                    var defaultSubjectSelected;
                     for(var i=0;i<response.length;i++){
                         var subjectInfo = response[i];
                         var id = subjectInfo.id;
                         var name = subjectInfo.name;
-                        var parentid = subjectInfo.parentid;
                         var optionObj = <Option key={id} value={id}>{name}</Option>;
-                        if(i==0){
-                            defaultSubjectSelected = id;
-                            courseInfoJson.courseTypeId = id;
-                        }
                         subjectOptionArray.push(optionObj);
                     }
-                    _this.setState({subjectOptionArray,defaultSubjectSelected});
+                    _this.setState({subjectOptionArray});
                 } else {
                     message.error("失败");
                 }
@@ -127,7 +203,6 @@ const CreateClassComponents = React.createClass({
                     message.success("成功");
                     var response=ret.data;
                     var teamOptionArray=[];
-                    var defaultTeamSelected;
                     for(var i=0;i<response.length;i++){
                         var teamInfo = response[i];
                         var id = teamInfo.id;
@@ -135,9 +210,6 @@ const CreateClassComponents = React.createClass({
                         var status = teamInfo.status;
                         var users = teamInfo.users;
                         var optionObj = <Option key={id} value={id}>{name}</Option>;
-                        if(i==0){
-                            defaultTeamSelected = id;
-                        }
                         var teamUserOptionArray=[];
                         for(var j=0;j<users.length;j++){
                             var user = users[j];
@@ -151,7 +223,7 @@ const CreateClassComponents = React.createClass({
                         teamOptionArray.push(optionObj);
                         teamJsonArray.push(teamJson);
                     }
-                    _this.setState({teamOptionArray,defaultTeamSelected});
+                    _this.setState({teamOptionArray});
                 } else {
                     message.error("失败");
                 }
@@ -392,7 +464,7 @@ const CreateClassComponents = React.createClass({
             checkResult=false;
         }else if(courseInfoJson.classTypeOnChange==1 && isEmpty(isSeries)){
             message.error("单人授课时,请选择课程类型");
-            checkResult=false;
+            checkResult=false;[moment('2015/01/01', dateFormat), moment('2015/01/01', dateFormat)]
         }else if(courseInfoJson.classTypeOnChange==2 && isEmpty(this.state.teamId)){
             message.error("团队授课时,请选择团队名称");
             checkResult=false;
@@ -418,7 +490,7 @@ const CreateClassComponents = React.createClass({
             return;
         }
         var lessonTeamTeacherTagArray = $(".lessonTeamTeacher option:selected");
-        var lessonTimeTagArray = $("input.ant-calendar-range-picker");
+        var lessonTimeTagArray = $(".ant-calendar-range-picker");
         var userId;
 
         if(this.state.isTeam==1) {
@@ -666,13 +738,14 @@ const CreateClassComponents = React.createClass({
                 <Row>
                     <Col span={4}>授课时间：</Col>
                     <Col span={18}>
-                        <RangePicker onChange={this.classTimeOnChange} />
+                        <RangePicker defaultValue={this.state.classTimeRange}
+                                     format={dateFormat} onChange={this.classTimeOnChange} />
                     </Col>
                 </Row>
                 <Row>
                     <Col span={4}>课程封面：</Col>
                     <Col span={18}>
-                        <ImageAnswerUploadComponents
+                        <ImageAnswerUploadComponents fileList={this.state.fileList}
                                                      callBackParent={this.getLessonImageList}>
                         </ImageAnswerUploadComponents>
                     </Col>
@@ -762,4 +835,4 @@ const CreateClassComponents = React.createClass({
     },
 });
 
-export default CreateClassComponents;
+export default UpdateClassComponents;

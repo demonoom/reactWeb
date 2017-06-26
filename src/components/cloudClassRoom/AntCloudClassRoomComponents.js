@@ -59,7 +59,12 @@ const AntCloudClassRoomComponents = React.createClass({
             case "myTeam":
                 topButton = createTeamBtn;
                 leftBtn = "";
-                tabPanel = <AntTeamComponents ref="antTeamComponents" isSeries="2"></AntTeamComponents>;
+                tabPanel = <AntTeamComponents ref="antTeamComponents" type="myTeam"></AntTeamComponents>;
+                break;
+            case "allTeam":
+                topButton = createTeamBtn;
+                leftBtn = "";
+                tabPanel = <AntTeamComponents ref="antTeamComponents" type="allTeam"></AntTeamComponents>;
                 break;
         }
 
