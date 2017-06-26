@@ -4732,15 +4732,46 @@ span.pagination{
 	display: block;
 	height: calc(100% - 63px);
     overflow-y: auto;
+	overflow-x: hidden;
 }
-
+.cloud_class_menu .cont_menu > li{
+    border-bottom: 1px solid #f3f3f3;
+    background: #f8f8f8;
+}
+.cloud_class_menu .cont_menu > li:last-child{
+	border-bottom:none
+}
+.cloud_class_menu .cont_menu .ant-menu-submenu{
+	margin-right:0
+}
 .cloud_class_menu li div.ant-menu-submenu-title{
-	padding: 10px 0px 10px 0px;
 	border-bottom: 1px solid #f3f3f3;
     background: #f8f8f8;
+	padding-left:14px !important;
+	font-size: 15px !important;
+    font-family: "Microsoft YaHei";
+    color: #666;
+	cursor:default
+}
+.cloud_class_menu .ant-menu-submenu > .ant-menu{
+	background: #FCFCFC;
+}
+.cloud_class_menu .ant-menu-inline > .ant-menu-item{
+	margin-right:0
 }
 .cloud_class_menu li div.ant-menu-submenu-title span{
 	text-indent:0;
+}
+.cloud_class_menu .ant-menu-sub.ant-menu-inline > .ant-menu-item{
+	height:48px;
+	line-height:48px;
+	font-size: 16px;
+    color: #333;
+	font-family: "Microsoft YaHei";
+	padding-left: 40px !important;
+}
+.cloud_class_menu .ant-menu-inline .ant-menu-item-active{
+	color:#42bef6 !important
 }
 .modal_course{
 	font-size:14px;
@@ -4822,7 +4853,7 @@ span.pagination{
 	font-size:14px;
 	line-height:25px;
 }
-.series_status{
+.series_status{/*状态*/
 	border: #40bb8a 1px solid;
     border-radius: 4px;
     text-align: center;
@@ -4830,7 +4861,7 @@ span.pagination{
     padding: 2px 0;
     color: #40bb8a;
 }
-.series_recall{/*已发布*/
+.series_publish{/*已发布*/
 	border: #ff9f5f 1px solid;
     border-radius: 4px;
     text-align: center;
@@ -4872,6 +4903,5 @@ span.pagination{
 	right:183px;
 }
 .team .clearfix{
-	height:calc(100% - 50px);
 	overflow:auto
 }

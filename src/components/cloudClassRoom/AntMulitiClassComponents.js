@@ -100,7 +100,7 @@ const AntMulitiClassComponents = React.createClass({
                 <Col span={4}>
                     <img alt="example" width="100%" src={image} />
                 </Col>
-                <Col span={17}>
+                <Col span={18}>
                     <Row className="details_cont">
                         <Row>
                             <Col span={21} className="font_gray_33">{courseName}</Col>
@@ -115,12 +115,12 @@ const AntMulitiClassComponents = React.createClass({
                         <Col span={24}><span className="series_gray_le">课程概述：</span><span className="series_gray_ri">{content}</span></Col>
                     </Row>
                 </Col>
-                <Col span={3}>
+                <Col span={2}>
                     <Row className="knowledge_ri">
-                        <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" onClick={_this.getClassDetail.bind(_this,id)}>详情</Button></Col>
-                        <Col span={24}><Button icon="rollback" className="exam-particulars_title" onClick={_this.withDrawClass.bind(_this,id)}>撤回</Button></Col>
-                        <Col span={24}><Button icon="edit" className="exam-particulars_title" onClick={_this.editClass.bind(_this,id)}>编辑</Button></Col>
-                        <Col span={24}><Button icon="check-circle-o" className="exam-particulars_title" onClick={_this.publishClass.bind(_this,id)}>发布</Button></Col>
+                        <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,id)}></Button></Col>
+                        <Col span={24}><Button icon="rollback" className="exam-particulars_title" title="撤回" onClick={_this.withDrawClass.bind(_this,id)}></Button></Col>
+                        <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,id)}></Button></Col>
+                        <Col span={24}><Button icon="check-circle-o" className="exam-particulars_title" title="发布" onClick={_this.publishClass.bind(_this,id)}></Button></Col>
                     </Row>
                 </Col>
             </Row>
