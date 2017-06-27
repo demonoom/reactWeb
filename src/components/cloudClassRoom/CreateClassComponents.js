@@ -729,8 +729,8 @@ const CreateClassComponents = React.createClass({
                         <Col span={8}>
                             <Input id={lessonJson.lessonNum} onChange={this.lessonTitleOnChange}/>
                         </Col>
-                        {lessonJson.teacherObj}
-                        {lessonJson.timeObj}
+                        <Col span={4}>{lessonJson.teacherObj}</Col>
+                        <Col span={4}>{lessonJson.timeObj}</Col>
                         <Col span={4}>
                             <Button icon="delete" onClick={this.removeLesson.bind(this,lessonJson.lessonNum)}></Button>
                         </Col>
@@ -740,8 +740,8 @@ const CreateClassComponents = React.createClass({
             }
             stepPanel=<div>
                 <Row>
-                    <Col span={4}>总课时：</Col>
-                    <Col span={18}>
+                    <Col span={4}>总&nbsp;&nbsp;课&nbsp;&nbsp;时：</Col>
+                    <Col span={20}>
                         <Input value={this.state.videoNum} disabled={this.state.videoNumInputDisable} onChange={this.classTimesOnChange}/>
                     </Col>
                 </Row>

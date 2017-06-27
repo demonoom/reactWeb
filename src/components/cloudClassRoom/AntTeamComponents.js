@@ -439,28 +439,27 @@ const AntTeamComponents = React.createClass({
     render() {
         var filterRadios;
         if(this.state.type=="myTeam"){
-            filterRadios=<div className="myfollow_zb">
+            filterRadios=
                 <RadioGroup onChange={this.teamTypeFliterOnChange} value={this.state.teamTypeFliterValue}>
                     <Radio value="0">我创建的团队</Radio>
                     <Radio value="1">我加入的团队</Radio>
-                </RadioGroup>
-            </div>;
+                </RadioGroup>;
         }else{
             filterRadios="";
         }
 
         return (
-            <div className="favorite_scroll">
+            <div className="favorite_scroll series_courses">
                 {/*className="myfollow_zb"*/}
-                <div>
+                <div  className="myfollow_zb">
+
                     {filterRadios}
-                    <Table className="group_table group_table_u"
+                    <Table className="details table_team"
                            scroll={{ x: true, }} columns={userTeamColumns} showHeader={false}
                            dataSource={this.state.userTeamData}
-                      pagination={{ total:this.state.totalCount,
-                      pageSize: getPageSize(),onChange:this.onTeamPageChange }}/>
-                </div>
-
+                     pagination={{ total:this.state.totalCount,
+                      pageSize: getPageSize(),onChange:this.onTeamPageChange }}/> 
+				</div>
                 <Modal
                     visible={this.state.createTeamModalVisible}
                     title="创建团队"

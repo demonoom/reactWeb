@@ -556,7 +556,8 @@ i, cite, em, var, address, dfn {
 .maaee_group_face1 img{
 	width:38px !important;
 	height:38px !important;
-	float:left
+	float:left;
+	border-radius: 50%
 }
 .maaee_group_face2 img{
 	width:19px !important;
@@ -4834,6 +4835,9 @@ span.pagination{
 .series_courses .details_cont{
 	padding-left:20px;
 }
+.series_courses .details_cont .ant-col-24{
+	padding:8px 0 0 0
+}
 .price{
 	background:#f9f9f9;
 	padding:8px;
@@ -4903,22 +4907,96 @@ span.pagination{
 	right:173px;
 }
 .series_top_btn2{
-	right:183px;
+	right:145px;
+	 top: -1px;
+}
+.series_top_span2{
+	width:140px;
+	display:inline-block
 }
 .team .clearfix{
 	overflow:auto
 }
-.course_section{
-}
 .course_section_title{
 	background: #f9f9f9;
-    padding: 8px
+    padding:4px 8px;
+	color:#0078e4;
+	margin-top:8px;
 }
-.course_section_title span.name{
-	width:60%;
-	display:inline-block
+.course_section_info{
+    padding:8px;
+	border-bottom:1px solid #e9e9e9;
 }
-.course_section_title span.cont{
+.course_section_info:last-child{
+	margin-bottom:8px;
+}
+.course_section_title span, .course_section_info span{
+	display:inline-block;
+}
+.course_section_title span.name, .course_section_info span.name{
+	width:55%;
+	text-overflow:ellipsis;
+	overflow:hidden;
+}
+.course_section_title span.cont, .course_section_info span.cont{
 	width:20%;
+}
+.course_section_title span.time, .course_section_info span.time1{
+	width:25%;
+}
+.course_section_info span.time1{
+	font-size:12px
+}
+.table_team .ant-table-tbody > tr > td:first-child{
+	width: 50px;
+	padding-left: 24px !important;
+}
+.table_team .ant-table-tbody > tr > td {
+    padding: 8px !important;
+}
+.table_team table tr td:nth-child(3) {
+    text-align: left;
+    font-size: 12px;
+    color: #999;
+    width: 69px;
+}
+.table_team table tr td:nth-child(4) {
+    width: 55px;
+}
+.information .ant-card-body > div{
 	display:inline-block
+}
+.information .ant-card-body {
+    padding: 12px 24px;
+}
+.information.ant-card{
+	border-radius:0;
+}
+.information.ant-card-bordered{
+	border-bottom:1px solid #e9e9e9;
+	border-top:none;
+	border-left:none;
+	border-right:none;
+}
+.info_user{
+	width:60px;
+	height:60px;
+	margin-right:12px;
+}
+.info_name{
+	color:#598AC7;
+	margin-right:24px;
+}
+.info_btn{
+	width:150px;
+	float:right;
+	text-align:right
+}
+.info_school{
+	color:#333;
+	padding:4px 0;
+}
+.apply_for{
+	font-size:14px;
+	color:#666
 }
