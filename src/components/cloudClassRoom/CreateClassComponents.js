@@ -32,12 +32,17 @@ const CreateClassComponents = React.createClass({
     },
 
     componentDidMount(){
+        this.getAllClass();
+        this.getAllSubject();
+        this.findTeamByUserId();
         var isSeries = this.props.isSeries;
         this.initCreatePage(isSeries);
     },
 
     componentWillReceiveProps(nextProps){
         var isSeries = nextProps.isSeries;
+        var stepDirect = nextProps.stepDirect;
+        this.setState({stepDirect});
         this.initCreatePage(isSeries);
     },
 
@@ -58,9 +63,6 @@ const CreateClassComponents = React.createClass({
         }
         courseInfoJson.videoNum=videoNum;
         this.setState({isSeries,isSeriesStr,videoNumInputDisable,videoNum});
-        this.getAllClass();
-        this.getAllSubject();
-        this.findTeamByUserId();
         // this.getAllTeam();
     },
     /**
@@ -189,7 +191,7 @@ const CreateClassComponents = React.createClass({
         var _this = this;
         var param = {
             "method": 'findTeamByUserId',
-            "userId": sessionStorage.getItem("ident"),
+            "id": sessionStorage.getItem("ident"),
         };
         var teamJson={};
         doWebService_CloudClassRoom(JSON.stringify(param), {
@@ -829,7 +831,7 @@ const CreateClassComponents = React.createClass({
 					</Steps>
 				</div>
                 {stepPanel}
-                <div>
+               {/* <div>
                     <Row>
                         <Col span={24}>
                             {preButton}
@@ -837,7 +839,7 @@ const CreateClassComponents = React.createClass({
                             {saveButton}
                         </Col>
                     </Row>
-                </div>
+                </div>*/}
             </div>
         );
     },

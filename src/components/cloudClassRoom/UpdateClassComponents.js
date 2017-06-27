@@ -27,13 +27,19 @@ const UpdateClassComponents = React.createClass({
             money:0,
             isSeries:2,
             isSeriesDisabled:false,
-            teamDisabled:true
+            teamDisabled:true,
+            teamUserOptionArray:[],
         };
     },
 
     componentDidMount(){
+        this.getAllClass();
+        this.getAllSubject();
+        this.getAllTeam();
         var updateClassObj = this.props.updateClassObj;
-        this.initPageInfo(updateClassObj);
+        if(isEmpty(updateClassObj)==false){
+            this.initPageInfo(updateClassObj);
+        }
     },
 
     // componentWillMount(){
@@ -43,10 +49,13 @@ const UpdateClassComponents = React.createClass({
 
     componentWillReceiveProps(nextProps){
         var updateClassObj = nextProps.updateClassObj;
-        this.initPageInfo(updateClassObj);
+        if(isEmpty(updateClassObj)==false){
+            this.initPageInfo(updateClassObj);
+        }
     },
 
     initPageInfo(updateClassObj){
+        var _this = this;
         var courseName = updateClassObj.courseName;
         var money = updateClassObj.money;
         var isFree = updateClassObj.isFree;
@@ -105,7 +114,7 @@ const UpdateClassComponents = React.createClass({
             videoNum=1;
             videoNumInputDisable=true;
         }
-        this.setState({
+        _this.setState({
             updateId:updateClassObj.id,
             courseName,isFree,money,
             defaultSubjectSelected:courseTypeId,
@@ -132,7 +141,9 @@ const UpdateClassComponents = React.createClass({
         courseInfoJson.publishType = publishType;
         courseInfoJson.videos = videos;
         if(isEmpty(videos)==false){
+            var lessonNum=0;
             videos.forEach(function (video) {
+                lessonNum+=1;
                 var liveTime = getLocalTime(video.liveTime);
                 var teacherObj;
                 if(isTeam==1) {
@@ -144,7 +155,7 @@ const UpdateClassComponents = React.createClass({
                              <option value="2">b</option>
                              <option value="3">c</option>
                              <option value="4">d</option>*/}
-                            {this.state.teamUserOptionArray}
+                            {_this.state.teamUserOptionArray}
                         </select>
                     </Col>;
                 }
@@ -156,18 +167,15 @@ const UpdateClassComponents = React.createClass({
                         showTime
                         format="YYYY-MM-DD HH:mm:ss"
                         placeholder="Select Time"
-                        onChange={this.lessonTimeOnChange}
-                        onOk={this.lessonTimeOnOk}
+                        onChange={_this.lessonTimeOnChange}
+                        onOk={_this.lessonTimeOnOk}
                     />
                 </Col>;
                 var lessonJson = {lessonNum,teacherObj,timeObj};
                 lessonArray.push(lessonJson);
-                this.setState({lessonArray});
+                _this.setState({lessonArray});
             })
         }
-        this.getAllClass();
-        this.getAllSubject();
-        this.getAllTeam();
     },
 
     /**
@@ -870,7 +878,7 @@ const UpdateClassComponents = React.createClass({
 					</Steps>
 				</div>
                 {stepPanel}
-                <div>
+                {/*<div>
                     <Row>
                         <Col span={24}>
                             {preButton}
@@ -878,7 +886,7 @@ const UpdateClassComponents = React.createClass({
                             {saveButton}
                         </Col>
                     </Row>
-                </div>
+                </div>*/}
             </div>
         );
     },

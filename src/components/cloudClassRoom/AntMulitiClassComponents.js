@@ -367,6 +367,30 @@ const AntMulitiClassComponents = React.createClass({
         this.getCourseList(1);
     },
 
+    changeStep(direct,optSource){
+        switch(optSource){
+            case "save":
+                this.refs.createClassComponent.changeStep(direct);
+                break;
+            case "update":
+                this.refs.updateClassComponents.changeStep(direct);
+                break;
+        }
+
+    },
+
+    saveClassInfo(optSource){
+        switch(optSource){
+            case "save":
+                this.refs.createClassComponent.saveClassInfo();
+                break;
+            case "update":
+                this.refs.updateClassComponents.saveClassInfo();
+                break;
+        }
+
+    },
+
     /**
      * 渲染页面
      * @returns {XML}
@@ -394,10 +418,15 @@ const AntMulitiClassComponents = React.createClass({
                        onCancel={this.createClassModalHandleCancel}
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
-					   footer={[<Button onClick={this.submitAnswer}>提交</Button>]}
+					   footer={[
+                           <Button onClick={this.changeStep.bind(this,"pre","save")}>上一步</Button>,
+                           <Button onClick={this.changeStep.bind(this,"next","save")}>下一步</Button>,
+                           <Button onClick={this.saveClassInfo.bind(this,"save")}>提交</Button>,
+                           <Button onClick={this.createClassModalHandleCancel}>关闭</Button>
+                       ]}
                 >
                     <div className="space">
-                        <CreateClassComponents isSeries={this.state.isSeries} onSaveOk={this.courseAddOk}></CreateClassComponents>
+                        <CreateClassComponents ref="createClassComponent" isSeries={this.state.isSeries} onSaveOk={this.courseAddOk}></CreateClassComponents>
                     </div>
                 </Modal>
 
@@ -405,7 +434,9 @@ const AntMulitiClassComponents = React.createClass({
                        onCancel={this.classDetailModalHandleCancel}
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
-                       footer={[<Button onClick={this.classDetailModalHandleCancel}>关闭</Button>]}
+                       footer={[
+                           <Button onClick={this.classDetailModalHandleCancel}>关闭</Button>
+                       ]}
                 >
                     <div className="space">
                         {this.state.classDetailPanel}
@@ -416,10 +447,15 @@ const AntMulitiClassComponents = React.createClass({
                        onCancel={this.updateClassModalHandleCancel}
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
-                       footer={[<Button onClick={this.submitAnswer}>提交</Button>]}
+                       footer={[
+                           <Button onClick={this.changeStep.bind(this,"pre","update")}>上一步</Button>,
+                           <Button onClick={this.changeStep.bind(this,"next","update")}>下一步</Button>,
+                           <Button onClick={this.saveClassInfo.bind(this,"update")}>提交</Button>,
+                           <Button onClick={this.updateClassModalHandleCancel}>关闭</Button>
+                       ]}
                 >
                     <div className="space">
-                        <UpdateClassComponents updateClassObj={this.state.updateClassObj} onSaveOk={this.courseUpdateOk}></UpdateClassComponents>
+                        <UpdateClassComponents ref="updateClassComponents" updateClassObj={this.state.updateClassObj} onSaveOk={this.courseUpdateOk}></UpdateClassComponents>
                     </div>
                 </Modal>
             </div>
