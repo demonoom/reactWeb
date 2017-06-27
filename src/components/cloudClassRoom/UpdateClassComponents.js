@@ -39,24 +39,25 @@ const UpdateClassComponents = React.createClass({
     componentDidMount(){
         var updateClassObj = this.props.updateClassObj;
         this.setState({updateClassObj});
-        if(isEmpty(updateClassObj)==false){
+        this.findTeamByUserId();
+        /*if(isEmpty(updateClassObj)==false){
             this.initPageInfo(updateClassObj);
-        }
+        }*/
     },
 
     componentWillMount(){
         this.getAllClass();
         this.getAllSubject();
-        this.findTeamByUserId();
+        // this.findTeamByUserId();
     },
 
     componentWillReceiveProps(nextProps){
         this.findTeamByUserId();
         var updateClassObj = nextProps.updateClassObj;
         this.setState({updateClassObj});
-        if(isEmpty(updateClassObj)==false){
+        /*if(isEmpty(updateClassObj)==false){
             this.initPageInfo(updateClassObj);
-        }
+        }*/
     },
 
     initPageInfo(updateClassObj){
@@ -249,6 +250,26 @@ const UpdateClassComponents = React.createClass({
         });
     },
 
+    updateCourse(){
+        var _this = this;
+        var param = {
+            "method": 'updateCourse',
+            "data": JSON.stringify(courseInfoJson),
+        };
+        doWebService_CloudClassRoom(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if(response){
+                    message.success("课程信息修改成功");
+                }
+                _this.props.onSaveOk();
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
     findTeamByUserId(){
         var _this = this;
         var param = {
@@ -259,6 +280,7 @@ const UpdateClassComponents = React.createClass({
             onResponse: function (ret) {
                 var response = ret.response;
                 var teamOptionArray=[];
+                teamJsonArray.splice(0);
                 for(var i=0;i<response.length;i++){
                     var teamJson={};
                     var teamInfo = response[i];
@@ -289,52 +311,6 @@ const UpdateClassComponents = React.createClass({
         });
     },
 
-    /*/!**
-     * 获取当前老师所属的团队
-     *!/
-    getAllTeam(){
-        var _this = this;
-        var requestUrl = getCloudClassRoomRequestURL("findTeamByUserId");
-        var requestType ="GET";
-        requestUrl = requestUrl+"?id="+sessionStorage.getItem("ident");
-        var propertyJson={};
-        var teamJson={};
-        cloudClassRoomRequestByAjax(requestUrl,propertyJson,requestType, {
-            onResponse: function (ret) {
-                if (ret.meta.success == true && ret.meta.message=="ok") {
-                    message.success("成功");
-                    var response=ret.data;
-                    var teamOptionArray=[];
-                    for(var i=0;i<response.length;i++){
-                        var teamInfo = response[i];
-                        var id = teamInfo.id;
-                        var name = teamInfo.name;
-                        var status = teamInfo.status;
-                        var users = teamInfo.users;
-                        var optionObj = <Option key={id} value={id}>{name}</Option>;
-                        var teamUserOptionArray=[];
-                        for(var j=0;j<users.length;j++){
-                            var user = users[j];
-                            var colUid = user.colUid;
-                            var userName = user.userName;
-                            var userOptionObj = <option value={colUid}>{userName}</option>;
-                            teamUserOptionArray.push(userOptionObj);
-                        }
-                        teamJson.teamId=id;
-                        teamJson.teamUserOptionArray = teamUserOptionArray;
-                        teamOptionArray.push(optionObj);
-                        teamJsonArray.push(teamJson);
-                    }
-                    _this.setState({teamOptionArray});
-                } else {
-                    message.error("失败");
-                }
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });
-    },*/
     /**
      * 根据teamId获取team下的老师
      * @param teamId
@@ -352,9 +328,9 @@ const UpdateClassComponents = React.createClass({
         this.setState({teamUserOptionArray});
     },
 
-    /**
+   /* /!**
      * 获取所有的年级
-     */
+     *!/
     addCourse(){
         var _this = this;
         var requestUrl = getCloudClassRoomRequestURL("courseAdd");
@@ -376,7 +352,7 @@ const UpdateClassComponents = React.createClass({
                 message.error(error);
             }
         });
-    },
+    },*/
 
     /**
      * 课程科目内容改变时的响应函数
@@ -619,19 +595,24 @@ const UpdateClassComponents = React.createClass({
         }
         var lessonTeamTeacherTagArray = $(".lessonTeamTeacher option:selected");
         var lessonTimeTagArray = $(".ant-calendar-range-picker");
-        var userId;
+        /*var userId;
 
         if(this.state.isTeam==1) {
             //发布者ＩＤ 单人授课时为人员id　团队授课时为团队id
             userId = this.state.cloudClassRoomUser.colUid;
         }else{
             userId = this.state.teamId;
-        }
+        }*/
         for(var i=0;i<lessonTimeTagArray.length;i++){
             var videoJson={};
             var option = lessonTeamTeacherTagArray[i];
             var　timeTag = lessonTimeTagArray[i];
-            var teacher = option.value;
+            var teacher;
+            if(this.state.isTeam==1) {
+                teacher = this.state.cloudClassRoomUser.colUid;
+            }else{
+                teacher = option.value;
+            }
             var time = timeTag.value;
             console.log("teacher"+teacher+"\t"+time);
             videoJson.squence = i+1;
@@ -640,7 +621,7 @@ const UpdateClassComponents = React.createClass({
             videoJson.liveTime = new Date(time).valueOf();
             this.buildVideosArray(videoJson);
         }
-        this.addCourse();
+        this.updateCourse();
     },
     /**
      * 立即发布复选框选中响应函数
@@ -862,7 +843,7 @@ const UpdateClassComponents = React.createClass({
                 <Row>
                     <Col span={4}>授课时间：</Col>
                     <Col span={18}>
-                        <RangePicker defaultValue={this.state.classTimeRange}
+                        <RangePicker defaultValue={this.state.classTimeRange} value={this.state.classTimeRange}
                                      format={dateFormat} onChange={this.classTimeOnChange} />
                     </Col>
                 </Row>

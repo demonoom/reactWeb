@@ -174,7 +174,6 @@ const CreateClassComponents = React.createClass({
                     teamOptionArray.push(optionObj);
                     teamJsonArray.push(teamJson);
                 }
-                _this.initPageInfo(_this.state.updateClassObj);
                 _this.setState({teamOptionArray});
             },
             onError: function (error) {
