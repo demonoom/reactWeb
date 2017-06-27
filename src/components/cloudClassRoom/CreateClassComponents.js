@@ -14,12 +14,13 @@ const RadioGroup = Radio.Group;
 const { RangePicker } = DatePicker;
 
 var lessonArray=[];
-var courseInfoJson={isPublish:2,isSeries:2,publisher_id:sessionStorage.getItem("ident"),isFree:1,money:0};
+var courseInfoJson;
 var videoJsonArray=[];
 var teamJsonArray=[];
 const CreateClassComponents = React.createClass({
 
     getInitialState() {
+        var cloudClassRoomUser = JSON.parse(sessionStorage.getItem("cloudClassRoomUser"));
         return {
             stepNum:0,
             isFree:1,
@@ -27,7 +28,8 @@ const CreateClassComponents = React.createClass({
             money:0,
             moneyInputDisable:true,
             isSeriesDisabled:false,
-            teamDisabled:true
+            teamDisabled:true,
+            cloudClassRoomUser:cloudClassRoomUser,
         };
     },
 
@@ -36,6 +38,7 @@ const CreateClassComponents = React.createClass({
         this.getAllSubject();
         this.findTeamByUserId();
         var isSeries = this.props.isSeries;
+        courseInfoJson={isPublish:2,isSeries:2,publisher_id:this.state.cloudClassRoomUser.colUid,isFree:1,money:0};
         this.initCreatePage(isSeries);
     },
 
@@ -140,75 +143,24 @@ const CreateClassComponents = React.createClass({
         });
     },
 
-    /**
-     * 获取当前老师所属的团队
-     */
-    getAllTeam(){
-        var _this = this;
-        var requestUrl = getCloudClassRoomRequestURL("findTeamByUserId");
-        var requestType ="GET";
-        requestUrl = requestUrl+"?id="+sessionStorage.getItem("ident");
-        var propertyJson={};
-        var teamJson={};
-        cloudClassRoomRequestByAjax(requestUrl,propertyJson,requestType, {
-            onResponse: function (ret) {
-                if (ret.meta.success == true && ret.meta.message=="ok") {
-                    message.success("成功");
-                    var response=ret.data;
-                    var teamOptionArray=[];
-                    for(var i=0;i<response.length;i++){
-                        var teamInfo = response[i];
-                        var id = teamInfo.id;
-                        var name = teamInfo.name;
-                        var status = teamInfo.status;
-                        var users = teamInfo.users;
-                        var optionObj = <Option key={id} value={id}>{name}</Option>;
-                        var teamUserOptionArray=[];
-                        for(var j=0;j<users.length;j++){
-                            var user = users[j];
-                            var colUid = user.colUid;
-                            var userName = user.userName;
-                            var userOptionObj = <option value={colUid}>{userName}</option>;
-                            teamUserOptionArray.push(userOptionObj);
-                        }
-                        teamJson.teamId=id;
-                        teamJson.teamUserOptionArray = teamUserOptionArray;
-                        teamOptionArray.push(optionObj);
-                        teamJsonArray.push(teamJson);
-                    }
-                    _this.setState({teamOptionArray});
-                } else {
-                    message.error("失败");
-                }
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });
-    },
-
     findTeamByUserId(){
         var _this = this;
         var param = {
             "method": 'findTeamByUserId',
-            "id": sessionStorage.getItem("ident"),
+            "id": JSON.parse(sessionStorage.getItem("cloudClassRoomUser")).colUid,
         };
-        var teamJson={};
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
                 var teamOptionArray=[];
-                var defaultTeamSelected;
                 for(var i=0;i<response.length;i++){
+                    var teamJson={};
                     var teamInfo = response[i];
                     var id = teamInfo.id;
                     var name = teamInfo.name;
                     var status = teamInfo.status;
                     var users = teamInfo.users;
                     var optionObj = <Option key={id} value={id}>{name}</Option>;
-                    if(i==0){
-                        defaultTeamSelected = id;
-                    }
                     var teamUserOptionArray=[];
                     for(var j=0;j<users.length;j++){
                         var user = users[j];
@@ -222,7 +174,8 @@ const CreateClassComponents = React.createClass({
                     teamOptionArray.push(optionObj);
                     teamJsonArray.push(teamJson);
                 }
-                _this.setState({teamOptionArray,defaultTeamSelected});
+                _this.initPageInfo(_this.state.updateClassObj);
+                _this.setState({teamOptionArray});
             },
             onError: function (error) {
                 message.error(error);
@@ -302,8 +255,7 @@ const CreateClassComponents = React.createClass({
         var teamDisabled;
         if(isTeam==1){
             //发布者ＩＤ 单人授课时为人员id　团队授课时为团队id
-            var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
-            courseInfoJson.publisherId=loginUser.colUid;
+            courseInfoJson.publisherId=this.state.cloudClassRoomUser.colUid;
             courseInfoJson.publishType=2;
             isSeriesDisabled=false;
             teamDisabled=true;
@@ -394,9 +346,8 @@ const CreateClassComponents = React.createClass({
         var lessonNum = lessonArray.length+1;
         // <Col span={4}>第{lessonNum}课时</Col>
         var teacherObj;
-        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         if(this.state.isTeam==1) {
-            teacherObj = <span>{loginUser.userName}</span>;
+            teacherObj = <span>{this.state.cloudClassRoomUser.userName}</span>;
         }else{
             teacherObj = <Col span={4}>
                 <select className="lessonTeamTeacher">
@@ -495,7 +446,6 @@ const CreateClassComponents = React.createClass({
         var lessonTeamTeacherTagArray = $(".lessonTeamTeacher option:selected");
         var lessonTimeTagArray = $("input.ant-calendar-range-picker");
         var userId;
-        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         /*if(this.state.isTeam==1) {
             //发布者ＩＤ 单人授课时为人员id　团队授课时为团队id
             userId = loginUser.colUid;
@@ -508,7 +458,7 @@ const CreateClassComponents = React.createClass({
             var　timeTag = lessonTimeTagArray[i];
             var teacher;
             if(this.state.isTeam==1) {
-                teacher = loginUser.colUid;
+                teacher = this.state.cloudClassRoomUser.colUid;
             }else{
                 teacher = option.value;
             }

@@ -5,6 +5,7 @@ import ImageAnswerUploadComponents from './ImageAnswerUploadComponents';
 import {isEmpty,formatYMD,getLocalTime} from '../../utils/utils';
 import {getCloudClassRoomRequestURL} from '../../utils/CloudClassRoomURLUtils';
 import {cloudClassRoomRequestByAjax} from '../../utils/CloudClassRoomURLUtils';
+import {doWebService_CloudClassRoom} from '../../utils/CloudClassRoomURLUtils';
 import moment from 'moment';
 const dateFormat = 'YYYY/MM/DD';
 const dateFullFormat = 'YYYY-MM-DD HH:mm:ss';
@@ -20,6 +21,8 @@ var teamJsonArray=[];
 const UpdateClassComponents = React.createClass({
 
     getInitialState() {
+        var cloudClassRoomUser = JSON.parse(sessionStorage.getItem("cloudClassRoomUser"));
+        this.findTeamByUserId();
         return {
             stepNum:0,
             isFree:1,
@@ -29,26 +32,28 @@ const UpdateClassComponents = React.createClass({
             isSeriesDisabled:false,
             teamDisabled:true,
             teamUserOptionArray:[],
+            cloudClassRoomUser:cloudClassRoomUser,
         };
     },
 
     componentDidMount(){
-        this.getAllClass();
-        this.getAllSubject();
-        this.getAllTeam();
         var updateClassObj = this.props.updateClassObj;
+        this.setState({updateClassObj});
         if(isEmpty(updateClassObj)==false){
             this.initPageInfo(updateClassObj);
         }
     },
 
-    // componentWillMount(){
-    //     var updateClassObj = this.props.updateClassObj;
-    //     this.initPageInfo(updateClassObj);
-    // },
+    componentWillMount(){
+        this.getAllClass();
+        this.getAllSubject();
+        this.findTeamByUserId();
+    },
 
     componentWillReceiveProps(nextProps){
+        this.findTeamByUserId();
         var updateClassObj = nextProps.updateClassObj;
+        this.setState({updateClassObj});
         if(isEmpty(updateClassObj)==false){
             this.initPageInfo(updateClassObj);
         }
@@ -88,6 +93,7 @@ const UpdateClassComponents = React.createClass({
             isTeam = 2;
             isSeriesDisabled=true;
             teamDisabled=false;
+            _this.getTeamUserOptions(publisher_id);
         }else{
             isTeam=1;
             isSeriesDisabled=false;
@@ -142,27 +148,29 @@ const UpdateClassComponents = React.createClass({
         courseInfoJson.videos = videos;
         if(isEmpty(videos)==false){
             var lessonNum=0;
+            lessonArray.splice(0);
             videos.forEach(function (video) {
                 lessonNum+=1;
                 var liveTime = getLocalTime(video.liveTime);
+                var videoNameObj = <Col span={6}>
+                    <Input id={lessonNum} value={video.name} onChange={_this.lessonTitleOnChange}/>
+                </Col>;
                 var teacherObj;
                 if(isTeam==1) {
-                    teacherObj = <span>{loginUser.userName}</span>;
+                    teacherObj = <span>{this.state.cloudClassRoomUser.userName}</span>;
                 }else{
                     teacherObj = <Col span={4}>
                         <select className="lessonTeamTeacher">
-                            {/*<option value="1">a</option>
-                             <option value="2">b</option>
-                             <option value="3">c</option>
-                             <option value="4">d</option>*/}
                             {_this.state.teamUserOptionArray}
                         </select>
                     </Col>;
                 }
+                // defaultValue={moment({liveTime}, dateFullFormat)}
+                // value={moment({liveTime}, dateFullFormat)}
                 var timeObj = <Col span={4}>
                     <DatePicker
-                        defaultValue={moment({liveTime}, dateFullFormat)}
-                        value={moment({liveTime}, dateFullFormat)}
+                        key={lessonNum}
+                        value={moment(liveTime, dateFullFormat)}
                         className="lessonTime"
                         showTime
                         format="YYYY-MM-DD HH:mm:ss"
@@ -171,7 +179,7 @@ const UpdateClassComponents = React.createClass({
                         onOk={_this.lessonTimeOnOk}
                     />
                 </Col>;
-                var lessonJson = {lessonNum,teacherObj,timeObj};
+                var lessonJson = {lessonNum,teacherObj,timeObj,videoNameObj};
                 lessonArray.push(lessonJson);
                 _this.setState({lessonArray});
             })
@@ -241,9 +249,49 @@ const UpdateClassComponents = React.createClass({
         });
     },
 
-    /**
+    findTeamByUserId(){
+        var _this = this;
+        var param = {
+            "method": 'findTeamByUserId',
+            "id": JSON.parse(sessionStorage.getItem("cloudClassRoomUser")).colUid,
+        };
+        doWebService_CloudClassRoom(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                var teamOptionArray=[];
+                for(var i=0;i<response.length;i++){
+                    var teamJson={};
+                    var teamInfo = response[i];
+                    var id = teamInfo.id;
+                    var name = teamInfo.name;
+                    var status = teamInfo.status;
+                    var users = teamInfo.users;
+                    var optionObj = <Option key={id} value={id}>{name}</Option>;
+                    var teamUserOptionArray=[];
+                    for(var j=0;j<users.length;j++){
+                        var user = users[j];
+                        var colUid = user.colUid;
+                        var userName = user.userName;
+                        var userOptionObj = <option value={colUid}>{userName}</option>;
+                        teamUserOptionArray.push(userOptionObj);
+                    }
+                    teamJson.teamId=id;
+                    teamJson.teamUserOptionArray = teamUserOptionArray;
+                    teamOptionArray.push(optionObj);
+                    teamJsonArray.push(teamJson);
+                }
+                _this.initPageInfo(_this.state.updateClassObj);
+                _this.setState({teamOptionArray});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /*/!**
      * 获取当前老师所属的团队
-     */
+     *!/
     getAllTeam(){
         var _this = this;
         var requestUrl = getCloudClassRoomRequestURL("findTeamByUserId");
@@ -286,7 +334,7 @@ const UpdateClassComponents = React.createClass({
                 message.error(error);
             }
         });
-    },
+    },*/
     /**
      * 根据teamId获取team下的老师
      * @param teamId
@@ -359,8 +407,7 @@ const UpdateClassComponents = React.createClass({
         var teamDisabled;
         if(isTeam==1){
             //发布者ＩＤ 单人授课时为人员id　团队授课时为团队id
-            var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
-            courseInfoJson.publisherId=loginUser.colUid;
+            courseInfoJson.publisherId=this.state.cloudClassRoomUser.colUid;
             courseInfoJson.publishType=2;
             isSeriesDisabled=false;
             teamDisabled=true;
@@ -451,17 +498,17 @@ const UpdateClassComponents = React.createClass({
         }
         var lessonNum = lessonArray.length+1;
         // <Col span={4}>第{lessonNum}课时</Col>
-        var lessonObj = <div>
+        /*var lessonObj = <div>
             <Col span={4}>
                 <select className="lessonTeamTeacher">
-                    {/*<option value="1">a</option>
+                    {/!*<option value="1">a</option>
                     <option value="2">b</option>
                     <option value="3">c</option>
-                    <option value="4">d</option>*/}
+                    <option value="4">d</option>*!/}
                     {this.state.teamUserOptionArray}
                 </select>
             </Col>
-            <Col span={8}>
+            <Col span={4}>
                 <DatePicker
                     className="lessonTime"
                     showTime
@@ -471,8 +518,32 @@ const UpdateClassComponents = React.createClass({
                     onOk={this.lessonTimeOnOk}
                 />
             </Col>
-        </div>;
-        var lessonJson = {lessonNum,lessonObj};
+        </div>;*/
+        var videoNameObj = <Col span={6}>
+            <Input id={lessonNum} onChange={this.lessonTitleOnChange}/>
+        </Col>;
+        var teacherObj;
+        if(this.state.isTeam==1) {
+            teacherObj = <span>{this.state.cloudClassRoomUser.userName}</span>;
+        }else{
+            teacherObj = <Col span={4}>
+                <select className="lessonTeamTeacher">
+                    {this.state.teamUserOptionArray}
+                </select>
+            </Col>;
+        }
+        var timeObj = <Col span={4}>
+            <DatePicker
+                className="lessonTime"
+                showTime
+                format="YYYY-MM-DD HH:mm:ss"
+                placeholder="Select Time"
+                onChange={this.lessonTimeOnChange}
+                onOk={this.lessonTimeOnOk}
+            />
+        </Col>;
+        var lessonJson = {lessonNum,teacherObj,timeObj,videoNameObj};
+        // var lessonJson = {lessonNum,lessonObj};
         lessonArray.push(lessonJson);
         this.setState({lessonArray});
     },
@@ -552,8 +623,7 @@ const UpdateClassComponents = React.createClass({
 
         if(this.state.isTeam==1) {
             //发布者ＩＤ 单人授课时为人员id　团队授课时为团队id
-            var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
-            userId = loginUser.colUid;
+            userId = this.state.cloudClassRoomUser.colUid;
         }else{
             userId = this.state.teamId;
         }
@@ -825,10 +895,9 @@ const UpdateClassComponents = React.createClass({
                     var lessonJson = this.state.lessonArray[i];
                     var lessonRowObj = <Row>
                         <Col span={4}>第{lessonJson.lessonNum}课时</Col>
-                        <Col span={6}>
-                            <Input id={lessonJson.lessonNum} onChange={this.lessonTitleOnChange}/>
-                        </Col>
-                        {lessonJson.lessonObj}
+                        {lessonJson.videoNameObj}
+                        {lessonJson.teacherObj}
+                        {lessonJson.timeObj}
                         <Col span={2}>
                             <Button icon="delete" onClick={this.removeLesson.bind(this,lessonJson.lessonNum)}></Button>
                         </Col>
