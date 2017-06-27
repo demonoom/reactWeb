@@ -4,8 +4,7 @@ import {getCloudClassRoomRequestURL} from '../../utils/CloudClassRoomURLUtils';
 import {cloudClassRoomRequestByAjax} from '../../utils/CloudClassRoomURLUtils';
 import {doWebService_CloudClassRoom} from '../../utils/CloudClassRoomURLUtils';
 import {getPageSize} from '../../utils/Const';
-import {formatYMD} from '../../utils/utils';
-import {formatHM} from '../../utils/utils';
+import {getLocalTime,formatYMD,formatHM} from '../../utils/utils';
 import {isEmpty,cutString} from '../../utils/utils';
 import {doWebService} from '../../WebServiceHelper';
 import CreateClassComponents from './CreateClassComponents';
@@ -121,16 +120,12 @@ const AntMulitiClassComponents = React.createClass({
         var videoLiTagArray=[];
         if(isEmpty(videosArray)==false){
             videosArray.forEach(function (video) {
+                var liveTimeStr = getLocalTime(video.liveTime);
                 var videoLi = <li className="course_section">
-					<div className="course_section_title">
-                    <span className="name">章节名称</span>
-                    <span className="cont">授课老师</span>
-                    <span className="cont">授课时间</span>
-					</div>
 					<div>
 					<span>{video.name}</span>
                     <span>{video.user.userName}</span>
-                    <span>{video.liveTime}</span>
+                    <span>{liveTimeStr}</span>
 					</div>
                 </li>;
                 videoLiTagArray.push(videoLi);
@@ -199,7 +194,14 @@ const AntMulitiClassComponents = React.createClass({
                         <Col span={24}><span className="series_gray_le">开始时间：</span><span className="series_gray_ri">{startTime}</span></Col>
                         <Col span={24}><span className="series_gray_le">结束时间：</span><span className="series_gray_ri">{endTime}</span></Col>
                         <Col span={24}><span className="series_gray_le">排课时间：</span><span className="series_gray_ri"><ul>
-                                {videoLiTagArray}
+                            <li  className="course_section">
+                                <div className="course_section_title">
+                                    <span className="name">章节名称</span>
+                                    <span className="cont">授课老师</span>
+                                    <span className="cont">授课时间</span>
+                                </div>
+                            </li>
+                            {videoLiTagArray}
                             </ul></span></Col>
                         <Col span={24}><span className="series_gray_le">课程概述：</span><span className="series_gray_ri">{content}</span></Col>
                 </Row>
