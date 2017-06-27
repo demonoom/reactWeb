@@ -121,12 +121,10 @@ const AntMulitiClassComponents = React.createClass({
         if(isEmpty(videosArray)==false){
             videosArray.forEach(function (video) {
                 var liveTimeStr = getLocalTime(video.liveTime);
-                var videoLi = <li className="course_section">
-					<div>
-					<span>{video.name}</span>
-                    <span>{video.user.userName}</span>
-                    <span>{liveTimeStr}</span>
-					</div>
+                var videoLi = <li className="course_section_info">
+						<span className="name">{video.name}</span>
+                    	<span className="cont">{video.user.userName}</span>
+                    	<span className="time1">{liveTimeStr}</span>
                 </li>;
                 videoLiTagArray.push(videoLi);
             });
@@ -194,12 +192,10 @@ const AntMulitiClassComponents = React.createClass({
                         <Col span={24}><span className="series_gray_le">开始时间：</span><span className="series_gray_ri">{startTime}</span></Col>
                         <Col span={24}><span className="series_gray_le">结束时间：</span><span className="series_gray_ri">{endTime}</span></Col>
                         <Col span={24}><span className="series_gray_le">排课时间：</span><span className="series_gray_ri"><ul>
-                            <li  className="course_section">
-                                <div className="course_section_title">
+                            <li className="course_section_title">
                                     <span className="name">章节名称</span>
                                     <span className="cont">授课老师</span>
-                                    <span className="cont">授课时间</span>
-                                </div>
+                                    <span className="time1">授课时间</span>
                             </li>
                             {videoLiTagArray}
                             </ul></span></Col>

@@ -730,21 +730,18 @@ const UpdateClassComponents = React.createClass({
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={6}>是否免费</Col>
+                    <Col span={4}>是否免费：</Col>
                     <Col span={18}>
                         <RadioGroup onChange={this.classIsFreeOnChange} value={this.state.isFree}>
-                            <Radio style={radioStyle} value={1}>
+                            <Radio style={radioStyle} value={1} className="line_block">
                                 免费
                             </Radio>
-                            <Radio style={radioStyle} value={2}>
+                            <Radio style={radioStyle} value={2} className="line_block">
                                 收费
-                                <Row>
-                                    <Col span={8}>请输入课程费用</Col>
-                                    <Col span={16}>
-                                        <Input value={this.state.money} disabled={this.state.moneyInputDisable} onChange={this.moneyOnChange}/>
-                                    </Col>
-                                </Row>
                             </Radio>
+							<span >
+                                  <Input value={this.state.money} style={{ width: 160 }} disabled={this.state.moneyInputDisable} onChange={this.moneyOnChange}/>
+                            </span>
                         </RadioGroup>
                     </Col>
                 </Row>
@@ -825,11 +822,11 @@ const UpdateClassComponents = React.createClass({
                     var lessonJson = this.state.lessonArray[i];
                     var lessonRowObj = <Row>
                         <Col span={4}>第{lessonJson.lessonNum}课时</Col>
-                        <Col span={6}>
+                        <Col span={8}>
                             <Input id={lessonJson.lessonNum} onChange={this.lessonTitleOnChange}/>
                         </Col>
                         {lessonJson.lessonObj}
-                        <Col span={2}>
+                        <Col span={4}>
                             <Button icon="delete" onClick={this.removeLesson.bind(this,lessonJson.lessonNum)}></Button>
                         </Col>
                     </Row>;
@@ -838,31 +835,31 @@ const UpdateClassComponents = React.createClass({
             }
             stepPanel=<div>
                 <Row>
-                    <Col span={4}>总课时</Col>
+                    <Col span={4}>总&nbsp;&nbsp;课&nbsp;&nbsp;时：</Col>
                     <Col span={20}>
                         <Input value={this.state.videoNum}  disabled={this.state.videoNumInputDisable} onChange={this.classTimesOnChange}/>
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={4}>设置课表</Col>
+                    <Col span={4}>设置课表：</Col>
                     <Col span={20}>
-                        <Row>
-                            <Col span={4}>目录</Col>
-                            <Col span={6}>名称</Col>
+                        <Row className="no_ant-row price"> 
+                            <Col span={4} className="add_left">目录</Col>
+                            <Col span={8}>名称</Col>
                             <Col span={4}>授课老师</Col>
-                            <Col span={8}>授课时间</Col>
-                            <Col span={2}>操作</Col>
+                            <Col span={4}>授课时间</Col>
+                            <Col span={4}>操作</Col>
                         </Row>
                         {everyLessonArray}
                         <Row>
                             <Col span={24}>
-                                <Button icon="add" onClick={this.addLesson}>添加目录</Button>
+                                <Button icon="add" onClick={this.addLesson} className="add_DIR add_study-b">添加目录</Button>
                             </Col>
                         </Row>
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={6}>
+                    <Col span={24} className="knowledge_ri">
                         <Checkbox onChange={this.publishClassAtNow}>立即发布</Checkbox>
                     </Col>
                 </Row>
