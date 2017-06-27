@@ -26,11 +26,13 @@ var userTeamColumns = [ {
 const AntTeamComponents = React.createClass({
 
     getInitialState() {
+        var cloudClassRoomUser = JSON.parse(sessionStorage.getItem("cloudClassRoomUser"));
         return {
             currentPage:1,
             userTeamData:[],
             createTeamModalVisible:false,
             totalTeamCount:0,
+            cloudClassRoomUser:cloudClassRoomUser,
         };
     },
 
@@ -60,10 +62,9 @@ const AntTeamComponents = React.createClass({
 
     findTeamByUserId(teamSearchKey){
         var _this = this;
-
         var param = {
             "method": 'findTeamByUserId',
-            "userId": sessionStorage.getItem("ident"),
+            "id": _this.state.cloudClassRoomUser.colUid,
         };
         if(isEmpty(teamSearchKey)==false){
             param.where=JSON.stringify({"name":teamSearchKey});
@@ -105,7 +106,7 @@ const AntTeamComponents = React.createClass({
         var _this = this;
         var param = {
             "method": 'findTeamByManager',
-            "userId": sessionStorage.getItem("ident"),
+            "userId": _this.state.cloudClassRoomUser.colUid,
         };
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -124,7 +125,7 @@ const AntTeamComponents = React.createClass({
         var _this = this;
         var param = {
             "method": 'findMyJoinTeam',
-            "userId": sessionStorage.getItem("ident"),
+            "userId": _this.state.cloudClassRoomUser.colUid,
         };
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -148,7 +149,7 @@ const AntTeamComponents = React.createClass({
             var isAtThisTeam=false;
             if(isEmpty(team.users)){
                 team.users.forEach(function (user) {
-                    if(users.colUid==sessionStorage.getItem("ident")){
+                    if(users.colUid==_this.state.cloudClassRoomUser.colUid){
                         isAtThisTeam=true;
                     }
                 });
@@ -159,7 +160,7 @@ const AntTeamComponents = React.createClass({
                 requestAddBtn="";
             }
             var settingBtn;
-            if(team.manager==sessionStorage.getItem("ident")){
+            if(team.manager==_this.state.cloudClassRoomUser.colUid){
                 settingBtn=<Button style={{ }} type=""  value={team.id} onClick={_this.showTeamSettingModal}  icon="setting" title="设置" className="score3_i"></Button>;
             }else{
                 settingBtn="";

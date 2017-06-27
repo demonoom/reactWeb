@@ -3,6 +3,7 @@ import { Tabs, Breadcrumb, Icon,Card,Button,Row,Col,Input} from 'antd';
 import AntMulitiClassComponents from './AntMulitiClassComponents';
 import AntTeamComponents from './AntTeamComponents';
 import MyMessageComponents from './MyMessageComponents';
+import {doWebService_CloudClassRoom} from '../../utils/CloudClassRoomURLUtils';
 
 const AntCloudClassRoomComponents = React.createClass({
 
@@ -14,10 +15,29 @@ const AntCloudClassRoomComponents = React.createClass({
 
     componentDidMount(){
         console.log("cloudRoomMenuItem"+this.props.currentItem);
+        this.findUserByAccount();
     },
 
     getClassList(){
 
+    },
+
+    findUserByAccount(){
+        var _this = this;
+        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+        var param = {
+            "method": 'findUserByAccount',
+            "account": loginUser.colAccount,
+        };
+        doWebService_CloudClassRoom(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                sessionStorage.setItem("cloudClassRoomUser",JSON.stringify(response));
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     createClass(){
