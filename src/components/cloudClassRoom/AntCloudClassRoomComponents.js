@@ -21,7 +21,11 @@ const AntCloudClassRoomComponents = React.createClass({
     },
 
     createClass(){
-        this.refs.antMulitiClassComponents.showCreateClassModal();
+        if(this.props.currentItem=="mulitiClass"){
+            this.refs.antMulitiClassComponents.showCreateClassModal();
+        }else{
+            this.refs.antSingleClassComponents.showCreateClassModal();
+        }
     },
 
     createTeam(){

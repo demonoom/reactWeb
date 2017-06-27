@@ -6,7 +6,7 @@ import {doWebService_CloudClassRoom} from '../../utils/CloudClassRoomURLUtils';
 import {getPageSize} from '../../utils/Const';
 import {formatYMD} from '../../utils/utils';
 import {formatHM} from '../../utils/utils';
-import {isEmpty} from '../../utils/utils';
+import {isEmpty,cutString} from '../../utils/utils';
 import {doWebService} from '../../WebServiceHelper';
 import CreateClassComponents from './CreateClassComponents';
 import UpdateClassComponents from './UpdateClassComponents';
@@ -105,7 +105,12 @@ const AntMulitiClassComponents = React.createClass({
         var courseName = row.courseName;
         var isFree = row.isFree;
         var money = row.money;
-        var content = row.content;
+        var content;
+        if(isEmpty(row.content)==false){
+            content = cutString(row.content,100);
+        }else{
+            content = row.content;
+        }
         var isSeries = row.isSeries;
         var courseTypeName = row.courseType.name;
         var image = row.image;
@@ -385,14 +390,14 @@ const AntMulitiClassComponents = React.createClass({
 				<Pagination total={this.state.totalCount} pageSize={getPageSize()} current={this.state.currentPage}
                                 onChange={this.pageOnChange}/>
 				</div>
-                <Modal className="modal_course" title="创建系列课程" visible={this.state.createClassModalVisible}
+                <Modal className="modal_course" title="创建课程" visible={this.state.createClassModalVisible}
                        onCancel={this.createClassModalHandleCancel}
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
 					   footer={[<Button onClick={this.submitAnswer}>提交</Button>]}
                 >
                     <div className="space">
-                        <CreateClassComponents onSaveOk={this.courseAddOk}></CreateClassComponents>
+                        <CreateClassComponents isSeries={this.state.isSeries} onSaveOk={this.courseAddOk}></CreateClassComponents>
                     </div>
                 </Modal>
 

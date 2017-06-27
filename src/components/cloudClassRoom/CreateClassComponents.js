@@ -32,7 +32,32 @@ const CreateClassComponents = React.createClass({
     },
 
     componentDidMount(){
-        console.log("cloudRoomMenuItem"+this.props.currentItem);
+        var isSeries = this.props.isSeries;
+        this.initCreatePage(isSeries);
+    },
+
+    componentWillReceiveProps(nextProps){
+        var isSeries = nextProps.isSeries;
+        this.initCreatePage(isSeries);
+    },
+
+    initCreatePage(isSeries){
+        lessonArray.splice(0);
+        courseInfoJson.isSeries = isSeries;
+        var isSeriesStr;
+        var videoNumInputDisable;
+        var videoNum;
+        if(isSeries=="1"){
+            isSeriesStr="系列课";
+            videoNum="";
+            videoNumInputDisable=false;
+        }else{
+            isSeriesStr="单节课";
+            videoNum=1;
+            videoNumInputDisable=true;
+        }
+        courseInfoJson.videoNum=videoNum;
+        this.setState({isSeries,isSeriesStr,videoNumInputDisable,videoNum});
         this.getAllClass();
         this.getAllSubject();
         // this.findTeamByUserId();
@@ -696,13 +721,13 @@ const CreateClassComponents = React.createClass({
                         <RadioGroup onChange={this.classTypeOnChange} value={this.state.isTeam}>
                             <Radio style={radioStyle} value={1}>单人授课</Radio>
 							<Row style={{ width: 420 }}>
-                                <Col span={6} style={{ marginLeft: 22 }}>选择课程类型：</Col>
-                                <Col span={16}>
-									<Select defaultValue="2" style={{ width: 120 }} disabled={this.state.isSeriesDisabled} onChange={this.courseTypeSelectOnChange}>
+                                <Col span={24} style={{ marginLeft: 22 }}>课程类型：{this.state.isSeriesStr}</Col>
+                                {/* <Col span={16}>
+									<Select defaultValue={this.state.isSeries} value={this.state.isSeries} style={{ width: 120 }} disabled={this.state.isSeriesDisabled} onChange={this.courseTypeSelectOnChange}>
 										<Option value="1">系列课</Option>
 										<Option value="2">单节课</Option>
 									</Select>
-								</Col>
+								</Col>*/}
                                 </Row>
                             <Radio style={radioStyle} value={2}>
                                 团队授课
@@ -766,7 +791,7 @@ const CreateClassComponents = React.createClass({
                 <Row>
                     <Col span={4}>总课时：</Col>
                     <Col span={18}>
-                        <Input value={this.state.videoNum} onChange={this.classTimesOnChange}/>
+                        <Input value={this.state.videoNum} disabled={this.state.videoNumInputDisable} onChange={this.classTimesOnChange}/>
                     </Col>
                 </Row>
                 <Row>
