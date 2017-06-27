@@ -106,7 +106,7 @@ const AntTeamComponents = React.createClass({
         var _this = this;
         var param = {
             "method": 'findTeamByManager',
-            "id": _this.state.cloudClassRoomUser.colUid,
+            "userId": _this.state.cloudClassRoomUser.colUid,
         };
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -125,7 +125,7 @@ const AntTeamComponents = React.createClass({
         var _this = this;
         var param = {
             "method": 'findMyJoinTeam',
-            "id": _this.state.cloudClassRoomUser.colUid,
+            "userId": _this.state.cloudClassRoomUser.colUid,
         };
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -356,9 +356,52 @@ const AntTeamComponents = React.createClass({
     createTeamModalHandleCancel(){
         this.setState({"createTeamModalVisible":false,"updateGroupId":''});
     },
-
+    /**
+     * 创建团队
+     */
     createTeam(){
-
+        var _this = this;
+        if(isEmpty(_this.state.targetKeys)){
+            message.error("请选择团队成员");
+            return;
+        }
+        var teamJson={};
+        teamJson.name = _this.state.teamName;
+        teamJson.createTime = new Date().valueOf();
+        teamJson.manager=_this.state.cloudClassRoomUser.colUid;
+        var usersArray=[];
+        _this.state.targetKeys.forEach(function (id) {
+            var userJson={};
+            userJson.id=id;
+            usersArray.push(userJson);
+        });
+        teamJson.users = usersArray;
+        var param = {
+            "method": 'saveTeam',
+            "jsonObject": JSON.stringify(teamJson),
+        };
+        doWebService_CloudClassRoom(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if(response==true){
+                    message.success("团队创建成功");
+                }else{
+                    message.success("团队创建失败");
+                }
+                _this.createTeamModalHandleCancel();
+                switch(_this.state.type){
+                    case "myTeam":
+                        _this.findTeamByUserId();
+                        break;
+                    case "allTeam":
+                        _this.findTeam();
+                        break;
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     teamNameOnChange(e){
