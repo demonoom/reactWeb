@@ -52,9 +52,11 @@ const UpdateClassComponents = React.createClass({
     },
 
     componentWillReceiveProps(nextProps){
-        this.findTeamByUserId();
-        var updateClassObj = nextProps.updateClassObj;
-        this.setState({updateClassObj});
+        if(!nextProps.isChangeStep){
+            this.findTeamByUserId();
+            var updateClassObj = nextProps.updateClassObj;
+            this.setState({updateClassObj});
+        }
         /*if(isEmpty(updateClassObj)==false){
             this.initPageInfo(updateClassObj);
         }*/
@@ -73,6 +75,7 @@ const UpdateClassComponents = React.createClass({
             isFree = 1;
             moneyInputDisable=true;
         }
+        var id = updateClassObj.id;
         var content = updateClassObj.content;
         var isSeries = updateClassObj.isSeries;
         var courseTypeId = updateClassObj.courseTypeId;
@@ -131,6 +134,8 @@ const UpdateClassComponents = React.createClass({
             courseSummary:content,
             videoNum,classTimeRange,isTeam,isSeriesDisabled,isSeries,teamDisabled,fileList,isSeriesStr,videoNumInputDisable
         });
+
+        courseInfoJson.id=id;
         courseInfoJson.courseName = courseName;
         courseInfoJson.money = money;
         courseInfoJson.isFree = isFree;
