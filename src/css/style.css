@@ -4908,3 +4908,17 @@ span.pagination{
 .team .clearfix{
 	overflow:auto
 }
+.course_section{
+}
+.course_section_title{
+	background: #f9f9f9;
+    padding: 8px
+}
+.course_section_title span.name{
+	width:60%;
+	display:inline-block
+}
+.course_section_title span.cont{
+	width:20%;
+	display:inline-block
+}
