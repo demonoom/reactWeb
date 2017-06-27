@@ -123,7 +123,7 @@ const AntMulitiClassComponents = React.createClass({
             videosArray.forEach(function (video) {
                 var videoLi = <li>
                     <span>章节名称:{video.name}</span>
-                    <span>授课老师:{video.User.userName}</span>
+                    <span>授课老师:{video.user.userName}</span>
                     <span>授课时间:{video.liveTime}</span>
                 </li>;
                 videoLiTagArray.push(videoLi);

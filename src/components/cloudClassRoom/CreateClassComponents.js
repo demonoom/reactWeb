@@ -60,8 +60,8 @@ const CreateClassComponents = React.createClass({
         this.setState({isSeries,isSeriesStr,videoNumInputDisable,videoNum});
         this.getAllClass();
         this.getAllSubject();
-        // this.findTeamByUserId();
-        this.getAllTeam();
+        this.findTeamByUserId();
+        // this.getAllTeam();
     },
     /**
      * 获取所有的年级
