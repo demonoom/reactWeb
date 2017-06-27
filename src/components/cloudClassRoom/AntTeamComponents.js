@@ -106,7 +106,7 @@ const AntTeamComponents = React.createClass({
         var _this = this;
         var param = {
             "method": 'findTeamByManager',
-            "userId": _this.state.cloudClassRoomUser.colUid,
+            "id": _this.state.cloudClassRoomUser.colUid,
         };
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -125,7 +125,7 @@ const AntTeamComponents = React.createClass({
         var _this = this;
         var param = {
             "method": 'findMyJoinTeam',
-            "userId": _this.state.cloudClassRoomUser.colUid,
+            "id": _this.state.cloudClassRoomUser.colUid,
         };
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -313,43 +313,44 @@ const AntTeamComponents = React.createClass({
         });
     },
 
-    /**
-     * 创建群组时，获取当前用户的联系人列表
-     */
-    getUserContactsMockData(){
 
+    /**
+     * 查询我加入的团队
+     */
+    findAllUserTeacher(){
         var _this = this;
         const mockData = [];
         var targetKeys = [];
-        var requestUrl = getCloudClassRoomRequestURL("findClass");
-        var requestType ="POST";
-        var propertyJson={};
-        cloudClassRoomRequestByAjax(requestUrl,propertyJson,requestType, {
+        var param = {
+            "method": 'findAllUserTeacher',
+            "userId": _this.state.cloudClassRoomUser.colUid,
+        };
+        doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
-                if (ret.meta.success == true && ret.meta.message=="ok") {
-                    message.success("成功");
-                    var response=ret.data;
-                    response.forEach(function (e) {
-                        /*var userId = e.colUid;
-                        var userName = e.userName;
-                        var userType = e.colUtype;
-                        if(userType!="SGZH" && parseInt(userId) != sessionStorage.getItem("ident")){
-                            const data = {
-                                key: userId,
-                                title: userName,
-                            };
-                            mockData.push(data);
-                        }*/
-                    });
-                    _this.setState({ mockData, targetKeys });
-                } else {
-                    message.error("失败");
-                }
+                var response = ret.response;
+                response.forEach(function (e) {
+                    var userId = e.colUid;
+                    var userName = e.userName;
+                    var userType = e.colUtype;
+                    // userType != "SGZH" &&
+                    if (parseInt(userId) != _this.state.cloudClassRoomUser.colUid) {
+                        const data = {
+                            key: userId,
+                            title: userName,
+                        };
+                        mockData.push(data);
+                    }
+                });
+                _this.setState({mockData, targetKeys});
             },
             onError: function (error) {
                 message.error(error);
             }
         });
+    },
+
+    transferHandleChange(targetKeys){
+        this.setState({ targetKeys });
     },
 
     createTeamModalHandleCancel(){
@@ -372,6 +373,7 @@ const AntTeamComponents = React.createClass({
     },
 
     showCreateTeamModal(){
+        this.findAllUserTeacher();
         this.setState({"createTeamModalVisible":true});
     },
 
