@@ -22,7 +22,7 @@ var userTeamColumns = [ {
     title: '团队设置',
     dataIndex: 'teamSet',
 },];
-
+var teamTableData = [];
 const AntTeamComponents = React.createClass({
 
     getInitialState() {
@@ -65,9 +65,10 @@ const AntTeamComponents = React.createClass({
         var param = {
             "method": 'findTeamByUserId',
             "id": _this.state.cloudClassRoomUser.colUid,
+            "name":''
         };
         if(isEmpty(teamSearchKey)==false){
-            param.where=JSON.stringify({"name":teamSearchKey});
+            param.name=teamSearchKey;
         }
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -83,10 +84,11 @@ const AntTeamComponents = React.createClass({
     findTeam(teamSearchKey){
         var _this = this;
         var param = {
-            "method": 'findTeam'
+            "method": 'findTeam',
+            "name":''
         };
         if(isEmpty(teamSearchKey)==false){
-            param.where=JSON.stringify({"name":teamSearchKey});
+            param.name=teamSearchKey;
         }
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -143,7 +145,7 @@ const AntTeamComponents = React.createClass({
         // var responseRows=response.rows;
         var _this = this;
         var total = response.length;
-        var teamTableData = [];
+        teamTableData.splice(0);
         response.forEach(function (team) {
             var requestAddBtn;
             var isAtThisTeam=false;
@@ -375,6 +377,8 @@ const AntTeamComponents = React.createClass({
             userJson.id=id;
             usersArray.push(userJson);
         });
+        var mySelfJson={id:_this.state.cloudClassRoomUser.colUid};
+        usersArray.push(mySelfJson);
         teamJson.users = usersArray;
         var param = {
             "method": 'saveTeam',
