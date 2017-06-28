@@ -13,6 +13,7 @@ const RadioGroup = Radio.Group;
 const Step = Steps.Step;
 var whereJson={};
 var courseInfoJson={};
+var cardArray = [];
 const AntMulitiClassComponents = React.createClass({
 
     getInitialState() {
@@ -37,14 +38,43 @@ const AntMulitiClassComponents = React.createClass({
 
     getCourseListBySeries(isSeries){
         var _this = this;
-        // var isSeries = _this.props.isSeries;
-        if(isEmpty(isSeries)==false){
-            whereJson.isSeries=isSeries;
-        }
-        _this.getCourseList(this.state.currentPage,whereJson);
+        _this.getCourseList(_this.state.currentPage,isSeries);
     },
 
-    getCourseList(pageNo,whereJson){
+    getCourseList(pageNo,isSeries,is_publish){
+        var _this = this;
+        var param = {
+            "method": 'listCourse',
+            "pageNo": pageNo,
+            "course_class":'',
+            "isseries":'',
+            "coursetypeid":'',
+            "numPerPage":getPageSize(),
+            "is_publish":''
+        };
+        if(isEmpty(isSeries)==false){
+            param.isseries=isSeries;
+        }
+        if(isEmpty(is_publish)==false){
+            param.is_publish=is_publish;
+        }
+        doWebService_CloudClassRoom(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                var total = ret.total;
+                cardArray.splice(0);
+                response.forEach(function (course) {
+                    _this.buildEveryCard(course,cardArray);
+                });
+                _this.setState({cardArray,totalCount:total});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /*getCourseList(pageNo,whereJson){
         var _this = this;
         var requestUrl = getCloudClassRoomRequestURL("courseList");
         var requestType ="POST";
@@ -75,7 +105,7 @@ const AntMulitiClassComponents = React.createClass({
                 message.error(error);
             }
         });
-    },
+    },*/
 
     buildEveryCard(row,cardArray){
         var _this = this;
@@ -292,7 +322,7 @@ const AntMulitiClassComponents = React.createClass({
                 if(response){
                     message.success("课程信息修改成功");
                 }
-                _this.getCourseList(_this.state.currentPage);
+                _this.getCourseList(_this.state.currentPage,_this.state.isSeries,_this.state.classFliterValue);
             },
             onError: function (error) {
                 message.error(error);
@@ -365,16 +395,11 @@ const AntMulitiClassComponents = React.createClass({
         this.setState({
             classFliterValue: e.target.value,
         });
-        if(e.target.value==0){
-            whereJson.is_publish="";
-        }else{
-            whereJson.is_publish=e.target.value;
-        }
-        this.getCourseList(this.state.currentPage,whereJson);
+        this.getCourseList(this.state.currentPage,this.state.isSeries,e.target.value);
     },
 
     pageOnChange(page) {
-        this.getCourseList(page);
+        this.getCourseList(page,this.state.isSeries,this.state.classFliterValue);
         this.setState({
             currentPage: page,
         });
@@ -382,7 +407,7 @@ const AntMulitiClassComponents = React.createClass({
 
     courseAddOk(){
         this.setState({"createClassModalVisible":false,"isChangeStep":false,stepDirect:''});
-        this.getCourseList(1);
+        this.getCourseList(this.state.currentPage,this.state.isSeries,this.state.classFliterValue);
     },
 
     classDetailModalHandleCancel(){
@@ -399,7 +424,7 @@ const AntMulitiClassComponents = React.createClass({
      */
     courseUpdateOk(){
         this.setState({"updateClassModalVisible":false,"isChangeStep":true,stepDirect:''});
-        this.getCourseList(1);
+        this.getCourseList(this.state.currentPage,this.state.isSeries,this.state.classFliterValue);
     },
 
     changeStep(direct,optSource){
