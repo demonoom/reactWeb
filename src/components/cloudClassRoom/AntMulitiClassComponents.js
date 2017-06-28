@@ -4,14 +4,16 @@ import {getCloudClassRoomRequestURL} from '../../utils/CloudClassRoomURLUtils';
 import {cloudClassRoomRequestByAjax} from '../../utils/CloudClassRoomURLUtils';
 import {doWebService_CloudClassRoom} from '../../utils/CloudClassRoomURLUtils';
 import {getPageSize} from '../../utils/Const';
-import {getLocalTime,formatYMD,formatHM} from '../../utils/utils';
+import {getLocalTime,formatYMD,formatHM,formatNoSecond} from '../../utils/utils';
 import {isEmpty,cutString} from '../../utils/utils';
-import {doWebService} from '../../WebServiceHelper';
+import ConfirmModal from '../ConfirmModal';
 import CreateClassComponents from './CreateClassComponents';
 import UpdateClassComponents from './UpdateClassComponents';
 const RadioGroup = Radio.Group;
 const Step = Steps.Step;
 var whereJson={};
+var courseInfoJson={};
+var cardArray = [];
 const AntMulitiClassComponents = React.createClass({
 
     getInitialState() {
@@ -36,14 +38,43 @@ const AntMulitiClassComponents = React.createClass({
 
     getCourseListBySeries(isSeries){
         var _this = this;
-        // var isSeries = _this.props.isSeries;
-        if(isEmpty(isSeries)==false){
-            whereJson.isSeries=isSeries;
-        }
-        _this.getCourseList(this.state.currentPage,whereJson);
+        _this.getCourseList(_this.state.currentPage,isSeries);
     },
 
-    getCourseList(pageNo,whereJson){
+    getCourseList(pageNo,isSeries,is_publish){
+        var _this = this;
+        var param = {
+            "method": 'listCourse',
+            "pageNo": pageNo,
+            "course_class":'',
+            "isseries":'',
+            "coursetypeid":'',
+            "numPerPage":getPageSize(),
+            "is_publish":''
+        };
+        if(isEmpty(isSeries)==false){
+            param.isseries=isSeries;
+        }
+        if(isEmpty(is_publish)==false){
+            param.is_publish=is_publish;
+        }
+        doWebService_CloudClassRoom(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                var total = ret.total;
+                cardArray.splice(0);
+                response.forEach(function (course) {
+                    _this.buildEveryCard(course,cardArray);
+                });
+                _this.setState({cardArray,totalCount:total});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /*getCourseList(pageNo,whereJson){
         var _this = this;
         var requestUrl = getCloudClassRoomRequestURL("courseList");
         var requestType ="POST";
@@ -74,29 +105,7 @@ const AntMulitiClassComponents = React.createClass({
                 message.error(error);
             }
         });
-    },
-    /**
-     * 修改课程信息
-     * @param propertyJson
-     */
-    updateCourseInfo(propertyJson){
-        var _this = this;
-        var requestUrl = getCloudClassRoomRequestURL("courseUpdate");
-        var requestType ="POST";
-        cloudClassRoomRequestByAjax(requestUrl,propertyJson,requestType, {
-            onResponse: function (ret) {
-                if (ret.meta.success == true && ret.meta.message=="ok") {
-                    message.success("修改成功");
-                    _this.getCourseList(_this.state.currentPage);
-                } else {
-                    message.error("修改失败");
-                }
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });
-    },
+    },*/
 
     buildEveryCard(row,cardArray){
         var _this = this;
@@ -118,8 +127,10 @@ const AntMulitiClassComponents = React.createClass({
         var endTime = formatYMD(row.endTime);
         var videosArray = row.videos;
         var videoLiTagArray=[];
+        var firstLiveTime;
         if(isEmpty(videosArray)==false){
-            videosArray.forEach(function (video) {
+            firstLiveTime = formatNoSecond(videosArray[0].liveTime);
+            /*videosArray.forEach(function (video) {
                 var liveTimeStr = getLocalTime(video.liveTime);
                 var videoLi = <li className="course_section_info">
 						<span className="name">{video.name}</span>
@@ -127,7 +138,7 @@ const AntMulitiClassComponents = React.createClass({
                     	<span className="time1">{liveTimeStr}</span>
                 </li>;
                 videoLiTagArray.push(videoLi);
-            });
+            });*/
         }
         var isPublish = row.isPublish;
         var isPublishStr;
@@ -143,7 +154,7 @@ const AntMulitiClassComponents = React.createClass({
 
                     <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,row)}></Button></Col>
                     <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
-                    <Col span={24}><Button icon="rollback" className="exam-particulars_title" title="撤回" onClick={_this.withDrawClass.bind(_this,id)}></Button></Col>
+                    <Col span={24}><Button icon="rollback" className="exam-particulars_title" title="撤回" onClick={_this.showConfirmDrwaModal.bind(_this,id)}></Button></Col>
                 </div>;
                 break;
             case "2":
@@ -151,7 +162,7 @@ const AntMulitiClassComponents = React.createClass({
                 optButtons=<div>
                     <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
                     <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,row)}></Button></Col>
-                    <Col span={24}><Button icon="check-circle-o" className="exam-particulars_title" title="发布" onClick={_this.publishClass.bind(_this,id)}></Button></Col>*/}
+                    <Col span={24}><Button icon="check-circle-o" className="exam-particulars_title" title="发布" onClick={_this.showConfirmPushModal.bind(_this,id)}></Button></Col>*/}
                 </div>;
                 break;
             case "3":
@@ -159,7 +170,7 @@ const AntMulitiClassComponents = React.createClass({
                 optButtons=<div>
                     <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
                     <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,row)}></Button></Col>
-                    <Col span={24}><Button icon="check-circle-o" className="exam-particulars_title" title="发布" onClick={_this.publishClass.bind(_this,id)}></Button></Col>
+                    <Col span={24}><Button icon="check-circle-o" className="exam-particulars_title" title="发布" onClick={_this.showConfirmPushModal.bind(_this,id)}></Button></Col>
                 </div>;
                 break;
         }
@@ -191,14 +202,18 @@ const AntMulitiClassComponents = React.createClass({
                         <Col span={24}><span className="series_gray_le">主讲老师：</span><span className="series_gray_ri">{userSpanArray}</span></Col>
                         <Col span={24}><span className="series_gray_le">开始时间：</span><span className="series_gray_ri">{startTime}</span></Col>
                         <Col span={24}><span className="series_gray_le">结束时间：</span><span className="series_gray_ri">{endTime}</span></Col>
-                        <Col span={24}><span className="series_gray_le">排课时间：</span><span className="series_gray_ri"><ul>
-                            <li className="course_section_title">
-                                    <span className="name">章节名称</span>
-                                    <span className="cont">授课老师</span>
-                                    <span className="time1">授课时间</span>
-                            </li>
-                            {videoLiTagArray}
-                            </ul></span></Col>
+                        <Col span={24}><span className="series_gray_le">排课时间：</span><span className="series_gray_ri">{firstLiveTime}
+                            {/*<ul>
+                                <li  className="course_section">
+                                    <div className="course_section_title">
+                                        <span className="name">章节名称</span>
+                                        <span className="cont">授课老师</span>
+                                        <span className="time1">授课时间</span>
+                                    </div>
+                                </li>
+                                {videoLiTagArray}
+                            </ul>*/}
+                        </span></Col>
                         <Col span={24}><span className="series_gray_le">课程概述：</span><span className="series_gray_ri">{content}</span></Col>
                 </Row>
                 </Col>
@@ -244,13 +259,11 @@ const AntMulitiClassComponents = React.createClass({
         var videoLiTagArray=[];
         if(isEmpty(videosArray)==false){
             videosArray.forEach(function (video) {
-                var liveTimeStr = getLocalTime(video.liveTime);
-                var videoLi = <li className="course_section">
-                    <div>
-                        <span>{video.name}</span>
-                        <span>{video.user.userName}</span>
-                        <span>{liveTimeStr}</span>
-                    </div>
+                var liveTimeStr = formatNoSecond(video.liveTime);
+                var videoLi = <li className="course_section_info">
+                        <span className="name">{video.name}</span>
+                        <span className="cont">{video.user.userName}</span>
+                        <span className="time1">{liveTimeStr}</span>
                 </li>;
                 videoLiTagArray.push(videoLi);
             });
@@ -295,28 +308,65 @@ const AntMulitiClassComponents = React.createClass({
         this.setState({classDetailModalVisible:true,classDetailPanel});
     },
     /**
+     * 更新课程信息
+     */
+    updateCourse(){
+        var _this = this;
+        var param = {
+            "method": 'updateCourse',
+            "data": JSON.stringify(courseInfoJson),
+        };
+        doWebService_CloudClassRoom(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if(response){
+                    message.success("课程信息修改成功");
+                }
+                _this.getCourseList(_this.state.currentPage,_this.state.isSeries,_this.state.classFliterValue);
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+    /**
+     * 显示撤回操作确认窗口
+     * @param classId
+     */
+    showConfirmDrwaModal(classId){
+        this.setState({classId});
+        this.refs.confirmDrawModal.changeConfirmModalVisible(true);
+    },
+
+    /**
+     * 显示撤回操作确认窗口
+     * @param classId
+     */
+    showConfirmPushModal(classId){
+        this.setState({classId});
+        this.refs.confirmPushModal.changeConfirmModalVisible(true);
+    },
+
+    /**
      * 撤回课程
      * @param classId
      */
-    withDrawClass(classId){
-        console.log("reBackClass classId:"+classId);
-        var propertyJson = {
-            "id": classId,
-            "isPublish": "3"
-        };
-        this.updateCourseInfo(propertyJson);
+    withDrawClass(){
+        courseInfoJson.id=this.state.classId;
+        courseInfoJson.isPublish=3;
+        this.closeConfirmDrawModal();
+        this.updateCourse();
     },
+
     /**
      * 发布课程
      * @param classId
      */
-    publishClass(classId){
-        console.log("publishClass classId:"+classId);
-        var propertyJson = {
-            "id": classId,
-            "isPublish": "1"
-        };
-        this.updateCourseInfo(propertyJson);
+    publishClass(){
+        courseInfoJson.id=this.state.classId;
+        courseInfoJson.isPublish=1;
+        this.closeConfirmPushModal();
+        this.updateCourse();
     },
 
     /**
@@ -345,16 +395,11 @@ const AntMulitiClassComponents = React.createClass({
         this.setState({
             classFliterValue: e.target.value,
         });
-        if(e.target.value==0){
-            whereJson.is_publish="";
-        }else{
-            whereJson.is_publish=e.target.value;
-        }
-        this.getCourseList(this.state.currentPage,whereJson);
+        this.getCourseList(this.state.currentPage,this.state.isSeries,e.target.value);
     },
 
     pageOnChange(page) {
-        this.getCourseList(page);
+        this.getCourseList(page,this.state.isSeries,this.state.classFliterValue);
         this.setState({
             currentPage: page,
         });
@@ -362,7 +407,7 @@ const AntMulitiClassComponents = React.createClass({
 
     courseAddOk(){
         this.setState({"createClassModalVisible":false,"isChangeStep":false,stepDirect:''});
-        this.getCourseList(1);
+        this.getCourseList(this.state.currentPage,this.state.isSeries,this.state.classFliterValue);
     },
 
     classDetailModalHandleCancel(){
@@ -379,7 +424,7 @@ const AntMulitiClassComponents = React.createClass({
      */
     courseUpdateOk(){
         this.setState({"updateClassModalVisible":false,"isChangeStep":true,stepDirect:''});
-        this.getCourseList(1);
+        this.getCourseList(this.state.currentPage,this.state.isSeries,this.state.classFliterValue);
     },
 
     changeStep(direct,optSource){
@@ -405,6 +450,20 @@ const AntMulitiClassComponents = React.createClass({
                 break;
         }
 
+    },
+    /**
+     * 关闭发布操作确认Modal
+     */
+    closeConfirmPushModal(){
+        this.setState({"classId":''});
+        this.refs.confirmPushModal.changeConfirmModalVisible(false);
+    },
+    /**
+     * 关闭撤回操作确认Modal
+     */
+    closeConfirmDrawModal(){
+        this.setState({"classId":''});
+        this.refs.confirmDrawModal.changeConfirmModalVisible(false);
     },
 
     /**
@@ -494,6 +553,19 @@ const AntMulitiClassComponents = React.createClass({
                         <UpdateClassComponents ref="updateClassComponents" isChangeStep={this.state.isChangeStep} updateClassObj={this.state.updateClassObj} onSaveOk={this.courseUpdateOk}></UpdateClassComponents>
                     </div>
                 </Modal>
+
+                <ConfirmModal ref="confirmPushModal"
+                              title="确定要发布该课程?"
+                              onConfirmModalCancel={this.closeConfirmPushModal}
+                              onConfirmModalOK={this.publishClass}
+                ></ConfirmModal>
+
+                <ConfirmModal ref="confirmDrawModal"
+                              title="确定要撤回该课程?"
+                              onConfirmModalCancel={this.closeConfirmDrawModal}
+                              onConfirmModalOK={this.withDrawClass}
+                ></ConfirmModal>
+
             </div>
         );
     },

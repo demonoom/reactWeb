@@ -22,7 +22,7 @@ var userTeamColumns = [ {
     title: '团队设置',
     dataIndex: 'teamSet',
 },];
-
+var teamTableData = [];
 const AntTeamComponents = React.createClass({
 
     getInitialState() {
@@ -65,9 +65,10 @@ const AntTeamComponents = React.createClass({
         var param = {
             "method": 'findTeamByUserId',
             "id": _this.state.cloudClassRoomUser.colUid,
+            "name":''
         };
         if(isEmpty(teamSearchKey)==false){
-            param.where=JSON.stringify({"name":teamSearchKey});
+            param.name=teamSearchKey;
         }
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -83,10 +84,11 @@ const AntTeamComponents = React.createClass({
     findTeam(teamSearchKey){
         var _this = this;
         var param = {
-            "method": 'findTeam'
+            "method": 'findTeam',
+            "name":''
         };
         if(isEmpty(teamSearchKey)==false){
-            param.where=JSON.stringify({"name":teamSearchKey});
+            param.name=teamSearchKey;
         }
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -143,7 +145,7 @@ const AntTeamComponents = React.createClass({
         // var responseRows=response.rows;
         var _this = this;
         var total = response.length;
-        var teamTableData = [];
+        teamTableData.splice(0);
         response.forEach(function (team) {
             var requestAddBtn;
             var isAtThisTeam=false;
@@ -161,7 +163,7 @@ const AntTeamComponents = React.createClass({
             }
             var settingBtn;
             if(team.manager==_this.state.cloudClassRoomUser.colUid){
-                settingBtn=<Button style={{ }} type=""  value={team.id} onClick={_this.showTeamSettingModal}  icon="setting" title="设置" className="score3_i"></Button>;
+                settingBtn=<Button style={{ }} type=""  value={team.id} onClick={_this.showUpdateTeamModal.bind(_this,team)}  icon="setting" title="设置" className="score3_i"></Button>;
             }else{
                 settingBtn="";
             }
@@ -354,8 +356,13 @@ const AntTeamComponents = React.createClass({
     },
 
     createTeamModalHandleCancel(){
-        this.setState({"createTeamModalVisible":false,"updateGroupId":''});
+        this.setState({"createTeamModalVisible":false,"updateGroupId":'',targetKeys:[]});
     },
+
+    updateTeamModalHandleCancel(){
+        this.setState({"updateTeamModalVisible":false,"updateGroupId":'',targetKeys:[]});
+    },
+
     /**
      * 创建团队
      */
@@ -375,6 +382,8 @@ const AntTeamComponents = React.createClass({
             userJson.id=id;
             usersArray.push(userJson);
         });
+        var mySelfJson={id:_this.state.cloudClassRoomUser.colUid};
+        usersArray.push(mySelfJson);
         teamJson.users = usersArray;
         var param = {
             "method": 'saveTeam',
@@ -414,10 +423,20 @@ const AntTeamComponents = React.createClass({
         var teamName = target.value;
         this.setState({"teamName":teamName});
     },
-
+    /**
+     * 显示创建团队的modal
+     */
     showCreateTeamModal(){
         this.findAllUserTeacher();
         this.setState({"createTeamModalVisible":true});
+    },
+    /**
+     * 显示修改团队的modal
+     */
+    showUpdateTeamModal(team){
+        this.findAllUserTeacher();
+        var teamName = team.name;
+        this.setState({"updateTeamModalVisible":true,teamName});
     },
 
     closeConfirmModal() {
@@ -469,6 +488,42 @@ const AntTeamComponents = React.createClass({
                     footer={[
                         <button type="primary" htmlType="submit" className="ant-btn-primary ant-btn" onClick={this.createTeam}  >确定</button>,
                         <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button" onClick={this.createTeamModalHandleCancel} >取消</button>
+                    ]}
+                >
+                    <Row className="ant-form-item">
+                        <span >
+                            <Input placeholder="请输入团队名称" value={this.state.teamName} defaultValue={this.state.teamName} onChange={this.teamNameOnChange} />
+                        </span>
+                    </Row>
+                    <Row className="ant-form-item">
+                        <Col span={24}>
+                            <Transfer
+                                dataSource={this.state.mockData}
+                                showSearch
+                                listStyle={{
+                                    width: 268,
+                                    height: 320,
+                                }}
+                                titles={['待选联系人','已选联系人']}
+                                operations={['', '']}
+                                targetKeys={this.state.targetKeys}
+                                onChange={this.transferHandleChange}
+                                render={item => `${item.title}`}
+                            />
+                        </Col>
+                    </Row>
+
+                </Modal>
+
+                <Modal
+                    visible={this.state.updateTeamModalVisible}
+                    title="修改团队"
+                    onCancel={this.updateTeamModalHandleCancel}
+                    transitionName=""  //禁用modal的动画效果
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    footer={[
+                        <button type="primary" htmlType="submit" className="ant-btn-primary ant-btn" onClick={this.updateTeam}  >确定</button>,
+                        <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button" onClick={this.updateTeamModalHandleCancel} >取消</button>
                     ]}
                 >
                     <Row className="ant-form-item">

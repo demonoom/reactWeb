@@ -15,6 +15,31 @@ export function getLocalTime(nS) {
     // return new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/, ' ');
 }
 
+export function formatNoSecond(nS) {
+    var da = new Date(parseInt(nS));
+    var year = da.getFullYear();
+    var month = da.getMonth()+1;
+    var date = da.getDate();
+    var hour = da.getHours()+":";
+    var minutes = da.getMinutes();
+    if(month<=9){
+        month = "0"+month;
+    }
+    if(date<=9){
+        date = "0"+date;
+    }
+    if(da.getHours()<=9){
+        hour = "0"+da.getHours()+":";
+    }
+    if(da.getMinutes()<=9){
+        minutes = "0"+da.getMinutes();
+    }
+    var dayStr = [year,month,date].join('-');
+    var dateStr = dayStr +" "+ hour + minutes;
+    return dateStr;
+    // return new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/, ' ');
+}
+
 export function formatYMD(nS) {
     var da = new Date(parseInt(nS));
     var year = da.getFullYear();
