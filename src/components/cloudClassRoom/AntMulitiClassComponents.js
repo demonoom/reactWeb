@@ -278,8 +278,8 @@ const AntMulitiClassComponents = React.createClass({
                 <Col span={24}>
                     <Row>
                         <Row>
-                            <Col span={18} className="font_gray_33">{classObj.courseName}</Col>
-                            <Col span={6} className="series_recall" >{isPublishStr}</Col>
+                            <Col span={21} className="font_gray_33">{classObj.courseName}</Col>
+                            <Col span={3} className="series_recall" >{isPublishStr}</Col>
                         </Row>
                         <Col span={24} className="price">
 							<span className="c-jg price_between">￥{classObj.money}</span>
