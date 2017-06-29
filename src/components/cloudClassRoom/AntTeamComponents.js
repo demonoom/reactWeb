@@ -317,9 +317,9 @@ const AntTeamComponents = React.createClass({
 
 
     /**
-     * 查询我加入的团队
+     * 查询可以加入团队的所有老师
      */
-    findAllUserTeacher(){
+    findAllUserTeacher(optSource){
         var _this = this;
         const mockData = [];
         var targetKeys = [];
@@ -343,7 +343,15 @@ const AntTeamComponents = React.createClass({
                         mockData.push(data);
                     }
                 });
-                _this.setState({mockData, targetKeys});
+                switch (optSource){
+                    case "create":
+                        _this.setState({mockData, targetKeys});
+                        break;
+                    case "update":
+                        _this.setState({mockData});
+                        break;
+                }
+
             },
             onError: function (error) {
                 message.error(error);
@@ -366,7 +374,7 @@ const AntTeamComponents = React.createClass({
     /**
      * 创建团队
      */
-    createTeam(){
+    createTeam(saveOrUpdate){
         var _this = this;
         if(isEmpty(_this.state.targetKeys)){
             message.error("请选择团队成员");
@@ -385,19 +393,37 @@ const AntTeamComponents = React.createClass({
         var mySelfJson={id:_this.state.cloudClassRoomUser.colUid};
         usersArray.push(mySelfJson);
         teamJson.users = usersArray;
+        var requestMethod;
+        var successMessage;
+        var errorMessage;
+        switch(saveOrUpdate){
+            case "create":
+                successMessage="团队创建成功";
+                errorMessage="团队创建失败";
+                teamJson.id = "";
+                requestMethod = "saveTeam";
+                break;
+            case "update":
+                successMessage="团队修改成功";
+                errorMessage="团队修改失败";
+                teamJson.id = _this.state.teamObj.id;
+                requestMethod = "updateTeam";
+                break;
+        }
         var param = {
-            "method": 'saveTeam',
+            "method": requestMethod,
             "jsonObject": JSON.stringify(teamJson),
         };
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
                 if(response==true){
-                    message.success("团队创建成功");
+                    message.success(successMessage);
                 }else{
-                    message.success("团队创建失败");
+                    message.success(errorMessage);
                 }
                 _this.createTeamModalHandleCancel();
+                _this.updateTeamModalHandleCancel();
                 switch(_this.state.type){
                     case "myTeam":
                         _this.findTeamByUserId();
@@ -427,16 +453,24 @@ const AntTeamComponents = React.createClass({
      * 显示创建团队的modal
      */
     showCreateTeamModal(){
-        this.findAllUserTeacher();
+        this.findAllUserTeacher("create");
         this.setState({"createTeamModalVisible":true});
     },
     /**
      * 显示修改团队的modal
      */
     showUpdateTeamModal(team){
-        this.findAllUserTeacher();
+        this.findAllUserTeacher("update");
         var teamName = team.name;
-        this.setState({"updateTeamModalVisible":true,teamName});
+        var users = team.users;
+        var targetKeys=[];
+        if(isEmpty(users)==false){
+            users.forEach(function (user) {
+                var userId = user.colUid;
+                targetKeys.push(userId);
+            })
+        }
+        this.setState({"updateTeamModalVisible":true,teamName,targetKeys,teamObj:team});
     },
 
     closeConfirmModal() {
@@ -446,9 +480,30 @@ const AntTeamComponents = React.createClass({
      * 申请加入某个团队
      */
     requestAddThisTeam(){
-        var teamObj = this.state.teamObj;
+        var _this = this;
+        var teamObj = _this.state.teamObj;
         console.log(teamObj.id);
-        this.closeConfirmModal();
+        var userId = _this.state.cloudClassRoomUser.colUid;
+        var teamUserJson = {teamId:teamObj.id,userId:parseInt(userId),
+            status:'2',createTime:new Date().valueOf()};
+        var param = {
+            "method": 'saveTeamUser',
+            "jsonObject": JSON.stringify(teamUserJson),
+        };
+        doWebService_CloudClassRoom(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if(response==true){
+                    message.success("申请成功,请等待管理员审核,谢谢!");
+                }else{
+                    message.error("申请失败");
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+        _this.closeConfirmModal();
     },
 
     /**
@@ -486,7 +541,7 @@ const AntTeamComponents = React.createClass({
                     transitionName=""  //禁用modal的动画效果
                     maskClosable={false} //设置不允许点击蒙层关闭
                     footer={[
-                        <button type="primary" htmlType="submit" className="ant-btn-primary ant-btn" onClick={this.createTeam}  >确定</button>,
+                        <button type="primary" htmlType="submit" className="ant-btn-primary ant-btn" onClick={this.createTeam.bind(this,"create")}  >确定</button>,
                         <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button" onClick={this.createTeamModalHandleCancel} >取消</button>
                     ]}
                 >
@@ -522,7 +577,7 @@ const AntTeamComponents = React.createClass({
                     transitionName=""  //禁用modal的动画效果
                     maskClosable={false} //设置不允许点击蒙层关闭
                     footer={[
-                        <button type="primary" htmlType="submit" className="ant-btn-primary ant-btn" onClick={this.updateTeam}  >确定</button>,
+                        <button type="primary" htmlType="submit" className="ant-btn-primary ant-btn" onClick={this.createTeam.bind(this,"update")}  >确定</button>,
                         <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button" onClick={this.updateTeamModalHandleCancel} >取消</button>
                     ]}
                 >
