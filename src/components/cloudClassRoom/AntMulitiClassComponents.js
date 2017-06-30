@@ -68,9 +68,9 @@ const AntMulitiClassComponents = React.createClass({
                         _this.buildEveryCard(course,cardArray);
                     });
                 }else {
-                    var cardObj = <Card>
+                    var cardObj = <Card className="noDataTipImg">
                         <div>
-                            <Icon type="frown-o" /><span>暂无数据</span>
+                            <Icon type="frown-o" /><span>&nbsp;&nbsp;暂无数据</span>
                         </div>
                     </Card>;
                     cardArray.push(cardObj);
@@ -125,7 +125,7 @@ const AntMulitiClassComponents = React.createClass({
                 optButtons=<div>
                     <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
                     <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,row)}></Button></Col>
-                    <Col span={24}><Button icon="check-circle-o" className="exam-particulars_title" title="发布" onClick={_this.showConfirmPushModal.bind(_this,id)}></Button></Col>*/}
+                    <Col span={24}><Button icon="check-circle-o" className="exam-particulars_title" title="发布" onClick={_this.showConfirmPushModal.bind(_this,id)}></Button></Col>
                 </div>;
                 break;
             case "3":
@@ -145,7 +145,7 @@ const AntMulitiClassComponents = React.createClass({
         if(isEmpty(users)==false){
             users.forEach(function (user) {
                 var userName= user.userName;
-                var userSpanObj = <span>{userName}</span>;
+                var userSpanObj = <span className="info_school_s">{userName}</span>;
                 userSpanArray.push(userSpanObj);
             });
         }
@@ -157,8 +157,8 @@ const AntMulitiClassComponents = React.createClass({
                 <Col span={18}>
                     <Row className="details_cont">
                         <Row>
-                            <Col span={21} className="font_gray_33">{courseName}</Col>
-                            <Col span={3} className="series_recall">{isPublishStr}</Col>
+                            <Col span={21} className="font_gray_33 submenu_left_hidden">{courseName}</Col>
+                            <Col span={3} className="series_recall right_ri">{isPublishStr}</Col>
                         </Row>
                         <Col span={24} className="price"><span className="c-jg price_between">￥{money}</span><span className="price_between gray_line"></span><span className=" price_between font-14">共{videoNum}课时</span></Col>
                         <Col span={24}><span className="series_gray_le">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：</span><span className="series_gray_ri">{courseTypeName}</span></Col>
@@ -223,25 +223,44 @@ const AntMulitiClassComponents = React.createClass({
         }
         console.log("getClassDetail classId:"+classObj.courseName);
         var classDetailPanel=<Card>
+		
             <Row>
-                <Col span={6}>
+				<Col span={24}>
                     <img alt="example" width="100%" src={classObj.image} />
                 </Col>
-                <Col span={14}>
+                <Col span={24}>
                     <Row>
                         <Row>
-                            <Col span={18}>{classObj.courseName}</Col>
-                            <Col span={6}>{isPublishStr}</Col>
+                            <Col span={21} className="font_gray_33">{classObj.courseName}</Col>
+                            <Col span={3} className="series_recall right_ri" >{isPublishStr}</Col>
                         </Row>
-                        <Col span={24}>￥{classObj.money}  |  共{classObj.videoNum}课时</Col>
-                        <Col span={24}>科目：{classObj.courseType.name}</Col>
-                        <Col span={24}>年级：{classObj.courseType.name}</Col>
-                        <Col span={24}>主讲老师：<ul>
-                            {userSpanArray}
-                        </ul></Col>
-                        <Col span={24}>开始时间：{startTime} </Col>
-                        <Col span={24}>结束时间：{endTime}</Col>
-                        <Col span={24}>排课时间：
+                        <Col span={24} className="price">
+							<span className="c-jg price_between">￥{classObj.money}</span>
+							<span className="price_between gray_line"></span>
+							<span className=" price_between font-14">共{classObj.videoNum}课时</span>
+						</Col>
+                        <Col span={24}>
+							<span className="series_gray_le">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：</span>
+							<span className="series_gray_ri">{classObj.courseType.name}</span>
+						</Col>
+                        <Col span={24}>
+							<span className="series_gray_le">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span>
+							<span className="series_gray_ri">{classObj.courseType.name}</span>
+						</Col>
+                        <Col span={24}>
+							<span className="series_gray_le">主讲老师：</span>
+                            <span className="series_gray_ri">{userSpanArray}</span>
+                        </Col>
+                        <Col span={24}>
+							<span className="series_gray_le">开始时间：</span>
+							<span className="series_gray_ri">{startTime}</span>
+						</Col>
+                        <Col span={24}>
+							<span className="series_gray_le">结束时间：</span>
+							<span className="series_gray_ri">{endTime}</span>
+						</Col>
+                        <Col span={24}>
+							<span className="series_gray_le">排课时间：</span>
                             <ul>
                                 <li  className="course_section">
                                     <div className="course_section_title">
@@ -253,7 +272,10 @@ const AntMulitiClassComponents = React.createClass({
                                 {videoLiTagArray}
                             </ul>
                         </Col>
-                        <Col span={24}>课程概述：{classObj.content}</Col>
+                        <Col span={24}>
+							<span className="series_gray_le">课程概述：</span>
+							<span className="series_gray_ri">{classObj.content}</span>
+						</Col>
                     </Row>
                 </Col>
             </Row>

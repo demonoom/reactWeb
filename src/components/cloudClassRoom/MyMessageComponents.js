@@ -50,9 +50,9 @@ const MyMessageComponents = React.createClass({
                         if(status==2){
                             statusMessage = "申请中";
                             requestMessage=userName+"申请加入您的"+teamName;
-                            optButton = <div>
-                                <Button onClick={_this.showUpdateTeamUserConfirmModal.bind(_this,id,1)}>同意</Button>
-                                <Button onClick={_this.showUpdateTeamUserConfirmModal.bind(_this,id,4)} className="correct_name">拒绝</Button>
+                            optButton = <div className="info_btn">
+                                <Button className="add_study-b" onClick={_this.showUpdateTeamUserConfirmModal.bind(_this,id,1)}>同意</Button>
+                                <Button className="correct_name" onClick={_this.showUpdateTeamUserConfirmModal.bind(_this,id,4)} className="correct_name">拒绝</Button>
                             </div>;
                         }else{
                             requestMessage=teamName+"邀请您加入";
@@ -64,20 +64,19 @@ const MyMessageComponents = React.createClass({
                                 <img className="person_user pers_bo_ra" src="http://www.maaee.com:80/Excoord_For_Education/userPhoto/default_avatar.png" />
                             </div>
                             <div>
-                                <div><span className="info_name">{userName}</span><span className="live_color live_orange">{statusMessage}</span></div>
-                                <div className="info_school">{schoolName}</div>
-                                <div className="apply_for">{requestMessage}</div>
+                                <div className="info_school"><span className="info_school_s">{userName}</span><span className="live_color live_orange">{statusMessage}</span></div>
+                                <div className="apply_for">{schoolName}</div>
+                                <div  className="exam-particulars_time">{requestMessage}</div>
                             </div>
-                            <div className="info_btn">
                                 {optButton}
-                            </div>
                         </Card>;
+						
                         teamUserCardArray.push(teamUserCard);
                     });
                 }else{
-                    var teamUserCard=<Card className="information">
+                    var teamUserCard=<Card className="pers_bo_ra noDataTipImg">
                         <div>
-                            <Icon type="frown-o" /><span>暂无数据</span>
+                            <Icon type="frown-o" /><span>&nbsp;&nbsp;暂无数据</span>
                         </div>
                     </Card>;
                     teamUserCardArray.push(teamUserCard);

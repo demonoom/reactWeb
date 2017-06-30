@@ -2548,7 +2548,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 }
 .group_talk ul li span.name img, .attention_img img, .public .sayLine.left div.saycont .sayHeader img, .public .sayLine.right div.saycont .sayHeader img{
 	position:relative;
-	background:#none;
+	background:none;
 	top:0;
 	width: 38px;
     height: 38px;
@@ -3011,7 +3011,7 @@ ul.integral li i{
 	height:25px;
 	line-height:22px;
 }
-.focus_1 span.antnest_name, .focus_1 a.antnest_name,{
+.focus_1 span.antnest_name, .focus_1 a.antnest_name{
 	font-weight: normal !important;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -4816,7 +4816,8 @@ span.pagination{
 }
 .series_courses .details{
 	height:calc(100% - 50px);
-	overflow:auto
+	overflow:auto;
+	position:relative
 }
 .series_courses .ant-card-bordered{
 	border-bottom:1px solid #e9e9e9 !important;
@@ -4840,7 +4841,7 @@ span.pagination{
 }
 .price{
 	background:#f9f9f9;
-	padding:8px;
+	padding:8px !important;
 	margin: 6px 0;
 }
 .price_between{
@@ -4860,6 +4861,9 @@ span.pagination{
 	font-size:14px;
 	line-height:25px;
 }
+.series_gray_ri li{
+	display:inline-block
+	}
 .series_status{/*状态*/
 	border: #40bb8a 1px solid;
     border-radius: 4px;
@@ -4883,6 +4887,7 @@ span.pagination{
     font-size: 14px;
     padding: 2px 0;
     color: #ff9f5f;
+	width:58px;
 }
 .series_unpublished{/*未发布*/
 	border: #bbbbbb 1px solid;
@@ -4961,7 +4966,7 @@ span.pagination{
     width: 69px;
 }
 .table_team table tr td:nth-child(4) {
-    width: 55px;
+    width: 110px;
 }
 .information .ant-card-body > div{
 	display:inline-block
@@ -4969,7 +4974,7 @@ span.pagination{
 .information .ant-card-body {
     padding: 12px 24px;
 }
-.information.ant-card{
+.information.ant-card, .modal_classDetail .ant-card{
 	border-radius:0;
 }
 .information.ant-card-bordered{
@@ -4985,18 +4990,34 @@ span.pagination{
 }
 .info_name{
 	color:#598AC7;
-	margin-right:24px;
+	margin-right:8px;
 }
 .info_btn{
 	width:150px;
 	float:right;
-	text-align:right
+	text-align:right;
+	margin-top:22px;
 }
 .info_school{
 	color:#333;
-	padding:4px 0;
+	padding:0 0 4px 0;
+	margin-right:8px
 }
+.info_school_s{
+	margin-right:8px;
+	}
 .apply_for{
 	font-size:14px;
 	color:#666
+}
+.modal_classDetail .ant-card-body{
+	padding:0;   
+}
+.modal_classDetail .ant-card-bordered{
+	border:none;
+}
+.modal_classDetail .ant-modal-body{
+	height:460px;
+	overflow-y:auto;
+	overflow-x:hidden;
 }
