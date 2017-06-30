@@ -166,7 +166,7 @@ const UpdateClassComponents = React.createClass({
                     teacherObj = <span>{this.state.cloudClassRoomUser.userName}</span>;
                 }else{
                     teacherObj = <Col span={4}>
-                        <select className="lessonTeamTeacher">
+                        <select className="lessonTeamTeacher course_n">
                             {_this.state.teamUserOptionArray}
                         </select>
                     </Col>;

@@ -20,7 +20,7 @@ code, kbd, pre, samp{
     position: absolute;
     left: 0px;
 }
-div, a, span, input, button, textarea, marquee{
+div, a, span, input, button, textarea, marquee, select{
 	outline:none;
 }
 .font_gray_33{
@@ -4796,6 +4796,18 @@ span.pagination{
 }
 .modal_course .ant-row .ant-col-4{
 	text-align:center
+}
+select.course_n{
+    background: transparent;
+    width: 83%;
+    border-color: #d9d9d9;
+    height: 28px;
+}
+select.course_n:hover{
+    background: transparent;
+    width: 83%;
+    border-color: #51c5fa;
+    height: 28px;
 }
 .modal_course .ant-radio-group .ant-row{
 	margin:10px 0;
