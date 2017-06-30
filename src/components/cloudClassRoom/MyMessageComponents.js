@@ -26,7 +26,7 @@ const MyMessageComponents = React.createClass({
     queryPageByTeamＵser(pageNo,status){
         var _this = this;
         var param = {
-            "method": 'queryPageByTeamＵser',
+            "method": 'queryPageByTeamUser',
             "pageNo": pageNo,
             "status":status,
             "personId":_this.state.cloudClassRoomUser.colUid
