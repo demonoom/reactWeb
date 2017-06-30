@@ -38,6 +38,7 @@ const CreateClassComponents = React.createClass({
         this.getAllSubject();
         this.findTeamByUserId();
         var isSeries = this.props.isSeries;
+        this.setState({isSeries});
         courseInfoJson={isPublish:2,isSeries:2,publisher_id:this.state.cloudClassRoomUser.colUid,isFree:1,money:0};
         this.initCreatePage(isSeries);
     },
@@ -45,7 +46,7 @@ const CreateClassComponents = React.createClass({
     componentWillReceiveProps(nextProps){
         var isSeries = nextProps.isSeries;
         var stepDirect = nextProps.stepDirect;
-        this.setState({stepDirect});
+        this.setState({stepDirect,isSeries});
         this.initCreatePage(isSeries);
     },
 
@@ -424,6 +425,9 @@ const CreateClassComponents = React.createClass({
         }else if(isEmpty(courseInfoJson.startTime) ||　isEmpty(courseInfoJson.endTime)){
             message.error("请选择授课时间");
             checkResult=false;
+        }else if(this.state.isSeries==2 && courseInfoJson.startTime != courseInfoJson.endTime){
+            message.error("单节课的授课时间只能在一天范围内");
+            checkResult = false;
         }else if(isEmpty(courseInfoJson.videoNum)){
             message.error("请输入总课时");
             checkResult=false;

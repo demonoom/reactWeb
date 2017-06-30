@@ -39,33 +39,34 @@ const AntTeamComponents = React.createClass({
     componentDidMount(){
         var type = this.props.type;
         this.setState({type});
-        this.findTeamInfoByType(type);
+        this.findTeamInfoByType(type,this.state.currentPage);
     },
 
     componentWillReceiveProps(nextProps){
         var type = nextProps.type;
-        this.setState({type});
-        this.findTeamInfoByType(type,nextProps.teamSearchKey);
+        this.setState({type,"teamSearchKey":nextProps.teamSearchKey});
+        this.findTeamInfoByType(type,this.state.currentPage,nextProps.teamSearchKey);
     },
 
-    findTeamInfoByType(type,teamSearchKey){
+    findTeamInfoByType(type,pageNo,teamSearchKey){
         var _this = this;
         switch(type){
             case "myTeam":
-                _this.findTeamByUserId(teamSearchKey);
+                _this.findTeamByUserId(pageNo,teamSearchKey);
                 break;
             case "allTeam":
-                _this.findTeam(teamSearchKey);
+                _this.findTeam(pageNo,teamSearchKey);
                 break;
         }
     },
 
-    findTeamByUserId(teamSearchKey){
+    findTeamByUserId(pageNo,teamSearchKey){
         var _this = this;
         var param = {
             "method": 'findTeamByUserId',
             "id": _this.state.cloudClassRoomUser.colUid,
-            "name":''
+            "name":'',
+            "pageNo":pageNo
         };
         if(isEmpty(teamSearchKey)==false){
             param.name=teamSearchKey;
@@ -73,7 +74,16 @@ const AntTeamComponents = React.createClass({
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                _this.buildTeamListByResponse(response);
+                var pager = ret.pager;
+                teamTableData.splice(0);
+                if(isEmpty(pager)==false){
+                    _this.setState({total:pager.rsCount});
+                }
+                if(isEmpty(response)==false){
+                    _this.buildTeamListByResponse(response);
+                }else{
+                    _this.setState({teamTableData});
+                }
             },
             onError: function (error) {
                 message.error(error);
@@ -81,11 +91,12 @@ const AntTeamComponents = React.createClass({
         });
     },
 
-    findTeam(teamSearchKey){
+    findTeam(pageNo,teamSearchKey){
         var _this = this;
         var param = {
             "method": 'findTeam',
-            "name":''
+            "name":'',
+            "pageNo":pageNo
         };
         if(isEmpty(teamSearchKey)==false){
             param.name=teamSearchKey;
@@ -93,7 +104,16 @@ const AntTeamComponents = React.createClass({
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                _this.buildTeamListByResponse(response);
+                var pager = ret.pager;
+                teamTableData.splice(0);
+                if(isEmpty(pager)==false){
+                    _this.setState({total:pager.rsCount});
+                }
+                if(isEmpty(response)==false){
+                    _this.buildTeamListByResponse(response);
+                }else{
+                    _this.setState({teamTableData});
+                }
             },
             onError: function (error) {
                 message.error(error);
@@ -104,16 +124,26 @@ const AntTeamComponents = React.createClass({
     /**
      * 查询我创建的团队
      */
-    findTeamByManager(){
+    findTeamByManager(pageNo){
         var _this = this;
         var param = {
             "method": 'findTeamByManager',
             "userId": _this.state.cloudClassRoomUser.colUid,
+            "pageNo":pageNo
         };
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                _this.buildTeamListByResponse(response);
+                var pager = ret.pager;
+                teamTableData.splice(0);
+                if(isEmpty(pager)==false){
+                    _this.setState({total:pager.rsCount});
+                }
+                if(isEmpty(response)==false){
+                    _this.buildTeamListByResponse(response);
+                }else{
+                    _this.setState({teamTableData});
+                }
             },
             onError: function (error) {
                 message.error(error);
@@ -123,16 +153,26 @@ const AntTeamComponents = React.createClass({
     /**
      * 查询我加入的团队
      */
-    findMyJoinTeam(){
+    findMyJoinTeam(pageNo){
         var _this = this;
         var param = {
             "method": 'findMyJoinTeam',
             "userId": _this.state.cloudClassRoomUser.colUid,
+            "pageNo":pageNo
         };
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                _this.buildTeamListByResponse(response);
+                var pager = ret.pager;
+                teamTableData.splice(0);
+                if(isEmpty(pager)==false){
+                    _this.setState({total:pager.rsCount});
+                }
+                if(isEmpty(response)==false){
+                    _this.buildTeamListByResponse(response);
+                }else{
+                    _this.setState({teamTableData});
+                }
             },
             onError: function (error) {
                 message.error(error);
@@ -145,7 +185,6 @@ const AntTeamComponents = React.createClass({
         // var responseRows=response.rows;
         var _this = this;
         var total = response.length;
-        teamTableData.splice(0);
         response.forEach(function (team) {
             var requestAddBtn;
             var isAtThisTeam=false;
@@ -300,16 +339,20 @@ const AntTeamComponents = React.createClass({
             teamTypeFliterValue: e.target.value,
         });
         if(e.target.value==0){
-            this.findTeamByManager();
+            this.findTeamByManager(1);
         }else{
-            this.findMyJoinTeam();
+            this.findMyJoinTeam(1);
         }
     },
 
-
-
     onTeamPageChange(page){
-        // this.getUserChatGroupById(page);
+        if(this.state.teamTypeFliterValue == 0){
+            this.findTeamByManager(page);
+        }else if(this.state.teamTypeFliterValue == 1){
+            this.findMyJoinTeam(page);
+        }else{
+            this.findTeamInfoByType(this.state.type,page,this.state.teamSearchKey);
+        }
         this.setState({
             currentPage: page,
         });
@@ -531,7 +574,7 @@ const AntTeamComponents = React.createClass({
                     <Table className="details table_team"
                            scroll={{ x: true, }} columns={userTeamColumns} showHeader={false}
                            dataSource={this.state.userTeamData}
-                     pagination={{ total:this.state.totalCount,
+                     pagination={{ total:this.state.total,
                       pageSize: getPageSize(),onChange:this.onTeamPageChange }}/> 
 				</div>
                 <Modal

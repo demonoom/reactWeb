@@ -15,6 +15,12 @@ class ConfirmModal extends React.Component{
         this.changeConfirmModalVisible = this.changeConfirmModalVisible.bind(this);
     }
 
+    componentWillReceiveProps(nextProps){
+        var title = nextProps.title;
+        this.setState({content:title});
+        this.changeConfirmModalVisible = this.changeConfirmModalVisible.bind(this);
+    }
+
     /**
      * 设置窗口的显示和关闭
      * @param isShow
