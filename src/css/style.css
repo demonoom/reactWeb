@@ -4840,7 +4840,7 @@ span.pagination{
 }
 .price{
 	background:#f9f9f9;
-	padding:8px;
+	padding:8px !important;
 	margin: 6px 0;
 }
 .price_between{
@@ -4989,17 +4989,22 @@ span.pagination{
 }
 .info_name{
 	color:#598AC7;
-	margin-right:24px;
+	margin-right:8px;
 }
 .info_btn{
 	width:150px;
 	float:right;
-	text-align:right
+	text-align:right;
+	margin-top:22px;
 }
 .info_school{
 	color:#333;
-	padding:4px 0;
+	padding:0 0 4px 0;
+	margin-right:8px
 }
+.info_school_s{
+	margin-right:8px;
+	}
 .apply_for{
 	font-size:14px;
 	color:#666
