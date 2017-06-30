@@ -26,8 +26,9 @@ const AntCloudClassRoomComponents = React.createClass({
         var _this = this;
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         var param = {
-            "method": 'findUserByAccount',
-            "account": loginUser.colAccount,
+            "method": 'AntLogin',
+            "colAccount": loginUser.colAccount,
+            "colPasswd": sessionStorage.getItem("loginPassword"),
         };
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
