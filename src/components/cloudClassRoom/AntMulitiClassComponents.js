@@ -61,51 +61,27 @@ const AntMulitiClassComponents = React.createClass({
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                var total = ret.total;
+                var pager = ret.pager;
                 cardArray.splice(0);
-                response.forEach(function (course) {
-                    _this.buildEveryCard(course,cardArray);
-                });
-                _this.setState({cardArray,totalCount:total});
+                if(isEmpty(response)==false){
+                    response.forEach(function (course) {
+                        _this.buildEveryCard(course,cardArray);
+                    });
+                }else {
+                    var cardObj = <Card className="noDataTipImg">
+                        <div>
+                            <Icon type="frown-o" /><span>&nbsp;&nbsp;暂无数据</span>
+                        </div>
+                    </Card>;
+                    cardArray.push(cardObj);
+                }
+                _this.setState({cardArray,total:pager.rsCount});
             },
             onError: function (error) {
                 message.error(error);
             }
         });
     },
-
-    /*getCourseList(pageNo,whereJson){
-        var _this = this;
-        var requestUrl = getCloudClassRoomRequestURL("courseList");
-        var requestType ="POST";
-        var propertyJson={
-            "numPerPage": getPageSize(),
-            "currentPage": pageNo
-        };
-        if(typeof(whereJson)!="undefined" ){
-            propertyJson.where=JSON.stringify(whereJson);
-        }
-        cloudClassRoomRequestByAjax(requestUrl,propertyJson,requestType, {
-            onResponse: function (ret) {
-                if (ret.meta.success == true && ret.meta.message=="ok") {
-                    message.success("成功");
-                    var response=ret.data;
-                    var total = response.total;
-                    var responseRows=response.rows;
-                    var cardArray = [];
-                    responseRows.forEach(function (row) {
-                        _this.buildEveryCard(row,cardArray);
-                    });
-                    _this.setState({cardArray,totalCount:total});
-                } else {
-                    message.error("失败");
-                }
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });
-    },*/
 
     buildEveryCard(row,cardArray){
         var _this = this;
@@ -130,23 +106,10 @@ const AntMulitiClassComponents = React.createClass({
         var firstLiveTime;
         if(isEmpty(videosArray)==false){
             firstLiveTime = formatNoSecond(videosArray[0].liveTime);
-            /*videosArray.forEach(function (video) {
-                var liveTimeStr = getLocalTime(video.liveTime);
-                var videoLi = <li className="course_section_info">
-						<span className="name">{video.name}</span>
-                    	<span className="cont">{video.user.userName}</span>
-                    	<span className="time1">{liveTimeStr}</span>
-                </li>;
-                videoLiTagArray.push(videoLi);
-            });*/
         }
         var isPublish = row.isPublish;
         var isPublishStr;
         var optButtons;
-        {/*<Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,id)}></Button></Col>
-        <Col span={24}><Button icon="rollback" className="exam-particulars_title" title="撤回" onClick={_this.withDrawClass.bind(_this,id)}></Button></Col>
-        <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,id)}></Button></Col>
-        <Col span={24}><Button icon="check-circle-o" className="exam-particulars_title" title="发布" onClick={_this.publishClass.bind(_this,id)}></Button></Col>*/}
         switch(isPublish){
             case "1":
                 isPublishStr="已发布";
@@ -203,16 +166,6 @@ const AntMulitiClassComponents = React.createClass({
                         <Col span={24}><span className="series_gray_le">开始时间：</span><span className="series_gray_ri">{startTime}</span></Col>
                         <Col span={24}><span className="series_gray_le">结束时间：</span><span className="series_gray_ri">{endTime}</span></Col>
                         <Col span={24}><span className="series_gray_le">排课时间：</span><span className="series_gray_ri">{firstLiveTime}
-                            {/*<ul>
-                                <li  className="course_section">
-                                    <div className="course_section_title">
-                                        <span className="name">章节名称</span>
-                                        <span className="cont">授课老师</span>
-                                        <span className="time1">授课时间</span>
-                                    </div>
-                                </li>
-                                {videoLiTagArray}
-                            </ul>*/}
                         </span></Col>
                         <Col span={24}><span className="series_gray_le">课程概述：</span><span className="series_gray_ri">{content}</span></Col>
                 </Row>
@@ -517,12 +470,6 @@ const AntMulitiClassComponents = React.createClass({
             ];
         }
 
-        /*[
-            <Button onClick={this.changeStep.bind(this,"pre","update")}>上一步</Button>,
-            <Button onClick={this.changeStep.bind(this,"next","update")}>下一步</Button>,
-            <Button onClick={this.saveClassInfo.bind(this,"update")}>提交</Button>,
-            <Button onClick={this.updateClassModalHandleCancel}>关闭</Button>
-        ]*/
         return (
             <div className="favorite_scroll series_courses">
 			<div className="clearfix">
@@ -538,7 +485,7 @@ const AntMulitiClassComponents = React.createClass({
                 	</div>
                 </div>
                 
-				<Pagination total={this.state.totalCount} pageSize={getPageSize()} current={this.state.currentPage}
+				<Pagination total={this.state.total} pageSize={getPageSize()} current={this.state.currentPage}
                                 onChange={this.pageOnChange}/>
 				</div>
                 <Modal className="modal_course" title="创建课程" visible={this.state.createClassModalVisible}
