@@ -4964,12 +4964,36 @@ select.course_n:hover{
 .course_section_info span.time1{
 	font-size:12px
 }
+.table_team .ant-table-body{
+	width:100%;
+	overflow-x:hidden;
+}
+.table_team .ant-table-scroll table{
+	width:100%;
+	}
+.table_team .ant-table-scroll table tr{
+	width:100%;
+	}
 .table_team .ant-table-tbody > tr > td:first-child{
-	width: 50px;
+	width: 70px;
 	padding-left: 24px !important;
 }
 .table_team .ant-table-tbody > tr > td {
     padding: 8px !important;
+}
+.table_team table tr td{
+	height:55px;
+	line-height: 38px;
+}
+.table_team table tr td:nth-child(2) {
+    width: calc(100% - 370px);
+	overflow:hidden;
+	text-overflow:ellipsis;
+	-o-text-overflow:ellipsis;
+	-webkit-text-overflow:ellipsis;
+	-moz-text-overflow:ellipsis;
+	white-space:nowrap;
+	padding-right:20px !important;
 }
 .table_team table tr td:nth-child(3) {
     text-align: left;
