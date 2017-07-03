@@ -17,6 +17,7 @@ var lessonArray=[];
 var courseInfoJson;
 var videoJsonArray=[];
 var teamJsonArray=[];
+var firstTeamId;
 const CreateClassComponents = React.createClass({
 
     getInitialState() {
@@ -158,6 +159,9 @@ const CreateClassComponents = React.createClass({
                     var teamJson={};
                     var teamInfo = response[i];
                     var id = teamInfo.id;
+                    if(i==0){
+                        firstTeamId = id;
+                    }
                     var name = teamInfo.name;
                     var status = teamInfo.status;
                     var users = teamInfo.users;
@@ -255,12 +259,12 @@ const CreateClassComponents = React.createClass({
         var teamDisabled;
         if(isTeam==1){
             //发布者ＩＤ 单人授课时为人员id　团队授课时为团队id
-            courseInfoJson.publisherId=this.state.cloudClassRoomUser.colUid;
+            courseInfoJson.publisher_id=this.state.cloudClassRoomUser.colUid;
             courseInfoJson.publishType=2;
             isSeriesDisabled=false;
             teamDisabled=true;
         }else{
-            courseInfoJson.publisherId="";
+            courseInfoJson.publisher_id=firstTeamId;
             courseInfoJson.publishType=1;
             isSeriesDisabled=true;
             teamDisabled=false;
@@ -304,7 +308,7 @@ const CreateClassComponents = React.createClass({
     teamSelectOnChange(value) {
         console.log(`teamSelectOnChange selected ${value}`);
         //团队授课时,发布者为团队id
-        courseInfoJson.publisherId=value;
+        courseInfoJson.publisher_id=value;
         this.getTeamUserOptions(value);
         this.setState({"teamId":value,defaultTeamSelected:value});
     },

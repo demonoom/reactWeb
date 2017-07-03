@@ -4,6 +4,7 @@ import AntMulitiClassComponents from './AntMulitiClassComponents';
 import AntTeamComponents from './AntTeamComponents';
 import MyMessageComponents from './MyMessageComponents';
 import {doWebService_CloudClassRoom} from '../../utils/CloudClassRoomURLUtils';
+import RecommendComponents from './RecommendComponents';
 
 const AntCloudClassRoomComponents = React.createClass({
 
@@ -106,6 +107,11 @@ const AntCloudClassRoomComponents = React.createClass({
                 topButton = "";
                 leftBtn = "";
                 tabPanel = <MyMessageComponents ref="myMessageComponents"></MyMessageComponents>;
+                break;
+            case "recommend":
+                topButton = "";
+                leftBtn = "";
+                tabPanel = <RecommendComponents ref="recommendComponents"></RecommendComponents>;
                 break;
         }
 
