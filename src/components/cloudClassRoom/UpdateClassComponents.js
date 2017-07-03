@@ -577,9 +577,6 @@ const UpdateClassComponents = React.createClass({
         }else if(courseInfoJson.classTypeOnChange==2 && isEmpty(this.state.teamId)){
             message.error("团队授课时,请选择团队名称");
             checkResult=false;
-        }else if(isEmpty(courseInfoJson.startTime) ||　isEmpty(courseInfoJson.endTime)){
-            message.error("请选择授课时间");
-            checkResult=false;
         }else if(isEmpty(courseInfoJson.videoNum)){
             message.error("请输入总课时");
             checkResult=false;
@@ -587,6 +584,10 @@ const UpdateClassComponents = React.createClass({
             message.error("请至少输入一次授课课表");
             checkResult=false;
         }
+        /*else if(isEmpty(courseInfoJson.startTime) ||　isEmpty(courseInfoJson.endTime)){
+            message.error("请选择授课时间");
+            checkResult=false;
+        }*/
         return checkResult;
     },
 
@@ -845,13 +846,13 @@ const UpdateClassComponents = React.createClass({
                         </RadioGroup>
                     </Col>
                 </Row>
-                <Row>
+               {/* <Row>
                     <Col span={4}>授课时间：</Col>
                     <Col span={18}>
                         <RangePicker defaultValue={this.state.classTimeRange} value={this.state.classTimeRange}
                                      format={dateFormat} onChange={this.classTimeOnChange} />
                     </Col>
-                </Row>
+                </Row>*/}
                 <Row>
                     <Col span={4}>课程封面：</Col>
                     <Col span={18}>
