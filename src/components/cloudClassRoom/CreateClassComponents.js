@@ -67,6 +67,7 @@ const CreateClassComponents = React.createClass({
             videoNumInputDisable=true;
         }
         courseInfoJson.videoNum=videoNum;
+        courseInfoJson.videos=[];
         this.setState({isSeries,isSeriesStr,videoNumInputDisable,videoNum});
         // this.getAllTeam();
     },
@@ -150,6 +151,8 @@ const CreateClassComponents = React.createClass({
         var param = {
             "method": 'findTeamByUserId',
             "id": JSON.parse(sessionStorage.getItem("cloudClassRoomUser")).colUid,
+            "pageNo":'',
+            "name":''
         };
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {

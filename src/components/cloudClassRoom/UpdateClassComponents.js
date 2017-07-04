@@ -280,6 +280,8 @@ const UpdateClassComponents = React.createClass({
         var param = {
             "method": 'findTeamByUserId',
             "id": JSON.parse(sessionStorage.getItem("cloudClassRoomUser")).colUid,
+            "pageNo":'',
+            "name":''
         };
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {

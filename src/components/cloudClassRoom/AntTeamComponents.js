@@ -195,7 +195,7 @@ const AntTeamComponents = React.createClass({
                     }
                 });
             }
-            if(isAtThisTeam==false){
+            if(isAtThisTeam==false && team.manager != _this.state.cloudClassRoomUser.colUid){
                 requestAddBtn = <Button style={{ }} type=""  value={team.id} onClick={_this.showAddTeamModal.bind(_this,team)}  icon="plus-circle-o" title="申请加入" className="score3_i"></Button>;
             }else{
                 requestAddBtn="";

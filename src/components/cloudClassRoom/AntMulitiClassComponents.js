@@ -102,6 +102,7 @@ const AntMulitiClassComponents = React.createClass({
         var startTime = formatYMD(row.startTime);
         var endTime = formatYMD(row.endTime);
         var videosArray = row.videos;
+        var studentNum = row.studentNum;
         var videoLiTagArray=[];
         var firstLiveTime;
         if(isEmpty(videosArray)==false){
@@ -113,12 +114,18 @@ const AntMulitiClassComponents = React.createClass({
         switch(isPublish){
             case "1":
                 isPublishStr="已发布";
-                optButtons=<div>
+                if(studentNum==0){
+                    optButtons=<div>
+                        <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,row)}></Button></Col>
+                        <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
+                        <Col span={24}><Button icon="rollback" className="exam-particulars_title" title="撤回" onClick={_this.showConfirmDrwaModal.bind(_this,id)}></Button></Col>
+                    </div>;
+                }else{
+                    optButtons=<div>
+                        <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
+                    </div>;
+                }
 
-                    <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,row)}></Button></Col>
-                    <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
-                    <Col span={24}><Button icon="rollback" className="exam-particulars_title" title="撤回" onClick={_this.showConfirmDrwaModal.bind(_this,id)}></Button></Col>
-                </div>;
                 break;
             case "2":
                 isPublishStr="未发布";
