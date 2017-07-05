@@ -67,6 +67,7 @@ const CreateClassComponents = React.createClass({
             videoNumInputDisable=true;
         }
         courseInfoJson.videoNum=videoNum;
+        videoJsonArray=[];
         courseInfoJson.videos=[];
         this.setState({isSeries,isSeriesStr,videoNumInputDisable,videoNum});
         // this.getAllTeam();
@@ -292,6 +293,7 @@ const CreateClassComponents = React.createClass({
         }else{
             moneyInputDisable = false;
         }
+        courseInfoJson.isFree=isFree;
         this.setState({
             isFree: isFree,moneyInputDisable,money:courseInfoJson.money
         });
@@ -480,6 +482,19 @@ const CreateClassComponents = React.createClass({
             videoJson.userID =teacher;
             videoJson.liveTime = new Date(time).valueOf();
             this.buildVideosArray(videoJson);
+        }
+        if(isEmpty(courseInfoJson.videos)==false){
+            var checkResult=true;
+            courseInfoJson.videos.forEach(function (video) {
+                if(isEmpty(video.name) || isEmpty(video.userID) || isEmpty(video.liveTime) || isNaN(video.liveTime)){
+                    checkResult=false;
+                    return;
+                }
+            })
+            if(checkResult==false){
+                message.error("排课课表中存在空值,请检查");
+                return;
+            }
         }
         this.addCourse();
     },

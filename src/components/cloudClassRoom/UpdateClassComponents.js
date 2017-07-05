@@ -163,7 +163,7 @@ const UpdateClassComponents = React.createClass({
                 </Col>;
                 var teacherObj;
                 if(isTeam==1) {
-                    teacherObj = <span>{this.state.cloudClassRoomUser.userName}</span>;
+                    teacherObj = <span>{_this.state.cloudClassRoomUser.userName}</span>;
                 }else{
                     teacherObj = <Col span={4}>
                         <select className="lessonTeamTeacher course_n">
@@ -628,6 +628,19 @@ const UpdateClassComponents = React.createClass({
             videoJson.userID =teacher;
             videoJson.liveTime = new Date(time).valueOf();
             this.buildVideosArray(videoJson);
+        }
+        if(isEmpty(courseInfoJson.videos)==false){
+            var checkResult=true;
+            courseInfoJson.videos.forEach(function (video) {
+                if(isEmpty(video.name) || isEmpty(video.userID) || isEmpty(video.liveTime) || isNaN(video.liveTime)){
+                    checkResult=false;
+                    return;
+                }
+            })
+            if(checkResult==false){
+                message.error("排课课表中存在空值,请检查");
+                return;
+            }
         }
         this.updateCourse();
     },
