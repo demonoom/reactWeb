@@ -1,11 +1,11 @@
 /**
  * Created by devnote on 16-12-2.
  */
-var isDebug=true;
-var domain=isDebug?"192.168.1.12":"www.maaee.com";
+var isDebug=false;
+var domain=isDebug?"192.168.1.12:8080":"www.maaee.com";
 var port = "8080";
 var baseURL="http://"+domain+":"+port+"/elearning/";
-var webserviceURL="http://"+domain+":"+port+"/elearning/elearningControl/";
+var webserviceURL="http://"+domain+"/elearning/elearningControl/";
 //课程分页列表url
 var courseListURL=baseURL+"course/list";
 //添加课程url

@@ -14,7 +14,7 @@ const RadioGroup = Radio.Group;
 const { RangePicker } = DatePicker;
 
 var lessonArray=[];
-var courseInfoJson;
+var courseInfoJson={};
 var videoJsonArray=[];
 var teamJsonArray=[];
 var firstTeamId;
@@ -76,7 +76,7 @@ const CreateClassComponents = React.createClass({
         this.setState({isSeries,isSeriesStr,videoNumInputDisable,videoNum,
         "courseName":'',"isFree":1,"money":0,"defaultSubjectSelected":"",
             "defaultSelected":'',"isTeam":1,"defaultTeamSelected":'',
-        "courseSummary":''});
+        "courseSummary":'',"moneyInputDisable":true});
         // this.getAllTeam();
     },
     /**
