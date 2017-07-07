@@ -4,7 +4,7 @@
 var isDebug=false;
 var domain=isDebug?"192.168.1.12:8080":"www.maaee.com";
 var port = "8080";
-var baseURL="http://"+domain+":"+port+"/elearning/";
+var baseURL="http://"+domain+"/elearning/";
 var webserviceURL="http://"+domain+"/elearning/elearningControl/";
 //课程分页列表url
 var courseListURL=baseURL+"course/list";
