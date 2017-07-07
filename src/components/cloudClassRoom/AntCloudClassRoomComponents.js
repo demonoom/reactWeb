@@ -27,7 +27,7 @@ const AntCloudClassRoomComponents = React.createClass({
         var _this = this;
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         var param = {
-            "method": 'AntLogin',
+            "method": 'AntTeacherLogin',
             "colAccount": loginUser.colAccount,
             "colPasswd": sessionStorage.getItem("loginPassword"),
         };

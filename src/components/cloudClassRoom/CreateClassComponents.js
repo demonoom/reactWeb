@@ -425,14 +425,19 @@ const CreateClassComponents = React.createClass({
         }else if(isEmpty(courseInfoJson.courseClass)){
             message.error("请选择授课年级");
             checkResult=false;
-        }else if(courseInfoJson.classTypeOnChange==1 && isEmpty(isSeries)){
+        }
+        /*else if(this.state.isTeam==1 && isEmpty(isSeries)){
             message.error("单人授课时,请选择课程类型");
             checkResult=false;
-        }else if(courseInfoJson.classTypeOnChange==2 && isEmpty(this.state.teamId)){
+        }*/
+        else if(this.state.isTeam==2 && isEmpty(this.state.teamId)){
             message.error("团队授课时,请选择团队名称");
             checkResult=false;
         }else if(this.state.isSeries==2 && courseInfoJson.startTime != courseInfoJson.endTime){
             message.error("单节课的授课时间只能在一天范围内");
+            checkResult = false;
+        }else if(isEmpty(courseInfoJson.image)){
+            message.error("请选择课程封面");
             checkResult = false;
         }else if(isEmpty(courseInfoJson.videoNum)){
             message.error("请输入总课时");
