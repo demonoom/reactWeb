@@ -113,6 +113,11 @@ const AntCloudClassRoomComponents = React.createClass({
                 leftBtn = "";
                 tabPanel = <RecommendComponents ref="recommendComponents"></RecommendComponents>;
                 break;
+            default:
+                topButton = createClassBtn;
+                leftBtn = "";
+                tabPanel = <AntMulitiClassComponents ref="antMulitiClassComponents" isSeries="1"></AntMulitiClassComponents>;
+                break;
         }
 
         toolbar = <h3 className={" public—til—blue"}>{this.state.activeKey}

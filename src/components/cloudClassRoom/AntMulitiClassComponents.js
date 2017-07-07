@@ -122,7 +122,7 @@ const AntMulitiClassComponents = React.createClass({
                 isPublishStr="已发布";
                 if(studentNum==0){
                     optButtons=<div>
-                        <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,row)}></Button></Col>
+                        {/*<Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,row)}></Button></Col>*/}
                         <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
                         <Col span={24}><Button icon="rollback" className="exam-particulars_title" title="撤回" onClick={_this.showConfirmDrwaModal.bind(_this,id)}></Button></Col>
                     </div>;

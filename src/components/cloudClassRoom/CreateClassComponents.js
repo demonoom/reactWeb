@@ -72,6 +72,7 @@ const CreateClassComponents = React.createClass({
         courseInfoJson.publishType=2;
         courseInfoJson.isPublish=2;
         courseInfoJson.publisher_id=2;
+        courseInfoJson.money=0;
         this.setState({isSeries,isSeriesStr,videoNumInputDisable,videoNum,
         "courseName":'',"isFree":1,"money":0,"defaultSubjectSelected":"",
             "defaultSelected":'',"isTeam":1,"defaultTeamSelected":'',
@@ -239,6 +240,7 @@ const CreateClassComponents = React.createClass({
             }
         });
         _this.initCreatePage(this.state.isSeries);
+        _this.changeStep("pre");
     },
 
     /**
@@ -434,6 +436,9 @@ const CreateClassComponents = React.createClass({
         if(isEmpty(courseInfoJson.courseName)){
             message.error("请输入课程名称");
             checkResult=false;
+        }else if(courseInfoJson.courseName.length>35){
+            message.error("课程名称不能超过35个字符");
+            checkResult=false;
         }else if(courseInfoJson.isFree==2 && courseInfoJson.money==0){
             message.error("收费课程请输入课程费用");
             checkResult=false;
@@ -547,6 +552,10 @@ const CreateClassComponents = React.createClass({
             target = e.target;
         }
         var courseName = target.value;
+        if(courseName.length>35) {
+            message.error("课程名称不能超过35个字符");
+            return;
+        }
         this.setState({courseName});
         courseInfoJson.courseName=courseName;
     },

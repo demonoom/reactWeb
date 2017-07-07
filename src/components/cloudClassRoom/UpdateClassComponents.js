@@ -60,6 +60,8 @@ const UpdateClassComponents = React.createClass({
         /*if(isEmpty(updateClassObj)==false){
             this.initPageInfo(updateClassObj);
         }*/
+        this.getAllClass();
+        this.getAllSubject();
     },
 
     initPageInfo(updateClassObj){
@@ -127,7 +129,7 @@ const UpdateClassComponents = React.createClass({
         _this.setState({
             updateId:updateClassObj.id,
             courseName,isFree,money,
-            defaultSubjectSelected:courseTypeId,
+            // defaultSubjectSelected:,
             defaultSelected:courseClass,
             publishType,
             defaultTeamSelected:publisher_id,
@@ -212,6 +214,9 @@ const UpdateClassComponents = React.createClass({
                         var name = classInfo.name;
                         var optionObj = <Option key={id} value={id}>{name}</Option>;
                         classOptionArray.push(optionObj);
+                        if(id == courseInfoJson.courseClass){
+                            _this.setState({"defaultSelected":name});
+                        }
                     }
                     _this.setState({classOptionArray});
                 } else {
@@ -243,6 +248,9 @@ const UpdateClassComponents = React.createClass({
                         var name = subjectInfo.name;
                         var optionObj = <Option key={id} value={id}>{name}</Option>;
                         subjectOptionArray.push(optionObj);
+                        if(id == courseInfoJson.courseTypeId){
+                            _this.setState({defaultSubjectSelected:name});
+                        }
                     }
                     _this.setState({subjectOptionArray});
                 } else {
@@ -820,7 +828,7 @@ const UpdateClassComponents = React.createClass({
                 <Row>
                     <Col span={4}>课程科目：</Col>
                     <Col span={18}>
-                        <Select defaultValue={this.state.defaultSubjectSelected} value={this.state.defaultSubjectSelected} style={{ width: 120 }} onChange={this.courseSelectOnChange}>
+                        <Select defaultValue={[this.state.defaultSubjectSelected]} value={this.state.defaultSubjectSelected} style={{ width: 120 }} onChange={this.courseSelectOnChange}>
                             {this.state.subjectOptionArray}
                         </Select>
                     </Col>
