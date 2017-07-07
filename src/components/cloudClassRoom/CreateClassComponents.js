@@ -71,7 +71,7 @@ const CreateClassComponents = React.createClass({
         courseInfoJson.isSeries = isSeries;
         courseInfoJson.publishType=2;
         courseInfoJson.isPublish=2;
-        courseInfoJson.publisher_id=2;
+        courseInfoJson.publisher_id=this.state.cloudClassRoomUser.colUid;
         courseInfoJson.money=0;
         this.setState({isSeries,isSeriesStr,videoNumInputDisable,videoNum,
         "courseName":'',"isFree":1,"money":0,"defaultSubjectSelected":"",
