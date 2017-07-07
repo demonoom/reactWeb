@@ -165,7 +165,7 @@ const UpdateClassComponents = React.createClass({
                 if(isTeam==1) {
                     teacherObj = <span>{_this.state.cloudClassRoomUser.userName}</span>;
                 }else{
-                    teacherObj = <Col span={4}>
+                    teacherObj = <Col span={24}>
                         <select className="lessonTeamTeacher course_n">
                             {_this.state.teamUserOptionArray}
                         </select>
@@ -895,7 +895,7 @@ const UpdateClassComponents = React.createClass({
                     var lessonRowObj = <Row>
                         <Col span={4}>第{lessonJson.lessonNum}课时</Col>
                         {lessonJson.videoNameObj}
-                        {lessonJson.teacherObj}
+                        <Col span={4}> {lessonJson.teacherObj}</Col>
                         {lessonJson.timeObj}
                         <Col span={4}>
                             <Button icon="delete" onClick={this.removeLesson.bind(this,lessonJson.lessonNum)}></Button>
