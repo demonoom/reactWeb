@@ -73,6 +73,7 @@ const CreateClassComponents = React.createClass({
         courseInfoJson.isPublish=2;
         courseInfoJson.publisher_id=this.state.cloudClassRoomUser.colUid;
         courseInfoJson.money=0;
+        courseInfoJson.isFree=1;
         this.setState({isSeries,isSeriesStr,videoNumInputDisable,videoNum,
         "courseName":'',"isFree":1,"money":0,"defaultSubjectSelected":"",
             "defaultSelected":'',"isTeam":1,"defaultTeamSelected":'',
@@ -228,8 +229,7 @@ const CreateClassComponents = React.createClass({
             onResponse: function (ret) {
                 if (ret.meta.success == true && ret.meta.message=="ok") {
                     message.success("成功");
-                    var response=ret.data;
-
+                    // var response=ret.data;
                 } else {
                     message.error("失败");
                 }
