@@ -2692,6 +2692,12 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 .ant-menu-item-selected .icon_gongpin{
 	background-position: 0 -550px;
 }
+.icon_cloud{
+	background-position: 0 -600px;
+}
+.ant-menu-item-selected .icon_cloud{
+	background-position: 0 -650px;
+}
 .person_13{
 	font-size:16px !important;
 }
@@ -5056,4 +5062,7 @@ select.course_n:hover{
 	height:460px;
 	overflow-y:auto;
 	overflow-x:hidden;
+}
+.modal_cloud_info{
+	padding:15px;
 }

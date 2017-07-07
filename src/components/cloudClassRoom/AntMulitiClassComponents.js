@@ -236,37 +236,37 @@ const AntMulitiClassComponents = React.createClass({
                     <img alt="example" width="100%" src={classObj.image} />
                 </Col>
                 <Col span={24}>
-                    <Row>
-                        <Row>
+                    <Row className="modal_cloud_info">
+                        <Row className="upexam_botom_ma">
                             <Col span={21} className="font_gray_33">{classObj.courseName}</Col>
                             <Col span={3} className="series_recall right_ri" >{isPublishStr}</Col>
                         </Row>
-                        <Col span={24} className="price">
+                        <Col span={24} className="price ant-form-item">
 							<span className="c-jg price_between">￥{classObj.money}</span>
 							<span className="price_between gray_line"></span>
 							<span className=" price_between font-14">共{classObj.videoNum}课时</span>
 						</Col>
-                        <Col span={24}>
+                        <Col span={24} className="ant-form-item">
 							<span className="series_gray_le">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：</span>
 							<span className="series_gray_ri">{classObj.courseType.name}</span>
 						</Col>
-                        <Col span={24}>
+                        <Col span={24} className="ant-form-item">
 							<span className="series_gray_le">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span>
 							<span className="series_gray_ri">{classObj.courseType.name}</span>
 						</Col>
-                        <Col span={24}>
+                        <Col span={24} className="ant-form-item">
 							<span className="series_gray_le">主讲老师：</span>
                             <span className="series_gray_ri">{userSpanArray}</span>
                         </Col>
-                        <Col span={24}>
+                        <Col span={24} className="ant-form-item">
 							<span className="series_gray_le">开始时间：</span>
 							<span className="series_gray_ri">{startTime}</span>
 						</Col>
-                        <Col span={24}>
+                        <Col span={24} className="ant-form-item">
 							<span className="series_gray_le">结束时间：</span>
 							<span className="series_gray_ri">{endTime}</span>
 						</Col>
-                        <Col span={24}>
+                        <Col span={24} className="ant-form-item">
 							<span className="series_gray_le">排课时间：</span>
                             <ul>
                                 <li  className="course_section">
@@ -279,7 +279,7 @@ const AntMulitiClassComponents = React.createClass({
                                 {videoLiTagArray}
                             </ul>
                         </Col>
-                        <Col span={24}>
+                        <Col span={24} >
 							<span className="series_gray_le">课程概述：</span>
 							<span className="series_gray_ri">{classObj.content}</span>
 						</Col>

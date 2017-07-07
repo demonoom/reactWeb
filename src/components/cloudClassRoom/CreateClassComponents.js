@@ -358,7 +358,7 @@ const CreateClassComponents = React.createClass({
         if(this.state.isTeam==1) {
             teacherObj = <span>{this.state.cloudClassRoomUser.userName}</span>;
         }else{
-            teacherObj = <Col span={4}>
+            teacherObj = <Col span={24}>
                 <select className="lessonTeamTeacher course_n">
                     {/*<option value="1">a</option>
                      <option value="2">b</option>
