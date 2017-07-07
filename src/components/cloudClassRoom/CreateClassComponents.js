@@ -40,7 +40,7 @@ const CreateClassComponents = React.createClass({
         this.findTeamByUserId();
         var isSeries = this.props.isSeries;
         this.setState({isSeries});
-        courseInfoJson={isPublish:2,isSeries:2,publisher_id:this.state.cloudClassRoomUser.colUid,isFree:1,money:0};
+        // courseInfoJson={isPublish:2,isSeries:2,publisher_id:this.state.cloudClassRoomUser.colUid,isFree:1,money:0};
         this.initCreatePage(isSeries);
     },
 
@@ -48,28 +48,34 @@ const CreateClassComponents = React.createClass({
         var isSeries = nextProps.isSeries;
         var stepDirect = nextProps.stepDirect;
         this.setState({stepDirect,isSeries});
-        this.initCreatePage(isSeries);
+        // this.initCreatePage(isSeries);
     },
 
     initCreatePage(isSeries){
         lessonArray.splice(0);
-        courseInfoJson.isSeries = isSeries;
+        courseInfoJson={};
+
         var isSeriesStr;
         var videoNumInputDisable;
-        var videoNum;
+        var videoNum=0;
         if(isSeries=="1"){
             isSeriesStr="系列课";
-            videoNum="";
             videoNumInputDisable=false;
         }else{
             isSeriesStr="单节课";
-            videoNum=1;
             videoNumInputDisable=true;
         }
         courseInfoJson.videoNum=videoNum;
         videoJsonArray=[];
         courseInfoJson.videos=[];
-        this.setState({isSeries,isSeriesStr,videoNumInputDisable,videoNum});
+        courseInfoJson.isSeries = isSeries;
+        courseInfoJson.publishType=2;
+        courseInfoJson.isPublish=2;
+        courseInfoJson.publisher_id=2;
+        this.setState({isSeries,isSeriesStr,videoNumInputDisable,videoNum,
+        "courseName":'',"isFree":1,"money":0,"defaultSubjectSelected":"",
+            "defaultSelected":'',"isTeam":1,"defaultTeamSelected":'',
+        "courseSummary":''});
         // this.getAllTeam();
     },
     /**
@@ -232,6 +238,7 @@ const CreateClassComponents = React.createClass({
                 message.error(error);
             }
         });
+        _this.initCreatePage(this.state.isSeries);
     },
 
     /**
@@ -348,8 +355,14 @@ const CreateClassComponents = React.createClass({
      * 添加课程目录
      */
     addLesson(){
-        if(lessonArray.length >= courseInfoJson.videoNum){
+        /*if(lessonArray.length >= courseInfoJson.videoNum){
             message.error("排课次数已经达到授课总课时,无法新增");
+            return;
+        }*/
+        var videoNumBeforeAdd = this.state.videoNum;
+        if(this.state.isSeries=="2" && videoNumBeforeAdd==1){
+            //单节课
+            message.error("单节课只能排课一次,无法继续添加课程目录!");
             return;
         }
         var lessonNum = lessonArray.length+1;
@@ -380,7 +393,9 @@ const CreateClassComponents = React.createClass({
         </Col>;
         var lessonJson = {lessonNum,teacherObj,timeObj};
         lessonArray.push(lessonJson);
-        this.setState({lessonArray});
+        var newVideoNum = parseInt(videoNumBeforeAdd)+1
+        courseInfoJson.videoNum=newVideoNum;
+        this.setState({lessonArray,"videoNum":newVideoNum});
     },
 
     lessonTimeOnChange(value, dateString,Event) {
@@ -405,7 +420,10 @@ const CreateClassComponents = React.createClass({
                 lessonObj.lessonNum -= 1;
             }
         });
-        this.setState({lessonArray});
+        var videoNumBeforeRemove = this.state.videoNum;
+        var newVideoNum = parseInt(videoNumBeforeRemove)-1
+        courseInfoJson.videoNum=newVideoNum;
+        this.setState({lessonArray,"videoNum":newVideoNum});
     },
 
     /**
@@ -774,7 +792,7 @@ const CreateClassComponents = React.createClass({
                 <Row>
                     <Col span={4}>总&nbsp;&nbsp;课&nbsp;&nbsp;时：</Col>
                     <Col span={20}>
-                        <Input value={this.state.videoNum} disabled={this.state.videoNumInputDisable} onChange={this.classTimesOnChange}/>
+                        <Input value={this.state.videoNum} disabled={true} onChange={this.classTimesOnChange}/>
                     </Col>
                 </Row>
                 <Row>
