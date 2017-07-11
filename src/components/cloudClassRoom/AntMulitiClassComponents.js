@@ -17,6 +17,7 @@ var cardArray = [];
 const AntMulitiClassComponents = React.createClass({
 
     getInitialState() {
+
         return {
             currentPage:1,
         };
@@ -43,14 +44,16 @@ const AntMulitiClassComponents = React.createClass({
 
     getCourseList(pageNo,isSeries,is_publish){
         var _this = this;
+        var cloudClassRoomUser = JSON.parse(sessionStorage.getItem("cloudClassRoomUser"));
         var param = {
-            "method": 'listCourse',
+            "method": 'findCourseByAccount',
             "pageNo": pageNo,
             "course_class":'',
             "isseries":'',
             "coursetypeid":'',
             "numPerPage":getPageSize(),
-            "is_publish":''
+            "is_publish":'',
+            "userId":cloudClassRoomUser.colUid
         };
         if(isEmpty(isSeries)==false){
             param.isseries=isSeries;
@@ -258,7 +261,7 @@ const AntMulitiClassComponents = React.createClass({
 						</Col>
                         <Col span={24} className="ant-form-item">
 							<span className="series_gray_le">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span>
-							<span className="series_gray_ri">{classObj.courseType.name}</span>
+							<span className="series_gray_ri">{classObj.courseClass}</span>
 						</Col>
                         <Col span={24} className="ant-form-item">
 							<span className="series_gray_le">主讲老师：</span>

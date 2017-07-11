@@ -18,6 +18,7 @@ var courseInfoJson={};
 var videoJsonArray=[];
 var teamJsonArray=[];
 var firstTeamId;
+var isSeriesStr="系列课";
 const CreateClassComponents = React.createClass({
 
     getInitialState() {
@@ -40,31 +41,37 @@ const CreateClassComponents = React.createClass({
         this.findTeamByUserId();
         var isSeries = this.props.isSeries;
         this.setState({isSeries});
+        if(isSeries=="1"){
+            isSeriesStr="系列课";
+        }else{
+            isSeriesStr="单节课";
+        }
         // courseInfoJson={isPublish:2,isSeries:2,publisher_id:this.state.cloudClassRoomUser.colUid,isFree:1,money:0};
         this.initCreatePage(isSeries);
     },
-
+    /**
+     * 创建课程
+     * @param nextProps
+     */
     componentWillReceiveProps(nextProps){
         var isSeries = nextProps.isSeries;
         var stepDirect = nextProps.stepDirect;
         this.setState({stepDirect,isSeries});
-        // this.initCreatePage(isSeries);
+        if(isSeries=="1"){
+            isSeriesStr="系列课";
+        }else{
+            isSeriesStr="单节课";
+        }
+        courseInfoJson.isSeries = isSeries;
+        // this.initCreatePage(isSeries,"update");
     },
 
     initCreatePage(isSeries){
         lessonArray.splice(0);
         courseInfoJson={};
-
         var isSeriesStr;
         var videoNumInputDisable;
         var videoNum=0;
-        if(isSeries=="1"){
-            isSeriesStr="系列课";
-            videoNumInputDisable=false;
-        }else{
-            isSeriesStr="单节课";
-            videoNumInputDisable=true;
-        }
         courseInfoJson.videoNum=videoNum;
         videoJsonArray=[];
         courseInfoJson.videos=[];
@@ -75,9 +82,9 @@ const CreateClassComponents = React.createClass({
         courseInfoJson.money=0;
         courseInfoJson.isFree=1;
         this.setState({isSeries,isSeriesStr,videoNumInputDisable,videoNum,
-        "courseName":'',"isFree":1,"money":0,"defaultSubjectSelected":"",
+            "courseName":'',"isFree":1,"money":0,"defaultSubjectSelected":"",
             "defaultSelected":'',"isTeam":1,"defaultTeamSelected":'',
-        "courseSummary":'',"moneyInputDisable":true});
+            "courseSummary":'',"moneyInputDisable":true});
         // this.getAllTeam();
     },
     /**
@@ -731,7 +738,7 @@ const CreateClassComponents = React.createClass({
                         <RadioGroup onChange={this.classTypeOnChange} value={this.state.isTeam}>
                             <Radio style={radioStyle} value={1}>单人授课</Radio>
 							<Row style={{ width: 420 }}>
-                                <Col span={24} style={{ marginLeft: 22 }}>课程类型：{this.state.isSeriesStr}</Col>
+                                <Col span={24} style={{ marginLeft: 22 }}>课程类型：{isSeriesStr}</Col>
                                 {/* <Col span={16}>
 									<Select defaultValue={this.state.isSeries} value={this.state.isSeries} style={{ width: 120 }} disabled={this.state.isSeriesDisabled} onChange={this.courseTypeSelectOnChange}>
 										<Option value="1">系列课</Option>

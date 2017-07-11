@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { Form, Icon, Input, Button, message } from 'antd';
 const FormItem = Form.Item;
 import { doWebService } from '../WebServiceHelper';
+import {doWebService_CloudClassRoom} from '../utils/CloudClassRoomURLUtils';
 
 var code;
 var loginComponent;
@@ -106,11 +107,45 @@ const Login = Form.create()(React.createClass({
                         }else{
                             location.hash="StudentMainLayout";
                         }
-
+                        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+                        var param = {
+                            "method": 'AntTeacherLogin',
+                            "colAccount": userName,
+                            "colPasswd": userPassword,
+                        };
+                        doWebService_CloudClassRoom(JSON.stringify(param), {
+                            onResponse: function (ret) {
+                                var response = ret.response;
+                                sessionStorage.setItem("cloudClassRoomUser",JSON.stringify(response));
+                            },
+                            onError: function (error) {
+                                message.error(error);
+                            }
+                        });
+                        //this.findUserByAccount();
                     }
                 }
             },
             onError : function(error) {
+                message.error(error);
+            }
+        });
+    },
+
+    findUserByAccount(){
+        var _this = this;
+        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+        var param = {
+            "method": 'AntTeacherLogin',
+            "colAccount": loginUser.colAccount,
+            "colPasswd": sessionStorage.getItem("loginPassword"),
+        };
+        doWebService_CloudClassRoom(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                sessionStorage.setItem("cloudClassRoomUser",JSON.stringify(response));
+            },
+            onError: function (error) {
                 message.error(error);
             }
         });
