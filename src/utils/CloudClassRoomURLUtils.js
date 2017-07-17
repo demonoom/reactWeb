@@ -1,7 +1,7 @@
 /**
  * Created by devnote on 16-12-2.
  */
-var isDebug=false;
+var isDebug=true;
 var domain=isDebug?"192.168.1.12:8080":"www.maaee.com";
 var port = "8080";
 var baseURL="http://"+domain+"/elearning/";

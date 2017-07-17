@@ -238,6 +238,16 @@ const AntMulitiClassComponents = React.createClass({
             });
         }
         console.log("getClassDetail classId:"+classObj.courseName);
+        var isSeries = classObj.isSeries;
+        var endTime;
+        if(isSeries=="2"){
+            endTime = null;
+        }else{
+            endTime = <Col span={24} className="ant-form-item">
+                <span className="series_gray_le">结束时间：</span>
+                <span className="series_gray_ri">{endTime}</span>
+            </Col>;
+        }
         var classDetailPanel=<Card>
 		
             <Row>
@@ -271,10 +281,7 @@ const AntMulitiClassComponents = React.createClass({
 							<span className="series_gray_le">开始时间：</span>
 							<span className="series_gray_ri">{startTime}</span>
 						</Col>
-                        <Col span={24} className="ant-form-item">
-							<span className="series_gray_le">结束时间：</span>
-							<span className="series_gray_ri">{endTime}</span>
-						</Col>
+                        {endTime}
                         <Col span={24} className="ant-form-item">
 							<span className="series_gray_le">排课时间：</span>
                             <ul>
