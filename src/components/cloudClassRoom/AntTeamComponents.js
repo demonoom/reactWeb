@@ -265,7 +265,6 @@ const AntTeamComponents = React.createClass({
         cloudClassRoomRequestByAjax(requestUrl,propertyJson,requestType, {
             onResponse: function (ret) {
                 if (ret.meta.success == true && ret.meta.message=="ok") {
-                    message.success("成功");
                     var response=ret.data;
                     var total = response.total;
                     var responseRows=response.rows;

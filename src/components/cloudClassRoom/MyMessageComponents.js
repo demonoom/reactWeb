@@ -52,7 +52,7 @@ const MyMessageComponents = React.createClass({
                             requestMessage=userName+"申请加入您的"+teamName;
                             optButton = <div className="info_btn">
                                 <Button className="add_study-b" onClick={_this.showUpdateTeamUserConfirmModal.bind(_this,id,1)}>同意</Button>
-                                <Button className="correct_name" onClick={_this.showUpdateTeamUserConfirmModal.bind(_this,id,4)} className="correct_name">拒绝</Button>
+                                <Button className="correct_name" onClick={_this.showUpdateTeamUserConfirmModal.bind(_this,id,4)}>拒绝</Button>
                             </div>;
                         }else{
                             requestMessage=teamName+"邀请您加入";

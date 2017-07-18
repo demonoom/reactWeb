@@ -417,7 +417,8 @@ const AntMulitiClassComponents = React.createClass({
      * 编辑课程窗口关闭函数
      */
     updateClassModalHandleCancel(){
-        this.setState({updateClassModalVisible:false,"isChangeStep":false,stepDirect:''});
+        this.setState({updateClassModalVisible:false,"isChangeStep":true,stepDirect:'pre'});
+        this.refs.updateClassComponents.changeStep('pre');
     },
     /**
      * 编辑完成后的处理

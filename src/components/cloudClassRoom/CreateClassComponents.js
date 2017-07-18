@@ -19,6 +19,7 @@ var videoJsonArray=[];
 var teamJsonArray=[];
 var firstTeamId;
 var isSeriesStr="系列课";
+var fileList=[];
 const CreateClassComponents = React.createClass({
 
     getInitialState() {
@@ -98,7 +99,6 @@ const CreateClassComponents = React.createClass({
         cloudClassRoomRequestByAjax(requestUrl,propertyJson,requestType, {
             onResponse: function (ret) {
                 if (ret.meta.success == true && ret.meta.message=="ok") {
-                    message.success("成功");
                     var response=ret.data;
                     var classOptionArray=[];
                     var defaultSelected;
@@ -135,7 +135,6 @@ const CreateClassComponents = React.createClass({
         cloudClassRoomRequestByAjax(requestUrl,propertyJson,requestType, {
             onResponse: function (ret) {
                 if (ret.meta.success == true && ret.meta.message=="ok") {
-                    message.success("成功");
                     var response=ret.data;
                     var subjectOptionArray=[];
                     var defaultSubjectSelected;
@@ -235,10 +234,10 @@ const CreateClassComponents = React.createClass({
         cloudClassRoomRequestByAjax(requestUrl,propertyJson,requestType, {
             onResponse: function (ret) {
                 if (ret.meta.success == true && ret.meta.message=="ok") {
-                    message.success("成功");
+                    message.success("课程创建成功");
                     // var response=ret.data;
                 } else {
-                    message.error("失败");
+                    message.error("课程创建失败");
                 }
                 _this.props.onSaveOk();
             },
@@ -621,6 +620,14 @@ const CreateClassComponents = React.createClass({
         if(isEmpty(isRemoved)==false && isRemoved=="removed"){
             lessonImage = "";
         }
+        if(isEmpty(lessonImage)==false){
+            var fileJson = {
+                uid: Math.random(),
+                url: lessonImage,
+            }
+            fileList.splice(0);
+            fileList.push(fileJson);
+        }
         //题目图片答案的图片来源
         courseInfoJson.image = lessonImage;
     },
@@ -769,7 +776,7 @@ const CreateClassComponents = React.createClass({
                 <Row>
                     <Col span={4}>课程封面：</Col>
                     <Col span={18}>
-                        <ImageAnswerUploadComponents
+                        <ImageAnswerUploadComponents fileList={fileList}
                                                      callBackParent={this.getLessonImageList}>
                         </ImageAnswerUploadComponents>
                     </Col>
