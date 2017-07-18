@@ -462,6 +462,9 @@ const CreateClassComponents = React.createClass({
         }else if(isEmpty(courseInfoJson.image)){
             message.error("请选择课程封面");
             checkResult = false;
+        }else if(isEmpty(courseInfoJson.content)==false && courseInfoJson.content.length>500){
+            message.error("课程概述不能超出500个字符");
+            checkResult = false;
         }else if(isEmpty(courseInfoJson.videoNum)){
             message.error("请输入总课时");
             checkResult=false;
