@@ -1,8 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Tabs, Breadcrumb, Icon,Card,Button,Row,Col,Radio,Table,message,Modal,Input,Transfer} from 'antd';
 import {isEmpty} from '../../utils/utils';
-import {getCloudClassRoomRequestURL} from '../../utils/CloudClassRoomURLUtils';
-import {cloudClassRoomRequestByAjax} from '../../utils/CloudClassRoomURLUtils';
 import {getPageSize} from '../../utils/Const';
 import {doWebService_CloudClassRoom} from '../../utils/CloudClassRoomURLUtils';
 import ConfirmModal from '../ConfirmModal';
@@ -249,76 +247,6 @@ const AntTeamComponents = React.createClass({
             });
         });
         _this.setState({userTeamData:teamTableData,totalTeamCount:total});
-    },
-
-    getTeamList(pageNo,whereJson){
-        var _this = this;
-        var requestUrl = getCloudClassRoomRequestURL("teamList");
-        var requestType ="POST";
-        var propertyJson={
-            "numPerPage": getPageSize(),
-            "currentPage": pageNo
-        };
-        if(typeof(whereJson)!="undefined" ){
-            propertyJson.where=JSON.stringify(whereJson);
-        }
-        cloudClassRoomRequestByAjax(requestUrl,propertyJson,requestType, {
-            onResponse: function (ret) {
-                if (ret.meta.success == true && ret.meta.message=="ok") {
-                    message.success("成功");
-                    var response=ret.data;
-                    var total = response.total;
-                    var responseRows=response.rows;
-                    var teamTableData = [];
-                    responseRows.forEach(function (team) {
-                        var subjectOpt=<Button style={{ }} type=""  value={team.id} onClick={_this.showTeamSettingModal}  icon="setting" title="设置" className="score3_i"></Button>;
-                        var teamUsersPhoto=[];
-                        var imgTag = <div className="maaee_group_face">{teamUsersPhoto}</div>;
-                        if(isEmpty(team.users)==false ){
-                            for(var i=0;i<team.users.length;i++){
-                                var user = team.users[i];
-                                var userAvatarTag = <img src={user.avatar} ></img>;
-                                teamUsersPhoto.push(userAvatarTag);
-                                if(i>=3){
-                                    break;
-                                }
-                            }
-                            switch (teamUsersPhoto.length){
-                                case 1:
-                                    imgTag = <div className="maaee_group_face1">{teamUsersPhoto}</div>;
-                                    break;
-                                case 2:
-                                    imgTag = <div className="maaee_group_face2">{teamUsersPhoto}</div>;
-                                    break;
-                                case 3:
-                                    imgTag = <div className="maaee_group_face3">{teamUsersPhoto}</div>;
-                                    break;
-                                case 4:
-                                    imgTag = <div className="maaee_group_face">{teamUsersPhoto}</div>;
-                                    break;
-                            }
-                        }
-                        var teamUserCount=0;
-                        if(isEmpty(team.users)==false){
-                            teamUserCount = team.users.length;
-                        }
-                        teamTableData.push({
-                            key: team.id,
-                            teamPhoto:imgTag,
-                            teamName: team.name,
-                            teamCount: teamUserCount,
-                            teamSet:subjectOpt
-                        });
-                    });
-                    _this.setState({userTeamData:teamTableData,totalTeamCount:total});
-                } else {
-                    message.error("失败");
-                }
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });
     },
 
     showTeamSettingModal(){

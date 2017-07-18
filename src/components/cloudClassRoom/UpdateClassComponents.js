@@ -3,8 +3,6 @@ import { Tabs, Breadcrumb, Icon,Card,Button,Row,Col,Steps,
     Input,Select,Radio,DatePicker,Checkbox,message} from 'antd';
 import ImageAnswerUploadComponents from './ImageAnswerUploadComponents';
 import {isEmpty,formatYMD,getLocalTime} from '../../utils/utils';
-import {getCloudClassRoomRequestURL} from '../../utils/CloudClassRoomURLUtils';
-import {cloudClassRoomRequestByAjax} from '../../utils/CloudClassRoomURLUtils';
 import {doWebService_CloudClassRoom} from '../../utils/CloudClassRoomURLUtils';
 import moment from 'moment';
 const dateFormat = 'YYYY/MM/DD';
@@ -18,6 +16,7 @@ var lessonArray=[];
 var courseInfoJson={isPublish:2,isSeries:2,publisher_id:sessionStorage.getItem("ident"),isFree:1,money:0};
 var videoJsonArray=[];
 var teamJsonArray=[];
+var fileList =[];
 const UpdateClassComponents = React.createClass({
 
     getInitialState() {
@@ -46,6 +45,16 @@ const UpdateClassComponents = React.createClass({
     },
 
     componentWillMount(){
+        var updateClassObj = this.props.updateClassObj;
+        var image = updateClassObj.image;
+        if(isEmpty(image)==false){
+            var fileJson = {
+                uid: Math.random(),
+                url: image,
+            }
+            fileList.splice(0);
+            fileList.push(fileJson);
+        }
         this.getAllClass();
         this.getAllSubject();
         // this.findTeamByUserId();
@@ -55,11 +64,23 @@ const UpdateClassComponents = React.createClass({
         if(!nextProps.isChangeStep){
             this.findTeamByUserId();
             var updateClassObj = nextProps.updateClassObj;
+            var image = updateClassObj.image;
+            if(isEmpty(image)==false){
+                var fileJson = {
+                    uid: Math.random(),
+                    url: image,
+                }
+                fileList.splice(0);
+                fileList.push(fileJson);
+            }
+            this.initPageInfo(updateClassObj);
             this.setState({updateClassObj});
         }
         /*if(isEmpty(updateClassObj)==false){
             this.initPageInfo(updateClassObj);
         }*/
+        this.getAllClass();
+        this.getAllSubject();
     },
 
     initPageInfo(updateClassObj){
@@ -106,14 +127,13 @@ const UpdateClassComponents = React.createClass({
         var startTimeYMD = formatYMD(startTime);
         var endTimeYMD = formatYMD(endTime);
         var classTimeRange = [moment(startTimeYMD, dateFormat), moment(endTimeYMD, dateFormat)];
-        var fileList =[];
-        if(isEmpty(image)==false){
+        /*if(isEmpty(image)==false){
             var fileJson = {
                 uid: Math.random(),
                 url: image,
             }
             fileList.push(fileJson);
-        }
+        }*/
         var isSeriesStr;
         var videoNumInputDisable;
         if(isSeries=="1"){
@@ -127,7 +147,7 @@ const UpdateClassComponents = React.createClass({
         _this.setState({
             updateId:updateClassObj.id,
             courseName,isFree,money,
-            defaultSubjectSelected:courseTypeId,
+            // defaultSubjectSelected:,
             defaultSelected:courseClass,
             publishType,
             defaultTeamSelected:publisher_id,
@@ -156,10 +176,14 @@ const UpdateClassComponents = React.createClass({
             var lessonNum=0;
             lessonArray.splice(0);
             videos.forEach(function (video) {
+                var squence = video.squence;
+                var name = video.name;
+                var videoJson = {squence,name};
+                _this.buildVideosArray(videoJson,"title");
                 lessonNum+=1;
                 var liveTime = getLocalTime(video.liveTime);
                 var videoNameObj = <Col span={8}>
-                    <Input id={lessonNum} value={video.name} onChange={_this.lessonTitleOnChange}/>
+                    <Input id={lessonNum} defaultValue={video.name} onChange={_this.lessonTitleOnChange}/>
                 </Col>;
                 var teacherObj;
                 if(isTeam==1) {
@@ -197,14 +221,13 @@ const UpdateClassComponents = React.createClass({
      */
     getAllClass(){
         var _this = this;
-        var requestUrl = getCloudClassRoomRequestURL("findClass");
-        var requestType ="POST";
-        var propertyJson={};
-        cloudClassRoomRequestByAjax(requestUrl,propertyJson,requestType, {
+        var param = {
+            "method": 'findCourseClass',
+        };
+        doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
-                if (ret.meta.success == true && ret.meta.message=="ok") {
-                    message.success("成功");
-                    var response=ret.data;
+                var response = ret.response;
+                if(isEmpty(response)==false){
                     var classOptionArray=[];
                     for(var i=0;i<response.length;i++){
                         var classInfo = response[i];
@@ -212,10 +235,11 @@ const UpdateClassComponents = React.createClass({
                         var name = classInfo.name;
                         var optionObj = <Option key={id} value={id}>{name}</Option>;
                         classOptionArray.push(optionObj);
+                        if(id == courseInfoJson.courseClass){
+                            _this.setState({"defaultSelected":name});
+                        }
                     }
                     _this.setState({classOptionArray});
-                } else {
-                    message.error("失败");
                 }
             },
             onError: function (error) {
@@ -228,14 +252,13 @@ const UpdateClassComponents = React.createClass({
      */
     getAllSubject(){
         var _this = this;
-        var requestUrl = getCloudClassRoomRequestURL("findSubject");
-        var requestType ="POST";
-        var propertyJson={};
-        cloudClassRoomRequestByAjax(requestUrl,propertyJson,requestType, {
+        var param = {
+            "method": 'findCourseSubject',
+        };
+        doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
-                if (ret.meta.success == true && ret.meta.message=="ok") {
-                    message.success("成功");
-                    var response=ret.data;
+                var response = ret.response;
+                if(isEmpty(response)==false){
                     var subjectOptionArray=[];
                     for(var i=0;i<response.length;i++){
                         var subjectInfo = response[i];
@@ -243,10 +266,11 @@ const UpdateClassComponents = React.createClass({
                         var name = subjectInfo.name;
                         var optionObj = <Option key={id} value={id}>{name}</Option>;
                         subjectOptionArray.push(optionObj);
+                        if(id == courseInfoJson.courseTypeId){
+                            _this.setState({defaultSubjectSelected:name});
+                        }
                     }
                     _this.setState({subjectOptionArray});
-                } else {
-                    message.error("失败");
                 }
             },
             onError: function (error) {
@@ -266,6 +290,7 @@ const UpdateClassComponents = React.createClass({
                 var response = ret.response;
                 if(response){
                     message.success("课程信息修改成功");
+                    _this.setState({"stepNum":0});
                 }
                 _this.props.onSaveOk();
             },
@@ -334,32 +359,6 @@ const UpdateClassComponents = React.createClass({
         }
         this.setState({teamUserOptionArray});
     },
-
-   /* /!**
-     * 获取所有的年级
-     *!/
-    addCourse(){
-        var _this = this;
-        var requestUrl = getCloudClassRoomRequestURL("courseAdd");
-        var requestType ="POST";
-        var propertyJson=courseInfoJson;
-        console.log("propertyJson:"+propertyJson);
-        cloudClassRoomRequestByAjax(requestUrl,propertyJson,requestType, {
-            onResponse: function (ret) {
-                if (ret.meta.success == true && ret.meta.message=="ok") {
-                    message.success("成功");
-                    var response=ret.data;
-
-                } else {
-                    message.error("失败");
-                }
-                _this.props.onSaveOk();
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });
-    },*/
 
     /**
      * 课程科目内容改变时的响应函数
@@ -475,33 +474,13 @@ const UpdateClassComponents = React.createClass({
      * 添加课程目录
      */
     addLesson(){
-        if(lessonArray.length >= courseInfoJson.videoNum){
-            message.error("排课次数已经达到授课总课时,无法新增");
+        var videoNumBeforeAdd = this.state.videoNum;
+        if(this.state.isSeries=="2" && videoNumBeforeAdd==1){
+            //单节课
+            message.error("单节课只能排课一次,无法继续添加课程目录!");
             return;
         }
         var lessonNum = lessonArray.length+1;
-        // <Col span={4}>第{lessonNum}课时</Col>
-        /*var lessonObj = <div>
-            <Col span={4}>
-                <select className="lessonTeamTeacher">
-                    {/!*<option value="1">a</option>
-                    <option value="2">b</option>
-                    <option value="3">c</option>
-                    <option value="4">d</option>*!/}
-                    {this.state.teamUserOptionArray}
-                </select>
-            </Col>
-            <Col span={4}>
-                <DatePicker
-                    className="lessonTime"
-                    showTime
-                    format="YYYY-MM-DD HH:mm:ss"
-                    placeholder="Select Time"
-                    onChange={this.lessonTimeOnChange}
-                    onOk={this.lessonTimeOnOk}
-                />
-            </Col>
-        </div>;*/
         var videoNameObj = <Col span={8}>
             <Input id={lessonNum} onChange={this.lessonTitleOnChange}/>
         </Col>;
@@ -526,9 +505,10 @@ const UpdateClassComponents = React.createClass({
             />
         </Col>;
         var lessonJson = {lessonNum,teacherObj,timeObj,videoNameObj};
-        // var lessonJson = {lessonNum,lessonObj};
         lessonArray.push(lessonJson);
-        this.setState({lessonArray});
+        var newVideoNum = parseInt(videoNumBeforeAdd)+1
+        courseInfoJson.videoNum=newVideoNum;
+        this.setState({lessonArray,"videoNum":newVideoNum});
     },
 
     lessonTimeOnChange(value, dateString,Event) {
@@ -553,7 +533,10 @@ const UpdateClassComponents = React.createClass({
                 lessonObj.lessonNum -= 1;
             }
         });
-        this.setState({lessonArray});
+        var videoNumBeforeRemove = this.state.videoNum;
+        var newVideoNum = parseInt(videoNumBeforeRemove)-1
+        courseInfoJson.videoNum=newVideoNum;
+        this.setState({lessonArray,"videoNum":newVideoNum});
     },
 
     /**
@@ -579,6 +562,9 @@ const UpdateClassComponents = React.createClass({
         }else if(courseInfoJson.classTypeOnChange==2 && isEmpty(this.state.teamId)){
             message.error("团队授课时,请选择团队名称");
             checkResult=false;
+        }else if(isEmpty(courseInfoJson.content)==false && courseInfoJson.content.length>500){
+            message.error("课程概述不能超出500个字符");
+            checkResult = false;
         }else if(isEmpty(courseInfoJson.videoNum)){
             message.error("请输入总课时");
             checkResult=false;
@@ -624,7 +610,7 @@ const UpdateClassComponents = React.createClass({
             var time = timeTag.value;
             console.log("teacher"+teacher+"\t"+time);
             videoJson.squence = i+1;
-            videoJson.courseId = courseInfoJson.courseTypeId;
+            videoJson.courseId = courseInfoJson.id;
             videoJson.userID =teacher;
             videoJson.liveTime = new Date(time).valueOf();
             this.buildVideosArray(videoJson);
@@ -820,7 +806,7 @@ const UpdateClassComponents = React.createClass({
                 <Row>
                     <Col span={4}>课程科目：</Col>
                     <Col span={18}>
-                        <Select defaultValue={this.state.defaultSubjectSelected} value={this.state.defaultSubjectSelected} style={{ width: 120 }} onChange={this.courseSelectOnChange}>
+                        <Select defaultValue={[this.state.defaultSubjectSelected]} value={this.state.defaultSubjectSelected} style={{ width: 120 }} onChange={this.courseSelectOnChange}>
                             {this.state.subjectOptionArray}
                         </Select>
                     </Col>
@@ -871,7 +857,7 @@ const UpdateClassComponents = React.createClass({
                 <Row>
                     <Col span={4}>课程封面：</Col>
                     <Col span={18}>
-                        <ImageAnswerUploadComponents fileList={this.state.fileList}
+                        <ImageAnswerUploadComponents fileList={fileList}
                                                      callBackParent={this.getLessonImageList}>
                         </ImageAnswerUploadComponents>
                     </Col>
@@ -908,7 +894,7 @@ const UpdateClassComponents = React.createClass({
                 <Row>
                     <Col span={4}>总&nbsp;&nbsp;课&nbsp;&nbsp;时：</Col>
                     <Col span={20}>
-                        <Input value={this.state.videoNum}  disabled={this.state.videoNumInputDisable} onChange={this.classTimesOnChange}/>
+                        <Input value={this.state.videoNum}  disabled={true} onChange={this.classTimesOnChange}/>
                     </Col>
                 </Row>
                 <Row>

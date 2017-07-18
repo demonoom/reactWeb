@@ -16,30 +16,10 @@ const AntCloudClassRoomComponents = React.createClass({
 
     componentDidMount(){
         console.log("cloudRoomMenuItem"+this.props.currentItem);
-        this.findUserByAccount();
     },
 
     getClassList(){
 
-    },
-
-    findUserByAccount(){
-        var _this = this;
-        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
-        var param = {
-            "method": 'AntTeacherLogin',
-            "colAccount": loginUser.colAccount,
-            "colPasswd": sessionStorage.getItem("loginPassword"),
-        };
-        doWebService_CloudClassRoom(JSON.stringify(param), {
-            onResponse: function (ret) {
-                var response = ret.response;
-                sessionStorage.setItem("cloudClassRoomUser",JSON.stringify(response));
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });
     },
 
     createClass(){
@@ -112,6 +92,11 @@ const AntCloudClassRoomComponents = React.createClass({
                 topButton = "";
                 leftBtn = "";
                 tabPanel = <RecommendComponents ref="recommendComponents"></RecommendComponents>;
+                break;
+            default:
+                topButton = createClassBtn;
+                leftBtn = "";
+                tabPanel = <AntMulitiClassComponents ref="antMulitiClassComponents" isSeries="1"></AntMulitiClassComponents>;
                 break;
         }
 

@@ -47,6 +47,7 @@ const MainLayout = React.createClass({
             locale: 'zh-cn',
             resouceType: '',
             ifr: {},
+            cloudRoomMenuItem:'mulitiClass'
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
     },

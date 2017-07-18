@@ -1,7 +1,5 @@
 import React, { PropTypes } from 'react';
 import { Card,Radio,Row,Col,Button,Icon,message,Steps,Modal,Form,Pagination } from 'antd';
-import {getCloudClassRoomRequestURL} from '../../utils/CloudClassRoomURLUtils';
-import {cloudClassRoomRequestByAjax} from '../../utils/CloudClassRoomURLUtils';
 import {doWebService_CloudClassRoom} from '../../utils/CloudClassRoomURLUtils';
 import {getPageSize} from '../../utils/Const';
 import {getLocalTime,formatYMD,formatHM,formatNoSecond} from '../../utils/utils';
@@ -17,6 +15,7 @@ var cardArray = [];
 const AntMulitiClassComponents = React.createClass({
 
     getInitialState() {
+
         return {
             currentPage:1,
         };
@@ -43,14 +42,16 @@ const AntMulitiClassComponents = React.createClass({
 
     getCourseList(pageNo,isSeries,is_publish){
         var _this = this;
+        var cloudClassRoomUser = JSON.parse(sessionStorage.getItem("cloudClassRoomUser"));
         var param = {
-            "method": 'listCourse',
+            "method": 'findCourseByAccount',
             "pageNo": pageNo,
             "course_class":'',
             "isseries":'',
             "coursetypeid":'',
             "numPerPage":getPageSize(),
-            "is_publish":''
+            "is_publish":'',
+            "userId":cloudClassRoomUser.colUid
         };
         if(isEmpty(isSeries)==false){
             param.isseries=isSeries;
@@ -95,7 +96,6 @@ const AntMulitiClassComponents = React.createClass({
         }else{
             content = row.content;
         }
-        var isSeries = row.isSeries;
         var courseTypeName = row.courseType.name;
         var image = row.image;
         var videoNum = row.videoNum;
@@ -111,12 +111,19 @@ const AntMulitiClassComponents = React.createClass({
         var isPublish = row.isPublish;
         var isPublishStr;
         var optButtons;
+        var isSeries = row.isSeries;
+        var endTime;
+        if(isSeries=="2"){
+            endTime = null;
+        }else{
+            endTime = <Col span={24}><span className="series_gray_le">结束时间：</span><span className="series_gray_ri">{endTime}</span></Col>;
+        }
         switch(isPublish){
             case "1":
                 isPublishStr="已发布";
                 if(studentNum==0){
                     optButtons=<div>
-                        <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,row)}></Button></Col>
+                        {/*<Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,row)}></Button></Col>*/}
                         <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
                         <Col span={24}><Button icon="rollback" className="exam-particulars_title" title="撤回" onClick={_this.showConfirmDrwaModal.bind(_this,id)}></Button></Col>
                     </div>;
@@ -171,7 +178,7 @@ const AntMulitiClassComponents = React.createClass({
                         <Col span={24}><span className="series_gray_le">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：</span><span className="series_gray_ri">{courseTypeName}</span></Col>
                         <Col span={24}><span className="series_gray_le">主讲老师：</span><span className="series_gray_ri">{userSpanArray}</span></Col>
                         <Col span={24}><span className="series_gray_le">开始时间：</span><span className="series_gray_ri">{startTime}</span></Col>
-                        <Col span={24}><span className="series_gray_le">结束时间：</span><span className="series_gray_ri">{endTime}</span></Col>
+                        {endTime}
                         <Col span={24}><span className="series_gray_le">排课时间：</span><span className="series_gray_ri">{firstLiveTime}
                         </span></Col>
                         <Col span={24}><span className="series_gray_le">课程概述：</span><span className="series_gray_ri">{content}</span></Col>
@@ -229,6 +236,16 @@ const AntMulitiClassComponents = React.createClass({
             });
         }
         console.log("getClassDetail classId:"+classObj.courseName);
+        var isSeries = classObj.isSeries;
+        var endTime;
+        if(isSeries=="2"){
+            endTime = null;
+        }else{
+            endTime = <Col span={24} className="ant-form-item">
+                <span className="series_gray_le">结束时间：</span>
+                <span className="series_gray_ri">{endTime}</span>
+            </Col>;
+        }
         var classDetailPanel=<Card>
 		
             <Row>
@@ -252,7 +269,7 @@ const AntMulitiClassComponents = React.createClass({
 						</Col>
                         <Col span={24} className="ant-form-item">
 							<span className="series_gray_le">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span>
-							<span className="series_gray_ri">{classObj.courseType.name}</span>
+							<span className="series_gray_ri">{classObj.courseClass}</span>
 						</Col>
                         <Col span={24} className="ant-form-item">
 							<span className="series_gray_le">主讲老师：</span>
@@ -262,10 +279,7 @@ const AntMulitiClassComponents = React.createClass({
 							<span className="series_gray_le">开始时间：</span>
 							<span className="series_gray_ri">{startTime}</span>
 						</Col>
-                        <Col span={24} className="ant-form-item">
-							<span className="series_gray_le">结束时间：</span>
-							<span className="series_gray_ri">{endTime}</span>
-						</Col>
+                        {endTime}
                         <Col span={24} className="ant-form-item">
 							<span className="series_gray_le">排课时间：</span>
                             <ul>
@@ -366,6 +380,8 @@ const AntMulitiClassComponents = React.createClass({
     },
 
     createClassModalHandleCancel(){
+        this.refs.createClassComponent.changeStep("pre");
+        this.refs.createClassComponent.initCreatePage(this.state.isSeries);
         this.setState({"createClassModalVisible":false,"isChangeStep":false,stepDirect:''});
     },
     /**
@@ -399,7 +415,8 @@ const AntMulitiClassComponents = React.createClass({
      * 编辑课程窗口关闭函数
      */
     updateClassModalHandleCancel(){
-        this.setState({updateClassModalVisible:false,"isChangeStep":false,stepDirect:''});
+        this.setState({updateClassModalVisible:false,"isChangeStep":true,stepDirect:'pre'});
+        this.refs.updateClassComponents.changeStep('pre');
     },
     /**
      * 编辑完成后的处理
