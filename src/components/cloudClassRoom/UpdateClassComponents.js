@@ -3,8 +3,6 @@ import { Tabs, Breadcrumb, Icon,Card,Button,Row,Col,Steps,
     Input,Select,Radio,DatePicker,Checkbox,message} from 'antd';
 import ImageAnswerUploadComponents from './ImageAnswerUploadComponents';
 import {isEmpty,formatYMD,getLocalTime} from '../../utils/utils';
-import {getCloudClassRoomRequestURL} from '../../utils/CloudClassRoomURLUtils';
-import {cloudClassRoomRequestByAjax} from '../../utils/CloudClassRoomURLUtils';
 import {doWebService_CloudClassRoom} from '../../utils/CloudClassRoomURLUtils';
 import moment from 'moment';
 const dateFormat = 'YYYY/MM/DD';
@@ -223,13 +221,13 @@ const UpdateClassComponents = React.createClass({
      */
     getAllClass(){
         var _this = this;
-        var requestUrl = getCloudClassRoomRequestURL("findClass");
-        var requestType ="POST";
-        var propertyJson={};
-        cloudClassRoomRequestByAjax(requestUrl,propertyJson,requestType, {
+        var param = {
+            "method": 'findCourseClass',
+        };
+        doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
-                if (ret.meta.success == true && ret.meta.message=="ok") {
-                    var response=ret.data;
+                var response = ret.response;
+                if(isEmpty(response)==false){
                     var classOptionArray=[];
                     for(var i=0;i<response.length;i++){
                         var classInfo = response[i];
@@ -242,8 +240,6 @@ const UpdateClassComponents = React.createClass({
                         }
                     }
                     _this.setState({classOptionArray});
-                } else {
-                    message.error("失败");
                 }
             },
             onError: function (error) {
@@ -256,13 +252,13 @@ const UpdateClassComponents = React.createClass({
      */
     getAllSubject(){
         var _this = this;
-        var requestUrl = getCloudClassRoomRequestURL("findSubject");
-        var requestType ="POST";
-        var propertyJson={};
-        cloudClassRoomRequestByAjax(requestUrl,propertyJson,requestType, {
+        var param = {
+            "method": 'findCourseSubject',
+        };
+        doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
-                if (ret.meta.success == true && ret.meta.message=="ok") {
-                    var response=ret.data;
+                var response = ret.response;
+                if(isEmpty(response)==false){
                     var subjectOptionArray=[];
                     for(var i=0;i<response.length;i++){
                         var subjectInfo = response[i];
@@ -275,8 +271,6 @@ const UpdateClassComponents = React.createClass({
                         }
                     }
                     _this.setState({subjectOptionArray});
-                } else {
-                    message.error("失败");
                 }
             },
             onError: function (error) {
@@ -365,32 +359,6 @@ const UpdateClassComponents = React.createClass({
         }
         this.setState({teamUserOptionArray});
     },
-
-   /* /!**
-     * 获取所有的年级
-     *!/
-    addCourse(){
-        var _this = this;
-        var requestUrl = getCloudClassRoomRequestURL("courseAdd");
-        var requestType ="POST";
-        var propertyJson=courseInfoJson;
-        console.log("propertyJson:"+propertyJson);
-        cloudClassRoomRequestByAjax(requestUrl,propertyJson,requestType, {
-            onResponse: function (ret) {
-                if (ret.meta.success == true && ret.meta.message=="ok") {
-                    message.success("成功");
-                    var response=ret.data;
-
-                } else {
-                    message.error("失败");
-                }
-                _this.props.onSaveOk();
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });
-    },*/
 
     /**
      * 课程科目内容改变时的响应函数

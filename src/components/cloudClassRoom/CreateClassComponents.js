@@ -3,8 +3,6 @@ import { Tabs, Breadcrumb, Icon,Card,Button,Row,Col,Steps,
     Input,Select,Radio,DatePicker,Checkbox,message} from 'antd';
 import ImageAnswerUploadComponents from './ImageAnswerUploadComponents';
 import {isEmpty} from '../../utils/utils';
-import {getCloudClassRoomRequestURL} from '../../utils/CloudClassRoomURLUtils';
-import {cloudClassRoomRequestByAjax} from '../../utils/CloudClassRoomURLUtils';
 import {doWebService_CloudClassRoom} from '../../utils/CloudClassRoomURLUtils';
 import moment from 'moment';
 const dateFormat = 'YYYY/MM/DD';
@@ -93,13 +91,13 @@ const CreateClassComponents = React.createClass({
      */
     getAllClass(){
         var _this = this;
-        var requestUrl = getCloudClassRoomRequestURL("findClass");
-        var requestType ="POST";
-        var propertyJson={};
-        cloudClassRoomRequestByAjax(requestUrl,propertyJson,requestType, {
+        var param = {
+            "method": 'findCourseClass',
+        };
+        doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
-                if (ret.meta.success == true && ret.meta.message=="ok") {
-                    var response=ret.data;
+                var response = ret.response;
+                if(isEmpty(response)==false){
                     var classOptionArray=[];
                     var defaultSelected;
                     for(var i=0;i<response.length;i++){
@@ -115,8 +113,6 @@ const CreateClassComponents = React.createClass({
                         classOptionArray.push(optionObj);
                     }
                     _this.setState({classOptionArray,defaultSelected});
-                } else {
-                    message.error("失败");
                 }
             },
             onError: function (error) {
@@ -129,13 +125,13 @@ const CreateClassComponents = React.createClass({
      */
     getAllSubject(){
         var _this = this;
-        var requestUrl = getCloudClassRoomRequestURL("findSubject");
-        var requestType ="POST";
-        var propertyJson={};
-        cloudClassRoomRequestByAjax(requestUrl,propertyJson,requestType, {
+        var param = {
+            "method": 'findCourseSubject',
+        };
+        doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
-                if (ret.meta.success == true && ret.meta.message=="ok") {
-                    var response=ret.data;
+                var response = ret.response;
+                if(isEmpty(response)==false){
                     var subjectOptionArray=[];
                     var defaultSubjectSelected;
                     for(var i=0;i<response.length;i++){
@@ -151,8 +147,6 @@ const CreateClassComponents = React.createClass({
                         subjectOptionArray.push(optionObj);
                     }
                     _this.setState({subjectOptionArray,defaultSubjectSelected});
-                } else {
-                    message.error("失败");
                 }
             },
             onError: function (error) {
@@ -227,15 +221,15 @@ const CreateClassComponents = React.createClass({
      */
     addCourse(){
         var _this = this;
-        var requestUrl = getCloudClassRoomRequestURL("courseAdd");
-        var requestType ="POST";
-        var propertyJson=courseInfoJson;
-        console.log("propertyJson:"+propertyJson);
-        cloudClassRoomRequestByAjax(requestUrl,propertyJson,requestType, {
+        var param = {
+            "method": 'addCourse',
+            "jsonObject": JSON.stringify(courseInfoJson),
+        };
+        doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
-                if (ret.meta.success == true && ret.meta.message=="ok") {
+                var response = ret.response;
+                if(response==true){
                     message.success("课程创建成功");
-                    // var response=ret.data;
                 } else {
                     message.error("课程创建失败");
                 }
@@ -245,7 +239,7 @@ const CreateClassComponents = React.createClass({
                 message.error(error);
             }
         });
-        _this.initCreatePage(this.state.isSeries);
+        _this.initCreatePage(_this.state.isSeries);
         _this.changeStep("pre");
     },
 
@@ -512,7 +506,7 @@ const CreateClassComponents = React.createClass({
             var time = timeTag.value;
             console.log("teacher"+teacher+"\t"+time);
             videoJson.squence = i+1;
-            videoJson.courseId = courseInfoJson.courseTypeId;
+            // videoJson.courseId = courseInfoJson.courseTypeId;
             videoJson.userID =teacher;
             videoJson.liveTime = new Date(time).valueOf();
             this.buildVideosArray(videoJson);
@@ -654,7 +648,7 @@ const CreateClassComponents = React.createClass({
                     everyVideoJson.name = videoJson.name;
                 }else{
                     everyVideoJson.squence = videoJson.squence;
-                    everyVideoJson.courseId = videoJson.courseId;
+                    // everyVideoJson.courseId = videoJson.courseId;
                     everyVideoJson.userID = videoJson.userID;
                     everyVideoJson.liveTime = videoJson.liveTime;
                 }
