@@ -52,6 +52,7 @@ class LiveTV extends React.Component {
         let _this = this;
         var param = {
             "method": 'getLiveInfos',
+            "userId":_this.state.ident,
             "pageNo": pageNo || 1,
         };
 
@@ -81,6 +82,7 @@ class LiveTV extends React.Component {
             "cityCode": '',
             "schoolId": '',
             "kemu": '',
+            "userId":_this.state.ident,
         };
 
         doWebService(JSON.stringify(param), {
@@ -108,6 +110,7 @@ class LiveTV extends React.Component {
         var param = {
             "method": 'getLivedLiveInfos',
             "pageNo": pageNo || 1,
+            "userId":_this.state.ident,
         };
 
         doWebService(JSON.stringify(param), {
@@ -321,6 +324,7 @@ class LiveTV extends React.Component {
             "method": 'searchLiveInfosBeanByKeywords',
             "keywords":  txt,
             "pageNo": pageNo || 1,
+            "userId":_this.state.ident,
         };
 
         doWebService(JSON.stringify(param), {
