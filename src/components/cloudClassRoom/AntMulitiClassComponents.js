@@ -140,16 +140,16 @@ const AntMulitiClassComponents = React.createClass({
                 isPublishStr="未发布";
                 optButtons=<div>
                     <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
-                    <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,row)}></Button></Col>
+                    {/*<Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,row)}></Button></Col>*/}
                     <Col span={24}><Button icon="check-circle-o" className="exam-particulars_title" title="发布" onClick={_this.showConfirmPushModal.bind(_this,id)}></Button></Col>
                     <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除" onClick={_this.showConfirmDrwaModal.bind(_this,id)}></Button></Col>
                 </div>;
                 break;
             case "3":
-                isPublishStr="已撤回";
+                isPublishStr="已删除";
                 optButtons=<div>
                     <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
-                    <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,row)}></Button></Col>
+                    {/*<Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,row)}></Button></Col>*/}
                     <Col span={24}><Button icon="check-circle-o" className="exam-particulars_title" title="发布" onClick={_this.showConfirmPushModal.bind(_this,id)}></Button></Col>
                 </div>;
                 break;
@@ -212,7 +212,7 @@ const AntMulitiClassComponents = React.createClass({
                 isPublishStr="未发布";
                 break;
             case "3":
-                isPublishStr="已撤回";
+                isPublishStr="已删除";
                 break;
         }
         var users = classObj.users;
@@ -329,7 +329,7 @@ const AntMulitiClassComponents = React.createClass({
         });
     },
     /**
-     * 显示撤回操作确认窗口
+     * 显示删除操作确认窗口
      * @param classId
      */
     showConfirmDrwaModal(classId){
@@ -338,7 +338,7 @@ const AntMulitiClassComponents = React.createClass({
     },
 
     /**
-     * 显示撤回操作确认窗口
+     * 显示删除操作确认窗口
      * @param classId
      */
     showConfirmPushModal(classId){
@@ -347,7 +347,7 @@ const AntMulitiClassComponents = React.createClass({
     },
 
     /**
-     * 撤回课程
+     * 删除课程
      * @param classId
      */
     withDrawClass(){
@@ -461,7 +461,7 @@ const AntMulitiClassComponents = React.createClass({
         this.refs.confirmPushModal.changeConfirmModalVisible(false);
     },
     /**
-     * 关闭撤回操作确认Modal
+     * 关闭删除操作确认Modal
      */
     closeConfirmDrawModal(){
         this.setState({"classId":''});
@@ -505,7 +505,7 @@ const AntMulitiClassComponents = React.createClass({
                         <Radio value="0">全部</Radio>
                         <Radio value="1">已发布</Radio>
                         <Radio value="2">未发布</Radio>
-                        {/*<Radio value="3">已撤回</Radio>*/}
+                        {/*<Radio value="3">已删除</Radio>*/}
                     </RadioGroup>
 					<div className="details">
                     	{this.state.cardArray} 
@@ -557,7 +557,7 @@ const AntMulitiClassComponents = React.createClass({
                 ></ConfirmModal>
 
                 <ConfirmModal ref="confirmDrawModal"
-                              title="确定要撤回该课程?"
+                              title="确定要删除该课程?"
                               onConfirmModalCancel={this.closeConfirmDrawModal}
                               onConfirmModalOK={this.withDrawClass}
                 ></ConfirmModal>
