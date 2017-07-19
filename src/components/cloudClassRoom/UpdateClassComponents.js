@@ -100,7 +100,7 @@ const UpdateClassComponents = React.createClass({
         var content = updateClassObj.content;
         var isSeries = updateClassObj.isSeries;
         var courseTypeId = updateClassObj.courseTypeId;
-        var courseClass = updateClassObj.courseClass;
+        var courseClass = updateClassObj.courseClassId;
         var image = updateClassObj.image;
         var videoNum = updateClassObj.videoNum;
         var startTime = updateClassObj.startTime;
@@ -200,7 +200,7 @@ const UpdateClassComponents = React.createClass({
                 var timeObj = <Col span={4}>
                     <DatePicker
                         key={lessonNum}
-                        value={moment(liveTime, dateFullFormat)}
+                        defaultValue={moment(liveTime, dateFullFormat)}
                         className="lessonTime"
                         showTime
                         format="YYYY-MM-DD HH:mm:ss"
