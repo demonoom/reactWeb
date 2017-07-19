@@ -18,6 +18,7 @@ const AntMulitiClassComponents = React.createClass({
 
         return {
             currentPage:1,
+            classFliterValue:"0",
         };
     },
 
@@ -39,7 +40,9 @@ const AntMulitiClassComponents = React.createClass({
         var _this = this;
         _this.getCourseList(_this.state.currentPage,isSeries);
     },
-
+    /**
+     * 获取课程列表
+     */
     getCourseList(pageNo,isSeries,is_publish){
         var _this = this;
         var cloudClassRoomUser = JSON.parse(sessionStorage.getItem("cloudClassRoomUser"));
@@ -50,7 +53,7 @@ const AntMulitiClassComponents = React.createClass({
             "isseries":'',
             "coursetypeid":'',
             "numPerPage":getPageSize(),
-            "is_publish":'',
+            "is_publish":'0',
             "userId":cloudClassRoomUser.colUid
         };
         if(isEmpty(isSeries)==false){
@@ -125,14 +128,13 @@ const AntMulitiClassComponents = React.createClass({
                     optButtons=<div>
                         {/*<Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,row)}></Button></Col>*/}
                         <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
-                        <Col span={24}><Button icon="rollback" className="exam-particulars_title" title="撤回" onClick={_this.showConfirmDrwaModal.bind(_this,id)}></Button></Col>
+                        <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除" onClick={_this.showConfirmDrwaModal.bind(_this,id)}></Button></Col>
                     </div>;
                 }else{
                     optButtons=<div>
                         <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
                     </div>;
                 }
-
                 break;
             case "2":
                 isPublishStr="未发布";
@@ -140,6 +142,7 @@ const AntMulitiClassComponents = React.createClass({
                     <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
                     <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,row)}></Button></Col>
                     <Col span={24}><Button icon="check-circle-o" className="exam-particulars_title" title="发布" onClick={_this.showConfirmPushModal.bind(_this,id)}></Button></Col>
+                    <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除" onClick={_this.showConfirmDrwaModal.bind(_this,id)}></Button></Col>
                 </div>;
                 break;
             case "3":
@@ -309,7 +312,7 @@ const AntMulitiClassComponents = React.createClass({
     updateCourse(){
         var _this = this;
         var param = {
-            "method": 'updateCourse',
+            "method": 'updateCoursePublish',
             "data": JSON.stringify(courseInfoJson),
         };
         doWebService_CloudClassRoom(JSON.stringify(param), {
@@ -372,7 +375,7 @@ const AntMulitiClassComponents = React.createClass({
     editClass(updateClassObj){
         // console.log("editClass classId:"+classId);
         this.setState({updateClassObj});
-        this.setState({"updateClassModalVisible":true});
+        this.setState({"updateClassModalVisible":true,"isChangeStep":false,stepDirect:''});
     },
 
     showCreateClassModal(){
@@ -502,7 +505,7 @@ const AntMulitiClassComponents = React.createClass({
                         <Radio value="0">全部</Radio>
                         <Radio value="1">已发布</Radio>
                         <Radio value="2">未发布</Radio>
-                        <Radio value="3">已撤回</Radio>
+                        {/*<Radio value="3">已撤回</Radio>*/}
                     </RadioGroup>
 					<div className="details">
                     	{this.state.cardArray} 

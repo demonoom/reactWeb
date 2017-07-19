@@ -32,6 +32,7 @@ const UpdateClassComponents = React.createClass({
             teamDisabled:true,
             teamUserOptionArray:[],
             cloudClassRoomUser:cloudClassRoomUser,
+            defaultTeamSelected:'',
         };
     },
 
@@ -79,10 +80,13 @@ const UpdateClassComponents = React.createClass({
         /*if(isEmpty(updateClassObj)==false){
             this.initPageInfo(updateClassObj);
         }*/
-        this.getAllClass();
-        this.getAllSubject();
+       /* this.getAllClass();
+        this.getAllSubject();*/
     },
-
+    /**
+     * 初始化更新页面
+     * @param updateClassObj
+     */
     initPageInfo(updateClassObj){
         var _this = this;
         var courseName = updateClassObj.courseName;
@@ -150,7 +154,7 @@ const UpdateClassComponents = React.createClass({
             // defaultSubjectSelected:,
             defaultSelected:courseClass,
             publishType,
-            defaultTeamSelected:publisher_id,
+            // defaultTeamSelected:publisher_id,
             courseSummary:content,
             videoNum,classTimeRange,isTeam,isSeriesDisabled,isSeries,teamDisabled,fileList,isSeriesStr,videoNumInputDisable
         });
@@ -214,6 +218,8 @@ const UpdateClassComponents = React.createClass({
                 _this.setState({lessonArray});
             })
         }
+        _this.getAllClass();
+        _this.getAllSubject();
     },
 
     /**
@@ -248,7 +254,7 @@ const UpdateClassComponents = React.createClass({
         });
     },
     /**
-     * 获取所有的授课科目
+     * 获取所有的授课科目，并设置默认选中的科目
      */
     getAllSubject(){
         var _this = this;
@@ -333,6 +339,9 @@ const UpdateClassComponents = React.createClass({
                     teamJson.teamUserOptionArray = teamUserOptionArray;
                     teamOptionArray.push(optionObj);
                     teamJsonArray.push(teamJson);
+                    if(id == courseInfoJson.publisher_id){
+                        _this.setState({"defaultTeamSelected":name});
+                    }
                 }
                 _this.initPageInfo(_this.state.updateClassObj);
                 _this.setState({teamOptionArray});
@@ -419,6 +428,7 @@ const UpdateClassComponents = React.createClass({
         }else{
             moneyInputDisable = false;
         }
+        courseInfoJson.isFree = isFree;
         this.setState({
             isFree: isFree,moneyInputDisable,money:courseInfoJson.money
         });
@@ -711,6 +721,14 @@ const UpdateClassComponents = React.createClass({
      */
     getLessonImageList(file,isRemoved){
         var lessonImage = file.response;
+        if(isEmpty(lessonImage)==false){
+            var fileJson = {
+                uid: Math.random(),
+                url: lessonImage,
+            }
+            fileList.splice(0);
+            fileList.push(fileJson);
+        }
         if(isEmpty(isRemoved)==false && isRemoved=="removed"){
             lessonImage = "";
         }

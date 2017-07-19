@@ -80,6 +80,7 @@ const CreateClassComponents = React.createClass({
         courseInfoJson.publisher_id=this.state.cloudClassRoomUser.colUid;
         courseInfoJson.money=0;
         courseInfoJson.isFree=1;
+        fileList.splice(0);
         this.setState({isSeries,isSeriesStr,videoNumInputDisable,videoNum,
             "courseName":'',"isFree":1,"money":0,"defaultSubjectSelected":"",
             "defaultSelected":'',"isTeam":1,"defaultTeamSelected":'',
@@ -233,6 +234,7 @@ const CreateClassComponents = React.createClass({
                 } else {
                     message.error("课程创建失败");
                 }
+                fileList.splice(0);
                 _this.props.onSaveOk();
             },
             onError: function (error) {
