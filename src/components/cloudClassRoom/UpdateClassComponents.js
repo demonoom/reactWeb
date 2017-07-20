@@ -623,6 +623,12 @@ const UpdateClassComponents = React.createClass({
             videoJson.courseId = courseInfoJson.id;
             videoJson.userID =teacher;
             videoJson.liveTime = new Date(time).valueOf();
+            if(videoJson.squence==1){
+                courseInfoJson.startTime = videoJson.liveTime;
+            }
+            if(videoJson.squence==lessonTimeTagArray.length){
+                courseInfoJson.endTime = videoJson.liveTime;
+            }
             this.buildVideosArray(videoJson);
         }
         if(isEmpty(courseInfoJson.videos)==false){
