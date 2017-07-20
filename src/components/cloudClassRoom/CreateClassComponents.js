@@ -2,10 +2,11 @@ import React, { PropTypes } from 'react';
 import { Tabs, Breadcrumb, Icon,Card,Button,Row,Col,Steps,
     Input,Select,Radio,DatePicker,Checkbox,message} from 'antd';
 import ImageAnswerUploadComponents from './ImageAnswerUploadComponents';
-import {isEmpty} from '../../utils/utils';
+import {isEmpty,getLocalTime} from '../../utils/utils';
 import {doWebService_CloudClassRoom} from '../../utils/CloudClassRoomURLUtils';
 import moment from 'moment';
 const dateFormat = 'YYYY/MM/DD';
+const dateFullFormat = 'YYYY-MM-DD HH:mm:ss';
 const Step = Steps.Step;
 const Option = Select.Option;
 const RadioGroup = Radio.Group;
@@ -400,8 +401,37 @@ const CreateClassComponents = React.createClass({
         var newVideoNum = parseInt(videoNumBeforeAdd)+1
         courseInfoJson.videoNum=newVideoNum;
         this.setState({lessonArray,"videoNum":newVideoNum});
+        // this.buildEveryLessonTag(lessonArray);
     },
 
+    buildEveryLessonTag(lessonArray){
+        var everyLessonArray=[];
+        // <Col span={4}>第{lessonNum}课时</Col>
+        if(typeof(lessonArray)!="undefined" ){
+            for(var i=0;i<lessonArray.length;i++){
+                var lessonJson = lessonArray[i];
+                var lessonRowObj = <Row>
+                    <Col span={4} className="add_left">第{lessonJson.lessonNum}课时</Col>
+                    <Col span={8}>
+                        <Input key={i} id={lessonJson.lessonNum} onChange={this.lessonTitleOnChange}/>
+                    </Col>
+                    <Col span={4}>{lessonJson.teacherObj}</Col>
+                    <Col span={4}>{lessonJson.timeObj}</Col>
+                    <Col span={4}>
+                        <Button icon="delete" onClick={this.removeLesson.bind(this,lessonJson.lessonNum)}></Button>
+                    </Col>
+                </Row>;
+                everyLessonArray.push(lessonRowObj);
+            }
+        }
+        this.setState({everyLessonArray});
+    },
+    /**
+     * 创建课程页面，日期改变响应函数
+     * @param value
+     * @param dateString
+     * @param Event
+     */
     lessonTimeOnChange(value, dateString,Event) {
         console.log('Selected Time: ', value);
         console.log('Formatted Selected Time: ', dateString);
@@ -630,7 +660,10 @@ const CreateClassComponents = React.createClass({
         //题目图片答案的图片来源
         courseInfoJson.image = lessonImage;
     },
-
+    /**
+     * 创建课程页面的排课名称改变响应函数
+     * @param e
+     */
     lessonTitleOnChange(e){
         var target = e.target;
         if(navigator.userAgent.indexOf("Chrome") > -1){
@@ -665,6 +698,19 @@ const CreateClassComponents = React.createClass({
             videoJsonArray.push(videoJson);
         }
         courseInfoJson.videos = videoJsonArray;
+    },
+
+    getVideoInfoFromCourseInfoJson(squence){
+        var videoInfo;
+        var videos = courseInfoJson.videos;
+        for(var i=0;i<videos.length;i++){
+            var videoJson = videos[i];
+            if(videoJson.squence == squence){
+                videoInfo = videoJson;
+                break;
+            }
+        }
+        return videoInfo;
     },
 
     teamTeacherSelectOnChange(value){
@@ -796,13 +842,31 @@ const CreateClassComponents = React.createClass({
             if(typeof(this.state.lessonArray)!="undefined" ){
                 for(var i=0;i<this.state.lessonArray.length;i++){
                     var lessonJson = this.state.lessonArray[i];
+                    //获取已经保存的时间信息，并重新初始化到页面的组件上
+                    var videoInfo = this.getVideoInfoFromCourseInfoJson(lessonJson.lessonNum);
+                    var videoName="";
+                    if(isEmpty(videoInfo)==false){
+                        console.log("videoInfo name:"+videoInfo.name);
+                        videoName = videoInfo.name;
+                    }
                     var lessonRowObj = <Row>
                         <Col span={4} className="add_left">第{lessonJson.lessonNum}课时</Col>
                         <Col span={8}>
-                            <Input id={lessonJson.lessonNum} onChange={this.lessonTitleOnChange}/>
+                            <Input key={i} id={lessonJson.lessonNum} defaultValue={videoName} onChange={this.lessonTitleOnChange}/>
                         </Col>
                         <Col span={4}>{lessonJson.teacherObj}</Col>
-                        <Col span={4}>{lessonJson.timeObj}</Col>
+                        <Col span={4}>
+                            <Col span={4}>
+                                <DatePicker
+                                    className="lessonTime"
+                                    showTime
+                                    format="YYYY-MM-DD HH:mm:ss"
+                                    placeholder="Select Time"
+                                    onChange={this.lessonTimeOnChange}
+                                    onOk={this.lessonTimeOnOk}
+                                />
+                            </Col>
+                        </Col>
                         <Col span={4}>
                             <Button icon="delete" onClick={this.removeLesson.bind(this,lessonJson.lessonNum)}></Button>
                         </Col>
