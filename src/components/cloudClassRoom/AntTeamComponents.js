@@ -637,8 +637,8 @@ const AntTeamComponents = React.createClass({
                 var userAvatar = teacherInfoArray[3];
                 const data = {key:userId,
                     label: <div>
-                        <span>{userName}</span>
-                        <span>{schoolName}</span>
+                        <div className="group_team_gray6">{userName}</div>
+                        <div className="group_team_gray9">{schoolName}</div>
                     </div>, value: userId+"#"+userName+"#"+schoolName+"#"+userAvatar }
                 teacherTargetOptions.push(data);
             });
@@ -664,8 +664,8 @@ const AntTeamComponents = React.createClass({
                 var userAvatar = teacherInfoArray[3];
                 const data = {key:userId,
                     label: <div>
-                        <span>{userName}</span>
-                        <span>{schoolName}</span>
+                        <div className="group_team_gray6">{userName}</div>
+                        <div className="group_team_gray9">{schoolName}</div>
                     </div>, value: userId+"#"+userName+"#"+schoolName+"#"+userAvatar }
                 teacherSrcOptions.push(data);
             });
@@ -857,7 +857,7 @@ const AntTeamComponents = React.createClass({
         var _this = this;
         var mainPanel;
         if(_this.state.optType == "teamSet"){
-            var welcomeTitle = "群设置";
+            var welcomeTitle = "团队设置";
             var managerUser = _this.state.settingTeam.user;
             var topButton;
             var dissolutionChatGroupButton;
@@ -865,14 +865,14 @@ const AntTeamComponents = React.createClass({
             if(managerUser.colUid==_this.state.cloudClassRoomUser.colUid){
                 topButton = <span className="right_ri">
                     <span className="toobar">
-                        <Button type="primary" onClick={_this.showAddMembersModal}>添加成员</Button>
+                        <Button  onClick={_this.showAddMembersModal} className="group_edit_add"><Icon type="plus" />添加成员</Button>
                     </span>
                 </span>;
-                dissolutionChatGroupButton = <Button onClick={_this.showDissolutionTeamConfirmModal} className="group_red_font"><i className="iconfont">&#xe616;</i>解散该团队</Button>;
-                editTeamButton=<Button icon="edit" onClick={_this.showUpdateTeamNameModal}></Button>;
+                dissolutionChatGroupButton = <Button onClick={_this.showDissolutionTeamConfirmModal} className="group_red_font">解散该团队</Button>;
+                editTeamButton=<Button onClick={_this.showUpdateTeamNameModal} className="group_edit"><i className="iconfont">&#xe610;</i>编辑</Button>;
             }else{
                 topButton = null;
-                dissolutionChatGroupButton = <Button onClick={_this.showExitTeamConfirmModal} className="group_red_font"><i className="iconfont">&#xe616;</i>退出该团队</Button>;
+                dissolutionChatGroupButton = <Button onClick={_this.showExitTeamConfirmModal} className="group_red_font">退出该团队</Button>;
                 editTeamButton = null;
             }
             var userLiTagArray=[];
@@ -918,7 +918,7 @@ const AntTeamComponents = React.createClass({
                         <div className="integral_line"></div>
                     </ul>
                     <ul className="group_fr_ul">
-                        <li className="color_gary_f"><span>群聊成员：{userLiTagArray.length}人</span>{topButton}</li>
+                        <li className="color_gary_f"><span>团队成员：{userLiTagArray.length}人</span>{topButton}</li>
                         <li className="user_hei">
                             {userLiTagArray}
                         </li>
@@ -982,7 +982,7 @@ const AntTeamComponents = React.createClass({
                                 </Col>
                                 <Col className="ant-transfer-list team_add">
                                     <div>
-                                        <div style={{height:'300px','overflow':'scroll'}}>
+                                        <div className="group_team2">
                                             <CheckboxGroup options={this.state.teacherTargetOptions} value={this.state.teacherTargetChecked} onChange={this.teacherTargetOnChange} />
                                         </div>
                                     </div>
@@ -1005,25 +1005,33 @@ const AntTeamComponents = React.createClass({
                     ]}
                 >
                     <Row className="ant-form-item">
-                        <Col span={11}>
-                            <div>
-                                <Input placeholder="请输入需添加的老师账号或姓名" value={this.state.searchKey} onChange={this.searchKeyOnChange} onPressEnter={this.findTeacherByKeyWords}/>
-                                <div style={{height:'300px','overflow':'scroll'}}>
-                                    <CheckboxGroup options={this.state.teacherSrcOptions} value={this.state.teacherSrcChecked} onChange={this.teacherSrcOnChange} />
-                                </div>
-                            </div>
-                        </Col>
-                        <Col span={2}>
-                            <Button onClick={this.addTeacherToTarget}>添加</Button>
-                            <Button onClick={this.addTeacherToSrc}>移除</Button>
-                        </Col>
-                        <Col span={11}>
-                            <div>
-                                <div style={{height:'300px','overflow':'scroll'}}>
-                                    <CheckboxGroup options={this.state.teacherTargetOptions} value={this.state.teacherTargetChecked} onChange={this.teacherTargetOnChange} />
-                                </div>
-                            </div>
-                        </Col>
+					 <Col span={24}>
+					 	<div className="ant-transfer">
+							<Col className="ant-transfer-list team_add">
+								<div>
+									<p className="team_remark">请按enter键搜索老师账号或姓名</p>
+									<div className="team_head">
+										<Input placeholder="请输入需添加的老师账号或姓名" value={this.state.searchKey} onChange={this.searchKeyOnChange} onPressEnter={this.findTeacherByKeyWords}  className="ant-transfer-list-search"/>
+										<span className="ant-transfer-list-search-action1"><Icon type="search" /></span>
+									</div>
+									<div   className="group_team">
+										<CheckboxGroup options={this.state.teacherSrcOptions} value={this.state.teacherSrcChecked} onChange={this.teacherSrcOnChange} />
+									</div>
+								</div>
+							</Col>
+							<Col className="ant-transfer-operation">
+								<Button onClick={this.addTeacherToTarget}><Icon type="right" /></Button>
+								<Button onClick={this.addTeacherToSrc}><Icon type="left" /></Button>
+							</Col>
+							<Col className="ant-transfer-list team_add">
+								<div>
+									<div className="group_team2">
+										<CheckboxGroup options={this.state.teacherTargetOptions} value={this.state.teacherTargetChecked} onChange={this.teacherTargetOnChange} />
+									</div>
+								</div>
+							</Col>
+						</div>
+						</Col>
                     </Row>
 
                 </Modal>

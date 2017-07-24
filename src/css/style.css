@@ -1585,11 +1585,11 @@ a {
 }
 @font-face {
   font-family: 'iconfont';  /* project id 197083 */
-  src: url('//at.alicdn.com/t/font_x6pwc65egffxbt9.eot');
-  src: url('//at.alicdn.com/t/font_x6pwc65egffxbt9.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_x6pwc65egffxbt9.woff') format('woff'),
-  url('//at.alicdn.com/t/font_x6pwc65egffxbt9.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_x6pwc65egffxbt9.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_2thffxnnfi5rvn29.eot');
+  src: url('//at.alicdn.com/t/font_2thffxnnfi5rvn29.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_2thffxnnfi5rvn29.woff') format('woff'),
+  url('//at.alicdn.com/t/font_2thffxnnfi5rvn29.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_2thffxnnfi5rvn29.svg#iconfont') format('svg');
 }
 .iconfont{
 	font-family:"iconfont" !important;
@@ -3045,6 +3045,7 @@ a.color_gary_f, .color_gary_f{
 	color:#333;
 	font-size:14px;
 	line-height:24px;
+	min-height:24px;
 }
 .group_fr_ul li.user_hei{
 	min-height:65px;
@@ -3540,9 +3541,12 @@ a.color_gary_f, .color_gary_f{
     border: none;
     background: none;
 	margin-left:12px;
+	border:1px solid #f15e5e;
+	padding:8px 25px;
 }
 .group_red_font:hover{
 	color:#f97979;
+	border:1px solid #f97979;
 }
 .group_red_font i{
 	font-size:14px;
@@ -5096,7 +5100,7 @@ select.course_n:hover{
 	padding: 7px 16px;
 }
 .group_team{
-	height:240px;
+	height:230px;
 	overflow: auto;
 }
 .group_team label{
@@ -5118,8 +5122,57 @@ select.course_n:hover{
 .group_team_gray6{
 	font-size: 14px;
 	color: #666;
+	max-width: 210px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
 }
 .group_team_gray9{
 	font-size: 12px;
 	color: #999;
+	max-width: 200px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+.group_team2{
+	height:300px;
+	overflow: auto;
+}
+.group_team2 label{
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	padding: 7px 16px;
+	-webkit-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+	display: block;
+}
+.group_team2 label span:nth-child(1){
+	float: left;
+	margin-top: 2px;
+}
+.group_team2 label span:nth-child(2){
+	display: inline-block;
+}
+.group_edit{
+	position: absolute;
+    margin-left: 10px;
+	color: #0078e4;
+    border: none;
+    background: none;
+	padding: 2px 8px;
+}
+.group_edit i{
+	font-size: 16px;
+    padding: 0 10px 0 0;
+}
+.group_edit_add{
+	color: #0078e4;
+    border: none;
+    background: none;
+	padding: 2px 8px;
+}
+.group_edit_add:hover{
+	color:#57C5F7;
 }
