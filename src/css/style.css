@@ -5012,7 +5012,7 @@ select.course_n:hover{
     width: 69px;
 }
 .table_team table tr td:nth-child(4) {
-    width: 110px;
+    width: 70px;
 }
 .information .ant-card-body > div{
 	display:inline-block
@@ -5069,4 +5069,57 @@ select.course_n:hover{
 }
 .modal_cloud_info{
 	padding:15px;
+}
+.team_add{
+	width: 268px;
+	height: 300px;
+	padding-top: 0px;
+}
+.team_head{
+	position: relative;
+	margin: 0 8px;
+}
+.ant-transfer-list-search-action1 {
+	color: #ccc;
+	position: absolute;
+	top: 2px;
+	right: 2px;
+	width: 26px;
+	height: 26px;
+	line-height: 26px;
+	text-align: center;
+	font-size: 14px;
+}
+.team_remark{
+	border-bottom: 1px solid #e9e9e9;
+	margin-bottom: 6px;
+	padding: 7px 16px;
+}
+.group_team{
+	height:240px;
+	overflow: auto;
+}
+.group_team label{
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	padding: 7px 16px;
+	-webkit-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+	display: block;
+}
+.group_team label span:nth-child(1){
+	float: left;
+	margin-top: 2px;
+}
+.group_team label span:nth-child(2){
+	display: inline-block;
+}
+.group_team_gray6{
+	font-size: 14px;
+	color: #666;
+}
+.group_team_gray9{
+	font-size: 12px;
+	color: #999;
 }

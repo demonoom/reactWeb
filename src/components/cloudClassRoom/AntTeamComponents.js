@@ -571,7 +571,7 @@ const AntTeamComponents = React.createClass({
         var param = {
             "method": 'findTeacherByKeyWords',
             "searchKeyWords": _this.state.searchKey,
-            "pageNo":-1,
+            "pageNo":_this.state.teacherSourceListPageNo,
         };
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -584,8 +584,8 @@ const AntTeamComponents = React.createClass({
                     if (parseInt(userId) != _this.state.cloudClassRoomUser.colUid) {
                         const data = {key:userId,
                         label: <div>
-                            <span>{userName}</span>
-                            <span>{schoolName}</span>
+                            <div className="group_team_gray6">{userName}</div>
+                            <div className="group_team_gray9">{schoolName}</div>
                         </div>, value: userId+"#"+userName+"#"+schoolName+"#"+userAvatar }
                         teacherSrcOptions.push(data);
                     }
@@ -962,23 +962,31 @@ const AntTeamComponents = React.createClass({
                         </span>
                     </Row>
                     <Row className="ant-form-item">
-                        <Col span={11}>
-                            <div>
-                                <Input placeholder="请输入需添加的老师账号或姓名" value={this.state.searchKey} onChange={this.searchKeyOnChange} onPressEnter={this.findTeacherByKeyWords}/>
-                                <div style={{height:'300px','overflow':'scroll'}}>
-                                    <CheckboxGroup options={this.state.teacherSrcOptions} value={this.state.teacherSrcChecked} onChange={this.teacherSrcOnChange} />
-                                </div>
-                            </div>
-                        </Col>
-                        <Col span={2}>
-                            <Button onClick={this.addTeacherToTarget}>添加</Button>
-                            <Button onClick={this.addTeacherToSrc}>移除</Button>
-                        </Col>
-                        <Col span={11}>
-                            <div>
-                                <div style={{height:'300px','overflow':'scroll'}}>
-                                    <CheckboxGroup options={this.state.teacherTargetOptions} value={this.state.teacherTargetChecked} onChange={this.teacherTargetOnChange} />
-                                </div>
+                        <Col span={24}>
+                            <div className="ant-transfer">
+                                <Col className="ant-transfer-list team_add">
+                                    <div>
+                                        <p className="team_remark">请按enter键搜索老师账号或姓名</p>
+                                        <div className="team_head">
+                                            <Input placeholder="请输入需添加的老师账号或姓名" value={this.state.searchKey} onChange={this.searchKeyOnChange} onPressEnter={this.findTeacherByKeyWords} className="ant-transfer-list-search"/>
+                                            <span className="ant-transfer-list-search-action1"><Icon type="search" /></span>
+                                        </div>
+                                        <div  className="group_team">
+                                            <CheckboxGroup options={this.state.teacherSrcOptions} value={this.state.teacherSrcChecked} onChange={this.teacherSrcOnChange}/>
+                                        </div>
+                                    </div>
+                                </Col>
+                                <Col className="ant-transfer-operation">
+                                    <Button onClick={this.addTeacherToTarget}><Icon type="right" /></Button>
+                                    <Button onClick={this.addTeacherToSrc}><Icon type="left" /></Button>
+                                </Col>
+                                <Col className="ant-transfer-list team_add">
+                                    <div>
+                                        <div style={{height:'300px','overflow':'scroll'}}>
+                                            <CheckboxGroup options={this.state.teacherTargetOptions} value={this.state.teacherTargetChecked} onChange={this.teacherTargetOnChange} />
+                                        </div>
+                                    </div>
+                                </Col>
                             </div>
                         </Col>
                     </Row>
