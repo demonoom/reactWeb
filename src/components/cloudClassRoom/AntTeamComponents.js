@@ -48,6 +48,7 @@ const AntTeamComponents = React.createClass({
             teacherSrcOptions:[],
             teacherTargetOptions:[],
             teamUserId:-1,
+            teamTypeFliterValue:-1,
         };
     },
 
@@ -254,6 +255,59 @@ const AntTeamComponents = React.createClass({
         _this.setState({userTeamData:teamTableData,totalTeamCount:total});
     },
 
+    /*buildTeamListByResponse(response){
+        var _this = this;
+        var total = response.length;
+        response.forEach(function (team) {
+            var isAtThisTeam=false;
+            if(isEmpty(team.users)){
+                team.users.forEach(function (teamUser) {
+                    if(teamUser.user.colUid==_this.state.cloudClassRoomUser.colUid){
+                        isAtThisTeam=true;
+                    }
+                });
+            }
+            var teamUsersPhoto=[];
+            var imgTag = <div className="maaee_group_face">{teamUsersPhoto}</div>;
+            if(isEmpty(team.users)==false ){
+                for(var i=0;i<team.users.length;i++){
+                    var teamUser = team.users[i];
+                    var userAvatarTag = <img src={teamUser.user.avatar} ></img>;
+                    teamUsersPhoto.push(userAvatarTag);
+                    if(i>=3){
+                        break;
+                    }
+                }
+                switch (teamUsersPhoto.length){
+                    case 1:
+                        imgTag = <div className="maaee_group_face1">{teamUsersPhoto}</div>;
+                        break;
+                    case 2:
+                        imgTag = <div className="maaee_group_face2">{teamUsersPhoto}</div>;
+                        break;
+                    case 3:
+                        imgTag = <div className="maaee_group_face3">{teamUsersPhoto}</div>;
+                        break;
+                    case 4:
+                        imgTag = <div className="maaee_group_face">{teamUsersPhoto}</div>;
+                        break;
+                }
+            }
+            var teamUserCount=0;
+            if(isEmpty(team.users)==false){
+                teamUserCount = team.users.length;
+            }
+            teamTableData.push({
+                key: team.id,
+                teamPhoto:imgTag,
+                teamName: team.name,
+                teamCount: teamUserCount,
+                teamSet:<Button style={{ }} type=""  value={team.id} onClick={_this.editTeam.bind(_this,team)}  icon="setting" title="设置" className="score3_i"></Button>
+            });
+        });
+        _this.setState({userTeamData:teamTableData,totalTeamCount:total});
+    },*/
+
     showTeamSettingModal(){
 
     },
@@ -276,8 +330,10 @@ const AntTeamComponents = React.createClass({
         });
         if(e.target.value==0){
             this.findTeamByManager(1);
-        }else{
+        }else if(e.target.value == 1){
             this.findMyJoinTeam(1);
+        }else{
+            this.findTeamByUserId(1);
         }
     },
 
@@ -343,10 +399,12 @@ const AntTeamComponents = React.createClass({
     },
 
     createTeamModalHandleCancel(){
+        this.initPage();
         this.setState({"createTeamModalVisible":false});
     },
 
     updateTeamModalHandleCancel(){
+        this.initPage();
         this.setState({"updateTeamModalVisible":false});
     },
 
@@ -358,6 +416,9 @@ const AntTeamComponents = React.createClass({
         var teacherTargetOptions = _this.state.teacherTargetOptions;
         if(isEmpty(teacherTargetOptions)){
             message.error("请选择团队成员");
+            return;
+        }else if(isEmpty(_this.state.teamName)){
+            message.error("团队名称不能为空,请重新输入,谢谢！");
             return;
         }
         var teamJson={};
@@ -537,6 +598,10 @@ const AntTeamComponents = React.createClass({
      */
     updateTeamName(){
         var _this = this;
+        if(isEmpty(_this.state.settingTeamName)){
+            message.error("团队名称不能为空,请重新输入,谢谢！");
+            return;
+        }
         var teamJson = _this.state.settingTeam;
         teamJson.name = _this.state.settingTeamName;
         var mySelfJson={id:_this.state.cloudClassRoomUser.colUid};
@@ -581,13 +646,17 @@ const AntTeamComponents = React.createClass({
                     var userName = e.userName;
                     var schoolName = e.schoolName;
                     var userAvatar = e.avatar;
-                    if (parseInt(userId) != _this.state.cloudClassRoomUser.colUid) {
-                        const data = {key:userId,
-                        label: <div>
-                            <div className="group_team_gray6">{userName}</div>
-                            <div className="group_team_gray9">{schoolName}</div>
-                        </div>, value: userId+"#"+userName+"#"+schoolName+"#"+userAvatar }
-                        teacherSrcOptions.push(data);
+                    var isExitAtTargetOptions=_this.findTeacherIsExitAtTargetOptions(userId);
+                    if(isExitAtTargetOptions==false){
+                        //不能添加自己
+                        if (parseInt(userId) != _this.state.cloudClassRoomUser.colUid) {
+                            const data = {key:userId,
+                                label: <div>
+                                    <div className="group_team_gray6">{userName}</div>
+                                    <div className="group_team_gray9">{schoolName}</div>
+                                </div>, value: userId+"#"+userName+"#"+schoolName+"#"+userAvatar }
+                            teacherSrcOptions.push(data);
+                        }
                     }
                 });
                 _this.setState({teacherSrcOptions});
@@ -597,6 +666,27 @@ const AntTeamComponents = React.createClass({
             }
         });
     },
+
+    /**
+     * 判断当前查询到的用户在Target中是否存在，如果已经存在，则过滤掉，避免重复添加
+     * @param userId
+     * @returns {boolean}
+     */
+    findTeacherIsExitAtTargetOptions(userId){
+        var isExit = false;
+        var teacherTargetOptions = this.state.teacherTargetOptions;
+        for(var i=0;i<teacherTargetOptions.length;i++){
+            var teacher = teacherTargetOptions[i];
+            var teacherArray = teacher.value.split("#");
+            var userIdInTarget = teacherArray[0];
+            if(userIdInTarget == userId){
+                isExit = true;
+                break;
+            }
+        }
+        return isExit;
+    },
+
     /**
      * 老师信息过滤文本框输入改变
      * @param e
@@ -929,6 +1019,7 @@ const AntTeamComponents = React.createClass({
         }else{
             mainPanel = <div  className="myfollow_zb">
                 <RadioGroup onChange={_this.teamTypeFliterOnChange} value={_this.state.teamTypeFliterValue}>
+                    <Radio value="-1">全部</Radio>
                     <Radio value="0">我创建的团队</Radio>
                     <Radio value="1">我加入的团队</Radio>
                 </RadioGroup>
@@ -969,7 +1060,7 @@ const AntTeamComponents = React.createClass({
                                         <p className="team_remark">请按enter键搜索老师账号或姓名</p>
                                         <div className="team_head">
                                             <Input placeholder="请输入需添加的老师账号或姓名" value={this.state.searchKey} onChange={this.searchKeyOnChange} onPressEnter={this.findTeacherByKeyWords} className="ant-transfer-list-search"/>
-                                            <span className="ant-transfer-list-search-action1"><Icon type="search" /></span>
+                                            <span className="ant-transfer-list-search-action1"><Icon type="search" onClick={this.findTeacherByKeyWords} /></span>
                                         </div>
                                         <div  className="group_team">
                                             <CheckboxGroup options={this.state.teacherSrcOptions} value={this.state.teacherSrcChecked} onChange={this.teacherSrcOnChange}/>
@@ -1012,7 +1103,7 @@ const AntTeamComponents = React.createClass({
 									<p className="team_remark">请按enter键搜索老师账号或姓名</p>
 									<div className="team_head">
 										<Input placeholder="请输入需添加的老师账号或姓名" value={this.state.searchKey} onChange={this.searchKeyOnChange} onPressEnter={this.findTeacherByKeyWords}  className="ant-transfer-list-search"/>
-										<span className="ant-transfer-list-search-action1"><Icon type="search" /></span>
+										<span className="ant-transfer-list-search-action1"><Icon type="search" onClick={this.findTeacherByKeyWords}/></span>
 									</div>
 									<div   className="group_team">
 										<CheckboxGroup options={this.state.teacherSrcOptions} value={this.state.teacherSrcChecked} onChange={this.teacherSrcOnChange} />
@@ -1066,7 +1157,7 @@ const AntTeamComponents = React.createClass({
                        ]}
                 >
                     <Row className="ant-form-item">
-                        <Col span={6} className="right_look">群名称：</Col>
+                        <Col span={6} className="right_look">团队名称：</Col>
                         <Col span={14}>
                             <Input value={this.state.settingTeamName} defaultValue={this.state.settingTeamName} onChange={this.updateTeamNameOnChange}/>
                         </Col>

@@ -150,7 +150,7 @@ const UpdateClassComponents = React.createClass({
         }
         _this.setState({
             updateId:updateClassObj.id,
-            courseName,isFree,money,
+            courseName,isFree,money,moneyInputDisable,
             // defaultSubjectSelected:,
             defaultSelected:courseClass,
             publishType,
@@ -377,6 +377,7 @@ const UpdateClassComponents = React.createClass({
             }
         }
         this.setState({teamUserOptionArray});
+        this.changeVideosSelect(this.state.isTeam,teamUserOptionArray);
     },
 
     /**
@@ -406,18 +407,19 @@ const UpdateClassComponents = React.createClass({
         var isTeam = e.target.value;
         var isSeriesDisabled;
         var teamDisabled;
-        if(isTeam==1){
+        if(isTeam==1){ // 单人
             //发布者ＩＤ 单人授课时为人员id　团队授课时为团队id
             courseInfoJson.publisherId=this.state.cloudClassRoomUser.colUid;
             courseInfoJson.publishType=2;
             isSeriesDisabled=false;
             teamDisabled=true;
-        }else{
+        }else{ // 团队
             courseInfoJson.publisherId="";
             courseInfoJson.publishType=1;
             isSeriesDisabled=true;
             teamDisabled=false;
         }
+        this.changeVideosSelect(isTeam);
         this.setState({
             isTeam: isTeam,isSeriesDisabled,teamDisabled
         });
@@ -462,6 +464,65 @@ const UpdateClassComponents = React.createClass({
         courseInfoJson.publisherId=value;
         this.getTeamUserOptions(value);
         this.setState({"teamId":value,defaultTeamSelected:value});
+    },
+    /**
+     * 修改排课部分的页面显示方式：
+     * 单人授课只显示姓名
+     * 团队授课显示团队成员的下拉列表
+     */
+    changeVideosSelect(isTeam,teamUserOptionArray){
+        var _this = this;
+        var updateClassObj = _this.state.updateClassObj;
+        // var isTeam = _this.state.isTeam;
+        var videos = updateClassObj.videos;
+        if(isEmpty(videos)==false){
+            var lessonNum=0;
+            lessonArray.splice(0);
+            videos.forEach(function (video) {
+                var squence = video.squence;
+                var name = video.name;
+                var videoJson = {squence,name};
+                _this.buildVideosArray(videoJson,"title");
+                lessonNum+=1;
+                var liveTime = getLocalTime(video.liveTime);
+                var videoNameObj = <Col span={8}>
+                    <Input id={lessonNum} defaultValue={video.name} onChange={_this.lessonTitleOnChange}/>
+                </Col>;
+                var teacherObj;
+                if(isTeam==1) {
+                    teacherObj = <span>{_this.state.cloudClassRoomUser.userName}</span>;
+                }else{
+                    teacherObj = <Col span={24}>
+                        <select className="lessonTeamTeacher course_n">
+                            {teamUserOptionArray}
+                        </select>
+                    </Col>;
+                }
+                // defaultValue={moment({liveTime}, dateFullFormat)}
+                // value={moment({liveTime}, dateFullFormat)}
+                var timeObj = <Col span={4}>
+                    <DatePicker
+                        key={lessonNum}
+                        defaultValue={moment(liveTime, dateFullFormat)}
+                        className="lessonTime"
+                        showTime
+                        format="YYYY-MM-DD HH:mm:ss"
+                        placeholder="Select Time"
+                        onChange={_this.lessonTimeOnChange}
+                        onOk={_this.lessonTimeOnOk}
+                    />
+                </Col>;
+                var lessonJson = {lessonNum,teacherObj,timeObj,videoNameObj};
+                lessonArray.push(lessonJson);
+                _this.setState({lessonArray});
+            })
+        }
+        /*if(isTeam==1){
+            //团队
+
+        }else{
+            //个人
+        }*/
     },
 
     /**
