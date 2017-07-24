@@ -239,11 +239,21 @@ const UpdateClassComponents = React.createClass({
                         var classInfo = response[i];
                         var id = classInfo.id;
                         var name = classInfo.name;
-                        var optionObj = <Option key={id} value={id}>{name}</Option>;
-                        classOptionArray.push(optionObj);
-                        if(id == courseInfoJson.courseClass){
-                            _this.setState({"defaultSelected":name});
+                        var courseTypes = classInfo.courseTypes;
+                        if(isEmpty(courseTypes)==false){
+                            for(var j=0;j<courseTypes.length;j++){
+                                var courseType = courseTypes[j];
+                                var courseTypeId = courseType.id;
+                                var courseTypeName = courseType.name;
+                                var optionObj = <Option key={courseTypeId} value={courseTypeId}>{courseTypeName}</Option>;
+                                classOptionArray.push(optionObj);
+                                if(id == courseInfoJson.courseClass){
+                                    _this.setState({"defaultSelected":name});
+                                }
+                            }
                         }
+                        // var optionObj = <Option key={id} value={id}>{name}</Option>;
+                        // classOptionArray.push(optionObj);
                     }
                     _this.setState({classOptionArray});
                 }
