@@ -571,7 +571,7 @@ const AntTeamComponents = React.createClass({
         var param = {
             "method": 'findTeacherByKeyWords',
             "searchKeyWords": _this.state.searchKey,
-            "pageNo":_this.state.teacherSourceListPageNo,
+            "pageNo":-1,
         };
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
