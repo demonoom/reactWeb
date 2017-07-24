@@ -1,10 +1,11 @@
 import React, { PropTypes } from 'react';
-import { Tabs, Breadcrumb, Icon,Card,Button,Row,Col,Radio,Table,message,Modal,Input,Transfer} from 'antd';
+import { Tabs, Breadcrumb, Icon,Card,Button,Row,Col,Radio,Table,message,Modal,Input,Transfer,Checkbox} from 'antd';
 import {isEmpty} from '../../utils/utils';
 import {getPageSize} from '../../utils/Const';
 import {doWebService_CloudClassRoom} from '../../utils/CloudClassRoomURLUtils';
 import ConfirmModal from '../ConfirmModal';
 const RadioGroup = Radio.Group;
+const CheckboxGroup = Checkbox.Group;
 
 var userTeamColumns = [ {
     title: '团队头像',
@@ -21,6 +22,16 @@ var userTeamColumns = [ {
     dataIndex: 'teamSet',
 },];
 var teamTableData = [];
+const options = [
+    { label: <div>
+        <span>李老师</span><span>语文</span>
+        <span>恒坐标学校</span>
+    </div>, value: '1' },
+    { label: <div>
+        <span>张老师</span><span>数学</span>
+        <span>恒坐标学校</span>
+    </div>, value: '2' },
+];
 const AntTeamComponents = React.createClass({
 
     getInitialState() {
@@ -31,6 +42,12 @@ const AntTeamComponents = React.createClass({
             createTeamModalVisible:false,
             totalTeamCount:0,
             cloudClassRoomUser:cloudClassRoomUser,
+            optType:'teamList',
+            settingTeamName:'',
+            teacherSourceListPageNo:1,
+            teacherSrcOptions:[],
+            teacherTargetOptions:[],
+            teamUserId:-1,
         };
     },
 
@@ -44,6 +61,12 @@ const AntTeamComponents = React.createClass({
         var type = nextProps.type;
         this.setState({type,"teamSearchKey":nextProps.teamSearchKey});
         this.findTeamInfoByType(type,this.state.currentPage,nextProps.teamSearchKey);
+    },
+    /**
+     * 初始化页面元素
+     */
+    initPage(){
+        this.setState({teacherSrcOptions:[],teacherTargetOptions:[],teamName:'',searchKey:''});
     },
 
     findTeamInfoByType(type,pageNo,teamSearchKey){
@@ -179,41 +202,23 @@ const AntTeamComponents = React.createClass({
     },
 
     buildTeamListByResponse(response){
-        // var total = response.total;
-        // var responseRows=response.rows;
         var _this = this;
         var total = response.length;
         response.forEach(function (team) {
-            var requestAddBtn;
             var isAtThisTeam=false;
-            if(isEmpty(team.users)){
-                team.users.forEach(function (user) {
-                    if(users.colUid==_this.state.cloudClassRoomUser.colUid){
+            if(isEmpty(team.teamUsers)){
+                team.teamUsers.forEach(function (teamUser) {
+                    if(teamUser.user.colUid==_this.state.cloudClassRoomUser.colUid){
                         isAtThisTeam=true;
                     }
                 });
             }
-            if(isAtThisTeam==false && team.manager != _this.state.cloudClassRoomUser.colUid){
-                requestAddBtn = <Button style={{ }} type=""  value={team.id} onClick={_this.showAddTeamModal.bind(_this,team)}  icon="plus-circle-o" title="申请加入" className="score3_i"></Button>;
-            }else{
-                requestAddBtn="";
-            }
-            var settingBtn;
-            if(team.manager==_this.state.cloudClassRoomUser.colUid){
-                settingBtn=<Button style={{ }} type=""  value={team.id} onClick={_this.showUpdateTeamModal.bind(_this,team)}  icon="setting" title="设置" className="score3_i"></Button>;
-            }else{
-                settingBtn="";
-            }
-            var subjectOpt=<div>
-                {requestAddBtn}
-                {settingBtn}
-            </div>;
             var teamUsersPhoto=[];
             var imgTag = <div className="maaee_group_face">{teamUsersPhoto}</div>;
-            if(isEmpty(team.users)==false ){
-                for(var i=0;i<team.users.length;i++){
-                    var user = team.users[i];
-                    var userAvatarTag = <img src={user.avatar} ></img>;
+            if(isEmpty(team.teamUsers)==false ){
+                for(var i=0;i<team.teamUsers.length;i++){
+                    var teamUser = team.teamUsers[i];
+                    var userAvatarTag = <img src={teamUser.user.avatar} ></img>;
                     teamUsersPhoto.push(userAvatarTag);
                     if(i>=3){
                         break;
@@ -235,15 +240,15 @@ const AntTeamComponents = React.createClass({
                 }
             }
             var teamUserCount=0;
-            if(isEmpty(team.users)==false){
-                teamUserCount = team.users.length;
+            if(isEmpty(team.teamUsers)==false){
+                teamUserCount = team.teamUsers.length;
             }
             teamTableData.push({
                 key: team.id,
                 teamPhoto:imgTag,
                 teamName: team.name,
                 teamCount: teamUserCount,
-                teamSet:subjectOpt
+                teamSet:<Button style={{ }} type=""  value={team.id} onClick={_this.editTeam.bind(_this,team)}  icon="setting" title="设置" className="score3_i"></Button>
             });
         });
         _this.setState({userTeamData:teamTableData,totalTeamCount:total});
@@ -252,9 +257,12 @@ const AntTeamComponents = React.createClass({
     showTeamSettingModal(){
 
     },
-
-    showAddTeamModal(teamObj){
-        this.setState({teamObj});
+    /**
+     * 显示移除团队成员的确认modal
+     * @param removeUser
+     */
+    showRemoveUserModal(removeUser){
+        this.setState({removeUser,"exitOrDelete":'delete'});
         this.refs.confirmModal.changeConfirmModalVisible(true);
     },
     /**
@@ -335,19 +343,20 @@ const AntTeamComponents = React.createClass({
     },
 
     createTeamModalHandleCancel(){
-        this.setState({"createTeamModalVisible":false,"updateGroupId":'',targetKeys:[]});
+        this.setState({"createTeamModalVisible":false});
     },
 
     updateTeamModalHandleCancel(){
-        this.setState({"updateTeamModalVisible":false,"updateGroupId":'',targetKeys:[]});
+        this.setState({"updateTeamModalVisible":false});
     },
 
     /**
      * 创建团队
      */
-    createTeam(saveOrUpdate){
+    createTeam(){
         var _this = this;
-        if(isEmpty(_this.state.targetKeys)){
+        var teacherTargetOptions = _this.state.teacherTargetOptions;
+        if(isEmpty(teacherTargetOptions)){
             message.error("请选择团队成员");
             return;
         }
@@ -356,53 +365,32 @@ const AntTeamComponents = React.createClass({
         teamJson.createTime = new Date().valueOf();
         teamJson.manager=_this.state.cloudClassRoomUser.colUid;
         var usersArray=[];
-        _this.state.targetKeys.forEach(function (id) {
+        for(var i=0;i<teacherTargetOptions.length;i++){
+            var teacher = teacherTargetOptions[i];
+            var teacherArray = teacher.value.split("#");
+            var userId = teacherArray[0];
             var userJson={};
-            userJson.id=id;
+            userJson.id=userId;
             usersArray.push(userJson);
-        });
+        }
         var mySelfJson={id:_this.state.cloudClassRoomUser.colUid};
         usersArray.push(mySelfJson);
         teamJson.users = usersArray;
-        var requestMethod;
-        var successMessage;
-        var errorMessage;
-        switch(saveOrUpdate){
-            case "create":
-                successMessage="团队创建成功";
-                errorMessage="团队创建失败";
-                teamJson.id = "";
-                requestMethod = "saveTeam";
-                break;
-            case "update":
-                successMessage="团队修改成功";
-                errorMessage="团队修改失败";
-                teamJson.id = _this.state.teamObj.id;
-                requestMethod = "updateTeam";
-                break;
-        }
         var param = {
-            "method": requestMethod,
+            "method": "saveTeam",
             "jsonObject": JSON.stringify(teamJson),
         };
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
                 if(response==true){
-                    message.success(successMessage);
+                    message.success("团队创建成功");
                 }else{
-                    message.success(errorMessage);
+                    message.success("团队创建失败");
                 }
                 _this.createTeamModalHandleCancel();
-                _this.updateTeamModalHandleCancel();
-                switch(_this.state.type){
-                    case "myTeam":
-                        _this.findTeamByUserId();
-                        break;
-                    case "allTeam":
-                        _this.findTeam();
-                        break;
-                }
+                _this.findTeamByUserId(1);
+                _this.initPage();
             },
             onError: function (error) {
                 message.error(error);
@@ -425,56 +413,440 @@ const AntTeamComponents = React.createClass({
      */
     showCreateTeamModal(){
         this.findAllUserTeacher("create");
-        this.setState({"createTeamModalVisible":true});
+        this.setState({"createTeamModalVisible":true,"teacherSrcOptions":[],"teacherTargetOptions":[],"searchKey":''});
     },
     /**
      * 显示修改团队的modal
      */
-    showUpdateTeamModal(team){
-        this.findAllUserTeacher("update");
-        var teamName = team.name;
-        var users = team.users;
-        var targetKeys=[];
-        if(isEmpty(users)==false){
-            users.forEach(function (user) {
-                var userId = user.colUid;
-                targetKeys.push(userId);
+    editTeam(team){
+        var _this = this;
+        _this.findAllUserTeacher("update");
+        var teamUsers = team.teamUsers;
+        if(isEmpty(teamUsers)==false){
+            teamUsers.forEach(function (teamUser) {
+                if(teamUser.user.colUid==_this.state.cloudClassRoomUser.colUid){
+                    _this.setState({teamUserId:teamUser.id});
+                }
             })
         }
-        this.setState({"updateTeamModalVisible":true,teamName,targetKeys,teamObj:team});
+        _this.setState({"optType":'teamSet',"settingTeam":team});
+        //团队设置按钮和搜索文本框的显示和隐藏 true：隐藏  false：显示
+        _this.props.onSetBtnClick(true);
     },
-
+    /**
+     * 关闭移除团队成员的确认modal
+     */
     closeConfirmModal() {
         this.refs.confirmModal.changeConfirmModalVisible(false);
     },
     /**
-     * 申请加入某个团队
+     * 添加团队成员
      */
-    requestAddThisTeam(){
+    saveTeamUser(){
         var _this = this;
-        var teamObj = _this.state.teamObj;
-        console.log(teamObj.id);
-        var userId = _this.state.cloudClassRoomUser.colUid;
-        var teamUserJson = {teamId:teamObj.id,userId:parseInt(userId),
-            status:'2',createTime:new Date().valueOf()};
+        var teacherTargetOptions = _this.state.teacherTargetOptions;
+        var settingTeam = _this.state.settingTeam;
+        if(isEmpty(teacherTargetOptions)){
+            message.error("请选择团队成员");
+            return;
+        }
+        var teamUsersArray=[];
+        for(var i=0;i<teacherTargetOptions.length;i++){
+            var teacher = teacherTargetOptions[i];
+            var teacherArray = teacher.value.split("#");
+            var userId = teacherArray[0];
+            var userJson={};
+            userJson.teamId = settingTeam.id;
+            userJson.userId=userId;
+            teamUsersArray.push(userJson);
+        }
         var param = {
             "method": 'saveTeamUser',
-            "jsonObject": JSON.stringify(teamUserJson),
+            "jsonObject": JSON.stringify(teamUsersArray),
         };
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
                 if(response==true){
-                    message.success("申请成功,请等待管理员审核,谢谢!");
+                    message.success("团队成员添加成功!");
                 }else{
-                    message.error("申请失败");
+                    message.error("团队成员添加失败");
+                }
+                _this.addUserToSettingTeam();
+                _this.updateTeamModalHandleCancel();
+                _this.initPage();
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 返回团队列表
+     */
+    returnToTeamList(){
+        this.setState({optType:'teamList'});
+        //团队设置按钮和搜索文本框的显示和隐藏 true：隐藏  false：显示
+        this.props.onSetBtnClick(false);
+    },
+    /**
+     * 团队设置时，退出团队/解散团队确认操作
+     */
+    showDissolutionTeamConfirmModal(){
+        this.refs.deleteTeamConfirmModal.changeConfirmModalVisible(true);
+    },
+
+    /**
+     * 显示添加团队成员的窗口
+     */
+    showAddMembersModal(){
+        this.setState({"updateTeamModalVisible":true});
+    },
+
+    /**
+     * 显示修改群名称的窗口
+     */
+    showUpdateTeamNameModal(){
+        this.setState({updateTeamNameModalVisible:true,settingTeamName:this.state.settingTeam.name});
+    },
+
+    /**
+     * 关闭修改团队名称的窗口
+     */
+    updateTeamNameModalHandleCancel(){
+        this.setState({updateTeamNameModalVisible:false});
+    },
+
+    /**
+     * 修改团队名称时，团队名称改变的响应函数
+     */
+    updateTeamNameOnChange(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var settingTeamName = target.value;
+        this.setState({settingTeamName});
+    },
+
+    /**
+     * 修改团队名称
+     */
+    updateTeamName(){
+        var _this = this;
+        var teamJson = _this.state.settingTeam;
+        teamJson.name = _this.state.settingTeamName;
+        var mySelfJson={id:_this.state.cloudClassRoomUser.colUid};
+        teamJson.users.push(mySelfJson);
+        var param = {
+            "method": "updateTeam",
+            "jsonObject": JSON.stringify(teamJson),
+        };
+        doWebService_CloudClassRoom(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if(response==true){
+                    message.success("修改成功");
+                }else{
+                    message.success(ret.msg);
+                }
+                _this.updateTeamNameModalHandleCancel();
+                _this.findTeamByUserId();
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 根据输入的关键字，查询老师的信息
+     */
+    findTeacherByKeyWords(){
+        var _this = this;
+        const teacherSrcOptions = [];
+        var param = {
+            "method": 'findTeacherByKeyWords',
+            "searchKeyWords": _this.state.searchKey,
+            "pageNo":_this.state.teacherSourceListPageNo,
+        };
+        doWebService_CloudClassRoom(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                response.forEach(function (e) {
+                    var userId = e.colUid;
+                    var userName = e.userName;
+                    var schoolName = e.schoolName;
+                    var userAvatar = e.avatar;
+                    if (parseInt(userId) != _this.state.cloudClassRoomUser.colUid) {
+                        const data = {key:userId,
+                        label: <div>
+                            <span>{userName}</span>
+                            <span>{schoolName}</span>
+                        </div>, value: userId+"#"+userName+"#"+schoolName+"#"+userAvatar }
+                        teacherSrcOptions.push(data);
+                    }
+                });
+                _this.setState({teacherSrcOptions});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+    /**
+     * 老师信息过滤文本框输入改变
+     * @param e
+     */
+    searchKeyOnChange(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var searchKey = target.value;
+        this.setState({"searchKey":searchKey});
+    },
+    /**
+     * 老师源数据列表选中函数
+     * @param checkedValues
+     */
+    teacherSrcOnChange(checkedValues) {
+        this.setState({"teacherSrcChecked":checkedValues});
+    },
+    teacherTargetOnChange(checkedValues) {
+        this.setState({"teacherTargetChecked":checkedValues});
+    },
+    /**
+     * 将选中的数据，添加到右侧，并将已选的数据，从左侧移除
+     */
+    addTeacherToTarget(){
+        // var this = this;
+        var teacherTargetOptions=this.state.teacherTargetOptions;
+        var teacherSrcChecked = this.state.teacherSrcChecked;
+        if(isEmpty(teacherSrcChecked)==false){
+            teacherSrcChecked.forEach(function (everyTeacher) {
+                var teacherInfoArray = everyTeacher.split("#");
+                var userId = teacherInfoArray[0];
+                var userName = teacherInfoArray[1];
+                var schoolName = teacherInfoArray[2];
+                var userAvatar = teacherInfoArray[3];
+                const data = {key:userId,
+                    label: <div>
+                        <span>{userName}</span>
+                        <span>{schoolName}</span>
+                    </div>, value: userId+"#"+userName+"#"+schoolName+"#"+userAvatar }
+                teacherTargetOptions.push(data);
+            });
+            var teacherSrcOptions = this.removeTeacherFormOptions(teacherSrcChecked,"src");
+            this.setState({teacherTargetOptions,teacherSrcOptions,teacherSrcChecked:[],teacherTargetChecked:[]});
+        }else{
+            message.warning("请先选中老师再执行添加操作");
+        }
+    },
+    /**
+     * 将选中的数据，添加到左侧，并将已选的数据，从右侧移除
+     */
+    addTeacherToSrc(){
+        var _this = this;
+        var teacherSrcOptions=_this.state.teacherSrcOptions;
+        var teacherTargetChecked = _this.state.teacherTargetChecked;
+        if(isEmpty(teacherTargetChecked)==false){
+            teacherTargetChecked.forEach(function (everyTeacher) {
+                var teacherInfoArray = everyTeacher.split("#");
+                var userId = teacherInfoArray[0];
+                var userName = teacherInfoArray[1];
+                var schoolName = teacherInfoArray[2];
+                var userAvatar = teacherInfoArray[3];
+                const data = {key:userId,
+                    label: <div>
+                        <span>{userName}</span>
+                        <span>{schoolName}</span>
+                    </div>, value: userId+"#"+userName+"#"+schoolName+"#"+userAvatar }
+                teacherSrcOptions.push(data);
+            });
+            var teacherTargetOptions = _this.removeTeacherFormOptions(teacherTargetChecked,"target");
+            this.setState({teacherTargetOptions,teacherSrcOptions,teacherSrcChecked:[],teacherTargetChecked:[]});
+        }else{
+            message.warning("请先选中老师再执行添加操作");
+        }
+    },
+    /**
+     * 从checkout中移除数据
+     * @param removeOptions
+     * @param whereIs
+     */
+    removeTeacherFormOptions(removeOptions,whereIs){
+        var newArray;
+        var _this = this;
+        if(whereIs=="src"){
+            //从源数据中移除
+            var teacherSrcOptions = _this.state.teacherSrcOptions;
+            removeOptions.forEach(function (userInfo) {
+                var teacherInfoArray = userInfo.split("#");
+                var userId = teacherInfoArray[0];
+                for(var i=0;i<teacherSrcOptions.length;i++){
+                    var srcTeacher = teacherSrcOptions[i];
+                    var srcTeacherArray = srcTeacher.value.split("#");
+                    var srcUserId = srcTeacherArray[0];
+                    if(userId==srcUserId){
+                        teacherSrcOptions.splice(i,1);
+                        break;
+                    }
+                }
+            });
+            newArray = teacherSrcOptions;
+        }else{
+            //从目标数据中移除
+            var teacherTargetOptions = _this.state.teacherTargetOptions;
+            removeOptions.forEach(function (userInfo) {
+                var teacherInfoArray = userInfo.split("#");
+                var userId = teacherInfoArray[0];
+                for(var i=0;i<teacherTargetOptions.length;i++){
+                    var srcTeacher = teacherTargetOptions[i];
+                    var srcTeacherArray = srcTeacher.value.split("#");
+                    var srcUserId = srcTeacherArray[0];
+                    if(userId==srcUserId){
+                        teacherTargetOptions.splice(i,1);
+                        break;
+                    }
+                }
+            });
+            newArray = teacherTargetOptions;
+        }
+        return newArray;
+    },
+
+    /**
+     * 解散团队
+     */
+    deleteTeam(){
+        var _this = this;
+        var deleteTeamId = _this.state.settingTeam.id;
+        var param = {
+            "method": 'deleteTeam',
+            "teamId": deleteTeamId,
+        };
+        doWebService_CloudClassRoom(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if(response==true){
+                    message.success("团队解散成功");
+                }else{
+                    message.error(ret.msg);
+                }
+                _this.closeDeleteTeamConfirmModal();
+                _this.findTeamByUserId(1);
+                _this.returnToTeamList();
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+    /**
+     * 删除团队成员
+     */
+    deleteTeamUser(){
+        var _this = this;
+        if(_this.state.exitOrDelete=="delete"){
+            var removeUser = _this.state.removeUser;
+            var param = {
+                "method": 'deleteTeamUser',
+                "id": removeUser.id,
+            };
+        }else{
+            var teamUserId = _this.state.teamUserId;
+            var param = {
+                "method": 'deleteTeamUser',
+                "id": teamUserId,
+            };
+        }
+        doWebService_CloudClassRoom(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if(response==true){
+                    message.success("操作成功");
+                }else{
+                    message.error(ret.msg);
+                }
+                if(_this.state.exitOrDelete=="delete"){
+                    _this.closeConfirmModal();
+                    _this.removeUserFromSettingTeam(removeUser);
+                }else{
+                    _this.closeExitTeamConfirmModal();
+                    _this.findTeamByUserId(1);
+                    _this.returnToTeamList();
                 }
             },
             onError: function (error) {
                 message.error(error);
             }
         });
-        _this.closeConfirmModal();
+    },
+    /**
+     * 删除本地存储的用户
+     */
+    removeUserFromSettingTeam(removeUser){
+        var settingTeam = this.state.settingTeam;
+        var newTeamUserArray=[];
+        settingTeam.teamUsers.forEach(function (userInfo) {
+            if(removeUser.id!=userInfo.id){
+                newTeamUserArray.push(userInfo);
+            }
+        });
+        settingTeam.teamUsers=newTeamUserArray;
+        this.setState({settingTeam});
+    },
+
+    /**
+     * 增加本地存储的用户
+     */
+    addUserToSettingTeam(){
+        var settingTeam = this.state.settingTeam;
+        var teacherTargetOptions = this.state.teacherTargetOptions;
+        for(var i=0;i<teacherTargetOptions.length;i++){
+            var teacher = teacherTargetOptions[i];
+            var teacherArray = teacher.value.split("#");
+            var userId = teacherArray[0];
+            var userName = teacherArray[1];
+            var userAvatar = teacherArray[3];
+            var userJson={};
+            userJson.teamId = settingTeam.id;
+            userJson.userId=userId;
+            var user = {};
+            user.colUid = userId;
+            user.userName = userName;
+            user.avatar = userAvatar;
+            userJson.user = user;
+            settingTeam.teamUsers.push(userJson);
+        }
+        this.setState({settingTeam});
+    },
+
+    /**
+     * 关闭解散团队确认框
+     */
+    closeDeleteTeamConfirmModal(){
+        this.refs.deleteTeamConfirmModal.changeConfirmModalVisible(false);
+    },
+    /**
+     * 显示退出群组确认Modal
+     */
+    showExitTeamConfirmModal(){
+        this.setState({"removeUser":this.state.cloudClassRoomUser,"exitOrDelete":'exit'});
+        this.refs.exitTeamConfirmModal.changeConfirmModalVisible(true);
+    },
+
+    /**
+     * 关闭退出群组确认Modal
+     */
+    closeExitTeamConfirmModal(){
+        this.refs.exitTeamConfirmModal.changeConfirmModalVisible(false);
     },
 
     /**
@@ -482,29 +854,97 @@ const AntTeamComponents = React.createClass({
      * @returns {XML}
      */
     render() {
-        var filterRadios;
-        if(this.state.type=="myTeam"){
-            filterRadios=
-                <RadioGroup onChange={this.teamTypeFliterOnChange} value={this.state.teamTypeFliterValue}>
+        var _this = this;
+        var mainPanel;
+        if(_this.state.optType == "teamSet"){
+            var welcomeTitle = "群设置";
+            var managerUser = _this.state.settingTeam.user;
+            var topButton;
+            var dissolutionChatGroupButton;
+            var editTeamButton;
+            if(managerUser.colUid==_this.state.cloudClassRoomUser.colUid){
+                topButton = <span className="right_ri">
+                    <span className="toobar">
+                        <Button type="primary" onClick={_this.showAddMembersModal}>添加成员</Button>
+                    </span>
+                </span>;
+                dissolutionChatGroupButton = <Button onClick={_this.showDissolutionTeamConfirmModal} className="group_red_font"><i className="iconfont">&#xe616;</i>解散该团队</Button>;
+                editTeamButton=<Button icon="edit" onClick={_this.showUpdateTeamNameModal}></Button>;
+            }else{
+                topButton = null;
+                dissolutionChatGroupButton = <Button onClick={_this.showExitTeamConfirmModal} className="group_red_font"><i className="iconfont">&#xe616;</i>退出该团队</Button>;
+                editTeamButton = null;
+            }
+            var userLiTagArray=[];
+            var settingTeam = _this.state.settingTeam;
+            settingTeam.teamUsers.forEach(function (teamUser) {
+                var userHeaderIcon;
+                var removeUserButton;
+                if(isEmpty(teamUser.user)==false){
+                    userHeaderIcon = <img src={teamUser.user.avatar}></img>;
+                }else{
+                    userHeaderIcon=<span className="attention_img"><img src={require('../images/maaee_face.png')}></img></span>;
+                }
+                if(managerUser.colUid==_this.state.cloudClassRoomUser.colUid && teamUser.user.colUid !=_this.state.cloudClassRoomUser.colUid){
+                    removeUserButton = <Button　value={teamUser.user.colUid} onClick={_this.showRemoveUserModal.bind(_this,teamUser)} className="group_del"><Icon type="close-circle-o" /></Button>;
+                }else{
+                    removeUserButton = null;
+                }
+                var liTag = <div className="group_fr">
+                    <span className="attention_img">{userHeaderIcon}</span><span>{teamUser.user.userName}</span>
+                    {removeUserButton}
+                </div>;
+                userLiTagArray.push(liTag);
+            });
+
+            mainPanel = <div className="group_cont">
+                <div className="public—til—blue">
+                    <div className="ant-tabs-right">
+                        <Button onClick={_this.returnToTeamList}>
+                            <Icon type="left" />
+                        </Button>
+                    </div>
+                    {welcomeTitle}
+                </div>
+                <div className="favorite_scroll del_out">
+                    <ul className="integral_top">
+                        <span className="integral_face">
+                            <img src={managerUser.avatar} className="person_user"/>
+                        </span>
+                        <div className="class_right color_gary_f">
+                            {_this.state.settingTeam.name}
+                            {editTeamButton}
+                        </div>
+                        <div className="integral_line"></div>
+                    </ul>
+                    <ul className="group_fr_ul">
+                        <li className="color_gary_f"><span>群聊成员：{userLiTagArray.length}人</span>{topButton}</li>
+                        <li className="user_hei">
+                            {userLiTagArray}
+                        </li>
+                        <li className="btm">{dissolutionChatGroupButton}</li>
+                    </ul>
+                </div>
+            </div>;
+        }else{
+            mainPanel = <div  className="myfollow_zb">
+                <RadioGroup onChange={_this.teamTypeFliterOnChange} value={_this.state.teamTypeFliterValue}>
                     <Radio value="0">我创建的团队</Radio>
                     <Radio value="1">我加入的团队</Radio>
-                </RadioGroup>;
-        }else{
-            filterRadios="";
+                </RadioGroup>
+                <Table className="details table_team"
+                       scroll={{ x: true, }} columns={userTeamColumns} showHeader={false}
+                       dataSource={_this.state.userTeamData}
+                       pagination={{ total:_this.state.total,
+                           pageSize: getPageSize(),onChange:_this.onTeamPageChange }}/>
+            </div>;
         }
 
         return (
             <div className="favorite_scroll series_courses">
-                {/*className="myfollow_zb"*/}
-                <div  className="myfollow_zb">
 
-                    {filterRadios}
-                    <Table className="details table_team"
-                           scroll={{ x: true, }} columns={userTeamColumns} showHeader={false}
-                           dataSource={this.state.userTeamData}
-                     pagination={{ total:this.state.total,
-                      pageSize: getPageSize(),onChange:this.onTeamPageChange }}/> 
-				</div>
+                {mainPanel}
+
                 <Modal
                     visible={this.state.createTeamModalVisible}
                     title="创建团队"
@@ -512,7 +952,7 @@ const AntTeamComponents = React.createClass({
                     transitionName=""  //禁用modal的动画效果
                     maskClosable={false} //设置不允许点击蒙层关闭
                     footer={[
-                        <button type="primary" htmlType="submit" className="ant-btn-primary ant-btn" onClick={this.createTeam.bind(this,"create")}  >确定</button>,
+                        <button type="primary" htmlType="submit" className="ant-btn-primary ant-btn" onClick={this.createTeam}  >确定</button>,
                         <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button" onClick={this.createTeamModalHandleCancel} >取消</button>
                     ]}
                 >
@@ -522,20 +962,24 @@ const AntTeamComponents = React.createClass({
                         </span>
                     </Row>
                     <Row className="ant-form-item">
-                        <Col span={24}>
-                            <Transfer
-                                dataSource={this.state.mockData}
-                                showSearch
-                                listStyle={{
-                                    width: 268,
-                                    height: 320,
-                                }}
-                                titles={['待选联系人','已选联系人']}
-                                operations={['', '']}
-                                targetKeys={this.state.targetKeys}
-                                onChange={this.transferHandleChange}
-                                render={item => `${item.title}`}
-                            />
+                        <Col span={11}>
+                            <div>
+                                <Input placeholder="请输入需添加的老师账号或姓名" value={this.state.searchKey} onChange={this.searchKeyOnChange} onPressEnter={this.findTeacherByKeyWords}/>
+                                <div style={{height:'300px','overflow':'scroll'}}>
+                                    <CheckboxGroup options={this.state.teacherSrcOptions} value={this.state.teacherSrcChecked} onChange={this.teacherSrcOnChange} />
+                                </div>
+                            </div>
+                        </Col>
+                        <Col span={2}>
+                            <Button onClick={this.addTeacherToTarget}>添加</Button>
+                            <Button onClick={this.addTeacherToSrc}>移除</Button>
+                        </Col>
+                        <Col span={11}>
+                            <div>
+                                <div style={{height:'300px','overflow':'scroll'}}>
+                                    <CheckboxGroup options={this.state.teacherTargetOptions} value={this.state.teacherTargetChecked} onChange={this.teacherTargetOnChange} />
+                                </div>
+                            </div>
                         </Col>
                     </Row>
 
@@ -543,45 +987,75 @@ const AntTeamComponents = React.createClass({
 
                 <Modal
                     visible={this.state.updateTeamModalVisible}
-                    title="修改团队"
+                    title="添加团队成员"
                     onCancel={this.updateTeamModalHandleCancel}
                     transitionName=""  //禁用modal的动画效果
                     maskClosable={false} //设置不允许点击蒙层关闭
                     footer={[
-                        <button type="primary" htmlType="submit" className="ant-btn-primary ant-btn" onClick={this.createTeam.bind(this,"update")}  >确定</button>,
+                        <button type="primary" htmlType="submit" className="ant-btn-primary ant-btn" onClick={this.saveTeamUser}  >确定</button>,
                         <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button" onClick={this.updateTeamModalHandleCancel} >取消</button>
                     ]}
                 >
                     <Row className="ant-form-item">
-                        <span >
-                            <Input placeholder="请输入团队名称" value={this.state.teamName} defaultValue={this.state.teamName} onChange={this.teamNameOnChange} />
-                        </span>
-                    </Row>
-                    <Row className="ant-form-item">
-                        <Col span={24}>
-                            <Transfer
-                                dataSource={this.state.mockData}
-                                showSearch
-                                listStyle={{
-                                    width: 268,
-                                    height: 320,
-                                }}
-                                titles={['待选联系人','已选联系人']}
-                                operations={['', '']}
-                                targetKeys={this.state.targetKeys}
-                                onChange={this.transferHandleChange}
-                                render={item => `${item.title}`}
-                            />
+                        <Col span={11}>
+                            <div>
+                                <Input placeholder="请输入需添加的老师账号或姓名" value={this.state.searchKey} onChange={this.searchKeyOnChange} onPressEnter={this.findTeacherByKeyWords}/>
+                                <div style={{height:'300px','overflow':'scroll'}}>
+                                    <CheckboxGroup options={this.state.teacherSrcOptions} value={this.state.teacherSrcChecked} onChange={this.teacherSrcOnChange} />
+                                </div>
+                            </div>
+                        </Col>
+                        <Col span={2}>
+                            <Button onClick={this.addTeacherToTarget}>添加</Button>
+                            <Button onClick={this.addTeacherToSrc}>移除</Button>
+                        </Col>
+                        <Col span={11}>
+                            <div>
+                                <div style={{height:'300px','overflow':'scroll'}}>
+                                    <CheckboxGroup options={this.state.teacherTargetOptions} value={this.state.teacherTargetChecked} onChange={this.teacherTargetOnChange} />
+                                </div>
+                            </div>
                         </Col>
                     </Row>
 
                 </Modal>
 
                 <ConfirmModal ref="confirmModal"
-                              title="确定要申请加入该团队?"
+                              title="确定要移除该团队成员?"
                               onConfirmModalCancel={this.closeConfirmModal}
-                              onConfirmModalOK={this.requestAddThisTeam}
+                              onConfirmModalOK={this.deleteTeamUser}
                 ></ConfirmModal>
+
+                <ConfirmModal ref="deleteTeamConfirmModal"
+                              title="确定要解散该团队?"
+                              onConfirmModalCancel={this.closeDeleteTeamConfirmModal}
+                              onConfirmModalOK={this.deleteTeam}
+                ></ConfirmModal>
+
+                <ConfirmModal ref="exitTeamConfirmModal"
+                              title="确定要退出该团队?"
+                              onConfirmModalCancel={this.closeExitTeamConfirmModal}
+                              onConfirmModalOK={this.deleteTeamUser}
+                ></ConfirmModal>
+
+                <Modal className="modol_width"
+                       visible={this.state.updateTeamNameModalVisible}
+                       title="修改团队名称"
+                       onCancel={this.updateTeamNameModalHandleCancel}
+                       transitionName=""  //禁用modal的动画效果
+                       maskClosable={false} //设置不允许点击蒙层关闭
+                       footer={[
+                           <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg" onClick={this.updateTeamName}  >确定</button>,
+                           <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button" onClick={this.updateTeamNameModalHandleCancel} >取消</button>
+                       ]}
+                >
+                    <Row className="ant-form-item">
+                        <Col span={6} className="right_look">群名称：</Col>
+                        <Col span={14}>
+                            <Input value={this.state.settingTeamName} defaultValue={this.state.settingTeamName} onChange={this.updateTeamNameOnChange}/>
+                        </Col>
+                    </Row>
+                </Modal>
 
             </div>
         );

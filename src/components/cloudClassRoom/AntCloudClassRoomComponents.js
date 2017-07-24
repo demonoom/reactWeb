@@ -44,6 +44,13 @@ const AntCloudClassRoomComponents = React.createClass({
         var teamSearchKey = target.value;
         this.setState({teamSearchKey});
     },
+    /**
+     * 团队设置按钮和搜索文本框的显示和隐藏 true：隐藏  false：显示
+     * @param isHide
+     */
+    hideTeamBtn(isHide){
+        this.setState({isHide});
+    },
 
     /**
      * 渲染页面
@@ -74,12 +81,20 @@ const AntCloudClassRoomComponents = React.createClass({
                 tabPanel = <AntMulitiClassComponents ref="antSingleClassComponents" isSeries="2"></AntMulitiClassComponents>;
                 break;
             case "myTeam":
-                topButton = teamBtn;
+                if(this.state.isHide==true){
+                    topButton = null;
+                }else{
+                    topButton = teamBtn;
+                }
                 leftBtn = "";
-                tabPanel = <AntTeamComponents ref="antTeamComponents" type="myTeam" teamSearchKey={this.state.teamSearchKey}></AntTeamComponents>;
+                tabPanel = <AntTeamComponents ref="antTeamComponents" onSetBtnClick={this.hideTeamBtn} type="myTeam" teamSearchKey={this.state.teamSearchKey}></AntTeamComponents>;
                 break;
             case "allTeam":
-                topButton = teamBtn;
+                if(this.state.isHide==true){
+                    topButton = null;
+                }else{
+                    topButton = teamBtn;
+                }
                 leftBtn = "";
                 tabPanel = <AntTeamComponents ref="antTeamComponents" type="allTeam" teamSearchKey={this.state.teamSearchKey}></AntTeamComponents>;
                 break;
@@ -100,12 +115,16 @@ const AntCloudClassRoomComponents = React.createClass({
                 break;
         }
 
-        toolbar = <h3 className={" public—til—blue"}>{this.state.activeKey}
-            <div className="btn1">
-                {leftBtn}
-                {topButton}
-            </div>
-        </h3>;
+        if(this.state.isHide==true){
+            toolbar = null;
+        }else{
+            toolbar = <h3 className={" public—til—blue"}>{this.state.activeKey}
+                <div className="btn1">
+                    {leftBtn}
+                    {topButton}
+                </div>
+            </h3>;
+        }
 
         return (
             <div className="team">
