@@ -193,9 +193,22 @@ const UpdateClassComponents = React.createClass({
                 if(isTeam==1) {
                     teacherObj = <span>{_this.state.cloudClassRoomUser.userName}</span>;
                 }else{
+                    var videoUser = video.user;
+                    var teamUsers = _this.state.teamUsers;
+                    var optionsArray=[];
+                    teamUsers.forEach(function (user) {
+                        var option;
+                        if(user.colUid == videoUser.colUid){
+                            option=<option value={user.colUid} selected="selected">{user.userName}</option>
+                        }else{
+                            option=<option value={user.colUid}>{user.userName}</option>
+                        }
+                        optionsArray.push(option);
+                    });
                     teacherObj = <Col span={24}>
                         <select className="lessonTeamTeacher course_n">
-                            {_this.state.teamUserOptionArray}
+                           {/* {_this.state.teamUserOptionArray}*/}
+                            {optionsArray}
                         </select>
                     </Col>;
                 }
@@ -239,6 +252,11 @@ const UpdateClassComponents = React.createClass({
                         var classInfo = response[i];
                         var id = classInfo.id;
                         var name = classInfo.name;
+                        var optionObj = <Option key={id} value={id}>{name}</Option>;
+                        if(id == courseInfoJson.courseClass){
+                            _this.setState({"defaultSelected":name});
+                        }
+                        classOptionArray.push(optionObj);
                         var courseTypes = classInfo.courseTypes;
                         if(isEmpty(courseTypes)==false){
                             for(var j=0;j<courseTypes.length;j++){
@@ -347,6 +365,7 @@ const UpdateClassComponents = React.createClass({
                     }
                     teamJson.teamId=id;
                     teamJson.teamUserOptionArray = teamUserOptionArray;
+                    teamJson.users = users;
                     teamOptionArray.push(optionObj);
                     teamJsonArray.push(teamJson);
                     if(id == courseInfoJson.publisher_id){
@@ -369,14 +388,16 @@ const UpdateClassComponents = React.createClass({
      */
     getTeamUserOptions(teamId){
         var teamUserOptionArray=[];
+        var teamUsers;
         for(var i=0;i<teamJsonArray.length;i++){
             var teamJson = teamJsonArray[i];
             if(teamJson.teamId == teamId){
                 teamUserOptionArray = teamJson.teamUserOptionArray;
+                teamUsers = teamJson.users;
                 break;
             }
         }
-        this.setState({teamUserOptionArray});
+        this.setState({teamUserOptionArray,teamUsers});
         this.changeVideosSelect(this.state.isTeam,teamUserOptionArray);
     },
 
@@ -470,7 +491,7 @@ const UpdateClassComponents = React.createClass({
      * 单人授课只显示姓名
      * 团队授课显示团队成员的下拉列表
      */
-    changeVideosSelect(isTeam,teamUserOptionArray){
+    changeVideosSelect(isTeam){
         var _this = this;
         var updateClassObj = _this.state.updateClassObj;
         // var isTeam = _this.state.isTeam;
@@ -492,10 +513,27 @@ const UpdateClassComponents = React.createClass({
                 if(isTeam==1) {
                     teacherObj = <span>{_this.state.cloudClassRoomUser.userName}</span>;
                 }else{
+                    var videoUser = video.user;
+                    var teamUsers = _this.state.teamUsers;
+                    var optionsArray=[];
+                    if(isEmpty(teamUsers)==false){
+                        teamUsers.forEach(function (user) {
+                            var option;
+                            if(user.colUid == videoUser.colUid){
+                                option=<option value={user.colUid} selected="selected">{user.userName}</option>
+                            }else{
+                                option=<option value={user.colUid}>{user.userName}</option>
+                            }
+                            optionsArray.push(option);
+                        });
+                    }
                     teacherObj = <Col span={24}>
                         <select className="lessonTeamTeacher course_n">
-                            {teamUserOptionArray}
+                            {optionsArray}
                         </select>
+                        {/*<Select defaultValue={videoUser}>
+                            {optionsArray}
+                        </Select>*/}
                     </Col>;
                 }
                 // defaultValue={moment({liveTime}, dateFullFormat)}
@@ -547,6 +585,9 @@ const UpdateClassComponents = React.createClass({
                 _this.setState({"stepNum":0});
                 break;
             case "next":
+                if(isEmpty(this.state.teamId)==false){
+                    this.getTeamUserOptions(this.state.teamId);
+                }
                 _this.setState({"stepNum":1});
                 break;
         }
@@ -670,6 +711,7 @@ const UpdateClassComponents = React.createClass({
         }
         var lessonTeamTeacherTagArray = $(".lessonTeamTeacher option:selected");
         var lessonTimeTagArray = $(".ant-calendar-range-picker");
+        courseInfoJson.videoNum=lessonTimeTagArray.length;
         /*var userId;
 
         if(this.state.isTeam==1) {

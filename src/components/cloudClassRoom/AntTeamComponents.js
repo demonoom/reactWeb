@@ -48,7 +48,7 @@ const AntTeamComponents = React.createClass({
             teacherSrcOptions:[],
             teacherTargetOptions:[],
             teamUserId:-1,
-            teamTypeFliterValue:-1,
+            teamTypeFliterValue:"-1",
         };
     },
 
@@ -647,7 +647,8 @@ const AntTeamComponents = React.createClass({
                     var schoolName = e.schoolName;
                     var userAvatar = e.avatar;
                     var isExitAtTargetOptions=_this.findTeacherIsExitAtTargetOptions(userId);
-                    if(isExitAtTargetOptions==false){
+                    var isExitInSettingTeam = _this.findTeacherIsExitAtSettringTeam(userId);
+                    if(isExitAtTargetOptions==false && isExitInSettingTeam==false){
                         //不能添加自己
                         if (parseInt(userId) != _this.state.cloudClassRoomUser.colUid) {
                             const data = {key:userId,
@@ -680,6 +681,25 @@ const AntTeamComponents = React.createClass({
             var teacherArray = teacher.value.split("#");
             var userIdInTarget = teacherArray[0];
             if(userIdInTarget == userId){
+                isExit = true;
+                break;
+            }
+        }
+        return isExit;
+    },
+
+    /**
+     * 判断当前查询到的用户在已添加的团队用户中是否存在，如果已经存在，则过滤掉，避免重复添加
+     * @param userId
+     * @returns {boolean}
+     */
+    findTeacherIsExitAtSettringTeam(userId){
+        var isExit = false;
+        var _this = this;
+        var teamUser = _this.state.settingTeam.teamUsers;
+        for(var i=0;i<teamUser.length;i++){
+            var teamUser = teamUser[i];
+            if(teamUser.userId == userId){
                 isExit = true;
                 break;
             }
@@ -1018,7 +1038,7 @@ const AntTeamComponents = React.createClass({
             </div>;
         }else{
             mainPanel = <div  className="myfollow_zb">
-                <RadioGroup onChange={_this.teamTypeFliterOnChange} value={_this.state.teamTypeFliterValue}>
+                <RadioGroup onChange={_this.teamTypeFliterOnChange} defaultValue={_this.state.teamTypeFliterValue} value={_this.state.teamTypeFliterValue}>
                     <Radio value="-1">全部</Radio>
                     <Radio value="0">我创建的团队</Radio>
                     <Radio value="1">我加入的团队</Radio>

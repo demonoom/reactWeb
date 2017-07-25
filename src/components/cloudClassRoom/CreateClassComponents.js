@@ -107,6 +107,12 @@ const CreateClassComponents = React.createClass({
                         var id = classInfo.id;
                         var name = classInfo.name;
                         var parentid = classInfo.parentid;
+                        var optionObj = <Option key={id} value={id}>{name}</Option>;
+                        if(i==0){
+                            defaultSelected = id;
+                            courseInfoJson.courseClass=id;
+                        }
+                        classOptionArray.push(optionObj);
                         var courseTypes = classInfo.courseTypes;
                         if(isEmpty(courseTypes)==false){
                             for(var j=0;j<courseTypes.length;j++){
@@ -114,10 +120,10 @@ const CreateClassComponents = React.createClass({
                                 var courseTypeId = courseType.id;
                                 var courseTypeName = courseType.name;
                                 var optionObj = <Option key={courseTypeId} value={courseTypeId}>{courseTypeName}</Option>;
-                                if(i==0 && j==0){
+                                /*if(i==0 && j==0){
                                     defaultSelected = courseTypeId;
                                     courseInfoJson.courseClass=courseTypeId;
-                                }
+                                }*/
                                 classOptionArray.push(optionObj);
                             }
                         }

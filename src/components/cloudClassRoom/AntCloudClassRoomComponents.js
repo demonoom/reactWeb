@@ -10,12 +10,16 @@ const AntCloudClassRoomComponents = React.createClass({
 
     getInitialState() {
         return {
-
+            isHide:false,
         };
     },
 
     componentDidMount(){
         console.log("cloudRoomMenuItem"+this.props.currentItem);
+    },
+
+    componentWillReceiveProps(nextProps){
+        this.setState({isHide:false});
     },
 
     getClassList(){
