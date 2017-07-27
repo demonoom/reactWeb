@@ -354,7 +354,7 @@ const AntTeamComponents = React.createClass({
     /**
      * 查询可以加入团队的所有老师
      */
-    findAllUserTeacher(optSource){
+    /*findAllUserTeacher(optSource){
         var _this = this;
         const mockData = [];
         var targetKeys = [];
@@ -392,7 +392,7 @@ const AntTeamComponents = React.createClass({
                 message.error(error);
             }
         });
-    },
+    },*/
 
     transferHandleChange(targetKeys){
         this.setState({ targetKeys });
@@ -473,7 +473,7 @@ const AntTeamComponents = React.createClass({
      * 显示创建团队的modal
      */
     showCreateTeamModal(){
-        this.findAllUserTeacher("create");
+        // this.findAllUserTeacher("create");
         this.setState({"createTeamModalVisible":true,"teacherSrcOptions":[],"teacherTargetOptions":[],"searchKey":''});
     },
     /**
@@ -481,7 +481,7 @@ const AntTeamComponents = React.createClass({
      */
     editTeam(team){
         var _this = this;
-        _this.findAllUserTeacher("update");
+        // _this.findAllUserTeacher("update");
         var teamUsers = team.teamUsers;
         if(isEmpty(teamUsers)==false){
             teamUsers.forEach(function (teamUser) {
@@ -676,13 +676,15 @@ const AntTeamComponents = React.createClass({
     findTeacherIsExitAtTargetOptions(userId){
         var isExit = false;
         var teacherTargetOptions = this.state.teacherTargetOptions;
-        for(var i=0;i<teacherTargetOptions.length;i++){
-            var teacher = teacherTargetOptions[i];
-            var teacherArray = teacher.value.split("#");
-            var userIdInTarget = teacherArray[0];
-            if(userIdInTarget == userId){
-                isExit = true;
-                break;
+        if(isEmpty(teacherTargetOptions)==false){
+            for(var i=0;i<teacherTargetOptions.length;i++){
+                var teacher = teacherTargetOptions[i];
+                var teacherArray = teacher.value.split("#");
+                var userIdInTarget = teacherArray[0];
+                if(userIdInTarget == userId){
+                    isExit = true;
+                    break;
+                }
             }
         }
         return isExit;
@@ -696,12 +698,14 @@ const AntTeamComponents = React.createClass({
     findTeacherIsExitAtSettringTeam(userId){
         var isExit = false;
         var _this = this;
-        var teamUser = _this.state.settingTeam.teamUsers;
-        for(var i=0;i<teamUser.length;i++){
-            var teamUser = teamUser[i];
-            if(teamUser.userId == userId){
-                isExit = true;
-                break;
+        if(isEmpty(_this.state.settingTeam)==false){
+            var teamUser = _this.state.settingTeam.teamUsers;
+            for(var i=0;i<teamUser.length;i++){
+                var teamUser = teamUser[i];
+                if(teamUser.userId == userId){
+                    isExit = true;
+                    break;
+                }
             }
         }
         return isExit;

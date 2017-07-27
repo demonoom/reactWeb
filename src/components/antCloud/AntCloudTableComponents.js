@@ -67,7 +67,7 @@ const AntCloudTableComponents = React.createClass({
             count: 0,
             totalCount: 0,
             currentPage: 1,
-            currentView: 'homeWorkList',
+            currentView: 'myFile',
             clazzId: '',
             dateTime: '',
             tableData:[],
@@ -77,13 +77,13 @@ const AntCloudTableComponents = React.createClass({
             mkdirModalVisible:false,
             uploadPercent:0,
             progressState:'none',
-            permissionModalVisible:false,     //设置权限窗口的状态控制
             permissionTypeValue:-1,      //默认的权限类型
             userAccount:'',     //搜索用户文本框的初始值
             userContactsData:[],
             delBtnReadOnly:true,
             concatOptions:[],
             groupOptions:[],
+            isGroupCreator:false,   //记录当前用户是否是操作当前群文件的群主
         };
     },
     componentDidMount(){
@@ -100,19 +100,9 @@ const AntCloudTableComponents = React.createClass({
         }else{
             cloudTable.getUserChatGroupRootCloudFiles(cloudTable.state.ident, initPageNo);
         }
-        cloudTable.setState({"getFileType":fileType,parentDirectoryId:-1});
+        cloudTable.setState({"getFileType":fileType,parentDirectoryId:-1,currentPage:1});
     },
 
-
-    start() {
-        cloudTable.setState({loading: true});
-        setTimeout(() => {
-            cloudTable.setState({
-                selectedRowKeys: [],
-                loading: false,
-            });
-        }, 1000);
-    },
     /**
      * 表格数据批量选中的响应函数
      * //选中时，需要判断当前选中的数据中，是否有不可删除权限的
@@ -413,6 +403,7 @@ const AntCloudTableComponents = React.createClass({
      * @param ret
      */
     buildTableDataByResponse(ret){
+        var _this = this;
         var i=0;
         var cloudFileArray=[];
         if(ret.msg=="调用成功" && ret.success==true && isEmpty(ret.response)==false){
@@ -420,7 +411,7 @@ const AntCloudTableComponents = React.createClass({
                 if(i==0){
                     if(e.parent){
                         var parentDirectoryId = e.parent.parentId;
-                        cloudTable.setState({"parentDirectoryId":parentDirectoryId});
+                        _this.setState({"parentDirectoryId":parentDirectoryId});
                     }
                 }
                 i++
@@ -442,59 +433,14 @@ const AntCloudTableComponents = React.createClass({
                 var path = e.path;
                 console.log("path---------->"+path);
 
-                var fileLogo;
                 var downloadButton;
                 if(directory){
-                    fileLogo=<span className="cloud_text">
-                    <i className="cloud_icon cloud_icon_file"></i>
-                    <span className="font_gray_666" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e,"mainTable")}>{name}</span>
-                </span>;
+                    downloadButton=null;
                 }else{
                     downloadButton=<a href={path} target="_blank" title="下载" download={path} className="te_download_a">
                         <Button icon="download"/></a>;
-                    var lastPointIndex = name.lastIndexOf(".");
-                    //通过截取文件后缀名的形式，完成对上传文件类型的判断
-                    var fileType = name.substring(lastPointIndex+1);
-                    var fileTypeLog;
-                    switch (fileType){
-                        case "png":
-                            fileTypeLog = <i className="cloud_icon cloud_icon_png"></i>;
-                            break;
-                        case "jpg":
-                            fileTypeLog = <i className="cloud_icon cloud_icon_jpg"></i>;
-                            break;
-                        case "mp3":
-                            fileTypeLog = <i className="cloud_icon cloud_icon_mp3"></i>;
-                            break;
-                        case "pdf":
-                            fileTypeLog = <i className="cloud_icon cloud_icon_pdf"></i>;
-                            break;
-                        case "ppt":
-                        case "pptx":
-                            fileTypeLog = <i className="cloud_icon cloud_icon_ppt"></i>;
-                            break;
-                        case "doc":
-                        case "docx":
-                            fileTypeLog = <i className="cloud_icon cloud_icon_doc"></i>;
-                            break;
-                        case "xls":
-                        case "xlsx":
-                            fileTypeLog = <i className="cloud_icon cloud_icon_xls"></i>;
-                            break;
-                        case "wps":
-                            fileTypeLog = <i className="cloud_icon cloud_icon_wps"></i>;
-                            break;
-                        default:
-                            fileTypeLog = <i className="cloud_icon cloud_icon_other"></i>;
-                            break;
-                    }
-                    fileLogo=<div>
-                        {fileTypeLog}
-                        {name}
-                    </div>;
                 }
-                var fileLogo = cloudTable.buildFileLogo(name,directory,e);
-                var maxPermission = cloudTable.getMaxPermission(permissionsArray);
+                var fileLogo = _this.buildFileLogo(name,directory,e);
                 var cloudFileJsonForEveryFile={"fileId":key,"cloudFileObj":e};
                 cloudFileArray.push(cloudFileJsonForEveryFile);
                 var editButton=<Button type="button" className="score3_i" value={key} text={key} onClick={cloudTable.editDirectoryName.bind(cloudTable,e)}
@@ -505,31 +451,17 @@ const AntCloudTableComponents = React.createClass({
                                         icon="share-alt"></Button>;
                 var moveButton=<Button type="button" value={key} text={key} onClick={cloudTable.showMoveFileModal.bind(cloudTable,e)}
                                        icon="export"></Button>;
-                var settinButton=<Button type="button" value={key} text={key} onClick={cloudTable.showPermissionModal.bind(cloudTable,e)}
-                                         icon="setting"></Button>;
-                //判断是否是第一层文件夹
-                if(cloudTable.state.currentDirectoryId==-1){
-                    // 判断是否是超级管理员
-                    if(!cloudTable.state.currentUserIsSuperManager){
-                        //超管在第一层具备所有文件夹操作权限，非超管无任何操作权限
+                var getFileType = cloudTable.state.getFileType;
+                //我的蚁盘是私有的，用户具备所有的操作权限
+                if(getFileType!="myFile"){
+                    //群文件的第一层无操作项
+                    //判断是否是第一层文件夹
+                    //群文件的第一层目录无任何操作
+                    if(_this.state.currentDirectoryId==-1 || (e.creator.colUid != sessionStorage.getItem("ident")　&& _this.state.isGroupCreator==false)){
                         editButton="";
                         deleteButton="";
                         shareButton="";
                         moveButton="";
-                        settinButton="";
-                    }
-                }else{
-                    //非第一层文件夹，根据分配的权限决定
-                    if(e.creator.colUid != sessionStorage.getItem("ident")){
-                        //自己创建的文件夹或文件，拥有最大权限
-                        switch (maxPermission){
-                            case 1:
-                            case 2:
-                                break;
-                            case 3:
-                                settinButton="";
-                                break;
-                        }
                     }
                 }
                 var subjectOpt = <div>
@@ -538,7 +470,6 @@ const AntCloudTableComponents = React.createClass({
                     {shareButton}
                     {moveButton}
                     {downloadButton}
-                    {settinButton}
                 </div>;
                 data.push({
                     key: key,
@@ -548,27 +479,10 @@ const AntCloudTableComponents = React.createClass({
                     subjectOpt: subjectOpt,
                 });
             });
-            cloudTable.setState({"tableData":data,cloudFileArray,totalCount: parseInt(pager.rsCount)});
+            _this.setState({"tableData":data,cloudFileArray,totalCount: parseInt(ret.pager.rsCount)});
+        }else{
+            _this.setState({"tableData":[],cloudFileArray:[],totalCount: 0});
         }
-        //cloudTable.setState({"tableData":data,cloudFileArray,totalCount: parseInt(pager.rsCount)});
-    },
-
-    /**
-     * 获取最大的权限
-     * 权限的排序为1最大，3最小
-     * @param permissionsArray
-     * @returns {*}
-     */
-    getMaxPermission(permissionsArray){
-        var maxPermission;
-        var permissionIdArray=[];
-        permissionsArray.forEach(function (e) {
-            var permission = e.permission;
-            permissionIdArray.push(permission);
-        });
-        permissionIdArray = bubbleSort(permissionIdArray);
-        maxPermission = permissionIdArray[0];
-        return maxPermission;
     },
 
     /**
@@ -576,11 +490,16 @@ const AntCloudTableComponents = React.createClass({
      */
     intoDirectoryInner(directoryObj,optSrc){
         console.log("optSrc:"+optSrc);
-        var permissionsArray = directoryObj.permissions;
-        var maxPermission = cloudTable.getMaxPermission(permissionsArray);
-        cloudTable.setState({"currentDirMaxPermission":maxPermission});
         var initPageNo =1 ;
         var queryConditionJson="";
+        //点击第一层文件夹时，记录当前文件夹的群主是否是当前用户
+        if(cloudTable.state.currentDirectoryId==-1 && this.state.getFileType != "myFile"){
+            if(directoryObj.createUid==this.state.ident){
+                this.setState({"isGroupCreator":true});
+            }else{
+                this.setState({"isGroupCreator":false});
+            }
+        }
         if(isEmpty(optSrc)==false && optSrc=="mainTable"){
             cloudTable.setState({"parentDirectoryId":directoryObj.parentId,"currentDirectoryId":directoryObj.id,"currentDirectoryCreatorId":directoryObj.creator.colUid});
         }else{
@@ -682,13 +601,12 @@ const AntCloudTableComponents = React.createClass({
      * @param pageNo
      */
     pageOnChange(pageNo) {
-        var currentView = cloudTable.state.currentView;
-        if (currentView == "homeWorkList") {
-            cloudTable.getUserRootCloudFiles(sessionStorage.getItem("ident"), pageNo);
+        var getFileType = cloudTable.state.getFileType;
+        if (getFileType == "myFile") {
+            cloudTable.getUserRootCloudFiles(cloudTable.state.ident, pageNo);
         } else {
-
+            cloudTable.getUserChatGroupRootCloudFiles(cloudTable.state.ident, pageNo);
         }
-
         cloudTable.setState({
             currentPage: pageNo,
         });
@@ -886,54 +804,6 @@ const AntCloudTableComponents = React.createClass({
         }
     },
 
-    /**
-     * 显示设置权限的窗口
-     */
-    showPermissionModal(fileObject){
-        console.log("setting key:"+fileObject.id);
-        var permissionsArray = fileObject.permissions;
-        var maxPermission = cloudTable.getMaxPermission(permissionsArray);
-        //当前要执行设置权限操作的文件夹id
-        cloudTable.setState({"settingCloudFileIds":fileObject.id,"settingCloudFileMaxPermission":maxPermission});
-        cloudTable.setState({"permissionModalVisible":true,permissionTypeValue:1,permissionTableData:[],userAccount:''});
-    },
-
-    /**
-     * 设置权限窗口的确定操作
-     */
-    permissionModalHandleOk(){
-        var param = {
-            "method": 'assignPermission',
-            "operateUseId": cloudTable.state.ident,
-            "cloudFileId":cloudTable.state.settingCloudFileIds,
-            "userId":cloudTable.state.userAccount,
-            "permission":cloudTable.state.permissionTypeValue,
-        };
-        doWebService(JSON.stringify(param), {
-            onResponse: function (ret) {
-                if(ret.success==true && ret.msg=="调用成功" && ret.response==true){
-                    var initPageNo = 1;
-                    var queryConditionJson="";
-                    cloudTable.listFiles(cloudTable.state.ident,
-                        cloudTable.state.currentDirectoryId,queryConditionJson,initPageNo,"mainTable");
-                    message.success("权限设置成功");
-                }else{
-                    message.error("权限设置失败");
-                }
-                cloudTable.setState({ permissionModalVisible: false });
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });
-    },
-
-    /**
-     * 设置权限窗口的取消操作
-     */
-    permissionModalHandleCancel(){
-        cloudTable.setState({"permissionModalVisible":false});
-    },
 
     /**
      * 执行批量删除操作
@@ -941,56 +811,6 @@ const AntCloudTableComponents = React.createClass({
     showdelAllDirectoryConfirmModal(){
         cloudTable.setState({"delType":"muliti"});
         cloudTable.refs.confirmModal.changeConfirmModalVisible(true);
-    },
-
-    /**
-     * 权限类型切换响应函数
-     * @param e
-     */
-    onPermissionTypeChange(e){
-        cloudTable.setState({
-            permissionTypeValue: e.target.value,
-        });
-        var param = {
-            "method": 'getCloudFilePermissionByIdAndPermission',
-            "operateUserId": cloudTable.state.ident,
-            "cloudFileId":cloudTable.state.settingCloudFileIds,
-            "permission":e.target.value,
-        };
-        doWebService(JSON.stringify(param), {
-            onResponse: function (ret) {
-                if(ret.success==true && ret.msg=="调用成功"){
-                    console.log(ret.response);
-                    var permissionTableData=[];
-                    var permissionResponse = ret.response;
-                    if(isEmpty(permissionResponse)==false && permissionResponse.length>0){
-
-                        permissionResponse.forEach(function (e) {
-                            var id = e.id;
-                            var permission = e.permission;
-                            var user = e.user;
-                            var permissionOpt=<div>
-                                <Button onClick={cloudTable.removePermission.bind(cloudTable,id)} icon="delete"></Button>
-                            </div>;
-                            var userJson = {
-                                key: id,
-                                userName:user.userName,
-                                permission: permission,
-                                user:user,
-                                permissionOpt:permissionOpt
-                            };
-                            permissionTableData.push(userJson);
-                        });
-                    }
-                    cloudTable.setState({"permissionTableData":permissionTableData});
-                }else{
-                    message.error("权限信息获取失败");
-                }
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });
     },
 
     userAccountInputChange(e){
@@ -1002,34 +822,6 @@ const AntCloudTableComponents = React.createClass({
         }
         var userAccount = target.value;
         cloudTable.setState({"userAccount":userAccount});
-    },
-    /**
-     * 移除权限
-     */
-    removePermission(delPermissionId){
-        console.log("delPermissionId:"+delPermissionId);
-        var param = {
-            "method": 'removeCloudFilePermissions',
-            "operateUseId": cloudTable.state.ident,
-            "cloudFilePermissionIds":delPermissionId
-        };
-        doWebService(JSON.stringify(param), {
-            onResponse: function (ret) {
-                if(ret.success==true && ret.msg=="调用成功" && ret.response==true){
-                    var initPageNo = 1;
-                    var queryConditionJson="";
-                    cloudTable.listFiles(cloudTable.state.ident,
-                        cloudTable.state.currentDirectoryId,queryConditionJson,initPageNo,"mainTable");
-                    message.success("权限设置成功");
-                }else{
-                    message.error("权限设置失败");
-                }
-                cloudTable.setState({ permissionModalVisible: false });
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });
     },
     /**
      * 显示移动文件的窗口
@@ -1228,7 +1020,6 @@ const AntCloudTableComponents = React.createClass({
             ms.send(commandJson);
         });
         cloudTable.setState({shareModalVisible:false});
-
     },
 
     /**
@@ -1263,48 +1054,43 @@ const AntCloudTableComponents = React.createClass({
         };
         const hasSelected = selectedRowKeys.length > 0;
         var delBtn;
+        var newButton;
+        var uploadButton;
+        var returnParentToolBar;
 
         var tipTitle;
         if(cloudTable.state.getFileType=="myFile"){
             tipTitle="我的文件";
-        }else{
-            tipTitle="群文件";
-        }
-        var newButton;
-        var uploadButton;
-        //判断是否是超级管理员
-        if(cloudTable.state.currentUserIsSuperManager){
-            //第一级文件夹，只有超管有上传和新建的权限
             newButton=<Button value="newDirectory"  className="antnest_talk" onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;
-            //uploadButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
+            if(cloudTable.state.currentDirectoryId!=-1){
+                uploadButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
+            }
             delBtn = <div className="cloud_tool"><Button type="primary" onClick={cloudTable.showdelAllDirectoryConfirmModal}
-                                  disabled={!hasSelected && cloudTable.state.delBtnReadOnly} loading={loading}
+                                                         disabled={!hasSelected && cloudTable.state.delBtnReadOnly} loading={loading}
             >批量删除</Button><span className="password_ts"
                                 style={{marginLeft: 8}}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span></div>;
         }else{
-            //非超管
+            tipTitle="群文件";
             if(cloudTable.state.currentDirectoryId!=-1){
                 // 非第一级文件夹
                 newButton=<Button value="newDirectory"  className="antnest_talk" onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;
                 //使用者只有上传的权限
                 uploadButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
                 /*if(cloudTable.state.currentDirMaxPermission!=3
-                    || cloudTable.state.currentDirectoryCreatorId==sessionStorage.getItem("ident")){
-                    newButton=<Button value="newDirectory"  className="antnest_talk" onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;
-                    uploadButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
-                }else{
-                    newButton=<Button value="newDirectory"  className="antnest_talk" onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;
-                    //使用者只有上传的权限
-                    uploadButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
-                }*/
+                 || cloudTable.state.currentDirectoryCreatorId==sessionStorage.getItem("ident")){
+                 newButton=<Button value="newDirectory"  className="antnest_talk" onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;
+                 uploadButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
+                 }else{
+                 newButton=<Button value="newDirectory"  className="antnest_talk" onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;
+                 //使用者只有上传的权限
+                 uploadButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
+                 }*/
                 delBtn = <div className="cloud_tool"><Button type="primary" onClick={cloudTable.showdelAllDirectoryConfirmModal}
-                                      disabled={!hasSelected} loading={loading}
+                                                             disabled={!hasSelected} loading={loading}
                 >批量删除</Button><span className="password_ts"
                                     style={{marginLeft: 8}}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span></div>;
             }
         }
-
-        var returnParentToolBar;
         console.log("------>"+cloudTable.state.parentDirectoryId);
         if(cloudTable.state.parentDirectoryId!=-1 && cloudTable.state.currentDirectoryId!=-1){
             returnParentToolBar = <div className="ant-tabs-right"><Button onClick={cloudTable.returnParent}><Icon type="left" /></Button></div>;
@@ -1331,30 +1117,6 @@ const AntCloudTableComponents = React.createClass({
             height: '30px',
             lineHeight: '30px',
         };
-
-        var radioGroup;
-        switch (cloudTable.state.settingCloudFileMaxPermission){
-            case 1:
-                if(cloudTable.state.currentUserIsSuperManager){
-                    //超级管理员
-                    radioGroup = <RadioGroup onChange={cloudTable.onPermissionTypeChange} value={cloudTable.state.permissionTypeValue}>
-                        <Radio  style={radioStyle} value={1}>校级管理员</Radio>
-                        <Radio  style={radioStyle} value={2}>管理者</Radio>
-                        <Radio  style={radioStyle} value={3}>使用者</Radio>
-                    </RadioGroup>;
-                }else{
-                    radioGroup = <RadioGroup onChange={cloudTable.onPermissionTypeChange} value={cloudTable.state.permissionTypeValue}>
-                        <Radio  style={radioStyle} value={2}>管理者</Radio>
-                        <Radio  style={radioStyle} value={3}>使用者</Radio>
-                    </RadioGroup>;
-                }
-                break;
-            case 2:
-                radioGroup = <RadioGroup onChange={cloudTable.onPermissionTypeChange} value={cloudTable.state.permissionTypeValue}>
-                    <Radio  style={radioStyle} value={3}>使用者</Radio>
-                </RadioGroup>
-                break;
-        }
 
         const {selectedRowKeysOfShare} = cloudTable.state;
         const rowSelectionOfShare = {
@@ -1434,37 +1196,6 @@ const AntCloudTableComponents = React.createClass({
                         </Row>
                     </Modal>
 
-                    <Modal title="权限管理"
-                           visible={cloudTable.state.permissionModalVisible}
-                           transitionName=""  //禁用modal的动画效果
-                           maskClosable={false} //设置不允许点击蒙层关闭
-                           onOk={cloudTable.permissionModalHandleOk}
-                           onCancel={cloudTable.permissionModalHandleCancel}
-                    >
-                        <div>
-                            <Row>
-                                <Col span={3} className="right_look">权限类型：</Col>
-                                <Col span={20}>
-                                    {radioGroup}
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col span={3} className="right_look">用户账号：</Col>
-                                <Col span={20}>
-                                    <Input value={cloudTable.state.userAccount} onChange={cloudTable.userAccountInputChange}/>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col span={3} className="right_look"></Col>
-                                <Col span={20}>
-                                    <Table showHeader={false} columns={permissionTableColumns} dataSource={cloudTable.state.permissionTableData}
-                                           pagination={false}
-                                    />
-                                </Col>
-                            </Row>
-
-                        </div>
-                    </Modal>
 
                     <Modal title="移动文件"
                            visible={cloudTable.state.moveFileModalVisible}
