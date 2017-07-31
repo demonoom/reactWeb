@@ -24,12 +24,15 @@ const AntCloudClassRoomMenu = React.createClass({
                 <Menu className="cont_menu"
                     onClick={this.handleClick}
                     defaultSelectedKeys={['mulitiClass']}
-                    openKeys={['pushClass','teamManager','systemManager']}
+                    openKeys={['pushClass','teamManager','liveVideoSub']}
                     mode="inline"
                 >
                     <SubMenu key="pushClass" title={<span><Icon type="book" /><span>课程发布</span></span>}>
                         <Menu.Item key="mulitiClass">系列课程</Menu.Item>
                         <Menu.Item key="singleClass">单节课程</Menu.Item>
+                    </SubMenu>
+                    <SubMenu key="liveVideoSub" title={<span><Icon type="play-circle-o" /><span>课程直播</span></span>}>
+                        <Menu.Item key="liveVideo">直播列表</Menu.Item>
                     </SubMenu>
                     <SubMenu key="teamManager" title={<span><Icon type="team" /><span>团队管理</span></span>}>
                         <Menu.Item key="myTeam">我的团队</Menu.Item>

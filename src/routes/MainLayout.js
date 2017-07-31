@@ -22,6 +22,7 @@ import TeachSpaceGhostMenu from '../components/TeachSpacesGhostMenu';
 import {MsgConnection} from '../utils/msg_websocket_connection';
 import AntCloudClassRoomMenu from '../components/layOut/AntCloudClassRoomMenu';
 import AntCloudClassRoomComponents from '../components/cloudClassRoom/AntCloudClassRoomComponents';
+import AntGroupSettingComponents from '../components/antCloud/AntGroupSettingComponents';
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
@@ -47,7 +48,8 @@ const MainLayout = React.createClass({
             locale: 'zh-cn',
             resouceType: '',
             ifr: {},
-            cloudRoomMenuItem:'mulitiClass'
+            cloudRoomMenuItem:'mulitiClass',
+            antCloudKey:'fileManager'
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
     },
@@ -300,13 +302,7 @@ const MainLayout = React.createClass({
     },
 
     getAntCloud(optType){
-        var pageNo;
-        this.refs.antCloudTable.getFileByType(optType);
-        /*if ("myFile" == optType) {
-            this.refs.antCloudTable.getTopics(pageNo, 0);
-        } else {
-            //this.refs.antCloudTable.getTopics(pageNo, 1);
-        }*/
+        this.setState({"antCloudKey":optType});
     },
 
     /**
@@ -375,11 +371,15 @@ const MainLayout = React.createClass({
                 tabComponent = <TeachSpace currentItem={this.state.activeMiddleMenu}/>;
                 break;
             case 'antCloud':
-                //蚁巢
+                //蚁盘
                 middleComponent = <AntCloudMenu callbackParent={this.getAntCloud}/>;
-                tabComponent = <AntCloudTableComponents ref="antCloudTable"
-                                                        messageUtilObj={ms}
-                            ></AntCloudTableComponents>;
+                if(this.state.antCloudKey=="groupSetting"){
+                    tabComponent = <AntGroupSettingComponents></AntGroupSettingComponents>
+                }else{
+                    tabComponent = <AntCloudTableComponents antCloudKey={this.state.antCloudKey}
+                                                            messageUtilObj={ms}
+                    ></AntCloudTableComponents>;
+                }
                 break;
             case 'antCloudClassRoom':
                 //云课堂

@@ -4,7 +4,10 @@
 var isDebug=false;
 var domain=isDebug?"192.168.1.12:8080":"www.maaee.com";
 // var domain=isDebug?"172.20.10.10:8080":"www.maaee.com";
+var liveDomain=isDebug?"192.168.1.34:8080":"www.maaee.com";
+
 var webserviceURL="http://"+domain+"/elearning/elearningControl/";
+export const TEACH_LIVE_URL="http://"+liveDomain+"/Excoord_PhoneService/elearningClass/teacherElearningLive/";
 
 export function doWebService_CloudClassRoom(data, listener) {
     var pro = document.getElementById("pro");

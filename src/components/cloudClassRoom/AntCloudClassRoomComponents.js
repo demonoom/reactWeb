@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { Tabs, Breadcrumb, Icon,Card,Button,Row,Col,Input} from 'antd';
 import AntMulitiClassComponents from './AntMulitiClassComponents';
 import AntTeamComponents from './AntTeamComponents';
+import OpenClassComponents from './OpenClassComponents';
 import MyMessageComponents from './MyMessageComponents';
 import {doWebService_CloudClassRoom} from '../../utils/CloudClassRoomURLUtils';
 import RecommendComponents from './RecommendComponents';
@@ -93,24 +94,10 @@ const AntCloudClassRoomComponents = React.createClass({
                 leftBtn = "";
                 tabPanel = <AntTeamComponents ref="antTeamComponents" onSetBtnClick={this.hideTeamBtn} type="myTeam" teamSearchKey={this.state.teamSearchKey}></AntTeamComponents>;
                 break;
-            case "allTeam":
-                if(this.state.isHide==true){
-                    topButton = null;
-                }else{
-                    topButton = teamBtn;
-                }
-                leftBtn = "";
-                tabPanel = <AntTeamComponents ref="antTeamComponents" type="allTeam" teamSearchKey={this.state.teamSearchKey}></AntTeamComponents>;
-                break;
-            case "myMessage":
+            case "liveVideo":
                 topButton = "";
                 leftBtn = "";
-                tabPanel = <MyMessageComponents ref="myMessageComponents"></MyMessageComponents>;
-                break;
-            case "recommend":
-                topButton = "";
-                leftBtn = "";
-                tabPanel = <RecommendComponents ref="recommendComponents"></RecommendComponents>;
+                tabPanel = <OpenClassComponents ref="openClassComponents"></OpenClassComponents>;
                 break;
             default:
                 topButton = createClassBtn;

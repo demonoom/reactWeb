@@ -4965,7 +4965,7 @@ select.course_n:hover{
 	display:inline-block;
 }
 .course_section_title span.name, .course_section_info span.name{
-	width:55%;
+	width:50%;
 	text-overflow:ellipsis;
 	overflow:hidden;
 }
@@ -4973,7 +4973,10 @@ select.course_n:hover{
 	width:20%;
 }
 .course_section_title span.time, .course_section_info span.time1{
-	width:25%;
+	width:20%;
+}
+.course_section_title span.cont3, .course_section_info span.cont3{
+	width:10%;
 }
 .course_section_info span.time1{
 	font-size:12px

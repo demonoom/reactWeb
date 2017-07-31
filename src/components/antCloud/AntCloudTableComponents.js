@@ -87,9 +87,16 @@ const AntCloudTableComponents = React.createClass({
         };
     },
     componentDidMount(){
-        ms = cloudTable.props.messageUtilObj;
-        cloudTable.isSchoolCloudFileSuperManager(cloudTable.state.ident);
-        cloudTable.getUserRootCloudFiles(cloudTable.state.ident, 1);
+        ms = this.props.messageUtilObj;
+        var antCloudKey = this.props.antCloudKey;
+        this.getFileByType(antCloudKey);
+        //cloudTable.isSchoolCloudFileSuperManager(cloudTable.state.ident);
+        //cloudTable.getUserRootCloudFiles(cloudTable.state.ident, 1);
+    },
+
+    componentWillReceiveProps(nextProps){
+        var antCloudKey = nextProps.antCloudKey;
+        this.getFileByType(antCloudKey);
     },
 
     getFileByType(fileType){
