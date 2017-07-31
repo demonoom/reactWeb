@@ -100,17 +100,31 @@ const OpenClassComponents = React.createClass({
         var isSeries = row.isSeries;
         var endTime;
         isSeriesStr="系列课";
+        var canOpenClass = row.canOpenClass;
+        var courseStatus = row.courseStatus;
+        var courseStatusStr="直播中";
+        if(courseStatus=="1"){
+            courseStatusStr="未开始";
+        }else if(courseStatus=="2"){
+            courseStatusStr="直播中";
+        }else if(courseStatus=="3"){
+            courseStatusStr="结束";
+        }
         if(isSeries=="2"){
             endTime = null;
             isSeriesStr="单节课";
-            optButtons=<div>
-                <Col span={24}><Button icon="play-circle-o" className="exam-particulars_title" title="直播" onClick={_this.openLive.bind(_this,row,"singleClass")}></Button></Col>
-            </div>;
+            if(canOpenClass==true && courseStatus=="1"){
+                optButtons=<div>
+                    <Col span={24}><Button icon="play-circle-o" className="exam-particulars_title" title="直播" onClick={_this.openLive.bind(_this,row,"singleClass")}></Button></Col>
+                </div>;
+            }
         }else{
             endTime = <Col span={24}><span className="series_gray_le">结束时间：</span><span className="series_gray_ri">{endTimeStr}</span></Col>;
-            optButtons=<div>
-                <Col span={24}><Button icon="play-circle-o" className="exam-particulars_title" title="直播" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
-            </div>;
+            if(canOpenClass==true && courseStatus=="1"){
+                optButtons=<div>
+                    <Col span={24}><Button icon="play-circle-o" className="exam-particulars_title" title="直播" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
+                </div>;
+            }
         }
         var users = row.users;
         var userSpanArray=[];
@@ -138,6 +152,8 @@ const OpenClassComponents = React.createClass({
                         <Col span={24}><span className="series_gray_le">开始时间：</span><span className="series_gray_ri">{startTime}</span></Col>
                         {endTime}
                         <Col span={24}><span className="series_gray_le">排课时间：</span><span className="series_gray_ri">{firstLiveTime}
+                        </span></Col>
+                        <Col span={24}><span className="series_gray_le">直播状态：</span><span className="series_gray_ri">{courseStatusStr}
                         </span></Col>
                         <Col span={24}><span className="series_gray_le">课程概述：</span><span className="series_gray_ri">{content}</span></Col>
                 </Row>
