@@ -216,9 +216,8 @@ const OpenClassComponents = React.createClass({
         console.log(TEACH_LIVE_URL);
         //0:课程   1 章节  targetType
         //192.168.1.34:8080/Excoord_PhoneService/elearningClass/teacherElearningLive/{userId}/{targetType}/{targetId}/{title}
-        var cloudClassRoomUser = JSON.parse(sessionStorage.getItem("cloudClassRoomUser"));
-        var userId = cloudClassRoomUser.colUid;
-        var isSeries = liveObj.isSeries;
+        // var cloudClassRoomUser = JSON.parse(sessionStorage.getItem("cloudClassRoomUser"));
+        var userId = sessionStorage.getItem("ident");
         var targetType="";
         var targetId = "";
         var title="";
