@@ -120,7 +120,7 @@ const OpenClassComponents = React.createClass({
             }
         }else{
             endTime = <Col span={24}><span className="series_gray_le">结束时间：</span><span className="series_gray_ri">{endTimeStr}</span></Col>;
-            if(canOpenClass==true && courseStatus=="1"){
+            if(canOpenClass==true){
                 optButtons=<div>
                     <Col span={24}><Button icon="play-circle-o" className="exam-particulars_title" title="直播" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
                 </div>;
@@ -182,7 +182,7 @@ const OpenClassComponents = React.createClass({
             videosArray.forEach(function (video) {
                 //播放按钮
                 var playButton;
-                if(video.userID==userId){
+                if(video.userID==userId && video.videoStatus=="1"){
                     playButton = <Button icon="play-circle-o" className="exam-particulars_title" title="直播" onClick={_this.openLive.bind(_this,video,"mulitiClass")}></Button>;
                 }
                 var liveTimeStr = formatNoSecond(video.liveTime);
