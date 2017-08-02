@@ -255,62 +255,6 @@ const AntTeamComponents = React.createClass({
         _this.setState({userTeamData:teamTableData,totalTeamCount:total});
     },
 
-    /*buildTeamListByResponse(response){
-        var _this = this;
-        var total = response.length;
-        response.forEach(function (team) {
-            var isAtThisTeam=false;
-            if(isEmpty(team.users)){
-                team.users.forEach(function (teamUser) {
-                    if(teamUser.user.colUid==_this.state.cloudClassRoomUser.colUid){
-                        isAtThisTeam=true;
-                    }
-                });
-            }
-            var teamUsersPhoto=[];
-            var imgTag = <div className="maaee_group_face">{teamUsersPhoto}</div>;
-            if(isEmpty(team.users)==false ){
-                for(var i=0;i<team.users.length;i++){
-                    var teamUser = team.users[i];
-                    var userAvatarTag = <img src={teamUser.user.avatar} ></img>;
-                    teamUsersPhoto.push(userAvatarTag);
-                    if(i>=3){
-                        break;
-                    }
-                }
-                switch (teamUsersPhoto.length){
-                    case 1:
-                        imgTag = <div className="maaee_group_face1">{teamUsersPhoto}</div>;
-                        break;
-                    case 2:
-                        imgTag = <div className="maaee_group_face2">{teamUsersPhoto}</div>;
-                        break;
-                    case 3:
-                        imgTag = <div className="maaee_group_face3">{teamUsersPhoto}</div>;
-                        break;
-                    case 4:
-                        imgTag = <div className="maaee_group_face">{teamUsersPhoto}</div>;
-                        break;
-                }
-            }
-            var teamUserCount=0;
-            if(isEmpty(team.users)==false){
-                teamUserCount = team.users.length;
-            }
-            teamTableData.push({
-                key: team.id,
-                teamPhoto:imgTag,
-                teamName: team.name,
-                teamCount: teamUserCount,
-                teamSet:<Button style={{ }} type=""  value={team.id} onClick={_this.editTeam.bind(_this,team)}  icon="setting" title="设置" className="score3_i"></Button>
-            });
-        });
-        _this.setState({userTeamData:teamTableData,totalTeamCount:total});
-    },*/
-
-    showTeamSettingModal(){
-
-    },
     /**
      * 显示移除团队成员的确认modal
      * @param removeUser
@@ -657,10 +601,12 @@ const AntTeamComponents = React.createClass({
                         if (parseInt(userId) != _this.state.cloudClassRoomUser.colUid) {
                             const data = {key:userId,
                                 label: <div>
-                                    <div className="group_team_gray6">{userName}</div>
+                                    <div>
+                                        <span className="group_team_gray6">{userName}</span>
+                                        <span className="group_team_blue9">{subjectName}</span>
+                                    </div>
                                     <div className="group_team_gray9">{schoolName}</div>
-                                    <div>{subjectName}</div>
-                                </div>, value: userId+"#"+userName+"#"+schoolName+"#"+userAvatar }
+                                </div>, value: userId+"#"+userName+"#"+schoolName+"#"+userAvatar+"#"+subjectName };
                             teacherSrcOptions.push(data);
                         }
                     }
@@ -754,11 +700,15 @@ const AntTeamComponents = React.createClass({
                 var userName = teacherInfoArray[1];
                 var schoolName = teacherInfoArray[2];
                 var userAvatar = teacherInfoArray[3];
+                var subjectName = teacherInfoArray[4];
                 const data = {key:userId,
                     label: <div>
-                        <div className="group_team_gray6">{userName}</div>
+                        <div>
+                            <span className="group_team_gray6">{userName}</span>
+                            <span className="group_team_blue9">{subjectName}</span>
+                        </div>
                         <div className="group_team_gray9">{schoolName}</div>
-                    </div>, value: userId+"#"+userName+"#"+schoolName+"#"+userAvatar }
+                    </div>, value: userId+"#"+userName+"#"+schoolName+"#"+userAvatar+"#"+subjectName }
                 teacherTargetOptions.push(data);
             });
             var teacherSrcOptions = this.removeTeacherFormOptions(teacherSrcChecked,"src");
@@ -781,11 +731,15 @@ const AntTeamComponents = React.createClass({
                 var userName = teacherInfoArray[1];
                 var schoolName = teacherInfoArray[2];
                 var userAvatar = teacherInfoArray[3];
+                var subjectName = teacherInfoArray[4];
                 const data = {key:userId,
                     label: <div>
-                        <div className="group_team_gray6">{userName}</div>
+                        <div>
+                            <span className="group_team_gray6">{userName}</span>
+                            <span className="group_team_blue9">{subjectName}</span>
+                        </div>
                         <div className="group_team_gray9">{schoolName}</div>
-                    </div>, value: userId+"#"+userName+"#"+schoolName+"#"+userAvatar }
+                    </div>, value: userId+"#"+userName+"#"+schoolName+"#"+userAvatar+"#"+subjectName }
                 teacherSrcOptions.push(data);
             });
             var teacherTargetOptions = _this.removeTeacherFormOptions(teacherTargetChecked,"target");
@@ -1086,7 +1040,7 @@ const AntTeamComponents = React.createClass({
                             <div className="ant-transfer">
                                 <Col className="ant-transfer-list team_add">
                                     <div>
-                                        <p className="team_remark">请按enter键搜索老师账号或姓名</p>
+                                        <p className=".group_team_gray9 team_remark">请按enter键搜索老师账号或姓名</p>
                                         <div className="team_head">
                                             <Input placeholder="请输入需添加的老师账号或姓名" value={this.state.searchKey} onChange={this.searchKeyOnChange} onPressEnter={this.findTeacherByKeyWords} className="ant-transfer-list-search"/>
                                             <span className="ant-transfer-list-search-action1"><Icon type="search" onClick={this.findTeacherByKeyWords} /></span>
