@@ -646,6 +646,10 @@ const AntTeamComponents = React.createClass({
                     var userName = e.userName;
                     var schoolName = e.schoolName;
                     var userAvatar = e.avatar;
+                    var subjectName="";
+                    if(isEmpty(e.elSubject)==false){
+                        subjectName = e.elSubject.name;
+                    }
                     var isExitAtTargetOptions=_this.findTeacherIsExitAtTargetOptions(userId);
                     var isExitInSettingTeam = _this.findTeacherIsExitAtSettringTeam(userId);
                     if(isExitAtTargetOptions==false && isExitInSettingTeam==false){
@@ -655,6 +659,7 @@ const AntTeamComponents = React.createClass({
                                 label: <div>
                                     <div className="group_team_gray6">{userName}</div>
                                     <div className="group_team_gray9">{schoolName}</div>
+                                    <div>{subjectName}</div>
                                 </div>, value: userId+"#"+userName+"#"+schoolName+"#"+userAvatar }
                             teacherSrcOptions.push(data);
                         }
