@@ -1,9 +1,9 @@
 /**
  * Created by devnote on 16-12-2.
  */
-var isDebug=true;
-// var domain=isDebug?"192.168.1.12:8080":"www.maaee.com";
-var domain=isDebug?"172.20.10.10:8080":"www.maaee.com";
+var isDebug=false;
+var domain=isDebug?"192.168.2.105:8080":"www.maaee.com";
+// var domain=isDebug?"172.20.10.10:8080":"www.maaee.com";
 var liveDomain=isDebug?"192.168.1.34:8080":"www.maaee.com";
 
 var webserviceURL="http://"+domain+"/elearning/elearningControl/";
