@@ -242,7 +242,7 @@ const SchoolGroupSettingComponents = React.createClass({
                         <Button onClick={this.groupSetting}>部门设置</Button>
                     </div>
                 </div>
-                <Table onRowClick={this.getSubGroup} columns={columns} dataSource={this.state.subGroupList}
+                <Table onRowClick={this.getSubGroup} showHeader={false} columns={columns} dataSource={this.state.subGroupList}
                        pagination={false}/>
                 <div>
                     <div>部门人员</div>
@@ -250,7 +250,7 @@ const SchoolGroupSettingComponents = React.createClass({
                         <Button onClick={this.addGroupMemeber}>添加员工</Button>
                     </div>
                 </div>
-                <Table onRowClick={this.getSubGroup} columns={memberColumns} dataSource={this.state.subGroupMemberList}
+                <Table onRowClick={this.getSubGroup} showHeader={false} columns={memberColumns} dataSource={this.state.subGroupMemberList}
                        pagination={{
                            total: this.state.totalMember,
                            pageSize: getPageSize(),
