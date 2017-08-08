@@ -45,6 +45,9 @@ const SchoolGroupSettingComponents = React.createClass({
         //组织架构根目录（学校）
         var rootStructure = nextProps.rootStructure;
         var isExit = this.checkStructureIsExitAtArray(rootStructure);
+        if(structuresObjArray.length>1){
+            structuresObjArray.splice(1,structuresObjArray.length);
+        }
         if(isEmpty(rootStructure)==false && isExit==false){
             //存放组织架构的层次关系
             structuresObjArray.push(rootStructure);
