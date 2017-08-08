@@ -22,7 +22,8 @@ import TeachSpaceGhostMenu from '../components/TeachSpacesGhostMenu';
 import {MsgConnection} from '../utils/msg_websocket_connection';
 import AntCloudClassRoomMenu from '../components/layOut/AntCloudClassRoomMenu';
 import AntCloudClassRoomComponents from '../components/cloudClassRoom/AntCloudClassRoomComponents';
-import AntGroupSettingComponents from '../components/antCloud/AntGroupSettingComponents';
+import SchoolGroupSettingComponents from '../components/schoolGroupSetting/SchoolGroupSettingComponents';
+import SchoolGroupMenu from '../components/schoolGroupSetting/SchoolGroupMenu';
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
@@ -305,6 +306,10 @@ const MainLayout = React.createClass({
         this.setState({"antCloudKey":optType});
     },
 
+    getSubGroup(structureId,structure){
+        this.setState({structureId,rootStructure:structure});
+    },
+
     /**
      * 获取云课堂的操作
      * @param menuItemKey
@@ -373,18 +378,20 @@ const MainLayout = React.createClass({
             case 'antCloud':
                 //蚁盘
                 middleComponent = <AntCloudMenu callbackParent={this.getAntCloud}/>;
-                if(this.state.antCloudKey=="groupSetting"){
-                    tabComponent = <AntGroupSettingComponents></AntGroupSettingComponents>
-                }else{
-                    tabComponent = <AntCloudTableComponents antCloudKey={this.state.antCloudKey}
-                                                            messageUtilObj={ms}
-                    ></AntCloudTableComponents>;
-                }
+                tabComponent = <AntCloudTableComponents antCloudKey={this.state.antCloudKey}
+                                                        messageUtilObj={ms}
+                ></AntCloudTableComponents>;
                 break;
             case 'antCloudClassRoom':
                 //云课堂
                 middleComponent = <AntCloudClassRoomMenu callbackParent={this.getCloudClassRoom}/>;
                 tabComponent = <AntCloudClassRoomComponents  currentItem={this.state.cloudRoomMenuItem}/>;
+
+                break;
+            case 'schoolGroupSetting':
+                //组织架构
+                middleComponent = <SchoolGroupMenu callbackParent={this.getSubGroup}/>;
+                tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId} rootStructure={this.state.rootStructure}></SchoolGroupSettingComponents>;
 
                 break;
         }
@@ -456,10 +463,14 @@ const MainLayout = React.createClass({
                                 <i className="icon_menu_ios icon_cloud"></i>
                                 <div className="tan">云课堂</div>
                             </Menu.Item>
-                            {/*<Menu.Item key="antCloud" className="padding_menu">
+                            <Menu.Item key="antCloud" className="padding_menu">
                                 <i className="icon_menu_ios icon_yichao1"></i>
                                 <div className="tan">蚁盘</div>
-                            </Menu.Item>*/}
+                            </Menu.Item>
+                            <Menu.Item key="schoolGroupSetting" className="padding_menu">
+                                <i className="icon_menu_ios icon_yichao1"></i>
+                                <div className="tan">组织架构</div>
+                            </Menu.Item>
                             <FloatButton ref="floatButton" messageUtilObj={ms}/>
                         </Menu>
 
