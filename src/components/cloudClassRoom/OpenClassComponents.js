@@ -43,7 +43,7 @@ const OpenClassComponents = React.createClass({
             "isseries":'',
             "coursetypeid":'',
             "numPerPage":getPageSize(),
-            "is_publish":'0',
+            "is_publish":'1',
             "userId":cloudClassRoomUser.colUid
         };
         doWebService_CloudClassRoom(JSON.stringify(param), {
@@ -231,26 +231,64 @@ const OpenClassComponents = React.createClass({
     openLive(liveObj,liveType){
         console.log(TEACH_LIVE_URL);
         //0:课程   1 章节  targetType
-        //192.168.1.34:8080/Excoord_PhoneService/elearningClass/teacherElearningLive/{userId}/{targetType}/{targetId}/{title}
-        // var cloudClassRoomUser = JSON.parse(sessionStorage.getItem("cloudClassRoomUser"));
-        var userId = sessionStorage.getItem("ident");
-        var targetType="";
-        var targetId = "";
-        var title="";
-        var requestUrl = TEACH_LIVE_URL;
-        if(liveType=="singleClass"){
-            //单节课（可以直接用课程开课）
-            targetType = 0;
-            targetId = liveObj.id;
-            title = liveObj.courseName;
-        }else{
-            //系列课播放的是具体章节，courseObj代表章节
-            targetType = 1;
-            targetId = liveObj.id;
-            title = liveObj.name;
-        }
-        requestUrl+=userId+"/"+targetType+"/"+targetId+"/"+title;
-        window.open(requestUrl);
+        var _this =this;
+        var param = {
+            "method": 'findVideoById',
+            "id": liveObj.id,
+        };
+        doWebService_CloudClassRoom(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                var videoStatus = response.videoStatus;
+                if(isEmpty(videoStatus)==false && videoStatus!=1){
+                    _this.setState({"tipModalVisible":true});
+                    return;
+                }
+                var userId = sessionStorage.getItem("ident");
+                var targetType="";
+                var targetId = "";
+                var title="";
+                var requestUrl = TEACH_LIVE_URL;
+                if(liveType=="singleClass"){
+                    //单节课（可以直接用课程开课）
+                    targetType = 0;
+                    targetId = liveObj.id;
+                    title = liveObj.courseName;
+                }else{
+                    //系列课播放的是具体章节，courseObj代表章节
+                    targetType = 1;
+                    targetId = liveObj.id;
+                    title = liveObj.name;
+                }
+                requestUrl+=userId+"/"+targetType+"/"+targetId+"/"+title;
+                window.open(requestUrl);
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 根据章节id，查询章节的信息
+     */
+    findVideoById(videoId){
+        var videoStatus="";
+        var param = {
+            "method": 'findVideoById',
+            "id": videoId,
+        };
+        doWebService_CloudClassRoom(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                videoStatus = response.videoStatus;
+                return videoStatus;
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+
     },
 
     pageOnChange(page) {
@@ -264,6 +302,10 @@ const OpenClassComponents = React.createClass({
         this.setState({classDetailModalVisible:false});
     },
 
+    tipModalHandleCancel(){
+        this.setState({"tipModalVisible":false,"classDetailModalVisible":false});
+        this.getCourseList(this.state.currentPage);
+    },
 
     /**
      * 渲染页面
@@ -294,6 +336,18 @@ const OpenClassComponents = React.createClass({
                 >
                     <div className="space">
                         {this.state.classDetailPanel}
+                    </div>
+                </Modal>
+
+                <Modal
+                    visible={this.state.tipModalVisible}
+                    title="课程状态"
+                    onCancel={this.tipModalHandleCancel}
+                    transitionName=""  //禁用modal的动画效果
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    footer={[]}>
+                    <div>
+                        当前课程已经直播过,稍后请选择其他章节再次开启直播,谢谢!
                     </div>
                 </Modal>
 
