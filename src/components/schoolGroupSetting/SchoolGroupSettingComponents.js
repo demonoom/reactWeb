@@ -225,7 +225,7 @@ const SchoolGroupSettingComponents = React.createClass({
             });
         }
         return (
-            <div style={{overflow:'scroll'}}>
+            <div className="schoolgroup">
                 <div>
                     <span>{rootStructureName}</span>
                     <Button>设置</Button>
@@ -235,15 +235,18 @@ const SchoolGroupSettingComponents = React.createClass({
                         {breadcrumbItemObjArray}
                     </Breadcrumb>
                 </div>
-                <div>
-                    <div>下级部门</div>
-                    <div>
+                <div className="schoolgroup_title">
+                    <Icon type="usb" />
+                    <span>下级部门</span>
+                    <span>
                         <Button onClick={this.addSubGroup}>添加子部门</Button>
                         <Button onClick={this.groupSetting}>部门设置</Button>
-                    </div>
+                    </span>
                 </div>
+                <div>
                 <Table onRowClick={this.getSubGroup} showHeader={false} columns={columns} dataSource={this.state.subGroupList}
                        pagination={false}/>
+                </div>
                 <div>
                     <div>部门人员</div>
                     <div>

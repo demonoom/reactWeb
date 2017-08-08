@@ -346,8 +346,8 @@ const OpenClassComponents = React.createClass({
                     transitionName=""  //禁用modal的动画效果
                     maskClosable={false} //设置不允许点击蒙层关闭
                     footer={[]}>
-                    <div>
-                        当前课程已经直播过,稍后请选择其他章节再次开启直播,谢谢!
+                    <div className="font_center">
+                        当前课程已经直播过，稍后请选择其他章节再次开启直播，谢谢！
                     </div>
                 </Modal>
 

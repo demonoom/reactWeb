@@ -1,0 +1,10 @@
+.schoolgroup{
+	padding:10px 20px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+.schoolgroup_title{
+	font-size: 16px;
+	padding: 15px 0;
+	color: #333;
+}
