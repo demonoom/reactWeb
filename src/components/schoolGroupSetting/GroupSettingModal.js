@@ -11,7 +11,9 @@ class GroupSettingModal extends React.Component {
 
   constructor(props) {
     super(props);
+    var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
     this.state = {
+      loginUser : loginUser,
       isShow: false,
       schoolName:'',  //学校名称
       ownerName:'',   //群主名称
@@ -28,42 +30,47 @@ class GroupSettingModal extends React.Component {
     var ownerName="";
     var schoolName = "";
     var chatGroupId ="";
+    var structureId="";
     var rootStructure = _this.props.rootStructure;
     if(isEmpty(rootStructure) == false){
       schoolName = rootStructure.schoolName;
       chatGroupId = rootStructure.chatGroupId;
+      structureId = rootStructure.id;
       var chatGroup = rootStructure.chatGroup;
       var owner = chatGroup.owner;
       if(isEmpty(owner) == false){
         ownerName = owner.userName;
       }
     }
+    this.getChatGroupById(chatGroupId);
     var isShow = _this.props.isShow;
-    this.setState({isShow,schoolName,ownerName});
+    this.setState({isShow,schoolName,ownerName,structureId});
   }
 
   componentWillReceiveProps(nextProps) {
     var ownerName="";
     var schoolName = "";
     var chatGroupId ="";
+    var structureId="";
     var rootStructure = nextProps.rootStructure;
     if(isEmpty(rootStructure) == false){
       schoolName = rootStructure.schoolName;
       chatGroupId = rootStructure.chatGroupId;
+      structureId = rootStructure.id;
       var chatGroup = rootStructure.chatGroup;
       var owner = chatGroup.owner;
       if(isEmpty(owner) == false){
         ownerName = owner.userName;
       }
     }
+    this.getChatGroupById(chatGroupId);
     var isShow = nextProps.isShow;
-    this.setState({isShow,schoolName,ownerName});
+    this.setState({isShow,schoolName,ownerName,structureId});
   }
 
   /**
-   * 根据部门id获取部门成员
-   * @param operateUserId
-   * @param structureId
+   * 根据群id获取群对象
+   * @param chatGroupId 群id
    */
   getChatGroupById(chatGroupId){
     let _this = this;
@@ -74,6 +81,45 @@ class GroupSettingModal extends React.Component {
     doWebService(JSON.stringify(param), {
       onResponse: function (ret) {
         var response = ret.response;
+        if(isEmpty(response)==false){
+          var members = response.members;
+          var ownerId = response.ownerId;
+          var memberRadioObjArray=[];
+          if(isEmpty(members)==false){
+            members.forEach(function (member) {
+                var memberId = member.colUid;
+                var memberName = member.userName;
+                var radioObj = <Radio value={memberId}>{memberName}</Radio>;
+                memberRadioObjArray.push(radioObj);
+            });
+          }
+          _this.setState({memberRadioObjArray,ownerId});
+        }
+      },
+      onError: function (error) {
+        message.error(error);
+      }
+    });
+  }
+
+  /**
+   * 更改组织架构群对应的群主
+   * @param chatGroupId 群id
+   */
+  updateStructureChatGroupOwner(){
+    let _this = this;
+    var param = {
+      "method": 'updateStructureChatGroupOwner',
+      "operateUserId": _this.state.loginUser.colUid,
+      "structureId":_this.state.structureId,
+      "ownerId":_this.state.ownerId
+    };
+    doWebService(JSON.stringify(param), {
+      onResponse: function (ret) {
+        if(ret.msg=="调用成功" && ret.success == true){
+          message.success("群主设置成功！");
+          _this.closeGroupSettingModal();
+        }
       },
       onError: function (error) {
         message.error(error);
@@ -92,7 +138,7 @@ class GroupSettingModal extends React.Component {
    * 确定完成操作
    */
   handleOk(){
-
+    this.updateStructureChatGroupOwner();
   }
 
   /**
@@ -131,10 +177,7 @@ class GroupSettingModal extends React.Component {
             <Col span={24}>
               <span>更换群主：</span>
               <RadioGroup onChange={this.onOwnerChange} value={this.state.ownerId}>
-                <Radio value={1}>A</Radio>
-                <Radio value={2}>B</Radio>
-                <Radio value={3}>C</Radio>
-                <Radio value={4}>D</Radio>
+                {this.state.memberRadioObjArray}
               </RadioGroup>
             </Col>
           </Row>

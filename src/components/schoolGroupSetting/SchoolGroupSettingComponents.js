@@ -4,6 +4,7 @@ import {doWebService} from '../../WebServiceHelper';
 import {getPageSize} from '../../utils/Const';
 import {isEmpty} from '../../utils/utils';
 import GroupSettingModal from './GroupSettingModal';
+import AddSubGroupModal from './AddSubGroupModal';
 
 const columns = [{
     title: '部门名称',
@@ -30,6 +31,7 @@ const SchoolGroupSettingComponents = React.createClass({
             memberPageNo:1,
             structuresObjArray:[],
             groupSettingModalIsShow:false,
+            addSubGroupModalIsShow:false
         };
     },
 
@@ -56,7 +58,7 @@ const SchoolGroupSettingComponents = React.createClass({
         }
         this.listStructures(structureId);
         this.getStrcutureMembers(structureId,defaultPageNo);
-        this.setState({structureId,rootStructure,structuresObjArray});
+        this.setState({structureId,rootStructure,structuresObjArray,"groupSettingModalIsShow":false,"addSubGroupModalIsShow":false});
     },
 
     /**
@@ -75,7 +77,6 @@ const SchoolGroupSettingComponents = React.createClass({
             onResponse: function (ret) {
                 var response = ret.response;
                 var subGroupList = [];
-                var parentGroup=null;
                 if(isEmpty(response)==false){
                     response.forEach(function (subGroup) {
                         var subGroupName = subGroup.name+"("+subGroup.memberCount+")";
@@ -83,15 +84,39 @@ const SchoolGroupSettingComponents = React.createClass({
                             key: subGroup.id,
                             subGroupName: subGroupName,
                         });
-                        parentGroup = subGroup.parent;
                     });
-                    var isExit = _this.checkStructureIsExitAtArray(parentGroup);
-                    if(isEmpty(parentGroup)==false && isExit==false){
-                        //存放组织架构的层次关系
-                        structuresObjArray.push(parentGroup);
-                    }
                 }
-                _this.setState({subGroupList});
+                _this.getStructureById(structureId);
+                _this.setState({subGroupList,"addSubGroupModalIsShow":false});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 获取当前用户的组织根节点
+     * @param operateUserId
+     * @param structureId
+     */
+    getStructureById(structureId){
+        let _this = this;
+        var param = {
+            "method": 'getStructureById',
+            "operateUserId": _this.state.loginUser.colUid,
+            "structureId": structureId,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var parentGroup = ret.response;
+                var isExit = _this.checkStructureIsExitAtArray(parentGroup);
+                if(isEmpty(parentGroup)==false && isExit==false){
+                    //存放组织架构的层次关系
+                    structuresObjArray.push(parentGroup);
+                }
+                _this.setState({parentGroup});
+
             },
             onError: function (error) {
                 message.error(error);
@@ -192,7 +217,7 @@ const SchoolGroupSettingComponents = React.createClass({
      * 添加子部门
      */
     addSubGroup(){
-
+        this.setState({"addSubGroupModalIsShow":true});
     },
 
     /**
@@ -267,6 +292,7 @@ const SchoolGroupSettingComponents = React.createClass({
                            onChange: this.memberPageOnChange
                        }} />
                 <GroupSettingModal isShow={this.state.groupSettingModalIsShow} rootStructure={this.state.rootStructure}></GroupSettingModal>
+                <AddSubGroupModal isShow={this.state.addSubGroupModalIsShow} parentGroup={this.state.parentGroup} callbackParent={this.listStructures}></AddSubGroupModal>
             </div>
         );
     },
