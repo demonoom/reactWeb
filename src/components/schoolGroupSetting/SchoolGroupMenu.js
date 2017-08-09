@@ -83,13 +83,14 @@ class SchoolGroupMenu extends React.Component {
         openKeys=''+structure.id;
         menuList.forEach(function (subGroup) {
             var menuItem = <Menu.Item key={subGroup.id}>
-                <Icon type="folder" />
+                { /*<Icon type="folder" className="schoolgroup_menu_i_blue" />*/}
+                <i className="iconfont schoolgroup_menu_i_blue">&#xe67b;</i>
                 <span>{subGroup.name}</span>
                 <span>({subGroup.memberCount}人)</span>
             </Menu.Item>;
             subMenuItemArray.push(menuItem);
         });
-        var subMenu = <SubMenu key={structure.id} title={<span><Icon type="mail" /><span>{structure.schoolName}</span></span>}>
+        var subMenu = <SubMenu className="schoolgroup_menu_c" key={structure.id} title={<span><Icon type="caret-down"  className="schoolgroup_down_arrow" /><i className="iconfont schoolgroup_menu_i">&#xe6a0;</i><span>{structure.schoolName}</span></span>}>
             {subMenuItemArray}
         </SubMenu>;
         _this.setState({subMenu,openKeys});

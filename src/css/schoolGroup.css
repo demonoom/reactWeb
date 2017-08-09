@@ -1,10 +1,89 @@
 .schoolgroup{
-	padding:10px 20px;
+	padding:0px 20px;
 	overflow-y: auto;
 	overflow-x: hidden;
+}
+.schoolgroup .ant-breadcrumb{
+    background: #fff;
+    padding: 0;
+    font-size: 14px;
+    height: 32px;
+    line-height: 32px;
+}
+.schoolgroup .ant-breadcrumb span.ant-breadcrumb-link a{
+    font-size: 14px;
+}
+.schoolgroup .ant-breadcrumb span:nth-child(1) .ant-breadcrumb-link a, .schoolgroup .ant-breadcrumb span:nth-child(1) .ant-breadcrumb-separator{
+    color: #0084ff;
+    font-size: 14px;
 }
 .schoolgroup_title{
 	font-size: 16px;
 	padding: 15px 0;
-	color: #333;
+	color: #424242;
+}
+.schoolgroup_btn{
+    padding:2px 8px;
+}
+.schoolgroup_btn_blue{
+	border:1px solid #0084ff;
+	color:#0084ff;
+    background: #fff;
+}
+.schoolgroup_btn_left{
+    margin-left: 20px;
+}
+.schoolgroup_btn_gray_6{
+    border:1px solid #666;
+    color:#666;
+    background: #fff;
+}
+.schoolgroup_table .ant-table-tbody > tr > td{
+    font-size: 14px;
+    color: #424242;
+    padding:13px 8px;
+}
+.schoolgroup_btn_blue_solid{
+    background: #0084ff;
+    border:1px solid #0084ff;
+    color: #fff;
+}
+.schoolgroup_table_edit{
+    padding: 0 !important;
+    border: none;
+    background: none;
+    line-height: 1px;
+}
+.schoolgroup_table_edit:hover{
+    padding: 0 !important;
+    border: none;
+    background: none;
+}
+.schoolgroup_i{
+    margin-right: 8px;
+    font-size: 18px;
+    color: #666;
+}
+.schoolgroup_menu_i{
+    margin-right: 8px;
+    font-size: 14px;
+    color: #0084ff;
+}
+.schoolgroup_menu_i_blue{
+    margin-right: 8px;
+    font-size: 14px;
+    color: #2db7f5;
+}
+.schoolgroup_menu_c{
+    background: #e5f1fd;
+    color: #0084ff;
+}
+.schoolgroup_menu_c span{
+    font-size: 14px;
+}
+.schoolgroup_down_arrow{
+    font-size: 18px;
+    position: relative;
+    left: -16px;
+    margin-right:0 !important;
 }
