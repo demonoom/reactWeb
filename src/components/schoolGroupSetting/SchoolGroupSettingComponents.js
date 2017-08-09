@@ -79,7 +79,11 @@ const SchoolGroupSettingComponents = React.createClass({
                 var parentGroup=null;
                 if(isEmpty(response)==false){
                     response.forEach(function (subGroup) {
-                        var subGroupName = subGroup.name+"（"+subGroup.memberCount+ '人' +"）";
+                        //var subGroupName = subGroup.name+"（"+subGroup.memberCount+ '人' +"）";
+                        var subGroupName = <div>
+                            <span>{subGroup.name}</span>
+                            <span>({subGroup.memberCount}人)</span>
+                        </div>;
                         subGroupList.push({
                             key: subGroup.id,
                             subGroupName: subGroupName,
