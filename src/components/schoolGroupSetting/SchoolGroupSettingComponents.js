@@ -16,6 +16,10 @@ const memberColumns = [{
     dataIndex: 'userName',
     key: 'userName',
 },{
+    title: '手机号',
+    dataIndex: 'userPhone',
+    key: 'userPhone',
+},{
     title: '操作',
     dataIndex: 'userOpt',
     key: 'userOpt',
@@ -32,7 +36,8 @@ const SchoolGroupSettingComponents = React.createClass({
             memberPageNo:1,
             structuresObjArray:[],
             groupSettingModalIsShow:false,
-            addSubGroupModalIsShow:false
+            addSubGroupModalIsShow:false,
+            selectedRowKeys:[]
         };
     },
 
@@ -165,6 +170,7 @@ const SchoolGroupSettingComponents = React.createClass({
                         subGroupMemberList.push({
                             key: member.id,
                             userName: user.userName,
+                            userPhone:user.phoneNumber,
                             userOpt:userOpt
                         });
                     });
@@ -245,12 +251,22 @@ const SchoolGroupSettingComponents = React.createClass({
         this.setState({groupSettingModalIsShow:true});
     },
 
+    onSelectChange(selectedRowKeys){
+        console.log('selectedRowKeys changed: ', selectedRowKeys);
+        this.setState({ selectedRowKeys });
+    },
+
     /**
      * 渲染页面
      * @returns {XML}
      */
     render() {
         var _this = this;
+        const rowSelection = {
+            selectedRowKeys:_this.state.selectedRowKeys,
+            onChange: _this.onSelectChange,
+        };
+        const hasSelected = _this.state.selectedRowKeys.length > 0;
         var rootStructureName = "";
         if(isEmpty(_this.state.rootStructure)==false){
             rootStructureName = _this.state.rootStructure.schoolName;
@@ -290,15 +306,29 @@ const SchoolGroupSettingComponents = React.createClass({
                     <span>部门人员</span>
                     <span>
                         <Button onClick={this.addGroupMemeber} className="schoolgroup_btn_blue_solid schoolgroup_btn_left schoolgroup_btn">添加员工</Button>
+                        <div style={{ marginBottom: 16 }}>
+                            <Button
+                                type="primary"
+                                onClick={this.start}
+                                disabled={!hasSelected}
+                            >
+                                批量删除
+                            </Button>
+                            <span style={{ marginLeft: 8 }}>
+                                {hasSelected ? `选中 ${_this.state.selectedRowKeys.length} 条记录` : ''}
+                            </span>
+                        </div>
                     </span>
                 </div>
                 <div>
-                <Table onRowClick={this.getSubGroup} showHeader={false} columns={memberColumns} dataSource={this.state.subGroupMemberList} className="schoolgroup_table"
-                       pagination={{
-                           total: this.state.totalMember,
-                           pageSize: getPageSize(),
-                           onChange: this.memberPageOnChange
-                       }} />
+                <div>
+                    <Table onRowClick={this.getSubGroup} rowSelection={rowSelection} columns={memberColumns} dataSource={this.state.subGroupMemberList} className="schoolgroup_table"
+                           pagination={{
+                               total: this.state.totalMember,
+                               pageSize: getPageSize(),
+                               onChange: this.memberPageOnChange
+                           }} />
+                </div>
                 </div>
                 <GroupSettingModal isShow={this.state.groupSettingModalIsShow} rootStructure={this.state.rootStructure}></GroupSettingModal>
                 <AddSubGroupModal isShow={this.state.addSubGroupModalIsShow} parentGroup={this.state.parentGroup} callbackParent={this.listStructures}></AddSubGroupModal>
