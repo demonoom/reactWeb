@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react';
-import { Table,Button,Breadcrumb} from 'antd';
+import { Table,Icon,Button,Breadcrumb} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import {getPageSize} from '../../utils/Const';
 import {isEmpty} from '../../utils/utils';
+import GroupSettingModal from './GroupSettingModal';
 
 const columns = [{
     title: '部门名称',
@@ -27,7 +28,8 @@ const SchoolGroupSettingComponents = React.createClass({
         return {
             loginUser : loginUser,
             memberPageNo:1,
-            structuresObjArray:[]
+            structuresObjArray:[],
+            groupSettingModalIsShow:false,
         };
     },
 
@@ -206,6 +208,12 @@ const SchoolGroupSettingComponents = React.createClass({
     groupSetting(){
 
     },
+    /**
+     * 学校设置
+     */
+    schoolSetting(){
+        this.setState({groupSettingModalIsShow:true});
+    },
 
     /**
      * 渲染页面
@@ -228,7 +236,7 @@ const SchoolGroupSettingComponents = React.createClass({
             <div className="schoolgroup">
                 <div>
                     <span>{rootStructureName}</span>
-                    <Button>设置</Button>
+                    <Button onClick={this.schoolSetting}>设置</Button>
                 </div>
                 <div>
                     <Breadcrumb>
@@ -236,7 +244,6 @@ const SchoolGroupSettingComponents = React.createClass({
                     </Breadcrumb>
                 </div>
                 <div className="schoolgroup_title">
-                    <Icon type="usb" />
                     <span>下级部门</span>
                     <span>
                         <Button onClick={this.addSubGroup}>添加子部门</Button>
@@ -259,6 +266,7 @@ const SchoolGroupSettingComponents = React.createClass({
                            pageSize: getPageSize(),
                            onChange: this.memberPageOnChange
                        }} />
+                <GroupSettingModal isShow={this.state.groupSettingModalIsShow} rootStructure={this.state.rootStructure}></GroupSettingModal>
             </div>
         );
     },
