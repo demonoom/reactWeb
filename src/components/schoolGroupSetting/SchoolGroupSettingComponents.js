@@ -19,6 +19,7 @@ const memberColumns = [{
     title: '操作',
     dataIndex: 'userOpt',
     key: 'userOpt',
+    width:'34px'
 }
 ];
 var structuresObjArray=[];
@@ -79,7 +80,11 @@ const SchoolGroupSettingComponents = React.createClass({
                 var subGroupList = [];
                 if(isEmpty(response)==false){
                     response.forEach(function (subGroup) {
-                        var subGroupName = subGroup.name+"("+subGroup.memberCount+")";
+                        //var subGroupName = subGroup.name+"（"+subGroup.memberCount+ '人' +"）";
+                        var subGroupName = <div>
+                            <span>{subGroup.name}</span>
+                            <span>({subGroup.memberCount}人)</span>
+                        </div>;
                         subGroupList.push({
                             key: subGroup.id,
                             subGroupName: subGroupName,
@@ -156,7 +161,7 @@ const SchoolGroupSettingComponents = React.createClass({
                 if(isEmpty(response)==false){
                     response.forEach(function (member) {
                         var user = member.user;
-                        var userOpt = <Button icon="edit"></Button>
+                        var userOpt = <Button className="schoolgroup_table_edit" icon="edit"></Button>
                         subGroupMemberList.push({
                             key: member.id,
                             userName: user.userName,
@@ -253,44 +258,48 @@ const SchoolGroupSettingComponents = React.createClass({
         var breadcrumbItemObjArray=[];
         if(isEmpty(_this.state.structuresObjArray)==false){
             _this.state.structuresObjArray.forEach(function (structure) {
-                var breadcrumbItemObj = <Breadcrumb.Item key={structure.id}><a onClick={_this.breadCrumbClick.bind(_this,structure.id)}>{structure.name}</a></Breadcrumb.Item>;
+                var breadcrumbItemObj = <Breadcrumb.Item key={structure.id} ><a onClick={_this.breadCrumbClick.bind(_this,structure.id)}>{structure.name}</a></Breadcrumb.Item>;
                 breadcrumbItemObjArray.push(breadcrumbItemObj);
             });
         }
         return (
             <div className="schoolgroup">
-                <div>
+                <div className="schoolgroup_title">
                     <span>{rootStructureName}</span>
-                    <Button onClick={this.schoolSetting}>设置</Button>
+                    <Button className="schoolgroup_btn_gray_6 schoolgroup_btn_left schoolgroup_btn" onClick={this.schoolSetting}>设置</Button>
                 </div>
                 <div>
-                    <Breadcrumb>
+                    <Breadcrumb separator=">">
                         {breadcrumbItemObjArray}
                     </Breadcrumb>
                 </div>
                 <div className="schoolgroup_title">
+                    <i className="iconfont schoolgroup_i">&#xe6a0;</i>
                     <span>下级部门</span>
                     <span>
-                        <Button onClick={this.addSubGroup}>添加子部门</Button>
-                        <Button onClick={this.groupSetting}>部门设置</Button>
+                        <Button className="schoolgroup_btn_blue schoolgroup_btn_left schoolgroup_btn" onClick={this.addSubGroup}>添加子部门</Button>
+                        <Button className="schoolgroup_btn_gray_6 schoolgroup_btn_left schoolgroup_btn" onClick={this.groupSetting}>部门设置</Button>
                     </span>
                 </div>
                 <div>
-                <Table onRowClick={this.getSubGroup} showHeader={false} columns={columns} dataSource={this.state.subGroupList}
+                <Table onRowClick={this.getSubGroup} showHeader={false} columns={columns} dataSource={this.state.subGroupList} className="schoolgroup_table"
                        pagination={false}/>
                 </div>
-                <div>
-                    <div>部门人员</div>
-                    <div>
-                        <Button onClick={this.addGroupMemeber}>添加员工</Button>
-                    </div>
+                <div className="schoolgroup_title">
+                    <i className="iconfont schoolgroup_i">&#xe61b;</i>
+                    <span>部门人员</span>
+                    <span>
+                        <Button onClick={this.addGroupMemeber} className="schoolgroup_btn_blue_solid schoolgroup_btn_left schoolgroup_btn">添加员工</Button>
+                    </span>
                 </div>
-                <Table onRowClick={this.getSubGroup} showHeader={false} columns={memberColumns} dataSource={this.state.subGroupMemberList}
+                <div>
+                <Table onRowClick={this.getSubGroup} showHeader={false} columns={memberColumns} dataSource={this.state.subGroupMemberList} className="schoolgroup_table"
                        pagination={{
                            total: this.state.totalMember,
                            pageSize: getPageSize(),
                            onChange: this.memberPageOnChange
                        }} />
+                </div>
                 <GroupSettingModal isShow={this.state.groupSettingModalIsShow} rootStructure={this.state.rootStructure}></GroupSettingModal>
                 <AddSubGroupModal isShow={this.state.addSubGroupModalIsShow} parentGroup={this.state.parentGroup} callbackParent={this.listStructures}></AddSubGroupModal>
             </div>

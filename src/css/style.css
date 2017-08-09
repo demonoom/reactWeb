@@ -1584,12 +1584,12 @@ a {
 
 }
 @font-face {
-  font-family: 'iconfont';  /* project id 197083 */
-  src: url('//at.alicdn.com/t/font_2thffxnnfi5rvn29.eot');
-  src: url('//at.alicdn.com/t/font_2thffxnnfi5rvn29.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_2thffxnnfi5rvn29.woff') format('woff'),
-  url('//at.alicdn.com/t/font_2thffxnnfi5rvn29.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_2thffxnnfi5rvn29.svg#iconfont') format('svg');
+	font-family: 'iconfont';  /* project id 197083 */
+	src: url('//at.alicdn.com/t/font_yb0jfen48i3pu8fr.eot');
+	src: url('//at.alicdn.com/t/font_yb0jfen48i3pu8fr.eot?#iefix') format('embedded-opentype'),
+	url('//at.alicdn.com/t/font_yb0jfen48i3pu8fr.woff') format('woff'),
+	url('//at.alicdn.com/t/font_yb0jfen48i3pu8fr.ttf') format('truetype'),
+	url('//at.alicdn.com/t/font_yb0jfen48i3pu8fr.svg#iconfont') format('svg');
 }
 .iconfont{
 	font-family:"iconfont" !important;
@@ -2697,6 +2697,12 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 }
 .ant-menu-item-selected .icon_cloud{
 	background-position: 0 -650px;
+}
+.icon_schoolGroup{
+	background-position: 0 -700px;
+}
+.ant-menu-item-selected .icon_schoolGroup{
+	background-position: 0 -750px;
 }
 .person_13{
 	font-size:16px !important;
