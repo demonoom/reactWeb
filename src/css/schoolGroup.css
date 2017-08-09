@@ -30,6 +30,16 @@
 	color:#0084ff;
     background: #fff;
 }
+.schoolgroup_btn_red{
+    border:1px solid #ff2641;
+    color:#ff2641;
+    background: #fff;
+}
+.schoolgroup_btn_red:hover{
+    border:1px solid #ff7586;
+    color:#ff7586;
+    background: #fff;
+}
 .schoolgroup_btn_left{
     margin-left: 20px;
 }
@@ -40,8 +50,15 @@
 }
 .schoolgroup_table .ant-table-tbody > tr > td{
     font-size: 14px;
+    color: #666;
+    padding:13px 8px;
+}
+.schoolgroup_table .ant-table-thead > tr > th{
+    font-size: 14px;
     color: #424242;
     padding:13px 8px;
+    background: #fff;
+    border-bottom:1px solid #e9e9e9
 }
 .schoolgroup_btn_blue_solid{
     background: #0084ff;
@@ -86,4 +103,12 @@
     position: relative;
     left: -16px;
     margin-right:0 !important;
+}
+.schoolgroup_people{
+    color: #7d7d7d;
+    margin-left: 8px;
+
+}
+.schoolgroup_operate{
+    text-align: center;
 }
