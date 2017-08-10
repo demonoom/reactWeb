@@ -29,6 +29,7 @@ const memberColumns = [{
 }
 ];
 var structuresObjArray=[];
+var subGroupMemberList = [];
 const SchoolGroupSettingComponents = React.createClass({
 
     getInitialState() {
@@ -195,7 +196,6 @@ const SchoolGroupSettingComponents = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                var subGroupMemberList = [];
                 if(isEmpty(response)==false){
                     response.forEach(function (member) {
                         var user = member.user;
@@ -205,6 +205,8 @@ const SchoolGroupSettingComponents = React.createClass({
                             userPhone:user.phoneNumber
                         });
                     });
+                }else{
+                    message.warn("没有更多可用数据");
                 }
                 var pager = ret.pager;
                 _this.setState({subGroupMemberList,totalMember:pager.rsCount});
@@ -242,10 +244,10 @@ const SchoolGroupSettingComponents = React.createClass({
      * @param pageNo
      */
     memberPageOnChange(pageNo) {
-        this.getStrcutureMembers(this.state.structureId,pageNo);
         this.setState({
             memberPageNo: pageNo,
         });
+        this.getStrcutureMembers(this.state.structureId,pageNo);
     },
 
     /**
@@ -293,16 +295,50 @@ const SchoolGroupSettingComponents = React.createClass({
         this.setState({schoolSettingModalIsShow:true});
     },
 
+    /**
+     * 员工选中响应函数
+     * @param selectedRowKeys
+     */
     onSelectChange(selectedRowKeys){
         console.log('selectedRowKeys changed: ', selectedRowKeys);
-        this.setState({ selectedRowKeys });
+        this.setState({selectedRowKeys,schoolSettingModalIsShow:false,addSubGroupModalIsShow:false,addGroupMemberModalIsShow:false,"groupSettingModalIsShow":false});
     },
 
     /**
      * 部门成员加载更多
      */
     loadMoreMember(){
+        var memberPageNo = parseInt(this.state.memberPageNo) + 1;
+        this.memberPageOnChange(memberPageNo);
+    },
 
+    /**
+     * 批量删除部门员工
+     */
+    batchDeleteMemeber(){
+        var _this = this;
+        var selectedRowKeys = _this.state.selectedRowKeys;
+        var memberIds = "";
+        if(isEmpty(selectedRowKeys)==false){
+            memberIds = selectedRowKeys.join(",");
+        }
+        var param = {
+            "method": 'deleteStuctureById',
+            "operateUserId": _this.state.loginUser.colUid,
+            "memberIds": memberIds,
+        };
+        /*doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    message.success("部门删除成功！");
+                    _this.listStructures(_this.state.structureId);
+                    _this.getStrcutureMembers(_this.state.structureId,_this.state.memberPageNo);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });*/
     },
 
     /**
@@ -365,7 +401,7 @@ const SchoolGroupSettingComponents = React.createClass({
                         <span className="schoolgroup_btn_left">
                             <Button
                                 type="primary"
-                                onClick={this.start}
+                                onClick={this.batchDeleteMemeber}
                                 disabled={!hasSelected} className="schoolgroup_btn_red schoolgroup_btn">
                                 批量删除
                             </Button>
@@ -376,7 +412,7 @@ const SchoolGroupSettingComponents = React.createClass({
                     </span>
                 </div>
                 <div>
-                    <Table onRowClick={this.getSubGroup} rowSelection={rowSelection} columns={memberColumns} pagination={false} dataSource={this.state.subGroupMemberList} className="schoolgroup_table schoolgroup_table_department"/>
+                    <Table rowSelection={rowSelection} columns={memberColumns} pagination={false} dataSource={this.state.subGroupMemberList} className="schoolgroup_table schoolgroup_table_department"/>
                     <div className="schoolgroup_operate schoolgroup_more">
                         <a onClick={this.loadMoreMember} className="schoolgroup_more_a">加载更多</a>
                     </div>

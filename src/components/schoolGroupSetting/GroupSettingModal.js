@@ -31,6 +31,8 @@ class GroupSettingModal extends React.Component {
         this.groupMemberHandleChange = this.groupMemberHandleChange.bind(this);
         this.groupSelectOnChange = this.groupSelectOnChange.bind(this);
         this.loadGroupSelectData = this.loadGroupSelectData.bind(this);
+        this.chatGroupManagerHandleChange = this.chatGroupManagerHandleChange.bind(this);
+        this.parentGroupNameChange = this.parentGroupNameChange.bind(this);
     }
 
     componentDidMount() {
@@ -193,16 +195,20 @@ class GroupSettingModal extends React.Component {
     handleOk() {
         var _this = this;
         //部门主管
-        var groupManager = _this.state.groupManager;
+        var groupManagerArray = _this.state.groupManager;
         //群主
         var chatGroupManager = _this.state.chatGroupManager;
         //部门名称
-        var parentGroupName = _this.state.parentGroupName;
+        var groupName = _this.state.parentGroupName;
+        var groupManager="";
+        if(isEmpty(groupManagerArray)==false){
+            groupManager = groupManagerArray.join(",");
+        }
         var param = {
-            "method": 'updateStructureChatGroupOwner',
-            "groupManager": groupManager,
-            "chatGroupManager": chatGroupManager,
-            "parentGroupName": parentGroupName
+            "method": 'updateStructureBaseInfo',//部门设置
+            "groupManager": groupManager, //部门主管,多个主管的id用逗号分割,memberId
+            "chatGroupManager": chatGroupManager,//群主,小蚂蚁用户id
+            "groupName": groupName  //部门名称
         };
         /*doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
