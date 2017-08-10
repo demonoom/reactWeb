@@ -103,17 +103,23 @@ class AddSubGroupModal extends React.Component {
         maskClosable={false} //设置不允许点击蒙层关闭
         onCancel={this.closeAddSubGroupModal}
         onOk={this.handleOk}
+        className="schoolgroup_modal"
       >
         <div className="modal_register_main">
           <Row className="ant_row">
-            <Col span={24}>
-              部门名称:
+            <Col span={6}>
+              部门名称：
+            </Col>
+            <Col span={18}>
               <Input placeholder="必填" value={this.state.subGroupName} onChange={this.subGroupNameChange}/>
             </Col>
           </Row>
           <Row className="ant_row">
-            <Col span={24}>
-              上级部门:{this.state.parentGroupName}
+            <Col span={6}>
+              上级部门：
+            </Col>
+            <Col span={18}>
+              {this.state.parentGroupName}
             </Col>
           </Row>
         </div>
