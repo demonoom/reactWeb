@@ -1,11 +1,10 @@
 .schoolgroup{
-	padding:0px 20px;
-	overflow-y: auto;
-	overflow-x: hidden;
+	padding:0px;
+	overflow: hidden;
 }
 .schoolgroup .ant-breadcrumb{
     background: #fff;
-    padding: 0;
+    padding: 0 20px;
     font-size: 14px;
     height: 32px;
     line-height: 32px;
@@ -19,7 +18,7 @@
 }
 .schoolgroup_title{
 	font-size: 16px;
-	padding: 15px 0;
+	padding: 15px 20px;
 	color: #424242;
 }
 .schoolgroup_btn{
@@ -59,6 +58,23 @@
     padding:13px 8px;
     background: #fff;
     border-bottom:1px solid #e9e9e9
+}
+.schoolgroup_table .ant-table-thead > tr > th:nth-child(3):before{
+    content: "";
+    border-left: 1px solid #888;
+    margin-right: 20px;
+}
+.schoolgroup_table .ant-table-tbody > tr > td:nth-child(3):before{
+    content: "";
+    margin-left: 21px;
+}
+.schoolgroup_table .ant-table-content{
+    height:170px;
+    overflow: auto;
+    padding:0 20px
+}
+.schoolgroup_table_department{
+    height:220px !important;
 }
 .schoolgroup_btn_blue_solid{
     background: #0084ff;
@@ -111,4 +127,37 @@
 }
 .schoolgroup_operate{
     text-align: center;
+}
+.schoolgroup_modal .modal_register_main{
+    padding: 0px 20px;
+    font-size: 14px;
+}
+.schoolgroup_modal .ant-modal-body{
+    max-height:400px;
+    overflow-y: auto;
+}
+.schoolgroup_modal .modal_register_main .ant-row{
+    margin-top: 15px;
+}
+.schoolgroup_modal_col6{
+    text-align: right;
+    padding-right: 12px;
+}
+.schoolgroup_modal .modal_register_main .ant-row .ant-radio-group label{
+    width: 45%;
+    margin-bottom:6px ;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    -o-text-overflow:ellipsis;
+    -webkit-text-overflow:ellipsis;
+    -moz-text-overflow:ellipsis;
+    white-space:nowrap;
+}
+.text_ellipsis{
+    overflow:hidden;
+    text-overflow:ellipsis;
+    -o-text-overflow:ellipsis;
+    -webkit-text-overflow:ellipsis;
+    -moz-text-overflow:ellipsis;
+    white-space:nowrap;
 }

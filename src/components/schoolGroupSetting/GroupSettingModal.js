@@ -153,6 +153,7 @@ class GroupSettingModal extends React.Component {
         maskClosable={false} //设置不允许点击蒙层关闭
         onCancel={this.closeGroupSettingModal}
         onOk={this.handleOk}
+        className="schoolgroup_modal"
       >
         <div className="modal_register_main">
           <Row className="ant_row">
