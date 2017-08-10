@@ -16,10 +16,11 @@ const memberColumns = [{
     title: '姓名',
     dataIndex: 'userName',
     key: 'userName',
+    width:'120px'
 },{
     title: '手机号',
     dataIndex: 'userPhone',
-    key: 'userPhone',
+    key: 'userPhone'
 }
 ];
 var structuresObjArray=[];
@@ -85,7 +86,7 @@ const SchoolGroupSettingComponents = React.createClass({
                         //var subGroupName = subGroup.name+"（"+subGroup.memberCount+ '人' +"）";
                         var subGroupName = <div>
                             <span>{subGroup.name}</span>
-                            <span>({subGroup.memberCount}人)</span>
+                            <span className="schoolgroup_people">({subGroup.memberCount}人                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                )</span>
                         </div>;
                         subGroupList.push({
                             key: subGroup.id,
@@ -301,18 +302,17 @@ const SchoolGroupSettingComponents = React.createClass({
                     <span>部门人员</span>
                     <span>
                         <Button onClick={this.addGroupMemeber} className="schoolgroup_btn_blue_solid schoolgroup_btn_left schoolgroup_btn">添加员工</Button>
-                        <div style={{ marginBottom: 16 }}>
+                        <span className="schoolgroup_btn_left">
                             <Button
                                 type="primary"
                                 onClick={this.start}
-                                disabled={!hasSelected}
-                            >
+                                disabled={!hasSelected} className="schoolgroup_btn_red schoolgroup_btn">
                                 批量删除
                             </Button>
-                            <span style={{ marginLeft: 8 }}>
+                            <span className="password_ts" style={{ marginLeft: 8 }}>
                                 {hasSelected ? `选中 ${_this.state.selectedRowKeys.length} 条记录` : ''}
                             </span>
-                        </div>
+                        </span>
                     </span>
                 </div>
                 <div>
