@@ -152,37 +152,46 @@ class SchoolSettingModal extends React.Component {
 
   render() {
     return (
-      <Modal
-        title="学校设置"
-        visible={this.state.isShow}
-        width={440}
-        transitionName=""  //禁用modal的动画效果
-        closable={true}     //设置显示右上角的关闭按钮（但是需要调整颜色，否则白色会无法显示）
-        maskClosable={false} //设置不允许点击蒙层关闭
-        onCancel={this.closeGroupSettingModal}
-        onOk={this.handleOk}
-      >
-        <div className="modal_register_main">
-          <Row className="ant_row">
-            <Col span={24}>
-              学校名称:{this.state.schoolName}
-            </Col>
-          </Row>
-          <Row className="ant_row">
-            <Col span={24}>
-              群主:{this.state.ownerName}
-            </Col>
-          </Row>
-          <Row className="ant_row">
-            <Col span={24}>
-              <span>更换群主：</span>
-              <RadioGroup onChange={this.onOwnerChange} value={this.state.ownerId}>
-                {this.state.memberRadioObjArray}
-              </RadioGroup>
-            </Col>
-          </Row>
-        </div>
-      </Modal>
+        <Modal
+            title="学校设置"
+            visible={this.state.isShow}
+            width={440}
+            transitionName=""  //禁用modal的动画效果
+            closable={true}     //设置显示右上角的关闭按钮（但是需要调整颜色，否则白色会无法显示）
+            maskClosable={false} //设置不允许点击蒙层关闭
+            onCancel={this.closeGroupSettingModal}
+            onOk={this.handleOk}
+            className="schoolgroup_modal"
+        >
+          <div className="modal_register_main">
+            <Row className="ant_row">
+              <Col span={6} className="schoolgroup_modal_col6">
+                学校名称：
+              </Col>
+              <Col span={18}>
+                  {this.state.schoolName}
+              </Col>
+            </Row>
+            <Row className="ant_row">
+              <Col span={6} className="schoolgroup_modal_col6">
+                群主：
+              </Col>
+              <Col span={18}>
+                  {this.state.ownerName}
+              </Col>
+            </Row>
+            <Row className="ant_row">
+              <Col span={6} className="schoolgroup_modal_col6">
+                更换群主：
+              </Col>
+              <Col span={18}>
+                <RadioGroup onChange={this.onOwnerChange} value={this.state.ownerId}>
+                    {this.state.memberRadioObjArray}
+                </RadioGroup>
+              </Col>
+            </Row>
+          </div>
+        </Modal>
     );
   }
 
