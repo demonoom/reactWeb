@@ -74,7 +74,10 @@
     padding:0 20px
 }
 .schoolgroup_table_department{
-    height:220px !important;
+    height:170px !important;
+}
+.schoolgroup_table_department > div:first-child{
+    height:100% !important;
 }
 .schoolgroup_btn_blue_solid{
     background: #0084ff;
@@ -160,4 +163,15 @@
     -webkit-text-overflow:ellipsis;
     -moz-text-overflow:ellipsis;
     white-space:nowrap;
+}
+.schoolgroup_more{
+    line-height: 38px;
+    text-align: center;
+}
+.schoolgroup_more_a{
+    color: #888;
+    font-size: 14px;
+}
+.shoolgroup_more_a:hover{
+    color:#0084ff !important;
 }
