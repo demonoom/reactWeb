@@ -315,7 +315,7 @@ const SchoolGroupSettingComponents = React.createClass({
                 </div>
                 <div className="schoolgroup_title">
                     <i className="iconfont schoolgroup_i">&#xe61b;</i>
-                    <span>部门人员</span>
+                    <span>部门人员1111</span>
                     <span>
                         <Button onClick={this.addGroupMemeber} className="schoolgroup_btn_blue_solid schoolgroup_btn_left schoolgroup_btn">添加员工</Button>
                         <span className="schoolgroup_btn_left">
@@ -332,7 +332,7 @@ const SchoolGroupSettingComponents = React.createClass({
                     </span>
                 </div>
                 <div>
-                    <Table onRowClick={this.getSubGroup} rowSelection={rowSelection} columns={memberColumns} dataSource={this.state.subGroupMemberList} className="schoolgroup_table schoolgroup_table_department"/>
+                    <Table onRowClick={this.getSubGroup} rowSelection={rowSelection} columns={memberColumns} pagination={false} dataSource={this.state.subGroupMemberList} className="schoolgroup_table schoolgroup_table_department"/>
                     <div>
                         <a onClick={this.loadMoreMember}>加载更多</a>
                     </div>
