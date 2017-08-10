@@ -2,14 +2,12 @@
  * Created by devnote on 17-4-17.
  */
 import React, {PropTypes} from 'react';
-import {Modal, Icon, Radio, Button, Row, Col,message,Input} from 'antd';
+import {Modal, Icon, Radio, Button, Row, Col,message} from 'antd';
 const RadioGroup = Radio.Group;
 import {doWebService} from '../../WebServiceHelper';
 import {isEmpty} from '../../utils/utils';
-/**
- * 部门设置
- */
-class GroupSettingModal extends React.Component {
+
+class SchoolSettingModal extends React.Component {
 
   constructor(props) {
     super(props);
@@ -17,31 +15,57 @@ class GroupSettingModal extends React.Component {
     this.state = {
       loginUser : loginUser,
       isShow: false,
-      parentGroup:'',  //部门信息
+      schoolName:'',  //学校名称
+      ownerName:'',   //群主名称
+      ownerId:''    //群主id
     };
     this.closeGroupSettingModal = this.closeGroupSettingModal.bind(this);
     this.handleOk = this.handleOk.bind(this);
+    this.onOwnerChange = this.onOwnerChange.bind(this);
     this.getChatGroupById = this.getChatGroupById.bind(this);
-    this.getStructureById = this.getStructureById.bind(this);
   }
 
   componentDidMount(){
     var _this = this;
+    var ownerName="";
+    var schoolName = "";
+    var chatGroupId ="";
+    var structureId="";
+    var rootStructure = _this.props.rootStructure;
+    if(isEmpty(rootStructure) == false){
+      schoolName = rootStructure.schoolName;
+      chatGroupId = rootStructure.chatGroupId;
+      structureId = rootStructure.id;
+      var chatGroup = rootStructure.chatGroup;
+      var owner = chatGroup.owner;
+      if(isEmpty(owner) == false){
+        ownerName = owner.userName;
+      }
+    }
+    this.getChatGroupById(chatGroupId);
     var isShow = _this.props.isShow;
-    this.setState({isShow});
+    this.setState({isShow,schoolName,ownerName,structureId});
   }
 
   componentWillReceiveProps(nextProps) {
-    var isShow = nextProps.isShow;
-    //部门设置时，获取部门信息
-    var parentGroup = nextProps.parentGroup;
-    var parentGroupName="";
-    var parentId = "";
-    if(isEmpty(parentGroup)==false){
-      parentGroupName = parentGroup.name;
-      parentId = parentGroup.id;
+    var ownerName="";
+    var schoolName = "";
+    var chatGroupId ="";
+    var structureId="";
+    var rootStructure = nextProps.rootStructure;
+    if(isEmpty(rootStructure) == false){
+      schoolName = rootStructure.schoolName;
+      chatGroupId = rootStructure.chatGroupId;
+      structureId = rootStructure.id;
+      var chatGroup = rootStructure.chatGroup;
+      var owner = chatGroup.owner;
+      if(isEmpty(owner) == false){
+        ownerName = owner.userName;
+      }
     }
-    this.setState({isShow,parentGroup,parentGroupName,parentId});
+    this.getChatGroupById(chatGroupId);
+    var isShow = nextProps.isShow;
+    this.setState({isShow,schoolName,ownerName,structureId});
   }
 
   /**
@@ -71,30 +95,6 @@ class GroupSettingModal extends React.Component {
           }
           _this.setState({memberRadioObjArray,ownerId});
         }
-      },
-      onError: function (error) {
-        message.error(error);
-      }
-    });
-  }
-
-  /**
-   * 获取当前用户的组织根节点
-   * @param operateUserId
-   * @param structureId
-   */
-  getStructureById(structureId){
-    let _this = this;
-    var param = {
-      "method": 'getStructureById',
-      "operateUserId": _this.state.loginUser.colUid,
-      "structureId": structureId,
-    };
-    doWebService(JSON.stringify(param), {
-      onResponse: function (ret) {
-        var parentGroup = ret.response;
-        _this.setState({parentGroup});
-
       },
       onError: function (error) {
         message.error(error);
@@ -141,6 +141,14 @@ class GroupSettingModal extends React.Component {
     this.updateStructureChatGroupOwner();
   }
 
+  /**
+   * 群主单选按钮组选项改变的响应
+   */
+  onOwnerChange(e){
+    this.setState({
+      ownerId: e.target.value,
+    });
+  }
 
   render() {
     return (
@@ -157,23 +165,20 @@ class GroupSettingModal extends React.Component {
         <div className="modal_register_main">
           <Row className="ant_row">
             <Col span={24}>
-              部门名称:<Input placeholder="部门名称" />
+              学校名称:{this.state.schoolName}
             </Col>
           </Row>
           <Row className="ant_row">
             <Col span={24}>
-              部门主管:
+              群主:{this.state.ownerName}
             </Col>
           </Row>
           <Row className="ant_row">
             <Col span={24}>
-              <span>上级部门：</span>
-
-            </Col>
-          </Row>
-          <Row className="ant_row">
-            <Col span={24}>
-              群主设置:
+              <span>更换群主：</span>
+              <RadioGroup onChange={this.onOwnerChange} value={this.state.ownerId}>
+                {this.state.memberRadioObjArray}
+              </RadioGroup>
             </Col>
           </Row>
         </div>
@@ -183,4 +188,4 @@ class GroupSettingModal extends React.Component {
 
 }
 
-export default GroupSettingModal;
+export default SchoolSettingModal;

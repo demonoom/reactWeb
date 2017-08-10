@@ -3,9 +3,10 @@ import { Table,Icon,Button,Breadcrumb} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import {getPageSize} from '../../utils/Const';
 import {isEmpty} from '../../utils/utils';
-import GroupSettingModal from './GroupSettingModal';
+import SchoolSettingModal from './SchoolSettingModal';
 import AddSubGroupModal from './AddSubGroupModal';
 import AddGroupMemberModal from './AddGroupMemberModal';
+import GroupSettingModal from './GroupSettingModal';
 
 const columns = [{
     title: '部门名称',
@@ -32,10 +33,11 @@ const SchoolGroupSettingComponents = React.createClass({
             loginUser : loginUser,
             memberPageNo:1,
             structuresObjArray:[],
-            groupSettingModalIsShow:false,
+            schoolSettingModalIsShow:false,
             addSubGroupModalIsShow:false,
             selectedRowKeys:[],
             addGroupMemberModalIsShow:false,
+            groupSettingModalIsShow:false
         };
     },
 
@@ -62,7 +64,7 @@ const SchoolGroupSettingComponents = React.createClass({
         }
         this.listStructures(structureId);
         this.getStrcutureMembers(structureId,defaultPageNo);
-        this.setState({structureId,rootStructure,structuresObjArray,"groupSettingModalIsShow":false,"addSubGroupModalIsShow":false,"addGroupMemberModalIsShow":false});
+        this.setState({structureId,rootStructure,structuresObjArray,"schoolSettingModalIsShow":false,"addSubGroupModalIsShow":false,"addGroupMemberModalIsShow":false,"groupSettingModalIsShow":false});
     },
 
     /**
@@ -95,7 +97,7 @@ const SchoolGroupSettingComponents = React.createClass({
                     });
                 }
                 _this.getStructureById(structureId);
-                _this.setState({subGroupList,"addSubGroupModalIsShow":false,"addGroupMemberModalIsShow":false});
+                _this.setState({subGroupList,"addSubGroupModalIsShow":false,"addGroupMemberModalIsShow":false,"groupSettingModalIsShow":false});
             },
             onError: function (error) {
                 message.error(error);
@@ -186,7 +188,7 @@ const SchoolGroupSettingComponents = React.createClass({
      * @param index
      */
     getSubGroup(record, index){
-        this.setState({structureId:record.key});
+        this.setState({structureId:record.key,schoolSettingModalIsShow:false,addSubGroupModalIsShow:false,addGroupMemberModalIsShow:false,"groupSettingModalIsShow":false});
         this.listStructures(record.key);
         this.getStrcutureMembers(record.key,this.state.memberPageNo);
     },
@@ -238,13 +240,13 @@ const SchoolGroupSettingComponents = React.createClass({
      * 部门设置
      */
     groupSetting(){
-
+        this.setState({"groupSettingModalIsShow":true});
     },
     /**
      * 学校设置
      */
     schoolSetting(){
-        this.setState({groupSettingModalIsShow:true});
+        this.setState({schoolSettingModalIsShow:true});
     },
 
     onSelectChange(selectedRowKeys){
@@ -263,9 +265,9 @@ const SchoolGroupSettingComponents = React.createClass({
             onChange: _this.onSelectChange,
         };
         const hasSelected = _this.state.selectedRowKeys.length > 0;
-        var rootStructureName = "";
-        if(isEmpty(_this.state.rootStructure)==false){
-            rootStructureName = _this.state.rootStructure.schoolName;
+        var structureName = "";
+        if(isEmpty(_this.state.parentGroup)==false){
+            structureName = _this.state.parentGroup.name;
         }
         var breadcrumbItemObjArray=[];
         if(isEmpty(_this.state.structuresObjArray)==false){
@@ -274,11 +276,19 @@ const SchoolGroupSettingComponents = React.createClass({
                 breadcrumbItemObjArray.push(breadcrumbItemObj);
             });
         }
+        var settingButton;
+        if(isEmpty(_this.state.rootStructure)){
+            settingButton = null;
+        }else if(_this.state.structureId == _this.state.rootStructure.id){
+            settingButton = <Button className="schoolgroup_btn_gray_6 schoolgroup_btn_left schoolgroup_btn" onClick={this.schoolSetting}>设置</Button>
+        }else{
+            settingButton = <Button className="schoolgroup_btn_gray_6 schoolgroup_btn_left schoolgroup_btn" onClick={this.groupSetting}>部门设置</Button>;
+        }
         return (
             <div className="schoolgroup">
                 <div className="schoolgroup_title">
-                    <span>{rootStructureName}</span>
-                    <Button className="schoolgroup_btn_gray_6 schoolgroup_btn_left schoolgroup_btn" onClick={this.schoolSetting}>设置</Button>
+                    <span>{structureName}</span>
+                    {settingButton}
                 </div>
                 <div>
                     <Breadcrumb separator=">">
@@ -290,7 +300,6 @@ const SchoolGroupSettingComponents = React.createClass({
                     <span>下级部门</span>
                     <span>
                         <Button className="schoolgroup_btn_blue schoolgroup_btn_left schoolgroup_btn" onClick={this.addSubGroup}>添加子部门</Button>
-                        <Button className="schoolgroup_btn_gray_6 schoolgroup_btn_left schoolgroup_btn" onClick={this.groupSetting}>部门设置</Button>
                     </span>
                 </div>
                 <div>
@@ -325,9 +334,10 @@ const SchoolGroupSettingComponents = React.createClass({
                            }} />
                 </div>
                 </div>
-                <GroupSettingModal isShow={this.state.groupSettingModalIsShow} rootStructure={this.state.rootStructure}></GroupSettingModal>
+                <SchoolSettingModal isShow={this.state.schoolSettingModalIsShow} rootStructure={this.state.rootStructure}></SchoolSettingModal>
                 <AddSubGroupModal isShow={this.state.addSubGroupModalIsShow} parentGroup={this.state.parentGroup} callbackParent={this.listStructures}></AddSubGroupModal>
                 <AddGroupMemberModal isShow={this.state.addGroupMemberModalIsShow} parentGroup={this.state.parentGroup} callbackParent={this.listStructures}></AddGroupMemberModal>
+                <GroupSettingModal isShow={this.state.groupSettingModalIsShow} parentGroup={this.state.parentGroup} ></GroupSettingModal>
             </div>
         );
     },
