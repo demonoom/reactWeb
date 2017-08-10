@@ -161,23 +161,32 @@ class GroupSettingModal extends React.Component {
         maskClosable={false} //设置不允许点击蒙层关闭
         onCancel={this.closeGroupSettingModal}
         onOk={this.handleOk}
+        className="schoolgroup_modal"
       >
         <div className="modal_register_main">
           <Row className="ant_row">
-            <Col span={24}>
-              学校名称:{this.state.schoolName}
+            <Col span={6} className="schoolgroup_modal_col6">
+              学校名称：
+            </Col>
+            <Col span={18}>
+              {this.state.schoolName}
             </Col>
           </Row>
           <Row className="ant_row">
-            <Col span={24}>
-              群主:{this.state.ownerName}
+            <Col span={6} className="schoolgroup_modal_col6">
+              群主：
+            </Col>
+            <Col span={18}>
+              {this.state.ownerName}
             </Col>
           </Row>
           <Row className="ant_row">
-            <Col span={24}>
-              <span>更换群主：</span>
+            <Col span={6} className="schoolgroup_modal_col6">
+              更换群主：
+            </Col>
+            <Col span={18}>
               <RadioGroup onChange={this.onOwnerChange} value={this.state.ownerId}>
-                {this.state.memberRadioObjArray}
+                  {this.state.memberRadioObjArray}
               </RadioGroup>
             </Col>
           </Row>
