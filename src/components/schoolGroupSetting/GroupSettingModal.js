@@ -286,13 +286,18 @@ class GroupSettingModal extends React.Component {
       >
         <div className="modal_register_main">
           <Row className="ant_row">
-            <Col span={24}>
-              部门名称:<Input placeholder="部门名称"　value={this.state.parentGroupName} />
+            <Col span={6} className="schoolgroup_modal_col6">
+              部门名称：
+            </Col>
+            <Col span={18}>
+              <Input placeholder="部门名称"　value={this.state.parentGroupName} />
             </Col>
           </Row>
           <Row className="ant_row">
-            <Col span={24}>
-              部门主管:
+            <Col span={6} className="schoolgroup_modal_col6">
+              部门主管：
+            </Col>
+            <Col span={18}>
               <Select
                   mode="tags"
                   tags={true}
@@ -302,13 +307,15 @@ class GroupSettingModal extends React.Component {
                   defaultValue={[]}
                   onChange={this.groupMemberHandleChange}
               >
-                {this.state.subGroupMemberList}
+                  {this.state.subGroupMemberList}
               </Select>
             </Col>
           </Row>
           <Row className="ant_row">
-            <Col span={24}>
-              群主设置:
+            <Col span={6} className="schoolgroup_modal_col6">
+              群主设置：
+            </Col>
+            <Col span={18}>
               <Select
                   showSearch
                   style={{ width: 200 }}
@@ -323,17 +330,6 @@ class GroupSettingModal extends React.Component {
               </Select>
             </Col>
           </Row>
-          {/*<Row className="ant_row">
-            <Col span={24}>
-              <span>上级部门：</span>
-              <Cascader
-                  options={this.state.groupOptions}
-                  loadData={this.loadGroupSelectData}
-                  onChange={this.groupSelectOnChange}
-                  changeOnSelect
-              />
-            </Col>
-          </Row>*/}
         </div>
       </Modal>
     );

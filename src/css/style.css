@@ -3191,9 +3191,9 @@ a.color_gary_f, .color_gary_f{
     position:static; /* IE6、7、8只能设置position:static(默认属性) ，否则会导致子元素继承Alpha值 */
     *zoom:1; /* 激活IE6、7的haslayout属性，让它读懂Alpha */
   }
-  .live_green span{
-    position: relative; /* 设置子元素为相对定位，可让子元素不继承Alpha值 */
-  }  
+  .live_green span {
+	  position: relative; /* 设置子元素为相对定位，可让子元素不继承Alpha值 */
+  }
 }
 .live_orange{
 	background:#7fbefb;
@@ -3204,7 +3204,6 @@ a.color_gary_f, .color_gary_f{
 .reset_wi{
 	display:inline-block;
 	width:300px
-
 }
 .reset_wi_hei{
 	height:33px;
