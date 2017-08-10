@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Table,Icon,Button,Breadcrumb} from 'antd';
+import { Table,Icon,Button,Breadcrumb,message} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import {getPageSize} from '../../utils/Const';
 import {isEmpty} from '../../utils/utils';
@@ -12,6 +12,10 @@ const columns = [{
     title: '部门名称',
     dataIndex: 'subGroupName',
     key: 'subGroupName',
+},{
+    title: '操作',
+    dataIndex: 'opt',
+    key: 'opt',
 }];
 const memberColumns = [{
     title: '姓名',
@@ -86,18 +90,47 @@ const SchoolGroupSettingComponents = React.createClass({
                 if(isEmpty(response)==false){
                     response.forEach(function (subGroup) {
                         //var subGroupName = subGroup.name+"（"+subGroup.memberCount+ '人' +"）";
-                        var subGroupName = <div>
+                        var subGroupName = <div onClick={_this.getSubGroupForButton.bind(_this,subGroup.id)}>
                             <span>{subGroup.name}</span>
                             <span className="schoolgroup_people">({subGroup.memberCount}人                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                )</span>
                         </div>;
+                        var opt = <div>
+                                <Button icon="down" onClick={_this.getSubGroupForButton.bind(_this,subGroup.id)}></Button>
+                                <Button icon="delete" onClick={_this.removeGroup.bind(_this,subGroup.id)}></Button>
+                            </div>
                         subGroupList.push({
                             key: subGroup.id,
                             subGroupName: subGroupName,
+                            opt:opt
                         });
                     });
                 }
                 _this.getStructureById(structureId);
                 _this.setState({subGroupList,"addSubGroupModalIsShow":false,"addGroupMemberModalIsShow":false,"groupSettingModalIsShow":false});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 移除部门
+     */
+    removeGroup(structureId){
+        let _this = this;
+        var param = {
+            "method": 'deleteStuctureById',
+            "operateUserId": _this.state.loginUser.colUid,
+            "structureId": structureId,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    message.success("部门删除成功！");
+                    _this.listStructures(_this.state.structureId);
+                    _this.getStrcutureMembers(_this.state.structureId,_this.state.memberPageNo);
+                }
             },
             onError: function (error) {
                 message.error(error);
@@ -191,6 +224,17 @@ const SchoolGroupSettingComponents = React.createClass({
         this.setState({structureId:record.key,schoolSettingModalIsShow:false,addSubGroupModalIsShow:false,addGroupMemberModalIsShow:false,"groupSettingModalIsShow":false});
         this.listStructures(record.key);
         this.getStrcutureMembers(record.key,this.state.memberPageNo);
+    },
+
+    /**
+     * 点击部门时，获取部门下的成员
+     * @param record
+     * @param index
+     */
+    getSubGroupForButton(structureId){
+        this.setState({structureId:structureId,schoolSettingModalIsShow:false,addSubGroupModalIsShow:false,addGroupMemberModalIsShow:false,"groupSettingModalIsShow":false});
+        this.listStructures(structureId);
+        this.getStrcutureMembers(structureId,this.state.memberPageNo);
     },
 
     /**
@@ -310,7 +354,7 @@ const SchoolGroupSettingComponents = React.createClass({
                     </span>
                 </div>
                 <div>
-                <Table onRowClick={this.getSubGroup} showHeader={false} columns={columns} dataSource={this.state.subGroupList} className="schoolgroup_table"
+                <Table showHeader={false} columns={columns} dataSource={this.state.subGroupList} className="schoolgroup_table"
                        pagination={false}/>
                 </div>
                 <div className="schoolgroup_title">
