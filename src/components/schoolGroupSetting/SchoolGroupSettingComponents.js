@@ -5,6 +5,7 @@ import {getPageSize} from '../../utils/Const';
 import {isEmpty} from '../../utils/utils';
 import GroupSettingModal from './GroupSettingModal';
 import AddSubGroupModal from './AddSubGroupModal';
+import AddGroupMemberModal from './AddGroupMemberModal';
 
 const columns = [{
     title: '部门名称',
@@ -19,11 +20,6 @@ const memberColumns = [{
     title: '手机号',
     dataIndex: 'userPhone',
     key: 'userPhone',
-},{
-    title: '操作',
-    dataIndex: 'userOpt',
-    key: 'userOpt',
-    width:'34px'
 }
 ];
 var structuresObjArray=[];
@@ -37,7 +33,8 @@ const SchoolGroupSettingComponents = React.createClass({
             structuresObjArray:[],
             groupSettingModalIsShow:false,
             addSubGroupModalIsShow:false,
-            selectedRowKeys:[]
+            selectedRowKeys:[],
+            addGroupMemberModalIsShow:false,
         };
     },
 
@@ -64,7 +61,7 @@ const SchoolGroupSettingComponents = React.createClass({
         }
         this.listStructures(structureId);
         this.getStrcutureMembers(structureId,defaultPageNo);
-        this.setState({structureId,rootStructure,structuresObjArray,"groupSettingModalIsShow":false,"addSubGroupModalIsShow":false});
+        this.setState({structureId,rootStructure,structuresObjArray,"groupSettingModalIsShow":false,"addSubGroupModalIsShow":false,"addGroupMemberModalIsShow":false});
     },
 
     /**
@@ -97,7 +94,7 @@ const SchoolGroupSettingComponents = React.createClass({
                     });
                 }
                 _this.getStructureById(structureId);
-                _this.setState({subGroupList,"addSubGroupModalIsShow":false});
+                _this.setState({subGroupList,"addSubGroupModalIsShow":false,"addGroupMemberModalIsShow":false});
             },
             onError: function (error) {
                 message.error(error);
@@ -166,12 +163,10 @@ const SchoolGroupSettingComponents = React.createClass({
                 if(isEmpty(response)==false){
                     response.forEach(function (member) {
                         var user = member.user;
-                        var userOpt = <Button className="schoolgroup_table_edit" icon="edit"></Button>
                         subGroupMemberList.push({
                             key: member.id,
                             userName: user.userName,
-                            userPhone:user.phoneNumber,
-                            userOpt:userOpt
+                            userPhone:user.phoneNumber
                         });
                     });
                 }
@@ -235,7 +230,7 @@ const SchoolGroupSettingComponents = React.createClass({
      * 添加部门人员
      */
     addGroupMemeber(){
-
+        this.setState({"addGroupMemberModalIsShow":true});
     },
 
     /**
@@ -332,6 +327,7 @@ const SchoolGroupSettingComponents = React.createClass({
                 </div>
                 <GroupSettingModal isShow={this.state.groupSettingModalIsShow} rootStructure={this.state.rootStructure}></GroupSettingModal>
                 <AddSubGroupModal isShow={this.state.addSubGroupModalIsShow} parentGroup={this.state.parentGroup} callbackParent={this.listStructures}></AddSubGroupModal>
+                <AddGroupMemberModal isShow={this.state.addGroupMemberModalIsShow} parentGroup={this.state.parentGroup} callbackParent={this.listStructures}></AddGroupMemberModal>
             </div>
         );
     },
