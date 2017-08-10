@@ -255,6 +255,13 @@ const SchoolGroupSettingComponents = React.createClass({
     },
 
     /**
+     * 部门成员加载更多
+     */
+    loadMoreMember(){
+
+    },
+
+    /**
      * 渲染页面
      * @returns {XML}
      */
@@ -325,12 +332,10 @@ const SchoolGroupSettingComponents = React.createClass({
                     </span>
                 </div>
                 <div>
-                    <Table onRowClick={this.getSubGroup} rowSelection={rowSelection} columns={memberColumns} dataSource={this.state.subGroupMemberList} className="schoolgroup_table schoolgroup_table_department"
-                           pagination={{
-                               total: this.state.totalMember,
-                               pageSize: getPageSize(),
-                               onChange: this.memberPageOnChange
-                           }} />
+                    <Table onRowClick={this.getSubGroup} rowSelection={rowSelection} columns={memberColumns} dataSource={this.state.subGroupMemberList} className="schoolgroup_table schoolgroup_table_department"/>
+                    <div>
+                        <a onClick={this.loadMoreMember}>加载更多</a>
+                    </div>
                 </div>
                 <SchoolSettingModal isShow={this.state.schoolSettingModalIsShow} rootStructure={this.state.rootStructure}></SchoolSettingModal>
                 <AddSubGroupModal isShow={this.state.addSubGroupModalIsShow} parentGroup={this.state.parentGroup} callbackParent={this.listStructures}></AddSubGroupModal>

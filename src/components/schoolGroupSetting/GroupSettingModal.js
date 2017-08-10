@@ -323,7 +323,7 @@ class GroupSettingModal extends React.Component {
               </Select>
             </Col>
           </Row>
-          <Row className="ant_row">
+          {/*<Row className="ant_row">
             <Col span={24}>
               <span>上级部门：</span>
               <Cascader
@@ -333,7 +333,7 @@ class GroupSettingModal extends React.Component {
                   changeOnSelect
               />
             </Col>
-          </Row>
+          </Row>*/}
         </div>
       </Modal>
     );
