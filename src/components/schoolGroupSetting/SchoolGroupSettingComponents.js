@@ -333,8 +333,8 @@ const SchoolGroupSettingComponents = React.createClass({
                 </div>
                 <div>
                     <Table onRowClick={this.getSubGroup} rowSelection={rowSelection} columns={memberColumns} pagination={false} dataSource={this.state.subGroupMemberList} className="schoolgroup_table schoolgroup_table_department"/>
-                    <div>
-                        <a onClick={this.loadMoreMember}>加载更多</a>
+                    <div className="schoolgroup_operate schoolgroup_more">
+                        <a onClick={this.loadMoreMember} className="schoolgroup_more_a">加载更多</a>
                     </div>
                 </div>
                 <SchoolSettingModal isShow={this.state.schoolSettingModalIsShow} rootStructure={this.state.rootStructure}></SchoolSettingModal>
