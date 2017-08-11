@@ -175,3 +175,19 @@
 .shoolgroup_more_a:hover{
     color:#0084ff !important;
 }
+.shoolgroup_btn_sublevel{
+    padding:0 4px
+}
+.sg_btn_del{
+    padding: 3px 6px !important;
+    position: relative;
+    top: -1px;
+    margin-left: 12px;
+}
+.schoolgroup_i_sublevel{
+    font-size: 18px;
+    color: #666;
+}
+.shoolgroup_btn_sublevel:hover .schoolgroup_i_sublevel, .shoolgroup_btn_sublevel:active .schoolgroup_i_sublevel{
+    color: #57c5f7;
+}

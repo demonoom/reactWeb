@@ -16,6 +16,7 @@ const columns = [{
     title: '操作',
     dataIndex: 'opt',
     key: 'opt',
+    width:'86px'
 }];
 const memberColumns = [{
     title: '姓名',
@@ -92,12 +93,12 @@ const SchoolGroupSettingComponents = React.createClass({
                     response.forEach(function (subGroup) {
                         //var subGroupName = subGroup.name+"（"+subGroup.memberCount+ '人' +"）";
                         var subGroupName = <div onClick={_this.getSubGroupForButton.bind(_this,subGroup.id)}>
-                            <span>{subGroup.name}</span>
+                            <span className="antnest_name affix_bottom_tc">{subGroup.name}</span>
                             <span className="schoolgroup_people">({subGroup.memberCount}人                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                )</span>
                         </div>;
                         var opt = <div>
-                                <Button icon="down" onClick={_this.getSubGroupForButton.bind(_this,subGroup.id)}></Button>
-                                <Button icon="delete" onClick={_this.removeGroup.bind(_this,subGroup.id)}></Button>
+                                <Button className="shoolgroup_btn_sublevel" onClick={_this.getSubGroupForButton.bind(_this,subGroup.id)}><i className="iconfont schoolgroup_i_sublevel">&#xe7ee;</i></Button>
+                                <Button className="sg_btn_del" icon="delete" onClick={_this.removeGroup.bind(_this,subGroup.id)}></Button>
                             </div>
                         subGroupList.push({
                             key: subGroup.id,
