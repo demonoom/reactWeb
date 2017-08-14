@@ -402,7 +402,7 @@ const SchoolGroupSettingComponents = React.createClass({
                 </div>
                 <div className="schoolgroup_title">
                     <i className="iconfont schoolgroup_i">&#xe61b;</i>
-                    <span>部门人员1111</span>
+                    <span>部门人员</span>
                     <span>
                         <Button onClick={this.addGroupMemeber} className="schoolgroup_btn_blue_solid schoolgroup_btn_left schoolgroup_btn">添加员工</Button>
                         <span className="schoolgroup_btn_left">
