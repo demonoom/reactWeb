@@ -73,9 +73,17 @@
     overflow: auto;
     padding:0 20px
 }
-.schoolgroup_table_department{
-    height:170px !important;
+@media only screen and (max-width:1366px){
+    .schoolgroup_table_department{
+        height: 170px;
+    }
 }
+@media only screen and (max-width:1365px){
+    .schoolgroup_table_department{
+        height: 140px;
+    }
+}
+
 .schoolgroup_table_department > div:first-child{
     height:100% !important;
 }
