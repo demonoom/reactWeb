@@ -204,13 +204,17 @@ class GroupSettingModal extends React.Component {
         if(isEmpty(groupManagerArray)==false){
             groupManager = groupManagerArray.join(",");
         }
+        var info = {
+            operateUserId:_this.state.loginUser.colUid,
+            structureId:_this.state.parentId,
+            groupManager:groupManager,
+            chatGroupManager:chatGroupManager,
+            groupName:groupName};
         var param = {
             "method": 'updateStructureBaseInfo',//部门设置
-            "groupManager": groupManager, //部门主管,多个主管的id用逗号分割,memberId
-            "chatGroupManager": chatGroupManager,//群主,小蚂蚁用户id
-            "groupName": groupName  //部门名称
+            "info": JSON.stringify(info), //部门主管,多个主管的id用逗号分割,memberId
         };
-        /*doWebService(JSON.stringify(param), {
+        doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.msg == "调用成功" && ret.success == true) {
                     message.success("部门修改成功！");
@@ -220,7 +224,7 @@ class GroupSettingModal extends React.Component {
             onError: function (error) {
                 message.error(error);
             }
-        });*/
+        });
     }
 
     /**

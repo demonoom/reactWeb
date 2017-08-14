@@ -88,10 +88,10 @@ class AddGroupMemberModal extends React.Component {
     var param = {
       "method": "batchAddStructureMembers",//批量添加部门员工
       "operateUserId": _this.state.loginUser.colUid,//操作用户id
-      "structureIds":_this.state.parentId,//部门id
+      "structureId":_this.state.parentId,//部门id
       "memberIds": memberIds//员工id,多个员工用逗号分开(如“23844,23847”)
     };
-    /*doWebService(JSON.stringify(param), {
+    doWebService(JSON.stringify(param), {
       onResponse: function (ret) {
         if(ret.success==true && ret.msg=="调用成功"){
           message.success("部门员工添加成功");
@@ -105,7 +105,7 @@ class AddGroupMemberModal extends React.Component {
       onError: function (error) {
         message.error(error);
       }
-    });*/
+    });
   }
 
   /**

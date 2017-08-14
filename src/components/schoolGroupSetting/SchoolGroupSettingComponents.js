@@ -116,6 +116,12 @@ const SchoolGroupSettingComponents = React.createClass({
         });
     },
 
+    listStructureAndMembers(structureId){
+        var defaultPageNo = 1;
+        this.listStructures(structureId);
+        this.getStrcutureMembers(structureId,defaultPageNo);
+    },
+
     /**
      * 移除部门
      */
@@ -206,8 +212,6 @@ const SchoolGroupSettingComponents = React.createClass({
                             userPhone:user.phoneNumber
                         });
                     });
-                }else{
-                    message.warn("没有更多可用数据");
                 }
                 var pager = ret.pager;
                 _this.setState({subGroupMemberList,totalMember:pager.rsCount});
@@ -235,6 +239,7 @@ const SchoolGroupSettingComponents = React.createClass({
      * @param index
      */
     getSubGroupForButton(structureId){
+        subGroupMemberList.splice(0);
         this.setState({structureId:structureId,schoolSettingModalIsShow:false,addSubGroupModalIsShow:false,addGroupMemberModalIsShow:false,"groupSettingModalIsShow":false});
         this.listStructures(structureId);
         this.getStrcutureMembers(structureId,this.state.memberPageNo);
@@ -324,14 +329,15 @@ const SchoolGroupSettingComponents = React.createClass({
             memberIds = selectedRowKeys.join(",");
         }
         var param = {
-            "method": 'deleteStuctureById',
+            "method": 'removeStructureMember',
             "operateUserId": _this.state.loginUser.colUid,
-            "memberIds": memberIds,
+            "structureMemberIds": memberIds,
         };
-        /*doWebService(JSON.stringify(param), {
+        doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.msg == "调用成功" && ret.success == true) {
-                    message.success("部门删除成功！");
+                    message.success("员工移除成功！");
+                    subGroupMemberList.splice(0);
                     _this.listStructures(_this.state.structureId);
                     _this.getStrcutureMembers(_this.state.structureId,_this.state.memberPageNo);
                 }
@@ -339,7 +345,7 @@ const SchoolGroupSettingComponents = React.createClass({
             onError: function (error) {
                 message.error(error);
             }
-        });*/
+        });
     },
 
     /**
@@ -420,7 +426,7 @@ const SchoolGroupSettingComponents = React.createClass({
                 </div>
                 <SchoolSettingModal isShow={this.state.schoolSettingModalIsShow} rootStructure={this.state.rootStructure}></SchoolSettingModal>
                 <AddSubGroupModal isShow={this.state.addSubGroupModalIsShow} parentGroup={this.state.parentGroup} callbackParent={this.listStructures}></AddSubGroupModal>
-                <AddGroupMemberModal isShow={this.state.addGroupMemberModalIsShow} parentGroup={this.state.parentGroup} callbackParent={this.listStructures}></AddGroupMemberModal>
+                <AddGroupMemberModal isShow={this.state.addGroupMemberModalIsShow} parentGroup={this.state.parentGroup} callbackParent={this.listStructureAndMembers}></AddGroupMemberModal>
                 <GroupSettingModal isShow={this.state.groupSettingModalIsShow} parentGroup={this.state.parentGroup} ></GroupSettingModal>
             </div>
         );
