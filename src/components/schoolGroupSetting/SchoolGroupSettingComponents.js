@@ -419,7 +419,7 @@ const SchoolGroupSettingComponents = React.createClass({
                     </span>
                 </div>
                 <div>
-                    <Table rowSelection={rowSelection} columns={memberColumns} pagination={false} dataSource={this.state.subGroupMemberList} className="schoolgroup_table schoolgroup_table_department"/>
+                    <Table rowSelection={rowSelection} columns={memberColumns} pagination={false} dataSource={this.state.subGroupMemberList} className="schoolgroup_table1 schoolgroup_table_department"/>
                     <div className="schoolgroup_operate schoolgroup_more">
                         <a onClick={this.loadMoreMember} className="schoolgroup_more_a">加载更多</a>
                     </div>

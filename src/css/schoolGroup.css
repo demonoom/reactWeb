@@ -73,6 +73,11 @@
     overflow: auto;
     padding:0 20px
 }
+.schoolgroup_table1 .ant-table-content{
+    height:140px;
+    overflow: auto;
+    padding:0 20px
+}
 @media only screen and (max-width:1366px){
     .schoolgroup_table_department{
         height: 170px;
@@ -82,6 +87,7 @@
     .schoolgroup_table_department{
         height: 140px;
     }
+
 }
 
 .schoolgroup_table_department > div:first-child{
