@@ -110,7 +110,8 @@ class SchoolGroupMenu extends React.Component {
                 <div className="menu_til">组织架构</div>
                 <Menu ref="middleMenu" onClick={this.handleClick}
                       selectedKeys={[this.state.selectedKeys]}
-                      defaultOpenKeys={[''+this.state.openKeys]}
+                      defaultOpenKeys={[this.state.openKeys]}
+                      openKeys={[this.state.openKeys]}
                       className="cont_t"
                       mode="inline"
                 >
