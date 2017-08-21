@@ -421,6 +421,7 @@ const MainLayout = React.createClass({
                 tabComponent = <AntCloudClassRoomComponents  currentItem={this.state.cloudRoomMenuItem}/>;
 
                 break;
+
             case 'systemSetting':
                 //系统设置
                 // middleComponent = <SchoolGroupMenu callbackParent={this.getSubGroup}/>;
@@ -430,6 +431,11 @@ const MainLayout = React.createClass({
                                          changeTabEvent={this.systemSettingTab}/>;
                 //tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId} rootStructure={this.state.rootStructure}></SchoolGroupSettingComponents>;
                 tabComponent = <SystemSettingComponent  currentItem={this.state.activeSystemSettingMiddleMenu}></SystemSettingComponent>;
+
+            // case 'schoolGroupSetting':
+            //     //组织架构
+            //     middleComponent = <SchoolGroupMenu callbackParent={this.getSubGroup} changeTab={this.teachSpaceTab}/>;
+            //     tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId} rootStructure={this.state.rootStructure} roleItem={this.state.activeMiddleMenu}></SchoolGroupSettingComponents>;
 
                 break;
         }

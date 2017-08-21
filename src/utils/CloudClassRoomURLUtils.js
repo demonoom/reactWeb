@@ -1,7 +1,7 @@
 /**
  * Created by devnote on 16-12-2.
  */
-var isDebug=false;
+var isDebug=true;
 var domain=isDebug?"192.168.2.105:8080":"www.maaee.com";
 // var domain=isDebug?"172.20.10.10:8080":"www.maaee.com";
 var liveDomain=isDebug?"192.168.1.34:8080":"www.maaee.com";

@@ -1,9 +1,12 @@
 import React, { PropTypes } from 'react';
 import { Table,Icon,Button,Breadcrumb,message} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
+import {getPageSize} from '../../utils/Const';
 import {isEmpty} from '../../utils/utils';
-import NschoolGroupSettingComponents from './NschoolGroupSettingComponents';
-import RoleComponents from './RoleComponents';
+import SchoolSettingModal from './SchoolSettingModal';
+import AddSubGroupModal from './AddSubGroupModal';
+import AddGroupMemberModal from './AddGroupMemberModal';
+import GroupSettingModal from './GroupSettingModal';
 
 const columns = [{
     title: '部门名称',
@@ -28,7 +31,7 @@ const memberColumns = [{
 ];
 var structuresObjArray=[];
 var subGroupMemberList = [];
-const SchoolGroupSettingComponents = React.createClass({
+const NschoolGroupSettingComponents = React.createClass({
 
     getInitialState() {
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
@@ -94,9 +97,9 @@ const SchoolGroupSettingComponents = React.createClass({
                             <span className="schoolgroup_people">({subGroup.memberCount}人                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                )</span>
                         </div>;
                         var opt = <div>
-                                <Button className="shoolgroup_btn_sublevel" onClick={_this.getSubGroupForButton.bind(_this,subGroup.id)}><i className="iconfont schoolgroup_i_sublevel">&#xe7ee;</i></Button>
-                                <Button className="sg_btn_del" icon="delete" onClick={_this.removeGroup.bind(_this,subGroup.id)}></Button>
-                            </div>
+                            <Button className="shoolgroup_btn_sublevel" onClick={_this.getSubGroupForButton.bind(_this,subGroup.id)}><i className="iconfont schoolgroup_i_sublevel">&#xe7ee;</i></Button>
+                            <Button className="sg_btn_del" icon="delete" onClick={_this.removeGroup.bind(_this,subGroup.id)}></Button>
+                        </div>
                         subGroupList.push({
                             key: subGroup.id,
                             subGroupName: subGroupName,
@@ -144,7 +147,7 @@ const SchoolGroupSettingComponents = React.createClass({
     },
 
     /**
-     * 获取当前用户的组织根节点222
+     * 获取当前用户的组织根节点333
      * @param operateUserId
      * @param structureId
      */
@@ -158,10 +161,13 @@ const SchoolGroupSettingComponents = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var parentGroup = ret.response;
-                var isExit = _this.checkStructureIsExitAtArray(parentGroup);
-                if(isEmpty(parentGroup)==false && isExit==false){
-                    //存放组织架构的层次关系
-                    structuresObjArray.push(parentGroup);
+
+                if(isEmpty(parentGroup)==false){
+                    var isExit = _this.checkStructureIsExitAtArray(parentGroup);
+                    if(isExit==false){
+                        //存放组织架构的层次关系
+                        structuresObjArray.push(parentGroup);
+                    }
                 }
                 _this.setState({parentGroup});
 
@@ -375,23 +381,61 @@ const SchoolGroupSettingComponents = React.createClass({
         }else{
             settingButton = <Button className="schoolgroup_btn_gray_6 schoolgroup_btn_left schoolgroup_btn" onClick={this.groupSetting}>部门设置</Button>;
         }
-
-        switch (this.props.roleItem) {
-
-            default : // 组织构架
-                this.tabComponent = <NschoolGroupSettingComponents structureId={this.state.structureId} rootStructure={this.state.rootStructure}></NschoolGroupSettingComponents>;
-                break;
-            case 'role':
-                // 角色
-                this.tabComponent = <RoleComponents/>;
-                break;
-        }
         return (
-            <div>
-                {this.tabComponent}
+            <div className="schoolgroup">
+                <div className="schoolgroup_title">
+                    <span>{structureName}</span>
+                    {settingButton}
+                </div>
+                <div>
+                    <Breadcrumb separator=">">
+                        {breadcrumbItemObjArray}
+                    </Breadcrumb>
+                </div>
+                <div className="schoolgroup_title">
+                    <i className="iconfont schoolgroup_i">&#xe6a0;</i>
+                    <span>下级部门</span>
+                    <span>
+                        <Button className="schoolgroup_btn_blue schoolgroup_btn_left schoolgroup_btn" onClick={this.addSubGroup}>添加子部门</Button>
+                    </span>
+                </div>
+                <div>
+                    <Table showHeader={false} columns={columns} dataSource={this.state.subGroupList} className="schoolgroup_table"
+                           pagination={false}/>
+                </div>
+                <div className="schoolgroup_title">
+                    <i className="iconfont schoolgroup_i">&#xe61b;</i>
+                    <span>部门人员</span>
+                    <span>
+                        <Button onClick={this.addGroupMemeber} className="schoolgroup_btn_blue_solid schoolgroup_btn_left schoolgroup_btn">添加员工</Button>
+                        <span className="schoolgroup_btn_left">
+                            <Button
+                                type="primary"
+                                onClick={this.batchDeleteMemeber}
+                                disabled={!hasSelected} className="schoolgroup_btn_red schoolgroup_btn">
+                                批量删除
+                            </Button>
+                            <span className="password_ts" style={{ marginLeft: 8 }}>
+                                {hasSelected ? `选中 ${_this.state.selectedRowKeys.length} 条记录` : ''}
+                            </span>
+                        </span>
+                    </span>
+                </div>
+                <div>
+                    <Table rowSelection={rowSelection} columns={memberColumns}
+                           pagination={false} dataSource={this.state.subGroupMemberList}
+                           className="schoolgroup_table1 schoolgroup_table_department"/>
+                    <div className="schoolgroup_operate schoolgroup_more">
+                        <a onClick={this.loadMoreMember} className="schoolgroup_more_a">加载更多</a>
+                    </div>
+                </div>
+                <SchoolSettingModal isShow={this.state.schoolSettingModalIsShow} rootStructure={this.state.rootStructure}></SchoolSettingModal>
+                <AddSubGroupModal isShow={this.state.addSubGroupModalIsShow} parentGroup={this.state.parentGroup} callbackParent={this.listStructures}></AddSubGroupModal>
+                <AddGroupMemberModal isShow={this.state.addGroupMemberModalIsShow} parentGroup={this.state.parentGroup} callbackParent={this.listStructureAndMembers}></AddGroupMemberModal>
+                <GroupSettingModal isShow={this.state.groupSettingModalIsShow} parentGroup={this.state.parentGroup} ></GroupSettingModal>
             </div>
         );
     }
 });
 
-export default SchoolGroupSettingComponents;
+export default NschoolGroupSettingComponents;

@@ -101,6 +101,9 @@ class GroupSettingModal extends React.Component {
      */
     getStrcutureMembers(structureId, pageNo) {
         let _this = this;
+        if(isEmpty(structureId)){
+            return;
+        }
         var param = {
             "method": 'getStrcutureMembers',
             "operateUserId": _this.state.loginUser.colUid,
@@ -111,7 +114,7 @@ class GroupSettingModal extends React.Component {
             onResponse: function (ret) {
                 var response = ret.response;
                 var subGroupMemberList = [];
-                if (isEmpty(response) == false) {
+                if (isEmpty(response) == false && typeof(response.length)!="undefined" ) {
                     response.forEach(function (member) {
                         var user = member.user;
                         var userOption = <Option key={member.id}>{user.userName}</Option>;
@@ -128,7 +131,7 @@ class GroupSettingModal extends React.Component {
     }
 
     /**
-     * 获取当前用户的组织根节点
+     * 获取当前用户的组织根节点111
      * @param operateUserId
      * @param structureId
      */
