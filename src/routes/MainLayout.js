@@ -209,7 +209,7 @@ const MainLayout = React.createClass({
         this.setState({activeMiddleMenu: activeMenu});
         this.setState({selectedKeys: selectedKeys});
         console.log('哈哈');
-        console.log(_this.state.selectedKeys);
+        console.log(selectedKeys);
     },
 
     systemSettingTab(activeMenu, beActive){
