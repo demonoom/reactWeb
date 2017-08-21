@@ -290,7 +290,6 @@ class SchoolGroupMenu extends React.Component {
                 arr.push(partMenu);
                 subRoleMenuItemArray = [];
         }
-        // console.log(arr);
         _this.setState({arr,openKeys});
     }
 
@@ -308,14 +307,7 @@ class SchoolGroupMenu extends React.Component {
         });
         this.props.callbackParent(e.key,this.state.structure);
         // 子传父函数调用
-        this.props.changeTab('role');
-    }
-
-    /*子传父函数调用*/
-    changeTabb=(event,actStr,beActive)=> {
-        alert(1);
-        this.setState({beActive:beActive});
-        this.props.changeTab(actStr,beActive);
+        this.props.changeTab('role',this.state.selectedKeys);
     }
 
     /**
@@ -347,7 +339,7 @@ class SchoolGroupMenu extends React.Component {
                         </Menu>
                     </TabPane>
                     {/*角色tab*/}
-                    <TabPane tab="角色" key="2" onClick={event=>{this.changeTabb(event,'role',true)}}>
+                    <TabPane tab="角色" key="2">
                         <Button onClick={this.addSubGroup}>添加角色组</Button>
                         <Button onClick={this.addRole}>添加角色</Button>
                         <Menu

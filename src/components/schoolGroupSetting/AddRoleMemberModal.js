@@ -8,7 +8,7 @@ import {isEmpty} from '../../utils/utils';
 import {TYPE_TEACHER} from '../../utils/Const';
 const CheckboxGroup = Checkbox.Group;
 
-class AddGroupMemberModal extends React.Component {
+class AddRoleMemberModal extends React.Component {
 
   constructor(props) {
     super(props);
@@ -22,7 +22,7 @@ class AddGroupMemberModal extends React.Component {
       teacherSrcOptions:[],
       teacherTargetOptions:[],
     };
-    this.addGroupMemberModalHandleCancel = this.addGroupMemberModalHandleCancel.bind(this);
+    this.AddRoleMemberModalHandleCancel = this.AddRoleMemberModalHandleCancel.bind(this);
     this.initPage = this.initPage.bind(this);
     this.addGroupMember = this.addGroupMember.bind(this);
     this.searchKeyOnChange = this.searchKeyOnChange.bind(this);
@@ -55,7 +55,7 @@ class AddGroupMemberModal extends React.Component {
     this.setState({isShow,parentGroup,parentGroupName,parentId,schoolId});
   }
 
-  addGroupMemberModalHandleCancel(){
+  AddRoleMemberModalHandleCancel(){
     this.initPage();
     this.setState({"isShow":false});
   }
@@ -68,7 +68,7 @@ class AddGroupMemberModal extends React.Component {
   }
 
   /**
-   * 设置选中员工的角色
+   * 添加部门员工
    */
   addGroupMember(){
     var _this = this;
@@ -98,7 +98,7 @@ class AddGroupMemberModal extends React.Component {
         }else{
           message.success("部门员工添加失败");
         }
-        _this.addGroupMemberModalHandleCancel();
+        _this.AddRoleMemberModalHandleCancel();
         _this.props.callbackParent(_this.state.parentId);
         _this.initPage();
       },
@@ -162,15 +162,18 @@ class AddGroupMemberModal extends React.Component {
           // var isExitInSettingTeam = _this.findTeacherIsExitAtSettringTeam(userId);
           // && isExitInSettingTeam==false
           if(isExitAtTargetOptions==false){
+            //不能添加自己
+            if (parseInt(userId) != _this.state.loginUser.colUid) {
               const data = {key:userId,
-                  label: <div>
-                    <div>
-                      <span className="group_team_gray6">{userName}</span>
-                      <span className="group_team_blue9">{courseName}</span>
-                    </div>
-                    <div className="group_team_gray9">{gradeName}</div>
-                  </div>, value: userId+"#"+userName+"#"+gradeName+"#"+userAvatar+"#"+courseName };
+                label: <div>
+                  <div>
+                    <span className="group_team_gray6">{userName}</span>
+                    <span className="group_team_blue9">{courseName}</span>
+                  </div>
+                  <div className="group_team_gray9">{gradeName}</div>
+                </div>, value: userId+"#"+userName+"#"+gradeName+"#"+userAvatar+"#"+courseName };
               teacherSrcOptions.push(data);
+            }
           }
         });
         _this.setState({teacherSrcOptions});
@@ -351,13 +354,13 @@ class AddGroupMemberModal extends React.Component {
     return (
         <Modal
             visible={this.state.isShow}
-            title="选择人员"
-            onCancel={this.addGroupMemberModalHandleCancel}
+            title="创建团队"
+            onCancel={this.AddRoleMemberModalHandleCancel}
             transitionName=""  //禁用modal的动画效果
             maskClosable={false} //设置不允许点击蒙层关闭
             footer={[
               <button type="primary" htmlType="submit" className="ant-btn-primary ant-btn" onClick={this.addGroupMember}  >确定</button>,
-              <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button" onClick={this.addGroupMemberModalHandleCancel} >取消</button>
+              <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button" onClick={this.AddRoleMemberModalHandleCancel} >取消</button>
             ]}
         >
           <Row className="ant-form-item">
@@ -401,4 +404,4 @@ class AddGroupMemberModal extends React.Component {
 
 }
 
-export default AddGroupMemberModal;
+export default AddRoleMemberModal;

@@ -1,12 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Table,Icon,Button,Breadcrumb,message} from 'antd';
-import {doWebService} from '../../WebServiceHelper';
-import {getPageSize} from '../../utils/Const';
-import {isEmpty} from '../../utils/utils';
-import SchoolSettingModal from './SchoolSettingModal';
-import AddSubGroupModal from './AddSubGroupModal';
-import AddGroupMemberModal from './AddGroupMemberModal';
-import GroupSettingModal from './GroupSettingModal';
+import AddRoleMemberModal from './AddRoleMemberModal';
 
 const columns = [{
     title: '姓名',
@@ -38,7 +32,7 @@ const RoleComponents = React.createClass({
             memberPageNo:1,
             structuresObjArray:[],
             schoolSettingModalIsShow:false,
-            addSubGroupModalIsShow:false,
+            addRoleModalIsShow:false,
             selectedRowKeys:[],
             addGroupMemberModalIsShow:false,
             groupSettingModalIsShow:false,
@@ -60,6 +54,10 @@ const RoleComponents = React.createClass({
     onSelectChange(selectedRowKeys){
         console.log('selectedRowKeys changed: ', selectedRowKeys);
         this.setState({selectedRowKeys});
+    },
+
+    addRoleMember(){
+        this.setState({addRoleModalIsShow:true});
     },
 
     /**
@@ -84,7 +82,7 @@ const RoleComponents = React.createClass({
                 </div>
                 <div className="schoolgroup_title">
                     <span>
-                        <Button className="schoolgroup_btn_blue schoolgroup_btn_left schoolgroup_btn" onClick={this.addSubGroup}>添加成员</Button>
+                        <Button className="schoolgroup_btn_blue schoolgroup_btn_left schoolgroup_btn" onClick={this.addRoleMember}>添加成员</Button>
                     </span>
                     <span>
 
@@ -102,10 +100,7 @@ const RoleComponents = React.createClass({
                     <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
                 </div>
 
-                <SchoolSettingModal isShow={this.state.schoolSettingModalIsShow} rootStructure={this.state.rootStructure}></SchoolSettingModal>
-                <AddSubGroupModal isShow={this.state.addSubGroupModalIsShow} parentGroup={this.state.parentGroup} callbackParent={this.listStructures}></AddSubGroupModal>
-                <AddGroupMemberModal isShow={this.state.addGroupMemberModalIsShow} parentGroup={this.state.parentGroup} callbackParent={this.listStructureAndMembers}></AddGroupMemberModal>
-                <GroupSettingModal isShow={this.state.groupSettingModalIsShow} parentGroup={this.state.parentGroup} ></GroupSettingModal>
+                <AddRoleMemberModal isShow={this.state.addRoleModalIsShow} parentRole={this.state.parentRole} callbackParent={this.listStructures}></AddRoleMemberModal>
             </div>
         );
     }
