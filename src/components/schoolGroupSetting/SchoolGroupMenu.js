@@ -27,7 +27,7 @@ class SchoolGroupMenu extends React.Component {
     }
 
     /**
-     * 获取当前用户的组织根节点
+     * 获取当前用户的组织根节点(组织架构菜单)
      * @param operateUserId
      * @param structureId
      */
