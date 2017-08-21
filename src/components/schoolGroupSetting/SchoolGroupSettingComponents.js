@@ -1,12 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Table,Icon,Button,Breadcrumb,message} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
-import {getPageSize} from '../../utils/Const';
 import {isEmpty} from '../../utils/utils';
-import SchoolSettingModal from './SchoolSettingModal';
-import AddSubGroupModal from './AddSubGroupModal';
-import AddGroupMemberModal from './AddGroupMemberModal';
-import GroupSettingModal from './GroupSettingModal';
 import NschoolGroupSettingComponents from './NschoolGroupSettingComponents';
 import RoleComponents from './RoleComponents';
 
@@ -149,7 +144,7 @@ const SchoolGroupSettingComponents = React.createClass({
     },
 
     /**
-     * 获取当前用户的组织根节点
+     * 获取当前用户的组织根节点222
      * @param operateUserId
      * @param structureId
      */

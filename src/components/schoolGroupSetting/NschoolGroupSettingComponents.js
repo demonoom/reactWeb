@@ -147,7 +147,7 @@ const NschoolGroupSettingComponents = React.createClass({
     },
 
     /**
-     * 获取当前用户的组织根节点
+     * 获取当前用户的组织根节点333
      * @param operateUserId
      * @param structureId
      */
@@ -161,10 +161,13 @@ const NschoolGroupSettingComponents = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var parentGroup = ret.response;
-                var isExit = _this.checkStructureIsExitAtArray(parentGroup);
-                if(isEmpty(parentGroup)==false && isExit==false){
-                    //存放组织架构的层次关系
-                    structuresObjArray.push(parentGroup);
+
+                if(isEmpty(parentGroup)==false){
+                    var isExit = _this.checkStructureIsExitAtArray(parentGroup);
+                    if(isExit==false){
+                        //存放组织架构的层次关系
+                        structuresObjArray.push(parentGroup);
+                    }
                 }
                 _this.setState({parentGroup});
 

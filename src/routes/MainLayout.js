@@ -24,6 +24,8 @@ import AntCloudClassRoomMenu from '../components/layOut/AntCloudClassRoomMenu';
 import AntCloudClassRoomComponents from '../components/cloudClassRoom/AntCloudClassRoomComponents';
 import SchoolGroupSettingComponents from '../components/schoolGroupSetting/SchoolGroupSettingComponents';
 import SchoolGroupMenu from '../components/schoolGroupSetting/SchoolGroupMenu';
+import SystemSettingGhostMenu from '../components/SystemSetting/SystemSettingGhostMenu';
+import SystemSettingComponent from '../components/SystemSetting/SystemSettingComponent';
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
@@ -74,6 +76,17 @@ const MainLayout = React.createClass({
             }
             return;
         }
+
+        if ('systemSetting' == e.key) {
+
+            if (e.key == this.state.currentKey) {
+                this.changeSystemGhostMenuVisible();
+            } else {
+                this.setState({currentKey: e.key, resouceType: 'B'});
+            }
+            return;
+        }
+
         this.setState({currentKey: e.key, resouceType: ''});
 
         if (e.key != "KnowledgeResources") {
@@ -199,16 +212,36 @@ const MainLayout = React.createClass({
         console.log(_this.state.selectedKeys);
     },
 
+    systemSettingTab(activeMenu, beActive){
+        // 2
+        this.changeSystemGhostMenuVisible({visible: false, beActive: beActive});
+        this.setState({activeSystemSettingMiddleMenu: activeMenu});
+    },
+
+    /**
+     * 设置教学空间的Ghost Menu的显示和关闭
+     * @param obj
+     */
     changeGhostMenuVisible(obj){
-
-
         if (obj) {
             if (!obj.beActive) return;
             this.setState({ghostMenuVisible: obj.visible});
         } else {
-
             let visible = !this.state.ghostMenuVisible;
             this.setState({ghostMenuVisible: visible});
+        }
+    },
+    /**
+     * 设置系统设置的Ghost Menu的显示和关闭
+     * @param obj
+     */
+    changeSystemGhostMenuVisible(obj){
+        if (obj) {
+            if (!obj.beActive) return;
+            this.setState({systemSettingGhostMenuVisible: obj.visible});
+        } else {
+            let visible = !this.state.systemSettingGhostMenuVisible;
+            this.setState({systemSettingGhostMenuVisible: visible});
         }
     },
 
@@ -392,10 +425,22 @@ const MainLayout = React.createClass({
                 tabComponent = <AntCloudClassRoomComponents  currentItem={this.state.cloudRoomMenuItem}/>;
 
                 break;
-            case 'schoolGroupSetting':
-                //组织架构
-                middleComponent = <SchoolGroupMenu callbackParent={this.getSubGroup} changeTab={this.teachSpaceTab}/>;
-                tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId} rootStructure={this.state.rootStructure} roleItem={this.state.activeMiddleMenu}></SchoolGroupSettingComponents>;
+
+            case 'systemSetting':
+                //系统设置
+                // middleComponent = <SchoolGroupMenu callbackParent={this.getSubGroup}/>;
+                middleComponent =
+                    <SystemSettingGhostMenu visible={this.state.systemSettingGhostMenuVisible}
+                                         toggleGhostMenu={ this.changeSystemGhostMenuVisible }
+                                         changeTabEvent={this.systemSettingTab}
+                    />;
+                //tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId} rootStructure={this.state.rootStructure}></SchoolGroupSettingComponents>;
+                tabComponent = <SystemSettingComponent  currentItem={this.state.activeSystemSettingMiddleMenu}  roleItem={this.state.activeMiddleMenu} changeTab={this.teachSpaceTab}></SystemSettingComponent>;
+
+            // case 'schoolGroupSetting':
+            //     //组织架构
+            //     middleComponent = <SchoolGroupMenu callbackParent={this.getSubGroup} changeTab={this.teachSpaceTab}/>;
+            //     tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId} rootStructure={this.state.rootStructure} roleItem={this.state.activeMiddleMenu}></SchoolGroupSettingComponents>;
 
                 break;
         }
@@ -471,7 +516,7 @@ const MainLayout = React.createClass({
                                 <i className="icon_menu_ios icon_yichao1"></i>
                                 <div className="tan">蚁盘</div>
                             </Menu.Item>
-                            <Menu.Item key="schoolGroupSetting" className="padding_menu">
+                            <Menu.Item key="systemSetting" className="padding_menu">
                                 <i className="icon_menu_ios icon_schoolGroup"></i>
                                 <div className="tan">组织架构</div>
                             </Menu.Item>
