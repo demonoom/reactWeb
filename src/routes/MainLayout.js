@@ -390,8 +390,8 @@ const MainLayout = React.createClass({
                 break;
             case 'schoolGroupSetting':
                 //组织架构
-                middleComponent = <SchoolGroupMenu callbackParent={this.getSubGroup}/>;
-                tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId} rootStructure={this.state.rootStructure}></SchoolGroupSettingComponents>;
+                middleComponent = <SchoolGroupMenu callbackParent={this.getSubGroup} changeTab={this.teachSpaceTab}/>;
+                tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId} rootStructure={this.state.rootStructure} roleItem={this.state.activeMiddleMenu}></SchoolGroupSettingComponents>;
 
                 break;
         }
