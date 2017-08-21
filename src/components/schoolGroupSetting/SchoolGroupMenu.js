@@ -307,7 +307,7 @@ class SchoolGroupMenu extends React.Component {
         });
         this.props.callbackParent(e.key,this.state.structure);
         // 子传父函数调用
-        this.props.changeTab('role',this.state.selectedKeys);
+        this.props.changeTab('role',true,this.state.selectedKeys);
     }
 
     /**

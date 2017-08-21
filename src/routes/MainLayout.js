@@ -190,12 +190,13 @@ const MainLayout = React.createClass({
         }
     },
     teachSpaceTab(activeMenu, beActive, selectedKeys){
-
+        let _this = this;
         // 2
         this.changeGhostMenuVisible({visible: false, beActive: beActive});
         this.setState({activeMiddleMenu: activeMenu});
-        this.setState({selectedKeys: activeMenu});
+        this.setState({selectedKeys: selectedKeys});
         console.log('哈哈');
+        console.log(_this.state.selectedKeys);
     },
 
     changeGhostMenuVisible(obj){
