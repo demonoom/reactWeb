@@ -431,9 +431,10 @@ const MainLayout = React.createClass({
                 middleComponent =
                     <SystemSettingGhostMenu visible={this.state.systemSettingGhostMenuVisible}
                                          toggleGhostMenu={ this.changeSystemGhostMenuVisible }
-                                         changeTabEvent={this.systemSettingTab}/>;
+                                         changeTabEvent={this.systemSettingTab}
+                    />;
                 //tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId} rootStructure={this.state.rootStructure}></SchoolGroupSettingComponents>;
-                tabComponent = <SystemSettingComponent  currentItem={this.state.activeSystemSettingMiddleMenu}></SystemSettingComponent>;
+                tabComponent = <SystemSettingComponent  currentItem={this.state.activeSystemSettingMiddleMenu}  roleItem={this.state.activeMiddleMenu} changeTab={this.teachSpaceTab}></SystemSettingComponent>;
 
             // case 'schoolGroupSetting':
             //     //组织架构

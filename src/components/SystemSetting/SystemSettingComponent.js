@@ -28,6 +28,7 @@ class SystemSettingComponent extends React.Component {
         this.middleComponent;
         this.tabComponent;
         this.getSubGroup = this.getSubGroup.bind(this);
+        this.changeGroupTab = this.changeGroupTab.bind(this);
     }
 
 
@@ -47,6 +48,10 @@ class SystemSettingComponent extends React.Component {
         this.setState({structureId,rootStructure:structure});
     }
 
+    changeGroupTab(activeMenu, beActive, selectedKeys){
+        this.props.changeTab(activeMenu, beActive, selectedKeys);
+    }
+
     render() {
 
         //系统设置页面渲染 根据如下判断结果，完成对页面中部位置的渲染，不同情况，渲染不同组件
@@ -55,10 +60,10 @@ class SystemSettingComponent extends React.Component {
             default : // teachTimes
 
                 // 组织架构 部门管理 LessonPlan  Schedule
-                this.middleComponent = <SchoolGroupMenu callbackParent={this.getSubGroup}/>;
-                this.tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId} rootStructure={this.state.rootStructure}></SchoolGroupSettingComponents>;
+                this.middleComponent = <SchoolGroupMenu callbackParent={this.getSubGroup} changeTab={this.changeGroupTab}/>;
+                this.tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId} rootStructure={this.state.rootStructure}  roleItem={this.props.roleItem}></SchoolGroupSettingComponents>;
                 break;
-            case 'systemRole':
+            /*case 'systemRole':
                 // 组织架构  角色管理
                 this.middleComponent = <SchoolGroupMenu callbackParent={this.getSubGroup}/>;
                 this.tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId} rootStructure={this.state.rootStructure}></SchoolGroupSettingComponents>;
@@ -72,7 +77,7 @@ class SystemSettingComponent extends React.Component {
                 // 审批流程
                 this.middleComponent = <SchoolGroupMenu callbackParent={this.getSubGroup}/>;
                 this.tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId} rootStructure={this.state.rootStructure}></SchoolGroupSettingComponents>;
-                break;
+                break;*/
 
         }
 
