@@ -43,6 +43,7 @@ const MainLayout = React.createClass({
             collapse: true,
             ghostMenuVisible: true,
             activeMiddleMenu: '',
+            selectedKeys:'',
             personCenterParams: '',
             currentKey: 'message',
             openKeysStr: '',
@@ -188,11 +189,13 @@ const MainLayout = React.createClass({
             this.refs.antNestTabComponents.getTopics(pageNo, 1);
         }
     },
-    teachSpaceTab(activeMenu, beActive){
+    teachSpaceTab(activeMenu, beActive, selectedKeys){
 
         // 2
         this.changeGhostMenuVisible({visible: false, beActive: beActive});
         this.setState({activeMiddleMenu: activeMenu});
+        this.setState({selectedKeys: activeMenu});
+        console.log('哈哈');
     },
 
     changeGhostMenuVisible(obj){
