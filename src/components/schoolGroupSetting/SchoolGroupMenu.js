@@ -277,7 +277,7 @@ class SchoolGroupMenu extends React.Component {
         for(var i = 0;i < part.length;i++) {
                 part[i].children.forEach(function (subGroup) {
                     // openKeys=''+part.id;
-                    var menuItem =  <Menu.Item key={subGroup.id}>
+                    var menuItem =  <Menu.Item key={subGroup.id + ',' +subGroup.name}>
                         <Icon type="user" />
                         <span>{subGroup.name}</span>
                     </Menu.Item>;
@@ -305,7 +305,6 @@ class SchoolGroupMenu extends React.Component {
         this.setState({
             selectedKeys: e.key,
         });
-        this.props.callbackParent(e.key,this.state.structure);
         // 子传父函数调用
         this.props.changeTab('role',true,e.key);
     }

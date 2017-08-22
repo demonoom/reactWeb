@@ -23,7 +23,8 @@ class SystemSettingComponent extends React.Component {
             currentKey: this.props.currentItem,
             openKeysStr: '',
             locale: 'zh-cn',
-            showArgs: ''
+            showArgs: '',
+            selectedId: ''
         }
         this.middleComponent;
         this.tabComponent;
@@ -49,7 +50,9 @@ class SystemSettingComponent extends React.Component {
     }
 
     changeGroupTab(activeMenu, beActive, selectedKeys){
+        // alert(selectedKeys);
         this.props.changeTab(activeMenu, beActive, selectedKeys);
+        this.setState({selectedId: selectedKeys});
     }
 
     render() {
@@ -61,7 +64,7 @@ class SystemSettingComponent extends React.Component {
 
                 // 组织架构 部门管理 LessonPlan  Schedule
                 this.middleComponent = <SchoolGroupMenu callbackParent={this.getSubGroup} changeTab={this.changeGroupTab}/>;
-                this.tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId} rootStructure={this.state.rootStructure}  roleItem={this.props.roleItem}></SchoolGroupSettingComponents>;
+                this.tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId} selectedId={this.state.selectedId} rootStructure={this.state.rootStructure}  roleItem={this.props.roleItem}></SchoolGroupSettingComponents>;
                 break;
             /*case 'systemRole':
                 // 组织架构  角色管理

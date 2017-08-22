@@ -54,6 +54,7 @@ const SchoolGroupSettingComponents = React.createClass({
 
     componentWillReceiveProps(nextProps){
         var structureId = nextProps.structureId;
+        console.log(nextProps.selectedId);
         var defaultPageNo = 1;
         //组织架构根目录（学校）
         var rootStructure = nextProps.rootStructure;
@@ -383,7 +384,7 @@ const SchoolGroupSettingComponents = React.createClass({
                 break;
             case 'role':
                 // 角色
-                this.tabComponent = <RoleComponents/>;
+                this.tabComponent = <RoleComponents selectedId={this.props.selectedId}/>;
                 break;
         }
         return (
