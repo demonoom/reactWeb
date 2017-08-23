@@ -285,12 +285,12 @@ class SchoolGroupMenu extends React.Component {
                 part[i].children.forEach(function (subGroup) {
                     // openKeys=''+part.id;
                     var menuItem =  <Menu.Item key={subGroup.id + ',' +subGroup.name}>
-                        <Icon type="user" />
+                        <Icon type="user" className="schoolgroup_menu_i_blue" />
                         <span>{subGroup.name}</span>
                     </Menu.Item>;
                     subRoleMenuItemArray.push(menuItem);
                 });
-                partMenu = <SubMenu className="schoolgroup_menu_c" key={part[i].id} title={<span><Icon type="caret-down"  className="schoolgroup_down_arrow" /><Icon type="folder" /><span>{part[i].name}</span><Icon type="edit" onClick={this.noom}/></span>}>
+                partMenu = <SubMenu className="schoolgroup_menu_c" key={part[i].id} title={<span><Icon type="caret-down" className="framework_down_arrow" /><i className="iconfont schoolgroup_menu_i_blue">&#xe67b;</i><span>{part[i].name}</span><Icon className="i_framework_right" type="edit" onClick={this.noom}/></span>}>
                     {subRoleMenuItemArray}
                 </SubMenu>;
                 // 这个地方的partMenu是一个对象，将对象放到数组里面，然后把数组setState，去DOM那里取数组就能够依次渲染出来
@@ -330,7 +330,7 @@ class SchoolGroupMenu extends React.Component {
     render() {
         console.log("openKeys===>"+this.state.openKeys);
         return (
-            <div>
+            <div className="framework_tab">
                 <Tabs size="small">
                     {/*组织架构tab*/}
                     <TabPane tab="组织架构" key="1">
@@ -346,14 +346,17 @@ class SchoolGroupMenu extends React.Component {
                     </TabPane>
                     {/*角色tab*/}
                     <TabPane tab="角色" key="2">
-                        <Button onClick={this.addSubGroup}>添加角色组</Button>
-                        <Button onClick={this.addRole}>添加角色</Button>
+                        <span className="character_add">
+                            <Button onClick={this.addSubGroup}>添加角色组</Button>
+                            <Button className="add_out" onClick={this.addRole}>添加角色</Button>
+                        </span>
                         <Menu
                             onClick={this.handleClickRole}
                             style={{ width: 240 }}
                             defaultSelectedKeys={['15']}
                             defaultOpenKeys={['4']}
                             mode="inline"
+                            className="framework_left_menu"
                         >
                             {this.state.arr}
                         </Menu>

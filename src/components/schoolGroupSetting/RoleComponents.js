@@ -9,12 +9,15 @@ const confirm = Modal.confirm;
 const columns = [{
     title: '姓名',
     dataIndex: 'name',
+    className:'antnest_name'
 }, {
     title: '部门',
     dataIndex: 'group',
+    className:'antnest_name'
 }, {
     title: '手机号',
     dataIndex: 'phone',
+    className:'antnest_name'
 }];
 
 const RoleComponents = React.createClass({
@@ -164,24 +167,19 @@ const RoleComponents = React.createClass({
                     <span>{this.state.roleName}</span>
                     <span>(1人)</span>
                     <span>
-                        <Button className="schoolgroup_btn_blue schoolgroup_btn_left schoolgroup_btn"
+                        <Button className="schoolgroup_btn_gray_6 schoolgroup_btn_left schoolgroup_btn"
                                 onClick={this.editRole}>编辑</Button>
-                    </span>
-                </div>
-                <div className="schoolgroup_title">
-                    <span>
-                        <Button className="schoolgroup_btn_blue schoolgroup_btn_left schoolgroup_btn"
-                                onClick={this.addRoleMember}>添加成员</Button>
-                    </span>
-                    <span>
-
                     </span>
                 </div>
 
                 <div>
                     <div style={{marginBottom: 16}}>
+                         <span>
+                        <Button className="schoolgroup_btn_blue schoolgroup_btn_left schoolgroup_btn"
+                                onClick={this.addRoleMember}>添加成员</Button>
+                    </span>
                         <Button disabled={!hasSelected}
-                                className="schoolgroup_btn_blue schoolgroup_btn_left schoolgroup_btn"
+                                className="schoolgroup_btn_red schoolgroup_btn_left schoolgroup_btn"
                                 onClick={this.showConfirm}>批量删除</Button>
                         <span className="password_ts" style={{marginLeft: 8}}>
                             {hasSelected ? `选中 ${this.state.selectedRowKeys.length} 条记录` : ''}</span>

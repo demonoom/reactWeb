@@ -205,3 +205,54 @@
 .shoolgroup_btn_sublevel:hover .schoolgroup_i_sublevel, .shoolgroup_btn_sublevel:active .schoolgroup_i_sublevel{
     color: #57c5f7;
 }
+.framework_tab .ant-tabs:not(.ant-tabs-vertical) .ant-tabs-tabpane{
+    padding: 0;
+}
+.framework_tab ul.cont_t{
+    height: 100%;
+}
+.framework_tab .ant-menu-submenu{
+    margin-right: 0;
+}
+.framework_tab .ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title{
+    border-right:none;
+    margin-right: 0;
+}
+.framework_tab .ant-menu-inline .ant-menu-item, .ant-menu-vertical .ant-menu-item{
+    margin-right: 0;
+}
+.framework_tab .ant-menu-submenu > .ant-menu{
+    background: #fcfcfc;
+}
+.character_add{
+    padding: 15px 10px;
+    text-align: center;
+    display: block;
+}
+.framework_left_menu .schoolgroup_menu_c{
+    background: #fcfcfc;
+    color:#666;
+}
+.framework_down_arrow{
+    font-size: 12px;
+    position: relative;
+    left: -16px;
+    margin-right:0 !important;
+    color: #c5c5c5;
+}
+.i_framework_right{
+    position: absolute;
+    right: 4px;
+    top: 14px;
+    color: #666;
+}
+.i_framework_right:hover{
+    color: #0084ff;
+}
+.framework_left_menu .anticon-caret-down:before{
+    content: "\E604" !important;
+}
+.framework_left_menu .ant-menu-submenu-open .anticon-caret-down:before{
+    content: "\E606" !important;
+
+}

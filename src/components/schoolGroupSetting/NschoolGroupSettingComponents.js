@@ -22,11 +22,13 @@ const memberColumns = [{
     title: '姓名',
     dataIndex: 'userName',
     key: 'userName',
-    width:'120px'
+    width:'120px',
+    className:'antnest_name'
 },{
     title: '手机号',
     dataIndex: 'userPhone',
-    key: 'userPhone'
+    key: 'userPhone',
+    className:'antnest_name'
 }
 ];
 var structuresObjArray=[];
