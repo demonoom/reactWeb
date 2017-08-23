@@ -61,6 +61,7 @@ class AddSubGroupModal extends React.Component {
           if(ret.msg=="调用成功" && ret.success==true){
               message.success("角色添加成功");
               _this.closeAddSubGroupModal();
+              _this.props.addRoleGroupComplete();
           }
           // _this.props.callbackParent(_this.state.parentId);
       },
@@ -76,6 +77,7 @@ class AddSubGroupModal extends React.Component {
    */
   closeAddSubGroupModal(){
     this.setState({"isShow":false});
+    this.props.closeModel();
   }
 
   /**
@@ -122,7 +124,6 @@ class AddSubGroupModal extends React.Component {
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var part = ret.response;
-                // _this.props.callbackParent(part.id,part);
                 // 调用 渲染角色函数
                 _this.buildMenuPart(part);
                 _this.setState({part});

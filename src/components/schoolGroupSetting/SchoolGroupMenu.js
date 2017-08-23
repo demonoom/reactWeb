@@ -6,6 +6,7 @@ import React, {PropTypes} from 'react';
 import {doWebService} from '../../WebServiceHelper';
 import AddRoleGroupModal from './AddRoleGroupModal';
 import AddRoleModal from './AddRoleModal';
+import EditRoleGroupModal from './EditRoleGroupModal';
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 const TabPane = Tabs.TabPane;
@@ -23,7 +24,10 @@ class SchoolGroupMenu extends React.Component {
             selectedKeys:[],
             addSubGroupModalIsShow:false,
             addRoleModalIsShow:false,
-            beActive:true
+            editRoleGroupIsShow:false,
+            delRoleGroupId:'',
+            beActive:true,
+            secret:true
 
         }
         // 使用extends创建的组件使用方法要在构造器中bind一下
@@ -33,10 +37,18 @@ class SchoolGroupMenu extends React.Component {
         this.handleClick = this.handleClick.bind(this);
         this.handleClickRole = this.handleClickRole.bind(this);
         this.addSubGroup = this.addSubGroup.bind(this);
+        this.closeModel = this.closeModel.bind(this);
         this.addRole = this.addRole.bind(this);
+        this.editRole = this.editRole.bind(this);
+        this.initMenuInfo = this.initMenuInfo.bind(this);
+        this.addRoleGroupComplete = this.addRoleGroupComplete.bind(this);
     }
 
     componentDidMount(){
+        this.initMenuInfo();
+    }
+
+    initMenuInfo(){
         var structureId = "-1";
         var operateUserId = this.state.loginUser.colUid;
         // 渲染到DOM后 调用 获取组织根节点函数
@@ -45,6 +57,18 @@ class SchoolGroupMenu extends React.Component {
         this.getStructureRoleGroups(operateUserId,structureId);
     }
 
+    addRoleGroupComplete(){
+        this.getStructureRoleGroups();
+        this.setState({"addSubGroupModalIsShow":false});
+        this.setState({"addRoleModalIsShow":false});
+        this.setState({"editRoleGroupIsShow":false});
+        this.refs.addRoleModal.getStructureRoleGroups();
+    }
+    closeModel(){
+        this.setState({"addSubGroupModalIsShow":false});
+        this.setState({"addRoleModalIsShow":false});
+        this.setState({"editRoleGroupIsShow":false})
+    }
     /**
      * 获取当前用户的组织根节点(组织架构菜单)
      * @param operateUserId
@@ -123,12 +147,12 @@ class SchoolGroupMenu extends React.Component {
      * @param operateUserId
      * @param structureId
      */
-    getStructureRoleGroups(operateUserId, structureId){
+    getStructureRoleGroups(){
         let _this = this;
         var param = {
             "method": 'getStructureRoleGroups',
-            "operateUserId": operateUserId,
-            "pageNo": structureId,
+            "operateUserId": _this.state.loginUser.colUid,
+            "pageNo": -1,
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -264,13 +288,6 @@ class SchoolGroupMenu extends React.Component {
         });
     }
 
-    noom(event){
-        console.log(event);
-        alert(1);
-        event.stopPropagation();
-        event.preventDefault();
-    }
-
     /*渲染角色函数*/
     buildMenuPart (part) {
         let _this = this;
@@ -290,7 +307,8 @@ class SchoolGroupMenu extends React.Component {
                     </Menu.Item>;
                     subRoleMenuItemArray.push(menuItem);
                 });
-                partMenu = <SubMenu className="schoolgroup_menu_c" key={part[i].id} title={<span><Icon type="caret-down" className="framework_down_arrow" /><i className="iconfont schoolgroup_menu_i_blue">&#xe67b;</i><span>{part[i].name}</span><Icon className="i_framework_right" type="edit" onClick={this.noom}/></span>}>
+
+                partMenu = <SubMenu className="schoolgroup_menu_c" key={part[i].id} title={<span><Icon type="caret-down"  className="framework_down_arrow" /><i className="iconfont schoolgroup_menu_i_blue">&#xe67b;</i><span>{part[i].name}</span><Icon type="edit" className="i_framework_right" onClick={this.editRole.bind(this,part[i].id,event)}/></span>}>
                     {subRoleMenuItemArray}
                 </SubMenu>;
                 // 这个地方的partMenu是一个对象，将对象放到数组里面，然后把数组setState，去DOM那里取数组就能够依次渲染出来
@@ -326,6 +344,15 @@ class SchoolGroupMenu extends React.Component {
     /*添加角色*/
     addRole() {
         this.setState({"addRoleModalIsShow":true})
+    }
+
+    /*编辑角色组*/
+    editRole(id,event){
+        // console.log(id);
+        this.setState({"editRoleGroupIsShow":true});
+        this.setState({"delRoleGroupId":id});
+        event.stopPropagation();
+        event.preventDefault();
     }
     render() {
         console.log("openKeys===>"+this.state.openKeys);
@@ -363,9 +390,22 @@ class SchoolGroupMenu extends React.Component {
                     </TabPane>
                 </Tabs>
                 {/*引入添加角色组模态框*/}
-                <AddRoleGroupModal isShow={this.state.addSubGroupModalIsShow}/>
+                <AddRoleGroupModal isShow={this.state.addSubGroupModalIsShow}
+                                   addRoleGroupComplete={this.addRoleGroupComplete}
+                                   closeModel={this.closeModel}
+                />
                 {/*引入添加角色模态框*/}
-                <AddRoleModal isShow={this.state.addRoleModalIsShow}/>
+                <AddRoleModal isShow={this.state.addRoleModalIsShow}
+                              addRoleGroupComplete={this.addRoleGroupComplete}
+                              closeModel={this.closeModel}
+                              ref="addRoleModal"
+                />
+                {/*引入编辑角色组模态框*/}
+                <EditRoleGroupModal isShow={this.state.editRoleGroupIsShow}
+                                    delRoleGroupId={this.state.delRoleGroupId}
+                                    addRoleGroupComplete={this.addRoleGroupComplete}
+                                    closeModel={this.closeModel}
+                />
             </div>
         );
     }

@@ -1,6 +1,7 @@
 .schoolgroup{
 	padding:0px;
 	overflow: hidden;
+    height:100%;
 }
 .schoolgroup .ant-breadcrumb{
     background: #fff;
@@ -255,4 +256,10 @@
 .framework_left_menu .ant-menu-submenu-open .anticon-caret-down:before{
     content: "\E606" !important;
 
+}
+.framework_r_height{
+    height:calc(100% - 100px)
+}
+.framework_r_height .ant-table-content{
+    overflow: auto;
 }

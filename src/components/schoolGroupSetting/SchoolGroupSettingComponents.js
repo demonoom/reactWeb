@@ -346,6 +346,10 @@ const SchoolGroupSettingComponents = React.createClass({
         });
     },
 
+    editRoleComplete(roleId,roleName){
+        this.props.onEditComplete(roleId,roleName);
+    },
+
     /**
      * 渲染页面
      * @returns {XML}
@@ -384,7 +388,7 @@ const SchoolGroupSettingComponents = React.createClass({
                 break;
             case 'role':
                 // 角色
-                this.tabComponent = <RoleComponents selectedId={this.props.selectedId}/>;
+                this.tabComponent = <RoleComponents selectedId={this.props.selectedId} onEditComplete={this.editRoleComplete}/>;
                 break;
         }
         return (
