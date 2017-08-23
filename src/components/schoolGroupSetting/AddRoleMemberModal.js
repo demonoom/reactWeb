@@ -61,6 +61,7 @@ class AddRoleMemberModal extends React.Component {
   AddRoleMemberModalHandleCancel(){
     this.initPage();
     this.setState({"isShow":false});
+    this.props.closeAddModel();
   }
 
   /**
@@ -94,14 +95,15 @@ class AddRoleMemberModal extends React.Component {
       "roleId":_this.state.roleId,//角色id
       "userIds": memberIds//员工id,多个员工用逗号分开(如“23844,23847”)
     };
-      console.log(param);
       doWebService(JSON.stringify(param), {
       onResponse: function (ret) {
           console.log('成功');
           if(ret.success==true && ret.msg=="调用成功"){
           message.success("添加成功");
+          _this.props.addRoleComplete();
         }else{
           message.success("部门员工添加失败");
+          _this.props.addRoleComplete();
         }
         _this.AddRoleMemberModalHandleCancel();
         _this.props.callbackParent(_this.state.parentId);

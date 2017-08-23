@@ -46,7 +46,7 @@ class AddSubGroupModal extends React.Component {
     }
     this.setState({isShow,parentGroup,parentGroupName,parentId});
     this.setState({roleName:nextProps.roleName});
-    this.setState({roleId:nextProps.roleId});
+    this.setState({roleId:nextProps.delRoleGroupId});
   }
 
   /**
@@ -57,15 +57,15 @@ class AddSubGroupModal extends React.Component {
     var param = {
       "method": 'updateStructrureRoleName',
       "operateUserId": _this.state.loginUser.colUid,
-      "roleName":_this.state.roleName,
+      "roleName":_this.state.subGroupName,
       "roleId":_this.state.roleId
     };
-      doWebService(JSON.stringify(param), {
+        doWebService(JSON.stringify(param), {
       onResponse: function (ret) {
           if(ret.msg=="调用成功" && ret.success==true){
-              message.success("更新角色成功");
-              _this.props.onEditComplete(_this.state.roleId,_this.state.roleName);
+              message.success("更新角色组成功");
               _this.closeAddSubGroupModal();
+              _this.props.addRoleGroupComplete();
           }
           // _this.props.callbackParent(_this.state.parentId);
       },
@@ -87,9 +87,11 @@ class AddSubGroupModal extends React.Component {
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                console.log(ret);
                 if(ret.msg=="调用成功" && ret.success==true){
-                    message.success("删除角色成功");
+                    message.success("删除角色组成功");
                     _this.closeAddSubGroupModal();
+                    _this.props.addRoleGroupComplete();
                 }
                 // _this.props.callbackParent(_this.state.parentId);
             },
@@ -128,10 +130,9 @@ class AddSubGroupModal extends React.Component {
     }else{
       target = e.target;
     }
-      var roleName = target.value;
-    this.setState({roleName});
+      var subGroupName = target.value;
+    this.setState({subGroupName});
   }
-
   parentRoleChange(e) {
     var target = e.target;
     if(navigator.userAgent.indexOf("Chrome") > -1){
@@ -193,7 +194,7 @@ class AddSubGroupModal extends React.Component {
   render() {
     return (
       <Modal
-        title="编辑角色"
+        title="编辑角色组"
         visible={this.state.isShow}
         width={440}
         transitionName=""  //禁用modal的动画效果
@@ -210,19 +211,11 @@ class AddSubGroupModal extends React.Component {
         <div className="modal_register_main">
           <Row className="ant_row">
             <Col span={6}>
-              角色名称：
+              角色组名称：
             </Col>
             <Col span={18}>
-              <Input placeholder="请输入角色名称" value={this.state.roleName} onChange={this.subGroupNameChange}/>
+              <Input placeholder={this.state.roleName} value={this.state.subGroupName} onChange={this.subGroupNameChange}/>
             </Col>
-          </Row>
-          <Row className="ant_row">
-            <Col span={6}>
-              分组到：
-            </Col>
-            <Select value={this.state.roleName} style={{ width: 270 }} onChange={this.parentRoleChange} disabled>
-
-            </Select>
           </Row>
         </div>
       </Modal>

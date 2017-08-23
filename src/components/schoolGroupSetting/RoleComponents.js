@@ -51,13 +51,17 @@ const RoleComponents = React.createClass({
         var arr = selectedMessage.split(',');
         this.setState({roleId: arr[0]});
         this.setState({roleName: arr[1]});
-        var data = [];
+        // var data = [];
+        this.ajaxData()
+    },
+
+    ajaxData(){
         let _this = this;
         var param = {
             "method": 'getUsersByStructrureRoleId',
             "operateUid": this.state.loginUser.colUid,
             "pageNo": -1,
-            "roleId": arr[0]
+            "roleId": this.state.roleId
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -70,7 +74,6 @@ const RoleComponents = React.createClass({
             }
         });
     },
-
     drawTable(data) {
         var _this = this;
         _this.setState({deleteData:data});
@@ -135,6 +138,7 @@ const RoleComponents = React.createClass({
                         // console.log(ret);
                         if(ret.success==true && ret.msg=="调用成功") {
                             message.success("删除成功")
+                            _this.ajaxData();
                         }
                     },
                     onError: function (error) {
@@ -149,6 +153,35 @@ const RoleComponents = React.createClass({
     },
 
     /**
+     * 编辑角色名称完成后的回调操作
+     * @param roleId 角色的id
+     * @param roleName 角色的名称
+     */
+    editRoleComplete(roleId,roleName){
+        //设置编辑角色Modal的显示状态为false，不再显示
+        this.setState({"roleName":roleName,"editRoleModalIsShow":false});
+        this.props.onEditComplete(roleId,roleName);
+    },
+    /**
+     * 编辑角色时取消和关闭时候的回调
+     */
+    closeModel(){
+        this.setState({"editRoleModalIsShow":false});
+    },
+    /**
+     * 添加成员的回调
+     */
+    addRoleComplete(){
+        this.ajaxData();
+        this.setState({"addRoleModalIsShow":false});
+    },
+    /**
+     * 添加成员时取消和关闭的回调
+     */
+    closeAddModel(){
+        this.setState({"addRoleModalIsShow":false});
+    },
+    /**
      * 渲染页面
      * @returns {XML}
      */
@@ -162,7 +195,7 @@ const RoleComponents = React.createClass({
             <div className="schoolgroup">
                 <div className="schoolgroup_title">
                     <span>{this.state.roleName}</span>
-                    <span>(1人)</span>
+                    {/*<span>(1人)</span>*/}
                     <span>
                         <Button className="schoolgroup_btn_blue schoolgroup_btn_left schoolgroup_btn"
                                 onClick={this.editRole}>编辑</Button>
@@ -193,8 +226,15 @@ const RoleComponents = React.createClass({
 
                 <AddRoleMemberModal isShow={this.state.addRoleModalIsShow} parentRole={this.state.parentRole}
                                     callbackParent={this.listStructures}
-                                    roleId={this.state.roleId}></AddRoleMemberModal>
-                <EditRoleModal isShow={this.state.editRoleModalIsShow}/>
+                                    roleId={this.state.roleId}
+                                    addRoleComplete={this.addRoleComplete}
+                                    closeAddModel={this.closeAddModel}
+                ></AddRoleMemberModal>
+                <EditRoleModal isShow={this.state.editRoleModalIsShow} roleId={this.state.roleId}
+                               roleName={this.state.roleName}
+                               onEditComplete={this.editRoleComplete}
+                               closeModel={this.closeModel}
+                />
             </div>
         );
     }

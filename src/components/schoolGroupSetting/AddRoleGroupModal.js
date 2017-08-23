@@ -54,10 +54,10 @@ class AddSubGroupModal extends React.Component {
       doWebService(JSON.stringify(param), {
       onResponse: function (ret) {
           if(ret.msg=="调用成功" && ret.success==true){
-              message.success("部门添加成功");
+              message.success("角色组添加成功");
               _this.closeAddSubGroupModal();
+              _this.props.addRoleGroupComplete();
           }
-          _this.props.callbackParent(_this.state.parentId);
       },
       onError: function (error) {
         message.error(error);
@@ -71,6 +71,7 @@ class AddSubGroupModal extends React.Component {
    */
   closeAddSubGroupModal(){
     this.setState({"isShow":false});
+    this.props.closeModel();
   }
 
   /**

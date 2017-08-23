@@ -30,6 +30,7 @@ class SystemSettingComponent extends React.Component {
         this.tabComponent;
         this.getSubGroup = this.getSubGroup.bind(this);
         this.changeGroupTab = this.changeGroupTab.bind(this);
+        this.editRoleComplete = this.editRoleComplete.bind(this);
     }
 
 
@@ -55,6 +56,12 @@ class SystemSettingComponent extends React.Component {
         this.setState({selectedId: selectedKeys});
     }
 
+    editRoleComplete(roleId,roleName){
+        var selectedId = roleId+","+roleName;
+        this.setState({selectedId});
+        this.refs.schoolGroupMenu.initMenuInfo();
+    }
+
     render() {
 
         //系统设置页面渲染 根据如下判断结果，完成对页面中部位置的渲染，不同情况，渲染不同组件
@@ -63,8 +70,11 @@ class SystemSettingComponent extends React.Component {
             default : // teachTimes
 
                 // 组织架构 部门管理 LessonPlan  Schedule
-                this.middleComponent = <SchoolGroupMenu callbackParent={this.getSubGroup} changeTab={this.changeGroupTab}/>;
-                this.tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId} selectedId={this.state.selectedId} rootStructure={this.state.rootStructure}  roleItem={this.props.roleItem}></SchoolGroupSettingComponents>;
+                this.middleComponent = <SchoolGroupMenu ref="schoolGroupMenu" callbackParent={this.getSubGroup} changeTab={this.changeGroupTab}/>;
+                this.tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId}
+                                                                  selectedId={this.state.selectedId} rootStructure={this.state.rootStructure}
+                                                                  roleItem={this.props.roleItem}
+                                                                  onEditComplete={this.editRoleComplete}></SchoolGroupSettingComponents>;
                 break;
             /*case 'systemRole':
                 // 组织架构  角色管理
