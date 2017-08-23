@@ -264,6 +264,13 @@ class SchoolGroupMenu extends React.Component {
         });
     }
 
+    noom(event){
+        console.log(event);
+        alert(1);
+        event.stopPropagation();
+        event.preventDefault();
+    }
+
     /*渲染角色函数*/
     buildMenuPart (part) {
         let _this = this;
@@ -283,7 +290,7 @@ class SchoolGroupMenu extends React.Component {
                     </Menu.Item>;
                     subRoleMenuItemArray.push(menuItem);
                 });
-                partMenu = <SubMenu className="schoolgroup_menu_c" key={part[i].id} title={<span><Icon type="caret-down"  className="schoolgroup_down_arrow" /><Icon type="folder" /><span>{part[i].name}</span></span>}>
+                partMenu = <SubMenu className="schoolgroup_menu_c" key={part[i].id} title={<span><Icon type="caret-down"  className="schoolgroup_down_arrow" /><Icon type="folder" /><span>{part[i].name}</span><Icon type="edit" onClick={this.noom}/></span>}>
                     {subRoleMenuItemArray}
                 </SubMenu>;
                 // 这个地方的partMenu是一个对象，将对象放到数组里面，然后把数组setState，去DOM那里取数组就能够依次渲染出来

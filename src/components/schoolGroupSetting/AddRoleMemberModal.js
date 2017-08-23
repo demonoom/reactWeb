@@ -21,6 +21,7 @@ class AddRoleMemberModal extends React.Component {
       teacherSourceListPageNo:1,
       teacherSrcOptions:[],
       teacherTargetOptions:[],
+      roleId:''
     };
     this.AddRoleMemberModalHandleCancel = this.AddRoleMemberModalHandleCancel.bind(this);
     this.initPage = this.initPage.bind(this);
@@ -39,6 +40,7 @@ class AddRoleMemberModal extends React.Component {
     var _this = this;
     var isShow = _this.props.isShow;
     this.setState({isShow});
+    this.setState({roleId:this.props.roleId});
   }
 
   componentWillReceiveProps(nextProps) {
@@ -47,6 +49,7 @@ class AddRoleMemberModal extends React.Component {
     var parentGroupName="";
     var parentId = "";
     var schoolId = "";
+    this.setState({roleId:nextProps.roleId});
     if(isEmpty(parentGroup)==false){
       parentGroupName = parentGroup.name;
       parentId = parentGroup.id;
@@ -86,15 +89,17 @@ class AddRoleMemberModal extends React.Component {
     }
     var memberIds = usersArray.join(",");
     var param = {
-      "method": "batchAddStructureMembers",//批量添加部门员工
-      "operateUserId": _this.state.loginUser.colUid,//操作用户id
-      "structureId":_this.state.parentId,//部门id
-      "memberIds": memberIds//员工id,多个员工用逗号分开(如“23844,23847”)
+      "method": "batchAddStrcutreRoleUsers",//批量添加部门员工
+      "operateUid": _this.state.loginUser.colUid,//操作用户id
+      "roleId":_this.state.roleId,//角色id
+      "userIds": memberIds//员工id,多个员工用逗号分开(如“23844,23847”)
     };
-    doWebService(JSON.stringify(param), {
+      console.log(param);
+      doWebService(JSON.stringify(param), {
       onResponse: function (ret) {
-        if(ret.success==true && ret.msg=="调用成功"){
-          message.success("部门员工添加成功");
+          console.log('成功');
+          if(ret.success==true && ret.msg=="调用成功"){
+          message.success("添加成功");
         }else{
           message.success("部门员工添加失败");
         }

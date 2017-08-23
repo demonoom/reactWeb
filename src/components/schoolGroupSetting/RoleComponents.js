@@ -1,8 +1,10 @@
-import React, { PropTypes } from 'react';
-import { Table,Icon,Button,Breadcrumb,message} from 'antd';
+import React, {PropTypes} from 'react';
+import {Table, Icon, Button, Breadcrumb, message, Modal} from 'antd';
 import AddRoleMemberModal from './AddRoleMemberModal';
 import {doWebService} from '../../WebServiceHelper';
-import {getPageSize} from '../../utils/Const';
+import EditRoleModal from './EditRoleModal'
+
+const confirm = Modal.confirm;
 
 const columns = [{
     title: '姓名',
@@ -15,48 +17,40 @@ const columns = [{
     dataIndex: 'phone',
 }];
 
-// const data = [];
-// for (let i = 0; i < 46; i++) {
-//     data.push({
-//         key: i,
-//         name: `Edward King ${i}`,
-//         age: 32,
-//         address: `London, Park Lane no. ${i}`,
-//     });
-// }
-
 const RoleComponents = React.createClass({
 
     getInitialState() {
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         return {
-            loginUser : loginUser,
-            memberPageNo:1,
-            structuresObjArray:[],
-            schoolSettingModalIsShow:false,
-            addRoleModalIsShow:false,
-            selectedRowKeys:[],
-            addGroupMemberModalIsShow:false,
-            groupSettingModalIsShow:false,
+            loginUser: loginUser,
+            memberPageNo: 1,
+            structuresObjArray: [],
+            schoolSettingModalIsShow: false,
+            addRoleModalIsShow: false,
+            editRoleModalIsShow:false,
+            selectedRowKeys: [],
+            addGroupMemberModalIsShow: false,
+            groupSettingModalIsShow: false,
             loading: false,
-            roleId:'',
-            roleName:'',
-            data:[]
+            roleId: '',
+            roleName: '',
+            data: [],
+            deleteData:[]
         };
     },
 
-    componentDidMount(){
+    componentDidMount() {
         var selectedMessage = this.props.selectedId;
         var arr = selectedMessage.split(',');
-        this.setState({roleId:arr[0]});
-        this.setState({roleName:arr[1]});
+        this.setState({roleId: arr[0]});
+        this.setState({roleName: arr[1]});
     },
 
-    componentWillReceiveProps(nextProps){
+    componentWillReceiveProps(nextProps) {
         var selectedMessage = nextProps.selectedId;
         var arr = selectedMessage.split(',');
-        this.setState({roleId:arr[0]});
-        this.setState({roleName:arr[1]});
+        this.setState({roleId: arr[0]});
+        this.setState({roleName: arr[1]});
         var data = [];
         let _this = this;
         var param = {
@@ -79,10 +73,11 @@ const RoleComponents = React.createClass({
 
     drawTable(data) {
         var _this = this;
+        _this.setState({deleteData:data});
         var mesData = [];
-        data.forEach(function (v,i) {
+        data.forEach(function (v, i) {
             var person = {
-                key: i,
+                key: v.colUid,
                 name: v.userName,
                 group: v.schoolName,
                 phone: `London, Park Lane no.`,
@@ -96,20 +91,61 @@ const RoleComponents = React.createClass({
      * 员工选中响应函数
      * @param selectedRowKeys
      */
-    onSelectChange(selectedRowKeys){
+    onSelectChange(selectedRowKeys) {
         console.log('selectedRowKeys changed: ', selectedRowKeys);
         this.setState({selectedRowKeys});
     },
 
-    addRoleMember(){
-        this.setState({addRoleModalIsShow:true});
+    addRoleMember() {
+        this.setState({addRoleModalIsShow: true});
     },
-
+    editRole() {
+        this.setState({editRoleModalIsShow:true});
+    },
     pageOnChange(pageNo) {
-        this.
-        this.setState({
+        this.this.setState({
             currentPage: pageNo,
         });
+    },
+    showConfirm() {
+        var _this = this;
+        confirm({
+            title: '确定删除?',
+            onOk() {
+                var selectedMem = _this.state.selectedRowKeys;
+                // console.log(selectedMem);
+                var userIds = '';
+                selectedMem.forEach(function (v,i) {
+                    // console.log(v.key);
+                    userIds += v + ',';
+                })
+                // console.log(userIds);
+                // console.log(_this.state.roleId);
+                // console.log(userIds.substr(0,userIds.length-1));
+
+                var param = {
+                    "method": 'deleteStructureRoleUsers',
+                    "operateUid": _this.state.loginUser.colUid,
+                    "roleId": _this.state.roleId,
+                    "userIds": userIds.substr(0,userIds.length-1)
+                };
+                // console.log(param);
+                doWebService(JSON.stringify(param), {
+                    onResponse: function (ret) {
+                        // console.log(ret);
+                        if(ret.success==true && ret.msg=="调用成功") {
+                            message.success("删除成功")
+                        }
+                    },
+                    onError: function (error) {
+                        message.error(error);
+                    }
+                });
+            },
+            onCancel() {
+                console.log('Cancel');
+            }
+        })
     },
 
     /**
@@ -118,24 +154,24 @@ const RoleComponents = React.createClass({
      */
     render() {
         const rowSelection = {
-            selectedRowKeys:this.state.selectedRowKeys,
+            selectedRowKeys: this.state.selectedRowKeys,
             onChange: this.onSelectChange,
         };
         const hasSelected = this.state.selectedRowKeys.length > 0;
         return (
             <div className="schoolgroup">
                 <div className="schoolgroup_title">
-                    {/*<span>{structureName}</span>*/}
-                    {/*{settingButton}*/}
                     <span>{this.state.roleName}</span>
                     <span>(1人)</span>
                     <span>
-                        <Button className="schoolgroup_btn_blue schoolgroup_btn_left schoolgroup_btn" onClick={this.addSubGroup}>编辑</Button>
+                        <Button className="schoolgroup_btn_blue schoolgroup_btn_left schoolgroup_btn"
+                                onClick={this.editRole}>编辑</Button>
                     </span>
                 </div>
                 <div className="schoolgroup_title">
                     <span>
-                        <Button className="schoolgroup_btn_blue schoolgroup_btn_left schoolgroup_btn" onClick={this.addRoleMember}>添加成员</Button>
+                        <Button className="schoolgroup_btn_blue schoolgroup_btn_left schoolgroup_btn"
+                                onClick={this.addRoleMember}>添加成员</Button>
                     </span>
                     <span>
 
@@ -143,11 +179,11 @@ const RoleComponents = React.createClass({
                 </div>
 
                 <div>
-                    <div style={{ marginBottom: 16 }}>
+                    <div style={{marginBottom: 16}}>
                         <Button disabled={!hasSelected}
                                 className="schoolgroup_btn_blue schoolgroup_btn_left schoolgroup_btn"
-                                onClick={this.addSubGroup}>批量删除</Button>
-                        <span className="password_ts" style={{ marginLeft: 8 }}>
+                                onClick={this.showConfirm}>批量删除</Button>
+                        <span className="password_ts" style={{marginLeft: 8}}>
                             {hasSelected ? `选中 ${this.state.selectedRowKeys.length} 条记录` : ''}</span>
                     </div>
                     <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.mesData}
@@ -155,7 +191,10 @@ const RoleComponents = React.createClass({
                     />
                 </div>
 
-                <AddRoleMemberModal isShow={this.state.addRoleModalIsShow} parentRole={this.state.parentRole} callbackParent={this.listStructures}></AddRoleMemberModal>
+                <AddRoleMemberModal isShow={this.state.addRoleModalIsShow} parentRole={this.state.parentRole}
+                                    callbackParent={this.listStructures}
+                                    roleId={this.state.roleId}></AddRoleMemberModal>
+                <EditRoleModal isShow={this.state.editRoleModalIsShow}/>
             </div>
         );
     }
