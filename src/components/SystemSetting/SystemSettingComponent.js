@@ -4,6 +4,7 @@ import moment from 'moment';
 const TabPane = Tabs.TabPane;
 import SchoolGroupMenu from '../../components/schoolGroupSetting/SchoolGroupMenu';
 import SchoolGroupSettingComponents from '../../components/schoolGroupSetting/SchoolGroupSettingComponents';
+import FlowSettingComponent from '../../components/flowSetting/FlowSettingComponent';
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
@@ -86,11 +87,12 @@ class SystemSettingComponent extends React.Component {
                 this.middleComponent = <SchoolGroupMenu callbackParent={this.getSubGroup}/>;
                 this.tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId} rootStructure={this.state.rootStructure}></SchoolGroupSettingComponents>;
                 break;
+             */
             case 'systemFlow':
                 // 审批流程
-                this.middleComponent = <SchoolGroupMenu callbackParent={this.getSubGroup}/>;
-                this.tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId} rootStructure={this.state.rootStructure}></SchoolGroupSettingComponents>;
-                break;*/
+                //this.middleComponent = <SchoolGroupMenu callbackParent={this.getSubGroup}/>;
+                this.tabComponent = <FlowSettingComponent></FlowSettingComponent>;
+                break;
 
         }
 
