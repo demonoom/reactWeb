@@ -50,29 +50,17 @@ const NschoolGroupSettingComponents = React.createClass({
     },
 
     componentDidMount(){
-        var structureId = this.props.structureId;
-        var rootStructure = this.props.rootStructure;
-        this.setState({structureId,rootStructure});
-        this.listStructures(structureId);
+        console.log("NScholl didMount");
         structuresObjArray.splice(0);
     },
 
     componentWillReceiveProps(nextProps){
+        console.log("NScholl will");
         var structureId = nextProps.structureId;
         var defaultPageNo = 1;
-        //组织架构根目录（学校）
-        var rootStructure = nextProps.rootStructure;
-        var isExit = this.checkStructureIsExitAtArray(rootStructure);
-        if(structuresObjArray.length>1){
-            structuresObjArray.splice(1,structuresObjArray.length);
-        }
-        if(isEmpty(rootStructure)==false && isExit==false){
-            //存放组织架构的层次关系
-            structuresObjArray.push(rootStructure);
-        }
         this.listStructures(structureId);
         this.getStrcutureMembers(structureId,defaultPageNo);
-        this.setState({structureId,rootStructure,structuresObjArray,"schoolSettingModalIsShow":false,"addSubGroupModalIsShow":false,"addGroupMemberModalIsShow":false,"groupSettingModalIsShow":false});
+        this.setState({structureId,structuresObjArray});
     },
 
     /**
@@ -93,7 +81,6 @@ const NschoolGroupSettingComponents = React.createClass({
                 var subGroupList = [];
                 if(isEmpty(response)==false){
                     response.forEach(function (subGroup) {
-                        //var subGroupName = subGroup.name+"（"+subGroup.memberCount+ '人' +"）";
                         var subGroupName = <div onClick={_this.getSubGroupForButton.bind(_this,subGroup.id)}>
                             <span className="antnest_name affix_bottom_tc">{subGroup.name}</span>
                             <span className="schoolgroup_people">({subGroup.memberCount}人                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                )</span>
@@ -353,6 +340,10 @@ const NschoolGroupSettingComponents = React.createClass({
         });
     },
 
+    initModalStatus(){
+        this.setState({"groupSettingModalIsShow":false,"addGroupMemberModalIsShow":false,"addSubGroupModalIsShow":false,"schoolSettingModalIsShow":false});
+    },
+
     /**
      * 渲染页面
      * @returns {XML}
@@ -376,9 +367,9 @@ const NschoolGroupSettingComponents = React.createClass({
             });
         }
         var settingButton;
-        if(isEmpty(_this.state.rootStructure)){
+        if(isEmpty(_this.props.rootStructure)){
             settingButton = null;
-        }else if(_this.state.structureId == _this.state.rootStructure.id){
+        }else if(_this.state.structureId == _this.props.rootStructure.id){
             settingButton = <Button className="schoolgroup_btn_gray_6 schoolgroup_btn_left schoolgroup_btn" onClick={this.schoolSetting}>设置</Button>
         }else{
             settingButton = <Button className="schoolgroup_btn_gray_6 schoolgroup_btn_left schoolgroup_btn" onClick={this.groupSetting}>部门设置</Button>;
@@ -431,10 +422,10 @@ const NschoolGroupSettingComponents = React.createClass({
                         <a onClick={this.loadMoreMember} className="schoolgroup_more_a">加载更多</a>
                     </div>
                 </div>
-                <SchoolSettingModal isShow={this.state.schoolSettingModalIsShow} rootStructure={this.state.rootStructure}></SchoolSettingModal>
-                <AddSubGroupModal isShow={this.state.addSubGroupModalIsShow} parentGroup={this.state.parentGroup} callbackParent={this.listStructures}></AddSubGroupModal>
-                <AddGroupMemberModal isShow={this.state.addGroupMemberModalIsShow} parentGroup={this.state.parentGroup} callbackParent={this.listStructureAndMembers}></AddGroupMemberModal>
-                <GroupSettingModal isShow={this.state.groupSettingModalIsShow} parentGroup={this.state.parentGroup} ></GroupSettingModal>
+                <SchoolSettingModal isShow={this.state.schoolSettingModalIsShow} rootStructure={this.props.rootStructure} onCancel={this.initModalStatus}></SchoolSettingModal>
+                <AddSubGroupModal isShow={this.state.addSubGroupModalIsShow} parentGroup={this.state.parentGroup} callbackParent={this.listStructures} onCancel={this.initModalStatus}></AddSubGroupModal>
+                <AddGroupMemberModal isShow={this.state.addGroupMemberModalIsShow} parentGroup={this.state.parentGroup} callbackParent={this.listStructureAndMembers} onCancel={this.initModalStatus}></AddGroupMemberModal>
+                <GroupSettingModal isShow={this.state.groupSettingModalIsShow} parentGroup={this.state.parentGroup} onCancel={this.initModalStatus}></GroupSettingModal>
             </div>
         );
     }

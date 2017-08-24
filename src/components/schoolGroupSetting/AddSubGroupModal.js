@@ -72,6 +72,7 @@ class AddSubGroupModal extends React.Component {
    */
   closeAddSubGroupModal(){
     this.setState({"isShow":false});
+    this.props.onCancel();
   }
 
   /**
