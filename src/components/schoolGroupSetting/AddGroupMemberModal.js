@@ -154,7 +154,10 @@ class AddGroupMemberModal extends React.Component {
           var teacher = e.teacher;
           var course = teacher.course;
           var user = teacher.user;
-          var courseName = course.name;
+          var courseName = "";
+          if(isEmpty(course)==false){
+            courseName = course.name;
+          }
           var userId = user.colUid;
           var userName = user.userName;
           var userAvatar = user.avatar;

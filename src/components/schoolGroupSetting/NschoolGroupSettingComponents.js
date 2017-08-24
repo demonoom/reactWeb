@@ -259,6 +259,7 @@ const NschoolGroupSettingComponents = React.createClass({
     breadCrumbClick(structureId){
         var defaultPageNo = 1;
         this.listStructures(structureId);
+        subGroupMemberList.splice(0);
         this.getStrcutureMembers(structureId,defaultPageNo);
         for(var i=0;i<structuresObjArray.length;i++){
             var structure = structuresObjArray[i];
