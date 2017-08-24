@@ -30,6 +30,7 @@ class SystemSettingComponent extends React.Component {
         this.middleComponent;
         this.tabComponent;
         this.getSubGroup = this.getSubGroup.bind(this);
+        this.sendFirstId = this.sendFirstId.bind(this);
         this.changeGroupTab = this.changeGroupTab.bind(this);
         this.editRoleComplete = this.editRoleComplete.bind(this);
     }
@@ -51,6 +52,10 @@ class SystemSettingComponent extends React.Component {
         this.setState({structureId,rootStructure:structure});
     }
 
+    sendFirstId(firstId){
+        console.log(firstId);
+        this.setState({firstId:firstId})
+    }
     changeGroupTab(activeMenu, beActive, selectedKeys, papaKey){
         this.props.changeTab(activeMenu, beActive, selectedKeys);
         this.setState({selectedId: selectedKeys});
@@ -64,20 +69,23 @@ class SystemSettingComponent extends React.Component {
     }
 
     render() {
-        console.log("1111");
+        // console.log("1111");
         //系统设置页面渲染 根据如下判断结果，完成对页面中部位置的渲染，不同情况，渲染不同组件
         switch (this.props.currentItem) {
 
             default : // teachTimes
 
                 // 组织架构 部门管理 LessonPlan  Schedule
-                this.middleComponent = <SchoolGroupMenu ref="schoolGroupMenu" callbackParent={this.getSubGroup} rootStructure={this.state.rootStructure} changeTab={this.changeGroupTab} currentItem = {this.props.currentItem}/>;
+                this.middleComponent = <SchoolGroupMenu ref="schoolGroupMenu" callbackParent={this.getSubGroup} rootStructure={this.state.rootStructure} changeTab={this.changeGroupTab} currentItem = {this.props.currentItem}
+                                                        sendFirstId={this.sendFirstId}
+                />;
                 this.tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId}
                                                                   selectedId={this.state.selectedId}
                                                                   rootStructure={this.state.rootStructure}
                                                                   currentItem = {this.props.currentItem}
                                                                   onEditComplete={this.editRoleComplete}
                                                                   papaKey={this.state.papaKey}
+                                                                  firstId={this.state.firstId}
                 ></SchoolGroupSettingComponents>;
                 break;
             /*case 'systemRole':

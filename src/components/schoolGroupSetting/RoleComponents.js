@@ -52,6 +52,7 @@ const RoleComponents = React.createClass({
         }catch(error){
             console.log(error);
         }
+        this.ajaxData(this.props.firstId);
     },
 
     componentWillReceiveProps(nextProps) {
@@ -65,10 +66,7 @@ const RoleComponents = React.createClass({
         {/*var papaArr = papaKey.split('#');*/}
         {/*this.setState({papaName:papaArr[1]});*/}
 {/*=======*/}
-        console.log('哈哈');
         console.log(nextProps.selectedId);
-        // console.log('哈哈哈');
-        // console.log(selectedMessage);
         try{
             var arr = selectedMessage.split(',');
             this.setState({roleId: arr[0]});
@@ -81,7 +79,6 @@ const RoleComponents = React.createClass({
         }catch(error){
             console.log(error);
         }
-// >>>>>>> fed3ed52415749317bd64ce6785960ff21b5f31e
     },
 
     ajaxData(roleId){

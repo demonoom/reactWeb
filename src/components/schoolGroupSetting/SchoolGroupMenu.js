@@ -270,8 +270,12 @@ class SchoolGroupMenu extends React.Component {
             //角色
             if(isEmpty(this.state.selectedRoleKeys)==false){
                 //向上传递点击过的角色菜单的key
+                var selId = this.state.selectedRoleKeys;
+                var arr = selId.split(',');
+                this.props.sendFirstId(arr[0]);
             }else{
                 //向上传递角色组下的第一个角色的id
+                this.props.sendFirstId(this.state.firstId);
             }
         }
         this.props.changeTab(key);
