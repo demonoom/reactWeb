@@ -381,12 +381,12 @@ const SchoolGroupSettingComponents = React.createClass({
             settingButton = <Button className="schoolgroup_btn_gray_6 schoolgroup_btn_left schoolgroup_btn" onClick={this.groupSetting}>部门设置</Button>;
         }
 
-        switch (this.props.roleItem) {
+        switch (this.props.currentItem) {
 
             default : // 组织构架
                 this.tabComponent = <NschoolGroupSettingComponents structureId={this.state.structureId} rootStructure={this.state.rootStructure}></NschoolGroupSettingComponents>;
                 break;
-            case 'role':
+            case 'systemRole':
                 // 角色
                 this.tabComponent = <RoleComponents selectedId={this.props.selectedId} onEditComplete={this.editRoleComplete}/>;
                 break;

@@ -75,6 +75,7 @@ class SystemSettingComponent extends React.Component {
                 this.tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId}
                                                                   selectedId={this.state.selectedId} rootStructure={this.state.rootStructure}
                                                                   roleItem={this.props.roleItem}
+                                                                  currentItem = {this.props.currentItem}
                                                                   onEditComplete={this.editRoleComplete}
                 ></SchoolGroupSettingComponents>;
                 break;
