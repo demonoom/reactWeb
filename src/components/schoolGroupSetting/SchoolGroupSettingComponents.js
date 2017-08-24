@@ -1,7 +1,4 @@
 import React, { PropTypes } from 'react';
-import { Table,Icon,Button,Breadcrumb,message} from 'antd';
-import {doWebService} from '../../WebServiceHelper';
-import {isEmpty} from '../../utils/utils';
 import NschoolGroupSettingComponents from './NschoolGroupSettingComponents';
 import RoleComponents from './RoleComponents';
 
@@ -36,7 +33,7 @@ const SchoolGroupSettingComponents = React.createClass({
                 break;
             case 'role':
                 // 角色
-                this.tabComponent = <RoleComponents selectedId={this.props.selectedId} onEditComplete={this.editRoleComplete}/>;
+                this.tabComponent = <RoleComponents selectedId={this.props.selectedId} onEditComplete={this.editRoleComplete} papaKey={this.props.papaKey}/>;
                 break;
         }
         return (

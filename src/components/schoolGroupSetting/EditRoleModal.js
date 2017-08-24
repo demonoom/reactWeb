@@ -47,6 +47,8 @@ class AddSubGroupModal extends React.Component {
     this.setState({isShow,parentGroup,parentGroupName,parentId});
     this.setState({roleName:nextProps.roleName});
     this.setState({roleId:nextProps.roleId});
+    this.setState({papaName:nextProps.papaName});
+
   }
 
   /**
@@ -89,6 +91,7 @@ class AddSubGroupModal extends React.Component {
             onResponse: function (ret) {
                 if(ret.msg=="调用成功" && ret.success==true){
                     message.success("删除角色成功");
+                    _this.props.onEditComplete(_this.state.roleId,_this.state.roleName);
                     _this.closeAddSubGroupModal();
                 }else {
                     message.error(ret.msg);
@@ -202,29 +205,31 @@ class AddSubGroupModal extends React.Component {
         closable={true}     //设置显示右上角的关闭按钮（但是需要调整颜色，否则白色会无法显示）
         maskClosable={false} //设置不允许点击蒙层关闭
         onCancel={this.closeAddSubGroupModal}
-        className="schoolgroup_modal"
+        className="schoolgroup_modal framework_modal"
          footer={[
              <button type="primary" className="ant-btn-primary ant-btn" onClick={this.handleOk}>确定</button>,
-             <button type="danger" className="ant-btn login-form-button"  onClick={this.handDel}>删除</button>,
+             <button type="danger" className="ant-btn login-form-button schoolgroup_btn_red"  onClick={this.handDel}>删除</button>,
              <button type="ghost" className="ant-btn ant-btn-ghost login-form-button" onClick={this.closeAddSubGroupModal}>取消</button>
          ]}
       >
         <div className="modal_register_main">
           <Row className="ant_row">
-            <Col span={6}>
-              角色名称：
+            <Col span={6} className="framework_m_l">
+              <span className="c_from_icon">*</span>角色名称：
             </Col>
-            <Col span={18}>
-              <Input placeholder="请输入角色名称" value={this.state.roleName} onChange={this.subGroupNameChange}/>
+            <Col span={16} className="framework_m_r">
+                <Input placeholder={this.state.roleName} value={this.state.roleName} onChange={this.subGroupNameChange}/>
             </Col>
           </Row>
           <Row className="ant_row">
-            <Col span={6}>
-              分组到：
+            <Col span={6} className="framework_m_l">
+                <span className="c_from_icon">*</span>分组到：
             </Col>
-            <Select value={this.state.roleName} style={{ width: 270 }} onChange={this.parentRoleChange} disabled>
+              <Col span={16} className="framework_m_r">
+                  <Select value={this.state.papaName} style={{ width: 245 }} onChange={this.parentRoleChange} disabled>
 
-            </Select>
+                  </Select>
+              </Col>
           </Row>
         </div>
       </Modal>
