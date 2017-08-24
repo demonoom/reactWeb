@@ -260,6 +260,28 @@
 .framework_r_height{
     height:calc(100% - 100px)
 }
-.framework_r_height .ant-table-content{
+.framework_r_height .ant-table-content .ant-table-tbody{
     overflow: auto;
+}
+.framework_tab .ant-tabs-nav-container-scrolling{
+    padding:0
+}
+.framework_tab .ant-tabs-tab-prev, .ant-tabs-tab-next{
+    width: 0;
+    margin-right: 0;
+}
+.framework_tab .ant-tabs-nav{
+    margin-left: 0;
+}
+.framework_tab .ant-tabs-nav .ant-tabs-tab{
+    width: 119px;
+    font-size: 16px;
+}
+.framework_r_height .ant-table-thead > tr > th.ant-table-selection-column, .ant-table-tbody > tr > td.ant-table-selection-column{
+    width:60px;
+    text-align: right;
+}
+.framework_r_height .ant-table-thead > tr > td, .framework_r_height .ant-table-body{
+    color:#424242;
+    font-size:14px;
 }
