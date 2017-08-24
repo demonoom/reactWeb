@@ -217,29 +217,19 @@ class AddSubGroupModal extends React.Component {
             <Col span={6} className="framework_m_l">
               <span className="c_from_icon">*</span>角色名称：
             </Col>
-<<<<<<< HEAD
             <Col span={16} className="framework_m_r">
-              <Input placeholder="请输入角色名称" value={this.state.roleName} onChange={this.subGroupNameChange}/>
-=======
-            <Col span={18}>
-              <Input placeholder={this.state.roleName} value={this.state.roleName} onChange={this.subGroupNameChange}/>
->>>>>>> 320aad1c3b89d3aebe2f82428522cb740a015f8a
+                <Input placeholder={this.state.roleName} value={this.state.roleName} onChange={this.subGroupNameChange}/>
             </Col>
           </Row>
           <Row className="ant_row">
             <Col span={6} className="framework_m_l">
                 <span className="c_from_icon">*</span>分组到：
             </Col>
-<<<<<<< HEAD
               <Col span={16} className="framework_m_r">
-                <Select value={this.state.roleName} style={{ width: 245 }} onChange={this.parentRoleChange} disabled>
-                </Select>
-              </Col>
-=======
-            <Select value={this.state.papaName} style={{ width: 270 }} onChange={this.parentRoleChange} disabled>
+                  <Select value={this.state.papaName} style={{ width: 245 }} onChange={this.parentRoleChange} disabled>
 
-            </Select>
->>>>>>> 320aad1c3b89d3aebe2f82428522cb740a015f8a
+                  </Select>
+              </Col>
           </Row>
         </div>
       </Modal>
