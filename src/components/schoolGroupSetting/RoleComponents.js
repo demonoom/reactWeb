@@ -52,10 +52,6 @@ const RoleComponents = React.createClass({
 
     componentWillReceiveProps(nextProps) {
         var selectedMessage = nextProps.selectedId;
-        console.log('哈哈');
-        console.log(nextProps.selectedId);
-        // console.log('哈哈哈');
-        // console.log(selectedMessage);
         var arr = selectedMessage.split(',');
         this.setState({roleId: arr[0]});
         this.setState({roleName: arr[1]});
@@ -131,12 +127,8 @@ const RoleComponents = React.createClass({
                 // console.log(selectedMem);
                 var userIds = '';
                 selectedMem.forEach(function (v,i) {
-                    // console.log(v.key);
                     userIds += v + ',';
                 })
-                // console.log(userIds);
-                // console.log(_this.state.roleId);
-                // console.log(userIds.substr(0,userIds.length-1));
 
                 var param = {
                     "method": 'deleteStructureRoleUsers',
@@ -149,8 +141,8 @@ const RoleComponents = React.createClass({
                     onResponse: function (ret) {
                         // console.log(ret);
                         if(ret.success==true && ret.msg=="调用成功") {
-                            message.success("删除成功")
-                            _this.ajaxData();
+                            message.success("删除成功");
+                            _this.ajaxData(_this.state.roleId);
                         }
                     },
                     onError: function (error) {
@@ -184,7 +176,7 @@ const RoleComponents = React.createClass({
      * 添加成员的回调
      */
     addRoleComplete(){
-        this.ajaxData();
+        this.ajaxData(this.state.roleId);
         this.setState({"addRoleModalIsShow":false});
     },
     /**
