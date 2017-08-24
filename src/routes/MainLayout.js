@@ -44,6 +44,7 @@ const MainLayout = React.createClass({
         return {
             collapse: true,
             ghostMenuVisible: true,
+            systemSettingGhostMenuVisible:true,
             activeMiddleMenu: '',
             selectedKeys:'',
             personCenterParams: '',
@@ -518,7 +519,7 @@ const MainLayout = React.createClass({
                             </Menu.Item>
                             <Menu.Item key="systemSetting" className="padding_menu">
                                 <i className="icon_menu_ios icon_schoolGroup"></i>
-                                <div className="tan">组织架构</div>
+                                <div className="tan">系统设置</div>
                             </Menu.Item>
                             <FloatButton ref="floatButton" messageUtilObj={ms}/>
                         </Menu>
