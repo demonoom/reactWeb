@@ -7,6 +7,7 @@ import {doWebService} from '../../WebServiceHelper';
 import AddRoleGroupModal from './AddRoleGroupModal';
 import AddRoleModal from './AddRoleModal';
 import EditRoleGroupModal from './EditRoleGroupModal';
+import {isEmpty} from '../../utils/utils';
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 const TabPane = Tabs.TabPane;
@@ -28,8 +29,8 @@ class SchoolGroupMenu extends React.Component {
             delRoleGroupId:'',
             beActive:true,
             secret:true,
-            activeTabKey:'1',
-
+            activeTabKey:'origin',
+            isChanged:false
         }
         // 使用extends创建的组件使用方法要在构造器中bind一下
         this.getStructureById = this.getStructureById.bind(this);
@@ -52,18 +53,21 @@ class SchoolGroupMenu extends React.Component {
 
     componentWillReceiveProps(nextProps){
         var currentItem = nextProps.currentItem;
-        if(currentItem=="systemRole"){
-            this.setState({"activeTabKey":"2"});
-        }else{
-            this.setState({"activeTabKey":"1"});
+        if(isEmpty(currentItem)==false){
+            this.setState({"activeTabKey":currentItem});
         }
     }
 
     initMenuInfo(){
         var structureId = "-1";
         var operateUserId = this.state.loginUser.colUid;
-        // 渲染到DOM后 调用 获取组织根节点函数
-        this.getStructureById(operateUserId,structureId);
+        var rootStructure = this.props.rootStructure;
+        if(isEmpty(rootStructure)==false){
+            // 渲染到DOM后 调用 获取组织根节点函数
+            this.listStructures(operateUserId,rootStructure);
+        }else{
+            this.getStructureById(operateUserId,structureId);
+        }
         // 渲染到DOM后 调用 获取角色组函数
         this.getStructureRoleGroups(operateUserId,structureId);
     }
@@ -369,7 +373,7 @@ class SchoolGroupMenu extends React.Component {
 
     tabOnChange(key) {
         console.log(key);
-        this.setState({activeTabKey:key});
+        this.setState({activeTabKey:key,'isChanged':true});
     }
 
     render() {
@@ -378,7 +382,7 @@ class SchoolGroupMenu extends React.Component {
             <div className="framework_tab">
                 <Tabs size="small" activeKey={this.state.activeTabKey} onChange={this.tabOnChange}>
                     {/*组织架构tab*/}
-                    <TabPane tab="组织架构" key="1">
+                    <TabPane tab="组织架构" key="origin">
                         <Menu ref="middleMenu" onClick={this.handleClick}
                               selectedKeys={[this.state.selectedKeys]}
                               defaultOpenKeys={[this.state.openKeys]}
@@ -390,7 +394,7 @@ class SchoolGroupMenu extends React.Component {
                         </Menu>
                     </TabPane>
                     {/*角色tab*/}
-                    <TabPane tab="角色" key="2">
+                    <TabPane tab="角色" key="role">
                         <span className="character_add">
                             <Button onClick={this.addSubGroup}>添加角色组</Button>
                             <Button className="add_out" onClick={this.addRole}>添加角色</Button>

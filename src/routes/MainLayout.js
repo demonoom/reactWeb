@@ -203,18 +203,18 @@ const MainLayout = React.createClass({
             this.refs.antNestTabComponents.getTopics(pageNo, 1);
         }
     },
-    teachSpaceTab(activeMenu, beActive, selectedKeys){
+    teachSpaceTab(activeMenu, beActive){
         let _this = this;
         // 2
         this.changeGhostMenuVisible({visible: false, beActive: beActive});
         this.setState({activeMiddleMenu: activeMenu});
-        this.setState({selectedKeys: selectedKeys});
     },
 
-    systemSettingTab(activeMenu, beActive){
+    systemSettingTab(activeMenu, beActive,selectedKeys){
         // 2
         this.changeSystemGhostMenuVisible({visible: false, beActive: beActive});
         this.setState({activeSystemSettingMiddleMenu: activeMenu});
+        this.setState({selectedKeys: selectedKeys});
     },
 
     /**
@@ -432,7 +432,7 @@ const MainLayout = React.createClass({
                                          toggleGhostMenu={ this.changeSystemGhostMenuVisible }
                                          changeTabEvent={this.systemSettingTab}
                     />;
-                tabComponent = <SystemSettingComponent  currentItem={this.state.activeSystemSettingMiddleMenu}  roleItem={this.state.activeMiddleMenu} changeTab={this.teachSpaceTab}></SystemSettingComponent>;
+                tabComponent = <SystemSettingComponent  currentItem={this.state.activeSystemSettingMiddleMenu} changeTab={this.systemSettingTab}></SystemSettingComponent>;
 
                 break;
         }

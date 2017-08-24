@@ -64,17 +64,17 @@ class SystemSettingComponent extends React.Component {
     }
 
     render() {
-
+        console.log("1111");
         //系统设置页面渲染 根据如下判断结果，完成对页面中部位置的渲染，不同情况，渲染不同组件
         switch (this.props.currentItem) {
 
             default : // teachTimes
 
                 // 组织架构 部门管理 LessonPlan  Schedule
-                this.middleComponent = <SchoolGroupMenu ref="schoolGroupMenu" callbackParent={this.getSubGroup} changeTab={this.changeGroupTab} currentItem = {this.props.currentItem}/>;
+                this.middleComponent = <SchoolGroupMenu ref="schoolGroupMenu" callbackParent={this.getSubGroup} rootStructure={this.state.rootStructure} changeTab={this.changeGroupTab} currentItem = {this.props.currentItem}/>;
                 this.tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId}
-                                                                  selectedId={this.state.selectedId} rootStructure={this.state.rootStructure}
-                                                                  roleItem={this.props.roleItem}
+                                                                  selectedId={this.state.selectedId}
+                                                                  rootStructure={this.state.rootStructure}
                                                                   currentItem = {this.props.currentItem}
                                                                   onEditComplete={this.editRoleComplete}
                 ></SchoolGroupSettingComponents>;
