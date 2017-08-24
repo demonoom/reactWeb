@@ -41,13 +41,17 @@ const RoleComponents = React.createClass({
     },
 
     componentDidMount() {
-        var selectedMessage = this.props.selectedId;
-        var arr = selectedMessage.split(',');
-        this.setState({roleId: arr[0]});
-        this.setState({roleName: arr[1]});
-        var papaKey = this.props.papaKey;
-        var papaArr = papaKey.split('#');
-        this.setState({papaName:papaArr[1]});
+        try{
+            var selectedMessage = this.props.selectedId;
+            var arr = selectedMessage.split(',');
+            this.setState({roleId: arr[0]});
+            this.setState({roleName: arr[1]});
+            var papaKey = this.props.papaKey;
+            var papaArr = papaKey.split('#');
+            this.setState({papaName:papaArr[1]});
+        }catch(error){
+            console.log(error);
+        }
     },
 
     componentWillReceiveProps(nextProps) {
@@ -56,13 +60,18 @@ const RoleComponents = React.createClass({
         console.log(nextProps.selectedId);
         // console.log('哈哈哈');
         // console.log(selectedMessage);
-        var arr = selectedMessage.split(',');
-        this.setState({roleId: arr[0]});
-        this.setState({roleName: arr[1]});
-        this.ajaxData(arr[0]);
-        var papaKey = nextProps.papaKey;
-        var papaArr = papaKey.split('#');
-        this.setState({papaName:papaArr[1]});
+        try{
+            var arr = selectedMessage.split(',');
+            this.setState({roleId: arr[0]});
+            this.setState({roleName: arr[1]});
+            this.ajaxData(arr[0]);
+            var papaKey = nextProps.papaKey;
+            var papaArr = [];
+            papaArr = papaKey.split('#');
+            this.setState({papaName:papaArr[1]});
+        }catch(error){
+            console.log(error);
+        }
     },
 
     ajaxData(roleId){
