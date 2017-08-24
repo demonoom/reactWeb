@@ -96,7 +96,7 @@ class AddSubGroupModal extends React.Component {
   render() {
     return (
       <Modal
-        title="学校设置"
+        title="添加部门"
         visible={this.state.isShow}
         width={440}
         transitionName=""  //禁用modal的动画效果
