@@ -115,7 +115,7 @@ const FlowSettingComponent = React.createClass({
      * 创建流程分组
      */
     createNewFlowGroup(){
-        this.setState({createFlowGroupModalVisible:true});
+        this.setState({createFlowGroupModalVisible:true,flowGroupName:''});
     },
 
     /**

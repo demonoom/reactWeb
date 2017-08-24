@@ -27,7 +27,8 @@ class SchoolGroupMenu extends React.Component {
             editRoleGroupIsShow:false,
             delRoleGroupId:'',
             beActive:true,
-            secret:true
+            secret:true,
+            activeTabKey:'1',
 
         }
         // 使用extends创建的组件使用方法要在构造器中bind一下
@@ -42,10 +43,20 @@ class SchoolGroupMenu extends React.Component {
         this.editRole = this.editRole.bind(this);
         this.initMenuInfo = this.initMenuInfo.bind(this);
         this.addRoleGroupComplete = this.addRoleGroupComplete.bind(this);
+        this.tabOnChange = this.tabOnChange.bind(this);
     }
 
     componentDidMount(){
         this.initMenuInfo();
+    }
+
+    componentWillReceiveProps(nextProps){
+        var currentItem = nextProps.currentItem;
+        if(currentItem=="systemRole"){
+            this.setState({"activeTabKey":"2"});
+        }else{
+            this.setState({"activeTabKey":"1"});
+        }
     }
 
     initMenuInfo(){
@@ -67,7 +78,8 @@ class SchoolGroupMenu extends React.Component {
     closeModel(){
         this.setState({"addSubGroupModalIsShow":false});
         this.setState({"addRoleModalIsShow":false});
-        this.setState({"editRoleGroupIsShow":false})
+        this.setState({"editRoleGroupIsShow":false});
+
     }
     /**
      * 获取当前用户的组织根节点(组织架构菜单)
@@ -354,11 +366,17 @@ class SchoolGroupMenu extends React.Component {
         event.stopPropagation();
         event.preventDefault();
     }
+
+    tabOnChange(key) {
+        console.log(key);
+        this.setState({activeTabKey:key});
+    }
+
     render() {
         console.log("openKeys===>"+this.state.openKeys);
         return (
             <div className="framework_tab">
-                <Tabs size="small">
+                <Tabs size="small" activeKey={this.state.activeTabKey} onChange={this.tabOnChange}>
                     {/*组织架构tab*/}
                     <TabPane tab="组织架构" key="1">
                         <Menu ref="middleMenu" onClick={this.handleClick}
