@@ -54,6 +54,7 @@ class GroupSettingModal extends React.Component {
             parentGroupName = parentGroup.name;
             parentId = parentGroup.id;
             chatGroupId = parentGroup.chatGroupId;
+            this.getStructureById(parentId);
         }
         this.getStrcutureMembers(parentId, 1);
         if(isShow==true && isEmpty(chatGroupId)==false){
@@ -87,7 +88,7 @@ class GroupSettingModal extends React.Component {
                             chatGroupMemberArray.push(memberOption);
                         });
                     }
-                    _this.setState({chatGroupMemberArray, ownerId});
+                    _this.setState({chatGroupMemberArray, ownerId,"chatGroupManager":ownerId});
                 }
             },
             onError: function (error) {
@@ -152,8 +153,15 @@ class GroupSettingModal extends React.Component {
                     value: response.id,
                     label: response.schoolName
                 };
+                var chargeMembers = response.chargeMembers;
+                var groupManager=[];
+                chargeMembers.forEach(function (chargeMember) {
+                    var memberId = chargeMember.id;
+                    var user = chargeMember.user;
+                    groupManager.push(memberId+"");
+                });
                 groupOptions.push(groupOption);
-                _this.setState({groupOptions});
+                _this.setState({groupOptions,groupManager});
 
             },
             onError: function (error) {
@@ -207,6 +215,18 @@ class GroupSettingModal extends React.Component {
         //部门名称
         var groupName = _this.state.parentGroupName;
         var groupManager="";
+        if(isEmpty(groupManagerArray)==true || groupManagerArray.length==0){
+            message.error("请选择部门主管");
+            return;
+        }
+        if(isEmpty(chatGroupManager)==true){
+            message.error("请选择群主");
+            return;
+        }
+        if(isEmpty(groupName)==true){
+            message.error("请输入部门名称");
+            return;
+        }
         if(isEmpty(groupManagerArray)==false){
             groupManager = groupManagerArray.join(",");
         }
@@ -351,7 +371,7 @@ class GroupSettingModal extends React.Component {
                                 tags={true}
                                 style={{width: '100%'}}
                                 value={this.state.groupManager}
-                                placeholder="Please select"
+                                placeholder="请选择主管"
                                 defaultValue={[]}
                                 onChange={this.groupMemberHandleChange}
                             >
@@ -367,8 +387,9 @@ class GroupSettingModal extends React.Component {
                             <Select
                                 showSearch
                                 style={{width: 200}}
-                                placeholder="Select a person"
+                                placeholder="请选择群主"
                                 optionFilterProp="children"
+                                value={this.state.chatGroupManager}
                                 onChange={this.chatGroupManagerHandleChange}
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             >

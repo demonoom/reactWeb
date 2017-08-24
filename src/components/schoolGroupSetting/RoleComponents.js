@@ -41,28 +41,47 @@ const RoleComponents = React.createClass({
     },
 
     componentDidMount() {
-        var selectedMessage = this.props.selectedId;
-        var arr = selectedMessage.split(',');
-        this.setState({roleId: arr[0]});
-        this.setState({roleName: arr[1]});
-        var papaKey = this.props.papaKey;
-        var papaArr = papaKey.split('#');
-        this.setState({papaName:papaArr[1]});
+        try{
+            var selectedMessage = this.props.selectedId;
+            var arr = selectedMessage.split(',');
+            this.setState({roleId: arr[0]});
+            this.setState({roleName: arr[1]});
+            var papaKey = this.props.papaKey;
+            var papaArr = papaKey.split('#');
+            this.setState({papaName:papaArr[1]});
+        }catch(error){
+            console.log(error);
+        }
     },
 
     componentWillReceiveProps(nextProps) {
         var selectedMessage = nextProps.selectedId;
+{/*<<<<<<< HEAD*/}
+        {/*var arr = selectedMessage.split(',');*/}
+        {/*this.setState({roleId: arr[0]});*/}
+        {/*this.setState({roleName: arr[1]});*/}
+        {/*this.ajaxData(arr[0]);*/}
+        {/*var papaKey = nextProps.papaKey;*/}
+        {/*var papaArr = papaKey.split('#');*/}
+        {/*this.setState({papaName:papaArr[1]});*/}
+{/*=======*/}
         console.log('哈哈');
         console.log(nextProps.selectedId);
         // console.log('哈哈哈');
         // console.log(selectedMessage);
-        var arr = selectedMessage.split(',');
-        this.setState({roleId: arr[0]});
-        this.setState({roleName: arr[1]});
-        this.ajaxData(arr[0]);
-        var papaKey = nextProps.papaKey;
-        var papaArr = papaKey.split('#');
-        this.setState({papaName:papaArr[1]});
+        try{
+            var arr = selectedMessage.split(',');
+            this.setState({roleId: arr[0]});
+            this.setState({roleName: arr[1]});
+            this.ajaxData(arr[0]);
+            var papaKey = nextProps.papaKey;
+            var papaArr = [];
+            papaArr = papaKey.split('#');
+            this.setState({papaName:papaArr[1]});
+        }catch(error){
+            console.log(error);
+        }
+// >>>>>>> fed3ed52415749317bd64ce6785960ff21b5f31e
     },
 
     ajaxData(roleId){
@@ -131,12 +150,8 @@ const RoleComponents = React.createClass({
                 // console.log(selectedMem);
                 var userIds = '';
                 selectedMem.forEach(function (v,i) {
-                    // console.log(v.key);
                     userIds += v + ',';
                 })
-                // console.log(userIds);
-                // console.log(_this.state.roleId);
-                // console.log(userIds.substr(0,userIds.length-1));
 
                 var param = {
                     "method": 'deleteStructureRoleUsers',
@@ -149,8 +164,8 @@ const RoleComponents = React.createClass({
                     onResponse: function (ret) {
                         // console.log(ret);
                         if(ret.success==true && ret.msg=="调用成功") {
-                            message.success("删除成功")
-                            _this.ajaxData();
+                            message.success("删除成功");
+                            _this.ajaxData(_this.state.roleId);
                         }
                     },
                     onError: function (error) {
@@ -184,7 +199,7 @@ const RoleComponents = React.createClass({
      * 添加成员的回调
      */
     addRoleComplete(){
-        this.ajaxData();
+        this.ajaxData(this.state.roleId);
         this.setState({"addRoleModalIsShow":false});
     },
     /**
@@ -217,7 +232,7 @@ const RoleComponents = React.createClass({
                 <div className="framework_r_height">
                     <div className="framework_btn_bg">
                          <span>
-                        <Button className="schoolgroup_btn_blue schoolgroup_btn_left schoolgroup_btn"
+                        <Button className="schoolgroup_btn_blue schoolgroup_btn"
                                 onClick={this.addRoleMember}>添加成员</Button>
                     </span>
                         <Button disabled={!hasSelected}

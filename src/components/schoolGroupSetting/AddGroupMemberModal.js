@@ -154,15 +154,17 @@ class AddGroupMemberModal extends React.Component {
           var teacher = e.teacher;
           var course = teacher.course;
           var user = teacher.user;
-          var courseName = course.name;
+          var courseName = "";
+          if(isEmpty(course)==false){
+            courseName = course.name;
+          }
           var userId = user.colUid;
           var userName = user.userName;
           var userAvatar = user.avatar;
 
           var isExitAtTargetOptions=_this.findTeacherIsExitAtTargetOptions(userId);
-          // var isExitInSettingTeam = _this.findTeacherIsExitAtSettringTeam(userId);
-          // && isExitInSettingTeam==false
-          if(isExitAtTargetOptions==false){
+          var isExitInGroup = _this.findTeacherIsExitAtGroup(userId);
+          if(isExitAtTargetOptions==false && isExitInGroup==false){
               const data = {key:userId,
                   label: <div>
                     <div>
@@ -205,18 +207,17 @@ class AddGroupMemberModal extends React.Component {
   }
 
   /**
-   * 判断当前查询到的用户在已添加的团队用户中是否存在，如果已经存在，则过滤掉，避免重复添加
+   * 判断当前查询到的用户在已添加的部门用户中是否存在，如果已经存在，则过滤掉，避免重复添加
    * @param userId
    * @returns {boolean}
    */
-  findTeacherIsExitAtSettringTeam(userId){
+  findTeacherIsExitAtGroup(userId){
     var isExit = false;
-    var _this = this;
-    if(isEmpty(_this.state.settingTeam)==false){
-      var teamUser = _this.state.settingTeam.teamUsers;
-      for(var i=0;i<teamUser.length;i++){
-        var teamUser = teamUser[i];
-        if(teamUser.userId == userId){
+    var addUserData = this.props.addedUserData;
+    if(isEmpty(addUserData)==false){
+      for(var i=0;i<addUserData.length;i++){
+        var addUser = addUserData[i];
+        if(addUser.userId == userId){
           isExit = true;
           break;
         }
