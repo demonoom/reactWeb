@@ -14,9 +14,6 @@ const data = [{
 }, {
     key: 'groupFile',
     option: <div><i className="iconfont menu_left_i">&#xe7e0;</i><span>群文件</span></div>,
-}, {
-    key: 'groupSetting',
-    option: <div><i className="iconfont menu_left_i">&#xe7e0;</i><span>组织架构</span></div>,
 }];
 
 const AntCloudMenu = React.createClass({

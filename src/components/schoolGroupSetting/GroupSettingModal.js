@@ -351,7 +351,7 @@ class GroupSettingModal extends React.Component {
                                 tags={true}
                                 style={{width: '100%'}}
                                 value={this.state.groupManager}
-                                placeholder="Please select"
+                                placeholder="请选择主管"
                                 defaultValue={[]}
                                 onChange={this.groupMemberHandleChange}
                             >
@@ -367,7 +367,7 @@ class GroupSettingModal extends React.Component {
                             <Select
                                 showSearch
                                 style={{width: 200}}
-                                placeholder="Select a person"
+                                placeholder="请选择群主"
                                 optionFilterProp="children"
                                 onChange={this.chatGroupManagerHandleChange}
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}

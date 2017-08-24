@@ -57,6 +57,7 @@ const NschoolGroupSettingComponents = React.createClass({
     componentWillReceiveProps(nextProps){
         console.log("NScholl will");
         structuresObjArray.splice(1,structuresObjArray.length);
+        subGroupMemberList.splice(0);
         var structureId = nextProps.structureId;
         var defaultPageNo = 1;
         this.listStructures(structureId);
@@ -202,6 +203,7 @@ const NschoolGroupSettingComponents = React.createClass({
                         var user = member.user;
                         subGroupMemberList.push({
                             key: member.id,
+                            userId:user.colUid,
                             userName: user.userName,
                             userPhone:user.phoneNumber
                         });
@@ -257,6 +259,7 @@ const NschoolGroupSettingComponents = React.createClass({
     breadCrumbClick(structureId){
         var defaultPageNo = 1;
         this.listStructures(structureId);
+        subGroupMemberList.splice(0);
         this.getStrcutureMembers(structureId,defaultPageNo);
         for(var i=0;i<structuresObjArray.length;i++){
             var structure = structuresObjArray[i];
@@ -426,7 +429,12 @@ const NschoolGroupSettingComponents = React.createClass({
                 </div>
                 <SchoolSettingModal isShow={this.state.schoolSettingModalIsShow} rootStructure={this.props.rootStructure} onCancel={this.initModalStatus}></SchoolSettingModal>
                 <AddSubGroupModal isShow={this.state.addSubGroupModalIsShow} parentGroup={this.state.parentGroup} callbackParent={this.listStructures} onCancel={this.initModalStatus}></AddSubGroupModal>
-                <AddGroupMemberModal isShow={this.state.addGroupMemberModalIsShow} parentGroup={this.state.parentGroup} callbackParent={this.listStructureAndMembers} onCancel={this.initModalStatus}></AddGroupMemberModal>
+                <AddGroupMemberModal isShow={this.state.addGroupMemberModalIsShow}
+                                     parentGroup={this.state.parentGroup}
+                                     callbackParent={this.listStructureAndMembers}
+                                     onCancel={this.initModalStatus}
+                                     addedUserData={this.state.subGroupMemberList}
+                ></AddGroupMemberModal>
                 <GroupSettingModal isShow={this.state.groupSettingModalIsShow} parentGroup={this.state.parentGroup} onCancel={this.initModalStatus}></GroupSettingModal>
             </div>
         );

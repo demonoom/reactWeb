@@ -41,24 +41,47 @@ const RoleComponents = React.createClass({
     },
 
     componentDidMount() {
-        var selectedMessage = this.props.selectedId;
-        var arr = selectedMessage.split(',');
-        this.setState({roleId: arr[0]});
-        this.setState({roleName: arr[1]});
-        var papaKey = this.props.papaKey;
-        var papaArr = papaKey.split('#');
-        this.setState({papaName:papaArr[1]});
+        try{
+            var selectedMessage = this.props.selectedId;
+            var arr = selectedMessage.split(',');
+            this.setState({roleId: arr[0]});
+            this.setState({roleName: arr[1]});
+            var papaKey = this.props.papaKey;
+            var papaArr = papaKey.split('#');
+            this.setState({papaName:papaArr[1]});
+        }catch(error){
+            console.log(error);
+        }
     },
 
     componentWillReceiveProps(nextProps) {
         var selectedMessage = nextProps.selectedId;
-        var arr = selectedMessage.split(',');
-        this.setState({roleId: arr[0]});
-        this.setState({roleName: arr[1]});
-        this.ajaxData(arr[0]);
-        var papaKey = nextProps.papaKey;
-        var papaArr = papaKey.split('#');
-        this.setState({papaName:papaArr[1]});
+{/*<<<<<<< HEAD*/}
+        {/*var arr = selectedMessage.split(',');*/}
+        {/*this.setState({roleId: arr[0]});*/}
+        {/*this.setState({roleName: arr[1]});*/}
+        {/*this.ajaxData(arr[0]);*/}
+        {/*var papaKey = nextProps.papaKey;*/}
+        {/*var papaArr = papaKey.split('#');*/}
+        {/*this.setState({papaName:papaArr[1]});*/}
+{/*=======*/}
+        console.log('哈哈');
+        console.log(nextProps.selectedId);
+        // console.log('哈哈哈');
+        // console.log(selectedMessage);
+        try{
+            var arr = selectedMessage.split(',');
+            this.setState({roleId: arr[0]});
+            this.setState({roleName: arr[1]});
+            this.ajaxData(arr[0]);
+            var papaKey = nextProps.papaKey;
+            var papaArr = [];
+            papaArr = papaKey.split('#');
+            this.setState({papaName:papaArr[1]});
+        }catch(error){
+            console.log(error);
+        }
+// >>>>>>> fed3ed52415749317bd64ce6785960ff21b5f31e
     },
 
     ajaxData(roleId){
@@ -218,7 +241,7 @@ const RoleComponents = React.createClass({
                         <span className="password_ts" style={{marginLeft: 8}}>
                             {hasSelected ? `选中 ${this.state.selectedRowKeys.length} 条记录` : ''}</span>
                     </div>
-                    <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.mesData}
+                    <Table className="framework_user" rowSelection={rowSelection} columns={columns} dataSource={this.state.mesData}
                            pagination={false}
                     />
                 </div>

@@ -258,9 +258,9 @@
 
 }
 .framework_r_height{
-    height:calc(100% - 100px)
+    height:calc(100% - 57px)
 }
-.framework_r_height .ant-table-content .ant-table-tbody{
+.framework_r_height .ant-table-content{
     overflow: auto;
 }
 .framework_tab .ant-tabs-nav-container-scrolling{
@@ -284,4 +284,44 @@
 .framework_r_height .ant-table-thead > tr > td, .framework_r_height .ant-table-body{
     color:#424242;
     font-size:14px;
+}
+.framework_user .ant-table-thead{
+    position: fixed;
+    z-index: 4;
+}
+.framework_user .ant-table-thead tr th:nth-child(2){
+    width:199px;
+
+}
+.framework_user .ant-table-thead tr th:nth-child(3){
+    width:361px;
+
+}
+.framework_user .ant-table-thead tr th:nth-child(4){
+    width:248px;
+
+}
+.framework_user .ant-table-tbody{
+    padding-top: 53px;
+    z-index: -1;
+}
+.framework_user .ant-table-tbody> tr:last-child > td{
+    border-bottom: none;
+}
+.framework_r_height .clearfix > div:first-child{
+    height: calc(100% - 43px);
+}
+.framework_m_l{
+    text-align: right;
+}
+.framework_m_r{
+    margin-left: 10px;
+}
+.c_from_icon {
+    color: #ff0000;
+    font-size: 16px;
+    margin-top: 0;
+    margin-right: 4px;
+    position: relative;
+    top: 4px;
 }

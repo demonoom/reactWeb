@@ -226,7 +226,7 @@ class SchoolGroupMenu extends React.Component {
 
     handleClickRole(e) {
         this.setState({
-            selectedKeys: e.key,
+            selectedRoleKeys: e.key,
         });
         // 子传父函数调用
         this.props.changeTab('role',true,e.key,e.keyPath[1]);
@@ -259,6 +259,22 @@ class SchoolGroupMenu extends React.Component {
     tabOnChange(key) {
         console.log(key);
         this.setState({activeTabKey:key,'isChanged':true});
+        if(key=="origin"){
+            //组织架构
+            if(isEmpty(this.state.selectedKeys)==false){
+                //向上传递点击过的菜单的key
+            }else{
+                //向上传递组织架构根节点的key(rootStructure.id)
+            }
+        }else{
+            //角色
+            if(isEmpty(this.state.selectedRoleKeys)==false){
+                //向上传递点击过的角色菜单的key
+            }else{
+                //向上传递角色组下的第一个角色的id
+            }
+        }
+        this.props.changeTab(key);
     }
 
     render() {
