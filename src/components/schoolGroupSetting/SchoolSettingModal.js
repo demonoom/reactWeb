@@ -27,24 +27,24 @@ class SchoolSettingModal extends React.Component {
 
   componentDidMount(){
     var _this = this;
-    var ownerName="";
-    var schoolName = "";
-    var chatGroupId ="";
-    var structureId="";
-    var rootStructure = _this.props.rootStructure;
-    if(isEmpty(rootStructure) == false){
-      schoolName = rootStructure.schoolName;
-      chatGroupId = rootStructure.chatGroupId;
-      structureId = rootStructure.id;
-      var chatGroup = rootStructure.chatGroup;
-      var owner = chatGroup.owner;
-      if(isEmpty(owner) == false){
-        ownerName = owner.userName;
-      }
-    }
-    this.getChatGroupById(chatGroupId);
-    var isShow = _this.props.isShow;
-    this.setState({isShow,schoolName,ownerName,structureId});
+    // var ownerName="";
+    // var schoolName = "";
+    // var chatGroupId ="";
+    // var structureId="";
+    // var rootStructure = _this.props.rootStructure;
+    // if(isEmpty(rootStructure) == false){
+    //   schoolName = rootStructure.schoolName;
+    //   chatGroupId = rootStructure.chatGroupId;
+    //   structureId = rootStructure.id;
+    //   var chatGroup = rootStructure.chatGroup;
+    //   var owner = chatGroup.owner;
+    //   if(isEmpty(owner) == false){
+    //     ownerName = owner.userName;
+    //   }
+    // }
+    // this.getChatGroupById(chatGroupId);
+    // var isShow = _this.props.isShow;
+    // this.setState({isShow,schoolName,ownerName,structureId});
   }
 
   componentWillReceiveProps(nextProps) {
@@ -63,8 +63,10 @@ class SchoolSettingModal extends React.Component {
         ownerName = owner.userName;
       }
     }
-    this.getChatGroupById(chatGroupId);
     var isShow = nextProps.isShow;
+    if(isShow==true && isEmpty(chatGroupId)==false){
+      this.getChatGroupById(chatGroupId);
+    }
     this.setState({isShow,schoolName,ownerName,structureId});
   }
 
@@ -132,6 +134,7 @@ class SchoolSettingModal extends React.Component {
    */
   closeGroupSettingModal(){
     this.setState({"isShow":false});
+    this.props.onCancel();
   }
 
   /**

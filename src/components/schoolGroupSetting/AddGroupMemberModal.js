@@ -58,6 +58,7 @@ class AddGroupMemberModal extends React.Component {
   addGroupMemberModalHandleCancel(){
     this.initPage();
     this.setState({"isShow":false});
+    this.props.onCancel();
   }
 
   /**

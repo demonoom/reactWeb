@@ -38,7 +38,8 @@ const RoleComponents = React.createClass({
             roleId: '',
             roleName: '',
             data: [],
-            deleteData:[]
+            deleteData:[],
+            mermberNum:0
         };
     },
 
@@ -207,7 +208,7 @@ const RoleComponents = React.createClass({
             <div className="schoolgroup">
                 <div className="schoolgroup_title">
                     <span>{this.state.roleName}</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <span>{this.state.mermberNum}</span><span>(人)</span>
+                    <span>(<span>{this.state.mermberNum}</span>人)</span>
                     <span>
                         <Button className="schoolgroup_btn_gray_6 schoolgroup_btn_left schoolgroup_btn"
                                 onClick={this.editRole}>编辑</Button>

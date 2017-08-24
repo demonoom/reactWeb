@@ -56,7 +56,9 @@ class GroupSettingModal extends React.Component {
             chatGroupId = parentGroup.chatGroupId;
         }
         this.getStrcutureMembers(parentId, 1);
-        this.getChatGroupById(chatGroupId);
+        if(isShow==true && isEmpty(chatGroupId)==false){
+            this.getChatGroupById(chatGroupId);
+        }
         this.setState({isShow, parentGroup, parentGroupName, parentId});
     }
 
@@ -190,6 +192,7 @@ class GroupSettingModal extends React.Component {
      */
     closeGroupSettingModal() {
         this.setState({"isShow": false});
+        this.props.onCancel();
     }
 
     /**

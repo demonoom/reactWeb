@@ -7,6 +7,7 @@ import {doWebService} from '../../WebServiceHelper';
 import AddRoleGroupModal from './AddRoleGroupModal';
 import AddRoleModal from './AddRoleModal';
 import EditRoleGroupModal from './EditRoleGroupModal';
+import {isEmpty} from '../../utils/utils';
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 const TabPane = Tabs.TabPane;
@@ -52,14 +53,21 @@ class SchoolGroupMenu extends React.Component {
 
     componentWillReceiveProps(nextProps){
         var currentItem = nextProps.currentItem;
-        this.setState({"activeTabKey":currentItem});
+        if(isEmpty(currentItem)==false){
+            this.setState({"activeTabKey":currentItem});
+        }
     }
 
     initMenuInfo(){
         var structureId = "-1";
         var operateUserId = this.state.loginUser.colUid;
-        // 渲染到DOM后 调用 获取组织根节点函数
-        this.getStructureById(operateUserId,structureId);
+        var rootStructure = this.props.rootStructure;
+        if(isEmpty(rootStructure)==false){
+            // 渲染到DOM后 调用 获取组织根节点函数
+            this.listStructures(operateUserId,rootStructure);
+        }else{
+            this.getStructureById(operateUserId,structureId);
+        }
         // 渲染到DOM后 调用 获取角色组函数
         this.getStructureRoleGroups(operateUserId,structureId);
     }
