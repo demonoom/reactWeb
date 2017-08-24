@@ -56,6 +56,7 @@ const NschoolGroupSettingComponents = React.createClass({
 
     componentWillReceiveProps(nextProps){
         console.log("NScholl will");
+        structuresObjArray.splice(1,structuresObjArray.length);
         var structureId = nextProps.structureId;
         var defaultPageNo = 1;
         this.listStructures(structureId);
@@ -97,7 +98,7 @@ const NschoolGroupSettingComponents = React.createClass({
                     });
                 }
                 _this.getStructureById(structureId);
-                _this.setState({subGroupList,"addSubGroupModalIsShow":false,"addGroupMemberModalIsShow":false,"groupSettingModalIsShow":false});
+                _this.setState({subGroupList});
             },
             onError: function (error) {
                 message.error(error);
