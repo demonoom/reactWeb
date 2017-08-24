@@ -18,7 +18,8 @@ const FlowSettingComponent = React.createClass({
             editFlowGroupModalVisible:false,
             flowCollpseArray:[],
             flowGroupName:'',   //流程分组的名称
-            flowGroupId:-1,
+            flowGroupId:"-1",
+            openCollapseKey:[],
         };
     },
 
@@ -34,6 +35,7 @@ const FlowSettingComponent = React.createClass({
      */
     getFlowGroup(){
         var collapsePanelArray = [];
+        var openCollapseKey =[];
         for(var i=0;i<3;i++){
             var flowObjArray=[];
             for(var j=0;j<2;j++){
@@ -59,9 +61,10 @@ const FlowSettingComponent = React.createClass({
             var collapsePanel = <Panel header={headerDiv} key={flowGroupId}>
                 {flowObjArray}
             </Panel>;
+            openCollapseKey.push(flowGroupId+"");
             collapsePanelArray.push(collapsePanel);
         }
-        this.setState({collapsePanelArray});
+        this.setState({collapsePanelArray,openCollapseKey});
     },
 
     /**
@@ -318,7 +321,7 @@ const FlowSettingComponent = React.createClass({
                 </div>
 
                 <div>
-                    <Collapse bordered={false} defaultActiveKey={['1']}>
+                    <Collapse bordered={false} defaultActiveKey={this.state.openCollapseKey} activeKey={this.state.openCollapseKey}>
                         {this.state.collapsePanelArray}
                     </Collapse>
                 </div>
