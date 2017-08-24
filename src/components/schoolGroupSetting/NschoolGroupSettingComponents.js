@@ -7,6 +7,7 @@ import SchoolSettingModal from './SchoolSettingModal';
 import AddSubGroupModal from './AddSubGroupModal';
 import AddGroupMemberModal from './AddGroupMemberModal';
 import GroupSettingModal from './GroupSettingModal';
+import ConfirmModal from '../ConfirmModal';
 
 const columns = [{
     title: '部门名称',
@@ -130,6 +131,8 @@ const NschoolGroupSettingComponents = React.createClass({
                     message.success("部门删除成功！");
                     _this.listStructures(_this.state.structureId);
                     _this.getStrcutureMembers(_this.state.structureId,_this.state.memberPageNo);
+                }else{
+                    message.error(ret.msg);
                 }
             },
             onError: function (error) {
@@ -337,6 +340,8 @@ const NschoolGroupSettingComponents = React.createClass({
                     subGroupMemberList.splice(0);
                     _this.listStructures(_this.state.structureId);
                     _this.getStrcutureMembers(_this.state.structureId,_this.state.memberPageNo);
+                    _this.setState({selectedRowKeys:[]});
+                    _this.closeConfirmModal();
                 }
             },
             onError: function (error) {
@@ -347,6 +352,14 @@ const NschoolGroupSettingComponents = React.createClass({
 
     initModalStatus(){
         this.setState({"groupSettingModalIsShow":false,"addGroupMemberModalIsShow":false,"addSubGroupModalIsShow":false,"schoolSettingModalIsShow":false});
+    },
+
+    showConfirmModal(){
+        this.refs.confirmModal.changeConfirmModalVisible(true);
+    },
+
+    closeConfirmModal() {
+        this.refs.confirmModal.changeConfirmModalVisible(false);
     },
 
     /**
@@ -409,7 +422,7 @@ const NschoolGroupSettingComponents = React.createClass({
                         <span className="schoolgroup_btn_left">
                             <Button
                                 type="primary"
-                                onClick={this.batchDeleteMemeber}
+                                onClick={this.showConfirmModal}
                                 disabled={!hasSelected} className="schoolgroup_btn_red schoolgroup_btn">
                                 批量删除
                             </Button>
@@ -427,6 +440,11 @@ const NschoolGroupSettingComponents = React.createClass({
                         <a onClick={this.loadMoreMember} className="schoolgroup_more_a">加载更多</a>
                     </div>
                 </div>
+                <ConfirmModal ref="confirmModal"
+                              title="确定要删除选中的部门员工?"
+                              onConfirmModalCancel={this.closeConfirmModal}
+                              onConfirmModalOK={this.batchDeleteMemeber}
+                ></ConfirmModal>
                 <SchoolSettingModal isShow={this.state.schoolSettingModalIsShow} rootStructure={this.props.rootStructure} onCancel={this.initModalStatus}></SchoolSettingModal>
                 <AddSubGroupModal isShow={this.state.addSubGroupModalIsShow} parentGroup={this.state.parentGroup} callbackParent={this.listStructures} onCancel={this.initModalStatus}></AddSubGroupModal>
                 <AddGroupMemberModal isShow={this.state.addGroupMemberModalIsShow}
