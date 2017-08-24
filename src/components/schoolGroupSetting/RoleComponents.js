@@ -9,15 +9,12 @@ const confirm = Modal.confirm;
 const columns = [{
     title: '姓名',
     dataIndex: 'name',
-    className:'antnest_name'
 }, {
     title: '部门',
     dataIndex: 'group',
-    className:'antnest_name'
 }, {
     title: '手机号',
     dataIndex: 'phone',
-    className:'antnest_name'
 }];
 
 const RoleComponents = React.createClass({
@@ -218,7 +215,7 @@ const RoleComponents = React.createClass({
                             {hasSelected ? `选中 ${this.state.selectedRowKeys.length} 条记录` : ''}</span>
                     </div>
                     <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.mesData}
-                           pagination={true}
+                           pagination={false}
                     />
                 </div>
 
