@@ -52,7 +52,6 @@ class SystemSettingComponent extends React.Component {
     }
 
     changeGroupTab(activeMenu, beActive, selectedKeys, papaKey){
-        alert(papaKey);
         this.props.changeTab(activeMenu, beActive, selectedKeys);
         this.setState({selectedId: selectedKeys});
         this.setState({papaKey: papaKey});

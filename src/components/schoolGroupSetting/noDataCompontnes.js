@@ -6,20 +6,6 @@ import EditRoleModal from './EditRoleModal'
 
 const confirm = Modal.confirm;
 
-const columns = [{
-    title: '姓名',
-    dataIndex: 'name',
-    className:'antnest_name'
-}, {
-    title: '部门',
-    dataIndex: 'group',
-    className:'antnest_name'
-}, {
-    title: '手机号',
-    dataIndex: 'phone',
-    className:'antnest_name'
-}];
-
 const RoleComponents = React.createClass({
 
     getInitialState() {
@@ -49,13 +35,13 @@ const RoleComponents = React.createClass({
         this.setState({roleName: arr[1]});
         var papaKey = this.props.papaKey;
         var papaArr = papaKey.split('#');
+        // console.log('你好你好你好');
+        // console.log(papaArr);
         this.setState({papaName:papaArr[1]});
     },
 
     componentWillReceiveProps(nextProps) {
         var selectedMessage = nextProps.selectedId;
-        console.log('哈哈哈');
-        console.log(selectedMessage);
         var arr = selectedMessage.split(',');
         this.setState({roleId: arr[0]});
         this.setState({roleName: arr[1]});
@@ -205,44 +191,7 @@ const RoleComponents = React.createClass({
         const hasSelected = this.state.selectedRowKeys.length > 0;
         return (
             <div className="schoolgroup">
-                <div className="schoolgroup_title">
-                    <span>{this.state.roleName}</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <span>{this.state.mermberNum}</span><span>(人)</span>
-                    <span>
-                        <Button className="schoolgroup_btn_gray_6 schoolgroup_btn_left schoolgroup_btn"
-                                onClick={this.editRole}>编辑</Button>
-                    </span>
-                </div>
-
-                <div className="framework_r_height">
-                    <div style={{marginBottom: 16}}>
-                         <span>
-                        <Button className="schoolgroup_btn_blue schoolgroup_btn_left schoolgroup_btn"
-                                onClick={this.addRoleMember}>添加成员</Button>
-                    </span>
-                        <Button disabled={!hasSelected}
-                                className="schoolgroup_btn_red schoolgroup_btn_left schoolgroup_btn"
-                                onClick={this.showConfirm}>批量删除</Button>
-                        <span className="password_ts" style={{marginLeft: 8}}>
-                            {hasSelected ? `选中 ${this.state.selectedRowKeys.length} 条记录` : ''}</span>
-                    </div>
-                    <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.mesData}
-                           pagination={false}
-                    />
-                </div>
-
-                <AddRoleMemberModal isShow={this.state.addRoleModalIsShow} parentRole={this.state.parentRole}
-                                    callbackParent={this.listStructures}
-                                    roleId={this.state.roleId}
-                                    addRoleComplete={this.addRoleComplete}
-                                    closeAddModel={this.closeAddModel}
-                ></AddRoleMemberModal>
-                <EditRoleModal isShow={this.state.editRoleModalIsShow} roleId={this.state.roleId}
-                               roleName={this.state.roleName}
-                               onEditComplete={this.editRoleComplete}
-                               closeModel={this.closeModel}
-                               papaName={this.state.papaName}
-                />
+                <img src="../images/noDataTipImg.png" alt=""/>
             </div>
         );
     }

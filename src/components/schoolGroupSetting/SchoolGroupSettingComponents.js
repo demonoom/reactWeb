@@ -4,6 +4,7 @@ import {doWebService} from '../../WebServiceHelper';
 import {isEmpty} from '../../utils/utils';
 import NschoolGroupSettingComponents from './NschoolGroupSettingComponents';
 import RoleComponents from './RoleComponents';
+import NoDataComponents from  './noDataCompontnes';
 
 const columns = [{
     title: '部门名称',
@@ -54,7 +55,7 @@ const SchoolGroupSettingComponents = React.createClass({
 
     componentWillReceiveProps(nextProps){
         var structureId = nextProps.structureId;
-        console.log(nextProps.selectedId);
+        // console.log(nextProps.selectedId);
         var defaultPageNo = 1;
         //组织架构根目录（学校）
         var rootStructure = nextProps.rootStructure;

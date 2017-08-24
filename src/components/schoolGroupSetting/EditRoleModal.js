@@ -91,6 +91,7 @@ class AddSubGroupModal extends React.Component {
             onResponse: function (ret) {
                 if(ret.msg=="调用成功" && ret.success==true){
                     message.success("删除角色成功");
+                    _this.props.onEditComplete(_this.state.roleId,_this.state.roleName);
                     _this.closeAddSubGroupModal();
                 }else {
                     message.error(ret.msg);
@@ -217,14 +218,14 @@ class AddSubGroupModal extends React.Component {
               角色名称：
             </Col>
             <Col span={18}>
-              <Input placeholder="请输入角色名称" value={this.state.roleName} onChange={this.subGroupNameChange}/>
+              <Input placeholder={this.state.roleName} value={this.state.roleName} onChange={this.subGroupNameChange}/>
             </Col>
           </Row>
           <Row className="ant_row">
             <Col span={6}>
               分组到：
             </Col>
-            <Select value={this.state.roleName} style={{ width: 270 }} onChange={this.parentRoleChange} disabled>
+            <Select value={this.state.papaName} style={{ width: 270 }} onChange={this.parentRoleChange} disabled>
 
             </Select>
           </Row>

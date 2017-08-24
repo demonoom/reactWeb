@@ -47,6 +47,7 @@ class AddSubGroupModal extends React.Component {
     this.setState({isShow,parentGroup,parentGroupName,parentId});
     this.setState({roleName:nextProps.roleName});
     this.setState({roleId:nextProps.delRoleGroupId});
+    this.setState({chooseName:nextProps.delRoleGroupName});
   }
 
   /**
@@ -217,7 +218,7 @@ class AddSubGroupModal extends React.Component {
               角色组名称：
             </Col>
             <Col span={18}>
-              <Input placeholder="请输入角色组名称" value={this.state.subGroupName} onChange={this.subGroupNameChange}/>
+              <Input placeholder={this.state.chooseName} value={this.state.subGroupName} onChange={this.subGroupNameChange}/>
             </Col>
           </Row>
         </div>
