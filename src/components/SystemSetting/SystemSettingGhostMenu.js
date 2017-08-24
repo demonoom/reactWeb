@@ -87,11 +87,11 @@ class SystemSettingGhostMenu extends React.Component {
                     <li className="multi">
                         <ul className="second">
                             <li onClick={ event => {
-                                this.changeMenu(event, 'schoolGroupSetting', true)
+                                this.changeMenu(event, 'origin', true)
                             }}>组织架构
                             </li>
                             <li onClick={ event => {
-                                this.changeMenu(event, 'systemRole', true)
+                                this.changeMenu(event, 'role', true)
                             }}>系统角色
                             </li>
                         </ul>

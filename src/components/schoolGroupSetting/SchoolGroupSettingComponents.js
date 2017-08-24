@@ -386,7 +386,7 @@ const SchoolGroupSettingComponents = React.createClass({
             default : // 组织构架
                 this.tabComponent = <NschoolGroupSettingComponents structureId={this.state.structureId} rootStructure={this.state.rootStructure}></NschoolGroupSettingComponents>;
                 break;
-            case 'systemRole':
+            case 'role':
                 // 角色
                 this.tabComponent = <RoleComponents selectedId={this.props.selectedId} onEditComplete={this.editRoleComplete}/>;
                 break;
