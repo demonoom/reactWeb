@@ -75,7 +75,6 @@ class SystemSettingComponent extends React.Component {
                 this.middleComponent = <SchoolGroupMenu ref="schoolGroupMenu" callbackParent={this.getSubGroup} changeTab={this.changeGroupTab} currentItem = {this.props.currentItem}/>;
                 this.tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId}
                                                                   selectedId={this.state.selectedId} rootStructure={this.state.rootStructure}
-                                                                  roleItem={this.props.roleItem}
                                                                   currentItem = {this.props.currentItem}
                                                                   onEditComplete={this.editRoleComplete}
                                                                   papaKey={this.state.papaKey}
