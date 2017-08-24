@@ -56,20 +56,24 @@ class AddSubGroupModal extends React.Component {
       "roleName":_this.state.subGroupName,
       "parentRoleId":_this.state.parentRoleId
     };
-    doWebService(JSON.stringify(param), {
-      onResponse: function (ret) {
-          if(ret.msg=="调用成功" && ret.success==true){
-              message.success("角色添加成功");
-              _this.closeAddSubGroupModal();
-              _this.props.addRoleGroupComplete();
-              _this.state.subGroupName = '';
-          }
-          // _this.props.callbackParent(_this.state.parentId);
-      },
-      onError: function (error) {
-        message.error(error);
-      }
-    });
+    if(param.roleName.length == 0) {
+        message.error('角色名称不能为空');
+    }else {
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if(ret.msg=="调用成功" && ret.success==true){
+                    message.success("角色添加成功");
+                    _this.closeAddSubGroupModal();
+                    _this.props.addRoleGroupComplete();
+                    _this.state.subGroupName = '';
+                }
+                // _this.props.callbackParent(_this.state.parentId);
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    }
   }
 
 

@@ -42,7 +42,7 @@ class AddSubGroupModal extends React.Component {
   }
 
   /**
-   * 添加下级部门
+   * 添加角色组
    */
   addRoleGroup(){
     let _this = this;
@@ -51,19 +51,24 @@ class AddSubGroupModal extends React.Component {
       "operateUserId": _this.state.loginUser.colUid,
       "roleName":_this.state.subGroupName,
     };
-      doWebService(JSON.stringify(param), {
-      onResponse: function (ret) {
-          if(ret.msg=="调用成功" && ret.success==true){
-              message.success("角色组添加成功");
-              _this.closeAddSubGroupModal();
-              _this.props.addRoleGroupComplete();
-              _this.state.subGroupName = '';
-          }
-      },
-      onError: function (error) {
-        message.error(error);
+      var length = param.roleName.length;
+      if(length == 0){
+        message.error('角色组名称不能为空');
+      }else {
+          doWebService(JSON.stringify(param), {
+              onResponse: function (ret) {
+                  if(ret.msg=="调用成功" && ret.success==true){
+                      message.success("角色组添加成功");
+                      _this.closeAddSubGroupModal();
+                      _this.props.addRoleGroupComplete();
+                      _this.state.subGroupName = '';
+                  }
+              },
+              onError: function (error) {
+                  message.error(error);
+              }
+          });
       }
-    });
   }
 
 

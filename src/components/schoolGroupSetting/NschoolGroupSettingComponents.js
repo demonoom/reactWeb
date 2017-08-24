@@ -71,6 +71,7 @@ const NschoolGroupSettingComponents = React.createClass({
      */
     listStructures(structureId){
         let _this = this;
+        this.getStructureById(structureId);
         var param = {
             "method": 'listStructures',
             "operateUserId": _this.state.loginUser.colUid,
@@ -97,7 +98,7 @@ const NschoolGroupSettingComponents = React.createClass({
                         });
                     });
                 }
-                _this.getStructureById(structureId);
+                // _this.getStructureById(structureId);
                 _this.setState({subGroupList});
             },
             onError: function (error) {

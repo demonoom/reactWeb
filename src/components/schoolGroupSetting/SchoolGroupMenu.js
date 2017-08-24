@@ -173,130 +173,11 @@ class SchoolGroupMenu extends React.Component {
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var part = ret.response;
-                // _this.props.callbackParent(part.id,part);
-                /*假数据*/
-                /*part = [
-                    {
-                        "children": [
-                            {
-                                "createTime": 1502704554000,
-                                "id": 15,
-                                "name": "负责人1",
-                                "parentId": 4,
-                                "schoolId": 9,
-                                "type": 0,
-                                "userId": 24827,
-                                "valid": 1
-                            },
-                            {
-                                "createTime": 1502704560000,
-                                "id": 16,
-                                "name": "负责人2",
-                                "parentId": 4,
-                                "schoolId": 9,
-                                "type": 0,
-                                "userId": 24827,
-                                "valid": 1
-                            },
-                            {
-                                "createTime": 1502704566000,
-                                "id": 17,
-                                "name": "负责人3",
-                                "parentId": 4,
-                                "schoolId": 9,
-                                "type": 0,
-                                "userId": 24827,
-                                "valid": 1
-                            }
-                        ],
-                        "createTime": 1502702735000,
-                        "id": 4,
-                        "name": "默认",
-                        "parentId": -1,
-                        "schoolId": 9,
-                        "type": 1,
-                        "userId": 24827,
-                        "valid": 1
-                    },
-                    {
-                        "children": [
-                            {
-                                "createTime": 1502704554000,
-                                "id": 15,
-                                "name": "年级组长",
-                                "parentId": 4,
-                                "schoolId": 9,
-                                "type": 0,
-                                "userId": 24827,
-                                "valid": 1
-                            },
-                            {
-                                "createTime": 1502704560000,
-                                "id": 16,
-                                "name": "数学组长",
-                                "parentId": 4,
-                                "schoolId": 9,
-                                "type": 0,
-                                "userId": 24827,
-                                "valid": 1
-                            },
-                            {
-                                "createTime": 1502704566000,
-                                "id": 17,
-                                "name": "语文组长",
-                                "parentId": 4,
-                                "schoolId": 9,
-                                "type": 0,
-                                "userId": 24827,
-                                "valid": 1
-                            }
-                        ],
-                        "createTime": 1503050095000,
-                        "id": 18,
-                        "name": "职务",
-                        "parentId": -1,
-                        "schoolId": 9,
-                        "type": 1,
-                        "userId": 23836,
-                        "valid": 1
-                    },
-                    {
-                        "children": [
-                            {
-                                "createTime": 1502704554000,
-                                "id": 15,
-                                "name": "财务",
-                                "parentId": 4,
-                                "schoolId": 9,
-                                "type": 0,
-                                "userId": 24827,
-                                "valid": 1
-                            },
-                            {
-                                "createTime": 1502704560000,
-                                "id": 16,
-                                "name": "出纳",
-                                "parentId": 4,
-                                "schoolId": 9,
-                                "type": 0,
-                                "userId": 24827,
-                                "valid": 1
-                            }
-                        ],
-                        "createTime": 1503051953000,
-                        "id": 19,
-                        "name": "岗位",
-                        "parentId": -1,
-                        "schoolId": 9,
-                        "type": 1,
-                        "userId": 23836,
-                        "valid": 1
-                    }
-                ]*/
                 // 调用 渲染角色函数
                 _this.buildMenuPart(part);
                 _this.setState({part});
-
+                // 设置一个默认ID
+                _this.setState({firstId:part[0].children[0].id});
             },
             onError: function (error) {
                 message.error(error);
@@ -324,7 +205,7 @@ class SchoolGroupMenu extends React.Component {
                     subRoleMenuItemArray.push(menuItem);
                 });
 
-                partMenu = <SubMenu className="schoolgroup_menu_c" key={part[i].id} title={<span><Icon type="caret-down"  className="framework_down_arrow" /><i className="iconfont schoolgroup_menu_i_blue">&#xe67b;</i><span>{part[i].name}</span><Icon type="edit" className="i_framework_right" onClick={this.editRole.bind(this,part[i].id,event)}/></span>}>
+                partMenu = <SubMenu className="schoolgroup_menu_c" key={part[i].id + '#' + part[i].name} title={<span><Icon type="caret-down"  className="framework_down_arrow" /><i className="iconfont schoolgroup_menu_i_blue">&#xe67b;</i><span>{part[i].name}</span><Icon type="edit" className="i_framework_right" onClick={this.editRole.bind(this,part[i].id,part[i].name,event)}/></span>}>
                     {subRoleMenuItemArray}
                 </SubMenu>;
                 // 这个地方的partMenu是一个对象，将对象放到数组里面，然后把数组setState，去DOM那里取数组就能够依次渲染出来
@@ -335,6 +216,7 @@ class SchoolGroupMenu extends React.Component {
     }
 
     handleClick(e) {
+
         this.setState({
             selectedKeys: e.key,
         });
@@ -347,7 +229,11 @@ class SchoolGroupMenu extends React.Component {
             selectedKeys: e.key,
         });
         // 子传父函数调用
-        this.props.changeTab('role',true,e.key);
+        this.props.changeTab('role',true,e.key,e.keyPath[1]);
+    }
+    openMenu(e) {
+        console.log(666);
+        console.log(e);
     }
 
     /**
@@ -363,10 +249,10 @@ class SchoolGroupMenu extends React.Component {
     }
 
     /*编辑角色组*/
-    editRole(id,event){
-        // console.log(id);
+    editRole(id,name,event){
         this.setState({"editRoleGroupIsShow":true});
         this.setState({"delRoleGroupId":id});
+        this.setState({"delRoleGroupName":name});
         event.stopPropagation();
         event.preventDefault();
     }
@@ -406,6 +292,7 @@ class SchoolGroupMenu extends React.Component {
                             defaultOpenKeys={['4']}
                             mode="inline"
                             className="framework_left_menu"
+                            onOpenChange={this.openMenu}
                         >
                             {this.state.arr}
                         </Menu>
@@ -425,6 +312,7 @@ class SchoolGroupMenu extends React.Component {
                 {/*引入编辑角色组模态框*/}
                 <EditRoleGroupModal isShow={this.state.editRoleGroupIsShow}
                                     delRoleGroupId={this.state.delRoleGroupId}
+                                    delRoleGroupName={this.state.delRoleGroupName}
                                     addRoleGroupComplete={this.addRoleGroupComplete}
                                     closeModel={this.closeModel}
                 />

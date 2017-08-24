@@ -166,7 +166,7 @@ class AddRoleMemberModal extends React.Component {
           var userAvatar = user.avatar;
 
           var isExitAtTargetOptions=_this.findTeacherIsExitAtTargetOptions(userId);
-          // var isExitInSettingTeam = _this.findTeacherIsExitAtSettringTeam(userId);
+          var isExitInSettingTeam = _this.findTeacherIsExitAtSettringTeam(userId);
           // && isExitInSettingTeam==false
           if(isExitAtTargetOptions==false){
             //不能添加自己
