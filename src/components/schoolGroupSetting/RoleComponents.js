@@ -52,24 +52,26 @@ const RoleComponents = React.createClass({
 
     componentWillReceiveProps(nextProps) {
         var selectedMessage = nextProps.selectedId;
-        console.log('哈哈哈');
-        console.log(selectedMessage);
+        console.log('哈哈');
+        console.log(nextProps.selectedId);
+        // console.log('哈哈哈');
+        // console.log(selectedMessage);
         var arr = selectedMessage.split(',');
         this.setState({roleId: arr[0]});
         this.setState({roleName: arr[1]});
-        this.ajaxData()
+        this.ajaxData(arr[0]);
         var papaKey = nextProps.papaKey;
         var papaArr = papaKey.split('#');
         this.setState({papaName:papaArr[1]});
     },
 
-    ajaxData(){
+    ajaxData(roleId){
         let _this = this;
         var param = {
             "method": 'getUsersByStructrureRoleId',
             "operateUid": this.state.loginUser.colUid,
             "pageNo": -1,
-            "roleId": this.state.roleId
+            "roleId": roleId
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -97,7 +99,7 @@ const RoleComponents = React.createClass({
             }
             mesData.push(person);
         });
-        _this.setState({mesData});
+        _this.setState({mesData,selectedRowKeys:[]});
     },
 
     /**

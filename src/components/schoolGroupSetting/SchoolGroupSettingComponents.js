@@ -1,10 +1,6 @@
 import React, { PropTypes } from 'react';
-import { Table,Icon,Button,Breadcrumb,message} from 'antd';
-import {doWebService} from '../../WebServiceHelper';
-import {isEmpty} from '../../utils/utils';
 import NschoolGroupSettingComponents from './NschoolGroupSettingComponents';
 import RoleComponents from './RoleComponents';
-import NoDataComponents from  './noDataCompontnes';
 
 const SchoolGroupSettingComponents = React.createClass({
 
