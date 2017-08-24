@@ -232,7 +232,6 @@ class SchoolGroupMenu extends React.Component {
         this.props.changeTab('role',true,e.key,e.keyPath[1]);
     }
     openMenu(e) {
-        console.log(666);
         console.log(e);
     }
 
