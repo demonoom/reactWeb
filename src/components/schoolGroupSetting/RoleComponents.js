@@ -54,7 +54,6 @@ const RoleComponents = React.createClass({
         var arr = selectedMessage.split(',');
         this.setState({roleId: arr[0]});
         this.setState({roleName: arr[1]});
-        // var data = [];
         this.ajaxData()
     },
 
@@ -78,6 +77,7 @@ const RoleComponents = React.createClass({
         });
     },
     drawTable(data) {
+        console.log(data);
         var _this = this;
         _this.setState({deleteData:data});
         var mesData = [];
@@ -86,7 +86,7 @@ const RoleComponents = React.createClass({
                 key: v.colUid,
                 name: v.userName,
                 group: v.schoolName,
-                phone: `London, Park Lane no.`,
+                phone: v.phoneNumber,
             }
             mesData.push(person);
         });
@@ -198,7 +198,7 @@ const RoleComponents = React.createClass({
             <div className="schoolgroup">
                 <div className="schoolgroup_title">
                     <span>{this.state.roleName}</span>
-                    {/*<span>(1人)</span>*/}
+                    {/*<span>{this.state.mesData.length}</span>*/}
                     <span>
                         <Button className="schoolgroup_btn_gray_6 schoolgroup_btn_left schoolgroup_btn"
                                 onClick={this.editRole}>编辑</Button>

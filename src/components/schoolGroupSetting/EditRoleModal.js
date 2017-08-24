@@ -66,8 +66,8 @@ class AddSubGroupModal extends React.Component {
               message.success("更新角色成功");
               _this.props.onEditComplete(_this.state.roleId,_this.state.roleName);
               _this.closeAddSubGroupModal();
+              _this.roleName = '';
           }
-          // _this.props.callbackParent(_this.state.parentId);
       },
       onError: function (error) {
         message.error(error);
@@ -90,8 +90,10 @@ class AddSubGroupModal extends React.Component {
                 if(ret.msg=="调用成功" && ret.success==true){
                     message.success("删除角色成功");
                     _this.closeAddSubGroupModal();
+                }else {
+                    message.error(ret.msg);
+                    _this.closeAddSubGroupModal();
                 }
-                // _this.props.callbackParent(_this.state.parentId);
             },
             onError: function (error) {
                 message.error(error);
