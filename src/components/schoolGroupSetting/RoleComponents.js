@@ -47,6 +47,10 @@ const RoleComponents = React.createClass({
         var arr = selectedMessage.split(',');
         this.setState({roleId: arr[0]});
         this.setState({roleName: arr[1]});
+        var papaKey = this.props.papaKey;
+        var papaArr = papaKey.split('#');
+        console.log(papaArr[1]);
+        this.setState({papaName:papaArr[1]});
     },
 
     componentWillReceiveProps(nextProps) {
@@ -77,9 +81,10 @@ const RoleComponents = React.createClass({
         });
     },
     drawTable(data) {
-        console.log(data);
+        var mermberNum = data.length;
         var _this = this;
         _this.setState({deleteData:data});
+        _this.setState({mermberNum:mermberNum});
         var mesData = [];
         data.forEach(function (v, i) {
             var person = {
@@ -197,8 +202,8 @@ const RoleComponents = React.createClass({
         return (
             <div className="schoolgroup">
                 <div className="schoolgroup_title">
-                    <span>{this.state.roleName}</span>
-                    {/*<span>{this.state.mesData.length}</span>*/}
+                    <span>{this.state.roleName}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span>{this.state.mermberNum}</span><span>(人)</span>
                     <span>
                         <Button className="schoolgroup_btn_gray_6 schoolgroup_btn_left schoolgroup_btn"
                                 onClick={this.editRole}>编辑</Button>
@@ -232,6 +237,7 @@ const RoleComponents = React.createClass({
                                roleName={this.state.roleName}
                                onEditComplete={this.editRoleComplete}
                                closeModel={this.closeModel}
+                               papaName={this.state.papaName}
                 />
             </div>
         );

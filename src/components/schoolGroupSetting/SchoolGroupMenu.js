@@ -320,7 +320,7 @@ class SchoolGroupMenu extends React.Component {
                     subRoleMenuItemArray.push(menuItem);
                 });
 
-                partMenu = <SubMenu className="schoolgroup_menu_c" key={part[i].id} title={<span><Icon type="caret-down"  className="framework_down_arrow" /><i className="iconfont schoolgroup_menu_i_blue">&#xe67b;</i><span>{part[i].name}</span><Icon type="edit" className="i_framework_right" onClick={this.editRole.bind(this,part[i].id,event)}/></span>}>
+                partMenu = <SubMenu className="schoolgroup_menu_c" key={part[i].id + '#' + part[i].name} title={<span><Icon type="caret-down"  className="framework_down_arrow" /><i className="iconfont schoolgroup_menu_i_blue">&#xe67b;</i><span>{part[i].name}</span><Icon type="edit" className="i_framework_right" onClick={this.editRole.bind(this,part[i].id,event)}/></span>}>
                     {subRoleMenuItemArray}
                 </SubMenu>;
                 // 这个地方的partMenu是一个对象，将对象放到数组里面，然后把数组setState，去DOM那里取数组就能够依次渲染出来
@@ -339,11 +339,12 @@ class SchoolGroupMenu extends React.Component {
     }
 
     handleClickRole(e) {
+        console.log(e.keyPath[1]);
         this.setState({
             selectedKeys: e.key,
         });
         // 子传父函数调用
-        this.props.changeTab('role',true,e.key);
+        this.props.changeTab('role',true,e.key,e.keyPath[1]);
     }
 
     /**
@@ -360,7 +361,6 @@ class SchoolGroupMenu extends React.Component {
 
     /*编辑角色组*/
     editRole(id,event){
-        // console.log(id);
         this.setState({"editRoleGroupIsShow":true});
         this.setState({"delRoleGroupId":id});
         event.stopPropagation();

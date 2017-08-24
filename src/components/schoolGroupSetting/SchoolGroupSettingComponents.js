@@ -388,7 +388,7 @@ const SchoolGroupSettingComponents = React.createClass({
                 break;
             case 'systemRole':
                 // 角色
-                this.tabComponent = <RoleComponents selectedId={this.props.selectedId} onEditComplete={this.editRoleComplete}/>;
+                this.tabComponent = <RoleComponents selectedId={this.props.selectedId} onEditComplete={this.editRoleComplete} papaKey={this.props.papaKey}/>;
                 break;
         }
         return (

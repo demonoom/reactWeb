@@ -47,6 +47,8 @@ class AddSubGroupModal extends React.Component {
     this.setState({isShow,parentGroup,parentGroupName,parentId});
     this.setState({roleName:nextProps.roleName});
     this.setState({roleId:nextProps.roleId});
+    this.setState({papaName:nextProps.papaName});
+
   }
 
   /**

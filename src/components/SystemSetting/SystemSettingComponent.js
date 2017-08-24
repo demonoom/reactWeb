@@ -51,10 +51,11 @@ class SystemSettingComponent extends React.Component {
         this.setState({structureId,rootStructure:structure});
     }
 
-    changeGroupTab(activeMenu, beActive, selectedKeys){
-        // alert(selectedKeys);
+    changeGroupTab(activeMenu, beActive, selectedKeys, papaKey){
+        alert(papaKey);
         this.props.changeTab(activeMenu, beActive, selectedKeys);
         this.setState({selectedId: selectedKeys});
+        this.setState({papaKey: papaKey});
     }
 
     editRoleComplete(roleId,roleName){
@@ -77,6 +78,7 @@ class SystemSettingComponent extends React.Component {
                                                                   roleItem={this.props.roleItem}
                                                                   currentItem = {this.props.currentItem}
                                                                   onEditComplete={this.editRoleComplete}
+                                                                  papaKey={this.state.papaKey}
                 ></SchoolGroupSettingComponents>;
                 break;
             /*case 'systemRole':
