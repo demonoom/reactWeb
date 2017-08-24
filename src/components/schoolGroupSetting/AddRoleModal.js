@@ -170,20 +170,22 @@ class AddSubGroupModal extends React.Component {
       >
         <div className="modal_register_main">
           <Row className="ant_row">
-            <Col span={6}>
-              角色名称：
+            <Col span={6} className="framework_m_l">
+                <span className="c_from_icon">*</span>角色名称：
             </Col>
-            <Col span={18}>
+            <Col span={16} className="framework_m_r">
               <Input placeholder="请输入角色名称" value={this.state.subGroupName} onChange={this.subGroupNameChange}/>
             </Col>
           </Row>
           <Row className="ant_row">
-            <Col span={6}>
-              分组到：
+            <Col span={6} className="framework_m_l">
+                <span className="c_from_icon">*</span>分组到：
             </Col>
-            <Select defaultValue="请选择分组" style={{ width: 270 }} onChange={this.parentRoleChange}>
-                {this.state.arr}
-            </Select>
+              <Col span={16}  className="framework_m_r">
+                  <Select defaultValue="请选择分组" style={{ width: 245 }} onChange={this.parentRoleChange}>
+                    {this.state.arr}
+                </Select>
+              </Col>
           </Row>
         </div>
       </Modal>

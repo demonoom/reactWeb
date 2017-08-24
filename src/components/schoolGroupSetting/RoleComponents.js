@@ -214,7 +214,7 @@ const RoleComponents = React.createClass({
                         <span className="password_ts" style={{marginLeft: 8}}>
                             {hasSelected ? `选中 ${this.state.selectedRowKeys.length} 条记录` : ''}</span>
                     </div>
-                    <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.mesData}
+                    <Table className="framework_user" rowSelection={rowSelection} columns={columns} dataSource={this.state.mesData}
                            pagination={false}
                     />
                 </div>
