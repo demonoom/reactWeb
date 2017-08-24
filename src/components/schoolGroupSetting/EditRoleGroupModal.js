@@ -20,7 +20,9 @@ class AddSubGroupModal extends React.Component {
     };
     this.closeAddSubGroupModal = this.closeAddSubGroupModal.bind(this);
     this.handleOk = this.handleOk.bind(this);
+    this.handDel = this.handDel.bind(this);
     this.addSubGroup = this.addSubGroup.bind(this);
+    this.deleteRole = this.deleteRole.bind(this);
     this.subGroupNameChange = this.subGroupNameChange.bind(this);
     this.getStructureRoleGroups = this.getStructureRoleGroups.bind(this);
     this.parentRoleChange = this.parentRoleChange.bind(this);
@@ -43,23 +45,25 @@ class AddSubGroupModal extends React.Component {
       parentId = parentGroup.id;
     }
     this.setState({isShow,parentGroup,parentGroupName,parentId});
+    this.setState({roleName:nextProps.roleName});
+    this.setState({roleId:nextProps.delRoleGroupId});
   }
 
   /**
-   * 添加角色
+   * 更新角色名字
    */
   addSubGroup(){
     let _this = this;
     var param = {
-      "method": 'createStructrureRole',
+      "method": 'updateStructrureRoleName',
       "operateUserId": _this.state.loginUser.colUid,
       "roleName":_this.state.subGroupName,
-      "parentRoleId":_this.state.parentRoleId
+      "roleId":_this.state.roleId
     };
-    doWebService(JSON.stringify(param), {
+        doWebService(JSON.stringify(param), {
       onResponse: function (ret) {
           if(ret.msg=="调用成功" && ret.success==true){
-              message.success("角色添加成功");
+              message.success("更新角色组成功");
               _this.closeAddSubGroupModal();
               _this.props.addRoleGroupComplete();
           }
@@ -71,6 +75,31 @@ class AddSubGroupModal extends React.Component {
     });
   }
 
+    /**
+     * 删除角色
+     */
+    deleteRole(){
+        let _this = this;
+        var param = {
+            "method": 'deleteStructureRole',
+            "operateUserId": _this.state.loginUser.colUid,
+            "roleId":_this.state.roleId
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                console.log(ret);
+                if(ret.msg=="调用成功" && ret.success==true){
+                    message.success("删除角色组成功");
+                    _this.closeAddSubGroupModal();
+                    _this.props.addRoleGroupComplete();
+                }
+                // _this.props.callbackParent(_this.state.parentId);
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    }
 
   /**
    * 关闭学校设置窗口
@@ -85,6 +114,13 @@ class AddSubGroupModal extends React.Component {
    */
   handleOk(){
     this.addSubGroup();
+  }
+
+  /**
+  * 删除操作
+   */
+  handDel() {
+      this.deleteRole();
   }
 
   subGroupNameChange(e){
@@ -124,6 +160,7 @@ class AddSubGroupModal extends React.Component {
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var part = ret.response;
+                // _this.props.callbackParent(part.id,part);
                 // 调用 渲染角色函数
                 _this.buildMenuPart(part);
                 _this.setState({part});
@@ -157,32 +194,28 @@ class AddSubGroupModal extends React.Component {
   render() {
     return (
       <Modal
-        title="添加角色"
+        title="编辑角色组"
         visible={this.state.isShow}
         width={440}
         transitionName=""  //禁用modal的动画效果
         closable={true}     //设置显示右上角的关闭按钮（但是需要调整颜色，否则白色会无法显示）
         maskClosable={false} //设置不允许点击蒙层关闭
         onCancel={this.closeAddSubGroupModal}
-        onOk={this.handleOk}
         className="schoolgroup_modal"
+         footer={[
+             <button type="primary" className="ant-btn-primary ant-btn" onClick={this.handleOk}>确定</button>,
+             <button type="danger" className="ant-btn login-form-button"  onClick={this.handDel}>删除</button>,
+             <button type="ghost" className="ant-btn ant-btn-ghost login-form-button" onClick={this.closeAddSubGroupModal}>取消</button>
+         ]}
       >
         <div className="modal_register_main">
           <Row className="ant_row">
             <Col span={6}>
-              角色名称：
+              角色组名称：
             </Col>
             <Col span={18}>
-              <Input placeholder="请输入角色名称" value={this.state.subGroupName} onChange={this.subGroupNameChange}/>
+              <Input placeholder={this.state.roleName} value={this.state.subGroupName} onChange={this.subGroupNameChange}/>
             </Col>
-          </Row>
-          <Row className="ant_row">
-            <Col span={6}>
-              分组到：
-            </Col>
-            <Select defaultValue="请选择分组" style={{ width: 270 }} onChange={this.parentRoleChange}>
-                {this.state.arr}
-            </Select>
           </Row>
         </div>
       </Modal>

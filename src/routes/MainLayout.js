@@ -209,8 +209,6 @@ const MainLayout = React.createClass({
         this.changeGhostMenuVisible({visible: false, beActive: beActive});
         this.setState({activeMiddleMenu: activeMenu});
         this.setState({selectedKeys: selectedKeys});
-        console.log('哈哈');
-        console.log(selectedKeys);
     },
 
     systemSettingTab(activeMenu, beActive){
@@ -429,19 +427,12 @@ const MainLayout = React.createClass({
 
             case 'systemSetting':
                 //系统设置
-                // middleComponent = <SchoolGroupMenu callbackParent={this.getSubGroup}/>;
                 middleComponent =
                     <SystemSettingGhostMenu visible={this.state.systemSettingGhostMenuVisible}
                                          toggleGhostMenu={ this.changeSystemGhostMenuVisible }
                                          changeTabEvent={this.systemSettingTab}
                     />;
-                //tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId} rootStructure={this.state.rootStructure}></SchoolGroupSettingComponents>;
                 tabComponent = <SystemSettingComponent  currentItem={this.state.activeSystemSettingMiddleMenu}  roleItem={this.state.activeMiddleMenu} changeTab={this.teachSpaceTab}></SystemSettingComponent>;
-
-            // case 'schoolGroupSetting':
-            //     //组织架构
-            //     middleComponent = <SchoolGroupMenu callbackParent={this.getSubGroup} changeTab={this.teachSpaceTab}/>;
-            //     tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId} rootStructure={this.state.rootStructure} roleItem={this.state.activeMiddleMenu}></SchoolGroupSettingComponents>;
 
                 break;
         }
