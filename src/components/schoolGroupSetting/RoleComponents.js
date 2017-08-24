@@ -9,15 +9,12 @@ const confirm = Modal.confirm;
 const columns = [{
     title: '姓名',
     dataIndex: 'name',
-    className:'antnest_name'
 }, {
     title: '部门',
     dataIndex: 'group',
-    className:'antnest_name'
 }, {
     title: '手机号',
     dataIndex: 'phone',
-    className:'antnest_name'
 }];
 
 const RoleComponents = React.createClass({
