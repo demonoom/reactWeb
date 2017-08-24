@@ -66,6 +66,7 @@ class AddSubGroupModal extends React.Component {
               message.success("更新角色组成功");
               _this.closeAddSubGroupModal();
               _this.props.addRoleGroupComplete();
+              _this.state.subGroupName = '';
           }
           // _this.props.callbackParent(_this.state.parentId);
       },
@@ -92,8 +93,10 @@ class AddSubGroupModal extends React.Component {
                     message.success("删除角色组成功");
                     _this.closeAddSubGroupModal();
                     _this.props.addRoleGroupComplete();
+                }else {
+                    message.error(ret.msg);
+                    _this.closeAddSubGroupModal();
                 }
-                // _this.props.callbackParent(_this.state.parentId);
             },
             onError: function (error) {
                 message.error(error);
@@ -214,7 +217,7 @@ class AddSubGroupModal extends React.Component {
               角色组名称：
             </Col>
             <Col span={18}>
-              <Input placeholder={this.state.roleName} value={this.state.subGroupName} onChange={this.subGroupNameChange}/>
+              <Input placeholder="请输入角色组名称" value={this.state.subGroupName} onChange={this.subGroupNameChange}/>
             </Col>
           </Row>
         </div>

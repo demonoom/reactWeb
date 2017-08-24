@@ -57,6 +57,7 @@ class AddSubGroupModal extends React.Component {
               message.success("角色组添加成功");
               _this.closeAddSubGroupModal();
               _this.props.addRoleGroupComplete();
+              _this.state.subGroupName = '';
           }
       },
       onError: function (error) {
