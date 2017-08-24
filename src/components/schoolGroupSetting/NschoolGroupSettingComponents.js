@@ -52,7 +52,7 @@ const NschoolGroupSettingComponents = React.createClass({
 
     componentDidMount(){
         console.log("NScholl didMount");
-        structuresObjArray.splice(0);
+        structuresObjArray.splice(1,structuresObjArray.length);
     },
 
     componentWillReceiveProps(nextProps){

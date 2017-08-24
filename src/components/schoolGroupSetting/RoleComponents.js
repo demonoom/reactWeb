@@ -227,9 +227,9 @@ const RoleComponents = React.createClass({
                 </div>
 
                 <div className="framework_r_height">
-                    <div style={{marginBottom: 16}}>
+                    <div className="framework_btn_bg">
                          <span>
-                        <Button className="schoolgroup_btn_blue schoolgroup_btn_left schoolgroup_btn"
+                        <Button className="schoolgroup_btn_blue schoolgroup_btn"
                                 onClick={this.addRoleMember}>添加成员</Button>
                     </span>
                         <Button disabled={!hasSelected}
