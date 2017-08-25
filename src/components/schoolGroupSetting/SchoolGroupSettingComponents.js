@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import NschoolGroupSettingComponents from './NschoolGroupSettingComponents';
 import RoleComponents from './RoleComponents';
+import {isEmpty} from '../../utils/utils';
 
 const SchoolGroupSettingComponents = React.createClass({
 
@@ -22,6 +23,21 @@ const SchoolGroupSettingComponents = React.createClass({
         this.props.onEditComplete(roleId,roleName);
     },
 
+    changeRightComponent(selectedKey,selectedRoleKeyPath){
+        var selectedId = selectedKey;
+        if(isEmpty(selectedId)){
+            selectedId = this.props.selectedId;
+        }
+        var papaKey = selectedRoleKeyPath;
+        if(isEmpty(papaKey)){
+            papaKey = this.props.papaKey;
+        }
+        this.setState({selectedId,papaKey});
+        // if(isEmpty(this.refs.roleComponents)==false){
+        //     this.refs.roleComponents.loadDataWhenGhostMenuClick(selectedId);
+        // }
+    },
+
     /**
      * 渲染页面
      * @returns {XML}
@@ -33,7 +49,7 @@ const SchoolGroupSettingComponents = React.createClass({
                 break;
             case 'role':
                 // 角色
-                this.tabComponent = <RoleComponents selectedId={this.props.selectedId} onEditComplete={this.editRoleComplete} papaKey={this.props.papaKey} firstId={this.props.firstId}/>;
+                this.tabComponent = <RoleComponents selectedId={this.state.selectedId} onEditComplete={this.editRoleComplete} papaKey={this.state.papaKey} firstId={this.props.firstId}/>;
                 break;
         }
         return (

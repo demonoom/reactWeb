@@ -31,7 +31,10 @@ class AddSubGroupModal extends React.Component {
   componentDidMount(){
     var _this = this;
     var isShow = _this.props.isShow;
-    this.setState({isShow});
+      _this.setState({isShow});
+      _this.setState({roleName:_this.props.roleName});
+      _this.setState({roleId:_this.props.roleId});
+      _this.setState({papaName:_this.props.papaName});
     _this.getStructureRoleGroups();
   }
 
