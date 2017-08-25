@@ -24,12 +24,10 @@ const memberColumns = [{
     dataIndex: 'userName',
     key: 'userName',
     width:'120px',
-    className:'antnest_name'
 },{
     title: '手机号',
     dataIndex: 'userPhone',
     key: 'userPhone',
-    className:'antnest_name'
 }
 ];
 var structuresObjArray=[];
@@ -89,8 +87,8 @@ const NschoolGroupSettingComponents = React.createClass({
                             <span className="antnest_name affix_bottom_tc">{subGroup.name}</span>
                             <span className="schoolgroup_people">({subGroup.memberCount}人                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                )</span>
                         </div>;
-                        var opt = <div>
-                            <Button className="shoolgroup_btn_sublevel" onClick={_this.getSubGroupForButton.bind(_this,subGroup.id)}><i className="iconfont schoolgroup_i_sublevel">&#xe7ee;</i></Button>
+                        var opt = <div className="knowledge_ri">
+                            {/*<Button className="shoolgroup_btn_sublevel" onClick={_this.getSubGroupForButton.bind(_this,subGroup.id)}><i className="iconfont schoolgroup_i_sublevel">&#xe7ee;</i></Button>*/}
                             <Button className="sg_btn_del" icon="delete" onClick={_this.removeGroup.bind(_this,subGroup.id)}></Button>
                         </div>
                         subGroupList.push({

@@ -457,7 +457,7 @@ const AntCloudTableComponents = React.createClass({
                 var shareButton=<Button type="button" value={key} text={key} onClick={cloudTable.showShareModal.bind(cloudTable,e)}
                                         icon="share-alt"></Button>;
                 var moveButton=<Button type="button" value={key} text={key} onClick={cloudTable.showMoveFileModal.bind(cloudTable,e)}
-                                       icon="export"></Button>;
+                                       icon="swap"></Button>;
                 var getFileType = cloudTable.state.getFileType;
                 //我的蚁盘是私有的，用户具备所有的操作权限
                 if(getFileType!="myFile"){
