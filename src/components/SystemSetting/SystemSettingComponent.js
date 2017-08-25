@@ -78,11 +78,11 @@ class SystemSettingComponent extends React.Component {
         // this.setState({"selectedId":selectedKey});
         if(isEmpty(this.refs.schoolGroupSettingComponents)==false){
             if(currentItem=="role"){
-                this.refs.schoolGroupSettingComponents.changeRightComponent(selectedRoleMenuId,selectedRoleKeyPath);
+                this.refs.schoolGroupSettingComponents.changeRightComponent(selectedRoleMenuId,selectedRoleKeyPath,currentItem);
             }else{
-                //this.setState({selectedStructureId: selectedKeys});
+                // this.setState({structureId:selectedRoleMenuId,rootStructure:selectedRoleKeyPath});
+                this.refs.schoolGroupSettingComponents.changeRightComponent(selectedRoleMenuId,selectedRoleKeyPath,currentItem);
             }
-
         }
     }
 

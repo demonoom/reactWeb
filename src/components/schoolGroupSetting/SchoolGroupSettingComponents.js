@@ -19,20 +19,36 @@ const SchoolGroupSettingComponents = React.createClass({
         };
     },
 
+    componentDidMount(){
+        var requestId;
+        var requestObj;
+        if(isEmpty(this.props.structureId)==false){
+            requestId = this.props.structureId;
+        }else{
+            requestId = this.state.selectedId;
+        }
+        if(isEmpty(this.props.rootStructure)==false){
+            requestObj = this.props.rootStructure;
+        }else{
+            requestObj = this.state.papaKey;
+        }
+        this.setState({requestId,requestObj});
+    },
+
     editRoleComplete(roleId,roleName){
         this.props.onEditComplete(roleId,roleName);
     },
 
-    changeRightComponent(selectedKey,selectedRoleKeyPath){
-        var selectedId = selectedKey;
-        if(isEmpty(selectedId)){
-            selectedId = this.props.selectedId;
+    changeRightComponent(selectedKey,selectedRoleKeyPath,currentItem){
+        var requestId = selectedKey;
+        if(isEmpty(requestId)){
+            requestId = this.props.selectedId;
         }
-        var papaKey = selectedRoleKeyPath;
-        if(isEmpty(papaKey)){
-            papaKey = this.props.papaKey;
+        var requestObj = selectedRoleKeyPath;
+        if(isEmpty(requestObj)){
+            requestObj = this.props.papaKey;
         }
-        this.setState({selectedId,papaKey});
+        this.setState({requestId,requestObj});
         // if(isEmpty(this.refs.roleComponents)==false){
         //     this.refs.roleComponents.loadDataWhenGhostMenuClick(selectedId);
         // }
@@ -45,11 +61,11 @@ const SchoolGroupSettingComponents = React.createClass({
     render() {
         switch (this.props.currentItem) {
             default : // 组织构架
-                this.tabComponent = <NschoolGroupSettingComponents structureId={this.props.structureId} rootStructure={this.props.rootStructure}></NschoolGroupSettingComponents>;
+                this.tabComponent = <NschoolGroupSettingComponents structureId={this.state.requestId} rootStructure={this.state.requestObj}></NschoolGroupSettingComponents>;
                 break;
             case 'role':
                 // 角色
-                this.tabComponent = <RoleComponents selectedId={this.state.selectedId} onEditComplete={this.editRoleComplete} papaKey={this.state.papaKey} firstId={this.props.firstId}/>;
+                this.tabComponent = <RoleComponents selectedId={this.state.requestId} onEditComplete={this.editRoleComplete} papaKey={this.state.requestObj} firstId={this.props.firstId}/>;
                 break;
         }
         return (

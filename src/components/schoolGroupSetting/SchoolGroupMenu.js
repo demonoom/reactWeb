@@ -56,8 +56,21 @@ class SchoolGroupMenu extends React.Component {
         if(isEmpty(currentItem)==false){
             this.setState({"activeTabKey":currentItem});
             // 子传父函数调用,调用父组件的设置右侧组件的方法
-            var requestId = "";
-            this.props.onGhostMenuClick(currentItem,this.state.selectedRoleKeys,this.state.selectedRoleKeyPath);
+            if(currentItem=="role"){
+                this.props.onGhostMenuClick(currentItem,this.state.selectedRoleKeys,this.state.selectedRoleKeyPath);
+            }else{
+                var requestId = "";
+                var requestObj=null;
+                if(isEmpty(this.state.selectedKeys)){
+                    requestId = this.props.rootStructure.id;
+                    requestObj = this.props.rootStructure;
+                }else{
+                    requestId = this.state.selectedKeys;
+                    requestObj = this.state.structure;
+                }
+                this.props.onGhostMenuClick(currentItem,requestId,requestObj);
+            }
+
         }
     }
 
@@ -228,8 +241,9 @@ class SchoolGroupMenu extends React.Component {
         this.setState({
             selectedKeys: e.key,
         });
-        this.props.callbackParent(e.key,this.state.structure);
-        this.props.changeTab('origin');
+        // this.props.callbackParent(e.key,this.state.structure);
+        // this.props.changeTab('origin');
+        this.props.onGhostMenuClick('origin',e.key,this.state.structure);
     }
 
     handleClickRole(e) {
@@ -271,6 +285,26 @@ class SchoolGroupMenu extends React.Component {
         this.setState({activeTabKey:key,'isChanged':true});
         //this.sendMenuInfoWhenTabChange(key);
         this.props.changeTab(key);
+        /*if(key=="role"){
+            this.props.onGhostMenuClick('role',this.state.selectedRoleKeys,this.state.selectedRoleKeyPath);
+        }else{
+
+            this.props.onGhostMenuClick('origin',this.state.selectedKeys,this.state.structure);
+        }*/
+        if(key=="role"){
+            this.props.onGhostMenuClick(key,this.state.selectedRoleKeys,this.state.selectedRoleKeyPath);
+        }else{
+            var requestId = "";
+            var requestObj=null;
+            if(isEmpty(this.state.selectedKeys)){
+                requestId = this.props.rootStructure.id;
+                requestObj = this.props.rootStructure;
+            }else{
+                requestId = this.state.selectedKeys;
+                requestObj = this.state.structure;
+            }
+            this.props.onGhostMenuClick(key,requestId,requestObj);
+        }
     }
 
     sendMenuInfoWhenTabChange(key){
