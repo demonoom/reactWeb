@@ -457,7 +457,7 @@ const AntCloudTableComponents = React.createClass({
                 var shareButton=<Button type="button" value={key} text={key} onClick={cloudTable.showShareModal.bind(cloudTable,e)}
                                         icon="share-alt"></Button>;
                 var moveButton=<Button type="button" value={key} text={key} onClick={cloudTable.showMoveFileModal.bind(cloudTable,e)}
-                                       icon="export"></Button>;
+                                       icon="swap"></Button>;
                 var getFileType = cloudTable.state.getFileType;
                 //我的蚁盘是私有的，用户具备所有的操作权限
                 if(getFileType!="myFile"){
@@ -551,8 +551,13 @@ const AntCloudTableComponents = React.createClass({
                 if(ret.success==true && ret.msg=="调用成功" && isEmpty(ret.response)==false){
                     var initPageNo = 1;
                     var queryConditionJson="";
-                    cloudTable.listFiles(cloudTable.state.ident,
-                        cloudTable.state.currentDirectoryId,queryConditionJson,initPageNo,"mainTable");
+                    if(cloudTable.state.currentDirectoryId!=-1){
+                        cloudTable.listFiles(cloudTable.state.ident,
+                            cloudTable.state.currentDirectoryId,queryConditionJson,initPageNo,"mainTable");
+                    }else{
+                        cloudTable.getUserRootCloudFiles(cloudTable.state.ident, cloudTable.state.currentPage);
+                    }
+
                     message.success("文件夹创建成功");
                 }else{
                     message.error(ret.msg);
@@ -587,8 +592,12 @@ const AntCloudTableComponents = React.createClass({
                 if(ret.success==true && ret.msg=="调用成功" && ret.response==true){
                     var initPageNo = 1;
                     var queryConditionJson="";
-                    cloudTable.listFiles(cloudTable.state.ident,
-                        cloudTable.state.currentDirectoryId,queryConditionJson,initPageNo,"mainTable");
+                    if(cloudTable.state.currentDirectoryId!=-1){
+                        cloudTable.listFiles(cloudTable.state.ident,
+                            cloudTable.state.currentDirectoryId,queryConditionJson,initPageNo,"mainTable");
+                    }else{
+                        cloudTable.getUserRootCloudFiles(cloudTable.state.ident, cloudTable.state.currentPage);
+                    }
                     message.success("删除成功");
                 }else{
                     message.error(ret.msg);

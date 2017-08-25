@@ -4024,21 +4024,24 @@ div.btn1{
 .cloud_box{
 	height: calc(100% - 40px);
 }
-.cloud_box table tr td.ant-table-selection-smallclass button{
+.cloud_box1{
+	height: 100%;
+}
+.cloud_box table tr td.ant-table-selection-smallclass button, .cloud_box1 table tr td.ant-table-selection-smallclass button{
 	border:none;
 	background: none;
     padding: 0;
 	margin:0
 	
 }
-.cloud_box .ant-table-thead > tr > th, .cloud_box .ant-table-tbody > tr > td {
+.cloud_box .ant-table-thead > tr > th, .cloud_box .ant-table-tbody > tr > td, .cloud_box1 .ant-table-thead > tr > th, .cloud_box .ant-table-tbody > tr > td {
 	padding: 16px 0px 16px 8px;
     text-align: left !important;
 }
-.cloud_box table tr th .ant-checkbox, .cloud_box table tr td .ant-checkbox{
+.cloud_box table tr th .ant-checkbox, .cloud_box table tr td .ant-checkbox, .cloud_box1 table tr th .ant-checkbox, .cloud_box table tr td .ant-checkbox{
 	margin-left:12px;
 }
-.cloud_box .ant-table-tbody > tr > td.cloud_name span.cloud_text span{
+.cloud_box .ant-table-tbody > tr > td.cloud_name span.cloud_text span, .cloud_box1 .ant-table-tbody > tr > td.cloud_name span.cloud_text span{
 	font-weight: normal !important;
 	width: calc(100% - 50px) !important;
 	cursor:pointer;
@@ -4056,47 +4059,47 @@ div.btn1{
 .cloud_icon{
 	background:url(../components/images/cloud_icon.png) no-repeat;
 	width:24px;
-	height: 24px;
+	height: 28px;
     display: inline-block;
     margin-right: 12px;
 	position: relative;
     top: 3px;
 }
 .cloud_icon_file{
-	background-position:0 0;
+	background-position:0 4px;
 }
 .cloud_icon_apx{
 	background-position:0 -50px;
 }
 .cloud_icon_png{
-	background-position:0 0;
+	background-position:0 -450px;
 }
 .cloud_icon_jpg{
-	background-position:0 0;
+	background-position:0 -500px;
 }
 .cloud_icon_mp3{
-	background-position:0 -300px;
-}
-.cloud_icon_mp4{
 	background-position:0 -350px;
 }
-.cloud_icon_ppt{
-	background-position:0 -100px;
+.cloud_icon_mp4{
+	background-position:0 -400px;
 }
-.cloud_icon_pdf{
+.cloud_icon_ppt{
 	background-position:0 -150px;
 }
-.cloud_icon_doc{
-	background-position:0 0;
-}
-.cloud_icon_xls{
-	background-position:0 0;
-}
-.cloud_icon_wps{
+.cloud_icon_pdf{
 	background-position:0 -200px;
 }
-.cloud_icon_other{
+.cloud_icon_doc{
+	background-position:0 -550px;
+}
+.cloud_icon_xls{
+	background-position:0 -600px;
+}
+.cloud_icon_wps{
 	background-position:0 -250px;
+}
+.cloud_icon_other{
+	background-position:0 -300px;
 }
 .share_til{
 	font-size: 14px;

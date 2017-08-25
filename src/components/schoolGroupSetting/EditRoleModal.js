@@ -92,6 +92,7 @@ class AddSubGroupModal extends React.Component {
                 if(ret.msg=="调用成功" && ret.success==true){
                     message.success("删除角色成功");
                     _this.props.onEditComplete(_this.state.roleId,_this.state.roleName);
+                    _this.props.refresh();
                     _this.closeAddSubGroupModal();
                 }else {
                     message.error(ret.msg);
