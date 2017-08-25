@@ -55,7 +55,7 @@ const RoleComponents = React.createClass({
             console.log(error);
         }
         this.ajaxData(this.props.firstId);
-        console.log(this.props.firstId);
+        // this.setState({roleName:this.props.firstName});
     },
 
     componentWillReceiveProps(nextProps) {
@@ -73,6 +73,7 @@ const RoleComponents = React.createClass({
         }catch(error){
             console.log(error);
         }
+        // console.log(nextProps.firstName);
     },
 
     ajaxData(roleId){

@@ -5,6 +5,7 @@ import React, {PropTypes} from 'react';
 import {Modal, Icon, Input, Button, Row, Col,message , Select} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import {isEmpty} from '../../utils/utils';
+import Confim from '../ConfirmModal';
 
 class AddSubGroupModal extends React.Component {
 
@@ -113,7 +114,16 @@ class AddSubGroupModal extends React.Component {
     this.props.closeModel();
   }
 
-  /**
+    showConfirmModal(){
+        this.refs.confirmModal.changeConfirmModalVisible(true);
+    }
+
+    closeConfirmModal() {
+        this.refs.confirmModal.changeConfirmModalVisible(false);
+    }
+
+
+    /**
    * 确定完成操作
    */
   handleOk(){
@@ -124,7 +134,8 @@ class AddSubGroupModal extends React.Component {
   * 删除操作
    */
   handDel() {
-      this.deleteRole();
+      this.showConfirmModal();
+      // this.deleteRole();
   }
 
   subGroupNameChange(e){
@@ -233,6 +244,13 @@ class AddSubGroupModal extends React.Component {
               </Col>
           </Row>
         </div>
+
+          <Confim
+              ref="confirmModal"
+              title="确定删除?"
+              onConfirmModalCancel={this.closeConfirmModal}
+              onConfirmModalOK={this.batchDeleteMemeber}
+          />
       </Modal>
     );
   }
