@@ -4,7 +4,6 @@ import MainTabComponents from '../components/MainTabComponents';
 import HeaderComponents from '../components/HeaderComponents';
 import UserFace from '../components/UserCardModalComponents';
 import FloatButton  from '../components/FloatButton';
-
 import PersonCenterMenu from '../components/layOut/PersonCenterMenu';
 import PersonCenter  from '../components/PersonCenter';
 import moment from 'moment';
@@ -26,6 +25,7 @@ import SchoolGroupSettingComponents from '../components/schoolGroupSetting/Schoo
 import SchoolGroupMenu from '../components/schoolGroupSetting/SchoolGroupMenu';
 import SystemSettingGhostMenu from '../components/SystemSetting/SystemSettingGhostMenu';
 import SystemSettingComponent from '../components/SystemSetting/SystemSettingComponent';
+import {isEmpty} from '../utils/utils';
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');

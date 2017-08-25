@@ -55,6 +55,9 @@ class SchoolGroupMenu extends React.Component {
         var currentItem = nextProps.currentItem;
         if(isEmpty(currentItem)==false){
             this.setState({"activeTabKey":currentItem});
+            // 子传父函数调用,调用父组件的设置右侧组件的方法
+            var requestId = "";
+            this.props.onGhostMenuClick(currentItem,this.state.selectedRoleKeys,this.state.selectedRoleKeyPath);
         }
     }
 
@@ -178,6 +181,7 @@ class SchoolGroupMenu extends React.Component {
                 _this.setState({part});
                 // 设置一个默认ID
                 _this.setState({firstId:part[0].children[0].id});
+                _this.setState({selectedRoleKeyPath:part[0].id+ '#' + part[0].name});
                 _this.setState({selectedRoleKeys:part[0].children[0].id + ',' + part[0].children[0].name});
                 var obj = {
                     "key" : '231,小组',
@@ -237,9 +241,11 @@ class SchoolGroupMenu extends React.Component {
         console.log(e);
         this.setState({
             selectedRoleKeys: e.key,
+            selectedRoleKeyPath:e.keyPath
         });
         // 子传父函数调用
-        this.props.changeTab('role',true,e.key,e.keyPath[1]);
+        //this.props.changeTab('role',true,e.key,e.keyPath[1]);
+        this.props.onGhostMenuClick('role',e.key,e.keyPath[1]);
     }
     openMenu(e) {
         console.log(e);
@@ -269,6 +275,11 @@ class SchoolGroupMenu extends React.Component {
     tabOnChange(key) {
         console.log(key);
         this.setState({activeTabKey:key,'isChanged':true});
+        //this.sendMenuInfoWhenTabChange(key);
+        this.props.changeTab(key);
+    }
+
+    sendMenuInfoWhenTabChange(key){
         if(key=="origin"){
             //组织架构
             if(isEmpty(this.state.selectedKeys)==false){
@@ -283,18 +294,15 @@ class SchoolGroupMenu extends React.Component {
                 //向上传递点击过的角色菜单的key
                 var selId = this.state.selectedRoleKeys;
                 var arr = selId.split(',');
-                this.props.sendFirstId(arr[0]);
+                //this.props.sendFirstId(arr[0]);
+                this.props.changeTab(key,true,arr[0]);
             }else{
                 //向上传递角色组下的第一个角色的id
-                this.props.sendFirstId(this.state.firstId);
-                // this.props.sendName(this.state.firstName);
-                // console.log(111);
-                // console.log(this.state.firstName);
+                this.props.changeTab(key,true,this.state.firstId);
             }
             console.log(this.state.obj);
             // this.handleClickRole(this.state.obj);
         }
-        this.props.changeTab(key);
     }
 
     render() {

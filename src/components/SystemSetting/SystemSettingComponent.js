@@ -5,6 +5,7 @@ const TabPane = Tabs.TabPane;
 import SchoolGroupMenu from '../../components/schoolGroupSetting/SchoolGroupMenu';
 import SchoolGroupSettingComponents from '../../components/schoolGroupSetting/SchoolGroupSettingComponents';
 import FlowSettingComponent from '../../components/flowSetting/FlowSettingComponent';
+import {isEmpty} from '../../utils/utils';
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
@@ -33,6 +34,7 @@ class SystemSettingComponent extends React.Component {
         this.sendFirstId = this.sendFirstId.bind(this);
         this.changeGroupTab = this.changeGroupTab.bind(this);
         this.editRoleComplete = this.editRoleComplete.bind(this);
+        this.changeSchoolGroupSettingCom = this.changeSchoolGroupSettingCom.bind(this);
     }
 
 
@@ -60,14 +62,30 @@ class SystemSettingComponent extends React.Component {
     }
     changeGroupTab(activeMenu, beActive, selectedKeys, papaKey){
         this.props.changeTab(activeMenu, beActive, selectedKeys);
-        this.setState({selectedId: selectedKeys});
-        this.setState({papaKey: papaKey});
+        if(activeMenu=="role"){
+            this.setState({selectedId: selectedKeys});
+        }else{
+            this.setState({selectedStructureId: selectedKeys});
+        }
+        this.setState({papaKey: papaKey,activeMenu});
     }
 
     editRoleComplete(roleId,roleName){
         var selectedId = roleId+","+roleName;
         this.setState({selectedId});
         this.refs.schoolGroupMenu.initMenuInfo();
+    }
+
+    changeSchoolGroupSettingCom(currentItem,selectedRoleMenuId,selectedRoleKeyPath){
+        // this.setState({"selectedId":selectedKey});
+        if(isEmpty(this.refs.schoolGroupSettingComponents)==false){
+            if(currentItem=="role"){
+                this.refs.schoolGroupSettingComponents.changeRightComponent(selectedRoleMenuId,selectedRoleKeyPath);
+            }else{
+                //this.setState({selectedStructureId: selectedKeys});
+            }
+
+        }
     }
 
     render() {
@@ -78,8 +96,12 @@ class SystemSettingComponent extends React.Component {
             default : // teachTimes
 
                 // 组织架构 部门管理 LessonPlan  Schedule
-                this.middleComponent = <SchoolGroupMenu ref="schoolGroupMenu" callbackParent={this.getSubGroup} rootStructure={this.state.rootStructure} changeTab={this.changeGroupTab} currentItem = {this.props.currentItem}
+                this.middleComponent = <SchoolGroupMenu ref="schoolGroupMenu" callbackParent={this.getSubGroup}
+                                                        rootStructure={this.state.rootStructure}
+                                                        changeTab={this.changeGroupTab}
+                                                        currentItem = {this.props.currentItem}
                                                         sendFirstId={this.sendFirstId}
+                                                        onGhostMenuClick={this.changeSchoolGroupSettingCom}
                 />;
                 this.tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId}
                                                                   selectedId={this.state.selectedId}
@@ -88,7 +110,7 @@ class SystemSettingComponent extends React.Component {
                                                                   onEditComplete={this.editRoleComplete}
                                                                   papaKey={this.state.papaKey}
                                                                   firstId={this.state.firstId}
-                                                                  firstName={this.state.firstName}
+                                                                  ref="schoolGroupSettingComponents"
                 ></SchoolGroupSettingComponents>;
                 break;
             case 'systemFlow':

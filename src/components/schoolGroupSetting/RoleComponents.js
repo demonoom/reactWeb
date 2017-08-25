@@ -4,6 +4,7 @@ import AddRoleMemberModal from './AddRoleMemberModal';
 import {doWebService} from '../../WebServiceHelper';
 import EditRoleModal from './EditRoleModal'
 import ConfirmModal from '../ConfirmModal'
+import {isEmpty} from '../../utils/utils';
 
 const confirm = Modal.confirm;
 
@@ -43,37 +44,60 @@ const RoleComponents = React.createClass({
     },
 
     componentDidMount() {
+        var requestId = "";
         try{
             var selectedMessage = this.props.selectedId;
-            var arr = selectedMessage.split(',');
-            this.setState({roleId: arr[0]});
-            this.setState({roleName: arr[1]});
+            if(isEmpty(selectedMessage)==false){
+                var arr = selectedMessage.split(',');
+                requestId = arr[0];
+                this.setState({roleId: arr[0]});
+                this.setState({roleName: arr[1]});
+            }
             var papaKey = this.props.papaKey;
-            var papaArr = papaKey.split('#');
-            this.setState({papaName:papaArr[1]});
+            if(isEmpty(papaKey)==false){
+                var papaArr = papaKey.split('#');
+                this.setState({papaName:papaArr[1]});
+            }
         }catch(error){
             console.log(error);
         }
-        this.ajaxData(this.props.firstId);
-        // this.setState({roleName:this.props.firstName});
+        if(isEmpty(requestId)==false){
+            this.ajaxData(requestId);
+        }else{
+            this.ajaxData(this.props.firstId);
+        }
+        console.log(this.props.firstId);
     },
 
     componentWillReceiveProps(nextProps) {
         var selectedMessage = nextProps.selectedId;
         console.log(nextProps.selectedId);
         try{
-            var arr = selectedMessage.split(',');
-            this.setState({roleId: arr[0]});
-            this.setState({roleName: arr[1]});
-            this.ajaxData(arr[0]);
+            if(isEmpty(selectedMessage)==false){
+                var arr = selectedMessage.split(',');
+                this.setState({roleId: arr[0]});
+                this.setState({roleName: arr[1]});
+                this.ajaxData(arr[0]);
+            }
             var papaKey = nextProps.papaKey;
             var papaArr = [];
-            papaArr = papaKey.split('#');
-            this.setState({papaName:papaArr[1]});
+            if(isEmpty(papaKey)==false){
+                papaArr = papaKey.split('#');
+                this.setState({papaName:papaArr[1]});
+            }
         }catch(error){
             console.log(error);
         }
         // console.log(nextProps.firstName);
+    },
+
+    loadDataWhenGhostMenuClick(selectedId){
+        if(isEmpty(selectedId)==false){
+            var arr = selectedId.split(',');
+            this.setState({roleId: arr[0]});
+            this.setState({roleName: arr[1]});
+            this.ajaxData(arr[0]);
+        }
     },
 
     ajaxData(roleId){
@@ -220,8 +244,8 @@ const RoleComponents = React.createClass({
         return (
             <div className="schoolgroup">
                 <div className="schoolgroup_title">
-                    <span>{this.state.roleName}</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <span>(<span>{this.state.mermberNum}</span>人)</span>
+                    <span>{this.state.roleName}</span>
+                    <span className="schoolgroup_people modal_course">(<span>{this.state.mermberNum}</span>人)</span>
                     <span>
                         <Button className="schoolgroup_btn_gray_6 schoolgroup_btn_left schoolgroup_btn"
                                 onClick={this.editRole}>编辑</Button>
