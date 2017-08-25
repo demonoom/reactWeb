@@ -88,6 +88,7 @@ const RoleComponents = React.createClass({
         }catch(error){
             console.log(error);
         }
+        // console.log(nextProps.firstName);
     },
 
     loadDataWhenGhostMenuClick(selectedId){

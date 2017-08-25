@@ -5,6 +5,7 @@ import React, {PropTypes} from 'react';
 import {Modal, Icon, Input, Button, Row, Col,message , Select} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import {isEmpty} from '../../utils/utils';
+import Confim from '../ConfirmModal';
 
 class AddSubGroupModal extends React.Component {
 
@@ -26,6 +27,8 @@ class AddSubGroupModal extends React.Component {
     this.subGroupNameChange = this.subGroupNameChange.bind(this);
     this.getStructureRoleGroups = this.getStructureRoleGroups.bind(this);
     this.parentRoleChange = this.parentRoleChange.bind(this);
+    this.closeConfirmModal = this.closeConfirmModal.bind(this);
+    this.batchDeleteMemeber = this.batchDeleteMemeber.bind(this);
   }
 
   componentDidMount(){
@@ -116,7 +119,16 @@ class AddSubGroupModal extends React.Component {
     this.props.closeModel();
   }
 
-  /**
+    showConfirmModal(){
+        this.refs.confirm.changeConfirmModalVisible(true);
+    }
+
+    closeConfirmModal() {
+        this.refs.confirm.changeConfirmModalVisible(false);
+    }
+
+
+    /**
    * 确定完成操作
    */
   handleOk(){
@@ -127,8 +139,37 @@ class AddSubGroupModal extends React.Component {
   * 删除操作
    */
   handDel() {
-      this.deleteRole();
+      this.showConfirmModal();
+      this.closeAddSubGroupModal();
+      // this.deleteRole();
   }
+    batchDeleteMemeber () {
+      // var _this = this;
+      // this.deleteRole();
+        this.refs.confirm.changeConfirmModalVisible(false);
+        let _this = this;
+        var param = {
+            "method": 'deleteStructureRole',
+            "operateUserId": _this.state.loginUser.colUid,
+            "roleId":_this.state.roleId
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if(ret.msg=="调用成功" && ret.success==true){
+                    message.success("删除角色成功");
+                    _this.props.onEditComplete(_this.state.roleId,_this.state.roleName);
+                    _this.props.refresh();
+                    _this.closeAddSubGroupModal();
+                }else {
+                    message.error(ret.msg);
+                    _this.closeAddSubGroupModal();
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    }
 
   subGroupNameChange(e){
     var target = e.target;
@@ -236,6 +277,13 @@ class AddSubGroupModal extends React.Component {
               </Col>
           </Row>
         </div>
+
+          <Confim
+              ref="confirm"
+              title="确定删除?"
+              onConfirmModalCancel={this.closeConfirmModal}
+              onConfirmModalOK={this.batchDeleteMemeber}
+          />
       </Modal>
     );
   }

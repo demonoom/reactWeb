@@ -54,9 +54,11 @@ class SystemSettingComponent extends React.Component {
         this.setState({structureId,rootStructure:structure});
     }
 
-    sendFirstId(firstId){
+    sendFirstId(firstId,firstName){
         console.log(firstId);
-        this.setState({firstId:firstId})
+        // console.log(firstName);
+        this.setState({firstId:firstId});
+        this.setState({firstName:firstName});
     }
     changeGroupTab(activeMenu, beActive, selectedKeys, papaKey){
         this.props.changeTab(activeMenu, beActive, selectedKeys);

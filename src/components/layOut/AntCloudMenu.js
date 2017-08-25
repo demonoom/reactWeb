@@ -10,10 +10,10 @@ const columns = [{
 
 const data = [{
     key: 'myFile',
-    option: <div><Icon type="appstore-o" className="menu_left_i" /><span>我的文件</span></div>,
+    option: <div className="yichao_menu_li"><Icon type="appstore-o" className="menu_left_i" /><span>我的文件</span></div>,
 }, {
     key: 'groupFile',
-    option: <div><i className="iconfont menu_left_i">&#xe7e0;</i><span>群文件</span></div>,
+    option: <div className="yichao_menu_li"><i className="iconfont menu_left_i">&#xe7e0;</i><span>群文件</span></div>,
 }];
 
 const AntCloudMenu = React.createClass({

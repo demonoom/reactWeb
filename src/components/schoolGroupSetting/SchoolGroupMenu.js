@@ -196,6 +196,11 @@ class SchoolGroupMenu extends React.Component {
                 _this.setState({firstId:part[0].children[0].id});
                 _this.setState({selectedRoleKeyPath:part[0].id+ '#' + part[0].name});
                 _this.setState({selectedRoleKeys:part[0].children[0].id + ',' + part[0].children[0].name});
+                var obj = {
+                    "key" : '231,小组',
+                    "keyPath" : ['231,小组','208#语文组']
+                }
+                _this.setState({obj:obj});
             },
             onError: function (error) {
                 message.error(error);
@@ -247,6 +252,7 @@ class SchoolGroupMenu extends React.Component {
     }
 
     handleClickRole(e) {
+        console.log(e);
         this.setState({
             selectedRoleKeys: e.key,
             selectedRoleKeyPath:e.keyPath
@@ -316,6 +322,7 @@ class SchoolGroupMenu extends React.Component {
                 //向上传递组织架构根节点的key(rootStructure.id)
             }
         }else{
+            // console.log(777);
             //角色
             if(isEmpty(this.state.selectedRoleKeys)==false){
                 //向上传递点击过的角色菜单的key
@@ -325,9 +332,10 @@ class SchoolGroupMenu extends React.Component {
                 this.props.changeTab(key,true,arr[0]);
             }else{
                 //向上传递角色组下的第一个角色的id
-                //this.props.sendFirstId(this.state.firstId);
                 this.props.changeTab(key,true,this.state.firstId);
             }
+            console.log(this.state.obj);
+            // this.handleClickRole(this.state.obj);
         }
     }
 
