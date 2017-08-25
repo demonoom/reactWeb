@@ -551,8 +551,13 @@ const AntCloudTableComponents = React.createClass({
                 if(ret.success==true && ret.msg=="调用成功" && isEmpty(ret.response)==false){
                     var initPageNo = 1;
                     var queryConditionJson="";
-                    cloudTable.listFiles(cloudTable.state.ident,
-                        cloudTable.state.currentDirectoryId,queryConditionJson,initPageNo,"mainTable");
+                    if(cloudTable.state.currentDirectoryId!=-1){
+                        cloudTable.listFiles(cloudTable.state.ident,
+                            cloudTable.state.currentDirectoryId,queryConditionJson,initPageNo,"mainTable");
+                    }else{
+                        cloudTable.getUserRootCloudFiles(cloudTable.state.ident, cloudTable.state.currentPage);
+                    }
+
                     message.success("文件夹创建成功");
                 }else{
                     message.error(ret.msg);
@@ -587,8 +592,12 @@ const AntCloudTableComponents = React.createClass({
                 if(ret.success==true && ret.msg=="调用成功" && ret.response==true){
                     var initPageNo = 1;
                     var queryConditionJson="";
-                    cloudTable.listFiles(cloudTable.state.ident,
-                        cloudTable.state.currentDirectoryId,queryConditionJson,initPageNo,"mainTable");
+                    if(cloudTable.state.currentDirectoryId!=-1){
+                        cloudTable.listFiles(cloudTable.state.ident,
+                            cloudTable.state.currentDirectoryId,queryConditionJson,initPageNo,"mainTable");
+                    }else{
+                        cloudTable.getUserRootCloudFiles(cloudTable.state.ident, cloudTable.state.currentPage);
+                    }
                     message.success("删除成功");
                 }else{
                     message.error(ret.msg);
