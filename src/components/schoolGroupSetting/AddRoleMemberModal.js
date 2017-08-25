@@ -44,7 +44,8 @@ class AddRoleMemberModal extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    var isShow = nextProps.isShow;
+      // console.log(nextProps.addedMemberData);
+      var isShow = nextProps.isShow;
     var parentGroup = nextProps.parentGroup;
     var parentGroupName="";
     var parentId = "";
@@ -138,14 +139,16 @@ class AddRoleMemberModal extends React.Component {
     const teacherSrcOptions = [];
     var searchOptions={
       keywords:_this.state.searchKey,
-      schoolId:_this.state.schoolId,
-      userType:TYPE_TEACHER
-    }
+      schoolId:_this.state.loginUser.schoolId,
+      userType:TYPE_TEACHER,
+      structureId:1
+    };
     var param = {
       "method": 'searchStructureUsers',
       "operateUserId": _this.state.loginUser.colUid,
       "searchOptions": JSON.stringify(searchOptions),
       "pageNo":_this.state.teacherSourceListPageNo,
+
     };
     doWebService(JSON.stringify(param), {
       onResponse: function (ret) {
@@ -167,8 +170,9 @@ class AddRoleMemberModal extends React.Component {
 
           var isExitAtTargetOptions=_this.findTeacherIsExitAtTargetOptions(userId);
           var isExitInSettingTeam = _this.findTeacherIsExitAtSettringTeam(userId);
-          // && isExitInSettingTeam==false
-          if(isExitAtTargetOptions==false){
+            console.log(isExitInSettingTeam);
+            // && isExitInSettingTeam==false
+          if(isExitAtTargetOptions==false&&isExitInSettingTeam==false){
             //不能添加自己
             if (parseInt(userId) != _this.state.loginUser.colUid) {
               const data = {key:userId,
@@ -220,12 +224,13 @@ class AddRoleMemberModal extends React.Component {
    */
   findTeacherIsExitAtSettringTeam(userId){
     var isExit = false;
-    var _this = this;
-    if(isEmpty(_this.state.settingTeam)==false){
-      var teamUser = _this.state.settingTeam.teamUsers;
-      for(var i=0;i<teamUser.length;i++){
-        var teamUser = teamUser[i];
-        if(teamUser.userId == userId){
+    var addedMemberData = this.props.addedMemberData;
+      console.log(addedMemberData);
+      console.log(userId);
+      if(isEmpty(addedMemberData)==false){
+      for(var i=0;i<addedMemberData.length;i++){
+        var teamUser = addedMemberData[i];
+        if(teamUser.key == userId){
           isExit = true;
           break;
         }

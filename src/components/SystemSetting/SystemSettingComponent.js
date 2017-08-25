@@ -88,20 +88,8 @@ class SystemSettingComponent extends React.Component {
                                                                   firstId={this.state.firstId}
                 ></SchoolGroupSettingComponents>;
                 break;
-            /*case 'systemRole':
-                // 组织架构  角色管理
-                this.middleComponent = <SchoolGroupMenu callbackParent={this.getSubGroup}/>;
-                this.tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId} rootStructure={this.state.rootStructure}></SchoolGroupSettingComponents>;
-                break;
-            case 'schoolGroupSetting':
-                // 组织架构 部门管理
-                this.middleComponent = <SchoolGroupMenu callbackParent={this.getSubGroup}/>;
-                this.tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId} rootStructure={this.state.rootStructure}></SchoolGroupSettingComponents>;
-                break;
-             */
             case 'systemFlow':
                 // 审批流程
-                //this.middleComponent = <SchoolGroupMenu callbackParent={this.getSubGroup}/>;
                 this.tabComponent = <FlowSettingComponent></FlowSettingComponent>;
                 break;
 

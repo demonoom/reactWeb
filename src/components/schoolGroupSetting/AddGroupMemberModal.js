@@ -132,7 +132,7 @@ class AddGroupMemberModal extends React.Component {
     const teacherSrcOptions = [];
     var searchOptions={
       keywords:_this.state.searchKey,
-      schoolId:_this.state.schoolId,
+      schoolId:_this.state.loginUser.schoolId,
       userType:TYPE_TEACHER
     }
     var param = {

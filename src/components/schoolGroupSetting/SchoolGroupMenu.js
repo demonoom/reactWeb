@@ -178,6 +178,7 @@ class SchoolGroupMenu extends React.Component {
                 _this.setState({part});
                 // 设置一个默认ID
                 _this.setState({firstId:part[0].children[0].id});
+                _this.setState({selectedRoleKeys:part[0].children[0].id + ',' + part[0].children[0].name});
             },
             onError: function (error) {
                 message.error(error);
@@ -194,6 +195,7 @@ class SchoolGroupMenu extends React.Component {
         var partMenu = '';
         var menuItem = '';
         var arr = [];
+        var openKeysArr = [];
 
         for(var i = 0;i < part.length;i++) {
                 part[i].children.forEach(function (subGroup) {
@@ -210,8 +212,10 @@ class SchoolGroupMenu extends React.Component {
                 </SubMenu>;
                 // 这个地方的partMenu是一个对象，将对象放到数组里面，然后把数组setState，去DOM那里取数组就能够依次渲染出来
                 arr.push(partMenu);
+                openKeysArr.push(part[i].id + '#' + part[i].name);
                 subRoleMenuItemArray = [];
         }
+        _this.setState({openKeysArr:openKeysArr});
         _this.setState({arr,openKeys});
     }
 
@@ -307,8 +311,8 @@ class SchoolGroupMenu extends React.Component {
                         <Menu
                             onClick={this.handleClickRole}
                             style={{ width: 240 }}
-                            defaultSelectedKeys={['15']}
-                            defaultOpenKeys={['4']}
+                            selectedKeys={[this.state.selectedRoleKeys]}
+                            defaultOpenKeys={this.state.openKeysArr}
                             mode="inline"
                             className="framework_left_menu"
                             onOpenChange={this.openMenu}

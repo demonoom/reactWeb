@@ -3,6 +3,7 @@ import {Table, Icon, Button, Breadcrumb, message, Modal} from 'antd';
 import AddRoleMemberModal from './AddRoleMemberModal';
 import {doWebService} from '../../WebServiceHelper';
 import EditRoleModal from './EditRoleModal'
+import ConfirmModal from '../ConfirmModal'
 
 const confirm = Modal.confirm;
 
@@ -31,6 +32,7 @@ const RoleComponents = React.createClass({
             selectedRowKeys: [],
             addGroupMemberModalIsShow: false,
             groupSettingModalIsShow: false,
+            confirmRoleModalIsShow:false,
             loading: false,
             roleId: '',
             roleName: '',
@@ -53,19 +55,11 @@ const RoleComponents = React.createClass({
             console.log(error);
         }
         this.ajaxData(this.props.firstId);
+        console.log(this.props.firstId);
     },
 
     componentWillReceiveProps(nextProps) {
         var selectedMessage = nextProps.selectedId;
-{/*<<<<<<< HEAD*/}
-        {/*var arr = selectedMessage.split(',');*/}
-        {/*this.setState({roleId: arr[0]});*/}
-        {/*this.setState({roleName: arr[1]});*/}
-        {/*this.ajaxData(arr[0]);*/}
-        {/*var papaKey = nextProps.papaKey;*/}
-        {/*var papaArr = papaKey.split('#');*/}
-        {/*this.setState({papaName:papaArr[1]});*/}
-{/*=======*/}
         console.log(nextProps.selectedId);
         try{
             var arr = selectedMessage.split(',');
@@ -172,8 +166,9 @@ const RoleComponents = React.createClass({
             },
             onCancel() {
                 console.log('Cancel');
-            }
+            },
         })
+        // _this.setState({confirmRoleModalIsShow:true});
     },
 
     /**
@@ -185,6 +180,12 @@ const RoleComponents = React.createClass({
         //设置编辑角色Modal的显示状态为false，不再显示
         this.setState({"roleName":roleName,"editRoleModalIsShow":false});
         this.props.onEditComplete(roleId,roleName);
+    },
+    /**
+     * 删除成功后右侧页面刷新为第一条的成员的回调
+     */
+    refresh(){
+        this.ajaxData(this.props.firstId);
     },
     /**
      * 编辑角色时取消和关闭时候的回调
@@ -248,12 +249,17 @@ const RoleComponents = React.createClass({
                                     roleId={this.state.roleId}
                                     addRoleComplete={this.addRoleComplete}
                                     closeAddModel={this.closeAddModel}
+                                    addedMemberData={this.state.mesData}
                 ></AddRoleMemberModal>
                 <EditRoleModal isShow={this.state.editRoleModalIsShow} roleId={this.state.roleId}
                                roleName={this.state.roleName}
                                onEditComplete={this.editRoleComplete}
+                               refresh={this.refresh}
                                closeModel={this.closeModel}
                                papaName={this.state.papaName}
+                />
+                <ConfirmModal
+                    isShow={this.state.confirmRoleModalIsShow}
                 />
             </div>
         );
