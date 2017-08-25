@@ -24,7 +24,7 @@ var columns = [{
 }, {
     title: '更新时间',
     dataIndex: 'createTime',
-    className: 'ant-135 class_right time',
+    className: 'ant-table-selection-smallclass class_right time',
 }, {
     title: '操作',
     className: 'ant-table-selection-smallclass class_right',
@@ -263,7 +263,7 @@ const AntCloudTableComponents = React.createClass({
         if(directory){
             fileLogo=<span className="cloud_text">
                 <i className="cloud_icon cloud_icon_file"></i>
-                <span className="font_gray_666" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e,"mainTable")}>{name}</span>
+                <span className="antnest_name" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e,"mainTable")}>{name}</span>
             </span>;
         }else{
             var lastPointIndex = name.lastIndexOf(".");
@@ -304,7 +304,7 @@ const AntCloudTableComponents = React.createClass({
             }
             fileLogo=<div>
                 {fileTypeLog}
-                {name}
+                <span className="yipan_name">{name}</span>
             </div>;
         }
         return fileLogo;
@@ -1220,7 +1220,7 @@ const AntCloudTableComponents = React.createClass({
                            onCancel={cloudTable.moveFileModalHandleCancel}
                            footer={null}
                     >
-                        <div>
+                        <div className="move_file">
                             <Row>
                                 <Col span={24}>
                                     {returnToolbarInMoveModal}

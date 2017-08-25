@@ -914,7 +914,7 @@ element.style {
 	width:16%
 }
 .ant-table-thead > tr > th.cloud_name, .ant-table-tbody > tr > td.cloud_name{
-	width:50%;
+	width:45%;
 }
 .ant-table-thead > tr > th.ant-table-selection-time, .ant-table-tbody > tr > td.ant-table-selection-time{
 	width:120px;
@@ -4055,6 +4055,8 @@ div.btn1{
     top: 4px;
 	width: 100%;
     float: left;
+	height:24px;
+	line-height: 24px;
 }
 .cloud_icon{
 	background:url(../components/images/cloud_icon.png) no-repeat;
@@ -4066,40 +4068,41 @@ div.btn1{
     top: 3px;
 }
 .cloud_icon_file{
-	background-position:0 4px;
+	background-position:0 0px;
 }
 .cloud_icon_apx{
 	background-position:0 -50px;
 }
+.cloud_icon_ppt{
+	background-position:0 -100px;
+}
 .cloud_icon_png{
-	background-position:0 -450px;
-}
-.cloud_icon_jpg{
-	background-position:0 -500px;
-}
-.cloud_icon_mp3{
-	background-position:0 -350px;
-}
-.cloud_icon_mp4{
 	background-position:0 -400px;
 }
-.cloud_icon_ppt{
+.cloud_icon_jpg{
+	background-position:0 -450px;
+}
+.cloud_icon_mp3{
+	background-position:0 -300px;
+}
+.cloud_icon_mp4{
+	background-position:0 -350px;
+}
+
+.cloud_icon_pdf{
 	background-position:0 -150px;
 }
-.cloud_icon_pdf{
-	background-position:0 -200px;
-}
 .cloud_icon_doc{
-	background-position:0 -550px;
+	background-position:0 -500px;
 }
 .cloud_icon_xls{
-	background-position:0 -600px;
+	background-position:0 -550px;
 }
 .cloud_icon_wps{
-	background-position:0 -250px;
+	background-position:0 -200px;
 }
 .cloud_icon_other{
-	background-position:0 -300px;
+	background-position:0 -250px;
 }
 .share_til{
 	font-size: 14px;
@@ -4790,7 +4793,21 @@ span.pagination{
 	font-family: "Microsoft YaHei";
 	padding-left: 40px !important;
 }
+.yichao_menu_li{
+	font-size: 16px;
+	color: #333;
+	font-family: "Microsoft YaHei";
+}
 .cloud_class_menu .ant-menu-inline .ant-menu-item-active{
+	color:#42bef6 !important
+}
+.yichao_menu_li:hover{
+	color:#42bef6 !important;
+}
+.yichao_menu_li span{
+	color: #333;
+}
+.yichao_menu_li:hover span{
 	color:#42bef6 !important
 }
 .modal_course{
@@ -5202,4 +5219,25 @@ select.course_n:hover{
 	line-height: 40px;
 	font-size: 16px;
 	margin-top: 20px;
+}
+.move_file{
+	height:350px;
+}
+.move_file .clearfix {
+	height: calc(100% - 30px);
+}
+.move_file .ant-table-fixed-header .ant-table-body {
+	min-height: 100%;
+}
+.move_file .public—til—blue{
+	height: 36px;
+	line-height: 36px;
+	margin-bottom: 10px;
+}
+.move_file .public—til—blue .ant-tabs-right{
+	margin-top: 7px;
+}
+.yipan_name{
+	position: relative;
+	top: -5px;
 }
