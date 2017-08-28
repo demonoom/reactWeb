@@ -47,6 +47,7 @@ const RoleComponents = React.createClass({
 
     componentDidMount() {
         var requestId = "";
+        var _this = this;
         try{
             var selectedMessage = this.props.selectedId;
             if(isEmpty(selectedMessage)==false){
@@ -59,6 +60,17 @@ const RoleComponents = React.createClass({
             if(isEmpty(papaKey)==false){
                 var papaArr = papaKey.split('#');
                 this.setState({papaName:papaArr[1]});
+
+                var selectedPapa = papaArr[0];
+                this.props.defaultId.forEach(function (v,i) {
+                    console.log(v);
+                    console.log(selectedPapa);
+                    if(v == selectedPapa) {
+                        _this.setState({disabled:true});
+                    } else{
+                        _this.setState({disabled:false});
+                    }
+                })
             }
         }catch(error){
             console.log(error);
@@ -74,7 +86,6 @@ const RoleComponents = React.createClass({
     componentWillReceiveProps(nextProps) {
         var _this = this;
         var selectedMessage = nextProps.selectedId;
-        console.log(nextProps.selectedId);
         try{
             if(isEmpty(selectedMessage)==false){
                 var arr = selectedMessage.split(',');
@@ -95,7 +106,7 @@ const RoleComponents = React.createClass({
                         _this.setState({disabled:false});
                     }
                 })
-            }
+            };
         }catch(error){
             console.log(error);
         }
