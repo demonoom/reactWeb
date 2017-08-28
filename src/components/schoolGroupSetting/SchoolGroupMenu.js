@@ -189,6 +189,13 @@ class SchoolGroupMenu extends React.Component {
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var part = ret.response;
+                var defaultArr = [];
+                part.forEach(function (v,i) {
+                    if(v.createType > 0) {
+                        defaultArr.push(v.id);
+                    }
+                });
+                _this.props.sendDefaultId(defaultArr);
                 // 调用 渲染角色函数
                 _this.buildMenuPart(part);
                 _this.setState({part});

@@ -129,6 +129,11 @@ class AddSubGroupModal extends React.Component {
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var part = ret.response;
+                part.forEach(function (v,i) {
+                    if(v.createType > 0) {
+                        part.splice(v,1);
+                    }
+                });
                 // 调用 渲染角色函数
                 _this.buildMenuPart(part);
                 _this.setState({part});
