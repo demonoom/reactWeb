@@ -23,6 +23,10 @@ const AntCloudMenu = React.createClass({
             selectRowKey:'myFile',
         };
     },
+
+    componentDidMount(){
+        mMenu.props.callbackParent(this.state.selectRowKey);
+    },
     /**
      * 获取当前的操作项
      * @param record

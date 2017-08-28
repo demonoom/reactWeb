@@ -61,13 +61,15 @@ class SchoolGroupMenu extends React.Component {
             }else{
                 var requestId = "";
                 var requestObj=null;
-                if(isEmpty(this.state.selectedKeys)){
-                    requestId = this.props.rootStructure.id;
-                    requestObj = this.props.rootStructure;
+                /*if(isEmpty(this.state.selectedKeys)){
+                    requestId = nextProps.rootStructure.id;
+                    requestObj = nextProps.rootStructure;
                 }else{
                     requestId = this.state.selectedKeys;
                     requestObj = this.state.structure;
-                }
+                }*/
+                requestId = nextProps.rootStructure.id;
+                requestObj = nextProps.rootStructure;
                 this.props.onGhostMenuClick(currentItem,requestId,requestObj);
             }
 
@@ -309,13 +311,15 @@ class SchoolGroupMenu extends React.Component {
         }else{
             var requestId = "";
             var requestObj=null;
-            if(isEmpty(this.state.selectedKeys)){
+            /*if(isEmpty(this.state.selectedKeys)){
                 requestId = this.props.rootStructure.id;
                 requestObj = this.props.rootStructure;
             }else{
                 requestId = this.state.selectedKeys;
                 requestObj = this.state.structure;
-            }
+            }*/
+            requestId = this.props.rootStructure.id;
+            requestObj = this.props.rootStructure;
             this.props.onGhostMenuClick(key,requestId,requestObj);
         }
     }
