@@ -50,19 +50,32 @@ const NschoolGroupSettingComponents = React.createClass({
 
     componentDidMount(){
         console.log("NScholl didMount");
-        structuresObjArray.splice(1,structuresObjArray.length);
+        // structuresObjArray.splice(1,structuresObjArray.length);
+        var structureId = "-1";
+        this.changeStructureData(structureId);
     },
 
     componentWillReceiveProps(nextProps){
         console.log("NScholl will");
-        structuresObjArray.splice(1,structuresObjArray.length);
+        if(isEmpty(structuresObjArray)==false && structuresObjArray.length>1){
+            structuresObjArray.splice(1,structuresObjArray.length);
+        }
         subGroupMemberList.splice(0);
         var structureId = nextProps.structureId;
+        /*var defaultPageNo = 1;
+        this.listStructures(structureId);
+        this.getStrcutureMembers(structureId,defaultPageNo);
+        this.setState({structureId,structuresObjArray});*/
+        this.changeStructureData(structureId);
+    },
+
+    changeStructureData(structureId){
         var defaultPageNo = 1;
         this.listStructures(structureId);
         this.getStrcutureMembers(structureId,defaultPageNo);
         this.setState({structureId,structuresObjArray});
     },
+
 
     /**
      * 列举子部门
@@ -146,6 +159,9 @@ const NschoolGroupSettingComponents = React.createClass({
      */
     getStructureById(structureId){
         let _this = this;
+        if(isEmpty(structureId)){
+            structureId = "-1";
+        }
         var param = {
             "method": 'getStructureById',
             "operateUserId": _this.state.loginUser.colUid,

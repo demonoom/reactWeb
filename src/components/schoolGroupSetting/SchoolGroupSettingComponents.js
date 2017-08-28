@@ -20,18 +20,10 @@ const SchoolGroupSettingComponents = React.createClass({
     },
 
     componentDidMount(){
-        var requestId;
-        var requestObj;
-        if(isEmpty(this.props.structureId)==false){
-            requestId = this.props.structureId;
-        }else{
-            requestId = this.state.selectedId;
-        }
-        if(isEmpty(this.props.rootStructure)==false){
-            requestObj = this.props.rootStructure;
-        }else{
-            requestObj = this.state.papaKey;
-        }
+         var requestId;
+         var requestObj;
+         requestId = this.props.structureId;
+         requestObj = this.props.rootStructure;
         this.setState({requestId,requestObj});
     },
 
@@ -41,17 +33,31 @@ const SchoolGroupSettingComponents = React.createClass({
 
     changeRightComponent(selectedKey,selectedRoleKeyPath,currentItem){
         var requestId = selectedKey;
-        if(isEmpty(requestId)){
-            requestId = this.props.selectedId;
-        }
         var requestObj = selectedRoleKeyPath;
-        if(isEmpty(requestObj)){
-            requestObj = this.props.papaKey;
+        if(currentItem=="origin"){
+            /*if(isEmpty(requestId)){
+                requestId = this.props.structureId;
+            }
+
+            if(isEmpty(requestObj)){
+                requestObj = this.props.rootStructure;
+            }*/
+        }else{
+            if(isEmpty(requestId)){
+                requestId = this.props.selectedId;
+            }
+
+            if(isEmpty(requestObj)){
+                requestObj = this.props.papaKey;
+            }
         }
         this.setState({requestId,requestObj});
         // if(isEmpty(this.refs.roleComponents)==false){
         //     this.refs.roleComponents.loadDataWhenGhostMenuClick(selectedId);
         // }
+        if(isEmpty(this.refs.nSchool)==false){
+            this.refs.nSchool.changeStructureData(requestId);
+        }
     },
 
     /**
@@ -61,7 +67,7 @@ const SchoolGroupSettingComponents = React.createClass({
     render() {
         switch (this.props.currentItem) {
             default : // 组织构架
-                this.tabComponent = <NschoolGroupSettingComponents structureId={this.state.requestId} rootStructure={this.state.requestObj}></NschoolGroupSettingComponents>;
+                this.tabComponent = <NschoolGroupSettingComponents ref="nSchool" structureId={this.state.requestId} rootStructure={this.state.requestObj}></NschoolGroupSettingComponents>;
                 break;
             case 'role':
                 // 角色

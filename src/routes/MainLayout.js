@@ -54,7 +54,8 @@ const MainLayout = React.createClass({
             resouceType: '',
             ifr: {},
             cloudRoomMenuItem:'mulitiClass',
-            antCloudKey:'fileManager'
+            antCloudKey:'fileManager',
+            activeSystemSettingMiddleMenu:'origin',
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
     },
