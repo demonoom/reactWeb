@@ -108,18 +108,18 @@ class AddSubGroupModal extends React.Component {
       >
         <div className="modal_register_main">
           <Row className="ant_row">
-            <Col span={6}>
+            <Col span={6} className="framework_m_l">
               部门名称：
             </Col>
-            <Col span={18}>
+            <Col span={16} className="framework_m_r">
               <Input placeholder="必填" value={this.state.subGroupName} onChange={this.subGroupNameChange}/>
             </Col>
           </Row>
           <Row className="ant_row">
-            <Col span={6}>
+            <Col span={6} className="framework_m_l">
               上级部门：
             </Col>
-            <Col span={18}>
+            <Col span={16} className="framework_m_r">
               {this.state.parentGroupName}
             </Col>
           </Row>
