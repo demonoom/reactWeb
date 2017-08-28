@@ -1,7 +1,7 @@
 /**
  * Created by devnote on 17-4-17.
  */
-import {Menu, Icon, Row, Col ,Tabs ,Button} from 'antd';
+import {Menu, Icon, Row, Col ,Tabs ,Button, message} from 'antd';
 import React, {PropTypes} from 'react';
 import {doWebService} from '../../WebServiceHelper';
 import AddRoleGroupModal from './AddRoleGroupModal';
@@ -208,7 +208,7 @@ class SchoolGroupMenu extends React.Component {
                 var obj = {
                     "key" : '231,小组',
                     "keyPath" : ['231,小组','208#语文组']
-                }
+                };
                 _this.setState({obj:obj});
             },
             onError: function (error) {
@@ -237,10 +237,23 @@ class SchoolGroupMenu extends React.Component {
                     </Menu.Item>;
                     subRoleMenuItemArray.push(menuItem);
                 });
+                if(i==0){
+                    partMenu = <SubMenu className="schoolgroup_menu_c" key={part[i].id + '#' + part[i].name}
+                                        title={<span><Icon type="caret-down"  className="framework_down_arrow" />
+                                        <i className="iconfont schoolgroup_menu_i_blue">&#xe67b;</i>
+                                        <span>{part[i].name}</span></span>}>
+                        {subRoleMenuItemArray}
+                    </SubMenu>;
+                }else{
+                    partMenu = <SubMenu className="schoolgroup_menu_c" key={part[i].id + '#' + part[i].name}
+                                        title={<span><Icon type="caret-down"  className="framework_down_arrow" />
+                                        <i className="iconfont schoolgroup_menu_i_blue">&#xe67b;</i>
+                                        <span>{part[i].name}</span>
+                                        <Icon type="edit" className="i_framework_right" onClick={this.editRole.bind(this,part[i].id,part[i].name,event)}/></span>}>
+                        {subRoleMenuItemArray}
+                    </SubMenu>;
+                }
 
-                partMenu = <SubMenu className="schoolgroup_menu_c" key={part[i].id + '#' + part[i].name} title={<span><Icon type="caret-down"  className="framework_down_arrow" /><i className="iconfont schoolgroup_menu_i_blue">&#xe67b;</i><span>{part[i].name}</span><Icon type="edit" className="i_framework_right" onClick={this.editRole.bind(this,part[i].id,part[i].name,event)}/></span>}>
-                    {subRoleMenuItemArray}
-                </SubMenu>;
                 // 这个地方的partMenu是一个对象，将对象放到数组里面，然后把数组setState，去DOM那里取数组就能够依次渲染出来
                 arr.push(partMenu);
                 openKeysArr.push(part[i].id + '#' + part[i].name);
@@ -283,7 +296,12 @@ class SchoolGroupMenu extends React.Component {
 
     /*添加角色*/
     addRole() {
-        this.setState({"addRoleModalIsShow":true})
+        var partLength = this.state.part.length;
+        if(partLength <= 1) {
+            message.error('请先添加角色组');
+        } else {
+            this.setState({"addRoleModalIsShow":true})
+        }
     }
 
     /*编辑角色组*/

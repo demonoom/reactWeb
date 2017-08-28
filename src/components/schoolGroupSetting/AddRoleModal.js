@@ -67,7 +67,6 @@ class AddSubGroupModal extends React.Component {
                     _this.props.addRoleGroupComplete();
                     _this.state.subGroupName = '';
                 }
-                // _this.props.callbackParent(_this.state.parentId);
             },
             onError: function (error) {
                 message.error(error);
