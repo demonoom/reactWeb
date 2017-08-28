@@ -51,7 +51,7 @@
 .schoolgroup_table .ant-table-tbody > tr > td{
     font-size: 14px;
     color: #666;
-    padding:13px 8px;
+    padding:8px;
     cursor:pointer
 }
 .schoolgroup_table .ant-table-thead > tr > th{
@@ -150,9 +150,12 @@
     margin-right:0 !important;
 }
 .schoolgroup_people{
-    color: #7d7d7d;
-    margin-left: 8px;
+    color: #424242
 
+}
+.group_name{
+    width: 110px;
+    float: left;
 }
 .schoolgroup_operate{
     text-align: center;
@@ -205,10 +208,16 @@
     padding:0 4px
 }
 .sg_btn_del{
-    padding: 3px 6px !important;
     position: relative;
-    top: -1px;
+    top: 0;
     margin-left: 12px;
+    border: none;
+    background: none;
+    padding: 0 !important;
+    margin: 0;
+}
+.sg_btn_del:hover{
+    background: none;
 }
 .schoolgroup_i_sublevel{
     font-size: 18px;
@@ -235,6 +244,7 @@
 }
 .framework_tab .ant-menu-submenu > .ant-menu{
     background: #fcfcfc;
+    color: #424242;
 }
 .character_add{
     padding: 15px 10px;
@@ -387,4 +397,10 @@
     overflow: hidden;
     white-space: nowrap;
     display: inline-block;
+}
+.first_indent{
+    text-indent: 18px;
+}
+.departmental_officer{
+    width: 120px;
 }

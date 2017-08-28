@@ -353,19 +353,19 @@ class GroupSettingModal extends React.Component {
             >
                 <div className="modal_register_main">
                     <Row className="ant_row">
-                        <Col span={6} className="schoolgroup_modal_col6">
+                        <Col span={6} className="framework_m_l">
                             部门名称：
                         </Col>
-                        <Col span={18}>
+                        <Col span={16} className="framework_m_r">
                             <Input placeholder="部门名称" value={this.state.parentGroupName}
                                    onChange={this.parentGroupNameChange}/>
                         </Col>
                     </Row>
                     <Row className="ant_row">
-                        <Col span={6} className="schoolgroup_modal_col6">
+                        <Col span={6} className="framework_m_l">
                             部门主管：
                         </Col>
-                        <Col span={18}>
+                        <Col span={16} className="framework_m_r">
                             <Select
                                 mode="tags"
                                 tags={true}
@@ -380,10 +380,10 @@ class GroupSettingModal extends React.Component {
                         </Col>
                     </Row>
                     <Row className="ant_row">
-                        <Col span={6} className="schoolgroup_modal_col6">
+                        <Col span={6}  className="framework_m_l">
                             群主设置：
                         </Col>
-                        <Col span={18}>
+                        <Col span={16} className="framework_m_r">
                             <Select
                                 showSearch
                                 style={{width: 200}}

@@ -164,8 +164,8 @@ class SchoolGroupMenu extends React.Component {
         menuList.forEach(function (subGroup) {
             var menuItem = <Menu.Item key={subGroup.id}>
                 { /*<Icon type="folder" className="schoolgroup_menu_i_blue" />*/}
-                <i className="iconfont schoolgroup_menu_i_blue">&#xe67b;</i>
-                <span>{subGroup.name}</span>
+                <i className="iconfont schoolgroup_menu_i_blue upexam_float">&#xe67b;</i>
+                <span className="group_name dold_text">{subGroup.name}</span>
                 <span>({subGroup.memberCount}人)</span>
             </Menu.Item>;
             subMenuItemArray.push(menuItem);

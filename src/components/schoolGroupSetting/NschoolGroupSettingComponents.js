@@ -24,6 +24,7 @@ const memberColumns = [{
     dataIndex: 'userName',
     key: 'userName',
     width:'120px',
+    className:'dold_text departmental_officer'
 },{
     title: '手机号',
     dataIndex: 'userPhone',
@@ -96,7 +97,7 @@ const NschoolGroupSettingComponents = React.createClass({
                 var subGroupList = [];
                 if(isEmpty(response)==false){
                     response.forEach(function (subGroup) {
-                        var subGroupName = <div onClick={_this.getSubGroupForButton.bind(_this,subGroup.id)}>
+                        var subGroupName = <div className="first_indent" onClick={_this.getSubGroupForButton.bind(_this,subGroup.id)}>
                             <span className="antnest_name affix_bottom_tc">{subGroup.name}</span>
                             <span className="schoolgroup_people">({subGroup.memberCount}人                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                )</span>
                         </div>;
@@ -429,7 +430,7 @@ const NschoolGroupSettingComponents = React.createClass({
                            pagination={false}/>
                 </div>
                 <div className="schoolgroup_title">
-                    <i className="iconfont schoolgroup_i">&#xe61b;</i>
+                    <i className="iconfont schoolgroup_i ">&#xe61b;</i>
                     <span>部门人员</span>
                     <span>
                         <Button onClick={this.addGroupMemeber} className="schoolgroup_btn_blue_solid schoolgroup_btn_left schoolgroup_btn">添加员工</Button>
