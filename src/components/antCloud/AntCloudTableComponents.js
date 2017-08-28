@@ -47,7 +47,7 @@ var targetDirColumns = [{
     dataIndex: 'dirName',
 }, {
     title: '操作',
-    className: 'ant-table-selection-user',
+    className: 'ant-table-selection-user schoolgroup_operate',
     dataIndex: 'moveDirOpt',
 }
 ];
@@ -262,8 +262,8 @@ const AntCloudTableComponents = React.createClass({
         var fileLogo;
         if(directory){
             fileLogo=<span className="cloud_text">
-                <i className="cloud_icon cloud_icon_file"></i>
-                <span className="antnest_name" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e,"mainTable")}>{name}</span>
+                <i className="cloud_icon cloud_icon_file upexam_float"></i>
+                <span className="antnest_name affix_bottom_tc" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e,"mainTable")}>{name}</span>
             </span>;
         }else{
             var lastPointIndex = name.lastIndexOf(".");
@@ -302,7 +302,7 @@ const AntCloudTableComponents = React.createClass({
                     fileTypeLog = <i className="cloud_icon cloud_icon_other"></i>;
                     break;
             }
-            fileLogo=<div>
+            fileLogo=<div className="cloud_text">
                 {fileTypeLog}
                 <span className="yipan_name">{name}</span>
             </div>;
@@ -1264,7 +1264,7 @@ const AntCloudTableComponents = React.createClass({
                             <Row>
                                 <Col span={12} className="share_til">选择好友分享文件：</Col>
                                 <Col span={12} className="share_til">这一刻的想法：
-									<span className="right_ri cloud_share_prompt"><Icon type="link" /><span>这是一个云盘分享的文件</span></span>
+									<span className="right_ri cloud_share_prompt"><Icon type="link" className="info_school_s" /><span>这是一个云盘分享的文件</span></span>
 								</Col>
                             </Row>
                             <Row>

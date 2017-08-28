@@ -2704,6 +2704,12 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 .ant-menu-item-selected .icon_schoolGroup{
 	background-position: 0 -750px;
 }
+.icon_antdisk{
+	background-position: 0 -800px;
+}
+.ant-menu-item-selected .icon_antdisk{
+	background-position: 0 -850px;
+}
 .person_13{
 	font-size:16px !important;
 }
@@ -4030,10 +4036,10 @@ div.btn1{
 .cloud_box table tr td.ant-table-selection-smallclass button, .cloud_box1 table tr td.ant-table-selection-smallclass button{
 	border:none;
 	background: none;
-    padding: 0;
-	margin:0
-	
+    padding: 0 !important;
+	margin:0 8px
 }
+
 .cloud_box .ant-table-thead > tr > th, .cloud_box .ant-table-tbody > tr > td, .cloud_box1 .ant-table-thead > tr > th, .cloud_box .ant-table-tbody > tr > td {
 	padding: 16px 0px 16px 8px;
     text-align: left !important;
@@ -4052,11 +4058,11 @@ div.btn1{
 }
 .cloud_text{
     position: relative;
-    top: 4px;
+    top: 0px;
 	width: 100%;
     float: left;
-	height:24px;
-	line-height: 24px;
+	height:28px;
+	line-height: 28px;
 }
 .cloud_icon{
 	background:url(../components/images/cloud_icon.png) no-repeat;
@@ -4065,10 +4071,10 @@ div.btn1{
     display: inline-block;
     margin-right: 12px;
 	position: relative;
-    top: 3px;
+    top: 2px;
 }
 .cloud_icon_file{
-	background-position:0 0px;
+	background-position:0 2px;
 }
 .cloud_icon_apx{
 	background-position:0 -50px;
@@ -4102,7 +4108,7 @@ div.btn1{
 	background-position:0 -200px;
 }
 .cloud_icon_other{
-	background-position:0 -250px;
+	background-position:0 -249px;
 }
 .share_til{
 	font-size: 14px;
