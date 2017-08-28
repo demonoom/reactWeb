@@ -11,10 +11,10 @@ const confirm = Modal.confirm;
 const columns = [{
     title: '姓名',
     dataIndex: 'name',
-}, {
+}, /*{
     title: '部门',
     dataIndex: 'group',
-}, {
+},*/ {
     title: '手机号',
     dataIndex: 'phone',
 }];
@@ -92,6 +92,7 @@ const RoleComponents = React.createClass({
     },
 
     loadDataWhenGhostMenuClick(selectedId){
+        console.log(selectedId);
         if(isEmpty(selectedId)==false){
             var arr = selectedId.split(',');
             this.setState({roleId: arr[0]});
@@ -129,7 +130,7 @@ const RoleComponents = React.createClass({
             var person = {
                 key: v.colUid,
                 name: v.userName,
-                group: v.schoolName,
+                // group: v.schoolName,
                 phone: v.phoneNumber,
             }
             mesData.push(person);
@@ -203,6 +204,7 @@ const RoleComponents = React.createClass({
      */
     editRoleComplete(roleId,roleName){
         //设置编辑角色Modal的显示状态为false，不再显示
+        alert(roleName);
         this.setState({"roleName":roleName,"editRoleModalIsShow":false});
         this.props.onEditComplete(roleId,roleName);
     },
