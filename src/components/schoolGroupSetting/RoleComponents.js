@@ -11,6 +11,7 @@ const confirm = Modal.confirm;
 const columns = [{
     title: '姓名',
     dataIndex: 'name',
+    className:'dold_text'
 }, /*{
     title: '部门',
     dataIndex: 'group',
