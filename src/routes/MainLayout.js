@@ -506,7 +506,7 @@ const MainLayout = React.createClass({
                                 <div className="tan">云课堂</div>
                             </Menu.Item>
                             <Menu.Item key="antCloud" className="padding_menu">
-                                <i className="icon_menu_ios icon_yichao1"></i>
+                                <i className="icon_menu_ios icon_antdisk"></i>
                                 <div className="tan">蚁盘</div>
                             </Menu.Item>
                             <Menu.Item key="systemSetting" className="padding_menu">
