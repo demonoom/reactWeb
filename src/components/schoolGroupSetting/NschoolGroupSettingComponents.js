@@ -44,15 +44,15 @@ const NschoolGroupSettingComponents = React.createClass({
             addSubGroupModalIsShow: false,
             selectedRowKeys: [],
             addGroupMemberModalIsShow: false,
-            groupSettingModalIsShow: false
+            groupSettingModalIsShow: false,
         };
     },
 
     componentDidMount() {
-        var structureId = "-1";
+        // this.getStructureById();
+        var structureId = "144";
         this.changeStructureData(structureId);
     },
-
     componentWillReceiveProps(nextProps) {
         if (isEmpty(structuresObjArray) == false && structuresObjArray.length > 1) {
             structuresObjArray.splice(1, structuresObjArray.length);
@@ -64,7 +64,9 @@ const NschoolGroupSettingComponents = React.createClass({
 
     changeStructureData(structureId) {
         var defaultPageNo = 1;
+        // 获取子部门
         this.listStructures(structureId);
+        // 根据部门id获取部门成员
         this.getStrcutureMembers(structureId, defaultPageNo);
         this.setState({structureId, structuresObjArray});
     },
@@ -172,7 +174,7 @@ const NschoolGroupSettingComponents = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var parentGroup = ret.response;
-
+                _this.setState({structureIdByNoom:parentGroup.id});
                 if (isEmpty(parentGroup) == false) {
                     var isExit = _this.checkStructureIsExitAtArray(parentGroup);
                     if (isExit == false) {
