@@ -52,18 +52,24 @@ class AddSubGroupModal extends React.Component {
       "name":_this.state.subGroupName,
       "parentId":_this.state.parentId
     };
-    doWebService(JSON.stringify(param), {
-      onResponse: function (ret) {
-          if(ret.msg=="调用成功" && ret.success==true){
-              message.success("部门添加成功");
-              _this.closeAddSubGroupModal();
-          }
-          _this.props.callbackParent(_this.state.parentId);
-      },
-      onError: function (error) {
-        message.error(error);
+      if(param.name.length == 0) {
+          message.error('角色名称不能为空');
+      }else {
+          doWebService(JSON.stringify(param), {
+              onResponse: function (ret) {
+                  if(ret.msg=="调用成功" && ret.success==true){
+                      message.success("部门添加成功");
+                      _this.closeAddSubGroupModal();
+                      _this.state.subGroupName = '';
+                      _this.props.addSubGroupComplete();
+                  }
+                  _this.props.callbackParent(_this.state.parentId);
+              },
+              onError: function (error) {
+                  message.error(error);
+              }
+          });
       }
-    });
   }
 
 
@@ -108,18 +114,18 @@ class AddSubGroupModal extends React.Component {
       >
         <div className="modal_register_main">
           <Row className="ant_row">
-            <Col span={6}>
+            <Col span={6} className="framework_m_l">
               部门名称：
             </Col>
-            <Col span={18}>
+            <Col span={16} className="framework_m_r">
               <Input placeholder="必填" value={this.state.subGroupName} onChange={this.subGroupNameChange}/>
             </Col>
           </Row>
           <Row className="ant_row">
-            <Col span={6}>
+            <Col span={6} className="framework_m_l">
               上级部门：
             </Col>
-            <Col span={18}>
+            <Col span={16} className="framework_m_r">
               {this.state.parentGroupName}
             </Col>
           </Row>

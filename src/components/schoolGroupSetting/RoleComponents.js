@@ -11,6 +11,7 @@ const confirm = Modal.confirm;
 const columns = [{
     title: '姓名',
     dataIndex: 'name',
+    className:'dold_text'
 }, /*{
     title: '部门',
     dataIndex: 'group',
@@ -39,12 +40,14 @@ const RoleComponents = React.createClass({
             roleName: '',
             data: [],
             deleteData:[],
-            mermberNum:0
+            mermberNum:0,
+            disabled:false
         };
     },
 
     componentDidMount() {
         var requestId = "";
+        var _this = this;
         try{
             var selectedMessage = this.props.selectedId;
             if(isEmpty(selectedMessage)==false){
@@ -57,6 +60,17 @@ const RoleComponents = React.createClass({
             if(isEmpty(papaKey)==false){
                 var papaArr = papaKey.split('#');
                 this.setState({papaName:papaArr[1]});
+
+                var selectedPapa = papaArr[0];
+                this.props.defaultId.forEach(function (v,i) {
+                    console.log(v);
+                    console.log(selectedPapa);
+                    if(v == selectedPapa) {
+                        _this.setState({disabled:true});
+                    } else{
+                        _this.setState({disabled:false});
+                    }
+                })
             }
         }catch(error){
             console.log(error);
@@ -66,12 +80,12 @@ const RoleComponents = React.createClass({
         }else{
             this.ajaxData(this.props.firstId);
         }
-        console.log(this.props.firstId);
+        this.setState({defaultId:this.props.defaultId});
     },
 
     componentWillReceiveProps(nextProps) {
+        var _this = this;
         var selectedMessage = nextProps.selectedId;
-        console.log(nextProps.selectedId);
         try{
             if(isEmpty(selectedMessage)==false){
                 var arr = selectedMessage.split(',');
@@ -84,15 +98,21 @@ const RoleComponents = React.createClass({
             if(isEmpty(papaKey)==false){
                 papaArr = papaKey.split('#');
                 this.setState({papaName:papaArr[1]});
-            }
+                var selectedPapa = papaArr[0];
+                this.state.defaultId.forEach(function (v,i) {
+                    if(v == selectedPapa) {
+                        _this.setState({disabled:true});
+                    } else{
+                        _this.setState({disabled:false});
+                    }
+                })
+            };
         }catch(error){
             console.log(error);
         }
-        // console.log(nextProps.firstName);
     },
 
     loadDataWhenGhostMenuClick(selectedId){
-        console.log(selectedId);
         if(isEmpty(selectedId)==false){
             var arr = selectedId.split(',');
             this.setState({roleId: arr[0]});
@@ -203,10 +223,9 @@ const RoleComponents = React.createClass({
      * @param roleName 角色的名称
      */
     editRoleComplete(roleId,roleName){
-        //设置编辑角色Modal的显示状态为false，不再显示
-        alert(roleName);
-        this.setState({"roleName":roleName,"editRoleModalIsShow":false});
         this.props.onEditComplete(roleId,roleName);
+        //设置编辑角色Modal的显示状态为false，不再显示
+        this.setState({"roleName":roleName,"editRoleModalIsShow":false});
     },
     /**
      * 删除成功后右侧页面刷新为第一条的成员的回调
@@ -250,7 +269,7 @@ const RoleComponents = React.createClass({
                     <span className="schoolgroup_people modal_course">(<span>{this.state.mermberNum}</span>人)</span>
                     <span>
                         <Button className="schoolgroup_btn_gray_6 schoolgroup_btn_left schoolgroup_btn"
-                                onClick={this.editRole}>编辑</Button>
+                                onClick={this.editRole} disabled = {this.state.disabled}>编辑</Button>
                     </span>
                 </div>
 

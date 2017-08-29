@@ -35,6 +35,8 @@ class SystemSettingComponent extends React.Component {
         this.changeGroupTab = this.changeGroupTab.bind(this);
         this.editRoleComplete = this.editRoleComplete.bind(this);
         this.changeSchoolGroupSettingCom = this.changeSchoolGroupSettingCom.bind(this);
+        this.sendDefaultId = this.sendDefaultId.bind(this);
+        this.addSubGroupComplete = this.addSubGroupComplete.bind(this);
     }
 
 
@@ -70,9 +72,21 @@ class SystemSettingComponent extends React.Component {
         this.setState({papaKey: papaKey,activeMenu});
     }
 
+    /**
+     * 系统设置中的角色修改操作的回调
+     * @param roleId
+     * @param roleName
+     */
     editRoleComplete(roleId,roleName){
         var selectedId = roleId+","+roleName;
         this.setState({selectedId});
+        this.refs.schoolGroupMenu.initMenuInfo();
+    }
+
+    /**
+     * 组织架构添加子部门的回调
+     */
+    addSubGroupComplete(){
         this.refs.schoolGroupMenu.initMenuInfo();
     }
 
@@ -86,6 +100,9 @@ class SystemSettingComponent extends React.Component {
                 this.refs.schoolGroupSettingComponents.changeRightComponent(selectedRoleMenuId,selectedRoleKeyPath,currentItem);
             }
         }
+    }
+    sendDefaultId (defaultId) {
+        this.setState({defaultId});
     }
 
     render() {
@@ -102,6 +119,7 @@ class SystemSettingComponent extends React.Component {
                                                         currentItem = {this.props.currentItem}
                                                         sendFirstId={this.sendFirstId}
                                                         onGhostMenuClick={this.changeSchoolGroupSettingCom}
+                                                        sendDefaultId = {this.sendDefaultId}
                 />;
                 this.tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId}
                                                                   selectedId={this.state.selectedId}
@@ -110,7 +128,9 @@ class SystemSettingComponent extends React.Component {
                                                                   onEditComplete={this.editRoleComplete}
                                                                   papaKey={this.state.papaKey}
                                                                   firstId={this.state.firstId}
+                                                                  defaultId={this.state.defaultId}
                                                                   ref="schoolGroupSettingComponents"
+                                                                  addSubGroupComplete={this.addSubGroupComplete}
                 ></SchoolGroupSettingComponents>;
                 break;
             case 'systemFlow':
