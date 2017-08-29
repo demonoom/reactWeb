@@ -487,7 +487,7 @@ const AntCloudTableComponents = React.createClass({
                 data.push({
                     key: key,
                     title: fileLogo,
-                    creator:creator.userName,
+                    creator:<span>{creator.userName}</span>,
                     createTime: getLocalTime(createTime),
                     subjectOpt: subjectOpt,
                 });

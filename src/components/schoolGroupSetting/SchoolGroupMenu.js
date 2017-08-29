@@ -91,7 +91,8 @@ class SchoolGroupMenu extends React.Component {
     }
 
     addRoleGroupComplete(){
-        this.getStructureRoleGroups();
+        this.initMenuInfo();
+        // this.getStructureRoleGroups();
         this.setState({"addSubGroupModalIsShow":false});
         this.setState({"addRoleModalIsShow":false});
         this.setState({"editRoleGroupIsShow":false});

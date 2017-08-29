@@ -25,9 +25,26 @@ const FlowSettingComponent = React.createClass({
 
     componentDidMount(){
         this.getFlowGroup();
+        // this.getPersonTask();
     },
 
     componentWillReceiveProps(nextProps){
+    },
+
+    getPersonTask(){
+        let _this = this;
+        var param = {
+            "method": 'findFlowTaskByUserId',
+            "userId": "zhangsan",
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                console.log(ret.msg+"==="+ret.response);
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     /**
