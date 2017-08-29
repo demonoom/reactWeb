@@ -51,6 +51,11 @@ const NschoolGroupSettingComponents = React.createClass({
     componentDidMount() {
         // this.getStructureById();
         var structureId = "-1";
+        if(isEmpty(structuresObjArray)==false && structuresObjArray.length > 0 ){
+            var currentObj = structuresObjArray[structuresObjArray.length-1];
+            structureId = currentObj.id;
+        }
+        this.setState({"currentStructureId":structureId});
         this.changeStructureData(structureId);
     },
     componentWillReceiveProps(nextProps) {
@@ -142,13 +147,13 @@ const NschoolGroupSettingComponents = React.createClass({
             onResponse: function (ret) {
                 if (ret.msg == "调用成功" && ret.success == true) {
                     message.success("部门删除成功！");
-                    _this.listStructures(_this.state.structureId);
-                    _this.getStrcutureMembers(_this.state.structureId, _this.state.memberPageNo);
+                    _this.listStructures(_this.state.currentStructureId);
+                    _this.getStrcutureMembers(_this.state.currentStructureId, _this.state.memberPageNo);
                 } else {
                     message.error(ret.msg);
                 }
                 _this.closeConfirmModal1();
-                _this.props.addSubGroupComplete();
+                // _this.props.addSubGroupComplete();
             },
             onError: function (error) {
                 message.error(error);
@@ -247,7 +252,7 @@ const NschoolGroupSettingComponents = React.createClass({
     getSubGroup(record, index) {
         var memberPageNo = 1;
         this.setState({
-            structureId: record.key,
+            currentStructureId: record.key,
             schoolSettingModalIsShow: false,
             addSubGroupModalIsShow: false,
             addGroupMemberModalIsShow: false,
@@ -265,12 +270,14 @@ const NschoolGroupSettingComponents = React.createClass({
     getSubGroupForButton(structureId) {
         var memberPageNo = 1;
         subGroupMemberList.splice(0);
+        var defaultMemberPageNo = 1;
         this.setState({
             structureId: structureId,
             schoolSettingModalIsShow: false,
             addSubGroupModalIsShow: false,
             addGroupMemberModalIsShow: false,
-            "groupSettingModalIsShow": false
+            "groupSettingModalIsShow": false,
+            memberPageNo:defaultMemberPageNo
         });
         this.listStructures(structureId);
         this.getStrcutureMembers(structureId, memberPageNo);
@@ -303,7 +310,8 @@ const NschoolGroupSettingComponents = React.createClass({
                 break;
             }
         }
-        this.setState({structureId, structuresObjArray});
+        var defaultMemberPageNo = 1;
+        this.setState({"currentStructureId":structureId, structuresObjArray,"memberPageNo":defaultMemberPageNo});
     },
 
     /**
@@ -399,7 +407,8 @@ const NschoolGroupSettingComponents = React.createClass({
     },
 
     addSubGroupComplete() {
-        this.props.addSubGroupComplete();
+        // this.props.addSubGroupComplete();
+        this.changeStructureData(this.state.currentStructureId);
     },
 
     showConfirmModal() {
