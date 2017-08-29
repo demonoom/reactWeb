@@ -404,3 +404,15 @@
 .departmental_officer{
     width: 120px;
 }
+.name_max{
+    max-width: 100px;
+}
+.name_max3{
+    max-width: 500px;
+    position: relative;
+    top: 3px;
+}
+.name_max_last{
+    position: relative;
+    top: -2px;
+}

@@ -487,7 +487,7 @@ const AntCloudTableComponents = React.createClass({
                 data.push({
                     key: key,
                     title: fileLogo,
-                    creator:<span>{creator.userName}</span>,
+                    creator:<span className="dold_text name_max">{creator.userName}</span>,
                     createTime: getLocalTime(createTime),
                     subjectOpt: subjectOpt,
                 });
@@ -1177,6 +1177,7 @@ const AntCloudTableComponents = React.createClass({
                         </div>
                     </Modal>
                     <Modal title="新建文件夹"
+                           width={440}
                            visible={cloudTable.state.mkdirModalVisible}
                            transitionName=""  //禁用modal的动画效果
                            maskClosable={false} //设置不允许点击蒙层关闭
@@ -1185,8 +1186,8 @@ const AntCloudTableComponents = React.createClass({
                     >
                         <div>
                             <Row>
-                                <Col span={3} className="right_look">名称：</Col>
-                                <Col span={20}>
+                                <Col span={6} className="right_look">名称：</Col>
+                                <Col span={16}>
                                     <Input value={cloudTable.state.editDirectoryName} onChange={cloudTable.directoryNameInputChange}/>
                                 </Col>
                             </Row>
