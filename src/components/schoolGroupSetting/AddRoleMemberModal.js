@@ -163,7 +163,10 @@ class AddRoleMemberModal extends React.Component {
           var teacher = e.teacher;
           var course = teacher.course;
           var user = teacher.user;
-          var courseName = course.name;
+          var courseName = "";
+          if(isEmpty(course)==false){
+            courseName = course.name;
+          }
           var userId = user.colUid;
           var userName = user.userName;
           var userAvatar = user.avatar;
@@ -173,18 +176,15 @@ class AddRoleMemberModal extends React.Component {
             console.log(isExitInSettingTeam);
             // && isExitInSettingTeam==false
           if(isExitAtTargetOptions==false&&isExitInSettingTeam==false){
-            //不能添加自己
-            if (parseInt(userId) != _this.state.loginUser.colUid) {
-              const data = {key:userId,
-                label: <div>
-                  <div>
-                    <span className="group_team_gray6">{userName}</span>
-                    <span className="group_team_blue9">{courseName}</span>
-                  </div>
-                  <div className="group_team_gray9">{gradeName}</div>
-                </div>, value: userId+"#"+userName+"#"+gradeName+"#"+userAvatar+"#"+courseName };
-              teacherSrcOptions.push(data);
-            }
+            const data = {key:userId,
+              label: <div>
+                <div>
+                  <span className="group_team_gray6">{userName}</span>
+                  <span className="group_team_blue9">{courseName}</span>
+                </div>
+                <div className="group_team_gray9">{gradeName}</div>
+              </div>, value: userId+"#"+userName+"#"+gradeName+"#"+userAvatar+"#"+courseName };
+            teacherSrcOptions.push(data);
           }
         });
         _this.setState({teacherSrcOptions});
