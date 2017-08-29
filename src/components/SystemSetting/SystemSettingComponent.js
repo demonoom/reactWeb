@@ -36,6 +36,7 @@ class SystemSettingComponent extends React.Component {
         this.editRoleComplete = this.editRoleComplete.bind(this);
         this.changeSchoolGroupSettingCom = this.changeSchoolGroupSettingCom.bind(this);
         this.sendDefaultId = this.sendDefaultId.bind(this);
+        this.addSubGroupComplete = this.addSubGroupComplete.bind(this);
     }
 
 
@@ -82,6 +83,13 @@ class SystemSettingComponent extends React.Component {
         this.refs.schoolGroupMenu.initMenuInfo();
     }
 
+    /**
+     * 组织架构添加子部门的回调
+     */
+    addSubGroupComplete(){
+        this.refs.schoolGroupMenu.initMenuInfo();
+    }
+
     changeSchoolGroupSettingCom(currentItem,selectedRoleMenuId,selectedRoleKeyPath){
         // this.setState({"selectedId":selectedKey});
         if(isEmpty(this.refs.schoolGroupSettingComponents)==false){
@@ -122,6 +130,7 @@ class SystemSettingComponent extends React.Component {
                                                                   firstId={this.state.firstId}
                                                                   defaultId={this.state.defaultId}
                                                                   ref="schoolGroupSettingComponents"
+                                                                  addSubGroupComplete={this.addSubGroupComplete}
                 ></SchoolGroupSettingComponents>;
                 break;
             case 'systemFlow':

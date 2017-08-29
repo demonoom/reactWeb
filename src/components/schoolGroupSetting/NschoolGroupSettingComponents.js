@@ -1,7 +1,6 @@
-import React, { PropTypes } from 'react';
-import { Table,Icon,Button,Breadcrumb,message} from 'antd';
+import React, {PropTypes} from 'react';
+import {Table, Icon, Button, Breadcrumb, message} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
-import {getPageSize} from '../../utils/Const';
 import {isEmpty} from '../../utils/utils';
 import SchoolSettingModal from './SchoolSettingModal';
 import AddSubGroupModal from './AddSubGroupModal';
@@ -13,68 +12,61 @@ const columns = [{
     title: '部门名称',
     dataIndex: 'subGroupName',
     key: 'subGroupName',
-},{
+}, {
     title: '操作',
     dataIndex: 'opt',
     key: 'opt',
-    width:'86px'
+    width: '86px'
 }];
 const memberColumns = [{
     title: '姓名',
     dataIndex: 'userName',
     key: 'userName',
-    width:'120px',
-    className:'dold_text departmental_officer'
-},{
+    width: '120px',
+    className: 'dold_text departmental_officer'
+}, {
     title: '手机号',
     dataIndex: 'userPhone',
     key: 'userPhone',
 }
 ];
-var structuresObjArray=[];
+var structuresObjArray = [];
 var subGroupMemberList = [];
 const NschoolGroupSettingComponents = React.createClass({
 
     getInitialState() {
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         return {
-            loginUser : loginUser,
-            memberPageNo:1,
-            structuresObjArray:[],
-            schoolSettingModalIsShow:false,
-            addSubGroupModalIsShow:false,
-            selectedRowKeys:[],
-            addGroupMemberModalIsShow:false,
-            groupSettingModalIsShow:false
+            loginUser: loginUser,
+            memberPageNo: 1,
+            structuresObjArray: [],
+            schoolSettingModalIsShow: false,
+            addSubGroupModalIsShow: false,
+            selectedRowKeys: [],
+            addGroupMemberModalIsShow: false,
+            groupSettingModalIsShow: false
         };
     },
 
-    componentDidMount(){
-        console.log("NScholl didMount");
-        // structuresObjArray.splice(1,structuresObjArray.length);
+    componentDidMount() {
         var structureId = "-1";
         this.changeStructureData(structureId);
     },
 
-    componentWillReceiveProps(nextProps){
-        console.log("NScholl will");
-        if(isEmpty(structuresObjArray)==false && structuresObjArray.length>1){
-            structuresObjArray.splice(1,structuresObjArray.length);
+    componentWillReceiveProps(nextProps) {
+        if (isEmpty(structuresObjArray) == false && structuresObjArray.length > 1) {
+            structuresObjArray.splice(1, structuresObjArray.length);
         }
         subGroupMemberList.splice(0);
         var structureId = nextProps.structureId;
-        /*var defaultPageNo = 1;
-        this.listStructures(structureId);
-        this.getStrcutureMembers(structureId,defaultPageNo);
-        this.setState({structureId,structuresObjArray});*/
         this.changeStructureData(structureId);
     },
 
-    changeStructureData(structureId){
+    changeStructureData(structureId) {
         var defaultPageNo = 1;
         this.listStructures(structureId);
-        this.getStrcutureMembers(structureId,defaultPageNo);
-        this.setState({structureId,structuresObjArray});
+        this.getStrcutureMembers(structureId, defaultPageNo);
+        this.setState({structureId, structuresObjArray});
     },
 
 
@@ -83,7 +75,7 @@ const NschoolGroupSettingComponents = React.createClass({
      * @param operateUserId
      * @param structureId
      */
-    listStructures(structureId){
+    listStructures(structureId) {
         let _this = this;
         this.getStructureById(structureId);
         var param = {
@@ -95,20 +87,22 @@ const NschoolGroupSettingComponents = React.createClass({
             onResponse: function (ret) {
                 var response = ret.response;
                 var subGroupList = [];
-                if(isEmpty(response)==false){
+                if (isEmpty(response) == false) {
                     response.forEach(function (subGroup) {
-                        var subGroupName = <div className="first_indent" onClick={_this.getSubGroupForButton.bind(_this,subGroup.id)}>
+                        var subGroupName = <div className="first_indent"
+                                                onClick={_this.getSubGroupForButton.bind(_this, subGroup.id)}>
                             <span className="antnest_name affix_bottom_tc">{subGroup.name}</span>
                             <span className="schoolgroup_people">({subGroup.memberCount}人                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                )</span>
                         </div>;
                         var opt = <div className="knowledge_ri">
-                            {/*<Button className="shoolgroup_btn_sublevel" onClick={_this.getSubGroupForButton.bind(_this,subGroup.id)}><i className="iconfont schoolgroup_i_sublevel">&#xe7ee;</i></Button>*/}
-                            <Button className="sg_btn_del" icon="delete" onClick={_this.removeGroup.bind(_this,subGroup.id)}></Button>
+                            <Button className="sg_btn_del" icon="delete"
+                                    onClick={_this.removeGroup.bind(_this, subGroup.id)}></Button>
+                            {/*<Button className="sg_btn_del" icon="delete" onClick={_this.showConfirmModal1.bind(_this,subGroup.id)}></Button>*/}
                         </div>
                         subGroupList.push({
                             key: subGroup.id,
                             subGroupName: subGroupName,
-                            opt:opt
+                            opt: opt
                         });
                     });
                 }
@@ -121,31 +115,38 @@ const NschoolGroupSettingComponents = React.createClass({
         });
     },
 
-    listStructureAndMembers(structureId){
+    listStructureAndMembers(structureId) {
         var defaultPageNo = 1;
         this.listStructures(structureId);
-        this.getStrcutureMembers(structureId,defaultPageNo);
+        this.getStrcutureMembers(structureId, defaultPageNo);
     },
 
     /**
      * 移除部门
      */
-    removeGroup(structureId){
+    removeGroup(structureId) {
+        this.showConfirmModal1();
+        this.setState({removeGroupId: structureId});
+    },
+
+    batchDeleteMemeber1() {
         let _this = this;
         var param = {
             "method": 'deleteStuctureById',
             "operateUserId": _this.state.loginUser.colUid,
-            "structureId": structureId,
+            "structureId": _this.state.removeGroupId,
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.msg == "调用成功" && ret.success == true) {
                     message.success("部门删除成功！");
                     _this.listStructures(_this.state.structureId);
-                    _this.getStrcutureMembers(_this.state.structureId,_this.state.memberPageNo);
-                }else{
+                    _this.getStrcutureMembers(_this.state.structureId, _this.state.memberPageNo);
+                } else {
                     message.error(ret.msg);
                 }
+                _this.closeConfirmModal1();
+                _this.props.addSubGroupComplete();
             },
             onError: function (error) {
                 message.error(error);
@@ -158,9 +159,9 @@ const NschoolGroupSettingComponents = React.createClass({
      * @param operateUserId
      * @param structureId
      */
-    getStructureById(structureId){
+    getStructureById(structureId) {
         let _this = this;
-        if(isEmpty(structureId)){
+        if (isEmpty(structureId)) {
             structureId = "-1";
         }
         var param = {
@@ -172,9 +173,9 @@ const NschoolGroupSettingComponents = React.createClass({
             onResponse: function (ret) {
                 var parentGroup = ret.response;
 
-                if(isEmpty(parentGroup)==false){
+                if (isEmpty(parentGroup) == false) {
                     var isExit = _this.checkStructureIsExitAtArray(parentGroup);
-                    if(isExit==false){
+                    if (isExit == false) {
                         //存放组织架构的层次关系
                         structuresObjArray.push(parentGroup);
                     }
@@ -188,11 +189,11 @@ const NschoolGroupSettingComponents = React.createClass({
         });
     },
 
-    checkStructureIsExitAtArray(newStructure){
+    checkStructureIsExitAtArray(newStructure) {
         var isExit = false;
-        for(var i=0;i<structuresObjArray.length;i++){
+        for (var i = 0; i < structuresObjArray.length; i++) {
             var structure = structuresObjArray[i];
-            if(structure.id == newStructure.id){
+            if (structure.id == newStructure.id) {
                 isExit = true;
                 break;
             }
@@ -205,30 +206,30 @@ const NschoolGroupSettingComponents = React.createClass({
      * @param operateUserId
      * @param structureId
      */
-    getStrcutureMembers(structureId,pageNo){
+    getStrcutureMembers(structureId, pageNo) {
         let _this = this;
         var param = {
             "method": 'getStrcutureMembers',
             "operateUserId": _this.state.loginUser.colUid,
             "structureId": structureId,
-            "pageNo":pageNo,
+            "pageNo": pageNo,
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                if(isEmpty(response)==false){
+                if (isEmpty(response) == false) {
                     response.forEach(function (member) {
                         var user = member.user;
                         subGroupMemberList.push({
                             key: member.id,
-                            userId:user.colUid,
+                            userId: user.colUid,
                             userName: user.userName,
-                            userPhone:user.phoneNumber
+                            userPhone: user.phoneNumber
                         });
                     });
                 }
                 var pager = ret.pager;
-                _this.setState({subGroupMemberList,totalMember:pager.rsCount});
+                _this.setState({subGroupMemberList, totalMember: pager.rsCount});
             },
             onError: function (error) {
                 message.error(error);
@@ -241,10 +242,17 @@ const NschoolGroupSettingComponents = React.createClass({
      * @param record
      * @param index
      */
-    getSubGroup(record, index){
-        this.setState({structureId:record.key,schoolSettingModalIsShow:false,addSubGroupModalIsShow:false,addGroupMemberModalIsShow:false,"groupSettingModalIsShow":false});
+    getSubGroup(record, index) {
+        var memberPageNo = 1;
+        this.setState({
+            structureId: record.key,
+            schoolSettingModalIsShow: false,
+            addSubGroupModalIsShow: false,
+            addGroupMemberModalIsShow: false,
+            "groupSettingModalIsShow": false
+        });
         this.listStructures(record.key);
-        this.getStrcutureMembers(record.key,this.state.memberPageNo);
+        this.getStrcutureMembers(record.key, memberPageNo);
     },
 
     /**
@@ -252,11 +260,18 @@ const NschoolGroupSettingComponents = React.createClass({
      * @param record
      * @param index
      */
-    getSubGroupForButton(structureId){
+    getSubGroupForButton(structureId) {
+        var memberPageNo = 1;
         subGroupMemberList.splice(0);
-        this.setState({structureId:structureId,schoolSettingModalIsShow:false,addSubGroupModalIsShow:false,addGroupMemberModalIsShow:false,"groupSettingModalIsShow":false});
+        this.setState({
+            structureId: structureId,
+            schoolSettingModalIsShow: false,
+            addSubGroupModalIsShow: false,
+            addGroupMemberModalIsShow: false,
+            "groupSettingModalIsShow": false
+        });
         this.listStructures(structureId);
-        this.getStrcutureMembers(structureId,this.state.memberPageNo);
+        this.getStrcutureMembers(structureId, memberPageNo);
     },
 
     /**
@@ -267,68 +282,74 @@ const NschoolGroupSettingComponents = React.createClass({
         this.setState({
             memberPageNo: pageNo,
         });
-        this.getStrcutureMembers(this.state.structureId,pageNo);
+        this.getStrcutureMembers(this.state.structureId, pageNo);
     },
 
     /**
      * 面包条点击响应
      * 切换到当前的组织架构层次，同时，在此面包条后的数据移除
      */
-    breadCrumbClick(structureId){
+    breadCrumbClick(structureId) {
         var defaultPageNo = 1;
         this.listStructures(structureId);
         subGroupMemberList.splice(0);
-        this.getStrcutureMembers(structureId,defaultPageNo);
-        for(var i=0;i<structuresObjArray.length;i++){
+        this.getStrcutureMembers(structureId, defaultPageNo);
+        for (var i = 0; i < structuresObjArray.length; i++) {
             var structure = structuresObjArray[i];
-            if(structure.id == structureId){
-                structuresObjArray.splice(i,structuresObjArray.length);
+            if (structure.id == structureId) {
+                structuresObjArray.splice(i, structuresObjArray.length);
                 break;
             }
         }
-        this.setState({structureId,structuresObjArray});
+        this.setState({structureId, structuresObjArray});
     },
 
     /**
      * 添加子部门
      */
-    addSubGroup(){
-        this.setState({"addSubGroupModalIsShow":true});
+    addSubGroup() {
+        this.setState({"addSubGroupModalIsShow": true});
     },
 
     /**
      * 添加部门人员
      */
-    addGroupMemeber(){
-        this.setState({"addGroupMemberModalIsShow":true});
+    addGroupMemeber() {
+        this.setState({"addGroupMemberModalIsShow": true});
     },
 
     /**
      * 部门设置
      */
-    groupSetting(){
-        this.setState({"groupSettingModalIsShow":true});
+    groupSetting() {
+        this.setState({"groupSettingModalIsShow": true});
     },
     /**
      * 学校设置
      */
-    schoolSetting(){
-        this.setState({schoolSettingModalIsShow:true});
+    schoolSetting() {
+        this.setState({schoolSettingModalIsShow: true});
     },
 
     /**
      * 员工选中响应函数
      * @param selectedRowKeys
      */
-    onSelectChange(selectedRowKeys){
+    onSelectChange(selectedRowKeys) {
         console.log('selectedRowKeys changed: ', selectedRowKeys);
-        this.setState({selectedRowKeys,schoolSettingModalIsShow:false,addSubGroupModalIsShow:false,addGroupMemberModalIsShow:false,"groupSettingModalIsShow":false});
+        this.setState({
+            selectedRowKeys,
+            schoolSettingModalIsShow: false,
+            addSubGroupModalIsShow: false,
+            addGroupMemberModalIsShow: false,
+            "groupSettingModalIsShow": false
+        });
     },
 
     /**
      * 部门成员加载更多
      */
-    loadMoreMember(){
+    loadMoreMember() {
         var memberPageNo = parseInt(this.state.memberPageNo) + 1;
         this.memberPageOnChange(memberPageNo);
     },
@@ -336,11 +357,11 @@ const NschoolGroupSettingComponents = React.createClass({
     /**
      * 批量删除部门员工
      */
-    batchDeleteMemeber(){
+    batchDeleteMemeber() {
         var _this = this;
         var selectedRowKeys = _this.state.selectedRowKeys;
         var memberIds = "";
-        if(isEmpty(selectedRowKeys)==false){
+        if (isEmpty(selectedRowKeys) == false) {
             memberIds = selectedRowKeys.join(",");
         }
         var param = {
@@ -354,8 +375,8 @@ const NschoolGroupSettingComponents = React.createClass({
                     message.success("员工移除成功！");
                     subGroupMemberList.splice(0);
                     _this.listStructures(_this.state.structureId);
-                    _this.getStrcutureMembers(_this.state.structureId,_this.state.memberPageNo);
-                    _this.setState({selectedRowKeys:[]});
+                    _this.getStrcutureMembers(_this.state.structureId, _this.state.memberPageNo);
+                    _this.setState({selectedRowKeys: []});
                     _this.closeConfirmModal();
                 }
             },
@@ -365,16 +386,32 @@ const NschoolGroupSettingComponents = React.createClass({
         });
     },
 
-    initModalStatus(){
-        this.setState({"groupSettingModalIsShow":false,"addGroupMemberModalIsShow":false,"addSubGroupModalIsShow":false,"schoolSettingModalIsShow":false});
+
+    initModalStatus() {
+        this.setState({
+            "groupSettingModalIsShow": false,
+            "addGroupMemberModalIsShow": false,
+            "addSubGroupModalIsShow": false,
+            "schoolSettingModalIsShow": false
+        });
     },
 
-    showConfirmModal(){
+    addSubGroupComplete() {
+        this.props.addSubGroupComplete();
+    },
+
+    showConfirmModal() {
         this.refs.confirmModal.changeConfirmModalVisible(true);
+    },
+    showConfirmModal1() {
+        this.refs.confirmModal1.changeConfirmModalVisible(true);
     },
 
     closeConfirmModal() {
         this.refs.confirmModal.changeConfirmModalVisible(false);
+    },
+    closeConfirmModal1() {
+        this.refs.confirmModal1.changeConfirmModalVisible(false);
     },
 
     /**
@@ -384,28 +421,31 @@ const NschoolGroupSettingComponents = React.createClass({
     render() {
         var _this = this;
         const rowSelection = {
-            selectedRowKeys:_this.state.selectedRowKeys,
+            selectedRowKeys: _this.state.selectedRowKeys,
             onChange: _this.onSelectChange,
         };
         const hasSelected = _this.state.selectedRowKeys.length > 0;
         var structureName = "";
-        if(isEmpty(_this.state.parentGroup)==false){
+        if (isEmpty(_this.state.parentGroup) == false) {
             structureName = _this.state.parentGroup.name;
         }
-        var breadcrumbItemObjArray=[];
-        if(isEmpty(_this.state.structuresObjArray)==false){
+        var breadcrumbItemObjArray = [];
+        if (isEmpty(_this.state.structuresObjArray) == false) {
             _this.state.structuresObjArray.forEach(function (structure) {
-                var breadcrumbItemObj = <Breadcrumb.Item key={structure.id} ><a onClick={_this.breadCrumbClick.bind(_this,structure.id)}>{structure.name}</a></Breadcrumb.Item>;
+                var breadcrumbItemObj = <Breadcrumb.Item key={structure.id}><a
+                    onClick={_this.breadCrumbClick.bind(_this, structure.id)}>{structure.name}</a></Breadcrumb.Item>;
                 breadcrumbItemObjArray.push(breadcrumbItemObj);
             });
         }
         var settingButton;
-        if(isEmpty(_this.props.rootStructure)){
+        if (isEmpty(_this.props.rootStructure)) {
             settingButton = null;
-        }else if(_this.state.structureId == _this.props.rootStructure.id){
-            settingButton = <Button className="schoolgroup_btn_gray_6 schoolgroup_btn_left schoolgroup_btn" onClick={this.schoolSetting}>设置</Button>
-        }else{
-            settingButton = <Button className="schoolgroup_btn_gray_6 schoolgroup_btn_left schoolgroup_btn" onClick={this.groupSetting}>部门设置</Button>;
+        } else if (_this.state.structureId == _this.props.rootStructure.id) {
+            settingButton = <Button className="schoolgroup_btn_gray_6 schoolgroup_btn_left schoolgroup_btn"
+                                    onClick={this.schoolSetting}>设置</Button>
+        } else {
+            settingButton = <Button className="schoolgroup_btn_gray_6 schoolgroup_btn_left schoolgroup_btn"
+                                    onClick={this.groupSetting}>部门设置</Button>;
         }
         return (
             <div className="schoolgroup">
@@ -422,18 +462,21 @@ const NschoolGroupSettingComponents = React.createClass({
                     <i className="iconfont schoolgroup_i">&#xe6a0;</i>
                     <span>下级部门</span>
                     <span>
-                        <Button className="schoolgroup_btn_blue schoolgroup_btn_left schoolgroup_btn" onClick={this.addSubGroup}>添加子部门</Button>
+                        <Button className="schoolgroup_btn_blue schoolgroup_btn_left schoolgroup_btn"
+                                onClick={this.addSubGroup}>添加子部门</Button>
                     </span>
                 </div>
                 <div>
-                    <Table showHeader={false} columns={columns} dataSource={this.state.subGroupList} className="schoolgroup_table"
+                    <Table showHeader={false} columns={columns} dataSource={this.state.subGroupList}
+                           className="schoolgroup_table"
                            pagination={false}/>
                 </div>
                 <div className="schoolgroup_title">
                     <i className="iconfont schoolgroup_i ">&#xe61b;</i>
                     <span>部门人员</span>
                     <span>
-                        <Button onClick={this.addGroupMemeber} className="schoolgroup_btn_blue_solid schoolgroup_btn_left schoolgroup_btn">添加员工</Button>
+                        <Button onClick={this.addGroupMemeber}
+                                className="schoolgroup_btn_blue_solid schoolgroup_btn_left schoolgroup_btn">添加员工</Button>
                         <span className="schoolgroup_btn_left">
                             <Button
                                 type="primary"
@@ -441,7 +484,7 @@ const NschoolGroupSettingComponents = React.createClass({
                                 disabled={!hasSelected} className="schoolgroup_btn_red schoolgroup_btn">
                                 批量删除
                             </Button>
-                            <span className="password_ts" style={{ marginLeft: 8 }}>
+                            <span className="password_ts" style={{marginLeft: 8}}>
                                 {hasSelected ? `选中 ${_this.state.selectedRowKeys.length} 条记录` : ''}
                             </span>
                         </span>
@@ -460,15 +503,29 @@ const NschoolGroupSettingComponents = React.createClass({
                               onConfirmModalCancel={this.closeConfirmModal}
                               onConfirmModalOK={this.batchDeleteMemeber}
                 ></ConfirmModal>
-                <SchoolSettingModal isShow={this.state.schoolSettingModalIsShow} rootStructure={this.props.rootStructure} onCancel={this.initModalStatus}></SchoolSettingModal>
-                <AddSubGroupModal isShow={this.state.addSubGroupModalIsShow} parentGroup={this.state.parentGroup} callbackParent={this.listStructures} onCancel={this.initModalStatus}></AddSubGroupModal>
+                <ConfirmModal
+                    ref="confirmModal1"
+                    title="确定删除?"
+                    onConfirmModalCancel={this.closeConfirmModal1}
+                    onConfirmModalOK={this.batchDeleteMemeber1}
+                />
+                <SchoolSettingModal isShow={this.state.schoolSettingModalIsShow}
+                                    rootStructure={this.props.rootStructure}
+                                    onCancel={this.initModalStatus}></SchoolSettingModal>
+                <AddSubGroupModal isShow={this.state.addSubGroupModalIsShow}
+                                  parentGroup={this.state.parentGroup}
+                                  callbackParent={this.listStructures}
+                                  onCancel={this.initModalStatus}
+                                  addSubGroupComplete={this.addSubGroupComplete}
+                ></AddSubGroupModal>
                 <AddGroupMemberModal isShow={this.state.addGroupMemberModalIsShow}
                                      parentGroup={this.state.parentGroup}
                                      callbackParent={this.listStructureAndMembers}
                                      onCancel={this.initModalStatus}
                                      addedUserData={this.state.subGroupMemberList}
                 ></AddGroupMemberModal>
-                <GroupSettingModal isShow={this.state.groupSettingModalIsShow} parentGroup={this.state.parentGroup} onCancel={this.initModalStatus}></GroupSettingModal>
+                <GroupSettingModal isShow={this.state.groupSettingModalIsShow} parentGroup={this.state.parentGroup}
+                                   onCancel={this.initModalStatus}></GroupSettingModal>
             </div>
         );
     }

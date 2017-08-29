@@ -30,6 +30,9 @@ const SchoolGroupSettingComponents = React.createClass({
     editRoleComplete(roleId,roleName){
         this.props.onEditComplete(roleId,roleName);
     },
+    addSubGroupComplete(){
+        this.props.addSubGroupComplete();
+    },
 
     changeRightComponent(selectedKey,selectedRoleKeyPath,currentItem){
         var requestId = selectedKey;
@@ -67,7 +70,11 @@ const SchoolGroupSettingComponents = React.createClass({
     render() {
         switch (this.props.currentItem) {
             default : // 组织构架
-                this.tabComponent = <NschoolGroupSettingComponents ref="nSchool" structureId={this.state.requestId} rootStructure={this.state.requestObj}></NschoolGroupSettingComponents>;
+                this.tabComponent = <NschoolGroupSettingComponents ref="nSchool"
+                                                                   structureId={this.state.requestId}
+                                                                   rootStructure={this.state.requestObj}
+                                                                   addSubGroupComplete={this.addSubGroupComplete}
+                ></NschoolGroupSettingComponents>;
                 break;
             case 'role':
                 // 角色
