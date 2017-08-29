@@ -61,7 +61,7 @@ class SystemSettingGhostMenu extends React.Component {
                                 <ul className="second">
                                     <li onClick={event => {
                                         // _this.changeMenu(event, 'origin', true)
-                                        _this.checkWords(v.actionParams.method);
+                                        _this.checkWords(v.actionParams,v.name);
                                     }}>{v.name}</li>
                                 </ul>
                           </li>
@@ -108,29 +108,32 @@ class SystemSettingGhostMenu extends React.Component {
 
     }
 
-    checkWords(words) {
+    checkWords(words,name) {
         var _this = this;
         console.log(words);
-        if(words == 'operateStructure'){
+        if(words.method == 'operateStructure'){
             _this.changeMenu(event, 'origin', true)
-        }else if (words == 'operateStructureRole'){
+        }else if (words.method == 'operateStructureRole'){
             _this.changeMenu(event, 'role', true)
         }else {
-            alert(3);
+            // console.log(words);
+            _this.showpanel(event,words.url,name);
         }
     }
 
 
     // teachingAdmin panel
-    showpanel(event) {
+    showpanel(event,urls,name) {
+
 
         this.onMenu(event);
 
         let param = {
             mode: 'teachingAdmin',
-            title: '教学管理',
-            url: 'http://www.maaee.com/Excoord_PhoneService/permission/permissionList/' + this.state.ident,
+            title: name,
+            url: urls + this.state.ident,
         }
+        // console.log(param);
 
         LP.Start(param);
     }
@@ -149,6 +152,7 @@ class SystemSettingGhostMenu extends React.Component {
 
         return (
             <div className={this.props.visible ? 'ghostMenu ghostMenuShow' : 'ghostMenu ghostMenuHide'}
+                 // style={{overflow:'scroll'}}
                  onClick={event => {
                      this.props.toggleGhostMenu({visible: false});
                  }}>

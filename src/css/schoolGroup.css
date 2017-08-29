@@ -12,10 +12,20 @@
 }
 .schoolgroup .ant-breadcrumb span.ant-breadcrumb-link a{
     font-size: 14px;
+    max-width: 500px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
 }
 .schoolgroup .ant-breadcrumb span:nth-child(1) .ant-breadcrumb-link a, .schoolgroup .ant-breadcrumb span:nth-child(1) .ant-breadcrumb-separator{
     color: #0084ff;
     font-size: 14px;
+}
+.schoolgroup .ant-breadcrumb-separator{
+    display: inline-block;
+    position: relative;
+    top: -11px;
 }
 .schoolgroup_title{
 	font-size: 16px;
@@ -399,8 +409,33 @@
     display: inline-block;
 }
 .first_indent{
-    text-indent: 18px;
+    text-indent: 10px;
 }
 .departmental_officer{
-    width: 120px;
+    width: 160px;
+}
+.name_max{
+    max-width: 100px;
+}
+.name_max3{
+    max-width: 500px;
+    position: relative;
+    top: 3px;
+}
+.name_max_last{
+    position: relative;
+    top: -2px;
+}
+.name_max4{
+    max-width: 500px;
+    float: left;
+}
+.name_max5{
+    width: 140px;
+    float: left;
+}
+.name_max5_i{
+    float: left;
+    position: relative;
+    top: 13px;
 }

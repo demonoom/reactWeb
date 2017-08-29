@@ -265,7 +265,7 @@ const RoleComponents = React.createClass({
         return (
             <div className="schoolgroup">
                 <div className="schoolgroup_title">
-                    <span>{this.state.roleName}</span>
+                    <span className="name_max4 dold_text">{this.state.roleName}</span>
                     <span className="schoolgroup_people modal_course">(<span>{this.state.mermberNum}</span>人)</span>
                     <span>
                         <Button className="schoolgroup_btn_gray_6 schoolgroup_btn_left schoolgroup_btn"

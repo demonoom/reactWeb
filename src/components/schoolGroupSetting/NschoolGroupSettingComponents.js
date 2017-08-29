@@ -51,6 +51,11 @@ const NschoolGroupSettingComponents = React.createClass({
     componentDidMount() {
         // this.getStructureById();
         var structureId = "-1";
+        if(isEmpty(structuresObjArray)==false && structuresObjArray.length > 0 ){
+            var currentObj = structuresObjArray[structuresObjArray.length-1];
+            structureId = currentObj.id;
+        }
+        this.setState({"currentStructureId":structureId});
         this.changeStructureData(structureId);
     },
     componentWillReceiveProps(nextProps) {
@@ -93,8 +98,8 @@ const NschoolGroupSettingComponents = React.createClass({
                     response.forEach(function (subGroup) {
                         var subGroupName = <div className="first_indent"
                                                 onClick={_this.getSubGroupForButton.bind(_this, subGroup.id)}>
-                            <span className="antnest_name affix_bottom_tc">{subGroup.name}</span>
-                            <span className="schoolgroup_people">({subGroup.memberCount}人                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                )</span>
+                            <span className="antnest_name affix_bottom_tc name_max3 dold_text">{subGroup.name}</span>
+                            <span className="schoolgroup_people name_max_last">({subGroup.memberCount}人                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                )</span>
                         </div>;
                         var opt = <div className="knowledge_ri">
                             <Button className="sg_btn_del" icon="delete"
@@ -142,13 +147,13 @@ const NschoolGroupSettingComponents = React.createClass({
             onResponse: function (ret) {
                 if (ret.msg == "调用成功" && ret.success == true) {
                     message.success("部门删除成功！");
-                    _this.listStructures(_this.state.structureId);
-                    _this.getStrcutureMembers(_this.state.structureId, _this.state.memberPageNo);
+                    _this.listStructures(_this.state.currentStructureId);
+                    _this.getStrcutureMembers(_this.state.currentStructureId, _this.state.memberPageNo);
                 } else {
                     message.error(ret.msg);
                 }
                 _this.closeConfirmModal1();
-                _this.props.addSubGroupComplete();
+                // _this.props.addSubGroupComplete();
             },
             onError: function (error) {
                 message.error(error);
@@ -216,9 +221,11 @@ const NschoolGroupSettingComponents = React.createClass({
             "structureId": structureId,
             "pageNo": pageNo,
         };
+        console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
+                console.log(response);
                 if (isEmpty(response) == false) {
                     response.forEach(function (member) {
                         var user = member.user;
@@ -247,7 +254,7 @@ const NschoolGroupSettingComponents = React.createClass({
     getSubGroup(record, index) {
         var memberPageNo = 1;
         this.setState({
-            structureId: record.key,
+            currentStructureId: record.key,
             schoolSettingModalIsShow: false,
             addSubGroupModalIsShow: false,
             addGroupMemberModalIsShow: false,
@@ -265,12 +272,14 @@ const NschoolGroupSettingComponents = React.createClass({
     getSubGroupForButton(structureId) {
         var memberPageNo = 1;
         subGroupMemberList.splice(0);
+        var defaultMemberPageNo = 1;
         this.setState({
             structureId: structureId,
             schoolSettingModalIsShow: false,
             addSubGroupModalIsShow: false,
             addGroupMemberModalIsShow: false,
-            "groupSettingModalIsShow": false
+            "groupSettingModalIsShow": false,
+            memberPageNo:defaultMemberPageNo
         });
         this.listStructures(structureId);
         this.getStrcutureMembers(structureId, memberPageNo);
@@ -284,7 +293,7 @@ const NschoolGroupSettingComponents = React.createClass({
         this.setState({
             memberPageNo: pageNo,
         });
-        this.getStrcutureMembers(this.state.structureId, pageNo);
+        this.getStrcutureMembers(this.state.currentStructureId, pageNo);
     },
 
     /**
@@ -303,7 +312,8 @@ const NschoolGroupSettingComponents = React.createClass({
                 break;
             }
         }
-        this.setState({structureId, structuresObjArray});
+        var defaultMemberPageNo = 1;
+        this.setState({"currentStructureId":structureId, structuresObjArray,"memberPageNo":defaultMemberPageNo});
     },
 
     /**
@@ -399,7 +409,8 @@ const NschoolGroupSettingComponents = React.createClass({
     },
 
     addSubGroupComplete() {
-        this.props.addSubGroupComplete();
+        // this.props.addSubGroupComplete();
+        this.changeStructureData(this.state.currentStructureId);
     },
 
     showConfirmModal() {
@@ -452,7 +463,7 @@ const NschoolGroupSettingComponents = React.createClass({
         return (
             <div className="schoolgroup">
                 <div className="schoolgroup_title">
-                    <span>{structureName}</span>
+                    <span className="name_max4 dold_text">{structureName}</span>
                     {settingButton}
                 </div>
                 <div>
