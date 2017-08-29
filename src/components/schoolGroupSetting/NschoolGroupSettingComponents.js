@@ -452,7 +452,7 @@ const NschoolGroupSettingComponents = React.createClass({
         return (
             <div className="schoolgroup">
                 <div className="schoolgroup_title">
-                    <span>{structureName}</span>
+                    <span className="name_max4 dold_text">{structureName}</span>
                     {settingButton}
                 </div>
                 <div>
