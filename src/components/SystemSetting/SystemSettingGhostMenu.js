@@ -1,21 +1,81 @@
 /**
  * Created by devnote on 17-4-17.
  */
-import {Menu, Icon, Row, Col} from 'antd';
+import {Menu, Icon, Row, Col, message} from 'antd';
 import React, {PropTypes} from 'react';
+import {doWebService} from '../../WebServiceHelper';
 
 class SystemSettingGhostMenu extends React.Component {
 
     constructor(props) {
         super(props);
+        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         this.state = {
-            ident : sessionStorage.getItem("ident"),
+            loginUser: loginUser,
+            ident: sessionStorage.getItem("ident"),
             beActive: true, // 是活动的，可伸缩的
         }
         this.changeMenu = this.changeMenu.bind(this);
         this.showpanel = this.showpanel.bind(this);
+        this.checkWords = this.checkWords.bind(this);
     }
 
+    componentDidMount() {
+        this.getTab();
+    }
+
+    /**
+     * 获取tab内容
+     */
+    getTab() {
+        var _this = this;
+        var param = {
+            "method": 'getAccessibleFunctionTabs',
+            "userId": this.state.loginUser.colUid,
+            "moduleId": '',
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var data = ret.response;
+                _this.buildTab(data);
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    }
+
+    /**
+     * 渲染tab
+     * @param data
+     */
+    buildTab(data) {
+        let _this = this;
+        var liArr = [];
+        var uls = '';
+        var arr = [];
+        for (var i = 0; i < data.length; i++) {
+            data[i].tabItems.forEach(function (v) {
+                console.log(v);
+                var lis =  <li className="multi">
+                                <ul className="second">
+                                    <li onClick={event => {
+                                        // _this.changeMenu(event, 'origin', true)
+                                        _this.checkWords(v.actionParams.method);
+                                    }}>{v.name}</li>
+                                </ul>
+                          </li>
+                liArr.push(lis);
+            });
+            uls =  <ul className="first">
+                     <li>{data[i].name}</li>
+                    {liArr}
+                  </ul>
+            arr.push(uls);
+            liArr = [];
+        }
+        _this.setState({arr});
+    }
 
     // toggle
     toggleGhostMenu(event) {
@@ -48,6 +108,18 @@ class SystemSettingGhostMenu extends React.Component {
 
     }
 
+    checkWords(words) {
+        var _this = this;
+        console.log(words);
+        if(words == 'operateStructure'){
+            _this.changeMenu(event, 'origin', true)
+        }else if (words == 'operateStructureRole'){
+            _this.changeMenu(event, 'role', true)
+        }else {
+            alert(3);
+        }
+    }
+
 
     // teachingAdmin panel
     showpanel(event) {
@@ -67,45 +139,24 @@ class SystemSettingGhostMenu extends React.Component {
     render() {
         //在菜单处于非活动状态下,隐藏向左的按钮,以免遮挡右侧区域,影响操作
         var hideButton;
-        if(this.state.beActive){
-            hideButton=<div className="headler" onClick={event => {
+        if (this.state.beActive) {
+            hideButton = <div className="headler" onClick={event => {
                 this.toggleGhostMenu(event);
             }}><Icon type="left"/></div>;
-        }else{
-            hideButton="";
+        } else {
+            hideButton = "";
         }
 
         return (
-            <div className={this.props.visible ? 'ghostMenu ghostMenuShow' : 'ghostMenu ghostMenuHide' }
+            <div className={this.props.visible ? 'ghostMenu ghostMenuShow' : 'ghostMenu ghostMenuHide'}
                  onClick={event => {
                      this.props.toggleGhostMenu({visible: false});
                  }}>
                 {hideButton}
                 <div className="menu_til">系统设置</div>
-                <ul className="first">
-                    <li ><Icon type="book"/>组织架构</li>
-                    <li className="multi">
-                        <ul className="second">
-                            <li onClick={ event => {
-                                this.changeMenu(event, 'origin', true)
-                            }}>组织架构
-                            </li>
-                            <li onClick={ event => {
-                                this.changeMenu(event, 'role', true)
-                            }}>系统角色
-                            </li>
-                        </ul>
-                    </li>
-                    <li><Icon type="file-text"/>审批</li>
-                    <li className="multi">
-                        <ul className="second">
-                            <li onClick={ event => {
-                                this.changeMenu(event, 'systemFlow', false)
-                            }}>流程管理
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
+                <div>
+                    {this.state.arr}
+                </div>
             </div>
         );
     }

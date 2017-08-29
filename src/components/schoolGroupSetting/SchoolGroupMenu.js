@@ -231,7 +231,6 @@ class SchoolGroupMenu extends React.Component {
 
         for(var i = 0;i < part.length;i++) {
                 part[i].children.forEach(function (subGroup) {
-                    // openKeys=''+part.id;
                     var menuItem =  <Menu.Item key={subGroup.id + ',' +subGroup.name}>
                         <Icon type="user" className="schoolgroup_menu_i_blue" />
                         <span>{subGroup.name}</span>
@@ -330,13 +329,6 @@ class SchoolGroupMenu extends React.Component {
         }else{
             var requestId = "";
             var requestObj=null;
-            /*if(isEmpty(this.state.selectedKeys)){
-                requestId = this.props.rootStructure.id;
-                requestObj = this.props.rootStructure;
-            }else{
-                requestId = this.state.selectedKeys;
-                requestObj = this.state.structure;
-            }*/
             requestId = this.props.rootStructure.id;
             requestObj = this.props.rootStructure;
             this.props.onGhostMenuClick(key,requestId,requestObj);
