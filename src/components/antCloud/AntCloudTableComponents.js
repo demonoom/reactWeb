@@ -487,7 +487,7 @@ const AntCloudTableComponents = React.createClass({
                 data.push({
                     key: key,
                     title: fileLogo,
-                    creator:<span>{creator.userName}</span>,
+                    creator:<span className="dold_text name_max">{creator.userName}</span>,
                     createTime: getLocalTime(createTime),
                     subjectOpt: subjectOpt,
                 });
@@ -1161,32 +1161,36 @@ const AntCloudTableComponents = React.createClass({
         return (
                 <div>
                     <Modal title="重命名"
+                           width={440}
                            visible={cloudTable.state.reNameModalVisible}
                            transitionName=""  //禁用modal的动画效果
                            maskClosable={false} //设置不允许点击蒙层关闭
                            onOk={cloudTable.reNameModalHandleOk}
                            onCancel={cloudTable.reNameModalHandleCancel}
+                           className="schoolgroup_modal"
                     >
-                    	<div>
-                            <Row>
-                                <Col span={3} className="right_look">名称：</Col>
-                                <Col span={20}>
+                    	<div className="modal_register_main">
+                            <Row className="ant_row">
+                                <Col span={6} className="right_look">名称：</Col>
+                                <Col span={16} className="framework_m_r">
                                     <Input value={cloudTable.state.editDirectoryName} onChange={cloudTable.directoryNameInputChange}/>
                                 </Col>
                             </Row>
                         </div>
                     </Modal>
                     <Modal title="新建文件夹"
+                           width={440}
                            visible={cloudTable.state.mkdirModalVisible}
                            transitionName=""  //禁用modal的动画效果
                            maskClosable={false} //设置不允许点击蒙层关闭
                            onOk={cloudTable.makeDirectory}
                            onCancel={cloudTable.mkdirModalHandleCancel}
+                           className="schoolgroup_modal"
                     >
-                        <div>
-                            <Row>
-                                <Col span={3} className="right_look">名称：</Col>
-                                <Col span={20}>
+                        <div className="modal_register_main">
+                            <Row className="ant_row">
+                                <Col span={6} className="right_look">名称：</Col>
+                                <Col span={16} className="framework_m_r">
                                     <Input value={cloudTable.state.editDirectoryName} onChange={cloudTable.directoryNameInputChange}/>
                                 </Col>
                             </Row>

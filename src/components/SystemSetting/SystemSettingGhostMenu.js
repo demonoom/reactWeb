@@ -96,6 +96,7 @@ class SystemSettingGhostMenu extends React.Component {
                             </li>
                         </ul>
                     </li>
+                    {/*
                     <li><Icon type="file-text"/>审批</li>
                     <li className="multi">
                         <ul className="second">
@@ -105,6 +106,7 @@ class SystemSettingGhostMenu extends React.Component {
                             </li>
                         </ul>
                     </li>
+                     */}
                 </ul>
             </div>
         );

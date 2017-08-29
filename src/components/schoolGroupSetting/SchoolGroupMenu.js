@@ -233,8 +233,8 @@ class SchoolGroupMenu extends React.Component {
                 part[i].children.forEach(function (subGroup) {
                     // openKeys=''+part.id;
                     var menuItem =  <Menu.Item key={subGroup.id + ',' +subGroup.name}>
-                        <Icon type="user" className="schoolgroup_menu_i_blue" />
-                        <span>{subGroup.name}</span>
+                        <Icon type="user" className="schoolgroup_menu_i_blue name_max5_i" />
+                        <span className="name_max5 dold_text">{subGroup.name}</span>
                     </Menu.Item>;
                     subRoleMenuItemArray.push(menuItem);
                 });
