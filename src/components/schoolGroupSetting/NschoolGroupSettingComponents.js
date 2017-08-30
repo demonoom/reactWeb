@@ -237,7 +237,7 @@ const NschoolGroupSettingComponents = React.createClass({
                     });
                 }
                 var pager = ret.pager;
-                _this.setState({subGroupMemberList, totalMember: pager.rsCount,selectedRowKeys:[]});
+                _this.setState({subGroupMemberList, totalMember: pager.rsCount, selectedRowKeys:[]});//selectedRowKeys设置成[]可以清除默认勾选
             },
             onError: function (error) {
                 message.error(error);
