@@ -74,6 +74,20 @@ class SystemSettingGhostMenu extends React.Component {
             arr.push(uls);
             liArr = [];
         }
+        //手动添加的测试菜单---开始
+        var flowUl = <ul>
+            <li><Icon type="file-text"/>审批</li>
+            <li className="multi">
+                <ul className="second">
+                    <li onClick={ event => {
+                        this.changeMenu(event, 'systemFlow', false)
+                    }}>流程管理
+                    </li>
+                </ul>
+            </li>
+        </ul>;
+        arr.push(flowUl);
+        //手动添加的测试菜单---结束
         _this.setState({arr});
     }
 

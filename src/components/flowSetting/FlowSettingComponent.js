@@ -25,62 +25,75 @@ const FlowSettingComponent = React.createClass({
 
     componentDidMount(){
         this.getFlowGroup();
-        // this.getPersonTask();
     },
 
     componentWillReceiveProps(nextProps){
     },
 
-    getPersonTask(){
-        let _this = this;
-        var param = {
-            "method": 'findFlowTaskByUserId',
-            "userId": "zhangsan",
-        };
-        doWebService(JSON.stringify(param), {
-            onResponse: function (ret) {
-                console.log(ret.msg+"==="+ret.response);
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });
-    },
 
     /**
      * 获取流程分组及其分组下的流程列表
      */
     getFlowGroup(){
+        let _this = this;
+        var param = {
+            "method": 'findAllFlowGroupBySchoolId',
+            "schoolId": this.state.loginUser.schoolId
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                console.log(ret.msg+"==="+ret.response);
+                if(ret.msg=="调用成功" &&　ret.success == true){
+                    _this.buildFlowGroupSpan(ret.response);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+
+    },
+
+    /**
+     * 创建流程分组的面板
+     */
+    buildFlowGroupSpan(flowGroupResponse){
+        var _this = this;
         var collapsePanelArray = [];
         var openCollapseKey =[];
-        for(var i=0;i<3;i++){
+        flowGroupResponse.forEach(function (flowGroup) {
             var flowObjArray=[];
-            for(var j=0;j<2;j++){
-                var flowId = j;
+            var processDefinitionList = flowGroup.flowProcessDefinitionList;
+            processDefinitionList.forEach(function(processDefinition){
+                var procDefId = processDefinition.procDefId;
+                var procName = processDefinition.procDefKey;
                 var flowObj = <div style={{display:'inline-flex'}}>
                     <div>
-                        <Icon type="logout" /><span>请假{j}</span>
+                        <Icon type="logout" /><span>{procName}</span>
                     </div>
                     <div>
-                        <a onClick={this.stopFlow.bind(this,j)}>停用</a>  <p></p>
-                        <a onClick={this.removeFlow.bind(this,j)}>移动到</a>
+                        <a onClick={_this.stopFlow.bind(_this,procDefId)}>停用</a>  <p></p>
+                        <a onClick={_this.removeFlow.bind(_this,procDefId)}>移动到</a>
                     </div>
                 </div>;
                 flowObjArray.push(flowObj);
+            });
+            var flowGroupId = flowGroup.groupId;
+            var flowCount = 0;
+            var flowGroupName = flowGroup.groupName;
+            if(isEmpty(processDefinitionList)== false){
+                flowCount = processDefinitionList.length;
             }
-            var flowGroupId = i;
-            var flowGroupName = "出勤休假"+i;
-            var flowCount = 2;
             var headerDiv=<div>
                 <span>{flowGroupName}({flowCount})</span>
-                <Button onClick={this.showEditGroupModal.bind(this,Event,flowGroupId,flowGroupName)}>编辑</Button>
+                <Button onClick={_this.showEditGroupModal.bind(_this,Event,flowGroupId,flowGroupName)}>编辑</Button>
             </div>;
             var collapsePanel = <Panel header={headerDiv} key={flowGroupId}>
                 {flowObjArray}
             </Panel>;
             openCollapseKey.push(flowGroupId+"");
             collapsePanelArray.push(collapsePanel);
-        }
+        });
         this.setState({collapsePanelArray,openCollapseKey});
     },
 

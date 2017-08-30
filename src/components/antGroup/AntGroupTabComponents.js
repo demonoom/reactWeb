@@ -220,7 +220,7 @@ const AntGroupTabComponents = React.createClass({
                         onOk() {
                             sessionStorage.removeItem("ident");
                             sessionStorage.removeItem("loginUser");
-                            sessionStorage.removeItem("machineId");
+                            //sessionStorage.removeItem("machineId");
                             location.hash="Login";
                             LP.delAll();
                         },

@@ -27,7 +27,7 @@ const FloatButton = React.createClass({
         }else{
             sessionStorage.removeItem("ident");
             sessionStorage.removeItem("loginUser");
-            sessionStorage.removeItem("machineId");
+            //sessionStorage.removeItem("machineId");
             location.hash="Login";
         }
         ms.closeConnection();
@@ -46,7 +46,7 @@ const FloatButton = React.createClass({
                     sessionStorage.removeItem("openKeysStr");
                     sessionStorage.removeItem("ident");
                     sessionStorage.removeItem("loginUser");
-                    sessionStorage.removeItem("machineId");
+                    //sessionStorage.removeItem("machineId");
                 }
                 location.hash="Login";
             },
