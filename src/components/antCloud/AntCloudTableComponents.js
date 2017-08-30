@@ -1032,15 +1032,43 @@ const AntCloudTableComponents = React.createClass({
     },
 
     /**
+     * 调用分享接口
+     */
+    getsharekey(){
+        var shareFileId = cloudTable.state.shareCloudFile.id;
+        var operateUserId = cloudTable.state.shareCloudFile.createUid;
+        var param = {
+            "method": 'share',
+            "operateUserId": operateUserId,
+            "cloudFileIds": shareFileId,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if(ret.success==true && ret.msg=="调用成功") {
+                    var response = ret.response;
+                    // console.log(response);
+                    cloudTable.shareFile(response);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+
+    /**
      * 分享文件
      */
-    shareFile(){
+    shareFile(response){
+        var response = response;
         var _this = this;
         var checkedConcatOptions = cloudTable.state.checkedConcatOptions;
         var checkedGroupOptions = cloudTable.state.checkedGroupOptions;
         var shareToUserArray = checkedConcatOptions.concat(checkedGroupOptions);
         var nowThinking = cloudTable.state.nowThinking;
         var shareFile = cloudTable.state.shareCloudFile;
+
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         var uuid = createUUID();
         var createTime = (new Date()).valueOf();
@@ -1049,7 +1077,10 @@ const AntCloudTableComponents = React.createClass({
         var name = shareFile.name;  //对应title
         var creator  = shareFile.creator;
         var messageToType=1;//根据接收者是群组还是个人来决定
-        var filePath = _this.buildShareUrl(shareFile.path);
+
+        // var filePath = _this.buildShareUrl(shareFile.path);
+        var filePath = "http://" + 'www.maaee.com' + ":" + 80 + "/Excoord_PhoneService" + "/cloudFile/shareShow/" + response;
+
         var attachement={"address":filePath,"user":creator,"createTime":shareFile.createTime,"cover":cover,"content":name,"type":4};
 
 
@@ -1057,9 +1088,10 @@ const AntCloudTableComponents = React.createClass({
             var messageJson = {
                 'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
                 "toId": e, "command": "message", "hostId": loginUser.colUid,
-                "uuid": uuid, "toType": 1,"attachment":attachement
+                "uuid": uuid, "toType": 1,"attachment":attachement,"state":0
             };
             var commandJson = {"command": "message", "data": {"message": messageJson}};
+            console.log(commandJson);
             ms.send(commandJson);
         });
         cloudTable.setState({shareModalVisible:false});
@@ -1282,7 +1314,7 @@ const AntCloudTableComponents = React.createClass({
                            transitionName=""  //禁用modal的动画效果
                            maskClosable={false} //设置不允许点击蒙层关闭
                            onCancel={cloudTable.shareModalHandleCancel}
-                           onOk={cloudTable.shareFile}
+                           onOk={cloudTable.getsharekey}
                     >
                         <div>
                             <Row>
