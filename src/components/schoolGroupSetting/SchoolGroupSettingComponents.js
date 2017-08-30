@@ -54,7 +54,7 @@ const SchoolGroupSettingComponents = React.createClass({
                 requestObj = this.props.papaKey;
             }
         }
-        this.setState({requestId,requestObj});
+        this.setState({requestId,requestObj});//257,256#默认
         // if(isEmpty(this.refs.roleComponents)==false){
         //     this.refs.roleComponents.loadDataWhenGhostMenuClick(selectedId);
         // }

@@ -85,13 +85,18 @@ const RoleComponents = React.createClass({
 
     componentWillReceiveProps(nextProps) {
         var _this = this;
-        var selectedMessage = nextProps.selectedId;
+        var selectedMessage = nextProps.selectedId+'';
         try{
             if(isEmpty(selectedMessage)==false){
-                var arr = selectedMessage.split(',');
-                this.setState({roleId: arr[0]});
-                this.setState({roleName: arr[1]});
-                this.ajaxData(arr[0]);
+                if(selectedMessage.indexOf(',') !== -1){
+                    var arr = selectedMessage.split(',');
+                    this.setState({roleId: arr[0]});
+                    this.setState({roleName: arr[1]});
+                    // alert(arr[0]);
+                    this.ajaxData(arr[0]);
+                }else {
+                    this.ajaxData(selectedMessage);
+                }
             }
             var papaKey = nextProps.papaKey;
             var papaArr = [];

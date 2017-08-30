@@ -58,7 +58,6 @@ class SystemSettingComponent extends React.Component {
 
     sendFirstId(firstId,firstName){
         console.log(firstId);
-        // console.log(firstName);
         this.setState({firstId:firstId});
         this.setState({firstName:firstName});
     }

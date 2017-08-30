@@ -198,6 +198,7 @@ class SchoolGroupMenu extends React.Component {
                         defaultArr.push(v.id);
                     }
                 });
+                _this.props.sendFirstId(part[0].children[0].id);
                 _this.props.sendDefaultId(defaultArr);
                 // 调用 渲染角色函数
                 _this.buildMenuPart(part);
@@ -206,6 +207,7 @@ class SchoolGroupMenu extends React.Component {
                 _this.setState({firstId:part[0].children[0].id});
                 _this.setState({selectedRoleKeyPath:part[0].id+ '#' + part[0].name});
                 _this.setState({selectedRoleKeys:part[0].children[0].id + ',' + part[0].children[0].name});
+                _this.props.onGhostMenuClick('role',part[0].children[0].id,part[0].id+ '#' + part[0].name);
                 var obj = {
                     "key" : '231,小组',
                     "keyPath" : ['231,小组','208#语文组']
@@ -316,22 +318,20 @@ class SchoolGroupMenu extends React.Component {
     tabOnChange(key) {
         console.log(key);
         this.setState({activeTabKey:key,'isChanged':true});
-        //this.sendMenuInfoWhenTabChange(key);
         this.props.changeTab(key);
-        /*if(key=="role"){
-            this.props.onGhostMenuClick('role',this.state.selectedRoleKeys,this.state.selectedRoleKeyPath);
-        }else{
-
-            this.props.onGhostMenuClick('origin',this.state.selectedKeys,this.state.structure);
-        }*/
         if(key=="role"){
             this.props.onGhostMenuClick(key,this.state.selectedRoleKeys,this.state.selectedRoleKeyPath);
+            // var selId = this.state.selectedRoleKeys;
+            // var arr = selId.split(',');
+            // this.props.sendFirstId(arr[0]);
+
         }else{
             var requestId = "";
             var requestObj=null;
             requestId = this.props.rootStructure.id;
             requestObj = this.props.rootStructure;
             this.props.onGhostMenuClick(key,requestId,requestObj);
+
         }
     }
 
@@ -350,7 +350,7 @@ class SchoolGroupMenu extends React.Component {
                 //向上传递点击过的角色菜单的key
                 var selId = this.state.selectedRoleKeys;
                 var arr = selId.split(',');
-                //this.props.sendFirstId(arr[0]);
+                // this.props.sendFirstId(arr[0]);
                 this.props.changeTab(key,true,arr[0]);
             }else{
                 //向上传递角色组下的第一个角色的id
