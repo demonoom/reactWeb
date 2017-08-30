@@ -131,6 +131,7 @@ class SystemSettingGhostMenu extends React.Component {
             _this.changeMenu(event, 'role', true)
         }else {
             _this.showpanel(event,words.url,name);
+            _this.changeMenu(event, 'stop', false)
 
         }
     }

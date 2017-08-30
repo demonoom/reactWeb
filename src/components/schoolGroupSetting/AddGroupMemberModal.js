@@ -141,7 +141,7 @@ class AddGroupMemberModal extends React.Component {
       "searchOptions": JSON.stringify(searchOptions),
       "pageNo":_this.state.teacherSourceListPageNo,
     };
-    doWebService(JSON.stringify(param), {
+      doWebService(JSON.stringify(param), {
       onResponse: function (ret) {
         var response = ret.response;
         response.forEach(function (e) {

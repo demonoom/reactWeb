@@ -111,12 +111,32 @@ class SchoolGroupMenu extends React.Component {
      * @param structureId
      */
     getStructureById(operateUserId, structureId){
+        console.log(structureId);
         let _this = this;
+
+        // if(structureId.indexOf(',') !== -1) {
+        //     var structureIdArr = structureId.split(',');
+        //     var structureIdd = structureIdArr[0];
+        //     var param = {
+        //         "method": 'getStructureById',
+        //         "operateUserId": operateUserId,
+        //         "structureId": structureIdd,
+        //     };
+        //
+        // }else {
+        //     var param = {
+        //         "method": 'getStructureById',
+        //         "operateUserId": operateUserId,
+        //         "structureId": structureId,
+        //     };
+        // }
+
         var param = {
             "method": 'getStructureById',
             "operateUserId": operateUserId,
             "structureId": structureId,
         };
+
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 //_this.buildMenuChildren(ret.response);

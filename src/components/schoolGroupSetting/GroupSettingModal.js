@@ -107,6 +107,26 @@ class GroupSettingModal extends React.Component {
         if(isEmpty(structureId)){
             return;
         }
+
+        // if(structureId.indexOf(',') !== -1) {
+        //     var structureIdArr = structureId.split(',');
+        //     var structureIdd = structureIdArr[0];
+        //     var param = {
+        //         "method": 'getStrcutureMembers',
+        //         "operateUserId": _this.state.loginUser.colUid,
+        //         "structureId": structureIdd,
+        //         "pageNo": pageNo,
+        //     };
+        //
+        // }else {
+        //     var param = {
+        //         "method": 'getStrcutureMembers',
+        //         "operateUserId": _this.state.loginUser.colUid,
+        //         "structureId": structureId,
+        //         "pageNo": pageNo,
+        //     };
+        // }
+
         var param = {
             "method": 'getStrcutureMembers',
             "operateUserId": _this.state.loginUser.colUid,
