@@ -238,7 +238,7 @@ const NschoolGroupSettingComponents = React.createClass({
                     });
                 }
                 var pager = ret.pager;
-                _this.setState({subGroupMemberList, totalMember: pager.rsCount});
+                _this.setState({subGroupMemberList, totalMember: pager.rsCount,selectedRowKeys:[]});
             },
             onError: function (error) {
                 message.error(error);
