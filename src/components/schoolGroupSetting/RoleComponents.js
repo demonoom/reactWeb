@@ -92,7 +92,6 @@ const RoleComponents = React.createClass({
                     var arr = selectedMessage.split(',');
                     this.setState({roleId: arr[0]});
                     this.setState({roleName: arr[1]});
-                    // alert(arr[0]);
                     this.ajaxData(arr[0]);
                 }else {
                     this.ajaxData(selectedMessage);
@@ -227,8 +226,8 @@ const RoleComponents = React.createClass({
      * @param roleId 角色的id
      * @param roleName 角色的名称
      */
-    editRoleComplete(roleId,roleName){
-        this.props.onEditComplete(roleId,roleName);
+    editRoleComplete(roleId,roleName,refresh){
+        this.props.onEditComplete(roleId,roleName,refresh);
         //设置编辑角色Modal的显示状态为false，不再显示
         this.setState({"roleName":roleName,"editRoleModalIsShow":false});
     },

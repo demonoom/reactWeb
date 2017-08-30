@@ -27,8 +27,8 @@ const SchoolGroupSettingComponents = React.createClass({
         this.setState({requestId,requestObj});
     },
 
-    editRoleComplete(roleId,roleName){
-        this.props.onEditComplete(roleId,roleName);
+    editRoleComplete(roleId,roleName,refresh){
+        this.props.onEditComplete(roleId,roleName,refresh);
     },
     addSubGroupComplete(){
         this.props.addSubGroupComplete();

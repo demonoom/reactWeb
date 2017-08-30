@@ -130,8 +130,8 @@ class SystemSettingGhostMenu extends React.Component {
         }else if (words.method == 'operateStructureRole'){
             _this.changeMenu(event, 'role', true)
         }else {
-            // console.log(words);
             _this.showpanel(event,words.url,name);
+
         }
     }
 

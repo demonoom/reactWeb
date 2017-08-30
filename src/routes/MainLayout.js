@@ -427,7 +427,7 @@ const MainLayout = React.createClass({
                 break;
 
             case 'systemSetting':
-                //系统设置
+                //教学管理
                 middleComponent =
                     <SystemSettingGhostMenu visible={this.state.systemSettingGhostMenuVisible}
                                          toggleGhostMenu={ this.changeSystemGhostMenuVisible }
@@ -511,7 +511,7 @@ const MainLayout = React.createClass({
                             </Menu.Item>
                             <Menu.Item key="systemSetting" className="padding_menu">
                                 <i className="icon_menu_ios icon_schoolGroup"></i>
-                                <div className="tan">系统设置</div>
+                                <div className="tan">教学管理</div>
                             </Menu.Item>
                             <FloatButton ref="floatButton" messageUtilObj={ms}/>
                         </Menu>

@@ -76,10 +76,10 @@ class SystemSettingComponent extends React.Component {
      * @param roleId
      * @param roleName
      */
-    editRoleComplete(roleId,roleName){
+    editRoleComplete(roleId,roleName,refresh){
         var selectedId = roleId+","+roleName;
         this.setState({selectedId});
-        this.refs.schoolGroupMenu.initMenuInfo();
+        this.refs.schoolGroupMenu.initMenuInfo(refresh);
     }
 
     /**

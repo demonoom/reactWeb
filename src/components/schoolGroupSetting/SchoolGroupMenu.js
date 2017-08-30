@@ -48,7 +48,8 @@ class SchoolGroupMenu extends React.Component {
     }
 
     componentDidMount(){
-        this.initMenuInfo();
+        var refresh = null;
+        this.initMenuInfo(refresh);
     }
 
     componentWillReceiveProps(nextProps){
@@ -76,7 +77,7 @@ class SchoolGroupMenu extends React.Component {
         }
     }
 
-    initMenuInfo(){
+    initMenuInfo(refresh){
         var structureId = "-1";
         var operateUserId = this.state.loginUser.colUid;
         var rootStructure = this.props.rootStructure;
@@ -87,7 +88,7 @@ class SchoolGroupMenu extends React.Component {
             this.getStructureById(operateUserId,structureId);
         }
         // 渲染到DOM后 调用 获取角色组函数
-        this.getStructureRoleGroups(operateUserId,structureId);
+        this.getStructureRoleGroups(operateUserId,structureId,refresh);
     }
 
     addRoleGroupComplete(){
@@ -182,42 +183,62 @@ class SchoolGroupMenu extends React.Component {
      * @param operateUserId
      * @param structureId
      */
-    getStructureRoleGroups(){
+    getStructureRoleGroups(operateUserId, structureId,refresh){
         let _this = this;
         var param = {
             "method": 'getStructureRoleGroups',
             "operateUserId": _this.state.loginUser.colUid,
             "pageNo": -1,
         };
-        doWebService(JSON.stringify(param), {
-            onResponse: function (ret) {
-                var part = ret.response;
-                var defaultArr = [];
-                part.forEach(function (v,i) {
-                    if(v.createType > 0) {
-                        defaultArr.push(v.id);
-                    }
-                });
-                _this.props.sendFirstId(part[0].children[0].id);
-                _this.props.sendDefaultId(defaultArr);
-                // 调用 渲染角色函数
-                _this.buildMenuPart(part);
-                _this.setState({part});
-                // 设置一个默认ID
-                _this.setState({firstId:part[0].children[0].id});
-                _this.setState({selectedRoleKeyPath:part[0].id+ '#' + part[0].name});
-                _this.setState({selectedRoleKeys:part[0].children[0].id + ',' + part[0].children[0].name});
-                _this.props.onGhostMenuClick('role',part[0].children[0].id,part[0].id+ '#' + part[0].name);
-                var obj = {
-                    "key" : '231,小组',
-                    "keyPath" : ['231,小组','208#语文组']
-                };
-                _this.setState({obj:obj});
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });
+        if(refresh == 'new') {
+            doWebService(JSON.stringify(param), {
+                onResponse: function (ret) {
+                    var part = ret.response;
+                    var defaultArr = [];
+                    part.forEach(function (v,i) {
+                        if(v.createType > 0) {
+                            defaultArr.push(v.id);
+                        }
+                    });
+                    // 调用 渲染角色函数
+                    _this.buildMenuPart(part);
+                    _this.setState({part});
+                    // 设置一个默认ID
+                    _this.setState({firstId:part[0].children[0].id});
+                    _this.setState({selectedRoleKeyPath:part[0].id+ '#' + part[0].name});
+                    _this.setState({selectedRoleKeys:part[0].children[0].id + ',' + part[0].children[0].name});
+                },
+                onError: function (error) {
+                    message.error(error);
+                }
+            });
+        } else {
+            doWebService(JSON.stringify(param), {
+                onResponse: function (ret) {
+                    var part = ret.response;
+                    var defaultArr = [];
+                    part.forEach(function (v,i) {
+                        if(v.createType > 0) {
+                            defaultArr.push(v.id);
+                        }
+                    });
+                    _this.props.sendFirstId(part[0].children[0].id);
+                    _this.props.sendDefaultId(defaultArr);
+                    // 调用 渲染角色函数
+                    _this.buildMenuPart(part);
+                    _this.setState({part});
+                    // 设置一个默认ID
+                    _this.setState({firstId:part[0].children[0].id});
+                    _this.setState({selectedRoleKeyPath:part[0].id+ '#' + part[0].name});
+                    _this.setState({selectedRoleKeys:part[0].children[0].id + ',' + part[0].children[0].name});
+                    _this.props.onGhostMenuClick('role',part[0].children[0].id+','+part[0].children[0].name,part[0].id+ '#' + part[0].name);
+                },
+                onError: function (error) {
+                    message.error(error);
+                }
+            });
+        }
+
     }
 
     /*渲染角色函数*/
