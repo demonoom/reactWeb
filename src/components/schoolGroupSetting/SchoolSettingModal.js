@@ -58,9 +58,11 @@ class SchoolSettingModal extends React.Component {
       chatGroupId = rootStructure.chatGroupId;
       structureId = rootStructure.id;
       var chatGroup = rootStructure.chatGroup;
-      var owner = chatGroup.owner;
-      if(isEmpty(owner) == false){
-        ownerName = owner.userName;
+      if(isEmpty(chatGroup)==false){
+          var owner = chatGroup.owner;
+          if(isEmpty(owner) == false){
+              ownerName = owner.userName;
+          }
       }
     }
     var isShow = nextProps.isShow;
