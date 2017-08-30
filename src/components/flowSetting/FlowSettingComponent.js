@@ -37,7 +37,8 @@ const FlowSettingComponent = React.createClass({
     getFlowGroup(){
         let _this = this;
         var param = {
-            "method": 'findAllFlowGroupBySchoolId',
+            "method": 'getAllFlowGroupBySchoolId',
+            "pageNo":1,
             "schoolId": this.state.loginUser.schoolId
         };
         doWebService(JSON.stringify(param), {
