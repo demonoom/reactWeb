@@ -50,7 +50,7 @@ const NschoolGroupSettingComponents = React.createClass({
 
     componentDidMount() {
         // this.getStructureById();
-        var structureId = "-1";
+        var structureId = this.props.structureId;
         if(isEmpty(structuresObjArray)==false && structuresObjArray.length > 0 ){
             var currentObj = structuresObjArray[structuresObjArray.length-1];
             structureId = currentObj.id;

@@ -54,26 +54,26 @@ class SchoolGroupMenu extends React.Component {
 
     componentWillReceiveProps(nextProps){
         var currentItem = nextProps.currentItem;
-        if(isEmpty(currentItem)==false){
-            this.setState({"activeTabKey":currentItem});
-            // 子传父函数调用,调用父组件的设置右侧组件的方法
-            if(currentItem=="role"){
-                this.props.onGhostMenuClick(currentItem,this.state.selectedRoleKeys,this.state.selectedRoleKeyPath);
-            }else{
-                var requestId = "";
-                var requestObj=null;
-                /*if(isEmpty(this.state.selectedKeys)){
-                    requestId = nextProps.rootStructure.id;
-                    requestObj = nextProps.rootStructure;
-                }else{
-                    requestId = this.state.selectedKeys;
-                    requestObj = this.state.structure;
-                }*/
-                requestId = nextProps.rootStructure.id;
-                requestObj = nextProps.rootStructure;
-                this.props.onGhostMenuClick(currentItem,requestId,requestObj);
-            }
-
+        if(isEmpty(currentItem)){
+            currentItem = "origin";
+        }
+        this.setState({"activeTabKey":currentItem});
+        // 子传父函数调用,调用父组件的设置右侧组件的方法
+        if(currentItem=="role"){
+            this.props.onGhostMenuClick(currentItem,this.state.selectedRoleKeys,this.state.selectedRoleKeyPath);
+        }else{
+            var requestId = "";
+            var requestObj=null;
+            /*if(isEmpty(this.state.selectedKeys)){
+             requestId = nextProps.rootStructure.id;
+             requestObj = nextProps.rootStructure;
+             }else{
+             requestId = this.state.selectedKeys;
+             requestObj = this.state.structure;
+             }*/
+            requestId = nextProps.rootStructure.id;
+            requestObj = nextProps.rootStructure;
+            this.props.onGhostMenuClick(currentItem,requestId,requestObj);
         }
     }
 
