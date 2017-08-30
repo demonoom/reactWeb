@@ -42,7 +42,7 @@ class AddSubGroupModal extends React.Component {
   }
 
   /**
-   * 添加下级部门
+   * 添加下级部门947
    */
   addSubGroup(){
     let _this = this;
@@ -59,10 +59,10 @@ class AddSubGroupModal extends React.Component {
               onResponse: function (ret) {
                   if(ret.msg=="调用成功" && ret.success==true){
                       message.success("部门添加成功");
-                      _this.closeAddSubGroupModal();
                       _this.state.subGroupName = '';
                       _this.props.addSubGroupComplete();
                   }
+                  _this.closeAddSubGroupModal();
                   _this.props.callbackParent(_this.state.parentId);
               },
               onError: function (error) {
