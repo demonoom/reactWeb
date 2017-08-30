@@ -138,7 +138,7 @@ const MainLayout = React.createClass({
         }
 
         var loginUserId = sessionStorage.getItem("ident");
-        var machineId = sessionStorage.getItem("machineId");
+        var machineId = localStorage.getItem("machineId");
         var password = sessionStorage.getItem("loginPassword");
         var pro = {
             "command": "messagerConnect",

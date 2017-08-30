@@ -100,7 +100,8 @@ const Login = Form.create()(React.createClass({
                         sessionStorage.setItem("loginUser",loginUserJson);
                         sessionStorage.setItem("loginPassword",userPassword);
                         var machineId = loginComponent.createMachineId();
-                        sessionStorage.setItem("machineId",machineId);
+                        // sessionStorage.setItem("machineId",machineId);
+                        localStorage.setItem("machineId",machineId);
                         loginComponent.getHistoryAccessPointId(response.colUid);
                         if(response.colUtype == "TEAC"){
                             location.hash="MainLayout";

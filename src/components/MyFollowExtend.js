@@ -260,10 +260,10 @@ const MyFollowExtend = React.createClass({
 
         messageList.splice(0);
         var loginUserId = sessionStorage.getItem("ident");
-        var machineId = sessionStorage.getItem("machineId");
+        var machineId = localStorage.getItem("machineId");
         var pro = {
             "command": "messagerConnect",
-            "data": {"machineType": "ios", "userId": Number.parseInt(loginUserId), "machine": machineId}
+            "data": {"machineType": "web", "userId": Number.parseInt(loginUserId), "machine": machineId}
         };
         ms.msgWsListener = {
             onError: function (errorMsg) {
@@ -368,11 +368,11 @@ const MyFollowExtend = React.createClass({
 
         messageList.splice(0);
         var loginUserId = sessionStorage.getItem("ident");
-        var machineId = sessionStorage.getItem("machineId");
+        var machineId = localStorage.getItem("machineId");
 
         var pro = {
             "command": "messagerConnect",
-            "data": {"machineType": "ios", "userId": Number.parseInt(loginUserId), "machine": machineId}
+            "data": {"machineType": "web", "userId": Number.parseInt(loginUserId), "machine": machineId}
         };
         ms.msgWsListener = {
             onError: function (errorMsg) {
