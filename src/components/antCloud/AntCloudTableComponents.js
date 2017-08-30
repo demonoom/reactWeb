@@ -1035,6 +1035,7 @@ const AntCloudTableComponents = React.createClass({
      * 分享文件
      */
     shareFile(){
+        var _this = this;
         var checkedConcatOptions = cloudTable.state.checkedConcatOptions;
         var checkedGroupOptions = cloudTable.state.checkedGroupOptions;
         var shareToUserArray = checkedConcatOptions.concat(checkedGroupOptions);
@@ -1043,7 +1044,15 @@ const AntCloudTableComponents = React.createClass({
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         var uuid = createUUID();
         var createTime = (new Date()).valueOf();
-        var attachement={"address":shareFile.path,"user":loginUser,"createTime":shareFile.createTime};
+        var cover = "http://png.findicons.com/files/icons/2083/go_green_web/64/link.png";
+        var suffix = shareFile.suffix;//后缀名
+        var name = shareFile.name;  //对应title
+        var creator  = shareFile.creator;
+        var messageToType=1;//根据接收者是群组还是个人来决定
+        var filePath = _this.buildShareUrl(shareFile.path);
+        var attachement={"address":filePath,"user":creator,"createTime":shareFile.createTime,"cover":cover,"content":name,"type":4};
+
+
         shareToUserArray.forEach(function (e) {
             var messageJson = {
                 'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
@@ -1054,6 +1063,17 @@ const AntCloudTableComponents = React.createClass({
             ms.send(commandJson);
         });
         cloudTable.setState({shareModalVisible:false});
+    },
+
+    buildShareUrl(filePath) {
+        if (filePath.indexOf("agent=ExcoordMessenger") == -1) {
+            if (filePath.indexOf("?") != -1) {
+                filePath =filePath + "&agent=ExcoordMessenger";
+            } else {
+                filePath =filePath + "?agent=ExcoordMessenger";
+            }
+        }
+        return filePath;
     },
 
     /**

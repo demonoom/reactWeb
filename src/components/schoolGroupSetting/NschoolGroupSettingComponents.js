@@ -221,9 +221,11 @@ const NschoolGroupSettingComponents = React.createClass({
             "structureId": structureId,
             "pageNo": pageNo,
         };
+        console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
+                console.log(response);
                 if (isEmpty(response) == false) {
                     response.forEach(function (member) {
                         var user = member.user;
@@ -291,7 +293,7 @@ const NschoolGroupSettingComponents = React.createClass({
         this.setState({
             memberPageNo: pageNo,
         });
-        this.getStrcutureMembers(this.state.structureId, pageNo);
+        this.getStrcutureMembers(this.state.currentStructureId, pageNo);
     },
 
     /**
