@@ -51,24 +51,50 @@ const NschoolGroupSettingComponents = React.createClass({
     componentDidMount() {
         // this.getStructureById();
         var structureId = this.props.structureId;
+        var rootStructure = this.props.rootStructure;
+        var currentObj = null;
         if(isEmpty(structuresObjArray)==false && structuresObjArray.length > 0 ){
-            var currentObj = structuresObjArray[structuresObjArray.length-1];
+            currentObj = structuresObjArray[structuresObjArray.length-1];
             structureId = currentObj.id;
         }
-        this.setState({"currentStructureId":structureId});
+        if(isEmpty(rootStructure)==false){
+            this.setState({"currentStructureId":structureId,"currentObj":rootStructure});
+        }else{
+            this.setState({"currentStructureId":structureId,"currentObj":currentObj});
+        }
         this.changeStructureData(structureId);
     },
     componentWillReceiveProps(nextProps) {
+        var currentObj = null;
         if (isEmpty(structuresObjArray) == false && structuresObjArray.length > 1) {
+            currentObj = structuresObjArray[structuresObjArray.length-1];
             structuresObjArray.splice(1, structuresObjArray.length);
         }
         subGroupMemberList.splice(0);
         var structureId = nextProps.structureId;
+        var rootStructure = nextProps.rootStructure;
+        if(isEmpty(rootStructure)==false){
+            this.setState({structureId,"currentObj":rootStructure});
+        }else{
+            this.setState({structureId,"currentObj":currentObj});
+        }
+
         this.changeStructureData(structureId);
     },
 
     changeStructureData(structureId) {
         var defaultPageNo = 1;
+        var currentObj = null;
+        if (isEmpty(structuresObjArray) == false && structuresObjArray.length > 1) {
+            currentObj = structuresObjArray[structuresObjArray.length-1];
+        }
+        var rootStructure = this.props.rootStructure;
+        if(isEmpty(rootStructure)==false){
+            this.setState({"currentStructureId":structureId,"currentObj":rootStructure});
+        }else{
+            this.setState({"currentStructureId":structureId,"currentObj":currentObj});
+        }
+
         // 获取子部门
         this.listStructures(structureId);
         // 根据部门id获取部门成员
@@ -450,9 +476,9 @@ const NschoolGroupSettingComponents = React.createClass({
             });
         }
         var settingButton;
-        if (isEmpty(_this.props.rootStructure)) {
+        if (isEmpty(_this.state.currentObj)) {
             settingButton = null;
-        } else if (_this.state.structureId == _this.props.rootStructure.id) {
+        } else if (_this.state.structureId == _this.state.currentObj.id) {
             settingButton = <Button className="schoolgroup_btn_gray_6 schoolgroup_btn_left schoolgroup_btn"
                                     onClick={this.schoolSetting}>设置</Button>
         } else {
@@ -522,7 +548,7 @@ const NschoolGroupSettingComponents = React.createClass({
                     onConfirmModalOK={this.batchDeleteMemeber1}
                 />
                 <SchoolSettingModal isShow={this.state.schoolSettingModalIsShow}
-                                    rootStructure={this.props.rootStructure}
+                                    rootStructure={this.state.currentObj}
                                     onCancel={this.initModalStatus}></SchoolSettingModal>
                 <AddSubGroupModal isShow={this.state.addSubGroupModalIsShow}
                                   parentGroup={this.state.parentGroup}

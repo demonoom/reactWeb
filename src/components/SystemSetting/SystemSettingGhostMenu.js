@@ -13,7 +13,7 @@ class SystemSettingGhostMenu extends React.Component {
         this.state = {
             loginUser: loginUser,
             ident: sessionStorage.getItem("ident"),
-            beActive: false, // 是活动的，可伸缩的 
+            beActive: false, // 是活动的，可伸缩的
         }
         this.changeMenu = this.changeMenu.bind(this);
         this.showpanel = this.showpanel.bind(this);
