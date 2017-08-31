@@ -194,14 +194,23 @@ const NschoolGroupSettingComponents = React.createClass({
      */
     getStructureById(structureId) {
         let _this = this;
+        var structureId = structureId + '';
+
         if (isEmpty(structureId)) {
             structureId = "-1";
         }
+
+        if(structureId.indexOf(',') !== -1) {
+            var structureIdArr = structureId.split(',');
+            structureId = structureIdArr[0];
+        }
+
         var param = {
             "method": 'getStructureById',
             "operateUserId": _this.state.loginUser.colUid,
             "structureId": structureId,
         };
+        console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var parentGroup = ret.response;
@@ -240,13 +249,22 @@ const NschoolGroupSettingComponents = React.createClass({
      * @param structureId
      */
     getStrcutureMembers(structureId, pageNo) {
+        console.log('这是1');
+        console.log(structureId);
         let _this = this;
+        var structureId = structureId + '';
+
+        if(structureId.indexOf(',') !== -1) {
+            var structureIdArr = structureId.split(',');
+            structureId = structureIdArr[0];
+        }
         var param = {
             "method": 'getStrcutureMembers',
             "operateUserId": _this.state.loginUser.colUid,
             "structureId": structureId,
             "pageNo": pageNo,
         };
+        console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;

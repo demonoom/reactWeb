@@ -103,29 +103,13 @@ class GroupSettingModal extends React.Component {
      * @param structureId
      */
     getStrcutureMembers(structureId, pageNo) {
+        console.log('这是2');
+        console.log(structureId);
         let _this = this;
         if(isEmpty(structureId)){
             return;
         }
 
-        // if(structureId.indexOf(',') !== -1) {
-        //     var structureIdArr = structureId.split(',');
-        //     var structureIdd = structureIdArr[0];
-        //     var param = {
-        //         "method": 'getStrcutureMembers',
-        //         "operateUserId": _this.state.loginUser.colUid,
-        //         "structureId": structureIdd,
-        //         "pageNo": pageNo,
-        //     };
-        //
-        // }else {
-        //     var param = {
-        //         "method": 'getStrcutureMembers',
-        //         "operateUserId": _this.state.loginUser.colUid,
-        //         "structureId": structureId,
-        //         "pageNo": pageNo,
-        //     };
-        // }
 
         var param = {
             "method": 'getStrcutureMembers',
@@ -159,6 +143,8 @@ class GroupSettingModal extends React.Component {
      * @param structureId
      */
     getStructureById(structureId) {
+        console.log('这是SchoolGroupMenu3');
+        console.log(structureId);
         let _this = this;
         var param = {
             "method": 'getStructureById',
