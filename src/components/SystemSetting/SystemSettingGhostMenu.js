@@ -37,6 +37,7 @@ class SystemSettingGhostMenu extends React.Component {
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var data = ret.response;
+                console.log(data);
                 _this.buildTab(data);
             },
             onError: function (error) {
@@ -62,7 +63,7 @@ class SystemSettingGhostMenu extends React.Component {
                                     <li onClick={event => {
                                         // _this.changeMenu(event, 'origin', true)
                                         _this.checkWords(v.actionParams,v.name);
-                                    }}>{v.name}</li>
+                                    }}><img src={v.icon}/>{v.name}</li>
                                 </ul>
                           </li>
                 liArr.push(lis);
