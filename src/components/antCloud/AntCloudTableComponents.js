@@ -103,7 +103,8 @@ const AntCloudTableComponents = React.createClass({
     componentDidMount() {
         ms = this.props.messageUtilObj;
         var antCloudKey = this.props.antCloudKey;
-        this.getFileByType(antCloudKey);
+        // this.getFileByType(antCloudKey);
+        this.getFileByType('myFile');
         //cloudTable.isSchoolCloudFileSuperManager(cloudTable.state.ident);
         //cloudTable.getUserRootCloudFiles(cloudTable.state.ident, 1);
     },
@@ -1121,7 +1122,8 @@ const AntCloudTableComponents = React.createClass({
             "type": TO_TYPE
         };
 
-        checkedGroupOptions.forEach(function (e) {
+        if(isEmpty(checkedGroupOptions) == false) {
+            checkedGroupOptions.forEach(function (e) {
             var uuid = createUUID();
             var messageJson = {
                 'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
@@ -1132,8 +1134,10 @@ const AntCloudTableComponents = React.createClass({
             console.log(commandJson);
             ms.send(commandJson);
         });
+        }
 
-        checkedConcatOptions.forEach(function (e) {
+        if(isEmpty(checkedConcatOptions) == false) {
+            checkedConcatOptions.forEach(function (e) {
             var uuid = createUUID();
             var messageJson = {
                 'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
@@ -1144,7 +1148,9 @@ const AntCloudTableComponents = React.createClass({
             console.log(commandJson);
             ms.send(commandJson);
         });
+        }
         cloudTable.setState({shareModalVisible: false});
+        // cloudTable.setState({"checkedGroupOptions": []});
     },
 
     buildShareUrl(filePath) {

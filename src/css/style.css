@@ -3806,6 +3806,12 @@ color:#ffbf00
 	cursor: pointer;
 
 }
+.ghostMenu_li{
+	padding:0 !important;
+}
+.ghostMenu_li > li:first-child{
+	border-bottom: 1px solid #f3f3f3
+}
 .icon_system_img{
 	width: 20px;
 	height: 20px;
