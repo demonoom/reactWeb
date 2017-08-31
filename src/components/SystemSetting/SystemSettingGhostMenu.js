@@ -63,7 +63,7 @@ class SystemSettingGhostMenu extends React.Component {
                                     <li onClick={event => {
                                         // _this.changeMenu(event, 'origin', true)
                                         _this.checkWords(v.actionParams,v.name);
-                                    }}><img src={v.icon}/>{v.name}</li>
+                                    }}><img  className="icon_system_img"  src={v.icon}/>{v.name}</li>
                                 </ul>
                           </li>
                 liArr.push(lis);
