@@ -13,7 +13,8 @@ class SystemSettingGhostMenu extends React.Component {
         this.state = {
             loginUser: loginUser,
             ident: sessionStorage.getItem("ident"),
-            beActive: false, // 是活动的，可伸缩的
+            beActive: false, // 是活动的，可伸缩的,
+            icon:["user","dot-chart","ellipsis"]
         }
         this.changeMenu = this.changeMenu.bind(this);
         this.showpanel = this.showpanel.bind(this);
@@ -69,7 +70,7 @@ class SystemSettingGhostMenu extends React.Component {
                 liArr.push(lis);
             });
             uls =  <li className="ghostMenu_li">
-                     <li><Icon type="dot-chart" />{data[i].name}</li>
+                     <li><Icon type={this.state.icon[i]} />{data[i].name}</li>
                     {liArr}
                   </li>
             arr.push(uls);
@@ -168,7 +169,6 @@ class SystemSettingGhostMenu extends React.Component {
 
         return (
             <div className={this.props.visible ? 'ghostMenu ghostMenuShow' : 'ghostMenu ghostMenuHide'}
-                 // style={{overflow:'scroll'}}
                  onClick={event => {
                      this.props.toggleGhostMenu({visible: false});
                  }}>
