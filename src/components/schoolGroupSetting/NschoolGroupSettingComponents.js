@@ -53,10 +53,12 @@ const NschoolGroupSettingComponents = React.createClass({
         var structureId = this.props.structureId;
         var rootStructure = this.props.rootStructure;
         var currentObj = null;
+
         if(isEmpty(structuresObjArray)==false && structuresObjArray.length > 0 ){
-            currentObj = structuresObjArray[structuresObjArray.length-1];
+            currentObj = structuresObjArray[0];
             structureId = currentObj.id;
         }
+
         if(isEmpty(rootStructure)==false){
             this.setState({"currentStructureId":structureId,"currentObj":rootStructure});
         }else{
@@ -67,7 +69,7 @@ const NschoolGroupSettingComponents = React.createClass({
     componentWillReceiveProps(nextProps) {
         var currentObj = null;
         if (isEmpty(structuresObjArray) == false && structuresObjArray.length > 1) {
-            currentObj = structuresObjArray[structuresObjArray.length-1];
+            currentObj = structuresObjArray[0];
             structuresObjArray.splice(1, structuresObjArray.length);
         }
         subGroupMemberList.splice(0);
@@ -86,7 +88,7 @@ const NschoolGroupSettingComponents = React.createClass({
         var defaultPageNo = 1;
         var currentObj = null;
         if (isEmpty(structuresObjArray) == false && structuresObjArray.length > 1) {
-            currentObj = structuresObjArray[structuresObjArray.length-1];
+            currentObj = structuresObjArray[0];
         }
         var rootStructure = this.props.rootStructure;
         if(isEmpty(rootStructure)==false){
@@ -173,13 +175,19 @@ const NschoolGroupSettingComponents = React.createClass({
             onResponse: function (ret) {
                 if (ret.msg == "调用成功" && ret.success == true) {
                     message.success("部门删除成功！");
-                    _this.listStructures(_this.state.currentStructureId);
-                    _this.getStrcutureMembers(_this.state.currentStructureId, _this.state.memberPageNo);
+                    _this.listStructures(_this.state.parentGroup.id);
+                    _this.getStrcutureMembers(_this.state.parentGroup.id, _this.state.memberPageNo);
                 } else {
                     message.error(ret.msg);
                 }
                 _this.closeConfirmModal1();
-                _this.props.addSubGroupComplete();
+                var root;
+                if (isEmpty(structuresObjArray) == false && structuresObjArray.length > 1) {
+                    root = structuresObjArray[0];
+                }
+                if(root.id == _this.state.parentGroup.id){
+                    _this.props.addSubGroupComplete();
+                }
             },
             onError: function (error) {
                 message.error(error);
@@ -200,10 +208,10 @@ const NschoolGroupSettingComponents = React.createClass({
             structureId = "-1";
         };
 
-        if(structureId.indexOf(',') !== -1) {
-            var structureIdArr = structureId.split(',');
-            structureId = structureIdArr[0];
-        };
+        // if(structureId.indexOf(',') !== -1) {
+        //     var structureIdArr = structureId.split(',');
+        //     structureId = structureIdArr[0];
+        // };
 
         var param = {
             "method": 'getStructureById',
@@ -452,7 +460,7 @@ const NschoolGroupSettingComponents = React.createClass({
     },
 
     addSubGroupComplete() {
-        this.props.addSubGroupComplete();
+        // this.props.addSubGroupComplete();
         this.changeStructureData(this.state.currentStructureId);
     },
 
