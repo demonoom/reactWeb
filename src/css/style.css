@@ -3806,6 +3806,13 @@ color:#ffbf00
 	cursor: pointer;
 
 }
+.icon_system_img{
+	width: 20px;
+	height: 20px;
+	position: relative;
+	top: 3px;
+	left: -12px;
+}
 .te_download_a{
 	float:right;
 	line-height:1px
@@ -5246,5 +5253,5 @@ select.course_n:hover{
 }
 .yipan_name{
 	position: relative;
-	top: -5px;
+	top: 2px;
 }

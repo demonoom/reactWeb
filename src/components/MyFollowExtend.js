@@ -486,27 +486,29 @@ const MyFollowExtend = React.createClass({
      */
     changeImgTextToTag(str, imgTags, messageReturnJson){
         showContent = str;
-        var start = str.indexOf("[bexp_");
-        if (start != -1) {
-            //
-            var end = str.indexOf("]");
-            var subStr = str.substring(start, end + 1);
-            showContent = showContent.replace(subStr, "~");
-            var imgUrl = getImgName(subStr);
-            var localUrl = "../src/components/images/emotions/" + imgUrl;
-            var subStrReplace = <span className='attention_img'><img src={localUrl}/></span>;
-            imgTags.push(subStrReplace);
-            var otherStr = str.substring(end + 1);
-            if (otherStr.indexOf("[bexp_") != -1) {
-                this.changeImgTextToTag(otherStr, imgTags);
-            } else {
-                showImg += otherStr;
-            }
-            messageReturnJson = {messageType: "imgTag", imgMessage: imgTags};
+        if(isEmpty(str)==false){
+            var start = str.indexOf("[bexp_");
+            if (start != -1) {
+                //
+                var end = str.indexOf("]");
+                var subStr = str.substring(start, end + 1);
+                showContent = showContent.replace(subStr, "~");
+                var imgUrl = getImgName(subStr);
+                var localUrl = "../src/components/images/emotions/" + imgUrl;
+                var subStrReplace = <span className='attention_img'><img src={localUrl}/></span>;
+                imgTags.push(subStrReplace);
+                var otherStr = str.substring(end + 1);
+                if (otherStr.indexOf("[bexp_") != -1) {
+                    this.changeImgTextToTag(otherStr, imgTags);
+                } else {
+                    showImg += otherStr;
+                }
+                messageReturnJson = {messageType: "imgTag", imgMessage: imgTags};
 
-        } else {
-            //不存在表情，为单纯性的文字消息
-            messageReturnJson = {messageType: "text", textMessage: str};
+            } else {
+                //不存在表情，为单纯性的文字消息
+                messageReturnJson = {messageType: "text", textMessage: str};
+            }
         }
         return messageReturnJson;
     },
