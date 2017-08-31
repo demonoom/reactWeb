@@ -181,13 +181,14 @@ const NschoolGroupSettingComponents = React.createClass({
                     message.error(ret.msg);
                 }
                 _this.closeConfirmModal1();
-                var root;
-                if (isEmpty(structuresObjArray) == false && structuresObjArray.length > 1) {
-                    root = structuresObjArray[0];
-                }
-                if(root.id == _this.state.parentGroup.id){
-                    _this.props.addSubGroupComplete();
-                }
+                // var root;
+                // if (isEmpty(structuresObjArray) == false && structuresObjArray.length > 1) {
+                //     root = structuresObjArray[0];
+                // }
+                // if(root.id == _this.state.parentGroup.id){
+                //     _this.props.addSubGroupComplete();
+                // }
+                _this.props.addSubGroupComplete();
             },
             onError: function (error) {
                 message.error(error);
@@ -460,7 +461,7 @@ const NschoolGroupSettingComponents = React.createClass({
     },
 
     addSubGroupComplete() {
-        // this.props.addSubGroupComplete();
+        this.props.addSubGroupComplete();
         this.changeStructureData(this.state.currentStructureId);
     },
 
