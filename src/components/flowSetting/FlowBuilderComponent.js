@@ -26,6 +26,7 @@ const FlowBuilderComponent = React.createClass({
             flowName:'',    //流程名称
             flowDescription:'', //流程说明
             approvalGroup:'-1',   //选中的流程分组
+            messageOfCopyPersonSendType:-1, //流程抄送人消息发送方式
         };
     },
 
@@ -75,8 +76,9 @@ const FlowBuilderComponent = React.createClass({
     /**
      * 抄送人通知发送方式
      */
-    copySendHandleChange(){
-
+    copySendHandleChange(value) {
+        console.log(`messageOfCopyPersonSendType selected ${value}`);
+        this.setState({messageOfCopyPersonSendType:value});
     },
 
     /**
@@ -208,6 +210,21 @@ const FlowBuilderComponent = React.createClass({
     },
 
     /**
+     * 该面板是流程基本信息配置面板，可以从该面板中获取以json描述的流程信息
+     */
+    getProcessDefinitionBaseJson(){
+        var processDefinitionBaseJson={};
+        //流程名称
+        processDefinitionBaseJson.procDefName = this.state.flowName;
+        //流程所在分组
+        processDefinitionBaseJson.flowGroupId = this.state.approvalGroup;
+        //
+        processDefinitionBaseJson.messageOfCopyPersonSendType = this.state.messageOfCopyPersonSendType;
+        processDefinitionBaseJson.copyPersonList = this.state.copyPersonIdArray;
+        processDefinitionBaseJson.procDefName = this.state.flowName;
+    },
+
+    /**
      * 渲染页面
      * @returns {XML}
      */
@@ -258,7 +275,7 @@ const FlowBuilderComponent = React.createClass({
                 <Row>
                     <Col span={4}>自动通知抄送人</Col>
                     <Col span={20}>
-                        <Select defaultValue="-1" style={{ width: 240 }} onChange={this.copySendHandleChange}>
+                        <Select defaultValue="-1" style={{ width: 240 }} value={this.state.messageOfCopyPersonSendType} onChange={this.copySendHandleChange}>
                             <Option value="-1">请选择</Option>
                             <Option value="0">仅全部同意后通知</Option>
                             <Option value="1">发起时和同意后均通知</Option>
