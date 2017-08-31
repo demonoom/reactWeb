@@ -1056,7 +1056,7 @@ const AntCloudTableComponents = React.createClass({
      * 关闭分享文件的窗口
      */
     shareModalHandleCancel() {
-        cloudTable.setState({shareModalVisible: false});
+        cloudTable.setState({shareModalVisible: false,"checkedGroupOptions":[],"checkedConcatOptions":[]});
     },
 
     /**
@@ -1149,7 +1149,7 @@ const AntCloudTableComponents = React.createClass({
             ms.send(commandJson);
         });
         }
-        cloudTable.setState({shareModalVisible: false});
+        cloudTable.setState({shareModalVisible: false,"checkedGroupOptions":[],"checkedConcatOptions":[]});
         // cloudTable.setState({"checkedGroupOptions": []});
     },
 
@@ -1402,10 +1402,12 @@ const AntCloudTableComponents = React.createClass({
                                           onChange={cloudTable.collapseChange}>
                                     <Panel header="我的群组" key="1">
                                         <CheckboxGroup options={cloudTable.state.groupOptions}
+                                                       value={cloudTable.state.checkedGroupOptions}
                                                        onChange={cloudTable.groupOptionsOnChange}/>
                                     </Panel>
                                     <Panel header="我的好友" key="2">
                                         <CheckboxGroup options={cloudTable.state.concatOptions}
+                                                       value={cloudTable.state.checkedConcatOptions}
                                                        onChange={cloudTable.concatOptionsOnChange}/>
                                     </Panel>
                                 </Collapse>
