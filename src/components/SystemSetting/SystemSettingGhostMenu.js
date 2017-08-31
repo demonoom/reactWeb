@@ -68,8 +68,8 @@ class SystemSettingGhostMenu extends React.Component {
                           </li>
                 liArr.push(lis);
             });
-            uls =  <li>
-                     <li>{data[i].name}</li>
+            uls =  <li className="ghostMenu_li">
+                     <li><Icon type="dot-chart" />{data[i].name}</li>
                     {liArr}
                   </li>
             arr.push(uls);
