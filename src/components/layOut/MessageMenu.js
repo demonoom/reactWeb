@@ -227,6 +227,10 @@ const MessageMenu = React.createClass({
                 }else{
                     showUser = messageObj.toUser;
                 }
+                if(isEmpty(showUser)){
+                    console.log("toUser为空");
+                    return;
+                }
                 var colUid = showUser.colUid;
                 messageIndex = mMenu.checkMessageIsExist(colUid);
                 //个人消息
