@@ -1065,12 +1065,12 @@ const AntCloudTableComponents = React.createClass({
         var _this = this;
         var checkedConcatOptions = cloudTable.state.checkedConcatOptions;
         var checkedGroupOptions = cloudTable.state.checkedGroupOptions;
-        var shareToUserArray = checkedConcatOptions.concat(checkedGroupOptions);
+        console.log(checkedConcatOptions);
+        console.log(checkedGroupOptions);
         var nowThinking = cloudTable.state.nowThinking;
         var shareFile = cloudTable.state.shareCloudFile;
 
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
-        var uuid = createUUID();
         var createTime = (new Date()).valueOf();
         var cover = "http://png.findicons.com/files/icons/2083/go_green_web/64/link.png";
         var suffix = shareFile.suffix;//后缀名
@@ -1078,13 +1078,29 @@ const AntCloudTableComponents = React.createClass({
         var creator  = shareFile.creator;
         var messageToType=1;//根据接收者是群组还是个人来决定
 
-        // var filePath = _this.buildShareUrl(shareFile.path);
+        /*远程调试*/
         var filePath = "http://" + 'www.maaee.com' + ":" + 80 + "/Excoord_PhoneService" + "/cloudFile/shareShow/" + response;
+
+        /*本地调试*/
+        // var filePath = "http://" + '192.168.1.34' + ":" + 8080 + "/Excoord_PhoneService" + "/cloudFile/shareShow/" + response;
 
         var attachement={"address":filePath,"user":creator,"createTime":shareFile.createTime,"cover":cover,"content":name,"type":4};
 
 
-        shareToUserArray.forEach(function (e) {
+        checkedGroupOptions.forEach(function (e) {
+            var uuid = createUUID();
+            var messageJson = {
+                'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
+                "toId": e, "command": "message", "hostId": loginUser.colUid,
+                "uuid": uuid, "toType": 4,"attachment":attachement,"state":0
+            };
+            var commandJson = {"command": "message", "data": {"message": messageJson}};
+            console.log(commandJson);
+            ms.send(commandJson);
+        });
+
+        checkedConcatOptions.forEach(function (e) {
+            var uuid = createUUID();
             var messageJson = {
                 'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
                 "toId": e, "command": "message", "hostId": loginUser.colUid,
