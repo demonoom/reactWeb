@@ -60,7 +60,7 @@ class AddSubGroupModal extends React.Component {
                   if(ret.msg=="调用成功" && ret.success==true){
                       message.success("部门添加成功");
                       _this.state.subGroupName = '';
-                      _this.props.addSubGroupComplete();
+                      _this.props.addSubGroupComplete(_this.state.parentId);
                   }
                   _this.closeAddSubGroupModal();
                   _this.props.callbackParent(_this.state.parentId);
