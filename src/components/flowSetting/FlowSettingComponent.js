@@ -136,7 +136,7 @@ const FlowSettingComponent = React.createClass({
     },
 
     /**
-     * 保存流程
+     * 保存流程到后台
      */
     saveFlow(){
 

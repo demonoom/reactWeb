@@ -47,9 +47,6 @@ const CreateFlowComponent = React.createClass({
         }
     },
 
-    // getFormData(){
-    //     //alert(formBuilder.actions.getData('json'));
-    // },
     /**
      * 判断是否可以执行下一步操作,是否可以进入下一步对应的页面
      * 如果当前页面的表单已经设置,则返回true可以进入下一步,否则停留在当前页,提示错误
@@ -66,6 +63,14 @@ const CreateFlowComponent = React.createClass({
     },
 
     /**
+     * 实现流程的部署
+     * 流程部署的数据分别来源于两个面板，需要将两个面板中的数据构建成json完成数据保存
+     */
+    deployProcess(){
+
+    },
+
+    /**
      * 渲染页面
      * @returns {XML}
      */
@@ -74,7 +79,7 @@ const CreateFlowComponent = React.createClass({
         if(this.state.stepNum==0){
             stepPanel = <FormBuilderComponent ref="formDataComponent"></FormBuilderComponent>;
         }else{
-            stepPanel=<FlowBuilderComponent></FlowBuilderComponent>;
+            stepPanel=<FlowBuilderComponent ref="flowBuilderComponent"></FlowBuilderComponent>;
         }
 
         return (
