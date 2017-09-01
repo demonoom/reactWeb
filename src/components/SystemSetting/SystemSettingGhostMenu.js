@@ -22,7 +22,9 @@ class SystemSettingGhostMenu extends React.Component {
     }
 
     componentDidMount() {
-        this.getTab();
+        //this.getTab();
+        //测试
+        this.buildTab([]);
     }
 
     /**
@@ -56,6 +58,18 @@ class SystemSettingGhostMenu extends React.Component {
         var liArr = [];
         var uls = '';
         var arr = [];
+        //手动添加的测试菜单---开始
+        var flowUl = <li className="multi">
+            <ul className="second">
+                <li onClick={ event => {
+                    this.changeMenu(event, 'systemFlow', false)
+                }}>流程管理
+                </li>
+            </ul>
+        </li>;
+        liArr.push(flowUl);
+        arr.push(liArr);
+        //手动添加的测试菜单---结束
         for (var i = 0; i < data.length; i++) {
             data[i].tabItems.forEach(function (v) {
                 console.log(v);
@@ -76,20 +90,6 @@ class SystemSettingGhostMenu extends React.Component {
             arr.push(uls);
             liArr = [];
         }
-        //手动添加的测试菜单---开始
-        var flowUl = <li className="ghostMenu_li">
-            <li><Icon type="file-text"/>审批</li>
-            <li className="multi">
-                <ul className="second">
-                    <li onClick={ event => {
-                        this.changeMenu(event, 'systemFlow', false)
-                    }}>流程管理
-                    </li>
-                </ul>
-            </li>
-        </li>;
-        arr.push(flowUl);
-        //手动添加的测试菜单---结束
         _this.setState({arr});
     }
 
