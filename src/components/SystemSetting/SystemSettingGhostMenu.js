@@ -150,7 +150,6 @@ class SystemSettingGhostMenu extends React.Component {
             title: name,
             url: urls + this.state.ident,
         }
-        // console.log(param);
 
         LP.Start(param);
     }
@@ -173,7 +172,7 @@ class SystemSettingGhostMenu extends React.Component {
                      this.props.toggleGhostMenu({visible: false});
                  }}>
                 {hideButton}
-                <div className="menu_til">系统设置</div>
+                <div className="menu_til">教学管理</div>
                 <ul className="first">
                     {this.state.arr}
                 </ul>
