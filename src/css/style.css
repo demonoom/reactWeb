@@ -1239,6 +1239,15 @@ article.content_3 img{
 	overflow-y:auto;
 	border:none;
 }
+.analyze_iframe_2{
+	width:100%;
+	height:calc(100% - 46px);
+	overflow-y:hidden;
+	border:none;
+}
+analyze_iframe_2 > div{
+	height:100% !important;
+}
 .ques_bg{
 	background:#fff;
 }
@@ -3253,6 +3262,7 @@ a.color_gary_f, .color_gary_f{
 	height:100%;
 	border: none;
 }
+
 .little-warp{
 	height: 100%;
 	width: 100%;
