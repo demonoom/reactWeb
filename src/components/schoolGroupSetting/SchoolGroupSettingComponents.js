@@ -87,9 +87,9 @@ const SchoolGroupSettingComponents = React.createClass({
                                                                    addSubGroupComplete={this.addSubGroupComplete}
                 ></NschoolGroupSettingComponents>;
                 break;
-            case 'stop':
-                this.tabComponent = <OpenNewPage/>;
-                break;
+            // case 'stop':
+            //     this.tabComponent = <OpenNewPage/>;
+            //     break;
         }
         return (
             <div>
