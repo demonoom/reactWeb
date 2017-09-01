@@ -319,7 +319,7 @@ const AntCloudTableComponents = React.createClass({
                     fileTypeLog = <i className="cloud_icon cloud_icon_other"></i>;
                     break;
             }
-            fileLogo = <span className="cloud_text">
+            fileLogo = <span className="cloud_text" >
                 {fileTypeLog}
                 <span className="yipan_name">{name}</span>
             </span>;

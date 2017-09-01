@@ -77,7 +77,7 @@ class SystemSettingGhostMenu extends React.Component {
             liArr = [];
         }
         //手动添加的测试菜单---开始
-        var flowUl = <ul>
+        var flowUl = <li className="ghostMenu_li">
             <li><Icon type="file-text"/>审批</li>
             <li className="multi">
                 <ul className="second">
@@ -87,8 +87,8 @@ class SystemSettingGhostMenu extends React.Component {
                     </li>
                 </ul>
             </li>
-        </ul>;
-        // arr.push(flowUl);
+        </li>;
+        arr.push(flowUl);
         //手动添加的测试菜单---结束
         _this.setState({arr});
     }
@@ -150,7 +150,6 @@ class SystemSettingGhostMenu extends React.Component {
             title: name,
             url: urls + this.state.ident,
         }
-        // console.log(param);
 
         LP.Start(param);
     }
@@ -173,7 +172,7 @@ class SystemSettingGhostMenu extends React.Component {
                      this.props.toggleGhostMenu({visible: false});
                  }}>
                 {hideButton}
-                <div className="menu_til">系统设置</div>
+                <div className="menu_til">教学管理</div>
                 <ul className="first">
                     {this.state.arr}
                 </ul>

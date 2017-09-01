@@ -57,6 +57,7 @@ const NschoolGroupSettingComponents = React.createClass({
         if(isEmpty(structuresObjArray)==false && structuresObjArray.length > 0 ){
             currentObj = structuresObjArray[0];
             structureId = currentObj.id;
+            structuresObjArray.splice(1,structuresObjArray.length);
         }
 
         if(isEmpty(rootStructure)==false){
@@ -69,16 +70,16 @@ const NschoolGroupSettingComponents = React.createClass({
     componentWillReceiveProps(nextProps) {
         var currentObj = null;
         if (isEmpty(structuresObjArray) == false && structuresObjArray.length > 1) {
-            currentObj = structuresObjArray[0];
+            //currentObj = structuresObjArray[0];
             structuresObjArray.splice(1, structuresObjArray.length);
         }
         subGroupMemberList.splice(0);
         var structureId = nextProps.structureId;
         var rootStructure = nextProps.rootStructure;
         if(isEmpty(rootStructure)==false){
-            this.setState({structureId,"currentObj":rootStructure});
+            this.setState({structureId});
         }else{
-            this.setState({structureId,"currentObj":currentObj});
+            this.setState({structureId});
         }
 
         this.changeStructureData(structureId);
@@ -88,13 +89,13 @@ const NschoolGroupSettingComponents = React.createClass({
         var defaultPageNo = 1;
         var currentObj = null;
         if (isEmpty(structuresObjArray) == false && structuresObjArray.length > 1) {
-            currentObj = structuresObjArray[0];
+            //currentObj = structuresObjArray[0];
         }
         var rootStructure = this.props.rootStructure;
         if(isEmpty(rootStructure)==false){
-            this.setState({"currentStructureId":structureId,"currentObj":rootStructure});
+            this.setState({"structureId":structureId});
         }else{
-            this.setState({"currentStructureId":structureId,"currentObj":currentObj});
+            this.setState({"structureId":structureId});
         }
 
         // 获取子部门
@@ -303,7 +304,7 @@ const NschoolGroupSettingComponents = React.createClass({
     getSubGroup(record, index) {
         var memberPageNo = 1;
         this.setState({
-            currentStructureId: record.key,
+            structureId: record.key,
             schoolSettingModalIsShow: false,
             addSubGroupModalIsShow: false,
             addGroupMemberModalIsShow: false,
@@ -342,7 +343,7 @@ const NschoolGroupSettingComponents = React.createClass({
         this.setState({
             memberPageNo: pageNo,
         });
-        this.getStrcutureMembers(this.state.currentStructureId, pageNo);
+        this.getStrcutureMembers(this.state.structureId, pageNo);
     },
 
     /**
@@ -362,7 +363,7 @@ const NschoolGroupSettingComponents = React.createClass({
             }
         }
         var defaultMemberPageNo = 1;
-        this.setState({"currentStructureId":structureId, structuresObjArray,"memberPageNo":defaultMemberPageNo});
+        this.setState({"structureId":structureId, structuresObjArray,"memberPageNo":defaultMemberPageNo});
     },
 
     /**
@@ -465,7 +466,7 @@ const NschoolGroupSettingComponents = React.createClass({
         if(root == key){
             _this.props.addSubGroupComplete();
         }
-        this.changeStructureData(this.state.currentStructureId);
+        this.changeStructureData(this.state.structureId);
     },
 
     showConfirmModal() {
