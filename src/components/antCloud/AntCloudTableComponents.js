@@ -567,11 +567,15 @@ const AntCloudTableComponents = React.createClass({
         }else if(type == 'mp3'){
             console.log('mp3');
         }else if(type == 'jpg'){
-            console.log(4);
             var url = path;
             this.view(event,url,name);
         }else if(type == 'bmp'){
-            console.log(4);
+            var url = path;
+            this.view(event,url,name);
+        }
+        else if(type == 'png'){
+            var url = path;
+            this.view(event,url,name);
         }else if(type == 'apk') {
             console.log('apk');
         }else {
@@ -1139,7 +1143,6 @@ const AntCloudTableComponents = React.createClass({
             }
         });
     },
-
 
     /**
      * 分享文件
