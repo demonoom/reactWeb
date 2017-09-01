@@ -66,8 +66,10 @@ const CreateFlowComponent = React.createClass({
      * 实现流程的部署
      * 流程部署的数据分别来源于两个面板，需要将两个面板中的数据构建成json完成数据保存
      */
-    deployProcess(){
-
+    getProcessDefinitionJson(){
+        var processDefinitionJson = this.refs.flowBuilderComponent.getProcessDefinitionBaseJson();
+        processDefinitionJson.formData = this.state.formData;
+        return processDefinitionJson;
     },
 
     /**
