@@ -58,6 +58,7 @@ class AddGroupMemberModal extends React.Component {
   addGroupMemberModalHandleCancel(){
     this.initPage();
     this.setState({"isShow":false});
+    this.props.onCancel();
   }
 
   /**
@@ -68,7 +69,7 @@ class AddGroupMemberModal extends React.Component {
   }
 
   /**
-   * 添加部门员工
+   * 设置选中员工的角色
    */
   addGroupMember(){
     var _this = this;
@@ -131,7 +132,7 @@ class AddGroupMemberModal extends React.Component {
     const teacherSrcOptions = [];
     var searchOptions={
       keywords:_this.state.searchKey,
-      schoolId:_this.state.schoolId,
+      schoolId:_this.state.loginUser.schoolId,
       userType:TYPE_TEACHER
     }
     var param = {
@@ -140,7 +141,7 @@ class AddGroupMemberModal extends React.Component {
       "searchOptions": JSON.stringify(searchOptions),
       "pageNo":_this.state.teacherSourceListPageNo,
     };
-    doWebService(JSON.stringify(param), {
+      doWebService(JSON.stringify(param), {
       onResponse: function (ret) {
         var response = ret.response;
         response.forEach(function (e) {
@@ -153,27 +154,26 @@ class AddGroupMemberModal extends React.Component {
           var teacher = e.teacher;
           var course = teacher.course;
           var user = teacher.user;
-          var courseName = course.name;
+          var courseName = "";
+          if(isEmpty(course)==false){
+            courseName = course.name;
+          }
           var userId = user.colUid;
           var userName = user.userName;
           var userAvatar = user.avatar;
 
           var isExitAtTargetOptions=_this.findTeacherIsExitAtTargetOptions(userId);
-          // var isExitInSettingTeam = _this.findTeacherIsExitAtSettringTeam(userId);
-          // && isExitInSettingTeam==false
-          if(isExitAtTargetOptions==false){
-            //不能添加自己
-            if (parseInt(userId) != _this.state.loginUser.colUid) {
+          var isExitInGroup = _this.findTeacherIsExitAtGroup(userId);
+          if(isExitAtTargetOptions==false && isExitInGroup==false){
               const data = {key:userId,
-                label: <div>
-                  <div>
-                    <span className="group_team_gray6">{userName}</span>
-                    <span className="group_team_blue9">{courseName}</span>
-                  </div>
-                  <div className="group_team_gray9">{gradeName}</div>
-                </div>, value: userId+"#"+userName+"#"+gradeName+"#"+userAvatar+"#"+courseName };
+                  label: <div>
+                    <div>
+                      <span className="group_team_gray6">{userName}</span>
+                      <span className="group_team_blue9">{courseName}</span>
+                    </div>
+                    <div className="group_team_gray9">{gradeName}</div>
+                  </div>, value: userId+"#"+userName+"#"+gradeName+"#"+userAvatar+"#"+courseName };
               teacherSrcOptions.push(data);
-            }
           }
         });
         _this.setState({teacherSrcOptions});
@@ -207,18 +207,17 @@ class AddGroupMemberModal extends React.Component {
   }
 
   /**
-   * 判断当前查询到的用户在已添加的团队用户中是否存在，如果已经存在，则过滤掉，避免重复添加
+   * 判断当前查询到的用户在已添加的部门用户中是否存在，如果已经存在，则过滤掉，避免重复添加
    * @param userId
    * @returns {boolean}
    */
-  findTeacherIsExitAtSettringTeam(userId){
+  findTeacherIsExitAtGroup(userId){
     var isExit = false;
-    var _this = this;
-    if(isEmpty(_this.state.settingTeam)==false){
-      var teamUser = _this.state.settingTeam.teamUsers;
-      for(var i=0;i<teamUser.length;i++){
-        var teamUser = teamUser[i];
-        if(teamUser.userId == userId){
+    var addUserData = this.props.addedUserData;
+    if(isEmpty(addUserData)==false){
+      for(var i=0;i<addUserData.length;i++){
+        var addUser = addUserData[i];
+        if(addUser.userId == userId){
           isExit = true;
           break;
         }
@@ -354,7 +353,7 @@ class AddGroupMemberModal extends React.Component {
     return (
         <Modal
             visible={this.state.isShow}
-            title="创建团队"
+            title="选择人员"
             onCancel={this.addGroupMemberModalHandleCancel}
             transitionName=""  //禁用modal的动画效果
             maskClosable={false} //设置不允许点击蒙层关闭

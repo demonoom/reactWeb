@@ -10,13 +10,10 @@ const columns = [{
 
 const data = [{
     key: 'myFile',
-    option: <div><Icon type="appstore-o" className="menu_left_i" /><span>我的文件</span></div>,
+    option: <div className="yichao_menu_li"><Icon type="appstore-o" className="menu_left_i" /><span>我的文件</span></div>,
 }, {
     key: 'groupFile',
-    option: <div><i className="iconfont menu_left_i">&#xe7e0;</i><span>群文件</span></div>,
-}, {
-    key: 'groupSetting',
-    option: <div><i className="iconfont menu_left_i">&#xe7e0;</i><span>组织架构</span></div>,
+    option: <div className="yichao_menu_li"><i className="iconfont menu_left_i">&#xe7e0;</i><span>群文件</span></div>,
 }];
 
 const AntCloudMenu = React.createClass({
@@ -25,6 +22,10 @@ const AntCloudMenu = React.createClass({
         return {
             selectRowKey:'myFile',
         };
+    },
+
+    componentDidMount(){
+        mMenu.props.callbackParent(this.state.selectRowKey);
     },
     /**
      * 获取当前的操作项

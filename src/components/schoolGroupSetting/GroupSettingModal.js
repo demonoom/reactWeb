@@ -54,9 +54,12 @@ class GroupSettingModal extends React.Component {
             parentGroupName = parentGroup.name;
             parentId = parentGroup.id;
             chatGroupId = parentGroup.chatGroupId;
+            this.getStructureById(parentId);
         }
         this.getStrcutureMembers(parentId, 1);
-        this.getChatGroupById(chatGroupId);
+        if(isShow==true && isEmpty(chatGroupId)==false){
+            this.getChatGroupById(chatGroupId);
+        }
         this.setState({isShow, parentGroup, parentGroupName, parentId});
     }
 
@@ -85,7 +88,7 @@ class GroupSettingModal extends React.Component {
                             chatGroupMemberArray.push(memberOption);
                         });
                     }
-                    _this.setState({chatGroupMemberArray, ownerId});
+                    _this.setState({chatGroupMemberArray, ownerId,"chatGroupManager":ownerId});
                 }
             },
             onError: function (error) {
@@ -100,7 +103,14 @@ class GroupSettingModal extends React.Component {
      * @param structureId
      */
     getStrcutureMembers(structureId, pageNo) {
+        console.log('这是2');
+        console.log(structureId);
         let _this = this;
+        if(isEmpty(structureId)){
+            return;
+        }
+
+
         var param = {
             "method": 'getStrcutureMembers',
             "operateUserId": _this.state.loginUser.colUid,
@@ -111,7 +121,7 @@ class GroupSettingModal extends React.Component {
             onResponse: function (ret) {
                 var response = ret.response;
                 var subGroupMemberList = [];
-                if (isEmpty(response) == false) {
+                if (isEmpty(response) == false && typeof(response.length)!="undefined" ) {
                     response.forEach(function (member) {
                         var user = member.user;
                         var userOption = <Option key={member.id}>{user.userName}</Option>;
@@ -128,11 +138,13 @@ class GroupSettingModal extends React.Component {
     }
 
     /**
-     * 获取当前用户的组织根节点
+     * 获取当前用户的组织根节点111
      * @param operateUserId
      * @param structureId
      */
     getStructureById(structureId) {
+        console.log('这是SchoolGroupMenu3');
+        console.log(structureId);
         let _this = this;
         var param = {
             "method": 'getStructureById',
@@ -147,8 +159,15 @@ class GroupSettingModal extends React.Component {
                     value: response.id,
                     label: response.schoolName
                 };
+                var chargeMembers = response.chargeMembers;
+                var groupManager=[];
+                chargeMembers.forEach(function (chargeMember) {
+                    var memberId = chargeMember.id;
+                    var user = chargeMember.user;
+                    groupManager.push(memberId+"");
+                });
                 groupOptions.push(groupOption);
-                _this.setState({groupOptions});
+                _this.setState({groupOptions,groupManager});
 
             },
             onError: function (error) {
@@ -187,6 +206,7 @@ class GroupSettingModal extends React.Component {
      */
     closeGroupSettingModal() {
         this.setState({"isShow": false});
+        this.props.onCancel();
     }
 
     /**
@@ -201,6 +221,18 @@ class GroupSettingModal extends React.Component {
         //部门名称
         var groupName = _this.state.parentGroupName;
         var groupManager="";
+        if(isEmpty(groupManagerArray)==true || groupManagerArray.length==0){
+            message.error("请选择部门主管");
+            return;
+        }
+        if(isEmpty(chatGroupManager)==true){
+            message.error("请选择群主");
+            return;
+        }
+        if(isEmpty(groupName)==true){
+            message.error("请输入部门名称");
+            return;
+        }
         if(isEmpty(groupManagerArray)==false){
             groupManager = groupManagerArray.join(",");
         }
@@ -327,25 +359,25 @@ class GroupSettingModal extends React.Component {
             >
                 <div className="modal_register_main">
                     <Row className="ant_row">
-                        <Col span={6} className="schoolgroup_modal_col6">
+                        <Col span={6} className="framework_m_l">
                             部门名称：
                         </Col>
-                        <Col span={18}>
+                        <Col span={16} className="framework_m_r">
                             <Input placeholder="部门名称" value={this.state.parentGroupName}
                                    onChange={this.parentGroupNameChange}/>
                         </Col>
                     </Row>
                     <Row className="ant_row">
-                        <Col span={6} className="schoolgroup_modal_col6">
+                        <Col span={6} className="framework_m_l">
                             部门主管：
                         </Col>
-                        <Col span={18}>
+                        <Col span={16} className="framework_m_r">
                             <Select
                                 mode="tags"
                                 tags={true}
                                 style={{width: '100%'}}
                                 value={this.state.groupManager}
-                                placeholder="Please select"
+                                placeholder="请选择主管"
                                 defaultValue={[]}
                                 onChange={this.groupMemberHandleChange}
                             >
@@ -354,15 +386,16 @@ class GroupSettingModal extends React.Component {
                         </Col>
                     </Row>
                     <Row className="ant_row">
-                        <Col span={6} className="schoolgroup_modal_col6">
+                        <Col span={6}  className="framework_m_l">
                             群主设置：
                         </Col>
-                        <Col span={18}>
+                        <Col span={16} className="framework_m_r">
                             <Select
                                 showSearch
                                 style={{width: 200}}
-                                placeholder="Select a person"
+                                placeholder="请选择群主"
                                 optionFilterProp="children"
+                                value={this.state.chatGroupManager}
                                 onChange={this.chatGroupManagerHandleChange}
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             >

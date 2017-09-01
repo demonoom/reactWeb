@@ -1,12 +1,26 @@
 import React, {PropTypes} from 'react';
-import {Table, Button, Progress, message,Icon,Input,Modal,Row,Col,Radio,Cascader,Collapse,Checkbox} from 'antd';
+import {
+    Table,
+    Button,
+    Progress,
+    message,
+    Icon,
+    Input,
+    Modal,
+    Row,
+    Col,
+    Radio,
+    Cascader,
+    Collapse,
+    Checkbox
+} from 'antd';
 import ConfirmModal from '../ConfirmModal';
 import CloudFileUploadComponents from './CloudFileUploadComponents';
 import {doWebService} from '../../WebServiceHelper';
 import {getPageSize} from '../../utils/Const';
 import {getLocalTime} from '../../utils/utils';
 import {createUUID} from '../../utils/utils';
-import {isEmpty} from '../../utils/Const';
+import {isEmpty, TO_TYPE} from '../../utils/Const';
 import {bubbleSort} from '../../utils/utils';
 
 const RadioGroup = Radio.Group;
@@ -17,14 +31,14 @@ var columns = [{
     title: '名称',
     dataIndex: 'title',
     className: 'cloud_name',
-},{
+}, {
     title: '创建者',
     dataIndex: 'creator',
     className: 'ant-table-selection-user2 class_right date_tr',
 }, {
     title: '更新时间',
     dataIndex: 'createTime',
-    className: 'ant-135 class_right time',
+    className: 'ant-table-selection-smallclass class_right time',
 }, {
     title: '操作',
     className: 'ant-table-selection-smallclass class_right',
@@ -47,13 +61,13 @@ var targetDirColumns = [{
     dataIndex: 'dirName',
 }, {
     title: '操作',
-    className: 'ant-table-selection-user',
+    className: 'ant-table-selection-user schoolgroup_operate',
     dataIndex: 'moveDirOpt',
 }
 ];
 
 var data = [];
-var uploadFileList=[];
+var uploadFileList = [];
 var cloudTable;
 var ms;
 const AntCloudTableComponents = React.createClass({
@@ -70,44 +84,45 @@ const AntCloudTableComponents = React.createClass({
             currentView: 'myFile',
             clazzId: '',
             dateTime: '',
-            tableData:[],
-            getFileType:'myFile',
-            parentDirectoryId:-1,
-            currentDirectoryId:-1,
-            mkdirModalVisible:false,
-            uploadPercent:0,
-            progressState:'none',
-            permissionTypeValue:-1,      //默认的权限类型
-            userAccount:'',     //搜索用户文本框的初始值
-            userContactsData:[],
-            delBtnReadOnly:true,
-            concatOptions:[],
-            groupOptions:[],
-            isGroupCreator:false,   //记录当前用户是否是操作当前群文件的群主
+            tableData: [],
+            getFileType: 'myFile',
+            parentDirectoryId: -1,
+            currentDirectoryId: -1,
+            mkdirModalVisible: false,
+            uploadPercent: 0,
+            progressState: 'none',
+            permissionTypeValue: -1,      //默认的权限类型
+            userAccount: '',     //搜索用户文本框的初始值
+            userContactsData: [],
+            delBtnReadOnly: true,
+            concatOptions: [],
+            groupOptions: [],
+            isGroupCreator: false,   //记录当前用户是否是操作当前群文件的群主
         };
     },
-    componentDidMount(){
+    componentDidMount() {
         ms = this.props.messageUtilObj;
         var antCloudKey = this.props.antCloudKey;
-        this.getFileByType(antCloudKey);
+        // this.getFileByType(antCloudKey);
+        this.getFileByType('myFile');
         //cloudTable.isSchoolCloudFileSuperManager(cloudTable.state.ident);
         //cloudTable.getUserRootCloudFiles(cloudTable.state.ident, 1);
     },
 
-    componentWillReceiveProps(nextProps){
+    componentWillReceiveProps(nextProps) {
         var antCloudKey = nextProps.antCloudKey;
         this.getFileByType(antCloudKey);
     },
 
-    getFileByType(fileType){
-        console.log("fileType"+fileType);
-        var initPageNo=1;
-        if(fileType=="myFile"){
+    getFileByType(fileType) {
+        console.log("fileType" + fileType);
+        var initPageNo = 1;
+        if (fileType == "myFile") {
             cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo);
-        }else{
+        } else {
             cloudTable.getUserChatGroupRootCloudFiles(cloudTable.state.ident, initPageNo);
         }
-        cloudTable.setState({"getFileType":fileType,parentDirectoryId:-1,currentPage:1});
+        cloudTable.setState({"getFileType": fileType, parentDirectoryId: -1, currentPage: 1});
     },
 
     /**
@@ -116,31 +131,31 @@ const AntCloudTableComponents = React.createClass({
      * @param selectedRowKeys
      */
     onSelectChange(selectedRowKeys) {
-        if(cloudTable.state.getFileType!="myFile"){
+        if (cloudTable.state.getFileType != "myFile") {
             //群文件中，群组可以删除任意文件，非群主只能删除自己的文件
             //判断是否是第一层文件夹
-            if(cloudTable.state.currentDirectoryId==-1){
+            if (cloudTable.state.currentDirectoryId == -1) {
                 // 判断是否是超级管理员
-                if(cloudTable.state.currentUserIsSuperManager){
+                if (cloudTable.state.currentUserIsSuperManager) {
                     //超管在第一层具备所有文件夹操作权限，非超管无任何操作权限
-                    cloudTable.setState({"delBtnReadOnly":false});
+                    cloudTable.setState({"delBtnReadOnly": false});
                 }
-            }else{
-                for(var i=0;i<selectedRowKeys.length;i++){
+            } else {
+                for (var i = 0; i < selectedRowKeys.length; i++) {
                     var delKey = selectedRowKeys[i];
                     var fileObj = cloudTable.getCloudFilePermissionById(delKey);
                     //非第一层文件夹，根据分配的权限决定
-                    if(fileObj.creator.colUid == sessionStorage.getItem("ident")){
+                    if (fileObj.creator.colUid == sessionStorage.getItem("ident")) {
                         //自己创建的文件夹或文件，拥有最大权限
-                        cloudTable.setState({"delBtnReadOnly":false});
-                    }else{
-                        cloudTable.setState({"delBtnReadOnly":true});
+                        cloudTable.setState({"delBtnReadOnly": false});
+                    } else {
+                        cloudTable.setState({"delBtnReadOnly": true});
                     }
                 }
             }
         }
-        if(selectedRowKeys.length==0){
-            cloudTable.setState({"delBtnReadOnly":true});
+        if (selectedRowKeys.length == 0) {
+            cloudTable.setState({"delBtnReadOnly": true});
         }
         cloudTable.setState({selectedRowKeys});
     },
@@ -149,14 +164,14 @@ const AntCloudTableComponents = React.createClass({
     /**
      * 获取此文件夹的所有的拥有者权限
      */
-    getCloudFilePermissionById(cloudFileId){
+    getCloudFilePermissionById(cloudFileId) {
         var fileObj;
         var cloudFileArray = cloudTable.state.cloudFileArray;
-        for(var i=0;i<cloudFileArray.length;i++){
+        for (var i = 0; i < cloudFileArray.length; i++) {
             var cloudFile = cloudFileArray[i];
             var fileId = cloudFile.fileId;
             var cloudFileObj = cloudFile.cloudFileObj;
-            if(cloudFileId==fileId){
+            if (cloudFileId == fileId) {
                 fileObj = cloudFileObj;
                 break;
             }
@@ -165,7 +180,7 @@ const AntCloudTableComponents = React.createClass({
     },
 
     //点击导航时，进入的我的文件列表
-    getUserRootCloudFiles: function (userId, pageNo,optSrc) {
+    getUserRootCloudFiles: function (userId, pageNo, optSrc) {
         data = [];
         cloudTable.setState({currentDirectoryId: -1, totalCount: 0});
         var param = {
@@ -176,12 +191,12 @@ const AntCloudTableComponents = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                if(response){
-                    if(isEmpty(optSrc)==false && optSrc=="mainTable"){
+                if (response) {
+                    if (isEmpty(optSrc) == false && optSrc == "mainTable") {
                         cloudTable.buildTableDataByResponse(ret);
-                    }else if(optSrc=="moveDirModal"){
+                    } else if (optSrc == "moveDirModal") {
                         cloudTable.buildTargetDirData(ret);
-                    }else {
+                    } else {
                         cloudTable.buildTableDataByResponse(ret);
                         cloudTable.buildTargetDirData(ret);
                     }
@@ -205,9 +220,9 @@ const AntCloudTableComponents = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                if(response){
-                    cloudTable.buildTableDataByResponse(ret);
-                    cloudTable.buildTargetDirData(ret);
+                if (response) {
+                    cloudTable.buildTableDataByResponse(ret);//构建表格的数据
+                    cloudTable.buildTargetDirData(ret);//构建移动文件时的目标文件夹数据
                 }
             },
             onError: function (error) {
@@ -219,58 +234,60 @@ const AntCloudTableComponents = React.createClass({
      * 构建移动文件时的目标文件夹数据
      * @param ret
      */
-    buildTargetDirData(ret){
-        var targetDirDataArray= [];
-        var i=0;
-        if(ret.msg=="调用成功" && ret.success==true && isEmpty(ret.response)==false){
+    buildTargetDirData(ret) {
+        var targetDirDataArray = [];
+        var i = 0;
+        if (ret.msg == "调用成功" && ret.success == true && isEmpty(ret.response) == false) {
             ret.response.forEach(function (e) {
-                if(i==0){
-                    if(e.parent){
+                if (i == 0) {
+                    if (e.parent) {
                         var parentDirectoryId = e.parent.parentId;
-                        cloudTable.setState({"parentDirectoryIdAtMoveModal":parentDirectoryId});
+                        cloudTable.setState({"parentDirectoryIdAtMoveModal": parentDirectoryId});
                     }
                 }
                 i++
                 var key = e.id;
                 var name = e.name;
                 var directory = e.directory;
-                var fileLogo = cloudTable.buildFileLogo(name,directory,e);
+                var fileLogo = cloudTable.buildFileLogo(name, directory, e);
 
-                var dirName = <span className="font_gray_666" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e,"moveDirModal")}>
+                var dirName = <span className="font_gray_666"
+                                    onClick={cloudTable.intoDirectoryInner.bind(cloudTable, e, "moveDirModal")}>
                 {fileLogo}
             </span>;
                 var moveDirOpt;
-                if(e.directory==true){
-                    moveDirOpt=<div>
-                        <Button onClick={cloudTable.moveFileToTargetDir.bind(cloudTable,key)}>确定</Button>
+                if (e.directory == true) {
+                    moveDirOpt = <div>
+                        <Button onClick={cloudTable.moveFileToTargetDir.bind(cloudTable, key)}>确定</Button>
                     </div>;
-                }else{
+                } else {
                     dirName = name;
                 }
-                var dataJson= {
+                var dataJson = {
                     key: key,
                     dirName: dirName,
-                    moveDirOpt:moveDirOpt
+                    moveDirOpt: moveDirOpt
                 };
                 targetDirDataArray.push(dataJson);
             })
-            cloudTable.setState({"targetDirDataArray":targetDirDataArray});
+            cloudTable.setState({"targetDirDataArray": targetDirDataArray});
         }
     },
 
-    buildFileLogo(name,directory,e){
+    buildFileLogo(name, directory, e) {
         var fileLogo;
-        if(directory){
-            fileLogo=<span className="cloud_text">
-                <i className="cloud_icon cloud_icon_file"></i>
-                <span className="font_gray_666" onClick={cloudTable.intoDirectoryInner.bind(cloudTable,e,"mainTable")}>{name}</span>
+        if (directory) {
+            fileLogo = <span className="cloud_text">
+                <i className="cloud_icon cloud_icon_file upexam_float"></i>
+                <span className="antnest_name affix_bottom_tc"
+                      onClick={cloudTable.intoDirectoryInner.bind(cloudTable, e, "mainTable")}>{name}</span>
             </span>;
-        }else{
+        } else {
             var lastPointIndex = name.lastIndexOf(".");
             //通过截取文件后缀名的形式，完成对上传文件类型的判断
-            var fileType = name.substring(lastPointIndex+1);
+            var fileType = name.substring(lastPointIndex + 1);
             var fileTypeLog;
-            switch (fileType){
+            switch (fileType) {
                 case "png":
                     fileTypeLog = <i className="cloud_icon cloud_icon_png"></i>;
                     break;
@@ -302,10 +319,10 @@ const AntCloudTableComponents = React.createClass({
                     fileTypeLog = <i className="cloud_icon cloud_icon_other"></i>;
                     break;
             }
-            fileLogo=<div>
+            fileLogo = <span className="cloud_text">
                 {fileTypeLog}
-                {name}
-            </div>;
+                <span className="yipan_name" onClick={cloudTable.readDoc.bind(cloudTable, e)}>{name}</span>
+            </span>;
         }
         return fileLogo;
     },
@@ -317,33 +334,33 @@ const AntCloudTableComponents = React.createClass({
      * @param queryConditionJson
      * @param pageNo
      */
-    listFiles: function (operateUserId, cloudFileId,queryConditionJson,pageNo,optSrc) {
+    listFiles: function (operateUserId, cloudFileId, queryConditionJson, pageNo, optSrc) {
         data = [];
         cloudTable.setState({totalCount: 0});
-        if(isEmpty(optSrc)==false && optSrc=="mainTable"){
-            cloudTable.setState({"currentDirectoryId":cloudFileId});
-        }else{
-            cloudTable.setState({"currentDirectoryIdAtMoveModal":cloudFileId});
+        if (isEmpty(optSrc) == false && optSrc == "mainTable") {
+            cloudTable.setState({"currentDirectoryId": cloudFileId});
+        } else {
+            cloudTable.setState({"currentDirectoryIdAtMoveModal": cloudFileId});
         }
         var param = {
             "method": 'listFiles',
             "operateUserId": operateUserId,
             "cloudFileId": cloudFileId,
-            "queryConditionJson":queryConditionJson,
-            "pageNo":pageNo
+            "queryConditionJson": queryConditionJson,
+            "pageNo": pageNo
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                if(response){
-                    if(isEmpty(optSrc)==false && optSrc=="mainTable"){
+                if (response) {
+                    if (isEmpty(optSrc) == false && optSrc == "mainTable") {
                         cloudTable.buildTableDataByResponse(ret);
-                    }else{
+                    } else {
                         cloudTable.buildTargetDirData(ret);
                     }
-                }else{
+                } else {
                     var parentDirectoryId = e.parent.parentId;
-                    cloudTable.setState({"parentDirectoryId":parentDirectoryId});
+                    cloudTable.setState({"parentDirectoryId": parentDirectoryId});
                 }
             },
             onError: function (error) {
@@ -355,7 +372,7 @@ const AntCloudTableComponents = React.createClass({
      * 是否是学校云盘的超级管理者
      * @param userId
      */
-    isSchoolCloudFileSuperManager(userId){
+    isSchoolCloudFileSuperManager(userId) {
         var param = {
             "method": 'isSchoolCloudFileSuperManager',
             "userId": userId,
@@ -363,8 +380,8 @@ const AntCloudTableComponents = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                if(ret.success==true && ret.msg=="调用成功"){
-                    cloudTable.setState({"currentUserIsSuperManager":response});
+                if (ret.success == true && ret.msg == "调用成功") {
+                    cloudTable.setState({"currentUserIsSuperManager": response});
                 }
             },
             onError: function (error) {
@@ -379,26 +396,32 @@ const AntCloudTableComponents = React.createClass({
      * @param cloudFileId
      * @param name
      */
-    renameCloudFile(operateUserId,cloudFileId,name){
+    renameCloudFile(operateUserId, cloudFileId, name) {
         var param = {
             "method": 'renameCloudFile',
             "operateUserId": operateUserId,
-            "cloudFileId":cloudFileId,
-            "name":name
+            "cloudFileId": cloudFileId,
+            "name": name
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                if(ret.success==true && ret.msg=="调用成功" && ret.response == true){
+                if (ret.success == true && ret.msg == "调用成功" && ret.response == true) {
                     var initPageNo = 1;
-                    var queryConditionJson="";
-                    cloudTable.listFiles(cloudTable.state.ident,
-                        cloudTable.state.currentDirectoryId,queryConditionJson,initPageNo,"mainTable");
+                    var queryConditionJson = "";
+                    /*cloudTable.listFiles(cloudTable.state.ident,
+                        cloudTable.state.currentDirectoryId,queryConditionJson,initPageNo,"mainTable");*/
+                    if (cloudTable.state.currentDirectoryId != -1) {
+                        cloudTable.listFiles(cloudTable.state.ident,
+                            cloudTable.state.currentDirectoryId, queryConditionJson, initPageNo, "mainTable");
+                    } else {
+                        cloudTable.getUserRootCloudFiles(cloudTable.state.ident, cloudTable.state.currentPage);
+                    }
                     message.success("重命名成功");
-                }else{
+                } else {
                     message.error("重命名失败");
                 }
-                cloudTable.setState({"reNameModalVisible":false});
+                cloudTable.setState({"reNameModalVisible": false});
             },
             onError: function (error) {
                 message.error(error);
@@ -409,21 +432,22 @@ const AntCloudTableComponents = React.createClass({
      * 构建表格的数据
      * @param ret
      */
-    buildTableDataByResponse(ret){
+    buildTableDataByResponse(ret) {
         var _this = this;
-        var i=0;
-        var cloudFileArray=[];
-        if(ret.msg=="调用成功" && ret.success==true && isEmpty(ret.response)==false){
+        var i = 0;
+        var cloudFileArray = [];
+        if (ret.msg == "调用成功" && ret.success == true && isEmpty(ret.response) == false) {
             ret.response.forEach(function (e) {
-                if(i==0){
-                    if(e.parent){
+                console.log(e);
+                if (i == 0) {
+                    if (e.parent) {
                         var parentDirectoryId = e.parent.parentId;
-                        _this.setState({"parentDirectoryId":parentDirectoryId});
+                        _this.setState({"parentDirectoryId": parentDirectoryId});
                     }
                 }
                 i++
-                var key=e.id;
-                var createTime =e.createTime;
+                var key = e.id;
+                var createTime = e.createTime;
                 var createUid = e.createUid;
                 var creator = e.creator;
                 var directory = e.directory;
@@ -438,37 +462,42 @@ const AntCloudTableComponents = React.createClass({
                 var schoolId = e.schoolId;
                 var valid = e.valid;
                 var path = e.path;
-                console.log("path---------->"+path);
+                console.log("path---------->" + path);
 
                 var downloadButton;
-                if(directory){
-                    downloadButton=null;
-                }else{
-                    downloadButton=<a href={path} target="_blank" title="下载" download={path} className="te_download_a">
-                        <Button icon="download"/></a>;
+                if (directory) {
+                    downloadButton = null;
+                } else {
+                    downloadButton =
+                        <a href={path} target="_blank" title="下载" download={path} className="te_download_a">
+                            <Button icon="download"/></a>;
                 }
-                var fileLogo = _this.buildFileLogo(name,directory,e);
-                var cloudFileJsonForEveryFile={"fileId":key,"cloudFileObj":e};
+                var fileLogo = _this.buildFileLogo(name, directory, e);
+                var cloudFileJsonForEveryFile = {"fileId": key, "cloudFileObj": e};
                 cloudFileArray.push(cloudFileJsonForEveryFile);
-                var editButton=<Button type="button" className="score3_i" value={key} text={key} onClick={cloudTable.editDirectoryName.bind(cloudTable,e)}
-                                       icon="edit"></Button>;
-                var deleteButton=<Button type="button" value={key} text={key} onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable,e)}
-                                         icon="delete"></Button>;
-                var shareButton=<Button type="button" value={key} text={key} onClick={cloudTable.showShareModal.bind(cloudTable,e)}
-                                        icon="share-alt"></Button>;
-                var moveButton=<Button type="button" value={key} text={key} onClick={cloudTable.showMoveFileModal.bind(cloudTable,e)}
-                                       icon="export"></Button>;
+                var editButton = <Button type="button" className="score3_i" value={key} text={key}
+                                         onClick={cloudTable.editDirectoryName.bind(cloudTable, e)}
+                                         icon="edit"></Button>;
+                var deleteButton = <Button type="button" value={key} text={key}
+                                           onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable, e)}
+                                           icon="delete"></Button>;
+                var shareButton = <Button type="button" value={key} text={key}
+                                          onClick={cloudTable.showShareModal.bind(cloudTable, e)}
+                                          icon="share-alt"></Button>;
+                var moveButton = <Button type="button" value={key} text={key}
+                                         onClick={cloudTable.showMoveFileModal.bind(cloudTable, e)}
+                                         icon="swap"></Button>;
                 var getFileType = cloudTable.state.getFileType;
                 //我的蚁盘是私有的，用户具备所有的操作权限
-                if(getFileType!="myFile"){
+                if (getFileType != "myFile") {
                     //群文件的第一层无操作项
                     //判断是否是第一层文件夹
                     //群文件的第一层目录无任何操作
-                    if(_this.state.currentDirectoryId==-1 || (e.creator.colUid != sessionStorage.getItem("ident")　&& _this.state.isGroupCreator==false)){
-                        editButton="";
-                        deleteButton="";
-                        shareButton="";
-                        moveButton="";
+                    if (_this.state.currentDirectoryId == -1 || (e.creator.colUid != sessionStorage.getItem("ident") && _this.state.isGroupCreator == false)) {
+                        editButton = "";
+                        deleteButton = "";
+                        shareButton = "";
+                        moveButton = "";
                     }
                 }
                 var subjectOpt = <div>
@@ -481,83 +510,149 @@ const AntCloudTableComponents = React.createClass({
                 data.push({
                     key: key,
                     title: fileLogo,
-                    creator:creator.userName,
+                    creator: <span className="dold_text name_max">{creator.userName}</span>,
                     createTime: getLocalTime(createTime),
                     subjectOpt: subjectOpt,
                 });
             });
-            _this.setState({"tableData":data,cloudFileArray,totalCount: parseInt(ret.pager.rsCount)});
-        }else{
-            _this.setState({"tableData":[],cloudFileArray:[],totalCount: 0});
+            _this.setState({"tableData": data, cloudFileArray, totalCount: parseInt(ret.pager.rsCount)});
+        } else {
+            _this.setState({"tableData": [], cloudFileArray: [], totalCount: 0});
         }
     },
 
     /**
      * 如果是文件夹，则可以点击文件夹名称，进入文件夹内部
      */
-    intoDirectoryInner(directoryObj,optSrc){
-        console.log("optSrc:"+optSrc);
-        var initPageNo =1 ;
-        var queryConditionJson="";
+    intoDirectoryInner(directoryObj, optSrc) {
+        console.log("optSrc:" + optSrc);
+        var initPageNo = 1;
+        var queryConditionJson = "";
         //点击第一层文件夹时，记录当前文件夹的群主是否是当前用户
-        if(cloudTable.state.currentDirectoryId==-1 && this.state.getFileType != "myFile"){
-            if(directoryObj.createUid==this.state.ident){
-                this.setState({"isGroupCreator":true});
-            }else{
-                this.setState({"isGroupCreator":false});
+        if (cloudTable.state.currentDirectoryId == -1 && this.state.getFileType != "myFile") {
+            if (directoryObj.createUid == this.state.ident) {
+                this.setState({"isGroupCreator": true});
+            } else {
+                this.setState({"isGroupCreator": false});
             }
         }
-        if(isEmpty(optSrc)==false && optSrc=="mainTable"){
-            cloudTable.setState({"parentDirectoryId":directoryObj.parentId,"currentDirectoryId":directoryObj.id,"currentDirectoryCreatorId":directoryObj.creator.colUid});
-        }else{
-            cloudTable.setState({"parentDirectoryIdAtMoveModal":directoryObj.parentId,
-                "currentDirectoryIdAtMoveModal":directoryObj.id});
+        if (isEmpty(optSrc) == false && optSrc == "mainTable") {
+            cloudTable.setState({
+                "parentDirectoryId": directoryObj.parentId,
+                "currentDirectoryId": directoryObj.id,
+                "currentDirectoryCreatorId": directoryObj.creator.colUid
+            });
+        } else {
+            cloudTable.setState({
+                "parentDirectoryIdAtMoveModal": directoryObj.parentId,
+                "currentDirectoryIdAtMoveModal": directoryObj.id
+            });
         }
-        cloudTable.listFiles(cloudTable.state.ident,directoryObj.id,queryConditionJson,initPageNo,optSrc);
+        cloudTable.listFiles(cloudTable.state.ident, directoryObj.id, queryConditionJson, initPageNo, optSrc);
+    },
+    /**
+     * 如果不是文件，預覽
+     */
+    readDoc(e){
+        console.log(e);
+        //根据不同的文件类型判断使用哪种方式预览
+        var type = e.suffix;
+        var path = e.path;
+        var id = e.id;
+        var createUid = e.createUid;
+        var name = e.name;
+        if(type == 'mp4') {
+            var url = path;
+            this.view(event,url,name);
+        }else if(type == 'jpg'){
+            var url = path;
+            this.view(event,url,name);
+        }else if(type == 'bmp'){
+            var url = path;
+            this.view(event,url,name);
+        }
+        else if(type == 'png'){
+            var url = path;
+            this.view(event,url,name);
+        }else {
+            var url = "http://www.maaee.com/Excoord_PhoneService/cloudFile/cloudFileShow/" + id + "/" + createUid;
+            this.view(event,url,name);
+        }
+    },
+    /**
+     * 打开view视窗
+     * @param e
+     * @param url
+     * @param tit
+     */
+    view(e, url, tit) {
+        e = e || window.event;
+        if (e.nativeEvent) {
+            e.nativeEvent.stopImmediatePropagation();
+        }
+        e.stopPropagation();
+        e.preventDefault();
+        e.cancelBubble = true;
+
+        let mode = (tit) =>{
+            let refArr =  tit.split('.');
+            let type = refArr[ refArr.length-1];
+            return type;
+        }
+
+        let obj = {mode:mode(tit),title: tit, url: url, width: '380px'};
+
+
+        LP.Start(obj);
     },
     /**
      * 修改文件夹的名称（重命名）
      * 显示修改操作的modal窗口
      * @param fileObject
      */
-    editDirectoryName(fileObject){
+    editDirectoryName(fileObject) {
         console.log(fileObject);
         var name = fileObject.name;
-        cloudTable.setState({"reNameModalVisible":true,"editDirectoryName":name,"editFileObject":fileObject});
+        cloudTable.setState({"reNameModalVisible": true, "editDirectoryName": name, "editFileObject": fileObject});
     },
 
     /**
      * 删除文件或文件夹
      * @param fileObject
      */
-    deleteFileOrDirectory(fileObject){
-        console.log("del key:"+fileObject.id);
-        cloudTable.setState({"delCloudFileIds":fileObject.id,"delType":"single"});
+    deleteFileOrDirectory(fileObject) {
+        console.log("del key:" + fileObject.id);
+        cloudTable.setState({"delCloudFileIds": fileObject.id, "delType": "single"});
         cloudTable.refs.confirmModal.changeConfirmModalVisible(true);
     },
     /**
      * 创建文件夹
      * TODO 此处应该将返回的response直接追加到当前的table中
      */
-    makeDirectory(){
+    makeDirectory() {
         var param = {
             "method": 'mkdir',
             "operateUserId": cloudTable.state.ident,
-            "parentCloudFileId":cloudTable.state.currentDirectoryId,
-            "name":cloudTable.state.editDirectoryName
+            "parentCloudFileId": cloudTable.state.currentDirectoryId,
+            "name": cloudTable.state.editDirectoryName
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                if(ret.success==true && ret.msg=="调用成功" && isEmpty(ret.response)==false){
+                if (ret.success == true && ret.msg == "调用成功" && isEmpty(ret.response) == false) {
                     var initPageNo = 1;
-                    var queryConditionJson="";
-                    cloudTable.listFiles(cloudTable.state.ident,
-                        cloudTable.state.currentDirectoryId,queryConditionJson,initPageNo,"mainTable");
+                    var queryConditionJson = "";
+                    if (cloudTable.state.currentDirectoryId != -1) {
+                        cloudTable.listFiles(cloudTable.state.ident,
+                            cloudTable.state.currentDirectoryId, queryConditionJson, initPageNo, "mainTable");
+                    } else {
+                        cloudTable.getUserRootCloudFiles(cloudTable.state.ident, cloudTable.state.currentPage);
+                    }
+
                     message.success("文件夹创建成功");
-                }else{
+                } else {
                     message.error(ret.msg);
                 }
-                cloudTable.setState({"mkdirModalVisible":false});
+                cloudTable.setState({"mkdirModalVisible": false});
             },
             onError: function (error) {
                 message.error(error);
@@ -569,31 +664,35 @@ const AntCloudTableComponents = React.createClass({
      * 删除文件夹或文件
      * 支持批量操作，多个id用逗号分割
      */
-    deleteCloudFiles(){
+    deleteCloudFiles() {
         var delIds;
-        if(cloudTable.state.delType=="muliti"){
+        if (cloudTable.state.delType == "muliti") {
             //批量删除
             delIds = cloudTable.state.selectedRowKeys.join(",");
-        }else{
-            delIds=cloudTable.state.delCloudFileIds;
+        } else {
+            delIds = cloudTable.state.delCloudFileIds;
         }
         var param = {
             "method": 'deleteCloudFiles',
             "operateUserId": cloudTable.state.ident,
-            "cloudFileIds":delIds,
+            "cloudFileIds": delIds,
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                if(ret.success==true && ret.msg=="调用成功" && ret.response==true){
+                if (ret.success == true && ret.msg == "调用成功" && ret.response == true) {
                     var initPageNo = 1;
-                    var queryConditionJson="";
-                    cloudTable.listFiles(cloudTable.state.ident,
-                        cloudTable.state.currentDirectoryId,queryConditionJson,initPageNo,"mainTable");
+                    var queryConditionJson = "";
+                    if (cloudTable.state.currentDirectoryId != -1) {
+                        cloudTable.listFiles(cloudTable.state.ident,
+                            cloudTable.state.currentDirectoryId, queryConditionJson, initPageNo, "mainTable");
+                    } else {
+                        cloudTable.getUserRootCloudFiles(cloudTable.state.ident, cloudTable.state.currentPage);
+                    }
                     message.success("删除成功");
-                }else{
+                } else {
                     message.error(ret.msg);
                 }
-                cloudTable.setState({"selectedRowKeys":[]});
+                cloudTable.setState({"selectedRowKeys": []});
                 cloudTable.refs.confirmModal.changeConfirmModalVisible(false);
             },
             onError: function (error) {
@@ -622,42 +721,42 @@ const AntCloudTableComponents = React.createClass({
     /**
      * 关闭重命名窗口
      */
-    reNameModalHandleCancel(){
-        cloudTable.setState({"reNameModalVisible":false});
+    reNameModalHandleCancel() {
+        cloudTable.setState({"reNameModalVisible": false});
     },
     /**
      * 确定执行重命名操作
      */
-    reNameModalHandleOk(){
+    reNameModalHandleOk() {
         var editFileObject = cloudTable.state.editFileObject;
-        cloudTable.renameCloudFile(cloudTable.state.ident,editFileObject.id,cloudTable.state.editDirectoryName);
+        cloudTable.renameCloudFile(cloudTable.state.ident, editFileObject.id, cloudTable.state.editDirectoryName);
     },
     /**
      * 修改文件夹名称的文本框内容改变响应函数
      */
-    directoryNameInputChange(e){
+    directoryNameInputChange(e) {
         var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
             target = e.target;
         }
         var editDirectoryName = target.value;
-        cloudTable.setState({"editDirectoryName":editDirectoryName});
+        cloudTable.setState({"editDirectoryName": editDirectoryName});
     },
 
     /**
      * 显示新建文件夹的窗口
      */
-    showMkdirModal(){
-        cloudTable.setState({"mkdirModalVisible":true,"editDirectoryName":''});
+    showMkdirModal() {
+        cloudTable.setState({"mkdirModalVisible": true, "editDirectoryName": ''});
     },
 
     /**
      * 关闭新建文件夹的窗口
      */
-    mkdirModalHandleCancel(){
-        cloudTable.setState({"mkdirModalVisible":false});
+    mkdirModalHandleCancel() {
+        cloudTable.setState({"mkdirModalVisible": false});
     },
     /**
      * 关闭删除确认的弹窗
@@ -669,19 +768,19 @@ const AntCloudTableComponents = React.createClass({
     /**
      * 关闭上传文件弹窗
      */
-    cloudFileUploadModalHandleCancel(){
-        cloudTable.setState({"cloudFileUploadModalVisible":false});
+    cloudFileUploadModalHandleCancel() {
+        cloudTable.setState({"cloudFileUploadModalVisible": false});
     },
 
     //点击保存按钮，向蚁盘指定文件夹上传文件
-    uploadFile(){
-        if(uploadFileList.length==0){
+    uploadFile() {
+        if (uploadFileList.length == 0) {
             message.warning("请选择上传的文件,谢谢！");
-        }else{
+        } else {
             var formData = new FormData();
-            for(var i=0;i<uploadFileList.length;i++){
-                formData.append("file"+i,uploadFileList[i]);
-                formData.append("name"+i,uploadFileList[i].name);
+            for (var i = 0; i < uploadFileList.length; i++) {
+                formData.append("file" + i, uploadFileList[i]);
+                formData.append("name" + i, uploadFileList[i].name);
             }
             $.ajax({
                 type: "POST",
@@ -689,31 +788,31 @@ const AntCloudTableComponents = React.createClass({
                 enctype: 'multipart/form-data',
                 data: formData,
                 // 告诉jQuery不要去处理发送的数据
-                processData : false,
+                processData: false,
                 // 告诉jQuery不要去设置Content-Type请求头
-                contentType : false,
-                xhr: function(){        //这是关键  获取原生的xhr对象  做以前做的所有事情
+                contentType: false,
+                xhr: function () {        //这是关键  获取原生的xhr对象  做以前做的所有事情
                     var xhr = jQuery.ajaxSettings.xhr();
-                    xhr.upload.onload = function (){
-                        cloudTable.setState({progressState:'none'});
+                    xhr.upload.onload = function () {
+                        cloudTable.setState({progressState: 'none'});
                     }
                     xhr.upload.onprogress = function (ev) {
-                        if(ev.lengthComputable) {
-                            var percent = 100 * ev.loaded/ev.total;
-                            cloudTable.setState({uploadPercent:Math.round(percent),progressState:'block'});
+                        if (ev.lengthComputable) {
+                            var percent = 100 * ev.loaded / ev.total;
+                            cloudTable.setState({uploadPercent: Math.round(percent), progressState: 'block'});
                         }
                     }
                     return xhr;
                 },
                 success: function (responseStr) {
-                    if(responseStr!=""){
-                        var fileUrl=responseStr;
+                    if (responseStr != "") {
+                        var fileUrl = responseStr;
                         //TODO 调用本地上传文件的方法
-                        cloudTable.createCloudFile(fileUrl,uploadFileList[0]);
+                        cloudTable.createCloudFile(fileUrl, uploadFileList[0]);
                     }
                 },
-                error : function(responseStr) {
-                    cloudTable.setState({ cloudFileUploadModalVisible: false });
+                error: function (responseStr) {
+                    cloudTable.setState({cloudFileUploadModalVisible: false});
                 }
             });
 
@@ -723,11 +822,11 @@ const AntCloudTableComponents = React.createClass({
      * 处理上传组件已上传的文件列表
      * @param fileList
      */
-    handleFileSubmit(fileList){
-        if(fileList==null || fileList.length==0){
-            uploadFileList.splice(0,uploadFileList.length);
+    handleFileSubmit(fileList) {
+        if (fileList == null || fileList.length == 0) {
+            uploadFileList.splice(0, uploadFileList.length);
         }
-        for(var i=0;i<fileList.length;i++){
+        for (var i = 0; i < fileList.length; i++) {
             var fileJson = fileList[i];
             var fileObj = fileJson.fileObj;
             uploadFileList.push(fileObj);
@@ -737,9 +836,9 @@ const AntCloudTableComponents = React.createClass({
      * 显示文件上传的窗口
      */
     showUploadFileModal() {
-        uploadFileList.splice(0,uploadFileList.length);
+        uploadFileList.splice(0, uploadFileList.length);
         cloudTable.setState({
-            cloudFileUploadModalVisible: true,uploadPercent:0,progressState:'none'
+            cloudFileUploadModalVisible: true, uploadPercent: 0, progressState: 'none'
         });
         //弹出文件上传窗口时，初始化窗口数据
         cloudTable.refs.fileUploadCom.initFileUploadPage();
@@ -748,27 +847,33 @@ const AntCloudTableComponents = React.createClass({
     /**
      * 向指定文件夹上传文件
      */
-    createCloudFile(fileUrl,fileObj){
+    createCloudFile(fileUrl, fileObj) {
         var param = {
             "method": 'createCloudFile',
             "operateUserId": cloudTable.state.ident,
-            "parentCloudFileId":cloudTable.state.currentDirectoryId,
-            "name":fileObj.name,
-            "path":fileUrl,
-            "length":fileObj.size
+            "parentCloudFileId": cloudTable.state.currentDirectoryId,
+            "name": fileObj.name,
+            "path": fileUrl,
+            "length": fileObj.size
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                if(ret.success==true && ret.msg=="调用成功" && isEmpty(ret.response)==false){
+                if (ret.success == true && ret.msg == "调用成功" && isEmpty(ret.response) == false) {
                     var initPageNo = 1;
-                    var queryConditionJson="";
-                    cloudTable.listFiles(cloudTable.state.ident,
-                        cloudTable.state.currentDirectoryId,queryConditionJson,initPageNo,"mainTable");
+                    var queryConditionJson = "";
+                    /*cloudTable.listFiles(cloudTable.state.ident,
+                        cloudTable.state.currentDirectoryId,queryConditionJson,initPageNo,"mainTable");*/
+                    if (cloudTable.state.currentDirectoryId != -1) {
+                        cloudTable.listFiles(cloudTable.state.ident,
+                            cloudTable.state.currentDirectoryId, queryConditionJson, initPageNo, "mainTable");
+                    } else {
+                        cloudTable.getUserRootCloudFiles(cloudTable.state.ident, cloudTable.state.currentPage);
+                    }
                     message.success("文件上传成功");
-                }else{
+                } else {
                     message.error("文件上传失败");
                 }
-                cloudTable.setState({ cloudFileUploadModalVisible: false });
+                cloudTable.setState({cloudFileUploadModalVisible: false});
             },
             onError: function (error) {
                 message.error(error);
@@ -779,34 +884,34 @@ const AntCloudTableComponents = React.createClass({
     /**
      * 返回上级目录
      */
-    returnParent(){
-        var initPageNo=1;
-        if(cloudTable.state.getFileType=="myFile"){
-            if(cloudTable.state.parentDirectoryId==0){
-                cloudTable.setState({"parentDirectoryId":-1,"currentDirectoryId":-1});
-                cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo,"mainTable");
-            }else{
-                var queryConditionJson="";
+    returnParent() {
+        var initPageNo = 1;
+        if (cloudTable.state.getFileType == "myFile") {
+            if (cloudTable.state.parentDirectoryId == 0) {
+                cloudTable.setState({"parentDirectoryId": -1, "currentDirectoryId": -1});
+                cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo, "mainTable");
+            } else {
+                var queryConditionJson = "";
                 cloudTable.listFiles(cloudTable.state.ident,
-                    cloudTable.state.parentDirectoryId,queryConditionJson,initPageNo,"mainTable");
+                    cloudTable.state.parentDirectoryId, queryConditionJson, initPageNo, "mainTable");
             }
-        }else{
+        } else {
             cloudTable.getUserChatGroupRootCloudFiles(cloudTable.state.ident, initPageNo);
         }
     },
 
-    returnParentAtMoveModal(){
-        var initPageNo=1;
-        if(cloudTable.state.getFileType=="myFile"){
-            if(cloudTable.state.parentDirectoryIdAtMoveModal==0){
-                cloudTable.setState({"parentDirectoryIdAtMoveModal":-1,"currentDirectoryIdAtMoveModal":-1});
-                cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo,"moveDirModal");
-            }else{
-                var queryConditionJson="";
+    returnParentAtMoveModal() {
+        var initPageNo = 1;
+        if (cloudTable.state.getFileType == "myFile") {
+            if (cloudTable.state.parentDirectoryIdAtMoveModal == 0) {
+                cloudTable.setState({"parentDirectoryIdAtMoveModal": -1, "currentDirectoryIdAtMoveModal": -1});
+                cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo, "moveDirModal");
+            } else {
+                var queryConditionJson = "";
                 cloudTable.listFiles(cloudTable.state.ident,
-                    cloudTable.state.parentDirectoryIdAtMoveModal,queryConditionJson,initPageNo,"moveDirModal");
+                    cloudTable.state.parentDirectoryIdAtMoveModal, queryConditionJson, initPageNo, "moveDirModal");
             }
-        }else{
+        } else {
             cloudTable.getUserChatGroupRootCloudFiles(cloudTable.state.ident, initPageNo);
         }
     },
@@ -815,63 +920,69 @@ const AntCloudTableComponents = React.createClass({
     /**
      * 执行批量删除操作
      */
-    showdelAllDirectoryConfirmModal(){
-        cloudTable.setState({"delType":"muliti"});
+    showdelAllDirectoryConfirmModal() {
+        cloudTable.setState({"delType": "muliti"});
         cloudTable.refs.confirmModal.changeConfirmModalVisible(true);
     },
 
-    userAccountInputChange(e){
+    userAccountInputChange(e) {
         var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
             target = e.target;
         }
         var userAccount = target.value;
-        cloudTable.setState({"userAccount":userAccount});
+        cloudTable.setState({"userAccount": userAccount});
     },
     /**
      * 显示移动文件的窗口
      */
-    showMoveFileModal(fileObject){
-        console.log("moveFileId key:"+fileObject.id);
+    showMoveFileModal(fileObject) {
+        console.log("moveFileId key:" + fileObject.id);
 
-        cloudTable.setState({ moveFileModalVisible: true,"moveFileId":fileObject.id });
+        cloudTable.setState({moveFileModalVisible: true, "moveFileId": fileObject.id});
     },
 
     /**
      * 关闭移动文件的窗口
      */
-    moveFileModalHandleCancel(){
-        cloudTable.setState({ moveFileModalVisible: false });
+    moveFileModalHandleCancel() {
+        cloudTable.setState({moveFileModalVisible: false});
     },
 
-    moveFileToTargetDir(toCloudFileId){
-        cloudTable.moveCloudFiles(cloudTable.state.moveFileId,toCloudFileId);
+    moveFileToTargetDir(toCloudFileId) {
+        cloudTable.moveCloudFiles(cloudTable.state.moveFileId, toCloudFileId);
     },
 
     /**
      * 完成文件向目标文件夹的移动
      */
-    moveCloudFiles(fromCloudFileIds,toCloudFileId){
+    moveCloudFiles(fromCloudFileIds, toCloudFileId) {
         var param = {
             "method": 'moveCloudFiles',
             "operateUserId": cloudTable.state.ident,
-            "fromCloudFileIds":fromCloudFileIds,
-            "toCloudFileId":toCloudFileId
+            "fromCloudFileIds": fromCloudFileIds,
+            "toCloudFileId": toCloudFileId
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                if(ret.success==true && ret.msg=="调用成功" && ret.response==true){
+                if (ret.success == true && ret.msg == "调用成功" && ret.response == true) {
                     var initPageNo = 1;
-                    var queryConditionJson="";
-                    cloudTable.listFiles(cloudTable.state.ident,
-                        cloudTable.state.currentDirectoryId,queryConditionJson,initPageNo,"mainTable");
+                    var queryConditionJson = "";
+                    /*cloudTable.listFiles(cloudTable.state.ident,
+                        cloudTable.state.currentDirectoryId,queryConditionJson,initPageNo,"mainTable");*/
+                    if (cloudTable.state.currentDirectoryId != -1) {
+                        cloudTable.listFiles(cloudTable.state.ident,
+                            cloudTable.state.currentDirectoryId, queryConditionJson, initPageNo, "mainTable");
+                    } else {
+                        cloudTable.getUserRootCloudFiles(cloudTable.state.ident, cloudTable.state.currentPage);
+                    }
                     message.success("移动成功");
-                }else{
+                } else {
                     message.error("移动失败");
                 }
-                cloudTable.setState({ moveFileModalVisible: false });
+                cloudTable.setState({moveFileModalVisible: false});
             },
             onError: function (error) {
                 message.error(error);
@@ -881,13 +992,13 @@ const AntCloudTableComponents = React.createClass({
 
     onShareDataSelectChange(selectedRowKeys) {
         var selectedRowKeysStr = selectedRowKeys.join(",");
-        cloudTable.setState({"selectedRowKeysOfShare":selectedRowKeysStr});
+        cloudTable.setState({"selectedRowKeysOfShare": selectedRowKeysStr});
     },
 
     /**
      * 获取联系人列表
      */
-    getAntGroup(){
+    getAntGroup() {
         var param = {
             "method": 'getUserContacts',
             "ident": sessionStorage.getItem("ident"),
@@ -895,19 +1006,19 @@ const AntCloudTableComponents = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                var i=0;
-                var concatOptions=[];
+                var i = 0;
+                var concatOptions = [];
                 response.forEach(function (e) {
                     var userId = e.colUid;
                     var userName = e.userName;
-                    var imgTag = <img src={e.avatar}  className="antnest_38_img" height="38" ></img>;
-                    var userNameTag=<div>{imgTag}<span>{userName}</span></div>;
-                    var userJson ={ label: userNameTag, value: userId};
-                    if(userId != sessionStorage.getItem("ident")){
+                    var imgTag = <img src={e.avatar} className="antnest_38_img" height="38"></img>;
+                    var userNameTag = <div>{imgTag}<span>{userName}</span></div>;
+                    var userJson = {label: userNameTag, value: userId};
+                    if (userId != sessionStorage.getItem("ident")) {
                         concatOptions.push(userJson);
                     }
                 });
-                cloudTable.setState({"concatOptions":concatOptions});
+                cloudTable.setState({"concatOptions": concatOptions});
             },
             onError: function (error) {
                 message.error(error);
@@ -915,7 +1026,7 @@ const AntCloudTableComponents = React.createClass({
         });
     },
 
-    getUserChatGroupById(pageNo){
+    getUserChatGroupById(pageNo) {
         var param = {
             "method": 'getUserChatGroup',
             "userId": sessionStorage.getItem("ident"),
@@ -923,25 +1034,25 @@ const AntCloudTableComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                if(ret.msg=="调用成功" && ret.success==true){
+                if (ret.msg == "调用成功" && ret.success == true) {
                     var response = ret.response;
                     // var charGroupArray = [];
-                    var groupOptions=[];
+                    var groupOptions = [];
                     response.forEach(function (e) {
                         var chatGroupId = e.chatGroupId;
                         var chatGroupName = e.name;
                         var membersCount = e.members.length;
-                        var groupMemebersPhoto=[];
-                        for(var i=0;i<membersCount;i++){
+                        var groupMemebersPhoto = [];
+                        for (var i = 0; i < membersCount; i++) {
                             var member = e.members[i];
-                            var memberAvatarTag = <img src={member.avatar} ></img>;
+                            var memberAvatarTag = <img src={member.avatar}></img>;
                             groupMemebersPhoto.push(memberAvatarTag);
-                            if(i>=3){
+                            if (i >= 3) {
                                 break;
                             }
                         }
                         var imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
-                        switch (groupMemebersPhoto.length){
+                        switch (groupMemebersPhoto.length) {
                             case 1:
                                 imgTag = <div className="maaee_group_face1">{groupMemebersPhoto}</div>;
                                 break;
@@ -957,10 +1068,10 @@ const AntCloudTableComponents = React.createClass({
                         }
                         var groupName = chatGroupName;
                         var groupNameTag = <div>{imgTag}<span>{groupName}</span></div>
-                        var groupJson ={ label: groupNameTag, value: chatGroupId};
+                        var groupJson = {label: groupNameTag, value: chatGroupId};
                         groupOptions.push(groupJson);
                     });
-                    cloudTable.setState({"groupOptions":groupOptions});
+                    cloudTable.setState({"groupOptions": groupOptions});
                 }
                 //var pager = ret.pager;
                 //cloudTable.setState({"optType":"getUserChatGroup","totalChatGroupCount":parseInt(pager.rsCount)});
@@ -974,59 +1085,138 @@ const AntCloudTableComponents = React.createClass({
     /**
      * 修改文件夹名称的文本框内容改变响应函数
      */
-    nowThinkingInputChange(e){
+    nowThinkingInputChange(e) {
         var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
             target = e.target;
         }
         var nowThinking = target.value;
-        if(isEmpty(nowThinking)){
-            nowThinking="这是一个云盘分享的文件";
+        if (isEmpty(nowThinking)) {
+            nowThinking = "这是一个云盘分享的文件";
         }
-        cloudTable.setState({"nowThinking":nowThinking});
+        cloudTable.setState({"nowThinking": nowThinking});
     },
 
     /**
      * 显示分享文件的窗口
      */
-    showShareModal(fileObject){
-        cloudTable.setState({"shareCloudFileIds":fileObject.id,"shareCloudFile":fileObject});
+    showShareModal(fileObject) {
+        cloudTable.setState({"shareCloudFileIds": fileObject.id, "shareCloudFile": fileObject});
         cloudTable.getAntGroup();
-        cloudTable.setState({shareModalVisible:true});
+        cloudTable.setState({shareModalVisible: true});
     },
 
     /**
      * 关闭分享文件的窗口
      */
-    shareModalHandleCancel(){
-        cloudTable.setState({shareModalVisible:false});
+    shareModalHandleCancel() {
+        cloudTable.setState({shareModalVisible: false,"checkedGroupOptions":[],"checkedConcatOptions":[]});
+    },
+
+    /**
+     * 调用分享接口
+     */
+    getsharekey() {
+        var shareFileId = cloudTable.state.shareCloudFile.id;
+        var operateUserId = cloudTable.state.shareCloudFile.createUid;
+        var param = {
+            "method": 'share',
+            "operateUserId": operateUserId,
+            "cloudFileIds": shareFileId,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.success == true && ret.msg == "调用成功") {
+                    var response = ret.response;
+                    // console.log(response);
+                    cloudTable.shareFile(response);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     /**
      * 分享文件
      */
-    shareFile(){
+    shareFile(response) {
+        var response = response;
+        var _this = this;
         var checkedConcatOptions = cloudTable.state.checkedConcatOptions;
         var checkedGroupOptions = cloudTable.state.checkedGroupOptions;
-        var shareToUserArray = checkedConcatOptions.concat(checkedGroupOptions);
+        console.log(checkedConcatOptions);
+        console.log(checkedGroupOptions);
         var nowThinking = cloudTable.state.nowThinking;
         var shareFile = cloudTable.state.shareCloudFile;
+
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
-        var uuid = createUUID();
         var createTime = (new Date()).valueOf();
-        var attachement={"address":shareFile.path,"user":loginUser,"createTime":shareFile.createTime};
-        shareToUserArray.forEach(function (e) {
+        var cover = "http://png.findicons.com/files/icons/2083/go_green_web/64/link.png";
+        var suffix = shareFile.suffix;//后缀名
+        var name = shareFile.name;  //对应title
+        var creator = shareFile.creator;
+        var messageToPer = 1;//根据接收者是群组还是个人来决定
+        var messageToGrp = 4;
+
+        /*远程调试*/
+        var filePath = "http://" + 'www.maaee.com' + ":" + 80 + "/Excoord_PhoneService" + "/cloudFile/shareShow/" + response;
+
+        /*本地调试*/
+        // var filePath = "http://" + '192.168.1.34' + ":" + 8080 + "/Excoord_PhoneService" + "/cloudFile/shareShow/" + response;
+
+        var attachement = {
+            "address": filePath,
+            "user": creator,
+            "createTime": shareFile.createTime,
+            "cover": cover,
+            "content": name,
+            "type": TO_TYPE
+        };
+
+        if(isEmpty(checkedGroupOptions) == false) {
+            checkedGroupOptions.forEach(function (e) {
+            var uuid = createUUID();
             var messageJson = {
                 'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
                 "toId": e, "command": "message", "hostId": loginUser.colUid,
-                "uuid": uuid, "toType": 1,"attachment":attachement
+                "uuid": uuid, "toType": messageToGrp, "attachment": attachement, "state": 0
             };
             var commandJson = {"command": "message", "data": {"message": messageJson}};
+            console.log(commandJson);
             ms.send(commandJson);
         });
-        cloudTable.setState({shareModalVisible:false});
+        }
+
+        if(isEmpty(checkedConcatOptions) == false) {
+            checkedConcatOptions.forEach(function (e) {
+            var uuid = createUUID();
+            var messageJson = {
+                'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
+                "toId": e, "command": "message", "hostId": loginUser.colUid,
+                "uuid": uuid, "toType": messageToPer, "attachment": attachement, "state": 0
+            };
+            var commandJson = {"command": "message", "data": {"message": messageJson}};
+            console.log(commandJson);
+            ms.send(commandJson);
+        });
+        }
+        cloudTable.setState({shareModalVisible: false,"checkedGroupOptions":[],"checkedConcatOptions":[]});
+        // cloudTable.setState({"checkedGroupOptions": []});
+    },
+
+    buildShareUrl(filePath) {
+        if (filePath.indexOf("agent=ExcoordMessenger") == -1) {
+            if (filePath.indexOf("?") != -1) {
+                filePath = filePath + "&agent=ExcoordMessenger";
+            } else {
+                filePath = filePath + "?agent=ExcoordMessenger";
+            }
+        }
+        return filePath;
     },
 
     /**
@@ -1035,7 +1225,7 @@ const AntCloudTableComponents = React.createClass({
      */
     concatOptionsOnChange(checkedValues) {
         console.log('checked = ', checkedValues);
-        cloudTable.setState({"checkedConcatOptions":checkedValues});
+        cloudTable.setState({"checkedConcatOptions": checkedValues});
     },
     /**
      * 我的好友复选框被选中时的响应
@@ -1043,10 +1233,10 @@ const AntCloudTableComponents = React.createClass({
      */
     groupOptionsOnChange(checkedValues) {
         console.log('checked = ', checkedValues);
-        cloudTable.setState({"checkedGroupOptions":checkedValues});
+        cloudTable.setState({"checkedGroupOptions": checkedValues});
     },
 
-    collapseChange(key){
+    collapseChange(key) {
         /*if(key==1){
             cloudTable.getUserChatGroupById(1);
         }*/
@@ -1066,23 +1256,27 @@ const AntCloudTableComponents = React.createClass({
         var returnParentToolBar;
 
         var tipTitle;
-        if(cloudTable.state.getFileType=="myFile"){
-            tipTitle="我的文件";
-            newButton=<Button value="newDirectory"  className="antnest_talk" onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;
-            if(cloudTable.state.currentDirectoryId!=-1){
-                uploadButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
+        if (cloudTable.state.getFileType == "myFile") {
+            tipTitle = "我的文件";
+            newButton = <Button value="newDirectory" className="antnest_talk"
+                                onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;
+            if (cloudTable.state.currentDirectoryId != -1) {
+                uploadButton = <Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
             }
-            delBtn = <div className="cloud_tool"><Button type="primary" onClick={cloudTable.showdelAllDirectoryConfirmModal}
-                                                         disabled={!hasSelected && cloudTable.state.delBtnReadOnly} loading={loading}
-            >批量删除</Button><span className="password_ts"
-                                style={{marginLeft: 8}}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span></div>;
-        }else{
-            tipTitle="群文件";
-            if(cloudTable.state.currentDirectoryId!=-1){
+            delBtn =
+                <div className="cloud_tool"><Button type="primary" onClick={cloudTable.showdelAllDirectoryConfirmModal}
+                                                    disabled={!hasSelected && cloudTable.state.delBtnReadOnly}
+                                                    loading={loading}
+                >批量删除</Button><span className="password_ts"
+                                    style={{marginLeft: 8}}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span>
+                </div>;
+        } else {
+            tipTitle = "群文件";
+            if (cloudTable.state.currentDirectoryId != -1) {
                 // 非第一级文件夹
-                newButton=<Button value="newDirectory"  className="antnest_talk" onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;
+                newButton = <Button value="newDirectory" className="antnest_talk" onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;
                 //使用者只有上传的权限
-                uploadButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
+                uploadButton = <Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
                 /*if(cloudTable.state.currentDirMaxPermission!=3
                  || cloudTable.state.currentDirectoryCreatorId==sessionStorage.getItem("ident")){
                  newButton=<Button value="newDirectory"  className="antnest_talk" onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;
@@ -1092,15 +1286,19 @@ const AntCloudTableComponents = React.createClass({
                  //使用者只有上传的权限
                  uploadButton=<Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
                  }*/
-                delBtn = <div className="cloud_tool"><Button type="primary" onClick={cloudTable.showdelAllDirectoryConfirmModal}
+                delBtn = <div className="cloud_tool"><Button type="primary"
+                                                             onClick={cloudTable.showdelAllDirectoryConfirmModal}
                                                              disabled={!hasSelected} loading={loading}
                 >批量删除</Button><span className="password_ts"
-                                    style={{marginLeft: 8}}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span></div>;
+                                    style={{marginLeft: 8}}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span>
+                </div>;
             }
         }
-        console.log("------>"+cloudTable.state.parentDirectoryId);
-        if(cloudTable.state.parentDirectoryId!=-1 && cloudTable.state.currentDirectoryId!=-1){
-            returnParentToolBar = <div className="ant-tabs-right"><Button onClick={cloudTable.returnParent}><Icon type="left" /></Button></div>;
+        console.log("------>" + cloudTable.state.parentDirectoryId);
+        if (cloudTable.state.parentDirectoryId != -1 && cloudTable.state.currentDirectoryId != -1) {
+            returnParentToolBar =
+                <div className="ant-tabs-right"><Button onClick={cloudTable.returnParent}><Icon type="left"/></Button>
+                </div>;
         }
 
         var toolbar = <div className="public—til—blue">
@@ -1111,11 +1309,12 @@ const AntCloudTableComponents = React.createClass({
             </div>
             {tipTitle}
         </div>;
-        var returnToolbarInMoveModal=<div className="public—til—blue">
-            <div className="ant-tabs-right"><Button onClick={cloudTable.returnParentAtMoveModal}><Icon type="left" /></Button></div>
+        var returnToolbarInMoveModal = <div className="public—til—blue">
+            <div className="ant-tabs-right"><Button onClick={cloudTable.returnParentAtMoveModal}><Icon
+                type="left"/></Button></div>
         </div>;
-        var returnToolbarInShareModal=<div className="public—til—blue">
-            <div className="ant-tabs-right"><Button onClick={cloudTable.getAntGroup}><Icon type="left" /></Button></div>
+        var returnToolbarInShareModal = <div className="public—til—blue">
+            <div className="ant-tabs-right"><Button onClick={cloudTable.getAntGroup}><Icon type="left"/></Button></div>
         </div>;
         //根据该状态值，来决定上传进度条是否显示
         var progressState = cloudTable.state.progressState;
@@ -1132,147 +1331,167 @@ const AntCloudTableComponents = React.createClass({
         };
 
         return (
-                <div>
-                    <Modal title="重命名"
-                           visible={cloudTable.state.reNameModalVisible}
-                           transitionName=""  //禁用modal的动画效果
-                           maskClosable={false} //设置不允许点击蒙层关闭
-                           onOk={cloudTable.reNameModalHandleOk}
-                           onCancel={cloudTable.reNameModalHandleCancel}
-                    >
-                    	<div>
-                            <Row>
-                                <Col span={3} className="right_look">名称：</Col>
-                                <Col span={20}>
-                                    <Input value={cloudTable.state.editDirectoryName} onChange={cloudTable.directoryNameInputChange}/>
-                                </Col>
-                            </Row>
-                        </div>
-                    </Modal>
-                    <Modal title="新建文件夹"
-                           visible={cloudTable.state.mkdirModalVisible}
-                           transitionName=""  //禁用modal的动画效果
-                           maskClosable={false} //设置不允许点击蒙层关闭
-                           onOk={cloudTable.makeDirectory}
-                           onCancel={cloudTable.mkdirModalHandleCancel}
-                    >
-                        <div>
-                            <Row>
-                                <Col span={3} className="right_look">名称：</Col>
-                                <Col span={20}>
-                                    <Input value={cloudTable.state.editDirectoryName} onChange={cloudTable.directoryNameInputChange}/>
-                                </Col>
-                            </Row>
-                        </div>
-                    </Modal>
-                    <ConfirmModal ref="confirmModal"
-                                  title="确定要删除选中的文件/文件夹"
-                                  onConfirmModalCancel={cloudTable.closeConfirmModal}
-                                  onConfirmModalOK={cloudTable.deleteCloudFiles}
-                    ></ConfirmModal>
+            <div>
+                <Modal title="重命名"
+                       width={440}
+                       visible={cloudTable.state.reNameModalVisible}
+                       transitionName=""  //禁用modal的动画效果
+                       maskClosable={false} //设置不允许点击蒙层关闭
+                       onOk={cloudTable.reNameModalHandleOk}
+                       onCancel={cloudTable.reNameModalHandleCancel}
+                       className="schoolgroup_modal"
+                >
+                    <div className="modal_register_main">
+                        <Row className="ant_row">
+                            <Col span={6} className="right_look">名称：</Col>
+                            <Col span={16} className="framework_m_r">
+                                <Input value={cloudTable.state.editDirectoryName}
+                                       onChange={cloudTable.directoryNameInputChange}/>
+                            </Col>
+                        </Row>
+                    </div>
+                </Modal>
+                <Modal title="新建文件夹"
+                       width={440}
+                       visible={cloudTable.state.mkdirModalVisible}
+                       transitionName=""  //禁用modal的动画效果
+                       maskClosable={false} //设置不允许点击蒙层关闭
+                       onOk={cloudTable.makeDirectory}
+                       onCancel={cloudTable.mkdirModalHandleCancel}
+                       className="schoolgroup_modal"
+                >
+                    <div className="modal_register_main">
+                        <Row className="ant_row">
+                            <Col span={6} className="right_look">名称：</Col>
+                            <Col span={16} className="framework_m_r">
+                                <Input value={cloudTable.state.editDirectoryName}
+                                       onChange={cloudTable.directoryNameInputChange}/>
+                            </Col>
+                        </Row>
+                    </div>
+                </Modal>
+                <ConfirmModal ref="confirmModal"
+                              title="确定要删除选中的文件/文件夹"
+                              onConfirmModalCancel={cloudTable.closeConfirmModal}
+                              onConfirmModalOK={cloudTable.deleteCloudFiles}
+                ></ConfirmModal>
 
-                    <Modal
-                        visible={cloudTable.state.cloudFileUploadModalVisible}
-                        title="上传文件"
-                        className="modol_width"
-                        maskClosable={false} //设置不允许点击蒙层关闭
-                        onCancel={cloudTable.cloudFileUploadModalHandleCancel}
-                        transitionName=""  //禁用modal的动画效果
-                        footer={[
+                <Modal
+                    visible={cloudTable.state.cloudFileUploadModalVisible}
+                    title="上传文件"
+                    className="modol_width"
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    onCancel={cloudTable.cloudFileUploadModalHandleCancel}
+                    transitionName=""  //禁用modal的动画效果
+                    footer={[
+                        <div>
+                            <Button type="primary" htmlType="submit" className="login-form-button"
+                                    onClick={cloudTable.uploadFile}>
+                                保存
+                            </Button>
+                            <Button type="ghost" htmlType="reset" className="login-form-button"
+                                    onClick={cloudTable.cloudFileUploadModalHandleCancel}>
+                                取消
+                            </Button>
+                        </div>
+                    ]}
+                >
+                    <Row>
+                        <Col span={4}>上传文件：</Col>
+                        <Col span={20}>
                             <div>
-                                <Button type="primary" htmlType="submit" className="login-form-button" onClick={cloudTable.uploadFile}>
-                                    保存
-                                </Button>
-                                <Button type="ghost" htmlType="reset" className="login-form-button" onClick={cloudTable.cloudFileUploadModalHandleCancel}>
-                                    取消
-                                </Button>
+                                <CloudFileUploadComponents ref="fileUploadCom"
+                                                           fatherState={cloudTable.state.cloudFileUploadModalVisible}
+                                                           callBackParent={cloudTable.handleFileSubmit}/>
                             </div>
-                        ]}
-                    >
+                            <div style={{display: progressState}}>
+                                <Progress percent={cloudTable.state.uploadPercent} width={80} strokeWidth={4}/>
+                            </div>
+                        </Col>
+
+                    </Row>
+                </Modal>
+
+
+                <Modal title="移动文件"
+                       visible={cloudTable.state.moveFileModalVisible}
+                       transitionName=""  //禁用modal的动画效果
+                       maskClosable={false} //设置不允许点击蒙层关闭
+                       onCancel={cloudTable.moveFileModalHandleCancel}
+                       footer={null}
+                >
+                    <div className="move_file">
                         <Row>
-                            <Col span={4}>上传文件：</Col>
-                            <Col span={20}>
+                            <Col span={24}>
+                                {returnToolbarInMoveModal}
+                                <Table columns={targetDirColumns} showHeader={false}
+                                       dataSource={cloudTable.state.targetDirDataArray}
+                                       pagination={{
+                                           total: cloudTable.state.totalCount,
+                                           pageSize: getPageSize(),
+                                           onChange: cloudTable.pageOnChange
+                                       }} scroll={{y: 300}}/>
+                            </Col>
+                        </Row>
+                    </div>
+                </Modal>
+
+                <Modal title="分享文件" className="cloud_share_Modal"
+                       visible={cloudTable.state.shareModalVisible}
+                       transitionName=""  //禁用modal的动画效果
+                       maskClosable={false} //设置不允许点击蒙层关闭
+                       onCancel={cloudTable.shareModalHandleCancel}
+                       onOk={cloudTable.getsharekey}
+                >
+                    <div>
+                        <Row>
+                            <Col span={12} className="share_til">选择好友分享文件：</Col>
+                            <Col span={12} className="share_til">这一刻的想法：
+                                <span className="right_ri cloud_share_prompt"><Icon type="link"
+                                                                                    className="info_school_s"/><span>这是一个云盘分享的文件</span></span>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col span={11} className="upexam_float cloud_share_cont">
+                                <Collapse bordered={false} defaultActiveKey={['2']}
+                                          onChange={cloudTable.collapseChange}>
+                                    <Panel header="我的群组" key="1">
+                                        <CheckboxGroup options={cloudTable.state.groupOptions}
+                                                       value={cloudTable.state.checkedGroupOptions}
+                                                       onChange={cloudTable.groupOptionsOnChange}/>
+                                    </Panel>
+                                    <Panel header="我的好友" key="2">
+                                        <CheckboxGroup options={cloudTable.state.concatOptions}
+                                                       value={cloudTable.state.checkedConcatOptions}
+                                                       onChange={cloudTable.concatOptionsOnChange}/>
+                                    </Panel>
+                                </Collapse>
+                            </Col>
+                            <Col span={12} className="topics_dianzan">
                                 <div>
-                                    <CloudFileUploadComponents ref="fileUploadCom" fatherState={cloudTable.state.cloudFileUploadModalVisible} callBackParent={cloudTable.handleFileSubmit}/>
-                                </div>
-                                <div style={{display:progressState}}>
-                                    <Progress percent={cloudTable.state.uploadPercent} width={80} strokeWidth={4} />
+                                    <Input type="textarea" rows={14} placeholder="这是一个云盘分享的文件"
+                                           value={cloudTable.state.nowThinking}
+                                           onChange={cloudTable.nowThinkingInputChange}/>
                                 </div>
                             </Col>
-
                         </Row>
-                    </Modal>
+                    </div>
+                </Modal>
 
-
-                    <Modal title="移动文件"
-                           visible={cloudTable.state.moveFileModalVisible}
-                           transitionName=""  //禁用modal的动画效果
-                           maskClosable={false} //设置不允许点击蒙层关闭
-                           onCancel={cloudTable.moveFileModalHandleCancel}
-                           footer={null}
-                    >
-                        <div>
-                            <Row>
-                                <Col span={24}>
-                                    {returnToolbarInMoveModal}
-                                    <Table  columns={targetDirColumns}  showHeader={false} dataSource={cloudTable.state.targetDirDataArray}
-                                        pagination={{
-                                        total: cloudTable.state.totalCount,
-                                        pageSize: getPageSize(),
-                                        onChange: cloudTable.pageOnChange
-                                    }} scroll={{y: 300}}/>
-                                </Col>
-                            </Row>
-                        </div>
-                    </Modal>
-
-                    <Modal title="分享文件" className="cloud_share_Modal"
-                           visible={cloudTable.state.shareModalVisible}
-                           transitionName=""  //禁用modal的动画效果
-                           maskClosable={false} //设置不允许点击蒙层关闭
-                           onCancel={cloudTable.shareModalHandleCancel}
-                           onOk={cloudTable.shareFile}
-                    >
-                        <div>
-                            <Row>
-                                <Col span={12} className="share_til">选择好友分享文件：</Col>
-                                <Col span={12} className="share_til">这一刻的想法：
-									<span className="right_ri cloud_share_prompt"><Icon type="link" /><span>这是一个云盘分享的文件</span></span>
-								</Col>
-                            </Row>
-                            <Row>
-                                <Col span={11} className="upexam_float cloud_share_cont" >
-                                    <Collapse bordered={false} defaultActiveKey={['2']} onChange={cloudTable.collapseChange}>
-                                        <Panel header="我的群组" key="1">
-                                            <CheckboxGroup options={cloudTable.state.groupOptions} onChange={cloudTable.groupOptionsOnChange} />
-                                        </Panel>
-                                        <Panel header="我的好友" key="2">
-                                            <CheckboxGroup options={cloudTable.state.concatOptions} onChange={cloudTable.concatOptionsOnChange} />
-                                        </Panel>
-                                    </Collapse>
-                                </Col>
-                                <Col span={12} className="topics_dianzan">
-                                    <div>
-                                        <Input type="textarea"rows={14} placeholder="这是一个云盘分享的文件" value={cloudTable.state.nowThinking} onChange={cloudTable.nowThinkingInputChange}/>
-                                    </div>
-                                </Col>
-                            </Row>
-                        </div>
-                    </Modal>
-
-                    {toolbar}
-                    <div className="favorite_scroll">
-                        {/*<div className="pl_del">
+                {toolbar}
+                <div className="favorite_scroll">
+                    {/*<div className="pl_del">
                             {delBtn}
                         </div>*/}
-                        {delBtn}
-                        <Table className="cloud_box" rowSelection={rowSelection} columns={columns} dataSource={cloudTable.state.tableData} pagination={{
-                            total: cloudTable.state.totalCount,
-                            pageSize: getPageSize(),
-                            onChange: cloudTable.pageOnChange
-                        }} scroll={{y: 400}}/>
-					</div>
+                    {delBtn}
+                    <Table className="cloud_box" rowSelection={rowSelection} columns={columns}
+                           dataSource={cloudTable.state.tableData} pagination={{
+                        total: cloudTable.state.totalCount,
+                        pageSize: getPageSize(),
+                        onChange: cloudTable.pageOnChange
+                    }} scroll={{y: 400}}/>
                 </div>
+            </div>
 
         );
     },

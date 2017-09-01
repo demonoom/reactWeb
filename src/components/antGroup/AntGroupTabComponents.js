@@ -120,6 +120,7 @@ const AntGroupTabComponents = React.createClass({
     },
 
     componentDidMount(){
+        this.turnToMessagePage(sessionStorage.getItem("loginUser"),"message","noTurnPage");
         // document.onkeydown=this.checkKeyType;
         /*$("#emotionInput").bind("keydown",antGroup.checkKeyType);
         $(".emoji-wysiwyg-editor").bind("keydown",antGroup.checkKeyType);*/
@@ -204,7 +205,7 @@ const AntGroupTabComponents = React.createClass({
      * 进入收发消息的窗口
      * @param user
      */
-    turnToMessagePage(operatorObj,messageType){
+    turnToMessagePage(operatorObj,messageType,isTurnPage){
         var _this = this;
         var userId;
         messageList.splice(0);
@@ -220,7 +221,7 @@ const AntGroupTabComponents = React.createClass({
                         onOk() {
                             sessionStorage.removeItem("ident");
                             sessionStorage.removeItem("loginUser");
-                            sessionStorage.removeItem("machineId");
+                            //sessionStorage.removeItem("machineId");
                             location.hash="Login";
                             LP.delAll();
                         },
@@ -355,7 +356,9 @@ const AntGroupTabComponents = React.createClass({
                                     contentArray: contentArray,
                                     "messageToType": 1
                                 };
-                                antGroup.props.onNewMessage(userJson);
+                                if(isEmpty(isTurnPage)){
+                                    antGroup.props.onNewMessage(userJson);
+                                }
                             }else{
                                 var userJson = {
                                     key: messageOfSinge.toUser.colUid,
@@ -363,7 +366,9 @@ const AntGroupTabComponents = React.createClass({
                                     contentArray: contentArray,
                                     "messageToType": 1
                                 };
-                                antGroup.props.onNewMessage(userJson);
+                                if(isEmpty(isTurnPage)) {
+                                    antGroup.props.onNewMessage(userJson);
+                                }
                             }
                         }else if(messageOfSinge.toType == 4 && typeof (content)!='undefined'){
                             //群组单条消息
@@ -392,7 +397,9 @@ const AntGroupTabComponents = React.createClass({
                                     contentArray: contentArray,
                                     "messageToType": 4
                                 };
-                                antGroup.props.onNewMessage(userJson);
+                                if(isEmpty(isTurnPage)) {
+                                    antGroup.props.onNewMessage(userJson);
+                                }
                             }else{
                                 var userJson = {
                                     key: messageOfSinge.toChatGroup.chatGroupId,
@@ -401,7 +408,9 @@ const AntGroupTabComponents = React.createClass({
                                     contentArray: contentArray,
                                     "messageToType": 4
                                 };
-                                antGroup.props.onNewMessage(userJson);
+                                if(isEmpty(isTurnPage)) {
+                                    antGroup.props.onNewMessage(userJson);
+                                }
                             }
                         }
                         antGroup.setState({"messageList": messageList});
@@ -409,13 +418,16 @@ const AntGroupTabComponents = React.createClass({
                 }
             }
         };
-        if (messageType=="message") {
-            //如果是个人消息通信，传入的对象应该是用户对象
-            antGroup.setState({"optType": "sendMessage", "userIdOfCurrentTalk": operatorObj.colUid, "currentUser": operatorObj});
-        }else{
-            //如果是个人消息通信，传入的对象应该是群组对象
-            antGroup.setState({"optType": "sendGroupMessage", "currentGroupObj": operatorObj});
+        if(isEmpty(isTurnPage)){
+            if (messageType=="message") {
+                //如果是个人消息通信，传入的对象应该是用户对象
+                antGroup.setState({"optType": "sendMessage", "userIdOfCurrentTalk": operatorObj.colUid, "currentUser": operatorObj});
+            }else{
+                //如果是个人消息通信，传入的对象应该是群组对象
+                antGroup.setState({"optType": "sendGroupMessage", "currentGroupObj": operatorObj});
+            }
         }
+
     },
 
     getImgTag(str){
@@ -431,27 +443,29 @@ const AntGroupTabComponents = React.createClass({
      */
     changeImgTextToTag(str, imgTags, messageReturnJson){
         showContent = str;
-        var start = str.indexOf("[bexp_");
-        if (start != -1) {
-            //
-            var end = str.indexOf("]");
-            var subStr = str.substring(start, end + 1);
-            showContent = showContent.replace(subStr, "~");
-            var imgUrl = getImgName(subStr);
-            var localUrl = "../src/components/images/emotions/" + imgUrl;
-            var subStrReplace = <span className='attention_img'><img src={localUrl}/></span>;
-            imgTags.push(subStrReplace);
-            var otherStr = str.substring(end + 1);
-            if (otherStr.indexOf("[bexp_") != -1) {
-                antGroup.changeImgTextToTag(otherStr, imgTags);
-            } else {
-                showImg += otherStr;
-            }
-            messageReturnJson = {messageType: "imgTag", imgMessage: imgTags};
+        if(isEmpty(str)==false){
+            var start = str.indexOf("[bexp_");
+            if (start != -1) {
+                //
+                var end = str.indexOf("]");
+                var subStr = str.substring(start, end + 1);
+                showContent = showContent.replace(subStr, "~");
+                var imgUrl = getImgName(subStr);
+                var localUrl = "../src/components/images/emotions/" + imgUrl;
+                var subStrReplace = <span className='attention_img'><img src={localUrl}/></span>;
+                imgTags.push(subStrReplace);
+                var otherStr = str.substring(end + 1);
+                if (otherStr.indexOf("[bexp_") != -1) {
+                    antGroup.changeImgTextToTag(otherStr, imgTags);
+                } else {
+                    showImg += otherStr;
+                }
+                messageReturnJson = {messageType: "imgTag", imgMessage: imgTags};
 
-        } else {
-            //不存在表情，为单纯性的文字消息
-            messageReturnJson = {messageType: "text", textMessage: str};
+            } else {
+                //不存在表情，为单纯性的文字消息
+                messageReturnJson = {messageType: "text", textMessage: str};
+            }
         }
         return messageReturnJson;
     },

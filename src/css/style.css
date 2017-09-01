@@ -907,6 +907,7 @@ element.style {
 .cloud_box .ant-table-thead > tr > th.ant-table-selection-smallclass, .cloud_box .ant-table-tbody > tr > td.ant-table-selection-smallclass{
 	width:20%
 }
+
 .ant-table-thead > tr > th.ant-135, .ant-table-tbody > tr > td.ant-135{
 	width:135px
 }
@@ -914,7 +915,7 @@ element.style {
 	width:16%
 }
 .ant-table-thead > tr > th.cloud_name, .ant-table-tbody > tr > td.cloud_name{
-	width:50%;
+	width:45%;
 }
 .ant-table-thead > tr > th.ant-table-selection-time, .ant-table-tbody > tr > td.ant-table-selection-time{
 	width:120px;
@@ -1237,6 +1238,15 @@ article.content_3 img{
 	height:calc(100% - 46px);
 	overflow-y:auto;
 	border:none;
+}
+.analyze_iframe_2{
+	width:100%;
+	height:calc(100% - 46px);
+	overflow-y:hidden;
+	border:none;
+}
+analyze_iframe_2 > div{
+	height:100% !important;
 }
 .ques_bg{
 	background:#fff;
@@ -1668,9 +1678,9 @@ a {
 	
 }
 .ant-table-thead > tr > th{
-	color:#0f70d9;
-	font-size:16px;
-	font-weight: normal;
+	color:#333;
+	font-size:14px;
+	font-weight: bold;
 }
 .popup_i_icon{
 	color: #5f6983;
@@ -2704,6 +2714,12 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 .ant-menu-item-selected .icon_schoolGroup{
 	background-position: 0 -750px;
 }
+.icon_antdisk{
+	background-position: 0 -800px;
+}
+.ant-menu-item-selected .icon_antdisk{
+	background-position: 0 -850px;
+}
 .person_13{
 	font-size:16px !important;
 }
@@ -3192,7 +3208,7 @@ a.color_gary_f, .color_gary_f{
     *zoom:1; /* 激活IE6、7的haslayout属性，让它读懂Alpha */
   }
   .live_green span {
-	  position: relative; /* 设置子元素为相对定位，可让子元素不继承Alpha值 */
+	  position: relative;  /* 设置子元素为相对定位，可让子元素不继承Alpha值 */
   }
 }
 .live_orange{
@@ -3246,6 +3262,7 @@ a.color_gary_f, .color_gary_f{
 	height:100%;
 	border: none;
 }
+
 .little-warp{
 	height: 100%;
 	width: 100%;
@@ -3799,6 +3816,19 @@ color:#ffbf00
 	cursor: pointer;
 
 }
+.ghostMenu_li{
+	padding:0 !important;
+}
+.ghostMenu_li > li:first-child{
+	border-bottom: 1px solid #f3f3f3
+}
+.icon_system_img{
+	width: 20px;
+	height: 20px;
+	position: relative;
+	top: 3px;
+	left: -12px;
+}
 .te_download_a{
 	float:right;
 	line-height:1px
@@ -4024,21 +4054,24 @@ div.btn1{
 .cloud_box{
 	height: calc(100% - 40px);
 }
-.cloud_box table tr td.ant-table-selection-smallclass button{
+.cloud_box1{
+	height: 100%;
+}
+.cloud_box table tr td.ant-table-selection-smallclass button, .cloud_box1 table tr td.ant-table-selection-smallclass button{
 	border:none;
 	background: none;
-    padding: 0;
-	margin:0
-	
+    padding: 0 !important;
+	margin:0 8px
 }
-.cloud_box .ant-table-thead > tr > th, .cloud_box .ant-table-tbody > tr > td {
+
+.cloud_box .ant-table-thead > tr > th, .cloud_box .ant-table-tbody > tr > td, .cloud_box1 .ant-table-thead > tr > th, .cloud_box .ant-table-tbody > tr > td {
 	padding: 16px 0px 16px 8px;
     text-align: left !important;
 }
-.cloud_box table tr th .ant-checkbox, .cloud_box table tr td .ant-checkbox{
+.cloud_box table tr th .ant-checkbox, .cloud_box table tr td .ant-checkbox, .cloud_box1 table tr th .ant-checkbox, .cloud_box table tr td .ant-checkbox{
 	margin-left:12px;
 }
-.cloud_box .ant-table-tbody > tr > td.cloud_name span.cloud_text span{
+.cloud_box .ant-table-tbody > tr > td.cloud_name span.cloud_text span, .cloud_box1 .ant-table-tbody > tr > td.cloud_name span.cloud_text span{
 	font-weight: normal !important;
 	width: calc(100% - 50px) !important;
 	cursor:pointer;
@@ -4049,30 +4082,35 @@ div.btn1{
 }
 .cloud_text{
     position: relative;
-    top: 4px;
+    top: 0px;
 	width: 100%;
     float: left;
+	height:28px;
+	line-height: 28px;
 }
 .cloud_icon{
 	background:url(../components/images/cloud_icon.png) no-repeat;
 	width:24px;
-	height: 24px;
+	height: 28px;
     display: inline-block;
     margin-right: 12px;
 	position: relative;
-    top: 3px;
+    top: 2px;
 }
 .cloud_icon_file{
-	background-position:0 0;
+	background-position:0 2px;
 }
 .cloud_icon_apx{
 	background-position:0 -50px;
 }
+.cloud_icon_ppt{
+	background-position:0 -100px;
+}
 .cloud_icon_png{
-	background-position:0 0;
+	background-position:0 -400px;
 }
 .cloud_icon_jpg{
-	background-position:0 0;
+	background-position:0 -450px;
 }
 .cloud_icon_mp3{
 	background-position:0 -300px;
@@ -4080,26 +4118,21 @@ div.btn1{
 .cloud_icon_mp4{
 	background-position:0 -350px;
 }
-.cloud_icon_pdf{
-	background-position:0 0;
-}
-.cloud_icon_ppt{
-	background-position:0 -100px;
-}
+
 .cloud_icon_pdf{
 	background-position:0 -150px;
 }
 .cloud_icon_doc{
-	background-position:0 0;
+	background-position:0 -500px;
 }
 .cloud_icon_xls{
-	background-position:0 0;
+	background-position:0 -550px;
 }
 .cloud_icon_wps{
 	background-position:0 -200px;
 }
 .cloud_icon_other{
-	background-position:0 -250px;
+	background-position:0 -249px;
 }
 .share_til{
 	font-size: 14px;
@@ -4790,7 +4823,21 @@ span.pagination{
 	font-family: "Microsoft YaHei";
 	padding-left: 40px !important;
 }
+.yichao_menu_li{
+	font-size: 16px;
+	color: #333;
+	font-family: "Microsoft YaHei";
+}
 .cloud_class_menu .ant-menu-inline .ant-menu-item-active{
+	color:#42bef6 !important
+}
+.yichao_menu_li:hover{
+	color:#42bef6 !important;
+}
+.yichao_menu_li span{
+	color: #333;
+}
+.yichao_menu_li:hover span{
 	color:#42bef6 !important
 }
 .modal_course{
@@ -5202,4 +5249,25 @@ select.course_n:hover{
 	line-height: 40px;
 	font-size: 16px;
 	margin-top: 20px;
+}
+.move_file{
+	height:350px;
+}
+.move_file .clearfix {
+	height: calc(100% - 30px);
+}
+.move_file .ant-table-fixed-header .ant-table-body {
+	min-height: 100%;
+}
+.move_file .public—til—blue{
+	height: 36px;
+	line-height: 36px;
+	margin-bottom: 10px;
+}
+.move_file .public—til—blue .ant-tabs-right{
+	margin-top: 7px;
+}
+.yipan_name{
+	position: relative;
+	top: 2px;
 }

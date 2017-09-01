@@ -127,7 +127,7 @@ class GhostMenu extends React.Component {
                             </li>
                         </ul>
                     </li>
-                    <li><Icon type="exception"/>更多</li>
+                    {/*<li><Icon type="exception"/>更多</li>
                     <li className="multi">
                         <ul className="second">
                             <li onClick={ event => {
@@ -135,7 +135,7 @@ class GhostMenu extends React.Component {
                             }}>教学管理
                             </li>
                         </ul>
-                    </li>
+                    </li>*/}
                 </ul>
             </div>
         );
