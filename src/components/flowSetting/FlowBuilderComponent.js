@@ -100,7 +100,7 @@ const FlowBuilderComponent = React.createClass({
         var stepObj = <Step id={approvalJson.approval} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
         stepObjArray.push(stepObj);
         approvalJsonArray.push(approvalJson);
-        this.setState({stepObjArray});
+        this.setState({stepObjArray,approvalJsonArray});
         this.approvalModalHandleCancel();
     },
 
@@ -216,12 +216,17 @@ const FlowBuilderComponent = React.createClass({
         var processDefinitionBaseJson={};
         //流程名称
         processDefinitionBaseJson.procDefName = this.state.flowName;
+        //流程说明
+        processDefinitionBaseJson.flowDescription=this.state.flowDescription;
         //流程所在分组
         processDefinitionBaseJson.flowGroupId = this.state.approvalGroup;
-        //
+        //抄送人消息推送方式
         processDefinitionBaseJson.messageOfCopyPersonSendType = this.state.messageOfCopyPersonSendType;
+        //消息抄送人列表
         processDefinitionBaseJson.copyPersonList = this.state.copyPersonIdArray;
-        processDefinitionBaseJson.procDefName = this.state.flowName;
+        //审批人列表
+        processDefinitionBaseJson.approvalIdJson = this.state.approvalJsonArray;
+        return processDefinitionBaseJson;
     },
 
     /**

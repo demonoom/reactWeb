@@ -139,7 +139,26 @@ const FlowSettingComponent = React.createClass({
      * 保存流程到后台
      */
     saveFlow(){
-
+        var processDefinitionJson = this.refs.createFlowComponent.getProcessDefinitionJson();
+        //{"procDefName":"请假单","flowDescription":"it部请假单","flowGroupId":"2","messageOfCopyPersonSendType":"0","copyPersonList":["23384","23385"],"approvalIdJson":[{"approvalType":1,"approval":"23836"},{"approvalType":1,"approval":"tom"}],"formData":"[{\"type\":\"header\",\"label\":\"表头\"},{\"type\":\"text\",\"label\":\"输入框\"}]"}
+        console.log("procDefJson:"+JSON.stringify(processDefinitionJson));
+        //调用后台完成json到底层对象的转化
+        var param = {
+            "method": 'deployProcess',
+            "flowProcessDefinitionJson":processDefinitionJson,
+            "operateUserId": this.state.loginUser.colUid
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                console.log(ret.msg+"==="+ret.response);
+                if(ret.msg=="调用成功" &&　ret.success == true){
+                    // _this.buildFlowGroupSpan(ret.response);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     /**
@@ -365,7 +384,7 @@ const FlowSettingComponent = React.createClass({
                        width="700px"
                 >
                     <div className="space">
-                        <CreateFlowComponent ref="createFlowComponent" onSaveOk={this.courseAddOk}></CreateFlowComponent>
+                        <CreateFlowComponent ref="createFlowComponent"></CreateFlowComponent>
                     </div>
                 </Modal>
 
