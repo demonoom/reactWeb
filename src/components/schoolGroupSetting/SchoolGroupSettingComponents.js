@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import NschoolGroupSettingComponents from './NschoolGroupSettingComponents';
 import RoleComponents from './RoleComponents';
+import OpenNewPage from '../OpenNewPage'
 import {isEmpty} from '../../utils/utils';
 
 const SchoolGroupSettingComponents = React.createClass({
@@ -69,7 +70,7 @@ const SchoolGroupSettingComponents = React.createClass({
      */
     render() {
         switch (this.props.currentItem) {
-            default : // 组织构架
+            default :
 
                 // this.tabComponent = null;
                 this.tabComponent=<div className="userinfo_bg_1"><span>科技改变未来，教育成就梦想</span></div>;
@@ -85,6 +86,9 @@ const SchoolGroupSettingComponents = React.createClass({
                                                                    rootStructure={this.state.requestObj}
                                                                    addSubGroupComplete={this.addSubGroupComplete}
                 ></NschoolGroupSettingComponents>;
+                break;
+            case 'stop':
+                this.tabComponent = <OpenNewPage/>;
                 break;
         }
         return (

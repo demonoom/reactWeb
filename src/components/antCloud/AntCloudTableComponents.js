@@ -221,8 +221,8 @@ const AntCloudTableComponents = React.createClass({
             onResponse: function (ret) {
                 var response = ret.response;
                 if (response) {
-                    cloudTable.buildTableDataByResponse(ret);
-                    cloudTable.buildTargetDirData(ret);
+                    cloudTable.buildTableDataByResponse(ret);//构建表格的数据
+                    cloudTable.buildTargetDirData(ret);//构建移动文件时的目标文件夹数据
                 }
             },
             onError: function (error) {
@@ -319,9 +319,9 @@ const AntCloudTableComponents = React.createClass({
                     fileTypeLog = <i className="cloud_icon cloud_icon_other"></i>;
                     break;
             }
-            fileLogo = <span className="cloud_text" >
+            fileLogo = <span className="cloud_text">
                 {fileTypeLog}
-                <span className="yipan_name">{name}</span>
+                <span className="yipan_name" onClick={cloudTable.readDoc.bind(cloudTable, e)}>{name}</span>
             </span>;
         }
         return fileLogo;
@@ -438,6 +438,7 @@ const AntCloudTableComponents = React.createClass({
         var cloudFileArray = [];
         if (ret.msg == "调用成功" && ret.success == true && isEmpty(ret.response) == false) {
             ret.response.forEach(function (e) {
+                console.log(e);
                 if (i == 0) {
                     if (e.parent) {
                         var parentDirectoryId = e.parent.parentId;
@@ -548,6 +549,12 @@ const AntCloudTableComponents = React.createClass({
             });
         }
         cloudTable.listFiles(cloudTable.state.ident, directoryObj.id, queryConditionJson, initPageNo, optSrc);
+    },
+    /**
+     * 如果不是文件，預覽
+     */
+    readDoc(e){
+        console.log(e);
     },
     /**
      * 修改文件夹的名称（重命名）
