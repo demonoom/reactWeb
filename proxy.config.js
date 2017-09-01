@@ -13,8 +13,8 @@ module.exports = {
     'GET /proxy/h5Point2/(.*)': 'http://www.maaee.com/h5Point2/',
     'GET /proxy/live2/(.*)': 'http://60.205.86.217:8585/live2/',
     'GET /proxy/live3/(.*)': 'http://60.205.86.217:8585/live3/',
-    'GET /proxy/upload4/(.*)': 'http://60.205.86.217/upload4/',
-    //'GET /proxy/upload5/(.*)': 'http://60.205.86.217/upload5/',
+    'GET /proxy/upload4/(.*)': 'http://www.maaee.com/upload4/',
+    'GET /proxy/upload5/(.*)': 'http://www.maaee.com/upload5/',
 
 
 };
