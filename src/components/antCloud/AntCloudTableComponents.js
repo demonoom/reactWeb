@@ -555,6 +555,59 @@ const AntCloudTableComponents = React.createClass({
      */
     readDoc(e){
         console.log(e);
+        //根据不同的文件类型判断使用哪种方式预览
+        var type = e.suffix;
+        var path = e.path;
+        var id = e.id;
+        var createUid = e.createUid;
+        var name = e.name;
+        if(type == 'mp4') {
+            var url = path;
+            this.view(event,url,name);
+        }else if(type == 'mp3'){
+            console.log('mp3');
+        }else if(type == 'jpg'){
+            var url = path;
+            this.view(event,url,name);
+        }else if(type == 'bmp'){
+            var url = path;
+            this.view(event,url,name);
+        }
+        else if(type == 'png'){
+            var url = path;
+            this.view(event,url,name);
+        }else if(type == 'apk') {
+            console.log('apk');
+        }else {
+            var url = "http://www.maaee.com/Excoord_PhoneService/cloudFile/cloudFileShow/" + id + "/" + createUid;
+            this.view(event,url,name);
+        }
+    },
+    /**
+     * 打开view视窗
+     * @param e
+     * @param url
+     * @param tit
+     */
+    view(e, url, tit) {
+        e = e || window.event;
+        if (e.nativeEvent) {
+            e.nativeEvent.stopImmediatePropagation();
+        }
+        e.stopPropagation();
+        e.preventDefault();
+        e.cancelBubble = true;
+
+        let mode = (tit) =>{
+            let refArr =  tit.split('.');
+            let type = refArr[ refArr.length-1];
+            return type;
+        }
+
+        let obj = {mode:mode(tit),title: tit, url: url, width: '380px'};
+
+
+        LP.Start(obj);
     },
     /**
      * 修改文件夹的名称（重命名）
@@ -1090,7 +1143,6 @@ const AntCloudTableComponents = React.createClass({
             }
         });
     },
-
 
     /**
      * 分享文件
