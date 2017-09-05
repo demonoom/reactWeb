@@ -511,3 +511,48 @@
     padding: 16px 20px;
     font-size: 14px;
 }
+.new_process .form_set{
+    background: url("http://formbuilder.readthedocs.io/en/latest/img/noise.png");
+    padding: 20px;
+    max-height: 430px;
+    overflow-y: auto;
+}
+.form-wrap.form-builder .frmb li{
+    transition:none !important;
+}
+.form-wrap.form-builder input{
+    line-height: 34px;
+    border-radius: 4px;
+    text-indent: 8px;
+    background-color: white;
+    border: 1px solid #ccc;
+}
+.form-wrap.form-builder input, .form-wrap.form-builder .frmb .prev-holder textarea{
+    width: 100%;
+}
+.form-wrap.form-builder .form-control {
+    display: block;
+    width: 100%;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background: #fff;
+}
+.form-wrap.form-builder .frmb .field-label, .form-wrap.form-builder .frmb .legend {
+    color: #666;
+    margin-bottom: 5px;
+    line-height: 27px;
+    font-size: 14px;
+    font-weight: 400;
+    height: 27px;
+    display: inline-block;
+}
+.form-wrap.form-builder .frmb .form-field .form-group header{
+    font-size: 24px;
+    color: #333;
+}
+.form-wrap.form-builder .fb-checkbox-group .checkbox input{
+    width: 19px;
+}

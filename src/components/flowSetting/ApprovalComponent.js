@@ -64,9 +64,9 @@ const ApprovalComponent = React.createClass({
         return (
             <div>
                 <RadioGroup onChange={this.approvalTypeOnChange} value={this.state.approvalTypeValue}>
-                    <Radio style={radioStyle} value={1}>
+                    <Radio style={radioStyle} value={0}>
                         单个成员(指定某人)
-                        {this.state.approvalTypeValue === 1 ?
+                        {this.state.approvalTypeValue === 0 ?
                             <Select
                                 showSearch
                                 style={{ width: 200 }}
@@ -76,7 +76,7 @@ const ApprovalComponent = React.createClass({
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             >
                                 <Option value="23836">Jack</Option>
-                                <Option value="23837">Lucy(te23837)</Option>
+                                <Option value="24491">小虎(te24491)</Option>
                                 <Option value="tom">Tom</Option>
                                 <Option value="jack1">Jack</Option>
                                 <Option value="lucy2">Lucy</Option>
@@ -91,8 +91,8 @@ const ApprovalComponent = React.createClass({
                             :
                             null}
                     </Radio>
-                    <Radio style={radioStyle} value={2}>角色(一组固定成员)
-                        {this.state.approvalTypeValue === 2 ?
+                    <Radio style={radioStyle} value={1}>角色(一组固定成员)
+                        {this.state.approvalTypeValue === 1 ?
                             <Select
                                 showSearch
                                 style={{ width: 200 }}

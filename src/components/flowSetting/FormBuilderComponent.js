@@ -83,7 +83,7 @@ const FormBuilderComponent = React.createClass({
                     'multiple','subtype'
                 ],  //设置不显示给用户的元素属性
                 disabledActionButtons: ['data','clear','save','Remove Element'],  //设置不显示给用户的操作按钮
-                editOnAdd: true
+                editOnAdd: false
             };
             var fbTemplate = document.getElementById('fb-editor');
             formBuilder = $(fbTemplate).formBuilder(options);
@@ -96,8 +96,7 @@ const FormBuilderComponent = React.createClass({
      */
     render() {
         return (
-            <div>
-                表单设置
+            <div className="form_set">
                 <div id="fb-editor"></div>
             </div>
         );

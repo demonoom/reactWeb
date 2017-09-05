@@ -67,6 +67,12 @@ const FlowSettingComponent = React.createClass({
             var processDefinitionList = flowGroup.flowProcessDefinitionList;
             processDefinitionList.forEach(function(processDefinition){
                 var procDefId = processDefinition.procDefId;
+                var suspendButton;
+                if(processDefinition.suspend==true){
+                    suspendButton=<a onClick={_this.suspendOrActivationProcessDefinitionConfirm.bind(_this,procDefId,"activity")}>启用</a>;
+                }else{
+                    suspendButton=<a onClick={_this.suspendOrActivationProcessDefinitionConfirm.bind(_this,procDefId,"suspend")}>停用</a>;
+                }
                 var procName = processDefinition.procDefKey;
                 var flowObj = <div className="process_flex">
                     <div>
@@ -74,7 +80,7 @@ const FlowSettingComponent = React.createClass({
                         <span className="name_max4 dold_text">{procName}</span>
                     </div>
                     <div className="process_r">
-                        <a onClick={_this.stopFlow.bind(_this,procDefId)}>停用</a>
+                        {suspendButton}
                         <a className="schoolgroup_btn_left" onClick={_this.removeFlow.bind(_this,procDefId)}>移动到</a>
                     </div>
                 </div>;
@@ -140,6 +146,7 @@ const FlowSettingComponent = React.createClass({
      * 保存流程到后台
      */
     saveFlow(){
+        var flowFormDefineList = this.refs.createFlowComponent.getFormDefindData();
         var processDefinitionJson = this.refs.createFlowComponent.getProcessDefinitionJson();
         //{"procDefName":"请假单","flowDescription":"it部请假单","flowGroupId":"2","messageOfCopyPersonSendType":"0","copyPersonList":["23384","23385"],"approvalIdJson":[{"approvalType":1,"approval":"23836"},{"approvalType":1,"approval":"tom"}],"formData":"[{\"type\":\"header\",\"label\":\"表头\"},{\"type\":\"text\",\"label\":\"输入框\"}]"}
         console.log("procDefJson:"+JSON.stringify(processDefinitionJson));
@@ -147,7 +154,7 @@ const FlowSettingComponent = React.createClass({
         var param = {
             "method": 'deployProcess',
             "flowProcessDefinitionJson":processDefinitionJson,
-            "operateUserId": this.state.loginUser.colUid
+            "flowFormDefineList":flowFormDefineList
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -172,15 +179,19 @@ const FlowSettingComponent = React.createClass({
     /**
      * 停用指定的流程
      */
-    stopFlow(flowId){
-        console.log(flowId);
+    suspendOrActivationProcessDefinitionConfirm(flowId,isSuspendStr){
+        console.log(flowId+"===="+isSuspendStr);
         var _this = this;
+        var title = '确定要启用该流程?';
+        if(isSuspendStr=="suspend"){
+            title = '确定要停用该流程?';
+        }
         confirm({
-            title: '确定要停用该流程?',
+            title: title,
             transitionName:"",  //禁用modal的动画效果
             onOk() {
                 console.log('OK');
-                //_this.suspendFlow(flowId);
+                _this.suspendOrActivationProcessDefinition(flowId,isSuspendStr);
             },
             onCancel() {
                 console.log('Cancel');
@@ -191,20 +202,23 @@ const FlowSettingComponent = React.createClass({
     /**
      * 停用流程(挂起流程定义)
      */
-    suspendFlow(flowId){
+    suspendOrActivationProcessDefinition(flowId,isSuspendStr){
         let _this = this;
         var param = {
-            "method": 'suspendFlow',
-            "operateUserId": _this.state.loginUser.colUid,
-            "flowId":flowId
+            "method": 'suspendOrActivationProcessDefinition',
+            "procDefId": flowId,
+            "isSuspendStr":isSuspendStr
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if(ret.msg=="调用成功" && ret.success==true){
-                    message.success("流程已停用");
-                    this.getFlowGroup();
+                    if(isSuspendStr=="suspend"){
+                        message.success("流程已停用");
+                    }else{
+                        message.success("流程已启用");
+                    }
+                    _this.getFlowGroup();
                 }
-                _this.createFlowGroupModalHandleCancel();
             },
             onError: function (error) {
                 message.error(error);
@@ -232,16 +246,21 @@ const FlowSettingComponent = React.createClass({
      */
     createFlowGroup(){
         let _this = this;
+        if(isEmpty(_this.state.flowGroupName)){
+            message.error("分组名称不允许为空，请重新输入，谢谢！");
+            return;
+        }
         var param = {
-            "method": 'createFlowGroup',
-            "operateUserId": _this.state.loginUser.colUid,
-            "flowGroupName":_this.state.flowGroupName
+            "method": 'saveFlowGroup',
+            "groupName":_this.state.flowGroupName,
+            "createrId": _this.state.loginUser.colUid,
+            "schoolId":this.state.loginUser.schoolId
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if(ret.msg=="调用成功" && ret.success==true){
                     message.success("分组创建成功");
-                    this.getFlowGroup();
+                    _this.getFlowGroup();
                 }
                 _this.createFlowGroupModalHandleCancel();
             },
@@ -256,17 +275,22 @@ const FlowSettingComponent = React.createClass({
      */
     editFlowGroup(){
         let _this = this;
+        if(isEmpty(_this.state.flowGroupName)){
+            message.error("分组名称不允许为空，请重新输入，谢谢！");
+            return;
+        }
         var param = {
-            "method": 'editFlowGroup',
-            "operateUserId": _this.state.loginUser.colUid,
-            "flowGroupId": _this.state.editFlowGroupId,
-            "flowGroupName":_this.state.flowGroupName
+            "method": 'updateFlowGroup',
+            "createrId": _this.state.loginUser.colUid,
+            "schoolId":_this.state.loginUser.schoolId,
+            "groupId": _this.state.editFlowGroupId,
+            "groupName":_this.state.flowGroupName
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if(ret.msg=="调用成功" && ret.success==true){
                     message.success("分组编辑成功");
-                    this.getFlowGroup();
+                    _this.getFlowGroup();
                 }
                 _this.editFlowGroupModalHandleCancel();
             },
@@ -276,6 +300,28 @@ const FlowSettingComponent = React.createClass({
         });
     },
 
+    /**
+     * 删除流程分组
+     */
+    deleteFlowGroup(){
+        let _this = this;
+        var param = {
+            "method": 'updateFlowGroup',
+            "groupId": _this.state.editFlowGroupId
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if(ret.msg=="调用成功" && ret.success==true){
+                    message.success("分组删除成功");
+                    _this.getFlowGroup();
+                }
+                _this.editFlowGroupModalHandleCancel();
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
     /**
      * 新建流程分组时,分组名称改变的响应函数
      */
@@ -418,6 +464,14 @@ const FlowSettingComponent = React.createClass({
                        maskClosable={false} //设置不允许点击蒙层关闭
                        width="440px"
                        className="schoolgroup_modal"
+                       footer={[
+                           <Button type="primary" htmlType="submit" className="login-form-button"
+                                   onClick={this.editFlowGroup}>确定</Button>,
+                           <Button type="primary" htmlType="submit" className="login-form-button"
+                                   onClick={this.deleteFlowGroup}>删除</Button>,
+                           <Button type="ghost" htmlType="reset" className="login-form-button"
+                                   onClick={this.editFlowGroupModalHandleCancel}>取消</Button>
+                       ]}
                 >
                     <div className="modal_register_main">
                     <Row className="ant_row ant_row_29">

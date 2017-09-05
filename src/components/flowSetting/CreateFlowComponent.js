@@ -62,13 +62,18 @@ const CreateFlowComponent = React.createClass({
         return canBeNext;
     },
 
+    getFormDefindData(){
+        return this.state.formData;
+    },
+
     /**
      * 实现流程的部署
      * 流程部署的数据分别来源于两个面板，需要将两个面板中的数据构建成json完成数据保存
      */
     getProcessDefinitionJson(){
         var processDefinitionJson = this.refs.flowBuilderComponent.getProcessDefinitionBaseJson();
-        processDefinitionJson.formData = this.state.formData;
+        processDefinitionJson.flowCreator=this.state.loginUser;
+        //processDefinitionJson.flowFormDefineList = this.state.formData;
         return processDefinitionJson;
     },
 
