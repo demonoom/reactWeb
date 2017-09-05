@@ -95,7 +95,7 @@ const FlowBuilderComponent = React.createClass({
         var approvalJson = this.refs.approvalComponent.getApprovalInfoByJson();
         console.log(approvalJson);
         var approvalType = approvalJson.approvalType;
-        var approvalTypeStr = approvalType==1?"单个用户":"角色";
+        var approvalTypeStr = approvalType==0?"单个用户":"角色";
         var approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalJson.approval)}>{approvalJson.approval}</div>;
         var stepObj = <Step id={approvalJson.approval} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
         stepObjArray.push(stepObj);
@@ -214,6 +214,21 @@ const FlowBuilderComponent = React.createClass({
      */
     getProcessDefinitionBaseJson(){
         var processDefinitionBaseJson={};
+        var copyPersonIdArray = this.state.copyPersonIdArray;
+        var approvalJsonArray = this.state.approvalJsonArray;
+        var copyPersonList = [];
+        var flowApprovalUsers=[];
+        for(var i=0;i<copyPersonIdArray.length;i++){
+            var userJson = {"colUid":copyPersonIdArray[i]}
+            copyPersonList.push(userJson);
+        }
+        for(var i=0;i<approvalJsonArray.length;i++){
+            var approvalJson = approvalJsonArray[i];
+            var approvalType = approvalJson.approvalType;
+            var approval = approvalJson.approval;
+            var userJson = {"userId":approval,"approvalType":approvalType}
+            flowApprovalUsers.push(userJson);
+        }
         //流程名称
         processDefinitionBaseJson.procDefName = this.state.flowName;
         //流程说明
@@ -223,9 +238,9 @@ const FlowBuilderComponent = React.createClass({
         //抄送人消息推送方式
         processDefinitionBaseJson.messageOfCopyPersonSendType = this.state.messageOfCopyPersonSendType;
         //消息抄送人列表
-        processDefinitionBaseJson.copyPersonList = this.state.copyPersonIdArray;
+        processDefinitionBaseJson.copyPersonList = copyPersonList;
         //审批人列表
-        processDefinitionBaseJson.approvalIdJson = this.state.approvalJsonArray;
+        processDefinitionBaseJson.flowApprovalUsers = flowApprovalUsers;
         return processDefinitionBaseJson;
     },
 
