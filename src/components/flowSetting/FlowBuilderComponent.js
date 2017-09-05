@@ -296,30 +296,30 @@ const FlowBuilderComponent = React.createClass({
      */
     render() {
         return (
-            <div>
+            <div className="modal_register_main">
                 <Row>
-                    <Col span={4}>审批名称</Col>
-                    <Col span={10}>
+                    <Col span={6}  className="framework_m_l">审批名称：</Col>
+                    <Col span={16}  className="framework_m_r">
                         <Input value={this.state.flowName} onChange={this.flowNameChange}/>
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={4}>审批说明</Col>
-                    <Col span={10}>
+                    <Col span={6} className="framework_m_l">审批说明：</Col>
+                    <Col span={16} className="framework_m_r">
                         <Input value={this.state.flowDescription} onChange={this.flowDescriptionChange}/>
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={4}>选择分组</Col>
-                    <Col span={20}>
+                    <Col span={6} className="framework_m_l">选择分组：</Col>
+                    <Col span={16} className="framework_m_r">
                         <Select defaultValue={this.state.approvalGroup} value={this.state.approvalGroup} style={{ width: 240 }} onChange={this.approvalGroupChange}>
                             {this.state.flowGroupArray}
                         </Select>
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={4}>审批人设置</Col>
-                    <Col span={20}>
+                    <Col span={6} className="framework_m_l">审批人设置：</Col>
+                    <Col span={16} className="framework_m_r">
                         <Steps>
                             {/*<Step status="process" title="项目组长审批" icon={<Icon type="user" />} />*/}
                             {this.state.stepObjArray}
@@ -328,15 +328,15 @@ const FlowBuilderComponent = React.createClass({
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={4}>抄送人设置</Col>
-                    <Col span={20}>
+                    <Col span={6} className="framework_m_l">抄送人设置：</Col>
+                    <Col span={16} className="framework_m_r">
                         {this.state.copyPersonTagArray}
                         <Button icon="plus-circle" onClick={this.addCopyPerson}></Button>
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={4}>自动通知抄送人</Col>
-                    <Col span={20}>
+                    <Col span={6} className="framework_m_l">自动通知抄送人：</Col>
+                    <Col span={16} className="framework_m_r">
                         <Select defaultValue="-1" style={{ width: 240 }} value={this.state.messageOfCopyPersonSendType} onChange={this.copySendHandleChange}>
                             <Option value="-1">请选择</Option>
                             <Option value="0">仅全部同意后通知</Option>
@@ -350,7 +350,8 @@ const FlowBuilderComponent = React.createClass({
                        onOk={this.addApprovalToStep}
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
-                       width="700px"
+                       width="440px"
+                       className="schoolgroup_modal"
                 >
                     <div className="space">
                         <ApprovalComponent ref="approvalComponent"></ApprovalComponent>
@@ -362,7 +363,7 @@ const FlowBuilderComponent = React.createClass({
                        onOk={this.addCopyPersonToTagArray}
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
-                       width="700px"
+                       width="616px"
                 >
                     <div className="space">
                         <CopyPersonSettingComponent ref="copyPersonSettingComponent" copyPersonIdArray={this.state.copyPersonIdArray}></CopyPersonSettingComponent>

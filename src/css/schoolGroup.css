@@ -178,7 +178,7 @@
     max-height:400px;
     overflow-y: auto;
 }
-.schoolgroup_modal .modal_register_main .ant-row{
+.schoolgroup_modal .modal_register_main .ant-row, .schoolgroup_modal .modal_register_main .ant-radio-group label{
     margin-top: 15px;
 }
 .schoolgroup_modal_col6{
@@ -512,7 +512,8 @@
     font-size: 14px;
 }
 .new_process .form_set{
-    background: url("http://formbuilder.readthedocs.io/en/latest/img/noise.png");
+    background-color: #f2f2f2;
+    background-image: url("http://formbuilder.readthedocs.io/en/latest/img/noise.png");
     padding: 20px;
     max-height: 430px;
     overflow-y: auto;
@@ -523,7 +524,6 @@
 .form-wrap.form-builder input{
     line-height: 34px;
     border-radius: 4px;
-    text-indent: 8px;
     background-color: white;
     border: 1px solid #ccc;
 }
@@ -553,6 +553,12 @@
     font-size: 24px;
     color: #333;
 }
-.form-wrap.form-builder .fb-checkbox-group .checkbox input{
+.form-wrap.form-builder .fb-checkbox-group .checkbox input, .form-wrap.form-builder .fb-radio-group .radio input{
     width: 19px;
+}
+.form-wrap.form-builder .frmb .form-field .form-group input, .form-wrap.form-builder .frmb .prev-holder textarea{
+    padding:6px 12px;
+}
+.form-wrap.form-builder .frmb-control li{
+    color: #333;
 }

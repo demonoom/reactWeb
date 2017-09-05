@@ -125,7 +125,7 @@ const ApprovalComponent = React.createClass({
             lineHeight: '30px',
         };
         return (
-            <div>
+            <div className="modal_register_main">
                 <RadioGroup onChange={this.approvalTypeOnChange} value={this.state.approvalTypeValue}>
                     <Radio style={radioStyle} value={0}>
                         单个成员(指定某人)
@@ -137,6 +137,7 @@ const ApprovalComponent = React.createClass({
                                 optionFilterProp="children"
                                 onChange={this.userSelectHandleChange}
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                className="framework_m_r"
                             >
                                 {/*<Option value="23836">Jack</Option>
                                 <Option value="24491">小虎(te24491)</Option>
