@@ -4,6 +4,7 @@ import { Tabs, Breadcrumb, Icon,Card,Button,Row,Col,Steps,
 import {isEmpty} from '../../utils/utils';
 import ApprovalComponent from './ApprovalComponent';
 import CopyPersonSettingComponent from './CopyPersonSettingComponent';
+import {doWebService} from '../../WebServiceHelper';
 const Step = Steps.Step;
 const Option = Select.Option;
 
@@ -26,17 +27,62 @@ const FlowBuilderComponent = React.createClass({
             flowName:'',    //流程名称
             flowDescription:'', //流程说明
             approvalGroup:'-1',   //选中的流程分组
-            messageOfCopyPersonSendType:-1, //流程抄送人消息发送方式
+            messageOfCopyPersonSendType:"-1", //流程抄送人消息发送方式
         };
     },
 
     componentDidMount(){
+        this.getFlowGroup();
     },
 
     componentWillReceiveProps(nextProps){
     },
 
     componentDidUpdate(){
+    },
+
+    /**
+     * 获取流程分组及其分组下的流程列表
+     */
+    getFlowGroup(){
+        let _this = this;
+        var param = {
+            "method": 'getAllFlowGroupNoProcessDefinition',
+            "schoolId": this.state.loginUser.schoolId
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                console.log(ret.msg+"==="+ret.response);
+                if(ret.msg=="调用成功" &&　ret.success == true){
+                    _this.buildFlowGroupOptions(ret.response);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+
+    },
+
+    /**
+     * 创建流程分组的下拉列表选项
+     */
+    buildFlowGroupOptions(response){
+        var _this = this;
+        var flowGroupArray = [];
+        var i=0;
+        var defaultSelectedGroupId = -1;
+        response.forEach(function (flowGroup) {
+            var flowGroupId = flowGroup.groupId;
+            var flowGroupName = flowGroup.groupName;
+            var optionObj = <Option value={flowGroupId}>{flowGroupName}</Option>
+            flowGroupArray.push(optionObj);
+            if(i==0){
+                defaultSelectedGroupId = flowGroupId;
+            }
+            i++;
+        });
+        _this.setState({flowGroupArray,"approvalGroup":defaultSelectedGroupId});
     },
 
     /**
@@ -96,7 +142,7 @@ const FlowBuilderComponent = React.createClass({
         console.log(approvalJson);
         var approvalType = approvalJson.approvalType;
         var approvalTypeStr = approvalType==0?"单个用户":"角色";
-        var approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalJson.approval)}>{approvalJson.approval}</div>;
+        var approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalJson.approval)}>{approvalJson.approval.userName}</div>;
         var stepObj = <Step id={approvalJson.approval} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
         stepObjArray.push(stepObj);
         approvalJsonArray.push(approvalJson);
@@ -226,7 +272,7 @@ const FlowBuilderComponent = React.createClass({
             var approvalJson = approvalJsonArray[i];
             var approvalType = approvalJson.approvalType;
             var approval = approvalJson.approval;
-            var userJson = {"userId":approval,"approvalType":approvalType}
+            var userJson = {"approvalUser":approval,"approvalType":approvalType}
             flowApprovalUsers.push(userJson);
         }
         //流程名称
@@ -267,11 +313,7 @@ const FlowBuilderComponent = React.createClass({
                     <Col span={4}>选择分组</Col>
                     <Col span={20}>
                         <Select defaultValue={this.state.approvalGroup} value={this.state.approvalGroup} style={{ width: 240 }} onChange={this.approvalGroupChange}>
-                            <Option value="-1">请选择分组</Option>
-                            <Option value="1">出勤休假</Option>
-                            <Option value="2">外出</Option>
-                            <Option value="3">费用报销</Option>
-                            <Option value="4">其他</Option>
+                            {this.state.flowGroupArray}
                         </Select>
                     </Col>
                 </Row>
