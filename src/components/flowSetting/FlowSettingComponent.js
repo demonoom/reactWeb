@@ -384,6 +384,7 @@ const FlowSettingComponent = React.createClass({
                        maskClosable={false} //设置不允许点击蒙层关闭
                        footer={saveButtons}
                        width="700px"
+                       className="new_process"
                 >
                     <div className="space">
                         <CreateFlowComponent ref="createFlowComponent"></CreateFlowComponent>

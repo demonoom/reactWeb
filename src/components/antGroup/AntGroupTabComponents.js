@@ -223,6 +223,7 @@ const AntGroupTabComponents = React.createClass({
                             sessionStorage.removeItem("loginUser");
                             //sessionStorage.removeItem("machineId");
                             location.hash="Login";
+                            window.ms = null;
                             LP.delAll();
                         },
                     });

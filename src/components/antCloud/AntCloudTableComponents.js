@@ -564,8 +564,6 @@ const AntCloudTableComponents = React.createClass({
         if(type == 'mp4') {
             var url = path;
             this.view(event,url,name);
-        }else if(type == 'mp3'){
-            console.log('mp3');
         }else if(type == 'jpg'){
             var url = path;
             this.view(event,url,name);
@@ -576,8 +574,6 @@ const AntCloudTableComponents = React.createClass({
         else if(type == 'png'){
             var url = path;
             this.view(event,url,name);
-        }else if(type == 'apk') {
-            console.log('apk');
         }else {
             var url = "http://www.maaee.com/Excoord_PhoneService/cloudFile/cloudFileShow/" + id + "/" + createUid;
             this.view(event,url,name);

@@ -502,3 +502,12 @@
 .ant_row_29{
     height: 29px;
 }
+
+.new_process .modal_steps{
+    width:100%;
+    padding:0 20px;
+}
+.new_process .ant-modal-body {
+    padding: 16px 20px;
+    font-size: 14px;
+}

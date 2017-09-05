@@ -45,7 +45,7 @@
             left: Math.round(perLeft),
             top: Math.round(perTop)
         }));
-        nodeEl.css({width: '100%', height: '100%', left: 0, top: 0, position: 'fixed'});
+        nodeEl.css({width: '100%', height: '100%', left: 0, top: '10%', position: 'fixed'});
         //
         let el = nodeEl.find('.zoom');
         el.off();
