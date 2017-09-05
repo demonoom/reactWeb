@@ -68,13 +68,14 @@ const FlowSettingComponent = React.createClass({
             processDefinitionList.forEach(function(processDefinition){
                 var procDefId = processDefinition.procDefId;
                 var procName = processDefinition.procDefKey;
-                var flowObj = <div style={{display:'inline-flex'}}>
+                var flowObj = <div className="process_flex">
                     <div>
-                        <Icon type="logout" /><span>{procName}</span>
+                        <img className="process_icon" src="http://60.205.86.217/upload2/common/img/admin_1.png" />
+                        <span className="name_max4 dold_text">{procName}</span>
                     </div>
-                    <div>
-                        <a onClick={_this.stopFlow.bind(_this,procDefId)}>停用</a>  <p></p>
-                        <a onClick={_this.removeFlow.bind(_this,procDefId)}>移动到</a>
+                    <div className="process_r">
+                        <a onClick={_this.stopFlow.bind(_this,procDefId)}>停用</a>
+                        <a className="schoolgroup_btn_left" onClick={_this.removeFlow.bind(_this,procDefId)}>移动到</a>
                     </div>
                 </div>;
                 flowObjArray.push(flowObj);
@@ -86,8 +87,8 @@ const FlowSettingComponent = React.createClass({
                 flowCount = processDefinitionList.length;
             }
             var headerDiv=<div>
-                <span>{flowGroupName}({flowCount})</span>
-                <Button onClick={_this.showEditGroupModal.bind(_this,Event,flowGroupId,flowGroupName)}>编辑</Button>
+                <span>{flowGroupName}</span><span className="process_number">({flowCount})</span>
+                <Button className="process_title_btn" onClick={_this.showEditGroupModal.bind(_this,Event,flowGroupId,flowGroupName)}>编辑</Button>
             </div>;
             var collapsePanel = <Panel header={headerDiv} key={flowGroupId}>
                 {flowObjArray}
@@ -365,12 +366,13 @@ const FlowSettingComponent = React.createClass({
 
         return (
             <div>
-                <div>
-                    <Button onClick={this.createNewFlowGroup}>新建分组</Button>
-                    <Button onClick={this.createNewFlow}>创建新审批</Button>
+                <div className="schoolgroup_title">
+                    <span className="name_max4 dold_text process_font_h">内部审批流程</span>
+                    <span className="schoolgroup_btn_left"><Button onClick={this.createNewFlowGroup}>新建分组</Button></span>
+                    <span className="topics_dianzan"><Button className="schoolgroup_btn_blue_solid" onClick={this.createNewFlow}>创建新审批</Button></span>
                 </div>
 
-                <div>
+                <div className="process_wrap">
                     <Collapse bordered={false} defaultActiveKey={this.state.openCollapseKey} activeKey={this.state.openCollapseKey}>
                         {this.state.collapsePanelArray}
                     </Collapse>
@@ -393,16 +395,19 @@ const FlowSettingComponent = React.createClass({
                        onOk={this.createFlowGroup}
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
-                       width="400px"
+                       width="440px"
+                       className="schoolgroup_modal"
                 >
-                    <Row>
-                        <Col span={4}>
+                    <div className="modal_register_main">
+                    <Row className="ant_row ant_row_29">
+                        <Col span={6} className="framework_m_l">
                             分组名称:
                         </Col>
-                        <Col span={20}>
+                        <Col span={16} className="framework_m_r">
                             <Input value={this.state.flowGroupName} onChange={this.flowGroupNameChange}/>
                         </Col>
                     </Row>
+                    </div>
                 </Modal>
 
                 <Modal title="编辑分组" visible={this.state.editFlowGroupModalVisible}
@@ -410,16 +415,19 @@ const FlowSettingComponent = React.createClass({
                        onOk={this.editFlowGroup}
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
-                       width="400px"
+                       width="440px"
+                       className="schoolgroup_modal"
                 >
-                    <Row>
-                        <Col span={4}>
-                            分组名称:
+                    <div className="modal_register_main">
+                    <Row className="ant_row ant_row_29">
+                        <Col span={6} className="framework_m_l">
+                            分组名称：
                         </Col>
-                        <Col span={20}>
+                        <Col span={16} className="framework_m_r">
                             <Input value={this.state.flowGroupName} onChange={this.flowGroupNameChange}/>
                         </Col>
                     </Row>
+                    </div>
                 </Modal>
 
                 <Modal title="移动到" visible={this.state.moveFlowModalVisible}
@@ -427,13 +435,15 @@ const FlowSettingComponent = React.createClass({
                        onOk={this.moveFlowToGroup}
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
-                       width="400px"
+                       width="440px"
+                       className="schoolgroup_modal"
                 >
-                    <Row>
-                        <Col span={4}>
-                            分组名称:
+                    <div className="modal_register_main">
+                    <Row className="ant_row ant_row_29">
+                        <Col span={6} className="framework_m_l">
+                            分组名称：
                         </Col>
-                        <Col span={20}>
+                        <Col span={16} className="framework_m_r">
                             <Select defaultValue={this.state.flowGroupId} value={this.state.flowGroupId} style={{ width: 240 }} onChange={this.flowGroupChange}>
                                 <Option value="-1">请选择分组</Option>
                                 <Option value="1">出勤休假</Option>
@@ -443,6 +453,7 @@ const FlowSettingComponent = React.createClass({
                             </Select>
                         </Col>
                     </Row>
+                    </div>
                 </Modal>
 
             </div>
