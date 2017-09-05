@@ -76,7 +76,7 @@ const FormBuilderComponent = React.createClass({
                     locale: 'zh-CN'
                 },
                 //controlPosition: 'left', //设置可拖拽元素的显示位置
-                disableFields: ['autocomplete','hidden','paragraph','number'],  //设置不显示给用户的表单元素
+                disableFields: ['autocomplete','hidden','paragraph','number','button'],  //设置不显示给用户的表单元素
                 disabledAttrs: [
                     'className','placeholder','access','name','required',
                     'max','maxlength','min','inline','other','toggle','description',
