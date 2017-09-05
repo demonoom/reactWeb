@@ -19,7 +19,7 @@ const OpenNewPage = React.createClass({
         return (
             <div className="noom">
                 <h3 className="public—til—blue"><div className="ant-tabs-right"><Button onClick={this.goBack} ><Icon type="left" /></Button></div>学情分析</h3>
-                <iframe ref="study" src='http://www.maaee.com:80/Excoord_PhoneService/masterAnalysis/getHistoryClass/9/-1/-1/-1/A"' className="analyze_iframe"/>
+                <iframe ref="study" src='http://www.maaee.com:80/Excoord_PhoneService/masterAnalysis/getHistoryClass/9/-1/-1/-1/A"' className="analyze_iframe_2"/>
             </div>
         );
     },
