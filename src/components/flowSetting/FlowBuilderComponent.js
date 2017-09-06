@@ -32,6 +32,11 @@ const FlowBuilderComponent = React.createClass({
     },
 
     componentDidMount(){
+        //初始化页面中的审批人和抄送人数据
+        approvalJsonArray.splice(0);
+        copyPersonIdArray.splice(0);
+        stepObjArray.splice(0);
+        copyPersonTagArray.splice(0);
         this.getFlowGroup();
     },
 
@@ -116,6 +121,10 @@ const FlowBuilderComponent = React.createClass({
      * 添加流程步骤
      */
     addFlowStep(){
+        if(this.state.stepObjArray.length>=6){
+            message.warn("审批节点请勿超过6人，谢谢！");
+            return;
+        }
         this.setState({approvalModalVisible:true});
     },
 
@@ -278,7 +287,7 @@ const FlowBuilderComponent = React.createClass({
         //流程名称
         processDefinitionBaseJson.procDefName = this.state.flowName;
         //流程说明
-        processDefinitionBaseJson.flowDescription=this.state.flowDescription;
+        processDefinitionBaseJson.procDefDescribe =this.state.flowDescription;
         //流程所在分组
         processDefinitionBaseJson.flowGroupId = this.state.approvalGroup;
         //抄送人消息推送方式
