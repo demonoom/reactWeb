@@ -178,7 +178,7 @@
     max-height:400px;
     overflow-y: auto;
 }
-.schoolgroup_modal .modal_register_main .ant-row{
+.schoolgroup_modal .modal_register_main .ant-row, .schoolgroup_modal .modal_register_main .ant-radio-group label{
     margin-top: 15px;
 }
 .schoolgroup_modal_col6{
@@ -441,4 +441,140 @@
 }
 .noom{
     height:100%
+}
+.process_font_h{
+    line-height: 31px;
+}
+.process_wrap{
+    padding:0 20px;
+    color: #424242;
+}
+.process_icon{
+    width: 50px;
+    height: 50px;
+    float: left;
+    margin-right: 12px;
+}
+.process_flex{
+    line-height: 50px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 0;
+}
+.process_wrap .ant-collapse-content > .ant-collapse-content-box{
+    padding: 0 !important;
+    color: #424242;
+}
+.process_wrap .process_flex:last-child{
+    border-bottom: none;
+}
+.flow-line {
+    width: 1px;
+    height: 60px;
+    background-color: #e0e0e0;
+    position: absolute;
+    right: 150px;
+    top: 10px;
+}
+.process_r{
+    line-height: 50px;
+    height: 50px;
+    border-left: #e0e0e0 1px solid;
+    padding-left: 70px;
+}
+.process_title_btn{
+    position: absolute;
+    right: 10px;
+    top: 6px;
+}
+.process_wrap .ant-collapse > .ant-collapse-item{
+    border-top: none;
+}
+.process_wrap .ant-collapse-header{
+    color: #333 !important
+}
+.process_number{
+    color: #666;
+    margin-left: 8px;
+    font-size: 14px;
+}
+.ant_row_29{
+    height: 29px;
+}
+
+.new_process .modal_steps{
+    width:100%;
+    padding:0 20px;
+}
+.new_process .ant-modal-body {
+    padding: 16px 20px;
+    font-size: 14px;
+}
+.new_process .form_set{
+    background-color: #f2f2f2;
+    background-image: url("http://formbuilder.readthedocs.io/en/latest/img/noise.png");
+    padding: 20px;
+    max-height: 430px;
+    overflow-y: auto;
+}
+.form-wrap.form-builder .frmb li{
+    transition:none !important;
+}
+.form-wrap.form-builder input{
+    line-height: 34px;
+    border-radius: 4px;
+    background-color: white;
+    border: 1px solid #ccc;
+}
+.form-wrap.form-builder input, .form-wrap.form-builder .frmb .prev-holder textarea{
+    width: 100%;
+}
+.form-wrap.form-builder .form-control {
+    display: block;
+    width: 100%;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background: #fff;
+}
+.form-wrap.form-builder .frmb .field-label, .form-wrap.form-builder .frmb .legend {
+    color: #666;
+    margin-bottom: 5px;
+    line-height: 27px;
+    font-size: 14px;
+    font-weight: 400;
+    height: 27px;
+    display: inline-block;
+}
+.form-wrap.form-builder .frmb .form-field .form-group header{
+    font-size: 24px;
+    color: #333;
+}
+.form-wrap.form-builder .fb-checkbox-group .checkbox input, .form-wrap.form-builder .fb-radio-group .radio input{
+    width: 19px;
+}
+.form-wrap.form-builder .frmb .form-field .form-group input, .form-wrap.form-builder .frmb .prev-holder textarea{
+    padding:6px 12px;
+}
+.form-wrap.form-builder .frmb-control li{
+    color: #333;
+}
+.approval_steps{
+    width: 100%;
+}
+.approval_steps .ant-steps-item {
+    width: 120px !important;
+    float: left !important;
+    margin-right: 0 !important;
+    margin-bottom: 15px;
+
+}
+.approval_steps .ant-steps-title div{
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    max-width: 80px !important;
 }
