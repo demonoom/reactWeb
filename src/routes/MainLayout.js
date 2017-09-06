@@ -1,11 +1,11 @@
-import React from  'react';
+import React from 'react';
 import {Menu, Icon, Row, Col} from 'antd';
 import MainTabComponents from '../components/MainTabComponents';
 import HeaderComponents from '../components/HeaderComponents';
 import UserFace from '../components/UserCardModalComponents';
-import FloatButton  from '../components/FloatButton';
+import FloatButton from '../components/FloatButton';
 import PersonCenterMenu from '../components/layOut/PersonCenterMenu';
-import PersonCenter  from '../components/PersonCenter';
+import PersonCenter from '../components/PersonCenter';
 import moment from 'moment';
 import AntNestTabComponents from '../components/antNest/AntNestTabComponents';
 import DingMessageTabComponents from '../components/dingMessage/DingMessageTabComponents';
@@ -18,7 +18,7 @@ import PersonCenterComponents from '../components/antGroup/PersonCenterComponent
 import AntCloudMenu from '../components/layOut/AntCloudMenu';
 import AntCloudTableComponents from '../components/antCloud/AntCloudTableComponents';
 import {LocaleProvider} from 'antd';
-import TeachSpace  from '../components/TeachSpaces';
+import TeachSpace from '../components/TeachSpaces';
 import TeachSpaceGhostMenu from '../components/TeachSpacesGhostMenu';
 import {MsgConnection} from '../utils/msg_websocket_connection';
 import AntCloudClassRoomMenu from '../components/layOut/AntCloudClassRoomMenu';
@@ -30,6 +30,7 @@ import SystemSettingComponent from '../components/SystemSetting/SystemSettingCom
 import {isEmpty} from '../utils/utils';
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
+
 moment.locale('zh-cn');
 import {createStore} from 'redux';
 
@@ -46,18 +47,18 @@ const MainLayout = React.createClass({
         return {
             collapse: true,
             ghostMenuVisible: true,
-            systemSettingGhostMenuVisible:true,
+            systemSettingGhostMenuVisible: true,
             activeMiddleMenu: '',
-            selectedKeys:'',
+            selectedKeys: '',
             personCenterParams: '',
             currentKey: 'message',
             openKeysStr: '',
             locale: 'zh-cn',
             resouceType: '',
             ifr: {},
-            cloudRoomMenuItem:'mulitiClass',
-            antCloudKey:'fileManager',
-            activeSystemSettingMiddleMenu:'',
+            cloudRoomMenuItem: 'mulitiClass',
+            antCloudKey: 'fileManager',
+            activeSystemSettingMiddleMenu: '',
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
     },
@@ -82,9 +83,10 @@ const MainLayout = React.createClass({
         }
 
         if ('systemSetting' == e.key) {
-            // if(vipKey) {
+            // if (this.state.vipKey) {
             //     return;
             // }
+            // console.log(this.state.vipKey);
             if (e.key == this.state.currentKey) {
                 this.changeSystemGhostMenuVisible();
             } else {
@@ -104,7 +106,7 @@ const MainLayout = React.createClass({
     },
 
 
-     // 不用了
+    // 不用了
     //获取备课计划下的课件资源
     getTeachPlans: function (optContent, breadCrumbArray) {
         //点击的菜单标识：teachScheduleId
@@ -135,7 +137,7 @@ const MainLayout = React.createClass({
         }
     },
 
-    componentWillMount(){
+    componentWillMount() {
         var userIdent = sessionStorage.getItem("ident");
         if (userIdent == null || userIdent == "") {
             location.hash = "login";
@@ -154,12 +156,12 @@ const MainLayout = React.createClass({
                 "version": 0.1
             }
         };
-        ms =  new MsgConnection();
+        ms = new MsgConnection();
         ms.connect(pro);
     },
     // 不用了
     // 呼叫本组件中的实例任何方法 dapeng
-    componentDidUpdate(){
+    componentDidUpdate() {
         if (this.autoeventparam) {
             // ['antGroupTabComponents', 'param', 'antGroupTabComponents'],
             let param = this.autoeventparam.linkpart.shift();
@@ -189,18 +191,18 @@ const MainLayout = React.createClass({
         this.refs.studyEvaluateTabComponents.getStudyEvaluate();
     },
 
-    callBackKnowledgeMenuBuildBreadCrume(menuText, menuLevel, menuId, openKeysStr){
+    callBackKnowledgeMenuBuildBreadCrume(menuText, menuLevel, menuId, openKeysStr) {
         return this.refs.knowledgeMenuComponents.bulidBreadCrumbArray(menuText, menuLevel, menuId, openKeysStr);
 
     },
 
-    getTeacherResource(params){
+    getTeacherResource(params) {
 
         this.setState({resouceType: '', currentKey: "personCenter", personCenterParams: params});
     },
 
 
-    getAntNest(optType){
+    getAntNest(optType) {
         var pageNo;
         if ("getAllTopic" == optType) {
             this.refs.antNestTabComponents.getTopics(pageNo, 0);
@@ -208,7 +210,7 @@ const MainLayout = React.createClass({
             this.refs.antNestTabComponents.getTopics(pageNo, 1);
         }
     },
-    getDingMessage(optType){
+    getDingMessage(optType) {
         var pageNo = 1;
         if ("myReceive" == optType) {
             this.refs.dingMessageTabComponents.getDList(pageNo, 1);
@@ -216,28 +218,30 @@ const MainLayout = React.createClass({
             this.refs.dingMessageTabComponents.getDList(pageNo, 2);
         }
     },
-    teachSpaceTab(activeMenu, beActive){
+    teachSpaceTab(activeMenu, beActive) {
         let _this = this;
         // 2
         this.changeGhostMenuVisible({visible: false, beActive: beActive});
         this.setState({activeMiddleMenu: activeMenu});
     },
 
-    systemSettingTab(activeMenu, beActive,selectedKeys){
+    systemSettingTab(activeMenu, beActive, selectedKeys) {
         // 2
         this.changeSystemGhostMenuVisible({visible: false, beActive: beActive});
         this.setState({activeSystemSettingMiddleMenu: activeMenu});
         this.setState({selectedKeys: selectedKeys});
     },
     checkVip(a) {
-        this.setState({vipKey:a})
+        this.setState({vipKey: a});
+        console.log('啥啥啥');
+        console.log(a);
     },
 
     /**
      * 设置教学空间的Ghost Menu的显示和关闭
      * @param obj
      */
-    changeGhostMenuVisible(obj){
+    changeGhostMenuVisible(obj) {
         if (obj) {
             if (!obj.beActive) return;
             this.setState({ghostMenuVisible: obj.visible});
@@ -250,12 +254,16 @@ const MainLayout = React.createClass({
      * 设置系统设置的Ghost Menu的显示和关闭
      * @param obj
      */
-    changeSystemGhostMenuVisible(obj){
+    changeSystemGhostMenuVisible(obj) {
         if (obj) {
             if (!obj.beActive) return;
             this.setState({systemSettingGhostMenuVisible: obj.visible});
         } else {
             let visible = !this.state.systemSettingGhostMenuVisible;
+            if (this.state.vipKey) {
+                return;
+            }
+            console.log(this.state.vipKey);
             this.setState({systemSettingGhostMenuVisible: visible});
         }
     },
@@ -264,24 +272,24 @@ const MainLayout = React.createClass({
     /**
      * 获取个人中心需要的数据,老师和学生可通用,后期需要什么再添加
      */
-    getPersonalCenterData(userId){
+    getPersonalCenterData(userId) {
         this.refs.personCenterComponents.getPersonalCenterData(userId);
     },
 
-    setFirstPerson(userContactsData){
+    setFirstPerson(userContactsData) {
         var userJson = userContactsData[0];
         this.setState({"userContactsData": userContactsData});
         this.getPersonalCenterData(userJson.userObj.colUid);
     },
 
-    getGroupInfo(){
+    getGroupInfo() {
         this.refs.personCenterComponents.getUserChatGroup();
     },
     /**
      * 回调发送群组消息
      * @param groupObj
      */
-    sendGroupMessage(groupObj){
+    sendGroupMessage(groupObj) {
         var contentJson = {"content": '', "createTime": ''};
         var contentArray = [contentJson];
         var userJson = {
@@ -296,7 +304,7 @@ const MainLayout = React.createClass({
             resouceType: '',
             "groupObj": groupObj,
             "messageType": 'groupMessage',
-            "actionFrom":"personCenterGroupList",
+            "actionFrom": "personCenterGroupList",
             userJson
         });
     },
@@ -304,7 +312,7 @@ const MainLayout = React.createClass({
     /**
      * 好友对好友的消息发送
      */
-    sendMessage(userInfo){
+    sendMessage(userInfo) {
         var contentJson = {"content": '', "createTime": ''};
         var contentArray = [contentJson];
         var userJson = {
@@ -318,7 +326,7 @@ const MainLayout = React.createClass({
             resouceType: '',
             "userInfo": userInfo.user,
             "messageType": 'message',
-            "actionFrom":"personCenter",
+            "actionFrom": "personCenter",
             userJson
         });
     },
@@ -326,14 +334,14 @@ const MainLayout = React.createClass({
     /**
      * 好友对好友的消息发送
      */
-    receiveNewMessage(userJson){
+    receiveNewMessage(userJson) {
         this.setState({
             currentKey: 'message',
             resouceType: '',
             "userInfo": userJson.fromUser,
             "messageType": 'message',
-            "actionFrom":"backgroudMessage",
-            "userJson":userJson
+            "actionFrom": "backgroudMessage",
+            "userJson": userJson
         });
     },
 
@@ -342,33 +350,33 @@ const MainLayout = React.createClass({
      * 根据当前点击的消息对象不同，分别进入个人消息和群组消息界面
      * @param fromObj
      */
-    turnToMessagePage(fromObj){
+    turnToMessagePage(fromObj) {
         var timeNode = (new Date()).valueOf();
         if (fromObj.messageType == 1) {
             // 个人消息
-            this.refs.antGroupTabComponents.getPersonMessage(fromObj.fromUser,timeNode);
+            this.refs.antGroupTabComponents.getPersonMessage(fromObj.fromUser, timeNode);
         } else {
             // 群组消息
-            this.refs.antGroupTabComponents.sendGroupMessage(fromObj.toChatGroup,timeNode);
+            this.refs.antGroupTabComponents.sendGroupMessage(fromObj.toChatGroup, timeNode);
         }
 
     },
 
-    getAntCloud(optType){
-        this.setState({"antCloudKey":optType});
+    getAntCloud(optType) {
+        this.setState({"antCloudKey": optType});
     },
 
-    getSubGroup(structureId,structure){
-        this.setState({structureId,rootStructure:structure});
+    getSubGroup(structureId, structure) {
+        this.setState({structureId, rootStructure: structure});
     },
 
     /**
      * 获取云课堂的操作
      * @param menuItemKey
      */
-    getCloudClassRoom(menuItemKey){
-        console.log("menuItemKey:"+menuItemKey);
-        this.setState({"cloudRoomMenuItem":menuItemKey});
+    getCloudClassRoom(menuItemKey) {
+        console.log("menuItemKey:" + menuItemKey);
+        this.setState({"cloudRoomMenuItem": menuItemKey});
     },
 
     render() {
@@ -423,7 +431,7 @@ const MainLayout = React.createClass({
                 //教学空间
                 middleComponent =
                     <TeachSpaceGhostMenu visible={this.state.ghostMenuVisible}
-                                         toggleGhostMenu={ this.changeGhostMenuVisible }
+                                         toggleGhostMenu={this.changeGhostMenuVisible}
                                          changeTabEvent={this.teachSpaceTab}/>;
                 tabComponent = <TeachSpace currentItem={this.state.activeMiddleMenu}/>;
                 break;
@@ -437,7 +445,7 @@ const MainLayout = React.createClass({
             case 'antCloudClassRoom':
                 //云课堂
                 middleComponent = <AntCloudClassRoomMenu callbackParent={this.getCloudClassRoom}/>;
-                tabComponent = <AntCloudClassRoomComponents  currentItem={this.state.cloudRoomMenuItem}/>;
+                tabComponent = <AntCloudClassRoomComponents currentItem={this.state.cloudRoomMenuItem}/>;
 
                 break;
 
@@ -445,11 +453,12 @@ const MainLayout = React.createClass({
                 //教学管理
                 middleComponent =
                     <SystemSettingGhostMenu visible={this.state.systemSettingGhostMenuVisible}
-                                         toggleGhostMenu={ this.changeSystemGhostMenuVisible }
-                                         changeTabEvent={this.systemSettingTab}
+                                            toggleGhostMenu={this.changeSystemGhostMenuVisible}
+                                            changeTabEvent={this.systemSettingTab}
                                             checkVip={this.checkVip}
                     />;
-                tabComponent = <SystemSettingComponent  currentItem={this.state.activeSystemSettingMiddleMenu} changeTab={this.systemSettingTab}></SystemSettingComponent>;
+                tabComponent = <SystemSettingComponent currentItem={this.state.activeSystemSettingMiddleMenu}
+                                                       changeTab={this.systemSettingTab}></SystemSettingComponent>;
 
                 break;
             case 'dingMessage':
@@ -506,7 +515,7 @@ const MainLayout = React.createClass({
                         <Menu mode="inline" theme="dark"
                               defaultSelectedKeys={[this.state.currentKey]}
                               selectedKeys={[this.state.currentKey]}
-                              // onClick={this.toolbarClick.bind(this,event,this.state.vipKey)}>
+                            // onClick={this.toolbarClick.bind(this,event,this.state.vipKey)}>
                               onClick={this.toolbarClick}>
                             <Menu.Item key="message" className="padding_menu">
                                 <i className="icon_menu_ios icon_message"></i>
@@ -536,10 +545,10 @@ const MainLayout = React.createClass({
                                 <i className="icon_menu_ios icon_schoolGroup"></i>
                                 <div className="tan">教学管理</div>
                             </Menu.Item>
-                            <Menu.Item key="dingMessage" className="padding_menu">
-                                <i className="icon_menu_ios icon_yichao1"></i>
-                                <div className="tan">叮一下</div>
-                            </Menu.Item>
+                            {/*<Menu.Item key="dingMessage" className="padding_menu">*/}
+                                {/*<i className="icon_menu_ios icon_yichao1"></i>*/}
+                                {/*<div className="tan">叮一下</div>*/}
+                            {/*</Menu.Item>*/}
                             <FloatButton ref="floatButton" messageUtilObj={ms}/>
                         </Menu>
 

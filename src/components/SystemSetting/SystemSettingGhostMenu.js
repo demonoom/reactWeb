@@ -22,9 +22,9 @@ class SystemSettingGhostMenu extends React.Component {
     }
 
     componentDidMount() {
-        // this.getTab();
+        this.getTab();
         //测试
-        this.buildTab([]);
+        // this.buildTab([]);
     }
 
     /**
