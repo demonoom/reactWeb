@@ -73,7 +73,7 @@ const FlowSettingComponent = React.createClass({
                 }else{
                     suspendButton=<a onClick={_this.suspendOrActivationProcessDefinitionConfirm.bind(_this,procDefId,"suspend")}>停用</a>;
                 }
-                var procName = processDefinition.procDefKey;
+                var procName = processDefinition.procDefName;
                 var flowObj = <div className="process_flex">
                     <div>
                         <img className="process_icon" src="http://60.205.86.217/upload2/common/img/admin_1.png" />
