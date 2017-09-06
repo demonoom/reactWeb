@@ -27,9 +27,11 @@
 
     }
 
-
+    /*大啊是大势的*/
     littlePanle.prototype.el = {};
+    var aa = true;
     littlePanle.prototype.zoomview = function (id) {
+        // alert(1);
 
         let nodeEl = $('#' + id);
         let posRef2 = window.getComputedStyle(nodeEl[0]);
@@ -45,15 +47,22 @@
             left: Math.round(perLeft),
             top: Math.round(perTop)
         }));
-        nodeEl.css({width: '100%', height: '100%', left: 0, top: '10%', position: 'fixed'});
-        //
+        if(aa) {
+            nodeEl.css({width: '100%', height: '100%', left: 0, top: '10%', position: 'fixed'});
+            aa = false;
+        }else{
+            nodeEl.css({width: '100%', height: '100%', left: 0, top: 0, position: 'fixed'});
+            aa = true;
+        }
         let el = nodeEl.find('.zoom');
         el.off();
         el.html('&#xe60f;');
         el.on('click', this.zoomMinView.bind(this, id));
+        // el.off('click',this.zoomview.bind(this, id)).on('click', this.zoomMinView.bind(this, id));
         enterFull(nodeEl[0]);
     }
     littlePanle.prototype.zoomMinView = function (id) {
+        // alert(2);
         let nodeEl = $('#' + id);
         let perInfo = nodeEl.attr('per');
         nodeEl.removeAttr('per');

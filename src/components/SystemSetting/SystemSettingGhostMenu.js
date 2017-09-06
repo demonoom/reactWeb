@@ -40,7 +40,16 @@ class SystemSettingGhostMenu extends React.Component {
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var data = ret.response;
-                console.log(data);
+                //判断是否有管理员
+                var Array = [];
+                for(var i =0;i<data.length;i++) {
+                    Array.push(data[i].name)
+                }
+                if(Array.indexOf('管理员') == -1) {
+                    _this.checkVip(true);
+                }else {
+                    _this.checkVip(false);
+                }
                 _this.buildTab(data);
             },
             onError: function (error) {
@@ -101,6 +110,10 @@ class SystemSettingGhostMenu extends React.Component {
         if (this.state.beActive) {
             this.props.toggleGhostMenu();
         }
+    }
+
+    checkVip(a) {
+        this.props.checkVip(a);
     }
 
     // menu on

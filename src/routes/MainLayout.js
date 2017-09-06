@@ -8,10 +8,12 @@ import PersonCenterMenu from '../components/layOut/PersonCenterMenu';
 import PersonCenter  from '../components/PersonCenter';
 import moment from 'moment';
 import AntNestTabComponents from '../components/antNest/AntNestTabComponents';
+import DingMessageTabComponents from '../components/dingMessage/DingMessageTabComponents';
 import AntGroupTabComponents from '../components/antGroup/AntGroupTabComponents';
 import MessageMenu from '../components/layOut/MessageMenu';
 import AntGroupMenu from '../components/layOut/AntGroupMenu';
 import AntNestMenu from '../components/layOut/AntNestMenu';
+import DingMessageMenu from '../components/dingMessage/DingMessageMenu';
 import PersonCenterComponents from '../components/antGroup/PersonCenterComponents';
 import AntCloudMenu from '../components/layOut/AntCloudMenu';
 import AntCloudTableComponents from '../components/antCloud/AntCloudTableComponents';
@@ -80,7 +82,9 @@ const MainLayout = React.createClass({
         }
 
         if ('systemSetting' == e.key) {
-
+            // if(vipKey) {
+            //     return;
+            // }
             if (e.key == this.state.currentKey) {
                 this.changeSystemGhostMenuVisible();
             } else {
@@ -204,6 +208,14 @@ const MainLayout = React.createClass({
             this.refs.antNestTabComponents.getTopics(pageNo, 1);
         }
     },
+    getDingMessage(optType){
+        var pageNo = 1;
+        if ("myReceive" == optType) {
+            this.refs.dingMessageTabComponents.getDList(pageNo, 1);
+        } else {
+            this.refs.dingMessageTabComponents.getDList(pageNo, 2);
+        }
+    },
     teachSpaceTab(activeMenu, beActive){
         let _this = this;
         // 2
@@ -216,6 +228,9 @@ const MainLayout = React.createClass({
         this.changeSystemGhostMenuVisible({visible: false, beActive: beActive});
         this.setState({activeSystemSettingMiddleMenu: activeMenu});
         this.setState({selectedKeys: selectedKeys});
+    },
+    checkVip(a) {
+        this.setState({vipKey:a})
     },
 
     /**
@@ -432,8 +447,15 @@ const MainLayout = React.createClass({
                     <SystemSettingGhostMenu visible={this.state.systemSettingGhostMenuVisible}
                                          toggleGhostMenu={ this.changeSystemGhostMenuVisible }
                                          changeTabEvent={this.systemSettingTab}
+                                            checkVip={this.checkVip}
                     />;
                 tabComponent = <SystemSettingComponent  currentItem={this.state.activeSystemSettingMiddleMenu} changeTab={this.systemSettingTab}></SystemSettingComponent>;
+
+                break;
+            case 'dingMessage':
+                //蚁巢
+                middleComponent = <DingMessageMenu callbackParent={this.getDingMessage}/>;
+                tabComponent = <DingMessageTabComponents ref="dingMessageTabComponents"/>;
 
                 break;
         }
@@ -484,6 +506,7 @@ const MainLayout = React.createClass({
                         <Menu mode="inline" theme="dark"
                               defaultSelectedKeys={[this.state.currentKey]}
                               selectedKeys={[this.state.currentKey]}
+                              // onClick={this.toolbarClick.bind(this,event,this.state.vipKey)}>
                               onClick={this.toolbarClick}>
                             <Menu.Item key="message" className="padding_menu">
                                 <i className="icon_menu_ios icon_message"></i>
@@ -512,6 +535,10 @@ const MainLayout = React.createClass({
                             <Menu.Item key="systemSetting" className="padding_menu">
                                 <i className="icon_menu_ios icon_schoolGroup"></i>
                                 <div className="tan">教学管理</div>
+                            </Menu.Item>
+                            <Menu.Item key="dingMessage" className="padding_menu">
+                                <i className="icon_menu_ios icon_yichao1"></i>
+                                <div className="tan">叮一下</div>
                             </Menu.Item>
                             <FloatButton ref="floatButton" messageUtilObj={ms}/>
                         </Menu>

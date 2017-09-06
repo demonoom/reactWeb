@@ -81,8 +81,6 @@ class SchoolGroupMenu extends React.Component {
         var structureId = "-1";
         var operateUserId = this.state.loginUser.colUid;
         var rootStructure = this.props.rootStructure;
-        console.log('牛旭東');
-        console.log(rootStructure);
         if(isEmpty(rootStructure)==false){
             // 渲染到DOM后 调用 获取组织根节点函数
             this.listStructures(operateUserId,rootStructure);
