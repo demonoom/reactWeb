@@ -320,7 +320,7 @@ const FlowBuilderComponent = React.createClass({
                 <Row>
                     <Col span={6} className="framework_m_l">审批人设置：</Col>
                     <Col span={16} className="framework_m_r">
-                        <Steps>
+                        <Steps className="approval_steps">
                             {/*<Step status="process" title="项目组长审批" icon={<Icon type="user" />} />*/}
                             {this.state.stepObjArray}
                         </Steps>
