@@ -6443,3 +6443,6 @@ select.course_n:hover {
     float: left;
     margin-left: 120px;
 }
+.make_dingPanel {
+    height: 300px;
+}
