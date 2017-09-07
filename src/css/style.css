@@ -6534,7 +6534,7 @@ select.course_n:hover {
     text-align: left;
     width: 190px;
 }
-.ding_read_u .ding_rev:last-child > div, .ding_read_u .ding_rev:last-child .dingHead{
+.ding_read_u .ding_rev:last-child{
     margin-bottom: 0;
 }
 .ding_rev > span {
