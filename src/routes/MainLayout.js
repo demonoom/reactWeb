@@ -545,10 +545,10 @@ const MainLayout = React.createClass({
                                 <i className="icon_menu_ios icon_schoolGroup"></i>
                                 <div className="tan">教学管理</div>
                             </Menu.Item>
-                            {/*<Menu.Item key="dingMessage" className="padding_menu">*/}
-                                {/*<i className="icon_menu_ios icon_yichao1"></i>*/}
-                                {/*<div className="tan">叮一下</div>*/}
-                            {/*</Menu.Item>*/}
+                            <Menu.Item key="dingMessage" className="padding_menu">
+                                <i className="icon_menu_ios icon_yichao1"></i>
+                                <div className="tan">叮一下</div>
+                            </Menu.Item>
                             <FloatButton ref="floatButton" messageUtilObj={ms}/>
                         </Menu>
 

@@ -6323,14 +6323,16 @@ select.course_n:hover {
     padding: 6% 2%;
     position: absolute;
     bottom: 0;
-    right: -500px;
-    /*overflow: auto;*/
+    right: -800px;
+}
+
+.ding_enter {
     animation-name: moveTest;
     animation-duration: 0.5s;
     animation-timing-function: linear;
     animation-fill-mode: forwards;
     /*设置动画的播放状态  paused:暂停   running:播放*/
-    animation-play-state: paused;
+    animation-play-state: running;
 }
 
 /*创建动画*/
@@ -6340,7 +6342,25 @@ select.course_n:hover {
     }
 
     to {
-        transform: translate(-500px, 0);
+        transform: translate(-800px, 0);
+    }
+}
+
+.ding_leave {
+    animation-name: moveLeave;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+    animation-play-state: running;
+}
+
+@keyframes moveLeave {
+    from {
+        transform: translate(-800px, 0);
+    }
+
+    to {
+        transform: translate(0, 0);
     }
 }
 

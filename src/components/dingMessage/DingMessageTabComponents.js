@@ -6,8 +6,8 @@ import {getPageSize} from '../../utils/Const';
 import {getLocalTime} from '../../utils/Const';
 import {isEmpty} from '../../utils/Const';
 import {showLargeImg} from '../../utils/utils';
-import UploadImgComponents from './UploadImgComponents';
-import ConfirmModal from '../ConfirmModal';
+import MakeDingModal from './MakeDingModal';
+
 
 var ding;
 var DingArr = [];
@@ -27,7 +27,8 @@ const DingMessageTabComponents = React.createClass({
             sendPage: 1,       //在查看我发出的消息时的当前页码
             //最终页面上显示的分页器上显示的页码值（该值由type来决定，type==0时取recPage,否则取sendPage值）
             currentShowPage: 1,
-            repeatMes:'',     //回复消息的内容
+            repeatMes: '',     //回复消息的内容
+            makeDingModalIsShow: false,
         };
     },
 
@@ -184,9 +185,9 @@ const DingMessageTabComponents = React.createClass({
      * Ding消息详情进场
      */
     entMesDetil(id) {
-        this.setState({biuId:id});
+        this.setState({biuId: id});
         var _this = this;
-        this.refs.dingPanel.style.animationPlayState = "running";
+        this.refs.dingPanel.className = 'ding_panel ding_enter';
         _this.showDingList(id);
     },
     /**
@@ -260,9 +261,9 @@ const DingMessageTabComponents = React.createClass({
                 for (var i = 0; i < readPer; i++) {
                     hsecond2 += '<li>' +
                         '<img class="dingHead"' +
-                        'src='+readPerImg[i]+
+                        'src=' + readPerImg[i] +
                         '>' +
-                        '<div>'+readPerName[i]+'</div>' +
+                        '<div>' + readPerName[i] + '</div>' +
                         '</li>'
                 }
                 var hsecond3 = '</ul>' + '</li>' + '<li>' + '<ul class="dReadList dingHide">';
@@ -270,9 +271,9 @@ const DingMessageTabComponents = React.createClass({
                 for (var i = 0; i < noReadPer; i++) {
                     hsecond4 += '<li>' +
                         '<img class="dingHead"' +
-                        'src='+noReadImg[i] +
+                        'src=' + noReadImg[i] +
                         '>' +
-                        '<div>'+noReadperName[i]+'</div>' +
+                        '<div>' + noReadperName[i] + '</div>' +
                         '</li>'
                 }
                 var hsecond5 = '</ul>' + '</li>' + '</ul>';
@@ -306,22 +307,7 @@ const DingMessageTabComponents = React.createClass({
      * Ding消息详情离场
      */
     levMesDetil() {
-        var dingPanel = ding.refs.dingPanel;
-        clearInterval(timer);
-        timer = setInterval(function () {
-            // 目标位置
-            var target = 1200;
-            // 当前位置
-            var leader = dingPanel.offsetLeft;
-            // 步距
-            var step = (target - leader) / 10;
-            step = Math.ceil(step);
-            leader = leader + step;
-            dingPanel.style.left = leader + 'px';
-            if (leader == target) {
-                clearInterval(timer);
-            }
-        }, 15)
+        this.refs.dingPanel.className = 'ding_panel ding_leave';
     },
     /*点击已读*/
     read() {
@@ -350,7 +336,7 @@ const DingMessageTabComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                if(ret.msg == '调用成功') {
+                if (ret.msg == '调用成功') {
                     _this.state.repeatMes = '';
                     _this.showDingList(id);
                 }
@@ -362,14 +348,26 @@ const DingMessageTabComponents = React.createClass({
         });
     },
     /**
-     * 回复消息的相应
+     * 叮一下
+     */
+    makeDing() {
+        ding.setState({makeDingModalIsShow:true});
+    },
+    /**
+     * 叮一下取消和关闭的回调
+     */
+    closeDingModel(){
+        this.setState({makeDingModalIsShow:false});
+    },
+    /**
+     * 回复消息输入的响应
      * @param e
      */
     repMesOnChange(e) {
         var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
             target = e.target;
         }
         var repeatMes = target.value;
@@ -391,7 +389,7 @@ const DingMessageTabComponents = React.createClass({
         var optionButton;
         optionButton = <div className="public—til—blue">
             <div className="talk_ant_btn1">
-                <Button value="talk" onClick={ding.showaddTopicModal} className="antnest_talk">叮一下</Button>
+                <Button value="talk" onClick={ding.makeDing} className="antnest_talk">叮一下</Button>
             </div>
             {breadMenuTip}
         </div>;
@@ -439,10 +437,14 @@ const DingMessageTabComponents = React.createClass({
                                    value={this.state.repeatMes}
                                    onChange={this.repMesOnChange}
                             />
-                            <Button type="primary" onClick={ding.sendMes.bind(this,this.state.biuId)}>发送</Button>
+                            <Button type="primary" onClick={ding.sendMes.bind(this, this.state.biuId)}>发送</Button>
                         </div>
                     </div>
                 </div>
+                <MakeDingModal
+                    isShow={this.state.makeDingModalIsShow}
+                    closeDingModel={this.closeDingModel}
+                />
             </div>
         );
     },
