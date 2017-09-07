@@ -148,6 +148,7 @@ const FlowSettingComponent = React.createClass({
      * 保存流程到后台
      */
     saveFlow(){
+        var _this = this;
         var flowFormDefineList = this.refs.createFlowComponent.getFormDefindData();
         var processDefinitionJson = this.refs.createFlowComponent.getProcessDefinitionJson();
         //{"procDefName":"请假单","flowDescription":"it部请假单","flowGroupId":"2","messageOfCopyPersonSendType":"0","copyPersonList":["23384","23385"],"approvalIdJson":[{"approvalType":1,"approval":"23836"},{"approvalType":1,"approval":"tom"}],"formData":"[{\"type\":\"header\",\"label\":\"表头\"},{\"type\":\"text\",\"label\":\"输入框\"}]"}
@@ -163,7 +164,10 @@ const FlowSettingComponent = React.createClass({
                 console.log(ret.msg+"==="+ret.response);
                 if(ret.msg=="调用成功" &&　ret.success == true){
                     // _this.buildFlowGroupSpan(ret.response);
+
                 }
+                _this.getFlowGroup();
+                _this.createNewFlowModalHandleCancel();
             },
             onError: function (error) {
                 message.error(error);
