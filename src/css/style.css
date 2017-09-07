@@ -6520,18 +6520,18 @@ select.course_n:hover {
 .ding_rev {
     display: inline-block;
     width: 100%;
+    margin-bottom: 15px;
 }
 
 .ding_rev img {
     float: left;
     margin-right: 10px !important;
-    border-bottom: 0 !important;
+    margin-bottom: 0 !important;
 }
 
 .ding_rev > div {
     float: left;
     text-align: left;
-    margin-bottom: 10px;
     width: 190px;
 }
 .ding_read_u .ding_rev:last-child > div, .ding_read_u .ding_rev:last-child .dingHead{
