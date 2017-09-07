@@ -6317,37 +6317,22 @@ select.course_n:hover {
 }
 
 .ding_panel {
-<<<<<<< HEAD
-	width: 62%;
-	height: 100%;
-	background-color: #f2f2f2;
-	padding: 6% 2%;
-	position: absolute;
-	bottom:0;
-	right:-700px;
-	/*overflow: auto;*/
-	animation-name: moveTest;
-	animation-duration: 0.5s;
-	animation-timing-function: linear;
-	animation-fill-mode: forwards;
-	/*设置动画的播放状态  paused:暂停   running:播放*/
-	animation-play-state: paused;
-=======
-    width: 62%;
+    width: 480px;
     height: 100%;
     background-color: #f2f2f2;
-    padding: 6% 2%;
+    padding: 6% 0;
     position: absolute;
     bottom: 0;
-    right: -500px;
-    /*overflow: auto;*/
+    right: -800px;
+}
+
+.ding_enter {
     animation-name: moveTest;
     animation-duration: 0.5s;
     animation-timing-function: linear;
     animation-fill-mode: forwards;
     /*设置动画的播放状态  paused:暂停   running:播放*/
-    animation-play-state: paused;
->>>>>>> 6f43be0a08738413659cfcbe3fe8e19589a6672a
+    animation-play-state: running;
 }
 
 /*创建动画*/
@@ -6355,16 +6340,27 @@ select.course_n:hover {
     from {
         transform: translate(0, 0);
     }
-
-<<<<<<< HEAD
-	to{
-		transform: translate(-700px,0);
-	}
-=======
     to {
-        transform: translate(-500px, 0);
+        transform: translate(-800px, 0);
     }
->>>>>>> 6f43be0a08738413659cfcbe3fe8e19589a6672a
+}
+
+.ding_leave {
+    animation-name: moveLeave;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+    animation-play-state: running;
+}
+
+@keyframes moveLeave {
+    from {
+        transform: translate(-800px, 0);
+    }
+
+    to {
+        transform: translate(0, 0);
+    }
 }
 .ding_bg{
 	background: #f8fbff;
@@ -6380,10 +6376,34 @@ select.course_n:hover {
 .ding_bg .ding_bg_list:last-child{
 	margin-bottom: 0;
 }
-.ding_bg_list h5{
+.ding_bg_list h5, .ding_side_wrap p{
 	color: #424242;
 	font-size: 15px;
 	line-height: 36px;
+    margin: 6px 0;
+}
+.ding_side_wrap p{
+    margin: 0 !important;
+}
+.ding_bg_list h5 img{
+    width: 24px;
+    height: 24px;
+    float: left;
+    margin: 6px 12px 6px 0;
+    padding: 0 !important;
+}
+.ding_side{
+    font-size: 16px;
+}
+.ding_side img{
+    width: 24px;
+    height: 24px;
+    float: left;
+    margin-right: 6px;
+    padding: 0 !important;
+}
+.ding_bg_l{
+    margin-left: 36px;
 }
 .ding_bg_list img{
 	max-height: 120px;
@@ -6404,7 +6424,10 @@ select.course_n:hover {
 .ding_t_red{
 	color: #ff4158;
 }
-
+.ding_user_t{
+    line-height: 36px;
+    margin-top: 6px;
+}
 .ding_top {
     height: 6%;
     width: 96%;
@@ -6421,14 +6444,29 @@ select.course_n:hover {
     /*background-color: #fff;*/
     overflow: auto;
 }
+.ding_inner .ant-card-bordered{
+    border: none;
+}
+.ding_inner .ant-card{
+    font-size: 14px;
+    margin: 0 3% 10px 3%;
+    width: 94%;
+}
+.ding_inner .ant-card:last-child{
+    margin: 0 3% 0 3%;
+}
+.ding_inner .ant-card-body{
+    padding: 16px;
+}
 
 .ding_bottom {
     height: 7%;
-    width: 96%;
+    width: 100%;
     position: absolute;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
+    background: #E4F2FF;
 }
 
 .d_mesclose {
@@ -6438,18 +6476,22 @@ select.course_n:hover {
 }
 
 .ding_ipt {
-    width: 60%;
+    width: 85%;
+    margin: 5px 0 0 10px;
 }
-
+.ding_send{
+    margin: 2px 0 0 8px;
+}
 .ding_inner:only-child {
     width: 100%;
 }
 
 .dingHead {
-    width: 35px;
-    height: 35px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     vertical-align: middle;
+    margin-right: 12px;
 }
 
 .dingImg {
@@ -6458,6 +6500,7 @@ select.course_n:hover {
 
 .dReadList li {
     float: left;
+    margin: 0 5px;
 }
 
 .dingHide {
@@ -6466,21 +6509,61 @@ select.course_n:hover {
 
 .dReadClick span {
     cursor: pointer;
+    margin-right: 20px;
+    color: #7b7b7b;
+    font-size: 13px;
 }
-
+.dReadClick span.active {
+    cursor: pointer;
+    color:#38ADFF
+}
 .ding_rev {
     display: inline-block;
+    width: 100%;
 }
 
 .ding_rev img {
     float: left;
+    margin-right: 10px !important;
+    border-bottom: 0 !important;
 }
 
 .ding_rev > div {
     float: left;
+    text-align: left;
+    margin-bottom: 10px;
+    width: 190px;
 }
-
+.ding_read_u .ding_rev:last-child > div, .ding_read_u .ding_rev:last-child .dingHead{
+    margin-bottom: 0;
+}
 .ding_rev > span {
-    float: left;
-    margin-left: 120px;
+    float: right;
+}
+.ding_gray{
+    color: #7b7b7b;
+}
+.ding_read_u{
+    display: inline-block;
+    width: 100%;
+    margin-top: 15px;
+    font-size: 12px;
+    text-align: center;
+}
+.ding_read_u .dingHead{
+    margin-right: 0;
+    margin-bottom: 10px;
+}
+.ding_read_u .user{
+    max-width: 42px;
+}
+.ding_send_btn{
+    background: #0084ff;
+    border: 1px solid #0084ff;
+    color: #fff;;
+}
+.ding_send_btn:hover{
+    background: #0D97FF;
+    color: #fff;
+    border: 1px solid #0D97FF;
 }

@@ -6,8 +6,8 @@ import {getPageSize} from '../../utils/Const';
 import {getLocalTime} from '../../utils/Const';
 import {isEmpty} from '../../utils/Const';
 import {showLargeImg} from '../../utils/utils';
-import UploadImgComponents from './UploadImgComponents';
-import ConfirmModal from '../ConfirmModal';
+import MakeDingModal from './MakeDingModal';
+
 
 var ding;
 var DingArr = [];
@@ -27,7 +27,8 @@ const DingMessageTabComponents = React.createClass({
             sendPage: 1,       //在查看我发出的消息时的当前页码
             //最终页面上显示的分页器上显示的页码值（该值由type来决定，type==0时取recPage,否则取sendPage值）
             currentShowPage: 1,
-            repeatMes:'',     //回复消息的内容
+            repeatMes: '',     //回复消息的内容
+            makeDingModalIsShow: false,
         };
     },
 
@@ -126,20 +127,20 @@ const DingMessageTabComponents = React.createClass({
                     var sendFMine = <div className="ding_bg_list">
                         {/*<img src="1.png" alt=""/>*/}
                             <div onClick={ding.entMesDetil.bind(this, id)} style={{cursor: 'pointer'}}>
-                                <div><span className="ding_ding">叮</span><span className="ding_left_1">我发出的</span><span className="ding_left_2 ding_t_12">{createTime}</span></div>
-                                <h5>{content}</h5>
+                                <div className="ding_bg_l"><span className="ding_ding">叮</span><span className="ding_left_1">我发出的</span><span className="ding_left_2 ding_t_12">{createTime}</span></div>
+                                <h5><img src="../src/components/images/ding_icon.png" />{content}</h5>
                             </div>
                             <img src={imgSrc} style={{width: '35%'}} onClick={showLargeImg}/>
-                        <div className="ding_t_12">共{revCon}人，<span className="ding_t_red">{notRed}</span>人未读</div>
+                        <div className="ding_t_12 ding_bg_l">共{revCon}人，<span className="ding_t_red">{notRed}</span>人未读</div>
                     </div>;
                 } else {
                     var sendFMine = <div className="ding_bg_list">
                         {/*<img src="1.png" alt=""/>*/}
                             <div onClick={ding.entMesDetil.bind(this, id)} style={{cursor: 'pointer'}}>
-                                <div><span className="ding_ding">叮</span><span className="ding_left_1">我发出的</span><span className="ding_left_2 ding_t_12">{createTime}</span></div>
-                                <h5>{content}</h5>
+                                <div className="ding_bg_l"><span className="ding_ding">叮</span><span className="ding_left_1">我发出的</span><span className="ding_left_2 ding_t_12">{createTime}</span></div>
+                                <h5><img src="../src/components/images/ding_icon.png" />{content}</h5>
                             </div>
-                        <div className="ding_t_12">共{revCon}人，<span className="ding_t_red">{notRed}</span>人未读</div>
+                        <div className="ding_t_12 ding_bg_l">共{revCon}人，<span className="ding_t_red">{notRed}</span>人未读</div>
                     </div>;
                 }
                 ;
@@ -148,20 +149,20 @@ const DingMessageTabComponents = React.createClass({
                     var sendFMine = <div className="ding_bg_list">
                         {/*<img src="1.png" alt=""/>*/}
                             <div onClick={ding.entMesDetil.bind(this, id)} style={{cursor: 'pointer'}}>
-                                <div><span className="ding_ding">叮</span><span className="ding_left_1">来自{author}</span><span className="ding_left_2 ding_t_12">{createTime}</span></div>
-                                <h5>{content}</h5>
+                                <div className="ding_bg_l"><span className="ding_ding">叮</span><span className="ding_left_1">来自{author}</span><span className="ding_left_2 ding_t_12">{createTime}</span></div>
+                                <h5><img src="../src/components/images/ding_icon.png" />{content}</h5>
                             </div>
                             <img src={imgSrc} onClick={showLargeImg}/>
-                        <div className="ding_t_12">共{revCon}人，<span className="ding_t_red">{notRed}</span>人未读</div>
+                        <div className="ding_t_12 ding_bg_l">共{revCon}人，<span className="ding_t_red">{notRed}</span>人未读</div>
                     </div>;
                 } else {
                     var sendFMine = <div className="ding_bg_list">
                         {/*<img src="1.png" alt=""/>*/}
                             <div onClick={ding.entMesDetil.bind(this, id)} style={{cursor: 'pointer'}}>
-                                <div><span className="ding_ding">叮</span><span className="ding_left_1">来自{author}</span><span className="ding_left_2 ding_t_12">{createTime}</span></div>
-                                <h5>{content}</h5>
+                                <div className="ding_bg_l"><span className="ding_ding">叮</span><span className="ding_left_1">来自{author}</span><span className="ding_left_2 ding_t_12">{createTime}</span></div>
+                                <h5><img src="../src/components/images/ding_icon.png" />{content}</h5>
                             </div>
-                        <div className="ding_t_12">共{revCon}人，<span className="ding_t_red">{notRed}</span>人未读</div>
+                        <div className="ding_t_12 ding_bg_l">共{revCon}人，<span className="ding_t_red">{notRed}</span>人未读</div>
                         </div>;
                 }
                 ;
@@ -176,9 +177,9 @@ const DingMessageTabComponents = React.createClass({
      * Ding消息详情进场
      */
     entMesDetil(id) {
-        this.setState({biuId:id});
+        this.setState({biuId: id});
         var _this = this;
-        this.refs.dingPanel.style.animationPlayState = "running";
+        this.refs.dingPanel.className = 'ding_panel ding_enter';
         _this.showDingList(id);
     },
     /**
@@ -228,21 +229,21 @@ const DingMessageTabComponents = React.createClass({
                 _this.setState({noReadPer, readPer});
                 // 渲染第一个card
                 if (isEmpty(data.attachments) === false) {
-                    var hfirst = '<h5>叮</h5>' +
+                    var hfirst = '<div class="ding_side"><img src="../src/components/images/ding_icon.png" /><span class="ding_ding">叮</span></div>' +
                         '<p>' + data.content + '</p>' +
                         '<img class="dingImg" src=' + data.attachments[0].address + '>' +
-                        '<div>' +
+                        '<div class="ding_user_t">' +
                         '<img class="dingHead" src=' + data.user.avatar + '>' +
-                        '<span>' + data.user.userName + '</span>' +
-                        '<span>' + getLocalTime(data.createTime) + '</span>' +
+                        '<span class="gray_42">' + data.user.userName + '</span>' +
+                        '<span class="add_out ding_gray">' + getLocalTime(data.createTime) + '</span>' +
                         '</div>';
                 } else {
-                    var hfirst = '<h5>叮</h5>' +
+                    var hfirst = '<div class="ding_side"><img src="../src/components/images/ding_icon.png" /><span class="ding_ding">叮</span></div>' +
                         '<p>' + data.content + '</p>' +
-                        '<div>' +
+                        '<div class="ding_user_t">' +
                         '<img class="dingHead" src=' + data.user.avatar + '>' +
-                        '<span>' + data.user.userName + '</span>' +
-                        '<span>' + getLocalTime(data.createTime) + '</span>' +
+                        '<span class="gray_42">' + data.user.userName + '</span>' +
+                        '<span class="add_out ding_gray">' + getLocalTime(data.createTime) + '</span>' +
                         '</div>';
                 }
                 _this.refs.cardfir.innerHTML = hfirst;
@@ -252,9 +253,9 @@ const DingMessageTabComponents = React.createClass({
                 for (var i = 0; i < readPer; i++) {
                     hsecond2 += '<li>' +
                         '<img class="dingHead"' +
-                        'src='+readPerImg[i]+
+                        'src=' + readPerImg[i] +
                         '>' +
-                        '<div>'+readPerName[i]+'</div>' +
+                        '<div class="message_name user">' + readPerName[i] + '</div>' +
                         '</li>'
                 }
                 var hsecond3 = '</ul>' + '</li>' + '<li>' + '<ul class="dReadList dingHide">';
@@ -262,9 +263,9 @@ const DingMessageTabComponents = React.createClass({
                 for (var i = 0; i < noReadPer; i++) {
                     hsecond4 += '<li>' +
                         '<img class="dingHead"' +
-                        'src='+noReadImg[i] +
+                        'src=' + noReadImg[i] +
                         '>' +
-                        '<div>'+noReadperName[i]+'</div>' +
+                        '<div class="message_name user">' + noReadperName[i] + '</div>' +
                         '</li>'
                 }
                 var hsecond5 = '</ul>' + '</li>' + '</ul>';
@@ -272,16 +273,16 @@ const DingMessageTabComponents = React.createClass({
                 var hsecond = hsecond1 + hsecond2 + hsecond3 + hsecond4 + hsecond5;
                 _this.refs.cardsec.innerHTML = hsecond;
                 // 渲染第三个card
-                var hthirdStart = '<div>回复（' + recNum + '）</div>' + '<div>' + '<ul>';
+                var hthirdStart = '<div class="dReadClick"><span>回复（' + recNum + '）</span></div>' + '<div class="ding_read_u">' + '<ul>';
                 var hthirdMid = '';
                 for (var i = 0; i < recNum; i++) {
                     hthirdMid += '<li class="ding_rev">' +
                         '<img class="dingHead" src=' + data.comments[i].user.avatar + '>' +
                         '<div>' +
-                        '<h5>' + data.comments[i].user.userName + '</h5>' +
-                        '<p>' + data.comments[i].content + '</p>' +
+                        '<div class="message_name user">' + data.comments[i].user.userName + '</div>' +
+                        '<p class="gray_42 date_tr">' + data.comments[i].content + '</p>' +
                         '</div>' +
-                        '<span>' + getLocalTime(data.comments[i].createTime) + '</span>' +
+                        '<span class="ding_t_12 ding_gray">' + getLocalTime(data.comments[i].createTime) + '</span>' +
                         '</li>';
                 }
                 var hthirdEnd = '</ul>' + '</div>';
@@ -298,22 +299,8 @@ const DingMessageTabComponents = React.createClass({
      * Ding消息详情离场
      */
     levMesDetil() {
-        var dingPanel = ding.refs.dingPanel;
-        clearInterval(timer);
-        timer = setInterval(function () {
-            // 目标位置
-            var target = 1700;
-            // 当前位置
-            var leader = dingPanel.offsetLeft;
-            // 步距
-            var step = (target - leader) / 10;
-            step = Math.ceil(step);
-            leader = leader + step;
-            dingPanel.style.left = leader + 'px';
-            if (leader == target) {
-                clearInterval(timer);
-            }
-        }, 15)
+
+        this.refs.dingPanel.className = 'ding_panel ding_leave';
     },
     /*点击已读*/
     read() {
@@ -342,7 +329,7 @@ const DingMessageTabComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                if(ret.msg == '调用成功') {
+                if (ret.msg == '调用成功') {
                     _this.state.repeatMes = '';
                     _this.showDingList(id);
                 }
@@ -354,14 +341,26 @@ const DingMessageTabComponents = React.createClass({
         });
     },
     /**
-     * 回复消息的相应
+     * 叮一下
+     */
+    makeDing() {
+        ding.setState({makeDingModalIsShow:true});
+    },
+    /**
+     * 叮一下取消和关闭的回调
+     */
+    closeDingModel(){
+        this.setState({makeDingModalIsShow:false});
+    },
+    /**
+     * 回复消息输入的响应
      * @param e
      */
     repMesOnChange(e) {
         var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
             target = e.target;
         }
         var repeatMes = target.value;
@@ -383,7 +382,7 @@ const DingMessageTabComponents = React.createClass({
         var optionButton;
         optionButton = <div className="public—til—blue">
             <div className="talk_ant_btn1">
-                <Button value="talk" onClick={ding.showaddTopicModal} className="antnest_talk">叮一下</Button>
+                <Button value="talk" onClick={ding.makeDing} className="antnest_talk">叮一下</Button>
             </div>
             {breadMenuTip}
         </div>;
@@ -410,14 +409,14 @@ const DingMessageTabComponents = React.createClass({
                         </div>
                         <div className="ding_inner">
                             <Card>
-                                <div ref="cardfir"></div>
+                                <div className="ding_side_wrap" ref="cardfir"></div>
                             </Card>
                             <Card>
                                 <div>
-                                    <div className="dReadClick"><span
+                                    <div className="dReadClick"><span className="active"
                                         onClick={ding.read}>已读（{this.state.readPer}人）</span><span
                                         onClick={ding.unRead}>未读（{this.state.noReadPer}人）</span></div>
-                                    <div ref="cardsec">
+                                    <div ref="cardsec" className="ding_read_u">
 
                                     </div>
                                 </div>
@@ -431,10 +430,14 @@ const DingMessageTabComponents = React.createClass({
                                    value={this.state.repeatMes}
                                    onChange={this.repMesOnChange}
                             />
-                            <Button type="primary" onClick={ding.sendMes.bind(this,this.state.biuId)}>发送</Button>
+                            <Button className="ding_send ding_send_btn" type="primary" onClick={ding.sendMes.bind(this, this.state.biuId)}>发送</Button>
                         </div>
                     </div>
                 </div>
+                <MakeDingModal
+                    isShow={this.state.makeDingModalIsShow}
+                    closeDingModel={this.closeDingModel}
+                />
             </div>
         );
     },
