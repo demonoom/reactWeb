@@ -83,7 +83,7 @@ const UploadImgComponents = React.createClass({
         };
 
         return (
-            <div>
+            <div className="ding_modal_left">
                 <Upload {...props}>
                     <div>
                         <Icon type="plus"  className="add_bnt topics_white" />

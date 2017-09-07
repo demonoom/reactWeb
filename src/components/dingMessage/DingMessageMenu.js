@@ -13,10 +13,10 @@ const columns = [{
 //构造表格数据
 const data = [ {
     key: 'myReceive',
-    option: <div className="yichao_menu_li"><i className="iconfont menu_left_i">&#xe7e0;</i><span>我收到的</span></div>,
+    option: <div className="yichao_menu_li"><i className="iconfont menu_left_i">&#xeaf8;</i><span>我收到的</span></div>,
 }, {
     key: 'mySend',
-    option: <div className="yichao_menu_li"><i className="iconfont menu_left_i">&#xe7e0;</i><span>我发出的</span></div>,
+    option: <div className="yichao_menu_li"><i className="iconfont menu_left_i">&#xe704;</i><span>我发出的</span></div>,
 }];
 
 const DingmessageMenu = React.createClass({

@@ -130,7 +130,7 @@ const DingMessageTabComponents = React.createClass({
                                 <div className="ding_bg_l"><span className="ding_ding">叮</span><span className="ding_left_1">我发出的</span><span className="ding_left_2 ding_t_12">{createTime}</span></div>
                                 <h5><img src="../src/components/images/ding_icon.png" />{content}</h5>
                             </div>
-                            <img src={imgSrc} style={{width: '35%'}} onClick={showLargeImg}/>
+                            <img src={imgSrc} className="ding_bg_l" onClick={showLargeImg}/>
                         <div className="ding_t_12 ding_bg_l">共{revCon}人，<span className="ding_t_red">{notRed}</span>人未读</div>
                     </div>;
                 } else {
@@ -152,7 +152,7 @@ const DingMessageTabComponents = React.createClass({
                                 <div className="ding_bg_l"><span className="ding_ding">叮</span><span className="ding_left_1">来自{author}</span><span className="ding_left_2 ding_t_12">{createTime}</span></div>
                                 <h5><img src="../src/components/images/ding_icon.png" />{content}</h5>
                             </div>
-                            <img src={imgSrc} onClick={showLargeImg}/>
+                            <img src={imgSrc}  className="ding_bg_l" onClick={showLargeImg}/>
                         <div className="ding_t_12 ding_bg_l">共{revCon}人，<span className="ding_t_red">{notRed}</span>人未读</div>
                     </div>;
                 } else {

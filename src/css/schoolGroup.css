@@ -446,8 +446,13 @@
     line-height: 31px;
 }
 .process_wrap{
+    height: calc(100% - 61px);
+    overflow: auto;
+}
+.process_wrap .ant-collapse{
     padding:0 20px;
     color: #424242;
+    max-height: 100% !important;
 }
 .process_icon{
     width: 50px;
@@ -577,4 +582,10 @@
     text-overflow:ellipsis;
     white-space: nowrap;
     max-width: 80px !important;
+}
+.ant-table table th.dold_text, .ant-table table td.dold_text{
+    width:100%;
+}
+.ant-table table td.dold_text{
+    padding:12px 8px
 }
