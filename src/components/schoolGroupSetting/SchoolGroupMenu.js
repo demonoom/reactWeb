@@ -71,8 +71,10 @@ class SchoolGroupMenu extends React.Component {
              requestId = this.state.selectedKeys;
              requestObj = this.state.structure;
              }*/
-            requestId = nextProps.rootStructure.id;
-            requestObj = nextProps.rootStructure;
+            if(isEmpty(nextProps.rootStructure)==false){
+                requestId = nextProps.rootStructure.id;
+                requestObj = nextProps.rootStructure;
+            }
             this.props.onGhostMenuClick(currentItem,requestId,requestObj);
         }
     }
