@@ -266,40 +266,34 @@ class MakeDingModal extends React.Component {
                 transitionName=""  //禁用modal的动画效果
                 maskClosable={false} //设置不允许点击蒙层关闭
                 footer={[
-                    <UploadImgComponents callBackParent={this.getUploadedImgList} fileList={this.state.topicImgUrl}/>,
-                    <button type="primary" htmlType="submit" className="ant-btn-primary ant-btn"
-                            onClick={this.sendDing}>发送</button>,
-                    <Select defaultValue="app" style={{width: 120}} onChange={this.handleChange}>
-                        <Option value="app">应用内发送</Option>
-                        <Option value="mes">短信发送</Option>
-                    </Select>
+
                 ]}
             >
 
 
-                <div>
-                    <span>接收者：</span>
-                    {tags.map((tag, index) => {
-                        const isLongTag = tag.length > 20;
-                        const tagElem = (
-                            <Tag key={tag} closable={index !== -1} afterClose={() => this.handleClose(tag)}>
-                                {isLongTag ? `${tag.slice(0, 20)}...` : tag}
-                            </Tag>
-                        );
-                        return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
-                    })}
-                    {inputVisible && (
-                        <Input
-                            ref={this.saveInputRef}
-                            type="text" size="small"
-                            style={{width: 78}}
-                            value={inputValue}
-                            onChange={this.handleInputChange}
-                            onBlur={this.handleInputConfirm}
-                            onPressEnter={this.handleInputConfirm}
-                        />
-                    )}
-                </div>
+                {/*<div>*/}
+                    {/*<span>接收者：</span>*/}
+                    {/*{tags.map((tag, index) => {*/}
+                        {/*const isLongTag = tag.length > 20;*/}
+                        {/*const tagElem = (*/}
+                            {/*<Tag key={tag} closable={index !== -1} afterClose={() => this.handleClose(tag)}>*/}
+                                {/*{isLongTag ? `${tag.slice(0, 20)}...` : tag}*/}
+                            {/*</Tag>*/}
+                        {/*);*/}
+                        {/*return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;*/}
+                    {/*})}*/}
+                    {/*{inputVisible && (*/}
+                        {/*<Input*/}
+                            {/*ref={this.saveInputRef}*/}
+                            {/*type="text" size="small"*/}
+                            {/*style={{width: 78}}*/}
+                            {/*value={inputValue}*/}
+                            {/*onChange={this.handleInputChange}*/}
+                            {/*onBlur={this.handleInputConfirm}*/}
+                            {/*onPressEnter={this.handleInputConfirm}*/}
+                        {/*/>*/}
+                    {/*)}*/}
+                {/*</div>*/}
 
                 <Row className="ant-form-item">
                     <Col span={24}>
@@ -310,6 +304,15 @@ class MakeDingModal extends React.Component {
                                        value={this.state.sendMes}
                                        onChange={this.snedMesOnChange}
                                 />
+                                <UploadImgComponents callBackParent={this.getUploadedImgList} fileList={this.state.topicImgUrl} />
+                                <div className="ding_modal_top">
+                                    <button type="primary" htmlType="submit" className="ant-btn-primary ant-btn"
+                                        onClick={this.sendDing}>发送</button>
+                                        <Select defaultValue="app" style={{width: 200}} onChange={this.handleChange} className="add_out">
+                                    <Option value="app">应用内发送</Option>
+                                    <Option value="mes">短信发送</Option>
+                                </Select>
+                                </div>
                             </Col>
 
                             {/*右*/}
