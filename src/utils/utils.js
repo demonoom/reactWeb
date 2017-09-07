@@ -99,8 +99,9 @@ export function showLargeImg(e) {
     } else {
         target = e.target;
     }
-
-    $.openPhotoGallery(target)
+    $.openPhotoGallery(target);
+    var event = event||window.event;
+    event.stopPropagation();
 }
 
 export function bubbleSort(array){
