@@ -123,54 +123,46 @@ const DingMessageTabComponents = React.createClass({
             var id = v.id;
             if (type == 2) {
                 if (isEmpty(v.attachments) === false) {
-                    var sendFMine = <div>
+                    var sendFMine = <div className="ding_bg_list">
                         {/*<img src="1.png" alt=""/>*/}
-                        <div>
                             <div onClick={ding.entMesDetil.bind(this, id)} style={{cursor: 'pointer'}}>
-                                <div><span>叮</span><span>我发出的</span><span>{createTime}</span></div>
+                                <div><span className="ding_ding">叮</span><span className="ding_left_1">我发出的</span><span className="ding_left_2 ding_t_12">{createTime}</span></div>
                                 <h5>{content}</h5>
                             </div>
                             <img src={imgSrc} style={{width: '35%'}} onClick={showLargeImg}/>
-                            <div>共{revCon}人，{notRed}人未读</div>
-                        </div>
+                        <div className="ding_t_12">共{revCon}人，<span className="ding_t_red">{notRed}</span>人未读</div>
                     </div>;
                 } else {
-                    var sendFMine = <div>
+                    var sendFMine = <div className="ding_bg_list">
                         {/*<img src="1.png" alt=""/>*/}
-                        <div>
                             <div onClick={ding.entMesDetil.bind(this, id)} style={{cursor: 'pointer'}}>
-                                <div><span>叮</span><span>我发出的</span><span>{createTime}</span></div>
+                                <div><span className="ding_ding">叮</span><span className="ding_left_1">我发出的</span><span className="ding_left_2 ding_t_12">{createTime}</span></div>
                                 <h5>{content}</h5>
                             </div>
-                            <div>共{revCon}人，{notRed}人未读</div>
-                        </div>
+                        <div className="ding_t_12">共{revCon}人，<span className="ding_t_red">{notRed}</span>人未读</div>
                     </div>;
                 }
                 ;
             } else {
                 if (isEmpty(v.attachments) === false) {
-                    var sendFMine = <div>
+                    var sendFMine = <div className="ding_bg_list">
                         {/*<img src="1.png" alt=""/>*/}
-                        <div>
                             <div onClick={ding.entMesDetil.bind(this, id)} style={{cursor: 'pointer'}}>
-                                <div><span>叮</span><span>来自{author}</span><span>{createTime}</span></div>
+                                <div><span className="ding_ding">叮</span><span className="ding_left_1">来自{author}</span><span className="ding_left_2 ding_t_12">{createTime}</span></div>
                                 <h5>{content}</h5>
                             </div>
-                            <img src={imgSrc} style={{width: '35%'}} onClick={showLargeImg}/>
-                            <div>共{revCon}人，{notRed}人未读</div>
-                        </div>
+                            <img src={imgSrc} onClick={showLargeImg}/>
+                        <div className="ding_t_12">共{revCon}人，<span className="ding_t_red">{notRed}</span>人未读</div>
                     </div>;
                 } else {
-                    var sendFMine = <div>
+                    var sendFMine = <div className="ding_bg_list">
                         {/*<img src="1.png" alt=""/>*/}
-                        <div>
                             <div onClick={ding.entMesDetil.bind(this, id)} style={{cursor: 'pointer'}}>
-                                <div><span>叮</span><span>来自{author}</span><span>{createTime}</span></div>
+                                <div><span className="ding_ding">叮</span><span className="ding_left_1">来自{author}</span><span className="ding_left_2 ding_t_12">{createTime}</span></div>
                                 <h5>{content}</h5>
                             </div>
-                            <div>共{revCon}人，{notRed}人未读</div>
-                        </div>
-                    </div>;
+                        <div className="ding_t_12">共{revCon}人，<span className="ding_t_red">{notRed}</span>人未读</div>
+                        </div>;
                 }
                 ;
             }
@@ -310,7 +302,7 @@ const DingMessageTabComponents = React.createClass({
         clearInterval(timer);
         timer = setInterval(function () {
             // 目标位置
-            var target = 1200;
+            var target = 1700;
             // 当前位置
             var leader = dingPanel.offsetLeft;
             // 步距
@@ -403,7 +395,7 @@ const DingMessageTabComponents = React.createClass({
                 </div>
 
                 <div className="favorite_scroll ding_list">
-                    <div className="antnest_cont topics_calc" style={{overflow: 'scroll'}}>
+                    <div className="antnest_cont topics_calc ding_bg" style={{overflow: 'scroll'}}>
                         {ding.state.DListArr}
                     </div>
 

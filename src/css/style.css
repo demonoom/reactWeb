@@ -5279,7 +5279,7 @@ select.course_n:hover{
 	padding: 6% 2%;
 	position: absolute;
 	bottom:0;
-	right:-500px;
+	right:-700px;
 	/*overflow: auto;*/
 	animation-name: moveTest;
 	animation-duration: 0.5s;
@@ -5295,8 +5295,46 @@ select.course_n:hover{
 	}
 
 	to{
-		transform: translate(-500px,0);
+		transform: translate(-700px,0);
 	}
+}
+.ding_bg{
+	background: #f8fbff;
+	padding: 16px;
+}
+.ding_bg_list{
+	background: #fff;
+	padding: 16px;
+	margin-bottom: 10px;
+	color: #7b7b7b;
+	font-size: 14px;
+}
+.ding_bg .ding_bg_list:last-child{
+	margin-bottom: 0;
+}
+.ding_bg_list h5{
+	color: #424242;
+	font-size: 15px;
+	line-height: 36px;
+}
+.ding_bg_list img{
+	max-height: 120px;
+	max-width: 100%;
+}
+.ding_ding{
+	color: #1890ff;
+}
+.ding_left_1{
+	margin-left: 6px;
+}
+.ding_left_2{
+	margin-left: 24px;
+}
+.ding_t_12{
+	font-size: 12px;
+}
+.ding_t_red{
+	color: #ff4158;
 }
 
 .ding_top {
