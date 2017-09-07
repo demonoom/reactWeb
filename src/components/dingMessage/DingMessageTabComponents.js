@@ -180,7 +180,27 @@ const DingMessageTabComponents = React.createClass({
         this.setState({biuId: id});
         var _this = this;
         this.refs.dingPanel.className = 'ding_panel ding_enter';
+        _this.confirmReadBiu(id);
         _this.showDingList(id);
+    },
+
+    /**
+     * 确认已读
+     */
+    confirmReadBiu(id) {
+        var param = {
+            "method": 'confirmReadBiu',
+            "biuId": id,
+            "userId": this.state.loginUser.colUid
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                console.log(ret);
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
     /**
      * 渲染消息详情面板内容

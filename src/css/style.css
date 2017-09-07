@@ -6573,3 +6573,7 @@ select.course_n:hover {
     color: #fff;
     border: 1px solid #0D97FF;
 }
+.ding_Person  {
+    height:300px;
+    overflow: auto;
+}

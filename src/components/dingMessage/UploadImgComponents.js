@@ -50,8 +50,8 @@ const UploadImgComponents = React.createClass({
             onPreview:antUpload.handlePreview,
             beforeUpload(file){
                 var currentFileList = antUpload.state.fileList;
-                if(isEmpty(currentFileList)==false && currentFileList.length>=9){
-                    message.error('最多只能上传9张图片',5);
+                if(isEmpty(currentFileList)==false && currentFileList.length>=1){
+                    message.error('最多只能上传1张图片',5);
                     return false;
                 }
                 var fileType = file.type;
