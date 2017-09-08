@@ -6589,3 +6589,6 @@ select.course_n:hover {
     margin-left: 10px;
     margin-top: 10px;
 }
+.ding_hide {
+    display: none;
+}

@@ -39,6 +39,13 @@ const DingMessageTabComponents = React.createClass({
     },
 
     /**
+     * 消息类型切换详情面板消失
+     */
+    mesListLev() {
+        this.refs.dingPanel.className = 'ding_panel ding_hide';
+    },
+
+    /**
      * 消息列表分页功能响应函数
      * @param page
      */
@@ -392,11 +399,11 @@ const DingMessageTabComponents = React.createClass({
      * @returns {XML}
      */
     render() {
-        var breadMenuTip = "叮列表";
+        var breadMenuTip = "我收到的";
         if (ding.state.type == 1) {
-            breadMenuTip = "叮列表";
+            breadMenuTip = "我收到的";
         } else {
-            breadMenuTip = "叮列表";
+            breadMenuTip = "我发出的";
         }
         //标题
         var optionButton;

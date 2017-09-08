@@ -186,6 +186,8 @@ class MakeDingModal extends React.Component {
                 if (ret.msg == "调用成功" && ret.success == true) {
                     message.success("发送成功");
                     _this.MakeDingModalHandleCancel();
+                }else {
+                    message.error("字数过长，只限200字");
                 }
             },
             onError: function (error) {
