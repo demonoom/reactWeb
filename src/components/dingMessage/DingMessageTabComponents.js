@@ -438,18 +438,10 @@ const DingMessageTabComponents = React.createClass({
                             </Card>
                             <Card>
                                 <div className="">
-                                    <ul className="dReadClick ding_tabs">
-                                        <li>
-                                            <input type="radio" name="ding_tabs" id="tab1" checked   />
-                                            <label for="tab1"  onClick={ding.read}>已读（{this.state.readPer}人）</label>
-
-                                        </li>
-                                        <li >
-                                            <input type="radio" name="ding_tabs" id="tab2"  />
-                                            <label for="tab2"  onClick={ding.unRead}>未读（{this.state.noReadPer}人）</label>
-
-                                        </li>
-                                    </ul>
+                                    <div className="dReadClick">
+                                            <span  onClick={ding.read}>已读（{this.state.readPer}人）</span>
+                                            <span onClick={ding.unRead}>未读（{this.state.noReadPer}人）</span>
+                                    </div>
                                     <div ref="cardsec" className="ding_read_u">
 
                                     </div>
