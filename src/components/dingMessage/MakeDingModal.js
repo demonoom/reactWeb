@@ -368,6 +368,7 @@ class MakeDingModal extends React.Component {
                 transitionName=""  //禁用modal的动画效果
                 maskClosable={false} //设置不允许点击蒙层关闭
                 footer={[]}
+                className="new_add_ding"
             >
 
                 <Row className="ant-form-item">
@@ -375,8 +376,9 @@ class MakeDingModal extends React.Component {
                         <div className="ant-transfer make_dingPanel">
                             {/*左*/}
                             <Col span={16}>
-                                <span>接收者：</span>
-                                <div className="ding_tags">
+                                <div className="ding_tags_wrap">
+                                <span className="upexam_float">接收者：</span>
+                                <div className="ding_tags upexam_float">
                                     {tags.map((tag, index) => {
                                         const isLongTag = tag.length > 20;
                                         const tagElem = (
@@ -399,10 +401,13 @@ class MakeDingModal extends React.Component {
                                         />
                                     )}
                                 </div>
-                                <Input className="ding_ipt" placeholder="内容" type="textarea" rows={15}
+                                </div>
+                                <div className="ding_textarea">
+                                    <Input className="ding_ipt" placeholder="内容" type="textarea" rows={12}
                                        value={this.state.sendMes}
                                        onChange={this.snedMesOnChange}
                                 />
+                                </div>
                                 <UploadImgComponents callBackParent={this.getUploadedImgList}
                                                      fileList={this.state.topicImgUrl}/>
                                 <div className="ding_modal_top">
