@@ -6330,6 +6330,10 @@ select.course_n:hover {
     position: absolute;
     bottom: 0;
     right: -800px;
+    box-shadow: 16px 17px 10px 16px #929292;
+    -moz-box-shadow: 16px 17px 10px 16px #929292;
+    -webkit-box-shadow: 16px 17px 10px 16px #929292;
+
 }
 
 .ding_enter {
@@ -6591,4 +6595,23 @@ select.course_n:hover {
 }
 .ding_hide {
     display: none;
+}
+.ding_Person .ant-table-thead{
+    position: fixed;
+    z-index: 2;
+}
+.ding_Person .ant-table-thead > tr > th.ant-table-selection-column{
+    width: 60px;
+    padding: 12px 8px;
+    text-align: right;
+}
+.ding_Person .ant-table table th.dold_text, .ding_Person .ant-table table td.dold_text{
+    width: 205px;
+}
+.ding_Person .ant-table-tbody{
+    display: block;
+    margin-top: 53px;
+}
+.ding_Person .ant-modal-footer{
+    padding:0
 }
