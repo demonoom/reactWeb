@@ -134,7 +134,6 @@ const DingMessageTabComponents = React.createClass({
             if (type == 2) {
                 if (isEmpty(v.attachments) === false) {
                     var sendFMine = <div className="ding_bg_list">
-                        {/*<img src="1.png" alt=""/>*/}
                             <div onClick={ding.entMesDetil.bind(this, id)} style={{cursor: 'pointer'}}>
                                 <div className="ding_ding_i"><img src="../src/components/images/ding_icon.png" /><span className="ding_ding">叮</span><span className="ding_left_1">我发出的</span><span className="ding_left_2 ding_t_12">{createTime}</span></div>
                                 <h5><div>{content}</div></h5>
@@ -144,7 +143,6 @@ const DingMessageTabComponents = React.createClass({
                     </div>;
                 } else {
                     var sendFMine = <div className="ding_bg_list">
-                        {/*<img src="1.png" alt=""/>*/}
                             <div onClick={ding.entMesDetil.bind(this, id)} style={{cursor: 'pointer'}}>
                                 <div className="ding_ding_i"><img src="../src/components/images/ding_icon.png" /><span className="ding_ding">叮</span><span className="ding_left_1">我发出的</span><span className="ding_left_2 ding_t_12">{createTime}</span></div>
                                 <h5><div>{content}</div></h5>
@@ -156,7 +154,6 @@ const DingMessageTabComponents = React.createClass({
             } else {
                 if (isEmpty(v.attachments) === false) {
                     var sendFMine = <div className="ding_bg_list">
-                        {/*<img src="1.png" alt=""/>*/}
                             <div onClick={ding.entMesDetil.bind(this, id)} style={{cursor: 'pointer'}}>
                                 <div className="ding_ding_i"><img src="../src/components/images/ding_icon.png" /><span className="ding_ding">叮</span><span className="ding_left_1">来自{author}</span><span className="ding_left_2 ding_t_12">{createTime}</span></div>
                                 <h5><div>{content}</div></h5>
@@ -166,7 +163,6 @@ const DingMessageTabComponents = React.createClass({
                     </div>;
                 } else {
                     var sendFMine = <div className="ding_bg_list">
-                        {/*<img src="1.png" alt=""/>*/}
                             <div onClick={ding.entMesDetil.bind(this, id)} style={{cursor: 'pointer'}}>
                                 <div className="ding_ding_i"><img src="../src/components/images/ding_icon.png" /><span className="ding_ding">叮</span><span className="ding_left_1">来自{author}</span><span className="ding_left_2 ding_t_12">{createTime}</span></div>
                                 <h5><div>{content}</div></h5>

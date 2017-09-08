@@ -1544,7 +1544,7 @@ analyze_iframe_2 > div {
 }
 
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
     height: 8px;
 }
 
@@ -6594,14 +6594,17 @@ select.course_n:hover {
 .ding_Person .ant-table-body {
     height:422px;
     overflow: auto;
+    border: 1px solid #E4E4E4;
+    margin-top: 10px;
+    border-radius: 4px;
 }
 .ding_modal_left{
-    margin-left: 10px;
-    margin-top: 20px;
+    margin-right: 10px;
+    margin-top: 15px;
 }
 .ding_modal_top{
-    margin-left: 10px;
-    margin-top: 10px;
+    margin-left: 0px;
+    margin-top: 5px;
 }
 .ding_hide {
     display: none;
@@ -6659,12 +6662,26 @@ select.course_n:hover {
 .ding_tags_wrap{
     max-height: 50px;
     overflow: auto;
+    margin-right: 12px;
+}
+.ding_textarea{
+    margin-right: 12px;
+}
+.ding_textarea .ding_ipt{
+    width: 100%;
+    padding: 8px;
+    margin: 8px 0 0 0;
 }
 .ding_tags {
     /*min-height: 26px;*/
 
     width: 465px;
 }
-.new_add_ding{
-
+.new_add_ding .ant-modal-footer{
+    padding:0 !important
+}
+.ding_Person .ant-table-placeholder{
+    width: 90%;
+    margin-left: 5%;
+    float: left;
 }
