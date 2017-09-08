@@ -1,3 +1,6 @@
+/**
+ * Created by noom on 17-9-7.
+ */
 import React, {PropTypes, Link} from 'react';
 import {Table,Icon} from 'antd';
 

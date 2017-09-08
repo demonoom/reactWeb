@@ -8,6 +8,7 @@ html, body {
     cursor: default;
     -webkit-user-select: none;
     font-size: 16px;
+    -webkit-font-smoothing: antialiased;
 }
 
 ul, li {
@@ -1543,7 +1544,7 @@ analyze_iframe_2 > div {
 }
 
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
     height: 8px;
 }
 
@@ -6330,6 +6331,10 @@ select.course_n:hover {
     position: absolute;
     bottom: 0;
     right: -800px;
+    box-shadow: 16px 17px 10px 16px #929292;
+    -moz-box-shadow: 16px 17px 10px 16px #929292;
+    -webkit-box-shadow: 16px 17px 10px 16px #929292;
+
 }
 
 .ding_enter {
@@ -6383,20 +6388,25 @@ select.course_n:hover {
 	margin-bottom: 0;
 }
 .ding_bg_list h5, .ding_side_wrap p{
-	color: #424242;
-	font-size: 15px;
-	line-height: 36px;
+    color: #424242;
+    font-size: 15px;
+    line-height: 27px;
     margin: 6px 0;
+    width: 100%;
+    float: left;
+    font-weight: normal;
 }
-.ding_side_wrap p{
-    margin: 0 !important;
-}
-.ding_bg_list h5 img{
+
+.ding_ding_i img{
     width: 24px;
     height: 24px;
     float: left;
-    margin: 6px 12px 6px 0;
+    margin: -3px 8px 0px 0;
     padding: 0 !important;
+}
+.ding_bg_list h5 div{
+    float: left;
+    margin-left: 36px;
 }
 .ding_side{
     font-size: 16px;
@@ -6414,6 +6424,7 @@ select.course_n:hover {
 .ding_bg_list img{
 	max-height: 120px;
 	max-width: 100%;
+    margin-bottom: 4px;
 }
 .ding_ding{
 	color: #1890ff;
@@ -6498,6 +6509,7 @@ select.course_n:hover {
     border-radius: 50%;
     vertical-align: middle;
     margin-right: 12px;
+    display: inline-block;
 }
 
 .dingImg {
@@ -6505,8 +6517,9 @@ select.course_n:hover {
 }
 
 .dReadList li {
-    float: left;
     margin: 0 5px;
+    display: inline-block;
+    text-align: center;
 }
 
 .dingHide {
@@ -6516,12 +6529,13 @@ select.course_n:hover {
 .dReadClick span {
     cursor: pointer;
     margin-right: 20px;
-    color: #7b7b7b;
     font-size: 13px;
 }
-.dReadClick span.active {
-    cursor: pointer;
+.ding_t_active {
     color:#38ADFF
+}
+.dign_t_default {
+    color:#7b7b7b
 }
 .ding_rev {
     display: inline-block;
@@ -6558,11 +6572,12 @@ select.course_n:hover {
     width: 100%;
     margin-top: 15px;
     font-size: 12px;
-    text-align: center;
+    text-align: left;
 }
 .ding_read_u .dingHead{
     margin-right: 0;
-    margin-bottom: 10px;
+    margin-bottom: 2px;
+    margin-top: 5px;
 }
 .ding_read_u .user{
     max-width: 42px;
@@ -6580,12 +6595,94 @@ select.course_n:hover {
 .ding_Person .ant-table-body {
     height:422px;
     overflow: auto;
+    border: 1px solid #E4E4E4;
+    margin-top: 10px;
+    border-radius: 4px;
 }
 .ding_modal_left{
-    margin-left: 10px;
-    margin-top: 20px;
+    margin-right: 10px;
+    margin-top: 15px;
 }
 .ding_modal_top{
-    margin-left: 10px;
-    margin-top: 10px;
+    margin-left: 0px;
+    margin-top: 5px;
+}
+.ding_hide {
+    display: none;
+}
+.ding_Person .ant-table-thead{
+    position: fixed;
+    z-index: 2;
+}
+.ding_Person .ant-table-thead > tr > th.ant-table-selection-column{
+    width: 60px;
+    padding: 12px 8px;
+    text-align: right;
+}
+.ding_Person .ant-table table th.dold_text, .ding_Person .ant-table table td.dold_text{
+    width: 205px;
+}
+.ding_Person .ant-table-tbody{
+    display: block;
+    margin-top: 53px;
+}
+.ding_Person .ant-modal-footer{
+    padding:0
+}
+
+.ding_tabs {
+    width: 100%;
+    float: none;
+    list-style: none;
+    position: relative;
+    margin: 0;
+    text-align: left;
+}
+.ding_tabs li {
+    float: left;
+    display: block;
+}
+.ding_tabs input[type="radio"] {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+}
+.ding_tabs label {
+    display: block;
+    font-size: 20px;
+    font-weight: normal;
+    cursor: pointer;
+    position: relative;
+    color: #7b7b7b;
+}
+
+.ding_tabs [id^="tab"]:checked + label{
+    top: 0 !important;
+    color: #0084ff !important;
+}
+.ding_tags_wrap{
+    max-height: 50px;
+    overflow: auto;
+    margin-right: 12px;
+}
+.ding_textarea{
+    margin-right: 12px;
+}
+.ding_textarea .ding_ipt{
+    width: 100%;
+    padding: 8px;
+    margin: 8px 0 0 0;
+}
+.ding_tags {
+    /*min-height: 26px;*/
+
+    width: 465px;
+}
+.new_add_ding .ant-modal-footer{
+    padding:0 !important
+}
+.ding_Person .ant-table-placeholder{
+    width: 90%;
+    margin-left: 5%;
+    float: left;
 }

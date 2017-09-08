@@ -217,6 +217,7 @@ const MainLayout = React.createClass({
         } else {
             this.refs.dingMessageTabComponents.getDList(pageNo, 2);
         }
+        this.refs.dingMessageTabComponents.mesListLev();
     },
     teachSpaceTab(activeMenu, beActive) {
         let _this = this;
@@ -462,7 +463,7 @@ const MainLayout = React.createClass({
 
                 break;
             case 'dingMessage':
-                //蚁巢
+                //叮消息
                 middleComponent = <DingMessageMenu callbackParent={this.getDingMessage}/>;
                 tabComponent = <DingMessageTabComponents ref="dingMessageTabComponents"/>;
 

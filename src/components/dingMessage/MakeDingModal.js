@@ -1,17 +1,19 @@
 /**
- * Created by devnote on 17-4-17.
+ * Created by noom on 17-9-7.
  */
 import React, {PropTypes} from 'react';
 import {Modal, Icon, Input, Button, Row, Col, message, Checkbox, Transfer, Table, Select, Tag, Tooltip} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import {isEmpty} from '../../utils/utils';
 import UploadImgComponents from './UploadImgComponents';
+import {TYPE_TEACHER} from '../../utils/Const';
 
 const columns = [{
     title: '全选',
     dataIndex: 'name',
     className: 'dold_text'
 }];
+var selectArr = [];
 
 class MakeDingModal extends React.Component {
 
@@ -21,18 +23,22 @@ class MakeDingModal extends React.Component {
         this.state = {
             loginUser: loginUser,
             isShow: false,
-            selectedRowKeys: [],
+            selectedRowKeys: [], // 勾选选中数组
             sendMes: '',
             messageType: 0,   //消息发送方式默认以应用内方式,
             topicImgUrl: [],     //说说/话题上传的图片路径,
-            tags: [],
+            tags: [],  //标签显示
             inputVisible: false,
             inputValue: '',
+            searchObj: '',
+            humArr: [],
         };
         this.MakeDingModalHandleCancel = this.MakeDingModalHandleCancel.bind(this);
         this.onSelectChange = this.onSelectChange.bind(this);
         this.getPerson = this.getPerson.bind(this);
         this.snedMesOnChange = this.snedMesOnChange.bind(this);
+        this.searchPerson = this.searchPerson.bind(this);
+        this.onKeyUp = this.onKeyUp.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.drawTable = this.drawTable.bind(this);
         this.sendDing = this.sendDing.bind(this);
@@ -41,8 +47,9 @@ class MakeDingModal extends React.Component {
         this.handleClose = this.handleClose.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleInputConfirm = this.handleInputConfirm.bind(this);
-        this.getUserName = this.getUserName.bind(this);
-
+        this.onRowSelected = this.onRowSelected.bind(this);
+        this.onSelectAll = this.onSelectAll.bind(this);
+        this.searchPer = this.searchPer.bind(this);
     }
 
     componentDidMount() {
@@ -65,22 +72,42 @@ class MakeDingModal extends React.Component {
         this.setState({"isShow": false});
         this.props.closeDingModel();
         this.state.sendMes = '';
+        this.state.searchObj = '';
         this.state.selectedRowKeys = [];
         this.state.topicImgUrl = [];
+        this.state.tags = [];
+        selectArr = [];
+        this.getPerson();
     }
 
-    /*选中人员的回调*/
+    /*选中项发生变化的时的回调*/
     onSelectChange(selectedRowKeys) {
         this.setState({selectedRowKeys: selectedRowKeys});
-        // this.setState({tags: selectedRowKeys});
-        // this.getUserName(selectedRowKeys);
     }
 
-    getUserName(id) {
-        var nameArr = this.state.humArr;
-        for (var i = 0; i < id.length; i++) {
-            //请求名字
+    /*用户手动选择  取消选择某列的回调*/
+    onRowSelected(record, selected, selectedRows) {
+        // 第一参数是操作人的那个对象，第二个参数布尔值true表示钩中，false表示取消，第三个参数表示钩中的人的数组
+        // this.setState({tags: selectedRows});
+        //这里应该是push和shift,而不是全部设置
+        if (selected) {
+            selectArr.push(record);
+        } else {
+            var key = record.key;
+            for (var i = 0; i < selectArr.length; i++) {
+                if (selectArr[i].key == key) {
+                    selectArr.splice(i, 1);
+                }
+            }
         }
+        this.setState({tags: selectArr});
+    }
+
+    /**
+     * 用户手动选择/取消选择所有列的回调
+     */
+    onSelectAll(selected, selectedRows, changeRows) {
+        this.setState({tags: selectedRows});
     }
 
     /*获取组织架构的全部人员*/
@@ -130,6 +157,18 @@ class MakeDingModal extends React.Component {
         this.setState({sendMes});
     }
 
+    searchPerson(e) {
+        var target = e.target;
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
+            target = e.target;
+        }
+        var searchObj = target.value;
+        this.setState({searchObj});
+
+    }
+
     /*发送方式选择回调*/
     handleChange(value) {
         if (value == 'mes') {
@@ -137,6 +176,11 @@ class MakeDingModal extends React.Component {
         } else {
             this.setState({messageType: 0});
         }
+    }
+
+    onKeyUp() {
+        // 调用搜索
+        this.searchPer();
     }
 
     /*发送*/
@@ -186,6 +230,8 @@ class MakeDingModal extends React.Component {
                 if (ret.msg == "调用成功" && ret.success == true) {
                     message.success("发送成功");
                     _this.MakeDingModalHandleCancel();
+                } else {
+                    message.error("字数过长，只限200字");
                 }
             },
             onError: function (error) {
@@ -222,10 +268,22 @@ class MakeDingModal extends React.Component {
         }
     }
 
+    /*标签关闭的回调*/
     handleClose = (removedTag) => {
         const tags = this.state.tags.filter(tag => tag !== removedTag);
-        console.log(tags);
+        var arr = [];
         this.setState({tags});
+        //设置勾选状态   selectedRowKeys
+        for (var i = 0; i < tags.length; i++) {
+            arr.push(tags[i].key);
+        }
+        this.state.selectedRowKeys = arr;
+        //在这里把点击的这一项从selectArr中删除  selectArr全局函数
+        for (var i = 0; i < selectArr.length; i++) {
+            if (selectArr[i].key == removedTag.key) {
+                selectArr.splice(i, 1);
+            }
+        }
     }
 
     handleInputChange = (e) => {
@@ -239,7 +297,6 @@ class MakeDingModal extends React.Component {
         if (inputValue && tags.indexOf(inputValue) === -1) {
             tags = [...tags, inputValue];
         }
-        console.log(tags);
         this.setState({
             tags,
             inputVisible: false,
@@ -247,15 +304,60 @@ class MakeDingModal extends React.Component {
         });
     }
 
-    saveInputRef = input => this.input = input
+    /*搜索按钮的回调*/
+    searchPer() {
+        var _this = this;
+        var arr = [];
+        if (_this.state.searchObj == '') {
+            _this.getPerson();
+            return;
+        } else {
+            var searchOptions = {
+                keywords: _this.state.searchObj,
+                schoolId: _this.state.loginUser.schoolId,
+                userType: TYPE_TEACHER,
+                structureId: 1
+            };
+        }
+        var param = {
+            "method": 'searchStructureUsers',
+            "operateUserId": _this.state.loginUser.colUid,
+            "searchOptions": JSON.stringify(searchOptions),
+            "pageNo": 1,
+
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var data = ret.response;
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {};
+                    obj.key = data[i].teacher.user.colUid;
+                    obj.name = data[i].teacher.user.userName;
+                    arr.push(obj);
+                }
+                ;
+                //改变表格数据
+                _this.setState({humArr: arr});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    }
+
+    saveInputRef = input => this.input = input;
 
     render() {
         const {tags, inputVisible, inputValue} = this.state;
 
         const rowSelection = {
-            //在这里截取并且设置不同的传递参数
             selectedRowKeys: this.state.selectedRowKeys,
+            // 选中项发生变化的时的回调
             onChange: this.onSelectChange,
+            // 用户手动选择/取消选择某列的回调
+            onSelect: this.onRowSelected,
+            //用户手动选择/取消选择所有列的回调
+            onSelectAll: this.onSelectAll
         };
         return (
             <Modal
@@ -265,58 +367,69 @@ class MakeDingModal extends React.Component {
                 onCancel={this.MakeDingModalHandleCancel}
                 transitionName=""  //禁用modal的动画效果
                 maskClosable={false} //设置不允许点击蒙层关闭
-                footer={[
-
-                ]}
+                footer={[]}
+                className="new_add_ding"
             >
-
-
-                {/*<div>*/}
-                    {/*<span>接收者：</span>*/}
-                    {/*{tags.map((tag, index) => {*/}
-                        {/*const isLongTag = tag.length > 20;*/}
-                        {/*const tagElem = (*/}
-                            {/*<Tag key={tag} closable={index !== -1} afterClose={() => this.handleClose(tag)}>*/}
-                                {/*{isLongTag ? `${tag.slice(0, 20)}...` : tag}*/}
-                            {/*</Tag>*/}
-                        {/*);*/}
-                        {/*return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;*/}
-                    {/*})}*/}
-                    {/*{inputVisible && (*/}
-                        {/*<Input*/}
-                            {/*ref={this.saveInputRef}*/}
-                            {/*type="text" size="small"*/}
-                            {/*style={{width: 78}}*/}
-                            {/*value={inputValue}*/}
-                            {/*onChange={this.handleInputChange}*/}
-                            {/*onBlur={this.handleInputConfirm}*/}
-                            {/*onPressEnter={this.handleInputConfirm}*/}
-                        {/*/>*/}
-                    {/*)}*/}
-                {/*</div>*/}
 
                 <Row className="ant-form-item">
                     <Col span={24}>
                         <div className="ant-transfer make_dingPanel">
                             {/*左*/}
                             <Col span={16}>
-                                <Input className="ding_ipt" placeholder="内容" type="textarea" rows={15}
+                                <div className="ding_tags_wrap">
+                                <span className="upexam_float">接收者：</span>
+                                <div className="ding_tags upexam_float">
+                                    {tags.map((tag, index) => {
+                                        const isLongTag = tag.length > 20;
+                                        const tagElem = (
+                                            <Tag key={tag.key} closable={index !== -1}
+                                                 afterClose={() => this.handleClose(tag)}>
+                                                {isLongTag ? `${tag.name.slice(0, 20)}...` : tag.name}
+                                            </Tag>
+                                        );
+                                        return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
+                                    })}
+                                    {inputVisible && (
+                                        <Input
+                                            ref={this.saveInputRef}
+                                            type="text" size="small"
+                                            style={{width: 78}}
+                                            value={inputValue}
+                                            onChange={this.handleInputChange}
+                                            onBlur={this.handleInputConfirm}
+                                            onPressEnter={this.handleInputConfirm}
+                                        />
+                                    )}
+                                </div>
+                                </div>
+                                <div className="ding_textarea">
+                                    <Input className="ding_ipt" placeholder="内容" type="textarea" rows={12}
                                        value={this.state.sendMes}
                                        onChange={this.snedMesOnChange}
                                 />
-                                <UploadImgComponents callBackParent={this.getUploadedImgList} fileList={this.state.topicImgUrl} />
+                                </div>
+                                <UploadImgComponents callBackParent={this.getUploadedImgList}
+                                                     fileList={this.state.topicImgUrl}/>
                                 <div className="ding_modal_top">
                                     <button type="primary" htmlType="submit" className="ant-btn-primary ant-btn"
-                                        onClick={this.sendDing}>发送</button>
-                                        <Select defaultValue="app" style={{width: 200}} onChange={this.handleChange} className="add_out">
-                                    <Option value="app">应用内发送</Option>
-                                    <Option value="mes">短信发送</Option>
-                                </Select>
+                                            onClick={this.sendDing}>发送
+                                    </button>
+                                    <Select defaultValue="app" style={{width: 200}} onChange={this.handleChange}
+                                            className="add_out">
+                                        <Option value="app">应用内发送</Option>
+                                        <Option value="mes">短信发送</Option>
+                                    </Select>
                                 </div>
                             </Col>
 
                             {/*右*/}
                             <Col span={8}>
+                                <Input
+                                    placeholder="请输入需添加的老师账号或姓名"
+                                    value={this.state.searchObj}
+                                    onChange={this.searchPerson}
+                                    onKeyUp={this.onKeyUp}
+                                />
                                 <div>
                                     <Table className="ding_Person" rowSelection={rowSelection} columns={columns}
                                            dataSource={this.state.humArr} pagination={false}/>
