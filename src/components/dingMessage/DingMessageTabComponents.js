@@ -1,3 +1,6 @@
+/**
+ * Created by noom on 17-9-7.
+ */
 import React, {PropTypes} from 'react';
 import {Tabs, Breadcrumb, Icon, Card, Button, Row, Col} from 'antd';
 import {message, Pagination, Modal, Input} from 'antd';
@@ -12,7 +15,6 @@ import MakeDingModal from './MakeDingModal';
 var ding;
 var DingArr = [];
 var DListArr = [];
-var timer = null;
 const DingMessageTabComponents = React.createClass({
 
     getInitialState() {
@@ -134,8 +136,8 @@ const DingMessageTabComponents = React.createClass({
                     var sendFMine = <div className="ding_bg_list">
                         {/*<img src="1.png" alt=""/>*/}
                             <div onClick={ding.entMesDetil.bind(this, id)} style={{cursor: 'pointer'}}>
-                                <div className="ding_bg_l"><span className="ding_ding">叮</span><span className="ding_left_1">我发出的</span><span className="ding_left_2 ding_t_12">{createTime}</span></div>
-                                <h5><img src="../src/components/images/ding_icon.png" /><div>{content}</div></h5>
+                                <div className="ding_ding_i"><img src="../src/components/images/ding_icon.png" /><span className="ding_ding">叮</span><span className="ding_left_1">我发出的</span><span className="ding_left_2 ding_t_12">{createTime}</span></div>
+                                <h5><div>{content}</div></h5>
                             </div>
                             <img src={imgSrc} className="ding_bg_l" onClick={showLargeImg}/>
                         <div className="ding_t_12 ding_bg_l">共{revCon}人，<span className="ding_t_red">{notRed}</span>人未读</div>
@@ -144,8 +146,8 @@ const DingMessageTabComponents = React.createClass({
                     var sendFMine = <div className="ding_bg_list">
                         {/*<img src="1.png" alt=""/>*/}
                             <div onClick={ding.entMesDetil.bind(this, id)} style={{cursor: 'pointer'}}>
-                                <div className="ding_bg_l"><span className="ding_ding">叮</span><span className="ding_left_1">我发出的</span><span className="ding_left_2 ding_t_12">{createTime}</span></div>
-                                <h5><img src="../src/components/images/ding_icon.png" /><div>{content}</div></h5>
+                                <div className="ding_ding_i"><img src="../src/components/images/ding_icon.png" /><span className="ding_ding">叮</span><span className="ding_left_1">我发出的</span><span className="ding_left_2 ding_t_12">{createTime}</span></div>
+                                <h5><div>{content}</div></h5>
                             </div>
                         <div className="ding_t_12 ding_bg_l">共{revCon}人，<span className="ding_t_red">{notRed}</span>人未读</div>
                     </div>;
@@ -156,8 +158,8 @@ const DingMessageTabComponents = React.createClass({
                     var sendFMine = <div className="ding_bg_list">
                         {/*<img src="1.png" alt=""/>*/}
                             <div onClick={ding.entMesDetil.bind(this, id)} style={{cursor: 'pointer'}}>
-                                <div className="ding_bg_l"><span className="ding_ding">叮</span><span className="ding_left_1">来自{author}</span><span className="ding_left_2 ding_t_12">{createTime}</span></div>
-                                <h5><img src="../src/components/images/ding_icon.png" /><div>{content}</div></h5>
+                                <div className="ding_ding_i"><img src="../src/components/images/ding_icon.png" /><span className="ding_ding">叮</span><span className="ding_left_1">来自{author}</span><span className="ding_left_2 ding_t_12">{createTime}</span></div>
+                                <h5><div>{content}</div></h5>
                             </div>
                             <img src={imgSrc}  className="ding_bg_l" onClick={showLargeImg}/>
                         <div className="ding_t_12 ding_bg_l">共{revCon}人，<span className="ding_t_red">{notRed}</span>人未读</div>
@@ -166,8 +168,8 @@ const DingMessageTabComponents = React.createClass({
                     var sendFMine = <div className="ding_bg_list">
                         {/*<img src="1.png" alt=""/>*/}
                             <div onClick={ding.entMesDetil.bind(this, id)} style={{cursor: 'pointer'}}>
-                                <div className="ding_bg_l"><span className="ding_ding">叮</span><span className="ding_left_1">来自{author}</span><span className="ding_left_2 ding_t_12">{createTime}</span></div>
-                                <h5><img src="../src/components/images/ding_icon.png" /><div>{content}</div></h5>
+                                <div className="ding_ding_i"><img src="../src/components/images/ding_icon.png" /><span className="ding_ding">叮</span><span className="ding_left_1">来自{author}</span><span className="ding_left_2 ding_t_12">{createTime}</span></div>
+                                <h5><div>{content}</div></h5>
                             </div>
                         <div className="ding_t_12 ding_bg_l">共{revCon}人，<span className="ding_t_red">{notRed}</span>人未读</div>
                         </div>;

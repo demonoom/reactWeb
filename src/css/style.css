@@ -6396,20 +6396,17 @@ select.course_n:hover {
     float: left;
     font-weight: normal;
 }
-.ding_side_wrap p{
-    margin: 0 !important;
-}
-.ding_bg_list h5 img{
+
+.ding_ding_i img{
     width: 24px;
     height: 24px;
     float: left;
-    margin: 6px 12px 6px 0;
+    margin: -3px 8px 0px 0;
     padding: 0 !important;
 }
 .ding_bg_list h5 div{
     float: left;
-    width: calc(100% - 36px);
-    margin-top: 6px ;
+    margin-left: 36px;
 }
 .ding_side{
     font-size: 16px;
@@ -6512,6 +6509,7 @@ select.course_n:hover {
     border-radius: 50%;
     vertical-align: middle;
     margin-right: 12px;
+    display: inline-block;
 }
 
 .dingImg {
@@ -6519,8 +6517,9 @@ select.course_n:hover {
 }
 
 .dReadList li {
-    float: left;
     margin: 0 5px;
+    display: inline-block;
+    text-align: center;
 }
 
 .dingHide {
@@ -6572,11 +6571,12 @@ select.course_n:hover {
     width: 100%;
     margin-top: 15px;
     font-size: 12px;
-    text-align: center;
+    text-align: left;
 }
 .ding_read_u .dingHead{
     margin-right: 0;
-    margin-bottom: 10px;
+    margin-bottom: 2px;
+    margin-top: 5px;
 }
 .ding_read_u .user{
     max-width: 42px;
@@ -6626,8 +6626,6 @@ select.course_n:hover {
     padding:0
 }
 
-
-
 .ding_tabs {
     width: 100%;
     float: none;
@@ -6657,4 +6655,16 @@ select.course_n:hover {
 .ding_tabs [id^="tab"]:checked + label{
     top: 0 !important;
     color: #f60 !important;
+}
+.ding_tags_wrap{
+    max-height: 50px;
+    overflow: auto;
+}
+.ding_tags {
+    /*min-height: 26px;*/
+
+    width: 465px;
+}
+.new_add_ding{
+
 }
