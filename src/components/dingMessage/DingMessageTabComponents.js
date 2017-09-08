@@ -332,12 +332,21 @@ const DingMessageTabComponents = React.createClass({
         var a = document.getElementsByClassName('dReadList');
         a[0].className = 'dReadList';
         a[1].className = 'dReadList dingHide';
+        var b = document.getElementById('alreadyR');
+        var c = document.getElementById('neverR');
+        b.className = 'ding_t_active';
+        c.className ='dign_t_default';
     },
     /*点击未读*/
     unRead() {
         var a = document.getElementsByClassName('dReadList');
         a[0].className = 'dReadList dingHide';
         a[1].className = 'dReadList';
+        var b = document.getElementById('alreadyR');
+        var c = document.getElementById('neverR');
+        b.className = 'dign_t_default';
+        c.className ='ding_t_active';
+
     },
     // 回复ding
     sendMes(id) {
@@ -439,8 +448,8 @@ const DingMessageTabComponents = React.createClass({
                             <Card>
                                 <div className="">
                                     <div className="dReadClick">
-                                            <span  onClick={ding.read}>已读（{this.state.readPer}人）</span>
-                                            <span onClick={ding.unRead}>未读（{this.state.noReadPer}人）</span>
+                                            <span id="alreadyR" className="ding_t_active" onClick={ding.read}>已读（{this.state.readPer}人）</span>
+                                            <span id="neverR" onClick={ding.unRead}>未读（{this.state.noReadPer}人）</span>
                                     </div>
                                     <div ref="cardsec" className="ding_read_u">
 
