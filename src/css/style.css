@@ -8,6 +8,7 @@ html, body {
     cursor: default;
     -webkit-user-select: none;
     font-size: 16px;
+    -webkit-font-smoothing: antialiased;
 }
 
 ul, li {
@@ -6387,10 +6388,13 @@ select.course_n:hover {
 	margin-bottom: 0;
 }
 .ding_bg_list h5, .ding_side_wrap p{
-	color: #424242;
-	font-size: 15px;
-	line-height: 36px;
+    color: #424242;
+    font-size: 15px;
+    line-height: 27px;
     margin: 6px 0;
+    width: 100%;
+    float: left;
+    font-weight: normal;
 }
 .ding_side_wrap p{
     margin: 0 !important;
@@ -6401,6 +6405,11 @@ select.course_n:hover {
     float: left;
     margin: 6px 12px 6px 0;
     padding: 0 !important;
+}
+.ding_bg_list h5 div{
+    float: left;
+    width: calc(100% - 36px);
+    margin-top: 6px ;
 }
 .ding_side{
     font-size: 16px;
@@ -6418,6 +6427,7 @@ select.course_n:hover {
 .ding_bg_list img{
 	max-height: 120px;
 	max-width: 100%;
+    margin-bottom: 4px;
 }
 .ding_ding{
 	color: #1890ff;
@@ -6614,4 +6624,37 @@ select.course_n:hover {
 }
 .ding_Person .ant-modal-footer{
     padding:0
+}
+
+
+
+.ding_tabs {
+    width: 100%;
+    float: none;
+    list-style: none;
+    position: relative;
+    margin: 0;
+    text-align: left;
+}
+.ding_tabs li {
+    float: left;
+    display: block;
+}
+.ding_tabs input[type="radio"] {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+}
+.ding_tabs label {
+    display: block;
+    font-size: 20px;
+    font-weight: normal;
+    cursor: pointer;
+    position: relative;
+    color: #7b7b7b;
+}
+
+.ding_tabs [id^="tab"]:checked + label{
+    top: 0 !important;
+    color: #f60 !important;
 }
