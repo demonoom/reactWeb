@@ -6615,3 +6615,9 @@ select.course_n:hover {
 .ding_Person .ant-modal-footer{
     padding:0
 }
+.ding_tags {
+    /*min-height: 26px;*/
+    max-height: 50px;
+    overflow: auto;
+    width: 465px;
+}

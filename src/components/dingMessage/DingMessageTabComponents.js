@@ -1,3 +1,6 @@
+/**
+ * Created by noom on 17-9-7.
+ */
 import React, {PropTypes} from 'react';
 import {Tabs, Breadcrumb, Icon, Card, Button, Row, Col} from 'antd';
 import {message, Pagination, Modal, Input} from 'antd';
@@ -12,7 +15,6 @@ import MakeDingModal from './MakeDingModal';
 var ding;
 var DingArr = [];
 var DListArr = [];
-var timer = null;
 const DingMessageTabComponents = React.createClass({
 
     getInitialState() {
