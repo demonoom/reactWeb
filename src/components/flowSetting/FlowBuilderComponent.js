@@ -336,7 +336,7 @@ const FlowBuilderComponent = React.createClass({
                         <Button className="upexam_float" icon="plus-circle" onClick={this.addFlowStep}></Button>
                     </Col>
                 </Row>
-                <Row>
+                {/*<Row>
                     <Col span={6} className="framework_m_l">抄送人设置：</Col>
                     <Col span={16} className="framework_m_r">
                         {this.state.copyPersonTagArray}
@@ -353,7 +353,7 @@ const FlowBuilderComponent = React.createClass({
                         </Select>
                     </Col>
                 </Row>
-
+                 */}
                 <Modal title="设置审批人" visible={this.state.approvalModalVisible}
                        onCancel={this.approvalModalHandleCancel}
                        onOk={this.addApprovalToStep}
