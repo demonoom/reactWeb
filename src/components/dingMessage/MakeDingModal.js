@@ -278,8 +278,12 @@ class MakeDingModal extends React.Component {
             arr.push(tags[i].key);
         }
         this.state.selectedRowKeys = arr;
-        //在这里设置标签数组里的数据tags
-        
+        //在这里把点击的这一项从selectArr中删除  selectArr全局函数
+        for (var i = 0; i < selectArr.length; i++) {
+            if (selectArr[i].key == removedTag.key) {
+                selectArr.splice(i, 1);
+            }
+        }
     }
 
     handleInputChange = (e) => {
