@@ -6529,12 +6529,13 @@ select.course_n:hover {
 .dReadClick span {
     cursor: pointer;
     margin-right: 20px;
-    color: #7b7b7b;
     font-size: 13px;
 }
-.dReadClick span.active {
-    cursor: pointer;
+.ding_t_active {
     color:#38ADFF
+}
+.dign_t_default {
+    color:#7b7b7b
 }
 .ding_rev {
     display: inline-block;
