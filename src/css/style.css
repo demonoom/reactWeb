@@ -6657,7 +6657,7 @@ select.course_n:hover {
 
 .ding_tabs [id^="tab"]:checked + label{
     top: 0 !important;
-    color: #f60 !important;
+    color: #0084ff !important;
 }
 .ding_tags_wrap{
     max-height: 50px;
