@@ -6411,6 +6411,8 @@ select.course_n:hover {
 .ding_bg_list h5 div {
     float: left;
     margin-left: 36px;
+    word-wrap: break-word;
+    width: calc(100% - 36px);
 }
 
 .ding_side {
@@ -6742,6 +6744,7 @@ select.course_n:hover {
     float: right;
     margin-right: 15px;
     margin-top: 5px;
+    font-size: 12px;
 }
 
 .ding_str_col {
