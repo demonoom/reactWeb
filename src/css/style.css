@@ -4,9 +4,6 @@ html, body {
     background-size: cover;
     margin: 0;
     padding: 0;
-    -moz-user-select: none;
-    cursor: default;
-    -webkit-user-select: none;
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
 }
@@ -6399,8 +6396,8 @@ select.course_n:hover {
     line-height: 27px;
     margin: 6px 0;
     width: 100%;
-    float: left;
     font-weight: normal;
+    display:inline-block;
 }
 
 .ding_ding_i img {
