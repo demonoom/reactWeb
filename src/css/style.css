@@ -4,9 +4,6 @@ html, body {
     background-size: cover;
     margin: 0;
     padding: 0;
-    -moz-user-select: none;
-    cursor: default;
-    -webkit-user-select: none;
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
 }

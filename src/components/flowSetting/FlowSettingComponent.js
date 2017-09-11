@@ -3,6 +3,7 @@ import {Button,Icon,message,Modal,Collapse,Input,Row,Col,Select} from 'antd';
 import CreateFlowComponent from './CreateFlowComponent';
 import {isEmpty} from '../../utils/utils';
 import {doWebService} from '../../WebServiceHelper';
+import {FLOW_OPTSOURCE_MANAGER} from '../../utils/Const';
 const Panel = Collapse.Panel;
 const Option = Select.Option;
 const confirm = Modal.confirm;
@@ -38,8 +39,9 @@ const FlowSettingComponent = React.createClass({
         let _this = this;
         var param = {
             "method": 'getAllFlowGroupBySchoolId',
-            "pageNo":1,
-            "schoolId": this.state.loginUser.schoolId
+            "pageNo":"1",
+            "schoolId": this.state.loginUser.schoolId+"",
+            "optSource":FLOW_OPTSOURCE_MANAGER
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
