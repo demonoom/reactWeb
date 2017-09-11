@@ -6431,7 +6431,7 @@ select.course_n:hover {
     margin-left: 36px;
 }
 
-.ding_bg_list img {
+.ding_bg_list img{
     max-height: 120px;
     max-width: 100%;
     margin-bottom: 4px;
@@ -6536,7 +6536,9 @@ select.course_n:hover {
 }
 
 .dingImg {
-    width: 40%;
+    max-height: 120px;
+    max-width: 100%;
+    margin-bottom: 4px;
 }
 
 .dReadList li {
