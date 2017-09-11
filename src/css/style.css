@@ -6393,8 +6393,8 @@ select.course_n:hover {
     line-height: 27px;
     margin: 6px 0;
     width: 100%;
-    float: left;
     font-weight: normal;
+    display:inline-block;
 }
 
 .ding_ding_i img{
