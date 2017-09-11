@@ -5,10 +5,12 @@
 //分页规则中的每页记录数
 export const PAGE_SIZE = 30;
 export const ALL_TOPIC = 0;
-export const IS_DEBUG = false;   //是否是本地调试模式（true：使用本地测试地址；false：使用远程地址）
+export const IS_DEBUG = true;   //是否是本地调试模式（true：使用本地测试地址；false：使用远程地址）
 export const IS_LIVE_DEBUG = false;  //是否是直播调试模式（true：使用本地直播测试地址；false：使用本地webservice测试地址）
 export const ONLY_TEACHER_TOPIC = 1;
 export const TYPE_TEACHER = "TEAC";
+export const FLOW_OPTSOURCE_USER = "0";
+export const FLOW_OPTSOURCE_MANAGER = "1";
 export const TO_TYPE = 4;
 var baseEmotionMap = new Map();
 baseEmotionMap.set("[bexp_0001]", "baseEmotions/bexp_0001.png");
