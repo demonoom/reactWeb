@@ -143,7 +143,9 @@ const MainLayout = React.createClass({
             }
         }
     },
-
+    componentDidMount() {
+        this.refs.dingMusic.innerHTML = '<source src="../../static/eva_call_disconnected.m4a" type="audio/mpeg">'
+    },
     componentWillMount() {
         var userIdent = sessionStorage.getItem("ident");
         if (userIdent == null || userIdent == "") {
@@ -227,11 +229,21 @@ const MainLayout = React.createClass({
         }
         this.refs.dingMessageTabComponents.mesListLev();
     },
+    /**
+     * 收到叮消息的回调
+     * @param flag
+     */
     showAlert(flag) {
-        //控制小红点的显示与隐藏
         if (flag) {
+            //控制小红点的显示与隐藏
             this.refs.dingAlert.className = 'ding_alert_show';
+            //控制提示框
             this.openNotification();
+            //控制提示音播放
+            var audio = document.getElementById("dingMusic");
+            audio.play();
+            // document.title = '您有新的叮消息';
+
         } else {
             this.refs.dingAlert.className = 'ding_alert';
         }
@@ -590,6 +602,11 @@ const MainLayout = React.createClass({
                     </div>
                     <div className="panleArea"></div>
                     <div className="downloadArea"></div>
+                    <div>
+                        <audio id="dingMusic" ref='dingMusic'>
+
+                        </audio>
+                    </div>
                 </div>
             </LocaleProvider>
         );
