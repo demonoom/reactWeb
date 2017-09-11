@@ -3275,6 +3275,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 .ant-menu-item-selected .icon_antdisk {
     background-position: 0 -850px;
 }
+
 .icon_ding {
     background-position: 0 -1000px;
 }
@@ -3282,6 +3283,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 .ant-menu-item-selected .icon_ding {
     background-position: 0 -1050px;
 }
+
 .person_13 {
     font-size: 16px !important;
 }
@@ -6373,21 +6375,25 @@ select.course_n:hover {
         transform: translate(0, 0);
     }
 }
-.ding_bg{
-	background: #f8fbff;
-	padding: 16px;
+
+.ding_bg {
+    background: #f8fbff;
+    padding: 16px;
 }
-.ding_bg_list{
-	background: #fff;
-	padding: 16px;
-	margin-bottom: 10px;
-	color: #7b7b7b;
-	font-size: 14px;
+
+.ding_bg_list {
+    background: #fff;
+    padding: 16px;
+    margin-bottom: 10px;
+    color: #7b7b7b;
+    font-size: 14px;
 }
-.ding_bg .ding_bg_list:last-child{
-	margin-bottom: 0;
+
+.ding_bg .ding_bg_list:last-child {
+    margin-bottom: 0;
 }
-.ding_bg_list h5, .ding_side_wrap p{
+
+.ding_bg_list h5, .ding_side_wrap p {
     color: #424242;
     font-size: 15px;
     line-height: 27px;
@@ -6397,54 +6403,66 @@ select.course_n:hover {
     font-weight: normal;
 }
 
-.ding_ding_i img{
+.ding_ding_i img {
     width: 24px;
     height: 24px;
     float: left;
     margin: -3px 8px 0px 0;
     padding: 0 !important;
 }
-.ding_bg_list h5 div{
+
+.ding_bg_list h5 div {
     float: left;
     margin-left: 36px;
 }
-.ding_side{
+
+.ding_side {
     font-size: 16px;
 }
-.ding_side img{
+
+.ding_side img {
     width: 24px;
     height: 24px;
     float: left;
     margin-right: 6px;
     padding: 0 !important;
 }
-.ding_bg_l{
+
+.ding_bg_l {
     margin-left: 36px;
 }
-.ding_bg_list img{
-	max-height: 120px;
-	max-width: 100%;
+
+.ding_bg_list img {
+    max-height: 120px;
+    max-width: 100%;
     margin-bottom: 4px;
 }
-.ding_ding{
-	color: #1890ff;
+
+.ding_ding {
+    color: #1890ff;
 }
-.ding_left_1{
-	margin-left: 6px;
+
+.ding_left_1 {
+    margin-left: 6px;
 }
-.ding_left_2{
-	margin-left: 24px;
+
+.ding_left_2 {
+    margin-left: 24px;
 }
-.ding_t_12{
-	font-size: 12px;
+
+.ding_t_12 {
+    font-size: 12px;
 }
-.ding_t_red{
-	color: #ff4158;
+
+.ding_t_red {
+    color: #ff4158;
 }
-.ding_user_t{
+
+.ding_user_t {
     line-height: 36px;
     margin-top: 6px;
 }
+
 .ding_top {
     height: 6%;
     width: 96%;
@@ -6461,18 +6479,22 @@ select.course_n:hover {
     /*background-color: #fff;*/
     overflow: auto;
 }
-.ding_inner .ant-card-bordered{
+
+.ding_inner .ant-card-bordered {
     border: none;
 }
-.ding_inner .ant-card{
+
+.ding_inner .ant-card {
     font-size: 14px;
     margin: 0 3% 10px 3%;
     width: 94%;
 }
-.ding_inner .ant-card:last-child{
+
+.ding_inner .ant-card:last-child {
     margin: 0 3% 0 3%;
 }
-.ding_inner .ant-card-body{
+
+.ding_inner .ant-card-body {
     padding: 16px;
 }
 
@@ -6496,9 +6518,11 @@ select.course_n:hover {
     width: 85%;
     margin: 5px 0 0 10px;
 }
-.ding_send{
+
+.ding_send {
     margin: 2px 0 0 8px;
 }
+
 .ding_inner:only-child {
     width: 100%;
 }
@@ -6531,12 +6555,15 @@ select.course_n:hover {
     margin-right: 20px;
     font-size: 13px;
 }
+
 .ding_t_active {
-    color:#38ADFF
+    color: #38ADFF
 }
+
 .dign_t_default {
-    color:#7b7b7b
+    color: #7b7b7b
 }
+
 .ding_rev {
     display: inline-block;
     width: 100%;
@@ -6554,80 +6581,98 @@ select.course_n:hover {
     text-align: left;
     width: 190px;
 }
-.ding_read_u .ding_rev:last-child{
+
+.ding_read_u .ding_rev:last-child {
     margin-bottom: 0;
 }
+
 .ding_rev > span {
     float: right;
 }
+
 .make_dingPanel {
     height: 451px;
 
 }
-.ding_gray{
+
+.ding_gray {
     color: #7b7b7b;
 }
-.ding_read_u{
+
+.ding_read_u {
     display: inline-block;
     width: 100%;
     margin-top: 15px;
     font-size: 12px;
     text-align: left;
 }
-.ding_read_u .dingHead{
+
+.ding_read_u .dingHead {
     margin-right: 0;
     margin-bottom: 2px;
     margin-top: 5px;
 }
-.ding_read_u .user{
+
+.ding_read_u .user {
     max-width: 42px;
 }
-.ding_send_btn{
+
+.ding_send_btn {
     background: #0084ff;
     border: 1px solid #0084ff;
     color: #fff;;
 }
-.ding_send_btn:hover{
+
+.ding_send_btn:hover {
     background: #0D97FF;
     color: #fff;
     border: 1px solid #0D97FF;
 }
+
 .ding_Person .ant-table-body {
-    height:422px;
+    height: 422px;
     overflow: auto;
     border: 1px solid #E4E4E4;
     margin-top: 10px;
     border-radius: 4px;
 }
-.ding_modal_left{
+
+.ding_modal_left {
     margin-right: 10px;
     margin-top: 15px;
 }
-.ding_modal_top{
+
+.ding_modal_top {
     margin-left: 0px;
     margin-top: 5px;
 }
+
 .ding_hide {
     display: none;
 }
-.ding_Person .ant-table-thead{
+
+.ding_Person .ant-table-thead {
     position: fixed;
     z-index: 2;
 }
-.ding_Person .ant-table-thead > tr > th.ant-table-selection-column{
+
+.ding_Person .ant-table-thead > tr > th.ant-table-selection-column {
     width: 60px;
     padding: 12px 8px;
     text-align: right;
 }
-.ding_Person .ant-table table th.dold_text, .ding_Person .ant-table table td.dold_text{
+
+.ding_Person .ant-table table th.dold_text, .ding_Person .ant-table table td.dold_text {
     width: 205px;
 }
-.ding_Person .ant-table-tbody{
+
+.ding_Person .ant-table-tbody {
     display: block;
     margin-top: 53px;
 }
-.ding_Person .ant-modal-footer{
-    padding:0
+
+.ding_Person .ant-modal-footer {
+    padding: 0
 }
 
 .ding_tabs {
@@ -6638,15 +6683,18 @@ select.course_n:hover {
     margin: 0;
     text-align: left;
 }
+
 .ding_tabs li {
     float: left;
     display: block;
 }
+
 .ding_tabs input[type="radio"] {
     position: absolute;
     top: -9999px;
     left: -9999px;
 }
+
 .ding_tabs label {
     display: block;
     font-size: 20px;
@@ -6656,33 +6704,70 @@ select.course_n:hover {
     color: #7b7b7b;
 }
 
-.ding_tabs [id^="tab"]:checked + label{
+.ding_tabs [id^="tab"]:checked + label {
     top: 0 !important;
     color: #0084ff !important;
 }
-.ding_tags_wrap{
+
+.ding_tags_wrap {
     max-height: 50px;
     overflow: auto;
     margin-right: 12px;
 }
-.ding_textarea{
+
+.ding_textarea {
     margin-right: 12px;
 }
-.ding_textarea .ding_ipt{
+
+.ding_textarea .ding_ipt {
     width: 100%;
     padding: 8px;
     margin: 8px 0 0 0;
 }
+
 .ding_tags {
     /*min-height: 26px;*/
 
     width: 465px;
 }
-.new_add_ding .ant-modal-footer{
-    padding:0 !important
+
+.new_add_ding .ant-modal-footer {
+    padding: 0 !important
 }
-.ding_Person .ant-table-placeholder{
+
+.ding_Person .ant-table-placeholder {
     width: 90%;
     margin-left: 5%;
     float: left;
+}
+
+.ding_str_num {
+    float: right;
+    margin-right: 15px;
+    margin-top: 5px;
+}
+
+.ding_str_col {
+    color: red;
+}
+
+.ding_comment {
+    width: 375px;
+}
+
+.ding_alert {
+    display: none;
+    width: 8px;
+    height: 8px;
+    background-color: red;
+    border-radius: 50%;
+    margin-bottom: 18px;
+}
+.ding_alert_show{
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: red;
+    border-radius: 50%;
+    margin-bottom: 18px;
 }

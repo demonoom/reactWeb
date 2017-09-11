@@ -32,6 +32,7 @@ class MakeDingModal extends React.Component {
             inputValue: '',
             searchObj: '',
             humArr: [],
+            defStrNum: 200,
         };
         this.MakeDingModalHandleCancel = this.MakeDingModalHandleCancel.bind(this);
         this.onSelectChange = this.onSelectChange.bind(this);
@@ -121,6 +122,7 @@ class MakeDingModal extends React.Component {
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var data = ret.response;
+                _this.setState({GroupName:data[1].schoolName})
                 _this.drawTable(data);
             },
             onError: function (error) {
@@ -154,6 +156,12 @@ class MakeDingModal extends React.Component {
             target = e.target;
         }
         var sendMes = target.value;
+        if(sendMes.length>200) {
+            sendMes = sendMes.substr(0,200);
+            message.error('已经达到最大字数限制');
+        }
+        var strNum = 200 - sendMes.length;
+        this.setState({defStrNum: strNum});
         this.setState({sendMes});
     }
 
@@ -216,7 +224,7 @@ class MakeDingModal extends React.Component {
             "biuReceiverUids": receivePer,
             "attachmentPaths": imgUrl
         };
-        if (mesContent.length == 0) {
+        if (mesContent.trim() === '') {
             message.error('消息不能为空');
             return;
         }
@@ -304,7 +312,7 @@ class MakeDingModal extends React.Component {
         });
     }
 
-    /*搜索按钮的回调*/
+    /*搜索的回调*/
     searchPer() {
         var _this = this;
         var arr = [];
@@ -363,7 +371,7 @@ class MakeDingModal extends React.Component {
             <Modal
                 visible={this.state.isShow}
                 width={850}
-                title="创建叮"
+                title={"创建叮———"+this.state.GroupName}
                 onCancel={this.MakeDingModalHandleCancel}
                 transitionName=""  //禁用modal的动画效果
                 maskClosable={false} //设置不允许点击蒙层关闭
@@ -376,38 +384,39 @@ class MakeDingModal extends React.Component {
                         <div className="ant-transfer make_dingPanel">
                             {/*左*/}
                             <Col span={16}>
-                                <div className="ding_tags_wrap">
                                 <span className="upexam_float">接收者：</span>
-                                <div className="ding_tags upexam_float">
-                                    {tags.map((tag, index) => {
-                                        const isLongTag = tag.length > 20;
-                                        const tagElem = (
-                                            <Tag key={tag.key} closable={index !== -1}
-                                                 afterClose={() => this.handleClose(tag)}>
-                                                {isLongTag ? `${tag.name.slice(0, 20)}...` : tag.name}
-                                            </Tag>
-                                        );
-                                        return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
-                                    })}
-                                    {inputVisible && (
-                                        <Input
-                                            ref={this.saveInputRef}
-                                            type="text" size="small"
-                                            style={{width: 78}}
-                                            value={inputValue}
-                                            onChange={this.handleInputChange}
-                                            onBlur={this.handleInputConfirm}
-                                            onPressEnter={this.handleInputConfirm}
-                                        />
-                                    )}
-                                </div>
+                                <div className="ding_tags_wrap">
+                                    <div className="ding_tags upexam_float">
+                                        {tags.map((tag, index) => {
+                                            const isLongTag = tag.length > 20;
+                                            const tagElem = (
+                                                <Tag key={tag.key} closable={index !== -1}
+                                                     afterClose={() => this.handleClose(tag)}>
+                                                    {isLongTag ? `${tag.name.slice(0, 20)}...` : tag.name}
+                                                </Tag>
+                                            );
+                                            return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
+                                        })}
+                                        {inputVisible && (
+                                            <Input
+                                                ref={this.saveInputRef}
+                                                type="text" size="small"
+                                                style={{width: 78}}
+                                                value={inputValue}
+                                                onChange={this.handleInputChange}
+                                                onBlur={this.handleInputConfirm}
+                                                onPressEnter={this.handleInputConfirm}
+                                            />
+                                        )}
+                                    </div>
                                 </div>
                                 <div className="ding_textarea">
                                     <Input className="ding_ipt" placeholder="内容" type="textarea" rows={12}
-                                       value={this.state.sendMes}
-                                       onChange={this.snedMesOnChange}
-                                />
+                                           value={this.state.sendMes}
+                                           onChange={this.snedMesOnChange}
+                                    />
                                 </div>
+                                <p className="ding_str_num">还可以输入<span className="ding_str_col">{this.state.defStrNum}</span>字</p>
                                 <UploadImgComponents callBackParent={this.getUploadedImgList}
                                                      fileList={this.state.topicImgUrl}/>
                                 <div className="ding_modal_top">

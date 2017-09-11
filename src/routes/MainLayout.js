@@ -1,5 +1,5 @@
 import React from 'react';
-import {Menu, Icon, Row, Col} from 'antd';
+import {Menu, Icon, Row, Col, Button, notification} from 'antd';
 import MainTabComponents from '../components/MainTabComponents';
 import HeaderComponents from '../components/HeaderComponents';
 import UserFace from '../components/UserCardModalComponents';
@@ -61,6 +61,13 @@ const MainLayout = React.createClass({
             activeSystemSettingMiddleMenu: '',
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
+    },
+
+    openNotification() {
+        notification.open({
+            // message: 'Notification Title',
+            description: '你有一条新的叮消息，请及时查看.',
+        });
     },
 
 
@@ -158,6 +165,7 @@ const MainLayout = React.createClass({
         };
         ms = new MsgConnection();
         ms.connect(pro);
+
     },
     // 不用了
     // 呼叫本组件中的实例任何方法 dapeng
@@ -218,6 +226,16 @@ const MainLayout = React.createClass({
             this.refs.dingMessageTabComponents.getDList(pageNo, 2);
         }
         this.refs.dingMessageTabComponents.mesListLev();
+    },
+    showAlert(flag) {
+        //控制小红点的显示与隐藏
+        if (flag) {
+            this.refs.dingAlert.className = 'ding_alert_show';
+            this.openNotification();
+        } else {
+            this.refs.dingAlert.className = 'ding_alert';
+        }
+
     },
     teachSpaceTab(activeMenu, beActive) {
         let _this = this;
@@ -403,6 +421,7 @@ const MainLayout = React.createClass({
                                                       messageType={this.state.messageType}
                                                       messageUtilObj={ms}
                                                       onNewMessage={this.receiveNewMessage}
+                                                      showAlert={this.showAlert}
                 />;
                 break;
             case 'antGroup':
@@ -465,7 +484,7 @@ const MainLayout = React.createClass({
             case 'dingMessage':
                 //叮消息
                 middleComponent = <DingMessageMenu callbackParent={this.getDingMessage}/>;
-                tabComponent = <DingMessageTabComponents ref="dingMessageTabComponents"/>;
+                tabComponent = <DingMessageTabComponents ref="dingMessageTabComponents" showAlert={this.showAlert}/>;
 
                 break;
         }
@@ -548,6 +567,7 @@ const MainLayout = React.createClass({
                             </Menu.Item>
                             <Menu.Item key="dingMessage" className="padding_menu">
                                 <i className="icon_menu_ios icon_ding"></i>
+                                <b className="ding_alert" ref='dingAlert'></b>
                                 <div className="tan">叮一下</div>
                             </Menu.Item>
                             <FloatButton ref="floatButton" messageUtilObj={ms}/>
