@@ -20,30 +20,30 @@ const MessageMenu = React.createClass({
         mMenu = this;
         return {
             badgeShow: false,
-            tableIsClick:false,
+            tableIsClick: false,
         };
     },
 
-    componentDidMount(){
+    componentDidMount() {
         mMenu.getUserRecentMessages();
         //mMenu.refreshMessage();
     },
 
-    componentWillReceiveProps(nextProps){
-        if(isEmpty(nextProps)==false && (typeof(nextProps.userJson)!="undefined")){
+    componentWillReceiveProps(nextProps) {
+        if (isEmpty(nextProps) == false && (typeof(nextProps.userJson) != "undefined")) {
             // messageData.push(nextProps.userJson);
             userMessageData.splice(0);
             var index = mMenu.checkUserJsonIsExist(nextProps.userJson);
-            if(index==-1){
-                messageData.splice(0,0,nextProps.userJson);
-            }else{
+            if (index == -1) {
+                messageData.splice(0, 0, nextProps.userJson);
+            } else {
                 messageData[index] = nextProps.userJson;
             }
             mMenu.showMessageData();
         }
     },
 
-    checkUserJsonIsExist(newMessageObj){
+    checkUserJsonIsExist(newMessageObj) {
         var index = -1;
         for (var i = 0; i < messageData.length; i++) {
             var messageObj = messageData[i];
@@ -65,11 +65,11 @@ const MessageMenu = React.createClass({
     /**
      * 获取用户最新消息列表
      */
-    getUserRecentMessages(){
+    getUserRecentMessages() {
         userMessageData.splice(0);
         messageData.splice(0);
         var propsUserJson = mMenu.props.userJson;
-        if(isEmpty(propsUserJson)==false){
+        if (isEmpty(propsUserJson) == false) {
             messageData.push(propsUserJson);
         }
         var param = {
@@ -80,7 +80,7 @@ const MessageMenu = React.createClass({
             onResponse: function (ret) {
                 var response = ret.response;
                 var i = 0;
-                if (isEmpty(response) == false || isEmpty(messageData)==false) {
+                if (isEmpty(response) == false || isEmpty(messageData) == false) {
                     //messageData.splice(0);
                     response.forEach(function (e) {
                         //临时处理
@@ -101,7 +101,7 @@ const MessageMenu = React.createClass({
         });
     },
 
-    showMessageData(){
+    showMessageData() {
         messageData.forEach(function (message) {
             var fromUser = message.fromUser;
             var colUid = fromUser.colUid;
@@ -118,40 +118,23 @@ const MessageMenu = React.createClass({
                     imgTag = <div>
                         <span className="antnest_user"><img src={fromUser.avatar} height="38"></img></span>
                         <div className="mes_u_l">
-                            <div><span className="message_name">{fromUser.userName}</span><span className="time right_ri time_w">{lastCreateTime}</span></div>
+                            <div><span className="message_name">{fromUser.userName}</span><span
+                                className="time right_ri time_w">{lastCreateTime}</span></div>
                             <div className="message_cont_w">{lastContentText}</div>
                         </div>
                     </div>;
                 } else {
-                    var membersCount = toChatGroup.members.length;
-                    var groupMemebersPhoto=[];
-                    for(var i=0;i<membersCount;i++){
-                        var member = toChatGroup.members[i];
-                        var memberAvatarTag = <img src={member.avatar} ></img>;
-                        groupMemebersPhoto.push(memberAvatarTag);
-                        if(i>=3){
-                            break;
-                        }
+                    var membersImgs = toChatGroup.avatar;
+                    if (membersImgs == '') {
+                        membersImgs = 'http://60.205.86.217/upload5/2017-07-24/18/8ab85f3d-e468-4cee-a4c0-1d2625b36f83.png';
                     }
-                    var groupMemebersPhotoTag = <div className="maaee_group_face upexam_float" >{groupMemebersPhoto}</div>;
-                    switch (groupMemebersPhoto.length){
-                        case 1:
-                            groupMemebersPhotoTag = <div className="maaee_group_face1 upexam_float" >{groupMemebersPhoto}</div>;
-                            break;
-                        case 2:
-                            groupMemebersPhotoTag = <div className="maaee_group_face2 upexam_float" >{groupMemebersPhoto}</div>;
-                            break;
-                        case 3:
-                            groupMemebersPhotoTag = <div className="maaee_group_face3 upexam_float" >{groupMemebersPhoto}</div>;
-                            break;
-                        case 4:
-                            groupMemebersPhotoTag = <div className="maaee_group_face upexam_float" >{groupMemebersPhoto}</div>;
-                            break;
-                    }
+                    var memberAvatarTag = <img src={membersImgs}/>;
+                    var groupMemebersPhotoTag = <div className="maaee_group_face upexam_float">{memberAvatarTag}</div>;
                     imgTag = <div>
                         {groupMemebersPhotoTag}
                         <div className="mes_u_l">
-                            <div><span className="message_name">{toChatGroup.name}</span><span className="time right_ri time_w">{lastCreateTime}</span></div>
+                            <div><span className="message_name">{toChatGroup.name}</span><span
+                                className="time right_ri time_w">{lastCreateTime}</span></div>
                             <div className="message_cont_w">{lastContentText}</div>
                         </div>
                     </div>;
@@ -178,22 +161,22 @@ const MessageMenu = React.createClass({
                         "toChatGroup": toChatGroup
                     };
                 }
-                if(messageType==1){
+                if (messageType == 1) {
                     if (colUid != parseInt(sessionStorage.getItem("ident"))) {
                         userMessageData.push(userJson);
                     }
-                }else{
+                } else {
                     userMessageData.push(userJson);
                 }
             }
-            if (i == 0) {
-                if (messageType == 1) {
-                    mMenu.setState({selectRowKey: colUid});
-                }else{
-                    mMenu.setState({selectRowKey: toChatGroup.chatGroupId});
-                }
-            }
-            i++;
+            // if (i == 0) {
+            //     if (messageType == 1) {
+            //         mMenu.setState({selectRowKey: colUid});
+            //     }else{
+            //         mMenu.setState({selectRowKey: toChatGroup.chatGroupId});
+            //     }
+            // }
+            // i++;
         })
         mMenu.setState({"userMessageData": userMessageData});
     },
@@ -203,17 +186,17 @@ const MessageMenu = React.createClass({
      * 格式为：{fromUser,messageResponse}
      * 如：{{colUid:23836,userName:'王丹'},[{content:'123'}{content:'test'}]}
      */
-    setMessageArrayForOnePerson(messageObj){
-        if(messageObj.command=="message"){
+    setMessageArrayForOnePerson(messageObj) {
+        if (messageObj.command == "message") {
             var fromUser = messageObj.fromUser;
             var content = messageObj.content;
 
             var isCurrentDay = isToday(messageObj.createTime);
             var createTime;
-            if(isCurrentDay){
+            if (isCurrentDay) {
                 //如果是当天的消息，只显示时间
                 createTime = formatHM(messageObj.createTime);
-            }else{
+            } else {
                 //非当天时间，显示的是月-日
                 createTime = formatMD(messageObj.createTime);
             }
@@ -222,12 +205,12 @@ const MessageMenu = React.createClass({
             var contentJson = {"content": content, "createTime": createTime};
             if (messageToType == 1) {
                 var showUser;
-                if(fromUser.colUid != sessionStorage.getItem("ident")){
+                if (fromUser.colUid != sessionStorage.getItem("ident")) {
                     showUser = fromUser;
-                }else{
+                } else {
                     showUser = messageObj.toUser;
                 }
-                if(isEmpty(showUser)){
+                if (isEmpty(showUser)) {
                     console.log("toUser为空");
                     return;
                 }
@@ -249,7 +232,7 @@ const MessageMenu = React.createClass({
             } else {
                 //群组消息
                 var toChatGroup = messageObj.toChatGroup;
-                if(isEmpty(toChatGroup)==false){
+                if (isEmpty(toChatGroup) == false) {
                     var chatGroupId = toChatGroup.chatGroupId;
                     var groupName = toChatGroup.name;
                     messageIndex = mMenu.checkMessageIsExist(messageObj.toChatGroup.chatGroupId);
@@ -271,7 +254,7 @@ const MessageMenu = React.createClass({
         }
     },
 
-    checkMessageIsExist(userId){
+    checkMessageIsExist(userId) {
         var messageIndex = -1;
         for (var i = 0; i < messageData.length; i++) {
             var userJson = messageData[i];
@@ -289,14 +272,14 @@ const MessageMenu = React.createClass({
      * @param index
      * @returns {string}
      */
-    getRowClassName(record, index){
+    getRowClassName(record, index) {
         if (record.key == mMenu.state.selectRowKey) {
             return "tableRow";
         }
     },
 
-    turnToMessagePage(record, index){
-        mMenu.setState({selectRowKey: record.key, badgeShow: false,tableIsClick:true});
+    turnToMessagePage(record, index) {
+        mMenu.setState({selectRowKey: record.key, badgeShow: false, tableIsClick: true});
         mMenu.props.onUserClick(record);
     },
 
@@ -304,7 +287,8 @@ const MessageMenu = React.createClass({
         return (
             <div>
                 <div className="menu_til">消息动态</div>
-                <Table className="message_menu" showHeader={false} columns={columns} dataSource={mMenu.state.userMessageData}
+                <Table className="message_menu" showHeader={false} columns={columns}
+                       dataSource={mMenu.state.userMessageData}
                        rowClassName={mMenu.getRowClassName}
                        onRowClick={mMenu.turnToMessagePage}
                        pagination={false}
