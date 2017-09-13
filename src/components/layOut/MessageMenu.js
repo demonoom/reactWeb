@@ -129,7 +129,7 @@ const MessageMenu = React.createClass({
                         membersImgs = 'http://60.205.86.217/upload5/2017-07-24/18/8ab85f3d-e468-4cee-a4c0-1d2625b36f83.png';
                     }
                     var memberAvatarTag = <img src={membersImgs}/>;
-                    var groupMemebersPhotoTag = <div className="maaee_group_face upexam_float">{memberAvatarTag}</div>;
+                    var groupMemebersPhotoTag = <div className="antnest_user upexam_float">{memberAvatarTag}</div>;
                     imgTag = <div>
                         {groupMemebersPhotoTag}
                         <div className="mes_u_l">
