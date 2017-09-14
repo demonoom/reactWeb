@@ -14,7 +14,7 @@ class SystemSettingGhostMenu extends React.Component {
             loginUser: loginUser,
             ident: sessionStorage.getItem("ident"),
             beActive: false, // 是活动的，可伸缩的,
-            icon:["user","dot-chart","ellipsis"]
+            icon: ["user", "dot-chart", "ellipsis"]
         }
         this.changeMenu = this.changeMenu.bind(this);
         this.showpanel = this.showpanel.bind(this);
@@ -24,7 +24,7 @@ class SystemSettingGhostMenu extends React.Component {
     componentDidMount() {
         this.getTab();
         //测试
-        //this.buildTab([]);
+        // this.buildTab([]);
     }
 
     /**
@@ -40,7 +40,16 @@ class SystemSettingGhostMenu extends React.Component {
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var data = ret.response;
-                console.log(data);
+                //判断是否有管理员
+                var Array = [];
+                for (var i = 0; i < data.length; i++) {
+                    Array.push(data[i].name)
+                }
+                if (Array.indexOf('管理员') == -1) {
+                    _this.checkVip(true);
+                } else {
+                    _this.checkVip(false);
+                }
                 _this.buildTab(data);
             },
             onError: function (error) {
@@ -73,19 +82,19 @@ class SystemSettingGhostMenu extends React.Component {
         for (var i = 0; i < data.length; i++) {
             data[i].tabItems.forEach(function (v) {
                 console.log(v);
-                var lis =  <li className="multi">
-                                <ul className="second">
-                                    <li onClick={event => {
-                                        _this.checkWords(v.actionParams,v.name);
-                                    }}><img  className="icon_system_img"  src={v.icon}/>{v.name}</li>
-                                </ul>
-                          </li>
+                var lis = <li className="multi">
+                    <ul className="second">
+                        <li onClick={event => {
+                            _this.checkWords(v.actionParams, v.name);
+                        }}><img className="icon_system_img" src={v.icon}/>{v.name}</li>
+                    </ul>
+                </li>
                 liArr.push(lis);
             });
-            uls =  <li className="ghostMenu_li">
-                     <li><Icon type={this.state.icon[i]} />{data[i].name}</li>
-                    {liArr}
-                  </li>
+            uls = <li className="ghostMenu_li">
+                <li><Icon type={this.state.icon[i]}/>{data[i].name}</li>
+                {liArr}
+            </li>
             arr.push(uls);
             liArr = [];
         }
@@ -101,6 +110,10 @@ class SystemSettingGhostMenu extends React.Component {
         if (this.state.beActive) {
             this.props.toggleGhostMenu();
         }
+    }
+
+    checkVip(a) {
+        this.props.checkVip(a);
     }
 
     // menu on
@@ -123,15 +136,18 @@ class SystemSettingGhostMenu extends React.Component {
 
     }
 
-    checkWords(words,name) {
+    checkWords(words, name) {
         var _this = this;
         console.log(words);
-        if(words.method == 'operateStructure'){
+        //words就是返回的对象
+        if (words.method == 'operateStructure') {
             _this.changeMenu(event, 'origin', true)
-        }else if (words.method == 'operateStructureRole'){
+        } else if (words.method == 'operateStructureRole') {
             _this.changeMenu(event, 'role', true)
-        }else {
-            _this.showpanel(event,words.url,name);
+        } else if (words.method == 'operateApproval') {
+            _this.changeMenu(event, 'systemFlow', false)
+        } else {
+            _this.showpanel(event, words.url, name);
             _this.changeMenu(event, 'stop', false)
 
         }
@@ -139,7 +155,7 @@ class SystemSettingGhostMenu extends React.Component {
 
 
     // teachingAdmin panel
-    showpanel(event,urls,name) {
+    showpanel(event, urls, name) {
 
 
         this.onMenu(event);
@@ -150,7 +166,22 @@ class SystemSettingGhostMenu extends React.Component {
             url: urls + this.state.ident,
         }
 
-        LP.Start(param);
+        //保持三端体验一致
+        let phone = {
+            callHandler: function (json) {
+                var method = json.method;
+                if(method == 'selectPicture') {
+                    //upload
+                    var paths = "";
+                    var backId = json.callbackId;
+                    iframeWindow.Bridge.cb.backId(paths);
+                }else if(method= 'openNewPage') {
+
+                }
+            }
+        }
+
+        LP.Start(param, phone);
     }
 
 

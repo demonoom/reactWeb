@@ -4,6 +4,7 @@ import { Tabs, Breadcrumb, Icon,Card,Button,Row,Col,Steps,
 import {isEmpty} from '../../utils/utils';
 import ApprovalComponent from './ApprovalComponent';
 import CopyPersonSettingComponent from './CopyPersonSettingComponent';
+import {doWebService} from '../../WebServiceHelper';
 const Step = Steps.Step;
 const Option = Select.Option;
 
@@ -26,17 +27,67 @@ const FlowBuilderComponent = React.createClass({
             flowName:'',    //流程名称
             flowDescription:'', //流程说明
             approvalGroup:'-1',   //选中的流程分组
-            messageOfCopyPersonSendType:-1, //流程抄送人消息发送方式
+            messageOfCopyPersonSendType:"-1", //流程抄送人消息发送方式
         };
     },
 
     componentDidMount(){
+        //初始化页面中的审批人和抄送人数据
+        approvalJsonArray.splice(0);
+        copyPersonIdArray.splice(0);
+        stepObjArray.splice(0);
+        copyPersonTagArray.splice(0);
+        this.getFlowGroup();
     },
 
     componentWillReceiveProps(nextProps){
     },
 
     componentDidUpdate(){
+    },
+
+    /**
+     * 获取流程分组及其分组下的流程列表
+     */
+    getFlowGroup(){
+        let _this = this;
+        var param = {
+            "method": 'getAllFlowGroupNoProcessDefinition',
+            "schoolId": this.state.loginUser.schoolId
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                console.log(ret.msg+"==="+ret.response);
+                if(ret.msg=="调用成功" &&　ret.success == true){
+                    _this.buildFlowGroupOptions(ret.response);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+
+    },
+
+    /**
+     * 创建流程分组的下拉列表选项
+     */
+    buildFlowGroupOptions(response){
+        var _this = this;
+        var flowGroupArray = [];
+        var i=0;
+        var defaultSelectedGroupId = -1;
+        response.forEach(function (flowGroup) {
+            var flowGroupId = flowGroup.groupId;
+            var flowGroupName = flowGroup.groupName;
+            var optionObj = <Option value={flowGroupId}>{flowGroupName}</Option>
+            flowGroupArray.push(optionObj);
+            if(i==0){
+                defaultSelectedGroupId = flowGroupId;
+            }
+            i++;
+        });
+        _this.setState({flowGroupArray,"approvalGroup":defaultSelectedGroupId});
     },
 
     /**
@@ -70,6 +121,10 @@ const FlowBuilderComponent = React.createClass({
      * 添加流程步骤
      */
     addFlowStep(){
+        if(this.state.stepObjArray.length>=6){
+            message.warn("审批节点请勿超过6人，谢谢！");
+            return;
+        }
         this.setState({approvalModalVisible:true});
     },
 
@@ -95,8 +150,8 @@ const FlowBuilderComponent = React.createClass({
         var approvalJson = this.refs.approvalComponent.getApprovalInfoByJson();
         console.log(approvalJson);
         var approvalType = approvalJson.approvalType;
-        var approvalTypeStr = approvalType==1?"单个用户":"角色";
-        var approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalJson.approval)}>{approvalJson.approval}</div>;
+        var approvalTypeStr = approvalType==0?"单个用户":"角色";
+        var approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalJson.approval)}>{approvalJson.approval.userName}</div>;
         var stepObj = <Step id={approvalJson.approval} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
         stepObjArray.push(stepObj);
         approvalJsonArray.push(approvalJson);
@@ -214,18 +269,33 @@ const FlowBuilderComponent = React.createClass({
      */
     getProcessDefinitionBaseJson(){
         var processDefinitionBaseJson={};
+        var copyPersonIdArray = this.state.copyPersonIdArray;
+        var approvalJsonArray = this.state.approvalJsonArray;
+        var copyPersonList = [];
+        var flowApprovalUsers=[];
+        for(var i=0;i<copyPersonIdArray.length;i++){
+            var userJson = {"colUid":copyPersonIdArray[i]}
+            copyPersonList.push(userJson);
+        }
+        for(var i=0;i<approvalJsonArray.length;i++){
+            var approvalJson = approvalJsonArray[i];
+            var approvalType = approvalJson.approvalType;
+            var approval = approvalJson.approval;
+            var userJson = {"approvalUser":approval,"approvalType":approvalType}
+            flowApprovalUsers.push(userJson);
+        }
         //流程名称
         processDefinitionBaseJson.procDefName = this.state.flowName;
         //流程说明
-        processDefinitionBaseJson.flowDescription=this.state.flowDescription;
+        processDefinitionBaseJson.procDefDescribe =this.state.flowDescription;
         //流程所在分组
         processDefinitionBaseJson.flowGroupId = this.state.approvalGroup;
         //抄送人消息推送方式
         processDefinitionBaseJson.messageOfCopyPersonSendType = this.state.messageOfCopyPersonSendType;
         //消息抄送人列表
-        processDefinitionBaseJson.copyPersonList = this.state.copyPersonIdArray;
+        processDefinitionBaseJson.copyPersonList = copyPersonList;
         //审批人列表
-        processDefinitionBaseJson.approvalIdJson = this.state.approvalJsonArray;
+        processDefinitionBaseJson.flowApprovalUsers = flowApprovalUsers;
         return processDefinitionBaseJson;
     },
 
@@ -235,51 +305,47 @@ const FlowBuilderComponent = React.createClass({
      */
     render() {
         return (
-            <div>
+            <div className="modal_register_main">
                 <Row>
-                    <Col span={4}>审批名称</Col>
-                    <Col span={10}>
+                    <Col span={6}  className="framework_m_l">审批名称：</Col>
+                    <Col span={16}  className="framework_m_r">
                         <Input value={this.state.flowName} onChange={this.flowNameChange}/>
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={4}>审批说明</Col>
-                    <Col span={10}>
+                    <Col span={6} className="framework_m_l">审批说明：</Col>
+                    <Col span={16} className="framework_m_r">
                         <Input value={this.state.flowDescription} onChange={this.flowDescriptionChange}/>
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={4}>选择分组</Col>
-                    <Col span={20}>
+                    <Col span={6} className="framework_m_l">选择分组：</Col>
+                    <Col span={16} className="framework_m_r">
                         <Select defaultValue={this.state.approvalGroup} value={this.state.approvalGroup} style={{ width: 240 }} onChange={this.approvalGroupChange}>
-                            <Option value="-1">请选择分组</Option>
-                            <Option value="1">出勤休假</Option>
-                            <Option value="2">外出</Option>
-                            <Option value="3">费用报销</Option>
-                            <Option value="4">其他</Option>
+                            {this.state.flowGroupArray}
                         </Select>
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={4}>审批人设置</Col>
-                    <Col span={20}>
-                        <Steps>
+                    <Col span={6} className="framework_m_l">审批人设置：</Col>
+                    <Col span={17} className="framework_m_r">
+                        <Steps className="approval_steps">
                             {/*<Step status="process" title="项目组长审批" icon={<Icon type="user" />} />*/}
                             {this.state.stepObjArray}
                         </Steps>
-                        <Button icon="plus-circle" onClick={this.addFlowStep}></Button>
+                        <Button className="upexam_float" icon="plus-circle" onClick={this.addFlowStep}></Button>
                     </Col>
                 </Row>
-                <Row>
-                    <Col span={4}>抄送人设置</Col>
-                    <Col span={20}>
+                {/*<Row>
+                    <Col span={6} className="framework_m_l">抄送人设置：</Col>
+                    <Col span={16} className="framework_m_r">
                         {this.state.copyPersonTagArray}
                         <Button icon="plus-circle" onClick={this.addCopyPerson}></Button>
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={4}>自动通知抄送人</Col>
-                    <Col span={20}>
+                    <Col span={6} className="framework_m_l">自动通知抄送人：</Col>
+                    <Col span={16} className="framework_m_r">
                         <Select defaultValue="-1" style={{ width: 240 }} value={this.state.messageOfCopyPersonSendType} onChange={this.copySendHandleChange}>
                             <Option value="-1">请选择</Option>
                             <Option value="0">仅全部同意后通知</Option>
@@ -287,13 +353,14 @@ const FlowBuilderComponent = React.createClass({
                         </Select>
                     </Col>
                 </Row>
-
+                 */}
                 <Modal title="设置审批人" visible={this.state.approvalModalVisible}
                        onCancel={this.approvalModalHandleCancel}
                        onOk={this.addApprovalToStep}
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
-                       width="700px"
+                       width="440px"
+                       className="schoolgroup_modal"
                 >
                     <div className="space">
                         <ApprovalComponent ref="approvalComponent"></ApprovalComponent>
@@ -305,7 +372,7 @@ const FlowBuilderComponent = React.createClass({
                        onOk={this.addCopyPersonToTagArray}
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
-                       width="700px"
+                       width="616px"
                 >
                     <div className="space">
                         <CopyPersonSettingComponent ref="copyPersonSettingComponent" copyPersonIdArray={this.state.copyPersonIdArray}></CopyPersonSettingComponent>

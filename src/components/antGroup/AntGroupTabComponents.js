@@ -223,6 +223,7 @@ const AntGroupTabComponents = React.createClass({
                             sessionStorage.removeItem("loginUser");
                             //sessionStorage.removeItem("machineId");
                             location.hash="Login";
+                            window.ms = null;
                             LP.delAll();
                         },
                     });
@@ -297,6 +298,10 @@ const AntGroupTabComponents = React.createClass({
                         antGroup.setState({"messageList": messageList});
                     } else if (command == "message") {
                         var data = info.data;
+                        if (data.message.command == "biu_message") {
+                            var obj = JSON.parse(data.message.content);
+                            _this.props.showAlert(true);
+                        }
                         showImg = "";
                         var messageOfSinge = data.message;
                         var fromUser = messageOfSinge.fromUser;
@@ -350,24 +355,28 @@ const AntGroupTabComponents = React.createClass({
                                 };
                                 messageList.splice(0, 0, messageShow);
                                 // messageList.push(messageShow);
-                                var userJson = {
-                                    key: messageOfSinge.toUser.colUid,
-                                    "fromUser": messageOfSinge.toUser,
-                                    contentArray: contentArray,
-                                    "messageToType": 1
-                                };
-                                if(isEmpty(isTurnPage)){
-                                    antGroup.props.onNewMessage(userJson);
+                                if(isEmpty(messageOfSinge.toUser)==false){
+                                    var userJson = {
+                                        key: messageOfSinge.toUser.colUid,
+                                        "fromUser": messageOfSinge.toUser,
+                                        contentArray: contentArray,
+                                        "messageToType": 1
+                                    };
+                                    if(isEmpty(isTurnPage)){
+                                        antGroup.props.onNewMessage(userJson);
+                                    }
                                 }
                             }else{
-                                var userJson = {
-                                    key: messageOfSinge.toUser.colUid,
-                                    "fromUser": messageOfSinge.toUser,
-                                    contentArray: contentArray,
-                                    "messageToType": 1
-                                };
-                                if(isEmpty(isTurnPage)) {
-                                    antGroup.props.onNewMessage(userJson);
+                                if(isEmpty(messageOfSinge.toUser)==false){
+                                    var userJson = {
+                                        key: messageOfSinge.toUser.colUid,
+                                        "fromUser": messageOfSinge.toUser,
+                                        contentArray: contentArray,
+                                        "messageToType": 1
+                                    };
+                                    if(isEmpty(isTurnPage)) {
+                                        antGroup.props.onNewMessage(userJson);
+                                    }
                                 }
                             }
                         }else if(messageOfSinge.toType == 4 && typeof (content)!='undefined'){
