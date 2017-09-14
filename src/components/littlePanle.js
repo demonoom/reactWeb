@@ -1032,7 +1032,6 @@
         },
 
         GetLP(objParam, phone) {
-            console.log(phone);
             let _this = this;
             let objA;
 

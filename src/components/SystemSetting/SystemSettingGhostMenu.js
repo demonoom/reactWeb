@@ -161,7 +161,7 @@ class SystemSettingGhostMenu extends React.Component {
         this.onMenu(event);
 
         let param = {
-            mode: '',
+            mode: 'teachingAdmin',
             title: name,
             url: urls + this.state.ident,
         }
