@@ -160,13 +160,34 @@
 
         $(this.el).find('.back').on('click', this.closepanle.bind(this, this.id));
         this.ifrel = $('#' + this.ifrid);
-        console.log(this.ifrel);
+        console.log(this.ifrel[0].contentWindow);
+        //给他绑定postMessage
+        var phone = {
+            callHandler(json) {
+
+                var method = json.method;
+
+                if (method == 'selectPicture') {
+                    // .....执行本地逻辑
+                    alert(1);
+                    // var paths = "";
+                    var backId = json.callbackId;
+                    // iframeWindow.Bridge.cb.backId(paths);
+                } else if (method = 'openNewPage') {
+                    alert(2);
+
+                }
+            }
+        };
+        var str = JSON.stringify(phone);
+        console.log(str);
+        console.log(111);
+        // this.ifrel[0].contentWindow.postMessage('getcolor,noom', 'http://localhost:63342/demo2/b.html');
         this.ifrel.on('load', this._teachAdmin_UI_templet_iframe_event.bind(this, this.id, this.ifrid, 1));
         return this;
     }
     littlePanle.prototype._teachAdmin_UI_templet_iframe_event = function (id, ifrid, event) {
         event.target.contentWindow.phone = phone;
-        event.target.contentDocument.phone = phone;
         $("#" + id + " h3").text(event.target.contentWindow.document.title);
     }
 
