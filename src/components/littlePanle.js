@@ -161,13 +161,16 @@
         $(this.el).find('.back').on('click', this.closepanle.bind(this, this.id));
         this.ifrel = $('#' + this.ifrid);
         console.log(this.ifrel);
+        window.onmessage = function (e) {
+            console.log(e);
+        }
         this.ifrel.on('load', this._teachAdmin_UI_templet_iframe_event.bind(this, this.id, this.ifrid, 1));
         return this;
     }
     littlePanle.prototype._teachAdmin_UI_templet_iframe_event = function (id, ifrid, event) {
-        event.target.contentWindow.phone = phone;
-        event.target.contentDocument.phone = phone;
-        $("#" + id + " h3").text(event.target.contentWindow.document.title);
+        //event.target.contentWindow.phone = phone;
+        //event.target.contentDocument.phone = phone;
+        //$("#" + id + " h3").text(event.target.contentWindow.documentf.title);
     }
 
 //
@@ -204,7 +207,19 @@
         $(this.el).find('.enterFull').on('click', enterFull);
         $(this.el).find('.exitFull').on('click', exitFull);
         this.ifrel = $('#' + objtemplet.ifrid);
+        var iframe = this.ifrel[0];
 
+
+        window.addEventListener('message',function (e) {
+            var data = JSON.parse(e.data);
+            if(data.method == 'selectPictures'){
+                alert("执行选择图片逻辑!!");
+                var paths = "https://gss0.bdstatic.com/94o3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=593ce0758b13632701e0ca61f0e6cb89/fcfaaf51f3deb48fc4b7dd77f11f3a292cf578b8.jpg";
+                var callbackId = data.callbackId;
+                var response = {'callbackId':callbackId,'params':paths};
+                iframe.contentWindow.postMessage(JSON.stringify(response),'*');
+            }
+        });
         this.ifrel.on('load', this._default_UI_templet_iframe_event.bind(this, objtemplet.ifrid));
 
 
