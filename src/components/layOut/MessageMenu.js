@@ -125,11 +125,11 @@ const MessageMenu = React.createClass({
                     </div>;
                 } else {
                     var membersImgs = toChatGroup.avatar;
-                    if (membersImgs == '') {
-                        membersImgs = 'http://60.205.86.217/upload5/2017-07-24/18/8ab85f3d-e468-4cee-a4c0-1d2625b36f83.png';
-                    }
                     var memberAvatarTag = <img src={membersImgs}/>;
-                    var groupMemebersPhotoTag = <div className="maaee_group_face upexam_float">{memberAvatarTag}</div>;
+                    if (membersImgs == '') {
+                        memberAvatarTag = <img src={require("../images/lALPAAAAARBOpS_NAf7NAf4_510_510.png")}/>;
+                    }
+                    var groupMemebersPhotoTag = <div className="antnest_user upexam_float">{memberAvatarTag}</div>;
                     imgTag = <div>
                         {groupMemebersPhotoTag}
                         <div className="mes_u_l">

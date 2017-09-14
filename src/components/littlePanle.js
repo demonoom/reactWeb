@@ -31,7 +31,6 @@
     littlePanle.prototype.el = {};
     var aa = true;
     littlePanle.prototype.zoomview = function (id) {
-        // alert(1);
 
         let nodeEl = $('#' + id);
         let posRef2 = window.getComputedStyle(nodeEl[0]);
@@ -47,10 +46,10 @@
             left: Math.round(perLeft),
             top: Math.round(perTop)
         }));
-        if(aa) {
+        if (aa) {
             nodeEl.css({width: '100%', height: '100%', left: 0, top: '10%', position: 'fixed'});
             aa = false;
-        }else{
+        } else {
             nodeEl.css({width: '100%', height: '100%', left: 0, top: 0, position: 'fixed'});
             aa = true;
         }
@@ -161,12 +160,17 @@
 
         $(this.el).find('.back').on('click', this.closepanle.bind(this, this.id));
         this.ifrel = $('#' + this.ifrid);
-        this.ifrel.on('load', this._teachAdmin_UI_templet_iframe_event.bind(this, this.id, this.ifrid));
+        console.log(this.ifrel);
+        window.onmessage = function (e) {
+            console.log(e);
+        }
+        this.ifrel.on('load', this._teachAdmin_UI_templet_iframe_event.bind(this, this.id, this.ifrid, 1));
         return this;
     }
     littlePanle.prototype._teachAdmin_UI_templet_iframe_event = function (id, ifrid, event) {
-        event.target.contentWindow.phone = phone;
-        $("#" + id + " h3").text(event.target.contentWindow.document.title);
+        //event.target.contentWindow.phone = phone;
+        //event.target.contentDocument.phone = phone;
+        //$("#" + id + " h3").text(event.target.contentWindow.documentf.title);
     }
 
 //
@@ -203,7 +207,19 @@
         $(this.el).find('.enterFull').on('click', enterFull);
         $(this.el).find('.exitFull').on('click', exitFull);
         this.ifrel = $('#' + objtemplet.ifrid);
+        var iframe = this.ifrel[0];
 
+
+        window.addEventListener('message',function (e) {
+            var data = JSON.parse(e.data);
+            if(data.method == 'selectPictures'){
+                alert("执行选择图片逻辑!!");
+                var paths = "https://gss0.bdstatic.com/94o3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=593ce0758b13632701e0ca61f0e6cb89/fcfaaf51f3deb48fc4b7dd77f11f3a292cf578b8.jpg";
+                var callbackId = data.callbackId;
+                var response = {'callbackId':callbackId,'params':paths};
+                iframe.contentWindow.postMessage(JSON.stringify(response),'*');
+            }
+        });
         this.ifrel.on('load', this._default_UI_templet_iframe_event.bind(this, objtemplet.ifrid));
 
 
@@ -211,6 +227,7 @@
     }
 
     littlePanle.prototype._default_UI_templet_iframe_event = function (id, event) {
+        console.log('onload');
         event.target.contentWindow.phone = phone;
     }
 
@@ -695,12 +712,12 @@
                         $('.panle .danmu_pic').remove();
                         $('.panle .showDanmuArea').append(htm);
 
-                      window.simpleClassDanmuT =  setInterval(function(){
+                        window.simpleClassDanmuT = setInterval(function () {
                             let lis = $('.panle .showDanmuArea li');
                             if (lis.length) {
                                 $(lis[0]).remove();
                             }
-                        },5000);
+                        }, 5000);
 
                         break;
 
@@ -1025,11 +1042,11 @@
         mgr: [],
         hideArr: [],
 
-        Start(objParam){
-            this.GetLP(objParam);
+        Start(objParam, phone) {
+            this.GetLP(objParam, phone);
         },
 
-        GetLP(objParam) {
+        GetLP(objParam, phone) {
             let _this = this;
             let objA;
 
@@ -1060,21 +1077,21 @@
             return objA;
 
         },
-        addOrderBtn(){
+        addOrderBtn() {
             if ($('.ant-layout-header .lpmgrbtn').length) return;
             $('.ant-layout-header > div').append("<div class='lpmgrbtn'>" +
                 "<a onclick='LP.orderAll()' class='no_le'><i class='iconfont'>&#xe67a;</i><span>复位</span></a>" +
                 "<a onclick='LP.delAll()' class='del'><i class='iconfont'>&#xe6b4;</i><span>关闭</span></a>" +
                 "</div>");
         },
-        delAll(){
+        delAll() {
             $('.dialog.little-layout-aside-r-show').remove();
             this.mgr = [];
             this.hideArr = [];
             $('.lpmgrbtn').remove();
 
         },
-        orderAll(){
+        orderAll() {
 
             if (!this.mgr.length) {
                 return;
@@ -1188,10 +1205,12 @@ function enterFull(el) {
         elem.msRequestFullscreen();
     }
 }
+
 function replaceUnit(str) {
     return parseInt(str.replace(/[a-z]*/img, ''))
 
 }
+
 var utilsCommon = (function () {
     function addEvents(target, type, func) {
         if (target.addEventListener) //非ie 和ie9
@@ -1200,6 +1219,7 @@ var utilsCommon = (function () {
             target.attachEvent("on" + type, func);
         else target["on" + type] = func; //ie5
     };
+
     function removeEvents(target, type, func) {
         if (target.removeEventListener)
             target.removeEventListener(type, func, false);
@@ -1348,27 +1368,27 @@ function contemosConfirm(msg, okFn, cancelfn) {
 function showLargeImg(el, parentSelector) {
     $.openPhotoGallery(el, parentSelector)
 }
+
 // 保持android ios 一直体验的接口实现
 var phone = {
     // callHandler ({method: xxxx, callbackId: xxxxxx, url: xxxxx})
-    callHandler(refObj, ifrobj)
-    {
+    callHandler(json) {
 
-        let obj = refObj;
-        //  let obj = eval('(' + ref + ')');
+        var method = json.method;
 
-        if (!this[obj.method]) {
-            console.error(ref);
-            return;
-        }
-        let result = this[obj.method](obj);
+        if (method == 'selectPicture') {
+            // .....执行本地逻辑
+            alert(1);
+            var paths = "";
+            var backId = json.callbackId;
+            iframeWindow.Bridge.cb.backId(paths);
+        } else if (method = 'openNewPage') {
+            alert(2);
 
-        if (result && obj.callbackId) {
-            ifrobj.contentWindow[obj.callbackId](result);
         }
     },
 
-    openNewPage(args){
+    openNewPage(args) {
         let obj = {mode: 'teachingAdmin', url: args.url};
         LP.Start(obj);
     },
@@ -1529,11 +1549,11 @@ function doWebService(data, listener) {
     }, "json");
 }
 
-function changeStatus(videoEl){
-   let roateNum = roateNum || 0;
+function changeStatus(videoEl) {
+    let roateNum = roateNum || 0;
     roateNum += 90;
-    if(roateNum==360){
-        roateNum =0;
+    if (roateNum == 360) {
+        roateNum = 0;
     }
-   $(videoEl)[0].style.transform = "rotate("+ roateNum +"deg)";
+    $(videoEl)[0].style.transform = "rotate(" + roateNum + "deg)";
 }

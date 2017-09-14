@@ -3478,7 +3478,32 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     top: 8px;
     right: -12px;
 }
+.borderballoon::selection{
+    background:#D4F0FF;
+    color:#333;
+}
 
+.borderballoon::-moz-selection{
+    background:#D4F0FF;
+    color:#333;
+}
+
+.borderballoon::-webkit-selection{
+    background:#D4F0FF;
+    color:#333;
+}
+.borderballoon_le::selection {
+    background:#D4F0FF;
+    color:#000;
+}
+.borderballoon_le::-moz-selection {
+    background:#D4F0FF;
+    color:#000;
+}
+.borderballoon_le::-webkit-selection{
+    background:#D4F0FF;
+    color:#000;
+}
 .borderballoon img, .public .sayLine.left .sayCon img, .public .sayLine.right .sayCon img {
     padding: 0 5px;
     height: 38px !important;
@@ -3492,7 +3517,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 }
 
 .borderballoon_le, .public .sayLine.left div.saycont .sayCon {
-    background: #f2f2f2;
+    background: #fff;
     border-radius: 4px;
     position: relative;
     display: inline-block;
@@ -3506,6 +3531,9 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     flex-direction: row;
     font-size: 14px;
     line-height: 24px;
+    word-break: break-word;
+    border:1px solid #eee;
+    color:#333
 }
 
 .borderballoon_le:after {

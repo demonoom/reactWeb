@@ -1,9 +1,9 @@
 module.exports = {
 
-    'GET /proxy/Excoord_For_Education/(.*)': 'http://www.maaee.com/Excoord_For_Education/',
-    'GET /proxy/Excoord_PhoneService/(.*)': 'http://www.maaee.com/Excoord_PhoneService/',
-  //  'GET /proxy/Excoord_PhoneService/(.*)':     'http://192.168.1.59:8080/Excoord_PhoneService/',
-   // 'GET /proxy/Excoord_PhoneService/(.*)':     'http://192.168.1.34:8080/Excoord_PhoneService/',
+    //'GET /proxy/Excoord_For_Education/(.*)': 'http://www.maaee.com/Excoord_For_Education/',
+    //'GET /proxy/Excoord_PhoneService/(.*)': 'http://www.maaee.com/Excoord_PhoneService/',
+    //'GET /proxy/Excoord_PhoneService/(.*)':     'http://192.168.1.34:8080/Excoord_PhoneService/',
+    'GET /proxy/Excoord_PhoneService/(.*)':     'http://192.168.1.34:8080/Excoord_PhoneService/',
     'GET /proxy/upload/45/125/8890': 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
     'GET /proxy/upload/2/104/8890': 'http://192.168.2.104:8890/Excoord_Upload_Server/file/upload',
     'GET /proxy/upload/1/34/8890': 'http://192.168.1.34:8890/Excoord_Upload_Server/file/upload',
