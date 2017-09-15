@@ -3467,6 +3467,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     font-size: 14px;
     line-height: 24px;
     margin-left: 0;
+    word-break: break-word;
 }
 
 .borderballoon:after {
