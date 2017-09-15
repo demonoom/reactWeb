@@ -422,6 +422,7 @@ class LiveTV extends React.Component {
         //
         this.livesUi = dataArr.map(function (item) {
 
+            console.log(item);
             let keyIcon;
             let id = item.id;
             let user = item.user;
@@ -443,7 +444,7 @@ class LiveTV extends React.Component {
                 <div className="live_img" id={id} onClick={ () => {
                     _this.view(item)
                 } }>
-                    {/*<img className="attention_img" width="100%" src={cover}/>*/}
+                    <img className="attention_img" width="100%" src={cover}/>
                     <div className="live_green"><span>{schoolName}</span></div>
                 </div>
                 <div className="custom-card">
