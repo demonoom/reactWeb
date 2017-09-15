@@ -4,6 +4,10 @@
 import {Menu, Icon, Row, Col, message} from 'antd';
 import React, {PropTypes} from 'react';
 import {doWebService} from '../../WebServiceHelper';
+import UpLoadModal from './unLoadModal';
+import {showNoomLargeImg} from '../../utils/utils'
+import {showLargeImg} from '../../utils/utils'
+
 
 class SystemSettingGhostMenu extends React.Component {
 
@@ -14,17 +18,63 @@ class SystemSettingGhostMenu extends React.Component {
             loginUser: loginUser,
             ident: sessionStorage.getItem("ident"),
             beActive: false, // 是活动的，可伸缩的,
-            icon: ["user", "dot-chart", "ellipsis"]
+            icon: ["user", "dot-chart", "ellipsis"],
+            makeDingModalIsShow: false,
         }
         this.changeMenu = this.changeMenu.bind(this);
         this.showpanel = this.showpanel.bind(this);
         this.checkWords = this.checkWords.bind(this);
+        this.noom = this.noom.bind(this);
+        this.closeDingModel = this.closeDingModel.bind(this);
+        this.sendImg = this.sendImg.bind(this);
+        this.imgClick = this.imgClick.bind(this);
     }
 
     componentDidMount() {
         this.getTab();
         //测试
         // this.buildTab([]);
+
+        //将GhostMenu组件中的方法挂在window上，以便于在littlePanel中能够调用。
+        window.__noom__ = this.noom;
+        window.__sendImg__ = this.sendImg;
+    }
+
+    sendImg(currentUrl, urls) {
+        var imgArr = [];
+        var num = '';
+        var urls = urls.split('#');
+        var _this = this;
+        //根据urls的length动态创建img
+        urls.forEach(function (v, i) {
+            var imgId = "img" + i;
+            var img = <span className="topics_zan"><img id={imgId} className="topics_zanImg"
+                                                        onClick={showLargeImg} src={v}/>
+                      </span>;
+            imgArr.push(img);
+            if (currentUrl == v) {
+                num = i;
+            }
+        });
+        this.setState({imgArr});
+        //图片已渲染到DOM
+
+        document.querySelectorAll(".topics_zanImg")[num].click();
+
+    }
+
+    imgClick(e) {
+        console.log(e);
+    }
+
+    noom(callbackId) {
+        //控制上传组件的显示与隐藏
+        this.setState({makeDingModalIsShow: true});
+        this.setState({callbackId});
+    }
+
+    closeDingModel() {
+        this.setState({makeDingModalIsShow: false});
     }
 
     /**
@@ -163,27 +213,11 @@ class SystemSettingGhostMenu extends React.Component {
         let param = {
             mode: 'teachingAdmin',
             title: name,
-            url: urls + this.state.ident,
+            url: urls,
         }
 
-        //保持三端体验一致
-        let phone = {
-            callHandler: function (json) {
-                var method = json.method;
-                if(method == 'selectPicture') {
-                    //upload
-                    var paths = "";
-                    var backId = json.callbackId;
-                    iframeWindow.Bridge.cb.backId(paths);
-                }else if(method= 'openNewPage') {
-
-                }
-            }
-        }
-
-        LP.Start(param, phone);
+        LP.Start(param);
     }
-
 
     render() {
         //在菜单处于非活动状态下,隐藏向左的按钮,以免遮挡右侧区域,影响操作
@@ -205,6 +239,19 @@ class SystemSettingGhostMenu extends React.Component {
                 <div className="menu_til">教学管理</div>
                 <ul className="first">
                     {this.state.arr}
+                </ul>
+                <UpLoadModal
+                    isShow={this.state.makeDingModalIsShow}
+                    closeDingModel={this.closeDingModel}
+                    callbackId={this.state.callbackId}
+                />
+                {/*<div ref='yida' id="yida" className="toppics_ul_bg share_cont">*/}
+                {/*{this.state.imgArr}*/}
+                {/*</div>*/}
+                <ul>
+                    <li className="imgLi">
+                        {this.state.imgArr}
+                    </li>
                 </ul>
             </div>
         );

@@ -553,7 +553,7 @@ const AntCloudTableComponents = React.createClass({
     /**
      * 如果不是文件，預覽
      */
-    readDoc(e){
+    readDoc(e) {
         console.log(e);
         //根据不同的文件类型判断使用哪种方式预览
         var type = e.suffix;
@@ -561,22 +561,22 @@ const AntCloudTableComponents = React.createClass({
         var id = e.id;
         var createUid = e.createUid;
         var name = e.name;
-        if(type == 'mp4') {
+        if (type == 'mp4') {
             var url = path;
-            this.view(event,url,name);
-        }else if(type == 'jpg'){
+            this.view(event, url, name);
+        } else if (type == 'jpg') {
             var url = path;
-            this.view(event,url,name);
-        }else if(type == 'bmp'){
+            this.view(event, url, name);
+        } else if (type == 'bmp') {
             var url = path;
-            this.view(event,url,name);
+            this.view(event, url, name);
         }
-        else if(type == 'png'){
+        else if (type == 'png') {
             var url = path;
-            this.view(event,url,name);
-        }else {
+            this.view(event, url, name);
+        } else {
             var url = "http://www.maaee.com/Excoord_PhoneService/cloudFile/cloudFileShow/" + id + "/" + createUid;
-            this.view(event,url,name);
+            this.view(event, url, name);
         }
     },
     /**
@@ -594,13 +594,13 @@ const AntCloudTableComponents = React.createClass({
         e.preventDefault();
         e.cancelBubble = true;
 
-        let mode = (tit) =>{
-            let refArr =  tit.split('.');
-            let type = refArr[ refArr.length-1];
+        let mode = (tit) => {
+            let refArr = tit.split('.');
+            let type = refArr[refArr.length - 1];
             return type;
         }
 
-        let obj = {mode:mode(tit),title: tit, url: url, width: '380px'};
+        let obj = {mode: mode(tit), title: tit, url: url, width: '380px'};
 
 
         LP.Start(obj);
@@ -1112,7 +1112,7 @@ const AntCloudTableComponents = React.createClass({
      * 关闭分享文件的窗口
      */
     shareModalHandleCancel() {
-        cloudTable.setState({shareModalVisible: false,"checkedGroupOptions":[],"checkedConcatOptions":[]});
+        cloudTable.setState({shareModalVisible: false, "checkedGroupOptions": [], "checkedConcatOptions": []});
     },
 
     /**
@@ -1177,34 +1177,34 @@ const AntCloudTableComponents = React.createClass({
             "type": TO_TYPE
         };
 
-        if(isEmpty(checkedGroupOptions) == false) {
+        if (isEmpty(checkedGroupOptions) == false) {
             checkedGroupOptions.forEach(function (e) {
-            var uuid = createUUID();
-            var messageJson = {
-                'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
-                "toId": e, "command": "message", "hostId": loginUser.colUid,
-                "uuid": uuid, "toType": messageToGrp, "attachment": attachement, "state": 0
-            };
-            var commandJson = {"command": "message", "data": {"message": messageJson}};
-            console.log(commandJson);
-            ms.send(commandJson);
-        });
+                var uuid = createUUID();
+                var messageJson = {
+                    'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
+                    "toId": e, "command": "message", "hostId": loginUser.colUid,
+                    "uuid": uuid, "toType": messageToGrp, "attachment": attachement, "state": 0
+                };
+                var commandJson = {"command": "message", "data": {"message": messageJson}};
+                console.log(commandJson);
+                ms.send(commandJson);
+            });
         }
 
-        if(isEmpty(checkedConcatOptions) == false) {
+        if (isEmpty(checkedConcatOptions) == false) {
             checkedConcatOptions.forEach(function (e) {
-            var uuid = createUUID();
-            var messageJson = {
-                'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
-                "toId": e, "command": "message", "hostId": loginUser.colUid,
-                "uuid": uuid, "toType": messageToPer, "attachment": attachement, "state": 0
-            };
-            var commandJson = {"command": "message", "data": {"message": messageJson}};
-            console.log(commandJson);
-            ms.send(commandJson);
-        });
+                var uuid = createUUID();
+                var messageJson = {
+                    'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
+                    "toId": e, "command": "message", "hostId": loginUser.colUid,
+                    "uuid": uuid, "toType": messageToPer, "attachment": attachement, "state": 0
+                };
+                var commandJson = {"command": "message", "data": {"message": messageJson}};
+                console.log(commandJson);
+                ms.send(commandJson);
+            });
         }
-        cloudTable.setState({shareModalVisible: false,"checkedGroupOptions":[],"checkedConcatOptions":[]});
+        cloudTable.setState({shareModalVisible: false, "checkedGroupOptions": [], "checkedConcatOptions": []});
         // cloudTable.setState({"checkedGroupOptions": []});
     },
 

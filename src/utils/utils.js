@@ -93,6 +93,7 @@ export function isToday(str) {
 }
 
 export function showLargeImg(e) {
+    //哈哈哈哈哈哈哈市的撒
     var target = e.target;
     if (navigator.userAgent.indexOf("Chrome") > -1) {
         target = e.currentTarget;
@@ -100,6 +101,12 @@ export function showLargeImg(e) {
         target = e.target;
     }
     $.openPhotoGallery(target);
+    var event = event||window.event;
+    event.stopPropagation();
+}
+
+export function showNoomLargeImg(e) {
+    $.openPhotoGallery(e);
     var event = event||window.event;
     event.stopPropagation();
 }
@@ -176,4 +183,8 @@ export function cutString(str, len) {
         }
     }
     return s;
+}
+
+export function showModal(modalStatus) {
+    alert(modalStatus);
 }

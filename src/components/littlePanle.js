@@ -1,7 +1,7 @@
 /**
  * Created by madapeng on 17-4-17.
  */
-
+// import {showModal} from '../utils/utils';
 
 ;(function ($) {
 
@@ -27,7 +27,6 @@
 
     }
 
-    /*大啊是大势的*/
     littlePanle.prototype.el = {};
     var aa = true;
     littlePanle.prototype.zoomview = function (id) {
@@ -105,6 +104,10 @@
         utilsCommon.unbind(document, 'paste', onPasteFunction);
     }
 
+    littlePanle.prototype.gobackpanle = function () {
+        alert(1);
+    }
+
 
     littlePanle.prototype._teachAdmin_UI_templet = function (obj) {
 
@@ -116,6 +119,7 @@
                 <h3 class="title">${ obj.title }</h3>
                     <div class="little-tilte">
                         <a class="back"><i class="anticon anticon-left "></i></a>
+                        <!--<div class="goback">后退</div>-->
                     </div>
                 </div>
                 <div class="content">
@@ -149,7 +153,7 @@
 
             return refStyle
 
-        }
+        };
 
         this.htm = $(this.htm).css(styleObj(this.param.stylePage, this.param.stylePage.zIndex, this.param.orderIndex));
         $(document.body).append(this.htm);
@@ -159,36 +163,49 @@
         }
 
         $(this.el).find('.back').on('click', this.closepanle.bind(this, this.id));
+        $(this.el).find('.goback').on('click', this.gobackpanle.bind(this, this.id));
         this.ifrel = $('#' + this.ifrid);
-        console.log(this.ifrel[0].contentWindow);
-        //给他绑定postMessage
-        var phone = {
-            callHandler(json) {
 
-                var method = json.method;
+        var iframe = this.ifrel[0];
 
-                if (method == 'selectPicture') {
-                    // .....执行本地逻辑
-                    alert(1);
-                    // var paths = "";
-                    var backId = json.callbackId;
-                    // iframeWindow.Bridge.cb.backId(paths);
-                } else if (method = 'openNewPage') {
-                    alert(2);
+        window.addEventListener('message', function (e) {
+            var data = JSON.parse(e.data);
+            //data.method方式
+            //data.callbackId回调方法名
+            //data.errorbackId错误回调方法名
+            if (data.method == 'selectPictures') {
 
-                }
+                //调用选择图片插件，获取图片的路径存入paths
+                window.__noom__(data.callbackId);
+
+                window.__noomUpLoad__ = function (data, callbackId) {
+                    var str = data.join(',');
+                    var paths = str;
+                    var callbackId = callbackId;
+                    var response = {'callbackId': callbackId, 'params': paths};
+                    iframe.contentWindow.postMessage(JSON.stringify(response), '*');
+                };
+            } else if (data.method == 'showImage') {
+                //data.currentUrl   当前的地址
+                //data.url  全部地址，用#分割
+                window.__sendImg__(data.currentUrl, data.url);
+
             }
-        };
-        var str = JSON.stringify(phone);
-        console.log(str);
-        console.log(111);
-        // this.ifrel[0].contentWindow.postMessage('getcolor,noom', 'http://localhost:63342/demo2/b.html');
+        });
+
+
         this.ifrel.on('load', this._teachAdmin_UI_templet_iframe_event.bind(this, this.id, this.ifrid, 1));
         return this;
-    }
+    };
     littlePanle.prototype._teachAdmin_UI_templet_iframe_event = function (id, ifrid, event) {
+
         event.target.contentWindow.phone = phone;
         $("#" + id + " h3").text(event.target.contentWindow.document.title);
+
+        //event.target.contentWindow.phone = phone;
+        //event.target.contentDocument.phone = phone;
+        //$("#" + id + " h3").text(event.target.contentWindow.documentf.title);
+
     }
 
 //
@@ -226,6 +243,19 @@
         $(this.el).find('.exitFull').on('click', exitFull);
         this.ifrel = $('#' + objtemplet.ifrid);
 
+        /*与iframe通信*/
+        // var iframe = this.ifrel[0];
+        //
+        // window.addEventListener('message', function (e) {
+        //     var data = JSON.parse(e.data);
+        //     if (data.method == 'selectPictures') {
+        //         alert("执行选择图片逻辑!!");
+        //         var paths = "https://gss0.bdstatic.com/94o3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=593ce0758b13632701e0ca61f0e6cb89/fcfaaf51f3deb48fc4b7dd77f11f3a292cf578b8.jpg";
+        //         var callbackId = data.callbackId;
+        //         var response = {'callbackId': callbackId, 'params': paths};
+        //         iframe.contentWindow.postMessage(JSON.stringify(response), '*');
+        //     }
+        // });
         this.ifrel.on('load', this._default_UI_templet_iframe_event.bind(this, objtemplet.ifrid));
 
 
@@ -565,7 +595,7 @@
                 ms.send(con);
                 break;
         }
-    }
+    };
 
 
 //fileupload 图片上传
@@ -1048,11 +1078,11 @@
         mgr: [],
         hideArr: [],
 
-        Start(objParam, phone) {
-            this.GetLP(objParam, phone);
+        Start(objParam) {
+            this.GetLP(objParam);
         },
 
-        GetLP(objParam, phone) {
+        GetLP(objParam) {
             let _this = this;
             let objA;
 
