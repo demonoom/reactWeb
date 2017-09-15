@@ -163,7 +163,7 @@ class SystemSettingGhostMenu extends React.Component {
         let param = {
             mode: '',
             title: name,
-            url: urls + this.state.ident,
+            url: urls,
         }
 
         //保持三端体验一致

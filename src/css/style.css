@@ -3457,9 +3457,9 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     display: inline-flex;
     padding: 6px 12px;
     margin-right: 12px;
-    max-width: calc(100% - 150px);
-    max-width: -moz-calc(100% - 150px);
-    max-width: -webkit-calc(100% - 150px);
+    max-width: calc(100% - 250px);
+    max-width: -moz-calc(100% - 250px);
+    max-width: -webkit-calc(100% - 250px);
     min-width: 0;
     text-align: left;
     color: #fff;
@@ -3524,9 +3524,9 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     display: inline-block;
     padding: 6px 12px;
     margin-left: 12px;
-    max-width: calc(100% - 150px);
-    max-width: -moz-calc(100% - 150px);
-    max-width: -webkit-calc(100% - 150px);
+    max-width: calc(100% - 250px);
+    max-width: -moz-calc(100% - 250px);
+    max-width: -webkit-calc(100% - 250px);
     text-align: left;
     min-width: 0;
     flex-direction: row;
