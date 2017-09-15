@@ -529,6 +529,7 @@ const AntGroupTabComponents = React.createClass({
             antGroup.setState({"messageList": messageList,"isDirectToBottom":true});
         }
     },
+
     /**
      * 通过id获取文本域对象，并进而获取vaue值
      * @returns {string}
@@ -824,11 +825,11 @@ const AntGroupTabComponents = React.createClass({
             var emotionInput;
             if (antGroup.state.optType == "sendMessage" && isEmpty(antGroup.state.currentUser.userName) == false) {
                 welcomeTitle = antGroup.state.currentUser.userName;
-                sendBtn = <Button onClick={antGroup.sendMessage}><div>发送<p className="password_ts">(Enter)</p></div></Button>;
+                sendBtn = <Button onClick={antGroup.sendMessage}><div>发送<p className="password_ts">(Ctrl+Enter)</p></div></Button>;
                 if (antGroup.state.currentUser.colUtype != "SGZH") {
                     emotionInput = <Row className="group_send">
                         <Col className="group_send_talk">
-                            <EmotionInputComponents onKeyDown={this.checkKeyType} sendMessage={this.sendMessage}/>
+                            <EmotionInputComponents onKeyDown={this.checkKeyType}></EmotionInputComponents>
                         </Col>
                         <Col className="group_send_btn">
                             {sendBtn}
@@ -837,11 +838,10 @@ const AntGroupTabComponents = React.createClass({
                 }
             }else{
                 welcomeTitle = antGroup.state.currentGroupObj.name;
-                sendBtn = <Button value="groupSend" onClick={antGroup.sendMessage}><div>发送<p className="password_ts">(Enter)</p></div></Button>
+                sendBtn = <Button value="groupSend" onClick={antGroup.sendMessage}><div>发送<p className="password_ts">(Ctrl+Enter)</p></div></Button>
                 emotionInput = <Row className="group_send">
                     <Col className="group_send_talk">
-                        <EmotionInputComponents onKeyDown={this.checkKeyType} sendMessage={this.sendMessage}></EmotionInputComponents>
-
+                        <EmotionInputComponents onKeyDown={this.checkKeyType}></EmotionInputComponents>
                     </Col>
                     <Col className="group_send_btn">
                         {sendBtn}
