@@ -9,7 +9,7 @@ var mMenu;
 //构造表格样式
 const columns = [{
     title: 'option',
-    dataIndex: 'option',
+    dataIndex: 'optiPPon',
     key: 'option',
 }];
 
