@@ -74,7 +74,6 @@ class LiveTV extends React.Component {
 
     // 历史回顾
     _getHistoryLives2(pageNo, fn) {
-
         let _this = this;
         var param = {
             "method": 'getLivedLiveInfos',
@@ -105,7 +104,6 @@ class LiveTV extends React.Component {
 
 // 获取所有直播过的直播主题
     _getHistoryLives(pageNo, fn) {
-
         let _this = this;
         var param = {
             "method": 'getLivedLiveInfos',
@@ -424,12 +422,15 @@ class LiveTV extends React.Component {
         //
         this.livesUi = dataArr.map(function (item) {
 
+            console.log(item);
             let keyIcon;
             let id = item.id;
             let user = item.user;
             let title = item.title;
             let userName = user.userName;
-            let cover = item.liveCover.cover;
+            // let cover = item.liveCover.cover;
+            let liveCover = item.liveCover?item.liveCover:"";
+            let cover = liveCover.cover;
             let schoolName = item.schoolName;
             let courseName = item.courseName;
             let startTime = getLocalTime(item.startTime);

@@ -17,13 +17,20 @@ var EmotionInputComponents = React.createClass({
 
     ga('create', 'UA-49610253-3', 'auto');
     ga('send', 'pageview');
-    $("#emotionInput").bind("keydown",this.sendMessage);
-    $(".emoji-wysiwyg-editor").bind("keydown",this.sendMessage);
+    $("#emotionInput").bind("keyup",this.Enterkey);
+    $(".emoji-wysiwyg-editor").bind("keyup",this.Enterkey);
   },
+  //
+  // sendMessage(e){
+  //   if(e.ctrlKey && e.keyCode==13){
+  //     this.props.onKeyDown();
+  //   }
+  // },
 
-  sendMessage(e){
-    if(e.ctrlKey && e.keyCode==13){
-      this.props.onKeyDown();
+ Enterkey(e){
+    var EnterKeyCode = (navigator.appname=="Netscape")?event.which:event.keyCode;
+    if ( EnterKeyCode == 13 ){
+       this.props.sendMessage(e);
     }
   },
 
@@ -31,7 +38,7 @@ var EmotionInputComponents = React.createClass({
   render : function(){
     return (
       <div>
-        <Input type="textarea" id="emotionInput" rows={4} data-emojiable="true" onChange={this.inputChange}/>
+        <Input type="textarea" id="emotionInput" rows={4} data-emojiable="true" onChange={this.inputChange} />
       </div>
     )
   }
