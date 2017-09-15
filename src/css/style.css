@@ -3468,6 +3468,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     line-height: 24px;
     margin-left: 0;
     word-break: break-word;
+    white-space: pre-wrap;
 }
 
 .borderballoon:after {
@@ -3533,6 +3534,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     font-size: 14px;
     line-height: 24px;
     word-break: break-word;
+    white-space: pre-wrap;
     border:1px solid #eee;
     color:#333
 }
