@@ -113,7 +113,7 @@ const OpenClassComponents = React.createClass({
         if(isSeries=="2"){
             endTime = null;
             isSeriesStr="单节课";
-            if(canOpenClass==true && courseStatus=="1"){
+            if(canOpenClass==true && courseStatus!="3"){
                 optButtons=<div>
                     <Col span={24}><Button icon="play-circle-o" className="exam-particulars_title" title="直播" onClick={_this.openLive.bind(_this,row,"singleClass")}></Button></Col>
                 </div>;
@@ -182,7 +182,7 @@ const OpenClassComponents = React.createClass({
             videosArray.forEach(function (video) {
                 //播放按钮
                 var playButton;
-                if(video.userID==userId && video.videoStatus=="1"){
+                if(video.userID==userId && video.videoStatus!="3"){
                     playButton = <Button icon="play-circle-o" className="exam-particulars_title" title="直播" onClick={_this.openLive.bind(_this,video,"mulitiClass")}></Button>;
                 }
                 var liveTimeStr = formatNoSecond(video.liveTime);
@@ -240,7 +240,7 @@ const OpenClassComponents = React.createClass({
             onResponse: function (ret) {
                 var response = ret.response;
                 var videoStatus = response.videoStatus;
-                if(isEmpty(videoStatus)==false && videoStatus!=1){
+                if(isEmpty(videoStatus)==false && videoStatus==3){
                     _this.setState({"tipModalVisible":true});
                     return;
                 }
