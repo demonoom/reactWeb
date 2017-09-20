@@ -38,7 +38,6 @@ class StudentPersonCenterMenu extends React.Component {
                 <div className="menu_til">个人中心</div>
                 <Menu
                     onClick={this.handleClick}
-                    style={{ width: 240 }}
                     defaultSelectedKeys={['1']}
                     mode="vertical"
                 >

@@ -1836,7 +1836,7 @@ const MyFollowExtend = React.createClass({
 
             case 'personCenter':
 
-                returnBtn = <h3 className="public—til—blue">
+               returnBtn = <h3 className="public—til—blue">
                     <div className="ant-tabs-right">
                         <button onClick={this.props.returnParentPersonCenter} className="affix_bottom_tc"><Icon
                             type="left"/></button>
@@ -2269,7 +2269,7 @@ const MyFollowExtend = React.createClass({
 
         return (<div className="follow_my">
                 {returnBtn}
-                <div className="favorite_scroll">
+                <div className="favorite_scroll userinfo_bg person_attention">
                     <UseKnowledgeComponents ref="useKnowledgeComponents"/>
                     <div className="group_cont">
                         {userPhoneCard}
