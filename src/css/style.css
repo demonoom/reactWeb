@@ -3481,7 +3481,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     border-radius: 4px;
     position: relative;
     display: inline-flex;
-    padding: 6px 12px;
+    padding: 6px 12px 6px 14px;
     margin-right: 12px;
     max-width: calc(100% - 250px);
     max-width: -moz-calc(100% - 250px);
@@ -3549,7 +3549,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     border-radius: 4px;
     position: relative;
     display: inline-block;
-    padding: 6px 12px;
+    padding: 6px 14px 6px 12px;
     margin-left: 12px;
     max-width: calc(100% - 250px);
     max-width: -moz-calc(100% - 250px);
@@ -3594,7 +3594,38 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     top: 8px;
     right: -12px !important;
 }
-
+.borderballoon_dingcorner_le {
+    content: "";
+    position: absolute;
+    background: url(../../src/components/images/ding_corner_le.png) no-repeat left 0;
+    top: 0px;
+    left: 0;
+    width: 32px;
+    height: 32px;
+    background-size: 80%;
+    display: none;
+}
+.borderballoon_dingcorner_ri {
+    content: "";
+    position: absolute;
+    background: url(../../src/components/images/ding_corner_ri.png) no-repeat right 0;
+    top: 0px;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    background-size: 80%;
+}
+.borderballoon_dingcorner_ri_no{
+    content: "";
+    position: absolute;
+    background: url(../../src/components/images/ding_corner_ri.png) no-repeat right 0;
+    top: 0px;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    background-size: 80%;
+    display:none
+}
 .level_list_pa {
     padding: 15px 25px !important;
 }
