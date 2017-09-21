@@ -25,7 +25,7 @@
             sourcesCreate: [],
         }
 
-    }
+    };
 
     littlePanle.prototype.el = {};
     var aa = true;
@@ -80,7 +80,7 @@
         //
         exitFull();
 
-    }
+    };
     littlePanle.prototype.closepanle = function (id) {
         if (window.liveTVWS) {
             window.liveTVWS._close();
@@ -104,11 +104,6 @@
         utilsCommon.unbind(document, 'paste', onPasteFunction);
     }
 
-    littlePanle.prototype.gobackpanle = function () {
-        alert(1);
-    }
-
-
     littlePanle.prototype._teachAdmin_UI_templet = function (obj) {
 
         let id = UUID(8, 16);
@@ -119,12 +114,12 @@
                 <h3 class="title">${ obj.title }</h3>
                     <div class="little-tilte">
                         <a class="back"><i class="anticon anticon-left "></i></a>
-                        <!--<div class="goback">后退</div>-->
+                        <div class="goback">后退</div>
                     </div>
                 </div>
                 <div class="content">
                     <section class="littleAnt-iframe-panle">
-                        <iframe  border={0} id="${this.ifrid}"  src="${ obj.url }"  ></iframe>
+                        <iframe  border={0} class="shengpi" id="${this.ifrid}"  src="${ obj.url }"  ></iframe>
                     </section>
                 </div>
                 </div>`;
@@ -197,13 +192,21 @@
         this.ifrel.on('load', this._teachAdmin_UI_templet_iframe_event.bind(this, this.id, this.ifrid, 1));
         return this;
     };
+
+    littlePanle.prototype.gobackpanle = function () {
+        //向jsp发送后退信号
+        var iframe = this.ifrel[0];
+
+        iframe.contentWindow.postMessage('goback', '*');
+        // stopPropagation
+        // iframe.contentWindow.stopPropagation();
+
+    };
+
     littlePanle.prototype._teachAdmin_UI_templet_iframe_event = function (id, ifrid, event) {
 
-        event.target.contentWindow.phone = phone;
-        $("#" + id + " h3").text(event.target.contentWindow.document.title);
-
         //event.target.contentWindow.phone = phone;
-        //event.target.contentDocument.phone = phone;
+        //$("#" + id + " h3").text(event.target.contentWindow.document.title);
         //$("#" + id + " h3").text(event.target.contentWindow.documentf.title);
 
     }

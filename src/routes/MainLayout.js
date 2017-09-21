@@ -143,9 +143,12 @@ const MainLayout = React.createClass({
             }
         }
     },
+
     componentDidMount() {
         this.refs.dingMusic.innerHTML = '<source src="../../static/eva_call_disconnected.m4a" type="audio/mpeg">'
+        this.refs.mesMusic.innerHTML = '<source src="../../static/B(1).mp3" type="audio/mpeg">'
     },
+
     componentWillMount() {
         var userIdent = sessionStorage.getItem("ident");
         if (userIdent == null || userIdent == "") {
@@ -169,6 +172,7 @@ const MainLayout = React.createClass({
         ms.connect(pro);
 
     },
+
     // 不用了
     // 呼叫本组件中的实例任何方法 dapeng
     componentDidUpdate() {
@@ -249,6 +253,21 @@ const MainLayout = React.createClass({
         }
 
     },
+    /**
+     * 收到普通消息的回调
+     */
+    showMesAlert(flag) {
+        if (flag) {
+            //控制提示音播放
+            var audio = document.getElementById("mesMusic");
+            audio.play();
+            //控制小红点的显示与隐藏
+            this.refs.msgAlert.className = 'ding_alert_show';
+        } else {
+            this.refs.msgAlert.className = 'ding_alert';
+        }
+    },
+
     teachSpaceTab(activeMenu, beActive) {
         let _this = this;
         // 2
@@ -281,6 +300,7 @@ const MainLayout = React.createClass({
             this.setState({ghostMenuVisible: visible});
         }
     },
+
     /**
      * 设置系统设置的Ghost Menu的显示和关闭
      * @param obj
@@ -315,6 +335,10 @@ const MainLayout = React.createClass({
 
     getGroupInfo() {
         this.refs.personCenterComponents.getUserChatGroup();
+    },
+
+    getGroupMenu() {
+        this.refs.personCenterComponents.getGroupMenu();
     },
     /**
      * 回调发送群组消息
@@ -434,13 +458,16 @@ const MainLayout = React.createClass({
                                                       messageUtilObj={ms}
                                                       onNewMessage={this.receiveNewMessage}
                                                       showAlert={this.showAlert}
+                                                      showMesAlert={this.showMesAlert}
                 />;
                 break;
             case 'antGroup':
                 //蚁群
                 middleComponent = <AntGroupMenu ref="antGroupMenu" callbackSetFirstPerson={this.setFirstPerson}
                                                 callbackPersonCenterData={this.getPersonalCenterData}
-                                                callbackGetGroupInfo={this.getGroupInfo}/>;
+                                                callbackGetGroupInfo={this.getGroupInfo}
+                                                callbackGetGroupMenu={this.getGroupMenu}
+                />;
                 tabComponent = <PersonCenterComponents ref="personCenterComponents"
                                                        userInfo={this.state.userObj}
                                                        userContactsData={this.state.userContactsData}
@@ -473,6 +500,9 @@ const MainLayout = React.createClass({
                 tabComponent = <AntCloudTableComponents antCloudKey={this.state.antCloudKey}
                                                         messageUtilObj={ms}
                 ></AntCloudTableComponents>;
+                // tabComponent = <nAntCloudTableComponents antCloudKey={this.state.antCloudKey}
+                //                                         messageUtilObj={ms}
+                // ></nAntCloudTableComponents>;
                 break;
             case 'antCloudClassRoom':
                 //云课堂
@@ -552,6 +582,7 @@ const MainLayout = React.createClass({
                             <Menu.Item key="message" className="padding_menu">
                                 <i className="icon_menu_ios icon_message"></i>
                                 <div className="tan">动态</div>
+                                <b className="ding_alert" ref='msgAlert'></b>
                             </Menu.Item>
                             <Menu.Item key="antNest" className="padding_menu">
                                 <i className="icon_menu_ios icon_yichao1"></i>
@@ -604,6 +635,9 @@ const MainLayout = React.createClass({
                     <div className="downloadArea"></div>
                     <div>
                         <audio id="dingMusic" ref='dingMusic'>
+
+                        </audio>
+                        <audio id="mesMusic" ref='mesMusic'>
 
                         </audio>
                     </div>

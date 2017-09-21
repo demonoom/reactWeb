@@ -3480,32 +3480,37 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     top: 8px;
     right: -12px;
 }
-.borderballoon::selection{
-    background:#D4F0FF;
-    color:#333;
+
+.borderballoon::selection {
+    background: #D4F0FF;
+    color: #333;
 }
 
-.borderballoon::-moz-selection{
-    background:#D4F0FF;
-    color:#333;
+.borderballoon::-moz-selection {
+    background: #D4F0FF;
+    color: #333;
 }
 
-.borderballoon::-webkit-selection{
-    background:#D4F0FF;
-    color:#333;
+.borderballoon::-webkit-selection {
+    background: #D4F0FF;
+    color: #333;
 }
+
 .borderballoon_le::selection {
-    background:#D4F0FF;
-    color:#000;
+    background: #D4F0FF;
+    color: #000;
 }
+
 .borderballoon_le::-moz-selection {
-    background:#D4F0FF;
-    color:#000;
+    background: #D4F0FF;
+    color: #000;
 }
-.borderballoon_le::-webkit-selection{
-    background:#D4F0FF;
-    color:#000;
+
+.borderballoon_le::-webkit-selection {
+    background: #D4F0FF;
+    color: #000;
 }
+
 .borderballoon img, .public .sayLine.left .sayCon img, .public .sayLine.right .sayCon img {
     padding: 0 5px;
     height: 38px !important;
@@ -3535,8 +3540,8 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     line-height: 24px;
     word-break: break-word;
     white-space: pre-wrap;
-    border:1px solid #eee;
-    color:#333
+    border: 1px solid #eee;
+    color: #333
 }
 
 .borderballoon_le:after {
@@ -6428,7 +6433,7 @@ select.course_n:hover {
     margin: 6px 0;
     width: 100%;
     font-weight: normal;
-    display:inline-block;
+    display: inline-block;
 }
 
 .ding_ding_i img {
@@ -6462,7 +6467,7 @@ select.course_n:hover {
     margin-left: 36px;
 }
 
-.ding_bg_list img{
+.ding_bg_list img {
     max-height: 120px;
     max-width: 100%;
     margin-bottom: 4px;
@@ -6796,11 +6801,20 @@ select.course_n:hover {
     border-radius: 50%;
     margin-bottom: 18px;
 }
-.ding_alert_show{
+
+.ding_alert_show {
     display: inline-block;
     width: 8px;
     height: 8px;
     background-color: red;
     border-radius: 50%;
     margin-bottom: 18px;
+}
+
+.ding_mes_read {
+    background-color: #fff;
+}
+
+.ding_mes_notRead {
+    background-color: blanchedalmond;
 }

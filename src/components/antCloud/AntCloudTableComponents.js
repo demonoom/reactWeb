@@ -22,6 +22,7 @@ import {getLocalTime} from '../../utils/utils';
 import {createUUID} from '../../utils/utils';
 import {isEmpty, TO_TYPE} from '../../utils/Const';
 import {bubbleSort} from '../../utils/utils';
+import {showLargeImg} from '../../utils/utils';
 
 const RadioGroup = Radio.Group;
 const Panel = Collapse.Panel;
@@ -112,6 +113,20 @@ const AntCloudTableComponents = React.createClass({
     componentWillReceiveProps(nextProps) {
         var antCloudKey = nextProps.antCloudKey;
         this.getFileByType(antCloudKey);
+    },
+
+    componentDidUpdate() {
+        var imgArrNum = this.state.imgArrNum;
+        var a = document.querySelectorAll(".topics_zanImg")[imgArrNum];
+        var b = this.state.imgArrflag;
+        if (isEmpty(a) == false) {
+            if (b) {
+                setTimeout(function () {
+                    a.click();
+                }, 100);
+                this.state.imgArrflag = false;
+            }
+        }
     },
 
     getFileByType(fileType) {
@@ -245,7 +260,7 @@ const AntCloudTableComponents = React.createClass({
                         cloudTable.setState({"parentDirectoryIdAtMoveModal": parentDirectoryId});
                     }
                 }
-                i++
+                i++;
                 var key = e.id;
                 var name = e.name;
                 var directory = e.directory;
@@ -554,7 +569,6 @@ const AntCloudTableComponents = React.createClass({
      * 如果不是文件，預覽
      */
     readDoc(e) {
-        console.log(e);
         //根据不同的文件类型判断使用哪种方式预览
         var type = e.suffix;
         var path = e.path;
@@ -564,16 +578,38 @@ const AntCloudTableComponents = React.createClass({
         if (type == 'mp4') {
             var url = path;
             this.view(event, url, name);
-        } else if (type == 'jpg') {
+        } else if (type == 'jpg' || type == 'bmp' || type == 'png') {
             var url = path;
-            this.view(event, url, name);
-        } else if (type == 'bmp') {
-            var url = path;
-            this.view(event, url, name);
-        }
-        else if (type == 'png') {
-            var url = path;
-            this.view(event, url, name);
+            //当前的路径
+            var arr = [];
+            var sum = document.getElementsByClassName('te_download_a');
+            for (var i = 0; i < sum.length; i++) {
+                var suffix = sum[i].href.substr(sum[i].href.length - 3);
+                if (suffix == 'jpg' || suffix == 'png' || suffix == 'PNG' || suffix == 'JPG' || suffix == 'BMP' || suffix == 'bmp') {
+                    arr.push(sum[i].href)
+                }
+            }
+            //总共的图片个数
+            var num = arr.length;
+            //所有图片的路径
+            //创建img对象，渲染并调用插件
+            var imgArr = [];
+            arr.forEach(function (v, i) {
+                var imgId = "img" + i;
+                var img = <span className="topics_zan"><img id={imgId} className="topics_zanImg"
+                                                            onClick={showLargeImg} src={v}/>
+                      </span>;
+                imgArr.push(img);
+                if (url == v) {
+                    num = i;
+                }
+            });
+            // console.log(imgArr);
+            //渲染
+            this.setState({imgArr, imgArrflag: true, imgArrNum: num});
+            // document.querySelectorAll(".topics_zanImg")[num].click();
+            //不能立马渲染到dom，怀疑是创建react的方法，采取另一种react创建方法
+            // this.view(event, url, name);
         } else {
             var url = "http://www.maaee.com/Excoord_PhoneService/cloudFile/cloudFileShow/" + id + "/" + createUid;
             this.view(event, url, name);
@@ -1491,6 +1527,11 @@ const AntCloudTableComponents = React.createClass({
                         onChange: cloudTable.pageOnChange
                     }} scroll={{y: 400}}/>
                 </div>
+                <ul>
+                    <li className="imgLi">
+                        {this.state.imgArr}
+                    </li>
+                </ul>
             </div>
 
         );

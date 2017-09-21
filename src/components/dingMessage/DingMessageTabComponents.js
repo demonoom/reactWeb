@@ -15,6 +15,8 @@ import MakeDingModal from './MakeDingModal';
 var ding;
 var DingArr = [];
 var DListArr = [];
+var notRedMesArr = [];
+
 const DingMessageTabComponents = React.createClass({
 
     getInitialState() {
@@ -42,6 +44,25 @@ const DingMessageTabComponents = React.createClass({
         ding.dingMs(ms);
     },
 
+    componentWillUpdate() {
+        var arr = this.state.notRedMesArr;
+        if (isEmpty(document.querySelector('.ding_bg_list')) == false) {
+            document.querySelector('.ding_bg_list').className = 'ding_mes_read ding_bg_list'
+        }
+        console.log(arr);
+        if (isEmpty(arr) == false) {
+            for (var i = 0; i < arr.length; i++) {
+                if (isEmpty(document.getElementById(arr[0])) == false) {
+                    document.getElementById(arr[i]).className = 'ding_mes_notRead ding_bg_list';
+                }
+            }
+        }
+        var id = this.state.biuId;
+        if (isEmpty(id) == false) {
+            document.getElementById(id).className = 'ding_bg_list ding_mes_read';
+        }
+    },
+
     /**
      * 即使通讯
      * @param ms
@@ -52,14 +73,16 @@ const DingMessageTabComponents = React.createClass({
             onMessage: function (info) {
                 var command = info.command;
                 if (isEmpty(command) == false) {
-                     if (command == 'message') {  //单条消息
+                    if (command == 'message') {  //单条消息
                         var data = info.data;
                         if (data.message.command == "biu_message") {
                             var obj = JSON.parse(data.message.content);
-                            var dingData = _this.state.DPanelMes;
-                            dingData.unshift(obj);
-                            ding.buildDList(dingData, 1);
-                            _this.props.showAlert(true);
+                            if (obj.userId !== _this.state.loginUser.colUid) {
+                                var dingData = _this.state.DPanelMes;
+                                dingData.unshift(obj);
+                                ding.buildDList(dingData, 1);
+                                _this.props.showAlert(true);
+                            }
                         }
                     }
                 }
@@ -135,6 +158,7 @@ const DingMessageTabComponents = React.createClass({
      * 渲染ding列表
      */
     buildDList(e, type) {
+        var _this = this;
         console.log(e);
         e.forEach(function (v) {
             // 转化时间
@@ -157,6 +181,10 @@ const DingMessageTabComponents = React.createClass({
             v.receivers.forEach(function (e) {
                 if (e.receiveState == 0) {
                     notRed++;
+                }
+                //判断出userId等于自己的id的时候，并且这个receiveState == 0,让这个成为未读标识，记录消息id---v.id
+                if (e.userId == _this.state.loginUser.colUid && e.receiveState == 0) {
+                    notRedMesArr.push(e.biuId);
                 }
             });
             var id = v.id;
@@ -192,7 +220,7 @@ const DingMessageTabComponents = React.createClass({
                 ;
             } else {
                 if (isEmpty(v.attachments) === false) {
-                    var sendFMine = <div className="ding_bg_list">
+                    var sendFMine = <div className="ding_bg_list" id={id}>
                         <div onClick={ding.entMesDetil.bind(this, id)} style={{cursor: 'pointer'}}>
                             <div className="ding_ding_i"><img src="../src/components/images/ding_icon.png"/><span
                                 className="ding_ding">叮</span><span className="ding_left_1">来自{author}</span><span
@@ -206,7 +234,7 @@ const DingMessageTabComponents = React.createClass({
                         </div>
                     </div>;
                 } else {
-                    var sendFMine = <div className="ding_bg_list">
+                    var sendFMine = <div className="ding_bg_list" id={id}>
                         <div onClick={ding.entMesDetil.bind(this, id)} style={{cursor: 'pointer'}}>
                             <div className="ding_ding_i"><img src="../src/components/images/ding_icon.png"/><span
                                 className="ding_ding">叮</span><span className="ding_left_1">来自{author}</span><span
@@ -223,8 +251,10 @@ const DingMessageTabComponents = React.createClass({
             }
             DListArr.push(sendFMine);
         });
+        ding.setState({notRedMesArr});
         ding.setState({DListArr});
         DListArr = [];
+        notRedMesArr = [];
     },
 
     /**

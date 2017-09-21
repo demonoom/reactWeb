@@ -1,5 +1,20 @@
 import React, {PropTypes} from 'react';
-import {Card, Button, Row, Col, message,Icon,Tabs,Pagination,Modal,Input,Collapse,Popover,Table,Transfer} from 'antd';
+import {
+    Card,
+    Button,
+    Row,
+    Col,
+    message,
+    Icon,
+    Tabs,
+    Pagination,
+    Modal,
+    Input,
+    Collapse,
+    Popover,
+    Table,
+    Transfer
+} from 'antd';
 import Favorites from '../Favorites';
 import UseKnowledgeComponents from '../UseKnowledgeComponents';
 import {doWebService} from '../../WebServiceHelper';
@@ -14,19 +29,19 @@ const Panel = Collapse.Panel;
 var courseWareList;
 var coursePanelChildren;
 var activeKey = [];
-var subjectList=[];
+var subjectList = [];
 var data = [];
-var subjectTableColumns  = [{
+var subjectTableColumns = [{
     title: '出题人',
-    className:'ant-table-selection-user',
+    className: 'ant-table-selection-user',
     dataIndex: 'name',
 }, {
     title: '内容',
-    className:'ant-table-selection-cont',
+    className: 'ant-table-selection-cont',
     dataIndex: 'content',
-},{
+}, {
     title: '题型',
-    className:'ant-table-selection-topic',
+    className: 'ant-table-selection-topic',
     dataIndex: 'subjectType',
     filters: [{
         text: '单选题',
@@ -45,28 +60,28 @@ var subjectTableColumns  = [{
         value: '材料题',
     },],
     onFilter: (value, record) => record.subjectType.indexOf(value) === 0,
-},{
+}, {
     title: '分值',
-    className:'ant-table-selection-score',
+    className: 'ant-table-selection-score',
     dataIndex: 'subjectScore',
 }, {
     title: '操作',
-    className:'ant-table-selection-score3',
+    className: 'ant-table-selection-score3',
     dataIndex: 'subjectOpt',
 },
 ];
 
-var userGroupsColumns = [ {
+var userGroupsColumns = [{
     title: '群聊头像',
     dataIndex: 'groupPhoto',
-	className: 'left-12',
-},{
+    className: 'left-12',
+}, {
     title: '群聊名称',
     dataIndex: 'groupName',
-},{
+}, {
     title: '群聊人数',
     dataIndex: 'userCount',
-},{
+}, {
     title: '群设置',
     dataIndex: 'groupSet',
 },];
@@ -77,19 +92,21 @@ const PersonCenterComponents = React.createClass({
 
     getInitialState() {
         personCenter = this;
+        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         return {
+            loginUser: loginUser,
             userInfo: personCenter.props.userInfo,
             isExist: false,
             optType: 'userDetail',
-            currentChatGroupPage:1,
-            userGroupsData:[],
+            currentChatGroupPage: 1,
+            userGroupsData: [],
         };
     },
 
     /**
      * 判断当前个人中心显示的人员是否是当前用户的联系人
      */
-    checkPersonIsInContacts(userInfo){
+    checkPersonIsInContacts(userInfo) {
         var isExist = false;
         var userContactsData = personCenter.props.userContactsData;
         for (var i = 0; i < userContactsData.length; i++) {
@@ -102,10 +119,14 @@ const PersonCenterComponents = React.createClass({
         return isExist;
     },
 
+    a(id) {
+        this.getPersonalCenterData(id);
+    },
+
     /**
      * 获取个人中心需要的数据,老师和学生可通用,后期需要什么再添加
      */
-    getPersonalCenterData(userId){
+    getPersonalCenterData(userId) {
         var param = {
             "method": 'getPersonalCenterData',
             "userId": userId,
@@ -115,7 +136,7 @@ const PersonCenterComponents = React.createClass({
                 var userInfo = ret.response;
                 var isExist = personCenter.checkPersonIsInContacts(userInfo);
                 personCenter.isFollow(userInfo);
-                personCenter.setState({"userInfo": userInfo, "isExist": isExist,"optType": 'userDetail'});
+                personCenter.setState({"userInfo": userInfo, "isExist": isExist, "optType": 'userDetail'});
             },
             onError: function (error) {
                 message.error(error);
@@ -126,7 +147,7 @@ const PersonCenterComponents = React.createClass({
     /**
      * 获取联系人列表
      */
-    isFollow(userInfo){
+    isFollow(userInfo) {
         var param = {
             "method": 'isFollow',
             "userId": sessionStorage.getItem("ident"),
@@ -146,25 +167,25 @@ const PersonCenterComponents = React.createClass({
     /**
      * 发消息
      */
-    sendMessage(e){
+    sendMessage(e) {
         personCenter.props.onSendMessage(personCenter.state.userInfo);
     },
     /**
      * 学生的提问
      */
-    studentAsk(){
-        personCenter.setState({"optType":"turnToAsk","activeKey":"我发起过的提问"});
+    studentAsk() {
+        personCenter.setState({"optType": "turnToAsk", "activeKey": "我发起过的提问"});
     },
     /**
      * 学生的学习轨迹
      */
-    studentStudyTrack(){
-        personCenter.setState({"optType":"turnStudyTrack","activeKey":"studyTrack"});
+    studentStudyTrack() {
+        personCenter.setState({"optType": "turnStudyTrack", "activeKey": "studyTrack"});
     },
     /**
      * 关注联系人
      */
-    followUser(){
+    followUser() {
         var param = {
             "method": 'follow',
             "userId": sessionStorage.getItem("ident"),
@@ -188,7 +209,7 @@ const PersonCenterComponents = React.createClass({
     /**
      * 关注联系人
      */
-    unfollowUser(){
+    unfollowUser() {
         var param = {
             "method": 'unFollow',
             "userId": sessionStorage.getItem("ident"),
@@ -213,7 +234,7 @@ const PersonCenterComponents = React.createClass({
      * 获取个人中心的关注列表
      * @param userId
      */
-    getMyFollows(userId){
+    getMyFollows(userId) {
 
         var param = {
             "method": 'getMyFollows',
@@ -221,20 +242,27 @@ const PersonCenterComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                if(ret.msg=="调用成功" && ret.success==true){
+                if (ret.msg == "调用成功" && ret.success == true) {
                     var response = ret.response;
-                    var followsUserArray=[];
+                    var followsUserArray = [];
                     response.forEach(function (e) {
                         var followUser = e.user;
                         var course = e.course;
                         var userName = followUser.userName;
                         var courseName = course.colCourse;
                         var userHeaderIcon = <img src={followUser.avatar}></img>;
-                        var userJson = {key:followUser.colUid,"userName":userName,"courseName":courseName,userHeaderIcon:userHeaderIcon,"userObj":followUser};
+                        var userJson = {
+                            key: followUser.colUid,
+                            "userName": userName,
+                            "courseName": courseName,
+                            userHeaderIcon: userHeaderIcon,
+                            "userObj": followUser
+                        };
                         // followsUserArray.push(userJson);
-                        var followsCard = <Card key={followUser.colUid} id={followUser} className="focus" onClick={personCenter.getPersonalCenterData.bind(personCenter,followUser.colUid)}>
-                                <a target="_blank" className="attention_img">
-								<img alt={userName + '头像'} width="100%" src={e.user.avatar}/></a>
+                        var followsCard = <Card key={followUser.colUid} id={followUser} className="focus"
+                                                onClick={personCenter.getPersonalCenterData.bind(personCenter, followUser.colUid)}>
+                            <a target="_blank" className="attention_img">
+                                <img alt={userName + '头像'} width="100%" src={e.user.avatar}/></a>
                             <div className="custom-card focus_2">
                                 <div className="focus_1">
                                     <span className="antnest_name focus_3">{e.user.userName}</span>
@@ -245,7 +273,11 @@ const PersonCenterComponents = React.createClass({
                         </Card>;
                         followsUserArray.push(followsCard);
                     });
-                    personCenter.setState({"optType":"getMyFollows","activeKey":"userFollows","followsUserArray":followsUserArray});
+                    personCenter.setState({
+                        "optType": "getMyFollows",
+                        "activeKey": "userFollows",
+                        "followsUserArray": followsUserArray
+                    });
                 }
             },
             onError: function (error) {
@@ -257,56 +289,66 @@ const PersonCenterComponents = React.createClass({
     /**
      * 获取我的收藏列表
      */
-    getUserFavorite(){
+    getUserFavorite() {
         var user = personCenter.state.userInfo.user;
-        personCenter.setState({"optType":"userFavorite","currentUser":user,"studentId":user.colUid,"activeKey":"1"});
+        personCenter.setState({
+            "optType": "userFavorite",
+            "currentUser": user,
+            "studentId": user.colUid,
+            "activeKey": "1"
+        });
     },
 
     /**
      * 获取我的题目
      */
-    getMySubjects(){
+    getMySubjects() {
         var userId = personCenter.state.userInfo.user.colUid;
         //personCenter.props.callBackGetMySubjects(personCenter.state.userInfo.user);
-        personCenter.getUserSubjectsByUid(userId,1);
+        personCenter.getUserSubjectsByUid(userId, 1);
     },
 
-    getUserSubjectsByUid:function (ident,pageNo) {
+    getUserSubjectsByUid: function (ident, pageNo) {
         var param = {
-            "method":'getUserSubjectsByUid',
-            "userId":ident,
-            "pageNo":pageNo
+            "method": 'getUserSubjectsByUid',
+            "userId": ident,
+            "pageNo": pageNo
         };
 
         doWebService(JSON.stringify(param), {
-            onResponse : function(ret) {
+            onResponse: function (ret) {
                 subjectList.splice(0);
                 data.splice(0);
                 var response = ret.response;
-                if(response==null || response.length==0){
-                    personCenter.setState({totalCount:0});
-                }else {
+                if (response == null || response.length == 0) {
+                    personCenter.setState({totalCount: 0});
+                } else {
                     response.forEach(function (e) {
                         var key = e.id;
-                        var name=e.user.userName;
-                        var popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>'+e.content+'<hr/><span class="answer_til answer_til_2">答案：</span>'+e.answer+'</div>';
-                        var content=<Popover placement="rightTop" content={<article id='contentHtml' className='content Popover_width' dangerouslySetInnerHTML={{__html: popOverContent}}></article>}><article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: e.content}}></article></Popover>;
-                        var subjectType=e.typeName;
-                        var subjectScore=e.score;
-                        if(parseInt(e.score)<0)
-                        {
-                            subjectScore='--';
+                        var name = e.user.userName;
+                        var popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>' + e.content + '<hr/><span class="answer_til answer_til_2">答案：</span>' + e.answer + '</div>';
+                        var content = <Popover placement="rightTop"
+                                               content={<article id='contentHtml' className='content Popover_width'
+                                                                 dangerouslySetInnerHTML={{__html: popOverContent}}></article>}>
+                            <article id='contentHtml' className='content'
+                                     dangerouslySetInnerHTML={{__html: e.content}}></article>
+                        </Popover>;
+                        var subjectType = e.typeName;
+                        var subjectScore = e.score;
+                        if (parseInt(e.score) < 0) {
+                            subjectScore = '--';
                         }
                         var answer = e.answer;
-                        var subjectOpt=<div><Button style={{ }} type=""  value={e.id} onClick={personCenter.showModal}  icon="export" title="使用" className="score3_i"></Button></div>;
+                        var subjectOpt = <div><Button style={{}} type="" value={e.id} onClick={personCenter.showModal}
+                                                      icon="export" title="使用" className="score3_i"></Button></div>;
                         data.push({
                             key: key,
                             name: name,
                             content: content,
-                            subjectType:subjectType,
-                            subjectScore:subjectScore,
-                            subjectOpt:subjectOpt,
-                            answer:answer
+                            subjectType: subjectType,
+                            subjectScore: subjectScore,
+                            subjectOpt: subjectOpt,
+                            answer: answer
                         });
                         var pager = ret.pager;
                         personCenter.setState({
@@ -318,7 +360,7 @@ const PersonCenterComponents = React.createClass({
                     });
                 }
             },
-            onError : function(error) {
+            onError: function (error) {
                 message.error(error);
             }
 
@@ -326,37 +368,37 @@ const PersonCenterComponents = React.createClass({
     },
 
     //弹出题目使用至备课计划的窗口
-    showModal:function (e) {
+    showModal: function (e) {
         var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
             target = e.target;
         }
         var currentKnowledge = target.value;
-        personCenter.refs.useKnowledgeComponents.showModal(currentKnowledge,"TeacherAllSubjects",personCenter.state.knowledgeName);
+        personCenter.refs.useKnowledgeComponents.showModal(currentKnowledge, "TeacherAllSubjects", personCenter.state.knowledgeName);
     },
 
     /**
      * 获取我的资源
      */
-    getMyCourseWares(){
-        personCenter.getTeachPlans(personCenter.state.userInfo.user.colUid,1);
+    getMyCourseWares() {
+        personCenter.getTeachPlans(personCenter.state.userInfo.user.colUid, 1);
     },
 
-    getTeachPlans(ident,pageNo){
+    getTeachPlans(ident, pageNo) {
         personCenter.setState({
-            ident:ident,
+            ident: ident,
         })
         var param = {
-            "method":'getMaterialsByUid',
-            "userId":ident,
-            "mtype":"-1",
-            "pageNo":pageNo,
+            "method": 'getMaterialsByUid',
+            "userId": ident,
+            "mtype": "-1",
+            "pageNo": pageNo,
         };
         doWebService(JSON.stringify(param), {
-            onResponse : function(ret) {
-                courseWareList=new Array();
+            onResponse: function (ret) {
+                courseWareList = new Array();
                 courseWareList.splice(0);
                 var response = ret.response;
                 let user;
@@ -369,38 +411,38 @@ const PersonCenterComponents = React.createClass({
                     var userName = e.user.userName;
                     var path = e.path;
                     var pdfPath = e.pdfPath;
-                    var fileType=fileName.substring(fileName.lastIndexOf(".")+1);
+                    var fileType = fileName.substring(fileName.lastIndexOf(".") + 1);
                     var pointId = e.pointId;
                     var pointContent = '';
 
-                    if(!pointId){
+                    if (!pointId) {
                         pointContent = '其它';
-                    }else{
+                    } else {
                         pointContent = e.point.content;
                     }
 
                     var createTime = getLocalTime(e.createTime);
                     var fileTypeLogo;
                     var type = e.type;
-                    var htmlPath="";
+                    var htmlPath = "";
                     var collectCount = e.collectCount; //收藏次数即现今的点赞次数
-                    if(fileType=="ppt"){
+                    if (fileType == "ppt") {
                         fileTypeLogo = "icon_geshi icon_ppt";
                         htmlPath = e.htmlPath;
-                    }else if(fileType=="mp4"){
+                    } else if (fileType == "mp4") {
                         fileTypeLogo = "icon_geshi icon_mp4";
-                    }else if(fileType=="flv"){
+                    } else if (fileType == "flv") {
                         fileTypeLogo = "icon_geshi icon_flv";
-                    }else if(fileType=="pdf"){
+                    } else if (fileType == "pdf") {
                         fileTypeLogo = "icon_geshi icon_pdf";
-                    }else if(fileType=="pptx"){
+                    } else if (fileType == "pptx") {
                         fileTypeLogo = "icon_geshi icon_pptx";
                         htmlPath = e.htmlPath;
-                    }else if(fileType=="mp3"){
+                    } else if (fileType == "mp3") {
                         fileTypeLogo = "icon_geshi icon_mp3";
                     }
-                    activeKey.push(fileName+"#"+createTime+"#"+id);
-                    courseWareList.push([id,fileName,userName,path,pdfPath,fileType,pointContent,createTime,fileTypeLogo,htmlPath,type,collectCount,userId]);
+                    activeKey.push(fileName + "#" + createTime + "#" + id);
+                    courseWareList.push([id, fileName, userName, path, pdfPath, fileType, pointContent, createTime, fileTypeLogo, htmlPath, type, collectCount, userId]);
                 });
                 personCenter.buildKonwledgePanels(courseWareList);
                 personCenter.setState({
@@ -411,7 +453,7 @@ const PersonCenterComponents = React.createClass({
                     totalCourseWareCount: parseInt(ret.pager.rsCount)
                 });
             },
-            onError : function(error) {
+            onError: function (error) {
                 message.error(error);
             }
 
@@ -419,28 +461,31 @@ const PersonCenterComponents = React.createClass({
     },
 
     //显示使用至备课计划的弹窗
-    showUseKnowledgeModal:function (e) {
+    showUseKnowledgeModal: function (e) {
         var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
             target = e.target;
         }
         var currentSchedule = target.value;
-        personCenter.refs.useKnowledgeComponents.showModal(currentSchedule,"TeacherAllCourseWare",personCenter.state.knowledgeName);
+        personCenter.refs.useKnowledgeComponents.showModal(currentSchedule, "TeacherAllCourseWare", personCenter.state.knowledgeName);
     },
 
-    buildKonwledgePanels:function (courseWareList) {
-        if(courseWareList.length==0){
-            coursePanelChildren = <img  className="noDataTipImg" src={require('../images/noDataTipImg.png')} />;
-        }else{
-            coursePanelChildren = courseWareList.map((e, i)=> {
-                var eysOnButton ;
+    buildKonwledgePanels: function (courseWareList) {
+        if (courseWareList.length == 0) {
+            coursePanelChildren = <img className="noDataTipImg" src={require('../images/noDataTipImg.png')}/>;
+        } else {
+            coursePanelChildren = courseWareList.map((e, i) => {
+                var eysOnButton;
                 var delButton;
-                if(e[9]!=null && e[9]!=""){
-                    eysOnButton = <Button icon="eye-o" style={{float: 'right'}} onClick={event => {this.viewMateria(event,e[9],e[1])} } />
+                if (e[9] != null && e[9] != "") {
+                    eysOnButton = <Button icon="eye-o" style={{float: 'right'}} onClick={event => {
+                        this.viewMateria(event, e[9], e[1])
+                    }}/>
                 }
-                return <Panel header={<span><span type="" className={e[8]}></span><span className="name_file">{e[1]}</span> </span>}  key={e[1]+"#"+e[7]+"#"+e[0]}>
+                return <Panel header={<span><span type="" className={e[8]}></span><span
+                    className="name_file">{e[1]}</span> </span>} key={e[1] + "#" + e[7] + "#" + e[0]}>
                     <pre>
 					<div className="bnt2_tex">
                          <span className="bai"><span className="col1">知识点：{e[6]}</span></span>
@@ -450,8 +495,10 @@ const PersonCenterComponents = React.createClass({
                       </div>
 
                             <div className="bnt2_right">
-                                <a href={e[3]} target="_blank" title="下载" download={e[3]} style={{ float:'right'}}><Button icon="download"/></a>
-                                <Button style={{ float:'right'}} type=""  icon="export" title="使用"  value={e[0]} onClick={personCenter.showUseKnowledgeModal}></Button>
+                                <a href={e[3]} target="_blank" title="下载" download={e[3]}
+                                   style={{float: 'right'}}><Button icon="download"/></a>
+                                <Button style={{float: 'right'}} type="" icon="export" title="使用" value={e[0]}
+                                        onClick={personCenter.showUseKnowledgeModal}></Button>
                                 {eysOnButton}
                             </div>
 
@@ -464,8 +511,8 @@ const PersonCenterComponents = React.createClass({
     /**
      * 获取我的直播课
      */
-    getLiveInfo(userId){
-        personCenter.getLiveInfoByUid(userId,1);
+    getLiveInfo(userId) {
+        personCenter.getLiveInfoByUid(userId, 1);
     },
 
     /**
@@ -473,17 +520,17 @@ const PersonCenterComponents = React.createClass({
      * @param userId
      * @param pageNo
      */
-    getLiveInfoByUid(userId,pageNo){
-        let _this =this;
+    getLiveInfoByUid(userId, pageNo) {
+        let _this = this;
         var param = {
             "method": 'getLiveInfoByUid',
             "userId": userId,
             "pageNo": pageNo,
         };
-        var userLiveData=[];
+        var userLiveData = [];
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                if(ret.msg=="调用成功" && ret.success==true){
+                if (ret.msg == "调用成功" && ret.success == true) {
                     let user;
                     var response = ret.response;
 
@@ -499,22 +546,25 @@ const PersonCenterComponents = React.createClass({
                         var userName = user.userName;
                         var courseName = e.courseName;
                         var id = e.id;
-                        var keyIcon='';
-                        if(e.password){
-                            keyIcon = <span className="right_ri key_span"><i className="iconfont key">&#xe621;</i></span>;
+                        var keyIcon = '';
+                        if (e.password) {
+                            keyIcon =
+                                <span className="right_ri key_span"><i className="iconfont key">&#xe621;</i></span>;
                         }
                         var delButton;
-                        if(user.colUid == sessionStorage.getItem("ident")){
+                        if (user.colUid == sessionStorage.getItem("ident")) {
                             //如果是当前用户，可以删除自己的直播课
-                            delButton = <Button icon="delete" className="right_ri star_del" onClick={personCenter.showDeleteLiveVideosConfirmModal.bind(personCenter,id)}></Button>
+                            delButton = <Button icon="delete" className="right_ri star_del"
+                                                onClick={personCenter.showDeleteLiveVideosConfirmModal.bind(personCenter, id)}></Button>
                         }
-                        var liveCard = <Card className="live" >
+                        var liveCard = <Card className="live">
                             <p className="h3">{title}</p>
-                            <div className="live_img"  id={id} onClick={personCenter.confirmVideoPwd.bind(personCenter, e) }  >
-                                <img className="attention_img"    width="100%" src={cover} />
+                            <div className="live_img" id={id}
+                                 onClick={personCenter.confirmVideoPwd.bind(personCenter, e)}>
+                                <img className="attention_img" width="100%" src={cover}/>
                                 <div className="live_green"><span>{schoolName}</span></div>
                             </div>
-                            <div className="custom-card"  >
+                            <div className="custom-card">
                                 <ul className="live_cont">
                                     <li className="li_live_span_3">
                                         <span className="attention_img2"><img src={user.avatar}></img></span>
@@ -548,12 +598,12 @@ const PersonCenterComponents = React.createClass({
         });
     },
 
-    showDeleteLiveVideosConfirmModal(id){
-        personCenter.setState({"delLiveVideoIds":id});
+    showDeleteLiveVideosConfirmModal(id) {
+        personCenter.setState({"delLiveVideoIds": id});
         personCenter.refs.deleteLiveVideosConfirmModal.changeConfirmModalVisible(true);
     },
 
-    closeDeleteLiveVideosConfirmModal(){
+    closeDeleteLiveVideosConfirmModal() {
         personCenter.refs.deleteLiveVideosConfirmModal.changeConfirmModalVisible(false);
     },
 
@@ -568,7 +618,7 @@ const PersonCenterComponents = React.createClass({
             let _this = this;
             Modal.confirm({
                 title: '请输入密码',
-                content: <Input id="tmppwd"  />,
+                content: <Input id="tmppwd"/>,
                 okText: '确定',
                 cancelText: '取消',
                 onOk: personCenter.videoPwdModalHandleOk.bind(_this, password, obj),
@@ -590,7 +640,7 @@ const PersonCenterComponents = React.createClass({
         }
     },
 
-    showpanle(obj){
+    showpanle(obj) {
         LP.Start(obj);
     },
 
@@ -629,7 +679,7 @@ const PersonCenterComponents = React.createClass({
     /**
      * 进入系统平台规则显示页面
      */
-    turnToPlatformRulePage(e){
+    turnToPlatformRulePage(e) {
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             target = e.currentTarget;
@@ -638,10 +688,10 @@ const PersonCenterComponents = React.createClass({
         }
         var urlType = target.value;
 
-        if(isEmpty(urlType)==false && urlType=="level"){
-            personCenter.setState({"optType":"getScoreOrLevelPage","activeKey":"userScores","urlType":urlType});
-        }else{
-            personCenter.setState({"optType": "scoreDetail","activeKey":"platformRulePage"});
+        if (isEmpty(urlType) == false && urlType == "level") {
+            personCenter.setState({"optType": "getScoreOrLevelPage", "activeKey": "userScores", "urlType": urlType});
+        } else {
+            personCenter.setState({"optType": "scoreDetail", "activeKey": "platformRulePage"});
         }
     },
 
@@ -649,29 +699,29 @@ const PersonCenterComponents = React.createClass({
      * 跳转到积分详情或等级说明的页面
      * @param e
      */
-    turnToScoreDetailPage(){
-        personCenter.setState({"optType":"getScoreOrLevelPage","activeKey":"userScores","urlType":"score"});
+    turnToScoreDetailPage() {
+        personCenter.setState({"optType": "getScoreOrLevelPage", "activeKey": "userScores", "urlType": "score"});
     },
 
     /**
      * 平台规则页面tab切换响应函数
      * @param key
      */
-    platformRulePageChange(key){
-        personCenter.setState({"optType":"scoreDetail","activeKey":key});
+    platformRulePageChange(key) {
+        personCenter.setState({"optType": "scoreDetail", "activeKey": key});
     },
 
-    returnPersonCenter(){
+    returnPersonCenter() {
         personCenter.setState({"optType": 'userDetail'});
     },
 
-    returnToChatGroupMessagePage(){
+    returnToChatGroupMessagePage() {
         personCenter.setState({"optType": 'getUserChatGroup'});
     },
 
-    onSubjectPageChange(page){
+    onSubjectPageChange(page) {
         var userId = personCenter.state.userInfo.user.colUid;
-        personCenter.getUserSubjectsByUid(userId,page);
+        personCenter.getUserSubjectsByUid(userId, page);
         personCenter.setState({
             currentSubjectPage: page,
         });
@@ -679,14 +729,55 @@ const PersonCenterComponents = React.createClass({
 
     // ------------------------群组操作
 
-    getUserChatGroup(){
+    getUserChatGroup() {
         personCenter.getUserChatGroupById(personCenter.state.currentChatGroupPage);
+    },
+
+    //-------------------------组织架构操作
+    getGroupMenu() {
+        personCenter.getStructureUsers();
+    },
+
+    /**
+     * 获取组织架构所有人
+     */
+    getStructureUsers() {
+        var _this = this;
+        var param = {
+            "method": 'getStructureUsers',
+            "operateUserId": this.state.loginUser.colUid,
+            "pageNo": -1,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var data = ret.response;
+                var arr = [];
+                data.forEach(function (e) {
+                    var id = e.colUid;
+                    var memberAvatarTag = <img src={e.avatar}></img>;
+                    var imgTag = <div className="maaee_group_face">{memberAvatarTag}</div>;
+                    var name = <span onClick={_this.a.bind(this, id)}>{e.userName}</span>
+                    var chatGroupJson = {
+                        key: id,
+                        groupPhoto: imgTag,
+                        'groupName': name,
+                    };
+                    arr.push(chatGroupJson);
+                });
+                personCenter.setState({"groupMenuMebs": arr});
+
+                personCenter.setState({"optType": "getGroupMenu"});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     /**
      * 获取当前用户的群组
      */
-    getUserChatGroupById(pageNo){
+    getUserChatGroupById(pageNo) {
         var param = {
             "method": 'getUserChatGroup',
             "userId": sessionStorage.getItem("ident"),
@@ -694,47 +785,61 @@ const PersonCenterComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                if(ret.msg=="调用成功" && ret.success==true){
+                if (ret.msg == "调用成功" && ret.success == true) {
                     var response = ret.response;
                     var charGroupArray = [];
                     response.forEach(function (e) {
                         var chatGroupId = e.chatGroupId;
                         var chatGroupName = e.name;
                         var membersCount = e.members.length;
-                        var groupMemebersPhoto=[];
-                        for(var i=0;i<e.members.length;i++){
+                        var groupMemebersPhoto = [];
+                        for (var i = 0; i < e.members.length; i++) {
                             var member = e.members[i];
-                            var memberAvatarTag = <img src={member.avatar} ></img>;
+                            var memberAvatarTag = <img src={member.avatar}></img>;
                             groupMemebersPhoto.push(memberAvatarTag);
-                            if(i>=3){
+                            if (i >= 3) {
                                 break;
                             }
                         }
-                        var imgTag = <div className="maaee_group_face" onClick={personCenter.sendGroupMessage.bind(personCenter,e)}>{groupMemebersPhoto}</div>;
-                        switch (groupMemebersPhoto.length){
+                        var imgTag = <div className="maaee_group_face"
+                                          onClick={personCenter.sendGroupMessage.bind(personCenter, e)}>{groupMemebersPhoto}</div>;
+                        switch (groupMemebersPhoto.length) {
                             case 1:
-                                imgTag = <div className="maaee_group_face1" onClick={personCenter.sendGroupMessage.bind(personCenter,e)}>{groupMemebersPhoto}</div>;
+                                imgTag = <div className="maaee_group_face1"
+                                              onClick={personCenter.sendGroupMessage.bind(personCenter, e)}>{groupMemebersPhoto}</div>;
                                 break;
                             case 2:
-                                imgTag = <div className="maaee_group_face2" onClick={personCenter.sendGroupMessage.bind(personCenter,e)}>{groupMemebersPhoto}</div>;
+                                imgTag = <div className="maaee_group_face2"
+                                              onClick={personCenter.sendGroupMessage.bind(personCenter, e)}>{groupMemebersPhoto}</div>;
                                 break;
                             case 3:
-                                imgTag = <div className="maaee_group_face3" onClick={personCenter.sendGroupMessage.bind(personCenter,e)}>{groupMemebersPhoto}</div>;
+                                imgTag = <div className="maaee_group_face3"
+                                              onClick={personCenter.sendGroupMessage.bind(personCenter, e)}>{groupMemebersPhoto}</div>;
                                 break;
                             case 4:
-                                imgTag = <div className="maaee_group_face" onClick={personCenter.sendGroupMessage.bind(personCenter,e)}>{groupMemebersPhoto}</div>;
+                                imgTag = <div className="maaee_group_face"
+                                              onClick={personCenter.sendGroupMessage.bind(personCenter, e)}>{groupMemebersPhoto}</div>;
                                 break;
                         }
                         var groupName = chatGroupName;
-                        var groupSet = <Button icon="setting" onClick={personCenter.setChatGroup.bind(personCenter,e)}></Button>;
-                        var groupNameTag = <a className="font_gray_666" onClick={personCenter.sendGroupMessage.bind(personCenter,e)}>{groupName}</a>
-                        var chatGroupJson = {key:chatGroupId,groupPhoto:imgTag,'groupName':groupNameTag,"groupObj":e,"userCount":membersCount+"人","groupSet":groupSet};
+                        var groupSet = <Button icon="setting"
+                                               onClick={personCenter.setChatGroup.bind(personCenter, e)}></Button>;
+                        var groupNameTag = <a className="font_gray_666"
+                                              onClick={personCenter.sendGroupMessage.bind(personCenter, e)}>{groupName}</a>
+                        var chatGroupJson = {
+                            key: chatGroupId,
+                            groupPhoto: imgTag,
+                            'groupName': groupNameTag,
+                            "groupObj": e,
+                            "userCount": membersCount + "人",
+                            "groupSet": groupSet
+                        };
                         charGroupArray.push(chatGroupJson);
                     });
-                    personCenter.setState({"userGroupsData":charGroupArray});
+                    personCenter.setState({"userGroupsData": charGroupArray});
                 }
                 var pager = ret.pager;
-                personCenter.setState({"optType":"getUserChatGroup","totalChatGroupCount":parseInt(pager.rsCount)});
+                personCenter.setState({"optType": "getUserChatGroup", "totalChatGroupCount": parseInt(pager.rsCount)});
             },
             onError: function (error) {
                 message.error(error);
@@ -746,22 +851,26 @@ const PersonCenterComponents = React.createClass({
      * 设置群组
      * @param e
      */
-    setChatGroup(groupObj){
+    setChatGroup(groupObj) {
         var currentGroupObj = groupObj;
-        if(isEmpty(currentGroupObj)==false){
+        if (isEmpty(currentGroupObj) == false) {
             var members = currentGroupObj.members;
-            var membersArray=[];
+            var membersArray = [];
             members.forEach(function (e) {
                 var memberId = e.colUid;
                 var memberName = e.userName;
-                var userJson = {key:memberId,groupUser:memberName,userInfo:e};
+                var userJson = {key: memberId, groupUser: memberName, userInfo: e};
                 membersArray.push(userJson);
             });
-            personCenter.setState({"optType":'showGroupInfo',"currentMemberArray":membersArray,"currentGroupObj":groupObj});
+            personCenter.setState({
+                "optType": 'showGroupInfo',
+                "currentMemberArray": membersArray,
+                "currentGroupObj": groupObj
+            });
         }
     },
 
-    onChatGroupPageChange(page){
+    onChatGroupPageChange(page) {
         personCenter.getUserChatGroupById(page);
         personCenter.setState({
             currentChatGroupPage: page,
@@ -773,21 +882,21 @@ const PersonCenterComponents = React.createClass({
      * @param record　当前行的群组信息
      * @param index　当前行的索引顺序，从０开始
      */
-    sendGroupMessage(groupObj){
+    sendGroupMessage(groupObj) {
         personCenter.props.onSendGroupMessage(groupObj);
     },
 
     /**
      * 显示创建群组的窗口
      */
-    showCreateChatGroup(){
+    showCreateChatGroup() {
         personCenter.getUserContactsMockData();
-        personCenter.setState({"createChatGroupModalVisible":true,"updateGroupId":''});
+        personCenter.setState({"createChatGroupModalVisible": true, "updateGroupId": ''});
     },
     /**
      * 创建群组时，获取当前用户的联系人列表
      */
-    getUserContactsMockData(){
+    getUserContactsMockData() {
         const mockData = [];
         var targetKeys = [];
         var param = {
@@ -795,13 +904,13 @@ const PersonCenterComponents = React.createClass({
             "ident": sessionStorage.getItem("ident"),
         };
         doWebService(JSON.stringify(param), {
-            onResponse : function(ret) {
+            onResponse: function (ret) {
                 var response = ret.response;
                 response.forEach(function (e) {
                     var userId = e.colUid;
                     var userName = e.userName;
                     var userType = e.colUtype;
-                    if(userType!="SGZH" && parseInt(userId) != sessionStorage.getItem("ident")){
+                    if (userType != "SGZH" && parseInt(userId) != sessionStorage.getItem("ident")) {
                         const data = {
                             key: userId,
                             title: userName,
@@ -809,9 +918,9 @@ const PersonCenterComponents = React.createClass({
                         mockData.push(data);
                     }
                 });
-                personCenter.setState({ mockData, targetKeys });
+                personCenter.setState({mockData, targetKeys});
             },
-            onError : function(error) {
+            onError: function (error) {
                 message.error(error);
             }
         });
@@ -819,7 +928,7 @@ const PersonCenterComponents = React.createClass({
     /**
      * 添加群成员时，获取未在群成员列表中的联系人
      */
-    getNotMemberUser(){
+    getNotMemberUser() {
         const memberData = [];
         memberData.splice(0);
         var memberTargetKeys = [];
@@ -828,14 +937,14 @@ const PersonCenterComponents = React.createClass({
             "ident": sessionStorage.getItem("ident"),
         };
         doWebService(JSON.stringify(param), {
-            onResponse : function(ret) {
+            onResponse: function (ret) {
                 var response = ret.response;
                 response.forEach(function (e) {
                     var userId = e.colUid;
                     var userName = e.userName;
                     var isExist = personCenter.checkMemberIsExist(userId);
                     var userType = e.colUtype;
-                    if(isExist==false && userType!="SGZH" && parseInt(userId) != sessionStorage.getItem("ident")){
+                    if (isExist == false && userType != "SGZH" && parseInt(userId) != sessionStorage.getItem("ident")) {
                         const data = {
                             key: userId,
                             title: userName,
@@ -843,38 +952,38 @@ const PersonCenterComponents = React.createClass({
                         memberData.push(data);
                     }
                 });
-                personCenter.setState({ memberData, memberTargetKeys });
+                personCenter.setState({memberData, memberTargetKeys});
             },
-            onError : function(error) {
+            onError: function (error) {
                 message.error(error);
             }
         });
     },
 
-    createChatGroupModalHandleCancel(){
-        personCenter.setState({"createChatGroupModalVisible":false,"updateGroupId":''});
+    createChatGroupModalHandleCancel() {
+        personCenter.setState({"createChatGroupModalVisible": false, "updateGroupId": ''});
     },
     /**
      * 获取页面数据，创建聊天群组
      */
-    createChatGroup(){
+    createChatGroup() {
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
-        var memberIds =personCenter.state.targetKeys.join(",");
+        var memberIds = personCenter.state.targetKeys.join(",");
         var updateGroupId = personCenter.state.updateGroupId;
         var currentGroupObj = personCenter.state.currentGroupObj;
-        if(isEmpty(updateGroupId)==false){
+        if (isEmpty(updateGroupId) == false) {
 
-        }else{
+        } else {
             var title = personCenter.state.chatGroupTitle;
-            if(isEmpty(title)){
+            if (isEmpty(title)) {
                 message.error("请输入群组名称");
                 return;
             }
-            if(title.length>10){
+            if (title.length > 10) {
                 message.error("群组名称不能超过10个字符");
                 return;
             }
-            if(isEmpty(memberIds)){
+            if (isEmpty(memberIds)) {
                 message.error("请选择群成员");
                 return;
             }
@@ -883,14 +992,14 @@ const PersonCenterComponents = React.createClass({
                 "groupAvatar": loginUser.avatar,
                 "groupName": personCenter.state.chatGroupTitle,
                 "ownerId": sessionStorage.getItem("ident"),
-                "memberIds":memberIds
+                "memberIds": memberIds
             };
             doWebService(JSON.stringify(param), {
                 onResponse: function (ret) {
                     var response = ret.response;
-                    if(ret.msg=="调用成功" && ret.success==true && isEmpty(response.chatGroupId)==false && response.chatGroupId>0){
+                    if (ret.msg == "调用成功" && ret.success == true && isEmpty(response.chatGroupId) == false && response.chatGroupId > 0) {
                         message.success("聊天群组创建成功");
-                    }else{
+                    } else {
                         message.success("聊天群组创建失败");
                     }
                     personCenter.getUserChatGroup();
@@ -900,37 +1009,37 @@ const PersonCenterComponents = React.createClass({
                 }
             });
         }
-        personCenter.setState({"createChatGroupModalVisible":false,"updateGroupId":'',"chatGroupTitle":''});
+        personCenter.setState({"createChatGroupModalVisible": false, "updateGroupId": '', "chatGroupTitle": ''});
     },
 
-    transferHandleChange(targetKeys){
-        personCenter.setState({ targetKeys });
+    transferHandleChange(targetKeys) {
+        personCenter.setState({targetKeys});
     },
 
-    chatGroupTitleOnChange(e){
+    chatGroupTitleOnChange(e) {
         var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
             target = e.target;
         }
         var chatGroupTitle = target.value;
-        personCenter.setState({"chatGroupTitle":chatGroupTitle});
+        personCenter.setState({"chatGroupTitle": chatGroupTitle});
     },
 
     /**
      * 检查群组成员是否已经存在
      */
-    checkMemberIsExist(memberId){
+    checkMemberIsExist(memberId) {
         var isExist = false;
         var currentGroupObj = personCenter.state.currentGroupObj;
-        if(isEmpty(currentGroupObj)==false){
+        if (isEmpty(currentGroupObj) == false) {
             var members = currentGroupObj.members;
-            if(isEmpty(members)==false && members.length!=0){
-                for(var i=0;i<members.length;i++){
+            if (isEmpty(members) == false && members.length != 0) {
+                for (var i = 0; i < members.length; i++) {
                     var member = members[i];
                     var memberIdInCurrent = member.colUid;
-                    if(memberId==memberIdInCurrent){
+                    if (memberId == memberIdInCurrent) {
                         isExist = true;
                         break;
                     }
@@ -943,22 +1052,22 @@ const PersonCenterComponents = React.createClass({
     /**
      * 群组成员列表选中事件
      */
-    onGroupUserTableSelectChange(selectedRowKeys){
-        var selectedRowKeysStr =selectedRowKeys.join(",");
-        this.setState({ selectedRowKeys,selectedRowKeysStr });
+    onGroupUserTableSelectChange(selectedRowKeys) {
+        var selectedRowKeysStr = selectedRowKeys.join(",");
+        this.setState({selectedRowKeys, selectedRowKeysStr});
     },
 
     /**
      * 移除选中的群组成员
      */
-    deleteAllSelectedMembers(){
+    deleteAllSelectedMembers() {
         confirm({
             title: '确定要移除选中的群成员?',
             onOk() {
                 var currentGroupObj = personCenter.state.currentGroupObj;
                 var memberIds = personCenter.state.selectedRowKeysStr;
-                var optType="removeMember";
-                personCenter.deleteChatGroupMember(currentGroupObj.chatGroupId,memberIds,optType);
+                var optType = "removeMember";
+                personCenter.deleteChatGroupMember(currentGroupObj.chatGroupId, memberIds, optType);
             },
             onCancel() {
             },
@@ -968,39 +1077,37 @@ const PersonCenterComponents = React.createClass({
     /**
      * 移除选中的群组成员
      */
-    deleteSelectedMember(){
+    deleteSelectedMember() {
         var currentGroupObj = personCenter.state.currentGroupObj;
         var memberIds = personCenter.state.delMemberIds;
-        var optType="removeMember";
-        personCenter.deleteChatGroupMember(currentGroupObj.chatGroupId,memberIds,optType);
+        var optType = "removeMember";
+        personCenter.deleteChatGroupMember(currentGroupObj.chatGroupId, memberIds, optType);
         personCenter.closeConfirmModal();
     },
 
-    deleteSelectedMemberById(memberIds){
+    deleteSelectedMemberById(memberIds) {
         var currentGroupObj = personCenter.state.currentGroupObj;
-        var optType="removeMember";
-        personCenter.deleteChatGroupMember(currentGroupObj.chatGroupId,memberIds,optType);
+        var optType = "removeMember";
+        personCenter.deleteChatGroupMember(currentGroupObj.chatGroupId, memberIds, optType);
     },
 
     /**
      * 刷新本地的群组成员列表
      */
-    refreshLocalMembers(memberIds){
+    refreshLocalMembers(memberIds) {
         var currentMemberArray = personCenter.state.currentMemberArray;
-        var memberIdsArray=[];
+        var memberIdsArray = [];
         memberIdsArray.push(memberIds);
-        currentMemberArray = personCenter.array_diff(currentMemberArray,memberIdsArray);
-        personCenter.setState({"currentMemberArray":currentMemberArray});
+        currentMemberArray = personCenter.array_diff(currentMemberArray, memberIdsArray);
+        personCenter.setState({"currentMemberArray": currentMemberArray});
     },
 
     array_diff(a, b) {
-        for(var i=0;i<b.length;i++)
-        {
-            for(var j=0;j<a.length;j++)
-            {
-                if(a[j].key==b[i]){
-                    a.splice(j,1);
-                    j=j-1;
+        for (var i = 0; i < b.length; i++) {
+            for (var j = 0; j < a.length; j++) {
+                if (a[j].key == b[i]) {
+                    a.splice(j, 1);
+                    j = j - 1;
                 }
             }
         }
@@ -1010,69 +1117,69 @@ const PersonCenterComponents = React.createClass({
      * 显示删除群成员的确认窗口
      * @param e
      */
-    showConfirmModal(e){
+    showConfirmModal(e) {
         var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
             target = e.target;
         }
         var memberIds = target.value;
-        personCenter.setState({"delMemberIds":memberIds});
+        personCenter.setState({"delMemberIds": memberIds});
         personCenter.refs.confirmModal.changeConfirmModalVisible(true);
     },
 
     /**
      * 关闭移出群聊按钮对应的confirm窗口
      */
-    closeConfirmModal(){
+    closeConfirmModal() {
         personCenter.refs.confirmModal.changeConfirmModalVisible(false);
     },
 
     /**
      * 显示群成员添加Modal窗口
      */
-    showAddMembersModal(){
+    showAddMembersModal() {
         personCenter.getNotMemberUser();
-        personCenter.setState({"addGroupMemberModalVisible":true});
+        personCenter.setState({"addGroupMemberModalVisible": true});
     },
     /**
      * 关闭添加群成员Modal窗口
      */
-    addGroupMemberModalHandleCancel(){
-        personCenter.setState({"addGroupMemberModalVisible":false});
+    addGroupMemberModalHandleCancel() {
+        personCenter.setState({"addGroupMemberModalVisible": false});
     },
     /**
      * 添加群成员的Tranfer组件内容改变事件
      * @param targetKeys
      */
-    addMemberTransferHandleChange(targetKeys){
-        personCenter.setState({ "memberTargetKeys":targetKeys });
+    addMemberTransferHandleChange(targetKeys) {
+        personCenter.setState({"memberTargetKeys": targetKeys});
     },
     /**
      * 添加群成员
      */
-    addGroupMember(){
+    addGroupMember() {
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         var memberTargetkeys = personCenter.state.memberTargetKeys;
-        var memberIds =memberTargetkeys.join(",");
+        var memberIds = memberTargetkeys.join(",");
         var currentGroupObj = personCenter.state.currentGroupObj;
         var param = {
             "method": 'addChatGroupMember',
             "chatGroupId": currentGroupObj.chatGroupId,
-            "memberIds":memberIds
+            "memberIds": memberIds
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                if(ret.msg=="调用成功" && ret.success==true && response==true){
+                if (ret.msg == "调用成功" && ret.success == true && response == true) {
                     message.success("群成员添加成功");
-                }else{
+                } else {
                     message.success("群成员添加失败");
                 }
                 var currentMemberArray = personCenter.state.currentMemberArray;
                 currentMemberArray = currentMemberArray.concat(memberTargetkeys);
-                personCenter.setState({"addGroupMemberModalVisible":false,"currentMemberArray":currentMemberArray});
+                personCenter.setState({"addGroupMemberModalVisible": false, "currentMemberArray": currentMemberArray});
                 personCenter.getUserChatGroup();
             },
             onError: function (error) {
@@ -1081,17 +1188,17 @@ const PersonCenterComponents = React.createClass({
         });
     },
 
-    getCurrentMemberIds(){
-        var memberIds="";
+    getCurrentMemberIds() {
+        var memberIds = "";
         var currentGroupObj = personCenter.state.currentGroupObj;
-        if(isEmpty(currentGroupObj)==false){
+        if (isEmpty(currentGroupObj) == false) {
             var groupTitle = currentGroupObj.name;
             var groupId = currentGroupObj.chatGroupId;
             var members = currentGroupObj.members;
-            var membersArray=[];
+            var membersArray = [];
             members.forEach(function (e) {
                 var memberId = e.colUid;
-                memberIds+=memberId+",";
+                memberIds += memberId + ",";
             });
         }
         return memberIds;
@@ -1100,36 +1207,36 @@ const PersonCenterComponents = React.createClass({
     /**
      * 解散聊天群
      */
-    dissolutionChatGroup(){
+    dissolutionChatGroup() {
         var currentGroupObj = personCenter.state.currentGroupObj;
         var memberIds = personCenter.getCurrentMemberIds();
-        var optType="dissolution";
-        personCenter.deleteChatGroupMember(currentGroupObj.chatGroupId,memberIds,optType);
+        var optType = "dissolution";
+        personCenter.deleteChatGroupMember(currentGroupObj.chatGroupId, memberIds, optType);
         personCenter.closeDissolutionChatGroupConfirmModal();
     },
     /**
      * 删除并退出群组
      */
-    exitChatGroup(){
+    exitChatGroup() {
         var currentGroupObj = personCenter.state.currentGroupObj;
         var memberIds = sessionStorage.getItem("ident");
-        var optType="exitChatGroup";
-        personCenter.deleteChatGroupMember(currentGroupObj.chatGroupId,memberIds,optType);
+        var optType = "exitChatGroup";
+        personCenter.deleteChatGroupMember(currentGroupObj.chatGroupId, memberIds, optType);
         personCenter.closeExitChatGroupConfirmModal();
     },
 
-    deleteChatGroupMember(chatGroupId,memberIds,optType){
+    deleteChatGroupMember(chatGroupId, memberIds, optType) {
         var successTip = "";
-        var errorTip="";
-        if(optType=="dissolution"){
+        var errorTip = "";
+        if (optType == "dissolution") {
             successTip = "群组解散成功";
-            errorTip="群组解散失败";
-        }else if(optType=="removeMember"){
+            errorTip = "群组解散失败";
+        } else if (optType == "removeMember") {
             successTip = "群成员移出成功";
-            errorTip="群成员移出失败";
-        }else if(optType=="exitChatGroup"){
+            errorTip = "群成员移出失败";
+        } else if (optType == "exitChatGroup") {
             successTip = "您已成功退出该群组";
-            errorTip="退出群组失败";
+            errorTip = "退出群组失败";
         }
         var param = {
             "method": 'deleteChatGroupMember',
@@ -1139,14 +1246,14 @@ const PersonCenterComponents = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                if(ret.msg=="调用成功" && ret.success==true && response==true){
+                if (ret.msg == "调用成功" && ret.success == true && response == true) {
                     message.success(successTip);
-                }else{
+                } else {
                     message.success(errorTip);
                 }
-                if(optType=="dissolution" || optType=="exitChatGroup"){
+                if (optType == "dissolution" || optType == "exitChatGroup") {
                     personCenter.getUserChatGroup();
-                }else if(optType=="removeMember"){
+                } else if (optType == "removeMember") {
                     personCenter.refreshLocalMembers(memberIds);
                 }
             },
@@ -1159,26 +1266,26 @@ const PersonCenterComponents = React.createClass({
     /**
      * 显示修改群名称的窗口
      */
-    showUpdateChatGroupNameModal(){
+    showUpdateChatGroupNameModal() {
         var currentGroupObj = personCenter.state.currentGroupObj;
         var updateChatGroupTitle = currentGroupObj.name;
-        personCenter.setState({"updateChatGroupNameModalVisible":true,"updateChatGroupTitle":updateChatGroupTitle});
+        personCenter.setState({"updateChatGroupNameModalVisible": true, "updateChatGroupTitle": updateChatGroupTitle});
     },
 
     /**
      * 关闭修改群名称的窗口
      */
-    updateChatGroupNameModalHandleCancel(){
-        personCenter.setState({"updateChatGroupNameModalVisible":false});
+    updateChatGroupNameModalHandleCancel() {
+        personCenter.setState({"updateChatGroupNameModalVisible": false});
     },
 
     /**
      * 修改群名称
      */
-    updateChatGroupName(){
+    updateChatGroupName() {
         //更新(判断和当前的groupObj信息是否一致)
         var currentGroupObj = personCenter.state.currentGroupObj;
-        if(isEmpty(personCenter.state.updateChatGroupTitle)==false){
+        if (isEmpty(personCenter.state.updateChatGroupTitle) == false) {
             var param = {
                 "method": 'updateChatGroupName',
                 "chatGroupId": currentGroupObj.chatGroupId,
@@ -1188,13 +1295,13 @@ const PersonCenterComponents = React.createClass({
             doWebService(JSON.stringify(param), {
                 onResponse: function (ret) {
                     var response = ret.response;
-                    if(ret.msg=="调用成功" && ret.success==true && response==true){
+                    if (ret.msg == "调用成功" && ret.success == true && response == true) {
                         message.success("聊天群组修改成功");
-                    }else{
+                    } else {
                         message.success("聊天群组修改失败");
                     }
                     personCenter.getUserChatGroup();
-                    personCenter.setState({"updateChatGroupNameModalVisible":false});
+                    personCenter.setState({"updateChatGroupNameModalVisible": false});
                 },
                 onError: function (error) {
                     message.error(error);
@@ -1206,25 +1313,25 @@ const PersonCenterComponents = React.createClass({
      * 修改群组名称时，名称内容改变的响应函数
      * @param e
      */
-    updateChatGroupTitleOnChange(e){
+    updateChatGroupTitleOnChange(e) {
         var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
             target = e.target;
         }
         var updateChatGroupTitle = target.value;
-        personCenter.setState({"updateChatGroupTitle":updateChatGroupTitle});
+        personCenter.setState({"updateChatGroupTitle": updateChatGroupTitle});
     },
 
     /**
      * 关闭解散群聊按钮对应的confirm窗口
      */
-    closeDissolutionChatGroupConfirmModal(){
+    closeDissolutionChatGroupConfirmModal() {
         personCenter.refs.dissolutionChatGroupConfirmModal.changeConfirmModalVisible(false);
     },
 
-    closeExitChatGroupConfirmModal(){
+    closeExitChatGroupConfirmModal() {
         personCenter.refs.exitChatGroupConfirmModal.changeConfirmModalVisible(false);
     },
 
@@ -1232,34 +1339,34 @@ const PersonCenterComponents = React.createClass({
      * 显示删除并退出的确认窗口
      * @param e
      */
-    showExitChatGroupConfirmModal(e){
+    showExitChatGroupConfirmModal(e) {
         var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
             target = e.target;
         }
         var memberIds = target.value;
-        personCenter.setState({"delMemberIds":memberIds});
+        personCenter.setState({"delMemberIds": memberIds});
         personCenter.refs.exitChatGroupConfirmModal.changeConfirmModalVisible(true);
     },
 
-    showDissolutionChatGroupConfirmModal(){
+    showDissolutionChatGroupConfirmModal() {
         personCenter.refs.dissolutionChatGroupConfirmModal.changeConfirmModalVisible(true);
     },
 
     /**
      * 显示创建群组的窗口
      */
-    showCreateChatGroup(){
+    showCreateChatGroup() {
         personCenter.getUserContactsMockData();
-        personCenter.setState({"createChatGroupModalVisible":true,"updateGroupId":''});
+        personCenter.setState({"createChatGroupModalVisible": true, "updateGroupId": ''});
     },
 
     /**
      * 创建群组时，获取当前用户的联系人列表
      */
-    getUserContactsMockData(){
+    getUserContactsMockData() {
         const mockData = [];
         var targetKeys = [];
         var param = {
@@ -1267,13 +1374,13 @@ const PersonCenterComponents = React.createClass({
             "ident": sessionStorage.getItem("ident"),
         };
         doWebService(JSON.stringify(param), {
-            onResponse : function(ret) {
+            onResponse: function (ret) {
                 var response = ret.response;
                 response.forEach(function (e) {
                     var userId = e.colUid;
                     var userName = e.userName;
                     var userType = e.colUtype;
-                    if(userType!="SGZH" && parseInt(userId) != sessionStorage.getItem("ident")){
+                    if (userType != "SGZH" && parseInt(userId) != sessionStorage.getItem("ident")) {
                         const data = {
                             key: userId,
                             title: userName,
@@ -1281,9 +1388,9 @@ const PersonCenterComponents = React.createClass({
                         mockData.push(data);
                     }
                 });
-                personCenter.setState({ mockData, targetKeys });
+                personCenter.setState({mockData, targetKeys});
             },
-            onError : function(error) {
+            onError: function (error) {
                 message.error(error);
             }
         });
@@ -1292,8 +1399,10 @@ const PersonCenterComponents = React.createClass({
 
     render() {
         var userPhotoTag;
-        var returnPersonCenterToolBar = <div className="ant-tabs-right"><Button onClick={personCenter.returnPersonCenter}><Icon type="left" /></Button></div>;
-        var returnChatGroupMessagePageToolBar = <div className="ant-tabs-right"><Button onClick={personCenter.returnToChatGroupMessagePage}><Icon type="left" /></Button></div>;
+        var returnPersonCenterToolBar = <div className="ant-tabs-right"><Button
+            onClick={personCenter.returnPersonCenter}><Icon type="left"/></Button></div>;
+        var returnChatGroupMessagePageToolBar = <div className="ant-tabs-right"><Button
+            onClick={personCenter.returnToChatGroupMessagePage}><Icon type="left"/></Button></div>;
         if (isEmpty(personCenter.state.userInfo) == false && personCenter.state.optType == "userDetail") {
             var user = personCenter.state.userInfo.user;
             var userName = user.userName;
@@ -1325,25 +1434,27 @@ const PersonCenterComponents = React.createClass({
                             className="person_cor person_cor3">
                         <div>收藏</div>
                     </Button>
-                    <Button value={user.colUid} icon="heart-o" onClick={personCenter.getMyFollows.bind(personCenter,user.colUid)}
+                    <Button value={user.colUid} icon="heart-o"
+                            onClick={personCenter.getMyFollows.bind(personCenter, user.colUid)}
                             className="person_cor person_cor4">
                         <div>关注</div>
                     </Button>
                 </div>;
-                userInfoCard = <Card title={personCenter.state.userInfo.user.userName + '的个人名片'} className="bai" style={{margintop:'15px'}}>
+                userInfoCard = <Card title={personCenter.state.userInfo.user.userName + '的个人名片'} className="bai"
+                                     style={{margintop: '15px'}}>
                     <Row className="person_13">
                         <p className="user_cont">
-							<span className="user_til_name">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;校：</span>
-							<span className="black_person">{personCenter.state.userInfo.school}</span>
-						</p>
-						<p className="user_cont">
-							<span className="user_til_name">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span>
-							<span className="black_person ">{personCenter.state.userInfo.grade}</span>
-						</p>
-						<p className="user_cont">
-							<span className="user_til_name">个人简介：</span>
-							<span className="black_person ">{intro}</span>
-						</p>
+                            <span className="user_til_name">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;校：</span>
+                            <span className="black_person">{personCenter.state.userInfo.school}</span>
+                        </p>
+                        <p className="user_cont">
+                            <span className="user_til_name">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span>
+                            <span className="black_person ">{personCenter.state.userInfo.grade}</span>
+                        </p>
+                        <p className="user_cont">
+                            <span className="user_til_name">个人简介：</span>
+                            <span className="black_person ">{intro}</span>
+                        </p>
                     </Row>
                 </Card>;
             } else {
@@ -1352,7 +1463,7 @@ const PersonCenterComponents = React.createClass({
                 }
                 userLinkCard = <div title={userName + '的个人名片'} className="person_container ">
                     <Button value={user.colUid} icon="play-circle-o" className="person_cor person_cor1"
-                            onClick={personCenter.getLiveInfo.bind(personCenter,user.colUid)}>
+                            onClick={personCenter.getLiveInfo.bind(personCenter, user.colUid)}>
                         <div>直播</div>
                     </Button>
                     <Button value={user.colUid} icon="area-chart" className="person_cor person_cor2"
@@ -1364,29 +1475,29 @@ const PersonCenterComponents = React.createClass({
                         <div>题库</div>
                     </Button>
                     <Button value={user.colUid} icon="heart-o" className="person_cor person_cor4"
-                            onClick={personCenter.getMyFollows.bind(personCenter,user.colUid)}>
+                            onClick={personCenter.getMyFollows.bind(personCenter, user.colUid)}>
                         <div>关注</div>
                     </Button>
                 </div>;
 
                 userInfoCard = <Card title={personCenter.state.userInfo.user.userName + '的个人名片'} className="bai">
                     <Row className="person_13">
-						<p className="user_cont">
-							<span className="user_til_name">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;校：</span>
-							<span className="black_person">{personCenter.state.userInfo.school}</span>
-						</p>
-						<p className="user_cont">
-							<span className="user_til_name">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：</span>
-							<span className="black_person">{personCenter.state.userInfo.course}</span>
-						</p>
-						<p className="user_cont">
-							<span className="user_til_name">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span>
-							<span className="black_person">{personCenter.state.userInfo.grade}</span>
-						</p>
-						<p className="user_cont">
-							<span className="user_til_name">个人简介：</span>
-							<span className="black_person">{intro}</span>
-						</p>
+                        <p className="user_cont">
+                            <span className="user_til_name">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;校：</span>
+                            <span className="black_person">{personCenter.state.userInfo.school}</span>
+                        </p>
+                        <p className="user_cont">
+                            <span className="user_til_name">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：</span>
+                            <span className="black_person">{personCenter.state.userInfo.course}</span>
+                        </p>
+                        <p className="user_cont">
+                            <span className="user_til_name">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span>
+                            <span className="black_person">{personCenter.state.userInfo.grade}</span>
+                        </p>
+                        <p className="user_cont">
+                            <span className="user_til_name">个人简介：</span>
+                            <span className="black_person">{intro}</span>
+                        </p>
 
                     </Row>
                 </Card>;
@@ -1407,23 +1518,23 @@ const PersonCenterComponents = React.createClass({
                 }
             }
             //如果个人中心显示的用户并不是当前用户的联系人，则不能显示发消息按钮
-            if (personCenter.state.isExist) {
+            // if (personCenter.state.isExist) {
                 sendMessageButton = <Button icon="message" value={personCenter.state.userInfo.user.colUid}
                                             onClick={personCenter.sendMessage}
                                             className="antnest_talk  persono_btn_blue">发消息</Button>;
-            }
+            // }
         }
 
         var personDate;
         var userPhoneCard;
         if (isEmpty(personCenter.state.userInfo) == false && personCenter.state.optType == "userDetail") {
             personDate = <div className="group_cont favorite_up">
-                <div className="public—til—blue">{personCenter.state.userInfo.user.userName+'的个人中心'}</div>
-				<div className="maaee_group_pa">
-                <Card className="bai">
-                    {userPhotoTag}
+                <div className="public—til—blue">{personCenter.state.userInfo.user.userName + '的个人中心'}</div>
+                <div className="maaee_group_pa">
+                    <Card className="bai">
+                        {userPhotoTag}
 
-                    <span className="person_btn">
+                        <span className="person_btn">
                         <Button className="antnest_talk antnest_icon_radius" value="score"
                                 onClick={personCenter.turnToPlatformRulePage}><i
                             className="iconfont iconfont_jifen">&#xe608;</i><span
@@ -1431,17 +1542,17 @@ const PersonCenterComponents = React.createClass({
 						<Button className="antnest_icon_blue_radius" value="level"
                                 onClick={personCenter.turnToPlatformRulePage}>{personCenter.state.userInfo.level.name}</Button>
                     </span>
-                    <span className="person_btn_ri">
+                        <span className="person_btn_ri">
                      {sendMessageButton}
-                        {followButton}
+                            {followButton}
 					 </span>
 
 
-                </Card>
-				</div>
+                    </Card>
+                </div>
 
                 <div className="maaee_group_pa maaee_group_pa_0">
-					{userLinkCard}
+                    {userLinkCard}
                     {userInfoCard}
                 </div>
             </div>;
@@ -1752,71 +1863,79 @@ const PersonCenterComponents = React.createClass({
                 {userPhoneCard}
                 {tabComponent}
             </div>;
-        }else if(personCenter.state.optType=="getScoreOrLevelPage"){
+        } else if (personCenter.state.optType == "getScoreOrLevelPage") {
 
             var currentPageLink;
             var toolbarTitle;
-            if(personCenter.state.urlType=="score"){
-                toolbarTitle="的积分";
+            if (personCenter.state.urlType == "score") {
+                toolbarTitle = "的积分";
                 currentPageLink = "http://www.maaee.com/Excoord_PhoneService/user/getUserScores/" + personCenter.state.userInfo.user.colUid;
-            }else{
-                toolbarTitle="的等级";
+            } else {
+                toolbarTitle = "的等级";
                 currentPageLink = "http://www.maaee.com/Excoord_PhoneService/user/personalGrade/" + personCenter.state.userInfo.user.colUid;
             }
             personDate = <div className="favorite_my">
-                <div className="public—til—blue">{returnPersonCenterToolBar}{personCenter.state.userInfo.user.userName+toolbarTitle}</div>
-                <div className="topics_le favorite_my"><iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe></div>
+                <div
+                    className="public—til—blue">{returnPersonCenterToolBar}{personCenter.state.userInfo.user.userName + toolbarTitle}</div>
+                <div className="topics_le favorite_my">
+                    <iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe>
+                </div>
             </div>;
-        }else if(personCenter.state.optType=="turnToAsk"){
+        } else if (personCenter.state.optType == "turnToAsk") {
             var currentPageLink = "http://www.maaee.com/Excoord_PhoneService/quiz/getUserAskedQuiz/" + personCenter.state.userInfo.user.colUid;
             personDate = <div className="group_cont">
-                <div className="public—til—blue">{returnPersonCenterToolBar}{personCenter.state.userInfo.user.userName+'发起过的提问'}</div>
+                <div
+                    className="public—til—blue">{returnPersonCenterToolBar}{personCenter.state.userInfo.user.userName + '发起过的提问'}</div>
                 <iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe>
             </div>
         }
-        else if(personCenter.state.optType=="turnStudyTrack"){
+        else if (personCenter.state.optType == "turnStudyTrack") {
             var currentPageLink = "http://www.maaee.com/Excoord_PhoneService/user/studytrack/" + personCenter.state.userInfo.user.colUid;
             personDate = <div className="group_cont">
-                <div className="public—til—blue">{returnPersonCenterToolBar}{personCenter.state.userInfo.user.userName+'的学习轨迹'}</div>
+                <div
+                    className="public—til—blue">{returnPersonCenterToolBar}{personCenter.state.userInfo.user.userName + '的学习轨迹'}</div>
                 <iframe ref="study" src={currentPageLink} className="analyze_iframe"></iframe>
             </div>
-        }else if(personCenter.state.optType=="userFavorite"){
+        } else if (personCenter.state.optType == "userFavorite") {
             personDate = <div className="myfollow_zb">
-                    <div className="public—til—blue">{returnPersonCenterToolBar}{personCenter.state.userInfo.user.userName+'的收藏'}</div>
-                    <Favorites userid={personCenter.state.studentId} breadcrumbVisible={false}
-                           onPreview={ this.props.onPreview }></Favorites>
-                </div>
-        }else if(personCenter.state.optType=="getMyFollows"){
-            var welcomeTitle=personCenter.state.userInfo.user.userName+"的关注";
+                <div
+                    className="public—til—blue">{returnPersonCenterToolBar}{personCenter.state.userInfo.user.userName + '的收藏'}</div>
+                <Favorites userid={personCenter.state.studentId} breadcrumbVisible={false}
+                           onPreview={this.props.onPreview}></Favorites>
+            </div>
+        } else if (personCenter.state.optType == "getMyFollows") {
+            var welcomeTitle = personCenter.state.userInfo.user.userName + "的关注";
             personDate = <div className="group_cont">
                 <div className="public—til—blue">{returnPersonCenterToolBar}{welcomeTitle}</div>
-                <div className="person_attention guanzhu favorite_scroll favorite_le_h" >
-                {personCenter.state.followsUserArray}
+                <div className="person_attention guanzhu favorite_scroll favorite_le_h">
+                    {personCenter.state.followsUserArray}
                 </div>
             </div>;
-        }else if(personCenter.state.optType=="getLiveInfoByUid"){
-            var  welcomeTitle=personCenter.state.userInfo.user.userName+"的直播课";
+        } else if (personCenter.state.optType == "getLiveInfoByUid") {
+            var welcomeTitle = personCenter.state.userInfo.user.userName + "的直播课";
             var returnPersonCenterBar;
-            personDate= <Tabs
+            personDate = <Tabs
                 hideAdd
-                ref = "mainTab"
+                ref="mainTab"
                 activeKey={this.state.activeKey}
                 defaultActiveKey={this.state.defaultActiveKey}
                 tabBarExtraContent={returnPersonCenterBar}
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab={welcomeTitle} key="userLiveInfos" className="topics_rela ">
-                    <div className='ant-tabs ant-tabs-top ant-tabs-line topics_calc favorite_pa_le' style={{'overflow':'auto'}}>
+                    <div className='ant-tabs ant-tabs-top ant-tabs-line topics_calc favorite_pa_le'
+                         style={{'overflow': 'auto'}}>
                         {personCenter.state.userLiveData}
                     </div>
-                    <Pagination total={personCenter.state.totalLiveCount} pageSize={getPageSize()} current={personCenter.state.currentLivePage} onChange={this.onLiveInfoPageChange}/>
+                    <Pagination total={personCenter.state.totalLiveCount} pageSize={getPageSize()}
+                                current={personCenter.state.currentLivePage} onChange={this.onLiveInfoPageChange}/>
                 </TabPane>
             </Tabs>;
-        }else if(personCenter.state.optType=="getUserCourseWares"){
-            var welcomeTitle=personCenter.state.userInfo.user.userName+"的资源";
-            personDate= <Tabs
+        } else if (personCenter.state.optType == "getUserCourseWares") {
+            var welcomeTitle = personCenter.state.userInfo.user.userName + "的资源";
+            personDate = <Tabs
                 hideAdd
-                ref = "mainTab"
+                ref="mainTab"
                 activeKey={this.state.activeKey}
                 defaultActiveKey={this.state.defaultActiveKey}
                 tabBarExtraContent={returnPersonCenterToolBar}
@@ -1829,41 +1948,68 @@ const PersonCenterComponents = React.createClass({
                                 {coursePanelChildren}
                             </Collapse>
                         </div>
-                        <Pagination total={personCenter.state.totalCourseWareCount} pageSize={getPageSize()} current={personCenter.state.currentCourseWarePage} onChange={this.onCourseWareChange}/>
+                        <Pagination total={personCenter.state.totalCourseWareCount} pageSize={getPageSize()}
+                                    current={personCenter.state.currentCourseWarePage}
+                                    onChange={this.onCourseWareChange}/>
                     </div>
                 </TabPane>
             </Tabs>;
-        }else if(personCenter.state.optType=="getUserSubjects"){
-            var welcomeTitle=personCenter.state.userInfo.user.userName+"的题目";
-            personDate= <Tabs
+        } else if (personCenter.state.optType == "getUserSubjects") {
+            var welcomeTitle = personCenter.state.userInfo.user.userName + "的题目";
+            personDate = <Tabs
                 hideAdd
-                ref = "mainTab"
+                ref="mainTab"
                 activeKey={this.state.activeKey}
                 defaultActiveKey={this.state.defaultActiveKey}
                 tabBarExtraContent={returnPersonCenterToolBar}
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab={welcomeTitle} key="userSubjects" className="topics_rela">
-                    <Table columns={subjectTableColumns} dataSource={data} pagination={{ total:personCenter.state.totalSubjectCount,pageSize: getPageSize(),onChange:personCenter.onSubjectPageChange }} scroll={{ y: 400}}/>
+                    <Table columns={subjectTableColumns} dataSource={data} pagination={{
+                        total: personCenter.state.totalSubjectCount,
+                        pageSize: getPageSize(),
+                        onChange: personCenter.onSubjectPageChange
+                    }} scroll={{y: 400}}/>
                 </TabPane>
             </Tabs>;
-        }else if(personCenter.state.optType=="getUserChatGroup"){
-            var welcomeTitle= "我的群聊";
-            var createChatToolBar = <div className="talk_ant_btn1"><Button onClick={personCenter.showCreateChatGroup}>创建群聊</Button></div>;
+        } else if (personCenter.state.optType == "getUserChatGroup") {
+            var welcomeTitle = "我的群聊";
+            var createChatToolBar = <div className="talk_ant_btn1"><Button onClick={personCenter.showCreateChatGroup}>创建群聊</Button>
+            </div>;
             personDate = <div className="myfollow_zb">
                 <div className="public—til—blue">{welcomeTitle}{createChatToolBar}</div>
-				<div className="favorite_scroll">
-                <ul className="group_table">
-                    <Table className="group_table_u" showHeader={false} scroll={{ x: true, }} columns={userGroupsColumns} dataSource={personCenter.state.userGroupsData} pagination={{ total:personCenter.state.totalChatGroupCount,pageSize: getPageSize(),onChange:personCenter.onChatGroupPageChange }}/>
-                </ul>
-				</div>
+                <div className="favorite_scroll">
+                    <ul className="group_table">
+                        <Table className="group_table_u" showHeader={false} scroll={{x: true,}}
+                               columns={userGroupsColumns} dataSource={personCenter.state.userGroupsData} pagination={{
+                            total: personCenter.state.totalChatGroupCount,
+                            pageSize: getPageSize(),
+                            onChange: personCenter.onChatGroupPageChange
+                        }}/>
+                    </ul>
+                </div>
             </div>;
-        }else if(personCenter.state.optType=="showGroupInfo"){
+        }
+        else if (personCenter.state.optType == "getGroupMenu") {
+            var welcomeTitle = "组织架构";
+            personDate = <div className="myfollow_zb">
+                <div className="public—til—blue">{welcomeTitle}</div>
+                <div className="favorite_scroll">
+                    <ul className="group_table">
+                        <Table className="group_table_u" showHeader={false} scroll={{x: true,}}
+                               columns={userGroupsColumns} dataSource={personCenter.state.groupMenuMebs}
+                               pagination={false}
+                        />
+                    </ul>
+                </div>
+            </div>;
+        }
+        else if (personCenter.state.optType == "showGroupInfo") {
             var welcomeTitle = "群设置";
-            const { loading, selectedRowKeys } = this.state;
+            const {loading, selectedRowKeys} = this.state;
             var topButton;
             var dissolutionChatGroupButton;
-            if(personCenter.state.currentGroupObj.owner.colUid==sessionStorage.getItem("ident")){
+            if (personCenter.state.currentGroupObj.owner.colUid == sessionStorage.getItem("ident")) {
                 topButton = <span className="right_ri">
                     <Button type="primary" onClick={this.showUpdateChatGroupNameModal}
                             loading={loading}
@@ -1872,51 +2018,59 @@ const PersonCenterComponents = React.createClass({
                                                      loading={loading}
                     >添加群成员</Button></span>
                 </span>;
-                dissolutionChatGroupButton = <Button onClick={personCenter.showDissolutionChatGroupConfirmModal} className="group_red_font"><i className="iconfont">&#xe616;</i>解散该群</Button>;
-            }else{
+                dissolutionChatGroupButton =
+                    <Button onClick={personCenter.showDissolutionChatGroupConfirmModal} className="group_red_font"><i
+                        className="iconfont">&#xe616;</i>解散该群</Button>;
+            } else {
                 topButton = <span className="right_ri">
                     <Button type="primary" onClick={this.showAddMembersModal}
                             loading={loading}
                     >添加群成员</Button>
                 </span>;
             }
-            var memberLiTag=[];
+            var memberLiTag = [];
             personCenter.state.currentMemberArray.forEach(function (e) {
                 var memberId = e.key;
                 var groupUser = e.groupUser;
                 var userInfo = e.userInfo;
                 var userHeaderIcon;
-                if(isEmpty(userInfo)==false){
+                if (isEmpty(userInfo) == false) {
                     userHeaderIcon = <img src={userInfo.avatar}></img>;
-                }else{
-                    userHeaderIcon=<span className="attention_img"><img src={require('../images/maaee_face.png')}></img></span>;
+                } else {
+                    userHeaderIcon =
+                        <span className="attention_img"><img src={require('../images/maaee_face.png')}></img></span>;
                 }
                 var liTag = <div className="group_fr">
                     <span className="attention_img">{userHeaderIcon}</span><span>{groupUser}</span>
-                    <Button　value={memberId} onClick={personCenter.showConfirmModal} className="group_del"><Icon type="close-circle-o" /></Button>
+                    <Button value={memberId} onClick={personCenter.showConfirmModal} className="group_del"><Icon
+                        type="close-circle-o"/></Button>
                 </div>;
                 memberLiTag.push(liTag);
             });
 
             personDate = <div className="group_cont">
-                    <div className="public—til—blue">{returnChatGroupMessagePageToolBar}{welcomeTitle}</div>
-                    <div className="favorite_scroll del_out">
-                        <ul className="integral_top">
-                            <span className="integral_face"><img src={personCenter.state.currentGroupObj.owner.avatar} className="person_user"/></span>
-                            <div className="class_right color_gary_f">{personCenter.state.currentGroupObj.name}</div>
-                            <div className="integral_line"></div>
-                        </ul>
-                        <ul className="group_fr_ul">
-                            <li className="color_gary_f"><span>群聊成员：{personCenter.state.currentMemberArray.length}人</span>{topButton}</li>
-                            <li className="user_hei">
-                                {memberLiTag}
-                            </li>
-                            <li className="color_gary_f">群聊名称：{personCenter.state.currentGroupObj.name}</li>
-                            <li className="btm"><Button onClick={personCenter.showExitChatGroupConfirmModal} className="group_red_btn">删除并退出</Button>{dissolutionChatGroupButton}</li>
-                        </ul>
-                    </div>
-                </div>;
-        }else {
+                <div className="public—til—blue">{returnChatGroupMessagePageToolBar}{welcomeTitle}</div>
+                <div className="favorite_scroll del_out">
+                    <ul className="integral_top">
+                        <span className="integral_face"><img src={personCenter.state.currentGroupObj.owner.avatar}
+                                                             className="person_user"/></span>
+                        <div className="class_right color_gary_f">{personCenter.state.currentGroupObj.name}</div>
+                        <div className="integral_line"></div>
+                    </ul>
+                    <ul className="group_fr_ul">
+                        <li className="color_gary_f">
+                            <span>群聊成员：{personCenter.state.currentMemberArray.length}人</span>{topButton}</li>
+                        <li className="user_hei">
+                            {memberLiTag}
+                        </li>
+                        <li className="color_gary_f">群聊名称：{personCenter.state.currentGroupObj.name}</li>
+                        <li className="btm"><Button onClick={personCenter.showExitChatGroupConfirmModal}
+                                                    className="group_red_btn">删除并退出</Button>{dissolutionChatGroupButton}
+                        </li>
+                    </ul>
+                </div>
+            </div>;
+        } else {
             personDate = <div>
                 <Card className="bai">
                     暂无数据
@@ -1933,14 +2087,18 @@ const PersonCenterComponents = React.createClass({
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
                        footer={[
-                           <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg" onClick={personCenter.updateChatGroupName}  >确定</button>,
-                           <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button" onClick={personCenter.updateChatGroupNameModalHandleCancel} >取消</button>
+                           <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
+                                   onClick={personCenter.updateChatGroupName}>确定</button>,
+                           <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
+                                   onClick={personCenter.updateChatGroupNameModalHandleCancel}>取消</button>
                        ]}
                 >
                     <Row className="ant-form-item">
                         <Col span={6} className="right_look">群名称：</Col>
                         <Col span={14}>
-                            <Input value={personCenter.state.updateChatGroupTitle} defaultValue={personCenter.state.updateChatGroupTitle} onChange={personCenter.updateChatGroupTitleOnChange}/>
+                            <Input value={personCenter.state.updateChatGroupTitle}
+                                   defaultValue={personCenter.state.updateChatGroupTitle}
+                                   onChange={personCenter.updateChatGroupTitleOnChange}/>
                         </Col>
                     </Row>
                 </Modal>
@@ -1952,8 +2110,10 @@ const PersonCenterComponents = React.createClass({
                     transitionName=""  //禁用modal的动画效果
                     maskClosable={false} //设置不允许点击蒙层关闭
                     footer={[
-                        <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg" onClick={personCenter.addGroupMember}  >确定</button>,
-                        <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button" onClick={personCenter.addGroupMemberModalHandleCancel} >取消</button>
+                        <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
+                                onClick={personCenter.addGroupMember}>确定</button>,
+                        <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
+                                onClick={personCenter.addGroupMemberModalHandleCancel}>取消</button>
                     ]}
                 >
                     <Row className="ant-form-item">
@@ -1965,7 +2125,7 @@ const PersonCenterComponents = React.createClass({
                                     width: 268,
                                     height: 320,
                                 }}
-                                titles={['待选联系人','已选联系人']}
+                                titles={['待选联系人', '已选联系人']}
                                 operations={['', '']}
                                 targetKeys={personCenter.state.memberTargetKeys}
                                 onChange={personCenter.addMemberTransferHandleChange}
@@ -1978,15 +2138,15 @@ const PersonCenterComponents = React.createClass({
                 <ConfirmModal ref="confirmModal"
                               title="确定要移除选中的群成员?"
                               onConfirmModalCancel={personCenter.closeConfirmModal}
-                              onConfirmModalOK={personCenter.deleteSelectedMember} />
+                              onConfirmModalOK={personCenter.deleteSelectedMember}/>
                 <ConfirmModal ref="dissolutionChatGroupConfirmModal"
                               title="确定要解散该群组?"
                               onConfirmModalCancel={personCenter.closeDissolutionChatGroupConfirmModal}
-                              onConfirmModalOK={personCenter.dissolutionChatGroup} />
+                              onConfirmModalOK={personCenter.dissolutionChatGroup}/>
                 <ConfirmModal ref="exitChatGroupConfirmModal"
                               title="确定要退出该群组?"
                               onConfirmModalCancel={personCenter.closeExitChatGroupConfirmModal}
-                              onConfirmModalOK={personCenter.exitChatGroup} />
+                              onConfirmModalOK={personCenter.exitChatGroup}/>
 
                 <Modal
                     visible={personCenter.state.createChatGroupModalVisible}
@@ -1995,13 +2155,17 @@ const PersonCenterComponents = React.createClass({
                     transitionName=""  //禁用modal的动画效果
                     maskClosable={false} //设置不允许点击蒙层关闭
                     footer={[
-                        <button type="primary" htmlType="submit" className="ant-btn-primary ant-btn" onClick={personCenter.createChatGroup}  >确定</button>,
-                        <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button" onClick={personCenter.createChatGroupModalHandleCancel} >取消</button>
+                        <button type="primary" htmlType="submit" className="ant-btn-primary ant-btn"
+                                onClick={personCenter.createChatGroup}>确定</button>,
+                        <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
+                                onClick={personCenter.createChatGroupModalHandleCancel}>取消</button>
                     ]}
                 >
                     <Row className="ant-form-item">
-                        <span >
-                            <Input placeholder="请输入群名称" value={personCenter.state.chatGroupTitle} defaultValue={personCenter.state.chatGroupTitle} onChange={personCenter.chatGroupTitleOnChange} />
+                        <span>
+                            <Input placeholder="请输入群名称" value={personCenter.state.chatGroupTitle}
+                                   defaultValue={personCenter.state.chatGroupTitle}
+                                   onChange={personCenter.chatGroupTitleOnChange}/>
                         </span>
                     </Row>
                     <Row className="ant-form-item">
@@ -2013,7 +2177,7 @@ const PersonCenterComponents = React.createClass({
                                     width: 268,
                                     height: 320,
                                 }}
-                                titles={['待选联系人','已选联系人']}
+                                titles={['待选联系人', '已选联系人']}
                                 operations={['', '']}
                                 targetKeys={personCenter.state.targetKeys}
                                 onChange={personCenter.transferHandleChange}
@@ -2024,7 +2188,7 @@ const PersonCenterComponents = React.createClass({
 
                 </Modal>
 
-                <UseKnowledgeComponents ref="useKnowledgeComponents" />
+                <UseKnowledgeComponents ref="useKnowledgeComponents"/>
                 {personDate}
             </div>
         );

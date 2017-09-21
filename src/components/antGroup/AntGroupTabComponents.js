@@ -41,7 +41,9 @@ const AntGroupTabComponents = React.createClass({
 
     getInitialState() {
         antGroup = this;
+        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         return {
+            loginUser: loginUser,
             isreader: true,
             defaultActiveKey: 'loginWelcome',
             activeKey: 'loginWelcome',
@@ -137,13 +139,20 @@ const AntGroupTabComponents = React.createClass({
             target = e.target;
         }
         var scrollTop = target.scrollTop;
-        if(scrollTop <= 1  ){
+        if(scrollTop <= 5  ){
             antGroup.setState({"isDirectToBottom":false});
             if(antGroup.state.messageComeFrom=="groupMessage"){
                 antGroup.getChatGroupMessages(antGroup.state.currentGroupObj,antGroup.state.firstMessageCreateTime);
+                console.log(target.scrollHeight);
+                console.log(target.scrollTop);
+                // target.scrollTop = target.scrollHeight - (target.scrollHeight-200);
                 // antGroup.reGetChatMessage(antGroup.state.currentGroupObj,antGroup.state.firstMessageCreateTime);
             }else{
                 antGroup.getUser2UserMessages(antGroup.state.currentUser,antGroup.state.firstMessageCreateTime);
+                console.log(target.scrollHeight);
+                console.log(target.scrollTop);
+                console.log(target.offsetHeight);
+                // target.scrollTop = target.scrollHeight - (target.scrollHeight-200);
             }
         }
     },
@@ -298,9 +307,15 @@ const AntGroupTabComponents = React.createClass({
                         antGroup.setState({"messageList": messageList});
                     } else if (command == "message") {
                         var data = info.data;
+                        console.log(data);
                         if (data.message.command == "biu_message") {
-                            var obj = JSON.parse(data.message.content);
+                            // var obj = JSON.parse(data.message.content);
                             _this.props.showAlert(true);
+                        }else if(data.message.command == "message") {
+                            // _this.props.showMesAlert(true);
+                            if(data.message.fromUser.colUid !== _this.state.loginUser.colUid) {
+                                _this.props.showMesAlert(true);
+                            }
                         }
                         showImg = "";
                         var messageOfSinge = data.message;
@@ -575,6 +590,7 @@ const AntGroupTabComponents = React.createClass({
         scrollType="auto";
         antGroup.setState({"isDirectToBottom":true,"messageComeFrom":"groupMessage","currentUser":''});
         antGroup.reGetChatMessage(groupObj,timeNode);
+        this.props.showMesAlert(false);
     },
 
     reGetChatMessage(groupObj,timeNode){
@@ -598,6 +614,7 @@ const AntGroupTabComponents = React.createClass({
     		icon: <Icon type="meh"  style={{ color: '#108ee9' , top:'-7px', position:'relative' }}/>,
 
  			 });
+			//
         }
     },
 
@@ -659,7 +676,7 @@ const AntGroupTabComponents = React.createClass({
         });
     },
     /**
-     * 点击消息列表，进入消息的列表窗口
+     * 点击消息列表，进入个人消息的列表窗口
      * @param userObj
      * @param timeNode
      */
@@ -669,6 +686,7 @@ const AntGroupTabComponents = React.createClass({
         antGroup.getUser2UserMessages(userObj,timeNode);
         var messageType = "message";
         antGroup.turnToMessagePage(userObj,messageType);
+        this.props.showMesAlert(false);
     },
 
     /**
@@ -825,7 +843,7 @@ const AntGroupTabComponents = React.createClass({
             var emotionInput;
             if (antGroup.state.optType == "sendMessage" && isEmpty(antGroup.state.currentUser.userName) == false) {
                 welcomeTitle = antGroup.state.currentUser.userName;
-                sendBtn = <Button onClick={antGroup.sendMessage}><div>发送<p className="password_ts">(Ctrl+Enter)</p></div></Button>;
+                sendBtn = <Button onClick={antGroup.sendMessage}><div>发送<p className="password_ts">(Enter)</p></div></Button>;
                 if (antGroup.state.currentUser.colUtype != "SGZH") {
                     emotionInput = <Row className="group_send">
                         <Col className="group_send_talk">
@@ -838,7 +856,7 @@ const AntGroupTabComponents = React.createClass({
                 }
             }else{
                 welcomeTitle = antGroup.state.currentGroupObj.name;
-                sendBtn = <Button value="groupSend" onClick={antGroup.sendMessage}><div>发送<p className="password_ts">(Ctrl+Enter)</p></div></Button>
+                sendBtn = <Button value="groupSend" onClick={antGroup.sendMessage}><div>发送<p className="password_ts">(Enter)</p></div></Button>
                 emotionInput = <Row className="group_send">
                     <Col className="group_send_talk">
                         <EmotionInputComponents onKeyDown={this.checkKeyType}></EmotionInputComponents>
