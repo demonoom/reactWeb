@@ -484,7 +484,7 @@ const AntCloudTableComponents = React.createClass({
                     downloadButton = null;
                 } else {
                     downloadButton =
-                        <a href={path} target="_blank" title="下载" download={path} className="te_download_a">
+                        <a href={path} target="_blank" title="下载" download={path} >
                             <Button icon="download"/></a>;
                 }
                 var fileLogo = _this.buildFileLogo(name, directory, e);
