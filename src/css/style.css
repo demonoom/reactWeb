@@ -93,6 +93,9 @@ i, cite, em, var, address, dfn {
     .little-layout-aside-r-show {
         height: 596px !important
     }
+    .gz_title_flex, .gz_title_flex + div{
+        width: 876px !important;
+    }
 }
 
 @media only screen and (max-width: 1365px) {
@@ -133,6 +136,9 @@ i, cite, em, var, address, dfn {
 
     .little-layout-aside-r-show .content {
         min-height: 430px !important
+    }
+    .gz_title_flex, .gz_title_flex + div{
+        width: 696px !important;
     }
 }
 
@@ -1638,7 +1644,7 @@ p.user_cont span.name, .user_til_name {
     text-align: right;
     display: inline-block;
     float: left;
-    padding: 8px 0;
+    padding:0;
 }
 
 .rc-upload {
@@ -3310,7 +3316,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 
 .black_person {
     color: #666;
-    padding: 8px 0;
+    padding: 0;
     float: left;
     width: calc(100% - 155px);
 }
@@ -6890,10 +6896,13 @@ select.course_n:hover {
 
 .ding_mes_notRead {
     background-color: blanchedalmond;
+}
 
-.white_16 {
-    color: #fff;
-    font-size: 16px;
+
+.white_16{
+    color:#fff;
+    font-size:16px;
+
 }
 
 .new_center_user {
@@ -6914,7 +6923,21 @@ select.course_n:hover {
     margin-top: -1px;
 }
 
-.noom_msgImages {
-    width: 220px;
-    height: 150px;
+.person_group > div{
+    height:100% !important;
+}
+.gz_title_flex{
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    top: 53px;
+}
+.gz_title_flex + div{
+    margin-top: 45px;
+    position: fixed;
+    height: calc(100% - 98px);
+}
+.gz_title_flex + div .ant-table-thead > tr > th.ant-table-selection-user2, .gz_title_flex + div .ant-table-tbody > tr > td.ant-table-selection-user2{
+    width: 100px;
+
 }

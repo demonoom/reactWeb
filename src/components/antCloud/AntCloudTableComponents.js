@@ -119,6 +119,8 @@ const AntCloudTableComponents = React.createClass({
         var imgArrNum = this.state.imgArrNum;
         var a = document.querySelectorAll(".topics_zanImg")[imgArrNum];
         var b = this.state.imgArrflag;
+        // console.log(a);
+        // console.log(imgArrNum);
         if (isEmpty(a) == false) {
             if (b) {
                 setTimeout(function () {

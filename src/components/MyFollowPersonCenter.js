@@ -194,9 +194,9 @@ const MyFollowPersonCenter = React.createClass({
             </div>;
             userInfoCard = <Card title={this.state.userInfo.user.userName+'的名片'}  className="bai">
                 <Row className="person_13">
-                    <p className="user_cont"><Col className="gary_person user_til_name">学&nbsp;&nbsp;&nbsp;&nbsp;校：</Col>
+                    <p className="user_cont"><Col className="gary_person user_til_name">学校：</Col>
                     <Col span={21} className="black_person">{this.state.userInfo.school}</Col></p>
-                    <Col className="gary_person user_til_name">年&nbsp;&nbsp;&nbsp;&nbsp;级：</Col>
+                    <Col className="gary_person user_til_name">年级：</Col>
                     <Col span={21} className="black_person ">{this.state.userInfo.grade}</Col>
                 </Row>
                 <Row>
@@ -218,9 +218,9 @@ const MyFollowPersonCenter = React.createClass({
 
             userInfoCard = <Card title={this.state.userInfo.user.userName+'的名片'}  className="bai new_center_user">
                 <Row className="person_13">
-                    <p className="user_cont"><span className="user_til_name">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;校：</span><span className="black_person">{this.state.userInfo.school}</span></p>
-                    <p className="user_cont"><span className="user_til_name">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：</span><span className="black_person">{this.state.userInfo.course}</span></p>
-                    <p className="user_cont"><span className="user_til_name">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span><span className="black_person">{this.state.userInfo.grade}</span></p>
+                    <p className="user_cont"><span className="user_til_name">学校：</span><span className="black_person">{this.state.userInfo.school}</span></p>
+                    <p className="user_cont"><span className="user_til_name">科目：</span><span className="black_person">{this.state.userInfo.course}</span></p>
+                    <p className="user_cont"><span className="user_til_name">年级：</span><span className="black_person">{this.state.userInfo.grade}</span></p>
                 </Row>
                 <Row>
                     <p className="user_cont"><span className="user_til_name">个人简介：</span><span className="black_person">{intro}</span></p>
@@ -244,7 +244,7 @@ const MyFollowPersonCenter = React.createClass({
         }
 
         return (
-            <div className="maaee_group_pa">
+            <div className="maaee_group_pa userinfo_bg">
                 <div className="bai gary_person">
                     {userPhotoTag}
 

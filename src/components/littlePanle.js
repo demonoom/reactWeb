@@ -104,6 +104,8 @@
         utilsCommon.unbind(document, 'paste', onPasteFunction);
     };
 
+    var isAddedListener = false;
+
     littlePanle.prototype._teachAdmin_UI_templet = function (obj) {
 
         let id = UUID(8, 16);
@@ -114,23 +116,24 @@
                 <h3 class="title">${ obj.title }</h3>
                     <div class="little-tilte">
                         <a class="back"><i class="anticon anticon-left "></i></a>
-                        <div class="goback">后退</div>
+                        <!--<div class="goback">后退</div>-->
                     </div>
                 </div>
                 <div class="content">
                     <section class="littleAnt-iframe-panle">
-                        <iframe  border={0} class="shengpi" id="${this.ifrid}"  src="${ obj.url }"  ></iframe>
+                        <iframe  border={0} class="shengpi" id="${this.ifrid}"  src="${ obj.url }" name="${this.ifrid}" ></iframe>
                     </section>
                 </div>
                 </div>`;
 
         let styleObj = (refStyle, index, orderIndex) => {
 
+            var layouts = $('.ant-layout-operation');
+            console.log(layouts);
             // 计算出复位的位置
-            var refOff = $('.ant-layout-operation').offset();
+            var refOff = $('.ant-layout-operation').eq(layouts.length-1).offset();
             var refW = $('.ant-layout-operation').width();
 
-            let tmpInterval = 0;
             //
             if (!refStyle.width) {
                 refStyle.width = 380;
@@ -139,11 +142,16 @@
             //  leftRef = leftRef + tmpInterval;
             refStyle.left = parseInt(leftRef.toFixed());
             //
-            let topRef = refOff.top + tmpInterval;
-            topRef = topRef - $(document.body).height();
-            topRef = topRef - refStyle.height * orderIndex;
-            refStyle.top = parseInt(topRef.toFixed());
-            //
+            let topReff = refOff.top;
+            // let topRef = refOff.top ;
+            topReff = topReff - $(document.body).height();
+            // console.log(topRef);-590
+            // topRef = topRef - refStyle.height * orderIndex + 25 * orderIndex;
+            topReff = topReff - refStyle.height * orderIndex ;
+            // console.log(topRef);减500
+            refStyle.top = parseInt(topReff.toFixed());
+
+            console.log(window.screen.height);
             refStyle.zIndex = index++;
 
             return refStyle
@@ -162,35 +170,41 @@
         this.ifrel = $('#' + this.ifrid);
 
         var iframe = this.ifrel[0];
+        var idd = iframe.id;
+        console.log(idd);
+        if (!isAddedListener) {
+            window.addEventListener('message', function (e) {
+                var data = JSON.parse(e.data);
+                //data.method方式
+                //data.callbackId回调方法名
+                //data.errorbackId错误回调方法名
+                console.log(data);
+                if (data.method == 'selectPictures') {
 
-        window.addEventListener('message', function (e) {
-            var data = JSON.parse(e.data);
-            //data.method方式
-            //data.callbackId回调方法名
-            //data.errorbackId错误回调方法名
-            console.log(data);
-            if (data.method == 'selectPictures') {
+                    //调用选择图片插件，获取图片的路径存入paths
+                    window.__noom__(data.callbackId);
 
-                //调用选择图片插件，获取图片的路径存入paths
-                window.__noom__(data.callbackId);
+                    window.__noomUpLoad__ = function (result, callbackId) {
+                        var str = result.join(',');
+                        var paths = str;
+                        var callbackId = callbackId;
+                        var response = {'callbackId': callbackId, 'params': paths};
+                        //iframe.contentWindow.postMessage(JSON.stringify(response), '*');
+                        var ifm = document.getElementById(data.windowName);
+                        ifm.contentWindow.postMessage(JSON.stringify(response), '*');
+                    };
+                } else if (data.method == 'showImage') {
+                    //data.currentUrl   当前的地址
+                    //data.url  全部地址，用#分割
+                    window.__sendImg__(data.currentUrl, data.url);
 
-                window.__noomUpLoad__ = function (data, callbackId) {
-                    var str = data.join(',');
-                    var paths = str;
-                    var callbackId = callbackId;
-                    var response = {'callbackId': callbackId, 'params': paths};
-                    iframe.contentWindow.postMessage(JSON.stringify(response), '*');
-                };
-            } else if (data.method == 'showImage') {
-                //data.currentUrl   当前的地址
-                //data.url  全部地址，用#分割
-                window.__sendImg__(data.currentUrl, data.url);
-
-            } else if (data.method == 'openNewPage') {
-                let obj = {mode: 'teachingAdmin', title: '',url: data.url};
-                LP.Start(obj);
-            }
-        });
+                } else if (data.method == 'openNewPage') {
+                    let obj = {mode: 'teachingAdmin', title: '', url: data.url};
+                    LP.Start(obj);
+                }
+            });
+            isAddedListener = true;
+        }
 
 
         this.ifrel.on('load', this._teachAdmin_UI_templet_iframe_event.bind(this, this.id, this.ifrid, 1));

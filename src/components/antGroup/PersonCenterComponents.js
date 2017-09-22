@@ -755,8 +755,8 @@ const PersonCenterComponents = React.createClass({
                 data.forEach(function (e) {
                     var id = e.colUid;
                     var memberAvatarTag = <img src={e.avatar}></img>;
-                    var imgTag = <div className="maaee_group_face">{memberAvatarTag}</div>;
-                    var name = <span onClick={_this.a.bind(this, id)}>{e.userName}</span>
+                    var imgTag = <div className="maaee_group_face1">{memberAvatarTag}</div>;
+                    var name = <a className="font_gray_666" onClick={_this.a.bind(this, id)}>{e.userName}</a>
                     var chatGroupJson = {
                         key: id,
                         groupPhoto: imgTag,
@@ -1444,12 +1444,12 @@ const PersonCenterComponents = React.createClass({
                           style={{margintop: '15px'}}>
                         <Row className="person_13">
                             <p className="user_cont">
-                                <span className="user_til_name">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;校：</span>
+                                <span className="user_til_name">学校：</span>
                                 <span className="black_person">{personCenter.state.userInfo.school}</span>
                             </p>
                             <p className="user_cont">
-                                <span className="user_til_name">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span>
-                                <span className="black_person ">{personCenter.state.userInfo.grade}</span>
+                                <span className="user_til_name">年级：</span>
+                                <span className="black_person">{personCenter.state.userInfo.grade}</span>
                             </p>
                             <p className="user_cont">
                                 <span className="user_til_name">个人简介：</span>
@@ -1485,15 +1485,15 @@ const PersonCenterComponents = React.createClass({
                     <Card title={personCenter.state.userInfo.user.userName + '的个人名片'} className="bai new_center_user">
                         <Row className="person_13">
                             <p className="user_cont">
-                                <span className="user_til_name">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;校：</span>
+                                <span className="user_til_name">学校：</span>
                                 <span className="black_person">{personCenter.state.userInfo.school}</span>
                             </p>
                             <p className="user_cont">
-                                <span className="user_til_name">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：</span>
+                                <span className="user_til_name">科目：</span>
                                 <span className="black_person">{personCenter.state.userInfo.course}</span>
                             </p>
                             <p className="user_cont">
-                                <span className="user_til_name">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span>
+                                <span className="user_til_name">年级：</span>
                                 <span className="black_person">{personCenter.state.userInfo.grade}</span>
                             </p>
                             <p className="user_cont">
@@ -1928,7 +1928,7 @@ const PersonCenterComponents = React.createClass({
                 transitionName=""  //禁用Tabs的动画效果
             >
                 <TabPane tab={welcomeTitle} key="userLiveInfos" className="topics_rela ">
-                    <div className='ant-tabs ant-tabs-top ant-tabs-line topics_calc favorite_pa_le'
+                    <div className='ant-tabs ant-tabs-top ant-tabs-line topics_calc'
                          style={{'overflow': 'auto'}}>
                         {personCenter.state.userLiveData}
                     </div>
@@ -2001,7 +2001,7 @@ const PersonCenterComponents = React.createClass({
                 <div className="public—til—blue">{welcomeTitle}</div>
                 <div className="favorite_scroll">
                     <ul className="group_table">
-                        <Table className="group_table_u" showHeader={false} scroll={{x: true,}}
+                        <Table className="group_table_u person_group" showHeader={false} scroll={{x: true,}}
                                columns={userGroupsColumns} dataSource={personCenter.state.groupMenuMebs}
                                pagination={false}
                         />

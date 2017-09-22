@@ -851,6 +851,18 @@ const AntGroupTabComponents = React.createClass({
                                             </li>;
                                         } else if (attachmentType == 2) {
                                             //语音
+                                            messageTag = <li className="right" style={{'textAlign': 'right'}}>
+                                                <div className="u-name"><span>{fromUser}</span></div>
+                                                <div className="talk-cont"><span
+                                                    className="name">{userPhoneIcon}</span><span
+                                                    className="borderballoon_le"
+                                                    onClick={this.audioPlay.bind(this, attachment)}>这是一条语音消息，暂不支持播放 <audio
+                                                    id={attachment}
+                                                >
+                                                    <source src={attachment} type="audio/mpeg"></source>
+                                                </audio><i
+                                                    className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                            </li>;
                                         }
                                     } else {
                                         messageTag = <li className="right" style={{'textAlign': 'right'}}>
@@ -881,7 +893,7 @@ const AntGroupTabComponents = React.createClass({
                                                 <div className="talk-cont"><span
                                                     className="name">{userPhoneIcon}</span><span
                                                     className="borderballoon_le"
-                                                    onClick={this.audioPlay.bind(this, attachment)}>这是一条语音消息，点击播放 <audio
+                                                    onClick={this.audioPlay.bind(this, attachment)}>这是一条语音消息，暂不支持播放 <audio
                                                     id={attachment}
                                                 >
                                                     <source src={attachment} type="audio/mpeg"></source>
