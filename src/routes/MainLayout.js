@@ -581,8 +581,9 @@ const MainLayout = React.createClass({
                               onClick={this.toolbarClick}>
                             <Menu.Item key="message" className="padding_menu">
                                 <i className="icon_menu_ios icon_message"></i>
-                                <div className="tan">动态</div>
                                 <b className="ding_alert" ref='msgAlert'></b>
+                                <div className="tan">动态</div>
+
                             </Menu.Item>
                             <Menu.Item key="antNest" className="padding_menu">
                                 <i className="icon_menu_ios icon_yichao1"></i>

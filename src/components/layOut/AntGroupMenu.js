@@ -104,7 +104,7 @@ const AntGroupMenu = React.createClass({
                 </div>
 
                 <div className="maaee_group affix_bottom_tc" onClick={mMenu.getGroupMenu}>
-                    <img src={require('../images/groupTitle.png')} className="antnest_38_img"/>
+                    <img src={require('../images/icon_jiagou.png')} className="antnest_38_img"/>
                     <span className="" icon="usergroup-add">组织构架</span>
                 </div>
 

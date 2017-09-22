@@ -2133,7 +2133,7 @@ const MyFollowExtend = React.createClass({
             case 'getUserSubjects':
 
                 tabComponent = <div className="follow_my">
-                    <h3 className="public—til—blue">
+                    <h3 className="public—til—blue gz_title_flex">
                         <div className="ant-tabs-right">
                             <button onClick={this.changeMyCenter} className="affix_bottom_tc"><Icon type="left"/>
                             </button>
@@ -2269,7 +2269,7 @@ const MyFollowExtend = React.createClass({
 
         return (<div className="follow_my">
                 {returnBtn}
-                <div className="favorite_scroll userinfo_bg person_attention">
+                <div className="favorite_scroll person_attention">
                     <UseKnowledgeComponents ref="useKnowledgeComponents"/>
                     <div className="group_cont">
                         {userPhoneCard}

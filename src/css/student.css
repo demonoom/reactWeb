@@ -12,7 +12,10 @@
     right: 0 !important;
 	border-left:none !important
 }
-
+li.liveTV:hover, li.history:hover, li.exam:hover {
+	cursor: pointer;
+	background: #EAF7FD;
+}
 .liveTV .public—til—blue, .history .public—til—blue{
 	background: #0084ff;
     height: 54px;

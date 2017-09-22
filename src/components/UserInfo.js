@@ -139,12 +139,10 @@ const UserInfo = React.createClass({
 
         var courseOrGrade;
         if(this.state.userType=="TEAC"){
-            courseOrGrade = <p className="user_cont"><span className="user_til_name">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                目：</span><span
+            courseOrGrade = <p className="user_cont"><span className="user_til_name">科目：</span><span
                 className="black_person">{this.state.courseName}</span></p>;
         }else{
-            courseOrGrade = <p className="user_cont"><span className="user_til_name">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                级：</span><span
+            courseOrGrade = <p className="user_cont"><span className="user_til_name">年级：</span><span
                 className="black_person">{this.state.grade}</span></p>;
         }
 
@@ -155,8 +153,7 @@ const UserInfo = React.createClass({
 				<div className="userinfo_top upexam_float">
 					<p className="user_cont"><span className="user_til_name">学校名称：</span><span
                     className="black_person">{this.state.schoolName}</span></p>
-                <p className="user_cont"><span className="user_til_name">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    名：</span><span
+                <p className="user_cont"><span className="user_til_name">姓名：</span><span
                     className="black_person">{this.state.userName}</span></p>
                 {courseOrGrade}
 				</div>
