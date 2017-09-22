@@ -315,6 +315,7 @@ const AntGroupTabComponents = React.createClass({
                             // _this.props.showMesAlert(true);
                             if(data.message.fromUser.colUid !== _this.state.loginUser.colUid) {
                                 _this.props.showMesAlert(true);
+
                             }
                         }
                         showImg = "";
@@ -802,13 +803,13 @@ const AntGroupTabComponents = React.createClass({
                                     messageTag = <li className="right" style={{'textAlign': 'right'}}>
                                         <div className="u-name"><span>{fromUser}</span></div>
                                         <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span
-                                            className="borderballoon">{e.content}</span></div>
+                                            className="borderballoon">{e.content}<i className="borderballoon_dingcorner_le"></i></span></div>
                                     </li>;
                                 } else {
                                     messageTag = <li style={{'textAlign': 'left'}}>
                                         <div className="u-name"><span>{fromUser}</span></div>
                                         <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span
-                                            className="borderballoon_le">{e.content}</span></div>
+                                            className="borderballoon_le">{e.content}<i className="borderballoon_dingcorner_ri_no"></i></span></div>
                                     </li>;
                                 }
                             } else if (e.messageReturnJson.messageType == "imgTag") {
@@ -816,13 +817,13 @@ const AntGroupTabComponents = React.createClass({
                                     messageTag = <li className="right" style={{'textAlign': 'right'}}>
                                         <div className="u-name"><span>{fromUser}</span></div>
                                         <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span
-                                            className="borderballoon ">{e.imgTagArray}</span></div>
+                                            className="borderballoon ">{e.imgTagArray}<i className="borderballoon_dingcorner_le"></i></span></div>
                                     </li>;
                                 } else {
                                     messageTag = <li style={{'textAlign': 'left'}}>
                                         <div className="u-name"><span>{fromUser}</span></div>
                                         <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span
-                                            className="borderballoon_le ">{e.imgTagArray}</span></div>
+                                            className="borderballoon_le">{e.imgTagArray}<i className="borderballoon_dingcorner_ri_no"></i></span></div>
                                     </li>;
                                 }
                             }
@@ -832,7 +833,7 @@ const AntGroupTabComponents = React.createClass({
                             <div className="u-name"><span>{fromUser}</span></div>
                             <div className="talk-cont">
                                 <span className="name">{userPhoneIcon}</span><span
-                                className="borderballoon">{content}</span>
+                                className="borderballoon">{content}<i className="borderballoon_dingcorner_le"></i></span>
                             </div>
                         </li>;
                     }

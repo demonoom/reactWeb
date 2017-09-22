@@ -129,7 +129,7 @@ const UserInfo = React.createClass({
                 }
             </Upload>
             <br/>
-            <span className="font_gray_33 date_tr">{this.state.userName} </span>
+            <span className="white_16 date_tr">{this.state.userName} </span>
             {/*{ this.state.userHeadIcon ? <img src={this.state.userHeadIcon} className="blur"/> : null }*/}
         </div>;
     },
@@ -139,25 +139,25 @@ const UserInfo = React.createClass({
 
         var courseOrGrade;
         if(this.state.userType=="TEAC"){
-            courseOrGrade = <p className="user_cont"><span className="name">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            courseOrGrade = <p className="user_cont"><span className="user_til_name">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 目：</span><span
-                className="name1">{this.state.courseName}</span></p>;
+                className="black_person">{this.state.courseName}</span></p>;
         }else{
-            courseOrGrade = <p className="user_cont"><span className="name">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            courseOrGrade = <p className="user_cont"><span className="user_til_name">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 级：</span><span
-                className="name1">{this.state.grade}</span></p>;
+                className="black_person">{this.state.grade}</span></p>;
         }
 
         return (
 			<div className="userinfo_bg">
             <div className="">
                 {this.getTitle()}
-				<div className="userinfo_top">
-					<p className="user_cont"><span className="name ant-col-3">学校名称：</span><span
-                    className="name1">{this.state.schoolName}</span></p>
-                <p className="user_cont"><span className="name">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<div className="userinfo_top upexam_float">
+					<p className="user_cont"><span className="user_til_name">学校名称：</span><span
+                    className="black_person">{this.state.schoolName}</span></p>
+                <p className="user_cont"><span className="user_til_name">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     名：</span><span
-                    className="name1">{this.state.userName}</span></p>
+                    className="black_person">{this.state.userName}</span></p>
                 {courseOrGrade}
 				</div>
                 

@@ -173,9 +173,9 @@ const MyFollowPersonCenter = React.createClass({
         var user = this.props.userInfo.user;
         var userName = user.userName;
         if(isEmpty(user.avatar)==false){
-            userPhotoTag = <span className="person_user_bg">
+            userPhotoTag = <div className="person_user_bg2">
                 <img src={user.avatar} className="person_user"/>
-            </span>;
+            </div>;
             <div></div>
         }
         var userLinkCard;
@@ -187,10 +187,10 @@ const MyFollowPersonCenter = React.createClass({
                 intro="这家伙很懒，还没编辑个人简介";
             }
             userLinkCard = <div  className="person_container">
-                <Button value={user.colUid} icon="question-circle-o" onClick={this.studentAsk} className="person_cor person_cor1" title={userName+'的提问'}><div>提问</div></Button>
-                <Button value={user.colUid} icon="area-chart" onClick={this.studentStudyTrack} className="person_cor person_cor2" title={userName+'的学习轨迹'}><div>学习轨迹</div></Button>
-                <Button value={user.colUid} icon="star-o" onClick={this.getUserFavorite} className="person_cor person_cor3" title={userName+'的收藏'}><div>收藏</div></Button>
-                <Button value={user.colUid} icon="heart-o" onClick={this.getMyFollows} className="person_cor person_cor4"  title={userName+'的关注'}><div>关注</div></Button>
+                <Button value={user.colUid} icon="question-circle-o" onClick={this.studentAsk} className="person_cor" title={userName+'的提问'}><div>提问</div></Button>
+                <Button value={user.colUid} icon="area-chart" onClick={this.studentStudyTrack} className="person_cor" title={userName+'的学习轨迹'}><div>学习轨迹</div></Button>
+                <Button value={user.colUid} icon="star-o" onClick={this.getUserFavorite} className="person_cor" title={userName+'的收藏'}><div>收藏</div></Button>
+                <Button value={user.colUid} icon="heart-o" onClick={this.getMyFollows} className="person_cor"  title={userName+'的关注'}><div>关注</div></Button>
             </div>;
             userInfoCard = <Card title={this.state.userInfo.user.userName+'的名片'}  className="bai">
                 <Row className="person_13">
@@ -210,24 +210,20 @@ const MyFollowPersonCenter = React.createClass({
                 intro="该老师很忙，还没编辑个人简介";
             }
             userLinkCard = <div  className="person_container ">
-                <Button value={user.colUid} icon="play-circle-o"  className="person_cor person_cor1" onClick={this.getLiveInfo} title={userName+'的直播'} ><div>直播</div></Button>
-                <Button value={user.colUid} icon="area-chart" className="person_cor person_cor2" onClick={this.getMyCourseWares} title={userName+'的资源'} ><div>资源</div></Button>
-                <Button value={user.colUid} icon="star-o" className="person_cor person_cor3" onClick={this.getMySubjects} title={userName+'的题库'} ><div>题库</div></Button>
-                <Button value={user.colUid} icon="heart-o" className="person_cor person_cor4" onClick={ this.intoMyFollows } title={userName+'的关注'} ><div>关注</div></Button>
+                <Button value={user.colUid} icon="play-circle-o"  className="person_cor" onClick={this.getLiveInfo} title={userName+'的直播'} ><div>直播</div></Button>
+                <Button value={user.colUid} icon="area-chart" className="person_cor" onClick={this.getMyCourseWares} title={userName+'的资源'} ><div>资源</div></Button>
+                <Button value={user.colUid} icon="star-o" className="person_cor" onClick={this.getMySubjects} title={userName+'的题库'} ><div>题库</div></Button>
+                <Button value={user.colUid} icon="heart-o" className="person_cor" onClick={ this.intoMyFollows } title={userName+'的关注'} ><div>关注</div></Button>
             </div>;
 
-            userInfoCard = <Card title={this.state.userInfo.user.userName+'的名片'}  className="bai">
+            userInfoCard = <Card title={this.state.userInfo.user.userName+'的名片'}  className="bai new_center_user">
                 <Row className="person_13">
-                    <Col span={3} className="gary_person">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;校：</Col>
-                    <Col span={21} className="black_person">{this.state.userInfo.school}</Col>
-                    <Col span={3} className="gary_person">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：</Col>
-                    <Col span={21} className="black_person">{this.state.userInfo.course}</Col>
-                    <Col span={3} className="gary_person">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</Col>
-                    <Col span={21} className="black_person">{this.state.userInfo.grade}</Col>
+                    <p className="user_cont"><span className="user_til_name">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;校：</span><span className="black_person">{this.state.userInfo.school}</span></p>
+                    <p className="user_cont"><span className="user_til_name">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：</span><span className="black_person">{this.state.userInfo.course}</span></p>
+                    <p className="user_cont"><span className="user_til_name">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span><span className="black_person">{this.state.userInfo.grade}</span></p>
                 </Row>
                 <Row>
-                    <Col span={3} className="gary_person">个人简介：</Col>
-                    <Col span={21} className="black_person">{intro}</Col>
+                    <p className="user_cont"><span className="user_til_name">个人简介：</span><span className="black_person">{intro}</span></p>
                 </Row>
             </Card>;
         }
@@ -237,9 +233,9 @@ const MyFollowPersonCenter = React.createClass({
         //个人中心页面中，如果是自己，则不能显示关注和取消关注
         if(this.state.userInfo.user.colUid != sessionStorage.getItem("ident")){
             if(this.state.isFollow==false){
-                followButton = <Button icon="heart-o" onClick={this.followUser} className="persono_btn_gray">关注</Button>;
+                followButton = <Button onClick={this.followUser} className="persono_btn_gray">关注</Button>;
             }else {
-                followButton = <Button icon="heart" onClick={this.unfollowUser} className="persono_btn_gray">取消关注</Button>;
+                followButton = <Button onClick={this.unfollowUser} className="persono_btn_gray_old">取消关注</Button>;
             }
         }
         //如果个人中心显示的用户并不是当前用户的联系人，则不能显示发消息按钮
@@ -249,25 +245,25 @@ const MyFollowPersonCenter = React.createClass({
 
         return (
             <div className="maaee_group_pa">
-                <Card className="bai">
+                <div className="bai gary_person">
                     {userPhotoTag}
 
-                    <span className="person_btn">
-                        <button className="antnest_talk antnest_icon_radius"   onClick={ ()=>{
+                    <div className="person_btn">
+                        <button className="ant-btn antnest_talk antnest_icon_radius"   onClick={ ()=>{
                             this.props.callBackTurnToPlatformRulePage( 'score');
                         }
-                        }><i className="iconfont iconfont_jifen">&#xe608;</i>
-                            <span className="iocnfont_sp_jifen">{this.state.userInfo.score}</span>积分</button>
-						<button className="antnest_icon_blue_radius"   onClick={ ()=>{
+                        }><span className="iocnfont_sp_jifen">{this.state.userInfo.score}</span>积分</button>
+                        <span className="bor_ri_line"></span>
+						<button className="ant-btn antnest_icon_blue_radius"   onClick={ ()=>{
                             this.props.callBackTurnToPlatformRulePage( 'level');
 						}
 						} >{this.state.userInfo.level.name}</button>
-                    </span>
-                    <span className="person_btn_ri">
+                    </div>
+                    <div className="person_btn_ri">
                      {sendMessageButton}
                         {followButton}
-					 </span>
-                </Card>
+					 </div>
+                </div>
 				
                 <div >
 					{userLinkCard}

@@ -1621,7 +1621,10 @@ p.user_cont1 span div.user_cont1 span {
 }
 
 p.user_cont {
-    padding: 8px 15px;
+    padding: 8px 0;
+    width: 100%;
+    float:left
+
 }
 
 p.user_cont_cen {
@@ -1634,6 +1637,8 @@ p.user_cont span.name, .user_til_name {
     margin-right: 30px;
     text-align: right;
     display: inline-block;
+    float: left;
+    padding:8px 0;
 }
 
 .rc-upload {
@@ -1701,13 +1706,11 @@ p.user_cont span.name1 {
     margin-bottom: 16px !important;
 }
 
-.17
-_hei1 {
+.17_hei1 {
     height: 98%;
 }
 
-.17
-_hei2 > table {
+.17_hei2 > table {
     padding: 3px 8px !important;
 }
 
@@ -2545,25 +2548,34 @@ li.ant-menu-submenu > ul > li.ant-menu-submenu {
 }
 
 .antnest_icon_radius {
-    border: 1px solid #FF8928;
-    color: #FF8928;
-    border-radius: 20px;
-    background: #fff;
-    padding: 2px 8px;
+    border:none;
+    color: #fff;
+    background:none;
+    padding: 0;
+    border-radius: 0;
 }
 
 .antnest_icon_blue_radius {
-    border: 1px solid #60A9FF;
-    color: #60A9FF;
-    border-radius: 20px;
-    background: #fff;
-    padding: 2px 8px;
+    border: none;
+    padding: 0;
+    background: none;
+    color:#fff;
 }
-
+.antnest_icon_radius:hover, .antnest_icon_radius:active, .antnest_icon_radius:focus, .antnest_icon_radius:visited, .antnest_icon_blue_radius:hover, .antnest_icon_blue_radius:active, .antnest_icon_blue_radius:focus, .antnest_icon_blue_radius:visited{
+    background: none;
+    color: #fffea4
+}
 .antnest_head span {
     margin-right: 8px;
 }
-
+.bor_ri_line{
+    border-right: 1px solid #fff;
+    height: 14px;
+    display: inline-block;
+    position: relative;
+    top: 2px;
+    margin-right: 12px;
+}
 .ant-card:hover {
     box-shadow: none !important
 }
@@ -2912,25 +2924,26 @@ a.topics:hover {
     margin-bottom: 1px !important;
 }
 
-span.person_user_bg {
+div.person_user_bg {
     width: 60px;
     height: 60px;
     padding: 0;
     display: inline-block
 }
 
-span.person_user_bg2 {
+div.person_user_bg2 {
     width: 140px;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: pre-wrap
+    white-space: pre-wrap;
+    margin: 0 auto;
 }
 
 .person_user {
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    border: 1px solid #C2C2C2;
+    border: 2px solid #fff;
     overflow: hidden;
     display: inline-block;
     box-sizing: border-box;
@@ -2946,9 +2959,8 @@ span.person_user_bg2 {
 }
 
 .person_btn {
-    margin-left: 10px;
     position: relative;
-    top: -20px;
+    top: 2px;
 }
 
 .person_btn_name {
@@ -2964,8 +2976,7 @@ span.person_user_bg2 {
 
 .person_btn_ri {
     position: relative;
-    top: 21px;
-    float: right;
+    top: 15px;
 }
 
 .person_le {
@@ -3294,6 +3305,8 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 .black_person {
     color: #666;
     padding: 8px 0;
+    float: left;
+    width: calc(100% - 155px);
 }
 
 .person_cor {
@@ -3301,13 +3314,15 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     width: 50px;
     height: 50px;
     display: inline-block;
+    background: #fff;
+    border: none;
 }
 
 .person_cor i {
-    font-size: 24px;
+    font-size: 30px;
     text-align: center;
-    line-height: 40px !important;
-    color: #fff;
+    line-height: 30px !important;
+    color: #0084ff;
 }
 
 .person_cor1 {
@@ -3376,15 +3391,23 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     top: 12px;
     left: -23px;
     width: 80px;
+    color:#424242;
 }
 
 .persono_btn_blue {
-    border: 1px solid #cee8fc;
+    background: #fff;
+    border: 1px solid #fff;
     color: #22a0fd
 }
-
-.persono_btn_gray i {
-    color: #f56a55
+.persono_btn_gray{
+    color: #424242;
+    background: #fff;
+    border: 1px solid #fff;
+}
+.persono_btn_gray_old{
+    color: #f56a55;
+    background: #fff;
+    border: 1px solid #fff;
 }
 
 .person_ri_line {
@@ -3403,12 +3426,15 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    margin: 25px;
-    height: 86px;
+    padding: 20px;
     -webkit-box-pack: justify;
     -webkit-justify-content: space-between;
     -ms-flex-pack: justify;
     justify-content: space-between;
+    background: #fff;
+    height: 106px;
+    margin: 20px 0;
+    border-radius: 4px;
 }
 
 .container Button {
@@ -3455,7 +3481,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     border-radius: 4px;
     position: relative;
     display: inline-flex;
-    padding: 6px 12px;
+    padding: 6px 12px 6px 14px;
     margin-right: 12px;
     max-width: calc(100% - 250px);
     max-width: -moz-calc(100% - 250px);
@@ -3528,7 +3554,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     border-radius: 4px;
     position: relative;
     display: inline-block;
-    padding: 6px 12px;
+    padding: 6px 14px 6px 12px;
     margin-left: 12px;
     max-width: calc(100% - 250px);
     max-width: -moz-calc(100% - 250px);
@@ -3573,7 +3599,38 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     top: 8px;
     right: -12px !important;
 }
-
+.borderballoon_dingcorner_le {
+    content: "";
+    position: absolute;
+    background: url(../../src/components/images/ding_corner_le.png) no-repeat left 0;
+    top: 0px;
+    left: 0;
+    width: 32px;
+    height: 32px;
+    background-size: 80%;
+    display: none;
+}
+.borderballoon_dingcorner_ri {
+    content: "";
+    position: absolute;
+    background: url(../../src/components/images/ding_corner_ri.png) no-repeat right 0;
+    top: 0px;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    background-size: 80%;
+}
+.borderballoon_dingcorner_ri_no{
+    content: "";
+    position: absolute;
+    background: url(../../src/components/images/ding_corner_ri.png) no-repeat right 0;
+    top: 0px;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    background-size: 80%;
+    display:none
+}
 .level_list_pa {
     padding: 15px 25px !important;
 }
@@ -4813,11 +4870,12 @@ div.btn1 {
 }
 
 .userinfo_bg {
-    background: url(../../src/components/images/userinfo_bg.png) no-repeat center 0;
-    height: 239px;
+    background: url(../../src/components/images/userinfo_bg.png) no-repeat center 0 #f9f9f9;
     margin-top: -1px;
-    padding: 70px 40px 0 40px;
+    padding: 20px 110px 0 110px;
     margin-left: 0;
+    background-size: contain;
+
 }
 
 .userinfo_bg_1 {
@@ -4836,7 +4894,10 @@ div.btn1 {
 }
 
 .userinfo_top {
-    margin-top: 80px
+    margin-top: 80px;
+    background:#fff;
+    border-radius:4px;
+    padding: 20px 0;
 }
 
 .teachingAdmin.little-layout-aside-r-show h3.title {
@@ -6810,6 +6871,7 @@ select.course_n:hover {
     border-radius: 50%;
     margin-bottom: 18px;
 }
+<<<<<<< HEAD
 
 .ding_mes_read {
     background-color: #fff;
@@ -6817,4 +6879,23 @@ select.course_n:hover {
 
 .ding_mes_notRead {
     background-color: blanchedalmond;
+=======
+.white_16{
+    color:#fff;
+    font-size:16px;
+}
+.new_center_user{
+    border:none;
+}
+.new_center_user .ant-card-head{
+    padding:0;
+    margin: 0 24px;
+}
+.new_center_user .ant-card-head h3{
+    font-weight: normal;
+    color: #333;
+}
+.new_center_user_top{
+    margin-top: -1px;
+>>>>>>> 472094c28ac5a9cfac535fd4e232cbb608069e66
 }

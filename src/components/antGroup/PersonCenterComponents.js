@@ -1407,11 +1407,10 @@ const PersonCenterComponents = React.createClass({
             var user = personCenter.state.userInfo.user;
             var userName = user.userName;
             if (isEmpty(user.avatar) == false) {
-                userPhotoTag = <span className="person_user_bg person_user_bg2">
-                <img src={user.avatar} className="person_user"/>
-                    <div className="person_btn_name">{userName}</div>
-            </span>;
-                <div></div>
+                userPhotoTag = <div className="person_user_bg2">
+                    <img src={user.avatar} className="person_user"/><br/>
+                    <div className="white_16 date_tr">{userName}</div>
+                </div>;
             }
             var userLinkCard;
             var userInfoCard;
@@ -1423,84 +1422,87 @@ const PersonCenterComponents = React.createClass({
                 }
                 userLinkCard = <div title={userName + '的个人名片'} className="person_container">
                     <Button value={user.colUid} icon="question-circle-o" onClick={personCenter.studentAsk}
-                            className="person_cor person_cor1">
+                            className="person_cor">
                         <div>提问</div>
                     </Button>
                     <Button value={user.colUid} icon="area-chart" onClick={personCenter.studentStudyTrack}
-                            className="person_cor person_cor2">
+                            className="person_cor">
                         <div>学习轨迹</div>
                     </Button>
                     <Button value={user.colUid} icon="star-o" onClick={personCenter.getUserFavorite}
-                            className="person_cor person_cor3">
+                            className="person_cor">
                         <div>收藏</div>
                     </Button>
                     <Button value={user.colUid} icon="heart-o"
                             onClick={personCenter.getMyFollows.bind(personCenter, user.colUid)}
-                            className="person_cor person_cor4">
+                            className="person_cor">
                         <div>关注</div>
                     </Button>
                 </div>;
-                userInfoCard = <Card title={personCenter.state.userInfo.user.userName + '的个人名片'} className="bai"
-                                     style={{margintop: '15px'}}>
-                    <Row className="person_13">
-                        <p className="user_cont">
-                            <span className="user_til_name">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;校：</span>
-                            <span className="black_person">{personCenter.state.userInfo.school}</span>
-                        </p>
-                        <p className="user_cont">
-                            <span className="user_til_name">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span>
-                            <span className="black_person ">{personCenter.state.userInfo.grade}</span>
-                        </p>
-                        <p className="user_cont">
-                            <span className="user_til_name">个人简介：</span>
-                            <span className="black_person ">{intro}</span>
-                        </p>
-                    </Row>
-                </Card>;
+                userInfoCard =
+                    <Card title={personCenter.state.userInfo.user.userName + '的个人名片'} className="bai new_center_user"
+                          style={{margintop: '15px'}}>
+                        <Row className="person_13">
+                            <p className="user_cont">
+                                <span className="user_til_name">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;校：</span>
+                                <span className="black_person">{personCenter.state.userInfo.school}</span>
+                            </p>
+                            <p className="user_cont">
+                                <span className="user_til_name">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span>
+                                <span className="black_person ">{personCenter.state.userInfo.grade}</span>
+                            </p>
+                            <p className="user_cont">
+                                <span className="user_til_name">个人简介：</span>
+                                <span className="black_person ">{intro}</span>
+                            </p>
+                        </Row>
+                    </Card>;
             } else {
                 if (isEmpty(intro)) {
                     intro = "该老师很忙，还没编辑个人简介";
                 }
                 userLinkCard = <div title={userName + '的个人名片'} className="person_container ">
-                    <Button value={user.colUid} icon="play-circle-o" className="person_cor person_cor1"
+
+                    <Button value={user.colUid} icon="play-circle-o" className="person_cor"
                             onClick={personCenter.getLiveInfo.bind(personCenter, user.colUid)}>
                         <div>直播</div>
                     </Button>
-                    <Button value={user.colUid} icon="area-chart" className="person_cor person_cor2"
+                    <Button value={user.colUid} icon="area-chart" className="person_cor"
                             onClick={personCenter.getMyCourseWares}>
                         <div>资源</div>
                     </Button>
-                    <Button value={user.colUid} icon="star-o" className="person_cor person_cor3"
+                    <Button value={user.colUid} icon="star-o" className="person_cor"
                             onClick={personCenter.getMySubjects}>
                         <div>题库</div>
                     </Button>
-                    <Button value={user.colUid} icon="heart-o" className="person_cor person_cor4"
+                    <Button value={user.colUid} icon="heart-o" className="person_cor"
                             onClick={personCenter.getMyFollows.bind(personCenter, user.colUid)}>
                         <div>关注</div>
                     </Button>
                 </div>;
 
-                userInfoCard = <Card title={personCenter.state.userInfo.user.userName + '的个人名片'} className="bai">
-                    <Row className="person_13">
-                        <p className="user_cont">
-                            <span className="user_til_name">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;校：</span>
-                            <span className="black_person">{personCenter.state.userInfo.school}</span>
-                        </p>
-                        <p className="user_cont">
-                            <span className="user_til_name">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：</span>
-                            <span className="black_person">{personCenter.state.userInfo.course}</span>
-                        </p>
-                        <p className="user_cont">
-                            <span className="user_til_name">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span>
-                            <span className="black_person">{personCenter.state.userInfo.grade}</span>
-                        </p>
-                        <p className="user_cont">
-                            <span className="user_til_name">个人简介：</span>
-                            <span className="black_person">{intro}</span>
-                        </p>
+                userInfoCard =
+                    <Card title={personCenter.state.userInfo.user.userName + '的个人名片'} className="bai new_center_user">
+                        <Row className="person_13">
+                            <p className="user_cont">
+                                <span className="user_til_name">学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;校：</span>
+                                <span className="black_person">{personCenter.state.userInfo.school}</span>
+                            </p>
+                            <p className="user_cont">
+                                <span className="user_til_name">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：</span>
+                                <span className="black_person">{personCenter.state.userInfo.course}</span>
+                            </p>
+                            <p className="user_cont">
+                                <span className="user_til_name">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span>
+                                <span className="black_person">{personCenter.state.userInfo.grade}</span>
+                            </p>
+                            <p className="user_cont">
+                                <span className="user_til_name">个人简介：</span>
+                                <span className="black_person">{intro}</span>
+                            </p>
 
-                    </Row>
-                </Card>;
+                        </Row>
+                    </Card>;
             }
 
             var followButton;
@@ -1509,51 +1511,54 @@ const PersonCenterComponents = React.createClass({
             if (personCenter.state.userInfo.user.colUid != sessionStorage.getItem("ident")) {
                 if (personCenter.state.isFollow == false) {
                     followButton =
-                        <Button icon="heart-o" onClick={personCenter.followUser}
+                        <Button onClick={personCenter.followUser}
                                 className="persono_btn_gray">关注</Button>;
                 } else {
                     followButton =
-                        <Button icon="heart" onClick={personCenter.unfollowUser}
-                                className="persono_btn_gray">取消关注</Button>;
+                        <Button onClick={personCenter.unfollowUser}
+                                className="persono_btn_gray_old">取消关注</Button>;
                 }
             }
             //如果个人中心显示的用户并不是当前用户的联系人，则不能显示发消息按钮
             // if (personCenter.state.isExist) {
-                sendMessageButton = <Button icon="message" value={personCenter.state.userInfo.user.colUid}
-                                            onClick={personCenter.sendMessage}
-                                            className="antnest_talk  persono_btn_blue">发消息</Button>;
+            sendMessageButton = <Button value={personCenter.state.userInfo.user.colUid}
+
+                                        onClick={personCenter.sendMessage}
+                                        className="antnest_talk  persono_btn_blue">发消息</Button>;
             // }
         }
 
         var personDate;
         var userPhoneCard;
         if (isEmpty(personCenter.state.userInfo) == false && personCenter.state.optType == "userDetail") {
-            personDate = <div className="group_cont favorite_up">
-                <div className="public—til—blue">{personCenter.state.userInfo.user.userName + '的个人中心'}</div>
-                <div className="maaee_group_pa">
-                    <Card className="bai">
-                        {userPhotoTag}
 
-                        <span className="person_btn">
-                        <Button className="antnest_talk antnest_icon_radius" value="score"
-                                onClick={personCenter.turnToPlatformRulePage}><i
-                            className="iconfont iconfont_jifen">&#xe608;</i><span
-                            className="iocnfont_sp_jifen">{personCenter.state.userInfo.score}</span>积分</Button>
-						<Button className="antnest_icon_blue_radius" value="level"
-                                onClick={personCenter.turnToPlatformRulePage}>{personCenter.state.userInfo.level.name}</Button>
-                    </span>
-                        <span className="person_btn_ri">
+            personDate = <div className="group_cont new_center_user_top">
+                {/* <div className="public—til—blue">{personCenter.state.userInfo.user.userName+'的个人中心'}</div>*/}
+                <div className="userinfo_bg group_cont favorite_up">
+                    <div className="gary_person">
+                        <div className="bai">
+                            {userPhotoTag}
+
+                            <div className="person_btn">
+                                <Button className="antnest_talk antnest_icon_radius" value="score"
+                                        onClick={personCenter.turnToPlatformRulePage}><span>{personCenter.state.userInfo.score}</span>积分</Button>
+                                <span className="bor_ri_line"></span>
+                                <Button className="antnest_icon_blue_radius" value="level"
+                                        onClick={personCenter.turnToPlatformRulePage}>{personCenter.state.userInfo.level.name}</Button>
+                            </div>
+                            <span className="person_btn_ri">
                      {sendMessageButton}
-                            {followButton}
+                                {followButton}
 					 </span>
 
+                        </div>
+                    </div>
 
-                    </Card>
-                </div>
 
-                <div className="maaee_group_pa maaee_group_pa_0">
-                    {userLinkCard}
-                    {userInfoCard}
+                    <div className="maaee_group_pa maaee_group_pa_0">
+                        {userLinkCard}
+                        {userInfoCard}
+                    </div>
                 </div>
             </div>;
         } else if (isEmpty(personCenter.state.userInfo) == false && personCenter.state.optType == "scoreDetail") {
