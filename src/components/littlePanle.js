@@ -58,7 +58,7 @@
         el.on('click', this.zoomMinView.bind(this, id));
         // el.off('click',this.zoomview.bind(this, id)).on('click', this.zoomMinView.bind(this, id));
         enterFull(nodeEl[0]);
-    }
+    };
     littlePanle.prototype.zoomMinView = function (id) {
         // alert(2);
         let nodeEl = $('#' + id);
@@ -102,7 +102,7 @@
             $('#ifr' + id).removeAttr('src');
         }
         utilsCommon.unbind(document, 'paste', onPasteFunction);
-    }
+    };
 
     littlePanle.prototype._teachAdmin_UI_templet = function (obj) {
 
@@ -168,6 +168,7 @@
             //data.method方式
             //data.callbackId回调方法名
             //data.errorbackId错误回调方法名
+            console.log(data);
             if (data.method == 'selectPictures') {
 
                 //调用选择图片插件，获取图片的路径存入paths
@@ -185,6 +186,9 @@
                 //data.url  全部地址，用#分割
                 window.__sendImg__(data.currentUrl, data.url);
 
+            } else if (data.method == 'openNewPage') {
+                let obj = {mode: 'teachingAdmin', title: '',url: data.url};
+                LP.Start(obj);
             }
         });
 
