@@ -110,7 +110,19 @@ const ApprovalComponent = React.createClass({
     getApprovalInfoByJson(){
         var approvalJson = {};
         approvalJson.approvalType = this.state.approvalTypeValue;
-        approvalJson.approval = this.state.approval;
+        switch(this.state.approvalTypeValue){
+            case 0:
+                approvalJson.approval = this.state.approval;
+                break;
+            case 1:
+
+                break;
+            case 2:
+                approvalJson.approval=null;
+                approvalJson.approvalManagerVariables = "${managerIds}";
+                break;
+        }
+
         return approvalJson;
     },
 
@@ -156,6 +168,7 @@ const ApprovalComponent = React.createClass({
                             :
                             null}
                     </Radio>
+                    <Radio style={radioStyle} value={2}>部门主管</Radio>
                     <Radio style={radioStyle} value={1}>角色(一组固定成员)
                         {this.state.approvalTypeValue === 1 ?
                             <Select

@@ -150,8 +150,21 @@ const FlowBuilderComponent = React.createClass({
         var approvalJson = this.refs.approvalComponent.getApprovalInfoByJson();
         console.log(approvalJson);
         var approvalType = approvalJson.approvalType;
-        var approvalTypeStr = approvalType==0?"单个用户":"角色";
-        var approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalJson.approval)}>{approvalJson.approval.userName}</div>;
+        var approvalTypeStr = "";
+        var approvalNameDiv;
+        switch(approvalType){
+            case 0:
+                approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalJson.approval)}>{approvalJson.approval.userName}</div>;
+                approvalTypeStr= "用户";
+                break;
+            case 1:
+                approvalTypeStr= "角色";
+                break;
+            case 2:
+                approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalJson.approval)}>部门主管</div>;
+                approvalTypeStr= "";
+                break;
+        }
         var stepObj = <Step id={approvalJson.approval} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
         stepObjArray.push(stepObj);
         approvalJsonArray.push(approvalJson);
@@ -281,7 +294,8 @@ const FlowBuilderComponent = React.createClass({
             var approvalJson = approvalJsonArray[i];
             var approvalType = approvalJson.approvalType;
             var approval = approvalJson.approval;
-            var userJson = {"approvalUser":approval,"approvalType":approvalType}
+            var approvalManagerVariables=approvalJson.approvalManagerVariables;
+            var userJson = {"approvalUser":approval,"approvalType":approvalType,"approvalManagerVariables":approvalManagerVariables}
             flowApprovalUsers.push(userJson);
         }
         //流程名称
