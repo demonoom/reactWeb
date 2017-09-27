@@ -26,10 +26,15 @@ const MessageMenu = React.createClass({
 
     componentDidMount() {
         mMenu.getUserRecentMessages();
-        //mMenu.refreshMessage();
     },
 
     componentWillReceiveProps(nextProps) {
+        // alert(4);
+        // console.log(nextProps.userJson);
+        // console.log(userMessageData);
+        //用户人还没有排列
+        // console.log(messageData);
+        //数据已经都排好了
         if (isEmpty(nextProps) == false && (typeof(nextProps.userJson) != "undefined")) {
             // messageData.push(nextProps.userJson);
             userMessageData.splice(0);
@@ -43,6 +48,10 @@ const MessageMenu = React.createClass({
         }
     },
 
+    componentWillUnmount() {
+        this.props.changeMesTabClick();
+    },
+
     checkUserJsonIsExist(newMessageObj) {
         var index = -1;
         for (var i = 0; i < messageData.length; i++) {
@@ -54,13 +63,6 @@ const MessageMenu = React.createClass({
         }
         return index;
     },
-
-    /*refreshMessage(){
-        console.log("ref");
-        setInterval(function () {
-            mMenu.getUserRecentMessages();
-        },1000*30);
-    },*/
 
     /**
      * 获取用户最新消息列表
@@ -101,6 +103,9 @@ const MessageMenu = React.createClass({
         });
     },
 
+    /**
+     * 渲染用户最新消息列表
+     */
     showMessageData() {
         messageData.forEach(function (message) {
             var fromUser = message.fromUser;
@@ -108,6 +113,7 @@ const MessageMenu = React.createClass({
             var contentArray = message.contentArray;
             var messageType = message.messageToType;
             var toChatGroup = message.toChatGroup;
+
             if (isEmpty(contentArray) == false && contentArray.length > 0) {
                 // 只显示具有消息内容的数据,且只显示最后一条消息记录
                 var lastContentInfo = contentArray[contentArray.length - 1];
@@ -115,6 +121,7 @@ const MessageMenu = React.createClass({
                 var lastCreateTime = lastContentInfo.createTime;
                 var imgTag;
                 if (messageType == 1) {
+                    //个人栏
                     imgTag = <div>
                         <span className="antnest_user"><img src={fromUser.avatar} height="38"></img></span>
                         <div className="mes_u_l">
@@ -124,9 +131,11 @@ const MessageMenu = React.createClass({
                         </div>
                     </div>;
                 } else {
+                    //群组栏
                     var membersImgs = toChatGroup.avatar;
                     var memberAvatarTag = <img src={membersImgs}/>;
                     if (membersImgs == '') {
+                        //如果这个字段为空，头像的处理
                         memberAvatarTag = <img src={require("../images/lALPAAAAARBOpS_NAf7NAf4_510_510.png")}/>;
                     }
                     var groupMemebersPhotoTag = <div className="antnest_user upexam_float">{memberAvatarTag}</div>;
@@ -278,6 +287,11 @@ const MessageMenu = React.createClass({
         }
     },
 
+    /**
+     * table被点击时的回调
+     * @param record
+     * @param index
+     */
     turnToMessagePage(record, index) {
         mMenu.setState({selectRowKey: record.key, badgeShow: false, tableIsClick: true});
         mMenu.props.onUserClick(record);

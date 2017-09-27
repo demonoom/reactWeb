@@ -14,6 +14,7 @@ import {getImgName} from '../../utils/Const';
 import {formatMD} from '../../utils/utils';
 import {formatHM} from '../../utils/utils';
 import {isToday} from '../../utils/utils';
+import {showLargeImg} from '../../utils/utils';
 import {MsgConnection} from '../../utils/msg_websocket_connection';
 import ConfirmModal from '../ConfirmModal';
 
@@ -262,7 +263,7 @@ const AntGroupTabComponents = React.createClass({
                             var content = e.content;
                             var uuid = e.uuid;
                             uuidsArray.push(uuid);
-                            var messageReturnJson = antGroup.getImgTag(content);
+                            var messageReturnJson = antGroup.getImgTag(e);
                             var imgTagArrayReturn = [];
                             if (messageReturnJson.messageType == "text") {
                                 content = messageReturnJson.textMessage;
@@ -312,10 +313,9 @@ const AntGroupTabComponents = React.createClass({
                             // var obj = JSON.parse(data.message.content);
                             _this.props.showAlert(true);
                         } else if (data.message.command == "message") {
-                            // _this.props.showMesAlert(true);
                             if (data.message.fromUser.colUid !== _this.state.loginUser.colUid) {
                                 _this.props.showMesAlert(true);
-
+                                _this.props.refresh();
                             }
                         }
                         showImg = "";
@@ -330,6 +330,10 @@ const AntGroupTabComponents = React.createClass({
                         if (isEmpty(messageOfSinge.attachment) == false) {
                             var attachment = messageOfSinge.attachment.address;
                             var attachmentType = messageOfSinge.attachment.type;
+                        }
+                        //动态表情
+                        if (isEmpty(messageOfSinge.expressionItem) == false) {
+                            var expressionItem = messageOfSinge.expressionItem.address;
                         }
                         uuidsArray.push(uuid);
                         var isExist = antGroup.checkSameMessageIsExist(uuid);
@@ -361,7 +365,7 @@ const AntGroupTabComponents = React.createClass({
                             if (isEmpty(antGroup.state.currentUser) == false && messageOfSinge.fromUser.colUid == antGroup.state.currentUser.colUid) {
                                 imgTagArray.splice(0);
                                 var imgTagArrayReturn = [];
-                                var messageReturnJson = antGroup.getImgTag(content);
+                                var messageReturnJson = antGroup.getImgTag(messageOfSinge);
                                 if (messageReturnJson.messageType == "text") {
                                     content = messageReturnJson.textMessage;
                                 } else if (messageReturnJson.messageType == "imgTag") {
@@ -374,14 +378,16 @@ const AntGroupTabComponents = React.createClass({
                                     "imgTagArray": imgTagArrayReturn,
                                     "messageReturnJson": messageReturnJson,
                                     "attachment": attachment,
-                                    "attachmentType": attachmentType
+                                    "attachmentType": attachmentType,
+                                    "expressionItem": expressionItem
                                 };
                                 messageList.splice(0, 0, messageShow);
                                 // messageList.push(messageShow);
                                 if (isEmpty(messageOfSinge.toUser) == false) {
                                     var userJson = {
                                         key: messageOfSinge.toUser.colUid,
-                                        "fromUser": messageOfSinge.toUser,
+                                        // "fromUser": messageOfSinge.toUser,
+                                        "fromUser": messageOfSinge.fromUser,
                                         contentArray: contentArray,
                                         "messageToType": 1
                                     };
@@ -394,7 +400,8 @@ const AntGroupTabComponents = React.createClass({
                                 if (isEmpty(messageOfSinge.toUser) == false) {
                                     var userJson = {
                                         key: messageOfSinge.toUser.colUid,
-                                        "fromUser": messageOfSinge.toUser,
+                                        // "fromUser": messageOfSinge.toUser,
+                                        "fromUser": messageOfSinge.fromUser,
                                         contentArray: contentArray,
                                         "messageToType": 1
                                     };
@@ -409,7 +416,7 @@ const AntGroupTabComponents = React.createClass({
                                 && antGroup.state.currentGroupObj.chatGroupId == messageOfSinge.toChatGroup.chatGroupId) {
                                 imgTagArray.splice(0);
                                 var imgTagArrayReturn = [];
-                                var messageReturnJson = antGroup.getImgTag(messageOfSinge.content);
+                                var messageReturnJson = antGroup.getImgTag(messageOfSinge);
                                 if (messageReturnJson.messageType == "text") {
                                     content = messageReturnJson.textMessage;
                                 } else if (messageReturnJson.messageType == "imgTag") {
@@ -422,7 +429,8 @@ const AntGroupTabComponents = React.createClass({
                                     "imgTagArray": imgTagArrayReturn,
                                     "messageReturnJson": messageReturnJson,
                                     "attachment": attachment,
-                                    "attachmentType": attachmentType
+                                    "attachmentType": attachmentType,
+                                    "expressionItem": expressionItem
                                 };
                                 messageList.splice(0, 0, messageShow);
                                 var userJson = {
@@ -469,10 +477,21 @@ const AntGroupTabComponents = React.createClass({
 
     },
 
-    getImgTag(str) {
-        var imgTags = [];
-        var messageReturnJson = {};
-        messageReturnJson = antGroup.changeImgTextToTag(str, imgTags, messageReturnJson);
+    getImgTag(messageOfSingle) {
+        if (isEmpty(messageOfSingle.content) == false) {
+            var imgTags = [];
+            var messageReturnJson = {};
+            messageReturnJson = antGroup.changeImgTextToTag(messageOfSingle.content, imgTags, messageReturnJson);
+        } else {
+            if (isEmpty(messageOfSingle.expressionItem) == false) {
+                var expressionItem = messageOfSingle.expressionItem;
+                messageReturnJson = {messageType: "audioTag", expressionItem: expressionItem};
+            } else if (isEmpty(messageOfSingle.attachment) == false) {
+                var address = messageOfSingle.attachment.address;
+                var content = messageOfSingle.attachment.content;
+                messageReturnJson = {messageType: "linkTag", address: address, content: content};
+            }
+        }
         return messageReturnJson;
     },
 
@@ -659,6 +678,10 @@ const AntGroupTabComponents = React.createClass({
                                 var attachmentType = messageOfSinge.attachment.type;
                             }
                             ;
+                            if (isEmpty(messageOfSinge.expressionItem) == false) {
+                                var expressionItem = messageOfSinge.expressionItem.address;
+                            }
+                            ;
                             var uuidsArray = [];
                             var fromUser = messageOfSinge.fromUser;
                             var colUtype = fromUser.colUtype;
@@ -670,7 +693,7 @@ const AntGroupTabComponents = React.createClass({
                                 showImg = "";
                                 var content = e.content;
                                 var imgTagArrayReturn = [];
-                                var messageReturnJson = antGroup.getImgTag(e.content);
+                                var messageReturnJson = antGroup.getImgTag(e);
                                 if (messageReturnJson.messageType == "text") {
                                     content = messageReturnJson.textMessage;
                                 } else if (messageReturnJson.messageType == "imgTag") {
@@ -683,7 +706,8 @@ const AntGroupTabComponents = React.createClass({
                                     "imgTagArray": imgTagArrayReturn,
                                     "messageReturnJson": messageReturnJson,
                                     "attachment": attachment,
-                                    "attachmentType": attachmentType
+                                    "attachmentType": attachmentType,
+                                    "expressionItem": expressionItem
                                 };
                                 messageList.push(message);
                             }
@@ -720,6 +744,14 @@ const AntGroupTabComponents = React.createClass({
     },
 
     /**
+     *查看链接的回调
+     */
+    readLink(id) {
+        let obj = {mode: 'teachingAdmin', url: id, title: ""};
+        LP.Start(obj);
+    },
+
+    /**
      * 获取个人的聊天信息
      */
     getUser2UserMessages(userObj, timeNode) {
@@ -746,6 +778,9 @@ const AntGroupTabComponents = React.createClass({
                                 var attachment = messageOfSinge.attachment.address;
                                 var attachmentType = messageOfSinge.attachment.type;
                             }
+                            if (isEmpty(messageOfSinge.expressionItem) == false) {
+                                var expressionItem = messageOfSinge.expressionItem.address;
+                            }
                             var fromUser = messageOfSinge.fromUser;
                             var colUtype = fromUser.colUtype;
                             var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
@@ -756,7 +791,7 @@ const AntGroupTabComponents = React.createClass({
                                 imgTagArray.splice(0);
                                 showImg = "";
                                 var imgTagArrayReturn = [];
-                                var messageReturnJson = antGroup.getImgTag(messageOfSinge.content);
+                                var messageReturnJson = antGroup.getImgTag(messageOfSinge);
                                 if (messageReturnJson.messageType == "text") {
                                     content = messageReturnJson.textMessage;
                                 } else if (messageReturnJson.messageType == "imgTag") {
@@ -769,7 +804,8 @@ const AntGroupTabComponents = React.createClass({
                                     "imgTagArray": imgTagArrayReturn,
                                     "messageReturnJson": messageReturnJson,
                                     "attachment": attachment,
-                                    "attachmentType": attachmentType
+                                    "attachmentType": attachmentType,
+                                    "expressionItem": expressionItem
                                 };
                                 messageList.push(messageShow);
                             }
@@ -818,7 +854,7 @@ const AntGroupTabComponents = React.createClass({
             var messageTagArray = [];
             messageTagArray.splice(0);
             var messageList = antGroup.state.messageList;
-            console.log(messageList);
+            // console.log(messageList);
             if (isEmpty(messageList) == false && messageList.length > 0) {
                 for (var i = messageList.length - 1; i >= 0; i--) {
                     var e = messageList[i];
@@ -834,6 +870,7 @@ const AntGroupTabComponents = React.createClass({
                     var messageTag;
                     var attachment = e.attachment;
                     var attachmentType = e.attachmentType;
+                    var expressionItem = e.expressionItem;
                     if (isEmpty(messageType) == false && messageType == "getMessage") {
                         if (isEmpty(e.messageReturnJson) == false && isEmpty(e.messageReturnJson.messageType) == false) {
                             if (e.messageReturnJson.messageType == "text") {
@@ -846,6 +883,7 @@ const AntGroupTabComponents = React.createClass({
                                             messageTag = <li className="right" style={{'textAlign': 'right'}}>
                                                 <div className="u-name"><span>{fromUser}</span></div>
                                                 <div className="talk-cont"><span className="name">{userPhoneIcon}</span><img
+                                                    onClick={showLargeImg}
                                                     src={attachment} style={{width: '220px', height: '150px'}}/><span><i
                                                     className="borderballoon_dingcorner_le"></i></span></div>
                                             </li>;
@@ -861,6 +899,19 @@ const AntGroupTabComponents = React.createClass({
                                                 >
                                                     <source src={attachment} type="audio/mpeg"></source>
                                                 </audio><i
+                                                    className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                            </li>;
+                                        } else if (attachmentType == 4) {
+                                            //有内容的链接
+                                            messageTag = <li style={{'textAlign': 'right'}} className="right">
+                                                <div className="u-name"><span>{fromUser}</span></div>
+                                                <div className="talk-cont"><span
+                                                    className="name">{userPhoneIcon}</span><span
+                                                    className="borderballoon_le noom_cursor"
+                                                    onClick={this.readLink.bind(this, attachment)}><img
+                                                    style={{width: 40}}
+                                                    src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
+                                                    alt=""/><span className="span_link">{content}</span><i
                                                     className="borderballoon_dingcorner_ri_no"></i></span></div>
                                             </li>;
                                         }
@@ -883,6 +934,7 @@ const AntGroupTabComponents = React.createClass({
                                                 <div className="u-name"><span>{fromUser}</span></div>
                                                 <div className="talk-cont"><span
                                                     className="name">{userPhoneIcon}</span><img
+                                                    onClick={showLargeImg}
                                                     style={{width: '220px', height: '150px'}} src={attachment}/><span><i
                                                     className="borderballoon_dingcorner_ri_no"></i></span></div>
                                             </li>;
@@ -900,6 +952,19 @@ const AntGroupTabComponents = React.createClass({
                                                 </audio><i
                                                     className="borderballoon_dingcorner_ri_no"></i></span></div>
                                             </li>;
+                                        } else if (attachmentType == 4) {
+                                            //有内容的链接
+                                            messageTag = <li style={{'textAlign': 'left'}}>
+                                                <div className="u-name"><span>{fromUser}</span></div>
+                                                <div className="talk-cont"><span
+                                                    className="name">{userPhoneIcon}</span><span
+                                                    className="borderballoon_le noom_cursor"
+                                                    onClick={this.readLink.bind(this, attachment)}><img
+                                                    style={{width: 40}}
+                                                    src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
+                                                    alt=""/><span className="span_link">{content}</span><i
+                                                    className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                            </li>;
                                         }
                                     } else {
                                         messageTag = <li style={{'textAlign': 'left'}}>
@@ -914,6 +979,7 @@ const AntGroupTabComponents = React.createClass({
                             } else if (e.messageReturnJson.messageType == "imgTag") {
                                 //context没有内容的消息
                                 if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
+                                    //我发出的
                                     messageTag = <li className="right" style={{'textAlign': 'right'}}>
                                         <div className="u-name"><span>{fromUser}</span></div>
                                         <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span
@@ -921,10 +987,59 @@ const AntGroupTabComponents = React.createClass({
                                             className="borderballoon_dingcorner_le"></i></span></div>
                                     </li>;
                                 } else {
+                                    //我收到的
                                     messageTag = <li style={{'textAlign': 'left'}}>
                                         <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span
+                                        <div className="talk-cont"><span
+                                            className="name">{userPhoneIcon}</span><span
                                             className="borderballoon_le">{e.imgTagArray}<i
+                                            className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                    </li>;
+                                }
+                            } else if (e.messageReturnJson.messageType == "audioTag") {
+                                if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
+                                    //我发出的
+                                    messageTag = <li className="right" style={{'textAlign': 'right'}}>
+                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><img
+                                            src={expressionItem} style={{width: '150px', height: '110px'}}/><span><i
+                                            className="borderballoon_dingcorner_le"></i></span></div>
+                                    </li>;
+                                } else {
+                                    //我收到的
+                                    messageTag = <li style={{'textAlign': 'left'}}>
+                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="talk-cont"><span
+                                            className="name">{userPhoneIcon}</span><img
+                                            style={{width: '150px', height: '110px'}} src={expressionItem}/><span><i
+                                            className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                    </li>;
+                                }
+                            } else if (e.messageReturnJson.messageType == "linkTag") {
+                                //没有内容的链接
+
+                                if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
+                                    messageTag = <li style={{'textAlign': 'right'}} className="right">
+                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="talk-cont"><span
+                                            className="name">{userPhoneIcon}</span><span
+                                            className="borderballoon_le noom_cursor"
+                                            onClick={this.readLink.bind(this, attachment)}><img
+                                            style={{width: 40}}
+                                            src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
+                                            alt=""/><span className="span_link">默认</span><i
+                                            className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                    </li>;
+                                } else {
+                                    messageTag = <li style={{'textAlign': 'left'}}>
+                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="talk-cont"><span
+                                            className="name">{userPhoneIcon}</span><span
+                                            className="borderballoon_le noom_cursor"
+                                            onClick={this.readLink.bind(this, attachment)}><img
+                                            style={{width: 40}}
+                                            src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
+                                            alt=""/><span className="span_link">默认</span><i
                                             className="borderballoon_dingcorner_ri_no"></i></span></div>
                                     </li>;
                                 }
@@ -983,7 +1098,7 @@ const AntGroupTabComponents = React.createClass({
             >
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div id="personTalk">
-                        <div className="group_talk" id="groupTalk" onMouseOver={this.handleScrollType.bind(this, Event)}
+                        <div className="group_talk 44" id="groupTalk" onMouseOver={this.handleScrollType.bind(this, Event)}
                              onScroll={this.handleScroll}>
                             <ul>
                                 {messageTagArray}

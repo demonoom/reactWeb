@@ -6,7 +6,7 @@ var EmotionInputComponents = React.createClass({
         window.emojiPicker = new EmojiPicker({
             emojiable_selector: '[data-emojiable=true]',
             assetsPath: '../../emojiPicker/lib/img/',
-            popupButtonClasses: 'fa fa-smile-o'
+            popupButtonClasses: 'fa',
         });
         window.emojiPicker.discover();
 
