@@ -3167,7 +3167,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 }
 
 .group_send {
-    height: 100px;
+    height: 98px;
 }
 
 .group_send_talk {
@@ -3186,7 +3186,9 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     border-right: none;
     margin-left: -1px
 }
-
+.group_send_talk_div{
+    height:100%
+}
 .group_send_btn {
     width: 80px;
     height: 100%;
