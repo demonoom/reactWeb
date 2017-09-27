@@ -152,20 +152,24 @@ const FlowBuilderComponent = React.createClass({
         var approvalType = approvalJson.approvalType;
         var approvalTypeStr = "";
         var approvalNameDiv;
+        var stepObj;
         switch(approvalType){
             case 0:
                 approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalJson.approval)}>{approvalJson.approval.userName}</div>;
                 approvalTypeStr= "用户";
+                stepObj = <Step id={approvalJson.approval} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
                 break;
             case 1:
+                approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalJson.approvalRoleVariables.id)}>{approvalJson.approvalRoleVariables.name}</div>;
                 approvalTypeStr= "角色";
+                stepObj = <Step id={approvalJson.approvalRoleVariables.id} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
                 break;
             case 2:
-                approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalJson.approval)}>部门主管</div>;
+                approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalJson.approvalManagerVariables)}>部门主管</div>;
                 approvalTypeStr= "";
+                stepObj = <Step id={approvalJson.approvalManagerVariables} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
                 break;
         }
-        var stepObj = <Step id={approvalJson.approval} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
         stepObjArray.push(stepObj);
         approvalJsonArray.push(approvalJson);
         this.setState({stepObjArray,approvalJsonArray});
@@ -295,7 +299,8 @@ const FlowBuilderComponent = React.createClass({
             var approvalType = approvalJson.approvalType;
             var approval = approvalJson.approval;
             var approvalManagerVariables=approvalJson.approvalManagerVariables;
-            var userJson = {"approvalUser":approval,"approvalType":approvalType,"approvalManagerVariables":approvalManagerVariables}
+            var approvalRoleVariables=approvalJson.approvalRoleVariables;
+            var userJson = {"approvalUser":approval,"approvalType":approvalType,"approvalManagerVariables":approvalManagerVariables,"approvalRoleVariables":approvalRoleVariables}
             flowApprovalUsers.push(userJson);
         }
         //流程名称

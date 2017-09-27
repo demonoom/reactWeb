@@ -28,7 +28,7 @@ const ApprovalComponent = React.createClass({
     },
 
     /**
-     * 获取流程分组及其分组下的流程列表
+     * 根据学校id,获取当前学校下的所有老师信息,并据此构建下拉列表选项
      */
     getTeahcerBySchoolId(){
         let _this = this;
@@ -47,7 +47,29 @@ const ApprovalComponent = React.createClass({
                 message.error(error);
             }
         });
+    },
 
+    /**
+     * 根据学校id,获取当前学校下的所有组织架构角色信息,并据此构建下拉列表选项
+     */
+    getRolesBySchoolId(){
+        let _this = this;
+        var param = {
+            "method": 'getStructureRoleGroups',
+            "operateUserId": this.state.loginUser.colUid,
+            "pageNo":-1
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                console.log(ret.msg+"==="+ret.response);
+                if(ret.msg=="调用成功" &&　ret.success == true){
+                    _this.buildRoleOptions(ret.response);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     /**
@@ -76,18 +98,50 @@ const ApprovalComponent = React.createClass({
     },
 
     /**
+     * 创建审批人分组的下拉列表选项
+     */
+    buildRoleOptions(response){
+        var _this = this;
+        var roleObjArray=[];
+        var roleOptionArray = [];
+        var i=0;
+        var defaultSelectedRoleId = -1;
+        response.forEach(function (response) {
+            var childrenArray = response.children;
+            var roleGroupName = response.name;
+            childrenArray.forEach(function (role) {
+                var roleId = role.id;
+                var roleName = role.name+"("+roleGroupName+")";
+                var optionObj = <Option value={roleId}>{roleName}</Option>
+                roleOptionArray.push(optionObj);
+                roleObjArray.push(role);
+                if(i==0){
+                    defaultSelectedRoleId = roleId;
+                }
+                i++;
+            });
+        });
+        _this.setState({roleObjArray,defaultSelectedRoleId,roleOptionArray});
+    },
+
+    /**
      * 审批人类型改变的响应
      */
     approvalTypeOnChange(e){
         if(e.target.value==1){
-            message.warn("使用系统角色进行审批的功能正在开发中...");
-            return;
+            // message.warn("使用系统角色进行审批的功能正在开发中...");
+            // return;
+            this.getRolesBySchoolId();
         }
         this.setState({
             approvalTypeValue: e.target.value,
         });
     },
 
+    /**
+     * 用户列表选中响应函数
+     * @param value
+     */
     userSelectHandleChange(value) {
         console.log(`selected ${value}`);
         var selectedUser = null;
@@ -103,6 +157,24 @@ const ApprovalComponent = React.createClass({
     },
 
     /**
+     * 角色选择响应函数
+     * @param value
+     */
+    roleSelectHandleChange(value) {
+        console.log(`selected ${value}`);
+        var selectedRole = null;
+        var roleObjArray = this.state.roleObjArray;
+        for(var i=0;i<roleObjArray.length;i++){
+            var role = roleObjArray[i];
+            if(value==role.id){
+                selectedRole = role;
+                break;
+            }
+        }
+        this.setState({"selectedRole":selectedRole});
+    },
+
+    /**
      * 通过json的形式,获取审批人的设置信息
      * json格式预定如下:
      * {approvalType:0,approval:te23836}
@@ -112,14 +184,22 @@ const ApprovalComponent = React.createClass({
         approvalJson.approvalType = this.state.approvalTypeValue;
         switch(this.state.approvalTypeValue){
             case 0:
+                //选择的是具体用户为审批人
                 approvalJson.approval = this.state.approval;
+                approvalJson.approvalManagerVariables = null;
+                approvalJson.approvalRoleVariables = null;
                 break;
             case 1:
-
+                approvalJson.approval=null;
+                approvalJson.approvalManagerVariables = null;
+                //选择的系统角色
+                approvalJson.approvalRoleVariables = this.state.selectedRole;
                 break;
             case 2:
                 approvalJson.approval=null;
+                //选择了主管,使用变量代替
                 approvalJson.approvalManagerVariables = "${managerIds}";
+                approvalJson.approvalRoleVariables = null;
                 break;
         }
 
@@ -151,18 +231,6 @@ const ApprovalComponent = React.createClass({
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                 className="framework_m_r"
                             >
-                                {/*<Option value="23836">Jack</Option>
-                                <Option value="24491">小虎(te24491)</Option>
-                                <Option value="tom">Tom</Option>
-                                <Option value="jack1">Jack</Option>
-                                <Option value="lucy2">Lucy</Option>
-                                <Option value="tom3">Tom</Option>
-                                <Option value="jack4">Jack</Option>
-                                <Option value="lucy5">Lucy</Option>
-                                <Option value="tom6">Tom</Option>
-                                <Option value="jack7">Jack</Option>
-                                <Option value="lucy8">Lucy</Option>
-                                <Option value="tom9">Tom</Option>*/}
                                 {this.state.teacherOptionArray}
                             </Select>
                             :
@@ -174,14 +242,15 @@ const ApprovalComponent = React.createClass({
                             <Select
                                 showSearch
                                 style={{ width: 200 }}
-                                placeholder="Select a person"
+                                placeholder="请选择一个角色"
                                 optionFilterProp="children"
-                                onChange={this.userSelectHandleChange}
+                                onChange={this.roleSelectHandleChange}
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             >
-                                <Option value="systemManager">系统管理员</Option>
+                                {/*<Option value="systemManager">系统管理员</Option>
                                 <Option value="teachMaster">教务处主任</Option>
-                                <Option value="teachLeader">化学组组长</Option>
+                                <Option value="teachLeader">化学组组长</Option>*/}
+                                {this.state.roleOptionArray}
                             </Select>
                             :
                             null}
