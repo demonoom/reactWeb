@@ -17,7 +17,7 @@
                 left: 0,
                 width: 400,
                 height: 500,
-                position: 'fixed',
+                position: 'relative',
                 backgroundColor: '#fff',
                 zIndex: 0
             },
@@ -129,8 +129,9 @@
         let styleObj = (refStyle, index, orderIndex) => {
 
             var layouts = $('.ant-layout-operation');
+            console.log(layouts);
             // 计算出复位的位置
-            var refOff = $('.ant-layout-operation').eq(layouts.length - 1).offset();
+            var refOff = $('.ant-layout-operation').eq(layouts.length-1).offset();
             var refW = $('.ant-layout-operation').width();
 
             //
@@ -142,26 +143,21 @@
             refStyle.left = parseInt(leftRef.toFixed());
             //
             let topReff = refOff.top;
-
-            //banner距离浏览器顶部的距离
-            var a = $('.ant-layout-header').offset().top;
-            //banner的高度
-            var b = $('.ant-layout-header').height();
-
-            var top = a + b;
+            // let topRef = refOff.top ;
             topReff = topReff - $(document.body).height();
+            // console.log(topRef);-590
             // topRef = topRef - refStyle.height * orderIndex + 25 * orderIndex;
-            topReff = topReff - refStyle.height * orderIndex;
+            topReff = topReff - refStyle.height * orderIndex ;
+            // console.log(topRef);减500
             refStyle.top = parseInt(topReff.toFixed());
-            refStyle.top = top;
 
+            console.log(window.screen.height);
             refStyle.zIndex = index++;
 
             return refStyle
 
         };
 
-        // 设置ifream样式
         this.htm = $(this.htm).css(styleObj(this.param.stylePage, this.param.stylePage.zIndex, this.param.orderIndex));
         $(document.body).append(this.htm);
         this.el = $('#' + this.id);

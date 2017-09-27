@@ -125,7 +125,7 @@ const AntCloudTableComponents = React.createClass({
             if (b) {
                 setTimeout(function () {
                     a.click();
-                }, 100);
+                }, 200);
                 this.state.imgArrflag = false;
             }
         }

@@ -29,21 +29,20 @@ const MessageMenu = React.createClass({
     },
 
     componentWillReceiveProps(nextProps) {
-        // alert(4);
+        // alert(1);
         // console.log(nextProps.userJson);
-        // console.log(userMessageData);
-        //用户人还没有排列
-        // console.log(messageData);
-        //数据已经都排好了
         if (isEmpty(nextProps) == false && (typeof(nextProps.userJson) != "undefined")) {
             // messageData.push(nextProps.userJson);
+            //清空userMessageData
             userMessageData.splice(0);
             var index = mMenu.checkUserJsonIsExist(nextProps.userJson);
             if (index == -1) {
                 messageData.splice(0, 0, nextProps.userJson);
             } else {
                 messageData[index] = nextProps.userJson;
+                //TODO 排序
             }
+            // console.log(messageData);
             mMenu.showMessageData();
         }
     },
@@ -56,6 +55,7 @@ const MessageMenu = React.createClass({
         var index = -1;
         for (var i = 0; i < messageData.length; i++) {
             var messageObj = messageData[i];
+            console.log(messageObj.key);
             if (messageObj.key == newMessageObj.key) {
                 index = i;
                 break;
