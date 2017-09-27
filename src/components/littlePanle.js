@@ -1067,23 +1067,54 @@
     littlePanle.prototype.calcPos = function (refStyle, index, orderIndex) {
 
         // 计算出复位的位置
+        // var refOff = $('.ant-layout-operation').offset();
+        // var refW = $('.ant-layout-operation').width();
+        //
+        // let tmpInterval = orderIndex * 45;
+        // //
+        // if (!refStyle.width) {
+        //     refStyle.width = 380;
+        // }
+        // let leftRef = (refOff.left + refW) - refStyle.width;
+        // leftRef = leftRef + tmpInterval;
+        // refStyle.left = parseInt(leftRef.toFixed());
+        // //
+        // let topRef = refOff.top + tmpInterval;
+        // topRef = topRef - $(document.body).height();
+        // topRef = topRef - refStyle.height * orderIndex;
+        // refStyle.top = parseInt(topRef.toFixed());
+        // //
+        // refStyle.zIndex = index++;
+        //
+        // return refStyle
+
+        // var refOff = $('.ant-layout-operation').eq(layouts.length - 1).offset();
+
         var refOff = $('.ant-layout-operation').offset();
         var refW = $('.ant-layout-operation').width();
 
-        let tmpInterval = orderIndex * 45;
         //
         if (!refStyle.width) {
             refStyle.width = 380;
         }
         let leftRef = (refOff.left + refW) - refStyle.width;
-        leftRef = leftRef + tmpInterval;
+        //  leftRef = leftRef + tmpInterval;
         refStyle.left = parseInt(leftRef.toFixed());
         //
-        let topRef = refOff.top + tmpInterval;
-        topRef = topRef - $(document.body).height();
-        topRef = topRef - refStyle.height * orderIndex;
-        refStyle.top = parseInt(topRef.toFixed());
-        //
+        let topReff = refOff.top;
+
+        //banner距离浏览器顶部的距离
+        var a = $('.ant-layout-header').offset().top;
+        //banner的高度
+        var b = $('.ant-layout-header').height();
+
+        var top = a + b;
+        topReff = topReff - $(document.body).height();
+        // topRef = topRef - refStyle.height * orderIndex + 25 * orderIndex;
+        topReff = topReff - refStyle.height * orderIndex;
+        refStyle.top = parseInt(topReff.toFixed());
+        refStyle.top = top;
+
         refStyle.zIndex = index++;
 
         return refStyle

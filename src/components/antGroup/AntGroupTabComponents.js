@@ -391,9 +391,9 @@ const AntGroupTabComponents = React.createClass({
                                         contentArray: contentArray,
                                         "messageToType": 1
                                     };
-                                    if (isEmpty(isTurnPage)) {
-                                        antGroup.props.onNewMessage(userJson);
-                                    }
+                                    // if (isEmpty(isTurnPage)) {
+                                    // }
+                                    antGroup.props.onNewMessage(userJson);
                                 }
                             } else {
                                 //我发出的
@@ -405,9 +405,9 @@ const AntGroupTabComponents = React.createClass({
                                         contentArray: contentArray,
                                         "messageToType": 1
                                     };
-                                    if (isEmpty(isTurnPage)) {
-                                        antGroup.props.onNewMessage(userJson);
-                                    }
+                                    // if (isEmpty(isTurnPage)) {
+                                    // }
+                                    antGroup.props.onNewMessage(userJson);
                                 }
                             }
                         } else if (messageOfSinge.toType == 4 && typeof (content) != 'undefined') {
@@ -435,25 +435,27 @@ const AntGroupTabComponents = React.createClass({
                                 messageList.splice(0, 0, messageShow);
                                 var userJson = {
                                     key: messageOfSinge.toChatGroup.chatGroupId,
+                                    // key: _this.state.loginUser.colUid,
                                     "fromUser": fromUser,
                                     "toChatGroup": messageOfSinge.toChatGroup,
                                     contentArray: contentArray,
                                     "messageToType": 4
                                 };
-                                if (isEmpty(isTurnPage)) {
-                                    antGroup.props.onNewMessage(userJson);
-                                }
+                                // if (isEmpty(isTurnPage)) {
+                                // }
+                                antGroup.props.onNewMessage(userJson);
                             } else {
                                 var userJson = {
-                                    key: messageOfSinge.toChatGroup.chatGroupId,
+                                    // key: messageOfSinge.toChatGroup.chatGroupId,
+                                    key: _this.state.loginUser.colUid,
                                     "fromUser": fromUser,
                                     "toChatGroup": messageOfSinge.toChatGroup,
                                     contentArray: contentArray,
                                     "messageToType": 4
                                 };
-                                if (isEmpty(isTurnPage)) {
-                                    antGroup.props.onNewMessage(userJson);
-                                }
+                                // if (isEmpty(isTurnPage)) {
+                                // }
+                                antGroup.props.onNewMessage(userJson);
                             }
                         }
                         antGroup.setState({"messageList": messageList});

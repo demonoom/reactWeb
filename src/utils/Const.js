@@ -71,7 +71,7 @@ export function getLocalTime(nS) {
  * @param content
  * @returns {boolean}
  */
-export function isEmpty(content){
+export function isEmpty(content) {
     if (content == null || content == "null" || content == "" || typeof(content) == "undefined") {
         return true;
     } else {

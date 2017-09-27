@@ -271,10 +271,11 @@ const MainLayout = React.createClass({
     },
 
     refresh() {
-        var flag = this.state.mesTabClick;
-        if (!flag) {
-            this.refs.messageMenu.getUserRecentMessages();
-        }
+        // var flag = this.state.mesTabClick;
+        // if (!flag) {
+        // this.refs.messageMenu.getUserRecentMessages();
+        // }
+        this.refs.messageMenu.componentWillReceiveProps();
     },
 
     teachSpaceTab(activeMenu, beActive) {
@@ -358,6 +359,7 @@ const MainLayout = React.createClass({
         var contentArray = [contentJson];
         var userJson = {
             key: groupObj.chatGroupId,
+            // key: groupObj.ownerId,
             "fromUser": groupObj,
             contentArray: contentArray,
             "messageToType": 4,
@@ -399,6 +401,7 @@ const MainLayout = React.createClass({
      * 好友对好友的消息发送
      */
     receiveNewMessage(userJson) {
+        console.log(456);
         this.setState({
             currentKey: 'message',
             resouceType: '',
