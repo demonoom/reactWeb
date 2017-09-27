@@ -403,7 +403,7 @@
 			});
 		}
 
-    $textarea.after("<i class='emoji-picker-icon emoji-picker " + this.options.popupButtonClasses + "' data-id='" + id + "' data-type='picker'></i>");
+    $textarea.after("<i class='emoji-picker-icon emoji-picker fa-smile-o " + this.options.popupButtonClasses + "' data-id='" + id + "' data-type='picker'></i><i class='emoji-picker-icon emoji-picker-icon_2 emoji-picker fa-folder-o " + this.options.popupButtonClasses + "' data-id='" + id + "' data-type='picker'></i>");
 
 		$textarea.hide().after(this.$editor);
 		this.setup();

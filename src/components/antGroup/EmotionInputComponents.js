@@ -6,7 +6,7 @@ var EmotionInputComponents = React.createClass({
         window.emojiPicker = new EmojiPicker({
             emojiable_selector: '[data-emojiable=true]',
             assetsPath: '../../emojiPicker/lib/img/',
-            popupButtonClasses: 'fa fa-smile-o'
+            popupButtonClasses: 'fa',
         });
         window.emojiPicker.discover();
 
@@ -72,7 +72,7 @@ var EmotionInputComponents = React.createClass({
 
     render : function(){
         return (
-            <div>
+            <div className="group_send_talk_div">
               <Input type="textarea" id="emotionInput" rows={4} data-emojiable="true" onChange={this.inputChange}/>
             </div>
         )

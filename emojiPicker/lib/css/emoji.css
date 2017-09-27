@@ -54,26 +54,29 @@ img.emoji {
 
 .emoji-picker-icon {
     position: absolute;
-    right: 10px;
+    left: 10px;
     top: 5px;
     font-size: 20px;
     opacity: 0.7;
     z-index: 100;
     transition: none;
-    color: black;
+    color: #9ea1a2;
     -moz-user-select: none;
     -khtml-user-select: none;
     -webkit-user-select: none;
     -o-user-select: none;
     user-select: none;
 }
-
+.emoji-picker-icon_2{
+    left: 42px;
+}
 .emoji-picker-icon.parent-has-scroll {
     right: 28px;
 }
 
 .emoji-picker-icon:hover {
-    opacity: 1;
+    color: #2196F3;
+    cursor: pointer;
 }
 
 /* Emoji area */

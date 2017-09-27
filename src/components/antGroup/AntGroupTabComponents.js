@@ -1100,7 +1100,7 @@ const AntGroupTabComponents = React.createClass({
             >
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div id="personTalk">
-                        <div className="group_talk" id="groupTalk" onMouseOver={this.handleScrollType.bind(this, Event)}
+                        <div className="group_talk 44" id="groupTalk" onMouseOver={this.handleScrollType.bind(this, Event)}
                              onScroll={this.handleScroll}>
                             <ul>
                                 {messageTagArray}

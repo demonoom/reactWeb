@@ -486,7 +486,7 @@ const AntCloudTableComponents = React.createClass({
                     downloadButton = null;
                 } else {
                     downloadButton =
-                        <a href={path} target="_blank" title="下载" download={path} className="te_download_a">
+                        <a href={path} target="_blank" title="下载" download={path} className="te_download_a_noom">
                             <Button icon="download"/></a>;
                 }
                 var fileLogo = _this.buildFileLogo(name, directory, e);
@@ -584,7 +584,7 @@ const AntCloudTableComponents = React.createClass({
             var url = path;
             //当前的路径
             var arr = [];
-            var sum = document.getElementsByClassName('te_download_a');
+            var sum = document.getElementsByClassName('te_download_a_noom');
             for (var i = 0; i < sum.length; i++) {
                 var suffix = sum[i].href.substr(sum[i].href.length - 3);
                 if (suffix == 'jpg' || suffix == 'png' || suffix == 'PNG' || suffix == 'JPG' || suffix == 'BMP' || suffix == 'bmp') {

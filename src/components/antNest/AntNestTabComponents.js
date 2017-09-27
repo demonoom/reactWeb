@@ -1386,7 +1386,7 @@ const AntNestTabComponents = React.createClass({
                        onOk={antNest.addTopicModalHandleOk}
                        onCancel={antNest.addTopicModalHandleCancel}
                 >
-                    <div>
+                    <div className="group_send_shuoshuo">
                         {topicTitle}
                         <Row>
                             <Col span={3} className="right_look">内容：</Col>
