@@ -29,7 +29,6 @@ const MessageMenu = React.createClass({
     },
 
     componentWillReceiveProps(nextProps) {
-        // alert(1);
         // console.log(nextProps.userJson);
         if (isEmpty(nextProps) == false && (typeof(nextProps.userJson) != "undefined")) {
             // messageData.push(nextProps.userJson);
