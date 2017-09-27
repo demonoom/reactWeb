@@ -1629,7 +1629,7 @@ p.user_cont1 span div.user_cont1 span {
 p.user_cont {
     padding: 8px 0;
     width: 100%;
-    float:left
+    float: left
 
 }
 
@@ -1712,11 +1712,13 @@ p.user_cont span.name1 {
     margin-bottom: 16px !important;
 }
 
-.17_hei1 {
+.17
+_hei1 {
     height: 98%;
 }
 
-.17_hei2 > table {
+.17
+_hei2 > table {
     padding: 3px 8px !important;
 }
 
@@ -2554,9 +2556,9 @@ li.ant-menu-submenu > ul > li.ant-menu-submenu {
 }
 
 .antnest_icon_radius {
-    border:none;
+    border: none;
     color: #fff;
-    background:none;
+    background: none;
     padding: 0;
     border-radius: 0;
 }
@@ -2565,16 +2567,19 @@ li.ant-menu-submenu > ul > li.ant-menu-submenu {
     border: none;
     padding: 0;
     background: none;
-    color:#fff;
+    color: #fff;
 }
-.antnest_icon_radius:hover, .antnest_icon_radius:active, .antnest_icon_radius:focus, .antnest_icon_radius:visited, .antnest_icon_blue_radius:hover, .antnest_icon_blue_radius:active, .antnest_icon_blue_radius:focus, .antnest_icon_blue_radius:visited{
+
+.antnest_icon_radius:hover, .antnest_icon_radius:active, .antnest_icon_radius:focus, .antnest_icon_radius:visited, .antnest_icon_blue_radius:hover, .antnest_icon_blue_radius:active, .antnest_icon_blue_radius:focus, .antnest_icon_blue_radius:visited {
     background: none;
     color: #fffea4
 }
+
 .antnest_head span {
     margin-right: 8px;
 }
-.bor_ri_line{
+
+.bor_ri_line {
     border-right: 1px solid #fff;
     height: 14px;
     display: inline-block;
@@ -2582,6 +2587,7 @@ li.ant-menu-submenu > ul > li.ant-menu-submenu {
     top: 2px;
     margin-right: 12px;
 }
+
 .ant-card:hover {
     box-shadow: none !important
 }
@@ -3397,7 +3403,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     top: 12px;
     left: -23px;
     width: 80px;
-    color:#424242;
+    color: #424242;
 }
 
 .persono_btn_blue {
@@ -3405,12 +3411,14 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     border: 1px solid #fff;
     color: #22a0fd
 }
-.persono_btn_gray{
+
+.persono_btn_gray {
     color: #424242;
     background: #fff;
     border: 1px solid #fff;
 }
-.persono_btn_gray_old{
+
+.persono_btn_gray_old {
     color: #f56a55;
     background: #fff;
     border: 1px solid #fff;
@@ -3605,6 +3613,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     top: 8px;
     right: -12px !important;
 }
+
 .borderballoon_dingcorner_le {
     content: "";
     position: absolute;
@@ -3616,6 +3625,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     background-size: 80%;
     display: none;
 }
+
 .borderballoon_dingcorner_ri {
     content: "";
     position: absolute;
@@ -3626,7 +3636,8 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     height: 32px;
     background-size: 80%;
 }
-.borderballoon_dingcorner_ri_no{
+
+.borderballoon_dingcorner_ri_no {
     content: "";
     position: absolute;
     background: url(../../src/components/images/ding_corner_ri.png) no-repeat right 0;
@@ -3635,8 +3646,9 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     width: 32px;
     height: 32px;
     background-size: 80%;
-    display:none
+    display: none
 }
+
 .level_list_pa {
     padding: 15px 25px !important;
 }
@@ -4901,8 +4913,8 @@ div.btn1 {
 
 .userinfo_top {
     margin-top: 80px;
-    background:#fff;
-    border-radius:4px;
+    background: #fff;
+    border-radius: 4px;
     padding: 20px 0;
 }
 
@@ -6885,24 +6897,32 @@ select.course_n:hover {
 .ding_mes_notRead {
     background-color: blanchedalmond;
 }
+
+
 .white_16{
     color:#fff;
     font-size:16px;
+
 }
-.new_center_user{
-    border:none;
+
+.new_center_user {
+    border: none;
 }
-.new_center_user .ant-card-head{
-    padding:0;
+
+.new_center_user .ant-card-head {
+    padding: 0;
     margin: 0 24px;
 }
-.new_center_user .ant-card-head h3{
+
+.new_center_user .ant-card-head h3 {
     font-weight: normal;
     color: #333;
 }
-.new_center_user_top{
+
+.new_center_user_top {
     margin-top: -1px;
 }
+
 .person_group > div{
     height:100% !important;
 }
@@ -6919,4 +6939,5 @@ select.course_n:hover {
 }
 .gz_title_flex + div .ant-table-thead > tr > th.ant-table-selection-user2, .gz_title_flex + div .ant-table-tbody > tr > td.ant-table-selection-user2{
     width: 100px;
+
 }

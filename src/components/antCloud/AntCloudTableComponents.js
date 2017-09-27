@@ -119,6 +119,8 @@ const AntCloudTableComponents = React.createClass({
         var imgArrNum = this.state.imgArrNum;
         var a = document.querySelectorAll(".topics_zanImg")[imgArrNum];
         var b = this.state.imgArrflag;
+        // console.log(a);
+        // console.log(imgArrNum);
         if (isEmpty(a) == false) {
             if (b) {
                 setTimeout(function () {
@@ -484,7 +486,7 @@ const AntCloudTableComponents = React.createClass({
                     downloadButton = null;
                 } else {
                     downloadButton =
-                        <a href={path} target="_blank" title="下载" download={path} >
+                        <a href={path} target="_blank" title="下载" download={path} className="te_download_a">
                             <Button icon="download"/></a>;
                 }
                 var fileLogo = _this.buildFileLogo(name, directory, e);
