@@ -93,7 +93,8 @@ i, cite, em, var, address, dfn {
     .little-layout-aside-r-show {
         height: 596px !important
     }
-    .gz_title_flex, .gz_title_flex + div{
+
+    .gz_title_flex, .gz_title_flex + div {
         width: 876px !important;
     }
 }
@@ -137,7 +138,8 @@ i, cite, em, var, address, dfn {
     .little-layout-aside-r-show .content {
         min-height: 430px !important
     }
-    .gz_title_flex, .gz_title_flex + div{
+
+    .gz_title_flex, .gz_title_flex + div {
         width: 696px !important;
     }
 }
@@ -1644,7 +1646,7 @@ p.user_cont span.name, .user_til_name {
     text-align: right;
     display: inline-block;
     float: left;
-    padding:0;
+    padding: 0;
 }
 
 .rc-upload {
@@ -6898,10 +6900,9 @@ select.course_n:hover {
     background-color: blanchedalmond;
 }
 
-
-.white_16{
-    color:#fff;
-    font-size:16px;
+.white_16 {
+    color: #fff;
+    font-size: 16px;
 
 }
 
@@ -6923,21 +6924,33 @@ select.course_n:hover {
     margin-top: -1px;
 }
 
-.person_group > div{
-    height:100% !important;
+.person_group > div {
+    height: 100% !important;
 }
-.gz_title_flex{
+
+.gz_title_flex {
     display: flex;
     justify-content: center;
     position: fixed;
     top: 53px;
 }
-.gz_title_flex + div{
+
+.gz_title_flex + div {
     margin-top: 45px;
     position: fixed;
     height: calc(100% - 98px);
 }
-.gz_title_flex + div .ant-table-thead > tr > th.ant-table-selection-user2, .gz_title_flex + div .ant-table-tbody > tr > td.ant-table-selection-user2{
+
+.gz_title_flex + div .ant-table-thead > tr > th.ant-table-selection-user2, .gz_title_flex + div .ant-table-tbody > tr > td.ant-table-selection-user2 {
     width: 100px;
 
+}
+
+.noom_cursor {
+    cursor: pointer;
+}
+
+.span_link {
+    margin-left: 10px;
+    vertical-align: super;
 }

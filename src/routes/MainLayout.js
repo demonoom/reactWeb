@@ -59,6 +59,7 @@ const MainLayout = React.createClass({
             cloudRoomMenuItem: 'mulitiClass',
             antCloudKey: 'fileManager',
             activeSystemSettingMiddleMenu: '',
+            mesTabClick: false
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
     },
@@ -150,6 +151,7 @@ const MainLayout = React.createClass({
     },
 
     componentWillMount() {
+        // alert('componentWillMount');
         var userIdent = sessionStorage.getItem("ident");
         if (userIdent == null || userIdent == "") {
             location.hash = "login";
@@ -176,6 +178,7 @@ const MainLayout = React.createClass({
     // 不用了
     // 呼叫本组件中的实例任何方法 dapeng
     componentDidUpdate() {
+        // alert('componentDidUpdate');
         if (this.autoeventparam) {
             // ['antGroupTabComponents', 'param', 'antGroupTabComponents'],
             let param = this.autoeventparam.linkpart.shift();
@@ -194,7 +197,6 @@ const MainLayout = React.createClass({
             this.proxyObj = null;
         }
     },
-
 
     //获取试卷列表
     getExamPagerList: function (optType) {
@@ -265,6 +267,13 @@ const MainLayout = React.createClass({
             this.refs.msgAlert.className = 'ding_alert_show';
         } else {
             this.refs.msgAlert.className = 'ding_alert';
+        }
+    },
+
+    refresh() {
+        var flag = this.state.mesTabClick;
+        if (!flag) {
+            this.refs.messageMenu.getUserRecentMessages();
         }
     },
 
@@ -414,7 +423,11 @@ const MainLayout = React.createClass({
             // 群组消息
             this.refs.antGroupTabComponents.sendGroupMessage(fromObj.toChatGroup, timeNode);
         }
+        this.setState({mesTabClick: true});
+    },
 
+    changeMesTabClick() {
+        this.setState({mesTabClick: false});
     },
 
     getAntCloud(optType) {
@@ -449,7 +462,10 @@ const MainLayout = React.createClass({
                 //消息动态
                 middleComponent = <MessageMenu onUserClick={this.turnToMessagePage}
                                                userJson={this.state.userJson}
-                                               onLoad={this.turnToMessagePage}/>;
+                                               onLoad={this.turnToMessagePage}
+                                               changeMesTabClick={this.changeMesTabClick}
+                                               ref="messageMenu"
+                />;
                 tabComponent = <AntGroupTabComponents ref="antGroupTabComponents"
                                                       userInfo={this.state.userInfo}
                                                       groupObj={this.state.groupObj}
@@ -459,6 +475,7 @@ const MainLayout = React.createClass({
                                                       onNewMessage={this.receiveNewMessage}
                                                       showAlert={this.showAlert}
                                                       showMesAlert={this.showMesAlert}
+                                                      refresh={this.refresh}
                 />;
                 break;
             case 'antGroup':
