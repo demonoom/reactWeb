@@ -116,7 +116,7 @@ class SystemSettingGhostMenu extends React.Component {
         var uls = '';
         var arr = [];
         //手动添加的测试菜单---开始
-        var flowUl = <li className="multi">
+        /*var flowUl = <li className="multi">
             <ul className="second">
                 <li onClick={ event => {
                     this.changeMenu(event, 'systemFlow', false)
@@ -125,7 +125,7 @@ class SystemSettingGhostMenu extends React.Component {
             </ul>
         </li>;
         liArr.push(flowUl);
-        arr.push(liArr);
+        arr.push(liArr);*/
         //手动添加的测试菜单---结束
         for (var i = 0; i < data.length; i++) {
             data[i].tabItems.forEach(function (v) {
