@@ -120,6 +120,7 @@ const AntGroupTabComponents = React.createClass({
                 gt.scrollTop(parseInt(gt[0].scrollHeight));
             }
         }
+        console.log("did:"+gt[0].scrollHeight);
     },
 
     componentDidMount() {
@@ -140,20 +141,13 @@ const AntGroupTabComponents = React.createClass({
             target = e.target;
         }
         var scrollTop = target.scrollTop;
-        if (scrollTop <= 5) {
+        console.log("scrollHeight before 1:"+target.scrollHeight);
+        if (scrollTop <= 1) {
             antGroup.setState({"isDirectToBottom": false});
             if (antGroup.state.messageComeFrom == "groupMessage") {
                 antGroup.getChatGroupMessages(antGroup.state.currentGroupObj, antGroup.state.firstMessageCreateTime);
-                console.log(target.scrollHeight);
-                console.log(target.scrollTop);
-                // target.scrollTop = target.scrollHeight - (target.scrollHeight-200);
-                // antGroup.reGetChatMessage(antGroup.state.currentGroupObj,antGroup.state.firstMessageCreateTime);
             } else {
                 antGroup.getUser2UserMessages(antGroup.state.currentUser, antGroup.state.firstMessageCreateTime);
-                console.log(target.scrollHeight);
-                console.log(target.scrollTop);
-                console.log(target.offsetHeight);
-                // target.scrollTop = target.scrollHeight - (target.scrollHeight-200);
             }
         }
     },

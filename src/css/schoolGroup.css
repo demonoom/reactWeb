@@ -427,8 +427,21 @@
     top: -2px;
 }
 .name_max4{
-    max-width: 500px;
-    float: left;
+     max-width: 500px;
+     float: left;
+ }
+.name_max4_24{
+    line-height: 24px;
+    width: 100%;
+}
+.name_text_12{
+    font-size: 12px;
+    line-height: 18px;
+    margin-top: 4px;
+    color: #666;
+}
+.process_l{
+    width: calc(100% - 100px);
 }
 .name_max5{
     width: 140px;
@@ -474,6 +487,7 @@
 .process_wrap .process_flex:last-child{
     border-bottom: none;
 }
+
 .flow-line {
     width: 1px;
     height: 60px;
