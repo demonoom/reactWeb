@@ -1,5 +1,5 @@
 import React, {PropTypes, Link} from 'react';
-import {Table, Badge} from 'antd';
+import {Table, Badge, Button, Icon, Switch} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import {isEmpty} from '../../utils/Const';
 import {formatMD} from '../../utils/utils';
@@ -7,6 +7,7 @@ import {formatHM} from '../../utils/utils';
 import {isToday} from '../../utils/utils';
 
 var mMenu;
+const ButtonGroup = Button.Group;
 const columns = [{
     title: 'messageContent',
     dataIndex: 'messageContent',
@@ -21,6 +22,7 @@ const MessageMenu = React.createClass({
         return {
             badgeShow: false,
             tableIsClick: false,
+            show: true,  //红点显示与隐藏
         };
     },
 
@@ -29,19 +31,25 @@ const MessageMenu = React.createClass({
     },
 
     componentWillReceiveProps(nextProps) {
-        // console.log(nextProps.userJson);
+        //看看它的key
+        // if (isEmpty(nextProps.userJson) == false) {
+        //     console.log(nextProps.userJson);
+        //     ;
+        // }
         if (isEmpty(nextProps) == false && (typeof(nextProps.userJson) != "undefined")) {
-            // messageData.push(nextProps.userJson);
             //清空userMessageData
             userMessageData.splice(0);
             var index = mMenu.checkUserJsonIsExist(nextProps.userJson);
+            //index=-1说明来的是以前不在列表中的新消息，直接置顶。
+            //否则说明来的是本来就在列表里的人发送的消息，index是那个人在messageData中的位置
+            // alert(index);
+            // nextProps.userJson.isNew = true;
             if (index == -1) {
                 messageData.splice(0, 0, nextProps.userJson);
             } else {
                 messageData[index] = nextProps.userJson;
-                //TODO 排序
+                //排序
             }
-            // console.log(messageData);
             mMenu.showMessageData();
         }
     },
@@ -52,9 +60,9 @@ const MessageMenu = React.createClass({
 
     checkUserJsonIsExist(newMessageObj) {
         var index = -1;
+        //遍历原来的messageData,如果新进来的消息的key与原来的messageData里的某条消息key相等，将index制成原来那个消息在messageData里的位置并返回
         for (var i = 0; i < messageData.length; i++) {
             var messageObj = messageData[i];
-            console.log(messageObj.key);
             if (messageObj.key == newMessageObj.key) {
                 index = i;
                 break;
@@ -89,6 +97,8 @@ const MessageMenu = React.createClass({
 
                         }*/
                         mMenu.setMessageArrayForOnePerson(e);
+                        //判断已读未读0未读1已读
+                        console.log(e.readState);
                     });
                     mMenu.showMessageData();
                     /*if(isEmpty(userMessageData)==false && mMenu.state.tableIsClick==false){
@@ -106,12 +116,22 @@ const MessageMenu = React.createClass({
      * 渲染用户最新消息列表
      */
     showMessageData() {
+        //不管是第一次进来通过get还是消息过来通过willReceiveProps，都会经过这里
+        //在这里对比messageData的不同，决定给哪一些加圆点
         messageData.forEach(function (message) {
             var fromUser = message.fromUser;
             var colUid = fromUser.colUid;
             var contentArray = message.contentArray;
             var messageType = message.messageToType;
             var toChatGroup = message.toChatGroup;
+            // var isNew = message.isNew;
+            // var tipPoint;
+            // if(isNew == true){
+            //     tipPoint = <b className="mes_alert_show mes_opt" id={colUid}></b>;
+            // }else{
+            //     tipPoint = null;
+            // }
+
 
             if (isEmpty(contentArray) == false && contentArray.length > 0) {
                 // 只显示具有消息内容的数据,且只显示最后一条消息记录
@@ -122,7 +142,12 @@ const MessageMenu = React.createClass({
                 if (messageType == 1) {
                     //个人栏
                     imgTag = <div>
-                        <span className="antnest_user"><img src={fromUser.avatar} height="38"></img></span>
+                        <span className="antnest_user">
+                            <img src={fromUser.avatar}
+                                 height="38"></img>
+                            {/*{tipPoint}*/}
+                            {/*<b className="mes_alert_show mes_opt" id={colUid}></b>*/}
+                        </span>
                         <div className="mes_u_l">
                             <div><span className="message_name">{fromUser.userName}</span><span
                                 className="time right_ri time_w">{lastCreateTime}</span></div>
@@ -137,7 +162,10 @@ const MessageMenu = React.createClass({
                         //如果这个字段为空，头像的处理
                         memberAvatarTag = <img src={require("../images/lALPAAAAARBOpS_NAf7NAf4_510_510.png")}/>;
                     }
-                    var groupMemebersPhotoTag = <div className="antnest_user upexam_float">{memberAvatarTag}</div>;
+                    var groupMemebersPhotoTag = <div className="antnest_user upexam_float">
+                        {memberAvatarTag}
+                        {/*<b className="mes_alert_show mes_opt" id={toChatGroup.chatGroupId}></b>*/}
+                    </div>;
                     imgTag = <div>
                         {groupMemebersPhotoTag}
                         <div className="mes_u_l">
@@ -187,6 +215,7 @@ const MessageMenu = React.createClass({
             // i++;
         })
         mMenu.setState({"userMessageData": userMessageData});
+
     },
 
     /**
@@ -231,7 +260,8 @@ const MessageMenu = React.createClass({
                         key: colUid,
                         "fromUser": showUser,
                         contentArray: contentArray,
-                        "messageToType": messageToType
+                        "messageToType": messageToType,
+                        // "isNew":true
                     };
                     messageData.push(userJson);
                 } else {
@@ -294,6 +324,9 @@ const MessageMenu = React.createClass({
     turnToMessagePage(record, index) {
         mMenu.setState({selectRowKey: record.key, badgeShow: false, tableIsClick: true});
         mMenu.props.onUserClick(record);
+        //根据id找到点击的那一个的b标签,设置它的样式为隐藏
+        // var bOpt = document.getElementById(record.key);
+        // bOpt.className = 'mes_alert mes_opt';
     },
 
     render() {

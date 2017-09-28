@@ -58,9 +58,7 @@ class SystemSettingGhostMenu extends React.Component {
         });
         this.setState({imgArr});
         //图片已渲染到DOM
-        console.log(1);
         document.querySelectorAll(".topics_zanImg")[num].click();
-        console.log(2);
     }
 
     imgClick(e) {
