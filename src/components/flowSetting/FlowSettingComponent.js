@@ -81,10 +81,12 @@ const FlowSettingComponent = React.createClass({
                 var procName = processDefinition.procDefName;
                 var procDefDescribe = processDefinition.procDefDescribe;
                 var flowObj = <div className="process_flex">
-                    <div>
+                    <div className="process_l">
                         <img className="process_icon" src="http://60.205.86.217/upload2/common/img/admin_1.png"/>
-                        <span className="name_max4 dold_text">{procName}</span>
-                        <span>{procDefDescribe}</span>
+                        <div className="name_max4">
+                            <div className="dold_text name_max4_24 upexam_float" >{procName}</div>
+                            <div className="dold_text name_max4_24 name_text_12 upexam_float ">{procDefDescribe}</div>
+                        </div>
                     </div>
                     <div className="process_r">
                         {suspendButton}
