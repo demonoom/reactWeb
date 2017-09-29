@@ -76,7 +76,8 @@ const AntGroupTabComponents = React.createClass({
             totalChatGroupCount: 0,  //当前用户的群组总数
             currentChatGroupPage: 1,    //群组列表页面的当前页码
             errorModalIsShow: false,
-            isDirectToBottom: true
+            isDirectToBottom: true,
+            preHeight:0,
         };
 
     },
@@ -114,13 +115,23 @@ const AntGroupTabComponents = React.createClass({
 
     componentDidUpdate() {
         var gt = $('#groupTalk');
-        if (typeof(gt) === "object" && typeof(gt).length === "number" && gt.length != 0) {
+        /*if (typeof(gt) === "object" && typeof(gt).length === "number" && gt.length != 0) {
+            topScrollHeight = gt[0].scrollHeight;
+            if (antGroup.state.isDirectToBottom) {
+                gt.scrollTop(parseInt(gt[0].scrollHeight));
+            }
+        }*/
+        if(antGroup.state.isDirectToBottom==false){
+            console.log("did:"+gt[0].scrollHeight);
+            var nowHeight = gt[0].scrollHeight;
+            var newHeight = parseInt(nowHeight) - parseInt(this.state.preHeight);
+            gt.scrollTop(newHeight);
+        }else{
             topScrollHeight = gt[0].scrollHeight;
             if (antGroup.state.isDirectToBottom) {
                 gt.scrollTop(parseInt(gt[0].scrollHeight));
             }
         }
-        console.log("did:"+gt[0].scrollHeight);
     },
 
     componentDidMount() {
@@ -143,7 +154,8 @@ const AntGroupTabComponents = React.createClass({
         var scrollTop = target.scrollTop;
         console.log("scrollHeight before 1:"+target.scrollHeight);
         if (scrollTop <= 1) {
-            antGroup.setState({"isDirectToBottom": false});
+            // preHeight = target.scrollHeight;
+            antGroup.setState({"isDirectToBottom": false,"preHeight":target.scrollHeight});
             if (antGroup.state.messageComeFrom == "groupMessage") {
                 antGroup.getChatGroupMessages(antGroup.state.currentGroupObj, antGroup.state.firstMessageCreateTime);
             } else {
