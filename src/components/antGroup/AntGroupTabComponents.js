@@ -220,6 +220,8 @@ const AntGroupTabComponents = React.createClass({
      * 拿到文件路径，发送message
      */
     sendFileToOthers(url) {
+
+        console.log(url);
         //文件名
         var name = uploadFileList[0].name;
         //文件大小
@@ -940,6 +942,14 @@ const AntGroupTabComponents = React.createClass({
     },
 
     /**
+     * 预览文件的回调
+     */
+    watchFile(src) {
+        console.log(src);
+        //要的是文件的id,创建人的id
+    },
+
+    /**
      * 获取个人的聊天信息
      */
     getUser2UserMessages(userObj, timeNode) {
@@ -1114,7 +1124,7 @@ const AntGroupTabComponents = React.createClass({
                                             <div className="talk-cont"><span
                                                 className="name">{userPhoneIcon}</span><span
                                                 className="borderballoon_le noom_cursor"
-                                                onClick={this.readLink.bind(this, filePath)}><img
+                                                onClick={this.watchFile.bind(this, filePath)}><img
                                                 style={{width: 40}}
                                                 src="../src/components/images/lALPBY0V4pLs8fFISA_72_72.png"
                                                 alt=""/><span
@@ -1152,7 +1162,7 @@ const AntGroupTabComponents = React.createClass({
                                             <div className="talk-cont"><span
                                                 className="name">{userPhoneIcon}</span><span
                                                 className="borderballoon_le noom_cursor"
-                                                onClick={this.readLink.bind(this, filePath)}><img
+                                                onClick={this.watchFile.bind(this, filePath)}><img
                                                 style={{width: 40}}
                                                 src="../src/components/images/lALPBY0V4pLs8fFISA_72_72.png"
                                                 alt=""/><span className="span_link">{fileName}</span><span>{fileLength}kb</span><i
@@ -1309,10 +1319,11 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><span
                                             className="borderballoon_le noom_cursor"
-                                            onClick={this.readLink.bind(this, filePath)}><img
+                                            onClick={this.watchFile.bind(this, filePath)}><img
                                             style={{width: 40}}
                                             src="../src/components/images/lALPBY0V4pLs8fFISA_72_72.png"
-                                            alt=""/><span className="span_link">{fileName}</span><span>{fileLength}kb</span><i
+                                            alt=""/><span
+                                            className="span_link">{fileName}</span><span>{fileLength}kb</span><i
                                             className="borderballoon_dingcorner_ri_no"></i></span></div>
                                     </li>;
                                 } else {
@@ -1322,10 +1333,11 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><span
                                             className="borderballoon_le noom_cursor"
-                                            onClick={this.readLink.bind(this, filePath)}><img
+                                            onClick={this.watchFile.bind(this, filePath)}><img
                                             style={{width: 40}}
                                             src="../src/components/images/lALPBY0V4pLs8fFISA_72_72.png"
-                                            alt=""/><span className="span_link">{fileName}</span><span>{fileLength}kb</span><i
+                                            alt=""/><span
+                                            className="span_link">{fileName}</span><span>{fileLength}kb</span><i
                                             className="borderballoon_dingcorner_ri_no"></i></span></div>
                                     </li>;
                                 }

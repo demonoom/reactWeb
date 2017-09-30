@@ -88,14 +88,14 @@
 
 
         let tmp = [];
-        LP.mgr.map(function (item, index) {
+        TP.mgr.map(function (item, index) {
             if (item.id == id) {
                 tmp.push(item)
             }
         });
-        LP.hideArr = LP.hideArr.concat(tmp);
-        if (!(LP.mgr.length - LP.hideArr.length)) {
-            LP.delAll();
+        TP.hideArr = TP.hideArr.concat(tmp);
+        if (!(TP.mgr.length - TP.hideArr.length)) {
+            TP.delAll();
         } else {
 
             $('#' + id).css({visibility: 'hidden'});
@@ -113,7 +113,7 @@
         this.ifrid = 'ifr' + id;
         this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show teachingAdmin">
                 <div class="header draggable">
-                <h3 class="title">${ obj.title }</h3>
+                <h3 class="title" id="${this.ifrid}1">${ obj.title }</h3>
                     <div class="little-tilte">
                         <a class="back"><i class="anticon anticon-left "></i></a>
                         <!--<div class="goback">后退</div>-->
@@ -210,7 +210,7 @@
         }
 
 
-        this.ifrel.on('load', this._teachAdmin_UI_templet_iframe_event.bind(this, this.id, this.ifrid, 1));
+        this.ifrel.on('load', this._teachAdmin_UI_templet_iframe_event.bind(this, this.id, this.ifrid));
         return this;
     };
 
@@ -224,11 +224,15 @@
 
     };
 
-    littlePanle.prototype._teachAdmin_UI_templet_iframe_event = function (id, ifrid, event) {
+    littlePanle.prototype._teachAdmin_UI_templet_iframe_event = function (id, ifrid) {
+        console.log(this);
+        // console.log(ifrid);
+        var iframe = this.ifrel[0];
+        console.log(iframe);
+        // console.log(iframe.document.title);
+        console.log(iframe.contentWindow.document.title);
+        // console.log(ifrid);
 
-        //event.target.contentWindow.phone = phone;
-        //$("#" + id + " h3").text(event.target.contentWindow.document.title);
-        //$("#" + id + " h3").text(event.target.contentWindow.documentf.title);
 
     }
 
@@ -266,6 +270,20 @@
         $(this.el).find('.enterFull').on('click', enterFull);
         $(this.el).find('.exitFull').on('click', exitFull);
         this.ifrel = $('#' + objtemplet.ifrid);
+
+        /*与iframe通信*/
+        // var iframe = this.ifrel[0];
+        //
+        // window.addEventListener('message', function (e) {
+        //     var data = JSON.parse(e.data);
+        //     if (data.method == 'selectPictures') {
+        //         alert("执行选择图片逻辑!!");
+        //         var paths = "https://gss0.bdstatic.com/94o3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=593ce0758b13632701e0ca61f0e6cb89/fcfaaf51f3deb48fc4b7dd77f11f3a292cf578b8.jpg";
+        //         var callbackId = data.callbackId;
+        //         var response = {'callbackId': callbackId, 'params': paths};
+        //         iframe.contentWindow.postMessage(JSON.stringify(response), '*');
+        //     }
+        // });
         this.ifrel.on('load', this._default_UI_templet_iframe_event.bind(this, objtemplet.ifrid));
 
 
@@ -972,7 +990,8 @@
         this.param.param = obj.param;
         this.param.title = obj.title;
         this.param.drag = obj.drag;
-        this.param.url = this._setProxyInfo(obj.url);
+        // this.param.url = this._setProxyInfo(obj.url);
+        this.param.url = obj.url;
 
         let maxIndex = () => {
             let refindex = 0;
@@ -988,9 +1007,9 @@
             return refindex;
         }
 
-        // this.param.orderIndex = oldArray.length || 0;
-        // this.param.stylePage.zIndex = maxIndex();
-        // this.param.stylePage.width = parseInt(this.param.width.replace(/[a-z]*/img, ''));
+        this.param.orderIndex = oldArray.length;
+        this.param.stylePage.zIndex = maxIndex();
+        this.param.stylePage.width = parseInt(this.param.width.replace(/[a-z]*/img, ''));
         //
         //
 
@@ -1015,8 +1034,7 @@
         }
 
         return this;
-    };
-
+    }
     littlePanle.prototype._setProxyInfo = function (url) {
 
         if (!url) return '';
@@ -1105,7 +1123,7 @@
 
         return refStyle
 
-    };
+    }
 
 
     littlePanle.prototype.historyControler = function (id, num) {
@@ -1113,148 +1131,117 @@
         var ifr = $('#ifr' + id)[0];
         ifr.contentWindow.history.go(num);
 
-    };
+    }
 
 
-    // var lpM = {
-    //     mgr: [],
-    //     hideArr: [],
-    //
-    //     Start(objParam) {
-    //         this.GetLP(objParam);
-    //     },
-    //
-    //     GetLP(objParam) {
-    //         let _this = this;
-    //         let objA;
-    //
-    //         switch (objParam.mode) {
-    //             case 'teachingAdmin':
-    //                 objA = new littlePanle().GetLP(objParam, _this.mgr);
-    //                 break;
-    //
-    //             case 'liveTV':
-    //                 _this.delAll();
-    //                 objA = new littlePanle().GetLP(objParam, _this.mgr);
-    //                 break;
-    //             case 'history':
-    //                 _this.delAll();
-    //                 objA = new littlePanle().GetLP(objParam, _this.mgr);
-    //                 break;
-    //
-    //             default :
-    //                 if ((this.mgr.length - _this.hideArr.length) >= 3) {
-    //                     log.info('打开太多！');
-    //                     return;
-    //                 }
-    //
-    //                 objA = new littlePanle().GetLP(objParam, _this.mgr);
-    //                 _this.addOrderBtn();
-    //         }
-    //         this.mgr.push(objA);
-    //         return objA;
-    //
-    //     },
-    //     addOrderBtn() {
-    //         if ($('.ant-layout-header .lpmgrbtn').length) return;
-    //         $('.ant-layout-header > div').append("<div class='lpmgrbtn'>" +
-    //             "<a onclick='LP.orderAll()' class='no_le'><i class='iconfont'>&#xe67a;</i><span>复位</span></a>" +
-    //             "<a onclick='LP.delAll()' class='del'><i class='iconfont'>&#xe6b4;</i><span>关闭</span></a>" +
-    //             "</div>");
-    //     },
-    //     delAll() {
-    //         $('.dialog.little-layout-aside-r-show').remove();
-    //         this.mgr = [];
-    //         this.hideArr = [];
-    //         $('.lpmgrbtn').remove();
-    //
-    //     },
-    //     orderAll() {
-    //
-    //         if (!this.mgr.length) {
-    //             return;
-    //         }
-    //
-    //         // 计算出复位的位置
-    //         var refOff = $('.ant-layout-operation').offset();
-    //         var refW = $('.ant-layout-operation').width();
-    //         //
-    //         let tmpArr = [];
-    //         let newArr = [];
-    //
-    //         // 复位所有lp
-    //         this.mgr.map(function (item, index) {
-    //
-    //             if ($(item.el.selector).css('visibility') == 'hidden') {
-    //                 tmpArr.push(item);
-    //                 $(item.el.selector).remove();
-    //             } else {
-    //                 newArr.push(item);
-    //                 index = index - tmpArr.length;
-    //                 let tmpInterval = index * 45;
-    //                 let leftRef = (refOff.left + refW) - $(item.el).width();
-    //                 leftRef = leftRef + tmpInterval;
-    //                 leftRef = parseInt(leftRef.toFixed());
-    //                 //
-    //                 //
-    //                 let topRef = refOff.top + tmpInterval;
-    //                 topRef = topRef - $(document.body).height();
-    //                 topRef = topRef - ($(item.el).height() * index);
-    //                 topRef = parseInt(topRef.toFixed());
-    //                 //
-    //                 let zindex = index++;
-    //
-    //                 $(item.el).css({top: topRef, left: leftRef, zIndex: zindex});
-    //             }
-    //
-    //         })
-    //
-    //         this.mgr = newArr;
-    //         this.hideArr = [];
-    //
-    //
-    //     }
-    // }
+    var lpM = {
+        mgr: [],
+        hideArr: [],
 
+        Start(objParam) {
+            this.GetLP(objParam);
+        },
 
-    // window.LP = lpM;
+        GetLP(objParam) {
+            let _this = this;
+            let objA;
 
+            switch (objParam.mode) {
+                case 'teachingAdmin':
+                    objA = new littlePanle().GetLP(objParam, _this.mgr);
+                    break;
 
-    window.__noomPanel__ = function (objParam, mgr) {
-        console.log(objParam);
-        console.log(mgr);
+                case 'liveTV':
+                    _this.delAll();
+                    objA = new littlePanle().GetLP(objParam, _this.mgr);
+                    break;
+                case 'history':
+                    _this.delAll();
+                    objA = new littlePanle().GetLP(objParam, _this.mgr);
+                    break;
 
-        let _this = this;
-        let objA;
+                default :
+                    if ((this.mgr.length - _this.hideArr.length) >= 3) {
+                        log.info('打开太多！');
+                        return;
+                    }
 
-        switch (objParam.mode) {
-            case 'teachingAdmin':
-                objA = new littlePanle().GetLP(objParam, _this.mgr);
-                break;
+                    objA = new littlePanle().GetLP(objParam, _this.mgr);
+                    _this.addOrderBtn();
+            }
+            this.mgr.push(objA);
+            return objA;
 
-            case 'liveTV':
-                _this.delAll();
-                objA = new littlePanle().GetLP(objParam, _this.mgr);
-                break;
-            case 'history':
-                _this.delAll();
-                objA = new littlePanle().GetLP(objParam, _this.mgr);
-                break;
+        },
+        addOrderBtn() {
+            if ($('.ant-layout-header .lpmgrbtn').length) return;
+            $('.ant-layout-header > div').append("<div class='lpmgrbtn'>" +
+                "<a onclick='LP.orderAll()' class='no_le'><i class='iconfont'>&#xe67a;</i><span>复位</span></a>" +
+                "<a onclick='LP.delAll()' class='del'><i class='iconfont'>&#xe6b4;</i><span>关闭</span></a>" +
+                "</div>");
+        },
+        delAll() {
+            $('.dialog.little-layout-aside-r-show').remove();
+            this.mgr = [];
+            this.hideArr = [];
+            $('.lpmgrbtn').remove();
 
-            default :
-                if ((this.mgr.length - _this.hideArr.length) >= 3) {
-                    log.info('打开太多！');
-                    return;
+        },
+        orderAll() {
+
+            if (!this.mgr.length) {
+                return;
+            }
+
+            // 计算出复位的位置
+            var refOff = $('.ant-layout-operation').offset();
+            var refW = $('.ant-layout-operation').width();
+            //
+            let tmpArr = [];
+            let newArr = [];
+
+            // 复位所有lp
+            this.mgr.map(function (item, index) {
+
+                if ($(item.el.selector).css('visibility') == 'hidden') {
+                    tmpArr.push(item);
+                    $(item.el.selector).remove();
+                } else {
+                    newArr.push(item);
+                    index = index - tmpArr.length;
+                    let tmpInterval = index * 45;
+                    let leftRef = (refOff.left + refW) - $(item.el).width();
+                    leftRef = leftRef + tmpInterval;
+                    leftRef = parseInt(leftRef.toFixed());
+                    //
+                    //
+                    let topRef = refOff.top + tmpInterval;
+                    topRef = topRef - $(document.body).height();
+                    topRef = topRef - ($(item.el).height() * index);
+                    topRef = parseInt(topRef.toFixed());
+                    //
+                    let zindex = index++;
+
+                    $(item.el).css({top: topRef, left: leftRef, zIndex: zindex});
                 }
 
-                objA = new littlePanle().GetLP(objParam, _this.mgr);
-                _this.addOrderBtn();
+            })
+
+            this.mgr = newArr;
+            this.hideArr = [];
+
+
         }
-        this.mgr.push(objA);
-        return objA;
+    }
 
 
-    };
+    window.TP = lpM;
+
+
+    window.__noomPanel__ = function (objParam) {
+        //调用原来littlePanel调用GETLP的事
+        TP.Start(objParam);
+    }
 
 
 }(jQuery));

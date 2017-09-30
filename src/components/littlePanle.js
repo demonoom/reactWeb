@@ -281,7 +281,7 @@
 
 
         return this;
-    }
+    };
 
     littlePanle.prototype._default_UI_templet_iframe_event = function (id, event) {
         console.log('onload');
@@ -1111,7 +1111,7 @@
                 case 'teachingAdmin':
                     // objA = new littlePanle().GetLP(objParam, _this.mgr);
                     //调用noomPanle.js中的panel
-                    window.__noomPanel__(objParam, _this.mgr);
+                    window.__noomPanel__(objParam);
                     break;
 
                 case 'liveTV':
