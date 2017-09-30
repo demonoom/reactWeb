@@ -22,7 +22,7 @@ var EmotionInputComponents = React.createClass({
 
   render : function(){
     return (
-      <div className="group_send_talk_div">
+      <div className="group_send_talk_div group_send_talk_div_84">
         <Input type="textarea" id="emotionInput" rows={4} data-emojiable="true" onChange={this.inputChange}/>
       </div>
     )
