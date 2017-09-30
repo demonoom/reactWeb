@@ -152,10 +152,10 @@ const AntGroupTabComponents = React.createClass({
             target = e.target;
         }
         var scrollTop = target.scrollTop;
-        console.log("scrollHeight before 1:"+target.scrollHeight);
+        console.log("scrollHeight before 1:"+target.scrollHeight+"------scrollTop:"+scrollTop);
         if (scrollTop <= 1) {
-            // preHeight = target.scrollHeight;
             antGroup.setState({"isDirectToBottom": false,"preHeight":target.scrollHeight});
+            // preHeight = target.scrollHeight;
             if (antGroup.state.messageComeFrom == "groupMessage") {
                 antGroup.getChatGroupMessages(antGroup.state.currentGroupObj, antGroup.state.firstMessageCreateTime);
             } else {
@@ -248,12 +248,18 @@ const AntGroupTabComponents = React.createClass({
 
             }, onMessage: function (info) {
                 var groupObj;
+                var gt = $('#groupTalk');
                 if (antGroup.state.optType == "sendMessage") {
                     //如果是个人消息通信，传入的对象应该是用户对象
                     userId = operatorObj.colUid;
                 } else {
                     //如果是群组消息通信，传入的对象应该是群组对象
                     groupObj = operatorObj;
+                }
+                var gtScrollHeight = gt[0].scrollHeight;
+                var gtScrollTop = gt[0].scrollTop;
+                if(parseInt(gtScrollHeight)-parseInt(gtScrollTop)<=10){
+                    _this.setState({"isDirectToBottom":true});
                 }
                 //获取messageList
                 var command = info.command;
@@ -464,6 +470,7 @@ const AntGroupTabComponents = React.createClass({
                                 antGroup.props.onNewMessage(userJson);
                             }
                         }
+                        debugger
                         antGroup.setState({"messageList": messageList});
                     }
                 }
