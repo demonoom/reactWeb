@@ -7004,8 +7004,23 @@ select.course_n:hover {
 .noom_cursor {
     cursor: pointer;
 }
-
 .span_link {
     margin-left: 10px;
-    vertical-align: super;
+    width: calc(100% - 50px);
+    display: inline-block;
+    float: left;
+    line-height: 18px;
+    margin-top: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.span_link_div{
+    max-width: calc(100% - 35px);
+}
+.span_link_img{
+    padding:0 !important;
+}
+.span_link_div .password_ts{
+    color:#F3F3F3
 }

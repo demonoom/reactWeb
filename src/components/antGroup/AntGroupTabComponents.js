@@ -1113,13 +1113,11 @@ const AntGroupTabComponents = React.createClass({
                                             <div className="u-name"><span>{fromUser}</span></div>
                                             <div className="talk-cont"><span
                                                 className="name">{userPhoneIcon}</span><span
-                                                className="borderballoon_le noom_cursor"
-                                                onClick={this.readLink.bind(this, filePath)}><img
-                                                style={{width: 40}}
-                                                src="../src/components/images/lALPBY0V4pLs8fFISA_72_72.png"
-                                                alt=""/><span
-                                                className="span_link">{fileName}</span><span>{fileLength}kb</span><i
-                                                className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                                className="borderballoon noom_cursor"
+                                                onClick={this.readLink.bind(this, filePath)}>
+                                                <div className="span_link_div"><span className="span_link">{fileName}</span><span className="span_link password_ts">{fileLength}kb</span></div>
+                                                <img className="upexam_float span_link_img" style={{width: 40}} src="../src/components/images/lALPBY0V4pLs8fFISA_72_72.png" alt=""/>
+                                                <i className="borderballoon_dingcorner_ri_no"></i></span></div>
                                         </li>;
                                     } else {
                                         messageTag = <li className="right" style={{'textAlign': 'right'}}>
@@ -1152,10 +1150,10 @@ const AntGroupTabComponents = React.createClass({
                                             <div className="talk-cont"><span
                                                 className="name">{userPhoneIcon}</span><span
                                                 className="borderballoon_le noom_cursor"
-                                                onClick={this.readLink.bind(this, filePath)}><img
+                                                onClick={this.readLink.bind(this, filePath)}><img className="upexam_float"
                                                 style={{width: 40}}
                                                 src="../src/components/images/lALPBY0V4pLs8fFISA_72_72.png"
-                                                alt=""/><span className="span_link">{fileName}</span><span>{fileLength}kb</span><i
+                                                alt=""/><span className="span_link">{fileName}</span><span className="span_link password_ts">{fileLength}kb</span><i
                                                 className="borderballoon_dingcorner_ri_no"></i></span>
                                             </div>
                                         </li>;
@@ -1308,12 +1306,11 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="u-name"><span>{fromUser}</span></div>
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><span
-                                            className="borderballoon_le noom_cursor"
-                                            onClick={this.readLink.bind(this, filePath)}><img
-                                            style={{width: 40}}
-                                            src="../src/components/images/lALPBY0V4pLs8fFISA_72_72.png"
-                                            alt=""/><span className="span_link">{fileName}</span><span>{fileLength}kb</span><i
-                                            className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                            className="borderballoon noom_cursor"
+                                            onClick={this.readLink.bind(this, filePath)}>
+                                            <div className="span_link_div"><span className="span_link">{fileName}</span><span className="span_link password_ts">{fileLength}kb</span></div>
+                                            <img className="upexam_float span_link_img" style={{width: 40}} src="../src/components/images/lALPBY0V4pLs8fFISA_72_72.png" alt=""/>
+                                            <i className="borderballoon_dingcorner_ri_no"></i></span></div>
                                     </li>;
                                 } else {
                                     //我收到的
@@ -1322,10 +1319,10 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><span
                                             className="borderballoon_le noom_cursor"
-                                            onClick={this.readLink.bind(this, filePath)}><img
+                                            onClick={this.readLink.bind(this, filePath)}><img className="upexam_float"
                                             style={{width: 40}}
                                             src="../src/components/images/lALPBY0V4pLs8fFISA_72_72.png"
-                                            alt=""/><span className="span_link">{fileName}</span><span>{fileLength}kb</span><i
+                                            alt=""/><span className="span_link">{fileName}</span><span className="span_link password_ts">{fileLength}kb</span><i
                                             className="borderballoon_dingcorner_ri_no"></i></span></div>
                                     </li>;
                                 }
