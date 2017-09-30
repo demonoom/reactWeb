@@ -408,9 +408,9 @@
         this.setup();
 
         //上传文件的点击事件
-        document.querySelector('.fa-folder-o').onclick = function () {
-            alert(1);
-        };
+        // document.querySelector('.fa-folder-o').onclick = function () {
+        //     window.__sendfile__();
+        // };
 
         /*
          * MODIFICATION: Following line was modified by Igor Zhukov, in order to
