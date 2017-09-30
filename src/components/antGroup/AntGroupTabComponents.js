@@ -258,7 +258,7 @@ const AntGroupTabComponents = React.createClass({
         var commandJson = {"command": "message", "data": {"message": messageJson}};
         console.log(commandJson);
 
-        // ms.send(commandJson);
+        ms.send(commandJson);
     },
 
     handleScroll(e) {
