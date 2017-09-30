@@ -402,14 +402,14 @@
             });
         }
 
-        $textarea.after("<i class='emoji-picker-icon emoji-picker fa-smile-o " + this.options.popupButtonClasses + "' data-id='" + id + "' data-type='picker'></i>");
+        $textarea.after("<i class='emoji-picker-icon emoji-picker fa-smile-o " + this.options.popupButtonClasses + "' data-id='" + id + "' data-type='picker'></i><i class='emoji-picker-icon emoji-picker-icon_2 fa-folder-o " + this.options.popupButtonClasses + "' data-id='fa-folder-o' data-type='picker'></i>");
 
         $textarea.hide().after(this.$editor);
         this.setup();
 
         //上传文件的点击事件
         document.querySelector('.fa-folder-o').onclick = function () {
-            alert(1);
+            window.__sendfile__();
         };
 
         /*

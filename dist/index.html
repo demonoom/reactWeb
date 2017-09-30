@@ -1,94 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="renderer" content="webkit">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>小蚂蚁移动教学平台</title>
-  <link rel="stylesheet" href="index.css" />
-  <link rel="icon" href="../src/components/images/logo_title.png" type="image/x-icon"/>
-  <script type="text/javascript" src="../jquerylib/jquery.min.js"></script>
-  <script type="text/javascript" src="../jquerylib/jquery.form.js"></script>
-  <script type="text/javascript" src="../jquerylib/jquery.jsonp.js"></script>
-  <script type="text/javascript" src="../textboxio/textboxio.js"></script>
-  <!-- 图片蒙层预览组件 -->
-  <script type="text/javascript" src="../jquery-photo-gallery/jquery.photo.gallery.js"></script>
-  <script type="text/javascript" src="../src/components/jquery.draggable.js"></script>
-  <script type="text/javascript" src="../src/components/littlePanle.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>小蚂蚁移动教学平台</title>
+    <link rel="stylesheet" href="index.css"/>
+    <link rel="icon" href="../src/components/images/logo_title.png" type="image/x-icon"/>
+    <script type="text/javascript" src="../jquerylib/jquery.min.js"></script>
+    <script type="text/javascript" src="../jquerylib/jquery.form.js"></script>
+    <script type="text/javascript" src="../jquerylib/jquery.jsonp.js"></script>
+    <script type="text/javascript" src="../textboxio/textboxio.js"></script>
+    <!-- 图片蒙层预览组件 -->
+    <script type="text/javascript" src="../jquery-photo-gallery/jquery.photo.gallery.js"></script>
+    <script type="text/javascript" src="../src/components/jquery.draggable.js"></script>
+    <script type="text/javascript" src="../src/components/littlePanle.js"></script>
+    <script type="text/javascript" src="../src/components/noomPanle.js"></script>
 
-  <script src="//vjs.zencdn.net/5.11/video.min.js"></script>
+    <script src="//vjs.zencdn.net/5.11/video.min.js"></script>
 
- <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/video.css?v=2.2">
+    <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/video.css?v=2.2">
     <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/style.css?v=2.3">
-  <!-- emoji picker start -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-  <link href="../emojiPicker/lib/css/nanoscroller.css" rel="stylesheet">
-  <link href="../emojiPicker/lib/css/emoji.css" rel="stylesheet">
-  <!-- emoji picker end -->
-  <script type="text/javascript">
-    //以下声明的对象为全局的textboxio组件对象
-    var mytextareaSingleEditor;
-    var mytextareaSingleModifyEditor;
-    var mytextareaMulitiEditor;
-    var mytextareaMulitiSelectModifyEditor;
-    var mytextareaCorrectEditor;
-    var mytextareaCorrectModifyEditor;
-    var mytextareaSimpleAnswerEditor;
-    var mytextareaAnswerEditor;
-    var mytextareaSimpleAnswerModifyEditor;
-    var mytextareaAnswerModifyEditor;
-    //textbox默认的全局配置
-    var defaultConfig = {
-      autosubmit:true,
-      paste : {
-        style : 'retain',  // Overrides default: 'prompt' for MS Office content
-        enableFlashImport: true // Note, true is the default
-      },
-      codeview : {
-        enabled: true,
-        showButton: false
-      },
-      images : {
-        editing : {
-          enabled : true
-        },
-        allowLocal : true,  //该值为false时，将禁止上传本地图片，图文粘贴时将会只有文字
-        upload : {
-          url : 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload'
-        }
-      }
-    };
-  //此处的几个全局对象用来完成题目修改时，向textboxio传递修改数据用
-   var editorContent="";
-   var muEditorContent="";
-   var correctEditorContent="";
-   var simpleEditorContent="";
-   var answerContent="";
-   var toolbarKey="";
-  </script>
+    <!-- emoji picker start -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link href="../emojiPicker/lib/css/nanoscroller.css" rel="stylesheet">
+    <link href="../emojiPicker/lib/css/emoji.css" rel="stylesheet">
+    <!-- emoji picker end -->
+    <script type="text/javascript">
+        //以下声明的对象为全局的textboxio组件对象
+        var mytextareaSingleEditor;
+        var mytextareaSingleModifyEditor;
+        var mytextareaMulitiEditor;
+        var mytextareaMulitiSelectModifyEditor;
+        var mytextareaCorrectEditor;
+        var mytextareaCorrectModifyEditor;
+        var mytextareaSimpleAnswerEditor;
+        var mytextareaAnswerEditor;
+        var mytextareaSimpleAnswerModifyEditor;
+        var mytextareaAnswerModifyEditor;
+        //textbox默认的全局配置
+        var defaultConfig = {
+            autosubmit: true,
+            paste: {
+                style: 'retain',  // Overrides default: 'prompt' for MS Office content
+                enableFlashImport: true // Note, true is the default
+            },
+            codeview: {
+                enabled: true,
+                showButton: false
+            },
+            images: {
+                editing: {
+                    enabled: true
+                },
+                allowLocal: true,  //该值为false时，将禁止上传本地图片，图文粘贴时将会只有文字
+                upload: {
+                    url: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload'
+                }
+            }
+        };
+        //此处的几个全局对象用来完成题目修改时，向textboxio传递修改数据用
+        var editorContent = "";
+        var muEditorContent = "";
+        var correctEditorContent = "";
+        var simpleEditorContent = "";
+        var answerContent = "";
+        var toolbarKey = "";
+    </script>
 
 </head>
-<body  >
+<body>
 
 <div id="root"></div>
 <div class="ant-layout-footer">
-  <BackTopButton/>
-  <div id="componyInfo"></div>
-  <script>
-    var timer;
-    function checkIsLogin() {
-        if (sessionStorage.getItem("ident")==null || sessionStorage.getItem("ident")==""){
-            timer = setTimeout("checkIsLogin()",500);
-            document.getElementById("componyInfo").innerHTML="小蚂蚁移动教学平台 版权所有 恒坐标教育集团";
-        }else{
-            document.getElementById("componyInfo").innerHTML="";
-            clearTimeout(timer);
+    <BackTopButton/>
+    <div id="componyInfo"></div>
+    <script>
+        var timer;
+
+        function checkIsLogin() {
+            if (sessionStorage.getItem("ident") == null || sessionStorage.getItem("ident") == "") {
+                timer = setTimeout("checkIsLogin()", 500);
+                document.getElementById("componyInfo").innerHTML = "小蚂蚁移动教学平台 版权所有 恒坐标教育集团";
+            } else {
+                document.getElementById("componyInfo").innerHTML = "";
+                clearTimeout(timer);
+            }
         }
-    }
-    checkIsLogin();
-  </script>
+
+        checkIsLogin();
+    </script>
 
 </div>
 
@@ -103,17 +106,23 @@
 <script src="index.js?v=1.3.5"></script>
 
 <script>
-  // Google Analytics
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    // Google Analytics
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-  ga('create', 'UA-49610253-3', 'auto');
-  ga('send', 'pageview');
+    ga('create', 'UA-49610253-3', 'auto');
+    ga('send', 'pageview');
 
 </script>
-
 
 
 </body>

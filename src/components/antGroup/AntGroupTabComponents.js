@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import {Tabs, Breadcrumb, Icon, Card, Button, Row, Col, Table, Transfer} from 'antd';
-import {Menu, Dropdown, message, Pagination, Tag, Modal, Popover, Input, Collapse, notification} from 'antd';
+import {Menu, Dropdown, message, Pagination, Tag, Modal, Popover, Input, Collapse, notification, Progress} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import PersonCenterComponents from './PersonCenterComponents';
 import EmotionInputComponents from './EmotionInputComponents';
@@ -17,6 +17,7 @@ import {isToday} from '../../utils/utils';
 import {showLargeImg} from '../../utils/utils';
 import {MsgConnection} from '../../utils/msg_websocket_connection';
 import ConfirmModal from '../ConfirmModal';
+import GroupFileUploadComponents from './GroupFileUploadComponents';
 
 const TabPane = Tabs.TabPane;
 const confirm = Modal.confirm;
@@ -38,6 +39,8 @@ var liveInfosPanelChildren;
 var topScrollHeight = 0;
 var scrollType = "auto";
 var receiveMessageArray = [];
+//上传文件
+var uploadFileList = [];
 const AntGroupTabComponents = React.createClass({
 
     getInitialState() {
@@ -76,7 +79,9 @@ const AntGroupTabComponents = React.createClass({
             totalChatGroupCount: 0,  //当前用户的群组总数
             currentChatGroupPage: 1,    //群组列表页面的当前页码
             errorModalIsShow: false,
-            isDirectToBottom: true
+            isDirectToBottom: true,
+            uploadPercent: 0,
+            progressState: 'none',
         };
 
     },
@@ -120,7 +125,7 @@ const AntGroupTabComponents = React.createClass({
                 gt.scrollTop(parseInt(gt[0].scrollHeight));
             }
         }
-        console.log("did:"+gt[0].scrollHeight);
+        console.log("did:" + gt[0].scrollHeight);
     },
 
     componentDidMount() {
@@ -128,6 +133,132 @@ const AntGroupTabComponents = React.createClass({
         // document.onkeydown=this.checkKeyType;
         /*$("#emotionInput").bind("keydown",antGroup.checkKeyType);
         $(".emoji-wysiwyg-editor").bind("keydown",antGroup.checkKeyType);*/
+        window.__sendfile__ = this.sendFile;
+    },
+
+    /**
+     * 让上传组件显示
+     */
+    sendFile() {
+        //清空上传文件数组
+        uploadFileList.splice(0, uploadFileList.length);
+        antGroup.setState({cloudFileUploadModalVisible: true, uploadPercent: 0, progressState: 'none'});
+    },
+
+    /**
+     * 关闭上传文件弹窗
+     */
+    cloudFileUploadModalHandleCancel() {
+        antGroup.setState({"cloudFileUploadModalVisible": false});
+    },
+
+    /**
+     * 处理上传组件已上传的文件列表
+     */
+    handleFileSubmit(fileList) {
+        if (fileList == null || fileList.length == 0) {
+            uploadFileList.splice(0, uploadFileList.length);
+        }
+        for (var i = 0; i < fileList.length; i++) {
+            var fileJson = fileList[i];
+            var fileObj = fileJson.fileObj;
+            uploadFileList.push(fileObj);
+        }
+    },
+
+    /**
+     * 发送文件的回调
+     */
+    uploadFile() {
+        if (uploadFileList.length == 0) {
+            message.warning("请选择上传的文件,谢谢！");
+        } else {
+            var formData = new FormData();
+            for (var i = 0; i < uploadFileList.length; i++) {
+                formData.append("file" + i, uploadFileList[i]);
+                formData.append("name" + i, uploadFileList[i].name);
+            }
+            $.ajax({
+                type: "POST",
+                url: "http://101.201.45.125:8890/Excoord_Upload_Server/file/upload",
+                enctype: 'multipart/form-data',
+                data: formData,
+                // 告诉jQuery不要去处理发送的数据
+                processData: false,
+                // 告诉jQuery不要去设置Content-Type请求头
+                contentType: false,
+                xhr: function () {        //这是关键  获取原生的xhr对象  做以前做的所有事情
+                    var xhr = jQuery.ajaxSettings.xhr();
+                    xhr.upload.onload = function () {
+                        antGroup.setState({progressState: 'none'});
+                    };
+                    xhr.upload.onprogress = function (ev) {
+                        if (ev.lengthComputable) {
+                            var percent = 100 * ev.loaded / ev.total;
+                            antGroup.setState({uploadPercent: Math.round(percent), progressState: 'block'});
+                        }
+                    };
+                    return xhr;
+                },
+                success: function (responseStr) {
+                    if (responseStr != "") {
+                        var fileUrl = responseStr;
+                        //fileUrl文件的路径，根据路径创建文件发送对象，ms.send,关闭模态框
+                        //调用发送文件的方法
+                        antGroup.sendFileToOthers(fileUrl);
+                    }
+                },
+                error: function (responseStr) {
+                    antGroup.setState({cloudFileUploadModalVisible: false});
+                }
+            });
+
+        }
+    },
+
+    /**
+     * 拿到文件路径，发送message
+     */
+    sendFileToOthers(url) {
+        //文件名
+        var name = uploadFileList[0].name;
+        //文件大小
+        var length = uploadFileList[0].size;
+        //文件路径
+        var path = url;
+
+        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+
+        var uuid = antGroup.createUUID();
+
+        var cloudFile = {
+            "name": name,
+            "length": length,
+            "parentId": -2,
+            "createUid": loginUser.colUid,
+            "fileType": 0,
+            "schoolId": loginUser.schoolId,
+            "path": path,
+            "uuid": uuid
+        };
+
+        var createTime = (new Date()).valueOf();
+
+        var messageJson = {
+            'content': '', "createTime": createTime, 'fromUser': loginUser,
+            "toId": antGroup.state.userIdOfCurrentTalk, "command": "message", "hostId": loginUser.colUid,
+            "uuid": uuid, "toType": 1, "cloudFile": cloudFile
+        };
+
+        if (antGroup.state.optType == "sendGroupMessage") {
+            messageJson.toId = antGroup.state.currentGroupObj.chatGroupId;
+            messageJson.toType = 4;
+        }
+
+        var commandJson = {"command": "message", "data": {"message": messageJson}};
+        console.log(commandJson);
+
+        // ms.send(commandJson);
     },
 
     handleScroll(e) {
@@ -141,7 +272,7 @@ const AntGroupTabComponents = React.createClass({
             target = e.target;
         }
         var scrollTop = target.scrollTop;
-        console.log("scrollHeight before 1:"+target.scrollHeight);
+        console.log("scrollHeight before 1:" + target.scrollHeight);
         if (scrollTop <= 1) {
             antGroup.setState({"isDirectToBottom": false});
             if (antGroup.state.messageComeFrom == "groupMessage") {
@@ -310,6 +441,12 @@ const AntGroupTabComponents = React.createClass({
                             if (data.message.fromUser.colUid !== _this.state.loginUser.colUid) {
                                 _this.props.showMesAlert(true);
                                 _this.props.refresh();
+                            } else {
+                                //普通消息是我发出的
+                                //判断消息是文件消息，让model关闭
+                                // if () {
+                                //     antGroup.cloudFileUploadModalHandleCancel();
+                                // }
                             }
                         }
                         showImg = "";
@@ -328,6 +465,15 @@ const AntGroupTabComponents = React.createClass({
                         //动态表情
                         if (isEmpty(messageOfSinge.expressionItem) == false) {
                             var expressionItem = messageOfSinge.expressionItem.address;
+                        }
+                        //文件
+                        if (isEmpty(messageOfSinge.cloudFile) == false) {
+                            //文件名
+                            var fileName = messageOfSinge.cloudFile.name;
+                            //路径
+                            var filePath = messageOfSinge.cloudFile.path;
+                            //大小
+                            var fileLength = messageOfSinge.cloudFile.length;
                         }
                         uuidsArray.push(uuid);
                         var isExist = antGroup.checkSameMessageIsExist(uuid);
@@ -373,7 +519,10 @@ const AntGroupTabComponents = React.createClass({
                                     "messageReturnJson": messageReturnJson,
                                     "attachment": attachment,
                                     "attachmentType": attachmentType,
-                                    "expressionItem": expressionItem
+                                    "expressionItem": expressionItem,
+                                    "fileName": fileName,
+                                    "filePath": filePath,
+                                    "fileLength": fileLength
                                 };
                                 messageList.splice(0, 0, messageShow);
                                 // messageList.push(messageShow);
@@ -401,6 +550,7 @@ const AntGroupTabComponents = React.createClass({
                                     };
                                     // if (isEmpty(isTurnPage)) {
                                     // }
+                                    // console.log(userJson);
                                     antGroup.props.onNewMessage(userJson);
                                 }
                             }
@@ -424,7 +574,10 @@ const AntGroupTabComponents = React.createClass({
                                     "messageReturnJson": messageReturnJson,
                                     "attachment": attachment,
                                     "attachmentType": attachmentType,
-                                    "expressionItem": expressionItem
+                                    "expressionItem": expressionItem,
+                                    "fileName": fileName,
+                                    "filePath": filePath,
+                                    "fileLength": fileLength
                                 };
                                 messageList.splice(0, 0, messageShow);
                                 var userJson = {
@@ -473,19 +626,46 @@ const AntGroupTabComponents = React.createClass({
 
     },
 
+    /**
+     * 判断来的消息是什么消息
+     * @param messageOfSingle
+     * @returns {{}}
+     */
     getImgTag(messageOfSingle) {
-        if (isEmpty(messageOfSingle.content) == false) {
+        if (isEmpty(messageOfSingle.content.trim()) == false) {
             var imgTags = [];
             var messageReturnJson = {};
             messageReturnJson = antGroup.changeImgTextToTag(messageOfSingle.content, imgTags, messageReturnJson);
         } else {
             if (isEmpty(messageOfSingle.expressionItem) == false) {
+                //动态表情（ios的动态表情本来就是没有content的）
                 var expressionItem = messageOfSingle.expressionItem;
                 messageReturnJson = {messageType: "audioTag", expressionItem: expressionItem};
             } else if (isEmpty(messageOfSingle.attachment) == false) {
-                var address = messageOfSingle.attachment.address;
-                var content = messageOfSingle.attachment.content;
-                messageReturnJson = {messageType: "linkTag", address: address, content: content};
+                if (messageOfSingle.attachment.type == 4) {
+                    //没有内容链接
+                    var address = messageOfSingle.attachment.address;
+                    var content = messageOfSingle.attachment.content;
+                    messageReturnJson = {messageType: "linkTag", address: address, content: content};
+                } else if (messageOfSingle.attachment.type == 1) {
+                    //图片
+                    var address = messageOfSingle.attachment.address;
+                    messageReturnJson = {messageType: "bigImgTag", address: address};
+                } else if (messageOfSingle.attachment.type == 2) {
+                    //语音
+                    var address = messageOfSingle.attachment.address;
+                    messageReturnJson = {messageType: "videoTag", address: address};
+                }
+            } else if (isEmpty(messageOfSingle.cloudFile) == false) {
+                //上传的文件
+
+                //文件名
+                var name = messageOfSingle.cloudFile.name;
+                //文件大小
+                var length = messageOfSingle.cloudFile.length;
+                //文件路径
+                var path = messageOfSingle.cloudFile.path;
+                messageReturnJson = {messageType: "fileUpload", name: name, length: length, path: path};
             }
         }
         return messageReturnJson;
@@ -678,6 +858,15 @@ const AntGroupTabComponents = React.createClass({
                                 var expressionItem = messageOfSinge.expressionItem.address;
                             }
                             ;
+                            if (isEmpty(messageOfSinge.cloudFile) == false) {
+                                //文件名
+                                var fileName = messageOfSinge.cloudFile.name;
+                                //路径
+                                var filePath = messageOfSinge.cloudFile.path;
+                                //大小
+                                var fileLength = messageOfSinge.cloudFile.length;
+                            }
+                            ;
                             var uuidsArray = [];
                             var fromUser = messageOfSinge.fromUser;
                             var colUtype = fromUser.colUtype;
@@ -703,7 +892,10 @@ const AntGroupTabComponents = React.createClass({
                                     "messageReturnJson": messageReturnJson,
                                     "attachment": attachment,
                                     "attachmentType": attachmentType,
-                                    "expressionItem": expressionItem
+                                    "expressionItem": expressionItem,
+                                    "fileName": fileName,
+                                    "filePath": filePath,
+                                    "fileLength": fileLength
                                 };
                                 messageList.push(message);
                             }
@@ -777,6 +969,14 @@ const AntGroupTabComponents = React.createClass({
                             if (isEmpty(messageOfSinge.expressionItem) == false) {
                                 var expressionItem = messageOfSinge.expressionItem.address;
                             }
+                            if (isEmpty(messageOfSinge.cloudFile) == false) {
+                                //文件名
+                                var fileName = messageOfSinge.cloudFile.name;
+                                //路径
+                                var filePath = messageOfSinge.cloudFile.path;
+                                //大小
+                                var fileLength = messageOfSinge.cloudFile.length;
+                            }
                             var fromUser = messageOfSinge.fromUser;
                             var colUtype = fromUser.colUtype;
                             var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
@@ -801,7 +1001,10 @@ const AntGroupTabComponents = React.createClass({
                                     "messageReturnJson": messageReturnJson,
                                     "attachment": attachment,
                                     "attachmentType": attachmentType,
-                                    "expressionItem": expressionItem
+                                    "expressionItem": expressionItem,
+                                    "fileName": fileName,
+                                    "filePath": filePath,
+                                    "fileLength": fileLength
                                 };
                                 messageList.push(messageShow);
                             }
@@ -836,6 +1039,7 @@ const AntGroupTabComponents = React.createClass({
     },
 
     render() {
+        var progressState = antGroup.state.progressState;
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         var welcomeTitle;
         var returnToolBar = <div className="ant-tabs-right"><Button
@@ -867,6 +1071,14 @@ const AntGroupTabComponents = React.createClass({
                     var attachment = e.attachment;
                     var attachmentType = e.attachmentType;
                     var expressionItem = e.expressionItem;
+
+                    //文件名
+                    var fileName = e.fileName;
+                    //路径
+                    var filePath = e.filePath;
+                    //大小
+                    var fileLength = parseInt(e.fileLength / 1024);
+
                     if (isEmpty(messageType) == false && messageType == "getMessage") {
                         if (isEmpty(e.messageReturnJson) == false && isEmpty(e.messageReturnJson.messageType) == false) {
                             if (e.messageReturnJson.messageType == "text") {
@@ -874,43 +1086,27 @@ const AntGroupTabComponents = React.createClass({
                                 if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
                                     //我发出的
                                     if (isEmpty(attachment) == false) {
-                                        if (attachmentType == 1) {
-                                            //图片
-                                            messageTag = <li className="right" style={{'textAlign': 'right'}}>
-                                                <div className="u-name"><span>{fromUser}</span></div>
-                                                <div className="talk-cont"><span className="name">{userPhoneIcon}</span><img
-                                                    onClick={showLargeImg}
-                                                    src={attachment} style={{width: '220px', height: '150px'}}/><span><i
-                                                    className="borderballoon_dingcorner_le"></i></span></div>
-                                            </li>;
-                                        } else if (attachmentType == 2) {
-                                            //语音
-                                            messageTag = <li className="right" style={{'textAlign': 'right'}}>
-                                                <div className="u-name"><span>{fromUser}</span></div>
-                                                <div className="talk-cont"><span
-                                                    className="name">{userPhoneIcon}</span><span
-                                                    className="borderballoon_le"
-                                                    onClick={this.audioPlay.bind(this, attachment)}>这是一条语音消息，暂不支持播放 <audio
-                                                    id={attachment}
-                                                >
-                                                    <source src={attachment} type="audio/mpeg"></source>
-                                                </audio><i
-                                                    className="borderballoon_dingcorner_ri_no"></i></span></div>
-                                            </li>;
-                                        } else if (attachmentType == 4) {
-                                            //有内容的链接
-                                            messageTag = <li style={{'textAlign': 'right'}} className="right">
-                                                <div className="u-name"><span>{fromUser}</span></div>
-                                                <div className="talk-cont"><span
-                                                    className="name">{userPhoneIcon}</span><span
-                                                    className="borderballoon_le noom_cursor"
-                                                    onClick={this.readLink.bind(this, attachment)}><img
-                                                    style={{width: 40}}
-                                                    src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
-                                                    alt=""/><span className="span_link">{content}</span><i
-                                                    className="borderballoon_dingcorner_ri_no"></i></span></div>
-                                            </li>;
-                                        }
+                                        //有内容的链接
+                                        messageTag = <li style={{'textAlign': 'right'}} className="right">
+                                            <div className="u-name"><span>{fromUser}</span></div>
+                                            <div className="talk-cont"><span
+                                                className="name">{userPhoneIcon}</span><span
+                                                className="borderballoon_le noom_cursor"
+                                                onClick={this.readLink.bind(this, attachment)}><img
+                                                style={{width: 40}}
+                                                src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
+                                                alt=""/><span className="span_link">{content}</span><i
+                                                className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                        </li>;
+                                        // }
+                                    } else if (isEmpty(expressionItem) == false) {
+                                        //来自安卓的动态表情（安卓的动态表情的content里有“表情”两个字）
+                                        messageTag = <li className="right" style={{'textAlign': 'right'}}>
+                                            <div className="u-name"><span>{fromUser}</span></div>
+                                            <div className="talk-cont"><span className="name">{userPhoneIcon}</span><img
+                                                src={expressionItem} style={{width: '150px', height: '110px'}}/><span><i
+                                                className="borderballoon_dingcorner_le"></i></span></div>
+                                        </li>;
                                     } else {
                                         messageTag = <li className="right" style={{'textAlign': 'right'}}>
                                             <div className="u-name"><span>{fromUser}</span></div>
@@ -921,47 +1117,29 @@ const AntGroupTabComponents = React.createClass({
                                         </li>;
                                     }
                                 } else {
-                                    //我收到的，现要求有纯文本、图片、语音、链接
+                                    //我收到的
                                     if (isEmpty(attachment) == false) {
-                                        //有attachment
-                                        if (attachmentType == 1) {
-                                            //图片
-                                            messageTag = <li style={{'textAlign': 'left'}}>
-                                                <div className="u-name"><span>{fromUser}</span></div>
-                                                <div className="talk-cont"><span
-                                                    className="name">{userPhoneIcon}</span><img
-                                                    onClick={showLargeImg}
-                                                    style={{width: '220px', height: '150px'}} src={attachment}/><span><i
-                                                    className="borderballoon_dingcorner_ri_no"></i></span></div>
-                                            </li>;
-                                        } else if (attachmentType == 2) {
-                                            //语音
-                                            messageTag = <li style={{'textAlign': 'left'}}>
-                                                <div className="u-name"><span>{fromUser}</span></div>
-                                                <div className="talk-cont"><span
-                                                    className="name">{userPhoneIcon}</span><span
-                                                    className="borderballoon_le"
-                                                    onClick={this.audioPlay.bind(this, attachment)}>这是一条语音消息，暂不支持播放 <audio
-                                                    id={attachment}
-                                                >
-                                                    <source src={attachment} type="audio/mpeg"></source>
-                                                </audio><i
-                                                    className="borderballoon_dingcorner_ri_no"></i></span></div>
-                                            </li>;
-                                        } else if (attachmentType == 4) {
-                                            //有内容的链接
-                                            messageTag = <li style={{'textAlign': 'left'}}>
-                                                <div className="u-name"><span>{fromUser}</span></div>
-                                                <div className="talk-cont"><span
-                                                    className="name">{userPhoneIcon}</span><span
-                                                    className="borderballoon_le noom_cursor"
-                                                    onClick={this.readLink.bind(this, attachment)}><img
-                                                    style={{width: 40}}
-                                                    src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
-                                                    alt=""/><span className="span_link">{content}</span><i
-                                                    className="borderballoon_dingcorner_ri_no"></i></span></div>
-                                            </li>;
-                                        }
+                                        //有内容的链接
+                                        messageTag = <li style={{'textAlign': 'left'}}>
+                                            <div className="u-name"><span>{fromUser}</span></div>
+                                            <div className="talk-cont"><span
+                                                className="name">{userPhoneIcon}</span><span
+                                                className="borderballoon_le noom_cursor"
+                                                onClick={this.readLink.bind(this, attachment)}><img
+                                                style={{width: 40}}
+                                                src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
+                                                alt=""/><span className="span_link">{content}</span><i
+                                                className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                        </li>;
+                                    } else if (isEmpty(expressionItem) == false) {
+                                        //来自安卓的动态表情（安卓的动态表情的content里有“表情”两个字）
+                                        messageTag = <li style={{'textAlign': 'left'}}>
+                                            <div className="u-name"><span>{fromUser}</span></div>
+                                            <div className="talk-cont"><span
+                                                className="name">{userPhoneIcon}</span><img
+                                                style={{width: '150px', height: '110px'}} src={expressionItem}/><span><i
+                                                className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                        </li>;
                                     } else {
                                         messageTag = <li style={{'textAlign': 'left'}}>
                                             <div className="u-name"><span>{fromUser}</span></div>
@@ -993,6 +1171,7 @@ const AntGroupTabComponents = React.createClass({
                                     </li>;
                                 }
                             } else if (e.messageReturnJson.messageType == "audioTag") {
+                                //动态表情（iOS发来的，安卓发过来的表情里有“表情”两个汉字）
                                 if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
                                     //我发出的
                                     messageTag = <li className="right" style={{'textAlign': 'right'}}>
@@ -1013,8 +1192,8 @@ const AntGroupTabComponents = React.createClass({
                                 }
                             } else if (e.messageReturnJson.messageType == "linkTag") {
                                 //没有内容的链接
-
                                 if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
+                                    //我发出的
                                     messageTag = <li style={{'textAlign': 'right'}} className="right">
                                         <div className="u-name"><span>{fromUser}</span></div>
                                         <div className="talk-cont"><span
@@ -1027,6 +1206,7 @@ const AntGroupTabComponents = React.createClass({
                                             className="borderballoon_dingcorner_ri_no"></i></span></div>
                                     </li>;
                                 } else {
+                                    //我收到的
                                     messageTag = <li style={{'textAlign': 'left'}}>
                                         <div className="u-name"><span>{fromUser}</span></div>
                                         <div className="talk-cont"><span
@@ -1036,6 +1216,88 @@ const AntGroupTabComponents = React.createClass({
                                             style={{width: 40}}
                                             src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
                                             alt=""/><span className="span_link">默认</span><i
+                                            className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                    </li>;
+                                }
+                            } else if (e.messageReturnJson.messageType == "bigImgTag") {
+                                //图片
+                                if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
+                                    //我发出的
+                                    messageTag = <li className="right" style={{'textAlign': 'right'}}>
+                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><img
+                                            onClick={showLargeImg}
+                                            src={attachment} style={{width: '220px', height: '150px'}}/><span><i
+                                            className="borderballoon_dingcorner_le"></i></span></div>
+                                    </li>;
+                                } else {
+                                    //我收到的
+                                    messageTag = <li style={{'textAlign': 'left'}}>
+                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="talk-cont"><span
+                                            className="name">{userPhoneIcon}</span><img
+                                            onClick={showLargeImg}
+                                            style={{width: '220px', height: '150px'}} src={attachment}/><span><i
+                                            className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                    </li>;
+                                }
+                            } else if (e.messageReturnJson.messageType == "videoTag") {
+                                //语音
+                                if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
+                                    //我发出的
+                                    messageTag = <li className="right" style={{'textAlign': 'right'}}>
+                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="talk-cont"><span
+                                            className="name">{userPhoneIcon}</span><span
+                                            className="borderballoon_le"
+                                            onClick={this.audioPlay.bind(this, attachment)}>这是一条语音消息，暂不支持播放 <audio
+                                            id={attachment}
+                                        >
+                                                <source src={attachment} type="audio/mpeg"></source>
+                                            </audio><i
+                                            className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                    </li>;
+                                } else {
+                                    //我收到的
+                                    messageTag = <li style={{'textAlign': 'left'}}>
+                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="talk-cont"><span
+                                            className="name">{userPhoneIcon}</span><span
+                                            className="borderballoon_le"
+                                            onClick={this.audioPlay.bind(this, attachment)}>这是一条语音消息，暂不支持播放 <audio
+                                            id={attachment}
+                                        >
+                                                <source src={attachment} type="audio/mpeg"></source>
+                                            </audio><i
+                                            className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                    </li>;
+                                }
+                            } else if (e.messageReturnJson.messageType == "fileUpload") {
+                                //文件
+                                if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
+                                    //我发出的
+                                    messageTag = <li style={{'textAlign': 'right'}} className="right">
+                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="talk-cont"><span
+                                            className="name">{userPhoneIcon}</span><span
+                                            className="borderballoon_le noom_cursor"
+                                            onClick={this.readLink.bind(this, filePath)}><img
+                                            style={{width: 40}}
+                                            src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
+                                            alt=""/><span className="span_link">{fileName}</span><i
+                                            className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                    </li>;
+                                } else {
+                                    //我收到的
+                                    messageTag = <li style={{'textAlign': 'left'}}>
+                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="talk-cont"><span
+                                            className="name">{userPhoneIcon}</span><span
+                                            className="borderballoon_le noom_cursor"
+                                            onClick={this.readLink.bind(this, filePath)}><img
+                                            style={{width: 40}}
+                                            src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
+                                            alt=""/><span className="span_link">{fileName}</span><i
                                             className="borderballoon_dingcorner_ri_no"></i></span></div>
                                     </li>;
                                 }
@@ -1094,7 +1356,8 @@ const AntGroupTabComponents = React.createClass({
             >
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div id="personTalk">
-                        <div className="group_talk 44" id="groupTalk" onMouseOver={this.handleScrollType.bind(this, Event)}
+                        <div className="group_talk 44" id="groupTalk"
+                             onMouseOver={this.handleScrollType.bind(this, Event)}
                              onScroll={this.handleScroll}>
                             <ul>
                                 {messageTagArray}
@@ -1114,6 +1377,43 @@ const AntGroupTabComponents = React.createClass({
                     {userPhoneCard}
                     {tabComponent}
                 </div>
+
+                <Modal
+                    visible={antGroup.state.cloudFileUploadModalVisible}
+                    title="上传文件"
+                    className="modol_width"
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    onCancel={antGroup.cloudFileUploadModalHandleCancel}
+                    transitionName=""  //禁用modal的动画效果
+                    footer={[
+                        <div>
+                            <Button type="primary" htmlType="submit" className="login-form-button"
+                                    onClick={antGroup.uploadFile}>
+                                发送
+                            </Button>
+                            <Button type="ghost" htmlType="reset" className="login-form-button"
+                                    onClick={antGroup.cloudFileUploadModalHandleCancel}>
+                                取消
+                            </Button>
+                        </div>
+                    ]}
+                >
+                    <Row>
+                        <Col span={4}>上传文件：</Col>
+                        <Col span={20}>
+                            <div>
+                                <GroupFileUploadComponents ref="fileUploadCom"
+                                                           fatherState={antGroup.state.cloudFileUploadModalVisible}
+                                                           callBackParent={antGroup.handleFileSubmit}/>
+                            </div>
+                            <div style={{display: progressState}}>
+                                <Progress percent={antGroup.state.uploadPercent} width={80} strokeWidth={4}/>
+                            </div>
+                        </Col>
+
+                    </Row>
+                </Modal>
+
             </div>
         );
     },
