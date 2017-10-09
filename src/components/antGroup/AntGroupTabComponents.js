@@ -46,7 +46,8 @@ var isNewPage = false;
 //此处返回的消息数量
 var currentReturnCount=0;
 var didCount = 0;
-var isRender=false;
+var isRendering=false;
+var isRequesting = false;
 const AntGroupTabComponents = React.createClass({
 
     getInitialState() {
@@ -60,7 +61,7 @@ const AntGroupTabComponents = React.createClass({
             optType: 'getUserList',
             userContactsData: [],
             currentPerson: -1,
-            messageList: '',
+            messageList: [],
             userIdOfCurrentTalk: '',
             userGroupsData: [],
             createChatGroupModalVisible: false,
@@ -124,19 +125,22 @@ const AntGroupTabComponents = React.createClass({
         }
     },
 
+
+
     componentDidUpdate() {
         var gt = $('#groupTalk');
         var _this = this;
         if(isDirectToBottom==false){
-            if(isNewPage==true){
-               setTimeout(function () {
-                    var nowHeight = gt[0].scrollHeight;
-                    console.log("nowHeight:"+nowHeight+"=======preHeight:"+_this.state.preHeight);
-                    var newHeight = Number(nowHeight) - Number(_this.state.preHeight);
-                    console.log("newHeight====>"+Number(newHeight));
-                    gt.scrollTop(Number(newHeight));
-               },1);
-            }
+            // if(isNewPage==true){
+            //
+            //     //setTimeout(function () {
+            //         var nowHeight = gt[0].scrollHeight;
+            //         console.log("nowHeight:"+nowHeight+"=======preHeight:"+_this.state.preHeight);
+            //         var newHeight = Number(nowHeight) - Number(_this.state.preHeight);
+            //         console.log("newHeight====>"+Number(newHeight));
+            //         gt.scrollTop(Number(newHeight));
+            //    //},1);
+            // }
         }else{
             topScrollHeight = gt[0].scrollHeight;
             gt.scrollTop(parseInt(gt[0].scrollHeight));
@@ -294,7 +298,7 @@ const AntGroupTabComponents = React.createClass({
             // this.setState({isDirectToBottom:false});
         }
         isNewPage = false;
-        if (scrollTop <= 1 && isRender == false) {
+        if (scrollTop <= 1 && isRendering == false && !isRequesting) {
             // "isDirectToBottom": false,
             didCount = 0;
             antGroup.setState({"preHeight":target.scrollHeight});
@@ -865,6 +869,22 @@ const AntGroupTabComponents = React.createClass({
         }
     },
 
+    addMessageList(messages){
+        antGroup.setState({messageList: antGroup.state.messageList.concat(messages)});
+        var gt = $('#groupTalk');
+        var _this = this;
+        if(isDirectToBottom==false){
+
+                //setTimeout(function () {
+                var nowHeight = gt[0].scrollHeight;
+                console.log("nowHeight:"+nowHeight+"=======preHeight:"+_this.state.preHeight);
+                var newHeight = Number(nowHeight) - Number(_this.state.preHeight);
+                console.log("newHeight====>"+Number(newHeight));
+                gt.scrollTop(Number(newHeight));
+                //},1);
+        }
+    },
+
     /**
      * 获取群聊天信息
      */
@@ -876,11 +896,14 @@ const AntGroupTabComponents = React.createClass({
             "chatGroupId": groupObj.chatGroupId,
             "timeNode": timeNode
         };
+        isRequesting = true;
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                isRequesting = false;
                 if (ret.msg == "调用成功" && ret.success == true) {
                     var i = 0;
                     antGroup.tipNotic(ret.response);
+                    var messageList = [];
                     ret.response.forEach(function (e) {
                         if (e.command == "message") {
                             var messageOfSinge = e;
@@ -946,11 +969,13 @@ const AntGroupTabComponents = React.createClass({
                         var newHeight = Number(nowHeight) - Number(_this.state.preHeight);
                         gt.scrollTop(Number(newHeight));
                     },1);*/
-                    antGroup.setState({"messageList": messageList});
+                    //antGroup.setState({"messageList": messageList});
+                    antGroup.addMessageList(messageList);
                     // currentReturnCount = ret.response.length;
                 }
             },
             onError: function (error) {
+                isRequesting = false;
                 message.error(error);
             }
         });
@@ -996,6 +1021,14 @@ const AntGroupTabComponents = React.createClass({
         //要的是文件的id,创建人的id
     },
 
+    handlePrependChatDataItem(data, showDate) {
+        let dom = $('<div style="width: 100%; height: auto;"></div>');
+        var groupListCon = jQuery("#groupTalk").children().eq(0);
+        groupListCon.prepend(dom);
+        $(this.refs.dataBox).prepend(dom);
+        ReactDOM.render(this,dom[0]);
+    },
+
     /**
      * 获取个人的聊天信息
      */
@@ -1008,8 +1041,10 @@ const AntGroupTabComponents = React.createClass({
             "user2Id": sessionStorage.getItem("ident"),
             "timeNode": timeNode
         };
+        isRequesting = true;
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                isRequesting = false;
                 if (ret.msg == "调用成功" && ret.success == true) {
                     var i = 0;
                     antGroup.tipNotic(ret.response);
@@ -1065,7 +1100,8 @@ const AntGroupTabComponents = React.createClass({
                                     "filePath": filePath,
                                     "fileLength": fileLength
                                 };
-                                messageList.push(messageShow);
+                                //messageList.push(messageShow);
+                                handlePrependChatDataItem()
                             }
                             /*var gt = $('#groupTalk');
                             setTimeout(function () {
@@ -1075,11 +1111,11 @@ const AntGroupTabComponents = React.createClass({
                             },1);*/
                         }
                     });
-                    isRender=true;
+                    isRendering=true;
                     antGroup.setState({"messageList": messageList});
                     currentReturnCount = ret.response.length;
                     setTimeout(function () {
-                        isRender=false;
+                        isRendering=false;
                     },5);
                 }
                 /*var gt = $('#groupTalk');
@@ -1092,6 +1128,7 @@ const AntGroupTabComponents = React.createClass({
                 }*/
             },
             onError: function (error) {
+                isRequesting = false;
                 message.error(error);
             }
         });
