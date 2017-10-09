@@ -1126,7 +1126,6 @@ const AntGroupTabComponents = React.createClass({
                         gt.scrollTop(parseInt(gt[0].scrollHeight)*2-10);
                     }
                 }*/
-                
             },
             onError: function (error) {
                 isRequesting = false;
