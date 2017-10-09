@@ -24,7 +24,7 @@ const confirm = Modal.confirm;
 const Panel = Collapse.Panel;
 
 var antGroup;
-var messageList = [];
+// var messageList = [];
 //消息通信js
 var ms;
 var imgTagArray = [];
@@ -48,6 +48,7 @@ var currentReturnCount=0;
 var didCount = 0;
 var isRendering=false;
 var isRequesting = false;
+var preHeight = 0;
 const AntGroupTabComponents = React.createClass({
 
     getInitialState() {
@@ -86,8 +87,6 @@ const AntGroupTabComponents = React.createClass({
             totalChatGroupCount: 0,  //当前用户的群组总数
             currentChatGroupPage: 1,    //群组列表页面的当前页码
             errorModalIsShow: false,
-            //isDirectToBottom: true,
-            preHeight:0,
             uploadPercent: 0,
             progressState: 'none',
         };
@@ -118,32 +117,9 @@ const AntGroupTabComponents = React.createClass({
                 antGroup.setState({"optType": "sendGroupMessage"});
                 antGroup.sendGroupMessage(antGroup.props.groupObj, timeNode);
                 if (isEmpty(actionFrom) == false) {
-                    // antGroup.turnToChatGroupMessagePage(antGroup.props.groupObj);
                     antGroup.turnToMessagePage(antGroup.props.groupObj, messageType);
                 }
             }
-        }
-    },
-
-
-
-    componentDidUpdate() {
-        var gt = $('#groupTalk');
-        var _this = this;
-        if(isDirectToBottom==false){
-            // if(isNewPage==true){
-            //
-            //     //setTimeout(function () {
-            //         var nowHeight = gt[0].scrollHeight;
-            //         console.log("nowHeight:"+nowHeight+"=======preHeight:"+_this.state.preHeight);
-            //         var newHeight = Number(nowHeight) - Number(_this.state.preHeight);
-            //         console.log("newHeight====>"+Number(newHeight));
-            //         gt.scrollTop(Number(newHeight));
-            //    //},1);
-            // }
-        }else{
-            topScrollHeight = gt[0].scrollHeight;
-            gt.scrollTop(parseInt(gt[0].scrollHeight));
         }
     },
 
@@ -290,20 +266,10 @@ const AntGroupTabComponents = React.createClass({
             target = e.target;
         }
         var scrollTop = target.scrollTop;
-        if(target.scrollHeight - target.offsetHeight <= target.scrollTop){
-            isDirectToBottom = true;
-            // this.setState({isDirectToBottom:true});
-        }else{
-            isDirectToBottom = false;
-            // this.setState({isDirectToBottom:false});
-        }
         isNewPage = false;
+        preHeight = target.scrollHeight;
         if (scrollTop <= 1 && isRendering == false && !isRequesting) {
-            // "isDirectToBottom": false,
             didCount = 0;
-            antGroup.setState({"preHeight":target.scrollHeight});
-            // preHeight = target.scrollHeight;
-            isNewPage = true;
             if (antGroup.state.messageComeFrom == "groupMessage") {
                 antGroup.getChatGroupMessages(antGroup.state.currentGroupObj, antGroup.state.firstMessageCreateTime);
             } else {
@@ -372,8 +338,7 @@ const AntGroupTabComponents = React.createClass({
     turnToMessagePage(operatorObj, messageType, isTurnPage) {
         var _this = this;
         var userId;
-        messageList.splice(0);
-        currentReturnCount = 0;
+        var messageList = [];
         ms.msgWsListener = {
             onError: function (errorMsg) {
                 if (_this.state.errorModalIsShow == false) {
@@ -407,10 +372,12 @@ const AntGroupTabComponents = React.createClass({
                 }
                 var gtScrollHeight = gt[0].scrollHeight;
                 var gtScrollTop = gt[0].scrollTop;
-                if(parseInt(gtScrollHeight)-parseInt(gtScrollTop)<=10){
-                    // _this.setState({"isDirectToBottom":true});
+                if(parseInt(gtScrollHeight)-parseInt(gtScrollTop) === gt[0].clientHeight){
                     isDirectToBottom=true;
+                }else{
+                    isDirectToBottom=false;
                 }
+                var messageList = [];
                 //获取messageList
                 var command = info.command;
                 if (isEmpty(command) == false) {
@@ -467,7 +434,7 @@ const AntGroupTabComponents = React.createClass({
                             };
                             ms.send(receivedCommand);
                         }
-                        antGroup.setState({"messageList": messageList});
+                        antGroup.addMessageList(messageList,"first");
                     } else if (command == "message") {
                         var data = info.data;
                         if (data.message.command == "biu_message") {
@@ -560,8 +527,7 @@ const AntGroupTabComponents = React.createClass({
                                     "filePath": filePath,
                                     "fileLength": fileLength
                                 };
-                                messageList.splice(0, 0, messageShow);
-                                // messageList.push(messageShow);
+                                messageList.push(messageShow);
                                 if (isEmpty(messageOfSinge.toUser) == false) {
                                     var userJson = {
                                         key: messageOfSinge.toUser.colUid,
@@ -614,7 +580,8 @@ const AntGroupTabComponents = React.createClass({
                                     "filePath": filePath,
                                     "fileLength": fileLength
                                 };
-                                messageList.splice(0, 0, messageShow);
+                                //messageList.splice(0, 0, messageShow);
+                                messageList.push(messageShow);
                                 var userJson = {
                                     key: messageOfSinge.toChatGroup.chatGroupId,
                                     // key: _this.state.loginUser.colUid,
@@ -640,7 +607,8 @@ const AntGroupTabComponents = React.createClass({
                                 antGroup.props.onNewMessage(userJson);
                             }
                         }
-                        antGroup.setState({"messageList": messageList});
+                        antGroup.addMessageList(messageList,"first");
+                        //antGroup.setState({"messageList": messageList});
                     }
                 }
             }
@@ -788,7 +756,6 @@ const AntGroupTabComponents = React.createClass({
             };
             antGroup.props.onNewMessage(userJson);
             isDirectToBottom = true;
-        // , "isDirectToBottom": true
             antGroup.setState({"messageList": messageList});
         }
     },
@@ -833,13 +800,9 @@ const AntGroupTabComponents = React.createClass({
      * @param index　当前行的索引顺序，从０开始
      */
     sendGroupMessage(groupObj, timeNode) {
-        currentReturnCount = 0;
-        messageList.splice(0);
         scrollType = "auto";
         isDirectToBottom = true;
-        isNewPage = false;
-        // "isDirectToBottom": true,
-        antGroup.setState({"messageComeFrom": "groupMessage", "currentUser": ''});
+        antGroup.setState({"messageComeFrom": "groupMessage", "currentUser": '',messageList:[]});
         antGroup.reGetChatMessage(groupObj, timeNode);
         this.props.showMesAlert(false);
     },
@@ -847,7 +810,6 @@ const AntGroupTabComponents = React.createClass({
     reGetChatMessage(groupObj, timeNode) {
 
         antGroup.getChatGroupMessages(groupObj, timeNode);
-        // antGroup.turnToChatGroupMessagePage(groupObj);
         var messageType = "groupMessage";
         antGroup.turnToMessagePage(groupObj, messageType);
     },
@@ -869,19 +831,26 @@ const AntGroupTabComponents = React.createClass({
         }
     },
 
-    addMessageList(messages){
-        antGroup.setState({messageList: antGroup.state.messageList.concat(messages)});
-        var gt = $('#groupTalk');
-        var _this = this;
-        if(isDirectToBottom==false){
+    addMessageList(messages,firstOrLast){
+        if(isEmpty(firstOrLast)==false){
+            antGroup.state.messageList.unshift(messages[0]);
+            antGroup.setState({messageList: antGroup.state.messageList});
+        }else{
+            antGroup.setState({messageList: antGroup.state.messageList.concat(messages)});
+        }
 
-                //setTimeout(function () {
-                var nowHeight = gt[0].scrollHeight;
-                console.log("nowHeight:"+nowHeight+"=======preHeight:"+_this.state.preHeight);
-                var newHeight = Number(nowHeight) - Number(_this.state.preHeight);
-                console.log("newHeight====>"+Number(newHeight));
-                gt.scrollTop(Number(newHeight));
-                //},1);
+        var gt = $('#groupTalk');
+        if(isDirectToBottom==false){
+                if(isNewPage==true){
+                    var nowHeight = gt[0].scrollHeight;
+                    console.log("nowHeight:"+nowHeight+"=======preHeight:"+preHeight);
+                    var newHeight = Number(nowHeight) - Number(preHeight);
+                    console.log("newHeight====>"+Number(newHeight));
+                    gt.scrollTop(Number(newHeight));
+                }
+        }else{
+            topScrollHeight = gt[0].scrollHeight;
+            gt.scrollTop(parseInt(gt[0].scrollHeight));
         }
     },
 
@@ -889,8 +858,6 @@ const AntGroupTabComponents = React.createClass({
      * 获取群聊天信息
      */
     getChatGroupMessages(groupObj, timeNode) {
-        var _this = this;
-        currentReturnCount = 0;
         var param = {
             "method": 'getChatGroupMessages',
             "chatGroupId": groupObj.chatGroupId,
@@ -904,6 +871,7 @@ const AntGroupTabComponents = React.createClass({
                     var i = 0;
                     antGroup.tipNotic(ret.response);
                     var messageList = [];
+                    isNewPage = true;
                     ret.response.forEach(function (e) {
                         if (e.command == "message") {
                             var messageOfSinge = e;
@@ -963,15 +931,13 @@ const AntGroupTabComponents = React.createClass({
                             }
                         }
                     });
-                    /*var gt = $('#groupTalk');
-                    setTimeout(function () {
-                        var nowHeight = gt[0].scrollHeight;
-                        var newHeight = Number(nowHeight) - Number(_this.state.preHeight);
-                        gt.scrollTop(Number(newHeight));
-                    },1);*/
-                    //antGroup.setState({"messageList": messageList});
+                    var gt = $('#groupTalk');
+                    if(parseInt(gt[0].scrollHeight)-parseInt(gt[0].scrollTop) === gt[0].clientHeight){
+                        isDirectToBottom=true;
+                    }else{
+                        isDirectToBottom=false;
+                    }
                     antGroup.addMessageList(messageList);
-                    // currentReturnCount = ret.response.length;
                 }
             },
             onError: function (error) {
@@ -986,11 +952,9 @@ const AntGroupTabComponents = React.createClass({
      * @param timeNode
      */
     getPersonMessage(userObj, timeNode) {
-        messageList.splice(0);
         isDirectToBottom = true;
         isNewPage = false;
-        // "isDirectToBottom": true,
-        antGroup.setState({"messageComeFrom": "personMessage", "currentGroupObj": ''});
+        antGroup.setState({"messageComeFrom": "personMessage", "currentGroupObj": '',messageList:[]});
         antGroup.getUser2UserMessages(userObj, timeNode);
         var messageType = "message";
         antGroup.turnToMessagePage(userObj, messageType);
@@ -1048,6 +1012,8 @@ const AntGroupTabComponents = React.createClass({
                 if (ret.msg == "调用成功" && ret.success == true) {
                     var i = 0;
                     antGroup.tipNotic(ret.response);
+                    var messageList = [];
+                    isNewPage = true;
                     ret.response.forEach(function (e) {
                         if (e.command == "message") {
                             var messageOfSinge = e;
@@ -1100,32 +1066,18 @@ const AntGroupTabComponents = React.createClass({
                                     "filePath": filePath,
                                     "fileLength": fileLength
                                 };
-                                //messageList.push(messageShow);
-                                handlePrependChatDataItem()
+                                messageList.push(messageShow);
                             }
-                            /*var gt = $('#groupTalk');
-                            setTimeout(function () {
-                                var nowHeight = gt[0].scrollHeight;
-                                var newHeight = Number(nowHeight) - Number(_this.state.preHeight);
-                                gt.scrollTop(Number(newHeight));
-                            },1);*/
                         }
                     });
-                    isRendering=true;
-                    antGroup.setState({"messageList": messageList});
-                    currentReturnCount = ret.response.length;
-                    setTimeout(function () {
-                        isRendering=false;
-                    },5);
-                }
-                /*var gt = $('#groupTalk');
-                if(typeof(gt)==="object" && typeof(gt).length==="number" && gt.length!=0){
-                    topScrollHeight = gt[0].scrollHeight;
-                    console.log("getUser--------->"+topScrollHeight);
-                    if(antGroup.state.isDirectToBottom==false){
-                        gt.scrollTop(parseInt(gt[0].scrollHeight)*2-10);
+                    var gt = $('#groupTalk');
+                    if(parseInt(gt[0].scrollHeight)-parseInt(gt[0].scrollTop) === gt[0].clientHeight){
+                        isDirectToBottom=true;
+                    }else{
+                        isDirectToBottom=false;
                     }
-                }*/
+                    antGroup.addMessageList(messageList);
+                }
             },
             onError: function (error) {
                 isRequesting = false;
