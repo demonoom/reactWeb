@@ -995,7 +995,7 @@
                 ind++;
                 refindex = ind > refindex ? ind : refindex;
 
-            })
+            });
             return refindex;
         }
 

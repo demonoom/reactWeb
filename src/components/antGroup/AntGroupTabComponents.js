@@ -85,6 +85,7 @@ const AntGroupTabComponents = React.createClass({
         };
 
     },
+
     /**
      * 话题tab切换响应函数
      * @param activeKey
@@ -258,8 +259,6 @@ const AntGroupTabComponents = React.createClass({
         }
 
         var commandJson = {"command": "message", "data": {"message": messageJson}};
-        console.log(commandJson);
-
         ms.send(commandJson);
     },
 
@@ -451,6 +450,7 @@ const AntGroupTabComponents = React.createClass({
                                 }
                             }
                         }
+                        ;
                         showImg = "";
                         var messageOfSinge = data.message;
                         var fromUser = messageOfSinge.fromUser;
@@ -476,6 +476,10 @@ const AntGroupTabComponents = React.createClass({
                             var filePath = messageOfSinge.cloudFile.path;
                             //大小
                             var fileLength = messageOfSinge.cloudFile.length;
+                            //uuid
+                            var fileUid = messageOfSinge.cloudFile.uuid;
+                            //文件CreateUid
+                            var fileCreateUid = messageOfSinge.cloudFile.createUid;
                         }
                         uuidsArray.push(uuid);
                         var isExist = antGroup.checkSameMessageIsExist(uuid);
@@ -524,7 +528,9 @@ const AntGroupTabComponents = React.createClass({
                                     "expressionItem": expressionItem,
                                     "fileName": fileName,
                                     "filePath": filePath,
-                                    "fileLength": fileLength
+                                    "fileLength": fileLength,
+                                    "fileUid": fileUid,
+                                    "fileCreateUid": fileCreateUid
                                 };
                                 messageList.splice(0, 0, messageShow);
                                 // messageList.push(messageShow);
@@ -545,14 +551,14 @@ const AntGroupTabComponents = React.createClass({
                                 if (isEmpty(messageOfSinge.toUser) == false) {
                                     var userJson = {
                                         key: messageOfSinge.toUser.colUid,
-                                        // "fromUser": messageOfSinge.toUser,
-                                        "fromUser": messageOfSinge.fromUser,
+                                        "fromUser": messageOfSinge.toUser,
+                                        // "fromUser": messageOfSinge.fromUser,个人消息收到的时候要写成fromUser，而发出的要写成
+                                        //toUser，否则会造成左侧联系人丢失。
                                         contentArray: contentArray,
                                         "messageToType": 1
                                     };
                                     // if (isEmpty(isTurnPage)) {
                                     // }
-                                    // console.log(userJson);
                                     antGroup.props.onNewMessage(userJson);
                                 }
                             }
@@ -579,7 +585,9 @@ const AntGroupTabComponents = React.createClass({
                                     "expressionItem": expressionItem,
                                     "fileName": fileName,
                                     "filePath": filePath,
-                                    "fileLength": fileLength
+                                    "fileLength": fileLength,
+                                    "fileUid": fileUid,
+                                    "fileCreateUid": fileCreateUid
                                 };
                                 messageList.splice(0, 0, messageShow);
                                 var userJson = {
@@ -706,6 +714,9 @@ const AntGroupTabComponents = React.createClass({
         return messageReturnJson;
     },
 
+    /**
+     *发送文字信息的回调
+     **/
     sendMessage(e) {
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
@@ -737,22 +748,24 @@ const AntGroupTabComponents = React.createClass({
         }
         var commandJson = {"command": "message", "data": {"message": messageJson}};
         ms.send(commandJson);
+        //send过信息之后要做的事情，联动
         antGroup.initMyEmotionInput();
         if (isEmpty(sendType) == false && sendType == "groupSend") {
             antGroup.setState({"isDirectToBottom": true});
         } else {
             messageList.splice(0, 0, messageJson);
-            // 更新左侧消息动态列表
-            var showCreateTime = formatHM(createTime);
-            var contentJson = {"content": messageContent, "createTime": showCreateTime};
-            var contentArray = [contentJson];
-            var userJson = {
-                key: antGroup.state.currentUser.colUid,
-                "fromUser": antGroup.state.currentUser,
-                contentArray: contentArray,
-                "messageToType": 1
-            };
-            antGroup.props.onNewMessage(userJson);
+            // // 更新左侧消息动态列表
+            // var showCreateTime = formatHM(createTime);
+            // var contentJson = {"content": messageContent, "createTime": showCreateTime};
+            // var contentArray = [contentJson];
+            // var userJson = {
+            //     key: antGroup.state.currentUser.colUid,
+            //     "fromUser": antGroup.state.currentUser,
+            //     contentArray: contentArray,
+            //     "messageToType": 1
+            // };
+            // console.log(userJson);
+            // antGroup.props.onNewMessage(userJson);
             antGroup.setState({"messageList": messageList, "isDirectToBottom": true});
         }
     },
@@ -867,6 +880,10 @@ const AntGroupTabComponents = React.createClass({
                                 var filePath = messageOfSinge.cloudFile.path;
                                 //大小
                                 var fileLength = messageOfSinge.cloudFile.length;
+                                //uuid
+                                var fileUid = messageOfSinge.cloudFile.uuid;
+                                //文件CreateUid
+                                var fileCreateUid = messageOfSinge.cloudFile.createUid;
                             }
                             ;
                             var uuidsArray = [];
@@ -897,7 +914,9 @@ const AntGroupTabComponents = React.createClass({
                                     "expressionItem": expressionItem,
                                     "fileName": fileName,
                                     "filePath": filePath,
-                                    "fileLength": fileLength
+                                    "fileLength": fileLength,
+                                    "fileUid": fileUid,
+                                    "fileCreateUid": fileCreateUid
                                 };
                                 messageList.push(message);
                             }
@@ -934,19 +953,47 @@ const AntGroupTabComponents = React.createClass({
     },
 
     /**
-     *查看链接的回调
+     *预览文件的回调
      */
-    readLink(id) {
-        let obj = {mode: 'teachingAdmin', url: id, title: ""};
+    watchFile(url, fileUid, fileCreateUid) {
+        // let obj = {mode: 'teachingAdmin', url: id, title: ""};
+        // LP.Start(obj);
+        // console.log(id);
+        // console.log(fileUid);
+        // console.log(fileCreateUid);
+        //文件的uuid和创建人的id
+        // var fileUid = fileUid;
+        // var fileCreateUid = fileCreateUid;
+        var url = "http://www.maaee.com/Excoord_PhoneService/cloudFile/cloudFileShow/" + fileUid + "/" + fileCreateUid;
+        this.view(event, url, name);
+    },
+
+    view(e, url, tit) {
+        e = e || window.event;
+        if (e.nativeEvent) {
+            e.nativeEvent.stopImmediatePropagation();
+        }
+        e.stopPropagation();
+        e.preventDefault();
+        e.cancelBubble = true;
+
+        let mode = (tit) => {
+            let refArr = tit.split('.');
+            let type = refArr[refArr.length - 1];
+            return type;
+        };
+
+        let obj = {mode: mode(tit), title: tit, url: url, width: '380px'};
+
         LP.Start(obj);
     },
 
     /**
-     * 预览文件的回调
+     * 查看链接的回调
      */
-    watchFile(src) {
-        console.log(src);
-        //要的是文件的id,创建人的id
+    readLink(id) {
+        let obj = {mode: 'teachingAdmin', url: id, title: ""};
+        LP.Start(obj);
     },
 
     /**
@@ -986,6 +1033,10 @@ const AntGroupTabComponents = React.createClass({
                                 var filePath = messageOfSinge.cloudFile.path;
                                 //大小
                                 var fileLength = messageOfSinge.cloudFile.length;
+                                //uuid
+                                var fileUid = messageOfSinge.cloudFile.uuid;
+                                //文件CreateUid
+                                var fileCreateUid = messageOfSinge.cloudFile.createUid;
                             }
                             var fromUser = messageOfSinge.fromUser;
                             var colUtype = fromUser.colUtype;
@@ -1014,7 +1065,9 @@ const AntGroupTabComponents = React.createClass({
                                     "expressionItem": expressionItem,
                                     "fileName": fileName,
                                     "filePath": filePath,
-                                    "fileLength": fileLength
+                                    "fileLength": fileLength,
+                                    "fileUid": fileUid,
+                                    "fileCreateUid": fileCreateUid
                                 };
                                 messageList.push(messageShow);
                             }
@@ -1088,6 +1141,10 @@ const AntGroupTabComponents = React.createClass({
                     var filePath = e.filePath;
                     //大小
                     var fileLength = (e.fileLength / 1024).toFixed(2);
+                    //文件的uuid
+                    var fileUid = e.fileUid
+                    //文件的createUid
+                    var fileCreateUid = e.fileCreateUid
 
                     if (isEmpty(messageType) == false && messageType == "getMessage") {
                         if (isEmpty(e.messageReturnJson) == false && isEmpty(e.messageReturnJson.messageType) == false) {
@@ -1102,7 +1159,7 @@ const AntGroupTabComponents = React.createClass({
                                             <div className="talk-cont"><span
                                                 className="name">{userPhoneIcon}</span><span
                                                 className="borderballoon_le noom_cursor"
-                                                onClick={this.readLink.bind(this, attachment)}><img
+                                                onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}><img
                                                 style={{width: 40}}
                                                 src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
                                                 alt=""/><span className="span_link">{content}</span><i
@@ -1125,7 +1182,8 @@ const AntGroupTabComponents = React.createClass({
                                                 className="name">{userPhoneIcon}</span><span
 
                                                 className="borderballoon noom_cursor"
-                                                onClick={this.readLink.bind(this, filePath)}>
+                                                onClick={this.watchFile.bind(this, filePath,
+                                                    fileUid, fileCreateUid)}>
                                                 <div className="span_link_div"><span
                                                     className="span_link">{fileName}</span><span
                                                     className="span_link password_ts">{fileLength}kb</span></div>
@@ -1152,7 +1210,7 @@ const AntGroupTabComponents = React.createClass({
                                             <div className="talk-cont"><span
                                                 className="name">{userPhoneIcon}</span><span
                                                 className="borderballoon_le noom_cursor"
-                                                onClick={this.readLink.bind(this, attachment)}><img
+                                                onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}><img
                                                 style={{width: 40}}
                                                 src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
                                                 alt=""/><span className="span_link">{content}</span><i
@@ -1165,7 +1223,7 @@ const AntGroupTabComponents = React.createClass({
                                             <div className="talk-cont"><span
                                                 className="name">{userPhoneIcon}</span><span
                                                 className="borderballoon_le noom_cursor"
-                                                onClick={this.readLink.bind(this, filePath)}><img
+                                                onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}><img
                                                 className="upexam_float"
                                                 style={{width: 40}}
                                                 src="../src/components/images/lALPBY0V4pLs8fFISA_72_72.png"
@@ -1242,7 +1300,7 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><span
                                             className="borderballoon_le noom_cursor"
-                                            onClick={this.readLink.bind(this, attachment)}><img
+                                            onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}><img
                                             style={{width: 40}}
                                             src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
                                             alt=""/><span className="span_link">默认</span><i
@@ -1255,7 +1313,7 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><span
                                             className="borderballoon_le noom_cursor"
-                                            onClick={this.readLink.bind(this, attachment)}><img
+                                            onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}><img
                                             style={{width: 40}}
                                             src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
                                             alt=""/><span className="span_link">默认</span><i
@@ -1324,7 +1382,7 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><span
                                             className="borderballoon noom_cursor"
-                                            onClick={this.readLink.bind(this, filePath)}>
+                                            onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}>
                                             <div className="span_link_div"><span className="span_link">{fileName}</span><span
                                                 className="span_link password_ts">{fileLength}kb</span></div>
                                             <img className="upexam_float span_link_img" style={{width: 40}}
@@ -1338,10 +1396,11 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><span
                                             className="borderballoon_le noom_cursor"
-                                            onClick={this.readLink.bind(this, filePath)}><img className="upexam_float"
-                                                                                              style={{width: 40}}
-                                                                                              src="../src/components/images/lALPBY0V4pLs8fFISA_72_72.png"
-                                                                                              alt=""/><span
+                                            onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}><img
+                                            className="upexam_float"
+                                            style={{width: 40}}
+                                            src="../src/components/images/lALPBY0V4pLs8fFISA_72_72.png"
+                                            alt=""/><span
                                             className="span_link">{fileName}</span><span
                                             className="span_link password_ts">{fileLength}kb</span><i
                                             className="borderballoon_dingcorner_ri_no"></i></span></div>
