@@ -20,19 +20,23 @@ var EmotionInputComponents = React.createClass({
         $("#emotionInput").bind("keydown",this.sendMessage);
         $(".emoji-wysiwyg-editor").bind("keydown",this.sendMessage);
     },
-    po_Last_Div(obj) {
-        if (window.getSelection) {//ie11 10 9 ff safari
-            obj.focus(); //解决ff不获取焦点无法定位问题
-            var range = window.getSelection();//创建range
-            range.selectAllChildren(obj);//range 选择obj下所有子内容  这里要改动obj==》？？ 0
-            range.collapseToEnd();//光标移至最后
+
+    placeCaretAtEnd(el) {
+        el.focus();
+        if (typeof window.getSelection != "undefined"
+            && typeof document.createRange != "undefined") {
+            var range = document.createRange();
+            range.selectNodeContents(el);
+            range.collapse(false);
+            var sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
         }
-        else if (document.selection) {//ie10 9 8 7 6 5
-            var range = document.selection.createRange();//创建选择对象
-            //var range = document.body.createTextRange();
-            range.moveToElementText(obj[0]);//range定位到obj
-            range.collapse(false);//光标移至最后
-            range.select();
+        else if (typeof document.body.createTextRange != "undefined") {
+            var textRange = document.body.createTextRange();
+            textRange.moveToElementText(el);
+            textRange.collapse(false);
+            textRange.select();
         }
     },
     sendMessage(e){
@@ -52,15 +56,16 @@ var EmotionInputComponents = React.createClass({
             if(selectText)
             {
                 if(selectText.length > 0)
-                    selectText += "<br/>";
+                    selectText += "<br><br/>";
                 else{
                     // selectText.select();
-                    selectText += "<br/>";
+                    selectText += "<br><br/>";
                 }
             }
             t.innerHTML = selectText;
             console.log(selectText);
-            this.po_Last_Div(t);
+            // this.po_Last_Div(t);
+            this.placeCaretAtEnd(t);
         }
         else if(event.keyCode == 13&& !event.ctrlKey)
         {

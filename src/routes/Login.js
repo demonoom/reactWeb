@@ -127,7 +127,6 @@ const Login = Form.create()(React.createClass({
                         message.error("用户身份不正确,请重新输入！");
                     }else{
                         _this.loginSystem(response);
-                        //this.findUserByAccount();
                     }
                 }
             },
@@ -155,7 +154,7 @@ const Login = Form.create()(React.createClass({
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         var param = {
             "method": 'AntTeacherLogin',
-            "colAccount": userName,
+            "colAccount": user.colAccount,
             "colPasswd": user.colPasswd,
         };
         doWebService_CloudClassRoom(JSON.stringify(param), {
