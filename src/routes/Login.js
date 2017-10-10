@@ -4,10 +4,14 @@ const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 import { doWebService } from '../WebServiceHelper';
 import {doWebService_CloudClassRoom} from '../utils/CloudClassRoomURLUtils';
+import {SimpleWebsocketConnection} from '../utils/simple_websocket_connection.js';
+import {isEmpty} from '../utils/utils';
 
 var code;
 var loginComponent;
 var loginFailedCount=0;
+window.simpleMS=null;
+var machineId=null;
 const Login = Form.create()(React.createClass({
 
     getInitialState() {
@@ -17,6 +21,12 @@ const Login = Form.create()(React.createClass({
             isValidateCode:false,
             loginFailedCount:0,
         };
+    },
+
+    componentWillMount() {
+        simpleMS = new SimpleWebsocketConnection();
+        simpleMS.connect();
+        machineId = loginComponent.createMachineId();
     },
 
     createMachineId() {
@@ -48,8 +58,27 @@ const Login = Form.create()(React.createClass({
     },
 
     componentDidMount(){
-        this.getLoginTeachSystemEwm();
-        loginComponent.createCode();
+        var _this = this;
+        _this.getLoginTeachSystemEwm();
+        _this.createCode();
+        simpleMS.msgWsListener = {
+            onError: function (errorMsg) {
+
+            }, onWarn: function (warnMsg) {
+
+            }, onMessage: function (info) {
+                var command = info.command;
+                if (isEmpty(command) == false && command == "allowLoginTeachSystem") {
+                    var data = info.data;
+                    var uuid = data.uuid;
+                    var user = data.user;
+                    if(uuid == machineId){
+                        _this.loginSystem(user);
+                    }
+                    console.log("data==============>"+data);
+                }
+            }
+        };
     },
 
     doWebService : function(data,listener) {
@@ -73,6 +102,7 @@ const Login = Form.create()(React.createClass({
     },
 
     loginValidate(userName,userPassword){
+        var _this = this;
         var param = {
             "method":'login',
             "username":userName,
@@ -96,35 +126,7 @@ const Login = Form.create()(React.createClass({
                         loginComponent.setState({loginFailedCount:loginFailedCount});
                         message.error("用户身份不正确,请重新输入！");
                     }else{
-                        loginComponent.setState({loginFailedCount:0});
-                        sessionStorage.setItem("ident", response.colUid);
-                        var loginUserJson = JSON.stringify(response);
-                        sessionStorage.setItem("loginUser",loginUserJson);
-                        sessionStorage.setItem("loginPassword",userPassword);
-                        var machineId = loginComponent.createMachineId();
-                        // sessionStorage.setItem("machineId",machineId);
-                        localStorage.setItem("machineId",machineId);
-                        loginComponent.getHistoryAccessPointId(response.colUid);
-                        if(response.colUtype == "TEAC"){
-                            location.hash="MainLayout";
-                        }else{
-                            location.hash="StudentMainLayout";
-                        }
-                        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
-                        var param = {
-                            "method": 'AntTeacherLogin',
-                            "colAccount": userName,
-                            "colPasswd": userPassword,
-                        };
-                        doWebService_CloudClassRoom(JSON.stringify(param), {
-                            onResponse: function (ret) {
-                                var response = ret.response;
-                                sessionStorage.setItem("cloudClassRoomUser",JSON.stringify(response));
-                            },
-                            onError: function (error) {
-                                message.error(error);
-                            }
-                        });
+                        _this.loginSystem(response);
                         //this.findUserByAccount();
                     }
                 }
@@ -133,6 +135,39 @@ const Login = Form.create()(React.createClass({
                 message.error(error);
             }
         });
+    },
+
+    loginSystem(user){
+        loginComponent.setState({loginFailedCount:0});
+        sessionStorage.setItem("ident", user.colUid);
+        var loginUserJson = JSON.stringify(user);
+        sessionStorage.setItem("loginUser",loginUserJson);
+        sessionStorage.setItem("loginPassword",user.colPasswd);
+        // var machineId = loginComponent.createMachineId();
+        // sessionStorage.setItem("machineId",machineId);
+        localStorage.setItem("machineId",machineId);
+        loginComponent.getHistoryAccessPointId(user.colUid);
+        if(user.colUtype == "TEAC"){
+            location.hash="MainLayout";
+        }else{
+            location.hash="StudentMainLayout";
+        }
+        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+        var param = {
+            "method": 'AntTeacherLogin',
+            "colAccount": userName,
+            "colPasswd": user.colPasswd,
+        };
+        doWebService_CloudClassRoom(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                sessionStorage.setItem("cloudClassRoomUser",JSON.stringify(response));
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+        window.simpleMS = null;
     },
 
     findUserByAccount(){
@@ -201,7 +236,8 @@ const Login = Form.create()(React.createClass({
     getLoginTeachSystemEwm(){
         var _this = this;
         var param = {
-            "method": 'getLoginTeachSystemEwm'
+            "method": 'getLoginTeachSystemEwm',
+            "uuid":machineId,
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
