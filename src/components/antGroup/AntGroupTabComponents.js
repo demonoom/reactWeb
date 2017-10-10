@@ -173,6 +173,7 @@ const AntGroupTabComponents = React.createClass({
                 formData.append("file" + i, uploadFileList[i]);
                 formData.append("name" + i, uploadFileList[i].name);
             }
+            console.log(formData);
             $.ajax({
                 type: "POST",
                 url: "http://101.201.45.125:8890/Excoord_Upload_Server/file/upload",
@@ -531,7 +532,7 @@ const AntGroupTabComponents = React.createClass({
                             }
 
                             if (isSend == false) {
-                                if (data.message.command != "message_read") {
+                                if (data.message.command != "message_read" && data.message.command != "biu_message") {
                                     var messageShow = {
                                         'fromUser': fromUser,
                                         'content': content,
