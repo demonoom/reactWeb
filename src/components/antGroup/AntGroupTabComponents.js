@@ -1295,8 +1295,7 @@ const AntGroupTabComponents = React.createClass({
                                                 className="name">{userPhoneIcon}</span><span
 
                                                 className="borderballoon noom_cursor"
-                                                onClick={this.watchFile.bind(this, filePath,
-                                                    fileUid, fileCreateUid)}>
+                                                >
                                                 <div className="span_link_div"><span
                                                     className="span_link">{fileName}</span><span
                                                     className="span_link password_ts">{fileLength}kb</span></div>
