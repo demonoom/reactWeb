@@ -254,8 +254,8 @@ const Login = Form.create()(React.createClass({
     render() {
         const { getFieldDecorator } = loginComponent.props.form;
         const formItemLayout = {
-            labelCol: { span: 6 },
-            wrapperCol: { span: 16 },
+            labelCol: { span: 0 },
+            wrapperCol: { span: 24 },
         };
 
         var codeDiv;
@@ -291,14 +291,14 @@ const Login = Form.create()(React.createClass({
                             </TabPane>
                             <TabPane tab="密码登录" key="2">
                                 <Form onSubmit={loginComponent.handleSubmit} className="login-form">
-                                    <FormItem {...formItemLayout} label="用户名">
+                                    <FormItem {...formItemLayout} >
                                         {getFieldDecorator('userName',{
                                             rules: [{ required: true, message: '请输入用户名!' }],
                                         })(
                                             <Input addonBefore={<Icon type="user" />} placeholder="请输入用户名"/>
                                         )}
                                     </FormItem>
-                                    <FormItem {...formItemLayout} label="密&nbsp;&nbsp;&nbsp;码">
+                                    <FormItem {...formItemLayout} >
                                         {getFieldDecorator('password',{
                                             rules: [{ required: true, message: '请输入密码!' }],
                                         })(
