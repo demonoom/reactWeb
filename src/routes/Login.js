@@ -47,6 +47,7 @@ const Login = Form.create()(React.createClass({
     },
 
     componentDidMount(){
+        this.getLoginTeachSystemEwm();
         loginComponent.createCode();
     },
 
@@ -195,6 +196,22 @@ const Login = Form.create()(React.createClass({
             }
         });
     },
+
+    getLoginTeachSystemEwm(){
+        var param = {
+            "method": 'getLoginTeachSystemEwm'
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
     render() {
         const { getFieldDecorator } = loginComponent.props.form;
         const formItemLayout = {
