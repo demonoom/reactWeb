@@ -199,13 +199,15 @@ const Login = Form.create()(React.createClass({
     },
 
     getLoginTeachSystemEwm(){
+        var _this = this;
         var param = {
             "method": 'getLoginTeachSystemEwm'
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-
+                var loginImg = <img src={response}/>;
+                _this.setState({loginImg});
             },
             onError: function (error) {
                 message.error(error);
@@ -249,7 +251,7 @@ const Login = Form.create()(React.createClass({
                     <div className="card-container">
                         <Tabs type="card">
                             <TabPane tab="扫码登录" key="1">
-                                扫码登录
+                                {this.state.loginImg}
                             </TabPane>
                             <TabPane tab="密码登录" key="2">
                                 <Form onSubmit={loginComponent.handleSubmit} className="login-form">
