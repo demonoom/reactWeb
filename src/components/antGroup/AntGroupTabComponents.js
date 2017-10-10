@@ -173,6 +173,7 @@ const AntGroupTabComponents = React.createClass({
                 formData.append("file" + i, uploadFileList[i]);
                 formData.append("name" + i, uploadFileList[i].name);
             }
+            console.log(formData);
             $.ajax({
                 type: "POST",
                 url: "http://101.201.45.125:8890/Excoord_Upload_Server/file/upload",
@@ -531,7 +532,7 @@ const AntGroupTabComponents = React.createClass({
                             }
 
                             if (isSend == false) {
-                                if (data.message.command != "message_read") {
+                                if (data.message.command != "message_read" && data.message.command != "biu_message") {
                                     var messageShow = {
                                         'fromUser': fromUser,
                                         'content': content,
@@ -1292,11 +1293,10 @@ const AntGroupTabComponents = React.createClass({
                                             <div className="u-name"><span>{fromUser}</span></div>
                                             <div className="talk-cont"><span
                                                 className="name">{userPhoneIcon}</span><span
-
                                                 className="borderballoon noom_cursor borderballoon_file"
-                                                onClick={this.watchFile.bind(this, filePath,
-                                                    fileUid, fileCreateUid)}>
-                                                <div className="borderballoon_le_cont"><div className="span_link_div"><span
+                                            >
+                                                <div className="borderballoon_le_cont"><div
+                                                    className="span_link_div"><span
                                                     className="span_link">{fileName}</span><span
                                                     className="span_link password_ts">{fileLength}kb</span></div>
                                                 <img className="upexam_float span_link_img" style={{width: 40}}
@@ -1308,7 +1308,8 @@ const AntGroupTabComponents = React.createClass({
                                                        onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}><Icon
                                                         type="eye"/>预览</a>
                                                     <a href={filePath} target="_blank" title="下载"
-                                                       download={filePath} className="downfile_noom file_noom_line"><Icon
+                                                       download={filePath}
+                                                       className="downfile_noom file_noom_line"><Icon
                                                         type="download"/>下载</a>
                                                 </div>
                                             </span></div>
@@ -1347,17 +1348,20 @@ const AntGroupTabComponents = React.createClass({
                                                 // onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}><img
                                             >
                                                 <div className="borderballoon_le_cont">
-                                                    <img className="upexam_float" style={{width: 40}} src="../src/components/images/lALPBY0V4pLs8fFISA_72_72.png" alt=""/>
+                                                    <img className="upexam_float" style={{width: 40}}
+                                                         src="../src/components/images/lALPBY0V4pLs8fFISA_72_72.png"
+                                                         alt=""/>
                                                     <span className="span_link">{fileName}</span>
                                                     <span className="span_link password_ts">{fileLength}kb</span>
                                                     <i className="borderballoon_dingcorner_ri_no"></i>
                                                 </div>
                                                 <div className="file_noom">
                                                     <a className="noom_cursor  file_noom_line"
-                                                          onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}><Icon
+                                                       onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}><Icon
                                                         type="eye"/>预览</a>
                                                     <a href={filePath} target="_blank" title="下载"
-                                                       download={filePath} className="downfile_noom file_noom_line"><Icon
+                                                       download={filePath}
+                                                       className="downfile_noom file_noom_line"><Icon
                                                         type="download"/>下载</a>
                                                 </div>
                                                 </span>
@@ -1526,7 +1530,8 @@ const AntGroupTabComponents = React.createClass({
                                                        onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}><Icon
                                                         type="eye"/>预览</a>
                                                     <a href={filePath} target="_blank" title="下载"
-                                                       download={filePath} className="downfile_noom file_noom_line"><Icon
+                                                       download={filePath}
+                                                       className="downfile_noom file_noom_line"><Icon
                                                         type="download"/>下载</a>
                                                 </div>
                                             </span></div>
@@ -1540,19 +1545,20 @@ const AntGroupTabComponents = React.createClass({
                                             className="borderballoon_le noom_cursor"
                                             onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}>
                                             <div className="borderballoon_le_cont"><img
-                                            className="upexam_float"
-                                            style={{width: 40}}
-                                            src="../src/components/images/lALPBY0V4pLs8fFISA_72_72.png"
-                                            alt=""/><span
-                                            className="span_link">{fileName}</span><span
-                                            className="span_link password_ts">{fileLength}kb</span><i
+                                                className="upexam_float"
+                                                style={{width: 40}}
+                                                src="../src/components/images/lALPBY0V4pLs8fFISA_72_72.png"
+                                                alt=""/><span
+                                                className="span_link">{fileName}</span><span
+                                                className="span_link password_ts">{fileLength}kb</span><i
                                                 className="borderballoon_dingcorner_ri_no"></i></div>
                                         <div className="file_noom">
                                                     <a className="noom_cursor  file_noom_line"
                                                        onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}><Icon
                                                         type="eye"/>预览</a>
                                                     <a href={filePath} target="_blank" title="下载"
-                                                       download={filePath} className="downfile_noom file_noom_line"><Icon
+                                                       download={filePath}
+                                                       className="downfile_noom file_noom_line"><Icon
                                                         type="download"/>下载</a>
                                                 </div>
                                         </span></div>
