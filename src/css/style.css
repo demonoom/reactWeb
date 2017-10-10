@@ -7035,3 +7035,13 @@ select.course_n:hover {
 .span_link_div .password_ts {
     color: #F3F3F3
 }
+
+.file_noom {
+    border-top: 1px solid #CCCCCC;
+    color: #DFE1E6;
+}
+
+.downfile_noom {
+    text-decoration: none;
+    color: #DFE1E6;
+}

@@ -990,10 +990,12 @@
             if (!oldArray.length) return refindex;
             oldArray.map(function (item, index) {
 
-                let ind = $(item.el.selector).css('z-index');
-                ind = parseInt(ind);
-                ind++;
-                refindex = ind > refindex ? ind : refindex;
+                // if (item !== undefined) {
+                    let ind = $(item.el.selector).css('z-index');
+                    ind = parseInt(ind);
+                    ind++;
+                    refindex = ind > refindex ? ind : refindex;
+                // }
 
             });
             return refindex;

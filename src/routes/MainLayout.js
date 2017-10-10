@@ -147,7 +147,7 @@ const MainLayout = React.createClass({
 
     componentDidMount() {
         this.refs.dingMusic.innerHTML = '<source src="../../static/eva_call_disconnected.m4a" type="audio/mpeg">'
-        this.refs.mesMusic.innerHTML = '<source src="../../static/B(1).mp3" type="audio/mpeg">'
+        this.refs.mesMusic.innerHTML = '<source src="../../static/yp.mp3" type="audio/mpeg">'
     },
 
     componentWillMount() {
@@ -401,7 +401,8 @@ const MainLayout = React.createClass({
      * 好友对好友的消息发送
      */
     receiveNewMessage(userJson) {
-        console.log(456);
+        // console.log(userJson);
+        // console.log(947);
         this.setState({
             currentKey: 'message',
             resouceType: '',

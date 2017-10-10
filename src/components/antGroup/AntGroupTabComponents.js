@@ -290,6 +290,7 @@ const AntGroupTabComponents = React.createClass({
         } else {
             sendType = "";
         }
+        isSend = true;
         antGroup.messageSendByType(sendType);
     },
 
@@ -583,7 +584,9 @@ const AntGroupTabComponents = React.createClass({
                                         messageList.push(messageShow);
                                         var userJson = {
                                             key: messageOfSinge.toUser.colUid,
+                                            // key: _this.state.loginUser.colUid,
                                             "fromUser": messageOfSinge.toUser,
+                                            // "fromUser": messageOfSinge.fromUser,
                                             // "fromUser": messageOfSinge.fromUser,个人消息收到的时候要写成fromUser，而发出的要写成
                                             //toUser，否则会造成左侧联系人丢失。
                                             contentArray: contentArray,
@@ -1034,6 +1037,15 @@ const AntGroupTabComponents = React.createClass({
     },
 
     /**
+     * 下载文件的回调
+     * @param url
+     */
+    downFile(url) {
+        // console.log(url);
+        window.location.href = url;
+    },
+
+    /**
      *预览文件的回调
      */
     watchFile(url, fileUid, fileCreateUid) {
@@ -1290,7 +1302,16 @@ const AntGroupTabComponents = React.createClass({
                                                 <img className="upexam_float span_link_img" style={{width: 40}}
                                                      src="../src/components/images/lALPBY0V4pLs8fFISA_72_72.png"
                                                      alt=""/>
-                                                <i className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                                <i className="borderballoon_dingcorner_ri_no"></i>
+                                            <span className="file_noom">
+                                                    <span className="noom_cursor"
+                                                          onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}><Icon
+                                                        type="eye"/>预览</span>
+                                                    <a href={filePath} target="_blank" title="下载"
+                                                       download={filePath} className="downfile_noom"><Icon
+                                                        type="download"/>下载</a>
+                                                </span>
+                                            </span></div>
                                         </li>;
                                     } else {
                                         messageTag = <li className="right" style={{'textAlign': 'right'}}>
@@ -1322,14 +1343,24 @@ const AntGroupTabComponents = React.createClass({
                                             <div className="u-name"><span>{fromUser}</span></div>
                                             <div className="talk-cont"><span
                                                 className="name">{userPhoneIcon}</span><span
-                                                className="borderballoon_le noom_cursor"
-                                                onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}><img
+                                                className="borderballoon_le"
+                                                // onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}><img
+                                            ><img
                                                 className="upexam_float"
                                                 style={{width: 40}}
                                                 src="../src/components/images/lALPBY0V4pLs8fFISA_72_72.png"
                                                 alt=""/><span className="span_link">{fileName}</span><span
                                                 className="span_link password_ts">{fileLength}kb</span><i
-                                                className="borderballoon_dingcorner_ri_no"></i></span>
+                                                className="borderballoon_dingcorner_ri_no"></i>
+                                                <span className="file_noom">
+                                                    <span className="noom_cursor"
+                                                          onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}><Icon
+                                                        type="eye"/>预览</span>
+                                                    <a href={filePath} target="_blank" title="下载"
+                                                       download={filePath} className="downfile_noom"><Icon
+                                                        type="download"/>下载</a>
+                                                </span>
+                                                </span>
                                             </div>
                                         </li>;
                                     } else if (isEmpty(expressionItem) == false) {
@@ -1487,7 +1518,16 @@ const AntGroupTabComponents = React.createClass({
                                                 className="span_link password_ts">{fileLength}kb</span></div>
                                             <img className="upexam_float span_link_img" style={{width: 40}}
                                                  src="../src/components/images/lALPBY0V4pLs8fFISA_72_72.png" alt=""/>
-                                            <i className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                            <i className="borderballoon_dingcorner_ri_no"></i>
+                                        <span className="file_noom">
+                                                    <span className="noom_cursor"
+                                                          onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}><Icon
+                                                        type="eye"/>预览</span>
+                                                    <a href={filePath} target="_blank" title="下载"
+                                                       download={filePath} className="downfile_noom"><Icon
+                                                        type="download"/>下载</a>
+                                                </span>
+                                        </span></div>
                                     </li>;
                                 } else {
                                     //我收到的
@@ -1503,7 +1543,16 @@ const AntGroupTabComponents = React.createClass({
                                             alt=""/><span
                                             className="span_link">{fileName}</span><span
                                             className="span_link password_ts">{fileLength}kb</span><i
-                                            className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                            className="borderballoon_dingcorner_ri_no"></i>
+                                        <span className="file_noom">
+                                                    <span className="noom_cursor"
+                                                          onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}><Icon
+                                                        type="eye"/>预览</span>
+                                                    <a href={filePath} target="_blank" title="下载"
+                                                       download={filePath} className="downfile_noom"><Icon
+                                                        type="download"/>下载</a>
+                                                </span>
+                                        </span></div>
                                     </li>;
                                 }
                             }
