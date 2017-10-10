@@ -1388,10 +1388,7 @@ element.style {
 }
 .login_logo {
     text-align: center;
-    padding: 20px 0;
-    position: absolute;
-    top: 0px;
-    left: 30px;
+    padding: 60px 0 0 0;
 }
 
 .login_welcome {
