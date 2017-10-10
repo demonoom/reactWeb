@@ -259,7 +259,7 @@ const Login = Form.create()(React.createClass({
 
         var codeDiv;
         if(loginComponent.state.loginFailedCount>=2){
-            codeDiv = <FormItem {...formItemLayout} label="验证码">
+            codeDiv = <FormItem {...formItemLayout} >
                 {getFieldDecorator('validateCode',{
                     rules: [{ required: true, message: '请输入验证码!' }],
                 })(
@@ -287,6 +287,7 @@ const Login = Form.create()(React.createClass({
                         <Tabs type="card">
                             <TabPane tab="扫码登录" key="1">
                                 {this.state.loginImg}
+                                <div className="login_ewm">请使用小蚂蚁移动教学扫二维码登录</div>
                             </TabPane>
                             <TabPane tab="密码登录" key="2">
                                 <Form onSubmit={loginComponent.handleSubmit} className="login-form">
