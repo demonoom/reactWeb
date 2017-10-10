@@ -1355,6 +1355,7 @@ element.style {
 }
 .login_bg_content .ant-tabs-nav .ant-tabs-tab, .login_bg_content .ant-tabs-nav .ant-tabs-tab-active{
     font-size: 14px;
+    width: 50%;
 }
 .login_bg_content  .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab-active{
     background: none;
@@ -1363,6 +1364,7 @@ element.style {
 .login_bg_content .ant-tabs-nav{
     height: 48px;
     margin: 0;
+    width: 100%;
 }
 .login_logo {
     text-align: center;
