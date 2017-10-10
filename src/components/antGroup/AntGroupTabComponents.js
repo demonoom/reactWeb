@@ -49,7 +49,7 @@ var didCount = 0;
 var isRendering = false;
 var isRequesting = false;
 var preHeight = 0;
-var isSend=false;
+var isSend = false;
 const AntGroupTabComponents = React.createClass({
 
     getInitialState() {
@@ -399,11 +399,14 @@ const AntGroupTabComponents = React.createClass({
                             uuidsArray.push(uuid);
                             var messageReturnJson = antGroup.getImgTag(e);
                             var imgTagArrayReturn = [];
-                            if (messageReturnJson.messageType == "text") {
-                                content = messageReturnJson.textMessage;
-                            } else if (messageReturnJson.messageType == "imgTag") {
-                                imgTagArrayReturn = messageReturnJson.imgMessage;
+                            if (isEmpty(messageReturnJson) == false && isEmpty(messageReturnJson.messageType) == false) {
+                                if (messageReturnJson.messageType == "text") {
+                                    content = messageReturnJson.textMessage;
+                                } else if (messageReturnJson.messageType == "imgTag") {
+                                    imgTagArrayReturn = messageReturnJson.imgMessage;
+                                }
                             }
+                            ;
                             if (e.toType == 1) {
                                 //个人消息
                                 if (("SGZH" == colUtype || fromUser.colUid == userId)) {
@@ -518,10 +521,12 @@ const AntGroupTabComponents = React.createClass({
                             imgTagArray.splice(0);
                             var imgTagArrayReturn = [];
                             var messageReturnJson = antGroup.getImgTag(messageOfSinge);
-                            if (messageReturnJson.messageType == "text") {
-                                content = messageReturnJson.textMessage;
-                            } else if (messageReturnJson.messageType == "imgTag") {
-                                imgTagArrayReturn = messageReturnJson.imgMessage;
+                            if (isEmpty(messageReturnJson) == false && isEmpty(messageReturnJson.messageType) == false) {
+                                if (messageReturnJson.messageType == "text") {
+                                    content = messageReturnJson.textMessage;
+                                } else if (messageReturnJson.messageType == "imgTag") {
+                                    imgTagArrayReturn = messageReturnJson.imgMessage;
+                                }
                             }
 
                             if (isSend == false) {
@@ -598,10 +603,12 @@ const AntGroupTabComponents = React.createClass({
                                 imgTagArray.splice(0);
                                 var imgTagArrayReturn = [];
                                 var messageReturnJson = antGroup.getImgTag(messageOfSinge);
-                                if (messageReturnJson.messageType == "text") {
-                                    content = messageReturnJson.textMessage;
-                                } else if (messageReturnJson.messageType == "imgTag") {
-                                    imgTagArrayReturn = messageReturnJson.imgMessage;
+                                if (isEmpty(messageReturnJson) == false && isEmpty(messageReturnJson.messageType) == false) {
+                                    if (messageReturnJson.messageType == "text") {
+                                        content = messageReturnJson.textMessage;
+                                    } else if (messageReturnJson.messageType == "imgTag") {
+                                        imgTagArrayReturn = messageReturnJson.imgMessage;
+                                    }
                                 }
                                 var messageShow = {
                                     'fromUser': fromUser,
@@ -756,7 +763,7 @@ const AntGroupTabComponents = React.createClass({
             target = e.target;
         }
         var sendType = target.value;
-        isSend=true;
+        isSend = true;
         antGroup.messageSendByType(sendType);
     },
 
@@ -962,10 +969,12 @@ const AntGroupTabComponents = React.createClass({
                                 var content = e.content;
                                 var imgTagArrayReturn = [];
                                 var messageReturnJson = antGroup.getImgTag(e);
-                                if (messageReturnJson.messageType == "text") {
-                                    content = messageReturnJson.textMessage;
-                                } else if (messageReturnJson.messageType == "imgTag") {
-                                    imgTagArrayReturn = messageReturnJson.imgMessage;
+                                if (isEmpty(messageReturnJson) == false && isEmpty(messageReturnJson.messageType) == false) {
+                                    if (messageReturnJson.messageType == "text") {
+                                        content = messageReturnJson.textMessage;
+                                    } else if (messageReturnJson.messageType == "imgTag") {
+                                        imgTagArrayReturn = messageReturnJson.imgMessage;
+                                    }
                                 }
                                 var message = {
                                     'fromUser': fromUser,
@@ -1056,6 +1065,7 @@ const AntGroupTabComponents = React.createClass({
         };
 
         let obj = {mode: mode(tit), title: tit, url: url, width: '380px'};
+        // let obj = {mode: 'teachingAdmin', title: tit, url: url, width: '380px'};
 
         LP.Start(obj);
     },
@@ -1135,10 +1145,12 @@ const AntGroupTabComponents = React.createClass({
                                 showImg = "";
                                 var imgTagArrayReturn = [];
                                 var messageReturnJson = antGroup.getImgTag(messageOfSinge);
-                                if (messageReturnJson.messageType == "text") {
-                                    content = messageReturnJson.textMessage;
-                                } else if (messageReturnJson.messageType == "imgTag") {
-                                    imgTagArrayReturn = messageReturnJson.imgMessage;
+                                if (isEmpty(messageReturnJson) == false && isEmpty(messageReturnJson.messageType) == false) {
+                                    if (messageReturnJson.messageType == "text") {
+                                        content = messageReturnJson.textMessage;
+                                    } else if (messageReturnJson.messageType == "imgTag") {
+                                        imgTagArrayReturn = messageReturnJson.imgMessage;
+                                    }
                                 }
                                 var messageShow = {
                                     'fromUser': fromUser,
@@ -1206,7 +1218,7 @@ const AntGroupTabComponents = React.createClass({
             if (isEmpty(messageList) == false && messageList.length > 0) {
                 for (var i = messageList.length - 1; i >= 0; i--) {
                     var e = messageList[i];
-                    if(isEmpty(e)==true){
+                    if (isEmpty(e) == true) {
                         continue;
                     }
                     var content = e.content;
