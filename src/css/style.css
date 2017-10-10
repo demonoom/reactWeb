@@ -1290,10 +1290,8 @@ element.style {
 .login_bg {
     height: 100%;
     position: relative;
-    background: -webkit-linear-gradient(#309ffb, #52cffd); /* Safari 5.1 - 6.0 */
-    background: -o-linear-gradient(#309ffb, #52cffd); /* Opera 11.1 - 12.0 */
-    background: -moz-linear-gradient(#309ffb, #52cffd); /* Firefox 3.6 - 15 */
-    background: linear-gradient(#309ffb, #52cffd); /* 标准的语法 */
+    background:url(../../src/components/images/bg_6.png);
+    background-size: cover;
 }
 
 .login_bottom {
@@ -1326,7 +1324,7 @@ element.style {
 }
 
 .login_bg_cont {
-    width: 720px;
+    width: 356px;
     position: absolute;
     left: 50%;
     top: 50%;
@@ -1336,22 +1334,61 @@ element.style {
 
 .login_bg_content {
     float: right;
-    width: 350px;
-    border-radius: 8px;
-    padding: 0 20px 30px 20px;
-    background: #fff;
+    width: 355px;
+    height: 315px;
+    border-radius: 4px;
+    padding: 0;
+    background: url(../../src/components/images/cloud_login.png);
 }
 
 .login_bg_content label {
     font-size: 14px !important;
 }
+.login_bg_content .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-nav-container{
+    height:48px ;
+}
+.login_bg_content .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab, .login_bg_content .ant-tabs-bar{
+    border: none;
+}
+.login_bg_content  .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab-active{
+    padding-bottom: 5px;
+}
+.login_bg_content .ant-tabs-nav .ant-tabs-tab, .login_bg_content .ant-tabs-nav .ant-tabs-tab-active{
+    font-size: 14px;
+    width: 50%;
+}
+.login_bg_content .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab{
+    background: #e7f0f1;
+}
+.login_bg_content  .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab-active{
+    background: none;
+    color: #333;
+}
 
+.login_bg_content .ant-tabs-nav{
+    height: 48px;
+    margin: 0;
+    width: 100%;
+}
+.login_bg_content .ant-tabs:not(.ant-tabs-vertical) .ant-tabs-tabpane{
+    padding:30px;
+    text-align: center;
+}
+.login_bg_content .ant-tabs:not(.ant-tabs-vertical) .ant-tabs-tabpane img{
+    width: 180px;
+}
+.login_bg_content .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab{
+    border-radius: 4px 4px 0 0;
+}
+.login_bg_content  .ant-input-lg{
+    height: 38px;
+}
+.login_bg_content .ant-input-group-addon{
+    padding: 4px 10px;
+}
 .login_logo {
     text-align: center;
-    padding: 20px 0;
-    position: absolute;
-    top: 0px;
-    left: 30px;
+    padding: 60px 0 0 0;
 }
 
 .login_welcome {

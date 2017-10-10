@@ -27,7 +27,6 @@ import SchoolGroupSettingComponents from '../components/schoolGroupSetting/Schoo
 import SchoolGroupMenu from '../components/schoolGroupSetting/SchoolGroupMenu';
 import SystemSettingGhostMenu from '../components/SystemSetting/SystemSettingGhostMenu';
 import SystemSettingComponent from '../components/SystemSetting/SystemSettingComponent';
-import {isEmpty} from '../utils/utils';
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
 
