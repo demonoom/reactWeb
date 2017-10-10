@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
-import { Form, Icon, Input, Button, message } from 'antd';
+import { Form, Icon, Input, Button, message,Tabs } from 'antd';
 const FormItem = Form.Item;
+const TabPane = Tabs.TabPane;
 import { doWebService } from '../WebServiceHelper';
 import {doWebService_CloudClassRoom} from '../utils/CloudClassRoomURLUtils';
 
@@ -244,37 +245,44 @@ const Login = Form.create()(React.createClass({
             <div className="login_bg">
 			<div className="login_logo"><img src={('../../src/components/images/maaee.png')}/></div>
 			<div className="login_bg_cont">
-				<div className="login_duxing"></div>
 			 	<div className="login_bg_content">
-					<div className="login_welcome">欢迎登录</div>
-						<Form onSubmit={loginComponent.handleSubmit} className="login-form">
-							<FormItem {...formItemLayout} label="用户名">
-								{getFieldDecorator('userName',{
-                                    rules: [{ required: true, message: '请输入用户名!' }],
-                                })(
-									<Input addonBefore={<Icon type="user" />} placeholder="请输入用户名"/>
-								)}
-							</FormItem>
-							<FormItem {...formItemLayout} label="密&nbsp;&nbsp;&nbsp;码">
-								{getFieldDecorator('password',{
-                                    rules: [{ required: true, message: '请输入密码!' }],
-                                })(
-									<Input addonBefore={<Icon type="lock" />} type="password" placeholder="请输入密码"/>
-								)}
-							</FormItem>
-                            {codeDiv}
+                    <div className="card-container">
+                        <Tabs type="card">
+                            <TabPane tab="扫码登录" key="1">
+                                扫码登录
+                            </TabPane>
+                            <TabPane tab="密码登录" key="2">
+                                <Form onSubmit={loginComponent.handleSubmit} className="login-form">
+                                    <FormItem {...formItemLayout} label="用户名">
+                                        {getFieldDecorator('userName',{
+                                            rules: [{ required: true, message: '请输入用户名!' }],
+                                        })(
+                                            <Input addonBefore={<Icon type="user" />} placeholder="请输入用户名"/>
+                                        )}
+                                    </FormItem>
+                                    <FormItem {...formItemLayout} label="密&nbsp;&nbsp;&nbsp;码">
+                                        {getFieldDecorator('password',{
+                                            rules: [{ required: true, message: '请输入密码!' }],
+                                        })(
+                                            <Input addonBefore={<Icon type="lock" />} type="password" placeholder="请输入密码"/>
+                                        )}
+                                    </FormItem>
+                                    {codeDiv}
 
-							<div className="login_buton">
-								<Button type="primary" htmlType="submit" className="login-form-button login_buton">
-									登录
-								</Button>
-							</div>
+                                    <div className="login_buton">
+                                        <Button type="primary" htmlType="submit" className="login-form-button login_buton">
+                                            登录
+                                        </Button>
+                                    </div>
 
-						</Form>
+                                </Form>
+                            </TabPane>
+
+                        </Tabs>
+                    </div>
+
 						</div>
 					</div>
-			<div className="login_bottom"></div>
-			<div className="login_sun"></div>
             </div>
 
         );
@@ -282,3 +290,6 @@ const Login = Form.create()(React.createClass({
 }));
 
 export default Login;
+<script type="text/javascript">
+    tabs_takes.init("tabs");
+</script>
