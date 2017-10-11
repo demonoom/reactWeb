@@ -2900,7 +2900,10 @@ a.topics:hover {
 .knowledge_table .ant-table-header {
     margin-bottom: 0 !important
 }
-
+.knowledge_list .ant-transfer-list-content-item .ant-checkbox-wrapper + span{
+    white-space: nowrap;
+    margin-left: 0;
+}
 #rcDialogTitle0 .avatar-uploader,
 #rcDialogTitle0 .avatar-uploader-trigger,
 #rcDialogTitle0 .avatar {

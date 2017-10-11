@@ -226,7 +226,7 @@ const BindKnowledgeComponents = React.createClass({
                             dataSource={bindKnowledge.state.mockData}
                             showSearch
                             listStyle={{
-                                width: 268,
+                                width: 235,
                                 height: 325,
                             }}
                             titles={['待选', '已选']}
@@ -234,6 +234,7 @@ const BindKnowledgeComponents = React.createClass({
                             targetKeys={bindKnowledge.state.targetKeys}
                             onChange={bindKnowledge.transferHandleChange}
                             render={item => `${item.description}`}
+                            className={'knowledge_list'}
                         />
                     </div>
                 </div>
