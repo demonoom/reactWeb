@@ -1300,7 +1300,7 @@ const AntGroupTabComponents = React.createClass({
                                                     className="span_link">{fileName}</span><span
                                                     className="span_link password_ts">{fileLength}kb</span></div>
                                                 <img className="upexam_float span_link_img" style={{width: 40}}
-                                                     src="../src/components/images/lALPBY0V4pLs8fFISA_72_72.png"
+                                                     src="../src/components/images/maaee_link_file_102_102.png"
                                                      alt=""/>
                                                     </div>
                                             <div className="file_noom">
@@ -1349,7 +1349,7 @@ const AntGroupTabComponents = React.createClass({
                                             >
                                                 <div className="borderballoon_le_cont">
                                                     <img className="upexam_float" style={{width: 40}}
-                                                         src="../src/components/images/lALPBY0V4pLs8fFISA_72_72.png"
+                                                         src="../src/components/images/maaee_link_file_102_102.png"
                                                          alt=""/>
                                                     <span className="span_link">{fileName}</span>
                                                     <span className="span_link password_ts">{fileLength}kb</span>
@@ -1522,7 +1522,7 @@ const AntGroupTabComponents = React.createClass({
                                                 className="span_link">{fileName}</span><span
                                                 className="span_link password_ts">{fileLength}kb</span></div>
                                                 <img className="upexam_float span_link_img" style={{width: 40}}
-                                                     src="../src/components/images/lALPBY0V4pLs8fFISA_72_72.png"
+                                                     src="../src/components/images/maaee_link_file_102_102.png"
                                                      alt=""/>
                                                     </div>
                                             <div className="file_noom">
@@ -1547,7 +1547,7 @@ const AntGroupTabComponents = React.createClass({
                                             <div className="borderballoon_le_cont"><img
                                                 className="upexam_float"
                                                 style={{width: 40}}
-                                                src="../src/components/images/lALPBY0V4pLs8fFISA_72_72.png"
+                                                src="../src/components/images/maaee_link_file_102_102.png"
                                                 alt=""/><span
                                                 className="span_link">{fileName}</span><span
                                                 className="span_link password_ts">{fileLength}kb</span><i
