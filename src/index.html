@@ -29,12 +29,10 @@
     <script src="../src/components/littlePanle_websocket.js?v=1.5"></script>
     <script src="static/videojs-flash.min.js"></script>
     <script src="static/video.min.js"></script>
-    <script src="../src/components/littlePanle.js?v=1.4"></script>
+    <script src="../src/components/littlePanle.js?v=1.5"></script>
     <script src="../src/components/noomPanle.js?v=1.1"></script>
-    <script src="../src/routes/jquery-1.8.3.min.js"></script>
-    <script src="../src/routes/tabs.js"></script>
     <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/video.css?v=3.2">
-    <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/style.css?v=5.4">
+    <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/style.css?v=5.5">
     <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/student.css?v=3.5">
     <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/schoolGroup.css?v=3.7">
     <!-- emoji picker start -->
@@ -93,17 +91,19 @@
     <div id="componyInfo" style="display:block">小蚂蚁移动教学平台 版权所有 恒坐标教育集团</div>
     <script>
         var timer;
+
         function checkIsLogin() {
             if (sessionStorage.getItem("ident") == null || sessionStorage.getItem("ident") == "") {
                 timer = setTimeout("checkIsLogin()", 500);
                 //document.getElementById("componyInfo").innerHTML = "小蚂蚁移动教学平台 版权所有 恒坐标教育集团";
-                $(".ant-layout-footer").css({"display":'block'});
+                $(".ant-layout-footer").css({"display": 'block'});
             } else {
                 //document.getElementById("componyInfo").innerHTML = "";
-                $(".ant-layout-footer").css({"display":'none'});
+                $(".ant-layout-footer").css({"display": 'none'});
                 clearTimeout(timer);
             }
         }
+
         checkIsLogin();
     </script>
 
@@ -117,7 +117,7 @@
 <script src="../emojiPicker/lib/js/jquery.emojiarea.js"></script>
 <script src="../emojiPicker/lib/js/emoji-picker.js"></script>
 <!-- End emoji-picker JavaScript -->
-<script src="index.js?v=1.7.8"></script>
+<script src="index.js?v=1.7.9"></script>
 
 </body>
 </html>

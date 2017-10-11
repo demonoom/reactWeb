@@ -321,6 +321,7 @@ const MessageMenu = React.createClass({
 
     /**
      * table被点击时的回调
+     * record是点击的那个人的信息
      * @param record
      * @param index
      */
