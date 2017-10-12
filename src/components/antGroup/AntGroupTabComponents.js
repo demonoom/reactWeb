@@ -22,20 +22,7 @@ import GroupFileUploadComponents from './GroupFileUploadComponents';
 const TabPane = Tabs.TabPane;
 const confirm = Modal.confirm;
 const Panel = Collapse.Panel;
-//聊天的更多功能
-const menu = (
-    <Menu>
-        <Menu.Item>
-            <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">保存到蚁盘</a>
-        </Menu.Item>
-        <Menu.Item>
-            <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">评论</a>
-        </Menu.Item>
-        <Menu.Item>
-            <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">保存到蚁盘</a>
-        </Menu.Item>
-    </Menu>
-);
+
 
 var antGroup;
 // var messageList = [];
@@ -64,11 +51,28 @@ var isRendering = false;
 var isRequesting = false;
 var preHeight = 0;
 var isSend = false;
+var menu = null;
+
+
 const AntGroupTabComponents = React.createClass({
 
     getInitialState() {
         antGroup = this;
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+        //聊天的更多功能
+        menu = (
+            <Menu>
+                <Menu.Item>
+                    <a target="_blank" onClick={this.saveFile}>保存到蚁盘</a>
+                </Menu.Item>
+                <Menu.Item>
+                    <a target="_blank">评论</a>
+                </Menu.Item>
+                <Menu.Item>
+                    <a target="_blank">保存到蚁盘</a>
+                </Menu.Item>
+            </Menu>
+        );
         return {
             loginUser: loginUser,
             isreader: true,
@@ -142,6 +146,54 @@ const AntGroupTabComponents = React.createClass({
     componentDidMount() {
         this.turnToMessagePage(sessionStorage.getItem("loginUser"), "message", "noTurnPage");
         window.__sendfile__ = this.sendFile;
+    },
+
+    /**
+     *打开保存文件到蚁盘的model
+     */
+    saveFile() {
+        //1.让model显示出来
+        antGroup.setState({saveFileModalVisible: true});
+
+        //2.请求用户的私人网盘用数据构建model的table
+        var param = {
+            "method": 'getUserRootCloudFiles',
+            "userId": antGroup.state.loginUser.colUid,
+            "pageNo": 1,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                console.log(response);
+                // if (response) {
+                //     if (isEmpty(optSrc) == false && optSrc == "mainTable") {
+                //         cloudTable.buildTableDataByResponse(ret);
+                //     } else if (optSrc == "moveDirModal") {
+                //         cloudTable.buildTargetDirData(ret);
+                //     } else {
+                //         cloudTable.buildTableDataByResponse(ret);
+                //         cloudTable.buildTargetDirData(ret);
+                //     }
+                // }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 关闭保存文件到蚁盘的model
+     */
+    moveFileModalHandleCancel() {
+        antGroup.setState({saveFileModalVisible: false});
+    },
+
+    /**
+     * 让保存文件到蚁盘model后退
+     */
+    returnParentAtMoveModal() {
+        alert('让保存文件到蚁盘model后退');
     },
 
     /**
@@ -1362,9 +1414,9 @@ const AntGroupTabComponents = React.createClass({
                                                        download={filePath}
                                                        className="downfile_noom file_noom_line"><Icon
                                                         type="download"/>下载</a>
-                                                    <Dropdown overlay={menu} trigger={['click']}>
-                                                        <a className="ant-dropdown-link" href="#">
-                                                          更多<Icon type="down" />
+                                                    <Dropdown overlay={menu}>
+                                                        <a className="ant-dropdown-link" href="javascript:;">
+                                                          更多<Icon type="down"/>
                                                         </a>
                                                     </Dropdown>
                                                 </div>
@@ -1430,9 +1482,9 @@ const AntGroupTabComponents = React.createClass({
                                                        download={filePath}
                                                        className="downfile_noom file_noom_line"><Icon
                                                         type="download"/>下载</a>
-                                                    <Dropdown overlay={menu} trigger={['click']}>
-                                                        <a className="ant-dropdown-link" href="#">
-                                                          更多<Icon type="down" />
+                                                    <Dropdown overlay={menu}>
+                                                        <a className="ant-dropdown-link" href="javascript:;">
+                                                          更多<Icon type="down"/>
                                                         </a>
                                                     </Dropdown>
                                                 </div>
@@ -1718,6 +1770,11 @@ const AntGroupTabComponents = React.createClass({
         } else {
             tabComponent = <div className="userinfo_bg_1"><span>科技改变未来，教育成就梦想</span></div>;
         }
+        var returnToolbarInMoveModal = <div className="public—til—blue">
+            <div className="ant-tabs-right"><Button onClick={antGroup.returnParentAtMoveModal}><Icon
+                type="left"/></Button></div>
+        </div>;
+
 
         return (
             <div>
@@ -1726,6 +1783,7 @@ const AntGroupTabComponents = React.createClass({
                     {tabComponent}
                 </div>
 
+                {/*发送文件model*/}
                 <Modal
                     visible={antGroup.state.cloudFileUploadModalVisible}
                     title="上传文件"
@@ -1760,6 +1818,32 @@ const AntGroupTabComponents = React.createClass({
                         </Col>
 
                     </Row>
+                </Modal>
+
+                {/*保存到我的蚁盘model*/}
+                <Modal title="我的文件"
+                       visible={antGroup.state.saveFileModalVisible}
+                       transitionName=""  //禁用modal的动画效果
+                       maskClosable={false} //设置不允许点击蒙层关闭
+                       onCancel={antGroup.moveFileModalHandleCancel}
+                       footer={null}
+                >
+                    <div className="move_file">
+                        <Row>
+                            <Col span={24}>
+                                {returnToolbarInMoveModal}
+                                {/*<Table columns={targetDirColumns} showHeader={false}*/}
+                                {/*dataSource={cloudTable.state.targetDirDataArray}*/}
+                                {/*pagination={{*/}
+                                {/*total: cloudTable.state.totalCount,*/}
+                                {/*pageSize: getPageSize(),*/}
+                                {/*onChange: cloudTable.pageOnChange*/}
+                                {/*}} scroll={{y: 300}}/>*/}
+
+                                哈哈哈哈哈哈哈哈
+                            </Col>
+                        </Row>
+                    </div>
                 </Modal>
 
             </div>
