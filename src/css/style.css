@@ -7084,7 +7084,7 @@ select.course_n:hover {
 }
 
 .span_link_div {
-    max-width: calc(100% - 35px);
+    max-width: calc(100% - 40px);
     height:40px;
     float: right;
 }
