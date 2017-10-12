@@ -1362,7 +1362,7 @@ const AntGroupTabComponents = React.createClass({
                                                        download={filePath}
                                                        className="downfile_noom file_noom_line"><Icon
                                                         type="download"/>下载</a>
-                                                    <Dropdown overlay={menu} trigger={['click']}>
+                                                    <Dropdown overlay={menu}>
                                                         <a className="ant-dropdown-link" href="#">
                                                           更多<Icon type="down" />
                                                         </a>
@@ -1430,7 +1430,7 @@ const AntGroupTabComponents = React.createClass({
                                                        download={filePath}
                                                        className="downfile_noom file_noom_line"><Icon
                                                         type="download"/>下载</a>
-                                                    <Dropdown overlay={menu} trigger={['click']}>
+                                                    <Dropdown overlay={menu}>
                                                         <a className="ant-dropdown-link" href="#">
                                                           更多<Icon type="down" />
                                                         </a>
