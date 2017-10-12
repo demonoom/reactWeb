@@ -7112,7 +7112,9 @@ select.course_n:hover {
     height:40px;
     float:right;
 }
-
+.borderballoon_file .span_link{
+    width: calc(100% - 5px);
+}
 .span_link_img {
     padding: 0 !important;
 }
@@ -7144,7 +7146,10 @@ select.course_n:hover {
 .file_noom a i {
     margin-right: 4px;
 }
-
+.file_noom a.ant-dropdown-link {
+    position: relative;
+    top:0;
+}
 .file_noom_line {
     border-left: 1px solid #e4e4e4;
     white-space: nowrap;
@@ -7165,4 +7170,15 @@ select.course_n:hover {
 .login_ewm {
     font-size: 12px;
     margin-top: 5px;
+}
+.borderballoon img.send_img, .borderballoon_le img.send_img{
+    width:220px !important;
+    height:150px !important;
+    padding: 5px 5px 0 5px !important;
+}
+.file_link_img_t{
+    line-height: 38px;
+}
+.borderballoon_file_p{
+    padding:0;
 }

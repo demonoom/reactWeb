@@ -1323,20 +1323,24 @@ const AntGroupTabComponents = React.createClass({
                                             <div className="talk-cont"><span
                                                 className="name">{userPhoneIcon}</span><span
                                                 className="borderballoon_le noom_cursor"
-                                                onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}><img
-                                                style={{width: 40}}
-                                                src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
-                                                alt=""/><span className="span_link">{content}</span><i
-                                                className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                                onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
+                                                <div className="borderballoon_le_cont">
+                                                <img className="upexam_float span_link_img" style={{width: 40}} src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png" alt=""/>
+                                                     <div className="span_link_div">
+                                                         <span className="span_link file_link_img_t">{content}</span>
+                                                     </div>
+                                                 </div>
+                                                <i className="borderballoon_dingcorner_ri_no"></i></span></div>
                                         </li>;
                                         // }
                                     } else if (isEmpty(expressionItem) == false) {
                                         //来自安卓的动态表情（安卓的动态表情的content里有“表情”两个字）
                                         messageTag = <li className="right" style={{'textAlign': 'right'}}>
                                             <div className="u-name"><span>{fromUser}</span></div>
-                                            <div className="talk-cont"><span className="name">{userPhoneIcon}</span><img
-                                                src={expressionItem} style={{width: '150px', height: '110px'}}/><span><i
-                                                className="borderballoon_dingcorner_le_no"></i></span></div>
+                                            <div className="talk-cont"><span className="name">{userPhoneIcon}</span>
+                                                <img src={expressionItem} style={{width: '150px', height: '110px'}}/>
+                                                <span><i className="borderballoon_dingcorner_le_no"></i></span>
+                                            </div>
                                         </li>;
                                     } else if (isEmpty(fileName) == false) {
                                         //发送的文件（content里带有文件名字）
@@ -1350,7 +1354,7 @@ const AntGroupTabComponents = React.createClass({
                                                     className="span_link_div"><span
                                                     className="span_link">{fileName}</span><span
                                                     className="span_link password_ts">{fileLength}kb</span></div>
-                                                <img className="upexam_float span_link_img" style={{width: 40}}
+                                                <img className="upexam_float span_link_img" style={{width: 38}}
                                                      src="../src/components/images/maaee_link_file_102_102.png"
                                                      alt=""/>
                                                     </div>
@@ -1363,8 +1367,8 @@ const AntGroupTabComponents = React.createClass({
                                                        className="downfile_noom file_noom_line"><Icon
                                                         type="download"/>下载</a>
                                                     <Dropdown overlay={menu}>
-                                                        <a className="ant-dropdown-link" href="#">
-                                                          更多<Icon type="down" />
+                                                        <a className="ant-dropdown-link file_noom_line" href="#">
+                                                          <Icon type="bars" />更多
                                                         </a>
                                                     </Dropdown>
                                                 </div>
@@ -1399,11 +1403,12 @@ const AntGroupTabComponents = React.createClass({
                                             <div className="talk-cont"><span
                                                 className="name">{userPhoneIcon}</span><span
                                                 className="borderballoon_le noom_cursor"
-                                                onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}><img
-                                                style={{width: 40}}
-                                                src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
-                                                alt=""/><span className="span_link">{content}</span><i
-                                                className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                                onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
+                                                 <img className="upexam_float span_link_img" style={{width: 40}} src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png" alt=""/>
+                                                <span className="span_link file_link_img_t">{content}</span>
+                                                <i className="borderballoon_dingcorner_ri_no"></i>
+                                            </span>
+                                            </div>
                                         </li>;
                                     } else if (isEmpty(fileName) == false) {
                                         //发送的文件（content里带有文件名字）
@@ -1415,7 +1420,7 @@ const AntGroupTabComponents = React.createClass({
                                                 // onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}><img
                                             >
                                                 <div className="borderballoon_le_cont">
-                                                    <img className="upexam_float" style={{width: 40}}
+                                                    <img className="upexam_float" style={{width: 38}}
                                                          src="../src/components/images/maaee_link_file_102_102.png"
                                                          alt=""/>
                                                     <span className="span_link">{fileName}</span>
@@ -1431,8 +1436,8 @@ const AntGroupTabComponents = React.createClass({
                                                        className="downfile_noom file_noom_line"><Icon
                                                         type="download"/>下载</a>
                                                     <Dropdown overlay={menu}>
-                                                        <a className="ant-dropdown-link" href="#">
-                                                          更多<Icon type="down" />
+                                                        <a className="ant-dropdown-link file_noom_line" href="#">
+                                                          <Icon type="bars" />更多
                                                         </a>
                                                     </Dropdown>
                                                 </div>
@@ -1518,12 +1523,15 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="u-name"><span>{fromUser}</span></div>
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><span
-                                            className="borderballoon_le noom_cursor"
-                                            onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}><img
-                                            style={{width: 40}}
-                                            src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
-                                            alt=""/><span className="span_link">默认</span><i
-                                            className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                            className="borderballoon noom_cursor borderballoon_file"
+                                            onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
+                                            <div className="borderballoon_le_cont">
+                                                <img className="upexam_float span_link_img" style={{width: 40}} src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png" alt=""/>
+                                                     <div className="span_link_div">
+                                                         <span className="span_link file_link_img_t">默认</span>
+                                                     </div>
+                                                 </div>
+                                            <i className="borderballoon_dingcorner_ri_no"></i></span></div>
                                     </li>;
                                 } else {
                                     //我收到的
@@ -1532,10 +1540,9 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><span
                                             className="borderballoon_le noom_cursor"
-                                            onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}><img
-                                            style={{width: 40}}
-                                            src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
-                                            alt=""/><span className="span_link">默认</span><i
+                                            onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
+                                            <img className="upexam_float span_link_img" style={{width: 40}} src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png" alt=""/>
+                                            <span className="span_link file_link_img_t">默认</span><i
                                             className="borderballoon_dingcorner_ri_no"></i></span></div>
                                     </li>;
                                 }
@@ -1545,20 +1552,24 @@ const AntGroupTabComponents = React.createClass({
                                     //我发出的
                                     messageTag = <li className="right" style={{'textAlign': 'right'}}>
                                         <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><img
-                                            onClick={showLargeImg}
-                                            src={attachment} style={{width: '220px', height: '150px'}}/><span><i
-                                            className="borderballoon_dingcorner_le_no"></i></span></div>
+                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span>
+                                            <span className="borderballoon borderballoon_file borderballoon_file_p">
+                                                <img onClick={showLargeImg} src={attachment} className="send_img"/>
+                                            </span>
+                                            <span><i className="borderballoon_dingcorner_le_no"></i></span>
+                                        </div>
                                     </li>;
                                 } else {
                                     //我收到的
                                     messageTag = <li style={{'textAlign': 'left'}}>
                                         <div className="u-name"><span>{fromUser}</span></div>
                                         <div className="talk-cont"><span
-                                            className="name">{userPhoneIcon}</span><img
-                                            onClick={showLargeImg}
-                                            style={{width: '220px', height: '150px'}} src={attachment}/><span><i
-                                            className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                            className="name">{userPhoneIcon}</span>
+                                            <span className="borderballoon_le borderballoon_file_p">
+                                                <img onClick={showLargeImg} className="send_img" src={attachment}/>
+                                            </span>
+                                            <span><i className="borderballoon_dingcorner_ri_no"></i></span>
+                                        </div>
                                     </li>;
                                 }
                             } else if (e.messageReturnJson.messageType == "videoTag") {
@@ -1605,7 +1616,7 @@ const AntGroupTabComponents = React.createClass({
                                             <div className="borderballoon_le_cont"><div className="span_link_div"><span
                                                 className="span_link">{fileName}</span><span
                                                 className="span_link password_ts">{fileLength}kb</span></div>
-                                                <img className="upexam_float span_link_img" style={{width: 40}}
+                                                <img className="upexam_float span_link_img" style={{width: 38}}
                                                      src="../src/components/images/maaee_link_file_102_102.png"
                                                      alt=""/>
                                                     </div>
@@ -1630,7 +1641,7 @@ const AntGroupTabComponents = React.createClass({
                                             onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}>
                                             <div className="borderballoon_le_cont"><img
                                                 className="upexam_float"
-                                                style={{width: 40}}
+                                                style={{width: 38}}
                                                 src="../src/components/images/maaee_link_file_102_102.png"
                                                 alt=""/><span
                                                 className="span_link">{fileName}</span><span
