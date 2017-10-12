@@ -22,6 +22,20 @@ import GroupFileUploadComponents from './GroupFileUploadComponents';
 const TabPane = Tabs.TabPane;
 const confirm = Modal.confirm;
 const Panel = Collapse.Panel;
+//聊天的更多功能
+const menu = (
+    <Menu>
+        <Menu.Item>
+            <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">保存到蚁盘</a>
+        </Menu.Item>
+        <Menu.Item>
+            <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">评论</a>
+        </Menu.Item>
+        <Menu.Item>
+            <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">保存到蚁盘</a>
+        </Menu.Item>
+    </Menu>
+);
 
 var antGroup;
 // var messageList = [];
@@ -1348,6 +1362,11 @@ const AntGroupTabComponents = React.createClass({
                                                        download={filePath}
                                                        className="downfile_noom file_noom_line"><Icon
                                                         type="download"/>下载</a>
+                                                    <Dropdown overlay={menu} trigger={['click']}>
+                                                        <a className="ant-dropdown-link" href="#">
+                                                          更多<Icon type="down" />
+                                                        </a>
+                                                    </Dropdown>
                                                 </div>
                                             </span></div>
                                         </li>;
@@ -1411,6 +1430,11 @@ const AntGroupTabComponents = React.createClass({
                                                        download={filePath}
                                                        className="downfile_noom file_noom_line"><Icon
                                                         type="download"/>下载</a>
+                                                    <Dropdown overlay={menu} trigger={['click']}>
+                                                        <a className="ant-dropdown-link" href="#">
+                                                          更多<Icon type="down" />
+                                                        </a>
+                                                    </Dropdown>
                                                 </div>
                                                 </span>
                                             </div>

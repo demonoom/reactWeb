@@ -1137,10 +1137,11 @@
                     break;
 
                 default :
-                    if ((this.mgr.length - _this.hideArr.length) >= 2) {
-                        log.info('打开太多！');
-                        return;
-                    }
+                    //暂时把这个限制去掉
+                    // if ((this.mgr.length - _this.hideArr.length) >= 2) {
+                    //     log.info('打开太多！');
+                    //     return;
+                    // }
 
                     objA = new littlePanle().GetLP(objParam, _this.mgr);
                     _this.addOrderBtn();
