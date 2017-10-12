@@ -145,8 +145,8 @@ const MainLayout = React.createClass({
     },
 
     componentDidMount() {
-        this.refs.dingMusic.innerHTML = '<source src="../../static/eva_call_disconnected.m4a" type="audio/mpeg">'
-        this.refs.mesMusic.innerHTML = '<source src="../../static/yp.mp3" type="audio/mpeg">'
+        this.refs.dingMusic.innerHTML = '<source src="../../static/dingmes.mp3" type="audio/mpeg">'
+        this.refs.mesMusic.innerHTML = '<source src="../../static/message.mp3" type="audio/mpeg">'
     },
 
     componentWillMount() {

@@ -471,6 +471,16 @@ const AntGroupTabComponents = React.createClass({
                         var content = messageOfSinge.content;
                         var uuidsArray = [];
                         var uuid = messageOfSinge.uuid;
+                        console.log(messageOfSinge);
+                        console.log('//判断是否是叮消息');
+                        //判断是否是叮消息
+                        var biumes = null;
+                        if (messageOfSinge.command == 'message') {
+                            biumes = false;
+                        }
+                        if (messageOfSinge.command == 'biu_message') {
+                            biumes = true;
+                        }
                         //附件，图片路径或者音频路径
                         if (isEmpty(messageOfSinge.attachment) == false) {
                             var attachment = messageOfSinge.attachment.address;
@@ -533,22 +543,29 @@ const AntGroupTabComponents = React.createClass({
 
                             if (isSend == false) {
                                 if (data.message.command != "message_read" && data.message.command != "biu_message") {
-                                    var messageShow = {
-                                        'fromUser': fromUser,
-                                        'content': content,
-                                        "messageType": "getMessage",
-                                        "imgTagArray": imgTagArrayReturn,
-                                        "messageReturnJson": messageReturnJson,
-                                        "attachment": attachment,
-                                        "attachmentType": attachmentType,
-                                        "expressionItem": expressionItem,
-                                        "fileName": fileName,
-                                        "filePath": filePath,
-                                        "fileLength": fileLength,
-                                        "fileUid": fileUid,
-                                        "fileCreateUid": fileCreateUid
-                                    };
-                                    messageList.push(messageShow);
+                                    if (operatorObj.colUid === data.message.fromUser.colUid) {
+                                        //处理在停留在别人聊天窗口时另一人新消息会显示的问题，其中operatorObj是点击的那个人的信息，
+                                        //data.message.fromUser是新消息来的那个人的信息
+                                        var messageShow = {
+                                            'fromUser': fromUser,
+                                            'content': content,
+                                            "messageType": "getMessage",
+                                            "imgTagArray": imgTagArrayReturn,
+                                            "messageReturnJson": messageReturnJson,
+                                            "attachment": attachment,
+                                            "attachmentType": attachmentType,
+                                            "expressionItem": expressionItem,
+                                            "fileName": fileName,
+                                            "filePath": filePath,
+                                            "fileLength": fileLength,
+                                            "fileUid": fileUid,
+                                            "fileCreateUid": fileCreateUid,
+                                            "biumes": biumes
+                                        };
+                                        messageList.push(messageShow);
+                                        console.log(messageList);
+                                        console.log('玩坏了');
+                                    }
                                     if (isEmpty(messageOfSinge.toUser) == false) {
                                         var userJson = {
                                             key: messageOfSinge.toUser.colUid,
@@ -961,6 +978,13 @@ const AntGroupTabComponents = React.createClass({
                                 var fileCreateUid = messageOfSinge.cloudFile.createUid;
                             }
                             ;
+                            var biumes = null;
+                            if (e.biuId != 0) {
+                                //这是biumessage
+                                biumes = true;
+                            } else {
+                                biumes = false;
+                            }
                             var uuidsArray = [];
                             var fromUser = messageOfSinge.fromUser;
                             var colUtype = fromUser.colUtype;
@@ -993,7 +1017,8 @@ const AntGroupTabComponents = React.createClass({
                                     "filePath": filePath,
                                     "fileLength": fileLength,
                                     "fileUid": fileUid,
-                                    "fileCreateUid": fileCreateUid
+                                    "fileCreateUid": fileCreateUid,
+                                    "biumes": biumes
                                 };
                                 messageList.push(message);
                             }
@@ -1016,7 +1041,7 @@ const AntGroupTabComponents = React.createClass({
     },
     /**
      * 点击消息列表，进入个人消息的列表窗口
-     * @param userObj
+     * @param userObj   点击的那个人的信息
      * @param timeNode
      */
     getPersonMessage(userObj, timeNode) {
@@ -1147,6 +1172,13 @@ const AntGroupTabComponents = React.createClass({
                                 //文件CreateUid
                                 var fileCreateUid = messageOfSinge.cloudFile.createUid;
                             }
+                            var biumes = null;
+                            if (e.biuId != 0) {
+                                //这是biumessage
+                                biumes = true;
+                            } else {
+                                biumes = false;
+                            }
                             var fromUser = messageOfSinge.fromUser;
                             var colUtype = fromUser.colUtype;
                             var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
@@ -1178,9 +1210,11 @@ const AntGroupTabComponents = React.createClass({
                                     "filePath": filePath,
                                     "fileLength": fileLength,
                                     "fileUid": fileUid,
-                                    "fileCreateUid": fileCreateUid
+                                    "fileCreateUid": fileCreateUid,
+                                    "biumes": biumes
                                 };
                                 messageList.push(messageShow);
+                                // console.log(messageList);
                             }
                         }
                     });
@@ -1227,7 +1261,8 @@ const AntGroupTabComponents = React.createClass({
             var messageTagArray = [];
             messageTagArray.splice(0);
             var messageList = antGroup.state.messageList;
-            // console.log(messageList);
+            console.log(messageList);
+            console.log('渲染');
             if (isEmpty(messageList) == false && messageList.length > 0) {
                 for (var i = messageList.length - 1; i >= 0; i--) {
                     var e = messageList[i];
@@ -1248,6 +1283,8 @@ const AntGroupTabComponents = React.createClass({
                     var attachmentType = e.attachmentType;
                     var expressionItem = e.expressionItem;
 
+                    //是否是biumessage
+                    var biumes = e.biumes;
                     //文件名
                     var fileName = e.fileName;
                     //路径
@@ -1285,7 +1322,7 @@ const AntGroupTabComponents = React.createClass({
                                             <div className="u-name"><span>{fromUser}</span></div>
                                             <div className="talk-cont"><span className="name">{userPhoneIcon}</span><img
                                                 src={expressionItem} style={{width: '150px', height: '110px'}}/><span><i
-                                                className="borderballoon_dingcorner_le"></i></span></div>
+                                                className="borderballoon_dingcorner_le_no"></i></span></div>
                                         </li>;
                                     } else if (isEmpty(fileName) == false) {
                                         //发送的文件（content里带有文件名字）
@@ -1315,13 +1352,24 @@ const AntGroupTabComponents = React.createClass({
                                             </span></div>
                                         </li>;
                                     } else {
-                                        messageTag = <li className="right" style={{'textAlign': 'right'}}>
-                                            <div className="u-name"><span>{fromUser}</span></div>
-                                            <div className="talk-cont"><span
-                                                className="name">{userPhoneIcon}</span><span
-                                                className="borderballoon">{e.content}<i
-                                                className="borderballoon_dingcorner_le"></i></span></div>
-                                        </li>;
+                                        //文字消息
+                                        if (biumes == true) {
+                                            messageTag = <li className="right" style={{'textAlign': 'right'}}>
+                                                <div className="u-name"><span>{fromUser}</span></div>
+                                                <div className="talk-cont"><span
+                                                    className="name">{userPhoneIcon}</span><span
+                                                    className="borderballoon">{e.content}<i
+                                                    className="borderballoon_dingcorner_le"></i></span></div>
+                                            </li>;
+                                        } else {
+                                            messageTag = <li className="right" style={{'textAlign': 'right'}}>
+                                                <div className="u-name"><span>{fromUser}</span></div>
+                                                <div className="talk-cont"><span
+                                                    className="name">{userPhoneIcon}</span><span
+                                                    className="borderballoon">{e.content}<i
+                                                    className="borderballoon_dingcorner_le_no"></i></span></div>
+                                            </li>;
+                                        }
                                     }
                                 } else {
                                     //我收到的
@@ -1377,13 +1425,25 @@ const AntGroupTabComponents = React.createClass({
                                                 className="borderballoon_dingcorner_ri_no"></i></span></div>
                                         </li>;
                                     } else {
-                                        messageTag = <li style={{'textAlign': 'left'}}>
-                                            <div className="u-name"><span>{fromUser}</span></div>
-                                            <div className="talk-cont"><span
-                                                className="name">{userPhoneIcon}</span><span
-                                                className="borderballoon_le">{e.content}<i
-                                                className="borderballoon_dingcorner_ri_no"></i></span></div>
-                                        </li>;
+                                        if (biumes == true) {
+                                            //叮消息有角标
+                                            messageTag = <li style={{'textAlign': 'left'}}>
+                                                <div className="u-name"><span>{fromUser}</span></div>
+                                                <div className="talk-cont"><span
+                                                    className="name">{userPhoneIcon}</span><span
+                                                    className="borderballoon_le">{e.content}<i
+                                                    className="borderballoon_dingcorner_ri"></i></span></div>
+                                            </li>;
+                                        } else {
+                                            //普通消息无角标
+                                            messageTag = <li style={{'textAlign': 'left'}}>
+                                                <div className="u-name"><span>{fromUser}</span></div>
+                                                <div className="talk-cont"><span
+                                                    className="name">{userPhoneIcon}</span><span
+                                                    className="borderballoon_le">{e.content}<i
+                                                    className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                            </li>;
+                                        }
                                     }
                                 }
                             } else if (e.messageReturnJson.messageType == "imgTag") {
@@ -1394,7 +1454,7 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="u-name"><span>{fromUser}</span></div>
                                         <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span
                                             className="borderballoon ">{e.imgTagArray}<i
-                                            className="borderballoon_dingcorner_le"></i></span></div>
+                                            className="borderballoon_dingcorner_le_no"></i></span></div>
                                     </li>;
                                 } else {
                                     //我收到的
@@ -1414,7 +1474,7 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="u-name"><span>{fromUser}</span></div>
                                         <div className="talk-cont"><span className="name">{userPhoneIcon}</span><img
                                             src={expressionItem} style={{width: '150px', height: '110px'}}/><span><i
-                                            className="borderballoon_dingcorner_le"></i></span></div>
+                                            className="borderballoon_dingcorner_le_no"></i></span></div>
                                     </li>;
                                 } else {
                                     //我收到的
@@ -1464,7 +1524,7 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="talk-cont"><span className="name">{userPhoneIcon}</span><img
                                             onClick={showLargeImg}
                                             src={attachment} style={{width: '220px', height: '150px'}}/><span><i
-                                            className="borderballoon_dingcorner_le"></i></span></div>
+                                            className="borderballoon_dingcorner_le_no"></i></span></div>
                                     </li>;
                                 } else {
                                     //我收到的
@@ -1572,7 +1632,7 @@ const AntGroupTabComponents = React.createClass({
                             <div className="talk-cont">
                                 <span className="name">{userPhoneIcon}</span><span
                                 className="borderballoon">{content}<i
-                                className="borderballoon_dingcorner_le"></i></span>
+                                className="borderballoon_dingcorner_le_no"></i></span>
                             </div>
                         </li>;
                     }
