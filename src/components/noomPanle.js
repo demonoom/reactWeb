@@ -209,6 +209,8 @@
                     var title = data.title;
                     var id = data.windowName + "_title";
                     document.getElementById(id).innerText = title;
+                } else if (data.method == 'showCloudFileShare') {
+                    window.__noomShareId__(data.shareId);
                 }
             });
             isAddedListener = true;
