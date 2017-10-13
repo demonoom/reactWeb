@@ -259,13 +259,14 @@ const AntGroupTabComponents = React.createClass({
         });
         fileIds = fileIds.substring(0, fileIds.length - 1);
         //打开我的文件model
-        this.saveFile(fileIds, 'copyCloudFiles');
+        this.saveFile(fileIds);
+        this.setState({isShare: true});
     },
 
     /**
      *打开保存文件到蚁盘的model
      */
-    saveFile(fileIds, method) {
+    saveFile(fileIds) {
         //1.请求用户的私人网盘用数据构建model的table
         var param = {
             "method": 'getUserRootCloudFiles',
@@ -277,7 +278,7 @@ const AntGroupTabComponents = React.createClass({
                 var response = ret.response;
                 if (response) {
                     //构建我的文件目标文件夹数据
-                    antGroup.buildTargetDirData(ret, true, fileIds, method);
+                    antGroup.buildTargetDirData(ret, true, fileIds);
                 }
             },
             onError: function (error) {
@@ -290,7 +291,7 @@ const AntGroupTabComponents = React.createClass({
      * 构建移动文件时的目标文件夹数据
      * @param ret
      */
-    buildTargetDirData(ret, flag, fileIds, method) {
+    buildTargetDirData(ret, flag, fileIds) {
         var targetDirDataArray = [];
         var i = 0;
         if (ret.msg == "调用成功" && ret.success == true && isEmpty(ret.response) == false) {
@@ -309,14 +310,14 @@ const AntGroupTabComponents = React.createClass({
 
                 var dirName = <span className="font_gray_666"
                     //这是点击文件名进入文件夹的功能
-                                    onClick={antGroup.intoDirectoryInner.bind(antGroup, e)}>
+                                    onClick={antGroup.intoDirectoryInner.bind(antGroup, e, fileIds)}>
                 {fileLogo}
             </span>;
                 var moveDirOpt;
                 if (e.directory == true) {
                     moveDirOpt = <div>
                         {/*这是确定保存的功能*/}
-                        <Button onClick={antGroup.saveFileToTargetDir.bind(antGroup, key, fileIds, method)}>确定</Button>
+                        <Button onClick={antGroup.saveFileToTargetDir.bind(antGroup, key, fileIds)}>确定</Button>
                     </div>;
                 } else {
                     dirName = name;
@@ -349,18 +350,17 @@ const AntGroupTabComponents = React.createClass({
     /**
      * 点击确定按钮，保存文件到指定目录
      */
-    saveFileToTargetDir(parentCloudFileId, fileIds, method) {
-        if (method == 'copyCloudFiles') {
+    saveFileToTargetDir(parentCloudFileId, fileIds) {
+        if (this.state.isShare) {
             var param = {
                 "method": 'copyCloudFiles',
                 "operateUserId": antGroup.state.loginUser.colUid,
                 "toCloudFileId": parentCloudFileId,
                 "fromCloudFileIds": fileIds
             };
-            debugger
+            console.log(param);
             doWebService(JSON.stringify(param), {
                 onResponse: function (ret) {
-                    debugger
                     console.log(ret);
                     if (ret.success == true && ret.msg == "调用成功" && isEmpty(ret.response) == false) {
                         var initPageNo = 1;
@@ -377,6 +377,7 @@ const AntGroupTabComponents = React.createClass({
                     }
                     antGroup.setState({saveFileModalVisible: false});
                     antGroup.setState({checkFileModalVisible: false});
+                    antGroup.setState({isShare: false});
                 },
                 onError: function (error) {
                     message.error(error);
@@ -388,6 +389,7 @@ const AntGroupTabComponents = React.createClass({
             var name = this.state.fileName;
             var path = this.state.filePath;
             var length = this.state.fileLength;
+            var fileCreateUid = this.state.fileCreateUid;
 
             var param = {
                 "method": 'createCloudFile',
@@ -438,7 +440,7 @@ const AntGroupTabComponents = React.createClass({
     /**
      * 如果是文件夹，则可以点击文件夹名称，进入文件夹内部
      */
-    intoDirectoryInner(directoryObj) {
+    intoDirectoryInner(directoryObj, fileIds) {
         var initPageNo = 1;
         var queryConditionJson = "";
         //点击第一层文件夹时，记录当前文件夹的群主是否是当前用户
@@ -453,7 +455,7 @@ const AntGroupTabComponents = React.createClass({
             "parentDirectoryIdAtMoveModal": directoryObj.parentId,
             "currentDirectoryIdAtMoveModal": directoryObj.id
         });
-        antGroup.listFiles(antGroup.state.ident, directoryObj.id, queryConditionJson, initPageNo);
+        antGroup.listFiles(antGroup.state.ident, directoryObj.id, queryConditionJson, initPageNo, fileIds);
     },
 
     /**
@@ -463,7 +465,7 @@ const AntGroupTabComponents = React.createClass({
      * @param queryConditionJson
      * @param pageNo
      */
-    listFiles: function (operateUserId, cloudFileId, queryConditionJson, pageNo) {
+    listFiles: function (operateUserId, cloudFileId, queryConditionJson, pageNo, fileIds) {
         data = [];
         antGroup.setState({totalCount: 0});
         antGroup.setState({"currentDirectoryIdAtMoveModal": cloudFileId});
@@ -478,7 +480,7 @@ const AntGroupTabComponents = React.createClass({
             onResponse: function (ret) {
                 var response = ret.response;
                 if (response) {
-                    antGroup.buildTargetDirData(ret);
+                    antGroup.buildTargetDirData(ret, false, fileIds);
                 } else {
                     var parentDirectoryId = e.parent.parentId;
                     antGroup.setState({"parentDirectoryId": parentDirectoryId});
@@ -1577,7 +1579,6 @@ const AntGroupTabComponents = React.createClass({
                                 var fileUid = messageOfSinge.cloudFile.uuid;
                                 //文件CreateUid
                                 var fileCreateUid = messageOfSinge.cloudFile.createUid;
-
                             }
                             var biumes = null;
                             if (e.biuId != 0) {
@@ -1851,7 +1852,7 @@ const AntGroupTabComponents = React.createClass({
                                                        className="downfile_noom file_noom_line"><Icon
                                                         type="download"/>下载</a>
                                                     <Dropdown overlay={menu}
-                                                              onVisibleChange={this.getCloudFile.bind(this, filePath, fileName, oriFileLength ,fileCreateUid)}>
+                                                              onVisibleChange={this.getCloudFile.bind(this, filePath, fileName, oriFileLength, fileCreateUid)}>
                                                         <a className="ant-dropdown-link file_noom_line"
                                                            href="javascript:;">
                                                           <Icon type="bars"/>更多
@@ -2049,7 +2050,7 @@ const AntGroupTabComponents = React.createClass({
                                                        className="downfile_noom file_noom_line"><Icon
                                                         type="download"/>下载</a>
                                                     <Dropdown overlay={menu}
-                                                              onVisibleChange={this.getCloudFile.bind(this, filePath, fileName, oriFileLength ,fileCreateUid)}>
+                                                              onVisibleChange={this.getCloudFile.bind(this, filePath, fileName, oriFileLength, fileCreateUid)}>
                                                             <a className="ant-dropdown-link file_noom_line"
                                                                href="javascript:;">
                                                               <Icon type="bars"/>更多
