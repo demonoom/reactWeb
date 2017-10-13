@@ -1,13 +1,9 @@
 import React, {PropTypes} from 'react';
 import {Tabs, Breadcrumb, Icon, Card, Button, Row, Col, Table, Transfer} from 'antd';
-import {Menu, Dropdown, message, Pagination, Tag, Modal, Popover, Input, Collapse, notification, Progress} from 'antd';
+import {Menu, Dropdown, message, Modal, Popover, Input, Collapse, notification, Progress} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
-import PersonCenterComponents from './PersonCenterComponents';
 import EmotionInputComponents from './EmotionInputComponents';
-import UseKnowledgeComponents from '../UseKnowledgeComponents';
-import Favorites from '../Favorites';
 import {getPageSize} from '../../utils/Const';
-import {getLocalTime} from '../../utils/utils';
 import {isEmpty} from '../../utils/Const';
 import {phone} from '../../utils/phone';
 import {getImgName} from '../../utils/Const';
@@ -15,13 +11,13 @@ import {formatMD} from '../../utils/utils';
 import {formatHM} from '../../utils/utils';
 import {isToday} from '../../utils/utils';
 import {showLargeImg} from '../../utils/utils';
-import {MsgConnection} from '../../utils/msg_websocket_connection';
 import ConfirmModal from '../ConfirmModal';
 import GroupFileUploadComponents from './GroupFileUploadComponents';
 
 const TabPane = Tabs.TabPane;
 const confirm = Modal.confirm;
 const Panel = Collapse.Panel;
+<<<<<<< HEAD
 //聊天的更多功能
 const menu = (
     <Menu>
@@ -36,6 +32,22 @@ const menu = (
         </Menu.Item>
     </Menu>
 );
+=======
+const fileDetilColumns = [{
+    title: '',
+    dataIndex: 'img',
+}];
+const data_noom = [];
+// for (let i = 0; i < 46; i++) {
+//     data_noom.push({
+//         key: i,
+//         img: `<img/>`,
+//         name: 32,
+//         time: `London, Park Lane no. ${i}`,
+//     });
+// }
+
+>>>>>>> ab0555b8bb3013dfccfa1a5fe017773a1b9e2b1d
 
 var antGroup;
 // var messageList = [];
@@ -104,6 +116,7 @@ const AntGroupTabComponents = React.createClass({
             errorModalIsShow: false,
             uploadPercent: 0,
             progressState: 'none',
+            totalCount: 0
         };
 
     },
@@ -142,9 +155,323 @@ const AntGroupTabComponents = React.createClass({
     componentDidMount() {
         this.turnToMessagePage(sessionStorage.getItem("loginUser"), "message", "noTurnPage");
         window.__sendfile__ = this.sendFile;
+        //查看分享的文件
+        window.__noomShareId__ = this.noomShareId;
+    },
+
+    //拿到分享链接里的查看文件id,去请求该文件的详细
+    noomShareId(id) {
+        var _this = this;
+        var param = {
+            "method": 'getCloudFileShareById',
+            "shareId": id,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response.attachments;
+                _this.buildFileDetilData(response);
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     /**
+     * 关闭查看分享的文件详情的model
+     */
+    checkFileModalHandleCancel() {
+        this.setState({checkFileModalVisible: false});
+    },
+
+    /**
+     * 构建查看文件详细的table
+     */
+    buildFileDetilData(res) {
+        //打开model,model里有一个table,支持多选，选择后下面的下载和保存到蚁盘可用
+        //根据数据展示文件,response已经拿到用它来渲染table
+        //table支持多选，选择后下面的下载和保存到蚁盘可用
+        //注：先将table渲染出来，再显示model，和昨天的model一样
+        for (var a = 0; a <= 15; a++) {
+            var imgTag = <div>
+                            <span>
+                                <img src="../../components/images/lALPBY0V4pdU_AxmZg_102_102.png"/>
+                            </span>
+                <div>
+                    <span>文件名.mp3</span>
+                    <span>2017.20.33 23:22:33</span>
+                </div>
+            </div>;
+            var fileMes = {
+                key: a,
+                img: imgTag,
+            };
+
+            data_noom.push(fileMes);
+        }
+        console.log(data_noom);
+
+        this.setState({data_noom});
+        this.setState({selectedRowKeys: []});
+        this.setState({checkFileModalVisible: true});
+    },
+
+    /**
+     * 表格分页响应函数
+     * 需要注意该表格承载了不同的数据，需要根据情况进行分页
+     * @param pageNo
+     */
+    pageOnChange(pageNo) {
+        antGroup.getUserRootCloudFiles(antGroup.state.ident, pageNo);
+        antGroup.setState({
+            currentPage: pageNo,
+        });
+    },
+
+    /**
+<<<<<<< HEAD
+=======
+     *打开保存文件到蚁盘的model
+     */
+    saveFile() {
+        //1.请求用户的私人网盘用数据构建model的table
+        var param = {
+            "method": 'getUserRootCloudFiles',
+            "userId": antGroup.state.loginUser.colUid,
+            "pageNo": 1,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if (response) {
+                    //构建我的文件目标文件夹数据
+                    antGroup.buildTargetDirData(ret, true);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 构建移动文件时的目标文件夹数据
+     * @param ret
+     */
+    buildTargetDirData(ret, flag) {
+        var targetDirDataArray = [];
+        var i = 0;
+        if (ret.msg == "调用成功" && ret.success == true && isEmpty(ret.response) == false) {
+            ret.response.forEach(function (e) {
+                if (i == 0) {
+                    if (e.parent) {
+                        var parentDirectoryId = e.parent.parentId;
+                        antGroup.setState({"parentDirectoryIdAtMoveModal": parentDirectoryId});
+                    }
+                }
+                i++;
+                var key = e.id;
+                var name = e.name;
+                var directory = e.directory;
+                var fileLogo = antGroup.buildFileLogo(name, directory, e);
+
+                var dirName = <span className="font_gray_666"
+                    //这是点击文件名进入文件夹的功能
+                                    onClick={antGroup.intoDirectoryInner.bind(antGroup, e)}>
+                {fileLogo}
+            </span>;
+                var moveDirOpt;
+                if (e.directory == true) {
+                    moveDirOpt = <div>
+                        {/*这是确定保存的功能*/}
+                        <Button onClick={antGroup.saveFileToTargetDir.bind(antGroup, key)}>确定</Button>
+                    </div>;
+                } else {
+                    dirName = name;
+                }
+                var dataJson = {
+                    key: key,
+                    dirName: dirName,
+                    moveDirOpt: moveDirOpt
+                };
+                targetDirDataArray.push(dataJson);
+            })
+            antGroup.setState({"targetDirDataArray": targetDirDataArray});
+            //2.当表格组件好之后就让model显示出来
+            if (flag) {
+                antGroup.setState({saveFileModalVisible: true});
+            }
+        }
+    },
+
+    /**
+     *拿到保存的文件的信息的回调
+     * @param filePath
+     * @param fileName
+     * @param fileLength
+     */
+    getCloudFile(filePath, fileName, fileLength) {
+        this.setState({filePath, fileName, fileLength})
+    },
+
+    /**
+     * 点击确定按钮，保存文件到指定目录
+     */
+    saveFileToTargetDir(parentCloudFileId) {
+        //1.将此文件的信息拿过来
+        var name = this.state.fileName;
+        var path = this.state.filePath;
+        var length = this.state.fileLength;
+
+        var param = {
+            "method": 'createCloudFile',
+            "operateUserId": antGroup.state.loginUser.colUid,
+            "parentCloudFileId": parentCloudFileId,
+            "name": name,
+            "path": path,
+            "length": length
+        };
+
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.success == true && ret.msg == "调用成功" && isEmpty(ret.response) == false) {
+                    var initPageNo = 1;
+                    var queryConditionJson = "";
+                    if (antGroup.state.currentDirectoryId != -1) {
+                        antGroup.listFiles(antGroup.state.ident,
+                            antGroup.state.currentDirectoryId, queryConditionJson, initPageNo, "mainTable");
+                    } else {
+                        antGroup.getUserRootCloudFiles(antGroup.state.ident, antGroup.state.currentPage);
+                    }
+                    message.success("文件保存成功");
+                } else {
+                    message.error("文件保存失败");
+                }
+                antGroup.setState({saveFileModalVisible: false});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     *构建我的文件model文件图标
+     */
+    buildFileLogo(name, directory, e) {
+        var fileLogo = <span className="cloud_text">
+                <i className="cloud_icon cloud_icon_file upexam_float"></i>
+                <span className="antnest_name affix_bottom_tc"
+                    //这也是点击文件名进入文件夹的功能
+                      onClick={antGroup.intoDirectoryInner.bind(antGroup, e)}>{name}</span>
+            </span>;
+        return fileLogo;
+    },
+
+    /**
+     * 如果是文件夹，则可以点击文件夹名称，进入文件夹内部
+     */
+    intoDirectoryInner(directoryObj) {
+        var initPageNo = 1;
+        var queryConditionJson = "";
+        //点击第一层文件夹时，记录当前文件夹的群主是否是当前用户
+        if (antGroup.state.currentDirectoryId == -1 && this.state.getFileType != "myFile") {
+            if (directoryObj.createUid == this.state.ident) {
+                this.setState({"isGroupCreator": true});
+            } else {
+                this.setState({"isGroupCreator": false});
+            }
+        }
+        antGroup.setState({
+            "parentDirectoryIdAtMoveModal": directoryObj.parentId,
+            "currentDirectoryIdAtMoveModal": directoryObj.id
+        });
+        antGroup.listFiles(antGroup.state.ident, directoryObj.id, queryConditionJson, initPageNo);
+    },
+
+    /**
+     * 点击文件夹名称，进入文件夹内部的文件列表
+     * @param operateUserId
+     * @param cloudFileId
+     * @param queryConditionJson
+     * @param pageNo
+     */
+    listFiles: function (operateUserId, cloudFileId, queryConditionJson, pageNo) {
+        data = [];
+        antGroup.setState({totalCount: 0});
+        antGroup.setState({"currentDirectoryIdAtMoveModal": cloudFileId});
+        var param = {
+            "method": 'listFiles',
+            "operateUserId": antGroup.state.loginUser.colUid,
+            "cloudFileId": cloudFileId,
+            "queryConditionJson": queryConditionJson,
+            "pageNo": pageNo
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if (response) {
+                    antGroup.buildTargetDirData(ret);
+                } else {
+                    var parentDirectoryId = e.parent.parentId;
+                    antGroup.setState({"parentDirectoryId": parentDirectoryId});
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 关闭保存文件到蚁盘的model
+     */
+    moveFileModalHandleCancel() {
+        antGroup.setState({saveFileModalVisible: false});
+    },
+
+    /**
+     * 让保存文件到蚁盘model后退
+     */
+    returnParentAtMoveModal() {
+        var initPageNo = 1;
+        if (antGroup.state.parentDirectoryIdAtMoveModal == 0) {
+            antGroup.setState({"parentDirectoryIdAtMoveModal": -1, "currentDirectoryIdAtMoveModal": -1});
+            antGroup.getUserRootCloudFiles(antGroup.state.ident, initPageNo);
+        } else {
+            var queryConditionJson = "";
+            antGroup.listFiles(antGroup.state.ident, antGroup.state.parentDirectoryIdAtMoveModal, queryConditionJson, initPageNo);
+        }
+    },
+
+    /**
+     * 获取用户文件根目录
+     * @param userId
+     * @param pageNo
+     */
+    getUserRootCloudFiles: function (userId, pageNo) {
+        data = [];
+        antGroup.setState({currentDirectoryId: -1, totalCount: 0});
+        var param = {
+            "method": 'getUserRootCloudFiles',
+            "userId": antGroup.state.loginUser.colUid,
+            "pageNo": pageNo,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if (response) {
+                    antGroup.buildTargetDirData(ret, false);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+>>>>>>> ab0555b8bb3013dfccfa1a5fe017773a1b9e2b1d
      * 让上传组件显示
      */
     sendFile() {
@@ -1259,7 +1586,21 @@ const AntGroupTabComponents = React.createClass({
         antGroup.turnToMessagePage(currentGroupObj, messageType);
     },
 
+    /**
+     * 表格选中响应函数
+     * @param selectedRowKeys
+     */
+    onSelectChange(selectedRowKeys) {
+        console.log('selectedRowKeys changed: ', selectedRowKeys);
+        this.setState({selectedRowKeys});
+    },
+
     render() {
+        const rowSelection = {
+            selectedRowKeys: this.state.selectedRowKeys,
+            onChange: this.onSelectChange,
+        };
+        const hasSelected = this.state.selectedRowKeys.length > 0;
         var progressState = antGroup.state.progressState;
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         var welcomeTitle;
@@ -1305,6 +1646,8 @@ const AntGroupTabComponents = React.createClass({
                     var filePath = e.filePath;
                     //大小
                     var fileLength = (e.fileLength / 1024).toFixed(2);
+                    //原始大小
+                    var oriFileLength = e.fileLength
                     //文件的uuid
                     var fileUid = e.fileUid
                     //文件的createUid
@@ -1366,9 +1709,17 @@ const AntGroupTabComponents = React.createClass({
                                                        download={filePath}
                                                        className="downfile_noom file_noom_line"><Icon
                                                         type="download"/>下载</a>
+<<<<<<< HEAD
                                                     <Dropdown overlay={menu}>
                                                         <a className="ant-dropdown-link file_noom_line" href="#">
                                                           <Icon type="bars" />更多
+=======
+                                                    <Dropdown overlay={menu}
+                                                              onVisibleChange={this.getCloudFile.bind(this, filePath, fileName, oriFileLength)}>
+                                                        <a className="ant-dropdown-link file_noom_line"
+                                                           href="javascript:;">
+                                                          <Icon type="bars"/>更多
+>>>>>>> ab0555b8bb3013dfccfa1a5fe017773a1b9e2b1d
                                                         </a>
                                                     </Dropdown>
                                                 </div>
@@ -1435,9 +1786,17 @@ const AntGroupTabComponents = React.createClass({
                                                        download={filePath}
                                                        className="downfile_noom file_noom_line"><Icon
                                                         type="download"/>下载</a>
+<<<<<<< HEAD
                                                     <Dropdown overlay={menu}>
                                                         <a className="ant-dropdown-link file_noom_line" href="#">
                                                           <Icon type="bars" />更多
+=======
+                                                    <Dropdown overlay={menu}
+                                                              onVisibleChange={this.getCloudFile.bind(this, filePath, fileName, oriFileLength)}>
+                                                        <a className="ant-dropdown-link file_noom_line"
+                                                           href="javascript:;">
+                                                          <Icon type="bars"/>更多
+>>>>>>> ab0555b8bb3013dfccfa1a5fe017773a1b9e2b1d
                                                         </a>
                                                     </Dropdown>
                                                 </div>
@@ -1628,6 +1987,13 @@ const AntGroupTabComponents = React.createClass({
                                                        download={filePath}
                                                        className="downfile_noom file_noom_line"><Icon
                                                         type="download"/>下载</a>
+                                                    <Dropdown overlay={menu}
+                                                              onVisibleChange={this.getCloudFile.bind(this, filePath, fileName, oriFileLength)}>
+                                                            <a className="ant-dropdown-link file_noom_line"
+                                                               href="javascript:;">
+                                                              <Icon type="bars"/>更多
+                                                            </a>
+                                                        </Dropdown>
                                                 </div>
                                             </span></div>
                                     </li>;
@@ -1655,6 +2021,13 @@ const AntGroupTabComponents = React.createClass({
                                                        download={filePath}
                                                        className="downfile_noom file_noom_line"><Icon
                                                         type="download"/>下载</a>
+                                                    <Dropdown overlay={menu}
+                                                              onVisibleChange={this.getCloudFile.bind(this, filePath, fileName, oriFileLength)}>
+                                                        <a className="ant-dropdown-link file_noom_line"
+                                                           href="javascript:;">
+                                                          <Icon type="bars"/>更多
+                                                        </a>
+                                                    </Dropdown>
                                                 </div>
                                         </span></div>
                                     </li>;
@@ -1773,6 +2146,62 @@ const AntGroupTabComponents = React.createClass({
                     </Row>
                 </Modal>
 
+<<<<<<< HEAD
+=======
+                {/*保存到我的蚁盘model*/}
+                <Modal title="我的文件"
+                       visible={antGroup.state.saveFileModalVisible}
+                       transitionName=""  //禁用modal的动画效果
+                       maskClosable={false} //设置不允许点击蒙层关闭
+                       onCancel={antGroup.moveFileModalHandleCancel}
+                       footer={null}
+                >
+                    <div className="move_file">
+                        <Row>
+                            <Col span={24}>
+                                {returnToolbarInMoveModal}
+                                <Table columns={targetDirColumns} showHeader={false}
+                                       dataSource={antGroup.state.targetDirDataArray}
+                                       pagination={{
+                                           total: antGroup.state.totalCount,
+                                           pageSize: getPageSize(),
+                                           onChange: antGroup.pageOnChange
+                                       }}
+                                       scroll={{y: 300}}/>
+                            </Col>
+                        </Row>
+                    </div>
+                </Modal>
+
+                <Modal title="文件详情"
+                       visible={this.state.checkFileModalVisible}
+                       transitionName=""  //禁用modal的动画效果
+                       maskClosable={false} //设置不允许点击蒙层关闭
+                       onCancel={this.checkFileModalHandleCancel}
+                       footer={null}
+                >
+                    <div className="move_file">
+                        <Row>
+                            <Col span={24}>
+                                <div>
+                                    <div style={{marginBottom: 16}}>
+                                        <Button
+                                            type="primary"
+                                            // onClick={this.start}
+                                            disabled={!hasSelected}
+                                        >
+                                            保存到蚁盘
+                                        </Button>
+                                    </div>
+                                    <Table rowSelection={rowSelection} columns={fileDetilColumns}
+                                           dataSource={data_noom}
+                                           pagination={false}/>
+                                </div>
+                            </Col>
+                        </Row>
+                    </div>
+                </Modal>
+>>>>>>> ab0555b8bb3013dfccfa1a5fe017773a1b9e2b1d
             </div>
         );
     },

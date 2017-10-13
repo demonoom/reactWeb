@@ -1,5 +1,5 @@
 import React from 'react';
-import {Menu, Icon, Row, Col, Button, notification} from 'antd';
+import {Menu, Icon, Row, Col, Button, notification, Modal} from 'antd';
 import MainTabComponents from '../components/MainTabComponents';
 import HeaderComponents from '../components/HeaderComponents';
 import UserFace from '../components/UserCardModalComponents';

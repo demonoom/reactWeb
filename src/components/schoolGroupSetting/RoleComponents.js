@@ -280,9 +280,9 @@ const RoleComponents = React.createClass({
                 <div className="framework_r_height">
                     <div className="framework_btn_bg">
                          <span>
-                        <Button className="schoolgroup_btn_blue schoolgroup_btn"
-                                onClick={this.addRoleMember}>添加成员</Button>
-                    </span>
+                            <Button className="schoolgroup_btn_blue schoolgroup_btn"
+                                    onClick={this.addRoleMember}>添加成员</Button>
+                        </span>
                         <Button disabled={!hasSelected}
                                 className="schoolgroup_btn_red schoolgroup_btn_left schoolgroup_btn"
                                 onClick={this.showConfirm}>批量删除</Button>
