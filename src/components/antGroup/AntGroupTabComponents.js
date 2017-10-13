@@ -209,13 +209,13 @@ const AntGroupTabComponents = React.createClass({
             var fileCreTime = getLocalTime(v.cloudFile.createTime);
             //我要的key
             var key = fileSrc + '@' + fileName + '@' + fileLength;
-            var imgTag = <div>
-                            <span>
-                                <img src="../../components/images/lALPBY0V4pdU_AxmZg_102_102.png"/>
+            var imgTag = <div className="file_icon_cont">
+                            <span className="file_icon_img">
+                                <img src="../src/components/images/lALPBY0V4pdU_AxmZg_102_102.png"/>
                             </span>
-                <div>
-                    <span>{fileName}</span>
-                    <span>{fileCreTime}</span>
+                <div className="file_icon_text">
+                    <span className="file_icon_text2">{fileName}</span>
+                    <span className="right_ri password_ts">{fileCreTime}</span>
                 </div>
             </div>;
             var fileMes = {
@@ -358,7 +358,6 @@ const AntGroupTabComponents = React.createClass({
                 "toCloudFileId": parentCloudFileId,
                 "fromCloudFileIds": fileIds
             };
-            console.log(param);
             doWebService(JSON.stringify(param), {
                 onResponse: function (ret) {
                     console.log(ret);
@@ -1237,9 +1236,9 @@ const AntGroupTabComponents = React.createClass({
             // antGroup.props.onNewMessage(userJson);
             // antGroup.setState({"messageList": messageList, "isDirectToBottom": true});
             /*var messageList = [];
-            messageList.push(messageJson);
-            antGroup.addMessageList(messageList,"first");
-            antGroup.setState({"isDirectToBottom": true});*/
+             messageList.push(messageJson);
+             antGroup.addMessageList(messageList,"first");
+             antGroup.setState({"isDirectToBottom": true});*/
         }
     },
 
@@ -2245,20 +2244,26 @@ const AntGroupTabComponents = React.createClass({
                        maskClosable={false} //设置不允许点击蒙层关闭
                        onCancel={this.checkFileModalHandleCancel}
                        footer={null}
+                       className="file_icon_new"
                 >
-                    <div className="move_file">
+                    <Row>
+                        <Col span={24}>
+                            <div style={{marginBottom: 16}} className="file_icon_new_p">
+                                <Button
+                                    type="primary"
+                                    onClick={this.saveShareFile}
+                                    disabled={!hasSelected}
+                                >
+                                    保存到蚁盘
+                                </Button>
+                            </div>
+                        </Col>
+                    </Row>
+                    <div className="move_file_clearfix">
                         <Row>
                             <Col span={24}>
-                                <div>
-                                    <div style={{marginBottom: 16}}>
-                                        <Button
-                                            type="primary"
-                                            onClick={this.saveShareFile}
-                                            disabled={!hasSelected}
-                                        >
-                                            保存到蚁盘
-                                        </Button>
-                                    </div>
+
+                                <div className="file_icon_new_clearfix">
                                     <Table rowSelection={rowSelection} columns={fileDetilColumns}
                                            dataSource={data_noom}
                                            pagination={false}/>
