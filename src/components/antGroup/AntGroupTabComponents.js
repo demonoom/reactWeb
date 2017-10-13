@@ -11,44 +11,18 @@ import {formatMD} from '../../utils/utils';
 import {formatHM} from '../../utils/utils';
 import {isToday} from '../../utils/utils';
 import {showLargeImg} from '../../utils/utils';
+import {getLocalTime} from '../../utils/Const'
 import ConfirmModal from '../ConfirmModal';
 import GroupFileUploadComponents from './GroupFileUploadComponents';
 
 const TabPane = Tabs.TabPane;
 const confirm = Modal.confirm;
 const Panel = Collapse.Panel;
-<<<<<<< HEAD
-//聊天的更多功能
-const menu = (
-    <Menu>
-        <Menu.Item>
-            <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">保存到蚁盘</a>
-        </Menu.Item>
-        <Menu.Item>
-            <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">评论</a>
-        </Menu.Item>
-        <Menu.Item>
-            <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">保存到蚁盘</a>
-        </Menu.Item>
-    </Menu>
-);
-=======
 const fileDetilColumns = [{
     title: '',
     dataIndex: 'img',
 }];
-const data_noom = [];
-// for (let i = 0; i < 46; i++) {
-//     data_noom.push({
-//         key: i,
-//         img: `<img/>`,
-//         name: 32,
-//         time: `London, Park Lane no. ${i}`,
-//     });
-// }
-
->>>>>>> ab0555b8bb3013dfccfa1a5fe017773a1b9e2b1d
-
+var data_noom = [];
 var antGroup;
 // var messageList = [];
 //消息通信js
@@ -76,11 +50,37 @@ var isRendering = false;
 var isRequesting = false;
 var preHeight = 0;
 var isSend = false;
+var menu = null;
+var targetDirColumns = [{
+    title: '文件夹名称',
+    dataIndex: 'dirName',
+}, {
+    title: '操作',
+    className: 'ant-table-selection-user schoolgroup_operate',
+    dataIndex: 'moveDirOpt',
+}
+];
+
+
 const AntGroupTabComponents = React.createClass({
 
     getInitialState() {
         antGroup = this;
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+        // //聊天的更多功能
+        menu = (
+            <Menu>
+                <Menu.Item>
+                    <a target="_blank" onClick={this.saveFile}>保存到蚁盘</a>
+                </Menu.Item>
+                {/*<Menu.Item>*/}
+                {/*<a target="_blank">评论</a>*/}
+                {/*</Menu.Item>*/}
+                {/*<Menu.Item>*/}
+                {/*<a target="_blank">保存到蚁盘</a>*/}
+                {/*</Menu.Item>*/}
+            </Menu>
+        );
         return {
             loginUser: loginUser,
             isreader: true,
@@ -182,36 +182,49 @@ const AntGroupTabComponents = React.createClass({
      */
     checkFileModalHandleCancel() {
         this.setState({checkFileModalVisible: false});
+        //关闭model时清空表格数据
+        data_noom = [];
     },
 
     /**
      * 构建查看文件详细的table
      */
     buildFileDetilData(res) {
+        data_noom = [];
         //打开model,model里有一个table,支持多选，选择后下面的下载和保存到蚁盘可用
         //根据数据展示文件,response已经拿到用它来渲染table
         //table支持多选，选择后下面的下载和保存到蚁盘可用
         //注：先将table渲染出来，再显示model，和昨天的model一样
-        for (var a = 0; a <= 15; a++) {
-            var imgTag = <div>
-                            <span>
-                                <img src="../../components/images/lALPBY0V4pdU_AxmZg_102_102.png"/>
+
+        res.forEach(function (v, i) {
+            //文件地址
+            var fileSrc = v.cloudFile.path;
+            //文件大小
+            var fileLength = v.cloudFile.length;
+            //文件ID
+            var fileId = v.cloudFileId;
+            //文件名
+            var fileName = v.cloudFile.name;
+            //文件创建时间
+            var fileCreTime = getLocalTime(v.cloudFile.createTime);
+            //我要的key
+            var key = fileSrc + '@' + fileName + '@' + fileLength;
+            var imgTag = <div className="file_icon_cont">
+                            <span className="file_icon_img">
+                                <img src="../src/components/images/lALPBY0V4pdU_AxmZg_102_102.png"/>
                             </span>
-                <div>
-                    <span>文件名.mp3</span>
-                    <span>2017.20.33 23:22:33</span>
+                <div className="file_icon_text">
+                    <span className="file_icon_text2">{fileName}</span>
+                    <span className="right_ri password_ts">{fileCreTime}</span>
                 </div>
             </div>;
             var fileMes = {
-                key: a,
+                key: fileId,
                 img: imgTag,
             };
-
             data_noom.push(fileMes);
-        }
-        console.log(data_noom);
+        });
 
-        this.setState({data_noom});
         this.setState({selectedRowKeys: []});
         this.setState({checkFileModalVisible: true});
     },
@@ -229,11 +242,30 @@ const AntGroupTabComponents = React.createClass({
     },
 
     /**
-<<<<<<< HEAD
-=======
+     * 保存分享文件的回调
+     */
+    saveShareFile() {
+        //在这里拿到文件的地址，名字，大小
+        //调用存文件的那个函数
+        var selectedFile = this.state.selectedRowKeys;
+        // var arr = [];
+        // //需要的信息用@拼接成一个字符串，顺序为 地址 文件名 大小
+        // selectedFile.forEach(function (v, i) {
+        //     arr = v.split('@');
+        // });
+        var fileIds = '';
+        selectedFile.forEach(function (v) {
+            fileIds += v + ','
+        });
+        fileIds = fileIds.substring(0, fileIds.length - 1);
+        //打开我的文件model
+        this.saveFile(fileIds, 'copyCloudFiles');
+    },
+
+    /**
      *打开保存文件到蚁盘的model
      */
-    saveFile() {
+    saveFile(fileIds, method) {
         //1.请求用户的私人网盘用数据构建model的table
         var param = {
             "method": 'getUserRootCloudFiles',
@@ -245,7 +277,7 @@ const AntGroupTabComponents = React.createClass({
                 var response = ret.response;
                 if (response) {
                     //构建我的文件目标文件夹数据
-                    antGroup.buildTargetDirData(ret, true);
+                    antGroup.buildTargetDirData(ret, true, fileIds, method);
                 }
             },
             onError: function (error) {
@@ -258,7 +290,7 @@ const AntGroupTabComponents = React.createClass({
      * 构建移动文件时的目标文件夹数据
      * @param ret
      */
-    buildTargetDirData(ret, flag) {
+    buildTargetDirData(ret, flag, fileIds, method) {
         var targetDirDataArray = [];
         var i = 0;
         if (ret.msg == "调用成功" && ret.success == true && isEmpty(ret.response) == false) {
@@ -284,7 +316,7 @@ const AntGroupTabComponents = React.createClass({
                 if (e.directory == true) {
                     moveDirOpt = <div>
                         {/*这是确定保存的功能*/}
-                        <Button onClick={antGroup.saveFileToTargetDir.bind(antGroup, key)}>确定</Button>
+                        <Button onClick={antGroup.saveFileToTargetDir.bind(antGroup, key, fileIds, method)}>确定</Button>
                     </div>;
                 } else {
                     dirName = name;
@@ -310,49 +342,83 @@ const AntGroupTabComponents = React.createClass({
      * @param fileName
      * @param fileLength
      */
-    getCloudFile(filePath, fileName, fileLength) {
-        this.setState({filePath, fileName, fileLength})
+    getCloudFile(filePath, fileName, fileLength, fileCreateUid) {
+        this.setState({filePath, fileName, fileLength, fileCreateUid});
     },
 
     /**
      * 点击确定按钮，保存文件到指定目录
      */
-    saveFileToTargetDir(parentCloudFileId) {
-        //1.将此文件的信息拿过来
-        var name = this.state.fileName;
-        var path = this.state.filePath;
-        var length = this.state.fileLength;
-
-        var param = {
-            "method": 'createCloudFile',
-            "operateUserId": antGroup.state.loginUser.colUid,
-            "parentCloudFileId": parentCloudFileId,
-            "name": name,
-            "path": path,
-            "length": length
-        };
-
-        doWebService(JSON.stringify(param), {
-            onResponse: function (ret) {
-                if (ret.success == true && ret.msg == "调用成功" && isEmpty(ret.response) == false) {
-                    var initPageNo = 1;
-                    var queryConditionJson = "";
-                    if (antGroup.state.currentDirectoryId != -1) {
-                        antGroup.listFiles(antGroup.state.ident,
-                            antGroup.state.currentDirectoryId, queryConditionJson, initPageNo, "mainTable");
+    saveFileToTargetDir(parentCloudFileId, fileIds, method) {
+        if (method == 'copyCloudFiles') {
+            var param = {
+                "method": 'copyCloudFiles',
+                "operateUserId": antGroup.state.loginUser.colUid,
+                "toCloudFileId": parentCloudFileId,
+                "fromCloudFileIds": fileIds
+            };
+            doWebService(JSON.stringify(param), {
+                onResponse: function (ret) {
+                    console.log(ret);
+                    if (ret.success == true && ret.msg == "调用成功" && isEmpty(ret.response) == false) {
+                        var initPageNo = 1;
+                        var queryConditionJson = "";
+                        if (antGroup.state.currentDirectoryId != -1) {
+                            antGroup.listFiles(antGroup.state.ident,
+                                antGroup.state.currentDirectoryId, queryConditionJson, initPageNo, "mainTable");
+                        } else {
+                            antGroup.getUserRootCloudFiles(antGroup.state.ident, antGroup.state.currentPage);
+                        }
+                        message.success("文件保存成功");
                     } else {
-                        antGroup.getUserRootCloudFiles(antGroup.state.ident, antGroup.state.currentPage);
+                        message.error("文件保存失败");
                     }
-                    message.success("文件保存成功");
-                } else {
-                    message.error("文件保存失败");
+                    antGroup.setState({saveFileModalVisible: false});
+                    antGroup.setState({checkFileModalVisible: false});
+                },
+                onError: function (error) {
+                    message.error(error);
                 }
-                antGroup.setState({saveFileModalVisible: false});
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });
+            });
+
+        } else {
+            //1.将此文件的信息拿过来
+            var name = this.state.fileName;
+            var path = this.state.filePath;
+            var length = this.state.fileLength;
+            var fileCreateUid = this.state.fileCreateUid;
+
+            var param = {
+                "method": 'createCloudFile',
+                "operateUserId": antGroup.state.loginUser.colUid,
+                "parentCloudFileId": parentCloudFileId,
+                "name": name,
+                "path": path,
+                "length": length
+            };
+
+            doWebService(JSON.stringify(param), {
+                onResponse: function (ret) {
+                    if (ret.success == true && ret.msg == "调用成功" && isEmpty(ret.response) == false) {
+                        var initPageNo = 1;
+                        var queryConditionJson = "";
+                        if (antGroup.state.currentDirectoryId != -1) {
+                            antGroup.listFiles(antGroup.state.ident,
+                                antGroup.state.currentDirectoryId, queryConditionJson, initPageNo, "mainTable");
+                        } else {
+                            antGroup.getUserRootCloudFiles(antGroup.state.ident, antGroup.state.currentPage);
+                        }
+                        message.success("文件保存成功");
+                    } else {
+                        message.error("文件保存失败");
+                    }
+                    antGroup.setState({saveFileModalVisible: false});
+                },
+                onError: function (error) {
+                    message.error(error);
+                }
+            });
+        }
     },
 
     /**
@@ -471,7 +537,6 @@ const AntGroupTabComponents = React.createClass({
     },
 
     /**
->>>>>>> ab0555b8bb3013dfccfa1a5fe017773a1b9e2b1d
      * 让上传组件显示
      */
     sendFile() {
@@ -905,7 +970,6 @@ const AntGroupTabComponents = React.createClass({
                                         };
                                         messageList.push(messageShow);
                                         console.log(messageList);
-                                        console.log('玩坏了');
                                     }
                                     if (isEmpty(messageOfSinge.toUser) == false) {
                                         var userJson = {
@@ -1170,9 +1234,9 @@ const AntGroupTabComponents = React.createClass({
             // antGroup.props.onNewMessage(userJson);
             // antGroup.setState({"messageList": messageList, "isDirectToBottom": true});
             /*var messageList = [];
-            messageList.push(messageJson);
-            antGroup.addMessageList(messageList,"first");
-            antGroup.setState({"isDirectToBottom": true});*/
+             messageList.push(messageJson);
+             antGroup.addMessageList(messageList,"first");
+             antGroup.setState({"isDirectToBottom": true});*/
         }
     },
 
@@ -1647,11 +1711,11 @@ const AntGroupTabComponents = React.createClass({
                     //大小
                     var fileLength = (e.fileLength / 1024).toFixed(2);
                     //原始大小
-                    var oriFileLength = e.fileLength
+                    var oriFileLength = e.fileLength;
                     //文件的uuid
-                    var fileUid = e.fileUid
+                    var fileUid = e.fileUid;
                     //文件的createUid
-                    var fileCreateUid = e.fileCreateUid
+                    var fileCreateUid = e.fileCreateUid;
 
                     if (isEmpty(messageType) == false && messageType == "getMessage") {
                         if (isEmpty(e.messageReturnJson) == false && isEmpty(e.messageReturnJson.messageType) == false) {
@@ -1668,7 +1732,9 @@ const AntGroupTabComponents = React.createClass({
                                                 className="borderballoon_le noom_cursor"
                                                 onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
                                                 <div className="borderballoon_le_cont">
-                                                <img className="upexam_float span_link_img" style={{width: 40}} src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png" alt=""/>
+                                                <img className="upexam_float span_link_img" style={{width: 40}}
+                                                     src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
+                                                     alt=""/>
                                                      <div className="span_link_div">
                                                          <span className="span_link file_link_img_t">{content}</span>
                                                      </div>
@@ -1709,17 +1775,11 @@ const AntGroupTabComponents = React.createClass({
                                                        download={filePath}
                                                        className="downfile_noom file_noom_line"><Icon
                                                         type="download"/>下载</a>
-<<<<<<< HEAD
-                                                    <Dropdown overlay={menu}>
-                                                        <a className="ant-dropdown-link file_noom_line" href="#">
-                                                          <Icon type="bars" />更多
-=======
                                                     <Dropdown overlay={menu}
-                                                              onVisibleChange={this.getCloudFile.bind(this, filePath, fileName, oriFileLength)}>
+                                                              onVisibleChange={this.getCloudFile.bind(this, filePath, fileName, oriFileLength, fileCreateUid)}>
                                                         <a className="ant-dropdown-link file_noom_line"
                                                            href="javascript:;">
                                                           <Icon type="bars"/>更多
->>>>>>> ab0555b8bb3013dfccfa1a5fe017773a1b9e2b1d
                                                         </a>
                                                     </Dropdown>
                                                 </div>
@@ -1755,7 +1815,9 @@ const AntGroupTabComponents = React.createClass({
                                                 className="name">{userPhoneIcon}</span><span
                                                 className="borderballoon_le noom_cursor"
                                                 onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
-                                                 <img className="upexam_float span_link_img" style={{width: 40}} src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png" alt=""/>
+                                                 <img className="upexam_float span_link_img" style={{width: 40}}
+                                                      src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
+                                                      alt=""/>
                                                 <span className="span_link file_link_img_t">{content}</span>
                                                 <i className="borderballoon_dingcorner_ri_no"></i>
                                             </span>
@@ -1786,17 +1848,11 @@ const AntGroupTabComponents = React.createClass({
                                                        download={filePath}
                                                        className="downfile_noom file_noom_line"><Icon
                                                         type="download"/>下载</a>
-<<<<<<< HEAD
-                                                    <Dropdown overlay={menu}>
-                                                        <a className="ant-dropdown-link file_noom_line" href="#">
-                                                          <Icon type="bars" />更多
-=======
                                                     <Dropdown overlay={menu}
-                                                              onVisibleChange={this.getCloudFile.bind(this, filePath, fileName, oriFileLength)}>
+                                                              onVisibleChange={this.getCloudFile.bind(this, filePath, fileName, oriFileLength, fileCreateUid)}>
                                                         <a className="ant-dropdown-link file_noom_line"
                                                            href="javascript:;">
                                                           <Icon type="bars"/>更多
->>>>>>> ab0555b8bb3013dfccfa1a5fe017773a1b9e2b1d
                                                         </a>
                                                     </Dropdown>
                                                 </div>
@@ -1885,7 +1941,9 @@ const AntGroupTabComponents = React.createClass({
                                             className="borderballoon noom_cursor borderballoon_file"
                                             onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
                                             <div className="borderballoon_le_cont">
-                                                <img className="upexam_float span_link_img" style={{width: 40}} src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png" alt=""/>
+                                                <img className="upexam_float span_link_img" style={{width: 40}}
+                                                     src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
+                                                     alt=""/>
                                                      <div className="span_link_div">
                                                          <span className="span_link file_link_img_t">默认</span>
                                                      </div>
@@ -1900,7 +1958,8 @@ const AntGroupTabComponents = React.createClass({
                                             className="name">{userPhoneIcon}</span><span
                                             className="borderballoon_le noom_cursor"
                                             onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
-                                            <img className="upexam_float span_link_img" style={{width: 40}} src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png" alt=""/>
+                                            <img className="upexam_float span_link_img" style={{width: 40}}
+                                                 src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png" alt=""/>
                                             <span className="span_link file_link_img_t">默认</span><i
                                             className="borderballoon_dingcorner_ri_no"></i></span></div>
                                     </li>;
@@ -1988,7 +2047,7 @@ const AntGroupTabComponents = React.createClass({
                                                        className="downfile_noom file_noom_line"><Icon
                                                         type="download"/>下载</a>
                                                     <Dropdown overlay={menu}
-                                                              onVisibleChange={this.getCloudFile.bind(this, filePath, fileName, oriFileLength)}>
+                                                              onVisibleChange={this.getCloudFile.bind(this, filePath, fileName, oriFileLength, fileCreateUid)}>
                                                             <a className="ant-dropdown-link file_noom_line"
                                                                href="javascript:;">
                                                               <Icon type="bars"/>更多
@@ -2022,7 +2081,7 @@ const AntGroupTabComponents = React.createClass({
                                                        className="downfile_noom file_noom_line"><Icon
                                                         type="download"/>下载</a>
                                                     <Dropdown overlay={menu}
-                                                              onVisibleChange={this.getCloudFile.bind(this, filePath, fileName, oriFileLength)}>
+                                                              onVisibleChange={this.getCloudFile.bind(this, filePath, fileName, oriFileLength, fileCreateUid)}>
                                                         <a className="ant-dropdown-link file_noom_line"
                                                            href="javascript:;">
                                                           <Icon type="bars"/>更多
@@ -2102,6 +2161,11 @@ const AntGroupTabComponents = React.createClass({
         } else {
             tabComponent = <div className="userinfo_bg_1"><span>科技改变未来，教育成就梦想</span></div>;
         }
+        var returnToolbarInMoveModal = <div className="public—til—blue">
+            <div className="ant-tabs-right"><Button onClick={antGroup.returnParentAtMoveModal}><Icon
+                type="left"/></Button></div>
+        </div>;
+
 
         return (
             <div>
@@ -2110,6 +2174,7 @@ const AntGroupTabComponents = React.createClass({
                     {tabComponent}
                 </div>
 
+                {/*发送文件model*/}
                 <Modal
                     visible={antGroup.state.cloudFileUploadModalVisible}
                     title="上传文件"
@@ -2146,8 +2211,6 @@ const AntGroupTabComponents = React.createClass({
                     </Row>
                 </Modal>
 
-<<<<<<< HEAD
-=======
                 {/*保存到我的蚁盘model*/}
                 <Modal title="我的文件"
                        visible={antGroup.state.saveFileModalVisible}
@@ -2179,20 +2242,26 @@ const AntGroupTabComponents = React.createClass({
                        maskClosable={false} //设置不允许点击蒙层关闭
                        onCancel={this.checkFileModalHandleCancel}
                        footer={null}
+                       className="file_icon_new"
                 >
-                    <div className="move_file">
+                    <Row>
+                        <Col span={24}>
+                            <div style={{marginBottom: 16}} className="file_icon_new_p">
+                                <Button
+                                    type="primary"
+                                    onClick={this.saveShareFile}
+                                    disabled={!hasSelected}
+                                >
+                                    保存到蚁盘
+                                </Button>
+                            </div>
+                        </Col>
+                    </Row>
+                    <div className="move_file_clearfix">
                         <Row>
                             <Col span={24}>
-                                <div>
-                                    <div style={{marginBottom: 16}}>
-                                        <Button
-                                            type="primary"
-                                            // onClick={this.start}
-                                            disabled={!hasSelected}
-                                        >
-                                            保存到蚁盘
-                                        </Button>
-                                    </div>
+
+                                <div className="file_icon_new_clearfix">
                                     <Table rowSelection={rowSelection} columns={fileDetilColumns}
                                            dataSource={data_noom}
                                            pagination={false}/>
@@ -2201,7 +2270,6 @@ const AntGroupTabComponents = React.createClass({
                         </Row>
                     </div>
                 </Modal>
->>>>>>> ab0555b8bb3013dfccfa1a5fe017773a1b9e2b1d
             </div>
         );
     },
