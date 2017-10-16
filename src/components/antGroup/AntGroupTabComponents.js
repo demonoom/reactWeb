@@ -2100,7 +2100,7 @@ const AntGroupTabComponents = React.createClass({
                             <div className="u-name"><span>{fromUser}</span></div>
                             <div className="talk-cont">
                                 <span className="name">{userPhoneIcon}</span><span
-                                className="borderballoon">{content}<i
+                                className="borderballoon">{e.content}<i
                                 className="borderballoon_dingcorner_le_no"></i></span>
                             </div>
                         </li>;
