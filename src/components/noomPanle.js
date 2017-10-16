@@ -32,31 +32,33 @@
     littlePanle.prototype.zoomview = function (id) {
 
         let nodeEl = $('#' + id);
-        let posRef2 = window.getComputedStyle(nodeEl[0]);
-        let perWidth = replaceUnit(posRef2.width);
-        let perHeight = replaceUnit(posRef2.height);
-        let perTop = replaceUnit(posRef2.top);
-        let perLeft = replaceUnit(posRef2.left);
+        /*
+       let posRef2 = window.getComputedStyle(nodeEl[0]);
+       let perWidth = replaceUnit(posRef2.width);
+       let perHeight = replaceUnit(posRef2.height);
+       let perTop = replaceUnit(posRef2.top);
+       let perLeft = replaceUnit(posRef2.left);
 
-        nodeEl.attr('per', JSON.stringify({
-            position: posRef2.position,
-            width: Math.round(perWidth),
-            height: Math.round(perHeight),
-            left: Math.round(perLeft),
-            top: Math.round(perTop)
-        }));
-        if (aa) {
-            nodeEl.css({width: '100%', height: '100%', left: 0, top: '10%', position: 'fixed'});
-            aa = false;
-        } else {
-            nodeEl.css({width: '100%', height: '100%', left: 0, top: 0, position: 'fixed'});
-            aa = true;
-        }
-        let el = nodeEl.find('.zoom');
-        el.off();
-        el.html('&#xe60f;');
-        el.on('click', this.zoomMinView.bind(this, id));
-        // el.off('click',this.zoomview.bind(this, id)).on('click', this.zoomMinView.bind(this, id));
+       nodeEl.attr('per', JSON.stringify({
+           position: posRef2.position,
+           width: Math.round(perWidth),
+           height: Math.round(perHeight),
+           left: Math.round(perLeft),
+           top: Math.round(perTop)
+       }));
+       if (aa) {
+           nodeEl.css({width: '100%', height: '100%', left: 0, top: '10%', position: 'fixed'});
+           aa = false;
+       } else {
+           nodeEl.css({width: '100%', height: '100%', left: 0, top: 0, position: 'fixed'});
+           aa = true;
+       }
+       let el = nodeEl.find('.zoom');
+       el.off();
+       el.html('&#xe60f;');
+       el.on('click', this.zoomMinView.bind(this, id));
+       // el.off('click',this.zoomview.bind(this, id)).on('click', this.zoomMinView.bind(this, id));
+       */
         enterFull(nodeEl[0]);
     };
     littlePanle.prototype.zoomMinView = function (id) {
@@ -121,7 +123,7 @@
                 </div>
                 <div class="content">
                     <section class="littleAnt-iframe-panle">
-                        <iframe  border={0} class="shengpi" id="${this.ifrid}"  src="${ obj.url }" name="${this.ifrid}" ></iframe>
+                        <iframe  border={0} class="shengpi" id="${this.ifrid}"  src="${ obj.url }" name="${this.ifrid}" allowfullscreen="true" allowtransparency="true"></iframe>
                     </section>
                 </div>
                 </div>`;
@@ -255,7 +257,7 @@
                 </div>
                 <div class="content">
                     <section class="littleAnt-iframe-panle">
-                        <iframe  border={0} id="${this.ifrid}"  src="${ obj.url }"  ></iframe>
+                        <iframe  border={0} id="${this.ifrid}"  src="${ obj.url }"  allowfullscreen="true" allowtransparency="true"></iframe>
                     </section>
                 </div>
                 </div>`;
@@ -406,7 +408,7 @@
 					<div class="right_cont">
 						 	<div class="activity">
 								<section class="panle">
-									<iframe  id="${this.pptIframeName}"  name="${this.pptIframeName}"  />
+									<iframe  id="${this.pptIframeName}"  name="${this.pptIframeName}"  allowfullscreen="true" allowtransparency="true"/>
 									<div class="maskPPT" ></div>
 									<div class="danmu_pic"><img src="../../src/components/images/danmu_pic.png"  height="208" /></div>
 									<div id="${this.showTuiPing}" class="panle_book ${this.showTuiPing}" ></div>
@@ -1294,21 +1296,26 @@ function exitFull() {
 function enterFull(el) {
     var docElm = document.documentElement;
     if (el) docElm = el;
+    var iframe = $(el).find("iframe")[0];
+    if(iframe != null && typeof(iframe) != 'undefined' ){
+        el = iframe;
+    }
 //W3C
     if (docElm.requestFullscreen) {
-        docElm.requestFullscreen();
+        el.requestFullscreen();
     }
 //FireFox
     else if (docElm.mozRequestFullScreen) {
-        docElm.mozRequestFullScreen();
+        el.mozRequestFullScreen();
     }
 //Chrome等
     else if (docElm.webkitRequestFullScreen) {
-        docElm.webkitRequestFullScreen();
+        //el.webkitRequestFullScreen();
+        el.webkitRequestFullScreen();
     }
 //IE11
-    else if (elem.msRequestFullscreen) {
-        elem.msRequestFullscreen();
+    else if (docElm.msRequestFullscreen) {
+        el.msRequestFullscreen();
     }
 }
 

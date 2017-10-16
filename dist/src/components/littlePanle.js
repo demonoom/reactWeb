@@ -31,7 +31,9 @@
     littlePanle.prototype.el = {};
     littlePanle.prototype.zoomview = function (id) {
 
+
         let nodeEl = $('#' + id);
+        /*
         let posRef2 = window.getComputedStyle(nodeEl[0]);
         let perWidth = replaceUnit(posRef2.width);
         let perHeight = replaceUnit(posRef2.height);
@@ -51,6 +53,7 @@
         el.off();
         el.html('&#xe60f;');
         el.on('click', this.zoomMinView.bind(this, id));
+        */
         enterFull(nodeEl[0]);
     }
     littlePanle.prototype.zoomMinView = function (id) {
@@ -111,7 +114,7 @@
                 </div>
                 <div class="content">
                     <section class="littleAnt-iframe-panle">
-                        <iframe  border={0} id="${this.ifrid}"  src="${ obj.url }"  ></iframe>
+                        <iframe  border={0} id="${this.ifrid}"  src="${ obj.url }"  allowfullscreen="true" allowtransparency="true"></iframe>
                     </section>
                 </div>
                 </div>`;
@@ -152,7 +155,7 @@
                 </div>
                 <div class="content">
                     <section class="littleAnt-iframe-panle">
-                        <iframe  border={0} id="${this.ifrid}"  src="${ obj.url }"  ></iframe>
+                        <iframe  border={0} id="${this.ifrid}"  src="${ obj.url }"  allowfullscreen="true" allowtransparency="true"></iframe>
                     </section>
                 </div>
                 </div>`;
