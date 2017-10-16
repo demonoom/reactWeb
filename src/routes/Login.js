@@ -1,12 +1,17 @@
 import React, { PropTypes } from 'react';
-import { Form, Icon, Input, Button, message } from 'antd';
+import { Form, Icon, Input, Button, message,Tabs } from 'antd';
 const FormItem = Form.Item;
+const TabPane = Tabs.TabPane;
 import { doWebService } from '../WebServiceHelper';
 import {doWebService_CloudClassRoom} from '../utils/CloudClassRoomURLUtils';
+import {SimpleWebsocketConnection} from '../utils/simple_websocket_connection.js';
+import {isEmpty} from '../utils/utils';
 
 var code;
 var loginComponent;
 var loginFailedCount=0;
+window.simpleMS=null;
+var machineId=null;
 const Login = Form.create()(React.createClass({
 
     getInitialState() {
@@ -16,6 +21,12 @@ const Login = Form.create()(React.createClass({
             isValidateCode:false,
             loginFailedCount:0,
         };
+    },
+
+    componentWillMount() {
+        simpleMS = new SimpleWebsocketConnection();
+        simpleMS.connect();
+        machineId = loginComponent.createMachineId();
     },
 
     createMachineId() {
@@ -47,7 +58,27 @@ const Login = Form.create()(React.createClass({
     },
 
     componentDidMount(){
-        loginComponent.createCode();
+        var _this = this;
+        _this.getLoginTeachSystemEwm();
+        _this.createCode();
+        simpleMS.msgWsListener = {
+            onError: function (errorMsg) {
+
+            }, onWarn: function (warnMsg) {
+
+            }, onMessage: function (info) {
+                var command = info.command;
+                if (isEmpty(command) == false && command == "allowLoginTeachSystem") {
+                    var data = info.data;
+                    var uuid = data.uuid;
+                    var user = data.user;
+                    if(uuid == machineId){
+                        _this.loginSystem(user);
+                    }
+                    console.log("data==============>"+data);
+                }
+            }
+        };
     },
 
     doWebService : function(data,listener) {
@@ -71,6 +102,7 @@ const Login = Form.create()(React.createClass({
     },
 
     loginValidate(userName,userPassword){
+        var _this = this;
         var param = {
             "method":'login',
             "username":userName,
@@ -94,36 +126,7 @@ const Login = Form.create()(React.createClass({
                         loginComponent.setState({loginFailedCount:loginFailedCount});
                         message.error("用户身份不正确,请重新输入！");
                     }else{
-                        loginComponent.setState({loginFailedCount:0});
-                        sessionStorage.setItem("ident", response.colUid);
-                        var loginUserJson = JSON.stringify(response);
-                        sessionStorage.setItem("loginUser",loginUserJson);
-                        sessionStorage.setItem("loginPassword",userPassword);
-                        var machineId = loginComponent.createMachineId();
-                        // sessionStorage.setItem("machineId",machineId);
-                        localStorage.setItem("machineId",machineId);
-                        loginComponent.getHistoryAccessPointId(response.colUid);
-                        if(response.colUtype == "TEAC"){
-                            location.hash="MainLayout";
-                        }else{
-                            location.hash="StudentMainLayout";
-                        }
-                        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
-                        var param = {
-                            "method": 'AntTeacherLogin',
-                            "colAccount": userName,
-                            "colPasswd": userPassword,
-                        };
-                        doWebService_CloudClassRoom(JSON.stringify(param), {
-                            onResponse: function (ret) {
-                                var response = ret.response;
-                                sessionStorage.setItem("cloudClassRoomUser",JSON.stringify(response));
-                            },
-                            onError: function (error) {
-                                message.error(error);
-                            }
-                        });
-                        //this.findUserByAccount();
+                        _this.loginSystem(response);
                     }
                 }
             },
@@ -131,6 +134,39 @@ const Login = Form.create()(React.createClass({
                 message.error(error);
             }
         });
+    },
+
+    loginSystem(user){
+        loginComponent.setState({loginFailedCount:0});
+        sessionStorage.setItem("ident", user.colUid);
+        var loginUserJson = JSON.stringify(user);
+        sessionStorage.setItem("loginUser",loginUserJson);
+        sessionStorage.setItem("loginPassword",user.colPasswd);
+        // var machineId = loginComponent.createMachineId();
+        // sessionStorage.setItem("machineId",machineId);
+        localStorage.setItem("machineId",machineId);
+        loginComponent.getHistoryAccessPointId(user.colUid);
+        if(user.colUtype == "TEAC"){
+            location.hash="MainLayout";
+        }else{
+            location.hash="StudentMainLayout";
+        }
+        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+        var param = {
+            "method": 'AntTeacherLogin',
+            "colAccount": user.colAccount,
+            "colPasswd": user.colPasswd,
+        };
+        doWebService_CloudClassRoom(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                sessionStorage.setItem("cloudClassRoomUser",JSON.stringify(response));
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+        window.simpleMS = null;
     },
 
     findUserByAccount(){
@@ -195,16 +231,35 @@ const Login = Form.create()(React.createClass({
             }
         });
     },
+
+    getLoginTeachSystemEwm(){
+        var _this = this;
+        var param = {
+            "method": 'getLoginTeachSystemEwm',
+            "uuid":machineId,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                var loginImg = <img src={response}/>;
+                _this.setState({loginImg});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
     render() {
         const { getFieldDecorator } = loginComponent.props.form;
         const formItemLayout = {
-            labelCol: { span: 6 },
-            wrapperCol: { span: 16 },
+            labelCol: { span: 0 },
+            wrapperCol: { span: 24 },
         };
 
         var codeDiv;
         if(loginComponent.state.loginFailedCount>=2){
-            codeDiv = <FormItem {...formItemLayout} label="验证码">
+            codeDiv = <FormItem {...formItemLayout} >
                 {getFieldDecorator('validateCode',{
                     rules: [{ required: true, message: '请输入验证码!' }],
                 })(
@@ -227,37 +282,45 @@ const Login = Form.create()(React.createClass({
             <div className="login_bg">
 			<div className="login_logo"><img src={('../../src/components/images/maaee.png')}/></div>
 			<div className="login_bg_cont">
-				<div className="login_duxing"></div>
 			 	<div className="login_bg_content">
-					<div className="login_welcome">欢迎登录</div>
-						<Form onSubmit={loginComponent.handleSubmit} className="login-form">
-							<FormItem {...formItemLayout} label="用户名">
-								{getFieldDecorator('userName',{
-                                    rules: [{ required: true, message: '请输入用户名!' }],
-                                })(
-									<Input addonBefore={<Icon type="user" />} placeholder="请输入用户名"/>
-								)}
-							</FormItem>
-							<FormItem {...formItemLayout} label="密&nbsp;&nbsp;&nbsp;码">
-								{getFieldDecorator('password',{
-                                    rules: [{ required: true, message: '请输入密码!' }],
-                                })(
-									<Input addonBefore={<Icon type="lock" />} type="password" placeholder="请输入密码"/>
-								)}
-							</FormItem>
-                            {codeDiv}
+                    <div className="card-container">
+                        <Tabs type="card">
+                            <TabPane tab="扫码登录" key="1">
+                                {this.state.loginImg}
+                                <div className="login_ewm">请使用小蚂蚁移动教学扫二维码登录</div>
+                            </TabPane>
+                            <TabPane tab="密码登录" key="2">
+                                <Form onSubmit={loginComponent.handleSubmit} className="login-form">
+                                    <FormItem {...formItemLayout} >
+                                        {getFieldDecorator('userName',{
+                                            rules: [{ required: true, message: '请输入用户名!' }],
+                                        })(
+                                            <Input addonBefore={<Icon type="user" />} placeholder="请输入用户名"/>
+                                        )}
+                                    </FormItem>
+                                    <FormItem {...formItemLayout} >
+                                        {getFieldDecorator('password',{
+                                            rules: [{ required: true, message: '请输入密码!' }],
+                                        })(
+                                            <Input addonBefore={<Icon type="lock" />} type="password" placeholder="请输入密码"/>
+                                        )}
+                                    </FormItem>
+                                    {codeDiv}
 
-							<div className="login_buton">
-								<Button type="primary" htmlType="submit" className="login-form-button login_buton">
-									登录
-								</Button>
-							</div>
+                                    <div className="login_buton">
+                                        <Button type="primary" htmlType="submit" className="login-form-button login_buton">
+                                            登录
+                                        </Button>
+                                    </div>
 
-						</Form>
+                                </Form>
+                            </TabPane>
+
+                        </Tabs>
+                    </div>
+
 						</div>
 					</div>
-			<div className="login_bottom"></div>
-			<div className="login_sun"></div>
             </div>
 
         );
@@ -265,3 +328,6 @@ const Login = Form.create()(React.createClass({
 }));
 
 export default Login;
+<script type="text/javascript">
+    tabs_takes.init("tabs");
+</script>

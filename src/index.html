@@ -12,11 +12,11 @@
     <!--<script src="../jquerylib/jquery.min.js"></script>-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <!-- 图片蒙层预览组件 -->
+    <script src="../jquery-photo-gallery/jquery.photo.gallery.js?v=0.2"></script>
     <script src="../jquerylib/jquery.form.js"></script>
     <script src="../jquerylib/jquery.jsonp.js"></script>
     <script src="../textboxio/textboxio.js"></script>
-    <!-- 图片蒙层预览组件 -->
-    <script src="../jquery-photo-gallery/jquery.photo.gallery.js?v=0.1"></script>
     <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
     <script src="../jQuery-File-Upload-9.11.2/js/vendor/jquery.ui.widget.js"></script>
     <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
@@ -29,10 +29,10 @@
     <script src="../src/components/littlePanle_websocket.js?v=1.5"></script>
     <script src="static/videojs-flash.min.js"></script>
     <script src="static/video.min.js"></script>
-    <script src="../src/components/littlePanle.js?v=1.4"></script>
+    <script src="../src/components/littlePanle.js?v=1.5"></script>
     <script src="../src/components/noomPanle.js?v=1.1"></script>
     <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/video.css?v=3.2">
-    <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/style.css?v=5.3">
+    <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/style.css?v=5.6">
     <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/student.css?v=3.5">
     <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/schoolGroup.css?v=3.7">
     <!-- emoji picker start -->
@@ -40,7 +40,10 @@
     <link href="../emojiPicker/lib/css/nanoscroller.css" rel="stylesheet">
     <link href="../emojiPicker/lib/css/emoji.css" rel="stylesheet">
     <!-- emoji picker end -->
-    <script src="http://formbuilder.online/assets/js/form-builder.min.js"></script>
+    <script src="thirdLib/formBuilder2.9.8/form-builder.min.js"></script>
+    <!--<script src="thirdLib/formBuilder2.9.8/assets/js/vendor.js"></script>-->
+    <script src="thirdLib/formBuilder2.9.8/assets/js/form-builder.min.js"></script>
+    <!--<script src="thirdLib/formBuilder2.9.8/assets/js/form-render.min.js"></script>-->
     <script>
         //以下声明的对象为全局的textboxio组件对象
         var mytextareaSingleEditor;
@@ -91,17 +94,19 @@
     <div id="componyInfo" style="display:block">小蚂蚁移动教学平台 版权所有 恒坐标教育集团</div>
     <script>
         var timer;
+
         function checkIsLogin() {
             if (sessionStorage.getItem("ident") == null || sessionStorage.getItem("ident") == "") {
                 timer = setTimeout("checkIsLogin()", 500);
                 //document.getElementById("componyInfo").innerHTML = "小蚂蚁移动教学平台 版权所有 恒坐标教育集团";
-                $(".ant-layout-footer").css({"display":'block'});
+                $(".ant-layout-footer").css({"display": 'block'});
             } else {
                 //document.getElementById("componyInfo").innerHTML = "";
-                $(".ant-layout-footer").css({"display":'none'});
+                $(".ant-layout-footer").css({"display": 'none'});
                 clearTimeout(timer);
             }
         }
+
         checkIsLogin();
     </script>
 
@@ -115,7 +120,7 @@
 <script src="../emojiPicker/lib/js/jquery.emojiarea.js"></script>
 <script src="../emojiPicker/lib/js/emoji-picker.js"></script>
 <!-- End emoji-picker JavaScript -->
-<script src="index.js?v=1.7.2"></script>
+<script src="index.js?v=1.8.1"></script>
 
 </body>
 </html>

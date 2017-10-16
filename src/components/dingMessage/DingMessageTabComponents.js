@@ -49,7 +49,7 @@ const DingMessageTabComponents = React.createClass({
         if (isEmpty(document.querySelector('.ding_bg_list')) == false) {
             document.querySelector('.ding_bg_list').className = 'ding_mes_read ding_bg_list'
         }
-        console.log(arr);
+        // console.log(arr);
         if (isEmpty(arr) == false) {
             for (var i = 0; i < arr.length; i++) {
                 if (isEmpty(document.getElementById(arr[0])) == false) {

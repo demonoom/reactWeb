@@ -227,7 +227,7 @@
         //$("#" + id + " h3").text(event.target.contentWindow.document.title);
         //$("#" + id + " h3").text(event.target.contentWindow.documentf.title);
 
-    }
+    };
 
 //
     littlePanle.prototype._default_UI_templet = function (obj) {
@@ -978,6 +978,11 @@
 
     littlePanle.prototype.GetLP = function (obj, oldArray) {
 
+        console.log(obj);
+        console.log(oldArray);
+        //oldArray是个空数组，第二次是两个underfined
+        console.log('-------------------');
+
         this.param.mode = obj.mode || obj.htmlMode || '';
         this.param.width = obj.width || '';
         this.param.param = obj.param;
@@ -987,23 +992,31 @@
 
         let maxIndex = () => {
             let refindex = 0;
+            console.log(oldArray.length);
             if (!oldArray.length) return refindex;
+
             oldArray.map(function (item, index) {
 
-                let ind = $(item.el.selector).css('z-index');
-                ind = parseInt(ind);
-                ind++;
-                refindex = ind > refindex ? ind : refindex;
+                if (item !== undefined) {
+                    let ind = $(item.el.selector).css('z-index');
+                    ind = parseInt(ind);
+                    ind++;
+                    refindex = ind > refindex ? ind : refindex;
+                } else {
+                    refindex = 0;
+                }
 
-            })
+            });
             return refindex;
         }
 
-        this.param.orderIndex = oldArray.length;
+        // this.param.orderIndex = oldArray.length;
+        this.param.orderIndex = 0;
+        //直接制成0之后（包括上面的判断）可以解决开了teach不能开default的问题，但是不能多开，多开会影响位置
+        //零时制成只能开1个
+
         this.param.stylePage.zIndex = maxIndex();
         this.param.stylePage.width = parseInt(this.param.width.replace(/[a-z]*/img, ''));
-        //
-        //
 
         switch (this.param.mode) {
             default:
@@ -1124,10 +1137,11 @@
                     break;
 
                 default :
-                    if ((this.mgr.length - _this.hideArr.length) >= 3) {
-                        log.info('打开太多！');
-                        return;
-                    }
+                    //暂时把这个限制去掉
+                    // if ((this.mgr.length - _this.hideArr.length) >= 2) {
+                    //     log.info('打开太多！');
+                    //     return;
+                    // }
 
                     objA = new littlePanle().GetLP(objParam, _this.mgr);
                     _this.addOrderBtn();

@@ -1,13 +1,9 @@
 import React, {PropTypes} from 'react';
 import {Tabs, Breadcrumb, Icon, Card, Button, Row, Col, Table, Transfer} from 'antd';
-import {Menu, Dropdown, message, Pagination, Tag, Modal, Popover, Input, Collapse, notification, Progress} from 'antd';
+import {Menu, Dropdown, message, Modal, Popover, Input, Collapse, notification, Progress} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
-import PersonCenterComponents from './PersonCenterComponents';
 import EmotionInputComponents from './EmotionInputComponents';
-import UseKnowledgeComponents from '../UseKnowledgeComponents';
-import Favorites from '../Favorites';
 import {getPageSize} from '../../utils/Const';
-import {getLocalTime} from '../../utils/utils';
 import {isEmpty} from '../../utils/Const';
 import {phone} from '../../utils/phone';
 import {getImgName} from '../../utils/Const';
@@ -15,16 +11,20 @@ import {formatMD} from '../../utils/utils';
 import {formatHM} from '../../utils/utils';
 import {isToday} from '../../utils/utils';
 import {showLargeImg} from '../../utils/utils';
-import {MsgConnection} from '../../utils/msg_websocket_connection';
+import {getLocalTime} from '../../utils/Const'
 import ConfirmModal from '../ConfirmModal';
 import GroupFileUploadComponents from './GroupFileUploadComponents';
 
 const TabPane = Tabs.TabPane;
 const confirm = Modal.confirm;
 const Panel = Collapse.Panel;
-
+const fileDetilColumns = [{
+    title: '',
+    dataIndex: 'img',
+}];
+var data_noom = [];
 var antGroup;
-var messageList = [];
+// var messageList = [];
 //消息通信js
 var ms;
 var imgTagArray = [];
@@ -44,15 +44,43 @@ var uploadFileList = [];
 var isDirectToBottom = true;
 var isNewPage = false;
 //此处返回的消息数量
-var currentReturnCount=0;
+var currentReturnCount = 0;
 var didCount = 0;
-var isRendering=false;
+var isRendering = false;
 var isRequesting = false;
+var preHeight = 0;
+var isSend = false;
+var menu = null;
+var targetDirColumns = [{
+    title: '文件夹名称',
+    dataIndex: 'dirName',
+}, {
+    title: '操作',
+    className: 'ant-table-selection-user schoolgroup_operate',
+    dataIndex: 'moveDirOpt',
+}
+];
+
+
 const AntGroupTabComponents = React.createClass({
 
     getInitialState() {
         antGroup = this;
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+        // //聊天的更多功能
+        menu = (
+            <Menu>
+                <Menu.Item>
+                    <a target="_blank" onClick={this.saveFile}>保存到蚁盘</a>
+                </Menu.Item>
+                {/*<Menu.Item>*/}
+                {/*<a target="_blank">评论</a>*/}
+                {/*</Menu.Item>*/}
+                {/*<Menu.Item>*/}
+                {/*<a target="_blank">保存到蚁盘</a>*/}
+                {/*</Menu.Item>*/}
+            </Menu>
+        );
         return {
             loginUser: loginUser,
             isreader: true,
@@ -86,13 +114,13 @@ const AntGroupTabComponents = React.createClass({
             totalChatGroupCount: 0,  //当前用户的群组总数
             currentChatGroupPage: 1,    //群组列表页面的当前页码
             errorModalIsShow: false,
-            //isDirectToBottom: true,
-            preHeight:0,
             uploadPercent: 0,
             progressState: 'none',
+            totalCount: 0
         };
 
     },
+
     /**
      * 话题tab切换响应函数
      * @param activeKey
@@ -118,38 +146,396 @@ const AntGroupTabComponents = React.createClass({
                 antGroup.setState({"optType": "sendGroupMessage"});
                 antGroup.sendGroupMessage(antGroup.props.groupObj, timeNode);
                 if (isEmpty(actionFrom) == false) {
-                    // antGroup.turnToChatGroupMessagePage(antGroup.props.groupObj);
                     antGroup.turnToMessagePage(antGroup.props.groupObj, messageType);
                 }
             }
         }
     },
 
-
-
-    componentDidUpdate() {
-        var gt = $('#groupTalk');
-        var _this = this;
-        if(isDirectToBottom==false){
-            // if(isNewPage==true){
-            //
-            //     //setTimeout(function () {
-            //         var nowHeight = gt[0].scrollHeight;
-            //         console.log("nowHeight:"+nowHeight+"=======preHeight:"+_this.state.preHeight);
-            //         var newHeight = Number(nowHeight) - Number(_this.state.preHeight);
-            //         console.log("newHeight====>"+Number(newHeight));
-            //         gt.scrollTop(Number(newHeight));
-            //    //},1);
-            // }
-        }else{
-            topScrollHeight = gt[0].scrollHeight;
-            gt.scrollTop(parseInt(gt[0].scrollHeight));
-        }
-    },
-
     componentDidMount() {
         this.turnToMessagePage(sessionStorage.getItem("loginUser"), "message", "noTurnPage");
         window.__sendfile__ = this.sendFile;
+        //查看分享的文件
+        window.__noomShareId__ = this.noomShareId;
+    },
+
+    //拿到分享链接里的查看文件id,去请求该文件的详细
+    noomShareId(id) {
+        var _this = this;
+        var param = {
+            "method": 'getCloudFileShareById',
+            "shareId": id,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response.attachments;
+                _this.buildFileDetilData(response);
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 关闭查看分享的文件详情的model
+     */
+    checkFileModalHandleCancel() {
+        this.setState({checkFileModalVisible: false});
+        //关闭model时清空表格数据
+        data_noom = [];
+    },
+
+    /**
+     * 构建查看文件详细的table
+     */
+    buildFileDetilData(res) {
+        data_noom = [];
+        //打开model,model里有一个table,支持多选，选择后下面的下载和保存到蚁盘可用
+        //根据数据展示文件,response已经拿到用它来渲染table
+        //table支持多选，选择后下面的下载和保存到蚁盘可用
+        //注：先将table渲染出来，再显示model，和昨天的model一样
+
+        res.forEach(function (v, i) {
+            //文件地址
+            var fileSrc = v.cloudFile.path;
+            //文件大小
+            var fileLength = v.cloudFile.length;
+            //文件ID
+            var fileId = v.cloudFileId;
+            //文件名
+            var fileName = v.cloudFile.name;
+            //文件创建时间
+            var fileCreTime = getLocalTime(v.cloudFile.createTime);
+            //我要的key
+            var key = fileSrc + '@' + fileName + '@' + fileLength;
+            var imgTag = <div className="file_icon_cont">
+                            <span className="file_icon_img">
+                                <img src="../src/components/images/lALPBY0V4pdU_AxmZg_102_102.png"/>
+                            </span>
+                <div className="file_icon_text">
+                    <span className="file_icon_text2">{fileName}</span>
+                    <span className="right_ri password_ts">{fileCreTime}</span>
+                </div>
+            </div>;
+            var fileMes = {
+                key: fileId,
+                img: imgTag,
+            };
+            data_noom.push(fileMes);
+        });
+
+        this.setState({selectedRowKeys: []});
+        this.setState({checkFileModalVisible: true});
+    },
+
+    /**
+     * 表格分页响应函数
+     * 需要注意该表格承载了不同的数据，需要根据情况进行分页
+     * @param pageNo
+     */
+    pageOnChange(pageNo) {
+        antGroup.getUserRootCloudFiles(antGroup.state.ident, pageNo);
+        antGroup.setState({
+            currentPage: pageNo,
+        });
+    },
+
+    /**
+     * 保存分享文件的回调
+     */
+    saveShareFile() {
+        //在这里拿到文件的地址，名字，大小
+        //调用存文件的那个函数
+        var selectedFile = this.state.selectedRowKeys;
+        // var arr = [];
+        // //需要的信息用@拼接成一个字符串，顺序为 地址 文件名 大小
+        // selectedFile.forEach(function (v, i) {
+        //     arr = v.split('@');
+        // });
+        var fileIds = '';
+        selectedFile.forEach(function (v) {
+            fileIds += v + ','
+        });
+        fileIds = fileIds.substring(0, fileIds.length - 1);
+        //打开我的文件model
+        this.saveFile(fileIds);
+        this.setState({isShare: true});
+    },
+
+    /**
+     *打开保存文件到蚁盘的model
+     */
+    saveFile(fileIds) {
+        //1.请求用户的私人网盘用数据构建model的table
+        var param = {
+            "method": 'getUserRootCloudFiles',
+            "userId": antGroup.state.loginUser.colUid,
+            "pageNo": 1,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if (response) {
+                    //构建我的文件目标文件夹数据
+                    antGroup.buildTargetDirData(ret, true, fileIds);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 构建移动文件时的目标文件夹数据
+     * @param ret
+     */
+    buildTargetDirData(ret, flag, fileIds) {
+        var targetDirDataArray = [];
+        var i = 0;
+        if (ret.msg == "调用成功" && ret.success == true && isEmpty(ret.response) == false) {
+            ret.response.forEach(function (e) {
+                if (i == 0) {
+                    if (e.parent) {
+                        var parentDirectoryId = e.parent.parentId;
+                        antGroup.setState({"parentDirectoryIdAtMoveModal": parentDirectoryId});
+                    }
+                }
+                i++;
+                var key = e.id;
+                var name = e.name;
+                var directory = e.directory;
+                var fileLogo = antGroup.buildFileLogo(name, directory, e);
+
+                var dirName = <span className="font_gray_666"
+                    //这是点击文件名进入文件夹的功能
+                                    onClick={antGroup.intoDirectoryInner.bind(antGroup, e, fileIds)}>
+                {fileLogo}
+            </span>;
+                var moveDirOpt;
+                if (e.directory == true) {
+                    moveDirOpt = <div>
+                        {/*这是确定保存的功能*/}
+                        <Button onClick={antGroup.saveFileToTargetDir.bind(antGroup, key, fileIds)}>确定</Button>
+                    </div>;
+                } else {
+                    dirName = name;
+                }
+                var dataJson = {
+                    key: key,
+                    dirName: dirName,
+                    moveDirOpt: moveDirOpt
+                };
+                targetDirDataArray.push(dataJson);
+            })
+            antGroup.setState({"targetDirDataArray": targetDirDataArray});
+            //2.当表格组件好之后就让model显示出来
+            if (flag) {
+                antGroup.setState({saveFileModalVisible: true});
+            }
+        }
+    },
+
+    /**
+     *拿到保存的文件的信息的回调
+     * @param filePath
+     * @param fileName
+     * @param fileLength
+     */
+    getCloudFile(filePath, fileName, fileLength, fileCreateUid) {
+        this.setState({filePath, fileName, fileLength, fileCreateUid});
+    },
+
+    /**
+     * 点击确定按钮，保存文件到指定目录
+     */
+    saveFileToTargetDir(parentCloudFileId, fileIds) {
+        if (this.state.isShare) {
+            var param = {
+                "method": 'copyCloudFiles',
+                "operateUserId": antGroup.state.loginUser.colUid,
+                "toCloudFileId": parentCloudFileId,
+                "fromCloudFileIds": fileIds
+            };
+            doWebService(JSON.stringify(param), {
+                onResponse: function (ret) {
+                    console.log(ret);
+                    if (ret.success == true && ret.msg == "调用成功" && isEmpty(ret.response) == false) {
+                        var initPageNo = 1;
+                        var queryConditionJson = "";
+                        if (antGroup.state.currentDirectoryId != -1) {
+                            antGroup.listFiles(antGroup.state.ident,
+                                antGroup.state.currentDirectoryId, queryConditionJson, initPageNo, "mainTable");
+                        } else {
+                            antGroup.getUserRootCloudFiles(antGroup.state.ident, antGroup.state.currentPage);
+                        }
+                        message.success("文件保存成功");
+                    } else {
+                        message.error("文件保存失败");
+                    }
+                    antGroup.setState({saveFileModalVisible: false});
+                    antGroup.setState({checkFileModalVisible: false});
+                    antGroup.setState({isShare: false});
+                },
+                onError: function (error) {
+                    message.error(error);
+                }
+            });
+
+        } else {
+            //1.将此文件的信息拿过来
+            var name = this.state.fileName;
+            var path = this.state.filePath;
+            var length = this.state.fileLength;
+            var fileCreateUid = this.state.fileCreateUid;
+
+            var param = {
+                "method": 'createCloudFile',
+                "operateUserId": antGroup.state.loginUser.colUid,
+                "parentCloudFileId": parentCloudFileId,
+                "name": name,
+                "path": path,
+                "length": length
+            };
+
+            doWebService(JSON.stringify(param), {
+                onResponse: function (ret) {
+                    if (ret.success == true && ret.msg == "调用成功" && isEmpty(ret.response) == false) {
+                        var initPageNo = 1;
+                        var queryConditionJson = "";
+                        if (antGroup.state.currentDirectoryId != -1) {
+                            antGroup.listFiles(antGroup.state.ident,
+                                antGroup.state.currentDirectoryId, queryConditionJson, initPageNo, "mainTable");
+                        } else {
+                            antGroup.getUserRootCloudFiles(antGroup.state.ident, antGroup.state.currentPage);
+                        }
+                        message.success("文件保存成功");
+                    } else {
+                        message.error("文件保存失败");
+                    }
+                    antGroup.setState({saveFileModalVisible: false});
+                },
+                onError: function (error) {
+                    message.error(error);
+                }
+            });
+        }
+    },
+
+    /**
+     *构建我的文件model文件图标
+     */
+    buildFileLogo(name, directory, e) {
+        var fileLogo = <span className="cloud_text">
+                <i className="cloud_icon cloud_icon_file upexam_float"></i>
+                <span className="antnest_name affix_bottom_tc"
+                    //这也是点击文件名进入文件夹的功能
+                      onClick={antGroup.intoDirectoryInner.bind(antGroup, e)}>{name}</span>
+            </span>;
+        return fileLogo;
+    },
+
+    /**
+     * 如果是文件夹，则可以点击文件夹名称，进入文件夹内部
+     */
+    intoDirectoryInner(directoryObj, fileIds) {
+        var initPageNo = 1;
+        var queryConditionJson = "";
+        //点击第一层文件夹时，记录当前文件夹的群主是否是当前用户
+        if (antGroup.state.currentDirectoryId == -1 && this.state.getFileType != "myFile") {
+            if (directoryObj.createUid == this.state.ident) {
+                this.setState({"isGroupCreator": true});
+            } else {
+                this.setState({"isGroupCreator": false});
+            }
+        }
+        antGroup.setState({
+            "parentDirectoryIdAtMoveModal": directoryObj.parentId,
+            "currentDirectoryIdAtMoveModal": directoryObj.id
+        });
+        antGroup.listFiles(antGroup.state.ident, directoryObj.id, queryConditionJson, initPageNo, fileIds);
+    },
+
+    /**
+     * 点击文件夹名称，进入文件夹内部的文件列表
+     * @param operateUserId
+     * @param cloudFileId
+     * @param queryConditionJson
+     * @param pageNo
+     */
+    listFiles: function (operateUserId, cloudFileId, queryConditionJson, pageNo, fileIds) {
+        data = [];
+        antGroup.setState({totalCount: 0});
+        antGroup.setState({"currentDirectoryIdAtMoveModal": cloudFileId});
+        var param = {
+            "method": 'listFiles',
+            "operateUserId": antGroup.state.loginUser.colUid,
+            "cloudFileId": cloudFileId,
+            "queryConditionJson": queryConditionJson,
+            "pageNo": pageNo
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if (response) {
+                    antGroup.buildTargetDirData(ret, false, fileIds);
+                } else {
+                    var parentDirectoryId = e.parent.parentId;
+                    antGroup.setState({"parentDirectoryId": parentDirectoryId});
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 关闭保存文件到蚁盘的model
+     */
+    moveFileModalHandleCancel() {
+        antGroup.setState({saveFileModalVisible: false});
+    },
+
+    /**
+     * 让保存文件到蚁盘model后退
+     */
+    returnParentAtMoveModal() {
+        var initPageNo = 1;
+        if (antGroup.state.parentDirectoryIdAtMoveModal == 0) {
+            antGroup.setState({"parentDirectoryIdAtMoveModal": -1, "currentDirectoryIdAtMoveModal": -1});
+            antGroup.getUserRootCloudFiles(antGroup.state.ident, initPageNo);
+        } else {
+            var queryConditionJson = "";
+            antGroup.listFiles(antGroup.state.ident, antGroup.state.parentDirectoryIdAtMoveModal, queryConditionJson, initPageNo);
+        }
+    },
+
+    /**
+     * 获取用户文件根目录
+     * @param userId
+     * @param pageNo
+     */
+    getUserRootCloudFiles: function (userId, pageNo) {
+        data = [];
+        antGroup.setState({currentDirectoryId: -1, totalCount: 0});
+        var param = {
+            "method": 'getUserRootCloudFiles',
+            "userId": antGroup.state.loginUser.colUid,
+            "pageNo": pageNo,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if (response) {
+                    antGroup.buildTargetDirData(ret, false);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     /**
@@ -166,6 +552,7 @@ const AntGroupTabComponents = React.createClass({
      */
     cloudFileUploadModalHandleCancel() {
         antGroup.setState({"cloudFileUploadModalVisible": false});
+        this.refs.fileUploadCom.initFileUploadPage();
     },
 
     /**
@@ -194,6 +581,7 @@ const AntGroupTabComponents = React.createClass({
                 formData.append("file" + i, uploadFileList[i]);
                 formData.append("name" + i, uploadFileList[i].name);
             }
+            console.log(formData);
             $.ajax({
                 type: "POST",
                 url: "http://101.201.45.125:8890/Excoord_Upload_Server/file/upload",
@@ -236,7 +624,7 @@ const AntGroupTabComponents = React.createClass({
      * 拿到文件路径，发送message
      */
     sendFileToOthers(url) {
-
+        isSend = true;
         console.log(url);
         //文件名
         var name = uploadFileList[0].name;
@@ -274,8 +662,6 @@ const AntGroupTabComponents = React.createClass({
         }
 
         var commandJson = {"command": "message", "data": {"message": messageJson}};
-        console.log(commandJson);
-
         ms.send(commandJson);
     },
 
@@ -290,20 +676,10 @@ const AntGroupTabComponents = React.createClass({
             target = e.target;
         }
         var scrollTop = target.scrollTop;
-        if(target.scrollHeight - target.offsetHeight <= target.scrollTop){
-            isDirectToBottom = true;
-            // this.setState({isDirectToBottom:true});
-        }else{
-            isDirectToBottom = false;
-            // this.setState({isDirectToBottom:false});
-        }
         isNewPage = false;
+        preHeight = target.scrollHeight;
         if (scrollTop <= 1 && isRendering == false && !isRequesting) {
-            // "isDirectToBottom": false,
             didCount = 0;
-            antGroup.setState({"preHeight":target.scrollHeight});
-            // preHeight = target.scrollHeight;
-            isNewPage = true;
             if (antGroup.state.messageComeFrom == "groupMessage") {
                 antGroup.getChatGroupMessages(antGroup.state.currentGroupObj, antGroup.state.firstMessageCreateTime);
             } else {
@@ -323,6 +699,7 @@ const AntGroupTabComponents = React.createClass({
         } else {
             sendType = "";
         }
+        isSend = true;
         antGroup.messageSendByType(sendType);
     },
 
@@ -372,8 +749,7 @@ const AntGroupTabComponents = React.createClass({
     turnToMessagePage(operatorObj, messageType, isTurnPage) {
         var _this = this;
         var userId;
-        messageList.splice(0);
-        currentReturnCount = 0;
+        var messageList = [];
         ms.msgWsListener = {
             onError: function (errorMsg) {
                 if (_this.state.errorModalIsShow == false) {
@@ -405,12 +781,18 @@ const AntGroupTabComponents = React.createClass({
                     //如果是群组消息通信，传入的对象应该是群组对象
                     groupObj = operatorObj;
                 }
-                var gtScrollHeight = gt[0].scrollHeight;
-                var gtScrollTop = gt[0].scrollTop;
-                if(parseInt(gtScrollHeight)-parseInt(gtScrollTop)<=10){
-                    // _this.setState({"isDirectToBottom":true});
-                    isDirectToBottom=true;
+
+                if (isEmpty(gt[0]) == false) {
+                    var gtScrollHeight = gt[0].scrollHeight;
+                    var gtScrollTop = gt[0].scrollTop;
+                    if (parseInt(gtScrollHeight) - parseInt(gtScrollTop) === gt[0].clientHeight) {
+                        isDirectToBottom = true;
+                    } else {
+                        isDirectToBottom = false;
+                    }
                 }
+
+                var messageList = [];
                 //获取messageList
                 var command = info.command;
                 if (isEmpty(command) == false) {
@@ -427,11 +809,14 @@ const AntGroupTabComponents = React.createClass({
                             uuidsArray.push(uuid);
                             var messageReturnJson = antGroup.getImgTag(e);
                             var imgTagArrayReturn = [];
-                            if (messageReturnJson.messageType == "text") {
-                                content = messageReturnJson.textMessage;
-                            } else if (messageReturnJson.messageType == "imgTag") {
-                                imgTagArrayReturn = messageReturnJson.imgMessage;
+                            if (isEmpty(messageReturnJson) == false && isEmpty(messageReturnJson.messageType) == false) {
+                                if (messageReturnJson.messageType == "text") {
+                                    content = messageReturnJson.textMessage;
+                                } else if (messageReturnJson.messageType == "imgTag") {
+                                    imgTagArrayReturn = messageReturnJson.imgMessage;
+                                }
                             }
+                            ;
                             if (e.toType == 1) {
                                 //个人消息
                                 if (("SGZH" == colUtype || fromUser.colUid == userId)) {
@@ -467,7 +852,7 @@ const AntGroupTabComponents = React.createClass({
                             };
                             ms.send(receivedCommand);
                         }
-                        antGroup.setState({"messageList": messageList});
+                        //antGroup.addMessageList(messageList,"first");
                     } else if (command == "message") {
                         var data = info.data;
                         if (data.message.command == "biu_message") {
@@ -485,6 +870,7 @@ const AntGroupTabComponents = React.createClass({
                                 }
                             }
                         }
+                        ;
                         showImg = "";
                         var messageOfSinge = data.message;
                         var fromUser = messageOfSinge.fromUser;
@@ -493,6 +879,16 @@ const AntGroupTabComponents = React.createClass({
                         var content = messageOfSinge.content;
                         var uuidsArray = [];
                         var uuid = messageOfSinge.uuid;
+                        console.log(messageOfSinge);
+                        console.log('//判断是否是叮消息');
+                        //判断是否是叮消息
+                        var biumes = null;
+                        if (messageOfSinge.command == 'message') {
+                            biumes = false;
+                        }
+                        if (messageOfSinge.command == 'biu_message') {
+                            biumes = true;
+                        }
                         //附件，图片路径或者音频路径
                         if (isEmpty(messageOfSinge.attachment) == false) {
                             var attachment = messageOfSinge.attachment.address;
@@ -510,6 +906,10 @@ const AntGroupTabComponents = React.createClass({
                             var filePath = messageOfSinge.cloudFile.path;
                             //大小
                             var fileLength = messageOfSinge.cloudFile.length;
+                            //uuid
+                            var fileUid = messageOfSinge.cloudFile.uuid;
+                            //文件CreateUid
+                            var fileCreateUid = messageOfSinge.cloudFile.createUid;
                         }
                         uuidsArray.push(uuid);
                         var isExist = antGroup.checkSameMessageIsExist(uuid);
@@ -538,55 +938,90 @@ const AntGroupTabComponents = React.createClass({
                         var contentArray = [contentJson];
                         if (messageOfSinge.toType == 1 && typeof (content) != 'undefined') {
                             //个人单条消息
-                            if (isEmpty(antGroup.state.currentUser) == false && messageOfSinge.fromUser.colUid == antGroup.state.currentUser.colUid) {
-                                imgTagArray.splice(0);
-                                var imgTagArrayReturn = [];
-                                var messageReturnJson = antGroup.getImgTag(messageOfSinge);
+                            imgTagArray.splice(0);
+                            var imgTagArrayReturn = [];
+                            var messageReturnJson = antGroup.getImgTag(messageOfSinge);
+                            if (isEmpty(messageReturnJson) == false && isEmpty(messageReturnJson.messageType) == false) {
                                 if (messageReturnJson.messageType == "text") {
                                     content = messageReturnJson.textMessage;
                                 } else if (messageReturnJson.messageType == "imgTag") {
                                     imgTagArrayReturn = messageReturnJson.imgMessage;
                                 }
-                                var messageShow = {
-                                    'fromUser': fromUser,
-                                    'content': content,
-                                    "messageType": "getMessage",
-                                    "imgTagArray": imgTagArrayReturn,
-                                    "messageReturnJson": messageReturnJson,
-                                    "attachment": attachment,
-                                    "attachmentType": attachmentType,
-                                    "expressionItem": expressionItem,
-                                    "fileName": fileName,
-                                    "filePath": filePath,
-                                    "fileLength": fileLength
-                                };
-                                messageList.splice(0, 0, messageShow);
-                                // messageList.push(messageShow);
-                                if (isEmpty(messageOfSinge.toUser) == false) {
-                                    var userJson = {
-                                        key: messageOfSinge.toUser.colUid,
-                                        // "fromUser": messageOfSinge.toUser,
-                                        "fromUser": messageOfSinge.fromUser,
-                                        contentArray: contentArray,
-                                        "messageToType": 1
-                                    };
-                                    // if (isEmpty(isTurnPage)) {
-                                    // }
-                                    antGroup.props.onNewMessage(userJson);
+                            }
+
+                            if (isSend == false) {
+                                if (data.message.command != "message_read" && data.message.command != "biu_message") {
+                                    if (operatorObj.colUid === data.message.fromUser.colUid) {
+                                        //处理在停留在别人聊天窗口时另一人新消息会显示的问题，其中operatorObj是点击的那个人的信息，
+                                        //data.message.fromUser是新消息来的那个人的信息
+                                        var messageShow = {
+                                            'fromUser': fromUser,
+                                            'content': content,
+                                            "messageType": "getMessage",
+                                            "imgTagArray": imgTagArrayReturn,
+                                            "messageReturnJson": messageReturnJson,
+                                            "attachment": attachment,
+                                            "attachmentType": attachmentType,
+                                            "expressionItem": expressionItem,
+                                            "fileName": fileName,
+                                            "filePath": filePath,
+                                            "fileLength": fileLength,
+                                            "fileUid": fileUid,
+                                            "fileCreateUid": fileCreateUid,
+                                            "biumes": biumes
+                                        };
+                                        messageList.push(messageShow);
+                                        console.log(messageList);
+                                    }
+                                    if (isEmpty(messageOfSinge.toUser) == false) {
+                                        var userJson = {
+                                            key: messageOfSinge.toUser.colUid,
+                                            // "fromUser": messageOfSinge.toUser,
+                                            "fromUser": messageOfSinge.fromUser,
+                                            contentArray: contentArray,
+                                            "messageToType": 1
+                                        };
+                                        // if (isEmpty(isTurnPage)) {
+                                        // }
+                                        antGroup.props.onNewMessage(userJson);
+                                    }
                                 }
+
                             } else {
                                 //我发出的
                                 if (isEmpty(messageOfSinge.toUser) == false) {
-                                    var userJson = {
-                                        key: messageOfSinge.toUser.colUid,
-                                        // "fromUser": messageOfSinge.toUser,
-                                        "fromUser": messageOfSinge.fromUser,
-                                        contentArray: contentArray,
-                                        "messageToType": 1
-                                    };
-                                    // if (isEmpty(isTurnPage)) {
-                                    // }
-                                    antGroup.props.onNewMessage(userJson);
+                                    if (data.message.command != "message_read") {
+                                        var messageShow = {
+                                            'fromUser': fromUser,
+                                            'content': content,
+                                            "messageType": "getMessage",
+                                            "imgTagArray": imgTagArrayReturn,
+                                            "messageReturnJson": messageReturnJson,
+                                            "attachment": attachment,
+                                            "attachmentType": attachmentType,
+                                            "expressionItem": expressionItem,
+                                            "fileName": fileName,
+                                            "filePath": filePath,
+                                            "fileLength": fileLength,
+                                            "fileUid": fileUid,
+                                            "fileCreateUid": fileCreateUid
+                                        };
+                                        messageList.push(messageShow);
+                                        var userJson = {
+                                            key: messageOfSinge.toUser.colUid,
+                                            // key: _this.state.loginUser.colUid,
+                                            "fromUser": messageOfSinge.toUser,
+                                            // "fromUser": messageOfSinge.fromUser,
+                                            // "fromUser": messageOfSinge.fromUser,个人消息收到的时候要写成fromUser，而发出的要写成
+                                            //toUser，否则会造成左侧联系人丢失。
+                                            contentArray: contentArray,
+                                            "messageToType": 1
+                                        };
+                                        // if (isEmpty(isTurnPage)) {
+                                        // }
+                                        antGroup.props.onNewMessage(userJson);
+                                        isSend = false;
+                                    }
                                 }
                             }
                         } else if (messageOfSinge.toType == 4 && typeof (content) != 'undefined') {
@@ -596,10 +1031,12 @@ const AntGroupTabComponents = React.createClass({
                                 imgTagArray.splice(0);
                                 var imgTagArrayReturn = [];
                                 var messageReturnJson = antGroup.getImgTag(messageOfSinge);
-                                if (messageReturnJson.messageType == "text") {
-                                    content = messageReturnJson.textMessage;
-                                } else if (messageReturnJson.messageType == "imgTag") {
-                                    imgTagArrayReturn = messageReturnJson.imgMessage;
+                                if (isEmpty(messageReturnJson) == false && isEmpty(messageReturnJson.messageType) == false) {
+                                    if (messageReturnJson.messageType == "text") {
+                                        content = messageReturnJson.textMessage;
+                                    } else if (messageReturnJson.messageType == "imgTag") {
+                                        imgTagArrayReturn = messageReturnJson.imgMessage;
+                                    }
                                 }
                                 var messageShow = {
                                     'fromUser': fromUser,
@@ -612,9 +1049,12 @@ const AntGroupTabComponents = React.createClass({
                                     "expressionItem": expressionItem,
                                     "fileName": fileName,
                                     "filePath": filePath,
-                                    "fileLength": fileLength
+                                    "fileLength": fileLength,
+                                    "fileUid": fileUid,
+                                    "fileCreateUid": fileCreateUid
                                 };
-                                messageList.splice(0, 0, messageShow);
+                                //messageList.splice(0, 0, messageShow);
+                                messageList.push(messageShow);
                                 var userJson = {
                                     key: messageOfSinge.toChatGroup.chatGroupId,
                                     // key: _this.state.loginUser.colUid,
@@ -640,7 +1080,8 @@ const AntGroupTabComponents = React.createClass({
                                 antGroup.props.onNewMessage(userJson);
                             }
                         }
-                        antGroup.setState({"messageList": messageList});
+                        antGroup.addMessageList(messageList, "first");
+                        //antGroup.setState({"messageList": messageList});
                     }
                 }
             }
@@ -739,6 +1180,9 @@ const AntGroupTabComponents = React.createClass({
         return messageReturnJson;
     },
 
+    /**
+     *发送文字信息的回调
+     **/
     sendMessage(e) {
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
@@ -747,6 +1191,7 @@ const AntGroupTabComponents = React.createClass({
             target = e.target;
         }
         var sendType = target.value;
+        isSend = true;
         antGroup.messageSendByType(sendType);
     },
 
@@ -770,26 +1215,30 @@ const AntGroupTabComponents = React.createClass({
         }
         var commandJson = {"command": "message", "data": {"message": messageJson}};
         ms.send(commandJson);
+        //send过信息之后要做的事情，联动
         antGroup.initMyEmotionInput();
         if (isEmpty(sendType) == false && sendType == "groupSend") {
             // antGroup.setState({"isDirectToBottom": true});
             isDirectToBottom = true;
         } else {
-            messageList.splice(0, 0, messageJson);
-            // 更新左侧消息动态列表
-            var showCreateTime = formatHM(createTime);
-            var contentJson = {"content": messageContent, "createTime": showCreateTime};
-            var contentArray = [contentJson];
-            var userJson = {
-                key: antGroup.state.currentUser.colUid,
-                "fromUser": antGroup.state.currentUser,
-                contentArray: contentArray,
-                "messageToType": 1
-            };
-            antGroup.props.onNewMessage(userJson);
-            isDirectToBottom = true;
-        // , "isDirectToBottom": true
-            antGroup.setState({"messageList": messageList});
+            // messageList.splice(0, 0, messageJson);
+            // // 更新左侧消息动态列表
+            // var showCreateTime = formatHM(createTime);
+            // var contentJson = {"content": messageContent, "createTime": showCreateTime};
+            // var contentArray = [contentJson];
+            // var userJson = {
+            //     key: antGroup.state.currentUser.colUid,
+            //     "fromUser": antGroup.state.currentUser,
+            //     contentArray: contentArray,
+            //     "messageToType": 1
+            // };
+            // console.log(userJson);
+            // antGroup.props.onNewMessage(userJson);
+            // antGroup.setState({"messageList": messageList, "isDirectToBottom": true});
+            /*var messageList = [];
+             messageList.push(messageJson);
+             antGroup.addMessageList(messageList,"first");
+             antGroup.setState({"isDirectToBottom": true});*/
         }
     },
 
@@ -833,13 +1282,9 @@ const AntGroupTabComponents = React.createClass({
      * @param index　当前行的索引顺序，从０开始
      */
     sendGroupMessage(groupObj, timeNode) {
-        currentReturnCount = 0;
-        messageList.splice(0);
         scrollType = "auto";
         isDirectToBottom = true;
-        isNewPage = false;
-        // "isDirectToBottom": true,
-        antGroup.setState({"messageComeFrom": "groupMessage", "currentUser": ''});
+        antGroup.setState({"messageComeFrom": "groupMessage", "currentUser": '', messageList: []});
         antGroup.reGetChatMessage(groupObj, timeNode);
         this.props.showMesAlert(false);
     },
@@ -847,7 +1292,6 @@ const AntGroupTabComponents = React.createClass({
     reGetChatMessage(groupObj, timeNode) {
 
         antGroup.getChatGroupMessages(groupObj, timeNode);
-        // antGroup.turnToChatGroupMessagePage(groupObj);
         var messageType = "groupMessage";
         antGroup.turnToMessagePage(groupObj, messageType);
     },
@@ -869,19 +1313,28 @@ const AntGroupTabComponents = React.createClass({
         }
     },
 
-    addMessageList(messages){
-        antGroup.setState({messageList: antGroup.state.messageList.concat(messages)});
-        var gt = $('#groupTalk');
-        var _this = this;
-        if(isDirectToBottom==false){
+    addMessageList(messages, firstOrLast) {
+        if (isEmpty(firstOrLast) == false) {
+            antGroup.state.messageList.unshift(messages[0]);
+            antGroup.setState({messageList: antGroup.state.messageList});
+        } else {
+            antGroup.setState({messageList: antGroup.state.messageList.concat(messages)});
+        }
 
-                //setTimeout(function () {
+        var gt = $('#groupTalk');
+        if (isDirectToBottom == false) {
+            if (isNewPage == true) {
                 var nowHeight = gt[0].scrollHeight;
-                console.log("nowHeight:"+nowHeight+"=======preHeight:"+_this.state.preHeight);
-                var newHeight = Number(nowHeight) - Number(_this.state.preHeight);
-                console.log("newHeight====>"+Number(newHeight));
+                console.log("nowHeight:" + nowHeight + "=======preHeight:" + preHeight);
+                var newHeight = Number(nowHeight) - Number(preHeight);
+                console.log("newHeight====>" + Number(newHeight));
                 gt.scrollTop(Number(newHeight));
-                //},1);
+            }
+        } else {
+            if (isEmpty(gt[0]) == false) {
+                topScrollHeight = gt[0].scrollHeight;
+                gt.scrollTop(parseInt(gt[0].scrollHeight));
+            }
         }
     },
 
@@ -889,8 +1342,6 @@ const AntGroupTabComponents = React.createClass({
      * 获取群聊天信息
      */
     getChatGroupMessages(groupObj, timeNode) {
-        var _this = this;
-        currentReturnCount = 0;
         var param = {
             "method": 'getChatGroupMessages',
             "chatGroupId": groupObj.chatGroupId,
@@ -904,6 +1355,7 @@ const AntGroupTabComponents = React.createClass({
                     var i = 0;
                     antGroup.tipNotic(ret.response);
                     var messageList = [];
+                    isNewPage = true;
                     ret.response.forEach(function (e) {
                         if (e.command == "message") {
                             var messageOfSinge = e;
@@ -927,8 +1379,19 @@ const AntGroupTabComponents = React.createClass({
                                 var filePath = messageOfSinge.cloudFile.path;
                                 //大小
                                 var fileLength = messageOfSinge.cloudFile.length;
+                                //uuid
+                                var fileUid = messageOfSinge.cloudFile.uuid;
+                                //文件CreateUid
+                                var fileCreateUid = messageOfSinge.cloudFile.createUid;
                             }
                             ;
+                            var biumes = null;
+                            if (e.biuId != 0) {
+                                //这是biumessage
+                                biumes = true;
+                            } else {
+                                biumes = false;
+                            }
                             var uuidsArray = [];
                             var fromUser = messageOfSinge.fromUser;
                             var colUtype = fromUser.colUtype;
@@ -941,10 +1404,12 @@ const AntGroupTabComponents = React.createClass({
                                 var content = e.content;
                                 var imgTagArrayReturn = [];
                                 var messageReturnJson = antGroup.getImgTag(e);
-                                if (messageReturnJson.messageType == "text") {
-                                    content = messageReturnJson.textMessage;
-                                } else if (messageReturnJson.messageType == "imgTag") {
-                                    imgTagArrayReturn = messageReturnJson.imgMessage;
+                                if (isEmpty(messageReturnJson) == false && isEmpty(messageReturnJson.messageType) == false) {
+                                    if (messageReturnJson.messageType == "text") {
+                                        content = messageReturnJson.textMessage;
+                                    } else if (messageReturnJson.messageType == "imgTag") {
+                                        imgTagArrayReturn = messageReturnJson.imgMessage;
+                                    }
                                 }
                                 var message = {
                                     'fromUser': fromUser,
@@ -957,21 +1422,22 @@ const AntGroupTabComponents = React.createClass({
                                     "expressionItem": expressionItem,
                                     "fileName": fileName,
                                     "filePath": filePath,
-                                    "fileLength": fileLength
+                                    "fileLength": fileLength,
+                                    "fileUid": fileUid,
+                                    "fileCreateUid": fileCreateUid,
+                                    "biumes": biumes
                                 };
                                 messageList.push(message);
                             }
                         }
                     });
-                    /*var gt = $('#groupTalk');
-                    setTimeout(function () {
-                        var nowHeight = gt[0].scrollHeight;
-                        var newHeight = Number(nowHeight) - Number(_this.state.preHeight);
-                        gt.scrollTop(Number(newHeight));
-                    },1);*/
-                    //antGroup.setState({"messageList": messageList});
+                    var gt = $('#groupTalk');
+                    if (parseInt(gt[0].scrollHeight) - parseInt(gt[0].scrollTop) === gt[0].clientHeight) {
+                        isDirectToBottom = true;
+                    } else {
+                        isDirectToBottom = false;
+                    }
                     antGroup.addMessageList(messageList);
-                    // currentReturnCount = ret.response.length;
                 }
             },
             onError: function (error) {
@@ -982,15 +1448,13 @@ const AntGroupTabComponents = React.createClass({
     },
     /**
      * 点击消息列表，进入个人消息的列表窗口
-     * @param userObj
+     * @param userObj   点击的那个人的信息
      * @param timeNode
      */
     getPersonMessage(userObj, timeNode) {
-        messageList.splice(0);
         isDirectToBottom = true;
         isNewPage = false;
-        // "isDirectToBottom": true,
-        antGroup.setState({"messageComeFrom": "personMessage", "currentGroupObj": ''});
+        antGroup.setState({"messageComeFrom": "personMessage", "currentGroupObj": '', messageList: []});
         antGroup.getUser2UserMessages(userObj, timeNode);
         var messageType = "message";
         antGroup.turnToMessagePage(userObj, messageType);
@@ -1006,19 +1470,57 @@ const AntGroupTabComponents = React.createClass({
     },
 
     /**
-     *查看链接的回调
+     * 下载文件的回调
+     * @param url
      */
-    readLink(id) {
-        let obj = {mode: 'teachingAdmin', url: id, title: ""};
+    downFile(url) {
+        // console.log(url);
+        window.location.href = url;
+    },
+
+    /**
+     *预览文件的回调
+     */
+    watchFile(url, fileUid, fileCreateUid) {
+        // let obj = {mode: 'teachingAdmin', url: id, title: ""};
+        // LP.Start(obj);
+        // console.log(id);
+        // console.log(fileUid);
+        // console.log(fileCreateUid);
+        //文件的uuid和创建人的id
+        // var fileUid = fileUid;
+        // var fileCreateUid = fileCreateUid;
+        var url = "http://www.maaee.com/Excoord_PhoneService/cloudFile/cloudFileShow/" + fileUid + "/" + fileCreateUid;
+        this.view(event, url, name);
+    },
+
+    view(e, url, tit) {
+        e = e || window.event;
+        if (e.nativeEvent) {
+            e.nativeEvent.stopImmediatePropagation();
+        }
+        e.stopPropagation();
+        e.preventDefault();
+        e.cancelBubble = true;
+
+        let mode = (tit) => {
+            let refArr = tit.split('.');
+            let type = refArr[refArr.length - 1];
+            return type;
+        };
+
+        let obj = {mode: mode(tit), title: tit, url: url, width: '380px'};
+        // let obj = {mode: 'teachingAdmin', title: tit, url: url, width: '380px'};
+
         LP.Start(obj);
     },
 
     /**
-     * 预览文件的回调
+     * 查看链接的回调
      */
-    watchFile(src) {
-        console.log(src);
-        //要的是文件的id,创建人的id
+    readLink(id) {
+        let obj = {mode: 'teachingAdmin', url: id, title: ""};
+        LP.Start(obj);
     },
 
     handlePrependChatDataItem(data, showDate) {
@@ -1026,7 +1528,7 @@ const AntGroupTabComponents = React.createClass({
         var groupListCon = jQuery("#groupTalk").children().eq(0);
         groupListCon.prepend(dom);
         $(this.refs.dataBox).prepend(dom);
-        ReactDOM.render(this,dom[0]);
+        ReactDOM.render(this, dom[0]);
     },
 
     /**
@@ -1048,6 +1550,8 @@ const AntGroupTabComponents = React.createClass({
                 if (ret.msg == "调用成功" && ret.success == true) {
                     var i = 0;
                     antGroup.tipNotic(ret.response);
+                    var messageList = [];
+                    isNewPage = true;
                     ret.response.forEach(function (e) {
                         if (e.command == "message") {
                             var messageOfSinge = e;
@@ -1070,6 +1574,17 @@ const AntGroupTabComponents = React.createClass({
                                 var filePath = messageOfSinge.cloudFile.path;
                                 //大小
                                 var fileLength = messageOfSinge.cloudFile.length;
+                                //uuid
+                                var fileUid = messageOfSinge.cloudFile.uuid;
+                                //文件CreateUid
+                                var fileCreateUid = messageOfSinge.cloudFile.createUid;
+                            }
+                            var biumes = null;
+                            if (e.biuId != 0) {
+                                //这是biumessage
+                                biumes = true;
+                            } else {
+                                biumes = false;
                             }
                             var fromUser = messageOfSinge.fromUser;
                             var colUtype = fromUser.colUtype;
@@ -1082,10 +1597,12 @@ const AntGroupTabComponents = React.createClass({
                                 showImg = "";
                                 var imgTagArrayReturn = [];
                                 var messageReturnJson = antGroup.getImgTag(messageOfSinge);
-                                if (messageReturnJson.messageType == "text") {
-                                    content = messageReturnJson.textMessage;
-                                } else if (messageReturnJson.messageType == "imgTag") {
-                                    imgTagArrayReturn = messageReturnJson.imgMessage;
+                                if (isEmpty(messageReturnJson) == false && isEmpty(messageReturnJson.messageType) == false) {
+                                    if (messageReturnJson.messageType == "text") {
+                                        content = messageReturnJson.textMessage;
+                                    } else if (messageReturnJson.messageType == "imgTag") {
+                                        imgTagArrayReturn = messageReturnJson.imgMessage;
+                                    }
                                 }
                                 var messageShow = {
                                     'fromUser': fromUser,
@@ -1098,34 +1615,24 @@ const AntGroupTabComponents = React.createClass({
                                     "expressionItem": expressionItem,
                                     "fileName": fileName,
                                     "filePath": filePath,
-                                    "fileLength": fileLength
+                                    "fileLength": fileLength,
+                                    "fileUid": fileUid,
+                                    "fileCreateUid": fileCreateUid,
+                                    "biumes": biumes
                                 };
-                                //messageList.push(messageShow);
-                                handlePrependChatDataItem()
+                                messageList.push(messageShow);
+                                // console.log(messageList);
                             }
-                            /*var gt = $('#groupTalk');
-                            setTimeout(function () {
-                                var nowHeight = gt[0].scrollHeight;
-                                var newHeight = Number(nowHeight) - Number(_this.state.preHeight);
-                                gt.scrollTop(Number(newHeight));
-                            },1);*/
                         }
                     });
-                    isRendering=true;
-                    antGroup.setState({"messageList": messageList});
-                    currentReturnCount = ret.response.length;
-                    setTimeout(function () {
-                        isRendering=false;
-                    },5);
-                }
-                /*var gt = $('#groupTalk');
-                if(typeof(gt)==="object" && typeof(gt).length==="number" && gt.length!=0){
-                    topScrollHeight = gt[0].scrollHeight;
-                    console.log("getUser--------->"+topScrollHeight);
-                    if(antGroup.state.isDirectToBottom==false){
-                        gt.scrollTop(parseInt(gt[0].scrollHeight)*2-10);
+                    var gt = $('#groupTalk');
+                    if (parseInt(gt[0].scrollHeight) - parseInt(gt[0].scrollTop) === gt[0].clientHeight) {
+                        isDirectToBottom = true;
+                    } else {
+                        isDirectToBottom = false;
                     }
-                }*/
+                    antGroup.addMessageList(messageList);
+                }
             },
             onError: function (error) {
                 isRequesting = false;
@@ -1145,7 +1652,21 @@ const AntGroupTabComponents = React.createClass({
         antGroup.turnToMessagePage(currentGroupObj, messageType);
     },
 
+    /**
+     * 表格选中响应函数
+     * @param selectedRowKeys
+     */
+    onSelectChange(selectedRowKeys) {
+        console.log('selectedRowKeys changed: ', selectedRowKeys);
+        this.setState({selectedRowKeys});
+    },
+
     render() {
+        const rowSelection = {
+            selectedRowKeys: this.state.selectedRowKeys,
+            onChange: this.onSelectChange,
+        };
+        const hasSelected = this.state.selectedRowKeys.length > 0;
         var progressState = antGroup.state.progressState;
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         var welcomeTitle;
@@ -1161,10 +1682,14 @@ const AntGroupTabComponents = React.createClass({
             var messageTagArray = [];
             messageTagArray.splice(0);
             var messageList = antGroup.state.messageList;
-            // console.log(messageList);
+            console.log(messageList);
+            console.log('渲染');
             if (isEmpty(messageList) == false && messageList.length > 0) {
                 for (var i = messageList.length - 1; i >= 0; i--) {
                     var e = messageList[i];
+                    if (isEmpty(e) == true) {
+                        continue;
+                    }
                     var content = e.content;
                     var fromUser = e.fromUser.userName;
                     var userPhoneIcon;
@@ -1179,12 +1704,20 @@ const AntGroupTabComponents = React.createClass({
                     var attachmentType = e.attachmentType;
                     var expressionItem = e.expressionItem;
 
+                    //是否是biumessage
+                    var biumes = e.biumes;
                     //文件名
                     var fileName = e.fileName;
                     //路径
                     var filePath = e.filePath;
                     //大小
                     var fileLength = (e.fileLength / 1024).toFixed(2);
+                    //原始大小
+                    var oriFileLength = e.fileLength;
+                    //文件的uuid
+                    var fileUid = e.fileUid;
+                    //文件的createUid
+                    var fileCreateUid = e.fileCreateUid;
 
                     if (isEmpty(messageType) == false && messageType == "getMessage") {
                         if (isEmpty(e.messageReturnJson) == false && isEmpty(e.messageReturnJson.messageType) == false) {
@@ -1199,20 +1732,26 @@ const AntGroupTabComponents = React.createClass({
                                             <div className="talk-cont"><span
                                                 className="name">{userPhoneIcon}</span><span
                                                 className="borderballoon_le noom_cursor"
-                                                onClick={this.readLink.bind(this, attachment)}><img
-                                                style={{width: 40}}
-                                                src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
-                                                alt=""/><span className="span_link">{content}</span><i
-                                                className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                                onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
+                                                <div className="borderballoon_le_cont">
+                                                <img className="upexam_float span_link_img" style={{width: 40}}
+                                                     src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
+                                                     alt=""/>
+                                                     <div className="span_link_div">
+                                                         <span className="span_link file_link_img_t">{content}</span>
+                                                     </div>
+                                                 </div>
+                                                <i className="borderballoon_dingcorner_ri_no"></i></span></div>
                                         </li>;
                                         // }
                                     } else if (isEmpty(expressionItem) == false) {
                                         //来自安卓的动态表情（安卓的动态表情的content里有“表情”两个字）
                                         messageTag = <li className="right" style={{'textAlign': 'right'}}>
                                             <div className="u-name"><span>{fromUser}</span></div>
-                                            <div className="talk-cont"><span className="name">{userPhoneIcon}</span><img
-                                                src={expressionItem} style={{width: '150px', height: '110px'}}/><span><i
-                                                className="borderballoon_dingcorner_le"></i></span></div>
+                                            <div className="talk-cont"><span className="name">{userPhoneIcon}</span>
+                                                <img src={expressionItem} style={{width: '150px', height: '110px'}}/>
+                                                <span><i className="borderballoon_dingcorner_le_no"></i></span>
+                                            </div>
                                         </li>;
                                     } else if (isEmpty(fileName) == false) {
                                         //发送的文件（content里带有文件名字）
@@ -1220,25 +1759,53 @@ const AntGroupTabComponents = React.createClass({
                                             <div className="u-name"><span>{fromUser}</span></div>
                                             <div className="talk-cont"><span
                                                 className="name">{userPhoneIcon}</span><span
-
-                                                className="borderballoon noom_cursor"
-                                                onClick={this.readLink.bind(this, filePath)}>
-                                                <div className="span_link_div"><span
+                                                className="borderballoon noom_cursor borderballoon_file"
+                                            >
+                                                <div className="borderballoon_le_cont"><div
+                                                    className="span_link_div"><span
                                                     className="span_link">{fileName}</span><span
                                                     className="span_link password_ts">{fileLength}kb</span></div>
-                                                <img className="upexam_float span_link_img" style={{width: 40}}
-                                                     src="../src/components/images/lALPBY0V4pLs8fFISA_72_72.png"
+                                                <img className="upexam_float span_link_img" style={{width: 38}}
+                                                     src="../src/components/images/maaee_link_file_102_102.png"
                                                      alt=""/>
-                                                <i className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                                    </div>
+                                            <div className="file_noom">
+                                                    <a className="noom_cursor  file_noom_line"
+                                                       onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}><Icon
+                                                        type="eye"/>预览</a>
+                                                    <a href={filePath} target="_blank" title="下载"
+                                                       download={filePath}
+                                                       className="downfile_noom file_noom_line"><Icon
+                                                        type="download"/>下载</a>
+                                                    <Dropdown overlay={menu}
+                                                              onVisibleChange={this.getCloudFile.bind(this, filePath, fileName, oriFileLength, fileCreateUid)}>
+                                                        <a className="ant-dropdown-link file_noom_line"
+                                                           href="javascript:;">
+                                                          <Icon type="bars"/>更多
+                                                        </a>
+                                                    </Dropdown>
+                                                </div>
+                                            </span></div>
                                         </li>;
                                     } else {
-                                        messageTag = <li className="right" style={{'textAlign': 'right'}}>
-                                            <div className="u-name"><span>{fromUser}</span></div>
-                                            <div className="talk-cont"><span
-                                                className="name">{userPhoneIcon}</span><span
-                                                className="borderballoon">{e.content}<i
-                                                className="borderballoon_dingcorner_le"></i></span></div>
-                                        </li>;
+                                        //文字消息
+                                        if (biumes == true) {
+                                            messageTag = <li className="right" style={{'textAlign': 'right'}}>
+                                                <div className="u-name"><span>{fromUser}</span></div>
+                                                <div className="talk-cont"><span
+                                                    className="name">{userPhoneIcon}</span><span
+                                                    className="borderballoon">{e.content}<i
+                                                    className="borderballoon_dingcorner_le"></i></span></div>
+                                            </li>;
+                                        } else {
+                                            messageTag = <li className="right" style={{'textAlign': 'right'}}>
+                                                <div className="u-name"><span>{fromUser}</span></div>
+                                                <div className="talk-cont"><span
+                                                    className="name">{userPhoneIcon}</span><span
+                                                    className="borderballoon">{e.content}<i
+                                                    className="borderballoon_dingcorner_le_no"></i></span></div>
+                                            </li>;
+                                        }
                                     }
                                 } else {
                                     //我收到的
@@ -1249,11 +1816,14 @@ const AntGroupTabComponents = React.createClass({
                                             <div className="talk-cont"><span
                                                 className="name">{userPhoneIcon}</span><span
                                                 className="borderballoon_le noom_cursor"
-                                                onClick={this.readLink.bind(this, attachment)}><img
-                                                style={{width: 40}}
-                                                src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
-                                                alt=""/><span className="span_link">{content}</span><i
-                                                className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                                onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
+                                                 <img className="upexam_float span_link_img" style={{width: 40}}
+                                                      src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
+                                                      alt=""/>
+                                                <span className="span_link file_link_img_t">{content}</span>
+                                                <i className="borderballoon_dingcorner_ri_no"></i>
+                                            </span>
+                                            </div>
                                         </li>;
                                     } else if (isEmpty(fileName) == false) {
                                         //发送的文件（content里带有文件名字）
@@ -1261,14 +1831,34 @@ const AntGroupTabComponents = React.createClass({
                                             <div className="u-name"><span>{fromUser}</span></div>
                                             <div className="talk-cont"><span
                                                 className="name">{userPhoneIcon}</span><span
-                                                className="borderballoon_le noom_cursor"
-                                                onClick={this.readLink.bind(this, filePath)}><img
-                                                className="upexam_float"
-                                                style={{width: 40}}
-                                                src="../src/components/images/lALPBY0V4pLs8fFISA_72_72.png"
-                                                alt=""/><span className="span_link">{fileName}</span><span
-                                                className="span_link password_ts">{fileLength}kb</span><i
-                                                className="borderballoon_dingcorner_ri_no"></i></span>
+                                                className="borderballoon_le"
+                                                // onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}><img
+                                            >
+                                                <div className="borderballoon_le_cont">
+                                                    <img className="upexam_float" style={{width: 38}}
+                                                         src="../src/components/images/maaee_link_file_102_102.png"
+                                                         alt=""/>
+                                                    <span className="span_link">{fileName}</span>
+                                                    <span className="span_link password_ts">{fileLength}kb</span>
+                                                    <i className="borderballoon_dingcorner_ri_no"></i>
+                                                </div>
+                                                <div className="file_noom">
+                                                    <a className="noom_cursor  file_noom_line"
+                                                       onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}><Icon
+                                                        type="eye"/>预览</a>
+                                                    <a href={filePath} target="_blank" title="下载"
+                                                       download={filePath}
+                                                       className="downfile_noom file_noom_line"><Icon
+                                                        type="download"/>下载</a>
+                                                    <Dropdown overlay={menu}
+                                                              onVisibleChange={this.getCloudFile.bind(this, filePath, fileName, oriFileLength, fileCreateUid)}>
+                                                        <a className="ant-dropdown-link file_noom_line"
+                                                           href="javascript:;">
+                                                          <Icon type="bars"/>更多
+                                                        </a>
+                                                    </Dropdown>
+                                                </div>
+                                                </span>
                                             </div>
                                         </li>;
                                     } else if (isEmpty(expressionItem) == false) {
@@ -1281,13 +1871,25 @@ const AntGroupTabComponents = React.createClass({
                                                 className="borderballoon_dingcorner_ri_no"></i></span></div>
                                         </li>;
                                     } else {
-                                        messageTag = <li style={{'textAlign': 'left'}}>
-                                            <div className="u-name"><span>{fromUser}</span></div>
-                                            <div className="talk-cont"><span
-                                                className="name">{userPhoneIcon}</span><span
-                                                className="borderballoon_le">{e.content}<i
-                                                className="borderballoon_dingcorner_ri_no"></i></span></div>
-                                        </li>;
+                                        if (biumes == true) {
+                                            //叮消息有角标
+                                            messageTag = <li style={{'textAlign': 'left'}}>
+                                                <div className="u-name"><span>{fromUser}</span></div>
+                                                <div className="talk-cont"><span
+                                                    className="name">{userPhoneIcon}</span><span
+                                                    className="borderballoon_le">{e.content}<i
+                                                    className="borderballoon_dingcorner_ri"></i></span></div>
+                                            </li>;
+                                        } else {
+                                            //普通消息无角标
+                                            messageTag = <li style={{'textAlign': 'left'}}>
+                                                <div className="u-name"><span>{fromUser}</span></div>
+                                                <div className="talk-cont"><span
+                                                    className="name">{userPhoneIcon}</span><span
+                                                    className="borderballoon_le">{e.content}<i
+                                                    className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                            </li>;
+                                        }
                                     }
                                 }
                             } else if (e.messageReturnJson.messageType == "imgTag") {
@@ -1298,7 +1900,7 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="u-name"><span>{fromUser}</span></div>
                                         <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span
                                             className="borderballoon ">{e.imgTagArray}<i
-                                            className="borderballoon_dingcorner_le"></i></span></div>
+                                            className="borderballoon_dingcorner_le_no"></i></span></div>
                                     </li>;
                                 } else {
                                     //我收到的
@@ -1318,7 +1920,7 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="u-name"><span>{fromUser}</span></div>
                                         <div className="talk-cont"><span className="name">{userPhoneIcon}</span><img
                                             src={expressionItem} style={{width: '150px', height: '110px'}}/><span><i
-                                            className="borderballoon_dingcorner_le"></i></span></div>
+                                            className="borderballoon_dingcorner_le_no"></i></span></div>
                                     </li>;
                                 } else {
                                     //我收到的
@@ -1338,12 +1940,17 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="u-name"><span>{fromUser}</span></div>
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><span
-                                            className="borderballoon_le noom_cursor"
-                                            onClick={this.readLink.bind(this, attachment)}><img
-                                            style={{width: 40}}
-                                            src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
-                                            alt=""/><span className="span_link">默认</span><i
-                                            className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                            className="borderballoon noom_cursor borderballoon_file"
+                                            onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
+                                            <div className="borderballoon_le_cont">
+                                                <img className="upexam_float span_link_img" style={{width: 40}}
+                                                     src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
+                                                     alt=""/>
+                                                     <div className="span_link_div">
+                                                         <span className="span_link file_link_img_t">默认</span>
+                                                     </div>
+                                                 </div>
+                                            <i className="borderballoon_dingcorner_ri_no"></i></span></div>
                                     </li>;
                                 } else {
                                     //我收到的
@@ -1352,10 +1959,10 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><span
                                             className="borderballoon_le noom_cursor"
-                                            onClick={this.readLink.bind(this, attachment)}><img
-                                            style={{width: 40}}
-                                            src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
-                                            alt=""/><span className="span_link">默认</span><i
+                                            onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
+                                            <img className="upexam_float span_link_img" style={{width: 40}}
+                                                 src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png" alt=""/>
+                                            <span className="span_link file_link_img_t">默认</span><i
                                             className="borderballoon_dingcorner_ri_no"></i></span></div>
                                     </li>;
                                 }
@@ -1365,20 +1972,24 @@ const AntGroupTabComponents = React.createClass({
                                     //我发出的
                                     messageTag = <li className="right" style={{'textAlign': 'right'}}>
                                         <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><img
-                                            onClick={showLargeImg}
-                                            src={attachment} style={{width: '220px', height: '150px'}}/><span><i
-                                            className="borderballoon_dingcorner_le"></i></span></div>
+                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span>
+                                            <span className="borderballoon borderballoon_file borderballoon_file_p">
+                                                <img onClick={showLargeImg} src={attachment} className="send_img"/>
+                                            </span>
+                                            <span><i className="borderballoon_dingcorner_le_no"></i></span>
+                                        </div>
                                     </li>;
                                 } else {
                                     //我收到的
                                     messageTag = <li style={{'textAlign': 'left'}}>
                                         <div className="u-name"><span>{fromUser}</span></div>
                                         <div className="talk-cont"><span
-                                            className="name">{userPhoneIcon}</span><img
-                                            onClick={showLargeImg}
-                                            style={{width: '220px', height: '150px'}} src={attachment}/><span><i
-                                            className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                            className="name">{userPhoneIcon}</span>
+                                            <span className="borderballoon_le borderballoon_file_p">
+                                                <img onClick={showLargeImg} className="send_img" src={attachment}/>
+                                            </span>
+                                            <span><i className="borderballoon_dingcorner_ri_no"></i></span>
+                                        </div>
                                     </li>;
                                 }
                             } else if (e.messageReturnJson.messageType == "videoTag") {
@@ -1420,13 +2031,32 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="u-name"><span>{fromUser}</span></div>
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><span
-                                            className="borderballoon noom_cursor"
-                                            onClick={this.readLink.bind(this, filePath)}>
-                                            <div className="span_link_div"><span className="span_link">{fileName}</span><span
+                                            className="borderballoon noom_cursor borderballoon_file"
+                                            onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}>
+                                            <div className="borderballoon_le_cont"><div className="span_link_div"><span
+                                                className="span_link">{fileName}</span><span
                                                 className="span_link password_ts">{fileLength}kb</span></div>
-                                            <img className="upexam_float span_link_img" style={{width: 40}}
-                                                 src="../src/components/images/lALPBY0V4pLs8fFISA_72_72.png" alt=""/>
-                                            <i className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                                <img className="upexam_float span_link_img" style={{width: 38}}
+                                                     src="../src/components/images/maaee_link_file_102_102.png"
+                                                     alt=""/>
+                                                    </div>
+                                            <div className="file_noom">
+                                                    <a className="noom_cursor  file_noom_line"
+                                                       onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}><Icon
+                                                        type="eye"/>预览</a>
+                                                    <a href={filePath} target="_blank" title="下载"
+                                                       download={filePath}
+                                                       className="downfile_noom file_noom_line"><Icon
+                                                        type="download"/>下载</a>
+                                                    <Dropdown overlay={menu}
+                                                              onVisibleChange={this.getCloudFile.bind(this, filePath, fileName, oriFileLength, fileCreateUid)}>
+                                                            <a className="ant-dropdown-link file_noom_line"
+                                                               href="javascript:;">
+                                                              <Icon type="bars"/>更多
+                                                            </a>
+                                                        </Dropdown>
+                                                </div>
+                                            </span></div>
                                     </li>;
                                 } else {
                                     //我收到的
@@ -1435,13 +2065,32 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><span
                                             className="borderballoon_le noom_cursor"
-                                            onClick={this.readLink.bind(this, filePath)}><img className="upexam_float"
-                                                                                              style={{width: 40}}
-                                                                                              src="../src/components/images/lALPBY0V4pLs8fFISA_72_72.png"
-                                                                                              alt=""/><span
-                                            className="span_link">{fileName}</span><span
-                                            className="span_link password_ts">{fileLength}kb</span><i
-                                            className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                            onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}>
+                                            <div className="borderballoon_le_cont"><img
+                                                className="upexam_float"
+                                                style={{width: 38}}
+                                                src="../src/components/images/maaee_link_file_102_102.png"
+                                                alt=""/><span
+                                                className="span_link">{fileName}</span><span
+                                                className="span_link password_ts">{fileLength}kb</span><i
+                                                className="borderballoon_dingcorner_ri_no"></i></div>
+                                        <div className="file_noom">
+                                                    <a className="noom_cursor  file_noom_line"
+                                                       onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}><Icon
+                                                        type="eye"/>预览</a>
+                                                    <a href={filePath} target="_blank" title="下载"
+                                                       download={filePath}
+                                                       className="downfile_noom file_noom_line"><Icon
+                                                        type="download"/>下载</a>
+                                                    <Dropdown overlay={menu}
+                                                              onVisibleChange={this.getCloudFile.bind(this, filePath, fileName, oriFileLength, fileCreateUid)}>
+                                                        <a className="ant-dropdown-link file_noom_line"
+                                                           href="javascript:;">
+                                                          <Icon type="bars"/>更多
+                                                        </a>
+                                                    </Dropdown>
+                                                </div>
+                                        </span></div>
                                     </li>;
                                 }
                             }
@@ -1452,7 +2101,7 @@ const AntGroupTabComponents = React.createClass({
                             <div className="talk-cont">
                                 <span className="name">{userPhoneIcon}</span><span
                                 className="borderballoon">{content}<i
-                                className="borderballoon_dingcorner_le"></i></span>
+                                className="borderballoon_dingcorner_le_no"></i></span>
                             </div>
                         </li>;
                     }
@@ -1514,6 +2163,11 @@ const AntGroupTabComponents = React.createClass({
         } else {
             tabComponent = <div className="userinfo_bg_1"><span>科技改变未来，教育成就梦想</span></div>;
         }
+        var returnToolbarInMoveModal = <div className="public—til—blue">
+            <div className="ant-tabs-right"><Button onClick={antGroup.returnParentAtMoveModal}><Icon
+                type="left"/></Button></div>
+        </div>;
+
 
         return (
             <div>
@@ -1522,6 +2176,7 @@ const AntGroupTabComponents = React.createClass({
                     {tabComponent}
                 </div>
 
+                {/*发送文件model*/}
                 <Modal
                     visible={antGroup.state.cloudFileUploadModalVisible}
                     title="上传文件"
@@ -1558,6 +2213,65 @@ const AntGroupTabComponents = React.createClass({
                     </Row>
                 </Modal>
 
+                {/*保存到我的蚁盘model*/}
+                <Modal title="我的文件"
+                       visible={antGroup.state.saveFileModalVisible}
+                       transitionName=""  //禁用modal的动画效果
+                       maskClosable={false} //设置不允许点击蒙层关闭
+                       onCancel={antGroup.moveFileModalHandleCancel}
+                       footer={null}
+                >
+                    <div className="move_file">
+                        <Row>
+                            <Col span={24}>
+                                {returnToolbarInMoveModal}
+                                <Table columns={targetDirColumns} showHeader={false}
+                                       dataSource={antGroup.state.targetDirDataArray}
+                                       pagination={{
+                                           total: antGroup.state.totalCount,
+                                           pageSize: getPageSize(),
+                                           onChange: antGroup.pageOnChange
+                                       }}
+                                       scroll={{y: 300}}/>
+                            </Col>
+                        </Row>
+                    </div>
+                </Modal>
+
+                <Modal title="文件详情"
+                       visible={this.state.checkFileModalVisible}
+                       transitionName=""  //禁用modal的动画效果
+                       maskClosable={false} //设置不允许点击蒙层关闭
+                       onCancel={this.checkFileModalHandleCancel}
+                       footer={null}
+                       className="file_icon_new"
+                >
+                    <Row>
+                        <Col span={24}>
+                            <div style={{marginBottom: 16}} className="file_icon_new_p">
+                                <Button
+                                    type="primary"
+                                    onClick={this.saveShareFile}
+                                    disabled={!hasSelected}
+                                >
+                                    保存到蚁盘
+                                </Button>
+                            </div>
+                        </Col>
+                    </Row>
+                    <div className="move_file_clearfix">
+                        <Row>
+                            <Col span={24}>
+
+                                <div className="file_icon_new_clearfix">
+                                    <Table rowSelection={rowSelection} columns={fileDetilColumns}
+                                           dataSource={data_noom}
+                                           pagination={false}/>
+                                </div>
+                            </Col>
+                        </Row>
+                    </div>
+                </Modal>
             </div>
         );
     },

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Menu, Icon, Row, Col, Button, notification} from 'antd';
+import {Menu, Icon, Row, Col, Button, notification, Modal} from 'antd';
 import MainTabComponents from '../components/MainTabComponents';
 import HeaderComponents from '../components/HeaderComponents';
 import UserFace from '../components/UserCardModalComponents';
@@ -27,7 +27,6 @@ import SchoolGroupSettingComponents from '../components/schoolGroupSetting/Schoo
 import SchoolGroupMenu from '../components/schoolGroupSetting/SchoolGroupMenu';
 import SystemSettingGhostMenu from '../components/SystemSetting/SystemSettingGhostMenu';
 import SystemSettingComponent from '../components/SystemSetting/SystemSettingComponent';
-import {isEmpty} from '../utils/utils';
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
 
@@ -146,8 +145,8 @@ const MainLayout = React.createClass({
     },
 
     componentDidMount() {
-        this.refs.dingMusic.innerHTML = '<source src="../../static/eva_call_disconnected.m4a" type="audio/mpeg">'
-        this.refs.mesMusic.innerHTML = '<source src="../../static/B(1).mp3" type="audio/mpeg">'
+        this.refs.dingMusic.innerHTML = '<source src="../../static/dingmes.mp3" type="audio/mpeg">'
+        this.refs.mesMusic.innerHTML = '<source src="../../static/message.mp3" type="audio/mpeg">'
     },
 
     componentWillMount() {
@@ -401,7 +400,8 @@ const MainLayout = React.createClass({
      * 好友对好友的消息发送
      */
     receiveNewMessage(userJson) {
-        console.log(456);
+        // console.log(userJson);
+        // console.log(947);
         this.setState({
             currentKey: 'message',
             resouceType: '',

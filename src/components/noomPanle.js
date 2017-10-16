@@ -113,7 +113,7 @@
         this.ifrid = 'ifr' + id;
         this.htm = `<div id="${id}" class="dialog little-layout-aside-r-show teachingAdmin">
                 <div class="header draggable">
-                <h3 class="title" id="${this.ifrid}1">${ obj.title }</h3>
+                <h3 class="title" id="${this.ifrid}_title">${ obj.title }</h3>
                     <div class="little-tilte">
                         <a class="back"><i class="anticon anticon-left "></i></a>
                         <!--<div class="goback">后退</div>-->
@@ -202,8 +202,15 @@
                     window.__sendImg__(data.currentUrl, data.url);
 
                 } else if (data.method == 'openNewPage') {
+                    // console.log(data.title);
                     let obj = {mode: 'teachingAdmin', title: '', url: data.url};
                     LP.Start(obj);
+                } else if (data.method == 'setPanelTitle') {
+                    var title = data.title;
+                    var id = data.windowName + "_title";
+                    document.getElementById(id).innerText = title;
+                } else if (data.method == 'showCloudFileShare') {
+                    window.__noomShareId__(data.shareId);
                 }
             });
             isAddedListener = true;
@@ -225,16 +232,13 @@
     };
 
     littlePanle.prototype._teachAdmin_UI_templet_iframe_event = function (id, ifrid) {
-        console.log(this);
+        // console.log(this);
         // console.log(ifrid);
         var iframe = this.ifrel[0];
-        console.log(iframe);
+        // console.log(iframe);
         // console.log(iframe.document.title);
-        console.log(iframe.contentWindow.document.title);
-        // console.log(ifrid);
-
-
-    }
+        // console.log(iframe.contentWindow.document.title);
+    };
 
 //
     littlePanle.prototype._default_UI_templet = function (obj) {
