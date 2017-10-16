@@ -7172,9 +7172,11 @@ select.course_n:hover {
     margin-top: 5px;
 }
 .borderballoon img.send_img, .borderballoon_le img.send_img{
-    width:220px !important;
-    height:150px !important;
+    max-width:230px !important;
+    height:auto !important;
     padding: 5px 5px 0 5px !important;
+    cursor: zoom-in;
+    cursor: -webkit-zoom-in;
 }
 .file_link_img_t{
     line-height: 38px;
