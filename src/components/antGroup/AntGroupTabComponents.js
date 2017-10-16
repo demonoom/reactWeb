@@ -1759,8 +1759,9 @@ const AntGroupTabComponents = React.createClass({
                                             <div className="u-name"><span>{fromUser}</span></div>
                                             <div className="talk-cont"><span
                                                 className="name">{userPhoneIcon}</span><span
-                                                className="borderballoon noom_cursor borderballoon_file"
-                                            >
+                                                className="borderballoon noom_cursor borderballoon_file">
+                                                <span className="bot"></span>
+                                                <span className="top"></span>
                                                 <div className="borderballoon_le_cont"><div
                                                     className="span_link_div"><span
                                                     className="span_link">{fileName}</span><span
@@ -1817,6 +1818,8 @@ const AntGroupTabComponents = React.createClass({
                                                 className="name">{userPhoneIcon}</span><span
                                                 className="borderballoon_le noom_cursor"
                                                 onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
+                                                 <span className="bot"></span>
+                                                 <span className="top"></span>
                                                  <img className="upexam_float span_link_img" style={{width: 40}}
                                                       src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
                                                       alt=""/>
@@ -1834,6 +1837,8 @@ const AntGroupTabComponents = React.createClass({
                                                 className="borderballoon_le"
                                                 // onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}><img
                                             >
+                                                <span className="bot"></span>
+                                                <span className="top"></span>
                                                 <div className="borderballoon_le_cont">
                                                     <img className="upexam_float" style={{width: 38}}
                                                          src="../src/components/images/maaee_link_file_102_102.png"
@@ -1877,8 +1882,11 @@ const AntGroupTabComponents = React.createClass({
                                                 <div className="u-name"><span>{fromUser}</span></div>
                                                 <div className="talk-cont"><span
                                                     className="name">{userPhoneIcon}</span><span
-                                                    className="borderballoon_le">{e.content}<i
-                                                    className="borderballoon_dingcorner_ri"></i></span></div>
+                                                    className="borderballoon_le">
+                                                    <span className="bot"></span>
+                                                    <span className="top"></span>
+                                                    {e.content}
+                                                    <i className="borderballoon_dingcorner_ri"></i></span></div>
                                             </li>;
                                         } else {
                                             //普通消息无角标
@@ -1886,8 +1894,11 @@ const AntGroupTabComponents = React.createClass({
                                                 <div className="u-name"><span>{fromUser}</span></div>
                                                 <div className="talk-cont"><span
                                                     className="name">{userPhoneIcon}</span><span
-                                                    className="borderballoon_le">{e.content}<i
-                                                    className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                                    className="borderballoon_le">
+                                                    <span className="bot"></span>
+                                                    <span className="top"></span>
+                                                    {e.content}
+                                                    <i className="borderballoon_dingcorner_ri_no"></i></span></div>
                                             </li>;
                                         }
                                     }
@@ -1942,6 +1953,8 @@ const AntGroupTabComponents = React.createClass({
                                             className="name">{userPhoneIcon}</span><span
                                             className="borderballoon noom_cursor borderballoon_file"
                                             onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
+                                                <span className="bot"></span>
+                                                <span className="top"></span>
                                             <div className="borderballoon_le_cont">
                                                 <img className="upexam_float span_link_img" style={{width: 40}}
                                                      src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
@@ -1960,6 +1973,8 @@ const AntGroupTabComponents = React.createClass({
                                             className="name">{userPhoneIcon}</span><span
                                             className="borderballoon_le noom_cursor"
                                             onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
+                                            <span className="bot"></span>
+                                            <span className="top"></span>
                                             <img className="upexam_float span_link_img" style={{width: 40}}
                                                  src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png" alt=""/>
                                             <span className="span_link file_link_img_t">默认</span><i
@@ -1974,6 +1989,8 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="u-name"><span>{fromUser}</span></div>
                                         <div className="talk-cont"><span className="name">{userPhoneIcon}</span>
                                             <span className="borderballoon borderballoon_file borderballoon_file_p">
+                                                <span className="bot"></span>
+                                                <span className="top"></span>
                                                 <img onClick={showLargeImg} src={attachment} className="send_img"/>
                                             </span>
                                             <span><i className="borderballoon_dingcorner_le_no"></i></span>
@@ -1986,6 +2003,8 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span>
                                             <span className="borderballoon_le borderballoon_file_p">
+                                                <span className="bot"></span>
+                                                <span className="top"></span>
                                                 <img onClick={showLargeImg} className="send_img" src={attachment}/>
                                             </span>
                                             <span><i className="borderballoon_dingcorner_ri_no"></i></span>
@@ -2033,6 +2052,8 @@ const AntGroupTabComponents = React.createClass({
                                             className="name">{userPhoneIcon}</span><span
                                             className="borderballoon noom_cursor borderballoon_file"
                                             onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}>
+                                                <span className="bot"></span>
+                                                <span className="top"></span>
                                             <div className="borderballoon_le_cont"><div className="span_link_div"><span
                                                 className="span_link">{fileName}</span><span
                                                 className="span_link password_ts">{fileLength}kb</span></div>
@@ -2066,6 +2087,8 @@ const AntGroupTabComponents = React.createClass({
                                             className="name">{userPhoneIcon}</span><span
                                             className="borderballoon_le noom_cursor"
                                             onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}>
+                                                <span className="bot"></span>
+                                                <span className="top"></span>
                                             <div className="borderballoon_le_cont"><img
                                                 className="upexam_float"
                                                 style={{width: 38}}
@@ -2100,7 +2123,7 @@ const AntGroupTabComponents = React.createClass({
                             <div className="u-name"><span>{fromUser}</span></div>
                             <div className="talk-cont">
                                 <span className="name">{userPhoneIcon}</span><span
-                                className="borderballoon">{content}<i
+                                className="borderballoon">{e.content}<i
                                 className="borderballoon_dingcorner_le_no"></i></span>
                             </div>
                         </li>;
