@@ -31,7 +31,9 @@
     var aa = true;
     littlePanle.prototype.zoomview = function (id) {
 
+
         let nodeEl = $('#' + id);
+        /*
         let posRef2 = window.getComputedStyle(nodeEl[0]);
         let perWidth = replaceUnit(posRef2.width);
         let perHeight = replaceUnit(posRef2.height);
@@ -57,6 +59,7 @@
         el.html('&#xe60f;');
         el.on('click', this.zoomMinView.bind(this, id));
         // el.off('click',this.zoomview.bind(this, id)).on('click', this.zoomMinView.bind(this, id));
+        */
         enterFull(nodeEl[0]);
     };
     littlePanle.prototype.zoomMinView = function (id) {
@@ -1261,21 +1264,25 @@ function exitFull() {
 function enterFull(el) {
     var docElm = document.documentElement;
     if (el) docElm = el;
+    var iframe = $(el).find("iframe")[0];
+    if(iframe != null && typeof(iframe) != 'undefined' ){
+        el = iframe;
+    }
 //W3C
     if (docElm.requestFullscreen) {
-        docElm.requestFullscreen();
+        el.requestFullscreen();
     }
 //FireFox
     else if (docElm.mozRequestFullScreen) {
-        docElm.mozRequestFullScreen();
+        el.mozRequestFullScreen();
     }
 //Chrome等
     else if (docElm.webkitRequestFullScreen) {
-        docElm.webkitRequestFullScreen();
+        el.webkitRequestFullScreen();
     }
 //IE11
-    else if (elem.msRequestFullscreen) {
-        elem.msRequestFullscreen();
+    else if (docElm.msRequestFullscreen) {
+        el.msRequestFullscreen();
     }
 }
 

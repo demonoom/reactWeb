@@ -11,7 +11,9 @@ html, body {
 ul, li {
     list-style: none;
 }
-
+pre{
+    white-space: pre-wrap;
+}
 code, kbd, pre, samp {
     font-family: "Microsoft YaHei", "Tahoma" !important;
 }
@@ -1791,7 +1793,6 @@ a {
     color: #2896fb;
     text-decoration: none;
 }
-
 .ant-pagination-prev, .ant-pagination-next, .ant-pagination-jump-prev, .ant-pagination-jump-next {
     border-radius: 50%
 }
@@ -3241,6 +3242,9 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     height: 64px;
     padding: 0 6px 4px 10px !important;
     position: absolute;
+    -webkit-user-modify: read-write-plaintext-only;
+    -moz-user-modify: read-write-plaintext-only;
+    user-modify: read-write-plaintext-only;
 }
 
 .group_send_shuoshuo .emoji-wysiwyg-editor {
@@ -3678,15 +3682,31 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 }
 
 .borderballoon_le:after {
+    display: table;
     content: "";
-    position: absolute;
-    border-style: solid;
-    border-color: transparent #f2f2f2 transparent transparent;
-    border-width: 6px;
-    top: 8px;
-    left: -12px;
+    clear: both;
 }
-
+.borderballoon_le span.bot,  .borderballoon_le span.top{
+    width: 0;
+    height: 0;
+    font-size: 0;
+    overflow: hidden;
+    position: absolute;
+}
+.borderballoon_le span.bot {
+    border-width: 6px;
+    border-style: solid dashed dashed;
+    border-color: transparent #eee transparent transparent;
+    left: -13px;
+    top: 8px;
+}
+.borderballoon_le span.top {
+    border-width: 6px;
+    border-style: solid dashed dashed;
+    border-color: transparent #ffffff transparent transparent;
+    left: -12px;
+    top: 8px;
+}
 .borderballoon_le_cont {
     height: 40px;
 }
@@ -3764,13 +3784,33 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 }
 
 .borderballoon_file:after {
+    display: table;
     content: "";
+    clear: both;
+    border-width: 0;
+    top: 0;
+    height: 0;
+}
+.borderballoon_file span.bot,  .borderballoon_file span.top{
+    width: 0;
+    height: 0;
+    font-size: 0;
+    overflow: hidden;
     position: absolute;
-    border-style: solid;
-    border-color: transparent transparent transparent #f2f2f2;
+}
+.borderballoon_file span.bot {
     border-width: 6px;
+    border-style: solid dashed dashed;
+    border-color: transparent transparent transparent #eee;
+    right: -13px;
     top: 8px;
+}
+.borderballoon_file span.top {
+    border-width: 6px;
+    border-style: solid dashed dashed;
+    border-color: transparent transparent transparent #ffffff;
     right: -12px;
+    top: 8px;
 }
 
 .borderballoon_file .span_link_div .password_ts {
@@ -7172,9 +7212,11 @@ select.course_n:hover {
     margin-top: 5px;
 }
 .borderballoon img.send_img, .borderballoon_le img.send_img{
-    width:220px !important;
-    height:150px !important;
+    max-width:230px !important;
+    height:auto !important;
     padding: 5px 5px 0 5px !important;
+    cursor: zoom-in;
+    cursor: -webkit-zoom-in;
 }
 .file_link_img_t{
     line-height: 38px;
