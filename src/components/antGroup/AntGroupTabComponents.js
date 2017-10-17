@@ -772,6 +772,9 @@ const AntGroupTabComponents = React.createClass({
             }, onWarn: function (warnMsg) {
 
             }, onMessage: function (info) {
+                console.log(info);
+                console.log('info');
+
                 var groupObj;
                 var gt = $('#groupTalk');
                 if (antGroup.state.optType == "sendMessage") {
@@ -795,10 +798,16 @@ const AntGroupTabComponents = React.createClass({
                 var messageList = [];
                 //获取messageList
                 var command = info.command;
+                var messageOfSinge;
                 if (isEmpty(command) == false) {
                     if (command == "messageList") {
                         showImg = "";
                         var data = info.data;
+                        //手机发送的群消息的处理
+                        // messageOfSinge = data.messages[0];
+                        // console.log(messageOfSinge);
+
+
                         var messageArray = data.messages;
                         var uuidsArray = [];
                         messageArray.forEach(function (e) {
@@ -872,7 +881,7 @@ const AntGroupTabComponents = React.createClass({
                         }
                         ;
                         showImg = "";
-                        var messageOfSinge = data.message;
+                        messageOfSinge = data.message;
                         var fromUser = messageOfSinge.fromUser;
                         var colUtype = fromUser.colUtype;
                         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
@@ -883,9 +892,11 @@ const AntGroupTabComponents = React.createClass({
                         console.log('//判断是否是叮消息');
                         //判断是否是叮消息
                         //判断这条消息是我发出的，处理别的手机发送消息不同步的问题
-                        // if (messageOfSinge.fromUser.colUid == antGroup.state.loginUser.colUid) {
-                        //     alert('我发出的');
-                        // };
+                        if (messageOfSinge.fromUser.colUid == antGroup.state.loginUser.colUid) {
+                            //     alert('我发出的');
+                            isSend = true;
+                        }
+                        ;
                         var biumes = null;
                         if (messageOfSinge.command == 'message') {
                             biumes = false;
@@ -1011,7 +1022,10 @@ const AntGroupTabComponents = React.createClass({
                                             "fileUid": fileUid,
                                             "fileCreateUid": fileCreateUid
                                         };
-                                        messageList.push(messageShow);
+                                        //如果发送的消息=当前点击人的id，才push
+                                        if (messageOfSinge.toUser.colUid === _this.state.curId) {
+                                            messageList.push(messageShow);
+                                        }
                                         var userJson = {
                                             key: messageOfSinge.toUser.colUid,
                                             // key: _this.state.loginUser.colUid,
@@ -1033,6 +1047,7 @@ const AntGroupTabComponents = React.createClass({
                             //群组单条消息
                             if (isEmpty(antGroup.state.currentGroupObj) == false
                                 && antGroup.state.currentGroupObj.chatGroupId == messageOfSinge.toChatGroup.chatGroupId) {
+                                //判断选中的群组就是要发送的群组
                                 imgTagArray.splice(0);
                                 var imgTagArrayReturn = [];
                                 var messageReturnJson = antGroup.getImgTag(messageOfSinge);
@@ -1058,6 +1073,8 @@ const AntGroupTabComponents = React.createClass({
                                     "fileUid": fileUid,
                                     "fileCreateUid": fileCreateUid
                                 };
+                                console.log(messageShow);
+                                console.log('～～～～～～～～～～');
                                 //messageList.splice(0, 0, messageShow);
                                 messageList.push(messageShow);
                                 var userJson = {
@@ -1457,6 +1474,8 @@ const AntGroupTabComponents = React.createClass({
      * @param timeNode
      */
     getPersonMessage(userObj, timeNode) {
+        //将点击的那个个人的id记录下来
+        this.setState({curId: userObj.colUid})
         isDirectToBottom = true;
         isNewPage = false;
         antGroup.setState({"messageComeFrom": "personMessage", "currentGroupObj": '', messageList: []});
