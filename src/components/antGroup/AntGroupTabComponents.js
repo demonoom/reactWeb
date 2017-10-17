@@ -882,6 +882,10 @@ const AntGroupTabComponents = React.createClass({
                         console.log(messageOfSinge);
                         console.log('//判断是否是叮消息');
                         //判断是否是叮消息
+                        //判断这条消息是我发出的，处理别的手机发送消息不同步的问题
+                        // if (messageOfSinge.fromUser.colUid == antGroup.state.loginUser.colUid) {
+                        //     alert('我发出的');
+                        // };
                         var biumes = null;
                         if (messageOfSinge.command == 'message') {
                             biumes = false;
@@ -989,6 +993,7 @@ const AntGroupTabComponents = React.createClass({
 
                             } else {
                                 //我发出的
+                                console.log('我发出的');
                                 if (isEmpty(messageOfSinge.toUser) == false) {
                                     if (data.message.command != "message_read") {
                                         var messageShow = {

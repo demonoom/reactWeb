@@ -199,7 +199,7 @@ const DingMessageTabComponents = React.createClass({
             var id = v.id;
             if (type == 2) {
                 if (isEmpty(v.attachments) === false) {
-                    var sendFMine = <div className="ding_bg_list">
+                    var sendFMine = <div className="ding_bg_list ding_mes_read">
                         <div onClick={ding.entMesDetil.bind(this, id)} style={{cursor: 'pointer'}}>
                             <div className="ding_ding_i"><img src="../src/components/images/ding_icon.png"/><span
                                 className="ding_ding">叮</span><span className="ding_left_1">我发出的</span><span
@@ -213,7 +213,7 @@ const DingMessageTabComponents = React.createClass({
                         </div>
                     </div>;
                 } else {
-                    var sendFMine = <div className="ding_bg_list">
+                    var sendFMine = <div className="ding_bg_list ding_mes_read">
                         <div onClick={ding.entMesDetil.bind(this, id)} style={{cursor: 'pointer'}}>
                             <div className="ding_ding_i"><img src="../src/components/images/ding_icon.png"/><span
                                 className="ding_ding">叮</span><span className="ding_left_1">我发出的</span><span
@@ -277,7 +277,6 @@ const DingMessageTabComponents = React.createClass({
         _this.confirmReadBiu(id);
         //渲染详情面板
         _this.showDingList(id);
-        console.log('entMesDetil');
         //先进入详情，后willcomponents
     },
 
