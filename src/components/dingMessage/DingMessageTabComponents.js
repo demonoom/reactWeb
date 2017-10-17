@@ -45,11 +45,12 @@ const DingMessageTabComponents = React.createClass({
     },
 
     componentWillUpdate() {
+        var _this = this;
+        //未读消息id的数组集合
         var arr = this.state.notRedMesArr;
         if (isEmpty(document.querySelector('.ding_bg_list')) == false) {
             document.querySelector('.ding_bg_list').className = 'ding_mes_read ding_bg_list'
         }
-        // console.log(arr);
         if (isEmpty(arr) == false) {
             for (var i = 0; i < arr.length; i++) {
                 if (isEmpty(document.getElementById(arr[0])) == false) {
@@ -58,8 +59,15 @@ const DingMessageTabComponents = React.createClass({
             }
         }
         var id = this.state.biuId;
-        if (isEmpty(id) == false) {
+        if (isEmpty(document.getElementById(id)) == false) {
             document.getElementById(id).className = 'ding_bg_list ding_mes_read';
+            //把这个id从notRedMesArr中剔除
+            arr.forEach(function (v, i) {
+                if (v == id) {
+                    arr.splice(i, 1);
+                    _this.setState({notRedMesArr: arr})
+                }
+            })
         }
     },
 
@@ -79,7 +87,9 @@ const DingMessageTabComponents = React.createClass({
                             var obj = JSON.parse(data.message.content);
                             if (obj.userId !== _this.state.loginUser.colUid) {
                                 var dingData = _this.state.DPanelMes;
+                                //将新来的这条信息放在原本DPanelMes的第一条位置   考虑设置一个参数标识为未读，所有未读的消息都为黄色，点击之后更改这个标识，重新渲染
                                 dingData.unshift(obj);
+                                //渲染ding列表
                                 ding.buildDList(dingData, 1);
                                 _this.props.showAlert(true);
                             }
@@ -159,7 +169,6 @@ const DingMessageTabComponents = React.createClass({
      */
     buildDList(e, type) {
         var _this = this;
-        console.log(e);
         e.forEach(function (v) {
             // 转化时间
             var createTime = getLocalTime(v.createTime);
@@ -264,8 +273,12 @@ const DingMessageTabComponents = React.createClass({
         this.setState({biuId: id});
         var _this = this;
         this.refs.dingPanel.className = 'ding_panel ding_enter';
+        //确认已读
         _this.confirmReadBiu(id);
+        //渲染详情面板
         _this.showDingList(id);
+        console.log('entMesDetil');
+        //先进入详情，后willcomponents
     },
 
     /**
