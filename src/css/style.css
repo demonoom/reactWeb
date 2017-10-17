@@ -3616,6 +3616,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     border-width: 6px;
     top: 8px;
     right: -12px;
+    height: 0;
 }
 
 .borderballoon::selection {
@@ -3685,6 +3686,9 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     display: table;
     content: "";
     clear: both;
+    height:0;
+    line-height: 0;
+    font-size:0;
 }
 .borderballoon_le span.bot,  .borderballoon_le span.top{
     width: 0;
