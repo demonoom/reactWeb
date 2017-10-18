@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 import {message, Upload, Icon} from 'antd';
 import {doWebService} from '../WebServiceHelper';
+import {SMALL_IMG, MIDDLE_IMG, LARGE_IMG} from '../utils/Const';
 
 
 const UserInfo = React.createClass({
@@ -124,7 +125,7 @@ const UserInfo = React.createClass({
         return <div className="gary_person">
             <Upload {...uploadProps}>
                 {
-                    this.state.userHeadIcon ? <img src={this.state.userHeadIcon} className="userinfo_name userinfo_face user_with_border4 affix_bottom_tc"/> :
+                    this.state.userHeadIcon ? <img src={this.state.userHeadIcon + '?' + SMALL_IMG} className="userinfo_name userinfo_face user_with_border4 affix_bottom_tc"/> :
                         <Icon type="plus" className="avatar-uploader-trigger"/>
                 }
             </Upload>

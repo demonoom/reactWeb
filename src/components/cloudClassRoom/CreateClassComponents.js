@@ -1,50 +1,55 @@
-import React, { PropTypes } from 'react';
-import { Tabs, Breadcrumb, Icon,Card,Button,Row,Col,Steps,
-    Input,Select,Radio,DatePicker,Checkbox,message} from 'antd';
+import React, {PropTypes} from 'react';
+import {
+    Tabs, Breadcrumb, Icon, Card, Button, Row, Col, Steps,
+    Input, Select, Radio, DatePicker, Checkbox, message
+} from 'antd';
 import ImageAnswerUploadComponents from './ImageAnswerUploadComponents';
-import {isEmpty,getLocalTime} from '../../utils/utils';
+import {isEmpty, getLocalTime} from '../../utils/utils';
 import {doWebService_CloudClassRoom} from '../../utils/CloudClassRoomURLUtils';
 import moment from 'moment';
+
 const dateFormat = 'YYYY/MM/DD';
 const dateFullFormat = 'YYYY-MM-DD HH:mm:ss';
 const Step = Steps.Step;
 const Option = Select.Option;
 const RadioGroup = Radio.Group;
-const { RangePicker } = DatePicker;
+const {RangePicker} = DatePicker;
 
-var lessonArray=[];
-var courseInfoJson={};
-var videoJsonArray=[];
-var teamJsonArray=[];
+var lessonArray = [];
+var courseInfoJson = {};
+var videoJsonArray = [];
+var teamJsonArray = [];
 var firstTeamId;
-var isSeriesStr="系列课";
-var fileList=[];
+var isSeriesStr = "系列课";
+var fileList = [];
 const CreateClassComponents = React.createClass({
 
     getInitialState() {
         var cloudClassRoomUser = JSON.parse(sessionStorage.getItem("cloudClassRoomUser"));
         return {
-            stepNum:0,
-            isFree:1,
-            isTeam:1,
-            money:0,
-            moneyInputDisable:true,
-            isSeriesDisabled:false,
-            teamDisabled:true,
-            cloudClassRoomUser:cloudClassRoomUser,
+            stepNum: 0,
+            isFree: 1,
+            isTeam: 1,
+            isLimit: 1,
+            money: 0,
+            limitPerson: 0,
+            moneyInputDisable: true,
+            isSeriesDisabled: false,
+            teamDisabled: true,
+            cloudClassRoomUser: cloudClassRoomUser,
         };
     },
 
-    componentDidMount(){
+    componentDidMount() {
         this.getAllClass();
         this.getAllSubject();
         this.findTeamByUserId();
         var isSeries = this.props.isSeries;
         this.setState({isSeries});
-        if(isSeries=="1"){
-            isSeriesStr="系列课";
-        }else{
-            isSeriesStr="单节课";
+        if (isSeries == "1") {
+            isSeriesStr = "系列课";
+        } else {
+            isSeriesStr = "单节课";
         }
         // courseInfoJson={isPublish:2,isSeries:2,publisher_id:this.state.cloudClassRoomUser.colUid,isFree:1,money:0};
         this.initCreatePage(isSeries);
@@ -53,45 +58,49 @@ const CreateClassComponents = React.createClass({
      * 创建课程
      * @param nextProps
      */
-    componentWillReceiveProps(nextProps){
+    componentWillReceiveProps(nextProps) {
         var isSeries = nextProps.isSeries;
         var stepDirect = nextProps.stepDirect;
-        this.setState({stepDirect,isSeries});
-        if(isSeries=="1"){
-            isSeriesStr="系列课";
-        }else{
-            isSeriesStr="单节课";
+        this.setState({stepDirect, isSeries});
+        if (isSeries == "1") {
+            isSeriesStr = "系列课";
+        } else {
+            isSeriesStr = "单节课";
         }
         courseInfoJson.isSeries = isSeries;
         // this.initCreatePage(isSeries,"update");
     },
 
-    initCreatePage(isSeries){
+    initCreatePage(isSeries) {
         lessonArray.splice(0);
-        courseInfoJson={};
+        courseInfoJson = {};
         var isSeriesStr;
         var videoNumInputDisable;
-        var videoNum=0;
-        courseInfoJson.videoNum=videoNum;
-        videoJsonArray=[];
-        courseInfoJson.videos=[];
+        var videoNum = 0;
+        courseInfoJson.videoNum = videoNum;
+        videoJsonArray = [];
+        courseInfoJson.videos = [];
         courseInfoJson.isSeries = isSeries;
-        courseInfoJson.publishType=2;
-        courseInfoJson.isPublish=2;
-        courseInfoJson.publisher_id=this.state.cloudClassRoomUser.colUid;
-        courseInfoJson.money=0;
-        courseInfoJson.isFree=1;
+        courseInfoJson.publishType = 2;
+        courseInfoJson.isPublish = 2;
+        courseInfoJson.publisher_id = this.state.cloudClassRoomUser.colUid;
+        courseInfoJson.money = 0;
+        courseInfoJson.limitPerson = 0;
+        courseInfoJson.isFree = 1;
+        courseInfoJson.isLimit = 1;
         fileList.splice(0);
-        this.setState({isSeries,isSeriesStr,videoNumInputDisable,videoNum,
-            "courseName":'',"isFree":1,"money":0,"defaultSubjectSelected":"",
-            "defaultSelected":'',"isTeam":1,"defaultTeamSelected":'',
-            "courseSummary":'',"moneyInputDisable":true});
+        this.setState({
+            isSeries, isSeriesStr, videoNumInputDisable, videoNum,
+            "courseName": '', "isFree": 1, "money": 0, "defaultSubjectSelected": "",
+            "defaultSelected": '', "isTeam": 1, "defaultTeamSelected": '',
+            "courseSummary": '', "moneyInputDisable": true, "numInputDisable": true
+        });
         // this.getAllTeam();
     },
     /**
      * 获取所有的年级
      */
-    getAllClass(){
+    getAllClass() {
         var _this = this;
         var param = {
             "method": 'findCourseClass',
@@ -99,27 +108,28 @@ const CreateClassComponents = React.createClass({
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                if(isEmpty(response)==false){
-                    var classOptionArray=[];
+                if (isEmpty(response) == false) {
+                    var classOptionArray = [];
                     var defaultSelected;
-                    for(var i=0;i<response.length;i++){
+                    for (var i = 0; i < response.length; i++) {
                         var classInfo = response[i];
                         var id = classInfo.id;
                         var name = classInfo.name;
                         var parentid = classInfo.parentid;
                         var optionObj = <Option key={id} value={id}>{name}</Option>;
-                        if(i==0){
+                        if (i == 0) {
                             defaultSelected = id;
-                            courseInfoJson.courseClass=id;
+                            courseInfoJson.courseClass = id;
                         }
                         classOptionArray.push(optionObj);
                         var courseTypes = classInfo.courseTypes;
-                        if(isEmpty(courseTypes)==false){
-                            for(var j=0;j<courseTypes.length;j++){
+                        if (isEmpty(courseTypes) == false) {
+                            for (var j = 0; j < courseTypes.length; j++) {
                                 var courseType = courseTypes[j];
                                 var courseTypeId = courseType.id;
                                 var courseTypeName = courseType.name;
-                                var optionObj = <Option key={courseTypeId} value={courseTypeId}>{courseTypeName}</Option>;
+                                var optionObj = <Option key={courseTypeId}
+                                                        value={courseTypeId}>{courseTypeName}</Option>;
                                 /*if(i==0 && j==0){
                                     defaultSelected = courseTypeId;
                                     courseInfoJson.courseClass=courseTypeId;
@@ -128,7 +138,7 @@ const CreateClassComponents = React.createClass({
                             }
                         }
                     }
-                    _this.setState({classOptionArray,defaultSelected});
+                    _this.setState({classOptionArray, defaultSelected});
                 }
             },
             onError: function (error) {
@@ -139,7 +149,7 @@ const CreateClassComponents = React.createClass({
     /**
      * 获取所有的授课科目
      */
-    getAllSubject(){
+    getAllSubject() {
         var _this = this;
         var param = {
             "method": 'findCourseSubject',
@@ -147,22 +157,22 @@ const CreateClassComponents = React.createClass({
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                if(isEmpty(response)==false){
-                    var subjectOptionArray=[];
+                if (isEmpty(response) == false) {
+                    var subjectOptionArray = [];
                     var defaultSubjectSelected;
-                    for(var i=0;i<response.length;i++){
+                    for (var i = 0; i < response.length; i++) {
                         var subjectInfo = response[i];
                         var id = subjectInfo.id;
                         var name = subjectInfo.name;
                         var parentid = subjectInfo.parentid;
                         var optionObj = <Option key={id} value={id}>{name}</Option>;
-                        if(i==0){
+                        if (i == 0) {
                             defaultSubjectSelected = id;
                             courseInfoJson.courseTypeId = id;
                         }
                         subjectOptionArray.push(optionObj);
                     }
-                    _this.setState({subjectOptionArray,defaultSubjectSelected});
+                    _this.setState({subjectOptionArray, defaultSubjectSelected});
                 }
             },
             onError: function (error) {
@@ -171,38 +181,38 @@ const CreateClassComponents = React.createClass({
         });
     },
 
-    findTeamByUserId(){
+    findTeamByUserId() {
         var _this = this;
         var param = {
             "method": 'findTeamByUserId',
             "id": JSON.parse(sessionStorage.getItem("cloudClassRoomUser")).colUid,
-            "pageNo":'',
-            "name":''
+            "pageNo": '',
+            "name": ''
         };
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                var teamOptionArray=[];
-                for(var i=0;i<response.length;i++){
-                    var teamJson={};
+                var teamOptionArray = [];
+                for (var i = 0; i < response.length; i++) {
+                    var teamJson = {};
                     var teamInfo = response[i];
                     var id = teamInfo.id;
-                    if(i==0){
+                    if (i == 0) {
                         firstTeamId = id;
                     }
                     var name = teamInfo.name;
                     var status = teamInfo.status;
                     var users = teamInfo.users;
                     var optionObj = <Option key={id} value={id}>{name}</Option>;
-                    var teamUserOptionArray=[];
-                    for(var j=0;j<users.length;j++){
+                    var teamUserOptionArray = [];
+                    for (var j = 0; j < users.length; j++) {
                         var user = users[j];
                         var colUid = user.colUid;
                         var userName = user.userName;
                         var userOptionObj = <option value={colUid}>{userName}</option>;
                         teamUserOptionArray.push(userOptionObj);
                     }
-                    teamJson.teamId=id;
+                    teamJson.teamId = id;
                     teamJson.teamUserOptionArray = teamUserOptionArray;
                     teamOptionArray.push(optionObj);
                     teamJsonArray.push(teamJson);
@@ -220,11 +230,11 @@ const CreateClassComponents = React.createClass({
      * @param teamId
      * @returns {Array}
      */
-    getTeamUserOptions(teamId){
-        var teamUserOptionArray=[];
-        for(var i=0;i<teamJsonArray.length;i++){
+    getTeamUserOptions(teamId) {
+        var teamUserOptionArray = [];
+        for (var i = 0; i < teamJsonArray.length; i++) {
             var teamJson = teamJsonArray[i];
-            if(teamJson.teamId == teamId){
+            if (teamJson.teamId == teamId) {
                 teamUserOptionArray = teamJson.teamUserOptionArray;
                 break;
             }
@@ -235,7 +245,7 @@ const CreateClassComponents = React.createClass({
     /**
      * 获取所有的年级
      */
-    addCourse(){
+    addCourse() {
         var _this = this;
         var param = {
             "method": 'addCourse',
@@ -244,7 +254,7 @@ const CreateClassComponents = React.createClass({
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                if(response==true){
+                if (response == true) {
                     message.success("课程创建成功");
                 } else {
                     message.error("课程创建失败");
@@ -266,8 +276,8 @@ const CreateClassComponents = React.createClass({
      */
     courseSelectOnChange(value) {
         console.log(`selected ${value}`);
-        this.setState({defaultSubjectSelected:value});
-        courseInfoJson.courseTypeId=value;
+        this.setState({defaultSubjectSelected: value});
+        courseInfoJson.courseTypeId = value;
     },
     /**
      * 授课年级内容改变时的响应函数
@@ -275,54 +285,70 @@ const CreateClassComponents = React.createClass({
      */
     classLevelSelectOnChange(value) {
         console.log(`selected ${value}`);
-        this.setState({defaultSelected:value});
-        courseInfoJson.courseClass=value;
+        this.setState({defaultSelected: value});
+        courseInfoJson.courseClass = value;
     },
     /**
      * 授课方式(单节/系列)
      * @param e
      */
-    classTypeOnChange(e){
+    classTypeOnChange(e) {
         console.log('radio checked', e.target.value);
         var isTeam = e.target.value;
         var isSeriesDisabled;
         var teamDisabled;
-        if(isTeam==1){
+        if (isTeam == 1) {
             //发布者ＩＤ 单人授课时为人员id　团队授课时为团队id
-            courseInfoJson.publisher_id=this.state.cloudClassRoomUser.colUid;
-            courseInfoJson.publishType=2;
-            isSeriesDisabled=false;
-            teamDisabled=true;
-        }else{
-            courseInfoJson.publisher_id=firstTeamId;
-            courseInfoJson.publishType=1;
-            isSeriesDisabled=true;
-            teamDisabled=false;
+            courseInfoJson.publisher_id = this.state.cloudClassRoomUser.colUid;
+            courseInfoJson.publishType = 2;
+            isSeriesDisabled = false;
+            teamDisabled = true;
+        } else {
+            courseInfoJson.publisher_id = firstTeamId;
+            courseInfoJson.publishType = 1;
+            isSeriesDisabled = true;
+            teamDisabled = false;
         }
         this.setState({
-            isTeam: isTeam,isSeriesDisabled,teamDisabled
+            isTeam: isTeam, isSeriesDisabled, teamDisabled
         });
     },
     /**
      * 课程是否免费的判断
      * @param e
      */
-    classIsFreeOnChange(e){
+    classIsFreeOnChange(e) {
         console.log('radio checked', e.target.value);
         var isFree = e.target.value;
 
-        var moneyInputDisable=true;
-        if(isFree==1){
+        var moneyInputDisable = true;
+        if (isFree == 1) {
             //TODO 免费时,输入金额的文本框禁用,课程金额为0
-            courseInfoJson.money=0;
-            moneyInputDisable=true;
-        }else{
+            courseInfoJson.money = 0;
+            moneyInputDisable = true;
+        } else {
             moneyInputDisable = false;
         }
-        courseInfoJson.isFree=isFree;
+        courseInfoJson.isFree = isFree;
         this.setState({
-            isFree: isFree,moneyInputDisable,money:courseInfoJson.money
+            isFree: isFree, moneyInputDisable, money: courseInfoJson.money
         });
+    },
+    /**
+     * 人数是否限制的回调
+     */
+    numberIsLimit(e) {
+        var isLimit = e.target.value;
+        var numInputDisable = true;
+        if (isLimit == 1) {
+            //TODO 免费时,输入金额的文本框禁用,课程金额为0
+            courseInfoJson.limitPerson = 0;
+            numInputDisable = true;
+        } else {
+            numInputDisable = false;
+        }
+        courseInfoJson.isLimit = isLimit;
+        this.setState({isLimit, numInputDisable, limitPerson: 0});
     },
     /**
      * 授课形式,系列课和单节课
@@ -330,7 +356,7 @@ const CreateClassComponents = React.createClass({
      */
     courseTypeSelectOnChange(value) {
         console.log(`courseTypeSelectOnChange ${value}`);
-        courseInfoJson.isSeries=value;
+        courseInfoJson.isSeries = value;
     },
     /**
      * 授课团队改变时的响应函数
@@ -339,9 +365,9 @@ const CreateClassComponents = React.createClass({
     teamSelectOnChange(value) {
         console.log(`teamSelectOnChange selected ${value}`);
         //团队授课时,发布者为团队id
-        courseInfoJson.publisher_id=value;
+        courseInfoJson.publisher_id = value;
         this.getTeamUserOptions(value);
-        this.setState({"teamId":value,defaultTeamSelected:value});
+        this.setState({"teamId": value, defaultTeamSelected: value});
     },
 
     /**
@@ -358,38 +384,38 @@ const CreateClassComponents = React.createClass({
         courseInfoJson.startTime = startTimestamp;
         courseInfoJson.endTime = endTimestamp;
     },
-    
-    changeStep(stepDirect){
+
+    changeStep(stepDirect) {
         var _this = this;
-        switch(stepDirect){
+        switch (stepDirect) {
             case "pre":
-                _this.setState({"stepNum":0});
+                _this.setState({"stepNum": 0});
                 break;
             case "next":
-                _this.setState({"stepNum":1});
+                _this.setState({"stepNum": 1});
                 break;
         }
     },
     /**
      * 添加课程目录
      */
-    addLesson(){
+    addLesson() {
         /*if(lessonArray.length >= courseInfoJson.videoNum){
             message.error("排课次数已经达到授课总课时,无法新增");
             return;
         }*/
         var videoNumBeforeAdd = this.state.videoNum;
-        if(this.state.isSeries=="2" && videoNumBeforeAdd==1){
+        if (this.state.isSeries == "2" && videoNumBeforeAdd == 1) {
             //单节课
             message.error("单节课只能排课一次,无法继续添加课程目录!");
             return;
         }
-        var lessonNum = lessonArray.length+1;
+        var lessonNum = lessonArray.length + 1;
         // <Col span={4}>第{lessonNum}课时</Col>
         var teacherObj;
-        if(this.state.isTeam==1) {
+        if (this.state.isTeam == 1) {
             teacherObj = <span>{this.state.cloudClassRoomUser.userName}</span>;
-        }else{
+        } else {
             teacherObj = <Col span={24}>
                 <select className="lessonTeamTeacher course_n">
                     {/*<option value="1">a</option>
@@ -401,7 +427,7 @@ const CreateClassComponents = React.createClass({
             </Col>;
         }
         var timeObj = <Col span={4}>
-            <DatePicker 
+            <DatePicker
                 className="lessonTime"
                 showTime
                 format="YYYY-MM-DD HH:mm:ss"
@@ -410,19 +436,19 @@ const CreateClassComponents = React.createClass({
                 onOk={this.lessonTimeOnOk}
             />
         </Col>;
-        var lessonJson = {lessonNum,teacherObj,timeObj};
+        var lessonJson = {lessonNum, teacherObj, timeObj};
         lessonArray.push(lessonJson);
-        var newVideoNum = parseInt(videoNumBeforeAdd)+1
-        courseInfoJson.videoNum=newVideoNum;
-        this.setState({lessonArray,"videoNum":newVideoNum});
+        var newVideoNum = parseInt(videoNumBeforeAdd) + 1
+        courseInfoJson.videoNum = newVideoNum;
+        this.setState({lessonArray, "videoNum": newVideoNum});
         // this.buildEveryLessonTag(lessonArray);
     },
 
-    buildEveryLessonTag(lessonArray){
-        var everyLessonArray=[];
+    buildEveryLessonTag(lessonArray) {
+        var everyLessonArray = [];
         // <Col span={4}>第{lessonNum}课时</Col>
-        if(typeof(lessonArray)!="undefined" ){
-            for(var i=0;i<lessonArray.length;i++){
+        if (typeof(lessonArray) != "undefined") {
+            for (var i = 0; i < lessonArray.length; i++) {
                 var lessonJson = lessonArray[i];
                 var lessonRowObj = <Row>
                     <Col span={4} className="add_left">第{lessonJson.lessonNum}课时</Col>
@@ -432,7 +458,7 @@ const CreateClassComponents = React.createClass({
                     <Col span={4}>{lessonJson.teacherObj}</Col>
                     <Col span={4}>{lessonJson.timeObj}</Col>
                     <Col span={4}>
-                        <Button icon="delete" onClick={this.removeLesson.bind(this,lessonJson.lessonNum)}></Button>
+                        <Button icon="delete" onClick={this.removeLesson.bind(this, lessonJson.lessonNum)}></Button>
                     </Col>
                 </Row>;
                 everyLessonArray.push(lessonRowObj);
@@ -446,7 +472,7 @@ const CreateClassComponents = React.createClass({
      * @param dateString
      * @param Event
      */
-    lessonTimeOnChange(value, dateString,Event) {
+    lessonTimeOnChange(value, dateString, Event) {
         console.log('Selected Time: ', value);
         console.log('Formatted Selected Time: ', dateString);
     },
@@ -455,68 +481,68 @@ const CreateClassComponents = React.createClass({
         console.log('onOk: ', value);
     },
 
-    removeLesson(lessonNum){
-        for(var i=0;i<lessonArray.length;i++){
+    removeLesson(lessonNum) {
+        for (var i = 0; i < lessonArray.length; i++) {
             var lessonJson = lessonArray[i];
-            if(lessonJson.lessonNum==lessonNum){
-                lessonArray.splice(i,1);
+            if (lessonJson.lessonNum == lessonNum) {
+                lessonArray.splice(i, 1);
                 break;
             }
         }
         lessonArray.forEach(function (lessonObj) {
-            if(lessonObj.lessonNum>lessonNum){
+            if (lessonObj.lessonNum > lessonNum) {
                 lessonObj.lessonNum -= 1;
             }
         });
         var videoNumBeforeRemove = this.state.videoNum;
-        var newVideoNum = parseInt(videoNumBeforeRemove)-1
-        courseInfoJson.videoNum=newVideoNum;
-        this.setState({lessonArray,"videoNum":newVideoNum});
+        var newVideoNum = parseInt(videoNumBeforeRemove) - 1
+        courseInfoJson.videoNum = newVideoNum;
+        this.setState({lessonArray, "videoNum": newVideoNum});
     },
 
     /**
      * 对提交的数据进行基础验证
      */
-    checkSubmitData(){
-        var checkResult=true;
-        if(isEmpty(courseInfoJson.courseName)){
+    checkSubmitData() {
+        var checkResult = true;
+        if (isEmpty(courseInfoJson.courseName)) {
             message.error("请输入课程名称");
-            checkResult=false;
-        }else if(courseInfoJson.courseName.length>35){
+            checkResult = false;
+        } else if (courseInfoJson.courseName.length > 35) {
             message.error("课程名称不能超过35个字符");
-            checkResult=false;
-        }else if(courseInfoJson.isFree==2 && courseInfoJson.money==0){
+            checkResult = false;
+        } else if (courseInfoJson.isFree == 2 && courseInfoJson.money == 0) {
             message.error("收费课程请输入课程费用");
-            checkResult=false;
-        }else if(isEmpty(courseInfoJson.courseTypeId)){
+            checkResult = false;
+        } else if (isEmpty(courseInfoJson.courseTypeId)) {
             message.error("请选择课程科目");
-            checkResult=false;
-        }else if(isEmpty(courseInfoJson.courseClass)){
+            checkResult = false;
+        } else if (isEmpty(courseInfoJson.courseClass)) {
             message.error("请选择授课年级");
-            checkResult=false;
+            checkResult = false;
         }
         /*else if(this.state.isTeam==1 && isEmpty(isSeries)){
             message.error("单人授课时,请选择课程类型");
             checkResult=false;
         }*/
-        else if(this.state.isTeam==2 && isEmpty(this.state.teamId)){
+        else if (this.state.isTeam == 2 && isEmpty(this.state.teamId)) {
             message.error("团队授课时,请选择团队名称");
-            checkResult=false;
-        }else if(this.state.isSeries==2 && courseInfoJson.startTime != courseInfoJson.endTime){
+            checkResult = false;
+        } else if (this.state.isSeries == 2 && courseInfoJson.startTime != courseInfoJson.endTime) {
             message.error("单节课的授课时间只能在一天范围内");
             checkResult = false;
-        }else if(isEmpty(courseInfoJson.image)){
+        } else if (isEmpty(courseInfoJson.image)) {
             message.error("请选择课程封面");
             checkResult = false;
-        }else if(isEmpty(courseInfoJson.content)==false && courseInfoJson.content.length>500){
+        } else if (isEmpty(courseInfoJson.content) == false && courseInfoJson.content.length > 500) {
             message.error("课程概述不能超出500个字符");
             checkResult = false;
-        }else if(isEmpty(courseInfoJson.videoNum)){
+        } else if (isEmpty(courseInfoJson.videoNum)) {
             message.error("请输入总课时");
-            checkResult=false;
-        }else if(isEmpty(courseInfoJson.videos) || courseInfoJson.videos.length==0){
+            checkResult = false;
+        } else if (isEmpty(courseInfoJson.videos) || courseInfoJson.videos.length == 0) {
             message.error("请至少输入一次授课课表");
-            checkResult=false;
+            checkResult = false;
         }
         /*else if(isEmpty(courseInfoJson.startTime) ||　isEmpty(courseInfoJson.endTime)){
             message.error("请选择授课时间");
@@ -528,9 +554,9 @@ const CreateClassComponents = React.createClass({
     /**
      * 保存课程信息
      */
-    saveClassInfo(){
+    saveClassInfo() {
         var checkResult = this.checkSubmitData();
-        if(checkResult==false){
+        if (checkResult == false) {
             return;
         }
         var lessonTeamTeacherTagArray = $(".lessonTeamTeacher option:selected");
@@ -542,33 +568,33 @@ const CreateClassComponents = React.createClass({
         }else{
             userId = this.state.teamId;
         }*/
-        for(var i=0;i<lessonTimeTagArray.length;i++){
-            var videoJson={};
+        for (var i = 0; i < lessonTimeTagArray.length; i++) {
+            var videoJson = {};
             var option = lessonTeamTeacherTagArray[i];
-            var　timeTag = lessonTimeTagArray[i];
+            var timeTag = lessonTimeTagArray[i];
             var teacher;
-            if(this.state.isTeam==1) {
+            if (this.state.isTeam == 1) {
                 teacher = this.state.cloudClassRoomUser.colUid;
-            }else{
+            } else {
                 teacher = option.value;
             }
             var time = timeTag.value;
-            console.log("teacher"+teacher+"\t"+time);
-            videoJson.squence = i+1;
+            console.log("teacher" + teacher + "\t" + time);
+            videoJson.squence = i + 1;
             // videoJson.courseId = courseInfoJson.courseTypeId;
-            videoJson.userID =teacher;
+            videoJson.userID = teacher;
             videoJson.liveTime = new Date(time).valueOf();
             this.buildVideosArray(videoJson);
         }
-        if(isEmpty(courseInfoJson.videos)==false){
-            var checkResult=true;
+        if (isEmpty(courseInfoJson.videos) == false) {
+            var checkResult = true;
             courseInfoJson.videos.forEach(function (video) {
-                if(isEmpty(video.name) || isEmpty(video.userID) || isEmpty(video.liveTime) || isNaN(video.liveTime)){
-                    checkResult=false;
+                if (isEmpty(video.name) || isEmpty(video.userID) || isEmpty(video.liveTime) || isNaN(video.liveTime)) {
+                    checkResult = false;
                     return;
                 }
             })
-            if(checkResult==false){
+            if (checkResult == false) {
                 message.error("排课课表中存在空值,请检查");
                 return;
             }
@@ -582,10 +608,10 @@ const CreateClassComponents = React.createClass({
     publishClassAtNow(e) {
         console.log(`checked = ${e.target.checked}`);
         // 是否发布　１已发布　２未发布
-        if(e.target.checked){
-            courseInfoJson.isPublish=1;
-        }else{
-            courseInfoJson.isPublish=2;
+        if (e.target.checked) {
+            courseInfoJson.isPublish = 1;
+        } else {
+            courseInfoJson.isPublish = 2;
         }
     },
 
@@ -593,45 +619,59 @@ const CreateClassComponents = React.createClass({
      * 课程名称文本框内容改变响应函数
      * @param e
      */
-    courseNameOnChange(e){
+    courseNameOnChange(e) {
         var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
             target = e.target;
         }
         var courseName = target.value;
-        if(courseName.length>35) {
+        if (courseName.length > 35) {
             message.error("课程名称不能超过35个字符");
             return;
         }
         this.setState({courseName});
-        courseInfoJson.courseName=courseName;
+        courseInfoJson.courseName = courseName;
     },
     /**
      * 课程收费金额文本框内容改变时的响应
      * @param e
      */
-    moneyOnChange(e){
+    moneyOnChange(e) {
         var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
             target = e.target;
         }
         var money = target.value;
         this.setState({money});
-        courseInfoJson.money=money;
+        courseInfoJson.money = money;
+    },
+    /**
+     *  限制人数变化的回调
+     */
+    numOnChange(e) {
+        var target = e.target;
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
+            target = e.target;
+        }
+        var limitPerson = target.value;
+        this.setState({limitPerson});
+        courseInfoJson.limitPerson = limitPerson;
     },
     /**
      * 课程概述内容响应函数
      * @param e
      */
-    classSummaryOnChange(e){
+    classSummaryOnChange(e) {
         var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
             target = e.target;
         }
         var courseSummary = target.value;
@@ -642,15 +682,15 @@ const CreateClassComponents = React.createClass({
      * 总课时内容改变时的响应函数
      * @param e
      */
-    classTimesOnChange(e){
+    classTimesOnChange(e) {
         var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
             target = e.target;
         }
         var videoNum = target.value;
-        console.log("classTimes:"+videoNum);
+        console.log("classTimes:" + videoNum);
         courseInfoJson.videoNum = videoNum;
         this.setState({videoNum});
     },
@@ -658,12 +698,12 @@ const CreateClassComponents = React.createClass({
     /**
      * 获取课程封面
      */
-    getLessonImageList(file,isRemoved){
+    getLessonImageList(file, isRemoved) {
         var lessonImage = file.response;
-        if(isEmpty(isRemoved)==false && isRemoved=="removed"){
+        if (isEmpty(isRemoved) == false && isRemoved == "removed") {
             lessonImage = "";
         }
-        if(isEmpty(lessonImage)==false){
+        if (isEmpty(lessonImage) == false) {
             var fileJson = {
                 uid: Math.random(),
                 url: lessonImage,
@@ -678,48 +718,48 @@ const CreateClassComponents = React.createClass({
      * 创建课程页面的排课名称改变响应函数
      * @param e
      */
-    lessonTitleOnChange(e){
+    lessonTitleOnChange(e) {
         var target = e.target;
-        if(navigator.userAgent.indexOf("Chrome") > -1){
-            target=e.currentTarget;
-        }else{
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
             target = e.target;
         }
         var squence = target.id;
         var name = target.value;
-        var videoJson = {squence,name};
-        this.buildVideosArray(videoJson,"title");
+        var videoJson = {squence, name};
+        this.buildVideosArray(videoJson, "title");
     },
 
-    buildVideosArray(videoJson,buildType){
-        var isExistSameVideo=false;
-        for(var i=0;i<videoJsonArray.length;i++){
+    buildVideosArray(videoJson, buildType) {
+        var isExistSameVideo = false;
+        for (var i = 0; i < videoJsonArray.length; i++) {
             var everyVideoJson = videoJsonArray[i];
-            if(everyVideoJson.squence == videoJson.squence){
-                if(buildType=="title"){
+            if (everyVideoJson.squence == videoJson.squence) {
+                if (buildType == "title") {
                     everyVideoJson.name = videoJson.name;
-                }else{
+                } else {
                     everyVideoJson.squence = videoJson.squence;
                     // everyVideoJson.courseId = videoJson.courseId;
                     everyVideoJson.userID = videoJson.userID;
                     everyVideoJson.liveTime = videoJson.liveTime;
                 }
-                isExistSameVideo=true;
+                isExistSameVideo = true;
                 break;
             }
         }
-        if(isExistSameVideo==false){
+        if (isExistSameVideo == false) {
             videoJsonArray.push(videoJson);
         }
         courseInfoJson.videos = videoJsonArray;
     },
 
-    getVideoInfoFromCourseInfoJson(squence){
+    getVideoInfoFromCourseInfoJson(squence) {
         var videoInfo;
         var videos = courseInfoJson.videos;
-        for(var i=0;i<videos.length;i++){
+        for (var i = 0; i < videos.length; i++) {
             var videoJson = videos[i];
-            if(videoJson.squence == squence){
+            if (videoJson.squence == squence) {
                 videoInfo = videoJson;
                 break;
             }
@@ -727,7 +767,7 @@ const CreateClassComponents = React.createClass({
         return videoInfo;
     },
 
-    teamTeacherSelectOnChange(value){
+    teamTeacherSelectOnChange(value) {
         console.log(value);
     },
 
@@ -748,11 +788,11 @@ const CreateClassComponents = React.createClass({
         var preButton;
         var nextButton;
         var stepPanel;
-        if(this.state.stepNum==0){
-            saveButton="";
-            classStepStatus="";
-            preButton=<Button disabled onClick={this.changeStep.bind(this,"pre")}>上一步</Button>;
-            nextButton = <Button onClick={this.changeStep.bind(this,"next")}>下一步</Button>;
+        if (this.state.stepNum == 0) {
+            saveButton = "";
+            classStepStatus = "";
+            preButton = <Button disabled onClick={this.changeStep.bind(this, "pre")}>上一步</Button>;
+            nextButton = <Button onClick={this.changeStep.bind(this, "next")}>下一步</Button>;
             stepPanel = <div>
                 <Row>
                     <Col span={4}>课程名称：</Col>
@@ -776,8 +816,26 @@ const CreateClassComponents = React.createClass({
                                     </Col>
                                 </Row>*/}
                             </Radio>
-							 <span >
-                              <Input value={this.state.money}  style={{ width: 160 }} disabled={this.state.moneyInputDisable} onChange={this.moneyOnChange}/>
+                            <span>
+                              <Input value={this.state.money} style={{width: 160}}
+                                     disabled={this.state.moneyInputDisable} onChange={this.moneyOnChange}/>
+                            </span>
+                        </RadioGroup>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={4}>人数限制：</Col>
+                    <Col span={18}>
+                        <RadioGroup onChange={this.numberIsLimit} value={this.state.isLimit}>
+                            <Radio style={radioStyle} value={1} className="line_block">
+                                不限人数
+                            </Radio>
+                            <Radio style={radioStyle} value={2} className="line_block">
+                                限制人数
+                            </Radio>
+                            <span>
+                              <Input value={this.state.limitPerson} style={{width: 160}}
+                                     disabled={this.state.numInputDisable} onChange={this.numOnChange}/>
                             </span>
                         </RadioGroup>
                     </Col>
@@ -785,7 +843,9 @@ const CreateClassComponents = React.createClass({
                 <Row>
                     <Col span={4}>课程科目：</Col>
                     <Col span={18}>
-                        <Select defaultValue={this.state.defaultSubjectSelected} value={this.state.defaultSubjectSelected} style={{ width: 120 }} onChange={this.courseSelectOnChange}>
+                        <Select defaultValue={this.state.defaultSubjectSelected}
+                                value={this.state.defaultSubjectSelected} style={{width: 120}}
+                                onChange={this.courseSelectOnChange}>
                             {this.state.subjectOptionArray}
                         </Select>
                     </Col>
@@ -793,31 +853,35 @@ const CreateClassComponents = React.createClass({
                 <Row>
                     <Col span={4}>授课年级：</Col>
                     <Col span={18}>
-                        <Select defaultValue={this.state.defaultSelected} value={this.state.defaultSelected} style={{ width: 120 }} onChange={this.classLevelSelectOnChange}>
+                        <Select defaultValue={this.state.defaultSelected} value={this.state.defaultSelected}
+                                style={{width: 120}} onChange={this.classLevelSelectOnChange}>
                             {this.state.classOptionArray}
                         </Select>
                     </Col>
                 </Row>
                 <Row>
                     <Col span={4}>授课形式：</Col>
-                    <Col span={18} style={{ height:160 }}>
+                    <Col span={18} style={{height: 160}}>
                         <RadioGroup onChange={this.classTypeOnChange} value={this.state.isTeam}>
                             <Radio style={radioStyle} value={1}>单人授课</Radio>
-							<Row style={{ width: 420 }}>
-                                <Col span={24} style={{ marginLeft: 22 }}>课程类型：{isSeriesStr}</Col>
+                            <Row style={{width: 420}}>
+                                <Col span={24} style={{marginLeft: 22}}>课程类型：{isSeriesStr}</Col>
                                 {/* <Col span={16}>
 									<Select defaultValue={this.state.isSeries} value={this.state.isSeries} style={{ width: 120 }} disabled={this.state.isSeriesDisabled} onChange={this.courseTypeSelectOnChange}>
 										<Option value="1">系列课</Option>
 										<Option value="2">单节课</Option>
 									</Select>
 								</Col>*/}
-                                </Row>
+                            </Row>
                             <Radio style={radioStyle} value={2}>
                                 团队授课
                                 <Row>
-                                    <Col span={6} style={{ marginLeft: 22 }}>选择团队：</Col>
+                                    <Col span={6} style={{marginLeft: 22}}>选择团队：</Col>
                                     <Col span={16}>
-                                        <Select defaultValue={this.state.defaultTeamSelected} value={this.state.defaultTeamSelected} disabled={this.state.teamDisabled}  style={{ width: 120 }} onChange={this.teamSelectOnChange}>
+                                        <Select defaultValue={this.state.defaultTeamSelected}
+                                                value={this.state.defaultTeamSelected}
+                                                disabled={this.state.teamDisabled} style={{width: 120}}
+                                                onChange={this.teamSelectOnChange}>
                                             {this.state.teamOptionArray}
                                         </Select>
                                     </Col>
@@ -843,30 +907,32 @@ const CreateClassComponents = React.createClass({
                 <Row>
                     <Col span={4}>课程概述：</Col>
                     <Col span={18}>
-                        <Input value={this.state.courseSummary} type="textarea" rows={4} onChange={this.classSummaryOnChange}/>
+                        <Input value={this.state.courseSummary} type="textarea" rows={4}
+                               onChange={this.classSummaryOnChange}/>
                     </Col>
                 </Row>
             </div>;
-        }else{
-            preButton=<Button onClick={this.changeStep.bind(this,"pre")}>上一步</Button>;
-            saveButton=<Button onClick={this.saveClassInfo}>保存</Button>;
-            nextButton="";
-            var everyLessonArray=[];
+        } else {
+            preButton = <Button onClick={this.changeStep.bind(this, "pre")}>上一步</Button>;
+            saveButton = <Button onClick={this.saveClassInfo}>保存</Button>;
+            nextButton = "";
+            var everyLessonArray = [];
             // <Col span={4}>第{lessonNum}课时</Col>
-            if(typeof(this.state.lessonArray)!="undefined" ){
-                for(var i=0;i<this.state.lessonArray.length;i++){
+            if (typeof(this.state.lessonArray) != "undefined") {
+                for (var i = 0; i < this.state.lessonArray.length; i++) {
                     var lessonJson = this.state.lessonArray[i];
                     //获取已经保存的时间信息，并重新初始化到页面的组件上
                     var videoInfo = this.getVideoInfoFromCourseInfoJson(lessonJson.lessonNum);
-                    var videoName="";
-                    if(isEmpty(videoInfo)==false){
-                        console.log("videoInfo name:"+videoInfo.name);
+                    var videoName = "";
+                    if (isEmpty(videoInfo) == false) {
+                        console.log("videoInfo name:" + videoInfo.name);
                         videoName = videoInfo.name;
                     }
                     var lessonRowObj = <Row>
                         <Col span={4} className="add_left">第{lessonJson.lessonNum}课时</Col>
                         <Col span={8}>
-                            <Input key={i} id={lessonJson.lessonNum} defaultValue={videoName} onChange={this.lessonTitleOnChange}/>
+                            <Input key={i} id={lessonJson.lessonNum} defaultValue={videoName}
+                                   onChange={this.lessonTitleOnChange}/>
                         </Col>
                         <Col span={4}>{lessonJson.teacherObj}</Col>
                         <Col span={4}>
@@ -882,13 +948,13 @@ const CreateClassComponents = React.createClass({
                             </Col>
                         </Col>
                         <Col span={4}>
-                            <Button icon="delete" onClick={this.removeLesson.bind(this,lessonJson.lessonNum)}></Button>
+                            <Button icon="delete" onClick={this.removeLesson.bind(this, lessonJson.lessonNum)}></Button>
                         </Col>
                     </Row>;
                     everyLessonArray.push(lessonRowObj);
                 }
             }
-            stepPanel=<div>
+            stepPanel = <div>
                 <Row>
                     <Col span={4}>总&nbsp;&nbsp;课&nbsp;&nbsp;时：</Col>
                     <Col span={20}>
@@ -898,7 +964,7 @@ const CreateClassComponents = React.createClass({
                 <Row>
                     <Col span={4}>设置课表：</Col>
                     <Col span={20}>
-                        <Row className="no_ant-row price" >
+                        <Row className="no_ant-row price">
                             <Col span={4} className="add_left">目录</Col>
                             <Col span={8}>名称</Col>
                             <Col span={4}>授课老师</Col>
@@ -908,7 +974,8 @@ const CreateClassComponents = React.createClass({
                         {everyLessonArray}
                         <Row>
                             <Col span={24}>
-                                <Button icon="add" onClick={this.addLesson} className="add_DIR add_study-b">添加目录</Button>
+                                <Button icon="add" onClick={this.addLesson}
+                                        className="add_DIR add_study-b">添加目录</Button>
                             </Col>
                         </Row>
                     </Col>
@@ -922,15 +989,15 @@ const CreateClassComponents = React.createClass({
         }
 
         return (
-            <div >
+            <div>
                 <div className="modal_steps">
-					<Steps current={this.state.stepNum} >
-						<Step title="课程信息" icon={<Icon type="credit-card" />} />
-						<Step title="设置课表" icon={<Icon type="smile-o" />} />
-					</Steps>
-				</div>
+                    <Steps current={this.state.stepNum}>
+                        <Step title="课程信息" icon={<Icon type="credit-card"/>}/>
+                        <Step title="设置课表" icon={<Icon type="smile-o"/>}/>
+                    </Steps>
+                </div>
                 {stepPanel}
-               {/* <div>
+                {/* <div>
                     <Row>
                         <Col span={24}>
                             {preButton}

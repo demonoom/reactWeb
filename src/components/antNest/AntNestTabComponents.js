@@ -4,7 +4,7 @@ import {message, Pagination, Modal, Input} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import {getPageSize} from '../../utils/Const';
 import {getLocalTime} from '../../utils/Const';
-import {isEmpty} from '../../utils/Const';
+import {isEmpty, SMALL_IMG, MIDDLE_IMG, LARGE_IMG} from '../../utils/Const';
 import {getAllTopic} from '../../utils/Const';
 import {getOnlyTeacherTopic} from '../../utils/Const';
 import {showLargeImg} from '../../utils/utils';
@@ -112,11 +112,11 @@ const AntNestTabComponents = React.createClass({
     buildTopicCard(topicObj, useType, topicReplayInfoArray, parTakeCountInfo) {
         //如果用户头像为空，使用系统默认头像
         var userHeadPhoto;
-        if (isEmpty(topicObj.fromUser.colPhotoPath)) {
+        if (isEmpty(topicObj.fromUser.avatar)) {
             //如果用户头像为空，则使用系统默认头像进行显示
-            userHeadPhoto = <img src={require('../images/maaee_pic.png')}/>;
+            userHeadPhoto = <img src={require('../images/maaee_face.png')}/>;
         } else {
-            userHeadPhoto = <img src={topicObj.fromUser.colPhotoPath}/>;
+            userHeadPhoto = <img src={topicObj.fromUser.avatar + '?' + SMALL_IMG}/>;
         }
         //转换系统时间戳为本地日期格式
         var createTime = getLocalTime(topicObj.createTime);
@@ -191,7 +191,8 @@ const AntNestTabComponents = React.createClass({
             if (attachMentType == 1) {
                 //图片附件
                 attachMents = <span className="topics_zan">
-                    <img className="topics_zanImg" src={e.address} onClick={showLargeImg}/>
+                    <img className="topics_zanImg" src={e.address} alt={e.address}
+                         onClick={showLargeImg}/>
                 </span>;
 
             } else if (attachMentType == 4) {

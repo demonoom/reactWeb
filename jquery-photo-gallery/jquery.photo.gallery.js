@@ -566,6 +566,11 @@
 
             var $img = $(obj),
                 imgUrl = $img[0].src;
+            // if ($img[0].alt == 'undefined') {
+            //     imgUrl = $img[0].src;
+            // } else {
+            //     imgUrl = $img[0].alt;
+            // }
             if (!imgUrl) return;
 
             //HTML5提供了一个新属性naturalWidth/naturalHeight可以直接获取图片的原始宽高

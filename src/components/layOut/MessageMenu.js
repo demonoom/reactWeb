@@ -1,7 +1,7 @@
 import React, {PropTypes, Link} from 'react';
 import {Table, Badge, Button, Icon, Switch, Modal, Row, Col, Progress} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
-import {isEmpty} from '../../utils/Const';
+import {isEmpty, SMALL_IMG, MIDDLE_IMG, LARGE_IMG} from '../../utils/Const';
 import {formatMD} from '../../utils/utils';
 import {formatHM} from '../../utils/utils';
 import {isToday} from '../../utils/utils';
@@ -146,21 +146,21 @@ const MessageMenu = React.createClass({
                     //个人栏
                     imgTag = <div>
                                 <span className="antnest_user">
-                                    <img src={fromUser.avatar}
+                                    <img src={fromUser.avatar + '?' + SMALL_IMG}
                                          height="38"></img>
                                     {/*{tipPoint}*/}
                                     {/*<b className="mes_alert_show mes_opt" id={colUid}></b>*/}
                                 </span>
-                                <div className="mes_u_l">
-                                    <div><span className="message_name">{fromUser.userName}</span><span
-                                        className="time right_ri time_w">{lastCreateTime}</span></div>
-                                    <div className="message_cont_w">{lastContentText}</div>
-                                </div>
-                            </div>;
+                        <div className="mes_u_l">
+                            <div><span className="message_name">{fromUser.userName}</span><span
+                                className="time right_ri time_w">{lastCreateTime}</span></div>
+                            <div className="message_cont_w">{lastContentText}</div>
+                        </div>
+                    </div>;
                 } else {
                     //群组栏
                     var membersImgs = toChatGroup.avatar;
-                    var memberAvatarTag = <img src={membersImgs}/>;
+                    var memberAvatarTag = <img src={membersImgs + '?' + SMALL_IMG}/>;
                     if (membersImgs == '') {
                         //如果这个字段为空，头像的处理
                         memberAvatarTag = <img src={require("../images/lALPAAAAARBOpS_NAf7NAf4_510_510.png")}/>;
@@ -179,10 +179,10 @@ const MessageMenu = React.createClass({
                     </div>;
                 }
                 var messageContentTag = <Badge dot={mMenu.state.badgeShow}>
-                                            <div>
-                                                {imgTag}
-                                            </div>
-                                        </Badge>;
+                    <div>
+                        {imgTag}
+                    </div>
+                </Badge>;
                 var userJson;
                 if (messageType == 1) {
                     userJson = {
