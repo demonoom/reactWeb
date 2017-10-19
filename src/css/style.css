@@ -2821,7 +2821,26 @@ a.topics:hover {
     min-height: calc(100% - 50px);
     max-height: calc(100% - 50px);
 }
-
+.topics_calc2{
+    min-height:calc(100% - -8px);
+    max-height:calc(100% - -8px);
+}
+.topics_calc2 .antnest-card{
+    border-bottom: none;
+    margin-bottom: 0;
+}
+.topics_calc2_center{
+    position: relative;
+    text-align: center;
+    top: -8px;
+    font-size: 13px !important;
+}
+.topics_calc2_center:hover{
+    color:#0078e4;
+}
+.topics_calc2_center span{
+    cursor: pointer;
+}
 .topics_rela {
     position: relative;
     height: calc(100% - 20px);

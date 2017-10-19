@@ -1370,9 +1370,9 @@ const AntNestTabComponents = React.createClass({
         }
         topicList =
             <div className="favorite_scroll">
-                <div className="antnest_cont topics_calc" style={{overflow: 'scroll'}}>
+                <div className="antnest_cont topics_calc2" style={{overflow: 'scroll'}}>
                     {antNest.state.topicCardList}
-                    <div onClick={antNest.pageAdd}>加载更多>></div>
+                    <div className="topics_calc2_center"><span onClick={antNest.pageAdd} >加载更多>></span></div>
                 </div>
                 {/*<Pagination key="all" total={antNest.state.totalCount} pageSize={getPageSize()}*/}
                 {/*current={antNest.state.currentShowPage}*/}
