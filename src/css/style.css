@@ -2835,11 +2835,12 @@ a.topics:hover {
     top: -8px;
     font-size: 13px !important;
 }
-.topics_calc2_center:hover{
-    color:#0078e4;
-}
+
 .topics_calc2_center span{
     cursor: pointer;
+}
+.topics_calc2_center span:hover{
+    color:#0078e4;
 }
 .topics_rela {
     position: relative;
