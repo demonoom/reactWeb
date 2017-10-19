@@ -91,7 +91,7 @@ const CreateClassComponents = React.createClass({
         fileList.splice(0);
         this.setState({
             isSeries, isSeriesStr, videoNumInputDisable, videoNum,
-            "courseName": '', "isFree": 1, "money": 0, "defaultSubjectSelected": "",
+            "courseName": '', "isFree": 1, "isLimit": 1, "money": 0, "limitPerson": 0, "defaultSubjectSelected": "",
             "defaultSelected": '', "isTeam": 1, "defaultTeamSelected": '',
             "courseSummary": '', "moneyInputDisable": true, "numInputDisable": true
         });
