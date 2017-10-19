@@ -38,6 +38,7 @@ const AntNestTabComponents = React.createClass({
             confirmModalVisible: true,   //删除操作的确认Modal状态控制
             topicCommentId: '',  //话题评论时的目标id
             type: 0,     //操作类型（0：查看全部  1：只看老师）
+            page: 1,
         };
     },
 
@@ -60,7 +61,7 @@ const AntNestTabComponents = React.createClass({
                 pageNo = antNest.state.currentTeacherPage;
             }
         }
-        topicCardArray.splice(0);
+        // topicCardArray.splice(0);
         topicObjArray.splice(0);
         var param = {
             "method": 'getTopicsByType',
@@ -440,6 +441,27 @@ const AntNestTabComponents = React.createClass({
      * @param page
      */
     pageOnChange(page) {
+        if (antNest.state.type == 0) {
+            antNest.setState({
+                currentPage: page,
+            });
+            antNest.getTopics(page, getAllTopic());
+        } else {
+            antNest.setState({
+                currentTeacherPage: page,
+            });
+            antNest.getTopics(page, getOnlyTeacherTopic());
+        }
+    },
+    /**
+     * 话题列表加载更多的回调
+     */
+    pageAdd() {
+        var page = this.state.page;
+        page++;
+        //调用获取话题的函数，把信息push到topicCardList中
+        //如果page超过最大值点击提示
+        this.setState({page});
         if (antNest.state.type == 0) {
             antNest.setState({
                 currentPage: page,
@@ -1350,10 +1372,11 @@ const AntNestTabComponents = React.createClass({
             <div className="favorite_scroll">
                 <div className="antnest_cont topics_calc" style={{overflow: 'scroll'}}>
                     {antNest.state.topicCardList}
+                    <div onClick={antNest.pageAdd}>加载更多>></div>
                 </div>
-                <Pagination key="all" total={antNest.state.totalCount} pageSize={getPageSize()}
-                            current={antNest.state.currentShowPage}
-                            onChange={antNest.pageOnChange}/>
+                {/*<Pagination key="all" total={antNest.state.totalCount} pageSize={getPageSize()}*/}
+                {/*current={antNest.state.currentShowPage}*/}
+                {/*onChange={antNest.pageOnChange}/>*/}
             </div>
         var topicTitle;
         if (antNest.state.topicModalType == "topic") {
