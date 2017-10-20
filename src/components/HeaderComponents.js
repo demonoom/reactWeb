@@ -18,7 +18,7 @@ const HeaderComponents = React.createClass({
         return (
             <div>
                 <MaaeeLogo/>
-                <Icon type="search" onClick={this.search}/>
+                <Icon type="search" className="search_header" onClick={this.search}/>
                 <ProgressBar style={{valign: 'bottom'}}></ProgressBar>
                 <Button icon="book" onClick={this.redirectHelpPage} className="colud_bnt help_note">操作手册</Button>
             </div>
