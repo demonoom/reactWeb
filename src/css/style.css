@@ -7416,3 +7416,10 @@ select.course_n:hover {
         background-position: -48px 0;
     }
 }
+.search_header{
+    color: #fff;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+}
