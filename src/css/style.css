@@ -2846,12 +2846,12 @@ a.topics:hover {
     font-size: 13px !important;
 }
 
-.topics_calc2_center:hover {
-    color: #0078e4;
-}
-
 .topics_calc2_center span {
     cursor: pointer;
+}
+
+.topics_calc2_center span:hover {
+    color: #0078e4;
 }
 
 .topics_rela {
