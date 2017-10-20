@@ -121,10 +121,10 @@ const FlowBuilderComponent = React.createClass({
      * 添加流程步骤
      */
     addFlowStep(){
-        if(this.state.stepObjArray.length>=6){
+        /*if(this.state.stepObjArray.length>=6){
             message.warn("审批节点请勿超过6人，谢谢！");
             return;
-        }
+        }*/
         this.setState({approvalModalVisible:true});
     },
 
@@ -155,19 +155,46 @@ const FlowBuilderComponent = React.createClass({
         var stepObj;
         switch(approvalType){
             case 0:
+                //选定具体用户
                 approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalJson.approval)}>{approvalJson.approval.userName}</div>;
                 approvalTypeStr= "用户";
                 stepObj = <Step id={approvalJson.approval} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
                 break;
             case 1:
+                //选定指定的角色
                 approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalJson.approvalRoleVariables.id)}>{approvalJson.approvalRoleVariables.name}</div>;
                 approvalTypeStr= "角色";
                 stepObj = <Step id={approvalJson.approvalRoleVariables.id} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
                 break;
             case 2:
-                approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalJson.approvalManagerVariables)}>部门主管</div>;
+                //主管审批规则
+                var flowApprovalUserRule = approvalJson.flowApprovalUserRule;
+                var approvalLevel = flowApprovalUserRule.approvalLevel;
+                var levelType = flowApprovalUserRule.levelType;
+                var approvalUserKey = levelType+"#"+approvalLevel;
+                var approvalShowName = ""
+                if(approvalLevel==0){
+                    approvalShowName = "直接主管";
+                }else{
+                    approvalShowName = "第"+approvalLevel+"级主管";
+                }
+                //部门主管-指定一级(包括直接主管的选项,直接主管的level为0)
+                approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalUserKey)}>{approvalShowName}</div>;
                 approvalTypeStr= "";
-                stepObj = <Step id={approvalJson.approvalManagerVariables} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
+                stepObj = <Step id={approvalUserKey} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
+                break;
+            case 3:
+                //主管审批规则
+                var flowApprovalUserRule = approvalJson.flowApprovalUserRule;
+                var approvalLevel = flowApprovalUserRule.approvalLevel;
+                var levelType = flowApprovalUserRule.levelType;
+                var approvalUserKey = levelType+"#"+approvalLevel;
+                var approvalShowName = ""
+                approvalShowName = "从直接主管到发起人向上的第"+approvalLevel+"级主管";
+                //部门主管-连续多级
+                approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalUserKey)}>{approvalShowName}</div>;
+                approvalTypeStr= "";
+                stepObj = <Step id={approvalUserKey} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
                 break;
         }
         stepObjArray.push(stepObj);
@@ -378,7 +405,7 @@ const FlowBuilderComponent = React.createClass({
                        onOk={this.addApprovalToStep}
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
-                       width="440px"
+                       width="600px"
                        className="schoolgroup_modal"
                 >
                     <div className="space">
