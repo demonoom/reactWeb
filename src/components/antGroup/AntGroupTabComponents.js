@@ -2041,29 +2041,33 @@ const AntGroupTabComponents = React.createClass({
                                     //我发出的
                                     messageTag = <li className="right" style={{'textAlign': 'right'}}>
                                         <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span
-                                            className="name">{userPhoneIcon}</span><span
-                                            className="borderballoon_le noom_cursor noom_audio"
-                                            onClick={this.audioPlay.bind(this, attachment)}>这是一条语音消息，点击播放 <audio
-                                            id={attachment}
-                                        >
+                                        <div className="talk-cont">
+                                            <span className="name">{userPhoneIcon}</span>
+                                            <span className="borderballoon noom_cursor noom_audio" onClick={this.audioPlay.bind(this, attachment)}>
+                                            <audio id={attachment} >
                                                 <source src={attachment} type="audio/mpeg"></source>
-                                            </audio><i
-                                            className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                            </audio>
+                                                <span className="audio_right_run"></span>
+                                            <i className="borderballoon_dingcorner_ri_no"></i>
+                                        </span>
+                                        </div>
                                     </li>;
                                 } else {
                                     //我收到的
                                     messageTag = <li style={{'textAlign': 'left'}}>
                                         <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span
-                                            className="name">{userPhoneIcon}</span><span
-                                            className="borderballoon_le noom_cursor"
-                                            onClick={this.audioPlay.bind(this, attachment)}>这是一条语音消息，点击播放 <audio
-                                            id={attachment}
-                                        >
-                                                <source src={attachment} type="audio/mpeg"></source>
-                                            </audio><i
-                                            className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                        <div className="talk-cont">
+                                            <span className="name">{userPhoneIcon}</span>
+                                            <span className="borderballoon_le noom_cursor" onClick={this.audioPlay.bind(this, attachment)}>
+                                                <span className="bot"></span>
+                                                <span className="top"></span>
+                                                <audio id={attachment} >
+                                                    <source src={attachment} type="audio/mpeg"></source>
+                                                </audio>
+                                                <span className="audio_left_run"></span>
+                                                <i className="borderballoon_dingcorner_ri_no"></i>
+                                            </span>
+                                        </div>
                                     </li>;
                                 }
                             } else if (e.messageReturnJson.messageType == "fileUpload") {

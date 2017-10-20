@@ -668,21 +668,34 @@ ul.cont_t2 {
 
 }
 
-.antnest_38_img, .maaee_group_face, .maaee_group_face1, .maaee_group_face2, .maaee_group_face3 {
+.maaee_group_face,  .maaee_group_face2, .maaee_group_face3 {
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 50%;
+    cursor: pointer;
+    padding:4px;
+    background: #eee
+}
+.antnest_38_img{
     width: 38px !important;
     height: 38px !important;
     border-radius: 50%;
     cursor: pointer;
 }
-
+.maaee_group_face1{
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 50%;
+    cursor: pointer;
+}
 .maaee_group_face {
     background: #eee
 }
 
 .maaee_group_face div, .maaee_group_face img {
-    width: 19px !important;
-    height: 19px !important;
-    float: left
+    width: 17px !important;
+    height: 17px !important;
+    float: left;
 }
 
 .maaee_group_face tr td img {
@@ -692,59 +705,60 @@ ul.cont_t2 {
 }
 
 .maaee_group_face img:first-child {
-    border-radius: 19px 0 0 0
+    border-radius: 50%
 }
 
 .maaee_group_face img:nth-child(2) {
-    border-radius: 0 19px 0 0
+    border-radius: 50%
 }
 
 .maaee_group_face img:nth-child(3) {
-    border-radius: 0 0 0 19px
+    border-radius:50%
 }
 
 .maaee_group_face img:nth-child(4) {
-    border-radius: 0 0 19px 0
+    border-radius: 50%
 }
 
 .maaee_group_face1 img {
-    width: 38px !important;
-    height: 38px !important;
+    width: 100% !important;
+    height: 100% !important;
     float: left;
     border-radius: 50%
 }
 
 .maaee_group_face2 img {
-    width: 19px !important;
-    height: 38px !important;
-    float: left
+    width: 17px !important;
+    height: 17px !important;
+    float: left;
+    margin-top: 8px;
 }
 
 .maaee_group_face2 img:nth-child(1) {
-    border-radius: 38px 0 0 38px;
+    border-radius: 50%;
 }
 
 .maaee_group_face2 img:nth-child(2) {
-    border-radius: 0 38px 38px 0;
+    border-radius: 50%;
 }
 
 .maaee_group_face3 img {
-    width: 19px !important;
-    height: 19px !important;
+    width: 17px !important;
+    height: 17px !important;
     float: left
 }
 
 .maaee_group_face3 img:nth-child(1) {
-    border-radius: 19px 0 0 0;
+    border-radius: 50%;
+    margin-left: 8px;
 }
 
 .maaee_group_face3 img:nth-child(2) {
-    border-radius: 0 19px 0 0;
+    border-radius:  50%;
 }
 
 .maaee_group_face3 img:nth-child(3) {
-    border-radius: 0 0 19px 19px;
-    width: 38px !important;
+    border-radius:  50%;
 }
 
 .ant-modal-content span.ant-modal-close-x {
@@ -7325,4 +7339,80 @@ select.course_n:hover {
 .noom_audio {
     background-color: #40BAFF;
     color: #FFFFFF;
+}
+.audio_left{
+    width: 24px;
+    height: 17px;
+    display: inline-block;
+    background: url(../components/images/audio_left.png) no-repeat; background-position: -48px 0;
+    position: relative;
+    top: 4px;
+}
+.audio_right{
+    width: 24px;
+    height: 17px;
+    display: inline-block;
+    background: url(../components/images/audio_right.png) no-repeat; background-position: -48px 0;
+    position: relative;
+    top: 4px;
+}
+.audio_left_run{
+    width: 24px;
+    height: 17px;
+    display: inline-block;
+    animation: audio_left_1 1s  infinite;
+    position: relative;
+    top: 4px;
+    background: url(../components/images/audio_left.png) no-repeat;
+
+}
+.audio_right_run{
+    width: 24px;
+    height: 17px;
+    display: inline-block;
+    animation: audio_right_1 1s  infinite;
+    position: relative;
+    top: 4px;
+    background: url(../components/images/audio_right.png) no-repeat;
+
+}
+@keyframes audio_right_1{
+    0%{
+         background-position: 0 0;
+    }
+    30%{
+        background-position: 0 0;
+    }
+    31%{
+        background-position: -24px 0;
+    }
+    61%{
+        background-position: -24px 0;
+    }
+    61.5%{
+        background-position: -48px 0;
+    }
+    100%{
+        background-position: -48px 0;
+    }
+}
+@keyframes audio_left_1{
+    0%{
+         background-position: 0 0;
+    }
+    30%{
+        background-position: 0 0;
+    }
+    31%{
+        background-position: -24px 0;
+    }
+    61%{
+        background-position: -24px 0;
+    }
+    61.5%{
+        background-position: -48px 0;
+    }
+    100%{
+        background-position: -48px 0;
+    }
 }
