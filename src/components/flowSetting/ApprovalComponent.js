@@ -306,23 +306,27 @@ const ApprovalComponent = React.createClass({
             //一级主管
             currentApprovalType = <div>
                 <hr/>
-                <div>本环节审批方式</div>
-                <RadioGroup onChange={this.currentApprovalTypeOnChange} value={this.state.currentApprovalTypeValue}>
-                    <Radio value={FLOW_CURRENT_APPROVAL_TYPE_NEXT}>依次审批(本环节内审批人依次审批)</Radio>
-                    <Radio value={FLOW_CURRENT_APPROVAL_TYPE_ALL}>会签(须所有审批人同意)</Radio>
-                    <Radio value={FLOW_CURRENT_APPROVAL_TYPE_ONE}>或签(一名审批人同意或拒绝即可)</Radio>
-                </RadioGroup>
+                <Col span={4} className="line_h_30">审批方式</Col>
+                <Col span={20}>
+                    <RadioGroup onChange={this.currentApprovalTypeOnChange} value={this.state.currentApprovalTypeValue}>
+                        <Radio style={radioStyle} value={FLOW_CURRENT_APPROVAL_TYPE_NEXT}>依次审批(本环节内审批人依次审批)</Radio>
+                        <Radio style={radioStyle} value={FLOW_CURRENT_APPROVAL_TYPE_ALL}>会签(须所有审批人同意)</Radio>
+                        <Radio style={radioStyle} value={FLOW_CURRENT_APPROVAL_TYPE_ONE}>或签(一名审批人同意或拒绝即可)</Radio>
+                    </RadioGroup>
+                </Col>
             </div>;
             ifManagerNull=<div>
                 <hr/>
-                <div>主管递补:</div>
-                <Checkbox checked={this.state.ifManagerNullFillType} onChange={this.ifManagerNullOnChange}>若该审批人空缺,由其在通讯录中的上级主管代审批</Checkbox>
+                <Col span={4} className="line_h_30">主管递补</Col>
+                <Col span={20}>
+                    <Checkbox style={radioStyle} checked={this.state.ifManagerNullFillType} onChange={this.ifManagerNullOnChange}>若该审批人空缺,由其在通讯录中的上级主管代审批</Checkbox>
+                </Col>
             </div>;
         }else if(this.state.approvalTypeValue == 3){
             //多级主管
             currentApprovalType = <div>
                 <hr/>
-                依次审批(每一级主管中的审批人依次审批)
+                <span className="line_h_30 margin_16">依次审批（每一级主管中的审批人依次审批）</span>
             </div>;
             ifManagerNull=null;
         }else{
@@ -333,77 +337,82 @@ const ApprovalComponent = React.createClass({
         return (
             <div className="modal_register_main">
                 <div>
-                    <span>审批人类别</span>
-                    <RadioGroup onChange={this.approvalTypeOnChange} value={this.state.approvalTypeValue}>
-                        <Radio style={radioStyle} value={0}>
-                            单个成员(指定某人)
-                            {this.state.approvalTypeValue === 0 ?
-                                <Select
-                                    showSearch
-                                    style={{ width: 200 }}
-                                    placeholder="请输入搜索条件"
-                                    optionFilterProp="children"
-                                    onChange={this.userSelectHandleChange}
-                                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                    className="framework_m_r"
-                                >
-                                    {this.state.teacherOptionArray}
-                                </Select>
-                                :
-                                null}
-                        </Radio>
-                        <Radio style={radioStyle} value={2}>部门主管-指定一级
-                            {this.state.approvalTypeValue === 2 ?
-                                <Select
-                                    style={{ width: 200 }}
-                                    onChange={this.departmentManagerOfOneSelectHandleChange}
-                                    className="framework_m_r"
-                                    defaultValue={this.state.selectedDepartmentLevel}
-                                >
-                                    {departmentLevelChildren}
-                                </Select>
-                                :
-                                null}
-                        </Radio>
-                        <Radio style={radioStyle} value={3}>部门主管-连续多级
-                            {this.state.approvalTypeValue === 3 ?
-                                <RadioGroup onChange={this.departmentMultiLevelOnChange} value={this.state.departmentMultiLevel}>
-                                    <Radio style={radioStyle} value={'endToTop'}>直到发起人向上的
-                                        {this.state.departmentMultiLevel === 'endToTop' ?
-                                            <Select
-                                                style={{ width: 200 }}
-                                                onChange={this.departmentManagerOfOneSelectHandleChange}
-                                                className="framework_m_r"
-                                                defaultValue={this.state.selectedDepartmentLevel}
-                                            >
-                                                {departmentLevelChildren}
-                                            </Select>
-                                            :
-                                            null}
-                                    </Radio>
-                                </RadioGroup>
-                                :
-                                null}
-                        </Radio>
-                        <Radio style={radioStyle} value={1}>角色(一组固定成员)
-                            {this.state.approvalTypeValue === 1 ?
-                                <Select
-                                    showSearch
-                                    style={{ width: 200 }}
-                                    placeholder="请选择一个角色"
-                                    optionFilterProp="children"
-                                    onChange={this.roleSelectHandleChange}
-                                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                >
-                                    {/*<Option value="systemManager">系统管理员</Option>
-                                     <Option value="teachMaster">教务处主任</Option>
-                                     <Option value="teachLeader">化学组组长</Option>*/}
-                                    {this.state.roleOptionArray}
-                                </Select>
-                                :
-                                null}
-                        </Radio>
-                    </RadioGroup>
+                    <Col span={4} className="line_h_30">审批人类别</Col>
+                    <Col span={20}>
+                        <RadioGroup  span={16} onChange={this.approvalTypeOnChange} value={this.state.approvalTypeValue}>
+                            <Radio style={radioStyle} value={0}>
+                                单个成员(指定某人)
+                                {this.state.approvalTypeValue === 0 ?
+                                    <Select
+                                        showSearch
+                                        style={{ width: 130 }}
+                                        placeholder="请输入搜索条件"
+                                        optionFilterProp="children"
+                                        onChange={this.userSelectHandleChange}
+                                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                        className="framework_m_r"
+                                    >
+                                        {this.state.teacherOptionArray}
+                                    </Select>
+                                    :
+                                    null}
+                            </Radio>
+                            <Radio style={radioStyle} value={2}>部门主管-指定一级
+                                {this.state.approvalTypeValue === 2 ?
+                                    <Select
+                                        style={{ width: 110 }}
+                                        onChange={this.departmentManagerOfOneSelectHandleChange}
+                                        className="framework_m_r"
+                                        defaultValue={this.state.selectedDepartmentLevel}
+                                    >
+                                        {departmentLevelChildren}
+                                    </Select>
+                                    :
+                                    null}
+                            </Radio>
+                            <Radio style={radioStyle} value={3}>部门主管-连续多级
+                                {this.state.approvalTypeValue === 3 ?
+
+                                    <RadioGroup onChange={this.departmentMultiLevelOnChange} value={this.state.departmentMultiLevel}>
+                                        <Radio className="schoolgroup_btn_left" style={radioStyle} value={'endToTop'}>直到发起人向上的
+                                            {this.state.departmentMultiLevel === 'endToTop' ?
+                                                <Select
+                                                    style={{ width: 110 }}
+                                                    onChange={this.departmentManagerOfOneSelectHandleChange}
+                                                    className="framework_m_r"
+                                                    defaultValue={this.state.selectedDepartmentLevel}
+                                                >
+                                                    {departmentLevelChildren}
+                                                </Select>
+                                                :
+                                                null}
+                                        </Radio>
+                                    </RadioGroup>
+                                    :
+                                    null}
+                            </Radio>
+                            <Radio style={radioStyle} value={1}>角色(一组固定成员)
+                                {this.state.approvalTypeValue === 1 ?
+                                    <Select
+                                        showSearch
+                                        style={{ width: 130 }}
+                                        className="framework_m_r"
+                                        placeholder="请选择一个角色"
+                                        optionFilterProp="children"
+                                        onChange={this.roleSelectHandleChange}
+                                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                    >
+                                        {/*<Option value="systemManager">系统管理员</Option>
+                                         <Option value="teachMaster">教务处主任</Option>
+                                         <Option value="teachLeader">化学组组长</Option>*/}
+                                        {this.state.roleOptionArray}
+                                    </Select>
+                                    :
+                                    null}
+                            </Radio>
+                        </RadioGroup>
+                    </Col>
+
                 </div>
                 {currentApprovalType}
                 {ifManagerNull}

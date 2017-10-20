@@ -195,6 +195,27 @@
     -moz-text-overflow:ellipsis;
     white-space:nowrap;
 }
+.builder_modal .modal_register_main{
+    padding: 0px 20px;
+    font-size: 13px;
+}
+.builder_modal .ant-modal-body{
+    max-height:334px;
+    overflow-y: auto;
+}
+.builder_modal .modal_register_main > div:first-child{
+    height: 130px;
+}
+.builder_modal .modal_register_main > div:nth-child(2){
+    height:100px;
+}
+.builder_modal .modal_register_main .ant-row, .builder_modal .modal_register_main .ant-radio-group label, .builder_modal .modal_register_main label{
+    font-size: 13px !important;
+}
+.builder_modal hr{
+    border:none;
+    border-top: 1px solid #e5e5e5;
+}
 .text_ellipsis{
     overflow:hidden;
     text-overflow:ellipsis;
@@ -584,22 +605,39 @@
 .approval_steps{
     width: 100%;
 }
-.approval_steps .ant-steps-item {
-    width: 120px !important;
+.approval_steps_w {
+    min-width: 120px !important;
     float: left !important;
-    margin-right: 0 !important;
+    margin-right: 10px !important;
     margin-bottom: 15px;
-
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid #e8e8e8;
+    width: auto !important;
+}
+.approval_steps_w i, .approval_steps_w div{
+    float:left
+}
+.approval_steps .ant-steps .ant-steps-tail{
+    display: none;
 }
 .approval_steps .ant-steps-title div{
-    overflow: hidden;
-    text-overflow:ellipsis;
-    white-space: nowrap;
-    max-width: 80px !important;
+    font-size: 13px;
+    font-weight: normal;
 }
 .ant-table table th.dold_text, .ant-table table td.dold_text{
     width:100%;
 }
 .ant-table table td.dold_text{
     padding:12px 8px
+}
+.line_h_30{
+    line-height: 30px
+}
+.margin_16{
+    margin-left: 16.66%;
+}
+.approval_right_arrow{
+    font-size: 24px;
+    color: #d8d8d8;
 }

@@ -157,14 +157,24 @@ const FlowBuilderComponent = React.createClass({
             case 0:
                 //选定具体用户
                 approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalJson.approval)}>{approvalJson.approval.userName}</div>;
-                approvalTypeStr= "用户";
-                stepObj = <Step id={approvalJson.approval} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
+                approvalTypeStr= "";
+                //stepObj = <Step id={approvalJson.approval} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
+                stepObj = <div id={approvalJson.approval} >
+                    <Icon type="user" />
+                    {approvalNameDiv}
+                    <Icon type="arrow-right" />
+                </div>;
                 break;
             case 1:
                 //选定指定的角色
                 approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalJson.approvalRoleVariables.id)}>{approvalJson.approvalRoleVariables.name}</div>;
-                approvalTypeStr= "角色";
-                stepObj = <Step id={approvalJson.approvalRoleVariables.id} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
+                approvalTypeStr= "";
+                //stepObj = <Step id={approvalJson.approvalRoleVariables.id} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
+                stepObj = <div id={approvalJson.approvalRoleVariables.id} >
+                    <Icon type="user" />
+                    {approvalNameDiv}
+                    <Icon type="arrow-right" />
+                </div>;
                 break;
             case 2:
                 //主管审批规则
@@ -181,7 +191,12 @@ const FlowBuilderComponent = React.createClass({
                 //部门主管-指定一级(包括直接主管的选项,直接主管的level为0)
                 approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalUserKey)}>{approvalShowName}</div>;
                 approvalTypeStr= "";
-                stepObj = <Step id={approvalUserKey} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
+                //stepObj = <Step id={approvalUserKey} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
+                stepObj = <div id={approvalUserKey} >
+                    <Icon type="user" />
+                    {approvalNameDiv}
+                    <Icon type="arrow-right" />
+                </div>;
                 break;
             case 3:
                 //主管审批规则
@@ -194,7 +209,14 @@ const FlowBuilderComponent = React.createClass({
                 //部门主管-连续多级
                 approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalUserKey)}>{approvalShowName}</div>;
                 approvalTypeStr= "";
-                stepObj = <Step id={approvalUserKey} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
+               /* stepObj = <Step id={approvalUserKey} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;*/
+                stepObj = <div id={approvalUserKey} >
+                    <div className="approval_steps_w">
+                        <Icon type="user" />
+                        {approvalNameDiv}
+                    </div>
+                        <Icon type="arrow-right" className="approval_right_arrow" />
+                </div>;
                 break;
         }
         stepObjArray.push(stepObj);
@@ -375,10 +397,11 @@ const FlowBuilderComponent = React.createClass({
                 <Row>
                     <Col span={6} className="framework_m_l">审批人设置：</Col>
                     <Col span={17} className="framework_m_r">
-                        <Steps className="approval_steps">
+                        <div className="approval_steps">
                             {/*<Step status="process" title="项目组长审批" icon={<Icon type="user" />} />*/}
                             {this.state.stepObjArray}
-                        </Steps>
+                        </div>
+
                         <Button className="upexam_float" icon="plus-circle" onClick={this.addFlowStep}></Button>
                     </Col>
                 </Row>
@@ -406,7 +429,7 @@ const FlowBuilderComponent = React.createClass({
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
                        width="600px"
-                       className="schoolgroup_modal"
+                       className="builder_modal"
                 >
                     <div className="space">
                         <ApprovalComponent ref="approvalComponent"></ApprovalComponent>
