@@ -22,6 +22,9 @@ export const FLOW_CURRENT_APPROVAL_TYPE_NEXT="next";
 export const FLOW_CURRENT_APPROVAL_TYPE_ALL="all";
 //本环节的审批方式(或签)
 export const FLOW_CURRENT_APPROVAL_TYPE_ONE="one";
+export const SMALL_IMG = 'size=100x100';
+export const MIDDLE_IMG = 'size=300x300';
+export const LARGE_IMG = 'size=500x500';
 var baseEmotionMap = new Map();
 baseEmotionMap.set("[bexp_0001]", "baseEmotions/bexp_0001.png");
 baseEmotionMap.set("[bexp_0002]", "baseEmotions/bexp_0002.png");

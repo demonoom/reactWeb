@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 import {Modal, message, Button, Upload, Icon} from 'antd';
 import {doWebService} from '../WebServiceHelper';
+import {SMALL_IMG, MIDDLE_IMG, LARGE_IMG} from '../utils/Const';
 
 function getBase64(img, callback) {
     const reader = new FileReader();
@@ -201,7 +202,7 @@ const UserCardModalComponents = React.createClass({
 
         return (
             <div className="layout_logo">
-                <img src={this.state.userHeadIcon} onClick={this.turnToPersoncenter}/>
+                <img src={this.state.userHeadIcon + '?' + SMALL_IMG} onClick={this.turnToPersoncenter}/>
                 {/* <p className="user_cont user_cont_cen">
                         <Button type="primary" htmlType="submit"
                                 className="login-form-button class_right user_btn add_study add_study-f"

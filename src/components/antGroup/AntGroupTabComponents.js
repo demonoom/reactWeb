@@ -11,7 +11,7 @@ import {formatMD} from '../../utils/utils';
 import {formatHM} from '../../utils/utils';
 import {isToday} from '../../utils/utils';
 import {showLargeImg} from '../../utils/utils';
-import {getLocalTime} from '../../utils/Const'
+import {getLocalTime, SMALL_IMG, MIDDLE_IMG, LARGE_IMG} from '../../utils/Const'
 import ConfirmModal from '../ConfirmModal';
 import GroupFileUploadComponents from './GroupFileUploadComponents';
 
@@ -360,7 +360,6 @@ const AntGroupTabComponents = React.createClass({
             };
             doWebService(JSON.stringify(param), {
                 onResponse: function (ret) {
-                    console.log(ret);
                     if (ret.success == true && ret.msg == "调用成功" && isEmpty(ret.response) == false) {
                         var initPageNo = 1;
                         var queryConditionJson = "";
@@ -581,7 +580,6 @@ const AntGroupTabComponents = React.createClass({
                 formData.append("file" + i, uploadFileList[i]);
                 formData.append("name" + i, uploadFileList[i].name);
             }
-            console.log(formData);
             $.ajax({
                 type: "POST",
                 url: "http://101.201.45.125:8890/Excoord_Upload_Server/file/upload",
@@ -625,7 +623,6 @@ const AntGroupTabComponents = React.createClass({
      */
     sendFileToOthers(url) {
         isSend = true;
-        console.log(url);
         //文件名
         var name = uploadFileList[0].name;
         //文件大小
@@ -795,10 +792,16 @@ const AntGroupTabComponents = React.createClass({
                 var messageList = [];
                 //获取messageList
                 var command = info.command;
+                var messageOfSinge;
                 if (isEmpty(command) == false) {
                     if (command == "messageList") {
                         showImg = "";
                         var data = info.data;
+                        //手机发送的群消息的处理
+                        // messageOfSinge = data.messages[0];
+                        // console.log(messageOfSinge);
+
+
                         var messageArray = data.messages;
                         var uuidsArray = [];
                         messageArray.forEach(function (e) {
@@ -872,7 +875,7 @@ const AntGroupTabComponents = React.createClass({
                         }
                         ;
                         showImg = "";
-                        var messageOfSinge = data.message;
+                        messageOfSinge = data.message;
                         var fromUser = messageOfSinge.fromUser;
                         var colUtype = fromUser.colUtype;
                         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
@@ -882,6 +885,12 @@ const AntGroupTabComponents = React.createClass({
                         console.log(messageOfSinge);
                         console.log('//判断是否是叮消息');
                         //判断是否是叮消息
+                        //判断这条消息是我发出的，处理别的手机发送消息不同步的问题
+                        if (messageOfSinge.fromUser.colUid == antGroup.state.loginUser.colUid) {
+                            //     alert('我发出的');
+                            isSend = true;
+                        }
+                        ;
                         var biumes = null;
                         if (messageOfSinge.command == 'message') {
                             biumes = false;
@@ -989,6 +998,7 @@ const AntGroupTabComponents = React.createClass({
 
                             } else {
                                 //我发出的
+                                console.log('我发出的');
                                 if (isEmpty(messageOfSinge.toUser) == false) {
                                     if (data.message.command != "message_read") {
                                         var messageShow = {
@@ -1006,7 +1016,10 @@ const AntGroupTabComponents = React.createClass({
                                             "fileUid": fileUid,
                                             "fileCreateUid": fileCreateUid
                                         };
-                                        messageList.push(messageShow);
+                                        //如果发送的消息=当前点击人的id，才push
+                                        if (messageOfSinge.toUser.colUid === _this.state.curId) {
+                                            messageList.push(messageShow);
+                                        }
                                         var userJson = {
                                             key: messageOfSinge.toUser.colUid,
                                             // key: _this.state.loginUser.colUid,
@@ -1028,6 +1041,7 @@ const AntGroupTabComponents = React.createClass({
                             //群组单条消息
                             if (isEmpty(antGroup.state.currentGroupObj) == false
                                 && antGroup.state.currentGroupObj.chatGroupId == messageOfSinge.toChatGroup.chatGroupId) {
+                                //判断选中的群组就是要发送的群组
                                 imgTagArray.splice(0);
                                 var imgTagArrayReturn = [];
                                 var messageReturnJson = antGroup.getImgTag(messageOfSinge);
@@ -1452,6 +1466,8 @@ const AntGroupTabComponents = React.createClass({
      * @param timeNode
      */
     getPersonMessage(userObj, timeNode) {
+        //将点击的那个个人的id记录下来
+        this.setState({curId: userObj.colUid})
         isDirectToBottom = true;
         isNewPage = false;
         antGroup.setState({"messageComeFrom": "personMessage", "currentGroupObj": '', messageList: []});
@@ -1474,24 +1490,27 @@ const AntGroupTabComponents = React.createClass({
      * @param url
      */
     downFile(url) {
-        // console.log(url);
         window.location.href = url;
     },
 
     /**
      *预览文件的回调
      */
-    watchFile(url, fileUid, fileCreateUid) {
+    watchFile(url, fileUid, fileCreateUid, fileName) {
         // let obj = {mode: 'teachingAdmin', url: id, title: ""};
         // LP.Start(obj);
-        // console.log(id);
-        // console.log(fileUid);
-        // console.log(fileCreateUid);
         //文件的uuid和创建人的id
         // var fileUid = fileUid;
         // var fileCreateUid = fileCreateUid;
+        //根据文件的后缀名判断是不是图片
         var url = "http://www.maaee.com/Excoord_PhoneService/cloudFile/cloudFileShow/" + fileUid + "/" + fileCreateUid;
-        this.view(event, url, name);
+        var suffix = fileName.substr(fileName.length - 3);
+        //如果是图片直接用插件展示，否则交给iframe展示
+        if (suffix == ('jpg' || 'JPG' || 'png' || 'PNG' || 'bmp' || 'BMP')) {
+            document.getElementById(fileUid).click();
+        } else {
+            this.view(event, url, name);
+        }
     },
 
     view(e, url, tit) {
@@ -1621,7 +1640,6 @@ const AntGroupTabComponents = React.createClass({
                                     "biumes": biumes
                                 };
                                 messageList.push(messageShow);
-                                // console.log(messageList);
                             }
                         }
                     });
@@ -1696,7 +1714,7 @@ const AntGroupTabComponents = React.createClass({
                     if (isEmpty(e.fromUser.avatar)) {
                         userPhoneIcon = <img src={require('../images/maaee_face.png')}></img>;
                     } else {
-                        userPhoneIcon = <img src={e.fromUser.avatar}></img>;
+                        userPhoneIcon = <img src={e.fromUser.avatar + '?' + SMALL_IMG}></img>;
                     }
                     var messageType = e.messageType;
                     var messageTag;
@@ -1770,9 +1788,12 @@ const AntGroupTabComponents = React.createClass({
                                                      src="../src/components/images/maaee_link_file_102_102.png"
                                                      alt=""/>
                                                     </div>
+                                                <img id={fileUid} style={{display: "none"}} src={filePath}
+                                                     onClick={showLargeImg}
+                                                     alt=""/>
                                             <div className="file_noom">
                                                     <a className="noom_cursor  file_noom_line"
-                                                       onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}><Icon
+                                                       onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid, fileName)}><Icon
                                                         type="eye"/>预览</a>
                                                     <a href={filePath} target="_blank" title="下载"
                                                        download={filePath}
@@ -1843,13 +1864,16 @@ const AntGroupTabComponents = React.createClass({
                                                     <img className="upexam_float" style={{width: 38}}
                                                          src="../src/components/images/maaee_link_file_102_102.png"
                                                          alt=""/>
+                                                    <img id={fileUid} style={{display: "none"}} src={filePath}
+                                                         onClick={showLargeImg}
+                                                         alt=""/>
                                                     <span className="span_link">{fileName}</span>
                                                     <span className="span_link password_ts">{fileLength}kb</span>
                                                     <i className="borderballoon_dingcorner_ri_no"></i>
                                                 </div>
                                                 <div className="file_noom">
                                                     <a className="noom_cursor  file_noom_line"
-                                                       onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}><Icon
+                                                       onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid, fileName)}><Icon
                                                         type="eye"/>预览</a>
                                                     <a href={filePath} target="_blank" title="下载"
                                                        download={filePath}
@@ -2019,8 +2043,8 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="u-name"><span>{fromUser}</span></div>
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><span
-                                            className="borderballoon_le"
-                                            onClick={this.audioPlay.bind(this, attachment)}>这是一条语音消息，暂不支持播放 <audio
+                                            className="borderballoon_le noom_cursor noom_audio"
+                                            onClick={this.audioPlay.bind(this, attachment)}>这是一条语音消息，点击播放 <audio
                                             id={attachment}
                                         >
                                                 <source src={attachment} type="audio/mpeg"></source>
@@ -2033,8 +2057,8 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="u-name"><span>{fromUser}</span></div>
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><span
-                                            className="borderballoon_le"
-                                            onClick={this.audioPlay.bind(this, attachment)}>这是一条语音消息，暂不支持播放 <audio
+                                            className="borderballoon_le noom_cursor"
+                                            onClick={this.audioPlay.bind(this, attachment)}>这是一条语音消息，点击播放 <audio
                                             id={attachment}
                                         >
                                                 <source src={attachment} type="audio/mpeg"></source>
@@ -2051,7 +2075,7 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><span
                                             className="borderballoon noom_cursor borderballoon_file"
-                                            onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}>
+                                            onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid, fileName)}>
                                                 <span className="bot"></span>
                                                 <span className="top"></span>
                                             <div className="borderballoon_le_cont"><div className="span_link_div"><span
@@ -2060,10 +2084,13 @@ const AntGroupTabComponents = React.createClass({
                                                 <img className="upexam_float span_link_img" style={{width: 38}}
                                                      src="../src/components/images/maaee_link_file_102_102.png"
                                                      alt=""/>
+                                                <img id={fileUid} style={{display: "none"}} src={filePath}
+                                                     onClick={showLargeImg}
+                                                     alt=""/>
                                                     </div>
                                             <div className="file_noom">
                                                     <a className="noom_cursor  file_noom_line"
-                                                       onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}><Icon
+                                                       onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid, fileName)}><Icon
                                                         type="eye"/>预览</a>
                                                     <a href={filePath} target="_blank" title="下载"
                                                        download={filePath}
@@ -2086,20 +2113,22 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><span
                                             className="borderballoon_le noom_cursor"
-                                            onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}>
+                                            onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid, fileName)}>
                                                 <span className="bot"></span>
                                                 <span className="top"></span>
                                             <div className="borderballoon_le_cont"><img
                                                 className="upexam_float"
                                                 style={{width: 38}}
                                                 src="../src/components/images/maaee_link_file_102_102.png"
-                                                alt=""/><span
+                                                alt=""/><img id={fileUid} style={{display: "none"}} src={filePath}
+                                                             onClick={showLargeImg}
+                                                             alt=""/><span
                                                 className="span_link">{fileName}</span><span
                                                 className="span_link password_ts">{fileLength}kb</span><i
                                                 className="borderballoon_dingcorner_ri_no"></i></div>
                                         <div className="file_noom">
                                                     <a className="noom_cursor  file_noom_line"
-                                                       onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}><Icon
+                                                       onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid, fileName)}><Icon
                                                         type="eye"/>预览</a>
                                                     <a href={filePath} target="_blank" title="下载"
                                                        download={filePath}

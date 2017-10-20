@@ -1,7 +1,7 @@
 import React, {PropTypes, Link} from 'react';
 import {Table, Badge, Button, Icon, Switch, Modal, Row, Col, Progress} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
-import {isEmpty} from '../../utils/Const';
+import {isEmpty, SMALL_IMG, MIDDLE_IMG, LARGE_IMG} from '../../utils/Const';
 import {formatMD} from '../../utils/utils';
 import {formatHM} from '../../utils/utils';
 import {isToday} from '../../utils/utils';
@@ -146,29 +146,50 @@ const MessageMenu = React.createClass({
                     //个人栏
                     imgTag = <div>
                                 <span className="antnest_user">
-                                    <img src={fromUser.avatar}
+                                    <img src={fromUser.avatar + '?' + SMALL_IMG}
                                          height="38"></img>
                                     {/*{tipPoint}*/}
                                     {/*<b className="mes_alert_show mes_opt" id={colUid}></b>*/}
                                 </span>
-                                <div className="mes_u_l">
-                                    <div><span className="message_name">{fromUser.userName}</span><span
-                                        className="time right_ri time_w">{lastCreateTime}</span></div>
-                                    <div className="message_cont_w">{lastContentText}</div>
-                                </div>
-                            </div>;
-                } else {
-                    //群组栏
-                    var membersImgs = toChatGroup.avatar;
-                    var memberAvatarTag = <img src={membersImgs}/>;
-                    if (membersImgs == '') {
-                        //如果这个字段为空，头像的处理
-                        memberAvatarTag = <img src={require("../images/lALPAAAAARBOpS_NAf7NAf4_510_510.png")}/>;
-                    }
-                    var groupMemebersPhotoTag = <div className="antnest_user upexam_float">
-                        {memberAvatarTag}
-                        {/*<b className="mes_alert_show mes_opt" id={toChatGroup.chatGroupId}></b>*/}
+                        <div className="mes_u_l">
+                            <div><span className="message_name">{fromUser.userName}</span><span
+                                className="time right_ri time_w">{lastCreateTime}</span></div>
+                            <div className="message_cont_w">{lastContentText}</div>
+                        </div>
                     </div>;
+                } else {
+                    var arr = toChatGroup.avatar.split("#");
+                    var membersCount = arr.length;
+                    var groupMemebersPhoto = [];
+                    for (var i = 0; i < membersCount; i++) {
+                        // var member = toChatGroup.members[i];
+                        var memberAvatarTag = <img src={arr[i] + '?' + SMALL_IMG}></img>;
+                        groupMemebersPhoto.push(memberAvatarTag);
+                        if (i >= 3) {
+                            break;
+                        }
+                    }
+                    var groupMemebersPhotoTag = <div
+                        className="maaee_group_face upexam_float">{groupMemebersPhoto}</div>;
+                    switch (groupMemebersPhoto.length) {
+                        case 1:
+                            groupMemebersPhotoTag =
+                                <div className="maaee_group_face1 upexam_float">{groupMemebersPhoto}</div>;
+                            break;
+                        case 2:
+                            groupMemebersPhotoTag =
+                                <div className="maaee_group_face2 upexam_float">{groupMemebersPhoto}</div>;
+                            break;
+                        case 3:
+                            groupMemebersPhotoTag =
+                                <div className="maaee_group_face3 upexam_float">{groupMemebersPhoto}</div>;
+                            break;
+                        case 4:
+                            groupMemebersPhotoTag =
+                                <div className="maaee_group_face upexam_float">{groupMemebersPhoto}</div>;
+                            break;
+                    }
+
                     imgTag = <div>
                         {groupMemebersPhotoTag}
                         <div className="mes_u_l">
@@ -179,10 +200,10 @@ const MessageMenu = React.createClass({
                     </div>;
                 }
                 var messageContentTag = <Badge dot={mMenu.state.badgeShow}>
-                                            <div>
-                                                {imgTag}
-                                            </div>
-                                        </Badge>;
+                    <div>
+                        {imgTag}
+                    </div>
+                </Badge>;
                 var userJson;
                 if (messageType == 1) {
                     userJson = {
@@ -227,6 +248,8 @@ const MessageMenu = React.createClass({
      * 如：{{colUid:23836,userName:'王丹'},[{content:'123'}{content:'test'}]}
      */
     setMessageArrayForOnePerson(messageObj) {
+        console.log(messageObj);
+        console.log('messageObj');
         if (messageObj.command == "message") {
             var fromUser = messageObj.fromUser;
             var content = messageObj.content;

@@ -93,7 +93,6 @@ export function isToday(str) {
 }
 
 export function showLargeImg(e) {
-    //哈哈哈哈哈哈哈市的撒
     var target = e.target;
     if (navigator.userAgent.indexOf("Chrome") > -1) {
         target = e.currentTarget;
