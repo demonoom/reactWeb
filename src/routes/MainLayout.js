@@ -220,9 +220,9 @@ const MainLayout = React.createClass({
     getAntNest(optType) {
         var pageNo;
         if ("getAllTopic" == optType) {
-            this.refs.antNestTabComponents.getTopics(pageNo, 0);
+            this.refs.antNestTabComponents.getTopics(pageNo, 0, true);
         } else {
-            this.refs.antNestTabComponents.getTopics(pageNo, 1);
+            this.refs.antNestTabComponents.getTopics(pageNo, 1, true);
         }
     },
     getDingMessage(optType) {
@@ -449,6 +449,9 @@ const MainLayout = React.createClass({
         console.log("menuItemKey:" + menuItemKey);
         this.setState({"cloudRoomMenuItem": menuItemKey});
     },
+    search() {
+        alert('search');
+    },
 
     render() {
 
@@ -645,7 +648,7 @@ const MainLayout = React.createClass({
 
                     <div className="ant-layout-main">
                         <div className="ant-layout-header">
-                            <HeaderComponents/>
+                            <HeaderComponents search={this.search}/>
                         </div>
 
                         <div className="ant-layout-operation">

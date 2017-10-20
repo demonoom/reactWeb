@@ -2015,7 +2015,8 @@ const AntGroupTabComponents = React.createClass({
                                             <span className="borderballoon borderballoon_file borderballoon_file_p">
                                                 <span className="bot"></span>
                                                 <span className="top"></span>
-                                                <img onClick={showLargeImg} src={attachment} className="send_img"/>
+                                                <img onClick={showLargeImg} src={attachment + '?' + MIDDLE_IMG}
+                                                     className="send_img" alt={attachment}/>
                                             </span>
                                             <span><i className="borderballoon_dingcorner_le_no"></i></span>
                                         </div>
@@ -2029,7 +2030,8 @@ const AntGroupTabComponents = React.createClass({
                                             <span className="borderballoon_le borderballoon_file_p">
                                                 <span className="bot"></span>
                                                 <span className="top"></span>
-                                                <img onClick={showLargeImg} className="send_img" src={attachment}/>
+                                                <img onClick={showLargeImg} className="send_img"
+                                                     src={attachment + '?' + MIDDLE_IMG} alt={attachment}/>
                                             </span>
                                             <span><i className="borderballoon_dingcorner_ri_no"></i></span>
                                         </div>

@@ -53,22 +53,33 @@ const AntNestTabComponents = React.createClass({
      * @param type 0:全部  1：只看老师
      * @param pageNo
      */
-    getTopics(pageNo, type) {
+    getTopics(pageNo, type, flag) {
         if (isEmpty(pageNo)) {
             if (type == 0) {
                 pageNo = antNest.state.currentPage;
             } else {
                 pageNo = antNest.state.currentTeacherPage;
             }
+            // topicCardArray.splice(0);
+            // topicObjArray.splice(0);
         }
-        // topicCardArray.splice(0);
-        topicObjArray.splice(0);
+        ;
+        if (flag) {
+            topicCardArray.splice(0);
+            topicObjArray.splice(0);
+            if (type == 0) {
+                pageNo = 1;
+            } else {
+                pageNo = 1;
+            }
+        }
         var param = {
             "method": 'getTopicsByType',
             "ident": sessionStorage.getItem("ident"),
             "type": type,
             "pageNo": pageNo
         };
+        //asdfghjhrewsdfg
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
@@ -195,7 +206,7 @@ const AntNestTabComponents = React.createClass({
                     <img className="topics_zanImg" src={e.address + '?' + MIDDLE_IMG} alt={e.address}
                          onClick={showLargeImg}/>
                     {/*<img className="topics_zanImg" src={e.address} alt={e.address}*/}
-                         {/*onClick={showLargeImg}/>*/}
+                    {/*onClick={showLargeImg}/>*/}
                 </span>;
 
             } else if (attachMentType == 4) {
@@ -1374,7 +1385,7 @@ const AntNestTabComponents = React.createClass({
             <div className="favorite_scroll">
                 <div className="antnest_cont topics_calc2" style={{overflow: 'scroll'}}>
                     {antNest.state.topicCardList}
-                    <div className="topics_calc2_center"><span onClick={antNest.pageAdd} >加载更多>></span></div>
+                    <div className="topics_calc2_center"><span onClick={antNest.pageAdd}>加载更多>></span></div>
                 </div>
                 {/*<Pagination key="all" total={antNest.state.totalCount} pageSize={getPageSize()}*/}
                 {/*current={antNest.state.currentShowPage}*/}

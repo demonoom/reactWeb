@@ -350,35 +350,18 @@
                 toggleImage();
 
                 $(o.imgs).each(function (i, img) {
-                    console.log(img);
-                    console.log('iiiiiii');
-                    if (img.noom_img) {
-                        $(o.template.IMAGE)
-                            .appendTo($gallery)
-                            .attr("src", img.url)
-                            .attr("index", i)
-                            .css({
-                                width: img.imgWidth * 2.3,
-                                height: img.imgHeight * 2.3,
-                                left: (cW - img.imgWidth * 2.3) / 2,
-                                top: (cH - img.imgHeight * 2.3) / 2
-                            }).on("dblclick", function () {
-                            app.window.close();
-                        });
-                    } else {
-                        $(o.template.IMAGE)
-                            .appendTo($gallery)
-                            .attr("src", img.url)
-                            .attr("index", i)
-                            .css({
-                                width: img.imgWidth,
-                                height: img.imgHeight,
-                                left: (cW - img.imgWidth) / 2,
-                                top: (cH - img.imgHeight) / 2
-                            }).on("dblclick", function () {
-                            app.window.close();
-                        });
-                    }
+                    $(o.template.IMAGE)
+                        .appendTo($gallery)
+                        .attr("src", img.url)
+                        .attr("index", i)
+                        .css({
+                            width: img.imgWidth,
+                            height: img.imgHeight,
+                            left: (cW - img.imgWidth) / 2,
+                            top: (cH - img.imgHeight) / 2
+                        }).on("dblclick", function () {
+                        app.window.close();
+                    });
 
                 });
                 $image = $(".image[index='" + o.activeIndex + "']", $gallery).addClass("active");
@@ -596,16 +579,29 @@
             //HTML5提供了一个新属性naturalWidth/naturalHeight可以直接获取图片的原始宽高
 
             //图片的原始宽高就是从这里获取的
-            var img = $img[0],
-                imgHeight = img.naturalHeight,
-                imgWidth = img.naturalWidth,
-                ratio = imgWidth / imgHeight,
-                wH = 415,
-                wW = 615,
-                winHeight,
-                winWidth,
-                maxHeight = document.body.clientHeight - windowMargin * 2,
-                maxWidth = document.body.clientWidth - windowMargin;
+            if (noom_img) {
+                var img = $img[0],
+                    imgHeight = img.naturalHeight * 2.3,
+                    imgWidth = img.naturalWidth * 2.3,
+                    ratio = imgWidth / imgHeight,
+                    wH = 415,
+                    wW = 615,
+                    winHeight,
+                    winWidth,
+                    maxHeight = document.body.clientHeight - windowMargin * 2,
+                    maxWidth = document.body.clientWidth - windowMargin;
+            } else {
+                var img = $img[0],
+                    imgHeight = img.naturalHeight,
+                    imgWidth = img.naturalWidth,
+                    ratio = imgWidth / imgHeight,
+                    wH = 415,
+                    wW = 615,
+                    winHeight,
+                    winWidth,
+                    maxHeight = document.body.clientHeight - windowMargin * 2,
+                    maxWidth = document.body.clientWidth - windowMargin;
+            }
 
             winWidth = Math.max(wW, imgWidth);
             winHeight = Math.max(wH, imgHeight);
@@ -639,13 +635,24 @@
                 }
             }
             $gallerys.find(".topics_zanImg").each(function (i, elem) {
-                var url = this.alt || this.src,
-                    img = $(this)[0],
-                    nH = img.naturalHeight,
-                    nW = img.naturalWidth,
-                    ratio = nW / nH,
-                    w = nW,
-                    h = nH;
+                //遍历所有图片，用于图片切换
+                if (noom_img) {
+                    var url = this.alt || this.src,
+                        img = $(this)[0],
+                        nH = img.naturalHeight * 2.3,
+                        nW = img.naturalWidth * 2.3,
+                        ratio = nW / nH,
+                        w = nW,
+                        h = nH;
+                } else {
+                    var url = this.alt || this.src,
+                        img = $(this)[0],
+                        nH = img.naturalHeight,
+                        nW = img.naturalWidth,
+                        ratio = nW / nH,
+                        w = nW,
+                        h = nH;
+                }
                 if (url == imgUrl) {
                     activeIndex = i;
                     w = imgWidth;
@@ -672,16 +679,14 @@
                 imgs.push({
                     url: url,
                     imgHeight: h,
-                    imgWidth: w,
-                    noom_img: noom_img
+                    imgWidth: w
                 });
             });
 
             imgs.push({
                 url: imgUrl,
                 imgHeight: imgHeight,
-                imgWidth: imgWidth,
-                noom_img: noom_img
+                imgWidth: imgWidth
             });
 
             localStorage["photoGalleryImgs"] = JSON.stringify(imgs); //因为此字符串可能是base64字符，appgo无法传
