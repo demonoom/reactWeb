@@ -2045,11 +2045,12 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="u-name"><span>{fromUser}</span></div>
                                         <div className="talk-cont">
                                             <span className="name">{userPhoneIcon}</span>
-                                            <span className="borderballoon noom_cursor noom_audio" onClick={this.audioPlay.bind(this, attachment)}>
-                                            <audio id={attachment} >
+                                            <span className="borderballoon noom_cursor noom_audio"
+                                                  onClick={this.audioPlay.bind(this, attachment)}>
+                                            <audio id={attachment}>
                                                 <source src={attachment} type="audio/mpeg"></source>
                                             </audio>
-                                                <span className="audio_right_run"></span>
+                                                <span className="audio_right"></span>
                                             <i className="borderballoon_dingcorner_ri_no"></i>
                                         </span>
                                         </div>
@@ -2060,13 +2061,14 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="u-name"><span>{fromUser}</span></div>
                                         <div className="talk-cont">
                                             <span className="name">{userPhoneIcon}</span>
-                                            <span className="borderballoon_le noom_cursor" onClick={this.audioPlay.bind(this, attachment)}>
+                                            <span className="borderballoon_le noom_cursor"
+                                                  onClick={this.audioPlay.bind(this, attachment)}>
                                                 <span className="bot"></span>
                                                 <span className="top"></span>
-                                                <audio id={attachment} >
+                                                <audio id={attachment}>
                                                     <source src={attachment} type="audio/mpeg"></source>
                                                 </audio>
-                                                <span className="audio_left_run"></span>
+                                                <span className="audio_left"></span>
                                                 <i className="borderballoon_dingcorner_ri_no"></i>
                                             </span>
                                         </div>

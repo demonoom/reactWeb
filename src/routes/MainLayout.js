@@ -58,7 +58,9 @@ const MainLayout = React.createClass({
             cloudRoomMenuItem: 'mulitiClass',
             antCloudKey: 'fileManager',
             activeSystemSettingMiddleMenu: '',
-            mesTabClick: false
+            mesTabClick: false,
+            isSearch: false,
+            isSearchGroup: false,
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
     },
@@ -147,6 +149,8 @@ const MainLayout = React.createClass({
     componentDidMount() {
         this.refs.dingMusic.innerHTML = '<source src="../../static/dingmes.mp3" type="audio/mpeg">'
         this.refs.mesMusic.innerHTML = '<source src="../../static/message.mp3" type="audio/mpeg">'
+        window.__noomSelect__ = this.noomSelect;
+        window.__noomSelectGroup__ = this.noomSelectUser;
     },
 
     componentWillMount() {
@@ -195,6 +199,57 @@ const MainLayout = React.createClass({
             this.refs[obj.ref][obj.methond].call(this.refs[obj.ref], obj.param);
             this.proxyObj = null;
         }
+    },
+
+    noomSelect(obj) {
+        this.sendMessage_noom_user(obj);
+    },
+
+    sendMessage_noom_user(userInfo) {
+        var contentJson = {"content": '', "createTime": ''};
+        var contentArray = [contentJson];
+        var userJson = {
+            key: userInfo.colUid,
+            "fromUser": userInfo,
+            contentArray: contentArray,
+            "messageToType": 1,
+        };
+        console.log(userJson);
+        this.setState({
+            currentKey: 'message',
+            resouceType: '',
+            "userInfo": userInfo,
+            "messageType": 'message',
+            "actionFrom": "search",
+            userJson,
+            isSearch: true
+        });
+    },
+
+    noomSelectUser(obj) {
+        this.sendMessage_noom_group(obj);
+    },
+
+    sendMessage_noom_group(groupObj) {
+        console.log(groupObj);
+        var contentJson = {"content": '', "createTime": ''};
+        var contentArray = [contentJson];
+        var userJson = {
+            key: groupObj.chatGroupId,
+            "fromUser": groupObj,
+            contentArray: contentArray,
+            "messageToType": 4,
+            "toChatGroup": groupObj
+        };
+        this.setState({
+            currentKey: 'message',
+            resouceType: '',
+            "groupObj": groupObj,
+            "messageType": 'groupMessage',
+            "actionFrom": "personCenterGroupList",
+            userJson,
+            isSearchGroup: true
+        });
     },
 
     //获取试卷列表
@@ -354,6 +409,7 @@ const MainLayout = React.createClass({
      * @param groupObj
      */
     sendGroupMessage(groupObj) {
+        console.log(groupObj);
         var contentJson = {"content": '', "createTime": ''};
         var contentArray = [contentJson];
         var userJson = {
@@ -386,6 +442,7 @@ const MainLayout = React.createClass({
             contentArray: contentArray,
             "messageToType": 1
         };
+        console.log(userJson);
         this.setState({
             currentKey: 'message',
             resouceType: '',
@@ -451,11 +508,22 @@ const MainLayout = React.createClass({
     },
     search() {
         //打开littlepanel
+        var loginUserId = sessionStorage.getItem("ident");
         let obj = {
-            mode: 'teachingAdmin',
-            url: 'http://192.168.2.105:8080//Excoord_PhoneService/antSearch/indexSearch/23836'
-        };
+                mode: 'teachingAdmin',
+                url: 'http://www.maaee.com//Excoord_PhoneService/antSearch/indexSearch/' + loginUserId,
+                title: '搜索'
+            }
+        ;
         LP.Start(obj);
+    },
+
+    changeIsSearch() {
+        this.setState({isSearch: false});
+    },
+
+    changeIsSearchGroup() {
+        this.setState({isSearchGroup: false});
     },
 
     render() {
@@ -473,6 +541,10 @@ const MainLayout = React.createClass({
                 //消息动态
                 middleComponent = <MessageMenu onUserClick={this.turnToMessagePage}
                                                userJson={this.state.userJson}
+                                               isSearch={this.state.isSearch}
+                                               isSearchGroup={this.state.isSearchGroup}
+                                               changeIsSearch={this.changeIsSearch}
+                                               changeIsSearchGroup={this.changeIsSearchGroup}
                                                onLoad={this.turnToMessagePage}
                                                changeMesTabClick={this.changeMesTabClick}
                                                ref="messageMenu"

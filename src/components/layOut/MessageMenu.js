@@ -55,6 +55,38 @@ const MessageMenu = React.createClass({
             }
             mMenu.showMessageData();
         }
+        if (isEmpty(nextProps) == false && isEmpty(nextProps.isSearch) == false) {
+            if (nextProps.isSearch) {
+                console.log(nextProps.userJson);
+                console.log('nextProps.userJson');
+                //调用点击用户函数
+                var obj = {
+                    fromUser: nextProps.userJson.fromUser,
+                    key: nextProps.userJson.key,
+                    messageType: nextProps.userJson.messageToType
+                };
+                mMenu.turnToMessagePage(obj);
+                //把nextProps.isSearch变回去
+                mMenu.props.changeIsSearch();
+            }
+        }
+        if (isEmpty(nextProps) == false && isEmpty(nextProps.isSearchGroup) == false) {
+            if (nextProps.isSearchGroup) {
+                console.log(nextProps.userJson);
+                console.log('nextProps.userJson');
+                //调用点击用户函数
+                var obj = {
+                    fromUser: nextProps.userJson.fromUser,
+                    key: nextProps.userJson.key,
+                    messageType: nextProps.userJson.messageToType,
+                    toChatGroup: nextProps.userJson.toChatGroup
+                };
+                mMenu.turnToMessagePage(obj);
+
+                //把nextProps.isSearch变回去
+                mMenu.props.changeIsSearchGroup();
+            }
+        }
     },
 
     componentWillUnmount() {
@@ -349,6 +381,8 @@ const MessageMenu = React.createClass({
      * @param index
      */
     turnToMessagePage(record, index) {
+        console.log(record);
+        console.log('record');
         mMenu.setState({selectRowKey: record.key, badgeShow: false, tableIsClick: true});
         mMenu.props.onUserClick(record);
         //根据id找到点击的那一个的b标签,设置它的样式为隐藏

@@ -183,7 +183,7 @@
                 //data.method方式
                 //data.callbackId回调方法名
                 //data.errorbackId错误回调方法名
-                console.log(data);
+                // console.log(data);
                 if (data.method == 'selectPictures') {
 
                     //调用选择图片插件，获取图片的路径存入paths
@@ -210,15 +210,21 @@
                 } else if (data.method == 'setPanelTitle') {
                     var title = data.title;
                     var id = data.windowName + "_title";
-                    document.getElementById(id).innerText = title;
+                    if (title == 'undefined') {
+                        document.getElementById(id).innerText = '';
+                    } else {
+                        document.getElementById(id).innerText = title;
+                    }
                 } else if (data.method == 'showCloudFileShare') {
                     window.__noomShareId__(data.shareId);
                 } else if (data.method == 'selectUser') {
                     //user对象
                     //data.user
+                    window.__noomSelect__(data.user);
                 } else if (data.method == 'selectGroup') {
                     //group对象
                     //data.group
+                    window.__noomSelectGroup__(data.group);
                 }
             });
             isAddedListener = true;
