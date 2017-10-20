@@ -158,17 +158,38 @@ const MessageMenu = React.createClass({
                         </div>
                     </div>;
                 } else {
-                    //群组栏
-                    var membersImgs = toChatGroup.avatar;
-                    var memberAvatarTag = <img src={membersImgs + '?' + SMALL_IMG}/>;
-                    if (membersImgs == '') {
-                        //如果这个字段为空，头像的处理
-                        memberAvatarTag = <img src={require("../images/lALPAAAAARBOpS_NAf7NAf4_510_510.png")}/>;
+                    var arr = toChatGroup.avatar.split("#");
+                    var membersCount = arr.length;
+                    var groupMemebersPhoto = [];
+                    for (var i = 0; i < membersCount; i++) {
+                        // var member = toChatGroup.members[i];
+                        var memberAvatarTag = <img src={arr[i] + '?' + SMALL_IMG}></img>;
+                        groupMemebersPhoto.push(memberAvatarTag);
+                        if (i >= 3) {
+                            break;
+                        }
                     }
-                    var groupMemebersPhotoTag = <div className="antnest_user upexam_float">
-                        {memberAvatarTag}
-                        {/*<b className="mes_alert_show mes_opt" id={toChatGroup.chatGroupId}></b>*/}
-                    </div>;
+                    var groupMemebersPhotoTag = <div
+                        className="maaee_group_face upexam_float">{groupMemebersPhoto}</div>;
+                    switch (groupMemebersPhoto.length) {
+                        case 1:
+                            groupMemebersPhotoTag =
+                                <div className="maaee_group_face1 upexam_float">{groupMemebersPhoto}</div>;
+                            break;
+                        case 2:
+                            groupMemebersPhotoTag =
+                                <div className="maaee_group_face2 upexam_float">{groupMemebersPhoto}</div>;
+                            break;
+                        case 3:
+                            groupMemebersPhotoTag =
+                                <div className="maaee_group_face3 upexam_float">{groupMemebersPhoto}</div>;
+                            break;
+                        case 4:
+                            groupMemebersPhotoTag =
+                                <div className="maaee_group_face upexam_float">{groupMemebersPhoto}</div>;
+                            break;
+                    }
+
                     imgTag = <div>
                         {groupMemebersPhotoTag}
                         <div className="mes_u_l">
@@ -227,6 +248,8 @@ const MessageMenu = React.createClass({
      * 如：{{colUid:23836,userName:'王丹'},[{content:'123'}{content:'test'}]}
      */
     setMessageArrayForOnePerson(messageObj) {
+        console.log(messageObj);
+        console.log('messageObj');
         if (messageObj.command == "message") {
             var fromUser = messageObj.fromUser;
             var content = messageObj.content;

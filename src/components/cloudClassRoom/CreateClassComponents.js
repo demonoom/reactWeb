@@ -26,6 +26,8 @@ const CreateClassComponents = React.createClass({
 
     getInitialState() {
         var cloudClassRoomUser = JSON.parse(sessionStorage.getItem("cloudClassRoomUser"));
+        console.log(cloudClassRoomUser);
+        console.log('888888888888');
         return {
             stepNum: 0,
             isFree: 1,

@@ -192,8 +192,10 @@ const AntNestTabComponents = React.createClass({
             if (attachMentType == 1) {
                 //图片附件
                 attachMents = <span className="topics_zan">
-                    <img className="topics_zanImg" src={e.address} alt={e.address}
+                    <img className="topics_zanImg" src={e.address + '?' + MIDDLE_IMG} alt={e.address}
                          onClick={showLargeImg}/>
+                    {/*<img className="topics_zanImg" src={e.address} alt={e.address}*/}
+                         {/*onClick={showLargeImg}/>*/}
                 </span>;
 
             } else if (attachMentType == 4) {

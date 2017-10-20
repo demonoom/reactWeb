@@ -7,12 +7,11 @@
 (function ($) {
 
     var windowMargin = 8; //加多边距的宽高，使得图片看起来有边框效果
+    //看是否有alt属性
 
 //图片查看器
     $.fn.extend({
-
         photoGallery: function (options) {
-
             var isFirefox = navigator.userAgent.indexOf("Firefox") > -1;
             var MOUSEWHEEL_EVENT = isFirefox ? "DOMMouseScroll" : "mousewheel";
             var defaults = {
@@ -351,19 +350,36 @@
                 toggleImage();
 
                 $(o.imgs).each(function (i, img) {
-                    $(o.template.IMAGE)
-                        .appendTo($gallery)
-                        .attr("src", img.url)
-                        .attr("index", i)
-                        .css({
-                            width: img.imgWidth,
-                            height: img.imgHeight,
-                            left: (cW - img.imgWidth) / 2,
-                            top: (cH - img.imgHeight) / 2
-                        }).on("dblclick", function () {
-                        app.window.close();
-                    });
-                    ;
+                    console.log(img);
+                    console.log('iiiiiii');
+                    if (img.noom_img) {
+                        $(o.template.IMAGE)
+                            .appendTo($gallery)
+                            .attr("src", img.url)
+                            .attr("index", i)
+                            .css({
+                                width: img.imgWidth * 2.3,
+                                height: img.imgHeight * 2.3,
+                                left: (cW - img.imgWidth * 2.3) / 2,
+                                top: (cH - img.imgHeight * 2.3) / 2
+                            }).on("dblclick", function () {
+                            app.window.close();
+                        });
+                    } else {
+                        $(o.template.IMAGE)
+                            .appendTo($gallery)
+                            .attr("src", img.url)
+                            .attr("index", i)
+                            .css({
+                                width: img.imgWidth,
+                                height: img.imgHeight,
+                                left: (cW - img.imgWidth) / 2,
+                                top: (cH - img.imgHeight) / 2
+                            }).on("dblclick", function () {
+                            app.window.close();
+                        });
+                    }
+
                 });
                 $image = $(".image[index='" + o.activeIndex + "']", $gallery).addClass("active");
             }
@@ -564,16 +580,22 @@
         //打开图片查看器
         openPhotoGallery: function (obj, parentClass) {
 
+            var noom_img;
+
             var $img = $(obj),
+                imgUrl;
+            //处理缩略图预览问题
+            if ($img[0].alt == 'undefined' || $img[0].alt == null || $img[0].alt == '') {
                 imgUrl = $img[0].src;
-            // if ($img[0].alt == 'undefined') {
-            //     imgUrl = $img[0].src;
-            // } else {
-            //     imgUrl = $img[0].alt;
-            // }
+            } else {
+                imgUrl = $img[0].alt;
+                noom_img = true;
+            }
             if (!imgUrl) return;
 
             //HTML5提供了一个新属性naturalWidth/naturalHeight可以直接获取图片的原始宽高
+
+            //图片的原始宽高就是从这里获取的
             var img = $img[0],
                 imgHeight = img.naturalHeight,
                 imgWidth = img.naturalWidth,
@@ -617,7 +639,7 @@
                 }
             }
             $gallerys.find(".topics_zanImg").each(function (i, elem) {
-                var url = this.src,
+                var url = this.alt || this.src,
                     img = $(this)[0],
                     nH = img.naturalHeight,
                     nW = img.naturalWidth,
@@ -650,14 +672,16 @@
                 imgs.push({
                     url: url,
                     imgHeight: h,
-                    imgWidth: w
+                    imgWidth: w,
+                    noom_img: noom_img
                 });
             });
 
             imgs.push({
                 url: imgUrl,
                 imgHeight: imgHeight,
-                imgWidth: imgWidth
+                imgWidth: imgWidth,
+                noom_img: noom_img
             });
 
             localStorage["photoGalleryImgs"] = JSON.stringify(imgs); //因为此字符串可能是base64字符，appgo无法传

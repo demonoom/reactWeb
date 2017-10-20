@@ -137,6 +137,8 @@ const Login = Form.create()(React.createClass({
     },
 
     loginSystem(user){
+        console.log(user);
+        console.log('user');
         loginComponent.setState({loginFailedCount:0});
         sessionStorage.setItem("ident", user.colUid);
         var loginUserJson = JSON.stringify(user);

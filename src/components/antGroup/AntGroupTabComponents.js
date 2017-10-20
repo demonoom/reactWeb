@@ -2043,8 +2043,8 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="u-name"><span>{fromUser}</span></div>
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><span
-                                            className="borderballoon_le"
-                                            onClick={this.audioPlay.bind(this, attachment)}>这是一条语音消息，暂不支持播放 <audio
+                                            className="borderballoon_le noom_cursor noom_audio"
+                                            onClick={this.audioPlay.bind(this, attachment)}>这是一条语音消息，点击播放 <audio
                                             id={attachment}
                                         >
                                                 <source src={attachment} type="audio/mpeg"></source>
@@ -2057,8 +2057,8 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="u-name"><span>{fromUser}</span></div>
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><span
-                                            className="borderballoon_le"
-                                            onClick={this.audioPlay.bind(this, attachment)}>这是一条语音消息，暂不支持播放 <audio
+                                            className="borderballoon_le noom_cursor"
+                                            onClick={this.audioPlay.bind(this, attachment)}>这是一条语音消息，点击播放 <audio
                                             id={attachment}
                                         >
                                                 <source src={attachment} type="audio/mpeg"></source>
