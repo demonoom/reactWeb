@@ -9,6 +9,7 @@ const HeaderComponents = React.createClass({
     redirectHelpPage() {
         window.open("http://maaee.com/luble/handbook/index.html", "_blank");
     },
+    //搜索向上传值
     search() {
         this.props.search();
     },

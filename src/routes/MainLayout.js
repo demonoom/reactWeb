@@ -450,7 +450,12 @@ const MainLayout = React.createClass({
         this.setState({"cloudRoomMenuItem": menuItemKey});
     },
     search() {
-        alert('search');
+        //打开littlepanel
+        let obj = {
+            mode: 'teachingAdmin',
+            url: 'http://192.168.2.105:8080//Excoord_PhoneService/antSearch/indexSearch/23836'
+        };
+        LP.Start(obj);
     },
 
     render() {

@@ -183,7 +183,7 @@
                 //data.method方式
                 //data.callbackId回调方法名
                 //data.errorbackId错误回调方法名
-                // console.log(data);
+                console.log(data);
                 if (data.method == 'selectPictures') {
 
                     //调用选择图片插件，获取图片的路径存入paths
@@ -213,6 +213,12 @@
                     document.getElementById(id).innerText = title;
                 } else if (data.method == 'showCloudFileShare') {
                     window.__noomShareId__(data.shareId);
+                } else if (data.method == 'selectUser') {
+                    //user对象
+                    //data.user
+                } else if (data.method == 'selectGroup') {
+                    //group对象
+                    //data.group
                 }
             });
             isAddedListener = true;
@@ -1297,7 +1303,7 @@ function enterFull(el) {
     var docElm = document.documentElement;
     if (el) docElm = el;
     var iframe = $(el).find("iframe")[0];
-    if(iframe != null && typeof(iframe) != 'undefined' ){
+    if (iframe != null && typeof(iframe) != 'undefined') {
         el = iframe;
     }
 //W3C
