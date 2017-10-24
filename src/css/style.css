@@ -1881,7 +1881,7 @@ a {
 }
 
 .maaeegroup {
-    height: calc(100% - 117px);
+    height: calc(100% - 171px);
 }
 
 .maaeegroup > div:first-child {
@@ -7419,7 +7419,12 @@ select.course_n:hover {
 .search_header{
     color: #fff;
     position: absolute;
-    top: 20px;
+    top: 14px;
     right: 20px;
     cursor: pointer;
+    font-size: 18px;
+    padding: 4px;
+}
+.search_header:hover{
+    color: #b8ddff
 }
