@@ -343,7 +343,8 @@ const MainLayout = React.createClass({
     },
 
     systemSettingTab(activeMenu, beActive, selectedKeys) {
-        // 2
+        //activeMenu就是区别用的那个字符串
+        //beActive为true，ghost就会拉进去，否则不会进去
         this.changeSystemGhostMenuVisible({visible: false, beActive: beActive});
         this.setState({activeSystemSettingMiddleMenu: activeMenu});
         this.setState({selectedKeys: selectedKeys});

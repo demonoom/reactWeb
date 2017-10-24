@@ -1,13 +1,17 @@
-import React from  'react';
+import React from 'react';
 import {Row, Col, Tabs} from 'antd';
 import moment from 'moment';
+
 const TabPane = Tabs.TabPane;
 import SchoolGroupMenu from '../../components/schoolGroupSetting/SchoolGroupMenu';
 import SchoolGroupSettingComponents from '../../components/schoolGroupSetting/SchoolGroupSettingComponents';
 import FlowSettingComponent from '../../components/flowSetting/FlowSettingComponent';
 import {isEmpty} from '../../utils/utils';
+import AttendanceSettingComponents from '../../components/Attendance/AttendanceSettingComponents';
+import Attendance from '../../components/Attendance/Attendance';
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
+
 moment.locale('zh-cn');
 import {createStore} from 'redux';
 
@@ -37,6 +41,7 @@ class SystemSettingComponent extends React.Component {
         this.changeSchoolGroupSettingCom = this.changeSchoolGroupSettingCom.bind(this);
         this.sendDefaultId = this.sendDefaultId.bind(this);
         this.addSubGroupComplete = this.addSubGroupComplete.bind(this);
+        this.attendanceSettingClick = this.attendanceSettingClick.bind(this);
     }
 
 
@@ -52,23 +57,24 @@ class SystemSettingComponent extends React.Component {
      * @param structureId
      * @param structure
      */
-    getSubGroup(structureId,structure){
-        this.setState({structureId,rootStructure:structure});
+    getSubGroup(structureId, structure) {
+        this.setState({structureId, rootStructure: structure});
     }
 
-    sendFirstId(firstId,firstName){
+    sendFirstId(firstId, firstName) {
         console.log(firstId);
-        this.setState({firstId:firstId});
-        this.setState({firstName:firstName});
+        this.setState({firstId: firstId});
+        this.setState({firstName: firstName});
     }
-    changeGroupTab(activeMenu, beActive, selectedKeys, papaKey){
+
+    changeGroupTab(activeMenu, beActive, selectedKeys, papaKey) {
         this.props.changeTab(activeMenu, beActive, selectedKeys);
-        if(activeMenu=="role"){
+        if (activeMenu == "role") {
             this.setState({selectedId: selectedKeys});
-        }else{
+        } else {
             this.setState({selectedStructureId: selectedKeys});
         }
-        this.setState({papaKey: papaKey,activeMenu});
+        this.setState({papaKey: papaKey, activeMenu});
     }
 
     /**
@@ -76,8 +82,8 @@ class SystemSettingComponent extends React.Component {
      * @param roleId
      * @param roleName
      */
-    editRoleComplete(roleId,roleName,refresh){
-        var selectedId = roleId+","+roleName;
+    editRoleComplete(roleId, roleName, refresh) {
+        var selectedId = roleId + "," + roleName;
         this.setState({selectedId});
         this.refs.schoolGroupMenu.initMenuInfo(refresh);
     }
@@ -85,22 +91,28 @@ class SystemSettingComponent extends React.Component {
     /**
      * 组织架构添加子部门的回调
      */
-    addSubGroupComplete(){
+    addSubGroupComplete() {
         this.refs.schoolGroupMenu.initMenuInfo();
     }
 
-    changeSchoolGroupSettingCom(currentItem,selectedRoleMenuId,selectedRoleKeyPath){
+    changeSchoolGroupSettingCom(currentItem, selectedRoleMenuId, selectedRoleKeyPath) {
         // this.setState({"selectedId":selectedKey});
-        if(isEmpty(this.refs.schoolGroupSettingComponents)==false){
-            if(currentItem=="role"){
-                this.refs.schoolGroupSettingComponents.changeRightComponent(selectedRoleMenuId,selectedRoleKeyPath,currentItem);
-            }else{
+        if (isEmpty(this.refs.schoolGroupSettingComponents) == false) {
+            if (currentItem == "role") {
+                this.refs.schoolGroupSettingComponents.changeRightComponent(selectedRoleMenuId, selectedRoleKeyPath, currentItem);
+            } else {
                 // this.setState({structureId:selectedRoleMenuId,rootStructure:selectedRoleKeyPath});
-                this.refs.schoolGroupSettingComponents.changeRightComponent(selectedRoleMenuId,selectedRoleKeyPath,currentItem);
+                this.refs.schoolGroupSettingComponents.changeRightComponent(selectedRoleMenuId, selectedRoleKeyPath, currentItem);
             }
         }
     }
-    sendDefaultId (defaultId) {
+
+    attendanceSettingClick(key) {
+        //根据key值去区分考勤右侧显示什么内容
+        this.setState({attendanceKey: key})
+    }
+
+    sendDefaultId(defaultId) {
         this.setState({defaultId});
     }
 
@@ -114,15 +126,15 @@ class SystemSettingComponent extends React.Component {
                 this.middleComponent = <SchoolGroupMenu ref="schoolGroupMenu" callbackParent={this.getSubGroup}
                                                         rootStructure={this.state.rootStructure}
                                                         changeTab={this.changeGroupTab}
-                                                        currentItem = {this.props.currentItem}
+                                                        currentItem={this.props.currentItem}
                                                         sendFirstId={this.sendFirstId}
                                                         onGhostMenuClick={this.changeSchoolGroupSettingCom}
-                                                        sendDefaultId = {this.sendDefaultId}
+                                                        sendDefaultId={this.sendDefaultId}
                 />;
                 this.tabComponent = <SchoolGroupSettingComponents structureId={this.state.structureId}
                                                                   selectedId={this.state.selectedId}
                                                                   rootStructure={this.state.rootStructure}
-                                                                  currentItem = {this.props.currentItem}
+                                                                  currentItem={this.props.currentItem}
                                                                   onEditComplete={this.editRoleComplete}
                                                                   papaKey={this.state.papaKey}
                                                                   firstId={this.state.firstId}
@@ -135,7 +147,14 @@ class SystemSettingComponent extends React.Component {
                 // 审批流程
                 this.tabComponent = <FlowSettingComponent></FlowSettingComponent>;
                 break;
-
+            case 'noomkaoqing':
+                //考勤打卡
+                this.middleComponent = <AttendanceSettingComponents
+                    attendanceSettingClick={this.attendanceSettingClick}
+                />;
+                this.tabComponent = <Attendance
+                    attendanceChoose={this.state.attendanceKey}
+                />;
         }
 
 

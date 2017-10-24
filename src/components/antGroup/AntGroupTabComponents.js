@@ -863,8 +863,10 @@ const AntGroupTabComponents = React.createClass({
                             _this.props.showAlert(true);
                         } else if (data.message.command == "message") {
                             if (data.message.fromUser.colUid !== _this.state.loginUser.colUid) {
-                                _this.props.showMesAlert(true);
-                                _this.props.refresh();
+                                if (isEmpty(data.message.toChatGroup) == false || isEmpty(data.message.toUser) == false) {
+                                    _this.props.showMesAlert(true);
+                                    _this.props.refresh();
+                                }
                             } else {
                                 //普通消息是我发出的
                                 if (isEmpty(data.message.cloudFile) == false) {
