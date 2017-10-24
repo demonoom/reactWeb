@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Card, Button, message, Breadcrumb, Icon,Pagination} from 'antd';
+import {Card, Button, message, Breadcrumb, Icon, Pagination} from 'antd';
 import {getLocalTime} from '../utils/utils';
-import {getPageSize} from '../utils/Const';
+import {getPageSize, isEmpty} from '../utils/Const';
 import {doWebService} from '../WebServiceHelper';
 
 let coursePanelChildren;
@@ -15,7 +15,7 @@ class MyMTV extends React.Component {
             ident: this.props.userid || sessionStorage.getItem("ident"),
             data: [],
             pageNo: 1,
-            pager:{pageNo:1,rsCount:30},
+            pager: {pageNo: 1, rsCount: 30},
             method: 'getLiveInfoByUid'
         };
         this.changeState = this.changeState.bind(this);
@@ -28,10 +28,10 @@ class MyMTV extends React.Component {
 
     getLiveInfoByUid(fn, param) {
         param = param || {
-                method: this.state.method,
-                ident: this.state.ident,
-                pageNo: this.state.pageNo
-            };
+            method: this.state.method,
+            ident: this.state.ident,
+            pageNo: this.state.pageNo
+        };
 
         var args = {
             "method": param.method,
@@ -107,21 +107,24 @@ class MyMTV extends React.Component {
 
 
     downloadLiveVideos(arr) {
-
         if (!arr.liveVideos.length) {
             message.info('无效的视频地址！');
             return;
         }
-        let ifrArr = [];
-        for (let i = 0; i < arr.liveVideos.length; i++) {
-            let obj = arr.liveVideos[i];
-
-            ifrArr.push(<iframe src={obj.path} key={'download_' + i}/> );
+        var downloadArr = arr.liveVideos;
+        for (var i = 0; i < downloadArr.length; i++) {
+            // console.log(document.getElementById(downloadArr[i].id + '_download'));
+            document.getElementById(downloadArr[i].id + '_download').click();
         }
-        ReactDOM.render(<div>{ifrArr}</div>, document.querySelector('.downloadArea'));
+        // let ifrArr = [];
+        // for (let i = 0; i < arr.liveVideos.length; i++) {
+        //     let obj = arr.liveVideos[i];
+        //
+        //     // ifrArr.push(<iframe src={obj.path} key={'download_' + i}/>);
+        //     ifrArr.push(<a href={obj.path} key={'download_' + i} className="noom_downLoad" download="help"></a>);
+        // }
+        // ReactDOM.render(<div>{ifrArr}</div>, document.querySelector('.downloadArea'));
     }
-
-
 
     view(objref) {
 
@@ -167,23 +170,31 @@ class MyMTV extends React.Component {
             let keyIcon;
             let delButton;
             let downloadBtn;
+            let downloadnoom = [];
             if (e.password) {
                 keyIcon = <span className="key_span"><i className="iconfont key">&#xe621;</i></span>;
             }
             if (user.colUid == sessionStorage.getItem("ident")) {
                 //如果是当前用户，可以删除自己的直播课
-                delButton = <Button icon="delete" className="star_del" onClick={ () => {
+                delButton = <Button icon="delete" className="star_del" onClick={() => {
                     this.deleteLiveVideos(id)
-                } }/>
-                downloadBtn = <Button icon="download" className="star_del" onClick={ () => {
+                }}/>
+                downloadBtn = <Button icon="download" className="star_del" onClick={() => {
                     this.downloadLiveVideos(e)
-                } }/>
+                }}/>
+                if (isEmpty(e.liveVideos) == false) {
+                    for (var i = 0; i < liveVideos.length; i++) {
+                        let obj = liveVideos[i];
+                        downloadnoom.push(<a href={obj.path} key={'download_' + i} id={obj.id + '_download'}
+                                             download="help"></a>);
+                    }
+                }
             }
             let liveCard = <Card className="live">
                 <p className="h3">{title}</p>
-                <div className="live_img" id={id} onClick={ () => {
+                <div className="live_img" id={id} onClick={() => {
                     this.view(e)
-                } }>
+                }}>
                     <img className="attention_img" width="100%" src={cover}/>
                     <div className="live_green"><span>{schoolName}</span></div>
                 </div>
@@ -192,13 +203,14 @@ class MyMTV extends React.Component {
                         <li className="li_live_span_3">
                             <span className="attention_img2"><img src={user.avatar}></img></span>
                             <span className="live_span_1 live_span_3">{userName}</span>
-							<span className="live_color live_orange right_ri live_span_2">{courseName}</span>    
+                            <span className="live_color live_orange right_ri live_span_2">{courseName}</span>
                         </li>
-                        <li> 
+                        <li>
                             {delButton}
                             {downloadBtn}
-							{keyIcon}
-							<span className="time right_ri">{startTime}</span>
+                            {keyIcon}
+                            {downloadnoom}
+                            <span className="time right_ri">{startTime}</span>
                         </li>
                     </ul>
                 </div>

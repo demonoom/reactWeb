@@ -45,7 +45,7 @@ const AntNestTabComponents = React.createClass({
     componentDidMount() {
         var initPageNo = 1;
         var initType = 0;
-        antNest.getTopics(initPageNo, initType);
+        antNest.getTopics(initPageNo, initType, true);
     },
 
     /**
@@ -53,7 +53,7 @@ const AntNestTabComponents = React.createClass({
      * @param type 0:全部  1：只看老师
      * @param pageNo
      */
-    getTopics(pageNo, type, flag) {
+    getTopics(pageNo, type, flag, fromTap) {
         if (isEmpty(pageNo)) {
             if (type == 0) {
                 pageNo = antNest.state.currentPage;
@@ -73,13 +73,19 @@ const AntNestTabComponents = React.createClass({
                 pageNo = 1;
             }
         }
+        ;
+        if (fromTap) {
+            antNest.setState({currentPage: 1, currentTeacherPage: 1})
+            // antNest.state.currentPage = 1;
+            // antNest.state.currentTeacherPage = 1;
+        }
+        ;
         var param = {
             "method": 'getTopicsByType',
             "ident": sessionStorage.getItem("ident"),
             "type": type,
             "pageNo": pageNo
         };
-        //asdfghjhrewsdfg
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
@@ -470,8 +476,11 @@ const AntNestTabComponents = React.createClass({
      * 话题列表加载更多的回调
      */
     pageAdd() {
-        var page = this.state.page;
+        var page = this.state.currentPage;
+        var pageOnlyTeacher = this.state.currentTeacherPage;
+        // alert(page);
         page++;
+        pageOnlyTeacher++;
         //调用获取话题的函数，把信息push到topicCardList中
         //如果page超过最大值点击提示
         this.setState({page});
@@ -482,9 +491,9 @@ const AntNestTabComponents = React.createClass({
             antNest.getTopics(page, getAllTopic());
         } else {
             antNest.setState({
-                currentTeacherPage: page,
+                currentTeacherPage: pageOnlyTeacher,
             });
-            antNest.getTopics(page, getOnlyTeacherTopic());
+            antNest.getTopics(pageOnlyTeacher, getOnlyTeacherTopic());
         }
     },
     /**

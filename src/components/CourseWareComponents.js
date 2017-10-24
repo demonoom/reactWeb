@@ -5,6 +5,7 @@ import {doWebService} from '../WebServiceHelper';
 import {getPageSize} from '../utils/Const';
 import {isEmpty} from '../utils/Const';
 import ConfirmModal from './ConfirmModal';
+
 const Panel = Collapse.Panel;
 
 
@@ -55,10 +56,9 @@ class CourseWare extends React.Component {
     componentWillReceiveProps(nextProps) {
         // 4
         let obj = nextProps.params ? nextProps.params : this.props.params;
-        if (!obj)   return;
+        if (!obj) return;
         this.getTeachPlans(obj.ident, obj.teachScheduleId, obj.optType, obj.pageNo, obj.knowledgeName, obj.dataFilter, obj.comeFrom);
     }
-
 
     getTeachPlans(ident, teachScheduleId, optType, pageNo, knowledgeName, dataFilter, comeFrom) {
         this.setState({
@@ -85,10 +85,22 @@ class CourseWare extends React.Component {
                     courseWareList.splice(0);
                     var response = ret.response;
                     response.forEach(function (e) {
+                        //区别是录得微课还是正常上传的文件
+                        if (isEmpty(e.attachements) == false) {
+                            if (e.attachements.length == 1) {
+                                var path = e.attachements[0].path;
+                            } else {
+                                //如果视频断了重连，attachements里就会有好多对象
+                                // alert('视频断了');
+                                var path = e.attachements[0].path;
+                            }
+                        } else {
+                            var path = e.path;
+                        }
                         var id = e.id;
                         var fileName = e.name;
                         var userName = e.user.userName;
-                        var path = e.path;
+                        // var path = e.path;
                         var pdfPath = e.pdfPath;
                         var fileType = fileName.substring(fileName.lastIndexOf(".") + 1);
                         var pointId = e.point.content;
@@ -109,6 +121,9 @@ class CourseWare extends React.Component {
                             htmlPath = e.htmlPath;
                         } else if (fileType == "mp3") {
                             fileTypeLogo = "icon_geshi icon_mp3";
+                        } else {
+                            //备课计划里录制的微课，没有后缀名，但一般都是flv格式的，先这样处理
+                            fileTypeLogo = "icon_geshi icon_flv";
                         }
                         var createTime = _this.getLocalTime(e.createTime);
                         _this.activeKey.push(fileName + "#" + createTime + "#" + id);
@@ -153,12 +168,25 @@ class CourseWare extends React.Component {
                     courseWareList.splice(0);
                     var response = ret.response;
                     response.forEach(function (e) {
+                        //区别是录得微课还是正常上传的文件
+                        if (isEmpty(e.attachements) == false) {
+                            var isFlv = true;
+                            if (e.attachements.length == 1) {
+                                var path = e.attachements[0].path;
+                            } else {
+                                //如果视频断了重连，attachements里就会有好多对象
+                                // alert('视频断了');
+                                var path = e.attachements[0].path;
+                            }
+                        } else {
+                            var isFlv = false;
+                            var path = e.path;
+                        }
                         var id = e.id;
                         var fileName = e.name;
                         //用户编号，用来判断当前的课件是否是自己上传的，如果是，则支持删除功能
                         var userId = e.userId;
                         var userName = e.user.userName;
-                        var path = e.path;
                         var pdfPath = e.pdfPath;
                         var fileType = fileName.substring(fileName.lastIndexOf(".") + 1);
                         var pointId = e.point.content;
@@ -181,9 +209,12 @@ class CourseWare extends React.Component {
                             htmlPath = e.htmlPath;
                         } else if (fileType == "mp3") {
                             fileTypeLogo = "icon_geshi icon_mp3";
+                        } else {
+                            //资源库里录制的微课，没有后缀名，但一般都是flv格式的，先这样处理
+                            fileTypeLogo = "icon_geshi icon_flv";
                         }
                         _this.activeKey.push(fileName + "#" + createTime + "#" + id);
-                        courseWareList.push([id, fileName, userName, path, pdfPath, fileType, pointId, createTime, fileTypeLogo, htmlPath, type, collectCount, userId]);
+                        courseWareList.push([id, fileName, userName, path, pdfPath, fileType, pointId, createTime, fileTypeLogo, htmlPath, type, collectCount, userId, isFlv]);
                     });
                     _this.buildKonwledgePanels(courseWareList);
                     _this.setState({courseListState: courseWareList});
@@ -347,13 +378,13 @@ class CourseWare extends React.Component {
         e.preventDefault();
         e.cancelBubble = true;
 
-        let mode = (tit) =>{
-            let refArr =  tit.split('.');
-            let type = refArr[ refArr.length-1];
+        let mode = (tit) => {
+            let refArr = tit.split('.');
+            let type = refArr[refArr.length - 1];
             return type;
         }
 
-        let obj = {mode:mode(tit),title: tit, url: url, width: '380px'};
+        let obj = {mode: mode(tit), title: tit, url: url, width: '380px'};
 
 
         LP.Start(obj);
@@ -374,7 +405,7 @@ class CourseWare extends React.Component {
                             eysOnButton =
                                 <Button icon="eye-o" style={{float: 'right'}} onClick={event => {
                                     this.view(event, e[9], e[1])
-                                } }/>
+                                }}/>
                         }
                         break;
 
@@ -383,7 +414,7 @@ class CourseWare extends React.Component {
                             eysOnButton =
                                 <Button icon="eye-o" style={{float: 'right'}} onClick={event => {
                                     this.view(event, e[9], e[1])
-                                } }/>
+                                }}/>
                         }
                         break;
 
@@ -392,7 +423,7 @@ class CourseWare extends React.Component {
                             eysOnButton =
                                 <Button icon="eye-o" style={{float: 'right'}} onClick={event => {
                                     this.view(event, e[9], e[1])
-                                } }/>
+                                }}/>
                         }
                         break;
                     case 'mp4':
@@ -400,7 +431,7 @@ class CourseWare extends React.Component {
                             eysOnButton =
                                 <Button icon="eye-o" style={{float: 'right'}} onClick={event => {
                                     this.view(event, e[9], e[1])
-                                } }/>
+                                }}/>
                         }
                         break;
                     default:
@@ -408,7 +439,7 @@ class CourseWare extends React.Component {
                             eysOnButton =
                                 <Button icon="eye-o" style={{float: 'right'}} onClick={event => {
                                     this.view(event, e[9], e[1])
-                                } }/>
+                                }}/>
                         }
                         break;
 
@@ -429,6 +460,8 @@ class CourseWare extends React.Component {
                                  onClick={this.showDelScheduleMateriaConfirmModal}></Button>
                         <a href={e[3]} target="_blank" title="下载" download={e[3]} className="te_download_a"><Button
                             icon="download"/></a>
+                        {/*<Button style={{float: 'right'}} icon="download" title="下载" value={e[0]}*/}
+                        {/*onClick={this.showDelScheduleMateriaConfirmModal}></Button>*/}
                         {eysOnButton}
 					</div>
                     </pre>
@@ -450,15 +483,15 @@ class CourseWare extends React.Component {
                         eysOnButton =
                             <Button icon="eye-o" style={{float: 'right'}} onClick={event => {
                                 this.view(event, e[9], e[1])
-                            } }/>
+                            }}/>
                     }
                 }
                 else {
-                    if (isEmpty(e[3]) == false) {
+                    if (isEmpty(e[3]) == false && e[13] == false) {
                         eysOnButton =
                             <Button icon="eye-o" style={{float: 'right'}} onClick={event => {
                                 this.view(event, e[3], e[1])
-                            } }/>
+                            }}/>
                     }
                 }
                 if (e[12] != null && e[12] == sessionStorage.getItem("ident")) {

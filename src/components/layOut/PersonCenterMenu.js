@@ -28,7 +28,6 @@ class PersonCenterMenu extends React.Component {
 
 
     handleClick = (e) => {
-
         this.props.callbackParent(e.key);
     }
 

@@ -1480,9 +1480,17 @@ const AntGroupTabComponents = React.createClass({
     /**
      * 聊天语音播放的回调
      */
-    audioPlay(id) {
+    audioPlay(id, direction) {
         document.getElementById(id).play();
-        console.log(document.getElementById(id));
+        var timer = setInterval(function () {
+            //播放开始，替换类名
+            document.getElementById(id + '_audio').className = 'audio' + direction + '_run';
+            if (document.getElementById(id).ended) {
+                //播放结束，替换类名
+                document.getElementById(id + '_audio').className = 'audio' + direction;
+                window.clearInterval(timer);
+            }
+        }, 10)
     },
 
     /**
@@ -1506,7 +1514,7 @@ const AntGroupTabComponents = React.createClass({
         var url = "http://www.maaee.com/Excoord_PhoneService/cloudFile/cloudFileShow/" + fileUid + "/" + fileCreateUid;
         var suffix = fileName.substr(fileName.length - 3);
         //如果是图片直接用插件展示，否则交给iframe展示
-        if (suffix == ('jpg' || 'JPG' || 'png' || 'PNG' || 'bmp' || 'BMP')) {
+        if (suffix == 'jpg' || suffix == 'JPG' || suffix == 'png' || suffix == 'PNG' || suffix == 'bmp' || suffix == 'BMP') {
             document.getElementById(fileUid).click();
         } else {
             this.view(event, url, name);
@@ -1767,7 +1775,7 @@ const AntGroupTabComponents = React.createClass({
                                         messageTag = <li className="right" style={{'textAlign': 'right'}}>
                                             <div className="u-name"><span>{fromUser}</span></div>
                                             <div className="talk-cont"><span className="name">{userPhoneIcon}</span>
-                                                <img src={expressionItem} style={{width: '150px', height: '110px'}}/>
+                                                <img src={expressionItem} style={{width: '100px', height: '100px'}}/>
                                                 <span><i className="borderballoon_dingcorner_le_no"></i></span>
                                             </div>
                                         </li>;
@@ -1896,7 +1904,7 @@ const AntGroupTabComponents = React.createClass({
                                             <div className="u-name"><span>{fromUser}</span></div>
                                             <div className="talk-cont"><span
                                                 className="name">{userPhoneIcon}</span><img
-                                                style={{width: '150px', height: '110px'}} src={expressionItem}/><span><i
+                                                style={{width: '100px', height: '100px'}} src={expressionItem}/><span><i
                                                 className="borderballoon_dingcorner_ri_no"></i></span></div>
                                         </li>;
                                     } else {
@@ -1954,7 +1962,7 @@ const AntGroupTabComponents = React.createClass({
                                     messageTag = <li className="right" style={{'textAlign': 'right'}}>
                                         <div className="u-name"><span>{fromUser}</span></div>
                                         <div className="talk-cont"><span className="name">{userPhoneIcon}</span><img
-                                            src={expressionItem} style={{width: '150px', height: '110px'}}/><span><i
+                                            src={expressionItem} style={{width: '100px', height: '100px'}}/><span><i
                                             className="borderballoon_dingcorner_le_no"></i></span></div>
                                     </li>;
                                 } else {
@@ -1963,7 +1971,7 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="u-name"><span>{fromUser}</span></div>
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><img
-                                            style={{width: '150px', height: '110px'}} src={expressionItem}/><span><i
+                                            style={{width: '100px', height: '100px'}} src={expressionItem}/><span><i
                                             className="borderballoon_dingcorner_ri_no"></i></span></div>
                                     </li>;
                                 }
@@ -2046,11 +2054,11 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="talk-cont">
                                             <span className="name">{userPhoneIcon}</span>
                                             <span className="borderballoon noom_cursor noom_audio"
-                                                  onClick={this.audioPlay.bind(this, attachment)}>
+                                                  onClick={this.audioPlay.bind(this, attachment, '_right')}>
                                             <audio id={attachment}>
                                                 <source src={attachment} type="audio/mpeg"></source>
                                             </audio>
-                                                <span className="audio_right"></span>
+                                                <span className="audio_right" id={attachment + '_audio'}></span>
                                             <i className="borderballoon_dingcorner_ri_no"></i>
                                         </span>
                                         </div>
@@ -2062,13 +2070,13 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="talk-cont">
                                             <span className="name">{userPhoneIcon}</span>
                                             <span className="borderballoon_le noom_cursor"
-                                                  onClick={this.audioPlay.bind(this, attachment)}>
+                                                  onClick={this.audioPlay.bind(this, attachment, '_left')}>
                                                 <span className="bot"></span>
                                                 <span className="top"></span>
                                                 <audio id={attachment}>
                                                     <source src={attachment} type="audio/mpeg"></source>
                                                 </audio>
-                                                <span className="audio_left"></span>
+                                                <span className="audio_left" id={attachment + '_audio'}></span>
                                                 <i className="borderballoon_dingcorner_ri_no"></i>
                                             </span>
                                         </div>

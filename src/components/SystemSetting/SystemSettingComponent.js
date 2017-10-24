@@ -105,7 +105,6 @@ class SystemSettingComponent extends React.Component {
     }
 
     render() {
-        // console.log("1111");
         //系统设置页面渲染 根据如下判断结果，完成对页面中部位置的渲染，不同情况，渲染不同组件
         switch (this.props.currentItem) {
 

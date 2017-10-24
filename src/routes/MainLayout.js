@@ -273,13 +273,16 @@ const MainLayout = React.createClass({
 
 
     getAntNest(optType) {
+        //onlyTeacherTopic或者getAllTopic
         var pageNo;
+        var fromTap = true;
         if ("getAllTopic" == optType) {
-            this.refs.antNestTabComponents.getTopics(pageNo, 0, true);
+            this.refs.antNestTabComponents.getTopics(pageNo, 0, true, fromTap);
         } else {
-            this.refs.antNestTabComponents.getTopics(pageNo, 1, true);
+            this.refs.antNestTabComponents.getTopics(pageNo, 1, true, fromTap);
         }
     },
+
     getDingMessage(optType) {
         var pageNo = 1;
         if ("myReceive" == optType) {
