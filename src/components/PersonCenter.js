@@ -2,12 +2,12 @@
  * Created by madapeng on 17-5-11.
  */
 
-import React  from 'react';
-import MyMTV  from './MyMTV';
-import UserInfo  from './UserInfo';
-import MyFollows  from './MyFollows';
-import MyFavorites  from './Favorites';
-import ResetStudentAccountKey  from './ResetStudentAccountKey';
+import React from 'react';
+import MyMTV from './MyMTV';
+import UserInfo from './UserInfo';
+import MyFollows from './MyFollows';
+import MyFavorites from './Favorites';
+import ResetStudentAccountKey from './ResetStudentAccountKey';
 import TeacherAllSubjects from '../components/TeacherInfos/TeacherAllSubjects';
 import TeacherAllCourseWare from '../components/TeacherInfos/TeacherAllCourseWare';
 
@@ -21,33 +21,32 @@ class PersonCenter extends React.Component {
     render() {
 
         let face = '';
-
         switch (this.props.params) {
             default :
-                face = <UserInfo />;
+                face = <UserInfo/>;
                 break;
 
             case 'myResource':
-                face = <TeacherAllCourseWare />;
+                face = <TeacherAllCourseWare/>;
                 break;
             case 'mySubject':
-                face = <TeacherAllSubjects />;
+                face = <TeacherAllSubjects/>;
                 break;
 
             case 'myFavorites':
-                face = <MyFavorites />;
+                face = <MyFavorites/>;
                 break;
 
             case 'myMTV':
-                face = <MyMTV  />;
+                face = <MyMTV/>;
                 break;
 
             case 'myFollows':
-                face = <MyFollows />;
+                face = <MyFollows/>;
                 break;
 
             case 'findStudentPwd':
-                face = <ResetStudentAccountKey />;
+                face = <ResetStudentAccountKey/>;
                 break;
         }
 

@@ -30,18 +30,18 @@ const TeacherAllCourseWare = React.createClass({
         };
     },
 
-    initCourseWareList(){
+    initCourseWareList() {
         this.setState({courseListState: []});
         this.setState({totalCount: 0});
     },
 
-    componentDidMount(){
+    componentDidMount() {
         var initPageNo = 1;
         this.getTeachPlans(sessionStorage.getItem("ident"), initPageNo);
     },
 
 
-    getTeachPlans(ident, pageNo){
+    getTeachPlans(ident, pageNo) {
         let _this = this;
         this.setState({
             ident: ident,
@@ -58,12 +58,26 @@ const TeacherAllCourseWare = React.createClass({
                 courseWareList.splice(0);
                 var response = ret.response;
                 response.forEach(function (e) {
+                    //区别是录得微课还是正常上传的文件
+                    if (isEmpty(e.attachements) == false) {
+                        var isFlv = true;
+                        if (e.attachements.length == 1) {
+                            var path = e.attachements[0].path;
+                        } else {
+                            //如果视频断了重连，attachements里就会有好多对象
+                            // alert('视频断了');
+                            var path = e.attachements[0].path;
+                        }
+                    } else {
+                        var isFlv = false;
+                        var path = e.path;
+                    }
                     var id = e.id;
                     var fileName = e.name;
                     //用户编号，用来判断当前的课件是否是自己上传的，如果是，则支持删除功能
                     var userId = e.userId;
                     var userName = e.user.userName;
-                    var path = e.path;
+                    // var path = e.path;
                     var pdfPath = e.pdfPath;
                     var fileType = fileName.substring(fileName.lastIndexOf(".") + 1);
                     var pointId = e.pointId;
@@ -95,9 +109,11 @@ const TeacherAllCourseWare = React.createClass({
                         htmlPath = e.htmlPath;
                     } else if (fileType == "mp3") {
                         fileTypeLogo = "icon_geshi icon_mp3";
+                    } else {
+                        fileTypeLogo = "icon_geshi icon_flv";
                     }
                     activeKey.push(fileName + "#" + createTime + "#" + id);
-                    courseWareList.push([id, fileName, userName, path, pdfPath, fileType, pointContent, createTime, fileTypeLogo, htmlPath, type, collectCount, userId]);
+                    courseWareList.push([id, fileName, userName, path, pdfPath, fileType, pointContent, createTime, fileTypeLogo, htmlPath, type, collectCount, userId, isFlv]);
                 });
                 _this.buildKonwledgePanels(courseWareList);
                 _this.setState({courseListState: courseWareList});
@@ -124,7 +140,7 @@ const TeacherAllCourseWare = React.createClass({
     },
 
     //删除资源库下的材料（课件）
-    batchDeleteMaterial(){
+    batchDeleteMaterial() {
         let _this = this;
         var materialIds = this.state.delMaterialIds;
         var param = {
@@ -173,7 +189,7 @@ const TeacherAllCourseWare = React.createClass({
     },
 
 
-    showpanle(obj){
+    showpanle(obj) {
         LP.Start(obj);
     },
 
@@ -188,12 +204,12 @@ const TeacherAllCourseWare = React.createClass({
                     eysOnButton =
                         <Button icon="eye-o" style={{float: 'right'}} onClick={event => {
                             this.view(event, e[9], e[1])
-                        } }/>
-                } else if (isEmpty(e[3]) == false) {
+                        }}/>
+                } else if (isEmpty(e[3]) == false && e[13] == false) {
                     eysOnButton =
                         <Button icon="eye-o" style={{float: 'right'}} onClick={event => {
                             this.view(event, e[3], e[1])
-                        } }/>
+                        }}/>
                 }
                 if (e[12] != null && e[12] == sessionStorage.getItem("ident")) {
                     delButton = <Button style={{float: 'right'}} icon="delete" title="删除" value={e[0]}
@@ -225,7 +241,7 @@ const TeacherAllCourseWare = React.createClass({
         }
     },
 
-    showConfirmModal(e){
+    showConfirmModal(e) {
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             target = e.currentTarget;
@@ -237,7 +253,7 @@ const TeacherAllCourseWare = React.createClass({
         this.refs.confirmModal.changeConfirmModalVisible(true);
     },
 
-    closeConfirmModal(){
+    closeConfirmModal() {
         this.refs.confirmModal.changeConfirmModalVisible(false);
     },
 
@@ -251,20 +267,20 @@ const TeacherAllCourseWare = React.createClass({
         });
         return (<div>
                 <div className="public—til—blue">我的资源</div>
-				<div className="favorite_scroll">
-					<div className='ant-tabs ant-tabs-top ant-tabs-line'>
-						<ConfirmModal ref="confirmModal"
-									  title="确定要删除该课件?"
-									  onConfirmModalCancel={this.closeConfirmModal}
-									  onConfirmModalOK={this.batchDeleteMaterial}
-						/>
-						<UseKnowledgeComponents ref="useKnowledgeComponents" />
-						<div className='ant-tabs-tabpane ant-tabs-tabpane-active'>
-							<Collapse defaultActiveKey={activeKey} activeKey={activeKey} ref="collapse">
-								{coursePanelChildren}
-							</Collapse>
-						</div>
-					</div>
+                <div className="favorite_scroll">
+                    <div className='ant-tabs ant-tabs-top ant-tabs-line'>
+                        <ConfirmModal ref="confirmModal"
+                                      title="确定要删除该课件?"
+                                      onConfirmModalCancel={this.closeConfirmModal}
+                                      onConfirmModalOK={this.batchDeleteMaterial}
+                        />
+                        <UseKnowledgeComponents ref="useKnowledgeComponents"/>
+                        <div className='ant-tabs-tabpane ant-tabs-tabpane-active'>
+                            <Collapse defaultActiveKey={activeKey} activeKey={activeKey} ref="collapse">
+                                {coursePanelChildren}
+                            </Collapse>
+                        </div>
+                    </div>
                     <Pagination total={this.state.totalCount} pageSize={getPageSize()} current={this.state.currentPage}
                                 onChange={this.onChange}/>
                 </div>

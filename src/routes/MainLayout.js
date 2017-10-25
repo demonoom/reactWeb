@@ -273,13 +273,16 @@ const MainLayout = React.createClass({
 
 
     getAntNest(optType) {
+        //onlyTeacherTopic或者getAllTopic
         var pageNo;
+        var fromTap = true;
         if ("getAllTopic" == optType) {
-            this.refs.antNestTabComponents.getTopics(pageNo, 0, true);
+            this.refs.antNestTabComponents.getTopics(pageNo, 0, true, fromTap);
         } else {
-            this.refs.antNestTabComponents.getTopics(pageNo, 1, true);
+            this.refs.antNestTabComponents.getTopics(pageNo, 1, true, fromTap);
         }
     },
+
     getDingMessage(optType) {
         var pageNo = 1;
         if ("myReceive" == optType) {
@@ -340,7 +343,8 @@ const MainLayout = React.createClass({
     },
 
     systemSettingTab(activeMenu, beActive, selectedKeys) {
-        // 2
+        //activeMenu就是区别用的那个字符串
+        //beActive为true，ghost就会拉进去，否则不会进去
         this.changeSystemGhostMenuVisible({visible: false, beActive: beActive});
         this.setState({activeSystemSettingMiddleMenu: activeMenu});
         this.setState({selectedKeys: selectedKeys});
