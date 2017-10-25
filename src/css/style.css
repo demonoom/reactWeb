@@ -3295,7 +3295,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     user-modify: read-write-plaintext-only;
 }
 
-.group_send_shuoshuo .emoji-wysiwyg-editor {
+.group_send_shuoshuo .emoji-wysiwyg-editor , .group_send_pinglun .emoji-wysiwyg-editor{
     border-radius: 4px;
     margin-left: 0;
     overflow: auto;
@@ -3322,14 +3322,17 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     position: relative;
 }
 
-.group_send_shuoshuo .group_send_talk_div span.ant-input-wrapper {
+.group_send_shuoshuo .group_send_talk_div span.ant-input-wrapper, .group_send_pinglun .group_send_talk_div span.ant-input-wrapper {
     border: 1px solid #d2dbe3;
     border-radius: 4px;
 }
 
-.group_send_talk .group_send_talk_div span.ant-input-wrapper .ant-input:focus, .group_send_shuoshuo .group_send_talk_div span.ant-input-wrapper .ant-input:focus {
+.group_send_talk .group_send_talk_div span.ant-input-wrapper .ant-input:focus, .group_send_shuoshuo .group_send_talk_div span.ant-input-wrapper .ant-input:focus, .group_send_pinglun .group_send_talk_div span.ant-input-wrapper .ant-input:focus {
     box-shadow: none;
     border: none;
+}
+.group_send_pinglun .fa-folder-o, .group_send_shuoshuo .fa-folder-o{
+    display: none;
 }
 
 .group_send_btn {
