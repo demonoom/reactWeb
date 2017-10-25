@@ -15,6 +15,7 @@ import ConfirmModal from '../ConfirmModal';
 var topicCardArray = [];
 var antNest;
 var topicObjArray = [];
+var topicArr = [];
 const AntNestTabComponents = React.createClass({
 
     getInitialState() {
@@ -67,6 +68,7 @@ const AntNestTabComponents = React.createClass({
         if (flag) {
             topicCardArray.splice(0);
             topicObjArray.splice(0);
+            topicArr.splice(0);
             if (type == 0) {
                 pageNo = 1;
             } else {
@@ -91,6 +93,7 @@ const AntNestTabComponents = React.createClass({
                 var response = ret.response;
                 response.forEach(function (e) {
                     topicObjArray.push(e);
+                    topicArr.push(e);
                     antNest.buildTopicCard(e, 0);
                 });
                 var pager = ret.pager;
@@ -172,7 +175,8 @@ const AntNestTabComponents = React.createClass({
                 }
                 var delBtn;
                 if (e.user.colUtype == "STUD" || (e.user.colUtype == "TEAC" && e.user.colUid == sessionStorage.getItem("ident"))) {
-                    delBtn = <Button value={e.id} className="topics_btn topics_a topics_a—bnt teopics_spa topics_le"
+                    delBtn = <Button value={e.id + "#" + topicObj.id}
+                                     className="topics_btn topics_a topics_a—bnt teopics_spa topics_le"
                                      type="dashed" onClick={antNest.showDeleteTopicCommentModal}>删除</Button>;
                 }
                 var answerUserInfo = <li className="topics_comment">
@@ -552,12 +556,22 @@ const AntNestTabComponents = React.createClass({
      * 从单个话题的页面，返回到话题列表上
      */
     returnTopicList() {
-        if (antNest.state.type == 0) {
-            antNest.getTopics(antNest.state.currentPage, getAllTopic());
-        } else {
-            antNest.getTopics(antNest.state.currentTeacherPage, getOnlyTeacherTopic());
-        }
-        antNest.setState({"optType": "getAllTopic", type: getAllTopic()});
+        // if (antNest.state.type == 0) {
+        //     antNest.getTopics(antNest.state.currentPage, getAllTopic());
+        // } else {
+        //     antNest.getTopics(antNest.state.currentTeacherPage, getOnlyTeacherTopic());
+        // }
+        // antNest.setState({"optType": "getAllTopic", type: getAllTopic()});
+
+        topicCardArray.splice(0);
+
+        topicArr.forEach(function (v) {
+            antNest.buildTopicCard(v, 0);
+        });
+
+        antNest.setState({
+            "topicCardList": topicCardArray,"optType": "getAllTopic", type: getAllTopic()
+        });
     },
     /**
      * 获取话题的参与者信息
@@ -595,6 +609,46 @@ const AntNestTabComponents = React.createClass({
     },
 
     /**
+     * 根据说说id请求说说
+     */
+    getTopicById(id, flag) {
+        var param = {
+            "method": 'getTopicById',
+            "topicId": id,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var data = ret.response;
+                //遍历数组topicArr,替换点赞的那条信息之后用新的数据去build
+                if (flag) {
+                    //删除话题，从数组中删除那一条记录
+                    topicArr.forEach(function (v, i) {
+                        if (v.id == data.id) {
+                            topicArr.splice(i, 1);
+                        }
+                    });
+                } else {
+                    topicArr.forEach(function (v, i) {
+                        if (v.id == data.id) {
+                            topicArr[i] = data;
+                        }
+                    });
+                }
+                topicArr.forEach(function (v) {
+                    antNest.buildTopicCard(v, 0);
+                });
+
+                antNest.setState({
+                    "topicCardList": topicCardArray
+                });
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
      * 话题点赞功能
      * @param e
      */
@@ -613,6 +667,7 @@ const AntNestTabComponents = React.createClass({
         } else {
             topicId = topicIdStrArray[0];
         }
+
         var param = {
             "method": 'praiseForTopic',
             "ident": sessionStorage.getItem("ident"),
@@ -630,11 +685,15 @@ const AntNestTabComponents = React.createClass({
                     antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
                     antNest.getTopicPartakeById(parentTopicId, antNest.state.currentShowPage);
                 } else {
-                    if (antNest.state.type == 0) {
-                        antNest.getTopics(antNest.state.currentPage, getAllTopic());
-                    } else {
-                        antNest.getTopics(antNest.state.currentTeacherPage, getOnlyTeacherTopic());
-                    }
+                    // if (antNest.state.type == 0) {
+                    //     //在这里请求新的页面应该不是当前页，而是你点击的那一页的页数
+                    //     antNest.getTopics(antNest.state.currentPage, getAllTopic());
+                    // } else {
+                    //     antNest.getTopics(antNest.state.currentTeacherPage, getOnlyTeacherTopic());
+                    // }
+                    //点赞结束之后，请求点赞的这条数据的最新状态，去数据中替换后重新渲染
+                    topicCardArray.splice(0);
+                    antNest.getTopicById(topicId, false);
                 }
             },
             onError: function (error) {
@@ -679,11 +738,13 @@ const AntNestTabComponents = React.createClass({
                     antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
                     antNest.getTopicPartakeById(parentTopicId, antNest.state.currentShowPage);
                 } else {
-                    if (antNest.state.type == 0) {
-                        antNest.getTopics(antNest.state.currentPage, getAllTopic());
-                    } else {
-                        antNest.getTopics(antNest.state.currentTeacherPage, getOnlyTeacherTopic());
-                    }
+                    // if (antNest.state.type == 0) {
+                    //     antNest.getTopics(antNest.state.currentPage, getAllTopic());
+                    // } else {
+                    //     antNest.getTopics(antNest.state.currentTeacherPage, getOnlyTeacherTopic());
+                    // }
+                    topicCardArray.splice(0);
+                    antNest.getTopicById(topicId, false);
                 }
             },
             onError: function (error) {
@@ -698,6 +759,8 @@ const AntNestTabComponents = React.createClass({
      * @param pageNo
      */
     reGetTopicInfo(pageNo, type) {
+        console.log(pageNo);
+        console.log(type);
         topicCardArray.splice(0);
         topicObjArray.splice(0);
         var param = {
@@ -779,11 +842,13 @@ const AntNestTabComponents = React.createClass({
                     antNest.reGetTopicInfo(antNest.state.currentPage, getAllTopic());
                     antNest.getTopicPartakeById(antNest.state.currentTopicId, antNest.state.currentPage);
                 } else {
-                    if (antNest.state.type == 0) {
-                        antNest.getTopics(antNest.state.currentPage, getAllTopic());
-                    } else {
-                        antNest.getTopics(antNest.state.currentTeacherPage, getOnlyTeacherTopic());
-                    }
+                    // if (antNest.state.type == 0) {
+                    //     antNest.getTopics(antNest.state.currentPage, getAllTopic());
+                    // } else {
+                    //     antNest.getTopics(antNest.state.currentTeacherPage, getOnlyTeacherTopic());
+                    // }
+                    topicCardArray.splice(0);
+                    antNest.getTopicById(topicId, true);
                 }
                 antNest.setState({"currentTopicId": ''});
             },
@@ -803,8 +868,10 @@ const AntNestTabComponents = React.createClass({
         } else {
             target = e.target;
         }
-        var topicCommentId = target.value;
-        antNest.setState({"topicCommentId": topicCommentId});
+        var arr = target.value.split("#");
+        var topicCommentId = arr[0];
+        var noomCommentId = arr[1];
+        antNest.setState({"topicCommentId": topicCommentId, noomCommentId});
         antNest.refs.deleteTopicCommentModal.changeConfirmModalVisible(true);
     },
 
@@ -820,13 +887,13 @@ const AntNestTabComponents = React.createClass({
      * @param e
      */
     deleteTopicComment() {
-        antNest.deleteTopicCommentById(antNest.state.topicCommentId);
+        antNest.deleteTopicCommentById(antNest.state.topicCommentId, antNest.state.noomCommentId);
     },
     /**
      * 根据评论id，删除话题/说说中的评论
      * @param topicCommentId 评论id
      */
-    deleteTopicCommentById(topicCommentId) {
+    deleteTopicCommentById(topicCommentId, topicId) {
         var param = {
             "method": 'deleteTopicComment',
             "ident": sessionStorage.getItem("ident"),
@@ -845,11 +912,13 @@ const AntNestTabComponents = React.createClass({
                     antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
                     antNest.getTopicPartakeById(antNest.state.currentTopicId, antNest.state.currentShowPage);
                 } else {
-                    if (antNest.state.type == 0) {
-                        antNest.getTopics(antNest.state.currentPage, getAllTopic());
-                    } else {
-                        antNest.getTopics(antNest.state.currentTeacherPage, getOnlyTeacherTopic());
-                    }
+                    // if (antNest.state.type == 0) {
+                    //     antNest.getTopics(antNest.state.currentPage, getAllTopic());
+                    // } else {
+                    //     antNest.getTopics(antNest.state.currentTeacherPage, getOnlyTeacherTopic());
+                    // }
+                    topicCardArray.splice(0);
+                    antNest.getTopicById(topicId, false);
                 }
             },
             onError: function (error) {
@@ -1007,11 +1076,13 @@ const AntNestTabComponents = React.createClass({
                     antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
                     antNest.getTopicPartakeById(antNest.state.currentTopicId, antNest.state.currentShowPage);
                 } else {
-                    if (antNest.state.type == 0) {
-                        antNest.getTopics(antNest.state.currentPage, getAllTopic());
-                    } else {
-                        antNest.getTopics(antNest.state.currentTeacherPage, getOnlyTeacherTopic());
-                    }
+                    // if (antNest.state.type == 0) {
+                    //     antNest.getTopics(antNest.state.currentPage, getAllTopic());
+                    // } else {
+                    //     antNest.getTopics(antNest.state.currentTeacherPage, getOnlyTeacherTopic());
+                    // }
+                    topicCardArray.splice(0);
+                    antNest.getTopicById(topicId, false);
                 }
             },
             onError: function (error) {
@@ -1172,9 +1243,9 @@ const AntNestTabComponents = React.createClass({
                 }
                 $("#emotionInput").val("");
                 if (antNest.state.type == 0) {
-                    antNest.getTopics(antNest.state.currentPage, getAllTopic());
+                    antNest.getTopics(antNest.state.currentPage, getAllTopic(), true, true);
                 } else {
-                    antNest.getTopics(antNest.state.currentTeacherPage, getOnlyTeacherTopic());
+                    antNest.getTopics(antNest.state.currentTeacherPage, getOnlyTeacherTopic(), true, true);
                 }
                 antNest.initMyEmotionInput();
                 antNest.setState({addTopicModalVisible: false, topicImgUrl: []});
@@ -1381,6 +1452,17 @@ const AntNestTabComponents = React.createClass({
                     <Button onClick={antNest.returnTopicList}><Icon type="left"/></Button>
                 </div>
                 话题详情</div>;
+
+            topicList =
+                <div className="favorite_scroll">
+                    <div className="antnest_cont topics_calc2" style={{overflow: 'scroll'}}>
+                        {antNest.state.topicCardList}
+                        {/*<div className="topics_calc2_center"><span onClick={antNest.pageAdd}>加载更多>></span></div>*/}
+                    </div>
+                    {/*<Pagination key="all" total={antNest.state.totalCount} pageSize={getPageSize()}*/}
+                    {/*current={antNest.state.currentShowPage}*/}
+                    {/*onChange={antNest.pageOnChange}/>*/}
+                </div>;
         } else {
             optionButton = <div className="public—til—blue">
                 <div className="talk_ant_btn1">
@@ -1389,17 +1471,18 @@ const AntNestTabComponents = React.createClass({
                 </div>
                 {breadMenuTip}
             </div>;
+
+            topicList =
+                <div className="favorite_scroll">
+                    <div className="antnest_cont topics_calc2" style={{overflow: 'scroll'}}>
+                        {antNest.state.topicCardList}
+                        <div className="topics_calc2_center"><span onClick={antNest.pageAdd}>加载更多>></span></div>
+                    </div>
+                    {/*<Pagination key="all" total={antNest.state.totalCount} pageSize={getPageSize()}*/}
+                    {/*current={antNest.state.currentShowPage}*/}
+                    {/*onChange={antNest.pageOnChange}/>*/}
+                </div>;
         }
-        topicList =
-            <div className="favorite_scroll">
-                <div className="antnest_cont topics_calc2" style={{overflow: 'scroll'}}>
-                    {antNest.state.topicCardList}
-                    <div className="topics_calc2_center"><span onClick={antNest.pageAdd}>加载更多>></span></div>
-                </div>
-                {/*<Pagination key="all" total={antNest.state.totalCount} pageSize={getPageSize()}*/}
-                {/*current={antNest.state.currentShowPage}*/}
-                {/*onChange={antNest.pageOnChange}/>*/}
-            </div>
         var topicTitle;
         if (antNest.state.topicModalType == "topic") {
             topicTitle = <Row className="yinyong_topic">
