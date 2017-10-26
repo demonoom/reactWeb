@@ -224,8 +224,8 @@ const ApprovalComponent = React.createClass({
                 flowApprovalUserRuleJson.levelType = FLOW_APPROVAL_ONE_LEVEL;
                 approvalJson.approval=null;
                 //选择了主管,选择一级主管模式(主管变量不再使用固定值,将会根据选定的主管级别,到后台来设置成部门id)
-                // approvalJson.approvalManagerVariables = "${managerIds}";
-                approvalJson.approvalRoleVariables = null;
+                approvalJson.approvalManagerVariables = "${managerIds}";
+                // approvalJson.approvalRoleVariables = null;
                 //设置主管的审批规则
                 approvalJson.flowApprovalUserRule = flowApprovalUserRuleJson;
                 //本环节审批方式
@@ -236,8 +236,8 @@ const ApprovalComponent = React.createClass({
             case 3:
                 approvalJson.approval=null;
                 //选择了主管,选择多级主管模式
-                // approvalJson.approvalManagerVariables = "${managerIds}";
-                approvalJson.approvalRoleVariables = null;
+                approvalJson.approvalManagerVariables = "${mulitiManagerId}";
+                // approvalJson.approvalRoleVariables = null;
                 var flowApprovalUserRuleJson={};
                 //选中的主管级别
                 flowApprovalUserRuleJson.approvalLevel=this.state.selectedDepartmentLevel;

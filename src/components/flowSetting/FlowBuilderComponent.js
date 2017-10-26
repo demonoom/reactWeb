@@ -349,7 +349,13 @@ const FlowBuilderComponent = React.createClass({
             var approval = approvalJson.approval;
             var approvalManagerVariables=approvalJson.approvalManagerVariables;
             var approvalRoleVariables=approvalJson.approvalRoleVariables;
-            var userJson = {"approvalUser":approval,"approvalType":approvalType,"approvalManagerVariables":approvalManagerVariables,"approvalRoleVariables":approvalRoleVariables}
+            var flowApprovalUserRule = approvalJson.flowApprovalUserRule;
+            var currentApprovalTypeValue = approvalJson.currentApprovalTypeValue;
+            var ifManagerNullFillType = approvalJson.ifManagerNullFillType;
+            var userJson = {"approvalUser":approval,"approvalType":approvalType,"approvalManagerVariables":approvalManagerVariables,
+                "approvalRoleVariables":approvalRoleVariables,"flowApprovalUserRule":flowApprovalUserRule,"currentApprovalTypeValue":currentApprovalTypeValue,
+                "ifManagerNullFillType":ifManagerNullFillType
+            }
             flowApprovalUsers.push(userJson);
         }
         //流程名称
