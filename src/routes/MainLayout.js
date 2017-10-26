@@ -61,6 +61,7 @@ const MainLayout = React.createClass({
             mesTabClick: false,
             isSearch: false,
             isSearchGroup: false,
+            isPersonCenter: false,
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
     },
@@ -214,7 +215,6 @@ const MainLayout = React.createClass({
             contentArray: contentArray,
             "messageToType": 1,
         };
-        console.log(userJson);
         this.setState({
             currentKey: 'message',
             resouceType: '',
@@ -453,7 +453,8 @@ const MainLayout = React.createClass({
             "userInfo": userInfo.user,
             "messageType": 'message',
             "actionFrom": "personCenter",
-            userJson
+            userJson,
+            isPersonCenter: true
         });
     },
 
@@ -479,6 +480,8 @@ const MainLayout = React.createClass({
      * @param fromObj
      */
     turnToMessagePage(fromObj) {
+        console.log(fromObj);
+        console.log('fromObj');
         var timeNode = (new Date()).valueOf();
         if (fromObj.messageType == 1) {
             // 个人消息
@@ -530,6 +533,10 @@ const MainLayout = React.createClass({
         this.setState({isSearchGroup: false});
     },
 
+    changeIsPersonCenter() {
+        this.setState({isPersonCenter: false});
+    },
+
     render() {
 
         const collapse = this.state.collapse;
@@ -547,8 +554,10 @@ const MainLayout = React.createClass({
                                                userJson={this.state.userJson}
                                                isSearch={this.state.isSearch}
                                                isSearchGroup={this.state.isSearchGroup}
+                                               isPersonCenter={this.state.isPersonCenter}
                                                changeIsSearch={this.changeIsSearch}
                                                changeIsSearchGroup={this.changeIsSearchGroup}
+                                               changeIsPersonCenter={this.changeIsPersonCenter}
                                                onLoad={this.turnToMessagePage}
                                                changeMesTabClick={this.changeMesTabClick}
                                                ref="messageMenu"

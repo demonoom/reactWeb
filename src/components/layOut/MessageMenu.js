@@ -57,8 +57,6 @@ const MessageMenu = React.createClass({
         }
         if (isEmpty(nextProps) == false && isEmpty(nextProps.isSearch) == false) {
             if (nextProps.isSearch) {
-                console.log(nextProps.userJson);
-                console.log('nextProps.userJson');
                 //调用点击用户函数
                 var obj = {
                     fromUser: nextProps.userJson.fromUser,
@@ -145,6 +143,26 @@ const MessageMenu = React.createClass({
                 message.error(error);
             }
         });
+        // if (isEmpty(mMenu.props.isPersonCenter) == false) {
+        //     if (mMenu.props.isPersonCenter) {
+        //         //调用点击用户函数
+        //         var obj = {
+        //             fromUser: propsUserJson.fromUser,
+        //             key: propsUserJson.key,
+        //             messageType: propsUserJson.messageToType
+        //         };
+        //         // console.log(nextProps.userJson);
+        //         // console.log('2323232323232323');
+        //         // var obj = {
+        //         //     fromUser:
+        //         //     key:
+        //         //     messageType:
+        //         // }
+        //         mMenu.turnToMessagePage(obj);
+        //         //把nextProps.isSearch变回去
+        //         mMenu.props.changeIsPersonCenter();
+        //     }
+        // }
     },
 
     /**
