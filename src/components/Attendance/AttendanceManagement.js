@@ -4,6 +4,7 @@ import {
     Button, Table, Icon, Row, Col, Card, Steps,
     Input, Select, Radio, Checkbox, message
 } from 'antd';
+import ChangeShiftModel from './ChangeShiftModel'
 
 const Option = Select.Option;
 
@@ -44,7 +45,7 @@ const workDayCol = [{
     key: 'action',
     render: (text, record) => (
         <span>
-      <a href="#">更改班次</a>
+      <a href="javascript:;">更改班次</a>
     </span>
     ),
 }];
@@ -130,6 +131,7 @@ const AttendanceManagement = React.createClass({
             optType: true,
             attName: "",//考勤组名称
             selectedRowKeys: [1, 2, 3, 4, 5], //默认选中的天数
+            changeShiftIsShow: false
         };
     },
 
@@ -162,6 +164,20 @@ const AttendanceManagement = React.createClass({
         }
         //设置考勤组名称
         this.setState({attName});
+    },
+
+    /**
+     * 更改班次的回调
+     */
+    changeShift() {
+        this.setState({changeShiftIsShow: true});
+    },
+
+    /**
+     * model关闭之后将addShiftModalIsShow重置
+     */
+    closeModel() {
+        this.setState({changeShiftIsShow: false});
     },
 
     /**
@@ -216,7 +232,7 @@ const AttendanceManagement = React.createClass({
             <Row>
                 <Col span={4}>工作日设置：</Col>
                 <Col span={10}>
-                    <span>默认班次：9:00--18:00</span><a href="javascript:;">更改班次</a>
+                    <span>默认班次：9:00--18:00</span><a href="javascript:;" onClick={this.changeShift}>更改班次</a>
                 </Col>
             </Row>
 
@@ -281,6 +297,10 @@ const AttendanceManagement = React.createClass({
                     {title}
                 </div>
                 {mainTable}
+                <ChangeShiftModel
+                    isShow={this.state.changeShiftIsShow}
+                    closeModel={this.closeModel}
+                />
             </div>
         );
     }
