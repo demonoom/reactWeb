@@ -769,6 +769,8 @@ const AntGroupTabComponents = React.createClass({
             }, onWarn: function (warnMsg) {
 
             }, onMessage: function (info) {
+                console.log(info);
+                console.log('info');
                 var groupObj;
                 var gt = $('#groupTalk');
                 if (antGroup.state.optType == "sendMessage") {

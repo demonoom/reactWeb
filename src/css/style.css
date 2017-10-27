@@ -668,26 +668,29 @@ ul.cont_t2 {
 
 }
 
-.maaee_group_face,  .maaee_group_face2, .maaee_group_face3 {
+.maaee_group_face, .maaee_group_face2, .maaee_group_face3 {
     width: 42px !important;
     height: 42px !important;
     border-radius: 50%;
     cursor: pointer;
-    padding:4px;
+    padding: 4px;
     background: #eee
 }
-.antnest_38_img{
+
+.antnest_38_img {
     width: 38px !important;
     height: 38px !important;
     border-radius: 50%;
     cursor: pointer;
 }
-.maaee_group_face1{
+
+.maaee_group_face1 {
     width: 42px !important;
     height: 42px !important;
     border-radius: 50%;
     cursor: pointer;
 }
+
 .maaee_group_face {
     background: #eee
 }
@@ -713,7 +716,7 @@ ul.cont_t2 {
 }
 
 .maaee_group_face img:nth-child(3) {
-    border-radius:50%
+    border-radius: 50%
 }
 
 .maaee_group_face img:nth-child(4) {
@@ -754,11 +757,11 @@ ul.cont_t2 {
 }
 
 .maaee_group_face3 img:nth-child(2) {
-    border-radius:  50%;
+    border-radius: 50%;
 }
 
 .maaee_group_face3 img:nth-child(3) {
-    border-radius:  50%;
+    border-radius: 50%;
 }
 
 .ant-modal-content span.ant-modal-close-x {
@@ -3295,7 +3298,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     user-modify: read-write-plaintext-only;
 }
 
-.group_send_shuoshuo .emoji-wysiwyg-editor , .group_send_pinglun .emoji-wysiwyg-editor{
+.group_send_shuoshuo .emoji-wysiwyg-editor, .group_send_pinglun .emoji-wysiwyg-editor {
     border-radius: 4px;
     margin-left: 0;
     overflow: auto;
@@ -3331,7 +3334,8 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     box-shadow: none;
     border: none;
 }
-.group_send_pinglun .fa-folder-o, .group_send_shuoshuo .fa-folder-o{
+
+.group_send_pinglun .fa-folder-o, .group_send_shuoshuo .fa-folder-o {
     display: none;
 }
 
@@ -7343,83 +7347,92 @@ select.course_n:hover {
     background-color: #40BAFF;
     color: #FFFFFF;
 }
-.audio_left{
+
+.audio_left {
     width: 24px;
     height: 17px;
     display: inline-block;
-    background: url(../components/images/audio_left.png) no-repeat; background-position: -48px 0;
+    background: url(../components/images/audio_left.png) no-repeat;
+    background-position: -48px 0;
     position: relative;
     top: 4px;
 }
-.audio_right{
+
+.audio_right {
     width: 24px;
     height: 17px;
     display: inline-block;
-    background: url(../components/images/audio_right.png) no-repeat; background-position: -48px 0;
+    background: url(../components/images/audio_right.png) no-repeat;
+    background-position: -48px 0;
     position: relative;
     top: 4px;
 }
-.audio_left_run{
+
+.audio_left_run {
     width: 24px;
     height: 17px;
     display: inline-block;
-    animation: audio_left_1 1s  infinite;
+    animation: audio_left_1 1s infinite;
     position: relative;
     top: 4px;
     background: url(../components/images/audio_left.png) no-repeat;
 
 }
-.audio_right_run{
+
+.audio_right_run {
     width: 24px;
     height: 17px;
     display: inline-block;
-    animation: audio_right_1 1s  infinite;
+    animation: audio_right_1 1s infinite;
     position: relative;
     top: 4px;
     background: url(../components/images/audio_right.png) no-repeat;
 
 }
-@keyframes audio_right_1{
-    0%{
-         background-position: 0 0;
-    }
-    30%{
+
+@keyframes audio_right_1 {
+    0% {
         background-position: 0 0;
     }
-    31%{
+    30% {
+        background-position: 0 0;
+    }
+    31% {
         background-position: -24px 0;
     }
-    61%{
+    61% {
         background-position: -24px 0;
     }
-    61.5%{
+    61.5% {
         background-position: -48px 0;
     }
-    100%{
+    100% {
         background-position: -48px 0;
     }
 }
-@keyframes audio_left_1{
-    0%{
-         background-position: 0 0;
-    }
-    30%{
+
+@keyframes audio_left_1 {
+    0% {
         background-position: 0 0;
     }
-    31%{
+    30% {
+        background-position: 0 0;
+    }
+    31% {
         background-position: -24px 0;
     }
-    61%{
+    61% {
         background-position: -24px 0;
     }
-    61.5%{
+    61.5% {
         background-position: -48px 0;
     }
-    100%{
+    100% {
         background-position: -48px 0;
     }
 }
-.search_header{
+
+.search_header {
     color: #fff;
     position: absolute;
     top: 14px;
@@ -7428,6 +7441,14 @@ select.course_n:hover {
     font-size: 18px;
     padding: 4px;
 }
-.search_header:hover{
+
+.search_header:hover {
     color: #b8ddff
+}
+
+.noom_map {
+    border: 1px solid #C0C0C0;
+    width: 150px;
+    height: auto;
+    display: none;
 }

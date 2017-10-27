@@ -5,6 +5,7 @@ import {
     Input, Select, Radio, Checkbox, message
 } from 'antd';
 import ChangeShiftModel from './ChangeShiftModel'
+import AddShiftPosModel from './AddShiftPosModel'
 
 const Option = Select.Option;
 
@@ -131,7 +132,8 @@ const AttendanceManagement = React.createClass({
             optType: true,
             attName: "",//考勤组名称
             selectedRowKeys: [1, 2, 3, 4, 5], //默认选中的天数
-            changeShiftIsShow: false
+            changeShiftIsShow: false,
+            addShiftPosModel: false,
         };
     },
 
@@ -177,7 +179,14 @@ const AttendanceManagement = React.createClass({
      * model关闭之后将addShiftModalIsShow重置
      */
     closeModel() {
-        this.setState({changeShiftIsShow: false});
+        this.setState({changeShiftIsShow: false, addShiftPosModel: false});
+    },
+
+    /**
+     * 添加考勤地点的回调
+     */
+    addShiftPos() {
+        this.setState({addShiftPosModel: true});
     },
 
     /**
@@ -252,7 +261,7 @@ const AttendanceManagement = React.createClass({
 
             <Table columns={workPositionCol} dataSource={positionData} pagination={false}/>
 
-            <a href="javascript:;">添加考勤地点</a>
+            <a href="javascript:;" onClick={this.addShiftPos}>添加考勤地点</a>
 
             <br/>
 
@@ -299,6 +308,10 @@ const AttendanceManagement = React.createClass({
                 {mainTable}
                 <ChangeShiftModel
                     isShow={this.state.changeShiftIsShow}
+                    closeModel={this.closeModel}
+                />
+                <AddShiftPosModel
+                    isShow={this.state.addShiftPosModel}
                     closeModel={this.closeModel}
                 />
             </div>
