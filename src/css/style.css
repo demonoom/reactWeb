@@ -7431,3 +7431,9 @@ select.course_n:hover {
 .search_header:hover{
     color: #b8ddff
 }
+.checking_in_box {
+    height: calc(100% - 40px);
+}
+.checking_in_box > div:first-child{
+    height: 100%
+}

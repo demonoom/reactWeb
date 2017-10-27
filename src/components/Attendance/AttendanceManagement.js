@@ -11,6 +11,7 @@ const columns = [{
     title: '名称',
     dataIndex: 'name',
     key: 'name',
+    className: 'cloud_name',
 }, {
     title: '人数',
     dataIndex: 'num',
@@ -249,9 +250,11 @@ const AttendanceManagement = React.createClass({
             title = <div className="public—til—blue">考勤详情</div>;
 
             mainTable =
-                <div>
-                    <Button type="primary" icon="plus" onClick={this.addAtt}>新增考勤组</Button>
-                    <Table columns={columns} dataSource={data} pagination={false}/>
+                <div className="favorite_scroll">
+                    <div className="cloud_tool">
+                        <Button type="primary" icon="plus" onClick={this.addAtt}>新增考勤组</Button>
+                    </div>
+                    <Table  className="checking_in_box" columns={columns} dataSource={data} pagination={false}/>
                 </div>;
         } else {
             title = <div className="public—til—blue">
@@ -276,10 +279,8 @@ const AttendanceManagement = React.createClass({
         }
 
         return (
-            <div>
-                <div className="talk_ant_btn">
+            <div className="group_cont">
                     {title}
-                </div>
                 {mainTable}
             </div>
         );
