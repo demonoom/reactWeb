@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 import {isEmpty} from '../../utils/utils';
 import {Button, Table} from 'antd';
+import AddShiftModel from './AddShiftModel';
 
 const columns = [{
     title: '班次名称',
@@ -43,6 +44,7 @@ const ShiftManagement = React.createClass({
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         return {
             loginUser: loginUser,
+            addShiftModalIsShow: false,
 
         };
     },
@@ -51,8 +53,18 @@ const ShiftManagement = React.createClass({
 
     },
 
+    /**
+     * 新增班次的回调
+     */
     addShift() {
-        alert('新增班次');
+        this.setState({addShiftModalIsShow: true});
+    },
+
+    /**
+     * model关闭之后将addShiftModalIsShow重置
+     */
+    closeModel() {
+        this.setState({addShiftModalIsShow: false});
     },
 
     /**
@@ -66,6 +78,11 @@ const ShiftManagement = React.createClass({
                 <Button type="primary" icon="plus" onClick={this.addShift}>新增班次</Button>
 
                 <Table columns={columns} dataSource={data} pagination={false}/>
+
+                <AddShiftModel
+                    isShow={this.state.addShiftModalIsShow}
+                    closeModel={this.closeModel}
+                />
             </div>
         );
     }
