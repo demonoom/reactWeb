@@ -13,22 +13,25 @@ const columns = [{
     title: '名称',
     dataIndex: 'name',
     key: 'name',
+    className: 'checking_in_name',
 }, {
     title: '人数',
     dataIndex: 'num',
     key: 'num',
+    className:'ant-table-selection-user2 class_right date_tr',
 }, {
     title: '考勤时间',
     dataIndex: 'time',
     key: 'time',
+    className: 'checking_in_date',
 }, {
     title: '操作',
+    className: 'ant-table-selection-smallclass checking_in_operate class_right',
     key: 'action',
     render: (text, record) => (
         <span>
-      <a href="#">编辑</a>
-      <span className="ant-divider"/>
-      <a href="#">删除</a>
+            <Button type="button" className="score3_i" icon="edit"></Button>
+           <Button type="button" icon="delete"></Button>
     </span>
     ),
 }];
@@ -44,10 +47,11 @@ const workDayCol = [{
 }, {
     title: '操作',
     key: 'action',
+    className:'checking_in_change',
     render: (text, record) => (
         <span>
-      <a href="javascript:;">更改班次</a>
-    </span>
+            <a href="javascript:;">更改班次</a>
+        </span>
     ),
 }];
 
@@ -212,44 +216,49 @@ const AttendanceManagement = React.createClass({
 
         //表单元素
         var stepPanel = <div>
-            <Row>
+            <div className="checking_add_box checking_in_31">
+            <Row >
                 <Col span={4}>考勤组名称：</Col>
                 <Col span={10}>
                     <Input placeholder="请输入考勤组名称" value={this.state.attName} onChange={this.attNameOnChange}/>
                 </Col>
             </Row>
-
-            <Row>
+            <Row className="upexam_to_ma">
                 <Col span={4}>参与考勤人员：</Col>
                 <Col span={18}>
                     <Button>请选择</Button>
                 </Col>
             </Row>
-            <Row>
+            <Row className="upexam_to_ma">
                 <Col span={4}>无需考勤人员：</Col>
                 <Col span={18}>
                     <Button>请选择</Button>
                 </Col>
             </Row>
-            <Row>
+            <Row className="upexam_to_ma">
                 <Col span={4}>考勤组负责人：</Col>
                 <Col span={18}>
                     <Button>请选择</Button>
                 </Col>
             </Row>
-            <span>协助管理员分管本考勤组的排班及统计</span>
+            <Row>
+                <Col span={24}>
+                    <span className="password_ts checking_in_le">协助管理员分管本考勤组的排班及统计</span>
+                 </Col>
+            </Row>
             <Row>
                 <Col span={4}>工作日设置：</Col>
                 <Col span={10}>
-                    <span>默认班次：9:00--18:00</span><a href="javascript:;" onClick={this.changeShift}>更改班次</a>
+                    <span>默认班次：9:00--18:00</span>
+                    <a href="javascript:;" onClick={this.changeShift} className="add_out">更改班次</a>
                 </Col>
             </Row>
 
-            <Table columns={workDayCol} dataSource={workdate} pagination={false} rowSelection={rowSelection}/>
+            <Table columns={workDayCol} dataSource={workdate} pagination={false} rowSelection={rowSelection} className="upexam_to_ma ant-col-20 checking_in_le" />
 
-            <Row>
+            <Row className="upexam_to_ma">
                 <Col span={4}>考勤地址：</Col>
-                <Col span={10}>根据办公地点考勤（可添加多个考勤地点）有效范围</Col>
+                <Col span={11}>根据办公地点考勤（可添加多个考勤地点）有效范围</Col>
                 <Col span={6}>
                     <Select style={{width: 75}} defaultValue="300米">
                         <Option value="jack">300米</Option>
@@ -259,40 +268,43 @@ const AttendanceManagement = React.createClass({
                 </Col>
             </Row>
 
-            <Table columns={workPositionCol} dataSource={positionData} pagination={false}/>
 
-            <a href="javascript:;" onClick={this.addShiftPos}>添加考勤地点</a>
-
-            <br/>
-
-            <Checkbox>允许外勤打卡</Checkbox>
-            <div>关闭后，范围外不允许打卡</div>
-        </div>;
-
+            <Table className="upexam_to_ma ant-col-20 checking_in_le" columns={workPositionCol} dataSource={positionData} pagination={false}/>
+            <div className="checking_in_le">
+                <a className="upexam_to_ma checking_in_l31" href="javascript:;" onClick={this.addShiftPos}>添加考勤地点</a>
+                <br/>
+                <Checkbox className="checking_in_l31">允许外勤打卡</Checkbox>
+                <div className="checking_in_l31">关闭后，范围外不允许打卡</div>
+            </div>
+        </div>
+        </div>
 
         if (this.state.optType) {
             title = <div className="public—til—blue">考勤详情</div>;
-
             mainTable =
-                <div>
-                    <Button type="primary" icon="plus" onClick={this.addAtt}>新增考勤组</Button>
-                    <Table columns={columns} dataSource={data} pagination={false}/>
+                <div className="favorite_scroll" style={{overflow:"auto" }}>
+                    <div  className="checking_add_box">
+                        <div>
+                            <Button type="primary" icon="plus" onClick={this.addAtt}>新增考勤组</Button>
+                        </div>
+                        <Table  className="checking_in_box cloud_box upexam_to_ma " columns={columns} dataSource={data} pagination={false}/>
+                    </div>
                 </div>;
         } else {
             title = <div className="public—til—blue">
                 <div className="ant-tabs-right">
                     <Button onClick={this.returnTable}><Icon type="left"/></Button>
-                    考勤详情
                 </div>
+                考勤详情
             </div>;
 
             mainTable =
-                <div className="favorite_scroll" style={{overflow: "auto", height: 510}}>
+                <div className="favorite_scroll" style={{overflow: "auto" }}>
                     {/*表单提交*/}
                     {stepPanel}
                     <div>
                         <Row>
-                            <Col span={24}>
+                            <Col span={24} className="class_right yinyong_topic">
                                 {saveButton}
                             </Col>
                         </Row>
@@ -301,10 +313,8 @@ const AttendanceManagement = React.createClass({
         }
 
         return (
-            <div>
-                <div className="talk_ant_btn">
+            <div className="group_cont">
                     {title}
-                </div>
                 {mainTable}
                 <ChangeShiftModel
                     isShow={this.state.changeShiftIsShow}

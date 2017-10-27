@@ -95,44 +95,61 @@ const AddShiftModel = React.createClass({
                 maskClosable={false} //设置不允许点击蒙层关闭
                 onCancel={this.closeAddShiftModal}
                 onOk={this.handleOk}
-                className="schoolgroup_modal"
+                className="schoolgroup_modal checking_in_modal"
             >
                 <div className="modal_register_main">
                     <Row>
-                        <Col span={7}>
-                            班次名称
+                        <Col span={4}>
+                            班次名称：
                         </Col>
-                        <Col span={16}>
+                        <Col span={10}>
                             <Input placeholder="必填 (最多6个字符)" value={this.state.shiftName}
                                    onChange={this.shiftNameChange}/>
                         </Col>
                     </Row>
-                    <span>设置该班次一天内上下班的次数</span>
-                    <Radio.Group value={this.state.size} onChange={this.degreeChange}>
-                        <Radio.Button value="one">一天1次上下班</Radio.Button>
-                        <Radio.Button value="two">一天2次上下班</Radio.Button>
-                        <Radio.Button value="thr">一天3次上下班</Radio.Button>
-                    </Radio.Group>
-                    <div style={{display: firTime}}>
-                        <span>第1次</span>
-                        <span>上班：</span>
-                        <TimePicker defaultValue={moment('12:08', format)} format={format}/>
-                        <span>下班：</span>
-                        <TimePicker defaultValue={moment('12:08', format)} format={format}/>
+                    <div>
+                            <span>设置该班次一天内上下班的次数</span>
+                            <span className="add_out off_duty">
+                                <Radio.Group value={this.state.size} onChange={this.degreeChange}>
+                                    <Radio.Button value="one">一天1次上下班</Radio.Button>
+                                    <Radio.Button value="two">一天2次上下班</Radio.Button>
+                                    <Radio.Button value="thr">一天3次上下班</Radio.Button>
+                                </Radio.Group>
+                                </span>
+                        </div>
+
+                    <div className="upexam_to_ma" style={{display: firTime}}>
+                        <span>
+                            <span>第1次</span>
+                            <span>上班：</span>
+                            <TimePicker defaultValue={moment('12:08', format)} format={format}/>
+                        </span>
+                        <span className="botton_left1">
+                            <span>下班：</span>
+                            <TimePicker defaultValue={moment('12:08', format)} format={format}/>
+                        </span>
                     </div>
-                    <div style={{display: secTime}}>
-                        <span>第2次</span>
-                        <span>上班：</span>
-                        <TimePicker defaultValue={moment('12:08', format)} format={format}/>
-                        <span>下班：</span>
-                        <TimePicker defaultValue={moment('12:08', format)} format={format}/>
+                    <div className="upexam_to_ma" style={{display: secTime}}>
+                        <span>
+                            <span>第2次</span>
+                            <span>上班：</span>
+                            <TimePicker defaultValue={moment('12:08', format)} format={format}/>
+                        </span>
+                        <span className="botton_left1">
+                            <span>下班：</span>
+                            <TimePicker defaultValue={moment('12:08', format)} format={format}/>
+                        </span>
                     </div>
-                    <div style={{display: thiTime}}>
-                        <span>第3次</span>
-                        <span>上班：</span>
-                        <TimePicker defaultValue={moment('12:08', format)} format={format}/>
-                        <span>下班：</span>
-                        <TimePicker defaultValue={moment('12:08', format)} format={format}/>
+                    <div className="upexam_to_ma" style={{display: thiTime}}>
+                        <span>
+                            <span>第3次</span>
+                            <span>上班：</span>
+                            <TimePicker defaultValue={moment('12:08', format)} format={format}/>
+                        </span>
+                        <span className="botton_left1">
+                            <span>下班：</span>
+                            <TimePicker defaultValue={moment('12:08', format)} format={format}/>
+                        </span>
                     </div>
                 </div>
             </Modal>
