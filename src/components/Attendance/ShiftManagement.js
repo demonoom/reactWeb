@@ -7,18 +7,20 @@ const columns = [{
     title: '班次名称',
     dataIndex: 'name',
     key: 'name',
+    className:'checking_in_name',
 }, {
     title: '考勤时间',
     dataIndex: 'time',
     key: 'time',
+    className:'checking_in_name',
 }, {
     title: '操作',
     key: 'action',
+    className:'ant-table-selection-smallclass checking_in_operate class_right',
     render: (text, record) => (
         <span>
-      <a href="#">编辑</a>
-      <span className="ant-divider"/>
-      <a href="#">删除</a>
+            <Button type="button" className="score3_i" icon="edit"></Button>
+            <Button type="button" icon="delete"></Button>
     </span>
     ),
 }];
@@ -73,16 +75,18 @@ const ShiftManagement = React.createClass({
      */
     render() {
         return (
-            <div>
+            <div className="group_cont">
                 <div className="public—til—blue">考勤详情</div>
-                <Button type="primary" icon="plus" onClick={this.addShift}>新增班次</Button>
-
-                <Table columns={columns} dataSource={data} pagination={false}/>
-
-                <AddShiftModel
-                    isShow={this.state.addShiftModalIsShow}
-                    closeModel={this.closeModel}
-                />
+                <div className="favorite_scroll" style={{overflow:"auto"}}>
+                    <div className="checking_add_box">
+                        <Button type="primary" icon="plus" onClick={this.addShift}>新增班次</Button>
+                        <Table className="checking_in_box cloud_box upexam_to_ma" columns={columns} dataSource={data} pagination={false}/>
+                            <AddShiftModel
+                                isShow={this.state.addShiftModalIsShow}
+                                closeModel={this.closeModel}
+                            />
+                    </div>
+                </div>
             </div>
         );
     }

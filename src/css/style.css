@@ -1150,7 +1150,9 @@ element.style {
 .cloud_box .ant-table-thead > tr > th.ant-135, .cloud_box .ant-table-tbody > tr > td.ant-135 {
     width: 16%
 }
-
+.cloud_box .ant-table-thead > tr > th.checking_in_operate, .cloud_box .ant-table-tbody > tr > td.checking_in_operate {
+    width: 10%
+}
 .ant-table-thead > tr > th.cloud_name, .ant-table-tbody > tr > td.cloud_name {
     width: 45%;
 }
@@ -7436,4 +7438,39 @@ select.course_n:hover {
 }
 .checking_in_box > div:first-child{
     height: 100%
+}
+.checking_in_box th.cloud_name, .checking_in_box td.cloud_name{
+    text-indent: 16px;
+}
+.ant-table-thead > tr > th.checking_in_name, .ant-table-tbody > tr > td.checking_in_name {
+    width: 40%;
+    text-indent: 15px;
+}
+.ant-table-thead > tr > th.checking_in_date, .ant-table-tbody > tr > td.checking_in_date {
+    width: 30%;
+}
+.ant-table-thead > tr > th.checking_in_change, .ant-table-tbody > tr > td.checking_in_change {
+    width: 14%;
+}
+.checking_in_31 .ant-row, .checking_in_l31{
+    line-height:31px;
+}
+.checking_in_le{
+    margin-left: 16.6666%;
+    margin-bottom:15px;
+}
+.checking_add_box{
+    padding: 8px 16px 16px 16px;
+    color: #424242;
+    font-size: 14px;
+}
+.checking_add_box a{
+    font-size: 14px;
+    cursor: pointer;
+}
+.off_duty .ant-radio-group label{
+    font-size: 12px !important;
+}
+.checking_in_modal .ant-modal-body{
+    min-height: 260px;
 }
