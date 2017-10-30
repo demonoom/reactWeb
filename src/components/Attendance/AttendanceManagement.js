@@ -1,13 +1,11 @@
 import React, {PropTypes} from 'react';
 import {isEmpty} from '../../utils/utils';
 import {
-    Button, Table, Icon, Row, Col, Card, Steps,
-    Input, Select, Radio, Checkbox, message
+    Button, Table, Icon, Row, Col,
+    Input, Select, Checkbox, message, Tag, Tooltip
 } from 'antd';
 import ChangeShiftModel from './ChangeShiftModel'
 import AddShiftPosModel from './AddShiftPosModel'
-
-const Option = Select.Option;
 
 const columns = [{
     title: '名称',
@@ -18,7 +16,7 @@ const columns = [{
     title: '人数',
     dataIndex: 'num',
     key: 'num',
-    className:'ant-table-selection-user2 class_right date_tr',
+    className: 'ant-table-selection-user2 class_right date_tr',
 }, {
     title: '考勤时间',
     dataIndex: 'time',
@@ -47,7 +45,7 @@ const workDayCol = [{
 }, {
     title: '操作',
     key: 'action',
-    className:'checking_in_change',
+    className: 'checking_in_change',
     render: (text, record) => (
         <span>
             <a href="javascript:;">更改班次</a>
@@ -138,6 +136,9 @@ const AttendanceManagement = React.createClass({
             selectedRowKeys: [1, 2, 3, 4, 5], //默认选中的天数
             changeShiftIsShow: false,
             addShiftPosModel: false,
+            tags: ['Tag 1', 'Tag 2', 'Tag 3','Tag 4', 'Tag 5', 'Tag 6','Tag 7', 'Tag 8', 'Tag 9','Tag 10', 'Tag 11', 'Tag 12',],
+            inputVisible: false,
+            inputValue: '',
         };
     },
 
@@ -193,11 +194,39 @@ const AttendanceManagement = React.createClass({
         this.setState({addShiftPosModel: true});
     },
 
+    handleClose(removedTag) {
+        const tags = this.state.tags.filter(tag => tag !== removedTag);
+        console.log(tags);
+        this.setState({tags});
+    },
+
+    handleInputChange(e) {
+        this.setState({inputValue: e.target.value});
+    },
+
+    handleInputConfirm() {
+        const state = this.state;
+        const inputValue = state.inputValue;
+        let tags = state.tags;
+        if (inputValue && tags.indexOf(inputValue) === -1) {
+            tags = [...tags, inputValue];
+        }
+        console.log(tags);
+        this.setState({
+            tags,
+            inputVisible: false,
+            inputValue: '',
+        });
+    },
+
+    // saveInputRef = input => this.input = input
+
     /**
      * 渲染页面
      * @returns {XML}
      */
     render() {
+        const {tags, inputVisible, inputValue} = this.state;
         //顶部banner
         var title;
         //页面主体部分
@@ -217,77 +246,155 @@ const AttendanceManagement = React.createClass({
         //表单元素
         var stepPanel = <div>
             <div className="checking_add_box checking_in_31">
-            <Row >
-                <Col span={4}>考勤组名称：</Col>
-                <Col span={10}>
-                    <Input placeholder="请输入考勤组名称" value={this.state.attName} onChange={this.attNameOnChange}/>
-                </Col>
-            </Row>
-            <Row className="upexam_to_ma">
-                <Col span={4}>参与考勤人员：</Col>
-                <Col span={18}>
-                    <Button>请选择</Button>
-                </Col>
-            </Row>
-            <Row className="upexam_to_ma">
-                <Col span={4}>无需考勤人员：</Col>
-                <Col span={18}>
-                    <Button>请选择</Button>
-                </Col>
-            </Row>
-            <Row className="upexam_to_ma">
-                <Col span={4}>考勤组负责人：</Col>
-                <Col span={18}>
-                    <Button>请选择</Button>
-                </Col>
-            </Row>
-            <Row>
-                <Col span={24}>
-                    <span className="password_ts checking_in_le">协助管理员分管本考勤组的排班及统计</span>
-                 </Col>
-            </Row>
-            <Row>
-                <Col span={4}>工作日设置：</Col>
-                <Col span={10}>
-                    <span>默认班次：9:00--18:00</span>
-                    <a href="javascript:;" onClick={this.changeShift} className="add_out">更改班次</a>
-                </Col>
-            </Row>
+                <Row>
+                    <Col span={4}>考勤组名称：</Col>
+                    <Col span={10}>
+                        <Input placeholder="请输入考勤组名称" value={this.state.attName} onChange={this.attNameOnChange}/>
+                    </Col>
+                </Row>
+                <Row className="upexam_to_ma">
+                    <Col span={4}>参与考勤人员：</Col>
+                    <Col span={18}>
+                            <span>
+                                {tags.map((tag, index) => {
+                                    const isLongTag = tag.length > 20;
+                                    const tagElem = (
+                                        <Tag key={tag} closable={index !== -1} afterClose={() => this.handleClose(tag)}>
+                                            {isLongTag ? `${tag.slice(0, 20)}...` : tag}
+                                        </Tag>
+                                    );
+                                    return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
+                                })}
+                                {inputVisible && (
+                                    <Input
+                                        ref={this.saveInputRef}
+                                        type="text"
+                                        size="small"
+                                        style={{width: 78}}
+                                        value={inputValue}
+                                        onChange={this.handleInputChange}
+                                        onBlur={this.handleInputConfirm}
+                                        onPressEnter={this.handleInputConfirm}
+                                    />
+                                )}
+                            </span>
+                        <Button>请选择</Button>
+                    </Col>
+                </Row>
+                <Row className="upexam_to_ma">
+                    <Col span={4}>无需考勤人员：</Col>
+                    <Col span={18}>
+                            <span>
+                                {tags.map((tag, index) => {
+                                    const isLongTag = tag.length > 20;
+                                    const tagElem = (
+                                        <Tag key={tag} closable={index !== -1} afterClose={() => this.handleClose(tag)}>
+                                            {isLongTag ? `${tag.slice(0, 20)}...` : tag}
+                                        </Tag>
+                                    );
+                                    return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
+                                })}
+                                {inputVisible && (
+                                    <Input
+                                        ref={this.saveInputRef}
+                                        type="text"
+                                        size="small"
+                                        style={{width: 78}}
+                                        value={inputValue}
+                                        onChange={this.handleInputChange}
+                                        onBlur={this.handleInputConfirm}
+                                        onPressEnter={this.handleInputConfirm}
+                                    />
+                                )}
+                            </span>
+                        <Button>请选择</Button>
+                    </Col>
+                </Row>
+                <Row className="upexam_to_ma">
+                    <Col span={4}>考勤组负责人：</Col>
+                    <Col span={18}>
+                            <span>
+                                {tags.map((tag, index) => {
+                                    const isLongTag = tag.length > 20;
+                                    const tagElem = (
+                                        <Tag key={tag} closable={index !== -1} afterClose={() => this.handleClose(tag)}>
+                                            {isLongTag ? `${tag.slice(0, 20)}...` : tag}
+                                        </Tag>
+                                    );
+                                    return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
+                                })}
+                                {inputVisible && (
+                                    <Input
+                                        ref={this.saveInputRef}
+                                        type="text"
+                                        size="small"
+                                        style={{width: 78}}
+                                        value={inputValue}
+                                        onChange={this.handleInputChange}
+                                        onBlur={this.handleInputConfirm}
+                                        onPressEnter={this.handleInputConfirm}
+                                    />
+                                )}
+                            </span>
+                        <Button>请选择</Button>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={24}>
+                        <span className="password_ts checking_in_le">协助管理员分管本考勤组的排班及统计</span>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={4}>工作日设置：</Col>
+                    <Col span={10}>
+                        <span>默认班次：9:00--18:00</span>
+                        <a href="javascript:;" onClick={this.changeShift} className="add_out">更改班次</a>
+                    </Col>
+                </Row>
 
-            <Table columns={workDayCol} dataSource={workdate} pagination={false} rowSelection={rowSelection} className="upexam_to_ma ant-col-20 checking_in_le" />
+                <Table columns={workDayCol} dataSource={workdate} pagination={false} rowSelection={rowSelection}
+                       className="upexam_to_ma ant-col-20 checking_in_le"/>
 
-            <Row className="upexam_to_ma">
-                <Col span={4}>考勤地址：</Col>
-                <Col span={11}>根据办公地点考勤（可添加多个考勤地点）有效范围</Col>
-                <Col span={6}>
-                    <Select style={{width: 75}} defaultValue="300米">
-                        <Option value="jack">300米</Option>
-                        <Option value="lucy">500米</Option>
-                        <Option value="Yiminghe">800米</Option>
-                    </Select>
-                </Col>
-            </Row>
+                <Row className="upexam_to_ma">
+                    <Col span={4}>考勤地址：</Col>
+                    <Col span={11}>根据办公地点考勤（可添加多个考勤地点）有效范围</Col>
+                    <Col span={6}>
+                        <Select style={{width: 75}} defaultValue="300米">
+                            <Option value="100">100米</Option>
+                            <Option value="200">200米</Option>
+                            <Option value="300">300米</Option>
+                            <Option value="400">400米</Option>
+                            <Option value="500">500米</Option>
+                            <Option value="600">600米</Option>
+                            <Option value="700">700米</Option>
+                            <Option value="800">800米</Option>
+                        </Select>
+                    </Col>
+                </Row>
 
 
-            <Table className="upexam_to_ma ant-col-20 checking_in_le" columns={workPositionCol} dataSource={positionData} pagination={false}/>
-            <div className="checking_in_le">
-                <a className="upexam_to_ma checking_in_l31" href="javascript:;" onClick={this.addShiftPos}>添加考勤地点</a>
-                <br/>
-                <Checkbox className="checking_in_l31">允许外勤打卡</Checkbox>
-                <div className="checking_in_l31">关闭后，范围外不允许打卡</div>
+                <Table className="upexam_to_ma ant-col-20 checking_in_le" columns={workPositionCol}
+                       dataSource={positionData} pagination={false}/>
+                <div className="checking_in_le">
+                    <a className="upexam_to_ma checking_in_l31" href="javascript:;"
+                       onClick={this.addShiftPos}>添加考勤地点</a>
+                    <br/>
+                    <Checkbox className="checking_in_l31">允许外勤打卡</Checkbox>
+                    <div className="checking_in_l31">关闭后，范围外不允许打卡</div>
+                </div>
             </div>
-        </div>
         </div>
 
         if (this.state.optType) {
             title = <div className="public—til—blue">考勤详情</div>;
             mainTable =
-                <div className="favorite_scroll" style={{overflow:"auto" }}>
-                    <div  className="checking_add_box">
+                <div className="favorite_scroll" style={{overflow: "auto"}}>
+                    <div className="checking_add_box">
                         <div>
                             <Button type="primary" icon="plus" onClick={this.addAtt}>新增考勤组</Button>
                         </div>
-                        <Table  className="checking_in_box cloud_box upexam_to_ma " columns={columns} dataSource={data} pagination={false}/>
+                        <Table className="checking_in_box cloud_box upexam_to_ma " columns={columns} dataSource={data}
+                               pagination={false}/>
                     </div>
                 </div>;
         } else {
@@ -299,7 +406,7 @@ const AttendanceManagement = React.createClass({
             </div>;
 
             mainTable =
-                <div className="favorite_scroll" style={{overflow: "auto" }}>
+                <div className="favorite_scroll" style={{overflow: "auto"}}>
                     {/*表单提交*/}
                     {stepPanel}
                     <div>
@@ -314,7 +421,7 @@ const AttendanceManagement = React.createClass({
 
         return (
             <div className="group_cont">
-                    {title}
+                {title}
                 {mainTable}
                 <ChangeShiftModel
                     isShow={this.state.changeShiftIsShow}

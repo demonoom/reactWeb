@@ -2,7 +2,7 @@
  * Created by noom on 17-9-7.
  */
 import React, {PropTypes} from 'react';
-import {Modal, Icon, Input, Button, Row, Col, message, Checkbox, Transfer, Table, Select, Tag, Tooltip} from 'antd';
+import {Modal, Input, Row, Col, message, Table, Select, Tag, Tooltip} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import {isEmpty} from '../../utils/utils';
 import UploadImgComponents from './UploadImgComponents';
@@ -122,7 +122,7 @@ class MakeDingModal extends React.Component {
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var data = ret.response;
-                _this.setState({GroupName:data[1].schoolName})
+                _this.setState({GroupName: data[1].schoolName})
                 _this.drawTable(data);
             },
             onError: function (error) {
@@ -156,8 +156,8 @@ class MakeDingModal extends React.Component {
             target = e.target;
         }
         var sendMes = target.value;
-        if(sendMes.length>200) {
-            sendMes = sendMes.substr(0,200);
+        if (sendMes.length > 200) {
+            sendMes = sendMes.substr(0, 200);
             message.error('已经达到最大字数限制');
         }
         var strNum = 200 - sendMes.length;
@@ -371,7 +371,7 @@ class MakeDingModal extends React.Component {
             <Modal
                 visible={this.state.isShow}
                 width={850}
-                title={"创建叮———"+this.state.GroupName}
+                title={"创建叮———" + this.state.GroupName}
                 onCancel={this.MakeDingModalHandleCancel}
                 transitionName=""  //禁用modal的动画效果
                 maskClosable={false} //设置不允许点击蒙层关闭
@@ -416,7 +416,8 @@ class MakeDingModal extends React.Component {
                                            onChange={this.snedMesOnChange}
                                     />
                                 </div>
-                                <p className="ding_str_num">还可以输入<span className="ding_str_col">{this.state.defStrNum}</span>字</p>
+                                <p className="ding_str_num">还可以输入<span
+                                    className="ding_str_col">{this.state.defStrNum}</span>字</p>
                                 <UploadImgComponents callBackParent={this.getUploadedImgList}
                                                      fileList={this.state.topicImgUrl}/>
                                 <div className="ding_modal_top">
