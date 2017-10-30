@@ -274,7 +274,7 @@ const AttendanceManagement = React.createClass({
                 <a className="upexam_to_ma checking_in_l31" href="javascript:;" onClick={this.addShiftPos}>添加考勤地点</a>
                 <br/>
                 <Checkbox className="checking_in_l31">允许外勤打卡</Checkbox>
-                <div className="checking_in_l31">关闭后，范围外不允许打卡</div>
+                <div className="checking_in_l31 password_ts">关闭后，范围外不允许打卡</div>
             </div>
         </div>
         </div>

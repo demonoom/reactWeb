@@ -29,7 +29,7 @@ const AddShiftPosModel = React.createClass({
         if (this.state.isShow && !this.state.flag) {
             this.showMap();
         }
-        document.getElementById('search-map').innerHTML = '<div id="r-result">请输入:<input type="text" id="suggestId" size="20" value="百度" style="width:150px;" /></div>\n' +
+        document.getElementById('search-map').innerHTML = '<div id="r-result"><div>请输入地址：</div><div><input type="text" id="suggestId" size="20" value="百度" style="width:170px;" /></div></div>\n' +
             '<div id="searchResultPanel" class="noom_map"></div>';
     },
 
@@ -144,14 +144,13 @@ const AddShiftPosModel = React.createClass({
                 maskClosable={false} //设置不允许点击蒙层关闭
                 onCancel={this.closeChangeShiftModal}
                 onOk={this.handleOk}
-                className="schoolgroup_modal"
             >
                 <div className="modal_register_main" id="noom_map">
                     <div id="l-map" style={{height: 368}}>
 
                     </div>
                 </div>
-                <div id="search-map">
+                <div id="search-map" className="search_map">
 
                 </div>
             </Modal>

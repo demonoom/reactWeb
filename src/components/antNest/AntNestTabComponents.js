@@ -1536,7 +1536,7 @@ const AntNestTabComponents = React.createClass({
                        onOk={antNest.partakeModalHandleOk}
                        onCancel={antNest.partakeModalHandleCancel}
                 >
-                    <div>
+                    <div className="group_send_shuoshuo">
                         <Row>
                             <Col span={3}>内容：</Col>
                             <Col span={20}><EmotionInputComponents
