@@ -373,24 +373,15 @@ const AttendanceManagement = React.createClass({
                 </Row>
 
 
-<<<<<<< HEAD
+
             <Table className="upexam_to_ma ant-col-20 checking_in_le" columns={workPositionCol} dataSource={positionData} pagination={false}/>
             <div className="checking_in_le">
                 <a className="upexam_to_ma checking_in_l31" href="javascript:;" onClick={this.addShiftPos}>添加考勤地点</a>
                 <br/>
                 <Checkbox className="checking_in_l31">允许外勤打卡</Checkbox>
                 <div className="checking_in_l31 password_ts">关闭后，范围外不允许打卡</div>
-=======
-                <Table className="upexam_to_ma ant-col-20 checking_in_le" columns={workPositionCol}
-                       dataSource={positionData} pagination={false}/>
-                <div className="checking_in_le">
-                    <a className="upexam_to_ma checking_in_l31" href="javascript:;"
-                       onClick={this.addShiftPos}>添加考勤地点</a>
-                    <br/>
-                    <Checkbox className="checking_in_l31">允许外勤打卡</Checkbox>
-                    <div className="checking_in_l31">关闭后，范围外不允许打卡</div>
-                </div>
->>>>>>> a295fc5f11739e9a73d6e8e2c1b5f63e4d81f373
+            </div>
+
             </div>
         </div>
 
