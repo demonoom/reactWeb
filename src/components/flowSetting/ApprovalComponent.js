@@ -248,6 +248,13 @@ const ApprovalComponent = React.createClass({
                 //本环节审批方式(依次审批)
                 approvalJson.currentApprovalTypeValue=FLOW_CURRENT_APPROVAL_TYPE_NEXT;
                 break;
+            case 4:
+                //选择的是流程发起人自己
+                approvalJson.approval = null;
+                approvalJson.approvalManagerVariables = null;
+                approvalJson.approvalRoleVariables = null;
+                approvalJson.approvalStarterVariables= "${assignOfStarter}";
+                break;
         }
 
         return approvalJson;
@@ -326,7 +333,10 @@ const ApprovalComponent = React.createClass({
             //多级主管
             currentApprovalType = <div>
                 <hr/>
-                <span className="line_h_30 margin_16">依次审批（每一级主管中的审批人依次审批）</span>
+                <Col span={4} className="line_h_30">审批方式</Col>
+                <Col span={20}>
+                    <span className="line_h_30 margin_16">依次审批（每一级主管中的审批人依次审批）</span>
+                </Col>
             </div>;
             ifManagerNull=null;
         }else{
@@ -370,7 +380,7 @@ const ApprovalComponent = React.createClass({
                                     :
                                     null}
                             </Radio>
-                            <Radio style={radioStyle} value={3}>部门主管-连续多级
+                            {/*<Radio style={radioStyle} value={3}>部门主管-连续多级
                                 {this.state.approvalTypeValue === 3 ?
 
                                     <RadioGroup onChange={this.departmentMultiLevelOnChange} value={this.state.departmentMultiLevel}>
@@ -390,6 +400,8 @@ const ApprovalComponent = React.createClass({
                                     </RadioGroup>
                                     :
                                     null}
+                            </Radio>*/}
+                            <Radio style={radioStyle} value={4}>发起人自己
                             </Radio>
                             <Radio style={radioStyle} value={1}>角色(一组固定成员)
                                 {this.state.approvalTypeValue === 1 ?
@@ -414,7 +426,7 @@ const ApprovalComponent = React.createClass({
                     </Col>
 
                 </div>
-                {currentApprovalType}
+                {/* {currentApprovalType} */}
                 {ifManagerNull}
             </div>
         );

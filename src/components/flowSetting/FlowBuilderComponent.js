@@ -218,6 +218,18 @@ const FlowBuilderComponent = React.createClass({
                         <Icon type="arrow-right" className="approval_right_arrow" />
                 </div>;
                 break;
+            case 4:
+                //选定审批人为流程发起人
+                approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalJson.approvalStarterVariables)}>发起人自己</div>;
+                approvalTypeStr= "";
+                stepObj = <div id={approvalJson.approvalStarterVariables} >
+                    <div className="approval_steps_w">
+                        <Icon type="user" />
+                        {approvalNameDiv}
+                    </div>
+                    <Icon type="arrow-right" className="approval_right_arrow" />
+                </div>;
+                break;
         }
         stepObjArray.push(stepObj);
         approvalJsonArray.push(approvalJson);
@@ -354,7 +366,7 @@ const FlowBuilderComponent = React.createClass({
             var ifManagerNullFillType = approvalJson.ifManagerNullFillType;
             var userJson = {"approvalUser":approval,"approvalType":approvalType,"approvalManagerVariables":approvalManagerVariables,
                 "approvalRoleVariables":approvalRoleVariables,"flowApprovalUserRule":flowApprovalUserRule,"currentApprovalTypeValue":currentApprovalTypeValue,
-                "ifManagerNullFillType":ifManagerNullFillType
+                "ifManagerNullFillType":ifManagerNullFillType,"approvalStarterVariables":approvalJson.approvalStarterVariables
             }
             flowApprovalUsers.push(userJson);
         }
