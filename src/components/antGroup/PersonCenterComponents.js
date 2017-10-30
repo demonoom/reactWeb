@@ -767,6 +767,7 @@ const PersonCenterComponents = React.createClass({
                         groupPhoto: imgTag,
                         'groupName': name,
                     };
+
                     arr.push(chatGroupJson);
                 });
                 personCenter.setState({"groupMenuMebs": arr});
