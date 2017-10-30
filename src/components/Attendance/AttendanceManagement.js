@@ -6,6 +6,8 @@ import {
 } from 'antd';
 import ChangeShiftModel from './ChangeShiftModel'
 import AddShiftPosModel from './AddShiftPosModel'
+import ChooseMemberModal from './ChooseMemberModal'
+import ConfirmModal from '../ConfirmModal'
 
 const columns = [{
     title: '名称',
@@ -136,9 +138,10 @@ const AttendanceManagement = React.createClass({
             selectedRowKeys: [1, 2, 3, 4, 5], //默认选中的天数
             changeShiftIsShow: false,
             addShiftPosModel: false,
-            tags: ['Tag 1', 'Tag 2', 'Tag 3','Tag 4', 'Tag 5', 'Tag 6','Tag 7', 'Tag 8', 'Tag 9','Tag 10', 'Tag 11', 'Tag 12',],
+            tags: ['Tag 1', 'Tag 2', 'Tag 3', 'Tag 4', 'Tag 5', 'Tag 6', 'Tag 7', 'Tag 8', 'Tag 9', 'Tag 10', 'Tag 11', 'Tag 12',],
             inputVisible: false,
             inputValue: '',
+            chooseMemberModalIsShow: false,
         };
     },
 
@@ -184,7 +187,7 @@ const AttendanceManagement = React.createClass({
      * model关闭之后将addShiftModalIsShow重置
      */
     closeModel() {
-        this.setState({changeShiftIsShow: false, addShiftPosModel: false});
+        this.setState({changeShiftIsShow: false, addShiftPosModel: false, chooseMemberModalIsShow: false});
     },
 
     /**
@@ -192,6 +195,13 @@ const AttendanceManagement = React.createClass({
      */
     addShiftPos() {
         this.setState({addShiftPosModel: true});
+    },
+
+    /**
+     * 选择考勤参与人的回调
+     */
+    chooseMember() {
+        this.setState({chooseMemberModalIsShow: true});
     },
 
     handleClose(removedTag) {
@@ -278,7 +288,7 @@ const AttendanceManagement = React.createClass({
                                     />
                                 )}
                             </span>
-                        <Button>请选择</Button>
+                        <Button onClick={this.chooseMember}>请选择</Button>
                     </Col>
                 </Row>
                 <Row className="upexam_to_ma">
@@ -307,7 +317,7 @@ const AttendanceManagement = React.createClass({
                                     />
                                 )}
                             </span>
-                        <Button>请选择</Button>
+                        <Button onClick={this.chooseMember}>请选择</Button>
                     </Col>
                 </Row>
                 <Row className="upexam_to_ma">
@@ -336,7 +346,7 @@ const AttendanceManagement = React.createClass({
                                     />
                                 )}
                             </span>
-                        <Button>请选择</Button>
+                        <Button onClick={this.chooseMember}>请选择</Button>
                     </Col>
                 </Row>
                 <Row>
@@ -430,6 +440,16 @@ const AttendanceManagement = React.createClass({
                 <AddShiftPosModel
                     isShow={this.state.addShiftPosModel}
                     closeModel={this.closeModel}
+                />
+                <ChooseMemberModal
+                    isShow={this.state.chooseMemberModalIsShow}
+                    onCancel={this.closeModel}
+                />
+                <ConfirmModal
+                    ref="confirmModal"
+                    title="确定要删除考勤组?"
+                    onConfirmModalCancel={this.closeConfirmModal}
+                    onConfirmModalOK={this.batchDeleteMemeber}
                 />
             </div>
         );
