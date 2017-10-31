@@ -207,7 +207,7 @@
     height: 130px;
 }
 .builder_modal .modal_register_main > div:nth-child(2){
-    height:100px;
+    height:30px;
 }
 .builder_modal .modal_register_main .ant-row, .builder_modal .modal_register_main .ant-radio-group label, .builder_modal .modal_register_main label{
     font-size: 13px !important;
@@ -605,12 +605,16 @@
 .approval_steps{
     width: 100%;
 }
+.approval_steps > div{
+    display: inline-block;
+    float: left;
+}
 .approval_steps_w {
     min-width: 120px !important;
     float: left !important;
     margin-right: 10px !important;
     margin-bottom: 15px;
-    padding: 2px 8px;
+    padding: 4px 8px;
     border-radius: 4px;
     border: 1px solid #e8e8e8;
     width: auto !important;
@@ -640,4 +644,12 @@
 .approval_right_arrow{
     font-size: 24px;
     color: #d8d8d8;
+    margin-right: 10px;
+}
+.approval_steps_w .anticon-user{
+    margin-top: 4px;
+    margin-right: 4px;
+}
+.approval_steps >div:last-child i.approval_right_arrow {
+    display: none;
 }

@@ -160,9 +160,11 @@ const FlowBuilderComponent = React.createClass({
                 approvalTypeStr= "";
                 //stepObj = <Step id={approvalJson.approval} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
                 stepObj = <div id={approvalJson.approval} >
-                    <Icon type="user" />
-                    {approvalNameDiv}
-                    <Icon type="arrow-right" />
+                    <div className="approval_steps_w">
+                        <Icon type="user" />
+                        {approvalNameDiv}
+                    </div>
+                    <Icon type="arrow-right" className="approval_right_arrow" />
                 </div>;
                 break;
             case 1:
@@ -171,9 +173,11 @@ const FlowBuilderComponent = React.createClass({
                 approvalTypeStr= "";
                 //stepObj = <Step id={approvalJson.approvalRoleVariables.id} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
                 stepObj = <div id={approvalJson.approvalRoleVariables.id} >
-                    <Icon type="user" />
-                    {approvalNameDiv}
-                    <Icon type="arrow-right" />
+                    <div className="approval_steps_w">
+                        <Icon type="user" />
+                        {approvalNameDiv}
+                    </div>
+                    <Icon type="arrow-right"  className="approval_right_arrow" />
                 </div>;
                 break;
             case 2:
@@ -193,9 +197,11 @@ const FlowBuilderComponent = React.createClass({
                 approvalTypeStr= "";
                 //stepObj = <Step id={approvalUserKey} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
                 stepObj = <div id={approvalUserKey} >
-                    <Icon type="user" />
-                    {approvalNameDiv}
-                    <Icon type="arrow-right" />
+                    <div className="approval_steps_w">
+                        <Icon type="user" />
+                        {approvalNameDiv}
+                    </div>
+                    <Icon type="arrow-right" className="approval_right_arrow" />
                 </div>;
                 break;
             case 3:
@@ -210,7 +216,7 @@ const FlowBuilderComponent = React.createClass({
                 approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalUserKey)}>{approvalShowName}</div>;
                 approvalTypeStr= "";
                /* stepObj = <Step id={approvalUserKey} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;*/
-                stepObj = <div id={approvalUserKey} >
+                stepObj = <div id={approvalUserKey}  >
                     <div className="approval_steps_w">
                         <Icon type="user" />
                         {approvalNameDiv}
