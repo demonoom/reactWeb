@@ -914,7 +914,7 @@ const CreateClassComponents = React.createClass({
                 </Row>
                 <Row>
                     <Col span={4}>授课形式：</Col>
-                    <Col span={18} style={{height: 160}}>
+                    <Col span={18} style={{height: 140}}>
                         <RadioGroup onChange={this.classTypeOnChange} value={this.state.isTeam}>
                             <Radio style={radioStyle} value={1}>单人授课</Radio>
                             <Row style={{width: 420}}>
@@ -944,7 +944,8 @@ const CreateClassComponents = React.createClass({
                     </Col>
                 </Row>
                 <Row>
-                    <Checkbox onChange={this.isWeiClass} checked={this.state.isWeiClass}>是否为微课</Checkbox>
+                    <Checkbox onChange={this.isWeiClass} checked={this.state.isWeiClass} className="upexam_le_datika">是否为微课</Checkbox>
+
                 </Row>
                 {/*<Row>
                     <Col span={4}>授课时间：</Col>
@@ -986,12 +987,12 @@ const CreateClassComponents = React.createClass({
                         }
                         var lessonRowObj = <Row>
                             <Col span={3} className="add_left">第{lessonJson.lessonNum}课时</Col>
-                            <Col span={6}>
+                            <Col span={6} className="class_right">
                                 <Input key={i} id={lessonJson.lessonNum} defaultValue={videoName}
                                        onChange={this.lessonTitleOnChange}/>
                             </Col>
-                            <Col span={3}>{lessonJson.teacherObj}</Col>
-                            <Col span={3}>
+                            <Col span={3} className="class_right">{lessonJson.teacherObj}</Col>
+                            <Col span={3} className="class_right">
                                 <Col span={4}>
                                     <DatePicker
                                         className="lessonTime"
@@ -1003,18 +1004,18 @@ const CreateClassComponents = React.createClass({
                                     />
                                 </Col>
                             </Col>
-                            <Col span={3}>
-                                微课
+                            <Col span={4} className="class_right">
+
                             </Col>
-                            <Col span={3}>
+                            <Col span={3} className="class_right create_upload">
                                 <Upload {...props}>
-                                    <Button>
+                                    <Button className="create_upload_btn">
                                         <Icon type="upload"/>
                                     </Button>
                                 </Upload>
                             </Col>
-                            <Col span={3}>
-                                <Button icon="delete"
+                            <Col span={2}>
+                                <Button icon="delete" className="create_upload_btn"
                                         onClick={this.removeLesson.bind(this, lessonJson.lessonNum)}></Button>
                             </Col>
                         </Row>;
@@ -1032,13 +1033,13 @@ const CreateClassComponents = React.createClass({
                         <Col span={4}>设置课表：</Col>
                         <Col span={20}>
                             <Row className="no_ant-row price">
-                                <Col span={4} className="add_left">目录</Col>
-                                <Col span={8}>名称</Col>
-                                <Col span={4}>授课老师</Col>
-                                <Col span={4}>授课时间</Col>
-                                <Col span={4}>微课名</Col>
-                                <Col span={4}>微课上传</Col>
-                                <Col span={4}>操作</Col>
+                                <Col span={3} className="add_left">目录</Col>
+                                <Col span={6}>名称</Col>
+                                <Col span={3} className="class_right">授课老师</Col>
+                                <Col span={3} className="class_right">授课时间</Col>
+                                <Col span={4} className="class_right">微课名</Col>
+                                <Col span={3} className="class_right">微课上传</Col>
+                                <Col span={2} className="class_right">操作</Col>
                             </Row>
                             {everyLessonArray}
                             <Row>
