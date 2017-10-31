@@ -162,6 +162,8 @@ const Login = Form.create()(React.createClass({
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
+                console.log(response);
+                console.log('旭');
                 sessionStorage.setItem("cloudClassRoomUser",JSON.stringify(response));
             },
             onError: function (error) {

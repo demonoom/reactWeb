@@ -22,6 +22,7 @@ var teamJsonArray = [];
 var firstTeamId;
 var isSeriesStr = "系列课";
 var fileList = [];
+
 const CreateClassComponents = React.createClass({
 
     getInitialState() {
@@ -265,23 +266,23 @@ const CreateClassComponents = React.createClass({
             "jsonObject": JSON.stringify(courseInfoJson),
         };
         console.log(param);
-        // doWebService_CloudClassRoom(JSON.stringify(param), {
-        //     onResponse: function (ret) {
-        //         var response = ret.response;
-        //         if (response == true) {
-        //             message.success("课程创建成功");
-        //         } else {
-        //             message.error("课程创建失败");
-        //         }
-        //         fileList.splice(0);
-        //         _this.props.onSaveOk();
-        //     },
-        //     onError: function (error) {
-        //         message.error(error);
-        //     }
-        // });
-        // _this.initCreatePage(_this.state.isSeries);
-        // _this.changeStep("pre");
+        doWebService_CloudClassRoom(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if (response == true) {
+                    message.success("课程创建成功");
+                } else {
+                    message.error("课程创建失败");
+                }
+                fileList.splice(0);
+                _this.props.onSaveOk();
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+        _this.initCreatePage(_this.state.isSeries);
+        _this.changeStep("pre");
     },
 
     /**
@@ -793,11 +794,8 @@ const CreateClassComponents = React.createClass({
         this.setState({isWeiClass: e.target.checked});
     },
 
-    /**
-     * 上传微课的回调
-     */
-    uploadWeiClass() {
-        alert('上传');
+    showWeiClass() {
+        alert('showWeiClass');
     },
 
 
@@ -806,6 +804,32 @@ const CreateClassComponents = React.createClass({
      * @returns {XML}
      */
     render() {
+        const props = {
+            action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
+            listType: 'text',
+            onPreview: this.showWeiClass,
+            beforeUpload(file) {
+                var fileType = file.type;
+                if (fileType.indexOf("video") == -1) {
+                    message.error('只能上传视频文件，请重新上传', 5);
+                    return false;
+                }
+            },
+            onChange(info) {
+                if (info.file.status !== 'uploading') {
+                    console.log(info.file, info.fileList);
+                }
+                if (info.file.status === 'done') {
+                    message.success('微课上传成功');
+                    // console.log(info.file.response);
+                    courseInfoJson.url = info.file.response;
+
+                } else if (info.file.status === 'error') {
+                    message.error('微课上传失败');
+                }
+            },
+        };
+
         const radioStyle = {
             display: 'block',
             height: '30px',
@@ -983,7 +1007,11 @@ const CreateClassComponents = React.createClass({
                                 微课
                             </Col>
                             <Col span={3}>
-                                <Button icon="upload" onClick={this.uploadWeiClass}></Button>
+                                <Upload {...props}>
+                                    <Button>
+                                        <Icon type="upload"/>
+                                    </Button>
+                                </Upload>
                             </Col>
                             <Col span={3}>
                                 <Button icon="delete"
