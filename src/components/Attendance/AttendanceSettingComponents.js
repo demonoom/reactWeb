@@ -3,7 +3,6 @@ import {isEmpty} from '../../utils/utils';
 import {Menu, Icon} from 'antd';
 
 const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
 
 const AttendanceSettingComponents = React.createClass({
 
