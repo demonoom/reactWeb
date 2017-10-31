@@ -7152,7 +7152,7 @@ select.course_n:hover {
 }
 
 .ding_mes_notRead {
-    background-color: blanchedalmond;
+    background-color: #fffbe8;
 }
 
 .white_16 {
@@ -7456,7 +7456,11 @@ select.course_n:hover {
     height: auto;
     display: none;
 }
-
+.noom_map_cont {
+    position:absolute;
+    top:50px;
+    right:50px;
+}
 .checking_in_box {
     height: calc(100% - 40px);
 }
@@ -7509,4 +7513,22 @@ select.course_n:hover {
 .checking_in_modal .ant-modal-body {
     min-height: 260px;
 }
-
+.search_map{
+    position: absolute;
+    top:30px;
+    right:30px;
+    border: 1px solid #cccccc;
+    background: #fff;
+    padding: 10px;
+}
+.search_map div{
+    line-height: 30px;
+    font-size: 14px;
+}
+.search_map div input{
+    line-height: 24px;
+    font-size: 12px
+}
+.tangram-suggestion-main{
+    z-index: 10000;
+}

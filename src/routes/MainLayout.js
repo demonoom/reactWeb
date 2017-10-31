@@ -27,6 +27,7 @@ import SchoolGroupSettingComponents from '../components/schoolGroupSetting/Schoo
 import SchoolGroupMenu from '../components/schoolGroupSetting/SchoolGroupMenu';
 import SystemSettingGhostMenu from '../components/SystemSetting/SystemSettingGhostMenu';
 import SystemSettingComponent from '../components/SystemSetting/SystemSettingComponent';
+// import AddShiftPosModel from '../components/Attendance/AddShiftPosModel';
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
 
@@ -62,6 +63,7 @@ const MainLayout = React.createClass({
             isSearch: false,
             isSearchGroup: false,
             isPersonCenter: false,
+            // addShiftPosModel: false,
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
     },
@@ -755,6 +757,10 @@ const MainLayout = React.createClass({
 
                         </audio>
                     </div>
+                    {/*<AddShiftPosModel*/}
+                        {/*isShow={this.state.addShiftPosModel}*/}
+                        {/*closeModel={this.closeModel}*/}
+                    {/*/>*/}
                 </div>
             </LocaleProvider>
         );

@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {
     Tabs, Breadcrumb, Icon, Card, Button, Row, Col, Steps,
-    Input, Select, Radio, DatePicker, Checkbox, message
+    Input, Select, Radio, DatePicker, Checkbox, message, Upload,
 } from 'antd';
 import ImageAnswerUploadComponents from './ImageAnswerUploadComponents';
 import {isEmpty, getLocalTime} from '../../utils/utils';
@@ -27,7 +27,6 @@ const CreateClassComponents = React.createClass({
     getInitialState() {
         var cloudClassRoomUser = JSON.parse(sessionStorage.getItem("cloudClassRoomUser"));
         console.log(cloudClassRoomUser);
-        console.log('888888888888');
         return {
             stepNum: 0,
             isFree: 1,
@@ -39,6 +38,7 @@ const CreateClassComponents = React.createClass({
             isSeriesDisabled: false,
             teamDisabled: true,
             cloudClassRoomUser: cloudClassRoomUser,
+            isWeiClass: false,
         };
     },
 
@@ -61,10 +61,21 @@ const CreateClassComponents = React.createClass({
      * @param nextProps
      */
     componentWillReceiveProps(nextProps) {
+        var isWeiClass = this.state.isWeiClass;
         var isSeries = nextProps.isSeries;
+        //isWeiClass为true，代表是微课
+        if (isWeiClass) {
+            if (isSeries == 1) {
+                //系列微课
+                isSeries = 3
+            } else if (isSeries == 2) {
+                //单节微课
+                isSeries = 4
+            }
+        }
         var stepDirect = nextProps.stepDirect;
         this.setState({stepDirect, isSeries});
-        if (isSeries == "1") {
+        if (isSeries == "1" || isSeries == "3") {
             isSeriesStr = "系列课";
         } else {
             isSeriesStr = "单节课";
@@ -95,7 +106,7 @@ const CreateClassComponents = React.createClass({
             isSeries, isSeriesStr, videoNumInputDisable, videoNum,
             "courseName": '', "isFree": 1, "isLimit": 1, "money": 0, "limitPerson": 0, "defaultSubjectSelected": "",
             "defaultSelected": '', "isTeam": 1, "defaultTeamSelected": '',
-            "courseSummary": '', "moneyInputDisable": true, "numInputDisable": true
+            "courseSummary": '', "moneyInputDisable": true, "numInputDisable": true, isWeiClass: false,
         });
         // this.getAllTeam();
     },
@@ -253,23 +264,24 @@ const CreateClassComponents = React.createClass({
             "method": 'addCourse',
             "jsonObject": JSON.stringify(courseInfoJson),
         };
-        doWebService_CloudClassRoom(JSON.stringify(param), {
-            onResponse: function (ret) {
-                var response = ret.response;
-                if (response == true) {
-                    message.success("课程创建成功");
-                } else {
-                    message.error("课程创建失败");
-                }
-                fileList.splice(0);
-                _this.props.onSaveOk();
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });
-        _this.initCreatePage(_this.state.isSeries);
-        _this.changeStep("pre");
+        console.log(param);
+        // doWebService_CloudClassRoom(JSON.stringify(param), {
+        //     onResponse: function (ret) {
+        //         var response = ret.response;
+        //         if (response == true) {
+        //             message.success("课程创建成功");
+        //         } else {
+        //             message.error("课程创建失败");
+        //         }
+        //         fileList.splice(0);
+        //         _this.props.onSaveOk();
+        //     },
+        //     onError: function (error) {
+        //         message.error(error);
+        //     }
+        // });
+        // _this.initCreatePage(_this.state.isSeries);
+        // _this.changeStep("pre");
     },
 
     /**
@@ -773,6 +785,21 @@ const CreateClassComponents = React.createClass({
         console.log(value);
     },
 
+    /**
+     * 勾选是否为微课的回调
+     */
+    isWeiClass(e) {
+        console.log(`checked = ${e.target.checked}`);
+        this.setState({isWeiClass: e.target.checked});
+    },
+
+    /**
+     * 上传微课的回调
+     */
+    uploadWeiClass() {
+        alert('上传');
+    },
+
 
     /**
      * 渲染页面
@@ -892,6 +919,9 @@ const CreateClassComponents = React.createClass({
                         </RadioGroup>
                     </Col>
                 </Row>
+                <Row>
+                    <Checkbox onChange={this.isWeiClass} checked={this.state.isWeiClass}>是否为微课</Checkbox>
+                </Row>
                 {/*<Row>
                     <Col span={4}>授课时间：</Col>
                     <Col span={18}>
@@ -919,75 +949,155 @@ const CreateClassComponents = React.createClass({
             saveButton = <Button onClick={this.saveClassInfo}>保存</Button>;
             nextButton = "";
             var everyLessonArray = [];
-            // <Col span={4}>第{lessonNum}课时</Col>
-            if (typeof(this.state.lessonArray) != "undefined") {
-                for (var i = 0; i < this.state.lessonArray.length; i++) {
-                    var lessonJson = this.state.lessonArray[i];
-                    //获取已经保存的时间信息，并重新初始化到页面的组件上
-                    var videoInfo = this.getVideoInfoFromCourseInfoJson(lessonJson.lessonNum);
-                    var videoName = "";
-                    if (isEmpty(videoInfo) == false) {
-                        console.log("videoInfo name:" + videoInfo.name);
-                        videoName = videoInfo.name;
+            if (this.state.isWeiClass) {
+                if (typeof(this.state.lessonArray) != "undefined") {
+                    for (var i = 0; i < this.state.lessonArray.length; i++) {
+                        var lessonJson = this.state.lessonArray[i];
+                        //获取已经保存的时间信息，并重新初始化到页面的组件上
+                        var videoInfo = this.getVideoInfoFromCourseInfoJson(lessonJson.lessonNum);
+                        var videoName = "";
+                        if (isEmpty(videoInfo) == false) {
+                            console.log("videoInfo name:" + videoInfo.name);
+                            videoName = videoInfo.name;
+                        }
+                        var lessonRowObj = <Row>
+                            <Col span={3} className="add_left">第{lessonJson.lessonNum}课时</Col>
+                            <Col span={6}>
+                                <Input key={i} id={lessonJson.lessonNum} defaultValue={videoName}
+                                       onChange={this.lessonTitleOnChange}/>
+                            </Col>
+                            <Col span={3}>{lessonJson.teacherObj}</Col>
+                            <Col span={3}>
+                                <Col span={4}>
+                                    <DatePicker
+                                        className="lessonTime"
+                                        showTime
+                                        format="YYYY-MM-DD HH:mm:ss"
+                                        placeholder="Select Time"
+                                        onChange={this.lessonTimeOnChange}
+                                        onOk={this.lessonTimeOnOk}
+                                    />
+                                </Col>
+                            </Col>
+                            <Col span={3}>
+                                微课
+                            </Col>
+                            <Col span={3}>
+                                <Button icon="upload" onClick={this.uploadWeiClass}></Button>
+                            </Col>
+                            <Col span={3}>
+                                <Button icon="delete"
+                                        onClick={this.removeLesson.bind(this, lessonJson.lessonNum)}></Button>
+                            </Col>
+                        </Row>;
+                        everyLessonArray.push(lessonRowObj);
                     }
-                    var lessonRowObj = <Row>
-                        <Col span={4} className="add_left">第{lessonJson.lessonNum}课时</Col>
-                        <Col span={8}>
-                            <Input key={i} id={lessonJson.lessonNum} defaultValue={videoName}
-                                   onChange={this.lessonTitleOnChange}/>
-                        </Col>
-                        <Col span={4}>{lessonJson.teacherObj}</Col>
-                        <Col span={4}>
-                            <Col span={4}>
-                                <DatePicker
-                                    className="lessonTime"
-                                    showTime
-                                    format="YYYY-MM-DD HH:mm:ss"
-                                    placeholder="Select Time"
-                                    onChange={this.lessonTimeOnChange}
-                                    onOk={this.lessonTimeOnOk}
-                                />
-                            </Col>
-                        </Col>
-                        <Col span={4}>
-                            <Button icon="delete" onClick={this.removeLesson.bind(this, lessonJson.lessonNum)}></Button>
-                        </Col>
-                    </Row>;
-                    everyLessonArray.push(lessonRowObj);
                 }
-            }
-            stepPanel = <div>
-                <Row>
-                    <Col span={4}>总&nbsp;&nbsp;课&nbsp;&nbsp;时：</Col>
-                    <Col span={20}>
-                        <Input value={this.state.videoNum} disabled={true} onChange={this.classTimesOnChange}/>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span={4}>设置课表：</Col>
-                    <Col span={20}>
-                        <Row className="no_ant-row price">
-                            <Col span={4} className="add_left">目录</Col>
-                            <Col span={8}>名称</Col>
-                            <Col span={4}>授课老师</Col>
-                            <Col span={4}>授课时间</Col>
-                            <Col span={4}>操作</Col>
-                        </Row>
-                        {everyLessonArray}
-                        <Row>
-                            <Col span={24}>
-                                <Button icon="add" onClick={this.addLesson}
-                                        className="add_DIR add_study-b">添加目录</Button>
+                stepPanel = <div>
+                    <Row>
+                        <Col span={4}>总&nbsp;&nbsp;课&nbsp;&nbsp;时：</Col>
+                        <Col span={20}>
+                            <Input value={this.state.videoNum} disabled={true} onChange={this.classTimesOnChange}/>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={4}>设置课表：</Col>
+                        <Col span={20}>
+                            <Row className="no_ant-row price">
+                                <Col span={4} className="add_left">目录</Col>
+                                <Col span={8}>名称</Col>
+                                <Col span={4}>授课老师</Col>
+                                <Col span={4}>授课时间</Col>
+                                <Col span={4}>微课名</Col>
+                                <Col span={4}>微课上传</Col>
+                                <Col span={4}>操作</Col>
+                            </Row>
+                            {everyLessonArray}
+                            <Row>
+                                <Col span={24}>
+                                    <Button icon="add" onClick={this.addLesson}
+                                            className="add_DIR add_study-b">添加目录</Button>
+                                </Col>
+                            </Row>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={24} className="knowledge_ri">
+                            <Checkbox onChange={this.publishClassAtNow}>立即发布</Checkbox>
+                        </Col>
+                    </Row>
+                </div>;
+            } else {
+                if (typeof(this.state.lessonArray) != "undefined") {
+                    for (var i = 0; i < this.state.lessonArray.length; i++) {
+                        var lessonJson = this.state.lessonArray[i];
+                        //获取已经保存的时间信息，并重新初始化到页面的组件上
+                        var videoInfo = this.getVideoInfoFromCourseInfoJson(lessonJson.lessonNum);
+                        var videoName = "";
+                        if (isEmpty(videoInfo) == false) {
+                            console.log("videoInfo name:" + videoInfo.name);
+                            videoName = videoInfo.name;
+                        }
+                        var lessonRowObj = <Row>
+                            <Col span={4} className="add_left">第{lessonJson.lessonNum}课时</Col>
+                            <Col span={8}>
+                                <Input key={i} id={lessonJson.lessonNum} defaultValue={videoName}
+                                       onChange={this.lessonTitleOnChange}/>
                             </Col>
-                        </Row>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span={24} className="knowledge_ri">
-                        <Checkbox onChange={this.publishClassAtNow}>立即发布</Checkbox>
-                    </Col>
-                </Row>
-            </div>;
+                            <Col span={4}>{lessonJson.teacherObj}</Col>
+                            <Col span={4}>
+                                <Col span={4}>
+                                    <DatePicker
+                                        className="lessonTime"
+                                        showTime
+                                        format="YYYY-MM-DD HH:mm:ss"
+                                        placeholder="Select Time"
+                                        onChange={this.lessonTimeOnChange}
+                                        onOk={this.lessonTimeOnOk}
+                                    />
+                                </Col>
+                            </Col>
+                            <Col span={4}>
+                                <Button icon="delete"
+                                        onClick={this.removeLesson.bind(this, lessonJson.lessonNum)}></Button>
+                            </Col>
+                        </Row>;
+                        everyLessonArray.push(lessonRowObj);
+                    }
+                }
+                stepPanel = <div>
+                    <Row>
+                        <Col span={4}>总&nbsp;&nbsp;课&nbsp;&nbsp;时：</Col>
+                        <Col span={20}>
+                            <Input value={this.state.videoNum} disabled={true} onChange={this.classTimesOnChange}/>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={4}>设置课表：</Col>
+                        <Col span={20}>
+                            <Row className="no_ant-row price">
+                                <Col span={4} className="add_left">目录</Col>
+                                <Col span={8}>名称</Col>
+                                <Col span={4}>授课老师</Col>
+                                <Col span={4}>授课时间</Col>
+                                <Col span={4}>操作</Col>
+                            </Row>
+                            {everyLessonArray}
+                            <Row>
+                                <Col span={24}>
+                                    <Button icon="add" onClick={this.addLesson}
+                                            className="add_DIR add_study-b">添加目录</Button>
+                                </Col>
+                            </Row>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={24} className="knowledge_ri">
+                            <Checkbox onChange={this.publishClassAtNow}>立即发布</Checkbox>
+                        </Col>
+                    </Row>
+                </div>;
+            }
         }
 
         return (
