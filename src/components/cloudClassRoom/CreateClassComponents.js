@@ -22,6 +22,7 @@ var teamJsonArray = [];
 var firstTeamId;
 var isSeriesStr = "系列课";
 var fileList = [];
+var oriUrl;
 
 const CreateClassComponents = React.createClass({
 
@@ -260,6 +261,7 @@ const CreateClassComponents = React.createClass({
      * 获取所有的年级
      */
     addCourse() {
+        console.log(courseInfoJson);
         var _this = this;
         var param = {
             "method": 'addCourse',
@@ -603,12 +605,28 @@ const CreateClassComponents = React.createClass({
         }
         if (isEmpty(courseInfoJson.videos) == false) {
             var checkResult = true;
-            courseInfoJson.videos.forEach(function (video) {
-                if (isEmpty(video.name) || isEmpty(video.userID) || isEmpty(video.liveTime) || isNaN(video.liveTime)) {
-                    checkResult = false;
-                    return;
-                }
-            })
+            // courseInfoJson.videos.forEach(function (video) {
+            //     if (isEmpty(video.name) || isEmpty(video.userID) || isEmpty(video.liveTime) || isNaN(video.liveTime)) {
+            //         checkResult = false;
+            //         return;
+            //     }
+            // })
+            if (this.state.isWeiClass) {
+                courseInfoJson.videos.forEach(function (video) {
+                    debugger
+                    if (isEmpty(video.name) || isEmpty(video.userID) || isEmpty(video.liveTime) || isNaN(video.liveTime) || isEmpty(video.url)) {
+                        checkResult = false;
+                        return;
+                    }
+                })
+            } else {
+                courseInfoJson.videos.forEach(function (video) {
+                    if (isEmpty(video.name) || isEmpty(video.userID) || isEmpty(video.liveTime) || isNaN(video.liveTime)) {
+                        checkResult = false;
+                        return;
+                    }
+                })
+            }
             if (checkResult == false) {
                 message.error("排课课表中存在空值,请检查");
                 return;
@@ -795,7 +813,11 @@ const CreateClassComponents = React.createClass({
     },
 
     showWeiClass() {
-        alert('showWeiClass');
+        // alert(oriUrl);
+    },
+
+    removeWeiClass() {
+        courseInfoJson.videos[0].url = '';
     },
 
 
@@ -808,6 +830,7 @@ const CreateClassComponents = React.createClass({
             action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
             listType: 'text',
             onPreview: this.showWeiClass,
+            onRemove: this.removeWeiClass,
             beforeUpload(file) {
                 var fileType = file.type;
                 if (fileType.indexOf("video") == -1) {
@@ -821,8 +844,9 @@ const CreateClassComponents = React.createClass({
                 }
                 if (info.file.status === 'done') {
                     message.success('微课上传成功');
-                    // console.log(info.file.response);
-                    courseInfoJson.url = info.file.response;
+                    courseInfoJson.videos[0].url = info.file.response;
+                    // oriUrl = info.file.response;
+                    oriUrl = info.file.uid;
 
                 } else if (info.file.status === 'error') {
                     message.error('微课上传失败');
