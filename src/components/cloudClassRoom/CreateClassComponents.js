@@ -23,7 +23,7 @@ var firstTeamId;
 var isSeriesStr = "系列课";
 var fileList = [];
 var oriUrl;
-var weiClassList = [];
+var uploadClickNum;
 
 const CreateClassComponents = React.createClass({
 
@@ -817,6 +817,10 @@ const CreateClassComponents = React.createClass({
         // fileList = [];
     },
 
+    uploadOnclick(i) {
+        uploadClickNum = i;
+    },
+
 
     /**
      * 渲染页面
@@ -845,7 +849,7 @@ const CreateClassComponents = React.createClass({
                 }
                 if (info.file.status === 'done') {
                     message.success('微课上传成功');
-                    courseInfoJson.videos[0].url = info.file.response;
+                    courseInfoJson.videos[uploadClickNum].url = info.file.response;
                     // oriUrl = info.file.response;
                     oriUrl = info.file.uid;
 
@@ -1031,7 +1035,7 @@ const CreateClassComponents = React.createClass({
                             <Col span={4} className="class_right">
 
                             </Col>
-                            <Col span={3} className="class_right create_upload">
+                            <Col span={3} className="class_right create_upload" onClick={this.uploadOnclick.bind(this,i)}>
                                 <Upload {...props}>
                                     <Button className="create_upload_btn">
                                         <Icon type="upload"/>

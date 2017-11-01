@@ -29,6 +29,7 @@ var videoJsonArray = [];
 var teamJsonArray = [];
 var fileList = [];
 var oriUrl;
+var uploadClickNum;
 const UpdateClassComponents = React.createClass({
 
     getInitialState() {
@@ -77,6 +78,15 @@ const UpdateClassComponents = React.createClass({
     },
 
     componentWillReceiveProps(nextProps) {
+        if(!this.state.isWeiClass) {
+            if (courseInfoJson.isSeries == 3) {
+                //系列微课
+                courseInfoJson.isSeries = 1
+            } else if (courseInfoJson.isSeries == 4) {
+                //单节微课
+                courseInfoJson.isSeries = 2
+            }
+        }
         if (!nextProps.isChangeStep) {
             this.findTeamByUserId();
             var updateClassObj = nextProps.updateClassObj;
@@ -103,8 +113,6 @@ const UpdateClassComponents = React.createClass({
      * @param updateClassObj
      */
     initPageInfo(updateClassObj) {
-        console.log(updateClassObj);
-        console.log('updateClassObj');
         var _this = this;
         var courseName = updateClassObj.courseName;
         var money = updateClassObj.money;
@@ -167,7 +175,7 @@ const UpdateClassComponents = React.createClass({
             fileList.push(fileJson);
         }*/
         var isWeiClass = this.state.isWeiClass;
-        if(!isWeiClass) {
+        if (!isWeiClass) {
             if (isSeries == 3) {
                 //系列微课
                 isSeries = 1
@@ -239,7 +247,8 @@ const UpdateClassComponents = React.createClass({
             videos.forEach(function (video) {
                 var squence = video.squence;
                 var name = video.name;
-                var videoJson = {squence, name};
+                var url = video.url;
+                var videoJson = {squence, name, url};
                 _this.buildVideosArray(videoJson, "title");
                 lessonNum += 1;
                 var liveTime = getLocalTime(video.liveTime);
@@ -372,24 +381,25 @@ const UpdateClassComponents = React.createClass({
     },
 
     updateCourse() {
+        console.log(courseInfoJson);
         var _this = this;
         var param = {
             "method": 'updateCourse',
             "data": JSON.stringify(courseInfoJson),
         };
-        doWebService_CloudClassRoom(JSON.stringify(param), {
-            onResponse: function (ret) {
-                var response = ret.response;
-                if (response) {
-                    message.success("课程信息修改成功");
-                    _this.setState({"stepNum": 0});
-                }
-                _this.props.onSaveOk();
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });
+        // doWebService_CloudClassRoom(JSON.stringify(param), {
+        //     onResponse: function (ret) {
+        //         var response = ret.response;
+        //         if (response) {
+        //             message.success("课程信息修改成功");
+        //             _this.setState({"stepNum": 0});
+        //         }
+        //         _this.props.onSaveOk();
+        //     },
+        //     onError: function (error) {
+        //         message.error(error);
+        //     }
+        // });
     },
 
     findTeamByUserId() {
@@ -823,6 +833,7 @@ const UpdateClassComponents = React.createClass({
             console.log("teacher" + teacher + "\t" + time);
             videoJson.squence = i + 1;
             videoJson.courseId = courseInfoJson.id;
+            videoJson.url = courseInfoJson.videos[i].url;
             videoJson.userID = teacher;
             videoJson.liveTime = new Date(time).valueOf();
             if (videoJson.squence == 1) {
@@ -969,6 +980,7 @@ const UpdateClassComponents = React.createClass({
                     everyVideoJson.courseId = videoJson.courseId;
                     everyVideoJson.userID = videoJson.userID;
                     everyVideoJson.liveTime = videoJson.liveTime;
+                    everyVideoJson.url = videoJson.url;
                 }
                 isExistSameVideo = true;
                 break;
@@ -992,6 +1004,10 @@ const UpdateClassComponents = React.createClass({
 
     },
 
+    uploadOnclick(i) {
+        uploadClickNum = i;
+    },
+
 
     /**
      * 渲染页面
@@ -1002,7 +1018,7 @@ const UpdateClassComponents = React.createClass({
         const props = {
             action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
             listType: 'text',
-            fileList:_this.state.fileList,
+            fileList: _this.state.fileList,
             // onPreview: this.showWeiClass,
             onRemove: this.removeWeiClass,
             beforeUpload(file) {
@@ -1020,7 +1036,7 @@ const UpdateClassComponents = React.createClass({
                 }
                 if (info.file.status === 'done') {
                     message.success('微课上传成功');
-                    courseInfoJson.videos[0].url = info.file.response;
+                    courseInfoJson.videos[uploadClickNum].url = info.file.response;
                     // oriUrl = info.file.response;
                     oriUrl = info.file.uid;
 
@@ -1179,7 +1195,8 @@ const UpdateClassComponents = React.createClass({
                             <Col span={4} className="class_right">
 
                             </Col>
-                            <Col span={3} className="class_right create_upload">
+                            <Col span={3} className="class_right create_upload"
+                                 onClick={this.uploadOnclick.bind(this, i)}>
                                 <Upload {...props}>
                                     <Button className="create_upload_btn">
                                         <Icon type="upload"/>
