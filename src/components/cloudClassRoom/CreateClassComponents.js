@@ -1015,13 +1015,13 @@ const CreateClassComponents = React.createClass({
                         }
                         var lessonRowObj = <Row>
                             <Col span={3} className="add_left">第{lessonJson.lessonNum}课时</Col>
-                            <Col span={6} className="class_right">
+                            <Col span={8} className="class_right">
                                 <Input key={i} id={lessonJson.lessonNum} defaultValue={videoName}
                                        onChange={this.lessonTitleOnChange}/>
                             </Col>
-                            <Col span={3} className="class_right">{lessonJson.teacherObj}</Col>
-                            <Col span={3} className="class_right">
-                                <Col span={4}>
+                            <Col span={4} className="class_right">{lessonJson.teacherObj}</Col>
+                            <Col span={4} className="class_right">
+                                <Col span={24}>
                                     <DatePicker
                                         className="lessonTime"
                                         showTime
@@ -1062,9 +1062,9 @@ const CreateClassComponents = React.createClass({
                         <Col span={20}>
                             <Row className="no_ant-row price">
                                 <Col span={3} className="add_left">目录</Col>
-                                <Col span={6}>名称</Col>
-                                <Col span={3} className="class_right">授课老师</Col>
-                                <Col span={3} className="class_right">授课时间</Col>
+                                <Col span={8}>名称</Col>
+                                <Col span={4} className="class_right">授课老师</Col>
+                                <Col span={4} className="class_right">授课时间</Col>
                                 {/*<Col span={4} className="class_right">微课名</Col>*/}
                                 <Col span={3} className="class_right">微课上传</Col>
                                 <Col span={2} className="class_right">操作</Col>
