@@ -445,6 +445,7 @@ const CreateClassComponents = React.createClass({
             </Col>;
         }
         var timeObj = <Col span={4}>
+            <Col span={24}>
             <DatePicker
                 className="lessonTime"
                 showTime
@@ -453,6 +454,7 @@ const CreateClassComponents = React.createClass({
                 onChange={this.lessonTimeOnChange}
                 onOk={this.lessonTimeOnOk}
             />
+            </Col>
         </Col>;
         var lessonJson = {lessonNum, teacherObj, timeObj};
         lessonArray.push(lessonJson);
@@ -1103,7 +1105,7 @@ const CreateClassComponents = React.createClass({
                             </Col>
                             <Col span={4}>{lessonJson.teacherObj}</Col>
                             <Col span={4}>
-                                <Col span={4}>
+                                <Col span={24}>
                                     <DatePicker
                                         className="lessonTime"
                                         showTime

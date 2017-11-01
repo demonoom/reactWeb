@@ -639,6 +639,7 @@ const UpdateClassComponents = React.createClass({
                 // defaultValue={moment({liveTime}, dateFullFormat)}
                 // value={moment({liveTime}, dateFullFormat)}
                 var timeObj = <Col span={4}>
+                    <Col span={24}>
                     <DatePicker
                         key={lessonNum}
                         defaultValue={moment(liveTime, dateFullFormat)}
@@ -649,6 +650,7 @@ const UpdateClassComponents = React.createClass({
                         onChange={_this.lessonTimeOnChange}
                         onOk={_this.lessonTimeOnOk}
                     />
+                    </Col>
                 </Col>;
                 var lessonJson = {lessonNum, teacherObj, timeObj, videoNameObj};
                 lessonArray.push(lessonJson);
@@ -1254,7 +1256,7 @@ const UpdateClassComponents = React.createClass({
                     for (var i = 0; i < this.state.lessonArray.length; i++) {
                         var lessonJson = this.state.lessonArray[i];
                         var lessonRowObj = <Row>
-                            <Col span={4}>第{lessonJson.lessonNum}课时</Col>
+                            <Col span={4} className="add_left">第{lessonJson.lessonNum}课时</Col>
                             {lessonJson.videoNameObj}
                             <Col span={4}> {lessonJson.teacherObj}</Col>
                             {lessonJson.timeObj}
