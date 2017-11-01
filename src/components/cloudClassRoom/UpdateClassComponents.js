@@ -243,7 +243,7 @@ const UpdateClassComponents = React.createClass({
                 _this.buildVideosArray(videoJson, "title");
                 lessonNum += 1;
                 var liveTime = getLocalTime(video.liveTime);
-                var videoNameObj = <Col span={8}>
+                var videoNameObj = <Col span={6}>
                     <Input id={lessonNum} defaultValue={video.name} onChange={_this.lessonTitleOnChange}/>
                 </Col>;
                 var teacherObj;
@@ -271,7 +271,8 @@ const UpdateClassComponents = React.createClass({
                 }
                 // defaultValue={moment({liveTime}, dateFullFormat)}
                 // value={moment({liveTime}, dateFullFormat)}
-                var timeObj = <Col span={4}>
+                var timeObj = <Col span={3} className="class_right">
+                    <Col span={4}>
                     <DatePicker
                         key={lessonNum}
                         defaultValue={moment(liveTime, dateFullFormat)}
@@ -282,6 +283,7 @@ const UpdateClassComponents = React.createClass({
                         onChange={_this.lessonTimeOnChange}
                         onOk={_this.lessonTimeOnOk}
                     />
+                    </Col>
                 </Col>;
                 var lessonJson = {lessonNum, teacherObj, timeObj, videoNameObj};
                 lessonArray.push(lessonJson);
@@ -691,7 +693,7 @@ const UpdateClassComponents = React.createClass({
             return;
         }
         var lessonNum = lessonArray.length + 1;
-        var videoNameObj = <Col span={8}>
+        var videoNameObj = <Col span={6}>
             <Input id={lessonNum} onChange={this.lessonTitleOnChange}/>
         </Col>;
         var teacherObj;
@@ -704,15 +706,17 @@ const UpdateClassComponents = React.createClass({
                 </select>
             </Col>;
         }
-        var timeObj = <Col span={4}>
-            <DatePicker
-                className="lessonTime"
-                showTime
-                format="YYYY-MM-DD HH:mm:ss"
-                placeholder="Select Time"
-                onChange={this.lessonTimeOnChange}
-                onOk={this.lessonTimeOnOk}
-            />
+        var timeObj = <Col span={3}>
+            <Col span={4}>
+                <DatePicker
+                    className="lessonTime"
+                    showTime
+                    format="YYYY-MM-DD HH:mm:ss"
+                    placeholder="Select Time"
+                    onChange={this.lessonTimeOnChange}
+                    onOk={this.lessonTimeOnOk}
+                />
+            </Col>
         </Col>;
         var lessonJson = {lessonNum, teacherObj, timeObj, videoNameObj};
         lessonArray.push(lessonJson);
@@ -1174,7 +1178,7 @@ const UpdateClassComponents = React.createClass({
                         var lessonRowObj = <Row>
                             <Col span={3}>第{lessonJson.lessonNum}课时</Col>
                             {lessonJson.videoNameObj}
-                            <Col span={3}> {lessonJson.teacherObj}</Col>
+                            <Col span={3}  className="class_right"> {lessonJson.teacherObj}</Col>
                             {lessonJson.timeObj}
                             <Col span={4} className="class_right">
 
@@ -1187,7 +1191,7 @@ const UpdateClassComponents = React.createClass({
                                 </Upload>
                             </Col>
                             <Col span={2}>
-                                <Button icon="delete"
+                                <Button icon="delete"  className="create_upload_btn"
                                         onClick={this.removeLesson.bind(this, lessonJson.lessonNum)}></Button>
                             </Col>
                         </Row>;
