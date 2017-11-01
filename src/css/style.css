@@ -7537,6 +7537,7 @@ select.course_n:hover {
     left: -100px;
     top: 4px;
     width: 125%;
+    display: none;
 
 }
 .create_upload .ant-upload-list-item{
