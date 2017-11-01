@@ -23,6 +23,7 @@ var firstTeamId;
 var isSeriesStr = "系列课";
 var fileList = [];
 var oriUrl;
+var weiClassList = [];
 
 const CreateClassComponents = React.createClass({
 
@@ -605,12 +606,6 @@ const CreateClassComponents = React.createClass({
         }
         if (isEmpty(courseInfoJson.videos) == false) {
             var checkResult = true;
-            // courseInfoJson.videos.forEach(function (video) {
-            //     if (isEmpty(video.name) || isEmpty(video.userID) || isEmpty(video.liveTime) || isNaN(video.liveTime)) {
-            //         checkResult = false;
-            //         return;
-            //     }
-            // })
             if (this.state.isWeiClass) {
                 courseInfoJson.videos.forEach(function (video) {
                     debugger
@@ -817,7 +812,9 @@ const CreateClassComponents = React.createClass({
     },
 
     removeWeiClass() {
-        courseInfoJson.videos[0].url = '';
+        // courseInfoJson.videos[0].url = '';
+        // weiClassList = [];
+        // fileList = [];
     },
 
 
@@ -826,12 +823,15 @@ const CreateClassComponents = React.createClass({
      * @returns {XML}
      */
     render() {
+        var _this = this;
         const props = {
             action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
             listType: 'text',
+            fileList: _this.state.fileList,
             onPreview: this.showWeiClass,
             onRemove: this.removeWeiClass,
             beforeUpload(file) {
+                _this.setState({fileList: []});
                 var fileType = file.type;
                 if (fileType.indexOf("video") == -1) {
                     message.error('只能上传视频文件，请重新上传', 5);
@@ -839,6 +839,7 @@ const CreateClassComponents = React.createClass({
                 }
             },
             onChange(info) {
+                _this.setState({fileList: info.fileList});
                 if (info.file.status !== 'uploading') {
                     console.log(info.file, info.fileList);
                 }
@@ -969,7 +970,6 @@ const CreateClassComponents = React.createClass({
                 </Row>
                 <Row>
                     <Checkbox onChange={this.isWeiClass} checked={this.state.isWeiClass} className="upexam_le_datika">是否为微课</Checkbox>
-
                 </Row>
                 {/*<Row>
                     <Col span={4}>授课时间：</Col>
