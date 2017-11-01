@@ -138,7 +138,7 @@ class SystemSettingGhostMenu extends React.Component {
         }
 
         //手动添加的测试菜单---开始
-        var flowUl = <li className="multi">
+        /*var flowUl = <li className="multi">
             <ul className="second">
                 <li onClick={event => {
                     this.changeMenu(event, 'noomkaoqing', true)
@@ -147,7 +147,7 @@ class SystemSettingGhostMenu extends React.Component {
             </ul>
         </li>;
         liArr.push(flowUl);
-        arr.push(liArr);
+        arr.push(liArr);*/
         //手动添加的测试菜单---结束
 
         _this.setState({arr});
