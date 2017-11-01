@@ -7547,7 +7547,7 @@ select.course_n:hover {
     text-overflow: ellipsis;
     white-space: nowrap;
     width:73px;
-    display: inline-block;
+    display: none;
 }
 .create_upload .anticon-paper-clip{
     display: none;

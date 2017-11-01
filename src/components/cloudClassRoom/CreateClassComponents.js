@@ -837,8 +837,8 @@ const CreateClassComponents = React.createClass({
             beforeUpload(file) {
                 _this.setState({fileList: []});
                 var fileType = file.type;
-                if (fileType.indexOf("video") == -1) {
-                    message.error('只能上传视频文件，请重新上传', 5);
+                if (fileType.indexOf("video/mp4") == -1) {
+                    message.error('只能上传mp4视频文件，请重新上传', 5);
                     return false;
                 }
             },
@@ -1065,7 +1065,7 @@ const CreateClassComponents = React.createClass({
                                 <Col span={6}>名称</Col>
                                 <Col span={3} className="class_right">授课老师</Col>
                                 <Col span={3} className="class_right">授课时间</Col>
-                                <Col span={4} className="class_right">微课名</Col>
+                                {/*<Col span={4} className="class_right">微课名</Col>*/}
                                 <Col span={3} className="class_right">微课上传</Col>
                                 <Col span={2} className="class_right">操作</Col>
                             </Row>
