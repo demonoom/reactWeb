@@ -5,11 +5,7 @@ import {IS_DEBUG} from './utils/Const';
 import {IS_LIVE_DEBUG} from './utils/Const';
 //导出常量
 const REMOTE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
-<<<<<<< HEAD
-const LOCAL_URL = "http://192.168.1.110:9006/Excoord_ApiServer/webservice";
-=======
 const LOCAL_URL = "http://192.168.2.105:9006/Excoord_ApiServer/webservice";
->>>>>>> 927bb2f2da3a7292d0a5b56a738d9cca1d067b21
 const LOCAL_URL_LIVE = "http://172.16.2.109:9006/Excoord_ApiServer/webservice";
 const WEBSERVICE_URL = IS_DEBUG ? (IS_LIVE_DEBUG ? LOCAL_URL_LIVE : LOCAL_URL) : REMOTE_URL;
 console.log("WEBSERVICE_URL:" + WEBSERVICE_URL);
