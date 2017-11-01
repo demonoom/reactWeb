@@ -28,9 +28,15 @@ const AddShiftPosModel = React.createClass({
     componentDidUpdate() {
         if (this.state.isShow && !this.state.flag) {
             this.showMap();
+            if (isEmpty(document.getElementById('search-map')) == false) {
+                document.getElementById('search-map').innerHTML = '<div id="r-result"><div>请输入地址：</div><div><input type="text" id="suggestId" size="20" value="百度" style="width:170px;" /></div></div>\n' +
+                    '<div id="searchResultPanel" class="noom_map"></div>';
+            }
         }
-        document.getElementById('search-map').innerHTML = '<div id="r-result"><div>请输入地址：</div><div><input type="text" id="suggestId" size="20" value="百度" style="width:170px;" /></div></div>\n' +
-            '<div id="searchResultPanel" class="noom_map"></div>';
+        // if (isEmpty(document.getElementById('search-map')) == false) {
+        //     document.getElementById('search-map').innerHTML = '<div id="r-result"><div>请输入地址：</div><div><input type="text" id="suggestId" size="20" value="百度" style="width:170px;" /></div></div>\n' +
+        //         '<div id="searchResultPanel" class="noom_map"></div>';
+        // }
     },
 
     /**
@@ -49,7 +55,7 @@ const AddShiftPosModel = React.createClass({
         });
         this.props.closeModel();
         console.log(map);
-        // map.centerAndZoom("西安", 12);
+        map.centerAndZoom("西安", 12);
     },
 
     showMap() {

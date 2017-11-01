@@ -1,8 +1,9 @@
 import React, {PropTypes} from 'react';
-import OpenNewPage from '../OpenNewPage'
 import {isEmpty} from '../../utils/utils';
-import {Modal, Icon, Input, Button, Row, Col, message, Radio, TimePicker} from 'antd';
+import {Modal, Icon, Input, Button, Row, Col, message, Radio, TimePicker, Checkbox, Select} from 'antd';
 import moment from 'moment';
+
+const Option = Select.Option;
 
 const AddShiftModel = React.createClass({
 
@@ -16,7 +17,19 @@ const AddShiftModel = React.createClass({
             firTime: "block",
             secTime: "none",
             thiTime: "none",
-        };
+            //上班时间，从09到22
+            oneTime: '09:00',
+            twoTime: '12:00',
+            thrTime: '14:00',
+            fouTime: '18:00',
+            fivTime: '19:00',
+            sixTime: '22:00',
+            unknowTime: '18:00',
+            checked: false,
+            playDaychecked: false,
+            timeSet: 'none',
+    }
+        ;
     },
 
     componentDidMount() {
@@ -43,9 +56,12 @@ const AddShiftModel = React.createClass({
             shiftName: '',
             size: "one",
             secTime: "none",
-            thiTime: "none"
+            thiTime: "none",
+            checked: false,
+            playDaychecked: false,
         });
         this.props.closeModel();
+        document.getElementById('isPlayDayOnChange').style.display = 'block';
     },
 
     shiftNameChange(e) {
@@ -64,14 +80,49 @@ const AddShiftModel = React.createClass({
         this.setState({shiftName});
     },
 
+    /**
+     * 上下班次数改变的回调
+     * @param e
+     */
     degreeChange(e) {
-        this.setState({size: e.target.value});
+        this.setState({size: e.target.value});//改变选中班次的高亮
         if (e.target.value == "two") {
-            this.setState({secTime: "block", thiTime: "none"});
+            this.setState({secTime: "block", thiTime: "none", unknowTime: "12:00"});
+            this.state.unknowTime = '12:00';
         } else if (e.target.value == "thr") {
             this.setState({secTime: "block", thiTime: "block"});
         } else {
-            this.setState({secTime: "none", thiTime: "none"});
+            this.setState({secTime: "none", thiTime: "none", unknowTime: "18:00"});
+        }
+    },
+
+    /**
+     * 打卡时段设置的回调
+     * @param e
+     */
+    checkboxOnChange(e) {
+        this.setState({playDaychecked: e.target.checked});
+        console.log(`checked = ${e.target.checked}`);
+        if(e.target.checked) {
+            this.setState({timeSet:'block'});
+        } else {
+            this.setState({timeSet:'none'});
+        }
+    },
+
+    /**
+     * 是否为休息日的回调
+     * @constructor
+     */
+    IsPlayDayOnChange(e) {
+        // console.log(`checked = ${e.target.checked}`);
+        this.setState({checked: e.target.checked});
+        if (e.target.checked) {
+            document.getElementById('isPlayDayOnChange').style.display = 'none';
+            this.setState({shiftName: '休息日'})
+        } else {
+            document.getElementById('isPlayDayOnChange').style.display = 'block';
+            this.setState({shiftName: ''})
         }
     },
 
@@ -84,6 +135,7 @@ const AddShiftModel = React.createClass({
         var firTime = this.state.firTime;
         var secTime = this.state.secTime;
         var thiTime = this.state.thiTime;
+        var timeSet = this.state.timeSet;
 
         return (
             <Modal
@@ -106,8 +158,12 @@ const AddShiftModel = React.createClass({
                             <Input placeholder="必填 (最多6个字符)" value={this.state.shiftName}
                                    onChange={this.shiftNameChange}/>
                         </Col>
+                        <Col span={9}>
+                            <Checkbox onChange={this.IsPlayDayOnChange} checked={this.state.checked}>是否为休息日</Checkbox>
+                        </Col>
                     </Row>
-                    <div>
+                    <div id="isPlayDayOnChange">
+                        <div>
                             <span>设置该班次一天内上下班的次数</span>
                             <span className="add_out off_duty">
                                 <Radio.Group value={this.state.size} onChange={this.degreeChange}>
@@ -116,40 +172,127 @@ const AddShiftModel = React.createClass({
                                     <Radio.Button value="thr">一天3次上下班</Radio.Button>
                                 </Radio.Group>
                                 </span>
+                            <Checkbox onChange={this.checkboxOnChange}
+                                      checked={this.state.playDaychecked}>打卡时段设置</Checkbox>
                         </div>
 
-                    <div className="upexam_to_ma" style={{display: firTime}}>
+                        <div className="upexam_to_ma" style={{display: firTime}}>
                         <span>
                             <span>第1次</span>
                             <span>上班：</span>
-                            <TimePicker defaultValue={moment('12:08', format)} format={format}/>
+                            <TimePicker defaultValue={moment(this.state.oneTime, format)} format={format}/>
+                            <span style={{display: timeSet}}>
+                                <span>
+                                <Select defaultValue="--" style={{width: 65}}>
+                                  <Option value="--">--</Option>
+                                  <Option value="10">10</Option>
+                                  <Option value="20">20</Option>
+                                  <Option value="30">30</Option>
+                                  <Option value="40">40</Option>
+                                  <Option value="50">50</Option>
+                                  <Option value="60">60</Option>
+                                </Select>
+                           </span>
+                            <span>分钟前开始打卡</span>
+                            </span>
                         </span>
-                        <span className="botton_left1">
+                            <span className="botton_left1">
                             <span>下班：</span>
-                            <TimePicker defaultValue={moment('12:08', format)} format={format}/>
+                            <TimePicker value={moment(this.state.unknowTime, format)} format={format}/>
+                            <span style={{display: timeSet}}>
+                                <span>
+                                    <Select defaultValue="--" style={{width: 65}}>
+                                      <Option value="--">--</Option>
+                                      <Option value="10">10</Option>
+                                      <Option value="20">20</Option>
+                                      <Option value="30">30</Option>
+                                      <Option value="40">40</Option>
+                                      <Option value="50">50</Option>
+                                      <Option value="60">60</Option>
+                                    </Select>
+                                </span>
+                            <span>分钟后结束打卡</span>
+                            </span>
                         </span>
-                    </div>
-                    <div className="upexam_to_ma" style={{display: secTime}}>
+                        </div>
+                        <div className="upexam_to_ma" style={{display: secTime}}>
                         <span>
                             <span>第2次</span>
                             <span>上班：</span>
-                            <TimePicker defaultValue={moment('12:08', format)} format={format}/>
+                            <TimePicker defaultValue={moment(this.state.thrTime, format)} format={format}/>
+                            <span style={{display: timeSet}}>
+                                <span>
+                                <Select defaultValue="--" style={{width: 65}}>
+                                  <Option value="--">--</Option>
+                                  <Option value="10">10</Option>
+                                  <Option value="20">20</Option>
+                                  <Option value="30">30</Option>
+                                  <Option value="40">40</Option>
+                                  <Option value="50">50</Option>
+                                  <Option value="60">60</Option>
+                                </Select>
+                           </span>
+                            <span>分钟前开始打卡</span>
+                            </span>
                         </span>
-                        <span className="botton_left1">
+                            <span className="botton_left1">
                             <span>下班：</span>
-                            <TimePicker defaultValue={moment('12:08', format)} format={format}/>
+                            <TimePicker defaultValue={moment(this.state.fouTime, format)} format={format}/>
+                            <span style={{display: timeSet}}>
+                                <span>
+                                <Select defaultValue="--" style={{width: 65}}>
+                                  <Option value="--">--</Option>
+                                  <Option value="10">10</Option>
+                                  <Option value="20">20</Option>
+                                  <Option value="30">30</Option>
+                                  <Option value="40">40</Option>
+                                  <Option value="50">50</Option>
+                                  <Option value="60">60</Option>
+                                </Select>
+                           </span>
+                            <span>分钟后结束打卡</span>
+                            </span>
                         </span>
-                    </div>
-                    <div className="upexam_to_ma" style={{display: thiTime}}>
+                        </div>
+                        <div className="upexam_to_ma" style={{display: thiTime}}>
                         <span>
                             <span>第3次</span>
                             <span>上班：</span>
-                            <TimePicker defaultValue={moment('12:08', format)} format={format}/>
+                            <TimePicker defaultValue={moment(this.state.fivTime, format)} format={format}/>
+                            <span style={{display: timeSet}}>
+                                <span>
+                                <Select defaultValue="--" style={{width: 65}}>
+                                  <Option value="--">--</Option>
+                                  <Option value="10">10</Option>
+                                  <Option value="20">20</Option>
+                                  <Option value="30">30</Option>
+                                  <Option value="40">40</Option>
+                                  <Option value="50">50</Option>
+                                  <Option value="60">60</Option>
+                                </Select>
+                           </span>
+                            <span>分钟前开始打卡</span>
+                            </span>
                         </span>
-                        <span className="botton_left1">
+                            <span className="botton_left1">
                             <span>下班：</span>
-                            <TimePicker defaultValue={moment('12:08', format)} format={format}/>
+                            <TimePicker defaultValue={moment(this.state.sixTime, format)} format={format}/>
+                            <span style={{display: timeSet}}>
+                                <span>
+                                <Select defaultValue="--" style={{width: 65}}>
+                                  <Option value="--">--</Option>
+                                  <Option value="10">10</Option>
+                                  <Option value="20">20</Option>
+                                  <Option value="30">30</Option>
+                                  <Option value="40">40</Option>
+                                  <Option value="50">50</Option>
+                                  <Option value="60">60</Option>
+                                </Select>
+                           </span>
+                            <span>分钟后结束打卡</span>
+                            </span>
                         </span>
+                        </div>
                     </div>
                 </div>
             </Modal>

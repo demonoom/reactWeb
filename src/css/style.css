@@ -7532,3 +7532,29 @@ select.course_n:hover {
 .tangram-suggestion-main{
     z-index: 10000;
 }
+.create_upload .ant-upload-list-text{
+    position: absolute;
+    left: -100px;
+    top: 4px;
+    width: 125%;
+
+}
+.create_upload .ant-upload-list-item{
+    margin:0
+}
+.create_upload .ant-upload-list-item-name{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width:73px;
+    display: inline-block;
+}
+.create_upload .anticon-paper-clip{
+    display: none;
+}
+.create_upload_btn{
+    border: none;
+    background: none;
+    padding: 0 !important;
+    margin: 0 8px;
+}

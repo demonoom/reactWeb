@@ -524,6 +524,7 @@ const AntMulitiClassComponents = React.createClass({
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
 					   footer={saveButtons}
+                       width={800}
                 >
                     <div className="space">
                         <CreateClassComponents ref="createClassComponent" isSeries={this.state.isSeries} onSaveOk={this.courseAddOk}></CreateClassComponents>
@@ -548,6 +549,7 @@ const AntMulitiClassComponents = React.createClass({
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
                        footer={updateButtons}
+                       width={800}
                 >
                     <div className="space">
                         <UpdateClassComponents ref="updateClassComponents" isChangeStep={this.state.isChangeStep} updateClassObj={this.state.updateClassObj} onSaveOk={this.courseUpdateOk}></UpdateClassComponents>
