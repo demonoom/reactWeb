@@ -83,7 +83,7 @@ const WeiClassUploadComponents = React.createClass({
 
             <div>
                 <Upload {...props}>
-                    <Button value={this.state.subjectInfo} onClick={this.showInfo}>
+                    <Button value={this.state.subjectInfo} onClick={this.showInfo}  className="create_upload_btn">
                         <Icon type="upload"/>
                     </Button>
                 </Upload>
