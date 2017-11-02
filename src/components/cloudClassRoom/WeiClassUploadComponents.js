@@ -4,6 +4,7 @@ import {isEmpty} from '../../utils/Const';
 
 var subjectFather;
 var fileList = [];
+var noom = [];
 const WeiClassUploadComponents = React.createClass({
 
     getInitialState() {
@@ -16,18 +17,21 @@ const WeiClassUploadComponents = React.createClass({
     },
 
     componentWillMount() {
-        console.log("will:" + this.props.fileList);
-        var defaultFileList = [];
-        if (typeof(this.props.fileList) != "undefined" && this.props.fileList.length != 0) {
-            defaultFileList = this.props.fileList;
+        console.log("will:" + this.props.noom);
+        noom = [];
+        if (typeof(this.props.noom) != "undefined" && this.props.noom.length != 0) {
+            noom = this.props.noom;
         }
-        this.setState({fileList: defaultFileList});
+        this.setState({fileList: noom});
     },
     /**
      * 课程封面图片
      * @param nextProps
      */
     componentWillReceiveProps(nextProps) {
+        //萨达撒大多juyjuytyut
+        noom = [];
+        noom = nextProps.noom;
         var defaultFileList = [];
         if (typeof(nextProps.fileList) != "undefined" && nextProps.fileList.length != 0) {
             defaultFileList = nextProps.fileList;
@@ -39,13 +43,14 @@ const WeiClassUploadComponents = React.createClass({
     },
 
     render() {
+        console.log(noom);
+        // alert(1);
         var _this = this;
         const props = {
             key: _this.props.params,
             action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
             listType: 'text',
-            // defaultFileList:_this.state.fileList,
-            fileList: _this.state.fileList,
+            defaultFileList: noom,
             onPreview: _this.handlePreview,
             beforeUpload(file) {
                 _this.setState({fileList: []});
@@ -54,6 +59,7 @@ const WeiClassUploadComponents = React.createClass({
                     message.error('只能上传图片文件，请重新上传', 5);
                     return false;
                 }
+                _this.props.beforeUploadBack(file);
             },
             onChange(info) {
                 _this.setState({fileList: info.fileList});
