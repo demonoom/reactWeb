@@ -1097,7 +1097,7 @@ const CreateClassComponents = React.createClass({
                                 </Col>
                             </Col>
                             <Col span={4}>
-                                <Button icon="delete"
+                                <Button icon="delete" className="create_upload_btn"
                                         onClick={this.removeLesson.bind(this, lessonJson.lessonNum)}></Button>
                             </Col>
                         </Row>;
