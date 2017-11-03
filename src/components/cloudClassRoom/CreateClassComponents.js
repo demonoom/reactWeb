@@ -24,6 +24,7 @@ var firstTeamId;
 var isSeriesStr = "系列课";
 var fileList = [];
 var uploadClickNum;
+var upLoadNum;
 
 const CreateClassComponents = React.createClass({
 
@@ -42,6 +43,7 @@ const CreateClassComponents = React.createClass({
             teamDisabled: true,
             cloudClassRoomUser: cloudClassRoomUser,
             isWeiClass: false,
+            upLoadNum: 0
         };
     },
 
@@ -269,25 +271,26 @@ const CreateClassComponents = React.createClass({
             "method": 'addCourse',
             "jsonObject": JSON.stringify(courseInfoJson),
         };
+        debugger
         console.log(param);
-        // doWebService_CloudClassRoom(JSON.stringify(param), {
-        //     onResponse: function (ret) {
-        //         var response = ret.response;
-        //         if (response == true) {
-        //             message.success("课程创建成功");
-        //         } else {
-        //             message.error("课程创建失败");
-        //         }
-        //         fileList.splice(0);
-        //         // weifileList.splice(0);
-        //         _this.props.onSaveOk();
-        //     },
-        //     onError: function (error) {
-        //         message.error(error);
-        //     }
-        // });
-        // _this.initCreatePage(_this.state.isSeries);
-        // _this.changeStep("pre");
+        doWebService_CloudClassRoom(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if (response == true) {
+                    message.success("课程创建成功");
+                } else {
+                    message.error("课程创建失败");
+                }
+                fileList.splice(0);
+                // weifileList.splice(0);
+                _this.props.onSaveOk();
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+        _this.initCreatePage(_this.state.isSeries);
+        _this.changeStep("pre");
     },
 
     /**
@@ -583,6 +586,8 @@ const CreateClassComponents = React.createClass({
         }
         var lessonTeamTeacherTagArray = $(".lessonTeamTeacher option:selected");
         var lessonTimeTagArray = $("input.ant-calendar-range-picker");
+        var arr = $('.noom_input');
+        console.log(arr.length);
         var userId;
         /*if(this.state.isTeam==1) {
             //发布者ＩＤ 单人授课时为人员id　团队授课时为团队id
@@ -590,10 +595,10 @@ const CreateClassComponents = React.createClass({
         }else{
             userId = this.state.teamId;
         }*/
-        for (var i = 0; i < lessonTimeTagArray.length; i++) {
+        for (var i = 0; i < arr.length; i++) {
             var videoJson = {};
             var option = lessonTeamTeacherTagArray[i];
-            var timeTag = lessonTimeTagArray[i];
+            var timeTag = arr[i];
             var teacher;
             if (this.state.isTeam == 1) {
                 teacher = this.state.cloudClassRoomUser.colUid;
@@ -613,7 +618,7 @@ const CreateClassComponents = React.createClass({
             if (this.state.isWeiClass) {
                 //微课验证
                 courseInfoJson.videos.forEach(function (video) {
-                    if (isEmpty(video.name) || isEmpty(video.userID) || isEmpty(video.url)) {
+                    if (isEmpty(video.name) || isEmpty(video.url) || isEmpty(video.userID)) {
                         checkResult = false;
                         return;
                     }
@@ -815,15 +820,18 @@ const CreateClassComponents = React.createClass({
     uploadOnclick(num) {
         uploadClickNum = num;
         this.setState({upLoadNum: num});
+        // upLoadNum = num;
     },
 
     /**
      * 微课上传完成的回调
      * @param e
      */
-    weiClassUpload(e) {
+    weiClassUpload(e, i) {
+        console.log(i);
         console.log('上传完成的回调');
-        courseInfoJson.videos[uploadClickNum].url = e.response;
+        courseInfoJson.videos[i].url = e.response;
+        courseInfoJson.videos[i].remark = e.name;
     },
 
     /**
@@ -836,7 +844,7 @@ const CreateClassComponents = React.createClass({
             uid: e.uid,
             name: e.name,
             status: 'done',
-            url: e.response
+            url: e.response,
         };
         courseInfoJson.videos[uploadClickNum].weiClassList = weiClassList;
         weiClassList = {};
@@ -1009,7 +1017,7 @@ const CreateClassComponents = React.createClass({
                         var lessonRowObj = <Row>
                             <Col span={3} className="add_left">第{lessonJson.lessonNum}课时</Col>
                             <Col span={8} className="class_right">
-                                <Input key={i} id={lessonJson.lessonNum} defaultValue={videoName}
+                                <Input className="noom_input" key={i} id={lessonJson.lessonNum} defaultValue={videoName}
                                        onChange={this.lessonTitleOnChange}/>
                             </Col>
                             <Col span={4} className="class_right">{lessonJson.teacherObj}</Col>
@@ -1019,10 +1027,11 @@ const CreateClassComponents = React.createClass({
                             <Col span={3} className="class_right create_upload"
                                  onClick={this.uploadOnclick.bind(this, i)}>
                                 <WeiClassUploadComponents
-                                    upLoadNum={this.state.upLoadNum}
+                                    upLoadNumber={i}
                                     callBackParent={this.weiClassUpload}
                                     beforeUploadBack={this.beforeUploadBack}
                                     noom={weifileList}
+                                    videoName={videoName}
                                 />
                             </Col>
                             <Col span={2}>
@@ -1080,7 +1089,7 @@ const CreateClassComponents = React.createClass({
                         var lessonRowObj = <Row>
                             <Col span={4} className="add_left">第{lessonJson.lessonNum}课时</Col>
                             <Col span={8}>
-                                <Input key={i} id={lessonJson.lessonNum} defaultValue={videoName}
+                                <Input className="noom_input" key={i} id={lessonJson.lessonNum} defaultValue={videoName}
                                        onChange={this.lessonTitleOnChange}/>
                             </Col>
                             <Col span={4}>{lessonJson.teacherObj}</Col>
