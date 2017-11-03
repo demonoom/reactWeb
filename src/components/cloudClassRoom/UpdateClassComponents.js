@@ -7,6 +7,7 @@ import ImageAnswerUploadComponents from './ImageAnswerUploadComponents';
 import {isEmpty, formatYMD, getLocalTime} from '../../utils/utils';
 import {doWebService_CloudClassRoom} from '../../utils/CloudClassRoomURLUtils';
 import moment from 'moment';
+import WeiClassUploadComponents from './WeiClassUploadComponents';
 
 const dateFormat = 'YYYY/MM/DD';
 const dateFullFormat = 'YYYY-MM-DD HH:mm:ss';
@@ -78,7 +79,8 @@ const UpdateClassComponents = React.createClass({
     },
 
     componentWillReceiveProps(nextProps) {
-        if(!this.state.isWeiClass) {
+        // debugger
+        if (!this.state.isWeiClass) {
             if (courseInfoJson.isSeries == 3) {
                 //系列微课
                 courseInfoJson.isSeries = 1
@@ -108,6 +110,7 @@ const UpdateClassComponents = React.createClass({
         /* this.getAllClass();
          this.getAllSubject();*/
     },
+
     /**
      * 初始化更新页面
      * @param updateClassObj
@@ -240,20 +243,31 @@ const UpdateClassComponents = React.createClass({
         courseInfoJson.publisher_id = publisher_id;
         courseInfoJson.publisher = publisher;
         courseInfoJson.publishType = publishType;
+        debugger
         courseInfoJson.videos = videos;
         if (isEmpty(videos) == false) {
             var lessonNum = 0;
             lessonArray.splice(0);
-            videos.forEach(function (video) {
+            videos.forEach(function (video, i) {
+                var weiClassName = {
+                    name: video.remark,
+                    uid: i
+                };
+                var weifileList = [
+                    weiClassName
+                ];
+                _this.setState({weifileList});
                 var squence = video.squence;
                 var name = video.name;
                 var url = video.url;
-                var videoJson = {squence, name, url};
+                var remark = video.remark;
+                var videoJson = {squence, name, url, remark};
                 _this.buildVideosArray(videoJson, "title");
                 lessonNum += 1;
                 var liveTime = getLocalTime(video.liveTime);
                 var videoNameObj = <Col span={8}>
-                    <Input id={lessonNum} defaultValue={video.name} onChange={_this.lessonTitleOnChange}/>
+                    <Input id={lessonNum} defaultValue={video.name} onChange={_this.lessonTitleOnChange}
+                           className="noom_input"/>
                 </Col>;
                 var teacherObj;
                 if (isTeam == 1) {
@@ -282,25 +296,36 @@ const UpdateClassComponents = React.createClass({
                 // value={moment({liveTime}, dateFullFormat)}
                 var timeObj = <Col span={4} className="class_right">
                     <Col span={24}>
-                    <DatePicker
-                        key={lessonNum}
-                        defaultValue={moment(liveTime, dateFullFormat)}
-                        className="lessonTime"
-                        showTime
-                        format="YYYY-MM-DD HH:mm:ss"
-                        placeholder="Select Time"
-                        onChange={_this.lessonTimeOnChange}
-                        onOk={_this.lessonTimeOnOk}
-                    />
+                        <DatePicker
+                            key={lessonNum}
+                            defaultValue={moment(liveTime, dateFullFormat)}
+                            className="lessonTime"
+                            showTime
+                            format="YYYY-MM-DD HH:mm:ss"
+                            placeholder="Select Time"
+                            onChange={_this.lessonTimeOnChange}
+                            onOk={_this.lessonTimeOnOk}
+                        />
                     </Col>
                 </Col>;
-                var lessonJson = {lessonNum, teacherObj, timeObj, videoNameObj};
+
+                var uploadList = <Col span={3} className="class_right create_upload"
+                >
+                    <WeiClassUploadComponents
+                        upLoadNumber={i}
+                        callBackParent={_this.weiClassUpload}
+                        beforeUploadBack={_this.beforeUploadBack}
+                        noom={_this.state.weifileList}
+                    />
+                </Col>;
+                var lessonJson = {lessonNum, teacherObj, timeObj, videoNameObj, uploadList};
                 lessonArray.push(lessonJson);
                 _this.setState({lessonArray});
             })
         }
         _this.getAllClass();
         _this.getAllSubject();
+        _this.setState({weifileList: []})
     },
 
     /**
@@ -383,6 +408,7 @@ const UpdateClassComponents = React.createClass({
     },
 
     updateCourse() {
+        debugger
         console.log(courseInfoJson);
         var _this = this;
         var param = {
@@ -607,7 +633,8 @@ const UpdateClassComponents = React.createClass({
                 lessonNum += 1;
                 var liveTime = getLocalTime(video.liveTime);
                 var videoNameObj = <Col span={8}>
-                    <Input id={lessonNum} defaultValue={video.name} onChange={_this.lessonTitleOnChange}/>
+                    <Input id={lessonNum} defaultValue={video.name} onChange={_this.lessonTitleOnChange}
+                           className="noom_input"/>
                 </Col>;
                 var teacherObj;
                 if (isTeam == 1) {
@@ -640,16 +667,16 @@ const UpdateClassComponents = React.createClass({
                 // value={moment({liveTime}, dateFullFormat)}
                 var timeObj = <Col span={4}>
                     <Col span={24}>
-                    <DatePicker
-                        key={lessonNum}
-                        defaultValue={moment(liveTime, dateFullFormat)}
-                        className="lessonTime"
-                        showTime
-                        format="YYYY-MM-DD HH:mm:ss"
-                        placeholder="Select Time"
-                        onChange={_this.lessonTimeOnChange}
-                        onOk={_this.lessonTimeOnOk}
-                    />
+                        <DatePicker
+                            key={lessonNum}
+                            defaultValue={moment(liveTime, dateFullFormat)}
+                            className="lessonTime"
+                            showTime
+                            format="YYYY-MM-DD HH:mm:ss"
+                            placeholder="Select Time"
+                            onChange={_this.lessonTimeOnChange}
+                            onOk={_this.lessonTimeOnOk}
+                        />
                     </Col>
                 </Col>;
                 var lessonJson = {lessonNum, teacherObj, timeObj, videoNameObj};
@@ -698,6 +725,8 @@ const UpdateClassComponents = React.createClass({
      * 添加课程目录
      */
     addLesson() {
+        debugger
+        var _this = this;
         var videoNumBeforeAdd = this.state.videoNum;
         if (this.state.isSeries == "2" && videoNumBeforeAdd == 1) {
             //单节课
@@ -706,7 +735,7 @@ const UpdateClassComponents = React.createClass({
         }
         var lessonNum = lessonArray.length + 1;
         var videoNameObj = <Col span={8}>
-            <Input id={lessonNum} onChange={this.lessonTitleOnChange}/>
+            <Input id={lessonNum} onChange={this.lessonTitleOnChange} className="noom_input"/>
         </Col>;
         var teacherObj;
         if (this.state.isTeam == 1) {
@@ -730,7 +759,16 @@ const UpdateClassComponents = React.createClass({
                 />
             </Col>
         </Col>;
-        var lessonJson = {lessonNum, teacherObj, timeObj, videoNameObj};
+        var uploadList = <Col span={3} className="class_right create_upload"
+        >
+            <WeiClassUploadComponents
+                upLoadNumber={lessonNum - 1}
+                callBackParent={_this.weiClassUpload}
+                beforeUploadBack={_this.beforeUploadBack}
+                noom={_this.state.weifileList}
+            />
+        </Col>;
+        var lessonJson = {lessonNum, teacherObj, timeObj, videoNameObj, uploadList};
         lessonArray.push(lessonJson);
         var newVideoNum = parseInt(videoNumBeforeAdd) + 1
         courseInfoJson.videoNum = newVideoNum;
@@ -810,13 +848,16 @@ const UpdateClassComponents = React.createClass({
      * 保存课程信息
      */
     saveClassInfo() {
+        console.log(courseInfoJson);
+        debugger
         var checkResult = this.checkSubmitData();
         if (checkResult == false) {
             return;
         }
         var lessonTeamTeacherTagArray = $(".lessonTeamTeacher option:selected");
         var lessonTimeTagArray = $(".ant-calendar-range-picker");
-        courseInfoJson.videoNum = lessonTimeTagArray.length;
+        var arr = $('.noom_input');
+        courseInfoJson.videoNum = arr.length;
         /*var userId;
 
         if(this.state.isTeam==1) {
@@ -825,10 +866,10 @@ const UpdateClassComponents = React.createClass({
         }else{
             userId = this.state.teamId;
         }*/
-        for (var i = 0; i < lessonTimeTagArray.length; i++) {
+        for (var i = 0; i < arr.length; i++) {
             var videoJson = {};
             var option = lessonTeamTeacherTagArray[i];
-            var timeTag = lessonTimeTagArray[i];
+            var timeTag = arr[i];
             var teacher;
             if (this.state.isTeam == 1) {
                 teacher = this.state.cloudClassRoomUser.colUid;
@@ -840,24 +881,38 @@ const UpdateClassComponents = React.createClass({
             videoJson.squence = i + 1;
             videoJson.courseId = courseInfoJson.id;
             videoJson.url = courseInfoJson.videos[i].url;
+            videoJson.remark = courseInfoJson.videos[i].remark;
             videoJson.userID = teacher;
             videoJson.liveTime = new Date(time).valueOf();
             if (videoJson.squence == 1) {
                 courseInfoJson.startTime = videoJson.liveTime;
             }
-            if (videoJson.squence == lessonTimeTagArray.length) {
+            if (videoJson.squence == arr.length) {
                 courseInfoJson.endTime = videoJson.liveTime;
             }
             this.buildVideosArray(videoJson);
         }
         if (isEmpty(courseInfoJson.videos) == false) {
             var checkResult = true;
-            courseInfoJson.videos.forEach(function (video) {
-                if (isEmpty(video.name) || isEmpty(video.userID) || isEmpty(video.liveTime) || isNaN(video.liveTime)) {
-                    checkResult = false;
-                    return;
-                }
-            })
+            if (this.state.isWeiClass) {
+                debugger
+                //微课验证
+                courseInfoJson.videos.forEach(function (video) {
+                    if (isEmpty(video.name) || isEmpty(video.url) || isEmpty(video.userID)) {
+                        checkResult = false;
+                        return;
+                    }
+                })
+            } else {
+                //普通课验证
+                courseInfoJson.videos.forEach(function (video) {
+                    if (isEmpty(video.name) || isEmpty(video.userID) || isEmpty(video.liveTime) || isNaN(video.liveTime)) {
+                        checkResult = false;
+                        return;
+                    }
+                })
+            }
+            ;
             if (checkResult == false) {
                 message.error("排课课表中存在空值,请检查");
                 return;
@@ -987,6 +1042,7 @@ const UpdateClassComponents = React.createClass({
                     everyVideoJson.userID = videoJson.userID;
                     everyVideoJson.liveTime = videoJson.liveTime;
                     everyVideoJson.url = videoJson.url;
+                    everyVideoJson.remark = videoJson.remark;
                 }
                 isExistSameVideo = true;
                 break;
@@ -1014,6 +1070,34 @@ const UpdateClassComponents = React.createClass({
         uploadClickNum = i;
     },
 
+    /**
+     * 微课上传完成的回调
+     * @param e
+     */
+    weiClassUpload(e, i) {
+        console.log('上传完成的回调');
+        courseInfoJson.videos[i].url = e.response;
+        courseInfoJson.videos[i].remark = e.name;
+    },
+
+    /**
+     * 微课上传之前的回调
+     * @param e
+     */
+    beforeUploadBack(e) {
+        console.log(e);
+        console.log('微课上传之前的回调');
+
+        var weiClassName = {
+            name: e.name,
+            uid: e.uid
+        };
+        var weifileList = [
+            weiClassName
+        ];
+        // this.setState({weifileList});
+        //设置this.state.weifileList
+    },
 
     /**
      * 渲染页面
@@ -1021,36 +1105,6 @@ const UpdateClassComponents = React.createClass({
      */
     render() {
         var _this = this;
-        const props = {
-            action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
-            listType: 'text',
-            fileList: _this.state.fileList,
-            // onPreview: this.showWeiClass,
-            onRemove: this.removeWeiClass,
-            beforeUpload(file) {
-                _this.setState({fileList: []});
-                var fileType = file.type;
-                if (fileType.indexOf("video/mp4") == -1) {
-                    message.error('只能上传mp4视频文件，请重新上传', 5);
-                    return false;
-                }
-            },
-            onChange(info) {
-                _this.setState({fileList: info.fileList});
-                if (info.file.status !== 'uploading') {
-                    console.log(info.file, info.fileList);
-                }
-                if (info.file.status === 'done') {
-                    message.success('微课上传成功');
-                    courseInfoJson.videos[uploadClickNum].url = info.file.response;
-                    // oriUrl = info.file.response;
-                    oriUrl = info.file.uid;
-
-                } else if (info.file.status === 'error') {
-                    message.error('微课上传失败');
-                }
-            },
-        };
         const radioStyle = {
             display: 'block',
             height: '30px',
@@ -1190,27 +1244,21 @@ const UpdateClassComponents = React.createClass({
             nextButton = "";
             var everyLessonArray = [];
             if (this.state.isWeiClass) {
+                //是微课
                 if (typeof(this.state.lessonArray) != "undefined") {
                     for (var i = 0; i < this.state.lessonArray.length; i++) {
                         var lessonJson = this.state.lessonArray[i];
                         var lessonRowObj = <Row>
                             <Col span={3}>第{lessonJson.lessonNum}课时</Col>
                             {lessonJson.videoNameObj}
-                            <Col span={4}  className="class_right"> {lessonJson.teacherObj}</Col>
-                            {lessonJson.timeObj}
+                            <Col span={4} className="class_right"> {lessonJson.teacherObj}</Col>
+                            {/*{lessonJson.timeObj}*/}
                             <Col span={4} className="class_right">
 
                             </Col>
-                            <Col span={3} className="class_right create_upload"
-                                 onClick={this.uploadOnclick.bind(this, i)}>
-                                <Upload {...props}>
-                                    <Button className="create_upload_btn">
-                                        <Icon type="upload"/>
-                                    </Button>
-                                </Upload>
-                            </Col>
+                            {lessonJson.uploadList}
                             <Col span={2}>
-                                <Button icon="delete"  className="create_upload_btn"
+                                <Button icon="delete" className="create_upload_btn"
                                         onClick={this.removeLesson.bind(this, lessonJson.lessonNum)}></Button>
                             </Col>
                         </Row>;
@@ -1231,8 +1279,7 @@ const UpdateClassComponents = React.createClass({
                                 <Col span={3} className="add_left">目录</Col>
                                 <Col span={8}>名称</Col>
                                 <Col span={4} className="class_right">授课老师</Col>
-                                <Col span={4} className="class_right">授课时间</Col>
-                                {/*<Col span={4} className="class_right">微课名</Col>*/}
+                                <Col span={4} className="class_right">微课名</Col>
                                 <Col span={3} className="class_right">微课上传</Col>
                                 <Col span={2} className="class_right">操作</Col>
                             </Row>

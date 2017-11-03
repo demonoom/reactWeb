@@ -7,7 +7,6 @@ import ImageAnswerUploadComponents from './ImageAnswerUploadComponents';
 import WeiClassUploadComponents from './WeiClassUploadComponents';
 import {isEmpty, getLocalTime} from '../../utils/utils';
 import {doWebService_CloudClassRoom} from '../../utils/CloudClassRoomURLUtils';
-import moment from 'moment';
 
 const dateFormat = 'YYYY/MM/DD';
 const dateFullFormat = 'YYYY-MM-DD HH:mm:ss';
@@ -18,14 +17,14 @@ const {RangePicker} = DatePicker;
 
 var lessonArray = [];
 var courseInfoJson = {};
+var weiClassList = {};
 var videoJsonArray = [];
 var teamJsonArray = [];
 var firstTeamId;
 var isSeriesStr = "系列课";
 var fileList = [];
-var weifileList = [];
-var oriUrl;
 var uploadClickNum;
+var upLoadNum;
 
 const CreateClassComponents = React.createClass({
 
@@ -44,6 +43,7 @@ const CreateClassComponents = React.createClass({
             teamDisabled: true,
             cloudClassRoomUser: cloudClassRoomUser,
             isWeiClass: false,
+            upLoadNum: 0
         };
     },
 
@@ -107,7 +107,7 @@ const CreateClassComponents = React.createClass({
         courseInfoJson.isFree = 1;
         courseInfoJson.isLimit = 1;
         fileList.splice(0);
-        weifileList.splice(0);
+        // weifileList.splice(0);
         this.setState({
             isSeries, isSeriesStr, videoNumInputDisable, videoNum,
             "courseName": '', "isFree": 1, "isLimit": 1, "money": 0, "limitPerson": 0, "defaultSubjectSelected": "",
@@ -271,6 +271,7 @@ const CreateClassComponents = React.createClass({
             "method": 'addCourse',
             "jsonObject": JSON.stringify(courseInfoJson),
         };
+        debugger
         console.log(param);
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -281,7 +282,7 @@ const CreateClassComponents = React.createClass({
                     message.error("课程创建失败");
                 }
                 fileList.splice(0);
-                weifileList.splice(0);
+                // weifileList.splice(0);
                 _this.props.onSaveOk();
             },
             onError: function (error) {
@@ -585,6 +586,8 @@ const CreateClassComponents = React.createClass({
         }
         var lessonTeamTeacherTagArray = $(".lessonTeamTeacher option:selected");
         var lessonTimeTagArray = $("input.ant-calendar-range-picker");
+        var arr = $('.noom_input');
+        console.log(arr.length);
         var userId;
         /*if(this.state.isTeam==1) {
             //发布者ＩＤ 单人授课时为人员id　团队授课时为团队id
@@ -592,10 +595,10 @@ const CreateClassComponents = React.createClass({
         }else{
             userId = this.state.teamId;
         }*/
-        for (var i = 0; i < lessonTimeTagArray.length; i++) {
+        for (var i = 0; i < arr.length; i++) {
             var videoJson = {};
             var option = lessonTeamTeacherTagArray[i];
-            var timeTag = lessonTimeTagArray[i];
+            var timeTag = arr[i];
             var teacher;
             if (this.state.isTeam == 1) {
                 teacher = this.state.cloudClassRoomUser.colUid;
@@ -615,7 +618,7 @@ const CreateClassComponents = React.createClass({
             if (this.state.isWeiClass) {
                 //微课验证
                 courseInfoJson.videos.forEach(function (video) {
-                    if (isEmpty(video.name) || isEmpty(video.userID) || isEmpty(video.url)) {
+                    if (isEmpty(video.name) || isEmpty(video.url) || isEmpty(video.userID)) {
                         checkResult = false;
                         return;
                     }
@@ -814,20 +817,38 @@ const CreateClassComponents = React.createClass({
         this.setState({isWeiClass: e.target.checked});
     },
 
-    showWeiClass() {
-        // alert(oriUrl);
+    uploadOnclick(num) {
+        uploadClickNum = num;
+        this.setState({upLoadNum: num});
+        // upLoadNum = num;
     },
 
-    removeWeiClass() {
-        // courseInfoJson.videos[0].url = '';
-        // weiClassList = [];
-        // fileList = [];
+    /**
+     * 微课上传完成的回调
+     * @param e
+     */
+    weiClassUpload(e, i) {
+        console.log(i);
+        console.log('上传完成的回调');
+        courseInfoJson.videos[i].url = e.response;
+        courseInfoJson.videos[i].remark = e.name;
     },
 
-    uploadOnclick(i) {
-        uploadClickNum = i;
+    /**
+     * 微课上传之前的回调
+     * @param e
+     */
+    beforeUploadBack(e) {
+        //将对象保存在courseInfo.videos中，以便下次渲染的时候取出来使用
+        weiClassList = {
+            uid: e.uid,
+            name: e.name,
+            status: 'done',
+            url: e.response,
+        };
+        courseInfoJson.videos[uploadClickNum].weiClassList = weiClassList;
+        weiClassList = {};
     },
-
 
     /**
      * 渲染页面
@@ -835,38 +856,6 @@ const CreateClassComponents = React.createClass({
      */
     render() {
         var _this = this;
-        // const props = {
-        //     action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
-        //     listType: 'text',
-        //     fileList: _this.state.fileList,
-        //     onPreview: this.showWeiClass,
-        //     onRemove: this.removeWeiClass,
-        //     beforeUpload(file) {
-        //         _this.setState({fileList: []});
-        //         var fileType = file.type;
-        //         if (fileType.indexOf("video/mp4") == -1) {
-        //             message.error('只能上传mp4视频文件，请重新上传', 5);
-        //             return false;
-        //         }
-        //     },
-        //     onChange(info) {
-        //         _this.setState({fileList: info.fileList});
-        //         if (info.file.status !== 'uploading') {
-        //             console.log(info.file, info.fileList);
-        //         }
-        //         if (info.file.status === 'done') {
-        //             message.success('微课上传成功');
-        //             courseInfoJson.videos[uploadClickNum].url = info.file.response;
-        //
-        //             // oriUrl = info.file.response;
-        //             oriUrl = info.file.uid;
-        //
-        //         } else if (info.file.status === 'error') {
-        //             message.error('微课上传失败');
-        //         }
-        //     },
-        // };
-
         const radioStyle = {
             display: 'block',
             height: '30px',
@@ -1018,16 +1007,17 @@ const CreateClassComponents = React.createClass({
                         //获取已经保存的时间信息，并重新初始化到页面的组件上
                         var videoInfo = this.getVideoInfoFromCourseInfoJson(lessonJson.lessonNum);
                         var videoName = "";
-                        var weifileList;
+                        var weifileList = [];
                         if (isEmpty(videoInfo) == false) {
                             console.log("videoInfo name:" + videoInfo.name);
                             videoName = videoInfo.name;
-                            weifileList = videoInfo.weifileList;
+                            // weifileList = videoInfo.weiClassList;
+                            weifileList.push(videoInfo.weiClassList);
                         }
                         var lessonRowObj = <Row>
                             <Col span={3} className="add_left">第{lessonJson.lessonNum}课时</Col>
                             <Col span={8} className="class_right">
-                                <Input key={i} id={lessonJson.lessonNum} defaultValue={videoName}
+                                <Input className="noom_input" key={i} id={lessonJson.lessonNum} defaultValue={videoName}
                                        onChange={this.lessonTitleOnChange}/>
                             </Col>
                             <Col span={4} className="class_right">{lessonJson.teacherObj}</Col>
@@ -1036,14 +1026,13 @@ const CreateClassComponents = React.createClass({
                             </Col>
                             <Col span={3} className="class_right create_upload"
                                  onClick={this.uploadOnclick.bind(this, i)}>
-                                {/*<Upload {...props}>*/}
-                                {/*<Button className="create_upload_btn">*/}
-                                {/*<Icon type="upload"/>*/}
-                                {/*</Button>*/}
-                                {/*</Upload>*/}
-                                <WeiClassUploadComponents fileList={weifileList}
-                                >
-                                </WeiClassUploadComponents>
+                                <WeiClassUploadComponents
+                                    upLoadNumber={i}
+                                    callBackParent={this.weiClassUpload}
+                                    beforeUploadBack={this.beforeUploadBack}
+                                    noom={weifileList}
+                                    videoName={videoName}
+                                />
                             </Col>
                             <Col span={2}>
                                 <Button icon="delete" className="create_upload_btn"
@@ -1100,7 +1089,7 @@ const CreateClassComponents = React.createClass({
                         var lessonRowObj = <Row>
                             <Col span={4} className="add_left">第{lessonJson.lessonNum}课时</Col>
                             <Col span={8}>
-                                <Input key={i} id={lessonJson.lessonNum} defaultValue={videoName}
+                                <Input className="noom_input" key={i} id={lessonJson.lessonNum} defaultValue={videoName}
                                        onChange={this.lessonTitleOnChange}/>
                             </Col>
                             <Col span={4}>{lessonJson.teacherObj}</Col>
