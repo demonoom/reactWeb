@@ -104,7 +104,7 @@ const AddShiftModel = React.createClass({
         this.setState({playDaychecked: e.target.checked});
         console.log(`checked = ${e.target.checked}`);
         if (e.target.checked) {
-            this.setState({timeSet: 'block'});
+            this.setState({timeSet: 'inline-block'});
         } else {
             this.setState({timeSet: 'none'});
         }
@@ -141,7 +141,7 @@ const AddShiftModel = React.createClass({
             <Modal
                 title="新增班次"
                 visible={this.state.isShow}
-                width={685}
+                width={760}
                 transitionName=""  //禁用modal的动画效果
                 closable={true}     //设置显示右上角的关闭按钮（但是需要调整颜色，否则白色会无法显示）
                 maskClosable={false} //设置不允许点击蒙层关闭
@@ -151,17 +151,20 @@ const AddShiftModel = React.createClass({
             >
                 <div className="modal_register_main">
                     <Row>
-                        <Col span={4}>
+                        <Col span={3} className="add_padding">
                             班次名称：
                         </Col>
-                        <Col span={10}>
-                            <Input placeholder="必填 (最多6个字符)" value={this.state.shiftName}
+                        <Col span={6}>
+                            <Input placeholder="必填" value={this.state.shiftName}
                                    onChange={this.shiftNameChange}/>
                         </Col>
-                        <Col span={9}>
-                        <Checkbox onChange={this.IsPlayDayOnChange} checked={this.state.checked}>是否为休息日</Checkbox>
+                        <Col span={9} className="add_study-d-le1 add_padding">
+                            <Checkbox onChange={this.IsPlayDayOnChange} checked={this.state.checked}>是否为休息日</Checkbox>
                         </Col>
                     </Row>
+                    <div className="row-t-f">
+                        <Col className="password_ts checking_in_le2">最多6个字符（中英文或数字）</Col>
+                    </div>
                     <div id="isPlayDayOnChange">
                         <div>
                         <span>设置该班次一天内上下班的次数</span>
@@ -173,7 +176,7 @@ const AddShiftModel = React.createClass({
                         </Radio.Group>
                         </span>
                         <Checkbox onChange={this.checkboxOnChange}
-                        checked={this.state.playDaychecked}>打卡时段设置</Checkbox>
+                        checked={this.state.playDaychecked} className="add_study-d-le1 span_link_img">打卡时段设置</Checkbox>
                         </div>
 
                         <div className="upexam_to_ma" style={{display: firTime}}>

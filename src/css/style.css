@@ -7494,7 +7494,10 @@ select.course_n:hover {
     margin-left: 16.6666%;
     margin-bottom: 15px;
 }
-
+.checking_in_le2 {
+    margin-left: 12.5%;;
+    margin-bottom: 15px;
+}
 .checking_add_box {
     padding: 8px 16px 16px 16px;
     color: #424242;
@@ -7557,4 +7560,11 @@ select.course_n:hover {
     background: none;
     padding: 0 !important;
     margin: 0 8px;
+}
+.add_padding{
+    padding:3px 0
+}
+.add_timeSet{
+    margin-left: 5px;
+    display: inline-block !important;
 }
