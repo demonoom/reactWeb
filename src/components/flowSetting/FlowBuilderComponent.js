@@ -156,10 +156,10 @@ const FlowBuilderComponent = React.createClass({
         switch(approvalType){
             case 0:
                 //选定具体用户
-                approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalJson.approval)}>{approvalJson.approval.userName}</div>;
+                approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalJson.approval.colUid)}>{approvalJson.approval.userName}</div>;
                 approvalTypeStr= "";
                 //stepObj = <Step id={approvalJson.approval} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
-                stepObj = <div id={approvalJson.approval} >
+                stepObj = <div id={approvalJson.approval.colUid} >
                     <div className="approval_steps_w">
                         <Icon type="user" />
                         {approvalNameDiv}
@@ -259,9 +259,42 @@ const FlowBuilderComponent = React.createClass({
     removeApprovalJsonArray(removeKey){
         for(var i=0;i<approvalJsonArray.length;i++){
             var approvalJson = approvalJsonArray[i];
-            if(approvalJson.approval==removeKey){
-                approvalJsonArray.splice(i,1);
-                break;
+            var approvalType = approvalJson.approvalType;
+            switch (approvalType){
+                case 0:
+                    //指定用户审批
+                    if(approvalJson.approval.colUid==removeKey){
+                        approvalJsonArray.splice(i,1);
+                        break;
+                    }
+                    break;
+                case 1:
+                    //角色审批
+                    var approvalRoleVariables = approvalJson.approvalRoleVariables;
+                    if(approvalRoleVariables.id==removeKey){
+                        approvalJsonArray.splice(i,1);
+                        break;
+                    }
+                    break;
+                case 2:
+                    //部门主管审批
+                    var flowApprovalUserRule = approvalJson.flowApprovalUserRule;
+                    var approvalUserKey = flowApprovalUserRule.levelType+"#"+flowApprovalUserRule.approvalLevel;
+                    if(approvalUserKey==removeKey){
+                        approvalJsonArray.splice(i,1);
+                        break;
+                    }
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    //发起人自己审批
+                    var approvalStarterVariables = approvalJson.approvalStarterVariables;
+                    if(approvalStarterVariables==removeKey){
+                        approvalJsonArray.splice(i,1);
+                        break;
+                    }
+                    break;
             }
         }
     },
