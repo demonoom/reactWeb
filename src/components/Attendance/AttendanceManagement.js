@@ -5,7 +5,6 @@ import {
     Input, Select, Checkbox, message, Tag, Tooltip
 } from 'antd';
 import ChangeShiftModel from './ChangeShiftModel'
-import AddShiftPosModel from './AddShiftPosModel'
 import ChooseMemberModal from './ChooseMemberModal'
 import ConfirmModal from '../ConfirmModal'
 
@@ -137,7 +136,6 @@ const AttendanceManagement = React.createClass({
             attName: "",//考勤组名称
             selectedRowKeys: [1, 2, 3, 4, 5], //默认选中的天数
             changeShiftIsShow: false,
-            addShiftPosModel: false,
             tags: ['Tag 1', 'Tag 2', 'Tag 3', 'Tag 4', 'Tag 5', 'Tag 6', 'Tag 7', 'Tag 8', 'Tag 9', 'Tag 10', 'Tag 11', 'Tag 12',],
             inputVisible: false,
             inputValue: '',
@@ -187,15 +185,14 @@ const AttendanceManagement = React.createClass({
      * model关闭之后将addShiftModalIsShow重置
      */
     closeModel() {
-        this.setState({changeShiftIsShow: false, addShiftPosModel: false, chooseMemberModalIsShow: false});
+        this.setState({changeShiftIsShow: false, chooseMemberModalIsShow: false});
     },
 
     /**
      * 添加考勤地点的回调
      */
     addShiftPos() {
-        this.setState({addShiftPosModel: true});
-        //把信号传给main 在那里设置addShiftPosModel为true,
+        this.props.mapShow();
     },
 
     /**
@@ -384,14 +381,15 @@ const AttendanceManagement = React.createClass({
                 </Row>
 
 
-
-            <Table className="upexam_to_ma ant-col-20 checking_in_le" columns={workPositionCol} dataSource={positionData} pagination={false}/>
-            <div className="checking_in_le">
-                <a className="upexam_to_ma checking_in_l31" href="javascript:;" onClick={this.addShiftPos}>添加考勤地点</a>
-                <br/>
-                <Checkbox className="checking_in_l31">允许外勤打卡</Checkbox>
-                <div className="checking_in_l31 password_ts">关闭后，范围外不允许打卡</div>
-            </div>
+                <Table className="upexam_to_ma ant-col-20 checking_in_le" columns={workPositionCol}
+                       dataSource={positionData} pagination={false}/>
+                <div className="checking_in_le">
+                    <a className="upexam_to_ma checking_in_l31" href="javascript:;"
+                       onClick={this.addShiftPos}>添加考勤地点</a>
+                    <br/>
+                    <Checkbox className="checking_in_l31">允许外勤打卡</Checkbox>
+                    <div className="checking_in_l31 password_ts">关闭后，范围外不允许打卡</div>
+                </div>
 
             </div>
         </div>
@@ -436,10 +434,6 @@ const AttendanceManagement = React.createClass({
                 {mainTable}
                 <ChangeShiftModel
                     isShow={this.state.changeShiftIsShow}
-                    closeModel={this.closeModel}
-                />
-                <AddShiftPosModel
-                    isShow={this.state.addShiftPosModel}
                     closeModel={this.closeModel}
                 />
                 <ChooseMemberModal

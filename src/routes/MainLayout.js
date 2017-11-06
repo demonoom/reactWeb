@@ -27,7 +27,7 @@ import SchoolGroupSettingComponents from '../components/schoolGroupSetting/Schoo
 import SchoolGroupMenu from '../components/schoolGroupSetting/SchoolGroupMenu';
 import SystemSettingGhostMenu from '../components/SystemSetting/SystemSettingGhostMenu';
 import SystemSettingComponent from '../components/SystemSetting/SystemSettingComponent';
-// import AddShiftPosModel from '../components/Attendance/AddShiftPosModel';
+import AddShiftPosModel from '../components/Attendance/AddShiftPosModel';
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
 
@@ -63,7 +63,7 @@ const MainLayout = React.createClass({
             isSearch: false,
             isSearchGroup: false,
             isPersonCenter: false,
-            // addShiftPosModel: false,
+            addShiftPosModel: false,
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
     },
@@ -539,6 +539,14 @@ const MainLayout = React.createClass({
         this.setState({isPersonCenter: false});
     },
 
+    mapShow() {
+        this.setState({addShiftPosModel: true});
+    },
+
+    closeModel() {
+        this.setState({addShiftPosModel: false});
+    },
+
     render() {
 
         const collapse = this.state.collapse;
@@ -635,7 +643,8 @@ const MainLayout = React.createClass({
                                             checkVip={this.checkVip}
                     />;
                 tabComponent = <SystemSettingComponent currentItem={this.state.activeSystemSettingMiddleMenu}
-                                                       changeTab={this.systemSettingTab}></SystemSettingComponent>;
+                                                       changeTab={this.systemSettingTab}
+                                                       mapShow={this.mapShow}></SystemSettingComponent>;
 
                 break;
             case 'dingMessage':
@@ -757,10 +766,10 @@ const MainLayout = React.createClass({
 
                         </audio>
                     </div>
-                    {/*<AddShiftPosModel*/}
-                        {/*isShow={this.state.addShiftPosModel}*/}
-                        {/*closeModel={this.closeModel}*/}
-                    {/*/>*/}
+                    <AddShiftPosModel
+                        isShow={this.state.addShiftPosModel}
+                        closeModel={this.closeModel}
+                    />
                 </div>
             </LocaleProvider>
         );

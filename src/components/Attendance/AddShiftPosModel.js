@@ -56,6 +56,7 @@ const AddShiftPosModel = React.createClass({
         this.props.closeModel();
         console.log(map);
         map.centerAndZoom("西安", 12);
+        $("#suggestId").val('');
     },
 
     showMap() {
@@ -142,7 +143,6 @@ const AddShiftPosModel = React.createClass({
 
         return (
             <Modal
-                // visible={this.state.isShow}
                 visible={this.state.isShow}
                 width={680}
                 transitionName=""  //禁用modal的动画效果

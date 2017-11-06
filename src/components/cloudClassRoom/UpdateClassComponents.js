@@ -869,7 +869,7 @@ const UpdateClassComponents = React.createClass({
         for (var i = 0; i < arr.length; i++) {
             var videoJson = {};
             var option = lessonTeamTeacherTagArray[i];
-            var timeTag = arr[i];
+            var timeTag = lessonTimeTagArray[i];
             var teacher;
             if (this.state.isTeam == 1) {
                 teacher = this.state.cloudClassRoomUser.colUid;

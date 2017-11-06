@@ -25,6 +25,10 @@ const Attendance = React.createClass({
         this.setState({attendanceChoose: nextProps.attendanceChoose})
     },
 
+    mapShow() {
+        this.props.mapShow();
+    },
+
 
     /**
      * 渲染页面
@@ -35,7 +39,9 @@ const Attendance = React.createClass({
         switch (this.state.attendanceChoose) {
             case 'attendanceManagement':
                 //考勤组管理
-                this.tabComponent = <AttendanceManagement/>;
+                this.tabComponent = <AttendanceManagement
+                    mapShow={this.mapShow}
+                />;
                 break;
             case 'shiftManagement':
                 //班次管理
