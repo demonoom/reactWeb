@@ -42,6 +42,7 @@ class SystemSettingComponent extends React.Component {
         this.sendDefaultId = this.sendDefaultId.bind(this);
         this.addSubGroupComplete = this.addSubGroupComplete.bind(this);
         this.attendanceSettingClick = this.attendanceSettingClick.bind(this);
+        this.mapShow = this.mapShow.bind(this);
     }
 
 
@@ -116,6 +117,10 @@ class SystemSettingComponent extends React.Component {
         this.setState({defaultId});
     }
 
+    mapShow() {
+        this.props.mapShow();
+    }
+
     render() {
         //系统设置页面渲染 根据如下判断结果，完成对页面中部位置的渲染，不同情况，渲染不同组件
         switch (this.props.currentItem) {
@@ -154,6 +159,7 @@ class SystemSettingComponent extends React.Component {
                 />;
                 this.tabComponent = <Attendance
                     attendanceChoose={this.state.attendanceKey}
+                    mapShow={this.mapShow}
                 />;
         }
 

@@ -266,12 +266,13 @@ const CreateClassComponents = React.createClass({
      */
     addCourse() {
         console.log(courseInfoJson);
+        console.log('有可能是我的问题');
         var _this = this;
         var param = {
             "method": 'addCourse',
             "jsonObject": JSON.stringify(courseInfoJson),
         };
-        debugger
+        // debugger
         console.log(param);
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -598,7 +599,7 @@ const CreateClassComponents = React.createClass({
         for (var i = 0; i < arr.length; i++) {
             var videoJson = {};
             var option = lessonTeamTeacherTagArray[i];
-            var timeTag = arr[i];
+            var timeTag = lessonTimeTagArray[i];
             var teacher;
             if (this.state.isTeam == 1) {
                 teacher = this.state.cloudClassRoomUser.colUid;
@@ -611,6 +612,7 @@ const CreateClassComponents = React.createClass({
             // videoJson.courseId = courseInfoJson.courseTypeId;
             videoJson.userID = teacher;
             videoJson.liveTime = new Date(time).valueOf();
+            debugger
             this.buildVideosArray(videoJson);
         }
         if (isEmpty(courseInfoJson.videos) == false) {
