@@ -28,8 +28,8 @@ const AddShiftModel = React.createClass({
             checked: false,
             playDaychecked: false,
             timeSet: 'none',
-    }
-        ;
+        }
+            ;
     },
 
     componentDidMount() {
@@ -103,10 +103,10 @@ const AddShiftModel = React.createClass({
     checkboxOnChange(e) {
         this.setState({playDaychecked: e.target.checked});
         console.log(`checked = ${e.target.checked}`);
-        if(e.target.checked) {
-            this.setState({timeSet:'block'});
+        if (e.target.checked) {
+            this.setState({timeSet: 'block'});
         } else {
-            this.setState({timeSet:'none'});
+            this.setState({timeSet: 'none'});
         }
     },
 
@@ -159,21 +159,21 @@ const AddShiftModel = React.createClass({
                                    onChange={this.shiftNameChange}/>
                         </Col>
                         <Col span={9}>
-                            <Checkbox onChange={this.IsPlayDayOnChange} checked={this.state.checked}>是否为休息日</Checkbox>
+                        <Checkbox onChange={this.IsPlayDayOnChange} checked={this.state.checked}>是否为休息日</Checkbox>
                         </Col>
                     </Row>
                     <div id="isPlayDayOnChange">
                         <div>
-                            <span>设置该班次一天内上下班的次数</span>
-                            <span className="add_out off_duty">
-                                <Radio.Group value={this.state.size} onChange={this.degreeChange}>
-                                    <Radio.Button value="one">一天1次上下班</Radio.Button>
-                                    <Radio.Button value="two">一天2次上下班</Radio.Button>
-                                    <Radio.Button value="thr">一天3次上下班</Radio.Button>
-                                </Radio.Group>
-                                </span>
-                            <Checkbox onChange={this.checkboxOnChange}
-                                      checked={this.state.playDaychecked}>打卡时段设置</Checkbox>
+                        <span>设置该班次一天内上下班的次数</span>
+                        <span className="add_out off_duty">
+                        <Radio.Group value={this.state.size} onChange={this.degreeChange}>
+                        <Radio.Button value="one">一天1次上下班</Radio.Button>
+                        <Radio.Button value="two">一天2次上下班</Radio.Button>
+                        <Radio.Button value="thr">一天3次上下班</Radio.Button>
+                        </Radio.Group>
+                        </span>
+                        <Checkbox onChange={this.checkboxOnChange}
+                        checked={this.state.playDaychecked}>打卡时段设置</Checkbox>
                         </div>
 
                         <div className="upexam_to_ma" style={{display: firTime}}>

@@ -34,18 +34,23 @@ const Attendance = React.createClass({
 
         switch (this.state.attendanceChoose) {
             case 'attendanceManagement':
+                //考勤组管理
                 this.tabComponent = <AttendanceManagement/>;
                 break;
             case 'shiftManagement':
+                //班次管理
                 this.tabComponent = <ShiftManagement/>;
                 break;
             case 'monthlySummary':
+                //月度汇总
                 this.tabComponent = <MonthlySummary/>;
                 break;
             case 'dailyStatistics':
+                //每日统计
                 this.tabComponent = <DailyStatistics/>;
                 break;
             case 'originalRecord':
+                //原始记录
                 this.tabComponent = <OriginalRecord/>;
                 break;
         }
