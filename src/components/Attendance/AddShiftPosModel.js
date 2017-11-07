@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import {isEmpty} from '../../utils/utils';
-import {Table, Icon, Modal} from 'antd';
+import {Table, Icon, Modal, Input} from 'antd';
 
 var map;
 var point;
@@ -14,6 +14,7 @@ const AddShiftPosModel = React.createClass({
             changeShiftIsShow: false,
             isShow: false,
             flag: false,
+            workPos: '',
         };
     },
 
@@ -57,9 +58,11 @@ const AddShiftPosModel = React.createClass({
         console.log(map);
         map.centerAndZoom("西安", 12);
         $("#suggestId").val('');
+        this.setState({workPos:''});
     },
 
     showMap() {
+        var _this = this;
 
         function G(id) {
             return document.getElementById(id);
@@ -82,7 +85,7 @@ const AddShiftPosModel = React.createClass({
             geoc.getLocation(pt, function (rs) {
                 var addComp = rs.addressComponents;
                 /*逆解析，获取详细地址*/
-                alert(addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
+                _this.setState({workPos: addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber});
             });
         });
         this.setState({flag: true});
@@ -158,6 +161,10 @@ const AddShiftPosModel = React.createClass({
                 </div>
                 <div id="search-map" className="search_map">
 
+                </div>
+
+                <div>
+                    <input type="text" value={this.state.workPos}/>
                 </div>
             </Modal>
         );
