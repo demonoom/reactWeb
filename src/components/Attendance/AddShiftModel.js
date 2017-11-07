@@ -141,7 +141,7 @@ const AddShiftModel = React.createClass({
             <Modal
                 title="新增班次"
                 visible={this.state.isShow}
-                width={760}
+                width={800}
                 transitionName=""  //禁用modal的动画效果
                 closable={true}     //设置显示右上角的关闭按钮（但是需要调整颜色，否则白色会无法显示）
                 maskClosable={false} //设置不允许点击蒙层关闭
@@ -181,10 +181,10 @@ const AddShiftModel = React.createClass({
 
                         <div className="upexam_to_ma" style={{display: firTime}}>
                         <span>
-                            <span>第1次</span>
+                            <span className="info_school_s">第1次</span>
                             <span>上班：</span>
                             <TimePicker defaultValue={moment(this.state.oneTime, format)} format={format}/>
-                            <span style={{display: timeSet}}>
+                            <span style={{display: timeSet}} className="ding_left_1">
                                 <span>
                                 <Select defaultValue="--" style={{width: 65}}>
                                   <Option value="--">--</Option>
@@ -196,13 +196,13 @@ const AddShiftModel = React.createClass({
                                   <Option value="60">60</Option>
                                 </Select>
                            </span>
-                            <span>分钟前开始打卡</span>
+                            <span className="ding_left_1">分钟前开始打卡</span>
                             </span>
                         </span>
-                            <span className="botton_left1">
+                            <span className="favorite_pa_le">
                             <span>下班：</span>
                             <TimePicker value={moment(this.state.unknowTime, format)} format={format}/>
-                            <span style={{display: timeSet}}>
+                            <span style={{display: timeSet}} className="ding_left_1">
                                 <span>
                                     <Select defaultValue="--" style={{width: 65}}>
                                       <Option value="--">--</Option>
@@ -214,16 +214,16 @@ const AddShiftModel = React.createClass({
                                       <Option value="60">60</Option>
                                     </Select>
                                 </span>
-                            <span>分钟后结束打卡</span>
+                            <span className="ding_left_1">分钟后结束打卡</span>
                             </span>
                         </span>
                         </div>
                         <div className="upexam_to_ma" style={{display: secTime}}>
                         <span>
-                            <span>第2次</span>
+                            <span className="info_school_s">第2次</span>
                             <span>上班：</span>
                             <TimePicker defaultValue={moment(this.state.thrTime, format)} format={format}/>
-                            <span style={{display: timeSet}}>
+                            <span style={{display: timeSet}} className="ding_left_1">
                                 <span>
                                 <Select defaultValue="--" style={{width: 65}}>
                                   <Option value="--">--</Option>
@@ -235,13 +235,13 @@ const AddShiftModel = React.createClass({
                                   <Option value="60">60</Option>
                                 </Select>
                            </span>
-                            <span>分钟前开始打卡</span>
+                            <span className="ding_left_1">分钟前开始打卡</span>
                             </span>
                         </span>
-                            <span className="botton_left1">
+                            <span className="favorite_pa_le">
                             <span>下班：</span>
                             <TimePicker defaultValue={moment(this.state.fouTime, format)} format={format}/>
-                            <span style={{display: timeSet}}>
+                            <span style={{display: timeSet}} className="ding_left_1">
                                 <span>
                                 <Select defaultValue="--" style={{width: 65}}>
                                   <Option value="--">--</Option>
@@ -253,16 +253,16 @@ const AddShiftModel = React.createClass({
                                   <Option value="60">60</Option>
                                 </Select>
                            </span>
-                            <span>分钟后结束打卡</span>
+                            <span className="ding_left_1">分钟后结束打卡</span>
                             </span>
                         </span>
                         </div>
                         <div className="upexam_to_ma" style={{display: thiTime}}>
                         <span>
-                            <span>第3次</span>
+                            <span className="info_school_s">第3次</span>
                             <span>上班：</span>
                             <TimePicker defaultValue={moment(this.state.fivTime, format)} format={format}/>
-                            <span style={{display: timeSet}}>
+                            <span style={{display: timeSet}} className="ding_left_1">
                                 <span>
                                 <Select defaultValue="--" style={{width: 65}}>
                                   <Option value="--">--</Option>
@@ -274,13 +274,13 @@ const AddShiftModel = React.createClass({
                                   <Option value="60">60</Option>
                                 </Select>
                            </span>
-                            <span>分钟前开始打卡</span>
+                            <span className="ding_left_1">分钟前开始打卡</span>
                             </span>
                         </span>
-                            <span className="botton_left1">
+                            <span className="favorite_pa_le">
                             <span>下班：</span>
                             <TimePicker defaultValue={moment(this.state.sixTime, format)} format={format}/>
-                            <span style={{display: timeSet}}>
+                            <span style={{display: timeSet}} className="ding_left_1">
                                 <span>
                                 <Select defaultValue="--" style={{width: 65}}>
                                   <Option value="--">--</Option>
@@ -292,7 +292,7 @@ const AddShiftModel = React.createClass({
                                   <Option value="60">60</Option>
                                 </Select>
                            </span>
-                            <span>分钟后结束打卡</span>
+                            <span className="ding_left_1">分钟后结束打卡</span>
                             </span>
                         </span>
                         </div>

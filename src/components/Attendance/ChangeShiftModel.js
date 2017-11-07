@@ -6,6 +6,7 @@ const columns = [{
     title: '班次名称',
     dataIndex: 'name',
     key: 'name',
+
 }, {
     title: '考勤时间',
     dataIndex: 'time',
@@ -87,8 +88,8 @@ const ChangeShiftModel = React.createClass({
                 onOk={this.handleOk}
                 className="schoolgroup_modal"
             >
-                <div className="modal_register_main">
-                    <Table columns={columns} dataSource={data} pagination={false} onRowClick={this.onRowClick}/>
+                <div>
+                    <Table columns={columns} dataSource={data} pagination={false} onRowClick={this.onRowClick} className="change_model" />
                 </div>
             </Modal>
         );

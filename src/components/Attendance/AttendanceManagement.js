@@ -12,7 +12,7 @@ const columns = [{
     title: '名称',
     dataIndex: 'name',
     key: 'name',
-    className: 'checking_in_name',
+    className: 'checking_in_date',
 }, {
     title: '人数',
     dataIndex: 'num',
@@ -22,7 +22,7 @@ const columns = [{
     title: '考勤时间',
     dataIndex: 'time',
     key: 'time',
-    className: 'checking_in_date',
+    className: 'checking_in_name',
 }, {
     title: '操作',
     className: 'ant-table-selection-smallclass checking_in_operate class_right',
@@ -255,13 +255,13 @@ const AttendanceManagement = React.createClass({
         var stepPanel = <div>
             <div className="checking_add_box checking_in_31">
                 <Row>
-                    <Col span={4}>考勤组名称：</Col>
+                    <Col span={4} className="knowledge_ri knowledge_ri_8">考勤组名称：</Col>
                     <Col span={10}>
                         <Input placeholder="请输入考勤组名称" value={this.state.attName} onChange={this.attNameOnChange}/>
                     </Col>
                 </Row>
                 <Row className="upexam_to_ma">
-                    <Col span={4}>参与考勤人员：</Col>
+                    <Col span={4} className="knowledge_ri knowledge_ri_8">参与考勤人员：</Col>
                     <Col span={18}>
                             <span>
                                 {tags.map((tag, index) => {
@@ -286,11 +286,11 @@ const AttendanceManagement = React.createClass({
                                     />
                                 )}
                             </span>
-                        <Button onClick={this.chooseMember}>请选择</Button>
+                        <Button className="btn_tag" onClick={this.chooseMember}>请选择</Button>
                     </Col>
                 </Row>
                 <Row className="upexam_to_ma">
-                    <Col span={4}>无需考勤人员：</Col>
+                    <Col span={4} className="knowledge_ri knowledge_ri_8">无需考勤人员：</Col>
                     <Col span={18}>
                             <span>
                                 {tags.map((tag, index) => {
@@ -315,11 +315,11 @@ const AttendanceManagement = React.createClass({
                                     />
                                 )}
                             </span>
-                        <Button onClick={this.chooseMember}>请选择</Button>
+                        <Button className="btn_tag" onClick={this.chooseMember}>请选择</Button>
                     </Col>
                 </Row>
                 <Row className="upexam_to_ma">
-                    <Col span={4}>考勤组负责人：</Col>
+                    <Col span={4} className="knowledge_ri knowledge_ri_8">考勤组负责人：</Col>
                     <Col span={18}>
                             <span>
                                 {tags.map((tag, index) => {
@@ -344,7 +344,7 @@ const AttendanceManagement = React.createClass({
                                     />
                                 )}
                             </span>
-                        <Button onClick={this.chooseMember}>请选择</Button>
+                        <Button className="btn_tag" onClick={this.chooseMember}>请选择</Button>
                     </Col>
                 </Row>
                 <Row>
@@ -353,7 +353,7 @@ const AttendanceManagement = React.createClass({
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={4}>工作日设置：</Col>
+                    <Col span={4} className="knowledge_ri knowledge_ri_8">工作日设置：</Col>
                     <Col span={10}>
                         <span>默认班次：9:00--18:00</span>
                         <a href="javascript:;" onClick={this.changeShift} className="add_out">更改班次</a>
@@ -364,7 +364,7 @@ const AttendanceManagement = React.createClass({
                        className="upexam_to_ma ant-col-20 checking_in_le"/>
 
                 <Row className="upexam_to_ma">
-                    <Col span={4}>考勤地址：</Col>
+                    <Col span={4} className="knowledge_ri knowledge_ri_8">考勤地址：</Col>
                     <Col span={11}>根据办公地点考勤（可添加多个考勤地点）有效范围</Col>
                     <Col span={6}>
                         <Select style={{width: 75}} defaultValue="300米">
