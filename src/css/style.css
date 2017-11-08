@@ -7605,3 +7605,6 @@ select.course_n:hover {
 .change_model tr th:first-child, .change_model tr td:first-child{
     width: 40%;
 }
+.min_53 .ant-spin-container > div > div > div {
+    min-height: 53px;
+}
