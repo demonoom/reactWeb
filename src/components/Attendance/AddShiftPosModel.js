@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import {isEmpty} from '../../utils/utils';
-import {Table, Icon, Modal, Input} from 'antd';
+import {Table, Icon, Modal, Input, message} from 'antd';
 
 var map;
 var point;
@@ -15,6 +15,7 @@ const AddShiftPosModel = React.createClass({
             isShow: false,
             flag: false,
             workPos: '',
+            location: '',
         };
     },
 
@@ -44,7 +45,16 @@ const AddShiftPosModel = React.createClass({
      * 确定的回调
      */
     handleOk() {
-        alert('确定');
+        var pos = this.state.location;   //坐标
+        var workPos = this.state.workPos;  //详细地址
+        var PosStr = pos + '$' + workPos;
+        if (isEmpty(pos) == false) {
+            //把坐标传给目标组件，关闭model
+            this.props.postPos(PosStr);
+            this.closeChangeShiftModal();
+        } else {
+            message.error('还未选择地址，请选择地址');
+        }
     },
 
     /**
@@ -54,11 +64,12 @@ const AddShiftPosModel = React.createClass({
         this.setState({
             isShow: false,
         });
-        this.props.closeModel();
-        console.log(map);
+        // console.log(map);
         map.centerAndZoom("西安", 12);
         $("#suggestId").val('');
-        this.setState({workPos:''});
+        this.setState({workPos: ''});
+        this.setState({location: ''});
+        this.props.closeModel();
     },
 
     showMap() {
@@ -81,7 +92,8 @@ const AddShiftPosModel = React.createClass({
         map.addEventListener("click", function (e) {
             var pt = e.point;
             /*坐标  经纬度*/
-            alert(pt.lng + "," + pt.lat);
+            // alert(pt.lng + "," + pt.lat);
+            _this.setState({location: pt.lng + "@" + pt.lat});
             geoc.getLocation(pt, function (rs) {
                 var addComp = rs.addressComponents;
                 /*逆解析，获取详细地址*/
@@ -118,6 +130,7 @@ const AddShiftPosModel = React.createClass({
         ac.addEventListener("onconfirm", function (e) {    //鼠标点击下拉列表后的事件
             var _value = e.item.value;
             myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
+            _this.setState({workPos: myValue});
             G("searchResultPanel").innerHTML = "onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
 
             setPlace();
@@ -163,8 +176,9 @@ const AddShiftPosModel = React.createClass({
                 <div id="search-map" className="search_map">
                 </div>
                 <hr className="search_map_hr"></hr>
-                <div >
-                    <span>地址名称：</span><input type="text" value={this.state.workPos} className="ant-input" style={{width: 240}}/>
+                <div>
+                    <span>地址名称：</span><input type="text" value={this.state.workPos} className="ant-input"
+                                             style={{width: 240}}/>
                 </div>
             </Modal>
         );

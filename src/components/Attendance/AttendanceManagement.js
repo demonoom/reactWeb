@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import {isEmpty} from '../../utils/utils';
+import {createUUID} from '../../utils/utils';
 import {
     Button, Table, Icon, Row, Col,
     Input, Select, Checkbox, message, Tag, Tooltip
@@ -7,6 +8,8 @@ import {
 import ChangeShiftModel from './ChangeShiftModel'
 import ChooseMemberModal from './ChooseMemberModal'
 import ConfirmModal from '../ConfirmModal'
+
+var posDetilArr = [];
 
 const columns = [{
     title: '名称',
@@ -140,11 +143,46 @@ const AttendanceManagement = React.createClass({
             inputVisible: false,
             inputValue: '',
             chooseMemberModalIsShow: false,
+            // posDetil: '',    //考勤详细地址
+            posDetilArr: [],
         };
     },
 
     componentDidMount() {
+        window.__setPos__ = this.setPos;
+    },
 
+    componentWillReceiveProps(nextProps) {
+
+    },
+
+    //接收坐标
+    /*checkPos(e) {
+        var arr = e.split('$');
+        var posDetil = arr[1];   //详细地址
+        var locationPoint = arr[0];   //坐标
+        // console.log(posDetil);
+        // console.log(locationPoint);
+        //e中存着地理信息会不断传过来，把信息存在本地中，向table数组存完就清空本地。
+        // this.setState({posDetil});   //考勤详细地址
+    },*/
+
+    setPos(e) {
+        var arr = e.split('$');
+        var posDetil = arr[1];   //详细地址
+        var locationPoint = arr[0];   //坐标
+        var num = createUUID();   //随机数
+
+        // console.log(posDetil);
+        // console.log(locationPoint);
+        // console.log(num);
+
+        var posDetil = {
+            key: locationPoint,
+            workpos: posDetil,
+        };
+        posDetilArr.push(posDetil);
+        this.setState({posDetilArr});
     },
 
     //增加考勤组
@@ -380,9 +418,9 @@ const AttendanceManagement = React.createClass({
                     </Col>
                 </Row>
 
-
+                {/*考勤地址table*/}
                 <Table className="upexam_to_ma ant-col-20 checking_in_le" columns={workPositionCol}
-                       dataSource={positionData} pagination={false}/>
+                       dataSource={this.state.posDetilArr} pagination={false}/>
                 <div className="checking_in_le">
                     <a className="upexam_to_ma checking_in_l31" href="javascript:;"
                        onClick={this.addShiftPos}>添加考勤地点</a>
