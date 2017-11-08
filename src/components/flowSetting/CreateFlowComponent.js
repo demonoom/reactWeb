@@ -86,7 +86,7 @@ const CreateFlowComponent = React.createClass({
         if(this.state.stepNum==0){
             stepPanel = <FormBuilderComponent ref="formDataComponent"></FormBuilderComponent>;
         }else{
-            stepPanel=<FlowBuilderComponent ref="flowBuilderComponent"></FlowBuilderComponent>;
+            stepPanel=<FlowBuilderComponent ref="flowBuilderComponent" formData = {this.state.formData}></FlowBuilderComponent>;
         }
 
         return (
