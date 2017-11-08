@@ -23,7 +23,7 @@ const Attendance = React.createClass({
     componentWillReceiveProps(nextProps) {
         this.setState({attendanceChoose: nextProps.attendanceChoose});
         if (isEmpty(nextProps.postPos) == false) {
-            this.refs.attendanceManagement.checkPos(nextProps.postPos);
+            // this.refs.attendanceManagement.checkPos(nextProps.postPos);
         }
     },
 

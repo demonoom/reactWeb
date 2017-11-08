@@ -158,9 +158,9 @@ const AddShiftModel = React.createClass({
                             <Input placeholder="必填" value={this.state.shiftName}
                                    onChange={this.shiftNameChange}/>
                         </Col>
-                        <Col span={9} className="add_study-d-le1 add_padding">
-                            <Checkbox onChange={this.IsPlayDayOnChange} checked={this.state.checked}>是否为休息日</Checkbox>
-                        </Col>
+                        {/*<Col span={9} className="add_study-d-le1 add_padding">*/}
+                            {/*<Checkbox onChange={this.IsPlayDayOnChange} checked={this.state.checked}>是否为休息日</Checkbox>*/}
+                        {/*</Col>*/}
                     </Row>
                     <div className="row-t-f">
                         <Col className="password_ts checking_in_le2">最多6个字符（中英文或数字）</Col>

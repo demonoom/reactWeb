@@ -566,12 +566,16 @@ const MainLayout = React.createClass({
         this.setState({addShiftPosModel: true});
     },
 
-    closeModel() {
+    closeModel(flag) {
         this.setState({addShiftPosModel: false});
+        // if(flag) {
+        //     window.__setPos__();
+        // }
     },
 
     postPos(postPos) {
         this.setState({postPos});
+        window.__setPos__(postPos);
     },
 
     render() {

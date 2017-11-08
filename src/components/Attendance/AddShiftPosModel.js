@@ -48,7 +48,7 @@ const AddShiftPosModel = React.createClass({
         var pos = this.state.location;   //坐标
         var workPos = this.state.workPos;  //详细地址
         var PosStr = pos + '$' + workPos;
-        if(isEmpty(pos)==false) {
+        if (isEmpty(pos) == false) {
             //把坐标传给目标组件，关闭model
             this.props.postPos(PosStr);
             this.closeChangeShiftModal();
@@ -64,12 +64,12 @@ const AddShiftPosModel = React.createClass({
         this.setState({
             isShow: false,
         });
-        this.props.closeModel();
         // console.log(map);
         map.centerAndZoom("西安", 12);
         $("#suggestId").val('');
         this.setState({workPos: ''});
         this.setState({location: ''});
+        this.props.closeModel();
     },
 
     showMap() {
@@ -176,8 +176,9 @@ const AddShiftPosModel = React.createClass({
                 <div id="search-map" className="search_map">
                 </div>
                 <hr className="search_map_hr"></hr>
-                <div >
-                    <span>地址名称：</span><input type="text" value={this.state.workPos} className="ant-input" style={{width: 240}}/>
+                <div>
+                    <span>地址名称：</span><input type="text" value={this.state.workPos} className="ant-input"
+                                             style={{width: 240}}/>
                 </div>
             </Modal>
         );
