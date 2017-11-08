@@ -163,13 +163,29 @@ const FlowSettingComponent = React.createClass({
         var _this = this;
         var flowFormDefineList = this.refs.createFlowComponent.getFormDefindData();
         var processDefinitionJson = this.refs.createFlowComponent.getProcessDefinitionJson();
+        var flowFormDefineListObj = JSON.parse(flowFormDefineList);
+        flowFormDefineListObj.forEach(function (flowFormDefine) {
+            var variableJson = {};
+            variableJson.isAbstractField = false;
+            variableJson.placeholder = "";
+            var selectedAbstractValues = processDefinitionJson.selectedAbstractValues;
+            selectedAbstractValues.forEach(function (selectedAbstract) {
+                if(flowFormDefine.label == selectedAbstract){
+                    variableJson.isAbstractField = true;
+                }
+            });
+            if(isEmpty(flowFormDefine.placeholder)==false){
+                variableJson.placeholder =flowFormDefine.placeholder;
+            }
+            flowFormDefine.variableJson = variableJson;
+        });
         //{"procDefName":"请假单","flowDescription":"it部请假单","flowGroupId":"2","messageOfCopyPersonSendType":"0","copyPersonList":["23384","23385"],"approvalIdJson":[{"approvalType":1,"approval":"23836"},{"approvalType":1,"approval":"tom"}],"formData":"[{\"type\":\"header\",\"label\":\"表头\"},{\"type\":\"text\",\"label\":\"输入框\"}]"}
         console.log("procDefJson:" + JSON.stringify(processDefinitionJson));
         //调用后台完成json到底层对象的转化
         var param = {
             "method": 'deployProcess',
             "flowProcessDefinitionJson": processDefinitionJson,
-            "flowFormDefineList": flowFormDefineList
+            "flowFormDefineList": JSON.stringify(flowFormDefineListObj)
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {

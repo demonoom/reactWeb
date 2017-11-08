@@ -14,10 +14,18 @@ var copyPersonTagArray=[];
 //准备发送到后台创建流程使用的审批节点数据(审批节点的顺序以数组索引顺序为依据)
 var approvalJsonArray=[];
 var copyPersonIdArray=[];
+const children = [];
 const FlowBuilderComponent = React.createClass({
 
     getInitialState() {
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+        console.log("formData----->"+this.props.formData);
+        var formData = this.props.formData;
+        var formDefineList = JSON.parse(formData);
+        children.splice(0);
+        formDefineList.forEach(function (formDefine) {
+            children.push(<Option key={formDefine.label}>{formDefine.label}</Option>);
+        });
         return {
             loginUser : loginUser,
             approvalModalVisible:false,     //设置审批人窗口的显示和关闭状态
@@ -421,7 +429,22 @@ const FlowBuilderComponent = React.createClass({
         processDefinitionBaseJson.copyPersonList = copyPersonList;
         //审批人列表
         processDefinitionBaseJson.flowApprovalUsers = flowApprovalUsers;
+        //审批表单摘要内容
+        processDefinitionBaseJson.selectedAbstractValues = this.state.selectedAbstractValues;
         return processDefinitionBaseJson;
+    },
+
+    /**
+     * 摘要展示内容改变的响应函数
+     * @param selectedValues
+     */
+    formDefineListHandleChange(selectedAbstractValues) {
+        console.log(`selected ${selectedAbstractValues}`);
+        if(selectedAbstractValues.length>3){
+            message.error("最多只允许选择三个字段作为摘要显示");
+            return false;
+        }
+        this.setState({selectedAbstractValues});
     },
 
     /**
@@ -460,6 +483,20 @@ const FlowBuilderComponent = React.createClass({
                         </div>
 
                         <Button className="upexam_float" icon="plus-circle" onClick={this.addFlowStep}></Button>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={6} className="framework_m_l">摘要展示内容：</Col>
+                    <Col span={17} className="framework_m_r">
+                        <Select
+                            multiple={true}
+                            style={{ width: '100%' }}
+                            placeholder="请选择将要在审批列表中显示的字段"
+                            onChange={this.formDefineListHandleChange}
+                            value={this.state.selectedAbstractValues}
+                        >
+                            {children}
+                        </Select>
                     </Col>
                 </Row>
                 {/*<Row>
