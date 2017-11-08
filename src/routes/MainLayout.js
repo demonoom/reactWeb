@@ -18,6 +18,7 @@ import PersonCenterComponents from '../components/antGroup/PersonCenterComponent
 import AntCloudMenu from '../components/layOut/AntCloudMenu';
 import AntCloudTableComponents from '../components/antCloud/AntCloudTableComponents';
 import {LocaleProvider} from 'antd';
+import {showLargeImg} from '../utils/utils'
 import TeachSpace from '../components/TeachSpaces';
 import TeachSpaceGhostMenu from '../components/TeachSpacesGhostMenu';
 import {MsgConnection} from '../utils/msg_websocket_connection';
@@ -154,6 +155,7 @@ const MainLayout = React.createClass({
         this.refs.mesMusic.innerHTML = '<source src="../../static/message.mp3" type="audio/mpeg">'
         window.__noomSelect__ = this.noomSelect;
         window.__noomSelectGroup__ = this.noomSelectUser;
+        window.__sendImg__ = this.sendImg;
     },
 
     componentWillMount() {
@@ -202,6 +204,27 @@ const MainLayout = React.createClass({
             this.refs[obj.ref][obj.methond].call(this.refs[obj.ref], obj.param);
             this.proxyObj = null;
         }
+    },
+
+    sendImg(currentUrl, urls) {
+        var imgArr = [];
+        var num = '';
+        var urls = urls.split('#');
+        var _this = this;
+        //根据urls的length动态创建img
+        urls.forEach(function (v, i) {
+            var imgId = "img" + i;
+            var img = <span className="topics_zan"><img id={imgId} className="topics_zanImg"
+                                                        onClick={showLargeImg} src={v}/>
+                      </span>;
+            imgArr.push(img);
+            if (currentUrl == v) {
+                num = i;
+            }
+        });
+        this.setState({imgArr});
+        //图片已渲染到DOM
+        document.querySelectorAll(".topics_zanImg")[num].click();
     },
 
     noomSelect(obj) {
@@ -543,8 +566,16 @@ const MainLayout = React.createClass({
         this.setState({addShiftPosModel: true});
     },
 
-    closeModel() {
+    closeModel(flag) {
         this.setState({addShiftPosModel: false});
+        // if(flag) {
+        //     window.__setPos__();
+        // }
+    },
+
+    postPos(postPos) {
+        this.setState({postPos});
+        window.__setPos__(postPos);
     },
 
     render() {
@@ -644,7 +675,8 @@ const MainLayout = React.createClass({
                     />;
                 tabComponent = <SystemSettingComponent currentItem={this.state.activeSystemSettingMiddleMenu}
                                                        changeTab={this.systemSettingTab}
-                                                       mapShow={this.mapShow}></SystemSettingComponent>;
+                                                       mapShow={this.mapShow}
+                                                       postPos={this.state.postPos}></SystemSettingComponent>;
 
                 break;
             case 'dingMessage':
@@ -769,7 +801,13 @@ const MainLayout = React.createClass({
                     <AddShiftPosModel
                         isShow={this.state.addShiftPosModel}
                         closeModel={this.closeModel}
+                        postPos={this.postPos}
                     />
+                    <ul style={{display: 'none'}}>
+                        <li className="imgLi">
+                            {this.state.imgArr}
+                        </li>
+                    </ul>
                 </div>
             </LocaleProvider>
         );

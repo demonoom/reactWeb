@@ -21,8 +21,10 @@ const Attendance = React.createClass({
     },
 
     componentWillReceiveProps(nextProps) {
-        // console.log(nextProps.attendanceChoose);
-        this.setState({attendanceChoose: nextProps.attendanceChoose})
+        this.setState({attendanceChoose: nextProps.attendanceChoose});
+        if (isEmpty(nextProps.postPos) == false) {
+            // this.refs.attendanceManagement.checkPos(nextProps.postPos);
+        }
     },
 
     mapShow() {
@@ -35,12 +37,14 @@ const Attendance = React.createClass({
      * @returns {XML}
      */
     render() {
+        var _this = this;
 
         switch (this.state.attendanceChoose) {
             case 'attendanceManagement':
                 //考勤组管理
                 this.tabComponent = <AttendanceManagement
                     mapShow={this.mapShow}
+                    ref="attendanceManagement"
                 />;
                 break;
             case 'shiftManagement':

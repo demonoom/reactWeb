@@ -50,6 +50,7 @@ const UpdateClassComponents = React.createClass({
             cloudClassRoomUser: cloudClassRoomUser,
             defaultTeamSelected: '',
             isWeiClass: false,
+            isShowClass: false,
         };
     },
 
@@ -79,7 +80,6 @@ const UpdateClassComponents = React.createClass({
     },
 
     componentWillReceiveProps(nextProps) {
-        // debugger
         if (!this.state.isWeiClass) {
             if (courseInfoJson.isSeries == 3) {
                 //系列微课
@@ -153,6 +153,7 @@ const UpdateClassComponents = React.createClass({
         var publisher = updateClassObj.publisher;
         var publishType = updateClassObj.publishType;
         var videos = updateClassObj.videos;
+        var showCourse = updateClassObj.showCourse;   //是否为展示课   1是0不是
         var isTeam;
         var isSeriesDisabled;
         var teamDisabled;
@@ -199,6 +200,13 @@ const UpdateClassComponents = React.createClass({
         }
         if (isSeries == 3 || 4) {
             this.setState({isWeiClass: true});
+        } else {
+            this.setState({isWeiClass: false});
+        }
+        if (showCourse == 1) {
+            this.setState({isShowClass: true})
+        } else {
+            this.setState({isShowClass: false})
         }
         _this.setState({
             updateId: updateClassObj.id,
@@ -231,6 +239,7 @@ const UpdateClassComponents = React.createClass({
         courseInfoJson.limitPerson = limitPerson;
         courseInfoJson.isFree = isFree;
         courseInfoJson.isLimit = isLimit;
+        courseInfoJson.showCourse = showCourse;
         courseInfoJson.content = content;
         courseInfoJson.isSeries = isSeries;
         courseInfoJson.courseTypeId = courseTypeId;
@@ -243,7 +252,6 @@ const UpdateClassComponents = React.createClass({
         courseInfoJson.publisher_id = publisher_id;
         courseInfoJson.publisher = publisher;
         courseInfoJson.publishType = publishType;
-        debugger
         courseInfoJson.videos = videos;
         if (isEmpty(videos) == false) {
             var lessonNum = 0;
@@ -408,7 +416,6 @@ const UpdateClassComponents = React.createClass({
     },
 
     updateCourse() {
-        debugger
         console.log(courseInfoJson);
         var _this = this;
         var param = {
@@ -725,7 +732,6 @@ const UpdateClassComponents = React.createClass({
      * 添加课程目录
      */
     addLesson() {
-        debugger
         var _this = this;
         var videoNumBeforeAdd = this.state.videoNum;
         if (this.state.isSeries == "2" && videoNumBeforeAdd == 1) {
@@ -849,7 +855,6 @@ const UpdateClassComponents = React.createClass({
      */
     saveClassInfo() {
         console.log(courseInfoJson);
-        debugger
         var checkResult = this.checkSubmitData();
         if (checkResult == false) {
             return;
@@ -899,7 +904,6 @@ const UpdateClassComponents = React.createClass({
         if (isEmpty(courseInfoJson.videos) == false) {
             var checkResult = true;
             if (this.state.isWeiClass) {
-                debugger
                 //微课验证
                 courseInfoJson.videos.forEach(function (video) {
                     if (isEmpty(video.name) || isEmpty(video.url) || isEmpty(video.userID)) {
@@ -1066,6 +1070,16 @@ const UpdateClassComponents = React.createClass({
         this.setState({isWeiClass: e.target.checked});
     },
 
+    isShowClass(e) {
+        this.setState({isShowClass: e.target.checked});
+        if (e.target.checked) {
+            //钩中展示课
+            courseInfoJson.showCourse = 1;
+        } else {
+            courseInfoJson.showCourse = 0;
+        }
+    },
+
     removeWeiClass() {
 
     },
@@ -1215,6 +1229,9 @@ const UpdateClassComponents = React.createClass({
                             </Radio>
                         </RadioGroup>
                     </Col>
+                </Row>
+                <Row>
+                    <Checkbox onChange={this.isShowClass} checked={this.state.isShowClass} className="upexam_le_datika">是否为展示课</Checkbox>
                 </Row>
                 <Row>
                     <Checkbox onChange={this.isWeiClass} checked={this.state.isWeiClass} className="upexam_le_datika">是否为微课</Checkbox>
