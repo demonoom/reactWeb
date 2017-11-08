@@ -108,7 +108,7 @@ const WeiClassUploadComponents = React.createClass({
 
             },
             onRemove(file) {
-                alert(22);
+                // alert(22);
                 noom = [];
             },
         };

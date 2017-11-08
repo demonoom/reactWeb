@@ -141,7 +141,6 @@ const UpdateClassComponents = React.createClass({
         }
         var id = updateClassObj.id;
         var content = updateClassObj.content;
-        var isSeries = updateClassObj.isSeries;
         var courseTypeId = updateClassObj.courseTypeId;
         var courseClass = updateClassObj.courseClassId;
         var image = updateClassObj.image;
@@ -171,6 +170,7 @@ const UpdateClassComponents = React.createClass({
         var startTimeYMD = formatYMD(startTime);
         var endTimeYMD = formatYMD(endTime);
         var classTimeRange = [moment(startTimeYMD, dateFormat), moment(endTimeYMD, dateFormat)];
+        var isWeiClass = this.state.isWeiClass;
         /*if(isEmpty(image)==false){
             var fileJson = {
                 uid: Math.random(),
@@ -178,7 +178,12 @@ const UpdateClassComponents = React.createClass({
             }
             fileList.push(fileJson);
         }*/
-        var isWeiClass = this.state.isWeiClass;
+        var isSeries = updateClassObj.isSeries;
+        if (isSeries == 3 || isSeries == 4) {
+            isWeiClass = true;
+        } else {
+            isWeiClass = false;
+        }
         if (!isWeiClass) {
             if (isSeries == 3) {
                 //系列微课
@@ -209,6 +214,7 @@ const UpdateClassComponents = React.createClass({
             this.setState({isShowClass: false})
         }
         _this.setState({
+            isWeiClass,
             updateId: updateClassObj.id,
             courseName,
             isFree,
