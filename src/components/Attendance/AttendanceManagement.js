@@ -403,9 +403,10 @@ const AttendanceManagement = React.createClass({
 
                 <Row className="upexam_to_ma">
                     <Col span={4} className="knowledge_ri knowledge_ri_8">考勤地址：</Col>
-                    <Col span={11}>根据办公地点考勤（可添加多个考勤地点）有效范围</Col>
-                    <Col span={6}>
-                        <Select style={{width: 75}} defaultValue="300米">
+                    <Col span={20}>
+                        <span>根据办公地点考勤（可添加多个考勤地点）有效范围</span>
+                        <span className="add_out">
+                            <Select style={{width: 75}} defaultValue="300米">
                             <Option value="100">100米</Option>
                             <Option value="200">200米</Option>
                             <Option value="300">300米</Option>
@@ -414,13 +415,15 @@ const AttendanceManagement = React.createClass({
                             <Option value="600">600米</Option>
                             <Option value="700">700米</Option>
                             <Option value="800">800米</Option>
-                        </Select>
+                            </Select>
+                        </span>
+
                     </Col>
                 </Row>
 
                 {/*考勤地址table*/}
-                <Table className="upexam_to_ma ant-col-20 checking_in_le" columns={workPositionCol}
-                       dataSource={this.state.posDetilArr} pagination={false}/>
+                <Table className="upexam_to_ma ant-col-20 checking_in_le min_53" columns={workPositionCol}
+                       dataSource={this.state.posDetilArr} pagination={false} />
                 <div className="checking_in_le">
                     <a className="upexam_to_ma checking_in_l31" href="javascript:;"
                        onClick={this.addShiftPos}>添加考勤地点</a>
