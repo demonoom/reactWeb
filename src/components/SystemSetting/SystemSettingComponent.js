@@ -53,6 +53,12 @@ class SystemSettingComponent extends React.Component {
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (isEmpty(nextProps.postPos) == false) {
+            this.setState({postPos: nextProps.postPos});
+        }
+    }
+
     /**
      * 获取当前用户的组织根节点(学校)
      * @param structureId
@@ -160,6 +166,7 @@ class SystemSettingComponent extends React.Component {
                 this.tabComponent = <Attendance
                     attendanceChoose={this.state.attendanceKey}
                     mapShow={this.mapShow}
+                    postPos={this.state.postPos}
                 />;
         }
 

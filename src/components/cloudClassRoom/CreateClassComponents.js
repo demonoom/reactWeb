@@ -43,6 +43,7 @@ const CreateClassComponents = React.createClass({
             teamDisabled: true,
             cloudClassRoomUser: cloudClassRoomUser,
             isWeiClass: false,
+            isShowClass: false,
             upLoadNum: 0
         };
     },
@@ -67,6 +68,7 @@ const CreateClassComponents = React.createClass({
      */
     componentWillReceiveProps(nextProps) {
         var isWeiClass = this.state.isWeiClass;
+        var isShowClass = this.state.isShowClass;
         var isSeries = nextProps.isSeries;
         //isWeiClass为true，代表是微课
         if (isWeiClass) {
@@ -78,6 +80,11 @@ const CreateClassComponents = React.createClass({
                 isSeries = 4
             }
         }
+        // if (isShowClass) {
+        //     showCourse = 1
+        // } else {
+        //     showCourse = 0
+        // }
         var stepDirect = nextProps.stepDirect;
         this.setState({stepDirect, isSeries});
         if (isSeries == "1" || isSeries == "3") {
@@ -89,6 +96,10 @@ const CreateClassComponents = React.createClass({
         // this.initCreatePage(isSeries,"update");
     },
 
+    /**
+     * 初始化创建面板
+     * @param isSeries
+     */
     initCreatePage(isSeries) {
         lessonArray.splice(0);
         courseInfoJson = {};
@@ -106,13 +117,29 @@ const CreateClassComponents = React.createClass({
         courseInfoJson.limitPerson = 0;
         courseInfoJson.isFree = 1;
         courseInfoJson.isLimit = 1;
+        courseInfoJson.showCourse = 0;   //展示课默认为0
         fileList.splice(0);
         // weifileList.splice(0);
         this.setState({
-            isSeries, isSeriesStr, videoNumInputDisable, videoNum,
-            "courseName": '', "isFree": 1, "isLimit": 1, "money": 0, "limitPerson": 0, "defaultSubjectSelected": "",
-            "defaultSelected": '', "isTeam": 1, "defaultTeamSelected": '',
-            "courseSummary": '', "moneyInputDisable": true, "numInputDisable": true, isWeiClass: false,
+            isSeries,
+            isSeriesStr,
+            videoNumInputDisable,
+            videoNum,
+            "courseName": '',
+            "isFree": 1,
+            "isLimit": 1,
+            "showCourse": 0,
+            "money": 0,
+            "limitPerson": 0,
+            "defaultSubjectSelected": "",
+            "defaultSelected": '',
+            "isTeam": 1,
+            "defaultTeamSelected": '',
+            "courseSummary": '',
+            "moneyInputDisable": true,
+            "numInputDisable": true,
+            isWeiClass: false,
+            isShowClass: false,
         });
         // this.getAllTeam();
     },
@@ -262,17 +289,15 @@ const CreateClassComponents = React.createClass({
     },
 
     /**
-     * 获取所有的年级
+     * 发课的回调
      */
     addCourse() {
         console.log(courseInfoJson);
-        console.log('有可能是我的问题');
         var _this = this;
         var param = {
             "method": 'addCourse',
             "jsonObject": JSON.stringify(courseInfoJson),
         };
-        // debugger
         console.log(param);
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -358,6 +383,27 @@ const CreateClassComponents = React.createClass({
             isFree: isFree, moneyInputDisable, money: courseInfoJson.money
         });
     },
+
+    /**
+     * 勾选是否为微课的回调
+     */
+    isWeiClass(e) {
+        this.setState({isWeiClass: e.target.checked});
+    },
+
+    /**
+     * 勾选是否为展示课的回调
+     */
+    isShowClass(e) {
+        this.setState({isShowClass: e.target.checked});
+        if (e.target.checked) {
+            //钩中展示课
+            courseInfoJson.showCourse = 1;
+        } else {
+            courseInfoJson.showCourse = 0;
+        }
+    },
+
     /**
      * 人数是否限制的回调
      */
@@ -616,7 +662,6 @@ const CreateClassComponents = React.createClass({
             // videoJson.courseId = courseInfoJson.courseTypeId;
             videoJson.userID = teacher;
             videoJson.liveTime = new Date(time).valueOf();
-            debugger
             this.buildVideosArray(videoJson);
         }
         if (isEmpty(courseInfoJson.videos) == false) {
@@ -815,14 +860,6 @@ const CreateClassComponents = React.createClass({
         console.log(value);
     },
 
-    /**
-     * 勾选是否为微课的回调
-     */
-    isWeiClass(e) {
-        console.log(`checked = ${e.target.checked}`);
-        this.setState({isWeiClass: e.target.checked});
-    },
-
     uploadOnclick(num) {
         uploadClickNum = num;
         this.setState({upLoadNum: num});
@@ -974,6 +1011,9 @@ const CreateClassComponents = React.createClass({
                             </Radio>
                         </RadioGroup>
                     </Col>
+                </Row>
+                <Row>
+                    <Checkbox onChange={this.isShowClass} checked={this.state.isShowClass} className="upexam_le_datika">是否为展示课</Checkbox>
                 </Row>
                 <Row>
                     <Checkbox onChange={this.isWeiClass} checked={this.state.isWeiClass} className="upexam_le_datika">是否为微课</Checkbox>

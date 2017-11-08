@@ -147,6 +147,19 @@ const AttendanceManagement = React.createClass({
 
     },
 
+    componentWillReceiveProps(nextProps) {
+
+    },
+
+    //接收坐标
+    checkPos(e) {
+        var arr = e.split('$');
+        var posDetil = arr[1];   //详细地址
+        var locationPoint = arr[0];   //坐标
+        console.log(posDetil);
+        console.log(locationPoint);
+    },
+
     //增加考勤组
     addAtt() {
         this.setState({optType: false});

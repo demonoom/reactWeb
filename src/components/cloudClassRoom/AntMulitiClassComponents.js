@@ -89,7 +89,6 @@ const AntMulitiClassComponents = React.createClass({
     },
 
     buildEveryCard(row, cardArray) {
-        debugger
         var _this = this;
         var id = row.id;
         var courseName = row.courseName;
