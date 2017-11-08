@@ -606,7 +606,11 @@ const CreateClassComponents = React.createClass({
             } else {
                 teacher = option.value;
             }
-            var time = timeTag.value;
+            if (isEmpty(timeTag) == false) {
+                var time = timeTag.value;
+            } else {
+                var time = '';
+            }
             console.log("teacher" + teacher + "\t" + time);
             videoJson.squence = i + 1;
             // videoJson.courseId = courseInfoJson.courseTypeId;

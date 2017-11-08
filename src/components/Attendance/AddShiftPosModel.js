@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import {isEmpty} from '../../utils/utils';
-import {Table, Icon, Modal} from 'antd';
+import {Table, Icon, Modal, Input} from 'antd';
 
 var map;
 var point;
@@ -14,6 +14,7 @@ const AddShiftPosModel = React.createClass({
             changeShiftIsShow: false,
             isShow: false,
             flag: false,
+            workPos: '',
         };
     },
 
@@ -57,9 +58,11 @@ const AddShiftPosModel = React.createClass({
         console.log(map);
         map.centerAndZoom("西安", 12);
         $("#suggestId").val('');
+        this.setState({workPos:''});
     },
 
     showMap() {
+        var _this = this;
 
         function G(id) {
             return document.getElementById(id);
@@ -82,7 +85,7 @@ const AddShiftPosModel = React.createClass({
             geoc.getLocation(pt, function (rs) {
                 var addComp = rs.addressComponents;
                 /*逆解析，获取详细地址*/
-                alert(addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
+                _this.setState({workPos: addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber});
             });
         });
         this.setState({flag: true});
@@ -144,12 +147,13 @@ const AddShiftPosModel = React.createClass({
         return (
             <Modal
                 visible={this.state.isShow}
-                width={680}
+                width={800}
                 transitionName=""  //禁用modal的动画效果
                 closable={true}     //设置显示右上角的关闭按钮（但是需要调整颜色，否则白色会无法显示）
                 maskClosable={false} //设置不允许点击蒙层关闭
                 onCancel={this.closeChangeShiftModal}
                 onOk={this.handleOk}
+                className="search_map_wrap"
             >
                 <div className="modal_register_main" id="noom_map">
                     <div id="l-map" style={{height: 368}}>
@@ -157,7 +161,10 @@ const AddShiftPosModel = React.createClass({
                     </div>
                 </div>
                 <div id="search-map" className="search_map">
-
+                </div>
+                <hr className="search_map_hr"></hr>
+                <div >
+                    <span>地址名称：</span><input type="text" value={this.state.workPos} className="ant-input" style={{width: 240}}/>
                 </div>
             </Modal>
         );

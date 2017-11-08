@@ -55,7 +55,8 @@ const WeiClassUploadComponents = React.createClass({
     },
 
     onRemove() {
-        noom = [];
+        alert(1);
+        // noom = [];
     },
 
     render() {
@@ -69,6 +70,7 @@ const WeiClassUploadComponents = React.createClass({
             onPreview: _this.handlePreview,
             beforeUpload(file) {
                 if (isEmpty(noom[0]) == false) {
+                    console.log(noom);
                     message.error('请先删除已上传文件，再重新上传', 5);
                     return false;
                 }
@@ -106,7 +108,8 @@ const WeiClassUploadComponents = React.createClass({
 
             },
             onRemove(file) {
-                console.log(file);
+                alert(22);
+                noom = [];
             },
         };
         return (
