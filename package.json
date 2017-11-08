@@ -24,6 +24,7 @@
     "react-emojione": "^2.0.0",
     "react-native": "^0.42.3",
     "react-redux": "^5.0.4",
+    "redux": "^3.7.2",
     "reqwest": "^2.0.5",
     "routes": "^2.1.0",
     "ueditor": "^1.2.0",
