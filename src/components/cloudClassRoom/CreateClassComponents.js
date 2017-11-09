@@ -475,7 +475,7 @@ const CreateClassComponents = React.createClass({
             return;
         }*/
         var videoNumBeforeAdd = this.state.videoNum;
-        if (this.state.isSeries == "2" && videoNumBeforeAdd == 1) {
+        if (this.state.isSeries == "2" && videoNumBeforeAdd == 1 || this.state.isSeries == "4" && videoNumBeforeAdd == 1) {
             //单节课
             message.error("单节课只能排课一次,无法继续添加课程目录!");
             return;

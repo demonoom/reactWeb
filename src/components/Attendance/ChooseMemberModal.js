@@ -35,6 +35,7 @@ class ChooseMemberModal extends React.Component {
         this.addTeacherToSrc = this.addTeacherToSrc.bind(this);
         this.removeTeacherFormOptions = this.removeTeacherFormOptions.bind(this);
         this.findTeacherIsExitAtTargetOptions = this.findTeacherIsExitAtTargetOptions.bind(this);
+        this.seeAddWhich = this.seeAddWhich.bind(this);
     }
 
     componentDidMount() {
@@ -70,7 +71,12 @@ class ChooseMemberModal extends React.Component {
      * 初始化页面元素
      */
     initPage() {
-        this.setState({teacherSrcOptions: [], teacherTargetOptions: [], teamName: '', searchKey: ''});
+        this.setState({teacherSrcOptions: [], teacherTargetOptions: [], teamName: '', searchKey: '', seeAddWhich: ''});
+    }
+
+    seeAddWhich(e) {
+        //页面打开的时候set,初始化的时候清空
+        this.setState({seeAddWhich: e});
     }
 
     /**
@@ -79,43 +85,25 @@ class ChooseMemberModal extends React.Component {
     addGroupMember() {
         var _this = this;
         var teacherTargetOptions = _this.state.teacherTargetOptions;
+        var seeAddWhich = this.state.seeAddWhich;
         if (isEmpty(teacherTargetOptions)) {
             message.error("请选择要添加的部门员工！");
             return;
         }
-        var usersArray = [];
+        var usersArray = [];  //用户id
+        var usersNameArr = [];  //用户名
         for (var i = 0; i < teacherTargetOptions.length; i++) {
             var teacher = teacherTargetOptions[i];
             var teacherArray = teacher.value.split("#");
             var userId = teacherArray[0];
+            var userName = teacherArray[1];
             usersArray.push(userId);
+            usersNameArr.push(userName);
         }
-        var memberIds = usersArray.join(",");
-        var param = {
-            "method": "batchAddStrcutreRoleUsers",//批量添加部门员工
-            "operateUid": _this.state.loginUser.colUid,//操作用户id
-            "roleId": _this.state.roleId,//角色id
-            "userIds": memberIds//员工id,多个员工用逗号分开(如“23844,23847”)
-        };
-        console.log(param);
-        // doWebService(JSON.stringify(param), {
-        //     onResponse: function (ret) {
-        //         console.log('成功');
-        //         if(ret.success==true && ret.msg=="调用成功"){
-        //             message.success("添加成功");
-        //             _this.props.addRoleComplete();
-        //         }else{
-        //             message.success("部门员工添加失败");
-        //             _this.props.addRoleComplete();
-        //         }
-        //         _this.AddRoleMemberModalHandleCancel();
-        //         _this.props.callbackParent(_this.state.parentId);
-        //         _this.initPage();
-        //     },
-        //     onError: function (error) {
-        //         message.error(error);
-        //     }
-        // });
+        // var memberIds = usersArray.join(",");
+        // var memberNames = usersNameArr.join(",");
+        this.props.addGroupMember(usersArray, usersNameArr, seeAddWhich);
+        this.AddRoleMemberModalHandleCancel();
     }
 
     /**

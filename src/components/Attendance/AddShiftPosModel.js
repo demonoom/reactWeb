@@ -35,10 +35,6 @@ const AddShiftPosModel = React.createClass({
                     '<div id="searchResultPanel" class="noom_map"></div>';
             }
         }
-        // if (isEmpty(document.getElementById('search-map')) == false) {
-        //     document.getElementById('search-map').innerHTML = '<div id="r-result"><div>请输入地址：</div><div><input type="text" id="suggestId" size="20" value="百度" style="width:170px;" /></div></div>\n' +
-        //         '<div id="searchResultPanel" class="noom_map"></div>';
-        // }
     },
 
     /**

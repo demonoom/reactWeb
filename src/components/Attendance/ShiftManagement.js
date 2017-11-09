@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import {isEmpty} from '../../utils/utils';
 import {Button, Table} from 'antd';
 import AddShiftModel from './AddShiftModel';
+import {doWebService} from '../../WebServiceHelper'
 
 const columns = [{
     title: '班次名称',
@@ -52,7 +53,31 @@ const ShiftManagement = React.createClass({
     },
 
     componentDidMount() {
+        //请求班次信息
+        this.viewAttendSchedule();
+    },
 
+    /**
+     * 获取班次
+     */
+    viewAttendSchedule() {
+        var _this = this;
+        var param = {
+            "method": 'viewAttendSchedulePage',
+            "colUid": _this.state.loginUser.colUid,
+            "pageNo": '-1'
+        };
+        console.log(param);
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                console.log(ret);
+                // var data = ret.response;
+
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     /**

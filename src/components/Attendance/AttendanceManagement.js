@@ -1,6 +1,5 @@
 import React, {PropTypes} from 'react';
 import {isEmpty} from '../../utils/utils';
-import {createUUID} from '../../utils/utils';
 import {
     Button, Table, Icon, Row, Col,
     Input, Select, Checkbox, message, Tag, Tooltip
@@ -8,8 +7,6 @@ import {
 import ChangeShiftModel from './ChangeShiftModel'
 import ChooseMemberModal from './ChooseMemberModal'
 import ConfirmModal from '../ConfirmModal'
-
-var posDetilArr = [];
 
 const columns = [{
     title: '名称',
@@ -55,29 +52,6 @@ const workDayCol = [{
             <a href="javascript:;">更改班次</a>
         </span>
     ),
-}];
-
-const workPositionCol = [{
-    title: '考勤地址',
-    dataIndex: 'workpos',
-    key: 'workpos',
-}, {
-    title: '操作',
-    key: 'action',
-    render: (text, record) => (
-        <span>
-      <a href="#">删除</a>
-    </span>
-    ),
-}];
-
-//假数据
-const positionData = [{
-    key: 1,
-    workpos: '陕西省西安市未央区汉城街道惠西第二保育院',
-}, {
-    key: 2,
-    workpos: '陕西省西安市未央区汉城街道惠西第一保育院',
 }];
 
 //假数据
@@ -139,12 +113,15 @@ const AttendanceManagement = React.createClass({
             attName: "",//考勤组名称
             selectedRowKeys: [1, 2, 3, 4, 5], //默认选中的天数
             changeShiftIsShow: false,
-            tags: ['水电费', '水电', '电费', '水费', '火电费', '火费', '大熟', '海燕风', '的撒大', '它犹如', '欧皮带', '的型从',],
+            joinAttMer: [],
+            outAttMer: [],
+            attPerson: [],
             inputVisible: false,
             inputValue: '',
             chooseMemberModalIsShow: false,
             // posDetil: '',    //考勤详细地址
-            posDetilArr: [],
+            posDetilArr: [],   //考勤详细地址包括坐标，对象
+            posArr: [],
         };
     },
 
@@ -167,22 +144,36 @@ const AttendanceManagement = React.createClass({
         // this.setState({posDetil});   //考勤详细地址
     },*/
 
+    /**
+     * 删除考勤地点的回调
+     * @param record
+     */
+    delPos(record) {
+        //1.在页面删除
+        var arr = this.state.posDetilArr;
+        arr.forEach(function (v, i) {
+            if (v.key == record.key) {
+                arr.splice(i, 1);
+                return
+            }
+        })
+        this.setState({posDetilArr: arr});
+        //2.在最后向后台传的数据中删除
+    },
+
     setPos(e) {
         var arr = e.split('$');
         var posDetil = arr[1];   //详细地址
         var locationPoint = arr[0];   //坐标
-        var num = createUUID();   //随机数
+        var posArr = this.state.posArr;
 
-        // console.log(posDetil);
-        // console.log(locationPoint);
-        // console.log(num);
 
         var posDetil = {
             key: locationPoint,
             workpos: posDetil,
         };
-        posDetilArr.push(posDetil);
-        this.setState({posDetilArr});
+        posArr.push(posDetil);
+        this.setState({posDetilArr: posArr});
     },
 
     //增加考勤组
@@ -193,6 +184,12 @@ const AttendanceManagement = React.createClass({
     //返回到主table
     returnTable() {
         this.setState({optType: true});
+        //初始化
+        this.setState({posArr: []})
+        this.setState({posDetilArr: []});
+        this.setState({joinAttMer: []});
+        this.setState({outAttMer: []});
+        this.setState({attPerson: []});
     },
 
     //考勤组输入框输入的回调
@@ -226,6 +223,24 @@ const AttendanceManagement = React.createClass({
         this.setState({changeShiftIsShow: false, chooseMemberModalIsShow: false});
     },
 
+    addGroupMember(ids, name, num) {
+        console.log(ids);
+        console.log(name);
+        console.log(num);
+        var arr = [];
+        name.forEach(function (v, i) {
+            arr.push(v);
+        });
+        //num是1，参与。2，无需。3，负责人
+        if (num == 1) {
+            this.setState({joinAttMer: arr})
+        } else if (num == 2) {
+            this.setState({outAttMer: arr})
+        } else if (num == 3) {
+            this.setState({attPerson: arr})
+        }
+    },
+
     /**
      * 添加考勤地点的回调
      */
@@ -236,35 +251,45 @@ const AttendanceManagement = React.createClass({
     /**
      * 选择考勤参与人的回调
      */
-    chooseMember() {
+    chooseMember(e) {
+        //e是1，参与。2，无需。3，负责人
         this.setState({chooseMemberModalIsShow: true});
+        this.refs.chooseMemberModal.seeAddWhich(e);
     },
 
-    handleClose(removedTag) {
-        const tags = this.state.tags.filter(tag => tag !== removedTag);
-        console.log(tags);
-        this.setState({tags});
-    },
-
-    handleInputChange(e) {
-        this.setState({inputValue: e.target.value});
-    },
-
-    handleInputConfirm() {
-        const state = this.state;
-        const inputValue = state.inputValue;
-        let tags = state.tags;
-        if (inputValue && tags.indexOf(inputValue) === -1) {
-            tags = [...tags, inputValue];
+    /**
+     * 人员tags点击x的回调
+     * @param removedTag
+     * @param kind
+     */
+    handleClose(removedTag, kind) {
+        if (kind == 1) {
+            //参与考勤人员
+            const joinAttMer = this.state.joinAttMer.filter(joinAttMer => joinAttMer !== removedTag);
+            console.log(joinAttMer);
+            this.setState({joinAttMer});
+        } else if (kind == 2) {
+            //无需考勤人员
+            const outAttMer = this.state.outAttMer.filter(outAttMer => outAttMer !== removedTag);
+            console.log(outAttMer);
+            this.setState({outAttMer});
+        } else if (kind == 3) {
+            //考勤组负责人
+            const attPerson = this.state.attPerson.filter(attPerson => attPerson !== removedTag);
+            console.log(attPerson);
+            this.setState({attPerson});
         }
-        console.log(tags);
-        this.setState({
-            tags,
-            inputVisible: false,
-            inputValue: '',
-        });
     },
 
+    /**
+     * 保存新增考勤组的回调
+     */
+    saveNewAtt() {
+        //向后台发送数据
+        //清空本地数据
+        // //保存后返回考勤组列表
+        this.returnTable();
+    },
     // saveInputRef = input => this.input = input
 
     /**
@@ -272,13 +297,29 @@ const AttendanceManagement = React.createClass({
      * @returns {XML}
      */
     render() {
-        const {tags, inputVisible, inputValue} = this.state;
+        var _this = this;
+        //考勤地点表头
+        const workPositionCol = [{
+            title: '考勤地址',
+            dataIndex: 'workpos',
+            key: 'workpos',
+        }, {
+            title: '操作',
+            key: 'action',
+            render: (text, record) => (
+                <span>
+                    <a onClick={_this.delPos.bind(this, record)}>删除</a>
+                </span>
+            ),
+        }];
+
+        const {joinAttMer, outAttMer, attPerson, inputVisible, inputValue} = this.state;
         //顶部banner
         var title;
         //页面主体部分
         var mainTable;
         //保存按钮
-        var saveButton = <Button type="primary">保存设置</Button>;
+        var saveButton = <Button type="primary" onClick={this.saveNewAtt}>保存设置</Button>;
         const rowSelection = {
             selectedRowKeys: this.state.selectedRowKeys,
             onChange: (selectedRowKeys, selectedRows) => {
@@ -302,10 +343,11 @@ const AttendanceManagement = React.createClass({
                     <Col span={4} className="knowledge_ri knowledge_ri_8">参与考勤人员：</Col>
                     <Col span={18}>
                             <span>
-                                {tags.map((tag, index) => {
+                                {joinAttMer.map((tag, index) => {
                                     const isLongTag = tag.length > 20;
                                     const tagElem = (
-                                        <Tag key={tag} closable={index !== -1} afterClose={() => this.handleClose(tag)}>
+                                        <Tag key={tag} closable={index !== -1}
+                                             afterClose={() => this.handleClose(tag, 1)}>
                                             {isLongTag ? `${tag.slice(0, 20)}...` : tag}
                                         </Tag>
                                     );
@@ -318,23 +360,21 @@ const AttendanceManagement = React.createClass({
                                         size="small"
                                         style={{width: 78}}
                                         value={inputValue}
-                                        onChange={this.handleInputChange}
-                                        onBlur={this.handleInputConfirm}
-                                        onPressEnter={this.handleInputConfirm}
                                     />
                                 )}
                             </span>
-                        <Button className="btn_tag" onClick={this.chooseMember}>请选择</Button>
+                        <Button className="btn_tag" onClick={this.chooseMember.bind(this, 1)}>请选择</Button>
                     </Col>
                 </Row>
                 <Row className="upexam_to_ma">
                     <Col span={4} className="knowledge_ri knowledge_ri_8">无需考勤人员：</Col>
                     <Col span={18}>
                             <span>
-                                {tags.map((tag, index) => {
+                                {outAttMer.map((tag, index) => {
                                     const isLongTag = tag.length > 20;
                                     const tagElem = (
-                                        <Tag key={tag} closable={index !== -1} afterClose={() => this.handleClose(tag)}>
+                                        <Tag key={tag} closable={index !== -1}
+                                             afterClose={() => this.handleClose(tag, 2)}>
                                             {isLongTag ? `${tag.slice(0, 20)}...` : tag}
                                         </Tag>
                                     );
@@ -347,23 +387,21 @@ const AttendanceManagement = React.createClass({
                                         size="small"
                                         style={{width: 78}}
                                         value={inputValue}
-                                        onChange={this.handleInputChange}
-                                        onBlur={this.handleInputConfirm}
-                                        onPressEnter={this.handleInputConfirm}
                                     />
                                 )}
                             </span>
-                        <Button className="btn_tag" onClick={this.chooseMember}>请选择</Button>
+                        <Button className="btn_tag" onClick={this.chooseMember.bind(this, 2)}>请选择</Button>
                     </Col>
                 </Row>
                 <Row className="upexam_to_ma">
                     <Col span={4} className="knowledge_ri knowledge_ri_8">考勤组负责人：</Col>
                     <Col span={18}>
                             <span>
-                                {tags.map((tag, index) => {
+                                {attPerson.map((tag, index) => {
                                     const isLongTag = tag.length > 20;
                                     const tagElem = (
-                                        <Tag key={tag} closable={index !== -1} afterClose={() => this.handleClose(tag)}>
+                                        <Tag key={tag} closable={index !== -1}
+                                             afterClose={() => this.handleClose(tag, 3)}>
                                             {isLongTag ? `${tag.slice(0, 20)}...` : tag}
                                         </Tag>
                                     );
@@ -376,13 +414,10 @@ const AttendanceManagement = React.createClass({
                                         size="small"
                                         style={{width: 78}}
                                         value={inputValue}
-                                        onChange={this.handleInputChange}
-                                        onBlur={this.handleInputConfirm}
-                                        onPressEnter={this.handleInputConfirm}
                                     />
                                 )}
                             </span>
-                        <Button className="btn_tag" onClick={this.chooseMember}>请选择</Button>
+                        <Button className="btn_tag" onClick={this.chooseMember.bind(this, 3)}>请选择</Button>
                     </Col>
                 </Row>
                 <Row>
@@ -423,7 +458,7 @@ const AttendanceManagement = React.createClass({
 
                 {/*考勤地址table*/}
                 <Table className="upexam_to_ma ant-col-20 checking_in_le min_53" columns={workPositionCol}
-                       dataSource={this.state.posDetilArr} pagination={false} />
+                       dataSource={this.state.posDetilArr} pagination={false}/>
                 <div className="checking_in_le">
                     <a className="upexam_to_ma checking_in_l31" href="javascript:;"
                        onClick={this.addShiftPos}>添加考勤地点</a>
@@ -480,6 +515,8 @@ const AttendanceManagement = React.createClass({
                 <ChooseMemberModal
                     isShow={this.state.chooseMemberModalIsShow}
                     onCancel={this.closeModel}
+                    addGroupMember={this.addGroupMember}
+                    ref="chooseMemberModal"
                 />
                 <ConfirmModal
                     ref="confirmModal"
