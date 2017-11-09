@@ -212,7 +212,7 @@ const PersonCenterComponents = React.createClass({
     },
 
     /**
-     * 关注联系人
+     * 关注联系人..
      */
     unfollowUser() {
         var param = {
