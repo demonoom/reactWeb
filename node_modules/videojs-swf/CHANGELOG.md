@@ -6,6 +6,10 @@ _(none)_
 
 --------------------
 
+## 5.4.1 (2017-07-25)
+* chore: update broken URLs
+* fix: decouple muted() from volume=0
+
 ## 5.4.0 (2017-04-28)
 * Add getVideoPlaybackQuality API
 * Fix buffered() getter for RTMP provider

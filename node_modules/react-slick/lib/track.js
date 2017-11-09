@@ -17,6 +17,12 @@ var _classnames2 = _interopRequireDefault(_classnames);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 var getSlideClasses = function getSlideClasses(spec) {
   var slickActive, slickCenter, slickCloned;
   var centerOffset, index;
@@ -26,7 +32,6 @@ var getSlideClasses = function getSlideClasses(spec) {
   } else {
     index = spec.index;
   }
-
   slickCloned = index < 0 || index >= spec.slideCount;
   if (spec.centerMode) {
     centerOffset = Math.floor(spec.slidesToShow / 2);
@@ -90,14 +95,7 @@ var renderSlides = function renderSlides(spec) {
       child = _react2.default.createElement('div', null);
     }
     var childStyle = getSlideStyle((0, _objectAssign2.default)({}, spec, { index: index }));
-    var slickClasses = getSlideClasses((0, _objectAssign2.default)({ index: index }, spec));
-    var cssClasses;
-
-    if (child.props.className) {
-      cssClasses = (0, _classnames2.default)(slickClasses, child.props.className);
-    } else {
-      cssClasses = slickClasses;
-    }
+    var slideClass = child.props.className || '';
 
     var onClick = function onClick(e) {
       child.props && child.props.onClick && child.props.onClick(e);
@@ -109,7 +107,7 @@ var renderSlides = function renderSlides(spec) {
     slides.push(_react2.default.cloneElement(child, {
       key: 'original' + getKey(child, index),
       'data-index': index,
-      className: cssClasses,
+      className: (0, _classnames2.default)(getSlideClasses((0, _objectAssign2.default)({ index: index }, spec)), slideClass),
       tabIndex: '-1',
       style: (0, _objectAssign2.default)({ outline: 'none' }, child.props.style || {}, childStyle),
       onClick: onClick
@@ -124,7 +122,7 @@ var renderSlides = function renderSlides(spec) {
         preCloneSlides.push(_react2.default.cloneElement(child, {
           key: 'precloned' + getKey(child, key),
           'data-index': key,
-          className: cssClasses,
+          className: (0, _classnames2.default)(getSlideClasses((0, _objectAssign2.default)({ index: key }, spec)), slideClass),
           style: (0, _objectAssign2.default)({}, child.props.style || {}, childStyle),
           onClick: onClick
         }));
@@ -135,7 +133,7 @@ var renderSlides = function renderSlides(spec) {
         postCloneSlides.push(_react2.default.cloneElement(child, {
           key: 'postcloned' + getKey(child, key),
           'data-index': key,
-          className: cssClasses,
+          className: (0, _classnames2.default)(getSlideClasses((0, _objectAssign2.default)({ index: key }, spec)), slideClass),
           style: (0, _objectAssign2.default)({}, child.props.style || {}, childStyle),
           onClick: onClick
         }));
@@ -150,15 +148,23 @@ var renderSlides = function renderSlides(spec) {
   }
 };
 
-var Track = exports.Track = _react2.default.createClass({
-  displayName: 'Track',
+var Track = exports.Track = function (_React$Component) {
+  _inherits(Track, _React$Component);
 
-  render: function render() {
+  function Track() {
+    _classCallCheck(this, Track);
+
+    return _possibleConstructorReturn(this, _React$Component.apply(this, arguments));
+  }
+
+  Track.prototype.render = function render() {
     var slides = renderSlides.call(this, this.props);
     return _react2.default.createElement(
       'div',
       { className: 'slick-track', style: this.props.trackStyle },
       slides
     );
-  }
-});
+  };
+
+  return Track;
+}(_react2.default.Component);
