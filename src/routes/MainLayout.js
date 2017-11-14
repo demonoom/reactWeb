@@ -19,6 +19,7 @@ import AntCloudMenu from '../components/layOut/AntCloudMenu';
 import AntCloudTableComponents from '../components/antCloud/AntCloudTableComponents';
 import {LocaleProvider} from 'antd';
 import {showLargeImg} from '../utils/utils'
+import {isEmpty} from '../utils/Const'
 import TeachSpace from '../components/TeachSpaces';
 import TeachSpaceGhostMenu from '../components/TeachSpacesGhostMenu';
 import {MsgConnection} from '../utils/msg_websocket_connection';
@@ -65,6 +66,7 @@ const MainLayout = React.createClass({
             isSearchGroup: false,
             isPersonCenter: false,
             addShiftPosModel: false,
+            lastClick: ''  //聊天功能最后一次点击的对象
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
     },
@@ -156,6 +158,8 @@ const MainLayout = React.createClass({
         window.__noomSelect__ = this.noomSelect;
         window.__noomSelectGroup__ = this.noomSelectUser;
         window.__sendImg__ = this.sendImg;
+        //定义方法（调用进入哪个聊天人）
+        // window.__toWhichCharObj__ = this.toWhichCharObj;
     },
 
     componentWillMount() {
@@ -203,6 +207,20 @@ const MainLayout = React.createClass({
 
             this.refs[obj.ref][obj.methond].call(this.refs[obj.ref], obj.param);
             this.proxyObj = null;
+        }
+    },
+
+    toWhichCharObj() {
+        var _this = this;
+        var lastClick = this.state.lastClick;
+        if (isEmpty(lastClick) == false) {
+
+            setTimeout(function () {
+                // _this.turnToMessagePage(lastClick);
+                _this.refs.messageMenu.turnToMessagePage(lastClick);
+            }, 50)
+        } else {
+            // alert('没有需要展示的')
         }
     },
 
@@ -337,6 +355,15 @@ const MainLayout = React.createClass({
         }
 
     },
+
+    /**
+     * 聊天卸载时，将这个js保存的信息清空，下次加载时会调用点击最后的那个方法
+     */
+    clearEverything() {
+        this.setState({userInfo: ''});
+        this.setState({messageType: ''});
+    },
+
     /**
      * 收到普通消息的回调
      */
@@ -455,7 +482,8 @@ const MainLayout = React.createClass({
             "groupObj": groupObj,
             "messageType": 'groupMessage',
             "actionFrom": "personCenterGroupList",
-            userJson
+            userJson,
+            lastClick: userJson
         });
     },
 
@@ -473,13 +501,15 @@ const MainLayout = React.createClass({
         };
         console.log(userJson);
         this.setState({
+            //把currentKey改成了’message‘就能够装载 消息组件
+            lastClick: userJson,
             currentKey: 'message',
             resouceType: '',
             "userInfo": userInfo.user,
             "messageType": 'message',
             "actionFrom": "personCenter",
             userJson,
-            isPersonCenter: true
+            isPersonCenter: true,
         });
     },
 
@@ -508,14 +538,23 @@ const MainLayout = React.createClass({
         console.log(fromObj);
         console.log('fromObj');
         var timeNode = (new Date()).valueOf();
-        if (fromObj.messageType == 1) {
-            // 个人消息
-            this.refs.antGroupTabComponents.getPersonMessage(fromObj.fromUser, timeNode);
+        if (fromObj.fromUser.colUtype == "SGZH_WEB") {
+            //审批助手逻辑
+            this.refs.antGroupTabComponents.getShengpiMes(fromObj.fromUser.colUid);
         } else {
-            // 群组消息
-            this.refs.antGroupTabComponents.sendGroupMessage(fromObj.toChatGroup, timeNode);
+            //有的地方写的是messageType，有的地方写的是messageToType,都要考虑到
+            if (fromObj.messageType == 1||fromObj.messageToType==1) {
+                // 个人消息
+                this.refs.antGroupTabComponents.getPersonMessage(fromObj.fromUser, timeNode);
+            } else {
+                // 群组消息
+                this.refs.antGroupTabComponents.sendGroupMessage(fromObj.toChatGroup, timeNode);
+            }
         }
+
         this.setState({mesTabClick: true});
+        //将最后一次点击的信息全部存储在mainLayOut的state中
+        this.setState({lastClick: fromObj});
     },
 
     changeMesTabClick() {
@@ -601,6 +640,7 @@ const MainLayout = React.createClass({
                                                changeIsPersonCenter={this.changeIsPersonCenter}
                                                onLoad={this.turnToMessagePage}
                                                changeMesTabClick={this.changeMesTabClick}
+                                               toWhichCharObj={this.toWhichCharObj}
                                                ref="messageMenu"
                 />;
                 tabComponent = <AntGroupTabComponents ref="antGroupTabComponents"
@@ -613,6 +653,7 @@ const MainLayout = React.createClass({
                                                       showAlert={this.showAlert}
                                                       showMesAlert={this.showMesAlert}
                                                       refresh={this.refresh}
+                                                      clearEverything={this.clearEverything}
                 />;
                 break;
             case 'antGroup':

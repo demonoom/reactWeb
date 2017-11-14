@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import {Tabs, Breadcrumb, Icon, Card, Button, Row, Col} from 'antd';
-import {message, Pagination, Modal, Input} from 'antd';
+import {message, Pagination, Modal, Input, Spin} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import {getPageSize} from '../../utils/Const';
 import {getLocalTime} from '../../utils/Const';
@@ -40,6 +40,7 @@ const AntNestTabComponents = React.createClass({
             topicCommentId: '',  //话题评论时的目标id
             type: 0,     //操作类型（0：查看全部  1：只看老师）
             page: 1,
+            antNestScoll: 0,
         };
     },
 
@@ -47,6 +48,12 @@ const AntNestTabComponents = React.createClass({
         var initPageNo = 1;
         var initType = 0;
         antNest.getTopics(initPageNo, initType, true);
+    },
+
+    componentDidUpdate() {
+        var a = $('.antNestScoll');
+        var antNestScoll = this.state.antNestScoll;
+        a.scrollTop(antNestScoll);
     },
 
     /**
@@ -381,7 +388,7 @@ const AntNestTabComponents = React.createClass({
                     var attachMentType = e.type;
                     if (attachMentType == 1) {
                         //图片附件
-                        attachMents = <span className="topics_zan"><img src={e.address}/></span>;
+                        attachMents = <span className="topics_zan"><img src={e.address + '?' + MIDDLE_IMG} alt={e.address} onClick={showLargeImg}/></span>;
                     } else if (attachMentType == 4) {
                         //mp4附件
                         attachMents = <span className="antnest_user">
@@ -515,6 +522,7 @@ const AntNestTabComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                debugger
                 var response = ret.response;
                 response.forEach(function (e) {
                     //话题的回复
@@ -526,7 +534,7 @@ const AntNestTabComponents = React.createClass({
                 topicCardArray.splice(0);
                 antNest.buildTopicCard(topicObj, 1, topicReplayInfoArray, parTakeCountInfo);
                 antNest.setState({
-                    "optType": 'getTopicById',
+                    // "optType": 'getTopicById',
                     "topicCardList": topicCardArray,
                     "totalCount": pager.rsCount,
                     "currentTopicId": topicId
@@ -563,6 +571,7 @@ const AntNestTabComponents = React.createClass({
         // }
         // antNest.setState({"optType": "getAllTopic", type: getAllTopic()});
 
+        //不将topicCardArray清空，就会追加在详情的后面
         topicCardArray.splice(0);
 
         topicArr.forEach(function (v) {
@@ -570,11 +579,12 @@ const AntNestTabComponents = React.createClass({
         });
 
         antNest.setState({
-            "topicCardList": topicCardArray,"optType": "getAllTopic", type: getAllTopic()
+            "topicCardList": topicCardArray, "optType": "getAllTopic", type: getAllTopic()
         });
     },
     /**
      * 获取话题的参与者信息
+     * 话题被点击的回调
      */
     getTopicPartakeInfo(e) {
         var target = e.target;
@@ -583,8 +593,18 @@ const AntNestTabComponents = React.createClass({
         } else {
             target = e.target;
         }
+        console.log(target);
+        //target就是那个a标签
         var topicId = target.title;
         var initPageNo = 1;
+        //set过optType之后，表头就会变成“话题详情”
+        this.setState({"optType": 'getTopicById'});
+        //将以前的topicCardArray滞空之后进入话题详情的位置也变成了最上面，但是出来的位置还不对
+        topicCardArray.splice(0);
+        var a = <div className="example">
+            <Spin size="large" delay={500}/>
+        </div>;
+        topicCardArray.push(a);
         antNest.getTopicPartakeById(topicId, initPageNo);
     },
     /**
@@ -1433,6 +1453,18 @@ const AntNestTabComponents = React.createClass({
         antNest.setState({"partakeModalVisible": false});
     },
 
+    handleScroll(e) {
+        var target = e.target;
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
+            target = e.target;
+        }
+        var scrollTop = target.scrollTop;
+        console.log(scrollTop);
+        this.setState({antNestScoll:scrollTop});
+    },
+
     /**
      * 渲染页面
      * @returns {XML}
@@ -1474,7 +1506,7 @@ const AntNestTabComponents = React.createClass({
 
             topicList =
                 <div className="favorite_scroll">
-                    <div className="antnest_cont topics_calc2" style={{overflow: 'scroll'}}>
+                    <div className="antnest_cont topics_calc2 antNestScoll" style={{overflow: 'scroll'}}  onScroll={this.handleScroll}>
                         {antNest.state.topicCardList}
                         <div className="topics_calc2_center"><span onClick={antNest.pageAdd}>加载更多>></span></div>
                     </div>

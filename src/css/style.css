@@ -2905,9 +2905,11 @@ a.topics:hover {
 .knowledge_ri {
     text-align: right
 }
+
 .knowledge_ri_8 {
-    padding-right:8px
+    padding-right: 8px
 }
+
 .ant-transfer-list {
     text-align: left;
 }
@@ -7458,11 +7460,13 @@ select.course_n:hover {
     height: auto;
     display: none;
 }
+
 .noom_map_cont {
-    position:absolute;
-    top:50px;
-    right:50px;
+    position: absolute;
+    top: 50px;
+    right: 50px;
 }
+
 .checking_in_box {
     height: calc(100% - 40px);
 }
@@ -7497,10 +7501,12 @@ select.course_n:hover {
     margin-left: 16.6666%;
     margin-bottom: 15px;
 }
+
 .checking_in_le2 {
     margin-left: 12.5%;;
     margin-bottom: 15px;
 }
+
 .checking_add_box {
     padding: 8px 16px 16px 16px;
     color: #424242;
@@ -7519,92 +7525,123 @@ select.course_n:hover {
 .checking_in_modal .ant-modal-body {
     min-height: 260px;
 }
-.search_map{
+
+.search_map {
     position: absolute;
-    top:30px;
-    right:30px;
+    top: 30px;
+    right: 30px;
     border: 1px solid #cccccc;
     background: #fff;
     padding: 6px 8px 8px 8px;
 }
-.search_map div{
+
+.search_map div {
     line-height: 24px;
     font-size: 14px;
 }
-.search_map div input{
+
+.search_map div input {
     line-height: 20px;
     font-size: 12px
 }
-.tangram-suggestion-main{
+
+.tangram-suggestion-main {
     z-index: 10000;
 }
-.create_upload .ant-upload-list-text{
+
+.create_upload .ant-upload-list-text {
     position: absolute;
     left: -100px;
     top: 4px;
     width: 125%;
 
 }
-.create_upload .ant-upload-list-item{
-    margin:0
+
+.create_upload .ant-upload-list-item {
+    margin: 0
 }
-.create_upload .ant-upload-list-item-name{
+
+.create_upload .ant-upload-list-item-name {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width:73px;
+    width: 73px;
     display: inline-block;
 }
-.create_upload .anticon-paper-clip{
+
+.create_upload .anticon-paper-clip {
     display: none;
 }
-.create_upload_btn{
+
+.create_upload_btn {
     border: none;
     background: none;
     padding: 0 !important;
     margin: 0 8px;
 }
-.add_padding{
-    padding:3px 0
+
+.add_padding {
+    padding: 3px 0
 }
-.add_timeSet{
+
+.add_timeSet {
     margin-left: 5px;
     display: inline-block !important;
 }
-.btn_tag{
+
+.btn_tag {
     padding: 0 8px;
     height: 22px;
     font-size: 12px !important;
     line-height: 20px;
 }
-.BMap_cpyCtrl span, .BMap_noprint span, .anchorBL span{
+
+.BMap_cpyCtrl span, .BMap_noprint span, .anchorBL span {
     display: none !important
 }
-.search_map_hr{
+
+.search_map_hr {
     margin-top: 16px;
     height: 1px;
     border: none;
     border-bottom: 1px solid #e5e5e5;
     margin-bottom: 12px;
 }
-.search_map_wrap .ant-modal-close-x{
+
+.search_map_wrap .ant-modal-close-x {
     display: none;
 }
-.change_model tr{
+
+.change_model tr {
     cursor: pointer;
 }
-.change_model tr th, .change_model tr td{
+
+.change_model tr th, .change_model tr td {
     text-indent: 10px;
     padding: 12px 8px !important;
     border-bottom: 1px solid #e9e9e9;
 }
-.change_model tr th{
-    border-bottom:1px solid #fff;
+
+.change_model tr th {
+    border-bottom: 1px solid #fff;
 }
 
-.change_model tr th:first-child, .change_model tr td:first-child{
+.change_model tr th:first-child, .change_model tr td:first-child {
     width: 40%;
 }
+
 .min_53 .ant-spin-container > div > div > div {
     min-height: 53px;
+}
+
+.example {
+    text-align: center;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    padding: 30px 50px;
+    margin: 20px 0;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }

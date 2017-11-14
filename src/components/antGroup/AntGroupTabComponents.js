@@ -159,6 +159,12 @@ const AntGroupTabComponents = React.createClass({
         window.__noomShareId__ = this.noomShareId;
     },
 
+    componentWillUnmount() {
+        // 在组件卸载之前将消息数组清空
+        // messageTagArray.splice(0);
+        this.props.clearEverything()
+    },
+
     //拿到分享链接里的查看文件id,去请求该文件的详细
     noomShareId(id) {
         var _this = this;
@@ -1464,6 +1470,21 @@ const AntGroupTabComponents = React.createClass({
             }
         });
     },
+
+    /**
+     * 审批助手逻辑
+     */
+    getShengpiMes(id) {
+        let obj = {
+            mode: 'teachingAdmin',
+            title: '审批助手',
+            url: 'http://www.maaee.com/Excoord_PhoneService/gongzhonghao/show/' + id + '/' + antGroup.state.loginUser.colUid,
+            width: '380px'
+        };
+
+        console.log(obj);
+        LP.Start(obj);
+    },
     /**
      * 点击消息列表，进入个人消息的列表窗口
      * @param userObj   点击的那个人的信息
@@ -2225,6 +2246,7 @@ const AntGroupTabComponents = React.createClass({
                              onMouseOver={this.handleScrollType.bind(this, Event)}
                              onScroll={this.handleScroll}>
                             <ul>
+                                {/*消息内容主体*/}
                                 {messageTagArray}
                             </ul>
                         </div>
