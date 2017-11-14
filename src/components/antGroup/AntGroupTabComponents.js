@@ -1137,9 +1137,22 @@ const AntGroupTabComponents = React.createClass({
      */
     getImgTag(messageOfSingle) {
         if (isEmpty(messageOfSingle.content.trim()) == false) {
-            var imgTags = [];
-            var messageReturnJson = {};
-            messageReturnJson = antGroup.changeImgTextToTag(messageOfSingle.content, imgTags, messageReturnJson);
+
+            if(isEmpty(messageOfSingle.attachment)==false) {
+                if (messageOfSingle.attachment.type == 1) {
+                    //图片
+                    var address = messageOfSingle.attachment.address;
+                    messageReturnJson = {messageType: "bigImgTag", address: address};
+                }else if(messageOfSingle.attachment.type == 2) {
+                    //语音
+                    var address = messageOfSingle.attachment.address;
+                    messageReturnJson = {messageType: "videoTag", address: address};
+                }
+            } else {
+                var imgTags = [];
+                var messageReturnJson = {};
+                messageReturnJson = antGroup.changeImgTextToTag(messageOfSingle.content, imgTags, messageReturnJson);
+            }
         } else {
             if (isEmpty(messageOfSingle.expressionItem) == false) {
                 //动态表情（ios的动态表情本来就是没有content的）
@@ -1762,7 +1775,7 @@ const AntGroupTabComponents = React.createClass({
                     //是否是biumessage
                     var biumes = e.biumes;
                     //文件名
-                    var fileName = e.fileName;
+                    var fileName = e.fileName;attachment
                     //路径
                     var filePath = e.filePath;
                     //大小
@@ -1781,6 +1794,9 @@ const AntGroupTabComponents = React.createClass({
                                 if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
                                     //我发出的
                                     if (isEmpty(attachment) == false) {
+                                        console.log(attachment);
+                                        console.log(e);
+                                        console.log('有内容的链接萨达撒多撒多所');
                                         //有内容的链接
                                         messageTag = <li style={{'textAlign': 'right'}} className="right">
                                             <div className="u-name"><span>{fromUser}</span></div>
@@ -1799,7 +1815,35 @@ const AntGroupTabComponents = React.createClass({
                                                 <i className="borderballoon_dingcorner_ri_no"></i></span></div>
                                         </li>;
                                         // }
-                                    } else if (isEmpty(expressionItem) == false) {
+                                    }
+
+
+
+
+
+
+                                    // if (e.attachmentType == 1) {
+                                    //     //图片
+                                    //     //我发出的
+                                    //     messageTag = <li className="right" style={{'textAlign': 'right'}}>
+                                    //         <div className="u-name"><span>{fromUser}</span></div>
+                                    //         <div className="talk-cont"><span className="name">{userPhoneIcon}</span>
+                                    //             <span className="borderballoon borderballoon_file borderballoon_file_p">
+                                    //             <span className="bot"></span>
+                                    //             <span className="top"></span>
+                                    //             <img onClick={showLargeImg} src={attachment + '?' + MIDDLE_IMG}
+                                    //                  className="send_img" alt={attachment}/>
+                                    //         </span>
+                                    //             <span><i className="borderballoon_dingcorner_le_no"></i></span>
+                                    //         </div>
+                                    //     </li>;
+                                    // }
+
+
+
+
+
+                                    else if (isEmpty(expressionItem) == false) {
                                         //来自安卓的动态表情（安卓的动态表情的content里有“表情”两个字）
                                         messageTag = <li className="right" style={{'textAlign': 'right'}}>
                                             <div className="u-name"><span>{fromUser}</span></div>
