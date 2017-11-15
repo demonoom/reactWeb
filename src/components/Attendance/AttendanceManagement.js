@@ -227,6 +227,7 @@ const AttendanceManagement = React.createClass({
         console.log(ids);
         console.log(name);
         console.log(num);
+        //这个局部变量arr导致每一次点击增加人员的时候会将以前的人员清空，后期做的时候把他做成全局变量，在最后保存信息的时候将数据清空
         var arr = [];
         name.forEach(function (v, i) {
             arr.push(v);
@@ -237,7 +238,12 @@ const AttendanceManagement = React.createClass({
         } else if (num == 2) {
             this.setState({outAttMer: arr})
         } else if (num == 3) {
-            this.setState({attPerson: arr})
+            if(arr.length>1) {
+                message.error('考勤组负责人只能选择1人');
+            } else {
+                this.setState({attPerson: arr})
+            }
+
         }
     },
 
@@ -422,7 +428,7 @@ const AttendanceManagement = React.createClass({
                 </Row>
                 <Row>
                     <Col span={24}>
-                        <span className="password_ts checking_in_le">协助管理员分管本考勤组的排班及统计</span>
+                        <span className="password_ts checking_in_le">协助管理员分管本考勤组的排班及统计，只能选择1人</span>
                     </Col>
                 </Row>
                 <Row>

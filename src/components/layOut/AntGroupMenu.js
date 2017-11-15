@@ -15,8 +15,10 @@ var columns = [{
 
 const AntGroupMenu = React.createClass({
     getInitialState() {
+        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         mMenu = this;
         return {
+            loginUser: loginUser,
             userContactsData: [],
         };
     },
@@ -66,8 +68,19 @@ const AntGroupMenu = React.createClass({
      * @param index　当前行的索引顺序，从０开始
      */
     getPersonCenterInfo(record, index) {
-        mMenu.setState({selectRowKey: record.key});
-        mMenu.props.callbackPersonCenterData(record.key);
+        if (record.userObj.colUtype == "SGZH_WEB") {
+            mMenu.setState({selectRowKey: record.key});
+            let obj = {
+                mode: 'teachingAdmin',
+                title: '审批助手',
+                url: 'http://www.maaee.com/Excoord_PhoneService/gongzhonghao/show/' + record.userObj.colUid + '/' + this.state.loginUser.colUid,
+                width: '380px'
+            };
+            LP.Start(obj);
+        } else {
+            mMenu.setState({selectRowKey: record.key});
+            mMenu.props.callbackPersonCenterData(record.key);
+        }
     },
 
     getUserChatGroup() {
