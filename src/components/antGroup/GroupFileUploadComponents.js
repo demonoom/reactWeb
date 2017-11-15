@@ -187,7 +187,7 @@ const GroupFileUploadComponents = React.createClass({
     },
 
     clearFile() {
-      // submitFileOptions.splice(0);
+        // submitFileOptions.splice(0);
     },
 
     selectFile(e) {

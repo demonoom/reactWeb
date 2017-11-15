@@ -565,7 +565,7 @@ const AntGroupTabComponents = React.createClass({
      */
     handleFileSubmit(fileList) {
         // if (fileList == null || fileList.length == 0) {
-            uploadFileList.splice(0, uploadFileList.length);
+        uploadFileList.splice(0, uploadFileList.length);
         // }
         for (var i = 0; i < fileList.length; i++) {
             var fileJson = fileList[i];
@@ -601,10 +601,14 @@ const AntGroupTabComponents = React.createClass({
                         antGroup.setState({progressState: 'none'});
                     };
                     xhr.upload.onprogress = function (ev) {
-                        if (ev.lengthComputable) {
-                            var percent = 100 * ev.loaded / ev.total;
-                            antGroup.setState({uploadPercent: Math.round(percent), progressState: 'block'});
-                        }
+                        antGroup.setState({progressState: 'block'});
+                        //if (ev.lengthComputable) {
+                        var loaded = ev.total * 1.7;
+                        var total = ev.total * 2;
+                        // var percent = 100 * loaded / total;
+                        var percent = 100 * ev.loaded / ev.total;
+                        antGroup.setState({uploadPercent: Math.round(percent)});
+                        //}
                     };
                     return xhr;
                 },
@@ -614,8 +618,8 @@ const AntGroupTabComponents = React.createClass({
                         //fileUrl文件的路径，根据路径创建文件发送对象，ms.send,关闭模态框
                         //调用发送文件的方法
                         var arr = fileUrl.split(',');
-                        arr.forEach(function (v,i) {
-                            antGroup.sendFileToOthers(v,i);
+                        arr.forEach(function (v, i) {
+                            antGroup.sendFileToOthers(v, i);
                         });
                     }
                 },
@@ -631,7 +635,7 @@ const AntGroupTabComponents = React.createClass({
     /**
      * 拿到文件路径，发送message
      */
-    sendFileToOthers(url,i) {
+    sendFileToOthers(url, i) {
         isSend = true;
         //文件名
         var name = uploadFileList[i].name;
@@ -779,8 +783,6 @@ const AntGroupTabComponents = React.createClass({
             }, onWarn: function (warnMsg) {
 
             }, onMessage: function (info) {
-                console.log(info);
-                console.log('info');
                 var groupObj;
                 var gt = $('#groupTalk');
                 if (antGroup.state.optType == "sendMessage") {
@@ -1138,15 +1140,20 @@ const AntGroupTabComponents = React.createClass({
     getImgTag(messageOfSingle) {
         if (isEmpty(messageOfSingle.content.trim()) == false) {
 
-            if(isEmpty(messageOfSingle.attachment)==false) {
+            if (isEmpty(messageOfSingle.attachment) == false) {
                 if (messageOfSingle.attachment.type == 1) {
                     //图片
                     var address = messageOfSingle.attachment.address;
                     messageReturnJson = {messageType: "bigImgTag", address: address};
-                }else if(messageOfSingle.attachment.type == 2) {
+                } else if (messageOfSingle.attachment.type == 2) {
                     //语音
                     var address = messageOfSingle.attachment.address;
                     messageReturnJson = {messageType: "videoTag", address: address};
+                } else if (messageOfSingle.attachment.type == 4) {
+                    //链接
+                    var address = messageOfSingle.attachment.address;
+                    var content = messageOfSingle.attachment.content;
+                    messageReturnJson = {messageType: "linkTag", address: address, content: content};
                 }
             } else {
                 var imgTags = [];
@@ -1736,6 +1743,7 @@ const AntGroupTabComponents = React.createClass({
         };
         const hasSelected = this.state.selectedRowKeys.length > 0;
         var progressState = antGroup.state.progressState;
+        // alert(progressState);
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         var welcomeTitle;
         var returnToolBar = <div className="ant-tabs-right"><Button
@@ -1775,7 +1783,8 @@ const AntGroupTabComponents = React.createClass({
                     //是否是biumessage
                     var biumes = e.biumes;
                     //文件名
-                    var fileName = e.fileName;attachment
+                    var fileName = e.fileName;
+                    attachment
                     //路径
                     var filePath = e.filePath;
                     //大小
@@ -1815,35 +1824,7 @@ const AntGroupTabComponents = React.createClass({
                                                 <i className="borderballoon_dingcorner_ri_no"></i></span></div>
                                         </li>;
                                         // }
-                                    }
-
-
-
-
-
-
-                                    // if (e.attachmentType == 1) {
-                                    //     //图片
-                                    //     //我发出的
-                                    //     messageTag = <li className="right" style={{'textAlign': 'right'}}>
-                                    //         <div className="u-name"><span>{fromUser}</span></div>
-                                    //         <div className="talk-cont"><span className="name">{userPhoneIcon}</span>
-                                    //             <span className="borderballoon borderballoon_file borderballoon_file_p">
-                                    //             <span className="bot"></span>
-                                    //             <span className="top"></span>
-                                    //             <img onClick={showLargeImg} src={attachment + '?' + MIDDLE_IMG}
-                                    //                  className="send_img" alt={attachment}/>
-                                    //         </span>
-                                    //             <span><i className="borderballoon_dingcorner_le_no"></i></span>
-                                    //         </div>
-                                    //     </li>;
-                                    // }
-
-
-
-
-
-                                    else if (isEmpty(expressionItem) == false) {
+                                    } else if (isEmpty(expressionItem) == false) {
                                         //来自安卓的动态表情（安卓的动态表情的content里有“表情”两个字）
                                         messageTag = <li className="right" style={{'textAlign': 'right'}}>
                                             <div className="u-name"><span>{fromUser}</span></div>
