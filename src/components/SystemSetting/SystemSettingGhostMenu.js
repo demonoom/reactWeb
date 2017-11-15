@@ -37,29 +37,7 @@ class SystemSettingGhostMenu extends React.Component {
 
         //将GhostMenu组件中的方法挂在window上，以便于在littlePanel中能够调用。
         window.__noom__ = this.noom;
-        // window.__sendImg__ = this.sendImg;
     }
-
-    // sendImg(currentUrl, urls) {
-    //     var imgArr = [];
-    //     var num = '';
-    //     var urls = urls.split('#');
-    //     var _this = this;
-    //     //根据urls的length动态创建img
-    //     urls.forEach(function (v, i) {
-    //         var imgId = "img" + i;
-    //         var img = <span className="topics_zan"><img id={imgId} className="topics_zanImg"
-    //                                                     onClick={showLargeImg} src={v}/>
-    //                   </span>;
-    //         imgArr.push(img);
-    //         if (currentUrl == v) {
-    //             num = i;
-    //         }
-    //     });
-    //     this.setState({imgArr});
-    //     //图片已渲染到DOM
-    //     document.querySelectorAll(".topics_zanImg")[num].click();
-    // }
 
     imgClick(e) {
         console.log(e);
@@ -247,14 +225,6 @@ class SystemSettingGhostMenu extends React.Component {
                     closeDingModel={this.closeDingModel}
                     callbackId={this.state.callbackId}
                 />
-                {/*<div ref='yida' id="yida" className="toppics_ul_bg share_cont">*/}
-                {/*{this.state.imgArr}*/}
-                {/*</div>*/}
-                {/*<ul>*/}
-                    {/*<li className="imgLi">*/}
-                        {/*{this.state.imgArr}*/}
-                    {/*</li>*/}
-                {/*</ul>*/}
             </div>
         );
     }

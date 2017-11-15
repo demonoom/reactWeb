@@ -159,6 +159,12 @@ const AntGroupTabComponents = React.createClass({
         window.__noomShareId__ = this.noomShareId;
     },
 
+    componentWillUnmount() {
+        // 在组件卸载之前将消息数组清空
+        // messageTagArray.splice(0);
+        this.props.clearEverything()
+    },
+
     //拿到分享链接里的查看文件id,去请求该文件的详细
     noomShareId(id) {
         var _this = this;
@@ -558,9 +564,9 @@ const AntGroupTabComponents = React.createClass({
      * 处理上传组件已上传的文件列表
      */
     handleFileSubmit(fileList) {
-        if (fileList == null || fileList.length == 0) {
-            uploadFileList.splice(0, uploadFileList.length);
-        }
+        // if (fileList == null || fileList.length == 0) {
+        uploadFileList.splice(0, uploadFileList.length);
+        // }
         for (var i = 0; i < fileList.length; i++) {
             var fileJson = fileList[i];
             var fileObj = fileJson.fileObj;
@@ -595,10 +601,14 @@ const AntGroupTabComponents = React.createClass({
                         antGroup.setState({progressState: 'none'});
                     };
                     xhr.upload.onprogress = function (ev) {
-                        if (ev.lengthComputable) {
-                            var percent = 100 * ev.loaded / ev.total;
-                            antGroup.setState({uploadPercent: Math.round(percent), progressState: 'block'});
-                        }
+                        antGroup.setState({progressState: 'block'});
+                        //if (ev.lengthComputable) {
+                        var loaded = ev.total * 1.7;
+                        var total = ev.total * 2;
+                        // var percent = 100 * loaded / total;
+                        var percent = 100 * ev.loaded / ev.total;
+                        antGroup.setState({uploadPercent: Math.round(percent)});
+                        //}
                     };
                     return xhr;
                 },
@@ -607,7 +617,10 @@ const AntGroupTabComponents = React.createClass({
                         var fileUrl = responseStr;
                         //fileUrl文件的路径，根据路径创建文件发送对象，ms.send,关闭模态框
                         //调用发送文件的方法
-                        antGroup.sendFileToOthers(fileUrl);
+                        var arr = fileUrl.split(',');
+                        arr.forEach(function (v, i) {
+                            antGroup.sendFileToOthers(v, i);
+                        });
                     }
                 },
                 error: function (responseStr) {
@@ -616,17 +629,18 @@ const AntGroupTabComponents = React.createClass({
             });
 
         }
+        this.refs.fileUploadCom.clearFile();
     },
 
     /**
      * 拿到文件路径，发送message
      */
-    sendFileToOthers(url) {
+    sendFileToOthers(url, i) {
         isSend = true;
         //文件名
-        var name = uploadFileList[0].name;
+        var name = uploadFileList[i].name;
         //文件大小
-        var length = uploadFileList[0].size;
+        var length = uploadFileList[i].size;
         //文件路径
         var path = url;
 
@@ -769,8 +783,6 @@ const AntGroupTabComponents = React.createClass({
             }, onWarn: function (warnMsg) {
 
             }, onMessage: function (info) {
-                console.log(info);
-                console.log('info');
                 var groupObj;
                 var gt = $('#groupTalk');
                 if (antGroup.state.optType == "sendMessage") {
@@ -1127,9 +1139,27 @@ const AntGroupTabComponents = React.createClass({
      */
     getImgTag(messageOfSingle) {
         if (isEmpty(messageOfSingle.content.trim()) == false) {
-            var imgTags = [];
-            var messageReturnJson = {};
-            messageReturnJson = antGroup.changeImgTextToTag(messageOfSingle.content, imgTags, messageReturnJson);
+
+            if (isEmpty(messageOfSingle.attachment) == false) {
+                if (messageOfSingle.attachment.type == 1) {
+                    //图片
+                    var address = messageOfSingle.attachment.address;
+                    messageReturnJson = {messageType: "bigImgTag", address: address};
+                } else if (messageOfSingle.attachment.type == 2) {
+                    //语音
+                    var address = messageOfSingle.attachment.address;
+                    messageReturnJson = {messageType: "videoTag", address: address};
+                } else if (messageOfSingle.attachment.type == 4) {
+                    //链接
+                    var address = messageOfSingle.attachment.address;
+                    var content = messageOfSingle.attachment.content;
+                    messageReturnJson = {messageType: "linkTag", address: address, content: content};
+                }
+            } else {
+                var imgTags = [];
+                var messageReturnJson = {};
+                messageReturnJson = antGroup.changeImgTextToTag(messageOfSingle.content, imgTags, messageReturnJson);
+            }
         } else {
             if (isEmpty(messageOfSingle.expressionItem) == false) {
                 //动态表情（ios的动态表情本来就是没有content的）
@@ -1464,6 +1494,21 @@ const AntGroupTabComponents = React.createClass({
             }
         });
     },
+
+    /**
+     * 审批助手逻辑
+     */
+    getShengpiMes(id) {
+        let obj = {
+            mode: 'teachingAdmin',
+            title: '审批助手',
+            url: 'http://www.maaee.com/Excoord_PhoneService/gongzhonghao/show/' + id + '/' + antGroup.state.loginUser.colUid,
+            width: '380px'
+        };
+
+        console.log(obj);
+        LP.Start(obj);
+    },
     /**
      * 点击消息列表，进入个人消息的列表窗口
      * @param userObj   点击的那个人的信息
@@ -1698,6 +1743,7 @@ const AntGroupTabComponents = React.createClass({
         };
         const hasSelected = this.state.selectedRowKeys.length > 0;
         var progressState = antGroup.state.progressState;
+        // alert(progressState);
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         var welcomeTitle;
         var returnToolBar = <div className="ant-tabs-right"><Button
@@ -1738,6 +1784,7 @@ const AntGroupTabComponents = React.createClass({
                     var biumes = e.biumes;
                     //文件名
                     var fileName = e.fileName;
+                    attachment
                     //路径
                     var filePath = e.filePath;
                     //大小
@@ -1756,6 +1803,9 @@ const AntGroupTabComponents = React.createClass({
                                 if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
                                     //我发出的
                                     if (isEmpty(attachment) == false) {
+                                        console.log(attachment);
+                                        console.log(e);
+                                        console.log('有内容的链接萨达撒多撒多所');
                                         //有内容的链接
                                         messageTag = <li style={{'textAlign': 'right'}} className="right">
                                             <div className="u-name"><span>{fromUser}</span></div>
@@ -2225,6 +2275,7 @@ const AntGroupTabComponents = React.createClass({
                              onMouseOver={this.handleScrollType.bind(this, Event)}
                              onScroll={this.handleScroll}>
                             <ul>
+                                {/*消息内容主体*/}
                                 {messageTagArray}
                             </ul>
                         </div>

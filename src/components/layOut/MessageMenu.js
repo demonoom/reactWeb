@@ -27,7 +27,8 @@ const MessageMenu = React.createClass({
     },
 
     componentDidMount() {
-        mMenu.getUserRecentMessages();
+        // this.props.toWhichCharObj();
+        mMenu.getUserRecentMessages(true);
     },
 
     componentWillReceiveProps(nextProps) {
@@ -107,7 +108,7 @@ const MessageMenu = React.createClass({
     /**
      * 获取用户最新消息列表
      */
-    getUserRecentMessages() {
+    getUserRecentMessages(flag) {
         userMessageData.splice(0);
         messageData.splice(0);
         var propsUserJson = mMenu.props.userJson;
@@ -133,7 +134,7 @@ const MessageMenu = React.createClass({
                         //判断已读未读0未读1已读
                         console.log(e.readState);
                     });
-                    mMenu.showMessageData();
+                    mMenu.showMessageData(flag);
                     /*if(isEmpty(userMessageData)==false && mMenu.state.tableIsClick==false){
                         mMenu.props.onLoad(userMessageData[0]);
                     }*/
@@ -168,7 +169,10 @@ const MessageMenu = React.createClass({
     /**
      * 渲染用户最新消息列表
      */
-    showMessageData() {
+    showMessageData(flag) {
+        if(flag) {
+            this.props.toWhichCharObj();
+        }
         //不管是第一次进来通过get还是消息过来通过willReceiveProps，都会经过这里
         //在这里对比messageData的不同，决定给哪一些加圆点
         messageData.forEach(function (message) {

@@ -186,6 +186,10 @@ const GroupFileUploadComponents = React.createClass({
         this.setState({submitFileCheckedList: checkedValues});
     },
 
+    clearFile() {
+        // submitFileOptions.splice(0);
+    },
+
     selectFile(e) {
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {

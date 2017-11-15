@@ -20,7 +20,7 @@ const AddShiftPosModel = React.createClass({
     },
 
     componentDidMount() {
-
+        this.getPositon();
     },
 
     componentWillReceiveProps(nextProps) {
@@ -35,6 +35,29 @@ const AddShiftPosModel = React.createClass({
                     '<div id="searchResultPanel" class="noom_map"></div>';
             }
         }
+    },
+
+    /**
+     * 获取当前位置
+     */
+    getPositon() {
+        $.ajax({
+            type: 'POST',
+            url: "https://api.map.baidu.com/location/ip",
+            data: {
+                ak: "lK9Uq8lbN3p3E8kOh0axyKw7ZEGQ3G2s",
+                coor: "gcj02"
+            },
+            success: function (result) {
+                // var arr = result.split('|');
+                console.log(result);
+                console.log(result.content.point)
+                var code = JSON.stringify(result.content.point)
+                console.log(code);
+                $(".location").html(code)
+            },
+            dataType: "jsonp"
+        });
     },
 
     /**

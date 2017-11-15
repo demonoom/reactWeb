@@ -169,11 +169,13 @@ const FlowSettingComponent = React.createClass({
             variableJson.isAbstractField = false;
             variableJson.placeholder = "";
             var selectedAbstractValues = processDefinitionJson.selectedAbstractValues;
-            selectedAbstractValues.forEach(function (selectedAbstract) {
-                if(flowFormDefine.label == selectedAbstract){
-                    variableJson.isAbstractField = true;
-                }
-            });
+            if(isEmpty(selectedAbstractValues)==false){
+                selectedAbstractValues.forEach(function (selectedAbstract) {
+                    if(flowFormDefine.label == selectedAbstract){
+                        variableJson.isAbstractField = true;
+                    }
+                });
+            }
             if(isEmpty(flowFormDefine.placeholder)==false){
                 variableJson.placeholder =flowFormDefine.placeholder;
             }
