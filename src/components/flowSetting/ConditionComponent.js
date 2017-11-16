@@ -287,9 +287,9 @@ const ConditionComponent = React.createClass({
                 if(formDataJson.value == checkedValue){
                     var conditionTag = null;
                     if(formDataJson.value == "assignOfStarter"){
-                        conditionTag = <div>
+                        conditionTag = <Row className="conditions_top2">
                             <Col span={4} className="line_h_30">发起人</Col>
-                            <Col span={20}>
+                            <Col span={20} className="line_h_30">
                                 <Select
                                     showSearch
                                     style={{width: 130}}
@@ -302,14 +302,14 @@ const ConditionComponent = React.createClass({
                                     {_this.state.teacherOptionArray}
                                 </Select>
                             </Col>
-                        </div>;
+                        </Row>;
                     }else{
                         var conditionalSymbolArray = _this.buildConditionalSymbol(formDataJson.label+"#"+formDataJson.type);
                         if(formDataJson.type=="text" || formDataJson.type=="textarea"){
                             var tagId = formDataJson.label + "#" + formDataJson.type;
-                            conditionTag = <div>
+                            conditionTag = <Row>
                                 <Col span={4} className="line_h_30">{formDataJson.label}</Col>
-                                <Col span={10} className="line_h_30">
+                                <Col span={7} className="line_h_30">
                                     <Select
                                         style={{width: 130}}
                                         onChange={_this.conditionalSymbolHandleChange}
@@ -321,7 +321,7 @@ const ConditionComponent = React.createClass({
                                 <Col span={10}>
                                     <Input id={tagId} onChange={_this.conditionValueOnChange}/>
                                 </Col>
-                            </div>;
+                            </Row>;
                         }else if(formDataJson.type=="select"){
                             var optionsArray = [];
                             formDataJson.values.forEach(function (formDataValue) {
@@ -330,9 +330,9 @@ const ConditionComponent = React.createClass({
                                 var optionObj = <Option value={value}>{label}</Option>;
                                 optionsArray.push(optionObj);
                             })
-                            conditionTag = <div>
+                            conditionTag = <Row>
                                 <Col span={4} className="line_h_30">{formDataJson.label}</Col>
-                                <Col span={10} className="line_h_30">
+                                <Col span={7} className="line_h_30">
                                     <Select
                                         style={{width: 130}}
                                         onChange={_this.conditionalSymbolHandleChange}
@@ -350,7 +350,7 @@ const ConditionComponent = React.createClass({
                                         {optionsArray}
                                     </Select>
                                 </Col>
-                            </div>;
+                            </Row>;
                         }else if("checkbox-group"==formDataJson.type){
                             var optionsArray = [];
                             formDataJson.values.forEach(function (formDataValue) {
@@ -359,9 +359,9 @@ const ConditionComponent = React.createClass({
                                 var optionObj = { label: label, value: value };
                                 optionsArray.push(optionObj);
                             })
-                            conditionTag = <div>
+                            conditionTag = <Row>
                                 <Col span={4} className="line_h_30">{formDataJson.label}</Col>
-                                <Col span={10} className="line_h_30">
+                                <Col span={7} className="line_h_30">
                                     <Select
                                         style={{width: 130}}
                                         onChange={_this.conditionalSymbolHandleChange}
@@ -373,7 +373,7 @@ const ConditionComponent = React.createClass({
                                 <Col span={10}>
                                     <CheckboxGroup options={optionsArray} onChange={_this.formDataCheckGroupOnChange}/>
                                 </Col>
-                            </div>;
+                            </Row>;
                         }else if("radio-group" == formDataJson.type){
                             var optionsArray = [];
                             formDataJson.values.forEach(function (formDataValue) {
@@ -383,9 +383,9 @@ const ConditionComponent = React.createClass({
                                 var radioObj = <Radio value={value}>{label}</Radio>;
                                 optionsArray.push(radioObj);
                             })
-                            conditionTag = <div>
+                            conditionTag = <Row>
                                 <Col span={4} className="line_h_30">{formDataJson.label}</Col>
-                                <Col span={10} className="line_h_30">
+                                <Col span={7} className="line_h_30">
                                     <Select
                                         style={{width: 130}}
                                         onChange={_this.conditionalSymbolHandleChange}
@@ -399,12 +399,12 @@ const ConditionComponent = React.createClass({
                                         {optionsArray}
                                     </RadioGroup>
                                 </Col>
-                            </div>;
+                            </Row>;
                         }else if("date" == formDataJson.type){
                             var tagId = formDataJson.label+"#"+formDataJson.type;
-                            conditionTag = <div>
+                            conditionTag = <Row>
                                 <Col span={4} className="line_h_30">{formDataJson.label}</Col>
-                                <Col span={10} className="line_h_30">
+                                <Col span={7} className="line_h_30">
                                     <Select
                                         style={{width: 130}}
                                         onChange={_this.conditionalSymbolHandleChange}
@@ -416,7 +416,7 @@ const ConditionComponent = React.createClass({
                                 <Col span={10}>
                                     <DatePicker onChange={_this.formDatePickerOnChange.bind(_this,tagId)} />
                                 </Col>
-                            </div>;
+                            </Row>;
                         }
 
                     }
@@ -603,23 +603,30 @@ const ConditionComponent = React.createClass({
 
 
         return (
-            <div>
-                <div>
+            <div className="conditions_group">
+                <Row>
                     <Col span={24}>
-                    请选择用来区分审批流程的条件字段：
+                        请选择用来区分审批流程的条件字段：
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={24}>
                     <CheckboxGroup options={this.state.formDataOptions}
                                    value={this.state.conditionFields}
                                    onChange={this.formDataOptionOnChange}/>
                     </Col>
-                </div>
-                <div>
+                </Row>
+                <hr className="conditions_top"></hr>
+                <Row>
                     <Col span={24}>当审批同时满足以下条件时</Col>
-                </div>
-                <div>
+                </Row>
+                <Row>
                     {this.state.conditionTagArray}
-                </div>
-                <div>
-                    <Col span={24}>对应审批人
+                </Row>
+                <hr className="conditions_top"></hr>
+                <Row>
+                    <Col span={4}>对应审批人</Col>
+                    <Col span={20}>
                         <Select
                             style={{width: 130}}
                             onChange={this.approvalUserHandleChange}
@@ -628,7 +635,7 @@ const ConditionComponent = React.createClass({
                             {this.state.approvalUserOptionArray}
                         </Select>
                     </Col>
-                </div>
+                </Row>
             </div>
         );
     },
