@@ -322,7 +322,7 @@ const ConditionComponent = React.createClass({
                                         {conditionalSymbolArray}
                                     </Select>
                                 </Col>
-                                <Col span={10}>
+                                <Col span={10} className="line_h_30">
                                     <Input id={tagId} onChange={_this.conditionValueOnChange}/>
                                 </Col>
                             </Row>;
@@ -345,7 +345,7 @@ const ConditionComponent = React.createClass({
                                         {conditionalSymbolArray}
                                     </Select>
                                 </Col>
-                                <Col span={10}>
+                                <Col span={10} className="line_h_30">
                                     <Select
                                         style={{width: 130}}
                                         onChange={_this.formDataSelectOptionsOnChange}
@@ -374,7 +374,7 @@ const ConditionComponent = React.createClass({
                                         {conditionalSymbolArray}
                                     </Select>
                                 </Col>
-                                <Col span={10}>
+                                <Col span={10} className="line_h_30">
                                     <CheckboxGroup options={optionsArray} onChange={_this.formDataCheckGroupOnChange}/>
                                 </Col>
                             </Row>;
@@ -398,7 +398,7 @@ const ConditionComponent = React.createClass({
                                         {conditionalSymbolArray}
                                     </Select>
                                 </Col>
-                                <Col span={10}>
+                                <Col span={10} className="line_h_30">
                                     <RadioGroup onChange={_this.formDataRadioGroupOnChange}>
                                         {optionsArray}
                                     </RadioGroup>
@@ -417,7 +417,7 @@ const ConditionComponent = React.createClass({
                                         {conditionalSymbolArray}
                                     </Select>
                                 </Col>
-                                <Col span={10}>
+                                <Col span={10} className="line_h_30">
                                     <DatePicker onChange={_this.formDatePickerOnChange.bind(_this,tagId)} />
                                 </Col>
                             </Row>;
@@ -610,7 +610,7 @@ const ConditionComponent = React.createClass({
             <div className="conditions_group">
                 <Row>
                     <Col span={24}>
-                        请选择用来区分审批流程的条件字段(只有必填字段才可以参与条件设置)：
+                        请选择用来区分审批流程的条件字段<span className="red_danger">（只有必填字段才可以参与条件设置）</span>：
                     </Col>
                 </Row>
                 <Row>
@@ -624,12 +624,12 @@ const ConditionComponent = React.createClass({
                 <Row>
                     <Col span={24}>当审批同时满足以下条件时</Col>
                 </Row>
-                <Row>
+                <Row className="conditions_row_2">
                     {this.state.conditionTagArray}
                 </Row>
                 <hr className="conditions_top"></hr>
                 <Row>
-                    <Col span={4}>对应审批人</Col>
+                    <Col span={4} className="line_h_30">对应审批人</Col>
                     <Col span={20}>
                         <Select
                             allowClear={true}
