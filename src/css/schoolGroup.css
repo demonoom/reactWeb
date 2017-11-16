@@ -629,6 +629,9 @@
     font-size: 13px;
     font-weight: normal;
 }
+.approval_steps_flow{
+    width: 100%;
+}
 .ant-table table th.dold_text, .ant-table table td.dold_text{
     width:100%;
 }
