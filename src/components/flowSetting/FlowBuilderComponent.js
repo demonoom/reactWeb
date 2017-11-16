@@ -751,17 +751,15 @@ const FlowBuilderComponent = React.createClass({
                             {/*<Step status="process" title="项目组长审批" icon={<Icon type="user" />} />*/}
                             {this.state.stepObjArray}
                         </div>
-                        <Button className="upexam_float" icon="plus-circle" onClick={this.addFlowStep}>添加</Button>
+                        <Button className="upexam_float" icon="plus-circle" onClick={this.addFlowStep}></Button>
 
                     </Col>
                 </Row>
                 <Row>
                     <Col span={6} className="framework_m_l">分条件审批：</Col>
                     <Col span={17} className="framework_m_r">
-                        <div>
-                            <Button className="upexam_float" icon="plus-circle" onClick={this.addFlowCondition}></Button>
-                        </div>
-                        <div className="approval_steps">
+                            <Button className="upexam_float" onClick={this.addFlowCondition}>添加</Button><br/>
+                        <div className="approval_steps conditions_approval_steps">
                             {this.state.stepConditionArray}
                         </div>
 

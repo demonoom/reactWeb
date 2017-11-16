@@ -656,3 +656,8 @@
 .approval_steps >div:last-child i.approval_right_arrow {
     display: none;
 }
+.conditions_approval_steps{
+    margin-top: 20px;
+    border:1px solid #EBEBEB;
+    width: 100%;
+}
