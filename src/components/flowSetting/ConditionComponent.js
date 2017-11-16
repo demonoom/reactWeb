@@ -165,7 +165,7 @@ const ConditionComponent = React.createClass({
             conditionalSymbolArray: [],
             approvalUserOptionArray: [],
             selectedApprovalUser: '',
-            teacherOptionArray: [],
+            //teacherOptionArray: [],
             defaultSelectedTeacherId:'',
             teacherUserObjArray:[],
             approvalTypeValue:'',
@@ -189,11 +189,12 @@ const ConditionComponent = React.createClass({
      */
     buildFormDataOptions(formData) {
         var formDefineList = JSON.parse(formData);
-        var formDataOptions = [{label: '发起人', value: 'assignOfStarter',type:'select'}];
+        // var formDataOptions = [{label: '发起人', value: 'assignOfStarter',type:'select'}];
+        var formDataOptions = [];
         formDefineList.forEach(function (formDefine) {
             //todo 构建可以作为条件使用的表单字段必须是必填项目，否则无法使用，另外文件上传和header表头组件也无法作为条件使用
             // if (formDefine.required == true && (formDefine.type !='file' || formDefine.type !='file')) {
-            if (formDefine.type !='file' && formDefine.type !="header" ) {
+            if (formDefine.required == true && formDefine.type !='file' && formDefine.type !="header" ) {
                 var optionJson = {label: formDefine.label, value: formDefine.label,type:formDefine.type,values:formDefine.values};
                 formDataOptions.push(optionJson);
             }
@@ -260,17 +261,19 @@ const ConditionComponent = React.createClass({
     buildConditionalSymbol(conditionField){
         var conditionalSymbolArray=[];
         var equalsSymbol = <Option value={conditionField+'#等于'}>等于</Option>;
+        var unEqualsSymbol = <Option value={conditionField+'#不等于'}>不等于</Option>;
         var greaterSymbol = <Option value={conditionField+'#大于'}>大于</Option>;
         var lessSymbol = <Option value={conditionField+'#小于'}>小于</Option>;
         var greaterEqualsSymbol = <Option value={conditionField+'#大于等于'}>大于等于</Option>;
         var lessEqualsSymbol = <Option value={conditionField+'#小于等于'}>小于等于</Option>;
-        var lessEqualsSymbol = <Option value={conditionField+'#介于'}>介于(两个数之间)</Option>;
+        // var middleEqualsSymbol = <Option value={conditionField+'#介于'}>介于(两个数之间)</Option>;
         conditionalSymbolArray.push(equalsSymbol);
+        conditionalSymbolArray.push(unEqualsSymbol);
         conditionalSymbolArray.push(greaterSymbol);
         conditionalSymbolArray.push(lessSymbol);
         conditionalSymbolArray.push(greaterEqualsSymbol);
         conditionalSymbolArray.push(lessEqualsSymbol);
-        conditionalSymbolArray.push(lessEqualsSymbol);
+        // conditionalSymbolArray.push(lessEqualsSymbol);
         // this.setState({conditionalSymbolArray});
         return conditionalSymbolArray;
     },
@@ -291,6 +294,7 @@ const ConditionComponent = React.createClass({
                             <Col span={4} className="line_h_30">发起人</Col>
                             <Col span={20} className="line_h_30">
                                 <Select
+                                    allowClear={true}
                                     showSearch
                                     style={{width: 130}}
                                     placeholder="请输入搜索条件"
@@ -606,7 +610,7 @@ const ConditionComponent = React.createClass({
             <div className="conditions_group">
                 <Row>
                     <Col span={24}>
-                        请选择用来区分审批流程的条件字段：
+                        请选择用来区分审批流程的条件字段(只有必填字段才可以参与条件设置)：
                     </Col>
                 </Row>
                 <Row>
@@ -628,6 +632,7 @@ const ConditionComponent = React.createClass({
                     <Col span={4}>对应审批人</Col>
                     <Col span={20}>
                         <Select
+                            allowClear={true}
                             style={{width: 130}}
                             onChange={this.approvalUserHandleChange}
                             className="framework_m_r"
