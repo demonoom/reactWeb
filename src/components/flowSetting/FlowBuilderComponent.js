@@ -51,7 +51,10 @@ const FlowBuilderComponent = React.createClass({
         approvalJsonArray.splice(0);
         copyPersonIdArray.splice(0);
         stepObjArray.splice(0);
+        currentConditionInfoJsonArray.splice(0);
         copyPersonTagArray.splice(0);
+        stepConditionArray.splice(0);
+        this.setState({stepConditionArray:[]});
         this.getFlowGroup();
     },
 
