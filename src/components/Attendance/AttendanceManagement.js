@@ -64,7 +64,7 @@ const AttendanceManagement = React.createClass({
                     for (var i = 0; i < data.length; i++) {
                         var str = '';
                         data[i].scheduleList.forEach(function (v) {
-                            str += (v + '|');
+                            str += (v + ' ' + ' ' +'|' + ' ' +  ' ');
                         });
 
                         var time = str.substr(0, str.length - 1);
@@ -558,7 +558,7 @@ const AttendanceManagement = React.createClass({
             title: '考勤时间',
             dataIndex: 'time',
             key: 'time',
-            className: 'checking_in_name',
+            className: 'checking_in_name  checking_in_name_time',
         }, {
             title: '操作',
             className: 'ant-table-selection-smallclass checking_in_operate class_right',
@@ -711,7 +711,7 @@ const AttendanceManagement = React.createClass({
                 <Table columns={workDayCol} dataSource={workdate} pagination={false}
                        className="upexam_to_ma ant-col-20 checking_in_le "/>
 
-                <Row className="upexam_to_ma upexam_float">
+                <Row className="upexam_to_ma upexam_float name_max4_24">
                     <Col span={4} className="knowledge_ri knowledge_ri_8">考勤地址：</Col>
                     <Col span={20}>
                         <span>根据办公地点考勤（可添加多个考勤地点）有效范围</span>
@@ -750,7 +750,7 @@ const AttendanceManagement = React.createClass({
             title = <div className="public—til—blue">考勤详情</div>;
             mainTable =
                 <div className="favorite_scroll" style={{overflow: "auto"}}>
-                    <div className="checking_add_box">
+                    <div className="checking_add_box group_cont">
                         <div>
                             <Button type="primary" icon="plus" onClick={this.addAtt}>新增考勤组</Button>
                         </div>
