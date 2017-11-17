@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {
     Tabs, Breadcrumb, Icon, Card, Button, Row, Col, Steps,
-    Input, Select, Radio, DatePicker, Checkbox, message
+    Input, Select, Radio, DatePicker, Checkbox, message,InputNumber
 } from 'antd';
 import {isEmpty} from '../../utils/utils';
 import {doWebService} from '../../WebServiceHelper';
@@ -326,6 +326,23 @@ const ConditionComponent = React.createClass({
                                     <Input id={tagId} onChange={_this.conditionValueOnChange}/>
                                 </Col>
                             </Row>;
+                        }if(formDataJson.type=="number"){
+                            var tagId = formDataJson.label + "#" + formDataJson.type;
+                            conditionTag = <Row>
+                                <Col span={4} className="line_h_30">{formDataJson.label}</Col>
+                                <Col span={7} className="line_h_30">
+                                    <Select
+                                        style={{width: 130}}
+                                        onChange={_this.conditionalSymbolHandleChange}
+                                        className="framework_m_r"
+                                    >
+                                        {conditionalSymbolArray}
+                                    </Select>
+                                </Col>
+                                <Col span={10} className="line_h_30">
+                                    <InputNumber id={tagId}  onChange={_this.formDataInputNumberOnChange.bind(_this,tagId)} />
+                                </Col>
+                            </Row>;
                         }else if(formDataJson.type=="select"){
                             var optionsArray = [];
                             formDataJson.values.forEach(function (formDataValue) {
@@ -443,6 +460,15 @@ const ConditionComponent = React.createClass({
         conditionField = conditionField + "#" + formDataType;
         console.log("conditionField:" + conditionField + ",formDataSelectOptionValue:" + formDataSelectOptionValue);
         var conditionalValueJson = {conditionField:conditionField,conditionalValue:formDataSelectOptionValue};
+        this.buildConditionalValueJsonArray(conditionalValueJson);
+    },
+
+    /**
+     * 生成的数字输入框内容改变响应函数
+     * @param value
+     */
+    formDataInputNumberOnChange(tagId,value){
+        var conditionalValueJson = {conditionField:tagId,conditionalValue:value};
         this.buildConditionalValueJsonArray(conditionalValueJson);
     },
 
