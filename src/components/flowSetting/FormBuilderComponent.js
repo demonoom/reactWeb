@@ -95,8 +95,11 @@ const FormBuilderComponent = React.createClass({
      */
     render() {
         return (
-            <div className="form_set">
-                <div id="fb-editor"></div>
+            <div>
+                <div>操作提示：请至少选择一个必填的表单项目</div>
+                <div className="form_set">
+                    <div id="fb-editor"></div>
+                </div>
             </div>
         );
     },
