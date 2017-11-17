@@ -142,7 +142,7 @@ const FlowSettingComponent = React.createClass({
         if (direct == "next") {
             var canBeNext = this.refs.createFlowComponent.canBeNextStep();
             if (canBeNext == false) {
-                message.error("请先设置流程审批的表单");
+                // message.error("请先设置流程审批的表单");
                 return;
             }
         }
