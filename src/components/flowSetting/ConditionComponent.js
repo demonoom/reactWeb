@@ -178,6 +178,11 @@ const ConditionComponent = React.createClass({
      */
     formDataOptionOnChange(checkedValues) {
         console.log('checked = ', checkedValues);
+        //todo 暂时屏蔽多条件设置，后期放开该功能，以便支持条件的并且操作
+        if(checkedValues.length>1){
+            message.error("请勿同时选择多个条件，谢谢！");
+            return;
+        }
         var formDataOptions = this.state.formDataOptions;
         this.setState({conditionFields:checkedValues});
         this.buildConditonTagArray(formDataOptions,checkedValues);
@@ -192,7 +197,6 @@ const ConditionComponent = React.createClass({
         // var formDataOptions = [{label: '发起人', value: 'assignOfStarter',type:'select'}];
         var formDataOptions = [];
         formDefineList.forEach(function (formDefine) {
-            //todo 构建可以作为条件使用的表单字段必须是必填项目，否则无法使用，另外文件上传和header表头组件也无法作为条件使用
             // if (formDefine.required == true && (formDefine.type !='file' || formDefine.type !='file')) {
             if (formDefine.required == true && formDefine.type !='file' && formDefine.type !="header" ) {
                 var optionJson = {label: formDefine.label, value: formDefine.label,type:formDefine.type,values:formDefine.values};
@@ -613,7 +617,9 @@ const ConditionComponent = React.createClass({
                 }
             }
         })
-        conditionalSymbolJsonArray = newArray
+        //todo 选择多个条件时，应该形成条件的并且关系
+        conditionalSymbolJsonArray = newArray;
+        // conditionalSymbolJsonArray.addAll(newArray);
     },
 
     /**
