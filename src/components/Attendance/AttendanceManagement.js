@@ -36,6 +36,7 @@ const AttendanceManagement = React.createClass({
             radiusValue: 300,
             workTime: ['休息', '休息', '休息', '休息', '休息', '休息', '休息'],
             workTimeId: [false, false, false, false, false, false, false],
+            defaultAtt: '默认班次： 9:00--18:00',
         };
     },
 
@@ -166,7 +167,7 @@ const AttendanceManagement = React.createClass({
                             arr.splice(i, 1);
                             return
                         }
-                    })
+                    });
                     _this.setState({attendenceData: arr});
                 } else {
                     message.error(ret.msg);
@@ -192,6 +193,7 @@ const AttendanceManagement = React.createClass({
         this.setState({checked: false});
         this.setState({workTime: ['休息', '休息', '休息', '休息', '休息', '休息', '休息']});
         this.setState({workTimeId: [false, false, false, false, false, false, false]});
+        this.setState({defaultAtt: '默认班次： 9:00--18:00'});
         setTimeout(function () {
             _this.viewAttendGroupPage();
         }, 500)
@@ -361,7 +363,7 @@ const AttendanceManagement = React.createClass({
             joinAttPerArr.push(obj);
         });
         var outAttPerArr = [];
-        if(isEmpty(outAttPer)==false) {
+        if (isEmpty(outAttPer) == false) {
             outAttPer.forEach(function (v, i) {
                 var obj = {
                     colUid: v
@@ -471,6 +473,7 @@ const AttendanceManagement = React.createClass({
             });
             this.setState({workTime: arr});
             this.setState({workTimeId: array});
+            this.setState({defaultAtt:data.name + ': ' + data.time});
         } else {
             //是单个设置
             var selectDay = this.state.selectDay;
@@ -702,7 +705,7 @@ const AttendanceManagement = React.createClass({
                 <Row>
                     <Col span={4} className="knowledge_ri knowledge_ri_8">工作日设置：</Col>
                     <Col span={10}>
-                        <span>默认班次：9:00--18:00</span>
+                        <span>{this.state.defaultAtt}</span>
                         <a href="javascript:;" onClick={this.changeShift} className="add_out">更改班次</a>
                     </Col>
                 </Row>
