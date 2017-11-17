@@ -185,7 +185,7 @@ const ShiftManagement = React.createClass({
             <div className="group_cont">
                 <div className="public—til—blue">考勤详情</div>
                 <div className="favorite_scroll" style={{overflow: "auto"}}>
-                    <div className="checking_add_box">
+                    <div className="checking_add_box group_cont">
                         <Button type="primary" icon="plus" onClick={this.addShift}>新增班次</Button>
                         <Table className="checking_in_box cloud_box upexam_to_ma" columns={columns}
                                dataSource={this.state.shiftData}
