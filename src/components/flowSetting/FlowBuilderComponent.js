@@ -188,26 +188,28 @@ const FlowBuilderComponent = React.createClass({
         switch(approvalType){
             case 0:
                 //选定具体用户
-                approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalJson.approval.colUid)}>{approvalJson.approval.userName}</div>;
+                approvalNameDiv=<div >{approvalJson.approval.userName}</div>;
                 approvalTypeStr= "";
                 //stepObj = <Step id={approvalJson.approval} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
                 stepObj = <div id={approvalJson.approval.colUid} >
                     <div className="approval_steps_w">
                         <Icon type="user" />
                         {approvalNameDiv}
+                        <Icon type="close" className="close" onClick={this.removeApprovalData.bind(this,approvalJson.approval.colUid)} />
                     </div>
                     <Icon type="arrow-right" className="approval_right_arrow" />
                 </div>;
                 break;
             case 1:
                 //选定指定的角色
-                approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalJson.approvalRoleVariables.id)}>{approvalJson.approvalRoleVariables.name}</div>;
+                approvalNameDiv=<div>{approvalJson.approvalRoleVariables.name}</div>;
                 approvalTypeStr= "";
                 //stepObj = <Step id={approvalJson.approvalRoleVariables.id} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
                 stepObj = <div id={approvalJson.approvalRoleVariables.id} >
                     <div className="approval_steps_w">
                         <Icon type="user" />
                         {approvalNameDiv}
+                        <Icon type="close" className="close"  onClick={this.removeApprovalData.bind(this,approvalJson.approvalRoleVariables.id)} />
                     </div>
                     <Icon type="arrow-right"  className="approval_right_arrow" />
                 </div>;
@@ -225,13 +227,14 @@ const FlowBuilderComponent = React.createClass({
                     approvalShowName = "第"+approvalLevel+"级主管";
                 }
                 //部门主管-指定一级(包括直接主管的选项,直接主管的level为0)
-                approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalUserKey)}>{approvalShowName}</div>;
+                approvalNameDiv=<div >{approvalShowName}</div>;
                 approvalTypeStr= "";
                 //stepObj = <Step id={approvalUserKey} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
                 stepObj = <div id={approvalUserKey} >
                     <div className="approval_steps_w">
                         <Icon type="user" />
                         {approvalNameDiv}
+                        <Icon type="close"  className="close" onClick={this.removeApprovalData.bind(this,approvalUserKey)}  />
                     </div>
                     <Icon type="arrow-right" className="approval_right_arrow" />
                 </div>;
@@ -245,25 +248,27 @@ const FlowBuilderComponent = React.createClass({
                 var approvalShowName = ""
                 approvalShowName = "从直接主管到发起人向上的第"+approvalLevel+"级主管";
                 //部门主管-连续多级
-                approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalUserKey)}>{approvalShowName}</div>;
+                approvalNameDiv=<div>{approvalShowName}</div>;
                 approvalTypeStr= "";
                /* stepObj = <Step id={approvalUserKey} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;*/
                 stepObj = <div id={approvalUserKey}  >
                     <div className="approval_steps_w">
                         <Icon type="user" />
                         {approvalNameDiv}
+                        <Icon type="close"  className="close" onClick={this.removeApprovalData.bind(this,approvalUserKey)}  />
                     </div>
                         <Icon type="arrow-right" className="approval_right_arrow" />
                 </div>;
                 break;
             case 4:
                 //选定审批人为流程发起人
-                approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalJson.approvalStarterVariables)}>发起人自己</div>;
+                approvalNameDiv=<div>发起人自己</div>;
                 approvalTypeStr= "";
                 stepObj = <div id={approvalJson.approvalStarterVariables} >
                     <div className="approval_steps_w">
                         <Icon type="user" />
                         {approvalNameDiv}
+                        <Icon type="close"  className="close"  onClick={this.removeApprovalData.bind(this,approvalJson.approvalStarterVariables)}  />
                     </div>
                     <Icon type="arrow-right" className="approval_right_arrow" />
                 </div>;
@@ -573,9 +578,10 @@ const FlowBuilderComponent = React.createClass({
             if("assignOfStarter"== conditionField){
                 showFlowStarer = "发起人";
                 var divId = conditionField+"#"+conditionalSymbol+"#"+conditionalValue.userName+"#"+selectedApprovalUser;
-                conditionTag = <div id={divId} onClick={_this.removeApprovalConditonData.bind(this,divId)}>
+                conditionTag = <div id={divId} >
                     <div>如果{showFlowStarer} {conditionalSymbol} {conditionalValue.userName}</div>
                     <div>审批人：{showName}</div>
+                    <Icon type="close"  className="close" onClick={_this.removeApprovalConditonData.bind(this,divId)} />
                 </div>;
             }else{
                 var conditionFieldArray = conditionField.split("#");
@@ -594,15 +600,17 @@ const FlowBuilderComponent = React.createClass({
                         }
                     }
                     var divId = conditionField+"#"+conditionalSymbol+"#"+conditionalValue+"#"+selectedApprovalUser;
-                    conditionTag = <div id={divId} onClick={_this.removeApprovalConditonData.bind(this,divId)}>
+                    conditionTag = <div id={divId} >
                         <div>如果{showFlowStarer} {conditionalSymbol} {showConditionalValues}</div>
                         <div>审批人：{showName}</div>
+                        <Icon type="close"  className="close" onClick={_this.removeApprovalConditonData.bind(this,divId)} />
                     </div>;
                 }else{
                     var divId = conditionField+"#"+conditionalSymbol+"#"+conditionalValue+"#"+selectedApprovalUser;
-                    conditionTag = <div id={divId} onClick={_this.removeApprovalConditonData.bind(this,divId)}>
+                    conditionTag = <div id={divId}>
                         <div>如果{showFlowStarer} {conditionalSymbol} {conditionalValue}</div>
                         <div>审批人：{showName}</div>
+                        <Icon type="close"  className="close" onClick={_this.removeApprovalConditonData.bind(this,divId)} />
                     </div>;
                 }
             }
