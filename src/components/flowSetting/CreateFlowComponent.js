@@ -54,11 +54,27 @@ const CreateFlowComponent = React.createClass({
      */
     canBeNextStep(){
         var canBeNext=true;
-        // var formData = formBuilder.actions.getData('json');
-        // var formDataObj = JSON.parse(formData);
-        // if(isEmpty(formDataObj)==false || formDataObj.length!=0){
-        //     canBeNext = true;
-        // }
+        var formData = this.refs.formDataComponent.getFormData();
+        var formDataObjArray = JSON.parse(formData);
+        if(isEmpty(formDataObjArray)==true || formDataObjArray.length==0){
+            message.error("请先设置流程审批的表单");
+            canBeNext = false;
+        }else{
+            //是否存在必选的元素
+            var isExistRequired=false;
+            for(var i=0;i<formDataObjArray.length;i++){
+                var formData = formDataObjArray[i];
+                var required = formData.required;
+                if(required==true){
+                    isExistRequired = true;
+                    break;
+                }
+            }
+            if(isExistRequired==false){
+                message.error("请至少选择一个必填的表单元素，谢谢！");
+                canBeNext = false;
+            }
+        }
         return canBeNext;
     },
 

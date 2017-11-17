@@ -4,6 +4,7 @@ import { Tabs, Breadcrumb, Icon,Card,Button,Row,Col,Steps,
 import {isEmpty} from '../../utils/utils';
 import ApprovalComponent from './ApprovalComponent';
 import CopyPersonSettingComponent from './CopyPersonSettingComponent';
+import ConditionComponent from './ConditionComponent';
 import {doWebService} from '../../WebServiceHelper';
 const Step = Steps.Step;
 const Option = Select.Option;
@@ -15,11 +16,14 @@ var copyPersonTagArray=[];
 var approvalJsonArray=[];
 var copyPersonIdArray=[];
 const children = [];
+var stepConditionArray = [];
+//审批条件的集合
+var currentConditionInfoJsonArray = [];
+
 const FlowBuilderComponent = React.createClass({
 
     getInitialState() {
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
-        console.log("formData----->"+this.props.formData);
         var formData = this.props.formData;
         var formDefineList = JSON.parse(formData);
         children.splice(0);
@@ -36,6 +40,9 @@ const FlowBuilderComponent = React.createClass({
             flowDescription:'', //流程说明
             approvalGroup:'-1',   //选中的流程分组
             messageOfCopyPersonSendType:"-1", //流程抄送人消息发送方式
+            stepConditionArray:[],   //审批条件集合
+            conditionModalVisible:false,    //审批条件窗口的显示和关闭
+
         };
     },
 
@@ -44,7 +51,10 @@ const FlowBuilderComponent = React.createClass({
         approvalJsonArray.splice(0);
         copyPersonIdArray.splice(0);
         stepObjArray.splice(0);
+        currentConditionInfoJsonArray.splice(0);
         copyPersonTagArray.splice(0);
+        stepConditionArray.splice(0);
+        this.setState({stepConditionArray:[]});
         this.getFlowGroup();
     },
 
@@ -137,6 +147,13 @@ const FlowBuilderComponent = React.createClass({
     },
 
     /**
+     * 显示添加审批条件的窗口
+     */
+    addFlowCondition(){
+        this.setState({conditionModalVisible:true});
+    },
+
+    /**
      * 抄送人通知发送方式
      */
     copySendHandleChange(value) {
@@ -152,6 +169,13 @@ const FlowBuilderComponent = React.createClass({
     },
 
     /**
+     * 设置审批条件窗口关闭的响应函数
+     */
+    conditionModalHandleCancel(){
+        this.setState({conditionModalVisible:false});
+    },
+
+    /**
      * 添加审批人到审批节点
      */
     addApprovalToStep(){
@@ -164,26 +188,28 @@ const FlowBuilderComponent = React.createClass({
         switch(approvalType){
             case 0:
                 //选定具体用户
-                approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalJson.approval.colUid)}>{approvalJson.approval.userName}</div>;
+                approvalNameDiv=<div >{approvalJson.approval.userName}</div>;
                 approvalTypeStr= "";
                 //stepObj = <Step id={approvalJson.approval} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
                 stepObj = <div id={approvalJson.approval.colUid} >
                     <div className="approval_steps_w">
                         <Icon type="user" />
                         {approvalNameDiv}
+                        <Icon type="close" className="close" onClick={this.removeApprovalData.bind(this,approvalJson.approval.colUid)} />
                     </div>
                     <Icon type="arrow-right" className="approval_right_arrow" />
                 </div>;
                 break;
             case 1:
                 //选定指定的角色
-                approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalJson.approvalRoleVariables.id)}>{approvalJson.approvalRoleVariables.name}</div>;
+                approvalNameDiv=<div>{approvalJson.approvalRoleVariables.name}</div>;
                 approvalTypeStr= "";
                 //stepObj = <Step id={approvalJson.approvalRoleVariables.id} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
                 stepObj = <div id={approvalJson.approvalRoleVariables.id} >
                     <div className="approval_steps_w">
                         <Icon type="user" />
                         {approvalNameDiv}
+                        <Icon type="close" className="close"  onClick={this.removeApprovalData.bind(this,approvalJson.approvalRoleVariables.id)} />
                     </div>
                     <Icon type="arrow-right"  className="approval_right_arrow" />
                 </div>;
@@ -201,13 +227,14 @@ const FlowBuilderComponent = React.createClass({
                     approvalShowName = "第"+approvalLevel+"级主管";
                 }
                 //部门主管-指定一级(包括直接主管的选项,直接主管的level为0)
-                approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalUserKey)}>{approvalShowName}</div>;
+                approvalNameDiv=<div >{approvalShowName}</div>;
                 approvalTypeStr= "";
                 //stepObj = <Step id={approvalUserKey} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;
                 stepObj = <div id={approvalUserKey} >
                     <div className="approval_steps_w">
                         <Icon type="user" />
                         {approvalNameDiv}
+                        <Icon type="close"  className="close" onClick={this.removeApprovalData.bind(this,approvalUserKey)}  />
                     </div>
                     <Icon type="arrow-right" className="approval_right_arrow" />
                 </div>;
@@ -221,25 +248,27 @@ const FlowBuilderComponent = React.createClass({
                 var approvalShowName = ""
                 approvalShowName = "从直接主管到发起人向上的第"+approvalLevel+"级主管";
                 //部门主管-连续多级
-                approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalUserKey)}>{approvalShowName}</div>;
+                approvalNameDiv=<div>{approvalShowName}</div>;
                 approvalTypeStr= "";
                /* stepObj = <Step id={approvalUserKey} status="process" title={approvalNameDiv} description={approvalTypeStr} icon={<Icon type="user" />} />;*/
                 stepObj = <div id={approvalUserKey}  >
                     <div className="approval_steps_w">
                         <Icon type="user" />
                         {approvalNameDiv}
+                        <Icon type="close"  className="close" onClick={this.removeApprovalData.bind(this,approvalUserKey)}  />
                     </div>
                         <Icon type="arrow-right" className="approval_right_arrow" />
                 </div>;
                 break;
             case 4:
                 //选定审批人为流程发起人
-                approvalNameDiv=<div onClick={this.removeApprovalData.bind(this,approvalJson.approvalStarterVariables)}>发起人自己</div>;
+                approvalNameDiv=<div>发起人自己</div>;
                 approvalTypeStr= "";
                 stepObj = <div id={approvalJson.approvalStarterVariables} >
                     <div className="approval_steps_w">
                         <Icon type="user" />
                         {approvalNameDiv}
+                        <Icon type="close"  className="close"  onClick={this.removeApprovalData.bind(this,approvalJson.approvalStarterVariables)}  />
                     </div>
                     <Icon type="arrow-right" className="approval_right_arrow" />
                 </div>;
@@ -431,6 +460,8 @@ const FlowBuilderComponent = React.createClass({
         processDefinitionBaseJson.flowApprovalUsers = flowApprovalUsers;
         //审批表单摘要内容
         processDefinitionBaseJson.selectedAbstractValues = this.state.selectedAbstractValues;
+        //当前审批对应的审批条件的集合
+        processDefinitionBaseJson.conditionalInfoList = currentConditionInfoJsonArray;
         return processDefinitionBaseJson;
     },
 
@@ -445,6 +476,255 @@ const FlowBuilderComponent = React.createClass({
             return false;
         }
         this.setState({selectedAbstractValues});
+    },
+
+    /**
+     * 从审批条件设置面板中，获取已经设置的审批条件
+     */
+    getConditionInfoByJson(){
+        //获取条件设定
+        var currentConditionInfoJson = this.refs.conditionComponent.getConditionInfoByJson();
+        //将获取到的条件设定，存入数组，该数组将会作为参数，传递到后台进行保存
+        currentConditionInfoJsonArray.push(currentConditionInfoJson);
+        this.addConditionToPanel(currentConditionInfoJson);
+        //初始化条件设置组件
+        this.refs.conditionComponent.initConditionComponent();
+    },
+
+    /**
+     * 添加审批条件到流程设置主面板
+     */
+    addConditionToPanel(currentConditionInfoJson){
+        var _this = this;
+        //审批条件
+        var conditionalSymbolJson = currentConditionInfoJson.flowConditionalSymbolList;
+        //审批条件满足时对应的用户
+        var selectedApprovalUser = currentConditionInfoJson.selectedApprovalUser;
+        if(isEmpty(selectedApprovalUser)){
+            message.error("请选择符合条件的审批用户");
+            this.setState({"conditionModalVisible":false});
+            return;
+        }
+        var selectedApprovalUserArray = selectedApprovalUser.split(",");
+        //审批用户类型
+        var approvalType = selectedApprovalUserArray[1];
+        //对应的审批用户
+        var approvalUser  = selectedApprovalUserArray[0];
+        var currentSelectedObj;
+        var showName;
+        for(var i=0;i<approvalJsonArray.length;i++){
+            var approvalJson = approvalJsonArray[i];
+            var approvalType = approvalJson.approvalType;
+            var approval = approvalJson.approval;
+            var approvalManagerVariables=approvalJson.approvalManagerVariables;
+            var approvalRoleVariables=approvalJson.approvalRoleVariables;
+            var flowApprovalUserRule = approvalJson.flowApprovalUserRule;
+            var currentApprovalTypeValue = approvalJson.currentApprovalTypeValue;
+            var ifManagerNullFillType = approvalJson.ifManagerNullFillType;
+            var approvalStarterVariables = approvalJson.approvalStarterVariables;
+            switch (approvalType){
+                case 0:
+                    //指定用户审批
+                    if(approvalJson.approval.colUid==approvalUser){
+                        currentSelectedObj = approvalJson.approval;
+                        showName = approvalJson.approval.userName;
+                        break;
+                    }
+                    break;
+                case 1:
+                    //角色审批
+                    var approvalRoleVariables = approvalJson.approvalRoleVariables;
+                    if(approvalRoleVariables.id==approvalUser){
+                        currentSelectedObj = approvalRoleVariables.id;
+                        showName = approvalRoleVariables.name;
+                        break;
+                    }
+                    break;
+                case 2:
+                    //部门主管审批
+                    var flowApprovalUserRule = approvalJson.flowApprovalUserRule;
+                    var approvalUserKey = flowApprovalUserRule.levelType+"#"+flowApprovalUserRule.approvalLevel;
+                    if(approvalUserKey==approvalUser){
+                        currentSelectedObj = approvalUserKey;
+                        if(flowApprovalUserRule.approvalLevel==0){
+                            showName = "直接主管";
+                        }else{
+                            showName = "第"+flowApprovalUserRule.approvalLevel+"级主管";
+                        }
+                        break;
+                    }
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    //发起人自己审批
+                    var approvalStarterVariables = approvalJson.approvalStarterVariables;
+                    if(approvalStarterVariables==approvalUser){
+                        currentSelectedObj = approvalStarterVariables;
+                        showName = "发起人自己审批";
+                        break;
+                    }
+                    break;
+            }
+        }
+
+        conditionalSymbolJson.forEach(function (currentCondition) {
+            var conditionField = currentCondition.conditionField;
+            var conditionalSymbol = currentCondition.conditionalSymbol;
+            var conditionalValue = currentCondition.conditionalValue;
+            var showFlowStarer;
+            var conditionTag;
+            //todo 该面板中，应该和审批人一样，支持审批条件的移除操作
+            if("assignOfStarter"== conditionField){
+                showFlowStarer = "发起人";
+                var divId = conditionField+"#"+conditionalSymbol+"#"+conditionalValue.userName+"#"+selectedApprovalUser;
+                conditionTag = <div id={divId} >
+                    <div>如果{showFlowStarer} {conditionalSymbol} {conditionalValue.userName}</div>
+                    <div>审批人：{showName}</div>
+                    <Icon type="close"  className="close" onClick={_this.removeApprovalConditonData.bind(this,divId)} />
+                </div>;
+            }else{
+                var conditionFieldArray = conditionField.split("#");
+                showFlowStarer = conditionFieldArray[0];
+                //表单元素类型
+                var conditionType = conditionFieldArray[1];
+                if(conditionType=="checkbox-group"){
+                    var conditionalValues = currentCondition.conditionalValues;
+                    var showConditionalValues="";
+                    for(var i=0;i<conditionalValues.length;i++){
+                        var conditionValue = conditionalValues[i];
+                        if(i!=conditionalValues.length-1){
+                            showConditionalValues = showConditionalValues+conditionValue+ "或者";
+                        }else{
+                            showConditionalValues = showConditionalValues+conditionValue;
+                        }
+                    }
+                    var divId = conditionField+"#"+conditionalSymbol+"#"+conditionalValue+"#"+selectedApprovalUser;
+                    conditionTag = <div id={divId} >
+                        <div>如果{showFlowStarer} {conditionalSymbol} {showConditionalValues}</div>
+                        <div>审批人：{showName}</div>
+                        <Icon type="close"  className="close" onClick={_this.removeApprovalConditonData.bind(this,divId)} />
+                    </div>;
+                }else{
+                    var divId = conditionField+"#"+conditionalSymbol+"#"+conditionalValue+"#"+selectedApprovalUser;
+                    conditionTag = <div id={divId}>
+                        <div>如果{showFlowStarer} {conditionalSymbol} {conditionalValue}</div>
+                        <div>审批人：{showName}</div>
+                        <Icon type="close"  className="close" onClick={_this.removeApprovalConditonData.bind(this,divId)} />
+                    </div>;
+                }
+            }
+            stepConditionArray.push(conditionTag);
+        });
+        this.setState({stepConditionArray,"conditionModalVisible":false});
+    },
+
+    /**
+     * 从审批条件数组中移除对应的条件
+     */
+    removeApprovalConditonData(divId){
+        var _this = this;
+        console.log(divId);
+        //todo 从存储审批条件的数组中移除审批条件，并重建页面的审批条件
+        for (var i = 0; i < currentConditionInfoJsonArray.length; i++) {
+            var currentConditionInfoJson = currentConditionInfoJsonArray[i];
+            //审批条件
+            var conditionalSymbolJson = currentConditionInfoJson.flowConditionalSymbolList;
+            //审批条件满足时对应的用户
+            var selectedApprovalUser = currentConditionInfoJson.selectedApprovalUser;
+            var isExist = false;
+            for(var j=0;j<conditionalSymbolJson.length;j++){
+                var currentCondition = conditionalSymbolJson[j];
+                var conditionField = currentCondition.conditionField;
+                var conditionalSymbol = currentCondition.conditionalSymbol;
+                var conditionalValue = currentCondition.conditionalValue;
+                var currentDivId;
+                if("assignOfStarter"== conditionField){
+                    currentDivId = conditionField+"#"+conditionalSymbol+"#"+conditionalValue.userName+"#"+selectedApprovalUser;
+                }else{
+                    currentDivId = conditionField+"#"+conditionalSymbol+"#"+conditionalValue+"#"+selectedApprovalUser;
+                }
+                if(currentDivId == divId){
+                    isExist = true;
+                    break;
+                }
+            }
+            if(isExist){
+                currentConditionInfoJsonArray.splice(i,1);
+                break;
+            }
+        }
+        //如果审批条件的数组中已经不存在审批条件了，则移除全部审批条件的div
+        if(currentConditionInfoJsonArray.length==0){
+            stepConditionArray.splice(0);
+            _this.setState({stepConditionArray});
+        }else{
+            stepConditionArray.splice(0);
+            currentConditionInfoJsonArray.forEach(function (currentConditionInfoJson) {
+                _this.addConditionToPanel(currentConditionInfoJson);
+            })
+        }
+    },
+
+    /**
+     * 根据审批用户的类型，到审批人数组中找出当前用户的名字或者角色的名字
+     */
+    getUserInfoFromApprovalJsonArray(selectedApprovalUser){
+        var currentSelectedObj;
+        var approvalJsonArray = this.state.approvalJsonArray;
+        var selectedApprovalUserArray = selectedApprovalUser.split(",");
+        //审批用户类型
+        var approvalType = selectedApprovalUserArray[1];
+        //对应的审批用户
+        var approvalUser  = selectedApprovalUserArray[0];
+        for(var i=0;i<approvalJsonArray.length;i++){
+            var approvalJson = approvalJsonArray[i];
+            var approvalType = approvalJson.approvalType;
+            var approval = approvalJson.approval;
+            var approvalManagerVariables=approvalJson.approvalManagerVariables;
+            var approvalRoleVariables=approvalJson.approvalRoleVariables;
+            var flowApprovalUserRule = approvalJson.flowApprovalUserRule;
+            var currentApprovalTypeValue = approvalJson.currentApprovalTypeValue;
+            var ifManagerNullFillType = approvalJson.ifManagerNullFillType;
+            var approvalStarterVariables = approvalJson.approvalStarterVariables;
+            switch (approvalType){
+                case 0:
+                    //指定用户审批
+                    if(approvalJson.approval.colUid==approvalUser){
+                        currentSelectedObj = approvalJson.approval;
+                        break;
+                    }
+                    break;
+                case 1:
+                    //角色审批
+                    var approvalRoleVariables = approvalJson.approvalRoleVariables;
+                    if(approvalRoleVariables.id==approvalUser){
+                        currentSelectedObj = approvalRoleVariables.id;
+                        break;
+                    }
+                    break;
+                case 2:
+                    //部门主管审批
+                    var flowApprovalUserRule = approvalJson.flowApprovalUserRule;
+                    var approvalUserKey = flowApprovalUserRule.levelType+"#"+flowApprovalUserRule.approvalLevel;
+                    if(approvalUserKey==approvalUser){
+                        currentSelectedObj = approvalUserKey;
+                        break;
+                    }
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    //发起人自己审批
+                    var approvalStarterVariables = approvalJson.approvalStarterVariables;
+                    if(approvalStarterVariables==approvalUser){
+                        currentSelectedObj = approvalStarterVariables;
+                        break;
+                    }
+                    break;
+            }
+            return currentSelectedObj;
+        }
     },
 
     /**
@@ -477,12 +757,23 @@ const FlowBuilderComponent = React.createClass({
                 <Row>
                     <Col span={6} className="framework_m_l">审批人设置：</Col>
                     <Col span={17} className="framework_m_r">
-                        <div className="approval_steps">
+
+                        <div className="approval_steps approval_steps_flow">
                             {/*<Step status="process" title="项目组长审批" icon={<Icon type="user" />} />*/}
                             {this.state.stepObjArray}
                         </div>
-
                         <Button className="upexam_float" icon="plus-circle" onClick={this.addFlowStep}></Button>
+
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={6} className="framework_m_l">分条件审批：</Col>
+                    <Col span={17} className="framework_m_r">
+                            <Button className="upexam_float" onClick={this.addFlowCondition}>添加</Button><br/>
+                        <div className="approval_steps conditions_approval_steps">
+                            {this.state.stepConditionArray}
+                        </div>
+
                     </Col>
                 </Row>
                 <Row>
@@ -539,6 +830,19 @@ const FlowBuilderComponent = React.createClass({
                 >
                     <div className="space">
                         <CopyPersonSettingComponent ref="copyPersonSettingComponent" copyPersonIdArray={this.state.copyPersonIdArray}></CopyPersonSettingComponent>
+                    </div>
+                </Modal>
+
+                <Modal title="设置审批条件" visible={this.state.conditionModalVisible}
+                       onCancel={this.conditionModalHandleCancel}
+                       onOk={this.getConditionInfoByJson}
+                       transitionName=""  //禁用modal的动画效果
+                       maskClosable={false} //设置不允许点击蒙层关闭
+                       width="600px"
+                       className="builder_modal"
+                >
+                    <div className="space">
+                        <ConditionComponent ref="conditionComponent" formData = {this.props.formData} approvalJsonArray={this.state.approvalJsonArray}></ConditionComponent>
                     </div>
                 </Modal>
 

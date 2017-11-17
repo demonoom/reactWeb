@@ -43,7 +43,6 @@ const FormBuilderComponent = React.createClass({
     },
 
     componentWillReceiveProps(nextProps){
-        console.log("wwwwwwwww");
     },
 
     componentDidUpdate(){
@@ -76,9 +75,9 @@ const FormBuilderComponent = React.createClass({
                     locale: 'zh-CN'
                 },
                 //controlPosition: 'left', //设置可拖拽元素的显示位置
-                disableFields: ['autocomplete','hidden','paragraph','number','button'],  //设置不显示给用户的表单元素
+                disableFields: ['autocomplete','hidden','paragraph','button'],  //设置不显示给用户的表单元素
                 disabledAttrs: [
-                    'className','access','name','required',
+                    'className','access','name',
                     'max','maxlength','min','inline','other','toggle','description',
                     'multiple','subtype'
                 ],  //设置不显示给用户的元素属性
@@ -96,8 +95,11 @@ const FormBuilderComponent = React.createClass({
      */
     render() {
         return (
-            <div className="form_set">
-                <div id="fb-editor"></div>
+            <div>
+                <div>操作提示：请至少选择一个必填的表单项目</div>
+                <div className="form_set">
+                    <div id="fb-editor"></div>
+                </div>
             </div>
         );
     },
