@@ -70,7 +70,12 @@ class SystemSettingGhostMenu extends React.Component {
                 //判断是否有管理员
                 var Array = [];
                 for (var i = 0; i < data.length; i++) {
-                    Array.push(data[i].name)
+                    Array.push(data[i].name);
+                    data[i].tabItems.forEach(function (item, index) {
+                        if (item.name == '考勤') {
+                            data[i].tabItems.splice(index, 1);
+                        }
+                    })
                 }
                 if (Array.indexOf('管理员') == -1) {
                     _this.checkVip(true);
