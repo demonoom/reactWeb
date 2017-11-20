@@ -41,6 +41,7 @@ const AddShiftPosModel = React.createClass({
      * 获取当前位置
      */
     getPositon() {
+        var _this = this;
         $.ajax({
             type: 'POST',
             url: "https://api.map.baidu.com/location/ip",
@@ -49,11 +50,8 @@ const AddShiftPosModel = React.createClass({
                 coor: "gcj02"
             },
             success: function (result) {
-                // var arr = result.split('|');
-                console.log(result);
-                console.log(result.content.point)
-                var code = JSON.stringify(result.content.point)
-                console.log(code);
+                _this.setState({centerPos: result.content.address});
+                var code = JSON.stringify(result.content.point);
                 $(".location").html(code)
             },
             dataType: "jsonp"
@@ -84,7 +82,8 @@ const AddShiftPosModel = React.createClass({
             isShow: false,
         });
         // console.log(map);
-        map.centerAndZoom("西安", 12);
+        var centerPos = this.state.centerPos;
+        map.centerAndZoom(centerPos, 12);
         $("#suggestId").val('');
         this.setState({workPos: ''});
         this.setState({location: ''});
@@ -94,13 +93,15 @@ const AddShiftPosModel = React.createClass({
     showMap() {
         var _this = this;
 
+        var centerPos = this.state.centerPos;
+
         function G(id) {
             return document.getElementById(id);
         }
 
         map = new BMap.Map("l-map");
         var geoc = new BMap.Geocoder();
-        map.centerAndZoom("西安", 12);                   // 初始化地图,设置城市和地图级别。
+        map.centerAndZoom(centerPos, 12);                   // 初始化地图,设置城市和地图级别。
 
         // point = map.Point(120.391655,36.067588);  // 创建点坐标
         // map.centerAndZoom(point, 15);

@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 import {isEmpty} from '../../utils/utils';
-import {Table, Icon, Modal} from 'antd';
+import {Table, Icon, Modal, message} from 'antd';
+import {doWebService} from '../../WebServiceHelper'
 
 const columns = [{
     title: '班次名称',
@@ -11,20 +12,6 @@ const columns = [{
     title: '考勤时间',
     dataIndex: 'time',
     key: 'time',
-}];
-
-const data = [{
-    key: '1',
-    name: 'A',
-    time: '09:00-18:00 19:00-22:00',
-}, {
-    key: '2',
-    name: 'B',
-    time: '09:00-18:00 19:00-22:00',
-}, {
-    key: '3',
-    name: 'C',
-    time: '09:00-18:00 19:00-22:00',
 }];
 
 const ChangeShiftModel = React.createClass({
@@ -39,18 +26,58 @@ const ChangeShiftModel = React.createClass({
     },
 
     componentDidMount() {
-
+        this.viewAttendSchedule();
     },
 
     componentWillReceiveProps(nextProps) {
         this.setState({isShow: nextProps.isShow});
     },
 
+    viewAttendSchedule() {
+        var _this = this;
+        var arr = [];
+        var param = {
+            "method": 'viewAttendSchedulePage',
+            "colUid": _this.state.loginUser.colUid,
+            "pageNo": '-1'
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var data = ret.response;
+                //创造shiftData
+                for (var i = 0; i < data.length; i++) {
+                    var str = '';
+                    data[i].items.forEach(function (v, i) {
+                        str += (v.checkIn + '--' + v.checkOut + ',');
+                    });
+                    var time = str.substr(0, str.length - 1);
+                    var shift = {
+                        key: data[i].id,
+                        name: data[i].name,
+                        time: time
+                    };
+                    arr.push(shift);
+                }
+                _this.setState({shiftData: arr})
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
     /**
      * 确定的回调
      */
     handleOk() {
-        alert('确定');
+        //将数据返回父组件
+        var record = this.state.record;
+        if (isEmpty(record) == true) {
+            message.error('请先选择班次');
+            return
+        }
+        this.props.callbackRecord(record);
+        this.closeChangeShiftModal();
     },
 
     /**
@@ -59,6 +86,7 @@ const ChangeShiftModel = React.createClass({
     closeChangeShiftModal() {
         this.setState({
             isShow: false,
+            record: null,
         });
         this.props.closeModel();
     },
@@ -67,7 +95,8 @@ const ChangeShiftModel = React.createClass({
      * 行点击的回调
      */
     onRowClick(record, index) {
-        console.log(record);
+        // console.log(record);
+        this.setState({record});
     },
 
     /**
@@ -89,7 +118,8 @@ const ChangeShiftModel = React.createClass({
                 className="schoolgroup_modal"
             >
                 <div>
-                    <Table columns={columns} dataSource={data} pagination={false} onRowClick={this.onRowClick} className="change_model" />
+                    <Table columns={columns} dataSource={this.state.shiftData} pagination={false}
+                           onRowClick={this.onRowClick} className="change_model"/>
                 </div>
             </Modal>
         );
