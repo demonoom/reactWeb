@@ -70,7 +70,7 @@ const AddShiftPosModel = React.createClass({
             this.props.postPos(PosStr);
             this.closeChangeShiftModal();
         } else {
-            message.error('还未选择地址，请选择地址');
+            message.error('请在地图上点击想要定位的地点');
         }
     },
 

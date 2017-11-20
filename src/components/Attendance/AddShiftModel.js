@@ -171,7 +171,8 @@ const AddShiftModel = React.createClass({
                     "colUid": _this.state.loginUser.colUid
                 },
                 "name": name,
-                "isSimple": _this.state.playDaychecked,
+                // "isSimple": !_this.state.playDaychecked,
+                "isSimple": true,
                 "isRestDay": false,
                 "items": items
             }
@@ -352,14 +353,14 @@ const AddShiftModel = React.createClass({
                             <span className="add_out off_duty">
                         <Radio.Group value={this.state.size} onChange={this.degreeChange}>
                         <Radio.Button value="one">一天1次上下班</Radio.Button>
-                        <Radio.Button value="two">一天2次上下班</Radio.Button>
-                        <Radio.Button value="thr">一天3次上下班</Radio.Button>
+                        <Radio.Button disabled value="two">一天2次上下班</Radio.Button>
+                        <Radio.Button disabled value="thr">一天3次上下班</Radio.Button>
                         </Radio.Group>
                         </span>
-                            {/*<Checkbox onChange={this.checkboxOnChange}*/}
-                            {/*checked={this.state.playDaychecked} className="add_study-d-le1 span_link_img"*/}
+                            <Checkbox disabled onChange={this.checkboxOnChange}
+                            checked={this.state.playDaychecked} className="add_study-d-le1 span_link_img"
 
-                            {/*>打卡时段设置</Checkbox>*/}
+                            >打卡时段设置</Checkbox>
                         </div>
 
                         <div className="upexam_to_ma" style={{display: firTime}}>
