@@ -36,6 +36,7 @@ const AttendanceManagement = React.createClass({
             radiusValue: 300,
             workTime: ['休息', '休息', '休息', '休息', '休息', '休息', '休息'],
             workTimeId: [false, false, false, false, false, false, false],
+            defaultAtt: '',
         };
     },
 
@@ -64,7 +65,7 @@ const AttendanceManagement = React.createClass({
                     for (var i = 0; i < data.length; i++) {
                         var str = '';
                         data[i].scheduleList.forEach(function (v) {
-                            str += (v + ' ' + ' ' +'|' + ' ' +  ' ');
+                            str += (v + ' ' + ' ' + '|' + ' ' + ' ');
                         });
 
                         var time = str.substr(0, str.length - 1);
@@ -166,7 +167,7 @@ const AttendanceManagement = React.createClass({
                             arr.splice(i, 1);
                             return
                         }
-                    })
+                    });
                     _this.setState({attendenceData: arr});
                 } else {
                     message.error(ret.msg);
@@ -192,6 +193,7 @@ const AttendanceManagement = React.createClass({
         this.setState({checked: false});
         this.setState({workTime: ['休息', '休息', '休息', '休息', '休息', '休息', '休息']});
         this.setState({workTimeId: [false, false, false, false, false, false, false]});
+        this.setState({defaultAtt: ''});
         setTimeout(function () {
             _this.viewAttendGroupPage();
         }, 500)
@@ -286,13 +288,31 @@ const AttendanceManagement = React.createClass({
     handleClose(removedTag, kind) {
         if (kind == 1) {
             //参与考勤人员
-            const joinAttMer = this.state.joinAttMer.filter(joinAttMer => joinAttMer !== removedTag);
-            console.log(joinAttMer);
+            const joinAttMer = this.state.joinAttMer;
+            const joinAttPer = this.state.joinAttPer;   //id数组
+            var delJoinMemberId;
+            joinAttMer.forEach(function (v, i) {
+                if (removedTag == v) {
+                    delJoinMemberId = i;
+                }
+            });
+            joinAttPer.splice(delJoinMemberId, 1);
+            this.setState({joinAttPer});
+            joinAttMer.filter(joinAttMer => joinAttMer !== removedTag);
             this.setState({joinAttMer});
         } else if (kind == 2) {
             //无需考勤人员
-            const outAttMer = this.state.outAttMer.filter(outAttMer => outAttMer !== removedTag);
-            console.log(outAttMer);
+            const outAttMer = this.state.outAttMer;
+            const outAttPer = this.state.outAttPer;
+            var delOutMemberId;
+            outAttMer.forEach(function (v, i) {
+                if (removedTag == v) {
+                    delOutMemberId = i;
+                }
+            });
+            outAttPer.splice(delOutMemberId, 1);
+            this.setState({outAttPer});
+            outAttMer.filter(outAttMer => outAttMer !== removedTag);
             this.setState({outAttMer});
         } else if (kind == 3) {
             //考勤组负责人
@@ -320,7 +340,6 @@ const AttendanceManagement = React.createClass({
      * 保存新增考勤组的回调
      */
     saveNewAtt() {
-        debugger
         //向后台发送数据
         //清空本地数据
         // //保存后返回考勤组列表
@@ -361,7 +380,7 @@ const AttendanceManagement = React.createClass({
             joinAttPerArr.push(obj);
         });
         var outAttPerArr = [];
-        if(isEmpty(outAttPer)==false) {
+        if (isEmpty(outAttPer) == false) {
             outAttPer.forEach(function (v, i) {
                 var obj = {
                     colUid: v
@@ -381,7 +400,7 @@ const AttendanceManagement = React.createClass({
         });
         var workTimeIdArr = [];
         workTimeId.forEach(function (v, i) {
-            if (!v) {
+            if (!v || v == 'restDay') {
                 var obj = {
                     "week": i + 1,
                     "isRestDay": true,
@@ -412,6 +431,7 @@ const AttendanceManagement = React.createClass({
                 "locationList": posDetilArray
             }
         };
+        // console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 console.log(ret);
@@ -471,6 +491,7 @@ const AttendanceManagement = React.createClass({
             });
             this.setState({workTime: arr});
             this.setState({workTimeId: array});
+            this.setState({defaultAtt: data.name + ': ' + data.time});
         } else {
             //是单个设置
             var selectDay = this.state.selectDay;
@@ -565,8 +586,8 @@ const AttendanceManagement = React.createClass({
             key: 'action',
             render: (text, record) => (
                 <span>
-                   <Button type="button" className="score3_i" icon="edit"></Button>
-                   <Button type="button" icon="delete" onClick={_this.delAtt.bind(this, record)}></Button>
+                   {/*<Button type="button" className="score3_i" icon="edit"></Button>*/}
+                    <Button type="button" icon="delete" onClick={_this.delAtt.bind(this, record)}></Button>
                 </span>
             ),
         }];
@@ -702,7 +723,7 @@ const AttendanceManagement = React.createClass({
                 <Row>
                     <Col span={4} className="knowledge_ri knowledge_ri_8">工作日设置：</Col>
                     <Col span={10}>
-                        <span>默认班次：9:00--18:00</span>
+                        <span>{this.state.defaultAtt}</span>
                         <a href="javascript:;" onClick={this.changeShift} className="add_out">更改班次</a>
                     </Col>
                 </Row>
@@ -738,7 +759,7 @@ const AttendanceManagement = React.createClass({
                     <a className="upexam_to_ma checking_in_l31" href="javascript:;"
                        onClick={this.addShiftPos}>添加考勤地点</a>
                     <br/>
-                    <Checkbox className="checking_in_l31" onChange={this.IsOutWorkOnChange}
+                    <Checkbox disabled className="checking_in_l31" onChange={this.IsOutWorkOnChange}
                               checked={this.state.checked}>允许外勤打卡</Checkbox>
                     <div className="checking_in_l31 password_ts">关闭后，范围外不允许打卡</div>
                 </div>

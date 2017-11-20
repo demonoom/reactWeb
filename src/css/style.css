@@ -7478,7 +7478,9 @@ select.course_n:hover {
 .checking_in_box th.cloud_name, .checking_in_box td.cloud_name {
     text-indent: 16px;
 }
-
+.checking_in_box .ant-table-content{
+    overflow:auto;
+}
 .ant-table-thead > tr > th.checking_in_name, .ant-table-tbody > tr > td.checking_in_name {
     width: 40%;
     text-indent: 15px;

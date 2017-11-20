@@ -56,7 +56,13 @@ const ChangeShiftModel = React.createClass({
                         name: data[i].name,
                         time: time
                     };
+                    var firstOpt = {
+                        key: 'restDay',
+                        name: '休息日',
+                        time: '休息'
+                    };
                     arr.push(shift);
+                    arr.unshift(firstOpt);
                 }
                 _this.setState({shiftData: arr})
             },
@@ -87,6 +93,7 @@ const ChangeShiftModel = React.createClass({
         this.setState({
             isShow: false,
             record: null,
+            rowClassName: ''
         });
         this.props.closeModel();
     },
@@ -96,7 +103,13 @@ const ChangeShiftModel = React.createClass({
      */
     onRowClick(record, index) {
         // console.log(record);
-        this.setState({record});
+        this.setState({record, selectRowKey: record.key});
+    },
+
+    getRowClassName(record) {
+        if (record.key == this.state.selectRowKey) {
+            return "tableRow";
+        }
     },
 
     /**
@@ -119,7 +132,7 @@ const ChangeShiftModel = React.createClass({
             >
                 <div>
                     <Table columns={columns} dataSource={this.state.shiftData} pagination={false}
-                           onRowClick={this.onRowClick} className="change_model"/>
+                           onRowClick={this.onRowClick} rowClassName={this.getRowClassName} className="change_model"/>
                 </div>
             </Modal>
         );
