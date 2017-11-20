@@ -97,7 +97,7 @@ const FormBuilderComponent = React.createClass({
         return (
             <div>
                 <div>操作提示：<span className="red_danger">请至少选择一个必填的表单项目</span></div>
-                <div className="form_set row-t-f">
+                <div className="form_set ">
                     <div id="fb-editor"></div>
                 </div>
             </div>
