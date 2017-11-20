@@ -104,13 +104,13 @@ class SystemSettingGhostMenu extends React.Component {
                             _this.checkWords(v.actionParams, v.name);
                         }}><img className="icon_system_img" src={v.icon}/>{v.name}</li>
                     </ul>
-                </li>
+                </li>;
                 liArr.push(lis);
             });
             uls = <li className="ghostMenu_li">
                 <li><Icon type={this.state.icon[i]}/>{data[i].name}</li>
                 {liArr}
-            </li>
+            </li>;
             arr.push(uls);
 
             liArr = [];
