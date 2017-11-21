@@ -464,23 +464,23 @@ const AttendanceManagement = React.createClass({
                 "locationList": posDetilArray
             }
         };
-        console.log(param);
-        // doWebService(JSON.stringify(param), {
-        //     onResponse: function (ret) {
-        //         console.log(ret);
-        //         // var data = ret.response;
-        //         if (ret.msg == "调用成功" && ret.success == true) {
-        //             message.success("保存成功");
-        //             _this.returnTable();
-        //         } else {
-        //             message.error(ret.msg);
-        //         }
-        //         //创造shiftData
-        //     },
-        //     onError: function (error) {
-        //         message.error(error);
-        //     }
-        // });
+        // console.log(param);
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                console.log(ret);
+                // var data = ret.response;
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    message.success("保存成功");
+                    _this.returnTable();
+                } else {
+                    message.error(ret.msg);
+                }
+                //创造shiftData
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     IsOutWorkOnChange(e) {
