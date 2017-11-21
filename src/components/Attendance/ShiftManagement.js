@@ -174,8 +174,8 @@ const ShiftManagement = React.createClass({
             className: 'ant-table-selection-smallclass checking_in_operate class_right',
             render: (text, record) => (
                 <span>
-                    <Button type="button" className="score3_i" icon="edit"
-                            onClick={_this.editShift.bind(this, record)}></Button>
+                    {/*<Button type="button" className="score3_i" icon="edit"*/}
+                            {/*onClick={_this.editShift.bind(this, record)}></Button>*/}
                     <Button type="button" icon="delete" onClick={_this.delShift.bind(this, record)}></Button>
                 </span>
             ),

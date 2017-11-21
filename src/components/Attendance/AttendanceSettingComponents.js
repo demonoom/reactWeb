@@ -42,11 +42,11 @@ const AttendanceSettingComponents = React.createClass({
                             <Menu.Item key="attendanceManagement">考勤组管理</Menu.Item>
                             <Menu.Item key="shiftManagement">班次管理</Menu.Item>
                         </SubMenu>
-                        <SubMenu key="sub4" title={<span><Icon type="area-chart" /><span>考勤统计</span></span>}>
-                            <Menu.Item key="monthlySummary">月度汇总</Menu.Item>
-                            <Menu.Item key="dailyStatistics">每日统计</Menu.Item>
-                            <Menu.Item key="originalRecord">原始记录</Menu.Item>
-                        </SubMenu>
+                        {/*<SubMenu key="sub4" title={<span><Icon type="area-chart" /><span>考勤统计</span></span>}>*/}
+                            {/*<Menu.Item key="monthlySummary">月度汇总</Menu.Item>*/}
+                            {/*<Menu.Item key="dailyStatistics">每日统计</Menu.Item>*/}
+                            {/*<Menu.Item key="originalRecord">原始记录</Menu.Item>*/}
+                        {/*</SubMenu>*/}
                     </Menu>
             </div>
         );

@@ -668,6 +668,7 @@ const ConditionComponent = React.createClass({
                             style={{width: 130}}
                             onChange={this.approvalUserHandleChange}
                             className="framework_m_r"
+                            value = {this.state.selectedApprovalUser}
                         >
                             {this.state.approvalUserOptionArray}
                         </Select>

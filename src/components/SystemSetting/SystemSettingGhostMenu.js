@@ -65,11 +65,17 @@ class SystemSettingGhostMenu extends React.Component {
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                debugger
                 var data = ret.response;
                 //判断是否有管理员
                 var Array = [];
                 for (var i = 0; i < data.length; i++) {
-                    Array.push(data[i].name)
+                    Array.push(data[i].name);
+                    data[i].tabItems.forEach(function (item, index) {
+                        if (item.name == '考勤') {
+                            data[i].tabItems.splice(index, 1);
+                        }
+                    })
                 }
                 if (Array.indexOf('管理员') == -1) {
                     _this.checkVip(true);
@@ -103,29 +109,29 @@ class SystemSettingGhostMenu extends React.Component {
                             _this.checkWords(v.actionParams, v.name);
                         }}><img className="icon_system_img" src={v.icon}/>{v.name}</li>
                     </ul>
-                </li>
+                </li>;
                 liArr.push(lis);
             });
             uls = <li className="ghostMenu_li">
                 <li><Icon type={this.state.icon[i]}/>{data[i].name}</li>
                 {liArr}
-            </li>
+            </li>;
             arr.push(uls);
 
             liArr = [];
         }
 
         //手动添加的测试菜单---开始
-        var flowUl = <li className="multi">
-            <ul className="second">
-                <li onClick={event => {
-                    this.changeMenu(event, 'noomkaoqing', true)
-                }}><img className="icon_system_img" src='http://60.205.86.217/upload2/common/img/examine_icon.png'/>考勤打卡
-                </li>
-            </ul>
-        </li>;
-        liArr.push(flowUl);
-        arr.push(liArr);
+        // var flowUl = <li className="multi">
+        //     <ul className="second">
+        //         <li onClick={event => {
+        //             this.changeMenu(event, 'noomkaoqing', true)
+        //         }}><img className="icon_system_img" src='http://60.205.86.217/upload2/common/img/examine_icon.png'/>考勤打卡
+        //         </li>
+        //     </ul>
+        // </li>;
+        // liArr.push(flowUl);
+        // arr.push(liArr);
         //手动添加的测试菜单---结束
 
         _this.setState({arr});
@@ -159,7 +165,7 @@ class SystemSettingGhostMenu extends React.Component {
     // change menu
     changeMenu(event, channelStr, beActive) {
         // add on class
-        this.onMenu(event)
+        this.onMenu(event);
         // 1
         this.setState({beActive: beActive});
         this.props.changeTabEvent(channelStr, beActive);
@@ -176,6 +182,8 @@ class SystemSettingGhostMenu extends React.Component {
             _this.changeMenu(event, 'role', true)
         } else if (words.method == 'operateApproval') {
             _this.changeMenu(event, 'systemFlow', false)
+        } else if (words.method == 'operateAttendance') {
+            _this.changeMenu(event, 'noomkaoqing', true)
         } else {
             _this.showpanel(event, words.url, name);
             _this.changeMenu(event, 'stop', false)
