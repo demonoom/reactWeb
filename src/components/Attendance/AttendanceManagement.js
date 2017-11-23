@@ -23,7 +23,7 @@ const AttendanceManagement = React.createClass({
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         return {
             loginUser: loginUser,
-            optType: true,
+            optType: 'showAttendance',
             attName: "",//考勤组名称
             selectedRowKeys: [], //默认选中的天数
             changeShiftIsShow: false,
@@ -42,6 +42,7 @@ const AttendanceManagement = React.createClass({
             workTime: ['休息', '休息', '休息', '休息', '休息', '休息', '休息'],
             workTimeId: [false, false, false, false, false, false, false],
             defaultAtt: '',
+            attendGroupId: '',
         };
     },
 
@@ -62,10 +63,12 @@ const AttendanceManagement = React.createClass({
             "colUid": _this.state.loginUser.colUid,
             "pageNo": '-1'
         };
+        console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.msg == "调用成功" && ret.success == true) {
                     var data = ret.response;
+                    console.log(data);
                     //创造attData
                     for (var i = 0; i < data.length; i++) {
                         var str = '';
@@ -138,14 +141,38 @@ const AttendanceManagement = React.createClass({
 
     //增加考勤组
     addAtt() {
-        this.setState({optType: false});
+        this.setState({optType: 'addAttendance'});
+    },
+
+    /**
+     * 编辑考勤组
+     */
+    updateAtt(e) {
+        var _this = this;
+        this.setState({attendGroupId: e.key});
+        var param = {
+            "method": 'viewAttendGroup',
+            "attendGroupId": e.key,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    var data = ret.response;
+                    //1.调用初始化的方法
+                    _this.initUpdateAtt(data);
+                    //2.展示编辑窗口
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     /**
      * 删除考勤组的回调
      */
     delAtt(e) {
-        console.log(e.key);
         this.setState({delAtt: e});   //要删除的班次的对象
         this.showConfirmModal();
     },
@@ -193,9 +220,11 @@ const AttendanceManagement = React.createClass({
         attIdArrF = [];
         attIdArrS = [];
         attIdArrT = [];
-        this.setState({optType: true});
+        this.setState({optType: 'showAttendance'});
+        this.setState({editAttName: ''});
+        this.setState({editSelValue: ''});
         //初始化
-        this.setState({posArr: []})
+        this.setState({posArr: []});
         this.setState({posDetilArr: []});
         this.setState({joinAttMer: []});
         this.setState({outAttMer: []});
@@ -227,6 +256,23 @@ const AttendanceManagement = React.createClass({
         this.setState({attName});
     },
 
+    //考勤组输入框输入的回调
+    editAttNameOnChange(e) {
+        var target = e.target;
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
+            target = e.target;
+        }
+        var editAttName = target.value;
+        if (editAttName.length > 20) {
+            message.error("考勤组名称不能超过20个字符");
+            return;
+        }
+        //设置考勤组名称
+        this.setState({editAttName});
+    },
+
     /**
      * model关闭之后将addShiftModalIsShow重置
      */
@@ -235,9 +281,6 @@ const AttendanceManagement = React.createClass({
     },
 
     addGroupMember(ids, name, num) {
-        // console.log(ids);
-        // console.log(name);
-        // console.log(num);
         ids.forEach(function (v, i) {
             if (num == 1) {
                 attIdArrF.push(v);
@@ -280,7 +323,7 @@ const AttendanceManagement = React.createClass({
             if (attNameArrT.length > 1) {
                 message.error('考勤组负责人只能选择1人');
                 //只保留attNameArrT中的第一个名字
-                attNameArrT.splice(1,attNameArrT.length);
+                attNameArrT.splice(1, attNameArrT.length);
                 this.setState({attPerson: attNameArrT})
             } else {
                 this.setState({attPerson: attNameArrT})
@@ -346,8 +389,7 @@ const AttendanceManagement = React.createClass({
             //考勤组负责人
             attNameArrT = [];
             attIdArrT = [];
-            AttPerAdmin.splice(0);
-            this.setState({AttPerAdmin});
+            this.setState({AttPerAdmin: attIdArrT});
             const attPerson = this.state.attPerson;
             attPerson.filter(attPerson => attPerson !== removedTag);
             attPerson.splice(0);
@@ -464,10 +506,180 @@ const AttendanceManagement = React.createClass({
                 "locationList": posDetilArray
             }
         };
-        // console.log(param);
+        console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                console.log(ret);
+                // var data = ret.response;
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    message.success("保存成功");
+                    _this.returnTable();
+                } else {
+                    message.error(ret.msg);
+                }
+                //创造shiftData
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 初始化编辑窗口的回调
+     * @param data
+     */
+    initUpdateAtt(data) {
+        console.log(data);
+        this.setState({editAttName: data.name});  //考勤组名称
+        this.setState({editSelValue: data.radius + '米'});  //半径
+        var posArr = this.state.posArr;
+        data.locationList.forEach(function (v, i) {
+            var posDetil = {
+                key: v.x + '@' + v.y,
+                workpos: v.name,
+            };
+            posArr.push(posDetil);
+        });
+        this.setState({posDetilArr: posArr});  //考勤详细地址
+        var joinArr = [];
+        var joinIdArr = [];
+        var outArr = [];
+        var outIdArr = [];
+        data.memberSet.forEach(function (v, i) {
+            joinArr.push(v.name);
+            joinIdArr.push(v.colUid);
+        });
+        attNameArrF = joinArr;
+        attIdArrF = joinIdArr;
+        this.setState({joinAttMer: joinArr});  //参与人名
+        this.setState({joinAttPer: joinIdArr});  //参与人名Id
+        data.privilege.forEach(function (v, i) {
+            outArr.push(v.name);
+            outIdArr.push(v.colUid);
+        });
+        attNameArrS = outArr;
+        attIdArrS = outIdArr;
+        this.setState({outAttMer: outArr});   //无需人名
+        this.setState({outAttPer: outIdArr});   //无需人名Id
+        attNameArrT = [data.admin.name];
+        attIdArrT = [data.admin.colUid];
+        this.setState({attPerson: [data.admin.name]});   //负责人人名
+        this.setState({AttPerAdmin: [data.admin.colUid]});   //负责人人名Id
+        var workTime = [];
+        var workTimeId = [];
+        data.scheduleList.forEach(function (v, i) {
+            workTime.push(v.scheduleItems);
+            // workTimeId.push(v.scheduleId);
+            if (isEmpty(v.scheduleId) == false) {
+                workTimeId.push(v.scheduleId)
+            } else {
+                workTimeId.push(!v.isRestDay)
+            }
+        });
+        this.setState({workTimeId});  //班次id
+        this.setState({workTime});  //工作日
+        this.setState({optType: 'editAttendance'});
+    },
+
+    updateNewAtt() {
+        var _this = this;
+        var name = this.state.editAttName;   //考勤组名称-
+        var radiusValue = this.state.editSelValue;   //考勤范围-
+        var isOutWork = this.state.checked;   //是否允许外请打卡
+        var joinAttPer = this.state.joinAttPer;
+        var outAttPer = this.state.outAttPer;
+        var AttPerAdmin = this.state.AttPerAdmin;
+        if (radiusValue.charAt(radiusValue.length - 1) == '米') {
+            radiusValue = radiusValue.substr(0, radiusValue.length - 1);
+        }
+        ;
+        var posDetilArr = this.state.posDetilArr;  //考勤地址数组
+        var workTimeId = this.state.workTimeId;   //考勤班次id
+        if (name.length == '0') {
+            message.error('考情组名称不能为空');
+            return
+        }
+        ;
+        if (isEmpty(joinAttPer) == true) {
+            message.error('请选择参与考勤人员');
+            return
+        }
+        ;
+        if (isEmpty(AttPerAdmin) == true) {
+            message.error('请选择参与考勤组负责人');
+            return
+        }
+        ;
+        if (isEmpty(posDetilArr) == true) {
+            message.error('请选择考勤地点');
+            return
+        }
+        ;
+        var joinAttPerArr = [];
+        joinAttPer.forEach(function (v, i) {
+            var obj = {
+                colUid: v
+            };
+            joinAttPerArr.push(obj);
+        });
+        var outAttPerArr = [];
+        if (isEmpty(outAttPer) == false) {
+            outAttPer.forEach(function (v, i) {
+                var obj = {
+                    colUid: v
+                };
+                outAttPerArr.push(obj);
+            });
+        }
+        var posDetilArray = [];
+        posDetilArr.forEach(function (v, i) {
+            var arr = v.key.split('@');
+            var obj = {
+                "name": v.workpos,
+                "x": arr[0],
+                "y": arr[1]
+            };
+            posDetilArray.push(obj);
+        });
+        var workTimeIdArr = [];
+        workTimeId.forEach(function (v, i) {
+            if (!v || v == 'restDay') {
+                var obj = {
+                    "week": i + 1,
+                    "isRestDay": true,
+                };
+            } else {
+                var obj = {
+                    "week": i + 1,
+                    "scheduleId": v
+                };
+            }
+            workTimeIdArr.push(obj);
+        });
+        var attendGroupId = this.state.attendGroupId;
+        var param = {
+            "method": "updateAttendGroup",
+            "attendGroup": {
+                "id": attendGroupId,
+                "creator": {
+                    "colUid": _this.state.loginUser.colUid
+                },
+                "admin": {
+                    "colUid": AttPerAdmin[0]
+                },
+                "name": name,
+                "allowOutside": isOutWork,
+                "radius": radiusValue,
+                "memberSet": joinAttPerArr,
+                "privilegeSet": outAttPerArr,
+                "scheduleList": workTimeIdArr,
+                "locationList": posDetilArray
+            }
+        };
+        console.log(param);
+        // debugger
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
                 // var data = ret.response;
                 if (ret.msg == "调用成功" && ret.success == true) {
                     message.success("保存成功");
@@ -492,6 +704,13 @@ const AttendanceManagement = React.createClass({
      */
     radiusChange(value) {
         this.setState({radiusValue: value});
+    },
+
+    /**
+     * 编辑范围变化的回调
+     */
+    editRadiusChange(value) {
+        this.setState({editSelValue: value});
     },
 
     /**
@@ -619,7 +838,8 @@ const AttendanceManagement = React.createClass({
             key: 'action',
             render: (text, record) => (
                 <span>
-                   {/*<Button type="button" className="score3_i" icon="edit"></Button>*/}
+                   <Button type="button" className="score3_i" icon="edit"
+                           onClick={_this.updateAtt.bind(this, record)}></Button>
                     <Button type="button" icon="delete" onClick={_this.delAtt.bind(this, record)}></Button>
                 </span>
             ),
@@ -647,6 +867,8 @@ const AttendanceManagement = React.createClass({
         var mainTable;
         //保存按钮
         var saveButton = <Button type="primary" onClick={this.saveNewAtt}>保存设置</Button>;
+        //更新按钮
+        var upDateButton = <Button type="primary" onClick={this.updateNewAtt}>保存设置</Button>;
         const rowSelection = {
             selectedRowKeys: this.state.selectedRowKeys,
             onChange: (selectedRowKeys, selectedRows) => {
@@ -798,9 +1020,149 @@ const AttendanceManagement = React.createClass({
                 </div>
 
             </div>
-        </div>
+        </div>;
 
-        if (this.state.optType) {
+        //编辑的表单元素，要初始化
+        var editStepPanel = <div>
+            <div className="checking_add_box checking_in_31">
+                <Row>
+                    <Col span={4} className="knowledge_ri knowledge_ri_8">考勤组名称：</Col>
+                    <Col span={10}>
+                        <Input placeholder="请输入考勤组名称" value={this.state.editAttName}
+                               onChange={this.editAttNameOnChange}/>
+                    </Col>
+                </Row>
+                <Row className="upexam_to_ma">
+                    <Col span={4} className="knowledge_ri knowledge_ri_8">参与考勤人员：</Col>
+                    <Col span={18}>
+                            <span>
+                                {joinAttMer.map((tag, index) => {
+                                    const isLongTag = tag.length > 20;
+                                    const tagElem = (
+                                        <Tag key={tag} closable={index !== -1}
+                                             afterClose={() => this.handleClose(tag, 1)}>
+                                            {isLongTag ? `${tag.slice(0, 20)}...` : tag}
+                                        </Tag>
+                                    );
+                                    return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
+                                })}
+                                {inputVisible && (
+                                    <Input
+                                        ref={this.saveInputRef}
+                                        type="text"
+                                        size="small"
+                                        style={{width: 78}}
+                                        value={inputValue}
+                                    />
+                                )}
+                            </span>
+                        <Button className="btn_tag" onClick={this.chooseMember.bind(this, 1)}>请选择</Button>
+                    </Col>
+                </Row>
+                <Row className="upexam_to_ma">
+                    <Col span={4} className="knowledge_ri knowledge_ri_8">无需考勤人员：</Col>
+                    <Col span={18}>
+                            <span>
+                                {outAttMer.map((tag, index) => {
+                                    const isLongTag = tag.length > 20;
+                                    const tagElem = (
+                                        <Tag key={tag} closable={index !== -1}
+                                             afterClose={() => this.handleClose(tag, 2)}>
+                                            {isLongTag ? `${tag.slice(0, 20)}...` : tag}
+                                        </Tag>
+                                    );
+                                    return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
+                                })}
+                                {inputVisible && (
+                                    <Input
+                                        ref={this.saveInputRef}
+                                        type="text"
+                                        size="small"
+                                        style={{width: 78}}
+                                        value={inputValue}
+                                    />
+                                )}
+                            </span>
+                        <Button className="btn_tag" onClick={this.chooseMember.bind(this, 2)}>请选择</Button>
+                    </Col>
+                </Row>
+                <Row className="upexam_to_ma">
+                    <Col span={4} className="knowledge_ri knowledge_ri_8">考勤组负责人：</Col>
+                    <Col span={18}>
+                            <span>
+                                {attPerson.map((tag, index) => {
+                                    const isLongTag = tag.length > 20;
+                                    const tagElem = (
+                                        <Tag key={tag} closable={index !== -1}
+                                             afterClose={() => this.handleClose(tag, 3)}>
+                                            {isLongTag ? `${tag.slice(0, 20)}...` : tag}
+                                        </Tag>
+                                    );
+                                    return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
+                                })}
+                                {inputVisible && (
+                                    <Input
+                                        ref={this.saveInputRef}
+                                        type="text"
+                                        size="small"
+                                        style={{width: 78}}
+                                        value={inputValue}
+                                    />
+                                )}
+                            </span>
+                        <Button className="btn_tag" onClick={this.chooseMember.bind(this, 3)}>请选择</Button>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={24}>
+                        <span className="password_ts checking_in_le">协助管理员分管本考勤组的排班及统计，只能选择1人</span>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={4} className="knowledge_ri knowledge_ri_8">工作日设置：</Col>
+                    <Col span={10}>
+                        <span>{this.state.defaultAtt}</span>
+                        <a href="javascript:;" onClick={this.changeShift} className="add_out">更改班次</a>
+                    </Col>
+                </Row>
+                {/*<Table columns={workDayCol} dataSource={workdate} pagination={false} rowSelection={rowSelection}*/}
+                <Table columns={workDayCol} dataSource={workdate} pagination={false}
+                       className="upexam_to_ma ant-col-20 checking_in_le "/>
+                <Row className="upexam_to_ma upexam_float name_max4_24">
+                    <Col span={4} className="knowledge_ri knowledge_ri_8">考勤地址：</Col>
+                    <Col span={20}>
+                        <span>根据办公地点考勤（可添加多个考勤地点）有效范围</span>
+                        <span className="add_out">
+                            <Select style={{width: 75}} value={this.state.editSelValue}
+                                    onChange={this.editRadiusChange}>
+                            <Option value="100">100米</Option>
+                            <Option value="200">200米</Option>
+                            <Option value="300">300米</Option>
+                            <Option value="400">400米</Option>
+                            <Option value="500">500米</Option>
+                            <Option value="600">600米</Option>
+                            <Option value="700">700米</Option>
+                            <Option value="800">800米</Option>
+                            </Select>
+                        </span>
+
+                    </Col>
+                </Row>
+                <Table className="upexam_to_ma ant-col-20 checking_in_le min_53" columns={workPositionCol}
+                       dataSource={this.state.posDetilArr} pagination={false}/>
+                <div className="checking_in_le">
+                    <a className="upexam_to_ma checking_in_l31" href="javascript:;"
+                       onClick={this.addShiftPos}>添加考勤地点</a>
+                    <br/>
+                    <Checkbox disabled className="checking_in_l31" onChange={this.IsOutWorkOnChange}
+                              checked={this.state.checked}>允许外勤打卡</Checkbox>
+                    <div className="checking_in_l31 password_ts">关闭后，范围外不允许打卡</div>
+                </div>
+            </div>
+        </div>;
+
+        if (this.state.optType == 'showAttendance') {
+            //考勤组展示
             title = <div className="public—til—blue">考勤详情</div>;
             mainTable =
                 <div className="favorite_scroll" style={{overflow: "auto"}}>
@@ -813,7 +1175,8 @@ const AttendanceManagement = React.createClass({
                                pagination={false}/>
                     </div>
                 </div>;
-        } else {
+        } else if (this.state.optType == 'addAttendance') {
+            //新增考勤组
             title = <div className="public—til—blue">
                 <div className="ant-tabs-right">
                     <Button onClick={this.returnTable}><Icon type="left"/></Button>
@@ -829,6 +1192,29 @@ const AttendanceManagement = React.createClass({
                         <Row>
                             <Col span={24} className="class_right yinyong_topic">
                                 {saveButton}
+                            </Col>
+                        </Row>
+                    </div>
+                </div>;
+        } else {
+            //编辑考勤组
+            title = <div className="public—til—blue">
+                <div className="ant-tabs-right">
+                    <Button onClick={this.returnTable}><Icon type="left"/></Button>
+                    {/*returnTable的初始化可能不符合要求,返回的位置需要针对*/}
+                </div>
+                考勤详情
+            </div>;
+
+            mainTable =
+                <div className="favorite_scroll" style={{overflow: "auto"}}>
+                    {/*编辑表单提交*/}
+                    {editStepPanel}
+                    <div>
+                        <Row>
+                            <Col span={24} className="class_right yinyong_topic">
+                                {upDateButton}
+                                {/*saveButton请求的方法不是更新的方法要换*/}
                             </Col>
                         </Row>
                     </div>
