@@ -9,8 +9,13 @@ import ChooseMemberModal from './ChooseMemberModal'
 import {doWebService} from '../../WebServiceHelper'
 import Confirm from '../ConfirmModal'
 
-//假数据
 
+var attNameArrF = [];
+var attNameArrS = [];
+var attNameArrT = [];
+var attIdArrF = [];
+var attIdArrS = [];
+var attIdArrT = [];
 
 const AttendanceManagement = React.createClass({
 
@@ -182,6 +187,12 @@ const AttendanceManagement = React.createClass({
     //返回到主table
     returnTable() {
         var _this = this;
+        attNameArrF = [];
+        attNameArrS = [];
+        attNameArrT = [];
+        attIdArrF = [];
+        attIdArrS = [];
+        attIdArrT = [];
         this.setState({optType: true});
         //初始化
         this.setState({posArr: []})
@@ -224,40 +235,55 @@ const AttendanceManagement = React.createClass({
     },
 
     addGroupMember(ids, name, num) {
-        console.log(ids);
-        console.log(name);
-        console.log(num);
+        // console.log(ids);
+        // console.log(name);
+        // console.log(num);
+        ids.forEach(function (v, i) {
+            if (num == 1) {
+                attIdArrF.push(v);
+            } else if (num == 2) {
+                attIdArrS.push(v);
+            } else {
+                attIdArrT.push(v);
+            }
+        });
         if (num == '1') {
             //参与考勤人员
-            this.setState({joinAttPer: ids});
+            this.setState({joinAttPer: attIdArrF});
         } else if (num == '2') {
             //无需考勤人员
-            this.setState({outAttPer: ids});
+            this.setState({outAttPer: attIdArrS});
         } else {
             //考勤组负责人
-            this.setState({AttPerAdmin: ids});
+            this.setState({AttPerAdmin: attIdArrT});
         }
         //这个局部变量arr导致每一次点击增加人员的时候会将以前的人员清空，后期做的时候把他做成全局变量，在最后保存信息的时候将数据清空
-        var arr = [];
+        // var arr = [];
         // var array = [];
         name.forEach(function (v, i) {
-            arr.push(v);
+            if (num == 1) {
+                attNameArrF.push(v);
+            } else if (num == 2) {
+                attNameArrS.push(v);
+            } else {
+                attNameArrT.push(v);
+            }
         });
-        // ids.forEach(function (v, i) {
-        //     array.push(v);
-        // });
         //num是1，参与。2，无需。3，负责人
         if (num == 1) {
-            this.setState({joinAttMer: arr})
+            this.setState({joinAttMer: attNameArrF})
             // this.setState({joinAttPer: array})
         } else if (num == 2) {
-            this.setState({outAttMer: arr})
+            this.setState({outAttMer: attNameArrS})
             // this.setState({outAttPer: array})
         } else if (num == 3) {
-            if (arr.length > 1) {
+            if (attNameArrT.length > 1) {
                 message.error('考勤组负责人只能选择1人');
+                //只保留attNameArrT中的第一个名字
+                attNameArrT.splice(1,attNameArrT.length);
+                this.setState({attPerson: attNameArrT})
             } else {
-                this.setState({attPerson: arr})
+                this.setState({attPerson: attNameArrT})
                 // this.setState({attAdmin: array})
             }
 
@@ -299,6 +325,7 @@ const AttendanceManagement = React.createClass({
             joinAttPer.splice(delJoinMemberId, 1);
             this.setState({joinAttPer});
             joinAttMer.filter(joinAttMer => joinAttMer !== removedTag);
+            joinAttMer.splice(delJoinMemberId, 1);
             this.setState({joinAttMer});
         } else if (kind == 2) {
             //无需考勤人员
@@ -313,11 +340,17 @@ const AttendanceManagement = React.createClass({
             outAttPer.splice(delOutMemberId, 1);
             this.setState({outAttPer});
             outAttMer.filter(outAttMer => outAttMer !== removedTag);
+            outAttMer.splice(delOutMemberId, 1);
             this.setState({outAttMer});
         } else if (kind == 3) {
             //考勤组负责人
-            const attPerson = this.state.attPerson.filter(attPerson => attPerson !== removedTag);
-            console.log(attPerson);
+            attNameArrT = [];
+            attIdArrT = [];
+            AttPerAdmin.splice(0);
+            this.setState({AttPerAdmin});
+            const attPerson = this.state.attPerson;
+            attPerson.filter(attPerson => attPerson !== removedTag);
+            attPerson.splice(0);
             this.setState({attPerson});
         }
     },

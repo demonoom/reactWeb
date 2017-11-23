@@ -99,7 +99,7 @@ const AddShiftPosModel = React.createClass({
             return document.getElementById(id);
         }
 
-        map = new BMap.Map("l-map");
+        map = new BMap.Map("l-map",{enableMapClick: false});  //{enableMapClick: false}可以屏蔽地点详情
         var geoc = new BMap.Geocoder();
         map.centerAndZoom(centerPos, 12);                   // 初始化地图,设置城市和地图级别。
 

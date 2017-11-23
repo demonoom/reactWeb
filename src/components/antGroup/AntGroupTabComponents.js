@@ -2046,7 +2046,7 @@ const AntGroupTabComponents = React.createClass({
                                                      src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
                                                      alt=""/>
                                                      <div className="span_link_div">
-                                                         <span className="span_link file_link_img_t">默认</span>
+                                                         <span className="span_link file_link_img_t">{e.messageReturnJson.content}</span>
                                                      </div>
                                                  </div>
                                             <i className="borderballoon_dingcorner_ri_no"></i></span></div>
@@ -2063,7 +2063,7 @@ const AntGroupTabComponents = React.createClass({
                                             <span className="top"></span>
                                             <img className="upexam_float span_link_img" style={{width: 40}}
                                                  src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png" alt=""/>
-                                            <span className="span_link file_link_img_t">默认</span><i
+                                            <span className="span_link file_link_img_t">{e.messageReturnJson.content}</span><i
                                             className="borderballoon_dingcorner_ri_no"></i></span></div>
                                     </li>;
                                 }
