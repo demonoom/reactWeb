@@ -2105,9 +2105,9 @@ const PersonCenterComponents = React.createClass({
                     <Button type="primary" onClick={this.mainTransfer}
                             loading={loading}
                     >群主转让</Button>
-                    <Button type="primary" onClick={this.showUpdateChatGroupNameModal}
+                    <span className="toobar"><Button type="primary" onClick={this.showUpdateChatGroupNameModal}
                             loading={loading}
-                    >修改群名称</Button>
+                    >修改群名称</Button></span>
                     <span className="toobar"><Button type="primary" onClick={this.showAddMembersModal}
                                                      loading={loading}
                     >添加群成员</Button></span>
@@ -2316,7 +2316,7 @@ const PersonCenterComponents = React.createClass({
                 </Modal>
 
 
-                <Modal
+                <Modal className="person_change_right"
                     visible={personCenter.state.mainTransferModalVisible}
                     title="转移群主"
                     onCancel={personCenter.mainTransferModalHandleCancel}
