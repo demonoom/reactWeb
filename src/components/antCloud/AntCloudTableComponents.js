@@ -23,7 +23,6 @@ import {createUUID} from '../../utils/utils';
 import {isEmpty, TO_TYPE} from '../../utils/Const';
 import {bubbleSort} from '../../utils/utils';
 import {showLargeImg} from '../../utils/utils';
-
 const RadioGroup = Radio.Group;
 const Panel = Collapse.Panel;
 const CheckboxGroup = Checkbox.Group;
@@ -98,6 +97,7 @@ const AntCloudTableComponents = React.createClass({
             delBtnReadOnly: true,
             concatOptions: [],
             groupOptions: [],
+            structureOptions: [],   //组织架构
             isGroupCreator: false,   //记录当前用户是否是操作当前群文件的群主
         };
     },
@@ -1064,6 +1064,9 @@ const AntCloudTableComponents = React.createClass({
         });
     },
 
+
+
+
     getUserChatGroupById(pageNo) {
         var param = {
             "method": 'getUserChatGroup',
@@ -1119,6 +1122,44 @@ const AntCloudTableComponents = React.createClass({
             }
         });
     },
+    /**
+     * 组织架构列表
+     */
+    getStructureUsers: function () {
+        var _this = this;
+        var param = {
+            "method": 'getStructureUsers',
+            "operateUserId": sessionStorage.getItem("ident"),
+            "pageNo": -1,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var data = ret.response;
+                console.log('组织架构内容',data);
+                debugger;
+                var userStruct = [];
+                data.forEach(function (e) {
+
+                    var userStructId = e.colUid;
+                    var userStructName = e.userName;
+                    var userStructImgTag = <img src={e.avatar} className="antnest_38_img" height="38"></img>;
+                    var userStructNameTag = <div>{userStructImgTag}<span>{userStructName}</span></div>;
+                    var userStructJson = {label: userStructNameTag, value: userStructId};
+
+                    if (userStructId != sessionStorage.getItem("userStructId")) {
+                        userStruct.push(userStructJson);
+                    }
+                });
+                console.log('值',userStruct);
+                cloudTable.setState({"structureOptions": userStruct});
+
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
 
     /**
      * 修改文件夹名称的文本框内容改变响应函数
@@ -1143,6 +1184,7 @@ const AntCloudTableComponents = React.createClass({
     showShareModal(fileObject) {
         cloudTable.setState({"shareCloudFileIds": fileObject.id, "shareCloudFile": fileObject});
         cloudTable.getAntGroup();
+        this.getStructureUsers();
         cloudTable.setState({shareModalVisible: true});
     },
 
@@ -1186,6 +1228,7 @@ const AntCloudTableComponents = React.createClass({
         var _this = this;
         var checkedConcatOptions = cloudTable.state.checkedConcatOptions;
         var checkedGroupOptions = cloudTable.state.checkedGroupOptions;
+        var checkedsSructureOptions = cloudTable.state.checkedsSructureOptions;
         console.log(checkedConcatOptions);
         console.log(checkedGroupOptions);
         var nowThinking = cloudTable.state.nowThinking;
@@ -1242,6 +1285,20 @@ const AntCloudTableComponents = React.createClass({
                 ms.send(commandJson);
             });
         }
+
+        if (isEmpty(checkedsSructureOptions) == false) {
+            checkedsSructureOptions.forEach(function (e) {
+                var uuid = createUUID();
+                var messageJson = {
+                    'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
+                    "toId": e, "command": "message", "hostId": loginUser.colUid,
+                    "uuid": uuid, "toType": messageToPer, "attachment": attachement, "state": 0
+                };
+                var commandJson = {"command": "message", "data": {"message": messageJson}};
+                console.log(commandJson);
+                ms.send(commandJson);
+            });
+        }
         cloudTable.setState({shareModalVisible: false, "checkedGroupOptions": [], "checkedConcatOptions": []});
         // cloudTable.setState({"checkedGroupOptions": []});
     },
@@ -1265,8 +1322,16 @@ const AntCloudTableComponents = React.createClass({
         console.log('checked = ', checkedValues);
         cloudTable.setState({"checkedConcatOptions": checkedValues});
     },
+
     /**
-     * 我的好友复选框被选中时的响应
+     * 组织架构复选框被选中时的响应
+     * @param checkedValues
+     */
+    roleOptionsOnChange(checkedValues) {
+        cloudTable.setState({"checkedsSructureOptions": checkedValues});
+    },
+    /**
+     * 我的好友复选框被选中时的响应x
      * @param checkedValues
      */
     groupOptionsOnChange(checkedValues) {
@@ -1499,9 +1564,14 @@ const AntCloudTableComponents = React.createClass({
                                                        onChange={cloudTable.groupOptionsOnChange}/>
                                     </Panel>
                                     <Panel header="我的好友" key="2">
-                                        <CheckboxGroup options={cloudTable.state.concatOptions}
-                                                       value={cloudTable.state.checkedConcatOptions}
-                                                       onChange={cloudTable.concatOptionsOnChange}/>
+                                    <CheckboxGroup options={cloudTable.state.concatOptions}
+                                                   value={cloudTable.state.checkedConcatOptions}
+                                                   onChange={cloudTable.concatOptionsOnChange}/>
+                                </Panel>
+                                    <Panel header="组织架构" key="3">
+                                        <CheckboxGroup options={cloudTable.state.structureOptions}
+                                                       value={cloudTable.state.checkedsSructureOptions}
+                                                       onChange={cloudTable.roleOptionsOnChange}/>
                                     </Panel>
                                 </Collapse>
                             </Col>
