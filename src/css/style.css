@@ -7657,10 +7657,18 @@ select.course_n:hover {
 }
 
 .noomGroupType {
-    background-color: red;
+    background-color: #7CBDFD;
     color: white;
     margin-left: 20px;
-    font-size: 13px;
+    font-size: 12px;
     border-radius: 4px;
-    padding: 0.5px 2px;
+    padding: 0px 2px 2px 2px;
+}
+.person_change_right{
+    width:400px !important;
+
+}
+.person_change_right .ant-modal-body{
+    max-height:350px !important;
+    overflow-y: scroll;
 }
