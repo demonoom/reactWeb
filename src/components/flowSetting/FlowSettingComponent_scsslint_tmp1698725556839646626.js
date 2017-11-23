@@ -80,7 +80,7 @@ const FlowSettingComponent = React.createClass({
                     suspendButton =
                         <a onClick={_this.suspendOrActivationProcessDefinitionConfirm.bind(_this, procDefId, "suspend")}>停用</a>;
                 }
-                var deleteButton = <a onClick={_this.deleteProcessDefinitionConfirm.bind(_this, flowGroupProcDefId)}>删除</a>;
+                var deleteButton = <a onClick={_this.deleteProcessDefinitionConfirm.bind(_this, flowGroupProcDefId)}>停用</a>;
                 var procName = processDefinition.procDefName;
                 var procDefDescribe = processDefinition.procDefDescribe;
                 var flowObj = <div className="process_flex">
@@ -93,7 +93,6 @@ const FlowSettingComponent = React.createClass({
                     </div>
                     <div className="process_r">
                         {suspendButton}
-                        {deleteButton}
                         {/* <a className="schoolgroup_btn_left" onClick={_this.removeFlow.bind(_this,procDefId)}>移动到</a>*/}
                     </div>
                 </div>;
@@ -287,7 +286,7 @@ const FlowSettingComponent = React.createClass({
     },
 
     /**
-     * 解除流程与分组的关系（从流程分组表中删除流程）
+     * 解除流程与分组的关系（从）
      */
     deleteFlowGroupProcDef(flowGroupProcDefId) {
         let _this = this;
@@ -298,7 +297,9 @@ const FlowSettingComponent = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.msg == "调用成功" && ret.success == true) {
-                    message.success("流程已删除");
+                    if (isSuspendStr == "suspend") {
+                        message.success("流程已删除");
+                    }
                     _this.getFlowGroup();
                 }
             },

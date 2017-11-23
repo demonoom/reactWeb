@@ -213,7 +213,7 @@ const ConditionComponent = React.createClass({
         var approvalUserOptionArray = [];
         if(isEmpty(approvalJsonArray)==false){
             //循环从1开始，过滤掉审批流程中的第一个人，因为第一个人不需要设置条件，第一个人采用的是默认流程
-            //todo 后期考虑第一个人的业务处理方式
+            //todo 后期考虑第一个人的业务
             for(var i=1;i<approvalJsonArray.length;i++){
                 var approvalJson = approvalJsonArray[i];
                 var approvalType = approvalJson.approvalType;
