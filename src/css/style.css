@@ -7478,18 +7478,22 @@ select.course_n:hover {
 .checking_in_box th.cloud_name, .checking_in_box td.cloud_name {
     text-indent: 16px;
 }
-.checking_in_box .ant-table-content{
-    overflow:auto;
+
+.checking_in_box .ant-table-content {
+    overflow: auto;
 }
+
 .ant-table-thead > tr > th.checking_in_name, .ant-table-tbody > tr > td.checking_in_name {
     width: 40%;
     text-indent: 15px;
 }
-.ant-table-tbody > tr > td.checking_in_name_time{
+
+.ant-table-tbody > tr > td.checking_in_name_time {
     line-height: 20px;
     color: #666;
     font-size: 12px;
 }
+
 .ant-table-thead > tr > th.checking_in_date, .ant-table-tbody > tr > td.checking_in_date {
     width: 30%;
     text-indent: 10px;
@@ -7650,4 +7654,13 @@ select.course_n:hover {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+}
+
+.noomGroupType {
+    background-color: red;
+    color: white;
+    margin-left: 20px;
+    font-size: 13px;
+    border-radius: 4px;
+    padding: 0.5px 2px;
 }

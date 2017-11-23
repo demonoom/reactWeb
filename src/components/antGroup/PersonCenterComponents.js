@@ -13,7 +13,7 @@ import {
     Collapse,
     Popover,
     Table,
-    Transfer
+    Transfer, Radio,
 } from 'antd';
 import Favorites from '../Favorites';
 import UseKnowledgeComponents from '../UseKnowledgeComponents';
@@ -25,6 +25,12 @@ import ConfirmModal from '../ConfirmModal';
 
 const TabPane = Tabs.TabPane;
 const Panel = Collapse.Panel;
+const RadioGroup = Radio.Group;
+const radioStyle = {
+    display: 'block',
+    height: '30px',
+    lineHeight: '30px',
+};
 
 var courseWareList;
 var coursePanelChildren;
@@ -100,6 +106,7 @@ const PersonCenterComponents = React.createClass({
             optType: 'userDetail',
             currentChatGroupPage: 1,
             userGroupsData: [],
+            radioValue: 1,
         };
     },
 
@@ -791,6 +798,7 @@ const PersonCenterComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                // debugger
                 if (ret.msg == "调用成功" && ret.success == true) {
                     var response = ret.response;
                     var charGroupArray = [];
@@ -799,6 +807,7 @@ const PersonCenterComponents = React.createClass({
                         var chatGroupName = e.name;
                         var membersCount = e.members.length;
                         var groupMemebersPhoto = [];
+                        var type = e.type;  //1为部门群  0为普通群
                         for (var i = 0; i < e.members.length; i++) {
                             var member = e.members[i];
                             var memberAvatarTag = <img src={member.avatar}></img>;
@@ -830,8 +839,17 @@ const PersonCenterComponents = React.createClass({
                         var groupName = chatGroupName;
                         var groupSet = <Button icon="setting"
                                                onClick={personCenter.setChatGroup.bind(personCenter, e)}></Button>;
-                        var groupNameTag = <a className="font_gray_666"
-                                              onClick={personCenter.sendGroupMessage.bind(personCenter, e)}>{groupName}</a>
+                        // var groupType = <span>部门群</span>;
+                        if (type == 1) {
+                            //部门群
+                            var groupNameTag = <span><a className="font_gray_666"
+                                                        onClick={personCenter.sendGroupMessage.bind(personCenter, e)}>{groupName}</a><span
+                                className="noomGroupType">部门</span></span>;
+                        } else {
+                            //普通群
+                            var groupNameTag = <a className="font_gray_666"
+                                                  onClick={personCenter.sendGroupMessage.bind(personCenter, e)}>{groupName}</a>;
+                        }
                         var chatGroupJson = {
                             key: chatGroupId,
                             groupPhoto: imgTag,
@@ -1276,6 +1294,59 @@ const PersonCenterComponents = React.createClass({
         var currentGroupObj = personCenter.state.currentGroupObj;
         var updateChatGroupTitle = currentGroupObj.name;
         personCenter.setState({"updateChatGroupNameModalVisible": true, "updateChatGroupTitle": updateChatGroupTitle});
+    },
+
+    /**
+     * 群主转让
+     */
+    mainTransfer() {
+        //先渲染出来，在展示弹框
+        var arr = this.state.currentMemberArray;
+        var array = [];
+        arr.forEach(function (v, i) {
+            var radioSon = <Radio style={radioStyle} value={v.key}>{v.groupUser}</Radio>;
+            array.push(radioSon);
+        });
+        this.setState({radioSon:array});
+        this.setState({mainTransferModalVisible: true});
+    },
+
+    mainTransferOnChange(e) {
+        console.log('radio checked', e.target.value);
+        this.setState({
+            radioValue: e.target.value,
+        });
+    },
+
+    mainTransferForSure() {
+        var newOwnerId = this.state.radioValue;
+        var oldOwnerId = this.state.currentGroupObj.owner.colUid;
+        var chatGroupId = this.state.currentGroupObj.chatGroupId;
+        var param = {
+            "method": 'changeChatGroupOwner',
+            "chatGroupId": chatGroupId,
+            "oldOwnerId": oldOwnerId,
+            "newOwnerId": newOwnerId
+        };
+        // console.log(param);
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                // debugger
+                if (ret.msg == "调用成功" && ret.success == true && response == true) {
+                    // message.success(successTip);
+                } else {
+                    // message.success(errorTip);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    mainTransferModalHandleCancel() {
+        this.setState({mainTransferModalVisible: false});
     },
 
     /**
@@ -2021,7 +2092,11 @@ const PersonCenterComponents = React.createClass({
             var topButton;
             var dissolutionChatGroupButton;
             if (personCenter.state.currentGroupObj.owner.colUid == sessionStorage.getItem("ident")) {
+                //我是群主
                 topButton = <span className="right_ri">
+                    <Button type="primary" onClick={this.mainTransfer}
+                            loading={loading}
+                    >群主转让</Button>
                     <Button type="primary" onClick={this.showUpdateChatGroupNameModal}
                             loading={loading}
                     >修改群名称</Button>
@@ -2032,32 +2107,65 @@ const PersonCenterComponents = React.createClass({
                 dissolutionChatGroupButton =
                     <Button onClick={personCenter.showDissolutionChatGroupConfirmModal} className="group_red_font"><i
                         className="iconfont">&#xe616;</i>解散该群</Button>;
+
+                var memberLiTag = [];
+                personCenter.state.currentMemberArray.forEach(function (e) {
+                    var memberId = e.key;
+                    var groupUser = e.groupUser;
+                    var userInfo = e.userInfo;
+                    var userHeaderIcon;
+                    if (isEmpty(userInfo) == false) {
+                        userHeaderIcon = <img src={userInfo.avatar}></img>;
+                    } else {
+                        userHeaderIcon =
+                            <span className="attention_img"><img
+                                src={require('../images/maaee_face.png')}></img></span>;
+                    }
+                    var liTag = <div className="group_fr">
+                        <span className="attention_img">{userHeaderIcon}</span><span>{groupUser}</span>
+                        <Button value={memberId} onClick={personCenter.showConfirmModal} className="group_del"><Icon
+                            type="close-circle-o"/></Button>
+                    </div>;
+                    memberLiTag.push(liTag);
+                });
             } else {
-                topButton = <span className="right_ri">
+                //我不是群主
+                if (personCenter.state.currentGroupObj.type == 1) {
+                    //部门群
+                    topButton = <span className="right_ri"></span>;
+                } else {
+                    //普通群
+                    if (JSON.parse(sessionStorage.getItem("loginUser")).colUtype == 'STUD') {
+                        //学生
+                        topButton = <span className="right_ri"></span>;
+                    } else {
+                        //老师
+                        topButton = <span className="right_ri">
                     <Button type="primary" onClick={this.showAddMembersModal}
                             loading={loading}
                     >添加群成员</Button>
-                </span>;
-            }
-            var memberLiTag = [];
-            personCenter.state.currentMemberArray.forEach(function (e) {
-                var memberId = e.key;
-                var groupUser = e.groupUser;
-                var userInfo = e.userInfo;
-                var userHeaderIcon;
-                if (isEmpty(userInfo) == false) {
-                    userHeaderIcon = <img src={userInfo.avatar}></img>;
-                } else {
-                    userHeaderIcon =
-                        <span className="attention_img"><img src={require('../images/maaee_face.png')}></img></span>;
+                    </span>;
+                    }
                 }
-                var liTag = <div className="group_fr">
-                    <span className="attention_img">{userHeaderIcon}</span><span>{groupUser}</span>
-                    <Button value={memberId} onClick={personCenter.showConfirmModal} className="group_del"><Icon
-                        type="close-circle-o"/></Button>
-                </div>;
-                memberLiTag.push(liTag);
-            });
+
+                var memberLiTag = [];
+                personCenter.state.currentMemberArray.forEach(function (e) {
+                    var groupUser = e.groupUser;
+                    var userInfo = e.userInfo;
+                    var userHeaderIcon;
+                    if (isEmpty(userInfo) == false) {
+                        userHeaderIcon = <img src={userInfo.avatar}></img>;
+                    } else {
+                        userHeaderIcon =
+                            <span className="attention_img"><img
+                                src={require('../images/maaee_face.png')}></img></span>;
+                    }
+                    var liTag = <div className="group_fr">
+                        <span className="attention_img">{userHeaderIcon}</span><span>{groupUser}</span>
+                    </div>;
+                    memberLiTag.push(liTag);
+                });
+            }
 
             personDate = <div className="group_cont">
                 <div className="public—til—blue">{returnChatGroupMessagePageToolBar}{welcomeTitle}</div>
@@ -2197,6 +2305,29 @@ const PersonCenterComponents = React.createClass({
                         </Col>
                     </Row>
 
+                </Modal>
+
+
+                <Modal
+                    visible={personCenter.state.mainTransferModalVisible}
+                    title="转移群主"
+                    onCancel={personCenter.mainTransferModalHandleCancel}
+                    transitionName=""  //禁用modal的动画效果
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    footer={[
+                        <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
+                                onClick={personCenter.mainTransferForSure}>确定</button>,
+                        <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
+                                onClick={personCenter.mainTransferModalHandleCancel}>取消</button>
+                    ]}
+                >
+                    <Row className="ant-form-item">
+                        <Col span={24}>
+                            <RadioGroup onChange={this.mainTransferOnChange} value={this.state.radioValue}>
+                                {this.state.radioSon}
+                            </RadioGroup>
+                        </Col>
+                    </Row>
                 </Modal>
 
                 <UseKnowledgeComponents ref="useKnowledgeComponents"/>

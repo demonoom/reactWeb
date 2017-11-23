@@ -56,7 +56,7 @@ class GhostMenu extends React.Component {
 
         let param = {
             mode: 'teachingAdmin',
-            title: '教学管理',
+            title: '教务管理',
             url: 'http://www.maaee.com/Excoord_PhoneService/permission/permissionList/' + this.state.ident,
         }
 
