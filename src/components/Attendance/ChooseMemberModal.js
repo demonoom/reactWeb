@@ -142,7 +142,6 @@ class ChooseMemberModal extends React.Component {
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                debugger
                 var response = ret.response;
                 response.forEach(function (e) {
                     var clazzes = e.clazzes;

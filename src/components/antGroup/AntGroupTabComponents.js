@@ -758,6 +758,7 @@ const AntGroupTabComponents = React.createClass({
      * @param user
      */
     turnToMessagePage(operatorObj, messageType, isTurnPage) {
+        this.initMyEmotionInput();
         var _this = this;
         var userId;
         var messageList = [];
