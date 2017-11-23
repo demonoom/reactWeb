@@ -899,8 +899,8 @@ const AntGroupTabComponents = React.createClass({
                         var content = messageOfSinge.content;
                         var uuidsArray = [];
                         var uuid = messageOfSinge.uuid;
-                        console.log(messageOfSinge);
-                        console.log('//判断是否是叮消息');
+                        // console.log(messageOfSinge);
+                        // console.log('//判断是否是叮消息');
                         //判断是否是叮消息
                         //判断这条消息是我发出的，处理别的手机发送消息不同步的问题
                         if (messageOfSinge.fromUser.colUid == antGroup.state.loginUser.colUid) {
@@ -997,7 +997,7 @@ const AntGroupTabComponents = React.createClass({
                                             "biumes": biumes
                                         };
                                         messageList.push(messageShow);
-                                        console.log(messageList);
+                                        // console.log(messageList);
                                     }
                                     if (isEmpty(messageOfSinge.toUser) == false) {
                                         var userJson = {
@@ -1015,7 +1015,6 @@ const AntGroupTabComponents = React.createClass({
 
                             } else {
                                 //我发出的
-                                console.log('我发出的');
                                 if (isEmpty(messageOfSinge.toUser) == false) {
                                     if (data.message.command != "message_read") {
                                         var messageShow = {
@@ -1507,7 +1506,6 @@ const AntGroupTabComponents = React.createClass({
             width: '380px'
         };
 
-        console.log(obj);
         LP.Start(obj);
     },
     /**
@@ -1759,8 +1757,8 @@ const AntGroupTabComponents = React.createClass({
             var messageTagArray = [];
             messageTagArray.splice(0);
             var messageList = antGroup.state.messageList;
-            console.log(messageList);
-            console.log('渲染');
+            // console.log(messageList);
+            // console.log('渲染');
             if (isEmpty(messageList) == false && messageList.length > 0) {
                 for (var i = messageList.length - 1; i >= 0; i--) {
                     var e = messageList[i];
@@ -1804,9 +1802,6 @@ const AntGroupTabComponents = React.createClass({
                                 if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
                                     //我发出的
                                     if (isEmpty(attachment) == false) {
-                                        console.log(attachment);
-                                        console.log(e);
-                                        console.log('有内容的链接萨达撒多撒多所');
                                         //有内容的链接
                                         messageTag = <li style={{'textAlign': 'right'}} className="right">
                                             <div className="u-name"><span>{fromUser}</span></div>
