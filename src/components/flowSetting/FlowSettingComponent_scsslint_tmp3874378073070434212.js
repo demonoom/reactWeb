@@ -80,7 +80,7 @@ const FlowSettingComponent = React.createClass({
                     suspendButton =
                         <a onClick={_this.suspendOrActivationProcessDefinitionConfirm.bind(_this, procDefId, "suspend")}>停用</a>;
                 }
-                var deleteButton = <a onClick={_this.deleteProcessDefinitionConfirm.bind(_this, flowGroupProcDefId)}>删除</a>;
+                var deleteButton = <a onClick={_this.deleteProcessDefinitionConfirm.bind(_this, flowGroupProcDefId)}>停用</a>;
                 var procName = processDefinition.procDefName;
                 var procDefDescribe = processDefinition.procDefDescribe;
                 var flowObj = <div className="process_flex">
@@ -93,7 +93,6 @@ const FlowSettingComponent = React.createClass({
                     </div>
                     <div className="process_r">
                         {suspendButton}
-                        {deleteButton}
                         {/* <a className="schoolgroup_btn_left" onClick={_this.removeFlow.bind(_this,procDefId)}>移动到</a>*/}
                     </div>
                 </div>;
@@ -239,19 +238,19 @@ const FlowSettingComponent = React.createClass({
         });
     },
 
-    /**
-     * 解除流程与分组的关系
-     * @param flowGroupProcdefId 流程分组关系的id
-     */
-    deleteProcessDefinitionConfirm(flowGroupProcdefId) {
+    deleteProcessDefinitionConfirm(flowId, isSuspendStr) {
+        console.log(flowId + "====" + isSuspendStr);
         var _this = this;
-        var title = '确定要删除该流程?';
+        var title = '确定要启用该流程?';
+        if (isSuspendStr == "suspend") {
+            title = '确定要停用该流程?';
+        }
         confirm({
             title: title,
             transitionName: "",  //禁用modal的动画效果
             onOk() {
                 console.log('OK');
-                _this.deleteFlowGroupProcDef(flowGroupProcdefId);
+                _this.suspendOrActivationProcessDefinition(flowId, isSuspendStr);
             },
             onCancel() {
                 console.log('Cancel');
@@ -277,28 +276,6 @@ const FlowSettingComponent = React.createClass({
                     } else {
                         message.success("流程已启用");
                     }
-                    _this.getFlowGroup();
-                }
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });
-    },
-
-    /**
-     * 解除流程与分组的关系（从流程分组表中删除流程）
-     */
-    deleteFlowGroupProcDef(flowGroupProcDefId) {
-        let _this = this;
-        var param = {
-            "method": 'deleteFlowGroupProcDef',
-            "flowGroupProcDefId": flowGroupProcDefId,
-        };
-        doWebService(JSON.stringify(param), {
-            onResponse: function (ret) {
-                if (ret.msg == "调用成功" && ret.success == true) {
-                    message.success("流程已删除");
                     _this.getFlowGroup();
                 }
             },
