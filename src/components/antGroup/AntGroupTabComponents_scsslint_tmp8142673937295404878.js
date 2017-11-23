@@ -758,7 +758,6 @@ const AntGroupTabComponents = React.createClass({
      * @param user
      */
     turnToMessagePage(operatorObj, messageType, isTurnPage) {
-        this.initMyEmotionInput();
         var _this = this;
         var userId;
         var messageList = [];
@@ -1245,6 +1244,7 @@ const AntGroupTabComponents = React.createClass({
     },
 
     messageSendByType(sendType) {
+        
         var messageContent = antGroup.getEmotionInputById();
         if (isEmpty(messageContent)) {
             message.error("消息内容不允许为空!");
