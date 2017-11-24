@@ -1742,7 +1742,6 @@ const AntGroupTabComponents = React.createClass({
         };
         const hasSelected = this.state.selectedRowKeys.length > 0;
         var progressState = antGroup.state.progressState;
-        // alert(progressState);
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         var welcomeTitle;
         var returnToolBar = <div className="ant-tabs-right"><Button
@@ -1972,16 +1971,20 @@ const AntGroupTabComponents = React.createClass({
                                             </li>;
                                         } else {
                                             //普通消息无角标
-                                            messageTag = <li style={{'textAlign': 'left'}}>
-                                                <div className="u-name"><span>{fromUser}</span></div>
-                                                <div className="talk-cont"><span
-                                                    className="name">{userPhoneIcon}</span><span
-                                                    className="borderballoon_le">
+                                            if (e.fromUser.colUid == 120024) {
+                                                messageTag = <li>{e.content}</li>;
+                                            } else {
+                                                messageTag = <li style={{'textAlign': 'left'}}>
+                                                    <div className="u-name"><span>{fromUser}</span></div>
+                                                    <div className="talk-cont"><span
+                                                        className="name">{userPhoneIcon}</span><span
+                                                        className="borderballoon_le">
                                                     <span className="bot"></span>
                                                     <span className="top"></span>
-                                                    {e.content}
-                                                    <i className="borderballoon_dingcorner_ri_no"></i></span></div>
-                                            </li>;
+                                                        {e.content}
+                                                        <i className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                                </li>;
+                                            }
                                         }
                                     }
                                 }
@@ -2042,7 +2045,8 @@ const AntGroupTabComponents = React.createClass({
                                                      src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
                                                      alt=""/>
                                                      <div className="span_link_div">
-                                                         <span className="span_link file_link_img_t">{e.messageReturnJson.content}</span>
+                                                         <span
+                                                             className="span_link file_link_img_t">{e.messageReturnJson.content}</span>
                                                      </div>
                                                  </div>
                                             <i className="borderballoon_dingcorner_ri_no"></i></span></div>
@@ -2059,7 +2063,8 @@ const AntGroupTabComponents = React.createClass({
                                             <span className="top"></span>
                                             <img className="upexam_float span_link_img" style={{width: 40}}
                                                  src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png" alt=""/>
-                                            <span className="span_link file_link_img_t">{e.messageReturnJson.content}</span><i
+                                            <span
+                                                className="span_link file_link_img_t">{e.messageReturnJson.content}</span><i
                                             className="borderballoon_dingcorner_ri_no"></i></span></div>
                                     </li>;
                                 }
