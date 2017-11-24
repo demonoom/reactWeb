@@ -535,8 +535,8 @@ const MainLayout = React.createClass({
      * @param fromObj
      */
     turnToMessagePage(fromObj) {
-        console.log(fromObj);
-        console.log('fromObj');
+        // console.log(fromObj);
+        // console.log('fromObj');
         var timeNode = (new Date()).valueOf();
         if (fromObj.fromUser.colUtype == "SGZH_WEB") {
             //审批助手逻辑

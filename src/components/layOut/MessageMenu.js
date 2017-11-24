@@ -71,8 +71,8 @@ const MessageMenu = React.createClass({
         }
         if (isEmpty(nextProps) == false && isEmpty(nextProps.isSearchGroup) == false) {
             if (nextProps.isSearchGroup) {
-                console.log(nextProps.userJson);
-                console.log('nextProps.userJson');
+                // console.log(nextProps.userJson);
+                // console.log('nextProps.userJson');
                 //调用点击用户函数
                 var obj = {
                     fromUser: nextProps.userJson.fromUser,
@@ -132,7 +132,7 @@ const MessageMenu = React.createClass({
                         }*/
                         mMenu.setMessageArrayForOnePerson(e);
                         //判断已读未读0未读1已读
-                        console.log(e.readState);
+                        // console.log(e.readState);
                     });
                     mMenu.showMessageData(flag);
                     /*if(isEmpty(userMessageData)==false && mMenu.state.tableIsClick==false){
@@ -302,8 +302,8 @@ const MessageMenu = React.createClass({
      * 如：{{colUid:23836,userName:'王丹'},[{content:'123'}{content:'test'}]}
      */
     setMessageArrayForOnePerson(messageObj) {
-        console.log(messageObj);
-        console.log('messageObj');
+        // console.log(messageObj);
+        // console.log('messageObj');
         if (messageObj.command == "message") {
             var fromUser = messageObj.fromUser;
             var content = messageObj.content;
@@ -403,8 +403,8 @@ const MessageMenu = React.createClass({
      * @param index
      */
     turnToMessagePage(record, index) {
-        console.log(record);
-        console.log('record');
+        // console.log(record);
+        // console.log('record');
         mMenu.setState({selectRowKey: record.key, badgeShow: false, tableIsClick: true});
         mMenu.props.onUserClick(record);
         //根据id找到点击的那一个的b标签,设置它的样式为隐藏

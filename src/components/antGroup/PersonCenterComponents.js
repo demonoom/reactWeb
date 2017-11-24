@@ -1307,18 +1307,18 @@ const PersonCenterComponents = React.createClass({
             var radioSon = <Radio style={radioStyle} value={v.key}>{v.groupUser}</Radio>;
             array.push(radioSon);
         });
-        this.setState({radioSon:array});
+        this.setState({radioSon: array});
         this.setState({mainTransferModalVisible: true});
     },
 
     mainTransferOnChange(e) {
-        console.log('radio checked', e.target.value);
         this.setState({
             radioValue: e.target.value,
         });
     },
 
     mainTransferForSure() {
+        var _this = this;
         var newOwnerId = this.state.radioValue;
         var oldOwnerId = this.state.currentGroupObj.owner.colUid;
         var chatGroupId = this.state.currentGroupObj.chatGroupId;
@@ -1333,10 +1333,17 @@ const PersonCenterComponents = React.createClass({
             onResponse: function (ret) {
                 var response = ret.response;
                 // debugger
-                if (ret.msg == "调用成功" && ret.success == true && response == true) {
-                    // message.success(successTip);
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    message.success('转让成功');
+                    // _this.setState({mainTransferModalVisible: false});
+                    // _this.setState({radioValue: 1});
+                    _this.mainTransferModalHandleCancel();
+                    var obj = _this.state.currentGroupObj;
+                    obj.owner.colUid = newOwnerId;
+                    _this.setState({currentGroupObj: obj});
+                    //重新刷新页面
                 } else {
-                    // message.success(errorTip);
+                    message.error(ret.msg);
                 }
             },
             onError: function (error) {
@@ -1347,6 +1354,7 @@ const PersonCenterComponents = React.createClass({
 
     mainTransferModalHandleCancel() {
         this.setState({mainTransferModalVisible: false});
+        this.setState({radioValue: 1});
     },
 
     /**
