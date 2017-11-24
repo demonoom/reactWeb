@@ -3228,7 +3228,15 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     background-position: center center;
     border-radius: 50%;
 }
-
+.group_talk ul li.reminder{
+    text-align: center;
+}
+.group_talk ul li.reminder span{
+    background: #e5e5e5;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+}
 .attention_img2 img {
     position: relative;
     background: #eee;

@@ -1972,7 +1972,7 @@ const AntGroupTabComponents = React.createClass({
                                         } else {
                                             //普通消息无角标
                                             if (e.fromUser.colUid == 120024) {
-                                                messageTag = <li>{e.content}</li>;
+                                                messageTag = <li className="reminder"><span>{e.content}</span></li>;
                                             } else {
                                                 messageTag = <li style={{'textAlign': 'left'}}>
                                                     <div className="u-name"><span>{fromUser}</span></div>
