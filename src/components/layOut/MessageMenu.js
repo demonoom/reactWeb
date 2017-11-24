@@ -170,7 +170,7 @@ const MessageMenu = React.createClass({
      * 渲染用户最新消息列表
      */
     showMessageData(flag) {
-        if(flag) {
+        if (flag) {
             this.props.toWhichCharObj();
         }
         //不管是第一次进来通过get还是消息过来通过willReceiveProps，都会经过这里
@@ -276,7 +276,8 @@ const MessageMenu = React.createClass({
                     };
                 }
                 if (messageType == 1) {
-                    if (colUid != parseInt(sessionStorage.getItem("ident"))) {
+                    if (colUid != parseInt(sessionStorage.getItem("ident")) && colUid != 120024) {
+                        //屏蔽群通知者120024
                         userMessageData.push(userJson);
                     }
                 } else {

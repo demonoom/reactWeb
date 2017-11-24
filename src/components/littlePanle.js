@@ -1,7 +1,6 @@
 /**
  * Created by madapeng on 17-4-17.
  */
-// import {showModal} from '../utils/utils';
 
 ;(function ($) {
 
@@ -88,8 +87,6 @@
         if (window.liveTVWS) {
             window.liveTVWS._close();
         }
-
-
         let tmp = [];
         LP.mgr.map(function (item, index) {
             if (item.id == id) {
@@ -1149,7 +1146,10 @@
                     objA = new littlePanle().GetLP(objParam, _this.mgr);
                     _this.addOrderBtn();
             }
-            this.mgr.push(objA);
+            //保证在进入noompanel的时候不会push进去一个undefined
+            if (objA !== undefined) {
+                this.mgr.push(objA);
+            }
             return objA;
 
         },
@@ -1265,7 +1265,7 @@ function enterFull(el) {
     var docElm = document.documentElement;
     if (el) docElm = el;
     var iframe = $(el).find("iframe")[0];
-    if(iframe != null && typeof(iframe) != 'undefined' ){
+    if (iframe != null && typeof(iframe) != 'undefined') {
         el = iframe;
     }
 //W3C
