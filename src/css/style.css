@@ -3232,10 +3232,11 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     text-align: center;
 }
 .group_talk ul li.reminder span{
-    background: #e5e5e5;
+    background: #c7c7c7;
     padding: 4px 10px;
     border-radius: 4px;
     font-size: 12px;
+    color: #fff;
 }
 .attention_img2 img {
     position: relative;
