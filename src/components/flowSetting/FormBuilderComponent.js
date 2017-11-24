@@ -10,7 +10,7 @@ const FormBuilderComponent = React.createClass({
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         return {
             loginUser : loginUser,
-            formData:'[]',
+            formData:[],
         };
     },
 
@@ -43,9 +43,13 @@ const FormBuilderComponent = React.createClass({
     },
 
     componentWillReceiveProps(nextProps){
+        // var formData = nextProps.formData;
+        // this.setState({formData});
+        // formBuilder.actions.setData(formData);
     },
 
     componentDidUpdate(){
+        // formBuilder.actions.setData(this.state.formData);
     },
 
     initFormData(formData){

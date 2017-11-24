@@ -870,8 +870,7 @@ const FlowBuilderComponent = React.createClass({
                             <Option value="1">发起时和同意后均通知</Option>
                         </Select>
                     </Col>
-                </Row>
-                 */}
+                </Row>*/}
                 <Modal title="设置审批人" visible={this.state.approvalModalVisible}
                        onCancel={this.approvalModalHandleCancel}
                        onOk={this.addApprovalToStep}

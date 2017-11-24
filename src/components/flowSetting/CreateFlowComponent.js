@@ -36,12 +36,17 @@ const CreateFlowComponent = React.createClass({
 
     changeStep(stepDirect){
         var _this = this;
+        var formData = null;
+        if(isEmpty(_this.refs.formDataComponent)==false){
+            formData = _this.refs.formDataComponent.getFormData();
+        }else{
+            formData = _this.state.formData;
+        }
         switch(stepDirect){
             case "pre":
-                _this.setState({"stepNum":0});
+                _this.setState({"stepNum":0,formData});
                 break;
             case "next":
-                var formData = _this.refs.formDataComponent.getFormData();
                 _this.setState({"stepNum":1,formData});
                 break;
         }
@@ -100,7 +105,7 @@ const CreateFlowComponent = React.createClass({
     render() {
         var stepPanel;
         if(this.state.stepNum==0){
-            stepPanel = <FormBuilderComponent ref="formDataComponent"></FormBuilderComponent>;
+            stepPanel = <FormBuilderComponent ref="formDataComponent" formData = {this.state.formData}></FormBuilderComponent>;
         }else{
             stepPanel=<FlowBuilderComponent ref="flowBuilderComponent" formData = {this.state.formData}></FlowBuilderComponent>;
         }
