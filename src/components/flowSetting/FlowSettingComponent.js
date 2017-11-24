@@ -195,11 +195,6 @@ const FlowSettingComponent = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                console.log(ret.msg + "===" + ret.response);
-                if (ret.msg == "调用成功" && ret.success == true) {
-                    // _this.buildFlowGroupSpan(ret.response);
-
-                }
                 _this.getFlowGroup();
                 _this.createNewFlowModalHandleCancel();
             },

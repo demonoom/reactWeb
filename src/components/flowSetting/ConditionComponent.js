@@ -18,7 +18,7 @@ const Option = Select.Option;
 const RadioGroup = Radio.Group;
 const CheckboxGroup = Checkbox.Group;
 const departmentLevelChildren = [];
-var conditionalSymbolJsonArray = [];
+// var conditionalSymbolJsonArray = [];
 
 const ConditionComponent = React.createClass({
 
@@ -29,6 +29,7 @@ const ConditionComponent = React.createClass({
             formDataOptions: [], //备选的审批条件字段
             conditionalSymbolArray:[],   //条件符号的集合，如大于，大于等于，等内容
             approvalUserOptionArray:[], //条件审批人的列表
+            conditionalSymbolJsonArray:[],
         };
     },
 
@@ -148,7 +149,7 @@ const ConditionComponent = React.createClass({
      */
     getConditionInfoByJson() {
         //todo 需要在返回数据之前，先做条件的有效性判断，包括条件表达式是否有选择，值是否为空，对应的审批人是否选择
-        var conditionInfoJson = {flowConditionalSymbolList:conditionalSymbolJsonArray,selectedApprovalUser:this.state.selectedApprovalUser};
+        var conditionInfoJson = {flowConditionalSymbolList:this.state.conditionalSymbolJsonArray,selectedApprovalUser:this.state.selectedApprovalUser};
         return conditionInfoJson;
     },
 
@@ -169,7 +170,8 @@ const ConditionComponent = React.createClass({
             defaultSelectedTeacherId:'',
             teacherUserObjArray:[],
             approvalTypeValue:'',
-            selectedDepartmentLevel:''
+            selectedDepartmentLevel:'',
+            conditionalSymbolJsonArray:[]
         });
     },
 
@@ -179,10 +181,10 @@ const ConditionComponent = React.createClass({
     formDataOptionOnChange(checkedValues) {
         console.log('checked = ', checkedValues);
         //todo 暂时屏蔽多条件设置，后期放开该功能，以便支持条件的并且操作
-        if(checkedValues.length>1){
+        /*if(checkedValues.length>1){
             message.error("请勿同时选择多个条件，谢谢！");
             return;
-        }
+        }*/
         var formDataOptions = this.state.formDataOptions;
         this.setState({conditionFields:checkedValues});
         this.buildConditonTagArray(formDataOptions,checkedValues);
@@ -540,8 +542,8 @@ const ConditionComponent = React.createClass({
      */
     buildConditionalSymbolJsonArray(conditionalSymbolJson){
         var isExist = false;
-        for(var i=0;i<conditionalSymbolJsonArray.length;i++){
-            var currentConditonSymbol = conditionalSymbolJsonArray[i];
+        for(var i=0;i<this.state.conditionalSymbolJsonArray.length;i++){
+            var currentConditonSymbol = this.state.conditionalSymbolJsonArray[i];
             if(currentConditonSymbol.conditionField == conditionalSymbolJson.conditionField){
                 //找到对应的审批条件,使用新的条件符号进行替换
                 currentConditonSymbol.conditionalSymbol = conditionalSymbolJson.conditionalSymbol;
@@ -550,7 +552,7 @@ const ConditionComponent = React.createClass({
             }
         }
         if(isExist == false){
-            conditionalSymbolJsonArray.push(conditionalSymbolJson);
+            this.state.conditionalSymbolJsonArray.push(conditionalSymbolJson);
         }
     },
 
@@ -576,8 +578,8 @@ const ConditionComponent = React.createClass({
      */
     buildConditionalValueJsonArray(conditionalValueJson){
         var isExist = false;
-        for(var i=0;i<conditionalSymbolJsonArray.length;i++){
-            var currentConditonSymbol = conditionalSymbolJsonArray[i];
+        for(var i=0;i<this.state.conditionalSymbolJsonArray.length;i++){
+            var currentConditonSymbol = this.state.conditionalSymbolJsonArray[i];
             if(currentConditonSymbol.conditionField == conditionalValueJson.conditionField){
                 /*
                 找到对应的审批条件,使用新的条件值进行替换
@@ -601,7 +603,7 @@ const ConditionComponent = React.createClass({
             if("assignOfStarter" == conditionalValueJson.conditionField){
                 conditionalValueJson.conditionalSymbol = "等于";
             }
-            conditionalSymbolJsonArray.push(conditionalValueJson);
+            this.state.conditionalSymbolJsonArray.push(conditionalValueJson);
         }
     },
 
@@ -611,8 +613,8 @@ const ConditionComponent = React.createClass({
     updateConditionalSymbolJsonArray(checkedValues) {
         var newArray = [];
         checkedValues.forEach(function (checkedValue) {
-            for (var i = 0; i < conditionalSymbolJsonArray.length; i++) {
-                var currentConditonSymbol = conditionalSymbolJsonArray[i];
+            for (var i = 0; i < this.state.conditionalSymbolJsonArray.length; i++) {
+                var currentConditonSymbol = this.state.conditionalSymbolJsonArray[i];
                 if (currentConditonSymbol.conditionField == checkedValue) {
                     newArray.push(currentConditonSymbol);
                     break;
@@ -620,8 +622,8 @@ const ConditionComponent = React.createClass({
             }
         })
         //todo 选择多个条件时，应该形成条件的并且关系
-        conditionalSymbolJsonArray = newArray;
-        // conditionalSymbolJsonArray.addAll(newArray);
+        //conditionalSymbolJsonArray = newArray;
+        this.state.conditionalSymbolJsonArray.addAll(newArray);
     },
 
     /**
