@@ -192,10 +192,12 @@ const AntGroupTabComponents = React.createClass({
         data_noom = [];
     },
 
+
     /**
-     * 构建查看文件详细的table
+     * 分享文件链接构建查看文件详细的table
      */
     buildFileDetilData(res) {
+        var _this = this;
         data_noom = [];
         //打开model,model里有一个table,支持多选，选择后下面的下载和保存到蚁盘可用
         //根据数据展示文件,response已经拿到用它来渲染table
@@ -213,12 +215,19 @@ const AntGroupTabComponents = React.createClass({
             var fileName = v.cloudFile.name;
             //文件创建时间
             var fileCreTime = getLocalTime(v.cloudFile.createTime);
+
+            var fileCreateUid = v.cloudFile.createUid;
             //我要的key
             var key = fileSrc + '@' + fileName + '@' + fileLength;
-            var imgTag = <div className="file_icon_cont">
+
+            var imgTag = <div className="file_icon_cont noom_cursor"
+                              onClick={_this.watchFileShare.bind(this, fileId, fileCreateUid, fileName)}>
                             <span className="file_icon_img">
                                 <img src="../src/components/images/lALPBY0V4pdU_AxmZg_102_102.png"/>
                             </span>
+                <img id={fileId} style={{display: "none"}} src={fileSrc}
+                     onClick={showLargeImg}
+                     alt=""/>
                 <div className="file_icon_text">
                     <span className="file_icon_text2">{fileName}</span>
                     <span className="right_ri password_ts">{fileCreTime}</span>
@@ -1548,6 +1557,19 @@ const AntGroupTabComponents = React.createClass({
     downFile(url) {
         window.location.href = url;
     },
+    /**
+     *  预览分享链接文件的回调
+     */
+    watchFileShare(fileUid, fileCreateUid, fileName) {
+        this.checkFileModalHandleCancel();
+        var url = "http://www.maaee.com/Excoord_PhoneService/cloudFile/cloudFileShow/" + fileUid + "/" + fileCreateUid;
+        var suffix = fileName.substr(fileName.length - 3);
+        if (suffix == 'jpg' || suffix == 'JPG' || suffix == 'png' || suffix == 'PNG' || suffix == 'bmp' || suffix == 'BMP') {
+            document.getElementById(fileUid).click();
+        } else {
+            this.view(event, url, name);
+        }
+    },
 
     /**
      *预览文件的回调
@@ -1561,12 +1583,13 @@ const AntGroupTabComponents = React.createClass({
         //根据文件的后缀名判断是不是图片
         var url = "http://www.maaee.com/Excoord_PhoneService/cloudFile/cloudFileShow/" + fileUid + "/" + fileCreateUid;
         var suffix = fileName.substr(fileName.length - 3);
-        //如果是图片直接用插件展示，否则交给iframe展示
+        // 如果是图片直接用插件展示,否则交给iframe展示
         if (suffix == 'jpg' || suffix == 'JPG' || suffix == 'png' || suffix == 'PNG' || suffix == 'bmp' || suffix == 'BMP') {
             document.getElementById(fileUid).click();
         } else {
             this.view(event, url, name);
         }
+
     },
 
     view(e, url, tit) {
@@ -1782,6 +1805,7 @@ const AntGroupTabComponents = React.createClass({
                     var biumes = e.biumes;
                     //文件名
                     var fileName = e.fileName;
+
                     attachment
                     //路径
                     var filePath = e.filePath;
@@ -1817,6 +1841,7 @@ const AntGroupTabComponents = React.createClass({
                                                      </div>
                                                  </div>
                                                 <i className="borderballoon_dingcorner_ri_no"></i></span></div>
+
                                         </li>;
                                         // }
                                     } else if (isEmpty(expressionItem) == false) {
@@ -1972,8 +1997,7 @@ const AntGroupTabComponents = React.createClass({
                                         } else {
                                             //普通消息无角标
                                             if (e.fromUser.colUid == 120024) {
-                                                //群通知者
-                                                messageTag = <li>{e.content}</li>;
+                                                messageTag = <li className="reminder"><span>{e.content}</span></li>;
                                             } else {
                                                 messageTag = <li style={{'textAlign': 'left'}}>
                                                     <div className="u-name"><span>{fromUser}</span></div>
