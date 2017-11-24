@@ -93,6 +93,7 @@ export function isToday(str) {
 }
 
 export function showLargeImg(e) {
+
     var target = e.target;
     if (navigator.userAgent.indexOf("Chrome") > -1) {
         target = e.currentTarget;

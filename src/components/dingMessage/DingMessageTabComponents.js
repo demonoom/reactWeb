@@ -91,7 +91,7 @@ const DingMessageTabComponents = React.createClass({
                                 dingData.unshift(obj);
                                 //渲染ding列表
                                 ding.buildDList(dingData, 1);
-                                _this.props.showAlert(true);
+                                _this.props.FshowAlert(true);
                             }
                         }
                     }
