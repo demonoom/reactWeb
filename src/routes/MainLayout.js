@@ -535,8 +535,8 @@ const MainLayout = React.createClass({
      * @param fromObj
      */
     turnToMessagePage(fromObj) {
-        console.log(fromObj);
-        console.log('fromObj');
+        // console.log(fromObj);
+        // console.log('fromObj');
         var timeNode = (new Date()).valueOf();
         if (fromObj.fromUser.colUtype == "SGZH_WEB") {
             //审批助手逻辑
@@ -804,7 +804,7 @@ const MainLayout = React.createClass({
                             </Menu.Item>
                             <Menu.Item key="systemSetting" className="padding_menu">
                                 <i className="icon_menu_ios icon_schoolGroup"></i>
-                                <div className="tan">教学管理</div>
+                                <div className="tan">教务管理</div>
                             </Menu.Item>
                             <Menu.Item key="dingMessage" className="padding_menu">
                                 <i className="icon_menu_ios icon_ding"></i>

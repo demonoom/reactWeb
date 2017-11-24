@@ -224,7 +224,7 @@ class SystemSettingGhostMenu extends React.Component {
                      this.props.toggleGhostMenu({visible: false});
                  }}>
                 {hideButton}
-                <div className="menu_til">教学管理</div>
+                <div className="menu_til">教务管理</div>
                 <ul className="first">
                     {this.state.arr}
                 </ul>

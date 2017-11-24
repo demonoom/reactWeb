@@ -1429,7 +1429,7 @@ function contemosConfirm(msg, okFn, cancelfn) {
 
 
     let htm = `<div id="modal_dialog"><div   class="ant-modal-mask"></div><div tabindex="-1" class="ant-modal-wrap " role="dialog">
-<div role="document" class="ant-modal " style="width: 440px;"><div class="ant-modal-content">
+<div role="document" class="ant-modal " style="width: 400px;"><div class="ant-modal-content">
 <button aria-label="Close" class="ant-modal-close"><span class="ant-modal-close-x"></span></button>
 <div class="ant-modal-body"><div class="class_right"><i class="anticon anticon-question-circle icon_Alert icon_orange"></i>
 <span style="font-size: 14px;">${msg}</span></div></div><div class="ant-modal-footer">
