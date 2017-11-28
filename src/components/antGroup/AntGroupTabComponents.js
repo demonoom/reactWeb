@@ -288,6 +288,7 @@ const AntGroupTabComponents = React.createClass({
             "userId": antGroup.state.loginUser.colUid,
             "pageNo": 1,
         };
+        console.log('555',param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
@@ -1800,6 +1801,7 @@ const AntGroupTabComponents = React.createClass({
                     var attachment = e.attachment;
                     var attachmentType = e.attachmentType;
                     var expressionItem = e.expressionItem;
+
 
                     //是否是biumessage
                     var biumes = e.biumes;

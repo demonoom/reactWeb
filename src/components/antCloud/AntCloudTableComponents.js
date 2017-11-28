@@ -247,6 +247,111 @@ const AntCloudTableComponents = React.createClass({
             }
         });
     },
+
+    /**
+     *打开保存文件到蚁盘的model
+     */
+    saveFile(fileIds) {
+        var _this = this;
+        //1.请求用户的私人网盘用数据构建model的table
+        var id = JSON.parse(sessionStorage.getItem("loginUser")).colUid;
+        var param = {
+            "method": 'getUserRootCloudFiles',
+            "userId":  id,
+            "pageNo": 1,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                console.log(response);
+                console.log('111111');
+                if (response) {
+                    //构建我的文件目标文件夹数据
+                    _this.buildTargetDirDataSaveLocal(ret, true, fileIds);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     *
+     */
+    /**
+     * 如果是文件夹，则可以点击文件夹名称，进入文件夹内部
+     */
+    intoDirectoryInnerLocal(directoryObj, fileIds) {
+        var initPageNo = 1;
+        var queryConditionJson = "";
+        //点击第一层文件夹时，记录当前文件夹的群主是否是当前用户
+        if (cloudTable.state.currentDirectoryId == -1 && this.state.getFileType != "myFile") {
+            if (directoryObj.createUid == this.state.ident) {
+                this.setState({"isGroupCreator": true});
+            } else {
+                this.setState({"isGroupCreator": false});
+            }
+        }
+        cloudTable.setState({
+            "parentDirectoryIdAtMoveModal": directoryObj.parentId,
+            "currentDirectoryIdAtMoveModal": directoryObj.id
+        });
+        cloudTable.listFiles(cloudTable.state.ident, directoryObj.id, queryConditionJson, initPageNo, fileIds);
+    },
+
+
+    /**
+     * 保存到本地的确定按钮
+     * @param ret
+     */
+    buildTargetDirDataSaveLocal(ret, flag, fileIds) {
+        console.log(fileIds);
+        var targetDirDataArray = [];
+        var i = 0;
+        if (ret.msg == "调用成功" && ret.success == true && isEmpty(ret.response) == false) {
+            ret.response.forEach(function (e) {
+                if (i == 0) {
+                    if (e.parent) {
+                        var parentDirectoryId = e.parent.parentId;
+                        cloudTable.setState({"parentDirectoryIdAtMoveModal": parentDirectoryId});
+                    }
+                }
+                i++;
+                var key = e.id;
+                var name = e.name;
+                var directory = e.directory;
+                var fileLogo = cloudTable.buildFileLogo(name, directory, e);
+
+                var dirName = <span className="font_gray_666"
+                    //这是点击文件名进入文件夹的功能
+                                    onClick={cloudTable.intoDirectoryInnerLocal.bind(cloudTable, e, fileIds)}>
+                {fileLogo}
+            </span>;
+                var moveDirOpt;
+                if (e.directory == true) {
+                    moveDirOpt = <div>
+                        {/*这是确定保存的功能*/}
+                        <Button onClick={cloudTable.saveFileToLocalDir.bind(cloudTable, key, fileIds)}>确定111</Button>
+                    </div>;
+                } else {
+                    dirName = name;
+                }
+                var dataJson = {
+                    key: key,
+                    dirName: dirName,
+                    moveDirOpt: moveDirOpt
+                };
+                targetDirDataArray.push(dataJson);
+            })
+            cloudTable.setState({"targetDirDataArray1": targetDirDataArray});
+            //2.当表格组件好之后就让model显示出来
+            if (flag) {
+                cloudTable.setState({saveFileModalVisible: true});
+            }
+        }
+    },
+
     /**
      * 构建移动文件时的目标文件夹数据
      * @param ret
@@ -455,8 +560,10 @@ const AntCloudTableComponents = React.createClass({
         var cloudFileArray = [];
         if (ret.msg == "调用成功" && ret.success == true && isEmpty(ret.response) == false) {
             ret.response.forEach(function (e) {
+                debugger;
                 console.log(e);
                 if (i == 0) {
+                    console.log('eee',e.parent);
                     if (e.parent) {
                         var parentDirectoryId = e.parent.parentId;
                         _this.setState({"parentDirectoryId": parentDirectoryId});
@@ -502,8 +609,10 @@ const AntCloudTableComponents = React.createClass({
                                           onClick={cloudTable.showShareModal.bind(cloudTable, e)}
                                           icon="share-alt"></Button>;
                 var moveButton = <Button type="button" value={key} text={key}
-                                         onClick={cloudTable.showMoveFileModal.bind(cloudTable, e)}
+
                                          icon="swap"></Button>;
+
+
                 var getFileType = cloudTable.state.getFileType;
                 //我的蚁盘是私有的，用户具备所有的操作权限
                 if (getFileType != "myFile") {
@@ -513,16 +622,21 @@ const AntCloudTableComponents = React.createClass({
                     if (_this.state.currentDirectoryId == -1 || (e.creator.colUid != sessionStorage.getItem("ident") && _this.state.isGroupCreator == false)) {
                         editButton = "";
                         deleteButton = "";
-                        shareButton = "";
+                        // shareButton = "";
                         moveButton = "";
                     }
+                    var saveButton = <Button type="button" value={key} text={key}
+                                             onClick={cloudTable.getCloudFile.bind(cloudTable,e)}
+                                             icon="save"></Button>;
                 }
                 var subjectOpt = <div>
                     {editButton}
                     {deleteButton}
                     {shareButton}
                     {moveButton}
+                    {saveButton}
                     {downloadButton}
+
                 </div>;
                 data.push({
                     key: key,
@@ -972,6 +1086,201 @@ const AntCloudTableComponents = React.createClass({
         }
         var userAccount = target.value;
         cloudTable.setState({"userAccount": userAccount});
+    },
+
+
+
+    /**
+     *拿到保存的文件的信息的回调
+     * @param filePath
+     * @param fileName
+     * @param fileLength
+     */
+    getCloudFile(fileObject) {
+        this.saveFile();
+        this.setState({saveFileModalVisible:true});
+        console.log(fileObject);
+        //文件名
+        var fileName = fileObject.name;
+
+        //路径
+        var filePath= fileObject.chatGroup['avatar'];
+        // var filePath = fileObject.filePath;
+        //大小
+        var fileLength = (fileObject.length / 1024).toFixed(2);
+        debugger;
+        this.setState({filePath, fileName, fileLength, fileCreateUid});
+    },
+
+    /**
+     * 点击取消按钮 取消保存文件
+     */
+    saveFileModalHandleCancel(){
+        cloudTable.setState({saveFileModalVisible: false});
+    },
+
+
+    /**
+     * 点击确定按钮，保存文件到指定目录
+     */
+    saveFileToLocalDir(parentCloudFileId, fileIds) {
+        var _this = this;
+        //1.请求用户的私人网盘用数据构建model的table
+        var id = JSON.parse(sessionStorage.getItem("loginUser")).colUid;
+        // if (this.state.isShare) {
+
+
+            var param = {
+                "method": 'copyCloudFiles',
+                "operateUserId": id,
+                "toCloudFileId": parentCloudFileId,
+                "fromCloudFileIds": fileIds
+            };
+            console.log(param);
+            doWebService(JSON.stringify(param), {
+                onResponse: function (ret) {
+                    debugger
+                    if (ret.success == true && ret.msg == "调用成功" && isEmpty(ret.response) == false) {
+                        var initPageNo = 1;
+                        var queryConditionJson = "";
+                        if (cloudTable.state.currentDirectoryId != -1) {
+                            cloudTable.listFiles(cloudTable.state.ident,
+                                cloudTable.state.currentDirectoryId, queryConditionJson, initPageNo, "mainTable");
+                        } else {
+                            cloudTable.getUserRootCloudFiles(antGroup.state.ident, antGroup.state.currentPage);
+                        }
+                        message.success("文件保存成功");
+                    } else {
+                        message.error("文件保存失败");
+                    }
+                    cloudTable.setState({saveFileModalVisible: false});
+                    cloudTable.setState({checkFileModalVisible: false});
+                    cloudTable.setState({isShare: false});
+                },
+                onError: function (error) {
+                    message.error(error);
+                }
+            });
+
+        // } else {
+        //     //1.将此文件的信息拿过来
+        //     var name = this.state.fileName;
+        //
+        //     var path = this.state.filePath;
+        //     var length = this.state.fileLength;
+        //     var fileCreateUid = this.state.fileCreateUid;
+        //
+        //
+        //     var param = {
+        //         "method": 'createCloudFile',
+        //         // "operateUserId": antGroup.state.loginUser.colUid,
+        //         "operateUserId": id,
+        //         "parentCloudFileId": parentCloudFileId,
+        //         "name": name,
+        //         "path": path,
+        //         "length": length
+        //     };
+        //
+        //     doWebService(JSON.stringify(param), {
+        //         onResponse: function (ret) {
+        //             if (ret.success == true && ret.msg == "调用成功" && isEmpty(ret.response) == false) {
+        //                 var initPageNo = 1;
+        //                 var queryConditionJson = "";
+        //                 if (cloudTable.state.currentDirectoryId != -1) {
+        //                     cloudTable.listFiles(antGroup.state.ident,
+        //                         cloudTable.state.currentDirectoryId, queryConditionJson, initPageNo, "mainTable");
+        //                 } else {
+        //                     cloudTable.getUserRootCloudFiles(antGroup.state.ident, antGroup.state.currentPage);
+        //                 }
+        //                 message.success("文件保存成功");
+        //             } else {
+        //                 message.error("文件保存失败");
+        //             }
+        //             cloudTable.setState({saveFileModalVisible: false});
+        //         },
+        //         onError: function (error) {
+        //             message.error(error);
+        //         }
+        //     });
+        // }
+    },
+
+
+
+
+    /**
+     * 点击确定按钮，保存文件到指定目录
+     */
+    saveFileToTargetDir(parentCloudFileId, fileIds) {
+        if (this.state.isShare) {
+            var param = {
+                "method": 'copyCloudFiles',
+                "operateUserId": antGroup.state.loginUser.colUid,
+                "toCloudFileId": parentCloudFileId,
+                "fromCloudFileIds": fileIds
+            };
+            doWebService(JSON.stringify(param), {
+                onResponse: function (ret) {
+                    if (ret.success == true && ret.msg == "调用成功" && isEmpty(ret.response) == false) {
+                        var initPageNo = 1;
+                        var queryConditionJson = "";
+                        if (antGroup.state.currentDirectoryId != -1) {
+                            antGroup.listFiles(antGroup.state.ident,
+                                antGroup.state.currentDirectoryId, queryConditionJson, initPageNo, "mainTable");
+                        } else {
+                            antGroup.getUserRootCloudFiles(antGroup.state.ident, antGroup.state.currentPage);
+                        }
+                        message.success("文件保存成功");
+                    } else {
+                        message.error("文件保存失败");
+                    }
+                    antGroup.setState({saveFileModalVisible: false});
+                    antGroup.setState({checkFileModalVisible: false});
+                    antGroup.setState({isShare: false});
+                },
+                onError: function (error) {
+                    message.error(error);
+                }
+            });
+
+        } else {
+            //1.将此文件的信息拿过来
+            var name = this.state.fileName;
+            var path = this.state.filePath;
+            var length = this.state.fileLength;
+            var fileCreateUid = this.state.fileCreateUid;
+
+            var param = {
+                "method": 'createCloudFile',
+                "operateUserId": antGroup.state.loginUser.colUid,
+                "parentCloudFileId": parentCloudFileId,
+                "name": name,
+                "path": path,
+                "length": length
+            };
+
+            doWebService(JSON.stringify(param), {
+                onResponse: function (ret) {
+                    if (ret.success == true && ret.msg == "调用成功" && isEmpty(ret.response) == false) {
+                        var initPageNo = 1;
+                        var queryConditionJson = "";
+                        if (antGroup.state.currentDirectoryId != -1) {
+                            antGroup.listFiles(antGroup.state.ident,
+                                antGroup.state.currentDirectoryId, queryConditionJson, initPageNo, "mainTable");
+                        } else {
+                            antGroup.getUserRootCloudFiles(antGroup.state.ident, antGroup.state.currentPage);
+                        }
+                        message.success("文件保存成功");
+                    } else {
+                        message.error("文件保存失败");
+                    }
+                    antGroup.setState({saveFileModalVisible: false});
+                },
+                onError: function (error) {
+                    message.error(error);
+                }
+            });
+        }
     },
     /**
      * 显示移动文件的窗口
@@ -1585,6 +1894,33 @@ const AntCloudTableComponents = React.createClass({
                         </Row>
                     </div>
                 </Modal>
+
+                {/*保存到我的蚁盘model*/}
+                <Modal title="我的文件"
+                       visible={cloudTable.state.saveFileModalVisible}
+                       transitionName=""  //禁用modal的动画效果
+                       maskClosable={false} //设置不允许点击蒙层关闭
+                       onCancel={cloudTable.saveFileModalHandleCancel}
+                       footer={null}
+                >
+                    <div className="move_file">
+                        <Row>
+                            <Col span={24}>
+                                {returnToolbarInMoveModal}
+                                <Table columns={targetDirColumns} showHeader={false}
+                                       dataSource={cloudTable.state.targetDirDataArray1}
+                                       pagination={{
+                                           total: cloudTable.state.totalCount,
+                                           pageSize: getPageSize(),
+                                           onChange: cloudTable.pageOnChange
+                                       }}
+
+                                       scroll={{y: 300}}/>
+                            </Col>
+                        </Row>
+                    </div>
+                </Modal>
+
 
                 {toolbar}
                 <div className="favorite_scroll">
