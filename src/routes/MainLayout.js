@@ -570,7 +570,7 @@ const MainLayout = React.createClass({
     },
 
     /**
-     * 获取云课堂的操作
+     * 获取云校的操作
      * @param menuItemKey
      */
     getCloudClassRoom(menuItemKey) {
@@ -700,7 +700,7 @@ const MainLayout = React.createClass({
                 // ></nAntCloudTableComponents>;
                 break;
             case 'antCloudClassRoom':
-                //云课堂
+                //云校
                 middleComponent = <AntCloudClassRoomMenu callbackParent={this.getCloudClassRoom}/>;
                 tabComponent = <AntCloudClassRoomComponents currentItem={this.state.cloudRoomMenuItem}/>;
 
@@ -796,7 +796,7 @@ const MainLayout = React.createClass({
                             </Menu.Item>
                             <Menu.Item key="antCloudClassRoom" className="padding_menu">
                                 <i className="icon_menu_ios icon_cloud"></i>
-                                <div className="tan">云课堂</div>
+                                <div className="tan">云校</div>
                             </Menu.Item>
                             <Menu.Item key="antCloud" className="padding_menu">
                                 <i className="icon_menu_ios icon_antdisk"></i>

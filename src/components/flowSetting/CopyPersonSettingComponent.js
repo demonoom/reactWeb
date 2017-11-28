@@ -58,7 +58,7 @@ const CopyPersonSettingComponent = React.createClass({
     },
 
     /**
-     * 根据输入的关键字，查询老师的信息
+     * 根据输入的关键字，查询可以被抄送的人员的信息
      */
     findTeacherByKeyWords(){
         var _this = this;
@@ -70,9 +70,9 @@ const CopyPersonSettingComponent = React.createClass({
         }
         var param = {
             "method": 'searchStructureUsers',
-            "operateUserId": _this.state.loginUser.colUid,
+            "operateUserId": _this.state.loginUser.colUid+"",
             "searchOptions": JSON.stringify(searchOptions),
-            "pageNo":-1,
+            "pageNo":"-1",
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {

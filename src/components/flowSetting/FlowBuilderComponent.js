@@ -150,6 +150,10 @@ const FlowBuilderComponent = React.createClass({
      * 显示添加审批条件的窗口
      */
     addFlowCondition(){
+        //初始化条件设置组件
+        if(isEmpty(this.refs.conditionComponent)==false){
+            this.refs.conditionComponent.initConditionComponent();
+        }
         this.setState({conditionModalVisible:true});
     },
 
@@ -488,7 +492,7 @@ const FlowBuilderComponent = React.createClass({
         currentConditionInfoJsonArray.push(currentConditionInfoJson);
         this.addConditionToPanel(currentConditionInfoJson);
         //初始化条件设置组件
-        this.refs.conditionComponent.initConditionComponent();
+        // this.refs.conditionComponent.initConditionComponent();
     },
 
     /**
@@ -567,55 +571,115 @@ const FlowBuilderComponent = React.createClass({
                     break;
             }
         }
-
-        conditionalSymbolJson.forEach(function (currentCondition) {
+        //todo 返回的条件中，一次条件的条件应该是构成并且的条件，并且的条件显示在同一个框内
+        var flowCondition="";
+        for(var i=0;i<conditionalSymbolJson.length;i++){
+            var currentCondition = conditionalSymbolJson[i];
             var conditionField = currentCondition.conditionField;
             var conditionalSymbol = currentCondition.conditionalSymbol;
             var conditionalValue = currentCondition.conditionalValue;
             var showFlowStarer;
             var conditionTag;
             //todo 该面板中，应该和审批人一样，支持审批条件的移除操作
-            if("assignOfStarter"== conditionField){
-                showFlowStarer = "发起人";
-                var divId = conditionField+"#"+conditionalSymbol+"#"+conditionalValue.userName+"#"+selectedApprovalUser;
-                conditionTag = <div id={divId} >
-                    <div>如果{showFlowStarer} {conditionalSymbol} {conditionalValue.userName}</div>
-                    <div>审批人：{showName}</div>
-                    <Icon type="close"  className="close" onClick={_this.removeApprovalConditonData.bind(this,divId)} />
-                </div>;
-            }else{
-                var conditionFieldArray = conditionField.split("#");
-                showFlowStarer = conditionFieldArray[0];
-                //表单元素类型
-                var conditionType = conditionFieldArray[1];
-                if(conditionType=="checkbox-group"){
-                    var conditionalValues = currentCondition.conditionalValues;
-                    var showConditionalValues="";
-                    for(var i=0;i<conditionalValues.length;i++){
-                        var conditionValue = conditionalValues[i];
-                        if(i!=conditionalValues.length-1){
-                            showConditionalValues = showConditionalValues+conditionValue+ "或者";
+            var divId;
+            if(conditionalSymbolJson.length > 1){
+                //如果有多个条件，需要增加条件的拼接，形成并且的条件
+                if(i!=conditionalSymbolJson.length-1){
+                    if("assignOfStarter"== conditionField){
+                        showFlowStarer = "发起人";
+                        divId = conditionField+"#"+conditionalSymbol+"#"+conditionalValue.userName+"#"+selectedApprovalUser;
+                        flowCondition += showFlowStarer +  conditionalSymbol + conditionalValue.userName+" 并且 ";
+                    }else{
+                        var conditionFieldArray = conditionField.split("#");
+                        showFlowStarer = conditionFieldArray[0];
+                        //表单元素类型
+                        var conditionType = conditionFieldArray[1];
+                        if(conditionType=="checkbox-group"){
+                            var conditionalValues = currentCondition.conditionalValues;
+                            var showConditionalValues="";
+                            for(var i=0;i<conditionalValues.length;i++){
+                                var conditionValue = conditionalValues[i];
+                                if(i!=conditionalValues.length-1){
+                                    showConditionalValues = showConditionalValues+conditionValue+ " 或者 ";
+                                }else{
+                                    showConditionalValues = showConditionalValues+conditionValue;
+                                }
+                            }
+                            divId = conditionField+"#"+conditionalSymbol+"#"+conditionalValue+"#"+selectedApprovalUser;
+                            flowCondition += showFlowStarer +  conditionalSymbol + showConditionalValues+" 并且 ";
                         }else{
-                            showConditionalValues = showConditionalValues+conditionValue;
+                            divId = conditionField+"#"+conditionalSymbol+"#"+conditionalValue+"#"+selectedApprovalUser;
+                            flowCondition += showFlowStarer +  conditionalSymbol + conditionalValue+" 并且 ";
                         }
                     }
-                    var divId = conditionField+"#"+conditionalSymbol+"#"+conditionalValue+"#"+selectedApprovalUser;
-                    conditionTag = <div id={divId} >
-                        <div>如果{showFlowStarer} {conditionalSymbol} {showConditionalValues}</div>
-                        <div>审批人：{showName}</div>
-                        <Icon type="close"  className="close" onClick={_this.removeApprovalConditonData.bind(this,divId)} />
-                    </div>;
                 }else{
-                    var divId = conditionField+"#"+conditionalSymbol+"#"+conditionalValue+"#"+selectedApprovalUser;
-                    conditionTag = <div id={divId}>
-                        <div>如果{showFlowStarer} {conditionalSymbol} {conditionalValue}</div>
-                        <div>审批人：{showName}</div>
-                        <Icon type="close"  className="close" onClick={_this.removeApprovalConditonData.bind(this,divId)} />
-                    </div>;
+                    if("assignOfStarter"== conditionField){
+                        showFlowStarer = "发起人";
+                        divId = conditionField+"#"+conditionalSymbol+"#"+conditionalValue.userName+"#"+selectedApprovalUser;
+                        // flowCondition += <div>{showFlowStarer} {conditionalSymbol} {conditionalValue.userName}</div>;
+                        flowCondition += showFlowStarer +  conditionalSymbol + conditionalValue.userName;
+                    }else{
+                        var conditionFieldArray = conditionField.split("#");
+                        showFlowStarer = conditionFieldArray[0];
+                        //表单元素类型
+                        var conditionType = conditionFieldArray[1];
+                        if(conditionType=="checkbox-group"){
+                            var conditionalValues = currentCondition.conditionalValues;
+                            var showConditionalValues="";
+                            for(var i=0;i<conditionalValues.length;i++){
+                                var conditionValue = conditionalValues[i];
+                                if(i!=conditionalValues.length-1){
+                                    showConditionalValues = showConditionalValues+conditionValue+ " 或者 ";
+                                }else{
+                                    showConditionalValues = showConditionalValues+conditionValue;
+                                }
+                            }
+                            divId = conditionField+"#"+conditionalSymbol+"#"+conditionalValue+"#"+selectedApprovalUser;
+                            flowCondition += showFlowStarer +  conditionalSymbol + showConditionalValues;
+                        }else{
+                            divId = conditionField+"#"+conditionalSymbol+"#"+conditionalValue+"#"+selectedApprovalUser;
+                            // flowCondition += <div>如果{showFlowStarer} {conditionalSymbol} {conditionalValue}</div>;
+                            flowCondition += showFlowStarer +  conditionalSymbol + conditionalValue;
+                        }
+                    }
+                }
+            }else{
+                //如果只有一个条件，按现有的方式进行显示;
+                if("assignOfStarter"== conditionField){
+                    showFlowStarer = "发起人";
+                    divId = conditionField+"#"+conditionalSymbol+"#"+conditionalValue.userName+"#"+selectedApprovalUser;
+                    flowCondition += showFlowStarer +  conditionalSymbol + conditionalValue.userName;
+                }else{
+                    var conditionFieldArray = conditionField.split("#");
+                    showFlowStarer = conditionFieldArray[0];
+                    //表单元素类型
+                    var conditionType = conditionFieldArray[1];
+                    if(conditionType=="checkbox-group"){
+                        var conditionalValues = currentCondition.conditionalValues;
+                        var showConditionalValues="";
+                        for(var i=0;i<conditionalValues.length;i++){
+                            var conditionValue = conditionalValues[i];
+                            if(i!=conditionalValues.length-1){
+                                showConditionalValues = showConditionalValues+conditionValue+ " 或者 ";
+                            }else{
+                                showConditionalValues = showConditionalValues+conditionValue;
+                            }
+                        }
+                        divId = conditionField+"#"+conditionalSymbol+"#"+conditionalValue+"#"+selectedApprovalUser;
+                        flowCondition += showFlowStarer +  conditionalSymbol + showConditionalValues;
+                    }else{
+                        divId = conditionField+"#"+conditionalSymbol+"#"+conditionalValue+"#"+selectedApprovalUser;
+                        flowCondition += showFlowStarer +  conditionalSymbol + conditionalValue;
+                    }
                 }
             }
-            stepConditionArray.push(conditionTag);
-        });
+        };
+        conditionTag = <div id={divId} >
+            <div>如果 {flowCondition}</div>
+            <div>审批人：{showName}</div>
+            <Icon type="close"  className="close" onClick={_this.removeApprovalConditonData.bind(_this,divId)} />
+        </div>;
+        stepConditionArray.push(conditionTag);
         this.setState({stepConditionArray,"conditionModalVisible":false});
     },
 
@@ -806,8 +870,7 @@ const FlowBuilderComponent = React.createClass({
                             <Option value="1">发起时和同意后均通知</Option>
                         </Select>
                     </Col>
-                </Row>
-                 */}
+                </Row>*/}
                 <Modal title="设置审批人" visible={this.state.approvalModalVisible}
                        onCancel={this.approvalModalHandleCancel}
                        onOk={this.addApprovalToStep}
