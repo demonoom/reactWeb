@@ -89,7 +89,7 @@ const MonthlySummary = React.createClass({
                     <div>
                         时间：<RangePicker onChange={this.timeOnChange}/>
                     </div>
-                    <Table columns={columns} dataSource={data} scroll={{x: 5000, y: 300}} pagination={false}/>
+                    <Table columns={columns} dataSource={data} scroll={{x: 5550, y: 300}} pagination={false}/>
                 </div>
             </div>
         );
