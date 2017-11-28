@@ -48,7 +48,7 @@ const columns = [
 
 //假数据
 const data = [];
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 50; i++) {
     data.push({
         key: i,
         name: `用户${i}`,
@@ -114,16 +114,18 @@ const MonthlySummary = React.createClass({
      */
     render() {
         return (
-            <div>
                 <div className="group_cont">
-                    <div className="public—til—blue">考勤详情</div>
-                    <div>
-                        时间：<RangePicker onChange={this.timeOnChange}
-                                        value={[moment(this.state.startTime, dateFormat), moment(this.state.endTime, dateFormat)]}/>
-                    </div>
-                    <Table columns={columns} dataSource={data} scroll={{x: 5550, y: 300}} pagination={false}/>
+                    <div className="public—til—blue">月度汇总</div>
+                    <div className="favorite_scroll">
+                        <div className="checking_add_box group_cont">
+                                <div className="ding_user_t">
+                                    时间：<RangePicker onChange={this.timeOnChange}
+                                                    value={[moment(this.state.startTime, dateFormat), moment(this.state.endTime, dateFormat)]}/>
+                                </div>
+                            <Table className="checking_in_box cloud_box row-t-f" columns={columns} dataSource={data} scroll={{x: 5550, y: 300}} pagination={false}/>
+                        </div>
+                    </div>;
                 </div>
-            </div>
         );
     }
 });
