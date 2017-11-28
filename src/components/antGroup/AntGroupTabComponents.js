@@ -1803,9 +1803,7 @@ const AntGroupTabComponents = React.createClass({
                       </span>;
                             imgArr.push(img);
                         }
-                    }
-
-
+                    };
                     var e = messageList[i];
                     if (isEmpty(e) == true) {
                         continue;
