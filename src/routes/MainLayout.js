@@ -403,8 +403,6 @@ const MainLayout = React.createClass({
     },
     checkVip(a) {
         this.setState({vipKey: a});
-        console.log('啥啥啥');
-        console.log(a);
     },
 
     /**

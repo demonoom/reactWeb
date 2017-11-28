@@ -1624,7 +1624,7 @@ analyze_iframe_2 > div {
 
 ::-webkit-scrollbar {
     width: 6px;
-    height: 8px;
+    height: 6px;
 }
 
 /* 这是针对缺省样式 (必须的) */
@@ -5239,7 +5239,9 @@ div.btn1 {
     white-space: nowrap;
     position: absolute;
 }
-
+.cloud_box .ant-table-fixed-left .ant-table-header{
+    height: 47px;
+}
 .cloud_text {
     position: relative;
     top: 0px;
@@ -7690,11 +7692,7 @@ select.course_n:hover {
 .ant-calendar-range-bottom, .ant-calendar-range .ant-calendar-input-wrap {
     display: none;
 }
-
-.ant-table-thead > tr > th {
-    padding: 12px 8px;
+.cloud_box  .ant-table-fixed-left .ant-table-header {
+    height: 47px;
 }
 
-.ant-table-fixed-left .ant-table-header {
-    height: 39px;
-}

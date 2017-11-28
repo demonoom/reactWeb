@@ -1759,7 +1759,14 @@ const AntGroupTabComponents = React.createClass({
         this.setState({selectedRowKeys});
     },
 
+    noomWatchImg(id) {
+        // console.log(id);
+        // document.querySelectorAll(".topics_zanImg").click();
+        document.getElementById(id).click();
+    },
+
     render() {
+        var _this = this;
         const rowSelection = {
             selectedRowKeys: this.state.selectedRowKeys,
             onChange: this.onSelectChange,
@@ -1780,10 +1787,24 @@ const AntGroupTabComponents = React.createClass({
             var messageTagArray = [];
             messageTagArray.splice(0);
             var messageList = antGroup.state.messageList;
-            // console.log(messageList);
-            // console.log('渲染');
+            console.log(messageList);
+            console.log('messageList');
+            var imgArr = [];
             if (isEmpty(messageList) == false && messageList.length > 0) {
                 for (var i = messageList.length - 1; i >= 0; i--) {
+                    //寻找messageList中的图片，动态构建img
+                    if (isEmpty(messageList[i].attachmentType) == false) {
+                        if (messageList[i].attachmentType == 1) {
+                            var img = <span className="topics_zan"><img id={messageList[i].attachment}
+                                                                        className="topics_zanImg"
+                                                                        onClick={showLargeImg}
+                                                                        src={messageList[i].attachment+ '?' + MIDDLE_IMG}
+                                                                        alt={messageList[i].attachment}
+                            />
+                      </span>;
+                            imgArr.push(img);
+                        }
+                    };
                     var e = messageList[i];
                     if (isEmpty(e) == true) {
                         continue;
@@ -2105,7 +2126,8 @@ const AntGroupTabComponents = React.createClass({
                                             <span className="borderballoon borderballoon_file borderballoon_file_p">
                                                 <span className="bot"></span>
                                                 <span className="top"></span>
-                                                <img onClick={showLargeImg} src={attachment + '?' + MIDDLE_IMG}
+                                                <img onClick={_this.noomWatchImg.bind(this, attachment)}
+                                                     src={attachment + '?' + MIDDLE_IMG}
                                                      className="send_img" alt={attachment}/>
                                             </span>
                                             <span><i className="borderballoon_dingcorner_le_no"></i></span>
@@ -2120,7 +2142,8 @@ const AntGroupTabComponents = React.createClass({
                                             <span className="borderballoon_le borderballoon_file_p">
                                                 <span className="bot"></span>
                                                 <span className="top"></span>
-                                                <img onClick={showLargeImg} className="send_img"
+                                                <img onClick={_this.noomWatchImg.bind(this, attachment)}
+                                                     className="send_img"
                                                      src={attachment + '?' + MIDDLE_IMG} alt={attachment}/>
                                             </span>
                                             <span><i className="borderballoon_dingcorner_ri_no"></i></span>
@@ -2257,6 +2280,7 @@ const AntGroupTabComponents = React.createClass({
                     }
                     messageTagArray.push(messageTag);
                 }
+                // _this.setState({imgArr});
             }
             currentReturnCount = messageTagArray.length;
             var sendBtn;
@@ -2325,6 +2349,11 @@ const AntGroupTabComponents = React.createClass({
                 <div className="group_cont">
                     {userPhoneCard}
                     {tabComponent}
+                    <ul style={{display: 'none'}}>
+                        <li className="imgLi">
+                            {imgArr}
+                        </li>
+                    </ul>
                 </div>
 
                 {/*发送文件model*/}
