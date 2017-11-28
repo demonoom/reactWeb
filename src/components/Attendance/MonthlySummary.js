@@ -122,7 +122,7 @@ const MonthlySummary = React.createClass({
                                     时间：<RangePicker onChange={this.timeOnChange}
                                                     value={[moment(this.state.startTime, dateFormat), moment(this.state.endTime, dateFormat)]}/>
                                 </div>
-                            <Table className="checking_in_box cloud_box row-t-f" columns={columns} dataSource={data} scroll={{x: 5550, y: 300}} pagination={false}/>
+                            <Table className="checking_in_box cloud_box row-t-f month_box" columns={columns} dataSource={data}  scroll={{x: 5550, y: 446}} pagination={false}/>
                         </div>
                     </div>;
                 </div>
