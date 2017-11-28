@@ -1,8 +1,10 @@
 import React, {PropTypes} from 'react';
 import {isEmpty} from '../../utils/utils';
 import {DatePicker, Table} from 'antd';
+import moment from 'moment';
 
-const {MonthPicker, RangePicker} = DatePicker;
+const {RangePicker} = DatePicker;
+const dateFormat = 'YYYY/MM/DD';
 
 const columns = [
     {title: '姓名', width: 100, dataIndex: 'name', key: 'name', fixed: 'left'},
@@ -44,6 +46,7 @@ const columns = [
     {title: '14号（星期二）', dataIndex: 'date', key: '31', width: 150},
 ];
 
+//假数据
 const data = [];
 for (let i = 0; i < 100; i++) {
     data.push({
@@ -70,11 +73,39 @@ const MonthlySummary = React.createClass({
     },
 
     componentDidMount() {
-
+        this.getTimeNow();
     },
 
+    /**
+     * 获取当前日期,设置开始日期为本月1号，结束日期为今天
+     */
+    getTimeNow() {
+        var date = new Date();
+        var seperator1 = "-";
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var startTime = year + seperator1 + month + seperator1 + '01';
+        var endTime = year + seperator1 + month + seperator1 + strDate;
+        this.setState({startTime, endTime});
+    },
+
+    /**
+     * 日期改变的回调
+     * @param date
+     * @param dateString
+     */
     timeOnChange(date, dateString) {
         console.log(date, dateString);
+        var startTime = dateString[0];
+        var endTime = dateString[1];
+        this.setState({startTime, endTime});
     },
 
     /**
@@ -87,7 +118,8 @@ const MonthlySummary = React.createClass({
                 <div className="group_cont">
                     <div className="public—til—blue">考勤详情</div>
                     <div>
-                        时间：<RangePicker onChange={this.timeOnChange}/>
+                        时间：<RangePicker onChange={this.timeOnChange}
+                                        value={[moment(this.state.startTime, dateFormat), moment(this.state.endTime, dateFormat)]}/>
                     </div>
                     <Table columns={columns} dataSource={data} scroll={{x: 5550, y: 300}} pagination={false}/>
                 </div>

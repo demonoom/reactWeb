@@ -1779,10 +1779,21 @@ const AntGroupTabComponents = React.createClass({
             var messageTagArray = [];
             messageTagArray.splice(0);
             var messageList = antGroup.state.messageList;
-            // console.log(messageList);
-            // console.log('渲染');
+            console.log(messageList);
+            console.log('messageList');
+            var imgArr = [];
             if (isEmpty(messageList) == false && messageList.length > 0) {
                 for (var i = messageList.length - 1; i >= 0; i--) {
+                    //寻找messageList中的图片，动态构建img
+                    if (messageList[i].attachmentType == 1) {
+                        var img = <span className="topics_zan"><img id={imgId} className="topics_zanImg"
+                                                                    onClick={showLargeImg}
+                                                                    src={messageList[i].attachment}/>
+                      </span>;
+                        imgArr.push(img);
+                    }
+
+
                     var e = messageList[i];
                     if (isEmpty(e) == true) {
                         continue;
