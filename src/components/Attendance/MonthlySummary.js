@@ -96,7 +96,7 @@ const MonthlySummary = React.createClass({
         this.setState({startTime, endTime});
         console.log(window.screen.width);
         if (window.screen.width > 1366) {
-            this.setState({y: 446})
+            this.setState({y: 436})
         } else {
             this.setState({y: 400})
         }
