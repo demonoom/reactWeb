@@ -320,6 +320,7 @@ const AntGroupTabComponents = React.createClass({
             "userId": antGroup.state.loginUser.colUid,
             "pageNo": 1,
         };
+
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
@@ -444,7 +445,8 @@ const AntGroupTabComponents = React.createClass({
                 "path": path,
                 "length": length
             };
-
+            debugger;
+            console.log('对话框确定按钮保存参数',param);
             doWebService(JSON.stringify(param), {
                 onResponse: function (ret) {
                     if (ret.success == true && ret.msg == "调用成功" && isEmpty(ret.response) == false) {
@@ -521,6 +523,8 @@ const AntGroupTabComponents = React.createClass({
             "queryConditionJson": queryConditionJson,
             "pageNo": pageNo
         };
+        // debugger;
+        console.log('listFiles',param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
@@ -1898,6 +1902,7 @@ const AntGroupTabComponents = React.createClass({
                     var attachment = e.attachment;
                     var attachmentType = e.attachmentType;
                     var expressionItem = e.expressionItem;
+
 
                     //是否是biumessage
                     var biumes = e.biumes;
