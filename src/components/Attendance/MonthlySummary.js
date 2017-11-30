@@ -7,61 +7,17 @@ import {doWebService} from '../../WebServiceHelper'
 const {RangePicker} = DatePicker;
 const dateFormat = 'YYYY/MM/DD';
 
-const columns = [
+var columns = [
     {title: '姓名', width: 100, dataIndex: 'name', key: 'name', fixed: 'left'},
-    {title: '部门', width: 100, dataIndex: 'department', key: 'department', width: 150},
-    {title: '迟到次数', dataIndex: 'tardiness', key: 'tardiness', width: 150},
-    {title: '早退次数', dataIndex: 'numOfLeaving', key: 'numOfLeaving', width: 150},
-    {title: '缺卡次数', dataIndex: 'missCardTimes', key: 'missCardTimes', width: 150},
-    {title: '旷工次数', dataIndex: 'absenteeism', key: 'absenteeism', width: 150},
-    {title: '出勤次数', dataIndex: 'attendance', key: 'attendance', width: 150},
-    {title: '13号（星期一）', dataIndex: 'date', key: '1', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '2', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '3', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '4', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '5', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '6', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '7', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '8', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '9', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '10', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '11', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '12', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '13', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '14', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '15', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '16', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '17', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '18', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '20', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '21', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '22', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '23', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '24', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '25', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '26', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '27', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '28', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '29', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '30', width: 150},
-    {title: '14号（星期二）', dataIndex: 'date', key: '31', width: 150},
+    {title: '部门', width: 100, dataIndex: 'department', key: 'department', width: 200},
+    {title: '迟到次数', dataIndex: 'tardiness', key: 'tardiness', width: 200},
+    {title: '早退次数', dataIndex: 'numOfLeaving', key: 'numOfLeaving', width: 200},
+    {title: '缺卡次数', dataIndex: 'missCardTimes', key: 'missCardTimes', width: 200},
+    {title: '旷工次数', dataIndex: 'absenteeism', key: 'absenteeism', width: 200},
+    {title: '出勤次数', dataIndex: 'attendance', key: 'attendance', width: 200},
 ];
 
-//假数据
-const data = [];
-for (let i = 0; i < 50; i++) {
-    data.push({
-        key: i,
-        name: `用户${i}`,
-        department: 'IT部',
-        tardiness: 1,
-        numOfLeaving: 2,
-        missCardTimes: 3,
-        absenteeism: 1,
-        attendance: 0,
-        date: `London Park no. ${i}`,
-    });
-}
+var monthData = [];
 
 const MonthlySummary = React.createClass({
 
@@ -69,7 +25,6 @@ const MonthlySummary = React.createClass({
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         return {
             loginUser: loginUser,
-
         };
     },
 
@@ -81,8 +36,18 @@ const MonthlySummary = React.createClass({
      * 获取月度汇总
      */
     getMonthlySummary(startTime, endTime) {
-        // var startTime = this.state.startTime;
-        // var endTime = this.state.endTime;
+        //初始化表头
+        columns = [
+            {title: '姓名', width: 100, dataIndex: 'name', key: 'name', fixed: 'left'},
+            {title: '部门', width: 100, dataIndex: 'department', key: 'department',},
+            {title: '迟到次数', dataIndex: 'tardiness', key: 'tardiness', width: 200},
+            {title: '早退次数', dataIndex: 'numOfLeaving', key: 'numOfLeaving', width: 200},
+            {title: '缺卡次数', dataIndex: 'missCardTimes', key: 'missCardTimes', width: 200},
+            {title: '旷工次数', dataIndex: 'absenteeism', key: 'absenteeism', width: 200},
+            {title: '出勤次数', dataIndex: 'attendance', key: 'attendance', width: 200},
+        ];
+        //初始化表格内容
+        monthData = [];
         var _this = this;
         var param = {
             "method": 'viewPunchStatisticsPage',
@@ -92,21 +57,55 @@ const MonthlySummary = React.createClass({
             "dId": '-1',
             "pageNo": '-1',
         };
-        console.log(param);
+        // console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 console.log(ret);
+                debugger
                 if (ret.msg == "调用成功" && ret.success == true) {
                     var data = ret.response;
-                    console.log(data);
-                    //创造attData
-
+                    _this.makeTable(data);
                 }
             },
             onError: function (error) {
                 message.error(error);
             }
         });
+    },
+
+    /**
+     * 制作表格
+     */
+    makeTable(data) {
+        if (isEmpty(data.punch_title) == false) {
+            data.punch_title.forEach(function (v, i) {
+                var obj = {title: v.day + '(' + v.week + ')', dataIndex: 'date' + i, key: i + '1', width: 200}
+                columns.push(obj);
+            })
+        }
+        if (isEmpty(data.punch_content) == false) {
+            data.punch_content.forEach(function (v, i) {
+                var obj1 = {
+                    key: i,
+                    name: v.name,
+                    department: v.department,
+                    tardiness: v.late,  //迟到
+                    numOfLeaving: v.early,  //早退
+                    missCardTimes: v.miss,  //缺卡
+                    absenteeism: v.absent,   //旷工
+                    attendance: v.attendance,   //出勤
+                }
+                var obj2 = {};
+                for (var i = 0; i < v.detail.length; i++) {
+                    obj2['date' + i] = v.detail[i]
+                }
+                var obj = Object.assign(obj1, obj2);
+                monthData.push(obj);
+            })
+        }
+        //计算表格宽度
+        var x = (data.punch_title.length + 6) * 200;
+        this.setState({x});
     },
 
     /**
@@ -141,7 +140,7 @@ const MonthlySummary = React.createClass({
      * @param dateString
      */
     timeOnChange(date, dateString) {
-        console.log(date, dateString);
+        // console.log(date, dateString);
         var startTime = dateString[0];
         var endTime = dateString[1];
         this.setState({startTime, endTime});
@@ -163,7 +162,7 @@ const MonthlySummary = React.createClass({
                                             value={[moment(this.state.startTime, dateFormat), moment(this.state.endTime, dateFormat)]}/>
                         </div>
                         <Table className="checking_in_box cloud_box row-t-f month_box" columns={columns}
-                               dataSource={data} scroll={{x: 5550, y: this.state.y}} pagination={false}/>
+                               dataSource={monthData} scroll={{x: this.state.x, y: this.state.y}} pagination={false}/>
                     </div>
                 </div>
                 ;
