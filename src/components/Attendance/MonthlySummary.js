@@ -1,7 +1,8 @@
 import React, {PropTypes} from 'react';
 import {isEmpty} from '../../utils/utils';
-import {DatePicker, Table} from 'antd';
+import {DatePicker, Table, message} from 'antd';
 import moment from 'moment';
+import {doWebService} from '../../WebServiceHelper'
 
 const {RangePicker} = DatePicker;
 const dateFormat = 'YYYY/MM/DD';
@@ -48,7 +49,7 @@ const columns = [
 
 //假数据
 const data = [];
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 50; i++) {
     data.push({
         key: i,
         name: `用户${i}`,
@@ -77,6 +78,38 @@ const MonthlySummary = React.createClass({
     },
 
     /**
+     * 获取月度汇总
+     */
+    getMonthlySummary(startTime, endTime) {
+        // var startTime = this.state.startTime;
+        // var endTime = this.state.endTime;
+        var _this = this;
+        var param = {
+            "method": 'viewPunchStatisticsPage',
+            "schId": _this.state.loginUser.schoolId,
+            "begin": startTime,
+            "end": endTime,
+            "dId": '-1',
+            "pageNo": '-1',
+        };
+        console.log(param);
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                console.log(ret);
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    var data = ret.response;
+                    console.log(data);
+                    //创造attData
+
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
      * 获取当前日期,设置开始日期为本月1号，结束日期为今天
      */
     getTimeNow() {
@@ -84,7 +117,7 @@ const MonthlySummary = React.createClass({
         var seperator1 = "-";
         var year = date.getFullYear();
         var month = date.getMonth() + 1;
-        var strDate = date.getDate();
+        var strDate = date.getDate() - 1;
         if (month >= 1 && month <= 9) {
             month = "0" + month;
         }
@@ -94,9 +127,9 @@ const MonthlySummary = React.createClass({
         var startTime = year + seperator1 + month + seperator1 + '01';
         var endTime = year + seperator1 + month + seperator1 + strDate;
         this.setState({startTime, endTime});
-        console.log(window.screen.width);
+        this.getMonthlySummary(startTime, endTime);
         if (window.screen.width > 1366) {
-            this.setState({y: 446})
+            this.setState({y: 436})
         } else {
             this.setState({y: 400})
         }
@@ -112,6 +145,7 @@ const MonthlySummary = React.createClass({
         var startTime = dateString[0];
         var endTime = dateString[1];
         this.setState({startTime, endTime});
+        this.getMonthlySummary(startTime, endTime);
     },
 
     /**
