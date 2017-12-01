@@ -63,7 +63,6 @@ const AttendanceManagement = React.createClass({
             "colUid": _this.state.loginUser.colUid,
             "pageNo": '-1'
         };
-        console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.msg == "调用成功" && ret.success == true) {

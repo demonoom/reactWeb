@@ -1624,7 +1624,7 @@ analyze_iframe_2 > div {
 
 ::-webkit-scrollbar {
     width: 6px;
-    height: 8px;
+    height: 6px;
 }
 
 /* 这是针对缺省样式 (必须的) */
@@ -3228,16 +3228,19 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     background-position: center center;
     border-radius: 50%;
 }
-.group_talk ul li.reminder{
+
+.group_talk ul li.reminder {
     text-align: center;
 }
-.group_talk ul li.reminder span{
+
+.group_talk ul li.reminder span {
     background: #c7c7c7;
     padding: 4px 10px;
     border-radius: 4px;
     font-size: 12px;
     color: #fff;
 }
+
 .attention_img2 img {
     position: relative;
     background: #eee;
@@ -5236,7 +5239,9 @@ div.btn1 {
     white-space: nowrap;
     position: absolute;
 }
-
+.cloud_box .ant-table-fixed-left .ant-table-header{
+    height: 47px;
+}
 .cloud_text {
     position: relative;
     top: 0px;
@@ -7673,11 +7678,21 @@ select.course_n:hover {
     border-radius: 4px;
     padding: 0px 2px 2px 2px;
 }
-.person_change_right{
-    width:400px !important;
+
+.person_change_right {
+    width: 400px !important;
 
 }
-.person_change_right .ant-modal-body{
-    max-height:350px !important;
+
+.person_change_right .ant-modal-body {
+    max-height: 350px !important;
     overflow-y: scroll;
 }
+
+.ant-calendar-range-bottom, .ant-calendar-range .ant-calendar-input-wrap {
+    display: none;
+}
+.cloud_box  .ant-table-fixed-left .ant-table-header {
+    height: 47px;
+}
+

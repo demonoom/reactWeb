@@ -20,7 +20,7 @@ const AntCloudClassRoomMenu = React.createClass({
     render() {
         return (
             <div className="cloud_class_menu">
-                <div className="menu_til">云课堂</div>
+                <div className="menu_til">云校</div>
                 <Menu className="cont_menu"
                     onClick={this.handleClick}
                     defaultSelectedKeys={['mulitiClass']}

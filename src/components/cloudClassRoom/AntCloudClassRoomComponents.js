@@ -32,7 +32,7 @@ const AntCloudClassRoomComponents = React.createClass({
     delClass() {
         let obj = {
             mode: 'teachingAdmin',
-            title: '蚂蚁云课堂课程删除',
+            title: '蚂蚁云校课程删除',
             url: 'http://192.168.2.105:8080/Excoord_PhoneService/permission/elearningDeleteCourse/' + loginUserId,
             width: '380px'
         };
