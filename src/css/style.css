@@ -7303,11 +7303,20 @@ select.course_n:hover {
     font-size: 12px;
     margin-top: 5px;
 }
+.send_img_cont{
+    max-width: 230px;
+    min-height: 21px;
+    line-height: 0;
+    position: relative;
+    display: block;
+}
 .borderballoon img.send_img, .borderballoon_le img.send_img {
     max-width: 230px;
     cursor: zoom-in;
     cursor: -webkit-zoom-in;
     border-radius: 4px;
+    height:auto !important;
+    padding: 5px;
 }
 
 .file_link_img_t {
@@ -7743,7 +7752,7 @@ select.course_n:hover {
     font-size: 18px;
     height: 18px;
     position: relative;
-    top: 10px;
+    top: 0px;
     right: 3px;
     display: none;
 }
@@ -7752,4 +7761,10 @@ select.course_n:hover {
 }
 .month_box .ant-table-tbody > tr > td{
     font-size: 12px;
+}
+.ellips_t{
+    color: #333;
+}
+.ellips_t:hover{
+    text-decoration: none;
 }
