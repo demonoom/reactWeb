@@ -57,9 +57,10 @@ const MonthlySummary = React.createClass({
             "dId": '-1',
             "pageNo": '-1',
         };
-        // console.log(param);
+        console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                console.log(ret);
                 if (ret.msg == "调用成功" && ret.success == true) {
                     var data = ret.response;
                     _this.makeTable(data);
@@ -115,6 +116,9 @@ const MonthlySummary = React.createClass({
         var year = date.getFullYear();
         var month = date.getMonth() + 1;
         var strDate = date.getDate() - 1;
+        if (strDate == 0) {
+            strDate += 1;
+        };
         if (month >= 1 && month <= 9) {
             month = "0" + month;
         }
@@ -151,17 +155,6 @@ const MonthlySummary = React.createClass({
      */
     render() {
         return (
-<<<<<<< HEAD
-                <div className="group_cont">
-                    <div className="public—til—blue">月度汇总</div>
-                    <div className="favorite_scroll">
-                        <div className="checking_add_box group_cont">
-                                <div className="ding_user_t">
-                                    时间：<RangePicker onChange={this.timeOnChange}
-                                                    value={[moment(this.state.startTime, dateFormat), moment(this.state.endTime, dateFormat)]}/>
-                                </div>
-                            <Table className="checking_in_box cloud_box row-t-f month_box" columns={columns} dataSource={data}  scroll={{x: 5550, y:446}} pagination={false}/>
-=======
             <div className="group_cont">
                 <div className="public—til—blue">月度汇总</div>
                 <div className="favorite_scroll">
@@ -169,7 +162,6 @@ const MonthlySummary = React.createClass({
                         <div className="ding_user_t">
                             时间：<RangePicker onChange={this.timeOnChange}
                                             value={[moment(this.state.startTime, dateFormat), moment(this.state.endTime, dateFormat)]}/>
->>>>>>> 82ed5b7cdce3bce8319188c686258bd0a91b74f7
                         </div>
                         <Table className="checking_in_box cloud_box row-t-f month_box" columns={columns}
                                dataSource={monthData} scroll={{x: this.state.x, y: this.state.y}} pagination={false}/>
