@@ -988,7 +988,7 @@ const AntGroupTabComponents = React.createClass({
                                 if (isEmpty(v) == false) {
                                     if (v.uuid == data.message.content) {
                                         messageList.splice(i, 1);
-                                        antGroup.setState({mesRetNum: i + 1});
+                                        antGroup.setState({mesRetNum: i});
                                     }
                                 }
                             });
