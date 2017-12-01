@@ -8,6 +8,7 @@ const FormBuilderComponent = React.createClass({
 
     getInitialState() {
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+        this.buildFormDataComponent();
         return {
             loginUser : loginUser,
             formData:[],
@@ -39,7 +40,7 @@ const FormBuilderComponent = React.createClass({
             'toggle',
             'value'
         ]*/
-        this.buildFormDataComponent();
+        // this.buildFormDataComponent();
     },
 
     componentWillReceiveProps(nextProps){
