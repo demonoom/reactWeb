@@ -488,11 +488,13 @@ const FlowBuilderComponent = React.createClass({
     getConditionInfoByJson(){
         //获取条件设定
         var currentConditionInfoJson = this.refs.conditionComponent.getConditionInfoByJson();
-        //将获取到的条件设定，存入数组，该数组将会作为参数，传递到后台进行保存
-        currentConditionInfoJsonArray.push(currentConditionInfoJson);
-        this.addConditionToPanel(currentConditionInfoJson);
-        //初始化条件设置组件
-        // this.refs.conditionComponent.initConditionComponent();
+        if(isEmpty(currentConditionInfoJson)==false){
+            //将获取到的条件设定，存入数组，该数组将会作为参数，传递到后台进行保存
+            currentConditionInfoJsonArray.push(currentConditionInfoJson);
+            this.addConditionToPanel(currentConditionInfoJson);
+            //初始化条件设置组件
+            // this.refs.conditionComponent.initConditionComponent();
+        }
     },
 
     /**
@@ -502,22 +504,24 @@ const FlowBuilderComponent = React.createClass({
         var _this = this;
         //审批条件
         var conditionalSymbolJson = currentConditionInfoJson.flowConditionalSymbolList;
-        //审批条件满足时对应的用户
+        //审批条件满足时对应的用户（该字段废弃）todo 后期把该字段从业务流程中剔除
         var selectedApprovalUser = currentConditionInfoJson.selectedApprovalUser;
-        if(isEmpty(selectedApprovalUser)){
+        //审批人列表，多个审批人，该流程为单独的流程，该流程执行完成后，会直接走向结束
+        var flowApprovalUsers = currentConditionInfoJson.flowApprovalUsers;
+        if(isEmpty(flowApprovalUsers)){
             message.error("请选择符合条件的审批用户");
             this.setState({"conditionModalVisible":false});
             return;
         }
-        var selectedApprovalUserArray = selectedApprovalUser.split(",");
+        /*var selectedApprovalUserArray = selectedApprovalUser.split(",");
         //审批用户类型
         var approvalType = selectedApprovalUserArray[1];
         //对应的审批用户
-        var approvalUser  = selectedApprovalUserArray[0];
-        var currentSelectedObj;
-        var showName;
-        for(var i=0;i<approvalJsonArray.length;i++){
-            var approvalJson = approvalJsonArray[i];
+        var approvalUser  = selectedApprovalUserArray[0];*/
+        // var currentSelectedObj;
+        var showName = "";
+        for(var i=0;i<flowApprovalUsers.length;i++){
+            var approvalJson = flowApprovalUsers[i];
             var approvalType = approvalJson.approvalType;
             var approval = approvalJson.approval;
             var approvalManagerVariables=approvalJson.approvalManagerVariables;
@@ -526,36 +530,50 @@ const FlowBuilderComponent = React.createClass({
             var currentApprovalTypeValue = approvalJson.currentApprovalTypeValue;
             var ifManagerNullFillType = approvalJson.ifManagerNullFillType;
             var approvalStarterVariables = approvalJson.approvalStarterVariables;
+            var linkTag = "  ";
+            if(i!= flowApprovalUsers.length-1){
+                linkTag="->";
+            }
             switch (approvalType){
                 case 0:
                     //指定用户审批
-                    if(approvalJson.approval.colUid==approvalUser){
+                    /*if(approvalJson.approval.colUid==approvalUser){
                         currentSelectedObj = approvalJson.approval;
-                        showName = approvalJson.approval.userName;
+                        showName += approvalJson.approval.userName+"  ";
                         break;
-                    }
+                    }*/
+                    // currentSelectedObj = approvalJson.approvalUser;
+                    showName += approvalJson.approvalUser.userName+linkTag;
                     break;
                 case 1:
                     //角色审批
                     var approvalRoleVariables = approvalJson.approvalRoleVariables;
-                    if(approvalRoleVariables.id==approvalUser){
+                    /*if(approvalRoleVariables.id==approvalUser){
                         currentSelectedObj = approvalRoleVariables.id;
-                        showName = approvalRoleVariables.name;
+                        showName = approvalRoleVariables.name+"  ";
                         break;
-                    }
+                    }*/
+                    // currentSelectedObj = approvalRoleVariables.id;
+                    showName += approvalRoleVariables.name+linkTag;
                     break;
                 case 2:
                     //部门主管审批
                     var flowApprovalUserRule = approvalJson.flowApprovalUserRule;
                     var approvalUserKey = flowApprovalUserRule.levelType+"#"+flowApprovalUserRule.approvalLevel;
-                    if(approvalUserKey==approvalUser){
+                    /*if(approvalUserKey==approvalUser){
                         currentSelectedObj = approvalUserKey;
                         if(flowApprovalUserRule.approvalLevel==0){
-                            showName = "直接主管";
+                            showName = "直接主管"+"  ";
                         }else{
-                            showName = "第"+flowApprovalUserRule.approvalLevel+"级主管";
+                            showName = "第"+flowApprovalUserRule.approvalLevel+"级主管"+"  ";
                         }
                         break;
+                    }*/
+                    // currentSelectedObj = approvalUserKey;
+                    if(flowApprovalUserRule.approvalLevel==0){
+                        showName += "直接主管"+linkTag;
+                    }else{
+                        showName += "第"+flowApprovalUserRule.approvalLevel+"级主管"+linkTag;
                     }
                     break;
                 case 3:
@@ -563,11 +581,13 @@ const FlowBuilderComponent = React.createClass({
                 case 4:
                     //发起人自己审批
                     var approvalStarterVariables = approvalJson.approvalStarterVariables;
-                    if(approvalStarterVariables==approvalUser){
+                    /*if(approvalStarterVariables==approvalUser){
                         currentSelectedObj = approvalStarterVariables;
-                        showName = "发起人自己审批";
+                        showName = "发起人自己审批"+"  ";
                         break;
-                    }
+                    }*/
+                    // currentSelectedObj = approvalStarterVariables;
+                    showName += "发起人自己审批"+linkTag;
                     break;
             }
         }

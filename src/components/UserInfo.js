@@ -1,8 +1,9 @@
 import React, {PropTypes} from 'react';
-import {message, Upload, Icon} from 'antd';
+import {message, Modal, Button, Upload, Icon, Input} from 'antd';
 import {doWebService} from '../WebServiceHelper';
 import {SMALL_IMG, MIDDLE_IMG, LARGE_IMG} from '../utils/Const';
 
+const {TextArea} = Input;
 
 const UserInfo = React.createClass({
     getInitialState() {
@@ -14,16 +15,19 @@ const UserInfo = React.createClass({
             courseName: '',
             schoolName: '',
             schoolAddress: '',
-            imageUrl: ''
+            imageUrl: '',
+            introduction: '',
+            editupdate: false,
+            editTextarea: ''
         };
         this.changeFace = this.changeFace.bind(this);
     },
 
-    componentWillMount(){
+    componentWillMount() {
         this.getTeacherInfo(this.state.ident);
     },
 
-    getTeacherInfo(ident){
+    getTeacherInfo(ident) {
 
         let _this = this;
         var param = {
@@ -38,19 +42,21 @@ const UserInfo = React.createClass({
                     var userName = userInfo.user.userName;//用户名
                     var userHeadIcon = userInfo.user.avatar;//头像
                     var courseName;
-                    if(userInfo.user.colUtype=="TEAC"){
+                    if (userInfo.user.colUtype == "TEAC") {
                         courseName = userInfo.course;//科目
                     }
                     var schoolName = userInfo.school;//学校名称
+                    var introduction = userInfo.introduction;//个人介绍
                     var grade = userInfo.grade;
                     _this.user = userInfo.user;
                     _this.setState({
                         userName: userName,
                         userHeadIcon: userHeadIcon,
-                        userType:userInfo.user.colUtype,
+                        userType: userInfo.user.colUtype,
                         courseName: courseName,
                         schoolName: schoolName,
-                        grade: grade
+                        grade: grade,
+                        introduction: introduction
                     });
                 } else {
                     message.error("个人信息获取失败");
@@ -64,7 +70,7 @@ const UserInfo = React.createClass({
 
 
     // face change
-    changeFace(info){
+    changeFace(info) {
         var _this = this;
         var param = {
             "method": 'upadteAvatar',
@@ -86,21 +92,21 @@ const UserInfo = React.createClass({
         });
     },
 
-    getTitle(){
-        let _this=this;
+    getTitle() {
+        let _this = this;
         let uploadProps = {
             action: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload',
             showUploadList: false,
             className: "avatar-uploader",
             name: "avatar",
-            beforeUpload (file){
+            beforeUpload(file) {
                 var fileType = file.type;
                 if (fileType.indexOf("image") == -1) {
                     message.error('只能上传图片文件，请重新上传', 5);
                     return false;
                 }
             },
-            onChange (info){
+            onChange(info) {
                 switch (info.file.status) {
                     case "uploading":
                         var percent = info.file.percent;
@@ -122,10 +128,12 @@ const UserInfo = React.createClass({
 
         };
 
+
         return <div className="gary_person">
             <Upload {...uploadProps}>
                 {
-                    this.state.userHeadIcon ? <img src={this.state.userHeadIcon + '?' + SMALL_IMG} className="userinfo_name userinfo_face user_with_border4 affix_bottom_tc"/> :
+                    this.state.userHeadIcon ? <img src={this.state.userHeadIcon + '?' + SMALL_IMG}
+                                                   className="userinfo_name userinfo_face user_with_border4 affix_bottom_tc"/> :
                         <Icon type="plus" className="avatar-uploader-trigger"/>
                 }
             </Upload>
@@ -135,35 +143,118 @@ const UserInfo = React.createClass({
         </div>;
     },
 
+    //model设置个人信息
+    showModal() {
+        this.setState({
+            editupdate: true,
+        });
+    },
+    closeEditModalHandleCancel() {
+        this.setState({
+            editupdate: false,
+        });
+    },
+    sendIntro() {
+        var str = this.state.editTextarea;
+        //将新的数据插入数据库（正常）
+        var _this = this;
+        var param = {
+            "method": 'updateUserIntroducation',
+            "userId": _this.state.ident,
+            "introduction": str,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (res) {
+                if (res.success) {
+                    message.success('修改成功');
+                    _this.setState({
+                        editupdate: false,
+                        introduction: str
+                    });
+                } else {
+                    message.error(res.msg);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+
+    },
+
+    // editTextArea(e) {
+    //
+    //     // this.setState({editTextarea: e.target.value});
+    //
+    // },
+
+
+
+    editTextArea(e) {
+        //限制字数
+        var target = e.target;
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
+            target = e.target;
+        }
+        var repeatMes = target.value;
+        if (repeatMes.length > 200) {
+            repeatMes = repeatMes.substr(0, 200);
+            message.error('已经达到最大字数限制');
+        }
+        this.setState({editTextarea:repeatMes});
+    },
 
     render() {
 
         var courseOrGrade;
-        if(this.state.userType=="TEAC"){
+        if (this.state.userType == "TEAC") {
             courseOrGrade = <p className="user_cont"><span className="user_til_name">科目：</span><span
                 className="black_person">{this.state.courseName}</span></p>;
-        }else{
+        } else {
             courseOrGrade = <p className="user_cont"><span className="user_til_name">年级：</span><span
                 className="black_person">{this.state.grade}</span></p>;
         }
 
         return (
-			<div className="userinfo_bg">
-            <div className="">
-                {this.getTitle()}
-				<div className="userinfo_top upexam_float">
-					<p className="user_cont"><span className="user_til_name">学校名称：</span><span
-                    className="black_person">{this.state.schoolName}</span></p>
-                <p className="user_cont"><span className="user_til_name">姓名：</span><span
-                    className="black_person">{this.state.userName}</span></p>
-                {courseOrGrade}
-				</div>
-                
-
+            <div className="userinfo_bg">
+                <div className="">
+                    {this.getTitle()}
+                    <div className="userinfo_top upexam_float">
+                        <p className="user_cont"><span className="user_til_name">学校名称：</span><span
+                            className="black_person">{this.state.schoolName}</span></p>
+                        <p className="user_cont"><span className="user_til_name">姓名：</span><span
+                            className="black_person">{this.state.userName}</span></p>
+                        {courseOrGrade}
+                        <p className="user_introduction"><span className="user_til_name_int">个人介绍：</span><span
+                            className="black_person_introduction">{this.state.introduction}</span>
+                            <Button float='left' type="primary" onClick={this.showModal}>编辑</Button>
+                        </p>
+                    </div>
+                </div>
+                <Modal title="编辑"
+                       visible={this.state.editupdate}
+                       transitionName=""  //禁用modal的动画效果
+                       maskClosable={false} //设置不允许点击蒙层关闭
+                       onCancel={this.closeEditModalHandleCancel}
+                       className="footer_user_introduction"
+                       footer={[
+                           <div>
+                               <Input type="textarea" id="" rows={4} value={this.state.editTextarea}
+                                      onChange={this.editTextArea}
+                               />
+                               <Button type="primary" htmlType="submit" className="login-form-button"
+                                       onClick={this.sendIntro}>
+                                   确认修改
+                               </Button>
+                           </div>
+                       ]}
+                >
+                </Modal>
             </div>
-			</div>
         );
     },
 });
-export  default UserInfo;
+export default UserInfo;
 
