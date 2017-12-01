@@ -51,6 +51,7 @@ var isRequesting = false;
 var preHeight = 0;
 var isSend = false;
 var menu = null;
+var msgMenu = null;
 var targetDirColumns = [{
     title: '文件夹名称',
     dataIndex: 'dirName',
@@ -79,6 +80,13 @@ const AntGroupTabComponents = React.createClass({
                 {/*<Menu.Item>*/}
                 {/*<a target="_blank">保存到蚁盘</a>*/}
                 {/*</Menu.Item>*/}
+            </Menu>
+        );
+        msgMenu = (
+            <Menu>
+                <Menu.Item>
+                    <a target="_blank" className="ellips_t" onClick={this.withdrawMsg}>撤回</a>
+                </Menu.Item>
             </Menu>
         );
         return {
@@ -278,6 +286,43 @@ const AntGroupTabComponents = React.createClass({
         this.setState({isShare: true});
     },
 
+    getMesUUid(uuid) {
+        this.setState({mesUuid: uuid});
+    },
+
+    /**
+     * 消息撤回的方法
+     */
+    withdrawMsg() {
+        var mesUuid = this.state.mesUuid;
+        var param = {
+            "method": 'retractMessage',
+            "userId": antGroup.state.loginUser.colUid,
+            "messageUUID": mesUuid,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    var messageList = antGroup.state.messageList;
+                    messageList.forEach(function (v, i) {
+                        if (isEmpty(v) == false) {
+                            if (v.uuid == mesUuid) {
+                                messageList.splice(i, 1);
+                                antGroup.setState({mesRetNum: i});
+                            }
+                        }
+                    });
+                    antGroup.setState({messageList});
+                } else {
+                    message.error(ret.msg);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
     /**
      *打开保存文件到蚁盘的model
      */
@@ -288,6 +333,7 @@ const AntGroupTabComponents = React.createClass({
             "userId": antGroup.state.loginUser.colUid,
             "pageNo": 1,
         };
+
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
@@ -412,7 +458,6 @@ const AntGroupTabComponents = React.createClass({
                 "path": path,
                 "length": length
             };
-
             doWebService(JSON.stringify(param), {
                 onResponse: function (ret) {
                     if (ret.success == true && ret.msg == "调用成功" && isEmpty(ret.response) == false) {
@@ -641,6 +686,42 @@ const AntGroupTabComponents = React.createClass({
         this.refs.fileUploadCom.clearFile();
     },
 
+    sendPicToOthers(url) {
+        var name = '';
+        //文件路径
+        var path = url;
+
+        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+
+        var uuid = this.createUUID();
+
+        var createTime = (new Date()).valueOf();
+
+        var attachment = {
+            "address": path,
+            "createTime": createTime,
+            "playing": false,
+            "type": 1,
+            "user": loginUser
+        };
+
+        var messageJson = {
+            'content': name, "createTime": createTime, 'fromUser': loginUser,
+            "toId": antGroup.state.userIdOfCurrentTalk, "command": "message", "hostId": loginUser.colUid,
+            "uuid": uuid, "toType": 1, "attachment": attachment
+        };
+
+        if (antGroup.state.optType == "sendGroupMessage") {
+            messageJson.toId = antGroup.state.currentGroupObj.chatGroupId;
+            messageJson.toType = 4;
+        }
+
+        var commandJson = {"command": "message", "data": {"message": messageJson}};
+
+        ms.send(commandJson);
+        //关闭model
+    },
+
     /**
      * 拿到文件路径，发送message
      */
@@ -793,6 +874,8 @@ const AntGroupTabComponents = React.createClass({
             }, onWarn: function (warnMsg) {
 
             }, onMessage: function (info) {
+                console.log(info);
+                console.log('info');
                 var groupObj;
                 var gt = $('#groupTalk');
                 if (antGroup.state.optType == "sendMessage") {
@@ -886,7 +969,7 @@ const AntGroupTabComponents = React.createClass({
                             // var obj = JSON.parse(data.message.content);
                             _this.props.showAlert(true);
                         } else if (data.message.command == "message") {
-                            if (data.message.fromUser.colUid !== _this.state.loginUser.colUid) {
+                            if (data.message.fromUser.colUid !== _this.state.loginUser.colUid && data.message.showType == 0) {
                                 if (isEmpty(data.message.toChatGroup) == false || isEmpty(data.message.toUser) == false) {
                                     _this.props.showMesAlert(true);
                                     _this.props.refresh();
@@ -898,8 +981,20 @@ const AntGroupTabComponents = React.createClass({
                                     antGroup.cloudFileUploadModalHandleCancel();
                                 }
                             }
+                        } else if (data.message.command == "retractMessage") {
+                            //根据data.message.content去messagelist中删除消息
+                            var messageList = antGroup.state.messageList;
+                            messageList.forEach(function (v, i) {
+                                if (isEmpty(v) == false) {
+                                    if (v.uuid == data.message.content) {
+                                        messageList.splice(i, 1);
+                                        antGroup.setState({mesRetNum: i});
+                                    }
+                                }
+                            });
+                            antGroup.setState({messageList});
                         }
-                        ;
+
                         showImg = "";
                         messageOfSinge = data.message;
                         var fromUser = messageOfSinge.fromUser;
@@ -908,8 +1003,7 @@ const AntGroupTabComponents = React.createClass({
                         var content = messageOfSinge.content;
                         var uuidsArray = [];
                         var uuid = messageOfSinge.uuid;
-                        // console.log(messageOfSinge);
-                        // console.log('//判断是否是叮消息');
+                        var showType = messageOfSinge.showType;  //showType为0正常显示 1通知形式
                         //判断是否是叮消息
                         //判断这条消息是我发出的，处理别的手机发送消息不同步的问题
                         if (messageOfSinge.fromUser.colUid == antGroup.state.loginUser.colUid) {
@@ -971,7 +1065,7 @@ const AntGroupTabComponents = React.createClass({
                         }
                         var contentJson = {"content": content, "createTime": createTime};
                         var contentArray = [contentJson];
-                        if (messageOfSinge.toType == 1 && typeof (content) != 'undefined') {
+                        if (messageOfSinge.toType == 1 && typeof (content) != 'undefined' && messageOfSinge.command != "retractMessage") {
                             //个人单条消息
                             imgTagArray.splice(0);
                             var imgTagArrayReturn = [];
@@ -1003,7 +1097,9 @@ const AntGroupTabComponents = React.createClass({
                                             "fileLength": fileLength,
                                             "fileUid": fileUid,
                                             "fileCreateUid": fileCreateUid,
-                                            "biumes": biumes
+                                            "biumes": biumes,
+                                            "uuid": uuid,
+                                            "showType": showType
                                         };
                                         messageList.push(messageShow);
                                         // console.log(messageList);
@@ -1039,7 +1135,9 @@ const AntGroupTabComponents = React.createClass({
                                             "filePath": filePath,
                                             "fileLength": fileLength,
                                             "fileUid": fileUid,
-                                            "fileCreateUid": fileCreateUid
+                                            "fileCreateUid": fileCreateUid,
+                                            "uuid": uuid,
+                                            "showType": showType,
                                         };
                                         //如果发送的消息=当前点击人的id，才push
                                         if (messageOfSinge.toUser.colUid === _this.state.curId) {
@@ -1062,7 +1160,7 @@ const AntGroupTabComponents = React.createClass({
                                     }
                                 }
                             }
-                        } else if (messageOfSinge.toType == 4 && typeof (content) != 'undefined') {
+                        } else if (messageOfSinge.toType == 4 && typeof (content) != 'undefined' && messageOfSinge.command != "retractMessage") {
                             //群组单条消息
                             if (isEmpty(antGroup.state.currentGroupObj) == false
                                 && antGroup.state.currentGroupObj.chatGroupId == messageOfSinge.toChatGroup.chatGroupId) {
@@ -1090,7 +1188,9 @@ const AntGroupTabComponents = React.createClass({
                                     "filePath": filePath,
                                     "fileLength": fileLength,
                                     "fileUid": fileUid,
-                                    "fileCreateUid": fileCreateUid
+                                    "fileCreateUid": fileCreateUid,
+                                    "uuid": uuid,
+                                    "showType": showType,
                                 };
                                 //messageList.splice(0, 0, messageShow);
                                 messageList.push(messageShow);
@@ -1372,7 +1472,18 @@ const AntGroupTabComponents = React.createClass({
 
     addMessageList(messages, firstOrLast) {
         if (isEmpty(firstOrLast) == false) {
-            antGroup.state.messageList.unshift(messages[0]);
+            if (isEmpty(messages[0]) == false) {
+                var num = antGroup.state.mesRetNum;
+                if (messages[0].showType == 1) {
+                    //对通知消息进行重排
+                    antGroup.state.messageList.splice(num, 0, messages[0])
+                } else {
+                    if (antGroup.state.messageList[0].uuid !== messages[0].uuid) {
+                        antGroup.state.messageList.unshift(messages[0]);
+                    }
+
+                }
+            }
             antGroup.setState({messageList: antGroup.state.messageList});
         } else {
             antGroup.setState({messageList: antGroup.state.messageList.concat(messages)});
@@ -1455,6 +1566,7 @@ const AntGroupTabComponents = React.createClass({
                             var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
                             if (("SGZH" == colUtype || groupObj.chatGroupId == e.toId ) && e.toType == 4) {
                                 var uuid = e.uuid;
+                                var showType = e.showType;
                                 uuidsArray.push(uuid);
                                 imgTagArray.splice(0);
                                 showImg = "";
@@ -1482,7 +1594,9 @@ const AntGroupTabComponents = React.createClass({
                                     "fileLength": fileLength,
                                     "fileUid": fileUid,
                                     "fileCreateUid": fileCreateUid,
-                                    "biumes": biumes
+                                    "biumes": biumes,
+                                    "uuid": uuid,
+                                    "showType": showType,
                                 };
                                 messageList.push(message);
                             }
@@ -1689,6 +1803,7 @@ const AntGroupTabComponents = React.createClass({
                             var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
                             if (messageOfSinge.toType == 1) {
                                 var uuid = messageOfSinge.uuid;
+                                var showType = messageOfSinge.showType;
                                 uuidsArray.push(uuid);
                                 var content = messageOfSinge.content;
                                 imgTagArray.splice(0);
@@ -1716,7 +1831,9 @@ const AntGroupTabComponents = React.createClass({
                                     "fileLength": fileLength,
                                     "fileUid": fileUid,
                                     "fileCreateUid": fileCreateUid,
-                                    "biumes": biumes
+                                    "biumes": biumes,
+                                    "uuid": uuid,
+                                    "showType": showType
                                 };
                                 messageList.push(messageShow);
                             }
@@ -1754,11 +1871,15 @@ const AntGroupTabComponents = React.createClass({
      * @param selectedRowKeys
      */
     onSelectChange(selectedRowKeys) {
-        console.log('selectedRowKeys changed: ', selectedRowKeys);
         this.setState({selectedRowKeys});
     },
 
+    noomWatchImg(id) {
+        document.getElementById(id).click();
+    },
+
     render() {
+        var _this = this;
         const rowSelection = {
             selectedRowKeys: this.state.selectedRowKeys,
             onChange: this.onSelectChange,
@@ -1779,21 +1900,29 @@ const AntGroupTabComponents = React.createClass({
             var messageTagArray = [];
             messageTagArray.splice(0);
             var messageList = antGroup.state.messageList;
+
             console.log(messageList);
             console.log('messageList');
+
             var imgArr = [];
             if (isEmpty(messageList) == false && messageList.length > 0) {
                 for (var i = messageList.length - 1; i >= 0; i--) {
                     //寻找messageList中的图片，动态构建img
-                    if (messageList[i].attachmentType == 1) {
-                        var img = <span className="topics_zan"><img id={imgId} className="topics_zanImg"
-                                                                    onClick={showLargeImg}
-                                                                    src={messageList[i].attachment}/>
+                    if (isEmpty(messageList[i]) == false) {
+                        if (isEmpty(messageList[i].attachmentType) == false) {
+                            if (messageList[i].attachmentType == 1) {
+                                var img = <span className="topics_zan"><img id={messageList[i].attachment}
+                                                                            className="topics_zanImg"
+                                                                            onClick={showLargeImg}
+                                                                            src={messageList[i].attachment + '?' + MIDDLE_IMG}
+                                                                            alt={messageList[i].attachment}
+                                />
                       </span>;
-                        imgArr.push(img);
+                                imgArr.push(img);
+                            }
+                        }
+                        ;
                     }
-
-
                     var e = messageList[i];
                     if (isEmpty(e) == true) {
                         continue;
@@ -1811,6 +1940,7 @@ const AntGroupTabComponents = React.createClass({
                     var attachment = e.attachment;
                     var attachmentType = e.attachmentType;
                     var expressionItem = e.expressionItem;
+
 
                     //是否是biumessage
                     var biumes = e.biumes;
@@ -1838,88 +1968,117 @@ const AntGroupTabComponents = React.createClass({
                                     if (isEmpty(attachment) == false) {
                                         //有内容的链接
                                         messageTag = <li style={{'textAlign': 'right'}} className="right">
-                                            <div className="u-name"><span>{fromUser}</span></div>
-                                            <div className="talk-cont"><span
-                                                className="name">{userPhoneIcon}</span><span
-                                                className="borderballoon_le noom_cursor"
-                                                onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
-                                                <div className="borderballoon_le_cont">
-                                                <img className="upexam_float span_link_img" style={{width: 40}}
-                                                     src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
-                                                     alt=""/>
-                                                     <div className="span_link_div">
-                                                         <span className="span_link file_link_img_t">{content}</span>
-                                                     </div>
-                                                 </div>
-                                                <i className="borderballoon_dingcorner_ri_no"></i></span></div>
-
+                                            <div className="u-name">
+                                                <span>{fromUser}</span>
+                                            </div>
+                                            <div className="talk-cont">
+                                                <span className="name">{userPhoneIcon}</span>
+                                                <span className="borderballoon_le noom_cursor" onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
+                                                    <div className="borderballoon_le_cont">
+                                                        <img className="upexam_float span_link_img" style={{width: 40}} src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png" alt=""/>
+                                                         <div className="span_link_div">
+                                                             <span className="span_link file_link_img_t">{content}</span>
+                                                         </div>
+                                                    </div>
+                                                    <i className="borderballoon_dingcorner_ri_no"></i>
+                                                </span>
+                                                <Dropdown overlay={msgMenu} placement="topCenter" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                                    <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                </Dropdown>
+                                            </div>
                                         </li>;
                                         // }
                                     } else if (isEmpty(expressionItem) == false) {
                                         //来自安卓的动态表情（安卓的动态表情的content里有“表情”两个字）
                                         messageTag = <li className="right" style={{'textAlign': 'right'}}>
-                                            <div className="u-name"><span>{fromUser}</span></div>
-                                            <div className="talk-cont"><span className="name">{userPhoneIcon}</span>
+                                            <div className="u-name">
+                                                <span>{fromUser}</span>
+                                            </div>
+                                            <div className="talk-cont">
+                                                <span className="name">{userPhoneIcon}</span>
                                                 <img src={expressionItem} style={{width: '100px', height: '100px'}}/>
                                                 <span><i className="borderballoon_dingcorner_le_no"></i></span>
+                                                <Dropdown overlay={msgMenu} placement="topCenter" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                                    <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                </Dropdown>
                                             </div>
                                         </li>;
                                     } else if (isEmpty(fileName) == false) {
                                         //发送的文件（content里带有文件名字）
                                         messageTag = <li style={{'textAlign': 'right'}} className="right">
-                                            <div className="u-name"><span>{fromUser}</span></div>
-                                            <div className="talk-cont"><span
-                                                className="name">{userPhoneIcon}</span><span
-                                                className="borderballoon noom_cursor borderballoon_file">
-                                                <span className="bot"></span>
-                                                <span className="top"></span>
-                                                <div className="borderballoon_le_cont"><div
-                                                    className="span_link_div"><span
-                                                    className="span_link">{fileName}</span><span
-                                                    className="span_link password_ts">{fileLength}kb</span></div>
-                                                <img className="upexam_float span_link_img" style={{width: 38}}
-                                                     src="../src/components/images/maaee_link_file_102_102.png"
-                                                     alt=""/>
+                                            <div className="u-name">
+                                                <span>{fromUser}</span>
+                                            </div>
+                                            <div className="talk-cont">
+                                                <span className="name">{userPhoneIcon}</span>
+                                                <span className="borderballoon noom_cursor borderballoon_file">
+                                                    <span className="bot"></span>
+                                                    <span className="top"></span>
+                                                    <div className="borderballoon_le_cont">
+                                                        <div className="span_link_div">
+                                                            <span className="span_link">{fileName}</span>
+                                                            <span className="span_link password_ts">{fileLength}kb</span>
+                                                        </div>
+                                                        <img className="upexam_float span_link_img" style={{width: 38}} src="../src/components/images/maaee_link_file_102_102.png" alt=""/>
                                                     </div>
-                                                <img id={fileUid} style={{display: "none"}} src={filePath}
-                                                     onClick={showLargeImg}
-                                                     alt=""/>
-                                            <div className="file_noom">
-                                                    <a className="noom_cursor  file_noom_line"
-                                                       onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid, fileName)}><Icon
-                                                        type="eye"/>预览</a>
-                                                    <a href={filePath} target="_blank" title="下载"
-                                                       download={filePath}
-                                                       className="downfile_noom file_noom_line"><Icon
-                                                        type="download"/>下载</a>
-                                                    <Dropdown overlay={menu}
-                                                              onVisibleChange={this.getCloudFile.bind(this, filePath, fileName, oriFileLength, fileCreateUid)}>
-                                                        <a className="ant-dropdown-link file_noom_line"
-                                                           href="javascript:;">
-                                                          <Icon type="bars"/>更多
+                                                    <img id={fileUid} style={{display: "none"}} src={filePath} onClick={showLargeImg} alt=""/>
+                                                    <div className="file_noom">
+                                                        <a className="noom_cursor  file_noom_line" onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid, fileName)}>
+                                                            <Icon type="eye"/>预览
                                                         </a>
-                                                    </Dropdown>
-                                                </div>
-                                            </span></div>
+                                                        <a href={filePath} target="_blank" title="下载" download={filePath} className="downfile_noom file_noom_line">
+                                                            <Icon type="download"/>下载</a>
+                                                        <Dropdown overlay={menu} onVisibleChange={this.getCloudFile.bind(this, filePath, fileName, oriFileLength, fileCreateUid)}>
+                                                            <a className="ant-dropdown-link file_noom_line"  href="javascript:;">
+                                                              <Icon type="bars"/>更多
+                                                            </a>
+                                                        </Dropdown>
+                                                    </div>
+                                                </span>
+                                                <Dropdown overlay={msgMenu} placement="topCenter" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                                    <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                </Dropdown>
+                                            </div>
                                         </li>;
                                     } else {
                                         //文字消息
                                         if (biumes == true) {
+                                            //叮消息
                                             messageTag = <li className="right" style={{'textAlign': 'right'}}>
-                                                <div className="u-name"><span>{fromUser}</span></div>
-                                                <div className="talk-cont"><span
-                                                    className="name">{userPhoneIcon}</span><span
-                                                    className="borderballoon">{e.content}<i
-                                                    className="borderballoon_dingcorner_le"></i></span></div>
+                                                <div className="u-name">
+                                                    <span>{fromUser}</span>
+                                                </div>
+                                                <div className="talk-cont">
+                                                    <span className="name">{userPhoneIcon}</span>
+                                                    <span className="borderballoon">{e.content}
+                                                        <i className="borderballoon_dingcorner_le"></i>
+                                                    </span>
+                                                    {/*<Dropdown overlay={msgMenu} placement="topLeft"*/}
+                                                    {/*onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>*/}
+                                                    {/*<Icon type="ellipsis"/>*/}
+                                                    {/*</Dropdown>*/}
+                                                </div>
                                             </li>;
                                         } else {
-                                            messageTag = <li className="right" style={{'textAlign': 'right'}}>
-                                                <div className="u-name"><span>{fromUser}</span></div>
-                                                <div className="talk-cont"><span
-                                                    className="name">{userPhoneIcon}</span><span
-                                                    className="borderballoon">{e.content}<i
-                                                    className="borderballoon_dingcorner_le_no"></i></span></div>
-                                            </li>;
+                                            //普通文字消息
+                                            if (e.showType == 1) {
+                                                messageTag = <li className="reminder"><span>{e.content}</span></li>;
+                                            } else {
+                                                messageTag = <li className="right" style={{'textAlign': 'right'}}>
+                                                    <div className="u-name">
+                                                        <span>{fromUser}</span>
+                                                    </div>
+                                                    <div className="talk-cont">
+                                                        <span className="name">{userPhoneIcon}</span>
+                                                        <span className="borderballoon">{e.content}
+                                                            <i className="borderballoon_dingcorner_le_no"></i>
+                                                        </span>
+                                                        <Dropdown overlay={msgMenu} placement="topCenter" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                                            <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                        </Dropdown>
+                                                    </div>
+                                                </li>;
+                                            }
                                         }
                                     }
                                 } else {
@@ -2007,7 +2166,7 @@ const AntGroupTabComponents = React.createClass({
                                             </li>;
                                         } else {
                                             //普通消息无角标
-                                            if (e.fromUser.colUid == 120024) {
+                                            if (e.fromUser.colUid == 120024 || e.showType == 1) {
                                                 messageTag = <li className="reminder"><span>{e.content}</span></li>;
                                             } else {
                                                 messageTag = <li style={{'textAlign': 'left'}}>
@@ -2029,10 +2188,18 @@ const AntGroupTabComponents = React.createClass({
                                 if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
                                     //我发出的
                                     messageTag = <li className="right" style={{'textAlign': 'right'}}>
-                                        <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span
-                                            className="borderballoon ">{e.imgTagArray}<i
-                                            className="borderballoon_dingcorner_le_no"></i></span></div>
+                                        <div className="u-name">
+                                            <span>{fromUser}</span>
+                                        </div>
+                                        <div className="talk-cont">
+                                            <span className="name">{userPhoneIcon}</span>
+                                            <span className="borderballoon ">{e.imgTagArray}
+                                                <i className="borderballoon_dingcorner_le_no"></i>
+                                            </span>
+                                            <Dropdown overlay={msgMenu} placement="topCenter" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                                <Icon className="icon_ellipsis" type="ellipsis"/>
+                                            </Dropdown>
+                                        </div>
                                     </li>;
                                 } else {
                                     //我收到的
@@ -2049,10 +2216,19 @@ const AntGroupTabComponents = React.createClass({
                                 if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
                                     //我发出的
                                     messageTag = <li className="right" style={{'textAlign': 'right'}}>
-                                        <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span><img
-                                            src={expressionItem} style={{width: '100px', height: '100px'}}/><span><i
-                                            className="borderballoon_dingcorner_le_no"></i></span></div>
+                                        <div className="u-name">
+                                            <span>{fromUser}</span>
+                                        </div>
+                                        <div className="talk-cont">
+                                            <span className="name">{userPhoneIcon}</span>
+                                            <img src={expressionItem} style={{width: '100px', height: '100px'}}/>
+                                            <span>
+                                                <i className="borderballoon_dingcorner_le_no"></i>
+                                            </span>
+                                            <Dropdown overlay={msgMenu} placement="topCenter" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                                <Icon className="icon_ellipsis" type="ellipsis"/>
+                                            </Dropdown>
+                                        </div>
                                     </li>;
                                 } else {
                                     //我收到的
@@ -2069,23 +2245,26 @@ const AntGroupTabComponents = React.createClass({
                                 if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
                                     //我发出的
                                     messageTag = <li style={{'textAlign': 'right'}} className="right">
-                                        <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span
-                                            className="name">{userPhoneIcon}</span><span
-                                            className="borderballoon noom_cursor borderballoon_file"
-                                            onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
+                                        <div className="u-name">
+                                            <span>{fromUser}</span>
+                                        </div>
+                                        <div className="talk-cont">
+                                            <span className="name">{userPhoneIcon}</span>
+                                            <span className="borderballoon noom_cursor borderballoon_file" onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
                                                 <span className="bot"></span>
                                                 <span className="top"></span>
-                                            <div className="borderballoon_le_cont">
-                                                <img className="upexam_float span_link_img" style={{width: 40}}
-                                                     src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
-                                                     alt=""/>
+                                                <div className="borderballoon_le_cont">
+                                                    <img className="upexam_float span_link_img" style={{width: 40}} src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png" alt=""/>
                                                      <div className="span_link_div">
-                                                         <span
-                                                             className="span_link file_link_img_t">{e.messageReturnJson.content}</span>
+                                                         <span className="span_link file_link_img_t">{e.messageReturnJson.content}</span>
                                                      </div>
-                                                 </div>
-                                            <i className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                                </div>
+                                                <i className="borderballoon_dingcorner_ri_no"></i>
+                                            </span>
+                                            <Dropdown overlay={msgMenu} placement="topCenter" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                                <Icon className="icon_ellipsis" type="ellipsis"/>
+                                            </Dropdown>
+                                        </div>
                                     </li>;
                                 } else {
                                     //我收到的
@@ -2109,15 +2288,22 @@ const AntGroupTabComponents = React.createClass({
                                 if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
                                     //我发出的
                                     messageTag = <li className="right" style={{'textAlign': 'right'}}>
-                                        <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span className="name">{userPhoneIcon}</span>
+                                        <div className="u-name">
+                                            <span>{fromUser}</span>
+                                        </div>
+                                        <div className="talk-cont">
+                                            <span className="name">{userPhoneIcon}</span>
                                             <span className="borderballoon borderballoon_file borderballoon_file_p">
                                                 <span className="bot"></span>
                                                 <span className="top"></span>
-                                                <img onClick={showLargeImg} src={attachment + '?' + MIDDLE_IMG}
-                                                     className="send_img" alt={attachment}/>
+                                                <span className="send_img_cont">
+                                                    <img onClick={_this.noomWatchImg.bind(this, attachment)} src={attachment + '?' + MIDDLE_IMG} className="send_img" alt={attachment}/>
+                                                </span>
                                             </span>
-                                            <span><i className="borderballoon_dingcorner_le_no"></i></span>
+                                            <i className="borderballoon_dingcorner_le_no"></i>
+                                            <Dropdown overlay={msgMenu} placement="topCenter" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                                <Icon className="icon_ellipsis" type="ellipsis"/>
+                                            </Dropdown>
                                         </div>
                                     </li>;
                                 } else {
@@ -2129,8 +2315,11 @@ const AntGroupTabComponents = React.createClass({
                                             <span className="borderballoon_le borderballoon_file_p">
                                                 <span className="bot"></span>
                                                 <span className="top"></span>
-                                                <img onClick={showLargeImg} className="send_img"
-                                                     src={attachment + '?' + MIDDLE_IMG} alt={attachment}/>
+                                                <span className="send_img_cont">
+                                                    <img onClick={_this.noomWatchImg.bind(this, attachment)}
+                                                         className="send_img"
+                                                         src={attachment + '?' + MIDDLE_IMG} alt={attachment}/>
+                                                </span>
                                             </span>
                                             <span><i className="borderballoon_dingcorner_ri_no"></i></span>
                                         </div>
@@ -2144,14 +2333,16 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="u-name"><span>{fromUser}</span></div>
                                         <div className="talk-cont">
                                             <span className="name">{userPhoneIcon}</span>
-                                            <span className="borderballoon noom_cursor noom_audio"
-                                                  onClick={this.audioPlay.bind(this, attachment, '_right')}>
-                                            <audio id={attachment}>
-                                                <source src={attachment} type="audio/mpeg"></source>
-                                            </audio>
+                                            <span className="borderballoon noom_cursor noom_audio" onClick={this.audioPlay.bind(this, attachment, '_right')}>
+                                                <audio id={attachment}>
+                                                    <source src={attachment} type="audio/mpeg"></source>
+                                                </audio>
                                                 <span className="audio_right" id={attachment + '_audio'}></span>
-                                            <i className="borderballoon_dingcorner_ri_no"></i>
-                                        </span>
+                                                <i className="borderballoon_dingcorner_ri_no"></i>
+                                            </span>
+                                            <Dropdown overlay={msgMenu} placement="topCenter" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                                <Icon className="icon_ellipsis" type="ellipsis"/>
+                                            </Dropdown>
                                         </div>
                                     </li>;
                                 } else {
@@ -2178,40 +2369,38 @@ const AntGroupTabComponents = React.createClass({
                                 if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
                                     //我发出的
                                     messageTag = <li style={{'textAlign': 'right'}} className="right">
-                                        <div className="u-name"><span>{fromUser}</span></div>
-                                        <div className="talk-cont"><span
-                                            className="name">{userPhoneIcon}</span><span
-                                            className="borderballoon noom_cursor borderballoon_file"
-                                            onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid, fileName)}>
+                                        <div className="u-name">
+                                            <span>{fromUser}</span>
+                                        </div>
+                                        <div className="talk-cont">
+                                            <span className="name">{userPhoneIcon}</span>
+                                            <span className="borderballoon noom_cursor borderballoon_file" onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid, fileName)}>
                                                 <span className="bot"></span>
                                                 <span className="top"></span>
-                                            <div className="borderballoon_le_cont"><div className="span_link_div"><span
-                                                className="span_link">{fileName}</span><span
-                                                className="span_link password_ts">{fileLength}kb</span></div>
-                                                <img className="upexam_float span_link_img" style={{width: 38}}
-                                                     src="../src/components/images/maaee_link_file_102_102.png"
-                                                     alt=""/>
-                                                <img id={fileUid} style={{display: "none"}} src={filePath}
-                                                     onClick={showLargeImg}
-                                                     alt=""/>
+                                                <div className="borderballoon_le_cont">
+                                                    <div className="span_link_div">
+                                                        <span className="span_link">{fileName}</span>
+                                                        <span className="span_link password_ts">{fileLength}kb</span>
                                                     </div>
-                                            <div className="file_noom">
-                                                    <a className="noom_cursor  file_noom_line"
-                                                       onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid, fileName)}><Icon
-                                                        type="eye"/>预览</a>
-                                                    <a href={filePath} target="_blank" title="下载"
-                                                       download={filePath}
-                                                       className="downfile_noom file_noom_line"><Icon
-                                                        type="download"/>下载</a>
-                                                    <Dropdown overlay={menu}
-                                                              onVisibleChange={this.getCloudFile.bind(this, filePath, fileName, oriFileLength, fileCreateUid)}>
-                                                            <a className="ant-dropdown-link file_noom_line"
-                                                               href="javascript:;">
-                                                              <Icon type="bars"/>更多
-                                                            </a>
-                                                        </Dropdown>
+                                                    <img className="upexam_float span_link_img" style={{width: 38}} src="../src/components/images/maaee_link_file_102_102.png" alt=""/>
+                                                    <img id={fileUid} style={{display: "none"}} src={filePath} onClick={showLargeImg}  alt=""/>
                                                 </div>
-                                            </span></div>
+                                                <div className="file_noom">
+                                                    <a className="noom_cursor  file_noom_line" onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid, fileName)}>
+                                                        <Icon type="eye"/>预览</a>
+                                                    <a href={filePath} target="_blank" title="下载" download={filePath} className="downfile_noom file_noom_line">
+                                                        <Icon type="download"/>下载</a>
+                                                    <Dropdown overlay={menu} onVisibleChange={this.getCloudFile.bind(this, filePath, fileName, oriFileLength, fileCreateUid)}>
+                                                        <a className="ant-dropdown-link file_noom_line" href="javascript:;">
+                                                          <Icon type="bars"/>更多
+                                                        </a>
+                                                    </Dropdown>
+                                                </div>
+                                            </span>
+                                            <Dropdown overlay={msgMenu} placement="topCenter" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                                <Icon className="icon_ellipsis" type="ellipsis"/>
+                                            </Dropdown>
+                                        </div>
                                     </li>;
                                 } else {
                                     //我收到的
@@ -2256,16 +2445,23 @@ const AntGroupTabComponents = React.createClass({
                         }
                     } else {
                         messageTag = <li className="right" style={{'textAlign': 'right'}}>
-                            <div className="u-name"><span>{fromUser}</span></div>
+                            <div className="u-name">
+                                <span>{fromUser}</span>
+                            </div>
                             <div className="talk-cont">
-                                <span className="name">{userPhoneIcon}</span><span
-                                className="borderballoon">{e.content}<i
-                                className="borderballoon_dingcorner_le_no"></i></span>
+                                <span className="name">{userPhoneIcon}</span>
+                                <span className="borderballoon">{e.content}
+                                    <i className="borderballoon_dingcorner_le_no"></i>
+                                </span>
+                                <Dropdown overlay={msgMenu} placement="topCenter" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                    <Icon className="icon_ellipsis" type="ellipsis"/>
+                                </Dropdown>
                             </div>
                         </li>;
                     }
                     messageTagArray.push(messageTag);
                 }
+                // _this.setState({imgArr});
             }
             currentReturnCount = messageTagArray.length;
             var sendBtn;
@@ -2334,6 +2530,11 @@ const AntGroupTabComponents = React.createClass({
                 <div className="group_cont">
                     {userPhoneCard}
                     {tabComponent}
+                    <ul style={{display: 'none'}}>
+                        <li className="imgLi">
+                            {imgArr}
+                        </li>
+                    </ul>
                 </div>
 
                 {/*发送文件model*/}

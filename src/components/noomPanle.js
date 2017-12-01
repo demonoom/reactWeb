@@ -1390,7 +1390,17 @@ function onPasteFunction(event) {
             // 读取该图片
             // imgReader(item);
             var file = item.getAsFile();
-            UploadFile1(file);
+            // UploadFile1(file);
+
+            var blob = item.getAsFile(),
+                reader = new FileReader();
+
+            reader.onload = function (e) {
+                //在mainlayout中起一个model
+                window.__noomSelectPic__(e.target.result, file);
+            };
+
+            reader.readAsDataURL(blob);
         }
     }
 
@@ -1427,7 +1437,7 @@ var UploadFile1 = function (readerResult) {
     }
     // xhr.sendAsBinary(readerResult);
 
-    xhr.send(fd);
+    // xhr.send(fd);
 
     xhr.onreadystatechange = function () {
         //  

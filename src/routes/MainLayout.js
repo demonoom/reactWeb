@@ -30,6 +30,7 @@ import SchoolGroupMenu from '../components/schoolGroupSetting/SchoolGroupMenu';
 import SystemSettingGhostMenu from '../components/SystemSetting/SystemSettingGhostMenu';
 import SystemSettingComponent from '../components/SystemSetting/SystemSettingComponent';
 import AddShiftPosModel from '../components/Attendance/AddShiftPosModel';
+import SendPicModel from '../components/antGroup/SendPicModel'
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
 
@@ -66,6 +67,7 @@ const MainLayout = React.createClass({
             isSearchGroup: false,
             isPersonCenter: false,
             addShiftPosModel: false,
+            sendPicModel: false,
             lastClick: ''  //聊天功能最后一次点击的对象
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
@@ -160,6 +162,7 @@ const MainLayout = React.createClass({
         window.__sendImg__ = this.sendImg;
         //定义方法（调用进入哪个聊天人）
         // window.__toWhichCharObj__ = this.toWhichCharObj;
+        window.__noomSelectPic__ = this.noomSelectPic;
     },
 
     componentWillMount() {
@@ -208,6 +211,10 @@ const MainLayout = React.createClass({
             this.refs[obj.ref][obj.methond].call(this.refs[obj.ref], obj.param);
             this.proxyObj = null;
         }
+    },
+
+    noomSelectPic(src, obj) {
+        this.setState({sendPicModel: true, pinSrc: src, picFile: obj});
     },
 
     toWhichCharObj() {
@@ -541,7 +548,7 @@ const MainLayout = React.createClass({
             this.refs.antGroupTabComponents.getShengpiMes(fromObj.fromUser.colUid);
         } else {
             //有的地方写的是messageType，有的地方写的是messageToType,都要考虑到
-            if (fromObj.messageType == 1||fromObj.messageToType==1) {
+            if (fromObj.messageType == 1 || fromObj.messageToType == 1) {
                 // 个人消息
                 this.refs.antGroupTabComponents.getPersonMessage(fromObj.fromUser, timeNode);
             } else {
@@ -610,9 +617,17 @@ const MainLayout = React.createClass({
         // }
     },
 
+    closeSendPicModel() {
+        this.setState({sendPicModel: false});
+    },
+
     postPos(postPos) {
         this.setState({postPos});
         window.__setPos__(postPos);
+    },
+
+    sendPicToOthers(url) {
+        this.refs.antGroupTabComponents.sendPicToOthers(url);
     },
 
     render() {
@@ -841,6 +856,13 @@ const MainLayout = React.createClass({
                         isShow={this.state.addShiftPosModel}
                         closeModel={this.closeModel}
                         postPos={this.postPos}
+                    />
+                    <SendPicModel
+                        isShow={this.state.sendPicModel}
+                        closeModel={this.closeSendPicModel}
+                        pinSrc={this.state.pinSrc}
+                        picFile={this.state.picFile}
+                        sendPicToOthers={this.sendPicToOthers}
                     />
                     <ul style={{display: 'none'}}>
                         <li className="imgLi">
