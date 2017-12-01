@@ -7303,11 +7303,20 @@ select.course_n:hover {
     font-size: 12px;
     margin-top: 5px;
 }
+.send_img_cont{
+    max-width: 230px;
+    min-height: 21px;
+    line-height: 0;
+    position: relative;
+    display: block;
+}
 .borderballoon img.send_img, .borderballoon_le img.send_img {
     max-width: 230px;
     cursor: zoom-in;
     cursor: -webkit-zoom-in;
     border-radius: 4px;
+    height:auto !important;
+    padding: 5px;
 }
 
 .file_link_img_t {
