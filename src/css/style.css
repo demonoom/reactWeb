@@ -7303,13 +7303,6 @@ select.course_n:hover {
     font-size: 12px;
     margin-top: 5px;
 }
-.send_img_cont{
-    max-width: 230px;
-    min-height: 21px;
-    max-height: 200px;
-    line-height: 0;
-    position: relative;
-}
 .borderballoon img.send_img, .borderballoon_le img.send_img {
     max-width: 230px;
     cursor: zoom-in;
