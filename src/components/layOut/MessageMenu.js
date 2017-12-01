@@ -49,7 +49,6 @@ const MessageMenu = React.createClass({
                 messageData.splice(0, 0, nextProps.userJson);
             } else {
                 messageData[index] = nextProps.userJson;
-                console.log(index);
                 // alert(index);
                 messageData.splice(0, 0, nextProps.userJson);
                 //排序

@@ -13,8 +13,8 @@ var columns = [
     {title: '迟到次数', dataIndex: 'tardiness', key: 'tardiness', width: 200},
     {title: '早退次数', dataIndex: 'numOfLeaving', key: 'numOfLeaving', width: 200},
     {title: '缺卡次数', dataIndex: 'missCardTimes', key: 'missCardTimes', width: 200},
-    {title: '旷工次数', dataIndex: 'absenteeism', key: 'absenteeism', width: 200},
-    {title: '出勤次数', dataIndex: 'attendance', key: 'attendance', width: 200},
+    {title: '旷工天数', dataIndex: 'absenteeism', key: 'absenteeism', width: 200},
+    {title: '出勤天数', dataIndex: 'attendance', key: 'attendance', width: 200},
 ];
 
 var monthData = [];
@@ -43,8 +43,8 @@ const MonthlySummary = React.createClass({
             {title: '迟到次数', dataIndex: 'tardiness', key: 'tardiness', width: 200},
             {title: '早退次数', dataIndex: 'numOfLeaving', key: 'numOfLeaving', width: 200},
             {title: '缺卡次数', dataIndex: 'missCardTimes', key: 'missCardTimes', width: 200},
-            {title: '旷工次数', dataIndex: 'absenteeism', key: 'absenteeism', width: 200},
-            {title: '出勤次数', dataIndex: 'attendance', key: 'attendance', width: 200},
+            {title: '旷工天数', dataIndex: 'absenteeism', key: 'absenteeism', width: 200},
+            {title: '出勤天数', dataIndex: 'attendance', key: 'attendance', width: 200},
         ];
         //初始化表格内容
         monthData = [];
@@ -60,8 +60,6 @@ const MonthlySummary = React.createClass({
         // console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                console.log(ret);
-                debugger
                 if (ret.msg == "调用成功" && ret.success == true) {
                     var data = ret.response;
                     _this.makeTable(data);
