@@ -7757,3 +7757,6 @@ select.course_n:hover {
 .icon_ellipsis:hover, .icon_ellipsis:active{
     background: #d9e7ef;
 }
+.month_box .ant-table-tbody > tr > td{
+    font-size: 12px;
+}
