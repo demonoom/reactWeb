@@ -7303,13 +7303,18 @@ select.course_n:hover {
     font-size: 12px;
     margin-top: 5px;
 }
-
+.send_img_cont{
+    max-width: 230px;
+    min-height: 21px;
+    max-height: 200px;
+    line-height: 0;
+    position: relative;
+}
 .borderballoon img.send_img, .borderballoon_le img.send_img {
-    max-width: 230px !important;
-    height: auto !important;
-    padding: 5px 5px 0 5px !important;
+    max-width: 230px;
     cursor: zoom-in;
     cursor: -webkit-zoom-in;
+    border-radius: 4px;
 }
 
 .file_link_img_t {
@@ -7695,4 +7700,63 @@ select.course_n:hover {
 .cloud_box  .ant-table-fixed-left .ant-table-header {
     height: 47px;
 }
+.crop_img{
+    width: 440px !important;
+    min-height: 300px !important;
+    height: auto;
+    overflow: hidden;
+}
+.crop_img .ant-modal-header{
+    text-align: center;
+}
+.crop_img .ant-modal-body{
+    background: #f8f8f8;
+    min-height: 185px;
+    display: flex;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    justify-content: center;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    align-items: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    -webkit-box-flex:1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+}
+.crop_img_i{
+    margin: 12px 0;
+    text-align: center;
 
+}
+.crop_img_i img{
+    max-width: 100%;
+    max-height: 200px;
+}
+.group_talk ul li.right div.talk-cont:hover .icon_ellipsis{
+    display: block;
+}
+.icon_ellipsis{
+    background: #c1d1da;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 8px;
+    color: #fff;
+    font-size: 18px;
+    height: 18px;
+    position: relative;
+    top: 10px;
+    right: 3px;
+    display: none;
+}
+.icon_ellipsis:hover, .icon_ellipsis:active{
+    background: #d9e7ef;
+}
+.month_box .ant-table-tbody > tr > td{
+    font-size: 12px;
+}

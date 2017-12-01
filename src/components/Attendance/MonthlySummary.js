@@ -57,9 +57,10 @@ const MonthlySummary = React.createClass({
             "dId": '-1',
             "pageNo": '-1',
         };
-        // console.log(param);
+        console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                console.log(ret);
                 if (ret.msg == "调用成功" && ret.success == true) {
                     var data = ret.response;
                     _this.makeTable(data);
@@ -116,6 +117,9 @@ const MonthlySummary = React.createClass({
         var year = date.getFullYear();
         var month = date.getMonth() + 1;
         var strDate = date.getDate() - 1;
+        if (strDate == 0) {
+            strDate += 1;
+        };
         if (month >= 1 && month <= 9) {
             month = "0" + month;
         }
