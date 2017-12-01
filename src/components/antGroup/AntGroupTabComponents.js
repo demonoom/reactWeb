@@ -286,28 +286,38 @@ const AntGroupTabComponents = React.createClass({
         this.setState({isShare: true});
     },
 
+    getMesUUid(uuid) {
+        this.setState({mesUuid: uuid});
+    },
+
     /**
      * 消息撤回的方法
      */
     withdrawMsg() {
+        var mesUuid = this.state.mesUuid;
         var param = {
             "method": 'retractMessage',
             "userId": antGroup.state.loginUser.colUid,
-            "messageUUID": 1,
+            "messageUUID": mesUuid,
         };
-        console.log(param);
-        // doWebService(JSON.stringify(param), {
-        //     onResponse: function (ret) {
-        //         var response = ret.response;
-        //         if (response) {
-        //             //构建我的文件目标文件夹数据
-        //             antGroup.buildTargetDirData(ret, true, fileIds);
-        //         }
-        //     },
-        //     onError: function (error) {
-        //         message.error(error);
-        //     }
-        // });
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    var messageList = antGroup.state.messageList;
+                    messageList.forEach(function (v, i) {
+                        if (v.uuid == mesUuid) {
+                            messageList.splice(i, 1);
+                        }
+                    });
+                    antGroup.setState({messageList});
+                } else {
+                    message.error(ret.msg);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     /**
@@ -445,8 +455,6 @@ const AntGroupTabComponents = React.createClass({
                 "path": path,
                 "length": length
             };
-            debugger;
-            console.log('对话框确定按钮保存参数',param);
             doWebService(JSON.stringify(param), {
                 onResponse: function (ret) {
                     if (ret.success == true && ret.msg == "调用成功" && isEmpty(ret.response) == false) {
@@ -524,7 +532,7 @@ const AntGroupTabComponents = React.createClass({
             "pageNo": pageNo
         };
         // debugger;
-        console.log('listFiles',param);
+        console.log('listFiles', param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
@@ -982,6 +990,7 @@ const AntGroupTabComponents = React.createClass({
                         var content = messageOfSinge.content;
                         var uuidsArray = [];
                         var uuid = messageOfSinge.uuid;
+                        var showType = messageOfSinge.showType;  //showType为0正常显示 1通知形式
                         // console.log(messageOfSinge);
                         // console.log('//判断是否是叮消息');
                         //判断是否是叮消息
@@ -1115,6 +1124,7 @@ const AntGroupTabComponents = React.createClass({
                                             "fileUid": fileUid,
                                             "fileCreateUid": fileCreateUid,
                                             "uuid": uuid,
+                                            "showType": showType,
                                         };
                                         //如果发送的消息=当前点击人的id，才push
                                         if (messageOfSinge.toUser.colUid === _this.state.curId) {
@@ -1167,6 +1177,7 @@ const AntGroupTabComponents = React.createClass({
                                     "fileUid": fileUid,
                                     "fileCreateUid": fileCreateUid,
                                     "uuid": uuid,
+                                    "showType": showType,
                                 };
                                 //messageList.splice(0, 0, messageShow);
                                 messageList.push(messageShow);
@@ -1531,6 +1542,7 @@ const AntGroupTabComponents = React.createClass({
                             var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
                             if (("SGZH" == colUtype || groupObj.chatGroupId == e.toId ) && e.toType == 4) {
                                 var uuid = e.uuid;
+                                var showType = e.showType;
                                 uuidsArray.push(uuid);
                                 imgTagArray.splice(0);
                                 showImg = "";
@@ -1560,6 +1572,7 @@ const AntGroupTabComponents = React.createClass({
                                     "fileCreateUid": fileCreateUid,
                                     "biumes": biumes,
                                     "uuid": uuid,
+                                    "showType": showType,
                                 };
                                 messageList.push(message);
                             }
@@ -1766,6 +1779,7 @@ const AntGroupTabComponents = React.createClass({
                             var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
                             if (messageOfSinge.toType == 1) {
                                 var uuid = messageOfSinge.uuid;
+                                var showType = messageOfSinge.showType;
                                 uuidsArray.push(uuid);
                                 var content = messageOfSinge.content;
                                 imgTagArray.splice(0);
@@ -1795,6 +1809,7 @@ const AntGroupTabComponents = React.createClass({
                                     "fileCreateUid": fileCreateUid,
                                     "biumes": biumes,
                                     "uuid": uuid,
+                                    "showType": showType
                                 };
                                 messageList.push(messageShow);
                             }
@@ -1864,8 +1879,8 @@ const AntGroupTabComponents = React.createClass({
             var messageTagArray = [];
             messageTagArray.splice(0);
             var messageList = antGroup.state.messageList;
-            console.log(messageList);
-            console.log('messageList');
+            // console.log(messageList);
+            // console.log('messageList');
             var imgArr = [];
             if (isEmpty(messageList) == false && messageList.length > 0) {
                 for (var i = messageList.length - 1; i >= 0; i--) {
@@ -1921,9 +1936,6 @@ const AntGroupTabComponents = React.createClass({
                     //文件的createUid
                     var fileCreateUid = e.fileCreateUid;
 
-                    console.log(e);
-                    console.log('121');
-
                     if (isEmpty(messageType) == false && messageType == "getMessage") {
                         if (isEmpty(e.messageReturnJson) == false && isEmpty(e.messageReturnJson.messageType) == false) {
                             if (e.messageReturnJson.messageType == "text") {
@@ -1947,7 +1959,8 @@ const AntGroupTabComponents = React.createClass({
                                                      </div>
                                                  </div>
                                                 <i className="borderballoon_dingcorner_ri_no"></i></span></div>
-                                            <Dropdown overlay={msgMenu} placement="topLeft">
+                                            <Dropdown overlay={msgMenu} placement="topLeft"
+                                                      onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                                 <Icon type="ellipsis"/>
                                             </Dropdown>
                                         </li>;
@@ -1960,7 +1973,8 @@ const AntGroupTabComponents = React.createClass({
                                                 <img src={expressionItem} style={{width: '100px', height: '100px'}}/>
                                                 <span><i className="borderballoon_dingcorner_le_no"></i></span>
                                             </div>
-                                            <Dropdown overlay={msgMenu} placement="topLeft">
+                                            <Dropdown overlay={msgMenu} placement="topLeft"
+                                                      onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                                 <Icon type="ellipsis"/>
                                             </Dropdown>
                                         </li>;
@@ -2001,34 +2015,43 @@ const AntGroupTabComponents = React.createClass({
                                                     </Dropdown>
                                                 </div>
                                             </span></div>
-                                            <Dropdown overlay={msgMenu} placement="topLeft">
+                                            <Dropdown overlay={msgMenu} placement="topLeft"
+                                                      onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                                 <Icon type="ellipsis"/>
                                             </Dropdown>
                                         </li>;
                                     } else {
                                         //文字消息
                                         if (biumes == true) {
+                                            //叮消息
                                             messageTag = <li className="right" style={{'textAlign': 'right'}}>
                                                 <div className="u-name"><span>{fromUser}</span></div>
                                                 <div className="talk-cont"><span
                                                     className="name">{userPhoneIcon}</span><span
                                                     className="borderballoon">{e.content}<i
                                                     className="borderballoon_dingcorner_le"></i></span></div>
-                                                <Dropdown overlay={msgMenu} placement="topLeft">
-                                                    <Icon type="ellipsis"/>
-                                                </Dropdown>
+                                                {/*<Dropdown overlay={msgMenu} placement="topLeft"*/}
+                                                {/*onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>*/}
+                                                {/*<Icon type="ellipsis"/>*/}
+                                                {/*</Dropdown>*/}
                                             </li>;
                                         } else {
-                                            messageTag = <li className="right" style={{'textAlign': 'right'}}>
-                                                <div className="u-name"><span>{fromUser}</span></div>
-                                                <div className="talk-cont"><span
-                                                    className="name">{userPhoneIcon}</span><span
-                                                    className="borderballoon">{e.content}<i
-                                                    className="borderballoon_dingcorner_le_no"></i></span></div>
-                                                <Dropdown overlay={msgMenu} placement="topLeft">
-                                                    <Icon type="ellipsis"/>
-                                                </Dropdown>
-                                            </li>;
+                                            //普通文字消息
+                                            if (e.showType == 1) {
+                                                messageTag = <li className="reminder"><span>{e.content}</span></li>;
+                                            } else {
+                                                messageTag = <li className="right" style={{'textAlign': 'right'}}>
+                                                    <div className="u-name"><span>{fromUser}</span></div>
+                                                    <div className="talk-cont"><span
+                                                        className="name">{userPhoneIcon}</span><span
+                                                        className="borderballoon">{e.content}<i
+                                                        className="borderballoon_dingcorner_le_no"></i></span></div>
+                                                    <Dropdown overlay={msgMenu} placement="topLeft"
+                                                              onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                                        <Icon type="ellipsis"/>
+                                                    </Dropdown>
+                                                </li>;
+                                            }
                                         }
                                     }
                                 } else {
@@ -2116,7 +2139,7 @@ const AntGroupTabComponents = React.createClass({
                                             </li>;
                                         } else {
                                             //普通消息无角标
-                                            if (e.fromUser.colUid == 120024) {
+                                            if (e.fromUser.colUid == 120024 || e.showType == 1) {
                                                 messageTag = <li className="reminder"><span>{e.content}</span></li>;
                                             } else {
                                                 messageTag = <li style={{'textAlign': 'left'}}>
@@ -2142,7 +2165,8 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="talk-cont"><span className="name">{userPhoneIcon}</span><span
                                             className="borderballoon ">{e.imgTagArray}<i
                                             className="borderballoon_dingcorner_le_no"></i></span></div>
-                                        <Dropdown overlay={msgMenu} placement="topLeft">
+                                        <Dropdown overlay={msgMenu} placement="topLeft"
+                                                  onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                             <Icon type="ellipsis"/>
                                         </Dropdown>
                                     </li>;
@@ -2165,7 +2189,8 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="talk-cont"><span className="name">{userPhoneIcon}</span><img
                                             src={expressionItem} style={{width: '100px', height: '100px'}}/><span><i
                                             className="borderballoon_dingcorner_le_no"></i></span></div>
-                                        <Dropdown overlay={msgMenu} placement="topLeft">
+                                        <Dropdown overlay={msgMenu} placement="topLeft"
+                                                  onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                             <Icon type="ellipsis"/>
                                         </Dropdown>
                                     </li>;
@@ -2201,7 +2226,8 @@ const AntGroupTabComponents = React.createClass({
                                                      </div>
                                                  </div>
                                             <i className="borderballoon_dingcorner_ri_no"></i></span></div>
-                                        <Dropdown overlay={msgMenu} placement="topLeft">
+                                        <Dropdown overlay={msgMenu} placement="topLeft"
+                                                  onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                             <Icon type="ellipsis"/>
                                         </Dropdown>
                                     </li>;
@@ -2238,7 +2264,8 @@ const AntGroupTabComponents = React.createClass({
                                             </span>
                                             <span><i className="borderballoon_dingcorner_le_no"></i></span>
                                         </div>
-                                        <Dropdown overlay={msgMenu} placement="topLeft">
+                                        <Dropdown overlay={msgMenu} placement="topLeft"
+                                                  onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                             <Icon type="ellipsis"/>
                                         </Dropdown>
                                     </li>;
@@ -2276,7 +2303,8 @@ const AntGroupTabComponents = React.createClass({
                                             <i className="borderballoon_dingcorner_ri_no"></i>
                                         </span>
                                         </div>
-                                        <Dropdown overlay={msgMenu} placement="topLeft">
+                                        <Dropdown overlay={msgMenu} placement="topLeft"
+                                                  onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                             <Icon type="ellipsis"/>
                                         </Dropdown>
                                     </li>;
@@ -2338,7 +2366,8 @@ const AntGroupTabComponents = React.createClass({
                                                         </Dropdown>
                                                 </div>
                                             </span></div>
-                                        <Dropdown overlay={msgMenu} placement="topLeft">
+                                        <Dropdown overlay={msgMenu} placement="topLeft"
+                                                  onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                             <Icon type="ellipsis"/>
                                         </Dropdown>
                                     </li>;
@@ -2391,7 +2420,8 @@ const AntGroupTabComponents = React.createClass({
                                 className="borderballoon">{e.content}<i
                                 className="borderballoon_dingcorner_le_no"></i></span>
                             </div>
-                            <Dropdown overlay={msgMenu} placement="topLeft">
+                            <Dropdown overlay={msgMenu} placement="topLeft"
+                                      onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                 <Icon type="ellipsis"/>
                             </Dropdown>
                         </li>;
