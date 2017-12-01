@@ -110,6 +110,7 @@ const MonthlySummary = React.createClass({
      * 获取当前日期,设置开始日期为本月1号，结束日期为今天
      */
     getTimeNow() {
+        debugger
         var date = new Date();
         var seperator1 = "-";
         var year = date.getFullYear();
@@ -123,6 +124,17 @@ const MonthlySummary = React.createClass({
         }
         var startTime = year + seperator1 + month + seperator1 + '01';
         var endTime = year + seperator1 + month + seperator1 + strDate;
+        //如果是1号的话
+        if (strDate == 0) {
+            if (month == 1) {
+                //1月1号
+                startTime = (year - 1) + seperator1 + 12 + seperator1 + '01';
+                endTime = (year - 1) + seperator1 + 12 + seperator1 + '30';
+            } else {
+                startTime = year + seperator1 + (month - 1) + seperator1 + '01';
+                endTime = year + seperator1 + (month - 1) + seperator1 + '30';
+            }
+        }
         this.setState({startTime, endTime});
         this.getMonthlySummary(startTime, endTime);
         if (window.screen.width > 1366) {
@@ -152,7 +164,7 @@ const MonthlySummary = React.createClass({
     render() {
         return (
             <div className="group_cont">
-                <div className="public—til—blue">月度汇总</div>
+                <div className="public—til—blue">考勤汇总</div>
                 <div className="favorite_scroll">
                     <div className="checking_add_box group_cont">
                         <div className="ding_user_t">

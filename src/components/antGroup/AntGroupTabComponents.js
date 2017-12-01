@@ -305,8 +305,11 @@ const AntGroupTabComponents = React.createClass({
                 if (ret.msg == "调用成功" && ret.success == true) {
                     var messageList = antGroup.state.messageList;
                     messageList.forEach(function (v, i) {
-                        if (v.uuid == mesUuid) {
-                            messageList.splice(i, 1);
+                        if (isEmpty(v) == false) {
+                            if (v.uuid == mesUuid) {
+                                messageList.splice(i, 1);
+                                antGroup.setState({mesRetNum: i});
+                            }
                         }
                     });
                     antGroup.setState({messageList});
@@ -531,8 +534,6 @@ const AntGroupTabComponents = React.createClass({
             "queryConditionJson": queryConditionJson,
             "pageNo": pageNo
         };
-        // debugger;
-        console.log('listFiles', param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
@@ -968,7 +969,7 @@ const AntGroupTabComponents = React.createClass({
                             // var obj = JSON.parse(data.message.content);
                             _this.props.showAlert(true);
                         } else if (data.message.command == "message") {
-                            if (data.message.fromUser.colUid !== _this.state.loginUser.colUid) {
+                            if (data.message.fromUser.colUid !== _this.state.loginUser.colUid && data.message.showType == 0) {
                                 if (isEmpty(data.message.toChatGroup) == false || isEmpty(data.message.toUser) == false) {
                                     _this.props.showMesAlert(true);
                                     _this.props.refresh();
@@ -980,8 +981,20 @@ const AntGroupTabComponents = React.createClass({
                                     antGroup.cloudFileUploadModalHandleCancel();
                                 }
                             }
+                        } else if (data.message.command == "retractMessage") {
+                            //根据data.message.content去messagelist中删除消息
+                            var messageList = antGroup.state.messageList;
+                            messageList.forEach(function (v, i) {
+                                if (isEmpty(v) == false) {
+                                    if (v.uuid == data.message.content) {
+                                        messageList.splice(i, 1);
+                                        antGroup.setState({mesRetNum: i + 1});
+                                    }
+                                }
+                            });
+                            antGroup.setState({messageList});
                         }
-                        ;
+
                         showImg = "";
                         messageOfSinge = data.message;
                         var fromUser = messageOfSinge.fromUser;
@@ -991,8 +1004,6 @@ const AntGroupTabComponents = React.createClass({
                         var uuidsArray = [];
                         var uuid = messageOfSinge.uuid;
                         var showType = messageOfSinge.showType;  //showType为0正常显示 1通知形式
-                        // console.log(messageOfSinge);
-                        // console.log('//判断是否是叮消息');
                         //判断是否是叮消息
                         //判断这条消息是我发出的，处理别的手机发送消息不同步的问题
                         if (messageOfSinge.fromUser.colUid == antGroup.state.loginUser.colUid) {
@@ -1054,7 +1065,7 @@ const AntGroupTabComponents = React.createClass({
                         }
                         var contentJson = {"content": content, "createTime": createTime};
                         var contentArray = [contentJson];
-                        if (messageOfSinge.toType == 1 && typeof (content) != 'undefined') {
+                        if (messageOfSinge.toType == 1 && typeof (content) != 'undefined' && messageOfSinge.command != "retractMessage") {
                             //个人单条消息
                             imgTagArray.splice(0);
                             var imgTagArrayReturn = [];
@@ -1086,7 +1097,9 @@ const AntGroupTabComponents = React.createClass({
                                             "fileLength": fileLength,
                                             "fileUid": fileUid,
                                             "fileCreateUid": fileCreateUid,
-                                            "biumes": biumes
+                                            "biumes": biumes,
+                                            "uuid": uuid,
+                                            "showType": showType
                                         };
                                         messageList.push(messageShow);
                                         // console.log(messageList);
@@ -1147,7 +1160,7 @@ const AntGroupTabComponents = React.createClass({
                                     }
                                 }
                             }
-                        } else if (messageOfSinge.toType == 4 && typeof (content) != 'undefined') {
+                        } else if (messageOfSinge.toType == 4 && typeof (content) != 'undefined' && messageOfSinge.command != "retractMessage") {
                             //群组单条消息
                             if (isEmpty(antGroup.state.currentGroupObj) == false
                                 && antGroup.state.currentGroupObj.chatGroupId == messageOfSinge.toChatGroup.chatGroupId) {
@@ -1459,7 +1472,18 @@ const AntGroupTabComponents = React.createClass({
 
     addMessageList(messages, firstOrLast) {
         if (isEmpty(firstOrLast) == false) {
-            antGroup.state.messageList.unshift(messages[0]);
+            if (isEmpty(messages[0]) == false) {
+                var num = antGroup.state.mesRetNum;
+                if (messages[0].showType == 1) {
+                    //对通知消息进行重排
+                    antGroup.state.messageList.splice(num, 0, messages[0])
+                } else {
+                    if (antGroup.state.messageList[0].uuid !== messages[0].uuid) {
+                        antGroup.state.messageList.unshift(messages[0]);
+                    }
+
+                }
+            }
             antGroup.setState({messageList: antGroup.state.messageList});
         } else {
             antGroup.setState({messageList: antGroup.state.messageList.concat(messages)});
@@ -1847,13 +1871,10 @@ const AntGroupTabComponents = React.createClass({
      * @param selectedRowKeys
      */
     onSelectChange(selectedRowKeys) {
-        console.log('selectedRowKeys changed: ', selectedRowKeys);
         this.setState({selectedRowKeys});
     },
 
     noomWatchImg(id) {
-        // console.log(id);
-        // document.querySelectorAll(".topics_zanImg").click();
         document.getElementById(id).click();
     },
 
@@ -1879,8 +1900,10 @@ const AntGroupTabComponents = React.createClass({
             var messageTagArray = [];
             messageTagArray.splice(0);
             var messageList = antGroup.state.messageList;
-            // console.log(messageList);
-            // console.log('messageList');
+
+            console.log(messageList);
+            console.log('messageList');
+
             var imgArr = [];
             if (isEmpty(messageList) == false && messageList.length > 0) {
                 for (var i = messageList.length - 1; i >= 0; i--) {
