@@ -1758,6 +1758,7 @@ const AntGroupTabComponents = React.createClass({
         isRequesting = true;
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                console.log(ret);
                 isRequesting = false;
                 if (ret.msg == "调用成功" && ret.success == true) {
                     var i = 0;
@@ -2001,6 +2002,7 @@ const AntGroupTabComponents = React.createClass({
                                                 <Dropdown overlay={msgMenu} placement="topCenter" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                                     <Icon className="icon_ellipsis" type="ellipsis"/>
                                                 </Dropdown>
+                                                <div>未读</div>
                                             </div>
                                         </li>;
                                     } else if (isEmpty(fileName) == false) {
@@ -2076,6 +2078,7 @@ const AntGroupTabComponents = React.createClass({
                                                         <Dropdown overlay={msgMenu} placement="topCenter" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                                             <Icon className="icon_ellipsis" type="ellipsis"/>
                                                         </Dropdown>
+                                                        <div>未读</div>
                                                     </div>
                                                 </li>;
                                             }
@@ -2199,6 +2202,7 @@ const AntGroupTabComponents = React.createClass({
                                             <Dropdown overlay={msgMenu} placement="topCenter" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                                 <Icon className="icon_ellipsis" type="ellipsis"/>
                                             </Dropdown>
+                                            <div>未读</div>
                                         </div>
                                     </li>;
                                 } else {
@@ -2228,6 +2232,7 @@ const AntGroupTabComponents = React.createClass({
                                             <Dropdown overlay={msgMenu} placement="topCenter" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                                 <Icon className="icon_ellipsis" type="ellipsis"/>
                                             </Dropdown>
+                                            <div>未读</div>
                                         </div>
                                     </li>;
                                 } else {
@@ -2304,6 +2309,7 @@ const AntGroupTabComponents = React.createClass({
                                             <Dropdown overlay={msgMenu} placement="topCenter" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                                 <Icon className="icon_ellipsis" type="ellipsis"/>
                                             </Dropdown>
+                                            <div>未读</div>
                                         </div>
                                     </li>;
                                 } else {
@@ -2456,6 +2462,7 @@ const AntGroupTabComponents = React.createClass({
                                 <Dropdown overlay={msgMenu} placement="topCenter" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                     <Icon className="icon_ellipsis" type="ellipsis"/>
                                 </Dropdown>
+                                <div>未读</div>
                             </div>
                         </li>;
                     }
