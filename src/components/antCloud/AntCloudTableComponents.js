@@ -1763,6 +1763,7 @@ const AntCloudTableComponents = React.createClass({
             <div className="ant-tabs-right"><Button onClick={cloudTable.saveBarBack}><Icon
                 type="left"/></Button></div>
         </div>;
+                
         //根据该状态值，来决定上传进度条是否显示
         var progressState = cloudTable.state.progressState;
         const radioStyle = {
