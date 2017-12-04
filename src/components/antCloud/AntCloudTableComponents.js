@@ -213,9 +213,13 @@ const AntCloudTableComponents = React.createClass({
                         cloudTable.buildTableDataByResponse(ret);
                     } else if (optSrc == "moveDirModal") {
                         cloudTable.buildTargetDirData(ret);
+
+                    }else if("copyDirModal" == optSrc){
+                        cloudTable.buildTargetDirDataSaveLocal(ret);
                     } else {
-                        cloudTable.buildTableDataByResponse(ret);
-                        cloudTable.buildTargetDirData(ret);
+                        // cloudTable.buildTableDataByResponse(ret);
+                        // cloudTable.buildTargetDirData(ret);
+                        // cloudTable.buildTargetDirDataSaveLocal(ret);
                     }
                 }
             },
@@ -240,6 +244,7 @@ const AntCloudTableComponents = React.createClass({
                 if (response) {
                     cloudTable.buildTableDataByResponse(ret);//构建表格的数据
                     cloudTable.buildTargetDirData(ret);//构建移动文件时的目标文件夹数据
+                    cloudTable.buildTargetDirDataSaveLocal(ret);
                 }
             },
             onError: function (error) {
@@ -251,7 +256,7 @@ const AntCloudTableComponents = React.createClass({
     /**
      *打开保存文件到蚁盘的model
      */
-    saveFile(fileIds) {
+/*    saveFile(fileIds) {
         var _this = this;
         //1.请求用户的私人网盘用数据构建model的table
         var id = JSON.parse(sessionStorage.getItem("loginUser")).colUid;
@@ -265,7 +270,7 @@ const AntCloudTableComponents = React.createClass({
                 var response = ret.response;
                 if (response) {
                     //构建我的文件目标文件夹数据
-                    _this.buildTargetDirDataSaveLocal(ret, true, fileIds);
+                    _this.buildTargetDirDataSaveLocal(ret);
                 }
                 // this.setState({isSaved: true});
             },
@@ -273,7 +278,7 @@ const AntCloudTableComponents = React.createClass({
                 message.error(error);
             }
         });
-    },
+    },*/
 
 
 
@@ -308,8 +313,8 @@ const AntCloudTableComponents = React.createClass({
      * 保存到本地的确定按钮
      * @param ret
      */
-    buildTargetDirDataSaveLocal(ret, flag, fileIds) {
-        console.log('确定fileIds',fileIds);
+    buildTargetDirDataSaveLocal(ret) {
+        // console.log('确定fileIds',fileIds);
         var targetDirDataArray = [];
         var i = 0;
         if (ret.msg == "调用成功" && ret.success == true && isEmpty(ret.response) == false) {
@@ -328,14 +333,14 @@ const AntCloudTableComponents = React.createClass({
 
                 var dirName = <span className="font_gray_666"
                     //这是点击文件名进入文件夹的功能
-                                    onClick={cloudTable.intoDirectoryInnerLocal.bind(cloudTable, e, fileIds)}>
+                                    onClick={cloudTable.intoDirectoryInner.bind(cloudTable, e)}>
                 {fileLogo}
             </span>;
                 var moveDirOpt;
                 if (e.directory == true) {
                     moveDirOpt = <div>
                         {/*这是确定保存的功能*/}
-                        <Button onClick={cloudTable.saveFileToLocalDir.bind(cloudTable, key, fileIds)}>确定111</Button>
+                        <Button onClick={cloudTable.saveFileToLocalDir.bind(cloudTable, key)}>确定111</Button>
                     </div>;
                 } else {
                     dirName = name;
@@ -349,9 +354,9 @@ const AntCloudTableComponents = React.createClass({
             })
             cloudTable.setState({"targetDirDataArray1": targetDirDataArray});
             //2.当表格组件好之后就让model显示出来
-            if (flag) {
+           /* if (flag) {
                 cloudTable.setState({saveFileModalVisible: true});
-            }
+            }*/
         }
     },
 
@@ -531,6 +536,7 @@ const AntCloudTableComponents = React.createClass({
                         cloudTable.buildTableDataByResponse(ret);
                     } else {
                         cloudTable.buildTargetDirData(ret);
+                        cloudTable.buildTargetDirDataSaveLocal(ret);
                     }
                 } else {
                     var parentDirectoryId = e.parent.parentId;
@@ -676,16 +682,16 @@ const AntCloudTableComponents = React.createClass({
                         // shareButton = "";
                         moveButton = "";
                     }
-                    // var saveButton = <Button type="button" value={key} text={key}
-                    //                          onClick={cloudTable.getCloudFileLocal.bind(cloudTable,e)}
-                    //                          icon="save"></Button>;
+                    var saveButton = <Button type="button" value={key} text={key}
+                                             onClick={cloudTable.getCloudFileLocal.bind(cloudTable,e)}
+                                             icon="save"></Button>;
                 }
                 var subjectOpt = <div>
                     {editButton}
                     {deleteButton}
                     {shareButton}
                     {moveButton}
-                    {/*{saveButton}*/}
+                    {saveButton}
                     {downloadButton}
 
                 </div>;
@@ -1148,10 +1154,12 @@ const AntCloudTableComponents = React.createClass({
      * @param fileLength
      */
     getCloudFileLocal(fileObject) {
-        this.saveFile(fileObject.id);
-        this.setState({saveFileModalVisible:true});
+        // this.saveFile();
+        var initPageNo = 1;
+        this.getUserRootCloudFiles(this.state.ident, initPageNo, "copyDirModal");
+        this.setState({saveFileModalVisible:true,"saveFileId": fileObject.id});
 
-        var fileCreateUid = fileObject.fileCreateUid;
+      /*  var fileCreateUid = fileObject.fileCreateUid;
         //文件名
         var fileName = fileObject.name;
         //路径
@@ -1160,7 +1168,7 @@ const AntCloudTableComponents = React.createClass({
         //大小
         var fileLength = (fileObject.length / 1024).toFixed(2);
 
-        this.setState({filePath, fileName, fileLength, fileCreateUid});
+        this.setState({filePath, fileName, fileLength, fileCreateUid});*/
 
     },
 
@@ -1177,7 +1185,7 @@ const AntCloudTableComponents = React.createClass({
     /**
      * 点击确定按钮，保存文件到指定目录   点击 父亲
      */
-    saveFileToLocalDir(parentCloudFileId, fileIds) {
+    saveFileToLocalDir(parentCloudFileId) {
         var _this = this;
         //1.请求用户的私人网盘用数据构建model的table
         var id = JSON.parse(sessionStorage.getItem("loginUser")).colUid;
@@ -1185,7 +1193,7 @@ const AntCloudTableComponents = React.createClass({
             "method": 'copyCloudFiles',
             "operateUserId": id,
             "toCloudFileId": parentCloudFileId,
-            "fromCloudFileIds": fileIds,
+            "fromCloudFileIds": this.state.saveFileId,
         };
         console.log('传递过来的参数',param);
         console.log('群文件保存参数',param);
