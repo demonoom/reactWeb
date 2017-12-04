@@ -25,6 +25,7 @@ const MonthlySummary = React.createClass({
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         return {
             loginUser: loginUser,
+            x: 1200
         };
     },
 
@@ -111,16 +112,11 @@ const MonthlySummary = React.createClass({
      * 获取当前日期,设置开始日期为本月1号，结束日期为今天
      */
     getTimeNow() {
-        debugger
         var date = new Date();
         var seperator1 = "-";
         var year = date.getFullYear();
         var month = date.getMonth() + 1;
         var strDate = date.getDate() - 1;
-        if (strDate == 0) {
-            strDate += 1;
-        }
-        ;
         if (month >= 1 && month <= 9) {
             month = "0" + month;
         }

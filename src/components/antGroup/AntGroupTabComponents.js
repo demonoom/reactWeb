@@ -85,7 +85,7 @@ const AntGroupTabComponents = React.createClass({
         msgMenu = (
             <Menu>
                 <Menu.Item>
-                    <a target="_blank" onClick={this.withdrawMsg}>撤回</a>
+                    <a target="_blank" className="ellips_t" onClick={this.withdrawMsg}>撤回</a>
                 </Menu.Item>
             </Menu>
         );
@@ -988,7 +988,7 @@ const AntGroupTabComponents = React.createClass({
                                 if (isEmpty(v) == false) {
                                     if (v.uuid == data.message.content) {
                                         messageList.splice(i, 1);
-                                        antGroup.setState({mesRetNum: i + 1});
+                                        antGroup.setState({mesRetNum: i});
                                     }
                                 }
                             });
@@ -1982,7 +1982,7 @@ const AntGroupTabComponents = React.createClass({
                                                     </div>
                                                     <i className="borderballoon_dingcorner_ri_no"></i>
                                                 </span>
-                                                <Dropdown overlay={msgMenu} placement="topLeft" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                                <Dropdown overlay={msgMenu} placement="topCenter" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                                     <Icon className="icon_ellipsis" type="ellipsis"/>
                                                 </Dropdown>
                                             </div>
@@ -1998,7 +1998,7 @@ const AntGroupTabComponents = React.createClass({
                                                 <span className="name">{userPhoneIcon}</span>
                                                 <img src={expressionItem} style={{width: '100px', height: '100px'}}/>
                                                 <span><i className="borderballoon_dingcorner_le_no"></i></span>
-                                                <Dropdown overlay={msgMenu} placement="topLeft" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                                <Dropdown overlay={msgMenu} placement="topCenter" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                                     <Icon className="icon_ellipsis" type="ellipsis"/>
                                                 </Dropdown>
                                             </div>
@@ -2035,7 +2035,7 @@ const AntGroupTabComponents = React.createClass({
                                                         </Dropdown>
                                                     </div>
                                                 </span>
-                                                <Dropdown overlay={msgMenu} placement="topLeft" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                                <Dropdown overlay={msgMenu} placement="topCenter" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                                     <Icon className="icon_ellipsis" type="ellipsis"/>
                                                 </Dropdown>
                                             </div>
@@ -2073,7 +2073,7 @@ const AntGroupTabComponents = React.createClass({
                                                         <span className="borderballoon">{e.content}
                                                             <i className="borderballoon_dingcorner_le_no"></i>
                                                         </span>
-                                                        <Dropdown overlay={msgMenu} placement="topLeft" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                                        <Dropdown overlay={msgMenu} placement="topCenter" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                                             <Icon className="icon_ellipsis" type="ellipsis"/>
                                                         </Dropdown>
                                                     </div>
@@ -2196,7 +2196,7 @@ const AntGroupTabComponents = React.createClass({
                                             <span className="borderballoon ">{e.imgTagArray}
                                                 <i className="borderballoon_dingcorner_le_no"></i>
                                             </span>
-                                            <Dropdown overlay={msgMenu} placement="topLeft" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                            <Dropdown overlay={msgMenu} placement="topCenter" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                                 <Icon className="icon_ellipsis" type="ellipsis"/>
                                             </Dropdown>
                                         </div>
@@ -2225,7 +2225,7 @@ const AntGroupTabComponents = React.createClass({
                                             <span>
                                                 <i className="borderballoon_dingcorner_le_no"></i>
                                             </span>
-                                            <Dropdown overlay={msgMenu} placement="topLeft" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                            <Dropdown overlay={msgMenu} placement="topCenter" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                                 <Icon className="icon_ellipsis" type="ellipsis"/>
                                             </Dropdown>
                                         </div>
@@ -2261,7 +2261,7 @@ const AntGroupTabComponents = React.createClass({
                                                 </div>
                                                 <i className="borderballoon_dingcorner_ri_no"></i>
                                             </span>
-                                            <Dropdown overlay={msgMenu} placement="topLeft" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                            <Dropdown overlay={msgMenu} placement="topCenter" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                                 <Icon className="icon_ellipsis" type="ellipsis"/>
                                             </Dropdown>
                                         </div>
@@ -2301,7 +2301,7 @@ const AntGroupTabComponents = React.createClass({
                                                 </span>
                                             </span>
                                             <i className="borderballoon_dingcorner_le_no"></i>
-                                            <Dropdown overlay={msgMenu} placement="topLeft" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                            <Dropdown overlay={msgMenu} placement="topCenter" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                                 <Icon className="icon_ellipsis" type="ellipsis"/>
                                             </Dropdown>
                                         </div>
@@ -2315,9 +2315,11 @@ const AntGroupTabComponents = React.createClass({
                                             <span className="borderballoon_le borderballoon_file_p">
                                                 <span className="bot"></span>
                                                 <span className="top"></span>
-                                                <img onClick={_this.noomWatchImg.bind(this, attachment)}
-                                                     className="send_img"
-                                                     src={attachment + '?' + MIDDLE_IMG} alt={attachment}/>
+                                                <span className="send_img_cont">
+                                                    <img onClick={_this.noomWatchImg.bind(this, attachment)}
+                                                         className="send_img"
+                                                         src={attachment + '?' + MIDDLE_IMG} alt={attachment}/>
+                                                </span>
                                             </span>
                                             <span><i className="borderballoon_dingcorner_ri_no"></i></span>
                                         </div>
@@ -2338,7 +2340,7 @@ const AntGroupTabComponents = React.createClass({
                                                 <span className="audio_right" id={attachment + '_audio'}></span>
                                                 <i className="borderballoon_dingcorner_ri_no"></i>
                                             </span>
-                                            <Dropdown overlay={msgMenu} placement="topLeft" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                            <Dropdown overlay={msgMenu} placement="topCenter" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                                 <Icon className="icon_ellipsis" type="ellipsis"/>
                                             </Dropdown>
                                         </div>
@@ -2395,7 +2397,7 @@ const AntGroupTabComponents = React.createClass({
                                                     </Dropdown>
                                                 </div>
                                             </span>
-                                            <Dropdown overlay={msgMenu} placement="topLeft" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                            <Dropdown overlay={msgMenu} placement="topCenter" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                                 <Icon className="icon_ellipsis" type="ellipsis"/>
                                             </Dropdown>
                                         </div>
@@ -2451,7 +2453,7 @@ const AntGroupTabComponents = React.createClass({
                                 <span className="borderballoon">{e.content}
                                     <i className="borderballoon_dingcorner_le_no"></i>
                                 </span>
-                                <Dropdown overlay={msgMenu} placement="topLeft" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                <Dropdown overlay={msgMenu} placement="topCenter" onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                     <Icon className="icon_ellipsis" type="ellipsis"/>
                                 </Dropdown>
                             </div>
