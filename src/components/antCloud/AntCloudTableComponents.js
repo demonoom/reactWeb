@@ -217,9 +217,9 @@ const AntCloudTableComponents = React.createClass({
                     }else if("copyDirModal" == optSrc){
                         cloudTable.buildTargetDirDataSaveLocal(ret);
                     } else {
-                        // cloudTable.buildTableDataByResponse(ret);
-                        // cloudTable.buildTargetDirData(ret);
-                        // cloudTable.buildTargetDirDataSaveLocal(ret);
+                        cloudTable.buildTableDataByResponse(ret);
+                        cloudTable.buildTargetDirData(ret);
+                        cloudTable.buildTargetDirDataSaveLocal(ret);
                     }
                 }
             },
@@ -256,29 +256,29 @@ const AntCloudTableComponents = React.createClass({
     /**
      *打开保存文件到蚁盘的model
      */
-/*    saveFile(fileIds) {
-        var _this = this;
-        //1.请求用户的私人网盘用数据构建model的table
-        var id = JSON.parse(sessionStorage.getItem("loginUser")).colUid;
-        var param = {
-            "method": 'getUserRootCloudFiles',
-            "userId":  id,
-            "pageNo": 1,
-        };
-        doWebService(JSON.stringify(param), {
-            onResponse: function (ret) {
-                var response = ret.response;
-                if (response) {
-                    //构建我的文件目标文件夹数据
-                    _this.buildTargetDirDataSaveLocal(ret);
+    /*    saveFile(fileIds) {
+            var _this = this;
+            //1.请求用户的私人网盘用数据构建model的table
+            var id = JSON.parse(sessionStorage.getItem("loginUser")).colUid;
+            var param = {
+                "method": 'getUserRootCloudFiles',
+                "userId":  id,
+                "pageNo": 1,
+            };
+            doWebService(JSON.stringify(param), {
+                onResponse: function (ret) {
+                    var response = ret.response;
+                    if (response) {
+                        //构建我的文件目标文件夹数据
+                        _this.buildTargetDirDataSaveLocal(ret);
+                    }
+                    // this.setState({isSaved: true});
+                },
+                onError: function (error) {
+                    message.error(error);
                 }
-                // this.setState({isSaved: true});
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });
-    },*/
+            });
+        },*/
 
 
 
@@ -354,9 +354,9 @@ const AntCloudTableComponents = React.createClass({
             })
             cloudTable.setState({"targetDirDataArray1": targetDirDataArray});
             //2.当表格组件好之后就让model显示出来
-           /* if (flag) {
-                cloudTable.setState({saveFileModalVisible: true});
-            }*/
+            /* if (flag) {
+                 cloudTable.setState({saveFileModalVisible: true});
+             }*/
         }
     },
 
@@ -1159,16 +1159,16 @@ const AntCloudTableComponents = React.createClass({
         this.getUserRootCloudFiles(this.state.ident, initPageNo, "copyDirModal");
         this.setState({saveFileModalVisible:true,"saveFileId": fileObject.id});
 
-      /*  var fileCreateUid = fileObject.fileCreateUid;
-        //文件名
-        var fileName = fileObject.name;
-        //路径
-        var filePath= fileObject.path;
-        // var filePath = fileObject.filePath;
-        //大小
-        var fileLength = (fileObject.length / 1024).toFixed(2);
+        /*  var fileCreateUid = fileObject.fileCreateUid;
+          //文件名
+          var fileName = fileObject.name;
+          //路径
+          var filePath= fileObject.path;
+          // var filePath = fileObject.filePath;
+          //大小
+          var fileLength = (fileObject.length / 1024).toFixed(2);
 
-        this.setState({filePath, fileName, fileLength, fileCreateUid});*/
+          this.setState({filePath, fileName, fileLength, fileCreateUid});*/
 
     },
 
@@ -1771,7 +1771,6 @@ const AntCloudTableComponents = React.createClass({
             <div className="ant-tabs-right"><Button onClick={cloudTable.saveBarBack}><Icon
                 type="left"/></Button></div>
         </div>;
-                
         //根据该状态值，来决定上传进度条是否显示
         var progressState = cloudTable.state.progressState;
         const radioStyle = {
