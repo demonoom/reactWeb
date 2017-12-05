@@ -7776,10 +7776,8 @@ select.course_n:hover {
     display: flex;
     flex-direction: row;
     min-width: 0;
+    max-width: 840px;
     padding-left: 140px;
-    max-width: calc(100% - 250px);
-    max-width: -moz-calc(100% - 250px);
-    max-width: -webkit-calc(100% - 250px);
 }
 .icon_ellipsis{
     background: #c1d1da;
