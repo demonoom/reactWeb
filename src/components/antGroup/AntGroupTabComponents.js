@@ -2431,15 +2431,18 @@ const AntGroupTabComponents = React.createClass({
                                         </div>
                                         <div className="talk-cont">
                                             <span className="name">{userPhoneIcon}</span>
-                                            <span className="borderballoon borderballoon_file borderballoon_file_p">
-                                                <span className="bot"></span>
-                                                <span className="top"></span>
-                                                <span className="send_img_cont">
-                                                    <img onClick={_this.noomWatchImg.bind(this, attachment)}
-                                                         src={attachment + '?' + MIDDLE_IMG} className="send_img"
-                                                         alt={attachment}/>
+                                            <div className="talk_bubble_box">
+                                                <span className="borderballoon borderballoon_file borderballoon_file_p">
+                                                    <span className="bot"></span>
+                                                    <span className="top"></span>
+                                                    <span className="send_img_cont">
+                                                        <img onClick={_this.noomWatchImg.bind(this, attachment)}
+                                                             src={attachment + '?' + MIDDLE_IMG} className="send_img"
+                                                             alt={attachment}/>
+                                                    </span>
                                                 </span>
-                                            </span>
+                                            </div>
+
                                             <i className="borderballoon_dingcorner_le_no"></i>
                                             <Dropdown overlay={msgMenu} placement="topCenter"
                                                       onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>

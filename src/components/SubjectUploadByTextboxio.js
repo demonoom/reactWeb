@@ -581,7 +581,7 @@ const SubjectUploadTabComponents = React.createClass({
     insertVideo(attachment){
         console.log("insertVideo");
         // var attachment = "http://60.205.86.217/upload5/2017-12-04/19/dd68da27-dd1c-4ecd-8677-50d2af9cfc5a.mp3";
-        var newContent ="<span class='audio_left'><video  controls='controls' src='"+attachment+"'></video></span>";
+        var newContent ="<span class='adiuo_p_play'><video  controls='controls' width='200' height='30' src='"+attachment+"'></video><span class='adiuo_hidden'></span></span>";
         switch(this.state.currentSubjectType){
             case "single":
                 mytextareaSingleEditor.content.insertHtmlAtCursor(newContent);
