@@ -781,6 +781,9 @@ const AntGroupTabComponents = React.createClass({
      */
     sendFileToOthers(url, i) {
         isSend = true;
+
+        //文件种类
+        var fileType = uploadFileList[i].type;
         //文件名
         var name = uploadFileList[i].name;
         //文件大小
@@ -792,24 +795,41 @@ const AntGroupTabComponents = React.createClass({
 
         var uuid = antGroup.createUUID();
 
-        var cloudFile = {
-            "name": name,
-            "length": length,
-            "parentId": -2,
-            "createUid": loginUser.colUid,
-            "fileType": 0,
-            "schoolId": loginUser.schoolId,
-            "path": path,
-            "uuid": uuid
-        };
-
         var createTime = (new Date()).valueOf();
 
-        var messageJson = {
-            'content': name, "createTime": createTime, 'fromUser': loginUser,
-            "toId": antGroup.state.userIdOfCurrentTalk, "command": "message", "hostId": loginUser.colUid,
-            "uuid": uuid, "toType": 1, "cloudFile": cloudFile
-        };
+        if (fileType == 'image/png' || fileType == 'image/jpeg' || fileType == 'image/jpg') {
+            var attachment = {
+                "address": path,
+                "createTime": createTime,
+                "playing": false,
+                "type": 1,
+                "user": loginUser
+            };
+
+            var messageJson = {
+                'content': name, "createTime": createTime, 'fromUser': loginUser,
+                "toId": antGroup.state.userIdOfCurrentTalk, "command": "message", "hostId": loginUser.colUid,
+                "uuid": uuid, "toType": 1, "attachment": attachment
+            };
+            antGroup.cloudFileUploadModalHandleCancel();
+        } else {
+            var cloudFile = {
+                "name": name,
+                "length": length,
+                "parentId": -2,
+                "createUid": loginUser.colUid,
+                "fileType": 0,
+                "schoolId": loginUser.schoolId,
+                "path": path,
+                "uuid": uuid
+            };
+
+            var messageJson = {
+                'content': name, "createTime": createTime, 'fromUser': loginUser,
+                "toId": antGroup.state.userIdOfCurrentTalk, "command": "message", "hostId": loginUser.colUid,
+                "uuid": uuid, "toType": 1, "cloudFile": cloudFile
+            };
+        }
 
         if (antGroup.state.optType == "sendGroupMessage") {
             messageJson.toId = antGroup.state.currentGroupObj.chatGroupId;
