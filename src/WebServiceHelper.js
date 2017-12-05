@@ -61,7 +61,7 @@ export function doWebService(data, listener) {
             XMLHttpRequest.setRequestHeader("accessUser", sessionStorage.getItem("ident"));
             XMLHttpRequest.setRequestHeader("machine", localStorage.getItem("machineId"));
             XMLHttpRequest.setRequestHeader("machineType", "web");
-            XMLHttpRequest.setRequestHeader("version", "1.01");
+            XMLHttpRequest.setRequestHeader("version", "1.02");
         },
         // headers: {
         //     "accessUser": sessionStorage.getItem("ident"),
