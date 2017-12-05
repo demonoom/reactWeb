@@ -59,6 +59,7 @@ var preHeight = 0;
 var isSend = false;
 var menu = null;
 var msgMenu = null;
+var uuidArr = [];
 var targetDirColumns = [{
     title: '文件夹名称',
     dataIndex: 'dirName',
@@ -176,8 +177,7 @@ const AntGroupTabComponents = React.createClass({
     },
 
     componentDidUpdate() {
-        console.log('componentDidUpdate');
-        // this.msMsgRead();
+        this.msMsgRead();
     },
 
     componentWillUnmount() {
@@ -190,32 +190,34 @@ const AntGroupTabComponents = React.createClass({
      *  已读消息回复服务器
      */
     msMsgRead() {
-        var messageList = antGroup.state.messageList;
+        var messageList = this.state.messageList;
+        var id = this.state.loginUser.colUid;
         if (isEmpty(messageList) == false && messageList.length > 0) {
-            // console.log(1);
             if (typeof(messageList[0].groupReadState) != 'undefined') {
                 //群组消息
                 messageList.forEach(function (v, i) {
-                    if (v.fromUser.colUid != antGroup.state.loginUser.colUid) {
+                    if (v.fromUser.colUid != id) {
                         if (v.groupReadState == 0 && v.readState >= 0) {
                             var receivedCommand = {
                                 "command": "message_read",
                                 "data": {"messageUUID": v.uuid}
                             };
                             ms.send(receivedCommand);
+                            uuidArr.push(v.uuid);
                         }
                     }
                 });
 
             } else {
                 messageList.forEach(function (v, i) {
-                    if (v.fromUser.colUid != antGroup.state.loginUser.colUid) {
+                    if (v.fromUser.colUid != id) {
                         if (v.readState == 0) {
                             var receivedCommand = {
                                 "command": "message_read",
                                 "data": {"messageUUID": v.uuid}
                             };
                             ms.send(receivedCommand);
+                            uuidArr.push(v.uuid);
                         }
                     }
                 });
@@ -1019,6 +1021,17 @@ const AntGroupTabComponents = React.createClass({
                         //已读未读处理，更改相关消息的readState， 分群和个人
                         if (isEmpty(info.data.message.toType) == false) {
                             var uuid = info.data.message.uuid;
+
+                            if (uuidArr.indexOf(uuid) != -1) {
+                                //消息已读之后服务器返回的message,在uuidArr数组中,不应该setState,
+                                //从数组中除去,并return
+                                uuidArr.forEach(function (v, i) {
+                                    if (v == uuid) {
+                                        uuidArr.splice(i, 1);
+                                    }
+                                });
+                                return false
+                            }
                             var messageList = antGroup.state.messageList;
                             if (info.data.message.toType == 1) {
                                 if (info.data.readUserCount !== 0) {
@@ -1073,6 +1086,9 @@ const AntGroupTabComponents = React.createClass({
                                 }
                             });
                             antGroup.setState({messageList});
+                        } else if (data.message.command == "message_read") {
+                            //消息已读之后来自蚂蚁君的message_read,没用直接return
+                            return false
                         }
 
                         showImg = "";
@@ -1461,6 +1477,9 @@ const AntGroupTabComponents = React.createClass({
         ms.send(commandJson);
         //send过信息之后要做的事情，联动
         antGroup.initMyEmotionInput();
+        //让消息回到底部
+        var gt = $('#groupTalk');
+        gt.scrollTop(parseInt(gt[0].scrollHeight));
         if (isEmpty(sendType) == false && sendType == "groupSend") {
             // antGroup.setState({"isDirectToBottom": true});
             isDirectToBottom = true;
@@ -2094,7 +2113,7 @@ const AntGroupTabComponents = React.createClass({
                                                     </div>
                                                     <i className="borderballoon_dingcorner_ri_no"></i>
                                                 </span>
-                                                <Dropdown overlay={msgMenu} placement="topCenter"
+                                                <Dropdown overlay={msgMenu} trigger={['click']} placement="topCenter"
                                                           onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                                     <Icon className="icon_ellipsis" type="ellipsis"/>
                                                 </Dropdown>
@@ -2112,7 +2131,7 @@ const AntGroupTabComponents = React.createClass({
                                                 <span className="name">{userPhoneIcon}</span>
                                                 <img src={expressionItem} style={{width: '100px', height: '100px'}}/>
                                                 <span><i className="borderballoon_dingcorner_le_no"></i></span>
-                                                <Dropdown overlay={msgMenu} placement="topCenter"
+                                                <Dropdown overlay={msgMenu} trigger={['click']} placement="topCenter"
                                                           onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                                     <Icon className="icon_ellipsis" type="ellipsis"/>
                                                 </Dropdown>
@@ -2159,7 +2178,7 @@ const AntGroupTabComponents = React.createClass({
                                                         </Dropdown>
                                                     </div>
                                                 </span>
-                                                <Dropdown overlay={msgMenu} placement="topCenter"
+                                                <Dropdown overlay={msgMenu} trigger={['click']} placement="topCenter"
                                                           onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                                     <Icon className="icon_ellipsis" type="ellipsis"/>
                                                 </Dropdown>
@@ -2199,7 +2218,7 @@ const AntGroupTabComponents = React.createClass({
                                                         <span className="borderballoon">{e.content}
                                                             <i className="borderballoon_dingcorner_le_no"></i>
                                                         </span>
-                                                        <Dropdown overlay={msgMenu} placement="topCenter"
+                                                        <Dropdown overlay={msgMenu} trigger={['click']} placement="topCenter"
                                                                   onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                                             <Icon className="icon_ellipsis" type="ellipsis"/>
                                                         </Dropdown>
@@ -2324,7 +2343,7 @@ const AntGroupTabComponents = React.createClass({
                                             <span className="borderballoon ">{e.imgTagArray}
                                                 <i className="borderballoon_dingcorner_le_no"></i>
                                             </span>
-                                            <Dropdown overlay={msgMenu} placement="topCenter"
+                                            <Dropdown overlay={msgMenu} trigger={['click']} placement="topCenter"
                                                       onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                                 <Icon className="icon_ellipsis" type="ellipsis"/>
                                             </Dropdown>
@@ -2355,7 +2374,7 @@ const AntGroupTabComponents = React.createClass({
                                             <span>
                                                 <i className="borderballoon_dingcorner_le_no"></i>
                                             </span>
-                                            <Dropdown overlay={msgMenu} placement="topCenter"
+                                            <Dropdown overlay={msgMenu} trigger={['click']} placement="topCenter"
                                                       onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                                 <Icon className="icon_ellipsis" type="ellipsis"/>
                                             </Dropdown>
@@ -2397,7 +2416,7 @@ const AntGroupTabComponents = React.createClass({
                                                 </div>
                                                 <i className="borderballoon_dingcorner_ri_no"></i>
                                             </span>
-                                            <Dropdown overlay={msgMenu} placement="topCenter"
+                                            <Dropdown overlay={msgMenu} trigger={['click']} placement="topCenter"
                                                       onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                                 <Icon className="icon_ellipsis" type="ellipsis"/>
                                             </Dropdown>
@@ -2441,7 +2460,7 @@ const AntGroupTabComponents = React.createClass({
                                                 </span>
                                             </span>
                                             <i className="borderballoon_dingcorner_le_no"></i>
-                                            <Dropdown overlay={msgMenu} placement="topCenter"
+                                            <Dropdown overlay={msgMenu} trigger={['click']} placement="topCenter"
                                                       onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                                 <Icon className="icon_ellipsis" type="ellipsis"/>
                                             </Dropdown>
@@ -2483,7 +2502,7 @@ const AntGroupTabComponents = React.createClass({
                                                 <span className="audio_right" id={attachment + '_audio'}></span>
                                                 <i className="borderballoon_dingcorner_ri_no"></i>
                                             </span>
-                                            <Dropdown overlay={msgMenu} placement="topCenter"
+                                            <Dropdown overlay={msgMenu} trigger={['click']} placement="topCenter"
                                                       onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                                 <Icon className="icon_ellipsis" type="ellipsis"/>
                                             </Dropdown>
@@ -2550,7 +2569,7 @@ const AntGroupTabComponents = React.createClass({
                                                     </Dropdown>
                                                 </div>
                                             </span>
-                                            <Dropdown overlay={msgMenu} placement="topCenter"
+                                            <Dropdown overlay={msgMenu} trigger={['click']} placement="topCenter"
                                                       onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                                 <Icon className="icon_ellipsis" type="ellipsis"/>
                                             </Dropdown>
@@ -2608,7 +2627,7 @@ const AntGroupTabComponents = React.createClass({
                                 <span className="borderballoon">{e.content}
                                     <i className="borderballoon_dingcorner_le_no"></i>
                                 </span>
-                                <Dropdown overlay={msgMenu} placement="topCenter"
+                                <Dropdown overlay={msgMenu} trigger={['click']} placement="topCenter"
                                           onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
                                     <Icon className="icon_ellipsis" type="ellipsis"/>
                                 </Dropdown>
