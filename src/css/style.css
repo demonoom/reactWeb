@@ -837,23 +837,11 @@ ul.cont_t2 {
     padding: 6px 12px;
     min-width: 72px;
 }
-
-
-
-.footer_user_introduction .ant-modal-body{
-    padding: 0;
-}
-.footer_user_introduction .ant-modal-footer{
-    padding: 16px 0 8px 0 !important;
-}
 .footer_user_introduction .ant-modal-footer .ant-input-wrapper textarea{
     max-width: 90%;
     height: auto;
 
 }
-
-
-
 .ant-form-item-control button {
     margin: 0 10px;
     padding: 6px 20px;
@@ -3529,7 +3517,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     color: #666;
     padding: 0;
     float: left;
-    width: calc(80% - 155px);
+    width: calc(100% - 235px);
 }
 
 
@@ -5206,7 +5194,7 @@ div.btn1 {
 }
 
 .userinfo_top {
-    margin-top: 80px;
+    margin-top: 60px;
     background: #fff;
     border-radius: 4px;
     padding: 20px 0;
@@ -7807,4 +7795,9 @@ select.course_n:hover {
 }
 .ellips_t:hover{
     text-decoration: none;
+}
+.black_person_btn{
+    float: right;
+    margin-right: 12px;
+    font-size: 12px !important;
 }

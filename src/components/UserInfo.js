@@ -229,7 +229,7 @@ const UserInfo = React.createClass({
                         {courseOrGrade}
                         <p className="user_introduction"><span className="user_til_name_int">个人介绍：</span><span
                             className="black_person_introduction">{this.state.introduction}</span>
-                            <Button float='left' type="primary" onClick={this.showModal}>编辑</Button>
+                            <Button className="black_person_btn" type="primary" onClick={this.showModal}>编辑</Button>
                         </p>
                     </div>
                 </div>
@@ -240,17 +240,17 @@ const UserInfo = React.createClass({
                        onCancel={this.closeEditModalHandleCancel}
                        className="footer_user_introduction"
                        footer={[
-                           <div>
-                               <Input type="textarea" id="" rows={4} value={this.state.editTextarea}
-                                      onChange={this.editTextArea}
-                               />
                                <Button type="primary" htmlType="submit" className="login-form-button"
                                        onClick={this.sendIntro}>
                                    确认修改
                                </Button>
-                           </div>
                        ]}
                 >
+                    <div>
+                        <Input type="textarea" id="" rows={4} value={this.state.editTextarea}
+                               onChange={this.editTextArea}
+                        />
+                    </div>
                 </Modal>
             </div>
         );
