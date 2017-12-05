@@ -2441,6 +2441,7 @@ const AntGroupTabComponents = React.createClass({
                                                              alt={attachment}/>
                                                     </span>
                                                 </span>
+
                                             </div>
 
                                             <i className="borderballoon_dingcorner_le_no"></i>
