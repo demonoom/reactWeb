@@ -3690,13 +3690,33 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     width: 400px;
 }
 
-.borderballoon, .public .sayLine.right div.saycont .sayCon {
+.borderballoon{
     background: #40baff;
     border-radius: 4px;
     position: relative;
     display: inline-block;
     padding: 6px 12px 6px 14px;
     margin-right: 12px;
+    min-width: 0;
+    text-align: left;
+    color: #fff;
+    flex-direction: row-reverse;
+    font-size: 14px;
+    line-height: 24px;
+    margin-left: 0;
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+.public .sayLine.right div.saycont .sayCon {
+    background: #40baff;
+    border-radius: 4px;
+    position: relative;
+    display: inline-block;
+    padding: 6px 12px 6px 14px;
+    margin-right: 12px;
+    max-width: calc(100% - 250px);
+    max-width: -moz-calc(100% - 250px);
+    max-width: -webkit-calc(100% - 250px);
     min-width: 0;
     text-align: left;
     color: #fff;
@@ -7777,18 +7797,36 @@ select.course_n:hover {
     max-width: calc(100% - 250px);
     max-width: -moz-calc(100% - 250px);
     max-width: -webkit-calc(100% - 250px);
+    position: relative;
+}
+.talk_bubble_ellipsis{
+    position: absolute;
+    width: 130px;
+    text-align: right;
+    left: 0;
+    bottom: 18px;
+}
+.talk_bubble_read{
+    position: absolute;
+    width: 130px;
+    text-align: right;
+    left: 0;
+    bottom: 0;
+    font-size: 12px;
+    color: #858e99;
+    cursor: default;
 }
 .icon_ellipsis{
     background: #c1d1da;
     border-radius: 4px;
     cursor: pointer;
-    margin-right: 8px;
     color: #fff;
-    font-size: 18px;
-    height: 18px;
-    position: relative;
+    font-size: 16px;
+    height: 16px;
     top: 0px;
-    right: 3px;
+    display: block;
+    width: 16px;
+    float: right;
     display: none;
 }
 .icon_ellipsis:hover, .icon_ellipsis:active{
