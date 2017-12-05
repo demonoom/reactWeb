@@ -645,13 +645,18 @@ const AntCloudTableComponents = React.createClass({
                 var path = e.path;
                 console.log("path---------->" + path);
                 console.log('key',key);
+                console.log('文件名字',name);
+                debugger;
                 var downloadButton;
+
                 if (directory) {
                     downloadButton = null;
                 } else {
+                    var pathLocal = path.substring(path.indexOf('/upload')-1,path.length);
                     downloadButton =
-                        <a href={path} target="_blank" title="下载" download={path} className="te_download_a_noom">
-                            <Button icon="download"/></a>;
+                        <a href={path} target="_blank" title="下载" download={e.name} className="te_download_a_noom">
+                    <Button icon="download"/></a>;
+
                 }
                 var fileLogo = _this.buildFileLogo(name, directory, e);
                 var cloudFileJsonForEveryFile = {"fileId": key, "cloudFileObj": e};
@@ -814,6 +819,22 @@ const AntCloudTableComponents = React.createClass({
 
         LP.Start(obj);
     },
+
+    /**
+     *
+     */
+    downloadFile(fileName, content){
+        console.log(555555);
+    var aLink = document.createElement('a');
+    var blob = new Blob([content]);
+    var evt = document.createEvent("HTMLEvents");
+    evt.initEvent("click", false, false);//initEvent 不加后两个参数在FF下会报错
+    aLink.download = fileName;
+    console.log( aLink.download);
+    aLink.href = URL.createObjectURL(blob);
+    aLink.dispatchEvent(evt);
+},
+
     /**
      * 修改文件夹的名称（重命名）
      * 显示修改操作的modal窗口
