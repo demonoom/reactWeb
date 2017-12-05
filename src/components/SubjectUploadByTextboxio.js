@@ -824,7 +824,7 @@ const SubjectUploadTabComponents = React.createClass({
                                 </Col>
                                 <Col span={20}>
                                     <TextboxioComponentForSingle />
-                                    <Button onClick={this.showVideoUploadModal.bind(this,'single')}>插入音频</Button>
+                                    <Button className="row-t-f" onClick={this.showVideoUploadModal.bind(this,'single')}>插入音频</Button>
                                 </Col>
                             </Row>
                             <Row>

@@ -3697,9 +3697,6 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     display: inline-block;
     padding: 6px 12px 6px 14px;
     margin-right: 12px;
-    max-width: calc(100% - 250px);
-    max-width: -moz-calc(100% - 250px);
-    max-width: -webkit-calc(100% - 250px);
     min-width: 0;
     text-align: left;
     color: #fff;
@@ -7810,4 +7807,18 @@ select.course_n:hover {
     float: right;
     margin-right: 12px;
     font-size: 12px !important;
+}
+.adiuo_p_play{
+    float: left;
+    height: 30px;
+    position: relative;
+}
+.adiuo_hidden{
+    width: 25px;
+    height: 32px;
+    background: #fafafa;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+    top: -2px;
 }
