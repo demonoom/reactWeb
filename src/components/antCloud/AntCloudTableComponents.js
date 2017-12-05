@@ -340,7 +340,7 @@ const AntCloudTableComponents = React.createClass({
                 if (e.directory == true) {
                     moveDirOpt = <div>
                         {/*这是确定保存的功能*/}
-                        <Button onClick={cloudTable.saveFileToLocalDir.bind(cloudTable, key)}>确定111</Button>
+                        <Button onClick={cloudTable.saveFileToLocalDir.bind(cloudTable, key)}>确定</Button>
                     </div>;
                 } else {
                     dirName = name;
