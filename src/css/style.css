@@ -7786,7 +7786,7 @@ select.course_n:hover {
     max-height: 200px;
 }
 .group_talk ul li.right div.talk-cont:hover .icon_ellipsis{
-    display: block;
+    visibility:visible
 }
 .talk_bubble_box{
     flex: 0 1 auto;
@@ -7827,7 +7827,7 @@ select.course_n:hover {
     display: block;
     width: 16px;
     float: right;
-    display: none;
+    visibility:hidden;
 }
 .icon_ellipsis:hover, .icon_ellipsis:active{
     background: #d9e7ef;
@@ -7859,4 +7859,7 @@ select.course_n:hover {
     position: absolute;
     right: 0;
     top: -2px;
+}
+.ellips_t:hover .icon_ellipsis{
+    visibility: visible;
 }
