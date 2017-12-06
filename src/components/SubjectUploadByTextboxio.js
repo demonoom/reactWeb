@@ -824,7 +824,7 @@ const SubjectUploadTabComponents = React.createClass({
                                 </Col>
                                 <Col span={20}>
                                     <TextboxioComponentForSingle />
-                                    <Button className="row-t-f" onClick={this.showVideoUploadModal.bind(this,'single')}>插入音频</Button>
+                                    {/*<Button className="row-t-f" onClick={this.showVideoUploadModal.bind(this,'single')}>插入音频</Button>*/}
                                 </Col>
                             </Row>
                             <Row>
@@ -874,7 +874,7 @@ const SubjectUploadTabComponents = React.createClass({
                                     </Col>
                                     <Col span={20}>
                                         <TextboxioComponentForMulitiSelect/>
-                                        <Button onClick={this.showVideoUploadModal.bind(this,'mulitiSelect')}>插入音频</Button>
+                                        {/*<Button onClick={this.showVideoUploadModal.bind(this,'mulitiSelect')}>插入音频</Button>*/}
                                     </Col>
                                 </Row>
                                 <Row>
@@ -926,7 +926,7 @@ const SubjectUploadTabComponents = React.createClass({
                                     </Col>
                                     <Col span={20}>
                                         <TextboxioComponentForCorrect/>
-                                        <Button onClick={this.showVideoUploadModal.bind(this,'correct')}>插入音频</Button>
+                                        {/*<Button onClick={this.showVideoUploadModal.bind(this,'correct')}>插入音频</Button>*/}
                                     </Col>
                                 </Row>
                                 <Row>
@@ -968,7 +968,7 @@ const SubjectUploadTabComponents = React.createClass({
                                     </Col>
                                     <Col span={20}>
                                         <TextboxioComponentForSimpleAnswer/>
-                                        <Button onClick={this.showVideoUploadModal.bind(this,'simpleAnswer')}>插入音频</Button>
+                                        {/*<Button onClick={this.showVideoUploadModal.bind(this,'simpleAnswer')}>插入音频</Button>*/}
                                     </Col>
                                 </Row>
 
