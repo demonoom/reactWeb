@@ -646,7 +646,6 @@ const AntCloudTableComponents = React.createClass({
                 console.log("path---------->" + path);
                 console.log('key',key);
                 console.log('文件名字',name);
-                debugger;
                 var downloadButton;
 
                 if (directory) {

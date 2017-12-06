@@ -1306,6 +1306,29 @@ const AntGroupTabComponents = React.createClass({
                         }
                         var contentJson = {"content": content, "createTime": createTime};
                         var contentArray = [contentJson];
+
+
+                        if (isEmpty(antGroup.state.messageList) == false && antGroup.state.messageList.length > 0) {
+                            if (messageOfSinge.createTime - antGroup.state.messageList[0].mesTimeForDetil > 300000) {
+                                var messageShoww = {
+                                    'fromUser': {
+                                        "avatar": "http://www.maaee.com:80/Excoord_For_Education/userPhoto/default_avatar.png",
+                                        "colUid": 120024,
+                                        "userName": "群通知者",
+                                    },
+                                    'content': formatHM(messageOfSinge.createTime),
+                                    "messageType": "getMessage",
+                                    "showType": 1,
+                                    "messageReturnJson": {
+                                        messageType: "text",
+                                    },
+                                };
+                                messageList.push(messageShoww);
+                                antGroup.addMessageList(messageList, "first");
+                                messageList.splice(0);
+                            }
+                        }
+
                         if (messageOfSinge.toType == 1 && typeof (content) != 'undefined' && messageOfSinge.command != "retractMessage") {
                             //个人单条消息
                             imgTagArray.splice(0);
@@ -1343,6 +1366,7 @@ const AntGroupTabComponents = React.createClass({
                                             "showType": showType,
                                             "readState": readState,
                                             "mesTime": mesTime,
+                                            "mesTimeForDetil": messageOfSinge.createTime,
                                         };
                                         messageList.push(messageShow);
                                         // console.log(messageList);
@@ -1384,6 +1408,7 @@ const AntGroupTabComponents = React.createClass({
                                             "readState": readState,
                                             "readStateStr": '未读',
                                             "mesTime": mesTime,
+                                            "mesTimeForDetil": messageOfSinge.createTime,
                                         };
                                         //如果发送的消息=当前点击人的id，才push
                                         if (messageOfSinge.toUser.colUid === _this.state.curId) {
@@ -1441,6 +1466,7 @@ const AntGroupTabComponents = React.createClass({
                                     "readStateStr": '未读',
                                     "groupReadState": readState,
                                     "mesTime": mesTime,
+                                    "mesTimeForDetil": messageOfSinge.createTime,
                                 };
                                 //messageList.splice(0, 0, messageShow);
                                 messageList.push(messageShow);
@@ -1819,14 +1845,35 @@ const AntGroupTabComponents = React.createClass({
                             var colUtype = fromUser.colUtype;
                             var isCurrentDay = isToday(messageOfSinge.createTime);
                             var mesTime;
+                            var timeSignForTime;
                             if (isCurrentDay) {
                                 //如果是当天的消息，只显示时间
                                 mesTime = formatHM(messageOfSinge.createTime);
+                                timeSignForTime = formatHM(timeSign);
                             } else {
                                 //非当天时间，显示的是月-日
                                 mesTime = formatMD(messageOfSinge.createTime) + ' ' + formatHM(messageOfSinge.createTime);
+                                timeSignForTime = formatMD(timeSign) + ' ' + formatHM(timeSign);
                             }
                             var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+                            if (messageOfSinge.createTime - timeSign != messageOfSinge.createTime && timeSign - messageOfSinge.createTime > 300000) {
+                                var messageShow = {
+                                    'fromUser': {
+                                        "avatar": "http://www.maaee.com:80/Excoord_For_Education/userPhoto/default_avatar.png",
+                                        "colUid": 120024,
+                                        "userName": "群通知者",
+                                    },
+                                    'content': timeSignForTime,
+                                    "messageType": "getMessage",
+                                    "showType": 1,
+                                    "messageReturnJson": {
+                                        messageType: "text",
+                                    },
+                                };
+                                messageList.push(messageShow);
+                            }
+                            ;
+                            timeSign = messageOfSinge.createTime;
                             if (("SGZH" == colUtype || groupObj.chatGroupId == e.toId ) && e.toType == 4) {
                                 var uuid = e.uuid;
                                 var showType = e.showType;
@@ -1873,26 +1920,10 @@ const AntGroupTabComponents = React.createClass({
                                     "readState": readState,
                                     "groupReadState": groupReadState,
                                     "mesTime": mesTime,
+                                    "mesTimeForDetil": timeSign,
                                 };
                                 messageList.push(message);
                             }
-                            if (messageOfSinge.createTime - timeSign != messageOfSinge.createTime && timeSign - messageOfSinge.createTime > 300000) {
-                                var messageShow = {
-                                    'fromUser': {
-                                        "avatar": "http://www.maaee.com:80/Excoord_For_Education/userPhoto/default_avatar.png",
-                                        "colUid": 120024,
-                                        "userName": "群通知者",
-                                    },
-                                    'content': mesTime,
-                                    "messageType": "getMessage",
-                                    "showType": 1,
-                                    "messageReturnJson": {
-                                        messageType: "text",
-                                    },
-                                };
-                                messageList.push(messageShow);
-                            };
-                            timeSign = messageOfSinge.createTime;
                         }
                     });
                     var gt = $('#groupTalk');
@@ -2095,15 +2126,36 @@ const AntGroupTabComponents = React.createClass({
                             var fromUser = messageOfSinge.fromUser;
                             var isCurrentDay = isToday(messageOfSinge.createTime);
                             var mesTime;
+                            var timeSignForTime;
                             if (isCurrentDay) {
                                 //如果是当天的消息，只显示时间
                                 mesTime = formatHM(messageOfSinge.createTime);
+                                timeSignForTime = formatHM(timeSign);
                             } else {
                                 //非当天时间，显示的是月-日
                                 mesTime = formatMD(messageOfSinge.createTime) + ' ' + formatHM(messageOfSinge.createTime);
+                                timeSignForTime = formatMD(timeSign) + ' ' + formatHM(timeSign);
                             }
                             var colUtype = fromUser.colUtype;
                             var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+                            if (messageOfSinge.createTime - timeSign != messageOfSinge.createTime && timeSign - messageOfSinge.createTime > 300000) {
+                                var messageShow = {
+                                    'fromUser': {
+                                        "avatar": "http://www.maaee.com:80/Excoord_For_Education/userPhoto/default_avatar.png",
+                                        "colUid": 120024,
+                                        "userName": "群通知者",
+                                    },
+                                    'content': timeSignForTime,
+                                    "messageType": "getMessage",
+                                    "showType": 1,
+                                    "messageReturnJson": {
+                                        messageType: "text",
+                                    },
+                                };
+                                messageList.push(messageShow);
+                            }
+                            ;
+                            timeSign = messageOfSinge.createTime;
                             if (messageOfSinge.toType == 1) {
                                 var uuid = messageOfSinge.uuid;
                                 var showType = messageOfSinge.showType;
@@ -2146,27 +2198,11 @@ const AntGroupTabComponents = React.createClass({
                                     "showType": showType,
                                     "readState": readState,
                                     "readStateStr": readStateStr,
-                                    "mesTime": mesTime
+                                    "mesTime": mesTime,
+                                    "mesTimeForDetil": messageOfSinge.createTime,
                                 };
                                 messageList.push(messageShow);
                             }
-                            if (messageOfSinge.createTime - timeSign != messageOfSinge.createTime && timeSign - messageOfSinge.createTime > 300000) {
-                                var messageShow = {
-                                    'fromUser': {
-                                        "avatar": "http://www.maaee.com:80/Excoord_For_Education/userPhoto/default_avatar.png",
-                                        "colUid": 120024,
-                                        "userName": "群通知者",
-                                    },
-                                    'content': mesTime,
-                                    "messageType": "getMessage",
-                                    "showType": 1,
-                                    "messageReturnJson": {
-                                        messageType: "text",
-                                    },
-                                };
-                                messageList.push(messageShow);
-                            };
-                            timeSign = messageOfSinge.createTime;
                         }
                     });
                     var gt = $('#groupTalk');
@@ -2231,8 +2267,8 @@ const AntGroupTabComponents = React.createClass({
             messageTagArray.splice(0);
             var messageList = antGroup.state.messageList;
 
-            console.log(messageList);
-            console.log('messageList');
+            // console.log(messageList);
+            // console.log('messageList');
 
             var imgArr = [];
             if (isEmpty(messageList) == false && messageList.length > 0) {
@@ -2719,7 +2755,8 @@ const AntGroupTabComponents = React.createClass({
                                                     <span className="send_img_cont">
                                                         <img onClick={_this.noomWatchImg.bind(this, attachment)}
                                                              src={attachment + '?' + MIDDLE_IMG} className="send_img"
-                                                             alt={attachment}/>
+                                                             alt={attachment}
+                                                        />
                                                     </span>
                                                     <i className="borderballoon_dingcorner_le_no"></i>
                                                 </span>
@@ -2747,7 +2784,8 @@ const AntGroupTabComponents = React.createClass({
                                                 <span className="send_img_cont">
                                                     <img onClick={_this.noomWatchImg.bind(this, attachment)}
                                                          className="send_img"
-                                                         src={attachment + '?' + MIDDLE_IMG} alt={attachment}/>
+                                                         src={attachment + '?' + MIDDLE_IMG} alt={attachment}
+                                                    />
                                                 </span>
                                             </span>
                                             <span><i className="borderballoon_dingcorner_ri_no"></i></span>
