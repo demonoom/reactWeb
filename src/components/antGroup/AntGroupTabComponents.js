@@ -13,7 +13,8 @@ import {
     Progress,
     Row,
     Table,
-    Tabs
+    Tabs,
+    Card
 } from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import EmotionInputComponents from './EmotionInputComponents';
@@ -69,6 +70,20 @@ var targetDirColumns = [{
     dataIndex: 'moveDirOpt',
 }
 ];
+var userGroupsColumns = [{
+    title: '群聊头像',
+    dataIndex: 'groupPhoto',
+    className: 'left-12',
+}, {
+    title: '群聊名称',
+    dataIndex: 'groupName',
+}, {
+    title: '群聊人数',
+    dataIndex: 'userCount',
+}, {
+    title: '群设置',
+    dataIndex: 'groupSet',
+},];
 
 
 const AntGroupTabComponents = React.createClass({
@@ -133,7 +148,8 @@ const AntGroupTabComponents = React.createClass({
             uploadPercent: 0,
             progressState: 'none',
             totalCount: 0,
-            readState: '未读'
+            readState: '未读',
+            mesReadActiveKey: "1"
         };
 
     },
@@ -304,6 +320,111 @@ const AntGroupTabComponents = React.createClass({
 
         this.setState({selectedRowKeys: []});
         this.setState({checkFileModalVisible: true});
+    },
+
+    onTabClick(e) {
+        this.setState({mesReadActiveKey: e});
+    },
+
+    /**
+     * 群消息中点击已读获取已读详细人员
+     */
+    checkTalkReaders(e) {
+        var _this = this;
+        if (typeof(e.groupReadState) != 'undefined') {
+            //群消息
+            this.refs.dingPanel.className = 'ding_panel ding_enter';
+            //渲染详情面板
+            _this.showReaderList(e.uuid);
+            _this.showNevReaderList(e.uuid);
+            //先进入详情，后willcomponents
+        }
+    },
+
+    /**
+     * 渲染群消息已读详情
+     */
+    showReaderList(id) {
+        var _this = this;
+        var param = {
+            "method": 'getMessageReadUsers',
+            "messageUUID": id,
+            "type": '0'
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    var data = ret.response;
+                    var arr = [];
+                    data.forEach(function (e) {
+                        var id = e.colUid;
+                        var memberAvatarTag = <img src={e.avatar}></img>;
+                        var imgTag = <div className="maaee_group_face1">{memberAvatarTag}</div>;
+                        var name = <span className="font_gray_666">{e.userName}</span>
+                        var chatGroupJson = {
+                            key: id,
+                            groupPhoto: imgTag,
+                            'groupName': name,
+                        };
+
+                        arr.push(chatGroupJson);
+                    });
+                    _this.setState({"readMenuMebs": arr});
+                } else {
+                    message.error(ret.msg);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 渲染群消息未读详情
+     */
+    showNevReaderList(id) {
+        var _this = this;
+        var param = {
+            "method": 'getMessageReadUsers',
+            "messageUUID": id,
+            "type": '1'
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    var data = ret.response;
+                    var arr = [];
+                    data.forEach(function (e) {
+                        var id = e.colUid;
+                        var memberAvatarTag = <img src={e.avatar}></img>;
+                        var imgTag = <div className="maaee_group_face1">{memberAvatarTag}</div>;
+                        var name = <span className="font_gray_666">{e.userName}</span>
+                        var chatGroupJson = {
+                            key: id,
+                            groupPhoto: imgTag,
+                            'groupName': name,
+                        };
+
+                        arr.push(chatGroupJson);
+                    });
+                    _this.setState({"noReadMenuMebs": arr});
+                } else {
+                    message.error(ret.msg);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 群消息已读人员侧边栏离场
+     */
+    levMesDetil() {
+        this.refs.dingPanel.className = 'ding_panel ding_leave';
+        this.setState({mesReadActiveKey: '1'});
     },
 
     /**
@@ -1173,12 +1294,15 @@ const AntGroupTabComponents = React.createClass({
                         }
                         var isCurrentDay = isToday(messageOfSinge.createTime);
                         var createTime;
+                        var mesTime;
                         if (isCurrentDay) {
                             //如果是当天的消息，只显示时间
                             createTime = formatHM(messageOfSinge.createTime);
+                            mesTime = formatHM(messageOfSinge.createTime);
                         } else {
                             //非当天时间，显示的是月-日
                             createTime = formatMD(messageOfSinge.createTime);
+                            mesTime = formatMD(messageOfSinge.createTime) + ' ' + formatHM(messageOfSinge.createTime);
                         }
                         var contentJson = {"content": content, "createTime": createTime};
                         var contentArray = [contentJson];
@@ -1218,6 +1342,7 @@ const AntGroupTabComponents = React.createClass({
                                             "uuid": uuid,
                                             "showType": showType,
                                             "readState": readState,
+                                            "mesTime": mesTime,
                                         };
                                         messageList.push(messageShow);
                                         // console.log(messageList);
@@ -1257,7 +1382,8 @@ const AntGroupTabComponents = React.createClass({
                                             "uuid": uuid,
                                             "showType": showType,
                                             "readState": readState,
-                                            "readStateStr": '未读'
+                                            "readStateStr": '未读',
+                                            "mesTime": mesTime,
                                         };
                                         //如果发送的消息=当前点击人的id，才push
                                         if (messageOfSinge.toUser.colUid === _this.state.curId) {
@@ -1314,6 +1440,7 @@ const AntGroupTabComponents = React.createClass({
                                     "readState": readState,
                                     "readStateStr": '未读',
                                     "groupReadState": readState,
+                                    "mesTime": mesTime,
                                 };
                                 //messageList.splice(0, 0, messageShow);
                                 messageList.push(messageShow);
@@ -1650,6 +1777,7 @@ const AntGroupTabComponents = React.createClass({
                     antGroup.tipNotic(ret.response);
                     var messageList = [];
                     isNewPage = true;
+                    var timeSign = 0;   //起始时间标记
                     ret.response.forEach(function (e) {
                         if (e.command == "message") {
                             var messageOfSinge = e;
@@ -1689,6 +1817,15 @@ const AntGroupTabComponents = React.createClass({
                             var uuidsArray = [];
                             var fromUser = messageOfSinge.fromUser;
                             var colUtype = fromUser.colUtype;
+                            var isCurrentDay = isToday(messageOfSinge.createTime);
+                            var mesTime;
+                            if (isCurrentDay) {
+                                //如果是当天的消息，只显示时间
+                                mesTime = formatHM(messageOfSinge.createTime);
+                            } else {
+                                //非当天时间，显示的是月-日
+                                mesTime = formatMD(messageOfSinge.createTime) + ' ' + formatHM(messageOfSinge.createTime);
+                            }
                             var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
                             if (("SGZH" == colUtype || groupObj.chatGroupId == e.toId ) && e.toType == 4) {
                                 var uuid = e.uuid;
@@ -1734,10 +1871,28 @@ const AntGroupTabComponents = React.createClass({
                                     "showType": showType,
                                     "readStateStr": readStateStr,
                                     "readState": readState,
-                                    "groupReadState": groupReadState
+                                    "groupReadState": groupReadState,
+                                    "mesTime": mesTime,
                                 };
                                 messageList.push(message);
                             }
+                            if (messageOfSinge.createTime - timeSign != messageOfSinge.createTime && timeSign - messageOfSinge.createTime > 300000) {
+                                var messageShow = {
+                                    'fromUser': {
+                                        "avatar": "http://www.maaee.com:80/Excoord_For_Education/userPhoto/default_avatar.png",
+                                        "colUid": 120024,
+                                        "userName": "群通知者",
+                                    },
+                                    'content': mesTime,
+                                    "messageType": "getMessage",
+                                    "showType": 1,
+                                    "messageReturnJson": {
+                                        messageType: "text",
+                                    },
+                                };
+                                messageList.push(messageShow);
+                            };
+                            timeSign = messageOfSinge.createTime;
                         }
                     });
                     var gt = $('#groupTalk');
@@ -1902,6 +2057,7 @@ const AntGroupTabComponents = React.createClass({
                     antGroup.tipNotic(ret.response);
                     var messageList = [];
                     isNewPage = true;
+                    var timeSign = 0;   //起始时间标记
                     ret.response.forEach(function (e) {
                         if (e.command == "message") {
                             var messageOfSinge = e;
@@ -1937,6 +2093,15 @@ const AntGroupTabComponents = React.createClass({
                                 biumes = false;
                             }
                             var fromUser = messageOfSinge.fromUser;
+                            var isCurrentDay = isToday(messageOfSinge.createTime);
+                            var mesTime;
+                            if (isCurrentDay) {
+                                //如果是当天的消息，只显示时间
+                                mesTime = formatHM(messageOfSinge.createTime);
+                            } else {
+                                //非当天时间，显示的是月-日
+                                mesTime = formatMD(messageOfSinge.createTime) + ' ' + formatHM(messageOfSinge.createTime);
+                            }
                             var colUtype = fromUser.colUtype;
                             var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
                             if (messageOfSinge.toType == 1) {
@@ -1980,10 +2145,28 @@ const AntGroupTabComponents = React.createClass({
                                     "uuid": uuid,
                                     "showType": showType,
                                     "readState": readState,
-                                    "readStateStr": readStateStr
+                                    "readStateStr": readStateStr,
+                                    "mesTime": mesTime
                                 };
                                 messageList.push(messageShow);
                             }
+                            if (messageOfSinge.createTime - timeSign != messageOfSinge.createTime && timeSign - messageOfSinge.createTime > 300000) {
+                                var messageShow = {
+                                    'fromUser': {
+                                        "avatar": "http://www.maaee.com:80/Excoord_For_Education/userPhoto/default_avatar.png",
+                                        "colUid": 120024,
+                                        "userName": "群通知者",
+                                    },
+                                    'content': mesTime,
+                                    "messageType": "getMessage",
+                                    "showType": 1,
+                                    "messageReturnJson": {
+                                        messageType: "text",
+                                    },
+                                };
+                                messageList.push(messageShow);
+                            };
+                            timeSign = messageOfSinge.createTime;
                         }
                     });
                     var gt = $('#groupTalk');
@@ -2048,8 +2231,8 @@ const AntGroupTabComponents = React.createClass({
             messageTagArray.splice(0);
             var messageList = antGroup.state.messageList;
 
-            // console.log(messageList);
-            // console.log('messageList');
+            console.log(messageList);
+            console.log('messageList');
 
             var imgArr = [];
             if (isEmpty(messageList) == false && messageList.length > 0) {
@@ -2075,6 +2258,7 @@ const AntGroupTabComponents = React.createClass({
                         continue;
                     }
                     var content = e.content;
+                    var mesTime = e.mesTime;
                     var fromUser = e.fromUser.userName;
                     var userPhoneIcon;
                     if (isEmpty(e.fromUser.avatar)) {
@@ -2117,6 +2301,7 @@ const AntGroupTabComponents = React.createClass({
                                         messageTag = <li style={{'textAlign': 'right'}} className="right">
                                             <div className="u-name">
                                                 <span>{fromUser}</span>
+                                                <span>{mesTime}</span>
                                             </div>
                                             <div className="talk-cont">
                                                 <span className="name">{userPhoneIcon}</span>
@@ -2142,7 +2327,8 @@ const AntGroupTabComponents = React.createClass({
                                                             <Icon className="icon_ellipsis" type="ellipsis"/>
                                                         </Dropdown>
                                                     </span>
-                                                    <span className="talk_bubble_read">{e.readStateStr}</span>
+                                                    <span className="talk_bubble_read"
+                                                          onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
                                                 </div>
                                             </div>
                                         </li>;
@@ -2152,6 +2338,7 @@ const AntGroupTabComponents = React.createClass({
                                         messageTag = <li className="right" style={{'textAlign': 'right'}}>
                                             <div className="u-name">
                                                 <span>{fromUser}</span>
+                                                <span>{mesTime}</span>
                                             </div>
                                             <div className="talk-cont">
                                                 <span className="name">{userPhoneIcon}</span>
@@ -2166,7 +2353,8 @@ const AntGroupTabComponents = React.createClass({
                                                             <Icon className="icon_ellipsis" type="ellipsis"/>
                                                         </Dropdown>
                                                     </span>
-                                                    <span className="talk_bubble_read">{e.readStateStr}</span>
+                                                    <span className="talk_bubble_read"
+                                                          onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
                                                 </div>
                                             </div>
                                         </li>;
@@ -2175,6 +2363,7 @@ const AntGroupTabComponents = React.createClass({
                                         messageTag = <li style={{'textAlign': 'right'}} className="right">
                                             <div className="u-name">
                                                 <span>{fromUser}</span>
+                                                <span>{mesTime}</span>
                                             </div>
                                             <div className="talk-cont">
                                                 <span className="name">{userPhoneIcon}</span>
@@ -2220,7 +2409,8 @@ const AntGroupTabComponents = React.createClass({
                                                             <Icon className="icon_ellipsis" type="ellipsis"/>
                                                         </Dropdown>
                                                 </span>
-                                                    <span className="talk_bubble_read">{e.readStateStr}</span>
+                                                    <span className="talk_bubble_read"
+                                                          onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
 
                                                 </div>
                                             </div>
@@ -2232,6 +2422,7 @@ const AntGroupTabComponents = React.createClass({
                                             messageTag = <li className="right" style={{'textAlign': 'right'}}>
                                                 <div className="u-name">
                                                     <span>{fromUser}</span>
+                                                    <span>{mesTime}</span>
                                                 </div>
                                                 <div className="talk-cont">
                                                     <span className="name">{userPhoneIcon}</span>
@@ -2252,6 +2443,7 @@ const AntGroupTabComponents = React.createClass({
                                                 messageTag = <li className="right" style={{'textAlign': 'right'}}>
                                                     <div className="u-name">
                                                         <span>{fromUser}</span>
+                                                        <span>{mesTime}</span>
                                                     </div>
                                                     <div className="talk-cont">
                                                         <span className="name">{userPhoneIcon}</span>
@@ -2266,7 +2458,8 @@ const AntGroupTabComponents = React.createClass({
                                                                     <Icon className="icon_ellipsis" type="ellipsis"/>
                                                                 </Dropdown>
                                                             </span>
-                                                            <span className="talk_bubble_read">{e.readStateStr}</span>
+                                                            <span className="talk_bubble_read"
+                                                                  onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
                                                         </div>
                                                     </div>
                                                 </li>;
@@ -2278,7 +2471,7 @@ const AntGroupTabComponents = React.createClass({
                                     if (isEmpty(attachment) == false) {
                                         //有内容的链接
                                         messageTag = <li style={{'textAlign': 'left'}}>
-                                            <div className="u-name"><span>{fromUser}</span></div>
+                                            <div className="u-name"><span>{fromUser}</span><span>{mesTime}</span></div>
                                             <div className="talk-cont"><span
                                                 className="name">{userPhoneIcon}</span><span
                                                 className="borderballoon_le noom_cursor"
@@ -2296,7 +2489,7 @@ const AntGroupTabComponents = React.createClass({
                                     } else if (isEmpty(fileName) == false) {
                                         //发送的文件（content里带有文件名字）
                                         messageTag = <li style={{'textAlign': 'left'}}>
-                                            <div className="u-name"><span>{fromUser}</span></div>
+                                            <div className="u-name"><span>{fromUser}</span><span>{mesTime}</span></div>
                                             <div className="talk-cont"><span
                                                 className="name">{userPhoneIcon}</span><span
                                                 className="borderballoon_le"
@@ -2337,7 +2530,7 @@ const AntGroupTabComponents = React.createClass({
                                     } else if (isEmpty(expressionItem) == false) {
                                         //来自安卓的动态表情（安卓的动态表情的content里有“表情”两个字）
                                         messageTag = <li style={{'textAlign': 'left'}}>
-                                            <div className="u-name"><span>{fromUser}</span></div>
+                                            <div className="u-name"><span>{fromUser}</span><span>{mesTime}</span></div>
                                             <div className="talk-cont"><span
                                                 className="name">{userPhoneIcon}</span><img
                                                 style={{width: '100px', height: '100px'}} src={expressionItem}/><span><i
@@ -2347,7 +2540,8 @@ const AntGroupTabComponents = React.createClass({
                                         if (biumes == true) {
                                             //叮消息有角标
                                             messageTag = <li style={{'textAlign': 'left'}}>
-                                                <div className="u-name"><span>{fromUser}</span></div>
+                                                <div className="u-name"><span>{fromUser}</span><span>{mesTime}</span>
+                                                </div>
                                                 <div className="talk-cont"><span
                                                     className="name">{userPhoneIcon}</span><span
                                                     className="borderballoon_le">
@@ -2362,7 +2556,8 @@ const AntGroupTabComponents = React.createClass({
                                                 messageTag = <li className="reminder"><span>{e.content}</span></li>;
                                             } else {
                                                 messageTag = <li style={{'textAlign': 'left'}}>
-                                                    <div className="u-name"><span>{fromUser}</span></div>
+                                                    <div className="u-name">
+                                                        <span>{fromUser}</span><span>{mesTime}</span></div>
                                                     <div className="talk-cont"><span
                                                         className="name">{userPhoneIcon}</span><span
                                                         className="borderballoon_le">
@@ -2382,6 +2577,7 @@ const AntGroupTabComponents = React.createClass({
                                     messageTag = <li className="right" style={{'textAlign': 'right'}}>
                                         <div className="u-name">
                                             <span>{fromUser}</span>
+                                            <span>{mesTime}</span>
                                         </div>
                                         <div className="talk-cont">
                                             <span className="name">{userPhoneIcon}</span>
@@ -2396,14 +2592,15 @@ const AntGroupTabComponents = React.createClass({
                                                         <Icon className="icon_ellipsis" type="ellipsis"/>
                                                     </Dropdown>
                                                 </span>
-                                                <span className="talk_bubble_read">{e.readStateStr}</span>
+                                                <span className="talk_bubble_read"
+                                                      onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
                                             </div>
                                         </div>
                                     </li>;
                                 } else {
                                     //我收到的
                                     messageTag = <li style={{'textAlign': 'left'}}>
-                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="u-name"><span>{fromUser}</span><span>{mesTime}</span></div>
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><span
                                             className="borderballoon_le">{e.imgTagArray}<i
@@ -2417,6 +2614,7 @@ const AntGroupTabComponents = React.createClass({
                                     messageTag = <li className="right" style={{'textAlign': 'right'}}>
                                         <div className="u-name">
                                             <span>{fromUser}</span>
+                                            <span>{mesTime}</span>
                                         </div>
                                         <div className="talk-cont">
                                             <span className="name">{userPhoneIcon}</span>
@@ -2432,14 +2630,15 @@ const AntGroupTabComponents = React.createClass({
                                                         <Icon className="icon_ellipsis" type="ellipsis"/>
                                                     </Dropdown>
                                                 </span>
-                                                <span className="talk_bubble_read">{e.readStateStr}</span>
+                                                <span className="talk_bubble_read"
+                                                      onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
                                             </div>
                                         </div>
                                     </li>;
                                 } else {
                                     //我收到的
                                     messageTag = <li style={{'textAlign': 'left'}}>
-                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="u-name"><span>{fromUser}</span><span>{mesTime}</span></div>
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><img
                                             style={{width: '100px', height: '100px'}} src={expressionItem}/><span><i
@@ -2453,6 +2652,7 @@ const AntGroupTabComponents = React.createClass({
                                     messageTag = <li style={{'textAlign': 'right'}} className="right">
                                         <div className="u-name">
                                             <span>{fromUser}</span>
+                                            <span>{mesTime}</span>
                                         </div>
                                         <div className="talk-cont">
                                             <span className="name">{userPhoneIcon}</span>
@@ -2479,14 +2679,15 @@ const AntGroupTabComponents = React.createClass({
                                                         <Icon className="icon_ellipsis" type="ellipsis"/>
                                                      </Dropdown>
                                                 </span>
-                                                <span className="talk_bubble_read">{e.readStateStr}</span>
+                                                <span className="talk_bubble_read"
+                                                      onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
                                             </div>
                                         </div>
                                     </li>;
                                 } else {
                                     //我收到的
                                     messageTag = <li style={{'textAlign': 'left'}}>
-                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="u-name"><span>{fromUser}</span><span>{mesTime}</span></div>
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><span
                                             className="borderballoon_le noom_cursor"
@@ -2507,6 +2708,7 @@ const AntGroupTabComponents = React.createClass({
                                     messageTag = <li className="right" style={{'textAlign': 'right'}}>
                                         <div className="u-name">
                                             <span>{fromUser}</span>
+                                            <span>{mesTime}</span>
                                         </div>
                                         <div className="talk-cont">
                                             <span className="name">{userPhoneIcon}</span>
@@ -2528,14 +2730,15 @@ const AntGroupTabComponents = React.createClass({
                                                         <Icon className="icon_ellipsis" type="ellipsis"/>
                                                      </Dropdown>
                                                 </span>
-                                                <span className="talk_bubble_read">{e.readStateStr}</span>
+                                                <span className="talk_bubble_read"
+                                                      onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
                                             </div>
                                         </div>
                                     </li>;
                                 } else {
                                     //我收到的
                                     messageTag = <li style={{'textAlign': 'left'}}>
-                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="u-name"><span>{fromUser}</span><span>{mesTime}</span></div>
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span>
                                             <span className="borderballoon_le borderballoon_file_p">
@@ -2556,7 +2759,7 @@ const AntGroupTabComponents = React.createClass({
                                 if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
                                     //我发出的
                                     messageTag = <li className="right" style={{'textAlign': 'right'}}>
-                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="u-name"><span>{fromUser}</span><span>{mesTime}</span></div>
                                         <div className="talk-cont">
                                             <span className="name">{userPhoneIcon}</span>
                                             <div className="talk_bubble_box">
@@ -2575,14 +2778,15 @@ const AntGroupTabComponents = React.createClass({
                                                         <Icon className="icon_ellipsis" type="ellipsis"/>
                                                     </Dropdown>
                                                 </span>
-                                                <span className="talk_bubble_read">{e.readStateStr}</span>
+                                                <span className="talk_bubble_read"
+                                                      onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
                                             </div>
                                         </div>
                                     </li>;
                                 } else {
                                     //我收到的
                                     messageTag = <li style={{'textAlign': 'left'}}>
-                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="u-name"><span>{fromUser}</span><span>{mesTime}</span></div>
                                         <div className="talk-cont">
                                             <span className="name">{userPhoneIcon}</span>
                                             <span className="borderballoon_le noom_cursor"
@@ -2605,6 +2809,7 @@ const AntGroupTabComponents = React.createClass({
                                     messageTag = <li style={{'textAlign': 'right'}} className="right">
                                         <div className="u-name">
                                             <span>{fromUser}</span>
+                                            <span>{mesTime}</span>
                                         </div>
                                         <div className="talk-cont">
                                             <span className="name">{userPhoneIcon}</span>
@@ -2649,14 +2854,15 @@ const AntGroupTabComponents = React.createClass({
                                                         <Icon className="icon_ellipsis" type="ellipsis"/>
                                                     </Dropdown>
                                             </span>
-                                                <span className="talk_bubble_read">{e.readStateStr}</span>
+                                                <span className="talk_bubble_read"
+                                                      onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
                                             </div>
                                         </div>
                                     </li>;
                                 } else {
                                     //我收到的
                                     messageTag = <li style={{'textAlign': 'left'}}>
-                                        <div className="u-name"><span>{fromUser}</span></div>
+                                        <div className="u-name"><span>{fromUser}</span><span>{mesTime}</span></div>
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><span
                                             className="borderballoon_le noom_cursor"
@@ -2698,6 +2904,7 @@ const AntGroupTabComponents = React.createClass({
                         messageTag = <li className="right" style={{'textAlign': 'right'}}>
                             <div className="u-name">
                                 <span>{fromUser}</span>
+                                <span>{mesTime}</span>
                             </div>
                             <div className="talk-cont">
                                 <span className="name">{userPhoneIcon}</span>
@@ -2711,7 +2918,8 @@ const AntGroupTabComponents = React.createClass({
                                             <Icon className="icon_ellipsis" type="ellipsis"/>
                                         </Dropdown>
                                     </span>
-                                    <span className="talk_bubble_read">{e.readStateStr}</span>
+                                    <span className="talk_bubble_read"
+                                          onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
                                 </div>
                             </div>
                         </li>;
@@ -2792,6 +3000,31 @@ const AntGroupTabComponents = React.createClass({
                             {imgArr}
                         </li>
                     </ul>
+                </div>
+
+                {/*侧边栏*/}
+                <div className="ding_panel" ref="dingPanel">
+                    <div className="ding_top">
+                        <Icon type="close" className="d_mesclose" onClick={this.levMesDetil}/>
+                    </div>
+                    <div className="ding_inner">
+                        <Card>
+                            <Tabs activeKey={this.state.mesReadActiveKey} onTabClick={this.onTabClick}>
+                                <TabPane tab="已读列表" key="1">
+                                    <Table className="group_table_u person_group" showHeader={false} scroll={{x: true,}}
+                                           columns={userGroupsColumns} dataSource={this.state.readMenuMebs}
+                                           pagination={false}
+                                    />
+                                </TabPane>
+                                <TabPane tab="未读列表" key="2">
+                                    <Table className="group_table_u person_group" showHeader={false} scroll={{x: true,}}
+                                           columns={userGroupsColumns} dataSource={this.state.noReadMenuMebs}
+                                           pagination={false}
+                                    />
+                                </TabPane>
+                            </Tabs>
+                        </Card>
+                    </div>
                 </div>
 
                 {/*发送文件model*/}
