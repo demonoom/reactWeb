@@ -24,7 +24,8 @@ var courseInfoJson = {
     isFree: 1,
     money: 0,
     isLimit: 1,
-    limitPerson: 0
+    limitPerson: 0,
+    updateDisabled:false, //默认所有组件是可以修改的
 };
 var videoJsonArray = [];
 var teamJsonArray = [];
@@ -117,6 +118,7 @@ const UpdateClassComponents = React.createClass({
      */
     initPageInfo(updateClassObj) {
         var _this = this;
+        var isDisable = false;//是否限制更新
         var courseName = updateClassObj.courseName;
         var money = updateClassObj.money;
         var limitPerson = updateClassObj.limitPerson;
@@ -263,6 +265,14 @@ const UpdateClassComponents = React.createClass({
             var lessonNum = 0;
             lessonArray.splice(0);
             videos.forEach(function (video, i) {
+                var videoStatus = video.videoStatus;
+                var currentLessionIsUpdateDisable=false;
+                //1.未直播2.直播中3．结束
+                if(videoStatus == 2 || videoStatus ==3 ){
+                    isDisable = true;
+                    currentLessionIsUpdateDisable = true;
+
+                }
                 var weiClassName = {
                     name: video.remark,
                     uid: i
@@ -280,7 +290,7 @@ const UpdateClassComponents = React.createClass({
                 lessonNum += 1;
                 var liveTime = getLocalTime(video.liveTime);
                 var videoNameObj = <Col span={8}>
-                    <Input id={lessonNum} defaultValue={video.name} onChange={_this.lessonTitleOnChange}
+                    <Input disabled={currentLessionIsUpdateDisable} id={lessonNum} defaultValue={video.name} onChange={_this.lessonTitleOnChange}
                            className="noom_input"/>
                 </Col>;
                 var teacherObj;
@@ -308,6 +318,7 @@ const UpdateClassComponents = React.createClass({
                 }
                 // defaultValue={moment({liveTime}, dateFullFormat)}
                 // value={moment({liveTime}, dateFullFormat)}
+                //授课时间
                 var timeObj = <Col span={4} className="class_right">
                     <Col span={24}>
                         <DatePicker
@@ -319,6 +330,7 @@ const UpdateClassComponents = React.createClass({
                             placeholder="Select Time"
                             onChange={_this.lessonTimeOnChange}
                             onOk={_this.lessonTimeOnOk}
+                            disabled={currentLessionIsUpdateDisable}
                         />
                     </Col>
                 </Col>;
@@ -339,7 +351,7 @@ const UpdateClassComponents = React.createClass({
         }
         _this.getAllClass();
         _this.getAllSubject();
-        _this.setState({weifileList: []})
+        _this.setState({weifileList: [],updateDisabled:isDisable})
     },
 
     /**
@@ -782,7 +794,7 @@ const UpdateClassComponents = React.createClass({
         </Col>;
         var lessonJson = {lessonNum, teacherObj, timeObj, videoNameObj, uploadList};
         lessonArray.push(lessonJson);
-        var newVideoNum = parseInt(videoNumBeforeAdd) + 1
+        var newVideoNum = parseInt(videoNumBeforeAdd) + 1;
         courseInfoJson.videoNum = newVideoNum;
         this.setState({lessonArray, "videoNum": newVideoNum});
     },
@@ -813,6 +825,7 @@ const UpdateClassComponents = React.createClass({
         var newVideoNum = parseInt(videoNumBeforeRemove) - 1
         courseInfoJson.videoNum = newVideoNum;
         this.setState({lessonArray, "videoNum": newVideoNum});
+
     },
 
     /**
@@ -860,7 +873,6 @@ const UpdateClassComponents = React.createClass({
      * 保存课程信息
      */
     saveClassInfo() {
-        console.log(courseInfoJson);
         var checkResult = this.checkSubmitData();
         if (checkResult == false) {
             return;
@@ -1149,7 +1161,7 @@ const UpdateClassComponents = React.createClass({
                 <Row>
                     <Col span={4}>课程名称：</Col>
                     <Col span={18}>
-                        <Input value={this.state.courseName} onChange={this.courseNameOnChange}/>
+                        <Input  disabled={this.state.updateDisabled} value={this.state.courseName} onChange={this.courseNameOnChange}/>
                     </Col>
                 </Row>
                 <Row>
@@ -1191,7 +1203,7 @@ const UpdateClassComponents = React.createClass({
                     <Col span={18}>
                         <Select defaultValue={[this.state.defaultSubjectSelected]}
                                 value={this.state.defaultSubjectSelected} style={{width: 120}}
-                                onChange={this.courseSelectOnChange}>
+                                onChange={this.courseSelectOnChange}  disabled={this.state.updateDisabled} >
                             {this.state.subjectOptionArray}
                         </Select>
                     </Col>
@@ -1242,18 +1254,22 @@ const UpdateClassComponents = React.createClass({
                 <Row>
                     <Checkbox onChange={this.isWeiClass} checked={this.state.isWeiClass} className="upexam_le_datika">是否为微课</Checkbox>
                 </Row>
-                {/* <Row>
-                    <Col span={4}>授课时间：</Col>
-                    <Col span={18}>
-                        <RangePicker defaultValue={this.state.classTimeRange} value={this.state.classTimeRange}
-                                     format={dateFormat} onChange={this.classTimeOnChange} />
-                    </Col>
-                </Row>*/}
+
+                {/*<Row>*/}
+                    {/*<Col span={4}>授课时间：</Col>*/}
+                    {/*<Col span={18}>*/}
+                        {/*<RangePicker defaultValue={this.state.classTimeRange} value={this.state.classTimeRange}*/}
+                                     {/*format={dateFormat} onChange={this.classTimeOnChange} />*/}
+                    {/*</Col>*/}
+                {/*</Row>*/}
+
                 <Row>
                     <Col span={4}>课程封面：</Col>
                     <Col span={18}>
                         <ImageAnswerUploadComponents fileList={fileList}
-                                                     callBackParent={this.getLessonImageList}>
+                                                     callBackParent={this.getLessonImageList}
+                                                     updateClassObj={this.state.updateClassObj}
+                                                    >
                         </ImageAnswerUploadComponents>
                     </Col>
                 </Row>
@@ -1286,6 +1302,8 @@ const UpdateClassComponents = React.createClass({
                             {lessonJson.uploadList}
                             <Col span={2}>
                                 <Button icon="delete" className="create_upload_btn"
+
+
                                         onClick={this.removeLesson.bind(this, lessonJson.lessonNum)}></Button>
                             </Col>
                         </Row>;
@@ -1296,7 +1314,7 @@ const UpdateClassComponents = React.createClass({
                     <Row>
                         <Col span={4}>总&nbsp;&nbsp;课&nbsp;&nbsp;时：</Col>
                         <Col span={20}>
-                            <Input value={this.state.videoNum} disabled={true} onChange={this.classTimesOnChange}/>
+                            <Input   value={this.state.videoNum} disabled={true} onChange={this.classTimesOnChange}/>
                         </Col>
                     </Row>
                     <Row>
@@ -1329,6 +1347,8 @@ const UpdateClassComponents = React.createClass({
                 if (typeof(this.state.lessonArray) != "undefined") {
                     for (var i = 0; i < this.state.lessonArray.length; i++) {
                         var lessonJson = this.state.lessonArray[i];
+                        console.log(1212)
+                        console.log(courseInfoJson.videos);
                         var lessonRowObj = <Row>
                             <Col span={4} className="add_left">第{lessonJson.lessonNum}课时</Col>
                             {lessonJson.videoNameObj}

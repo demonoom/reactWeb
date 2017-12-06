@@ -242,7 +242,7 @@ const UserInfo = React.createClass({
                        footer={[
                            <div>
                                <Input type="textarea" id="" rows={4} value={this.state.editTextarea}
-                                      onChange={this.editTextArea}
+                                      onChange={this.editTextArea} placeholder={this.state.introduction}
                                />
                                <Button type="primary" htmlType="submit" className="login-form-button"
                                        onClick={this.sendIntro}>

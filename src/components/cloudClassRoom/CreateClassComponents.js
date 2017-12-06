@@ -44,7 +44,8 @@ const CreateClassComponents = React.createClass({
             cloudClassRoomUser: cloudClassRoomUser,
             isWeiClass: false,
             isShowClass: false,
-            upLoadNum: 0
+            upLoadNum: 0,
+
         };
     },
 
@@ -324,7 +325,8 @@ const CreateClassComponents = React.createClass({
      * @param value
      */
     courseSelectOnChange(value) {
-        console.log(`selected ${value}`);
+        // console.log(`selected ${value}`);
+
         this.setState({defaultSubjectSelected: value});
         courseInfoJson.courseTypeId = value;
     },
@@ -722,6 +724,7 @@ const CreateClassComponents = React.createClass({
         }
         this.setState({courseName});
         courseInfoJson.courseName = courseName;
+
     },
     /**
      * 课程收费金额文本框内容改变时的响应
@@ -919,7 +922,7 @@ const CreateClassComponents = React.createClass({
                 <Row>
                     <Col span={4}>课程名称：</Col>
                     <Col span={18}>
-                        <Input value={this.state.courseName} onChange={this.courseNameOnChange}/>
+                        <Input  value={this.state.courseName} onChange={this.courseNameOnChange}/>
                     </Col>
                 </Row>
                 <Row>
@@ -939,7 +942,7 @@ const CreateClassComponents = React.createClass({
                                 </Row>*/}
                             </Radio>
                             <span>
-                              <Input value={this.state.money} style={{width: 160}}
+                              <Input  value={this.state.money} style={{width: 160}}
                                      disabled={this.state.moneyInputDisable} onChange={this.moneyOnChange}/>
                             </span>
                         </RadioGroup>
