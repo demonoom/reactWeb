@@ -1809,13 +1809,11 @@ p.user_cont span.name1 {
     margin-bottom: 16px !important;
 }
 
-.17
-_hei1 {
-    height: 98%;
-}
+.17_hei1 {
+       height: 98%;
+   }
 
-.17
-_hei2 > table {
+.17_hei2 > table {
     padding: 3px 8px !important;
 }
 
@@ -6762,10 +6760,10 @@ select.course_n:hover {
 
 }
 .read_panel {
-    width: 400px;
+    width: 380px;
     height: 100%;
     background-color: #f2f2f2;
-    padding: 6% 0;
+    padding: 42px 0 0 0;
     position: absolute;
     bottom: 0;
     right: -800px;
@@ -6774,8 +6772,35 @@ select.course_n:hover {
     -webkit-box-shadow: 16px 17px 10px 16px #929292;
 
 }
+.read_panel .ding_top{
+    height: 42px;
+
+}
+.read_panel .ding_inner .ant-card:last-child{
+    margin:0;
+}
+.read_panel .person_group{
+    margin-top: 50px;
+}
+.read_panel .ding_inner .ant-card{
+    width: 100%;
+}
+.read_panel .ant-tabs-bar{
+    position: fixed;
+    background: #fff;
+    height: 50px;
+    z-index: 2;
+    z-index: 2;
+    width: 98%;
+}
 .read_panel .ant-tabs-nav .ant-tabs-tab{
     font-size: 14px;
+}
+.read_panel .ding_inner .ant-card-body{
+    padding:0
+}
+.read_panel .ant-table-tbody > tr > td.left-12{
+    width: 60px;
 }
 .ding_enter {
     animation-name: moveTest;
