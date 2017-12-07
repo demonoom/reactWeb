@@ -1,11 +1,12 @@
 import React, {PropTypes} from 'react';
 import {isEmpty} from '../../utils/utils';
-import {DatePicker, Table, message} from 'antd';
+import {DatePicker, Table, message, Button, Select} from 'antd';
 import moment from 'moment';
 import {doWebService} from '../../WebServiceHelper'
 
 const {RangePicker} = DatePicker;
 const dateFormat = 'YYYY/MM/DD';
+const Option = Select.Option;
 
 var columns = [
     {title: '姓名', width: 100, dataIndex: 'name', key: 'name', fixed: 'left'},
@@ -31,7 +32,44 @@ const MonthlySummary = React.createClass({
 
     componentDidMount() {
         this.getTimeNow();
+        // this.viewRootDepartment()
     },
+
+    /**
+     * 获取部门id
+     */
+    viewRootDepartment() {
+        var _this = this;
+        var param = {
+            "method": 'viewRootDepartment',
+            "schId": _this.state.loginUser.schoolId,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    var data = ret.response;
+                    _this.setState({departmentId: data.idrList});
+                    var arr = [];
+                    // data.nameList   部门名称id  构建到option里
+                    if (isEmpty(data) == false && isEmpty(data.nameList) == false) {
+                        data.nameList.forEach(function (v, i) {
+                            var opt = <Option value={data.nameList[i]}>{v}</Option>;
+                            arr.push(opt);
+                        });
+                        var a = <Option value='-1'>{'全公司'}</Option>;
+                        arr.unshift(a);
+                        _this.setState({departmentArr: arr});
+                    }
+                } else {
+                    message.error(ret.msg);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
 
     /**
      * 获取月度汇总
@@ -159,10 +197,19 @@ const MonthlySummary = React.createClass({
     },
 
     /**
+     * 部门选择改变的回调
+     * @param e
+     */
+    departmentOnChange(e) {
+        console.log(e);
+    },
+
+    /**
      * 渲染页面
      * @returns {XML}
      */
     render() {
+        var departmentArr = this.state.departmentArr;
         return (
             <div className="group_cont">
                 <div className="public—til—blue">考勤汇总</div>
@@ -172,6 +219,11 @@ const MonthlySummary = React.createClass({
                             时间：<RangePicker onChange={this.timeOnChange}
                                             value={[moment(this.state.startTime, dateFormat), moment(this.state.endTime, dateFormat)]}/>
                         </div>
+                        {/*<Select defaultValue="全公司" style={{width: 120}} onChange={this.departmentOnChange}>*/}
+                            {/*/!*<Option value="jack">全公司</Option>*!/*/}
+                            {/*{departmentArr}*/}
+                        {/*</Select>*/}
+                        {/*<Button type="primary">导出报表</Button>*/}
                         <Table className="checking_in_box cloud_box row-t-f month_box" columns={columns}
                                dataSource={monthData} scroll={{x: this.state.x, y: this.state.y}} pagination={false}/>
                     </div>
