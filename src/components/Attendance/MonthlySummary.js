@@ -56,6 +56,8 @@ const MonthlySummary = React.createClass({
                             var opt = <Option value={data.nameList[i]}>{v}</Option>;
                             arr.push(opt);
                         });
+                        var a = <Option value='-1'>{'全公司'}</Option>;
+                        arr.unshift(a);
                         _this.setState({departmentArr: arr});
                     }
                 } else {
@@ -207,6 +209,7 @@ const MonthlySummary = React.createClass({
      * @returns {XML}
      */
     render() {
+        var departmentArr = this.state.departmentArr;
         return (
             <div className="group_cont">
                 <div className="public—til—blue">考勤汇总</div>
@@ -216,9 +219,9 @@ const MonthlySummary = React.createClass({
                             时间：<RangePicker onChange={this.timeOnChange}
                                             value={[moment(this.state.startTime, dateFormat), moment(this.state.endTime, dateFormat)]}/>
                         </div>
-                        {/*<Select defaultValue="jack" style={{width: 120}} onChange={this.departmentOnChange}>*/}
-                            {/*<Option value="jack">全公司</Option>*/}
-                            {/*{this.state.departmentArr}*/}
+                        {/*<Select defaultValue="全公司" style={{width: 120}} onChange={this.departmentOnChange}>*/}
+                            {/*/!*<Option value="jack">全公司</Option>*!/*/}
+                            {/*{departmentArr}*/}
                         {/*</Select>*/}
                         {/*<Button type="primary">导出报表</Button>*/}
                         <Table className="checking_in_box cloud_box row-t-f month_box" columns={columns}
