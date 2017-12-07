@@ -3180,13 +3180,13 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 }
 
 .group_talk ul li {
-    padding: 10px 0;
+    margin: 10px 0;
     float: left;
     width: 100%;
 }
 
 .group_talk ul li.right {
-    padding: 10px 0;
+    margin: 10px 0;
     float: right;
     width: 100%;
 }
@@ -3207,9 +3207,19 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     color: #8E97A6;
     font-size: 12px
 }
-
+.cart_time{
+    color: #bdbebf !important;
+    margin: 0 6px;
+    transform: scale(0.9);
+    padding: 0 !important;
+    visibility: hidden;
+}
+.group_talk ul li:hover .cart_time{
+    visibility: visible;
+}
 .group_talk ul li.right div.u-name span, .public .sayLine.right p.u-name span {
     padding-right: 50px;
+    padding-left:0 !important;
     color: #8E97A6;
     font-size: 12px
 }
@@ -6751,7 +6761,22 @@ select.course_n:hover {
     -webkit-box-shadow: 16px 17px 10px 16px #929292;
 
 }
+.read_panel {
+    width: 400px;
+    height: 100%;
+    background-color: #f2f2f2;
+    padding: 6% 0;
+    position: absolute;
+    bottom: 0;
+    right: -800px;
+    box-shadow: 16px 17px 10px 16px #929292;
+    -moz-box-shadow: 16px 17px 10px 16px #929292;
+    -webkit-box-shadow: 16px 17px 10px 16px #929292;
 
+}
+.read_panel .ant-tabs-nav .ant-tabs-tab{
+    font-size: 14px;
+}
 .ding_enter {
     animation-name: moveTest;
     animation-duration: 0.5s;
@@ -7832,6 +7857,9 @@ select.course_n:hover {
 .icon_ellipsis:hover, .icon_ellipsis:active{
     background: #d9e7ef;
 }
+.ellips_t:hover .icon_ellipsis{
+    visibility: visible;
+}
 .month_box .ant-table-tbody > tr > td{
     font-size: 12px;
 }
@@ -7859,7 +7887,4 @@ select.course_n:hover {
     position: absolute;
     right: 0;
     top: -2px;
-}
-.ellips_t:hover .icon_ellipsis{
-    visibility: visible;
 }
