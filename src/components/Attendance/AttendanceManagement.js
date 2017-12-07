@@ -95,17 +95,6 @@ const AttendanceManagement = React.createClass({
 
     },
 
-    //接收坐标
-    /*checkPos(e) {
-        var arr = e.split('$');
-        var posDetil = arr[1];   //详细地址
-        var locationPoint = arr[0];   //坐标
-        // console.log(posDetil);
-        // console.log(locationPoint);
-        //e中存着地理信息会不断传过来，把信息存在本地中，向table数组存完就清空本地。
-        // this.setState({posDetil});   //考勤详细地址
-    },*/
-
     /**
      * 删除考勤地点的回调
      * @param record
@@ -505,7 +494,6 @@ const AttendanceManagement = React.createClass({
                 "locationList": posDetilArray
             }
         };
-        console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 // var data = ret.response;
@@ -528,9 +516,10 @@ const AttendanceManagement = React.createClass({
      * @param data
      */
     initUpdateAtt(data) {
-        console.log(data);
+        // console.log(data);
         this.setState({editAttName: data.name});  //考勤组名称
         this.setState({editSelValue: data.radius + '米'});  //半径
+        this.setState({checked: data.allowOutside});
         var posArr = this.state.posArr;
         data.locationList.forEach(function (v, i) {
             var posDetil = {
@@ -675,8 +664,6 @@ const AttendanceManagement = React.createClass({
                 "locationList": posDetilArray
             }
         };
-        console.log(param);
-        // debugger
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 // var data = ret.response;
@@ -1013,7 +1000,7 @@ const AttendanceManagement = React.createClass({
                     <a className="upexam_to_ma checking_in_l31" href="javascript:;"
                        onClick={this.addShiftPos}>添加考勤地点</a>
                     <br/>
-                    <Checkbox disabled className="checking_in_l31" onChange={this.IsOutWorkOnChange}
+                    <Checkbox className="checking_in_l31" onChange={this.IsOutWorkOnChange}
                               checked={this.state.checked}>允许外勤打卡</Checkbox>
                     <div className="checking_in_l31 password_ts">关闭后，范围外不允许打卡</div>
                 </div>
@@ -1153,7 +1140,7 @@ const AttendanceManagement = React.createClass({
                     <a className="upexam_to_ma checking_in_l31" href="javascript:;"
                        onClick={this.addShiftPos}>添加考勤地点</a>
                     <br/>
-                    <Checkbox disabled className="checking_in_l31" onChange={this.IsOutWorkOnChange}
+                    <Checkbox className="checking_in_l31" onChange={this.IsOutWorkOnChange}
                               checked={this.state.checked}>允许外勤打卡</Checkbox>
                     <div className="checking_in_l31 password_ts">关闭后，范围外不允许打卡</div>
                 </div>

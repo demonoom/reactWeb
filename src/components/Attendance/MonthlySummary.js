@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import {isEmpty} from '../../utils/utils';
-import {DatePicker, Table, message} from 'antd';
+import {DatePicker, Table, message, Button} from 'antd';
 import moment from 'moment';
 import {doWebService} from '../../WebServiceHelper'
 
@@ -172,6 +172,7 @@ const MonthlySummary = React.createClass({
                             时间：<RangePicker onChange={this.timeOnChange}
                                             value={[moment(this.state.startTime, dateFormat), moment(this.state.endTime, dateFormat)]}/>
                         </div>
+                        <Button type="primary">导出报表</Button>
                         <Table className="checking_in_box cloud_box row-t-f month_box" columns={columns}
                                dataSource={monthData} scroll={{x: this.state.x, y: this.state.y}} pagination={false}/>
                     </div>

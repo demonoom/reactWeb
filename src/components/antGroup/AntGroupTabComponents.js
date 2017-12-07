@@ -193,7 +193,7 @@ const AntGroupTabComponents = React.createClass({
     },
 
     componentDidUpdate() {
-        // console.log('componentDidUpdate');
+        console.log('componentDidUpdate');
         this.msMsgRead();
     },
 
@@ -210,6 +210,7 @@ const AntGroupTabComponents = React.createClass({
         var messageList = this.state.messageList;
         var id = this.state.loginUser.colUid;
         if (isEmpty(messageList) == false && messageList.length > 0) {
+            console.log('要开始了');
             if (typeof(messageList[0].groupReadState) != 'undefined') {
                 //群组消息
                 messageList.forEach(function (v, i) {
@@ -219,6 +220,7 @@ const AntGroupTabComponents = React.createClass({
                                 "command": "message_read",
                                 "data": {"messageUUID": v.uuid}
                             };
+                            console.log('群消息');
                             ms.send(receivedCommand);
                             uuidArr.push(v.uuid);
                         }
@@ -233,6 +235,7 @@ const AntGroupTabComponents = React.createClass({
                                 "command": "message_read",
                                 "data": {"messageUUID": v.uuid}
                             };
+                            console.log('个人消息');
                             ms.send(receivedCommand);
                             uuidArr.push(v.uuid);
                         }
