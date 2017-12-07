@@ -13,3 +13,12 @@
     right: 0;
     top: -2px;
 }
+.audio_left {
+    width: 24px;
+    height: 17px;
+    display: inline-block;
+    background:#000;
+    background-position: -48px 0;
+    position: relative;
+    top: 4px;
+}

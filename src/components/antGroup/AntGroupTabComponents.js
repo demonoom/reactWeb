@@ -337,7 +337,7 @@ const AntGroupTabComponents = React.createClass({
         var _this = this;
         if (typeof(e.groupReadState) != 'undefined') {
             //群消息
-            this.refs.dingPanel.className = 'ding_panel ding_enter';
+            this.refs.dingPanel.className = 'read_panel ding_enter';
             //渲染详情面板
             _this.showReaderList(e.uuid);
             _this.showNevReaderList(e.uuid);
@@ -2341,7 +2341,7 @@ const AntGroupTabComponents = React.createClass({
                                         messageTag = <li style={{'textAlign': 'right'}} className="right">
                                             <div className="u-name">
                                                 <span>{fromUser}</span>
-                                                <span>{mesTime}</span>
+                                                <span className="cart_time">{mesTime}</span>
                                             </div>
                                             <div className="talk-cont">
                                                 <span className="name">{userPhoneIcon}</span>
@@ -2378,7 +2378,7 @@ const AntGroupTabComponents = React.createClass({
                                         messageTag = <li className="right" style={{'textAlign': 'right'}}>
                                             <div className="u-name">
                                                 <span>{fromUser}</span>
-                                                <span>{mesTime}</span>
+                                                <span className="cart_time">{mesTime}</span>
                                             </div>
                                             <div className="talk-cont">
                                                 <span className="name">{userPhoneIcon}</span>
@@ -2403,7 +2403,7 @@ const AntGroupTabComponents = React.createClass({
                                         messageTag = <li style={{'textAlign': 'right'}} className="right">
                                             <div className="u-name">
                                                 <span>{fromUser}</span>
-                                                <span>{mesTime}</span>
+                                                <span className="cart_time">{mesTime}</span>
                                             </div>
                                             <div className="talk-cont">
                                                 <span className="name">{userPhoneIcon}</span>
@@ -2462,7 +2462,7 @@ const AntGroupTabComponents = React.createClass({
                                             messageTag = <li className="right" style={{'textAlign': 'right'}}>
                                                 <div className="u-name">
                                                     <span>{fromUser}</span>
-                                                    <span>{mesTime}</span>
+                                                    <span className="cart_time">{mesTime}</span>
                                                 </div>
                                                 <div className="talk-cont">
                                                     <span className="name">{userPhoneIcon}</span>
@@ -2483,7 +2483,7 @@ const AntGroupTabComponents = React.createClass({
                                                 messageTag = <li className="right" style={{'textAlign': 'right'}}>
                                                     <div className="u-name">
                                                         <span>{fromUser}</span>
-                                                        <span>{mesTime}</span>
+                                                        <span className="cart_time">{mesTime}</span>
                                                     </div>
                                                     <div className="talk-cont">
                                                         <span className="name">{userPhoneIcon}</span>
@@ -2511,7 +2511,7 @@ const AntGroupTabComponents = React.createClass({
                                     if (isEmpty(attachment) == false) {
                                         //有内容的链接
                                         messageTag = <li style={{'textAlign': 'left'}}>
-                                            <div className="u-name"><span>{fromUser}</span><span>{mesTime}</span></div>
+                                            <div className="u-name"><span>{fromUser}</span><span className="cart_time">{mesTime}</span></div>
                                             <div className="talk-cont"><span
                                                 className="name">{userPhoneIcon}</span><span
                                                 className="borderballoon_le noom_cursor"
@@ -2529,7 +2529,7 @@ const AntGroupTabComponents = React.createClass({
                                     } else if (isEmpty(fileName) == false) {
                                         //发送的文件（content里带有文件名字）
                                         messageTag = <li style={{'textAlign': 'left'}}>
-                                            <div className="u-name"><span>{fromUser}</span><span>{mesTime}</span></div>
+                                            <div className="u-name"><span>{fromUser}</span><span className="cart_time">{mesTime}</span></div>
                                             <div className="talk-cont"><span
                                                 className="name">{userPhoneIcon}</span><span
                                                 className="borderballoon_le"
@@ -2570,7 +2570,7 @@ const AntGroupTabComponents = React.createClass({
                                     } else if (isEmpty(expressionItem) == false) {
                                         //来自安卓的动态表情（安卓的动态表情的content里有“表情”两个字）
                                         messageTag = <li style={{'textAlign': 'left'}}>
-                                            <div className="u-name"><span>{fromUser}</span><span>{mesTime}</span></div>
+                                            <div className="u-name"><span>{fromUser}</span><span className="cart_time">{mesTime}</span></div>
                                             <div className="talk-cont"><span
                                                 className="name">{userPhoneIcon}</span><img
                                                 style={{width: '100px', height: '100px'}} src={expressionItem}/><span><i
@@ -2580,7 +2580,7 @@ const AntGroupTabComponents = React.createClass({
                                         if (biumes == true) {
                                             //叮消息有角标
                                             messageTag = <li style={{'textAlign': 'left'}}>
-                                                <div className="u-name"><span>{fromUser}</span><span>{mesTime}</span>
+                                                <div className="u-name"><span>{fromUser}</span><span className="cart_time">{mesTime}</span>
                                                 </div>
                                                 <div className="talk-cont"><span
                                                     className="name">{userPhoneIcon}</span><span
@@ -2597,7 +2597,7 @@ const AntGroupTabComponents = React.createClass({
                                             } else {
                                                 messageTag = <li style={{'textAlign': 'left'}}>
                                                     <div className="u-name">
-                                                        <span>{fromUser}</span><span>{mesTime}</span></div>
+                                                        <span>{fromUser}</span><span className="cart_time">{mesTime}</span></div>
                                                     <div className="talk-cont"><span
                                                         className="name">{userPhoneIcon}</span><span
                                                         className="borderballoon_le">
@@ -2617,7 +2617,7 @@ const AntGroupTabComponents = React.createClass({
                                     messageTag = <li className="right" style={{'textAlign': 'right'}}>
                                         <div className="u-name">
                                             <span>{fromUser}</span>
-                                            <span>{mesTime}</span>
+                                            <span className="cart_time">{mesTime}</span>
                                         </div>
                                         <div className="talk-cont">
                                             <span className="name">{userPhoneIcon}</span>
@@ -2640,7 +2640,7 @@ const AntGroupTabComponents = React.createClass({
                                 } else {
                                     //我收到的
                                     messageTag = <li style={{'textAlign': 'left'}}>
-                                        <div className="u-name"><span>{fromUser}</span><span>{mesTime}</span></div>
+                                        <div className="u-name"><span>{fromUser}</span><span className="cart_time">{mesTime}</span></div>
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><span
                                             className="borderballoon_le">{e.imgTagArray}<i
@@ -2654,7 +2654,7 @@ const AntGroupTabComponents = React.createClass({
                                     messageTag = <li className="right" style={{'textAlign': 'right'}}>
                                         <div className="u-name">
                                             <span>{fromUser}</span>
-                                            <span>{mesTime}</span>
+                                            <span className="cart_time">{mesTime}</span>
                                         </div>
                                         <div className="talk-cont">
                                             <span className="name">{userPhoneIcon}</span>
@@ -2678,7 +2678,7 @@ const AntGroupTabComponents = React.createClass({
                                 } else {
                                     //我收到的
                                     messageTag = <li style={{'textAlign': 'left'}}>
-                                        <div className="u-name"><span>{fromUser}</span><span>{mesTime}</span></div>
+                                        <div className="u-name"><span>{fromUser}</span><span className="cart_time">{mesTime}</span></div>
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><img
                                             style={{width: '100px', height: '100px'}} src={expressionItem}/><span><i
@@ -2692,7 +2692,7 @@ const AntGroupTabComponents = React.createClass({
                                     messageTag = <li style={{'textAlign': 'right'}} className="right">
                                         <div className="u-name">
                                             <span>{fromUser}</span>
-                                            <span>{mesTime}</span>
+                                            <span className="cart_time">{mesTime}</span>
                                         </div>
                                         <div className="talk-cont">
                                             <span className="name">{userPhoneIcon}</span>
@@ -2727,7 +2727,7 @@ const AntGroupTabComponents = React.createClass({
                                 } else {
                                     //我收到的
                                     messageTag = <li style={{'textAlign': 'left'}}>
-                                        <div className="u-name"><span>{fromUser}</span><span>{mesTime}</span></div>
+                                        <div className="u-name"><span>{fromUser}</span><span className="cart_time">{mesTime}</span></div>
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><span
                                             className="borderballoon_le noom_cursor"
@@ -2748,7 +2748,7 @@ const AntGroupTabComponents = React.createClass({
                                     messageTag = <li className="right" style={{'textAlign': 'right'}}>
                                         <div className="u-name">
                                             <span>{fromUser}</span>
-                                            <span>{mesTime}</span>
+                                            <span className="cart_time">{mesTime}</span>
                                         </div>
                                         <div className="talk-cont">
                                             <span className="name">{userPhoneIcon}</span>
@@ -2779,7 +2779,7 @@ const AntGroupTabComponents = React.createClass({
                                 } else {
                                     //我收到的
                                     messageTag = <li style={{'textAlign': 'left'}}>
-                                        <div className="u-name"><span>{fromUser}</span><span>{mesTime}</span></div>
+                                        <div className="u-name"><span>{fromUser}</span><span className="cart_time">{mesTime}</span></div>
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span>
                                             <span className="borderballoon_le borderballoon_file_p">
@@ -2801,7 +2801,7 @@ const AntGroupTabComponents = React.createClass({
                                 if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
                                     //我发出的
                                     messageTag = <li className="right" style={{'textAlign': 'right'}}>
-                                        <div className="u-name"><span>{fromUser}</span><span>{mesTime}</span></div>
+                                        <div className="u-name"><span>{fromUser}</span><span className="cart_time">{mesTime}</span></div>
                                         <div className="talk-cont">
                                             <span className="name">{userPhoneIcon}</span>
                                             <div className="talk_bubble_box">
@@ -2828,7 +2828,7 @@ const AntGroupTabComponents = React.createClass({
                                 } else {
                                     //我收到的
                                     messageTag = <li style={{'textAlign': 'left'}}>
-                                        <div className="u-name"><span>{fromUser}</span><span>{mesTime}</span></div>
+                                        <div className="u-name"><span>{fromUser}</span><span className="cart_time">{mesTime}</span></div>
                                         <div className="talk-cont">
                                             <span className="name">{userPhoneIcon}</span>
                                             <span className="borderballoon_le noom_cursor"
@@ -2851,7 +2851,7 @@ const AntGroupTabComponents = React.createClass({
                                     messageTag = <li style={{'textAlign': 'right'}} className="right">
                                         <div className="u-name">
                                             <span>{fromUser}</span>
-                                            <span>{mesTime}</span>
+                                            <span className="cart_time">{mesTime}</span>
                                         </div>
                                         <div className="talk-cont">
                                             <span className="name">{userPhoneIcon}</span>
@@ -2904,7 +2904,7 @@ const AntGroupTabComponents = React.createClass({
                                 } else {
                                     //我收到的
                                     messageTag = <li style={{'textAlign': 'left'}}>
-                                        <div className="u-name"><span>{fromUser}</span><span>{mesTime}</span></div>
+                                        <div className="u-name"><span>{fromUser}</span><span className="cart_time">{mesTime}</span></div>
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><span
                                             className="borderballoon_le noom_cursor"
@@ -2946,7 +2946,7 @@ const AntGroupTabComponents = React.createClass({
                         messageTag = <li className="right" style={{'textAlign': 'right'}}>
                             <div className="u-name">
                                 <span>{fromUser}</span>
-                                <span>{mesTime}</span>
+                                <span className="cart_time">{mesTime}</span>
                             </div>
                             <div className="talk-cont">
                                 <span className="name">{userPhoneIcon}</span>
@@ -3045,7 +3045,7 @@ const AntGroupTabComponents = React.createClass({
                 </div>
 
                 {/*侧边栏*/}
-                <div className="ding_panel" ref="dingPanel">
+                <div className="read_panel" ref="dingPanel">
                     <div className="ding_top">
                         <Icon type="close" className="d_mesclose" onClick={this.levMesDetil}/>
                     </div>
