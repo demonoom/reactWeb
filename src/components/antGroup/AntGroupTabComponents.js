@@ -193,6 +193,7 @@ const AntGroupTabComponents = React.createClass({
     },
 
     componentDidUpdate() {
+        // console.log('componentDidUpdate');
         this.msMsgRead();
     },
 

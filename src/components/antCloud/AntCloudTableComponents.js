@@ -119,8 +119,6 @@ const AntCloudTableComponents = React.createClass({
         var imgArrNum = this.state.imgArrNum;
         var a = document.querySelectorAll(".topics_zanImg")[imgArrNum];
         var b = this.state.imgArrflag;
-        // console.log(a);
-        // console.log(imgArrNum);
         if (isEmpty(a) == false) {
             if (b) {
                 setTimeout(function () {
@@ -287,8 +285,6 @@ const AntCloudTableComponents = React.createClass({
      * 如果是文件夹，则可以点击文件夹名称，进入文件夹内部
      */
     intoDirectoryInnerLocal(directoryObj, fileIds) {
-        console.log('66666',directoryObj);
-        console.log('888888',fileIds);
         var initPageNo = 1;
         var queryConditionJson = "";
         //点击第一层文件夹时，记录当前文件夹的群主是否是当前用户
@@ -314,7 +310,6 @@ const AntCloudTableComponents = React.createClass({
      * @param ret
      */
     buildTargetDirDataSaveLocal(ret) {
-        // console.log('确定fileIds',fileIds);
         var targetDirDataArray = [];
         var i = 0;
         if (ret.msg == "调用成功" && ret.success == true && isEmpty(ret.response) == false) {
@@ -618,9 +613,7 @@ const AntCloudTableComponents = React.createClass({
         var cloudFileArray = [];
         if (ret.msg == "调用成功" && ret.success == true && isEmpty(ret.response) == false) {
             ret.response.forEach(function (e) {
-                console.log(e);
                 if (i == 0) {
-                    console.log('eee',e.parent);
                     if (e.parent) {
                         var parentDirectoryId = e.parent.parentId;
                         _this.setState({"parentDirectoryId": parentDirectoryId});
@@ -644,8 +637,6 @@ const AntCloudTableComponents = React.createClass({
                 var valid = e.valid;
                 var path = e.path;
                 console.log("path---------->" + path);
-                console.log('key',key);
-                console.log('文件名字',name);
                 var downloadButton;
 
                 if (directory) {
@@ -717,7 +708,6 @@ const AntCloudTableComponents = React.createClass({
      * 如果是文件夹，则可以点击文件夹名称，进入文件夹内部
      */
     intoDirectoryInner(directoryObj, optSrc) {
-        console.log("optSrc:" + optSrc);
         var initPageNo = 1;
         var queryConditionJson = "";
         //点击第一层文件夹时，记录当前文件夹的群主是否是当前用户
@@ -781,7 +771,6 @@ const AntCloudTableComponents = React.createClass({
                     num = i;
                 }
             });
-            // console.log(imgArr);
             //渲染
             this.setState({imgArr, imgArrflag: true, imgArrNum: num});
             // document.querySelectorAll(".topics_zanImg")[num].click();
@@ -823,7 +812,6 @@ const AntCloudTableComponents = React.createClass({
      *
      */
     downloadFile(fileName, content){
-        console.log(555555);
     var aLink = document.createElement('a');
     var blob = new Blob([content]);
     var evt = document.createEvent("HTMLEvents");
@@ -840,7 +828,6 @@ const AntCloudTableComponents = React.createClass({
      * @param fileObject
      */
     editDirectoryName(fileObject) {
-        console.log(fileObject);
         var name = fileObject.name;
         cloudTable.setState({"reNameModalVisible": true, "editDirectoryName": name, "editFileObject": fileObject});
     },
@@ -850,7 +837,6 @@ const AntCloudTableComponents = React.createClass({
      * @param fileObject
      */
     deleteFileOrDirectory(fileObject) {
-        console.log("del key:" + fileObject.id);
         cloudTable.setState({"delCloudFileIds": fileObject.id, "delType": "single"});
         cloudTable.refs.confirmModal.changeConfirmModalVisible(true);
     },
@@ -1215,8 +1201,6 @@ const AntCloudTableComponents = React.createClass({
             "toCloudFileId": parentCloudFileId,
             "fromCloudFileIds": this.state.saveFileId,
         };
-        console.log('传递过来的参数',param);
-        console.log('群文件保存参数',param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.success == true && ret.msg == "调用成功" && isEmpty(ret.response) == false) {
@@ -1323,8 +1307,6 @@ const AntCloudTableComponents = React.createClass({
      * 显示移动文件的窗口
      */
     showMoveFileModal(fileObject) {
-        console.log("moveFileId key:" + fileObject.id);
-
         cloudTable.setState({moveFileModalVisible: true, "moveFileId": fileObject.id});
     },
 
@@ -1419,11 +1401,8 @@ const AntCloudTableComponents = React.createClass({
         var initPageNo = 1;
         if (cloudTable.state.parentDirectoryIdAtMoveModalSave == 0) {
             cloudTable.setState({"parentDirectoryIdAtMoveModalSave": -1, "currentDirectoryIdAtMoveModalSave": -1});
-            console.log('movelModal',cloudTable.state.parentDirectoryIdAtMoveModalSave);
             cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo);
         } else {
-            console.log('movelModal222',cloudTable.state.parentDirectoryIdAtMoveModalSave);
-
             var queryConditionJson = "";
             cloudTable.listFilesLocal(cloudTable.state.ident, cloudTable.state.parentDirectoryIdAtMoveModalSave, queryConditionJson, initPageNo);
         }
@@ -1504,7 +1483,6 @@ const AntCloudTableComponents = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var data = ret.response;
-                console.log('组织架构内容',data);
                 var userStruct = [];
                 data.forEach(function (e) {
 
@@ -1518,7 +1496,6 @@ const AntCloudTableComponents = React.createClass({
                         userStruct.push(userStructJson);
                     }
                 });
-                console.log('值',userStruct);
                 cloudTable.setState({"structureOptions": userStruct});
 
             },
@@ -1578,7 +1555,6 @@ const AntCloudTableComponents = React.createClass({
             onResponse: function (ret) {
                 if (ret.success == true && ret.msg == "调用成功") {
                     var response = ret.response;
-                    // console.log(response);
                     cloudTable.shareFile(response);
                 }
             },
@@ -1597,8 +1573,6 @@ const AntCloudTableComponents = React.createClass({
         var checkedConcatOptions = cloudTable.state.checkedConcatOptions;
         var checkedGroupOptions = cloudTable.state.checkedGroupOptions;
         var checkedsSructureOptions = cloudTable.state.checkedsSructureOptions;
-        console.log(checkedConcatOptions);
-        console.log(checkedGroupOptions);
         var nowThinking = cloudTable.state.nowThinking;
         var shareFile = cloudTable.state.shareCloudFile;
 
@@ -1635,7 +1609,6 @@ const AntCloudTableComponents = React.createClass({
                     "uuid": uuid, "toType": messageToGrp, "attachment": attachement, "state": 0
                 };
                 var commandJson = {"command": "message", "data": {"message": messageJson}};
-                console.log(commandJson);
                 ms.send(commandJson);
             });
         }
@@ -1649,7 +1622,6 @@ const AntCloudTableComponents = React.createClass({
                     "uuid": uuid, "toType": messageToPer, "attachment": attachement, "state": 0
                 };
                 var commandJson = {"command": "message", "data": {"message": messageJson}};
-                console.log(commandJson);
                 ms.send(commandJson);
             });
         }
@@ -1663,7 +1635,6 @@ const AntCloudTableComponents = React.createClass({
                     "uuid": uuid, "toType": messageToPer, "attachment": attachement, "state": 0
                 };
                 var commandJson = {"command": "message", "data": {"message": messageJson}};
-                console.log(commandJson);
                 ms.send(commandJson);
             });
         }
@@ -1687,7 +1658,6 @@ const AntCloudTableComponents = React.createClass({
      * @param checkedValues
      */
     concatOptionsOnChange(checkedValues) {
-        console.log('checked = ', checkedValues);
         cloudTable.setState({"checkedConcatOptions": checkedValues});
     },
 
@@ -1703,7 +1673,6 @@ const AntCloudTableComponents = React.createClass({
      * @param checkedValues
      */
     groupOptionsOnChange(checkedValues) {
-        console.log('checked = ', checkedValues);
         cloudTable.setState({"checkedGroupOptions": checkedValues});
     },
 
