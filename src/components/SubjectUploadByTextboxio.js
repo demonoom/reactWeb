@@ -579,9 +579,12 @@ const SubjectUploadTabComponents = React.createClass({
      * 插入音频
      */
     insertVideo(attachment){
+        var _this = this;
         console.log("insertVideo");
+        var id = "audioTag"+parseInt(Math.random()*1000)
         // var attachment = "http://60.205.86.217/upload5/2017-12-04/19/dd68da27-dd1c-4ecd-8677-50d2af9cfc5a.mp3";
-        var newContent ="<span class='adiuo_p_play'><video  controls='controls' width='200' height='30' src='"+attachment+"'></video><span class='adiuo_hidden'></span></span>";
+        // var newContent ="<span class='adiuo_p_play'><i class='audio_left' onclick='javascript:document.getElementById('\'audioTag\').play()'></i><audio  id='audiotag' style='display: none'  controls='controls' width='200' height='30' src='"+attachment+"'></audio></span>";
+        var newContent ='<span class="adiuo_p_play"><i class="audio_left" onclick="javascript:document.getElementById(\''+id+'\').play()"></i><audio  id="'+id+'" style="display: none"  controls="controls" width="200" height="30" src="'+attachment+'"></audio></span>';
         switch(this.state.currentSubjectType){
             case "single":
                 mytextareaSingleEditor.content.insertHtmlAtCursor(newContent);
@@ -596,6 +599,10 @@ const SubjectUploadTabComponents = React.createClass({
                 mytextareaSimpleAnswerEditor.content.insertHtmlAtCursor(newContent);
                 break;
         }
+    },
+
+    playAudio(){
+        console.log("1111");
     },
 
     showVideoUploadModal(subjectType){
@@ -824,7 +831,7 @@ const SubjectUploadTabComponents = React.createClass({
                                 </Col>
                                 <Col span={20}>
                                     <TextboxioComponentForSingle />
-                                    {/*<Button className="row-t-f" onClick={this.showVideoUploadModal.bind(this,'single')}>插入音频</Button>*/}
+                                    <Button className="row-t-f" onClick={this.showVideoUploadModal.bind(this,'single')}>插入音频</Button>
                                 </Col>
                             </Row>
                             <Row>
@@ -874,7 +881,7 @@ const SubjectUploadTabComponents = React.createClass({
                                     </Col>
                                     <Col span={20}>
                                         <TextboxioComponentForMulitiSelect/>
-                                        {/*<Button onClick={this.showVideoUploadModal.bind(this,'mulitiSelect')}>插入音频</Button>*/}
+                                        <Button onClick={this.showVideoUploadModal.bind(this,'mulitiSelect')}>插入音频</Button>
                                     </Col>
                                 </Row>
                                 <Row>
@@ -926,7 +933,7 @@ const SubjectUploadTabComponents = React.createClass({
                                     </Col>
                                     <Col span={20}>
                                         <TextboxioComponentForCorrect/>
-                                        {/*<Button onClick={this.showVideoUploadModal.bind(this,'correct')}>插入音频</Button>*/}
+                                        <Button onClick={this.showVideoUploadModal.bind(this,'correct')}>插入音频</Button>
                                     </Col>
                                 </Row>
                                 <Row>
@@ -968,7 +975,7 @@ const SubjectUploadTabComponents = React.createClass({
                                     </Col>
                                     <Col span={20}>
                                         <TextboxioComponentForSimpleAnswer/>
-                                        {/*<Button onClick={this.showVideoUploadModal.bind(this,'simpleAnswer')}>插入音频</Button>*/}
+                                        <Button onClick={this.showVideoUploadModal.bind(this,'simpleAnswer')}>插入音频</Button>
                                     </Col>
                                 </Row>
 
