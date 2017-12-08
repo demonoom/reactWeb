@@ -7913,6 +7913,6 @@ select.course_n:hover {
     right: 0;
     top: -2px;
 }
-.range_time .ant-calendar-footer{
-    display: none;
+.ant-calendar-footer{
+    /*display: none;*/
 }
