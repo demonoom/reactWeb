@@ -1469,7 +1469,7 @@ const AntGroupTabComponents = React.createClass({
                                     "uuid": uuid,
                                     "showType": showType,
                                     "readState": readState,
-                                    "readStateStr": '未读',
+                                    "readStateStr": '全部未读',
                                     "groupReadState": readState,
                                     "mesTime": mesTime,
                                     "mesTimeForDetil": messageOfSinge.createTime,
@@ -1891,7 +1891,7 @@ const AntGroupTabComponents = React.createClass({
                                 var messageReturnJson = antGroup.getImgTag(e);
                                 var groupReadState = e.readState;
                                 if (e.readUserCount == 0) {
-                                    var readStateStr = '未读',
+                                    var readStateStr = '全部未读',
                                         readState = 0;
                                 } else {
                                     var readStateStr = e.readUserCount + '人已读',
