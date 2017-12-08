@@ -7476,7 +7476,7 @@ select.course_n:hover {
     width: 24px;
     height: 17px;
     display: inline-block;
-    background: url(../components/images/audio_left.png) no-repeat;
+    background: url(http://60.205.111.227/upload2/common/img/audio_left.png) no-repeat;
     background-position: -48px 0;
     position: relative;
     top: 4px;
@@ -7499,7 +7499,7 @@ select.course_n:hover {
     animation: audio_left_1 1s infinite;
     position: relative;
     top: 4px;
-    background: url(../components/images/audio_left.png) no-repeat;
+    background: url(http://60.205.111.227/upload2/common/img/audio_left.png) no-repeat;
 
 }
 
