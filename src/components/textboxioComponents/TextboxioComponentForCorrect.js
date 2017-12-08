@@ -7,6 +7,8 @@ var TextboxioComponentForCorrect = React.createClass({
       if(mytextareaCorrectEditor.mode.get()=="code"){
         mytextareaCorrectEditor.mode.set("design");
       }
+        var newContent = "<span></span>";
+        mytextareaCorrectEditor.content.insertHtmlAtCursor(newContent);
     });
   },
   componentDidUpdate(){

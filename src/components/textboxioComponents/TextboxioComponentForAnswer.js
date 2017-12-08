@@ -8,6 +8,8 @@ var TextboxioComponentForAnswer = React.createClass({
       if(mytextareaAnswerEditor.mode.get()=="code"){
         mytextareaAnswerEditor.mode.set("design");
       }
+      var newContent = "<span></span>";
+      mytextareaAnswerEditor.content.insertHtmlAtCursor(newContent);
     });
   },
   componentDidUpdate(){
