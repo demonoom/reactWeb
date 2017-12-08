@@ -102,13 +102,15 @@ const MonthlySummary = React.createClass({
             "pageNo": '-1',
             "colUid": _this.state.loginUser.colUid,
         };
-        console.log(param);
+        // console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                // console.log(ret);
                 if (ret.msg == "调用成功" && ret.success == true) {
                     var data = ret.response;
                     _this.setState({url: data.downloadURL})
                     _this.makeTable(data);
+                    _this.setState({downLoadReback: data})
                 } else {
                     message.error(ret.msg);
                 }
@@ -189,7 +191,7 @@ const MonthlySummary = React.createClass({
         }
         this.setState({startTime, endTime});
         this.getMonthlySummary(startTime, endTime);
-        if (window.screen.width >= 1366) {
+        if (window.screen.width > 1366) {
             this.setState({y: 436})
         } else {
             this.setState({y: 400})
@@ -222,6 +224,32 @@ const MonthlySummary = React.createClass({
         this.getMonthlySummary(startTime, endTime, value);
     },
 
+    buttonOnClick() {
+        var downLoadReback = this.state.downLoadReback;
+        var param = {
+            "method": 'printNotify',
+            "userId": downLoadReback.userId,
+            "notifyTitle": downLoadReback.notifyTitle,
+            "notifyCover": downLoadReback.notifyCover,
+            "fileWebPath": downLoadReback.fileWebPath,
+            "fileName": downLoadReback.fileName,
+            "fileLength": downLoadReback.fileLength,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    var data = ret.response;
+                    console.log(data);
+                } else {
+                    message.error(ret.msg);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
     /**
      * 渲染页面
      * @returns {XML}
@@ -236,12 +264,15 @@ const MonthlySummary = React.createClass({
                     <div className="checking_add_box group_cont">
                         <div className="ding_user_t">
                             时间：
-                            <RangePicker  className="range_time" onChange={this.timeOnChange}
-                                          value={[moment(this.state.startTime, dateFormat), moment(this.state.endTime, dateFormat)]}/>
-                                 <Select defaultValue="全公司" style={{width: 120}} onSelect={this.departmentOnSelect} className="add_out">
-                                    {departmentArr}
-                                </Select>
-                                <a href={url} target="_blank" title="下载" download={url}><Button className="right_ri" type="primary">导出报表</Button></a>
+                            <RangePicker className="range_time" onChange={this.timeOnChange}
+                                         value={[moment(this.state.startTime, dateFormat), moment(this.state.endTime, dateFormat)]}/>
+                            <Select defaultValue="全公司" style={{width: 120}} onSelect={this.departmentOnSelect}
+                                    className="add_out">
+                                {departmentArr}
+                            </Select>
+                            <a href={url} target="_blank" title="下载" download={url}><Button className="right_ri"
+                                                                                            type="primary"
+                                                                                            onClick={this.buttonOnClick}>导出报表</Button></a>
                         </div>
 
 
