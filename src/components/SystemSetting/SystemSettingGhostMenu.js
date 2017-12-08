@@ -194,8 +194,7 @@ class SystemSettingGhostMenu extends React.Component {
 
     // teachingAdmin panel
     showpanel(event, urls, name) {
-
-
+        urls = urls+="?access_user="+sessionStorage.getItem("ident");
         this.onMenu(event);
 
         let param = {

@@ -542,6 +542,20 @@ const AntGroupTabComponents = React.createClass({
         this.setState({makeDingModalIsShow: false});
     },
 
+    dingMsgReturnSuc(id) {
+        var messageList = antGroup.state.messageList;
+        messageList.forEach(function (v, i) {
+            if (isEmpty(v) == false) {
+                if (v.uuid == id) {
+                    console.log(v);
+                    v.biumes = true
+                }
+            }
+        });
+        // antGroup.setState({messageList});
+        //根据uuid改变megList
+    },
+
     /**
      * 消息撤回的方法
      */
@@ -1115,6 +1129,11 @@ const AntGroupTabComponents = React.createClass({
         return isExits;
     },
 
+    //ding消息被点击
+    entDingMesDetil() {
+      alert(1);
+    },
+
     /**
      * 进入收发消息的窗口
      * @param user
@@ -1320,7 +1339,9 @@ const AntGroupTabComponents = React.createClass({
                         var uuidsArray = [];
                         var uuid = messageOfSinge.uuid;
                         var toId = messageOfSinge.toId;
-                        var toName = messageOfSinge.toUser.userName;
+                        if (isEmpty(messageOfSinge.toUser) == false) {
+                            var toName = messageOfSinge.toUser.userName;
+                        }
                         var showType = messageOfSinge.showType;  //showType为0正常显示 1通知形式
                         var readState = messageOfSinge.readState;  //0为未读，1为已读
                         //判断是否是叮消息
@@ -1387,26 +1408,31 @@ const AntGroupTabComponents = React.createClass({
                         }
                         var contentJson = {"content": content, "createTime": createTime};
                         var contentArray = [contentJson];
-
-
-                        if (isEmpty(antGroup.state.messageList) == false && antGroup.state.messageList.length > 0) {
-                            if (messageOfSinge.createTime - antGroup.state.messageList[0].mesTimeForDetil > 300000) {
-                                var messageShoww = {
-                                    'fromUser': {
-                                        "avatar": "http://www.maaee.com:80/Excoord_For_Education/userPhoto/default_avatar.png",
-                                        "colUid": 120024,
-                                        "userName": "群通知者",
-                                    },
-                                    'content': formatHM(messageOfSinge.createTime),
-                                    "messageType": "getMessage",
-                                    "showType": 1,
-                                    "messageReturnJson": {
-                                        messageType: "text",
-                                    },
-                                };
-                                messageList.push(messageShoww);
-                                antGroup.addMessageList(messageList, "first");
-                                messageList.splice(0);
+                        //推时间
+                        var noomGroupId = -999;
+                        if (isEmpty(messageOfSinge.toChatGroup) == false) {
+                            noomGroupId = messageOfSinge.toChatGroup.chatGroupId
+                        };
+                        if (noomGroupId == antGroup.state.currentGroupObj.chatGroupId || operatorObj.colUid == data.message.fromUser.colUid || data.message.fromUser.colUid == antGroup.state.loginUser.colUid) {
+                            if (isEmpty(antGroup.state.messageList) == false && antGroup.state.messageList.length > 0) {
+                                if (messageOfSinge.createTime - antGroup.state.messageList[0].mesTimeForDetil > 300000) {
+                                    var messageShoww = {
+                                        'fromUser': {
+                                            "avatar": "http://www.maaee.com:80/Excoord_For_Education/userPhoto/default_avatar.png",
+                                            "colUid": 120024,
+                                            "userName": "群通知者",
+                                        },
+                                        'content': formatHM(messageOfSinge.createTime),
+                                        "messageType": "getMessage",
+                                        "showType": 1,
+                                        "messageReturnJson": {
+                                            messageType: "text",
+                                        },
+                                    };
+                                    messageList.push(messageShoww);
+                                    antGroup.addMessageList(messageList, "first");
+                                    messageList.splice(0);
+                                }
                             }
                         }
 
@@ -3270,6 +3296,7 @@ const AntGroupTabComponents = React.createClass({
                     dingSelectedRowKeys={this.state.dingSelectedRowKeys}
                     dingSelectedNames={this.state.dingSelectedNames}
                     dingUuid={this.state.dingUuid}
+                    dingMsgReturnSuc={this.dingMsgReturnSuc}
                 />
             </div>
         );

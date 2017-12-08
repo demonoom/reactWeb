@@ -256,6 +256,7 @@ class EditDingModal extends React.Component {
                 console.log(ret);
                 if (ret.msg == "调用成功" && ret.success == true) {
                     message.success("发送成功");
+                    _this.props.dingMsgReturnSuc(_this.state.dingUuid);
                     _this.MakeDingModalHandleCancel();
                 } else {
                     message.error("字数过长，只限200字");
@@ -435,8 +436,8 @@ class EditDingModal extends React.Component {
                                            onChange={this.snedMesOnChange}
                                     />
                                 </div>
-                                <p className="ding_str_num">还可以输入<span
-                                    className="ding_str_col">{this.state.defStrNum}</span>字</p>
+                                {/*<p className="ding_str_num">还可以输入<span*/}
+                                    {/*className="ding_str_col">{this.state.defStrNum}</span>字</p>*/}
                                 {/*<UploadImgComponents callBackParent={this.getUploadedImgList}*/}
                                 {/*fileList={this.state.topicImgUrl}/>*/}
                                 <div className="ding_modal_top">
