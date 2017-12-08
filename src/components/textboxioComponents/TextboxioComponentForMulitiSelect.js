@@ -8,6 +8,8 @@ var TextboxioComponentForMulitiSelect = React.createClass({
       if(mytextareaMulitiEditor.mode.get()=="code"){
         mytextareaMulitiEditor.mode.set("design");
       }
+        var newContent = "<span></span>";
+        mytextareaMulitiEditor.content.insertHtmlAtCursor(newContent);
     });
   },
   componentDidUpdate(){

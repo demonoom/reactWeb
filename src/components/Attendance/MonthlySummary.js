@@ -263,9 +263,9 @@ const MonthlySummary = React.createClass({
                 <div className="favorite_scroll">
                     <div className="checking_add_box group_cont">
                         <div className="ding_user_t">
-                            时间：<RangePicker className="range_time" onChange={this.timeOnChange}
-                                            value={[moment(this.state.startTime, dateFormat), moment(this.state.endTime, dateFormat)]}/>
-
+                            时间：
+                            <RangePicker className="range_time" onChange={this.timeOnChange}
+                                         value={[moment(this.state.startTime, dateFormat), moment(this.state.endTime, dateFormat)]}/>
                             <Select defaultValue="全公司" style={{width: 120}} onSelect={this.departmentOnSelect}
                                     className="add_out">
                                 {departmentArr}

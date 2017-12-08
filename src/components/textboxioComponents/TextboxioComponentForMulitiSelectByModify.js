@@ -9,11 +9,15 @@ var TextboxioComponentForMulitiSelectByModify = React.createClass({
     mytextareaMulitiSelectModifyEditor.events.dirty.addListener(function () {
       mytextareaMulitiSelectModifyEditor.mode.set("code");
       mytextareaMulitiSelectModifyEditor.mode.set("design");
+        var newContent = "<span></span>";
+        mytextareaMulitiSelectModifyEditor.content.insertHtmlAtCursor(newContent);
     });
     mytextareaMulitiSelectModifyEditor.events.focus.addListener(function () {
       if(mytextareaMulitiSelectModifyEditor.mode.get()=="code"){
         mytextareaMulitiSelectModifyEditor.mode.set("design");
       }
+        var newContent = "<span></span>";
+        mytextareaMulitiSelectModifyEditor.content.insertHtmlAtCursor(newContent);
     });
   },
   componentDidUpdate(){

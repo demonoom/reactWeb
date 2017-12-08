@@ -9,11 +9,15 @@ var TextboxioComponentForAnswerByModify = React.createClass({
     mytextareaAnswerModifyEditor.events.dirty.addListener(function () {
       mytextareaAnswerModifyEditor.mode.set("code");
       mytextareaAnswerModifyEditor.mode.set("design");
+        var newContent = "<span></span>";
+        mytextareaAnswerModifyEditor.content.insertHtmlAtCursor(newContent);
     });
     mytextareaAnswerModifyEditor.events.focus.addListener(function () {
       if(mytextareaAnswerModifyEditor.mode.get()=="code"){
         mytextareaAnswerModifyEditor.mode.set("design");
       }
+        var newContent = "<span></span>";
+        mytextareaAnswerModifyEditor.content.insertHtmlAtCursor(newContent);
     });
   },
   componentDidUpdate(){
