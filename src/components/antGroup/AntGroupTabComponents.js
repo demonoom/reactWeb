@@ -22,6 +22,7 @@ import {getImgName, getLocalTime, getPageSize, isEmpty, MIDDLE_IMG, SMALL_IMG} f
 import {phone} from '../../utils/phone';
 import {formatHM, formatMD, isToday, showLargeImg} from '../../utils/utils';
 import GroupFileUploadComponents from './GroupFileUploadComponents';
+import EditDingModal from './EditDingModal';
 
 const TabPane = Tabs.TabPane;
 const confirm = Modal.confirm;
@@ -110,6 +111,9 @@ const AntGroupTabComponents = React.createClass({
                 <Menu.Item>
                     <a target="_blank" className="ellips_t" onClick={this.withdrawMsg}>撤回</a>
                 </Menu.Item>
+                <Menu.Item>
+                    <a target="_blank" className="ellips_t" onClick={this.turnToDing}>叮一下</a>
+                </Menu.Item>
             </Menu>
         );
         return {
@@ -149,7 +153,8 @@ const AntGroupTabComponents = React.createClass({
             progressState: 'none',
             totalCount: 0,
             readState: '未读',
-            mesReadActiveKey: "1"
+            mesReadActiveKey: "1",
+            makeDingModalIsShow: false,
         };
 
     },
@@ -467,8 +472,74 @@ const AntGroupTabComponents = React.createClass({
         this.setState({isShare: true});
     },
 
-    getMesUUid(uuid) {
+    getMesUUid(uuid, e) {
         this.setState({mesUuid: uuid});
+        this.setState({megObj: e});
+    },
+
+    turnToDing() {
+        var _this = this;
+        var megObj = this.state.megObj;
+        console.log(megObj);
+        //console.log(megObj.groupReadState);区分是群还是个人  个人传个人  群传未读人
+        if (isEmpty(megObj.attachmentType) == true && isEmpty(megObj.fileName) == true && isEmpty(megObj.expressionItem) == true) {
+            //文字
+            if (typeof(megObj.groupReadState) != 'undefined') {
+                //群
+                _this.checkNevReaders(megObj.uuid);
+            } else {
+                //个人
+                _this.setState({
+                    dingSelectedRowKeys: [megObj.toId],
+                    dingSelectedNames: [{key: megObj.toId, name: megObj.toName}]
+                });
+            }
+            _this.setState({msgContent: megObj.content, dingUuid: megObj.uuid});
+            //打开model
+            _this.setState({makeDingModalIsShow: true});
+        } else {
+            message.error('该消息不支持');
+        }
+    },
+
+    /**
+     *
+     */
+    checkNevReaders(id) {
+        var _this = this;
+        var param = {
+            "method": 'getMessageReadUsers',
+            "messageUUID": id,
+            "type": '1'
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    var data = ret.response;
+                    var dingSelectedRowKeys = [];
+                    var dingSelectedNames = [];
+                    if (isEmpty(data) == false) {
+                        data.forEach(function (v, i) {
+                            dingSelectedRowKeys.push(v.colUid);
+                            dingSelectedNames.push({key: v.colUid, name: v.userName});
+                        })
+                        _this.setState({
+                            dingSelectedRowKeys,
+                            dingSelectedNames
+                        });
+                    }
+                } else {
+                    message.error(ret.msg);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    closeDingModel() {
+        this.setState({makeDingModalIsShow: false});
     },
 
     /**
@@ -1207,7 +1278,9 @@ const AntGroupTabComponents = React.createClass({
                         var data = info.data;
                         if (data.message.command == "biu_message") {
                             // var obj = JSON.parse(data.message.content);
-                            _this.props.showAlert(true);
+                            if (data.message.fromUser.colUid != 41451) {
+                                _this.props.showAlert(true);
+                            }
                         } else if (data.message.command == "message") {
                             if (data.message.fromUser.colUid !== _this.state.loginUser.colUid && data.message.showType == 0) {
                                 if (isEmpty(data.message.toChatGroup) == false || isEmpty(data.message.toUser) == false) {
@@ -1246,6 +1319,8 @@ const AntGroupTabComponents = React.createClass({
                         var content = messageOfSinge.content;
                         var uuidsArray = [];
                         var uuid = messageOfSinge.uuid;
+                        var toId = messageOfSinge.toId;
+                        var toName = messageOfSinge.toUser.userName;
                         var showType = messageOfSinge.showType;  //showType为0正常显示 1通知形式
                         var readState = messageOfSinge.readState;  //0为未读，1为已读
                         //判断是否是叮消息
@@ -1415,6 +1490,8 @@ const AntGroupTabComponents = React.createClass({
                                             "readStateStr": '未读',
                                             "mesTime": mesTime,
                                             "mesTimeForDetil": messageOfSinge.createTime,
+                                            "toId": toId,
+                                            "toName": toName,
                                         };
                                         //如果发送的消息=当前点击人的id，才push
                                         if (messageOfSinge.toUser.colUid === _this.state.curId) {
@@ -2085,9 +2162,11 @@ const AntGroupTabComponents = React.createClass({
             "user2Id": sessionStorage.getItem("ident"),
             "timeNode": timeNode
         };
+        // console.log(param);
         isRequesting = true;
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                // console.log(ret);
                 isRequesting = false;
                 if (ret.msg == "调用成功" && ret.success == true) {
                     var i = 0;
@@ -2130,6 +2209,8 @@ const AntGroupTabComponents = React.createClass({
                                 biumes = false;
                             }
                             var fromUser = messageOfSinge.fromUser;
+                            var toId = messageOfSinge.toId;
+                            var toName = messageOfSinge.toUser.userName;
                             var isCurrentDay = isToday(messageOfSinge.createTime);
                             var mesTime;
                             var timeSignForTime;
@@ -2206,6 +2287,8 @@ const AntGroupTabComponents = React.createClass({
                                     "readStateStr": readStateStr,
                                     "mesTime": mesTime,
                                     "mesTimeForDetil": messageOfSinge.createTime,
+                                    "toId": toId,
+                                    "toName": toName,
                                 };
                                 messageList.push(messageShow);
                             }
@@ -2365,7 +2448,7 @@ const AntGroupTabComponents = React.createClass({
                                                     <span className="talk_bubble_ellipsis">
                                                         <Dropdown overlay={msgMenu} trigger={['click']}
                                                                   placement="topCenter"
-                                                                  onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                                                  onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                             <Icon className="icon_ellipsis" type="ellipsis"/>
                                                         </Dropdown>
                                                     </span>
@@ -2391,7 +2474,7 @@ const AntGroupTabComponents = React.createClass({
                                                     <span className="talk_bubble_ellipsis">
                                                         <Dropdown overlay={msgMenu} trigger={['click']}
                                                                   placement="topCenter"
-                                                                  onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                                                  onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                             <Icon className="icon_ellipsis" type="ellipsis"/>
                                                         </Dropdown>
                                                     </span>
@@ -2447,7 +2530,7 @@ const AntGroupTabComponents = React.createClass({
                                                     <span className="talk_bubble_ellipsis">
                                                         <Dropdown overlay={msgMenu} trigger={['click']}
                                                                   placement="topCenter"
-                                                                  onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                                                  onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                             <Icon className="icon_ellipsis" type="ellipsis"/>
                                                         </Dropdown>
                                                 </span>
@@ -2496,7 +2579,7 @@ const AntGroupTabComponents = React.createClass({
                                                             <span className="talk_bubble_ellipsis">
                                                                 <Dropdown overlay={msgMenu} trigger={['click']}
                                                                           placement="topCenter"
-                                                                          onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                                                          onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                                     <Icon className="icon_ellipsis" type="ellipsis"/>
                                                                 </Dropdown>
                                                             </span>
@@ -2635,7 +2718,7 @@ const AntGroupTabComponents = React.createClass({
                                                 <span className="talk_bubble_ellipsis">
                                                     <Dropdown overlay={msgMenu} trigger={['click']}
                                                               placement="topCenter"
-                                                              onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                                              onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                         <Icon className="icon_ellipsis" type="ellipsis"/>
                                                     </Dropdown>
                                                 </span>
@@ -2674,7 +2757,7 @@ const AntGroupTabComponents = React.createClass({
                                                 <span className="talk_bubble_ellipsis">
                                                     <Dropdown overlay={msgMenu} trigger={['click']}
                                                               placement="topCenter"
-                                                              onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                                              onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                         <Icon className="icon_ellipsis" type="ellipsis"/>
                                                     </Dropdown>
                                                 </span>
@@ -2724,7 +2807,7 @@ const AntGroupTabComponents = React.createClass({
                                                 <span className="talk_bubble_ellipsis">
                                                     <Dropdown overlay={msgMenu} trigger={['click']}
                                                               placement="topCenter"
-                                                              onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                                              onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                         <Icon className="icon_ellipsis" type="ellipsis"/>
                                                      </Dropdown>
                                                 </span>
@@ -2777,7 +2860,7 @@ const AntGroupTabComponents = React.createClass({
                                                 <span className="talk_bubble_ellipsis">
                                                     <Dropdown overlay={msgMenu} trigger={['click']}
                                                               placement="topCenter"
-                                                              onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                                              onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                         <Icon className="icon_ellipsis" type="ellipsis"/>
                                                      </Dropdown>
                                                 </span>
@@ -2828,7 +2911,7 @@ const AntGroupTabComponents = React.createClass({
                                                 <span className="talk_bubble_ellipsis">
                                                     <Dropdown overlay={msgMenu} trigger={['click']}
                                                               placement="topCenter"
-                                                              onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                                              onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                         <Icon className="icon_ellipsis" type="ellipsis"/>
                                                     </Dropdown>
                                                 </span>
@@ -2905,7 +2988,7 @@ const AntGroupTabComponents = React.createClass({
                                                 <span className="talk_bubble_ellipsis">
                                                     <Dropdown overlay={msgMenu} trigger={['click']}
                                                               placement="topCenter"
-                                                              onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                                              onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                         <Icon className="icon_ellipsis" type="ellipsis"/>
                                                     </Dropdown>
                                             </span>
@@ -2970,7 +3053,7 @@ const AntGroupTabComponents = React.createClass({
                                     </span>
                                     <span className="talk_bubble_ellipsis">
                                         <Dropdown overlay={msgMenu} trigger={['click']} placement="topCenter"
-                                                  onVisibleChange={this.getMesUUid.bind(this, e.uuid)}>
+                                                  onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                             <Icon className="icon_ellipsis" type="ellipsis"/>
                                         </Dropdown>
                                     </span>
@@ -3179,6 +3262,15 @@ const AntGroupTabComponents = React.createClass({
                         </Row>
                     </div>
                 </Modal>
+
+                <EditDingModal
+                    isShow={this.state.makeDingModalIsShow}
+                    closeDingModel={this.closeDingModel}
+                    msgContent={this.state.msgContent}
+                    dingSelectedRowKeys={this.state.dingSelectedRowKeys}
+                    dingSelectedNames={this.state.dingSelectedNames}
+                    dingUuid={this.state.dingUuid}
+                />
             </div>
         );
     },

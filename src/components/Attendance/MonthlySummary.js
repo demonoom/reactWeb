@@ -100,8 +100,9 @@ const MonthlySummary = React.createClass({
             "end": endTime,
             "dId": did,
             "pageNo": '-1',
+            "colUid": _this.state.loginUser.colUid,
         };
-        // console.log(param);
+        console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.msg == "调用成功" && ret.success == true) {
