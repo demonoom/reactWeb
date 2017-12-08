@@ -1164,18 +1164,6 @@ const AntCloudTableComponents = React.createClass({
         var initPageNo = 1;
         this.getUserRootCloudFiles(this.state.ident, initPageNo, "copyDirModal");
         this.setState({saveFileModalVisible:true,"saveFileId": fileObject.id});
-
-        /*  var fileCreateUid = fileObject.fileCreateUid;
-          //文件名
-          var fileName = fileObject.name;
-          //路径
-          var filePath= fileObject.path;
-          // var filePath = fileObject.filePath;
-          //大小
-          var fileLength = (fileObject.length / 1024).toFixed(2);
-
-          this.setState({filePath, fileName, fileLength, fileCreateUid});*/
-
     },
 
     /**
