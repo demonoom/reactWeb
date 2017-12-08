@@ -429,7 +429,7 @@ class EditDingModal extends React.Component {
                                         )}
                                     </div>
                                 </div>
-                                <div className="ding_textarea">
+                                <div className="ding_textarea yinyong_topic">
                                     <Input disabled className="ding_ipt" placeholder="内容" type="textarea" rows={12}
                                            value={this.state.sendMes}
                                            onChange={this.snedMesOnChange}
