@@ -234,14 +234,16 @@ const MonthlySummary = React.createClass({
                 <div className="favorite_scroll">
                     <div className="checking_add_box group_cont">
                         <div className="ding_user_t">
-                            时间：<RangePicker onChange={this.timeOnChange}
+                            时间：<RangePicker  className="range_time" onChange={this.timeOnChange}
                                             value={[moment(this.state.startTime, dateFormat), moment(this.state.endTime, dateFormat)]}/>
+
+                                 <Select defaultValue="全公司" style={{width: 120}} onSelect={this.departmentOnSelect} className="add_out">
+                                    {departmentArr}
+                                </Select>
+                                <a href={url} target="_blank" title="下载" download={url}><Button className="right_ri" type="primary">导出报表</Button></a>
                         </div>
-                        <Select defaultValue="全公司" style={{width: 120}}
-                                onSelect={this.departmentOnSelect}>
-                            {departmentArr}
-                        </Select>
-                        <a href={url} target="_blank" title="下载" download={url}><Button type="primary">导出报表</Button></a>
+
+
                         <Table className="checking_in_box cloud_box row-t-f month_box" columns={columns}
                                dataSource={monthData} scroll={{x: this.state.x, y: this.state.y}} pagination={false}/>
                     </div>
