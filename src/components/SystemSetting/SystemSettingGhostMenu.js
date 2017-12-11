@@ -117,7 +117,6 @@ class SystemSettingGhostMenu extends React.Component {
                 {liArr}
             </li>;
             arr.push(uls);
-
             liArr = [];
         }
 

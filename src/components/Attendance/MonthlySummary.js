@@ -274,8 +274,6 @@ const MonthlySummary = React.createClass({
                                                                                             type="primary"
                                                                                             onClick={this.buttonOnClick}>导出报表</Button></a>
                         </div>
-
-
                         <Table className="checking_in_box cloud_box row-t-f month_box" columns={columns}
                                dataSource={monthData} scroll={{x: this.state.x, y: this.state.y}} pagination={false}/>
                     </div>
