@@ -3182,7 +3182,9 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     float: left;
     width: 100%;
 }
-
+.group_talk ul li:hover .icon_ellipsis {
+    visibility: visible;
+}
 .group_talk ul li.right {
     margin: 10px 0;
     float: right;
@@ -3225,8 +3227,15 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 .group_talk ul li div.talk-cont, .public .sayLine.left div.saycont {
     display: flex;
     flex-direction: row;
+    position: relative;
 }
-
+.borderballoon_le .talk_bubble_ellipsis{
+    position: absolute;
+    width: 130px;
+    text-align: right;
+    right: -24px;
+    bottom: 8px;
+}
 .group_talk ul li.right div.talk-cont, .public .sayLine.right div.saycont {
     display: flex;
     flex-direction: row-reverse;
@@ -7849,7 +7858,7 @@ select.course_n:hover {
     max-width: -webkit-calc(100% - 250px);
     position: relative;
 }
-.talk_bubble_ellipsis{
+.talk_bubble_box .talk_bubble_ellipsis{
     position: absolute;
     width: 130px;
     text-align: right;
