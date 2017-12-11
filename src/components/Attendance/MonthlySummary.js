@@ -105,7 +105,7 @@ const MonthlySummary = React.createClass({
         // console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                // console.log(ret);
+                console.log(ret);
                 if (ret.msg == "调用成功" && ret.success == true) {
                     var data = ret.response;
                     _this.setState({url: data.downloadURL})
@@ -227,14 +227,16 @@ const MonthlySummary = React.createClass({
     buttonOnClick() {
         var downLoadReback = this.state.downLoadReback;
         var param = {
-            "method": 'printNotify',
+            "method": 'printNotifyWithPreViewPahth',
             "userId": downLoadReback.userId,
             "notifyTitle": downLoadReback.notifyTitle,
             "notifyCover": downLoadReback.notifyCover,
-            "fileWebPath": downLoadReback.fileWebPath,
+            "fileWebPath": downLoadReback.downloadURL,
             "fileName": downLoadReback.fileName,
             "fileLength": downLoadReback.fileLength,
+            "preViewPath": downLoadReback.fileWebPath,
         };
+        console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.msg == "调用成功" && ret.success == true) {
