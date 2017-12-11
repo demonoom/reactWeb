@@ -14,7 +14,8 @@ import {
     Row,
     Table,
     Tabs,
-    Card
+    Card,
+    Checkbox,
 } from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import EmotionInputComponents from './EmotionInputComponents';
@@ -26,6 +27,7 @@ import EditDingModal from './EditDingModal';
 
 const TabPane = Tabs.TabPane;
 const confirm = Modal.confirm;
+const CheckboxGroup = Checkbox.Group;
 const Panel = Collapse.Panel;
 const fileDetilColumns = [{
     title: '',
@@ -166,6 +168,10 @@ const AntGroupTabComponents = React.createClass({
             readState: '未读',
             mesReadActiveKey: "1",
             makeDingModalIsShow: false,
+            concatOptions: [],
+            structureOptions: [],   //组织架构
+            groupOptions: [],
+            RMsgActiveKey: ['2']
         };
 
     },
@@ -492,7 +498,449 @@ const AntGroupTabComponents = React.createClass({
      * 消息转发
      */
     relayMsg() {
-        alert('转发');
+        var megObj = this.state.megObj;
+        if (megObj.attachmentType == 2) {
+            message.error('该消息不支持');
+            return false
+        }
+        this.getAntGroup();
+        this.getStructureUsers();
+        this.setState({relayMsgModalVisible: true});
+        //打开选择人员model
+    },
+
+    /**
+     * 消息转发model关闭的回调
+     */
+    relayMsgModalHandleCancel() {
+        this.setState({
+            relayMsgModalVisible: false,
+            "checkedGroupOptions": [],
+            "checkedConcatOptions": [],
+            RMsgActiveKey: ['2']
+        });
+    },
+
+    /**
+     * 消息转发确定
+     */
+    sendMegToOthers() {
+        //根据不同类型的消息转发
+        //文字 图片 大表情 链接 文件   -语音-
+        var megObj = this.state.megObj;
+        console.log(megObj);
+
+        var _this = this;
+        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+        var createTime = (new Date()).valueOf();
+        var messageToPer = 1;//根据接收者是群组还是个人来决定
+        var messageToGrp = 4;
+        var checkedConcatOptions = this.state.checkedConcatOptions;   //好友id数组
+        var checkedGroupOptions = this.state.checkedGroupOptions;   //群组id数组
+        var checkedsSructureOptions = this.state.checkedsSructureOptions;  //组织架构id数组
+
+        if (isEmpty(checkedConcatOptions) == true && isEmpty(checkedGroupOptions) == true && isEmpty(checkedsSructureOptions) == true) {
+            message.error('请选择转发好友或群组');
+            return false
+        }
+
+        if (megObj.attachmentType == 1) {
+            //图片消息
+            var attachment = {
+                "address": megObj.attachment,
+                "createTime": createTime,
+                "playing": false,
+                "type": 1,
+                "user": loginUser
+            };
+
+            if (isEmpty(checkedGroupOptions) == false) {
+                checkedGroupOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToGrp, "attachment": attachment
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+
+            if (isEmpty(checkedConcatOptions) == false) {
+                checkedConcatOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToPer, "attachment": attachment
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+
+            if (isEmpty(checkedsSructureOptions) == false) {
+                checkedsSructureOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToPer, "attachment": attachment
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+
+        } else if (megObj.attachmentType == 4) {
+            //链接消息
+            var cover = "http://png.findicons.com/files/icons/2083/go_green_web/64/link.png";
+            var attachment = {
+                "address": megObj.attachment,
+                "createTime": createTime,
+                "playing": false,
+                "type": 4,
+                "user": megObj.fromUser,
+                "cover": cover,
+                "content": megObj.content,
+            };
+            if (isEmpty(checkedGroupOptions) == false) {
+                checkedGroupOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToGrp, "attachment": attachment, "state": 0
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+
+            if (isEmpty(checkedConcatOptions) == false) {
+                checkedConcatOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToPer, "attachment": attachment, "state": 0
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+
+            if (isEmpty(checkedsSructureOptions) == false) {
+                checkedsSructureOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToPer, "attachment": attachment, "state": 0
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+        } else if (isEmpty(megObj.expressionItem) == false) {
+            //大表情消息
+            var expressionItem = {
+                "address": megObj.expressionItem
+            }
+            if (isEmpty(checkedGroupOptions) == false) {
+                checkedGroupOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToGrp, "expressionItem": expressionItem
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+
+            if (isEmpty(checkedConcatOptions) == false) {
+                checkedConcatOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToPer, "expressionItem": expressionItem
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+
+            if (isEmpty(checkedsSructureOptions) == false) {
+                checkedsSructureOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToPer, "expressionItem": expressionItem
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+        } else if (isEmpty(megObj.fileName) == false) {
+            //文件消息
+            var cloudFile = {
+                "name": megObj.fileName,
+                "length": megObj.fileLength,
+                "parentId": -2,
+                "createUid": loginUser.colUid,
+                "fileType": 0,
+                "schoolId": loginUser.schoolId,
+                "path": megObj.filePath,
+                "uuid": megObj.fileUid
+            };
+            if (isEmpty(checkedGroupOptions) == false) {
+                checkedGroupOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToGrp, "cloudFile": cloudFile
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+
+            if (isEmpty(checkedConcatOptions) == false) {
+                checkedConcatOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToPer, "cloudFile": cloudFile
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+
+            if (isEmpty(checkedsSructureOptions) == false) {
+                checkedsSructureOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToPer, "cloudFile": cloudFile
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+        } else {
+            // 文字消息
+            if (isEmpty(checkedGroupOptions) == false) {
+                checkedGroupOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToGrp,
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+
+            if (isEmpty(checkedConcatOptions) == false) {
+                checkedConcatOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToPer,
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+
+            if (isEmpty(checkedsSructureOptions) == false) {
+                checkedsSructureOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToPer,
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+
+        }
+
+        //初始化
+        this.setState({
+            relayMsgModalVisible: false,
+            "checkedGroupOptions": [],
+            "checkedConcatOptions": [],
+            "checkedsSructureOptions": [],
+            RMsgActiveKey: ['2'],
+        });
+    },
+
+    /**
+     * 获取联系人列表
+     */
+    getAntGroup() {
+        var _this = this;
+        var param = {
+            "method": 'getUserContacts',
+            "ident": sessionStorage.getItem("ident"),
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                var i = 0;
+                var concatOptions = [];
+                for (var i = 0; i < response.length; i++) {
+                    if (response[i].colUid == 41451 || response[i].colUid == 138437 || response[i].colUid == 142033 || response[i].colUid == 139581) {
+                        continue
+                    }
+                    var userId = response[i].colUid;
+                    var userName = response[i].userName;
+                    var imgTag = <img src={response[i].avatar} className="antnest_38_img" height="38"></img>;
+                    var userNameTag = <div>{imgTag}<span>{userName}</span></div>;
+                    var userJson = {label: userNameTag, value: userId};
+                    if (userId != sessionStorage.getItem("ident")) {
+                        concatOptions.push(userJson);
+                    }
+                }
+                _this.setState({"concatOptions": concatOptions});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 组织架构列表
+     */
+    getStructureUsers: function () {
+        var _this = this;
+        var param = {
+            "method": 'getStructureUsers',
+            "operateUserId": sessionStorage.getItem("ident"),
+            "pageNo": -1,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var data = ret.response;
+                var userStruct = [];
+                data.forEach(function (e) {
+
+                    var userStructId = e.colUid;
+                    var userStructName = e.userName;
+                    var userStructImgTag = <img src={e.avatar} className="antnest_38_img" height="38"></img>;
+                    var userStructNameTag = <div>{userStructImgTag}<span>{userStructName}</span></div>;
+                    var userStructJson = {label: userStructNameTag, value: userStructId};
+
+                    if (userStructId != sessionStorage.getItem("userStructId")) {
+                        userStruct.push(userStructJson);
+                    }
+                });
+                _this.setState({"structureOptions": userStruct});
+
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 我的好友复选框被选中时的响应x
+     * @param checkedValues
+     */
+    groupOptionsOnChange(checkedValues) {
+        this.setState({"checkedGroupOptions": checkedValues});
+    },
+
+    /**
+     * 我的好友复选框被选中时的响应
+     * @param checkedValues
+     */
+    concatOptionsOnChange(checkedValues) {
+        this.setState({"checkedConcatOptions": checkedValues});
+    },
+
+    /**
+     * 组织架构复选框被选中时的响应
+     * @param checkedValues
+     */
+    roleOptionsOnChange(checkedValues) {
+        this.setState({"checkedsSructureOptions": checkedValues});
+    },
+
+    collapseChange(key) {
+        this.setState({RMsgActiveKey: key});
+        this.getUserChatGroupById(1);
+    },
+
+    getUserChatGroupById(pageNo) {
+        var _this = this;
+        var param = {
+            "method": 'getUserChatGroup',
+            "userId": sessionStorage.getItem("ident"),
+            "pageNo": pageNo
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    var response = ret.response;
+                    // var charGroupArray = [];
+                    var groupOptions = [];
+                    response.forEach(function (e) {
+                        var chatGroupId = e.chatGroupId;
+                        var chatGroupName = e.name;
+                        var membersCount = e.members.length;
+                        var groupMemebersPhoto = [];
+                        for (var i = 0; i < membersCount; i++) {
+                            var member = e.members[i];
+                            var memberAvatarTag = <img src={member.avatar}></img>;
+                            groupMemebersPhoto.push(memberAvatarTag);
+                            if (i >= 3) {
+                                break;
+                            }
+                        }
+                        var imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
+                        switch (groupMemebersPhoto.length) {
+                            case 1:
+                                imgTag = <div className="maaee_group_face1">{groupMemebersPhoto}</div>;
+                                break;
+                            case 2:
+                                imgTag = <div className="maaee_group_face2">{groupMemebersPhoto}</div>;
+                                break;
+                            case 3:
+                                imgTag = <div className="maaee_group_face3">{groupMemebersPhoto}</div>;
+                                break;
+                            case 4:
+                                imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
+                                break;
+                        }
+                        var groupName = chatGroupName;
+                        var groupNameTag = <div>{imgTag}<span>{groupName}</span></div>
+                        var groupJson = {label: groupNameTag, value: chatGroupId};
+                        groupOptions.push(groupJson);
+                    });
+                    _this.setState({"groupOptions": groupOptions});
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     /**
@@ -898,8 +1346,11 @@ const AntGroupTabComponents = React.createClass({
      * 关闭上传文件弹窗
      */
     cloudFileUploadModalHandleCancel() {
+        var _this = this;
         antGroup.setState({"cloudFileUploadModalVisible": false});
-        this.refs.fileUploadCom.initFileUploadPage();
+        if (isEmpty(_this.refs.fileUploadCom) == false) {
+            _this.refs.fileUploadCom.initFileUploadPage();
+        }
     },
 
     /**
@@ -2477,7 +2928,7 @@ const AntGroupTabComponents = React.createClass({
                                             <div className="talk-cont">
                                                 <span className="name">{userPhoneIcon}</span>
                                                 <div className="talk_bubble_box">
-                                                    <span className="borderballoon_le noom_cursor"
+                                                    <span className="borderballoon noom_cursor"
                                                           onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
                                                         <div className="borderballoon_le_cont">
                                                             <img className="upexam_float span_link_img"
@@ -2490,13 +2941,6 @@ const AntGroupTabComponents = React.createClass({
                                                              </div>
                                                         </div>
                                                         <i className="borderballoon_dingcorner_ri_no"></i>
-                                                    </span>
-                                                    <span className="talk_bubble_ellipsis">
-                                                        <Dropdown overlay={msgMenu} trigger={['click']}
-                                                                  placement="topCenter"
-                                                                  onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
-                                                            <Icon className="icon_ellipsis" type="ellipsis"/>
-                                                        </Dropdown>
                                                     </span>
                                                     <span className="talk_bubble_read"
                                                           onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
@@ -2645,10 +3089,10 @@ const AntGroupTabComponents = React.createClass({
                                         messageTag = <li style={{'textAlign': 'left'}}>
                                             <div className="u-name"><span>{fromUser}</span><span
                                                 className="cart_time">{mesTime}</span></div>
-                                            <div className="talk-cont"><span
-                                                className="name">{userPhoneIcon}</span><span
-                                                className="borderballoon_le noom_cursor"
-                                                onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
+                                            <div className="talk-cont">
+                                                <span className="name">{userPhoneIcon}</span>
+                                                <span className="borderballoon_le noom_cursor"
+                                                      onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
                                                  <span className="bot"></span>
                                                  <span className="top"></span>
                                                  <img className="upexam_float span_link_img" style={{width: 40}}
@@ -2656,19 +3100,26 @@ const AntGroupTabComponents = React.createClass({
                                                       alt=""/>
                                                 <span className="span_link file_link_img_t">{content}</span>
                                                 <i className="borderballoon_dingcorner_ri_no"></i>
+                                                    <span className="talk_bubble_ellipsis">
+                                                        <Dropdown overlay={msgMenuLeft} trigger={['click']}
+                                                                  placement="topCenter"
+                                                                  onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                            <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                        </Dropdown>
+                                                    </span>
                                             </span>
                                             </div>
                                         </li>;
                                     } else if (isEmpty(fileName) == false) {
                                         //发送的文件（content里带有文件名字）
                                         messageTag = <li style={{'textAlign': 'left'}}>
-                                            <div className="u-name"><span>{fromUser}</span><span
-                                                className="cart_time">{mesTime}</span></div>
-                                            <div className="talk-cont"><span
-                                                className="name">{userPhoneIcon}</span><span
-                                                className="borderballoon_le"
-                                                // onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}><img
-                                            >
+                                            <div className="u-name"><span>{fromUser}</span>
+                                                <span className="cart_time">{mesTime}</span></div>
+                                            <div className="talk-cont">
+                                                <span className="name">{userPhoneIcon}</span>
+                                                <span className="borderballoon_le"
+                                                    // onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid)}><img
+                                                >
                                                 <span className="bot"></span>
                                                 <span className="top"></span>
                                                 <div className="borderballoon_le_cont">
@@ -2698,6 +3149,13 @@ const AntGroupTabComponents = React.createClass({
                                                         </a>
                                                     </Dropdown>
                                                 </div>
+                                                     <span className="talk_bubble_ellipsis">
+                                                        <Dropdown overlay={msgMenuLeft} trigger={['click']}
+                                                                  placement="topCenter"
+                                                                  onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                            <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                        </Dropdown>
+                                                    </span>
                                                 </span>
                                             </div>
                                         </li>;
@@ -2709,7 +3167,14 @@ const AntGroupTabComponents = React.createClass({
                                             <div className="talk-cont"><span
                                                 className="name">{userPhoneIcon}</span><img
                                                 style={{width: '100px', height: '100px'}} src={expressionItem}/><span><i
-                                                className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                                className="borderballoon_dingcorner_ri_no"></i><span
+                                                className="talk_bubble_ellipsis">
+                                                    <Dropdown overlay={msgMenuLeft} trigger={['click']}
+                                                              placement="topCenter"
+                                                              onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                        <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                    </Dropdown>
+                                            </span></span></div>
                                         </li>;
                                     } else {
                                         if (biumes == true) {
@@ -2724,7 +3189,16 @@ const AntGroupTabComponents = React.createClass({
                                                     <span className="bot"></span>
                                                     <span className="top"></span>
                                                     {e.content}
-                                                    <i className="borderballoon_dingcorner_ri"></i></span></div>
+                                                    <i className="borderballoon_dingcorner_ri"></i>
+                                                    <span className="talk_bubble_ellipsis">
+                                                        <Dropdown overlay={msgMenuLeft} trigger={['click']}
+                                                                  placement="topCenter"
+                                                                  onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                            <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                        </Dropdown>
+                                                    </span>
+                                                </span>
+                                                </div>
                                             </li>;
                                         } else {
                                             //普通消息无角标
@@ -2733,15 +3207,24 @@ const AntGroupTabComponents = React.createClass({
                                             } else {
                                                 messageTag = <li style={{'textAlign': 'left'}}>
                                                     <div className="u-name">
-                                                        <span>{fromUser}</span><span
-                                                        className="cart_time">{mesTime}</span></div>
-                                                    <div className="talk-cont"><span
-                                                        className="name">{userPhoneIcon}</span><span
-                                                        className="borderballoon_le">
+                                                        <span>{fromUser}</span>
+                                                        <span className="cart_time">{mesTime}</span>
+                                                    </div>
+                                                    <div className="talk-cont">
+                                                        <span className="name">{userPhoneIcon}</span>
+                                                        <span className="borderballoon_le">
                                                     <span className="bot"></span>
                                                     <span className="top"></span>
-                                                        {e.content}
-                                                        <i className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                                            {e.content}
+                                                            <i className="borderballoon_dingcorner_ri_no"></i>
+                                                        <span className="talk_bubble_ellipsis">
+                                                            <Dropdown overlay={msgMenuLeft} trigger={['click']}
+                                                                      placement="topCenter"
+                                                                      onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                                <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                            </Dropdown>
+                                                        </span>
+                                                    </span></div>
                                                 </li>;
                                             }
                                         }
@@ -2782,7 +3265,16 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="talk-cont"><span
                                             className="name">{userPhoneIcon}</span><span
                                             className="borderballoon_le">{e.imgTagArray}<i
-                                            className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                            className="borderballoon_dingcorner_ri_no"></i>
+                                            <span className="talk_bubble_ellipsis">
+                                                <Dropdown overlay={msgMenuLeft} trigger={['click']}
+                                                          placement="topCenter"
+                                                          onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                    <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                </Dropdown>
+                                            </span>
+                                        </span>
+                                        </div>
                                     </li>;
                                 }
                             } else if (e.messageReturnJson.messageType == "audioTag") {
@@ -2814,14 +3306,26 @@ const AntGroupTabComponents = React.createClass({
                                         </div>
                                     </li>;
                                 } else {
-                                    //我收到的
+                                    //我收到的(--)
                                     messageTag = <li style={{'textAlign': 'left'}}>
-                                        <div className="u-name"><span>{fromUser}</span><span
-                                            className="cart_time">{mesTime}</span></div>
-                                        <div className="talk-cont"><span
-                                            className="name">{userPhoneIcon}</span><img
-                                            style={{width: '100px', height: '100px'}} src={expressionItem}/><span><i
-                                            className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                        <div className="u-name">
+                                            <span>{fromUser}</span>
+                                            <span className="cart_time">{mesTime}</span>
+                                        </div>
+                                        <div className="talk-cont">
+                                            <span className="name">{userPhoneIcon}</span>
+                                            <img style={{width: '100px', height: '100px'}} src={expressionItem}/>
+                                            <span>
+                                                <i className="borderballoon_dingcorner_ri_no"></i>
+                                            </span>
+                                            <span className="talk_bubble_ellipsis">
+                                                    <Dropdown overlay={msgMenuLeft} trigger={['click']}
+                                                              placement="topCenter"
+                                                              onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                        <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                    </Dropdown>
+                                            </span>
+                                        </div>
                                     </li>;
                                 }
                             } else if (e.messageReturnJson.messageType == "linkTag") {
@@ -2868,17 +3372,27 @@ const AntGroupTabComponents = React.createClass({
                                     messageTag = <li style={{'textAlign': 'left'}}>
                                         <div className="u-name"><span>{fromUser}</span><span
                                             className="cart_time">{mesTime}</span></div>
-                                        <div className="talk-cont"><span
-                                            className="name">{userPhoneIcon}</span><span
-                                            className="borderballoon_le noom_cursor"
-                                            onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
-                                            <span className="bot"></span>
-                                            <span className="top"></span>
-                                            <img className="upexam_float span_link_img" style={{width: 40}}
-                                                 src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png" alt=""/>
-                                            <span
-                                                className="span_link file_link_img_t">{e.messageReturnJson.content}</span><i
-                                            className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                        <div className="talk-cont">
+                                            <span className="name">{userPhoneIcon}</span>
+                                            <span className="borderballoon_le noom_cursor"
+                                                  onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
+                                                <span className="bot"></span>
+                                                <span className="top"></span>
+                                                <img className="upexam_float span_link_img" style={{width: 40}}
+                                                     src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
+                                                     alt=""/>
+                                                <span
+                                                    className="span_link file_link_img_t">{e.messageReturnJson.content}</span>
+                                                <i className="borderballoon_dingcorner_ri_no"></i>
+                                        </span>
+                                            <span className="talk_bubble_ellipsis noom_repMsg">
+                                                    <Dropdown overlay={msgMenuLeft} trigger={['click']}
+                                                              placement="topCenter"
+                                                              onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                        <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                    </Dropdown>
+                                                </span>
+                                        </div>
                                     </li>;
                                 }
                             } else if (e.messageReturnJson.messageType == "bigImgTag") {
@@ -2929,11 +3443,17 @@ const AntGroupTabComponents = React.createClass({
                                                 <span className="send_img_cont">
                                                     <img onClick={_this.noomWatchImg.bind(this, attachment)}
                                                          className="send_img"
-                                                         src={attachment + '?' + MIDDLE_IMG} alt={attachment}
-                                                    />
+                                                         src={attachment + '?' + MIDDLE_IMG} alt={attachment}/>
+                                                </span>
+                                                <i className="borderballoon_dingcorner_ri_no"></i>
+                                                <span className="talk_bubble_ellipsis">
+                                                    <Dropdown overlay={msgMenuLeft} trigger={['click']}
+                                                              placement="topCenter"
+                                                              onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                        <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                    </Dropdown>
                                                 </span>
                                             </span>
-                                            <span><i className="borderballoon_dingcorner_ri_no"></i></span>
                                         </div>
                                     </li>;
                                 }
@@ -2976,13 +3496,20 @@ const AntGroupTabComponents = React.createClass({
                                             <span className="name">{userPhoneIcon}</span>
                                             <span className="borderballoon_le noom_cursor"
                                                   onClick={this.audioPlay.bind(this, attachment, '_left')}>
-                                                <span className="bot"></span>
-                                                <span className="top"></span>
-                                                <audio id={attachment}>
-                                                    <source src={attachment} type="audio/mpeg"></source>
-                                                </audio>
-                                                <span className="audio_left" id={attachment + '_audio'}></span>
-                                                <i className="borderballoon_dingcorner_ri_no"></i>
+                                                    <span className="bot"></span>
+                                                    <span className="top"></span>
+                                                    <audio id={attachment}>
+                                                        <source src={attachment} type="audio/mpeg"></source>
+                                                    </audio>
+                                                    <span className="audio_left" id={attachment + '_audio'}></span>
+                                                    <i className="borderballoon_dingcorner_ri_no"></i>
+                                            </span>
+                                            <span className="talk_bubble_ellipsis noom_repMsg">
+                                                    <Dropdown overlay={msgMenuLeft} trigger={['click']}
+                                                              placement="topCenter"
+                                                              onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                        <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                    </Dropdown>
                                             </span>
                                         </div>
                                     </li>;
@@ -3050,22 +3577,20 @@ const AntGroupTabComponents = React.createClass({
                                         <div className="u-name"><span>{fromUser}</span><span
                                             className="cart_time">{mesTime}</span></div>
                                         <div className="talk-cont"><span
-                                            className="name">{userPhoneIcon}</span><span
-                                            className="borderballoon_le noom_cursor"
-                                            onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid, fileName)}>
+                                            className="name">{userPhoneIcon}</span>
+                                            <span className="borderballoon_le noom_cursor"
+                                                  onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid, fileName)}>
                                                 <span className="bot"></span>
                                                 <span className="top"></span>
-                                            <div className="borderballoon_le_cont"><img
-                                                className="upexam_float"
-                                                style={{width: 38}}
-                                                src="../src/components/images/maaee_link_file_102_102.png"
-                                                alt=""/><img id={fileUid} style={{display: "none"}} src={filePath}
-                                                             onClick={showLargeImg}
-                                                             alt=""/><span
-                                                className="span_link">{fileName}</span><span
-                                                className="span_link password_ts">{fileLength}kb</span><i
-                                                className="borderballoon_dingcorner_ri_no"></i></div>
-                                        <div className="file_noom">
+                                                <div className="borderballoon_le_cont">
+                                                    <img className="upexam_float" style={{width: 38}}
+                                                         src="../src/components/images/maaee_link_file_102_102.png"
+                                                         onClick={showLargeImg} alt=""/>
+                                                    <span className="span_link">{fileName}</span>
+                                                    <span className="span_link password_ts">{fileLength}kb</span>
+                                                    <i className="borderballoon_dingcorner_ri_no"></i>
+                                                </div>
+                                                <div className="file_noom">
                                                     <a className="noom_cursor  file_noom_line"
                                                        onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid, fileName)}><Icon
                                                         type="eye"/>预览</a>
@@ -3081,7 +3606,15 @@ const AntGroupTabComponents = React.createClass({
                                                         </a>
                                                     </Dropdown>
                                                 </div>
-                                        </span></div>
+                                                <span className="talk_bubble_ellipsis">
+                                                    <Dropdown overlay={msgMenuLeft} trigger={['click']}
+                                                              placement="topCenter"
+                                                              onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                        <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                    </Dropdown>
+                                                </span>
+                                            </span>
+                                        </div>
                                     </li>;
                                 }
                             }
@@ -3305,6 +3838,43 @@ const AntGroupTabComponents = React.createClass({
                                            dataSource={data_noom}
                                            pagination={false}/>
                                 </div>
+                            </Col>
+                        </Row>
+                    </div>
+                </Modal>
+
+                <Modal title="转发消息" className="cloud_share_Modal"
+                       visible={this.state.relayMsgModalVisible}
+                       transitionName=""  //禁用modal的动画效果
+                       maskClosable={false} //设置不允许点击蒙层关闭
+                       onCancel={this.relayMsgModalHandleCancel}
+                       onOk={this.sendMegToOthers}
+                       width={400}
+                >
+                    <div>
+                        <Row>
+                            <Col span={12} className="share_til">选择好友：</Col>
+                        </Row>
+                        <Row>
+                            <Col span={23} className="upexam_float cloud_share_cont">
+                                <Collapse bordered={false} activeKey={this.state.RMsgActiveKey}
+                                          onChange={this.collapseChange}>
+                                    <Panel header="我的群组" key="1">
+                                        <CheckboxGroup options={this.state.groupOptions}
+                                                       value={this.state.checkedGroupOptions}
+                                                       onChange={this.groupOptionsOnChange}/>
+                                    </Panel>
+                                    <Panel header="我的好友" key="2">
+                                        <CheckboxGroup options={this.state.concatOptions}
+                                                       value={this.state.checkedConcatOptions}
+                                                       onChange={this.concatOptionsOnChange}/>
+                                    </Panel>
+                                    <Panel header="组织架构" key="3">
+                                        <CheckboxGroup options={this.state.structureOptions}
+                                                       value={this.state.checkedsSructureOptions}
+                                                       onChange={this.roleOptionsOnChange}/>
+                                    </Panel>
+                                </Collapse>
                             </Col>
                         </Row>
                     </div>
