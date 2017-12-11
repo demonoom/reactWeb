@@ -425,10 +425,11 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
     insertVideo(attachment){
         var _this = this;
         console.log("insertVideo");
-        var id = "audioTag"+parseInt(Math.random()*1000)
+        var id = "audioTag"+parseInt(Math.random()*1000);
+        var iTagId = "iTag"+parseInt(Math.random()*1000);
         // var attachment = "http://60.205.86.217/upload5/2017-12-04/19/dd68da27-dd1c-4ecd-8677-50d2af9cfc5a.mp3";
         // var newContent ="<span class='adiuo_p_play'><i class='audio_left' onclick='javascript:document.getElementById('\'audioTag\').play()'></i><audio  id='audiotag' style='display: none'  controls='controls' width='200' height='30' src='"+attachment+"'></audio></span>";
-        var newContent ='<span class="adiuo_p_play"><i class="audio_left" onclick="javascript:document.getElementById(\''+id+'\').play()"></i><audio  id="'+id+'" style="display: none"  controls="controls" width="200" height="30" src="'+attachment+'"></audio></span>';
+        var newContent ='<span class="adiuo_p_play"><i id="'+iTagId+'" class="audio_left" onclick="javascript:var isPaused=document.getElementById(\''+id+'\').paused;if(isPaused){ document.getElementById(\''+id+'\').play();document.getElementById(\''+iTagId+'\').className=\'audio_left_run\'; }else{ document.getElementById(\''+id+'\').pause();document.getElementById(\''+iTagId+'\').className=\'audio_left\'; }"></i><audio onended="javascript:document.getElementById(\''+iTagId+'\').className=\'audio_left\'" id="'+id+'" style="display: none"  controls="controls" width="200" height="30" src="'+attachment+'"></audio></span>';
         switch(this.state.currentSubjectType){
             case "single":
                 mytextareaSingleModifyEditor.content.insertHtmlAtCursor(newContent);
