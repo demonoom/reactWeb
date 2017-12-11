@@ -14,7 +14,8 @@ import {
     Row,
     Table,
     Tabs,
-    Card
+    Card,
+    Checkbox,
 } from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import EmotionInputComponents from './EmotionInputComponents';
@@ -26,6 +27,7 @@ import EditDingModal from './EditDingModal';
 
 const TabPane = Tabs.TabPane;
 const confirm = Modal.confirm;
+const CheckboxGroup = Checkbox.Group;
 const Panel = Collapse.Panel;
 const fileDetilColumns = [{
     title: '',
@@ -166,6 +168,10 @@ const AntGroupTabComponents = React.createClass({
             readState: '未读',
             mesReadActiveKey: "1",
             makeDingModalIsShow: false,
+            concatOptions: [],
+            structureOptions: [],   //组织架构
+            groupOptions: [],
+            RMsgActiveKey: ['2']
         };
 
     },
@@ -492,7 +498,449 @@ const AntGroupTabComponents = React.createClass({
      * 消息转发
      */
     relayMsg() {
-        alert('转发');
+        var megObj = this.state.megObj;
+        if (megObj.attachmentType == 2) {
+            message.error('该消息不支持');
+            return false
+        }
+        this.getAntGroup();
+        this.getStructureUsers();
+        this.setState({relayMsgModalVisible: true});
+        //打开选择人员model
+    },
+
+    /**
+     * 消息转发model关闭的回调
+     */
+    relayMsgModalHandleCancel() {
+        this.setState({
+            relayMsgModalVisible: false,
+            "checkedGroupOptions": [],
+            "checkedConcatOptions": [],
+            RMsgActiveKey: ['2']
+        });
+    },
+
+    /**
+     * 消息转发确定
+     */
+    sendMegToOthers() {
+        //根据不同类型的消息转发
+        //文字 图片 大表情 链接 文件   -语音-
+        var megObj = this.state.megObj;
+        console.log(megObj);
+
+        var _this = this;
+        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+        var createTime = (new Date()).valueOf();
+        var messageToPer = 1;//根据接收者是群组还是个人来决定
+        var messageToGrp = 4;
+        var checkedConcatOptions = this.state.checkedConcatOptions;   //好友id数组
+        var checkedGroupOptions = this.state.checkedGroupOptions;   //群组id数组
+        var checkedsSructureOptions = this.state.checkedsSructureOptions;  //组织架构id数组
+
+        if (isEmpty(checkedConcatOptions) == true && isEmpty(checkedGroupOptions) == true && isEmpty(checkedsSructureOptions) == true) {
+            message.error('请选择转发好友或群组');
+            return false
+        }
+
+        if (megObj.attachmentType == 1) {
+            //图片消息
+            var attachment = {
+                "address": megObj.attachment,
+                "createTime": createTime,
+                "playing": false,
+                "type": 1,
+                "user": loginUser
+            };
+
+            if (isEmpty(checkedGroupOptions) == false) {
+                checkedGroupOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToGrp, "attachment": attachment
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+
+            if (isEmpty(checkedConcatOptions) == false) {
+                checkedConcatOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToPer, "attachment": attachment
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+
+            if (isEmpty(checkedsSructureOptions) == false) {
+                checkedsSructureOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToPer, "attachment": attachment
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+
+        } else if (megObj.attachmentType == 4) {
+            //链接消息
+            var cover = "http://png.findicons.com/files/icons/2083/go_green_web/64/link.png";
+            var attachment = {
+                "address": megObj.attachment,
+                "createTime": createTime,
+                "playing": false,
+                "type": 4,
+                "user": megObj.fromUser,
+                "cover": cover,
+                "content": megObj.content,
+            };
+            if (isEmpty(checkedGroupOptions) == false) {
+                checkedGroupOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToGrp, "attachment": attachment, "state": 0
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+
+            if (isEmpty(checkedConcatOptions) == false) {
+                checkedConcatOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToPer, "attachment": attachment, "state": 0
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+
+            if (isEmpty(checkedsSructureOptions) == false) {
+                checkedsSructureOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToPer, "attachment": attachment, "state": 0
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+        } else if (isEmpty(megObj.expressionItem) == false) {
+            //大表情消息
+            var expressionItem = {
+                "address": megObj.expressionItem
+            }
+            if (isEmpty(checkedGroupOptions) == false) {
+                checkedGroupOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToGrp, "expressionItem": expressionItem
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+
+            if (isEmpty(checkedConcatOptions) == false) {
+                checkedConcatOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToPer, "expressionItem": expressionItem
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+
+            if (isEmpty(checkedsSructureOptions) == false) {
+                checkedsSructureOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToPer, "expressionItem": expressionItem
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+        } else if (isEmpty(megObj.fileName) == false) {
+            //文件消息
+            var cloudFile = {
+                "name": megObj.fileName,
+                "length": megObj.fileLength,
+                "parentId": -2,
+                "createUid": loginUser.colUid,
+                "fileType": 0,
+                "schoolId": loginUser.schoolId,
+                "path": megObj.filePath,
+                "uuid": megObj.fileUid
+            };
+            if (isEmpty(checkedGroupOptions) == false) {
+                checkedGroupOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToGrp, "cloudFile": cloudFile
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+
+            if (isEmpty(checkedConcatOptions) == false) {
+                checkedConcatOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToPer, "cloudFile": cloudFile
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+
+            if (isEmpty(checkedsSructureOptions) == false) {
+                checkedsSructureOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToPer, "cloudFile": cloudFile
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+        } else {
+            // 文字消息
+            if (isEmpty(checkedGroupOptions) == false) {
+                checkedGroupOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToGrp,
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+
+            if (isEmpty(checkedConcatOptions) == false) {
+                checkedConcatOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToPer,
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+
+            if (isEmpty(checkedsSructureOptions) == false) {
+                checkedsSructureOptions.forEach(function (e) {
+                    var uuid = antGroup.createUUID();
+                    var messageJson = {
+                        'content': megObj.content, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToPer,
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                });
+            }
+
+        }
+
+        //初始化
+        this.setState({
+            relayMsgModalVisible: false,
+            "checkedGroupOptions": [],
+            "checkedConcatOptions": [],
+            "checkedsSructureOptions": [],
+            RMsgActiveKey: ['2'],
+        });
+    },
+
+    /**
+     * 获取联系人列表
+     */
+    getAntGroup() {
+        var _this = this;
+        var param = {
+            "method": 'getUserContacts',
+            "ident": sessionStorage.getItem("ident"),
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                var i = 0;
+                var concatOptions = [];
+                for (var i = 0; i < response.length; i++) {
+                    if (response[i].colUid == 41451 || response[i].colUid == 138437 || response[i].colUid == 142033 || response[i].colUid == 139581) {
+                        continue
+                    }
+                    var userId = response[i].colUid;
+                    var userName = response[i].userName;
+                    var imgTag = <img src={response[i].avatar} className="antnest_38_img" height="38"></img>;
+                    var userNameTag = <div>{imgTag}<span>{userName}</span></div>;
+                    var userJson = {label: userNameTag, value: userId};
+                    if (userId != sessionStorage.getItem("ident")) {
+                        concatOptions.push(userJson);
+                    }
+                }
+                _this.setState({"concatOptions": concatOptions});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 组织架构列表
+     */
+    getStructureUsers: function () {
+        var _this = this;
+        var param = {
+            "method": 'getStructureUsers',
+            "operateUserId": sessionStorage.getItem("ident"),
+            "pageNo": -1,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var data = ret.response;
+                var userStruct = [];
+                data.forEach(function (e) {
+
+                    var userStructId = e.colUid;
+                    var userStructName = e.userName;
+                    var userStructImgTag = <img src={e.avatar} className="antnest_38_img" height="38"></img>;
+                    var userStructNameTag = <div>{userStructImgTag}<span>{userStructName}</span></div>;
+                    var userStructJson = {label: userStructNameTag, value: userStructId};
+
+                    if (userStructId != sessionStorage.getItem("userStructId")) {
+                        userStruct.push(userStructJson);
+                    }
+                });
+                _this.setState({"structureOptions": userStruct});
+
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 我的好友复选框被选中时的响应x
+     * @param checkedValues
+     */
+    groupOptionsOnChange(checkedValues) {
+        this.setState({"checkedGroupOptions": checkedValues});
+    },
+
+    /**
+     * 我的好友复选框被选中时的响应
+     * @param checkedValues
+     */
+    concatOptionsOnChange(checkedValues) {
+        this.setState({"checkedConcatOptions": checkedValues});
+    },
+
+    /**
+     * 组织架构复选框被选中时的响应
+     * @param checkedValues
+     */
+    roleOptionsOnChange(checkedValues) {
+        this.setState({"checkedsSructureOptions": checkedValues});
+    },
+
+    collapseChange(key) {
+        this.setState({RMsgActiveKey: key});
+        this.getUserChatGroupById(1);
+    },
+
+    getUserChatGroupById(pageNo) {
+        var _this = this;
+        var param = {
+            "method": 'getUserChatGroup',
+            "userId": sessionStorage.getItem("ident"),
+            "pageNo": pageNo
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    var response = ret.response;
+                    // var charGroupArray = [];
+                    var groupOptions = [];
+                    response.forEach(function (e) {
+                        var chatGroupId = e.chatGroupId;
+                        var chatGroupName = e.name;
+                        var membersCount = e.members.length;
+                        var groupMemebersPhoto = [];
+                        for (var i = 0; i < membersCount; i++) {
+                            var member = e.members[i];
+                            var memberAvatarTag = <img src={member.avatar}></img>;
+                            groupMemebersPhoto.push(memberAvatarTag);
+                            if (i >= 3) {
+                                break;
+                            }
+                        }
+                        var imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
+                        switch (groupMemebersPhoto.length) {
+                            case 1:
+                                imgTag = <div className="maaee_group_face1">{groupMemebersPhoto}</div>;
+                                break;
+                            case 2:
+                                imgTag = <div className="maaee_group_face2">{groupMemebersPhoto}</div>;
+                                break;
+                            case 3:
+                                imgTag = <div className="maaee_group_face3">{groupMemebersPhoto}</div>;
+                                break;
+                            case 4:
+                                imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
+                                break;
+                        }
+                        var groupName = chatGroupName;
+                        var groupNameTag = <div>{imgTag}<span>{groupName}</span></div>
+                        var groupJson = {label: groupNameTag, value: chatGroupId};
+                        groupOptions.push(groupJson);
+                    });
+                    _this.setState({"groupOptions": groupOptions});
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     /**
@@ -898,8 +1346,11 @@ const AntGroupTabComponents = React.createClass({
      * 关闭上传文件弹窗
      */
     cloudFileUploadModalHandleCancel() {
+        var _this = this;
         antGroup.setState({"cloudFileUploadModalVisible": false});
-        this.refs.fileUploadCom.initFileUploadPage();
+        if (isEmpty(_this.refs.fileUploadCom) == false) {
+            _this.refs.fileUploadCom.initFileUploadPage();
+        }
     },
 
     /**
@@ -2742,6 +3193,11 @@ const AntGroupTabComponents = React.createClass({
                                                     <span className="top"></span>
                                                         {e.content}
                                                         <i className="borderballoon_dingcorner_ri_no"></i></span></div>
+                                                    <Dropdown overlay={msgMenuLeft} trigger={['click']}
+                                                              placement="topCenter"
+                                                              onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                        <Icon type="ellipsis"/>
+                                                    </Dropdown>
                                                 </li>;
                                             }
                                         }
@@ -3305,6 +3761,43 @@ const AntGroupTabComponents = React.createClass({
                                            dataSource={data_noom}
                                            pagination={false}/>
                                 </div>
+                            </Col>
+                        </Row>
+                    </div>
+                </Modal>
+
+                <Modal title="转发消息" className="cloud_share_Modal"
+                       visible={this.state.relayMsgModalVisible}
+                       transitionName=""  //禁用modal的动画效果
+                       maskClosable={false} //设置不允许点击蒙层关闭
+                       onCancel={this.relayMsgModalHandleCancel}
+                       onOk={this.sendMegToOthers}
+                       width={400}
+                >
+                    <div>
+                        <Row>
+                            <Col span={12} className="share_til">选择好友：</Col>
+                        </Row>
+                        <Row>
+                            <Col span={23} className="upexam_float cloud_share_cont">
+                                <Collapse bordered={false} activeKey={this.state.RMsgActiveKey}
+                                          onChange={this.collapseChange}>
+                                    <Panel header="我的群组" key="1">
+                                        <CheckboxGroup options={this.state.groupOptions}
+                                                       value={this.state.checkedGroupOptions}
+                                                       onChange={this.groupOptionsOnChange}/>
+                                    </Panel>
+                                    <Panel header="我的好友" key="2">
+                                        <CheckboxGroup options={this.state.concatOptions}
+                                                       value={this.state.checkedConcatOptions}
+                                                       onChange={this.concatOptionsOnChange}/>
+                                    </Panel>
+                                    <Panel header="组织架构" key="3">
+                                        <CheckboxGroup options={this.state.structureOptions}
+                                                       value={this.state.checkedsSructureOptions}
+                                                       onChange={this.roleOptionsOnChange}/>
+                                    </Panel>
+                                </Collapse>
                             </Col>
                         </Row>
                     </div>
