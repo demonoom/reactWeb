@@ -28,7 +28,7 @@ export const SMALL_IMG = 'size=100x100';
 export const MIDDLE_IMG = 'size=300x300';
 export const LARGE_IMG = 'size=500x500';
 //webService请求的版本号
-export const WEB_VERSION = "1.03";
+export const WEB_VERSION = "1.04";
 var baseEmotionMap = new Map();
 baseEmotionMap.set("[bexp_0001]", "baseEmotions/bexp_0001.png");
 baseEmotionMap.set("[bexp_0002]", "baseEmotions/bexp_0002.png");
