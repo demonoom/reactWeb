@@ -61,6 +61,7 @@ var preHeight = 0;
 var isSend = false;
 var menu = null;
 var msgMenu = null;
+var msgMenuLeft = null;
 var uuidArr = [];
 var targetDirColumns = [{
     title: '文件夹名称',
@@ -113,6 +114,16 @@ const AntGroupTabComponents = React.createClass({
                 </Menu.Item>
                 <Menu.Item>
                     <a target="_blank" className="ellips_t" onClick={this.turnToDing}>叮一下</a>
+                </Menu.Item>
+                <Menu.Item>
+                    <a target="_blank" className="ellips_t" onClick={this.relayMsg}>转发</a>
+                </Menu.Item>
+            </Menu>
+        );
+        msgMenuLeft = (
+            <Menu>
+                <Menu.Item>
+                    <a target="_blank" className="ellips_t" onClick={this.relayMsg}>转发</a>
                 </Menu.Item>
             </Menu>
         );
@@ -477,10 +488,19 @@ const AntGroupTabComponents = React.createClass({
         this.setState({megObj: e});
     },
 
+    /**
+     * 消息转发
+     */
+    relayMsg() {
+        alert('转发');
+    },
+
+    /**
+     * 消息转叮
+     */
     turnToDing() {
         var _this = this;
         var megObj = this.state.megObj;
-        console.log(megObj);
         //console.log(megObj.groupReadState);区分是群还是个人  个人传个人  群传未读人
         if (isEmpty(megObj.attachmentType) == true && isEmpty(megObj.fileName) == true && isEmpty(megObj.expressionItem) == true) {
             //文字
@@ -542,17 +562,19 @@ const AntGroupTabComponents = React.createClass({
         this.setState({makeDingModalIsShow: false});
     },
 
+    /**
+     * 叮消息转换成功变成叮消息的样式
+     * @param id
+     */
     dingMsgReturnSuc(id) {
         var messageList = antGroup.state.messageList;
         messageList.forEach(function (v, i) {
             if (isEmpty(v) == false) {
                 if (v.uuid == id) {
-                    console.log(v);
                     v.biumes = true
                 }
             }
         });
-        // antGroup.setState({messageList});
         //根据uuid改变megList
     },
 
@@ -1131,7 +1153,7 @@ const AntGroupTabComponents = React.createClass({
 
     //ding消息被点击
     entDingMesDetil() {
-      alert(1);
+        // alert(1);
     },
 
     /**
@@ -1412,7 +1434,8 @@ const AntGroupTabComponents = React.createClass({
                         var noomGroupId = -999;
                         if (isEmpty(messageOfSinge.toChatGroup) == false) {
                             noomGroupId = messageOfSinge.toChatGroup.chatGroupId
-                        };
+                        }
+                        ;
                         if (noomGroupId == antGroup.state.currentGroupObj.chatGroupId || operatorObj.colUid == data.message.fromUser.colUid || data.message.fromUser.colUid == antGroup.state.loginUser.colUid) {
                             if (isEmpty(antGroup.state.messageList) == false && antGroup.state.messageList.length > 0) {
                                 if (messageOfSinge.createTime - antGroup.state.messageList[0].mesTimeForDetil > 300000) {
@@ -1476,7 +1499,6 @@ const AntGroupTabComponents = React.createClass({
                                             "mesTimeForDetil": messageOfSinge.createTime,
                                         };
                                         messageList.push(messageShow);
-                                        // console.log(messageList);
                                     }
                                     if (isEmpty(messageOfSinge.toUser) == false) {
                                         var userJson = {
@@ -2188,11 +2210,9 @@ const AntGroupTabComponents = React.createClass({
             "user2Id": sessionStorage.getItem("ident"),
             "timeNode": timeNode
         };
-        // console.log(param);
         isRequesting = true;
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                // console.log(ret);
                 isRequesting = false;
                 if (ret.msg == "调用成功" && ret.success == true) {
                     var i = 0;
@@ -2577,7 +2597,8 @@ const AntGroupTabComponents = React.createClass({
                                                 </div>
                                                 <div className="talk-cont">
                                                     <span className="name">{userPhoneIcon}</span>
-                                                    <span className="borderballoon">{e.content}
+                                                    <span className="borderballoon"
+                                                          onClick={this.entDingMesDetil}>{e.content}
                                                         <i className="borderballoon_dingcorner_le"></i>
                                                     </span>
                                                     {/*<Dropdown overlay={msgMenu} placement="topLeft"*/}
@@ -2699,7 +2720,7 @@ const AntGroupTabComponents = React.createClass({
                                                 </div>
                                                 <div className="talk-cont"><span
                                                     className="name">{userPhoneIcon}</span><span
-                                                    className="borderballoon_le">
+                                                    className="borderballoon_le" onClick={this.entDingMesDetil}>
                                                     <span className="bot"></span>
                                                     <span className="top"></span>
                                                     {e.content}
