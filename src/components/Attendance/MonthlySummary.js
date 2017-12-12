@@ -227,16 +227,14 @@ const MonthlySummary = React.createClass({
     buttonOnClick() {
         var downLoadReback = this.state.downLoadReback;
         var param = {
-            "method": 'printNotifyWithPreViewPahth',
+            "method": 'printNotify',
             "userId": downLoadReback.userId,
             "notifyTitle": downLoadReback.notifyTitle,
             "notifyCover": downLoadReback.notifyCover,
-            "fileWebPath": downLoadReback.downloadURL,
+            "fileWebPath": downLoadReback.fileWebPath,
             "fileName": downLoadReback.fileName,
             "fileLength": downLoadReback.fileLength,
-            "preViewPath": downLoadReback.fileWebPath,
         };
-        console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.msg == "调用成功" && ret.success == true) {
