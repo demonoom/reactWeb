@@ -9,7 +9,7 @@ import TextboxioComponentForCorrectByModify from './textboxioComponents/Textboxi
 import TextboxioComponentForSimpleAnswerByModify from './textboxioComponents/TextboxioComponentForSimpleAnswerByModify';
 import TextboxioComponentForAnswerByModify from './textboxioComponents/TextboxioComponentForAnswerByModify';
 import SubjectVideoUploadComponents from './SubjectVideoUploadComponents';
-import {isEmpty} from "../utils/Const";
+import {isEmpty,AUDIO_SUBJECT_ALLOWED} from "../utils/Const";
 import {doWebService} from '../WebServiceHelper';
 const RadioGroup = Radio.Group;
 const Option = Select.Option;
@@ -588,6 +588,8 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                 取消
             </Button>
         </div>;
+        //插入音频按钮
+        var audioButton = <Button className="row-t-f" onClick={this.showVideoUploadModal.bind(this,'single')}>插入音频</Button>;
         if (currentActiveKey == "单选题") {
             buttons = <div>
                 <Button type="primary" htmlType="submit" className="login-form-button"
@@ -598,6 +600,7 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                     取消
                 </Button>
             </div>;
+            audioButton = <Button className="row-t-f" onClick={this.showVideoUploadModal.bind(this,'single')}>插入音频</Button>;
         } else if (currentActiveKey == "多选题") {
             buttons = <div>
                 <Button type="primary" htmlType="submit" className="login-form-button"
@@ -608,6 +611,7 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                     取消
                 </Button>
             </div>;
+            audioButton = <Button onClick={this.showVideoUploadModal.bind(this,'mulitiSelect')}>插入音频</Button>;
         } else if (currentActiveKey == "判断题") {
             buttons = <div>
                 <Button type="primary" htmlType="submit" className="login-form-button"
@@ -618,6 +622,7 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                     取消
                 </Button>
             </div>;
+            audioButton = <Button onClick={this.showVideoUploadModal.bind(this,'correct')}>插入音频</Button>;
         } else if (currentActiveKey == "简答题") {
             buttons = <div>
                 <Button type="primary" htmlType="submit" className="login-form-button"
@@ -628,6 +633,12 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                     取消
                 </Button>
             </div>;
+            audioButton = <Button onClick={this.showVideoUploadModal.bind(this,'simpleAnswer')}>插入音频</Button>;
+        }
+
+        //如果用户不在允许的权限列表中，将audioButton设置为null，不显示
+        if(AUDIO_SUBJECT_ALLOWED.indexOf(sessionStorage.getItem("ident")) == -1){
+            audioButton = null;
         }
 
         var tipInfo = <div className="binding_b_t">1、如果题目来源于word文档，建议使用office2007完成传题操作；<br/>
@@ -668,7 +679,7 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                                 </Col>
                                 <Col span={20}>
                                     <TextboxioComponentForSingleByModify/>
-                                    <Button className="row-t-f" onClick={this.showVideoUploadModal.bind(this,'single')}>插入音频</Button>
+                                    {audioButton}
                                 </Col>
                             </Row>
                             <Row>
@@ -707,7 +718,7 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                                     </Col>
                                     <Col span={20}>
                                         <TextboxioComponentForMulitiSelectByModify/>
-                                        <Button onClick={this.showVideoUploadModal.bind(this,'mulitiSelect')}>插入音频</Button>
+                                        {audioButton}
                                     </Col>
                                 </Row>
                                 <Row>
@@ -747,7 +758,7 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                                     </Col>
                                     <Col span={20}>
                                         <TextboxioComponentForCorrectByModify/>
-                                        <Button onClick={this.showVideoUploadModal.bind(this,'correct')}>插入音频</Button>
+                                        {audioButton}
                                     </Col>
                                 </Row>
                                 <Row>
@@ -790,7 +801,7 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                                     </Col>
                                     <Col span={20}>
                                         <TextboxioComponentForSimpleAnswerByModify/>
-                                        <Button onClick={this.showVideoUploadModal.bind(this,'simpleAnswer')}>插入音频</Button>
+                                        {audioButton}
                                     </Col>
                                 </Row>
 

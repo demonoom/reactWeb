@@ -3,6 +3,7 @@ import {
     Tabs, Breadcrumb, Icon, Card, Button, Row, Col, Steps,
     Input, Select, Radio, DatePicker, Checkbox, message, Upload,
 } from 'antd';
+import moment from 'moment';
 import ImageAnswerUploadComponents from './ImageAnswerUploadComponents';
 import WeiClassUploadComponents from './WeiClassUploadComponents';
 import {isEmpty, getLocalTime} from '../../utils/utils';
@@ -544,9 +545,13 @@ const CreateClassComponents = React.createClass({
      * @param dateString
      * @param Event
      */
-    lessonTimeOnChange(value, dateString, Event) {
-        console.log('Selected Time: ', value);
+    lessonTimeOnChange(id,value, dateString) {
+        console.log('Selected Time: ', value+"\t"+id);
         console.log('Formatted Selected Time: ', dateString);
+        var squence = id;
+        var liveTime = dateString;
+        var videoJson = {squence, liveTime};
+        this.buildVideosArray(videoJson, "liveTime");
     },
 
     lessonTimeOnOk(value) {
@@ -1058,7 +1063,9 @@ const CreateClassComponents = React.createClass({
                             console.log("videoInfo name:" + videoInfo.name);
                             videoName = videoInfo.name;
                             // weifileList = videoInfo.weiClassList;
-                            weifileList.push(videoInfo.weiClassList);
+                            if(isEmpty(videoInfo.weiClassList)==false){
+                                weifileList.push(videoInfo.weiClassList);
+                            }
                         }
                         var lessonRowObj = <Row>
                             <Col span={3} className="add_left">第{lessonJson.lessonNum}课时</Col>
@@ -1127,10 +1134,13 @@ const CreateClassComponents = React.createClass({
                         var lessonJson = this.state.lessonArray[i];
                         //获取已经保存的时间信息，并重新初始化到页面的组件上
                         var videoInfo = this.getVideoInfoFromCourseInfoJson(lessonJson.lessonNum);
+                        var timestamp = (new Date()).valueOf();
                         var videoName = "";
+                        var liveTime = getLocalTime(timestamp);
                         if (isEmpty(videoInfo) == false) {
                             console.log("videoInfo name:" + videoInfo.name);
                             videoName = videoInfo.name;
+                            liveTime = videoInfo.liveTime;
                         }
                         var lessonRowObj = <Row>
                             <Col span={4} className="add_left">第{lessonJson.lessonNum}课时</Col>
@@ -1142,11 +1152,12 @@ const CreateClassComponents = React.createClass({
                             <Col span={4}>
                                 <Col span={24}>
                                     <DatePicker
+                                        defaultValue={moment(liveTime, dateFormat)}
                                         className="lessonTime"
                                         showTime
                                         format="YYYY-MM-DD HH:mm:ss"
                                         placeholder="Select Time"
-                                        onChange={this.lessonTimeOnChange}
+                                        onChange={this.lessonTimeOnChange.bind(_this,lessonJson.lessonNum)}
                                         onOk={this.lessonTimeOnOk}
                                     />
                                 </Col>

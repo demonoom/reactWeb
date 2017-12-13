@@ -435,6 +435,14 @@ const FlowBuilderComponent = React.createClass({
             var userJson = {"colUid":copyPersonIdArray[i]}
             copyPersonList.push(userJson);
         }
+        //验证基本信息的非空
+        if(isEmpty(this.state.flowName)){
+            message.error("请输入审批名称");
+            return;
+        }else if(isEmpty(approvalJsonArray)){
+            message.error("请选择流程审批人");
+            return;
+        }
         for(var i=0;i<approvalJsonArray.length;i++){
             var approvalJson = approvalJsonArray[i];
             var approvalType = approvalJson.approvalType;
