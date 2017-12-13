@@ -16,7 +16,6 @@ var cardArray = [];
 const AntMulitiClassComponents = React.createClass({
 
     getInitialState() {
-
         return {
             currentPage: 1,
             classFliterValue: "0",
@@ -90,7 +89,6 @@ const AntMulitiClassComponents = React.createClass({
     },
 
     buildEveryCard(row, cardArray) {
-        // debugger
         var _this = this;
         var id = row.id;
         var courseName = row.courseName;
@@ -130,36 +128,35 @@ const AntMulitiClassComponents = React.createClass({
             case "1":
                 isPublishStr = "已发布";
                 //出现删除、详情等按钮
+                // if(studentNum==0){
+                //     optButtons=<div>
+                //         <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,row)}></Button></Col>
+                //         <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
+                //
+                //     </div>;
+                // }
 
-                if(studentNum==0){
-                    optButtons=<div>
-                        <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,row)}></Button></Col>
-                        <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
+                        if(money==0) {
+                            optButtons=<div>
+                                <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,id)}></Button></Col>
+                                <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
 
-                    </div>;
+                                <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
+                                                       disabled={false}  onClick={_this.showConfirmDrwaModal.bind(_this, id)}></Button></Col>
 
-                }else {
-                    if(money==0) {
-                        optButtons=<div>
-                            <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,row)}></Button></Col>
-                            <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
+                            </div>;
+                        } else {
+                            optButtons=<div>
+                                <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,id)}></Button></Col>
+                                <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
 
-                            <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
-                                                   disabled={false}  onClick={_this.showConfirmDrwaModal.bind(_this, id)}></Button></Col>
+                                <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
+                                                       disabled={true}  onClick={_this.showConfirmDrwaModal.bind(_this, id)}></Button></Col>
 
-                        </div>;
-                    } else {
-                        optButtons=<div>
-                            <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,row)}></Button></Col>
-                            <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
+                            </div>;
+                        }
 
-                            <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
-                                                   disabled={true}  onClick={_this.showConfirmDrwaModal.bind(_this, id)}></Button></Col>
 
-                        </div>;
-                    }
-
-                }
                 break;
             case "2":
                 isPublishStr = "未发布";
@@ -167,7 +164,7 @@ const AntMulitiClassComponents = React.createClass({
                     <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情"
                                            onClick={_this.getClassDetail.bind(_this, row)}></Button></Col>
                     <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑"
-                                           onClick={_this.editClass.bind(_this, row)}></Button></Col>
+                                           onClick={_this.editClass.bind(_this, id)}></Button></Col>
                     <Col span={24}><Button icon="check-circle-o" className="exam-particulars_title" title="发布"
                                            onClick={_this.showConfirmPushModal.bind(_this, id)}></Button></Col>
                     <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
@@ -478,10 +475,25 @@ const AntMulitiClassComponents = React.createClass({
      * 编辑课程
      * @param classId
      */
-    editClass(updateClassObj) {
+    editClass(updateClassId) {
         // console.log("editClass classId:"+classId);
-        this.setState({updateClassObj});
-        this.setState({"updateClassModalVisible": true, "isChangeStep": false, stepDirect: ''});
+        var _this = this;
+        var cloudClassRoomUserObj = JSON.parse(sessionStorage.getItem("cloudClassRoomUser"));
+        var param = {
+            "method": 'findCourseByCourseId',
+            "id":updateClassId,
+            "publisher_id" : cloudClassRoomUserObj.colUid
+        };
+        doWebService_CloudClassRoom(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                _this.setState({updateClassObj:response});
+                _this.setState({"updateClassModalVisible": true, "isChangeStep": false, stepDirect: ''});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     showCreateClassModal() {

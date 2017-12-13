@@ -1555,8 +1555,7 @@ const AntNestTabComponents = React.createClass({
                         </Row>
                         <Row className="yinyong3">
                             <Col span={3} className="right_look">附件：</Col>
-                            <Col span={20}><UploadImgComponents fileList={antNest.state.topicImgUrl}
-                                                                callBackParent={antNest.getUploadedImgList}></UploadImgComponents></Col>
+                            <Col span={20}><UploadImgComponents fileList={antNest.state.topicImgUrl} callBackParent={antNest.getUploadedImgList}></UploadImgComponents></Col>
                         </Row>
                     </div>
 

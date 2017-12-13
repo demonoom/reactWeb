@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {Tabs, Button, Radio} from 'antd';
+import {Tabs, Button, Radio,Progress} from 'antd';
 import {Modal} from 'antd';
 import {Input, Select, Row, Col, Checkbox,Slider} from 'antd';
 import {message} from 'antd';
@@ -8,7 +8,9 @@ import TextboxioComponentForMulitiSelect from './textboxioComponents/TextboxioCo
 import TextboxioComponentForCorrect from './textboxioComponents/TextboxioComponentForCorrect';
 import TextboxioComponentForSimpleAnswer from './textboxioComponents/TextboxioComponentForSimpleAnswer';
 import TextboxioComponentForAnswer  from './textboxioComponents/TextboxioComponentForAnswer';
+import SubjectVideoUploadComponents from './SubjectVideoUploadComponents';
 import {doWebService} from '../WebServiceHelper';
+import {isEmpty} from "../utils/Const";
 const RadioGroup = Radio.Group;
 const Option = Select.Option;
 const CheckboxGroup = Checkbox.Group;
@@ -16,6 +18,7 @@ const TabPane = Tabs.TabPane;
 
 var mulitiAnswer = new Array('A');
 var subjectUpload;
+var uploadFileList = [];
 /**
  * 题目上传组件
  */
@@ -51,7 +54,9 @@ const SubjectUploadTabComponents = React.createClass({
                 <Radio key="D" value="D">D</Radio>
             ],
             sliderValue:4,
-            singleSliderValue:4
+            singleSliderValue:4,
+            subjectVideoModalVisible:false,
+            uploadPercent:0,
         };
     },
     /**
@@ -571,6 +576,116 @@ const SubjectUploadTabComponents = React.createClass({
     },
 
     /**
+     * 插入音频
+     */
+    insertVideo(attachment){
+        console.log("insertVideo");
+        // var attachment = "http://60.205.86.217/upload5/2017-12-04/19/dd68da27-dd1c-4ecd-8677-50d2af9cfc5a.mp3";
+        var newContent ="<span class='adiuo_p_play'><video  controls='controls' width='200' height='30' src='"+attachment+"'></video><span class='adiuo_hidden'></span></span>";
+        switch(this.state.currentSubjectType){
+            case "single":
+                mytextareaSingleEditor.content.insertHtmlAtCursor(newContent);
+                break;
+            case "mulitiSelect":
+                mytextareaMulitiEditor.content.insertHtmlAtCursor(newContent);
+                break;
+            case "correct":
+                mytextareaCorrectEditor.content.insertHtmlAtCursor(newContent);
+                break;
+            case "simpleAnswer":
+                mytextareaSimpleAnswerEditor.content.insertHtmlAtCursor(newContent);
+                break;
+        }
+    },
+
+    showVideoUploadModal(subjectType){
+        if(isEmpty(this.refs.subjectVideoUpload)==false){
+            this.refs.subjectVideoUpload.initFileUploadPage();
+        }
+        this.setState({subjectVideoModalVisible:true,"currentSubjectType":subjectType});
+    },
+
+    /**
+     * 聊天语音播放的回调
+     */
+    audioPlay(id, direction) {
+        document.getElementById(id).play();
+        var timer = setInterval(function () {
+            //播放开始，替换类名
+            document.getElementById(id + '_audio').className = 'audio' + direction + '_run';
+            if (document.getElementById(id).ended) {
+                //播放结束，替换类名
+                document.getElementById(id + '_audio').className = 'audio' + direction;
+                window.clearInterval(timer);
+            }
+        }, 10)
+    },
+
+    handleFileSubmit(fileList){
+        if(fileList==null || fileList.length==0){
+            uploadFileList.splice(0,uploadFileList.length);
+        }
+        for(var i=0;i<fileList.length;i++){
+            var fileJson = fileList[i];
+            var fileObj = fileJson.fileObj;
+            // uploadFileList.push(fileObj[0]);
+            uploadFileList.push(fileObj);
+        }
+    },
+
+    subjectVideoModalHandleCancel(){
+        this.setState({"subjectVideoModalVisible": false});
+    },
+
+    //点击保存按钮，向服务器保存选定的文件，并将文件的路径返回
+    uploadFile() {
+        var _this = this;
+        if (uploadFileList.length == 0) {
+            message.warning("请选择上传的文件,谢谢！");
+        } else {
+            var formData = new FormData();
+            for (var i = 0; i < uploadFileList.length; i++) {
+                formData.append("file" + i, uploadFileList[i]);
+                formData.append("name" + i, uploadFileList[i].name);
+            }
+            $.ajax({
+                type: "POST",
+                url: "http://101.201.45.125:8890/Excoord_Upload_Server/file/upload",
+                enctype: 'multipart/form-data',
+                data: formData,
+                // 告诉jQuery不要去处理发送的数据
+                processData: false,
+                // 告诉jQuery不要去设置Content-Type请求头
+                contentType: false,
+                xhr: function () {        //这是关键  获取原生的xhr对象  做以前做的所有事情
+                    var xhr = jQuery.ajaxSettings.xhr();
+                    xhr.upload.onload = function () {
+                        _this.setState({progressState: 'none'});
+                    }
+                    xhr.upload.onprogress = function (ev) {
+                        if (ev.lengthComputable) {
+                            var percent = 100 * ev.loaded / ev.total;
+                            _this.setState({uploadPercent: Math.round(percent), progressState: 'block'});
+                        }
+                    }
+                    return xhr;
+                },
+                success: function (responseStr) {
+                    if (responseStr != "") {
+                        var fileUrl = responseStr;
+                        _this.insertVideo(fileUrl);
+                        _this.setState({"subjectVideoModalVisible": false});
+                    }
+                },
+                error: function (responseStr) {
+                    _this.setState({subjectVideoModalVisible: false});
+                }
+            });
+
+        }
+    },
+
+    /**
      * 页面元素的渲染操作
      * @returns {XML}
      */
@@ -674,6 +789,9 @@ const SubjectUploadTabComponents = React.createClass({
                 2、文档中的自定义形状或剪贴画，请先使用截图工具截图替换后再进行粘贴上传；<br/>
                 3、文档中的数学公式请单独粘贴上传</div>;
 
+        //根据该状态值，来决定上传进度条是否显示
+        var progressState = this.state.progressState;
+
         return (
             <div className="toobar right_ri ">
                 <Button type="primary" icon="plus-circle" onClick={this.showModal} title="上传题目" className="add_study add_study-b">添加题目</Button>
@@ -706,6 +824,7 @@ const SubjectUploadTabComponents = React.createClass({
                                 </Col>
                                 <Col span={20}>
                                     <TextboxioComponentForSingle />
+                                    {/*<Button className="row-t-f" onClick={this.showVideoUploadModal.bind(this,'single')}>插入音频</Button>*/}
                                 </Col>
                             </Row>
                             <Row>
@@ -755,6 +874,7 @@ const SubjectUploadTabComponents = React.createClass({
                                     </Col>
                                     <Col span={20}>
                                         <TextboxioComponentForMulitiSelect/>
+                                        {/*<Button onClick={this.showVideoUploadModal.bind(this,'mulitiSelect')}>插入音频</Button>*/}
                                     </Col>
                                 </Row>
                                 <Row>
@@ -806,6 +926,7 @@ const SubjectUploadTabComponents = React.createClass({
                                     </Col>
                                     <Col span={20}>
                                         <TextboxioComponentForCorrect/>
+                                        {/*<Button onClick={this.showVideoUploadModal.bind(this,'correct')}>插入音频</Button>*/}
                                     </Col>
                                 </Row>
                                 <Row>
@@ -847,6 +968,7 @@ const SubjectUploadTabComponents = React.createClass({
                                     </Col>
                                     <Col span={20}>
                                         <TextboxioComponentForSimpleAnswer/>
+                                        {/*<Button onClick={this.showVideoUploadModal.bind(this,'simpleAnswer')}>插入音频</Button>*/}
                                     </Col>
                                 </Row>
 
@@ -877,6 +999,43 @@ const SubjectUploadTabComponents = React.createClass({
                         </TabPane>
                     </Tabs>
                 </Modal>
+
+                <Modal
+                    visible={this.state.subjectVideoModalVisible}
+                    title="上传文件"
+                    className="modol_width"
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    onCancel={this.subjectVideoModalHandleCancel}
+                    transitionName=""  //禁用modal的动画效果
+                    footer={[
+                        <div>
+                            <Button type="primary" htmlType="submit" className="login-form-button"
+                                    onClick={this.uploadFile}>
+                                发送
+                            </Button>
+                            <Button type="ghost" htmlType="reset" className="login-form-button"
+                                    onClick={this.subjectVideoModalHandleCancel}>
+                                取消
+                            </Button>
+                        </div>
+                    ]}
+                >
+                    <Row>
+                        <Col span={4}>上传文件：</Col>
+                        <Col span={20}>
+                            <div>
+                                <SubjectVideoUploadComponents ref="subjectVideoUpload"
+                                                           fatherState={this.state.subjectVideoModalVisible}
+                                                           callBackParent={this.handleFileSubmit}/>
+                            </div>
+                            <div style={{display: progressState}}>
+                                <Progress percent={this.state.uploadPercent} width={80} strokeWidth={4}/>
+                            </div>
+                        </Col>
+
+                    </Row>
+                </Modal>
+
             </div>
         );
     },

@@ -23,7 +23,7 @@ const WeiClassUploadComponents = React.createClass({
         // console.log(this.props.upLoadNum);
         console.log(videoName);
         console.log('~~~~~~');
-        this.setState({upLoadNum})
+        this.setState({upLoadNum});
         this.setState({videoName})
     },
 

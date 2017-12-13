@@ -546,9 +546,13 @@ const CreateClassComponents = React.createClass({
      * @param dateString
      * @param Event
      */
-    lessonTimeOnChange(value, dateString, Event) {
+    lessonTimeOnChange(value, dateString, e) {
         console.log('Selected Time: ', value);
         console.log('Formatted Selected Time: ', dateString);
+        this.setState({
+            value:value,
+        })
+
     },
 
     lessonTimeOnOk(value) {
@@ -701,8 +705,10 @@ const CreateClassComponents = React.createClass({
         // 是否发布　１已发布　２未发布
         if (e.target.checked) {
             courseInfoJson.isPublish = 1;
+
         } else {
             courseInfoJson.isPublish = 2;
+
         }
     },
 
@@ -874,7 +880,6 @@ const CreateClassComponents = React.createClass({
      * @param e
      */
     weiClassUpload(e, i) {
-        console.log(i);
         console.log('上传完成的回调');
         courseInfoJson.videos[i].url = e.response;
         courseInfoJson.videos[i].remark = e.name;
@@ -1120,7 +1125,7 @@ const CreateClassComponents = React.createClass({
                     </Row>
                     <Row>
                         <Col span={24} className="knowledge_ri">
-                            <Checkbox onChange={this.publishClassAtNow}>立即发布</Checkbox>
+                            <Checkbox  onChange={this.publishClassAtNow}>立即发布</Checkbox>
                         </Col>
                     </Row>
                 </div>;
@@ -1151,6 +1156,7 @@ const CreateClassComponents = React.createClass({
                                         placeholder="Select Time"
                                         onChange={this.lessonTimeOnChange}
                                         onOk={this.lessonTimeOnOk}
+                                        // value={this.state.value}
                                     />
                                 </Col>
                             </Col>
@@ -1190,7 +1196,7 @@ const CreateClassComponents = React.createClass({
                     </Row>
                     <Row>
                         <Col span={24} className="knowledge_ri">
-                            <Checkbox onChange={this.publishClassAtNow}>立即发布</Checkbox>
+                            <Checkbox  onChange={this.publishClassAtNow}>立即发布</Checkbox>
                         </Col>
                     </Row>
                 </div>;

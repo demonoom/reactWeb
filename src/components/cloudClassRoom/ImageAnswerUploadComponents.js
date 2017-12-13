@@ -39,14 +39,14 @@ const ImageAnswerUploadComponents = React.createClass({
                 updateClassObj.forEach(function (updateClassObj, i) {
                     var videoStatus = updateClassObj.videoStatus;
                     if (videoStatus == 2 || videoStatus == 3) {
-                        _this.setState({imgIsUpdateDisable: true,imagesupdateDisable:true});
+                        _this.setState({imgIsUpdateDisable: true});
                         // maskClosable="false"
                         // maskClosable="true"
 
                     }
                 });
             }else {
-                _this.setState({imgIsUpdateDisable: false,imagesupdateDisable:false});
+                _this.setState({imgIsUpdateDisable: false});
             }
         }
         var defaultFileList = [];
@@ -121,7 +121,7 @@ const ImageAnswerUploadComponents = React.createClass({
                         <Icon type="upload"/> 上传
                     </Button>
                 </Upload>
-                <Modal closable={this.state.imagesupdateDisable} visible={this.state.previewVisible} footer={null}
+                <Modal maskClosable={false} visible={this.state.previewVisible} footer={null}
                        onCancel={this.handleCancel}>
                     <img alt="example" style={{width: '100%'}} src={this.state.previewImage}/>
                 </Modal>
