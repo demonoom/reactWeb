@@ -15,15 +15,15 @@ export const FLOW_OPTSOURCE_USER = "0";
 export const FLOW_OPTSOURCE_MANAGER = "1";
 export const TO_TYPE = 4;
 //部门主管审批时,选定的部门主管级别为直接指定具体的某一级别
-export const FLOW_APPROVAL_ONE_LEVEL=0;
+export const FLOW_APPROVAL_ONE_LEVEL = 0;
 //部门主管审批时,选定的部门主管级别为从当前主管开始直到选定的某一级别
-export const FLOW_APPROVAL_UNTIL_LEVEL=1;
+export const FLOW_APPROVAL_UNTIL_LEVEL = 1;
 //本环节的审批方式(依次审批)
-export const FLOW_CURRENT_APPROVAL_TYPE_NEXT="next";
+export const FLOW_CURRENT_APPROVAL_TYPE_NEXT = "next";
 //本环节的审批方式(会签)
-export const FLOW_CURRENT_APPROVAL_TYPE_ALL="all";
+export const FLOW_CURRENT_APPROVAL_TYPE_ALL = "all";
 //本环节的审批方式(或签)
-export const FLOW_CURRENT_APPROVAL_TYPE_ONE="one";
+export const FLOW_CURRENT_APPROVAL_TYPE_ONE = "one";
 export const SMALL_IMG = 'size=100x100';
 export const MIDDLE_IMG = 'size=300x300';
 export const LARGE_IMG = 'size=500x500';
@@ -93,6 +93,23 @@ export function isEmpty(content) {
         return true;
     } else {
         return false;
+    }
+}
+
+/**
+ * 网址验证
+ * @param urlString
+ * @returns {boolean}
+ */
+export function checkUrl(urlString) {
+    if (urlString != "") {
+        var strRegex = "(http://|ftp://|https://|www){0,1}[^\u4e00-\u9fa5\\s]*?\\.(com|net|cn|me|tw|fr|mp3|mp4|apk)[^\u4e00-\u9fa5\\s]*"
+        var reg = new RegExp(strRegex);
+        if (!reg.test(urlString)) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }
 

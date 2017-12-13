@@ -19,7 +19,7 @@ import {
 } from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import EmotionInputComponents from './EmotionInputComponents';
-import {getImgName, getLocalTime, getPageSize, isEmpty, MIDDLE_IMG, SMALL_IMG} from '../../utils/Const';
+import {getImgName, getLocalTime, getPageSize, isEmpty, MIDDLE_IMG, SMALL_IMG, checkUrl} from '../../utils/Const';
 import {phone} from '../../utils/phone';
 import {formatHM, formatMD, isToday, showLargeImg} from '../../utils/utils';
 import GroupFileUploadComponents from './GroupFileUploadComponents';
@@ -171,7 +171,17 @@ const AntGroupTabComponents = React.createClass({
             concatOptions: [],
             structureOptions: [],   //组织架构
             groupOptions: [],
-            RMsgActiveKey: ['2']
+            RMsgActiveKey: ['2'],
+            msgMenu: (
+                <Menu>
+                    <Menu.Item>
+                        <a target="_blank" className="ellips_t" onClick={this.turnToDing}>叮一下</a>
+                    </Menu.Item>
+                    <Menu.Item>
+                        <a target="_blank" className="ellips_t" onClick={this.relayMsg}>转发</a>
+                    </Menu.Item>
+                </Menu>
+            ),
         };
 
     },
@@ -490,6 +500,35 @@ const AntGroupTabComponents = React.createClass({
     },
 
     getMesUUid(uuid, e) {
+        var nowTime = (new Date()).valueOf();
+        var withdrawMsg = (
+            <Menu>
+                <Menu.Item>
+                    <a target="_blank" className="ellips_t" onClick={this.withdrawMsg}>撤回</a>
+                </Menu.Item>
+                <Menu.Item>
+                    <a target="_blank" className="ellips_t" onClick={this.turnToDing}>叮一下</a>
+                </Menu.Item>
+                <Menu.Item>
+                    <a target="_blank" className="ellips_t" onClick={this.relayMsg}>转发</a>
+                </Menu.Item>
+            </Menu>
+        );
+        var withdrawMsgCannot = (
+            <Menu>
+                <Menu.Item>
+                    <a target="_blank" className="ellips_t" onClick={this.turnToDing}>叮一下</a>
+                </Menu.Item>
+                <Menu.Item>
+                    <a target="_blank" className="ellips_t" onClick={this.relayMsg}>转发</a>
+                </Menu.Item>
+            </Menu>
+        );
+        if ((nowTime - e.mesTimeForDetil) < 120000) {
+            this.setState({msgMenu: withdrawMsg});
+        } else {
+            this.setState({msgMenu: withdrawMsgCannot});
+        }
         this.setState({mesUuid: uuid});
         this.setState({megObj: e});
     },
@@ -2962,7 +3001,7 @@ const AntGroupTabComponents = React.createClass({
                                                          style={{width: '100px', height: '100px'}}/>
                                                     <span><i className="borderballoon_dingcorner_le_no"></i></span>
                                                     <span className="talk_bubble_ellipsis">
-                                                        <Dropdown overlay={msgMenu} trigger={['click']}
+                                                        <Dropdown overlay={this.state.msgMenu} trigger={['click']}
                                                                   placement="topCenter"
                                                                   onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                             <Icon className="icon_ellipsis" type="ellipsis"/>
@@ -3018,7 +3057,7 @@ const AntGroupTabComponents = React.createClass({
                                                         </div>
                                                     </span>
                                                     <span className="talk_bubble_ellipsis">
-                                                        <Dropdown overlay={msgMenu} trigger={['click']}
+                                                        <Dropdown overlay={this.state.msgMenu} trigger={['click']}
                                                                   placement="topCenter"
                                                                   onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                             <Icon className="icon_ellipsis" type="ellipsis"/>
@@ -3056,29 +3095,61 @@ const AntGroupTabComponents = React.createClass({
                                             if (e.showType == 1) {
                                                 messageTag = <li className="reminder"><span>{e.content}</span></li>;
                                             } else {
-                                                messageTag = <li className="right" style={{'textAlign': 'right'}}>
-                                                    <div className="u-name">
-                                                        <span>{fromUser}</span>
-                                                        <span className="cart_time">{mesTime}</span>
-                                                    </div>
-                                                    <div className="talk-cont">
-                                                        <span className="name">{userPhoneIcon}</span>
-                                                        <div className="talk_bubble_box">
+                                                // checkUrl
+                                                if (checkUrl(e.content) == false) {
+                                                    messageTag = <li className="right" style={{'textAlign': 'right'}}>
+                                                        <div className="u-name">
+                                                            <span>{fromUser}</span>
+                                                            <span className="cart_time">{mesTime}</span>
+                                                        </div>
+                                                        <div className="talk-cont">
+                                                            <span className="name">{userPhoneIcon}</span>
+                                                            <div className="talk_bubble_box">
                                                             <span className="borderballoon">{e.content}
                                                                 <i className="borderballoon_dingcorner_le_no"></i>
                                                             </span>
-                                                            <span className="talk_bubble_ellipsis">
-                                                                <Dropdown overlay={msgMenu} trigger={['click']}
+                                                                <span className="talk_bubble_ellipsis">
+                                                                <Dropdown overlay={this.state.msgMenu}
+                                                                          trigger={['click']}
                                                                           placement="topCenter"
                                                                           onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                                     <Icon className="icon_ellipsis" type="ellipsis"/>
                                                                 </Dropdown>
                                                             </span>
-                                                            <span className="talk_bubble_read"
-                                                                  onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
+                                                                <span className="talk_bubble_read"
+                                                                      onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </li>;
+                                                    </li>;
+                                                } else {
+                                                    //内容为链接
+                                                    messageTag = <li className="right" style={{'textAlign': 'right'}}>
+                                                        <div className="u-name">
+                                                            <span>{fromUser}</span>
+                                                            <span className="cart_time">{mesTime}</span>
+                                                        </div>
+                                                        <div className="talk-cont">
+                                                            <span className="name">{userPhoneIcon}</span>
+                                                            <div className="talk_bubble_box">
+                                                            <span className="borderballoon">
+                                                                <a className="noom_link" target="_Blank"
+                                                                   href={e.content}>{e.content}</a>
+                                                                <i className="borderballoon_dingcorner_le_no"></i>
+                                                            </span>
+                                                                <span className="talk_bubble_ellipsis">
+                                                                <Dropdown overlay={this.state.msgMenu}
+                                                                          trigger={['click']}
+                                                                          placement="topCenter"
+                                                                          onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                                    <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                                </Dropdown>
+                                                            </span>
+                                                                <span className="talk_bubble_read"
+                                                                      onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
+                                                            </div>
+                                                        </div>
+                                                    </li>;
+                                                }
                                             }
                                         }
                                     }
@@ -3205,18 +3276,20 @@ const AntGroupTabComponents = React.createClass({
                                             if (e.fromUser.colUid == 120024 || e.showType == 1) {
                                                 messageTag = <li className="reminder"><span>{e.content}</span></li>;
                                             } else {
-                                                messageTag = <li style={{'textAlign': 'left'}}>
-                                                    <div className="u-name">
-                                                        <span>{fromUser}</span>
-                                                        <span className="cart_time">{mesTime}</span>
-                                                    </div>
-                                                    <div className="talk-cont">
-                                                        <span className="name">{userPhoneIcon}</span>
-                                                        <span className="borderballoon_le">
+                                                // checkUrl
+                                                if (checkUrl(e.content) == false) {
+                                                    messageTag = <li style={{'textAlign': 'left'}}>
+                                                        <div className="u-name">
+                                                            <span>{fromUser}</span>
+                                                            <span className="cart_time">{mesTime}</span>
+                                                        </div>
+                                                        <div className="talk-cont">
+                                                            <span className="name">{userPhoneIcon}</span>
+                                                            <span className="borderballoon_le">
                                                     <span className="bot"></span>
                                                     <span className="top"></span>
-                                                            {e.content}
-                                                            <i className="borderballoon_dingcorner_ri_no"></i>
+                                                                {e.content}
+                                                                <i className="borderballoon_dingcorner_ri_no"></i>
                                                         <span className="talk_bubble_ellipsis">
                                                             <Dropdown overlay={msgMenuLeft} trigger={['click']}
                                                                       placement="topCenter"
@@ -3225,7 +3298,31 @@ const AntGroupTabComponents = React.createClass({
                                                             </Dropdown>
                                                         </span>
                                                     </span></div>
-                                                </li>;
+                                                    </li>;
+                                                } else {
+                                                    messageTag = <li style={{'textAlign': 'left'}}>
+                                                        <div className="u-name">
+                                                            <span>{fromUser}</span>
+                                                            <span className="cart_time">{mesTime}</span>
+                                                        </div>
+                                                        <div className="talk-cont">
+                                                            <span className="name">{userPhoneIcon}</span>
+                                                            <span className="borderballoon_le">
+                                                    <span className="bot"></span>
+                                                    <span className="top"></span>
+                                                                <a className="noom_link_left" target="_Blank"
+                                                                   href={e.content}>{e.content}</a>
+                                                                <i className="borderballoon_dingcorner_ri_no"></i>
+                                                        <span className="talk_bubble_ellipsis">
+                                                            <Dropdown overlay={msgMenuLeft} trigger={['click']}
+                                                                      placement="topCenter"
+                                                                      onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                                <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                            </Dropdown>
+                                                        </span>
+                                                    </span></div>
+                                                    </li>;
+                                                }
                                             }
                                         }
                                     }
@@ -3246,7 +3343,7 @@ const AntGroupTabComponents = React.createClass({
                                                     <i className="borderballoon_dingcorner_le_no"></i>
                                                 </span>
                                                 <span className="talk_bubble_ellipsis">
-                                                    <Dropdown overlay={msgMenu} trigger={['click']}
+                                                    <Dropdown overlay={this.state.msgMenu} trigger={['click']}
                                                               placement="topCenter"
                                                               onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                         <Icon className="icon_ellipsis" type="ellipsis"/>
@@ -3294,7 +3391,7 @@ const AntGroupTabComponents = React.createClass({
                                                     <i className="borderballoon_dingcorner_le_no"></i>
                                                 </span>
                                                 <span className="talk_bubble_ellipsis">
-                                                    <Dropdown overlay={msgMenu} trigger={['click']}
+                                                    <Dropdown overlay={this.state.msgMenu} trigger={['click']}
                                                               placement="topCenter"
                                                               onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                         <Icon className="icon_ellipsis" type="ellipsis"/>
@@ -3356,7 +3453,7 @@ const AntGroupTabComponents = React.createClass({
                                                     <i className="borderballoon_dingcorner_ri_no"></i>
                                                 </span>
                                                 <span className="talk_bubble_ellipsis">
-                                                    <Dropdown overlay={msgMenu} trigger={['click']}
+                                                    <Dropdown overlay={this.state.msgMenu} trigger={['click']}
                                                               placement="topCenter"
                                                               onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                         <Icon className="icon_ellipsis" type="ellipsis"/>
@@ -3369,13 +3466,38 @@ const AntGroupTabComponents = React.createClass({
                                     </li>;
                                 } else {
                                     //我收到的
-                                    messageTag = <li style={{'textAlign': 'left'}}>
-                                        <div className="u-name"><span>{fromUser}</span><span
-                                            className="cart_time">{mesTime}</span></div>
-                                        <div className="talk-cont">
-                                            <span className="name">{userPhoneIcon}</span>
-                                            <span className="borderballoon_le noom_cursor"
-                                                  onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
+                                    if (e.fromUser.colUtype == 'SGZH') {
+                                        //蚂蚁君卡片
+                                        messageTag =
+                                            <li style={{'textAlign': 'left'}}>
+                                                <div className="u-name">
+                                                    <span>{fromUser}</span>
+                                                    <span className="cart_time">{mesTime}</span>
+                                                </div>
+                                                <div className="talk-cont">
+                                                    <span className="name">{userPhoneIcon}</span>
+                                                    <span className="borderballoon_le noom_cursor noom_MYZcard"
+                                                          onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
+                                                        <span
+                                                            className="span_link file_link_img_t noom_MYZcontent">{e.messageReturnJson.content}</span>
+                                                    </span>
+                                                    <span className="talk_bubble_ellipsis noom_repMsg">
+                                                        <Dropdown overlay={msgMenuLeft} trigger={['click']}
+                                                                  placement="topCenter"
+                                                                  onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                            <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                        </Dropdown>
+                                                    </span>
+                                                </div>
+                                            </li>
+                                    } else {
+                                        messageTag = <li style={{'textAlign': 'left'}}>
+                                            <div className="u-name"><span>{fromUser}</span><span
+                                                className="cart_time">{mesTime}</span></div>
+                                            <div className="talk-cont">
+                                                <span className="name">{userPhoneIcon}</span>
+                                                <span className="borderballoon_le noom_cursor"
+                                                      onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
                                                 <span className="bot"></span>
                                                 <span className="top"></span>
                                                 <img className="upexam_float span_link_img" style={{width: 40}}
@@ -3385,15 +3507,16 @@ const AntGroupTabComponents = React.createClass({
                                                     className="span_link file_link_img_t">{e.messageReturnJson.content}</span>
                                                 <i className="borderballoon_dingcorner_ri_no"></i>
                                         </span>
-                                            <span className="talk_bubble_ellipsis noom_repMsg">
+                                                <span className="talk_bubble_ellipsis noom_repMsg">
                                                     <Dropdown overlay={msgMenuLeft} trigger={['click']}
                                                               placement="topCenter"
                                                               onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                         <Icon className="icon_ellipsis" type="ellipsis"/>
                                                     </Dropdown>
                                                 </span>
-                                        </div>
-                                    </li>;
+                                            </div>
+                                        </li>;
+                                    }
                                 }
                             } else if (e.messageReturnJson.messageType == "bigImgTag") {
                                 //图片
@@ -3419,7 +3542,7 @@ const AntGroupTabComponents = React.createClass({
                                                     <i className="borderballoon_dingcorner_le_no"></i>
                                                 </span>
                                                 <span className="talk_bubble_ellipsis">
-                                                    <Dropdown overlay={msgMenu} trigger={['click']}
+                                                    <Dropdown overlay={this.state.msgMenu} trigger={['click']}
                                                               placement="topCenter"
                                                               onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                         <Icon className="icon_ellipsis" type="ellipsis"/>
@@ -3476,7 +3599,7 @@ const AntGroupTabComponents = React.createClass({
                                                     <i className="borderballoon_dingcorner_ri_no"></i>
                                                 </span>
                                                 <span className="talk_bubble_ellipsis">
-                                                    <Dropdown overlay={msgMenu} trigger={['click']}
+                                                    <Dropdown overlay={this.state.msgMenu} trigger={['click']}
                                                               placement="topCenter"
                                                               onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                         <Icon className="icon_ellipsis" type="ellipsis"/>
@@ -3560,7 +3683,7 @@ const AntGroupTabComponents = React.createClass({
                                                     </div>
                                                 </span>
                                                 <span className="talk_bubble_ellipsis">
-                                                    <Dropdown overlay={msgMenu} trigger={['click']}
+                                                    <Dropdown overlay={this.state.msgMenu} trigger={['click']}
                                                               placement="topCenter"
                                                               onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                         <Icon className="icon_ellipsis" type="ellipsis"/>
@@ -3632,7 +3755,7 @@ const AntGroupTabComponents = React.createClass({
                                         <i className="borderballoon_dingcorner_le_no"></i>
                                     </span>
                                     <span className="talk_bubble_ellipsis">
-                                        <Dropdown overlay={msgMenu} trigger={['click']} placement="topCenter"
+                                        <Dropdown overlay={this.state.msgMenu} trigger={['click']} placement="topCenter"
                                                   onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                             <Icon className="icon_ellipsis" type="ellipsis"/>
                                         </Dropdown>
@@ -3664,8 +3787,12 @@ const AntGroupTabComponents = React.createClass({
                             {sendBtn}
                         </Col>
                     </Row>;
+                    $('#groupTalk').removeClass('noom_MYJ');
+                } else {
+                    $('#groupTalk').addClass('noom_MYJ');
                 }
             } else {
+                $('#groupTalk').removeClass('noom_MYJ');
                 welcomeTitle = antGroup.state.currentGroupObj.name;
                 sendBtn = <Button value="groupSend" onClick={antGroup.sendMessage}>
                     <div>发送<p className="password_ts">(Enter)</p></div>
