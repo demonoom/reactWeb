@@ -836,11 +836,13 @@ ul.cont_t2 {
     padding: 6px 12px;
     min-width: 72px;
 }
-.footer_user_introduction .ant-modal-footer .ant-input-wrapper textarea{
+
+.footer_user_introduction .ant-modal-footer .ant-input-wrapper textarea {
     max-width: 90%;
     height: auto;
 
 }
+
 .ant-form-item-control button {
     margin: 0 10px;
     padding: 6px 20px;
@@ -1712,7 +1714,7 @@ p.user_cont {
 
 }
 
-p.user_introduction{
+p.user_introduction {
     padding: 8px 0;
     width: 100%;
     float: left
@@ -1741,7 +1743,6 @@ p.user_introduction span.name, .user_til_name_int {
     float: left;
     padding: 0;
 }
-
 
 .rc-upload {
     top: 0 !important;
@@ -3179,13 +3180,17 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 }
 
 .group_talk ul li {
-    padding: 10px 0;
+    margin: 10px 0;
     float: left;
     width: 100%;
 }
 
+.group_talk ul li:hover .icon_ellipsis {
+    visibility: visible;
+}
+
 .group_talk ul li.right {
-    padding: 10px 0;
+    margin: 10px 0;
     float: right;
     width: 100%;
 }
@@ -3207,8 +3212,21 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     font-size: 12px
 }
 
+.cart_time {
+    color: #bdbebf !important;
+    margin: 0 6px;
+    transform: scale(0.9);
+    padding: 0 !important;
+    visibility: hidden;
+}
+
+.group_talk ul li:hover .cart_time {
+    visibility: visible;
+}
+
 .group_talk ul li.right div.u-name span, .public .sayLine.right p.u-name span {
     padding-right: 50px;
+    padding-left: 0 !important;
     color: #8E97A6;
     font-size: 12px
 }
@@ -3216,6 +3234,15 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 .group_talk ul li div.talk-cont, .public .sayLine.left div.saycont {
     display: flex;
     flex-direction: row;
+    position: relative;
+}
+
+.borderballoon_le .talk_bubble_ellipsis {
+    position: absolute;
+    width: 130px;
+    text-align: right;
+    right: -24px;
+    bottom: 8px;
 }
 
 .group_talk ul li.right div.talk-cont, .public .sayLine.right div.saycont {
@@ -3512,13 +3539,13 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     float: left;
     width: calc(100% - 155px);
 }
-.black_person_introduction{
+
+.black_person_introduction {
     color: #666;
     padding: 0;
     float: left;
     width: calc(100% - 235px);
 }
-
 
 .person_cor {
     border-radius: 50%;
@@ -3689,7 +3716,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     width: 400px;
 }
 
-.borderballoon{
+.borderballoon {
     background: #40baff;
     border-radius: 4px;
     position: relative;
@@ -3706,6 +3733,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     word-break: break-word;
     white-space: pre-wrap;
 }
+
 .public .sayLine.right div.saycont .sayCon {
     background: #40baff;
     border-radius: 4px;
@@ -5283,9 +5311,11 @@ div.btn1 {
     white-space: nowrap;
     position: absolute;
 }
-.cloud_box .ant-table-fixed-left .ant-table-header{
+
+.cloud_box .ant-table-fixed-left .ant-table-header {
     height: 47px;
 }
+
 .cloud_text {
     position: relative;
     top: 0px;
@@ -6751,6 +6781,58 @@ select.course_n:hover {
 
 }
 
+.read_panel {
+    width: 380px;
+    height: 100%;
+    background-color: #f2f2f2;
+    padding: 42px 0 0 0;
+    position: absolute;
+    bottom: 0;
+    right: -800px;
+    box-shadow: 16px 17px 10px 16px #929292;
+    -moz-box-shadow: 16px 17px 10px 16px #929292;
+    -webkit-box-shadow: 16px 17px 10px 16px #929292;
+
+}
+
+.read_panel .ding_top {
+    height: 42px;
+
+}
+
+.read_panel .ding_inner .ant-card:last-child {
+    margin: 0;
+}
+
+.read_panel .person_group {
+    margin-top: 50px;
+}
+
+.read_panel .ding_inner .ant-card {
+    width: 100%;
+}
+
+.read_panel .ant-tabs-bar {
+    position: fixed;
+    background: #fff;
+    height: 50px;
+    z-index: 2;
+    z-index: 2;
+    width: 98%;
+}
+
+.read_panel .ant-tabs-nav .ant-tabs-tab {
+    font-size: 14px;
+}
+
+.read_panel .ding_inner .ant-card-body {
+    padding: 0
+}
+
+.read_panel .ant-table-tbody > tr > td.left-12 {
+    width: 60px;
+}
+
 .ding_enter {
     animation-name: moveTest;
     animation-duration: 0.5s;
@@ -7347,19 +7429,21 @@ select.course_n:hover {
     font-size: 12px;
     margin-top: 5px;
 }
-.send_img_cont{
+
+.send_img_cont {
     max-width: 230px;
     min-height: 21px;
     line-height: 0;
     position: relative;
     display: block;
 }
+
 .borderballoon img.send_img, .borderballoon_le img.send_img {
     max-width: 230px;
     cursor: zoom-in;
     cursor: -webkit-zoom-in;
     border-radius: 4px;
-    height:auto !important;
+    height: auto !important;
     padding: 5px;
 }
 
@@ -7425,7 +7509,7 @@ select.course_n:hover {
     width: 24px;
     height: 17px;
     display: inline-block;
-    background: url(../components/images/audio_left.png) no-repeat;
+    background: url(http://60.205.111.227/upload2/common/img/audio_left.png) no-repeat;
     background-position: -48px 0;
     position: relative;
     top: 4px;
@@ -7448,7 +7532,7 @@ select.course_n:hover {
     animation: audio_left_1 1s infinite;
     position: relative;
     top: 4px;
-    background: url(../components/images/audio_left.png) no-repeat;
+    background: url(http://60.205.111.227/upload2/common/img/audio_left.png) no-repeat;
 
 }
 
@@ -7741,21 +7825,25 @@ select.course_n:hover {
 }
 
 .ant-calendar-range-bottom, .ant-calendar-range .ant-calendar-input-wrap {
-    display: none;
+    /*display: none;*/
 }
-.cloud_box  .ant-table-fixed-left .ant-table-header {
+
+.cloud_box .ant-table-fixed-left .ant-table-header {
     height: 47px;
 }
-.crop_img{
+
+.crop_img {
     width: 440px !important;
     min-height: 300px !important;
     height: auto;
     overflow: hidden;
 }
-.crop_img .ant-modal-header{
+
+.crop_img .ant-modal-header {
     text-align: center;
 }
-.crop_img .ant-modal-body{
+
+.crop_img .ant-modal-body {
     background: #f8f8f8;
     min-height: 185px;
     display: flex;
@@ -7770,24 +7858,28 @@ select.course_n:hover {
     -webkit-box-align: center;
     -webkit-align-items: center;
     -ms-flex-align: center;
-    -webkit-box-flex:1;
+    -webkit-box-flex: 1;
     -webkit-flex: 1;
     -ms-flex: 1;
     flex: 1;
 }
-.crop_img_i{
+
+.crop_img_i {
     margin: 12px 0;
     text-align: center;
 
 }
-.crop_img_i img{
+
+.crop_img_i img {
     max-width: 100%;
     max-height: 200px;
 }
-.group_talk ul li.right div.talk-cont:hover .icon_ellipsis{
-    display: block;
+
+.group_talk ul li.right div.talk-cont:hover .icon_ellipsis {
+    visibility: visible
 }
-.talk_bubble_box{
+
+.talk_bubble_box {
     flex: 0 1 auto;
     display: flex;
     flex-direction: row;
@@ -7798,14 +7890,16 @@ select.course_n:hover {
     max-width: -webkit-calc(100% - 250px);
     position: relative;
 }
-.talk_bubble_ellipsis{
+
+.talk_bubble_box .talk_bubble_ellipsis {
     position: absolute;
     width: 130px;
     text-align: right;
     left: 0;
     bottom: 18px;
 }
-.talk_bubble_read{
+
+.talk_bubble_read {
     position: absolute;
     width: 130px;
     text-align: right;
@@ -7815,7 +7909,8 @@ select.course_n:hover {
     color: #858e99;
     cursor: default;
 }
-.icon_ellipsis{
+
+.icon_ellipsis {
     background: #c1d1da;
     border-radius: 4px;
     cursor: pointer;
@@ -7826,31 +7921,42 @@ select.course_n:hover {
     display: block;
     width: 16px;
     float: right;
-    display: none;
+    visibility: hidden;
 }
-.icon_ellipsis:hover, .icon_ellipsis:active{
+
+.icon_ellipsis:hover, .icon_ellipsis:active {
     background: #d9e7ef;
 }
-.month_box .ant-table-tbody > tr > td{
+
+.ellips_t:hover .icon_ellipsis {
+    visibility: visible;
+}
+
+.month_box .ant-table-tbody > tr > td {
     font-size: 12px;
 }
-.ellips_t{
+
+.ellips_t {
     color: #333;
 }
-.ellips_t:hover{
+
+.ellips_t:hover {
     text-decoration: none;
 }
-.black_person_btn{
+
+.black_person_btn {
     float: right;
     margin-right: 12px;
     font-size: 12px !important;
 }
-.adiuo_p_play{
+
+.adiuo_p_play {
     float: left;
     height: 30px;
     position: relative;
 }
-.adiuo_hidden{
+
+.adiuo_hidden {
     width: 25px;
     height: 32px;
     background: #fafafa;
@@ -7858,4 +7964,13 @@ select.course_n:hover {
     position: absolute;
     right: 0;
     top: -2px;
+}
+
+.ant-calendar-footer {
+    /*display: none;*/
+}
+
+.noom_repMsg {
+    margin-left: 10px;
+    margin-top: 5px;
 }

@@ -1,11 +1,12 @@
 import React, {PropTypes} from 'react';
 import {isEmpty} from '../../utils/utils';
-import {DatePicker, Table, message} from 'antd';
+import {DatePicker, Table, message, Button, Select} from 'antd';
 import moment from 'moment';
 import {doWebService} from '../../WebServiceHelper'
 
 const {RangePicker} = DatePicker;
 const dateFormat = 'YYYY/MM/DD';
+const Option = Select.Option;
 
 var columns = [
     {title: '姓名', width: 100, dataIndex: 'name', key: 'name', fixed: 'left'},
@@ -25,18 +26,56 @@ const MonthlySummary = React.createClass({
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         return {
             loginUser: loginUser,
-            x: 1200
+            x: 1200,
+            departmentsId: -1
         };
     },
 
     componentDidMount() {
         this.getTimeNow();
+        this.viewRootDepartment()
     },
+
+    /**
+     * 获取部门id
+     */
+    viewRootDepartment() {
+        var _this = this;
+        var param = {
+            "method": 'viewRootDepartment',
+            "schId": _this.state.loginUser.schoolId,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    var data = ret.response;
+                    _this.setState({departmentId: data.idrList});
+                    var arr = [];
+                    // data.nameList   部门名称id  构建到option里
+                    if (isEmpty(data) == false && isEmpty(data.nameList) == false) {
+                        data.nameList.forEach(function (v, i) {
+                            var opt = <Option value={data.idList[i]}>{v}</Option>;
+                            arr.push(opt);
+                        });
+                        var a = <Option value='-1'>{'全公司'}</Option>;
+                        arr.unshift(a);
+                        _this.setState({departmentArr: arr});
+                    }
+                } else {
+                    message.error(ret.msg);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
 
     /**
      * 获取月度汇总
      */
-    getMonthlySummary(startTime, endTime) {
+    getMonthlySummary(startTime, endTime, e) {
         //初始化表头
         columns = [
             {title: '姓名', width: 100, dataIndex: 'name', key: 'name', fixed: 'left'},
@@ -50,19 +89,28 @@ const MonthlySummary = React.createClass({
         //初始化表格内容
         monthData = [];
         var _this = this;
+        var did = -1;
+        if (isEmpty(e) == false) {
+            did = e;
+        }
         var param = {
             "method": 'viewPunchStatisticsPage',
             "schId": _this.state.loginUser.schoolId,
             "begin": startTime,
             "end": endTime,
-            "dId": '-1',
+            "dId": did,
             "pageNo": '-1',
+            "colUid": _this.state.loginUser.colUid,
         };
+        // console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                console.log(ret);
                 if (ret.msg == "调用成功" && ret.success == true) {
                     var data = ret.response;
+                    _this.setState({url: data.downloadURL})
                     _this.makeTable(data);
+                    _this.setState({downLoadReback: data})
                 } else {
                     message.error(ret.msg);
                 }
@@ -104,7 +152,12 @@ const MonthlySummary = React.createClass({
             })
         }
         //计算表格宽度
-        var x = (data.punch_title.length + 6) * 200;
+        var x;
+        if (isEmpty(data.punch_title) == false) {
+            x = (data.punch_title.length + 6) * 200;
+        } else {
+            x = 6 * 200;
+        }
         this.setState({x});
     },
 
@@ -154,8 +207,47 @@ const MonthlySummary = React.createClass({
         // console.log(date, dateString);
         var startTime = dateString[0];
         var endTime = dateString[1];
+        var departmentsId = this.state.departmentsId;
         this.setState({startTime, endTime});
-        this.getMonthlySummary(startTime, endTime);
+        this.getMonthlySummary(startTime, endTime, departmentsId);
+    },
+
+    /**
+     * 部门选择改变的回调
+     * @param e
+     */
+    departmentOnSelect(value) {
+        //调用请求方法
+        var startTime = this.state.startTime;
+        var endTime = this.state.endTime;
+        this.setState({departmentsId: value})
+        this.getMonthlySummary(startTime, endTime, value);
+    },
+
+    buttonOnClick() {
+        var downLoadReback = this.state.downLoadReback;
+        var param = {
+            "method": 'printNotify',
+            "userId": downLoadReback.userId,
+            "notifyTitle": downLoadReback.notifyTitle,
+            "notifyCover": downLoadReback.notifyCover,
+            "fileWebPath": downLoadReback.fileWebPath,
+            "fileName": downLoadReback.fileName,
+            "fileLength": downLoadReback.fileLength,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    var data = ret.response;
+                    console.log(data);
+                } else {
+                    message.error(ret.msg);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     /**
@@ -163,14 +255,24 @@ const MonthlySummary = React.createClass({
      * @returns {XML}
      */
     render() {
+        var departmentArr = this.state.departmentArr;
+        var url = this.state.url;
         return (
             <div className="group_cont">
                 <div className="public—til—blue">考勤汇总</div>
                 <div className="favorite_scroll">
                     <div className="checking_add_box group_cont">
                         <div className="ding_user_t">
-                            时间：<RangePicker onChange={this.timeOnChange}
-                                            value={[moment(this.state.startTime, dateFormat), moment(this.state.endTime, dateFormat)]}/>
+                            时间：
+                            <RangePicker className="range_time" onChange={this.timeOnChange}
+                                         value={[moment(this.state.startTime, dateFormat), moment(this.state.endTime, dateFormat)]}/>
+                            <Select defaultValue="全公司" style={{width: 120}} onSelect={this.departmentOnSelect}
+                                    className="add_out">
+                                {departmentArr}
+                            </Select>
+                            <a href={url} target="_blank" title="下载" download={url}><Button className="right_ri"
+                                                                                            type="primary"
+                                                                                            onClick={this.buttonOnClick}>导出报表</Button></a>
                         </div>
                         <Table className="checking_in_box cloud_box row-t-f month_box" columns={columns}
                                dataSource={monthData} scroll={{x: this.state.x, y: this.state.y}} pagination={false}/>

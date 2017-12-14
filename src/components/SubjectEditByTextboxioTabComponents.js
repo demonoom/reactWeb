@@ -1,13 +1,15 @@
 import React, {PropTypes} from 'react';
 import {Tabs, Button, Radio} from 'antd';
 import {Modal} from 'antd';
-import {Input, Select, Row, Col, Checkbox} from 'antd';
+import {Input, Select, Row, Col, Checkbox,Progress} from 'antd';
 import {message} from 'antd';
 import TextboxioComponentForSingleByModify from './textboxioComponents/TextboxioComponentForSingleByModify';
 import TextboxioComponentForMulitiSelectByModify from './textboxioComponents/TextboxioComponentForMulitiSelectByModify';
 import TextboxioComponentForCorrectByModify from './textboxioComponents/TextboxioComponentForCorrectByModify';
 import TextboxioComponentForSimpleAnswerByModify from './textboxioComponents/TextboxioComponentForSimpleAnswerByModify';
 import TextboxioComponentForAnswerByModify from './textboxioComponents/TextboxioComponentForAnswerByModify';
+import SubjectVideoUploadComponents from './SubjectVideoUploadComponents';
+import {isEmpty,AUDIO_SUBJECT_ALLOWED} from "../utils/Const";
 import {doWebService} from '../WebServiceHelper';
 const RadioGroup = Radio.Group;
 const Option = Select.Option;
@@ -17,6 +19,7 @@ var mulitiAnswer = new Array('A');
 //将要被修改的题目id
 var sid;
 var subjectUpload;
+var uploadFileList = [];
 /**
  * 题目修改组件
  */
@@ -415,6 +418,125 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
     onScoreDefinedValueChange(e){
         this.setState({scoreDefinedValue: e.target.value});
     },
+
+    /**
+     * 插入音频
+     */
+    insertVideo(attachment){
+        var _this = this;
+        console.log("insertVideo");
+        var id = "audioTag"+parseInt(Math.random()*1000);
+        var iTagId = "iTag"+parseInt(Math.random()*1000);
+        // var attachment = "http://60.205.86.217/upload5/2017-12-04/19/dd68da27-dd1c-4ecd-8677-50d2af9cfc5a.mp3";
+        // var newContent ="<span class='adiuo_p_play'><i class='audio_left' onclick='javascript:document.getElementById('\'audioTag\').play()'></i><audio  id='audiotag' style='display: none'  controls='controls' width='200' height='30' src='"+attachment+"'></audio></span>";
+        var newContent ='<span class="adiuo_p_play"><i id="'+iTagId+'" class="audio_left" onclick="javascript:var isPaused=document.getElementById(\''+id+'\').paused;if(isPaused){ document.getElementById(\''+id+'\').play();document.getElementById(\''+iTagId+'\').className=\'audio_left_run\'; }else{ document.getElementById(\''+id+'\').pause();document.getElementById(\''+iTagId+'\').className=\'audio_left\'; }"></i><audio onended="javascript:document.getElementById(\''+iTagId+'\').className=\'audio_left\'" id="'+id+'" style="display: none"  controls="controls" width="200" height="30" src="'+attachment+'"></audio></span>';
+        switch(this.state.currentSubjectType){
+            case "single":
+                mytextareaSingleModifyEditor.content.insertHtmlAtCursor(newContent);
+                break;
+            case "mulitiSelect":
+                mytextareaMulitiSelectModifyEditor.content.insertHtmlAtCursor(newContent);
+                break;
+            case "correct":
+                mytextareaCorrectModifyEditor.content.insertHtmlAtCursor(newContent);
+                break;
+            case "simpleAnswer":
+                mytextareaSimpleAnswerModifyEditor.content.insertHtmlAtCursor(newContent);
+                break;
+        }
+    },
+
+    playAudio(){
+        console.log("1111");
+    },
+
+    showVideoUploadModal(subjectType){
+        if(isEmpty(this.refs.subjectVideoUpload)==false){
+            this.refs.subjectVideoUpload.initFileUploadPage();
+        }
+        this.setState({subjectVideoModalVisible:true,"currentSubjectType":subjectType});
+    },
+
+    /**
+     * 聊天语音播放的回调
+     */
+    audioPlay(id, direction) {
+        document.getElementById(id).play();
+        var timer = setInterval(function () {
+            //播放开始，替换类名
+            document.getElementById(id + '_audio').className = 'audio' + direction + '_run';
+            if (document.getElementById(id).ended) {
+                //播放结束，替换类名
+                document.getElementById(id + '_audio').className = 'audio' + direction;
+                window.clearInterval(timer);
+            }
+        }, 10)
+    },
+
+    handleFileSubmit(fileList){
+        if(fileList==null || fileList.length==0){
+            uploadFileList.splice(0,uploadFileList.length);
+        }
+        for(var i=0;i<fileList.length;i++){
+            var fileJson = fileList[i];
+            var fileObj = fileJson.fileObj;
+            // uploadFileList.push(fileObj[0]);
+            uploadFileList.push(fileObj);
+        }
+    },
+
+    subjectVideoModalHandleCancel(){
+        this.setState({"subjectVideoModalVisible": false});
+    },
+
+    //点击保存按钮，向服务器保存选定的文件，并将文件的路径返回
+    uploadFile() {
+        var _this = this;
+        if (uploadFileList.length == 0) {
+            message.warning("请选择上传的文件,谢谢！");
+        } else {
+            var formData = new FormData();
+            for (var i = 0; i < uploadFileList.length; i++) {
+                formData.append("file" + i, uploadFileList[i]);
+                formData.append("name" + i, uploadFileList[i].name);
+            }
+            $.ajax({
+                type: "POST",
+                url: "http://101.201.45.125:8890/Excoord_Upload_Server/file/upload",
+                enctype: 'multipart/form-data',
+                data: formData,
+                // 告诉jQuery不要去处理发送的数据
+                processData: false,
+                // 告诉jQuery不要去设置Content-Type请求头
+                contentType: false,
+                xhr: function () {        //这是关键  获取原生的xhr对象  做以前做的所有事情
+                    var xhr = jQuery.ajaxSettings.xhr();
+                    xhr.upload.onload = function () {
+                        _this.setState({progressState: 'none'});
+                    }
+                    xhr.upload.onprogress = function (ev) {
+                        if (ev.lengthComputable) {
+                            var percent = 100 * ev.loaded / ev.total;
+                            _this.setState({uploadPercent: Math.round(percent), progressState: 'block'});
+                        }
+                    }
+                    return xhr;
+                },
+                success: function (responseStr) {
+                    if (responseStr != "") {
+                        var fileUrl = responseStr;
+                        _this.insertVideo(fileUrl);
+                        _this.setState({"subjectVideoModalVisible": false});
+                    }
+                },
+                error: function (responseStr) {
+                    _this.setState({subjectVideoModalVisible: false});
+                }
+            });
+
+        }
+    },
+
     /**
      * 页面元素渲染
      */
@@ -466,6 +588,8 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                 取消
             </Button>
         </div>;
+        //插入音频按钮
+        var audioButton = <Button className="row-t-f" onClick={this.showVideoUploadModal.bind(this,'single')}>插入音频</Button>;
         if (currentActiveKey == "单选题") {
             buttons = <div>
                 <Button type="primary" htmlType="submit" className="login-form-button"
@@ -476,6 +600,7 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                     取消
                 </Button>
             </div>;
+            audioButton = <Button className="row-t-f" onClick={this.showVideoUploadModal.bind(this,'single')}>插入音频</Button>;
         } else if (currentActiveKey == "多选题") {
             buttons = <div>
                 <Button type="primary" htmlType="submit" className="login-form-button"
@@ -486,6 +611,7 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                     取消
                 </Button>
             </div>;
+            audioButton = <Button onClick={this.showVideoUploadModal.bind(this,'mulitiSelect')}>插入音频</Button>;
         } else if (currentActiveKey == "判断题") {
             buttons = <div>
                 <Button type="primary" htmlType="submit" className="login-form-button"
@@ -496,6 +622,7 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                     取消
                 </Button>
             </div>;
+            audioButton = <Button onClick={this.showVideoUploadModal.bind(this,'correct')}>插入音频</Button>;
         } else if (currentActiveKey == "简答题") {
             buttons = <div>
                 <Button type="primary" htmlType="submit" className="login-form-button"
@@ -506,11 +633,20 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                     取消
                 </Button>
             </div>;
+            audioButton = <Button onClick={this.showVideoUploadModal.bind(this,'simpleAnswer')}>插入音频</Button>;
+        }
+
+        //如果用户不在允许的权限列表中，将audioButton设置为null，不显示
+        if(AUDIO_SUBJECT_ALLOWED.indexOf(sessionStorage.getItem("ident")) == -1){
+            audioButton = null;
         }
 
         var tipInfo = <div className="binding_b_t">1、如果题目来源于word文档，建议使用office2007完成传题操作；<br/>
             2、文档中的自定义形状或剪贴画，请先使用截图工具截图替换后再进行粘贴上传；<br/>
             3、文档中的数学公式请单独粘贴上传</div>;
+
+        //根据该状态值，来决定上传进度条是否显示
+        var progressState = this.state.progressState;
 
         return (
             <div className="toobar right_ri">
@@ -543,6 +679,7 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                                 </Col>
                                 <Col span={20}>
                                     <TextboxioComponentForSingleByModify/>
+                                    {audioButton}
                                 </Col>
                             </Row>
                             <Row>
@@ -581,6 +718,7 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                                     </Col>
                                     <Col span={20}>
                                         <TextboxioComponentForMulitiSelectByModify/>
+                                        {audioButton}
                                     </Col>
                                 </Row>
                                 <Row>
@@ -620,6 +758,7 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                                     </Col>
                                     <Col span={20}>
                                         <TextboxioComponentForCorrectByModify/>
+                                        {audioButton}
                                     </Col>
                                 </Row>
                                 <Row>
@@ -662,6 +801,7 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                                     </Col>
                                     <Col span={20}>
                                         <TextboxioComponentForSimpleAnswerByModify/>
+                                        {audioButton}
                                     </Col>
                                 </Row>
 
@@ -692,6 +832,43 @@ const SubjectEditByTextboxioTabComponents = React.createClass({
                         </TabPane>
                     </Tabs>
                 </Modal>
+
+                <Modal
+                    visible={this.state.subjectVideoModalVisible}
+                    title="上传文件"
+                    className="modol_width"
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    onCancel={this.subjectVideoModalHandleCancel}
+                    transitionName=""  //禁用modal的动画效果
+                    footer={[
+                        <div>
+                            <Button type="primary" htmlType="submit" className="login-form-button"
+                                    onClick={this.uploadFile}>
+                                发送
+                            </Button>
+                            <Button type="ghost" htmlType="reset" className="login-form-button"
+                                    onClick={this.subjectVideoModalHandleCancel}>
+                                取消
+                            </Button>
+                        </div>
+                    ]}
+                >
+                    <Row>
+                        <Col span={4}>上传文件：</Col>
+                        <Col span={20}>
+                            <div>
+                                <SubjectVideoUploadComponents ref="subjectVideoUpload"
+                                                              fatherState={this.state.subjectVideoModalVisible}
+                                                              callBackParent={this.handleFileSubmit}/>
+                            </div>
+                            <div style={{display: progressState}}>
+                                <Progress percent={this.state.uploadPercent} width={80} strokeWidth={4}/>
+                            </div>
+                        </Col>
+
+                    </Row>
+                </Modal>
+
             </div>
         );
     },

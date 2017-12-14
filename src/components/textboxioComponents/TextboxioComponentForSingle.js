@@ -8,6 +8,8 @@ var TextboxioComponentForSingle = React.createClass({
       if(mytextareaSingleEditor.mode.get()=="code"){
         mytextareaSingleEditor.mode.set("design");
       }
+      var newContent = "<span></span>";
+      mytextareaSingleEditor.content.insertHtmlAtCursor(newContent);
     });
   },
   componentDidUpdate(){

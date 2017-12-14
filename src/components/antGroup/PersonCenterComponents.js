@@ -14,6 +14,7 @@ import {
     Popover,
     Table,
     Transfer, Radio,
+    Breadcrumb,Tree,
 } from 'antd';
 import Favorites from '../Favorites';
 import UseKnowledgeComponents from '../UseKnowledgeComponents';
@@ -2086,6 +2087,10 @@ const PersonCenterComponents = React.createClass({
                 <div className="public—til—blue">{welcomeTitle}</div>
                 <div className="favorite_scroll">
                     <ul className="group_table">
+                        {/*<Breadcrumb separator=">">*/}
+                            {/*<Breadcrumb.Item>恒坐标集团</Breadcrumb.Item>*/}
+
+                        {/*</Breadcrumb>*/}
                         <Table className="group_table_u person_group" showHeader={false} scroll={{x: true,}}
                                columns={userGroupsColumns} dataSource={personCenter.state.groupMenuMebs}
                                pagination={false}

@@ -7,6 +7,8 @@ var TextboxioComponentForSimpleAnswer = React.createClass({
       if(mytextareaSimpleAnswerEditor.mode.get()=="code"){
         mytextareaSimpleAnswerEditor.mode.set("design");
       }
+        var newContent = "<span></span>";
+        mytextareaSimpleAnswerEditor.content.insertHtmlAtCursor(newContent);
     });
   },
   componentDidUpdate(){

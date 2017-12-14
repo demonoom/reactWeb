@@ -148,7 +148,7 @@ const UpdateClassComponents = React.createClass({
         var id = updateClassObj.id;
         var content = updateClassObj.content;
         var courseTypeId = updateClassObj.courseTypeId;
-        var courseClass = updateClassObj.courseClassId;
+        var courseClass = updateClassObj.courseClass;
         var image = updateClassObj.image;
         var videoNum = updateClassObj.videoNum;
         var startTime = updateClassObj.startTime;
@@ -386,9 +386,14 @@ const UpdateClassComponents = React.createClass({
                         var classInfo = response[i];
                         var id = classInfo.id;
                         var name = classInfo.name;
+                        console.log(2222);
+                        console.log(name);
                         var optionObj = <Option key={id} value={id}>{name}</Option>;
                         if (id == courseInfoJson.courseClass) {
                             _this.setState({"defaultSelected": name});
+                            console.log(3333);
+                            console.log(name);
+                            console.log(defaultSelected);
                         }
                         classOptionArray.push(optionObj);
                         var courseTypes = classInfo.courseTypes;
@@ -554,6 +559,7 @@ const UpdateClassComponents = React.createClass({
         console.log(`selected ${value}`);
         this.setState({defaultSelected: value});
         courseInfoJson.courseClass = value;
+
     },
     /**
      * 授课方式(单节/系列)
@@ -795,7 +801,6 @@ const UpdateClassComponents = React.createClass({
                     placeholder="Select Time"
                     onChange={this.lessonTimeOnChange}
                     onOk={this.lessonTimeOnOk}
-                    // value={this.state.value}
                 />
             </Col>
         </Col>;
@@ -831,6 +836,16 @@ const UpdateClassComponents = React.createClass({
             if (lessonJson.lessonNum == lessonNum) {
                 lessonArray.splice(i, 1);
                 break;
+            }
+        }
+
+        var removevideo=courseInfoJson.videos;
+        for (let i = 0; i < removevideo.length; i++) {
+            var squence= removevideo[i].squence;
+            if(squence==lessonNum){
+                removevideo.splice(i, 1);
+                break;
+
             }
         }
         lessonArray.forEach(function (lessonObj) {
@@ -1415,7 +1430,7 @@ const UpdateClassComponents = React.createClass({
                         <Col span={24} className="knowledge_ri">
                             <Checkbox  disabled={this.state.isShowseclect} defaultChecked={this.state.isShowseclect} onChange={this.publishClassAtNow}>立即发布</Checkbox>
                         </Col>
-                    </Row>s
+                    </Row>
                 </div>;
             }
             // <Col span={4}>第{lessonNum}课时</Col>

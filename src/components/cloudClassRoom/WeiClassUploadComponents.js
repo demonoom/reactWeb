@@ -14,6 +14,7 @@ const WeiClassUploadComponents = React.createClass({
             subjectInfo: this.props.params,
             previewVisible: false,
             previewImage: '',
+            fileList:[],
         };
     },
 
@@ -36,7 +37,7 @@ const WeiClassUploadComponents = React.createClass({
         this.setState({fileList: noom});
     },
     /**
-     * 课程封面图片
+     * 课程封面图片(微课上传组件)
      * @param nextProps
      */
     componentWillReceiveProps(nextProps) {

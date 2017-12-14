@@ -117,7 +117,6 @@ class SystemSettingGhostMenu extends React.Component {
                 {liArr}
             </li>;
             arr.push(uls);
-
             liArr = [];
         }
 
@@ -194,8 +193,7 @@ class SystemSettingGhostMenu extends React.Component {
 
     // teachingAdmin panel
     showpanel(event, urls, name) {
-
-
+        urls = urls+="?access_user="+sessionStorage.getItem("ident");
         this.onMenu(event);
 
         let param = {
