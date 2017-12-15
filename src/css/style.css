@@ -7974,3 +7974,39 @@ select.course_n:hover {
     margin-left: 10px;
     margin-top: 5px;
 }
+
+.noom_link {
+    color: #FFffff;
+}
+
+.noom_link:hover {
+    color: #FFffff;
+}
+
+.noom_link_left {
+    color: #000;
+}
+
+.noom_link_left:hover {
+    color: #000;
+}
+
+.noom_MYJ {
+    height: 97%;
+}
+
+.noom_MYZcard {
+    border-top: 30px #2acaee solid;
+    width: 250px;
+}
+
+.noom_MYZcontent {
+    white-space: normal;
+}
+
+.noomFinish ant-badge > ant-scroll-number ant-badge-count {
+    /*right: 0;*/
+    /*top: 50% !important;*/
+    margin-top: 5px;
+    margin-left: 5px;
+}

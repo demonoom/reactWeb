@@ -19,7 +19,7 @@ import {
 } from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import EmotionInputComponents from './EmotionInputComponents';
-import {getImgName, getLocalTime, getPageSize, isEmpty, MIDDLE_IMG, SMALL_IMG} from '../../utils/Const';
+import {getImgName, getLocalTime, getPageSize, isEmpty, MIDDLE_IMG, SMALL_IMG, checkUrl} from '../../utils/Const';
 import {phone} from '../../utils/phone';
 import {formatHM, formatMD, isToday, showLargeImg} from '../../utils/utils';
 import GroupFileUploadComponents from './GroupFileUploadComponents';
@@ -171,7 +171,18 @@ const AntGroupTabComponents = React.createClass({
             concatOptions: [],
             structureOptions: [],   //组织架构
             groupOptions: [],
-            RMsgActiveKey: ['2']
+            RMsgActiveKey: ['2'],
+            msgMenu: (
+                <Menu>
+                    <Menu.Item>
+                        <a target="_blank" className="ellips_t" onClick={this.turnToDing}>叮一下</a>
+                    </Menu.Item>
+                    <Menu.Item>
+                        <a target="_blank" className="ellips_t" onClick={this.relayMsg}>转发</a>
+                    </Menu.Item>
+                </Menu>
+            ),
+            sendFileButton: false,
         };
 
     },
@@ -490,6 +501,35 @@ const AntGroupTabComponents = React.createClass({
     },
 
     getMesUUid(uuid, e) {
+        var nowTime = (new Date()).valueOf();
+        var withdrawMsg = (
+            <Menu>
+                <Menu.Item>
+                    <a target="_blank" className="ellips_t" onClick={this.withdrawMsg}>撤回</a>
+                </Menu.Item>
+                <Menu.Item>
+                    <a target="_blank" className="ellips_t" onClick={this.turnToDing}>叮一下</a>
+                </Menu.Item>
+                <Menu.Item>
+                    <a target="_blank" className="ellips_t" onClick={this.relayMsg}>转发</a>
+                </Menu.Item>
+            </Menu>
+        );
+        var withdrawMsgCannot = (
+            <Menu>
+                <Menu.Item>
+                    <a target="_blank" className="ellips_t" onClick={this.turnToDing}>叮一下</a>
+                </Menu.Item>
+                <Menu.Item>
+                    <a target="_blank" className="ellips_t" onClick={this.relayMsg}>转发</a>
+                </Menu.Item>
+            </Menu>
+        );
+        if ((nowTime - e.mesTimeForDetil) < 120000) {
+            this.setState({msgMenu: withdrawMsg});
+        } else {
+            this.setState({msgMenu: withdrawMsgCannot});
+        }
         this.setState({mesUuid: uuid});
         this.setState({megObj: e});
     },
@@ -1347,7 +1387,7 @@ const AntGroupTabComponents = React.createClass({
      */
     cloudFileUploadModalHandleCancel() {
         var _this = this;
-        antGroup.setState({"cloudFileUploadModalVisible": false});
+        antGroup.setState({"cloudFileUploadModalVisible": false, sendFileButton: false});
         if (isEmpty(_this.refs.fileUploadCom) == false) {
             _this.refs.fileUploadCom.initFileUploadPage();
         }
@@ -1374,6 +1414,7 @@ const AntGroupTabComponents = React.createClass({
         if (uploadFileList.length == 0) {
             message.warning("请选择上传的文件,谢谢！");
         } else {
+            this.setState({sendFileButton: true});
             var formData = new FormData();
             for (var i = 0; i < uploadFileList.length; i++) {
                 formData.append("file" + i, uploadFileList[i]);
@@ -1883,11 +1924,16 @@ const AntGroupTabComponents = React.createClass({
                         var contentArray = [contentJson];
                         //推时间
                         var noomGroupId = -999;
+                        var noomchatGroupId = -9999;
                         if (isEmpty(messageOfSinge.toChatGroup) == false) {
                             noomGroupId = messageOfSinge.toChatGroup.chatGroupId
                         }
                         ;
-                        if (noomGroupId == antGroup.state.currentGroupObj.chatGroupId || operatorObj.colUid == data.message.fromUser.colUid || data.message.fromUser.colUid == antGroup.state.loginUser.colUid) {
+                        if (isEmpty(antGroup.state.currentGroupObj) == false) {
+                            noomchatGroupId = antGroup.state.currentGroupObj.chatGroupId
+                        }
+                        ;
+                        if (noomGroupId == noomchatGroupId || operatorObj.colUid == data.message.fromUser.colUid || data.message.fromUser.colUid == antGroup.state.loginUser.colUid) {
                             if (isEmpty(antGroup.state.messageList) == false && antGroup.state.messageList.length > 0) {
                                 if (messageOfSinge.createTime - antGroup.state.messageList[0].mesTimeForDetil > 300000) {
                                     var messageShoww = {
@@ -1953,14 +1999,13 @@ const AntGroupTabComponents = React.createClass({
                                     }
                                     if (isEmpty(messageOfSinge.toUser) == false) {
                                         var userJson = {
-                                            key: messageOfSinge.toUser.colUid,
+                                            // key: messageOfSinge.toUser.colUid,
+                                            key: messageOfSinge.fromUser.colUid,   //key是做红点的时候改的
                                             // "fromUser": messageOfSinge.toUser,
                                             "fromUser": messageOfSinge.fromUser,
                                             contentArray: contentArray,
                                             "messageToType": 1
                                         };
-                                        // if (isEmpty(isTurnPage)) {
-                                        // }
                                         antGroup.props.onNewMessage(userJson);
                                     }
                                 }
@@ -2065,8 +2110,8 @@ const AntGroupTabComponents = React.createClass({
                                 antGroup.props.onNewMessage(userJson);
                             } else {
                                 var userJson = {
-                                    // key: messageOfSinge.toChatGroup.chatGroupId,
-                                    key: _this.state.loginUser.colUid,
+                                    key: messageOfSinge.toChatGroup.chatGroupId,
+                                    // key: _this.state.loginUser.colUid,
                                     "fromUser": fromUser,
                                     "toChatGroup": messageOfSinge.toChatGroup,
                                     contentArray: contentArray,
@@ -2830,6 +2875,12 @@ const AntGroupTabComponents = React.createClass({
         document.getElementById(id).click();
     },
 
+    imgOnError(src, e) {
+        e.target.src = src;
+        // e.target.src = '../src/components/images/e9c6ad1e-7ef3-45cf-ab40-25d5b5a0374c.png';
+        e.target.onerror = null;
+    },
+
     render() {
         var _this = this;
         const rowSelection = {
@@ -2920,14 +2971,15 @@ const AntGroupTabComponents = React.createClass({
                                     //我发出的
                                     if (isEmpty(attachment) == false) {
                                         //有内容的链接
-                                        messageTag = <li style={{'textAlign': 'right'}} className="right">
-                                            <div className="u-name">
-                                                <span>{fromUser}</span>
-                                                <span className="cart_time">{mesTime}</span>
-                                            </div>
-                                            <div className="talk-cont">
-                                                <span className="name">{userPhoneIcon}</span>
-                                                <div className="talk_bubble_box">
+                                        if (e.toId == 138437) {
+                                            messageTag = <li style={{'textAlign': 'right'}} className="right">
+                                                <div className="u-name">
+                                                    <span>{fromUser}</span>
+                                                    <span className="cart_time">{mesTime}</span>
+                                                </div>
+                                                <div className="talk-cont">
+                                                    <span className="name">{userPhoneIcon}</span>
+                                                    <div className="talk_bubble_box">
                                                     <span className="borderballoon noom_cursor"
                                                           onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
                                                         <div className="borderballoon_le_cont">
@@ -2942,47 +2994,100 @@ const AntGroupTabComponents = React.createClass({
                                                         </div>
                                                         <i className="borderballoon_dingcorner_ri_no"></i>
                                                     </span>
-                                                    <span className="talk_bubble_read"
-                                                          onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </li>;
+                                            </li>;
+                                        } else {
+                                            messageTag = <li style={{'textAlign': 'right'}} className="right">
+                                                <div className="u-name">
+                                                    <span>{fromUser}</span>
+                                                    <span className="cart_time">{mesTime}</span>
+                                                </div>
+                                                <div className="talk-cont">
+                                                    <span className="name">{userPhoneIcon}</span>
+                                                    <div className="talk_bubble_box">
+                                                    <span className="borderballoon noom_cursor"
+                                                          onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
+                                                        <div className="borderballoon_le_cont">
+                                                            <img className="upexam_float span_link_img"
+                                                                 style={{width: 40}}
+                                                                 src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
+                                                                 alt=""/>
+                                                             <div className="span_link_div">
+                                                                 <span
+                                                                     className="span_link file_link_img_t">{content}</span>
+                                                             </div>
+                                                        </div>
+                                                        <i className="borderballoon_dingcorner_ri_no"></i>
+                                                    </span>
+                                                        <span className="talk_bubble_read"
+                                                              onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
+                                                    </div>
+                                                </div>
+                                            </li>;
+                                        }
                                         // }
                                     } else if (isEmpty(expressionItem) == false) {
                                         //来自安卓的动态表情（安卓的动态表情的content里有“表情”两个字）
-                                        messageTag = <li className="right" style={{'textAlign': 'right'}}>
-                                            <div className="u-name">
-                                                <span>{fromUser}</span>
-                                                <span className="cart_time">{mesTime}</span>
-                                            </div>
-                                            <div className="talk-cont">
-                                                <span className="name">{userPhoneIcon}</span>
-                                                <div className="talk_bubble_box">
-                                                    <img src={expressionItem}
-                                                         style={{width: '100px', height: '100px'}}/>
-                                                    <span><i className="borderballoon_dingcorner_le_no"></i></span>
-                                                    <span className="talk_bubble_ellipsis">
-                                                        <Dropdown overlay={msgMenu} trigger={['click']}
+                                        if (e.toId == 138437) {
+                                            messageTag = <li className="right" style={{'textAlign': 'right'}}>
+                                                <div className="u-name">
+                                                    <span>{fromUser}</span>
+                                                    <span className="cart_time">{mesTime}</span>
+                                                </div>
+                                                <div className="talk-cont">
+                                                    <span className="name">{userPhoneIcon}</span>
+                                                    <div className="talk_bubble_box">
+                                                        <img src={expressionItem}
+                                                             style={{width: '100px', height: '100px'}}/>
+                                                        <span><i className="borderballoon_dingcorner_le_no"></i></span>
+                                                        <span className="talk_bubble_ellipsis">
+                                                        <Dropdown overlay={this.state.msgMenu} trigger={['click']}
                                                                   placement="topCenter"
                                                                   onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                             <Icon className="icon_ellipsis" type="ellipsis"/>
                                                         </Dropdown>
                                                     </span>
-                                                    <span className="talk_bubble_read"
-                                                          onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </li>;
+                                            </li>;
+                                        } else {
+                                            messageTag = <li className="right" style={{'textAlign': 'right'}}>
+                                                <div className="u-name">
+                                                    <span>{fromUser}</span>
+                                                    <span className="cart_time">{mesTime}</span>
+                                                </div>
+                                                <div className="talk-cont">
+                                                    <span className="name">{userPhoneIcon}</span>
+                                                    <div className="talk_bubble_box">
+                                                        <img src={expressionItem}
+                                                             style={{width: '100px', height: '100px'}}/>
+                                                        <span><i className="borderballoon_dingcorner_le_no"></i></span>
+                                                        <span className="talk_bubble_ellipsis">
+                                                        <Dropdown overlay={this.state.msgMenu} trigger={['click']}
+                                                                  placement="topCenter"
+                                                                  onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                            <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                        </Dropdown>
+                                                    </span>
+                                                        <span className="talk_bubble_read"
+                                                              onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
+                                                    </div>
+                                                </div>
+                                            </li>;
+                                        }
+
                                     } else if (isEmpty(fileName) == false) {
                                         //发送的文件（content里带有文件名字）
-                                        messageTag = <li style={{'textAlign': 'right'}} className="right">
-                                            <div className="u-name">
-                                                <span>{fromUser}</span>
-                                                <span className="cart_time">{mesTime}</span>
-                                            </div>
-                                            <div className="talk-cont">
-                                                <span className="name">{userPhoneIcon}</span>
-                                                <div className="talk_bubble_box">
+                                        if (e.toId == 138437) {
+                                            messageTag = <li style={{'textAlign': 'right'}} className="right">
+                                                <div className="u-name">
+                                                    <span>{fromUser}</span>
+                                                    <span className="cart_time">{mesTime}</span>
+                                                </div>
+                                                <div className="talk-cont">
+                                                    <span className="name">{userPhoneIcon}</span>
+                                                    <div className="talk_bubble_box">
                                                     <span className="borderballoon noom_cursor borderballoon_file">
                                                         <span className="bot"></span>
                                                         <span className="top"></span>
@@ -3017,19 +3122,74 @@ const AntGroupTabComponents = React.createClass({
                                                             </Dropdown>
                                                         </div>
                                                     </span>
-                                                    <span className="talk_bubble_ellipsis">
-                                                        <Dropdown overlay={msgMenu} trigger={['click']}
+                                                        <span className="talk_bubble_ellipsis">
+                                                        <Dropdown overlay={this.state.msgMenu} trigger={['click']}
                                                                   placement="topCenter"
                                                                   onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                             <Icon className="icon_ellipsis" type="ellipsis"/>
                                                         </Dropdown>
                                                 </span>
-                                                    <span className="talk_bubble_read"
-                                                          onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
-
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </li>;
+                                            </li>;
+                                        } else {
+                                            messageTag = <li style={{'textAlign': 'right'}} className="right">
+                                                <div className="u-name">
+                                                    <span>{fromUser}</span>
+                                                    <span className="cart_time">{mesTime}</span>
+                                                </div>
+                                                <div className="talk-cont">
+                                                    <span className="name">{userPhoneIcon}</span>
+                                                    <div className="talk_bubble_box">
+                                                    <span className="borderballoon noom_cursor borderballoon_file">
+                                                        <span className="bot"></span>
+                                                        <span className="top"></span>
+                                                        <div className="borderballoon_le_cont">
+                                                            <div className="span_link_div">
+                                                                <span className="span_link">{fileName}</span>
+                                                                <span
+                                                                    className="span_link password_ts">{fileLength}kb</span>
+                                                            </div>
+                                                            <img className="upexam_float span_link_img"
+                                                                 style={{width: 38}}
+                                                                 src="../src/components/images/maaee_link_file_102_102.png"
+                                                                 alt=""/>
+                                                        </div>
+                                                        <img id={fileUid} style={{display: "none"}} src={filePath}
+                                                             onClick={showLargeImg} alt=""/>
+                                                        <div className="file_noom">
+                                                            <a className="noom_cursor  file_noom_line"
+                                                               onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid, fileName)}>
+                                                                <Icon type="eye"/>预览
+                                                            </a>
+                                                            <a href={filePath} target="_blank" title="下载"
+                                                               download={filePath}
+                                                               className="downfile_noom file_noom_line">
+                                                                <Icon type="download"/>下载</a>
+                                                            <Dropdown overlay={menu}
+                                                                      onVisibleChange={this.getCloudFile.bind(this, filePath, fileName, oriFileLength, fileCreateUid)}>
+                                                                <a className="ant-dropdown-link file_noom_line"
+                                                                   href="javascript:;">
+                                                                  <Icon type="bars"/>更多
+                                                                </a>
+                                                            </Dropdown>
+                                                        </div>
+                                                    </span>
+                                                        <span className="talk_bubble_ellipsis">
+                                                        <Dropdown overlay={this.state.msgMenu} trigger={['click']}
+                                                                  placement="topCenter"
+                                                                  onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                            <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                        </Dropdown>
+                                                </span>
+                                                        <span className="talk_bubble_read"
+                                                              onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
+
+                                                    </div>
+                                                </div>
+                                            </li>;
+                                        }
+
                                     } else {
                                         //文字消息
                                         if (biumes == true) {
@@ -3056,29 +3216,119 @@ const AntGroupTabComponents = React.createClass({
                                             if (e.showType == 1) {
                                                 messageTag = <li className="reminder"><span>{e.content}</span></li>;
                                             } else {
-                                                messageTag = <li className="right" style={{'textAlign': 'right'}}>
-                                                    <div className="u-name">
-                                                        <span>{fromUser}</span>
-                                                        <span className="cart_time">{mesTime}</span>
-                                                    </div>
-                                                    <div className="talk-cont">
-                                                        <span className="name">{userPhoneIcon}</span>
-                                                        <div className="talk_bubble_box">
+                                                // checkUrl
+                                                if (checkUrl(e.content) == false) {
+                                                    if (e.toId == 138437) {
+                                                        messageTag =
+                                                            <li className="right" style={{'textAlign': 'right'}}>
+                                                                <div className="u-name">
+                                                                    <span>{fromUser}</span>
+                                                                    <span className="cart_time">{mesTime}</span>
+                                                                </div>
+                                                                <div className="talk-cont">
+                                                                    <span className="name">{userPhoneIcon}</span>
+                                                                    <div className="talk_bubble_box">
                                                             <span className="borderballoon">{e.content}
                                                                 <i className="borderballoon_dingcorner_le_no"></i>
                                                             </span>
-                                                            <span className="talk_bubble_ellipsis">
-                                                                <Dropdown overlay={msgMenu} trigger={['click']}
+                                                                        <span className="talk_bubble_ellipsis">
+                                                                <Dropdown overlay={this.state.msgMenu}
+                                                                          trigger={['click']}
                                                                           placement="topCenter"
                                                                           onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                                     <Icon className="icon_ellipsis" type="ellipsis"/>
                                                                 </Dropdown>
                                                             </span>
-                                                            <span className="talk_bubble_read"
-                                                                  onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
-                                                        </div>
-                                                    </div>
-                                                </li>;
+                                                                    </div>
+                                                                </div>
+                                                            </li>;
+                                                    } else {
+                                                        messageTag =
+                                                            <li className="right" style={{'textAlign': 'right'}}>
+                                                                <div className="u-name">
+                                                                    <span>{fromUser}</span>
+                                                                    <span className="cart_time">{mesTime}</span>
+                                                                </div>
+                                                                <div className="talk-cont">
+                                                                    <span className="name">{userPhoneIcon}</span>
+                                                                    <div className="talk_bubble_box">
+                                                            <span className="borderballoon">{e.content}
+                                                                <i className="borderballoon_dingcorner_le_no"></i>
+                                                            </span>
+                                                                        <span className="talk_bubble_ellipsis">
+                                                                <Dropdown overlay={this.state.msgMenu}
+                                                                          trigger={['click']}
+                                                                          placement="topCenter"
+                                                                          onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                                    <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                                </Dropdown>
+                                                            </span>
+                                                                        <span className="talk_bubble_read"
+                                                                              onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>;
+                                                    }
+
+                                                } else {
+                                                    //内容为链接
+                                                    if (e.toId == 138437) {
+                                                        messageTag =
+                                                            <li className="right" style={{'textAlign': 'right'}}>
+                                                                <div className="u-name">
+                                                                    <span>{fromUser}</span>
+                                                                    <span className="cart_time">{mesTime}</span>
+                                                                </div>
+                                                                <div className="talk-cont">
+                                                                    <span className="name">{userPhoneIcon}</span>
+                                                                    <div className="talk_bubble_box">
+                                                            <span className="borderballoon">
+                                                                <a className="noom_link" target="_Blank"
+                                                                   href={e.content}>{e.content}</a>
+                                                                <i className="borderballoon_dingcorner_le_no"></i>
+                                                            </span>
+                                                                        <span className="talk_bubble_ellipsis">
+                                                                <Dropdown overlay={this.state.msgMenu}
+                                                                          trigger={['click']}
+                                                                          placement="topCenter"
+                                                                          onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                                    <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                                </Dropdown>
+                                                            </span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>;
+                                                    } else {
+                                                        messageTag =
+                                                            <li className="right" style={{'textAlign': 'right'}}>
+                                                                <div className="u-name">
+                                                                    <span>{fromUser}</span>
+                                                                    <span className="cart_time">{mesTime}</span>
+                                                                </div>
+                                                                <div className="talk-cont">
+                                                                    <span className="name">{userPhoneIcon}</span>
+                                                                    <div className="talk_bubble_box">
+                                                            <span className="borderballoon">
+                                                                <a className="noom_link" target="_Blank"
+                                                                   href={e.content}>{e.content}</a>
+                                                                <i className="borderballoon_dingcorner_le_no"></i>
+                                                            </span>
+                                                                        <span className="talk_bubble_ellipsis">
+                                                                <Dropdown overlay={this.state.msgMenu}
+                                                                          trigger={['click']}
+                                                                          placement="topCenter"
+                                                                          onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                                    <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                                </Dropdown>
+                                                            </span>
+                                                                        <span className="talk_bubble_read"
+                                                                              onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>;
+                                                    }
+
+                                                }
                                             }
                                         }
                                     }
@@ -3205,18 +3455,20 @@ const AntGroupTabComponents = React.createClass({
                                             if (e.fromUser.colUid == 120024 || e.showType == 1) {
                                                 messageTag = <li className="reminder"><span>{e.content}</span></li>;
                                             } else {
-                                                messageTag = <li style={{'textAlign': 'left'}}>
-                                                    <div className="u-name">
-                                                        <span>{fromUser}</span>
-                                                        <span className="cart_time">{mesTime}</span>
-                                                    </div>
-                                                    <div className="talk-cont">
-                                                        <span className="name">{userPhoneIcon}</span>
-                                                        <span className="borderballoon_le">
+                                                // checkUrl
+                                                if (checkUrl(e.content) == false) {
+                                                    messageTag = <li style={{'textAlign': 'left'}}>
+                                                        <div className="u-name">
+                                                            <span>{fromUser}</span>
+                                                            <span className="cart_time">{mesTime}</span>
+                                                        </div>
+                                                        <div className="talk-cont">
+                                                            <span className="name">{userPhoneIcon}</span>
+                                                            <span className="borderballoon_le">
                                                     <span className="bot"></span>
                                                     <span className="top"></span>
-                                                            {e.content}
-                                                            <i className="borderballoon_dingcorner_ri_no"></i>
+                                                                {e.content}
+                                                                <i className="borderballoon_dingcorner_ri_no"></i>
                                                         <span className="talk_bubble_ellipsis">
                                                             <Dropdown overlay={msgMenuLeft} trigger={['click']}
                                                                       placement="topCenter"
@@ -3225,7 +3477,31 @@ const AntGroupTabComponents = React.createClass({
                                                             </Dropdown>
                                                         </span>
                                                     </span></div>
-                                                </li>;
+                                                    </li>;
+                                                } else {
+                                                    messageTag = <li style={{'textAlign': 'left'}}>
+                                                        <div className="u-name">
+                                                            <span>{fromUser}</span>
+                                                            <span className="cart_time">{mesTime}</span>
+                                                        </div>
+                                                        <div className="talk-cont">
+                                                            <span className="name">{userPhoneIcon}</span>
+                                                            <span className="borderballoon_le">
+                                                    <span className="bot"></span>
+                                                    <span className="top"></span>
+                                                                <a className="noom_link_left" target="_Blank"
+                                                                   href={e.content}>{e.content}</a>
+                                                                <i className="borderballoon_dingcorner_ri_no"></i>
+                                                        <span className="talk_bubble_ellipsis">
+                                                            <Dropdown overlay={msgMenuLeft} trigger={['click']}
+                                                                      placement="topCenter"
+                                                                      onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                                <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                            </Dropdown>
+                                                        </span>
+                                                    </span></div>
+                                                    </li>;
+                                                }
                                             }
                                         }
                                     }
@@ -3234,29 +3510,54 @@ const AntGroupTabComponents = React.createClass({
                                 //context没有内容的消息
                                 if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
                                     //我发出的
-                                    messageTag = <li className="right" style={{'textAlign': 'right'}}>
-                                        <div className="u-name">
-                                            <span>{fromUser}</span>
-                                            <span className="cart_time">{mesTime}</span>
-                                        </div>
-                                        <div className="talk-cont">
-                                            <span className="name">{userPhoneIcon}</span>
-                                            <div className="talk_bubble_box">
+                                    if (e.toId == 138437) {
+                                        messageTag = <li className="right" style={{'textAlign': 'right'}}>
+                                            <div className="u-name">
+                                                <span>{fromUser}</span>
+                                                <span className="cart_time">{mesTime}</span>
+                                            </div>
+                                            <div className="talk-cont">
+                                                <span className="name">{userPhoneIcon}</span>
+                                                <div className="talk_bubble_box">
                                                 <span className="borderballoon ">{e.imgTagArray}
                                                     <i className="borderballoon_dingcorner_le_no"></i>
                                                 </span>
-                                                <span className="talk_bubble_ellipsis">
-                                                    <Dropdown overlay={msgMenu} trigger={['click']}
+                                                    <span className="talk_bubble_ellipsis">
+                                                    <Dropdown overlay={this.state.msgMenu} trigger={['click']}
                                                               placement="topCenter"
                                                               onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                         <Icon className="icon_ellipsis" type="ellipsis"/>
                                                     </Dropdown>
                                                 </span>
-                                                <span className="talk_bubble_read"
-                                                      onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </li>;
+                                        </li>;
+                                    } else {
+                                        messageTag = <li className="right" style={{'textAlign': 'right'}}>
+                                            <div className="u-name">
+                                                <span>{fromUser}</span>
+                                                <span className="cart_time">{mesTime}</span>
+                                            </div>
+                                            <div className="talk-cont">
+                                                <span className="name">{userPhoneIcon}</span>
+                                                <div className="talk_bubble_box">
+                                                <span className="borderballoon ">{e.imgTagArray}
+                                                    <i className="borderballoon_dingcorner_le_no"></i>
+                                                </span>
+                                                    <span className="talk_bubble_ellipsis">
+                                                    <Dropdown overlay={this.state.msgMenu} trigger={['click']}
+                                                              placement="topCenter"
+                                                              onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                        <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                    </Dropdown>
+                                                </span>
+                                                    <span className="talk_bubble_read"
+                                                          onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
+                                                </div>
+                                            </div>
+                                        </li>;
+                                    }
+
                                 } else {
                                     //我收到的
                                     messageTag = <li style={{'textAlign': 'left'}}>
@@ -3281,30 +3582,58 @@ const AntGroupTabComponents = React.createClass({
                                 //动态表情（iOS发来的，安卓发过来的表情里有“表情”两个汉字）
                                 if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
                                     //我发出的
-                                    messageTag = <li className="right" style={{'textAlign': 'right'}}>
-                                        <div className="u-name">
-                                            <span>{fromUser}</span>
-                                            <span className="cart_time">{mesTime}</span>
-                                        </div>
-                                        <div className="talk-cont">
-                                            <span className="name">{userPhoneIcon}</span>
-                                            <div className="talk_bubble_box">
-                                                <img src={expressionItem} style={{width: '100px', height: '100px'}}/>
-                                                <span>
+                                    if (e.toId == 138437) {
+                                        messageTag = <li className="right" style={{'textAlign': 'right'}}>
+                                            <div className="u-name">
+                                                <span>{fromUser}</span>
+                                                <span className="cart_time">{mesTime}</span>
+                                            </div>
+                                            <div className="talk-cont">
+                                                <span className="name">{userPhoneIcon}</span>
+                                                <div className="talk_bubble_box">
+                                                    <img src={expressionItem}
+                                                         style={{width: '100px', height: '100px'}}/>
+                                                    <span>
                                                     <i className="borderballoon_dingcorner_le_no"></i>
                                                 </span>
-                                                <span className="talk_bubble_ellipsis">
-                                                    <Dropdown overlay={msgMenu} trigger={['click']}
+                                                    <span className="talk_bubble_ellipsis">
+                                                    <Dropdown overlay={this.state.msgMenu} trigger={['click']}
                                                               placement="topCenter"
                                                               onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                         <Icon className="icon_ellipsis" type="ellipsis"/>
                                                     </Dropdown>
                                                 </span>
-                                                <span className="talk_bubble_read"
-                                                      onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </li>;
+                                        </li>;
+                                    } else {
+                                        messageTag = <li className="right" style={{'textAlign': 'right'}}>
+                                            <div className="u-name">
+                                                <span>{fromUser}</span>
+                                                <span className="cart_time">{mesTime}</span>
+                                            </div>
+                                            <div className="talk-cont">
+                                                <span className="name">{userPhoneIcon}</span>
+                                                <div className="talk_bubble_box">
+                                                    <img src={expressionItem}
+                                                         style={{width: '100px', height: '100px'}}/>
+                                                    <span>
+                                                    <i className="borderballoon_dingcorner_le_no"></i>
+                                                </span>
+                                                    <span className="talk_bubble_ellipsis">
+                                                    <Dropdown overlay={this.state.msgMenu} trigger={['click']}
+                                                              placement="topCenter"
+                                                              onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                        <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                    </Dropdown>
+                                                </span>
+                                                    <span className="talk_bubble_read"
+                                                          onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
+                                                </div>
+                                            </div>
+                                        </li>;
+                                    }
+
                                 } else {
                                     //我收到的(--)
                                     messageTag = <li style={{'textAlign': 'left'}}>
@@ -3332,14 +3661,15 @@ const AntGroupTabComponents = React.createClass({
                                 //没有内容的链接
                                 if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
                                     //我发出的
-                                    messageTag = <li style={{'textAlign': 'right'}} className="right">
-                                        <div className="u-name">
-                                            <span>{fromUser}</span>
-                                            <span className="cart_time">{mesTime}</span>
-                                        </div>
-                                        <div className="talk-cont">
-                                            <span className="name">{userPhoneIcon}</span>
-                                            <div className="talk_bubble_box">
+                                    if (e.toId == 138437) {
+                                        messageTag = <li style={{'textAlign': 'right'}} className="right">
+                                            <div className="u-name">
+                                                <span>{fromUser}</span>
+                                                <span className="cart_time">{mesTime}</span>
+                                            </div>
+                                            <div className="talk-cont">
+                                                <span className="name">{userPhoneIcon}</span>
+                                                <div className="talk_bubble_box">
                                                 <span className="borderballoon noom_cursor borderballoon_file"
                                                       onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
                                                     <span className="bot"></span>
@@ -3355,27 +3685,88 @@ const AntGroupTabComponents = React.createClass({
                                                     </div>
                                                     <i className="borderballoon_dingcorner_ri_no"></i>
                                                 </span>
-                                                <span className="talk_bubble_ellipsis">
-                                                    <Dropdown overlay={msgMenu} trigger={['click']}
+                                                    <span className="talk_bubble_ellipsis">
+                                                    <Dropdown overlay={this.state.msgMenu} trigger={['click']}
                                                               placement="topCenter"
                                                               onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                         <Icon className="icon_ellipsis" type="ellipsis"/>
                                                      </Dropdown>
                                                 </span>
-                                                <span className="talk_bubble_read"
-                                                      onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </li>;
+                                        </li>;
+                                    } else {
+                                        messageTag = <li style={{'textAlign': 'right'}} className="right">
+                                            <div className="u-name">
+                                                <span>{fromUser}</span>
+                                                <span className="cart_time">{mesTime}</span>
+                                            </div>
+                                            <div className="talk-cont">
+                                                <span className="name">{userPhoneIcon}</span>
+                                                <div className="talk_bubble_box">
+                                                <span className="borderballoon noom_cursor borderballoon_file"
+                                                      onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
+                                                    <span className="bot"></span>
+                                                    <span className="top"></span>
+                                                    <div className="borderballoon_le_cont">
+                                                        <img className="upexam_float span_link_img" style={{width: 40}}
+                                                             src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
+                                                             alt=""/>
+                                                         <div className="span_link_div">
+                                                             <span
+                                                                 className="span_link file_link_img_t">{e.messageReturnJson.content}</span>
+                                                         </div>
+                                                    </div>
+                                                    <i className="borderballoon_dingcorner_ri_no"></i>
+                                                </span>
+                                                    <span className="talk_bubble_ellipsis">
+                                                    <Dropdown overlay={this.state.msgMenu} trigger={['click']}
+                                                              placement="topCenter"
+                                                              onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                        <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                     </Dropdown>
+                                                </span>
+                                                    <span className="talk_bubble_read"
+                                                          onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
+                                                </div>
+                                            </div>
+                                        </li>;
+                                    }
+
                                 } else {
                                     //我收到的
-                                    messageTag = <li style={{'textAlign': 'left'}}>
-                                        <div className="u-name"><span>{fromUser}</span><span
-                                            className="cart_time">{mesTime}</span></div>
-                                        <div className="talk-cont">
-                                            <span className="name">{userPhoneIcon}</span>
-                                            <span className="borderballoon_le noom_cursor"
-                                                  onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
+                                    if (e.fromUser.colUtype == 'SGZH') {
+                                        //蚂蚁君卡片
+                                        messageTag =
+                                            <li style={{'textAlign': 'left'}}>
+                                                <div className="u-name">
+                                                    <span>{fromUser}</span>
+                                                    <span className="cart_time">{mesTime}</span>
+                                                </div>
+                                                <div className="talk-cont">
+                                                    <span className="name">{userPhoneIcon}</span>
+                                                    <span className="borderballoon_le noom_cursor noom_MYZcard"
+                                                          onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
+                                                        <span
+                                                            className="span_link file_link_img_t noom_MYZcontent">{e.messageReturnJson.content}</span>
+                                                    </span>
+                                                    <span className="talk_bubble_ellipsis noom_repMsg">
+                                                        <Dropdown overlay={msgMenuLeft} trigger={['click']}
+                                                                  placement="topCenter"
+                                                                  onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                            <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                        </Dropdown>
+                                                    </span>
+                                                </div>
+                                            </li>
+                                    } else {
+                                        messageTag = <li style={{'textAlign': 'left'}}>
+                                            <div className="u-name"><span>{fromUser}</span><span
+                                                className="cart_time">{mesTime}</span></div>
+                                            <div className="talk-cont">
+                                                <span className="name">{userPhoneIcon}</span>
+                                                <span className="borderballoon_le noom_cursor"
+                                                      onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
                                                 <span className="bot"></span>
                                                 <span className="top"></span>
                                                 <img className="upexam_float span_link_img" style={{width: 40}}
@@ -3385,28 +3776,30 @@ const AntGroupTabComponents = React.createClass({
                                                     className="span_link file_link_img_t">{e.messageReturnJson.content}</span>
                                                 <i className="borderballoon_dingcorner_ri_no"></i>
                                         </span>
-                                            <span className="talk_bubble_ellipsis noom_repMsg">
+                                                <span className="talk_bubble_ellipsis noom_repMsg">
                                                     <Dropdown overlay={msgMenuLeft} trigger={['click']}
                                                               placement="topCenter"
                                                               onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                         <Icon className="icon_ellipsis" type="ellipsis"/>
                                                     </Dropdown>
                                                 </span>
-                                        </div>
-                                    </li>;
+                                            </div>
+                                        </li>;
+                                    }
                                 }
                             } else if (e.messageReturnJson.messageType == "bigImgTag") {
                                 //图片
                                 if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
                                     //我发出的
-                                    messageTag = <li className="right" style={{'textAlign': 'right'}}>
-                                        <div className="u-name">
-                                            <span>{fromUser}</span>
-                                            <span className="cart_time">{mesTime}</span>
-                                        </div>
-                                        <div className="talk-cont">
-                                            <span className="name">{userPhoneIcon}</span>
-                                            <div className="talk_bubble_box">
+                                    if (e.toId == 138437) {
+                                        messageTag = <li className="right" style={{'textAlign': 'right'}}>
+                                            <div className="u-name">
+                                                <span>{fromUser}</span>
+                                                <span className="cart_time">{mesTime}</span>
+                                            </div>
+                                            <div className="talk-cont">
+                                                <span className="name">{userPhoneIcon}</span>
+                                                <div className="talk_bubble_box">
                                                 <span className="borderballoon borderballoon_file borderballoon_file_p">
                                                     <span className="bot"></span>
                                                     <span className="top"></span>
@@ -3414,22 +3807,56 @@ const AntGroupTabComponents = React.createClass({
                                                         <img onClick={_this.noomWatchImg.bind(this, attachment)}
                                                              src={attachment + '?' + MIDDLE_IMG} className="send_img"
                                                              alt={attachment}
+                                                             onError={_this.imgOnError.bind(this, attachment)}
                                                         />
                                                     </span>
                                                     <i className="borderballoon_dingcorner_le_no"></i>
                                                 </span>
-                                                <span className="talk_bubble_ellipsis">
-                                                    <Dropdown overlay={msgMenu} trigger={['click']}
+                                                    <span className="talk_bubble_ellipsis">
+                                                    <Dropdown overlay={this.state.msgMenu} trigger={['click']}
                                                               placement="topCenter"
                                                               onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                         <Icon className="icon_ellipsis" type="ellipsis"/>
                                                      </Dropdown>
                                                 </span>
-                                                <span className="talk_bubble_read"
-                                                      onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </li>;
+                                        </li>;
+                                    } else {
+                                        messageTag = <li className="right" style={{'textAlign': 'right'}}>
+                                            <div className="u-name">
+                                                <span>{fromUser}</span>
+                                                <span className="cart_time">{mesTime}</span>
+                                            </div>
+                                            <div className="talk-cont">
+                                                <span className="name">{userPhoneIcon}</span>
+                                                <div className="talk_bubble_box">
+                                                <span className="borderballoon borderballoon_file borderballoon_file_p">
+                                                    <span className="bot"></span>
+                                                    <span className="top"></span>
+                                                    <span className="send_img_cont">
+                                                        <img onClick={_this.noomWatchImg.bind(this, attachment)}
+                                                             src={attachment + '?' + MIDDLE_IMG} className="send_img"
+                                                             alt={attachment}
+                                                             onError={_this.imgOnError.bind(this, attachment)}
+                                                        />
+                                                    </span>
+                                                    <i className="borderballoon_dingcorner_le_no"></i>
+                                                </span>
+                                                    <span className="talk_bubble_ellipsis">
+                                                    <Dropdown overlay={this.state.msgMenu} trigger={['click']}
+                                                              placement="topCenter"
+                                                              onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                        <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                     </Dropdown>
+                                                </span>
+                                                    <span className="talk_bubble_read"
+                                                          onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
+                                                </div>
+                                            </div>
+                                        </li>;
+                                    }
+
                                 } else {
                                     //我收到的
                                     messageTag = <li style={{'textAlign': 'left'}}>
@@ -3443,7 +3870,9 @@ const AntGroupTabComponents = React.createClass({
                                                 <span className="send_img_cont">
                                                     <img onClick={_this.noomWatchImg.bind(this, attachment)}
                                                          className="send_img"
-                                                         src={attachment + '?' + MIDDLE_IMG} alt={attachment}/>
+                                                         src={attachment + '?' + MIDDLE_IMG} alt={attachment}
+                                                         onError={_this.imgOnError.bind(this, attachment)}
+                                                    />
                                                 </span>
                                                 <i className="borderballoon_dingcorner_ri_no"></i>
                                                 <span className="talk_bubble_ellipsis">
@@ -3461,12 +3890,13 @@ const AntGroupTabComponents = React.createClass({
                                 //语音
                                 if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
                                     //我发出的
-                                    messageTag = <li className="right" style={{'textAlign': 'right'}}>
-                                        <div className="u-name"><span>{fromUser}</span><span
-                                            className="cart_time">{mesTime}</span></div>
-                                        <div className="talk-cont">
-                                            <span className="name">{userPhoneIcon}</span>
-                                            <div className="talk_bubble_box">
+                                    if (e.toId == 138437) {
+                                        messageTag = <li className="right" style={{'textAlign': 'right'}}>
+                                            <div className="u-name"><span>{fromUser}</span><span
+                                                className="cart_time">{mesTime}</span></div>
+                                            <div className="talk-cont">
+                                                <span className="name">{userPhoneIcon}</span>
+                                                <div className="talk_bubble_box">
                                                 <span className="borderballoon noom_cursor noom_audio"
                                                       onClick={this.audioPlay.bind(this, attachment, '_right')}>
                                                     <audio id={attachment}>
@@ -3475,18 +3905,45 @@ const AntGroupTabComponents = React.createClass({
                                                     <span className="audio_right" id={attachment + '_audio'}></span>
                                                     <i className="borderballoon_dingcorner_ri_no"></i>
                                                 </span>
-                                                <span className="talk_bubble_ellipsis">
-                                                    <Dropdown overlay={msgMenu} trigger={['click']}
+                                                    <span className="talk_bubble_ellipsis">
+                                                    <Dropdown overlay={this.state.msgMenu} trigger={['click']}
                                                               placement="topCenter"
                                                               onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                         <Icon className="icon_ellipsis" type="ellipsis"/>
                                                     </Dropdown>
                                                 </span>
-                                                <span className="talk_bubble_read"
-                                                      onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </li>;
+                                        </li>;
+                                    } else {
+                                        messageTag = <li className="right" style={{'textAlign': 'right'}}>
+                                            <div className="u-name"><span>{fromUser}</span><span
+                                                className="cart_time">{mesTime}</span></div>
+                                            <div className="talk-cont">
+                                                <span className="name">{userPhoneIcon}</span>
+                                                <div className="talk_bubble_box">
+                                                <span className="borderballoon noom_cursor noom_audio"
+                                                      onClick={this.audioPlay.bind(this, attachment, '_right')}>
+                                                    <audio id={attachment}>
+                                                        <source src={attachment} type="audio/mpeg"></source>
+                                                    </audio>
+                                                    <span className="audio_right" id={attachment + '_audio'}></span>
+                                                    <i className="borderballoon_dingcorner_ri_no"></i>
+                                                </span>
+                                                    <span className="talk_bubble_ellipsis">
+                                                    <Dropdown overlay={this.state.msgMenu} trigger={['click']}
+                                                              placement="topCenter"
+                                                              onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                        <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                    </Dropdown>
+                                                </span>
+                                                    <span className="talk_bubble_read"
+                                                          onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
+                                                </div>
+                                            </div>
+                                        </li>;
+                                    }
+
                                 } else {
                                     //我收到的
                                     messageTag = <li style={{'textAlign': 'left'}}>
@@ -3518,14 +3975,15 @@ const AntGroupTabComponents = React.createClass({
                                 //文件
                                 if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
                                     //我发出的
-                                    messageTag = <li style={{'textAlign': 'right'}} className="right">
-                                        <div className="u-name">
-                                            <span>{fromUser}</span>
-                                            <span className="cart_time">{mesTime}</span>
-                                        </div>
-                                        <div className="talk-cont">
-                                            <span className="name">{userPhoneIcon}</span>
-                                            <div className="talk_bubble_box">
+                                    if (e.toId == 138437) {
+                                        messageTag = <li style={{'textAlign': 'right'}} className="right">
+                                            <div className="u-name">
+                                                <span>{fromUser}</span>
+                                                <span className="cart_time">{mesTime}</span>
+                                            </div>
+                                            <div className="talk-cont">
+                                                <span className="name">{userPhoneIcon}</span>
+                                                <div className="talk_bubble_box">
                                                 <span className="borderballoon noom_cursor borderballoon_file"
                                                       onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid, fileName)}>
                                                     <span className="bot"></span>
@@ -3559,18 +4017,72 @@ const AntGroupTabComponents = React.createClass({
                                                         </Dropdown>
                                                     </div>
                                                 </span>
-                                                <span className="talk_bubble_ellipsis">
-                                                    <Dropdown overlay={msgMenu} trigger={['click']}
+                                                    <span className="talk_bubble_ellipsis">
+                                                    <Dropdown overlay={this.state.msgMenu} trigger={['click']}
                                                               placement="topCenter"
                                                               onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                                         <Icon className="icon_ellipsis" type="ellipsis"/>
                                                     </Dropdown>
                                             </span>
-                                                <span className="talk_bubble_read"
-                                                      onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </li>;
+                                        </li>;
+                                    } else {
+                                        messageTag = <li style={{'textAlign': 'right'}} className="right">
+                                            <div className="u-name">
+                                                <span>{fromUser}</span>
+                                                <span className="cart_time">{mesTime}</span>
+                                            </div>
+                                            <div className="talk-cont">
+                                                <span className="name">{userPhoneIcon}</span>
+                                                <div className="talk_bubble_box">
+                                                <span className="borderballoon noom_cursor borderballoon_file"
+                                                      onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid, fileName)}>
+                                                    <span className="bot"></span>
+                                                    <span className="top"></span>
+                                                    <div className="borderballoon_le_cont">
+                                                        <div className="span_link_div">
+                                                            <span className="span_link">{fileName}</span>
+                                                            <span
+                                                                className="span_link password_ts">{fileLength}kb</span>
+                                                        </div>
+                                                        <img className="upexam_float span_link_img" style={{width: 38}}
+                                                             src="../src/components/images/maaee_link_file_102_102.png"
+                                                             alt=""/>
+                                                        <img id={fileUid} style={{display: "none"}} src={filePath}
+                                                             onClick={showLargeImg} alt=""/>
+                                                    </div>
+                                                    <div className="file_noom">
+                                                        <a className="noom_cursor  file_noom_line"
+                                                           onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid, fileName)}>
+                                                            <Icon type="eye"/>预览</a>
+                                                        <a href={filePath} target="_blank" title="下载"
+                                                           download={filePath}
+                                                           className="downfile_noom file_noom_line">
+                                                            <Icon type="download"/>下载</a>
+                                                        <Dropdown overlay={menu}
+                                                                  onVisibleChange={this.getCloudFile.bind(this, filePath, fileName, oriFileLength, fileCreateUid)}>
+                                                            <a className="ant-dropdown-link file_noom_line"
+                                                               href="javascript:;">
+                                                              <Icon type="bars"/>更多
+                                                            </a>
+                                                        </Dropdown>
+                                                    </div>
+                                                </span>
+                                                    <span className="talk_bubble_ellipsis">
+                                                    <Dropdown overlay={this.state.msgMenu} trigger={['click']}
+                                                              placement="topCenter"
+                                                              onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                                        <Icon className="icon_ellipsis" type="ellipsis"/>
+                                                    </Dropdown>
+                                            </span>
+                                                    <span className="talk_bubble_read"
+                                                          onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
+                                                </div>
+                                            </div>
+                                        </li>;
+                                    }
+
                                 } else {
                                     //我收到的
                                     messageTag = <li style={{'textAlign': 'left'}}>
@@ -3620,28 +4132,52 @@ const AntGroupTabComponents = React.createClass({
                             }
                         }
                     } else {
-                        messageTag = <li className="right" style={{'textAlign': 'right'}}>
-                            <div className="u-name">
-                                <span>{fromUser}</span>
-                                <span className="cart_time">{mesTime}</span>
-                            </div>
-                            <div className="talk-cont">
-                                <span className="name">{userPhoneIcon}</span>
-                                <div className="talk_bubble_box">
+                        if (e.toId == 138437) {
+                            messageTag = <li className="right" style={{'textAlign': 'right'}}>
+                                <div className="u-name">
+                                    <span>{fromUser}</span>
+                                    <span className="cart_time">{mesTime}</span>
+                                </div>
+                                <div className="talk-cont">
+                                    <span className="name">{userPhoneIcon}</span>
+                                    <div className="talk_bubble_box">
                                     <span className="borderballoon">{e.content}
                                         <i className="borderballoon_dingcorner_le_no"></i>
                                     </span>
-                                    <span className="talk_bubble_ellipsis">
-                                        <Dropdown overlay={msgMenu} trigger={['click']} placement="topCenter"
+                                        <span className="talk_bubble_ellipsis">
+                                        <Dropdown overlay={this.state.msgMenu} trigger={['click']} placement="topCenter"
                                                   onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
                                             <Icon className="icon_ellipsis" type="ellipsis"/>
                                         </Dropdown>
                                     </span>
-                                    <span className="talk_bubble_read"
-                                          onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </li>;
+                            </li>;
+                        } else {
+                            messageTag = <li className="right" style={{'textAlign': 'right'}}>
+                                <div className="u-name">
+                                    <span>{fromUser}</span>
+                                    <span className="cart_time">{mesTime}</span>
+                                </div>
+                                <div className="talk-cont">
+                                    <span className="name">{userPhoneIcon}</span>
+                                    <div className="talk_bubble_box">
+                                    <span className="borderballoon">{e.content}
+                                        <i className="borderballoon_dingcorner_le_no"></i>
+                                    </span>
+                                        <span className="talk_bubble_ellipsis">
+                                        <Dropdown overlay={this.state.msgMenu} trigger={['click']} placement="topCenter"
+                                                  onVisibleChange={this.getMesUUid.bind(this, e.uuid, e)}>
+                                            <Icon className="icon_ellipsis" type="ellipsis"/>
+                                        </Dropdown>
+                                    </span>
+                                        <span className="talk_bubble_read"
+                                              onClick={this.checkTalkReaders.bind(this, e)}>{e.readStateStr}</span>
+                                    </div>
+                                </div>
+                            </li>;
+                        }
+
                     }
                     messageTagArray.push(messageTag);
                 }
@@ -3664,8 +4200,12 @@ const AntGroupTabComponents = React.createClass({
                             {sendBtn}
                         </Col>
                     </Row>;
+                    $('#groupTalk').removeClass('noom_MYJ');
+                } else {
+                    $('#groupTalk').addClass('noom_MYJ');
                 }
             } else {
+                $('#groupTalk').removeClass('noom_MYJ');
                 welcomeTitle = antGroup.state.currentGroupObj.name;
                 sendBtn = <Button value="groupSend" onClick={antGroup.sendMessage}>
                     <div>发送<p className="password_ts">(Enter)</p></div>
@@ -3757,7 +4297,9 @@ const AntGroupTabComponents = React.createClass({
                     footer={[
                         <div>
                             <Button type="primary" htmlType="submit" className="login-form-button"
-                                    onClick={antGroup.uploadFile}>
+                                    onClick={antGroup.uploadFile}
+                                    disabled={this.state.sendFileButton}
+                            >
                                 发送
                             </Button>
                             <Button type="ghost" htmlType="reset" className="login-form-button"
