@@ -91,6 +91,7 @@ const Role = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var data = ret.response;
+                console.log(data);
                 _this.drawTable(data);
 
             },

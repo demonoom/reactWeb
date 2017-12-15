@@ -522,7 +522,6 @@ const AntNestTabComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                debugger
                 var response = ret.response;
                 response.forEach(function (e) {
                     //话题的回复

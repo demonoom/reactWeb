@@ -2004,7 +2004,8 @@ const AntGroupTabComponents = React.createClass({
                                             // "fromUser": messageOfSinge.toUser,
                                             "fromUser": messageOfSinge.fromUser,
                                             contentArray: contentArray,
-                                            "messageToType": 1
+                                            "messageToType": 1,
+                                            "uuid": messageOfSinge.uuid
                                         };
                                         antGroup.props.onNewMessage(userJson);
                                     }
@@ -2049,7 +2050,8 @@ const AntGroupTabComponents = React.createClass({
                                             // "fromUser": messageOfSinge.fromUser,个人消息收到的时候要写成fromUser，而发出的要写成
                                             //toUser，否则会造成左侧联系人丢失。
                                             contentArray: contentArray,
-                                            "messageToType": 1
+                                            "messageToType": 1,
+                                            "uuid": messageOfSinge.uuid
                                         };
                                         // if (isEmpty(isTurnPage)) {
                                         // }
@@ -2103,7 +2105,8 @@ const AntGroupTabComponents = React.createClass({
                                     "fromUser": fromUser,
                                     "toChatGroup": messageOfSinge.toChatGroup,
                                     contentArray: contentArray,
-                                    "messageToType": 4
+                                    "messageToType": 4,
+                                    "uuid": messageOfSinge.uuid
                                 };
                                 // if (isEmpty(isTurnPage)) {
                                 // }
@@ -2115,7 +2118,8 @@ const AntGroupTabComponents = React.createClass({
                                     "fromUser": fromUser,
                                     "toChatGroup": messageOfSinge.toChatGroup,
                                     contentArray: contentArray,
-                                    "messageToType": 4
+                                    "messageToType": 4,
+                                    "uuid": messageOfSinge.uuid
                                 };
                                 // if (isEmpty(isTurnPage)) {
                                 // }
