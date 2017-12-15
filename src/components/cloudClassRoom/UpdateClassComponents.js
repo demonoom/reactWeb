@@ -838,7 +838,7 @@ const UpdateClassComponents = React.createClass({
                 break;
             }
         }
-
+        //点击删除时；将输入的值进行遍历，并删除其值，不存在空值
         var removevideo=courseInfoJson.videos;
         for (let i = 0; i < removevideo.length; i++) {
             var squence= removevideo[i].squence;

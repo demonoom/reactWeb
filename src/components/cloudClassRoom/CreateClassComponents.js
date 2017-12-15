@@ -555,10 +555,6 @@ const CreateClassComponents = React.createClass({
         var liveTime = dateString;
         var videoJson = {squence, liveTime};
         this.buildVideosArray(videoJson, "liveTime");
-        // this.setState({
-        //      value:value,
-        //  })
-
     },
 
     lessonTimeOnOk(value) {
@@ -673,7 +669,8 @@ const CreateClassComponents = React.createClass({
             videoJson.squence = i + 1;
             // videoJson.courseId = courseInfoJson.courseTypeId;
             videoJson.userID = teacher;
-            videoJson.liveTime = new Date(time).valueOf();
+             videoJson.liveTime = new Date(time).valueOf();
+            // videoJson.liveTime = new Date(time);
             this.buildVideosArray(videoJson);
         }
         if (isEmpty(courseInfoJson.videos) == false) {
