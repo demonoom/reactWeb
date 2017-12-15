@@ -105,7 +105,7 @@ const MonthlySummary = React.createClass({
         // console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                // console.log(ret);
+                console.log(ret);
                 if (ret.msg == "调用成功" && ret.success == true) {
                     var data = ret.response;
                     _this.setState({url: data.downloadURL})

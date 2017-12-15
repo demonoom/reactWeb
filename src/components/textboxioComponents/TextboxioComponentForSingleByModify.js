@@ -9,15 +9,15 @@ var TextboxioComponentForSingleByModify = React.createClass({
     mytextareaSingleModifyEditor.events.dirty.addListener(function () {
       mytextareaSingleModifyEditor.mode.set("code");
       mytextareaSingleModifyEditor.mode.set("design");
-      var newContent = "<span></span>";
-      mytextareaSingleModifyEditor.content.insertHtmlAtCursor(newContent);
+      // var newContent = "<span></span>";
+      // mytextareaSingleModifyEditor.content.insertHtmlAtCursor(newContent);
     });
     mytextareaSingleModifyEditor.events.focus.addListener(function () {
       if(mytextareaSingleModifyEditor.mode.get()=="code"){
         mytextareaSingleModifyEditor.mode.set("design");
       }
-      var newContent = "<span></span>";
-      mytextareaSingleModifyEditor.content.insertHtmlAtCursor(newContent);
+      // var newContent = "<span></span>";
+      // mytextareaSingleModifyEditor.content.insertHtmlAtCursor(newContent);
     });
   },
   componentDidUpdate(){

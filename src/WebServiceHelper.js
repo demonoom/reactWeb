@@ -1,12 +1,12 @@
 /**
  * Created by devnote on 16-12-2.
  */
-import {IS_DEBUG} from './utils/Const';
+import {IS_DEBUG,WEB_VERSION} from './utils/Const';
 import {IS_LIVE_DEBUG} from './utils/Const';
 //导出常量
 const REMOTE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
 
-const LOCAL_URL = "http://192.168.1.230:9006/Excoord_ApiServer/webservice";
+const LOCAL_URL = "http://192.168.1.140:9006/Excoord_ApiServer/webservice";
 
 const LOCAL_URL_LIVE = "http://172.16.2.109:9006/Excoord_ApiServer/webservice";
 const WEBSERVICE_URL = IS_DEBUG ? (IS_LIVE_DEBUG ? LOCAL_URL_LIVE : LOCAL_URL) : REMOTE_URL;
@@ -61,7 +61,7 @@ export function doWebService(data, listener) {
             XMLHttpRequest.setRequestHeader("accessUser", sessionStorage.getItem("ident"));
             XMLHttpRequest.setRequestHeader("machine", localStorage.getItem("machineId"));
             XMLHttpRequest.setRequestHeader("machineType", "web");
-            XMLHttpRequest.setRequestHeader("version", "1.02");
+            XMLHttpRequest.setRequestHeader("version", WEB_VERSION);
         },
         // headers: {
         //     "accessUser": sessionStorage.getItem("ident"),

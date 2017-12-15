@@ -10,7 +10,7 @@ import TextboxioComponentForSimpleAnswer from './textboxioComponents/TextboxioCo
 import TextboxioComponentForAnswer  from './textboxioComponents/TextboxioComponentForAnswer';
 import SubjectVideoUploadComponents from './SubjectVideoUploadComponents';
 import {doWebService} from '../WebServiceHelper';
-import {isEmpty} from "../utils/Const";
+import {isEmpty,AUDIO_SUBJECT_ALLOWED} from "../utils/Const";
 const RadioGroup = Radio.Group;
 const Option = Select.Option;
 const CheckboxGroup = Checkbox.Group;
@@ -585,7 +585,7 @@ const SubjectUploadTabComponents = React.createClass({
         var iTagId = "iTag"+parseInt(Math.random()*1000);
         // var attachment = "http://60.205.86.217/upload5/2017-12-04/19/dd68da27-dd1c-4ecd-8677-50d2af9cfc5a.mp3";
         // var newContent ="<span class='adiuo_p_play'><i class='audio_left' onclick='javascript:document.getElementById('\'audioTag\').play()'></i><audio  id='audiotag' style='display: none'  controls='controls' width='200' height='30' src='"+attachment+"'></audio></span>";
-        var newContent ='<span class="adiuo_p_play"><i id="'+iTagId+'" class="audio_left" onclick="javascript:document.getElementById(\''+id+'\').play();document.getElementById(\''+iTagId+'\').className=\'audio_left_run\'"></i><audio onended="javascript:document.getElementById(\''+iTagId+'\').className=\'audio_left\'" id="'+id+'" style="display: none"  controls="controls" width="200" height="30" src="'+attachment+'"></audio></span>';
+        var newContent ='<span class="adiuo_p_play"><i id="'+iTagId+'" class="audio_left" onclick="javascript:var isPaused=document.getElementById(\''+id+'\').paused;if(isPaused){ document.getElementById(\''+id+'\').play();document.getElementById(\''+iTagId+'\').className=\'audio_left_run\'; }else{ document.getElementById(\''+id+'\').pause();document.getElementById(\''+iTagId+'\').className=\'audio_left\'; }"></i><audio onended="javascript:document.getElementById(\''+iTagId+'\').className=\'audio_left\'" id="'+id+'" style="display: none"  controls="controls" width="200" height="30" src="'+attachment+'"></audio></span>';
         switch(this.state.currentSubjectType){
             case "single":
                 mytextareaSingleEditor.content.insertHtmlAtCursor(newContent);
@@ -750,6 +750,8 @@ const SubjectUploadTabComponents = React.createClass({
                 保存并返回列表
             </Button>
         </div>;
+        //插入音频按钮
+        var audioButton = <Button className="row-t-f" onClick={this.showVideoUploadModal.bind(this,'single')}>插入音频</Button>;
         if (currentActiveKey == "单选题") {
             buttons = <div>
                 <Button type="primary" htmlType="submit" className="login-form-button"
@@ -760,6 +762,7 @@ const SubjectUploadTabComponents = React.createClass({
                     保存并返回列表
                 </Button>
             </div>;
+            audioButton = <Button className="row-t-f" onClick={this.showVideoUploadModal.bind(this,'single')}>插入音频</Button>;
         } else if (currentActiveKey == "多选题") {
             buttons = <div>
                 <Button type="primary" htmlType="submit" className="login-form-button"
@@ -770,6 +773,7 @@ const SubjectUploadTabComponents = React.createClass({
                     保存并返回列表
                 </Button>
             </div>;
+            audioButton = <Button onClick={this.showVideoUploadModal.bind(this,'mulitiSelect')}>插入音频</Button>
         } else if (currentActiveKey == "判断题") {
             buttons = <div>
                 <Button type="primary" htmlType="submit" className="login-form-button"
@@ -780,6 +784,7 @@ const SubjectUploadTabComponents = React.createClass({
                     保存并返回列表
                 </Button>
             </div>;
+            audioButton = <Button onClick={this.showVideoUploadModal.bind(this,'correct')}>插入音频</Button>;
         } else if (currentActiveKey == "简答题") {
             buttons = <div>
                 <Button type="primary" htmlType="submit" className="login-form-button"
@@ -791,6 +796,12 @@ const SubjectUploadTabComponents = React.createClass({
                     保存并返回列表
                 </Button>
             </div>;
+            audioButton = <Button onClick={this.showVideoUploadModal.bind(this,'simpleAnswer')}>插入音频</Button>;
+        }
+
+        //如果用户不在允许的权限列表中，将audioButton设置为null，不显示
+        if(AUDIO_SUBJECT_ALLOWED.indexOf(sessionStorage.getItem("ident")) == -1){
+            audioButton = null;
         }
 
         var tipInfo = <div className="binding_b_t">1、如果题目来源于word文档，建议使用office2007完成传题操作；<br/>
@@ -832,7 +843,7 @@ const SubjectUploadTabComponents = React.createClass({
                                 </Col>
                                 <Col span={20}>
                                     <TextboxioComponentForSingle />
-                                    <Button className="row-t-f" onClick={this.showVideoUploadModal.bind(this,'single')}>插入音频</Button>
+                                    {audioButton}
                                 </Col>
                             </Row>
                             <Row>
@@ -882,7 +893,7 @@ const SubjectUploadTabComponents = React.createClass({
                                     </Col>
                                     <Col span={20}>
                                         <TextboxioComponentForMulitiSelect/>
-                                        <Button onClick={this.showVideoUploadModal.bind(this,'mulitiSelect')}>插入音频</Button>
+                                        {audioButton}
                                     </Col>
                                 </Row>
                                 <Row>
@@ -934,7 +945,7 @@ const SubjectUploadTabComponents = React.createClass({
                                     </Col>
                                     <Col span={20}>
                                         <TextboxioComponentForCorrect/>
-                                        <Button onClick={this.showVideoUploadModal.bind(this,'correct')}>插入音频</Button>
+                                        {audioButton}
                                     </Col>
                                 </Row>
                                 <Row>
@@ -976,7 +987,7 @@ const SubjectUploadTabComponents = React.createClass({
                                     </Col>
                                     <Col span={20}>
                                         <TextboxioComponentForSimpleAnswer/>
-                                        <Button onClick={this.showVideoUploadModal.bind(this,'simpleAnswer')}>插入音频</Button>
+                                        {audioButton}
                                     </Col>
                                 </Row>
 
