@@ -52,11 +52,7 @@ const MessageMenu = React.createClass({
                     if (uuid != nextProps.userJson.uuid) {
                         num += 1;
                     } else {
-                        if (uuid != nextProps.userJson.uuid) {
-                            num = num;
-                        } else {
-                            num = 0;
-                        }
+                        num = num;
                     }
                 }
                 uuid = nextProps.userJson.uuid;
