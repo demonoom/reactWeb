@@ -107,8 +107,8 @@ const FlowDetailComponent = React.createClass({
             case "text":
             case "textarea":
                 formTag = <Row>
-                    <Col span={3}>{label}</Col>
-                    <Col span={21}>
+                    <Col  span={6} className="framework_m_l">{label}：</Col>
+                    <Col  span={16} className="framework_m_r">
                         <Input placeholder={placeholder} defaultValue={value}/>
                     </Col>
                 </Row>
@@ -122,12 +122,9 @@ const FlowDetailComponent = React.createClass({
                     optionsArray.push(optionObj);
                 });
                 formTag = <Row>
-                    <Col span={3}>{label}</Col>
-                    <Col span={21}>
-                        <Select
-                            style={{width: 130}}
-                            className="framework_m_r"
-                        >
+                    <Col  span={6} className="framework_m_l">{label}：</Col>
+                    <Col  span={16}>
+                        <Select style={{width: 130}} className="framework_m_r" >
                             {optionsArray}
                         </Select>
                     </Col>
@@ -142,8 +139,8 @@ const FlowDetailComponent = React.createClass({
                     optionsArray.push(radioObj);
                 });
                 formTag = <Row>
-                        <Col span={3}>{label}</Col>
-                        <Col span={21}>
+                        <Col  span={6} className="framework_m_l">{label}：</Col>
+                        <Col span={16} className="framework_m_r setting_radio_group">
                             <RadioGroup>
                                 {optionsArray}
                             </RadioGroup>
@@ -159,8 +156,8 @@ const FlowDetailComponent = React.createClass({
                     optionsArray.push(optionObj);
                 })
                 formTag = <Row>
-                    <Col span={3}>{label}</Col>
-                    <Col span={21}>
+                    <Col  span={6} className="framework_m_l">{label}：</Col>
+                    <Col span={16} className="framework_m_r">
                         <CheckboxGroup options={optionsArray}/>
                     </Col>
                 </Row>
@@ -168,8 +165,8 @@ const FlowDetailComponent = React.createClass({
             case "date":
                 var tagId = label+"#"+type;
                 formTag = <Row>
-                    <Col span={3}>{label}</Col>
-                    <Col span={21}>
+                    <Col  span={6} className="framework_m_l">{label}：</Col>
+                    <Col span={16} className="framework_m_r">
                         <DatePicker />
                     </Col>
                 </Row>
@@ -177,8 +174,8 @@ const FlowDetailComponent = React.createClass({
             case "file":
                 var tagId = label+"#"+type;
                 formTag = <Row>
-                    <Col span={3}>{label}</Col>
-                    <Col span={21}>
+                    <Col  span={6} className="framework_m_l">{label}：</Col>
+                    <Col span={16} className="framework_m_r">
                         <Upload {...props}>
                             <Button>
                                 <Icon type="upload" /> 上传
@@ -190,8 +187,8 @@ const FlowDetailComponent = React.createClass({
             case "number":
                 var tagId = label+"#"+type;
                 formTag = <Row>
-                    <Col span={3}>{label}</Col>
-                    <Col span={21}>
+                    <Col  span={6} className="framework_m_l">{label}：</Col>
+                    <Col span={16} className="framework_m_r">
                         <Input placeholder={placeholder} defaultValue={value}/>
                     </Col>
                 </Row>
@@ -209,8 +206,8 @@ const FlowDetailComponent = React.createClass({
                 //用户
                 var approvalUser = flowApprovalUser.approvalUser;
                 approvalUserTag = <Row>
-                    <Col span={8}>审批类型：用户</Col>
-                    <Col span={16}>
+                    <Col span={12} className="setting_le">审批类型：用户</Col>
+                    <Col span={12} className="setting_le">
                         审批人：{approvalUser.userName}
                     </Col>
                 </Row>;
@@ -220,8 +217,8 @@ const FlowDetailComponent = React.createClass({
                 var approvalRoleVariables = flowApprovalUser.approvalRoleVariables;
                 var roleName = approvalRoleVariables.name;
                 approvalUserTag = <Row>
-                    <Col span={8}>审批类型：角色</Col>
-                    <Col span={16}>
+                    <Col span={12} className="setting_le">审批类型：角色</Col>
+                    <Col span={12} className="setting_le">
                         审批人：{roleName}
                     </Col>
                 </Row>;
@@ -238,8 +235,8 @@ const FlowDetailComponent = React.createClass({
                     approvalName = "第"+approvalLevel+"级主管"
                 }
                 approvalUserTag = <Row>
-                    <Col span={8}>审批类型：部门主管</Col>
-                    <Col span={16}>
+                    <Col span={12} className="setting_le">审批类型：部门主管</Col>
+                    <Col span={12} className="setting_le">
                         审批人：{approvalName}
                     </Col>
                 </Row>;
@@ -247,8 +244,8 @@ const FlowDetailComponent = React.createClass({
             case 4:
                 //发起人自己
                 approvalUserTag = <Row>
-                    <Col span={8}>审批类型：用户</Col>
-                    <Col span={16}>
+                    <Col span={12} className="setting_le">审批类型：用户</Col>
+                    <Col span={12} className="setting_le">
                         审批人：发起人自己
                     </Col>
                 </Row>;
@@ -277,28 +274,26 @@ const FlowDetailComponent = React.createClass({
     render() {
 
         return (
-            <div >
+            <div className="modal_register_main">
                 <div className="modal_steps">
                     <Row>
-                        <Col span={24}>审批表单</Col>
+                        <Col span={24} className="setting_le_title">审批表单</Col>
                     </Row>
                     <Row>
-                        <Col span={3}>审批名称:</Col>
-                        <Col span={21}>{this.state.procDefName}</Col>
+                        <Col span={6} className="framework_m_l">审批名称：</Col>
+                        <Col span={16} className="framework_m_r">{this.state.procDefName}</Col>
                     </Row>
                     <Row>
-                        <Col span={3}>审批描述:</Col>
-                        <Col span={21}>{this.state.procDefDescribe}</Col>
+                        <Col span={6} className="framework_m_l">审批描述：</Col>
+                        <Col span={16} className="framework_m_r">{this.state.procDefDescribe}</Col>
                     </Row>
-                    <Row>
+
                         {this.state.flowFormTagList}
-                    </Row>
+
                     <Row>
-                        <Col span={24}>审批人</Col>
+                        <Col span={24} className="setting_le_title">审批人</Col>
                     </Row>
-                    <Row>
                         {this.state.flowApprovalUserTagList}
-                    </Row>
 				</div>
             </div>
         );

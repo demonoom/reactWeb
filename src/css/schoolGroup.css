@@ -463,7 +463,7 @@
     color: #666;
 }
 .process_l{
-    width: calc(100% - 100px);
+    width: calc(100% - 150px);
 }
 .name_max5{
     width: 140px;
@@ -523,7 +523,7 @@
     height: 50px;
     border-left: #e0e0e0 1px solid;
     padding-left: 30px;
-    width: 100px;
+    width: 150px;
 }
 .process_r a:nth-child(2){
     float: right;
@@ -724,4 +724,17 @@
 }
 .conditions_row_2 .ant-row:first-child{
     margin-top: 0 !important;
+}
+.setting_radio_group .ant-radio-group{
+    margin-top: -14px;
+    width:100%;
+}
+.setting_le{
+    padding-left: 72px;
+    padding-right: 10px;
+}
+.setting_le_title{
+    border-bottom: 1px solid #e5e5e5;
+    padding-bottom: 5px;
+    color: #333;
 }

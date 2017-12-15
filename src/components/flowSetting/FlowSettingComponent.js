@@ -82,7 +82,7 @@ const FlowSettingComponent = React.createClass({
                         <a onClick={_this.suspendOrActivationProcessDefinitionConfirm.bind(_this, procDefId, "suspend")}>停用</a>;
                 }
                 var deleteButton = <a onClick={_this.deleteProcessDefinitionConfirm.bind(_this, flowGroupProcDefId)}>删除</a>;
-                var detailButton = <a onClick={_this.showProcessDefinitionDetailModal.bind(_this, procDefId)}>详情</a>;
+                var detailButton = <a className="schoolgroup_btn_left" onClick={_this.showProcessDefinitionDetailModal.bind(_this, procDefId)}>详情</a>;
                 var procName = processDefinition.procDefName;
                 var procDefDescribe = processDefinition.procDefDescribe;
                 var flowObj = <div className="process_flex">
