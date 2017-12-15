@@ -96,7 +96,7 @@ const FlowSettingComponent = React.createClass({
                     <div className="process_r">
                         {suspendButton}
                         {deleteButton}
-                        {detailButton}
+                        {/*{detailButton}*/}
                         {/* <a className="schoolgroup_btn_left" onClick={_this.removeFlow.bind(_this,procDefId)}>移动到</a>*/}
                     </div>
                 </div>;
