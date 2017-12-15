@@ -352,7 +352,6 @@ const UpdateClassComponents = React.createClass({
         };
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
-                debugger
                 var response = ret.response;
                 if (isEmpty(response) == false) {
                     var classOptionArray = [];

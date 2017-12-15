@@ -65,7 +65,6 @@ class LessonPlans extends React.Component {
 
         optContent = optContent || this.state.contentData;
 
-        debugger
         var optContentArray = optContent.split("#");
         var teachScheduleId = optContentArray[0];
         var optType = optContentArray[1];
@@ -201,7 +200,6 @@ class LessonPlans extends React.Component {
                 dataFilter: clickKey,
                 comeFrom: this.state.dataFilter,
             }
-            debugger
             this.setState({activeKey: '课件', courseWareParams: params});
         } else {
             this.setState({subjectDataFilter: clickKey});
