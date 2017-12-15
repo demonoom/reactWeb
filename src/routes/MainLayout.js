@@ -522,8 +522,6 @@ const MainLayout = React.createClass({
      * 好友对好友的消息发送
      */
     receiveNewMessage(userJson) {
-        // console.log(userJson);
-        // console.log(947);
         this.setState({
             currentKey: 'message',
             resouceType: '',

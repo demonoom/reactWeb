@@ -8002,5 +8002,12 @@ select.course_n:hover {
 }
 
 .noom_MYZcontent {
-    white-space:normal;
+    white-space: normal;
+}
+
+.noomFinish ant-badge > ant-scroll-number ant-badge-count {
+    /*right: 0;*/
+    /*top: 50% !important;*/
+    margin-top: 5px;
+    margin-left: 5px;
 }
