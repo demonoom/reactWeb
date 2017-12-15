@@ -9,6 +9,8 @@ import FlowSettingComponent from '../../components/flowSetting/FlowSettingCompon
 import {isEmpty} from '../../utils/utils';
 import AttendanceSettingComponents from '../../components/Attendance/AttendanceSettingComponents';
 import Attendance from '../../components/Attendance/Attendance';
+import Role from '../../components/role/Role';
+import RoleSettingComponents from '../../components/role/RoleSettingComponents';
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
 
@@ -43,6 +45,8 @@ class SystemSettingComponent extends React.Component {
         this.addSubGroupComplete = this.addSubGroupComplete.bind(this);
         this.attendanceSettingClick = this.attendanceSettingClick.bind(this);
         this.mapShow = this.mapShow.bind(this);
+        this.roleGroupClick = this.roleGroupClick.bind(this);
+        this.sendDefaultSelected = this.sendDefaultSelected.bind(this);
     }
 
 
@@ -127,6 +131,14 @@ class SystemSettingComponent extends React.Component {
         this.props.mapShow();
     }
 
+    roleGroupClick(id) {
+        this.setState({roleGroupClick:id})
+    }
+
+    sendDefaultSelected(key) {
+        this.setState({sendDefaultSelected:key})
+    }
+
     render() {
         //系统设置页面渲染 根据如下判断结果，完成对页面中部位置的渲染，不同情况，渲染不同组件
         switch (this.props.currentItem) {
@@ -168,6 +180,18 @@ class SystemSettingComponent extends React.Component {
                     mapShow={this.mapShow}
                     postPos={this.state.postPos}
                 />;
+                break;
+            case 'noomjuese':
+                //角色
+                this.middleComponent = <RoleSettingComponents
+                                            roleGroupClick={this.roleGroupClick}
+                                            sendDefaultSelected={this.sendDefaultSelected}
+                                        />
+                this.tabComponent = <Role
+                                        roleGroupClick={this.state.roleGroupClick}
+                                        sendDefaultSelected={this.state.sendDefaultSelected}
+                                    />;
+                break;
         }
 
 

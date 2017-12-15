@@ -31,8 +31,11 @@ const MonthlySummary = React.createClass({
         };
     },
 
-    componentDidMount() {
+    componentWillMount() {
         this.getTimeNow();
+    },
+
+    componentDidMount() {
         this.viewRootDepartment()
     },
 
@@ -105,7 +108,7 @@ const MonthlySummary = React.createClass({
         // console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                console.log(ret);
+                // console.log(ret);
                 if (ret.msg == "调用成功" && ret.success == true) {
                     var data = ret.response;
                     _this.setState({url: data.downloadURL})
@@ -142,7 +145,7 @@ const MonthlySummary = React.createClass({
                     missCardTimes: v.miss,  //缺卡
                     absenteeism: v.absent,   //旷工
                     attendance: v.attendance,   //出勤
-                }
+                };
                 var obj2 = {};
                 for (var i = 0; i < v.detail.length; i++) {
                     obj2['date' + i] = v.detail[i]
@@ -209,7 +212,9 @@ const MonthlySummary = React.createClass({
         var endTime = dateString[1];
         var departmentsId = this.state.departmentsId;
         this.setState({startTime, endTime});
-        this.getMonthlySummary(startTime, endTime, departmentsId);
+        if (date.length != 0) {
+            this.getMonthlySummary(startTime, endTime, departmentsId);
+        }
     },
 
     /**
@@ -220,8 +225,10 @@ const MonthlySummary = React.createClass({
         //调用请求方法
         var startTime = this.state.startTime;
         var endTime = this.state.endTime;
-        this.setState({departmentsId: value})
-        this.getMonthlySummary(startTime, endTime, value);
+        this.setState({departmentsId: value});
+        if(isEmpty(startTime)==false) {
+            this.getMonthlySummary(startTime, endTime, value);
+        }
     },
 
     buttonOnClick() {
@@ -264,8 +271,9 @@ const MonthlySummary = React.createClass({
                     <div className="checking_add_box group_cont">
                         <div className="ding_user_t">
                             时间：
-                            <RangePicker className="range_time" onChange={this.timeOnChange}
-                                         value={[moment(this.state.startTime, dateFormat), moment(this.state.endTime, dateFormat)]}/>
+                            <RangePicker
+                                defaultValue={[moment(this.state.startTime, dateFormat), moment(this.state.endTime, dateFormat)]}
+                                className="range_time" onChange={this.timeOnChange}/>
                             <Select defaultValue="全公司" style={{width: 120}} onSelect={this.departmentOnSelect}
                                     className="add_out">
                                 {departmentArr}
