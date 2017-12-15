@@ -8005,9 +8005,9 @@ select.course_n:hover {
     white-space: normal;
 }
 
-.noomFinish ant-badge > ant-scroll-number ant-badge-count {
-    /*right: 0;*/
-    /*top: 50% !important;*/
-    margin-top: 5px;
-    margin-left: 5px;
+.noomFinish sup.ant-scroll-number{
+    right: 0;
+    top: 24px;
+    z-index: 1000;
+    margin-right: -10px;
 }
