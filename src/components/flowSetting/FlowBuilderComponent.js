@@ -443,7 +443,7 @@ const FlowBuilderComponent = React.createClass({
         }else if(isEmpty(approvalJsonArray)){
             message.error("请选择流程审批人");
             return;
-        }else if(isEmpty(this.state.messageOfCopyPersonSendType) || "-1"==this.state.messageOfCopyPersonSendType ){
+        }else if(isEmpty(copyPersonList)==false && copyPersonList.length!=0 && (isEmpty(this.state.messageOfCopyPersonSendType) || "-1"==this.state.messageOfCopyPersonSendType) ){
             message.error("请选择抄送人消息推送方式");
             return;
         }
