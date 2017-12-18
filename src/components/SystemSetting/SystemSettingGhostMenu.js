@@ -121,7 +121,7 @@ class SystemSettingGhostMenu extends React.Component {
         }
 
         //手动添加的测试菜单---开始
-        var flowUl = <li className="multi">
+        /*var flowUl = <li className="multi">*/
             {/*<ul className="second">*/}
                 {/*<li onClick={event => {*/}
                     {/*this.changeMenu(event, 'noomkaoqing', true)*/}
@@ -135,9 +135,9 @@ class SystemSettingGhostMenu extends React.Component {
                 {/*}}><img className="icon_system_img" src='http://60.205.86.217/upload2/common/img/examine_icon.png'/>角色*/}
                 {/*</li>*/}
             {/*</ul>*/}
-        </li>;
-        liArr.push(flowUl);
-        arr.push(liArr);
+        {/*</li>;*/}
+        {/*liArr.push(flowUl);*/}
+        {/*arr.push(liArr);*/}
         //手动添加的测试菜单---结束
 
         _this.setState({arr});
