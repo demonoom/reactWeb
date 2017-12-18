@@ -387,8 +387,6 @@ const UpdateClassComponents = React.createClass({
                         var classInfo = response[i];
                         var id = classInfo.id;
                         var name = classInfo.name;
-                        console.log(2222);
-                        console.log(name);
                         var optionObj = <Option key={id} value={id}>{name}</Option>;
                         if (id == courseInfoJson.courseClass) {
                             _this.setState({"defaultSelected": name});
@@ -939,29 +937,12 @@ const UpdateClassComponents = React.createClass({
             }
             console.log("teacher" + teacher + "\t" + time);
             videoJson.squence = i + 1;
-            console.log(111);
-            console.log( courseInfoJson.videos[i]);
-            // videoJson.courseId = courseInfoJson.id;
-            // videoJson.url = courseInfoJson.videos[i].url;
-            // videoJson.remark = courseInfoJson.videos[i].remark;
-            // videoJson.videoStatus = courseInfoJson.videos[i].videoStatus;
-            // videoJson.userID = teacher;
-            // videoJson.liveTime = new Date(time).valueOf();
-            if(this.isWeiClass){
-                videoJson.courseId = courseInfoJson.id;
-                videoJson.url = courseInfoJson.videos[i].url;
-                videoJson.remark = courseInfoJson.videos[i].remark;
-                videoJson.videoStatus = courseInfoJson.videos[i].videoStatus;
-                videoJson.userID = teacher;
-                videoJson.liveTime = new Date(time).valueOf();
-            }else {
-                videoJson.courseId = courseInfoJson.id;
-                // videoJson.url = courseInfoJson.videos[i].url;
-                // videoJson.remark = courseInfoJson.videos[i].remark;
-                videoJson.videoStatus = courseInfoJson.videos[i].videoStatus;
-                videoJson.userID = teacher;
-                videoJson.liveTime = new Date(time).valueOf();
-            }
+            videoJson.courseId = courseInfoJson.id;
+            videoJson.url = courseInfoJson.videos[i].url;
+            videoJson.remark = courseInfoJson.videos[i].remark;
+            videoJson.videoStatus = courseInfoJson.videos[i].videoStatus;
+            videoJson.userID = teacher;
+            videoJson.liveTime = new Date(time).valueOf();
             if (videoJson.squence == 1) {
                 courseInfoJson.startTime = videoJson.liveTime;
             }
