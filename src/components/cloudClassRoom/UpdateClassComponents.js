@@ -129,6 +129,7 @@ const UpdateClassComponents = React.createClass({
         var moneyInputDisable;
         var isShowseclect=false;
         var LessionIsUpdateDisable=false;
+         videoJsonArray=[];
 
         if (money != 0) {
             isFree = 2;
@@ -938,12 +939,29 @@ const UpdateClassComponents = React.createClass({
             }
             console.log("teacher" + teacher + "\t" + time);
             videoJson.squence = i + 1;
-            videoJson.courseId = courseInfoJson.id;
-            videoJson.url = courseInfoJson.videos[i].url;
-            videoJson.remark = courseInfoJson.videos[i].remark;
-            videoJson.videoStatus = courseInfoJson.videos[i].videoStatus;
-            videoJson.userID = teacher;
-            videoJson.liveTime = new Date(time).valueOf();
+            console.log(111);
+            console.log( courseInfoJson.videos[i]);
+            // videoJson.courseId = courseInfoJson.id;
+            // videoJson.url = courseInfoJson.videos[i].url;
+            // videoJson.remark = courseInfoJson.videos[i].remark;
+            // videoJson.videoStatus = courseInfoJson.videos[i].videoStatus;
+            // videoJson.userID = teacher;
+            // videoJson.liveTime = new Date(time).valueOf();
+            if(this.isWeiClass){
+                videoJson.courseId = courseInfoJson.id;
+                videoJson.url = courseInfoJson.videos[i].url;
+                videoJson.remark = courseInfoJson.videos[i].remark;
+                videoJson.videoStatus = courseInfoJson.videos[i].videoStatus;
+                videoJson.userID = teacher;
+                videoJson.liveTime = new Date(time).valueOf();
+            }else {
+                videoJson.courseId = courseInfoJson.id;
+                // videoJson.url = courseInfoJson.videos[i].url;
+                // videoJson.remark = courseInfoJson.videos[i].remark;
+                videoJson.videoStatus = courseInfoJson.videos[i].videoStatus;
+                videoJson.userID = teacher;
+                videoJson.liveTime = new Date(time).valueOf();
+            }
             if (videoJson.squence == 1) {
                 courseInfoJson.startTime = videoJson.liveTime;
             }
