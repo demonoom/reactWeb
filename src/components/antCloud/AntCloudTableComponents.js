@@ -1898,7 +1898,7 @@ const AntCloudTableComponents = React.createClass({
                                                        value={cloudTable.state.checkedConcatOptions}
                                                        onChange={cloudTable.concatOptionsOnChange}/>
                                     </Panel>
-                                    <Panel header="组织架构" key="3">
+                                    <Panel header="组织架构" key="3">*/}
                                         <CheckboxGroup options={cloudTable.state.structureOptions}
                                                        value={cloudTable.state.checkedsSructureOptions}
                                                        onChange={cloudTable.roleOptionsOnChange}/>

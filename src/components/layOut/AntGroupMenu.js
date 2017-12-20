@@ -19,7 +19,7 @@ const AntGroupMenu = React.createClass({
         mMenu = this;
         return {
             loginUser: loginUser,
-            userContactsData: [],
+            userContactsData: [],//人员的后台数据
         };
     },
 
@@ -54,7 +54,8 @@ const AntGroupMenu = React.createClass({
                     i++;
                 });
                 mMenu.setState({"userContactsData": userContactsData});
-                mMenu.props.callbackSetFirstPerson(userContactsData);
+                console.log(userContactsData);
+                mMenu.props.callbackSetFirstPerson(userContactsData);//父组件的callbackSetFirstPerson
             },
             onError: function (error) {
                 message.error(error);
@@ -120,7 +121,6 @@ const AntGroupMenu = React.createClass({
                     <img src={require('../images/icon_jiagou.png')} className="antnest_38_img"/>
                     <span className="" icon="usergroup-add">组织构架</span>
                 </div>
-
                 <Table className="maaeegroup yiqun" onRowClick={mMenu.getPersonCenterInfo} showHeader={false}
                        columns={columns} dataSource={mMenu.state.userContactsData}
                        pagination={false} rowClassName={mMenu.getRowClassName}/>

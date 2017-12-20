@@ -14,6 +14,7 @@ import {
     Popover,
     Table,
     Transfer, Radio,
+    Breadcrumb,Tree,
 } from 'antd';
 import Favorites from '../Favorites';
 import UseKnowledgeComponents from '../UseKnowledgeComponents';
@@ -2086,10 +2087,13 @@ const PersonCenterComponents = React.createClass({
                 <div className="public—til—blue">{welcomeTitle}</div>
                 <div className="favorite_scroll">
                     <ul className="group_table">
+                        {/*获取组织架构的所有人*/}
+
                         <Table className="group_table_u person_group" showHeader={false} scroll={{x: true,}}
                                columns={userGroupsColumns} dataSource={personCenter.state.groupMenuMebs}
                                pagination={false}
                         />
+
                     </ul>
                 </div>
             </div>;
@@ -2106,7 +2110,7 @@ const PersonCenterComponents = React.createClass({
                             loading={loading}
                     >群主转让</Button>
                     <span className="toobar"><Button type="primary" onClick={this.showUpdateChatGroupNameModal}
-                            loading={loading}
+                                                     loading={loading}
                     >修改群名称</Button></span>
                     <span className="toobar"><Button type="primary" onClick={this.showAddMembersModal}
                                                      loading={loading}
@@ -2317,17 +2321,17 @@ const PersonCenterComponents = React.createClass({
 
 
                 <Modal className="person_change_right"
-                    visible={personCenter.state.mainTransferModalVisible}
-                    title="转移群主"
-                    onCancel={personCenter.mainTransferModalHandleCancel}
-                    transitionName=""  //禁用modal的动画效果
-                    maskClosable={false} //设置不允许点击蒙层关闭
-                    footer={[
-                        <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
-                                onClick={personCenter.mainTransferForSure}>确定</button>,
-                        <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
-                                onClick={personCenter.mainTransferModalHandleCancel}>取消</button>
-                    ]}
+                       visible={personCenter.state.mainTransferModalVisible}
+                       title="转移群主"
+                       onCancel={personCenter.mainTransferModalHandleCancel}
+                       transitionName=""  //禁用modal的动画效果
+                       maskClosable={false} //设置不允许点击蒙层关闭
+                       footer={[
+                           <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
+                                   onClick={personCenter.mainTransferForSure}>确定</button>,
+                           <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
+                                   onClick={personCenter.mainTransferModalHandleCancel}>取消</button>
+                       ]}
                 >
                     <Row className="ant-form-item">
                         <Col span={24}>

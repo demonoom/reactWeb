@@ -247,8 +247,8 @@ const UserInfo = React.createClass({
                        ]}
                 >
                     <div>
-                        <Input type="textarea" id="" rows={4} value={this.state.editTextarea}
-                               onChange={this.editTextArea}
+                        <Input type="textarea"  rows={4} value={this.state.editTextarea}
+                               onChange={this.editTextArea} placeholder={this.state.introduction}
                         />
                     </div>
                 </Modal>
@@ -257,4 +257,6 @@ const UserInfo = React.createClass({
     },
 });
 export default UserInfo;
+
+
 
