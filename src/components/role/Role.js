@@ -28,7 +28,7 @@ const Role = React.createClass({
             loginUser: loginUser,
             addRoleModalIsShow: false,
             editRoleModalIsShow: false,
-            disabled: false,
+            disabled: true,
             selectedRowKeys: [],
         };
     },
@@ -46,6 +46,11 @@ const Role = React.createClass({
             var arr = selectedMessage.split(',');
             this.setState({roleId: arr[0], roleName: arr[1]});
             this.ajaxData(arr[0]);
+            if (arr[2] != 0) {
+                this.setState({disabled: true})
+            } else {
+                this.setState({disabled: false})
+            }
         } else {
             if (isEmpty(nextProps.sendDefaultSelected) == false) {
                 var sendDefaultSelected = nextProps.sendDefaultSelected;
@@ -53,6 +58,10 @@ const Role = React.createClass({
                 this.setState({roleId: arr[0], roleName: arr[1]});
                 this.ajaxData(arr[0]);
             }
+        }
+        if (isEmpty(nextProps.RoleGroupName) == false) {
+            var arr = nextProps.RoleGroupName.split('#');
+            this.setState({papaName: arr[1]});
         }
         // if(isEmpty(selectedMessage)==false){
         //     if(selectedMessage.indexOf(',') !== -1){
@@ -91,7 +100,7 @@ const Role = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var data = ret.response;
-                console.log(data);
+                // console.log(data);
                 _this.drawTable(data);
 
             },
@@ -154,9 +163,21 @@ const Role = React.createClass({
      * @param roleName 角色的名称
      */
     editRoleComplete(roleId, roleName, refresh) {
-        // this.props.onEditComplete(roleId,roleName,refresh);
+        //将编辑后的名字同步至左侧
+        this.props.onEditComplete(roleName, roleId);
         //设置编辑角色Modal的显示状态为false，不再显示
         this.setState({"roleName": roleName, "editRoleModalIsShow": false});
+    },
+
+    /**
+     * 删除角色成功的回调
+     * @param roleId
+     * @param roleName
+     */
+    onDelComplete(roleId, roleName) {
+        console.log(roleId);
+        console.log(roleName);
+        //
     },
 
     /**
@@ -186,10 +207,8 @@ const Role = React.createClass({
                     "roleId": _this.state.roleId,
                     "userIds": userIds.substr(0, userIds.length - 1)
                 };
-                // console.log(param);
                 doWebService(JSON.stringify(param), {
                     onResponse: function (ret) {
-                        // console.log(ret);
                         if (ret.success == true && ret.msg == "调用成功") {
                             message.success("删除成功");
                             _this.ajaxData(_this.state.roleId);
@@ -204,7 +223,6 @@ const Role = React.createClass({
                 console.log('Cancel');
             },
         })
-        // _this.setState({confirmRoleModalIsShow:true});
     },
 
     /**
@@ -257,7 +275,7 @@ const Role = React.createClass({
                 <EditRoleModal isShow={this.state.editRoleModalIsShow} roleId={this.state.roleId}
                                roleName={this.state.roleName}
                                onEditComplete={this.editRoleComplete}
-                               refresh={this.refresh}
+                               onDelComplete={this.onDelComplete}
                                closeModel={this.closeModel}
                                papaName={this.state.papaName}
                 />

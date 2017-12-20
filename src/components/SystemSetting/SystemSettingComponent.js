@@ -11,6 +11,8 @@ import AttendanceSettingComponents from '../../components/Attendance/AttendanceS
 import Attendance from '../../components/Attendance/Attendance';
 import Role from '../../components/role/Role';
 import RoleSettingComponents from '../../components/role/RoleSettingComponents';
+import Structure from '../../components/structrue/Structure'
+import StructureSettingComponents from '../../components/structrue/StructureSettingComponents'
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
 
@@ -47,6 +49,12 @@ class SystemSettingComponent extends React.Component {
         this.mapShow = this.mapShow.bind(this);
         this.roleGroupClick = this.roleGroupClick.bind(this);
         this.sendDefaultSelected = this.sendDefaultSelected.bind(this);
+        this.roleOnEditComplete = this.roleOnEditComplete.bind(this);
+        this.passDefaultStructure = this.passDefaultStructure.bind(this);
+        this.refreshLeft = this.refreshLeft.bind(this);
+        this.onStructureMenuClick = this.onStructureMenuClick.bind(this);
+        this.delStructure = this.delStructure.bind(this);
+        this.callBackChangeMsg = this.callBackChangeMsg.bind(this);
     }
 
 
@@ -131,12 +139,39 @@ class SystemSettingComponent extends React.Component {
         this.props.mapShow();
     }
 
-    roleGroupClick(id) {
-        this.setState({roleGroupClick:id})
+    roleGroupClick(id, parentName) {
+        this.setState({roleGroupClick: id, RoleGroupName: parentName})
     }
 
     sendDefaultSelected(key) {
-        this.setState({sendDefaultSelected:key})
+        this.setState({sendDefaultSelected: key})
+    }
+
+    roleOnEditComplete(name, id) {
+        this.setState({roleName: name});
+        this.setState({roleId: id});
+    }
+
+    passDefaultStructure(obj) {
+        this.setState({passDefaultStructure: obj});
+    }
+
+    refreshLeft() {
+        this.refs.structureSettingComponents.getStructureById();
+    }
+
+    onStructureMenuClick(id) {
+        // this.setState({onStructureMenuClick: id});
+        this.refs.structure.getSubGroupForButton(id, true)
+
+    }
+
+    delStructure(id) {
+        this.refs.structureSettingComponents.delStructure(id);
+    }
+
+    callBackChangeMsg(id, name) {
+        this.refs.structureSettingComponents.callBackChangeMsg(id, name)
     }
 
     render() {
@@ -184,14 +219,32 @@ class SystemSettingComponent extends React.Component {
             case 'noomjuese':
                 //角色
                 this.middleComponent = <RoleSettingComponents
-                                            roleGroupClick={this.roleGroupClick}
-                                            sendDefaultSelected={this.sendDefaultSelected}
-                                        />
+                    roleGroupClick={this.roleGroupClick}
+                    sendDefaultSelected={this.sendDefaultSelected}
+                    roleName={this.state.roleName}
+                    roleId={this.state.roleId}
+                />;
                 this.tabComponent = <Role
-                                        roleGroupClick={this.state.roleGroupClick}
-                                        sendDefaultSelected={this.state.sendDefaultSelected}
-                                    />;
+                    roleGroupClick={this.state.roleGroupClick}
+                    sendDefaultSelected={this.state.sendDefaultSelected}
+                    onEditComplete={this.roleOnEditComplete}
+                    RoleGroupName={this.state.RoleGroupName}
+                />;
                 break;
+            case 'noomStructure':
+                this.middleComponent = <StructureSettingComponents
+                    passDefaultStructure={this.passDefaultStructure}
+                    ref="structureSettingComponents"
+                    onStructureMenuClick={this.onStructureMenuClick}
+                />
+                this.tabComponent = <Structure
+                    passDefaultStructure={this.state.passDefaultStructure}
+                    refreshLeft={this.refreshLeft}
+                    onStructureMenuClick={this.state.onStructureMenuClick}
+                    delStructure={this.delStructure}
+                    callBackChangeMsg={this.callBackChangeMsg}
+                    ref="structure"
+                />
         }
 
 

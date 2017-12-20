@@ -37,6 +37,7 @@ const MessageMenu = React.createClass({
         if (isEmpty(noomSelectRowKey)) {
             //noomSelectRowKey没有值
             if (isEmpty(nextProps) == false && (typeof(nextProps.userJson) != "undefined")) {
+                console.log(nextProps.userJson);
 
                 var num;
                 messageData.forEach(function (v, i) {
@@ -57,6 +58,10 @@ const MessageMenu = React.createClass({
                 }
                 uuid = nextProps.userJson.uuid;
 
+                if (nextProps.userJson.fromUser.colUid == 139581 || nextProps.userJson.fromUser.colUid == 138437 || nextProps.userJson.fromUser.colUid == 142033) {
+                    num = 0;
+                    console.log('000');
+                }
 
                 if (nextProps.userJson.messageToType == 1) {
                     //个人消息
@@ -164,10 +169,9 @@ const MessageMenu = React.createClass({
                 var response = ret.response;
                 var i = 0;
                 if (isEmpty(response) == false || isEmpty(messageData) == false) {
-                    //messageData.splice(0);
                     response.forEach(function (e) {
-                        //如果这条消息的来源是我自己,就直接讲readState制成1
-                        if (e.fromUser.colUid == sessionStorage.getItem("ident")) {
+                        //如果这条消息的来源是我自己 助手 ,就直接讲readState制成1
+                        if (e.fromUser.colUid == sessionStorage.getItem("ident") || e.fromUser.colUid == 138437 || e.fromUser.colUid == 142033 || e.fromUser.colUid == 139581) {
                             e.readState = 1;
                         }
                         //临时处理
