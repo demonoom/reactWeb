@@ -129,6 +129,7 @@ const UpdateClassComponents = React.createClass({
         var moneyInputDisable;
         var isShowseclect=false;
         var LessionIsUpdateDisable=false;
+         videoJsonArray=[];
 
         if (money != 0) {
             isFree = 2;
@@ -386,8 +387,6 @@ const UpdateClassComponents = React.createClass({
                         var classInfo = response[i];
                         var id = classInfo.id;
                         var name = classInfo.name;
-                        console.log(2222);
-                        console.log(name);
                         var optionObj = <Option key={id} value={id}>{name}</Option>;
                         if (id == courseInfoJson.courseClass) {
                             _this.setState({"defaultSelected": name});

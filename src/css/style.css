@@ -8006,7 +8006,16 @@ select.course_n:hover {
 
 .noomFinish sup.ant-scroll-number{
     right: 0;
-    top: 24px;
+    top: 22px;
     z-index: 1000;
     margin-right: -10px;
+}
+.noomFinish sup{
+    box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    border: 1px solid #fff;
+}
+.noomFinish sup.ant-badge-count{
+    padding:0 4px;
+    box-shadow: 0 0 0 1px transparent;
 }
