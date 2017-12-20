@@ -15,7 +15,7 @@ const StructureSettingComponents = React.createClass({
     },
 
     componentWillMount() {
-        this.getStructureById();
+        this.getStructureById(false);
     },
 
     componentDidMount() {
@@ -41,7 +41,7 @@ const StructureSettingComponents = React.createClass({
      * @param operateUserId
      * @param structureId
      */
-    getStructureById() {
+    getStructureById(flag) {
         var structureId = "-1";
         var operateUserId = this.state.loginUser.colUid;
         let _this = this;
@@ -59,7 +59,9 @@ const StructureSettingComponents = React.createClass({
                 // 根据组织根节点的id请求该组织根节点里的子部门， 调用 列举子部门函数
                 _this.listStructures(operateUserId, structure);
                 _this.setState({structure});
-                _this.props.passDefaultStructure(structure);
+                if (!flag) {
+                    _this.props.passDefaultStructure(structure);
+                }
             },
             onError: function (error) {
                 message.error(error);
@@ -114,11 +116,16 @@ const StructureSettingComponents = React.createClass({
     },
 
     handleClick(e) {
-
         this.setState({
             selectedKeys: e.key,
         });
         this.props.onStructureMenuClick(e.key);
+    },
+
+    setSelectedKeys(id) {
+        this.setState({
+            selectedKeys: id,
+        });
     },
 
     callBackChangeMsg(id, name) {

@@ -62,6 +62,7 @@ const RoleSettingComponents = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var part = ret.response;
+                _this.setState({firstClickObj: part[0].children[0].id + ',' + part[0].children[0].name + ',' + part[0].children[0].createType});
                 var defaultArr = [];
                 part.forEach(function (v, i) {
                     openKeysArr.push(part[i].id + '#' + part[i].name);
@@ -171,6 +172,11 @@ const RoleSettingComponents = React.createClass({
         this.setState({"addRoleModalIsShow": false});
         this.setState({"editRoleGroupIsShow": false});
 
+    },
+
+    firstClickObj() {
+        var key = this.state.firstClickObj;
+        this.props.roleGroupClick(key, key);
     },
 
     /**

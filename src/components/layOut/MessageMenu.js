@@ -37,8 +37,6 @@ const MessageMenu = React.createClass({
         if (isEmpty(noomSelectRowKey)) {
             //noomSelectRowKey没有值
             if (isEmpty(nextProps) == false && (typeof(nextProps.userJson) != "undefined")) {
-                console.log(nextProps.userJson);
-
                 var num;
                 messageData.forEach(function (v, i) {
                     if (v.key == nextProps.userJson.key) {
@@ -60,7 +58,6 @@ const MessageMenu = React.createClass({
 
                 if (nextProps.userJson.fromUser.colUid == 139581 || nextProps.userJson.fromUser.colUid == 138437 || nextProps.userJson.fromUser.colUid == 142033) {
                     num = 0;
-                    console.log('000');
                 }
 
                 if (nextProps.userJson.messageToType == 1) {

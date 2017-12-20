@@ -178,6 +178,7 @@ const Role = React.createClass({
         console.log(roleId);
         console.log(roleName);
         //
+        this.props.onDelComplete(roleId, roleName);
     },
 
     /**

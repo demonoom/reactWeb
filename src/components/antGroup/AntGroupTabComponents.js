@@ -2878,6 +2878,10 @@ const AntGroupTabComponents = React.createClass({
         this.setState({selectedRowKeys});
     },
 
+    /**
+     * 查看大图片
+     * @param selectedRowKeys
+     */
     noomWatchImg(id) {
         document.getElementById(id).click();
     },

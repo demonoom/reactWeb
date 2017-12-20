@@ -55,6 +55,8 @@ class SystemSettingComponent extends React.Component {
         this.onStructureMenuClick = this.onStructureMenuClick.bind(this);
         this.delStructure = this.delStructure.bind(this);
         this.callBackChangeMsg = this.callBackChangeMsg.bind(this);
+        this.onDelComplete = this.onDelComplete.bind(this);
+        this.passstructureIdToLeft = this.passstructureIdToLeft.bind(this);
     }
 
 
@@ -156,8 +158,8 @@ class SystemSettingComponent extends React.Component {
         this.setState({passDefaultStructure: obj});
     }
 
-    refreshLeft() {
-        this.refs.structureSettingComponents.getStructureById();
+    refreshLeft(flag) {
+        this.refs.structureSettingComponents.getStructureById(flag);
     }
 
     onStructureMenuClick(id) {
@@ -172,6 +174,15 @@ class SystemSettingComponent extends React.Component {
 
     callBackChangeMsg(id, name) {
         this.refs.structureSettingComponents.callBackChangeMsg(id, name)
+    }
+
+    onDelComplete(roleId, roleName) {
+        this.refs.roleSettingComponents.getStructureRoleGroups();
+        this.refs.roleSettingComponents.firstClickObj();
+    }
+
+    passstructureIdToLeft(id) {
+        this.refs.structureSettingComponents.setSelectedKeys(id);
     }
 
     render() {
@@ -223,12 +234,14 @@ class SystemSettingComponent extends React.Component {
                     sendDefaultSelected={this.sendDefaultSelected}
                     roleName={this.state.roleName}
                     roleId={this.state.roleId}
+                    ref="roleSettingComponents"
                 />;
                 this.tabComponent = <Role
                     roleGroupClick={this.state.roleGroupClick}
                     sendDefaultSelected={this.state.sendDefaultSelected}
                     onEditComplete={this.roleOnEditComplete}
                     RoleGroupName={this.state.RoleGroupName}
+                    onDelComplete={this.onDelComplete}
                 />;
                 break;
             case 'noomStructure':
@@ -244,6 +257,7 @@ class SystemSettingComponent extends React.Component {
                     delStructure={this.delStructure}
                     callBackChangeMsg={this.callBackChangeMsg}
                     ref="structure"
+                    passstructureIdToLeft={this.passstructureIdToLeft}
                 />
         }
 

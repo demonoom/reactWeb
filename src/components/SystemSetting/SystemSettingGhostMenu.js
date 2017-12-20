@@ -123,25 +123,25 @@ class SystemSettingGhostMenu extends React.Component {
         //手动添加的测试菜单---开始
         var flowUl = <li className="multi">
             {/*<ul className="second">*/}
+            {/*<li onClick={event => {*/}
+            {/*this.changeMenu(event, 'noomkaoqing', true)*/}
+            {/*}}><img className="icon_system_img" src='http://60.205.86.217/upload2/common/img/examine_icon.png'/>考勤打卡*/}
+            {/*</li>*/}
+            {/*</ul>*/}
+
+            {/*<ul className="second">*/}
                 {/*<li onClick={event => {*/}
-                    {/*this.changeMenu(event, 'noomkaoqing', true)*/}
-                {/*}}><img className="icon_system_img" src='http://60.205.86.217/upload2/common/img/examine_icon.png'/>考勤打卡*/}
+                    {/*this.changeMenu(event, 'noomjuese', true)*/}
+                {/*}}><img className="icon_system_img" src='http://60.205.86.217/upload2/common/img/examine_icon.png'/>角色*/}
                 {/*</li>*/}
             {/*</ul>*/}
 
-            <ul className="second">
-                <li onClick={event => {
-                    this.changeMenu(event, 'noomjuese', true)
-                }}><img className="icon_system_img" src='http://60.205.86.217/upload2/common/img/examine_icon.png'/>角色
-                </li>
-            </ul>
-
-            <ul className="second">
-                <li onClick={event => {
-                    this.changeMenu(event, 'noomStructure', true)
-                }}><img className="icon_system_img" src='http://60.205.86.217/upload2/common/img/examine_icon.png'/>组织架构
-                </li>
-            </ul>
+            {/*<ul className="second">*/}
+                {/*<li onClick={event => {*/}
+                    {/*this.changeMenu(event, 'noomStructure', true)*/}
+                {/*}}><img className="icon_system_img" src='http://60.205.86.217/upload2/common/img/examine_icon.png'/>组织架构*/}
+                {/*</li>*/}
+            {/*</ul>*/}
         </li>;
         liArr.push(flowUl);
         arr.push(liArr);
@@ -190,9 +190,11 @@ class SystemSettingGhostMenu extends React.Component {
         console.log(words);
         //words就是返回的对象
         if (words.method == 'operateStructure') {
-            _this.changeMenu(event, 'origin', true)
+            // _this.changeMenu(event, 'origin', true)
+            _this.changeMenu(event, 'noomStructure', true)
         } else if (words.method == 'operateStructureRole') {
-            _this.changeMenu(event, 'role', true)
+            // _this.changeMenu(event, 'role', true)
+            _this.changeMenu(event, 'noomjuese', true)
         } else if (words.method == 'operateApproval') {
             _this.changeMenu(event, 'systemFlow', false)
         } else if (words.method == 'operateAttendance') {
@@ -207,7 +209,7 @@ class SystemSettingGhostMenu extends React.Component {
 
     // teachingAdmin panel
     showpanel(event, urls, name) {
-        urls = urls+="?access_user="+sessionStorage.getItem("ident");
+        urls = urls += "?access_user=" + sessionStorage.getItem("ident");
         this.onMenu(event);
 
         let param = {

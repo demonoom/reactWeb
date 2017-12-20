@@ -249,7 +249,7 @@ const MainLayout = React.createClass({
         });
         this.setState({imgArr});
         //图片已渲染到DOM
-        document.querySelectorAll(".topics_zanImg")[num].click();
+        document.querySelectorAll(".topics_zanImg")[num].click();   //怀疑是这个querySelectorAll选择到了AntGroup里面的元素
     },
 
     noomSelect(obj) {

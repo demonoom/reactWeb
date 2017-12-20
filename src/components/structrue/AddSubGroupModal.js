@@ -42,7 +42,7 @@ class AddSubGroupModal extends React.Component {
   }
 
   /**
-   * 添加下级部门947
+   * 添加下级部门
    */
   addSubGroup(){
     let _this = this;

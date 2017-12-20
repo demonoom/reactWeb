@@ -318,6 +318,7 @@ const Structure = React.createClass({
                         })
                     }
                     _this.buildStrcutureMembers(currentStructureMember, false)
+                    _this.props.refreshLeft(true);
                 }
             },
             onError: function (error) {
@@ -353,6 +354,7 @@ const Structure = React.createClass({
         this.listStructures(structureId, true);     //列举子部门
         this.getStructureById(structureId);   //获取组织架构obj
         this.getStrcutureMembers(structureId, memberPageNo, false);    //获取部门成员   false清空原数组
+        this.props.passstructureIdToLeft(structureId)
     },
 
     checkStructureIsExitAtArray(newStructure) {
@@ -448,6 +450,8 @@ const Structure = React.createClass({
     listStructureAndMembers(structureId) {
         var defaultPageNo = 1;
         this.getStrcutureMembers(structureId, defaultPageNo, false);
+        //表示在根目录下添加的部门
+        this.props.refreshLeft(true);
     },
 
     /**
@@ -503,7 +507,7 @@ const Structure = React.createClass({
         var rootId = this.state.rootGroup.id;
         if (rootId == id) {
             //表示在根目录下添加的部门
-            this.props.refreshLeft();
+            this.props.refreshLeft(false);   //传false同步回来
         }
     },
 
