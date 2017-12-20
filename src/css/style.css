@@ -8010,3 +8010,33 @@ select.course_n:hover {
     z-index: 1000;
     margin-right: -10px;
 }
+
+
+/*部门展示的div*/
+
+.department_scroll{
+    height: calc(60% - 46px);
+}
+.department_scroll .schoolgroup_table .ant-table-content{
+    height:100%;
+    overflow: auto;
+    padding: 0 10px;
+}
+
+
+
+.department_scroll .clearfix {
+    overflow: hidden;
+    position: relative;
+    height: 64%;
+}
+.department_scroll .schoolgroup_subGroupMemberList{
+    overflow: auto;
+    position: relative;
+    height: 100%;
+}
+.department_scroll .clearfix .ant-spin-container.ant-table-content .ant-table-body .ant-table-thead{
+    position: fixed;
+}
+
+/*.department_scroll .schoolgroup_table1 .schoolgroup_table_department .clearfix .ant-spin-container*/

@@ -13,8 +13,8 @@ import {
     Collapse,
     Popover,
     Table,
+    Breadcrumb,
     Transfer, Radio,
-    Breadcrumb,Tree,
 } from 'antd';
 import Favorites from '../Favorites';
 import UseKnowledgeComponents from '../UseKnowledgeComponents';
@@ -38,6 +38,8 @@ var coursePanelChildren;
 var activeKey = [];
 var subjectList = [];
 var data = [];
+var subGroupMemberList = [];
+var structuresObjArray = [];
 var subjectTableColumns = [{
     title: '出题人',
     className: 'ant-table-selection-user',
@@ -78,6 +80,31 @@ var subjectTableColumns = [{
 },
 ];
 
+const memberColumns = [{
+    title: '姓名',
+    dataIndex: 'userName',
+    key: 'userName',
+    width: 160,
+    className: 'dold_text departmental_officer'
+}, {
+    title: '手机号',
+    dataIndex: 'userPhone',
+    key: 'userPhone',
+}
+];
+
+//部门
+const columns = [{
+    title: '部门名称',
+    dataIndex: 'subGroupName',
+    key: 'subGroupName',
+}, {
+    title: '操作',
+    dataIndex: 'opt',
+    key: 'opt',
+    width: '86px'
+}];
+
 var userGroupsColumns = [{
     title: '群聊头像',
     dataIndex: 'groupPhoto',
@@ -104,12 +131,15 @@ const PersonCenterComponents = React.createClass({
             loginUser: loginUser,
             userInfo: personCenter.props.userInfo,
             isExist: false,
+            memberPageNo: 1,
             optType: 'userDetail',
             currentChatGroupPage: 1,
             userGroupsData: [],
             radioValue: 1,
+            structuresObjArray: [],
         };
     },
+
 
     /**
      * 判断当前个人中心显示的人员是否是当前用户的联系人
@@ -125,10 +155,6 @@ const PersonCenterComponents = React.createClass({
             }
         }
         return isExist;
-    },
-
-    a(id) {
-        this.getPersonalCenterData(id);
     },
 
     /**
@@ -150,6 +176,13 @@ const PersonCenterComponents = React.createClass({
                 message.error(error);
             }
         });
+    },
+
+    /**
+     * 当点击人员列表行时，弹出该人员的具体信息界面
+     */
+    onRowClick(record) {
+        this.getPersonalCenterData(record.userId);
     },
 
     /**
@@ -748,44 +781,221 @@ const PersonCenterComponents = React.createClass({
 
     //-------------------------组织架构操作
     getGroupMenu() {
-        personCenter.getStructureUsers();
+        structuresObjArray.splice(0);
+        this.getStructureById("-1");
     },
 
     /**
-     * 获取组织架构所有人
+     * 获取当前用户的组织根节点(蚁群中的组织架构菜单)
+     * @param operateUserId
+     * @param structureId
      */
-    getStructureUsers() {
-        var _this = this;
+    getStructureById(structureId) {
+        let _this = this;
+
+        var structureId = structureId + '';
+
+        if (isEmpty(structureId)) {
+            structureId = "-1";
+        }
+
         var param = {
-            "method": 'getStructureUsers',
-            "operateUserId": this.state.loginUser.colUid,
-            "pageNo": -1,
+            "method": 'getStructureById',
+            "operateUserId": _this.state.loginUser.colUid,
+            "structureId": structureId,
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                var data = ret.response;
-                var arr = [];
-                data.forEach(function (e) {
-                    var id = e.colUid;
-                    var memberAvatarTag = <img src={e.avatar}></img>;
-                    var imgTag = <div className="maaee_group_face1">{memberAvatarTag}</div>;
-                    var name = <a className="font_gray_666" onClick={_this.a.bind(this, id)}>{e.userName}</a>
-                    var chatGroupJson = {
-                        key: id,
-                        groupPhoto: imgTag,
-                        'groupName': name,
-                    };
+                var parentGroup = ret.response;
 
-                    arr.push(chatGroupJson);
-                });
-                personCenter.setState({"groupMenuMebs": arr});
+                // 根据组织根节点的id请求该组织根节点里的子部门， 调用 列举子部门函数
+                if (structureId == "-1") {
+                    _this.listStructures(parentGroup.id);
+                    var defaultPageNo = 1;
+                    _this.getStrcutureMembers(parentGroup.id, defaultPageNo);
+                    _this.setState({structureId: parentGroup.id});
+                }
+                // _this.setState({parentGroup});
 
-                personCenter.setState({"optType": "getGroupMenu"});
+                if (isEmpty(parentGroup) == false) {
+                    var isExit = _this.checkStructureIsExitAtArray(parentGroup);
+                    if (isExit == false) {
+                        //存放组织架构的层次关系
+                        structuresObjArray.push(parentGroup);
+                    }
+                }
+
+                _this.setState({parentGroup, structuresObjArray});
             },
             onError: function (error) {
                 message.error(error);
             }
         });
+    },
+
+    checkStructureIsExitAtArray(newStructure) {
+        var isExit = false;
+        for (var i = 0; i < structuresObjArray.length; i++) {
+            var structure = structuresObjArray[i];
+            if (structure.id == newStructure.id) {
+                isExit = true;
+                break;
+            }
+        }
+        return isExit;
+    },
+
+
+    /**
+     * 列举蚁群中的子部门11
+     * @param operateUserId
+     * @param structureId
+     */
+    listStructures(structureId) {
+        let _this = this;
+        _this.getStructureById(structureId);
+        var param = {
+            "method": 'listStructures',
+            "operateUserId": _this.state.loginUser.colUid,
+            "structureId": structureId,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                var subGroupList = [];
+                if (isEmpty(response) == false) {
+                    response.forEach(function (subGroup) {
+                        var subGroupName = <div className="first_indent"
+                                                onClick={_this.getSubGroupForButton.bind(_this, subGroup.id)}>
+                            <span className="antnest_name affix_bottom_tc name_max3 dold_text">{subGroup.name}</span>
+                        </div>
+                        subGroupList.push({
+                            key: subGroup.id,
+                            subGroupName: subGroupName,
+                        });
+                    });
+                }
+                _this.setState({subGroupList, "optType": "getGroupMenu"});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+
+    },
+
+    /**
+     * 获取部门下的成员及部门
+     */
+
+    listStructureAndMembers(structureId) {
+        var defaultPageNo = 1;
+        this.listStructures(structureId);
+        this.getStrcutureMembers(structureId, defaultPageNo);
+        this.getStructureById(sessionStorage.getItem("ident"), structureId)
+    },
+
+    /**
+     * 点击部门时，获取部门下的成员
+     * @param record
+     * @param index
+     */
+    getSubGroupForButton(structureId) {
+        var memberPageNo = 1;
+        subGroupMemberList.splice(0);
+        var defaultMemberPageNo = 1;
+        this.setState({
+            structureId: structureId,
+            memberPageNo: defaultMemberPageNo,
+
+        });
+        this.listStructures(structureId);
+        this.getStrcutureMembers(structureId, memberPageNo);
+        this.getStructureById(sessionStorage.getItem("ident"), structureId)
+    },
+
+
+    /**
+     * 根据部门id获取部门成员
+     * @param operateUserId
+     * @param structureId
+     */
+    getStrcutureMembers(structureId, pageNo) {
+        let _this = this;
+        var structureId = structureId + '';
+
+        if (structureId.indexOf(',') !== -1) {
+            var structureIdArr = structureId.split(',');
+            structureId = structureIdArr[0];
+        }
+        var param = {
+            "method": 'getStrcutureMembers',
+            "operateUserId": _this.state.loginUser.colUid,
+            "structureId": structureId,
+            "pageNo": pageNo,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if (isEmpty(response) == false) {
+                    response.forEach(function (member) {
+                        var user = member.user;
+                        subGroupMemberList.push({
+                            key: member.id,
+                            userId: user.colUid,
+                            userName: user.userName,
+                            userPhone:user.phoneNumber
+                        });
+                    });
+                }
+                var pager = ret.pager;
+                _this.setState({subGroupMemberList, totalMember: pager.rsCount});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+
+    /**
+     * 面包条点击响应
+     * 切换到当前的组织架构层次，同时，在此面包条后的数据移除
+     */
+    breadCrumbClick(structureId) {
+        var defaultPageNo = 1;
+        for (var i = 0; i < structuresObjArray.length; i++) {
+            var structure = structuresObjArray[i];
+            if (structure.id == structureId) {
+                structuresObjArray.splice(i, structuresObjArray.length);
+                break;
+            }
+        }
+        this.listStructures(structureId);
+        subGroupMemberList.splice(0);
+        this.getStrcutureMembers(structureId, defaultPageNo);
+        var defaultMemberPageNo = 1;
+        this.setState({"structureId": structureId, structuresObjArray, "memberPageNo": defaultMemberPageNo});
+    },
+
+
+    /**
+     * 部门成员加载更多
+     */
+    loadMoreMember() {
+        var memberPageNo = parseInt(this.state.memberPageNo) + 1;
+        this.memberPageOnChange(memberPageNo);
+    },
+
+    /**
+     * 部门成员的数据分页
+     * @param pageNo
+     */
+    memberPageOnChange(pageNo) {
+        this.setState({
+            memberPageNo: pageNo,
+        });
+        this.getStrcutureMembers(this.state.structureId, pageNo);
     },
 
     /**
@@ -799,7 +1009,6 @@ const PersonCenterComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                // debugger
                 if (ret.msg == "调用成功" && ret.success == true) {
                     var response = ret.response;
                     var charGroupArray = [];
@@ -1329,11 +1538,9 @@ const PersonCenterComponents = React.createClass({
             "oldOwnerId": oldOwnerId,
             "newOwnerId": newOwnerId
         };
-        // console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                // debugger
                 if (ret.msg == "调用成功" && ret.success == true) {
                     message.success('转让成功');
                     // _this.setState({mainTransferModalVisible: false});
@@ -1484,11 +1691,24 @@ const PersonCenterComponents = React.createClass({
 
 
     render() {
+        var _this = this;
         var userPhotoTag;
         var returnPersonCenterToolBar = <div className="ant-tabs-right"><Button
             onClick={personCenter.returnPersonCenter}><Icon type="left"/></Button></div>;
         var returnChatGroupMessagePageToolBar = <div className="ant-tabs-right"><Button
             onClick={personCenter.returnToChatGroupMessagePage}><Icon type="left"/></Button></div>;
+
+        //构建蚁群中的组织架构部分的面包屑组件
+        var breadcrumbItemObjArray = [];
+        if (isEmpty(_this.state.structuresObjArray) == false) {
+            _this.state.structuresObjArray.forEach(function (structure) {
+                var breadcrumbItemObj = <Breadcrumb.Item key={structure.id}><a
+                    onClick={_this.breadCrumbClick.bind(_this, structure.id)}>{structure.name}</a></Breadcrumb.Item>;
+                breadcrumbItemObjArray.push(breadcrumbItemObj);
+            });
+        }
+
+
         if (isEmpty(personCenter.state.userInfo) == false && personCenter.state.optType == "userDetail") {
             var user = personCenter.state.userInfo.user;
             var userName = user.userName;
@@ -2082,19 +2302,34 @@ const PersonCenterComponents = React.createClass({
             </div>;
         }
         else if (personCenter.state.optType == "getGroupMenu") {
-            var welcomeTitle = "组织架构";
+            var structureName = "";
+            if(isEmpty(structuresObjArray)==false && structuresObjArray.length > 0 ){
+                var structuresObjArrayLength = structuresObjArray.length;
+                structureName = structuresObjArray[structuresObjArrayLength-1].name;
+            }
             personDate = <div className="myfollow_zb">
-                <div className="public—til—blue">{welcomeTitle}</div>
-                <div className="favorite_scroll">
-                    <ul className="group_table">
-                        {/*获取组织架构的所有人*/}
+                <div className="department_scroll">
+                    <div className="public—til—blue">{structureName}</div>
+                    {/*面包屑*/}
+                    <Breadcrumb separator=">">
+                        {breadcrumbItemObjArray}
+                    </Breadcrumb>
 
-                        <Table className="group_table_u person_group" showHeader={false} scroll={{x: true,}}
-                               columns={userGroupsColumns} dataSource={personCenter.state.groupMenuMebs}
-                               pagination={false}
-                        />
+                    {/*获取组织架构的所有部门*/}
+                    <Table showHeader={false} columns={columns} dataSource={this.state.subGroupList}
+                           className="schoolgroup_table"
+                           pagination={false}/>
 
-                    </ul>
+                    <Table columns={memberColumns}
+                           pagination={false} dataSource={this.state.subGroupMemberList}
+                           className="schoolgroup_table1 schoolgroup_table_department"
+                           onRowClick={this.onRowClick}
+                    />
+
+                    <div className="schoolgroup_operate schoolgroup_more">
+                        <a onClick={this.loadMoreMember} className="schoolgroup_more_a">加载更多</a>
+                    </div>
+
                 </div>
             </div>;
         }
