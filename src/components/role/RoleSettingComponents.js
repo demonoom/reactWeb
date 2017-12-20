@@ -32,6 +32,21 @@ const RoleSettingComponents = React.createClass({
 
     },
 
+    componentWillReceiveProps(nextProps) {
+        if (isEmpty(nextProps.roleName) == false && isEmpty(nextProps.roleId) == false) {
+            var arr = this.state.part;
+            var roleId = Number(nextProps.roleId);
+            arr.forEach(function (v, i) {
+                for (var i = 0; i < v.children.length; i++) {
+                    if (v.children[i].id == roleId) {
+                        v.children[i].name = nextProps.roleName
+                    }
+                }
+            });
+            this.buildMenuPart(arr);
+        }
+    },
+
     /**
      * 获取角色组
      * @param operateUserId
@@ -47,6 +62,7 @@ const RoleSettingComponents = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var part = ret.response;
+                _this.setState({firstClickObj: part[0].children[0].id + ',' + part[0].children[0].name + ',' + part[0].children[0].createType});
                 var defaultArr = [];
                 part.forEach(function (v, i) {
                     openKeysArr.push(part[i].id + '#' + part[i].name);
@@ -59,11 +75,11 @@ const RoleSettingComponents = React.createClass({
                 // // 调用 渲染角色函数
                 _this.buildMenuPart(part);
                 _this.setState({part});
-                _this.props.sendDefaultSelected(part[0].children[0].id+'#'+part[0].children[0].name);
+                _this.props.sendDefaultSelected(part[0].children[0].id + '#' + part[0].children[0].name);
                 // // 设置一个默认ID
                 // _this.setState({firstId:part[0].children[0].id});
                 // _this.setState({selectedRoleKeyPath:part[0].id+ '#' + part[0].name});
-                _this.setState({selectedRoleKeys: part[0].children[0].id + ',' + part[0].children[0].name});
+                _this.setState({selectedRoleKeys: part[0].children[0].id + ',' + part[0].children[0].name + ',' + part[0].children[0].createType});
                 // _this.props.onGhostMenuClick('role',part[0].children[0].id+','+part[0].children[0].name,part[0].id+ '#' + part[0].name);
             },
             onError: function (error) {
@@ -74,6 +90,7 @@ const RoleSettingComponents = React.createClass({
 
     /*渲染角色函数*/
     buildMenuPart(part) {
+        console.log(part);
         let _this = this;
         var menuContent;
         var subRoleMenuItemArray = [];
@@ -84,7 +101,7 @@ const RoleSettingComponents = React.createClass({
 
         for (var i = 0; i < part.length; i++) {
             part[i].children.forEach(function (subGroup) {
-                var menuItem = <Menu.Item key={subGroup.id + ',' + subGroup.name}>
+                var menuItem = <Menu.Item key={subGroup.id + ',' + subGroup.name + ',' + subGroup.createType}>
                     <Icon type="user" className="schoolgroup_menu_i_blue name_max5_i"/>
                     <span className="name_max5 dold_text">{subGroup.name}</span>
                 </Menu.Item>;
@@ -143,14 +160,11 @@ const RoleSettingComponents = React.createClass({
 
     handleClickRole(e) {
         console.log(e);
-        console.log(this.state.part[0]);
         this.setState({
             selectedRoleKeys: e.key,
             selectedRoleKeyPath: e.keyPath
         });
-        this.props.roleGroupClick(e.key);
-        // 子传父函数调用
-        // this.props.onGhostMenuClick('role',e.key,e.keyPath[1]);
+        this.props.roleGroupClick(e.key, e.keyPath[1]);
     },
 
     closeModel() {
@@ -158,6 +172,11 @@ const RoleSettingComponents = React.createClass({
         this.setState({"addRoleModalIsShow": false});
         this.setState({"editRoleGroupIsShow": false});
 
+    },
+
+    firstClickObj() {
+        var key = this.state.firstClickObj;
+        this.props.roleGroupClick(key, key);
     },
 
     /**
@@ -174,7 +193,33 @@ const RoleSettingComponents = React.createClass({
             message.error('请先添加角色组');
         } else {
             this.setState({"addRoleModalIsShow": true})
+            this.refs.addRoleModal.getStructureRoleGroups();
         }
+    },
+
+    callBackNewRoleName(name, id) {
+        var arr = this.state.part;
+        arr.forEach(function (v, i) {
+            if (v.id == id) {
+                v.name = name
+            }
+        });
+        this.buildMenuPart(arr);
+    },
+
+    callBackDelRoleId(id) {
+        debugger
+        var arr = this.state.part;
+        arr.forEach(function (v, i) {
+            if (v.id == id) {
+                arr.splice(i, 1);
+            }
+        });
+        this.buildMenuPart(arr);
+    },
+
+    addRoleGroupComplete() {
+        this.getStructureRoleGroups()
     },
 
     /**
@@ -206,7 +251,7 @@ const RoleSettingComponents = React.createClass({
                 />
                 {/*引入添加角色模态框*/}
                 <AddRoleModal isShow={this.state.addRoleModalIsShow}
-                              addRoleGroupComplete={this.addRoleGroupComplete}
+                              addRoleComplete={this.addRoleGroupComplete}
                               closeModel={this.closeModel}
                               ref="addRoleModal"
                 />
@@ -214,8 +259,9 @@ const RoleSettingComponents = React.createClass({
                 <EditRoleGroupModal isShow={this.state.editRoleGroupIsShow}
                                     delRoleGroupId={this.state.delRoleGroupId}
                                     delRoleGroupName={this.state.delRoleGroupName}
-                                    addRoleGroupComplete={this.addRoleGroupComplete}
                                     closeModel={this.closeModel}
+                                    callBackNewRoleName={this.callBackNewRoleName}
+                                    callBackDelRoleId={this.callBackDelRoleId}
                 />
             </div>
         );

@@ -1842,6 +1842,9 @@ const AntGroupTabComponents = React.createClass({
                         } else if (data.message.command == "message_read") {
                             //消息已读之后来自蚂蚁君的message_read,没用直接return
                             return false
+                        } else if (data.message.command == "dissolutionChatGroup") {
+                            //组织架构删除子部门后来自群通知着的消息
+                            return false
                         }
 
                         showImg = "";
@@ -2875,6 +2878,10 @@ const AntGroupTabComponents = React.createClass({
         this.setState({selectedRowKeys});
     },
 
+    /**
+     * 查看大图片
+     * @param selectedRowKeys
+     */
     noomWatchImg(id) {
         document.getElementById(id).click();
     },
