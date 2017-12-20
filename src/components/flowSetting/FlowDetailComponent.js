@@ -39,6 +39,7 @@ const FlowDetailComponent = React.createClass({
      */
     getFlowProcessDefinitionById(procDefId) {
         let _this = this;
+        _this.setState({"flowFormTagList":[],"conditionalTagList":[],"copyMessageSendType":[],"copyTagList":[]});
         var param = {
             "method": 'getFlowProcessDefinitionDetailById',
             "procDefId": procDefId,
@@ -73,7 +74,7 @@ const FlowDetailComponent = React.createClass({
         var flowFormDefineList = flowProcessDefinition.flowFormDefineList;
         var flowApprovalUsers = flowProcessDefinition.flowApprovalUsers;
         var flowFormTagList = [];
-        var flowApprovalUserTagList = [];
+        var conditionalTagList = [];
         flowFormDefineList.forEach(function (flowFormDefinition) {
             var label = flowFormDefinition.label;
             var type = flowFormDefinition.type;
@@ -84,12 +85,63 @@ const FlowDetailComponent = React.createClass({
             flowFormTagList.push(formTag);
         });
 
-        flowApprovalUsers.forEach(function (flowApprovalUser) {
+        /*flowApprovalUsers.forEach(function (flowApprovalUser) {
             var approvalUserTag = _this.buildApprovalUserTag(flowApprovalUser);
             flowApprovalUserTagList.push(approvalUserTag);
-        })
+        })*/
 
-        this.setState({flowFormTagList,flowApprovalUserTagList});
+        var conditionalInfoList = flowProcessDefinition.conditionalInfoList;
+        conditionalInfoList.forEach(function (conditonnalInfo) {
+            var condtionStr = conditonnalInfo.condtionStr;
+            var flowApprovalUsers = conditonnalInfo.flowApprovalUsers;
+            var flowApprovalUserTagList = [];
+            flowApprovalUsers.forEach(function (flowApprovalUser) {
+                var approvalUserTag = _this.buildApprovalUserTag(flowApprovalUser);
+                flowApprovalUserTagList.push(approvalUserTag);
+            })
+            var conditionSpan=<span>
+                <span>
+                    {condtionStr}
+                </span>
+                <span>
+                    {flowApprovalUserTagList}
+                </span>
+            </span>;
+            conditionalTagList.push(conditionSpan);
+        });
+        var copyTagList = [];
+        var copyPersonList = flowProcessDefinition.copyPersonList;
+        var messageOfCopyPersonSendType = flowProcessDefinition.messageOfCopyPersonSendType;
+        var copyMessageSendType = "";
+        switch(messageOfCopyPersonSendType){
+            case "0":
+                copyMessageSendType = "仅全部同意后通知";
+                break;
+            case "1":
+                copyMessageSendType = "发起时和同意后均通知";
+                break;
+        }
+        copyPersonList.forEach(function (copyPerson) {
+            var userInfo = JSON.parse(copyPerson).colUid;
+            var toUserId = userInfo.toUserId;
+            var copyToType = userInfo.copyToType;
+            var userName = userInfo.userName;
+            var userType = "";
+            switch(copyToType){
+                case "0":
+                    userType = "单个用户";
+                    break;
+            }
+            var copySpan= <Row>
+                <Col span={12} className="setting_le">用户类型:{userType}</Col>
+                <Col span={12} className="setting_le">
+                    抄送人：{userName}
+                </Col>
+            </Row>;
+            copyTagList.push(copySpan);
+        });
+
+        _this.setState({flowFormTagList,conditionalTagList,copyMessageSendType,copyTagList});
     },
 
     /**
@@ -206,7 +258,7 @@ const FlowDetailComponent = React.createClass({
                 //用户
                 var approvalUser = flowApprovalUser.approvalUser;
                 approvalUserTag = <Row>
-                    <Col span={12} className="setting_le">审批类型：用户</Col>
+                    <Col span={12} className="setting_le">审批类型：单个用户</Col>
                     <Col span={12} className="setting_le">
                         审批人：{approvalUser.userName}
                     </Col>
@@ -293,7 +345,15 @@ const FlowDetailComponent = React.createClass({
                     <Row>
                         <Col span={24} className="setting_le_title">审批人</Col>
                     </Row>
-                        {this.state.flowApprovalUserTagList}
+                        {this.state.conditionalTagList}
+                    <Row>
+                        <Col span={24} className="setting_le_title">抄送通知方式</Col>
+                    </Row>
+                    {this.state.copyMessageSendType}
+                    <Row>
+                        <Col span={24} className="setting_le_title">抄送人</Col>
+                    </Row>
+                        {this.state.copyTagList}
 				</div>
             </div>
         );
