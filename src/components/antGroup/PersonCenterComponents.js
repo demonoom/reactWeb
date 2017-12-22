@@ -89,7 +89,7 @@ const memberColumns = [{
 }, {
     title: '手机号',
     dataIndex: 'userPhone',
-    key: 'userPhone',
+    key: 'userPhone'
 }
 ];
 
@@ -859,6 +859,7 @@ const PersonCenterComponents = React.createClass({
             "operateUserId": _this.state.loginUser.colUid,
             "structureId": structureId,
         };
+
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
@@ -873,6 +874,9 @@ const PersonCenterComponents = React.createClass({
                             key: subGroup.id,
                             subGroupName: subGroupName,
                         });
+                        // if(isEmpty(subGroupList)==true){
+                        //     message.info("该部门无子部门")
+                        // }
                     });
                 }
                 _this.setState({subGroupList, "optType": "getGroupMenu"});
@@ -963,6 +967,7 @@ const PersonCenterComponents = React.createClass({
      * 切换到当前的组织架构层次，同时，在此面包条后的数据移除
      */
     breadCrumbClick(structureId) {
+
         var defaultPageNo = 1;
         for (var i = 0; i < structuresObjArray.length; i++) {
             var structure = structuresObjArray[i];
@@ -2307,23 +2312,25 @@ const PersonCenterComponents = React.createClass({
                 var structuresObjArrayLength = structuresObjArray.length;
                 structureName = structuresObjArray[structuresObjArrayLength-1].name;
             }
-            personDate = <div className="myfollow_zb">
+            personDate = <div className="favorite_scroll">
                 <div className="department_scroll">
                     <div className="public—til—blue">{structureName}</div>
                     {/*面包屑*/}
                     <Breadcrumb separator=">">
                         {breadcrumbItemObjArray}
                     </Breadcrumb>
-
+                    <div className="up_table_height">
+                        <Table showHeader={false} columns={columns} dataSource={this.state.subGroupList}
+                               className="schoolgroup_table"
+                               pagination={false}/>
+                    </div>
                     {/*获取组织架构的所有部门*/}
-                    <Table showHeader={false} columns={columns} dataSource={this.state.subGroupList}
-                           className="schoolgroup_table"
-                           pagination={false}/>
+
 
                     <Table columns={memberColumns}
                            pagination={false} dataSource={this.state.subGroupMemberList}
-                           className="schoolgroup_table1 schoolgroup_table_department"
-                           onRowClick={this.onRowClick}
+                           className="schoolgroup_table1 schoolgroup_table_department down_table_height"
+                           onRowClick={this.onRowClick}   scroll={{ y: 300 }}
                     />
 
                     <div className="schoolgroup_operate schoolgroup_more">

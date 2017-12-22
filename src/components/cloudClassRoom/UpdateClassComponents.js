@@ -297,11 +297,14 @@ const UpdateClassComponents = React.createClass({
                     weiClassName
                 ];
                 _this.setState({weifileList});
+                //将数据返回到数据库
+                debugger;
                 var squence = video.squence;
                 var name = video.name;
                 var url = video.url;
                 var remark = video.remark;
-                var videoJson = {squence, name, url, remark,videoStatus};
+                var id=video.id;
+                var videoJson = {squence, name, url, remark,videoStatus,id};
                 _this.buildVideosArray(videoJson, "title");
                 lessonNum += 1;
                 var liveTime = getLocalTime(video.liveTime);
@@ -390,9 +393,6 @@ const UpdateClassComponents = React.createClass({
                         var optionObj = <Option key={id} value={id}>{name}</Option>;
                         if (id == courseInfoJson.courseClass) {
                             _this.setState({"defaultSelected": name});
-                            console.log(3333);
-                            console.log(name);
-                            console.log(defaultSelected);
                         }
                         classOptionArray.push(optionObj);
                         var courseTypes = classInfo.courseTypes;
@@ -459,7 +459,7 @@ const UpdateClassComponents = React.createClass({
             "method": 'updateCourse',
             "data": JSON.stringify(courseInfoJson),
         };
-        doWebService_CloudClassRoom(JSON.stringify(param), {
+        /*doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
                 if (response) {
@@ -471,7 +471,7 @@ const UpdateClassComponents = React.createClass({
             onError: function (error) {
                 message.error(error);
             }
-        });
+        });*/
     },
 
     findTeamByUserId() {
@@ -673,7 +673,8 @@ const UpdateClassComponents = React.createClass({
             videos.forEach(function (video) {
                 var squence = video.squence;
                 var name = video.name;
-                var videoJson = {squence, name};
+                var id=video.id;
+                var videoJson = {squence, name,id};
                 _this.buildVideosArray(videoJson, "title");
                 lessonNum += 1;
                 var liveTime = getLocalTime(video.liveTime);
@@ -812,6 +813,7 @@ const UpdateClassComponents = React.createClass({
                 noom={_this.state.weifileList}
             />
         </Col>;
+
         var videoStatus = 1;//未直播
         var lessonJson = {lessonNum, teacherObj, timeObj, videoNameObj, uploadList,videoStatus};
         lessonArray.push(lessonJson);
@@ -936,13 +938,24 @@ const UpdateClassComponents = React.createClass({
                 var time = '';
             }
             console.log("teacher" + teacher + "\t" + time);
-            videoJson.squence = i + 1;
-            videoJson.courseId = courseInfoJson.id;
-            videoJson.url = courseInfoJson.videos[i].url;
-            videoJson.remark = courseInfoJson.videos[i].remark;
-            videoJson.videoStatus = courseInfoJson.videos[i].videoStatus;
-            videoJson.userID = teacher;
-            videoJson.liveTime = new Date(time).valueOf();
+            if(this.state.isWeiClass){
+                videoJson.videoStatus = courseInfoJson.videos[i].videoStatus;
+                videoJson.userID = teacher;
+                videoJson.liveTime = new Date(time).valueOf();
+                videoJson.squence = i + 1;
+                videoJson.courseId = courseInfoJson.id;
+                videoJson.url = courseInfoJson.videos[i].url;
+                videoJson.remark = courseInfoJson.videos[i].remark;
+
+            }else {
+                videoJson.videoStatus = courseInfoJson.videos[i].videoStatus;
+                videoJson.squence = i + 1;
+                videoJson.courseId = courseInfoJson.id;
+                videoJson.userID = teacher;
+                videoJson.liveTime = new Date(time).valueOf();
+            }
+
+
             if (videoJson.squence == 1) {
                 courseInfoJson.startTime = videoJson.liveTime;
             }
@@ -1111,6 +1124,7 @@ const UpdateClassComponents = React.createClass({
                 break;
             }
         }
+
         if (isExistSameVideo == false) {
             videoJsonArray.push(videoJson);
         }

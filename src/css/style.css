@@ -8015,22 +8015,27 @@ select.course_n:hover {
 
 /*部门展示的div*/
 
-.department_scroll{
-    height: calc(60% - 46px);
-}
+/*.department_scroll{*/
+    /*height: calc(60% - 46px);*/
+/*}*/
 .department_scroll .schoolgroup_table .ant-table-content{
-    height:100%;
+   max-height:262px;
     overflow: auto;
     padding: 0 10px;
 }
 
-
-
+.up_table_height{
+    max-height: 140px;
+}
+.down_table_height{
+    max-height: 270px;
+}
 .department_scroll .clearfix {
     overflow: hidden;
     position: relative;
-    height: 64%;
+    height: 100%;
 }
+.
 .department_scroll .schoolgroup_subGroupMemberList{
     overflow: auto;
     position: relative;
@@ -8050,4 +8055,11 @@ select.course_n:hover {
     padding:0 4px;
     box-shadow: 0 0 0 1px transparent;
 }
-
+/*面包屑的箭头*/
+.department_scroll .ant-breadcrumb .ant-breadcrumb-separator{
+    color: #666!important;
+    font-size:16px!important;
+}
+.department_scroll .ant-breadcrumb a{
+    font-size:16px!important;
+}
