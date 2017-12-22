@@ -1359,7 +1359,8 @@ const AntCloudTableComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                var response = ret.response;
+                var resLength = ret.response.length;
+                var response = ret.response.splice(4,resLength);
                 var i = 0;
                 var concatOptions = [];
                 response.forEach(function (e) {
@@ -1741,7 +1742,7 @@ const AntCloudTableComponents = React.createClass({
             <div className="ant-tabs-right"><Button onClick={cloudTable.returnParentAtMoveModal}><Icon
                 type="left"/></Button></div>
         </div>;
-        var returnToolbarInShareModal = <div className="public—til—blue">
+     var returnToolbarInShareModal = <div className="public—til—blue">
             <div className="ant-tabs-right"><Button onClick={cloudTable.getAntGroup}><Icon type="left"/></Button></div>
         </div>;
         var saveToobarBack = <div className="public—til—blue">
