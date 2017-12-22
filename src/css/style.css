@@ -5219,7 +5219,7 @@ div.btn1 {
     padding: 20px 110px 0 110px;
     margin-left: 0;
     background-size: contain;
-
+    position:relative;
 }
 
 .userinfo_bg_1 {
@@ -8018,24 +8018,31 @@ select.course_n:hover {
 /*.department_scroll{*/
     /*height: calc(60% - 46px);*/
 /*}*/
+.department_scroll{
+    height:100%;
+}
 .department_scroll .schoolgroup_table .ant-table-content{
-   max-height:262px;
+   max-height:96%;
     overflow: auto;
     padding: 0 10px;
 }
-
 .up_table_height{
-    max-height: 140px;
+    height: 40%;
+}
+.up_table_height .clearfix > div:first-child{
+    height:100%;
 }
 .down_table_height{
-    max-height: 270px;
+    height: 60%;
 }
-.department_scroll .clearfix {
+.down_table_height .clearfix {
     overflow: hidden;
     position: relative;
-    height: 100%;
+    height: calc(100% - 39px);
 }
-.
+.down_table_height .ant-table-header{
+    margin-bottom:0 !important
+}
 .department_scroll .schoolgroup_subGroupMemberList{
     overflow: auto;
     position: relative;
@@ -8044,8 +8051,6 @@ select.course_n:hover {
 .department_scroll .clearfix .ant-spin-container.ant-table-content .ant-table-body .ant-table-thead{
     position: fixed;
 }
-
-
 .noomFinish sup{
     box-sizing: border-box;
     -ms-box-sizing: border-box;
@@ -8056,10 +8061,33 @@ select.course_n:hover {
     box-shadow: 0 0 0 1px transparent;
 }
 /*面包屑的箭头*/
+.department_scroll .favorite_scroll{
+    height:calc(100% - 92px);
+}
+.department_scroll .ant-breadcrumb{
+    background-color: #f9f9f9;
+}
 .department_scroll .ant-breadcrumb .ant-breadcrumb-separator{
     color: #666!important;
     font-size:16px!important;
 }
 .department_scroll .ant-breadcrumb a{
-    font-size:16px!important;
+    font-size:12px!important;
+}
+.down_table_height .schoolgroup_table1 .ant-table-content{
+    padding:0 20px;
+}
+.down_table_height_back{
+    position: absolute;
+    left: 12px;
+    top: 12px;
+}
+.down_table_height_back i{
+    font-size: 22px;
+    color: #fff;
+    left: 0;
+    cursor: pointer;
+}
+.down_table_height .ant-table-thead > tr, .ant-table-tbody > tr{
+    cursor: pointer;
 }

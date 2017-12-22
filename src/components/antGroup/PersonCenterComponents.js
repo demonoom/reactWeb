@@ -1846,6 +1846,7 @@ const PersonCenterComponents = React.createClass({
             personDate = <div className="group_cont new_center_user_top">
                 {/* <div className="public—til—blue">{personCenter.state.userInfo.user.userName+'的个人中心'}</div>*/}
                 <div className="userinfo_bg group_cont favorite_up">
+                    <div className="down_table_height_back"><Icon type="left" /></div>
                     <div className="gary_person">
                         <div className="bai">
                             {userPhotoTag}
@@ -2312,31 +2313,30 @@ const PersonCenterComponents = React.createClass({
                 var structuresObjArrayLength = structuresObjArray.length;
                 structureName = structuresObjArray[structuresObjArrayLength-1].name;
             }
-            personDate = <div className="favorite_scroll">
-                <div className="department_scroll">
-                    <div className="public—til—blue">{structureName}</div>
-                    {/*面包屑*/}
-                    <Breadcrumb separator=">">
-                        {breadcrumbItemObjArray}
-                    </Breadcrumb>
+            personDate = <div className="department_scroll">
+                <div className="public—til—blue">{structureName}</div>
+                {/*面包屑*/}
+                <Breadcrumb separator=">">
+                    {breadcrumbItemObjArray}
+                </Breadcrumb>
+                <div className="favorite_scroll">
                     <div className="up_table_height">
                         <Table showHeader={false} columns={columns} dataSource={this.state.subGroupList}
                                className="schoolgroup_table"
                                pagination={false}/>
                     </div>
                     {/*获取组织架构的所有部门*/}
+                    <div className="down_table_height">
+                        <Table columns={memberColumns}
+                               pagination={false} dataSource={this.state.subGroupMemberList}
+                               className="schoolgroup_table1 schoolgroup_table_department"
+                               onRowClick={this.onRowClick}
+                        />
 
-
-                    <Table columns={memberColumns}
-                           pagination={false} dataSource={this.state.subGroupMemberList}
-                           className="schoolgroup_table1 schoolgroup_table_department down_table_height"
-                           onRowClick={this.onRowClick}   scroll={{ y: 300 }}
-                    />
-
-                    <div className="schoolgroup_operate schoolgroup_more">
-                        <a onClick={this.loadMoreMember} className="schoolgroup_more_a">加载更多</a>
+                        <div className="schoolgroup_operate schoolgroup_more">
+                            <a onClick={this.loadMoreMember} className="schoolgroup_more_a">加载更多</a>
+                        </div>
                     </div>
-
                 </div>
             </div>;
         }
