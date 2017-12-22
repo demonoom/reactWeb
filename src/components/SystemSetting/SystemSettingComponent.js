@@ -9,6 +9,10 @@ import FlowSettingComponent from '../../components/flowSetting/FlowSettingCompon
 import {isEmpty} from '../../utils/utils';
 import AttendanceSettingComponents from '../../components/Attendance/AttendanceSettingComponents';
 import Attendance from '../../components/Attendance/Attendance';
+import Role from '../../components/role/Role';
+import RoleSettingComponents from '../../components/role/RoleSettingComponents';
+import Structure from '../../components/structrue/Structure'
+import StructureSettingComponents from '../../components/structrue/StructureSettingComponents'
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
 
@@ -43,6 +47,16 @@ class SystemSettingComponent extends React.Component {
         this.addSubGroupComplete = this.addSubGroupComplete.bind(this);
         this.attendanceSettingClick = this.attendanceSettingClick.bind(this);
         this.mapShow = this.mapShow.bind(this);
+        this.roleGroupClick = this.roleGroupClick.bind(this);
+        this.sendDefaultSelected = this.sendDefaultSelected.bind(this);
+        this.roleOnEditComplete = this.roleOnEditComplete.bind(this);
+        this.passDefaultStructure = this.passDefaultStructure.bind(this);
+        this.refreshLeft = this.refreshLeft.bind(this);
+        this.onStructureMenuClick = this.onStructureMenuClick.bind(this);
+        this.delStructure = this.delStructure.bind(this);
+        this.callBackChangeMsg = this.callBackChangeMsg.bind(this);
+        this.onDelComplete = this.onDelComplete.bind(this);
+        this.passstructureIdToLeft = this.passstructureIdToLeft.bind(this);
     }
 
 
@@ -127,6 +141,50 @@ class SystemSettingComponent extends React.Component {
         this.props.mapShow();
     }
 
+    roleGroupClick(id, parentName) {
+        this.setState({roleGroupClick: id, RoleGroupName: parentName})
+    }
+
+    sendDefaultSelected(key) {
+        this.setState({sendDefaultSelected: key})
+    }
+
+    roleOnEditComplete(name, id) {
+        this.setState({roleName: name});
+        this.setState({roleId: id});
+    }
+
+    passDefaultStructure(obj) {
+        this.setState({passDefaultStructure: obj});
+    }
+
+    refreshLeft(flag) {
+        this.refs.structureSettingComponents.getStructureById(flag);
+    }
+
+    onStructureMenuClick(id) {
+        // this.setState({onStructureMenuClick: id});
+        this.refs.structure.getSubGroupForButton(id, true)
+
+    }
+
+    delStructure(id) {
+        this.refs.structureSettingComponents.delStructure(id);
+    }
+
+    callBackChangeMsg(id, name) {
+        this.refs.structureSettingComponents.callBackChangeMsg(id, name)
+    }
+
+    onDelComplete(roleId, roleName) {
+        this.refs.roleSettingComponents.getStructureRoleGroups();
+        this.refs.roleSettingComponents.firstClickObj();
+    }
+
+    passstructureIdToLeft(id) {
+        this.refs.structureSettingComponents.setSelectedKeys(id);
+    }
+
     render() {
         //系统设置页面渲染 根据如下判断结果，完成对页面中部位置的渲染，不同情况，渲染不同组件
         switch (this.props.currentItem) {
@@ -168,6 +226,39 @@ class SystemSettingComponent extends React.Component {
                     mapShow={this.mapShow}
                     postPos={this.state.postPos}
                 />;
+                break;
+            case 'noomjuese':
+                //角色
+                this.middleComponent = <RoleSettingComponents
+                    roleGroupClick={this.roleGroupClick}
+                    sendDefaultSelected={this.sendDefaultSelected}
+                    roleName={this.state.roleName}
+                    roleId={this.state.roleId}
+                    ref="roleSettingComponents"
+                />;
+                this.tabComponent = <Role
+                    roleGroupClick={this.state.roleGroupClick}
+                    sendDefaultSelected={this.state.sendDefaultSelected}
+                    onEditComplete={this.roleOnEditComplete}
+                    RoleGroupName={this.state.RoleGroupName}
+                    onDelComplete={this.onDelComplete}
+                />;
+                break;
+            case 'noomStructure':
+                this.middleComponent = <StructureSettingComponents
+                    passDefaultStructure={this.passDefaultStructure}
+                    ref="structureSettingComponents"
+                    onStructureMenuClick={this.onStructureMenuClick}
+                />
+                this.tabComponent = <Structure
+                    passDefaultStructure={this.state.passDefaultStructure}
+                    refreshLeft={this.refreshLeft}
+                    onStructureMenuClick={this.state.onStructureMenuClick}
+                    delStructure={this.delStructure}
+                    callBackChangeMsg={this.callBackChangeMsg}
+                    ref="structure"
+                    passstructureIdToLeft={this.passstructureIdToLeft}
+                />
         }
 
 

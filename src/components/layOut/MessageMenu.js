@@ -7,6 +7,7 @@ import {formatHM} from '../../utils/utils';
 import {isToday} from '../../utils/utils';
 
 var mMenu;
+var noomSelectRowKey;
 // const ButtonGroup = Button.Group;
 const columns = [{
     title: 'messageContent',
@@ -16,6 +17,7 @@ const columns = [{
 
 var messageData = [];
 var userMessageData = [];
+var uuid;
 const MessageMenu = React.createClass({
     getInitialState() {
         mMenu = this;
@@ -32,63 +34,104 @@ const MessageMenu = React.createClass({
     },
 
     componentWillReceiveProps(nextProps) {
+        if (isEmpty(noomSelectRowKey)) {
+            //noomSelectRowKey没有值
+            if (isEmpty(nextProps) == false && (typeof(nextProps.userJson) != "undefined")) {
+                var num;
+                messageData.forEach(function (v, i) {
+                    if (v.key == nextProps.userJson.key) {
+                        num = v.noomReadState
+                    }
+                });
+                if (isEmpty(num) && num != 0) {
+                    //没有找到那条消息,是一条新消息
+                    num = 1
+                } else {
+                    //找到了拿到那个数字要加一
+                    if (uuid != nextProps.userJson.uuid) {
+                        num += 1;
+                    } else {
+                        num = num;
+                    }
+                }
+                uuid = nextProps.userJson.uuid;
+
+                if (nextProps.userJson.fromUser.colUid == 139581 || nextProps.userJson.fromUser.colUid == 138437 || nextProps.userJson.fromUser.colUid == 142033) {
+                    num = 0;
+                }
+
+                if (nextProps.userJson.messageToType == 1) {
+                    //个人消息
+                    if (nextProps.userJson.fromUser.colUid != this.state.selectRowKey) {
+                        nextProps.userJson.noomReadState = num;
+                    }
+                } else {
+                    //群组消息
+                    if (nextProps.userJson.key != this.state.selectRowKey) {
+                        nextProps.userJson.noomReadState = num
+                    }
+                }
+                //清空userMessageData
+                userMessageData.splice(0);
+                var index = mMenu.checkUserJsonIsExist(nextProps.userJson);
+                //index=-1说明来的是以前不在列表中的新消息，直接置顶。
+                //否则说明来的是本来就在列表里的人发送的消息，index是那个人在messageData中的位置
+                // nextProps.userJson.isNew = true;
+                if (index == -1) {
+                    messageData.splice(0, 0, nextProps.userJson);
+                } else {
+                    // messageData[index] = nextProps.userJson;
+                    // messageData.splice(0, 0, nextProps.userJson);
+                    //排序
+                    messageData.splice(index, 1);
+                    messageData.splice(0, 0, nextProps.userJson);
+                }
+                mMenu.showMessageData();
+            }
+            if (isEmpty(nextProps) == false && isEmpty(nextProps.isSearch) == false) {
+                if (nextProps.isSearch) {
+                    //调用点击用户函数
+                    var obj = {
+                        fromUser: nextProps.userJson.fromUser,
+                        key: nextProps.userJson.key,
+                        messageType: nextProps.userJson.messageToType
+                    };
+                    mMenu.turnToMessagePage(obj);
+                    //把nextProps.isSearch变回去
+                    mMenu.props.changeIsSearch();
+                }
+            }
+            if (isEmpty(nextProps) == false && isEmpty(nextProps.isSearchGroup) == false) {
+                if (nextProps.isSearchGroup) {
+                    //调用点击用户函数
+                    var obj = {
+                        fromUser: nextProps.userJson.fromUser,
+                        key: nextProps.userJson.key,
+                        messageType: nextProps.userJson.messageToType,
+                        toChatGroup: nextProps.userJson.toChatGroup
+                    };
+                    mMenu.turnToMessagePage(obj);
+
+                    //把nextProps.isSearch变回去
+                    mMenu.props.changeIsSearchGroup();
+                }
+            }
+        } else {
+            //noomSelectRowKey有值    当点击左侧的时候会赋值   到这里滞空
+            console.log(messageData);
+            noomSelectRowKey = null;
+        }
+        // noomSelectRowKey = null;
         //看看它的key
         // if (isEmpty(nextProps.userJson) == false) {
         //     console.log(nextProps.userJson);
         //     ;
         // }
-        if (isEmpty(nextProps) == false && (typeof(nextProps.userJson) != "undefined")) {
-            //清空userMessageData
-            userMessageData.splice(0);
-            var index = mMenu.checkUserJsonIsExist(nextProps.userJson);
-            //index=-1说明来的是以前不在列表中的新消息，直接置顶。
-            //否则说明来的是本来就在列表里的人发送的消息，index是那个人在messageData中的位置
-            // alert(index);
-            // nextProps.userJson.isNew = true;
-            if (index == -1) {
-                messageData.splice(0, 0, nextProps.userJson);
-            } else {
-                messageData[index] = nextProps.userJson;
-                // alert(index);
-                messageData.splice(0, 0, nextProps.userJson);
-                //排序
-            }
-            mMenu.showMessageData();
-        }
-        if (isEmpty(nextProps) == false && isEmpty(nextProps.isSearch) == false) {
-            if (nextProps.isSearch) {
-                //调用点击用户函数
-                var obj = {
-                    fromUser: nextProps.userJson.fromUser,
-                    key: nextProps.userJson.key,
-                    messageType: nextProps.userJson.messageToType
-                };
-                mMenu.turnToMessagePage(obj);
-                //把nextProps.isSearch变回去
-                mMenu.props.changeIsSearch();
-            }
-        }
-        if (isEmpty(nextProps) == false && isEmpty(nextProps.isSearchGroup) == false) {
-            if (nextProps.isSearchGroup) {
-                // console.log(nextProps.userJson);
-                // console.log('nextProps.userJson');
-                //调用点击用户函数
-                var obj = {
-                    fromUser: nextProps.userJson.fromUser,
-                    key: nextProps.userJson.key,
-                    messageType: nextProps.userJson.messageToType,
-                    toChatGroup: nextProps.userJson.toChatGroup
-                };
-                mMenu.turnToMessagePage(obj);
-
-                //把nextProps.isSearch变回去
-                mMenu.props.changeIsSearchGroup();
-            }
-        }
     },
 
     componentWillUnmount() {
         this.props.changeMesTabClick();
+        noomSelectRowKey = null;
     },
 
     checkUserJsonIsExist(newMessageObj) {
@@ -123,15 +166,16 @@ const MessageMenu = React.createClass({
                 var response = ret.response;
                 var i = 0;
                 if (isEmpty(response) == false || isEmpty(messageData) == false) {
-                    //messageData.splice(0);
                     response.forEach(function (e) {
+                        //如果这条消息的来源是我自己 助手 ,就直接讲readState制成1
+                        if (e.fromUser.colUid == sessionStorage.getItem("ident") || e.fromUser.colUid == 138437 || e.fromUser.colUid == 142033 || e.fromUser.colUid == 139581) {
+                            e.readState = 1;
+                        }
                         //临时处理
                         /*if(e.toType==1){
 
                         }*/
                         mMenu.setMessageArrayForOnePerson(e);
-                        //判断已读未读0未读1已读
-                        // console.log(e.readState);
                     });
                     mMenu.showMessageData(flag);
                     /*if(isEmpty(userMessageData)==false && mMenu.state.tableIsClick==false){
@@ -174,12 +218,19 @@ const MessageMenu = React.createClass({
         }
         //不管是第一次进来通过get还是消息过来通过willReceiveProps，都会经过这里
         //在这里对比messageData的不同，决定给哪一些加圆点
+        userMessageData.splice(0);
         messageData.forEach(function (message) {
             var fromUser = message.fromUser;
             var colUid = fromUser.colUid;
             var contentArray = message.contentArray;
             var messageType = message.messageToType;
             var toChatGroup = message.toChatGroup;
+            var noomReadState = message.noomReadState;   //noomReadState为0是未读  1是已读   如果是0就要显示红点
+            if (!noomReadState) {
+                var redPoint = 0;
+            } else {
+                var redPoint = noomReadState;
+            }
             // var isNew = message.isNew;
             // var tipPoint;
             // if(isNew == true){
@@ -187,8 +238,7 @@ const MessageMenu = React.createClass({
             // }else{
             //     tipPoint = null;
             // }
-
-
+            var badgeCount = 0;
             if (isEmpty(contentArray) == false && contentArray.length > 0) {
                 // 只显示具有消息内容的数据,且只显示最后一条消息记录
                 var lastContentInfo = contentArray[contentArray.length - 1];
@@ -252,7 +302,7 @@ const MessageMenu = React.createClass({
                         </div>
                     </div>;
                 }
-                var messageContentTag = <Badge dot={mMenu.state.badgeShow}>
+                var messageContentTag = <Badge className='noomFinish' dot={mMenu.state.badgeShow} count={redPoint}>
                     <div>
                         {imgTag}
                     </div>
@@ -263,7 +313,8 @@ const MessageMenu = React.createClass({
                         key: colUid,
                         "fromUser": fromUser,
                         messageContent: messageContentTag,
-                        "messageType": messageType
+                        "messageType": messageType,
+                        "redPoint": redPoint
                     };
                 } else {
                     userJson = {
@@ -302,11 +353,16 @@ const MessageMenu = React.createClass({
      * 如：{{colUid:23836,userName:'王丹'},[{content:'123'}{content:'test'}]}
      */
     setMessageArrayForOnePerson(messageObj) {
-        // console.log(messageObj);
-        // console.log('messageObj');
         if (messageObj.command == "message") {
             var fromUser = messageObj.fromUser;
             var content = messageObj.content;
+            //noomReadState为0是未读  1是已读
+            if (messageObj.readState == 0) {
+                var noomReadState = 1;
+            } else {
+                var noomReadState = false
+            }
+
 
             var isCurrentDay = isToday(messageObj.createTime);
             var createTime;
@@ -321,6 +377,7 @@ const MessageMenu = React.createClass({
             var messageToType = messageObj.toType;
             var contentJson = {"content": content, "createTime": createTime};
             if (messageToType == 1) {
+                //个人消息
                 var showUser;
                 if (fromUser.colUid != sessionStorage.getItem("ident")) {
                     showUser = fromUser;
@@ -341,6 +398,7 @@ const MessageMenu = React.createClass({
                         "fromUser": showUser,
                         contentArray: contentArray,
                         "messageToType": messageToType,
+                        "noomReadState": noomReadState,
                         // "isNew":true
                     };
                     messageData.push(userJson);
@@ -361,7 +419,8 @@ const MessageMenu = React.createClass({
                             "fromUser": fromUser,
                             contentArray: contentArray,
                             "messageToType": messageToType,
-                            "toChatGroup": toChatGroup
+                            "toChatGroup": toChatGroup,
+                            "noomReadState": noomReadState,
                         };
                         messageData.push(userJson);
                     } else {
@@ -403,10 +462,16 @@ const MessageMenu = React.createClass({
      * @param index
      */
     turnToMessagePage(record, index) {
-        // console.log(record);
-        // console.log('record');
+        messageData.forEach(function (v, i) {
+            //遍历messageData,去改变他的noomReadState,然后调用渲染方法showMessageData就能够消去红点
+            if (v.key == record.key) {
+                v.noomReadState = false;
+            }
+        });
         mMenu.setState({selectRowKey: record.key, badgeShow: false, tableIsClick: true});
         mMenu.props.onUserClick(record);
+        noomSelectRowKey = record.key;
+        this.showMessageData();
         //根据id找到点击的那一个的b标签,设置它的样式为隐藏
         // var bOpt = document.getElementById(record.key);
         // bOpt.className = 'mes_alert mes_opt';

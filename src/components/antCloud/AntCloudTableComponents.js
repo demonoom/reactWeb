@@ -1588,6 +1588,7 @@ const AntCloudTableComponents = React.createClass({
             "content": name,
             "type": TO_TYPE
         };
+        console.log(attachement);
 
         if (isEmpty(checkedGroupOptions) == false) {
             checkedGroupOptions.forEach(function (e) {

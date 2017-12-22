@@ -3,6 +3,7 @@ import {
     Tabs, Breadcrumb, Icon, Card, Button, Row, Col, Steps,
     Input, Select, Radio, DatePicker, Checkbox, message, Upload,
 } from 'antd';
+import moment from 'moment';
 import ImageAnswerUploadComponents from './ImageAnswerUploadComponents';
 import WeiClassUploadComponents from './WeiClassUploadComponents';
 import {isEmpty, getLocalTime} from '../../utils/utils';
@@ -44,7 +45,8 @@ const CreateClassComponents = React.createClass({
             cloudClassRoomUser: cloudClassRoomUser,
             isWeiClass: false,
             isShowClass: false,
-            upLoadNum: 0
+            upLoadNum: 0,
+
         };
     },
 
@@ -324,7 +326,8 @@ const CreateClassComponents = React.createClass({
      * @param value
      */
     courseSelectOnChange(value) {
-        console.log(`selected ${value}`);
+        // console.log(`selected ${value}`);
+
         this.setState({defaultSubjectSelected: value});
         courseInfoJson.courseTypeId = value;
     },
@@ -544,9 +547,14 @@ const CreateClassComponents = React.createClass({
      * @param dateString
      * @param Event
      */
-    lessonTimeOnChange(value, dateString, Event) {
-        console.log('Selected Time: ', value);
+
+    lessonTimeOnChange(id,value, dateString) {
+        console.log('Selected Time: ', value+"\t"+id);
         console.log('Formatted Selected Time: ', dateString);
+        var squence = id;
+        var liveTime = dateString;
+        var videoJson = {squence, liveTime};
+        this.buildVideosArray(videoJson, "liveTime");
     },
 
     lessonTimeOnOk(value) {
@@ -661,7 +669,8 @@ const CreateClassComponents = React.createClass({
             videoJson.squence = i + 1;
             // videoJson.courseId = courseInfoJson.courseTypeId;
             videoJson.userID = teacher;
-            videoJson.liveTime = new Date(time).valueOf();
+             videoJson.liveTime = new Date(time).valueOf();
+            // videoJson.liveTime = new Date(time);
             this.buildVideosArray(videoJson);
         }
         if (isEmpty(courseInfoJson.videos) == false) {
@@ -699,8 +708,10 @@ const CreateClassComponents = React.createClass({
         // 是否发布　１已发布　２未发布
         if (e.target.checked) {
             courseInfoJson.isPublish = 1;
+
         } else {
             courseInfoJson.isPublish = 2;
+
         }
     },
 
@@ -722,6 +733,7 @@ const CreateClassComponents = React.createClass({
         }
         this.setState({courseName});
         courseInfoJson.courseName = courseName;
+
     },
     /**
      * 课程收费金额文本框内容改变时的响应
@@ -871,7 +883,6 @@ const CreateClassComponents = React.createClass({
      * @param e
      */
     weiClassUpload(e, i) {
-        console.log(i);
         console.log('上传完成的回调');
         courseInfoJson.videos[i].url = e.response;
         courseInfoJson.videos[i].remark = e.name;
@@ -919,7 +930,7 @@ const CreateClassComponents = React.createClass({
                 <Row>
                     <Col span={4}>课程名称：</Col>
                     <Col span={18}>
-                        <Input value={this.state.courseName} onChange={this.courseNameOnChange}/>
+                        <Input  value={this.state.courseName} onChange={this.courseNameOnChange}/>
                     </Col>
                 </Row>
                 <Row>
@@ -939,7 +950,7 @@ const CreateClassComponents = React.createClass({
                                 </Row>*/}
                             </Radio>
                             <span>
-                              <Input value={this.state.money} style={{width: 160}}
+                              <Input  value={this.state.money} style={{width: 160}}
                                      disabled={this.state.moneyInputDisable} onChange={this.moneyOnChange}/>
                             </span>
                         </RadioGroup>
@@ -1058,7 +1069,9 @@ const CreateClassComponents = React.createClass({
                             console.log("videoInfo name:" + videoInfo.name);
                             videoName = videoInfo.name;
                             // weifileList = videoInfo.weiClassList;
-                            weifileList.push(videoInfo.weiClassList);
+                            if(isEmpty(videoInfo.weiClassList)==false){
+                                weifileList.push(videoInfo.weiClassList);
+                            }
                         }
                         var lessonRowObj = <Row>
                             <Col span={3} className="add_left">第{lessonJson.lessonNum}课时</Col>
@@ -1117,7 +1130,7 @@ const CreateClassComponents = React.createClass({
                     </Row>
                     <Row>
                         <Col span={24} className="knowledge_ri">
-                            <Checkbox onChange={this.publishClassAtNow}>立即发布</Checkbox>
+                            <Checkbox  onChange={this.publishClassAtNow}>立即发布</Checkbox>
                         </Col>
                     </Row>
                 </div>;
@@ -1127,10 +1140,13 @@ const CreateClassComponents = React.createClass({
                         var lessonJson = this.state.lessonArray[i];
                         //获取已经保存的时间信息，并重新初始化到页面的组件上
                         var videoInfo = this.getVideoInfoFromCourseInfoJson(lessonJson.lessonNum);
+                        var timestamp = (new Date()).valueOf();
                         var videoName = "";
+                        var liveTime = getLocalTime(timestamp);
                         if (isEmpty(videoInfo) == false) {
                             console.log("videoInfo name:" + videoInfo.name);
                             videoName = videoInfo.name;
+                            liveTime = videoInfo.liveTime;
                         }
                         var lessonRowObj = <Row>
                             <Col span={4} className="add_left">第{lessonJson.lessonNum}课时</Col>
@@ -1142,11 +1158,12 @@ const CreateClassComponents = React.createClass({
                             <Col span={4}>
                                 <Col span={24}>
                                     <DatePicker
+                                        // defaultValue={moment(liveTime, dateFormat)}
                                         className="lessonTime"
                                         showTime
                                         format="YYYY-MM-DD HH:mm:ss"
                                         placeholder="Select Time"
-                                        onChange={this.lessonTimeOnChange}
+                                        onChange={this.lessonTimeOnChange.bind(_this,lessonJson.lessonNum)}
                                         onOk={this.lessonTimeOnOk}
                                     />
                                 </Col>
@@ -1187,7 +1204,7 @@ const CreateClassComponents = React.createClass({
                     </Row>
                     <Row>
                         <Col span={24} className="knowledge_ri">
-                            <Checkbox onChange={this.publishClassAtNow}>立即发布</Checkbox>
+                            <Checkbox  onChange={this.publishClassAtNow}>立即发布</Checkbox>
                         </Col>
                     </Row>
                 </div>;

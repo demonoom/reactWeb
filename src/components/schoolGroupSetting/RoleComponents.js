@@ -1,9 +1,9 @@
 import React, {PropTypes} from 'react';
 import {Table, Icon, Button, Breadcrumb, message, Modal} from 'antd';
 import AddRoleMemberModal from './AddRoleMemberModal';
-import {doWebService} from '../../WebServiceHelper';
 import EditRoleModal from './EditRoleModal'
 import ConfirmModal from '../ConfirmModal'
+import {doWebService} from '../../WebServiceHelper';
 import {isEmpty} from '../../utils/utils';
 
 const confirm = Modal.confirm;

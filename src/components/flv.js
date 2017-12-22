@@ -6709,7 +6709,6 @@ var IOController = function () {
     }, {
         key: '_onLoaderComplete',
         value: function _onLoaderComplete(from, to) {
-          debugger
             // Force-flush stash buffer, and drop unconsumed data
             this._flushStashBuffer(true);
 

@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 import {Button, Icon, message, Modal, Collapse, Input, Row, Col, Select} from 'antd';
 import CreateFlowComponent from './CreateFlowComponent';
+import FlowDetailComponent from './FlowDetailComponent';
 import {isEmpty} from '../../utils/utils';
 import {doWebService} from '../../WebServiceHelper';
 import {FLOW_OPTSOURCE_MANAGER} from '../../utils/Const';
@@ -81,6 +82,7 @@ const FlowSettingComponent = React.createClass({
                         <a onClick={_this.suspendOrActivationProcessDefinitionConfirm.bind(_this, procDefId, "suspend")}>停用</a>;
                 }
                 var deleteButton = <a onClick={_this.deleteProcessDefinitionConfirm.bind(_this, flowGroupProcDefId)}>删除</a>;
+                var detailButton = <a className="schoolgroup_btn_left" onClick={_this.showProcessDefinitionDetailModal.bind(_this, procDefId)}>详情</a>;
                 var procName = processDefinition.procDefName;
                 var procDefDescribe = processDefinition.procDefDescribe;
                 var flowObj = <div className="process_flex">
@@ -94,6 +96,7 @@ const FlowSettingComponent = React.createClass({
                     <div className="process_r">
                         {suspendButton}
                         {deleteButton}
+                        {detailButton}
                         {/* <a className="schoolgroup_btn_left" onClick={_this.removeFlow.bind(_this,procDefId)}>移动到</a>*/}
                     </div>
                 </div>;
@@ -252,6 +255,24 @@ const FlowSettingComponent = React.createClass({
                 console.log('Cancel');
             },
         });
+    },
+
+    /**
+     * 显示编辑流程定义的窗口
+     */
+    showProcessDefinitionDetailModal(procDefId){
+        console.log("procDefId:"+procDefId);
+        this.setState({"detailFlowModalVisible":true,"procDefId":procDefId});
+        if(isEmpty(this.refs.flowDetailComponent)==false){
+            this.refs.flowDetailComponent.getFlowProcessDefinitionById(procDefId);
+        }
+    },
+
+    /**
+     * 关闭编辑流程定义的窗口
+     */
+    detailFlowModalHandleCancel(){
+        this.setState({"detailFlowModalVisible":false});
     },
 
     /**
@@ -485,6 +506,8 @@ const FlowSettingComponent = React.createClass({
             ];
         }
 
+        var detailButton =  <Button onClick={this.detailFlowModalHandleCancel}>关闭</Button>;
+
 
         return (
             <div>
@@ -513,6 +536,19 @@ const FlowSettingComponent = React.createClass({
                 >
                     <div className="space">
                         <CreateFlowComponent ref="createFlowComponent"></CreateFlowComponent>
+                    </div>
+                </Modal>
+
+                <Modal title="审批详情" visible={this.state.detailFlowModalVisible}
+                       onCancel={this.detailFlowModalHandleCancel}
+                       transitionName=""  //禁用modal的动画效果
+                       maskClosable={false} //设置不允许点击蒙层关闭
+                       footer={detailButton}
+                       width="700px"
+                       className="new_process schoolgroup_modal"
+                >
+                    <div className="space">
+                        <FlowDetailComponent ref="flowDetailComponent" procDefId={this.state.procDefId}></FlowDetailComponent>
                     </div>
                 </Modal>
 

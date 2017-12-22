@@ -207,17 +207,11 @@ const NschoolGroupSettingComponents = React.createClass({
             structureId = "-1";
         };
 
-        // if(structureId.indexOf(',') !== -1) {
-        //     var structureIdArr = structureId.split(',');
-        //     structureId = structureIdArr[0];
-        // };
-
         var param = {
             "method": 'getStructureById',
             "operateUserId": _this.state.loginUser.colUid,
             "structureId": structureId,
         };
-        console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var parentGroup = ret.response;

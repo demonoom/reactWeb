@@ -16,7 +16,6 @@ function uploadImg() {
             }
         },
         onComplete: function (info) {
-            debugger
             switch (info.file.status) {
                 case "uploading":
                     var percent = info.file.percent;

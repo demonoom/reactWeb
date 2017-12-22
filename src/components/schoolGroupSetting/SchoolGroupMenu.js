@@ -389,6 +389,7 @@ class SchoolGroupMenu extends React.Component {
 
     render() {
         console.log("openKeys===>"+this.state.openKeys);
+        console.log("openKeysArr===>"+this.state.openKeysArr);
         return (
             <div className="framework_tab">
                 <Tabs size="small" activeKey={this.state.activeTabKey} onChange={this.tabOnChange}>

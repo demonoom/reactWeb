@@ -122,12 +122,12 @@ const FlowBuilderComponent = React.createClass({
      * 移除抄送人
      * 如果不可以移除,则执行e.preventDefault();
      */
-    removeCopyPerson(e,userId){
+    removeCopyPerson(e,userInfo){
         // console.log(e);
         // console.log("userId:"+userId);
         for(var i=0;i<copyPersonIdArray.length;i++){
             var userIdInArray = copyPersonIdArray[i];
-            if(userIdInArray == userId){
+            if(userIdInArray.toUserId == userInfo.userId){
                 copyPersonIdArray.splice(i,1);
                 break;
             }
@@ -370,9 +370,10 @@ const FlowBuilderComponent = React.createClass({
             var userId = teacherArray[0];
             var userName = teacherArray[1];
             var userTag =  <Tag closable onClose={this.removeCopyPerson.bind(this,Event,{userId})}>{userName}</Tag>;
+            var copyPersonJson = {copyToType:'0',toUserId:userId};
             copyPersonTagArray.push(userTag);
             //存放发送给后台的抄送人数据
-            copyPersonIdArray.push(userId);
+            copyPersonIdArray.push(copyPersonJson);
         }
         this.setState({copyPersonTagArray,copyPersonIdArray});
         this.copyPersonModalHandleCancel();
@@ -434,6 +435,17 @@ const FlowBuilderComponent = React.createClass({
         for(var i=0;i<copyPersonIdArray.length;i++){
             var userJson = {"colUid":copyPersonIdArray[i]}
             copyPersonList.push(userJson);
+        }
+        //验证基本信息的非空
+        if(isEmpty(this.state.flowName)){
+            message.error("请输入审批名称");
+            return;
+        }else if(isEmpty(approvalJsonArray)){
+            message.error("请选择流程审批人");
+            return;
+        }else if(isEmpty(copyPersonList)==false && copyPersonList.length!=0 && (isEmpty(this.state.messageOfCopyPersonSendType) || "-1"==this.state.messageOfCopyPersonSendType) ){
+            message.error("请选择抄送人消息推送方式");
+            return;
         }
         for(var i=0;i<approvalJsonArray.length;i++){
             var approvalJson = approvalJsonArray[i];
@@ -874,7 +886,7 @@ const FlowBuilderComponent = React.createClass({
                         </Select>
                     </Col>
                 </Row>
-                {/*<Row>
+                <Row>
                     <Col span={6} className="framework_m_l">抄送人设置：</Col>
                     <Col span={16} className="framework_m_r">
                         {this.state.copyPersonTagArray}
@@ -890,7 +902,7 @@ const FlowBuilderComponent = React.createClass({
                             <Option value="1">发起时和同意后均通知</Option>
                         </Select>
                     </Col>
-                </Row>*/}
+                </Row>
                 <Modal title="设置审批人" visible={this.state.approvalModalVisible}
                        onCancel={this.approvalModalHandleCancel}
                        onOk={this.addApprovalToStep}

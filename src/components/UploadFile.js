@@ -42,7 +42,6 @@ function uploadAndSubmit(file) {
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4) {
                 if (xhr.status == 200) {
-                    debugger
                     console.log("response: " + xhr.responseText);
                 }
             }
