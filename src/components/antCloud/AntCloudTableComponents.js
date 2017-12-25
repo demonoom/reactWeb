@@ -99,6 +99,7 @@ const AntCloudTableComponents = React.createClass({
             groupOptions: [],
             structureOptions: [],   //组织架构
             isGroupCreator: false,   //记录当前用户是否是操作当前群文件的群主
+            disabledFlag:false,
         };
     },
     componentDidMount() {
@@ -828,8 +829,13 @@ const AntCloudTableComponents = React.createClass({
      * @param fileObject
      */
     editDirectoryName(fileObject) {
-        var name = fileObject.name;
-        cloudTable.setState({"reNameModalVisible": true, "editDirectoryName": name, "editFileObject": fileObject});
+        var pointPosition = fileObject.name.lastIndexOf(".");
+        if(pointPosition==-1){
+            cloudTable.setState({"reNameModalVisible": true, "editDirectoryName": fileObject.name, "editFileObject": fileObject});
+        }else{
+            var name = fileObject.name.slice(0,pointPosition);
+            cloudTable.setState({"reNameModalVisible": true, "editDirectoryName": name, "editFileObject": fileObject});
+        }
     },
 
     /**
@@ -944,19 +950,32 @@ const AntCloudTableComponents = React.createClass({
      */
     reNameModalHandleOk() {
         var editFileObject = cloudTable.state.editFileObject;
-        cloudTable.renameCloudFile(cloudTable.state.ident, editFileObject.id, cloudTable.state.editDirectoryName);
+        console.log("----",editFileObject);
+        if(!editFileObject.suffix){
+            cloudTable.renameCloudFile(cloudTable.state.ident, editFileObject.id, cloudTable.state.editDirectoryName);
+        }else{
+            console.log('后缀',editFileObject.suffix);
+          var editDirectoryName = cloudTable.state.editDirectoryName + "." + editFileObject.suffix;
+          console.log('name', editDirectoryName );
+            cloudTable.renameCloudFile(cloudTable.state.ident, editFileObject.id,editDirectoryName);
+        }
+
     },
     /**
      * 修改文件夹名称的文本框内容改变响应函数
      */
     directoryNameInputChange(e) {
+
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             target = e.currentTarget;
         } else {
             target = e.target;
         }
+        var editFileObject = cloudTable.state.editFileObject;
         var editDirectoryName = target.value;
+
+        console.log('要修改的名字',editDirectoryName);
         cloudTable.setState({"editDirectoryName": editDirectoryName});
     },
 
@@ -984,14 +1003,16 @@ const AntCloudTableComponents = React.createClass({
      * 关闭上传文件弹窗
      */
     cloudFileUploadModalHandleCancel() {
-        cloudTable.setState({"cloudFileUploadModalVisible": false});
+        cloudTable.setState({"cloudFileUploadModalVisible": false,disabledFlag: false});
     },
 
     //点击保存按钮，向蚁盘指定文件夹上传文件
     uploadFile() {
+        cloudTable.state.disabledFlag ="false";
         if (uploadFileList.length == 0) {
             message.warning("请选择上传的文件,谢谢！");
         } else {
+            cloudTable.state.disabledFlag ="true";
             var formData = new FormData();
             for (var i = 0; i < uploadFileList.length; i++) {
                 formData.append("file" + i, uploadFileList[i]);
@@ -1053,7 +1074,7 @@ const AntCloudTableComponents = React.createClass({
     showUploadFileModal() {
         uploadFileList.splice(0, uploadFileList.length);
         cloudTable.setState({
-            cloudFileUploadModalVisible: true, uploadPercent: 0, progressState: 'none'
+            cloudFileUploadModalVisible: true, uploadPercent: 0, progressState: 'none',disabledFlag:false
         });
         //弹出文件上传窗口时，初始化窗口数据
         cloudTable.refs.fileUploadCom.initFileUploadPage();
@@ -1496,6 +1517,7 @@ const AntCloudTableComponents = React.createClass({
      * 修改文件夹名称的文本框内容改变响应函数
      */
     nowThinkingInputChange(e) {
+
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             target = e.currentTarget;
@@ -1817,7 +1839,8 @@ const AntCloudTableComponents = React.createClass({
                     footer={[
                         <div>
                             <Button type="primary" htmlType="submit" className="login-form-button"
-                                    onClick={cloudTable.uploadFile}>
+                                    onClick={cloudTable.uploadFile}
+                                    disabled ={cloudTable.state.disabledFlag}>
                                 保存
                             </Button>
                             <Button type="ghost" htmlType="reset" className="login-form-button"
