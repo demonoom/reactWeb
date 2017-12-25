@@ -265,6 +265,7 @@ i{
     background: #333;
     padding: 3px 12px;
     border-radius: 12px;
-    z-index: 2;
+    z-index: 1000;
     opacity: .7;
+    position: relative;
 }
