@@ -459,7 +459,7 @@ const UpdateClassComponents = React.createClass({
             "method": 'updateCourse',
             "data": JSON.stringify(courseInfoJson),
         };
-        /*doWebService_CloudClassRoom(JSON.stringify(param), {
+        doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
                 if (response) {
@@ -471,7 +471,7 @@ const UpdateClassComponents = React.createClass({
             onError: function (error) {
                 message.error(error);
             }
-        });*/
+        });
     },
 
     findTeamByUserId() {
