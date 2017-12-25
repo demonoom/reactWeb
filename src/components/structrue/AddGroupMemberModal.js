@@ -134,7 +134,7 @@ class AddGroupMemberModal extends React.Component {
       keywords:_this.state.searchKey,
       schoolId:_this.state.loginUser.schoolId,
       userType:TYPE_TEACHER
-    }
+    };
     var param = {
       "method": 'searchStructureUsers',
       "operateUserId": _this.state.loginUser.colUid,
