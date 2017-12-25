@@ -29,8 +29,8 @@
                     '<span class="prev"><i class="icon_tool-prev"></i></span>' +
                     '<span class="next"><i class="icon_tool-next"></i></span>' +
                     '</div>' +
-                    '<div>' +
-                        '<span><span id="currentImg">'+currentImg+'</span>/<span id="totalImgs">'+totalImgs+'</span></span>' +
+                    '<div class="galler_page">' +
+                        '<span><span id="currentImg">'+currentImg+'</span><span class="galler_page_2">/</span><span id="totalImgs" class="galler_page_2">'+totalImgs+'</span></span>' +
                     '</div>' +
                     '<div class="tool">' +
                     '<div class="toolct">' +

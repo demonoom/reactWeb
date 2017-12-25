@@ -250,3 +250,14 @@ i{
 .gallery .oper .prev.active i, .gallery .oper .next.active i{
 	display: inline-block;
 }
+.galler_page{
+    text-align: center;
+    color: #fff;
+    font-size: 18px;
+    position: absolute;
+    width: 100%;
+    top: 30px;
+}
+.galler_page_2{
+    color:#dedede
+}
