@@ -28,6 +28,9 @@
                     '<span class="prev"><i class="icon_tool-prev"></i></span>' +
                     '<span class="next"><i class="icon_tool-next"></i></span>' +
                     '</div>' +
+                    '<div class="galler_page">' +
+                    '<span><span id="currentImg">'+currentImg+'</span><span class="galler_page_2">/</span><span id="totalImgs" class="galler_page_2">'+totalImgs+'</span></span>' +
+                    '</div>' +
                     '<div class="tool">' +
                     '<div class="toolct">' +
                     /*'<span class="oper_fullscreen" title="查看全屏"><i class="icon_tool-fullscreen"></i></span>' +*/
