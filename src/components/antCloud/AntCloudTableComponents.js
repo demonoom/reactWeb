@@ -950,13 +950,13 @@ const AntCloudTableComponents = React.createClass({
      */
     reNameModalHandleOk() {
         var editFileObject = cloudTable.state.editFileObject;
-        console.log("----",editFileObject);
+
         if(!editFileObject.suffix){
             cloudTable.renameCloudFile(cloudTable.state.ident, editFileObject.id, cloudTable.state.editDirectoryName);
         }else{
-            console.log('后缀',editFileObject.suffix);
+
           var editDirectoryName = cloudTable.state.editDirectoryName + "." + editFileObject.suffix;
-          console.log('name', editDirectoryName );
+
             cloudTable.renameCloudFile(cloudTable.state.ident, editFileObject.id,editDirectoryName);
         }
 
@@ -975,7 +975,7 @@ const AntCloudTableComponents = React.createClass({
         var editFileObject = cloudTable.state.editFileObject;
         var editDirectoryName = target.value;
 
-        console.log('要修改的名字',editDirectoryName);
+
         cloudTable.setState({"editDirectoryName": editDirectoryName});
     },
 

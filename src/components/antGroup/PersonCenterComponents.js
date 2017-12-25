@@ -160,7 +160,7 @@ const PersonCenterComponents = React.createClass({
     /**
      * 获取个人中心需要的数据,老师和学生可通用,后期需要什么再添加
      */
-    getPersonalCenterData(userId) {
+    getPersonalCenterData(userId,comFrom) {
         var param = {
             "method": 'getPersonalCenterData',
             "userId": userId,
@@ -170,7 +170,7 @@ const PersonCenterComponents = React.createClass({
                 var userInfo = ret.response;
                 var isExist = personCenter.checkPersonIsInContacts(userInfo);
                 personCenter.isFollow(userInfo);
-                personCenter.setState({"userInfo": userInfo, "isExist": isExist, "optType": 'userDetail'});
+                personCenter.setState({"userInfo": userInfo, "isExist": isExist, "optType": 'userDetail',"comFrom":comFrom});
             },
             onError: function (error) {
                 message.error(error);
@@ -182,9 +182,11 @@ const PersonCenterComponents = React.createClass({
      * 当点击人员列表行时，弹出该人员的具体信息界面
      */
     onRowClick(record) {
-        debugger;
-        this.getPersonalCenterData(record.userId);
+        this.getPersonalCenterData(record.userId,'structureUser');
     },
+
+
+
 
     /**
      * 获取联系人列表
@@ -332,6 +334,9 @@ const PersonCenterComponents = React.createClass({
             }
         });
     },
+
+
+
 
     /**
      * 获取我的收藏列表
@@ -847,6 +852,18 @@ const PersonCenterComponents = React.createClass({
     },
 
 
+
+    /**
+     * 返回上级目录
+     */
+    returnParent() {
+        if(personCenter.state.optType == "userDetail"){
+            personCenter.setState({"optType": "getGroupMenu"});
+        }
+
+    },
+
+
     /**
      * 列举蚁群中的子部门11
      * @param operateUserId
@@ -875,9 +892,8 @@ const PersonCenterComponents = React.createClass({
                             key: subGroup.id,
                             subGroupName: subGroupName,
                         });
-                        // if(isEmpty(subGroupList)==true){
-                        //     message.info("该部门无子部门")
-                        // }
+
+
                     });
                 }
                 _this.setState({subGroupList, "optType": "getGroupMenu"});
@@ -925,7 +941,7 @@ const PersonCenterComponents = React.createClass({
      * @param operateUserId
      * @param structureId
      */
-    getStrcutureMembers(structureId, pageNo) {
+    getStrcutureMembers(structureId, pageNo){
         let _this = this;
         var structureId = structureId + '';
 
@@ -960,6 +976,7 @@ const PersonCenterComponents = React.createClass({
                 message.error(error);
             }
         });
+
     },
 
 
@@ -967,7 +984,7 @@ const PersonCenterComponents = React.createClass({
      * 面包条点击响应
      * 切换到当前的组织架构层次，同时，在此面包条后的数据移除
      */
-    breadCrumbClick(structureId) {
+    breadCrumbClick(structureId){
 
         var defaultPageNo = 1;
         for (var i = 0; i < structuresObjArray.length; i++) {
@@ -988,7 +1005,7 @@ const PersonCenterComponents = React.createClass({
     /**
      * 部门成员加载更多
      */
-    loadMoreMember() {
+    loadMoreMember(){
         var memberPageNo = parseInt(this.state.memberPageNo) + 1;
         this.memberPageOnChange(memberPageNo);
     },
@@ -1843,11 +1860,16 @@ const PersonCenterComponents = React.createClass({
         var personDate;
         var userPhoneCard;
         if (isEmpty(personCenter.state.userInfo) == false && personCenter.state.optType == "userDetail") {
+            var leftIcon = null;
+            if(isEmpty(personCenter.state.comFrom)==false && personCenter.state.comFrom=="structureUser"){
+                leftIcon = <Icon type="left"  onClick={personCenter.returnParent}/>;
+            }
 
             personDate = <div className="group_cont new_center_user_top">
                 {/* <div className="public—til—blue">{personCenter.state.userInfo.user.userName+'的个人中心'}</div>*/}
                 <div className="userinfo_bg group_cont favorite_up">
-                    <div className="down_table_height_back"><Icon type="left" /></div>
+                   {/*显示返回上一步的按钮*/}
+                    <div className="down_table_height_back">{leftIcon}</div>
                     <div className="gary_person">
                         <div className="bai">
                             {userPhotoTag}
@@ -2333,7 +2355,6 @@ const PersonCenterComponents = React.createClass({
                                className="schoolgroup_table1 schoolgroup_table_department"
                                onRowClick={this.onRowClick}
                         />
-
                         <div className="schoolgroup_operate schoolgroup_more">
                             <a onClick={this.loadMoreMember} className="schoolgroup_more_a">加载更多</a>
                         </div>
