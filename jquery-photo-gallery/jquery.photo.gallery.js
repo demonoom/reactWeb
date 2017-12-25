@@ -8,8 +8,7 @@
 
     var windowMargin = 8; //加多边距的宽高，使得图片看起来有边框效果
     //看是否有alt属性
-    var currentImg = 1;
-    var totalImgs = 1;
+
 //图片查看器
     $.fn.extend({
         photoGallery: function (options) {
@@ -28,9 +27,6 @@
                     OPERTATION: '<div class="oper">' +
                     '<span class="prev"><i class="icon_tool-prev"></i></span>' +
                     '<span class="next"><i class="icon_tool-next"></i></span>' +
-                    '</div>' +
-                    '<div>' +
-                        '<span><span id="currentImg">'+currentImg+'</span>/<span id="totalImgs">'+totalImgs+'</span></span>' +
                     '</div>' +
                     '<div class="tool">' +
                     '<div class="toolct">' +
@@ -51,6 +47,7 @@
                     IMAGE: '<img class="image" ondragstart="return false;"/>'
                 }
             };
+
             var o = $.extend(defaults, options),
                 $gallery = $(this);
             $gallery.append(o.template.OPERTATION).append(o.template.THUMBNAILS);
@@ -76,14 +73,11 @@
                 w, h, isVertical,
                 thumbX,
                 thumbY;
-            $("#totalImgs")[0].innerText = o.imgs.length;
-            $("#currentImg")[0].innerText = parseInt(o.activeIndex)+1;
+
             //上一张
             $prev.on('click', function () {
-                var nowIndex = o.activeIndex;
-                if (o.activeIndex > 0) nowIndex = o.activeIndex--;
+                if (o.activeIndex > 0) o.activeIndex--;
                 toggleImage();
-                $("#currentImg")[0].innerText = parseInt(o.activeIndex)+1;
             }).on("mouseover", function (e) {
                 if (o.activeIndex > 0)
                     $(this).addClass("active");
@@ -93,10 +87,8 @@
 
             //下一张
             $next.on('click', function () {
-                var nowIndex = o.activeIndex;
-                if (o.activeIndex < o.imgs.length - 1)  nowIndex = o.activeIndex++;
+                if (o.activeIndex < o.imgs.length - 1) o.activeIndex++;
                 toggleImage();
-                $("#currentImg")[0].innerText = parseInt(o.activeIndex)+1;
             }).on("mouseover", function (e) {
                 if (o.activeIndex < o.imgs.length - 1)
                     $(this).addClass("active");
@@ -642,8 +634,7 @@
                     $gallerys = $(obj).parent();
                 }
             }
-            var totalImgArray = $gallerys.find(".topics_zanImg");
-            totalImgArray.each(function (i, elem) {
+            $gallerys.find(".topics_zanImg").each(function (i, elem) {
                 //遍历所有图片，用于图片切换
                 if (noom_img) {
                     var url = this.alt || this.src,
