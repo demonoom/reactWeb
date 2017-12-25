@@ -1385,7 +1385,7 @@ const AntCloudTableComponents = React.createClass({
      * 保存 save  back
      * @param pageNo
      */
-    saveBarBack(){
+     saveBarBack(){
 
         var initPageNo = 1;
         if (cloudTable.state.parentDirectoryIdAtMoveModalSave == 0) {
@@ -1396,10 +1396,7 @@ const AntCloudTableComponents = React.createClass({
             cloudTable.listFilesLocal(cloudTable.state.ident, cloudTable.state.parentDirectoryIdAtMoveModalSave, queryConditionJson, initPageNo);
         }
 
-
     },
-
-
 
 
 

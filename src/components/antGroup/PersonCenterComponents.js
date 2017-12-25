@@ -182,6 +182,7 @@ const PersonCenterComponents = React.createClass({
      * 当点击人员列表行时，弹出该人员的具体信息界面
      */
     onRowClick(record) {
+        debugger;
         this.getPersonalCenterData(record.userId);
     },
 
