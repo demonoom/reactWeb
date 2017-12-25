@@ -54,7 +54,6 @@ const AntGroupMenu = React.createClass({
                     i++;
                 });
                 mMenu.setState({"userContactsData": userContactsData});
-                console.log(userContactsData);
                 mMenu.props.callbackSetFirstPerson(userContactsData);//父组件的callbackSetFirstPerson
             },
             onError: function (error) {
@@ -117,7 +116,7 @@ const AntGroupMenu = React.createClass({
                     <span className="" icon="usergroup-add">我的群组</span>
                 </div>
 
-                <div className="maaee_group affix_bottom_tc" onClick={mMenu.getGroupMenu}>
+                <div className="maaee_group affix_bottom_tc" onClick={this.getGroupMenu}>
                     <img src={require('../images/icon_jiagou.png')} className="antnest_38_img"/>
                     <span className="" icon="usergroup-add">组织构架</span>
                 </div>
