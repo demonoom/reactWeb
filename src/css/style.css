@@ -3237,14 +3237,16 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     position: relative;
 }
 
-.borderballoon_le .talk_bubble_ellipsis {
+.talk_le_bubble_box .talk_bubble_ellipsis {
     position: absolute;
     width: 130px;
-    text-align: right;
-    right: -24px;
-    bottom: 8px;
+    text-align: left;
+    right: 0;
+    bottom: 18px;
 }
-
+.talk_le_bubble_box .talk_bubble_ellipsis i.icon_ellipsis{
+    float: left;
+}
 .group_talk ul li.right div.talk-cont, .public .sayLine.right div.saycont {
     display: flex;
     flex-direction: row-reverse;
@@ -3807,8 +3809,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     height: 120px !important;
     width: auto !important;
 }
-
-.borderballoon_le, .public .sayLine.left div.saycont .sayCon {
+.public .sayLine.left div.saycont .sayCon {
     background: #fff;
     border-radius: 4px;
     position: relative;
@@ -3828,7 +3829,23 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     border: 1px solid #eee;
     color: #333
 }
-
+.borderballoon_le{
+    background: #fff;
+    border-radius: 4px;
+    position: relative;
+    display: inline-block;
+    padding: 6px 12px 6px 14px;
+    margin-left: 12px;
+    text-align: left;
+    min-width: 0;
+    flex-direction: row;
+    font-size: 14px;
+    line-height: 24px;
+    word-break: break-word;
+    white-space: pre-wrap;
+    border: 1px solid #eee;
+    color: #333;
+}
 .borderballoon_le:after {
     display: table;
     content: "";
@@ -7931,7 +7948,17 @@ select.course_n:hover {
 .ellips_t:hover .icon_ellipsis {
     visibility: visible;
 }
-
+.talk_le_bubble_box {
+    flex: 0 1 auto;
+    display: flex;
+    flex-direction: row;
+    min-width: 0;
+    padding-right: 140px;
+    max-width: calc(100% - 250px);
+    max-width: -moz-calc(100% - 250px);
+    max-width: -webkit-calc(100% - 250px);
+    position: relative;
+}
 .month_box .ant-table-tbody > tr > td {
     font-size: 12px;
 }
@@ -7976,21 +8003,23 @@ select.course_n:hover {
 }
 
 .noom_link {
-    color: #FFffff;
+    color: #d1ecfd;
+    font-size: 14px;
 }
 
 .noom_link:hover {
-    color: #FFffff;
+    color: #fff;
+    text-decoration: none;
 }
 
 .noom_link_left {
-    color: #000;
+    color: #38adff;
+    font-size: 14px;
 }
-
 .noom_link_left:hover {
-    color: #000;
+    color: #60bcfd;
+    text-decoration: none;
 }
-
 .noom_MYJ {
     height: 97%;
 }
