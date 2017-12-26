@@ -239,7 +239,7 @@ const MainLayout = React.createClass({
         //根据urls的length动态创建img
         urls.forEach(function (v, i) {
             var imgId = "img" + i;
-            var img = <span className="topics_zan"><img id={imgId} className="topics_zanImg"
+            var img = <span className="topics_zan"><img id={imgId} className="topics_zanImg noomSendImg"
                                                         onClick={showLargeImg} src={v}/>
                       </span>;
             imgArr.push(img);
@@ -249,7 +249,7 @@ const MainLayout = React.createClass({
         });
         this.setState({imgArr});
         //图片已渲染到DOM
-        document.querySelectorAll(".topics_zanImg")[num].click();   //怀疑是这个querySelectorAll选择到了AntGroup里面的元素
+        document.querySelectorAll(".noomSendImg")[num].click();   //使用noomSendImg可以区分选择的图片是聊天里的还是审批里的,不会造成混乱
     },
 
     noomSelect(obj) {
