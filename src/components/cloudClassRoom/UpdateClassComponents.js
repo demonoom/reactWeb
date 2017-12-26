@@ -16,7 +16,6 @@ const Option = Select.Option;
 const RadioGroup = Radio.Group;
 const {RangePicker} = DatePicker;
 
-var lessonArray = [];
 var courseInfoJson = {
     isPublish: 2,
     isSeries: 2,
@@ -27,6 +26,7 @@ var courseInfoJson = {
     limitPerson: 0,
     updateDisabled:false, //默认所有组件是可以修改的
 };
+var lessonArray = [];
 var videoJsonArray = [];
 var teamJsonArray = [];
 var fileList = [];
@@ -167,7 +167,7 @@ const UpdateClassComponents = React.createClass({
             //团队发布
             isTeam = 2;
             isSeriesDisabled = true;
-            teamDisabled = false;
+            teamDisabled = true;
             _this.getTeamUserOptions(publisher_id);
         } else {
             isTeam = 1;
@@ -288,6 +288,7 @@ const UpdateClassComponents = React.createClass({
                     isDisable = true;
                     currentLessionIsUpdateDisable = true;
                     LessionIsUpdateDisable=true;
+                    teamDisabled=true;
                 }
                 var weiClassName = {
                     name: video.remark,
@@ -298,7 +299,6 @@ const UpdateClassComponents = React.createClass({
                 ];
                 _this.setState({weifileList});
                 //将数据返回到数据库
-                debugger;
                 var squence = video.squence;
                 var name = video.name;
                 var url = video.url;
