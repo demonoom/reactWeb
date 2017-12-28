@@ -2228,7 +2228,7 @@ const AntGroupTabComponents = React.createClass({
                 showContent = showContent.replace(subStr, "~");
                 var imgUrl = getImgName(subStr);
                 var localUrl = "../src/components/images/emotions/" + imgUrl;
-                var subStrReplace = <span className='attention_img'><img src={localUrl}/></span>;
+                var subStrReplace = <span className='attention_img'><img className="face_text_img" src={localUrl}/></span>;
                 imgTags.push(subStrReplace);
                 var otherStr = str.substring(end + 1);
                 if (otherStr.indexOf("[bexp_") != -1) {
