@@ -642,8 +642,7 @@
                     $gallerys = $(obj).parent();
                 }
             }
-            var totalImgArray = $gallerys.find(".topics_zanImg");
-            totalImgArray.each(function (i, elem) {
+            $gallerys.find(".topics_zanImg").each(function (i, elem) {
                 //遍历所有图片，用于图片切换
                 if (noom_img) {
                     var url = this.alt || this.src,

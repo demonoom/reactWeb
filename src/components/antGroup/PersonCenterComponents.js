@@ -1735,10 +1735,13 @@ const PersonCenterComponents = React.createClass({
         var breadcrumbItemObjArray = [];
         if (isEmpty(_this.state.structuresObjArray) == false) {
             _this.state.structuresObjArray.forEach(function (structure) {
-                var breadcrumbItemObj = <Breadcrumb.Item key={structure.id}><a
-                    onClick={_this.breadCrumbClick.bind(_this, structure.id)}>{structure.name}</a></Breadcrumb.Item>;
-                breadcrumbItemObjArray.push(breadcrumbItemObj);
+
+                    var breadcrumbItemObj = <Breadcrumb.Item key={structure.id}>
+                        <a onClick={_this.breadCrumbClick.bind(_this, structure.id)}>{structure.name}</a></Breadcrumb.Item>;
+                    breadcrumbItemObjArray.push(breadcrumbItemObj);
+
             });
+
         }
 
 

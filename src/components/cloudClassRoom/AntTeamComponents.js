@@ -605,7 +605,9 @@ const AntTeamComponents = React.createClass({
     /**
      * 根据输入的关键字，查询老师的信息
      */
+
     findTeacherByKeyWords(pageNo,memberPageNo,flag) {
+
         var _this = this;
         var teacherSourceListPageNo = this.state.teacherSourceListPageNo;
         // const teacherSrcOptions = [];
@@ -630,6 +632,7 @@ const AntTeamComponents = React.createClass({
 
             onResponse: function (ret) {
                 var response = ret.response;
+                console.log("--",response);
                 response.forEach(function (e) {
                     var userId = e.colUid;
                     var userName = e.userName;
