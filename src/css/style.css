@@ -3798,10 +3798,11 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
     color: #000;
 }
 
-.borderballoon img, .public .sayLine.left .sayCon img, .public .sayLine.right .sayCon img {
+.borderballoon img, .public .sayLine.left .sayCon img, .public .sayLine.right .sayCon img , .borderballoon_le img{
     padding: 0 5px;
     height: 38px !important;
     width: auto !important;
+    border-radius:0 !important;
 }
 
 .public .sayLine.left .sayCon img, .public .sayLine.right .sayCon img {
@@ -8119,4 +8120,8 @@ select.course_n:hover {
 }
 .down_table_height .ant-table-thead > tr, .ant-table-tbody > tr{
     cursor: pointer;
+}
+.text_face{
+    line-height: 45px;
+    float: left;
 }
