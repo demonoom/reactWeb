@@ -64,6 +64,7 @@ const AntCloudClassRoomComponents = React.createClass({
             target = e.target;
         }
         var teamSearchKey = target.value;
+
         this.setState({teamSearchKey});
     },
     /**

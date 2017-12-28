@@ -575,6 +575,7 @@ const AntTeamComponents = React.createClass({
      * 根据输入的关键字，查询老师的信息
      */
     findTeacherByKeyWords(){
+        debugger
         var _this = this;
         const teacherSrcOptions = [];
         var param = {
@@ -585,6 +586,7 @@ const AntTeamComponents = React.createClass({
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
+                console.log("--",response);
                 response.forEach(function (e) {
                     var userId = e.colUid;
                     var userName = e.userName;
