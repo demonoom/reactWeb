@@ -109,6 +109,7 @@ const AntMulitiClassComponents = React.createClass({
         var videosArray = row.videos;
         var studentNum = row.studentNum;
         var videoLiTagArray = [];
+        var videoLiArray = [];
         var firstLiveTime;
         if (isEmpty(videosArray) == false) {
             firstLiveTime = formatNoSecond(videosArray[0].liveTime);
@@ -322,26 +323,40 @@ const AntMulitiClassComponents = React.createClass({
             var userSpanObj = <li>{userName}</li>;
             userSpanArray.push(userSpanObj);
         });
+        debugger;
         var startTime = formatYMD(classObj.startTime);
         var endTime = formatYMD(classObj.endTime);
         var courseTime = formatHM(classObj.courseTime);
+        var createTime = formatNoSecond(classObj.createTime);
         var videosArray = classObj.videos;
         var videoLiTagArray = [];
+        var videoLiArray = [];
+        var isSeries = classObj.isSeries;
         if (isEmpty(videosArray) == false) {
             videosArray.forEach(function (video) {
                 var liveTimeStr = formatNoSecond(video.liveTime);
-                var videoLi = <li className="course_section_info">
-                    <span className="name">{video.name}</span>
-                    <span className="cont">{video.user.userName}</span>
-                    <span className="time1">{liveTimeStr}</span>
-                </li>;
-                videoLiTagArray.push(videoLi);
+                if(isSeries == "3" || isSeries == "4"){
+                    var videoLi = <li className="course_section_info">
+                        <span className="name">{video.name}</span>
+                        <span className="cont">{video.user.userName}</span>
+                    </li>;
+                    videoLiArray.push(videoLi);
+                }else {
+                    var videoLi = <li className="course_section_info">
+                        <span className="name">{video.name}</span>
+                        <span className="cont">{video.user.userName}</span>
+                        <span className="time1">{liveTimeStr}</span>
+                    </li>;
+                     videoLiTagArray.push(videoLi);
+                }
+
+
             });
         }
         console.log("getClassDetail classId:" + classObj.courseName);
 
-        var isSeries = classObj.isSeries;
         var endTime;
+
         if (isSeries == "2") {
             endTime = null;
         } else {
@@ -350,62 +365,122 @@ const AntMulitiClassComponents = React.createClass({
                 <span className="series_gray_ri">{endTime}</span>
             </Col>;
         }
-        var classDetailPanel = <Card>
 
-            <Row>
-                <Col span={24}>
-                    <img alt="example" width="100%" src={classObj.image}/>
-                </Col>
-                <Col span={24}>
-                    <Row className="modal_cloud_info">
-                        <Row className="upexam_botom_ma">
-                            <Col span={21} className="font_gray_33">{classObj.courseName}</Col>
-                            <Col span={3} className="series_recall right_ri">{isPublishStr}</Col>
+        if (isSeries == "3" || isSeries == "4") {
+            var classDetailPanel = <Card>
+                <Row>
+                    <Col span={24}>
+                        <img alt="example" width="100%" src={classObj.image}/>
+                    </Col>
+                    <Col span={24}>
+                        <Row className="modal_cloud_info">
+                            <Row className="upexam_botom_ma">
+                                <Col span={21} className="font_gray_33">{classObj.courseName}</Col>
+                                <Col span={3} className="series_recall right_ri">{isPublishStr}</Col>
+                            </Row>
+                            <Col span={24} className="price ant-form-item">
+                                <span className="c-jg price_between" id="picr">￥{classObj.money}</span>
+                                <span className="price_between gray_line"></span>
+                                <span className=" price_between font-14">共{classObj.videoNum}课时</span>
+                            </Col>
+                            <Col span={24} className="ant-form-item">
+                                <span className="series_gray_le">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：</span>
+                                <span className="series_gray_ri">{classObj.courseType.name}</span>
+                            </Col>
+                            <Col span={24} className="ant-form-item">
+                                <span className="series_gray_le">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span>
+                                <span className="series_gray_ri">{classObj.courseClass}</span>
+                            </Col>
+                            <Col span={24} className="ant-form-item">
+                                <span className="series_gray_le">主讲老师：</span>
+                                <span className="series_gray_ri">{userSpanArray}</span>
+                            </Col>
+
+                            <Col span={24} className="ant-form-item">
+                                <span className="series_gray_le">创课时间：</span>
+                                <span className="series_gray_ri">{createTime}</span>
+                            </Col>
+                            <Col span={24} className="ant-form-item">
+                                <span className="series_gray_le">排课时间：</span>
+                                <ul>
+                                    <li className="course_section">
+                                        <div className="course_section_title">
+                                            <span className="name">章节名称</span>
+                                            <span className="cont">授课老师</span>
+                                        </div>
+                                    </li>
+                                    {videoLiArray}
+                                </ul>
+                            </Col>
+                            <Col span={24}>
+                                <span className="series_gray_le">课程概述：</span>
+                                <span className="series_gray_ri">{classObj.content}</span>
+                            </Col>
                         </Row>
-                        <Col span={24} className="price ant-form-item">
-                            <span className="c-jg price_between" id="picr">￥{classObj.money}</span>
-                            <span className="price_between gray_line"></span>
-                            <span className=" price_between font-14">共{classObj.videoNum}课时</span>
-                        </Col>
-                        <Col span={24} className="ant-form-item">
-                            <span className="series_gray_le">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：</span>
-                            <span className="series_gray_ri">{classObj.courseType.name}</span>
-                        </Col>
-                        <Col span={24} className="ant-form-item">
-                            <span className="series_gray_le">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span>
-                            <span className="series_gray_ri">{classObj.courseClass}</span>
-                        </Col>
-                        <Col span={24} className="ant-form-item">
-                            <span className="series_gray_le">主讲老师：</span>
-                            <span className="series_gray_ri">{userSpanArray}</span>
-                        </Col>
-                        <Col span={24} className="ant-form-item">
-                            <span className="series_gray_le">开始时间：</span>
-                            <span className="series_gray_ri">{startTime}</span>
-                        </Col>
-                        {endTime}
-                        <Col span={24} className="ant-form-item">
-                            <span className="series_gray_le">排课时间：</span>
-                            <ul>
-                                <li className="course_section">
-                                    <div className="course_section_title">
-                                        <span className="name">章节名称</span>
-                                        <span className="cont">授课老师</span>
-                                        <span className="cont">授课时间</span>
-                                    </div>
-                                </li>
-                                {videoLiTagArray}
-                            </ul>
-                        </Col>
-                        <Col span={24}>
-                            <span className="series_gray_le">课程概述：</span>
-                            <span className="series_gray_ri">{classObj.content}</span>
-                        </Col>
-                    </Row>
-                </Col>
-            </Row>
-        </Card>;
+                    </Col>
+                </Row>
+            </Card>;
+        } else {
+            var classDetailPanel = <Card>
+                <Row>
+                    <Col span={24}>
+                        <img alt="example" width="100%" src={classObj.image}/>
+                    </Col>
+                    <Col span={24}>
+                        <Row className="modal_cloud_info">
+                            <Row className="upexam_botom_ma">
+                                <Col span={21} className="font_gray_33">{classObj.courseName}</Col>
+                                <Col span={3} className="series_recall right_ri">{isPublishStr}</Col>
+                            </Row>
+                            <Col span={24} className="price ant-form-item">
+                                <span className="c-jg price_between" id="picr">￥{classObj.money}</span>
+                                <span className="price_between gray_line"></span>
+                                <span className=" price_between font-14">共{classObj.videoNum}课时</span>
+                            </Col>
+                            <Col span={24} className="ant-form-item">
+                                <span className="series_gray_le">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：</span>
+                                <span className="series_gray_ri">{classObj.courseType.name}</span>
+                            </Col>
+                            <Col span={24} className="ant-form-item">
+                                <span className="series_gray_le">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span>
+                                <span className="series_gray_ri">{classObj.courseClass}</span>
+                            </Col>
+                            <Col span={24} className="ant-form-item">
+                                <span className="series_gray_le">主讲老师：</span>
+                                <span className="series_gray_ri">{userSpanArray}</span>
+                            </Col>
+
+                            <Col span={24} className="ant-form-item">
+                                <span className="series_gray_le">开始时间：</span>
+                                <span className="series_gray_ri">{startTime}</span>
+                            </Col>
+                            {endTime}
+                            <Col span={24} className="ant-form-item">
+                                <span className="series_gray_le">排课时间：</span>
+                                <ul>
+                                    <li className="course_section">
+                                        <div className="course_section_title">
+                                            <span className="name">章节名称</span>
+                                            <span className="cont">授课老师</span>
+                                            <span className="cont">授课时间</span>
+                                        </div>
+                                    </li>
+                                    {videoLiTagArray}
+                                </ul>
+                            </Col>
+                            <Col span={24}>
+                                <span className="series_gray_le">课程概述：</span>
+                                <span className="series_gray_ri">{classObj.content}</span>
+                            </Col>
+                        </Row>
+                    </Col>
+                </Row>
+            </Card>;
+        }
+
+
         this.setState({classDetailModalVisible: true, classDetailPanel});
+
     },
     /**
      * 更新课程信息
