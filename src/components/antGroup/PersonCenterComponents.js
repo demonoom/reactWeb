@@ -137,6 +137,7 @@ const PersonCenterComponents = React.createClass({
             userGroupsData: [],
             radioValue: 1,
             structuresObjArray: [],
+            wordSrc: '加载更多',
         };
     },
 
@@ -969,13 +970,21 @@ const PersonCenterComponents = React.createClass({
                         });
                     });
                 }
+
                 var pager = ret.pager;
+                var pageCount=pager.pageCount;
+                if (pageCount == pageNo) {
+                    var wordSrc = '无更多数据';
+                    _this.setState({wordSrc});
+
+                }
                 _this.setState({subGroupMemberList, totalMember: pager.rsCount});
             },
             onError: function (error) {
                 message.error(error);
             }
         });
+
 
     },
 
@@ -1015,6 +1024,8 @@ const PersonCenterComponents = React.createClass({
      * @param pageNo
      */
     memberPageOnChange(pageNo) {
+        console.log(111);
+        console.log(pageNo);
         this.setState({
             memberPageNo: pageNo,
         });
@@ -2359,7 +2370,7 @@ const PersonCenterComponents = React.createClass({
                                onRowClick={this.onRowClick}
                         />
                         <div className="schoolgroup_operate schoolgroup_more">
-                            <a onClick={this.loadMoreMember} className="schoolgroup_more_a">加载更多</a>
+                            <a onClick={this.loadMoreMember} className="schoolgroup_more_a">{this.state.wordSrc}</a>
                         </div>
                     </div>
                 </div>
