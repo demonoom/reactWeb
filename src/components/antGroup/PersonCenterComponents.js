@@ -962,6 +962,7 @@ const PersonCenterComponents = React.createClass({
                 if (isEmpty(response) == false) {
                     response.forEach(function (member) {
                         var user = member.user;
+                        
                         subGroupMemberList.push({
                             key: member.id,
                             userId: user.colUid,
@@ -1024,8 +1025,6 @@ const PersonCenterComponents = React.createClass({
      * @param pageNo
      */
     memberPageOnChange(pageNo) {
-        console.log(111);
-        console.log(pageNo);
         this.setState({
             memberPageNo: pageNo,
         });
@@ -2354,12 +2353,13 @@ const PersonCenterComponents = React.createClass({
                     {breadcrumbItemObjArray}
                 </Breadcrumb>
                 <div className="favorite_scroll">
+                    {/*获取组织架构的所有部门*/}
                     <div className="up_table_height">
                         <Table showHeader={false} columns={columns} dataSource={this.state.subGroupList}
                                className="schoolgroup_table"
                                pagination={false}/>
                     </div>
-                    {/*获取组织架构的所有部门*/}
+                    {/*获取组织架构的部门下的人*/}
                     <div className="down_table_height">
                         <Table columns={memberColumns}
                                pagination={false} dataSource={this.state.subGroupMemberList}
