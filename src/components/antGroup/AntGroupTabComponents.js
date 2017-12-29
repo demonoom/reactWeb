@@ -2228,7 +2228,7 @@ const AntGroupTabComponents = React.createClass({
                 showContent = showContent.replace(subStr, "~");
                 var imgUrl = getImgName(subStr);
                 var localUrl = "../src/components/images/emotions/" + imgUrl;
-                var subStrReplace = <span className='attention_img'><img src={localUrl}/></span>;
+                var subStrReplace = <span className='attention_img'><img className="face_text_img" src={localUrl}/></span>;
                 imgTags.push(subStrReplace);
                 var otherStr = str.substring(end + 1);
                 if (otherStr.indexOf("[bexp_") != -1) {
@@ -3585,10 +3585,10 @@ const AntGroupTabComponents = React.createClass({
                                                     <span className="name">{userPhoneIcon}</span>
                                                     <div className="talk_bubble_box">
                                                         <span className="borderballoon ">
-                                                            <span>{startStrMe}</span>
+                                                            <span  className="text_face">{startStrMe}</span>
                                                             {e.imgTagArray}
                                                             <i className="borderballoon_dingcorner_le_no"></i>
-                                                            <span>{endStrRevMe}</span>
+                                                            <span  className="text_face">{endStrRevMe}</span>
                                                 </span>
                                                         <span className="talk_bubble_ellipsis">
                                                     <Dropdown overlay={this.state.msgMenu} trigger={['click']}
@@ -3648,10 +3648,10 @@ const AntGroupTabComponents = React.createClass({
                                                 <span className="name">{userPhoneIcon}</span>
                                                 <div className="talk_le_bubble_box">
                                                     <span className="borderballoon_le">
-                                                        <span>{startStr}</span>
-                                                    {e.imgTagArray}
+                                                        <span className="text_face">{startStr}</span>
+                                                            {e.imgTagArray}
                                                         <i className="borderballoon_dingcorner_ri_no"></i>
-                                                        <span>{endStrRev}</span>
+                                                        <span className="text_face">{endStrRev}</span>
                                                 </span>
                                                     <span className="talk_bubble_ellipsis">
                                                     <Dropdown overlay={msgMenuLeft} trigger={['click']}
