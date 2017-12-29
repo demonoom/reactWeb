@@ -105,8 +105,9 @@ export function isEmpty(content) {
  */
 export function checkUrl(urlString) {
     if (urlString != "") {
-        var strRegex = "(http://|ftp://|https://|www){0,1}[^\u4e00-\u9fa5\\s]*?\\.(com|net|cn|me|tw|fr|mp3|mp4|apk)[^\u4e00-\u9fa5\\s]*"
+        // var strRegex = "(http://|ftp://|https://|www){0,1}[^\u4e00-\u9fa5\\s]*?\\.(com|net|cn|me|tw|fr|mp3|mp4|apk)[^\u4e00-\u9fa5\\s]*"
         // var strRegex = "(http://|ftp://|https://|www){0,1}[^\u4e00-\u9fa5\\s]*?\\.[^\u4e00-\u9fa5\\s]*";
+        var strRegex = "(((https?|ftp|file)://)|www.)[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*\\.[-a-zA-Z0-9+&@#/%=~_|]";
         var reg = new RegExp(strRegex);
         if (!reg.test(urlString)) {
             return false;
