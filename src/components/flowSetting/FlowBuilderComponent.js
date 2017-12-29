@@ -19,6 +19,10 @@ const children = [];
 var stepConditionArray = [];
 //审批条件的集合
 var currentConditionInfoJsonArray = [];
+var flowNameCache="";
+var flowDescriptionCache = "";
+var approvalGroupCache = "-1";
+var approvalJsonCache="";
 
 const FlowBuilderComponent = React.createClass({
 
@@ -36,9 +40,9 @@ const FlowBuilderComponent = React.createClass({
             stepObjArray:[],        //审批步骤的Step数组
             copyPersonIdArray:[],
             copyPersonModalVisible:false,   //设置抄送人窗口的显示和关闭状态
-            flowName:'',    //流程名称
-            flowDescription:'', //流程说明
-            approvalGroup:'-1',   //选中的流程分组
+            flowName:flowNameCache,    //流程名称
+            flowDescription:flowDescriptionCache, //流程说明
+            approvalGroup:approvalGroupCache,   //选中的流程分组
             messageOfCopyPersonSendType:"-1", //流程抄送人消息发送方式
             stepConditionArray:[],   //审批条件集合
             conditionModalVisible:false,    //审批条件窗口的显示和关闭
@@ -58,10 +62,11 @@ const FlowBuilderComponent = React.createClass({
         this.getFlowGroup();
     },
 
-    componentWillReceiveProps(nextProps){
-    },
-
-    componentDidUpdate(){
+    initFlowData(){
+        flowNameCache="";
+        flowDescriptionCache = "";
+        approvalGroupCache = "-1";
+        approvalJsonCache="";
     },
 
     /**
@@ -105,7 +110,12 @@ const FlowBuilderComponent = React.createClass({
             }
             i++;
         });
-        _this.setState({flowGroupArray,"approvalGroup":defaultSelectedGroupId});
+        if(isEmpty(approvalGroupCache)==false && approvalGroupCache!="-1"){
+            this.setState({approvalGroup:approvalGroupCache});
+        }else{
+            this.setState({approvalGroup:defaultSelectedGroupId});
+        }
+        _this.setState({flowGroupArray});
     },
 
     /**
@@ -396,8 +406,8 @@ const FlowBuilderComponent = React.createClass({
         }else{
             target = e.target;
         }
-        var flowName = target.value;
-        this.setState({flowName});
+        flowNameCache = target.value;
+        this.setState({flowName:flowNameCache});
     },
 
     /**
@@ -410,8 +420,8 @@ const FlowBuilderComponent = React.createClass({
         }else{
             target = e.target;
         }
-        var flowDescription = target.value;
-        this.setState({flowDescription});
+        flowDescriptionCache = target.value;
+        this.setState({flowDescription:flowDescriptionCache});
     },
 
     /**
@@ -420,7 +430,8 @@ const FlowBuilderComponent = React.createClass({
      */
     approvalGroupChange(value) {
         console.log(`selected ${value}`);
-        this.setState({approvalGroup:value});
+        approvalGroupCache = value;
+        this.setState({approvalGroup:approvalGroupCache});
     },
 
     /**
