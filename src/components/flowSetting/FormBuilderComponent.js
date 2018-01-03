@@ -4,10 +4,12 @@ import { Tabs, Breadcrumb, Icon,Card,Button,Row,Col,Steps,
 import {isEmpty} from '../../utils/utils';
 const Step = Steps.Step;
 var formBuilder;
+var formDataCache="";
 const FormBuilderComponent = React.createClass({
 
     getInitialState() {
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+        formDataCache = this.props.formData;
         this.buildFormDataComponent();
         return {
             loginUser : loginUser,
@@ -15,49 +17,17 @@ const FormBuilderComponent = React.createClass({
         };
     },
 
-    componentDidMount(){
-       // $("#fb-editor").formBuilder();
-       // $(document.getElementById('fb-editor')).formBuilder();
-       /* const attrs = [
-            'access',   //角色
-            'className',    //样式名称
-            'description',  //帮助文字
-            'inline',   //显示在一行
-            'label',    //文本标签
-            'max',  //最大值
-            'maxlength',    //最大长度
-            'min',  //最小值
-            'multiple', //是否允许上传多个文件
-            'name', //控件名称
-            'options',  //控件的选项
-            'other',    //其他??
-            'placeholder',  //文本框中的提示文字
-            'required', //是否必填项,打红色*
-            'rows',    //文本域的行数
-            'step',
-            'style',
-            'subtype',  //元素的格式(如:按钮的submit/reset等)
-            'toggle',
-            'value'
-        ]*/
-        // this.buildFormDataComponent();
+    componentWillUnMount(){
+        formDataCache = "";
+        this.setState({formData:[]});
     },
 
-    componentWillReceiveProps(nextProps){
-        // var formData = nextProps.formData;
-        // this.setState({formData});
-        // formBuilder.actions.setData(formData);
-    },
-
-    componentDidUpdate(){
-        // formBuilder.actions.setData(this.state.formData);
-    },
-
-    initFormData(formData){
-        $(document).ready(function () {
-            formBuilder.actions.setData(formData);
-        })
-        this.setState({formData});
+    initFormData(){
+        formDataCache = "";
+        this.setState({formData:[]});
+        if(isEmpty(formBuilder)==false){
+            formBuilder.actions.clearFields();
+        }
     },
 
     /**
@@ -73,22 +43,41 @@ const FormBuilderComponent = React.createClass({
      * 创建FormData组件
      */
     buildFormDataComponent(){
-        jQuery(function($) {
-            'use strict'
-            var options = {
+        var _this = this;
+        var options = {
+            i18n: {
+                locale: 'zh-CN'
+            },
+            //controlPosition: 'left', //设置可拖拽元素的显示位置
+            disableFields: ['autocomplete', 'hidden', 'paragraph', 'button'],  //设置不显示给用户的表单元素
+            disabledAttrs: [
+                'className', 'access', 'name',
+                'max', 'maxlength', 'min', 'inline', 'other', 'toggle', 'description',
+                'multiple', 'subtype'
+            ],  //设置不显示给用户的元素属性
+            disabledActionButtons: ['data', 'clear', 'save', 'Remove Element'],  //设置不显示给用户的操作按钮
+            editOnAdd: false
+        };
+        if(isEmpty(formBuilder)==false && isEmpty(formDataCache)==false){
+            options = {
                 i18n: {
                     locale: 'zh-CN'
                 },
                 //controlPosition: 'left', //设置可拖拽元素的显示位置
-                disableFields: ['autocomplete','hidden','paragraph','button'],  //设置不显示给用户的表单元素
+                disableFields: ['autocomplete', 'hidden', 'paragraph', 'button'],  //设置不显示给用户的表单元素
                 disabledAttrs: [
-                    'className','access','name',
-                    'max','maxlength','min','inline','other','toggle','description',
-                    'multiple','subtype'
+                    'className', 'access', 'name',
+                    'max', 'maxlength', 'min', 'inline', 'other', 'toggle', 'description',
+                    'multiple', 'subtype'
                 ],  //设置不显示给用户的元素属性
-                disabledActionButtons: ['data','clear','save','Remove Element'],  //设置不显示给用户的操作按钮
-                editOnAdd: false
+                disabledActionButtons: ['data', 'clear', 'save', 'Remove Element'],  //设置不显示给用户的操作按钮
+                editOnAdd: false,
+                formData:formDataCache
             };
+        }
+
+        jQuery(function ($) {
+            'use strict'
             var fbTemplate = document.getElementById('fb-editor');
             formBuilder = $(fbTemplate).formBuilder(options);
         });

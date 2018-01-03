@@ -18,7 +18,6 @@ const CreateFlowComponent = React.createClass({
     },
 
     componentDidMount(){
-
     },
 
 
@@ -27,11 +26,16 @@ const CreateFlowComponent = React.createClass({
      * @param nextProps
      */
     componentWillReceiveProps(nextProps){
-
     },
 
     initCreatePage(){
-
+        if(isEmpty(this.refs.formDataComponent)==false){
+            this.refs.formDataComponent.initFormData();
+        }
+        if(isEmpty(this.refs.flowBuilderComponent)==false){
+            this.refs.flowBuilderComponent.initFlowData();
+        }
+        this.setState({"formData":[]});
     },
 
     changeStep(stepDirect){
