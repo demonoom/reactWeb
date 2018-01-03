@@ -31,6 +31,10 @@ const memberColumns = [{
     title: '手机号',
     dataIndex: 'userPhone',
     key: 'userPhone',
+},{
+    title: '',
+    dataIndex: 'isMaster',
+    key: 'isMaster'
 }
 ];
 
@@ -178,6 +182,7 @@ const Structure = React.createClass({
                     <Button className="sg_btn_del" icon="delete"
                             onClick={_this.removeGroup.bind(_this, subGroup.id)}></Button>
                 </div>
+
                 subGroupList.push({
                     key: subGroup.id,
                     subGroupName: subGroupName,
@@ -210,6 +215,9 @@ const Structure = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var parentGroup = ret.response;
+                var owner= parentGroup.chatGroup.owner.colUid;
+                console.log(999);
+                console.log(owner);
                 if (isEmpty(parentGroup) == false) {
                     var isExit = _this.checkStructureIsExitAtArray(parentGroup);
                     if (isExit == false) {
@@ -217,7 +225,7 @@ const Structure = React.createClass({
                         structuresObjArray.push(parentGroup);   //面包条数组
                     }
                 }
-                _this.setState({parentGroup, structuresObjArray});
+                _this.setState({parentGroup, structuresObjArray,owner});
             },
             onError: function (error) {
                 message.error(error);
@@ -271,19 +279,35 @@ const Structure = React.createClass({
      * 渲染部门成员
      */
     buildStrcutureMembers(response, flag) {
+        var _this = this;
         if (!flag) {    //分页请求传的是true
             subGroupMemberList.splice(0);   //部门人员数组先清空,之后重新push
         }
         if (isEmpty(response) == false) {
+            console.log(subGroupMemberList);
             response.forEach(function (member) {
                 var user = member.user;
-                subGroupMemberList.push({
-                    key: member.id,
-                    userId: user.colUid,
-                    userName: user.userName,
-                    userPhone: user.phoneNumber
-                });
+                var owner = _this.state.owner;
+                if(owner==user.colUid){
+                    subGroupMemberList.push({
+                        key: member.id,
+                        userId: user.colUid,
+                        userName: user.userName,
+                        userPhone:user.phoneNumber,
+                        isMaster:'主管'
+                    });
+
+                }else {
+                    subGroupMemberList.push({
+                        key: member.id,
+                        userId: user.colUid,
+                        userName: user.userName,
+                        userPhone:user.phoneNumber,
+
+                    });
+                }
             });
+
         }
         this.setState({subGroupMemberList, selectedRowKeys: []});//selectedRowKeys设置成[]可以清除默认勾选
     },
