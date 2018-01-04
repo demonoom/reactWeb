@@ -323,7 +323,6 @@ const AntMulitiClassComponents = React.createClass({
             var userSpanObj = <li>{userName}</li>;
             userSpanArray.push(userSpanObj);
         });
-        debugger;
         var startTime = formatYMD(classObj.startTime);
         var endTime = formatYMD(classObj.endTime);
         var courseTime = formatHM(classObj.courseTime);

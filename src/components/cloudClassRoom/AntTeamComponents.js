@@ -90,7 +90,7 @@ const AntTeamComponents = React.createClass({
      * 初始化页面元素
      */
     initPage() {
-        this.setState({teacherSrcOptions: [], teacherTargetOptions: [], teamName: '', searchKey: ''});
+        this.setState({teacherSrcOptions: [], teacherTargetOptions: [], teamName: '', searchKey: '',teacherSourceListPageNo:1});
     },
 
     findTeamInfoByType(type, pageNo, teamSearchKey) {
@@ -610,8 +610,9 @@ const AntTeamComponents = React.createClass({
 
         var _this = this;
         var teacherSourceListPageNo = this.state.teacherSourceListPageNo;
-        // const teacherSrcOptions = [];
+
         if(isEmpty(flag)==false) {
+
             var param = {
                 "method": 'findTeacherByKeyWords',
                 "searchKeyWords": _this.state.searchKey,
@@ -625,14 +626,9 @@ const AntTeamComponents = React.createClass({
                 "pageNo": teacherSourceListPageNo,
             };
         }
-
-        console.log(param);
-
         doWebService_CloudClassRoom(JSON.stringify(param), {
-
             onResponse: function (ret) {
                 var response = ret.response;
-                console.log("--",response);
                 response.forEach(function (e) {
                     var userId = e.colUid;
                     var userName = e.userName;
@@ -1104,7 +1100,7 @@ const AntTeamComponents = React.createClass({
             </div>;
         }
 
-        if(isEmpty(_this.state.teacherSrcOptions)==false && _this.state.teacherSrcOptions.length>=30){
+        if(isEmpty(_this.state.teacherSrcOptions)==false && (_this.state.teacherSrcOptions.length>=10 &&_this.state.teacherSrcOptions.length<=30)){
             loadMore=  <div className="schoolgroup_operate schoolgroup_more">
                 <a onClick={this.loadMoreMember}
                    className="schoolgroup_more_a">{this.state.wordSrc}

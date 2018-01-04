@@ -28,7 +28,7 @@ export const SMALL_IMG = 'size=100x100';
 export const MIDDLE_IMG = 'size=300x300';
 export const LARGE_IMG = 'size=500x500';
 //webService请求的版本号
-export const WEB_VERSION = "1.08";
+export const WEB_VERSION = "1.09";
 //音频题目权限开放账号集合，其中23836和54208为系统测试用户账号
 export const AUDIO_SUBJECT_ALLOWED = ["134770","134755","135359","135872","135001","135302","135303","135304","135244","135167","23836","54208"];
 var baseEmotionMap = new Map();
@@ -105,8 +105,9 @@ export function isEmpty(content) {
  */
 export function checkUrl(urlString) {
     if (urlString != "") {
-        var strRegex = "(http://|ftp://|https://|www){0,1}[^\u4e00-\u9fa5\\s]*?\\.(com|net|cn|me|tw|fr|mp3|mp4|apk)[^\u4e00-\u9fa5\\s]*"
+        // var strRegex = "(http://|ftp://|https://|www){0,1}[^\u4e00-\u9fa5\\s]*?\\.(com|net|cn|me|tw|fr|mp3|mp4|apk)[^\u4e00-\u9fa5\\s]*"
         // var strRegex = "(http://|ftp://|https://|www){0,1}[^\u4e00-\u9fa5\\s]*?\\.[^\u4e00-\u9fa5\\s]*";
+        var strRegex = "(((https?|ftp|file)://)|www.)[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*\\.[-a-zA-Z0-9+&@#/%=~_|]";
         var reg = new RegExp(strRegex);
         if (!reg.test(urlString)) {
             return false;

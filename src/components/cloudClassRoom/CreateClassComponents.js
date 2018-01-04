@@ -31,7 +31,6 @@ const CreateClassComponents = React.createClass({
 
     getInitialState() {
         var cloudClassRoomUser = JSON.parse(sessionStorage.getItem("cloudClassRoomUser"));
-        console.log(cloudClassRoomUser);
         return {
             stepNum: 0,
             isFree: 1,
@@ -46,7 +45,7 @@ const CreateClassComponents = React.createClass({
             isWeiClass: false,
             isShowClass: false,
             upLoadNum: 0,
-
+            isTextClass:false,
         };
     },
 
@@ -71,6 +70,7 @@ const CreateClassComponents = React.createClass({
     componentWillReceiveProps(nextProps) {
         var isWeiClass = this.state.isWeiClass;
         var isShowClass = this.state.isShowClass;
+        var isTextClass=this.state.isTextClass;
         var isSeries = nextProps.isSeries;
         //isWeiClass为true，代表是微课
         if (isWeiClass) {
@@ -120,6 +120,8 @@ const CreateClassComponents = React.createClass({
         courseInfoJson.isFree = 1;
         courseInfoJson.isLimit = 1;
         courseInfoJson.showCourse = 0;   //展示课默认为0
+
+
         fileList.splice(0);
         // weifileList.splice(0);
         this.setState({
@@ -142,8 +144,10 @@ const CreateClassComponents = React.createClass({
             "numInputDisable": true,
             isWeiClass: false,
             isShowClass: false,
+            isTextClass:false,
         });
         // this.getAllTeam();
+
     },
     /**
      * 获取所有的年级
@@ -156,6 +160,7 @@ const CreateClassComponents = React.createClass({
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
+
                 if (isEmpty(response) == false) {
                     var classOptionArray = [];
                     var defaultSelected;
@@ -294,13 +299,11 @@ const CreateClassComponents = React.createClass({
      * 发课的回调
      */
     addCourse() {
-        console.log(courseInfoJson);
         var _this = this;
         var param = {
             "method": 'addCourse',
             "jsonObject": JSON.stringify(courseInfoJson),
         };
-        console.log(param);
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
@@ -326,8 +329,6 @@ const CreateClassComponents = React.createClass({
      * @param value
      */
     courseSelectOnChange(value) {
-        // console.log(`selected ${value}`);
-
         this.setState({defaultSubjectSelected: value});
         courseInfoJson.courseTypeId = value;
     },
@@ -408,6 +409,13 @@ const CreateClassComponents = React.createClass({
     },
 
     /**
+     * 勾选是否为测试课的回调
+     */
+    isTextClass(e){
+        this.setState({isTextClass:e.target.checked});
+    },
+
+    /**
      * 人数是否限制的回调
      */
     numberIsLimit(e) {
@@ -473,28 +481,25 @@ const CreateClassComponents = React.createClass({
      * 添加课程目录
      */
     addLesson() {
-        /*if(lessonArray.length >= courseInfoJson.videoNum){
-            message.error("排课次数已经达到授课总课时,无法新增");
-            return;
-        }*/
+        var _this = this;
+        var maxSequence = this.getMaxSequenceFromCourseInfoJson();
         var videoNumBeforeAdd = this.state.videoNum;
         if (this.state.isSeries == "2" && videoNumBeforeAdd == 1 || this.state.isSeries == "4" && videoNumBeforeAdd == 1) {
             //单节课
             message.error("单节课只能排课一次,无法继续添加课程目录!");
             return;
         }
-        var lessonNum = lessonArray.length + 1;
-        // <Col span={4}>第{lessonNum}课时</Col>
+
+        var lessonNum = parseInt(maxSequence) + 1;
+        var videoNameObj = <Col span={8}>
+            <Input id={lessonNum} value="" onChange={this.lessonTitleOnChange} className="noom_input"/>
+        </Col>;
         var teacherObj;
         if (this.state.isTeam == 1) {
             teacherObj = <span>{this.state.cloudClassRoomUser.userName}</span>;
         } else {
             teacherObj = <Col span={24}>
                 <select className="lessonTeamTeacher course_n">
-                    {/*<option value="1">a</option>
-                     <option value="2">b</option>
-                     <option value="3">c</option>
-                     <option value="4">d</option>*/}
                     {this.state.teamUserOptionArray}
                 </select>
             </Col>;
@@ -511,12 +516,31 @@ const CreateClassComponents = React.createClass({
                 />
             </Col>
         </Col>;
-        var lessonJson = {lessonNum, teacherObj, timeObj};
+        var lessonJson = {lessonNum, teacherObj, timeObj,videoNameObj,"squence":lessonNum};
         lessonArray.push(lessonJson);
-        var newVideoNum = parseInt(videoNumBeforeAdd) + 1
+        var newVideoNum = parseInt(videoNumBeforeAdd) + 1;
         courseInfoJson.videoNum = newVideoNum;
+
+        var videoJson = {"squence":lessonNum}
+        videoJsonArray.push(videoJson);
+        courseInfoJson.videos = videoJsonArray;
+
+
         this.setState({lessonArray, "videoNum": newVideoNum});
-        // this.buildEveryLessonTag(lessonArray);
+
+    },
+
+    /**
+     * 从存放数据的courseInfoJson.videos中获取最大的sequence号
+     */
+    getMaxSequenceFromCourseInfoJson(){
+        var maxSequence = 0;
+        var length = courseInfoJson.videos.length;
+        var lastVideo = courseInfoJson.videos[length-1];
+        if(isEmpty(lastVideo)==false){
+            maxSequence = lastVideo.squence;
+        }
+        return maxSequence;
     },
 
     buildEveryLessonTag(lessonArray) {
@@ -549,36 +573,57 @@ const CreateClassComponents = React.createClass({
      */
 
     lessonTimeOnChange(id,value, dateString) {
-        console.log('Selected Time: ', value+"\t"+id);
-        console.log('Formatted Selected Time: ', dateString);
         var squence = id;
         var liveTime = dateString;
         var videoJson = {squence, liveTime};
         this.buildVideosArray(videoJson, "liveTime");
+        this.setState({liveTime});
     },
 
     lessonTimeOnOk(value) {
         console.log('onOk: ', value);
     },
 
-    removeLesson(lessonNum) {
+    /**
+     * 点击删除按钮时，改变响应函数
+     *
+     */
+
+    removeLesson(removeSequence) {
         for (var i = 0; i < lessonArray.length; i++) {
             var lessonJson = lessonArray[i];
-            if (lessonJson.lessonNum == lessonNum) {
+            if (lessonJson.squence == removeSequence) {
                 lessonArray.splice(i, 1);
                 break;
             }
         }
+        //点击删除时；将输入的值进行遍历，并删除其值，不存在空值
+        var removevideo=courseInfoJson.videos;
+        for (let i = 0; i < removevideo.length; i++) {
+            var lesson = removevideo[i];
+            var squence= lesson.squence;
+            // var lessonId  = lesson.id;
+
+            if(squence==removeSequence){
+                removevideo.splice(i, 1);
+                break;
+            }
+        }
+
         lessonArray.forEach(function (lessonObj) {
-            if (lessonObj.lessonNum > lessonNum) {
+            if (lessonObj.lessonNum > removeSequence) {
                 lessonObj.lessonNum -= 1;
             }
         });
         var videoNumBeforeRemove = this.state.videoNum;
-        var newVideoNum = parseInt(videoNumBeforeRemove) - 1
+        var newVideoNum = parseInt(videoNumBeforeRemove) - 1;
         courseInfoJson.videoNum = newVideoNum;
         this.setState({lessonArray, "videoNum": newVideoNum});
+
+
     },
+
+
 
     /**
      * 对提交的数据进行基础验证
@@ -642,7 +687,8 @@ const CreateClassComponents = React.createClass({
         var lessonTeamTeacherTagArray = $(".lessonTeamTeacher option:selected");
         var lessonTimeTagArray = $("input.ant-calendar-range-picker");
         var arr = $('.noom_input');
-        console.log(arr.length);
+
+        courseInfoJson.videoNum = arr.length;
         var userId;
         /*if(this.state.isTeam==1) {
             //发布者ＩＤ 单人授课时为人员id　团队授课时为团队id
@@ -665,12 +711,9 @@ const CreateClassComponents = React.createClass({
             } else {
                 var time = '';
             }
-            console.log("teacher" + teacher + "\t" + time);
             videoJson.squence = i + 1;
-            // videoJson.courseId = courseInfoJson.courseTypeId;
             videoJson.userID = teacher;
              videoJson.liveTime = new Date(time).valueOf();
-            // videoJson.liveTime = new Date(time);
             this.buildVideosArray(videoJson);
         }
         if (isEmpty(courseInfoJson.videos) == false) {
@@ -791,7 +834,6 @@ const CreateClassComponents = React.createClass({
             target = e.target;
         }
         var videoNum = target.value;
-        console.log("classTimes:" + videoNum);
         courseInfoJson.videoNum = videoNum;
         this.setState({videoNum});
     },
@@ -828,9 +870,29 @@ const CreateClassComponents = React.createClass({
         }
         var squence = target.id;
         var name = target.value;
-        var videoJson = {squence, name};
+        var videoJson = {squence, name,videoStatus:1,'delete':false};
         this.buildVideosArray(videoJson, "title");
+        // var lessonArray = this.state.lessonArray;
+        lessonArray.forEach(function(lessonJson){
+            var squenceInArray = lessonJson.squence;
+            var videoName = lessonJson.videoName;
+            if(squenceInArray == squence){
+                lessonJson.videoName = name;
+            }
+        });
+        var removevideo=courseInfoJson.videos;
+        for (let i = 0; i < removevideo.length; i++) {
+            var lesson = removevideo[i];
+            var squenceInArray= lesson.squence;
+            if(squenceInArray==squence){
+                lesson.name = name;
+                break;
+            }
+        }
+        this.setState({ value: name });
     },
+
+
 
     buildVideosArray(videoJson, buildType) {
         var isExistSameVideo = false;
@@ -855,6 +917,11 @@ const CreateClassComponents = React.createClass({
         courseInfoJson.videos = videoJsonArray;
     },
 
+    /**
+     * 从课程的集合中，根据课程的sequence获取对应的课程章节信息
+     * @param squence
+     * @returns {*}
+     */
     getVideoInfoFromCourseInfoJson(squence) {
         var videoInfo;
         var videos = courseInfoJson.videos;
@@ -1061,24 +1128,23 @@ const CreateClassComponents = React.createClass({
                 if (typeof(this.state.lessonArray) != "undefined") {
                     for (var i = 0; i < this.state.lessonArray.length; i++) {
                         var lessonJson = this.state.lessonArray[i];
+
+
                         //获取已经保存的时间信息，并重新初始化到页面的组件上
-                        var videoInfo = this.getVideoInfoFromCourseInfoJson(lessonJson.lessonNum);
-                        var videoName = "";
+                        var videoInfo = this.getVideoInfoFromCourseInfoJson(lessonJson.squence);
+                        var videoName = lessonJson.videoName;
                         var weifileList = [];
                         if (isEmpty(videoInfo) == false) {
-                            console.log("videoInfo name:" + videoInfo.name);
                             videoName = videoInfo.name;
                             // weifileList = videoInfo.weiClassList;
                             if(isEmpty(videoInfo.weiClassList)==false){
                                 weifileList.push(videoInfo.weiClassList);
                             }
                         }
+                        var InputObj = <Input id={lessonJson.squence} value={videoName} onChange={_this.lessonTitleOnChange} className="noom_input"/>;
                         var lessonRowObj = <Row>
                             <Col span={3} className="add_left">第{lessonJson.lessonNum}课时</Col>
-                            <Col span={8} className="class_right">
-                                <Input className="noom_input" key={i} id={lessonJson.lessonNum} defaultValue={videoName}
-                                       onChange={this.lessonTitleOnChange}/>
-                            </Col>
+                            <Col span={8}>{InputObj}</Col>
                             <Col span={4} className="class_right">{lessonJson.teacherObj}</Col>
                             <Col span={4} className="class_right">
 
@@ -1095,7 +1161,7 @@ const CreateClassComponents = React.createClass({
                             </Col>
                             <Col span={2}>
                                 <Button icon="delete" className="create_upload_btn"
-                                        onClick={this.removeLesson.bind(this, lessonJson.lessonNum)}></Button>
+                                        onClick={this.removeLesson.bind(this, lessonJson.squence)}></Button>
                             </Col>
                         </Row>;
                         everyLessonArray.push(lessonRowObj);
@@ -1139,38 +1205,58 @@ const CreateClassComponents = React.createClass({
                     for (var i = 0; i < this.state.lessonArray.length; i++) {
                         var lessonJson = this.state.lessonArray[i];
                         //获取已经保存的时间信息，并重新初始化到页面的组件上
-                        var videoInfo = this.getVideoInfoFromCourseInfoJson(lessonJson.lessonNum);
+                        var videoInfo = this.getVideoInfoFromCourseInfoJson(lessonJson.squence);
                         var timestamp = (new Date()).valueOf();
-                        var videoName = "";
+                        // var videoName = "";
+                        var videoName = lessonJson.videoName;
                         var liveTime = getLocalTime(timestamp);
                         if (isEmpty(videoInfo) == false) {
-                            console.log("videoInfo name:" + videoInfo.name);
                             videoName = videoInfo.name;
                             liveTime = videoInfo.liveTime;
                         }
+
+                        var datePicker = null;
+                        if(isEmpty(liveTime)){
+                            datePicker = <DatePicker
+                                //defaultValue={moment(liveTime, dateFormat)}
+                                //value={moment(liveTime, dateFormat)}
+                                className="lessonTime"
+                                showTime
+                                format="YYYY-MM-DD HH:mm:ss"
+                                placeholder="Select Time"
+                                onChange={this.lessonTimeOnChange.bind(_this,lessonJson.squence)}
+                                onOk={this.lessonTimeOnOk}
+                            />;
+                        }else{
+                            datePicker = <DatePicker
+                                //defaultValue={moment(liveTime, dateFormat)}
+                                value={moment(liveTime, dateFullFormat)}
+                                className="lessonTime"
+                                showTime
+                                format="YYYY-MM-DD HH:mm:ss"
+                                placeholder="Select Time"
+                                onChange={this.lessonTimeOnChange.bind(_this,lessonJson.squence)}
+                                onOk={this.lessonTimeOnOk}
+                            />;
+                        }
+
+                        var InputObj = <Input id={lessonJson.squence} value={videoName} onChange={_this.lessonTitleOnChange} className="noom_input"/>;
+
+
                         var lessonRowObj = <Row>
                             <Col span={4} className="add_left">第{lessonJson.lessonNum}课时</Col>
-                            <Col span={8}>
-                                <Input className="noom_input" key={i} id={lessonJson.lessonNum} defaultValue={videoName}
-                                       onChange={this.lessonTitleOnChange}/>
-                            </Col>
+
+
+                            <Col span={8}>{InputObj}</Col>
                             <Col span={4}>{lessonJson.teacherObj}</Col>
                             <Col span={4}>
                                 <Col span={24}>
-                                    <DatePicker
-                                        // defaultValue={moment(liveTime, dateFormat)}
-                                        className="lessonTime"
-                                        showTime
-                                        format="YYYY-MM-DD HH:mm:ss"
-                                        placeholder="Select Time"
-                                        onChange={this.lessonTimeOnChange.bind(_this,lessonJson.lessonNum)}
-                                        onOk={this.lessonTimeOnOk}
-                                    />
+                                    {datePicker}
                                 </Col>
                             </Col>
                             <Col span={4}>
                                 <Button icon="delete" className="create_upload_btn"
-                                        onClick={this.removeLesson.bind(this, lessonJson.lessonNum)}></Button>
+                                        onClick={this.removeLesson.bind(this, lessonJson.squence)}></Button>
                             </Col>
                         </Row>;
                         everyLessonArray.push(lessonRowObj);
