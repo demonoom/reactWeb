@@ -45,7 +45,8 @@ const CreateClassComponents = React.createClass({
             isWeiClass: false,
             isShowClass: false,
             upLoadNum: 0,
-            isTextClass:false,
+            isTestClass:false,//默认测试课选中状态
+            test:cloudClassRoomUser.test
         };
     },
 
@@ -70,7 +71,7 @@ const CreateClassComponents = React.createClass({
     componentWillReceiveProps(nextProps) {
         var isWeiClass = this.state.isWeiClass;
         var isShowClass = this.state.isShowClass;
-        var isTextClass=this.state.isTextClass;
+        var isTestClass=this.state.isTestClass;
         var isSeries = nextProps.isSeries;
         //isWeiClass为true，代表是微课
         if (isWeiClass) {
@@ -120,7 +121,7 @@ const CreateClassComponents = React.createClass({
         courseInfoJson.isFree = 1;
         courseInfoJson.isLimit = 1;
         courseInfoJson.showCourse = 0;   //展示课默认为0
-
+        courseInfoJson.test = ""; //测试课默认为空
 
         fileList.splice(0);
         // weifileList.splice(0);
@@ -144,7 +145,7 @@ const CreateClassComponents = React.createClass({
             "numInputDisable": true,
             isWeiClass: false,
             isShowClass: false,
-            isTextClass:false,
+            isTestClass:false,//默认测试课选中状态
         });
         // this.getAllTeam();
 
@@ -409,12 +410,17 @@ const CreateClassComponents = React.createClass({
     },
 
     /**
-     * 勾选是否为测试课的回调
+     * 创建课程时，勾选是否为测试课的回调
      */
-    isTextClass(e){
-        this.setState({isTextClass:e.target.checked});
-    },
+    isTestClass(e) {
+        this.setState({isTestClass: e.target.checked});
+        if (e.target.checked) {
+            courseInfoJson.test = "test";
+        }else {
+            courseInfoJson.test="";
+        }
 
+    },
     /**
      * 人数是否限制的回调
      */
@@ -880,9 +886,9 @@ const CreateClassComponents = React.createClass({
                 lessonJson.videoName = name;
             }
         });
-        var removevideo=courseInfoJson.videos;
-        for (let i = 0; i < removevideo.length; i++) {
-            var lesson = removevideo[i];
+        var removeVideo=courseInfoJson.videos;
+        for (let i = 0; i < removeVideo.length; i++) {
+            var lesson = removeVideo[i];
             var squenceInArray= lesson.squence;
             if(squenceInArray==squence){
                 lesson.name = name;
@@ -988,6 +994,16 @@ const CreateClassComponents = React.createClass({
         var preButton;
         var nextButton;
         var stepPanel;
+        // 测试课标签是否隐藏
+        var isShowTestClass=null;
+        if(isEmpty(this.state.test)==false){
+            isShowTestClass=
+                <Row>
+                    <Checkbox onChange={this.isTestClass} checked={this.state.isTestClass} className="upexam_le_datika">是否为测试课</Checkbox>
+                </Row>
+        } else {
+            isShowTestClass=null;
+        }
         if (this.state.stepNum == 0) {
             saveButton = "";
             classStepStatus = "";
@@ -1096,6 +1112,8 @@ const CreateClassComponents = React.createClass({
                 <Row>
                     <Checkbox onChange={this.isWeiClass} checked={this.state.isWeiClass} className="upexam_le_datika">是否为微课</Checkbox>
                 </Row>
+                {/*测试课*/}
+                {isShowTestClass}
                 {/*<Row>
                     <Col span={4}>授课时间：</Col>
                     <Col span={18}>
