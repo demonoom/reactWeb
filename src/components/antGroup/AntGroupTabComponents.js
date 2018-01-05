@@ -3025,8 +3025,7 @@ const AntGroupTabComponents = React.createClass({
                                                                      src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
                                                                      alt=""/>
                                                                  <div className="span_link_div">
-                                                                     <span
-                                                                         className="span_link file_link_img_t">{content}</span>
+                                                                     <span className="span_link file_link_img_t">{content}</span>
                                                                  </div>
                                                             </div>
                                                             <i className="borderballoon_dingcorner_ri_no"></i>
@@ -3103,15 +3102,15 @@ const AntGroupTabComponents = React.createClass({
                                                         <span className="bot"></span>
                                                         <span className="top"></span>
                                                         <div className="borderballoon_le_cont">
+                                                            <img className="upexam_float span_link_img"
+                                                                 style={{width: 38}}
+                                                                 src="../src/components/images/maaee_link_file_102_102.png"
+                                                                 alt=""/>
                                                             <div className="span_link_div">
                                                                 <span className="span_link">{fileName}</span>
                                                                 <span
                                                                     className="span_link password_ts">{fileLength}kb</span>
                                                             </div>
-                                                            <img className="upexam_float span_link_img"
-                                                                 style={{width: 38}}
-                                                                 src="../src/components/images/maaee_link_file_102_102.png"
-                                                                 alt=""/>
                                                         </div>
                                                         <img id={fileUid} style={{display: "none"}} src={filePath}
                                                              onClick={showLargeImg} alt=""/>
@@ -3156,15 +3155,15 @@ const AntGroupTabComponents = React.createClass({
                                                         <span className="bot"></span>
                                                         <span className="top"></span>
                                                         <div className="borderballoon_le_cont">
+                                                            <img className="upexam_float span_link_img"
+                                                                 style={{width: 38}}
+                                                                 src="../src/components/images/maaee_link_file_102_102.png"
+                                                                 alt=""/>
                                                             <div className="span_link_div">
                                                                 <span className="span_link">{fileName}</span>
                                                                 <span
                                                                     className="span_link password_ts">{fileLength}kb</span>
                                                             </div>
-                                                            <img className="upexam_float span_link_img"
-                                                                 style={{width: 38}}
-                                                                 src="../src/components/images/maaee_link_file_102_102.png"
-                                                                 alt=""/>
                                                         </div>
                                                         <img id={fileUid} style={{display: "none"}} src={filePath}
                                                              onClick={showLargeImg} alt=""/>
@@ -3790,8 +3789,7 @@ const AntGroupTabComponents = React.createClass({
                                                              src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
                                                              alt=""/>
                                                          <div className="span_link_div">
-                                                             <span
-                                                                 className="span_link file_link_img_t">{e.messageReturnJson.content}</span>
+                                                             <span className="span_link file_link_img_t">{e.messageReturnJson.content}</span>
                                                          </div>
                                                     </div>
                                                     <i className="borderballoon_dingcorner_ri_no"></i>
@@ -3824,8 +3822,7 @@ const AntGroupTabComponents = React.createClass({
                                                              src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
                                                              alt=""/>
                                                          <div className="span_link_div">
-                                                             <span
-                                                                 className="span_link file_link_img_t">{e.messageReturnJson.content}</span>
+                                                             <span className="span_link file_link_img_t">{e.messageReturnJson.content}</span>
                                                          </div>
                                                     </div>
                                                     <i className="borderballoon_dingcorner_ri_no"></i>
@@ -3859,8 +3856,20 @@ const AntGroupTabComponents = React.createClass({
                                                     <div className="talk_le_bubble_box">
                                                         <span className="borderballoon_le noom_cursor noom_MYZcard"
                                                               onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
-                                                            <span
-                                                                className="span_link file_link_img_t noom_MYZcontent">{e.messageReturnJson.content}</span>
+                                                            <span className="bot"></span>
+                                                            <span className="top"></span>
+                                                            <div className="borderballoon_le_cont">
+                                                                <img className="upexam_float" style={{width: 38}}
+                                                                     src="../src/components/images/icon_view_details.png"
+                                                                     onClick={showLargeImg} alt=""/>
+                                                                <span className="span_link">{e.messageReturnJson.content}</span>
+                                                                <i className="borderballoon_dingcorner_ri_no"></i>
+                                                            </div>
+                                                            <div className="file_noom">
+                                                        <a className="noom_cursor  file_noom_line"
+                                                           onClick={this.watchFile.bind(this, filePath, fileUid, fileCreateUid, fileName)}>
+                                                            查看详情</a>
+                                                    </div>
                                                         </span>
                                                         <span className="talk_bubble_ellipsis noom_repMsg">
                                                             <Dropdown overlay={msgMenuLeft} trigger={['click']}
@@ -4113,14 +4122,14 @@ const AntGroupTabComponents = React.createClass({
                                                     <span className="bot"></span>
                                                     <span className="top"></span>
                                                     <div className="borderballoon_le_cont">
+                                                        <img className="upexam_float span_link_img" style={{width: 38}}
+                                                             src="../src/components/images/maaee_link_file_102_102.png"
+                                                             alt=""/>
                                                         <div className="span_link_div">
                                                             <span className="span_link">{fileName}</span>
                                                             <span
                                                                 className="span_link password_ts">{fileLength}kb</span>
                                                         </div>
-                                                        <img className="upexam_float span_link_img" style={{width: 38}}
-                                                             src="../src/components/images/maaee_link_file_102_102.png"
-                                                             alt=""/>
                                                         <img id={fileUid} style={{display: "none"}} src={filePath}
                                                              onClick={showLargeImg} alt=""/>
                                                     </div>
@@ -4165,14 +4174,13 @@ const AntGroupTabComponents = React.createClass({
                                                     <span className="bot"></span>
                                                     <span className="top"></span>
                                                     <div className="borderballoon_le_cont">
-                                                        <div className="span_link_div">
-                                                            <span className="span_link">{fileName}</span>
-                                                            <span
-                                                                className="span_link password_ts">{fileLength}kb</span>
-                                                        </div>
                                                         <img className="upexam_float span_link_img" style={{width: 38}}
                                                              src="../src/components/images/maaee_link_file_102_102.png"
                                                              alt=""/>
+                                                        <div className="span_link_div">
+                                                            <span className="span_link">{fileName}</span>
+                                                            <span className="span_link password_ts">{fileLength}kb</span>
+                                                        </div>
                                                         <img id={fileUid} style={{display: "none"}} src={filePath}
                                                              onClick={showLargeImg} alt=""/>
                                                     </div>
