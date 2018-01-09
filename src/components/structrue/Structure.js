@@ -31,7 +31,7 @@ const memberColumns = [{
     title: '手机号',
     dataIndex: 'userPhone',
     key: 'userPhone',
-},{
+}, {
     title: '',
     dataIndex: 'isMaster',
     key: 'isMaster'
@@ -64,6 +64,7 @@ const Structure = React.createClass({
     componentWillReceiveProps(nextProps) {
         if (isEmpty(nextProps.passDefaultStructure) == false) {
             var defaultStructure = nextProps.passDefaultStructure;
+            var owner = defaultStructure.chatGroup.owner.colUid;
             var isExit = this.checkStructureIsExitAtArray(defaultStructure);
             if (isExit == false) {
                 //存放组织架构的层次关系
@@ -71,6 +72,7 @@ const Structure = React.createClass({
             }
             structuresObjArray.splice(1, structuresObjArray.length - 1);
             this.setState({
+                owner,
                 rootGroup: defaultStructure,
                 parentGroup: defaultStructure,
                 structureId: defaultStructure.id,
@@ -188,6 +190,7 @@ const Structure = React.createClass({
                     subGroupName: subGroupName,
                     opt: opt
                 });
+
             });
         }
         this.setState({subGroupList});
@@ -215,9 +218,7 @@ const Structure = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var parentGroup = ret.response;
-                var owner= parentGroup.chatGroup.owner.colUid;
-                console.log(999);
-                console.log(owner);
+                var owner = parentGroup.chatGroup.owner.colUid;
                 if (isEmpty(parentGroup) == false) {
                     var isExit = _this.checkStructureIsExitAtArray(parentGroup);
                     if (isExit == false) {
@@ -225,7 +226,7 @@ const Structure = React.createClass({
                         structuresObjArray.push(parentGroup);   //面包条数组
                     }
                 }
-                _this.setState({parentGroup, structuresObjArray,owner});
+                _this.setState({parentGroup, structuresObjArray, owner});
             },
             onError: function (error) {
                 message.error(error);
@@ -259,7 +260,27 @@ const Structure = React.createClass({
                 _this.buildStrcutureMembers(response, flag);
                 // }
                 var pager = ret.pager;
-                _this.setState({totalMember: pager.rsCount});
+                var owner = _this.state.owner;
+                var user = pager.user;
+                if (owner == user.colUid) {
+                    subGroupMemberList.push({
+                        key: user.id,
+                        userId: user.colUid,
+                        userName: user.userName,
+                        userPhone: user.phoneNumber,
+                        isMaster: '主管'
+                    });
+
+                } else {
+                    subGroupMemberList.push({
+                        key: user.id,
+                        userId: user.colUid,
+                        userName: user.userName,
+                        userPhone: user.phoneNumber,
+
+                    });
+                }
+                _this.setState({subGroupMemberList, totalMember: pager.rsCount});
                 if (!flag) {
                     currentStructureMember.splice(0)
                 }
@@ -284,25 +305,24 @@ const Structure = React.createClass({
             subGroupMemberList.splice(0);   //部门人员数组先清空,之后重新push
         }
         if (isEmpty(response) == false) {
-            console.log(subGroupMemberList);
             response.forEach(function (member) {
                 var user = member.user;
                 var owner = _this.state.owner;
-                if(owner==user.colUid){
+                if (owner == user.colUid) {
                     subGroupMemberList.push({
                         key: member.id,
                         userId: user.colUid,
                         userName: user.userName,
-                        userPhone:user.phoneNumber,
-                        isMaster:'主管'
+                        userPhone: user.phoneNumber,
+                        isMaster: '主管'
                     });
 
-                }else {
+                } else {
                     subGroupMemberList.push({
                         key: member.id,
                         userId: user.colUid,
                         userName: user.userName,
-                        userPhone:user.phoneNumber,
+                        userPhone: user.phoneNumber,
 
                     });
                 }
@@ -362,6 +382,7 @@ const Structure = React.createClass({
      * 子部门被点击的方法
      */
     getSubGroupForButton(structureId, flag) {
+        var _this = this;
         if (flag) {   //点击左侧列表的时候传的是true  面包条只保留学校
             structuresObjArray.splice(1, structuresObjArray.length - 1)
         }
@@ -375,10 +396,35 @@ const Structure = React.createClass({
             // "groupSettingModalIsShow": false,
             memberPageNo: defaultMemberPageNo
         });
-        this.listStructures(structureId, true);     //列举子部门
         this.getStructureById(structureId);   //获取组织架构obj
-        this.getStrcutureMembers(structureId, memberPageNo, false);    //获取部门成员   false清空原数组
+        this.listStructures(structureId, true);     //列举子部门
+        setTimeout(function () {
+            _this.getStrcutureMembers(structureId, memberPageNo, false);    //获取部门成员   false清空原数组
+        }, 200);
         this.props.passstructureIdToLeft(structureId)
+    },
+
+    /**
+     * 面包条被点击的响应
+     * 切换到当前的组织架构层次，同时，在此面包条后的数据移除
+     */
+    breadCrumbClick(structureId) {
+        var _this = this;
+        var defaultPageNo = 1;
+        this.getStructureById(structureId);    //可以优化点
+        this.listStructures(structureId, true);   //列举子部门
+        setTimeout(function () {
+            _this.getStrcutureMembers(structureId, defaultPageNo, false);   //获取部门成员   false清空原数组
+        }, 200);
+        for (var i = 0; i < structuresObjArray.length; i++) {
+            var structure = structuresObjArray[i];
+            if (structure.id == structureId) {
+                structuresObjArray.splice(i, structuresObjArray.length);
+                break;
+            }
+        }
+        var defaultMemberPageNo = 1;
+        this.setState({"structureId": structureId, structuresObjArray, "memberPageNo": defaultMemberPageNo});
     },
 
     checkStructureIsExitAtArray(newStructure) {
@@ -502,26 +548,6 @@ const Structure = React.createClass({
      */
     groupSetting() {
         this.setState({groupSettingModalIsShow: true});
-    },
-
-    /**
-     * 面包条被点击的响应
-     * 切换到当前的组织架构层次，同时，在此面包条后的数据移除
-     */
-    breadCrumbClick(structureId) {
-        var defaultPageNo = 1;
-        this.listStructures(structureId, true);   //列举子部门
-        this.getStructureById(structureId);    //可以优化点
-        this.getStrcutureMembers(structureId, defaultPageNo, false);   //获取部门成员   false清空原数组
-        for (var i = 0; i < structuresObjArray.length; i++) {
-            var structure = structuresObjArray[i];
-            if (structure.id == structureId) {
-                structuresObjArray.splice(i, structuresObjArray.length);
-                break;
-            }
-        }
-        var defaultMemberPageNo = 1;
-        this.setState({"structureId": structureId, structuresObjArray, "memberPageNo": defaultMemberPageNo});
     },
 
     /**

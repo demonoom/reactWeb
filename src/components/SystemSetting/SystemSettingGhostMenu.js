@@ -135,7 +135,7 @@ class SystemSettingGhostMenu extends React.Component {
                 {/*}}><img className="icon_system_img" src='http://60.205.86.217/upload2/common/img/examine_icon.png'/>角色*/}
                 {/*</li>*/}
             {/*</ul>*/}
-
+            {/*组织架构*/}
             {/*<ul className="second">*/}
                 {/*<li onClick={event => {*/}
                     {/*this.changeMenu(event, 'noomStructure', true)*/}
@@ -187,7 +187,6 @@ class SystemSettingGhostMenu extends React.Component {
 
     checkWords(words, name) {
         var _this = this;
-        console.log(words);
         //words就是返回的对象
         if (words.method == 'operateStructure') {
             // _this.changeMenu(event, 'origin', true)
