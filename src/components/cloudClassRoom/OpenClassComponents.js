@@ -99,7 +99,7 @@ const OpenClassComponents = React.createClass({
         var optButtons;
         var isSeries = row.isSeries;
         var endTime;
-        isSeriesStr="系列课";
+        isSeriesStr="普通课程";
         var canOpenClass = row.canOpenClass;
         var courseStatus = row.courseStatus;
         var courseStatusStr="直播中";
@@ -110,20 +110,30 @@ const OpenClassComponents = React.createClass({
         }else if(courseStatus=="3"){
             courseStatusStr="结束";
         }
-        if(isSeries=="2"){
+        if(isEmpty(isSeries)){
             endTime = null;
-            isSeriesStr="单节课";
+            isSeriesStr="实景课";
             if(canOpenClass==true && courseStatus!="3"){
                 optButtons=<div>
                     <Col span={24}><Button icon="play-circle-o" className="exam-particulars_title" title="直播" onClick={_this.openLive.bind(_this,row,"singleClass")}></Button></Col>
                 </div>;
             }
         }else{
-            endTime = <Col span={24}><span className="series_gray_le">结束时间：</span><span className="series_gray_ri">{endTimeStr}</span></Col>;
-            if(canOpenClass==true){
-                optButtons=<div>
-                    <Col span={24}><Button icon="play-circle-o" className="exam-particulars_title" title="直播" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
-                </div>;
+            if(isSeries=="2"){
+                endTime = null;
+                isSeriesStr="单节课";
+                if(canOpenClass==true && courseStatus!="3"){
+                    optButtons=<div>
+                        <Col span={24}><Button icon="play-circle-o" className="exam-particulars_title" title="直播" onClick={_this.openLive.bind(_this,row,"singleClass")}></Button></Col>
+                    </div>;
+                }
+            }else{
+                endTime = <Col span={24}><span className="series_gray_le">结束时间：</span><span className="series_gray_ri">{endTimeStr}</span></Col>;
+                if(canOpenClass==true){
+                    optButtons=<div>
+                        <Col span={24}><Button icon="play-circle-o" className="exam-particulars_title" title="直播" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
+                    </div>;
+                }
             }
         }
         var users = row.users;
@@ -226,7 +236,7 @@ const OpenClassComponents = React.createClass({
     },
     /**
      * 课程直播
-     * @param liveObj（直播对象，系列课为当前课程，单节课为选定的章节）
+     * @param liveObj（直播对象，普通课程为当前课程，单节课为选定的章节）
      */
     openLive(liveObj,liveType){
         console.log(TEACH_LIVE_URL);
@@ -255,7 +265,7 @@ const OpenClassComponents = React.createClass({
                     targetId = liveObj.id;
                     title = liveObj.courseName;
                 }else{
-                    //系列课播放的是具体章节，courseObj代表章节
+                    //普通课程播放的是具体章节，courseObj代表章节
                     targetType = 1;
                     targetId = liveObj.id;
                     title = liveObj.name;

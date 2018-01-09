@@ -33,6 +33,7 @@ const FlowSettingComponent = React.createClass({
     },
 
     componentWillReceiveProps(nextProps) {
+        this.setState({"pageType":''});
     },
 
 

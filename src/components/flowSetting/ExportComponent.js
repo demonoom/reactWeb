@@ -3,6 +3,7 @@ import {
     Tabs, Table, message,Select,Row,Col,Input,DatePicker,Button,Modal
 } from 'antd';
 import {isEmpty} from '../../utils/utils';
+import {getPageSize} from '../../utils/Const';
 import {doWebService} from '../../WebServiceHelper';
 import {FLOW_OPTSOURCE_MANAGER} from '../../utils/Const';
 const TabPane = Tabs.TabPane;
@@ -22,22 +23,54 @@ var processColumns = [{
     title: '标题',
     dataIndex: 'processName',
     key: 'processName',
-    width: '120px',
-    className: 'dold_text departmental_officer'
+    width: '200px',
 }, {
     title: '发起时间',
     dataIndex: 'processStartTime',
     key: 'processStartTime',
+    width: '150px',
 }, {
     title: '完成时间',
     dataIndex: 'processEndTime',
     key: 'processEndTime',
+    width: '150px',
 }, {
     title: '历史审批人',
     dataIndex: 'approvalUsers',
     key: 'approvalUsers',
 }
 ];
+
+var exportLogColumns  = [{
+    title: '导出文件名称',
+    dataIndex: 'exportFileName',
+    key: 'exportFileName',
+    width: '230px',
+}, {
+    title: '导出人员',
+    dataIndex: 'exportUser',
+    key: 'exportUser',
+    width: '80px',
+}, {
+    title: '导出时间',
+    dataIndex: 'exportTime',
+    key: 'exportTime',
+    width: '150px',
+}, {
+    title: '审批名称',
+    dataIndex: 'processName',
+    key: 'processName',
+    width: '200px',
+}, {
+    title: '操作',
+    dataIndex: 'opt',
+    key: 'opt',
+    width: '50px',
+    }
+];
+
+
+
 const ExportComponent = React.createClass({
 
     getInitialState() {
@@ -125,7 +158,14 @@ const ExportComponent = React.createClass({
      */
     exportTabsChange(key){
         console.log(key);
+        if(key == "exportLog"){
+            //查询导出记录
+            var initPageNo = "1";
+            this.searchExportLog(initPageNo);
+        }
     },
+
+
 
     /**
      * 审批类型改变的响应函数
@@ -175,16 +215,21 @@ const ExportComponent = React.createClass({
         this.setState({startTimeOfProcessEnd, endTimeOfProcessEnd});
     },
 
+    searchProcessByPage(){
+        var initPageNo = 1;
+        this.searchProcess(initPageNo);
+    },
+
     /**
      * 查询按钮点击响应函数
      */
-    searchProcess(){
+    searchProcess(pageNo){
         //查询
         let _this = this;
         var processList = [];
         var param = {
             "method": 'getHistoricProcessInstanceByCondition',
-            "pageNo": "1",
+            "pageNo": pageNo,
             "procDefId": this.state.flowType,
             "startTimeOfProcessStart": this.state.startTimeOfProcessStart,
             "endTimeOfProcessStart": this.state.endTimeOfProcessStart,
@@ -204,12 +249,56 @@ const ExportComponent = React.createClass({
                                 key: historicProcess.procInsId,
                                 processName:historicProcess.procInsName,
                                 processStartTime: historicProcess.startTime,
-                                processEndTime: historicProcess.endTime
+                                processEndTime: historicProcess.endTime,
+                                approvalUsers:historicProcess.allApprovalUserName
                             });
                         });
                     }
                     var pager = ret.pager;
-                    _this.setState({processList, totalMember: pager.rsCount, selectedRowKeys:[]});//selectedRowKeys设置成[]可以清除默认勾选
+                    _this.setState({processList, totalProcessCount: pager.rsCount, selectedRowKeys:[]});//selectedRowKeys设置成[]可以清除默认勾选
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+
+    },
+
+    /**
+     * 切换tab页时，获取导出记录的表格数据
+     */
+    searchExportLog(pageNo){
+        //查询
+        let _this = this;
+        var exportLogList = [];
+        var param = {
+            "method": 'getAllFlowExportLogByUserId',
+            "pageNo": pageNo,
+            "userId": this.state.loginUser.colUid
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                console.log(ret.msg + "===" + ret.response);
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    var response = ret.response;
+                    if (isEmpty(response) == false) {
+                        response.forEach(function (exportLog) {
+                            var downloadButton =
+                                <a href={exportLog.exportFileUrl} target="_blank" title="下载" download={exportLog.exportFileUrl} className="te_download_a_noom">
+                                    <Button icon="download"/></a>;
+                            exportLogList.push({
+                                key: exportLog.exportId,
+                                exportFileName:exportLog.exportFileName,
+                                exportUser: exportLog.user.userName,
+                                exportTime: exportLog.exportTime,
+                                processName: exportLog.processName,
+                                opt:downloadButton
+                            });
+                        });
+                    }
+                    var pager = ret.pager;
+                    _this.setState({exportLogList, totalExportLogCount: pager.rsCount});
                 }
             },
             onError: function (error) {
@@ -234,11 +323,58 @@ const ExportComponent = React.createClass({
      * 执行导出操作，并给出对应的操作提示
      */
     exportTips(){
+        this.exportProcessData();
         Modal.success({
             transitionName:"",  //禁用modal的动画效果
             content: '数据准备中，完成导出后我们会将数据保存在“数据导出记录”中，您稍后下载即可。'
         });
     },
+
+    /**
+     * 完成选定审批数据的导出操作
+     */
+    exportProcessData(){
+        var _this = this;
+        var selectedRowKeys = _this.state.selectedRowKeys;
+        var procInsIds = selectedRowKeys.toString();
+        var param = {
+            "method": 'exportHistoricProcessInstanceToExcel',
+            "procInsIds":procInsIds,
+            "userId": this.state.loginUser.colUid
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                console.log(ret.msg + "===" + ret.response);
+                if (ret.msg == "调用成功" && ret.success == true) {
+
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 审批列表分页
+     */
+    processPageOnChange(pageNo){
+        this.searchProcess(pageNo);
+        this.setState({
+            currentPage: pageNo,
+        });
+    },
+    /**
+     * 审批导出记录分页
+     * @param pageNo
+     */
+    exportLogPageOnChange(pageNo){
+        this.searchExportLog(pageNo);
+        this.setState({
+            exportLogCurrentPage: pageNo,
+        });
+    },
+
     /**
      * 渲染页面
      * @returns {XML}
@@ -277,10 +413,10 @@ const ExportComponent = React.createClass({
                                     </Row>
                                 </Col>
 
-                                <Col span={3}>标题</Col>
+                                {/*<Col span={3}>标题</Col>
                                 <Col span={9}>
                                     <Input value={this.state.processName} onChange={this.processNameChange}/>
-                                </Col>
+                                </Col>*/}
                             </Row>
 
                             <Row>
@@ -297,7 +433,7 @@ const ExportComponent = React.createClass({
 
                             <Row>
                                 <Col span={24} justify="end">
-                                    <Button onClick={this.searchProcess}>查询</Button>
+                                    <Button onClick={this.searchProcessByPage}>查询</Button>
                                 </Col>
                             </Row>
 
@@ -310,11 +446,17 @@ const ExportComponent = React.createClass({
                                 导出
                             </Button>
                             <Table rowSelection={rowSelection} columns={processColumns}
+                                   pagination={{total: this.state.totalProcessCount, pageSize: getPageSize(), onChange: this.processPageOnChange}}
                                    dataSource={this.state.processList} scroll={{ y: 200 }}
                                    />
                         </div>
                     </TabPane>
-                    <TabPane tab="数据导出记录" key="exportLog">Content of Tab Pane 2</TabPane>
+                    <TabPane tab="数据导出记录" key="exportLog">
+                        <Table columns={exportLogColumns}
+                               pagination={{total: this.state.totalExportLogCount, pageSize: getPageSize(), onChange: this.exportLogPageOnChange}}
+                               dataSource={this.state.exportLogList} scroll={{ y: 400 }}
+                        />
+                    </TabPane>
                 </Tabs>
             </div>
         );
