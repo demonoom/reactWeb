@@ -394,9 +394,9 @@ const ExportComponent = React.createClass({
                     <TabPane tab="数据导出" key="dataExport">
                         <div>
                             <Row>
-                                <Col span={3}>审批类型</Col>
+                                <Col span={3} className="framework_m_l">审批类型：</Col>
                                 <Col span={9}>
-                                    <Row>
+                                    <Row className="margin_0">
                                         <Col span={12}>
                                             <Select style={{width: 150}} defaultValue={this.state.flowType} value={this.state.flowType} onChange={this.flowTypeChange}>
                                                 {this.state.optionGroupArray}
@@ -420,31 +420,33 @@ const ExportComponent = React.createClass({
                             </Row>
 
                             <Row>
-                                <Col span={3}>发起时间</Col>
-                                <Col span={9}>
+                                <Col span={3} className="framework_m_l">发起时间：</Col>
+                                <Col span={8} className="margin_0">
                                     <RangePicker onChange={this.processStartTimeOnChange} />
                                 </Col>
 
-                                <Col span={3}>完成时间</Col>
-                                <Col span={9}>
+                                <Col span={3} className="framework_m_l">完成时间：</Col>
+                                <Col span={8} className="margin_0">
                                     <RangePicker onChange={this.processEndTimeOnChange} />
                                 </Col>
                             </Row>
 
                             <Row>
-                                <Col span={24} justify="end">
-                                    <Button onClick={this.searchProcessByPage}>查询</Button>
+                                <Col span={22} justify="end" className="right_look">
+                                    <Button onClick={this.searchProcessByPage} className="ant-btn-primary ant-btn">查询</Button>
+                                    <Button
+                                        type="primary"
+                                        onClick={this.exportTips}
+                                        disabled={!hasSelected}  className="ant-btn-primary ant-btn">
+
+                                        导出
+                                    </Button>
                                 </Col>
                             </Row>
 
                         </div>
                         <div>
-                            <Button
-                                type="primary"
-                                onClick={this.exportTips}
-                                disabled={!hasSelected}>
-                                导出
-                            </Button>
+
                             <Table rowSelection={rowSelection} columns={processColumns}
                                    pagination={{total: this.state.totalProcessCount, pageSize: getPageSize(), onChange: this.processPageOnChange}}
                                    dataSource={this.state.processList} scroll={{ y: 200 }}

@@ -1,3 +1,9 @@
 .data_export .ant-tabs-nav .ant-tabs-tab{
     font-size: 14px;
 }
+.data_export .ant-row{
+    font-size: 12px;
+}
+.margin_0{
+    margin-top: -2px !important;
+}
