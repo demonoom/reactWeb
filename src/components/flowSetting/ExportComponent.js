@@ -457,9 +457,11 @@ const ExportComponent = React.createClass({
                     </TabPane>
                     <TabPane tab="数据导出记录" key="exportLog">
                         <Table columns={exportLogColumns}
-                               pagination={{total: this.state.totalExportLogCount, pageSize: getPageSize(), onChange: this.exportLogPageOnChange}}
-                               dataSource={this.state.exportLogList} scroll={{ y: 400 }}
+                               pagination={false}
+                               dataSource={this.state.exportLogList} scroll={{ y: 300 }}
                         />
+                        {/*pagination={{total: this.state.totalExportLogCount, pageSize: getPageSize(), onChange: this.exportLogPageOnChange}}*/}
+                        <Pagination defaultCurrent={1} pageSize="30" total={this.state.totalExportLogCount} onChange={this.exportLogPageOnChange} />
                     </TabPane>
                 </Tabs>
             </div>
