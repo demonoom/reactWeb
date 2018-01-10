@@ -7,3 +7,9 @@
 .margin_0{
     margin-top: -2px !important;
 }
+.date_export_input{
+    margin-bottom: 15px;
+}
+.date_export_table{
+    height: calc(100% - 130px);
+}

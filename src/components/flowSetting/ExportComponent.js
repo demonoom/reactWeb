@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import {
-    Tabs, Table, message,Select,Row,Col,Input,DatePicker,Button,Modal
+    Tabs, Table, message,Select,Row,Col,Input,DatePicker,Button,Modal,Pagination
 } from 'antd';
 import {isEmpty} from '../../utils/utils';
 import {getPageSize} from '../../utils/Const';
@@ -392,7 +392,7 @@ const ExportComponent = React.createClass({
             <div className="conditions_group">
                 <Tabs defaultActiveKey="dataExport" className="data_export" onChange={this.exportTabsChange}>
                     <TabPane tab="数据导出" key="dataExport">
-                        <div>
+                        <div className="date_export_input">
                             <Row>
                                 <Col span={3} className="framework_m_l">审批类型：</Col>
                                 <Col span={9}>
@@ -445,12 +445,14 @@ const ExportComponent = React.createClass({
                             </Row>
 
                         </div>
-                        <div>
+                        <div className="date_export_table">
 
                             <Table rowSelection={rowSelection} columns={processColumns}
-                                   pagination={{total: this.state.totalProcessCount, pageSize: getPageSize(), onChange: this.processPageOnChange}}
+                                   pagination={false}
                                    dataSource={this.state.processList} scroll={{ y: 200 }}
                                    />
+                            {/*<Pagination defaultCurrent={1} pageSize={getPageSize()} total={this.state.totalProcessCount} onChange={this.processPageOnChange} />*/}
+                            <Pagination defaultCurrent={1} pageSize={getPageSize()} total={this.state.totalProcessCount} onChange={this.processPageOnChange} />
                         </div>
                     </TabPane>
                     <TabPane tab="数据导出记录" key="exportLog">
