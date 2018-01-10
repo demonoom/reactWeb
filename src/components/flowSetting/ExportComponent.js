@@ -413,10 +413,6 @@ const ExportComponent = React.createClass({
                                     </Row>
                                 </Col>
 
-                                {/*<Col span={3}>标题</Col>
-                                <Col span={9}>
-                                    <Input value={this.state.processName} onChange={this.processNameChange}/>
-                                </Col>*/}
                             </Row>
 
                             <Row>
