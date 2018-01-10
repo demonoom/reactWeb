@@ -27,30 +27,41 @@ const AntMulitiClassComponents = React.createClass({
         var _this = this;
         //控制显示的是单节课还是系列课
         var isSeries = _this.props.isSeries;
+        var courseClass = '';
+        if(isEmpty(isSeries)){
+            //实景课的课程列表
+            courseClass = '29';
+        }
         this.setState({isSeries});
-        this.getCourseListBySeries(isSeries);
+        this.getCourseListBySeries(isSeries,courseClass);
     },
 
     componentWillReceiveProps(nextProps) {
         var isSeries = nextProps.isSeries;
-        this.setState({isSeries});
-        this.getCourseListBySeries(isSeries);
+        var courseClass = '';
+        if(isEmpty(isSeries)){
+            //实景课的课程列表
+            courseClass = '29';
+        }
+        this.setState({isSeries,courseClass});
+        this.getCourseListBySeries(isSeries,courseClass);
     },
 
-    getCourseListBySeries(isSeries) {
+    getCourseListBySeries(isSeries,courseClass) {
         var _this = this;
-        _this.getCourseList(_this.state.currentPage, isSeries);
+        _this.getCourseList(_this.state.currentPage, isSeries,'0',courseClass);
     },
+
     /**
      * 获取课程列表
      */
-    getCourseList(pageNo, isSeries, is_publish) {
+    getCourseList(pageNo, isSeries, is_publish,courseClass) {
         var _this = this;
         var cloudClassRoomUser = JSON.parse(sessionStorage.getItem("cloudClassRoomUser"));
         var param = {
             "method": 'findCourseByAccount',
             "pageNo": pageNo,
-            "course_class": '',
+            "course_class": courseClass,
             "isseries": '',
             "coursetypeid": '',
             "numPerPage": getPageSize(),
@@ -119,7 +130,7 @@ const AntMulitiClassComponents = React.createClass({
         var optButtons;
         var isSeries = row.isSeries;
         var endTime;
-        if (isSeries == "2") {
+        if (isEmpty(isSeries) || isSeries == "2") {
             endTime = null;
         } else {
             endTime = <Col span={24}><span className="series_gray_le">结束时间：</span><span
@@ -244,8 +255,7 @@ const AntMulitiClassComponents = React.createClass({
                             <Col span={24} className="price"><span className="c-jg price_between">￥{money}</span><span
                                 className="price_between gray_line"></span><span
                                 className=" price_between font-14">共{videoNum}课时</span></Col>
-                            <Col span={24}><span className="series_gray_le">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                目：</span><span className="series_gray_ri">{courseTypeName}</span></Col>
+                            <Col span={24}><span className="series_gray_le">课程分类：</span><span className="series_gray_ri">{courseTypeName}</span></Col>
                             <Col span={24}><span className="series_gray_le">主讲老师：</span><span
                                 className="series_gray_ri">{userSpanArray}</span></Col>
                             <Col span={24}><span className="series_gray_le">开始时间：</span><span
@@ -356,7 +366,7 @@ const AntMulitiClassComponents = React.createClass({
 
         var endTime;
 
-        if (isSeries == "2") {
+        if (isEmpty(isSeries) || isSeries == "2") {
             endTime = null;
         } else {
             endTime = <Col span={24} className="ant-form-item">
@@ -437,13 +447,13 @@ const AntMulitiClassComponents = React.createClass({
                                 <span className=" price_between font-14">共{classObj.videoNum}课时</span>
                             </Col>
                             <Col span={24} className="ant-form-item">
-                                <span className="series_gray_le">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：</span>
+                                <span className="series_gray_le">课程分类：</span>
                                 <span className="series_gray_ri">{classObj.courseType.name}</span>
                             </Col>
-                            <Col span={24} className="ant-form-item">
+                            {/*<Col span={24} className="ant-form-item">
                                 <span className="series_gray_le">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;级：</span>
                                 <span className="series_gray_ri">{classObj.courseClass}</span>
-                            </Col>
+                            </Col>*/}
                             <Col span={24} className="ant-form-item">
                                 <span className="series_gray_le">主讲老师：</span>
                                 <span className="series_gray_ri">{userSpanArray}</span>
@@ -496,7 +506,7 @@ const AntMulitiClassComponents = React.createClass({
                 if (response) {
                     message.success("课程信息修改成功");
                 }
-                _this.getCourseList(_this.state.currentPage, _this.state.isSeries, _this.state.classFliterValue);
+                _this.getCourseList(_this.state.currentPage, _this.state.isSeries, _this.state.classFliterValue,this.state.courseClass);
             },
             onError: function (error) {
                 message.error(error);
@@ -588,11 +598,11 @@ const AntMulitiClassComponents = React.createClass({
         this.setState({
             classFliterValue: e.target.value,
         });
-        this.getCourseList(this.state.currentPage, this.state.isSeries, e.target.value);
+        this.getCourseList(this.state.currentPage, this.state.isSeries, e.target.value,this.state.courseClass);
     },
 
     pageOnChange(page) {
-        this.getCourseList(page, this.state.isSeries, this.state.classFliterValue);
+        this.getCourseList(page, this.state.isSeries, this.state.classFliterValue,this.state.courseClass);
         this.setState({
             currentPage: page,
         });
@@ -600,7 +610,14 @@ const AntMulitiClassComponents = React.createClass({
 
     courseAddOk() {
         this.setState({"createClassModalVisible": false, "isChangeStep": false, stepDirect: ''});
-        this.getCourseList(this.state.currentPage, this.state.isSeries, this.state.classFliterValue);
+        var courseClass="";
+        if(isEmpty(this.state.isSeries)){
+            //实景课的课程列表
+            courseClass = '29';
+        }else{
+            courseClass = this.state.courseClass;
+        }
+        this.getCourseList(this.state.currentPage, this.state.isSeries, this.state.classFliterValue,courseClass);
     },
 
     classDetailModalHandleCancel() {
@@ -618,7 +635,7 @@ const AntMulitiClassComponents = React.createClass({
      */
     courseUpdateOk() {
         this.setState({"updateClassModalVisible": false, "isChangeStep": true, stepDirect: ''});
-        this.getCourseList(this.state.currentPage, this.state.isSeries, this.state.classFliterValue);
+        this.getCourseList(this.state.currentPage, this.state.isSeries, this.state.classFliterValue,this.state.courseClass);
     },
 
     changeStep(direct, optSource) {

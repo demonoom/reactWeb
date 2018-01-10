@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import {Button, Icon, message, Modal, Collapse, Input, Row, Col, Select} from 'antd';
 import CreateFlowComponent from './CreateFlowComponent';
 import FlowDetailComponent from './FlowDetailComponent';
+import ExportComponent from './ExportComponent';
 import {isEmpty} from '../../utils/utils';
 import {doWebService} from '../../WebServiceHelper';
 import {FLOW_OPTSOURCE_MANAGER} from '../../utils/Const';
@@ -23,6 +24,7 @@ const FlowSettingComponent = React.createClass({
             flowGroupName: '',   //流程分组的名称
             flowGroupId: "-1",
             openCollapseKey: [],
+            pageType:'' //当前页面将要渲染的业务内容
         };
     },
 
@@ -31,6 +33,7 @@ const FlowSettingComponent = React.createClass({
     },
 
     componentWillReceiveProps(nextProps) {
+        this.setState({"pageType":''});
     },
 
 
@@ -487,6 +490,13 @@ const FlowSettingComponent = React.createClass({
     },
 
     /**
+     * 转向到数据导出页面
+     */
+    turnToExportPage(){
+        this.setState({"pageType":'exportPage'});
+    },
+
+    /**
      * 渲染页面
      * @returns {XML}
      */
@@ -508,6 +518,13 @@ const FlowSettingComponent = React.createClass({
 
         var detailButton =  <Button onClick={this.detailFlowModalHandleCancel}>关闭</Button>;
 
+        var mainContent = <Collapse bordered={false} defaultActiveKey={this.state.openCollapseKey}
+                                    activeKey={this.state.openCollapseKey}>
+            {this.state.collapsePanelArray}
+        </Collapse>;
+        if(isEmpty(this.state.pageType)==false && this.state.pageType == "exportPage"){
+            mainContent = <div><ExportComponent></ExportComponent></div>;
+        }
 
         return (
             <div>
@@ -515,15 +532,14 @@ const FlowSettingComponent = React.createClass({
                     <span className="name_max4 dold_text process_font_h">内部审批流程</span>
                     <span className="schoolgroup_btn_left"><Button
                         onClick={this.createNewFlowGroup}>新建分组</Button></span>
+                    <span className="schoolgroup_btn_left"><Button
+                        onClick={this.turnToExportPage}>数据导出</Button></span>
                     <span className="topics_dianzan"><Button className="schoolgroup_btn_blue_solid"
                                                              onClick={this.createNewFlow}>创建新审批</Button></span>
                 </div>
 
                 <div className="process_wrap">
-                    <Collapse bordered={false} defaultActiveKey={this.state.openCollapseKey}
-                              activeKey={this.state.openCollapseKey}>
-                        {this.state.collapsePanelArray}
-                    </Collapse>
+                    {mainContent}
                 </div>
 
                 <Modal title="创建新审批" visible={this.state.createNewFlowModalVisible}
