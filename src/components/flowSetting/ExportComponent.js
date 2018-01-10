@@ -433,7 +433,7 @@ const ExportComponent = React.createClass({
 
                             <Row>
                                 <Col span={22} justify="end" className="right_look">
-                                    <Button onClick={this.searchProcessByPage} className="ant-btn-primary ant-btn">查询</Button>
+                                    <Button onClick={this.searchProcessByPage} className="ant-btn-primary ant-btn antnest_talk">查询</Button>
                                     <Button
                                         type="primary"
                                         onClick={this.exportTips}
