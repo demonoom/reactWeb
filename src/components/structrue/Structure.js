@@ -7,6 +7,7 @@ import AddSubGroupModal from './AddSubGroupModal';
 import ConfirmModal from '../ConfirmModal';
 import SchoolSettingModal from './SchoolSettingModal';
 import GroupSettingModal from './GroupSettingModal';
+import MemberSettingModal from './MemberSettingModal';
 
 const confirm = Modal.confirm;
 
@@ -35,6 +36,10 @@ const memberColumns = [{
     title: '',
     dataIndex: 'isMaster',
     key: 'isMaster'
+}, {
+    title: '操作',
+    dataIndex: 'opt',
+    key: 'opt'
 }
 ];
 
@@ -308,13 +313,18 @@ const Structure = React.createClass({
             response.forEach(function (member) {
                 var user = member.user;
                 var owner = _this.state.owner;
+                var editButton = <div className="knowledge_ri">
+                    <Button icon="edit"
+                            onClick={_this.changeMemberDepartment.bind(this, user)}></Button>
+                </div>
                 if (owner == user.colUid) {
                     subGroupMemberList.push({
                         key: member.id,
                         userId: user.colUid,
                         userName: user.userName,
                         userPhone: user.phoneNumber,
-                        isMaster: '主管'
+                        isMaster: '主管',
+                        opt:editButton
                     });
 
                 } else {
@@ -323,13 +333,21 @@ const Structure = React.createClass({
                         userId: user.colUid,
                         userName: user.userName,
                         userPhone: user.phoneNumber,
-
+                        isMaster: '',
+                        opt:editButton
                     });
                 }
             });
 
         }
         this.setState({subGroupMemberList, selectedRowKeys: []});//selectedRowKeys设置成[]可以清除默认勾选
+    },
+
+    /**
+     * 显示跟换员工组织架构部门的窗口
+     */
+    changeMemberDepartment(memberInfo){
+        this.setState({memberInfo,memberSettingModalIsShow:true});
     },
 
     /**
@@ -532,7 +550,8 @@ const Structure = React.createClass({
             "groupSettingModalIsShow": false,
             "addGroupMemberModalIsShow": false,
             "addSubGroupModalIsShow": false,
-            "schoolSettingModalIsShow": false
+            "schoolSettingModalIsShow": false,
+            "memberSettingModalIsShow": false
         });
     },
 
@@ -690,6 +709,10 @@ const Structure = React.createClass({
                                     rootStructure={this.state.parentGroup}
                                     onCancel={this.initModalStatus}></SchoolSettingModal>
 
+                <MemberSettingModal isShow={this.state.memberSettingModalIsShow}
+                                    rootStructure={this.state.parentGroup}
+                                    memberInfo = {this.state.memberInfo}
+                                    onCancel={this.initModalStatus}></MemberSettingModal>
                 {/*部门设置model*/}
                 <GroupSettingModal isShow={this.state.groupSettingModalIsShow} parentGroup={this.state.parentGroup}
                                    onCancel={this.initModalStatus}
