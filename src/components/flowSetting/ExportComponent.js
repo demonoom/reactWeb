@@ -390,7 +390,7 @@ const ExportComponent = React.createClass({
 
         return (
             <div className="conditions_group">
-                <Tabs defaultActiveKey="dataExport" onChange={this.exportTabsChange}>
+                <Tabs defaultActiveKey="dataExport" className="data_export" onChange={this.exportTabsChange}>
                     <TabPane tab="数据导出" key="dataExport">
                         <div>
                             <Row>
