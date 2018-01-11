@@ -137,7 +137,7 @@ class SystemSettingGhostMenu extends React.Component {
             {/*</ul>*/}
 
             {/*组织架构*/}
-            
+
             {/*<ul className="second">*/}
                 {/*<li onClick={event => {*/}
                     {/*this.changeMenu(event, 'noomStructure', true)*/}

@@ -2897,9 +2897,9 @@ const AntGroupTabComponents = React.createClass({
     },
 
     imgOnError(src, e) {
-        e.target.src = src;
+        // e.target.src = src;
         // e.target.src = '../src/components/images/e9c6ad1e-7ef3-45cf-ab40-25d5b5a0374c.png';
-        e.target.onerror = null;
+        // e.target.onerror = null;
     },
 
     render() {
