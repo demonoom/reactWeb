@@ -50,7 +50,8 @@ const columns = [{
 
 var data = [];
 var subjectList = [];
-class SUbjectTable extends React.Component{
+
+class SUbjectTable extends React.Component {
 
 
     constructor(props) {
@@ -73,7 +74,7 @@ class SUbjectTable extends React.Component{
         }
         this.start = this.start.bind(this);
         this.onSelectChange = this.onSelectChange.bind(this);
-        this.getSubjectData=this.getSubjectData.bind(this);
+        this.getSubjectData = this.getSubjectData.bind(this);
         this.getSubjectDataBySchedule = this.getSubjectDataBySchedule.bind(this);
         this.editSubject = this.editSubject.bind(this);
         this.isDeleteAll = this.isDeleteAll.bind(this);
@@ -100,16 +101,15 @@ class SUbjectTable extends React.Component{
     }
 
 
-    componentDidMount(){
-         this.initGetSubjectInfo(this.props.params);
+    componentDidMount() {
+        this.initGetSubjectInfo(this.props.params);
     }
-
 
 
     componentWillReceiveProps(nextProps) {
 
         let obj = nextProps || this.props.params ? this.props.params : null;
-        if (!obj)   return;
+        if (!obj) return;
         this.initGetSubjectInfo(obj)
     }
 
@@ -128,7 +128,7 @@ class SUbjectTable extends React.Component{
         this.setState({selectedRowKeys, selectedRowKeysStr});
     }
 
-    getSubjectData(ident, ScheduleOrSubjectId, pageNo, optType, knowledgeName, isOwmer){
+    getSubjectData(ident, ScheduleOrSubjectId, pageNo, optType, knowledgeName, isOwmer) {
         data = [];
         this.setState({optType: optType, knowledgeName: knowledgeName, ScheduleOrSubjectId: ScheduleOrSubjectId});
         if (optType == "bySchedule") {
@@ -138,7 +138,7 @@ class SUbjectTable extends React.Component{
         }
     }
 
-    getSubjectDataBySchedule (ident, ScheduleOrSubjectId, pageNo) {
+    getSubjectDataBySchedule(ident, ScheduleOrSubjectId, pageNo) {
         let _this = this;
         var param = {
             "method": 'getClassSubjects',
@@ -194,16 +194,16 @@ class SUbjectTable extends React.Component{
         });
     }
 
-    editSubject (e) {
+    editSubject(e) {
 
     }
 
-    isDeleteAll(e){
+    isDeleteAll(e) {
 
         this.setState({isDeleteAllSubject: e.target.checked});
     }
 
-    showDelSubjectConfirmModal(e){
+    showDelSubjectConfirmModal(e) {
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             target = e.currentTarget;
@@ -215,11 +215,11 @@ class SUbjectTable extends React.Component{
         this.refs.delSubjectConfirmModal.changeConfirmModalVisible(true);
     }
 
-    closeDelSubjectConfirmModal(){
+    closeDelSubjectConfirmModal() {
         this.refs.delSubjectConfirmModal.changeConfirmModalVisible(false);
     }
 
-    showConfirmModal(e){
+    showConfirmModal(e) {
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             target = e.currentTarget;
@@ -231,23 +231,23 @@ class SUbjectTable extends React.Component{
         this.refs.confirmModal.changeConfirmModalVisible(true);
     }
 
-    closeConfirmModal(){
+    closeConfirmModal() {
         this.refs.confirmModal.changeConfirmModalVisible(false);
     }
 
-    showDelAllSubjectConfirmModal(){
+    showDelAllSubjectConfirmModal() {
         this.refs.delAllSubjectConfirmModal.changeConfirmModalVisible(true);
     }
 
-    closeDelAllSubjectConfirmModal(){
+    closeDelAllSubjectConfirmModal() {
         this.refs.delAllSubjectConfirmModal.changeConfirmModalVisible(false);
     }
 
-    showdelAllSubjectInScheduleConfirmModal(){
+    showdelAllSubjectInScheduleConfirmModal() {
         this.refs.delAllSubjectInScheduleConfirmModal.changeConfirmModalVisible(true);
     }
 
-    closeDelAllSubjectInScheduleConfirmModal(){
+    closeDelAllSubjectInScheduleConfirmModal() {
         this.refs.delAllSubjectInScheduleConfirmModal.changeConfirmModalVisible(false);
     }
 
@@ -256,7 +256,7 @@ class SUbjectTable extends React.Component{
      * 批量或单独删除备课计划下的题目
      * @param subjectIds
      */
-    deleteSubjectsByConditonForSchedule(subjectIds){
+    deleteSubjectsByConditonForSchedule(subjectIds) {
         let _this = this;
         var param = {
             "method": 'deleteScheduleSubjects',
@@ -284,7 +284,8 @@ class SUbjectTable extends React.Component{
      * 批量或单独删除资源库下的题目
      * @param subjectIds
      */
-    deleteSubjectsByConditon(subjectIds){
+    deleteSubjectsByConditon(subjectIds) {
+        debugger
         let _this = this;
         //同时删除此人教学进度和知识点下面的这些题目
         var param
@@ -303,7 +304,6 @@ class SUbjectTable extends React.Component{
         }
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-
                 if (ret.msg == "调用成功" && ret.success == true) {
                     message.success("题目删除成功");
                 } else {
@@ -319,7 +319,7 @@ class SUbjectTable extends React.Component{
     }
 
     //删除备课计划下的题目
-    deleteSubject (e) {
+    deleteSubject(e) {
         this.deleteSubjectsByConditonForSchedule(this.state.delSubjectId);
         this.closeConfirmModal();
     }
@@ -327,7 +327,7 @@ class SUbjectTable extends React.Component{
     /**
      * 根据复选框的选择，批量删除资源库下的题目
      */
-    deleteAllSelectedSubjectS(){
+    deleteAllSelectedSubjectS() {
         //已选中的题目的id字符串，使用逗号进行分割
         var subjectIds = this.state.selectedRowKeysStr;
         if (this.state.optType == "bySchedule") {
@@ -341,7 +341,7 @@ class SUbjectTable extends React.Component{
     }
 
     //删除资源库下的题目
-    delMySubjects () {
+    delMySubjects() {
         this.deleteSubjectsByConditon(this.state.delSubjectId);
         this.closeDelSubjectConfirmModal();
     }
@@ -353,7 +353,7 @@ class SUbjectTable extends React.Component{
      * @param pageNo
      * @param isOwmer
      */
-    getSubjectDataByKnowledge (ident, ScheduleOrSubjectId, pageNo, isOwmer) {
+    getSubjectDataByKnowledge(ident, ScheduleOrSubjectId, pageNo, isOwmer) {
         let _this = this;
         var param = {
             "method": 'getUserSubjectsByKnowledgePoint',
@@ -425,9 +425,8 @@ class SUbjectTable extends React.Component{
     }
 
 
+    initGetSubjectInfo(subjectParams, currentPageNo) {
 
-    initGetSubjectInfo (subjectParams, currentPageNo) {
-        
         var subjectParamArray = this.props.params.split("#");
         this.setState({subjectParams: this.props.params});
         if (subjectParams) {
@@ -459,7 +458,7 @@ class SUbjectTable extends React.Component{
         }
     }
 
-    showModal (e) {
+    showModal(e) {
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             target = e.currentTarget;
@@ -470,7 +469,7 @@ class SUbjectTable extends React.Component{
         this.refs.useKnowledgeComponents.showModal(currentKnowledge, "knowledgeSubject", this.state.knowledgeName);
     }
 
-    showModifySubjectModal (e) {
+    showModifySubjectModal(e) {
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             target = e.currentTarget;
@@ -488,7 +487,7 @@ class SUbjectTable extends React.Component{
         });
     }
 
-    subjectEditCallBack(){
+    subjectEditCallBack() {
 
         this.getSubjectDataByKnowledge(sessionStorage.getItem("ident"), this.state.ScheduleOrSubjectId, this.state.currentPage, "Y");
     }
@@ -507,12 +506,14 @@ class SUbjectTable extends React.Component{
                 delBtn = <div><Button type="primary" onClick={this.showdelAllSubjectInScheduleConfirmModal}
                                       disabled={!hasSelected} loading={loading}
                 >批量删除</Button><span className="password_ts"
-                    style={{marginLeft: 8}}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span></div>;
+                                    style={{marginLeft: 8}}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span>
+                </div>;
             } else {
                 delBtn = <div><Button type="primary" onClick={this.showDelAllSubjectConfirmModal}
                                       disabled={!hasSelected} loading={loading}
                 >批量删除</Button><span className="password_ts"
-                    style={{marginLeft: 8}}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span></div>;
+                                    style={{marginLeft: 8}}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span>
+                </div>;
             }
             subjectTable =
                 <div className="pl_hei"><Table rowSelection={rowSelection} columns={columns} dataSource={data}
@@ -540,14 +541,14 @@ class SUbjectTable extends React.Component{
                 <span>确定要删除选定的题目?</span>
             </div>;
         } else {
-            title = <span >
+            title = <span>
                 <span className="antnest_talk">确定要删除选定的题目?</span>
                 <Checkbox defaultChecked={false} onChange={this.isDeleteAll}>同步删除备课计划下的题目</Checkbox>
             </span>;
         }
 
         return (
-            <div >
+            <div>
                 <ConfirmModal ref="confirmModal"
                               title="确定要删除该题目?"
                               onConfirmModalCancel={this.closeConfirmModal}
