@@ -25,8 +25,6 @@ class MemberSettingModal extends React.Component {
             ],
         };
         this.closeMemberSettingModal = this.closeMemberSettingModal.bind(this);
-        this.onLoadData = this.onLoadData.bind(this);
-        this.renderTreeNodes = this.renderTreeNodes.bind(this);
     }
 
     componentDidMount() {
