@@ -23,21 +23,22 @@ var processColumns = [{
     title: '标题',
     dataIndex: 'processName',
     key: 'processName',
-    width: '200px',
+    width: '20%',
 }, {
     title: '发起时间',
     dataIndex: 'processStartTime',
     key: 'processStartTime',
-    width: '150px',
+    width: '20%',
 }, {
     title: '完成时间',
     dataIndex: 'processEndTime',
     key: 'processEndTime',
-    width: '150px',
+    width: '20%',
 }, {
     title: '历史审批人',
     dataIndex: 'approvalUsers',
     key: 'approvalUsers',
+    width: '30%',
 }
 ];
 
@@ -45,27 +46,28 @@ var exportLogColumns  = [{
     title: '导出文件名称',
     dataIndex: 'exportFileName',
     key: 'exportFileName',
-    width: '230px',
+    width: '35%',
 }, {
     title: '导出人员',
     dataIndex: 'exportUser',
     key: 'exportUser',
-    width: '80px',
+    width: '10%',
 }, {
     title: '导出时间',
     dataIndex: 'exportTime',
     key: 'exportTime',
-    width: '150px',
+    width: '20%',
 }, {
     title: '审批名称',
     dataIndex: 'processName',
     key: 'processName',
-    width: '200px',
+    width: '25%',
 }, {
     title: '操作',
     dataIndex: 'opt',
     key: 'opt',
-    width: '50px',
+    width: '10%',
+    className:'date_export_btn'
     }
 ];
 
@@ -389,78 +391,77 @@ const ExportComponent = React.createClass({
         const hasSelected = _this.state.selectedRowKeys.length > 0;
 
         return (
-            <div className="conditions_group">
-                <Tabs defaultActiveKey="dataExport" className="data_export" onChange={this.exportTabsChange}>
+                <Tabs defaultActiveKey="dataExport" onChange={this.exportTabsChange} className="data_export">
                     <TabPane tab="数据导出" key="dataExport">
-                        <div className="date_export_input">
-                            <Row>
-                                <Col span={3} className="framework_m_l">审批类型：</Col>
-                                <Col span={9}>
-                                    <Row className="margin_0">
-                                        <Col span={12}>
-                                            <Select style={{width: 150}} defaultValue={this.state.flowType} value={this.state.flowType} onChange={this.flowTypeChange}>
-                                                {this.state.optionGroupArray}
-                                            </Select>
+                        <div>
+                            <div className="group_cont data_export">
+                                <div className="date_export_input">
+                                    <Row>
+                                        <Col span={3} className="framework_m_l">审批类型：</Col>
+                                        <Col span={9}>
+                                            <Row className="margin_0">
+                                                <Col span={12}>
+                                                    <Select style={{width: 150}} defaultValue={this.state.flowType} value={this.state.flowType} onChange={this.flowTypeChange}>
+                                                        {this.state.optionGroupArray}
+                                                    </Select>
+                                                </Col>
+                                                <Col span={12}>
+                                                    <Select style={{width: 150}} onChange={this.flowStatusChange}>
+                                                        <Option value="-1">请选择运行状态</Option>
+                                                        <Option value="1">全部</Option>
+                                                        <Option value="2">已完成</Option>
+                                                        <Option value="3">进行中</Option>
+                                                    </Select>
+                                                </Col>
+                                            </Row>
                                         </Col>
-                                        <Col span={12}>
-                                            <Select style={{width: 150}} onChange={this.flowStatusChange}>
-                                                <Option value="-1">请选择运行状态</Option>
-                                                <Option value="1">全部</Option>
-                                                <Option value="2">已完成</Option>
-                                                <Option value="3">进行中</Option>
-                                            </Select>
+
+                                    </Row>
+                                    <Row>
+                                        <Col span={3} className="framework_m_l">发起时间：</Col>
+                                        <Col span={8} className="margin_0">
+                                            <RangePicker onChange={this.processStartTimeOnChange} />
+                                        </Col>
+
+                                        <Col span={3} className="framework_m_l">完成时间：</Col>
+                                        <Col span={8} className="margin_0">
+                                            <RangePicker onChange={this.processEndTimeOnChange} />
                                         </Col>
                                     </Row>
-                                </Col>
-
-                            </Row>
-
-                            <Row>
-                                <Col span={3} className="framework_m_l">发起时间：</Col>
-                                <Col span={8} className="margin_0">
-                                    <RangePicker onChange={this.processStartTimeOnChange} />
-                                </Col>
-
-                                <Col span={3} className="framework_m_l">完成时间：</Col>
-                                <Col span={8} className="margin_0">
-                                    <RangePicker onChange={this.processEndTimeOnChange} />
-                                </Col>
-                            </Row>
-
-                            <Row>
-                                <Col span={22} justify="end" className="right_look">
-                                    <Button onClick={this.searchProcessByPage} className="ant-btn-primary ant-btn antnest_talk">查询</Button>
-                                    <Button
-                                        type="primary"
-                                        onClick={this.exportTips}
-                                        disabled={!hasSelected}  className="ant-btn-primary ant-btn">
-
-                                        导出
-                                    </Button>
-                                </Col>
-                            </Row>
-
-                        </div>
-                        <div className="date_export_table">
-
-                            <Table rowSelection={rowSelection} columns={processColumns}
-                                   pagination={false}
-                                   dataSource={this.state.processList} scroll={{ y: 200 }}
-                                   />
-                            {/*<Pagination defaultCurrent={1} pageSize={getPageSize()} total={this.state.totalProcessCount} onChange={this.processPageOnChange} />*/}
-                            <Pagination defaultCurrent={1} pageSize={getPageSize()} total={this.state.totalProcessCount} onChange={this.processPageOnChange} />
+                                    <Row>
+                                        <Col span={22} justify="end" className="right_look">
+                                            <Button onClick={this.searchProcessByPage} className="ant-btn-primary ant-btn antnest_talk">查询</Button>
+                                            <Button
+                                                type="primary"
+                                                onClick={this.exportTips}
+                                                disabled={!hasSelected}  className="ant-btn-primary ant-btn">
+                                                导出
+                                            </Button>
+                                        </Col>
+                                    </Row>
+                                </div>
+                                <div className="date_export_table">
+                                    <Table rowSelection={rowSelection} columns={processColumns}
+                                           pagination={{total: this.state.totalProcessCount, pageSize: getPageSize(), onChange: this.processPageOnChange}}
+                                           dataSource={this.state.processList} scroll={{ y: 200 }}
+                                           />
+                                    {/*<Pagination defaultCurrent={1} pageSize={getPageSize()} total={this.state.totalProcessCount} onChange={this.processPageOnChange} />*/}
+                                    {/*<Pagination defaultCurrent={1} pageSize={getPageSize()} total={this.state.totalProcessCount} onChange={this.processPageOnChange} />*/}
+                                </div>
+                            </div>
                         </div>
                     </TabPane>
                     <TabPane tab="数据导出记录" key="exportLog">
-                        <Table columns={exportLogColumns}
-                               pagination={false}
-                               dataSource={this.state.exportLogList} scroll={{ y: 300 }}
-                        />
-                        {/*pagination={{total: this.state.totalExportLogCount, pageSize: getPageSize(), onChange: this.exportLogPageOnChange}}*/}
-                        <Pagination defaultCurrent={1} pageSize="30" total={this.state.totalExportLogCount} onChange={this.exportLogPageOnChange} />
+                        <div>
+                                <Table columns={exportLogColumns}
+                                       pagination={{total: this.state.totalExportLogCount, pageSize: getPageSize(), onChange: this.exportLogPageOnChange}}
+                                       dataSource={this.state.exportLogList} scroll={{ y: 300 }}
+                                />
+                                {/*<Pagination defaultCurrent={1} pageSize="30" total={this.state.totalExportLogCount} onChange={this.exportLogPageOnChange} />*/}
+                                {/*pagination={{total: this.state.totalExportLogCount, pageSize: getPageSize(), onChange: this.exportLogPageOnChange}}*/}
+                        </div>
                     </TabPane>
                 </Tabs>
-            </div>
         );
     },
 });
