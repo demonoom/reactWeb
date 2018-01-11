@@ -523,7 +523,7 @@ const FlowSettingComponent = React.createClass({
             {this.state.collapsePanelArray}
         </Collapse>;
         if(isEmpty(this.state.pageType)==false && this.state.pageType == "exportPage"){
-            mainContent = <div><ExportComponent></ExportComponent></div>;
+            mainContent = <ExportComponent></ExportComponent>;
         }
 
         return (
@@ -537,7 +537,6 @@ const FlowSettingComponent = React.createClass({
                     <span className="topics_dianzan"><Button className="schoolgroup_btn_blue_solid"
                                                              onClick={this.createNewFlow}>创建新审批</Button></span>
                 </div>
-
                 <div className="process_wrap">
                     {mainContent}
                 </div>

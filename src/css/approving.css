@@ -1,8 +1,9 @@
 .data_export .ant-tabs-nav .ant-tabs-tab{
-    font-size: 14px;
+    font-size: 16px;
 }
 .data_export .ant-row{
     font-size: 12px;
+    margin-top: 15px;
 }
 .margin_0{
     margin-top: -2px !important;
@@ -11,5 +12,22 @@
     margin-bottom: 15px;
 }
 .date_export_table{
-    height: calc(100% - 130px);
+    height: calc(100% - 143px);
+
+}
+.date_export_div div{
+    height:100%
+}
+.date_export_table .ant-table-thead > tr > th, .ant-table-tbody > tr > td, .date_export_table .ant-table-tbody > tr > td.ant-table-selection-column{
+    font-size: 12px;
+    color: #666;
+}
+.date_export_btn button{
+    border: none;
+    background: none;
+    padding: 0 !important;
+    margin: 0 8px;
+}
+.date_export_btn button:hover{
+    background: none;
 }
