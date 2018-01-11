@@ -30,7 +30,7 @@ export const LARGE_IMG = 'size=500x500';
 //webService请求的版本号
 export const WEB_VERSION = "1.08";
 //音频题目权限开放账号集合，其中23836和54208为系统测试用户账号
-export const AUDIO_SUBJECT_ALLOWED = ["134770","134755","135359","135872","135001","135302","135303","135304","135244","135167","23836","54208"];
+export const AUDIO_SUBJECT_ALLOWED = ["134770", "134755", "135359", "135872", "135001", "135302", "135303", "135304", "135244", "135167", "23836", "54208"];
 var baseEmotionMap = new Map();
 baseEmotionMap.set("[bexp_0001]", "baseEmotions/bexp_0001.png");
 baseEmotionMap.set("[bexp_0002]", "baseEmotions/bexp_0002.png");
@@ -113,8 +113,17 @@ export function checkUrl(urlString) {
             return false;
         } else {
             return true;
+            console.log(urlString.match(strRegex));
+            console.log(urlString.match(reg));
         }
     }
+}
+
+export function getUrl(urlString) {
+    var strRegex = "(((https?|ftp|file)://)|www.)[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*\\.[-a-zA-Z0-9+&@#/%=~_|]";
+    var reg = new RegExp(strRegex);
+    console.log(urlString.match(reg).input);
+    // return urlString.match(reg).input;
 }
 
 /**

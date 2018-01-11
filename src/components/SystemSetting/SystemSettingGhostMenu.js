@@ -136,12 +136,12 @@ class SystemSettingGhostMenu extends React.Component {
                 {/*</li>*/}
             {/*</ul>*/}
 
-            <ul className="second">
-                <li onClick={event => {
-                    this.changeMenu(event, 'noomStructure', true)
-                }}><img className="icon_system_img" src='http://60.205.86.217/upload2/common/img/examine_icon.png'/>组织架构
-                </li>
-            </ul>
+            {/*<ul className="second">*/}
+                {/*<li onClick={event => {*/}
+                    {/*this.changeMenu(event, 'noomStructure', true)*/}
+                {/*}}><img className="icon_system_img" src='http://60.205.86.217/upload2/common/img/examine_icon.png'/>组织架构*/}
+                {/*</li>*/}
+            {/*</ul>*/}
         </li>;
         liArr.push(flowUl);
         arr.push(liArr);
