@@ -7381,7 +7381,7 @@ select.course_n:hover {
 .span_link_div {
     max-width: calc(100% - 42px);
     height: 40px;
-    float: right;
+    float:left;
 }
 
 .borderballoon_file .span_link {
@@ -8025,10 +8025,23 @@ select.course_n:hover {
 }
 
 .noom_MYZcard {
-    border-top: 30px #2acaee solid;
-    width: 250px;
+    width: 260px;
 }
-
+.noom_MYZcard .span_link{
+    margin-left: 10px;
+    width: calc(100% - 50px);
+    display: inline-block;
+    float: left;
+    line-height: 18px;
+    margin-top: 2px;
+    overflow: visible;
+    text-overflow: inherit;
+    white-space: pre-wrap;
+}
+.noom_MYZcard .file_noom{
+    width:100%;
+    text-align: center;
+}
 .noom_MYZcontent {
     white-space: normal;
 }

@@ -90,6 +90,10 @@ const memberColumns = [{
     title: '手机号',
     dataIndex: 'userPhone',
     key: 'userPhone'
+}, {
+    title: '',
+    dataIndex: 'isMaster',
+    key: 'isMaster'
 }
 ];
 
@@ -799,7 +803,6 @@ const PersonCenterComponents = React.createClass({
      */
     getStructureById(structureId) {
         let _this = this;
-
         var structureId = structureId + '';
 
         if (isEmpty(structureId)) {
@@ -815,6 +818,8 @@ const PersonCenterComponents = React.createClass({
             onResponse: function (ret) {
                 var parentGroup = ret.response;
 
+                var owner= parentGroup.chatGroup.owner.colUid;
+
                 // 根据组织根节点的id请求该组织根节点里的子部门， 调用 列举子部门函数
                 if (structureId == "-1") {
                     _this.listStructures(parentGroup.id);
@@ -822,18 +827,20 @@ const PersonCenterComponents = React.createClass({
                     _this.getStrcutureMembers(parentGroup.id, defaultPageNo);
                     _this.setState({structureId: parentGroup.id});
                 }
-                // _this.setState({parentGroup});
+
 
                 if (isEmpty(parentGroup) == false) {
                     var isExit = _this.checkStructureIsExitAtArray(parentGroup);
                     if (isExit == false) {
                         //存放组织架构的层次关系
                         structuresObjArray.push(parentGroup);
+
                     }
                 }
 
-                _this.setState({parentGroup, structuresObjArray});
+                _this.setState({parentGroup, structuresObjArray,owner});
             },
+
             onError: function (error) {
                 message.error(error);
             }
@@ -950,6 +957,7 @@ const PersonCenterComponents = React.createClass({
             var structureIdArr = structureId.split(',');
             structureId = structureIdArr[0];
         }
+
         var param = {
             "method": 'getStrcutureMembers',
             "operateUserId": _this.state.loginUser.colUid,
@@ -958,20 +966,35 @@ const PersonCenterComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+
                 var response = ret.response;
+                var  owner=_this.state.owner;
+
                 if (isEmpty(response) == false) {
                     response.forEach(function (member) {
                         var user = member.user;
-                        
-                        subGroupMemberList.push({
+                        if(owner==user.colUid){
+                           subGroupMemberList.push({
                             key: member.id,
                             userId: user.colUid,
                             userName: user.userName,
-                            userPhone:user.phoneNumber
-                        });
+                            userPhone:user.phoneNumber,
+                            isMaster:'主管'
+                            });
+
+                        }else {
+                            subGroupMemberList.push({
+                            key: member.id,
+                            userId: user.colUid,
+                            userName: user.userName,
+                            userPhone:user.phoneNumber,
+
+                            });
+                        }
+
                     });
                 }
-
+                console.log(subGroupMemberList);
                 var pager = ret.pager;
                 var pageCount=pager.pageCount;
                 if (pageCount == pageNo) {
@@ -2348,7 +2371,9 @@ const PersonCenterComponents = React.createClass({
             if(isEmpty(structuresObjArray)==false && structuresObjArray.length > 0 ){
                 var structuresObjArrayLength = structuresObjArray.length;
                 structureName = structuresObjArray[structuresObjArrayLength-1].name;
+
             }
+
             personDate = <div className="department_scroll">
                 <div className="public—til—blue">{structureName}</div>
                 {/*面包屑*/}
@@ -2368,6 +2393,8 @@ const PersonCenterComponents = React.createClass({
                                pagination={false} dataSource={this.state.subGroupMemberList}
                                className="schoolgroup_table1 schoolgroup_table_department"
                                onRowClick={this.onRowClick}
+                               scroll={{ y: 240 }}
+
                         />
                         <div className="schoolgroup_operate schoolgroup_more">
                             <a onClick={this.loadMoreMember} className="schoolgroup_more_a">{this.state.wordSrc}</a>
