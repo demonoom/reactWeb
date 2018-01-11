@@ -23,7 +23,7 @@ var processColumns = [{
     title: '标题',
     dataIndex: 'processName',
     key: 'processName',
-    width: '20%',
+    width: '30%',
 }, {
     title: '发起时间',
     dataIndex: 'processStartTime',
@@ -46,12 +46,12 @@ var exportLogColumns  = [{
     title: '导出文件名称',
     dataIndex: 'exportFileName',
     key: 'exportFileName',
-    width: '35%',
+    width: '30%',
 }, {
     title: '导出人员',
     dataIndex: 'exportUser',
     key: 'exportUser',
-    width: '10%',
+    width: '15%',
 }, {
     title: '导出时间',
     dataIndex: 'exportTime',
@@ -86,7 +86,7 @@ const ExportComponent = React.createClass({
             endTimeOfProcessStart: '',
             startTimeOfProcessEnd: '',
             endTimeOfProcessEnd: '',
-            flowStatus: '',
+            flowStatus: '-1',
             selectedRowKeys: [],
             processList:[]
         };
@@ -389,6 +389,13 @@ const ExportComponent = React.createClass({
             onChange: _this.onSelectChange,
         };
         const hasSelected = _this.state.selectedRowKeys.length > 0;
+        var processTable = null;
+        if(isEmpty(_this.state.processList)==false){
+            processTable = <Table rowSelection={rowSelection} columns={processColumns}
+                                  pagination={{total: this.state.totalProcessCount, pageSize: getPageSize(), onChange: this.processPageOnChange}}
+                                  dataSource={this.state.processList} scroll={{ y: 200 }}
+            />;
+        }
 
         return (
                 <Tabs defaultActiveKey="dataExport" onChange={this.exportTabsChange} className="data_export">
@@ -399,14 +406,14 @@ const ExportComponent = React.createClass({
                                     <Row>
                                         <Col span={3} className="framework_m_l">审批类型：</Col>
                                         <Col span={9}>
-                                            <Row className="margin_0">
+                                            <Row className="margin_0_4">
                                                 <Col span={12}>
                                                     <Select style={{width: 150}} defaultValue={this.state.flowType} value={this.state.flowType} onChange={this.flowTypeChange}>
                                                         {this.state.optionGroupArray}
                                                     </Select>
                                                 </Col>
                                                 <Col span={12}>
-                                                    <Select style={{width: 150}} onChange={this.flowStatusChange}>
+                                                    <Select defaultValue={_this.state.flowStatus} value={_this.state.flowStatus} style={{width: 150}} onChange={this.flowStatusChange}>
                                                         <Option value="-1">请选择运行状态</Option>
                                                         <Option value="1">全部</Option>
                                                         <Option value="2">已完成</Option>
@@ -419,12 +426,12 @@ const ExportComponent = React.createClass({
                                     </Row>
                                     <Row>
                                         <Col span={3} className="framework_m_l">发起时间：</Col>
-                                        <Col span={8} className="margin_0">
+                                        <Col span={8} className="margin_0_4">
                                             <RangePicker onChange={this.processStartTimeOnChange} />
                                         </Col>
 
                                         <Col span={3} className="framework_m_l">完成时间：</Col>
-                                        <Col span={8} className="margin_0">
+                                        <Col span={8} className="margin_0_4">
                                             <RangePicker onChange={this.processEndTimeOnChange} />
                                         </Col>
                                     </Row>
@@ -441,10 +448,11 @@ const ExportComponent = React.createClass({
                                     </Row>
                                 </div>
                                 <div className="date_export_table">
-                                    <Table rowSelection={rowSelection} columns={processColumns}
-                                           pagination={{total: this.state.totalProcessCount, pageSize: getPageSize(), onChange: this.processPageOnChange}}
-                                           dataSource={this.state.processList} scroll={{ y: 200 }}
-                                           />
+                                    {/*<Table rowSelection={rowSelection} columns={processColumns}*/}
+                                           {/*pagination={{total: this.state.totalProcessCount, pageSize: getPageSize(), onChange: this.processPageOnChange}}*/}
+                                           {/*dataSource={this.state.processList} scroll={{ y: 200 }}*/}
+                                           {/*/>*/}
+                                    {processTable}
                                     {/*<Pagination defaultCurrent={1} pageSize={getPageSize()} total={this.state.totalProcessCount} onChange={this.processPageOnChange} />*/}
                                     {/*<Pagination defaultCurrent={1} pageSize={getPageSize()} total={this.state.totalProcessCount} onChange={this.processPageOnChange} />*/}
                                 </div>
