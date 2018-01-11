@@ -115,7 +115,7 @@ const OpenClassComponents = React.createClass({
             isSeriesStr="实景课";
             if(canOpenClass==true && courseStatus!="3"){
                 optButtons=<div>
-                    <Col span={24}><Button icon="play-circle-o" className="exam-particulars_title" title="直播" onClick={_this.openLive.bind(_this,row,"singleClass")}></Button></Col>
+                    <Col span={24}><Button icon="play-circle-o" className="exam-particulars_title" title="直播" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
                 </div>;
             }
         }else{
