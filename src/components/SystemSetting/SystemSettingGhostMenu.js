@@ -122,12 +122,12 @@ class SystemSettingGhostMenu extends React.Component {
 
         //手动添加的测试菜单---开始
         var flowUl = <li className="multi">
-            {/*<ul className="second">*/}
-            {/*<li onClick={event => {*/}
-            {/*this.changeMenu(event, 'noomkaoqing', true)*/}
-            {/*}}><img className="icon_system_img" src='http://60.205.86.217/upload2/common/img/examine_icon.png'/>考勤打卡*/}
-            {/*</li>*/}
-            {/*</ul>*/}
+            <ul className="second">
+            <li onClick={event => {
+            this.changeMenu(event, 'noomkaoqing', true)
+            }}><img className="icon_system_img" src='http://60.205.86.217/upload2/common/img/examine_icon.png'/>考勤打卡
+            </li>
+            </ul>
 
             {/*<ul className="second">*/}
                 {/*<li onClick={event => {*/}
