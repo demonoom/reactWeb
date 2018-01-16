@@ -6273,8 +6273,10 @@ span.pagination {
     width: 90%;
     margin: 24px auto 0 auto;
 }
-
-.modal_course .ant-row {
+.row_div{
+    min-height: 27px;
+}
+.modal_course .ant-row, .row_div{
     margin-top: 15px;
     font-size: 14px;
 }
@@ -8144,4 +8146,9 @@ select.course_n:hover {
     -webkit-border-radius: 0 !important;;
     -moz-border-radius: 0 !important;;
     border-radius: 0 !important;;
+}
+.examupload_start{
+    position: relative;
+    top: 4px;
+    font-size: 14px;
 }

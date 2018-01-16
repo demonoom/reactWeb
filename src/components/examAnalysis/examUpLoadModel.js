@@ -189,24 +189,32 @@ const ExamUpLoadModel = React.createClass({
                 className="schoolgroup_modal checking_in_modal"
             >
                 <div className="modal_register_main">
-                    <div>
-                        名称:<Input value={this.state.name} onChange={this.nameOnChange}/>
+                    <div className="row_div">
+                        <div className="ant-col-6 right_look">名称：</div>
+                        <div className="ant-col-14"><Input value={this.state.name} onChange={this.nameOnChange}/></div>
                     </div>
-                    <div>
-                        总分值:<Input value={this.state.totalValue} onChange={this.totalValueOnChange}/>
+                    <div className="row_div">
+                        <div className="ant-col-6 right_look">总分值：</div>
+                        <div className="ant-col-14"><Input value={this.state.totalValue} onChange={this.totalValueOnChange}/></div>
                     </div>
-                    <div>
-                        合格分数线:<Input value={this.state.qualifiedScoreLine} onChange={this.qualifiedScoreLineOnChange}/>
+                    <div className="row_div">
+                        <div className="ant-col-6 right_look">合格分数线：</div>
+                        <div className="ant-col-14"><Input value={this.state.qualifiedScoreLine} onChange={this.qualifiedScoreLineOnChange}/></div>
                     </div>
-                    <div>
-                        优秀分数线:<Input value={this.state.excellentFractionalLine}
-                                     onChange={this.excellentFractionalLineOnChange}/>
+                    <div className="row_div">
+                        <div className="ant-col-6 right_look">优秀分数线：</div>
+                        <div className="ant-col-14"><Input value={this.state.excellentFractionalLine} onChange={this.excellentFractionalLineOnChange}/></div>
                     </div>
-                    <div>
-                        文件上传(先上传知识点,再上传成绩单):
-                        <Upload {...props} fileList={this.state.fileList}>
-                            <Icon type="upload" className='noom_cursor'/>
-                        </Upload>
+                    <div className="row_div">
+                        <div className="ant-col-6 right_look">文件上传：</div>
+                        <div className="ant-col-4">
+                            <Upload {...props} fileList={this.state.fileList}>
+                                <Button>
+                                    <Icon type="upload" />上传
+                                </Button>
+                            </Upload>
+                        </div>
+                        <div className="ant-col-10 ding_t_red ding_t_12 right_look"><span className="examupload_start">＊</span>先上传知识点，再上传成绩单</div>
                     </div>
                 </div>
             </Modal>
