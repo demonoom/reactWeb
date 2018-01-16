@@ -246,15 +246,17 @@ const ExamUpLoadModel = React.createClass({
                         <div className="ant-col-14"><Input value={this.state.excellentFractionalLine} onChange={this.excellentFractionalLineOnChange}/></div>
                     </div>
                     <div className="row_div">
+                        <div className="ding_t_red ding_t_12 exam_analysis_red">＊先上传知识点，再上传成绩单</div>
+                    </div>
+                    <div>
                         <div className="ant-col-6 right_look">文件上传：</div>
-                        <div className="ant-col-4">
+                        <div className="ant-col-14">
                             <Upload {...props} fileList={this.state.fileList}>
                                 <Button>
                                     <Icon type="upload" />上传
                                 </Button>
                             </Upload>
                         </div>
-                        <div className="ant-col-10 ding_t_red ding_t_12 right_look"><span className="examupload_start">＊</span>先上传知识点，再上传成绩单</div>
                     </div>
                 </div>
             </Modal>

@@ -8191,3 +8191,6 @@ select.course_n:hover {
 .exam_analysis .ant-table-thead > tr > th.right, .exam_analysis .ant-table-tbody > tr > td.right{
     width: 120px;
 }
+.exam_analysis_red{
+    text-indent: 25%;
+}
