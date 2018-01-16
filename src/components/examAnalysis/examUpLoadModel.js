@@ -61,6 +61,7 @@ const ExamUpLoadModel = React.createClass({
     },
 
     addPaperAnalysisTask() {
+        var _this = this;
         var task = {
             creatorId: this.state.loginUser.colUid,
             name: this.state.name,
@@ -70,20 +71,19 @@ const ExamUpLoadModel = React.createClass({
             knowledgeFile: this.state.urlArr[0].url,
             resultFile: this.state.urlArr[1].url,
         };
-        // console.log(task);
         var param = {
             "method": "addPaperAnalysisTask",
             "task": JSON.stringify(task)
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                console.log(ret);
-                // var data = ret.response;
-                /*if (ret.msg == "调用成功" && ret.success == true) {
-
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    message.success('成绩单上传成功');
+                    _this.closeAddShiftModal();
+                    _this.props.addFinish();
                 } else {
                     message.error(ret.msg);
-                }*/
+                }
             },
             onError: function (error) {
                 message.error(error);
@@ -99,6 +99,10 @@ const ExamUpLoadModel = React.createClass({
         this.props.closeExamAnalysisModel();
         this.state.fileList.splice(0);
         this.state.urlArr.splice(0);
+        this.state.name = '';
+        this.state.excellentFractionalLine = '';
+        this.state.qualifiedScoreLine = '';
+        this.state.totalValue = '';
     },
 
     /**

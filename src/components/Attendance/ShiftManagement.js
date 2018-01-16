@@ -117,7 +117,7 @@ const ShiftManagement = React.createClass({
                         }
                     })
                     _this.setState({shiftData: arr});
-                    message.error('删除成功');
+                    message.success('删除成功');
                 } else {
                     message.error(ret.msg);
                 }
