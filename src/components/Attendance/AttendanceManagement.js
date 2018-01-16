@@ -816,7 +816,7 @@ const AttendanceManagement = React.createClass({
         }, {
             title: '考勤时间',
             dataIndex: 'time',
-            key: 'time',
+            key: 'tirecordme',
             className: 'checking_in_name  checking_in_name_time',
         }, {
             title: '操作',

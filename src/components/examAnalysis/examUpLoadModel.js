@@ -32,12 +32,17 @@ const ExamUpLoadModel = React.createClass({
      * 确定的回调
      */
     handleOk() {
+        //先验证
         if (this.state.urlArr.length != 2) {
             message.error('请上传两个文件');
             return
         }
         if (this.state.name.length == 0) {
             message.error('请输入名称');
+            return
+        }
+        if (this.state.name.length > 10) {
+            message.error('名称不能超过10个字');
             return
         }
         if (this.state.totalValue.length == 0) {
@@ -52,7 +57,38 @@ const ExamUpLoadModel = React.createClass({
             message.error('请输入优秀分数线');
             return
         }
+        this.addPaperAnalysisTask()
+    },
 
+    addPaperAnalysisTask() {
+        var task = {
+            creatorId: this.state.loginUser.colUid,
+            name: this.state.name,
+            excellentLine: this.state.excellentFractionalLine,
+            passingLine: this.state.qualifiedScoreLine,
+            totalScore: this.state.totalValue,
+            knowledgeFile: this.state.urlArr[0].url,
+            resultFile: this.state.urlArr[1].url,
+        };
+        // console.log(task);
+        var param = {
+            "method": "addPaperAnalysisTask",
+            "task": JSON.stringify(task)
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                console.log(ret);
+                // var data = ret.response;
+                /*if (ret.msg == "调用成功" && ret.success == true) {
+
+                } else {
+                    message.error(ret.msg);
+                }*/
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     /**
