@@ -4558,10 +4558,9 @@ a.color_gary_f, .color_gary_f {
     top: 6px;
 }
 
-.favorite_scroll {
+.favorite_scroll{
     height: calc(100% - 46px);
 }
-
 .favorite_scroll2 {
     height: calc(100% - 91px);
 }
@@ -6273,8 +6272,10 @@ span.pagination {
     width: 90%;
     margin: 24px auto 0 auto;
 }
-
-.modal_course .ant-row {
+.row_div{
+    min-height: 27px;
+}
+.modal_course .ant-row, .row_div{
     margin-top: 15px;
     font-size: 14px;
 }
@@ -8144,4 +8145,49 @@ select.course_n:hover {
     -webkit-border-radius: 0 !important;;
     -moz-border-radius: 0 !important;;
     border-radius: 0 !important;;
+}
+.examupload_start{
+    position: relative;
+    top: 4px;
+    font-size: 14px;
+}
+.exam_analysis{
+    height: calc(100% - 46px);
+}
+.exam_analysis .clearfix > div:first-child{
+    height: 100%;
+}
+.exam_analysis .ant-table-thead{
+    position: fixed;
+    z-index: 4;
+}
+.exam_analysis .ant-table-tbody{
+    padding-top: 53px;
+    z-index: -1;
+    width: 100%;
+    float: left;
+}
+.exam_analysis .ant-spin-container, .ant-table-content{
+    overflow: auto;
+}
+@media only screen and (min-width: 1366px){
+.exam_analysis .ant-table-thead > tr > th.checking_in_name, .exam_analysis .ant-table-tbody > tr > td.checking_in_name{
+        width: 750px;
+    }
+}
+@media only screen and (max-width: 1365px){
+    .exam_analysis .ant-table-thead > tr > th.checking_in_name, .exam_analysis .ant-table-tbody > tr > td.checking_in_name{
+        width: 570px;
+    }
+}
+.exam_analysis .ant-table-tbody > tr > td.checking_in_name{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    height: 48px;
+    line-height: 32px;
+}
+.exam_analysis .ant-table-thead > tr > th.right, .exam_analysis .ant-table-tbody > tr > td.right{
+    width: 120px;
 }

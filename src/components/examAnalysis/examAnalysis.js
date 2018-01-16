@@ -148,11 +148,11 @@ const ExamAnalysisComponents = React.createClass({
             title: '名称',
             dataIndex: 'name',
             key: 'name',
-            className: 'checking_in_name',
+            className: 'checking_in_name focus_3',
         }, {
             title: '操作',
             key: 'action',
-            className: 'ant-table-selection-smallclass checking_in_operate class_right',
+            className: 'class_right right',
             render: (text, record) => (
                 <span>
                     <Button type="button" className="score3_i" icon="area-chart"
@@ -170,9 +170,11 @@ const ExamAnalysisComponents = React.createClass({
                     </div>
                     成绩分析列表
                 </div>
-                <Table className="checking_in_box cloud_box upexam_to_ma" columns={columns}
-                       dataSource={this.state.scoreData}
-                       pagination={false}/>
+                <div className="exam_analysis">
+                    <Table columns={columns}
+                           dataSource={this.state.scoreData}
+                           pagination={false}/>
+                </div>
                 <ExamUpLoadModel
                     isShow={this.state.examUpLoadModelIsShow}
                     closeExamAnalysisModel={this.closeExamAnalysisModel}
