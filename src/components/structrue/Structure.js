@@ -7,7 +7,7 @@ import AddSubGroupModal from './AddSubGroupModal';
 import ConfirmModal from '../ConfirmModal';
 import SchoolSettingModal from './SchoolSettingModal';
 import GroupSettingModal from './GroupSettingModal';
-import MemberSettingModal from './MemberSettingModal';
+/*import MemberSettingModal from './MemberSettingModal';*/
 
 const confirm = Modal.confirm;
 
@@ -36,11 +36,11 @@ const memberColumns = [{
     title: '',
     dataIndex: 'isMaster',
     key: 'isMaster'
-}, {
+}/*, {
     title: '操作',
     dataIndex: 'opt',
     key: 'opt'
-}
+}*/
 ];
 
 var structuresObjArray = [];   //面包条数组
@@ -324,7 +324,7 @@ const Structure = React.createClass({
                         userName: user.userName,
                         userPhone: user.phoneNumber,
                         isMaster: '主管',
-                        opt:editButton
+                        /*opt:editButton*/
                     });
 
                 } else {
@@ -334,7 +334,7 @@ const Structure = React.createClass({
                         userName: user.userName,
                         userPhone: user.phoneNumber,
                         isMaster: '',
-                        opt:editButton
+                        /*opt:editButton*/
                     });
                 }
             });
@@ -709,10 +709,10 @@ const Structure = React.createClass({
                                     rootStructure={this.state.parentGroup}
                                     onCancel={this.initModalStatus}></SchoolSettingModal>
 
-                <MemberSettingModal isShow={this.state.memberSettingModalIsShow}
+                {/*<MemberSettingModal isShow={this.state.memberSettingModalIsShow}
                                     rootStructure={this.state.parentGroup}
                                     memberInfo = {this.state.memberInfo}
-                                    onCancel={this.initModalStatus}></MemberSettingModal>
+                                    onCancel={this.initModalStatus}></MemberSettingModal>*/}
                 {/*部门设置model*/}
                 <GroupSettingModal isShow={this.state.groupSettingModalIsShow} parentGroup={this.state.parentGroup}
                                    onCancel={this.initModalStatus}

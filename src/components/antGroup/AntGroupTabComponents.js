@@ -19,7 +19,16 @@ import {
 } from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import EmotionInputComponents from './EmotionInputComponents';
-import {getImgName, getLocalTime, getPageSize, isEmpty, MIDDLE_IMG, SMALL_IMG, checkUrl} from '../../utils/Const';
+import {
+    getImgName,
+    getLocalTime,
+    getPageSize,
+    isEmpty,
+    MIDDLE_IMG,
+    SMALL_IMG,
+    checkUrl,
+    getUrl
+} from '../../utils/Const';
 import {phone} from '../../utils/phone';
 import {formatHM, formatMD, isToday, showLargeImg} from '../../utils/utils';
 import GroupFileUploadComponents from './GroupFileUploadComponents';
@@ -2228,7 +2237,8 @@ const AntGroupTabComponents = React.createClass({
                 showContent = showContent.replace(subStr, "~");
                 var imgUrl = getImgName(subStr);
                 var localUrl = "../src/components/images/emotions/" + imgUrl;
-                var subStrReplace = <span className='attention_img'><img className="face_text_img" src={localUrl}/></span>;
+                var subStrReplace = <span className='attention_img'><img className="face_text_img"
+                                                                         src={localUrl}/></span>;
                 imgTags.push(subStrReplace);
                 var otherStr = str.substring(end + 1);
                 if (otherStr.indexOf("[bexp_") != -1) {
@@ -3025,7 +3035,8 @@ const AntGroupTabComponents = React.createClass({
                                                                      src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
                                                                      alt=""/>
                                                                  <div className="span_link_div">
-                                                                     <span className="span_link file_link_img_t">{content}</span>
+                                                                     <span
+                                                                         className="span_link file_link_img_t">{content}</span>
                                                                  </div>
                                                             </div>
                                                             <i className="borderballoon_dingcorner_ri_no"></i>
@@ -3282,6 +3293,7 @@ const AntGroupTabComponents = React.createClass({
 
                                                 } else {
                                                     //内容为链接
+                                                    getUrl(e.content)
                                                     if (e.toId == 138437) {
                                                         messageTag =
                                                             <li className="right" style={{'textAlign': 'right'}}>
@@ -3584,10 +3596,10 @@ const AntGroupTabComponents = React.createClass({
                                                     <span className="name">{userPhoneIcon}</span>
                                                     <div className="talk_bubble_box">
                                                         <span className="borderballoon ">
-                                                            <span  className="text_face">{startStrMe}</span>
+                                                            <span className="text_face">{startStrMe}</span>
                                                             {e.imgTagArray}
                                                             <i className="borderballoon_dingcorner_le_no"></i>
-                                                            <span  className="text_face">{endStrRevMe}</span>
+                                                            <span className="text_face">{endStrRevMe}</span>
                                                 </span>
                                                         <span className="talk_bubble_ellipsis">
                                                     <Dropdown overlay={this.state.msgMenu} trigger={['click']}
@@ -3648,7 +3660,7 @@ const AntGroupTabComponents = React.createClass({
                                                 <div className="talk_le_bubble_box">
                                                     <span className="borderballoon_le">
                                                         <span className="text_face">{startStr}</span>
-                                                            {e.imgTagArray}
+                                                        {e.imgTagArray}
                                                         <i className="borderballoon_dingcorner_ri_no"></i>
                                                         <span className="text_face">{endStrRev}</span>
                                                 </span>
@@ -3789,7 +3801,8 @@ const AntGroupTabComponents = React.createClass({
                                                              src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
                                                              alt=""/>
                                                          <div className="span_link_div">
-                                                             <span className="span_link file_link_img_t">{e.messageReturnJson.content}</span>
+                                                             <span
+                                                                 className="span_link file_link_img_t">{e.messageReturnJson.content}</span>
                                                          </div>
                                                     </div>
                                                     <i className="borderballoon_dingcorner_ri_no"></i>
@@ -3822,7 +3835,8 @@ const AntGroupTabComponents = React.createClass({
                                                              src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
                                                              alt=""/>
                                                          <div className="span_link_div">
-                                                             <span className="span_link file_link_img_t">{e.messageReturnJson.content}</span>
+                                                             <span
+                                                                 className="span_link file_link_img_t">{e.messageReturnJson.content}</span>
                                                          </div>
                                                     </div>
                                                     <i className="borderballoon_dingcorner_ri_no"></i>
@@ -3862,7 +3876,8 @@ const AntGroupTabComponents = React.createClass({
                                                                 <img className="upexam_float" style={{width: 38}}
                                                                      src="../src/components/images/icon_view_details.png"
                                                                      onClick={showLargeImg} alt=""/>
-                                                                <span className="span_link">{e.messageReturnJson.content}</span>
+                                                                <span
+                                                                    className="span_link">{e.messageReturnJson.content}</span>
                                                                 <i className="borderballoon_dingcorner_ri_no"></i>
                                                             </div>
                                                             <div className="file_noom">
@@ -4179,7 +4194,8 @@ const AntGroupTabComponents = React.createClass({
                                                              alt=""/>
                                                         <div className="span_link_div">
                                                             <span className="span_link">{fileName}</span>
-                                                            <span className="span_link password_ts">{fileLength}kb</span>
+                                                            <span
+                                                                className="span_link password_ts">{fileLength}kb</span>
                                                         </div>
                                                         <img id={fileUid} style={{display: "none"}} src={filePath}
                                                              onClick={showLargeImg} alt=""/>

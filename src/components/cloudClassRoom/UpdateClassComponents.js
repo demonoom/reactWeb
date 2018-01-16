@@ -80,7 +80,7 @@ const UpdateClassComponents = React.createClass({
         }
         this.getAllClass();
         if(this.state.stepNum==0){
-            this.getAllSubject();
+            this.getAllSubject(updateClassObj.courseClassId);
         }
         // this.findTeamByUserId();
     },
@@ -244,7 +244,7 @@ const UpdateClassComponents = React.createClass({
             moneyInputDisable,
             numInputDisable,
             // defaultSubjectSelected:,
-            defaultSelected: courseClass,
+            courseClass: courseClass,
             publishType,
             // defaultTeamSelected:publisher_id,
             courseSummary: content,
@@ -398,7 +398,7 @@ const UpdateClassComponents = React.createClass({
         if(isEmpty(isSeries)==false){
             _this.getAllClass();
         }
-        _this.getAllSubject(isSeries);
+        _this.getAllSubject(courseClass);
         _this.setState({
             weifileList: [],
             updateDisabled: isDisable,
@@ -426,7 +426,7 @@ const UpdateClassComponents = React.createClass({
                         var name = classInfo.name;
                         var optionObj = <Option key={id} value={id}>{name}</Option>;
                         if (id == courseInfoJson.courseClass) {
-                            _this.setState({"defaultSelected": name});
+                            _this.setState({"courseClass": name});
                         }
                         classOptionArray.push(optionObj);
                         var courseTypes = classInfo.courseTypes;
@@ -439,7 +439,7 @@ const UpdateClassComponents = React.createClass({
                                                         value={courseTypeId}>{courseTypeName}</Option>;
                                 classOptionArray.push(optionObj);
                                 if (id == courseInfoJson.courseClass) {
-                                    _this.setState({"defaultSelected": name});
+                                    _this.setState({"courseClass": name});
                                 }
                             }
                         }
@@ -457,10 +457,10 @@ const UpdateClassComponents = React.createClass({
     /**
      * 获取所有的授课科目，并设置默认选中的科目
      */
-    getAllSubject(isSeries) {
+    getAllSubject(courseClass) {
         var _this = this;
         var methodName = "findCourseSubject";
-        if(isEmpty(isSeries)){
+        if(isEmpty(courseClass)==false && courseClass=='29'){
             methodName = "findRealLessonSubject";
         }
         var param = {
@@ -492,6 +492,10 @@ const UpdateClassComponents = React.createClass({
 
     updateCourse() {
         var _this = this;
+        if(isEmpty(courseInfoJson.isSeries)){
+            //如果是实景课，isSeries设置为1
+            courseInfoJson.isSeries = "1";
+        }
         var param = {
             "method": 'updateCourse',
             "data": JSON.stringify(courseInfoJson),
@@ -593,7 +597,7 @@ const UpdateClassComponents = React.createClass({
      */
     classLevelSelectOnChange(value) {
         console.log(`selected ${value}`);
-        this.setState({defaultSelected: value});
+        this.setState({courseClass: value});
         // courseInfoJson.courseClass = value;
 
     },
@@ -1363,11 +1367,11 @@ const UpdateClassComponents = React.createClass({
             nextButton = <Button onClick={this.changeStep.bind(this, "next")}>下一步</Button>;
             var classRow = null;
             var subjectTitle = "课程分类";
-            if(isEmpty(this.state.isSeries)==false){
+            if(isEmpty(this.state.courseClass)==false && this.state.courseClass != "29"){
                 classRow = <Row>
                     <Col span={4}>授课年级：</Col>
                     <Col span={18}>
-                        <Select defaultValue={this.state.defaultSelected} value={this.state.defaultSelected}
+                        <Select defaultValue={this.state.courseClass} value={this.state.courseClass}
                                 style={{width: 120}} disabled={this.state.LessionIsUpdateDisable}
                                 onChange={this.classLevelSelectOnChange}>
                             {this.state.classOptionArray}
@@ -1434,7 +1438,7 @@ const UpdateClassComponents = React.createClass({
                 {/*<Row>
                     <Col span={4}>授课年级：</Col>
                     <Col span={18}>
-                        <Select defaultValue={this.state.defaultSelected} value={this.state.defaultSelected}
+                        <Select defaultValue={this.state.courseClass} value={this.state.courseClass}
                                 style={{width: 120}} disabled={this.state.LessionIsUpdateDisable}
                                 onChange={this.classLevelSelectOnChange}>
                             {this.state.classOptionArray}

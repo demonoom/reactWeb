@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import {Modal, Button, message} from 'antd';
 import {Form, Input, Select, Radio} from 'antd';
 import {doWebService} from '../WebServiceHelper';
+
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -42,7 +43,7 @@ const UseKnowledgeComponents = React.createClass({
         this.getLessonMenu();
     },
 
-    initPage(){
+    initPage() {
         knowledge.setState({
             schedule: '',
             selectOptions: [],
@@ -96,7 +97,7 @@ const UseKnowledgeComponents = React.createClass({
         knowledge.initPage();
     },
 
-    saveSchedule(ident, scheduleName){
+    saveSchedule(ident, scheduleName) {
         var param = {
             "method": 'addTeachSchedule',
             "ident": ident,
@@ -119,7 +120,7 @@ const UseKnowledgeComponents = React.createClass({
         });
     },
 
-    copyMaterialToSchedule(userId, materiaIds, scheduleId){
+    copyMaterialToSchedule(userId, materiaIds, scheduleId) {
         var param = {
             "method": 'copyMaterialToSchedule',
             "userId": userId,
@@ -143,7 +144,7 @@ const UseKnowledgeComponents = React.createClass({
         });
     },
 
-    copySubjects(subjectsIds, scheduleId){
+    copySubjects(subjectsIds, scheduleId) {
         var param = {
             "method": 'copySubjects',
             "subjectsIds": subjectsIds,
@@ -171,13 +172,14 @@ const UseKnowledgeComponents = React.createClass({
         this.setState({visible: false});
     },
 
-    getLessonMenu(){
+    getLessonMenu() {
         var param = {
             "method": 'getTeachScheduleByIdent',
             "ident": sessionStorage.getItem("ident")
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                debugger
                 List.splice(0, List.length);
                 ret.response.forEach(function (e) {
                     var lessonArray = e.split("#");
@@ -251,13 +253,13 @@ const UseKnowledgeComponents = React.createClass({
                             style={{width: '95%'}} ref="teachSchedule" onChange={this.handleSchedule}>
                         {knowledge.state.selectOptions}
                     </Select>
-                </Radio><br />
+                </Radio><br/>
                 <Radio value="newSchedule"><span className="left-letter">新建备课计划：</span><Input
                     disabled={knowledge.state.newScheduleDisableStatus} ref="scheduleName"/></Radio>
             </RadioGroup>;
         } else {
             attach = <RadioGroup onChange={this.useTypeOnChange} value={this.state.useTypeValue}>
-                <Radio value="currentKnowledge">使用当前知识点名称作为备课计划名称</Radio><br />
+                <Radio value="currentKnowledge">使用当前知识点名称作为备课计划名称</Radio><br/>
                 <Radio value="searchSchedule">
                     使用至现有计划：
                     <Select disabled={knowledge.state.searchScheduleDisableStatus}
@@ -265,7 +267,7 @@ const UseKnowledgeComponents = React.createClass({
                             style={{width: '100%'}} ref="teachSchedule" onChange={this.handleSchedule}>
                         {knowledge.state.selectOptions}
                     </Select>
-                </Radio><br />
+                </Radio><br/>
                 <Radio value="newSchedule"><span className="left-letter">新建备课计划：</span><Input
                     disabled={knowledge.state.newScheduleDisableStatus} ref="scheduleName"/></Radio>
             </RadioGroup>;
@@ -296,5 +298,5 @@ const UseKnowledgeComponents = React.createClass({
         );
     },
 });
-export  default UseKnowledgeComponents;
+export default UseKnowledgeComponents;
 

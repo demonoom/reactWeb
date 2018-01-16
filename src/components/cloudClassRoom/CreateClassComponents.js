@@ -316,6 +316,11 @@ const CreateClassComponents = React.createClass({
      */
     addCourse() {
         var _this = this;
+        if(isEmpty(courseInfoJson.isSeries)){
+            //如果是实景课，isSeries设置为1
+            courseInfoJson.isSeries = "1";
+            courseInfoJson.courseClass = "29";
+        }
         var param = {
             "method": 'addCourse',
             "jsonObject": JSON.stringify(courseInfoJson),

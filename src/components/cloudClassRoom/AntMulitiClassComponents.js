@@ -49,7 +49,11 @@ const AntMulitiClassComponents = React.createClass({
 
     getCourseListBySeries(isSeries,courseClass) {
         var _this = this;
-        _this.getCourseList(_this.state.currentPage, isSeries,'0',courseClass);
+        if(isEmpty(isSeries)){
+            _this.getCourseList(_this.state.currentPage, isSeries,'0',courseClass);
+        }else{
+            _this.findCourseByAccountWeb(_this.state.currentPage, isSeries,'0',courseClass);
+        }
     },
 
     /**
@@ -60,6 +64,53 @@ const AntMulitiClassComponents = React.createClass({
         var cloudClassRoomUser = JSON.parse(sessionStorage.getItem("cloudClassRoomUser"));
         var param = {
             "method": 'findCourseByAccount',
+            "pageNo": pageNo,
+            "course_class": courseClass,
+            "isseries": '',
+            "coursetypeid": '',
+            "numPerPage": getPageSize(),
+            "is_publish": '0',
+            "userId": cloudClassRoomUser.colUid
+        };
+        if (isEmpty(isSeries) == false) {
+            param.isseries = isSeries;
+        }
+        if (isEmpty(is_publish) == false) {
+            param.is_publish = is_publish;
+        }
+        doWebService_CloudClassRoom(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                var pager = ret.pager;
+                cardArray.splice(0);
+                if (isEmpty(response) == false) {
+                    response.forEach(function (course) {
+                        _this.buildEveryCard(course, cardArray);
+                    });
+                } else {
+                    var cardObj = <Card className="noDataTipImg">
+                        <div>
+                            <Icon type="frown-o"/><span>&nbsp;&nbsp;暂无数据</span>
+                        </div>
+                    </Card>;
+                    cardArray.push(cardObj);
+                }
+                _this.setState({cardArray, total: pager.rsCount});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 获取普通课的课程列表
+     */
+    findCourseByAccountWeb(pageNo, isSeries, is_publish,courseClass) {
+        var _this = this;
+        var cloudClassRoomUser = JSON.parse(sessionStorage.getItem("cloudClassRoomUser"));
+        var param = {
+            "method": 'findCourseByAccountWeb',
             "pageNo": pageNo,
             "course_class": courseClass,
             "isseries": '',
