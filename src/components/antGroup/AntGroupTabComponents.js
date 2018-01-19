@@ -98,6 +98,7 @@ var userGroupsColumns = [{
     dataIndex: 'groupSet',
 },];
 
+var imgErrorCount = 0;
 
 const AntGroupTabComponents = React.createClass({
 
@@ -2897,9 +2898,15 @@ const AntGroupTabComponents = React.createClass({
     },
 
     imgOnError(src, e) {
+        if(imgErrorCount>3){
+            e.target.src = '../src/components/images/e9c6ad1e-7ef3-45cf-ab40-25d5b5a0374c.png';
+            imgErrorCount = 0;
+            return;
+        }
         e.target.src = src;
         // e.target.src = '../src/components/images/e9c6ad1e-7ef3-45cf-ab40-25d5b5a0374c.png';
         e.target.onerror = null;
+        imgErrorCount++;
     },
 
     render() {

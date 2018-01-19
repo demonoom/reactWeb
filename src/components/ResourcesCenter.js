@@ -5,7 +5,7 @@ import CourseWareComponents from './CourseWareComponents';
 import SubjectTable from './SubjectTableComponents';
 import UseKnowledgeComponents from './UseKnowledgeComponents';
 import CourseWareUploadComponents from './CourseWareUploadComponents';
-import SubjectUploadByTextboxio from './SubjectUploadByTextboxio';
+import SubjectUploadComponent from './subjectManager/SubjectUploadComponent';
 
 const TabPane = Tabs.TabPane;
 
@@ -202,8 +202,6 @@ class ResourcesCenter extends React.Component{
             </Menu>
         );
 
-
-
         switch (this.state.currentOptType) {
             case 'bySubjectId':
                 tabPanel =
@@ -238,7 +236,7 @@ class ResourcesCenter extends React.Component{
         if (this.state.currentOptType == "bySubjectId" && sessionStorage.getItem("lastClickMenuChildrenCount") == 0 && sessionStorage.getItem("lastClickMenuId") != null) {
             toolbarExtra = <div className="talk_ant_btn1_1">
                 <CourseWareUploadComponents courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}/>
-                <SubjectUploadByTextboxio courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}/>
+                <SubjectUploadComponent courseUploadCallBack={this.courseUploadCallBack} params={this.state.subjectParams}/>
             </div>;
         }
 

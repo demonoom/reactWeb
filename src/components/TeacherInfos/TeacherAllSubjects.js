@@ -1,10 +1,10 @@
 import React, {PropTypes} from 'react';
 import {Table, Button, Popover, message, Breadcrumb, Icon} from 'antd';
 import ConfirmModal from '../ConfirmModal';
-import {getPageSize} from '../../utils/Const';
+import {getPageSize,isEmpty} from '../../utils/Const';
 import {doWebService} from '../../WebServiceHelper';
 import UseKnowledgeComponents from '../UseKnowledgeComponents';
-import SubjectEditByTextboxioTabComponents from '../SubjectEditByTextboxioTabComponents';
+import SubjectEditComponents from '../subjectManager/SubjectEditComponents';
 
 const columns = [
     {
@@ -39,9 +39,9 @@ const columns = [
         onFilter: (value, record) => record.subjectType.indexOf(value) === 0,
     },
     {
-        title: '分值',
+        title: '所属知识点',
         className: 'ant-table-selection-score',
-        dataIndex: 'subjectScore',
+        dataIndex: 'subjectKnowledges',
     }, {
         title: '操作',
         className: 'ant-table-selection-score3',
@@ -131,12 +131,19 @@ const TeacherAllSubjects = React.createClass({
                             <Button value={e.id} onClick={_self.showConfirmModal} icon="delete" title="删除"
                                     className="score3_i"/>
                         </div>;
+                        var knowledges= [];
+                        var knowledgeInfoList = e.knowledgeInfoList;
+                        if(isEmpty(knowledgeInfoList)==false){
+                            knowledgeInfoList.forEach(function (knowledge) {
+                                knowledges.push(knowledge.knowledgeName);
+                            });
+                        }
                         data.push({
                             key: key,
                             name: name,
                             content: content,
                             subjectType: subjectType,
-                            subjectScore: subjectScore,
+                            subjectKnowledges: knowledges.join(","),
                             subjectOpt: subjectOpt,
                             answer: answer
                         });
@@ -236,8 +243,8 @@ const TeacherAllSubjects = React.createClass({
                 />
 				<div className="favorite_scroll">
                 <div className='ant-tabs-tabpane ant-tabs-tabpane-active pers_bo_ra'>
-                    <SubjectEditByTextboxioTabComponents ref="subjectEditTabComponents"
-                                                         subjectEditCallBack={this.subjectEditCallBack}/>
+                    <SubjectEditComponents ref="subjectEditTabComponents"
+                                           subjectEditCallBack={this.subjectEditCallBack}></SubjectEditComponents>
                     <UseKnowledgeComponents ref="useKnowledgeComponents"/>
                     <Table columns={columns} dataSource={data} pagination={{
                         total: this.state.totalCount,
