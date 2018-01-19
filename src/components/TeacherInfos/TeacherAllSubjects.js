@@ -8,7 +8,7 @@ import SubjectEditComponents from '../subjectManager/SubjectEditComponents';
 
 const columns = [
     {
-        title: '出题人666',
+        title: '出题人',
         className: 'ant-table-selection-user2 left-12 ant-table-selection-user2-again',
         dataIndex: 'name',
     }, {
