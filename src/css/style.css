@@ -1114,12 +1114,17 @@ html, body, #root {
 .ant-table-thead > tr > th.ant-table-selection-user, .ant-table-tbody > tr > td.ant-table-selection-user {
     width: 90px
 }
-
+.ant-table-thead > tr > th.ant-table-selection-user-again, .ant-table-tbody > tr > td.ant-table-selection-user-again{
+    width: 10%;
+    word-break: break-all
+}
 .ant-table-thead > tr > th.ant-table-selection-user2, .ant-table-tbody > tr > td.ant-table-selection-user2 {
     width: 100px;
     text-align: center;
 }
-
+.ant-table-thead > tr > th.ant-table-selection-user2-again, .ant-table-tbody > tr > td.ant-table-selection-user2-again{
+    width: 15%;
+}
 .cloud_box .ant-table-thead > tr > th.ant-table-selection-user2, .cloud_box .ant-table-tbody > tr > td.ant-table-selection-user2 {
     width: 13%;
     text-align: center;
@@ -1129,17 +1134,26 @@ html, body, #root {
     width: 80px;
     text-align: center
 }
-
+.ant-table-thead > tr > th.ant-table-selection-topic-again, .ant-table-tbody > tr > td.ant-table-selection-topic-again{
+    width: 10%;
+    word-break: break-all
+}
 .ant-table-thead > tr > th.ant-table-selection-score, .ant-table-tbody > tr > td.ant-table-selection-score {
     width: 80px;
     text-align: center;
 }
-
+.ant-table-thead > tr > th.ant-table-selection-score-again, .ant-table-tbody > tr > td.ant-table-selection-score-again{
+    width: 20%;
+    word-break: break-all
+}
 .ant-table-thead > tr > th.ant-table-selection-score3, .ant-table-tbody > tr > td.ant-table-selection-score3 {
     width: 150px;
     text-align: center;
 }
-
+.ant-table-thead > tr > th.ant-table-selection-score3-again, .ant-table-tbody > tr > td.ant-table-selection-score3-again{
+    width: 25%;
+    word-break: break-all;
+}
 .ant-table-thead > tr > th.ant-table-selection-smallclass, .ant-table-tbody > tr > td.ant-table-selection-smallclass {
     width: 160px
 }
@@ -1174,7 +1188,10 @@ element.style {
 .ant-table-thead > tr > th.ant-table-selection-cont, .ant-table-tbody > tr > td.ant-table-selection-cont {
     max-width: 210px !important;
 }
-
+.ant-table-thead > tr > th.ant-table-selection-cont-again, .ant-table-tbody > tr > td.ant-table-selection-cont-again {
+    width: 30%;
+    word-break: break-all;
+}
 .ant-table-thead > tr > th.ant-table-selection-cont article, .ant-table-tbody > tr > td.ant-table-selection-cont article {
     max-height: 100px !important;
     overflow: hidden;
@@ -1799,7 +1816,9 @@ p.user_cont span.name1 {
 .modol_width {
     width: 480px !important;
 }
-
+.queanswer_modol_width{
+    width: 760px !important;
+}
 .knowledge_width {
     width: 750px !important;
 }
@@ -2197,7 +2216,10 @@ a {
 .row-t-f {
     margin-top: 10px;
 }
-
+.roe-t-f-left{
+    margin-left:10px;
+    margin-bottom: 10px;
+}
 .menu_left_icon {
     width: 64px;
     height: 64px;
@@ -3175,8 +3197,8 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 .group_talk {
     height: calc(100% - 98px);
     padding: 0 20px 0 0;
-    overflow: auto;
-
+    overflow-y: auto;
+    overflow-x:hidden;
 }
 
 .group_talk ul li {

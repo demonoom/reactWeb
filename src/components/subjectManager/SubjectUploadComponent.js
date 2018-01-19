@@ -680,17 +680,17 @@ const SubjectUploadComponent = React.createClass({
                             <Col span={20}>
                                 <SubjectContent ref="subjectContent"/>
                                 {audioButton}
-                                <Button className="row-t-f" onClick={this.showAnalysisModal}>题目解析</Button>
+                                <Button className="row-t-f roe-t-f-left" onClick={this.showAnalysisModal}>题目解析</Button>
                             </Col>
                         </Row>
 
                         {answerComponent}
 
                         <Row>
-                            <Col span={3} className="ant-form-item-label">
+                            <Col span={3} className="ant-form-item-label row-t-f">
                                 <span className="font-14">知识点：</span>
                             </Col>
-                            <Col span={20}>
+                            <Col span={20} className="row-t-f">
                                 <Select
                                     multiple={true}
                                     tags={true}
@@ -748,7 +748,7 @@ const SubjectUploadComponent = React.createClass({
                 <Modal
                     visible={this.state.subjectAnalysisModalVisible}
                     title="题目解析"
-                    className="modol_width"
+                    className="modol_width queanswer_modol_width"
                     maskClosable={false} //设置不允许点击蒙层关闭
                     onCancel={this.subjectAnalysisModalHandleCancel}
                     transitionName=""  //禁用modal的动画效果
@@ -766,8 +766,8 @@ const SubjectUploadComponent = React.createClass({
                     ]}
                 >
                     <Row>
-                        <Col span={4}>题目解析：</Col>
-                        <Col span={20}>
+                        <Col span={2}>题目解析：</Col>
+                        <Col span={22}>
                             <SubjectAnalysisContent analysisContent={this.state.analysisContent} ref="subjectAnalysisContentComponent"></SubjectAnalysisContent>
                         </Col>
 

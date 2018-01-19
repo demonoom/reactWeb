@@ -8,17 +8,17 @@ import SubjectEditComponents from '../subjectManager/SubjectEditComponents';
 
 const columns = [
     {
-        title: '出题人',
-        className: 'ant-table-selection-user2 left-12',
+        title: '出题人666',
+        className: 'ant-table-selection-user2 left-12 ant-table-selection-user2-again',
         dataIndex: 'name',
     }, {
         title: '内容',
-        className: 'ant-table-selection-cont',
+        className: 'ant-table-selection-cont ant-table-selection-cont-again',
         dataIndex: 'content',
     },
     {
         title: '题型',
-        className: 'ant-table-selection-topic',
+        className: 'ant-table-selection-topic ant-table-selection-topic-again',
         dataIndex: 'subjectType',
         filters: [{
             text: '单选题',
@@ -40,11 +40,11 @@ const columns = [
     },
     {
         title: '所属知识点',
-        className: 'ant-table-selection-score',
+        className: 'ant-table-selection-score ant-table-selection-score-again',
         dataIndex: 'subjectKnowledges',
     }, {
         title: '操作',
-        className: 'ant-table-selection-score3',
+        className: 'ant-table-selection-score3 ant-table-selection-score3-again',
         dataIndex: 'subjectOpt',
     },
 ];
