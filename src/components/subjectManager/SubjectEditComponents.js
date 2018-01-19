@@ -669,17 +669,17 @@ const SubjectEditComponents = React.createClass({
                             <Col span={20}>
                                 <SubjectContentEditor ref="subjectContentEditor"/>
                                 {audioButton}
-                                <Button className="row-t-f" onClick={this.showAnalysisModifyModal}>题目解析</Button>
+                                <Button className="row-t-f roe-t-f-left" onClick={this.showAnalysisModifyModal}>题目解析</Button>
                             </Col>
                         </Row>
 
                         {answerComponent}
 
                         <Row>
-                            <Col span={3} className="ant-form-item-label">
+                            <Col span={3} className="ant-form-item-label row-t-f">
                                 <span className="font-14">知识点：</span>
                             </Col>
-                            <Col span={20}>
+                            <Col span={20} className="row-t-f">
                                 {/*<Select multiple={true}
                                         tags={true} value={['lucy','jack']} style={{ width: 120 }} onChange={this.handleChange}>
                                     <Option value="jack">Jack</Option>
@@ -745,7 +745,7 @@ const SubjectEditComponents = React.createClass({
                 <Modal
                     visible={this.state.subjectAnalysisModifyModalVisible}
                     title="题目解析"
-                    // className="modol_width"
+                    className="modol_width queanswer_modol_width"
                     maskClosable={false} //设置不允许点击蒙层关闭
                     onCancel={this.subjectAnalysisModifyModalHandleCancel}
                     transitionName=""  //禁用modal的动画效果
@@ -763,8 +763,8 @@ const SubjectEditComponents = React.createClass({
                     ]}
                 >
                     <Row>
-                        <Col span={4}>题目解析：</Col>
-                        <Col span={20}>
+                        <Col span={2}>题目解析：</Col>
+                        <Col span={22}>
                             <SubjectAnalysisContentEditor ref="subjectAnalysisModifyContentEditor"></SubjectAnalysisContentEditor>
                         </Col>
 
