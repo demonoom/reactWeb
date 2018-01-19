@@ -11,7 +11,7 @@ import StudyEvaluateMenu from './StudyEvaluateMenu';
 import StudyEvaluateTabComponents from './StudyEvaluateTabComponents';
 import ExamMenu from './exam/ExamMenu';
 import ExamPagerTabComponents from './exam/ExamPagerTabComponents';
-import ExamPagerTableComponents from './exam/ExamPagerTableComponents';
+import ExamAnalysisComponents from './examAnalysis/examAnalysis';
 import TestListComponents from './createTest/TestListComponents';
 const TabPane = Tabs.TabPane;
 // 推荐在入口文件全局设置 locale
@@ -143,9 +143,9 @@ class TeachSpaces extends React.Component {
                 // middleComponent =  <ExamPagerTableComponents ref="examPagerTable" callBackParent={this.getExamPagerInfo} />;
                 this.tabComponent = <TestListComponents ref="testListComponents"/>;
                 break;
-            case 'teachingAdmin':
-                // 教学管理
-                // 沿用上次的内容
+            case 'examAnalysis':
+                // 试卷分析
+                this.tabComponent = <ExamAnalysisComponents ref="examAnalysisComponents"/>;
                 break;
 
         }
