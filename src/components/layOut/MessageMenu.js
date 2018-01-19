@@ -118,7 +118,6 @@ const MessageMenu = React.createClass({
             }
         } else {
             //noomSelectRowKey有值    当点击左侧的时候会赋值   到这里滞空
-            console.log(messageData);
             noomSelectRowKey = null;
         }
         // noomSelectRowKey = null;

@@ -98,6 +98,7 @@ var userGroupsColumns = [{
     dataIndex: 'groupSet',
 },];
 
+var imgErrorCount = 0;
 
 const AntGroupTabComponents = React.createClass({
 
@@ -2897,9 +2898,15 @@ const AntGroupTabComponents = React.createClass({
     },
 
     imgOnError(src, e) {
+        if (imgErrorCount > 3) {
+            e.target.src = '../src/components/images/e9c6ad1e-7ef3-45cf-ab40-25d5b5a0374c.png';
+            imgErrorCount = 0;
+            return;
+        }
         e.target.src = src;
         // e.target.src = '../src/components/images/e9c6ad1e-7ef3-45cf-ab40-25d5b5a0374c.png';
         e.target.onerror = null;
+        imgErrorCount++;
     },
 
     render() {
@@ -3293,7 +3300,7 @@ const AntGroupTabComponents = React.createClass({
 
                                                 } else {
                                                     //内容为链接
-                                                    getUrl(e.content)
+                                                    // getUrl(e.content);
                                                     if (e.toId == 138437) {
                                                         messageTag =
                                                             <li className="right" style={{'textAlign': 'right'}}>
@@ -3331,8 +3338,10 @@ const AntGroupTabComponents = React.createClass({
                                                                     <span className="name">{userPhoneIcon}</span>
                                                                     <div className="talk_bubble_box">
                                                             <span className="borderballoon">
+                                                                {getUrl(e.content)[0]}
                                                                 <a className="noom_link" target="_Blank"
-                                                                   href={e.content}>{e.content}</a>
+                                                                   href={getUrl(e.content)[2]}>{getUrl(e.content)[2]}</a>
+                                                                {getUrl(e.content)[1]}
                                                                 <i className="borderballoon_dingcorner_le_no"></i>
                                                             </span>
                                                                         <span className="talk_bubble_ellipsis">
@@ -3532,8 +3541,10 @@ const AntGroupTabComponents = React.createClass({
                                                                 <span className="borderballoon_le">
                                                                     <span className="bot"></span>
                                                                     <span className="top"></span>
+                                                                    {getUrl(e.content)[0]}
                                                                     <a className="noom_link_left" target="_Blank"
-                                                                       href={e.content}>{e.content}</a>
+                                                                       href={getUrl(e.content)[2]}>{getUrl(e.content)[2]}</a>
+                                                                    {getUrl(e.content)[1]}
                                                                     <i className="borderballoon_dingcorner_ri_no"></i>
                                                                 </span>
                                                                 <span className="talk_bubble_ellipsis">

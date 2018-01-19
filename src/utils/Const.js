@@ -5,7 +5,7 @@
 //分页规则中的每页记录数
 export const PAGE_SIZE = 30;
 export const ALL_TOPIC = 0;
-export const IS_DEBUG = false;   //是否是本地调试模式（true：使用本地测试地址；false：使用远程地址）
+export const IS_DEBUG = true;   //是否是本地调试模式（true：使用本地测试地址；false：使用远程地址）
 
 export const IS_LIVE_DEBUG = false;  //是否是直播调试模式（true：使用本地直播测试地址；false：使用本地webservice测试地址）
 
@@ -105,25 +105,23 @@ export function isEmpty(content) {
  */
 export function checkUrl(urlString) {
     if (urlString != "") {
-        // var strRegex = "(http://|ftp://|https://|www){0,1}[^\u4e00-\u9fa5\\s]*?\\.(com|net|cn|me|tw|fr|mp3|mp4|apk)[^\u4e00-\u9fa5\\s]*"
-        // var strRegex = "(http://|ftp://|https://|www){0,1}[^\u4e00-\u9fa5\\s]*?\\.[^\u4e00-\u9fa5\\s]*";
         var strRegex = "(((https?|ftp|file)://)|www.)[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*\\.[-a-zA-Z0-9+&@#/%=~_|]";
         var reg = new RegExp(strRegex);
         if (!reg.test(urlString)) {
             return false;
         } else {
             return true;
-            console.log(urlString.match(strRegex));
-            console.log(urlString.match(reg));
         }
     }
 }
 
 export function getUrl(urlString) {
-    var strRegex = "(((https?|ftp|file)://)|www.)[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*\\.[-a-zA-Z0-9+&@#/%=~_|]";
+    // var strRegex = "(((https?|ftp|file)://)|www.)[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*\\.[-a-zA-Z0-9+&@#/%=~_|]";
+    var strRegex = "(http|ftp|https):\\/\\/([\\w\\d\\-_]+[\\.\\w\\d\\-_]+)[:\\d+]?([\\/]?[\\w\\/\\.\\?=&;%@#\\+,]+)";
     var reg = new RegExp(strRegex);
-    console.log(urlString.match(reg).input);
-    // return urlString.match(reg).input;
+    var str = urlString.split(urlString.match(reg)[0]);
+    str.push(urlString.match(reg)[0]);
+    return str;
 }
 
 /**

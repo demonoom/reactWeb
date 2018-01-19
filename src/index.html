@@ -56,6 +56,14 @@
         var mytextareaAnswerEditor;
         var mytextareaSimpleAnswerModifyEditor;
         var mytextareaAnswerModifyEditor;
+        //题干组件
+        var subjectContentEditor;
+        //修改组件
+        var subjectContentForEdit;
+        //题目解析组件
+        var subjectAnalysisContentEditor;
+        //题目解析组件(修改用)
+        var subjectAnalysisContentModifyEditor;
         //textbox默认的全局配置
         var defaultConfig = {
             autosubmit: true,
@@ -79,6 +87,8 @@
         };
         //此处的几个全局对象用来完成题目修改时，向textboxio传递修改数据用
         var editorContent = "";
+        var analysisEditContent="";
+
         var muEditorContent = "";
         var correctEditorContent = "";
         var simpleEditorContent = "";

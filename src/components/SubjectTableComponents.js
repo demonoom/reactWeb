@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {Table, Button, Icon, Popover, message, Checkbox} from 'antd';
 import UseKnowledgeComponents from './UseKnowledgeComponents';
-import SubjectEditByTextboxioTabComponents from './SubjectEditByTextboxioTabComponents';
+import SubjectEditComponents from '../components/subjectManager/SubjectEditComponents';
 import {doWebService} from '../WebServiceHelper';
 import {getPageSize} from '../utils/Const';
 import {isEmpty} from '../utils/Const';
@@ -38,10 +38,11 @@ const columns = [{
     onFilter: (value, record) => record.subjectType.indexOf(value) === 0,
 },
     {
-        title: '分值',
+        title: '所属知识点',
         className: 'ant-table-selection-score',
-        dataIndex: 'subjectScore',
-    }, {
+        dataIndex: 'subjectKnowledges',
+    },
+    {
         title: '操作',
         className: 'ant-table-selection-score3',
         dataIndex: 'subjectOpt',
@@ -174,12 +175,19 @@ class SUbjectTable extends React.Component {
                                                                                                       title="删除"
                                                                                                       onClick={_this.showConfirmModal}><Icon
                             type="delete"/></Button></span></div>;
+                        var knowledges= [];
+                        var knowledgeInfoList = e.knowledgeInfoList;
+                        if(isEmpty(knowledgeInfoList)==false){
+                            knowledgeInfoList.forEach(function (knowledge) {
+                                knowledges.push(knowledge.knowledgeName);
+                            });
+                        }
                         data.push({
                             key: key,
                             name: name,
                             content: content,
                             subjectType: subjectType,
-                            subjectScore: subjectScore,
+                            subjectKnowledges: knowledges.join(","),
                             subjectOpt: subjectOpt,
                         });
                         var pager = ret.pager;
@@ -403,12 +411,20 @@ class SUbjectTable extends React.Component {
                             subjectOpt =
                                 <Button value={e.id} onClick={_this.showModal} icon="export" title="使用"></Button>;
                         }
+                        var knowledges= [];
+                        var knowledgeInfoList = e.knowledgeInfoList;
+                        if(isEmpty(knowledgeInfoList)==false){
+                            knowledgeInfoList.forEach(function (knowledge) {
+                                knowledges.push(knowledge.knowledgeName);
+                            });
+                        }
                         data.push({
                             key: key,
                             name: name,
                             content: content,
                             subjectType: subjectType,
-                            subjectScore: subjectScore,
+                            //subjectScore: subjectScore,
+                            subjectKnowledges: knowledges.join(","),
                             subjectOpt: subjectOpt,
                             answer: answer
                         });
@@ -569,9 +585,9 @@ class SUbjectTable extends React.Component {
                               onConfirmModalCancel={this.closeDelAllSubjectInScheduleConfirmModal}
                               onConfirmModalOK={this.deleteAllSelectedSubjectS}
                 ></ConfirmModal>
-                <SubjectEditByTextboxioTabComponents ref="subjectEditTabComponents"
-                                                     subjectEditCallBack={this.subjectEditCallBack}></SubjectEditByTextboxioTabComponents>
-                <UseKnowledgeComponents ref="useKnowledgeComponents"></UseKnowledgeComponents>
+                <SubjectEditComponents ref="subjectEditTabComponents"
+                                                     subjectEditCallBack={this.subjectEditCallBack}></SubjectEditComponents>
+                <UseKnowledgeComponents ref="useKnowledgeComponents" divContent={this.state.classDiv}></UseKnowledgeComponents>
                 <div className="pl_del">
                     {delBtn}
                 </div>
