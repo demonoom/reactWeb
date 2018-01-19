@@ -395,6 +395,12 @@ const SubjectUploadComponent = React.createClass({
             knowledgeName = sessionStorage.getItem("lastClickMenuName");
         }
         var isLinkToSchedule = this.state.useSameScheduleForCorrect;
+        var alterNativeAnswerCount = 4;
+        if(this.state.subjectType == "C"){
+            alterNativeAnswerCount = this.state.singleSliderValue;
+        }else if(this.state.subjectType == "MC"){
+            alterNativeAnswerCount = this.state.sliderValue;
+        }
         var batchAddSubjectBeanJson = {
             "textTigan": subjectName,
             "textAnswer": answer,
@@ -402,7 +408,8 @@ const SubjectUploadComponent = React.createClass({
             "userId": this.state.loginUser.colUid,
             "type": this.state.subjectType,
             "knowledges":this.state.knowledges,
-            "analysisContent":this.state.analysisContent
+            "analysisContent":this.state.analysisContent,
+            "alterNativeAnswerCount":alterNativeAnswerCount
         };
         if (optType == "bySubjectId") {
             batchAddSubjectBeanJson.knowledgePointId = ScheduleOrSubjectId;
@@ -632,7 +639,7 @@ const SubjectUploadComponent = React.createClass({
 
         return (
             <div className="toobar right_ri ">
-                <Button type="primary" icon="plus-circle" onClick={this.showModal} title="上传题目" className="add_study add_study-b">aaa添加题目</Button>
+                <Button type="primary" icon="plus-circle" onClick={this.showModal} title="上传题目" className="add_study add_study-b">添加题目</Button>
                 <Modal
                     visible={this.state.visible}
                     title="添加题目"
@@ -695,7 +702,7 @@ const SubjectUploadComponent = React.createClass({
                                     multiple={true}
                                     tags={true}
                                     style={{ width: '100%' }}
-                                    placeholder="Tags Mode"
+                                    placeholder="请选择或输入知识点名称"
                                     value={this.state.knowledges}
                                     onChange={this.handleChange}
                                     onSearch={this.searchKnowledge}

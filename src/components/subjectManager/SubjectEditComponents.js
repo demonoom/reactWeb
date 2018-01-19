@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {Tabs, Button, Radio} from 'antd';
 import {Modal} from 'antd';
-import {Input, Select, Row, Col, Checkbox,Progress} from 'antd';
+import {Input, Select, Row, Col, Checkbox,Progress,Slider} from 'antd';
 import {message} from 'antd';
 import TextboxioComponentForSingleByModify from '../textboxioComponents/TextboxioComponentForSingleByModify';
 import TextboxioComponentForMulitiSelectByModify from '../textboxioComponents/TextboxioComponentForMulitiSelectByModify';
@@ -52,7 +52,9 @@ const SubjectEditComponents = React.createClass({
             knowledges:[],
             pageNo:1,
             conditionKeyOfKnowledge:'',
-            analysisModifyContent:''
+            analysisModifyContent:'',
+            sliderValue:4,
+            singleSliderValue:4,
         };
     },
 
@@ -113,7 +115,7 @@ const SubjectEditComponents = React.createClass({
                         singleAnswerOptions.push(selectValue);
                     }
                     _this.setState({
-                        singleAnswer: response.answer, "singleAnswerOptions": singleAnswerOptions
+                        singleAnswer: response.answer, "singleAnswerOptions": singleAnswerOptions,"singleSliderValue":choosens.length
                     });
                 } else if (subjectType == "MC") {
                     var choosens = response.choosens;
@@ -124,7 +126,7 @@ const SubjectEditComponents = React.createClass({
                         mulitiAnswerOptions.push(selectValue);
                     }
                     _this.setState({
-                        mulitiAnswerDefaultValue: response.answer, "mulitiAnswerOptions": mulitiAnswerOptions
+                        mulitiAnswerDefaultValue: response.answer, "mulitiAnswerOptions": mulitiAnswerOptions,"sliderValue":choosens.length
                     });
                 } else if (subjectType == "J") {
                     _this.setState({
@@ -479,6 +481,35 @@ const SubjectEditComponents = React.createClass({
     },
 
     /**
+     * 单选题选项自定义数量变化处理函数
+     * @param value
+     */
+    singleSliderChange(value){
+        var selectArray=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+        var singleAnswerOptions=[];
+        for(var i=0;i<value;i++){
+            var selectValue = <Radio key={selectArray[i]} value={selectArray[i]}>{selectArray[i]}</Radio>;
+            singleAnswerOptions.push(selectValue);
+        }
+        this.setState({"singleAnswerOptions":singleAnswerOptions,"singleSliderValue":value});
+    },
+
+    /**
+     * 自定义多选题选项数量
+     * @param value
+     * @returns {string}
+     */
+    sliderChange(value) {
+        var selectArray=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+        var mulitiAnswerOptions=[];
+        for(var i=0;i<value;i++){
+            var selectValue = {label: selectArray[i], value: selectArray[i]};
+            mulitiAnswerOptions.push(selectValue);
+        }
+        this.setState({"mulitiAnswerOptions":mulitiAnswerOptions,"sliderValue":value});
+    },
+
+    /**
      * 页面元素渲染
      */
     render() {
@@ -499,13 +530,23 @@ const SubjectEditComponents = React.createClass({
                     <span className="font-14">答案：</span>
                 </Col>
                 <Col span={20}>
-                    <div className="ant-form-item-control">
-                        <RadioGroup onChange={this.singleAnswerOnChange} ref="singleAnswer"
-                                    defaultValue={subjectUpload.state.singleAnswer}
-                                    value={subjectUpload.state.singleAnswer}>
-                            {this.state.singleAnswerOptions}
-                        </RadioGroup>
-                    </div>
+                    <Row>
+                        <Col span className="ant-form-item-label ant-form-item-control timu_line">
+                            自定义答案选项数量：
+                        </Col>
+                        <Col span={12}>
+                            <Slider min={4} max={8} defaultValue={this.state.singleSliderValue} value={this.state.singleSliderValue} onChange={this.singleSliderChange} />
+                        </Col>
+                    </Row>
+                    <Row>
+                        <div className="ant-form-item-control">
+                            <RadioGroup onChange={this.singleAnswerOnChange} ref="singleAnswer"
+                                        defaultValue={subjectUpload.state.singleAnswer}
+                                        value={subjectUpload.state.singleAnswer}>
+                                {this.state.singleAnswerOptions}
+                            </RadioGroup>
+                        </div>
+                    </Row>
                 </Col>
             </Row>;
             audioButton = <Button className="row-t-f" onClick={this.showVideoUploadModal.bind(this,'single')}>插入音频</Button>;
@@ -515,12 +556,24 @@ const SubjectEditComponents = React.createClass({
                     <span className="font-14">答案：</span>
                 </Col>
                 <Col span={20}>
-                    <div className="ant-form-item-control">
-                        <CheckboxGroup options={this.state.mulitiAnswerOptions}
-                                       defaultValue={subjectUpload.state.mulitiAnswerDefaultValue}
-                                       value={subjectUpload.state.mulitiAnswerDefaultValue}
-                                       onChange={this.mulitiAnswerOnChange}/>
-                    </div>
+                    <Row>
+                        <Col span className="ant-form-item-label ant-form-item-control timu_line">
+                            自定义答案选项数量：
+                        </Col>
+                        <Col span={12}>
+
+                            <Slider min={4} max={8} defaultValue={this.state.sliderValue} value={this.state.sliderValue} onChange={this.sliderChange} />
+
+                        </Col>
+                    </Row>
+                    <Row>
+                        <div className="ant-form-item-control">
+                            <CheckboxGroup options={this.state.mulitiAnswerOptions}
+                                           defaultValue={subjectUpload.state.mulitiAnswerDefaultValue}
+                                           value={subjectUpload.state.mulitiAnswerDefaultValue}
+                                           onChange={this.mulitiAnswerOnChange}/>
+                        </div>
+                    </Row>
                 </Col>
             </Row>;
             audioButton = <Button onClick={this.showVideoUploadModal.bind(this,'mulitiSelect')}>插入音频</Button>
@@ -638,7 +691,7 @@ const SubjectEditComponents = React.createClass({
                                     multiple={true}
                                     tags={true}
                                     style={{ width: '100%' }}
-                                    placeholder="Tags Mode"
+                                    placeholder="请选择或输入知识点名称"
                                     value={this.state.knowledges}
                                     onChange={this.handleChange}
                                     onSearch={this.searchKnowledge}
