@@ -5,7 +5,7 @@
 //分页规则中的每页记录数
 export const PAGE_SIZE = 30;
 export const ALL_TOPIC = 0;
-export const IS_DEBUG = true;   //是否是本地调试模式（true：使用本地测试地址；false：使用远程地址）
+export const IS_DEBUG = false;   //是否是本地调试模式（true：使用本地测试地址；false：使用远程地址）
 
 export const IS_LIVE_DEBUG = false;  //是否是直播调试模式（true：使用本地直播测试地址；false：使用本地webservice测试地址）
 
@@ -28,7 +28,7 @@ export const SMALL_IMG = 'size=100x100';
 export const MIDDLE_IMG = 'size=300x300';
 export const LARGE_IMG = 'size=500x500';
 //webService请求的版本号
-export const WEB_VERSION = "1.09";
+export const WEB_VERSION = "1.10";
 //音频题目权限开放账号集合，其中23836和54208为系统测试用户账号
 export const AUDIO_SUBJECT_ALLOWED = ["134770", "134755", "135359", "135872", "135001", "135302", "135303", "135304", "135244", "135167", "23836", "54208"];
 var baseEmotionMap = new Map();
