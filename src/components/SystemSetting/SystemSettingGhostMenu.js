@@ -154,7 +154,6 @@ class SystemSettingGhostMenu extends React.Component {
 
     // toggle
     toggleGhostMenu(event) {
-
         event = event || window.event;
         event.preventDefault();
         event.stopPropagation();
@@ -217,7 +216,7 @@ class SystemSettingGhostMenu extends React.Component {
             mode: 'teachingAdmin',
             title: name,
             url: urls,
-        }
+        };
 
         LP.Start(param);
     }

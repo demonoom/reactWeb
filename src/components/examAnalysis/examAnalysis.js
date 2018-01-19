@@ -73,7 +73,14 @@ const ExamAnalysisComponents = React.createClass({
      * 分析的回调
      */
     analysis(record) {
-        alert(record);
+        var urls = 'http://jiaoxue.maaee.com:8091/#/resultAnalysis?taskId=' + record.key;
+        let param = {
+            mode: 'teachingAdmin',
+            title: '成绩分析',
+            url: urls,
+        };
+
+        LP.Start(param);
     },
 
     /**

@@ -3306,7 +3306,7 @@ const AntGroupTabComponents = React.createClass({
                                                                     <div className="talk_bubble_box">
                                                             <span className="borderballoon">
                                                                 <a className="noom_link" target="_Blank"
-                                                                   href={e.content}>{e.content}</a>
+                                                                   href={'http://' + e.content}>{e.content}</a>
                                                                 <i className="borderballoon_dingcorner_le_no"></i>
                                                             </span>
                                                                         <span className="talk_bubble_ellipsis">
@@ -3332,7 +3332,7 @@ const AntGroupTabComponents = React.createClass({
                                                                     <div className="talk_bubble_box">
                                                             <span className="borderballoon">
                                                                 <a className="noom_link" target="_Blank"
-                                                                   href={'http://' + e.content}>{e.content}</a>
+                                                                   href={e.content}>{e.content}</a>
                                                                 <i className="borderballoon_dingcorner_le_no"></i>
                                                             </span>
                                                                         <span className="talk_bubble_ellipsis">
