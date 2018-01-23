@@ -1,5 +1,5 @@
 import React from 'react';
-import {Menu, Icon, Row, Col, Button, notification, Modal} from 'antd';
+import {Menu, Icon, Row, Col, notification, Modal, Collapse, Checkbox, Input, message} from 'antd';
 import MainTabComponents from '../components/MainTabComponents';
 import HeaderComponents from '../components/HeaderComponents';
 import UserFace from '../components/UserCardModalComponents';
@@ -37,6 +37,9 @@ import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
 import {createStore} from 'redux';
 
+const Panel = Collapse.Panel;
+
+const CheckboxGroup = Checkbox.Group;
 
 const store = createStore(function () {
 
@@ -68,7 +71,8 @@ const MainLayout = React.createClass({
             isPersonCenter: false,
             addShiftPosModel: false,
             sendPicModel: false,
-            lastClick: ''  //聊天功能最后一次点击的对象
+            lastClick: '',  //聊天功能最后一次点击的对象
+            RMsgActiveKey: ['2'],
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
     },
@@ -163,10 +167,10 @@ const MainLayout = React.createClass({
         //定义方法（调用进入哪个聊天人）
         // window.__toWhichCharObj__ = this.toWhichCharObj;
         window.__noomSelectPic__ = this.noomSelectPic;
+        window.__noomShareMbile__ = this.noomShareMbile;
     },
 
     componentWillMount() {
-        // alert('componentWillMount');
         var userIdent = sessionStorage.getItem("ident");
         if (userIdent == null || userIdent == "") {
             location.hash = "login";
@@ -193,7 +197,6 @@ const MainLayout = React.createClass({
     // 不用了
     // 呼叫本组件中的实例任何方法 dapeng
     componentDidUpdate() {
-        // alert('componentDidUpdate');
         if (this.autoeventparam) {
             // ['antGroupTabComponents', 'param', 'antGroupTabComponents'],
             let param = this.autoeventparam.linkpart.shift();
@@ -217,6 +220,278 @@ const MainLayout = React.createClass({
         this.setState({sendPicModel: true, pinSrc: src, picFile: obj});
     },
 
+    /**
+     * 分享移动网页的回调
+     * @param src
+     */
+    noomShareMbile(src, title) {
+        this.getAntGroup();
+        this.getStructureUsers();
+        this.setState({shareSrc: src, shareTitle: title});
+        this.setState({shareModalVisible: true});
+    },
+
+    collapseChange(key) {
+        this.setState({RMsgActiveKey: key});
+        this.getUserChatGroupById(-1);
+    },
+
+    /**
+     * 获取群组列表
+     * @param pageNo
+     */
+    getUserChatGroupById(pageNo) {
+        var _this = this;
+        var param = {
+            "method": 'getUserChatGroup',
+            "userId": sessionStorage.getItem("ident"),
+            "pageNo": pageNo
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    var response = ret.response;
+                    // var charGroupArray = [];
+                    var groupOptions = [];
+                    response.forEach(function (e) {
+                        var chatGroupId = e.chatGroupId;
+                        var chatGroupName = e.name;
+                        var membersCount = e.members.length;
+                        var groupMemebersPhoto = [];
+                        for (var i = 0; i < membersCount; i++) {
+                            var member = e.members[i];
+                            var memberAvatarTag = <img src={member.avatar}></img>;
+                            groupMemebersPhoto.push(memberAvatarTag);
+                            if (i >= 3) {
+                                break;
+                            }
+                        }
+                        var imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
+                        switch (groupMemebersPhoto.length) {
+                            case 1:
+                                imgTag = <div className="maaee_group_face1">{groupMemebersPhoto}</div>;
+                                break;
+                            case 2:
+                                imgTag = <div className="maaee_group_face2">{groupMemebersPhoto}</div>;
+                                break;
+                            case 3:
+                                imgTag = <div className="maaee_group_face3">{groupMemebersPhoto}</div>;
+                                break;
+                            case 4:
+                                imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
+                                break;
+                        }
+                        var groupName = chatGroupName;
+                        var groupNameTag = <div>{imgTag}<span>{groupName}</span></div>
+                        var groupJson = {label: groupNameTag, value: chatGroupId};
+                        groupOptions.push(groupJson);
+                    });
+                    _this.setState({"groupOptions": groupOptions});
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 获取联系人列表
+     */
+    getAntGroup() {
+        var _this = this;
+        var param = {
+            "method": 'getUserContacts',
+            "ident": sessionStorage.getItem("ident"),
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                var i = 0;
+                var concatOptions = [];
+                for (var i = 0; i < response.length; i++) {
+                    if (response[i].colUid == 41451 || response[i].colUid == 138437 || response[i].colUid == 142033 || response[i].colUid == 139581) {
+                        continue
+                    }
+                    var userId = response[i].colUid;
+                    var userName = response[i].userName;
+                    var imgTag = <img src={response[i].avatar} className="antnest_38_img" height="38"></img>;
+                    var userNameTag = <div>{imgTag}<span>{userName}</span></div>;
+                    var userJson = {label: userNameTag, value: userId};
+                    if (userId != sessionStorage.getItem("ident")) {
+                        concatOptions.push(userJson);
+                    }
+                }
+                _this.setState({"concatOptions": concatOptions});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 组织架构列表
+     */
+    getStructureUsers: function () {
+        var _this = this;
+        var param = {
+            "method": 'getStructureUsers',
+            "operateUserId": sessionStorage.getItem("ident"),
+            "pageNo": -1,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var data = ret.response;
+                var userStruct = [];
+                data.forEach(function (e) {
+
+                    var userStructId = e.colUid;
+                    var userStructName = e.userName;
+                    var userStructImgTag = <img src={e.avatar} className="antnest_38_img" height="38"></img>;
+                    var userStructNameTag = <div>{userStructImgTag}<span>{userStructName}</span></div>;
+                    var userStructJson = {label: userStructNameTag, value: userStructId};
+
+                    if (userStructId != sessionStorage.getItem("userStructId")) {
+                        userStruct.push(userStructJson);
+                    }
+                });
+                _this.setState({"structureOptions": userStruct});
+
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 修改分享文件的文本框内容改变响应函数
+     */
+    nowThinkingInputChange(e) {
+
+        var target = e.target;
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
+            target = e.target;
+        }
+        var nowThinking = target.value;
+        if (isEmpty(nowThinking)) {
+            nowThinking = "这是一个云盘分享的文件";
+        }
+        this.setState({"nowThinking": nowThinking});
+    },
+
+    /**
+     * 我的好友复选框被选中时的响应
+     * @param checkedValues
+     */
+    concatOptionsOnChange(checkedValues) {
+        this.setState({"checkedConcatOptions": checkedValues});
+    },
+
+    /**
+     * 组织架构复选框被选中时的响应
+     * @param checkedValues
+     */
+    roleOptionsOnChange(checkedValues) {
+        this.setState({"checkedsSructureOptions": checkedValues});
+    },
+
+    /**
+     * 我的好友复选框被选中时的响应x
+     * @param checkedValues
+     */
+    groupOptionsOnChange(checkedValues) {
+        this.setState({"checkedGroupOptions": checkedValues});
+    },
+
+    /**
+     * 分享文件点击OK
+     */
+    getsharekey() {
+        var shareSrc = this.state.shareSrc;
+        var shareTitle = this.state.shareTitle;
+        var _this = this;
+        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+        var createTime = (new Date()).valueOf();
+        var messageToPer = 1;//根据接收者是群组还是个人来决定
+        var messageToGrp = 4;
+        var checkedConcatOptions = this.state.checkedConcatOptions;   //好友id数组
+        var checkedGroupOptions = this.state.checkedGroupOptions;   //群组id数组
+        var checkedsSructureOptions = this.state.checkedsSructureOptions;  //组织架构id数组
+
+        if (isEmpty(checkedConcatOptions) == true && isEmpty(checkedGroupOptions) == true && isEmpty(checkedsSructureOptions) == true) {
+            message.error('请选择转发好友或群组');
+            return false
+        }
+
+        //链接消息
+        var cover = "http://png.findicons.com/files/icons/2083/go_green_web/64/link.png";
+        var attachment = {
+            "address": shareSrc,
+            "createTime": createTime,
+            "playing": false,
+            "type": 4,
+            "user": loginUser,
+            "cover": cover,
+            "content": shareTitle,
+        };
+        if (isEmpty(checkedGroupOptions) == false) {
+            checkedGroupOptions.forEach(function (e) {
+                var uuid = _this.createUUID();
+                var messageJson = {
+                    'content': shareTitle, "createTime": createTime, 'fromUser': loginUser,
+                    "toId": e, "command": "message", "hostId": loginUser.colUid,
+                    "uuid": uuid, "toType": messageToGrp, "attachment": attachment, "state": 0
+                };
+                var commandJson = {"command": "message", "data": {"message": messageJson}};
+                ms.send(commandJson);
+            });
+        }
+
+        if (isEmpty(checkedConcatOptions) == false) {
+            checkedConcatOptions.forEach(function (e) {
+                var uuid = _this.createUUID();
+                var messageJson = {
+                    'content': shareTitle, "createTime": createTime, 'fromUser': loginUser,
+                    "toId": e, "command": "message", "hostId": loginUser.colUid,
+                    "uuid": uuid, "toType": messageToPer, "attachment": attachment, "state": 0
+                };
+                var commandJson = {"command": "message", "data": {"message": messageJson}};
+                ms.send(commandJson);
+            });
+        }
+
+        if (isEmpty(checkedsSructureOptions) == false) {
+            checkedsSructureOptions.forEach(function (e) {
+                var uuid = _this.createUUID();
+                var messageJson = {
+                    'content': shareTitle, "createTime": createTime, 'fromUser': loginUser,
+                    "toId": e, "command": "message", "hostId": loginUser.colUid,
+                    "uuid": uuid, "toType": messageToPer, "attachment": attachment, "state": 0
+                };
+                var commandJson = {"command": "message", "data": {"message": messageJson}};
+                ms.send(commandJson);
+            });
+        }
+        _this.shareModalHandleCancel();
+    },
+
+    /**
+     * 关闭分享文件model
+     */
+    shareModalHandleCancel() {
+        this.setState({
+            shareModalVisible: false,
+            "checkedGroupOptions": [],
+            "checkedConcatOptions": [],
+            "checkedsSructureOptions": [],
+            RMsgActiveKey: ['2']
+        });
+    },
+
     toWhichCharObj() {
         var _this = this;
         var lastClick = this.state.lastClick;
@@ -227,7 +502,7 @@ const MainLayout = React.createClass({
                 _this.refs.messageMenu.turnToMessagePage(lastClick);
             }, 50)
         } else {
-            // alert('没有需要展示的')
+
         }
     },
 
@@ -504,7 +779,6 @@ const MainLayout = React.createClass({
             contentArray: contentArray,
             "messageToType": 1
         };
-        console.log(userJson);
         this.setState({
             //把currentKey改成了’message‘就能够装载 消息组件
             lastClick: userJson,
@@ -523,8 +797,8 @@ const MainLayout = React.createClass({
      */
     receiveNewMessage(userJson) {
         this.setState({
-            currentKey: 'message',
-            resouceType: '',
+            // currentKey: 'message',
+            // resouceType: '',
             "userInfo": userJson.fromUser,
             "messageType": 'message',
             "actionFrom": "backgroudMessage",
@@ -626,6 +900,20 @@ const MainLayout = React.createClass({
 
     sendPicToOthers(url) {
         this.refs.antGroupTabComponents.sendPicToOthers(url);
+    },
+
+    createUUID() {
+        var s = [];
+        var hexDigits = "0123456789abcdef";
+        for (var i = 0; i < 36; i++) {
+            s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+        }
+        s[14] = "4";  // bits 12-15 of the time_hi_and_version field to 0010
+        s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
+        s[8] = s[13] = s[18] = s[23] = "-";
+
+        var uuid = s.join("");
+        return uuid;
     },
 
     render() {
@@ -862,6 +1150,57 @@ const MainLayout = React.createClass({
                         picFile={this.state.picFile}
                         sendPicToOthers={this.sendPicToOthers}
                     />
+                    <Modal title="分享文件" className="cloud_share_Modal"
+                           visible={this.state.shareModalVisible}
+                           transitionName=""  //禁用modal的动画效果
+                           maskClosable={false} //设置不允许点击蒙层关闭
+                           onCancel={this.shareModalHandleCancel}
+                           onOk={this.getsharekey}
+                    >
+                        <div>
+                            <Row>
+                                <Col span={12} className="share_til">选择好友分享文件：</Col>
+                                <Col span={12} className="share_til">这一刻的想法：
+                                    <span className="right_ri cloud_share_prompt"><Icon type="link"
+                                                                                        className="info_school_s"/><span>这是一个云盘分享的文件</span></span>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col span={11} className="upexam_float cloud_share_cont">
+                                    <Collapse bordered={false} activeKey={this.state.RMsgActiveKey}
+                                              onChange={this.collapseChange}
+                                    >
+                                        <Panel header="我的群组" key="1">
+                                            <CheckboxGroup options={this.state.groupOptions}
+                                                           value={this.state.checkedGroupOptions}
+                                                           onChange={this.groupOptionsOnChange}
+                                            />
+                                        </Panel>
+                                        <Panel header="我的好友" key="2">
+                                            <CheckboxGroup options={this.state.concatOptions}
+                                                           value={this.state.checkedConcatOptions}
+                                                           onChange={this.concatOptionsOnChange}
+                                            />
+                                        </Panel>
+                                        <Panel header="组织架构" key="3">
+                                            <CheckboxGroup options={this.state.structureOptions}
+                                                           value={this.state.checkedsSructureOptions}
+                                                           onChange={this.roleOptionsOnChange}
+                                            />
+                                        </Panel>
+                                    </Collapse>
+                                </Col>
+                                <Col span={12} className="topics_dianzan">
+                                    <div>
+                                        <Input type="textarea" rows={14} placeholder="这是一个云盘分享的文件"
+                                               value={this.state.nowThinking}
+                                               onChange={this.nowThinkingInputChange}
+                                        />
+                                    </div>
+                                </Col>
+                            </Row>
+                        </div>
+                    </Modal>
                     <ul style={{display: 'none'}}>
                         <li className="imgLi">
                             {this.state.imgArr}

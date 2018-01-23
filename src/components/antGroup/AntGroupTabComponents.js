@@ -578,8 +578,6 @@ const AntGroupTabComponents = React.createClass({
         //根据不同类型的消息转发
         //文字 图片 大表情 链接 文件   -语音-
         var megObj = this.state.megObj;
-        console.log(megObj);
-
         var _this = this;
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         var createTime = (new Date()).valueOf();
@@ -935,62 +933,7 @@ const AntGroupTabComponents = React.createClass({
 
     collapseChange(key) {
         this.setState({RMsgActiveKey: key});
-        this.getUserChatGroupById(1);
-    },
-
-    getUserChatGroupById(pageNo) {
-        var _this = this;
-        var param = {
-            "method": 'getUserChatGroup',
-            "userId": sessionStorage.getItem("ident"),
-            "pageNo": pageNo
-        };
-        doWebService(JSON.stringify(param), {
-            onResponse: function (ret) {
-                if (ret.msg == "调用成功" && ret.success == true) {
-                    var response = ret.response;
-                    // var charGroupArray = [];
-                    var groupOptions = [];
-                    response.forEach(function (e) {
-                        var chatGroupId = e.chatGroupId;
-                        var chatGroupName = e.name;
-                        var membersCount = e.members.length;
-                        var groupMemebersPhoto = [];
-                        for (var i = 0; i < membersCount; i++) {
-                            var member = e.members[i];
-                            var memberAvatarTag = <img src={member.avatar}></img>;
-                            groupMemebersPhoto.push(memberAvatarTag);
-                            if (i >= 3) {
-                                break;
-                            }
-                        }
-                        var imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
-                        switch (groupMemebersPhoto.length) {
-                            case 1:
-                                imgTag = <div className="maaee_group_face1">{groupMemebersPhoto}</div>;
-                                break;
-                            case 2:
-                                imgTag = <div className="maaee_group_face2">{groupMemebersPhoto}</div>;
-                                break;
-                            case 3:
-                                imgTag = <div className="maaee_group_face3">{groupMemebersPhoto}</div>;
-                                break;
-                            case 4:
-                                imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
-                                break;
-                        }
-                        var groupName = chatGroupName;
-                        var groupNameTag = <div>{imgTag}<span>{groupName}</span></div>
-                        var groupJson = {label: groupNameTag, value: chatGroupId};
-                        groupOptions.push(groupJson);
-                    });
-                    _this.setState({"groupOptions": groupOptions});
-                }
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });
+        this.getUserChatGroupById(-1);
     },
 
     /**
@@ -1655,7 +1598,7 @@ const AntGroupTabComponents = React.createClass({
 
     //ding消息被点击
     entDingMesDetil() {
-        // alert(1);
+
     },
 
     /**
@@ -1874,7 +1817,6 @@ const AntGroupTabComponents = React.createClass({
                         //判断是否是叮消息
                         //判断这条消息是我发出的，处理别的手机发送消息不同步的问题
                         if (messageOfSinge.fromUser.colUid == antGroup.state.loginUser.colUid) {
-                            //     alert('我发出的');
                             isSend = true;
                         }
                         ;

@@ -105,7 +105,8 @@ export function isEmpty(content) {
  */
 export function checkUrl(urlString) {
     if (urlString != "") {
-        var strRegex = "(((https?|ftp|file)://)|www.)[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*\\.[-a-zA-Z0-9+&@#/%=~_|]";
+        // var strRegex = "(((https?|ftp|file)://)|www.)[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*\\.[-a-zA-Z0-9+&@#/%=~_|]";
+        var strRegex = "(http|ftp|https)://[a-zA-Z@0-9_.\\-]+(:\\d+)?(/[a-zA-Z0-9\\-_.#%]*)*(\\?[a-zA-Z0-9_]+=[a-zA-Z0-9_]+(&[a-zA-Z0-9_]+=[a-zA-Z0-9_]+)?)?";
         var reg = new RegExp(strRegex);
         if (!reg.test(urlString)) {
             return false;
@@ -116,12 +117,13 @@ export function checkUrl(urlString) {
 }
 
 export function getUrl(urlString) {
-    // var strRegex = "(((https?|ftp|file)://)|www.)[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*\\.[-a-zA-Z0-9+&@#/%=~_|]";
-    var strRegex = "(http|ftp|https):\\/\\/([\\w\\d\\-_]+[\\.\\w\\d\\-_]+)[:\\d+]?([\\/]?[\\w\\/\\.\\?=&;%@#\\+,]+)";
+    var strRegex = "(http|ftp|https)://[a-zA-Z@0-9_.\\-]+(:\\d+)?(/[a-zA-Z0-9\\-_.#%]*)*(\\?[a-zA-Z0-9_]+=[a-zA-Z0-9_]+(&[a-zA-Z0-9_]+=[a-zA-Z0-9_]+)?)?";
     var reg = new RegExp(strRegex);
-    var str = urlString.split(urlString.match(reg)[0]);
-    str.push(urlString.match(reg)[0]);
-    return str;
+    if (urlString.match(reg) != null) {
+        var str = urlString.split(urlString.match(reg)[0]);
+        str.push(urlString.match(reg)[0]);
+        return str;
+    }
 }
 
 /**

@@ -150,7 +150,6 @@ const ExamUpLoadModel = React.createClass({
      * @param file
      */
     onRemove(file) {
-        debugger
         var arr = this.state.urlArr;
         arr.forEach(function (v, i) {
             if (v.uid == file.uid) {

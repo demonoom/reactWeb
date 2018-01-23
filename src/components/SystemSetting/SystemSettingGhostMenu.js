@@ -65,7 +65,6 @@ class SystemSettingGhostMenu extends React.Component {
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                // debugger
                 var data = ret.response;
                 //判断是否有管理员
                 var Array = [];
