@@ -1103,8 +1103,9 @@ html, body, #root {
 }
 
 .ant-table-thead > tr > th.ant-table-selection-column, .ant-table-tbody > tr > td.ant-table-selection-column {
-    width: 40px;
+    width: 5%;
     text-align: center;
+    min-width: 40px;
 }
 
 .ant-table-thead > tr > th.left-12, .ant-table-tbody > tr > td.left-12, .group_table .ant-table-tbody > tr > td.left-12 {
@@ -1116,7 +1117,8 @@ html, body, #root {
 }
 .ant-table-thead > tr > th.ant-table-selection-user-again, .ant-table-tbody > tr > td.ant-table-selection-user-again{
     width: 10%;
-    word-break: break-all
+    word-break: break-all;
+    min-width: 60px;
 }
 .ant-table-thead > tr > th.ant-table-selection-user2, .ant-table-tbody > tr > td.ant-table-selection-user2 {
     width: 100px;
@@ -1136,15 +1138,23 @@ html, body, #root {
 }
 .ant-table-thead > tr > th.ant-table-selection-topic-again, .ant-table-tbody > tr > td.ant-table-selection-topic-again{
     width: 10%;
-    word-break: break-all
+    word-break: break-all;
+    min-width: 60px;
 }
 .ant-table-thead > tr > th.ant-table-selection-score, .ant-table-tbody > tr > td.ant-table-selection-score {
     width: 80px;
     text-align: center;
 }
+
+.ant-table-thead > tr > th.ant-table-selection-score-visibility, .ant-table-tbody > tr > td.ant-table-selection-score-visibility{
+    width: 10%;
+    word-break: break-all;
+    min-width: 80px;
+}
 .ant-table-thead > tr > th.ant-table-selection-score-again, .ant-table-tbody > tr > td.ant-table-selection-score-again{
-    width: 20%;
-    word-break: break-all
+    width: 15%;
+    word-break: break-all;
+    min-width: 90px;
 }
 .ant-table-thead > tr > th.ant-table-selection-score3, .ant-table-tbody > tr > td.ant-table-selection-score3 {
     width: 150px;
@@ -1153,6 +1163,7 @@ html, body, #root {
 .ant-table-thead > tr > th.ant-table-selection-score3-again, .ant-table-tbody > tr > td.ant-table-selection-score3-again{
     width: 25%;
     word-break: break-all;
+    min-width: 150px;
 }
 .ant-table-thead > tr > th.ant-table-selection-smallclass, .ant-table-tbody > tr > td.ant-table-selection-smallclass {
     width: 160px
@@ -1189,8 +1200,9 @@ element.style {
     max-width: 210px !important;
 }
 .ant-table-thead > tr > th.ant-table-selection-cont-again, .ant-table-tbody > tr > td.ant-table-selection-cont-again {
-    width: 30%;
+    width: 25%;
     word-break: break-all;
+    min-width: 210px;
 }
 .ant-table-thead > tr > th.ant-table-selection-cont article, .ant-table-tbody > tr > td.ant-table-selection-cont article {
     max-height: 100px !important;

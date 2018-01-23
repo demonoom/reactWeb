@@ -44,7 +44,7 @@ const columns = [{
     },
     {
         title: '可见性',
-        className: 'ant-table-selection-score ant-table-selection-score-again',
+        className: 'ant-table-selection-score-visibility',
         dataIndex: 'subjectVisible',
     },
     {
