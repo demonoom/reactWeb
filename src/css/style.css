@@ -2063,11 +2063,11 @@ a {
 
 @font-face {
     font-family: 'iconfont';  /* project id 197083 */
-    src: url('//at.alicdn.com/t/font_197083_uwgbf8jx1aif6r.eot');
-    src: url('//at.alicdn.com/t/font_197083_uwgbf8jx1aif6r.eot?#iefix') format('embedded-opentype'),
-    url('//at.alicdn.com/t/font_197083_uwgbf8jx1aif6r.woff') format('woff'),
-    url('//at.alicdn.com/t/font_197083_uwgbf8jx1aif6r.ttf') format('truetype'),
-    url('//at.alicdn.com/t/font_197083_uwgbf8jx1aif6r.svg#iconfont') format('svg');
+    src: url('//at.alicdn.com/t/font_197083_p365xzo72qvkj4i.eot');
+    src: url('//at.alicdn.com/t/font_197083_p365xzo72qvkj4i.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_197083_p365xzo72qvkj4i.woff') format('woff'),
+    url('//at.alicdn.com/t/font_197083_p365xzo72qvkj4i.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_197083_p365xzo72qvkj4i.svg#iconfont') format('svg');
 }
 
 .iconfont {
@@ -5298,6 +5298,11 @@ div.btn1 {
 
 .teachingAdmin.little-layout-aside-r-show .back i {
     font-size: 22px;
+    color: #0078e4;
+    font-weight: normal;
+}
+.share i{
+    font-size: 18px;
     color: #0078e4;
     font-weight: normal;
 }

@@ -119,7 +119,7 @@
                 <h3 class="title" id="${this.ifrid}_title">${ obj.title }</h3>
                     <div class="little-tilte">
                         <a class="back"><i class="anticon anticon-left "></i></a>
-                        <div class="share">分享</div>
+                        <a class="share"><i class="anticon anticon-share-alt "></i></a>
                     </div>
                 </div>
                 <div class="content">
