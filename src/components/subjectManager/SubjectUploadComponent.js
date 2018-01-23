@@ -55,6 +55,7 @@ const SubjectUploadComponent = React.createClass({
             conditionKeyOfKnowledge:'',  //查询知识点的关键字
             knowledges:[],  //题目的知识点
             subjectAnalysisModalVisible:false,  //题目的解析窗口状态
+            subjectVisibility:'all',    //题目可见性，默认全部可见
         };
     },
 
@@ -401,6 +402,11 @@ const SubjectUploadComponent = React.createClass({
         }else if(this.state.subjectType == "MC"){
             alterNativeAnswerCount = this.state.sliderValue;
         }
+        //题目归属的学校id，如果全部可见，则学校id为0
+        var ownerSchoolid=0;
+        if(this.state.subjectVisibility=='school'){
+            ownerSchoolid=this.state.loginUser.schoolId;
+        }
         var batchAddSubjectBeanJson = {
             "textTigan": subjectName,
             "textAnswer": answer,
@@ -409,7 +415,8 @@ const SubjectUploadComponent = React.createClass({
             "type": this.state.subjectType,
             "knowledges":this.state.knowledges,
             "analysisContent":this.state.analysisContent,
-            "alterNativeAnswerCount":alterNativeAnswerCount
+            "alterNativeAnswerCount":alterNativeAnswerCount,
+            "ownerSchoolid":ownerSchoolid
         };
         if (optType == "bySubjectId") {
             batchAddSubjectBeanJson.knowledgePointId = ScheduleOrSubjectId;
@@ -463,6 +470,7 @@ const SubjectUploadComponent = React.createClass({
      * @param subjectsIds
      */
     getKnowledgeInfosByConditionKey(pageNo,conditionKey){
+        var _this = this;
         var param = {
             "method": 'getKnowledgeInfoListByConditionKey',
             "pageNo": pageNo,
@@ -474,11 +482,13 @@ const SubjectUploadComponent = React.createClass({
                 if (ret.msg == "调用成功" && ret.success == true) {
                     //children.splice(0);
                     var response = ret.response;
+                    children.splice(0);
                     response.forEach(function (knowledgeInfo) {
                         var knowledgeId = knowledgeInfo.knowledgeId;
                         var knowledgeName = knowledgeInfo.knowledgeName;
                         children.push(<Option key={knowledgeId}>{knowledgeName}</Option>);
                     });
+                    //_this.setState({"knowledgeChildren":children});
                 }
             },
             onError: function (error) {
@@ -491,6 +501,11 @@ const SubjectUploadComponent = React.createClass({
         console.log("searchCondition:"+searchCondition);
         // children.splice(0);
         this.getKnowledgeInfosByConditionKey(this.state.pageNo,searchCondition);
+    },
+
+    filterKnowledge(inputValue,option){
+        console.log("inputValue:"+inputValue);
+        //this.getKnowledgeInfosByConditionKey(1,inputValue);
     },
 
     /**
@@ -523,6 +538,13 @@ const SubjectUploadComponent = React.createClass({
         var analysisContent = this.refs.subjectAnalysisContentComponent.getSubjectAnalysisContent();
         console.log(analysisContent);
         this.setState({analysisContent,subjectAnalysisModalVisible:false});
+    },
+
+    /**
+     * 题目可见性选项改变时的响应函数
+     */
+    subjectVisibilityOnChange(e){
+        this.setState({"subjectVisibility":e.target.value});
     },
 
     /**
@@ -701,14 +723,28 @@ const SubjectUploadComponent = React.createClass({
                                 <Select
                                     multiple={true}
                                     tags={true}
+                                    autoFocus={true}
+                                    showSearch={true}
+                                    filterOption={true}
                                     style={{ width: '100%' }}
                                     placeholder="请选择或输入知识点名称"
                                     value={this.state.knowledges}
                                     onChange={this.handleChange}
-                                    onSearch={this.searchKnowledge}
                                 >
                                     {children}
                                 </Select>
+                            </Col>
+                        </Row>
+
+                        <Row>
+                            <Col span={3} className="ant-form-item-label row-t-f">
+                                <span className="font-14">可见性：</span>
+                            </Col>
+                            <Col span={20} className="row-t-f">
+                                <RadioGroup onChange={this.subjectVisibilityOnChange} value={this.state.subjectVisibility}>
+                                    <Radio value="all">全部可见</Radio>
+                                    <Radio value="school">本校可见</Radio>
+                                </RadioGroup>
                             </Col>
                         </Row>
 

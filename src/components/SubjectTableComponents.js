@@ -43,6 +43,11 @@ const columns = [{
         dataIndex: 'subjectKnowledges',
     },
     {
+        title: '可见性',
+        className: 'ant-table-selection-score ant-table-selection-score-again',
+        dataIndex: 'subjectVisible',
+    },
+    {
         title: '操作',
         className: 'ant-table-selection-score3 ant-table-selection-score3-again',
         dataIndex: 'subjectOpt',
@@ -57,6 +62,7 @@ class SUbjectTable extends React.Component {
 
     constructor(props) {
         super(props);
+        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         this.state = {
             selectedRowKeys: [],
             selectedRowKeysStr: '',
@@ -72,6 +78,7 @@ class SUbjectTable extends React.Component {
             subjectParams: '',
             isOwmer: 'N',
             isDeleteAllSubject: false,
+            loginUser: loginUser,
         }
         this.start = this.start.bind(this);
         this.onSelectChange = this.onSelectChange.bind(this);
@@ -109,9 +116,10 @@ class SUbjectTable extends React.Component {
 
     componentWillReceiveProps(nextProps) {
 
-        let obj = nextProps || this.props.params ? this.props.params : null;
-        if (!obj) return;
-        this.initGetSubjectInfo(obj)
+        //let obj = nextProps || this.props.params ? this.props.params : null;
+        // let obj = nextProps;
+        // if (!obj) return;
+        this.initGetSubjectInfo(nextProps.params)
     }
 
     start() {
@@ -129,13 +137,13 @@ class SUbjectTable extends React.Component {
         this.setState({selectedRowKeys, selectedRowKeysStr});
     }
 
-    getSubjectData(ident, ScheduleOrSubjectId, pageNo, optType, knowledgeName, isOwmer) {
+    getSubjectData(ident, ScheduleOrSubjectId, pageNo, optType, knowledgeName, isOwmer,subjectVisible) {
         data = [];
         this.setState({optType: optType, knowledgeName: knowledgeName, ScheduleOrSubjectId: ScheduleOrSubjectId});
         if (optType == "bySchedule") {
             this.getSubjectDataBySchedule(ident, ScheduleOrSubjectId, pageNo);
         } else {
-            this.getSubjectDataByKnowledge(ident, ScheduleOrSubjectId, pageNo, isOwmer);
+            this.getSubjectDataByKnowledge(ident, ScheduleOrSubjectId, pageNo, isOwmer,subjectVisible);
         }
     }
 
@@ -317,7 +325,7 @@ class SUbjectTable extends React.Component {
                 } else {
                     message.error("题目删除失败");
                 }
-                _this.getSubjectDataByKnowledge(sessionStorage.getItem("ident"), _this.state.ScheduleOrSubjectId, _this.state.currentPage, "Y");
+                _this.getSubjectDataByKnowledge(sessionStorage.getItem("ident"), _this.state.ScheduleOrSubjectId, _this.state.currentPage, "Y",_this.state.subjectVisible);
             },
             onError: function (error) {
                 message.error(error);
@@ -361,14 +369,15 @@ class SUbjectTable extends React.Component {
      * @param pageNo
      * @param isOwmer
      */
-    getSubjectDataByKnowledge(ident, ScheduleOrSubjectId, pageNo, isOwmer) {
+    getSubjectDataByKnowledge(ident, ScheduleOrSubjectId, pageNo, isOwmer,subjectVisible) {
         let _this = this;
         var param = {
             "method": 'getUserSubjectsByKnowledgePoint',
             "ident": ident,
             "pointId": ScheduleOrSubjectId,
             "isOwmer": isOwmer,
-            "pageNo": pageNo
+            "pageNo": pageNo,
+            "subjectVisible":subjectVisible
         };
 
         doWebService(JSON.stringify(param), {
@@ -418,6 +427,11 @@ class SUbjectTable extends React.Component {
                                 knowledges.push(knowledge.knowledgeName);
                             });
                         }
+                        var ownerSchoolid = e.ownerSchoolid;
+                        var subjectVisible = "全部可见";
+                        if(isEmpty(ownerSchoolid)==false && ownerSchoolid == _this.state.loginUser.schoolId){
+                            subjectVisible = "本校可见";
+                        }
                         data.push({
                             key: key,
                             name: name,
@@ -426,7 +440,8 @@ class SUbjectTable extends React.Component {
                             //subjectScore: subjectScore,
                             subjectKnowledges: knowledges.join(","),
                             subjectOpt: subjectOpt,
-                            answer: answer
+                            answer: answer,
+                            subjectVisible:subjectVisible
                         });
                         var pager = ret.pager;
                         _this.setState({totalCount: parseInt(pager.rsCount)});
@@ -460,17 +475,21 @@ class SUbjectTable extends React.Component {
         var optType = subjectParamArray[3];
         var knowledgeName = subjectParamArray[4];
         var dataFilter = subjectParamArray[5];
-        var isOwmer = "Y";
+        var isOwmer = "";
+        var subjectVisible="";
         if (dataFilter == "self") {
             isOwmer = "Y";
         } else if (dataFilter == "other") {
             isOwmer = "N";
         }
-        this.getSubjectData(ident, ScheduleOrSubjectId, pageNo, optType, knowledgeName, isOwmer);
+        if(isEmpty(dataFilter)==false){
+            subjectVisible = dataFilter;
+        }
+        this.getSubjectData(ident, ScheduleOrSubjectId, pageNo, optType, knowledgeName, isOwmer,subjectVisible);
         if (isEmpty(subjectParamArray[6]) && "fromUpload" == subjectParamArray) {
-            this.setState({isOwmer, currentPage: 1});
+            this.setState({isOwmer, currentPage: 1,subjectVisible});
         } else {
-            this.setState({isOwmer, currentPage: parseInt(pageNo)});
+            this.setState({isOwmer, currentPage: parseInt(pageNo),subjectVisible});
         }
     }
 
@@ -505,7 +524,7 @@ class SUbjectTable extends React.Component {
 
     subjectEditCallBack() {
 
-        this.getSubjectDataByKnowledge(sessionStorage.getItem("ident"), this.state.ScheduleOrSubjectId, this.state.currentPage, "Y");
+        this.getSubjectDataByKnowledge(sessionStorage.getItem("ident"), this.state.ScheduleOrSubjectId, this.state.currentPage, "Y",this.state.subjectVisible);
     }
 
     render() {
