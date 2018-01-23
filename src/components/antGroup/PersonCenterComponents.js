@@ -213,11 +213,6 @@ const PersonCenterComponents = React.createClass({
         });
     },
 
-    //noomSelect
-    noomSelect() {
-        alert('noomSelect');
-    },
-
     /**
      * 发消息
      */

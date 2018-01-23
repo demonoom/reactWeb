@@ -65,7 +65,6 @@ class SystemSettingGhostMenu extends React.Component {
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                // debugger
                 var data = ret.response;
                 //判断是否有管理员
                 var Array = [];
@@ -122,12 +121,12 @@ class SystemSettingGhostMenu extends React.Component {
 
         //手动添加的测试菜单---开始
         var flowUl = <li className="multi">
-            <ul className="second">
-            <li onClick={event => {
-            this.changeMenu(event, 'noomkaoqing', true)
-            }}><img className="icon_system_img" src='http://60.205.86.217/upload2/common/img/examine_icon.png'/>考勤打卡
-            </li>
-            </ul>
+            {/*<ul className="second">*/}
+            {/*<li onClick={event => {*/}
+            {/*this.changeMenu(event, 'noomkaoqing', true)*/}
+            {/*}}><img className="icon_system_img" src='http://60.205.86.217/upload2/common/img/examine_icon.png'/>考勤打卡*/}
+            {/*</li>*/}
+            {/*</ul>*/}
 
             {/*<ul className="second">*/}
                 {/*<li onClick={event => {*/}
@@ -154,7 +153,6 @@ class SystemSettingGhostMenu extends React.Component {
 
     // toggle
     toggleGhostMenu(event) {
-
         event = event || window.event;
         event.preventDefault();
         event.stopPropagation();
@@ -217,7 +215,7 @@ class SystemSettingGhostMenu extends React.Component {
             mode: 'teachingAdmin',
             title: name,
             url: urls,
-        }
+        };
 
         LP.Start(param);
     }

@@ -3,44 +3,7 @@ import {isEmpty} from '../../utils/utils';
 import {Button, message, Table} from 'antd';
 import {doWebService} from '../../WebServiceHelper'
 import ExamUpLoadModel from './examUpLoadModel'
-
-const data = [{
-    key: '1',
-    name: '语文XXXxxxxxxxxx',
-}, {
-    key: '2',
-    name: '数学XXXxxxxxx',
-}, {
-    key: '3',
-    name: '英语XXXxxxxxxxxxxx',
-},{
-    key: '4',
-    name: '语文XXXxxxxxxxxx',
-}, {
-    key: '5',
-    name: '数学XXXxxxxxx',
-}, {
-    key: '6',
-    name: '英语XXXxxxxxxxxxxx',
-},{
-    key: '7',
-    name: '语文XXXxxxxxxxxx',
-}, {
-    key: '8',
-    name: '数学XXXxxxxxx',
-}, {
-    key: '9',
-    name: '英语XXXxxxxxxxxxxx',
-},{
-    key: '10',
-    name: '语文XXXxxxxxxxxx',
-}, {
-    key: '11',
-    name: '数学XXXxxxxxx',
-}, {
-    key: '12',
-    name: '英语XXXxxxxxxxxxxx',
-}];
+import Confirm from '../ConfirmModal'
 
 const ExamAnalysisComponents = React.createClass({
 
@@ -67,16 +30,24 @@ const ExamAnalysisComponents = React.createClass({
             "colUid": _this.state.loginUser.colUid,
             "pageNo": '-1'
         };
-        console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                console.log(ret);
-                // var data = ret.response;
-                /*if (ret.msg == "调用成功" && ret.success == true) {
-
+                var data = ret.response;
+                var arr = [];
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    if (isEmpty(data) == false) {
+                        data.forEach(function (v, i) {
+                            var obj = {
+                                key: v.taskId,
+                                name: v.taskName
+                            }
+                            arr.push(obj);
+                        })
+                        _this.setState({scoreData: arr});
+                    }
                 } else {
                     message.error(ret.msg);
-                }*/
+                }
             },
             onError: function (error) {
                 message.error(error);
@@ -102,7 +73,15 @@ const ExamAnalysisComponents = React.createClass({
      * 分析的回调
      */
     analysis(record) {
-        alert(record);
+        // var urls = 'http://172.16.2.53:8091/#/resultAnalysis?taskId=' + record.key;
+        var urls = 'http://jiaoxue.maaee.com:8091/#/resultAnalysis?taskId=' + record.key;
+        let param = {
+            mode: 'teachingAdmin',
+            title: '成绩分析',
+            url: urls,
+        };
+
+        LP.Start(param);
     },
 
     /**
@@ -110,7 +89,61 @@ const ExamAnalysisComponents = React.createClass({
      * @param record
      */
     delScore(record) {
-        alert(record)
+        this.setState({delRec: record});   //要删除的班次的对象
+        this.showConfirmModal();
+    },
+
+    /**
+     * 删除成绩单
+     */
+    deletePaperAnalysisTask() {
+        var num = this.state.delRec.key;
+        this.refs.confirm.changeConfirmModalVisible(false);
+        var _this = this;
+        //1.调用接口
+        var param = {
+            "method": "deletePaperAnalysisTask",
+            "taskId": num
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.msg == "调用成功" || ret.success == true) {
+                    //2.从本地数据删除那条班次信息
+                    var arr = _this.state.scoreData;
+                    arr.forEach(function (v, i) {
+                        if (v.key == num) {
+                            arr.splice(i, 1);
+                            return
+                        }
+                    });
+                    _this.setState({scoreData: arr});
+                    message.success('删除成功');
+                } else {
+                    message.error(ret.msg);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * Confirm打开
+     */
+    showConfirmModal() {
+        this.refs.confirm.changeConfirmModalVisible(true);
+    },
+
+    /**
+     * Confirm关闭
+     */
+    closeConfirmModal() {
+        this.refs.confirm.changeConfirmModalVisible(false);
+    },
+
+    addFinish() {
+        this.viewPaperAnalysisTaskPage();
     },
 
     /**
@@ -130,7 +163,8 @@ const ExamAnalysisComponents = React.createClass({
             className: 'class_right right',
             render: (text, record) => (
                 <span>
-                    <Button type="button" className="score3_i" icon="area-chart" onClick={_this.analysis.bind(this, record)}></Button>
+                    <Button type="button" className="score3_i" icon="area-chart"
+                            onClick={_this.analysis.bind(this, record)}></Button>
                     <Button type="button" icon="delete"
                             onClick={_this.delScore.bind(this, record)}></Button>
                 </span>
@@ -146,13 +180,19 @@ const ExamAnalysisComponents = React.createClass({
                 </div>
                 <div className="exam_analysis">
                     <Table columns={columns}
-                        // dataSource={this.state.scoreData}
-                           dataSource={data}
+                           dataSource={this.state.scoreData}
                            pagination={false}/>
                 </div>
                 <ExamUpLoadModel
                     isShow={this.state.examUpLoadModelIsShow}
                     closeExamAnalysisModel={this.closeExamAnalysisModel}
+                    addFinish={this.addFinish}
+                />
+                <Confirm
+                    ref="confirm"
+                    title="确定删除?"
+                    onConfirmModalCancel={this.closeConfirmModal}
+                    onConfirmModalOK={this.deletePaperAnalysisTask}
                 />
             </div>
         );

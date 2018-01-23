@@ -179,7 +179,6 @@ const UseKnowledgeComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                debugger
                 List.splice(0, List.length);
                 ret.response.forEach(function (e) {
                     var lessonArray = e.split("#");

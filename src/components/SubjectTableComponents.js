@@ -301,7 +301,6 @@ class SUbjectTable extends React.Component {
      * @param subjectIds
      */
     deleteSubjectsByConditon(subjectIds) {
-        debugger
         let _this = this;
         //同时删除此人教学进度和知识点下面的这些题目
         var param

@@ -208,7 +208,6 @@ const RoleSettingComponents = React.createClass({
     },
 
     callBackDelRoleId(id) {
-        debugger
         var arr = this.state.part;
         arr.forEach(function (v, i) {
             if (v.id == id) {

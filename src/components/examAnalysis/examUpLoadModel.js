@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import {isEmpty} from '../../utils/utils';
 import {doWebService} from '../../WebServiceHelper'
 import {Modal, Input, Upload, Button, Icon, message} from 'antd';
+import {showLargeImg} from '../../utils/utils';
 
 const ExamUpLoadModel = React.createClass({
 
@@ -61,6 +62,7 @@ const ExamUpLoadModel = React.createClass({
     },
 
     addPaperAnalysisTask() {
+        var _this = this;
         var task = {
             creatorId: this.state.loginUser.colUid,
             name: this.state.name,
@@ -70,20 +72,19 @@ const ExamUpLoadModel = React.createClass({
             knowledgeFile: this.state.urlArr[0].url,
             resultFile: this.state.urlArr[1].url,
         };
-        // console.log(task);
         var param = {
             "method": "addPaperAnalysisTask",
             "task": JSON.stringify(task)
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                console.log(ret);
-                // var data = ret.response;
-                /*if (ret.msg == "调用成功" && ret.success == true) {
-
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    message.success('成绩单上传成功');
+                    _this.closeAddShiftModal();
+                    _this.props.addFinish();
                 } else {
                     message.error(ret.msg);
-                }*/
+                }
             },
             onError: function (error) {
                 message.error(error);
@@ -99,6 +100,10 @@ const ExamUpLoadModel = React.createClass({
         this.props.closeExamAnalysisModel();
         this.state.fileList.splice(0);
         this.state.urlArr.splice(0);
+        this.state.name = '';
+        this.state.excellentFractionalLine = '';
+        this.state.qualifiedScoreLine = '';
+        this.state.totalValue = '';
     },
 
     /**
@@ -145,7 +150,6 @@ const ExamUpLoadModel = React.createClass({
      * @param file
      */
     onRemove(file) {
-        debugger
         var arr = this.state.urlArr;
         arr.forEach(function (v, i) {
             if (v.uid == file.uid) {
@@ -199,6 +203,16 @@ const ExamUpLoadModel = React.createClass({
         this.setState({excellentFractionalLine});
     },
 
+    ckeckFirstImg() {
+        document.getElementById('firstImg').click();
+        document.getElementById('J_pg').style.zIndex = 10000;
+    },
+
+    secFirstImg() {
+        document.getElementById('secImg').click();
+        document.getElementById('J_pg').style.zIndex = 10000;
+    },
+
     /**
      * 渲染页面
      * @returns {XML}
@@ -231,32 +245,52 @@ const ExamUpLoadModel = React.createClass({
                     </div>
                     <div className="row_div">
                         <div className="ant-col-6 right_look">总分值：</div>
-                        <div className="ant-col-14"><Input value={this.state.totalValue} onChange={this.totalValueOnChange}/></div>
+                        <div className="ant-col-14"><Input value={this.state.totalValue}
+                                                           onChange={this.totalValueOnChange}/></div>
                     </div>
                     <div className="row_div">
                         <div className="ant-col-6 right_look">合格分数线：</div>
-                        <div className="ant-col-14"><Input value={this.state.qualifiedScoreLine} onChange={this.qualifiedScoreLineOnChange}/></div>
+                        <div className="ant-col-14"><Input value={this.state.qualifiedScoreLine}
+                                                           onChange={this.qualifiedScoreLineOnChange}/></div>
                     </div>
                     <div className="row_div">
                         <div className="ant-col-6 right_look">优秀分数线：</div>
-                        <div className="ant-col-14"><Input value={this.state.excellentFractionalLine} onChange={this.excellentFractionalLineOnChange}/></div>
+                        <div className="ant-col-14"><Input value={this.state.excellentFractionalLine}
+                                                           onChange={this.excellentFractionalLineOnChange}/></div>
                     </div>
                     <div className="row_div">
-                        <div className="ding_t_red ding_t_12 exam_analysis_red">＊先上传知识点，再上传成绩单</div>
+                        <div className="ding_t_red ding_t_12 exam_analysis_red">＊先上传双向细目表，再上传成绩单</div>
+                        <span className="ding_t_red ding_t_12 exam_analysis_red"
+                              style={{marginLeft: 132}}>＊点击查看文件规范要求:</span>
+                        <span className="ding_t_red ding_t_12 exam_analysis_red noom_cursor"
+                              style={{marginLeft: 8, color: 'blue'}}
+                              onClick={this.ckeckFirstImg}
+                        >双向细目表规范</span>
+                        <span className="ding_t_red ding_t_12 exam_analysis_red noom_cursor"
+                              style={{marginLeft: 5, color: 'blue'}}
+                              onClick={this.secFirstImg}
+                        >试卷成绩规范</span>
+                        <img id='firstImg' style={{display: 'none'}}
+                             src={require('../images/lALPBY0V4ucb2ujNBKTNA3M_883_1188.png')}
+                             onClick={showLargeImg}/>
+                        <img id='secImg' style={{display: 'none'}}
+                             src={require('../images/lALPBY0V4ucb2ufNBKTNA3M_883_1188.png')}
+                             onClick={showLargeImg}/>
                     </div>
                     <div>
                         <div className="ant-col-6 right_look">文件上传：</div>
                         <div className="ant-col-14">
                             <Upload {...props} fileList={this.state.fileList}>
                                 <Button>
-                                    <Icon type="upload" />上传
+                                    <Icon type="upload"/>上传
                                 </Button>
                             </Upload>
                         </div>
                     </div>
                 </div>
             </Modal>
-        );
+        )
+            ;
     }
 });
 

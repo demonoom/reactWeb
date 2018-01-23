@@ -144,7 +144,7 @@ class TeachSpaces extends React.Component {
                 this.tabComponent = <TestListComponents ref="testListComponents"/>;
                 break;
             case 'examAnalysis':
-                // 试卷分析
+                // 成绩分析
                 this.tabComponent = <ExamAnalysisComponents ref="examAnalysisComponents"/>;
                 break;
 

@@ -62,7 +62,6 @@
         enterFull(nodeEl[0]);
     };
     littlePanle.prototype.zoomMinView = function (id) {
-        // alert(2);
         let nodeEl = $('#' + id);
         let perInfo = nodeEl.attr('per');
         nodeEl.removeAttr('per');
@@ -108,6 +107,8 @@
 
     var isAddedListener = false;
 
+    var titleNoom = '';
+
     littlePanle.prototype._teachAdmin_UI_templet = function (obj) {
 
         let id = UUID(8, 16);
@@ -118,7 +119,7 @@
                 <h3 class="title" id="${this.ifrid}_title">${ obj.title }</h3>
                     <div class="little-tilte">
                         <a class="back"><i class="anticon anticon-left "></i></a>
-                        <!--<div class="goback">后退</div>-->
+                        <a class="share"><i class="anticon anticon-share-alt "></i></a>
                     </div>
                 </div>
                 <div class="content">
@@ -172,7 +173,7 @@
         }
 
         $(this.el).find('.back').on('click', this.closepanle.bind(this, this.id));
-        $(this.el).find('.goback').on('click', this.gobackpanle.bind(this, this.id));
+        $(this.el).find('.share').on('click', this.sharePanel.bind(this, this.id));
         this.ifrel = $('#' + this.ifrid);
 
         var iframe = this.ifrel[0];
@@ -209,6 +210,7 @@
                     LP.Start(obj);
                 } else if (data.method == 'setPanelTitle') {
                     var title = data.title;
+                    titleNoom = data.title;
                     var id = data.windowName + "_title";
                     if (title == 'undefined') {
                         document.getElementById(id).innerText = '';
@@ -235,13 +237,10 @@
         return this;
     };
 
-    littlePanle.prototype.gobackpanle = function () {
-        //向jsp发送后退信号
+    littlePanle.prototype.sharePanel = function () {
+        //分享移动网页
         var iframe = this.ifrel[0];
-
-        iframe.contentWindow.postMessage('goback', '*');
-        // stopPropagation
-        // iframe.contentWindow.stopPropagation();
+        window.__noomShareMbile__(iframe.src, titleNoom);
 
     };
 
@@ -1513,12 +1512,10 @@ var phone = {
 
         if (method == 'selectPicture') {
             // .....执行本地逻辑
-            alert(1);
             var paths = "";
             var backId = json.callbackId;
             iframeWindow.Bridge.cb.backId(paths);
         } else if (method = 'openNewPage') {
-            alert(2);
 
         }
     },
