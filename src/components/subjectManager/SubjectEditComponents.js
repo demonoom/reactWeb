@@ -55,6 +55,7 @@ const SubjectEditComponents = React.createClass({
             analysisModifyContent:'',
             sliderValue:4,
             singleSliderValue:4,
+            subjectVisibility:'all',    //题目可见性，默认全部可见
         };
     },
 
@@ -148,8 +149,13 @@ const SubjectEditComponents = React.createClass({
                     analysisContent = response.analysisContent;
                     analysisEditContent = response.analysisContent;
                 }
+                var ownerSchoolid = response.ownerSchoolid;
+                var subjectVisibility = "all";
+                if(isEmpty(ownerSchoolid)==false && ownerSchoolid != '0' ){
+                    subjectVisibility = "school";
+                }
                 _this.setState({
-                    visible: true,knowledges,"analysisModifyContent":analysisContent
+                    visible: true,knowledges,"analysisModifyContent":analysisContent,subjectVisibility
                 });
             },
             onError: function (error) {
@@ -226,7 +232,7 @@ const SubjectEditComponents = React.createClass({
     /**
      * 修改题目
      */
-    modifySubject(content, answer){
+    modifySubject(content, answer,ownerSchoolid){
         var param = {
             "method": 'modifySubject',
             "sid": sid,
@@ -234,7 +240,8 @@ const SubjectEditComponents = React.createClass({
             "answer": answer,
             "score": "-1",
             "knowledgesStr":this.state.knowledges.toString(),
-            "analysisContent":this.state.analysisModifyContent
+            "analysisContent":this.state.analysisModifyContent,
+            "ownerSchoolid":ownerSchoolid
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -402,6 +409,11 @@ const SubjectEditComponents = React.createClass({
         }
         var subjectName = subjectContentForEdit.content.get();
         var answer = this.getSubjectAnswerByType();
+        //题目归属的学校id，如果全部可见，则学校id为0
+        var ownerSchoolid=0;
+        if(this.state.subjectVisibility=='school'){
+            ownerSchoolid=this.state.loginUser.schoolId;
+        }
         //完成基础的非空验证
         if (isEmpty(subjectName)) {
             message.warning("请输入题目");
@@ -409,7 +421,7 @@ const SubjectEditComponents = React.createClass({
             message.warning("请输入答案");
         } else {
             //完成题目的修改操作
-            this.modifySubject(subjectName, answer);
+            this.modifySubject(subjectName, answer,ownerSchoolid);
             this.setState({visible: false});
             //重新初始化页面
             this.initPage();
@@ -507,6 +519,13 @@ const SubjectEditComponents = React.createClass({
             mulitiAnswerOptions.push(selectValue);
         }
         this.setState({"mulitiAnswerOptions":mulitiAnswerOptions,"sliderValue":value});
+    },
+
+    /**
+     * 题目可见性选项改变时的响应函数
+     */
+    subjectVisibilityOnChange(e){
+        this.setState({"subjectVisibility":e.target.value});
     },
 
     /**
@@ -698,6 +717,18 @@ const SubjectEditComponents = React.createClass({
                                 >
                                     {this.state.knowledgeOptionArray}
                                 </Select>
+                            </Col>
+                        </Row>
+
+                        <Row>
+                            <Col span={3} className="ant-form-item-label row-t-f">
+                                <span className="font-14">可见性：</span>
+                            </Col>
+                            <Col span={20} className="row-t-f">
+                                <RadioGroup onChange={this.subjectVisibilityOnChange} value={this.state.subjectVisibility}>
+                                    <Radio value="all">全部可见</Radio>
+                                    <Radio value="school">本校可见</Radio>
+                                </RadioGroup>
                             </Col>
                         </Row>
 

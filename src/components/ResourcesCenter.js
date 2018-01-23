@@ -8,6 +8,9 @@ import CourseWareUploadComponents from './CourseWareUploadComponents';
 import SubjectUploadComponent from './subjectManager/SubjectUploadComponent';
 
 const TabPane = Tabs.TabPane;
+const SubMenu = Menu.SubMenu;
+const MenuItemGroup = Menu.ItemGroup;
+
 
 class ResourcesCenter extends React.Component{
 
@@ -197,8 +200,16 @@ class ResourcesCenter extends React.Component{
 
         const menu = (
             <Menu onClick={this.menuItemOnClick}>
-                <Menu.Item key="self">只看自己</Menu.Item>
-                <Menu.Item key="other">查看他人</Menu.Item>
+                <SubMenu title={<span><Icon type="filter" />数据筛选</span>}>
+                    <MenuItemGroup key="subjectCreator" title="题目创建者">
+                        <Menu.Item key="self">只看自己</Menu.Item>
+                        <Menu.Item key="other">查看他人</Menu.Item>
+                    </MenuItemGroup>
+                    <MenuItemGroup key="subjectOwner" title="题目归属者">
+                        <Menu.Item key="school">只看本校</Menu.Item>
+                        <Menu.Item key="all">查看全部</Menu.Item>
+                    </MenuItemGroup>
+                </SubMenu>
             </Menu>
         );
 
