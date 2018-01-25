@@ -75,6 +75,7 @@ const ExamAnalysisComponents = React.createClass({
     analysis(record) {
         // var urls = 'http://172.16.2.53:8091/#/resultAnalysis?taskId=' + record.key;
         var urls = 'http://jiaoxue.maaee.com:8091/#/resultAnalysis?taskId=' + record.key;
+        // var urls = 'http://172.16.2.64:8091/#/resultAnalysis?taskId=' + record.key;
         let param = {
             mode: 'teachingAdmin',
             title: '成绩分析',
