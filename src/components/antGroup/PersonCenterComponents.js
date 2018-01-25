@@ -81,25 +81,26 @@ var subjectTableColumns = [{
 ];
 
 const memberColumns = [{
-    title: '姓名555',
+    title: '姓名',
     dataIndex: 'userName',
     key: 'userName',
     width: 160,
     className: 'dold_text departmental_officer'
 }, {
-    title: '手机号66666',
+    title: '手机号',
     dataIndex: 'userPhone',
     key: 'userPhone'
 }, {
-    title: '公司职位',
+    title: '',
     dataIndex: 'isMaster',
     key: 'isMaster',
-},
+}
+/*,
     {
         title: '操作',
         dataIndex: 'subjectButtons',
         key: 'subjectButtons',
-    },
+    },*/
 ];
 
 //部门
@@ -196,11 +197,11 @@ const PersonCenterComponents = React.createClass({
     /**
      * 当点击人员列表行时，弹出该人员的具体信息界面
      */
-    onRowClick(e,record) {
-        e = e || window.event;
+    onRowClick(record) {
+        /*e = e || window.event;
         if (e.nativeEvent) {
             e.nativeEvent.stopImmediatePropagation();
-        }
+        }*/
         // e.stopPropagation();
         // e.preventDefault();
         // e.cancelBubble = true;
@@ -989,7 +990,7 @@ const PersonCenterComponents = React.createClass({
                                 userName: user.userName,
                                 userPhone: user.phoneNumber,
                                 isMaster: '主管',
-                                subjectButtons:moveButton
+                                //subjectButtons:moveButton
                             });
 
                         } else {
@@ -998,7 +999,7 @@ const PersonCenterComponents = React.createClass({
                                 userId: user.colUid,
                                 userName: user.userName,
                                 userPhone: user.phoneNumber,
-                                subjectButtons:moveButton
+                                //subjectButtons:moveButton
                             });
                         }
 
