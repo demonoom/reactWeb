@@ -319,7 +319,7 @@ const PersonCenterComponents = React.createClass({
                             userHeaderIcon: userHeaderIcon,
                             "userObj": followUser
                         };
-                        // followsUserArray.push(userJson);
+                        followsUserArray.push(userJson);
                         var followsCard = <Card key={followUser.colUid} id={followUser} className="focus"
                                                 onClick={personCenter.getPersonalCenterData.bind(personCenter, followUser.colUid)}>
                             <a target="_blank" className="attention_img">
