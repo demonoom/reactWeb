@@ -81,25 +81,25 @@ var subjectTableColumns = [{
 ];
 
 const memberColumns = [{
-    title: '姓名555',
+    title: '姓名',
     dataIndex: 'userName',
     key: 'userName',
     width: 160,
     className: 'dold_text departmental_officer'
 }, {
-    title: '手机号66666',
+    title: '手机号',
     dataIndex: 'userPhone',
     key: 'userPhone'
 }, {
-    title: '公司职位',
+    title: '',
     dataIndex: 'isMaster',
     key: 'isMaster',
 },
-    {
-        title: '操作',
-        dataIndex: 'subjectButtons',
-        key: 'subjectButtons',
-    },
+    // {
+    //     title: '操作',
+    //     dataIndex: 'subjectButtons',
+    //     key: 'subjectButtons',
+    // },
 ];
 
 //部门
@@ -196,14 +196,11 @@ const PersonCenterComponents = React.createClass({
     /**
      * 当点击人员列表行时，弹出该人员的具体信息界面
      */
-    onRowClick(e,record) {
-        e = e || window.event;
-        if (e.nativeEvent) {
-            e.nativeEvent.stopImmediatePropagation();
-        }
-        // e.stopPropagation();
-        // e.preventDefault();
-        // e.cancelBubble = true;
+    onRowClick(record) {
+        // e = e || window.event;
+        // if (e.nativeEvent) {
+        //     e.nativeEvent.stopImmediatePropagation();
+        // }
         this.getPersonalCenterData(record.userId, 'structureUser');
     },
 
@@ -989,7 +986,6 @@ const PersonCenterComponents = React.createClass({
                                 userName: user.userName,
                                 userPhone: user.phoneNumber,
                                 isMaster: '主管',
-                                subjectButtons:moveButton
                             });
 
                         } else {
@@ -998,7 +994,6 @@ const PersonCenterComponents = React.createClass({
                                 userId: user.colUid,
                                 userName: user.userName,
                                 userPhone: user.phoneNumber,
-                                subjectButtons:moveButton
                             });
                         }
 
@@ -2682,23 +2677,23 @@ const PersonCenterComponents = React.createClass({
                 <UseKnowledgeComponents ref="useKnowledgeComponents"/>
                 {personDate}
 
-                <Modal
-                       visible={personCenter.state.moveStructeModalVisible}
-                       title="移动至组织架构"
-                       onCancel={personCenter.moveStructeModalclose}
-                       transitionName=""  //禁用modal的动画效果
-                       maskClosable={false} //设置不允许点击蒙层关闭
-                       footer={[
-                           <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
-                                   onClick={personCenter.moveStructeModalConfirm}>确定</button>,
-                           <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
-                                   onClick={personCenter.moveStructeModalCancel}>取消</button>
-                       ]}
-                >
-                    <Row className="ant-form-item">
-                    3333
-                    </Row>
-                </Modal>
+                {/*<Modal*/}
+                    {/*visible={personCenter.state.moveStructeModalVisible}*/}
+                    {/*title="移动至组织架构"*/}
+                    {/*onCancel={personCenter.moveStructeModalclose}*/}
+                    {/*transitionName=""  //禁用modal的动画效果*/}
+                    {/*maskClosable={false} //设置不允许点击蒙层关闭*/}
+                    {/*footer={[*/}
+                        {/*<button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"*/}
+                                {/*onClick={personCenter.moveStructeModalConfirm}>确定</button>,*/}
+                        {/*<button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"*/}
+                                {/*onClick={personCenter.moveStructeModalCancel}>取消</button>*/}
+                    {/*]}*/}
+                {/*>*/}
+                    {/*<Row className="ant-form-item">*/}
+                        {/*3333*/}
+                    {/*</Row>*/}
+                {/*</Modal>*/}
             </div>
         );
     },
