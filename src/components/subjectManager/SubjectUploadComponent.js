@@ -723,6 +723,16 @@ const SubjectUploadComponent = React.createClass({
                                 <Select
                                     multiple={true}
                                     tags={true}
+                                    style={{ width: '100%' }}
+                                    placeholder="请选择或输入知识点名称"
+                                    value={this.state.knowledges}
+                                    onChange={this.handleChange}
+                                    onSearch={this.searchKnowledge}
+                                >
+                                    {/*
+                                <Select
+                                    multiple={true}
+                                    tags={true}
                                     autoFocus={true}
                                     showSearch={true}
                                     filterOption={true}
@@ -730,7 +740,7 @@ const SubjectUploadComponent = React.createClass({
                                     placeholder="请选择或输入知识点名称"
                                     value={this.state.knowledges}
                                     onChange={this.handleChange}
-                                >
+                                >*/}
                                     {children}
                                 </Select>
                             </Col>

@@ -94,12 +94,22 @@ const memberColumns = [{
     title: '',
     dataIndex: 'isMaster',
     key: 'isMaster',
+<<<<<<< HEAD
 },
     // {
     //     title: '操作',
     //     dataIndex: 'subjectButtons',
     //     key: 'subjectButtons',
     // },
+=======
+}
+/*,
+    {
+        title: '操作',
+        dataIndex: 'subjectButtons',
+        key: 'subjectButtons',
+    },*/
+>>>>>>> c49f0169eeb4cf1ea3136820591df553856320dc
 ];
 
 //部门
@@ -197,10 +207,20 @@ const PersonCenterComponents = React.createClass({
      * 当点击人员列表行时，弹出该人员的具体信息界面
      */
     onRowClick(record) {
+<<<<<<< HEAD
         // e = e || window.event;
         // if (e.nativeEvent) {
         //     e.nativeEvent.stopImmediatePropagation();
         // }
+=======
+        /*e = e || window.event;
+        if (e.nativeEvent) {
+            e.nativeEvent.stopImmediatePropagation();
+        }*/
+        // e.stopPropagation();
+        // e.preventDefault();
+        // e.cancelBubble = true;
+>>>>>>> c49f0169eeb4cf1ea3136820591df553856320dc
         this.getPersonalCenterData(record.userId, 'structureUser');
     },
 
@@ -986,6 +1006,10 @@ const PersonCenterComponents = React.createClass({
                                 userName: user.userName,
                                 userPhone: user.phoneNumber,
                                 isMaster: '主管',
+<<<<<<< HEAD
+=======
+                                //subjectButtons:moveButton
+>>>>>>> c49f0169eeb4cf1ea3136820591df553856320dc
                             });
 
                         } else {
@@ -994,6 +1018,10 @@ const PersonCenterComponents = React.createClass({
                                 userId: user.colUid,
                                 userName: user.userName,
                                 userPhone: user.phoneNumber,
+<<<<<<< HEAD
+=======
+                                //subjectButtons:moveButton
+>>>>>>> c49f0169eeb4cf1ea3136820591df553856320dc
                             });
                         }
 
