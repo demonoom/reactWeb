@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {Tabs, Button, Radio} from 'antd';
 import {Modal} from 'antd';
-import {Input, Select, Row, Col, Checkbox,Progress,Slider} from 'antd';
+import {Input, Select, Row, Col, Checkbox,Progress,Slider,Tag} from 'antd';
 import {message} from 'antd';
 import TextboxioComponentForSingleByModify from '../textboxioComponents/TextboxioComponentForSingleByModify';
 import TextboxioComponentForMulitiSelectByModify from '../textboxioComponents/TextboxioComponentForMulitiSelectByModify';
@@ -14,6 +14,7 @@ import SubjectAnalysisContentEditor from './SubjectAnalysisContentEditor';
 import TextboxioComponentForAnswer from '../textboxioComponents/TextboxioComponentForAnswer';
 import {isEmpty,AUDIO_SUBJECT_ALLOWED} from "../../utils/Const";
 import {doWebService} from '../../WebServiceHelper';
+import SelectKnowledgeModal from './SelectKnowledgeModal';
 const RadioGroup = Radio.Group;
 const Option = Select.Option;
 const CheckboxGroup = Checkbox.Group;
@@ -33,6 +34,7 @@ const SubjectEditComponents = React.createClass({
     getInitialState() {
         subjectUpload = this;
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+        console.log("==========getInitialState============");
         return {
             loginUser: loginUser,
             visible: false,
@@ -56,6 +58,8 @@ const SubjectEditComponents = React.createClass({
             sliderValue:4,
             singleSliderValue:4,
             subjectVisibility:'all',    //题目可见性，默认全部可见
+            tags:[],
+            selectKnowledgeModalIsShow:false
         };
     },
 
@@ -136,11 +140,11 @@ const SubjectEditComponents = React.createClass({
                 } else if (subjectType == "S") {
                     answerContent = response.answer;
                 }
-                var knowledges = [];
+                var tags = [];
                 var knowledgeInfoList = response.knowledgeInfoList;
                 if(isEmpty(knowledgeInfoList)==false){
                     knowledgeInfoList.forEach(function (knowledge) {
-                        knowledges.push(knowledge.knowledgeName);
+                        tags.push({key:knowledge.knowledgeId,name:knowledge.knowledgeName});
                         // knowledges.push(knowledge.knowledgeId);
                     });
                 }
@@ -155,7 +159,7 @@ const SubjectEditComponents = React.createClass({
                     subjectVisibility = "school";
                 }
                 _this.setState({
-                    visible: true,knowledges,"analysisModifyContent":analysisContent,subjectVisibility
+                    visible: true,tags,"analysisModifyContent":analysisContent,subjectVisibility
                 });
             },
             onError: function (error) {
@@ -233,13 +237,18 @@ const SubjectEditComponents = React.createClass({
      * 修改题目
      */
     modifySubject(content, answer,ownerSchoolid){
+        var knowledges=[];
+        for(var i=0;i<this.state.tags.length;i++){
+            var tag = this.state.tags[i];
+            knowledges.push(tag.name);
+        }
         var param = {
             "method": 'modifySubject',
             "sid": sid,
             "content": content,
             "answer": answer,
             "score": "-1",
-            "knowledgesStr":this.state.knowledges.toString(),
+            "knowledgesStr":knowledges.toString(),
             "analysisContent":this.state.analysisModifyContent,
             "ownerSchoolid":ownerSchoolid
         };
@@ -528,6 +537,43 @@ const SubjectEditComponents = React.createClass({
         this.setState({"subjectVisibility":e.target.value});
     },
 
+    showSelectKnowledgeModal(){
+        this.setState({"selectKnowledgeModalIsShow":true});
+    },
+
+    closeSelectKnowledgeModal(tags){
+        // var tags = this.state.tags;
+        // newTags.forEach(function (newTag) {
+        //     tags.push(newTag);
+        // });
+        var _this = this;
+        console.log("close:"+tags);
+        _this.state.tags.splice(0);
+        // this.setState({"tags":tags});
+        if(isEmpty(tags)==false){
+            tags.forEach(function (tag) {
+                _this.state.tags.push(tag);
+            })
+        }
+        _this.setState({"selectKnowledgeModalIsShow":false});
+    },
+
+    /**
+     * 修改题目时，可以直接删除已选的知识点
+     * @param removedTag
+     */
+    handleClose(removedTag){
+        var tags = this.state.tags;
+        for (var i = 0; i < tags.length; i++) {
+            if (tags[i].key == removedTag.key) {
+                tags.splice(i, 1);
+            }
+        }
+        console.log("handleClose:"+tags);
+        this.setState(tags);
+    },
+
+
     /**
      * 页面元素渲染
      */
@@ -638,6 +684,7 @@ const SubjectEditComponents = React.createClass({
 
         //根据该状态值，来决定上传进度条是否显示
         var progressState = this.state.progressState;
+        const {tags} = this.state;
 
         return (
             <div className="toobar right_ri">
@@ -699,24 +746,19 @@ const SubjectEditComponents = React.createClass({
                                 <span className="font-14">知识点：</span>
                             </Col>
                             <Col span={20} className="row-t-f">
-                                {/*<Select multiple={true}
-                                        tags={true} value={['lucy','jack']} style={{ width: 120 }} onChange={this.handleChange}>
-                                    <Option value="jack">Jack</Option>
-                                    <Option value="lucy">Lucy</Option>
-                                    <Option value="disabled" disabled>Disabled</Option>
-                                    <Option value="Yiminghe">yiminghe</Option>
-                                </Select>*/}
-                               <Select
-                                    multiple={true}
-                                    tags={true}
-                                    style={{ width: '100%' }}
-                                    placeholder="请选择或输入知识点名称"
-                                    value={this.state.knowledges}
-                                    onChange={this.handleChange}
-                                    onSearch={this.searchKnowledge}
-                                >
-                                    {this.state.knowledgeOptionArray}
-                                </Select>
+                                <div className="ding_tags upexam_float">
+                                    {tags.map((tag, index) => {
+                                        const isLongTag = tag.length > 20;
+                                        const tagElem = (
+                                            <Tag key={tag.key} closable={index !== -1}
+                                                 afterClose={() => this.handleClose(tag)}>
+                                                {isLongTag ? `${tag.name.slice(0, 20)}...` : tag.name}
+                                            </Tag>
+                                        );
+                                        return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
+                                    })}
+                                </div>
+                                <Button className="row-t-f roe-t-f-left" onClick={this.showSelectKnowledgeModal}>选择知识点</Button>
                             </Col>
                         </Row>
 
@@ -801,6 +843,9 @@ const SubjectEditComponents = React.createClass({
 
                     </Row>
                 </Modal>
+
+                <SelectKnowledgeModal isShow={this.state.selectKnowledgeModalIsShow} initTags={this.state.tags}
+                                      closeSelectKnowledgeModal={this.closeSelectKnowledgeModal}></SelectKnowledgeModal>
 
             </div>
         );
