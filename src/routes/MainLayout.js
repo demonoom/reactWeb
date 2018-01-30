@@ -1,6 +1,5 @@
 import React from 'react';
 import {Menu, Icon, Row, Col, notification, Modal, Collapse, Checkbox, Input, message} from 'antd';
-import MainTabComponents from '../components/MainTabComponents';
 import HeaderComponents from '../components/HeaderComponents';
 import UserFace from '../components/UserCardModalComponents';
 import FloatButton from '../components/FloatButton';
@@ -120,41 +119,6 @@ const MainLayout = React.createClass({
 
         if (e.key != "KnowledgeResources") {
             var breadcrumbArray = [{hrefLink: '#/MainLayout', hrefText: "首页"}];
-            if (this.refs.mainTabComponents) {
-                this.refs.mainTabComponents.buildBreadcrumb(breadcrumbArray, 0);
-            }
-        }
-    },
-
-
-    // 不用了
-    //获取备课计划下的课件资源
-    getTeachPlans: function (optContent, breadCrumbArray) {
-        //点击的菜单标识：teachScheduleId
-        if (optContent == null) {
-            if (this.refs.mainTabComponents) {
-                this.refs.mainTabComponents.buildBreadcrumb(breadCrumbArray);
-            }
-        } else {
-
-            var optContentArray = optContent.split("#");
-            var childrenCount = optContentArray[3];
-            //lastClickMenuChildrenCount = childrenCount;
-            sessionStorage.setItem("lastClickMenuChildrenCount", childrenCount);
-            if (optContentArray[1] != "bySubjectId") {
-                var breadcrumbArray = [{hrefLink: '#/MainLayout', hrefText: "首页"}];
-                if (this.refs.mainTabComponents) {
-                    this.refs.mainTabComponents.buildBreadcrumb(breadcrumbArray);
-                }
-            }
-
-            if (this.refs.mainTabComponents) {
-                this.refs.mainTabComponents.buildBreadcrumb(breadCrumbArray, childrenCount);
-
-            }
-            if (this.refs.mainTabComponents) {
-                this.refs.mainTabComponents.getTeachPlans(optContent);
-            }
         }
     },
 
@@ -194,27 +158,6 @@ const MainLayout = React.createClass({
 
     },
 
-    // 不用了
-    // 呼叫本组件中的实例任何方法 dapeng
-    componentDidUpdate() {
-        if (this.autoeventparam) {
-            // ['antGroupTabComponents', 'param', 'antGroupTabComponents'],
-            let param = this.autoeventparam.linkpart.shift();
-            if (param[2]) {
-                let param = this.autoeventparam;
-                let componentPart = this.refs[param[2]];
-                componentPart[param[0]](param[1], param);
-            }
-
-            this.autoeventparam = null;
-        } else {
-            let obj = this.proxyObj;
-            if (!obj) return;
-
-            this.refs[obj.ref][obj.methond].call(this.refs[obj.ref], obj.param);
-            this.proxyObj = null;
-        }
-    },
 
     noomSelectPic(src, obj) {
         this.setState({sendPicModel: true, pinSrc: src, picFile: obj});
@@ -925,8 +868,6 @@ const MainLayout = React.createClass({
         var tabComponent;
 
         switch (this.state.currentKey) {
-            default:
-                tabComponent = <MainTabComponents ref="mainTabComponents"/>;
             case 'message':
                 //消息动态
                 middleComponent = <MessageMenu onUserClick={this.turnToMessagePage}

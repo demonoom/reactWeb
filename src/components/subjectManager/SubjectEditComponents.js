@@ -26,6 +26,7 @@ var subjectUpload;
 var uploadFileList = [];
 /**
  * 题目修改组件
+ * 2018-1-30启用
  */
 const SubjectEditComponents = React.createClass({
     /**
