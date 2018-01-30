@@ -34,6 +34,9 @@ var TextboxioComponentForAnswerByModify = React.createClass({
     });*/
   },
   componentDidUpdate(){
+      if(answerContent!=""){
+          mytextareaAnswerModifyEditor.content.set(answerContent);
+      }
     /*if(mytextareaAnswerModifyEditor!=null && typeof(mytextareaAnswerModifyEditor)!='undefined' ){
       if(mytextareaAnswerModifyEditor.content!=null && typeof(mytextareaAnswerModifyEditor.content)!='undefined' ){
         var contentIsDirty=mytextareaAnswerModifyEditor.content.isDirty();

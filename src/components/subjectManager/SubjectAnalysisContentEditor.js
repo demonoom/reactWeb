@@ -29,6 +29,9 @@ var SubjectAnalysisContentEditor = React.createClass({
     });*/
   },
   componentDidUpdate(){
+      if(analysisEditContent!=""){
+          subjectAnalysisContentModifyEditor.content.set(analysisEditContent);
+      }
     /*if(subjectAnalysisContentModifyEditor!=null && typeof(subjectAnalysisContentModifyEditor)!='undefined' ){
       if(subjectAnalysisContentModifyEditor.content!=null && typeof(subjectAnalysisContentModifyEditor.content)!='undefined' ){
         var contentIsDirty=subjectAnalysisContentModifyEditor.content.isDirty();

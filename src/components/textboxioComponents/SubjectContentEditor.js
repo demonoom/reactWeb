@@ -33,6 +33,9 @@ var SubjectContentEditor = React.createClass({
       });*/
   },
   componentDidUpdate(){
+      if(editorContent!=""){
+          subjectContentForEdit.content.set(editorContent);
+      }
     /*if(subjectContentForEdit!=null && typeof(subjectContentForEdit)!='undefined' ){
       if(subjectContentForEdit.content!=null && typeof(subjectContentForEdit.content)!='undefined' ){
         var contentIsDirty=subjectContentForEdit.content.isDirty();

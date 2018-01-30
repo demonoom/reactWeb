@@ -244,7 +244,7 @@ class SelectKnowledgeModal extends React.Component {
                     <Col span={24}>
                         <div className="ant-transfer">
                             <div className="select_knoledge">
-                                    <span className="upexam_float">接收者：</span>
+                                    <span className="upexam_float">已选知识点：</span>
                                     <div className="select_knoledge_tags_wrap">
                                         <div className="select_knoledge_tags upexam_float">
                                             {selTags.map((tag, index) => {
