@@ -69,10 +69,10 @@ var SubjectAnalysisContentEditor = React.createClass({
 
   render : function(){
     return (
-      <div>
+      <div className="btn_subject_ri_wrap">
         <Spin spinning={this.state.loading}  tip="图文内容上传中..." size="large">
           <div id="subjectAnalysisModify" style={{width:'100%',height:'300px'}}></div>
-          <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.changeMode}>
+          <Button type="primary" htmlType="submit" className="login-form-button btn_subject_ri" onClick={this.changeMode}>
             保存解析中的图片
           </Button>
         </Spin>
