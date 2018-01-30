@@ -710,7 +710,7 @@ const SubjectEditComponents = React.createClass({
                             <Col span={3} className="ant-form-item-label">
                                 <span className="font-14">题目类型：</span>
                             </Col>
-                            <Col span={20}>
+                            <Col span={20} className="row-t-f">
                                 <RadioGroup onChange={this.subjectTypeOnChange} value={this.state.subjectType}>
                                     <Radio value="C">单选题</Radio>
                                     <Radio value="MC">多选题</Radio>
@@ -729,7 +729,7 @@ const SubjectEditComponents = React.createClass({
                             </Col>
                         </Row>
 
-                        <Row>
+                        <Row className="row-t-f">
                             <Col span={3} className="ant-form-item-label">
                                 <span className="font-14">题目：</span>
                             </Col>
@@ -747,7 +747,7 @@ const SubjectEditComponents = React.createClass({
                                 <span className="font-14">知识点：</span>
                             </Col>
                             <Col span={20} className="row-t-f">
-                                <div className="ding_tags upexam_float">
+                                <div className="select_knoledge_width upexam_float">
                                     {tags.map((tag, index) => {
                                         const isLongTag = tag.length > 20;
                                         const tagElem = (
@@ -759,7 +759,7 @@ const SubjectEditComponents = React.createClass({
                                         return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
                                     })}
                                 </div>
-                                <Button className="row-t-f roe-t-f-left" onClick={this.showSelectKnowledgeModal}>选择知识点</Button>
+                                <Button className="ding_modal_top roe-t-f-left" onClick={this.showSelectKnowledgeModal}>选择知识点</Button>
                             </Col>
                         </Row>
 
@@ -767,7 +767,7 @@ const SubjectEditComponents = React.createClass({
                             <Col span={3} className="ant-form-item-label row-t-f">
                                 <span className="font-14">可见性：</span>
                             </Col>
-                            <Col span={20} className="row-t-f">
+                            <Col span={20} className="row-t-f  select_knoledge_top2">
                                 <RadioGroup onChange={this.subjectVisibilityOnChange} value={this.state.subjectVisibility}>
                                     <Radio value="all">全部可见</Radio>
                                     <Radio value="school">本校可见</Radio>

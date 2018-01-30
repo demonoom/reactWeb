@@ -75,10 +75,12 @@ var SubjectContentEditor = React.createClass({
     return (
       <div>
         <Spin spinning={this.state.loading}  tip="图文内容上传中..." size="large">
-          <div id="subjectEditorByModify" style={{width:'100%',height:'300px'}}></div>
-          <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.changeMode}>
-            保存题目中的图片
-          </Button>
+            <div className="btn_subject_ri_wrap">
+                <div id="subjectEditorByModify" style={{width:'100%',height:'300px'}}></div>
+                <Button type="primary" htmlType="submit" className="login-form-button btn_subject_ri" onClick={this.changeMode}>
+                    保存题目中的图片
+                </Button>
+            </div>
         </Spin>
       </div>
     )
