@@ -34,7 +34,8 @@ class SelectKnowledgeModal extends React.Component {
             humArr: [],
             defStrNum: 200,
             pageNo:1,
-            conditionKeyOfKnowledge:''
+            conditionKeyOfKnowledge:'',
+            headerIsShow:true
         };
         this.SelectKnowledgeModalHandleCancel = this.SelectKnowledgeModalHandleCancel.bind(this);
         this.onSelectChange = this.onSelectChange.bind(this);
@@ -148,7 +149,11 @@ class SelectKnowledgeModal extends React.Component {
                         }
                         tableData.push(person);
                     });
-                    _this.setState({tableData});
+                    var headerIsShow = true;
+                    if(response.length==0){
+                        headerIsShow = false;
+                    }
+                    _this.setState({tableData,headerIsShow});
                 }
             },
             onError: function (error) {
@@ -273,7 +278,7 @@ class SelectKnowledgeModal extends React.Component {
                                 </div>
                                 <div>
                                     <Col span={24}>
-                                    <Table className="select_knoledge_Person" rowSelection={rowSelection} columns={columns}
+                                    <Table showHeader={this.state.headerIsShow} className="select_knoledge_Person" rowSelection={rowSelection} columns={columns}
                                            dataSource={this.state.tableData} pagination={false}/>
                                     </Col>
                                 </div>

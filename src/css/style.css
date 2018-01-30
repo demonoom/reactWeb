@@ -8236,7 +8236,7 @@ select.course_n:hover {
 .select_knoledge_tags_wrap {
     max-height: 50px;
     overflow: auto;
-    width: calc(100% - 60px);
+    width: calc(100% - 88px);
     display: inline-block;
 }
 .select_knoledge_tags{
@@ -8249,6 +8249,11 @@ select.course_n:hover {
 }
 .select_knoledge_top2{
     margin-top: 18px;
+}
+
+.select_knoledge_Person .ant-table-placeholder{
+    border-left: 1px solid #E4E4E4;
+    border-right: 1px solid #E4E4E4;
 }
 .select_knoledge_Person .ant-table-body {
     height: 351px;
