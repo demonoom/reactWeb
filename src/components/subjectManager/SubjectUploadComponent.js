@@ -22,6 +22,7 @@ var children = [];
 
 /**
  * 题目上传组件
+ * 2018-1-30启用
  */
 const SubjectUploadComponent = React.createClass({
     getInitialState() {
