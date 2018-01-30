@@ -233,54 +233,50 @@ class SelectKnowledgeModal extends React.Component {
         return (
             <Modal
                 visible={this.state.isShow}
-                width={850}
+                width={440}
                 title={"选择知识点"}
                 onCancel={this.SelectKnowledgeModalHandleCancel}
                 transitionName=""  //禁用modal的动画效果
                 maskClosable={false} //设置不允许点击蒙层关闭
                 footer={[buttons]}
-                className="new_add_ding"
             >
-
-                <Row>
+                <Row className="ant-form-item">
                     <Col span={24}>
-                        <div>
-                            {/*左*/}
-                            <Col span={16}>
-                                <span className="upexam_float">接收者：</span>
-                                <div className="ding_tags_wrap">
-                                    <div className="ding_tags upexam_float">
-                                        {selTags.map((tag, index) => {
-                                            const isLongTag = tag.length > 20;
-                                            const tagElem = (
-                                                <Tag key={tag.key} closable={index !== -1}
-                                                     afterClose={() => this.handleClose(tag)}>
-                                                    {isLongTag ? `${tag.name.slice(0, 20)}...` : tag.name}
-                                                </Tag>
-                                            );
-                                            return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
-                                        })}
+                        <div className="ant-transfer">
+                            <div className="select_knoledge">
+                                    <span className="upexam_float">接收者：</span>
+                                    <div className="select_knoledge_tags_wrap">
+                                        <div className="select_knoledge_tags upexam_float">
+                                            {selTags.map((tag, index) => {
+                                                const isLongTag = tag.length > 20;
+                                                const tagElem = (
+                                                    <Tag key={tag.key} closable={index !== -1}
+                                                         afterClose={() => this.handleClose(tag)}>
+                                                        {isLongTag ? `${tag.name.slice(0, 20)}...` : tag.name}
+                                                    </Tag>
+                                                );
+                                                return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
+                                            })}
+                                        </div>
                                     </div>
+                            </div>
+                                <div className="select_knoledge">
+                                    <Col span={20}>
+                                    <Input
+                                        placeholder="请输入需添加的知识点"
+                                        value={this.state.searchObj}
+                                        onChange={this.searchKnowledge}
+                                        onKeyUp={this.onKeyUp}
+                                    />
+                                    </Col>
+                                    <Button type="primary" className="roe-t-f-left" onClick={this.addNewTags}>新增</Button>
                                 </div>
-                            </Col>
-
-                        </div>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span={16}>
-                        <div>
-                            搜索条件：<Input
-                                placeholder="请输入需添加的知识点"
-                                value={this.state.searchObj}
-                                onChange={this.searchKnowledge}
-                                onKeyUp={this.onKeyUp}
-                            />
-                            <Button className="row-t-f roe-t-f-left" onClick={this.addNewTags}>新增</Button>
-                        </div>
-                        <div>
-                            <Table className="ding_Person" rowSelection={rowSelection} columns={columns}
-                                   dataSource={this.state.tableData} pagination={false}/>
+                                <div>
+                                    <Col span={24}>
+                                    <Table className="select_knoledge_Person" rowSelection={rowSelection} columns={columns}
+                                           dataSource={this.state.tableData} pagination={false}/>
+                                    </Col>
+                                </div>
                         </div>
                     </Col>
                 </Row>

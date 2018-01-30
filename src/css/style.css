@@ -8233,3 +8233,52 @@ select.course_n:hover {
 .exam_analysis_red{
     text-indent: 25%;
 }
+.select_knoledge{
+    margin: 8px 0;
+    min-height: 24px;
+}
+.select_knoledge_tags_wrap {
+    max-height: 50px;
+    overflow: auto;
+    width: calc(100% - 60px);
+    display: inline-block;
+}
+.select_knoledge_tags{
+    width: 100%;
+}
+.select_knoledge_width{
+    max-width: 465px;
+    margin-top: 7px;
+    margin-right: 10px;
+}
+.select_knoledge_top2{
+    margin-top: 18px;
+}
+.select_knoledge_Person .ant-table-body {
+    height: 351px;
+    overflow: auto;
+    border: 1px solid #E4E4E4;
+    border-radius: 4px;
+}
+.select_knoledge_Person .ant-table-thead {
+    position: fixed;
+    z-index: 2;
+}
+.select_knoledge_Person .ant-table-thead > tr > th.ant-table-selection-column {
+    width: 60px;
+    padding: 12px 8px;
+    text-align: right;
+}
+
+.select_knoledge_Person .ant-table table th.dold_text, .select_knoledge_Person .ant-table table td.dold_text {
+    width: 340px;
+}
+
+.select_knoledge_Person .ant-table-tbody {
+    display: block;
+    margin-top: 53px;
+}
+
+.select_knoledge_Person .ant-modal-footer {
+    padding: 0
+}
