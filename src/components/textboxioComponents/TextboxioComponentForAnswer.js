@@ -52,7 +52,7 @@ var TextboxioComponentForAnswer = React.createClass({
       <div className="btn_subject_ri_wrap">
         <Spin spinning={this.state.loading}  tip="图文内容上传中..." size="large">
           <div id="myAnswerTextarea" style={{width:'100%',height:'300px'}}></div>
-          <Button type="primary" htmlType="submit" className="login-form-button btn_subject_ri" onClick={this.changeMode}>
+          <Button type="primary" htmlType="submit" className="login-form-button btn_subject_ri btn_gray_exam" onClick={this.changeMode}>
             保存答案中的图片
           </Button>
         </Spin>

@@ -8266,12 +8266,14 @@ select.course_n:hover {
     z-index: 2;
 }
 .select_knoledge_Person .ant-table-thead > tr > th.ant-table-selection-column {
-    width: 60px;
+    width: 40px;
     padding: 12px 8px;
     text-align: right;
 }
-
-.select_knoledge_Person .ant-table table th.dold_text, .select_knoledge_Person .ant-table table td.dold_text {
+.select_knoledge_Person .ant-table table th.dold_text{
+    width: 360px;
+}
+.select_knoledge_Person .ant-table table td.dold_text {
     width: 340px;
 }
 
@@ -8295,4 +8297,12 @@ select.course_n:hover {
     z-index: 1000;
     border-radius: 0;
     margin: 0 !important;
+}
+.add_modal_subject .ant-modal-body{
+    height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.select_knoledge_Person .ant-spin-container > div:first-child{
+    height: 351px;
 }

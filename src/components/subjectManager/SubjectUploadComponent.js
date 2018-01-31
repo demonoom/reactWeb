@@ -684,7 +684,7 @@ const SubjectUploadComponent = React.createClass({
             </Row>;
             audioButton = <Button className="roe-t-f-left" onClick={this.showVideoUploadModal.bind(this,'correct')}>插入音频</Button>;
         } else if (this.state.subjectType == "S") {
-            answerComponent =<Row>
+            answerComponent =<Row className="row-t-f">
                 <Col span={3} className="ant-form-item-label">
                     <span className="font-14">答案：</span>
                 </Col>
@@ -718,7 +718,7 @@ const SubjectUploadComponent = React.createClass({
                     title="添加题目"
                     width="860px"
                     height="636px"
-                    className="ant-modal-width"
+                    className="ant-modal-width add_modal_subject"
                     onCancel={this.handleCancel}
                     maskClosable={false} //设置不允许点击蒙层关闭
                     transitionName=""  //禁用modal的动画效果
