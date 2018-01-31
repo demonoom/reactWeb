@@ -611,7 +611,7 @@ const SubjectUploadComponent = React.createClass({
             </Button>
         </div>;
         //插入音频按钮
-        var audioButton = <Button className="row-t-f" onClick={this.showVideoUploadModal.bind(this,'single')}>插入音频</Button>;
+        var audioButton = <Button className="row-t-f roe-t-f-left" onClick={this.showVideoUploadModal.bind(this,'single')}>插入音频</Button>;
         var answerComponent = null;
 
         if (this.state.subjectType == "C") {
@@ -638,7 +638,7 @@ const SubjectUploadComponent = React.createClass({
                     </Row>
                 </Col>
             </Row>;
-            audioButton = <Button className="row-t-f" onClick={this.showVideoUploadModal.bind(this,'single')}>插入音频</Button>;
+            audioButton = <Button className="roe-t-f-left" onClick={this.showVideoUploadModal.bind(this,'single')}>插入音频</Button>;
         } else if (this.state.subjectType == "MC") {
             answerComponent = <Row>
                 <Col span={3} className="ant-form-item-label">
@@ -665,7 +665,7 @@ const SubjectUploadComponent = React.createClass({
                     </Row>
                 </Col>
             </Row>;
-            audioButton = <Button onClick={this.showVideoUploadModal.bind(this,'mulitiSelect')}>插入音频</Button>
+            audioButton = <Button className="roe-t-f-left" onClick={this.showVideoUploadModal.bind(this,'mulitiSelect')}>插入音频</Button>
         } else if (this.state.subjectType == "J") {
             answerComponent = <Row>
                 <Col span={3} className="ant-form-item-label">
@@ -682,7 +682,7 @@ const SubjectUploadComponent = React.createClass({
                     </div>
                 </Col>
             </Row>;
-            audioButton = <Button onClick={this.showVideoUploadModal.bind(this,'correct')}>插入音频</Button>;
+            audioButton = <Button className="roe-t-f-left" onClick={this.showVideoUploadModal.bind(this,'correct')}>插入音频</Button>;
         } else if (this.state.subjectType == "S") {
             answerComponent =<Row>
                 <Col span={3} className="ant-form-item-label">
@@ -694,7 +694,7 @@ const SubjectUploadComponent = React.createClass({
                     </div>
                 </Col>
             </Row>;
-            audioButton = <Button onClick={this.showVideoUploadModal.bind(this,'simpleAnswer')}>插入音频</Button>;
+            audioButton = <Button className="roe-t-f-left" onClick={this.showVideoUploadModal.bind(this,'simpleAnswer')}>插入音频</Button>;
         }
 
         //如果用户不在允许的权限列表中，将audioButton设置为null，不显示
@@ -759,8 +759,9 @@ const SubjectUploadComponent = React.createClass({
                             </Col>
                             <Col span={20}>
                                 <SubjectContent ref="subjectContent"/>
+                                {/*className="row-t-f roe-t-f-left"*/}
+                                <Button className="row-t-f" onClick={this.showAnalysisModal}>题目解析</Button>
                                 {audioButton}
-                                <Button className="row-t-f roe-t-f-left" onClick={this.showAnalysisModal}>题目解析</Button>
                             </Col>
                         </Row>
 
@@ -783,7 +784,7 @@ const SubjectUploadComponent = React.createClass({
                                         return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
                                     })}
                                 </div>
-                                <Button className="ding_modal_top roe-t-f-left" onClick={this.showSelectKnowledgeModal}>选择知识点</Button>
+                                <Button className="ding_modal_top" onClick={this.showSelectKnowledgeModal}>选择知识点</Button>
                             </Col>
                         </Row>
 

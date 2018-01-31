@@ -268,7 +268,7 @@ class SelectKnowledgeModal extends React.Component {
                                 <div className="select_knoledge">
                                     <Col span={20}>
                                     <Input
-                                        placeholder="请输入需添加的知识点"
+                                        placeholder="请输入或选择需添加的知识点"
                                         value={this.state.searchObj}
                                         onChange={this.searchKnowledge}
                                         onKeyUp={this.onKeyUp}
