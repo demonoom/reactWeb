@@ -18,7 +18,7 @@ import AntCloudMenu from '../components/layOut/AntCloudMenu';
 import AntCloudTableComponents from '../components/antCloud/AntCloudTableComponents';
 import {LocaleProvider} from 'antd';
 import {showLargeImg} from '../utils/utils'
-import {isEmpty} from '../utils/Const'
+import {isEmpty, SMALL_IMG, MIDDLE_IMG, LARGE_IMG} from '../utils/Const'
 import TeachSpace from '../components/TeachSpaces';
 import TeachSpaceGhostMenu from '../components/TeachSpacesGhostMenu';
 import {MsgConnection} from '../utils/msg_websocket_connection';
@@ -39,6 +39,9 @@ import {createStore} from 'redux';
 const Panel = Collapse.Panel;
 
 const CheckboxGroup = Checkbox.Group;
+
+var messageData = [];
+var userMessageData = [];
 
 const store = createStore(function () {
 
@@ -106,7 +109,6 @@ const MainLayout = React.createClass({
             // if (this.state.vipKey) {
             //     return;
             // }
-            // console.log(this.state.vipKey);
             if (e.key == this.state.currentKey) {
                 this.changeSystemGhostMenuVisible();
             } else {
@@ -170,6 +172,7 @@ const MainLayout = React.createClass({
     noomShareMbile(src, title) {
         this.getAntGroup();
         this.getStructureUsers();
+        this.getRecentContents();
         this.setState({shareSrc: src, shareTitle: title});
         this.setState({shareModalVisible: true});
     },
@@ -177,6 +180,7 @@ const MainLayout = React.createClass({
     collapseChange(key) {
         this.setState({RMsgActiveKey: key});
         this.getUserChatGroupById(-1);
+        this.getRecentContents();
     },
 
     /**
@@ -309,6 +313,172 @@ const MainLayout = React.createClass({
     },
 
     /**
+     * 获取最近联系人
+     */
+    getRecentContents() {
+        userMessageData.splice(0);
+        messageData.splice(0);
+        var _this = this;
+        var param = {
+            "method": 'getUserRecentMessages',
+            "userId": sessionStorage.getItem("ident"),
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if (isEmpty(response) == false || isEmpty(messageData) == false) {
+                    response.forEach(function (e) {
+                        //如果这条消息的来源是我自己 助手 ,就直接讲readState制成1
+                        _this.setMessageArrayForOnePerson(e);
+                    });
+                    _this.showMessageData();
+                }
+
+
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 将返回的每一个message消息对象进行处理，将同一个人的消息整合到一起
+     * 格式为：{fromUser,messageResponse}
+     * 如：{{colUid:23836,userName:'王丹'},[{content:'123'}{content:'test'}]}
+     */
+    setMessageArrayForOnePerson(messageObj) {
+        if (messageObj.command == "message") {
+            var fromUser = messageObj.fromUser;
+            var content = messageObj.content;
+
+            var messageIndex = -1;
+            var messageToType = messageObj.toType;
+            var contentJson = {"content": content,};
+            if (messageToType == 1) {
+                //个人消息
+                var showUser;
+                if (fromUser.colUid != sessionStorage.getItem("ident")) {
+                    showUser = fromUser;
+                } else {
+                    showUser = messageObj.toUser;
+                }
+                if (isEmpty(showUser)) {
+                    console.log("toUser为空");
+                    return;
+                }
+                var colUid = showUser.colUid;
+                messageIndex = this.checkMessageIsExist(colUid);
+                //个人消息
+                if (messageIndex == -1) {
+                    var contentArray = [contentJson];
+                    var userJson = {
+                        key: colUid,
+                        "fromUser": showUser,
+                        contentArray: contentArray,
+                        "messageToType": messageToType,
+                    };
+                    messageData.push(userJson);
+                } else {
+                    messageData[messageIndex].contentArray.push(contentJson);
+                }
+            } else {
+                //群组消息
+                var toChatGroup = messageObj.toChatGroup;
+                if (isEmpty(toChatGroup) == false) {
+                    var chatGroupId = toChatGroup.chatGroupId;
+                    var groupName = toChatGroup.name;
+                    messageIndex = this.checkMessageIsExist(messageObj.toChatGroup.chatGroupId);
+                    if (messageIndex == -1) {
+                        var contentArray = [contentJson];
+                        var userJson = {
+                            key: chatGroupId,
+                            "fromUser": fromUser,
+                            contentArray: contentArray,
+                            "messageToType": messageToType,
+                            "toChatGroup": toChatGroup,
+                        };
+                        messageData.push(userJson);
+                    } else {
+                        messageData[messageIndex].contentArray.push(contentJson);
+                    }
+                }
+            }
+        }
+    },
+
+    checkMessageIsExist(userId) {
+        var messageIndex = -1;
+        for (var i = 0; i < messageData.length; i++) {
+            var userJson = messageData[i];
+            if (userJson.key == userId) {
+                messageIndex = i;
+                break;
+            }
+        }
+        return messageIndex;
+    },
+
+    /**
+     * 渲染用户最新消息列表
+     */
+    showMessageData() {
+        userMessageData.splice(0);
+        console.log(messageData);
+        messageData.forEach(function (data) {
+            var messageType = data.messageToType;
+            if (messageType == 1) {
+                //个人消息
+                var userStructId = data.key;
+                var userStructName = data.fromUser.userName;
+                var userStructImgTag = <img src={data.fromUser.avatar} className="antnest_38_img" height="38"></img>;
+                var userStructNameTag = <div>{userStructImgTag}<span>{userStructName}</span></div>;
+                var userStructJson = {label: userStructNameTag, value: userStructId};
+
+                if (userStructId != sessionStorage.getItem("userStructId") && userStructId != 138437 && userStructId != 41451 && userStructId != 142033 && userStructId != 139581) {
+                    userMessageData.push(userStructJson);
+                }
+            } else {
+                //群组
+
+                var chatGroupId = data.key;
+                var chatGroupName = data.toChatGroup.name;
+                var membersCount = data.toChatGroup.avatar.split('#').length;
+                var groupMemebersPhoto = [];
+                for (var i = 0; i < membersCount; i++) {
+                    var memberAvatarTag = <img src={data.toChatGroup.avatar.split('#')[i] + '?' + SMALL_IMG}></img>;
+                    groupMemebersPhoto.push(memberAvatarTag);
+                    if (i >= 3) {
+                        break;
+                    }
+                }
+                var imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
+                switch (groupMemebersPhoto.length) {
+                    case 1:
+                        imgTag = <div className="maaee_group_face1">{groupMemebersPhoto}</div>;
+                        break;
+                    case 2:
+                        imgTag = <div className="maaee_group_face2">{groupMemebersPhoto}</div>;
+                        break;
+                    case 3:
+                        imgTag = <div className="maaee_group_face3">{groupMemebersPhoto}</div>;
+                        break;
+                    case 4:
+                        imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
+                        break;
+                }
+                var groupName = chatGroupName;
+                var groupNameTag = <div>{imgTag}<span>{groupName}</span></div>
+                var groupJson = {label: groupNameTag, value: chatGroupId + '%'};
+                userMessageData.push(groupJson);
+            }
+
+        });
+        this.setState({"userMessageData": []});   //先setStatet空可以让render强刷
+        this.setState({"userMessageData": userMessageData});
+    },
+
+    /**
      * 修改分享文件的文本框内容改变响应函数
      */
     nowThinkingInputChange(e) {
@@ -351,6 +521,14 @@ const MainLayout = React.createClass({
     },
 
     /**
+     * 最近联系复选框被选中时的响应x
+     * @param checkedValues
+     */
+    recentConnectOptionsOnChange(checkedValues) {
+        this.setState({"checkedRecentConnectOptions": checkedValues});
+    },
+
+    /**
      * 分享文件点击OK
      */
     getsharekey() {
@@ -364,8 +542,9 @@ const MainLayout = React.createClass({
         var checkedConcatOptions = this.state.checkedConcatOptions;   //好友id数组
         var checkedGroupOptions = this.state.checkedGroupOptions;   //群组id数组
         var checkedsSructureOptions = this.state.checkedsSructureOptions;  //组织架构id数组
+        var checkedRecentConnectOptions = this.state.checkedRecentConnectOptions;  //最近联系人id 既包括群组(%结尾)又有个人数组
 
-        if (isEmpty(checkedConcatOptions) == true && isEmpty(checkedGroupOptions) == true && isEmpty(checkedsSructureOptions) == true) {
+        if (isEmpty(checkedConcatOptions) == true && isEmpty(checkedGroupOptions) == true && isEmpty(checkedsSructureOptions) == true && isEmpty(checkedRecentConnectOptions) == true) {
             message.error('请选择转发好友或群组');
             return false
         }
@@ -381,6 +560,35 @@ const MainLayout = React.createClass({
             "cover": cover,
             "content": shareTitle,
         };
+
+        if (isEmpty(checkedRecentConnectOptions) == false) {
+            checkedRecentConnectOptions.forEach(function (e) {
+                var mes = e + '';
+                if (mes.indexOf('%') == -1) {
+                    //个人
+                    var uuid = _this.createUUID();
+                    var messageJson = {
+                        'content': shareTitle, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToPer, "attachment": attachment, "state": 0
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                } else {
+                    //群组
+                    var toId = e.slice(0, e.length - 1)
+                    var uuid = _this.createUUID();
+                    var messageJson = {
+                        'content': shareTitle, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": toId, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToGrp, "attachment": attachment, "state": 0
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                }
+            });
+        }
+
         if (isEmpty(checkedGroupOptions) == false) {
             checkedGroupOptions.forEach(function (e) {
                 var uuid = _this.createUUID();
@@ -431,6 +639,7 @@ const MainLayout = React.createClass({
             "checkedGroupOptions": [],
             "checkedConcatOptions": [],
             "checkedsSructureOptions": [],
+            "checkedRecentConnectOptions": [],
             RMsgActiveKey: ['2']
         });
     },
@@ -499,7 +708,6 @@ const MainLayout = React.createClass({
     },
 
     sendMessage_noom_group(groupObj) {
-        console.log(groupObj);
         var contentJson = {"content": '', "createTime": ''};
         var contentArray = [contentJson];
         var userJson = {
@@ -657,7 +865,6 @@ const MainLayout = React.createClass({
             if (this.state.vipKey) {
                 return;
             }
-            console.log(this.state.vipKey);
             this.setState({systemSettingGhostMenuVisible: visible});
         }
     },
@@ -688,7 +895,6 @@ const MainLayout = React.createClass({
      * @param groupObj
      */
     sendGroupMessage(groupObj) {
-        console.log(groupObj);
         var contentJson = {"content": '', "createTime": ''};
         var contentArray = [contentJson];
         var userJson = {
@@ -755,8 +961,6 @@ const MainLayout = React.createClass({
      * @param fromObj
      */
     turnToMessagePage(fromObj) {
-        // console.log(fromObj);
-        // console.log('fromObj');
         var timeNode = (new Date()).valueOf();
         if (fromObj.fromUser.colUtype == "SGZH_WEB") {
             //审批助手逻辑
@@ -1111,6 +1315,12 @@ const MainLayout = React.createClass({
                                     <Collapse bordered={false} activeKey={this.state.RMsgActiveKey}
                                               onChange={this.collapseChange}
                                     >
+                                        <Panel header="最近联系人" key="0">
+                                            <CheckboxGroup options={this.state.userMessageData}
+                                                           value={this.state.checkedRecentConnectOptions}
+                                                           onChange={this.recentConnectOptionsOnChange}
+                                            />
+                                        </Panel>
                                         <Panel header="我的群组" key="1">
                                             <CheckboxGroup options={this.state.groupOptions}
                                                            value={this.state.checkedGroupOptions}

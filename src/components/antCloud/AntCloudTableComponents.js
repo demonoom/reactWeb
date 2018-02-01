@@ -20,9 +20,10 @@ import {doWebService} from '../../WebServiceHelper';
 import {getPageSize} from '../../utils/Const';
 import {getLocalTime} from '../../utils/utils';
 import {createUUID} from '../../utils/utils';
-import {isEmpty, TO_TYPE} from '../../utils/Const';
+import {isEmpty, TO_TYPE, SMALL_IMG} from '../../utils/Const';
 import {bubbleSort} from '../../utils/utils';
 import {showLargeImg} from '../../utils/utils';
+
 const RadioGroup = Radio.Group;
 const Panel = Collapse.Panel;
 const CheckboxGroup = Checkbox.Group;
@@ -70,6 +71,10 @@ var data = [];
 var uploadFileList = [];
 var cloudTable;
 var ms;
+
+var messageData = [];
+var userMessageData = [];
+
 const AntCloudTableComponents = React.createClass({
     getInitialState() {
         cloudTable = this;
@@ -99,7 +104,7 @@ const AntCloudTableComponents = React.createClass({
             groupOptions: [],
             structureOptions: [],   //组织架构
             isGroupCreator: false,   //记录当前用户是否是操作当前群文件的群主
-            disabledFlag:false,
+            disabledFlag: false,
         };
     },
     componentDidMount() {
@@ -213,7 +218,7 @@ const AntCloudTableComponents = React.createClass({
                     } else if (optSrc == "moveDirModal") {
                         cloudTable.buildTargetDirData(ret);
 
-                    }else if("copyDirModal" == optSrc){
+                    } else if ("copyDirModal" == optSrc) {
                         cloudTable.buildTargetDirDataSaveLocal(ret);
                     } else {
                         cloudTable.buildTableDataByResponse(ret);
@@ -355,10 +360,6 @@ const AntCloudTableComponents = React.createClass({
              }*/
         }
     },
-
-
-
-
 
 
     /**
@@ -643,10 +644,10 @@ const AntCloudTableComponents = React.createClass({
                 if (directory) {
                     downloadButton = null;
                 } else {
-                    var pathLocal = path.substring(path.indexOf('/upload')-1,path.length);
+                    var pathLocal = path.substring(path.indexOf('/upload') - 1, path.length);
                     downloadButton =
                         <a href={path} target="_blank" title="下载" download={e.name} className="te_download_a_noom">
-                    <Button icon="download"/></a>;
+                            <Button icon="download"/></a>;
 
                 }
                 var fileLogo = _this.buildFileLogo(name, directory, e);
@@ -679,7 +680,7 @@ const AntCloudTableComponents = React.createClass({
                         moveButton = "";
                     }
                     var saveButton = <Button type="button" value={key} text={key}
-                                             onClick={cloudTable.getCloudFileLocal.bind(cloudTable,e)}
+                                             onClick={cloudTable.getCloudFileLocal.bind(cloudTable, e)}
                                              icon="save"></Button>;
                 }
                 var subjectOpt = <div>
@@ -812,16 +813,16 @@ const AntCloudTableComponents = React.createClass({
     /**
      *
      */
-    downloadFile(fileName, content){
-    var aLink = document.createElement('a');
-    var blob = new Blob([content]);
-    var evt = document.createEvent("HTMLEvents");
-    evt.initEvent("click", false, false);//initEvent 不加后两个参数在FF下会报错
-    aLink.download = fileName;
-    console.log( aLink.download);
-    aLink.href = URL.createObjectURL(blob);
-    aLink.dispatchEvent(evt);
-},
+    downloadFile(fileName, content) {
+        var aLink = document.createElement('a');
+        var blob = new Blob([content]);
+        var evt = document.createEvent("HTMLEvents");
+        evt.initEvent("click", false, false);//initEvent 不加后两个参数在FF下会报错
+        aLink.download = fileName;
+        console.log(aLink.download);
+        aLink.href = URL.createObjectURL(blob);
+        aLink.dispatchEvent(evt);
+    },
 
     /**
      * 修改文件夹的名称（重命名）
@@ -830,10 +831,14 @@ const AntCloudTableComponents = React.createClass({
      */
     editDirectoryName(fileObject) {
         var pointPosition = fileObject.name.lastIndexOf(".");
-        if(pointPosition==-1){
-            cloudTable.setState({"reNameModalVisible": true, "editDirectoryName": fileObject.name, "editFileObject": fileObject});
-        }else{
-            var name = fileObject.name.slice(0,pointPosition);
+        if (pointPosition == -1) {
+            cloudTable.setState({
+                "reNameModalVisible": true,
+                "editDirectoryName": fileObject.name,
+                "editFileObject": fileObject
+            });
+        } else {
+            var name = fileObject.name.slice(0, pointPosition);
             cloudTable.setState({"reNameModalVisible": true, "editDirectoryName": name, "editFileObject": fileObject});
         }
     },
@@ -951,13 +956,13 @@ const AntCloudTableComponents = React.createClass({
     reNameModalHandleOk() {
         var editFileObject = cloudTable.state.editFileObject;
 
-        if(!editFileObject.suffix){
+        if (!editFileObject.suffix) {
             cloudTable.renameCloudFile(cloudTable.state.ident, editFileObject.id, cloudTable.state.editDirectoryName);
-        }else{
+        } else {
 
-          var editDirectoryName = cloudTable.state.editDirectoryName + "." + editFileObject.suffix;
+            var editDirectoryName = cloudTable.state.editDirectoryName + "." + editFileObject.suffix;
 
-            cloudTable.renameCloudFile(cloudTable.state.ident, editFileObject.id,editDirectoryName);
+            cloudTable.renameCloudFile(cloudTable.state.ident, editFileObject.id, editDirectoryName);
         }
 
     },
@@ -1003,16 +1008,16 @@ const AntCloudTableComponents = React.createClass({
      * 关闭上传文件弹窗
      */
     cloudFileUploadModalHandleCancel() {
-        cloudTable.setState({"cloudFileUploadModalVisible": false,disabledFlag: false});
+        cloudTable.setState({"cloudFileUploadModalVisible": false, disabledFlag: false});
     },
 
     //点击保存按钮，向蚁盘指定文件夹上传文件
     uploadFile() {
-        cloudTable.state.disabledFlag ="false";
+        cloudTable.state.disabledFlag = "false";
         if (uploadFileList.length == 0) {
             message.warning("请选择上传的文件,谢谢！");
         } else {
-            cloudTable.state.disabledFlag ="true";
+            cloudTable.state.disabledFlag = "true";
             var formData = new FormData();
             for (var i = 0; i < uploadFileList.length; i++) {
                 formData.append("file" + i, uploadFileList[i]);
@@ -1074,7 +1079,7 @@ const AntCloudTableComponents = React.createClass({
     showUploadFileModal() {
         uploadFileList.splice(0, uploadFileList.length);
         cloudTable.setState({
-            cloudFileUploadModalVisible: true, uploadPercent: 0, progressState: 'none',disabledFlag:false
+            cloudFileUploadModalVisible: true, uploadPercent: 0, progressState: 'none', disabledFlag: false
         });
         //弹出文件上传窗口时，初始化窗口数据
         cloudTable.refs.fileUploadCom.initFileUploadPage();
@@ -1173,7 +1178,6 @@ const AntCloudTableComponents = React.createClass({
     },
 
 
-
     /**
      *拿到保存的文件的信息的回调
      * @param filePath
@@ -1184,17 +1188,15 @@ const AntCloudTableComponents = React.createClass({
         // this.saveFile();
         var initPageNo = 1;
         this.getUserRootCloudFiles(this.state.ident, initPageNo, "copyDirModal");
-        this.setState({saveFileModalVisible:true,"saveFileId": fileObject.id});
+        this.setState({saveFileModalVisible: true, "saveFileId": fileObject.id});
     },
 
     /**
      * 点击取消按钮 取消保存文件
      */
-    saveFileModalHandleCancel(){
+    saveFileModalHandleCancel() {
         cloudTable.setState({saveFileModalVisible: false});
     },
-
-
 
 
     /**
@@ -1233,9 +1235,6 @@ const AntCloudTableComponents = React.createClass({
         });
 
     },
-
-
-
 
 
     /**
@@ -1381,7 +1380,7 @@ const AntCloudTableComponents = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var resLength = ret.response.length;
-                var response = ret.response.splice(4,resLength);
+                var response = ret.response.splice(4, resLength);
                 var i = 0;
                 var concatOptions = [];
                 response.forEach(function (e) {
@@ -1406,7 +1405,7 @@ const AntCloudTableComponents = React.createClass({
      * 保存 save  back
      * @param pageNo
      */
-     saveBarBack(){
+    saveBarBack() {
 
         var initPageNo = 1;
         if (cloudTable.state.parentDirectoryIdAtMoveModalSave == 0) {
@@ -1418,8 +1417,6 @@ const AntCloudTableComponents = React.createClass({
         }
 
     },
-
-
 
 
     getUserChatGroupById(pageNo) {
@@ -1477,6 +1474,7 @@ const AntCloudTableComponents = React.createClass({
             }
         });
     },
+
     /**
      * 组织架构列表
      */
@@ -1512,6 +1510,172 @@ const AntCloudTableComponents = React.createClass({
         });
     },
 
+    /**
+     * 获取最近联系人
+     */
+    getRecentContents() {
+        userMessageData.splice(0);
+        messageData.splice(0);
+        var _this = this;
+        var param = {
+            "method": 'getUserRecentMessages',
+            "userId": sessionStorage.getItem("ident"),
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if (isEmpty(response) == false || isEmpty(messageData) == false) {
+                    response.forEach(function (e) {
+                        //如果这条消息的来源是我自己 助手 ,就直接讲readState制成1
+                        _this.setMessageArrayForOnePerson(e);
+                    });
+                    _this.showMessageData();
+                }
+
+
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 将返回的每一个message消息对象进行处理，将同一个人的消息整合到一起
+     * 格式为：{fromUser,messageResponse}
+     * 如：{{colUid:23836,userName:'王丹'},[{content:'123'}{content:'test'}]}
+     */
+    setMessageArrayForOnePerson(messageObj) {
+        if (messageObj.command == "message") {
+            var fromUser = messageObj.fromUser;
+            var content = messageObj.content;
+
+            var messageIndex = -1;
+            var messageToType = messageObj.toType;
+            var contentJson = {"content": content,};
+            if (messageToType == 1) {
+                //个人消息
+                var showUser;
+                if (fromUser.colUid != sessionStorage.getItem("ident")) {
+                    showUser = fromUser;
+                } else {
+                    showUser = messageObj.toUser;
+                }
+                if (isEmpty(showUser)) {
+                    console.log("toUser为空");
+                    return;
+                }
+                var colUid = showUser.colUid;
+                messageIndex = this.checkMessageIsExist(colUid);
+                //个人消息
+                if (messageIndex == -1) {
+                    var contentArray = [contentJson];
+                    var userJson = {
+                        key: colUid,
+                        "fromUser": showUser,
+                        contentArray: contentArray,
+                        "messageToType": messageToType,
+                    };
+                    messageData.push(userJson);
+                } else {
+                    messageData[messageIndex].contentArray.push(contentJson);
+                }
+            } else {
+                //群组消息
+                var toChatGroup = messageObj.toChatGroup;
+                if (isEmpty(toChatGroup) == false) {
+                    var chatGroupId = toChatGroup.chatGroupId;
+                    var groupName = toChatGroup.name;
+                    messageIndex = this.checkMessageIsExist(messageObj.toChatGroup.chatGroupId);
+                    if (messageIndex == -1) {
+                        var contentArray = [contentJson];
+                        var userJson = {
+                            key: chatGroupId,
+                            "fromUser": fromUser,
+                            contentArray: contentArray,
+                            "messageToType": messageToType,
+                            "toChatGroup": toChatGroup,
+                        };
+                        messageData.push(userJson);
+                    } else {
+                        messageData[messageIndex].contentArray.push(contentJson);
+                    }
+                }
+            }
+        }
+    },
+
+    checkMessageIsExist(userId) {
+        var messageIndex = -1;
+        for (var i = 0; i < messageData.length; i++) {
+            var userJson = messageData[i];
+            if (userJson.key == userId) {
+                messageIndex = i;
+                break;
+            }
+        }
+        return messageIndex;
+    },
+
+    /**
+     * 渲染用户最新消息列表
+     */
+    showMessageData() {
+        userMessageData.splice(0);
+        console.log(messageData);
+        messageData.forEach(function (data) {
+            var messageType = data.messageToType;
+            if (messageType == 1) {
+                //个人消息
+                var userStructId = data.key;
+                var userStructName = data.fromUser.userName;
+                var userStructImgTag = <img src={data.fromUser.avatar} className="antnest_38_img" height="38"></img>;
+                var userStructNameTag = <div>{userStructImgTag}<span>{userStructName}</span></div>;
+                var userStructJson = {label: userStructNameTag, value: userStructId};
+
+                if (userStructId != sessionStorage.getItem("userStructId") && userStructId != 138437 && userStructId != 41451 && userStructId != 142033 && userStructId != 139581) {
+                    userMessageData.push(userStructJson);
+                }
+            } else {
+                //群组
+
+                var chatGroupId = data.key;
+                var chatGroupName = data.toChatGroup.name;
+                var membersCount = data.toChatGroup.avatar.split('#').length;
+                var groupMemebersPhoto = [];
+                for (var i = 0; i < membersCount; i++) {
+                    var memberAvatarTag = <img src={data.toChatGroup.avatar.split('#')[i] + '?' + SMALL_IMG}></img>;
+                    groupMemebersPhoto.push(memberAvatarTag);
+                    if (i >= 3) {
+                        break;
+                    }
+                }
+                var imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
+                switch (groupMemebersPhoto.length) {
+                    case 1:
+                        imgTag = <div className="maaee_group_face1">{groupMemebersPhoto}</div>;
+                        break;
+                    case 2:
+                        imgTag = <div className="maaee_group_face2">{groupMemebersPhoto}</div>;
+                        break;
+                    case 3:
+                        imgTag = <div className="maaee_group_face3">{groupMemebersPhoto}</div>;
+                        break;
+                    case 4:
+                        imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
+                        break;
+                }
+                var groupName = chatGroupName;
+                var groupNameTag = <div>{imgTag}<span>{groupName}</span></div>
+                var groupJson = {label: groupNameTag, value: chatGroupId + '%'};
+                userMessageData.push(groupJson);
+            }
+
+        });
+        this.setState({"userMessageData": []});   //先setStatet空可以让render强刷
+        this.setState({"userMessageData": userMessageData});
+    },
+
 
     /**
      * 修改文件夹名称的文本框内容改变响应函数
@@ -1538,6 +1702,7 @@ const AntCloudTableComponents = React.createClass({
         cloudTable.setState({"shareCloudFileIds": fileObject.id, "shareCloudFile": fileObject});
         cloudTable.getAntGroup();
         this.getStructureUsers();
+        this.getRecentContents();
         cloudTable.setState({shareModalVisible: true});
     },
 
@@ -1545,7 +1710,12 @@ const AntCloudTableComponents = React.createClass({
      * 关闭分享文件的窗口
      */
     shareModalHandleCancel() {
-        cloudTable.setState({shareModalVisible: false, "checkedGroupOptions": [], "checkedConcatOptions": []});
+        cloudTable.setState({
+            shareModalVisible: false,
+            "checkedGroupOptions": [],
+            "checkedConcatOptions": [],
+            "checkedRecentConnectOptions": [],
+        });
     },
 
     /**
@@ -1581,6 +1751,7 @@ const AntCloudTableComponents = React.createClass({
         var checkedConcatOptions = cloudTable.state.checkedConcatOptions;
         var checkedGroupOptions = cloudTable.state.checkedGroupOptions;
         var checkedsSructureOptions = cloudTable.state.checkedsSructureOptions;
+        var checkedRecentConnectOptions = this.state.checkedRecentConnectOptions;  //最近联系人id 既包括群组(%结尾)又有个人数组
         var nowThinking = cloudTable.state.nowThinking;
         var shareFile = cloudTable.state.shareCloudFile;
 
@@ -1607,6 +1778,34 @@ const AntCloudTableComponents = React.createClass({
             "content": name,
             "type": TO_TYPE
         };
+
+        if (isEmpty(checkedRecentConnectOptions) == false) {
+            checkedRecentConnectOptions.forEach(function (e) {
+                var mes = e + '';
+                if (mes.indexOf('%') == -1) {
+                    //个人
+                    var uuid = createUUID();
+                    var messageJson = {
+                        'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToPer, "attachment": attachement, "state": 0
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                } else {
+                    //群组
+                    var toId = e.slice(0, e.length - 1)
+                    var uuid = createUUID();
+                    var messageJson = {
+                        'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": toId, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToGrp, "attachment": attachement, "state": 0
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                }
+            });
+        }
 
         if (isEmpty(checkedGroupOptions) == false) {
             checkedGroupOptions.forEach(function (e) {
@@ -1684,10 +1883,19 @@ const AntCloudTableComponents = React.createClass({
         cloudTable.setState({"checkedGroupOptions": checkedValues});
     },
 
+    /**
+     * 最近联系复选框被选中时的响应x
+     * @param checkedValues
+     */
+    recentConnectOptionsOnChange(checkedValues) {
+        this.setState({"checkedRecentConnectOptions": checkedValues});
+    },
+
     collapseChange(key) {
         /*if(key==1){
             cloudTable.getUserChatGroupById(1);
         }*/
+        this.getRecentContents();
         cloudTable.getUserChatGroupById(1);
     },
 
@@ -1761,7 +1969,7 @@ const AntCloudTableComponents = React.createClass({
             <div className="ant-tabs-right"><Button onClick={cloudTable.returnParentAtMoveModal}><Icon
                 type="left"/></Button></div>
         </div>;
-     var returnToolbarInShareModal = <div className="public—til—blue">
+        var returnToolbarInShareModal = <div className="public—til—blue">
             <div className="ant-tabs-right"><Button onClick={cloudTable.getAntGroup}><Icon type="left"/></Button></div>
         </div>;
         var saveToobarBack = <div className="public—til—blue">
@@ -1839,7 +2047,7 @@ const AntCloudTableComponents = React.createClass({
                         <div>
                             <Button type="primary" htmlType="submit" className="login-form-button"
                                     onClick={cloudTable.uploadFile}
-                                    disabled ={cloudTable.state.disabledFlag}>
+                                    disabled={cloudTable.state.disabledFlag}>
                                 保存
                             </Button>
                             <Button type="ghost" htmlType="reset" className="login-form-button"
@@ -1908,6 +2116,12 @@ const AntCloudTableComponents = React.createClass({
                             <Col span={11} className="upexam_float cloud_share_cont">
                                 <Collapse bordered={false} defaultActiveKey={['2']}
                                           onChange={cloudTable.collapseChange}>
+                                    <Panel header="最近联系人" key="0">
+                                        <CheckboxGroup options={this.state.userMessageData}
+                                                       value={this.state.checkedRecentConnectOptions}
+                                                       onChange={this.recentConnectOptionsOnChange}
+                                        />
+                                    </Panel>
                                     <Panel header="我的群组" key="1">
                                         <CheckboxGroup options={cloudTable.state.groupOptions}
                                                        value={cloudTable.state.checkedGroupOptions}
