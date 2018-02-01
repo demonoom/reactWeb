@@ -735,8 +735,8 @@ const SubjectEditComponents = React.createClass({
                             </Col>
                             <Col span={20}>
                                 <SubjectContentEditor ref="subjectContentEditor"/>
-                                {audioButton}
                                 <Button className="row-t-f roe-t-f-left" onClick={this.showAnalysisModifyModal}>题目解析</Button>
+                                {audioButton}
                             </Col>
                         </Row>
 
