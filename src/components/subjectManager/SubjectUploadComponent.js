@@ -96,7 +96,7 @@ const SubjectUploadComponent = React.createClass({
      */
     initPage(){
         if(isEmpty(subjectContentEditor)==false){
-            //subjectContentEditor.content.set('');
+            subjectContentEditor.content.set('');
         }
         if(isEmpty(mytextareaAnswerEditor)==false){
             mytextareaAnswerEditor.content.set('');
@@ -636,7 +636,7 @@ const SubjectUploadComponent = React.createClass({
                     <Row>
                         <div className="ant-form-item-control">
                             <RadioGroup onChange={this.singleAnswerOnChange}
-                                        defaultValue={this.state.singleAnswer}>
+                                        value={this.state.singleAnswer}>
                                 {this.state.singleAnswerOptions}
                             </RadioGroup>
                         </div>
