@@ -96,7 +96,7 @@ const SubjectUploadComponent = React.createClass({
      */
     initPage(){
         if(isEmpty(subjectContentEditor)==false){
-            subjectContentEditor.content.set('');
+            //subjectContentEditor.content.set('');
         }
         if(isEmpty(mytextareaAnswerEditor)==false){
             mytextareaAnswerEditor.content.set('');
