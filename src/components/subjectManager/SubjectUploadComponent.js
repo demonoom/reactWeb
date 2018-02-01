@@ -69,7 +69,7 @@ const SubjectUploadComponent = React.createClass({
      * 设置当前题目上传组件的Modal显示状态为true，即显示窗口
      */
     showModal() {
-        // this.getKnowledgeInfosByConditionKey(this.state.pageNo,this.state.conditionKeyOfKnowledge);
+        //this.getKnowledgeInfosByConditionKey(this.state.pageNo,this.state.conditionKeyOfKnowledge);
         console.log("showUpload");
         this.setState({
             visible: true,tags:[]
@@ -123,7 +123,9 @@ const SubjectUploadComponent = React.createClass({
             sliderValue:4,
             singleSliderValue:4,
             knowledges:[],
-            analysisContent:''
+            analysisContent:'',
+            tags:[],    //选中的知识点标签
+            subjectVisibility:'all',    //题目可见性，默认全部可见
         });
     },
 
@@ -566,23 +568,26 @@ const SubjectUploadComponent = React.createClass({
     },
 
     showSelectKnowledgeModal(){
-        this.state.tags.splice(0);
+        //this.state.tags.splice(0);
+        console.log("==========selectKnowledgeModalIsShow============");
         this.setState({"selectKnowledgeModalIsShow":true});
     },
 
-    closeSelectKnowledgeModal(tags){
+    closeSelectKnowledgeModal(tags,buttonType){
         // var tags = this.state.tags;
         // newTags.forEach(function (newTag) {
         //     tags.push(newTag);
         // });
         var _this = this;
-        console.log("close:"+tags);
-        // this.setState({"tags":tags});
-        _this.state.tags.splice(0);
-        if(isEmpty(tags)==false){
-            tags.forEach(function (tag) {
-                _this.state.tags.push(tag);
-            })
+        if(isEmpty(buttonType)==true){
+            console.log("close:"+tags);
+            // this.setState({"tags":tags});
+            _this.state.tags.splice(0);
+            if(isEmpty(tags)==false){
+                tags.forEach(function (tag) {
+                    _this.state.tags.push(tag);
+                })
+            }
         }
         _this.setState({"selectKnowledgeModalIsShow":false});
     },
