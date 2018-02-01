@@ -303,8 +303,8 @@ class SelectKnowledgeModal extends React.Component {
                                     <Col span={24}>
                                         <Table showHeader={this.state.headerIsShow} className="select_knoledge_Person" rowSelection={rowSelection} columns={columns}
                                                dataSource={this.state.tableData} pagination={false}/>
-                                        <div>
-                                            <a onClick={this.loadMore}>{this.state.loadMoreContent}</a>
+                                        <div className="schoolgroup_operate schoolgroup_more">
+                                            <a onClick={this.loadMore} className="schoolgroup_more_a">{this.state.loadMoreContent}</a>
                                         </div>
                                     </Col>
                                 </div>
