@@ -489,9 +489,9 @@ const MainLayout = React.createClass({
             target = e.target;
         }
         var nowThinking = target.value;
-        if (isEmpty(nowThinking)) {
-            nowThinking = "这是一个云盘分享的文件";
-        }
+        // if (isEmpty(nowThinking)) {
+        //     nowThinking = "这是一个云盘分享的文件";
+        // }
         this.setState({"nowThinking": nowThinking});
     },
 
@@ -531,6 +531,7 @@ const MainLayout = React.createClass({
      * 分享文件点击OK
      */
     getsharekey() {
+        var nowThinking = this.state.nowThinking;
         var shareSrc = this.state.shareSrc;
         var shareTitle = this.state.shareTitle;
         var _this = this;
@@ -542,6 +543,10 @@ const MainLayout = React.createClass({
         var checkedGroupOptions = this.state.checkedGroupOptions;   //群组id数组
         var checkedsSructureOptions = this.state.checkedsSructureOptions;  //组织架构id数组
         var checkedRecentConnectOptions = this.state.checkedRecentConnectOptions;  //最近联系人id 既包括群组(%结尾)又有个人数组
+
+        if (typeof(nowThinking) == 'undefined') {
+            nowThinking = '这是一个云盘分享的文件'
+        }
 
         if (isEmpty(checkedConcatOptions) == true && isEmpty(checkedGroupOptions) == true && isEmpty(checkedsSructureOptions) == true && isEmpty(checkedRecentConnectOptions) == true) {
             message.error('请选择转发好友或群组');
@@ -567,7 +572,7 @@ const MainLayout = React.createClass({
                     //个人
                     var uuid = _this.createUUID();
                     var messageJson = {
-                        'content': shareTitle, "createTime": createTime, 'fromUser': loginUser,
+                        'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
                         "toId": e, "command": "message", "hostId": loginUser.colUid,
                         "uuid": uuid, "toType": messageToPer, "attachment": attachment, "state": 0
                     };
@@ -578,7 +583,7 @@ const MainLayout = React.createClass({
                     var toId = e.slice(0, e.length - 1)
                     var uuid = _this.createUUID();
                     var messageJson = {
-                        'content': shareTitle, "createTime": createTime, 'fromUser': loginUser,
+                        'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
                         "toId": toId, "command": "message", "hostId": loginUser.colUid,
                         "uuid": uuid, "toType": messageToGrp, "attachment": attachment, "state": 0
                     };
@@ -592,7 +597,7 @@ const MainLayout = React.createClass({
             checkedGroupOptions.forEach(function (e) {
                 var uuid = _this.createUUID();
                 var messageJson = {
-                    'content': shareTitle, "createTime": createTime, 'fromUser': loginUser,
+                    'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
                     "toId": e, "command": "message", "hostId": loginUser.colUid,
                     "uuid": uuid, "toType": messageToGrp, "attachment": attachment, "state": 0
                 };
@@ -605,7 +610,7 @@ const MainLayout = React.createClass({
             checkedConcatOptions.forEach(function (e) {
                 var uuid = _this.createUUID();
                 var messageJson = {
-                    'content': shareTitle, "createTime": createTime, 'fromUser': loginUser,
+                    'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
                     "toId": e, "command": "message", "hostId": loginUser.colUid,
                     "uuid": uuid, "toType": messageToPer, "attachment": attachment, "state": 0
                 };
@@ -618,7 +623,7 @@ const MainLayout = React.createClass({
             checkedsSructureOptions.forEach(function (e) {
                 var uuid = _this.createUUID();
                 var messageJson = {
-                    'content': shareTitle, "createTime": createTime, 'fromUser': loginUser,
+                    'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
                     "toId": e, "command": "message", "hostId": loginUser.colUid,
                     "uuid": uuid, "toType": messageToPer, "attachment": attachment, "state": 0
                 };

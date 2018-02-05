@@ -1689,9 +1689,9 @@ const AntCloudTableComponents = React.createClass({
             target = e.target;
         }
         var nowThinking = target.value;
-        if (isEmpty(nowThinking)) {
-            nowThinking = "这是一个云盘分享的文件";
-        }
+        // if (isEmpty(nowThinking)) {
+        //     nowThinking = "这是一个云盘分享的文件";
+        // }
         cloudTable.setState({"nowThinking": nowThinking});
     },
 
@@ -1763,6 +1763,15 @@ const AntCloudTableComponents = React.createClass({
         var creator = shareFile.creator;
         var messageToPer = 1;//根据接收者是群组还是个人来决定
         var messageToGrp = 4;
+
+        if (typeof(nowThinking) == 'undefined') {
+            nowThinking = '这是一个云盘分享的文件'
+        }
+
+        if (isEmpty(checkedConcatOptions) == true && isEmpty(checkedGroupOptions) == true && isEmpty(checkedsSructureOptions) == true && isEmpty(checkedRecentConnectOptions) == true) {
+            message.error('请选择转发好友或群组');
+            return false
+        }
 
         /*远程调试*/
         var filePath = "http://" + 'www.maaee.com' + ":" + 80 + "/Excoord_PhoneService" + "/cloudFile/shareShow/" + response;
