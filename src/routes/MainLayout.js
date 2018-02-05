@@ -424,7 +424,6 @@ const MainLayout = React.createClass({
      */
     showMessageData() {
         userMessageData.splice(0);
-        console.log(messageData);
         messageData.forEach(function (data) {
             var messageType = data.messageToType;
             if (messageType == 1) {
@@ -1315,7 +1314,7 @@ const MainLayout = React.createClass({
                                     <Collapse bordered={false} activeKey={this.state.RMsgActiveKey}
                                               onChange={this.collapseChange}
                                     >
-                                        <Panel header="最近联系人" key="0">
+                                        <Panel header="最近联系人" key="2">
                                             <CheckboxGroup options={this.state.userMessageData}
                                                            value={this.state.checkedRecentConnectOptions}
                                                            onChange={this.recentConnectOptionsOnChange}
@@ -1327,7 +1326,7 @@ const MainLayout = React.createClass({
                                                            onChange={this.groupOptionsOnChange}
                                             />
                                         </Panel>
-                                        <Panel header="我的好友" key="2">
+                                        <Panel header="我的好友" key="0">
                                             <CheckboxGroup options={this.state.concatOptions}
                                                            value={this.state.checkedConcatOptions}
                                                            onChange={this.concatOptionsOnChange}

@@ -2116,7 +2116,7 @@ const AntCloudTableComponents = React.createClass({
                             <Col span={11} className="upexam_float cloud_share_cont">
                                 <Collapse bordered={false} defaultActiveKey={['2']}
                                           onChange={cloudTable.collapseChange}>
-                                    <Panel header="最近联系人" key="0">
+                                    <Panel header="最近联系人" key="2">
                                         <CheckboxGroup options={this.state.userMessageData}
                                                        value={this.state.checkedRecentConnectOptions}
                                                        onChange={this.recentConnectOptionsOnChange}
@@ -2127,7 +2127,7 @@ const AntCloudTableComponents = React.createClass({
                                                        value={cloudTable.state.checkedGroupOptions}
                                                        onChange={cloudTable.groupOptionsOnChange}/>
                                     </Panel>
-                                    <Panel header="我的好友" key="2">
+                                    <Panel header="我的好友" key="0">
                                         <CheckboxGroup options={cloudTable.state.concatOptions}
                                                        value={cloudTable.state.checkedConcatOptions}
                                                        onChange={cloudTable.concatOptionsOnChange}/>

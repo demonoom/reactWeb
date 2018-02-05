@@ -3048,8 +3048,6 @@ const AntGroupTabComponents = React.createClass({
             "user2Id": userObj.colUid,
             "timeNode": timeNode
         };
-        console.log(param);
-        console.log('谁是User');
         isRequesting = true;
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -4889,7 +4887,7 @@ const AntGroupTabComponents = React.createClass({
                             <Col span={23} className="upexam_float cloud_share_cont">
                                 <Collapse bordered={false} activeKey={this.state.RMsgActiveKey}
                                           onChange={this.collapseChange}>
-                                    <Panel header="最近联系人" key="0">
+                                    <Panel header="最近联系人" key="2">
                                         <CheckboxGroup options={this.state.userMessageData}
                                                        value={this.state.checkedRecentConnectOptions}
                                                        onChange={this.recentConnectOptionsOnChange}
@@ -4900,7 +4898,7 @@ const AntGroupTabComponents = React.createClass({
                                                        value={this.state.checkedGroupOptions}
                                                        onChange={this.groupOptionsOnChange}/>
                                     </Panel>
-                                    <Panel header="我的好友" key="2">
+                                    <Panel header="我的好友" key="0">
                                         <CheckboxGroup options={this.state.concatOptions}
                                                        value={this.state.checkedConcatOptions}
                                                        onChange={this.concatOptionsOnChange}/>

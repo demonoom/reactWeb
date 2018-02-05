@@ -241,7 +241,7 @@
                 <div class="header draggable">
                 <h3 class="title">${ obj.title }</h3>
                     <div class="little-tilte">
-                        <a class="share"><i class="anticon anticon-share-alt "></i></a>
+                        <a class="shareLittle"><i class="anticon anticon-share-alt "></i></a>
                         <a class="close"><i className="iconfont iconfont_close">&#xe615;</i></a>
                         <a class="zoom"><i className="iconfont iconfont_more">&#xe67e;</i></a> 
                     </div>
@@ -260,7 +260,7 @@
         $(document.body).append(objtemplet.htm);
         this.el = $('#' + objtemplet.id);
         $(this.el).drag();
-        $(this.el).find('.share').on('click', this.sharePanel.bind(this, this.id));
+        $(this.el).find('.shareLittle').on('click', this.sharePanel.bind(this, this.id));
         $(this.el).find('.close').on('click', this.closepanle.bind(this, this.id));
         $(this.el).find('.zoom').on('click', this.zoomview.bind(this, this.id));
         $(this.el).find('.back').on('click', this.historyControler.bind(this, this.id, -1));
