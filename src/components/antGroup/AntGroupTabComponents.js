@@ -3044,8 +3044,8 @@ const AntGroupTabComponents = React.createClass({
         currentReturnCount = 0;
         var param = {
             "method": 'getUser2UserMessages',
-            "user1Id": userObj.colUid,
-            "user2Id": sessionStorage.getItem("ident"),
+            "user1Id": sessionStorage.getItem("ident"),
+            "user2Id": userObj.colUid,
             "timeNode": timeNode
         };
         isRequesting = true;
@@ -4887,7 +4887,7 @@ const AntGroupTabComponents = React.createClass({
                             <Col span={23} className="upexam_float cloud_share_cont">
                                 <Collapse bordered={false} activeKey={this.state.RMsgActiveKey}
                                           onChange={this.collapseChange}>
-                                    <Panel header="最近联系人" key="0">
+                                    <Panel header="最近联系人" key="2">
                                         <CheckboxGroup options={this.state.userMessageData}
                                                        value={this.state.checkedRecentConnectOptions}
                                                        onChange={this.recentConnectOptionsOnChange}
@@ -4898,7 +4898,7 @@ const AntGroupTabComponents = React.createClass({
                                                        value={this.state.checkedGroupOptions}
                                                        onChange={this.groupOptionsOnChange}/>
                                     </Panel>
-                                    <Panel header="我的好友" key="2">
+                                    <Panel header="我的好友" key="0">
                                         <CheckboxGroup options={this.state.concatOptions}
                                                        value={this.state.checkedConcatOptions}
                                                        onChange={this.concatOptionsOnChange}/>

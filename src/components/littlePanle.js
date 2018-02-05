@@ -4,6 +4,8 @@
 
 ;(function ($) {
 
+    var globalSrc,
+        globalTitle;
 
     var littlePanle = function () {
 
@@ -83,6 +85,7 @@
         exitFull();
 
     };
+
     littlePanle.prototype.closepanle = function (id) {
         if (window.liveTVWS) {
             window.liveTVWS._close();
@@ -238,6 +241,7 @@
                 <div class="header draggable">
                 <h3 class="title">${ obj.title }</h3>
                     <div class="little-tilte">
+                        <a class="shareLittle"><i class="iconfont">&#xe624;</i></a>
                         <a class="close"><i className="iconfont iconfont_close">&#xe615;</i></a>
                         <a class="zoom"><i className="iconfont iconfont_more">&#xe67e;</i></a> 
                     </div>
@@ -256,6 +260,7 @@
         $(document.body).append(objtemplet.htm);
         this.el = $('#' + objtemplet.id);
         $(this.el).drag();
+        $(this.el).find('.shareLittle').on('click', this.sharePanel.bind(this, this.id));
         $(this.el).find('.close').on('click', this.closepanle.bind(this, this.id));
         $(this.el).find('.zoom').on('click', this.zoomview.bind(this, this.id));
         $(this.el).find('.back').on('click', this.historyControler.bind(this, this.id, -1));
@@ -973,15 +978,22 @@
             _this.closepanle(id);
         });
 
-    }
+    };
+
+    littlePanle.prototype.sharePanel = function () {
+        //分享移动网页
+        window.__noomShareMbile__(globalSrc, globalTitle);
+    };
 
 
     littlePanle.prototype.GetLP = function (obj, oldArray) {
 
+        globalSrc = obj.url;
+        globalTitle = obj.title
+
         console.log(obj);
         console.log(oldArray);
         //oldArray是个空数组，第二次是两个underfined
-        console.log('-------------------');
 
         this.param.mode = obj.mode || obj.htmlMode || '';
         this.param.width = obj.width || '';

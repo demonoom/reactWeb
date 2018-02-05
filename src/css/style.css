@@ -1171,7 +1171,9 @@ element.style {
 .cloud_box .ant-table-thead > tr > th.ant-table-selection-smallclass, .cloud_box .ant-table-tbody > tr > td.ant-table-selection-smallclass {
     width: 20%
 }
-
+.cloud_box .ant-table-thead > tr > th.ant-table-selection-smallclass_t, .cloud_box .ant-table-tbody > tr > td.ant-table-selection-smallclass_t {
+    width: 18%
+}
 .ant-table-thead > tr > th.ant-135, .ant-table-tbody > tr > td.ant-135 {
     width: 135px
 }
@@ -4445,7 +4447,8 @@ a.color_gary_f, .color_gary_f {
 .little-layout-aside-r-show .close,
 .little-layout-aside-r-show .zoom,
 .little-layout-aside-r-show .back,
-.little-layout-aside-r-show .forward {
+.little-layout-aside-r-show .forward,
+.little-layout-aside-r-show .shareLittle{
     display: inline-block;
     position: absolute;
     font-weight: lighter;
@@ -4462,7 +4465,8 @@ a.color_gary_f, .color_gary_f {
 .little-layout-aside-r-show .close,
 .little-layout-aside-r-show .zoom,
 .little-layout-aside-r-show .back,
-.little-layout-aside-r-show .forward {
+.little-layout-aside-r-show .forward,
+.little-layout-aside-r-show .shareLittle{
     font-family: "iconfont" !important;
     font-size: 16px;
     font-style: normal;
@@ -4506,7 +4510,16 @@ a.color_gary_f, .color_gary_f {
 .little-layout-aside-r-show .forward:hover {
     color: #57c5f7;
 }
-
+.little-layout-aside-r-show .shareLittle{
+    right: 65px;
+    font-size: 18px;
+}
+.little-layout-aside-r-show .shareLittle i{
+    font-size: 18px;
+}
+.little-layout-aside-r-show .shareLittle:hover {
+    color: #57c5f7
+}
 .lpmgrbtn {
     padding: 4px 0;
     border-radius: 4px;
@@ -5441,14 +5454,19 @@ div.btn1 {
 
 .cloud_share_cont {
     border: 1px solid #cfcfd0;
-    height: 260px;
+    height: 350px;
 }
 
 .cloud_share_cont .ant-collapse {
     min-height: 100%;
     height: 100%;
 }
-
+.cloud_share_cont_ri{
+    height: 350px;
+}
+.cloud_share_cont_ri textarea.ant-input{
+    height: 100%;
+}
 li.liveTV:hover, li.history:hover {
     background: #eaf8fe;
     cursor: pointer
@@ -5508,7 +5526,7 @@ ul.liveTV_tab .liveTV, ul.liveTV_tab .liveTV i, ul.history_tab .history, ul.hist
 }
 
 .cloud_share_Modal {
-    height: 462px
+    height: 530px
 }
 
 .exam_timeline {
