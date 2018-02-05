@@ -5452,14 +5452,19 @@ div.btn1 {
 
 .cloud_share_cont {
     border: 1px solid #cfcfd0;
-    height: 260px;
+    height: 350px;
 }
 
 .cloud_share_cont .ant-collapse {
     min-height: 100%;
     height: 100%;
 }
-
+.cloud_share_cont_ri{
+    height: 350px;
+}
+.cloud_share_cont_ri textarea.ant-input{
+    height: 100%;
+}
 li.liveTV:hover, li.history:hover {
     background: #eaf8fe;
     cursor: pointer
@@ -5519,7 +5524,7 @@ ul.liveTV_tab .liveTV, ul.liveTV_tab .liveTV i, ul.history_tab .history, ul.hist
 }
 
 .cloud_share_Modal {
-    height: 462px
+    height: 530px
 }
 
 .exam_timeline {

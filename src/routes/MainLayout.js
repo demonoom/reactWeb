@@ -1346,7 +1346,7 @@ const MainLayout = React.createClass({
                                     </Collapse>
                                 </Col>
                                 <Col span={12} className="topics_dianzan">
-                                    <div>
+                                    <div className="cloud_share_cont_ri">
                                         <Input type="textarea" rows={14} placeholder="这是一个云盘分享的文件"
                                                value={this.state.nowThinking}
                                                onChange={this.nowThinkingInputChange}
