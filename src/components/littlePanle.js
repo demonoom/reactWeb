@@ -1470,12 +1470,12 @@ var phone = {
 
         if (method == 'selectPicture') {
             // .....执行本地逻辑
-            alert(1);
+            // alert(1);
             var paths = "";
             var backId = json.callbackId;
             iframeWindow.Bridge.cb.backId(paths);
         } else if (method = 'openNewPage') {
-            alert(2);
+            // alert(2);
 
         }
     },
