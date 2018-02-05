@@ -16,7 +16,7 @@ var SubjectContent = React.createClass({
     componentDidMount() {
         console.log("SubjectContent didMount");
         subjectContentEditor = textboxio.replace('#mytextarea', defaultConfig);
-
+        subjectContentEditor.content.set(" ");
         /*subjectContentEditor.events.focus.addListener(function () {
             console.log("SubjectContent focus"+subjectContentEditor.mode.get());
             if (subjectContentEditor.mode.get() == "code") {
@@ -49,7 +49,7 @@ var SubjectContent = React.createClass({
      * 获取题目的题干
      */
     setSubjectContent(content) {
-        subjectContentEditor.content.set(content);
+        //subjectContentEditor.content.set(content);
     },
 
     changeMode(){
@@ -66,7 +66,7 @@ var SubjectContent = React.createClass({
         return (
             <div className="btn_subject_ri_wrap">
                 <Spin spinning={this.state.loading}  tip="图文内容上传中..." size="large">
-                    <textarea id="mytextarea" style={{width: '100%', height: '300px'}}></textarea>
+                    <div id="mytextarea" style={{width: '100%', height: '300px'}}></div>
                     <Button type="primary" htmlType="submit" className="login-form-button btn_subject_ri" onClick={this.changeMode}>
                         保存题目中的图片
                     </Button>

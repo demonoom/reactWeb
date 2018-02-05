@@ -14,7 +14,7 @@ const columns = [{
     className: 'dold_text'
 }];
 var selectArr = [];
-
+var tableData = [];
 class SelectKnowledgeModal extends React.Component {
 
     constructor(props) {
@@ -30,12 +30,13 @@ class SelectKnowledgeModal extends React.Component {
             selTags: [],  //标签显示
             inputVisible: false,
             inputValue: '',
-            searchObj: '',
+            // searchObj: '',
             humArr: [],
             defStrNum: 200,
             pageNo:1,
             conditionKeyOfKnowledge:'',
-            headerIsShow:true
+            headerIsShow:true,
+            loadMoreContent:''
         };
         this.SelectKnowledgeModalHandleCancel = this.SelectKnowledgeModalHandleCancel.bind(this);
         this.onSelectChange = this.onSelectChange.bind(this);
@@ -47,6 +48,7 @@ class SelectKnowledgeModal extends React.Component {
         this.getKnowledgeInfosByConditionKey = this.getKnowledgeInfosByConditionKey.bind(this);
         this.searchKnowledge = this.searchKnowledge.bind(this);
         this.saveButtonOnClick = this.saveButtonOnClick.bind(this);
+        this.loadMore = this.loadMore.bind(this);
     }
 
     componentDidMount() {
@@ -57,6 +59,7 @@ class SelectKnowledgeModal extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        console.log("=========componentWillReceiveProps=============");
         var isShow = nextProps.isShow;
         var initTags = nextProps.initTags;
         var knowledgeIds = [];
@@ -70,7 +73,8 @@ class SelectKnowledgeModal extends React.Component {
                 selectArr.push(tag);
             });
         }
-        this.setState({isShow,"selTags":initTags,"selectedRowKeys":knowledgeIds});
+        tableData.splice(0);
+        this.setState({isShow,"selTags":initTags,"selectedRowKeys":knowledgeIds,conditionKeyOfKnowledge:'',loadMoreContent:'',pageNo:1});
         this.getKnowledgeInfosByConditionKey(this.state.pageNo,this.state.conditionKeyOfKnowledge);
     }
 
@@ -80,9 +84,9 @@ class SelectKnowledgeModal extends React.Component {
      */
     SelectKnowledgeModalHandleCancel() {
         this.setState({"isShow": false});
-        this.props.closeSelectKnowledgeModal(this.state.selTags);
+        this.props.closeSelectKnowledgeModal(this.state.selTags,'closeBtn');
         this.state.sendMes = '';
-        this.state.searchObj = '';
+        // this.state.searchObj = '';
         this.state.selectedRowKeys = [];
         this.state.topicImgUrl = [];
         this.state.selTags = [];
@@ -138,7 +142,6 @@ class SelectKnowledgeModal extends React.Component {
                 if (ret.msg == "调用成功" && ret.success == true) {
                     //children.splice(0);
                     var response = ret.response;
-                    var tableData = [];
                     // _this.setState({knowledgeResponse:response});
                     response.forEach(function (knowledgeInfo) {
                         var knowledgeId = knowledgeInfo.knowledgeId;
@@ -150,10 +153,13 @@ class SelectKnowledgeModal extends React.Component {
                         tableData.push(person);
                     });
                     var headerIsShow = true;
+                    var loadMoreContent="加载更多";
                     if(response.length==0){
-                        headerIsShow = false;
+                        //headerIsShow = false;
+                        loadMoreContent = "无更多数据";
                     }
-                    _this.setState({tableData,headerIsShow});
+                    var pager = ret.pager;
+                    _this.setState({tableData,totalKnowledge: pager.rsCount, loadMoreContent});
                 }
             },
             onError: function (error) {
@@ -169,13 +175,17 @@ class SelectKnowledgeModal extends React.Component {
         } else {
             target = e.target;
         }
-        var searchObj = target.value;
-        this.setState({searchObj});
+        var conditionKeyOfKnowledge = target.value;
+        this.setState({conditionKeyOfKnowledge});
     }
 
     onKeyUp() {
         // 调用搜索
-        this.getKnowledgeInfosByConditionKey(this.state.pageNo,this.state.searchObj);
+        console.log("1111");
+        tableData.splice(0);
+        var initPageNo = 1;
+        this.getKnowledgeInfosByConditionKey(initPageNo,this.state.conditionKeyOfKnowledge);
+        this.setState({pageNo:initPageNo});
     }
 
     /*标签关闭的回调*/
@@ -200,8 +210,8 @@ class SelectKnowledgeModal extends React.Component {
      * 添加新的tag
      */
     addNewTags(){
-        var searchObj = this.state.searchObj;
-        var record = {key:searchObj,name:searchObj};
+        var conditionKeyOfKnowledge = this.state.conditionKeyOfKnowledge;
+        var record = {key:conditionKeyOfKnowledge,name:conditionKeyOfKnowledge};
         selectArr.push(record);
         this.setState({selTags: selectArr});
     }
@@ -211,6 +221,17 @@ class SelectKnowledgeModal extends React.Component {
      */
     saveButtonOnClick(){
         this.props.closeSelectKnowledgeModal(this.state.selTags);
+    }
+
+    /**
+     * 部门成员加载更多
+     */
+    loadMore() {
+        if(this.state.loadMoreContent=="加载更多"){
+            var newPageNo = parseInt(this.state.pageNo) + 1;
+            this.getKnowledgeInfosByConditionKey(newPageNo,this.state.conditionKeyOfKnowledge);
+            this.setState({"pageNo":newPageNo});
+        }
     }
 
     saveInputRef = input => this.input = input;
@@ -269,7 +290,7 @@ class SelectKnowledgeModal extends React.Component {
                                     <Col span={20}>
                                     <Input
                                         placeholder="请输入或选择需添加的知识点"
-                                        value={this.state.searchObj}
+                                        value={this.state.conditionKeyOfKnowledge}
                                         onChange={this.searchKnowledge}
                                         onKeyUp={this.onKeyUp}
                                     />
@@ -280,8 +301,11 @@ class SelectKnowledgeModal extends React.Component {
                                 </div>
                                 <div>
                                     <Col span={24}>
-                                    <Table showHeader={this.state.headerIsShow} className="select_knoledge_Person" rowSelection={rowSelection} columns={columns}
-                                           dataSource={this.state.tableData} pagination={false}/>
+                                        <Table showHeader={this.state.headerIsShow} className="select_knoledge_Person" rowSelection={rowSelection} columns={columns}
+                                               dataSource={this.state.tableData} pagination={false}/>
+                                        <div className="schoolgroup_operate schoolgroup_more">
+                                            <a onClick={this.loadMore} className="schoolgroup_more_a">{this.state.loadMoreContent}</a>
+                                        </div>
                                     </Col>
                                 </div>
                         </div>

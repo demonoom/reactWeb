@@ -31,7 +31,7 @@
     <script src="../src/components/littlePanle.js?v=1.7"></script>
     <script src="../src/components/noomPanle.js?v=1.5"></script>
     <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/video.css?v=3.2">
-    <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/style.css?v=9.8">
+    <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/style.css?v=10.0">
     <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/student.css?v=3.5">
     <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/schoolGroup.css?v=3.8">
     <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/approving.css?v=3.1">
@@ -46,13 +46,6 @@
     <!--<script src="thirdLib/formBuilder2.9.8/assets/js/form-render.min.js"></script>-->
     <script>
         //以下声明的对象为全局的textboxio组件对象
-        /*var mytextareaSingleEditor;
-        var mytextareaSingleModifyEditor;
-        var mytextareaMulitiEditor;
-        var mytextareaMulitiSelectModifyEditor;
-        var mytextareaCorrectEditor;
-        var mytextareaCorrectModifyEditor;
-        */
 
         var mytextareaSimpleAnswerEditor;
         var mytextareaAnswerModifyEditor;
@@ -86,16 +79,23 @@
                 upload: {
                     url: 'http://101.201.45.125:8890/Excoord_Upload_Server/file/upload'
                 }
+            },
+            css : {
+                styles : [
+                    { rule : 'div' },			// Change selected elements to paragraph elements
+                    { rule : 'p' },			// Change selected elements to paragraph elements
+                    { rule : 'h1'},
+                    { rule : 'h2'},
+                    { rule : 'h3'},
+                    { rule : 'h4'},// Change selected elements to heading1 elements, apply blue class. Shown in the styles dropdown as 'Blue heading'
+                    { rule : 'pre' },		// Apply a red class to selected anchor elements
+                ]
             }
         };
         //此处的几个全局对象用来完成题目修改时，向textboxio传递修改数据用
         var editorContent = "";
         var analysisEditContent="";
         var answerContent = "";
-        /*var muEditorContent = "";
-        var correctEditorContent = "";
-        var simpleEditorContent = "";
-        */
         var toolbarKey = "";
     </script>
 
@@ -140,6 +140,6 @@
         history.pushState(null, null, document.URL);
     });
 </script>
-<script src="index.js?v=2.3.3"></script>
+<script src="index.js?v=2.3.5"></script>
 </body>
 </html>
