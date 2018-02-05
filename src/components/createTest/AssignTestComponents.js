@@ -5,6 +5,7 @@ import {doWebService} from '../../WebServiceHelper';
 import {getPageSize} from '../../utils/Const';
 import {getCurrentHM} from '../../utils/utils';
 import {formatYMD} from '../../utils/utils';
+import {QUESTION_DETAIL_URL} from '../../utils/Const';
 import UpdateExamPagerComponents from '../exam/UpdateExamPagerComponents';
 import moment from 'moment';
 
@@ -257,6 +258,7 @@ const AssignTestComponents = React.createClass({
 
     //根据备课计划获取题目列表
     getSubjectDataBySchedule: function (ident, ScheduleOrSubjectId, pageNo) {
+        var _this = this;
         var param = {
             "method": 'getClassSubjects',
             "ident": ident,
@@ -269,16 +271,11 @@ const AssignTestComponents = React.createClass({
                 var response = ret.response;
                 response.forEach(function (e) {
                     var key = e.id;
-                    var popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>' + e.content + '<hr/><span class="answer_til answer_til_2">答案：</span>' + e.answer + '</div>';
-                    var content = <Popover placement="rightTop"
-                                           content={<article id='contentHtml' className='content Popover_width'
-                                                             dangerouslySetInnerHTML={{__html: popOverContent}}></article>}>
-                        <article id='contentHtml' className='content'
-                                 dangerouslySetInnerHTML={{__html: e.content}}></article>
-                    </Popover>;
                     var subjectType = e.typeName;
+                    var content = <article id='contentHtml' className='content'
+                                           dangerouslySetInnerHTML={{__html: e.content}} onClick={_this.showDetailPanel.bind(_this,key,subjectType)}></article>;
                     subjectData.push({
-                        key: key + "^" + e.content + "^" + e.answer,
+                        key: key + "^" + e.content + "^" + e.answer + "^" + e.subjectType,
                         content: content,
                         subjectType: subjectType,
                     });
@@ -291,6 +288,21 @@ const AssignTestComponents = React.createClass({
             }
 
         });
+    },
+
+    /**
+     * 在侧边栏中，显示当前题目的详情信息
+     * @param subjectId
+     * @param subjectType
+     */
+    showDetailPanel(subjectId,subjectType){
+        var url = QUESTION_DETAIL_URL+"?courseId=" + subjectId + "&subjectType=" + subjectType;
+        let param = {
+            mode: 'teachingAdmin',
+            title: "题目详情",
+            url: url,
+        };
+        LP.Start(param);
     },
 
     //题目表格行被选中时获取被选中项目
@@ -310,16 +322,12 @@ const AssignTestComponents = React.createClass({
      * @param selectedSubjectKeys
      */
     buildSubjectCheckList(selectedSubjectKeys){
+        var _this = this;
         assignHomeWork.state.selectedSubjectData.splice(0);
         selectedSubjectKeys.forEach(function (e) {
             var subjectArray = e.split("^");
-            var popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>' + subjectArray[1] + '<hr/><span class="answer_til answer_til_2">答案：</span>' + subjectArray[2] + '</div>';
-            var content = <Popover placement="rightTop"
-                                   content={<article id='contentHtml' className='content Popover_width'
-                                                     dangerouslySetInnerHTML={{__html: popOverContent}}></article>}>
-                <article id='contentHtml' className='content content_3'
-                         dangerouslySetInnerHTML={{__html: subjectArray[1]}}></article>
-            </Popover>;
+            var content = <article id='contentHtml' className='content content_3'
+                                   dangerouslySetInnerHTML={{__html: subjectArray[1]}} onClick={_this.showDetailPanel.bind(_this,subjectArray[0],subjectArray[3])}></article>;
             assignHomeWork.state.selectedSubjectData.push({
                 key: e,
                 content: content,
