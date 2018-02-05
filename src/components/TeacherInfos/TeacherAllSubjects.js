@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import {Table, Button, Popover, message, Breadcrumb, Icon} from 'antd';
 import ConfirmModal from '../ConfirmModal';
 import {getPageSize,isEmpty} from '../../utils/Const';
+import {QUESTION_DETAIL_URL} from '../../utils/Const';
 import {doWebService} from '../../WebServiceHelper';
 import UseKnowledgeComponents from '../UseKnowledgeComponents';
 import SubjectEditComponents from '../subjectManager/SubjectEditComponents';
@@ -38,11 +39,12 @@ const columns = [
         },],
         onFilter: (value, record) => record.subjectType.indexOf(value) === 0,
     },
-    {
+    /*{
         title: '所属知识点',
         className: 'ant-table-selection-score ant-table-selection-score-again',
         dataIndex: 'subjectKnowledges',
-    }, {
+    },*/
+    {
         title: '操作',
         className: 'ant-table-selection-score3 ant-table-selection-score3-again',
         dataIndex: 'subjectOpt',
@@ -110,13 +112,8 @@ const TeacherAllSubjects = React.createClass({
                     response.forEach(function (e) {
                         var key = e.id;
                         var name = e.user.userName;
-                        var popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>' + e.content + '<hr/><span class="answer_til answer_til_2">答案：</span>' + e.answer + '</div>';
-                        var content = <Popover placement="rightTop"
-                                               content={<article id='contentHtml' className='content Popover_width'
-                                                                 dangerouslySetInnerHTML={{__html: popOverContent}}></article>}>
-                            <article id='contentHtml' className='content'
-                                     dangerouslySetInnerHTML={{__html: e.content}}/>
-                        </Popover>;
+                        var content = <article id='contentHtml' className='content'
+                                               dangerouslySetInnerHTML={{__html: e.content}} onClick={_self.showDetailPanel.bind(_self,key,e.subjectType)}></article>;
                         var subjectType = e.typeName;
                         var subjectScore = e.score;
                         if (parseInt(e.score) < 0) {
@@ -143,7 +140,7 @@ const TeacherAllSubjects = React.createClass({
                             name: name,
                             content: content,
                             subjectType: subjectType,
-                            subjectKnowledges: knowledges.join(","),
+                            //subjectKnowledges: knowledges.join(","),
                             subjectOpt: subjectOpt,
                             answer: answer
                         });
@@ -156,6 +153,21 @@ const TeacherAllSubjects = React.createClass({
             }
 
         });
+    },
+
+    /**
+     * 在侧边栏中，显示当前题目的详情信息
+     * @param subjectId
+     * @param subjectType
+     */
+    showDetailPanel(subjectId,subjectType){
+        var url = QUESTION_DETAIL_URL+"?courseId=" + subjectId + "&subjectType=" + subjectType;
+        let param = {
+            mode: 'teachingAdmin',
+            title: "题目详情",
+            url: url,
+        };
+        LP.Start(param);
     },
 
 

@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import {Table, Button, Popover, message} from 'antd';
 import {doWebService} from '../WebServiceHelper';
 import {getPageSize} from '../utils/Const';
+import {QUESTION_DETAIL_URL} from '../utils/Const';
 
 var columns = [{
     title: '标题',
@@ -159,6 +160,7 @@ const HomeWorkTableComponents = React.createClass({
 
     //点击作业列表中的查看时，进入题目列表
     getHomeworkSubjects: function (ident, clazzId, dateTime, pageNo) {
+        var _this = this;
         var param = {
             "method": 'getHomeworkSubjects',
             "ident": ident,
@@ -173,14 +175,9 @@ const HomeWorkTableComponents = React.createClass({
                 var response = ret.response;
                 response.forEach(function (e) {
                     var id = e.id;
-                    var popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>' + e.content + '<hr/><span class="answer_til answer_til_2">答案：</span>' + e.answer + '</div>';
-                    var content = <Popover placement="rightTop"
-                                           content={<article id='contentHtml' className='content Popover_width'
-                                                             dangerouslySetInnerHTML={{__html: popOverContent}}></article>}>
-                        <article id='contentHtml' className='content Popover_width'
-                                 dangerouslySetInnerHTML={{__html: e.content}}></article>
-                    </Popover>;
                     var subjectType = e.subjectType;
+                    var content = <article id='contentHtml' className='content Popover_width'
+                                           dangerouslySetInnerHTML={{__html: e.content}} onClick={_this.showDetailPanel.bind(_this,id,subjectType)}></article>
                     var typeName = e.typeName;
                     var score = e.score;
                     data.push({
@@ -199,6 +196,21 @@ const HomeWorkTableComponents = React.createClass({
             }
 
         });
+    },
+
+    /**
+     * 在侧边栏中，显示当前题目的详情信息
+     * @param subjectId
+     * @param subjectType
+     */
+    showDetailPanel(subjectId,subjectType){
+        var url = QUESTION_DETAIL_URL+"?courseId=" + subjectId + "&subjectType=" + subjectType;
+        let param = {
+            mode: 'teachingAdmin',
+            title: "题目详情",
+            url: url,
+        };
+        LP.Start(param);
     },
 
     pageOnChange(pageNo) {
