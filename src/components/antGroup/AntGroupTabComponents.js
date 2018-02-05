@@ -3279,6 +3279,7 @@ const AntGroupTabComponents = React.createClass({
                         ;
                     }
                     var e = messageList[i];
+                    console.log(e);
                     if (isEmpty(e) == true) {
                         continue;
                     }
@@ -4161,10 +4162,11 @@ const AntGroupTabComponents = React.createClass({
                                             <div className="talk-cont">
                                                 <span className="name">{userPhoneIcon}</span>
                                                 <div className="talk_bubble_box">
-                                                <span className="borderballoon noom_cursor borderballoon_file"
-                                                      onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
+                                                    <span className="borderballoon noom_cursor borderballoon_file"
+                                                          onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
                                                     <span className="bot"></span>
                                                     <span className="top"></span>
+                                                    <div>{e.content}</div>
                                                     <div className="borderballoon_le_cont">
                                                         <img className="upexam_float span_link_img" style={{width: 40}}
                                                              src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
@@ -4244,6 +4246,7 @@ const AntGroupTabComponents = React.createClass({
                                                           onClick={this.readLink.bind(this, attachment, fileUid, fileCreateUid)}>
                                                         <span className="bot"></span>
                                                         <span className="top"></span>
+                                                        <div>{e.content}</div>
                                                         <img className="upexam_float span_link_img" style={{width: 40}}
                                                              src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
                                                              alt=""/>
