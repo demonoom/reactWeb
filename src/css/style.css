@@ -1171,7 +1171,9 @@ element.style {
 .cloud_box .ant-table-thead > tr > th.ant-table-selection-smallclass, .cloud_box .ant-table-tbody > tr > td.ant-table-selection-smallclass {
     width: 20%
 }
-
+.cloud_box .ant-table-thead > tr > th.ant-table-selection-smallclass_t, .cloud_box .ant-table-tbody > tr > td.ant-table-selection-smallclass_t {
+    width: 18%
+}
 .ant-table-thead > tr > th.ant-135, .ant-table-tbody > tr > td.ant-135 {
     width: 135px
 }
