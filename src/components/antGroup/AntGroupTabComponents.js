@@ -3044,10 +3044,12 @@ const AntGroupTabComponents = React.createClass({
         currentReturnCount = 0;
         var param = {
             "method": 'getUser2UserMessages',
-            "user1Id": userObj.colUid,
-            "user2Id": sessionStorage.getItem("ident"),
+            "user1Id": sessionStorage.getItem("ident"),
+            "user2Id": userObj.colUid,
             "timeNode": timeNode
         };
+        console.log(param);
+        console.log('谁是User');
         isRequesting = true;
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
