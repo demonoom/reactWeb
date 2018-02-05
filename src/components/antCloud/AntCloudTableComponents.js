@@ -39,7 +39,7 @@ var columns = [{
 }, {
     title: '更新时间',
     dataIndex: 'createTime',
-    className: 'ant-table-selection-smallclass class_right time',
+    className: 'ant-table-selection-smallclass_t class_right time',
 }, {
     title: '操作',
     className: 'ant-table-selection-smallclass class_right',
@@ -2104,7 +2104,7 @@ const AntCloudTableComponents = React.createClass({
                        onCancel={cloudTable.shareModalHandleCancel}
                        onOk={cloudTable.getsharekey}
                 >
-                    <div className="cloud_share_cont_ri">
+                    <div>
                         <Row>
                             <Col span={12} className="share_til">选择好友分享文件：</Col>
                             <Col span={12} className="share_til">这一刻的想法：
