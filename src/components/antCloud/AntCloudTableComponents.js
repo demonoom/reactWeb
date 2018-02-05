@@ -2104,12 +2104,13 @@ const AntCloudTableComponents = React.createClass({
                        onCancel={cloudTable.shareModalHandleCancel}
                        onOk={cloudTable.getsharekey}
                 >
-                    <div>
+                    <div className="cloud_share_cont_ri">
                         <Row>
                             <Col span={12} className="share_til">选择好友分享文件：</Col>
                             <Col span={12} className="share_til">这一刻的想法：
-                                <span className="right_ri cloud_share_prompt"><Icon type="link"
-                                                                                    className="info_school_s"/><span>这是一个云盘分享的文件</span></span>
+                                <span className="right_ri cloud_share_prompt">
+                                    <Icon type="link" className="info_school_s"/><span>这是一个云盘分享的文件</span>
+                                </span>
                             </Col>
                         </Row>
                         <Row>
@@ -2140,7 +2141,7 @@ const AntCloudTableComponents = React.createClass({
                                 </Collapse>
                             </Col>
                             <Col span={12} className="topics_dianzan">
-                                <div>
+                                <div className="cloud_share_cont_ri">
                                     <Input type="textarea" rows={14} placeholder="这是一个云盘分享的文件"
                                            value={cloudTable.state.nowThinking}
                                            onChange={cloudTable.nowThinkingInputChange}/>
