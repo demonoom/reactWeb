@@ -103,6 +103,8 @@ var imgErrorCount = 0;
 var messageData = [];
 var userMessageData = [];
 
+var mesReFlag = true;
+
 const AntGroupTabComponents = React.createClass({
 
     getInitialState() {
@@ -265,7 +267,6 @@ const AntGroupTabComponents = React.createClass({
                                 "command": "message_read",
                                 "data": {"messageUUID": v.uuid}
                             };
-                            console.log('群消息回复');
                             ms.send(receivedCommand);
                             // v.readState = 1;
                             v.groupReadState = 1;
@@ -282,7 +283,6 @@ const AntGroupTabComponents = React.createClass({
                                 "command": "message_read",
                                 "data": {"messageUUID": v.uuid}
                             };
-                            console.log('个人消息回复');
                             ms.send(receivedCommand);
                             v.readState = 1;
                             uuidArr.push(v.uuid);
@@ -1111,7 +1111,7 @@ const AntGroupTabComponents = React.createClass({
                     showUser = messageObj.toUser;
                 }
                 if (isEmpty(showUser)) {
-                    console.log("toUser为空");
+                    // console.log("toUser为空");
                     return;
                 }
                 var colUid = showUser.colUid;
@@ -1171,7 +1171,6 @@ const AntGroupTabComponents = React.createClass({
      */
     showMessageData() {
         userMessageData.splice(0);
-        console.log(messageData);
         messageData.forEach(function (data) {
             var messageType = data.messageToType;
             if (messageType == 1) {
@@ -2014,6 +2013,8 @@ const AntGroupTabComponents = React.createClass({
             }, onWarn: function (warnMsg) {
 
             }, onMessage: function (info) {
+                mesReFlag = true;
+                var messageList = antGroup.state.messageList;
                 // console.log(info);
                 // console.log('info');
                 var groupObj;
@@ -2163,6 +2164,7 @@ const AntGroupTabComponents = React.createClass({
                                 }
                             }
                         } else if (data.message.command == "retractMessage") {
+                            mesReFlag = false;
                             //根据data.message.content去messagelist中删除消息
                             var messageList = antGroup.state.messageList;
                             messageList.forEach(function (v, i) {
@@ -2719,6 +2721,9 @@ const AntGroupTabComponents = React.createClass({
     },
 
     addMessageList(messages, firstOrLast) {
+        if (!mesReFlag) {
+            return
+        }
         if (isEmpty(firstOrLast) == false) {
             if (isEmpty(messages[0]) == false) {
                 var num = antGroup.state.mesRetNum;
@@ -3279,7 +3284,7 @@ const AntGroupTabComponents = React.createClass({
                         ;
                     }
                     var e = messageList[i];
-                    console.log(e);
+                    // console.log(e);
                     if (isEmpty(e) == true) {
                         continue;
                     }
