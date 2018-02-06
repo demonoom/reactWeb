@@ -1407,8 +1407,8 @@ const AntCloudTableComponents = React.createClass({
      * @param pageNo
      */
      saveBarBack(){
-
         var initPageNo = 1;
+        console.log('cloudTable',cloudTable.state.parentDirectoryIdAtMoveModalSave);
         if (cloudTable.state.parentDirectoryIdAtMoveModalSave == 0) {
             cloudTable.setState({"parentDirectoryIdAtMoveModalSave": -1, "currentDirectoryIdAtMoveModalSave": -1});
             cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo);
@@ -1743,6 +1743,7 @@ const AntCloudTableComponents = React.createClass({
             }
         }
         console.log("------>" + cloudTable.state.parentDirectoryId);
+        console.log("*****",cloudTable.state.ident);
         if (cloudTable.state.parentDirectoryId != -1 && cloudTable.state.currentDirectoryId != -1) {
             returnParentToolBar =
                 <div className="ant-tabs-right"><Button onClick={cloudTable.returnParent}><Icon type="left"/></Button>

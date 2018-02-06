@@ -246,9 +246,13 @@
     background: none;
     padding: 0 !important;
     margin: 0;
+    margin-right:20px;
 }
 .sg_btn_del:hover{
     background: none;
+}
+.sg_btn_swap{
+    margin-right:20px;
 }
 .schoolgroup_i_sublevel{
     font-size: 18px;

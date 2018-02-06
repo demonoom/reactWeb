@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import {isEmpty} from '../../utils/utils';
-import {Table, Icon, Button, Breadcrumb, message, Modal} from 'antd';
+import {Table, Icon, Button, Breadcrumb, message, Modal, Row} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import AddGroupMemberModal from './AddGroupMemberModal';
 import AddSubGroupModal from './AddSubGroupModal';
@@ -33,20 +33,32 @@ const memberColumns = [{
     dataIndex: 'userPhone',
     key: 'userPhone',
 }, {
-    title: '',
+    title: '职位',
     dataIndex: 'isMaster',
     key: 'isMaster'
-}/*, {
+}, {
     title: '操作',
-    dataIndex: 'opt',
-    key: 'opt'
-}*/
+    dataIndex: 'subjectButtons',
+    key: 'subjectButtons',
+},
 ];
-
+var memberMoveModalColumns = [
+    {
+        title: '部门名称',
+        dataIndex: 'subGroupModalName',
+        key: 'subGroupModalName',
+    }, {
+        title: '操作',
+        dataIndex: 'moveDirOpt',
+        key: 'moveDirOpt',
+        width: '86px'
+    }
+];
 var structuresObjArray = [];   //面包条数组
 var subGroupMemberList = [];
 var currentStructureMember = [];   //当前人员
-
+var backIcon;
+var structuresObjChangedArray =[];
 const Structure = React.createClass({
 
     getInitialState() {
@@ -81,7 +93,8 @@ const Structure = React.createClass({
                 rootGroup: defaultStructure,
                 parentGroup: defaultStructure,
                 structureId: defaultStructure.id,
-                structuresObjArray    //面包条数组
+                defaultStructureId:defaultStructure.id,
+                structuresObjArray,    //面包条数组
             });   //部门和部门id   这个部门是学校obj
             //列举子部门
             this.listStructures(defaultStructure.id, false);
@@ -186,6 +199,8 @@ const Structure = React.createClass({
                     <span className="schoolgroup_people name_max_last">({subGroup.memberCount}人                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                )</span>
                 </div>;
                 var opt = <div className="knowledge_ri">
+                    <Button className="sg_btn_del sg_btn_swap" icon="swap"
+                            onClick={_this.displayStructeMemberModal.bind(_this, subGroup,true)}></Button>
                     <Button className="sg_btn_del" icon="delete"
                             onClick={_this.removeGroup.bind(_this, subGroup.id)}></Button>
                 </div>
@@ -201,6 +216,205 @@ const Structure = React.createClass({
         this.setState({subGroupList});
     },
 
+    /*
+    modal弹框默认请求 此处flag 判断是组织架构变更 还是人员组织架构变更（因为用一个相同的modal）
+     */
+    listModalStructures(structureId,flag,subGroup) {
+        let _this = this;
+        var param = {
+            "method": 'listStructures',
+            "operateUserId": _this.state.loginUser.colUid,
+            "structureId": structureId,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if(isEmpty(response)== false){
+                    _this.buildModalListStruct(response,flag);
+                    if(response.length>0){
+                        structuresObjChangedArray.push(subGroup);
+                    }
+                }
+            }
+        })
+    },
+    /*
+ modal 构建弹框数据
+  */
+    buildModalListStruct(response,flag) {
+        var _this = this;
+        var parentId = null;
+        if (isEmpty(response) == false) {
+            var memberStructureModalDataSource = [];
+            for (var i = 0; i < response.length; i++) {
+                var subGroup = response[i];
+                var moveDirOpt = <div>
+                    <Button onClick={_this.memberModalConfirmChange.bind(_this, subGroup,flag)}>确定</Button>
+                </div>
+                var dirName = <span className="font_gray_666"
+                                    onClick={_this.memberModalClickInto.bind(_this, subGroup,flag)}>{subGroup.name}
+                                     </span>;
+                memberStructureModalDataSource.push({
+                    key: subGroup.id,
+                    subGroupModalName: dirName,
+                    moveDirOpt: moveDirOpt
+                });
+                if(i==0){
+                    parentId = subGroup.parent.parentId;
+                }
+            }
+            backIcon=<p><Icon type="left" style={{fontSize: 20, color: '#08c', cursor: 'pointer'}}
+                              onClick={this.memberModalBackToList.bind(_this,flag,parentId)}/></p>
+            _this.setState({memberStructureModalDataSource,parentId});
+        }
+    },
+
+    /*
+  组织架构移动的点击出现弹框
+    */
+    displayStructeMemberModal(member,flag) {
+        structuresObjChangedArray = [];
+        if(flag){
+            this.setState({
+                moveMemberStructureModalVisible: true,
+                currentUpdateStructureId:member.id,
+            })
+        }else{
+            this.setState({
+                moveMemberStructureModalVisible: true,
+                CurrentUpdateMemberStructuresId: member.userId,
+            });
+        }
+        this.modalDefaultData(flag);
+    },
+
+    //modal 的根选项
+    modalDefaultData(flag){
+        backIcon=<p><Icon type="left" style={{fontSize: 20, color: '#08c', cursor: 'pointer'}}
+                          onClick={this.memberModalBackToList.bind(this,flag)}/></p>
+        var memberStructureModalDataSource = [];
+        var rootGroup = this.state.rootGroup;
+        var moveDirOpt = <div>
+            <Button onClick={this.memberModalConfirmChange.bind(this, rootGroup,flag)}>确定</Button>
+        </div>
+        var dirName = <span className="font_gray_666"
+                            onClick={this.memberModalClickInto.bind(this,rootGroup,flag)}>{rootGroup.name}
+                                     </span>;
+        memberStructureModalDataSource.push({
+            key: rootGroup.id,
+            subGroupModalName: dirName,
+            moveDirOpt: moveDirOpt
+        });
+        this.setState({memberStructureModalDataSource});
+    },
+
+    /*更改用户所属部门 组织架构弹框的关闭
+     */
+    moveMemberStructeModalclose() {
+        this.setState({moveMemberStructureModalVisible: false});
+    },
+
+    /*
+   modal 确认转换组织架构按钮
+    */
+    memberModalConfirmChange(subGroup,flag) {
+        var _this = this;
+        var defaultPageNo = 1;
+        _this.setState({moveMemberStructureModalVisible: false});
+        if(flag){
+            _this.updateStructureParent(_this.state.currentUpdateStructureId, subGroup.id);
+            _this.getStructureById(subGroup.id);
+            _this.listStructures(subGroup.id, true);
+            _this.breadCrumbClick(subGroup.id);
+            _this.getSubGroupForButton(subGroup.id, true)
+        }else{
+            _this.updateMemberStructures(subGroup.id, _this.state.CurrentUpdateMemberStructuresId);
+            _this.getSubGroupForButton(subGroup.id, true)
+        }
+        structuresObjChangedArray.push(subGroup);
+        structuresObjArray = structuresObjChangedArray;
+        _this.setState({moveMemberStructureModalVisible: false,structuresObjArray});
+    },
+
+    /*
+        modal框深入点击
+     */
+    memberModalClickInto(subGroup,flag) {
+        var _this = this;
+        var defaultPageNo = 1;
+        _this.listModalStructures(subGroup.id, flag,subGroup);
+        // structuresObjChangedArray.push(subGroup);
+        console.log('---666-----',structuresObjChangedArray);
+    },
+
+    /*member组织架构 层级返回
+    * */
+    memberModalBackToList(flag,parentId){
+        var _this = this;
+            if(parentId == undefined){
+               return;
+            }
+            if(parentId==0){
+                _this.modalDefaultData(flag);
+            }
+            if(parentId){
+                // structuresObjChangedArray.pop();
+                _this.listModalStructures(parentId,flag);
+            }
+    },
+
+    /**
+     * 更改用户所属部门
+     *
+     * @param operateUserId
+     * @param structureIds
+     * @return
+     * @throws Exception boolean
+     */
+    updateMemberStructures(structureIds, userId) {
+        var _this = this;
+        var param = {
+            "method": "updateMemberStructures",
+            "operateUserId": _this.state.loginUser.colUid,
+            "structureIds": structureIds,
+            "userId": userId
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.success == true && ret.msg == "调用成功" && isEmpty(ret.response) == false) {
+                    message.success("文件保存成功");
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        })
+    },
+    /* 更改上级部门
+  * @param operateUserId
+  * @param structureId
+  * @param newParentId
+  */
+    updateStructureParent(structureId, newParentId) {
+        var _this = this;
+        var param = {
+            "method": 'updateStructureParent',
+            "operateUserId": _this.state.loginUser.colUid,
+            "structureId": structureId,
+            "newParentId": newParentId
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.success == true && ret.msg == "调用成功" && isEmpty(ret.response) == false) {
+                    message.success("文件保存成功");
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        })
+    },
+    /*
     /**
      * 获取组织根节点
      * @param operateUserId
@@ -209,12 +423,9 @@ const Structure = React.createClass({
     getStructureById(structureId) {
         let _this = this;
         var structureId = structureId + '';
-
         if (isEmpty(structureId)) {
             structureId = "-1";
-        }
-        ;
-
+        };
         var param = {
             "method": 'getStructureById',
             "operateUserId": _this.state.loginUser.colUid,
@@ -247,7 +458,6 @@ const Structure = React.createClass({
     getStrcutureMembers(structureId, pageNo, flag) {
         let _this = this;
         var structureId = structureId + '';
-
         if (structureId.indexOf(',') !== -1) {
             var structureIdArr = structureId.split(',');
             structureId = structureIdArr[0];
@@ -273,7 +483,7 @@ const Structure = React.createClass({
                         userId: user.colUid,
                         userName: user.userName,
                         userPhone: user.phoneNumber,
-                        isMaster: '主管'
+                        isMaster: '主管',
                     });
 
                 } else {
@@ -282,7 +492,6 @@ const Structure = React.createClass({
                         userId: user.colUid,
                         userName: user.userName,
                         userPhone: user.phoneNumber,
-
                     });
                 }
                 _this.setState({subGroupMemberList, totalMember: pager.rsCount});
@@ -317,6 +526,8 @@ const Structure = React.createClass({
                     <Button icon="edit"
                             onClick={_this.changeMemberDepartment.bind(this, user)}></Button>
                 </div>
+                var moveButton = <span onClick={_this.displayStructeMemberModal.bind(_this, member,false)}>
+                    <Icon type="swap" style={{fontSize: 16}}/></span>
                 if (owner == user.colUid) {
                     subGroupMemberList.push({
                         key: member.id,
@@ -325,6 +536,7 @@ const Structure = React.createClass({
                         userPhone: user.phoneNumber,
                         isMaster: '主管',
                         /*opt:editButton*/
+                        subjectButtons: moveButton
                     });
 
                 } else {
@@ -335,6 +547,7 @@ const Structure = React.createClass({
                         userPhone: user.phoneNumber,
                         isMaster: '',
                         /*opt:editButton*/
+                        subjectButtons: moveButton
                     });
                 }
             });
@@ -344,10 +557,10 @@ const Structure = React.createClass({
     },
 
     /**
-     * 显示跟换员工组织架构部门的窗口
+     * 显示更换员工组织架构部门的窗口
      */
-    changeMemberDepartment(memberInfo){
-        this.setState({memberInfo,memberSettingModalIsShow:true});
+    changeMemberDepartment(memberInfo) {
+        this.setState({memberInfo, memberSettingModalIsShow: true});
     },
 
     /**
@@ -436,9 +649,11 @@ const Structure = React.createClass({
         }, 200);
         for (var i = 0; i < structuresObjArray.length; i++) {
             var structure = structuresObjArray[i];
-            if (structure.id == structureId) {
-                structuresObjArray.splice(i, structuresObjArray.length);
-                break;
+            if(structure != 'undefined'){
+                if (structure.id == structureId) {
+                    structuresObjArray.splice(i, structuresObjArray.length);
+                    break;
+                }
             }
         }
         var defaultMemberPageNo = 1;
@@ -449,9 +664,11 @@ const Structure = React.createClass({
         var isExit = false;
         for (var i = 0; i < structuresObjArray.length; i++) {
             var structure = structuresObjArray[i];
-            if (structure.id == newStructure.id) {
-                isExit = true;
-                break;
+            if(structure !="undefined"){
+                if (structure.id == newStructure.id) {
+                    isExit = true;
+                    break;
+                }
             }
         }
         return isExit;
@@ -461,7 +678,6 @@ const Structure = React.createClass({
         this.showConfirmModalIcon();
         this.setState({removeGroupId: structureId});
     },
-
     /**
      * 添加员工
      */
@@ -522,7 +738,6 @@ const Structure = React.createClass({
      * @param selectedRowKeys
      */
     onSelectChange(selectedRowKeys) {
-        console.log('selectedRowKeys changed: ', selectedRowKeys);
         this.setState({
             selectedRowKeys,
             // schoolSettingModalIsShow: false,
@@ -609,11 +824,14 @@ const Structure = React.createClass({
         }
 
         var breadcrumbItemObjArray = [];
-        if (isEmpty(_this.state.structuresObjArray) == false) {    //面包条数组
+        if (isEmpty(_this.state.structuresObjArray) == false) {
             _this.state.structuresObjArray.forEach(function (structure) {
-                var breadcrumbItemObj = <Breadcrumb.Item key={structure.id}><a
-                    onClick={_this.breadCrumbClick.bind(_this, structure.id)}>{structure.name}</a></Breadcrumb.Item>;
-                breadcrumbItemObjArray.push(breadcrumbItemObj);
+                if(typeof structure!='undefined'){
+                    var breadcrumbItemObj = <Breadcrumb.Item key={structure.id}><a
+                        onClick={_this.breadCrumbClick.bind(_this, structure.id)}>{structure.name}</a></Breadcrumb.Item>;
+                    breadcrumbItemObjArray.push(breadcrumbItemObj);
+                }
+
             });
         }
 
@@ -731,6 +949,23 @@ const Structure = React.createClass({
                     onConfirmModalCancel={this.closeConfirmModalIcon}
                     onConfirmModalOK={this.batchDeleteGroup}
                 />
+                {/*更改用户所属部门 modal*/}
+                <Modal
+                    visible={this.state.moveMemberStructureModalVisible}
+                    title="移动至组织架构"
+                    onCancel={this.moveMemberStructeModalclose}
+                    transitionName=""  //禁用modal的动画效果
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    footer={null}
+                >
+                    <Row className="ant-form-item">
+                        {backIcon}
+                        <Table className="cloud_box" dataSource={this.state.memberStructureModalDataSource}
+                               columns={memberMoveModalColumns}
+                               pagination={false} scroll={{y: 400}}
+                        />
+                    </Row>
+                </Modal>
             </div>
         );
     }
