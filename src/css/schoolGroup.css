@@ -438,6 +438,10 @@
 .departmental_officer{
     width: 160px;
 }
+.table_body_font{
+    font-size: 12px !important;
+    color: #666666;
+}
 .name_max{
     max-width: 100px;
 }

@@ -40,7 +40,6 @@ export function doWebService(data, listener) {
                 //设置进度条的宽度
                 pro.style.width = width + "%";
             },
-            8
         );
     }
     /*$.post(WEBSERVICE_URL, {

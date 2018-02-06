@@ -171,7 +171,6 @@ class SystemSettingComponent extends React.Component {
     delStructure(id) {
         this.refs.structureSettingComponents.delStructure(id);
     }
-
     callBackChangeMsg(id, name) {
         this.refs.structureSettingComponents.callBackChangeMsg(id, name)
     }

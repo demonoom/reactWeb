@@ -35,7 +35,6 @@ const StructureSettingComponents = React.createClass({
         });
         this.buildMenuChildren(arr, this.state.currentStructure)
     },
-
     /**
      * 获取当前用户的组织根节点(组织架构菜单)
      * @param operateUserId
@@ -116,6 +115,7 @@ const StructureSettingComponents = React.createClass({
     },
 
     handleClick(e) {
+        alert('111');
         this.setState({
             selectedKeys: e.key,
         });

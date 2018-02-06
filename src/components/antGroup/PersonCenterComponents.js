@@ -91,16 +91,11 @@ const memberColumns = [{
     dataIndex: 'userPhone',
     key: 'userPhone'
 }, {
-    title: '职位',
+    title: '',
     dataIndex: 'isMaster',
     key: 'isMaster',
 
-},
-    {
-        title: '操作',
-        dataIndex: 'subjectButtons',
-        key: 'subjectButtons',
-    },
+}
 ];
 
 //部门

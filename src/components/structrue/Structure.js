@@ -7,6 +7,7 @@ import AddSubGroupModal from './AddSubGroupModal';
 import ConfirmModal from '../ConfirmModal';
 import SchoolSettingModal from './SchoolSettingModal';
 import GroupSettingModal from './GroupSettingModal';
+
 /*import MemberSettingModal from './MemberSettingModal';*/
 
 const confirm = Modal.confirm;
@@ -47,18 +48,20 @@ var memberMoveModalColumns = [
         title: '部门名称',
         dataIndex: 'subGroupModalName',
         key: 'subGroupModalName',
+        className:'table_body_font'
     }, {
         title: '操作',
         dataIndex: 'moveDirOpt',
         key: 'moveDirOpt',
-        width: '86px'
+        width: '86px',
+        className:'table_body_font'
     }
 ];
 var structuresObjArray = [];   //面包条数组
 var subGroupMemberList = [];
 var currentStructureMember = [];   //当前人员
 var backIcon;
-var structuresObjChangedArray =[];
+var structuresObjChangedArray = [];
 const Structure = React.createClass({
 
     getInitialState() {
@@ -93,7 +96,7 @@ const Structure = React.createClass({
                 rootGroup: defaultStructure,
                 parentGroup: defaultStructure,
                 structureId: defaultStructure.id,
-                defaultStructureId:defaultStructure.id,
+                defaultStructureId: defaultStructure.id,
                 structuresObjArray,    //面包条数组
             });   //部门和部门id   这个部门是学校obj
             //列举子部门
@@ -200,7 +203,7 @@ const Structure = React.createClass({
                 </div>;
                 var opt = <div className="knowledge_ri">
                     <Button className="sg_btn_del sg_btn_swap" icon="swap"
-                            onClick={_this.displayStructeMemberModal.bind(_this, subGroup,true)}></Button>
+                            onClick={_this.displayStructeMemberModal.bind(_this, subGroup, true)}></Button>
                     <Button className="sg_btn_del" icon="delete"
                             onClick={_this.removeGroup.bind(_this, subGroup.id)}></Button>
                 </div>
@@ -219,7 +222,7 @@ const Structure = React.createClass({
     /*
     modal弹框默认请求 此处flag 判断是组织架构变更 还是人员组织架构变更（因为用一个相同的modal）
      */
-    listModalStructures(structureId,flag,subGroup) {
+    listModalStructures(structureId, flag, subGroup) {
         let _this = this;
         var param = {
             "method": 'listStructures',
@@ -229,9 +232,9 @@ const Structure = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                if(isEmpty(response)== false){
-                    _this.buildModalListStruct(response,flag);
-                    if(response.length>0){
+                if (isEmpty(response) == false) {
+                    _this.buildModalListStruct(response, flag);
+                    if (response.length > 0) {
                         structuresObjChangedArray.push(subGroup);
                     }
                 }
@@ -241,45 +244,54 @@ const Structure = React.createClass({
     /*
  modal 构建弹框数据
   */
-    buildModalListStruct(response,flag) {
+    buildModalListStruct(response, flag) {
         var _this = this;
         var parentId = null;
         if (isEmpty(response) == false) {
             var memberStructureModalDataSource = [];
             for (var i = 0; i < response.length; i++) {
                 var subGroup = response[i];
-                var moveDirOpt = <div>
-                    <Button onClick={_this.memberModalConfirmChange.bind(_this, subGroup,flag)}>确定</Button>
-                </div>
-                var dirName = <span className="font_gray_666"
-                                    onClick={_this.memberModalClickInto.bind(_this, subGroup,flag)}>{subGroup.name}
-                                     </span>;
+                console.log('zizizi',subGroup);
+                if(subGroup.hasSubStructure== true){
+                    var moveDirOpt = <div>
+                        <span onClick={this.memberModalClickInto.bind(this, subGroup, flag)}><Icon type="down" style={{ fontSize: 16 }}/></span>
+                        <span onClick={this.memberModalConfirmChange.bind(this, subGroup, flag)}><Icon type="check-circle" style={{ fontSize: 16,float:'right',marginRight:20}} /></span>
+                    </div>
+                }else{
+                    var moveDirOpt = <div>
+                        <span onClick={this.memberModalConfirmChange.bind(this, subGroup, flag)}><Icon type="check-circle" style={{ fontSize: 16,float:'right',marginRight:20}} /></span>
+                    </div>
+                }
+
+                var dirName = <div className="first_indent" onClick={this.memberModalClickInto.bind(this, subGroup, flag)}>
+                                <span>{subGroup.name}</span>
+                             </div>;
                 memberStructureModalDataSource.push({
                     key: subGroup.id,
                     subGroupModalName: dirName,
                     moveDirOpt: moveDirOpt
                 });
-                if(i==0){
+                if (i == 0) {
                     parentId = subGroup.parent.parentId;
                 }
             }
-            backIcon=<p><Icon type="left" style={{fontSize: 20, color: '#08c', cursor: 'pointer'}}
-                              onClick={this.memberModalBackToList.bind(_this,flag,parentId)}/></p>
-            _this.setState({memberStructureModalDataSource,parentId});
+            backIcon = <p><Icon type="left" style={{fontSize: 20, color: '#08c', cursor: 'pointer'}}
+                                onClick={this.memberModalBackToList.bind(_this, flag, parentId)}/></p>
+            _this.setState({memberStructureModalDataSource, parentId});
         }
     },
 
     /*
   组织架构移动的点击出现弹框
     */
-    displayStructeMemberModal(member,flag) {
+    displayStructeMemberModal(member, flag) {
         structuresObjChangedArray = [];
-        if(flag){
+        if (flag) {
             this.setState({
                 moveMemberStructureModalVisible: true,
-                currentUpdateStructureId:member.id,
+                currentUpdateStructureId: member.id,
             })
-        }else{
+        } else {
             this.setState({
                 moveMemberStructureModalVisible: true,
                 CurrentUpdateMemberStructuresId: member.userId,
@@ -289,17 +301,25 @@ const Structure = React.createClass({
     },
 
     //modal 的根选项
-    modalDefaultData(flag){
-        backIcon=<p><Icon type="left" style={{fontSize: 20, color: '#08c', cursor: 'pointer'}}
-                          onClick={this.memberModalBackToList.bind(this,flag)}/></p>
+    modalDefaultData(flag) {
+        backIcon = null;
         var memberStructureModalDataSource = [];
         var rootGroup = this.state.rootGroup;
-        var moveDirOpt = <div>
-            <Button onClick={this.memberModalConfirmChange.bind(this, rootGroup,flag)}>确定</Button>
-        </div>
-        var dirName = <span className="font_gray_666"
-                            onClick={this.memberModalClickInto.bind(this,rootGroup,flag)}>{rootGroup.name}
-                                     </span>;
+      if(rootGroup.hasSubStructure==true){
+          var moveDirOpt = <div>
+              <span onClick={this.memberModalClickInto.bind(this, rootGroup, flag)}><Icon type="down" style={{ fontSize: 16}}/></span>
+              <span onClick={this.memberModalConfirmChange.bind(this, rootGroup, flag)}><Icon type="check-circle" style={{ fontSize: 16,float:'right',marginRight:20}} /></span>
+          </div>
+      }else{
+          var moveDirOpt = <div>
+              <span onClick={this.memberModalConfirmChange.bind(this, rootGroup, flag)}><Icon type="check-circle" style={{ fontSize: 16,float:'right',marginRight:20}} /></span>
+          </div>
+      }
+
+        var dirName = <div className="first_indent"
+                           onClick={this.memberModalClickInto.bind(this, rootGroup, flag)}>
+                            <span>{rootGroup.name}</span>
+        </div>;
         memberStructureModalDataSource.push({
             key: rootGroup.id,
             subGroupModalName: dirName,
@@ -317,50 +337,51 @@ const Structure = React.createClass({
     /*
    modal 确认转换组织架构按钮
     */
-    memberModalConfirmChange(subGroup,flag) {
+    memberModalConfirmChange(subGroup, flag) {
         var _this = this;
         var defaultPageNo = 1;
         _this.setState({moveMemberStructureModalVisible: false});
-        if(flag){
+        if (flag) {
             _this.updateStructureParent(_this.state.currentUpdateStructureId, subGroup.id);
+            _this.listModalStructures(subGroup.id, flag, subGroup);
             _this.getStructureById(subGroup.id);
             _this.listStructures(subGroup.id, true);
             _this.breadCrumbClick(subGroup.id);
             _this.getSubGroupForButton(subGroup.id, true)
-        }else{
+        } else {
             _this.updateMemberStructures(subGroup.id, _this.state.CurrentUpdateMemberStructuresId);
             _this.getSubGroupForButton(subGroup.id, true)
         }
         structuresObjChangedArray.push(subGroup);
         structuresObjArray = structuresObjChangedArray;
-        _this.setState({moveMemberStructureModalVisible: false,structuresObjArray});
+        _this.setState({moveMemberStructureModalVisible: false, structuresObjArray});
+        //刷新左侧组织架构
+        this.props.refreshLeft(true);
     },
 
     /*
         modal框深入点击
      */
-    memberModalClickInto(subGroup,flag) {
+    memberModalClickInto(subGroup, flag) {
         var _this = this;
         var defaultPageNo = 1;
-        _this.listModalStructures(subGroup.id, flag,subGroup);
-        // structuresObjChangedArray.push(subGroup);
-        console.log('---666-----',structuresObjChangedArray);
+        _this.listModalStructures(subGroup.id, flag, subGroup);
     },
 
     /*member组织架构 层级返回
     * */
-    memberModalBackToList(flag,parentId){
+    memberModalBackToList(flag, parentId) {
         var _this = this;
-            if(parentId == undefined){
-               return;
-            }
-            if(parentId==0){
-                _this.modalDefaultData(flag);
-            }
-            if(parentId){
-                 structuresObjChangedArray.pop();
-                _this.listModalStructures(parentId,flag);
-            }
+        if (parentId == undefined) {
+            return;
+        }
+        if (parentId == 0) {
+            _this.modalDefaultData(flag);
+        }
+        if (parentId) {
+            structuresObjChangedArray.pop();
+            _this.listModalStructures(parentId, flag);
+        }
     },
 
     /**
@@ -425,7 +446,8 @@ const Structure = React.createClass({
         var structureId = structureId + '';
         if (isEmpty(structureId)) {
             structureId = "-1";
-        };
+        }
+        ;
         var param = {
             "method": 'getStructureById',
             "operateUserId": _this.state.loginUser.colUid,
@@ -526,7 +548,7 @@ const Structure = React.createClass({
                     <Button icon="edit"
                             onClick={_this.changeMemberDepartment.bind(this, user)}></Button>
                 </div>
-                var moveButton = <span onClick={_this.displayStructeMemberModal.bind(_this, member,false)}>
+                var moveButton = <span onClick={_this.displayStructeMemberModal.bind(_this, member, false)}>
                     <Icon type="swap" style={{fontSize: 16}}/></span>
                 if (owner == user.colUid) {
                     subGroupMemberList.push({
@@ -649,7 +671,7 @@ const Structure = React.createClass({
         }, 200);
         for (var i = 0; i < structuresObjArray.length; i++) {
             var structure = structuresObjArray[i];
-            if(structure != 'undefined'){
+            if (structure != 'undefined') {
                 if (structure.id == structureId) {
                     structuresObjArray.splice(i, structuresObjArray.length);
                     break;
@@ -664,7 +686,7 @@ const Structure = React.createClass({
         var isExit = false;
         for (var i = 0; i < structuresObjArray.length; i++) {
             var structure = structuresObjArray[i];
-            if(structure !="undefined"){
+            if (structure != "undefined") {
                 if (structure.id == newStructure.id) {
                     isExit = true;
                     break;
@@ -826,7 +848,7 @@ const Structure = React.createClass({
         var breadcrumbItemObjArray = [];
         if (isEmpty(_this.state.structuresObjArray) == false) {
             _this.state.structuresObjArray.forEach(function (structure) {
-                if(typeof structure!='undefined'){
+                if (typeof structure != 'undefined') {
                     var breadcrumbItemObj = <Breadcrumb.Item key={structure.id}><a
                         onClick={_this.breadCrumbClick.bind(_this, structure.id)}>{structure.name}</a></Breadcrumb.Item>;
                     breadcrumbItemObjArray.push(breadcrumbItemObj);
