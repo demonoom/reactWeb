@@ -564,7 +564,7 @@ class SUbjectTable extends React.Component {
                                                    defaultCurrent: this.state.currentPage,
                                                    current: this.state.currentPage,
                                                    onChange: this.pageOnChange
-                                               }} scroll={{y: 400}}/></div>;
+                                               }} /></div>;
         } else {
             delBtn = '';
             subjectTable = <div className="pl_hei2"><Table columns={columns} dataSource={data} pagination={{
@@ -573,7 +573,7 @@ class SUbjectTable extends React.Component {
                 defaultCurrent: this.state.currentPage,
                 current: this.state.currentPage,
                 onChange: this.pageOnChange
-            }} scroll={{y: 400}}/></div>;
+            }} /></div>;
         }
 
         var title;

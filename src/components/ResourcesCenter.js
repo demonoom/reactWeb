@@ -209,11 +209,11 @@ class ResourcesCenter extends React.Component{
 
         const subjectMenu = (
             <Menu onClick={this.menuItemOnClick}>
-                <MenuItemGroup key="subjectCreator" title="  题目创建者">
-                    <Menu.Item key="self">只看自己</Menu.Item>
-                    <Menu.Item key="other">查看他人</Menu.Item>
+                <MenuItemGroup key="subjectCreator" className="resource_bg_c" title="题目创建者">
+                    <Menu.Item key="self" className="resource_bg_w">只看自己</Menu.Item>
+                    <Menu.Item key="other" className="resource_bg_w">查看他人</Menu.Item>
                 </MenuItemGroup>
-                <MenuItemGroup key="subjectOwner" title="  题目归属者">
+                <MenuItemGroup key="subjectOwner" className="resource_bg_c" title="题目归属者">
                     <Menu.Item key="school">只看本校</Menu.Item>
                     <Menu.Item key="all">查看全部</Menu.Item>
                 </MenuItemGroup>
