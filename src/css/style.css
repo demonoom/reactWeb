@@ -198,7 +198,7 @@ ul.cont_t {
     width: 240px;
     overflow-x: hidden;
     overflow-y: auto;
-    height: calc(100% - 72px)
+    height: calc(100% - 63px)
 }
 
 ul.cont_t2 {
@@ -2624,7 +2624,7 @@ li.ant-menu-submenu > ul > li.ant-menu-submenu {
 }
 
 .pl_hei2 {
-    height: calc(100% - 10px)
+    height: 100%
 }
 
 .timu_line {
@@ -8323,4 +8323,11 @@ select.course_n:hover {
 }
 .select_knoledge_Person .ant-spin-container > div:first-child{
     height: 351px;
+}
+.resource_bg_c{
+    color: #000;
+    text-align: center;
+}
+.resource_bg_w{
+    color: #666;
 }

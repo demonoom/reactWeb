@@ -2746,9 +2746,9 @@ const AntGroupTabComponents = React.createClass({
         if (isDirectToBottom == false) {
             if (isNewPage == true) {
                 var nowHeight = gt[0].scrollHeight;
-                console.log("nowHeight:" + nowHeight + "=======preHeight:" + preHeight);
+                // console.log("nowHeight:" + nowHeight + "=======preHeight:" + preHeight);
                 var newHeight = Number(nowHeight) - Number(preHeight);
-                console.log("newHeight====>" + Number(newHeight));
+                // console.log("newHeight====>" + Number(newHeight));
                 gt.scrollTop(Number(newHeight));
             }
         } else {
