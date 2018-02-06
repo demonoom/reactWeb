@@ -142,6 +142,9 @@ const AntGroupTabComponents = React.createClass({
                 <Menu.Item>
                     <a target="_blank" className="ellips_t" onClick={this.relayMsg}>转发</a>
                 </Menu.Item>
+                <Menu.Item>
+                    <a target="_blank" className="ellips_t" onClick={this.delMsg}>删除</a>
+                </Menu.Item>
             </Menu>
         );
         return {
@@ -526,6 +529,9 @@ const AntGroupTabComponents = React.createClass({
                 <Menu.Item>
                     <a target="_blank" className="ellips_t" onClick={this.relayMsg}>转发</a>
                 </Menu.Item>
+                <Menu.Item>
+                    <a target="_blank" className="ellips_t" onClick={this.delMsg}>删除</a>
+                </Menu.Item>
             </Menu>
         );
         var withdrawMsgCannot = (
@@ -535,6 +541,9 @@ const AntGroupTabComponents = React.createClass({
                 </Menu.Item>
                 <Menu.Item>
                     <a target="_blank" className="ellips_t" onClick={this.relayMsg}>转发</a>
+                </Menu.Item>
+                <Menu.Item>
+                    <a target="_blank" className="ellips_t" onClick={this.delMsg}>删除</a>
                 </Menu.Item>
             </Menu>
         );
@@ -561,6 +570,40 @@ const AntGroupTabComponents = React.createClass({
         this.getRecentContents();
         this.setState({relayMsgModalVisible: true});
         //打开选择人员model
+    },
+
+    /**
+     * 消息删除
+     */
+    delMsg() {
+        var megObj = this.state.megObj;
+        var _this = this;
+        var param = {
+            "method": 'removeUserMessage',
+            "uuids": megObj.uuid,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.msg == '调用成功' && ret.response == true) {
+                    //从数组中去除那条消息
+                    var messageList = antGroup.state.messageList;
+                    messageList.forEach(function (v, i) {
+                        if (isEmpty(v) == false) {
+                            if (v.uuid == megObj.uuid) {
+                                messageList.splice(i, 1);
+                                antGroup.setState({mesRetNum: i});
+                            }
+                        }
+                    });
+                    antGroup.setState({messageList});
+                } else {
+                    message.error(ret.msg);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     /**
@@ -2015,8 +2058,8 @@ const AntGroupTabComponents = React.createClass({
             }, onMessage: function (info) {
                 mesReFlag = true;
                 var messageList = antGroup.state.messageList;
-                // console.log(info);
-                // console.log('info');
+                console.log(info);
+                console.log('info');
                 var groupObj;
                 var gt = $('#groupTalk');
                 if (antGroup.state.optType == "sendMessage") {
@@ -2181,6 +2224,9 @@ const AntGroupTabComponents = React.createClass({
                             return false
                         } else if (data.message.command == "dissolutionChatGroup") {
                             //组织架构删除子部门后来自群通知着的消息
+                            return false
+                        } else if (data.message.command == "COMMAND_DELETE_RECENT_MESSAGE" || data.message.command == "COMMAND_DELETE_RECORD_MESSAGE") {
+                            //删除消息的commend,没用直接return
                             return false
                         }
 
