@@ -2011,7 +2011,7 @@ const AntGroupTabComponents = React.createClass({
                     });
                 }
             }, onWarn: function (warnMsg) {
-
+                message.warning(warnMsg);
             }, onMessage: function (info) {
                 mesReFlag = true;
                 var messageList = antGroup.state.messageList;
