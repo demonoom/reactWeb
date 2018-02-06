@@ -5129,9 +5129,10 @@ a.color_gary_f, .color_gary_f {
 }
 
 .message_menu .ant-table-tbody > tr > td {
-    padding: 8px !important;
+    padding: 8px 2px 8px 12px !important;
     border-bottom: none;
-    cursor: pointer
+    cursor: pointer;
+    position: relative;
 }
 
 .message_menu .ant-table-tbody > tr > td span.ant-badge {
@@ -8330,4 +8331,20 @@ select.course_n:hover {
 }
 .resource_bg_w{
     color: #666;
+}
+.message_menu .ant-table-tbody > tr > td .message_le_del{
+    display: none;
+}
+.message_menu .ant-table-tbody > tr > td:hover .message_le_del{
+    display: block;
+}
+.message_le_del i{
+    position: absolute;
+    left: -11px;
+    top: 15px;
+    font-size: 12px;
+    color: #999;
+}
+.message_le_del i:hover{
+    color: #333;
 }
