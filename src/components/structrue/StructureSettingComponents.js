@@ -115,7 +115,6 @@ const StructureSettingComponents = React.createClass({
     },
 
     handleClick(e) {
-        alert('111');
         this.setState({
             selectedKeys: e.key,
         });
