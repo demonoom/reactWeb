@@ -544,17 +544,17 @@ class SUbjectTable extends React.Component {
         var subjectTable;
         if (this.state.isOwmer == "Y") {
             if (this.state.optType == "bySchedule") {
-                delBtn = <div><Button type="primary" onClick={this.showdelAllSubjectInScheduleConfirmModal}
+                delBtn = <div className="pl_del"><div><Button type="primary" onClick={this.showdelAllSubjectInScheduleConfirmModal}
                                       disabled={!hasSelected} loading={loading}
                 >批量删除</Button><span className="password_ts"
                                     style={{marginLeft: 8}}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span>
-                </div>;
+                </div></div>;
             } else {
-                delBtn = <div><Button type="primary" onClick={this.showDelAllSubjectConfirmModal}
+                delBtn = <div className="pl_del"><div><Button type="primary" onClick={this.showDelAllSubjectConfirmModal}
                                       disabled={!hasSelected} loading={loading}
                 >批量删除</Button><span className="password_ts"
                                     style={{marginLeft: 8}}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span>
-                </div>;
+                </div></div>;
             }
             subjectTable =
                 <div className="pl_hei"><Table rowSelection={rowSelection} columns={columns} dataSource={data}
@@ -613,9 +613,9 @@ class SUbjectTable extends React.Component {
                 <SubjectEditComponents ref="subjectEditTabComponents"
                                                      subjectEditCallBack={this.subjectEditCallBack}></SubjectEditComponents>
                 <UseKnowledgeComponents ref="useKnowledgeComponents" divContent={this.state.classDiv}></UseKnowledgeComponents>
-                <div className="pl_del">
+                {/*<div className="pl_del">*/}
                     {delBtn}
-                </div>
+                {/*</div>*/}
                 {subjectTable}
             </div>
         );
