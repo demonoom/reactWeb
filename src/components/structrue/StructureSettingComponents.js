@@ -35,7 +35,6 @@ const StructureSettingComponents = React.createClass({
         });
         this.buildMenuChildren(arr, this.state.currentStructure)
     },
-
     /**
      * 获取当前用户的组织根节点(组织架构菜单)
      * @param operateUserId
@@ -55,7 +54,6 @@ const StructureSettingComponents = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var structure = ret.response;
-
                 // _this.props.callbackParent(structure.id, structure);
                 // 根据组织根节点的id请求该组织根节点里的子部门， 调用 列举子部门函数
                 _this.listStructures(operateUserId, structure);

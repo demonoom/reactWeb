@@ -1405,8 +1405,8 @@ const AntCloudTableComponents = React.createClass({
      * 保存 save  back
      * @param pageNo
      */
-    saveBarBack() {
 
+    saveBarBack() {
         var initPageNo = 1;
         if (cloudTable.state.parentDirectoryIdAtMoveModalSave == 0) {
             cloudTable.setState({"parentDirectoryIdAtMoveModalSave": -1, "currentDirectoryIdAtMoveModalSave": -1});

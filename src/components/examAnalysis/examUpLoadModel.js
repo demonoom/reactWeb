@@ -138,11 +138,11 @@ const ExamUpLoadModel = React.createClass({
             message.error('只能上传2个文件', 5);
             return false;
         }
-        //var fileType = file.type;
-        /*if (fileType !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
-            message.error('只能上传excel文件，请重新上传', 5);
-            return false;
-        }*/
+        // var fileType = file.type;
+        // if (fileType !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+        //     message.error('只能上传excel文件，请重新上传', 5);
+        //     return false;
+        // }
         var fileName = file.name;
         var lastPointIndex = fileName.lastIndexOf(".");
         //通过截取文件后缀名的形式，完成对上传文件类型的判断

@@ -94,17 +94,12 @@ const memberColumns = [{
     title: '',
     dataIndex: 'isMaster',
     key: 'isMaster',
+
 }
-/*,
-    {
-        title: '操作',
-        dataIndex: 'subjectButtons',
-        key: 'subjectButtons',
-    },*/
 ];
 
 //部门
-const columns = [{
+var columns = [{
     title: '部门名称',
     dataIndex: 'subGroupName',
     key: 'subGroupName',
@@ -197,14 +192,14 @@ const PersonCenterComponents = React.createClass({
     /**
      * 当点击人员列表行时，弹出该人员的具体信息界面
      */
-    onRowClick(record) {
-        /*e = e || window.event;
+    onRowClick(record, e) {
+        e = e || window.event;
         if (e.nativeEvent) {
             e.nativeEvent.stopImmediatePropagation();
-        }*/
-        // e.stopPropagation();
-        // e.preventDefault();
-        // e.cancelBubble = true;
+        }
+        //   e.stopPropagation();
+        //   e.preventDefault();
+        //   e.cancelBubble = true;
         this.getPersonalCenterData(record.userId, 'structureUser');
     },
 
@@ -323,7 +318,7 @@ const PersonCenterComponents = React.createClass({
                             userHeaderIcon: userHeaderIcon,
                             "userObj": followUser
                         };
-                        // followsUserArray.push(userJson);
+                        followsUserArray.push(userJson);
                         var followsCard = <Card key={followUser.colUid} id={followUser} className="focus"
                                                 onClick={personCenter.getPersonalCenterData.bind(personCenter, followUser.colUid)}>
                             <a target="_blank" className="attention_img">
@@ -405,7 +400,7 @@ const PersonCenterComponents = React.createClass({
                             subjectScore = '--';
                         }
                         var answer = e.answer;
-                        var subjectOpt = <div><Button style={{}} type="" value={e.id} onClick={personCenter.showModal}
+                        var subjectOpt = <div><Button type="" value={e.id} onClick={personCenter.showModal}
                                                       icon="export" title="使用" className="score3_i"></Button></div>;
                         data.push({
                             key: key,
@@ -813,11 +808,9 @@ const PersonCenterComponents = React.createClass({
     getStructureById(structureId) {
         let _this = this;
         var structureId = structureId + '';
-
         if (isEmpty(structureId)) {
             structureId = "-1";
         }
-
         var param = {
             "method": 'getStructureById',
             "operateUserId": _this.state.loginUser.colUid,
@@ -825,19 +818,19 @@ const PersonCenterComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                console.log('根节点', ret);
                 var parentGroup = ret.response;
-
-                var owner = parentGroup.chatGroup.owner.colUid;
-
+                if (isEmpty(ret.response) == false) {
+                    var owner = parentGroup.chatGroup.owner.colUid;
+                }
                 // 根据组织根节点的id请求该组织根节点里的子部门， 调用 列举子部门函数
                 if (structureId == "-1") {
                     _this.listStructures(parentGroup.id);
                     var defaultPageNo = 1;
                     _this.getStrcutureMembers(parentGroup.id, defaultPageNo);
+                    _this.modalListStruct(parentGroup.id);
                     _this.setState({structureId: parentGroup.id});
                 }
-
-
                 if (isEmpty(parentGroup) == false) {
                     var isExit = _this.checkStructureIsExitAtArray(parentGroup);
                     if (isExit == false) {
@@ -893,11 +886,10 @@ const PersonCenterComponents = React.createClass({
             "operateUserId": _this.state.loginUser.colUid,
             "structureId": structureId,
         };
-
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                console.log('66', response);
+                console.log('架构列表', response);
                 var subGroupList = [];
                 if (isEmpty(response) == false) {
                     response.forEach(function (subGroup) {
@@ -910,11 +902,9 @@ const PersonCenterComponents = React.createClass({
                             subGroupName: subGroupName,
                         });
 
-
                     });
                 }
                 _this.setState({subGroupList, "optType": "getGroupMenu"});
-                console.log('subGroupList', subGroupList);
             },
             onError: function (error) {
                 message.error(error);
@@ -946,7 +936,6 @@ const PersonCenterComponents = React.createClass({
         this.setState({
             structureId: structureId,
             memberPageNo: defaultMemberPageNo,
-
         });
         this.listStructures(structureId);
         this.getStrcutureMembers(structureId, memberPageNo);
@@ -962,12 +951,10 @@ const PersonCenterComponents = React.createClass({
     getStrcutureMembers(structureId, pageNo) {
         let _this = this;
         var structureId = structureId + '';
-
         if (structureId.indexOf(',') !== -1) {
             var structureIdArr = structureId.split(',');
             structureId = structureIdArr[0];
         }
-
         var param = {
             "method": 'getStrcutureMembers',
             "operateUserId": _this.state.loginUser.colUid,
@@ -976,10 +963,9 @@ const PersonCenterComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-
+                console.log('组织架构人员列表', ret);
                 var response = ret.response;
                 var owner = _this.state.owner;
-                var moveButton = <Icon type="swap" style={{ fontSize: 16, color: '#08c' }} onClick={_this.moveStructeModal} />
                 if (isEmpty(response) == false) {
                     response.forEach(function (member) {
                         var user = member.user;
@@ -990,7 +976,6 @@ const PersonCenterComponents = React.createClass({
                                 userName: user.userName,
                                 userPhone: user.phoneNumber,
                                 isMaster: '主管',
-                                //subjectButtons:moveButton
                             });
 
                         } else {
@@ -999,7 +984,6 @@ const PersonCenterComponents = React.createClass({
                                 userId: user.colUid,
                                 userName: user.userName,
                                 userPhone: user.phoneNumber,
-                                //subjectButtons:moveButton
                             });
                         }
 
@@ -1023,35 +1007,11 @@ const PersonCenterComponents = React.createClass({
     },
 
 
-    /*
-       点击图标出现弹框
-     */
-    moveStructeModal(e) {
-        personCenter.setState({
-            moveStructeModalVisible: true
-        })
-    },
-    moveStructeModalclose() {
-        personCenter.setState({
-            moveStructeModalVisible: false
-        })
-    },
-    moveStructeModalConfirm() {
-        personCenter.setState({
-            moveStructeModalVisible: false
-        })
-    },
-    moveStructeModalCancel() {
-        personCenter.setState({
-            moveStructeModalVisible: false
-        })
-    },
     /**
      * 面包条点击响应
      * 切换到当前的组织架构层次，同时，在此面包条后的数据移除
      */
     breadCrumbClick(structureId) {
-
         var defaultPageNo = 1;
         for (var i = 0; i < structuresObjArray.length; i++) {
             var structure = structuresObjArray[i];
@@ -2656,8 +2616,6 @@ const PersonCenterComponents = React.createClass({
                     </Row>
 
                 </Modal>
-
-
                 <Modal className="person_change_right"
                        visible={personCenter.state.mainTransferModalVisible}
                        title="转移群主"
@@ -2682,24 +2640,6 @@ const PersonCenterComponents = React.createClass({
 
                 <UseKnowledgeComponents ref="useKnowledgeComponents"/>
                 {personDate}
-
-                <Modal
-                       visible={personCenter.state.moveStructeModalVisible}
-                       title="移动至组织架构"
-                       onCancel={personCenter.moveStructeModalclose}
-                       transitionName=""  //禁用modal的动画效果
-                       maskClosable={false} //设置不允许点击蒙层关闭
-                       footer={[
-                           <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
-                                   onClick={personCenter.moveStructeModalConfirm}>确定</button>,
-                           <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
-                                   onClick={personCenter.moveStructeModalCancel}>取消</button>
-                       ]}
-                >
-                    <Row className="ant-form-item">
-                    3333
-                    </Row>
-                </Modal>
             </div>
         );
     },
