@@ -5,6 +5,7 @@ import SubjectEditComponents from '../components/subjectManager/SubjectEditCompo
 import {doWebService} from '../WebServiceHelper';
 import {getPageSize} from '../utils/Const';
 import {isEmpty} from '../utils/Const';
+import {QUESTION_DETAIL_URL} from '../utils/Const';
 import ConfirmModal from './ConfirmModal';
 
 const columns = [{
@@ -37,11 +38,11 @@ const columns = [{
     },],
     onFilter: (value, record) => record.subjectType.indexOf(value) === 0,
 },
-    {
+    /*{
         title: '所属知识点',
         className: 'ant-table-selection-score ant-table-selection-score-again',
         dataIndex: 'subjectKnowledges',
-    },
+    },*/
     {
         title: '可见性',
         className: 'ant-table-selection-score-visibility',
@@ -106,6 +107,7 @@ class SUbjectTable extends React.Component {
         this.pageOnChange = this.pageOnChange.bind(this);
         this.subjectEditCallBack = this.subjectEditCallBack.bind(this);
         this.render = this.render.bind(this);
+        this.showDetailPanel = this.showDetailPanel.bind(this);
     }
 
 
@@ -167,13 +169,8 @@ class SUbjectTable extends React.Component {
                     response.forEach(function (e) {
                         var key = e.id;
                         var name = e.user.userName;
-                        var popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>' + e.content + '<hr/><span class="answer_til answer_til_2">答案：</span>' + e.answer + '</div>';
-                        var content = <Popover placement="rightTop"
-                                               content={<article id='contentHtml' className='content Popover_width'
-                                                                 dangerouslySetInnerHTML={{__html: popOverContent}}></article>}>
-                            <article id='contentHtml' className='content'
-                                     dangerouslySetInnerHTML={{__html: e.content}}></article>
-                        </Popover>;
+                        var content = <article id='contentHtml' className='content'
+                                               dangerouslySetInnerHTML={{__html: e.content}} onClick={_this.showDetailPanel.bind(_this,key,e.subjectType)}></article>;
                         var subjectType = e.typeName;
                         var subjectScore = e.score;
                         if (parseInt(e.score) < 0) {
@@ -195,7 +192,7 @@ class SUbjectTable extends React.Component {
                             name: name,
                             content: content,
                             subjectType: subjectType,
-                            subjectKnowledges: knowledges.join(","),
+                            //subjectKnowledges: knowledges.join(","),
                             subjectOpt: subjectOpt,
                         });
                         var pager = ret.pager;
@@ -212,6 +209,21 @@ class SUbjectTable extends React.Component {
 
     editSubject(e) {
 
+    }
+
+    /**
+     * 在侧边栏中，显示当前题目的详情信息
+     * @param subjectId
+     * @param subjectType
+     */
+    showDetailPanel(subjectId,subjectType){
+        var url = QUESTION_DETAIL_URL+"?courseId=" + subjectId + "&subjectType=" + subjectType;
+        let param = {
+            mode: 'teachingAdmin',
+            title: "题目详情",
+            url: url,
+        };
+        LP.Start(param);
     }
 
     isDeleteAll(e) {
@@ -391,13 +403,8 @@ class SUbjectTable extends React.Component {
                     response.forEach(function (e) {
                         var key = e.id;
                         var name = e.user.userName;
-                        var popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>' + e.content + '<hr/><span class="answer_til answer_til_2">答案：</span>' + e.answer + '</div>';
-                        var content = <Popover placement="rightTop"
-                                               content={<article id='contentHtml' className='content Popover_width'
-                                                                 dangerouslySetInnerHTML={{__html: popOverContent}}></article>}>
-                            <article id='contentHtml' className='content'
-                                     dangerouslySetInnerHTML={{__html: e.content}}></article>
-                        </Popover>;
+                        var content = <article id='contentHtml' className='content'
+                                               dangerouslySetInnerHTML={{__html: e.content}} onClick={_this.showDetailPanel.bind(_this,key,e.subjectType)}></article>
                         var subjectType = e.typeName;
                         var subjectScore = e.score;
                         if (parseInt(e.score) < 0) {
@@ -437,7 +444,7 @@ class SUbjectTable extends React.Component {
                             content: content,
                             subjectType: subjectType,
                             //subjectScore: subjectScore,
-                            subjectKnowledges: knowledges.join(","),
+                            //subjectKnowledges: knowledges.join(","),
                             subjectOpt: subjectOpt,
                             answer: answer,
                             subjectVisible:subjectVisible
@@ -537,17 +544,17 @@ class SUbjectTable extends React.Component {
         var subjectTable;
         if (this.state.isOwmer == "Y") {
             if (this.state.optType == "bySchedule") {
-                delBtn = <div><Button type="primary" onClick={this.showdelAllSubjectInScheduleConfirmModal}
+                delBtn = <div className="pl_del"><div><Button type="primary" onClick={this.showdelAllSubjectInScheduleConfirmModal}
                                       disabled={!hasSelected} loading={loading}
                 >批量删除</Button><span className="password_ts"
                                     style={{marginLeft: 8}}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span>
-                </div>;
+                </div></div>;
             } else {
-                delBtn = <div><Button type="primary" onClick={this.showDelAllSubjectConfirmModal}
+                delBtn = <div className="pl_del"><div><Button type="primary" onClick={this.showDelAllSubjectConfirmModal}
                                       disabled={!hasSelected} loading={loading}
                 >批量删除</Button><span className="password_ts"
                                     style={{marginLeft: 8}}>{hasSelected ? `已选中 ${selectedRowKeys.length} 条记录` : ''}</span>
-                </div>;
+                </div></div>;
             }
             subjectTable =
                 <div className="pl_hei"><Table rowSelection={rowSelection} columns={columns} dataSource={data}
@@ -557,7 +564,7 @@ class SUbjectTable extends React.Component {
                                                    defaultCurrent: this.state.currentPage,
                                                    current: this.state.currentPage,
                                                    onChange: this.pageOnChange
-                                               }} scroll={{y: 400}}/></div>;
+                                               }} /></div>;
         } else {
             delBtn = '';
             subjectTable = <div className="pl_hei2"><Table columns={columns} dataSource={data} pagination={{
@@ -566,7 +573,7 @@ class SUbjectTable extends React.Component {
                 defaultCurrent: this.state.currentPage,
                 current: this.state.currentPage,
                 onChange: this.pageOnChange
-            }} scroll={{y: 400}}/></div>;
+            }} /></div>;
         }
 
         var title;
@@ -606,9 +613,9 @@ class SUbjectTable extends React.Component {
                 <SubjectEditComponents ref="subjectEditTabComponents"
                                                      subjectEditCallBack={this.subjectEditCallBack}></SubjectEditComponents>
                 <UseKnowledgeComponents ref="useKnowledgeComponents" divContent={this.state.classDiv}></UseKnowledgeComponents>
-                <div className="pl_del">
+                {/*<div className="pl_del">*/}
                     {delBtn}
-                </div>
+                {/*</div>*/}
                 {subjectTable}
             </div>
         );

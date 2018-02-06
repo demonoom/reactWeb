@@ -302,6 +302,9 @@ const MessageMenu = React.createClass({
                     </div>;
                 }
                 var messageContentTag = <Badge className='noomFinish' dot={mMenu.state.badgeShow} count={redPoint}>
+                    <span className="message_le_del">
+                        <Icon type="close" />
+                    </span>
                     <div>
                         {imgTag}
                     </div>

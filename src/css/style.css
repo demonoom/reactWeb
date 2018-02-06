@@ -198,7 +198,7 @@ ul.cont_t {
     width: 240px;
     overflow-x: hidden;
     overflow-y: auto;
-    height: calc(100% - 72px)
+    height: calc(100% - 63px)
 }
 
 ul.cont_t2 {
@@ -1118,7 +1118,6 @@ html, body, #root {
 .ant-table-thead > tr > th.ant-table-selection-user-again, .ant-table-tbody > tr > td.ant-table-selection-user-again{
     width: 10%;
     word-break: break-all;
-    min-width: 60px;
 }
 .ant-table-thead > tr > th.ant-table-selection-user2, .ant-table-tbody > tr > td.ant-table-selection-user2 {
     width: 100px;
@@ -1139,7 +1138,6 @@ html, body, #root {
 .ant-table-thead > tr > th.ant-table-selection-topic-again, .ant-table-tbody > tr > td.ant-table-selection-topic-again{
     width: 10%;
     word-break: break-all;
-    min-width: 60px;
 }
 .ant-table-thead > tr > th.ant-table-selection-score, .ant-table-tbody > tr > td.ant-table-selection-score {
     width: 80px;
@@ -1149,21 +1147,19 @@ html, body, #root {
 .ant-table-thead > tr > th.ant-table-selection-score-visibility, .ant-table-tbody > tr > td.ant-table-selection-score-visibility{
     width: 10%;
     word-break: break-all;
-    min-width: 80px;
+    text-align: center;
 }
 .ant-table-thead > tr > th.ant-table-selection-score-again, .ant-table-tbody > tr > td.ant-table-selection-score-again{
-    width: 15%;
+    width: 20%;
     word-break: break-all;
-    min-width: 90px;
+    text-align: left !important;
 }
 .ant-table-thead > tr > th.ant-table-selection-score3, .ant-table-tbody > tr > td.ant-table-selection-score3 {
     width: 150px;
     text-align: center;
 }
 .ant-table-thead > tr > th.ant-table-selection-score3-again, .ant-table-tbody > tr > td.ant-table-selection-score3-again{
-    width: 25%;
-    word-break: break-all;
-    min-width: 150px;
+    width: 17%;
 }
 .ant-table-thead > tr > th.ant-table-selection-smallclass, .ant-table-tbody > tr > td.ant-table-selection-smallclass {
     width: 160px
@@ -1175,7 +1171,9 @@ element.style {
 .cloud_box .ant-table-thead > tr > th.ant-table-selection-smallclass, .cloud_box .ant-table-tbody > tr > td.ant-table-selection-smallclass {
     width: 20%
 }
-
+.cloud_box .ant-table-thead > tr > th.ant-table-selection-smallclass_t, .cloud_box .ant-table-tbody > tr > td.ant-table-selection-smallclass_t {
+    width: 18%
+}
 .ant-table-thead > tr > th.ant-135, .ant-table-tbody > tr > td.ant-135 {
     width: 135px
 }
@@ -1200,9 +1198,9 @@ element.style {
     max-width: 210px !important;
 }
 .ant-table-thead > tr > th.ant-table-selection-cont-again, .ant-table-tbody > tr > td.ant-table-selection-cont-again {
-    width: 25%;
+    width: 27%;
     word-break: break-all;
-    min-width: 210px;
+    overflow: hidden;
 }
 .ant-table-thead > tr > th.ant-table-selection-cont article, .ant-table-tbody > tr > td.ant-table-selection-cont article {
     max-height: 100px !important;
@@ -2626,7 +2624,7 @@ li.ant-menu-submenu > ul > li.ant-menu-submenu {
 }
 
 .pl_hei2 {
-    height: calc(100% - 10px)
+    height: 100%
 }
 
 .timu_line {
@@ -4449,7 +4447,8 @@ a.color_gary_f, .color_gary_f {
 .little-layout-aside-r-show .close,
 .little-layout-aside-r-show .zoom,
 .little-layout-aside-r-show .back,
-.little-layout-aside-r-show .forward {
+.little-layout-aside-r-show .forward,
+.little-layout-aside-r-show .shareLittle{
     display: inline-block;
     position: absolute;
     font-weight: lighter;
@@ -4466,7 +4465,8 @@ a.color_gary_f, .color_gary_f {
 .little-layout-aside-r-show .close,
 .little-layout-aside-r-show .zoom,
 .little-layout-aside-r-show .back,
-.little-layout-aside-r-show .forward {
+.little-layout-aside-r-show .forward,
+.little-layout-aside-r-show .shareLittle{
     font-family: "iconfont" !important;
     font-size: 16px;
     font-style: normal;
@@ -4510,7 +4510,16 @@ a.color_gary_f, .color_gary_f {
 .little-layout-aside-r-show .forward:hover {
     color: #57c5f7;
 }
-
+.little-layout-aside-r-show .shareLittle{
+    right: 65px;
+    font-size: 18px;
+}
+.little-layout-aside-r-show .shareLittle i{
+    font-size: 18px;
+}
+.little-layout-aside-r-show .shareLittle:hover {
+    color: #57c5f7
+}
 .lpmgrbtn {
     padding: 4px 0;
     border-radius: 4px;
@@ -5120,9 +5129,10 @@ a.color_gary_f, .color_gary_f {
 }
 
 .message_menu .ant-table-tbody > tr > td {
-    padding: 8px !important;
+    padding: 8px 2px 8px 12px !important;
     border-bottom: none;
-    cursor: pointer
+    cursor: pointer;
+    position: relative;
 }
 
 .message_menu .ant-table-tbody > tr > td span.ant-badge {
@@ -5445,14 +5455,19 @@ div.btn1 {
 
 .cloud_share_cont {
     border: 1px solid #cfcfd0;
-    height: 260px;
+    height: 350px;
 }
 
 .cloud_share_cont .ant-collapse {
     min-height: 100%;
     height: 100%;
 }
-
+.cloud_share_cont_ri{
+    height: 350px;
+}
+.cloud_share_cont_ri textarea.ant-input{
+    height: 100%;
+}
 li.liveTV:hover, li.history:hover {
     background: #eaf8fe;
     cursor: pointer
@@ -5512,7 +5527,7 @@ ul.liveTV_tab .liveTV, ul.liveTV_tab .liveTV i, ul.history_tab .history, ul.hist
 }
 
 .cloud_share_Modal {
-    height: 462px
+    height: 530px
 }
 
 .exam_timeline {
@@ -8232,4 +8247,104 @@ select.course_n:hover {
 }
 .exam_analysis_red{
     text-indent: 25%;
+}
+.select_knoledge{
+    margin: 8px 0;
+    min-height: 24px;
+}
+.select_knoledge_tags_wrap {
+    max-height: 50px;
+    overflow: auto;
+    width: calc(100% - 88px);
+    display: inline-block;
+}
+.select_knoledge_tags{
+    width: 100%;
+}
+.select_knoledge_width{
+    max-width: 465px;
+    margin-top: 7px;
+    margin-right: 10px;
+}
+.select_knoledge_top2{
+    margin-top: 18px;
+}
+
+.select_knoledge_Person .ant-table-placeholder{
+    border-left: 1px solid #E4E4E4;
+    border-right: 1px solid #E4E4E4;
+}
+.select_knoledge_Person .ant-table-body {
+    height: 351px;
+    overflow: auto;
+    border: 1px solid #E4E4E4;
+    border-radius: 4px;
+}
+.select_knoledge_Person .ant-table-thead {
+    position: fixed;
+    z-index: 2;
+}
+.select_knoledge_Person .ant-table-thead > tr > th.ant-table-selection-column {
+    width: 40px;
+    padding: 12px 8px;
+    text-align: right;
+}
+.select_knoledge_Person .ant-table table th.dold_text{
+    width: 360px;
+}
+.select_knoledge_Person .ant-table table td.dold_text {
+    width: 340px;
+}
+
+.select_knoledge_Person .ant-table-tbody {
+    display: block;
+    margin-top: 53px;
+}
+
+.select_knoledge_Person .ant-modal-footer {
+    padding: 0
+}
+.btn_subject_ri_wrap{
+    width:100%;
+    height: 300px;
+    position: relative;
+}
+.btn_subject_ri{
+    position: absolute;
+    bottom: 1px;
+    right: 1px;
+    z-index: 1000;
+    border-radius: 0;
+    margin: 0 !important;
+}
+.add_modal_subject .ant-modal-body{
+    height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.select_knoledge_Person .ant-spin-container > div:first-child{
+    height: 351px;
+}
+.resource_bg_c{
+    color: #000;
+    text-align: center;
+}
+.resource_bg_w{
+    color: #666;
+}
+.message_menu .ant-table-tbody > tr > td .message_le_del{
+    display: none;
+}
+.message_menu .ant-table-tbody > tr > td:hover .message_le_del{
+    display: block;
+}
+.message_le_del i{
+    position: absolute;
+    left: -11px;
+    top: 15px;
+    font-size: 12px;
+    color: #999;
+}
+.message_le_del i:hover{
+    color: #333;
 }

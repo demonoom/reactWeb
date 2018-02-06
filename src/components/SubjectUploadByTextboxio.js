@@ -819,7 +819,7 @@ const SubjectUploadTabComponents = React.createClass({
                     title="添加题目"
                     width="860px"
                     height="636px"
-                    className="ant-modal-width"
+                    className="ant-modal-width add_modal_subject"
                     onCancel={this.handleCancel}
                     maskClosable={false} //设置不允许点击蒙层关闭
                     transitionName=""  //禁用modal的动画效果
@@ -991,7 +991,7 @@ const SubjectUploadTabComponents = React.createClass({
                                     </Col>
                                 </Row>
 
-                                <Row>
+                                <Row className="row-t-f">
                                     <Col span={3} className="ant-form-item-label">
                                         <span className="font-14">答案：</span>
                                     </Col>

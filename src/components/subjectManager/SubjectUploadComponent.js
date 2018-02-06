@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {Button, Radio,Progress} from 'antd';
 import {Modal} from 'antd';
-import { Row, Col, Checkbox,Slider,Select} from 'antd';
+import { Row, Col, Checkbox,Slider,Select,Tag} from 'antd';
 import {message} from 'antd';
 import TextboxioComponentForAnswer  from '../textboxioComponents/TextboxioComponentForAnswer';
 import SubjectVideoUploadComponents from '../SubjectVideoUploadComponents';
@@ -9,6 +9,7 @@ import SubjectAnalysisContent from './SubjectAnalysisContent';
 import SubjectContent from '../textboxioComponents/SubjectContent';
 import {doWebService} from '../../WebServiceHelper';
 import {isEmpty,AUDIO_SUBJECT_ALLOWED} from "../../utils/Const";
+import SelectKnowledgeModal from './SelectKnowledgeModal';
 const RadioGroup = Radio.Group;
 const CheckboxGroup = Checkbox.Group;
 const Option = Select.Option;
@@ -17,10 +18,11 @@ var mulitiAnswer = new Array('A');
 var subjectUpload;
 var uploadFileList = [];
 
-const children = [];
+var children = [];
 
 /**
  * 题目上传组件
+ * 2018-1-30启用
  */
 const SubjectUploadComponent = React.createClass({
     getInitialState() {
@@ -56,6 +58,10 @@ const SubjectUploadComponent = React.createClass({
             knowledges:[],  //题目的知识点
             subjectAnalysisModalVisible:false,  //题目的解析窗口状态
             subjectVisibility:'all',    //题目可见性，默认全部可见
+            knowledgeChildren:[],
+            knowledgeResponse:[],
+            selectKnowledgeModalIsShow:false,
+            tags:[]
         };
     },
 
@@ -63,9 +69,10 @@ const SubjectUploadComponent = React.createClass({
      * 设置当前题目上传组件的Modal显示状态为true，即显示窗口
      */
     showModal() {
-        this.getKnowledgeInfosByConditionKey(this.state.pageNo,this.state.conditionKeyOfKnowledge);
+        //this.getKnowledgeInfosByConditionKey(this.state.pageNo,this.state.conditionKeyOfKnowledge);
+        console.log("showUpload");
         this.setState({
-            visible: true,
+            visible: true,tags:[]
         });
     },
     /**
@@ -116,7 +123,9 @@ const SubjectUploadComponent = React.createClass({
             sliderValue:4,
             singleSliderValue:4,
             knowledges:[],
-            analysisContent:''
+            analysisContent:'',
+            tags:[],    //选中的知识点标签
+            subjectVisibility:'all',    //题目可见性，默认全部可见
         });
     },
 
@@ -407,13 +416,18 @@ const SubjectUploadComponent = React.createClass({
         if(this.state.subjectVisibility=='school'){
             ownerSchoolid=this.state.loginUser.schoolId;
         }
+        var knowledges=[];
+        for(var i=0;i<this.state.tags.length;i++){
+            var tag = this.state.tags[i];
+            knowledges.push(tag.name);
+        }
         var batchAddSubjectBeanJson = {
             "textTigan": subjectName,
             "textAnswer": answer,
             // "score": 0,
             "userId": this.state.loginUser.colUid,
             "type": this.state.subjectType,
-            "knowledges":this.state.knowledges,
+            "knowledges":knowledges,
             "analysisContent":this.state.analysisContent,
             "alterNativeAnswerCount":alterNativeAnswerCount,
             "ownerSchoolid":ownerSchoolid
@@ -483,12 +497,13 @@ const SubjectUploadComponent = React.createClass({
                     //children.splice(0);
                     var response = ret.response;
                     children.splice(0);
+                    _this.setState({knowledgeResponse:response});
                     response.forEach(function (knowledgeInfo) {
                         var knowledgeId = knowledgeInfo.knowledgeId;
                         var knowledgeName = knowledgeInfo.knowledgeName;
                         children.push(<Option key={knowledgeId}>{knowledgeName}</Option>);
                     });
-                    //_this.setState({"knowledgeChildren":children});
+                    _this.setState({"knowledgeChildren":children});
                 }
             },
             onError: function (error) {
@@ -515,6 +530,11 @@ const SubjectUploadComponent = React.createClass({
     handleChange(value) {
         console.log(`selected ${value}`);
         this.setState({"knowledges":value});
+        this.getKnowledgeInfosByConditionKey(this.state.pageNo,value);
+    },
+
+    selectKnowledge(value){
+        console.log("sel"+value);
     },
 
     /**
@@ -547,6 +567,41 @@ const SubjectUploadComponent = React.createClass({
         this.setState({"subjectVisibility":e.target.value});
     },
 
+    showSelectKnowledgeModal(){
+        //this.state.tags.splice(0);
+        console.log("==========selectKnowledgeModalIsShow============");
+        this.setState({"selectKnowledgeModalIsShow":true});
+    },
+
+    closeSelectKnowledgeModal(tags,buttonType){
+        // var tags = this.state.tags;
+        // newTags.forEach(function (newTag) {
+        //     tags.push(newTag);
+        // });
+        var _this = this;
+        if(isEmpty(buttonType)==true){
+            console.log("close:"+tags);
+            // this.setState({"tags":tags});
+            _this.state.tags.splice(0);
+            if(isEmpty(tags)==false){
+                tags.forEach(function (tag) {
+                    _this.state.tags.push(tag);
+                })
+            }
+        }
+        _this.setState({"selectKnowledgeModalIsShow":false});
+    },
+
+    handleClose(removedTag){
+        var tags = this.state.tags;
+        for (var i = 0; i < tags.length; i++) {
+            if (tags[i].key == removedTag.key) {
+                tags.splice(i, 1);
+            }
+        }
+        this.setState(tags);
+    },
+
     /**
      * 页面元素的渲染操作
      * @returns {XML}
@@ -561,7 +616,7 @@ const SubjectUploadComponent = React.createClass({
             </Button>
         </div>;
         //插入音频按钮
-        var audioButton = <Button className="row-t-f" onClick={this.showVideoUploadModal.bind(this,'single')}>插入音频</Button>;
+        var audioButton = <Button className="row-t-f roe-t-f-left" onClick={this.showVideoUploadModal.bind(this,'single')}>插入音频</Button>;
         var answerComponent = null;
 
         if (this.state.subjectType == "C") {
@@ -581,14 +636,14 @@ const SubjectUploadComponent = React.createClass({
                     <Row>
                         <div className="ant-form-item-control">
                             <RadioGroup onChange={this.singleAnswerOnChange}
-                                        defaultValue={this.state.singleAnswer}>
+                                        value={this.state.singleAnswer}>
                                 {this.state.singleAnswerOptions}
                             </RadioGroup>
                         </div>
                     </Row>
                 </Col>
             </Row>;
-            audioButton = <Button className="row-t-f" onClick={this.showVideoUploadModal.bind(this,'single')}>插入音频</Button>;
+            audioButton = <Button className="roe-t-f-left" onClick={this.showVideoUploadModal.bind(this,'single')}>插入音频</Button>;
         } else if (this.state.subjectType == "MC") {
             answerComponent = <Row>
                 <Col span={3} className="ant-form-item-label">
@@ -615,7 +670,7 @@ const SubjectUploadComponent = React.createClass({
                     </Row>
                 </Col>
             </Row>;
-            audioButton = <Button onClick={this.showVideoUploadModal.bind(this,'mulitiSelect')}>插入音频</Button>
+            audioButton = <Button className="roe-t-f-left" onClick={this.showVideoUploadModal.bind(this,'mulitiSelect')}>插入音频</Button>
         } else if (this.state.subjectType == "J") {
             answerComponent = <Row>
                 <Col span={3} className="ant-form-item-label">
@@ -632,9 +687,9 @@ const SubjectUploadComponent = React.createClass({
                     </div>
                 </Col>
             </Row>;
-            audioButton = <Button onClick={this.showVideoUploadModal.bind(this,'correct')}>插入音频</Button>;
+            audioButton = <Button className="roe-t-f-left" onClick={this.showVideoUploadModal.bind(this,'correct')}>插入音频</Button>;
         } else if (this.state.subjectType == "S") {
-            answerComponent =<Row>
+            answerComponent =<Row className="row-t-f">
                 <Col span={3} className="ant-form-item-label">
                     <span className="font-14">答案：</span>
                 </Col>
@@ -644,7 +699,7 @@ const SubjectUploadComponent = React.createClass({
                     </div>
                 </Col>
             </Row>;
-            audioButton = <Button onClick={this.showVideoUploadModal.bind(this,'simpleAnswer')}>插入音频</Button>;
+            audioButton = <Button className="roe-t-f-left" onClick={this.showVideoUploadModal.bind(this,'simpleAnswer')}>插入音频</Button>;
         }
 
         //如果用户不在允许的权限列表中，将audioButton设置为null，不显示
@@ -658,6 +713,7 @@ const SubjectUploadComponent = React.createClass({
 
         //根据该状态值，来决定上传进度条是否显示
         var progressState = this.state.progressState;
+        const {tags} = this.state;
 
         return (
             <div className="toobar right_ri ">
@@ -667,7 +723,7 @@ const SubjectUploadComponent = React.createClass({
                     title="添加题目"
                     width="860px"
                     height="636px"
-                    className="ant-modal-width"
+                    className="ant-modal-width add_modal_subject"
                     onCancel={this.handleCancel}
                     maskClosable={false} //设置不允许点击蒙层关闭
                     transitionName=""  //禁用modal的动画效果
@@ -683,7 +739,7 @@ const SubjectUploadComponent = React.createClass({
                             <Col span={3} className="ant-form-item-label">
                                 <span className="font-14">题目类型：</span>
                             </Col>
-                            <Col span={20}>
+                            <Col span={20} className="row-t-f">
                                 <RadioGroup onChange={this.subjectTypeOnChange} value={this.state.subjectType}>
                                     <Radio value="C">单选题</Radio>
                                     <Radio value="MC">多选题</Radio>
@@ -702,14 +758,15 @@ const SubjectUploadComponent = React.createClass({
                             </Col>
                         </Row>
 
-                        <Row>
+                        <Row className="row-t-f">
                             <Col span={3} className="ant-form-item-label">
                                 <span className="font-14">题目：</span>
                             </Col>
                             <Col span={20}>
                                 <SubjectContent ref="subjectContent"/>
+                                {/*className="row-t-f roe-t-f-left"*/}
+                                <Button className="row-t-f" onClick={this.showAnalysisModal}>题目解析</Button>
                                 {audioButton}
-                                <Button className="row-t-f roe-t-f-left" onClick={this.showAnalysisModal}>题目解析</Button>
                             </Col>
                         </Row>
 
@@ -720,29 +777,19 @@ const SubjectUploadComponent = React.createClass({
                                 <span className="font-14">知识点：</span>
                             </Col>
                             <Col span={20} className="row-t-f">
-                                <Select
-                                    multiple={true}
-                                    tags={true}
-                                    style={{ width: '100%' }}
-                                    placeholder="请选择或输入知识点名称"
-                                    value={this.state.knowledges}
-                                    onChange={this.handleChange}
-                                    onSearch={this.searchKnowledge}
-                                >
-                                    {/*
-                                <Select
-                                    multiple={true}
-                                    tags={true}
-                                    autoFocus={true}
-                                    showSearch={true}
-                                    filterOption={true}
-                                    style={{ width: '100%' }}
-                                    placeholder="请选择或输入知识点名称"
-                                    value={this.state.knowledges}
-                                    onChange={this.handleChange}
-                                >*/}
-                                    {children}
-                                </Select>
+                                <div className="select_knoledge_width upexam_float">
+                                    {tags.map((tag, index) => {
+                                        const isLongTag = tag.length > 20;
+                                        const tagElem = (
+                                            <Tag key={tag.key} closable={index !== -1}
+                                                 afterClose={() => this.handleClose(tag)}>
+                                                {isLongTag ? `${tag.name.slice(0, 20)}...` : tag.name}
+                                            </Tag>
+                                        );
+                                        return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
+                                    })}
+                                </div>
+                                <Button className="ding_modal_top" onClick={this.showSelectKnowledgeModal}>选择知识点</Button>
                             </Col>
                         </Row>
 
@@ -750,7 +797,7 @@ const SubjectUploadComponent = React.createClass({
                             <Col span={3} className="ant-form-item-label row-t-f">
                                 <span className="font-14">可见性：</span>
                             </Col>
-                            <Col span={20} className="row-t-f">
+                            <Col span={20}  className="select_knoledge_top2">
                                 <RadioGroup onChange={this.subjectVisibilityOnChange} value={this.state.subjectVisibility}>
                                     <Radio value="all">全部可见</Radio>
                                     <Radio value="school">本校可见</Radio>
@@ -826,6 +873,10 @@ const SubjectUploadComponent = React.createClass({
 
                     </Row>
                 </Modal>
+
+                <SelectKnowledgeModal isShow={this.state.selectKnowledgeModalIsShow}  initTags={this.state.tags}
+                                      closeSelectKnowledgeModal={this.closeSelectKnowledgeModal}></SelectKnowledgeModal>
+
 
             </div>
         );

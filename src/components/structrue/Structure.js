@@ -358,7 +358,7 @@ const Structure = React.createClass({
                 _this.modalDefaultData(flag);
             }
             if(parentId){
-                // structuresObjChangedArray.pop();
+                 structuresObjChangedArray.pop();
                 _this.listModalStructures(parentId,flag);
             }
     },

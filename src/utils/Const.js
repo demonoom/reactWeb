@@ -31,6 +31,7 @@ export const LARGE_IMG = 'size=500x500';
 export const WEB_VERSION = "1.10";
 //音频题目权限开放账号集合，其中23836和54208为系统测试用户账号
 export const AUDIO_SUBJECT_ALLOWED = ["134770", "134755", "135359", "135872", "135001", "135302", "135303", "135304", "135244", "135167", "23836", "54208"];
+export const QUESTION_DETAIL_URL = "http://jiaoxue.maaee.com:8091/#/questionDetil";
 var baseEmotionMap = new Map();
 baseEmotionMap.set("[bexp_0001]", "baseEmotions/bexp_0001.png");
 baseEmotionMap.set("[bexp_0002]", "baseEmotions/bexp_0002.png");
