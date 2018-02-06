@@ -253,6 +253,10 @@ const AntGroupTabComponents = React.createClass({
         this.props.clearEverything()
     },
 
+    rightMsgDelFinish() {
+        this.setState({optType: 'getUserList'})
+    },
+
     /**
      *  已读消息回复服务器
      */
@@ -2058,8 +2062,8 @@ const AntGroupTabComponents = React.createClass({
             }, onMessage: function (info) {
                 mesReFlag = true;
                 var messageList = antGroup.state.messageList;
-                console.log(info);
-                console.log('info');
+                // console.log(info);
+                // console.log('info');
                 var groupObj;
                 var gt = $('#groupTalk');
                 if (antGroup.state.optType == "sendMessage") {
@@ -2225,8 +2229,32 @@ const AntGroupTabComponents = React.createClass({
                         } else if (data.message.command == "dissolutionChatGroup") {
                             //组织架构删除子部门后来自群通知着的消息
                             return false
-                        } else if (data.message.command == "COMMAND_DELETE_RECENT_MESSAGE" || data.message.command == "COMMAND_DELETE_RECORD_MESSAGE") {
+                        } else if (data.message.command == "COMMAND_DELETE_RECORD_MESSAGE") {
                             //删除消息的commend,没用直接return
+                            var uuid = JSON.parse(data.message.content)[0].uuid;
+                            var messageList = antGroup.state.messageList;
+                            messageList.forEach(function (v, i) {
+                                if (isEmpty(v) == false) {
+                                    if (v.uuid == uuid) {
+                                        messageList.splice(i, 1);
+                                        antGroup.setState({mesRetNum: i});
+                                    }
+                                }
+                            });
+                            antGroup.setState({messageList});
+                            return false
+                        } else if (data.message.command == "COMMAND_DELETE_RECENT_MESSAGE") {
+                            var uuids = '';
+                            var uuid;
+                            JSON.parse(data.message.content).forEach(function (v) {
+                                if (v.toType == 1) {
+                                    uuid = v.toUser.colUid;
+                                } else {
+                                    uuid = v.toChatGroup.chatGroupId
+                                }
+                                uuids += uuid + '#';
+                            });
+                            antGroup.props.delLeftMsgFinish(uuids);
                             return false
                         }
 

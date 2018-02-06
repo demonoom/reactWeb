@@ -18,6 +18,9 @@ const columns = [{
 var messageData = [];
 var userMessageData = [];
 var uuid;
+var delCannotFlag = true;
+var delKey;
+var delKeyReback;
 const MessageMenu = React.createClass({
     getInitialState() {
         mMenu = this;
@@ -208,10 +211,75 @@ const MessageMenu = React.createClass({
         // }
     },
 
+    delLeftMsgFinish(uuid) {
+        var arr = uuid.split("#");
+        var messageList = this.state.userMessageData;
+        for (var i = 0; i < arr.length - 1; i++) {
+            messageList.forEach(function (v, index) {
+                if (v.key == arr[i]) {
+                    messageList.splice(index, 1);
+                    messageData.splice(index, 1);
+                }
+            });
+            if (delKey == arr[i]) {
+                this.props.rightMsgDelFinish()
+                delKeyReback = delKey;
+            }
+        }
+        this.setState({userMessageData: messageList});
+    },
+
+    delMes(id) {
+        var delUuid;
+        delCannotFlag = false;
+        messageData.forEach(function (v) {
+            if (v.key == id) {
+                delUuid = v.uuid;
+            }
+        });
+
+        var _this = this;
+        var param = {
+            "method": 'removeUserRecentMessage',
+            "uuids": delUuid,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.msg == '调用成功' && ret.response == true) {
+                    //从数组中去除那条消息
+                    var messageList = _this.state.userMessageData;
+                    messageList.forEach(function (v, i) {
+                        if (isEmpty(v) == false) {
+                            if (v.key == id) {
+                                messageList.splice(i, 1);
+                                messageData.splice(i, 1);
+                            }
+                        }
+                    });
+                    _this.setState({userMessageData: messageList});
+                } else {
+                    message.error(ret.msg);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+
+
+        // console.log(mMenu.state.userMessageData);
+    },
+
     /**
      * 渲染用户最新消息列表
      */
     showMessageData(flag) {
+        for (var i = 0; i < messageData.length; i++) {
+            if (messageData[i].key == delKeyReback) {
+                delKeyReback = '';
+                messageData.splice(i, 1);
+            }
+        }
         if (flag) {
             this.props.toWhichCharObj();
         }
@@ -302,8 +370,8 @@ const MessageMenu = React.createClass({
                     </div>;
                 }
                 var messageContentTag = <Badge className='noomFinish' dot={mMenu.state.badgeShow} count={redPoint}>
-                    <span className="message_le_del">
-                        <Icon type="close" />
+                    <span className="message_le_del" onClick={mMenu.delMes.bind(this, message.key)}>
+                        <Icon type="close"/>
                     </span>
                     <div>
                         {imgTag}
@@ -358,13 +426,13 @@ const MessageMenu = React.createClass({
         if (messageObj.command == "message") {
             var fromUser = messageObj.fromUser;
             var content = messageObj.content;
+            var uuid = messageObj.uuid;
             //noomReadState为0是未读  1是已读
             if (messageObj.readState == 0) {
                 var noomReadState = 1;
             } else {
                 var noomReadState = false
             }
-
 
             var isCurrentDay = isToday(messageObj.createTime);
             var createTime;
@@ -401,6 +469,7 @@ const MessageMenu = React.createClass({
                         contentArray: contentArray,
                         "messageToType": messageToType,
                         "noomReadState": noomReadState,
+                        "uuid": uuid
                         // "isNew":true
                     };
                     messageData.push(userJson);
@@ -423,6 +492,7 @@ const MessageMenu = React.createClass({
                             "messageToType": messageToType,
                             "toChatGroup": toChatGroup,
                             "noomReadState": noomReadState,
+                            "uuid": uuid
                         };
                         messageData.push(userJson);
                     } else {
@@ -453,6 +523,7 @@ const MessageMenu = React.createClass({
      */
     getRowClassName(record, index) {
         if (record.key == mMenu.state.selectRowKey) {
+            delKey = record.key;
             return "tableRow";
         }
     },
@@ -464,6 +535,10 @@ const MessageMenu = React.createClass({
      * @param index
      */
     turnToMessagePage(record, index) {
+        if (!delCannotFlag) {
+            delCannotFlag = true;
+            return
+        }
         messageData.forEach(function (v, i) {
             //遍历messageData,去改变他的noomReadState,然后调用渲染方法showMessageData就能够消去红点
             if (v.key == record.key) {

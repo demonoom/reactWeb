@@ -43,6 +43,8 @@ const CheckboxGroup = Checkbox.Group;
 var messageData = [];
 var userMessageData = [];
 
+var delLastClick = false;
+
 const store = createStore(function () {
 
 });
@@ -649,6 +651,10 @@ const MainLayout = React.createClass({
     },
 
     toWhichCharObj() {
+        if (delLastClick) {
+            delLastClick = false;
+            return false
+        }
         var _this = this;
         var lastClick = this.state.lastClick;
         if (isEmpty(lastClick) == false) {
@@ -660,6 +666,13 @@ const MainLayout = React.createClass({
         } else {
 
         }
+    },
+
+    rightMsgDelFinish() {
+        this.refs.antGroupTabComponents.rightMsgDelFinish();
+        // console.log(this.state.lastClick);
+        // this.setState({lastClick: ''})
+        delLastClick = true;
     },
 
     sendImg(currentUrl, urls) {
@@ -799,6 +812,10 @@ const MainLayout = React.createClass({
     clearEverything() {
         this.setState({userInfo: ''});
         this.setState({messageType: ''});
+    },
+
+    delLeftMsgFinish(uuid) {
+        this.refs.messageMenu.delLeftMsgFinish(uuid);
     },
 
     /**
@@ -1089,6 +1106,7 @@ const MainLayout = React.createClass({
                                                onLoad={this.turnToMessagePage}
                                                changeMesTabClick={this.changeMesTabClick}
                                                toWhichCharObj={this.toWhichCharObj}
+                                               rightMsgDelFinish={this.rightMsgDelFinish}
                                                ref="messageMenu"
                 />;
                 tabComponent = <AntGroupTabComponents ref="antGroupTabComponents"
@@ -1102,6 +1120,7 @@ const MainLayout = React.createClass({
                                                       showMesAlert={this.showMesAlert}
                                                       refresh={this.refresh}
                                                       clearEverything={this.clearEverything}
+                                                      delLeftMsgFinish={this.delLeftMsgFinish}
                 />;
                 break;
             case 'antGroup':
