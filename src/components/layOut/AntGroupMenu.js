@@ -106,6 +106,16 @@ const AntGroupMenu = React.createClass({
     },
 
     render() {
+        //获取用户类型，学生用户无组织架构功能
+        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+        var userType = loginUser.colUtype;
+        var structure = null;
+        if(userType == "TEAC"){
+            structure = <div className="maaee_group affix_bottom_tc" onClick={this.getGroupMenu}>
+                <img src={require('../images/icon_jiagou.png')} className="antnest_38_img"/>
+                <span className="" icon="usergroup-add">组织构架</span>
+            </div>;
+        }
         return (
             <div>
                 <div className="menu_til">
@@ -116,10 +126,8 @@ const AntGroupMenu = React.createClass({
                     <span className="" icon="usergroup-add">我的群组</span>
                 </div>
 
-                <div className="maaee_group affix_bottom_tc" onClick={this.getGroupMenu}>
-                    <img src={require('../images/icon_jiagou.png')} className="antnest_38_img"/>
-                    <span className="" icon="usergroup-add">组织构架</span>
-                </div>
+                {structure}
+
                 <Table className="maaeegroup yiqun" onRowClick={mMenu.getPersonCenterInfo} showHeader={false}
                        columns={columns} dataSource={mMenu.state.userContactsData}
                        pagination={false} rowClassName={mMenu.getRowClassName}/>

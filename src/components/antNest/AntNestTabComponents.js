@@ -1460,7 +1460,6 @@ const AntNestTabComponents = React.createClass({
             target = e.target;
         }
         var scrollTop = target.scrollTop;
-        console.log(scrollTop);
         this.setState({antNestScoll:scrollTop});
     },
 

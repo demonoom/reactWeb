@@ -265,7 +265,7 @@ const AntGroupTabComponents = React.createClass({
                                 "command": "message_read",
                                 "data": {"messageUUID": v.uuid}
                             };
-                            console.log('群消息回复');
+                            // console.log('群消息回复');
                             ms.send(receivedCommand);
                             // v.readState = 1;
                             v.groupReadState = 1;
@@ -282,7 +282,7 @@ const AntGroupTabComponents = React.createClass({
                                 "command": "message_read",
                                 "data": {"messageUUID": v.uuid}
                             };
-                            console.log('个人消息回复');
+                            // console.log('个人消息回复');
                             ms.send(receivedCommand);
                             v.readState = 1;
                             uuidArr.push(v.uuid);
@@ -1111,7 +1111,7 @@ const AntGroupTabComponents = React.createClass({
                     showUser = messageObj.toUser;
                 }
                 if (isEmpty(showUser)) {
-                    console.log("toUser为空");
+                    // console.log("toUser为空");
                     return;
                 }
                 var colUid = showUser.colUid;
@@ -1171,7 +1171,7 @@ const AntGroupTabComponents = React.createClass({
      */
     showMessageData() {
         userMessageData.splice(0);
-        console.log(messageData);
+        // console.log(messageData);
         messageData.forEach(function (data) {
             var messageType = data.messageToType;
             if (messageType == 1) {
@@ -2741,9 +2741,9 @@ const AntGroupTabComponents = React.createClass({
         if (isDirectToBottom == false) {
             if (isNewPage == true) {
                 var nowHeight = gt[0].scrollHeight;
-                console.log("nowHeight:" + nowHeight + "=======preHeight:" + preHeight);
+                // console.log("nowHeight:" + nowHeight + "=======preHeight:" + preHeight);
                 var newHeight = Number(nowHeight) - Number(preHeight);
-                console.log("newHeight====>" + Number(newHeight));
+                // console.log("newHeight====>" + Number(newHeight));
                 gt.scrollTop(Number(newHeight));
             }
         } else {
@@ -3279,7 +3279,7 @@ const AntGroupTabComponents = React.createClass({
                         ;
                     }
                     var e = messageList[i];
-                    console.log(e);
+                    // console.log(e);
                     if (isEmpty(e) == true) {
                         continue;
                     }

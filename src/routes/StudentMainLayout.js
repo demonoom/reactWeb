@@ -18,6 +18,8 @@ import {LocaleProvider} from 'antd';
 import TeachSpace  from '../components/TeachSpaces';
 import TeachSpaceGhostMenu from '../components/TeachSpacesGhostMenu';
 import {MsgConnection} from '../utils/msg_websocket_connection';
+import {isEmpty} from '../utils/Const'
+import SendPicModel from '../components/antGroup/SendPicModel'
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
@@ -44,6 +46,9 @@ const StudentMainLayout = React.createClass({
             locale: 'zh-cn',
             resouceType: 'C',
             ifr: {},
+            isPersonCenter: false,
+            isSearchGroup: false,
+            sendPicModel:false,
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
     },
@@ -54,6 +59,32 @@ const StudentMainLayout = React.createClass({
             collapse: !this.state.collapse,
         })
     },
+
+    noomSelectUser(obj) {
+        this.sendMessage_noom_group(obj);
+    },
+
+    sendMessage_noom_group(groupObj) {
+        var contentJson = {"content": '', "createTime": ''};
+        var contentArray = [contentJson];
+        var userJson = {
+            key: groupObj.chatGroupId,
+            "fromUser": groupObj,
+            contentArray: contentArray,
+            "messageToType": 4,
+            "toChatGroup": groupObj
+        };
+        this.setState({
+            currentKey: 'message',
+            resouceType: '',
+            "groupObj": groupObj,
+            "messageType": 'groupMessage',
+            "actionFrom": "personCenterGroupList",
+            userJson,
+            isSearchGroup: true
+        });
+    },
+
     toolbarClick: function (e) {
 
 
@@ -135,6 +166,43 @@ const StudentMainLayout = React.createClass({
         ms =  new MsgConnection();
         ms.connect(pro);
     },
+
+    sendImg(currentUrl, urls) {
+        var imgArr = [];
+        var num = '';
+        var urls = urls.split('#');
+        var _this = this;
+        //根据urls的length动态创建img
+        urls.forEach(function (v, i) {
+            var imgId = "img" + i;
+            var img = <span className="topics_zan"><img id={imgId} className="topics_zanImg noomSendImg"
+                                                        onClick={showLargeImg} src={v}/>
+                      </span>;
+            imgArr.push(img);
+            if (currentUrl == v) {
+                num = i;
+            }
+        });
+        this.setState({imgArr});
+        //图片已渲染到DOM
+        document.querySelectorAll(".noomSendImg")[num].click();   //使用noomSendImg可以区分选择的图片是聊天里的还是审批里的,不会造成混乱
+    },
+
+    noomSelectPic(src, obj) {
+        this.setState({sendPicModel: true, pinSrc: src, picFile: obj});
+    },
+
+    componentDidMount() {
+        this.refs.dingMusic.innerHTML = '<source src="../../static/dingmes.mp3" type="audio/mpeg">'
+        this.refs.mesMusic.innerHTML = '<source src="../../static/message.mp3" type="audio/mpeg">'
+        window.__noomSelect__ = this.noomSelect;
+        window.__noomSelectGroup__ = this.noomSelectUser;
+        window.__sendImg__ = this.sendImg;
+        //定义方法（调用进入哪个聊天人）
+        // window.__toWhichCharObj__ = this.toWhichCharObj;
+        window.__noomSelectPic__ = this.noomSelectPic;
+        // window.__noomShareMbile__ = this.noomShareMbile;
+    },
     // 不用了
     // 呼叫本组件中的实例任何方法 dapeng
     componentDidUpdate(){
@@ -178,14 +246,26 @@ const StudentMainLayout = React.createClass({
     },
 
 
-    getAntNest(optType){
+/*    getAntNest(optType){
         var pageNo;
         if ("getAllTopic" == optType) {
             this.refs.antNestTabComponents.getTopics(pageNo, 0);
         } else {
             this.refs.antNestTabComponents.getTopics(pageNo, 1);
         }
+    },*/
+
+    getAntNest(optType) {
+        //onlyTeacherTopic或者getAllTopic
+        var pageNo;
+        var fromTap = true;
+        if ("getAllTopic" == optType) {
+            this.refs.antNestTabComponents.getTopics(pageNo, 0, true, fromTap);
+        } else {
+            this.refs.antNestTabComponents.getTopics(pageNo, 1, true, fromTap);
+        }
     },
+
     teachSpaceTab(activeMenu, beActive){
 
         // 2
@@ -265,7 +345,8 @@ const StudentMainLayout = React.createClass({
             "userInfo": userInfo.user,
             "messageType": 'message',
             "actionFrom": "personCenter",
-            userJson
+            userJson,
+            isPersonCenter: true,
         });
     },
 
@@ -300,6 +381,103 @@ const StudentMainLayout = React.createClass({
 
     },
 
+    changeMesTabClick() {
+        this.setState({mesTabClick: false});
+    },
+
+    toWhichCharObj() {
+        var _this = this;
+        var lastClick = this.state.lastClick;
+        if (isEmpty(lastClick) == false) {
+
+            setTimeout(function () {
+                // _this.turnToMessagePage(lastClick);
+                _this.refs.messageMenu.turnToMessagePage(lastClick);
+            }, 50)
+        } else {
+
+        }
+    },
+
+    /**
+     * 收到普通消息的回调
+     */
+    showMesAlert(flag) {
+        if (flag) {
+            //控制提示音播放
+            var audio = document.getElementById("mesMusic");
+            audio.play();
+            //控制小红点的显示与隐藏
+            this.refs.msgAlert.className = 'ding_alert_show';
+        } else {
+            this.refs.msgAlert.className = 'ding_alert';
+        }
+    },
+
+    /**
+     * 聊天卸载时，将这个js保存的信息清空，下次加载时会调用点击最后的那个方法
+     */
+    clearEverything() {
+        this.setState({userInfo: ''});
+        this.setState({messageType: ''});
+    },
+
+    getGroupMenu() {
+        this.refs.personCenterComponents.getGroupMenu();
+    },
+
+    refresh() {
+        // var flag = this.state.mesTabClick;
+        // if (!flag) {
+        // this.refs.messageMenu.getUserRecentMessages();
+        // }
+        this.refs.messageMenu.componentWillReceiveProps();
+    },
+
+    changeIsPersonCenter() {
+        this.setState({isPersonCenter: false});
+    },
+
+    changeIsSearchGroup() {
+        this.setState({isSearchGroup: false});
+    },
+
+    closeSendPicModel() {
+        this.setState({sendPicModel: false});
+    },
+
+    sendPicToOthers(url) {
+        this.refs.antGroupTabComponents.sendPicToOthers(url);
+    },
+
+    changeIsSearch() {
+        this.setState({isSearch: false});
+    },
+
+    noomSelect(obj) {
+        this.sendMessage_noom_user(obj);
+    },
+
+    sendMessage_noom_user(userInfo) {
+        var contentJson = {"content": '', "createTime": ''};
+        var contentArray = [contentJson];
+        var userJson = {
+            key: userInfo.colUid,
+            "fromUser": userInfo,
+            contentArray: contentArray,
+            "messageToType": 1,
+        };
+        this.setState({
+            currentKey: 'message',
+            resouceType: '',
+            "userInfo": userInfo,
+            "messageType": 'message',
+            "actionFrom": "search",
+            userJson,
+            isSearch: true
+        });
+    },
+
     render() {
 
         const collapse = this.state.collapse;
@@ -313,9 +491,23 @@ const StudentMainLayout = React.createClass({
                 tabComponent = <MainTabComponents ref="mainTabComponents"/>;
             case 'message':
                 //消息动态
+                /*middleComponent = <MessageMenu onUserClick={this.turnToMessagePage}
+                                               userJson={this.state.userJson}
+                                               onLoad={this.turnToMessagePage}/>;*/
                 middleComponent = <MessageMenu onUserClick={this.turnToMessagePage}
                                                userJson={this.state.userJson}
-                                               onLoad={this.turnToMessagePage}/>;
+                                               isSearch={this.state.isSearch}
+                                               isSearchGroup={this.state.isSearchGroup}
+                                               isPersonCenter={this.state.isPersonCenter}
+                                               changeIsSearch={this.changeIsSearch}
+                                               changeIsSearchGroup={this.changeIsSearchGroup}
+                                               changeIsPersonCenter={this.changeIsPersonCenter}
+                                               onLoad={this.turnToMessagePage}
+                                               changeMesTabClick={this.changeMesTabClick}
+                                               toWhichCharObj={this.toWhichCharObj}
+                                               ref="messageMenu"
+                />
+
                 tabComponent = <AntGroupTabComponents ref="antGroupTabComponents"
                                                       userInfo={this.state.userInfo}
                                                       groupObj={this.state.groupObj}
@@ -323,13 +515,18 @@ const StudentMainLayout = React.createClass({
                                                       messageType={this.state.messageType}
                                                       messageUtilObj={ms}
                                                       onNewMessage={this.receiveNewMessage}
+                                                      showMesAlert={this.showMesAlert}
+                                                      refresh={this.refresh}
+                                                      clearEverything={this.clearEverything}
                 />;
                 break;
             case 'antGroup':
                 //蚁群
                 middleComponent = <AntGroupMenu ref="antGroupMenu" callbackSetFirstPerson={this.setFirstPerson}
                                                 callbackPersonCenterData={this.getPersonalCenterData}
-                                                callbackGetGroupInfo={this.getGroupInfo}/>;
+                                                callbackGetGroupInfo={this.getGroupInfo}
+                                                callbackGetGroupMenu={this.getGroupMenu}
+                />;
                 tabComponent = <PersonCenterComponents ref="personCenterComponents"
                                                        userInfo={this.state.userObj}
                                                        userContactsData={this.state.userContactsData}
@@ -407,6 +604,7 @@ const StudentMainLayout = React.createClass({
                               onClick={this.toolbarClick}>
                             <Menu.Item key="message" className="padding_menu">
                                 <i className="icon_menu_ios icon_message"></i>
+                                <b className="ding_alert" ref='msgAlert'></b>
                                 <div className="tan">动态</div>
                             </Menu.Item>
                             <Menu.Item key="antNest" className="padding_menu">
@@ -440,6 +638,21 @@ const StudentMainLayout = React.createClass({
                     </div>
                     <div className="panleArea"></div>
                     <div className="downloadArea"></div>
+                    <div>
+                        <audio id="dingMusic" ref='dingMusic'>
+
+                        </audio>
+                        <audio id="mesMusic" ref='mesMusic'>
+
+                        </audio>
+                    </div>
+                    <SendPicModel
+                        isShow={this.state.sendPicModel}
+                        closeModel={this.closeSendPicModel}
+                        pinSrc={this.state.pinSrc}
+                        picFile={this.state.picFile}
+                        sendPicToOthers={this.sendPicToOthers}
+                    />
                 </div>
             </LocaleProvider>
         );
