@@ -1,8 +1,7 @@
 import React, {PropTypes} from 'react';
-import {Tabs, Breadcrumb, Icon, Card, Button, Row, Col} from 'antd';
-import {message, Pagination, Modal, Input, Spin} from 'antd';
+import {Icon, Card, Button, Row, Col} from 'antd';
+import {message, Modal, Input, Spin, Select} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
-import {getPageSize} from '../../utils/Const';
 import {getLocalTime} from '../../utils/Const';
 import {isEmpty, SMALL_IMG, MIDDLE_IMG, LARGE_IMG} from '../../utils/Const';
 import {getAllTopic} from '../../utils/Const';
@@ -16,6 +15,16 @@ var topicCardArray = [];
 var antNest;
 var topicObjArray = [];
 var topicArr = [];
+
+const Option = Select.Option;
+
+//假数据
+const children = [];
+for (let i = 10; i < 36; i++) {
+    children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
+}
+
+
 const AntNestTabComponents = React.createClass({
 
     getInitialState() {
@@ -54,6 +63,10 @@ const AntNestTabComponents = React.createClass({
         var a = $('.antNestScoll');
         var antNestScoll = this.state.antNestScoll;
         a.scrollTop(antNestScoll);
+    },
+
+    handleChange(value) {
+        console.log(`selected ${value}`);
     },
 
     /**
@@ -388,7 +401,9 @@ const AntNestTabComponents = React.createClass({
                     var attachMentType = e.type;
                     if (attachMentType == 1) {
                         //图片附件
-                        attachMents = <span className="topics_zan"><img src={e.address + '?' + MIDDLE_IMG} alt={e.address} onClick={showLargeImg}/></span>;
+                        attachMents =
+                            <span className="topics_zan"><img src={e.address + '?' + MIDDLE_IMG} alt={e.address}
+                                                              onClick={showLargeImg}/></span>;
                     } else if (attachMentType == 4) {
                         //mp4附件
                         attachMents = <span className="antnest_user">
@@ -1460,7 +1475,7 @@ const AntNestTabComponents = React.createClass({
             target = e.target;
         }
         var scrollTop = target.scrollTop;
-        this.setState({antNestScoll:scrollTop});
+        this.setState({antNestScoll: scrollTop});
     },
 
     /**
@@ -1504,7 +1519,8 @@ const AntNestTabComponents = React.createClass({
 
             topicList =
                 <div className="favorite_scroll">
-                    <div className="antnest_cont topics_calc2 antNestScoll" style={{overflow: 'scroll'}}  onScroll={this.handleScroll}>
+                    <div className="antnest_cont topics_calc2 antNestScoll" style={{overflow: 'scroll'}}
+                         onScroll={this.handleScroll}>
                         {antNest.state.topicCardList}
                         <div className="topics_calc2_center"><span onClick={antNest.pageAdd}>加载更多>></span></div>
                     </div>
@@ -1553,7 +1569,22 @@ const AntNestTabComponents = React.createClass({
                         </Row>
                         <Row className="yinyong3">
                             <Col span={3} className="right_look">附件：</Col>
-                            <Col span={20}><UploadImgComponents fileList={antNest.state.topicImgUrl} callBackParent={antNest.getUploadedImgList}></UploadImgComponents></Col>
+                            <Col span={20}><UploadImgComponents fileList={antNest.state.topicImgUrl}
+                                                                callBackParent={antNest.getUploadedImgList}></UploadImgComponents></Col>
+                        </Row>
+                        <Row>
+                            <Col span={3} className="right_look">可见班级：</Col>
+                            <Col span={20} className="right_look">
+                                <Select
+                                    multiple='true'
+                                    style={{width: '100%'}}
+                                    placeholder="Please select"
+                                    defaultValue={['a10', 'c12']}
+                                    onChange={this.handleChange}
+                                >
+                                    {children}
+                                </Select>
+                            </Col>
                         </Row>
                     </div>
 
