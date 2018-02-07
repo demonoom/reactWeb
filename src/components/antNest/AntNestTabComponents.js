@@ -77,8 +77,9 @@ const AntNestTabComponents = React.createClass({
         });
     },
 
-    checkboxOnChange(checkedValues) {
-        console.log(checkedValues);
+    checkboxOnChange(e, id) {
+        console.log(e.target.checked);
+        console.log(id);
     },
 
     onSelectChange(value) {
@@ -1404,7 +1405,8 @@ const AntNestTabComponents = React.createClass({
                     var arr = [];
                     if (isEmpty(res) == false) {
                         res.forEach(function (v) {
-                            var clazz = v.grade.name + ' ' + v.name;
+                            var clazz = <Checkbox
+                                onChange={_this.checkboxOnChange.bind(this, event, v.id)}>{v.grade.name + ' ' + v.name}</Checkbox>;
                             arr.push(clazz);
                         })
                     }
@@ -1677,8 +1679,7 @@ const AntNestTabComponents = React.createClass({
                             </RadioGroup>
                         </Row>
                         <Row style={{display: this.state.boxDisplay}}>
-                            <CheckboxGroup options={this.state.classChildren}
-                                           onChange={this.checkboxOnChange}/>
+                            {this.state.classChildren}
                         </Row>
                     </div>
 
