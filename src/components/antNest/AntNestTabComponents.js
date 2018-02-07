@@ -1,8 +1,6 @@
 import React, {PropTypes} from 'react';
-import {Tabs, Breadcrumb, Icon, Card, Button, Row, Col} from 'antd';
-import {message, Pagination, Modal, Input, Spin} from 'antd';
+import {Icon, Card, Button, Row, Col, message, Modal, Input, Spin, Select, Radio, Checkbox} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
-import {getPageSize} from '../../utils/Const';
 import {getLocalTime} from '../../utils/Const';
 import {isEmpty, SMALL_IMG, MIDDLE_IMG, LARGE_IMG} from '../../utils/Const';
 import {getAllTopic} from '../../utils/Const';
@@ -16,6 +14,14 @@ var topicCardArray = [];
 var antNest;
 var topicObjArray = [];
 var topicArr = [];
+const RadioGroup = Radio.Group;
+const CheckboxGroup = Checkbox.Group;
+//假数据
+const children = [];
+for (let i = 10; i < 36; i++) {
+    children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
+}
+
 const AntNestTabComponents = React.createClass({
 
     getInitialState() {
@@ -41,6 +47,10 @@ const AntNestTabComponents = React.createClass({
             type: 0,     //操作类型（0：查看全部  1：只看老师）
             page: 1,
             antNestScoll: 0,
+            classChildren: [],
+            selectValue: [],
+            radioValue: 1,
+            boxDisplay: 'none'
         };
     },
 
@@ -54,6 +64,37 @@ const AntNestTabComponents = React.createClass({
         var a = $('.antNestScoll');
         var antNestScoll = this.state.antNestScoll;
         a.scrollTop(antNestScoll);
+    },
+
+    radioOnChange(e) {
+        if (e.target.value == 2) {
+            this.setState({boxDisplay: 'block'})
+        } else {
+            this.setState({boxDisplay: 'none'})
+        }
+        this.setState({
+            radioValue: e.target.value,
+        });
+    },
+
+    checkboxOnChange(checkedValues) {
+        console.log(checkedValues);
+    },
+
+    onSelectChange(value) {
+        var arr = this.state.selectValue;
+        arr.push(value);
+        this.setState({selectValue: arr});
+    },
+
+    onDeselectChange(value) {
+        var arr = this.state.selectValue;
+        arr.forEach(function (v, i) {
+            if (v == value) {
+                arr.splice(i, 1);
+            }
+        })
+        this.setState({selectValue: arr});
     },
 
     /**
@@ -388,7 +429,9 @@ const AntNestTabComponents = React.createClass({
                     var attachMentType = e.type;
                     if (attachMentType == 1) {
                         //图片附件
-                        attachMents = <span className="topics_zan"><img src={e.address + '?' + MIDDLE_IMG} alt={e.address} onClick={showLargeImg}/></span>;
+                        attachMents =
+                            <span className="topics_zan"><img src={e.address + '?' + MIDDLE_IMG} alt={e.address}
+                                                              onClick={showLargeImg}/></span>;
                     } else if (attachMentType == 4) {
                         //mp4附件
                         attachMents = <span className="antnest_user">
@@ -592,7 +635,6 @@ const AntNestTabComponents = React.createClass({
         } else {
             target = e.target;
         }
-        console.log(target);
         //target就是那个a标签
         var topicId = target.title;
         var initPageNo = 1;
@@ -778,8 +820,6 @@ const AntNestTabComponents = React.createClass({
      * @param pageNo
      */
     reGetTopicInfo(pageNo, type) {
-        console.log(pageNo);
-        console.log(type);
         topicCardArray.splice(0);
         topicObjArray.splice(0);
         var param = {
@@ -1132,7 +1172,7 @@ const AntNestTabComponents = React.createClass({
             }
         }
         //清空话题标题输入框
-        antNest.setState({"topicTitle": '', "topicImgUrl": []});
+        antNest.setState({"topicTitle": '', "topicImgUrl": [], 'selectValue': []});
     },
 
     createUUID() {
@@ -1192,6 +1232,18 @@ const AntNestTabComponents = React.createClass({
      */
     addTopicModalHandleOk() {
         //获取富文本框中包含表情的评论内容
+
+        var selectValue = this.state.selectValue;
+        var seeList = [];
+        if (selectValue.length != 0) {
+            selectValue.forEach(function (v) {
+                var obj = {
+                    id: v
+                }
+                seeList.push(obj);
+            });
+        }
+        // console.log(seeList);  whiteList:   向后台发送的新键值对  JSON格式
         var inputContent;
         var emotionInput = antNest.getEmotionInput();
         if (isEmpty($("#emotionInput").val()) == false) {
@@ -1227,17 +1279,32 @@ const AntNestTabComponents = React.createClass({
             };
             attachMents.push(attach);
         }
-        var topicJson = {
-            "content": inputContent,
-            "fromUserId": sessionStorage.getItem("ident"),
-            "fromUser": JSON.parse(sessionStorage.getItem("loginUser")),
-            "valid": 0,
-            "type": 0,
-            "uuid": uuid,
-            "attachMents": attachMents,
-            "comments": [],
-            "open": 0,
-        };
+        if (selectValue.length == 0) {
+            var topicJson = {
+                "content": inputContent,
+                "fromUserId": sessionStorage.getItem("ident"),
+                "fromUser": JSON.parse(sessionStorage.getItem("loginUser")),
+                "valid": 0,
+                "type": 0,
+                "uuid": uuid,
+                "attachMents": attachMents,
+                "comments": [],
+                "open": 0,
+            };
+        } else {
+            var topicJson = {
+                "content": inputContent,
+                "fromUserId": sessionStorage.getItem("ident"),
+                "fromUser": JSON.parse(sessionStorage.getItem("loginUser")),
+                "valid": 0,
+                "type": 0,
+                "uuid": uuid,
+                "attachMents": attachMents,
+                "comments": [],
+                "open": 0,
+                "whiteList": JSON.stringify(seeList)
+            };
+        }
         if (isEmpty(antNest.state.topicTitle) == false) {
             topicJson.type = 1;
             var title = antNest.state.topicTitle;
@@ -1316,6 +1383,7 @@ const AntNestTabComponents = React.createClass({
      * 显示发表说说/话题的窗口
      */
     showaddTopicModal(e) {
+        var _this = this;
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             target = e.currentTarget;
@@ -1324,6 +1392,31 @@ const AntNestTabComponents = React.createClass({
         }
         var optType = target.value;
         antNest.initMyEmotionInput();
+        var param = {
+            "method": 'getClazzesByUserId',
+            "userId": sessionStorage.getItem("ident"),
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                console.log(ret);
+                if (ret.success == true && ret.msg == '调用成功') {
+                    var res = ret.response;
+                    var arr = [];
+                    if (isEmpty(res) == false) {
+                        res.forEach(function (v) {
+                            var clazz = v.grade.name + ' ' + v.name;
+                            arr.push(clazz);
+                        })
+                    }
+                    _this.setState({classChildren: arr});
+                } else {
+
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
         antNest.setState({"addTopicModalVisible": true, "topicModalType": optType});
     },
 
@@ -1460,7 +1553,7 @@ const AntNestTabComponents = React.createClass({
             target = e.target;
         }
         var scrollTop = target.scrollTop;
-        this.setState({antNestScoll:scrollTop});
+        this.setState({antNestScoll: scrollTop});
     },
 
     /**
@@ -1468,6 +1561,11 @@ const AntNestTabComponents = React.createClass({
      * @returns {XML}
      */
     render() {
+        const radioStyle = {
+            display: 'block',
+            height: '30px',
+            lineHeight: '30px',
+        };
         var breadMenuTip = "查看全部";
         if (antNest.state.type == 0) {
             breadMenuTip = "查看全部";
@@ -1504,7 +1602,8 @@ const AntNestTabComponents = React.createClass({
 
             topicList =
                 <div className="favorite_scroll">
-                    <div className="antnest_cont topics_calc2 antNestScoll" style={{overflow: 'scroll'}}  onScroll={this.handleScroll}>
+                    <div className="antnest_cont topics_calc2 antNestScoll" style={{overflow: 'scroll'}}
+                         onScroll={this.handleScroll}>
                         {antNest.state.topicCardList}
                         <div className="topics_calc2_center"><span onClick={antNest.pageAdd}>加载更多>></span></div>
                     </div>
@@ -1553,7 +1652,33 @@ const AntNestTabComponents = React.createClass({
                         </Row>
                         <Row className="yinyong3">
                             <Col span={3} className="right_look">附件：</Col>
-                            <Col span={20}><UploadImgComponents fileList={antNest.state.topicImgUrl} callBackParent={antNest.getUploadedImgList}></UploadImgComponents></Col>
+                            <Col span={20}><UploadImgComponents fileList={antNest.state.topicImgUrl}
+                                                                callBackParent={antNest.getUploadedImgList}></UploadImgComponents></Col>
+                        </Row>
+                        {/*<Row>
+                            <Col span={3} className="right_look">可见班级：</Col>
+                            <Col span={20} className="right_look">
+                                <Select
+                                    multiple='true'
+                                    style={{width: '100%'}}
+                                    placeholder="请选择可见的班级(不选择则全部可见)"
+                                    value={this.state.selectValue}
+                                    onSelect={this.onSelectChange}
+                                    onDeselect={this.onDeselectChange}
+                                >
+                                    {this.state.classChildren}
+                                </Select>
+                            </Col>
+                        </Row>*/}
+                        <Row>
+                            <RadioGroup onChange={this.radioOnChange} value={this.state.radioValue}>
+                                <Radio style={radioStyle} value={1}>公开</Radio>
+                                <Radio style={radioStyle} value={2}>部分可见</Radio>
+                            </RadioGroup>
+                        </Row>
+                        <Row style={{display: this.state.boxDisplay}}>
+                            <CheckboxGroup options={this.state.classChildren}
+                                           onChange={this.checkboxOnChange}/>
                         </Row>
                     </div>
 
