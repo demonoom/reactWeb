@@ -13,6 +13,7 @@ import ExamMenu from './exam/ExamMenu';
 import ExamPagerTabComponents from './exam/ExamPagerTabComponents';
 import ExamAnalysisComponents from './examAnalysis/examAnalysis';
 import TestListComponents from './createTest/TestListComponents';
+import LocalClasses from './localClassRoom/LocalClasses';
 const TabPane = Tabs.TabPane;
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
@@ -146,6 +147,10 @@ class TeachSpaces extends React.Component {
             case 'examAnalysis':
                 // 成绩分析
                 this.tabComponent = <ExamAnalysisComponents ref="examAnalysisComponents"/>;
+                break;
+            case 'localClassRoom':
+                // 开启本地课堂
+                this.tabComponent = <LocalClasses ref="localClasses"/>;
                 break;
 
         }
