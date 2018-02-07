@@ -3,6 +3,7 @@ import { Router, Route } from 'dva/router';
 import MainLayout from './routes/MainLayout';
 import StudentMainLayout from './routes/StudentMainLayout';
 import Login from './routes/Login';
+import LocalClassRoom from './routes/LocalClassRoom';
 
 export default function({ history }) {
     return (
@@ -12,6 +13,7 @@ export default function({ history }) {
             <Route path="/StudentMainLayout" components={StudentMainLayout}/>
             <Route path="/login" component={Login}/>
             <Route path="/LittleAntWeb" component={Login}/>
+            <Route path="/localClassRoom" component={LocalClassRoom}/>
         </Router>
     );
 };
