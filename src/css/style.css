@@ -8348,3 +8348,10 @@ select.course_n:hover {
 .message_le_del i:hover{
     color: #333;
 }
+.gray_6_12{
+    font-size: 12px !important;
+    color: #666 !important;
+}
+.radio_left{
+    margin-left: 6%;
+}

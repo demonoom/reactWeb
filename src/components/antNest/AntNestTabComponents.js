@@ -1677,9 +1677,9 @@ const AntNestTabComponents = React.createClass({
                             </Col>
                         </Row>*/}
                         <Row>
-                            <RadioGroup onChange={this.radioOnChange} value={this.state.radioValue}>
-                                <Radio style={radioStyle} value={1}>公开</Radio>
-                                <Radio style={radioStyle} value={2}>部分可见</Radio>
+                            <RadioGroup onChange={this.radioOnChange} value={this.state.radioValue} className="radio_left">
+                                <Radio style={radioStyle} value={1} className="gray_6_12">公开</Radio>
+                                <Radio style={radioStyle} value={2} className="gray_6_12">部分可见</Radio>
                             </RadioGroup>
                         </Row>
                         <Row style={{display: this.state.boxDisplay}}>
