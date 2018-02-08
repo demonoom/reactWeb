@@ -22,6 +22,7 @@ for (let i = 10; i < 36; i++) {
     children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
 }
 
+
 const AntNestTabComponents = React.createClass({
 
     getInitialState() {
@@ -50,7 +51,8 @@ const AntNestTabComponents = React.createClass({
             classChildren: [],
             selectValue: [],
             radioValue: 1,
-            boxDisplay: 'none'
+            boxDisplay: 'none',
+            noomValue: false
         };
     },
 
@@ -77,9 +79,9 @@ const AntNestTabComponents = React.createClass({
         });
     },
 
-    checkboxOnChange(e, id) {
+    checkboxOnChange(e) {
         console.log(e.target.checked);
-        console.log(id);
+        console.log(e.target.id);
     },
 
     onSelectChange(value) {
@@ -1406,7 +1408,9 @@ const AntNestTabComponents = React.createClass({
                     if (isEmpty(res) == false) {
                         res.forEach(function (v) {
                             var clazz = <Checkbox
-                                onChange={_this.checkboxOnChange.bind(this, event, v.id)}>{v.grade.name + ' ' + v.name}</Checkbox>;
+                                id={v.id}
+                                value={_this.state.noomValue}
+                                onChange={_this.checkboxOnChange}>{v.grade.name + ' ' + v.name}</Checkbox>;
                             arr.push(clazz);
                         })
                     }
