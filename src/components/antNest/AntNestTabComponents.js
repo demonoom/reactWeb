@@ -1629,8 +1629,8 @@ const AntNestTabComponents = React.createClass({
             optionButton = <div className="public—til—blue">
                 <div className="talk_ant_btn1">
                     <Button value="talk" onClick={antNest.showaddTopicModal} className="antnest_talk">发表说说</Button>
-                    <Button value="topic" onClick={antNest.showaddTopicModal}>发表话题</Button>
-                    <Button value="homework" onClick={antNest.showaddTopicModal}>发步作业</Button>
+                    <Button value="topic" onClick={antNest.showaddTopicModal} className="antnest_talk">发表话题</Button>
+                    <Button value="homework" onClick={antNest.showaddTopicModal}>发布作业</Button>
                 </div>
                 {breadMenuTip}
             </div>;
@@ -1658,7 +1658,7 @@ const AntNestTabComponents = React.createClass({
         var homeWorkTime;
         if (antNest.state.topicModalType == "homework") {
             homeWorkTime = <Row>
-                <Col span={3}>时间：</Col>
+                <Col span={3} className="right_look">时间：</Col>
                 <Col span={20}>
                     <DatePicker
                         showTime
@@ -1695,7 +1695,7 @@ const AntNestTabComponents = React.createClass({
                 >
                     <div className="group_send_shuoshuo">
                         {topicTitle}
-                        <Row>
+                        <Row className="yinyong_topic">
                             <Col span={3} className="right_look">内容：</Col>
                             <Col span={20}><EmotionInputComponents></EmotionInputComponents></Col>
                         </Row>
@@ -1706,16 +1706,19 @@ const AntNestTabComponents = React.createClass({
                                                                 callBackParent={antNest.getUploadedImgList}></UploadImgComponents></Col>
                         </Row>
                         <Row style={{display: this.state.radioDisplay}}>
-                            <RadioGroup onChange={this.radioOnChange} value={this.state.radioValue}
-                                        className="radio_left">
-                                <Radio style={radioStyle} value={1} className="gray_6_12">公开</Radio>
-                                <Radio style={radioStyle} value={2} className="gray_6_12">部分可见</Radio>
-                            </RadioGroup>
+                            <div className="radio_left">
+                                <RadioGroup onChange={this.radioOnChange} value={this.state.radioValue}>
+                                    <Radio style={radioStyle} value={1} className="gray_6_12">公开</Radio>
+                                    <Radio style={radioStyle} value={2} className="gray_6_12">部分可见</Radio>
+                                </RadioGroup>
+                            </div>
                         </Row>
                         <Row style={{display: this.state.boxDisplay}}>
-                            <CheckboxGroup options={this.state.classChildren}
-                                           value={this.state.classSrcChecked}
-                                           onChange={this.checkboxOnChange}/>
+                            <div className="checkbox_left gray_6_12">
+                                <CheckboxGroup options={this.state.classChildren}
+                                               value={this.state.classSrcChecked}
+                                               onChange={this.checkboxOnChange}/>
+                            </div>
                         </Row>
                     </div>
 
@@ -1726,6 +1729,7 @@ const AntNestTabComponents = React.createClass({
                        maskClosable={false} //设置不允许点击蒙层关闭
                        onOk={antNest.partakeModalHandleOk}
                        onCancel={antNest.partakeModalHandleCancel}
+                       style={{height:360}}
                 >
                     <div className="group_send_shuoshuo">
                         <Row>
