@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {Icon, Card, Button, Row, Col, message, Modal, Input, Spin, Select, Radio, Checkbox} from 'antd';
+import {Icon, Card, Button, Row, Col, message, Modal, Input, Spin, Select, Radio, Checkbox, DatePicker} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import {getLocalTime} from '../../utils/Const';
 import {isEmpty, SMALL_IMG, MIDDLE_IMG, LARGE_IMG} from '../../utils/Const';
@@ -17,6 +17,7 @@ var topicArr = [];
 var classCanSeeObj = [];
 const RadioGroup = Radio.Group;
 const CheckboxGroup = Checkbox.Group;
+const {RangePicker} = DatePicker;
 //假数据
 const children = [];
 for (let i = 10; i < 36; i++) {
@@ -1412,6 +1413,9 @@ const AntNestTabComponents = React.createClass({
                 if (ret.success == true && ret.msg == '调用成功') {
                     var res = ret.response;
                     var arr = [];
+                    if (res.length == 0) {
+                        _this.setState({radioDisplay: 'none'});
+                    }
                     if (isEmpty(res) == false) {
                         res.forEach(function (v) {
                             var clazz = v.grade.name + ' ' + v.name;
@@ -1573,6 +1577,15 @@ const AntNestTabComponents = React.createClass({
         this.setState({antNestScoll: scrollTop});
     },
 
+    timeOnOk(value) {
+        console.log('onOk: ', value);
+    },
+
+    timeOnChange(value, dateString) {
+        console.log('Selected Time: ', value);
+        console.log('Formatted Selected Time: ', dateString);
+    },
+
     /**
      * 渲染页面
      * @returns {XML}
@@ -1613,6 +1626,7 @@ const AntNestTabComponents = React.createClass({
                 <div className="talk_ant_btn1">
                     <Button value="talk" onClick={antNest.showaddTopicModal} className="antnest_talk">发表说说</Button>
                     <Button value="topic" onClick={antNest.showaddTopicModal}>发表话题</Button>
+                    <Button value="homework" onClick={antNest.showaddTopicModal}>发步作业</Button>
                 </div>
                 {breadMenuTip}
             </div>;
@@ -1630,12 +1644,27 @@ const AntNestTabComponents = React.createClass({
                 </div>;
         }
         var topicTitle;
-        if (antNest.state.topicModalType == "topic") {
+        if (antNest.state.topicModalType == "topic" || antNest.state.topicModalType == "homework") {
             topicTitle = <Row className="yinyong_topic">
                 <Col span={3} className="right_look">标题：</Col>
                 <Col span={20}><Input onChange={antNest.topicTitleChange} defaultValue={antNest.state.topicTitle}
                                       value={antNest.state.topicTitle}/></Col>
             </Row>;
+        }
+        var homeWorkTime;
+        if (antNest.state.topicModalType == "homework") {
+            homeWorkTime = <Row>
+                <Col span={3}>时间：</Col>
+                <Col span={20}>
+                    <DatePicker
+                        showTime
+                        format="YYYY-MM-DD HH:mm:ss"
+                        placeholder="Select Time"
+                        onChange={antNest.timeOnChange}
+                        onOk={antNest.timeOnOk}
+                    />
+                </Col>
+            </Row>
         }
         return (
             <div>
@@ -1667,6 +1696,7 @@ const AntNestTabComponents = React.createClass({
                             <Col span={3} className="right_look">内容：</Col>
                             <Col span={20}><EmotionInputComponents></EmotionInputComponents></Col>
                         </Row>
+                        {homeWorkTime}
                         <Row className="yinyong3">
                             <Col span={3} className="right_look">附件：</Col>
                             <Col span={20}><UploadImgComponents fileList={antNest.state.topicImgUrl}
