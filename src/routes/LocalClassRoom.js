@@ -38,17 +38,17 @@ const LocalClassRoom = React.createClass({
 
     render() {
         return (
-                <div style={{height:'900px'}}>
-                    <Col span={18} style={{height:'100%'}}>
+                <div className="local_class flex">
+                    <div className="flex_auto">
                         <iframe src={this.state.classRoomUrl} style={{width:'100%',height:'100%'}}></iframe>
                         <div>
                             <Button onClick={this.getPPT}>课件</Button>
                             <Button onClick={this.getSubject}>题目</Button>
                         </div>
-                    </Col>
-                    <Col span={4} style={{height:'100%'}}>
+                    </div>
+                    <div className="local_class_right">
                         <LocalClassesMessage></LocalClassesMessage>
-                    </Col>
+                    </div>
                 </div>
         );
     },

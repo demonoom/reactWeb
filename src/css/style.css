@@ -8357,3 +8357,26 @@ select.course_n:hover {
 .radio_left{
     margin-left: 6%;
 }
+.local_class{
+    height: 100%;
+    width: 100%;
+}
+.flex{
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+.local_class_right{
+    width: 300px;
+    height: 100%;
+}
+.flex_auto{
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+}
+.local_class iframe{
+    border: none;
+}
