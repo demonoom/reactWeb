@@ -15,6 +15,10 @@ export function getLocalTime(nS) {
     // return new Date(parseInt(nS)).toLocaleString().replace(/:\d{1,2}$/, ' ');
 }
 
+export function getMsObj(){
+    return window.ms;
+}
+
 export function formatNoSecond(nS) {
     var da = new Date(parseInt(nS));
     var year = da.getFullYear();

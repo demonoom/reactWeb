@@ -2070,14 +2070,13 @@ a {
     font-size: 16px;
 
 }
-
 @font-face {
     font-family: 'iconfont';  /* project id 197083 */
-    src: url('//at.alicdn.com/t/font_197083_p365xzo72qvkj4i.eot');
-    src: url('//at.alicdn.com/t/font_197083_p365xzo72qvkj4i.eot?#iefix') format('embedded-opentype'),
-    url('//at.alicdn.com/t/font_197083_p365xzo72qvkj4i.woff') format('woff'),
-    url('//at.alicdn.com/t/font_197083_p365xzo72qvkj4i.ttf') format('truetype'),
-    url('//at.alicdn.com/t/font_197083_p365xzo72qvkj4i.svg#iconfont') format('svg');
+    src: url('//at.alicdn.com/t/font_197083_hvk93bhod2znnrk9.eot');
+    src: url('//at.alicdn.com/t/font_197083_hvk93bhod2znnrk9.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_197083_hvk93bhod2znnrk9.woff') format('woff'),
+    url('//at.alicdn.com/t/font_197083_hvk93bhod2znnrk9.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_197083_hvk93bhod2znnrk9.svg#iconfont') format('svg');
 }
 
 .iconfont {
@@ -7712,7 +7711,10 @@ select.course_n:hover {
     width: 40%;
     text-indent: 15px;
 }
-
+.ant-table-thead > tr > th.class_in_name, .ant-table-tbody > tr > td.class_in_name {
+    width: 85%;
+    text-indent: 15px;
+}
 .ant-table-tbody > tr > td.checking_in_name_time {
     line-height: 20px;
     color: #666;
@@ -8351,4 +8353,45 @@ select.course_n:hover {
 }
 .message_le_del i:hover{
     color: #333;
+}
+.gray_6_12{
+    font-size: 12px !important;
+    color: #666 !important;
+}
+.radio_left{
+    margin-left: 6%;
+}
+.checkbox_left{
+    margin-left: 10%;
+    max-height: 60px;
+    line-height: 30px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.checkbox_left label{
+    font-size: 12px !important;
+    color: #666 !important;
+}
+.local_class{
+    height: 100%;
+    width: 100%;
+}
+.flex{
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+.local_class_right{
+    width: 300px;
+    height: 100%;
+}
+.flex_auto{
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+}
+.local_class iframe{
+    border: none;
 }
