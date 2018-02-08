@@ -49,11 +49,12 @@ const CreateClassComponents = React.createClass({
             isWeiClass: false,
             isShowClass: false,
             upLoadNum: 0,
-            knowledgePointNum:0,
+            knowledgePointNum: 0,
             isTestClass: false,//默认测试课选中状态
             test: cloudClassRoomUser.test,
             selectKnowledgeModalIsShow: false, //知识点点击的Modal
-            tags: []
+            tags: [],
+            noomTages: [],
         };
     },
 
@@ -515,6 +516,8 @@ const CreateClassComponents = React.createClass({
      * 添加课程目录
      */
     addLesson() {
+        var tagArrByNoom = [];
+        this.state.noomTages.push(tagArrByNoom);
         var _this = this;
         var maxSequence = this.getMaxSequenceFromCourseInfoJson();
         var videoNumBeforeAdd = this.state.videoNum;
@@ -748,7 +751,6 @@ const CreateClassComponents = React.createClass({
             videoJson.squence = i + 1;
             videoJson.userID = teacher;
             videoJson.liveTime = new Date(time).valueOf();
-            // debugger;
             // var knowledges=[];
             // for(var i=0;i<this.state.tags.length;i++){
             //     var tag = this.state.tags[i];
@@ -757,7 +759,6 @@ const CreateClassComponents = React.createClass({
             // videoJson.knowLedgeVideos = knowledges
             this.buildVideosArray(videoJson);
         }
-        debugger;
         if (isEmpty(courseInfoJson.videos) == false) {
             var checkResult = true;
             if (this.state.isWeiClass) {
@@ -1016,26 +1017,26 @@ const CreateClassComponents = React.createClass({
         weiClassList = {};
     },
 
-    knowledgePointOnclick(num){
-        debugger;
-        console.log('num1111',num);
+    knowledgePointOnclick(num) {
+        console.log('num1111', num);
         knowledgePointNum = num;
-        this.setState({knowledgePointNum:num});
+        this.setState({knowledgePointNum: num});
     },
     /*
     知识点弹框的出现
      */
-    showSelectKnowledgeModal() {
+    showSelectKnowledgeModal(t) {
+        this.refs.knowledgePointModal.rememberId(t);
         this.setState({"selectKnowledgeModalIsShow": true});
     },
 
-    closeSelectKnowledgeModal(tags,i) {
+    closeSelectKnowledgeModal(tags, i) {
+        //在这里决定往哪个数组的tags push tag
         var _this = this;
-        console.log("close:", _this.state.tags);
-        _this.state.tags.splice(0);
+        this.state.noomTages[i].splice(0);
         if (isEmpty(tags) == false) {
             tags.forEach(function (tag) {
-                _this.state.tags.push(tag);
+                _this.state.noomTages[i].push(tag);
             })
         }
         _this.setState({"selectKnowledgeModalIsShow": false});
@@ -1238,6 +1239,8 @@ const CreateClassComponents = React.createClass({
             if (this.state.isWeiClass) {
                 //是微课
                 if (typeof(this.state.lessonArray) != "undefined") {
+                    debugger
+                    console.log(lessonArray);
                     for (var i = 0; i < this.state.lessonArray.length; i++) {
                         var lessonJson = this.state.lessonArray[i];
                         //获取已经保存的时间信息，并重新初始化到页面的组件上
@@ -1251,6 +1254,36 @@ const CreateClassComponents = React.createClass({
                                 weifileList.push(videoInfo.weiClassList);
                             }
                         }
+                        var Tags = <Row style={{"clear": "both"}}>
+                            <Col span={3} className="ant-form-item-label row-t-f">
+                                <span className="font-14">知识点：</span>
+                            </Col>
+                            <Col span={27} className="row-t-f">
+                                <div className="select_knoledge_width upexam_float">
+                                    {_this.state.noomTages[i].map((tag, index) => {
+                                        const isLongTag = tag.length > 20;
+                                        const tagElem = (
+                                            <Tag key={tag.key} closable={index !== -1}
+                                                 afterClose={() => this.handleClose(tag)}>
+                                                {isLongTag ? `${tag.name.slice(0, 20)}...` : tag.name}
+                                            </Tag>
+                                        );
+                                        return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
+                                    })}
+                                </div>
+                            </Col>
+                            <Col span={3} onClick={this.knowledgePointOnclick.bind(this, i)}>
+                                <Button className="ding_modal_top roe-t-f-left"
+                                        onClick={this.showSelectKnowledgeModal.bind(this, i)}>选择知识点333</Button>
+                                <KnowledgePointModal isShow={this.state.selectKnowledgeModalIsShow}
+                                                     initTags={this.state.tags}
+                                                     knowledgePointNumber={i}
+                                                     closeSelectKnowledgeModal={this.closeSelectKnowledgeModal}
+                                                     ref="knowledgePointModal"
+                                >
+                                </KnowledgePointModal>
+                            </Col>
+                        </Row>
                         var InputObj = <Input id={lessonJson.squence} value={videoName}
                                               onChange={_this.lessonTitleOnChange} className="noom_input"/>;
                         var lessonRowObj = <Row>
@@ -1275,34 +1308,9 @@ const CreateClassComponents = React.createClass({
                                         onClick={this.removeLesson.bind(this, lessonJson.squence)}></Button>
                             </Col>
                             {/*知识点*/}
-                            <Row style={{"clear": "both"}}>
-                                <Col span={3} className="ant-form-item-label row-t-f">
-                                    <span className="font-14">知识点：</span>
-                                </Col>
-                                <Col span={27} className="row-t-f">
-                                    <div className="select_knoledge_width upexam_float">
-                                        {this.state.tags.map((tag, index) => {
-                                            const isLongTag = tag.length > 20;
-                                            const tagElem = (
-                                                <Tag key={tag.key} closable={index !== -1}
-                                                     afterClose={() => this.handleClose(tag)}>
-                                                    {isLongTag ? `${tag.name.slice(0, 20)}...` : tag.name}
-                                                </Tag>
-                                            );
-                                            return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
-                                        })}
-                                    </div>
-                                </Col>
-                                <Col span={3} onClick={this.knowledgePointOnclick.bind(this, i)}>
-                                    <Button className="ding_modal_top roe-t-f-left"
-                                            onClick={this.showSelectKnowledgeModal}>选择知识点333</Button>
-                                    <KnowledgePointModal isShow={this.state.selectKnowledgeModalIsShow}
-                                                         initTags={this.state.tags}
-                                                         knowledgePointNumber={i}
-                                                         closeSelectKnowledgeModal={this.closeSelectKnowledgeModal}>
-                                    </KnowledgePointModal>
-                                </Col>
-                            </Row>
+                            <Col>
+                                {Tags}
+                            </Col>
                         </Row>;
                         everyLessonArray.push(lessonRowObj);
                     }

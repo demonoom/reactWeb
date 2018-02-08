@@ -1335,6 +1335,7 @@ const UpdateClassComponents = React.createClass({
     },
 
     closeSelectKnowledgeModal(tags){
+        //
         var _this = this;
         console.log("close:"+tags);
          _this.state.tags.splice(0);
