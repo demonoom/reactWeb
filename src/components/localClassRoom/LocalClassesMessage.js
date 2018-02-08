@@ -7,51 +7,38 @@ const { TextArea } = Input;
 /**
  * 本地课堂组件
  */
-
+var connection = null;
+var parentMs = null;
 const LocalClassesMessage = React.createClass({
 
     getInitialState() {
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         return {
             loginUser: loginUser,
+            barrageMessageContent:''
         };
     },
 
     componentDidMount(){
+        parentMs=this.props.ms;
         this.listenClassMessage();
+    },
+
+    componentWillReceiveProps(nextProps){
+        parentMs=nextProps.ms;
     },
 
     listenClassMessage(){
         var _this = this;
-        var connection = _this.props.connection;
-        connection.clazzWsListener = {
-
+        parentMs.msgWsListener = {
             onError: function (errorMsg) {
-                //强制退出课堂
                 message.error(errorMsg);
-                // window.close();
+            }, onWarn: function (warnMsg) {
+                message.warning(warnMsg);
+            }, onMessage: function (info) {
+                console.log("-------------------------->"+info);
             },
-
-            onWarn: function (warnMsg) {
-                message.warn(warnMsg);
-            },
-            // 显示消息
-            onMessage: function (info) {
-                console.log("=========课堂信息==========="+info);
-                var data = info.data;
-                switch (info.command) {
-                    case'simpleClassDanmu': // 弹幕
-                        var message = info.data.message;
-                        console.log("simpleClassDanmu:"+message);
-                        break;
-
-                    case 'classDanmu':
-                        var message = info.data.message;
-                        console.log("classDanmu:"+message);
-                        break;
-                }
-            }
-        };
+        }
     },
 
     componentDidMount() {
@@ -59,20 +46,55 @@ const LocalClassesMessage = React.createClass({
     },
 
     handleScrollType(e) {
-        //scrollType = "defined";
     },
 
     handleScroll(e) {
     },
 
-
-
     /**
      *发送文字信息的回调
      **/
-    sendMessage(e) {
-        var protocal = eval('(' + "{'command':'simpleClassDanmu','data':{'content':'"+content+"'}}" + ')');
-        connection.send(protocal);
+    sendBarrageMessage(e) {
+        if (isEmpty(this.state.barrageMessageContent) == false) {
+            var uuid = this.createUUID();
+            var createTime = (new Date()).valueOf();
+            var loginUser = {colUid:24491,colAccount:'TE24491'};
+            var messageToType="3";
+            var vid = sessionStorage.getItem("vid");
+            var userId = sessionStorage.getItem("userId");
+            var messageJson = {
+                'content': this.state.barrageMessageContent, "createTime": createTime, 'fromUser': loginUser,
+                "toId": vid, "command": "message", "hostId": userId,
+                "uuid": uuid, "toType": messageToType, "attachment": '',
+            };
+            var commandJson = {"command": "message", "data": {"message": messageJson}};
+            parentMs.send(commandJson);
+        }
+    },
+
+    createUUID() {
+        var s = [];
+        var hexDigits = "0123456789abcdef";
+        for (var i = 0; i < 36; i++) {
+            s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+        }
+        s[14] = "4";  // bits 12-15 of the time_hi_and_version field to 0010
+        s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
+        s[8] = s[13] = s[18] = s[23] = "-";
+
+        var uuid = s.join("");
+        return uuid;
+    },
+
+    messageContentChange(e){
+        var target = e.target;
+        if(navigator.userAgent.indexOf("Chrome") > -1){
+            target=e.currentTarget;
+        }else{
+            target = e.target;
+        }
+        var barrageMessageContent = target.value;
+        this.setState({barrageMessageContent});
     },
 
     /**
@@ -109,10 +131,10 @@ const LocalClassesMessage = React.createClass({
                     </div>
                     <div>
                         <div>
-                            <Input />
+                            <Input value={this.state.barrageMessageContent} onChange={this.messageContentChange}/>
                         </div>
                         <div>
-                            <Button onClick={this.sendMessage}>
+                            <Button onClick={this.sendBarrageMessage}>
                                 <div>发送<p >(Enter)</p></div>
                             </Button>
                         </div>

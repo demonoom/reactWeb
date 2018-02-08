@@ -32,6 +32,10 @@ const LocalClasses = React.createClass({
         this.getTeacherClasses()
     },
 
+    getMsObj(){
+        return window.ms;
+    },
+
     /**
      * 获取当前老师所带班级列表
      */
