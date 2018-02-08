@@ -135,17 +135,17 @@ const LocalClassRoom = React.createClass({
         }
 
         return (
-                <div style={{height:'900px'}}>
-                    <Col span={18} style={{height:'100%'}}>
+                <div className="local_class flex">
+                    <div className="flex_auto">
                         {classIfream}
                         <div>
                             <Button onClick={this.getPPT}>课件</Button>
                             <Button onClick={this.getSubject}>题目</Button>
                         </div>
-                    </Col>
-                    <Col span={4} style={{height:'100%'}}>
+                    </div>
+                    <div className="local_class_right">
                         <LocalClassesMessage connection={connection} classCode={this.state.classCode} classType={this.state.classType}></LocalClassesMessage>
-                    </Col>
+                    </div>
                 </div>
         );
     },

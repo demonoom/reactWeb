@@ -71,15 +71,8 @@ const LocalClassesMessage = React.createClass({
      *发送文字信息的回调
      **/
     sendMessage(e) {
-        var target = e.target;
-        if (navigator.userAgent.indexOf("Chrome") > -1) {
-            target = e.currentTarget;
-        } else {
-            target = e.target;
-        }
-        var sendType = target.value;
-        // isSend = true;
-        // this.messageSendByType(sendType);
+        var protocal = eval('(' + "{'command':'simpleClassDanmu','data':{'content':'"+content+"'}}" + ')');
+        connection.send(protocal);
     },
 
     /**
@@ -89,17 +82,17 @@ const LocalClassesMessage = React.createClass({
     render() {
         var _this = this;
         var messageTagArray = [];
-        var messageTag = <li className="right" style={{'textAlign': 'right'}}>
-            <div className="u-name">
+        var messageTag = <li style={{'textAlign': 'right'}}>
+            <div>
                 <span>zhangsan</span>
-                <span className="cart_time">2018-2-7</span>
+                <span>2018-2-7</span>
             </div>
-            <div className="talk-cont">
-                <span className="name"></span>
-                <div className="talk_bubble_box">
-                                    <span className="borderballoon">消息内容
-                                        <i className="borderballoon_dingcorner_le_no"></i>
-                                    </span>
+            <div>
+                <span></span>
+                <div>
+                    <span>消息内容
+                           <i></i>
+                    </span>
                 </div>
             </div>
         </li>;
@@ -108,24 +101,22 @@ const LocalClassesMessage = React.createClass({
         return (
             <div>
                 <div id="personTalk" style={{height:'900px',marginLeft:'18px'}}>
-                    <div className="group_talk 44" id="groupTalk"
-                         onMouseOver={this.handleScrollType.bind(this, Event)}
-                         onScroll={this.handleScroll}>
+                    <div>
                         <ul>
                             {/*消息内容主体*/}
                             {messageTagArray}
                         </ul>
                     </div>
-                    <Row className="group_send">
-                        <Col className="group_send_talk">
+                    <div>
+                        <div>
                             <Input />
-                        </Col>
-                        <Col className="group_send_btn">
-                            <Button value="groupSend" onClick={this.sendMessage}>
-                                <div>发送<p className="password_ts">(Enter)</p></div>
+                        </div>
+                        <div>
+                            <Button onClick={this.sendMessage}>
+                                <div>发送<p >(Enter)</p></div>
                             </Button>
-                        </Col>
-                    </Row>
+                        </div>
+                    </div>
                 </div>
             </div>
         );

@@ -22,6 +22,7 @@ for (let i = 10; i < 36; i++) {
     children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
 }
 
+
 const AntNestTabComponents = React.createClass({
 
     getInitialState() {
@@ -50,7 +51,8 @@ const AntNestTabComponents = React.createClass({
             classChildren: [],
             selectValue: [],
             radioValue: 1,
-            boxDisplay: 'none'
+            boxDisplay: 'none',
+            noomValue: false
         };
     },
 
@@ -77,8 +79,9 @@ const AntNestTabComponents = React.createClass({
         });
     },
 
-    checkboxOnChange(checkedValues) {
-        console.log(checkedValues);
+    checkboxOnChange(e) {
+        console.log(e.target.checked);
+        console.log(e.target.id);
     },
 
     onSelectChange(value) {
@@ -1404,7 +1407,10 @@ const AntNestTabComponents = React.createClass({
                     var arr = [];
                     if (isEmpty(res) == false) {
                         res.forEach(function (v) {
-                            var clazz = v.grade.name + ' ' + v.name;
+                            var clazz = <Checkbox
+                                id={v.id}
+                                value={_this.state.noomValue}
+                                onChange={_this.checkboxOnChange}>{v.grade.name + ' ' + v.name}</Checkbox>;
                             arr.push(clazz);
                         })
                     }
@@ -1671,14 +1677,13 @@ const AntNestTabComponents = React.createClass({
                             </Col>
                         </Row>*/}
                         <Row>
-                            <RadioGroup onChange={this.radioOnChange} value={this.state.radioValue}>
-                                <Radio style={radioStyle} value={1}>公开</Radio>
-                                <Radio style={radioStyle} value={2}>部分可见</Radio>
+                            <RadioGroup onChange={this.radioOnChange} value={this.state.radioValue} className="radio_left">
+                                <Radio style={radioStyle} value={1} className="gray_6_12">公开</Radio>
+                                <Radio style={radioStyle} value={2} className="gray_6_12">部分可见</Radio>
                             </RadioGroup>
                         </Row>
                         <Row style={{display: this.state.boxDisplay}}>
-                            <CheckboxGroup options={this.state.classChildren}
-                                           onChange={this.checkboxOnChange}/>
+                            {this.state.classChildren}
                         </Row>
                     </div>
 
