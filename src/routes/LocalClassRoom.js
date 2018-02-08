@@ -3,6 +3,7 @@ import {Modal, message, Row, Col, Button, Tabs, Input} from 'antd';
 import LocalClassesMessage from '../components/localClassRoom/LocalClassesMessage'
 import {isEmpty} from "../utils/Const";
 import SelectSubjectModal from '../components/localClassRoom/SelectSubjectModal';
+import SelectMaterialsModal from '../components/localClassRoom/SelectMaterialsModal';
 
 var connection = null;
 var ms = null;
@@ -14,7 +15,8 @@ const LocalClassRoom = React.createClass({
             account: '',
             classRoomUrl: '',
             messageTagArray:[],
-            subjectModalIsShow:false
+            subjectModalIsShow:false,
+            materialsModalIsShow:false
         };
     },
 
@@ -123,11 +125,7 @@ const LocalClassRoom = React.createClass({
      * 获取课件，打开ppt，完成推ppt的操作
      */
     getPPT() {
-        var pptURL = "https://www.maaee.com/h5Point/2017-06-19/10/1497839536166/1497839536166.html";
-        var vid = this.state.vid;
-        var userId = this.state.userId;
-        var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid="+vid+"&userId="+userId+"&role=manager&ppt="+pptURL;
-        this.setState({classRoomUrl});
+        this.setState({materialsModalIsShow:true});
     },
 
     /**
@@ -154,6 +152,18 @@ const LocalClassRoom = React.createClass({
         connection.send(pushSubjectProtocal);
     },
 
+    closeMaterialsModal(){
+        this.setState({materialsModalIsShow:false});
+    },
+
+    pushMaterialsToClass(){
+        var pptURL = "https://www.maaee.com/h5Point/2017-06-19/10/1497839536166/1497839536166.html";
+        var vid = this.state.vid;
+        var userId = this.state.userId;
+        var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid="+vid+"&userId="+userId+"&role=manager&ppt="+pptURL;
+        this.setState({classRoomUrl});
+    },
+
     render() {
 
         var classIfream = null;
@@ -176,6 +186,7 @@ const LocalClassRoom = React.createClass({
                     <LocalClassesMessage ms={ms} classCode={this.state.classCode} classType={this.state.classType}></LocalClassesMessage>
                 </div>
                 <SelectSubjectModal isShow={this.state.subjectModalIsShow} onCancel={this.closeSubjectModal} pushSubjectToClass={this.pushSubjectToClass}></SelectSubjectModal>
+                <SelectMaterialsModal isShow={this.state.materialsModalIsShow} onCancel={this.closeMaterialsModal} pushMaterialsToClass={this.pushMaterialsToClass}></SelectMaterialsModal>
             </div>
         );
     },
