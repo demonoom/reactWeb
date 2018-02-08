@@ -1726,6 +1726,7 @@ const AntNestTabComponents = React.createClass({
                        maskClosable={false} //设置不允许点击蒙层关闭
                        onOk={antNest.partakeModalHandleOk}
                        onCancel={antNest.partakeModalHandleCancel}
+                       style={{height:360}}
                 >
                     <div className="group_send_shuoshuo">
                         <Row>
