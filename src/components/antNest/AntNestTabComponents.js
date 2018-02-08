@@ -57,7 +57,7 @@ const AntNestTabComponents = React.createClass({
             boxDisplay: 'none',
             radioDisplay: 'block',
             classSrcChecked: [],  //checkbox可见班级的名字,checkbox的value值,
-            dateValue: '2018-02-08 15:06:10'
+            homeWorkTime: '',
         };
     },
 
@@ -1179,7 +1179,7 @@ const AntNestTabComponents = React.createClass({
             classSrcChecked: [],
             boxDisplay: 'none',
             radioDisplay: 'block',
-            dateValue: '2018-02-08 15:06:10'
+            homeWorkTime: '',
         });
     },
 
@@ -1259,6 +1259,13 @@ const AntNestTabComponents = React.createClass({
                 })
             })
         }
+        var homeWorkDate = this.state.homeWorkDate;
+        if (antNest.state.topicModalType == "homework") {
+            if (isEmpty(antNest.state.homeWorkDate)) {
+                message.error("请选择时间。", 5);
+                return;
+            }
+        }
         var inputContent;
         var emotionInput = antNest.getEmotionInput();
         if (isEmpty($("#emotionInput").val()) == false) {
@@ -1266,9 +1273,9 @@ const AntNestTabComponents = React.createClass({
         } else {
             inputContent = emotionInput;
         }
-        if (antNest.state.topicModalType == "topic") {
+        if (antNest.state.topicModalType == "topic" || antNest.state.topicModalType == "homework") {
             if (isEmpty(antNest.state.topicTitle)) {
-                message.error("话题的标题不允许为空，请重新输入。", 5);
+                message.error("标题不允许为空，请重新输入。", 5);
                 return;
             }
         }
@@ -1317,17 +1324,30 @@ const AntNestTabComponents = React.createClass({
                 "attachMents": attachMents,
                 "comments": [],
                 "open": 0,
-                "whiteList": ckeckIdArr
+                "whiteList": ckeckIdArr,
             };
         }
-        if (isEmpty(antNest.state.topicTitle) == false) {
+        if (antNest.state.topicModalType == "topic") {
             topicJson.type = 1;
-            var title = antNest.state.topicTitle;
-            title = title.replace(/\'/g, "\\'");  //' 替换成  \'
-            title = title.replace(/\"/g, "\\\""); //" 替换成\"
-            title = title.replace(/</g, "\\\<"); //< 替换成\<
-            title = title.replace(/>/g, "\\\>"); //> 替换成\>
-            topicJson.title = title;
+            if (isEmpty(antNest.state.topicTitle) == false) {
+                var title = antNest.state.topicTitle;
+                title = title.replace(/\'/g, "\\'");  //' 替换成  \'
+                title = title.replace(/\"/g, "\\\""); //" 替换成\"
+                title = title.replace(/</g, "\\\<"); //< 替换成\<
+                title = title.replace(/>/g, "\\\>"); //> 替换成\>
+                topicJson.title = title;
+            }
+        } else if (antNest.state.topicModalType == "homework") {
+            topicJson.type = 11;
+            topicJson.commentDisplayTime = homeWorkDate;
+            if (isEmpty(antNest.state.topicTitle) == false) {
+                var title = antNest.state.topicTitle;
+                title = title.replace(/\'/g, "\\'");  //' 替换成  \'
+                title = title.replace(/\"/g, "\\\""); //" 替换成\"
+                title = title.replace(/</g, "\\\<"); //< 替换成\<
+                title = title.replace(/>/g, "\\\>"); //> 替换成\>
+                topicJson.title = title;
+            }
         } else {
             topicJson.type = 0;
         }
@@ -1442,7 +1462,14 @@ const AntNestTabComponents = React.createClass({
                 message.error(error);
             }
         });
-        // this.setState({homeWorkTime:})
+        this.setState({
+            homeWorkTime: <DatePicker
+                showTime
+                format="YYYY-MM-DD HH:mm:ss"
+                placeholder="请选择时间"
+                onChange={antNest.timeOnChange}
+            />
+        });
         antNest.setState({"addTopicModalVisible": true, "topicModalType": optType});
     },
 
@@ -1584,10 +1611,7 @@ const AntNestTabComponents = React.createClass({
 
     timeOnChange(value, dateString) {
         var date = new Date(dateString).valueOf();
-        console.log(date);
-        console.log(value);
-        console.log(dateString);
-        this.setState({dateValue: dateString})
+        this.setState({homeWorkDate: date});
     },
 
     /**
@@ -1660,12 +1684,7 @@ const AntNestTabComponents = React.createClass({
             homeWorkTime = <Row>
                 <Col span={3} className="right_look">时间：</Col>
                 <Col span={20}>
-                    <DatePicker
-                        showTime
-                        format="YYYY-MM-DD HH:mm:ss"
-                        placeholder="请选择时间"
-                        onChange={antNest.timeOnChange}
-                    />
+                    {antNest.state.homeWorkTime}
                 </Col>
             </Row>
         }
@@ -1729,7 +1748,7 @@ const AntNestTabComponents = React.createClass({
                        maskClosable={false} //设置不允许点击蒙层关闭
                        onOk={antNest.partakeModalHandleOk}
                        onCancel={antNest.partakeModalHandleCancel}
-                       style={{height:360}}
+                       style={{height: 360}}
                 >
                     <div className="group_send_shuoshuo">
                         <Row>
