@@ -1,12 +1,13 @@
 import React, {PropTypes} from 'react';
 import {isEmpty} from '../../utils/utils';
-import {Button, message, Row,Col} from 'antd';
+import {Button, message, Row,Col,Input} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
-import EmotionInputComponents from '../../components/antGroup/EmotionInputComponents';
+const { TextArea } = Input;
 
 /**
  * 本地课堂组件
  */
+
 const LocalClassesMessage = React.createClass({
 
     getInitialState() {
@@ -16,35 +17,55 @@ const LocalClassesMessage = React.createClass({
         };
     },
 
+    componentDidMount(){
+        this.listenClassMessage();
+    },
+
+    listenClassMessage(){
+        var _this = this;
+        var connection = _this.props.connection;
+        connection.clazzWsListener = {
+
+            onError: function (errorMsg) {
+                //强制退出课堂
+                message.error(errorMsg);
+                // window.close();
+            },
+
+            onWarn: function (warnMsg) {
+                message.warn(warnMsg);
+            },
+            // 显示消息
+            onMessage: function (info) {
+                console.log("=========课堂信息==========="+info);
+                var data = info.data;
+                switch (info.command) {
+                    case'simpleClassDanmu': // 弹幕
+                        var message = info.data.message;
+                        console.log("simpleClassDanmu:"+message);
+                        break;
+
+                    case 'classDanmu':
+                        var message = info.data.message;
+                        console.log("classDanmu:"+message);
+                        break;
+                }
+            }
+        };
+    },
+
     componentDidMount() {
+
     },
 
     handleScrollType(e) {
-        scrollType = "defined";
+        //scrollType = "defined";
     },
 
     handleScroll(e) {
-        /*if (scrollType == "auto") {
-            return;
-        }
-        var target = e.target;
-        if (navigator.userAgent.indexOf("Chrome") > -1) {
-            target = e.currentTarget;
-        } else {
-            target = e.target;
-        }
-        var scrollTop = target.scrollTop;
-        isNewPage = false;
-        preHeight = target.scrollHeight;
-        if (scrollTop <= 1 && isRendering == false && !isRequesting) {
-            didCount = 0;
-            if (antGroup.state.messageComeFrom == "groupMessage") {
-                antGroup.getChatGroupMessages(antGroup.state.currentGroupObj, antGroup.state.firstMessageCreateTime);
-            } else {
-                antGroup.getUser2UserMessages(antGroup.state.currentUser, antGroup.state.firstMessageCreateTime);
-            }
-        }*/
     },
+
+
 
     /**
      *发送文字信息的回调
@@ -59,17 +80,6 @@ const LocalClassesMessage = React.createClass({
         var sendType = target.value;
         // isSend = true;
         // this.messageSendByType(sendType);
-    },
-
-    checkKeyType() {
-        // var sendType;
-        // if (antGroup.state.messageComeFrom == "groupMessage") {
-        //     sendType = "groupSend";
-        // } else {
-        //     sendType = "";
-        // }
-        // isSend = true;
-        // antGroup.messageSendByType(sendType);
     },
 
     /**
@@ -108,7 +118,7 @@ const LocalClassesMessage = React.createClass({
                     </div>
                     <Row className="group_send">
                         <Col className="group_send_talk">
-                            <EmotionInputComponents onKeyDown={this.checkKeyType}></EmotionInputComponents>
+                            <Input />
                         </Col>
                         <Col className="group_send_btn">
                             <Button value="groupSend" onClick={this.sendMessage}>

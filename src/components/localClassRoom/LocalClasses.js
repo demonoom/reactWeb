@@ -77,47 +77,13 @@ const LocalClasses = React.createClass({
      */
     openClass(classId){
         console.log(classId);
-        this.getDisconnectedClass();
+        var classType = "A";
+        var account = this.state.loginUser.colAccount;
+        var userId = this.state.loginUser.colUid;
+        window.open("http://localhost:8090/#/localClassRoom?userId="+userId+"&account="+account+"&classCode="+classId+"&classType="+classType);
     },
 
-    /**
-     * 获取断开的课堂信息(这个在老师进入程序主界面的时候获取，如果有的的话，根据里面返回的信息重新进入课堂)
-     */
-    getDisconnectedClass() {
-        var _this = this;
-        var param = {
-            "method": "getDisconnectedClass",
-            "userId": _this.state.loginUser.colUid
-        };
-        doWebService(JSON.stringify(param), {
-            onResponse: function (ret) {
-                var response = ret.response;
-                if (ret.msg == "调用成功" && ret.success == true) {
-                    //如果response不是null，表示存在已断开的课堂
-                    if (isEmpty(response) == false) {
-                        //虚拟课堂的id
-                        var vid = response.vid;
-                        //开课老师id
-                        var userId = response.userId;
-                        //开课老师账号
-                        var account = response.account;
-                        //如A
-                        var type = response.type;
-                        //这是一个数组，如['A']
-                        var joinType = response.joinType;
-                        //正在开课的班级id
-                        var classCode = response.classCode;
-                        window.open("http://localhost:8090/#/localClassRoom?vid="+vid+"&account="+account);
-                    }
-                } else {
-                    message.error(ret.msg);
-                }
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });
-    },
+
 
     /**
      * 渲染页面
@@ -128,7 +94,7 @@ const LocalClasses = React.createClass({
         return (
             <div>
                 <div className="public—til—blue">
-                    成绩分析列表
+                    班级列表
                 </div>
                 <div>
                     <Table columns={classRoomColumns}
