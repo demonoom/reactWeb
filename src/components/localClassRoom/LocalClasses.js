@@ -7,7 +7,7 @@ const classRoomColumns = [{
     title: '班级',
     dataIndex: 'className',
     key: 'className',
-    className: 'checking_in_name focus_3',
+    className: 'class_in_name focus_3',
 }, {
     title: '操作',
     dataIndex: 'action',

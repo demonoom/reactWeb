@@ -2070,14 +2070,13 @@ a {
     font-size: 16px;
 
 }
-
 @font-face {
     font-family: 'iconfont';  /* project id 197083 */
-    src: url('//at.alicdn.com/t/font_197083_p365xzo72qvkj4i.eot');
-    src: url('//at.alicdn.com/t/font_197083_p365xzo72qvkj4i.eot?#iefix') format('embedded-opentype'),
-    url('//at.alicdn.com/t/font_197083_p365xzo72qvkj4i.woff') format('woff'),
-    url('//at.alicdn.com/t/font_197083_p365xzo72qvkj4i.ttf') format('truetype'),
-    url('//at.alicdn.com/t/font_197083_p365xzo72qvkj4i.svg#iconfont') format('svg');
+    src: url('//at.alicdn.com/t/font_197083_hvk93bhod2znnrk9.eot');
+    src: url('//at.alicdn.com/t/font_197083_hvk93bhod2znnrk9.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_197083_hvk93bhod2znnrk9.woff') format('woff'),
+    url('//at.alicdn.com/t/font_197083_hvk93bhod2znnrk9.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_197083_hvk93bhod2znnrk9.svg#iconfont') format('svg');
 }
 
 .iconfont {
@@ -7708,7 +7707,10 @@ select.course_n:hover {
     width: 40%;
     text-indent: 15px;
 }
-
+.ant-table-thead > tr > th.class_in_name, .ant-table-tbody > tr > td.class_in_name {
+    width: 85%;
+    text-indent: 15px;
+}
 .ant-table-tbody > tr > td.checking_in_name_time {
     line-height: 20px;
     color: #666;
