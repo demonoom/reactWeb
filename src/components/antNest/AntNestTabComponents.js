@@ -9,6 +9,7 @@ import {showLargeImg} from '../../utils/utils';
 import UploadImgComponents from './UploadImgComponents';
 import EmotionInputComponents from './EmotionInputComponents';
 import ConfirmModal from '../ConfirmModal';
+import moment from 'moment';
 
 var topicCardArray = [];
 var antNest;
@@ -18,6 +19,7 @@ var classCanSeeObj = [];
 const RadioGroup = Radio.Group;
 const CheckboxGroup = Checkbox.Group;
 const {RangePicker} = DatePicker;
+const dateFullFormat = 'YYYY-MM-DD HH:mm:ss';
 //假数据
 const children = [];
 for (let i = 10; i < 36; i++) {
@@ -54,7 +56,8 @@ const AntNestTabComponents = React.createClass({
             radioValue: 1,    //公开还是可见  1公开2可见
             boxDisplay: 'none',
             radioDisplay: 'block',
-            classSrcChecked: []  //checkbox可见班级的名字,checkbox的value值
+            classSrcChecked: [],  //checkbox可见班级的名字,checkbox的value值,
+            dateValue: '2018-02-08 15:06:10'
         };
     },
 
@@ -1175,7 +1178,8 @@ const AntNestTabComponents = React.createClass({
             radioValue: 1,
             classSrcChecked: [],
             boxDisplay: 'none',
-            radioDisplay: 'block'
+            radioDisplay: 'block',
+            dateValue: '2018-02-08 15:06:10'
         });
     },
 
@@ -1438,6 +1442,7 @@ const AntNestTabComponents = React.createClass({
                 message.error(error);
             }
         });
+        // this.setState({homeWorkTime:})
         antNest.setState({"addTopicModalVisible": true, "topicModalType": optType});
     },
 
@@ -1577,13 +1582,12 @@ const AntNestTabComponents = React.createClass({
         this.setState({antNestScoll: scrollTop});
     },
 
-    timeOnOk(value) {
-        console.log('onOk: ', value);
-    },
-
     timeOnChange(value, dateString) {
-        console.log('Selected Time: ', value);
-        console.log('Formatted Selected Time: ', dateString);
+        var date = new Date(dateString).valueOf();
+        console.log(date);
+        console.log(value);
+        console.log(dateString);
+        this.setState({dateValue: dateString})
     },
 
     /**
@@ -1659,9 +1663,8 @@ const AntNestTabComponents = React.createClass({
                     <DatePicker
                         showTime
                         format="YYYY-MM-DD HH:mm:ss"
-                        placeholder="Select Time"
+                        placeholder="请选择时间"
                         onChange={antNest.timeOnChange}
-                        onOk={antNest.timeOnOk}
                     />
                 </Col>
             </Row>

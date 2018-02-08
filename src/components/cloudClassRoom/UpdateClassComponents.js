@@ -894,8 +894,6 @@ const UpdateClassComponents = React.createClass({
     },
 
     lessonTimeOnChange(squence,value, dateString) {
-        console.log('Selected Time: ', value);
-        console.log('Formatted Selected Time: ', dateString);
         var liveTime = dateString;
         var videoJson = {squence, liveTime,videoStatus: 1, 'delete': false};
         this.buildVideosArray(videoJson);
