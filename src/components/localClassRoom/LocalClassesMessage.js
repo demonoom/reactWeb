@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import {isEmpty} from '../../utils/utils';
+import {getLocalTime} from '../../utils/Const';
 import {Button, message, Row,Col,Input} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 const { TextArea } = Input;
@@ -9,6 +10,7 @@ const { TextArea } = Input;
  */
 var connection = null;
 var parentMs = null;
+var messageLiArray=[];
 const LocalClassesMessage = React.createClass({
 
     getInitialState() {
@@ -26,6 +28,7 @@ const LocalClassesMessage = React.createClass({
 
     componentWillReceiveProps(nextProps){
         parentMs=nextProps.ms;
+        this.listenClassMessage();
     },
 
     listenClassMessage(){
@@ -37,8 +40,52 @@ const LocalClassesMessage = React.createClass({
                 message.warning(warnMsg);
             }, onMessage: function (info) {
                 console.log("-------------------------->"+info);
-            },
+                var infoCommand = info.command;
+                if(infoCommand == "message"){
+                    var messageData = info.data.message;
+                    var messageCommand = messageData.command;
+                    if(messageCommand == "message"){
+                        var messageFrom = "receive";
+                        _this.buildMessageLiArray(messageData,messageFrom);
+                    }
+                }
+            }
         }
+    },
+
+    buildMessageLiArray(messageData,messageFrom){
+        var content = messageData.content;
+        var createTime = getLocalTime(messageData.createTime);
+        var fromUser = messageData.fromUser;
+        var uuid = messageData.uuid;
+        var messageTag = null;
+        if(fromUser.colUid == sessionStorage.getItem("userId")){
+            messageTag = <li style={{'textAlign': 'right'}}>
+                <div>
+                    <span>{fromUser.userName}</span>
+                    <span>{createTime}</span>
+                </div>
+                <div>
+                    <div>
+                        <span>{content}</span>
+                    </div>
+                </div>
+            </li>;
+        }else{
+            messageTag = <li style={{'textAlign': 'left'}}>
+                <div>
+                    <span>{fromUser.userName}</span>
+                    <span>{createTime}</span>
+                </div>
+                <div>
+                    <div>
+                        <span>{content}</span>
+                    </div>
+                </div>
+            </li>;
+        }
+        messageLiArray.splice(0,0,messageTag);
+        this.setState({messageLiArray});
     },
 
     componentDidMount() {
@@ -58,7 +105,7 @@ const LocalClassesMessage = React.createClass({
         if (isEmpty(this.state.barrageMessageContent) == false) {
             var uuid = this.createUUID();
             var createTime = (new Date()).valueOf();
-            var loginUser = {colUid:24491,colAccount:'TE24491'};
+            var loginUser = {colUid:24491,colAccount:'TE24491',userName:'邹长亮'};
             var messageToType="3";
             var vid = sessionStorage.getItem("vid");
             var userId = sessionStorage.getItem("userId");
@@ -69,6 +116,7 @@ const LocalClassesMessage = React.createClass({
             };
             var commandJson = {"command": "message", "data": {"message": messageJson}};
             parentMs.send(commandJson);
+            this.buildMessageLiArray();
         }
     },
 
@@ -102,31 +150,13 @@ const LocalClassesMessage = React.createClass({
      * @returns {XML}
      */
     render() {
-        var _this = this;
-        var messageTagArray = [];
-        var messageTag = <li style={{'textAlign': 'right'}}>
-            <div>
-                <span>zhangsan</span>
-                <span>2018-2-7</span>
-            </div>
-            <div>
-                <span></span>
-                <div>
-                    <span>消息内容
-                           <i></i>
-                    </span>
-                </div>
-            </div>
-        </li>;
-        messageTagArray.push(messageTag);
-
         return (
             <div>
                 <div id="personTalk" style={{height:'900px',marginLeft:'18px'}}>
-                    <div>
+                    <div style={{height:'800px'}}>
                         <ul>
                             {/*消息内容主体*/}
-                            {messageTagArray}
+                            {this.state.messageLiArray}
                         </ul>
                     </div>
                     <div>
