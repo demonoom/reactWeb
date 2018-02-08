@@ -8357,6 +8357,17 @@ select.course_n:hover {
 .radio_left{
     margin-left: 6%;
 }
+.checkbox_left{
+    margin-left: 10%;
+    max-height: 60px;
+    line-height: 30px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.checkbox_left label{
+    font-size: 12px !important;
+    color: #666 !important;
+}
 .local_class{
     height: 100%;
     width: 100%;
