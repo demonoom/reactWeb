@@ -548,7 +548,6 @@ const SubjectEditComponents = React.createClass({
         //     tags.push(newTag);
         // });
         var _this = this;
-        console.log("close:"+tags);
         _this.state.tags.splice(0);
         // this.setState({"tags":tags});
         if(isEmpty(tags)==false){

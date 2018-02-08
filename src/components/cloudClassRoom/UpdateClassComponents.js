@@ -8,6 +8,7 @@ import {isEmpty, formatYMD, getLocalTime} from '../../utils/utils';
 import {doWebService_CloudClassRoom} from '../../utils/CloudClassRoomURLUtils';
 import moment from 'moment';
 import WeiClassUploadComponents from './WeiClassUploadComponents';
+import KnowledgePointModal from './KnowledgePointModal';
 
 const dateFormat = 'YYYY/MM/DD';
 const dateFullFormat = 'YYYY-MM-DD HH:mm:ss';
@@ -53,7 +54,8 @@ const UpdateClassComponents = React.createClass({
             isWeiClass: false,
             isShowClass: false,
             isTestClass: false,//默认测试课勾选状态
-            test: cloudClassRoomUser.test //获取当前用户的test ""为不是 test是测试用户
+            test: cloudClassRoomUser.test ,//获取当前用户的test ""为不是 test是测试用户
+            selectKnowledgeModalIsShow:false   //修改 知识点弹框
 
         };
     },
@@ -1325,6 +1327,26 @@ const UpdateClassComponents = React.createClass({
         }
     },
 
+    /*
+    知识点modal 框
+     */
+    showSelectKnowledgeModal(){
+        this.setState({selectKnowledgeModalIsShow:true})
+    },
+
+    closeSelectKnowledgeModal(tags){
+        var _this = this;
+        console.log("close:"+tags);
+         _this.state.tags.splice(0);
+        if(isEmpty(tags)==false){
+            tags.forEach(function (tag) {
+                _this.state.tags.push(tag);
+            })
+        }
+        _this.setState({"selectKnowledgeModalIsShow":false});
+    },
+
+
     /**
      * 渲染页面
      * @returns {XML}
@@ -1542,6 +1564,10 @@ const UpdateClassComponents = React.createClass({
                                     // disabled={deleteDisable}
                                         onClick={this.removeLesson.bind(this, lessonJson.squence, i)}></Button>
                             </Col>
+                            {/*知识点*/}
+                            <Col span={24} className="knowledgePoint">
+                                <span className="font-14">知识点：</span><Button className="ding_modal_top" onClick={this.showSelectKnowledgeModal}>选择知识点333</Button>
+                            </Col>
                         </Row>;
                         everyLessonArray.push(lessonRowObj);
                     }
@@ -1677,6 +1703,8 @@ const UpdateClassComponents = React.createClass({
                         </Col>
                     </Row>
                 </div>*/}
+                <KnowledgePointModal isShow={this.state.selectKnowledgeModalIsShow}  initTags={this.state.tags}
+                                      closeSelectKnowledgeModal={this.closeSelectKnowledgeModal}></KnowledgePointModal>
             </div>
         );
     },

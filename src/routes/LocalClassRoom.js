@@ -1,16 +1,18 @@
 import React from 'react';
-import {Modal, message,Row,Col,Button,Tabs} from 'antd';
+import {Modal, message, Row, Col, Button, Tabs, Input} from 'antd';
 import LocalClassesMessage from '../components/localClassRoom/LocalClassesMessage'
 import {isEmpty} from "../utils/Const";
 
 var connection = null;
-
+var ms = null;
 const LocalClassRoom = React.createClass({
     getInitialState() {
+        ms = opener.ms;
         return {
-            vid:'',
-            account:'',
-            classRoomUrl:''
+            vid: '',
+            account: '',
+            classRoomUrl: '',
+            messageTagArray:[]
         };
     },
 
@@ -23,14 +25,15 @@ const LocalClassRoom = React.createClass({
         var classCode = searchArray[2].split('=')[1];
         var classType = searchArray[3].split('=')[1];
         document.title = "本地课堂";   //设置title
-        this.getDisconnectedClass(userId,classCode,classType);
-        this.setState({userId,account,classCode,classType});
+        sessionStorage.setItem("userId",userId);
+        this.getDisconnectedClass(userId, classCode, classType);
+        this.setState({userId, account, classCode, classType});
     },
 
     /**
      * 获取断开的课堂信息(这个在老师进入程序主界面的时候获取，如果有的的话，根据里面返回的信息重新进入课堂)
      */
-    getDisconnectedClass(userId,classCode,classType) {
+    getDisconnectedClass(userId, classCode, classType) {
         var _this = this;
         var param = {
             "method": "getDisconnectedClass",
@@ -46,11 +49,11 @@ const LocalClassRoom = React.createClass({
                         var vid = response.vid;
                         //开课老师账号
                         var account = response.account;
-                        var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/whiteboard_frame.jsp?vid="+vid+"&account="+account;
-                        _this.setState({classRoomUrl});
-                    }else{
+                        sessionStorage.setItem("vid",vid);
+                        _this.setState({vid});
+                    } else {
                         //如果不存在断开的课堂，以当前老师的信息，开启新的课堂
-                        _this.connectClazz(userId,classCode,classType);
+                        _this.connectClazz(userId, classCode, classType);
                     }
                 } else {
                     message.error(ret.msg);
@@ -62,7 +65,7 @@ const LocalClassRoom = React.createClass({
         });
     },
 
-    connectClazz(userId,classCode,classType) {
+    connectClazz(userId, classCode, classType) {
         var _this = this;
         connection = new ClazzConnection();
         connection.clazzWsListener = {
@@ -78,15 +81,15 @@ const LocalClassRoom = React.createClass({
             },
             // 显示消息
             onMessage: function (info) {
-                console.log("=========课堂信息==========="+info);
                 var data = info.data;
+                console.log("=============================================>"+info);
                 switch (info.command) {
                     case "teacherLogin":
                         //老师登入课堂成功后，返回新建课堂的vid，以此vid进入课堂
                         var account = data.account;
                         var vid = data.vid;
-                        var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/whiteboard_frame.jsp?vid="+vid+"&account="+account;
-                        _this.setState({classRoomUrl});
+                        sessionStorage.setItem("vid",vid);
+                        _this.setState({vid});
                         break;
                     case'simpleClassDanmu': // 弹幕
                         var message = info.data.message;
@@ -105,7 +108,7 @@ const LocalClassRoom = React.createClass({
                 "password": "zcl123456",
                 "account": "TE24491",
                 "classType": classType,
-                "classCode":classCode,
+                "classCode": classCode,
                 "userId": userId
             }
         };
@@ -116,37 +119,50 @@ const LocalClassRoom = React.createClass({
     /**
      * 获取课件，打开ppt，完成推ppt的操作
      */
-    getPPT(){
-
+    getPPT() {
+        var pptURL = "https://www.maaee.com/h5Point/2017-06-19/10/1497839536166/1497839536166.html";
+        var vid = this.state.vid;
+        var userId = this.state.userId;
+        var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid="+vid+"&userId="+userId+"&role=manager&ppt="+pptURL;
+        this.setState({classRoomUrl});
     },
 
     /**
      * 获取题目，完成推题的操作
      */
-    getSubject(){
+    getSubject() {
 
+    },
+
+    handleScrollType(e) {
+        //scrollType = "defined";
+    },
+
+    handleScroll(e) {
     },
 
     render() {
 
-        var classIfream=null;
-        if(isEmpty(this.state.classRoomUrl)==false){
-            classIfream = <iframe src={this.state.classRoomUrl} style={{width:'100%',height:'100%'}}></iframe>;
+        var classIfream = null;
+        if (isEmpty(this.state.classRoomUrl) == false) {
+            classIfream = <iframe src={this.state.classRoomUrl} style={{width: '100%', height: '100%'}}></iframe>;
+        }else{
+            classIfream = <div>默认的欢迎页</div>
         }
 
         return (
-                <div className="local_class flex">
-                    <div className="flex_auto">
-                        {classIfream}
-                        <div>
-                            <Button onClick={this.getPPT}>课件</Button>
-                            <Button onClick={this.getSubject}>题目</Button>
-                        </div>
-                    </div>
-                    <div className="local_class_right">
-                        <LocalClassesMessage connection={connection} classCode={this.state.classCode} classType={this.state.classType}></LocalClassesMessage>
+            <div className="local_class flex">
+                <div className="flex_auto">
+                    {classIfream}
+                    <div>
+                        <Button onClick={this.getPPT}>课件</Button>
+                        <Button onClick={this.getSubject}>题目</Button>
                     </div>
                 </div>
+                <div className="local_class_right">
+                    <LocalClassesMessage ms={ms} classCode={this.state.classCode} classType={this.state.classType}></LocalClassesMessage>
+                </div>
+            </div>
         );
     },
 
