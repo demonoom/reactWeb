@@ -2,6 +2,7 @@ import React from 'react';
 import {Modal, message, Row, Col, Button, Tabs, Input} from 'antd';
 import LocalClassesMessage from '../components/localClassRoom/LocalClassesMessage'
 import {isEmpty} from "../utils/Const";
+import SelectSubjectModal from '../components/localClassRoom/SelectSubjectModal';
 
 var connection = null;
 var ms = null;
@@ -12,7 +13,8 @@ const LocalClassRoom = React.createClass({
             vid: '',
             account: '',
             classRoomUrl: '',
-            messageTagArray:[]
+            messageTagArray:[],
+            subjectModalIsShow:false
         };
     },
 
@@ -26,7 +28,8 @@ const LocalClassRoom = React.createClass({
         var classType = searchArray[3].split('=')[1];
         document.title = "本地课堂";   //设置title
         sessionStorage.setItem("userId",userId);
-        this.getDisconnectedClass(userId, classCode, classType);
+        this.connectClazz(userId, classCode, classType);
+        // this.getDisconnectedClass(userId, classCode, classType);
         this.setState({userId, account, classCode, classType});
     },
 
@@ -128,17 +131,27 @@ const LocalClassRoom = React.createClass({
     },
 
     /**
-     * 获取题目，完成推题的操作
+     * 打开选择题目的modal
      */
     getSubject() {
-
+        this.setState({subjectModalIsShow:true});
     },
 
-    handleScrollType(e) {
-        //scrollType = "defined";
+    /**
+     * 关闭选择题目的modal
+     */
+    closeSubjectModal(){
+        this.setState({subjectModalIsShow:false});
     },
 
-    handleScroll(e) {
+    pushSubjectToClass(subjectIdsArray){
+        // var protocal = eval('(' + "{'command':'pushSubjecShowContentUrl','data':{'sids':'"+sids+"'}}" + ')');
+        var sids = subjectIdsArray.join(",");
+        var pushSubjectProtocal = {
+            'command':'pushSubjecShowContentUrl',
+            'data':{'sids':sids}
+        };
+        connection.send(pushSubjectProtocal);
     },
 
     render() {
@@ -162,6 +175,7 @@ const LocalClassRoom = React.createClass({
                 <div className="local_class_right">
                     <LocalClassesMessage ms={ms} classCode={this.state.classCode} classType={this.state.classType}></LocalClassesMessage>
                 </div>
+                <SelectSubjectModal isShow={this.state.subjectModalIsShow} onCancel={this.closeSubjectModal} pushSubjectToClass={this.pushSubjectToClass}></SelectSubjectModal>
             </div>
         );
     },

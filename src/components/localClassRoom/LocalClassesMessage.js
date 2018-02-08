@@ -8,7 +8,6 @@ const { TextArea } = Input;
 /**
  * 本地课堂组件
  */
-var connection = null;
 var parentMs = null;
 var messageLiArray=[];
 const LocalClassesMessage = React.createClass({
