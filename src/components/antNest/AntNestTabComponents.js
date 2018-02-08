@@ -195,6 +195,10 @@ const AntNestTabComponents = React.createClass({
             topicTitle = <a value={topicObj.id} title={topicObj.id} onClick={antNest.getTopicPartakeInfo}
                             className="topics">#{topicObj.title}#</a>
         }
+        if (isEmpty(topicObj.title) == false && useType == 0 && topicObj.valid == 0 && topicObj.type == 11) {
+            topicTitle = <a value={topicObj.id} title={topicObj.id} onClick={antNest.getTopicPartakeInfo}
+                            className="topics">@{topicObj.title}@</a>
+        }
         //点赞用户span标记数组
         var likeUsersArray = [];
         var likeUsersInfoArray = [];
@@ -628,6 +632,7 @@ const AntNestTabComponents = React.createClass({
      * 话题被点击的回调
      */
     getTopicPartakeInfo(e) {
+        alert('话题被点击');
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             target = e.currentTarget;
@@ -1170,7 +1175,6 @@ const AntNestTabComponents = React.createClass({
                 emotionArray[i].innerText = "";
             }
         }
-        classCanSeeObj.splice(0);
         //清空话题标题输入框
         antNest.setState({
             "topicTitle": '',
@@ -1419,6 +1423,7 @@ const AntNestTabComponents = React.createClass({
      * 显示发表说说/话题的窗口
      */
     showaddTopicModal(e) {
+        classCanSeeObj.splice(0);
         var _this = this;
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
