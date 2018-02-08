@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {Icon, Card, Button, Row, Col, message, Modal, Input, Spin, Select, Radio, Checkbox} from 'antd';
+import {Icon, Card, Button, Row, Col, message, Modal, Input, Spin, Select, Radio, Checkbox, DatePicker} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import {getLocalTime} from '../../utils/Const';
 import {isEmpty, SMALL_IMG, MIDDLE_IMG, LARGE_IMG} from '../../utils/Const';
@@ -14,8 +14,10 @@ var topicCardArray = [];
 var antNest;
 var topicObjArray = [];
 var topicArr = [];
+var classCanSeeObj = [];
 const RadioGroup = Radio.Group;
 const CheckboxGroup = Checkbox.Group;
+const {RangePicker} = DatePicker;
 //假数据
 const children = [];
 for (let i = 10; i < 36; i++) {
@@ -49,10 +51,10 @@ const AntNestTabComponents = React.createClass({
             page: 1,
             antNestScoll: 0,
             classChildren: [],
-            selectValue: [],
-            radioValue: 1,
+            radioValue: 1,    //公开还是可见  1公开2可见
             boxDisplay: 'none',
-            noomValue: false
+            radioDisplay: 'block',
+            classSrcChecked: []  //checkbox可见班级的名字,checkbox的value值
         };
     },
 
@@ -68,36 +70,27 @@ const AntNestTabComponents = React.createClass({
         a.scrollTop(antNestScoll);
     },
 
+    /**
+     * 公开不公开的切换
+     * @param e
+     */
     radioOnChange(e) {
         if (e.target.value == 2) {
             this.setState({boxDisplay: 'block'})
         } else {
-            this.setState({boxDisplay: 'none'})
+            this.setState({boxDisplay: 'none', classSrcChecked: []})
         }
         this.setState({
             radioValue: e.target.value,
         });
     },
 
-    checkboxOnChange(e) {
-        console.log(e.target.checked);
-        console.log(e.target.id);
-    },
-
-    onSelectChange(value) {
-        var arr = this.state.selectValue;
-        arr.push(value);
-        this.setState({selectValue: arr});
-    },
-
-    onDeselectChange(value) {
-        var arr = this.state.selectValue;
-        arr.forEach(function (v, i) {
-            if (v == value) {
-                arr.splice(i, 1);
-            }
-        })
-        this.setState({selectValue: arr});
+    /**
+     * 可见班级的选择
+     * @param checkedValues
+     */
+    checkboxOnChange(checkedValues) {
+        this.setState({"classSrcChecked": checkedValues});
     },
 
     /**
@@ -1174,8 +1167,16 @@ const AntNestTabComponents = React.createClass({
                 emotionArray[i].innerText = "";
             }
         }
+        classCanSeeObj.splice(0);
         //清空话题标题输入框
-        antNest.setState({"topicTitle": '', "topicImgUrl": [], 'selectValue': []});
+        antNest.setState({
+            "topicTitle": '',
+            "topicImgUrl": [],
+            radioValue: 1,
+            classSrcChecked: [],
+            boxDisplay: 'none',
+            radioDisplay: 'block'
+        });
     },
 
     createUUID() {
@@ -1235,18 +1236,25 @@ const AntNestTabComponents = React.createClass({
      */
     addTopicModalHandleOk() {
         //获取富文本框中包含表情的评论内容
-
-        var selectValue = this.state.selectValue;
-        var seeList = [];
-        if (selectValue.length != 0) {
-            selectValue.forEach(function (v) {
-                var obj = {
-                    id: v
-                }
-                seeList.push(obj);
-            });
+        var ckeckIdArr = [];
+        if (this.state.radioValue == 2) {
+            //做出whiteList
+            if (this.state.classSrcChecked.length == 0) {
+                message.error('请选择可见班级', 5)
+                return
+            }
+            this.state.classSrcChecked.forEach(function (v, i) {
+                //classCanSeeObj为空的时候不会到这里
+                classCanSeeObj.forEach(function (data, index) {
+                    if (data.name == v) {
+                        var obj = {
+                            id: data.id + ''
+                        }
+                        ckeckIdArr.push(obj);
+                    }
+                })
+            })
         }
-        // console.log(seeList);  whiteList:   向后台发送的新键值对  JSON格式
         var inputContent;
         var emotionInput = antNest.getEmotionInput();
         if (isEmpty($("#emotionInput").val()) == false) {
@@ -1282,7 +1290,7 @@ const AntNestTabComponents = React.createClass({
             };
             attachMents.push(attach);
         }
-        if (selectValue.length == 0) {
+        if (this.state.radioValue == 1) {
             var topicJson = {
                 "content": inputContent,
                 "fromUserId": sessionStorage.getItem("ident"),
@@ -1305,7 +1313,7 @@ const AntNestTabComponents = React.createClass({
                 "attachMents": attachMents,
                 "comments": [],
                 "open": 0,
-                "whiteList": JSON.stringify(seeList)
+                "whiteList": ckeckIdArr
             };
         }
         if (isEmpty(antNest.state.topicTitle) == false) {
@@ -1323,6 +1331,7 @@ const AntNestTabComponents = React.createClass({
             "method": 'addTopic',
             "topicJson": topicJson,
         };
+        console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.success == true && ret.response == true) {
@@ -1401,18 +1410,24 @@ const AntNestTabComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                console.log(ret);
                 if (ret.success == true && ret.msg == '调用成功') {
                     var res = ret.response;
                     var arr = [];
+                    if (res.length == 0) {
+                        _this.setState({radioDisplay: 'none'});
+                    }
                     if (isEmpty(res) == false) {
                         res.forEach(function (v) {
-                            var clazz = <Checkbox
-                                id={v.id}
-                                value={_this.state.noomValue}
-                                onChange={_this.checkboxOnChange}>{v.grade.name + ' ' + v.name}</Checkbox>;
+                            var clazz = v.grade.name + ' ' + v.name;
                             arr.push(clazz);
+                            var obj = {
+                                name: v.grade.name + ' ' + v.name,
+                                id: v.id
+                            }
+                            classCanSeeObj.push(obj);
                         })
+                    } else {
+                        _this.setState({radioDisplay: 'none'});
                     }
                     _this.setState({classChildren: arr});
                 } else {
@@ -1562,6 +1577,15 @@ const AntNestTabComponents = React.createClass({
         this.setState({antNestScoll: scrollTop});
     },
 
+    timeOnOk(value) {
+        console.log('onOk: ', value);
+    },
+
+    timeOnChange(value, dateString) {
+        console.log('Selected Time: ', value);
+        console.log('Formatted Selected Time: ', dateString);
+    },
+
     /**
      * 渲染页面
      * @returns {XML}
@@ -1601,7 +1625,8 @@ const AntNestTabComponents = React.createClass({
             optionButton = <div className="public—til—blue">
                 <div className="talk_ant_btn1">
                     <Button value="talk" onClick={antNest.showaddTopicModal} className="antnest_talk">发表说说</Button>
-                    <Button value="topic" onClick={antNest.showaddTopicModal}>发表话题</Button>
+                    <Button value="topic" onClick={antNest.showaddTopicModal} className="antnest_talk">发表话题</Button>
+                    <Button value="homework" onClick={antNest.showaddTopicModal}>发布作业</Button>
                 </div>
                 {breadMenuTip}
             </div>;
@@ -1619,12 +1644,27 @@ const AntNestTabComponents = React.createClass({
                 </div>;
         }
         var topicTitle;
-        if (antNest.state.topicModalType == "topic") {
+        if (antNest.state.topicModalType == "topic" || antNest.state.topicModalType == "homework") {
             topicTitle = <Row className="yinyong_topic">
                 <Col span={3} className="right_look">标题：</Col>
                 <Col span={20}><Input onChange={antNest.topicTitleChange} defaultValue={antNest.state.topicTitle}
                                       value={antNest.state.topicTitle}/></Col>
             </Row>;
+        }
+        var homeWorkTime;
+        if (antNest.state.topicModalType == "homework") {
+            homeWorkTime = <Row>
+                <Col span={3} className="right_look">时间：</Col>
+                <Col span={20}>
+                    <DatePicker
+                        showTime
+                        format="YYYY-MM-DD HH:mm:ss"
+                        placeholder="Select Time"
+                        onChange={antNest.timeOnChange}
+                        onOk={antNest.timeOnOk}
+                    />
+                </Col>
+            </Row>
         }
         return (
             <div>
@@ -1652,38 +1692,30 @@ const AntNestTabComponents = React.createClass({
                 >
                     <div className="group_send_shuoshuo">
                         {topicTitle}
-                        <Row>
+                        <Row className="yinyong_topic">
                             <Col span={3} className="right_look">内容：</Col>
                             <Col span={20}><EmotionInputComponents></EmotionInputComponents></Col>
                         </Row>
+                        {homeWorkTime}
                         <Row className="yinyong3">
                             <Col span={3} className="right_look">附件：</Col>
                             <Col span={20}><UploadImgComponents fileList={antNest.state.topicImgUrl}
                                                                 callBackParent={antNest.getUploadedImgList}></UploadImgComponents></Col>
                         </Row>
-                        {/*<Row>
-                            <Col span={3} className="right_look">可见班级：</Col>
-                            <Col span={20} className="right_look">
-                                <Select
-                                    multiple='true'
-                                    style={{width: '100%'}}
-                                    placeholder="请选择可见的班级(不选择则全部可见)"
-                                    value={this.state.selectValue}
-                                    onSelect={this.onSelectChange}
-                                    onDeselect={this.onDeselectChange}
-                                >
-                                    {this.state.classChildren}
-                                </Select>
-                            </Col>
-                        </Row>*/}
-                        <Row>
-                            <RadioGroup onChange={this.radioOnChange} value={this.state.radioValue} className="radio_left">
-                                <Radio style={radioStyle} value={1} className="gray_6_12">公开</Radio>
-                                <Radio style={radioStyle} value={2} className="gray_6_12">部分可见</Radio>
-                            </RadioGroup>
+                        <Row style={{display: this.state.radioDisplay}}>
+                            <div className="radio_left">
+                                <RadioGroup onChange={this.radioOnChange} value={this.state.radioValue}>
+                                    <Radio style={radioStyle} value={1} className="gray_6_12">公开</Radio>
+                                    <Radio style={radioStyle} value={2} className="gray_6_12">部分可见</Radio>
+                                </RadioGroup>
+                            </div>
                         </Row>
                         <Row style={{display: this.state.boxDisplay}}>
-                            {this.state.classChildren}
+                            <div className="checkbox_left gray_6_12">
+                                <CheckboxGroup options={this.state.classChildren}
+                                               value={this.state.classSrcChecked}
+                                               onChange={this.checkboxOnChange}/>
+                            </div>
                         </Row>
                     </div>
 
@@ -1694,6 +1726,7 @@ const AntNestTabComponents = React.createClass({
                        maskClosable={false} //设置不允许点击蒙层关闭
                        onOk={antNest.partakeModalHandleOk}
                        onCancel={antNest.partakeModalHandleCancel}
+                       style={{height:360}}
                 >
                     <div className="group_send_shuoshuo">
                         <Row>
