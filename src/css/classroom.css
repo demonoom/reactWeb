@@ -39,9 +39,11 @@
     color: #fff;
 }
 .classroom_draw{
-    width: 90%;
-    height: 90%;
-    margin: 5%;
+    width: 86%;
+    height: 86%;
+    left: 7%;
+    top:7%;
+    position: absolute;
 }
 
 
@@ -135,6 +137,6 @@
 .classroom_direction{
     flex-direction: row-reverse;
 }
-.classroom_subject div{
+.classroom_subject > div{
     height: 400px !important;
 }
