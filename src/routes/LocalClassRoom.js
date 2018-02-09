@@ -156,8 +156,10 @@ const LocalClassRoom = React.createClass({
         this.setState({materialsModalIsShow:false});
     },
 
-    pushMaterialsToClass(){
-        var pptURL = "https://www.maaee.com/h5Point/2017-06-19/10/1497839536166/1497839536166.html";
+    pushMaterialsToClass(materials){
+        var htmlPath = materials.htmlPath;
+        var pptURL = htmlPath.replace("60.205.111.227","www.maaee.com");
+        pptURL = pptURL.replace("http","https");
         var vid = this.state.vid;
         var userId = this.state.userId;
         var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid="+vid+"&userId="+userId+"&role=manager&ppt="+pptURL;

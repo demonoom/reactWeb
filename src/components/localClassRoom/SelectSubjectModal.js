@@ -240,7 +240,6 @@ class SelectSubjectModal extends React.Component {
                             <Table className="17_hei2" columns={subjectColumns}
                                    dataSource={subjectData}
                                    rowSelection={subjectRowSelection}
-                                   onRowClick={this.selectSubject}
                                    pagination={{
                                 total: this.state.totalSubjectCount,
                                 pageSize: getPageSize(),

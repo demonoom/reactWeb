@@ -2,39 +2,19 @@
  * Created by devnote on 17-4-17.
  */
 import React, {PropTypes} from 'react';
-import {Modal, Button, Row, Col, message,Table,Popover} from 'antd';
+import {Modal, Button, Row, Col, message,Table,Popover,Radio} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import {isEmpty} from '../../utils/utils';
 import {getPageSize} from '../../utils/Const';
+const RadioGroup = Radio.Group;
 
 var scheduleData = [];
 var subjectData = [];
 var subjectColumns = [{
-    title: '内容',
+    title: '文件',
     className: 'ant-table-selection-cont2',
-    dataIndex: 'content'
-}, {
-    title: '题型',
-    className: 'ant-table-selection-topic',
-    dataIndex: 'subjectType',
-    filters: [{
-        text: '单选题',
-        value: '单选题',
-    }, {
-        text: '多选题',
-        value: '多选题',
-    }, {
-        text: '判断题',
-        value: '判断题',
-    }, {
-        text: '简答题',
-        value: '简答题',
-    }, {
-        text: '材料题',
-        value: '材料题',
-    },],
-    onFilter: (value, record) => record.subjectType.indexOf(value) === 0,
-},
+    dataIndex: 'fileName'
+}
 ];
 
 var scheduleColumns = [{
@@ -58,15 +38,14 @@ class SelectMaterialsModal extends React.Component {
             dataSourceValue:'1',
             selectedSubjectKeys:[], //选中的题目
         };
-        this.SelectMaterialsModalHandleCancel = this.SelectMaterialsModalHandleCancel.bind(this);
+        this.selectMaterialsModalHandleCancel = this.selectMaterialsModalHandleCancel.bind(this);
         this.initPage = this.initPage.bind(this);
-        this.subjectModalHandleOk = this.subjectModalHandleOk.bind(this);
         this.pageOnChange = this.pageOnChange.bind(this);
         this.getScheduleList = this.getScheduleList.bind(this);
         this.onScheduleSelectChange = this.onScheduleSelectChange.bind(this);
-        this.getSubjectDataBySchedule = this.getSubjectDataBySchedule.bind(this);
-        this.onSubjectTableSelectChange = this.onSubjectTableSelectChange.bind(this);
-        this.subjectModalHandleOk = this.subjectModalHandleOk.bind(this);
+        this.getMaterialsBySheduleId = this.getMaterialsBySheduleId.bind(this);
+        this.dataSourceOnChange = this.dataSourceOnChange.bind(this);
+        this.selectMaterials = this.selectMaterials.bind(this);
     }
 
     componentDidMount() {
@@ -83,7 +62,7 @@ class SelectMaterialsModal extends React.Component {
         this.setState({isShow});
     }
 
-    SelectMaterialsModalHandleCancel() {
+    selectMaterialsModalHandleCancel() {
         this.initPage();
         this.setState({"isShow": false});
         this.props.onCancel();
@@ -96,16 +75,12 @@ class SelectMaterialsModal extends React.Component {
         this.setState({selectedSubjectKeys:[]});
     }
 
-    subjectModalHandleOk() {
-
-    }
-
     /**
      * 题目分页页码改变的响应函数
      * @param pageNo
      */
     pageOnChange(pageNo){
-        this.getSubjectDataBySchedule(this.state.currentScheduleId, pageNo);
+        this.getMaterialsBySheduleId(this.state.currentScheduleId, pageNo);
         this.setState({
             currentPage: pageNo,
         });
@@ -142,38 +117,30 @@ class SelectMaterialsModal extends React.Component {
     onScheduleSelectChange(selectedRowKeys) {
         var scheduleId = selectedRowKeys.key;
         subjectData = [];
-        this.getSubjectDataBySchedule(scheduleId, 1);
+        this.getMaterialsBySheduleId(scheduleId, 1);
         this.setState({currentScheduleId: scheduleId});
     }
 
-    //根据备课计划获取题目列表
-    getSubjectDataBySchedule (ScheduleOrSubjectId, pageNo) {
+    //根据备课计划获取资源列表
+    getMaterialsBySheduleId (ScheduleId, pageNo) {
         var _this = this;
         var param = {
-            "method": 'getClassSubjects',
-            "ident": _this.state.loginUser.colUid,
-            "teachScheduleId": ScheduleOrSubjectId,
+            "method": 'getMaterialsBySheduleId',
+            "scheduleId": ScheduleId,
             "pageNo": pageNo
         };
-
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                let courseWareList = [];
+                _this.activeKey = [];
+                courseWareList.splice(0);
                 var response = ret.response;
                 response.forEach(function (e) {
-                    var key = e.id;
-                    var popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>' + e.content + '<hr/><span class="answer_til answer_til_2">答案：</span>' + e.answer + '</div>';
-                    var content = <Popover placement="rightTop"
-                                           content={<article id='contentHtml' className='content Popover_width'
-                                                             dangerouslySetInnerHTML={{__html: popOverContent}}></article>}>
-                        <article id='contentHtml' className='content'
-                                 dangerouslySetInnerHTML={{__html: e.content}}></article>
-                    </Popover>;
-                    var subjectType = e.typeName;
                     subjectData.push({
-                        key: key,
-                        content: content,
-                        subjectType: subjectType,
-                        subjectObj:e
+                        key: e.id,
+                        fileName: e.name,
+                        htmlPath: e.htmlPath,
+                        materialsObj:e
                     });
                     var pager = ret.pager;
                     _this.setState({totalSubjectCount: parseInt(pager.rsCount)});
@@ -186,29 +153,15 @@ class SelectMaterialsModal extends React.Component {
         });
     }
 
-    //题目表格行被选中时获取被选中项目
-    onSubjectTableSelectChange(selectedSubjectKeys) {
-        this.setState({selectedSubjectKeys});
-    }
-
-    /**
-     * 选择题目后的确定操作
-     */
-    subjectModalHandleOk(){
-        //通过回调的形式，将选中的题目回调给父组件，并完成推题的操作
-        this.props.pushMaterialsToClass(this.state.selectedSubjectKeys);
-        this.SelectMaterialsModalHandleCancel();
-    }
-
     /**
      * 从题目列表中，选中一个题目
      */
-/*    selectSubject(record, index, event) {
-        var subjectId = record.key;
+    selectMaterials(record, index, event) {
         console.log(record);
-        //通过回调的形式，将选中的题目回调给父组件，并完成推题的操作
-        this.props.pushSubjectToClass(record);
-    }*/
+        //通过回调的形式，将选中的课件回调给父组件，并完成推送课件的操作
+        this.props.pushMaterialsToClass(record);
+        this.selectMaterialsModalHandleCancel();
+    }
 
     dataSourceOnChange(e){
         console.log('radio checked', e.target.value);
@@ -218,24 +171,12 @@ class SelectMaterialsModal extends React.Component {
     }
 
     render() {
-        const subjectRowSelection = {
-            selectedRowKeys: this.state.selectedSubjectKeys,
-            onChange: this.onSubjectTableSelectChange,
-        };
-
         return (
             <Modal title="选择题目" className="choose_class" visible={this.state.isShow}
-                   onCancel={this.SelectMaterialsModalHandleCancel}
+                   onCancel={this.selectMaterialsModalHandleCancel}
                    transitionName=""  //禁用modal的动画效果
                    maskClosable={false} //设置不允许点击蒙层关闭
-                   footer={[
-
-                       <Button key="return" type="primary" size="large"
-                               onClick={this.subjectModalHandleOk}>确定</Button>,
-
-                       <Button key="ok" type="ghost" size="large" onClick={this.SelectMaterialsModalHandleCancel}>取消</Button>,
-
-                   ]}
+                   footer={null}
             >
                 <Row>
                     <RadioGroup onChange={this.dataSourceOnChange} value={this.state.dataSourceValue}>
@@ -253,8 +194,7 @@ class SelectMaterialsModal extends React.Component {
                         <div className="17_hei1">
                             <Table className="17_hei2" columns={subjectColumns}
                                    dataSource={subjectData}
-                                   rowSelection={subjectRowSelection}
-                                   onRowClick={this.selectSubject}
+                                   onRowClick={this.selectMaterials}
                                    pagination={{
                                 total: this.state.totalSubjectCount,
                                 pageSize: getPageSize(),
