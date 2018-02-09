@@ -119,7 +119,7 @@ const LocalClassesMessage = React.createClass({
             var fromUser = this.state.loginUser;
             var commandJson = {"command": "message", "data": {"message": messageJson},fromUser};
             parentMs.send(commandJson);
-            this.buildMessageLiArray(commandJson);
+            this.buildMessageLiArray(messageJson);
         }
     },
 
