@@ -1921,7 +1921,6 @@ const AntNestTabComponents = React.createClass({
                        visible={antNest.state.whoISSecretModalVisible}
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
-                    // onOk={antNest.partakeModalHandleOk}
                        onCancel={antNest.whoISSecretModalHandleCancel}
                        footer={null}
                        className="visible_class"
