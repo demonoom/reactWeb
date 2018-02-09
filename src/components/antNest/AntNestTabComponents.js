@@ -170,8 +170,6 @@ const AntNestTabComponents = React.createClass({
     },
 
     whoISSecret(data) {
-        console.log(data);
-        // whoISSecretLis
         var arr = [];
         data.forEach(function (v) {
             var li = <li>{v.grade.name + ' ' + v.name}</li>
@@ -193,7 +191,7 @@ const AntNestTabComponents = React.createClass({
     buildTopicCard(topicObj, useType, topicReplayInfoArray, parTakeCountInfo, homeWorkFlag) {
         var screatPic = '';
         if (topicObj.fromUserId == sessionStorage.getItem("ident") && topicObj.applyWhiteList == true) {
-            screatPic = <span onClick={this.whoISSecret.bind(this, topicObj.whiteList)} className="topics_time"><img
+            screatPic = <span onClick={this.whoISSecret.bind(this, topicObj.whiteList)} className="topics_time noom_cursor"><img
                 src={require('../images/screatPic.png')} alt="" className="screatPic"/></span>
         }
         //如果用户头像为空，使用系统默认头像
