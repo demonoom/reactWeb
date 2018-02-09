@@ -4,5 +4,42 @@
     position: relative;
 }
 .classroom_welcome{
-
+}
+.classroom_welcome img{
+    max-width: 100%;
+}
+.classroom_btn{
+    z-index: 10;
+    position: absolute;
+    top:20px;
+    left: 20px;
+}
+.classroom_btn_b{
+    color: #fff;
+    font-size: 14px;
+    border: none;
+}
+.classroom_btn_b i{
+    font-size: 18px;
+    position: relative;
+    top: 1px;
+}
+.classroom_btn_green{
+    background: #9cc232
+}
+.classroom_btn_green:hover{
+    background: #acd43e;
+    color: #fff;
+}
+.classroom_btn_orange{
+    background: #fdc300;
+}
+.classroom_btn_orange:hover{
+    background: #ffda45;
+    color: #fff;
+}
+.classroom_draw{
+    width: 90%;
+    height: 90%;
+    margin: 5%;
 }

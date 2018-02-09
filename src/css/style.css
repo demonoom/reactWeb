@@ -8394,4 +8394,6 @@ select.course_n:hover {
 }
 .local_class iframe{
     border: none;
+    z-index: 10;
+    position: relative;
 }

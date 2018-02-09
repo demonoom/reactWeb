@@ -170,21 +170,21 @@ const LocalClassRoom = React.createClass({
 
         var classIfream = null;
         if (isEmpty(this.state.classRoomUrl) == false) {
-            classIfream = <iframe src={this.state.classRoomUrl} style={{width: '100%', height: '100%'}}></iframe>;
+            classIfream = <div className="classroom_draw"><iframe src={this.state.classRoomUrl} style={{width: '100%', height: '100%'}}></iframe></div>;
         }else{
-            classIfream = <div>默认的欢迎页</div>
+            classIfream = <div className="classroom_welcome">
+                <img className="center_all" src="../../src/components/images/board_welcome.jpg" />
+            </div>
         }
 
         return (
             <div className="local_class flex">
                 <div className="flex_auto classroom_left">
-                    <div className="classroom_welcome">
-                        <img className="center_all" src="../../src/components/images/board_welcome.jpg" />
-                    </div>
+
                     {classIfream}
-                    <div>
-                        <Button onClick={this.getPPT}>课件</Button>
-                        <Button onClick={this.getSubject}>题目</Button>
+                    <div className="classroom_btn">
+                        <Button className="classroom_btn_b classroom_btn_orange" onClick={this.getPPT} icon="folder-open">课件</Button>
+                        <Button className="classroom_btn_b classroom_btn_green add_out" onClick={this.getSubject} icon="file-text">题目</Button>
                     </div>
                 </div>
                 <div className="local_class_right">
