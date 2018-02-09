@@ -8385,6 +8385,7 @@ select.course_n:hover {
 .local_class_right{
     width: 300px;
     height: 100%;
+    background: #fff;
 }
 .flex_auto{
     -webkit-box-flex: 1;

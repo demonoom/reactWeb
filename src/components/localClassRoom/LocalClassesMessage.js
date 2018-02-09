@@ -62,27 +62,19 @@ const LocalClassesMessage = React.createClass({
         var uuid = messageData.uuid;
         var messageTag = null;
         if(fromUser.colUid == sessionStorage.getItem("userId")){
-            messageTag = <li style={{'textAlign': 'right'}}>
-                <div>
-                    <span>{fromUser.userName}</span>
-                    <span>{createTime}</span>
-                </div>
-                <div>
-                    <div>
-                        <span>{content}</span>
-                    </div>
+            messageTag = <li className="flex classroom_direction">
+                <div className="classroom_user"><img src="http://img000.hc360.cn/y1/M01/7A/4F/wKhQc1RzaJ6EN3PMAAAAAGPs-ZY043.jpg" width="60" height="60" class="green" /></div>
+                <div className="class_talk_info_right">
+                    <div className="classroom_name"><span className="classroom_time">{createTime}</span><span className="add_out">{fromUser.userName}</span></div>
+                    <div className="classroom_info">{content}</div>
                 </div>
             </li>;
         }else{
-            messageTag = <li style={{'textAlign': 'left'}}>
-                <div>
-                    <span>{fromUser.userName}</span>
-                    <span>{createTime}</span>
-                </div>
-                <div>
-                    <div>
-                        <span>{content}</span>
-                    </div>
+            messageTag = <li className="flex">
+                <div className="classroom_user"><img src="http://img000.hc360.cn/y1/M01/7A/4F/wKhQc1RzaJ6EN3PMAAAAAGPs-ZY043.jpg" width="60" height="60" class="green" /></div>
+                <div className="class_talk_info">
+                    <div className="classroom_name"><span>{fromUser.userName}</span><span className="add_out classroom_time">{createTime}</span></div>
+                    <div className="classroom_info_left">{content}</div>
                 </div>
             </li>;
         }
@@ -154,26 +146,18 @@ const LocalClassesMessage = React.createClass({
      */
     render() {
         return (
-            <div>
-                <div id="personTalk" style={{height:'900px',marginLeft:'18px'}}>
-                    <div style={{height:'800px'}}>
-                        <ul>
-                            {/*消息内容主体*/}
-                            {this.state.messageLiArray}
-                        </ul>
-                    </div>
-                    <div>
-                        <div>
-                            <Input value={this.state.barrageMessageContent} onChange={this.messageContentChange}/>
-                        </div>
-                        <div>
-                            <Button onClick={this.sendBarrageMessage}>
-                                <div>发送<p >(Enter)</p></div>
-                            </Button>
-                        </div>
+                <div id="personTalk" className="class_personTalk">
+                    <ul className="class_talk_top">
+                        {/*消息内容主体*/}
+                        {this.state.messageLiArray}
+                    </ul>
+                    <div className="class_talk_bottom">
+                        <Input className="class_send_input" value={this.state.barrageMessageContent} onChange={this.messageContentChange}/>
+                        <Button onClick={this.sendBarrageMessage} className="class_send_btn">
+                            发送
+                        </Button>
                     </div>
                 </div>
-            </div>
         );
     }
 });

@@ -222,7 +222,7 @@ class SelectSubjectModal extends React.Component {
                    ]}
             >
                 <Row style={{height: 400}}>
-                    <Col span={7} className="ant-form"><Table size="small" className="lesson"
+                    <Col span={7} className="ant-form"><Table size="small" className="lesson classroom_subject"
                                                               onRowClick={this.onScheduleSelectChange}
                                                               columns={scheduleColumns} dataSource={scheduleData}
                                                               pagination={false}

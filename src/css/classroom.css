@@ -43,3 +43,98 @@
     height: 90%;
     margin: 5%;
 }
+
+
+.classroom_info {
+    background: #39f;
+    padding: 5px 10px;
+    display: inline-block;
+    border-radius: 4px;
+    color: #fff;
+    margin-top: 6px;
+}
+.classroom_info_left {
+    background: #fff;
+    border: 1px solid #eee;
+    padding: 5px 10px;
+    display: inline-block;
+    border-radius: 4px;
+    color: #333;
+    margin-top: 6px;
+}
+.classroom_name {
+    color: #8E97A6;
+    font-size: 12px;
+}
+.classroom_time{
+    color: #c3c3c3;
+}
+.class_talk_info {
+    margin-left: 10px;
+    font-size: 14px;
+    flex:1;
+}
+.class_talk_info_right {
+    margin-right: 10px;
+    font-size: 14px;
+    flex:1;
+    text-align: right;
+}
+.classroom_user {
+    width: 38px;
+    height: 38px;
+}
+.classroom_user img {
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+}
+.live_talk {
+    float: left;
+}
+.class_personTalk{
+    border-left: 15px solid #e8e8e8;
+    padding:15px 0;
+    height: 100%;
+}
+.class_send_input{
+    width: 175px;
+}
+.class_send_btn {
+    background: #39f;
+    border: none;
+    color: #fff;
+    width: 70px;
+    border-radius: 4px;
+    font-size: 16px;
+    float: right;
+    margin-top: -1px;
+}
+.class_send_btn:hover{
+    background: #65b2ff;
+    color:#fff;
+}
+.class_talk_top{
+    height: calc(100% - 45px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 15px;
+    margin: 0;
+}
+.class_talk_top li{
+    padding: 0;
+    list-style: none;
+    margin-bottom: 20px;
+}
+.class_talk_bottom{
+    height: 30px;
+    margin-top: 15px;
+    position: relative;
+    padding: 0 15px;
+}
+.classroom_direction{
+    flex-direction: row-reverse;
+}
+.classroom_subject div{
+    height: 400px !important;
+}
