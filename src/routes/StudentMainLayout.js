@@ -355,8 +355,8 @@ const StudentMainLayout = React.createClass({
      */
     receiveNewMessage(userJson){
         this.setState({
-            currentKey: 'message',
-            resouceType: '',
+            // currentKey: 'message',
+            // resouceType: '',
             "userInfo": userJson.fromUser,
             "messageType": 'message',
             "actionFrom": "backgroudMessage",
@@ -485,7 +485,7 @@ const StudentMainLayout = React.createClass({
         var middleComponent;
         var mainContent;
         var tabComponent;
-
+        console.log("stu---->"+this.state.currentKey);
         switch (this.state.currentKey) {
             default:
                 tabComponent = <MainTabComponents ref="mainTabComponents"/>;
