@@ -59,39 +59,43 @@ const LocalClassesMessage = React.createClass({
         var content = messageData.content;
         var createTime = getLocalTime(messageData.createTime);
         var fromUser = messageData.fromUser;
+        var avatar=null;
+        if(isEmpty(fromUser.avatar)){
+            avatar = <img src="http://www.maaee.com:80/Excoord_For_Education/userPhoto/default_avatar.png" width="60" height="60" class="green" />;
+        }else{
+            avatar = <img src={fromUser.avatar} width="60" height="60" class="green" />;
+        }
         var uuid = messageData.uuid;
         var messageTag = null;
         if(fromUser.colUid == sessionStorage.getItem("userId")){
-            messageTag = <li style={{'textAlign': 'right'}}>
-                <div>
-                    <span>{fromUser.userName}</span>
-                    <span>{createTime}</span>
-                </div>
-                <div>
-                    <div>
-                        <span>{content}</span>
-                    </div>
+            messageTag = <li className="flex classroom_direction">
+                <div className="classroom_user">{avatar}</div>
+                <div className="class_talk_info_right">
+                    <div className="classroom_name"><span className="classroom_time">{createTime}</span><span className="add_out">{fromUser.userName}</span></div>
+                    <div className="classroom_info">{content}</div>
                 </div>
             </li>;
         }else{
-            messageTag = <li style={{'textAlign': 'left'}}>
-                <div>
-                    <span>{fromUser.userName}</span>
-                    <span>{createTime}</span>
-                </div>
-                <div>
-                    <div>
-                        <span>{content}</span>
-                    </div>
+            messageTag = <li className="flex">
+                <div className="classroom_user">{avatar}</div>
+                <div className="class_talk_info">
+                    <div className="classroom_name"><span>{fromUser.userName}</span><span className="add_out classroom_time">{createTime}</span></div>
+                    <div className="classroom_info_left">{content}</div>
                 </div>
             </li>;
         }
-        messageLiArray.splice(0,0,messageTag);
+        // messageLiArray.splice(0,0,messageTag);
+        messageLiArray.push(messageTag);
         this.setState({messageLiArray});
     },
 
     componentDidMount() {
 
+    },
+
+    componentDidUpdate(){
+        var gt = $('#groupTalk');
+        gt.scrollTop(parseInt(gt[0].scrollHeight));
     },
 
     handleScrollType(e) {
@@ -119,6 +123,7 @@ const LocalClassesMessage = React.createClass({
             var fromUser = this.state.loginUser;
             var commandJson = {"command": "message", "data": {"message": messageJson},fromUser};
             parentMs.send(commandJson);
+            this.setState({"barrageMessageContent":''});
             // this.buildMessageLiArray(messageJson);
         }
     },
@@ -154,26 +159,18 @@ const LocalClassesMessage = React.createClass({
      */
     render() {
         return (
-            <div>
-                <div id="personTalk" style={{height:'900px',marginLeft:'18px'}}>
-                    <div style={{height:'800px'}}>
-                        <ul>
-                            {/*消息内容主体*/}
-                            {this.state.messageLiArray}
-                        </ul>
-                    </div>
-                    <div>
-                        <div>
-                            <Input value={this.state.barrageMessageContent} onChange={this.messageContentChange}/>
-                        </div>
-                        <div>
-                            <Button onClick={this.sendBarrageMessage}>
-                                <div>发送<p >(Enter)</p></div>
-                            </Button>
-                        </div>
+                <div id="personTalk" className="class_personTalk">
+                    <ul className="class_talk_top" id="groupTalk">
+                        {/*消息内容主体*/}
+                        {this.state.messageLiArray}
+                    </ul>
+                    <div className="class_talk_bottom">
+                        <Input className="class_send_input" value={this.state.barrageMessageContent} onChange={this.messageContentChange}/>
+                        <Button onClick={this.sendBarrageMessage} className="class_send_btn">
+                            发送
+                        </Button>
                     </div>
                 </div>
-            </div>
         );
     }
 });

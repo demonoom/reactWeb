@@ -438,7 +438,7 @@ class SelectMaterialsModal extends React.Component {
 
         var mainContent = null;
         if(this.state.dataSourceValue == 1){
-            mainContent = <Row style={{height: 400}}>
+            mainContent = <Row style={{height: 400}} className="yinyong3">
                 <Col span={7} className="ant-form"><Table size="small" className="lesson"
                                                           onRowClick={this.onScheduleSelectChange}
                                                           columns={scheduleColumns} dataSource={scheduleData}
@@ -459,10 +459,10 @@ class SelectMaterialsModal extends React.Component {
             </Row>;
         }else{
             //从蚁盘选择文件
-            mainContent = <Row style={{height: 400}}>
-                <Col span={24} className="col17_le 17_hei ant-form">
+            mainContent = <Row style={{height: 400}} className="yinyong3">
+                <Col span={24} className="17_hei ant-form">
                     <Row>
-                        <Col span={24}>
+                        <Col span={24} style={{height:'354'}}>
                             <div className="public—til—blue">
                                 <div className="ant-tabs-right"><Button onClick={this.returnParentAtMoveModal}><Icon
                                     type="left"/></Button></div>
