@@ -1924,6 +1924,7 @@ const AntNestTabComponents = React.createClass({
                        onCancel={antNest.whoISSecretModalHandleCancel}
                        footer={null}
                        className="visible_class"
+                       style={{width: 480}}
                 >
                         <ul>
                             {this.state.whoISSecretLis}
