@@ -173,7 +173,9 @@ const LocalClassRoom = React.createClass({
             classIfream = <div className="classroom_draw"><iframe src={this.state.classRoomUrl} style={{width: '100%', height: '100%'}}></iframe></div>;
         }else{
             classIfream = <div className="classroom_welcome">
-                <img className="center_all" src="../../src/components/images/board_welcome.jpg" />
+                <video width="954" height="584" autoPlay="autoPlay" className="center_all" >
+                    <source src="https://www.maaee.com/upload2/common/board_welcome2.mp4" type="video/mp4" />
+                </video>
             </div>
         }
 
