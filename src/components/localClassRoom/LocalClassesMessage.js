@@ -43,7 +43,8 @@ const LocalClassesMessage = React.createClass({
                 if(infoCommand == "message"){
                     var messageData = info.data.message;
                     var messageCommand = messageData.command;
-                    if(messageCommand == "message"){
+                    var messageToType = messageData.toType;
+                    if(messageCommand == "message" && messageToType == "3"){
                         var messageFrom = "receive";
                         _this.buildMessageLiArray(messageData,messageFrom);
                     }
