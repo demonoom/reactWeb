@@ -2846,7 +2846,7 @@ a.topics:hover {
     letter-spacing: -2px;
 }
 
-.topics_a {
+.topics_a, .topics_a span {
     color: #666;
     line-height: 23px;
     font-size: 12px !important
@@ -2856,7 +2856,7 @@ a.topics:hover {
     line-height: 14px !important
 }
 
-.topics_a:hover {
+.topics_a:hover, .topics_a span:hover {
     color: #2896fb;
     text-decoration: none
 }
@@ -8399,4 +8399,22 @@ select.course_n:hover {
 }
 .screatPic{
     width: 20px;
+    cursor: pointer;
+}
+.visible_class{
+}
+.visible_class ul{
+    margin: 0;
+    padding: 25px 0;
+    height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.visible_class .ant-modal-body{
+    padding: 0 25px !important;
+}
+.visible_class ul li{
+    list-style: none;
+    float: left;
+    margin-right: 30px;
 }

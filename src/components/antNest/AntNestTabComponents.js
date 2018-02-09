@@ -1923,12 +1923,12 @@ const AntNestTabComponents = React.createClass({
                        maskClosable={false} //设置不允许点击蒙层关闭
                     // onOk={antNest.partakeModalHandleOk}
                        onCancel={antNest.whoISSecretModalHandleCancel}
+                       footer={null}
+                       className="visible_class"
                 >
-                    <div className="group_send_pinglun">
                         <ul>
                             {this.state.whoISSecretLis}
                         </ul>
-                    </div>
                 </Modal>
 
                 <ConfirmModal ref="confirmModal"
