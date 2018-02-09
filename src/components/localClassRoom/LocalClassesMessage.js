@@ -59,11 +59,17 @@ const LocalClassesMessage = React.createClass({
         var content = messageData.content;
         var createTime = getLocalTime(messageData.createTime);
         var fromUser = messageData.fromUser;
+        var avatar=null;
+        if(isEmpty(fromUser.avatar)){
+            avatar = <img src="http://www.maaee.com:80/Excoord_For_Education/userPhoto/default_avatar.png" width="60" height="60" class="green" />;
+        }else{
+            avatar = <img src={fromUser.avatar} width="60" height="60" class="green" />;
+        }
         var uuid = messageData.uuid;
         var messageTag = null;
         if(fromUser.colUid == sessionStorage.getItem("userId")){
             messageTag = <li className="flex classroom_direction">
-                <div className="classroom_user"><img src="http://img000.hc360.cn/y1/M01/7A/4F/wKhQc1RzaJ6EN3PMAAAAAGPs-ZY043.jpg" width="60" height="60" class="green" /></div>
+                <div className="classroom_user">{avatar}</div>
                 <div className="class_talk_info_right">
                     <div className="classroom_name"><span className="classroom_time">{createTime}</span><span className="add_out">{fromUser.userName}</span></div>
                     <div className="classroom_info">{content}</div>
@@ -71,19 +77,25 @@ const LocalClassesMessage = React.createClass({
             </li>;
         }else{
             messageTag = <li className="flex">
-                <div className="classroom_user"><img src="http://img000.hc360.cn/y1/M01/7A/4F/wKhQc1RzaJ6EN3PMAAAAAGPs-ZY043.jpg" width="60" height="60" class="green" /></div>
+                <div className="classroom_user">{avatar}</div>
                 <div className="class_talk_info">
                     <div className="classroom_name"><span>{fromUser.userName}</span><span className="add_out classroom_time">{createTime}</span></div>
                     <div className="classroom_info_left">{content}</div>
                 </div>
             </li>;
         }
-        messageLiArray.splice(0,0,messageTag);
+        // messageLiArray.splice(0,0,messageTag);
+        messageLiArray.push(messageTag);
         this.setState({messageLiArray});
     },
 
     componentDidMount() {
 
+    },
+
+    componentDidUpdate(){
+        var gt = $('#groupTalk');
+        gt.scrollTop(parseInt(gt[0].scrollHeight));
     },
 
     handleScrollType(e) {
@@ -147,7 +159,7 @@ const LocalClassesMessage = React.createClass({
     render() {
         return (
                 <div id="personTalk" className="class_personTalk">
-                    <ul className="class_talk_top">
+                    <ul className="class_talk_top" id="groupTalk">
                         {/*消息内容主体*/}
                         {this.state.messageLiArray}
                     </ul>

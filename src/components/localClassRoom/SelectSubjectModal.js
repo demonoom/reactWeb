@@ -106,7 +106,7 @@ class SelectSubjectModal extends React.Component {
         });
     }
 
-    //获取老师名下的备课计划
+    //在选择题目的窗口中，先获取老师名下的备课计划
     getScheduleList(){
         var _this = this;
         scheduleData.splice(0);
@@ -126,7 +126,7 @@ class SelectSubjectModal extends React.Component {
                         scheduleOpt: '',
                     });
                 });
-                _this.setState({scheduleCount: scheduleData.length});
+                _this.setState({scheduleCount: scheduleData.length,scheduleData});
             },
             onError: function (error) {
                 message.error(error);
@@ -224,7 +224,7 @@ class SelectSubjectModal extends React.Component {
                 <Row style={{height: 400}}>
                     <Col span={7} className="ant-form"><Table size="small" className="lesson classroom_subject"
                                                               onRowClick={this.onScheduleSelectChange}
-                                                              columns={scheduleColumns} dataSource={scheduleData}
+                                                              columns={scheduleColumns} dataSource={this.state.scheduleData}
                                                               pagination={false}
                                                               scroll={{y: 300}}/></Col>
                     <Col span={17} className="col17_le 17_hei ant-form">
