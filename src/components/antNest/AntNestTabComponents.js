@@ -108,8 +108,6 @@ const AntNestTabComponents = React.createClass({
             } else {
                 pageNo = antNest.state.currentTeacherPage;
             }
-            // topicCardArray.splice(0);
-            // topicObjArray.splice(0);
         }
         ;
         if (flag) {
@@ -125,8 +123,6 @@ const AntNestTabComponents = React.createClass({
         ;
         if (fromTap) {
             antNest.setState({currentPage: 1, currentTeacherPage: 1})
-            // antNest.state.currentPage = 1;
-            // antNest.state.currentTeacherPage = 1;
         }
         ;
         var param = {
@@ -177,8 +173,18 @@ const AntNestTabComponents = React.createClass({
      * @param topicObj 话题对象
      * @param useType 用途 0:列表  1：单个话题
      */
-    buildTopicCard(topicObj, useType, topicReplayInfoArray, parTakeCountInfo) {
+    buildTopicCard(topicObj, useType, topicReplayInfoArray, parTakeCountInfo, homeWorkFlag) {
+        console.log(topicObj);
+        var screatPic = '';
+        if (topicObj.fromUserId == sessionStorage.getItem("ident") && topicObj.applyWhiteList == true) {
+            screatPic = <img src={require('../images/screatPic.png')} alt=""/>
+        }
         //如果用户头像为空，使用系统默认头像
+        var commentDisplayTime = '';
+        if (topicObj.type == 11) {
+            commentDisplayTime =
+                <span className="topics_time">(结束时间:{getLocalTime(topicObj.commentDisplayTime)})</span>;
+        }
         var userHeadPhoto;
         if (isEmpty(topicObj.fromUser.avatar)) {
             //如果用户头像为空，则使用系统默认头像进行显示
@@ -196,8 +202,8 @@ const AntNestTabComponents = React.createClass({
                             className="topics">#{topicObj.title}#</a>
         }
         if (isEmpty(topicObj.title) == false && useType == 0 && topicObj.valid == 0 && topicObj.type == 11) {
-            topicTitle = <a value={topicObj.id} title={topicObj.id} onClick={antNest.getTopicPartakeInfo}
-                            className="topics">@{topicObj.title}@</a>
+            topicTitle = <a value={topicObj.id} title={topicObj.id} onClick={antNest.getHomeWorkPartakeInfo}
+                            className="topics">#{topicObj.title}#</a>
         }
         //点赞用户span标记数组
         var likeUsersArray = [];
@@ -323,15 +329,26 @@ const AntNestTabComponents = React.createClass({
             }
         }
         //参与人数显示card
+
         var parTakeCountCard;
         if (isEmpty(parTakeCountInfo) == false) {
-            parTakeCountCard = <div className="upexam_top topics_blue_bg">
-                <ul className="topics_mar60">
+            if (homeWorkFlag) {
+                parTakeCountCard = <div className="upexam_top topics_blue_bg">
+                    <ul className="topics_mar60">
+                    <span
+                        className="topics_time">作答{parTakeCountInfo.participatecount}人，未作答{parTakeCountInfo.unParticipatecount}人</span>
+                        <span><Button value={topicObj.id} onClick={antNest.showPartakeModal}>立即作答</Button></span>
+                    </ul>
+                </div>;
+            } else {
+                parTakeCountCard = <div className="upexam_top topics_blue_bg">
+                    <ul className="topics_mar60">
                     <span
                         className="topics_time">参与{parTakeCountInfo.participatecount}人，未参与{parTakeCountInfo.unParticipatecount}人</span>
-                    <span><Button value={topicObj.id} onClick={antNest.showPartakeModal}>立即参与</Button></span>
-                </ul>
-            </div>;
+                        <span><Button value={topicObj.id} onClick={antNest.showPartakeModal}>立即参与</Button></span>
+                    </ul>
+                </div>;
+            }
         }
         //单个话题中的回复参与信息
         var topicReplayCardArray = [];
@@ -365,7 +382,7 @@ const AntNestTabComponents = React.createClass({
                         if (e.user.colUtype == "STUD" || (e.user.colUtype == "TEAC" && e.user.colUid == sessionStorage.getItem("ident"))) {
                             delBtnInRelpay = <Button value={e.id} type="dashed"
                                                      className="topics_btn topics_a topics_a—bnt teopics_spa topics_le"
-                                                     onClick={antNest.deleteTopicComment}>删除</Button>;
+                                                     onClick={antNest.deleteTopicComment.bind(this, e.id)}>删除</Button>;
                         }
                         var answerUserInfo = <li className="topics_comment">
                             {replayUserTitle}
@@ -451,7 +468,7 @@ const AntNestTabComponents = React.createClass({
                 if (topicReplayInfo.fromUser.colUtype == "STUD" || (topicReplayInfo.fromUser.colUtype == "TEAC" && topicReplayInfo.fromUser.colUid == sessionStorage.getItem("ident"))) {
                     delBtnInReplayCard = <Button value={topicReplayInfo.id} icon="delete"
                                                  onClick={antNest.deleteTopic.bind(antNest, topicReplayInfo.id)}
-                                                 className="topics_btn  teopics_spa">删除</Button>;
+                                                 className="topics_btn  teopics_spa">删除4</Button>;
                 }
                 var praiseBtn;
                 if (topicObj.fromUser.colUtype == "TEAC" && topicObj.fromUser.colUid == sessionStorage.getItem("ident")) {
@@ -498,6 +515,8 @@ const AntNestTabComponents = React.createClass({
                 </li>
                 <li className="topics_bot">
                     <span className="topics_time">{createTime}</span>
+                    {commentDisplayTime}
+                    {screatPic}
                     <span>{delButton}</span>
                     <span className="topics_dianzan">
                          {praiseButton}
@@ -535,7 +554,6 @@ const AntNestTabComponents = React.createClass({
     pageAdd() {
         var page = this.state.currentPage;
         var pageOnlyTeacher = this.state.currentTeacherPage;
-        // alert(page);
         page++;
         pageOnlyTeacher++;
         //调用获取话题的函数，把信息push到topicCardList中
@@ -553,6 +571,43 @@ const AntNestTabComponents = React.createClass({
             antNest.getTopics(pageOnlyTeacher, getOnlyTeacherTopic());
         }
     },
+
+    /**
+     * 根据作业的id，获取对应的话题详细信息
+     */
+    getZuoYeInfoById(topicId, parTakeCountInfo, pageNo) {
+        var topicReplayInfoArray = [];
+        var param = {
+            "method": 'getTopicsByZuoYeId',
+            "accessUserId": sessionStorage.getItem("ident"),
+            "zyId": topicId,
+            "pageNo": pageNo
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                response.forEach(function (e) {
+                    //话题的回复
+                    topicReplayInfoArray.push(e);
+                });
+                var pager = ret.pager;
+                //话题主体对象
+                var topicObj = antNest.findTopicObjFromArrayById(topicId);
+                topicCardArray.splice(0);
+                antNest.buildTopicCard(topicObj, 1, topicReplayInfoArray, parTakeCountInfo, true);
+                antNest.setState({
+                    // "optType": 'getTopicById',
+                    "topicCardList": topicCardArray,
+                    "totalCount": pager.rsCount,
+                    "currentTopicId": topicId
+                });
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
     /**
      * 根据话题的id，获取对应的话题详细信息
      * @param topicId 话题id
@@ -577,7 +632,7 @@ const AntNestTabComponents = React.createClass({
                 //话题主体对象
                 var topicObj = antNest.findTopicObjFromArrayById(topicId);
                 topicCardArray.splice(0);
-                antNest.buildTopicCard(topicObj, 1, topicReplayInfoArray, parTakeCountInfo);
+                antNest.buildTopicCard(topicObj, 1, topicReplayInfoArray, parTakeCountInfo, false);
                 antNest.setState({
                     // "optType": 'getTopicById',
                     "topicCardList": topicCardArray,
@@ -632,7 +687,6 @@ const AntNestTabComponents = React.createClass({
      * 话题被点击的回调
      */
     getTopicPartakeInfo(e) {
-        alert('话题被点击');
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             target = e.currentTarget;
@@ -652,6 +706,28 @@ const AntNestTabComponents = React.createClass({
         topicCardArray.push(a);
         antNest.getTopicPartakeById(topicId, initPageNo);
     },
+
+    /**
+     * 获取作业详情
+     */
+    getHomeWorkPartakeInfo(e) {
+        var target = e.target;
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
+            target = e.target;
+        }
+        var topicId = target.title;
+        var initPageNo = 1;
+        //set过optType之后，表头就会变成“话题详情”
+        this.setState({"optType": 'getZuoYeById'});
+        topicCardArray.splice(0);
+        var a = <div className="example">
+            <Spin size="large" delay={500}/>
+        </div>;
+        topicCardArray.push(a);
+        antNest.getZuoYePartakeById(topicId, initPageNo);
+    },
     /**
      * 获取话题参与人数的信息
      * @param topicId 话题id
@@ -666,6 +742,25 @@ const AntNestTabComponents = React.createClass({
             onResponse: function (ret) {
                 var parTakeCountInfo = ret.response;
                 antNest.getTopicInfoById(topicId, parTakeCountInfo, pageNo);
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 获取作业参与人数的信息
+     */
+    getZuoYePartakeById(topicId, pageNo) {
+        var param = {
+            "method": 'getZuoYeInfo',
+            "zuoYeId": topicId,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var parTakeCountInfo = ret.response;
+                antNest.getZuoYeInfoById(topicId, parTakeCountInfo, pageNo);
             },
             onError: function (error) {
                 message.error(error);
@@ -749,6 +844,9 @@ const AntNestTabComponents = React.createClass({
                     //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
                     antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
                     antNest.getTopicPartakeById(parentTopicId, antNest.state.currentShowPage);
+                } else if (antNest.state.optType == "getZuoYeById") {
+                    antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
+                    antNest.getZuoYePartakeById(parentTopicId, antNest.state.currentShowPage);
                 } else {
                     // if (antNest.state.type == 0) {
                     //     //在这里请求新的页面应该不是当前页，而是你点击的那一页的页数
@@ -802,6 +900,9 @@ const AntNestTabComponents = React.createClass({
                     //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
                     antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
                     antNest.getTopicPartakeById(parentTopicId, antNest.state.currentShowPage);
+                } else if (antNest.state.optType == "getZuoYeById") {
+                    antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
+                    antNest.getZuoYePartakeById(parentTopicId, antNest.state.currentShowPage);
                 } else {
                     // if (antNest.state.type == 0) {
                     //     antNest.getTopics(antNest.state.currentPage, getAllTopic());
@@ -904,6 +1005,9 @@ const AntNestTabComponents = React.createClass({
                     //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
                     antNest.reGetTopicInfo(antNest.state.currentPage, getAllTopic());
                     antNest.getTopicPartakeById(antNest.state.currentTopicId, antNest.state.currentPage);
+                } else if (antNest.state.optType == "getZuoYeById") {
+                    antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
+                    antNest.getZuoYePartakeById(antNest.state.currentTopicId, antNest.state.currentShowPage);
                 } else {
                     // if (antNest.state.type == 0) {
                     //     antNest.getTopics(antNest.state.currentPage, getAllTopic());
@@ -949,19 +1053,25 @@ const AntNestTabComponents = React.createClass({
      * 删除一个话题中的评论
      * @param e
      */
-    deleteTopicComment() {
-        antNest.deleteTopicCommentById(antNest.state.topicCommentId, antNest.state.noomCommentId);
+    deleteTopicComment(e) {
+        if (isEmpty(e) == false) {
+            antNest.deleteTopicCommentById(e, antNest.state.noomCommentId);
+        } else {
+            antNest.deleteTopicCommentById(antNest.state.topicCommentId, antNest.state.noomCommentId);
+        }
     },
     /**
      * 根据评论id，删除话题/说说中的评论
      * @param topicCommentId 评论id
      */
     deleteTopicCommentById(topicCommentId, topicId) {
+        debugger
         var param = {
             "method": 'deleteTopicComment',
             "ident": sessionStorage.getItem("ident"),
             "topicCommentId": topicCommentId + ""
         };
+        console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.success == true && ret.response == true) {
@@ -974,6 +1084,9 @@ const AntNestTabComponents = React.createClass({
                     //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
                     antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
                     antNest.getTopicPartakeById(antNest.state.currentTopicId, antNest.state.currentShowPage);
+                } else if (antNest.state.optType == "getZuoYeById") {
+                    antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
+                    antNest.getZuoYePartakeById(antNest.state.currentTopicId, antNest.state.currentShowPage);
                 } else {
                     // if (antNest.state.type == 0) {
                     //     antNest.getTopics(antNest.state.currentPage, getAllTopic());
@@ -1044,6 +1157,9 @@ const AntNestTabComponents = React.createClass({
                     //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
                     antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
                     antNest.getTopicPartakeById(setTopicId, antNest.state.currentShowPage);
+                } else if (antNest.state.optType == "getZuoYeById") {
+                    antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
+                    antNest.getZuoYePartakeById(setTopicId, antNest.state.currentShowPage);
                 } else {
                     if (antNest.state.type == 0) {
                         antNest.getTopics(antNest.state.currentPage, getAllTopic());
@@ -1138,6 +1254,9 @@ const AntNestTabComponents = React.createClass({
                     //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
                     antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
                     antNest.getTopicPartakeById(antNest.state.currentTopicId, antNest.state.currentShowPage);
+                } else if (antNest.state.optType == "getZuoYeById") {
+                    antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
+                    antNest.getZuoYePartakeById(antNest.state.currentTopicId, antNest.state.currentShowPage);
                 } else {
                     // if (antNest.state.type == 0) {
                     //     antNest.getTopics(antNest.state.currentPage, getAllTopic());
@@ -1359,7 +1478,6 @@ const AntNestTabComponents = React.createClass({
             "method": 'addTopic',
             "topicJson": topicJson,
         };
-        console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.success == true && ret.response == true) {
@@ -1580,6 +1698,9 @@ const AntNestTabComponents = React.createClass({
                     //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
                     antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
                     antNest.getTopicPartakeById(antNest.state.currentTopicId, antNest.state.currentShowPage);
+                } else if (antNest.state.optType == "getZuoYeById") {
+                    antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
+                    antNest.getZuoYePartakeById(antNest.state.currentTopicId, antNest.state.currentShowPage);
                 } else {
                     if (antNest.state.type == 0) {
                         antNest.getTopics(antNest.state.currentPage, getAllTopic());
@@ -1654,6 +1775,19 @@ const AntNestTabComponents = React.createClass({
                     {/*current={antNest.state.currentShowPage}*/}
                     {/*onChange={antNest.pageOnChange}/>*/}
                 </div>;
+        } else if (antNest.state.optType == "getZuoYeById") {
+            optionButton = <div className="public—til—blue">
+                <div className="ant-tabs-right">
+                    <Button onClick={antNest.returnTopicList}><Icon type="left"/></Button>
+                </div>
+                作业内容</div>;
+
+            topicList =
+                <div className="favorite_scroll">
+                    <div className="antnest_cont topics_calc2" style={{overflow: 'scroll'}}>
+                        {antNest.state.topicCardList}
+                    </div>
+                </div>;
         } else {
             optionButton = <div className="public—til—blue">
                 <div className="talk_ant_btn1">
@@ -1687,7 +1821,7 @@ const AntNestTabComponents = React.createClass({
         var homeWorkTime;
         if (antNest.state.topicModalType == "homework") {
             homeWorkTime = <Row>
-                <Col span={3} className="right_look">时间：</Col>
+                <Col span={3} className="right_look">作业结束时间：</Col>
                 <Col span={20}>
                     {antNest.state.homeWorkTime}
                 </Col>
@@ -1787,13 +1921,6 @@ const AntNestTabComponents = React.createClass({
                               onConfirmModalOK={antNest.setTopicToTop}
                 ></ConfirmModal>
                 <div className="talk_ant_btn">
-                    {/*<Breadcrumb separator=">">
-                        <Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
-                        <Breadcrumb.Item href="#/MainLayout">首页</Breadcrumb.Item>
-                        <Breadcrumb.Item href="#/MainLayout">蚁巢</Breadcrumb.Item>
-                        <Breadcrumb.Item href="#/MainLayout">{breadMenuTip}</Breadcrumb.Item>
-                    </Breadcrumb>*/}
-
                     {optionButton}
                 </div>
                 {topicList}
