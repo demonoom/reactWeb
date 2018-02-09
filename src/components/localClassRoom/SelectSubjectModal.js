@@ -95,10 +95,6 @@ class SelectSubjectModal extends React.Component {
         this.setState({selectedSubjectKeys:[]});
     }
 
-    subjectModalHandleOk() {
-
-    }
-
     /**
      * 题目分页页码改变的响应函数
      * @param pageNo
@@ -138,6 +134,10 @@ class SelectSubjectModal extends React.Component {
         });
     }
 
+    /**
+     * 选中备课计划后，根据选定的备课计划，获取指定备课计划下的题目
+     * @param selectedRowKeys
+     */
     onScheduleSelectChange(selectedRowKeys) {
         var scheduleId = selectedRowKeys.key;
         subjectData = [];
@@ -195,19 +195,11 @@ class SelectSubjectModal extends React.Component {
      */
     subjectModalHandleOk(){
         //通过回调的形式，将选中的题目回调给父组件，并完成推题的操作
-        this.props.pushSubjectToClass(this.state.selectedSubjectKeys);
+        if(isEmpty(this.state.selectedSubjectKeys)==false){
+            this.props.pushSubjectToClass(this.state.selectedSubjectKeys);
+        }
         this.SelectSubjectModalHandleCancel();
     }
-
-    /**
-     * 从题目列表中，选中一个题目
-     */
-/*    selectSubject(record, index, event) {
-        var subjectId = record.key;
-        console.log(record);
-        //通过回调的形式，将选中的题目回调给父组件，并完成推题的操作
-        this.props.pushSubjectToClass(record);
-    }*/
 
     render() {
         const subjectRowSelection = {
@@ -240,7 +232,6 @@ class SelectSubjectModal extends React.Component {
                             <Table className="17_hei2" columns={subjectColumns}
                                    dataSource={subjectData}
                                    rowSelection={subjectRowSelection}
-                                   onRowClick={this.selectSubject}
                                    pagination={{
                                 total: this.state.totalSubjectCount,
                                 pageSize: getPageSize(),

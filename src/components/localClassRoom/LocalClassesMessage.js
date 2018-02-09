@@ -21,12 +21,14 @@ const LocalClassesMessage = React.createClass({
     },
 
     componentDidMount(){
-        parentMs=this.props.ms;
+        parentMs=opener.window.ms==null?this.props.ms:opener.window.ms;
+        console.log("parentMs at componentDidMount==>"+parentMs);
         this.listenClassMessage();
     },
 
     componentWillReceiveProps(nextProps){
-        parentMs=nextProps.ms;
+        parentMs=opener.window.ms==null?nextProps.ms:opener.window.ms;
+        console.log("parentMs at componentWillReceiveProps==>"+parentMs);
         this.listenClassMessage();
     },
 
@@ -43,7 +45,8 @@ const LocalClassesMessage = React.createClass({
                 if(infoCommand == "message"){
                     var messageData = info.data.message;
                     var messageCommand = messageData.command;
-                    if(messageCommand == "message"){
+                    var messageToType = messageData.toType;
+                    if(messageCommand == "message" && messageToType == "3"){
                         var messageFrom = "receive";
                         _this.buildMessageLiArray(messageData,messageFrom);
                     }
@@ -113,9 +116,10 @@ const LocalClassesMessage = React.createClass({
                 "toId": vid, "command": "message", "hostId": userId,
                 "uuid": uuid, "toType": messageToType, "attachment": '',
             };
-            var commandJson = {"command": "message", "data": {"message": messageJson}};
+            var fromUser = this.state.loginUser;
+            var commandJson = {"command": "message", "data": {"message": messageJson},fromUser};
             parentMs.send(commandJson);
-            this.buildMessageLiArray();
+            // this.buildMessageLiArray(messageJson);
         }
     },
 

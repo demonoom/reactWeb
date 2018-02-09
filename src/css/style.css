@@ -2372,7 +2372,7 @@ li.ant-menu-submenu > ul > li.ant-menu-submenu {
     width: 100%;
 }
 
-.noDataTipImg {
+.noDataTipImg, .center_all {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -8394,4 +8394,6 @@ select.course_n:hover {
 }
 .local_class iframe{
     border: none;
+    z-index: 10;
+    position: relative;
 }

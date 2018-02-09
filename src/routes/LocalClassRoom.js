@@ -3,6 +3,7 @@ import {Modal, message, Row, Col, Button, Tabs, Input} from 'antd';
 import LocalClassesMessage from '../components/localClassRoom/LocalClassesMessage'
 import {isEmpty} from "../utils/Const";
 import SelectSubjectModal from '../components/localClassRoom/SelectSubjectModal';
+import SelectMaterialsModal from '../components/localClassRoom/SelectMaterialsModal';
 
 var connection = null;
 var ms = null;
@@ -14,7 +15,8 @@ const LocalClassRoom = React.createClass({
             account: '',
             classRoomUrl: '',
             messageTagArray:[],
-            subjectModalIsShow:false
+            subjectModalIsShow:false,
+            materialsModalIsShow:false
         };
     },
 
@@ -28,47 +30,40 @@ const LocalClassRoom = React.createClass({
         var classType = searchArray[3].split('=')[1];
         document.title = "本地课堂";   //设置title
         sessionStorage.setItem("userId",userId);
-        this.connectClazz(userId, classCode, classType);
-        // this.getDisconnectedClass(userId, classCode, classType);
+        // this.getUsersByAccount(account);
+        this.connectClazz(userId, classCode, classType,account);
         this.setState({userId, account, classCode, classType});
     },
 
     /**
-     * 获取断开的课堂信息(这个在老师进入程序主界面的时候获取，如果有的的话，根据里面返回的信息重新进入课堂)
+     * 根据从地址中获取的用户账号，重新获取用户的信息
+     * @param account
      */
-    getDisconnectedClass(userId, classCode, classType) {
+    /*getUsersByAccount(account){
         var _this = this;
         var param = {
-            "method": "getDisconnectedClass",
-            "userId": userId
+            "method": 'getUserByAccount',
+            "account": account,
         };
+
         doWebService(JSON.stringify(param), {
-            onResponse: function (ret) {
-                var response = ret.response;
-                if (ret.msg == "调用成功" && ret.success == true) {
-                    //如果response不是null，表示存在已断开的课堂，直接进入已存在的课堂
-                    if (isEmpty(response) == false) {
-                        //虚拟课堂的id
-                        var vid = response.vid;
-                        //开课老师账号
-                        var account = response.account;
-                        sessionStorage.setItem("vid",vid);
-                        _this.setState({vid});
-                    } else {
-                        //如果不存在断开的课堂，以当前老师的信息，开启新的课堂
-                        _this.connectClazz(userId, classCode, classType);
+            onResponse: function (res) {
+                if (res.success) {
+                    if (res.response) {
+                        console.log(res.response);
+                        sessionStorage.setItem("teacherInfoAtClass",res.response);
                     }
                 } else {
-                    message.error(ret.msg);
+                    message.error(res.msg);
                 }
             },
             onError: function (error) {
                 message.error(error);
             }
         });
-    },
+    },*/
 
-    connectClazz(userId, classCode, classType) {
+    connectClazz(userId, classCode, classType,account) {
         var _this = this;
         connection = new ClazzConnection();
         connection.clazzWsListener = {
@@ -108,8 +103,8 @@ const LocalClassRoom = React.createClass({
         var loginPro = {
             "command": "teacherLogin",
             "data": {
-                "password": "zcl123456",
-                "account": "TE24491",
+                "password": sessionStorage.getItem("pd"),
+                "account": account,
                 "classType": classType,
                 "classCode": classCode,
                 "userId": userId
@@ -123,11 +118,7 @@ const LocalClassRoom = React.createClass({
      * 获取课件，打开ppt，完成推ppt的操作
      */
     getPPT() {
-        var pptURL = "https://www.maaee.com/h5Point/2017-06-19/10/1497839536166/1497839536166.html";
-        var vid = this.state.vid;
-        var userId = this.state.userId;
-        var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid="+vid+"&userId="+userId+"&role=manager&ppt="+pptURL;
-        this.setState({classRoomUrl});
+        this.setState({materialsModalIsShow:true});
     },
 
     /**
@@ -154,28 +145,46 @@ const LocalClassRoom = React.createClass({
         connection.send(pushSubjectProtocal);
     },
 
+    closeMaterialsModal(){
+        this.setState({materialsModalIsShow:false});
+    },
+
+    pushMaterialsToClass(materials){
+        var htmlPath = materials.htmlPath;
+        var pptURL = htmlPath.replace("60.205.111.227","www.maaee.com");
+        pptURL = pptURL.replace("http","https");
+        var vid = this.state.vid;
+        var userId = this.state.userId;
+        var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid="+vid+"&userId="+userId+"&role=manager&ppt="+pptURL;
+        this.setState({classRoomUrl});
+    },
+
     render() {
 
         var classIfream = null;
         if (isEmpty(this.state.classRoomUrl) == false) {
-            classIfream = <iframe src={this.state.classRoomUrl} style={{width: '100%', height: '100%'}}></iframe>;
+            classIfream = <div className="classroom_draw"><iframe src={this.state.classRoomUrl} style={{width: '100%', height: '100%'}}></iframe></div>;
         }else{
-            classIfream = <div>默认的欢迎页</div>
+            classIfream = <div className="classroom_welcome">
+                <img className="center_all" src="../../src/components/images/board_welcome.jpg" />
+            </div>
         }
 
         return (
             <div className="local_class flex">
-                <div className="flex_auto">
+                <div className="flex_auto classroom_left">
+
                     {classIfream}
-                    <div>
-                        <Button onClick={this.getPPT}>课件</Button>
-                        <Button onClick={this.getSubject}>题目</Button>
+                    <div className="classroom_btn">
+                        <Button className="classroom_btn_b classroom_btn_orange" onClick={this.getPPT} icon="folder-open">课件</Button>
+                        <Button className="classroom_btn_b classroom_btn_green add_out" onClick={this.getSubject} icon="file-text">题目</Button>
                     </div>
                 </div>
                 <div className="local_class_right">
                     <LocalClassesMessage ms={ms} classCode={this.state.classCode} classType={this.state.classType}></LocalClassesMessage>
                 </div>
                 <SelectSubjectModal isShow={this.state.subjectModalIsShow} onCancel={this.closeSubjectModal} pushSubjectToClass={this.pushSubjectToClass}></SelectSubjectModal>
+                <SelectMaterialsModal isShow={this.state.materialsModalIsShow} onCancel={this.closeMaterialsModal} pushMaterialsToClass={this.pushMaterialsToClass}></SelectMaterialsModal>
             </div>
         );
     },
