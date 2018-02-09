@@ -9,6 +9,7 @@ import {showLargeImg} from '../../utils/utils';
 import UploadImgComponents from './UploadImgComponents';
 import EmotionInputComponents from './EmotionInputComponents';
 import ConfirmModal from '../ConfirmModal';
+import moment from 'moment';
 
 var topicCardArray = [];
 var antNest;
@@ -18,6 +19,7 @@ var classCanSeeObj = [];
 const RadioGroup = Radio.Group;
 const CheckboxGroup = Checkbox.Group;
 const {RangePicker} = DatePicker;
+const dateFullFormat = 'YYYY-MM-DD HH:mm:ss';
 //假数据
 const children = [];
 for (let i = 10; i < 36; i++) {
@@ -54,7 +56,8 @@ const AntNestTabComponents = React.createClass({
             radioValue: 1,    //公开还是可见  1公开2可见
             boxDisplay: 'none',
             radioDisplay: 'block',
-            classSrcChecked: []  //checkbox可见班级的名字,checkbox的value值
+            classSrcChecked: [],  //checkbox可见班级的名字,checkbox的value值,
+            homeWorkTime: '',
         };
     },
 
@@ -191,6 +194,10 @@ const AntNestTabComponents = React.createClass({
         if (isEmpty(topicObj.title) == false && useType == 0 && topicObj.valid == 0 && topicObj.type == 1) {
             topicTitle = <a value={topicObj.id} title={topicObj.id} onClick={antNest.getTopicPartakeInfo}
                             className="topics">#{topicObj.title}#</a>
+        }
+        if (isEmpty(topicObj.title) == false && useType == 0 && topicObj.valid == 0 && topicObj.type == 11) {
+            topicTitle = <a value={topicObj.id} title={topicObj.id} onClick={antNest.getTopicPartakeInfo}
+                            className="topics">@{topicObj.title}@</a>
         }
         //点赞用户span标记数组
         var likeUsersArray = [];
@@ -625,6 +632,7 @@ const AntNestTabComponents = React.createClass({
      * 话题被点击的回调
      */
     getTopicPartakeInfo(e) {
+        alert('话题被点击');
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             target = e.currentTarget;
@@ -1167,7 +1175,6 @@ const AntNestTabComponents = React.createClass({
                 emotionArray[i].innerText = "";
             }
         }
-        classCanSeeObj.splice(0);
         //清空话题标题输入框
         antNest.setState({
             "topicTitle": '',
@@ -1175,7 +1182,8 @@ const AntNestTabComponents = React.createClass({
             radioValue: 1,
             classSrcChecked: [],
             boxDisplay: 'none',
-            radioDisplay: 'block'
+            radioDisplay: 'block',
+            homeWorkTime: '',
         });
     },
 
@@ -1255,6 +1263,13 @@ const AntNestTabComponents = React.createClass({
                 })
             })
         }
+        var homeWorkDate = this.state.homeWorkDate;
+        if (antNest.state.topicModalType == "homework") {
+            if (isEmpty(antNest.state.homeWorkDate)) {
+                message.error("请选择时间。", 5);
+                return;
+            }
+        }
         var inputContent;
         var emotionInput = antNest.getEmotionInput();
         if (isEmpty($("#emotionInput").val()) == false) {
@@ -1262,9 +1277,9 @@ const AntNestTabComponents = React.createClass({
         } else {
             inputContent = emotionInput;
         }
-        if (antNest.state.topicModalType == "topic") {
+        if (antNest.state.topicModalType == "topic" || antNest.state.topicModalType == "homework") {
             if (isEmpty(antNest.state.topicTitle)) {
-                message.error("话题的标题不允许为空，请重新输入。", 5);
+                message.error("标题不允许为空，请重新输入。", 5);
                 return;
             }
         }
@@ -1313,17 +1328,30 @@ const AntNestTabComponents = React.createClass({
                 "attachMents": attachMents,
                 "comments": [],
                 "open": 0,
-                "whiteList": ckeckIdArr
+                "whiteList": ckeckIdArr,
             };
         }
-        if (isEmpty(antNest.state.topicTitle) == false) {
+        if (antNest.state.topicModalType == "topic") {
             topicJson.type = 1;
-            var title = antNest.state.topicTitle;
-            title = title.replace(/\'/g, "\\'");  //' 替换成  \'
-            title = title.replace(/\"/g, "\\\""); //" 替换成\"
-            title = title.replace(/</g, "\\\<"); //< 替换成\<
-            title = title.replace(/>/g, "\\\>"); //> 替换成\>
-            topicJson.title = title;
+            if (isEmpty(antNest.state.topicTitle) == false) {
+                var title = antNest.state.topicTitle;
+                title = title.replace(/\'/g, "\\'");  //' 替换成  \'
+                title = title.replace(/\"/g, "\\\""); //" 替换成\"
+                title = title.replace(/</g, "\\\<"); //< 替换成\<
+                title = title.replace(/>/g, "\\\>"); //> 替换成\>
+                topicJson.title = title;
+            }
+        } else if (antNest.state.topicModalType == "homework") {
+            topicJson.type = 11;
+            topicJson.commentDisplayTime = homeWorkDate;
+            if (isEmpty(antNest.state.topicTitle) == false) {
+                var title = antNest.state.topicTitle;
+                title = title.replace(/\'/g, "\\'");  //' 替换成  \'
+                title = title.replace(/\"/g, "\\\""); //" 替换成\"
+                title = title.replace(/</g, "\\\<"); //< 替换成\<
+                title = title.replace(/>/g, "\\\>"); //> 替换成\>
+                topicJson.title = title;
+            }
         } else {
             topicJson.type = 0;
         }
@@ -1395,6 +1423,7 @@ const AntNestTabComponents = React.createClass({
      * 显示发表说说/话题的窗口
      */
     showaddTopicModal(e) {
+        classCanSeeObj.splice(0);
         var _this = this;
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
@@ -1437,6 +1466,14 @@ const AntNestTabComponents = React.createClass({
             onError: function (error) {
                 message.error(error);
             }
+        });
+        this.setState({
+            homeWorkTime: <DatePicker
+                showTime
+                format="YYYY-MM-DD HH:mm:ss"
+                placeholder="请选择时间"
+                onChange={antNest.timeOnChange}
+            />
         });
         antNest.setState({"addTopicModalVisible": true, "topicModalType": optType});
     },
@@ -1577,13 +1614,9 @@ const AntNestTabComponents = React.createClass({
         this.setState({antNestScoll: scrollTop});
     },
 
-    timeOnOk(value) {
-        console.log('onOk: ', value);
-    },
-
     timeOnChange(value, dateString) {
-        console.log('Selected Time: ', value);
-        console.log('Formatted Selected Time: ', dateString);
+        var date = new Date(dateString).valueOf();
+        this.setState({homeWorkDate: date});
     },
 
     /**
@@ -1656,13 +1689,7 @@ const AntNestTabComponents = React.createClass({
             homeWorkTime = <Row>
                 <Col span={3} className="right_look">时间：</Col>
                 <Col span={20}>
-                    <DatePicker
-                        showTime
-                        format="YYYY-MM-DD HH:mm:ss"
-                        placeholder="Select Time"
-                        onChange={antNest.timeOnChange}
-                        onOk={antNest.timeOnOk}
-                    />
+                    {antNest.state.homeWorkTime}
                 </Col>
             </Row>
         }
@@ -1726,7 +1753,7 @@ const AntNestTabComponents = React.createClass({
                        maskClosable={false} //设置不允许点击蒙层关闭
                        onOk={antNest.partakeModalHandleOk}
                        onCancel={antNest.partakeModalHandleCancel}
-                       style={{height:360}}
+                       style={{height: 360}}
                 >
                     <div className="group_send_shuoshuo">
                         <Row>

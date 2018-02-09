@@ -738,7 +738,7 @@ const AntMulitiClassComponents = React.createClass({
 
         if (isEmpty(this.state.stepDirect) || this.state.stepDirect == "pre") {
             saveButtons = [
-                <Button onClick={this.changeStep.bind(this, "next", "save")}>下一步</Button>,
+                <Button onClick={this.changeStep.bind(this, "next", "save")}>下一步3333x</Button>,
                 <Button onClick={this.createClassModalHandleCancel}>关闭</Button>
             ];
             var updateButtons = [
@@ -748,7 +748,7 @@ const AntMulitiClassComponents = React.createClass({
         } else if (this.state.stepDirect == "next") {
             saveButtons = [
                 <Button onClick={this.changeStep.bind(this, "pre", "save")}>上一步</Button>,
-                <Button onClick={this.saveClassInfo.bind(this, "save")}>提交</Button>,
+                <Button onClick={this.saveClassInfo.bind(this, "save")}>提交333</Button>,
                 <Button onClick={this.createClassModalHandleCancel}>关闭</Button>
             ];
             var updateButtons = [
