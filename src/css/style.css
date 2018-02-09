@@ -8402,11 +8402,12 @@ select.course_n:hover {
     cursor: pointer;
 }
 .visible_class{
+    width: 440px;
 }
 .visible_class ul{
     margin: 0;
     padding: 25px 0;
-    height: 200px;
+    height: 100px;
     overflow-y: auto;
     overflow-x: hidden;
 }
