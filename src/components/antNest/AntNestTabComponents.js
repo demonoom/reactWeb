@@ -58,6 +58,7 @@ const AntNestTabComponents = React.createClass({
             radioDisplay: 'block',
             classSrcChecked: [],  //checkbox可见班级的名字,checkbox的value值,
             homeWorkTime: '',
+            whoISSecretModalVisible: false
         };
     },
 
@@ -168,16 +169,30 @@ const AntNestTabComponents = React.createClass({
         LP.Start(obj);
     },
 
+    whoISSecret(data) {
+        // whoISSecretLis
+        var arr = [];
+        data.forEach(function (v) {
+            var li = <li>{v.name}</li>
+
+        });
+        this.setState({whoISSecretModalVisible: true});
+    },
+
+    whoISSecretModalHandleCancel() {
+        this.setState({whoISSecretModalVisible: false});
+    },
+
     /**
      * 构建话题的card对象
      * @param topicObj 话题对象
      * @param useType 用途 0:列表  1：单个话题
      */
     buildTopicCard(topicObj, useType, topicReplayInfoArray, parTakeCountInfo, homeWorkFlag) {
-        console.log(topicObj);
         var screatPic = '';
         if (topicObj.fromUserId == sessionStorage.getItem("ident") && topicObj.applyWhiteList == true) {
-            screatPic = <img src={require('../images/screatPic.png')} alt=""/>
+            screatPic = <img src={require('../images/screatPic.png')} alt=""
+                             onClick={this.whoISSecret.bind(this, topicObj.whiteList)}/>
         }
         //如果用户头像为空，使用系统默认头像
         var commentDisplayTime = '';
@@ -1065,13 +1080,11 @@ const AntNestTabComponents = React.createClass({
      * @param topicCommentId 评论id
      */
     deleteTopicCommentById(topicCommentId, topicId) {
-        debugger
         var param = {
             "method": 'deleteTopicComment',
             "ident": sessionStorage.getItem("ident"),
             "topicCommentId": topicCommentId + ""
         };
-        console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.success == true && ret.response == true) {
@@ -1903,6 +1916,21 @@ const AntNestTabComponents = React.createClass({
                     </div>
 
                 </Modal>
+
+                <Modal title="可见班级"
+                       visible={antNest.state.whoISSecretModalVisible}
+                       transitionName=""  //禁用modal的动画效果
+                       maskClosable={false} //设置不允许点击蒙层关闭
+                    // onOk={antNest.partakeModalHandleOk}
+                       onCancel={antNest.whoISSecretModalHandleCancel}
+                >
+                    <div className="group_send_pinglun">
+                        <ul>
+                            {this.state.whoISSecretLis}
+                        </ul>
+                    </div>
+                </Modal>
+
                 <ConfirmModal ref="confirmModal"
                               title="确定要删除该条记录?"
                               onConfirmModalCancel={antNest.closeDeleteTopicModal}
