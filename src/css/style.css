@@ -8402,7 +8402,6 @@ select.course_n:hover {
     cursor: pointer;
 }
 .visible_class{
-    width: 440px;
 }
 .visible_class ul{
     margin: 0;
