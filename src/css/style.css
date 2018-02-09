@@ -8359,7 +8359,7 @@ select.course_n:hover {
     color: #666 !important;
 }
 .radio_left{
-    margin-left: 6%;
+    margin-left: 10%;
 }
 .checkbox_left{
     margin-left: 10%;
@@ -8396,4 +8396,7 @@ select.course_n:hover {
     border: none;
     z-index: 10;
     position: relative;
+}
+.screatPic{
+    width: 20px;
 }
