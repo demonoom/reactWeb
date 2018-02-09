@@ -30,38 +30,9 @@ const LocalClassRoom = React.createClass({
         var classType = searchArray[3].split('=')[1];
         document.title = "本地课堂";   //设置title
         sessionStorage.setItem("userId",userId);
-        // this.getUsersByAccount(account);
         this.connectClazz(userId, classCode, classType,account);
         this.setState({userId, account, classCode, classType});
     },
-
-    /**
-     * 根据从地址中获取的用户账号，重新获取用户的信息
-     * @param account
-     */
-    /*getUsersByAccount(account){
-        var _this = this;
-        var param = {
-            "method": 'getUserByAccount',
-            "account": account,
-        };
-
-        doWebService(JSON.stringify(param), {
-            onResponse: function (res) {
-                if (res.success) {
-                    if (res.response) {
-                        console.log(res.response);
-                        sessionStorage.setItem("teacherInfoAtClass",res.response);
-                    }
-                } else {
-                    message.error(res.msg);
-                }
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });
-    },*/
 
     connectClazz(userId, classCode, classType,account) {
         var _this = this;
