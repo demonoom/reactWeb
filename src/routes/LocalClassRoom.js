@@ -30,47 +30,40 @@ const LocalClassRoom = React.createClass({
         var classType = searchArray[3].split('=')[1];
         document.title = "本地课堂";   //设置title
         sessionStorage.setItem("userId",userId);
-        this.connectClazz(userId, classCode, classType);
-        // this.getDisconnectedClass(userId, classCode, classType);
+        // this.getUsersByAccount(account);
+        this.connectClazz(userId, classCode, classType,account);
         this.setState({userId, account, classCode, classType});
     },
 
     /**
-     * 获取断开的课堂信息(这个在老师进入程序主界面的时候获取，如果有的的话，根据里面返回的信息重新进入课堂)
+     * 根据从地址中获取的用户账号，重新获取用户的信息
+     * @param account
      */
-    getDisconnectedClass(userId, classCode, classType) {
+    /*getUsersByAccount(account){
         var _this = this;
         var param = {
-            "method": "getDisconnectedClass",
-            "userId": userId
+            "method": 'getUserByAccount',
+            "account": account,
         };
+
         doWebService(JSON.stringify(param), {
-            onResponse: function (ret) {
-                var response = ret.response;
-                if (ret.msg == "调用成功" && ret.success == true) {
-                    //如果response不是null，表示存在已断开的课堂，直接进入已存在的课堂
-                    if (isEmpty(response) == false) {
-                        //虚拟课堂的id
-                        var vid = response.vid;
-                        //开课老师账号
-                        var account = response.account;
-                        sessionStorage.setItem("vid",vid);
-                        _this.setState({vid});
-                    } else {
-                        //如果不存在断开的课堂，以当前老师的信息，开启新的课堂
-                        _this.connectClazz(userId, classCode, classType);
+            onResponse: function (res) {
+                if (res.success) {
+                    if (res.response) {
+                        console.log(res.response);
+                        sessionStorage.setItem("teacherInfoAtClass",res.response);
                     }
                 } else {
-                    message.error(ret.msg);
+                    message.error(res.msg);
                 }
             },
             onError: function (error) {
                 message.error(error);
             }
         });
-    },
+    },*/
 
-    connectClazz(userId, classCode, classType) {
+    connectClazz(userId, classCode, classType,account) {
         var _this = this;
         connection = new ClazzConnection();
         connection.clazzWsListener = {
@@ -110,8 +103,8 @@ const LocalClassRoom = React.createClass({
         var loginPro = {
             "command": "teacherLogin",
             "data": {
-                "password": "zcl123456",
-                "account": "TE24491",
+                "password": sessionStorage.getItem("pd"),
+                "account": account,
                 "classType": classType,
                 "classCode": classCode,
                 "userId": userId
