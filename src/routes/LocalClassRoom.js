@@ -152,7 +152,10 @@ const LocalClassRoom = React.createClass({
 
         return (
             <div className="local_class flex">
-                <div className="flex_auto">
+                <div className="flex_auto classroom_left">
+                    <div className="classroom_welcome">
+                        <img className="center_all" src="../../src/components/images/board_welcome.jpg" />
+                    </div>
                     {classIfream}
                     <div>
                         <Button onClick={this.getPPT}>课件</Button>
