@@ -174,7 +174,7 @@ const AntNestTabComponents = React.createClass({
         // whoISSecretLis
         var arr = [];
         data.forEach(function (v) {
-            var li = <li>{v.name}</li>
+            var li = <li>{v.grade.name + ' ' + v.name}</li>
             arr.push(li);
 
         });
