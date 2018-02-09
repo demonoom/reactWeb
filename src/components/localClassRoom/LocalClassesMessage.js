@@ -107,12 +107,12 @@ const LocalClassesMessage = React.createClass({
         if (isEmpty(this.state.barrageMessageContent) == false) {
             var uuid = this.createUUID();
             var createTime = (new Date()).valueOf();
-            var loginUser = {colUid:24491,colAccount:'TE24491',userName:'邹长亮'};
+            //var loginUser = {colUid:24491,colAccount:'TE24491',userName:'邹长亮'};
             var messageToType="3";
             var vid = sessionStorage.getItem("vid");
             var userId = sessionStorage.getItem("userId");
             var messageJson = {
-                'content': this.state.barrageMessageContent, "createTime": createTime, 'fromUser': loginUser,
+                'content': this.state.barrageMessageContent, "createTime": createTime, 'fromUser': this.state.loginUser,
                 "toId": vid, "command": "message", "hostId": userId,
                 "uuid": uuid, "toType": messageToType, "attachment": '',
             };

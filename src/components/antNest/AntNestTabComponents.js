@@ -170,13 +170,15 @@ const AntNestTabComponents = React.createClass({
     },
 
     whoISSecret(data) {
+        console.log(data);
         // whoISSecretLis
         var arr = [];
         data.forEach(function (v) {
             var li = <li>{v.name}</li>
+            arr.push(li);
 
         });
-        this.setState({whoISSecretModalVisible: true});
+        this.setState({whoISSecretModalVisible: true, whoISSecretLis: arr});
     },
 
     whoISSecretModalHandleCancel() {
@@ -191,8 +193,8 @@ const AntNestTabComponents = React.createClass({
     buildTopicCard(topicObj, useType, topicReplayInfoArray, parTakeCountInfo, homeWorkFlag) {
         var screatPic = '';
         if (topicObj.fromUserId == sessionStorage.getItem("ident") && topicObj.applyWhiteList == true) {
-            screatPic = <img src={require('../images/screatPic.png')} alt=""
-                             onClick={this.whoISSecret.bind(this, topicObj.whiteList)}/>
+            screatPic = <span onClick={this.whoISSecret.bind(this, topicObj.whiteList)} className="topics_time"><img
+                src={require('../images/screatPic.png')} alt="" className="screatPic"/></span>
         }
         //如果用户头像为空，使用系统默认头像
         var commentDisplayTime = '';
@@ -483,7 +485,7 @@ const AntNestTabComponents = React.createClass({
                 if (topicReplayInfo.fromUser.colUtype == "STUD" || (topicReplayInfo.fromUser.colUtype == "TEAC" && topicReplayInfo.fromUser.colUid == sessionStorage.getItem("ident"))) {
                     delBtnInReplayCard = <Button value={topicReplayInfo.id} icon="delete"
                                                  onClick={antNest.deleteTopic.bind(antNest, topicReplayInfo.id)}
-                                                 className="topics_btn  teopics_spa">删除4</Button>;
+                                                 className="topics_btn  teopics_spa antnest_talk">删除</Button>;
                 }
                 var praiseBtn;
                 if (topicObj.fromUser.colUtype == "TEAC" && topicObj.fromUser.colUid == sessionStorage.getItem("ident")) {
@@ -1826,16 +1828,16 @@ const AntNestTabComponents = React.createClass({
         var topicTitle;
         if (antNest.state.topicModalType == "topic" || antNest.state.topicModalType == "homework") {
             topicTitle = <Row className="yinyong_topic">
-                <Col span={3} className="right_look">标题：</Col>
-                <Col span={20}><Input onChange={antNest.topicTitleChange} defaultValue={antNest.state.topicTitle}
+                <Col span={4} className="right_look">标题：</Col>
+                <Col span={18}><Input onChange={antNest.topicTitleChange} defaultValue={antNest.state.topicTitle}
                                       value={antNest.state.topicTitle}/></Col>
             </Row>;
         }
         var homeWorkTime;
         if (antNest.state.topicModalType == "homework") {
             homeWorkTime = <Row>
-                <Col span={3} className="right_look">作业结束时间：</Col>
-                <Col span={20}>
+                <Col span={4} className="right_look">作业结束时间：</Col>
+                <Col span={18}>
                     {antNest.state.homeWorkTime}
                 </Col>
             </Row>
@@ -1851,8 +1853,8 @@ const AntNestTabComponents = React.createClass({
                 >
                     <div className="group_send_pinglun">
                         <Row>
-                            <Col span={3} className="right_look">内容：</Col>
-                            <Col span={20}><EmotionInputComponents
+                            <Col span={4} className="right_look">内容：</Col>
+                            <Col span={18}><EmotionInputComponents
                                 className="topics_ral"></EmotionInputComponents></Col>
                         </Row>
                     </div>
@@ -1867,13 +1869,13 @@ const AntNestTabComponents = React.createClass({
                     <div className="group_send_shuoshuo">
                         {topicTitle}
                         <Row className="yinyong_topic">
-                            <Col span={3} className="right_look">内容：</Col>
-                            <Col span={20}><EmotionInputComponents></EmotionInputComponents></Col>
+                            <Col span={4} className="right_look">内容：</Col>
+                            <Col span={18}><EmotionInputComponents></EmotionInputComponents></Col>
                         </Row>
                         {homeWorkTime}
                         <Row className="yinyong3">
-                            <Col span={3} className="right_look">附件：</Col>
-                            <Col span={20}><UploadImgComponents fileList={antNest.state.topicImgUrl}
+                            <Col span={4} className="right_look">附件：</Col>
+                            <Col span={18}><UploadImgComponents fileList={antNest.state.topicImgUrl}
                                                                 callBackParent={antNest.getUploadedImgList}></UploadImgComponents></Col>
                         </Row>
                         <Row style={{display: this.state.radioDisplay}}>
@@ -1904,13 +1906,13 @@ const AntNestTabComponents = React.createClass({
                 >
                     <div className="group_send_shuoshuo">
                         <Row>
-                            <Col span={3}>内容：</Col>
-                            <Col span={20}><EmotionInputComponents
+                            <Col span={4} className="right_look">内容：</Col>
+                            <Col span={18}><EmotionInputComponents
                                 className="topics_ral"></EmotionInputComponents></Col>
                         </Row>
                         <Row className="yinyong3">
-                            <Col span={3}>附件：</Col>
-                            <Col span={20}><UploadImgComponents
+                            <Col span={4} className="right_look">附件：</Col>
+                            <Col span={18}><UploadImgComponents
                                 callBackParent={antNest.getUploadedImgList}></UploadImgComponents></Col>
                         </Row>
                     </div>
