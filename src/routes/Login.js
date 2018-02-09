@@ -126,6 +126,7 @@ const Login = Form.create()(React.createClass({
                         loginComponent.setState({loginFailedCount:loginFailedCount});
                         message.error("用户身份不正确,请重新输入！");
                     }else{
+                        sessionStorage.setItem("pd",userPassword)
                         _this.loginSystem(response);
                     }
                 }
