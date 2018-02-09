@@ -21,12 +21,14 @@ const LocalClassesMessage = React.createClass({
     },
 
     componentDidMount(){
-        parentMs=this.props.ms==null?opener.window.ms:this.props.ms;
+        parentMs=opener.window.ms==null?this.props.ms:opener.window.ms;
+        console.log("parentMs at componentDidMount==>"+parentMs);
         this.listenClassMessage();
     },
 
     componentWillReceiveProps(nextProps){
-        parentMs=nextProps.ms==null?opener.window.ms:nextProps.ms;
+        parentMs=opener.window.ms==null?nextProps.ms:opener.window.ms;
+        console.log("parentMs at componentWillReceiveProps==>"+parentMs);
         this.listenClassMessage();
     },
 
@@ -114,9 +116,10 @@ const LocalClassesMessage = React.createClass({
                 "toId": vid, "command": "message", "hostId": userId,
                 "uuid": uuid, "toType": messageToType, "attachment": '',
             };
-            var commandJson = {"command": "message", "data": {"message": messageJson}};
+            var fromUser = this.state.loginUser;
+            var commandJson = {"command": "message", "data": {"message": messageJson},fromUser};
             parentMs.send(commandJson);
-            // this.buildMessageLiArray();
+            this.buildMessageLiArray(messageJson);
         }
     },
 
