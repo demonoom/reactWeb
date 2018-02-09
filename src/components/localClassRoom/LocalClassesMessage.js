@@ -21,12 +21,12 @@ const LocalClassesMessage = React.createClass({
     },
 
     componentDidMount(){
-        parentMs=this.props.ms;
+        parentMs=this.props.ms==null?opener.window.ms:this.props.ms;
         this.listenClassMessage();
     },
 
     componentWillReceiveProps(nextProps){
-        parentMs=nextProps.ms;
+        parentMs=nextProps.ms==null?opener.window.ms:nextProps.ms;
         this.listenClassMessage();
     },
 
@@ -115,7 +115,7 @@ const LocalClassesMessage = React.createClass({
             };
             var commandJson = {"command": "message", "data": {"message": messageJson}};
             parentMs.send(commandJson);
-            this.buildMessageLiArray();
+            // this.buildMessageLiArray();
         }
     },
 
