@@ -517,6 +517,7 @@ const CreateClassComponents = React.createClass({
      * 添加课程目录
      */
     addLesson() {
+        debugger;
         var tagArrByNoom = [];
         this.state.noomTages.push(tagArrByNoom);
         var _this = this;
@@ -563,8 +564,6 @@ const CreateClassComponents = React.createClass({
         var videoJson = {"squence": lessonNum}
         videoJsonArray.push(videoJson);
         courseInfoJson.videos = videoJsonArray;
-
-
         this.setState({lessonArray, "videoNum": newVideoNum});
 
     },
@@ -629,6 +628,8 @@ const CreateClassComponents = React.createClass({
      */
 
     removeLesson(removeSequence) {
+        debugger;
+        console.log('.....',removeSequence);
         for (var i = 0; i < lessonArray.length; i++) {
             var lessonJson = lessonArray[i];
             if (lessonJson.squence == removeSequence) {
@@ -657,8 +658,9 @@ const CreateClassComponents = React.createClass({
         var videoNumBeforeRemove = this.state.videoNum;
         var newVideoNum = parseInt(videoNumBeforeRemove) - 1;
         courseInfoJson.videoNum = newVideoNum;
+        var index = removeSequence -1;
+        this.state.noomTages.splice(index,1);
         this.setState({lessonArray, "videoNum": newVideoNum});
-
 
     },
 
@@ -770,7 +772,6 @@ const CreateClassComponents = React.createClass({
             videoJson.knowledgeVideos = knowledgeVideosArray;
             this.buildVideosArray(videoJson);
         }
-        videoJson.knowledgeVideos = knowledgeVideosArray;
         if (isEmpty(courseInfoJson.videos) == false) {
             var checkResult = true;
             if (this.state.isWeiClass) {
@@ -1031,7 +1032,6 @@ const CreateClassComponents = React.createClass({
     },
 
     knowledgePointOnclick(num) {
-        // console.log('num1111', num);
         knowledgePointNum = num;
         this.setState({knowledgePointNum: num});
     },
@@ -1042,7 +1042,6 @@ const CreateClassComponents = React.createClass({
         this.refs.knowledgePointModal.rememberId(t);
         this.setState({"selectKnowledgeModalIsShow": true});
     },
-
 
     closeSelectKnowledgeModal(tags, i) {
         //在这里决定往哪个数组的tags push tag
@@ -1268,6 +1267,8 @@ const CreateClassComponents = React.createClass({
             if (this.state.isWeiClass) {
                 //是微课
                 if (typeof(this.state.lessonArray) != "undefined") {
+                    debugger
+                    console.log(lessonArray);
                     for (var i = 0; i < this.state.lessonArray.length; i++) {
                         var lessonJson = this.state.lessonArray[i];
                         //获取已经保存的时间信息，并重新初始化到页面的组件上

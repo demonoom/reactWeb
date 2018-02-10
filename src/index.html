@@ -31,19 +31,18 @@
     <script src="../src/components/littlePanle.js?v=1.8"></script>
     <script src="../src/components/noomPanle.js?v=1.6"></script>
     <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/video.css?v=3.2">
-    <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/style.css?v=10.2">
+    <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/style.css?v=10.3">
     <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/student.css?v=3.6">
     <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/schoolGroup.css?v=3.8">
     <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/approving.css?v=3.1">
+    <link charset="utf-8" rel="stylesheet" type="text/css" href="../src/css/classroom.css?v=3.2">
     <!-- emoji picker start -->
     <link rel="stylesheet" href="../src/css/font-awesome-4.7.0/css/font-awesome.min.css">
     <link href="../emojiPicker/lib/css/nanoscroller.css" rel="stylesheet">
     <link href="../emojiPicker/lib/css/emoji.css" rel="stylesheet">
     <!-- emoji picker end -->
     <script src="thirdLib/formBuilder2.9.8/form-builder.min.js"></script>
-    <!--<script src="thirdLib/formBuilder2.9.8/assets/js/vendor.js"></script>-->
     <script src="thirdLib/formBuilder2.9.8/assets/js/form-builder.min.js"></script>
-    <!--<script src="thirdLib/formBuilder2.9.8/assets/js/form-render.min.js"></script>-->
     <script>
         //以下声明的对象为全局的textboxio组件对象
 
@@ -110,10 +109,8 @@
         function checkIsLogin() {
             if (sessionStorage.getItem("ident") == null || sessionStorage.getItem("ident") == "") {
                 timer = setTimeout("checkIsLogin()", 500);
-                //document.getElementById("componyInfo").innerHTML = "小蚂蚁移动教学平台 版权所有 恒坐标教育集团";
                 $(".ant-layout-footer").css({"display": 'block'});
             } else {
-                //document.getElementById("componyInfo").innerHTML = "";
                 $(".ant-layout-footer").css({"display": 'none'});
                 clearTimeout(timer);
             }
@@ -133,13 +130,12 @@
 <script src="../emojiPicker/lib/js/emoji-picker.js"></script>
 <!-- End emoji-picker JavaScript -->
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=lK9Uq8lbN3p3E8kOh0axyKw7ZEGQ3G2s"></script>
-<!--<script src="https://www.maaee.com/Excoord_PhoneService/js/clazz_websocket_connection.js?v=0.01"></script>-->
 <script type="text/javascript">
     window.history.pushState(null, null, document.URL);
     window.addEventListener('popstate', function () {
         history.pushState(null, null, document.URL);
     });
 </script>
-<script src="index.js?v=2.3.7"></script>
+<script src="index.js?v=2.3.8"></script>
 </body>
 </html>

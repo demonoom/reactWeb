@@ -1025,8 +1025,9 @@ const UpdateClassComponents = React.createClass({
         var videoNumBeforeRemove = this.state.videoNum;
         var newVideoNum = parseInt(videoNumBeforeRemove) - 1;
         courseInfoJson.videoNum = newVideoNum;
+        var index = removeSequence -1;
+        this.state.noomTages.splice(index,1);
         this.setState({lessonArray, "videoNum": newVideoNum});
-
 
     },
 
@@ -1418,6 +1419,7 @@ const UpdateClassComponents = React.createClass({
         this.refs.knowledgePointModal.rememberId(t);
         this.setState({selectKnowledgeModalIsShow:true,"initTags":tagNoomObj})
     },
+
     /**
      * 修改题目的过程中，如果选择知识点的窗口关闭，则将选定的知识点带回并关闭当前的窗口
      * @param tags

@@ -9,6 +9,7 @@ import {showLargeImg} from '../../utils/utils';
 import UploadImgComponents from './UploadImgComponents';
 import EmotionInputComponents from './EmotionInputComponents';
 import ConfirmModal from '../ConfirmModal';
+import moment from 'moment';
 
 var topicCardArray = [];
 var antNest;
@@ -18,6 +19,7 @@ var classCanSeeObj = [];
 const RadioGroup = Radio.Group;
 const CheckboxGroup = Checkbox.Group;
 const {RangePicker} = DatePicker;
+const dateFullFormat = 'YYYY-MM-DD HH:mm:ss';
 //假数据
 const children = [];
 for (let i = 10; i < 36; i++) {
@@ -54,7 +56,9 @@ const AntNestTabComponents = React.createClass({
             radioValue: 1,    //公开还是可见  1公开2可见
             boxDisplay: 'none',
             radioDisplay: 'block',
-            classSrcChecked: []  //checkbox可见班级的名字,checkbox的value值
+            classSrcChecked: [],  //checkbox可见班级的名字,checkbox的value值,
+            homeWorkTime: '',
+            whoISSecretModalVisible: false
         };
     },
 
@@ -105,8 +109,6 @@ const AntNestTabComponents = React.createClass({
             } else {
                 pageNo = antNest.state.currentTeacherPage;
             }
-            // topicCardArray.splice(0);
-            // topicObjArray.splice(0);
         }
         ;
         if (flag) {
@@ -122,8 +124,6 @@ const AntNestTabComponents = React.createClass({
         ;
         if (fromTap) {
             antNest.setState({currentPage: 1, currentTeacherPage: 1})
-            // antNest.state.currentPage = 1;
-            // antNest.state.currentTeacherPage = 1;
         }
         ;
         var param = {
@@ -169,13 +169,39 @@ const AntNestTabComponents = React.createClass({
         LP.Start(obj);
     },
 
+    whoISSecret(data) {
+        console.log(data);
+        // whoISSecretLis
+        var arr = [];
+        data.forEach(function (v) {
+            var li = <li>{v.grade.name + ' ' + v.name}</li>
+            arr.push(li);
+
+        });
+        this.setState({whoISSecretModalVisible: true, whoISSecretLis: arr});
+    },
+
+    whoISSecretModalHandleCancel() {
+        this.setState({whoISSecretModalVisible: false});
+    },
+
     /**
      * 构建话题的card对象
      * @param topicObj 话题对象
      * @param useType 用途 0:列表  1：单个话题
      */
-    buildTopicCard(topicObj, useType, topicReplayInfoArray, parTakeCountInfo) {
+    buildTopicCard(topicObj, useType, topicReplayInfoArray, parTakeCountInfo, homeWorkFlag) {
+        var screatPic = '';
+        if (topicObj.fromUserId == sessionStorage.getItem("ident") && topicObj.applyWhiteList == true) {
+            screatPic = <span onClick={this.whoISSecret.bind(this, topicObj.whiteList)} className="topics_time"><img
+                src={require('../images/screatPic.png')} alt="" className="screatPic"/></span>
+        }
         //如果用户头像为空，使用系统默认头像
+        var commentDisplayTime = '';
+        if (topicObj.type == 11) {
+            commentDisplayTime =
+                <span className="topics_time">(结束时间:{getLocalTime(topicObj.commentDisplayTime)})</span>;
+        }
         var userHeadPhoto;
         if (isEmpty(topicObj.fromUser.avatar)) {
             //如果用户头像为空，则使用系统默认头像进行显示
@@ -190,6 +216,10 @@ const AntNestTabComponents = React.createClass({
         //话题标题不为空，且是在全部话题列表中的时候、处于有效状态，类型为话题，而非说说时才需要显示话题标题
         if (isEmpty(topicObj.title) == false && useType == 0 && topicObj.valid == 0 && topicObj.type == 1) {
             topicTitle = <a value={topicObj.id} title={topicObj.id} onClick={antNest.getTopicPartakeInfo}
+                            className="topics">#{topicObj.title}#</a>
+        }
+        if (isEmpty(topicObj.title) == false && useType == 0 && topicObj.valid == 0 && topicObj.type == 11) {
+            topicTitle = <a value={topicObj.id} title={topicObj.id} onClick={antNest.getHomeWorkPartakeInfo}
                             className="topics">#{topicObj.title}#</a>
         }
         //点赞用户span标记数组
@@ -316,15 +346,26 @@ const AntNestTabComponents = React.createClass({
             }
         }
         //参与人数显示card
+
         var parTakeCountCard;
         if (isEmpty(parTakeCountInfo) == false) {
-            parTakeCountCard = <div className="upexam_top topics_blue_bg">
-                <ul className="topics_mar60">
+            if (homeWorkFlag) {
+                parTakeCountCard = <div className="upexam_top topics_blue_bg">
+                    <ul className="topics_mar60">
+                    <span
+                        className="topics_time">作答{parTakeCountInfo.participatecount}人，未作答{parTakeCountInfo.unParticipatecount}人</span>
+                        <span><Button value={topicObj.id} onClick={antNest.showPartakeModal}>立即作答</Button></span>
+                    </ul>
+                </div>;
+            } else {
+                parTakeCountCard = <div className="upexam_top topics_blue_bg">
+                    <ul className="topics_mar60">
                     <span
                         className="topics_time">参与{parTakeCountInfo.participatecount}人，未参与{parTakeCountInfo.unParticipatecount}人</span>
-                    <span><Button value={topicObj.id} onClick={antNest.showPartakeModal}>立即参与</Button></span>
-                </ul>
-            </div>;
+                        <span><Button value={topicObj.id} onClick={antNest.showPartakeModal}>立即参与</Button></span>
+                    </ul>
+                </div>;
+            }
         }
         //单个话题中的回复参与信息
         var topicReplayCardArray = [];
@@ -358,7 +399,7 @@ const AntNestTabComponents = React.createClass({
                         if (e.user.colUtype == "STUD" || (e.user.colUtype == "TEAC" && e.user.colUid == sessionStorage.getItem("ident"))) {
                             delBtnInRelpay = <Button value={e.id} type="dashed"
                                                      className="topics_btn topics_a topics_a—bnt teopics_spa topics_le"
-                                                     onClick={antNest.deleteTopicComment}>删除</Button>;
+                                                     onClick={antNest.deleteTopicComment.bind(this, e.id)}>删除</Button>;
                         }
                         var answerUserInfo = <li className="topics_comment">
                             {replayUserTitle}
@@ -444,7 +485,7 @@ const AntNestTabComponents = React.createClass({
                 if (topicReplayInfo.fromUser.colUtype == "STUD" || (topicReplayInfo.fromUser.colUtype == "TEAC" && topicReplayInfo.fromUser.colUid == sessionStorage.getItem("ident"))) {
                     delBtnInReplayCard = <Button value={topicReplayInfo.id} icon="delete"
                                                  onClick={antNest.deleteTopic.bind(antNest, topicReplayInfo.id)}
-                                                 className="topics_btn  teopics_spa">删除</Button>;
+                                                 className="topics_btn  teopics_spa antnest_talk">删除</Button>;
                 }
                 var praiseBtn;
                 if (topicObj.fromUser.colUtype == "TEAC" && topicObj.fromUser.colUid == sessionStorage.getItem("ident")) {
@@ -491,6 +532,8 @@ const AntNestTabComponents = React.createClass({
                 </li>
                 <li className="topics_bot">
                     <span className="topics_time">{createTime}</span>
+                    {commentDisplayTime}
+                    {screatPic}
                     <span>{delButton}</span>
                     <span className="topics_dianzan">
                          {praiseButton}
@@ -528,7 +571,6 @@ const AntNestTabComponents = React.createClass({
     pageAdd() {
         var page = this.state.currentPage;
         var pageOnlyTeacher = this.state.currentTeacherPage;
-        // alert(page);
         page++;
         pageOnlyTeacher++;
         //调用获取话题的函数，把信息push到topicCardList中
@@ -546,6 +588,43 @@ const AntNestTabComponents = React.createClass({
             antNest.getTopics(pageOnlyTeacher, getOnlyTeacherTopic());
         }
     },
+
+    /**
+     * 根据作业的id，获取对应的话题详细信息
+     */
+    getZuoYeInfoById(topicId, parTakeCountInfo, pageNo) {
+        var topicReplayInfoArray = [];
+        var param = {
+            "method": 'getTopicsByZuoYeId',
+            "accessUserId": sessionStorage.getItem("ident"),
+            "zyId": topicId,
+            "pageNo": pageNo
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                response.forEach(function (e) {
+                    //话题的回复
+                    topicReplayInfoArray.push(e);
+                });
+                var pager = ret.pager;
+                //话题主体对象
+                var topicObj = antNest.findTopicObjFromArrayById(topicId);
+                topicCardArray.splice(0);
+                antNest.buildTopicCard(topicObj, 1, topicReplayInfoArray, parTakeCountInfo, true);
+                antNest.setState({
+                    // "optType": 'getTopicById',
+                    "topicCardList": topicCardArray,
+                    "totalCount": pager.rsCount,
+                    "currentTopicId": topicId
+                });
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
     /**
      * 根据话题的id，获取对应的话题详细信息
      * @param topicId 话题id
@@ -570,7 +649,7 @@ const AntNestTabComponents = React.createClass({
                 //话题主体对象
                 var topicObj = antNest.findTopicObjFromArrayById(topicId);
                 topicCardArray.splice(0);
-                antNest.buildTopicCard(topicObj, 1, topicReplayInfoArray, parTakeCountInfo);
+                antNest.buildTopicCard(topicObj, 1, topicReplayInfoArray, parTakeCountInfo, false);
                 antNest.setState({
                     // "optType": 'getTopicById',
                     "topicCardList": topicCardArray,
@@ -644,6 +723,28 @@ const AntNestTabComponents = React.createClass({
         topicCardArray.push(a);
         antNest.getTopicPartakeById(topicId, initPageNo);
     },
+
+    /**
+     * 获取作业详情
+     */
+    getHomeWorkPartakeInfo(e) {
+        var target = e.target;
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
+            target = e.target;
+        }
+        var topicId = target.title;
+        var initPageNo = 1;
+        //set过optType之后，表头就会变成“话题详情”
+        this.setState({"optType": 'getZuoYeById'});
+        topicCardArray.splice(0);
+        var a = <div className="example">
+            <Spin size="large" delay={500}/>
+        </div>;
+        topicCardArray.push(a);
+        antNest.getZuoYePartakeById(topicId, initPageNo);
+    },
     /**
      * 获取话题参与人数的信息
      * @param topicId 话题id
@@ -658,6 +759,25 @@ const AntNestTabComponents = React.createClass({
             onResponse: function (ret) {
                 var parTakeCountInfo = ret.response;
                 antNest.getTopicInfoById(topicId, parTakeCountInfo, pageNo);
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 获取作业参与人数的信息
+     */
+    getZuoYePartakeById(topicId, pageNo) {
+        var param = {
+            "method": 'getZuoYeInfo',
+            "zuoYeId": topicId,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var parTakeCountInfo = ret.response;
+                antNest.getZuoYeInfoById(topicId, parTakeCountInfo, pageNo);
             },
             onError: function (error) {
                 message.error(error);
@@ -741,6 +861,9 @@ const AntNestTabComponents = React.createClass({
                     //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
                     antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
                     antNest.getTopicPartakeById(parentTopicId, antNest.state.currentShowPage);
+                } else if (antNest.state.optType == "getZuoYeById") {
+                    antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
+                    antNest.getZuoYePartakeById(parentTopicId, antNest.state.currentShowPage);
                 } else {
                     // if (antNest.state.type == 0) {
                     //     //在这里请求新的页面应该不是当前页，而是你点击的那一页的页数
@@ -794,6 +917,9 @@ const AntNestTabComponents = React.createClass({
                     //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
                     antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
                     antNest.getTopicPartakeById(parentTopicId, antNest.state.currentShowPage);
+                } else if (antNest.state.optType == "getZuoYeById") {
+                    antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
+                    antNest.getZuoYePartakeById(parentTopicId, antNest.state.currentShowPage);
                 } else {
                     // if (antNest.state.type == 0) {
                     //     antNest.getTopics(antNest.state.currentPage, getAllTopic());
@@ -896,6 +1022,9 @@ const AntNestTabComponents = React.createClass({
                     //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
                     antNest.reGetTopicInfo(antNest.state.currentPage, getAllTopic());
                     antNest.getTopicPartakeById(antNest.state.currentTopicId, antNest.state.currentPage);
+                } else if (antNest.state.optType == "getZuoYeById") {
+                    antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
+                    antNest.getZuoYePartakeById(antNest.state.currentTopicId, antNest.state.currentShowPage);
                 } else {
                     // if (antNest.state.type == 0) {
                     //     antNest.getTopics(antNest.state.currentPage, getAllTopic());
@@ -941,8 +1070,12 @@ const AntNestTabComponents = React.createClass({
      * 删除一个话题中的评论
      * @param e
      */
-    deleteTopicComment() {
-        antNest.deleteTopicCommentById(antNest.state.topicCommentId, antNest.state.noomCommentId);
+    deleteTopicComment(e) {
+        if (isEmpty(e) == false) {
+            antNest.deleteTopicCommentById(e, antNest.state.noomCommentId);
+        } else {
+            antNest.deleteTopicCommentById(antNest.state.topicCommentId, antNest.state.noomCommentId);
+        }
     },
     /**
      * 根据评论id，删除话题/说说中的评论
@@ -966,6 +1099,9 @@ const AntNestTabComponents = React.createClass({
                     //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
                     antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
                     antNest.getTopicPartakeById(antNest.state.currentTopicId, antNest.state.currentShowPage);
+                } else if (antNest.state.optType == "getZuoYeById") {
+                    antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
+                    antNest.getZuoYePartakeById(antNest.state.currentTopicId, antNest.state.currentShowPage);
                 } else {
                     // if (antNest.state.type == 0) {
                     //     antNest.getTopics(antNest.state.currentPage, getAllTopic());
@@ -1036,6 +1172,9 @@ const AntNestTabComponents = React.createClass({
                     //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
                     antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
                     antNest.getTopicPartakeById(setTopicId, antNest.state.currentShowPage);
+                } else if (antNest.state.optType == "getZuoYeById") {
+                    antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
+                    antNest.getZuoYePartakeById(setTopicId, antNest.state.currentShowPage);
                 } else {
                     if (antNest.state.type == 0) {
                         antNest.getTopics(antNest.state.currentPage, getAllTopic());
@@ -1130,6 +1269,9 @@ const AntNestTabComponents = React.createClass({
                     //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
                     antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
                     antNest.getTopicPartakeById(antNest.state.currentTopicId, antNest.state.currentShowPage);
+                } else if (antNest.state.optType == "getZuoYeById") {
+                    antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
+                    antNest.getZuoYePartakeById(antNest.state.currentTopicId, antNest.state.currentShowPage);
                 } else {
                     // if (antNest.state.type == 0) {
                     //     antNest.getTopics(antNest.state.currentPage, getAllTopic());
@@ -1167,7 +1309,6 @@ const AntNestTabComponents = React.createClass({
                 emotionArray[i].innerText = "";
             }
         }
-        classCanSeeObj.splice(0);
         //清空话题标题输入框
         antNest.setState({
             "topicTitle": '',
@@ -1175,7 +1316,8 @@ const AntNestTabComponents = React.createClass({
             radioValue: 1,
             classSrcChecked: [],
             boxDisplay: 'none',
-            radioDisplay: 'block'
+            radioDisplay: 'block',
+            homeWorkTime: '',
         });
     },
 
@@ -1255,6 +1397,13 @@ const AntNestTabComponents = React.createClass({
                 })
             })
         }
+        var homeWorkDate = this.state.homeWorkDate;
+        if (antNest.state.topicModalType == "homework") {
+            if (isEmpty(antNest.state.homeWorkDate)) {
+                message.error("请选择时间。", 5);
+                return;
+            }
+        }
         var inputContent;
         var emotionInput = antNest.getEmotionInput();
         if (isEmpty($("#emotionInput").val()) == false) {
@@ -1262,9 +1411,9 @@ const AntNestTabComponents = React.createClass({
         } else {
             inputContent = emotionInput;
         }
-        if (antNest.state.topicModalType == "topic") {
+        if (antNest.state.topicModalType == "topic" || antNest.state.topicModalType == "homework") {
             if (isEmpty(antNest.state.topicTitle)) {
-                message.error("话题的标题不允许为空，请重新输入。", 5);
+                message.error("标题不允许为空，请重新输入。", 5);
                 return;
             }
         }
@@ -1313,17 +1462,30 @@ const AntNestTabComponents = React.createClass({
                 "attachMents": attachMents,
                 "comments": [],
                 "open": 0,
-                "whiteList": ckeckIdArr
+                "whiteList": ckeckIdArr,
             };
         }
-        if (isEmpty(antNest.state.topicTitle) == false) {
+        if (antNest.state.topicModalType == "topic") {
             topicJson.type = 1;
-            var title = antNest.state.topicTitle;
-            title = title.replace(/\'/g, "\\'");  //' 替换成  \'
-            title = title.replace(/\"/g, "\\\""); //" 替换成\"
-            title = title.replace(/</g, "\\\<"); //< 替换成\<
-            title = title.replace(/>/g, "\\\>"); //> 替换成\>
-            topicJson.title = title;
+            if (isEmpty(antNest.state.topicTitle) == false) {
+                var title = antNest.state.topicTitle;
+                title = title.replace(/\'/g, "\\'");  //' 替换成  \'
+                title = title.replace(/\"/g, "\\\""); //" 替换成\"
+                title = title.replace(/</g, "\\\<"); //< 替换成\<
+                title = title.replace(/>/g, "\\\>"); //> 替换成\>
+                topicJson.title = title;
+            }
+        } else if (antNest.state.topicModalType == "homework") {
+            topicJson.type = 11;
+            topicJson.commentDisplayTime = homeWorkDate;
+            if (isEmpty(antNest.state.topicTitle) == false) {
+                var title = antNest.state.topicTitle;
+                title = title.replace(/\'/g, "\\'");  //' 替换成  \'
+                title = title.replace(/\"/g, "\\\""); //" 替换成\"
+                title = title.replace(/</g, "\\\<"); //< 替换成\<
+                title = title.replace(/>/g, "\\\>"); //> 替换成\>
+                topicJson.title = title;
+            }
         } else {
             topicJson.type = 0;
         }
@@ -1331,7 +1493,6 @@ const AntNestTabComponents = React.createClass({
             "method": 'addTopic',
             "topicJson": topicJson,
         };
-        console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.success == true && ret.response == true) {
@@ -1395,6 +1556,7 @@ const AntNestTabComponents = React.createClass({
      * 显示发表说说/话题的窗口
      */
     showaddTopicModal(e) {
+        classCanSeeObj.splice(0);
         var _this = this;
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
@@ -1437,6 +1599,14 @@ const AntNestTabComponents = React.createClass({
             onError: function (error) {
                 message.error(error);
             }
+        });
+        this.setState({
+            homeWorkTime: <DatePicker
+                showTime
+                format="YYYY-MM-DD HH:mm:ss"
+                placeholder="请选择时间"
+                onChange={antNest.timeOnChange}
+            />
         });
         antNest.setState({"addTopicModalVisible": true, "topicModalType": optType});
     },
@@ -1543,6 +1713,9 @@ const AntNestTabComponents = React.createClass({
                     //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
                     antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
                     antNest.getTopicPartakeById(antNest.state.currentTopicId, antNest.state.currentShowPage);
+                } else if (antNest.state.optType == "getZuoYeById") {
+                    antNest.reGetTopicInfo(antNest.state.currentShowPage, getAllTopic());
+                    antNest.getZuoYePartakeById(antNest.state.currentTopicId, antNest.state.currentShowPage);
                 } else {
                     if (antNest.state.type == 0) {
                         antNest.getTopics(antNest.state.currentPage, getAllTopic());
@@ -1577,13 +1750,9 @@ const AntNestTabComponents = React.createClass({
         this.setState({antNestScoll: scrollTop});
     },
 
-    timeOnOk(value) {
-        console.log('onOk: ', value);
-    },
-
     timeOnChange(value, dateString) {
-        console.log('Selected Time: ', value);
-        console.log('Formatted Selected Time: ', dateString);
+        var date = new Date(dateString).valueOf();
+        this.setState({homeWorkDate: date});
     },
 
     /**
@@ -1621,6 +1790,19 @@ const AntNestTabComponents = React.createClass({
                     {/*current={antNest.state.currentShowPage}*/}
                     {/*onChange={antNest.pageOnChange}/>*/}
                 </div>;
+        } else if (antNest.state.optType == "getZuoYeById") {
+            optionButton = <div className="public—til—blue">
+                <div className="ant-tabs-right">
+                    <Button onClick={antNest.returnTopicList}><Icon type="left"/></Button>
+                </div>
+                作业内容</div>;
+
+            topicList =
+                <div className="favorite_scroll">
+                    <div className="antnest_cont topics_calc2" style={{overflow: 'scroll'}}>
+                        {antNest.state.topicCardList}
+                    </div>
+                </div>;
         } else {
             optionButton = <div className="public—til—blue">
                 <div className="talk_ant_btn1">
@@ -1646,23 +1828,17 @@ const AntNestTabComponents = React.createClass({
         var topicTitle;
         if (antNest.state.topicModalType == "topic" || antNest.state.topicModalType == "homework") {
             topicTitle = <Row className="yinyong_topic">
-                <Col span={3} className="right_look">标题：</Col>
-                <Col span={20}><Input onChange={antNest.topicTitleChange} defaultValue={antNest.state.topicTitle}
+                <Col span={4} className="right_look">标题：</Col>
+                <Col span={18}><Input onChange={antNest.topicTitleChange} defaultValue={antNest.state.topicTitle}
                                       value={antNest.state.topicTitle}/></Col>
             </Row>;
         }
         var homeWorkTime;
         if (antNest.state.topicModalType == "homework") {
             homeWorkTime = <Row>
-                <Col span={3} className="right_look">时间：</Col>
-                <Col span={20}>
-                    <DatePicker
-                        showTime
-                        format="YYYY-MM-DD HH:mm:ss"
-                        placeholder="Select Time"
-                        onChange={antNest.timeOnChange}
-                        onOk={antNest.timeOnOk}
-                    />
+                <Col span={4} className="right_look">作业结束时间：</Col>
+                <Col span={18}>
+                    {antNest.state.homeWorkTime}
                 </Col>
             </Row>
         }
@@ -1677,8 +1853,8 @@ const AntNestTabComponents = React.createClass({
                 >
                     <div className="group_send_pinglun">
                         <Row>
-                            <Col span={3} className="right_look">内容：</Col>
-                            <Col span={20}><EmotionInputComponents
+                            <Col span={4} className="right_look">内容：</Col>
+                            <Col span={18}><EmotionInputComponents
                                 className="topics_ral"></EmotionInputComponents></Col>
                         </Row>
                     </div>
@@ -1693,13 +1869,13 @@ const AntNestTabComponents = React.createClass({
                     <div className="group_send_shuoshuo">
                         {topicTitle}
                         <Row className="yinyong_topic">
-                            <Col span={3} className="right_look">内容：</Col>
-                            <Col span={20}><EmotionInputComponents></EmotionInputComponents></Col>
+                            <Col span={4} className="right_look">内容：</Col>
+                            <Col span={18}><EmotionInputComponents></EmotionInputComponents></Col>
                         </Row>
                         {homeWorkTime}
                         <Row className="yinyong3">
-                            <Col span={3} className="right_look">附件：</Col>
-                            <Col span={20}><UploadImgComponents fileList={antNest.state.topicImgUrl}
+                            <Col span={4} className="right_look">附件：</Col>
+                            <Col span={18}><UploadImgComponents fileList={antNest.state.topicImgUrl}
                                                                 callBackParent={antNest.getUploadedImgList}></UploadImgComponents></Col>
                         </Row>
                         <Row style={{display: this.state.radioDisplay}}>
@@ -1726,22 +1902,37 @@ const AntNestTabComponents = React.createClass({
                        maskClosable={false} //设置不允许点击蒙层关闭
                        onOk={antNest.partakeModalHandleOk}
                        onCancel={antNest.partakeModalHandleCancel}
-                       style={{height:360}}
+                       style={{height: 360}}
                 >
                     <div className="group_send_shuoshuo">
                         <Row>
-                            <Col span={3}>内容：</Col>
-                            <Col span={20}><EmotionInputComponents
+                            <Col span={4} className="right_look">内容：</Col>
+                            <Col span={18}><EmotionInputComponents
                                 className="topics_ral"></EmotionInputComponents></Col>
                         </Row>
                         <Row className="yinyong3">
-                            <Col span={3}>附件：</Col>
-                            <Col span={20}><UploadImgComponents
+                            <Col span={4} className="right_look">附件：</Col>
+                            <Col span={18}><UploadImgComponents
                                 callBackParent={antNest.getUploadedImgList}></UploadImgComponents></Col>
                         </Row>
                     </div>
 
                 </Modal>
+
+                <Modal title="可见班级"
+                       visible={antNest.state.whoISSecretModalVisible}
+                       transitionName=""  //禁用modal的动画效果
+                       maskClosable={false} //设置不允许点击蒙层关闭
+                    // onOk={antNest.partakeModalHandleOk}
+                       onCancel={antNest.whoISSecretModalHandleCancel}
+                       footer={null}
+                       className="visible_class"
+                >
+                        <ul>
+                            {this.state.whoISSecretLis}
+                        </ul>
+                </Modal>
+
                 <ConfirmModal ref="confirmModal"
                               title="确定要删除该条记录?"
                               onConfirmModalCancel={antNest.closeDeleteTopicModal}
@@ -1760,13 +1951,6 @@ const AntNestTabComponents = React.createClass({
                               onConfirmModalOK={antNest.setTopicToTop}
                 ></ConfirmModal>
                 <div className="talk_ant_btn">
-                    {/*<Breadcrumb separator=">">
-                        <Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
-                        <Breadcrumb.Item href="#/MainLayout">首页</Breadcrumb.Item>
-                        <Breadcrumb.Item href="#/MainLayout">蚁巢</Breadcrumb.Item>
-                        <Breadcrumb.Item href="#/MainLayout">{breadMenuTip}</Breadcrumb.Item>
-                    </Breadcrumb>*/}
-
                     {optionButton}
                 </div>
                 {topicList}

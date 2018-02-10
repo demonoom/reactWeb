@@ -56,6 +56,8 @@ class KnowledgePointModal extends React.Component {
         var _this = this;
         var isShow = _this.props.isShow;
         this.setState({isShow});
+        var knowledgePointNumber = this.props.knowledgePointNumber;
+        this.setState({isShow});
         this.getKnowledgeInfoList(this.state.pageNo, this.state.conditionKeyOfKnowledge);
     }
 
