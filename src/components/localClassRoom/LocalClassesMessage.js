@@ -160,6 +160,8 @@ const LocalClassesMessage = React.createClass({
     render() {
         return (
                 <div id="personTalk" className="class_personTalk">
+                    <h3 className="classroom_h3">互动讨论</h3>
+                    <img className="noDataTipImg" width={'240'} src={require('../images/noDataTipImg.png')}/>
                     <ul className="class_talk_top" id="groupTalk">
                         {/*消息内容主体*/}
                         {this.state.messageLiArray}

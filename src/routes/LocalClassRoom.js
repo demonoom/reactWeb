@@ -155,8 +155,12 @@ const LocalClassRoom = React.createClass({
      * 下课，断开与课堂的连接
      */
     disConnectClassRoom(){
-        message.info("将完成下课逻辑,并关闭窗口");
+        var classOverProtocal = {
+            'command':'classOver'
+        };
+        connection.send(classOverProtocal);
         this.closeConfirmModal();
+        window.close();
     },
 
     showConfirmModal(e) {
