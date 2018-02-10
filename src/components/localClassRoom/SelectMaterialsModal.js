@@ -67,6 +67,7 @@ class SelectMaterialsModal extends React.Component {
         this.intoDirectoryInner = this.intoDirectoryInner.bind(this);
         this.listFiles = this.listFiles.bind(this);
         this.returnParentAtMoveModal = this.returnParentAtMoveModal.bind(this);
+        this.pushFileFromAntCloud = this.pushFileFromAntCloud.bind(this);
     }
 
     componentDidMount() {
@@ -171,7 +172,7 @@ class SelectMaterialsModal extends React.Component {
                     materialsData.push({
                         key: e.id,
                         fileName: e.name,
-                        fileOpt:fileOpt,
+                        //fileOpt:fileOpt,
                         htmlPath: e.htmlPath,
                         materialsObj:e
                     });
@@ -191,9 +192,14 @@ class SelectMaterialsModal extends React.Component {
      */
     selectMaterials(record, index, event) {
         console.log(record);
-        //通过回调的形式，将选中的课件回调给父组件，并完成推送课件的操作
-        this.props.pushMaterialsToClass(record);
-        this.selectMaterialsModalHandleCancel();
+        if(isEmpty(record.htmlPath)){
+            message.error("暂不支持打开该文件");
+            return;
+        }else{
+            //通过回调的形式，将选中的课件回调给父组件，并完成推送课件的操作
+            this.props.pushMaterialsToClass(record);
+            this.selectMaterialsModalHandleCancel();
+        }
     }
 
     dataSourceOnChange(e){
@@ -264,8 +270,7 @@ class SelectMaterialsModal extends React.Component {
                 var directory = e.directory;
                 var fileLogo = _this.buildFileLogo(name, directory, e);
 
-                var dirName = <span className="font_gray_666"
-                                    onClick={_this.intoDirectoryInner.bind(_this, e, "moveDirModal")}>
+                var dirName = <span className="font_gray_666">
                                 {fileLogo}
                               </span>;
                 var moveDirOpt;
@@ -283,7 +288,8 @@ class SelectMaterialsModal extends React.Component {
                 var dataJson = {
                     key: key,
                     dirName: dirName,
-                    moveDirOpt: moveDirOpt
+                    fileObj:e
+                    //moveDirOpt: moveDirOpt
                 };
                 targetDirDataArray.push(dataJson);
             })
@@ -427,10 +433,27 @@ class SelectMaterialsModal extends React.Component {
      * 将选中的蚁盘文件，通过回调的形式，推送到课堂
      * @param file
      */
-    pushFileFromAntCloud(file){
-        //通过回调的形式，将选中的课件回调给父组件，并完成推送课件的操作
-        this.props.pushMaterialsToClass(file);
-        this.selectMaterialsModalHandleCancel();
+    pushFileFromAntCloud(fileOrDirectory){
+        var _this = this;
+        console.log(fileOrDirectory);
+        var fileObj = fileOrDirectory.fileObj;
+        var fileName = fileObj.name;
+        var isDirectory = fileObj.directory;
+        if(isDirectory==true){
+            this.intoDirectoryInner(fileObj, "moveDirModal");
+        }else{
+            var lastPointIndex = fileName.lastIndexOf(".");
+            //通过截取文件后缀名的形式，完成对上传文件类型的判断
+            var fileType = fileName.substring(lastPointIndex + 1);
+            if(fileType=="ppt" || fileType == "pptx"){
+                //通过回调的形式，将选中的课件回调给父组件，并完成推送课件的操作
+                this.props.pushMaterialsToClass(fileObj);
+                this.selectMaterialsModalHandleCancel();
+            }else{
+                message.error("暂不支持打开该文件");
+                return;
+            }
+        }
     }
 
 
@@ -448,7 +471,8 @@ class SelectMaterialsModal extends React.Component {
                     <div className="17_hei1">
                         <Table className="17_hei2" columns={materialsColumns}
                                dataSource={materialsData}
-                               //onRowClick={this.selectMaterials}
+                               showHeader={false}
+                               onRowClick={this.selectMaterials}
                                pagination={{
                                    total: this.state.totalMaterialsCount,
                                    pageSize: getPageSize(),
@@ -469,6 +493,7 @@ class SelectMaterialsModal extends React.Component {
                             </div>
                             <Table columns={targetDirColumns} showHeader={false}
                                    dataSource={this.state.targetDirDataArray}
+                                   onRowClick={this.pushFileFromAntCloud}
                                    pagination={{
                                        total: this.state.totalCount,
                                        pageSize: getPageSize(),

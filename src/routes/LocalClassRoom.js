@@ -4,6 +4,7 @@ import LocalClassesMessage from '../components/localClassRoom/LocalClassesMessag
 import {isEmpty} from "../utils/Const";
 import SelectSubjectModal from '../components/localClassRoom/SelectSubjectModal';
 import SelectMaterialsModal from '../components/localClassRoom/SelectMaterialsModal';
+import ConfirmModal from '../components/ConfirmModal';
 
 var connection = null;
 var ms = null;
@@ -130,6 +131,22 @@ const LocalClassRoom = React.createClass({
         this.setState({classRoomUrl});
     },
 
+    /**
+     * 下课，断开与课堂的连接
+     */
+    disConnectClassRoom(){
+        message.info("将完成下课逻辑,并关闭窗口");
+        this.closeConfirmModal();
+    },
+
+    showConfirmModal(e) {
+        this.refs.confirmModal.changeConfirmModalVisible(true);
+    },
+
+    closeConfirmModal() {
+        this.refs.confirmModal.changeConfirmModalVisible(false);
+    },
+
     render() {
 
         var classIfream = null;
@@ -151,6 +168,7 @@ const LocalClassRoom = React.createClass({
                     <div className="classroom_btn">
                         <Button className="classroom_btn_b classroom_btn_orange" onClick={this.getPPT} icon="folder-open">课件</Button>
                         <Button className="classroom_btn_b classroom_btn_green add_out" onClick={this.getSubject} icon="file-text">题目</Button>
+                        <Button className="classroom_btn_b classroom_btn_green add_out" onClick={this.showConfirmModal} icon="file-text">下课</Button>
                     </div>
                 </div>
                 <div className="local_class_right">
@@ -158,6 +176,11 @@ const LocalClassRoom = React.createClass({
                 </div>
                 <SelectSubjectModal isShow={this.state.subjectModalIsShow} onCancel={this.closeSubjectModal} pushSubjectToClass={this.pushSubjectToClass}></SelectSubjectModal>
                 <SelectMaterialsModal isShow={this.state.materialsModalIsShow} onCancel={this.closeMaterialsModal} pushMaterialsToClass={this.pushMaterialsToClass}></SelectMaterialsModal>
+                <ConfirmModal ref="confirmModal"
+                              title="确定要下课吗?"
+                              onConfirmModalCancel={this.closeConfirmModal}
+                              onConfirmModalOK={this.disConnectClassRoom}
+                ></ConfirmModal>
             </div>
         );
     },

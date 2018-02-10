@@ -96,6 +96,15 @@ class GhostMenu extends React.Component {
                             </li>
                         </ul>
                     </li>
+                    <li><Icon type="laptop" />课堂</li>
+                    <li className="multi">
+                        <ul className="second">
+                            <li onClick={ event => {
+                                this.changeMenu(event, 'localClassRoom', false)
+                            }}>开启课堂
+                            </li>
+                        </ul>
+                    </li>
                     <li><Icon type="file-text"/>作业</li>
                     <li className="multi">
                         <ul className="second">
@@ -128,15 +137,6 @@ class GhostMenu extends React.Component {
                             <li onClick={ event => {
                                 this.changeMenu(event, 'examAnalysis', false)
                             }}>成绩分析
-                            </li>
-                        </ul>
-                    </li>
-                    <li><Icon type="laptop" />课堂</li>
-                    <li className="multi">
-                        <ul className="second">
-                            <li onClick={ event => {
-                                this.changeMenu(event, 'localClassRoom', false)
-                            }}>开启课堂
                             </li>
                         </ul>
                     </li>
