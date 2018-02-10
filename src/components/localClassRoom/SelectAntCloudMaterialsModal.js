@@ -314,7 +314,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
 
 
         return (
-            <Modal className="choose_class" visible={this.state.isShow}
+            <Modal className="modal_classroom modal_classroom_push" visible={this.state.isShow}
                    onCancel={this.SelectAntCloudMaterialsModalHandleCancel}
                    transitionName=""  //禁用modal的动画效果
                    title="选择课件"

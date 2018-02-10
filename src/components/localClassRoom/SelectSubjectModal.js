@@ -208,28 +208,26 @@ class SelectSubjectModal extends React.Component {
         };
 
         return (
-            <Modal title="选择题目" className="choose_class" visible={this.state.isShow}
+            <Modal title="推送题目" className="modal_classroom modal_classroom_push" visible={this.state.isShow}
                    onCancel={this.SelectSubjectModalHandleCancel}
                    transitionName=""  //禁用modal的动画效果
                    maskClosable={false} //设置不允许点击蒙层关闭
+                   width={750}
                    footer={[
-
                        <Button key="return" type="primary" size="large"
                                onClick={this.subjectModalHandleOk}>确定</Button>,
-
                        <Button key="ok" type="ghost" size="large" onClick={this.SelectSubjectModalHandleCancel}>取消</Button>,
-
                    ]}
             >
-                <Row style={{height: 400}}>
-                    <Col span={7} className="ant-form"><Table size="small" className="lesson classroom_subject"
+                <Row className="modal_flex">
+                    <Col className="ant-form modal_classroom_push_left"><Table className="lesson classroom_prepare_lessons"
                                                               onRowClick={this.onScheduleSelectChange}
                                                               columns={scheduleColumns} dataSource={this.state.scheduleData}
                                                               pagination={false}
                                                               scroll={{y: 300}}/></Col>
-                    <Col span={17} className="col17_le 17_hei ant-form">
+                    <Col className="col17_le 17_hei ant-form modal_flex_1">
                         <div className="17_hei1">
-                            <Table className="17_hei2" columns={subjectColumns}
+                            <Table  className="modal_classroom_push_right" columns={subjectColumns}
                                    dataSource={subjectData}
                                    rowSelection={subjectRowSelection}
                                    pagination={{
