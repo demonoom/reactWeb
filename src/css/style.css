@@ -5156,6 +5156,11 @@ a.color_gary_f, .color_gary_f {
     color: #0078e4;
     position: relative
 }
+.lesson_start{
+    color: #0183ff;
+    background: #fff;
+    border: 1px solid #0183ff
+}
 
 .mes_u_l {
     margin-left: 46px;
@@ -8387,6 +8392,24 @@ select.course_n:hover {
     height: 100%;
     background: #fff;
     position: relative;
+}
+.warning_message{
+    position: absolute;
+    padding: 10px 0;
+    width: 100%;
+    background: rgba(0,0,0,0.4);
+    color: #fff;
+    font-size: 14px;
+}
+.warning_message_img{
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: url(../../src/components/images/warning.png) no-repeat center;
+    background-size: contain;
+    vertical-align: sub;
+    margin-left: 15px;
+    margin-right: 10px;
 }
 .flex_auto{
     -webkit-box-flex: 1;

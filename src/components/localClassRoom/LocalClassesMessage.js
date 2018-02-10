@@ -238,7 +238,7 @@ const LocalClassesMessage = React.createClass({
         var newMessageLength = this.state.newMessageArray.length;
         //如果处于自定义滚动状态，且存在新消息，则提示存在N条新消息
         if(scrollType=="defined" && newMessageLength != 0){
-            newMessageTip = <div><span onClick={this.scrollToBottom}>有{newMessageLength}条新消息</span></div>
+            newMessageTip = <div className="warning_message"><i className="warning_message_img"></i><span onClick={this.scrollToBottom}>有{newMessageLength}条新消息</span></div>
         }
         return (
                 <div id="personTalk" className="class_personTalk">
