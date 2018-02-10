@@ -48,7 +48,7 @@ const AntMulitiClassComponents = React.createClass({
     },
 
     getCourseListBySeries(isSeries,courseClass) {
-        debugger;
+        // debugger;
         var _this = this;
         if(isEmpty(isSeries)){
             _this.getCourseList(_this.state.currentPage, isSeries,'0',courseClass);
@@ -82,7 +82,7 @@ const AntMulitiClassComponents = React.createClass({
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                console.log('常规课',response);
+                // console.log('常规课',response);
                 var pager = ret.pager;
                 cardArray.splice(0);
                 if (isEmpty(response) == false) {
@@ -130,7 +130,7 @@ const AntMulitiClassComponents = React.createClass({
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                console.log('普通课程',response)
+                // console.log('普通课程',response)
                 var pager = ret.pager;
                 cardArray.splice(0);
                 if (isEmpty(response) == false) {
@@ -181,13 +181,12 @@ const AntMulitiClassComponents = React.createClass({
                 nameTotal.push(knowledgeNameArray+'、');
             }
         })
-      
         var newNameTotal = [nameTotal[0]];
         for(var i=1;i<nameTotal.length;i++){
             if(newNameTotal.indexOf(nameTotal[i]) == -1){
                 newNameTotal.push(nameTotal[i])}
         }
-
+        // console.log('newNameTotal',newNameTotal);
         var studentNum = row.studentNum;
         var videoLiTagArray = [];
         var videoLiArray = [];
