@@ -96,7 +96,7 @@ class GhostMenu extends React.Component {
                             </li>
                         </ul>
                     </li>
-                    <li><Icon type="laptop" />课堂</li>
+                    <li><Icon type="laptop" />本地课堂</li>
                     <li className="multi">
                         <ul className="second">
                             <li onClick={ event => {
