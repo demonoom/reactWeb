@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import {isEmpty} from '../../utils/utils';
+import {LOCAL_CLASS_ROOM_URL} from '../../utils/Const';
 import {Button, message, Table} from 'antd';
 import {doWebService} from '../../WebServiceHelper'
 
@@ -84,7 +85,7 @@ const LocalClasses = React.createClass({
         var classType = "A";
         var account = this.state.loginUser.colAccount;
         var userId = this.state.loginUser.colUid;
-        window.open("http://localhost:8090/#/localClassRoom?userId="+userId+"&account="+account+"&classCode="+classId+"&classType="+classType);
+        window.open("http://172.16.2.93:8090/#/localClassRoom?userId="+userId+"&account="+account+"&classCode="+classId+"&classType="+classType);
     },
 
 
