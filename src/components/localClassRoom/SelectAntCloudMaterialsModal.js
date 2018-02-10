@@ -39,7 +39,7 @@ var targetDirColumns = [{
 ];
 
 /**
- * 从备课计划选题的modal
+ * 从蚁盘选择课件的modal
  */
 class SelectAntCloudMaterialsModal extends React.Component {
 
@@ -140,27 +140,10 @@ class SelectAntCloudMaterialsModal extends React.Component {
                 var name = e.name;
                 var directory = e.directory;
                 var fileLogo = _this.buildFileLogo(name, directory, e);
-
-                var dirName = <span className="font_gray_666">
-                                {fileLogo}
-                              </span>;
-                var moveDirOpt;
-                var lastPointIndex = name.lastIndexOf(".");
-                //通过截取文件后缀名的形式，完成对上传文件类型的判断
-                var fileType = name.substring(lastPointIndex + 1);
-                if (directory == false) {
-                    dirName = name;
-                    if(fileType=="ppt" || fileType == "pptx"){
-                        moveDirOpt = <div>
-                            <Button onClick={_this.pushFileFromAntCloud.bind(_this,e)}>确定</Button>
-                        </div>;
-                    }
-                }
                 var dataJson = {
                     key: key,
-                    dirName: dirName,
+                    dirName: fileLogo,
                     fileObj:e
-                    //moveDirOpt: moveDirOpt
                 };
                 targetDirDataArray.push(dataJson);
             })
@@ -169,7 +152,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
     }
 
     /**
-     * 根据文件类型，构建不同的图标显示
+     * 生成蚁盘文件列表时，根据文件类型，构建不同的图标显示
      */
     buildFileLogo(name, directory, e) {
         var _this = this;
@@ -177,8 +160,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
         if (directory) {
             fileLogo = <span className="cloud_text">
                 <i className="cloud_icon cloud_icon_file upexam_float"></i>
-                <span className="antnest_name affix_bottom_tc"
-                      onClick={_this.intoDirectoryInner.bind(_this, e, "mainTable")}>{name}</span>
+                <span className="antnest_name affix_bottom_tc">{name}</span>
             </span>;
         } else {
             var lastPointIndex = name.lastIndexOf(".");
@@ -218,7 +200,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
                     break;
             }
             fileLogo = <span className="cloud_text">
-                {fileTypeLog}
+                {fileTypeLog}{name}
             </span>;
         }
         return fileLogo;

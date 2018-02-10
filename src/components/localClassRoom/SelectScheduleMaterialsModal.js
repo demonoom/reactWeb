@@ -39,7 +39,7 @@ var targetDirColumns = [{
 ];
 
 /**
- * 从备课计划选题的modal
+ * 从备课计划选择课件的modal
  */
 class SelectScheduleMaterialsModal extends React.Component {
 
@@ -56,6 +56,7 @@ class SelectScheduleMaterialsModal extends React.Component {
         this.getScheduleList = this.getScheduleList.bind(this);
         this.onScheduleSelectChange = this.onScheduleSelectChange.bind(this);
         this.getMaterialsBySheduleId = this.getMaterialsBySheduleId.bind(this);
+        this.buildMaterialsFileLogo = this.buildMaterialsFileLogo.bind(this);
         this.selectMaterials = this.selectMaterials.bind(this);
     }
 
@@ -137,20 +138,11 @@ class SelectScheduleMaterialsModal extends React.Component {
                 courseWareList.splice(0);
                 var response = ret.response;
                 response.forEach(function (e) {
-                    var fileOpt = null;
                     var name = e.name;
-                    var lastPointIndex = name.lastIndexOf(".");
-                    //通过截取文件后缀名的形式，完成对上传文件类型的判断
-                    var fileType = name.substring(lastPointIndex + 1);
-                    if(fileType=="ppt" || fileType == "pptx"){
-                        fileOpt = <div>
-                            <Button onClick={_this.selectMaterials.bind(_this,e)}>确定</Button>
-                        </div>;
-                    }
+                    var fileLog = _this.buildMaterialsFileLogo(name);
                     materialsData.push({
                         key: e.id,
-                        fileName: e.name,
-                        //fileOpt:fileOpt,
+                        fileName: fileLog,
                         htmlPath: e.htmlPath,
                         materialsObj:e
                     });
@@ -178,6 +170,53 @@ class SelectScheduleMaterialsModal extends React.Component {
             this.props.pushMaterialsToClass(record);
             this.SelectScheduleMaterialsModalHandleCancel();
         }
+    }
+
+    /**
+     * 生成备课计划资源文件列表时，根据文件类型，构建不同的图标显示
+     */
+    buildMaterialsFileLogo(name) {
+        var fileLogo;
+        var lastPointIndex = name.lastIndexOf(".");
+        //通过截取文件后缀名的形式，完成对上传文件类型的判断
+        var fileType = name.substring(lastPointIndex + 1);
+        var fileTypeLog;
+        switch (fileType) {
+            case "png":
+                fileTypeLog = <i className="cloud_icon cloud_icon_png"></i>;
+                break;
+            case "jpg":
+                fileTypeLog = <i className="cloud_icon cloud_icon_jpg"></i>;
+                break;
+            case "mp3":
+                fileTypeLog = <i className="cloud_icon cloud_icon_mp3"></i>;
+                break;
+            case "pdf":
+                fileTypeLog = <i className="cloud_icon cloud_icon_pdf"></i>;
+                break;
+            case "ppt":
+            case "pptx":
+                fileTypeLog = <i className="cloud_icon cloud_icon_ppt"></i>;
+                break;
+            case "doc":
+            case "docx":
+                fileTypeLog = <i className="cloud_icon cloud_icon_doc"></i>;
+                break;
+            case "xls":
+            case "xlsx":
+                fileTypeLog = <i className="cloud_icon cloud_icon_xls"></i>;
+                break;
+            case "wps":
+                fileTypeLog = <i className="cloud_icon cloud_icon_wps"></i>;
+                break;
+            default:
+                fileTypeLog = <i className="cloud_icon cloud_icon_other"></i>;
+                break;
+        }
+        fileLogo = <span className="cloud_text">
+                {fileTypeLog}{name}
+            </span>;
+        return fileLogo;
     }
 
     render() {
