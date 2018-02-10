@@ -207,11 +207,13 @@ const LocalClassesMessage = React.createClass({
         var scrollHeight = target.scrollHeight;
         var clientHeight = target.clientHeight;
         if (scrollHeight - scrollTop == clientHeight) {
+            //每次当前用户发送消息时，设置页面的滚动方式为自动滚动
             scrollType = "auto";
-            console.log("到底了");
+            //因为当前用户自己发消息时，会直接刷新到消息区域的底部，所以不存在新消息通知，这里将新消息通知的数据清空
+            newMessageArray.splice(0);
+            this.setState({newMessageArray:[]});
         }else{
             scrollType = "defined";
-            console.log(scrollHeight - scrollTop);
         }
     },
 
@@ -238,7 +240,7 @@ const LocalClassesMessage = React.createClass({
         var newMessageLength = this.state.newMessageArray.length;
         //如果处于自定义滚动状态，且存在新消息，则提示存在N条新消息
         if(scrollType=="defined" && newMessageLength != 0){
-            newMessageTip = <div><span onClick={this.scrollToBottom}>有{newMessageLength}条新消息</span></div>
+            newMessageTip = <div className="warning_message"><i className="warning_message_img"></i><span onClick={this.scrollToBottom}>有{newMessageLength}条新消息</span></div>
         }
         return (
                 <div id="personTalk" className="class_personTalk">
@@ -255,7 +257,7 @@ const LocalClassesMessage = React.createClass({
                         </li>
                     </ul>
                     <div className="class_talk_bottom">
-                        <Input className="class_send_input" value={this.state.barrageMessageContent} onChange={this.messageContentChange}/>
+                        <Input className="class_send_input" value={this.state.barrageMessageContent} onChange={this.messageContentChange} onPressEnter={this.sendBarrageMessage}/>
                         <Button onClick={this.sendBarrageMessage} className="class_send_btn">
                             发送
                         </Button>
