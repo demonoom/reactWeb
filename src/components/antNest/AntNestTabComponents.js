@@ -66,6 +66,11 @@ const AntNestTabComponents = React.createClass({
         var initPageNo = 1;
         var initType = 0;
         antNest.getTopics(initPageNo, initType, true);
+        if (JSON.parse(sessionStorage.getItem("loginUser")).colAccount.substr(0, 2) == 'ST') {
+            this.setState({homeWorkPublish: 'none'})
+        } else {
+            this.setState({homeWorkPublish: 'inline-block'})
+        }
     },
 
     componentDidUpdate() {
@@ -170,8 +175,6 @@ const AntNestTabComponents = React.createClass({
     },
 
     whoISSecret(data) {
-        console.log(data);
-        // whoISSecretLis
         var arr = [];
         data.forEach(function (v) {
             var li = <li>{v.grade.name + ' ' + v.name}</li>
@@ -193,8 +196,9 @@ const AntNestTabComponents = React.createClass({
     buildTopicCard(topicObj, useType, topicReplayInfoArray, parTakeCountInfo, homeWorkFlag) {
         var screatPic = '';
         if (topicObj.fromUserId == sessionStorage.getItem("ident") && topicObj.applyWhiteList == true) {
-            screatPic = <span onClick={this.whoISSecret.bind(this, topicObj.whiteList)} className="topics_time"><img
-                src={require('../images/screatPic.png')} alt="" className="screatPic"/></span>
+            screatPic =
+                <span onClick={this.whoISSecret.bind(this, topicObj.whiteList)} className="topics_time noom_cursor"><img
+                    src={require('../images/screatPic.png')} alt="" className="screatPic"/></span>
         }
         //如果用户头像为空，使用系统默认头像
         var commentDisplayTime = '';
@@ -219,7 +223,8 @@ const AntNestTabComponents = React.createClass({
                             className="topics">#{topicObj.title}#</a>
         }
         if (isEmpty(topicObj.title) == false && useType == 0 && topicObj.valid == 0 && topicObj.type == 11) {
-            topicTitle = <a value={topicObj.id} title={topicObj.id} onClick={antNest.getHomeWorkPartakeInfo}
+            topicTitle = <a value={topicObj.id} title={topicObj.id} id={topicObj.commentDisplayTime}
+                            onClick={antNest.getHomeWorkPartakeInfo}
                             className="topics">#{topicObj.title}#</a>
         }
         //点赞用户span标记数组
@@ -354,7 +359,8 @@ const AntNestTabComponents = React.createClass({
                     <ul className="topics_mar60">
                     <span
                         className="topics_time">作答{parTakeCountInfo.participatecount}人，未作答{parTakeCountInfo.unParticipatecount}人</span>
-                        <span><Button value={topicObj.id} onClick={antNest.showPartakeModal}>立即作答</Button></span>
+                        <span style={{display: antNest.state.zuodaTime}}><Button value={topicObj.id}
+                                                                                 onClick={antNest.showPartakeModal}>立即作答</Button></span>
                     </ul>
                 </div>;
             } else {
@@ -602,6 +608,8 @@ const AntNestTabComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                debugger
+                console.log(ret);
                 var response = ret.response;
                 response.forEach(function (e) {
                     //话题的回复
@@ -743,7 +751,7 @@ const AntNestTabComponents = React.createClass({
             <Spin size="large" delay={500}/>
         </div>;
         topicCardArray.push(a);
-        antNest.getZuoYePartakeById(topicId, initPageNo);
+        antNest.getZuoYePartakeById(topicId, initPageNo, e.target.id);
     },
     /**
      * 获取话题参与人数的信息
@@ -769,7 +777,7 @@ const AntNestTabComponents = React.createClass({
     /**
      * 获取作业参与人数的信息
      */
-    getZuoYePartakeById(topicId, pageNo) {
+    getZuoYePartakeById(topicId, pageNo, time) {
         var param = {
             "method": 'getZuoYeInfo',
             "zuoYeId": topicId,
@@ -777,6 +785,12 @@ const AntNestTabComponents = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var parTakeCountInfo = ret.response;
+                var now = parTakeCountInfo.now;
+                if (now > time) {
+                    antNest.setState({zuodaTime: 'none'})
+                } else {
+                    antNest.setState({zuodaTime: 'inline-block'})
+                }
                 antNest.getZuoYeInfoById(topicId, parTakeCountInfo, pageNo);
             },
             onError: function (error) {
@@ -1698,6 +1712,9 @@ const AntNestTabComponents = React.createClass({
             "open": 0,
             "parent": parentTopic
         };
+        if (antNest.state.optType == "getZuoYeById") {
+            topicJson.type = 11
+        }
         var param = {
             "method": 'addTopic',
             "topicJson": topicJson,
@@ -1707,7 +1724,8 @@ const AntNestTabComponents = React.createClass({
                 if (ret.success == true && ret.response == true) {
                     message.success("话题参与成功");
                 } else {
-                    message.error("话题参与失败");
+                    // message.error("话题参与失败");
+                    message.error(ret.msg);
                 }
                 if (antNest.state.optType == "getTopicById") {
                     //如果是在单个话题的页面中完成点赞或取消点赞，则停留在当前页面
@@ -1808,7 +1826,8 @@ const AntNestTabComponents = React.createClass({
                 <div className="talk_ant_btn1">
                     <Button value="talk" onClick={antNest.showaddTopicModal} className="antnest_talk">发表说说</Button>
                     <Button value="topic" onClick={antNest.showaddTopicModal} className="antnest_talk">发表话题</Button>
-                    <Button value="homework" onClick={antNest.showaddTopicModal}>发布作业</Button>
+                    <Button style={{display: antNest.state.homeWorkPublish}} value="homework"
+                            onClick={antNest.showaddTopicModal}>发布作业</Button>
                 </div>
                 {breadMenuTip}
             </div>;
@@ -1923,14 +1942,15 @@ const AntNestTabComponents = React.createClass({
                        visible={antNest.state.whoISSecretModalVisible}
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
-                    // onOk={antNest.partakeModalHandleOk}
                        onCancel={antNest.whoISSecretModalHandleCancel}
                        footer={null}
+
                        className="visible_class"
+
                 >
-                        <ul>
-                            {this.state.whoISSecretLis}
-                        </ul>
+                    <ul>
+                        {this.state.whoISSecretLis}
+                    </ul>
                 </Modal>
 
                 <ConfirmModal ref="confirmModal"
