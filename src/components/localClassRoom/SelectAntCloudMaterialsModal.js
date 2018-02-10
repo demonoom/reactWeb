@@ -39,26 +39,18 @@ var targetDirColumns = [{
 ];
 
 /**
- * 从备课计划选题的modal
+ * 从蚁盘选择课件的modal
  */
-class SelectMaterialsModal extends React.Component {
+class SelectAntCloudMaterialsModal extends React.Component {
 
     constructor(props) {
         super(props);
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         this.state = {
             loginUser: loginUser,
-            isShow: false,
-            dataSourceValue:1,  //默认为从备课计划中选择
+            isShow: false
         };
-        this.selectMaterialsModalHandleCancel = this.selectMaterialsModalHandleCancel.bind(this);
-        this.initPage = this.initPage.bind(this);
-        this.pageOnChange = this.pageOnChange.bind(this);
-        this.getScheduleList = this.getScheduleList.bind(this);
-        this.onScheduleSelectChange = this.onScheduleSelectChange.bind(this);
-        this.getMaterialsBySheduleId = this.getMaterialsBySheduleId.bind(this);
-        this.dataSourceOnChange = this.dataSourceOnChange.bind(this);
-        this.selectMaterials = this.selectMaterials.bind(this);
+        this.SelectAntCloudMaterialsModalHandleCancel = this.SelectAntCloudMaterialsModalHandleCancel.bind(this);
         this.buildTargetDirData = this.buildTargetDirData.bind(this);
         this.getUserRootCloudFiles = this.getUserRootCloudFiles.bind(this);
         this.antCloudFileTablePageOnChange = this.antCloudFileTablePageOnChange.bind(this);
@@ -67,139 +59,24 @@ class SelectMaterialsModal extends React.Component {
         this.intoDirectoryInner = this.intoDirectoryInner.bind(this);
         this.listFiles = this.listFiles.bind(this);
         this.returnParentAtMoveModal = this.returnParentAtMoveModal.bind(this);
+        this.pushFileFromAntCloud = this.pushFileFromAntCloud.bind(this);
     }
 
     componentDidMount() {
         var _this = this;
         var isShow = _this.props.isShow;
         this.setState({isShow});
-        this.initPage();
-        this.getScheduleList();
         this.getAntCountFileList();
     }
 
     componentWillReceiveProps(nextProps) {
         var isShow = nextProps.isShow;
-        this.initPage();
         this.setState({isShow});
     }
 
-    selectMaterialsModalHandleCancel() {
-        this.initPage();
+    SelectAntCloudMaterialsModalHandleCancel() {
         this.setState({"isShow": false});
         this.props.onCancel();
-    }
-
-    /**
-     * 初始化页面元素
-     */
-    initPage() {
-        this.setState({dataSourceValue:1});
-    }
-
-    /**
-     * 题目分页页码改变的响应函数
-     * @param pageNo
-     */
-    pageOnChange(pageNo){
-        this.getMaterialsBySheduleId(this.state.currentScheduleId, pageNo);
-        this.setState({
-            currentPage: pageNo,
-        });
-    }
-
-    //获取老师名下的备课计划
-    getScheduleList(){
-        var _this = this;
-        scheduleData.splice(0);
-        var param = {
-            "method": 'getTeachScheduleByIdent',
-            "ident": _this.state.loginUser.colUid
-        };
-        doWebService(JSON.stringify(param), {
-            onResponse: function (ret) {
-                ret.response.forEach(function (e) {
-                    var scheduleArray = e.split("#");
-                    var scheduleId = scheduleArray[0];
-                    var courseName = scheduleArray[1];
-                    scheduleData.push({
-                        key: scheduleId,
-                        scheduleName: courseName,
-                        scheduleOpt: '',
-                    });
-                });
-                _this.setState({scheduleCount: scheduleData.length});
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });
-    }
-
-    onScheduleSelectChange(selectedRowKeys) {
-        var scheduleId = selectedRowKeys.key;
-        materialsData = [];
-        this.getMaterialsBySheduleId(scheduleId, 1);
-        this.setState({currentScheduleId: scheduleId});
-    }
-
-    //点击左侧备课计划时，根据备课计划获取对应的资源文件
-    getMaterialsBySheduleId (ScheduleId, pageNo) {
-        var _this = this;
-        var param = {
-            "method": 'getMaterialsBySheduleId',
-            "scheduleId": ScheduleId,
-            "pageNo": pageNo
-        };
-        doWebService(JSON.stringify(param), {
-            onResponse: function (ret) {
-                let courseWareList = [];
-                _this.activeKey = [];
-                courseWareList.splice(0);
-                var response = ret.response;
-                response.forEach(function (e) {
-                    var fileOpt = null;
-                    var name = e.name;
-                    var lastPointIndex = name.lastIndexOf(".");
-                    //通过截取文件后缀名的形式，完成对上传文件类型的判断
-                    var fileType = name.substring(lastPointIndex + 1);
-                    if(fileType=="ppt" || fileType == "pptx"){
-                        fileOpt = <div>
-                            <Button onClick={_this.selectMaterials.bind(_this,e)}>确定</Button>
-                        </div>;
-                    }
-                    materialsData.push({
-                        key: e.id,
-                        fileName: e.name,
-                        fileOpt:fileOpt,
-                        htmlPath: e.htmlPath,
-                        materialsObj:e
-                    });
-                    var pager = ret.pager;
-                    _this.setState({totalMaterialsCount: parseInt(pager.rsCount)});
-                });
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-
-        });
-    }
-
-    /**
-     * 从备课计划列表中，选中一个文件
-     */
-    selectMaterials(record, index, event) {
-        console.log(record);
-        //通过回调的形式，将选中的课件回调给父组件，并完成推送课件的操作
-        this.props.pushMaterialsToClass(record);
-        this.selectMaterialsModalHandleCancel();
-    }
-
-    dataSourceOnChange(e){
-        this.setState({
-            dataSourceValue: e.target.value,
-        });
     }
 
     getAntCountFileList(){
@@ -263,27 +140,10 @@ class SelectMaterialsModal extends React.Component {
                 var name = e.name;
                 var directory = e.directory;
                 var fileLogo = _this.buildFileLogo(name, directory, e);
-
-                var dirName = <span className="font_gray_666"
-                                    onClick={_this.intoDirectoryInner.bind(_this, e, "moveDirModal")}>
-                                {fileLogo}
-                              </span>;
-                var moveDirOpt;
-                var lastPointIndex = name.lastIndexOf(".");
-                //通过截取文件后缀名的形式，完成对上传文件类型的判断
-                var fileType = name.substring(lastPointIndex + 1);
-                if (directory == false) {
-                    dirName = name;
-                    if(fileType=="ppt" || fileType == "pptx"){
-                        moveDirOpt = <div>
-                            <Button onClick={_this.pushFileFromAntCloud.bind(_this,e)}>确定</Button>
-                        </div>;
-                    }
-                }
                 var dataJson = {
                     key: key,
-                    dirName: dirName,
-                    moveDirOpt: moveDirOpt
+                    dirName: fileLogo,
+                    fileObj:e
                 };
                 targetDirDataArray.push(dataJson);
             })
@@ -292,7 +152,7 @@ class SelectMaterialsModal extends React.Component {
     }
 
     /**
-     * 根据文件类型，构建不同的图标显示
+     * 生成蚁盘文件列表时，根据文件类型，构建不同的图标显示
      */
     buildFileLogo(name, directory, e) {
         var _this = this;
@@ -300,8 +160,7 @@ class SelectMaterialsModal extends React.Component {
         if (directory) {
             fileLogo = <span className="cloud_text">
                 <i className="cloud_icon cloud_icon_file upexam_float"></i>
-                <span className="antnest_name affix_bottom_tc"
-                      onClick={_this.intoDirectoryInner.bind(_this, e, "mainTable")}>{name}</span>
+                <span className="antnest_name affix_bottom_tc">{name}</span>
             </span>;
         } else {
             var lastPointIndex = name.lastIndexOf(".");
@@ -341,7 +200,7 @@ class SelectMaterialsModal extends React.Component {
                     break;
             }
             fileLogo = <span className="cloud_text">
-                {fileTypeLog}
+                {fileTypeLog}{name}
             </span>;
         }
         return fileLogo;
@@ -427,78 +286,66 @@ class SelectMaterialsModal extends React.Component {
      * 将选中的蚁盘文件，通过回调的形式，推送到课堂
      * @param file
      */
-    pushFileFromAntCloud(file){
-        //通过回调的形式，将选中的课件回调给父组件，并完成推送课件的操作
-        this.props.pushMaterialsToClass(file);
-        this.selectMaterialsModalHandleCancel();
+    pushFileFromAntCloud(fileOrDirectory){
+        var _this = this;
+        console.log(fileOrDirectory);
+        var fileObj = fileOrDirectory.fileObj;
+        var fileName = fileObj.name;
+        var isDirectory = fileObj.directory;
+        if(isDirectory==true){
+            this.intoDirectoryInner(fileObj, "moveDirModal");
+        }else{
+            var lastPointIndex = fileName.lastIndexOf(".");
+            //通过截取文件后缀名的形式，完成对上传文件类型的判断
+            var fileType = fileName.substring(lastPointIndex + 1);
+            if(fileType=="ppt" || fileType == "pptx"){
+                //通过回调的形式，将选中的课件回调给父组件，并完成推送课件的操作
+                this.props.pushMaterialsToClass(fileObj);
+                this.SelectAntCloudMaterialsModalHandleCancel();
+            }else{
+                message.error("暂不支持打开该文件");
+                return;
+            }
+        }
     }
 
 
     render() {
 
-        var mainContent = null;
-        if(this.state.dataSourceValue == 1){
-            mainContent = <Row style={{height: 400}} className="yinyong3">
-                <Col span={7} className="ant-form"><Table size="small" className="lesson"
-                                                          onRowClick={this.onScheduleSelectChange}
-                                                          columns={scheduleColumns} dataSource={scheduleData}
-                                                          pagination={false}
-                                                          scroll={{y: 300}}/></Col>
-                <Col span={17} className="col17_le 17_hei ant-form">
-                    <div className="17_hei1">
-                        <Table className="17_hei2" columns={materialsColumns}
-                               dataSource={materialsData}
-                               //onRowClick={this.selectMaterials}
-                               pagination={{
-                                   total: this.state.totalMaterialsCount,
-                                   pageSize: getPageSize(),
-                                   onChange: this.pageOnChange
-                               }} scroll={{y: 300}}/>
-                    </div>
-                </Col>
-            </Row>;
-        }else{
-            //从蚁盘选择文件
-            mainContent = <Row style={{height: 400}} className="yinyong3">
-                <Col span={24} className="17_hei ant-form">
-                    <Row>
-                        <Col span={24} style={{height:'354'}}>
-                            <div className="public—til—blue">
-                                <div className="ant-tabs-right"><Button onClick={this.returnParentAtMoveModal}><Icon
-                                    type="left"/></Button></div>
-                            </div>
-                            <Table columns={targetDirColumns} showHeader={false}
-                                   dataSource={this.state.targetDirDataArray}
-                                   pagination={{
-                                       total: this.state.totalCount,
-                                       pageSize: getPageSize(),
-                                       onChange: this.antCloudFileTablePageOnChange
-                                   }} scroll={{y: 300}}/>
-                        </Col>
-                    </Row>
-                </Col>
-            </Row>;
-        }
-
 
         return (
-            <Modal title="选择课件" className="choose_class" visible={this.state.isShow}
-                   onCancel={this.selectMaterialsModalHandleCancel}
+            <Modal className="choose_class" visible={this.state.isShow}
+                   onCancel={this.SelectAntCloudMaterialsModalHandleCancel}
                    transitionName=""  //禁用modal的动画效果
+                   title="选择课件"
                    maskClosable={false} //设置不允许点击蒙层关闭
                    footer={null}
+                   closable={true}     //设置显示右上角的关闭按钮（但是需要调整颜色，否则白色会无法显示）
             >
-                <Row>
-                    <RadioGroup onChange={this.dataSourceOnChange} value={this.state.dataSourceValue}>
-                        <Radio value={1}>备课计划</Radio>
-                        <Radio value={2}>蚁盘</Radio>
-                    </RadioGroup>
+                <Row style={{height: 400}} className="yinyong3">
+                    <Col span={24} className="17_hei ant-form">
+                        <Row>
+                            <Col span={24} style={{height:'354'}}>
+                                <div className="public—til—blue">
+                                    <div className="ant-tabs-right"><Button onClick={this.returnParentAtMoveModal}><Icon
+                                        type="left"/></Button></div>
+                                </div>
+                                <Table columns={targetDirColumns} showHeader={false}
+                                       dataSource={this.state.targetDirDataArray}
+                                       onRowClick={this.pushFileFromAntCloud}
+                                       pagination={{
+                                           total: this.state.totalCount,
+                                           pageSize: getPageSize(),
+                                           onChange: this.antCloudFileTablePageOnChange
+                                       }} scroll={{y: 300}}/>
+                            </Col>
+                        </Row>
+                    </Col>
                 </Row>
-                {mainContent}
             </Modal>
         );
     }
 
 }
 
-export default SelectMaterialsModal;
+export default SelectAntCloudMaterialsModal;

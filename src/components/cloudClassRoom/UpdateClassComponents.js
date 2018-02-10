@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {
     Tabs, Breadcrumb, Icon, Card, Button, Row, Col, Steps,
-    Input, Select, Radio, DatePicker, Checkbox, message, Upload
+    Input, Select, Radio, DatePicker, Checkbox, message, Upload,Tag
 } from 'antd';
 import ImageAnswerUploadComponents from './ImageAnswerUploadComponents';
 import {isEmpty, formatYMD, getLocalTime} from '../../utils/utils';
@@ -53,6 +53,8 @@ const UpdateClassComponents = React.createClass({
             defaultTeamSelected: '',
             isWeiClass: false,
             isShowClass: false,
+            tags: [],
+            noomTages: [],
             isTestClass: false,//默认测试课勾选状态
             test: cloudClassRoomUser.test ,//获取当前用户的test ""为不是 test是测试用户
             selectKnowledgeModalIsShow:false   //修改 知识点弹框
@@ -120,6 +122,26 @@ const UpdateClassComponents = React.createClass({
     },
 
     /**
+     * 修改题目时，可以直接删除已选的知识点
+     * @param removedTag
+     */
+    removeSelectedTags(removedTag,removeIndex) {
+        var tags = this.state.tags;
+        for (var i = 0; i < tags.length; i++) {
+            if (tags[i].key == removedTag.key) {
+                tags.splice(i, 1);
+            }
+        }
+        var noomTag = this.state.noomTages[removeIndex];
+        for (var i = 0; i < noomTag.length; i++) {
+            if (noomTag[i].key == removedTag.key) {
+                noomTag.splice(i, 1);
+            }
+        }
+        this.setState({initTags:noomTag});
+    },
+
+    /**
      * 初始化更新页面
      * @param updateClassObj
      */
@@ -169,6 +191,7 @@ const UpdateClassComponents = React.createClass({
         var isTeam;
         var isSeriesDisabled;
         var teamDisabled;
+        var tagNoomArray =[];
         if (publishType == 1) {
             //团队发布
             isTeam = 2;
@@ -379,12 +402,22 @@ const UpdateClassComponents = React.createClass({
                         noom={_this.state.weifileList}
                     />
                 </Col>;
+                var tagNoomObj = video.knowledgeVideos;
+                // tagNoomArray.push(video.knowledgeVideos);
+                var initTagsArray = [];
+                tagNoomObj.map((tagObj, index) => {
+                    var tagKey = tagObj.knowledgeId;
+                    var tagName = tagObj.knowledgeInfo['knowledgeName'];
+                    var tagJson = {'key':tagKey,'name':tagName};
+                    initTagsArray.push(tagJson);
+                })
                 var lessonJson = {
                     lessonNum,
                     teacherObj,
                     timeObj,
                     videoNameObj,
                     uploadList,
+                    //Tags,
                     currentLessionIsUpdateDisable,
                     deleteDisable: true,
                     videoStatus,
@@ -394,8 +427,10 @@ const UpdateClassComponents = React.createClass({
                     liveTime
                 };
                 lessonArray.push(lessonJson);
+                tagNoomArray.push(initTagsArray);
                 _this.setState({lessonArray});
             })
+            _this.setState({'noomTages':tagNoomArray})
         }
         if(isEmpty(isSeries)==false){
             _this.getAllClass();
@@ -589,7 +624,7 @@ const UpdateClassComponents = React.createClass({
      * @param value
      */
     courseSelectOnChange(value) {
-        console.log(`selected ${value}`);
+        // console.log(`selected ${value}`);
         this.setState({defaultSubjectSelected: value});
         courseInfoJson.courseTypeId = value;
     },
@@ -598,7 +633,7 @@ const UpdateClassComponents = React.createClass({
      * @param value
      */
     classLevelSelectOnChange(value) {
-        console.log(`selected ${value}`);
+        // console.log(`selected ${value}`);
         this.setState({courseClass: value});
         // courseInfoJson.courseClass = value;
 
@@ -608,7 +643,7 @@ const UpdateClassComponents = React.createClass({
      * @param e
      */
     classTypeOnChange(e) {
-        console.log('radio checked', e.target.value);
+        // console.log('radio checked', e.target.value);
         var isTeam = e.target.value;
         var isSeriesDisabled;
         var teamDisabled;
@@ -634,7 +669,7 @@ const UpdateClassComponents = React.createClass({
      * @param e
      */
     classIsFreeOnChange(e) {
-        console.log('radio checked', e.target.value);
+        // console.log('radio checked', e.target.value);
         var isFree = e.target.value;
 
         var moneyInputDisable = true;
@@ -685,7 +720,7 @@ const UpdateClassComponents = React.createClass({
      * @param value
      */
     courseTypeSelectOnChange(value) {
-        console.log(`courseTypeSelectOnChange ${value}`);
+        // console.log(`courseTypeSelectOnChange ${value}`);
         courseInfoJson.isSeries = value;
         this.setState({isSeries: value});
     },
@@ -695,7 +730,7 @@ const UpdateClassComponents = React.createClass({
      * @param value
      */
     teamSelectOnChange(value) {
-        console.log(`teamSelectOnChange selected ${value}`);
+        // console.log(`teamSelectOnChange selected ${value}`);
         //团队授课时,发布者为团队id
         courseInfoJson.publisherId = value;
         this.getTeamUserOptions(value);
@@ -789,7 +824,7 @@ const UpdateClassComponents = React.createClass({
      * @param dateString
      */
     classTimeOnChange(date, dateString) {
-        console.log(date, dateString);
+        // console.log(date, dateString);
         var startTime = dateString[0];
         var endTime = dateString[1];
         var startTimestamp = new Date(startTime).valueOf();
@@ -816,6 +851,8 @@ const UpdateClassComponents = React.createClass({
      * 添加课程目录
      */
     addLesson() {
+        var tagArrByNoom = [];
+        this.state.noomTages.push(tagArrByNoom);
         var _this = this;
         var maxSequence = this.getMaxSequenceFromCourseInfoJson();
         var videoNumBeforeAdd = this.state.videoNum;
@@ -859,7 +896,36 @@ const UpdateClassComponents = React.createClass({
                 noom={_this.state.weifileList}
             />
         </Col>;
-
+        /*var Tags = <Row style={{"clear": "both"}}>
+            <Col span={3} className="ant-form-item-label row-t-f">
+                <span className="font-14">知识点：</span>
+            </Col>
+            <Col span={27} className="row-t-f">
+                <div className="select_knoledge_width upexam_float">
+                    {_this.state.noomTages[i].map((tag, index) => {
+                        const isLongTag = tag.length > 20;
+                        const tagElem = (
+                            <Tag key={tag.key} closable={index !== -1}
+                                 afterClose={() => _this.removeSelectedTags(tag,index)}>
+                                {isLongTag ? `${tag.name.slice(0, 20)}...` : tag.name}
+                            </Tag>
+                        );
+                        return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
+                    })}
+                </div>
+            </Col>
+            <Col span={3}>
+                <Button className="ding_modal_top roe-t-f-left"
+                        onClick={this.showSelectKnowledgeModal.bind(this, i)}>选择知识点333</Button>
+                <KnowledgePointModal isShow={this.state.selectKnowledgeModalIsShow}
+                                     initTags={this.state.initTags}
+                                     knowledgePointNumber={i}
+                                     closeSelectKnowledgeModal={this.closeSelectKnowledgeModal}
+                                     ref="knowledgePointModal"
+                >
+                </KnowledgePointModal>
+            </Col>
+        </Row>*/
         var videoStatus = 1;//未直播
         // var videoJson=courseInfoJson.videos
         var lessonJson = {
@@ -869,6 +935,7 @@ const UpdateClassComponents = React.createClass({
             videoNameObj,
             uploadList,
             videoStatus,
+             //Tags,
             'delete': false,
             "squence": lessonNum
         };
@@ -918,7 +985,7 @@ const UpdateClassComponents = React.createClass({
     },
 
     lessonTimeOnOk(value) {
-        console.log('onOk: ', value);
+        // console.log('onOk: ', value);
     },
     /**
      * 删除章节时，回调的函数
@@ -958,8 +1025,9 @@ const UpdateClassComponents = React.createClass({
         var videoNumBeforeRemove = this.state.videoNum;
         var newVideoNum = parseInt(videoNumBeforeRemove) - 1;
         courseInfoJson.videoNum = newVideoNum;
+        var index = removeSequence -1;
+        this.state.noomTages.splice(index,1);
         this.setState({lessonArray, "videoNum": newVideoNum});
-
 
     },
 
@@ -1005,7 +1073,7 @@ const UpdateClassComponents = React.createClass({
     },
 
     /**
-     * 保存课程信息
+     * 构建修改后的题目信息
      */
     saveClassInfo() {
         var checkResult = this.checkSubmitData();
@@ -1040,7 +1108,7 @@ const UpdateClassComponents = React.createClass({
             } else {
                 var time = '';
             }
-            console.log("teacher" + teacher + "\t" + time);
+            // console.log("teacher" + teacher + "\t" + time);
             if (this.state.isWeiClass) {
                 videoJson.videoStatus = courseInfoJson.videos[i].videoStatus;
                 videoJson.userID = teacher;
@@ -1065,6 +1133,22 @@ const UpdateClassComponents = React.createClass({
             if (videoJson.squence == arr.length) {
                 courseInfoJson.endTime = videoJson.liveTime;
             }
+            var knowledgeVideosArray = [];
+            var tagJsonArray = this.state.noomTages[i];
+            if(isEmpty(tagJsonArray)==false){
+                tagJsonArray.forEach(function (tagObj) {
+                    var key = tagObj.key;
+                    var name = tagObj.name;
+                    var knowledgeJson = {};
+                    knowledgeJson.knowledgeId = key;
+                    var knowledgeInfo = {};
+                    knowledgeInfo.knowledgeId = key;
+                    knowledgeInfo.knowledgeName = name;
+                    knowledgeJson.knowledgeInfo = knowledgeInfo;
+                    knowledgeVideosArray.push(knowledgeJson);
+                });
+            }
+            videoJson.knowledgeVideos = knowledgeVideosArray;
             this.buildVideosArray(videoJson);
         }
         if (isEmpty(courseInfoJson.videos) == false) {
@@ -1098,7 +1182,7 @@ const UpdateClassComponents = React.createClass({
      * @param e
      */
     publishClassAtNow(e) {
-        console.log(`checked = ${e.target.checked}`);
+        // console.log(`checked = ${e.target.checked}`);
         // 是否发布　１已发布　２未发布
 
         if (e.target.checked) {
@@ -1166,7 +1250,7 @@ const UpdateClassComponents = React.createClass({
             target = e.target;
         }
         var videoNum = target.value;
-        console.log("classTimes:" + videoNum);
+        // console.log("classTimes:" + videoNum);
         courseInfoJson.videoNum = videoNum;
         this.setState({videoNum});
     },
@@ -1240,6 +1324,7 @@ const UpdateClassComponents = React.createClass({
                     everyVideoJson.userID = videoJson.userID;
                     everyVideoJson.url = videoJson.url;
                     everyVideoJson.remark = videoJson.remark;
+                    everyVideoJson.knowledgeVideos = videoJson.knowledgeVideos;
                 }
                 everyVideoJson.liveTime = videoJson.liveTime;
                 everyVideoJson.videoStatus = videoJson.videoStatus;
@@ -1255,7 +1340,7 @@ const UpdateClassComponents = React.createClass({
     },
 
     teamTeacherSelectOnChange(value) {
-        console.log(value);
+        // console.log(value);
     },
 
     isWeiClass(e) {
@@ -1285,7 +1370,7 @@ const UpdateClassComponents = React.createClass({
      * @param e
      */
     weiClassUpload(e, index) {
-        console.log('上传完成的回调');
+        // console.log('上传完成的回调');
         courseInfoJson.videos.forEach(function (v, i) {
             if (v.squence == index) {
                 v.url = e.response;
@@ -1300,8 +1385,8 @@ const UpdateClassComponents = React.createClass({
      * @param e
      */
     beforeUploadBack(e) {
-        console.log(e);
-        console.log('微课上传之前的回调');
+        // console.log(e);
+        // console.log('微课上传之前的回调');
 
         var weiClassName = {
             name: e.name,
@@ -1330,23 +1415,31 @@ const UpdateClassComponents = React.createClass({
     /*
     知识点modal 框
      */
-    showSelectKnowledgeModal(){
-        this.setState({selectKnowledgeModalIsShow:true})
+    showSelectKnowledgeModal(t,tagNoomObj){
+        this.refs.knowledgePointModal.rememberId(t);
+        this.setState({selectKnowledgeModalIsShow:true,"initTags":tagNoomObj})
     },
 
-    closeSelectKnowledgeModal(tags){
-        //
+    /**
+     * 修改题目的过程中，如果选择知识点的窗口关闭，则将选定的知识点带回并关闭当前的窗口
+     * @param tags
+     * @param i
+     */
+    closeSelectKnowledgeModal(tags, i) {
+        //在这里决定往哪个数组的tags push tag
         var _this = this;
-        console.log("close:"+tags);
-         _this.state.tags.splice(0);
-        if(isEmpty(tags)==false){
-            tags.forEach(function (tag) {
-                _this.state.tags.push(tag);
-            })
+        _this.setState({"selectKnowledgeModalIsShow": false});
+        if(i!="closeBtn"){
+            if(isEmpty(this.state.noomTages)==false){
+                _this.state.noomTages[i].splice(0);
+            }
+            if (isEmpty(tags) == false) {
+                tags.forEach(function (tag) {
+                    _this.state.noomTages[i].push(tag);
+                })
+            }
         }
-        _this.setState({"selectKnowledgeModalIsShow":false});
     },
-
 
     /**
      * 渲染页面
@@ -1541,14 +1634,12 @@ const UpdateClassComponents = React.createClass({
             if (this.state.isWeiClass) {
                 //是微课
                 if (typeof(this.state.lessonArray) != "undefined") {
-
                     for (var i = 0; i < this.state.lessonArray.length; i++) {
                         var lessonJson = this.state.lessonArray[i];
                         var deleteDisable = lessonJson.deleteDisable;
                         var videoName = lessonJson.videoName;
                         var InputObj = <Input id={lessonJson.squence} value={videoName}
                                               onChange={_this.lessonTitleOnChange} className="noom_input"/>;
-
                         var lessonRowObj = <Row>
                             <Col span={3}>第{lessonJson.lessonNum}课时</Col>
                             {/*{lessonJson.videoNameObj}*/}
@@ -1565,10 +1656,36 @@ const UpdateClassComponents = React.createClass({
                                     // disabled={deleteDisable}
                                         onClick={this.removeLesson.bind(this, lessonJson.squence, i)}></Button>
                             </Col>
-                            {/*知识点*/}
-                            <Col span={24} className="knowledgePoint">
-                                <span className="font-14">知识点：</span><Button className="ding_modal_top" onClick={this.showSelectKnowledgeModal}>选择知识点333</Button>
-                            </Col>
+
+                            <Row style={{"clear": "both"}}>
+                                <Col span={3} className="ant-form-item-label row-t-f">
+                                    <span className="font-14">知识点：</span>
+                                </Col>
+                                <Col span={27} className="row-t-f">
+                                    <div className="select_knoledge_width upexam_float">
+                                        {_this.state.noomTages[i].map((tagObj, index) => {
+                                            const isLongTag = tagObj.length > 20;
+                                            var tagKey = tagObj.key;
+                                            var tagName = tagObj.name;
+                                            var tagJson = {'key':tagKey,'name':tagName};
+                                            var noomIndex = parseInt(lessonJson.squence)-1;
+                                            const tagElem = (
+                                                <Tag key={tagKey} closable={index !== -1}
+                                                     afterClose={() => _this.removeSelectedTags(tagJson,noomIndex)}>
+                                                    {isLongTag ? `${tagName.slice(0, 20)}...` : tagName}
+                                                </Tag>
+                                            );
+                                            return isLongTag ? <Tooltip title={tagJson}>{tagElem}</Tooltip> : tagElem;
+                                        })}
+                                    </div>
+                                </Col>
+                                <Col span={3}>
+                                    <Button className="ding_modal_top roe-t-f-left"
+                                            onClick={_this.showSelectKnowledgeModal.bind(_this, i,_this.state.noomTages[i])}>选择知识点</Button>
+
+                                </Col>
+                            </Row>
+
                         </Row>;
                         everyLessonArray.push(lessonRowObj);
                     }
@@ -1588,7 +1705,7 @@ const UpdateClassComponents = React.createClass({
                                 <Col span={3} className="add_left">目录</Col>
                                 <Col span={8}>名称</Col>
                                 <Col span={4} className="class_right">授课老师</Col>
-                                <Col span={4} className="class_right">微课名</Col>
+                                <Col span={4} className="class_right">附件名</Col>
                                 <Col span={3} className="class_right">微课上传</Col>
                                 <Col span={2} className="class_right">操作</Col>
                             </Row>
@@ -1695,6 +1812,13 @@ const UpdateClassComponents = React.createClass({
                     </Steps>
                 </div>
                 {stepPanel}
+
+                <KnowledgePointModal isShow={_this.state.selectKnowledgeModalIsShow}
+                                     initTags={_this.state.initTags}
+                                     closeSelectKnowledgeModal={_this.closeSelectKnowledgeModal}
+                                     ref={"knowledgePointModal"}
+                >
+                </KnowledgePointModal>
                 {/*<div>
                     <Row>
                         <Col span={24}>
@@ -1704,8 +1828,6 @@ const UpdateClassComponents = React.createClass({
                         </Col>
                     </Row>
                 </div>*/}
-                <KnowledgePointModal isShow={this.state.selectKnowledgeModalIsShow}  initTags={this.state.tags}
-                                      closeSelectKnowledgeModal={this.closeSelectKnowledgeModal}></KnowledgePointModal>
             </div>
         );
     },

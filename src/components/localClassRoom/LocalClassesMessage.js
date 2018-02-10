@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import {isEmpty} from '../../utils/utils';
+import {isEmpty,showLargeImg} from '../../utils/utils';
 import {getLocalTime} from '../../utils/Const';
 import {Button, message, Row,Col,Input} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
@@ -10,6 +10,7 @@ const { TextArea } = Input;
  */
 var parentMs = null;
 var messageLiArray=[];
+var imgArr=[];
 const LocalClassesMessage = React.createClass({
 
     getInitialState() {
@@ -55,6 +56,14 @@ const LocalClassesMessage = React.createClass({
         }
     },
 
+    /**
+     * 查看大图片
+     * @param selectedRowKeys
+     */
+    noomWatchImg(id) {
+        document.getElementById(id).click();
+    },
+
     buildMessageLiArray(messageData,messageFrom){
         var content = messageData.content;
         var createTime = getLocalTime(messageData.createTime);
@@ -66,6 +75,23 @@ const LocalClassesMessage = React.createClass({
             avatar = <img src={fromUser.avatar} width="60" height="60" class="green" />;
         }
         var uuid = messageData.uuid;
+        if(isEmpty(messageData.attachment)==false){
+            var attachmentObj = messageData.attachment;
+            if(attachmentObj.type == 1){
+                var address = attachmentObj.address;
+                content = <span>
+                    <img src={address} alt={address} style={{width:'20%',height:'20%'}}
+                         onClick={this.noomWatchImg.bind(this, address)} />
+                </span>
+                var imgObj = <span className="topics_zan"><img id={address}
+                                                            className="topics_zanImg"
+                                                            onClick={showLargeImg}
+                                                            src={address}
+                                                            alt={address}/>
+                            </span>;
+                imgArr.push(imgObj);
+            }
+        }
         var messageTag = null;
         if(fromUser.colUid == sessionStorage.getItem("userId")){
             messageTag = <li className="flex classroom_direction">
@@ -158,11 +184,22 @@ const LocalClassesMessage = React.createClass({
      * @returns {XML}
      */
     render() {
+        var noDataTipImgObj = null;
+        if(isEmpty(this.state.messageLiArray)){
+            noDataTipImgObj = <img className="noDataTipImg" width={'240'} src={require('../images/noDataTipImg.png')}/>;
+        }
         return (
                 <div id="personTalk" className="class_personTalk">
+                    <h3 className="classroom_h3">互动讨论</h3>
+                    {noDataTipImgObj}
                     <ul className="class_talk_top" id="groupTalk">
                         {/*消息内容主体*/}
                         {this.state.messageLiArray}
+                    </ul>
+                    <ul style={{display: 'none'}}>
+                        <li className="imgLi">
+                            {imgArr}
+                        </li>
                     </ul>
                     <div className="class_talk_bottom">
                         <Input className="class_send_input" value={this.state.barrageMessageContent} onChange={this.messageContentChange}/>
