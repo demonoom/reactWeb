@@ -183,7 +183,6 @@ const LocalClassRoom = React.createClass({
                     </div>
                 </div>
                 <div className="local_class_right">
-                    <img className="noDataTipImg" src={require('../components/images/noDataTipImg.png')}/>
                     <LocalClassesMessage ms={ms} classCode={this.state.classCode} classType={this.state.classType}></LocalClassesMessage>
                 </div>
                 <SelectSubjectModal isShow={this.state.subjectModalIsShow} onCancel={this.closeSubjectModal} pushSubjectToClass={this.pushSubjectToClass}></SelectSubjectModal>
