@@ -9,20 +9,30 @@
     max-width: 100%;
 }
 .classroom_btn{
+     z-index: 10;
+     position: absolute;
+     top:20px;
+     left: 20px;
+ }
+.classroom_btn_finish{
     z-index: 10;
     position: absolute;
     top:20px;
-    left: 20px;
+    right: 20px;
 }
 .classroom_btn_b{
-    color: #fff;
     font-size: 14px;
     border: none;
+    width: 48px;
+    height: 48px;
+    border-radius: 0;
+    padding: 0;
 }
-.classroom_btn_b i{
-    font-size: 18px;
-    position: relative;
-    top: 1px;
+.classroom_btn_b img{
+    width: 100%;
+}
+.classroom_btn_b:hover{
+    background: none;
 }
 .classroom_btn_green{
     background: #9cc232
@@ -255,7 +265,15 @@
     min-height: 100%;
     height: 100%;
 }
-.modal_classroom_push_right .ant-table-tbody > tr > td:hover{
+.modal_classroom_push_right .ant-table-tbody > tr:hover,
+.modal_classroom_push_right .ant-table-thead > tr.ant-table-row-hover,
+.modal_classroom_push_right .ant-table-tbody > tr.ant-table-row-hover,
+.modal_classroom_push_right .ant-table-thead > tr:hover,
+.modal_classroom_push_left .ant-table-tbody > tr:hover,
+.modal_classroom_push_left .ant-table-thead > tr.ant-table-row-hover,
+.modal_classroom_push_left .ant-table-tbody > tr.ant-table-row-hover,
+.modal_classroom_push_left .ant-table-thead > tr:hover,
+.ant-table-placeholder{
     background: none;
 }
 .classroom_push_td{
@@ -281,4 +299,15 @@
 .modal_classroom_box .ant-modal-body{
     padding: 10px 20px 20px 20px !important;
     height: 431px;
+}
+.btn_push_i{
+    background: #39f;
+    border-radius: 4px;
+    color: #fff;
+    padding: 4px 20px;
+    border: none;
+    margin: 8px 0;
+}
+.btn_push_box{
+    height: calc(100% - 50px) !important;
 }

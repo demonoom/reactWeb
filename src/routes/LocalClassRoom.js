@@ -191,9 +191,11 @@ const LocalClassRoom = React.createClass({
 
                     {classIfream}
                     <div className="classroom_btn">
-                        <Button className="classroom_btn_b classroom_btn_orange" onClick={this.getPPT} icon="folder-open">课件</Button>
-                        <Button className="classroom_btn_b classroom_btn_green add_out" onClick={this.getSubject} icon="file-text">题目</Button>
-                        <Button className="classroom_btn_b classroom_btn_green add_out" onClick={this.showConfirmModal} icon="file-text">下课</Button>
+                        <Button className="classroom_btn_b" onClick={this.getPPT} ><img src={require('../components/images/icon_kejian.png')} /></Button>
+                        <Button className="classroom_btn_b  add_out" onClick={this.getSubject} ><img src={require('../components/images/icon_timu_class_white.png')} /></Button>
+                    </div>
+                    <div className="classroom_btn_finish">
+                        <Button className="classroom_btn_b add_out" onClick={this.showConfirmModal}><img src={require('../components/images/finish_class.png')} /></Button>
                     </div>
                 </div>
                 <div className="local_class_right">

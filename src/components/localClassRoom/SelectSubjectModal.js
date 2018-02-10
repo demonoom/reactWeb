@@ -200,10 +200,10 @@ class SelectSubjectModal extends React.Component {
                                                               columns={scheduleColumns} dataSource={this.state.scheduleData}
                                                               pagination={false}
                                                               scroll={{y: 300}}/></Col>
-                    <Col className="col17_le 17_hei ant-form modal_flex_1">
-                        <div className="17_hei1">
-                            <Button key="return" type="primary" size="large"
-                                    onClick={this.subjectModalHandleOk}>推送</Button>
+                    <Col className="col17_le 17_hei ant-form modal_flex_1 btn_push_box">
+                        <Button key="return" type="primary" size="large" className="btn_push_i"
+                                onClick={this.subjectModalHandleOk}>推送</Button>
+                        <div >
                             <Table  className="modal_classroom_push_right" columns={subjectColumns}
                                    dataSource={subjectData}
                                    rowSelection={subjectRowSelection}
