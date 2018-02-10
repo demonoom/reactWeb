@@ -48,6 +48,7 @@ const AntMulitiClassComponents = React.createClass({
     },
 
     getCourseListBySeries(isSeries,courseClass) {
+        // debugger;
         var _this = this;
         if(isEmpty(isSeries)){
             _this.getCourseList(_this.state.currentPage, isSeries,'0',courseClass);
@@ -81,6 +82,7 @@ const AntMulitiClassComponents = React.createClass({
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
+                // console.log('常规课',response);
                 var pager = ret.pager;
                 cardArray.splice(0);
                 if (isEmpty(response) == false) {
@@ -128,6 +130,7 @@ const AntMulitiClassComponents = React.createClass({
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
+                // console.log('普通课程',response)
                 var pager = ret.pager;
                 cardArray.splice(0);
                 if (isEmpty(response) == false) {
@@ -169,6 +172,21 @@ const AntMulitiClassComponents = React.createClass({
         var endTime = formatYMD(row.endTime);
         var createTime = formatNoSecond(row.createTime);
         var videosArray = row.videos;
+        var nameTotal = [];
+        videosArray.forEach(function(videoArrayItem){
+            var knowledgeArray = videoArrayItem.knowledgeVideos;
+            for(var k=0;k<knowledgeArray.length;k++) {
+                var knowledgeEvery = knowledgeArray[k];
+                var knowledgeNameArray = knowledgeEvery.knowledgeInfo.knowledgeName;
+                nameTotal.push(knowledgeNameArray+'、');
+            }
+        })
+        var newNameTotal = [nameTotal[0]];
+        for(var i=1;i<nameTotal.length;i++){
+            if(newNameTotal.indexOf(nameTotal[i]) == -1){
+                newNameTotal.push(nameTotal[i])}
+        }
+        // console.log('newNameTotal',newNameTotal);
         var studentNum = row.studentNum;
         var videoLiTagArray = [];
         var videoLiArray = [];
@@ -282,6 +300,9 @@ const AntMulitiClassComponents = React.createClass({
                         </span></Col>
                             <Col span={24}><span className="series_gray_le">课程概述：</span><span
                                 className="series_gray_ri">{content}</span></Col>
+                            <Col span={24}><span className="series_gray_le">知识点：</span><span
+                                className="series_gray_ri">{newNameTotal}
+                        </span></Col>
                         </Row>
                     </Col>
                     <Col span={2}>
@@ -317,6 +338,9 @@ const AntMulitiClassComponents = React.createClass({
                         </span></Col>
                             <Col span={24}><span className="series_gray_le">课程概述：</span><span
                                 className="series_gray_ri">{content}</span></Col>
+                            <Col span={24}><span className="series_gray_le">知识点：</span><span
+                                className="series_gray_ri">{newNameTotal}
+                        </span></Col>
                         </Row>
                     </Col>
                     <Col span={2}>

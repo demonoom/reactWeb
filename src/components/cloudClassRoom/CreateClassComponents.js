@@ -1357,7 +1357,7 @@ const CreateClassComponents = React.createClass({
                                 <Col span={3} className="add_left">目录</Col>
                                 <Col span={8}>名称</Col>
                                 <Col span={4} className="class_right">授课老师</Col>
-                                <Col span={4} className="class_right">微课名</Col>
+                                <Col span={4} className="class_right">附件名</Col>
                                 <Col span={3} className="class_right">微课上传</Col>
                                 <Col span={2} className="class_right">操作</Col>
                             </Row>
