@@ -105,8 +105,8 @@ const LocalClassesMessage = React.createClass({
             var attachmentObj = messageData.attachment;
             if(attachmentObj.type == 1){
                 var address = attachmentObj.address;
-                content = <span>
-                    <img src={address} alt={address} style={{width:'20%',height:'20%'}}
+                content = <span className="class_send_img">
+                               <img src={address} alt={address}
                          onClick={this.noomWatchImg.bind(this, address)} />
                 </span>
                 var imgObj = <span className="topics_zan"><img id={address}
