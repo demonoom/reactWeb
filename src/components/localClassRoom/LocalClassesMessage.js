@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import {isEmpty,showLargeImg} from '../../utils/utils';
-import {getLocalTime} from '../../utils/Const';
+import {getLocalTime,MESSAGE_TO_TYPE_ONlINE_CLASS} from '../../utils/Const';
 import {Button, message, Row,Col,Input} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 const { TextArea } = Input;
@@ -10,14 +10,17 @@ const { TextArea } = Input;
  */
 var parentMs = null;
 var messageLiArray=[];
+var newMessageArray=[];
 var imgArr=[];
+var scrollType = "auto";
 const LocalClassesMessage = React.createClass({
 
     getInitialState() {
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         return {
             loginUser: loginUser,
-            barrageMessageContent:''
+            barrageMessageContent:'',
+            newMessageArray:[]
         };
     },
 
@@ -31,6 +34,14 @@ const LocalClassesMessage = React.createClass({
         parentMs=opener.window.ms==null?nextProps.ms:opener.window.ms;
         console.log("parentMs at componentWillReceiveProps==>"+parentMs);
         this.listenClassMessage();
+    },
+
+
+    componentDidUpdate(){
+        var gt = $('#groupTalk');
+        if(scrollType=="auto"){
+            gt.scrollTop(parseInt(gt[0].scrollHeight));
+        }
     },
 
     listenClassMessage(){
@@ -47,10 +58,25 @@ const LocalClassesMessage = React.createClass({
                     var messageData = info.data.message;
                     var messageCommand = messageData.command;
                     var messageToType = messageData.toType;
-                    if(messageCommand == "message" && messageToType == "3"){
+                    if(messageCommand == "message" && messageToType == MESSAGE_TO_TYPE_ONlINE_CLASS){
                         var messageFrom = "receive";
+                        if(scrollType=="defined"){
+                            var fromUser = messageData.fromUser;
+                            if(fromUser.colUid != _this.state.loginUser.colUid){
+                                newMessageArray.push(messageData);
+                            }
+                        }else{
+                            newMessageArray.splice(0);
+                        }
+                        //向服务器发送响应，表示已经读取服务器的消息
+                        var receivedCommand = {
+                            "command": "message_read",
+                            "data": {"messageUUID": messageData.uuid}
+                        };
+                        parentMs.send(receivedCommand);
                         _this.buildMessageLiArray(messageData,messageFrom);
                     }
+                    _this.setState({newMessageArray});
                 }
             }
         }
@@ -70,9 +96,9 @@ const LocalClassesMessage = React.createClass({
         var fromUser = messageData.fromUser;
         var avatar=null;
         if(isEmpty(fromUser.avatar)){
-            avatar = <img src="http://www.maaee.com:80/Excoord_For_Education/userPhoto/default_avatar.png" width="60" height="60" class="green" />;
+            avatar = <img src="http://www.maaee.com:80/Excoord_For_Education/userPhoto/default_avatar.png" width="60" height="60" className="green" />;
         }else{
-            avatar = <img src={fromUser.avatar} width="60" height="60" class="green" />;
+            avatar = <img src={fromUser.avatar} width="60" height="60" className="green" />;
         }
         var uuid = messageData.uuid;
         if(isEmpty(messageData.attachment)==false){
@@ -110,25 +136,10 @@ const LocalClassesMessage = React.createClass({
                 </div>
             </li>;
         }
-        // messageLiArray.splice(0,0,messageTag);
         messageLiArray.push(messageTag);
         this.setState({messageLiArray});
     },
 
-    componentDidMount() {
-
-    },
-
-    componentDidUpdate(){
-        var gt = $('#groupTalk');
-        gt.scrollTop(parseInt(gt[0].scrollHeight));
-    },
-
-    handleScrollType(e) {
-    },
-
-    handleScroll(e) {
-    },
 
     /**
      *发送文字信息的回调
@@ -137,8 +148,7 @@ const LocalClassesMessage = React.createClass({
         if (isEmpty(this.state.barrageMessageContent) == false) {
             var uuid = this.createUUID();
             var createTime = (new Date()).valueOf();
-            //var loginUser = {colUid:24491,colAccount:'TE24491',userName:'邹长亮'};
-            var messageToType="3";
+            var messageToType=MESSAGE_TO_TYPE_ONlINE_CLASS;
             var vid = sessionStorage.getItem("vid");
             var userId = sessionStorage.getItem("userId");
             var messageJson = {
@@ -149,8 +159,11 @@ const LocalClassesMessage = React.createClass({
             var fromUser = this.state.loginUser;
             var commandJson = {"command": "message", "data": {"message": messageJson},fromUser};
             parentMs.send(commandJson);
-            this.setState({"barrageMessageContent":''});
-            // this.buildMessageLiArray(messageJson);
+            //每次当前用户发送消息时，设置页面的滚动方式为自动滚动
+            scrollType = "auto";
+            //因为当前用户自己发消息时，会直接刷新到消息区域的底部，所以不存在新消息通知，这里将新消息通知的数据清空
+            newMessageArray.splice(0);
+            this.setState({"barrageMessageContent":'',newMessageArray:[]});
         }
     },
 
@@ -180,6 +193,39 @@ const LocalClassesMessage = React.createClass({
     },
 
     /**
+     * 本地课堂消息区域滚动响应函数
+     * @param e
+     */
+    handleScroll(e) {
+        var target = e.target;
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
+            target = e.target;
+        }
+        var scrollTop = target.scrollTop;
+        var scrollHeight = target.scrollHeight;
+        var clientHeight = target.clientHeight;
+        if (scrollHeight - scrollTop == clientHeight) {
+            scrollType = "auto";
+            console.log("到底了");
+        }else{
+            scrollType = "defined";
+            console.log(scrollHeight - scrollTop);
+        }
+    },
+
+    /**
+     * 直接滚动到页面底部
+     */
+    scrollToBottom(){
+        var gt = $('#groupTalk');
+        gt.scrollTop(parseInt(gt[0].scrollHeight));
+        newMessageArray.splice(0);
+        this.setState({newMessageArray:[]});
+    },
+
+    /**
      * 渲染页面
      * @returns {XML}
      */
@@ -188,11 +234,18 @@ const LocalClassesMessage = React.createClass({
         if(isEmpty(this.state.messageLiArray)){
             noDataTipImgObj = <img className="noDataTipImg" width={'240'} src={require('../images/noDataTipImg.png')}/>;
         }
+        var newMessageTip=null;
+        var newMessageLength = this.state.newMessageArray.length;
+        //如果处于自定义滚动状态，且存在新消息，则提示存在N条新消息
+        if(scrollType=="defined" && newMessageLength != 0){
+            newMessageTip = <div><span onClick={this.scrollToBottom}>有{newMessageLength}条新消息</span></div>
+        }
         return (
                 <div id="personTalk" className="class_personTalk">
                     <h3 className="classroom_h3">互动讨论</h3>
+                    {newMessageTip}
                     {noDataTipImgObj}
-                    <ul className="class_talk_top" id="groupTalk">
+                    <ul className="class_talk_top" id="groupTalk" onScroll={this.handleScroll}>
                         {/*消息内容主体*/}
                         {this.state.messageLiArray}
                     </ul>
