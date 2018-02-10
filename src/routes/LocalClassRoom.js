@@ -3,7 +3,8 @@ import {Modal, message, Row, Col, Button, Tabs, Input} from 'antd';
 import LocalClassesMessage from '../components/localClassRoom/LocalClassesMessage'
 import {isEmpty} from "../utils/Const";
 import SelectSubjectModal from '../components/localClassRoom/SelectSubjectModal';
-import SelectMaterialsModal from '../components/localClassRoom/SelectMaterialsModal';
+import SelectAntCloudMaterialsModal from '../components/localClassRoom/SelectAntCloudMaterialsModal';
+import SelectScheduleMaterialsModal from '../components/localClassRoom/SelectScheduleMaterialsModal';
 import ConfirmModal from '../components/ConfirmModal';
 import GuideModal from '../components/localClassRoom/GuideModal';
 
@@ -18,7 +19,8 @@ const LocalClassRoom = React.createClass({
             classRoomUrl: '',
             messageTagArray:[],
             subjectModalIsShow:false,
-            materialsModalIsShow:false
+            antCloudMaterialsModalIsShow:false,
+            closeScheduleMaterialsModal:false,
         };
     },
 
@@ -91,7 +93,6 @@ const LocalClassRoom = React.createClass({
      * 获取课件，打开ppt，完成推ppt的操作
      */
     getPPT() {
-        //this.setState({materialsModalIsShow:true});
         this.refs.guideModal.changeGuideModalVisible(true);
     },
 
@@ -100,8 +101,12 @@ const LocalClassRoom = React.createClass({
      * @param guideType
      */
     setGuideType(guideType){
+        if(guideType.key == "schedule"){
+            this.setState({schduleMaterialsModalIsShow:true});
+        }else{
+            this.setState({antCloudMaterialsModalIsShow:true});
+        }
         this.refs.guideModal.changeGuideModalVisible(false);
-        this.setState({materialsModalIsShow:true});
     },
 
     /**
@@ -128,8 +133,12 @@ const LocalClassRoom = React.createClass({
         connection.send(pushSubjectProtocal);
     },
 
-    closeMaterialsModal(){
-        this.setState({materialsModalIsShow:false});
+    closeAntCloudMaterialsModal(){
+        this.setState({antCloudMaterialsModalIsShow:false});
+    },
+
+    closeScheduleMaterialsModal(){
+        this.setState({schduleMaterialsModalIsShow:false});
     },
 
     pushMaterialsToClass(materials){
@@ -186,7 +195,8 @@ const LocalClassRoom = React.createClass({
                     <LocalClassesMessage ms={ms} classCode={this.state.classCode} classType={this.state.classType}></LocalClassesMessage>
                 </div>
                 <SelectSubjectModal isShow={this.state.subjectModalIsShow} onCancel={this.closeSubjectModal} pushSubjectToClass={this.pushSubjectToClass}></SelectSubjectModal>
-                <SelectMaterialsModal isShow={this.state.materialsModalIsShow} onCancel={this.closeMaterialsModal} pushMaterialsToClass={this.pushMaterialsToClass}></SelectMaterialsModal>
+                <SelectAntCloudMaterialsModal isShow={this.state.antCloudMaterialsModalIsShow} onCancel={this.closeAntCloudMaterialsModal} pushMaterialsToClass={this.pushMaterialsToClass}></SelectAntCloudMaterialsModal>
+                <SelectScheduleMaterialsModal isShow={this.state.schduleMaterialsModalIsShow} onCancel={this.closeScheduleMaterialsModal} pushMaterialsToClass={this.pushMaterialsToClass}></SelectScheduleMaterialsModal>
                 <ConfirmModal ref="confirmModal"
                               title="确定要下课吗?"
                               onConfirmModalCancel={this.closeConfirmModal}
