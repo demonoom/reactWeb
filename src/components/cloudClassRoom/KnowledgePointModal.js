@@ -2,7 +2,7 @@
  * Created by noom on 17-9-7.
  */
 import React, {PropTypes} from 'react';
-import {Modal, Input, Row, Col, message, Table, Select, Tag, Tooltip,Button} from 'antd';
+import {Modal, Input, Row, Col, message, Table, Select, Tag, Tooltip, Button} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 import {isEmpty} from '../../utils/utils';
 import {TYPE_TEACHER} from '../../utils/Const';
@@ -33,10 +33,10 @@ class KnowledgePointModal extends React.Component {
             // searchObj: '',
             humArr: [],
             defStrNum: 200,
-            pageNo:1,
-            conditionKeyOfKnowledge:'',
-            headerIsShow:true,
-            loadMoreContent:''
+            pageNo: 1,
+            conditionKeyOfKnowledge: '',
+            headerIsShow: true,
+            loadMoreContent: ''
         };
         this.SelectKnowledgeModalHandleCancel = this.SelectKnowledgeModalHandleCancel.bind(this);
         this.onSelectChange = this.onSelectChange.bind(this);
@@ -49,27 +49,28 @@ class KnowledgePointModal extends React.Component {
         this.searchKnowledge = this.searchKnowledge.bind(this);
         this.saveButtonOnClick = this.saveButtonOnClick.bind(this);
         this.loadMore = this.loadMore.bind(this);
+        this.rememberId = this.rememberId.bind(this);
     }
 
     componentDidMount() {
         var _this = this;
         var isShow = _this.props.isShow;
-        var knowledgePointNumber = this.props.knowledgePointNumber;
-        console.log('知识点',knowledgePointNumber);
         this.setState({isShow});
-        console.log(this.state.conditionKeyOfKnowledge);
-        this.getKnowledgeInfoList(this.state.pageNo,this.state.conditionKeyOfKnowledge);
+        this.getKnowledgeInfoList(this.state.pageNo, this.state.conditionKeyOfKnowledge);
     }
 
+    /**
+     * 知识点更新后的数据接收
+     * @param nextProps
+     */
     componentWillReceiveProps(nextProps) {
-        console.log("=========componentWillReceiveProps=============");
         var isShow = nextProps.isShow;
         var initTags = nextProps.initTags;
         var knowledgeIds = [];
-        if(isEmpty(initTags)){
+        if (isEmpty(initTags)) {
             initTags = [];
             selectArr.splice(0);
-        }else{
+        } else {
             selectArr.splice(0);
             initTags.forEach(function (tag) {
                 knowledgeIds.push(tag.key);
@@ -77,8 +78,19 @@ class KnowledgePointModal extends React.Component {
             });
         }
         tableData.splice(0);
-        this.setState({isShow,"selTags":initTags,"selectedRowKeys":knowledgeIds,conditionKeyOfKnowledge:'',loadMoreContent:'',pageNo:1});
-        this.getKnowledgeInfoList(this.state.pageNo,this.state.conditionKeyOfKnowledge);
+        this.setState({
+            isShow,
+            "selTags": initTags,
+            "selectedRowKeys": knowledgeIds,
+            conditionKeyOfKnowledge: '',
+            loadMoreContent: '',
+            pageNo: 1
+        });
+        this.getKnowledgeInfoList(this.state.pageNo, this.state.conditionKeyOfKnowledge);
+    }
+
+    rememberId(id) {
+        this.setState({rememberId: id})
     }
 
     /**
@@ -93,14 +105,12 @@ class KnowledgePointModal extends React.Component {
         this.state.topicImgUrl = [];
         this.state.selTags = [];
         selectArr = [];
-        this.props.closeSelectKnowledgeModal(this.state.selTags,'closeBtn');
+        this.props.closeSelectKnowledgeModal(this.state.selTags, 'closeBtn');
     }
 
     /*选中项发生变化的时的回调*/
     onSelectChange(selectedRowKeys) {
-        debugger;
         this.setState({selectedRowKeys: selectedRowKeys});
-        console.log('selectedRowKeys66',selectedRowKeys)
     }
 
     /*用户手动选择  取消选择某列的回调*/
@@ -134,19 +144,18 @@ class KnowledgePointModal extends React.Component {
      * @param data
      * @return
      */
-    getKnowledgeInfoList(pageNo,knowledgeInfoName){
-        var _this= this;
+    getKnowledgeInfoList(pageNo, knowledgeInfoName) {
+        var _this = this;
         var param = {
-            "method":'getKnowledgeInfoList',
-            "pageNo":pageNo,
-            "knowledgeInfoName":knowledgeInfoName
+            "method": 'getKnowledgeInfoList',
+            "pageNo": pageNo,
+            "knowledgeInfoName": knowledgeInfoName
         };
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.msg == "调用成功" && ret.success == true) {
                     //children.splice(0);
                     var response = ret.response;
-                     console.log('列表666',response);
                     // _this.setState({knowledgeResponse:response});
                     response.forEach(function (knowledgeInfo) {
                         var knowledgeId = knowledgeInfo.knowledgeId;
@@ -158,13 +167,13 @@ class KnowledgePointModal extends React.Component {
                         tableData.push(person);
                     });
                     var headerIsShow = true;
-                    var loadMoreContent="加载更多";
-                    if(response.length==0){
+                    var loadMoreContent = "加载更多";
+                    if (response.length == 0) {
                         //headerIsShow = false;
                         loadMoreContent = "无更多数据";
                     }
                     var pager = ret.pager;
-                    _this.setState({tableData,totalKnowledge: pager.rsCount, loadMoreContent});
+                    _this.setState({tableData, totalKnowledge: pager.rsCount, loadMoreContent});
                 }
             },
             onError: function (error) {
@@ -172,13 +181,14 @@ class KnowledgePointModal extends React.Component {
             }
         });
     }
+
     /**
      * 根据指定的关键字，获取指定的知识点集合,用来完成modal搜索
      * @param userId
      * @param title
      * @param subjectsIds
      */
-    getKnowledgeInfosByConditionKey(pageNo,conditionKey){
+    getKnowledgeInfosByConditionKey(pageNo, conditionKey) {
         var _this = this;
         var param = {
             "method": 'getKnowledgeInfoListByConditionKey',
@@ -202,13 +212,13 @@ class KnowledgePointModal extends React.Component {
                         tableData.push(person);
                     });
                     var headerIsShow = true;
-                    var loadMoreContent="加载更多";
-                    if(response.length==0){
+                    var loadMoreContent = "加载更多";
+                    if (response.length == 0) {
                         //headerIsShow = false;
                         loadMoreContent = "无更多数据";
                     }
                     var pager = ret.pager;
-                    _this.setState({tableData,totalKnowledge: pager.rsCount, loadMoreContent});
+                    _this.setState({tableData, totalKnowledge: pager.rsCount, loadMoreContent});
                 }
             },
             onError: function (error) {
@@ -230,11 +240,10 @@ class KnowledgePointModal extends React.Component {
 
     onKeyUp() {
         // 调用搜索
-        console.log("1111");
         tableData.splice(0);
         var initPageNo = 1;
-        this.getKnowledgeInfoList(initPageNo,this.state.conditionKeyOfKnowledge);
-        this.setState({pageNo:initPageNo});
+        this.getKnowledgeInfoList(initPageNo, this.state.conditionKeyOfKnowledge);
+        this.setState({pageNo: initPageNo});
     }
 
     /*标签关闭的回调*/
@@ -258,28 +267,36 @@ class KnowledgePointModal extends React.Component {
     /**
      * 添加新的tag
      */
-    addNewTags(){
+    addNewTags() {
         var conditionKeyOfKnowledge = this.state.conditionKeyOfKnowledge;
-        var record = {key:conditionKeyOfKnowledge + 'NewId',name:conditionKeyOfKnowledge};
+        var newIndex = 'newId#'+ Math.ceil(Math.random()*1000);
+        var record = {key:newIndex, name: conditionKeyOfKnowledge};
         selectArr.push(record);
+        var hash = {};
+        selectArr = selectArr.reduce(function(item, next) {
+            hash[next.name] ? '' : hash[next.name] = true && item.push(next);
+            return item
+        }, [])
         this.setState({selTags: selectArr});
     }
+
 
     /**
      * 保存知识点
      */
-    saveButtonOnClick(){
-        this.props.closeSelectKnowledgeModal(this.state.selTags);
+    saveButtonOnClick() {
+        var rememberId = this.state.rememberId;
+        this.props.closeSelectKnowledgeModal(this.state.selTags, rememberId);
     }
 
     /**
      * 部门成员加载更多
      */
     loadMore() {
-        if(this.state.loadMoreContent=="加载更多"){
+        if (this.state.loadMoreContent == "加载更多") {
             var newPageNo = parseInt(this.state.pageNo) + 1;
-            this.getKnowledgeInfoList(newPageNo,this.state.conditionKeyOfKnowledge);
-            this.setState({"pageNo":newPageNo});
+            this.getKnowledgeInfoList(newPageNo, this.state.conditionKeyOfKnowledge);
+            this.setState({"pageNo": newPageNo});
         }
     }
 
@@ -301,7 +318,8 @@ class KnowledgePointModal extends React.Component {
             <Button type="primary" htmlType="submit" className="login-form-button" onClick={this.saveButtonOnClick}>
                 确定
             </Button>
-            <Button type="ghost" htmlType="submit" className="login-form-button" onClick={this.SelectKnowledgeModalHandleCancel}>
+            <Button type="ghost" htmlType="submit" className="login-form-button"
+                    onClick={this.SelectKnowledgeModalHandleCancel}>
                 取消
             </Button>
         </div>
@@ -345,15 +363,18 @@ class KnowledgePointModal extends React.Component {
                                     />
                                 </Col>
                                 <Col span={4} className="right_look">
-                                    <Button type="primary" className="roe-t-f-left" onClick={this.addNewTags}>新增</Button>
+                                    <Button type="primary" className="roe-t-f-left"
+                                            onClick={this.addNewTags}>新增</Button>
                                 </Col>
                             </div>
                             <div>
                                 <Col span={24}>
-                                    <Table showHeader={this.state.headerIsShow} className="select_knoledge_Person" rowSelection={rowSelection} columns={columns}
+                                    <Table showHeader={this.state.headerIsShow} className="select_knoledge_Person"
+                                           rowSelection={rowSelection} columns={columns}
                                            dataSource={this.state.tableData} pagination={false}/>
                                     <div className="schoolgroup_operate schoolgroup_more">
-                                        <a onClick={this.loadMore} className="schoolgroup_more_a">{this.state.loadMoreContent}</a>
+                                        <a onClick={this.loadMore}
+                                           className="schoolgroup_more_a">{this.state.loadMoreContent}</a>
                                     </div>
                                 </Col>
                             </div>
