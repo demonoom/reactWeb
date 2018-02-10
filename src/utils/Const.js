@@ -29,6 +29,8 @@ export const MIDDLE_IMG = 'size=300x300';
 export const LARGE_IMG = 'size=500x500';
 //webService请求的版本号
 export const WEB_VERSION = "1.10";
+//本地课堂消息类型
+export const MESSAGE_TO_TYPE_ONlINE_CLASS = "3";
 //音频题目权限开放账号集合，其中23836和54208为系统测试用户账号
 export const AUDIO_SUBJECT_ALLOWED = ["134770", "134755", "135359", "135872", "135001", "135302", "135303", "135304", "135244", "135167", "23836", "54208"];
 export const QUESTION_DETAIL_URL = "http://jiaoxue.maaee.com:8091/#/questionDetil";

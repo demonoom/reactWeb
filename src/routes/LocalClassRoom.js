@@ -131,6 +131,7 @@ const LocalClassRoom = React.createClass({
             'data':{'sids':sids}
         };
         connection.send(pushSubjectProtocal);
+        message.success("推送成功!");
     },
 
     closeAntCloudMaterialsModal(){
