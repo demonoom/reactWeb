@@ -330,11 +330,12 @@ class SelectAntCloudMaterialsModal extends React.Component {
 
     render() {
 
-        //title="选择课件"
+
         return (
             <Modal className="choose_class" visible={this.state.isShow}
                    onCancel={this.SelectAntCloudMaterialsModalHandleCancel}
                    transitionName=""  //禁用modal的动画效果
+                   title="选择课件"
                    maskClosable={false} //设置不允许点击蒙层关闭
                    footer={null}
                    closable={true}     //设置显示右上角的关闭按钮（但是需要调整颜色，否则白色会无法显示）
