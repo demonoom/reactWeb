@@ -213,11 +213,7 @@ class SelectSubjectModal extends React.Component {
                    transitionName=""  //禁用modal的动画效果
                    maskClosable={false} //设置不允许点击蒙层关闭
                    width={750}
-                   footer={[
-                       <Button key="return" type="primary" size="large"
-                               onClick={this.subjectModalHandleOk}>确定</Button>,
-                       <Button key="ok" type="ghost" size="large" onClick={this.SelectSubjectModalHandleCancel}>取消</Button>,
-                   ]}
+                   footer={null}
             >
                 <Row className="modal_flex">
                     <Col className="ant-form modal_classroom_push_left"><Table className="lesson classroom_prepare_lessons"
@@ -227,9 +223,12 @@ class SelectSubjectModal extends React.Component {
                                                               scroll={{y: 300}}/></Col>
                     <Col className="col17_le 17_hei ant-form modal_flex_1">
                         <div className="17_hei1">
+                            <Button key="return" type="primary" size="large"
+                                    onClick={this.subjectModalHandleOk}>推送</Button>
                             <Table  className="modal_classroom_push_right" columns={subjectColumns}
                                    dataSource={subjectData}
                                    rowSelection={subjectRowSelection}
+                                   showHeader={false}
                                    pagination={{
                                 total: this.state.totalSubjectCount,
                                 pageSize: getPageSize(),
