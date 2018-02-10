@@ -262,3 +262,23 @@
     display: flex;
     line-height: 28px;
 }
+.classroom_left_i{
+    font-size: 22px;
+    color: #0078e4;
+    font-weight: normal;
+    cursor: pointer;
+    position: absolute;
+    top: -42px;
+    left: -10px;
+
+}
+.modal_classroom_box .ant-modal-header{
+    text-align: center;
+}
+.modal_classroom_box .ant-table-fixed-header .ant-table-scroll .ant-table-header{
+    margin: 0;
+}
+.modal_classroom_box .ant-modal-body{
+    padding: 10px 20px 20px 20px !important;
+    height: 431px;
+}

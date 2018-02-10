@@ -13,27 +13,6 @@ var subjectColumns = [{
     title: '内容',
     className: 'ant-table-selection-cont2',
     dataIndex: 'content'
-}, {
-    title: '题型',
-    className: 'ant-table-selection-topic',
-    dataIndex: 'subjectType',
-    filters: [{
-        text: '单选题',
-        value: '单选题',
-    }, {
-        text: '多选题',
-        value: '多选题',
-    }, {
-        text: '判断题',
-        value: '判断题',
-    }, {
-        text: '简答题',
-        value: '简答题',
-    }, {
-        text: '材料题',
-        value: '材料题',
-    },],
-    onFilter: (value, record) => record.subjectType.indexOf(value) === 0,
 },
 ];
 

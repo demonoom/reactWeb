@@ -56,7 +56,7 @@ const LocalClasses = React.createClass({
                             var classInfoArray = classInfo.split("#");
                             var classId = classInfoArray[0];
                             var className = classInfoArray[1];
-                            var openButton = <div><Button onClick={_this.openClass.bind(_this,classId)}>开课</Button></div>
+                            var openButton = <div><Button onClick={_this.openClass.bind(_this,classId)} className="lesson_start">开课</Button></div>
                             var obj = {
                                 key: classId,
                                 className:className,
