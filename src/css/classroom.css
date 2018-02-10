@@ -247,6 +247,10 @@
     cursor: pointer !important;
     text-indent: 12px;
 }
+.modal_classroom_push_left .ant-table-tbody > tr > td:hover{
+    color:#4da6ff;
+    cursor: pointer;
+}
 .modal_classroom_push_left .ant-table-tbody > tr > td:before {
     content: "";
     background: #999;
@@ -259,7 +263,7 @@
     top: -2px;
 }
 .modal_classroom_push_right .ant-table-header{
-    margin: 0;
+    margin-bottom: 0 !important;
 }
 .modal_classroom_push_right .ant-table-fixed-header .ant-table-body{
     min-height: 100%;
@@ -273,7 +277,11 @@
 .modal_classroom_push_left .ant-table-thead > tr.ant-table-row-hover,
 .modal_classroom_push_left .ant-table-tbody > tr.ant-table-row-hover,
 .modal_classroom_push_left .ant-table-thead > tr:hover,
-.ant-table-placeholder{
+.ant-table-placeholder,
+.modal_classroom_box .ant-table-tbody > tr:hover,
+.modal_classroom_box .ant-table-thead > tr.ant-table-row-hover,
+.modal_classroom_box .ant-table-tbody > tr.ant-table-row-hover,
+.modal_classroom_box .ant-table-thead > tr:hover{
     background: none;
 }
 .classroom_push_td{
