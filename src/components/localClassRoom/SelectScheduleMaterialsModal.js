@@ -222,7 +222,7 @@ class SelectScheduleMaterialsModal extends React.Component {
     render() {
 
         return (
-            <Modal className="choose_class" visible={this.state.isShow}
+            <Modal className="modal_classroom modal_classroom_push" visible={this.state.isShow}
                    onCancel={this.SelectScheduleMaterialsModalHandleCancel}
                    transitionName=""  //禁用modal的动画效果
                    title="推送课件"
@@ -230,7 +230,7 @@ class SelectScheduleMaterialsModal extends React.Component {
                    closable={true}     //设置显示右上角的关闭按钮（但是需要调整颜色，否则白色会无法显示）
                    footer={null}
             >
-                <Row style={{height: 400}} className="yinyong3">
+                <Row style={{height: 400}} >
                     <Col span={7} className="ant-form"><Table size="small" className="lesson"
                                                               onRowClick={this.onScheduleSelectChange}
                                                               columns={scheduleColumns} dataSource={scheduleData}

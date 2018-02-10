@@ -62,15 +62,16 @@ class GuideModal extends React.Component{
         return(
             <Modal
                 title="选择课件"
+                className="modal_classroom modal_classroom_select"
                 visible={this.state.isShow}
-                width={440}
+                width={300}
                 transitionName=""  //禁用modal的动画效果
                 closable={true}     //设置显示右上角的关闭按钮（但是需要调整颜色，否则白色会无法显示）
                 maskClosable={false} //设置不允许点击蒙层关闭
                 footer={null}
                 onCancel={this.onGuideModalCancel}
                 >
-                <div className="class_right">
+                <div className="class_right table_classroom">
                     <Table dataSource={dataSource} columns={columns} onRowClick={this.selectGuide} showHeader={false} pagination={false}/>
                 </div>
             </Modal>
