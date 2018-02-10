@@ -55,13 +55,16 @@ class KnowledgePointModal extends React.Component {
     componentDidMount() {
         var _this = this;
         var isShow = _this.props.isShow;
-        var knowledgePointNumber = this.props.knowledgePointNumber;
-        console.log('知识点', knowledgePointNumber);
         this.setState({isShow});
-        console.log(this.state.conditionKeyOfKnowledge);
+        var knowledgePointNumber = this.props.knowledgePointNumber;
+        this.setState({isShow});
         this.getKnowledgeInfoList(this.state.pageNo, this.state.conditionKeyOfKnowledge);
     }
 
+    /**
+     * 知识点更新后的数据接收
+     * @param nextProps
+     */
     componentWillReceiveProps(nextProps) {
         var isShow = nextProps.isShow;
         var initTags = nextProps.initTags;
@@ -109,9 +112,7 @@ class KnowledgePointModal extends React.Component {
 
     /*选中项发生变化的时的回调*/
     onSelectChange(selectedRowKeys) {
-        debugger;
         this.setState({selectedRowKeys: selectedRowKeys});
-        console.log('selectedRowKeys66', selectedRowKeys)
     }
 
     /*用户手动选择  取消选择某列的回调*/
@@ -157,7 +158,6 @@ class KnowledgePointModal extends React.Component {
                 if (ret.msg == "调用成功" && ret.success == true) {
                     //children.splice(0);
                     var response = ret.response;
-                    console.log('列表666', response);
                     // _this.setState({knowledgeResponse:response});
                     response.forEach(function (knowledgeInfo) {
                         var knowledgeId = knowledgeInfo.knowledgeId;
@@ -242,7 +242,6 @@ class KnowledgePointModal extends React.Component {
 
     onKeyUp() {
         // 调用搜索
-        console.log("1111");
         tableData.splice(0);
         var initPageNo = 1;
         this.getKnowledgeInfoList(initPageNo, this.state.conditionKeyOfKnowledge);
@@ -272,10 +271,17 @@ class KnowledgePointModal extends React.Component {
      */
     addNewTags() {
         var conditionKeyOfKnowledge = this.state.conditionKeyOfKnowledge;
-        var record = {key: conditionKeyOfKnowledge + 'NewId', name: conditionKeyOfKnowledge};
+        var newIndex = 'newId#'+ Math.ceil(Math.random()*1000);
+        var record = {key:newIndex, name: conditionKeyOfKnowledge};
         selectArr.push(record);
+        var hash = {};
+        selectArr = selectArr.reduce(function(item, next) {
+            hash[next.name] ? '' : hash[next.name] = true && item.push(next);
+            return item
+        }, [])
         this.setState({selTags: selectArr});
     }
+
 
     /**
      * 保存知识点
