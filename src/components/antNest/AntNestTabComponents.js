@@ -608,6 +608,8 @@ const AntNestTabComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                debugger
+                console.log(ret);
                 var response = ret.response;
                 response.forEach(function (e) {
                     //话题的回复
@@ -734,12 +736,6 @@ const AntNestTabComponents = React.createClass({
      * 获取作业详情
      */
     getHomeWorkPartakeInfo(e) {
-        var timeNow = new Date().valueOf();
-        if (timeNow > e.target.id) {
-            this.setState({zuodaTime: 'none'})
-        } else {
-            this.setState({zuodaTime: 'block'})
-        }
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             target = e.currentTarget;
@@ -755,7 +751,7 @@ const AntNestTabComponents = React.createClass({
             <Spin size="large" delay={500}/>
         </div>;
         topicCardArray.push(a);
-        antNest.getZuoYePartakeById(topicId, initPageNo);
+        antNest.getZuoYePartakeById(topicId, initPageNo, e.target.id);
     },
     /**
      * 获取话题参与人数的信息
@@ -781,7 +777,7 @@ const AntNestTabComponents = React.createClass({
     /**
      * 获取作业参与人数的信息
      */
-    getZuoYePartakeById(topicId, pageNo) {
+    getZuoYePartakeById(topicId, pageNo, time) {
         var param = {
             "method": 'getZuoYeInfo',
             "zuoYeId": topicId,
@@ -789,6 +785,12 @@ const AntNestTabComponents = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var parTakeCountInfo = ret.response;
+                var now = parTakeCountInfo.now;
+                if (now > time) {
+                    antNest.setState({zuodaTime: 'none'})
+                } else {
+                    antNest.setState({zuodaTime: 'inline-block'})
+                }
                 antNest.getZuoYeInfoById(topicId, parTakeCountInfo, pageNo);
             },
             onError: function (error) {
