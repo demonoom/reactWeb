@@ -5,6 +5,7 @@ import {isEmpty} from "../utils/Const";
 import SelectSubjectModal from '../components/localClassRoom/SelectSubjectModal';
 import SelectMaterialsModal from '../components/localClassRoom/SelectMaterialsModal';
 import ConfirmModal from '../components/ConfirmModal';
+import GuideModal from '../components/localClassRoom/GuideModal';
 
 var connection = null;
 var ms = null;
@@ -90,6 +91,16 @@ const LocalClassRoom = React.createClass({
      * 获取课件，打开ppt，完成推ppt的操作
      */
     getPPT() {
+        //this.setState({materialsModalIsShow:true});
+        this.refs.guideModal.changeGuideModalVisible(true);
+    },
+
+    /**
+     * 设置不同的操作指向，用来根据不同的数据源，分别从备课计划和蚁盘中获取文件
+     * @param guideType
+     */
+    setGuideType(guideType){
+        this.refs.guideModal.changeGuideModalVisible(false);
         this.setState({materialsModalIsShow:true});
     },
 
@@ -181,6 +192,7 @@ const LocalClassRoom = React.createClass({
                               onConfirmModalCancel={this.closeConfirmModal}
                               onConfirmModalOK={this.disConnectClassRoom}
                 ></ConfirmModal>
+                <GuideModal ref="guideModal" setGuideType={this.setGuideType}></GuideModal>
             </div>
         );
     },
