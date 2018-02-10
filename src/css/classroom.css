@@ -110,17 +110,17 @@
     height: 100%;
 }
 .class_send_input{
-    width: 175px;
+    width: 212px;
 }
 .class_send_btn {
     background: #39f;
     border: none;
     color: #fff;
-    width: 70px;
     border-radius: 4px;
-    font-size: 16px;
+    font-size: 16px !important;
     float: right;
     margin-top: -1px;
+    padding: 2px 8px;
 }
 .class_send_btn:hover{
     background: #65b2ff;

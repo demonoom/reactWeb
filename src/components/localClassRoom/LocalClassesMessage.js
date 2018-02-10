@@ -258,8 +258,7 @@ const LocalClassesMessage = React.createClass({
                     </ul>
                     <div className="class_talk_bottom">
                         <Input className="class_send_input" value={this.state.barrageMessageContent} onChange={this.messageContentChange} onPressEnter={this.sendBarrageMessage}/>
-                        <Button onClick={this.sendBarrageMessage} className="class_send_btn">
-                            发送
+                        <Button onClick={this.sendBarrageMessage} className="class_send_btn" icon="enter">
                         </Button>
                     </div>
                 </div>
