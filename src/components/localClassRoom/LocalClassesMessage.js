@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
-import {isEmpty,showLargeImg} from '../../utils/utils';
-import {getLocalTime,MESSAGE_TO_TYPE_ONlINE_CLASS} from '../../utils/Const';
+import {isEmpty,showLargeImg,formatHM} from '../../utils/utils';
+import {MESSAGE_TO_TYPE_ONlINE_CLASS} from '../../utils/Const';
 import {Button, message, Row,Col,Input} from 'antd';
 import {doWebService} from '../../WebServiceHelper';
 const { TextArea } = Input;
@@ -92,7 +92,7 @@ const LocalClassesMessage = React.createClass({
 
     buildMessageLiArray(messageData,messageFrom){
         var content = messageData.content;
-        var createTime = getLocalTime(messageData.createTime);
+        var createTime = formatHM(messageData.createTime);
         var fromUser = messageData.fromUser;
         var avatar=null;
         if(isEmpty(fromUser.avatar)){
