@@ -226,7 +226,7 @@ class SelectScheduleMaterialsModal extends React.Component {
                 break;
         }
         fileLogo = <div className="classroom_push_td">
-                {fileTypeLog}{name}
+                {fileTypeLog}<span>{name}</span>
             </div>;
         return fileLogo;
     }
