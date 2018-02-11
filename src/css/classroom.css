@@ -333,3 +333,6 @@
     position: relative;
     top: -42px;
 }
+.classroom_file_50{
+    width: calc(100% - 50px);
+}
