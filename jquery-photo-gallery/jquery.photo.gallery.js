@@ -712,7 +712,8 @@
                     height: winHeight,
                     background: 'rgba(177, 178, 179, 0.6)',
                     border: '1px solid #6D6D6D',
-                    'border-radius': '4px'
+                    'border-radius': '4px',
+                    'z-index':999,
                 });
         },
         //做初始化
