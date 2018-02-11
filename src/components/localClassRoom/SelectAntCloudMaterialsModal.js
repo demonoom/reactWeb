@@ -31,11 +31,7 @@ var scheduleColumns = [{
 var targetDirColumns = [{
     title: '文件夹名称',
     dataIndex: 'dirName',
-}, {
-    title: '操作',
-    className: 'ant-table-selection-user schoolgroup_operate',
-    dataIndex: 'moveDirOpt',
-}
+},
 ];
 
 /**
@@ -199,9 +195,9 @@ class SelectAntCloudMaterialsModal extends React.Component {
                     fileTypeLog = <i className="cloud_icon cloud_icon_other"></i>;
                     break;
             }
-            fileLogo = <span className="cloud_text">
+            fileLogo = <div className="classroom_push_td">
                 {fileTypeLog}{name}
-            </span>;
+            </div>;
         }
         return fileLogo;
     }
@@ -314,7 +310,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
 
 
         return (
-            <Modal className="choose_class" visible={this.state.isShow}
+            <Modal className="modal_classroom modal_classroom_push modal_classroom_box" visible={this.state.isShow}
                    onCancel={this.SelectAntCloudMaterialsModalHandleCancel}
                    transitionName=""  //禁用modal的动画效果
                    title="选择课件"
@@ -322,14 +318,11 @@ class SelectAntCloudMaterialsModal extends React.Component {
                    footer={null}
                    closable={true}     //设置显示右上角的关闭按钮（但是需要调整颜色，否则白色会无法显示）
             >
-                <Row style={{height: 400}} className="yinyong3">
+                <Row style={{height: 400}}>
                     <Col span={24} className="17_hei ant-form">
                         <Row>
-                            <Col span={24} style={{height:'354'}}>
-                                <div className="public—til—blue">
-                                    <div className="ant-tabs-right"><Button onClick={this.returnParentAtMoveModal}><Icon
-                                        type="left"/></Button></div>
-                                </div>
+                            <Col span={24} >
+                                    <Icon type="left" className="classroom_left_i" onClick={this.returnParentAtMoveModal} />
                                 <Table columns={targetDirColumns} showHeader={false}
                                        dataSource={this.state.targetDirDataArray}
                                        onRowClick={this.pushFileFromAntCloud}

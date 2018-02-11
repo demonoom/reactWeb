@@ -9,20 +9,31 @@
     max-width: 100%;
 }
 .classroom_btn{
+     z-index: 10;
+     position: absolute;
+     top:20px;
+     left: 20px;
+ }
+.classroom_btn_finish{
     z-index: 10;
     position: absolute;
     top:20px;
-    left: 20px;
+    right: 20px;
 }
 .classroom_btn_b{
-    color: #fff;
     font-size: 14px;
     border: none;
+    width: 48px;
+    height: 48px;
+    border-radius: 0;
+    padding: 0;
+    background: none;
 }
-.classroom_btn_b i{
-    font-size: 18px;
-    position: relative;
-    top: 1px;
+.classroom_btn_b img{
+    width: 100%;
+}
+.classroom_btn_b:hover{
+    background: none;
 }
 .classroom_btn_green{
     background: #9cc232
@@ -100,21 +111,30 @@
     height: 100%;
 }
 .class_send_input{
-    width: 175px;
+    width: 212px;
 }
 .class_send_btn {
     background: #39f;
     border: none;
     color: #fff;
-    width: 70px;
     border-radius: 4px;
-    font-size: 16px;
+    font-size: 16px !important;
     float: right;
     margin-top: -1px;
+    padding: 2px 8px;
 }
 .class_send_btn:hover{
     background: #65b2ff;
     color:#fff;
+}
+.class_send_img{
+    max-width: 120px;
+    min-width: 10px;
+    display: inline-block;
+}
+.class_send_img img{
+    max-width: 100%;
+    max-height: 100%;
 }
 .class_talk_top{
     height: calc(100% - 85px);
@@ -148,4 +168,164 @@
     font-size: 18px;
     font-weight: normal;
     margin:0 0 15px 0;
+}
+.modal_classroom .ant-modal-content{
+    box-shadow: 1px 1px 50px rgba(0,0,0,.3);
+    border-radius:2px;
+}
+.modal_classroom .ant-modal-content span.ant-modal-close-x{
+    color: #232323;
+}
+.modal_classroom .ant-modal-header{
+    background-color: #F8F8F8;
+    color: #333;
+    padding: 10px 16px;
+}
+.modal_classroom .ant-modal-body{
+    padding: 20px;
+}
+.table_classroom .ant-table-tbody > tr > td{
+    color: #333;
+    font-size: 14px;
+}
+.table_classroom .ant-table-tbody > tr > td:hover{
+    background: #fff;
+    color:#4da6ff;
+    cursor: pointer;
+}
+.table_classroom .ant-table-tbody > tr > td:before {
+    content: "";
+    background: #999;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+    position: relative;
+    top: -2px;
+}
+.modal_classroom_select .ant-modal-body{
+    height: 159px;
+}
+.modal_classroom_push .ant-modal-body{
+    padding: 0 !important;
+    height: 459px;
+}
+.modal_classroom_push_left{
+    width: 242px;
+    height: 458px;
+    background: #F6FBFF;
+}
+.modal_flex{
+    display: flex;
+}
+.modal_flex_1{
+    flex: 1;
+}
+.modal_flex_auto{
+    flex: auto;
+}
+.modal_classroom_push_left .clearfix > div:first-child{
+    height: 100% !important;
+}
+.modal_classroom_push_left{
+    border: none;
+    border-radius: 0;
+}
+.modal_classroom_push_left .ant-table-header, .modal_classroom_push_left .ant-table-thead > tr > th, .modal_classroom_push_left .ant-table-fixed-header .ant-table-body{
+    background: none;
+}
+.modal_classroom_push_left .ant-table-thead > tr > th{
+    text-align: center;
+    color: #4da6ff;
+    padding: 10px 0;
+    font-weight: normal;
+}
+.modal_classroom_push_left .ant-table-header table{
+    border-bottom: 1px solid #d8eeff;
+    margin-bottom: 10px;
+}
+.modal_classroom_push_left .ant-table-tbody > tr > td{
+    padding: 0;
+    border: none;
+    overflow: hidden;
+    width: 230px;
+    height: 36px;
+    line-height: 36px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer !important;
+    text-indent: 12px;
+}
+.modal_classroom_push_left .ant-table-tbody > tr > td:hover{
+    color:#4da6ff;
+    cursor: pointer;
+}
+.modal_classroom_push_left .ant-table-tbody > tr > td:before {
+    content: "";
+    background: #999;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+    position: relative;
+    top: -2px;
+}
+.modal_classroom_push_right .ant-table-header{
+    margin-bottom: 0 !important;
+}
+.modal_classroom_push_right .ant-table-fixed-header .ant-table-body{
+    min-height: 100%;
+    height: 100%;
+}
+.modal_classroom_push_right .ant-table-tbody > tr:hover,
+.modal_classroom_push_right .ant-table-thead > tr.ant-table-row-hover,
+.modal_classroom_push_right .ant-table-tbody > tr.ant-table-row-hover,
+.modal_classroom_push_right .ant-table-thead > tr:hover,
+.modal_classroom_push_left .ant-table-tbody > tr:hover,
+.modal_classroom_push_left .ant-table-thead > tr.ant-table-row-hover,
+.modal_classroom_push_left .ant-table-tbody > tr.ant-table-row-hover,
+.modal_classroom_push_left .ant-table-thead > tr:hover,
+.ant-table-placeholder,
+.modal_classroom_box .ant-table-tbody > tr:hover,
+.modal_classroom_box .ant-table-thead > tr.ant-table-row-hover,
+.modal_classroom_box .ant-table-tbody > tr.ant-table-row-hover,
+.modal_classroom_box .ant-table-thead > tr:hover{
+    background: none;
+}
+.classroom_push_td{
+    display: flex;
+    line-height: 28px;
+}
+.classroom_left_i{
+    font-size: 22px;
+    color: #0078e4;
+    font-weight: normal;
+    cursor: pointer;
+    position: absolute;
+    top: -42px;
+    left: -10px;
+
+}
+.modal_classroom_box .ant-modal-header{
+    text-align: center;
+}
+.modal_classroom_box .ant-table-fixed-header .ant-table-scroll .ant-table-header{
+    margin: 0;
+}
+.modal_classroom_box .ant-modal-body{
+    padding: 10px 20px 20px 20px !important;
+    height: 431px;
+}
+.btn_push_i{
+    background: #39f;
+    border-radius: 4px;
+    color: #fff;
+    padding: 4px 20px;
+    border: none;
+    margin: 8px 0;
+}
+.btn_push_box{
+    height: calc(100% - 50px) !important;
 }

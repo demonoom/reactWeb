@@ -13,27 +13,6 @@ var subjectColumns = [{
     title: '内容',
     className: 'ant-table-selection-cont2',
     dataIndex: 'content'
-}, {
-    title: '题型',
-    className: 'ant-table-selection-topic',
-    dataIndex: 'subjectType',
-    filters: [{
-        text: '单选题',
-        value: '单选题',
-    }, {
-        text: '多选题',
-        value: '多选题',
-    }, {
-        text: '判断题',
-        value: '判断题',
-    }, {
-        text: '简答题',
-        value: '简答题',
-    }, {
-        text: '材料题',
-        value: '材料题',
-    },],
-    onFilter: (value, record) => record.subjectType.indexOf(value) === 0,
 },
 ];
 
@@ -208,30 +187,27 @@ class SelectSubjectModal extends React.Component {
         };
 
         return (
-            <Modal title="选择题目" className="choose_class" visible={this.state.isShow}
+            <Modal title="推送题目" className="modal_classroom modal_classroom_push" visible={this.state.isShow}
                    onCancel={this.SelectSubjectModalHandleCancel}
                    transitionName=""  //禁用modal的动画效果
                    maskClosable={false} //设置不允许点击蒙层关闭
-                   footer={[
-
-                       <Button key="return" type="primary" size="large"
-                               onClick={this.subjectModalHandleOk}>确定</Button>,
-
-                       <Button key="ok" type="ghost" size="large" onClick={this.SelectSubjectModalHandleCancel}>取消</Button>,
-
-                   ]}
+                   width={750}
+                   footer={null}
             >
-                <Row style={{height: 400}}>
-                    <Col span={7} className="ant-form"><Table size="small" className="lesson classroom_subject"
+                <Row className="modal_flex">
+                    <Col className="ant-form modal_classroom_push_left"><Table className="lesson classroom_prepare_lessons"
                                                               onRowClick={this.onScheduleSelectChange}
                                                               columns={scheduleColumns} dataSource={this.state.scheduleData}
                                                               pagination={false}
                                                               scroll={{y: 300}}/></Col>
-                    <Col span={17} className="col17_le 17_hei ant-form">
-                        <div className="17_hei1">
-                            <Table className="17_hei2" columns={subjectColumns}
+                    <Col className="col17_le 17_hei ant-form modal_flex_1 btn_push_box">
+                        <Button key="return" type="primary" size="large" className="btn_push_i"
+                                onClick={this.subjectModalHandleOk}>推送</Button>
+                        <div >
+                            <Table  className="modal_classroom_push_right" columns={subjectColumns}
                                    dataSource={subjectData}
                                    rowSelection={subjectRowSelection}
+                                   showHeader={false}
                                    pagination={{
                                 total: this.state.totalSubjectCount,
                                 pageSize: getPageSize(),

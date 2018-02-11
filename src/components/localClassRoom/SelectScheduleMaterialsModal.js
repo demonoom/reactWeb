@@ -14,10 +14,6 @@ var materialsColumns = [{
     title: '文件',
     className: 'ant-table-selection-cont2',
     dataIndex: 'fileName'
-}, {
-    title: '操作',
-    className: 'ant-table-selection-user schoolgroup_operate',
-    dataIndex: 'fileOpt',
 }
 ];
 
@@ -213,32 +209,33 @@ class SelectScheduleMaterialsModal extends React.Component {
                 fileTypeLog = <i className="cloud_icon cloud_icon_other"></i>;
                 break;
         }
-        fileLogo = <span className="cloud_text">
+        fileLogo = <div className="classroom_push_td">
                 {fileTypeLog}{name}
-            </span>;
+            </div>;
         return fileLogo;
     }
 
     render() {
 
         return (
-            <Modal className="choose_class" visible={this.state.isShow}
+            <Modal className="modal_classroom modal_classroom_push" visible={this.state.isShow}
                    onCancel={this.SelectScheduleMaterialsModalHandleCancel}
                    transitionName=""  //禁用modal的动画效果
                    title="推送课件"
+                   width={750}
                    maskClosable={false} //设置不允许点击蒙层关闭
                    closable={true}     //设置显示右上角的关闭按钮（但是需要调整颜色，否则白色会无法显示）
                    footer={null}
             >
-                <Row style={{height: 400}} className="yinyong3">
-                    <Col span={7} className="ant-form"><Table size="small" className="lesson"
+                <Row className="modal_flex">
+                    <Col className="ant-form modal_classroom_push_left"><Table className="lesson classroom_prepare_lessons"
                                                               onRowClick={this.onScheduleSelectChange}
                                                               columns={scheduleColumns} dataSource={scheduleData}
                                                               pagination={false}
-                                                              scroll={{y: 300}}/></Col>
-                    <Col span={17} className="col17_le 17_hei ant-form">
+                                                              scroll={{y: 300, x:'hidden'}} /></Col>
+                    <Col className="col17_le 17_hei ant-form modal_flex_1">
                         <div className="17_hei1">
-                            <Table className="17_hei2" columns={materialsColumns}
+                            <Table className="modal_classroom_push_right" columns={materialsColumns}
                                    dataSource={materialsData}
                                    showHeader={false}
                                    onRowClick={this.selectMaterials}
