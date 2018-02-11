@@ -327,7 +327,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
                    footer={null}
                    closable={true}     //设置显示右上角的关闭按钮（但是需要调整颜色，否则白色会无法显示）
             >
-                <Row style={{height: 400}}>
+                <Row >
                     <Col span={24} className="17_hei ant-form">
                         <Row>
                             <Col span={24} >
@@ -335,7 +335,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
                                 <Table columns={targetDirColumns} showHeader={false}
                                        dataSource={this.state.targetDirDataArray}
                                        onRowClick={this.pushFileFromAntCloud}
-                                       pagination={false} scroll={{y: 300}}/>
+                                       pagination={false} />
                                 <div className="schoolgroup_operate schoolgroup_more more_classroom">
                                     <a onClick={this.loadMoreAntCloudFlile} className="schoolgroup_more_a">加载更多</a>
                                 </div>
