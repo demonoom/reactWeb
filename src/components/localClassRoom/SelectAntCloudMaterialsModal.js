@@ -329,7 +329,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
                                        dataSource={this.state.targetDirDataArray}
                                        onRowClick={this.pushFileFromAntCloud}
                                        pagination={false} scroll={{y: 300}}/>
-                                <div className="schoolgroup_operate schoolgroup_more">
+                                <div className="schoolgroup_operate schoolgroup_more more_classroom">
                                     <a onClick={this.loadMoreAntCloudFlile} className="schoolgroup_more_a">加载更多</a>
                                 </div>
                             </Col>
