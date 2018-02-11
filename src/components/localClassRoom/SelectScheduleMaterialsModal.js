@@ -251,7 +251,7 @@ class SelectScheduleMaterialsModal extends React.Component {
                                    showHeader={false}
                                    onRowClick={this.selectMaterials}
                                    pagination={false} scroll={{y: 300}}/>
-                            <div className="schoolgroup_operate schoolgroup_more">
+                            <div className="schoolgroup_operate schoolgroup_more more_classroom">
                                 <a onClick={this.loadMoreScheduleFlile} className="schoolgroup_more_a">加载更多</a>
                             </div>
                         </div>
