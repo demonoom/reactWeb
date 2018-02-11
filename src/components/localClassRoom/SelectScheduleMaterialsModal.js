@@ -37,6 +37,8 @@ var targetDirColumns = [{
 /**
  * 从备课计划选择课件的modal
  */
+//是否给出无更多数据的提示
+var isTipNoDataMessage=true;
 class SelectScheduleMaterialsModal extends React.Component {
 
     constructor(props) {
@@ -112,11 +114,13 @@ class SelectScheduleMaterialsModal extends React.Component {
     onScheduleSelectChange(selectedRowKeys) {
         var scheduleId = selectedRowKeys.key;
         materialsData = [];
+        //切换备课计划时，不提示无更多数据
+        isTipNoDataMessage = false;
         this.getMaterialsBySheduleId(scheduleId, 1);
         this.setState({currentScheduleId: scheduleId});
     }
 
-    //点击左侧备课计划时，根据备课计划获取对应的资源文件
+    //本地课堂中，点击左侧备课计划时，根据备课计划获取对应的资源文件
     getMaterialsBySheduleId (ScheduleId, pageNo) {
         var _this = this;
         var param = {
@@ -131,6 +135,7 @@ class SelectScheduleMaterialsModal extends React.Component {
                 courseWareList.splice(0);
                 var response = ret.response;
                 if(isEmpty(response)==false && response.length>0){
+                    isTipNoDataMessage = true;
                     response.forEach(function (e) {
                         var name = e.name;
                         var fileLog = _this.buildMaterialsFileLogo(name);
@@ -145,7 +150,9 @@ class SelectScheduleMaterialsModal extends React.Component {
                     var pager = ret.pager;
                     _this.setState({totalMaterialsCount: parseInt(pager.rsCount),currentPage: pageNo });
                 }else{
-                    message.error("无更多数据");
+                    if(isTipNoDataMessage==true){
+                        message.error("无更多数据");
+                    }
                 }
             },
             onError: function (error) {
