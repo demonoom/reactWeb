@@ -70,6 +70,10 @@ class SelectScheduleMaterialsModal extends React.Component {
         this.setState({isShow});
     }
 
+    /**
+     * 关闭从备课计划选择课件的窗口
+     * @constructor
+     */
     SelectScheduleMaterialsModalHandleCancel() {
         this.setState({"isShow": false});
         this.props.onCancel();
@@ -111,6 +115,10 @@ class SelectScheduleMaterialsModal extends React.Component {
         });
     }
 
+    /**
+     * 本地课堂中，左侧备课计划选项改变的响应函数
+     * @param selectedRowKeys
+     */
     onScheduleSelectChange(selectedRowKeys) {
         var scheduleId = selectedRowKeys.key;
         materialsData = [];
@@ -147,8 +155,7 @@ class SelectScheduleMaterialsModal extends React.Component {
                         });
 
                     });
-                    var pager = ret.pager;
-                    _this.setState({totalMaterialsCount: parseInt(pager.rsCount),currentPage: pageNo });
+                    _this.setState({currentPage: pageNo });
                 }else{
                     if(isTipNoDataMessage==true){
                         message.error("无更多数据");

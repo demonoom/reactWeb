@@ -72,11 +72,18 @@ class SelectAntCloudMaterialsModal extends React.Component {
         this.setState({isShow});
     }
 
+    /**
+     * 本地课堂中，关闭从蚁盘选择课件的窗口
+     * @constructor
+     */
     SelectAntCloudMaterialsModalHandleCancel() {
         this.setState({"isShow": false});
         this.props.onCancel();
     }
 
+    /**
+     * 获取用户的蚁盘根文件夹
+     */
     getAntCountFileList(){
         var initPageNo = 1;
         this.getUserRootCloudFiles(this.state.loginUser.colUid, initPageNo);
@@ -92,7 +99,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
         if(this.state.currentDirectoryIdAtMoveModal==-1){
             this.getUserRootCloudFiles(this.state.loginUser.colUid, antCloudFileCurrentPage);
         }else{
-            this.listFiles(this.state.loginUser.colUid, this.state.currentDirectoryIdAtMoveModal, queryConditionJson, antCloudFileCurrentPage, "moveDirModal");
+            this.listFiles(this.state.loginUser.colUid, this.state.currentDirectoryIdAtMoveModal, queryConditionJson, antCloudFileCurrentPage);
         }
     }
 
@@ -212,7 +219,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
     /**
      * 如果是文件夹，则可以点击文件夹名称，进入文件夹内部
      */
-    intoDirectoryInner(directoryObj, optSrc) {
+    intoDirectoryInner(directoryObj) {
         var _this = this;
         var initPageNo = 1;
         var queryConditionJson = "";
@@ -222,7 +229,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
             "parentDirectoryIdAtMoveModal": directoryObj.parentId,
             "currentDirectoryIdAtMoveModal": directoryObj.id
         });
-        _this.listFiles(_this.state.loginUser.colUid, directoryObj.id, queryConditionJson, initPageNo, optSrc);
+        _this.listFiles(_this.state.loginUser.colUid, directoryObj.id, queryConditionJson, initPageNo);
     }
 
     /**
@@ -232,7 +239,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
      * @param queryConditionJson
      * @param pageNo
      */
-    listFiles(operateUserId, cloudFileId, queryConditionJson, pageNo, optSrc) {
+    listFiles(operateUserId, cloudFileId, queryConditionJson, pageNo) {
         var _this = this;
         _this.setState({totalCount: 0});
         _this.setState({"currentDirectoryIdAtMoveModal": cloudFileId});
@@ -277,7 +284,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
         } else {
             var queryConditionJson = "";
             _this.listFiles(_this.state.loginUser.colUid,
-                _this.state.parentDirectoryIdAtMoveModal, queryConditionJson, initPageNo, "moveDirModal");
+                _this.state.parentDirectoryIdAtMoveModal, queryConditionJson, initPageNo);
         }
     }
 
@@ -292,7 +299,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
         var fileName = fileObj.name;
         var isDirectory = fileObj.directory;
         if(isDirectory==true){
-            this.intoDirectoryInner(fileObj, "moveDirModal");
+            this.intoDirectoryInner(fileObj);
         }else{
             var lastPointIndex = fileName.lastIndexOf(".");
             //通过截取文件后缀名的形式，完成对上传文件类型的判断
