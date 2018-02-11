@@ -48,7 +48,7 @@ class SelectScheduleMaterialsModal extends React.Component {
             dataSourceValue:1,  //默认为从备课计划中选择
         };
         this.SelectScheduleMaterialsModalHandleCancel = this.SelectScheduleMaterialsModalHandleCancel.bind(this);
-        this.pageOnChange = this.pageOnChange.bind(this);
+        this.loadMoreScheduleFlile = this.loadMoreScheduleFlile.bind(this);
         this.getScheduleList = this.getScheduleList.bind(this);
         this.onScheduleSelectChange = this.onScheduleSelectChange.bind(this);
         this.getMaterialsBySheduleId = this.getMaterialsBySheduleId.bind(this);
@@ -74,14 +74,11 @@ class SelectScheduleMaterialsModal extends React.Component {
     }
 
     /**
-     * 题目分页页码改变的响应函数
-     * @param pageNo
+     * 备课计划下的课件加载更多
      */
-    pageOnChange(pageNo){
-        this.getMaterialsBySheduleId(this.state.currentScheduleId, pageNo);
-        this.setState({
-            currentPage: pageNo,
-        });
+    loadMoreScheduleFlile(){
+        var newPageNo = parseInt(this.state.currentPage)+1;
+        this.getMaterialsBySheduleId(this.state.currentScheduleId, newPageNo);
     }
 
     //获取老师名下的备课计划
@@ -133,18 +130,23 @@ class SelectScheduleMaterialsModal extends React.Component {
                 _this.activeKey = [];
                 courseWareList.splice(0);
                 var response = ret.response;
-                response.forEach(function (e) {
-                    var name = e.name;
-                    var fileLog = _this.buildMaterialsFileLogo(name);
-                    materialsData.push({
-                        key: e.id,
-                        fileName: fileLog,
-                        htmlPath: e.htmlPath,
-                        materialsObj:e
+                if(isEmpty(response)==false && response.length>0){
+                    response.forEach(function (e) {
+                        var name = e.name;
+                        var fileLog = _this.buildMaterialsFileLogo(name);
+                        materialsData.push({
+                            key: e.id,
+                            fileName: fileLog,
+                            htmlPath: e.htmlPath,
+                            materialsObj:e
+                        });
+
                     });
                     var pager = ret.pager;
-                    _this.setState({totalMaterialsCount: parseInt(pager.rsCount)});
-                });
+                    _this.setState({totalMaterialsCount: parseInt(pager.rsCount),currentPage: pageNo });
+                }else{
+                    message.error("无更多数据");
+                }
             },
             onError: function (error) {
                 message.error(error);
@@ -228,22 +230,23 @@ class SelectScheduleMaterialsModal extends React.Component {
                    footer={null}
             >
                 <Row className="modal_flex">
-                    <Col className="ant-form modal_classroom_push_left"><Table className="lesson classroom_prepare_lessons"
+                    <Col className="ant-form modal_classroom_push_left">
+                        <Table className="lesson classroom_prepare_lessons"
                                                               onRowClick={this.onScheduleSelectChange}
                                                               columns={scheduleColumns} dataSource={scheduleData}
                                                               pagination={false}
-                                                              scroll={{y: 300, x:'hidden'}} /></Col>
+                                                              scroll={{y: 300, x:'hidden'}} />
+                    </Col>
                     <Col className="col17_le 17_hei ant-form modal_flex_1">
                         <div className="17_hei1">
                             <Table className="modal_classroom_push_right" columns={materialsColumns}
                                    dataSource={materialsData}
                                    showHeader={false}
                                    onRowClick={this.selectMaterials}
-                                   pagination={{
-                                       total: this.state.totalMaterialsCount,
-                                       pageSize: getPageSize(),
-                                       onChange: this.pageOnChange
-                                   }} scroll={{y: 300}}/>
+                                   pagination={false} scroll={{y: 300}}/>
+                            <div className="schoolgroup_operate schoolgroup_more">
+                                <a onClick={this.loadMoreScheduleFlile} className="schoolgroup_more_a">加载更多</a>
+                            </div>
                         </div>
                     </Col>
                 </Row>

@@ -34,6 +34,7 @@ var targetDirColumns = [{
 },
 ];
 
+var targetDirDataArray = [];
 /**
  * 从蚁盘选择课件的modal
  */
@@ -44,12 +45,13 @@ class SelectAntCloudMaterialsModal extends React.Component {
         var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
         this.state = {
             loginUser: loginUser,
-            isShow: false
+            isShow: false,
+            currentDirectoryIdAtMoveModal:-1
         };
         this.SelectAntCloudMaterialsModalHandleCancel = this.SelectAntCloudMaterialsModalHandleCancel.bind(this);
         this.buildTargetDirData = this.buildTargetDirData.bind(this);
         this.getUserRootCloudFiles = this.getUserRootCloudFiles.bind(this);
-        this.antCloudFileTablePageOnChange = this.antCloudFileTablePageOnChange.bind(this);
+        this.loadMoreAntCloudFlile = this.loadMoreAntCloudFlile.bind(this);
         this.getAntCountFileList = this.getAntCountFileList.bind(this);
         this.buildFileLogo = this.buildFileLogo.bind(this);
         this.intoDirectoryInner = this.intoDirectoryInner.bind(this);
@@ -82,15 +84,16 @@ class SelectAntCloudMaterialsModal extends React.Component {
     }
 
     /**
-     * 课件表格分页
-     * 需要注意该表格承载了不同的数据，需要根据情况进行分页
-     * @param pageNo
+     * 蚁盘文件加载更多的回调
      */
-    antCloudFileTablePageOnChange(pageNo) {
-        this.getUserRootCloudFiles(this.state.loginUser.colUid, pageNo);
-        this.setState({
-            antCloudFileCurrentPage: pageNo,
-        });
+    loadMoreAntCloudFlile() {
+        var queryConditionJson = "";
+        var antCloudFileCurrentPage = parseInt(this.state.antCloudFileCurrentPage) + 1;
+        if(this.state.currentDirectoryIdAtMoveModal==-1){
+            this.getUserRootCloudFiles(this.state.loginUser.colUid, antCloudFileCurrentPage);
+        }else{
+            this.listFiles(this.state.loginUser.colUid, this.state.currentDirectoryIdAtMoveModal, queryConditionJson, antCloudFileCurrentPage, "moveDirModal");
+        }
     }
 
     //点击导航时，进入的我的文件列表
@@ -105,8 +108,13 @@ class SelectAntCloudMaterialsModal extends React.Component {
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                if (response) {
+                if (isEmpty(response)==false && response.length >0) {
                     _this.buildTargetDirData(ret);
+                    _this.setState({
+                        antCloudFileCurrentPage: pageNo,
+                    });
+                }else{
+                    message.error("无更多数据");
                 }
             },
             onError: function (error) {
@@ -121,7 +129,6 @@ class SelectAntCloudMaterialsModal extends React.Component {
      */
     buildTargetDirData(ret) {
         var _this = this;
-        var targetDirDataArray = [];
         var i = 0;
         if (ret.msg == "调用成功" && ret.success == true && isEmpty(ret.response) == false) {
             ret.response.forEach(function (e) {
@@ -209,18 +216,12 @@ class SelectAntCloudMaterialsModal extends React.Component {
         var _this = this;
         var initPageNo = 1;
         var queryConditionJson = "";
-        if (isEmpty(optSrc) == false && optSrc == "mainTable") {
-            _this.setState({
-                "parentDirectoryId": directoryObj.parentId,
-                "currentDirectoryId": directoryObj.id,
-                "currentDirectoryCreatorId": directoryObj.creator.colUid
-            });
-        } else {
-            _this.setState({
-                "parentDirectoryIdAtMoveModal": directoryObj.parentId,
-                "currentDirectoryIdAtMoveModal": directoryObj.id
-            });
-        }
+        //进入文件夹前，先清空文件夹内的数据
+        targetDirDataArray.splice(0);
+        _this.setState({
+            "parentDirectoryIdAtMoveModal": directoryObj.parentId,
+            "currentDirectoryIdAtMoveModal": directoryObj.id
+        });
         _this.listFiles(_this.state.loginUser.colUid, directoryObj.id, queryConditionJson, initPageNo, optSrc);
     }
 
@@ -234,11 +235,7 @@ class SelectAntCloudMaterialsModal extends React.Component {
     listFiles(operateUserId, cloudFileId, queryConditionJson, pageNo, optSrc) {
         var _this = this;
         _this.setState({totalCount: 0});
-        if (isEmpty(optSrc) == false && optSrc == "mainTable") {
-            _this.setState({"currentDirectoryId": cloudFileId});
-        } else {
-            _this.setState({"currentDirectoryIdAtMoveModal": cloudFileId});
-        }
+        _this.setState({"currentDirectoryIdAtMoveModal": cloudFileId});
         var param = {
             "method": 'listFiles',
             "operateUserId": operateUserId,
@@ -249,11 +246,13 @@ class SelectAntCloudMaterialsModal extends React.Component {
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                if (response) {
+                if (isEmpty(response)==false && response.length>0) {
                     _this.buildTargetDirData(ret);
+                    _this.setState({
+                        antCloudFileCurrentPage: pageNo,
+                    });
                 } else {
-                    var parentDirectoryId = e.parent.parentId;
-                    _this.setState({"parentDirectoryId": parentDirectoryId});
+                    message.error("无更多数据");
                 }
             },
             onError: function (error) {
@@ -268,6 +267,10 @@ class SelectAntCloudMaterialsModal extends React.Component {
     returnParentAtMoveModal() {
         var _this = this;
         var initPageNo = 1;
+        if (_this.state.parentDirectoryIdAtMoveModal != -1) {
+            //进入文件夹前，先清空文件夹内的数据
+            targetDirDataArray.splice(0);
+        }
         if (_this.state.parentDirectoryIdAtMoveModal == 0) {
             _this.setState({"parentDirectoryIdAtMoveModal": -1, "currentDirectoryIdAtMoveModal": -1});
             _this.getUserRootCloudFiles(_this.state.loginUser.colUid, initPageNo, "moveDirModal");
@@ -308,7 +311,6 @@ class SelectAntCloudMaterialsModal extends React.Component {
 
     render() {
 
-
         return (
             <Modal className="modal_classroom modal_classroom_push modal_classroom_box" visible={this.state.isShow}
                    onCancel={this.SelectAntCloudMaterialsModalHandleCancel}
@@ -326,11 +328,10 @@ class SelectAntCloudMaterialsModal extends React.Component {
                                 <Table columns={targetDirColumns} showHeader={false}
                                        dataSource={this.state.targetDirDataArray}
                                        onRowClick={this.pushFileFromAntCloud}
-                                       pagination={{
-                                           total: this.state.totalCount,
-                                           pageSize: getPageSize(),
-                                           onChange: this.antCloudFileTablePageOnChange
-                                       }} scroll={{y: 300}}/>
+                                       pagination={false} scroll={{y: 300}}/>
+                                <div className="schoolgroup_operate schoolgroup_more">
+                                    <a onClick={this.loadMoreAntCloudFlile} className="schoolgroup_more_a">加载更多</a>
+                                </div>
                             </Col>
                         </Row>
                     </Col>
