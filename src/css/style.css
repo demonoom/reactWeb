@@ -101,6 +101,13 @@ i, cite, em, var, address, dfn {
     .gz_title_flex, .gz_title_flex + div {
         width: 876px !important;
     }
+    .cloud_box .ant-table-thead > tr > th.ant-table-selection-smallclass, .cloud_box .ant-table-tbody > tr > td.ant-table-selection-smallclass {
+        width: 20%
+    }
+    .ant-table-thead > tr > th.cloud_name, .ant-table-tbody > tr > td.cloud_name {
+        width: 45%;
+    }
+
 }
 
 @media only screen and (max-width: 1365px) {
@@ -146,6 +153,13 @@ i, cite, em, var, address, dfn {
     .gz_title_flex, .gz_title_flex + div {
         width: 696px !important;
     }
+    .cloud_box .ant-table-thead > tr > th.ant-table-selection-smallclass, .cloud_box .ant-table-tbody > tr > td.ant-table-selection-smallclass {
+        width: 24%
+    }
+    .ant-table-thead > tr > th.cloud_name, .ant-table-tbody > tr > td.cloud_name {
+        width: 41%;
+    }
+
 }
 
 .layout_logo {
@@ -1168,9 +1182,7 @@ html, body, #root {
 element.style {
 }
 
-.cloud_box .ant-table-thead > tr > th.ant-table-selection-smallclass, .cloud_box .ant-table-tbody > tr > td.ant-table-selection-smallclass {
-    width: 20%
-}
+
 .cloud_box .ant-table-thead > tr > th.ant-table-selection-smallclass_t, .cloud_box .ant-table-tbody > tr > td.ant-table-selection-smallclass_t {
     width: 18%
 }
@@ -1186,9 +1198,6 @@ element.style {
     width: 10%
 }
 
-.ant-table-thead > tr > th.cloud_name, .ant-table-tbody > tr > td.cloud_name {
-    width: 45%;
-}
 
 .ant-table-thead > tr > th.ant-table-selection-time, .ant-table-tbody > tr > td.ant-table-selection-time {
     width: 120px;
