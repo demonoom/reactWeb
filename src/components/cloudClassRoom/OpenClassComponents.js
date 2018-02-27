@@ -246,6 +246,8 @@ const OpenClassComponents = React.createClass({
             "method": 'findVideoById',
             "id": liveObj.id,
         };
+        //在执行ajax请求前，打开一个空白的新窗口
+        var newTab=window.open('about:blank');
         doWebService_CloudClassRoom(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
@@ -271,10 +273,13 @@ const OpenClassComponents = React.createClass({
                     title = liveObj.name;
                 }
                 requestUrl+=userId+"/"+targetType+"/"+targetId+"/"+title;
-                window.open(requestUrl);
+                // window.open(requestUrl);
+                //将之前打开的新窗口重定向到当前指定的路径上（目的：解决在ajax中打开新窗口被拦截的问题）
+                newTab.location.href = requestUrl;
             },
             onError: function (error) {
                 message.error(error);
+                newTab.close();
             }
         });
     },
