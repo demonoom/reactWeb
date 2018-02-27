@@ -4810,9 +4810,7 @@ const AntGroupTabComponents = React.createClass({
                 {/*<TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">*/}
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div id="personTalk">
-                        <Icon style={{display: groupSetting}}
-                              title="群设置" className="groupTalkSetting noom_cursor" type="setting"
-                              onClick={this.gopTalkSetClick}/>
+                        <i style={{display: groupSetting}} title="群设置" className="iconfont groupTalkSetting noom_cursor" onClick={this.gopTalkSetClick} >&#xe675;</i>
                         <div className="group_talk 44" id="groupTalk"
                              onMouseOver={this.handleScrollType.bind(this, Event)}
                              onScroll={this.handleScroll}>
