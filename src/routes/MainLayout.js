@@ -775,6 +775,7 @@ const MainLayout = React.createClass({
             dissolutionChatGroupButton =
                 <Button onClick={this.showDissolutionChatGroupConfirmModal} className="group_red_font"><i
                     className="iconfont">&#xe616;</i>解散该群</Button>;
+            _this.setState({dissolutionChatGroupButton})
 
             var memberLiTag = [];
             currentMemberArray.forEach(function (e) {
@@ -835,7 +836,7 @@ const MainLayout = React.createClass({
         }
 
         var personDate = <div className="group_cont">
-            <div className="favorite_scroll del_out">
+            <div className="myfollow_zb del_out">
                 <ul className="integral_top">
                         <span className="integral_face"><img src={currentGroupObj.owner.avatar}
                                                              className="person_user"/></span>
@@ -845,13 +846,11 @@ const MainLayout = React.createClass({
                 <ul className="group_fr_ul">
                     <li className="color_gary_f">
                         <span>群聊成员：{currentMemberArray.length}人</span>{topButton}</li>
-                    <li className="user_hei">
+                    <li className="user_hei flow_x">
                         {memberLiTag}
                     </li>
                     <li className="color_gary_f">群聊名称：{currentGroupObj.name}</li>
-                    <li className="btm"><Button onClick={this.showExitChatGroupConfirmModal}
-                                                className="group_red_btn">删除并退出</Button>{dissolutionChatGroupButton}
-                    </li>
+
                 </ul>
             </div>
         </div>;
@@ -1911,8 +1910,12 @@ const MainLayout = React.createClass({
                             群设置
                             <Icon type="close" className="d_mesclose" onClick={this.levGroupSet}/>
                         </div>
-                        <div>
+                        <div className="set_in_background">
                             {this.state.personDate}
+                        </div>
+                        <div className="set_in_del_btn">
+                           <Button onClick={this.showExitChatGroupConfirmModal} className="group_red_btn">删除并退出</Button>{this.state.dissolutionChatGroupButton}
+
                         </div>
                     </div>
 
