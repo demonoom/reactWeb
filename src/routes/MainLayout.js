@@ -18,14 +18,12 @@ import AntCloudMenu from '../components/layOut/AntCloudMenu';
 import AntCloudTableComponents from '../components/antCloud/AntCloudTableComponents';
 import {LocaleProvider} from 'antd';
 import {showLargeImg} from '../utils/utils'
-import {isEmpty, SMALL_IMG, MIDDLE_IMG, LARGE_IMG} from '../utils/Const'
+import {isEmpty, SMALL_IMG} from '../utils/Const'
 import TeachSpace from '../components/TeachSpaces';
 import TeachSpaceGhostMenu from '../components/TeachSpacesGhostMenu';
 import {MsgConnection} from '../utils/msg_websocket_connection';
 import AntCloudClassRoomMenu from '../components/layOut/AntCloudClassRoomMenu';
 import AntCloudClassRoomComponents from '../components/cloudClassRoom/AntCloudClassRoomComponents';
-import SchoolGroupSettingComponents from '../components/schoolGroupSetting/SchoolGroupSettingComponents';
-import SchoolGroupMenu from '../components/schoolGroupSetting/SchoolGroupMenu';
 import SystemSettingGhostMenu from '../components/SystemSetting/SystemSettingGhostMenu';
 import SystemSettingComponent from '../components/SystemSetting/SystemSettingComponent';
 import AddShiftPosModel from '../components/Attendance/AddShiftPosModel';
@@ -77,6 +75,7 @@ const MainLayout = React.createClass({
             sendPicModel: false,
             lastClick: '',  //聊天功能最后一次点击的对象
             RMsgActiveKey: ['2'],
+            searchWords: '',
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
     },
@@ -529,6 +528,10 @@ const MainLayout = React.createClass({
         this.setState({"checkedRecentConnectOptions": checkedValues});
     },
 
+    searchShareUsersOnChange(checkedValues) {
+        this.setState({"searchShareUsersOptions": checkedValues});
+    },
+
     /**
      * 分享文件点击OK
      */
@@ -646,7 +649,8 @@ const MainLayout = React.createClass({
             "checkedConcatOptions": [],
             "checkedsSructureOptions": [],
             "checkedRecentConnectOptions": [],
-            RMsgActiveKey: ['2']
+            RMsgActiveKey: ['2'],
+            searchWords: ''
         });
     },
 
@@ -670,7 +674,6 @@ const MainLayout = React.createClass({
 
     rightMsgDelFinish() {
         this.refs.antGroupTabComponents.rightMsgDelFinish();
-        // console.log(this.state.lastClick);
         // this.setState({lastClick: ''})
         delLastClick = true;
     },
@@ -1084,8 +1087,104 @@ const MainLayout = React.createClass({
         return uuid;
     },
 
-    render() {
+    emitEmpty() {
+        this.userNameInput.focus();
+        this.setState({searchWords: ''});
+    },
 
+    onChangeUserName(e) {
+        if (e.target.value.length != 0) {
+            this.searchShareUsers(e.target.value);
+        }
+        this.setState({searchWords: e.target.value});
+    },
+
+    searchShareUsers(str) {
+        var _this = this;
+        var param = {
+            "method": 'searchShareUsers',
+            "userId": sessionStorage.getItem("ident"),
+            "pageNo": -1,
+            "searchKeyWords": str,
+            "dataType": 0
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    var response = ret.response;
+                    if (isEmpty(response) == false) {
+                        _this.showSearchShareUsers(response)
+                    } else {
+                        //显示没有结果
+                    }
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    showSearchShareUsers(res) {
+        console.log(res);
+        var arr = [];
+        res.forEach(function (data) {
+            var messageType = data.type;
+            if (messageType == 0) {
+                //个人消息
+                var userStructId = data.user.colUid;
+                var userStructName = data.user.userName;
+                var userStructImgTag = <img src={data.user.avatar} className="antnest_38_img" height="38"></img>;
+                var userStructNameTag = <div>{userStructImgTag}<span>{userStructName}</span></div>;
+                var userStructJson = {label: userStructNameTag, value: userStructId};
+
+                if (userStructId != sessionStorage.getItem("userStructId") && userStructId != 138437 && userStructId != 41451 && userStructId != 142033 && userStructId != 139581) {
+                    arr.push(userStructJson);
+                }
+            } else {
+                //群组
+
+                var chatGroupId = data.chatGroup.chatGroupId;
+                var chatGroupName = data.chatGroup.name;
+                var membersCount = data.chatGroup.avatar.split('#').length;
+                var groupMemebersPhoto = [];
+                for (var i = 0; i < membersCount; i++) {
+                    var memberAvatarTag = <img src={data.chatGroup.avatar.split('#')[i] + '?' + SMALL_IMG}></img>;
+                    groupMemebersPhoto.push(memberAvatarTag);
+                    if (i >= 3) {
+                        break;
+                    }
+                }
+                var imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
+                switch (groupMemebersPhoto.length) {
+                    case 1:
+                        imgTag = <div className="maaee_group_face1">{groupMemebersPhoto}</div>;
+                        break;
+                    case 2:
+                        imgTag = <div className="maaee_group_face2">{groupMemebersPhoto}</div>;
+                        break;
+                    case 3:
+                        imgTag = <div className="maaee_group_face3">{groupMemebersPhoto}</div>;
+                        break;
+                    case 4:
+                        imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
+                        break;
+                }
+                var groupName = chatGroupName;
+                var groupNameTag = <div>{imgTag}<span>{groupName}</span></div>
+                var groupJson = {label: groupNameTag, value: chatGroupId + '%'};
+                arr.push(groupJson);
+            }
+
+        });
+        // this.setState({"userMessageData": []});   //先setStatet空可以让render强刷
+        this.setState({"searchShareUsersData": arr});
+    },
+
+    render() {
+        const suffix = this.state.searchWords ? <Icon type="close-circle" onClick={this.emitEmpty}/> : null;
+        const searchIfOrNot = this.state.searchWords ? 'none' : 'block';
+        const searchNotOrIf = this.state.searchWords ? 'block' : 'none';
         const collapse = this.state.collapse;
         //根据如下判断结果，完成对页面中部位置的渲染，不同情况，渲染不同组件
         var middleComponent;
@@ -1334,7 +1433,25 @@ const MainLayout = React.createClass({
                                 </Col>
                             </Row>
                             <Row>
-                                <Col span={11} className="upexam_float cloud_share_cont">
+                                <Col>
+                                    <Input
+                                        placeholder="首字母搜索更快捷"
+                                        suffix={this.state.searchWords ?
+                                            <Icon type="close-circle" onClick={this.emitEmpty}/> : null}
+                                        value={this.state.searchWords}
+                                        onChange={this.onChangeUserName}
+                                        ref={node => this.userNameInput = node}
+                                    />
+                                </Col>
+                                <Col style={{display: searchNotOrIf}} span={11}
+                                     className="upexam_float cloud_share_cont">
+                                    <CheckboxGroup options={this.state.searchShareUsersData}
+                                                   value={this.state.searchShareUsersOptions}
+                                                   onChange={this.searchShareUsersOnChange}
+                                    />
+                                </Col>
+                                <Col style={{display: searchIfOrNot}} span={11}
+                                     className="upexam_float cloud_share_cont">
                                     <Collapse bordered={false} activeKey={this.state.RMsgActiveKey}
                                               onChange={this.collapseChange}
                                     >
