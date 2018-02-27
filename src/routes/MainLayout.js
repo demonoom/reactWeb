@@ -758,20 +758,17 @@ const MainLayout = React.createClass({
      * @param arr
      */
     buildGroupSet(currentMemberArray, currentGroupObj) {
+        this.state.dissolutionChatGroupButton = '';
         this.setState({currentGroupObj});
         var _this = this;
         var topButton,
             dissolutionChatGroupButton;
+        var divBlock = 'none';
         if (currentGroupObj.owner.colUid == sessionStorage.getItem("ident")) {
             //我是群主
-            topButton = <span className="right_ri">
-                    <Button type="primary" onClick={this.mainTransfer.bind(this, currentMemberArray)}
-                    >群主转让</Button>
-                    <span className="toobar"><Button type="primary" onClick={this.showUpdateChatGroupNameModal}
-                    >修改群名称</Button></span>
-                    <span className="toobar"><Button type="primary" onClick={this.showAddMembersModal}
-                    >添加群成员</Button></span>
-                </span>;
+            divBlock = 'inline-block';
+            topButton = <span className="toobar"><Button type="primary" onClick={this.showAddMembersModal}
+            >添加群成员</Button></span>
             dissolutionChatGroupButton =
                 <Button onClick={this.showDissolutionChatGroupConfirmModal} className="group_red_font"><i
                     className="iconfont">&#xe616;</i>解散该群</Button>;
@@ -837,20 +834,20 @@ const MainLayout = React.createClass({
 
         var personDate = <div className="group_cont">
             <div className="myfollow_zb del_out">
-                <ul className="integral_top">
-                        <span className="integral_face"><img src={currentGroupObj.owner.avatar}
-                                                             className="person_user"/></span>
-                    <div className="class_right color_gary_f">{currentGroupObj.name}</div>
-                    <div className="integral_line"></div>
-                </ul>
                 <ul className="group_fr_ul">
+                    <li className="color_gary_f">群聊名称：{currentGroupObj.name}
+                        <span style={{display: divBlock}} className="noom_cursor"
+                              onClick={this.showUpdateChatGroupNameModal}>编辑</span>
+                    </li>
+                    <li className="color_gary_f">群主：{currentGroupObj.owner.userName}
+                        <span style={{display: divBlock}} className="noom_cursor"
+                              onClick={this.mainTransfer.bind(this, currentMemberArray)}>转让群主</span>
+                    </li>
                     <li className="color_gary_f">
                         <span>群聊成员：{currentMemberArray.length}人</span>{topButton}</li>
                     <li className="user_hei flow_x">
                         {memberLiTag}
                     </li>
-                    <li className="color_gary_f">群聊名称：{currentGroupObj.name}</li>
-
                 </ul>
             </div>
         </div>;
@@ -1914,7 +1911,8 @@ const MainLayout = React.createClass({
                             {this.state.personDate}
                         </div>
                         <div className="set_in_del_btn">
-                           <Button onClick={this.showExitChatGroupConfirmModal} className="group_red_btn">删除并退出</Button>{this.state.dissolutionChatGroupButton}
+                            <Button onClick={this.showExitChatGroupConfirmModal}
+                                    className="group_red_btn">删除并退出</Button>{this.state.dissolutionChatGroupButton}
 
                         </div>
                     </div>
