@@ -1,5 +1,5 @@
 import React from 'react';
-import {Menu, Icon, Row, Col, notification, Modal, Collapse, Checkbox, Input, message} from 'antd';
+import {Menu, Icon, Row, Col, notification, Modal, Collapse, Checkbox, Input, message, Button} from 'antd';
 import HeaderComponents from '../components/HeaderComponents';
 import UserFace from '../components/UserCardModalComponents';
 import FloatButton from '../components/FloatButton';
@@ -497,9 +497,168 @@ const MainLayout = React.createClass({
     },
 
     /**
-     * 群点击设置
+     * 群点击设置上层只传入id过来.剩下的交给下层
      */
-    gopTalkSetClick() {
+    gopTalkSetClick(id) {
+        var _this = this;
+        var param = {
+            "method": 'getChatGroupById',
+            "chatGroupId": id,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    var data = ret.response;
+                    var members = data.members;
+                    var membersArray = [];
+                    members.forEach(function (e) {
+                        var memberId = e.colUid;
+                        var memberName = e.userName;
+                        var userJson = {key: memberId, groupUser: memberName, userInfo: e};
+                        membersArray.push(userJson);
+                    });
+                    _this.buildGroupSet(membersArray, data);
+
+                } else {
+                    message.error(ret.msg);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 群主转让
+     */
+    mainTransfer() {
+
+    },
+
+    showUpdateChatGroupNameModal() {
+
+    },
+
+    showAddMembersModal() {
+
+    },
+
+    showDissolutionChatGroupConfirmModal() {
+
+    },
+
+    showConfirmModal() {
+
+    },
+
+    showExitChatGroupConfirmModal() {
+
+    },
+
+    /**
+     * 构建群点击设置
+     * @param arr
+     */
+    buildGroupSet(currentMemberArray, currentGroupObj) {
+        var _this = this;
+        var topButton,
+            dissolutionChatGroupButton;
+        if (currentGroupObj.owner.colUid == sessionStorage.getItem("ident")) {
+            //我是群主
+            topButton = <span className="right_ri">
+                    <Button type="primary" onClick={this.mainTransfer}
+                    >群主转让</Button>
+                    <span className="toobar"><Button type="primary" onClick={this.showUpdateChatGroupNameModal}
+                    >修改群名称</Button></span>
+                    <span className="toobar"><Button type="primary" onClick={this.showAddMembersModal}
+                    >添加群成员</Button></span>
+                </span>;
+            dissolutionChatGroupButton =
+                <Button onClick={this.showDissolutionChatGroupConfirmModal} className="group_red_font"><i
+                    className="iconfont">&#xe616;</i>解散该群</Button>;
+
+            var memberLiTag = [];
+            currentMemberArray.forEach(function (e) {
+                var memberId = e.key;
+                var groupUser = e.groupUser;
+                var userInfo = e.userInfo;
+                var userHeaderIcon;
+                if (isEmpty(userInfo) == false) {
+                    userHeaderIcon = <img src={userInfo.avatar}></img>;
+                } else {
+                    userHeaderIcon =
+                        <span className="attention_img"><img
+                            src={require('../components/images/maaee_face.png')}></img></span>;
+                }
+                var liTag = <div className="group_fr">
+                    <span className="attention_img">{userHeaderIcon}</span><span>{groupUser}</span>
+                    <Button value={memberId} onClick={_this.showConfirmModal} className="group_del"><Icon
+                        type="close-circle-o"/></Button>
+                </div>;
+                memberLiTag.push(liTag);
+            });
+        } else {
+            //我不是群主
+            if (currentGroupObj.type == 1) {
+                //部门群
+                topButton = <span className="right_ri"></span>;
+            } else {
+                //普通群
+                if (JSON.parse(sessionStorage.getItem("loginUser")).colUtype == 'STUD') {
+                    //学生
+                    topButton = <span className="right_ri"></span>;
+                } else {
+                    //老师
+                    topButton = <span className="right_ri">
+                    <Button type="primary" onClick={this.showAddMembersModal}
+                    >添加群成员</Button>
+                    </span>;
+                }
+            }
+
+            var memberLiTag = [];
+            currentMemberArray.forEach(function (e) {
+                var groupUser = e.groupUser;
+                var userInfo = e.userInfo;
+                var userHeaderIcon;
+                if (isEmpty(userInfo) == false) {
+                    userHeaderIcon = <img src={userInfo.avatar}></img>;
+                } else {
+                    userHeaderIcon =
+                        <span className="attention_img"><img
+                            src={require('../components/images/maaee_face.png')}></img></span>;
+                }
+                var liTag = <div className="group_fr">
+                    <span className="attention_img">{userHeaderIcon}</span><span>{groupUser}</span>
+                </div>;
+                memberLiTag.push(liTag);
+            });
+        }
+
+        var personDate = <div className="group_cont">
+            <div className="favorite_scroll del_out">
+                <ul className="integral_top">
+                        <span className="integral_face"><img src={currentGroupObj.owner.avatar}
+                                                             className="person_user"/></span>
+                    <div className="class_right color_gary_f">{currentGroupObj.name}</div>
+                    <div className="integral_line"></div>
+                </ul>
+                <ul className="group_fr_ul">
+                    <li className="color_gary_f">
+                        <span>群聊成员：{currentMemberArray.length}人</span>{topButton}</li>
+                    <li className="user_hei">
+                        {memberLiTag}
+                    </li>
+                    <li className="color_gary_f">群聊名称：{currentGroupObj.name}</li>
+                    <li className="btm"><Button onClick={this.showExitChatGroupConfirmModal}
+                                                className="group_red_btn">删除并退出</Button>{dissolutionChatGroupButton}
+                    </li>
+                </ul>
+            </div>
+        </div>;
+
+        this.setState({personDate});
         this.refs.groupSetPanel.className = 'groupSet_panel ding_enter';
     },
 
@@ -562,12 +721,13 @@ const MainLayout = React.createClass({
         var checkedGroupOptions = this.state.checkedGroupOptions;   //群组id数组
         var checkedsSructureOptions = this.state.checkedsSructureOptions;  //组织架构id数组
         var checkedRecentConnectOptions = this.state.checkedRecentConnectOptions;  //最近联系人id 既包括群组(%结尾)又有个人数组
+        var searchShareUsersOptions = this.state.searchShareUsersOptions;
 
         if (typeof(nowThinking) == 'undefined') {
             nowThinking = '这是一个云盘分享的文件'
         }
 
-        if (isEmpty(checkedConcatOptions) == true && isEmpty(checkedGroupOptions) == true && isEmpty(checkedsSructureOptions) == true && isEmpty(checkedRecentConnectOptions) == true) {
+        if (isEmpty(checkedConcatOptions) == true && isEmpty(checkedGroupOptions) == true && isEmpty(checkedsSructureOptions) == true && isEmpty(checkedRecentConnectOptions) == true && isEmpty(searchShareUsersOptions) == true) {
             message.error('请选择转发好友或群组');
             return false
         }
@@ -586,6 +746,34 @@ const MainLayout = React.createClass({
 
         if (isEmpty(checkedRecentConnectOptions) == false) {
             checkedRecentConnectOptions.forEach(function (e) {
+                var mes = e + '';
+                if (mes.indexOf('%') == -1) {
+                    //个人
+                    var uuid = _this.createUUID();
+                    var messageJson = {
+                        'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToPer, "attachment": attachment, "state": 0
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                } else {
+                    //群组
+                    var toId = e.slice(0, e.length - 1)
+                    var uuid = _this.createUUID();
+                    var messageJson = {
+                        'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": toId, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToGrp, "attachment": attachment, "state": 0
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                }
+            });
+        }
+
+        if (isEmpty(searchShareUsersOptions) == false) {
+            searchShareUsersOptions.forEach(function (e) {
                 var mes = e + '';
                 if (mes.indexOf('%') == -1) {
                     //个人
@@ -663,6 +851,7 @@ const MainLayout = React.createClass({
             "checkedConcatOptions": [],
             "checkedsSructureOptions": [],
             "checkedRecentConnectOptions": [],
+            "searchShareUsersOptions": [],
             RMsgActiveKey: ['2'],
             searchWords: ''
         });
@@ -1107,6 +1296,12 @@ const MainLayout = React.createClass({
     },
 
     onChangeUserName(e) {
+        //搜索框改变就清空选择数组
+        this.state.checkedConcatOptions = [];
+        this.state.checkedGroupOptions = [];
+        this.state.checkedsSructureOptions = [];
+        this.state.checkedRecentConnectOptions = [];
+        this.state.searchShareUsersOptions = [];
         if (e.target.value.length != 0) {
             this.searchShareUsers(e.target.value);
         }
@@ -1140,7 +1335,6 @@ const MainLayout = React.createClass({
     },
 
     showSearchShareUsers(res) {
-        console.log(res);
         var arr = [];
         res.forEach(function (data) {
             var messageType = data.type;
@@ -1191,7 +1385,6 @@ const MainLayout = React.createClass({
             }
 
         });
-        // this.setState({"userMessageData": []});   //先setStatet空可以让render强刷
         this.setState({"searchShareUsersData": arr});
     },
 
@@ -1460,7 +1653,6 @@ const MainLayout = React.createClass({
                                 </Col>
                             </Row>
                             <Row className="yinyong3">
-
                                 <Col style={{display: searchNotOrIf}} span={11}
                                      className="upexam_float cloud_share_cont ant-collapse-content favorite_up cloud_share_cont_search">
                                     <CheckboxGroup options={this.state.searchShareUsersData}
@@ -1522,7 +1714,7 @@ const MainLayout = React.createClass({
                             <Icon type="close" className="d_mesclose" onClick={this.levGroupSet}/>
                         </div>
                         <div>
-
+                            {this.state.personDate}
                         </div>
                     </div>
                 </div>

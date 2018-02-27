@@ -404,7 +404,8 @@ const AntGroupTabComponents = React.createClass({
      * 群设置点击
      */
     gopTalkSetClick() {
-        this.props.gopTalkSetClick();
+        var groupSetId = this.state.groupSetId;
+        this.props.gopTalkSetClick(groupSetId);
     },
 
     /**
@@ -2770,6 +2771,7 @@ const AntGroupTabComponents = React.createClass({
      * @param index　当前行的索引顺序，从０开始
      */
     sendGroupMessage(groupObj, timeNode) {
+        this.setState({groupSetId: groupObj.chatGroupId});
         scrollType = "auto";
         isDirectToBottom = true;
         antGroup.setState({"messageComeFrom": "groupMessage", "currentUser": '', messageList: []});
