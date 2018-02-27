@@ -1,5 +1,5 @@
 import React from 'react';
-import {Menu, Icon, Row, Col, notification, Modal, Collapse, Checkbox, Input, message, Button} from 'antd';
+import {Menu, Icon, Row, Col, notification, Modal, Collapse, Checkbox, Input, message, Button, Radio} from 'antd';
 import HeaderComponents from '../components/HeaderComponents';
 import UserFace from '../components/UserCardModalComponents';
 import FloatButton from '../components/FloatButton';
@@ -28,6 +28,7 @@ import SystemSettingGhostMenu from '../components/SystemSetting/SystemSettingGho
 import SystemSettingComponent from '../components/SystemSetting/SystemSettingComponent';
 import AddShiftPosModel from '../components/Attendance/AddShiftPosModel';
 import SendPicModel from '../components/antGroup/SendPicModel'
+import ConfirmModal from '../components/ConfirmModal';
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
 
@@ -36,7 +37,15 @@ import {createStore} from 'redux';
 
 const Panel = Collapse.Panel;
 
+const RadioGroup = Radio.Group;
+
 const CheckboxGroup = Checkbox.Group;
+
+const radioStyle = {
+    display: 'block',
+    height: '30px',
+    lineHeight: '30px',
+};
 
 var messageData = [];
 var userMessageData = [];
@@ -532,26 +541,214 @@ const MainLayout = React.createClass({
     /**
      * 群主转让
      */
-    mainTransfer() {
-
+    mainTransfer(currentMemberArray) {
+        //先渲染出来，在展示弹框
+        var array = [];
+        currentMemberArray.forEach(function (v, i) {
+            var radioSon = <Radio style={radioStyle} value={v.key}>{v.groupUser}</Radio>;
+            array.push(radioSon);
+        });
+        this.setState({radioSon: array});
+        this.setState({mainTransferModalVisible: true});
     },
 
+    mainTransferModalHandleCancel() {
+        this.setState({mainTransferModalVisible: false});
+        this.setState({radioValue: 1});
+    },
+
+    mainTransferOnChange(e) {
+        this.setState({
+            radioValue: e.target.value,
+        });
+    },
+
+    mainTransferForSure() {
+        var _this = this;
+        var newOwnerId = this.state.radioValue;
+        var oldOwnerId = this.state.currentGroupObj.owner.colUid;
+        var chatGroupId = this.state.currentGroupObj.chatGroupId;
+        var param = {
+            "method": 'changeChatGroupOwner',
+            "chatGroupId": chatGroupId,
+            "oldOwnerId": oldOwnerId,
+            "newOwnerId": newOwnerId
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    message.success('转让成功');
+                    _this.mainTransferModalHandleCancel();
+                    var obj = _this.state.currentGroupObj;
+                    obj.owner.colUid = newOwnerId;
+                    _this.setState({currentGroupObj: obj});
+                    _this.levGroupSet();
+                    //重新刷新页面
+                } else {
+                    message.error(ret.msg);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 修改群名称
+     */
     showUpdateChatGroupNameModal() {
-
+        var currentGroupObj = this.state.currentGroupObj;
+        var updateChatGroupTitle = currentGroupObj.name;
+        this.setState({"updateChatGroupNameModalVisible": true, "updateChatGroupTitle": updateChatGroupTitle});
     },
 
+    /**
+     * 关闭修改群名称的窗口
+     */
+    updateChatGroupNameModalHandleCancel() {
+        this.setState({"updateChatGroupNameModalVisible": false});
+    },
+
+    /**
+     * 修改群名称
+     */
+    updateChatGroupName() {
+        var _this = this;
+        //更新(判断和当前的groupObj信息是否一致)
+        var currentGroupObj = this.state.currentGroupObj;
+        if (isEmpty(this.state.updateChatGroupTitle) == false) {
+            var param = {
+                "method": 'updateChatGroupName',
+                "chatGroupId": currentGroupObj.chatGroupId,
+                "name": this.state.updateChatGroupTitle,
+                "userId": sessionStorage.getItem("ident"),
+            };
+            doWebService(JSON.stringify(param), {
+                onResponse: function (ret) {
+                    var response = ret.response;
+                    if (ret.msg == "调用成功" && ret.success == true && response == true) {
+                        message.success("聊天群组修改成功");
+                    } else {
+                        message.success("聊天群组修改失败");
+                    }
+                    _this.setState({"updateChatGroupNameModalVisible": false});
+                    _this.levGroupSet();
+                    _this.refs.antGroupTabComponents.changeWelcomeTitle(_this.state.updateChatGroupTitle)
+                },
+                onError: function (error) {
+                    message.error(error);
+                }
+            });
+        }
+    },
+
+    /**
+     * 修改群组名称时，名称内容改变的响应函数
+     * @param e
+     */
+    updateChatGroupTitleOnChange(e) {
+        var target = e.target;
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
+            target = e.target;
+        }
+        var updateChatGroupTitle = target.value;
+        this.setState({"updateChatGroupTitle": updateChatGroupTitle});
+    },
+
+    /**
+     * 添加群成员
+     */
     showAddMembersModal() {
 
     },
 
+    /**
+     * 解散该群
+     */
     showDissolutionChatGroupConfirmModal() {
+        this.refs.dissolutionChatGroupConfirmModal.changeConfirmModalVisible(true);
+    },
 
+    /**
+     * 关闭解散群聊按钮对应的confirm窗口
+     */
+    closeDissolutionChatGroupConfirmModal() {
+        this.refs.dissolutionChatGroupConfirmModal.changeConfirmModalVisible(false);
+    },
+
+    /**
+     * 解散聊天群
+     */
+    dissolutionChatGroup() {
+        var currentGroupObj = this.state.currentGroupObj;
+        var memberIds = this.getCurrentMemberIds();
+        var optType = "dissolution";
+        this.deleteChatGroupMember(currentGroupObj.chatGroupId, memberIds, optType);
+        this.closeDissolutionChatGroupConfirmModal();
+    },
+
+    getCurrentMemberIds() {
+        var memberIds = "";
+        var currentGroupObj = this.state.currentGroupObj;
+        if (isEmpty(currentGroupObj) == false) {
+            var members = currentGroupObj.members;
+            members.forEach(function (e) {
+                var memberId = e.colUid;
+                memberIds += memberId + ",";
+            });
+        }
+        return memberIds;
+    },
+
+    deleteChatGroupMember(chatGroupId, memberIds, optType) {
+        var successTip = "";
+        var errorTip = "";
+        if (optType == "dissolution") {
+            successTip = "群组解散成功";
+            errorTip = "群组解散失败";
+        } else if (optType == "removeMember") {
+            successTip = "群成员移出成功";
+            errorTip = "群成员移出失败";
+        } else if (optType == "exitChatGroup") {
+            successTip = "您已成功退出该群组";
+            errorTip = "退出群组失败";
+        }
+        var param = {
+            "method": 'deleteChatGroupMember',
+            "chatGroupId": chatGroupId,
+            "memberIds": memberIds
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if (ret.msg == "调用成功" && ret.success == true && response == true) {
+                    message.success(successTip);
+                } else {
+                    message.success(errorTip);
+                }
+                if (optType == "dissolution" || optType == "exitChatGroup") {
+                    //退出或解散
+                } else if (optType == "removeMember") {
+                    //移除成员
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     showConfirmModal() {
 
     },
 
+    /**
+     * 删除并退出
+     */
     showExitChatGroupConfirmModal() {
 
     },
@@ -561,13 +758,14 @@ const MainLayout = React.createClass({
      * @param arr
      */
     buildGroupSet(currentMemberArray, currentGroupObj) {
+        this.setState({currentGroupObj});
         var _this = this;
         var topButton,
             dissolutionChatGroupButton;
         if (currentGroupObj.owner.colUid == sessionStorage.getItem("ident")) {
             //我是群主
             topButton = <span className="right_ri">
-                    <Button type="primary" onClick={this.mainTransfer}
+                    <Button type="primary" onClick={this.mainTransfer.bind(this, currentMemberArray)}
                     >群主转让</Button>
                     <span className="toobar"><Button type="primary" onClick={this.showUpdateChatGroupNameModal}
                     >修改群名称</Button></span>
@@ -1717,6 +1915,61 @@ const MainLayout = React.createClass({
                             {this.state.personDate}
                         </div>
                     </div>
+
+                    <Modal className="person_change_right"
+                           visible={this.state.mainTransferModalVisible}
+                           title="转移群主"
+                           onCancel={this.mainTransferModalHandleCancel}
+                           transitionName=""  //禁用modal的动画效果
+                           maskClosable={false} //设置不允许点击蒙层关闭
+                           footer={[
+                               <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
+                                       onClick={this.mainTransferForSure}>确定</button>,
+                               <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
+                                       onClick={this.mainTransferModalHandleCancel}>取消</button>
+                           ]}
+                    >
+                        <Row className="ant-form-item">
+                            <Col span={24}>
+                                <RadioGroup onChange={this.mainTransferOnChange} value={this.state.radioValue}>
+                                    {this.state.radioSon}
+                                </RadioGroup>
+                            </Col>
+                        </Row>
+                    </Modal>
+
+                    <Modal className="modol_width"
+                           visible={this.state.updateChatGroupNameModalVisible}
+                           title="修改群名称"
+                           onCancel={this.updateChatGroupNameModalHandleCancel}
+                           transitionName=""  //禁用modal的动画效果
+                           maskClosable={false} //设置不允许点击蒙层关闭
+                           footer={[
+                               <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
+                                       onClick={this.updateChatGroupName}>确定</button>,
+                               <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
+                                       onClick={this.updateChatGroupNameModalHandleCancel}>取消</button>
+                           ]}
+                    >
+                        <Row className="ant-form-item">
+                            <Col span={6} className="right_look">群名称：</Col>
+                            <Col span={14}>
+                                <Input value={this.state.updateChatGroupTitle}
+                                       defaultValue={this.state.updateChatGroupTitle}
+                                       onChange={this.updateChatGroupTitleOnChange}/>
+                            </Col>
+                        </Row>
+                    </Modal>
+
+                    <ConfirmModal ref="dissolutionChatGroupConfirmModal"
+                                  title="确定要解散该群组?"
+                                  onConfirmModalCancel={this.closeDissolutionChatGroupConfirmModal}
+                                  onConfirmModalOK={this.dissolutionChatGroup}/>
+                    {/*<ConfirmModal ref="exitChatGroupConfirmModal"
+                                  title="确定要退出该群组?"
+                                  onConfirmModalCancel={this.closeExitChatGroupConfirmModal}
+                                  onConfirmModalOK={this.exitChatGroup}/>*/}
+
                 </div>
             </LocaleProvider>
         );

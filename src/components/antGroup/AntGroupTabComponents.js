@@ -257,6 +257,10 @@ const AntGroupTabComponents = React.createClass({
         this.setState({optType: 'getUserList'})
     },
 
+    changeWelcomeTitle(welcomeTitle) {
+        antGroup.state.currentGroupObj.name = welcomeTitle;
+    },
+
     /**
      *  已读消息回复服务器
      */
