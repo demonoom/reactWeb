@@ -5528,7 +5528,7 @@ ul.liveTV_tab .liveTV, ul.liveTV_tab .liveTV i, ul.history_tab .history, ul.hist
 
 .cloud_share_cont .ant-checkbox {
     margin-right: 4px;
-    top: 6px;
+    top: 12px;
 }
 
 .cloud_share_cont .ant-checkbox-wrapper {
@@ -5537,21 +5537,30 @@ ul.liveTV_tab .liveTV, ul.liveTV_tab .liveTV i, ul.history_tab .history, ul.hist
     padding-right: 0px;
 }
 
-.cloud_share_cont .ant-collapse-content-box span:nth-child(2) {
+.cloud_share_cont .ant-collapse-content-box span:nth-child(2), .cloud_share_cont_search span:nth-child(2) {
     width: calc(100% - 26px);
     margin-right: 0;
 }
-
-.cloud_share_cont .ant-collapse-content-box span:nth-child(2) div {
+.cloud_share_cont_search span{
+    float: left
+}
+.cloud_share_cont_search span:nth-child(2){
+    display: inline-block;
+    margin-left: 8px;
+}
+.cloud_share_cont_search label{
+    margin-top: 12px;
+}
+.cloud_share_cont .ant-collapse-content-box span:nth-child(2) div, .cloud_share_cont_search span:nth-child(2) div{
     height: 38px;
     line-height: 38px;
 }
 
-.cloud_share_cont .ant-collapse-content-box span:nth-child(2) div img {
+.cloud_share_cont .ant-collapse-content-box span:nth-child(2) div img, .cloud_share_cont_search span:nth-child(2) div img {
     float: left
 }
 
-.cloud_share_cont .ant-collapse-content-box span:nth-child(2) div span {
+.cloud_share_cont .ant-collapse-content-box span:nth-child(2) div span, .cloud_share_cont_search span:nth-child(2) div span {
     margin-right: 0;
     width: 145px;
     overflow: hidden;
@@ -5560,7 +5569,8 @@ ul.liveTV_tab .liveTV, ul.liveTV_tab .liveTV i, ul.history_tab .history, ul.hist
     margin-left: 12px;
 }
 
-.cloud_share_cont .ant-collapse-content-box span:nth-child(2) div .maaee_group_face, .cloud_share_cont .ant-collapse-content-box span:nth-child(2) div .maaee_group_face1, .cloud_share_cont .ant-collapse-content-box span:nth-child(2) div .maaee_group_face2, .cloud_share_cont .ant-collapse-content-box span:nth-child(2) div .maaee_group_face3 {
+.cloud_share_cont .ant-collapse-content-box span:nth-child(2) div .maaee_group_face, .cloud_share_cont .ant-collapse-content-box span:nth-child(2) div .maaee_group_face1, .cloud_share_cont .ant-collapse-content-box span:nth-child(2) div .maaee_group_face2, .cloud_share_cont .ant-collapse-content-box span:nth-child(2) div .maaee_group_face3,
+.cloud_share_cont_search span:nth-child(2) div .maaee_group_face, .cloud_share_cont_search span:nth-child(2) div .maaee_group_face1, .cloud_share_cont_search span:nth-child(2) div .maaee_group_face2, .cloud_share_cont_search span:nth-child(2) div .maaee_group_face3{
     float: left;
 }
 
