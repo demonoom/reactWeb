@@ -401,6 +401,13 @@ const AntGroupTabComponents = React.createClass({
     },
 
     /**
+     * 群设置点击
+     */
+    gopTalkSetClick() {
+        this.props.gopTalkSetClick();
+    },
+
+    /**
      * 渲染群消息已读详情
      */
     showReaderList(id) {
@@ -3313,6 +3320,10 @@ const AntGroupTabComponents = React.createClass({
     },
 
     render() {
+        var groupSetting = 'none';
+        if (this.state.messageComeFrom == 'groupMessage') {
+            groupSetting = 'block'
+        }
         var _this = this;
         const rowSelection = {
             selectedRowKeys: this.state.selectedRowKeys,
@@ -4794,8 +4805,12 @@ const AntGroupTabComponents = React.createClass({
                 defaultActiveKey={this.state.defaultActiveKey}
                 transitionName=""  //禁用Tabs的动画效果
             >
+                {/*<TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">*/}
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div id="personTalk">
+                        <Icon style={{display: groupSetting}}
+                              title="群设置" className="groupTalkSetting noom_cursor" type="setting"
+                              onClick={this.gopTalkSetClick}/>
                         <div className="group_talk 44" id="groupTalk"
                              onMouseOver={this.handleScrollType.bind(this, Event)}
                              onScroll={this.handleScroll}>

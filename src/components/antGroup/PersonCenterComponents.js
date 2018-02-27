@@ -1135,6 +1135,8 @@ const PersonCenterComponents = React.createClass({
      * @param e
      */
     setChatGroup(groupObj) {
+        alert('改变')
+        console.log(groupObj);
         var currentGroupObj = groupObj;
         if (isEmpty(currentGroupObj) == false) {
             var members = currentGroupObj.members;

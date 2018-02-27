@@ -497,6 +497,20 @@ const MainLayout = React.createClass({
     },
 
     /**
+     * 群点击设置
+     */
+    gopTalkSetClick() {
+        this.refs.groupSetPanel.className = 'groupSet_panel ding_enter';
+    },
+
+    /**
+     * 群消息设置侧边栏离场
+     */
+    levGroupSet() {
+        this.refs.groupSetPanel.className = 'groupSet_panel ding_leave';
+    },
+
+    /**
      * 我的好友复选框被选中时的响应
      * @param checkedValues
      */
@@ -1220,6 +1234,7 @@ const MainLayout = React.createClass({
                                                       refresh={this.refresh}
                                                       clearEverything={this.clearEverything}
                                                       delLeftMsgFinish={this.delLeftMsgFinish}
+                                                      gopTalkSetClick={this.gopTalkSetClick}
                 />;
                 break;
             case 'antGroup':
@@ -1497,6 +1512,16 @@ const MainLayout = React.createClass({
                             {this.state.imgArr}
                         </li>
                     </ul>
+                    {/*群设置侧边栏*/}
+                    <div className="groupSet_panel" ref="groupSetPanel">
+                        <div className="ding_top">
+                            群设置
+                            <Icon type="close" className="d_mesclose" onClick={this.levGroupSet}/>
+                        </div>
+                        <div>
+
+                        </div>
+                    </div>
                 </div>
             </LocaleProvider>
         );
