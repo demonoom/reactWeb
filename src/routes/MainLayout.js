@@ -1433,7 +1433,7 @@ const MainLayout = React.createClass({
                                 </Col>
                             </Row>
                             <Row>
-                                <Col>
+                                <Col span={11}>
                                     <Input
                                         placeholder="首字母搜索更快捷"
                                         suffix={this.state.searchWords ?
@@ -1443,8 +1443,11 @@ const MainLayout = React.createClass({
                                         ref={node => this.userNameInput = node}
                                     />
                                 </Col>
+                            </Row>
+                            <Row className="yinyong3">
+
                                 <Col style={{display: searchNotOrIf}} span={11}
-                                     className="upexam_float cloud_share_cont">
+                                     className="upexam_float cloud_share_cont ant-collapse-content favorite_up cloud_share_cont_search">
                                     <CheckboxGroup options={this.state.searchShareUsersData}
                                                    value={this.state.searchShareUsersOptions}
                                                    onChange={this.searchShareUsersOnChange}
