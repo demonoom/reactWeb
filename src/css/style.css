@@ -3942,9 +3942,12 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 }
 
 .borderballoon_le_cont {
-    height: 40px;
+    display: flex;
 }
-
+.borderballoon_le_cont img{
+    width: 38px !important;
+    height: 38px !important;
+}
 .public .sayLine.left .sayCon:after {
     content: "";
     position: absolute;
