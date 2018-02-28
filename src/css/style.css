@@ -8180,7 +8180,8 @@ select.course_n:hover {
 }
 
 .noom_MYZcard {
-    width: 260px;
+    min-width: 260px;
+    max-width: 400px;
 }
 
 .noom_MYZcard .span_link {
