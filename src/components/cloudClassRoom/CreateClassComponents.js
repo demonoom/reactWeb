@@ -517,7 +517,6 @@ const CreateClassComponents = React.createClass({
      * 添加课程目录
      */
     addLesson() {
-        debugger;
         var tagArrByNoom = [];
         this.state.noomTages.push(tagArrByNoom);
         var _this = this;
@@ -628,8 +627,6 @@ const CreateClassComponents = React.createClass({
      */
 
     removeLesson(removeSequence) {
-        debugger;
-        console.log('.....',removeSequence);
         for (var i = 0; i < lessonArray.length; i++) {
             var lessonJson = lessonArray[i];
             if (lessonJson.squence == removeSequence) {
@@ -1267,8 +1264,6 @@ const CreateClassComponents = React.createClass({
             if (this.state.isWeiClass) {
                 //是微课
                 if (typeof(this.state.lessonArray) != "undefined") {
-                    debugger
-                    console.log(lessonArray);
                     for (var i = 0; i < this.state.lessonArray.length; i++) {
                         var lessonJson = this.state.lessonArray[i];
                         //获取已经保存的时间信息，并重新初始化到页面的组件上
