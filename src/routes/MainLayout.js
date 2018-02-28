@@ -676,10 +676,168 @@ const MainLayout = React.createClass({
     /**
      * 添加群成员
      */
-    showAddMembersModal(obj) {
-        // obj.type=1是部门群
-        this.getNotMemberUser();
-        this.setState({"addGroupMemberModalVisible": true});
+    showAddMembersModal(type) {
+        if (type == 1) {
+            return
+            //部门群
+            this.getStructureById("-1");
+            this.setState({"addDeGroupMemberModalVisible": true});
+        } else {
+            //普通群
+            this.getNotMemberUser();
+            this.setState({"addGroupMemberModalVisible": true});
+        }
+    },
+
+    /**
+     * 获取当前用户的组织根节点(蚁群中的组织架构菜单)
+     * @param operateUserId
+     * @param structureId
+     */
+    getStructureById(structureId) {
+        let _this = this;
+        var structureId = structureId + '';
+        if (isEmpty(structureId)) {
+            structureId = "-1";
+        }
+        var param = {
+            "method": 'getStructureById',
+            "operateUserId": sessionStorage.getItem("ident"),
+            "structureId": structureId,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                console.log(ret);
+                var parentGroup = ret.response;
+                if (isEmpty(ret.response) == false) {
+                    var owner = parentGroup.chatGroup.owner.colUid;
+                }
+                // 根据组织根节点的id请求该组织根节点里的子部门， 调用 列举子部门函数
+                if (structureId == "-1") {
+                    _this.listStructures(parentGroup.id);
+                    var defaultPageNo = 1;
+                    _this.getStrcutureMembers(parentGroup.id, defaultPageNo);
+                    _this.setState({structureId: parentGroup.id});
+                }
+                if (isEmpty(parentGroup) == false) {
+                    var isExit = _this.checkStructureIsExitAtArray(parentGroup);
+                    if (isExit == false) {
+                        //存放组织架构的层次关系
+                        structuresObjArray.push(parentGroup);
+
+                    }
+                }
+
+                _this.setState({parentGroup, structuresObjArray, owner});
+            },
+
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 列举蚁群中的子部门11
+     * @param operateUserId
+     * @param structureId
+     */
+    listStructures(structureId) {
+        let _this = this;
+        _this.getStructureById(structureId);
+        var param = {
+            "method": 'listStructures',
+            "operateUserId": _this.state.loginUser.colUid,
+            "structureId": structureId,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                console.log('架构列表', response);
+                var subGroupList = [];
+                if (isEmpty(response) == false) {
+                    response.forEach(function (subGroup) {
+                        var subGroupName = <div className="first_indent"
+                                                onClick={_this.getSubGroupForButton.bind(_this, subGroup.id)}>
+                            <span className="antnest_name affix_bottom_tc name_max3 dold_text">{subGroup.name}</span>
+                        </div>
+                        subGroupList.push({
+                            key: subGroup.id,
+                            subGroupName: subGroupName,
+                        });
+
+                    });
+                }
+                _this.setState({subGroupList, "optType": "getGroupMenu"});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+
+    },
+
+    /**
+     * 根据部门id获取部门成员
+     * @param operateUserId
+     * @param structureId
+     */
+    getStrcutureMembers(structureId, pageNo) {
+        let _this = this;
+        var structureId = structureId + '';
+        if (structureId.indexOf(',') !== -1) {
+            var structureIdArr = structureId.split(',');
+            structureId = structureIdArr[0];
+        }
+        var param = {
+            "method": 'getStrcutureMembers',
+            "operateUserId": _this.state.loginUser.colUid,
+            "structureId": structureId,
+            "pageNo": pageNo,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                console.log('组织架构人员列表', ret);
+                var response = ret.response;
+                var owner = _this.state.owner;
+                if (isEmpty(response) == false) {
+                    response.forEach(function (member) {
+                        var user = member.user;
+                        if (owner == user.colUid) {
+                            subGroupMemberList.push({
+                                key: member.id,
+                                userId: user.colUid,
+                                userName: user.userName,
+                                userPhone: user.phoneNumber,
+                                isMaster: '主管',
+                            });
+
+                        } else {
+                            subGroupMemberList.push({
+                                key: member.id,
+                                userId: user.colUid,
+                                userName: user.userName,
+                                userPhone: user.phoneNumber,
+                            });
+                        }
+
+                    });
+                }
+                var pager = ret.pager;
+                var pageCount = pager.pageCount;
+                if (pageCount == pageNo) {
+                    var wordSrc = '无更多数据';
+                    _this.setState({wordSrc});
+
+                }
+                _this.setState({subGroupMemberList, totalMember: pager.rsCount});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+
+
     },
 
     /**
@@ -745,6 +903,10 @@ const MainLayout = React.createClass({
      */
     addGroupMemberModalHandleCancel() {
         this.setState({"addGroupMemberModalVisible": false});
+    },
+
+    addDeGroupMemberModalHandleCancel() {
+        this.setState({"addDeGroupMemberModalVisible": false});
     },
 
     addGroupMember() {
@@ -900,6 +1062,7 @@ const MainLayout = React.createClass({
      * @param arr
      */
     buildGroupSet(currentMemberArray, currentGroupObj) {
+        var groupType = currentGroupObj.type;
         this.state.dissolutionChatGroupButton = '';
         this.setState({currentGroupObj});
         var _this = this;
@@ -909,9 +1072,10 @@ const MainLayout = React.createClass({
         if (currentGroupObj.owner.colUid == sessionStorage.getItem("ident")) {
             //我是群主
             divBlock = 'inline-block';
-            topButton = <span className="toobar"><Button type="primary"
-                                                         onClick={this.showAddMembersModal.bind(this, currentGroupObj)}
-            >添加群成员</Button></span>
+            topButton = <span className="toobar">
+                <span type="primary" className="noom_cursor set_in_btn_font"
+                      onClick={this.showAddMembersModal.bind(this, groupType)}><Icon
+                    className="i_antdesign" type="plus"/>添加群成员</span></span>
             dissolutionChatGroupButton =
                 <Button onClick={this.showDissolutionChatGroupConfirmModal} className="group_red_font"><i
                     className="iconfont">&#xe616;</i>解散该群</Button>;
@@ -951,10 +1115,10 @@ const MainLayout = React.createClass({
                     topButton = <span className="right_ri"></span>;
                 } else {
                     //老师
-                    topButton = <span className="right_ri">
-                    <Button type="primary" onClick={this.showAddMembersModal}
-                    >添加群成员</Button>
-                    </span>;
+                    topButton = <span className="toobar">
+                        <span type="primary" className="noom_cursor set_in_btn_font"
+                              onClick={this.showAddMembersModal.bind(this, groupType)}>
+                        <Icon className="i_antdesign" type="plus"/>添加群成员</span></span>
                 }
             }
 
@@ -981,12 +1145,13 @@ const MainLayout = React.createClass({
             <div className="myfollow_zb del_out">
                 <ul className="group_fr_ul">
                     <li className="color_gary_f">群聊名称：{currentGroupObj.name}
-                        <span style={{display: divBlock}} className="noom_cursor"
-                              onClick={this.showUpdateChatGroupNameModal}>编辑</span>
+                        <span style={{display: divBlock}} className="noom_cursor set_in_btn_font"
+                              onClick={this.showUpdateChatGroupNameModal}><Icon type="edit" className="i_antdesign"/>编辑</span>
                     </li>
                     <li className="color_gary_f">群主：{currentGroupObj.owner.userName}
-                        <span style={{display: divBlock}} className="noom_cursor"
-                              onClick={this.mainTransfer.bind(this, currentMemberArray)}>转让群主</span>
+                        <span style={{display: divBlock}} className="noom_cursor set_in_btn_font"
+                              onClick={this.mainTransfer.bind(this, currentMemberArray)}><Icon type="swap"
+                                                                                               className="i_antdesign"/>转让群主</span>
                     </li>
                     <li className="color_gary_f">
                         <span>群聊成员：{currentMemberArray.length}人</span>{topButton}</li>
@@ -2048,9 +2213,9 @@ const MainLayout = React.createClass({
                     </ul>
                     {/*群设置侧边栏*/}
                     <div className="groupSet_panel" ref="groupSetPanel">
-                        <div className="ding_top">
+                        <div className="side_header">
                             群设置
-                            <Icon type="close" className="d_mesclose" onClick={this.levGroupSet}/>
+                            <Icon type="close" className="d_mesclose_new" onClick={this.levGroupSet}/>
                         </div>
                         <div className="set_in_background">
                             {this.state.personDate}
@@ -2135,6 +2300,26 @@ const MainLayout = React.createClass({
                                     onChange={this.addMemberTransferHandleChange}
                                     render={item => `${item.title}`}
                                 />
+                            </Col>
+                        </Row>
+                    </Modal>
+
+                    <Modal
+                        visible={this.state.addDeGroupMemberModalVisible}
+                        title="添加群成员"
+                        onCancel={this.addDeGroupMemberModalHandleCancel}
+                        transitionName=""  //禁用modal的动画效果
+                        maskClosable={false} //设置不允许点击蒙层关闭
+                        footer={[
+                            <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
+                                    onClick={this.addGroupMember}>确定</button>,
+                            <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
+                                    onClick={this.addDeGroupMemberModalHandleCancel}>取消</button>
+                        ]}
+                    >
+                        <Row className="ant-form-item">
+                            <Col span={24}>
+
                             </Col>
                         </Row>
                     </Modal>
