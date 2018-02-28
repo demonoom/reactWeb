@@ -7,6 +7,7 @@ import SelectAntCloudMaterialsModal from '../components/localClassRoom/SelectAnt
 import SelectScheduleMaterialsModal from '../components/localClassRoom/SelectScheduleMaterialsModal';
 import ConfirmModal from '../components/ConfirmModal';
 import GuideModal from '../components/localClassRoom/GuideModal';
+import SendPicModel from '../components/antGroup/SendPicModel'
 
 var connection = null;
 var ms = null;
@@ -21,6 +22,7 @@ const LocalClassRoom = React.createClass({
             subjectModalIsShow:false,
             antCloudMaterialsModalIsShow:false,
             closeScheduleMaterialsModal:false,
+            sendPicModel: false,
         };
     },
 
@@ -36,6 +38,22 @@ const LocalClassRoom = React.createClass({
         sessionStorage.setItem("userId",userId);
         this.connectClazz(userId, classCode, classType,account);
         this.setState({userId, account, classCode, classType});
+    },
+
+    componentDidMount(){
+        window.__noomSelectPic__ = this.noomSelectPic;
+    },
+
+    noomSelectPic(src, obj) {
+        this.setState({sendPicModel: true, pinSrc: src, picFile: obj});
+    },
+
+    closeSendPicModel() {
+        this.setState({sendPicModel: false});
+    },
+
+    sendPicToOthers(url) {
+        this.refs.localClassesMessage.sendPicToOthers(url);
     },
 
     connectClazz(userId, classCode, classType,account) {
@@ -199,7 +217,7 @@ const LocalClassRoom = React.createClass({
                     </div>
                 </div>
                 <div className="local_class_right">
-                    <LocalClassesMessage ms={ms} classCode={this.state.classCode} classType={this.state.classType}></LocalClassesMessage>
+                    <LocalClassesMessage ref="localClassesMessage" ms={ms} classCode={this.state.classCode} classType={this.state.classType}></LocalClassesMessage>
                 </div>
                 <SelectSubjectModal isShow={this.state.subjectModalIsShow} onCancel={this.closeSubjectModal} pushSubjectToClass={this.pushSubjectToClass}></SelectSubjectModal>
                 <SelectAntCloudMaterialsModal isShow={this.state.antCloudMaterialsModalIsShow} onCancel={this.closeAntCloudMaterialsModal} pushMaterialsToClass={this.pushMaterialsToClass}></SelectAntCloudMaterialsModal>
@@ -210,6 +228,13 @@ const LocalClassRoom = React.createClass({
                               onConfirmModalOK={this.disConnectClassRoom}
                 ></ConfirmModal>
                 <GuideModal ref="guideModal" setGuideType={this.setGuideType}></GuideModal>
+                <SendPicModel
+                    isShow={this.state.sendPicModel}
+                    closeModel={this.closeSendPicModel}
+                    pinSrc={this.state.pinSrc}
+                    picFile={this.state.picFile}
+                    sendPicToOthers={this.sendPicToOthers}
+                />
             </div>
         );
     },

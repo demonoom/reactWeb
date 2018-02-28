@@ -167,6 +167,32 @@ const LocalClassesMessage = React.createClass({
         }
     },
 
+    sendPicToOthers(url) {
+        var name = '';
+        //文件路径
+        var path = url;
+        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+        var uuid = this.createUUID();
+        var createTime = (new Date()).valueOf();
+        var vid = sessionStorage.getItem("vid");
+        var messageToType=MESSAGE_TO_TYPE_ONlINE_CLASS;
+        var attachment = {
+            "address": path,
+            "createTime": createTime,
+            "playing": false,
+            "type": 1,
+            "user": loginUser
+        };
+        var messageJson = {
+            'content': name, "createTime": createTime, 'fromUser': loginUser,
+            "toId": vid, "command": "message", "hostId": loginUser.colUid,
+            "uuid": uuid, "toType": messageToType, "attachment": attachment
+        };
+        var commandJson = {"command": "message", "data": {"message": messageJson}};
+        parentMs.send(commandJson);
+        //关闭model
+    },
+
     createUUID() {
         var s = [];
         var hexDigits = "0123456789abcdef";
