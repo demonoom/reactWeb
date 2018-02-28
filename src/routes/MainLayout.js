@@ -824,8 +824,8 @@ const MainLayout = React.createClass({
         if (currentGroupObj.owner.colUid == sessionStorage.getItem("ident")) {
             //我是群主
             divBlock = 'inline-block';
-            topButton = <span className="toobar"><Button type="primary" onClick={this.showAddMembersModal}
-            >添加群成员</Button></span>
+            topButton = <span className="toobar">
+                <span type="primary" className="noom_cursor set_in_btn_font" onClick={this.showAddMembersModal}><Icon className="i_antdesign" type="plus" />添加群成员</span></span>
             dissolutionChatGroupButton =
                 <Button onClick={this.showDissolutionChatGroupConfirmModal} className="group_red_font"><i
                     className="iconfont">&#xe616;</i>解散该群</Button>;
@@ -895,12 +895,12 @@ const MainLayout = React.createClass({
             <div className="myfollow_zb del_out">
                 <ul className="group_fr_ul">
                     <li className="color_gary_f">群聊名称：{currentGroupObj.name}
-                        <span style={{display: divBlock}} className="noom_cursor"
-                              onClick={this.showUpdateChatGroupNameModal}>编辑</span>
+                        <span style={{display: divBlock}} className="noom_cursor set_in_btn_font"
+                              onClick={this.showUpdateChatGroupNameModal}><Icon type="edit" className="i_antdesign" />编辑</span>
                     </li>
                     <li className="color_gary_f">群主：{currentGroupObj.owner.userName}
-                        <span style={{display: divBlock}} className="noom_cursor"
-                              onClick={this.mainTransfer.bind(this, currentMemberArray)}>转让群主</span>
+                        <span style={{display: divBlock}} className="noom_cursor set_in_btn_font"
+                              onClick={this.mainTransfer.bind(this, currentMemberArray)}><Icon type="swap" className="i_antdesign" />转让群主</span>
                     </li>
                     <li className="color_gary_f">
                         <span>群聊成员：{currentMemberArray.length}人</span>{topButton}</li>
@@ -1962,9 +1962,9 @@ const MainLayout = React.createClass({
                     </ul>
                     {/*群设置侧边栏*/}
                     <div className="groupSet_panel" ref="groupSetPanel">
-                        <div className="ding_top">
+                        <div className="side_header">
                             群设置
-                            <Icon type="close" className="d_mesclose" onClick={this.levGroupSet}/>
+                            <Icon type="close" className="d_mesclose_new" onClick={this.levGroupSet}/>
                         </div>
                         <div className="set_in_background">
                             {this.state.personDate}

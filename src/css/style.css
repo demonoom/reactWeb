@@ -4402,7 +4402,7 @@ a.color_gary_f, .color_gary_f {
 
 }
 
-.little-layout-aside-r-show .header {
+.little-layout-aside-r-show .header, .side_header{
     width: 100%;
     height: 45px;
     overflow: hidden;
@@ -4412,7 +4412,10 @@ a.color_gary_f, .color_gary_f {
     background: #fff;
     position: relative;
 }
-
+.side_header{
+    text-align: center;
+    color: #0078e4
+}
 .little-layout-aside-r-show .content {
     min-height: 552px;
     height: 100%;
@@ -6936,7 +6939,7 @@ select.course_n:hover {
     width: 380px;
     height: calc(100% - 54px);
     background-color: #f2f2f2;
-    padding: 42px 0 0 0;
+    padding: 0;
     position: absolute;
     bottom: 0;
     right: -800px;
@@ -7159,7 +7162,17 @@ select.course_n:hover {
     float: right;
     cursor: pointer;
 }
-
+.d_mesclose_new {
+    font-size: 20px;
+    position: absolute;
+    cursor: pointer;
+    right: 10px;
+    top: 8px;
+    color: #888;
+}
+.d_mesclose_new:hover, .d_mesclose_new:active{
+    color: #ED121D;
+}
 .ding_ipt {
     width: 85%;
     margin: 5px 0 0 10px;
@@ -8591,15 +8604,33 @@ select.course_n:hover {
 
 .groupTalkSetting {
     position: fixed;
-    top: -33px;
-    right: 20px;
+    top: -38px;
+    right: 16px;
     font-size: 20px;
+    color: #008cee;
+}
+.groupTalkSetting:hover, .groupTalkSetting:active{
+    color:#20a0fa;
 }
 .set_in_background{
     background: #fff;
-    height: calc(100% - 60px);
+    height: calc(100% - 106px);
 }
 .set_in_del_btn{
     text-align: center;
     padding-top: 14px;
+}
+.set_in_btn_font{
+    margin-left: 12px;
+    color: #2fa9ff;
+    font-size: 12px;
+}
+.set_in_btn_font:hover, .set_in_btn_font:active{
+    color: #54B8FA;
+}
+.i_antdesign{
+    font-size: 16px;
+    position: relative;
+    top:2px;
+    margin-right: 4px;
 }
