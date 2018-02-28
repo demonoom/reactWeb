@@ -705,6 +705,7 @@ const MainLayout = React.createClass({
     },
 
     deleteChatGroupMember(chatGroupId, memberIds, optType) {
+        var _this = this;
         var successTip = "";
         var errorTip = "";
         if (optType == "dissolution") {
@@ -727,13 +728,17 @@ const MainLayout = React.createClass({
                 var response = ret.response;
                 if (ret.msg == "调用成功" && ret.success == true && response == true) {
                     message.success(successTip);
+                    if (optType == "dissolution" || optType == "exitChatGroup") {
+                        //退出或解散
+                        //1.收回侧边  2.右侧滞空  3.左侧删除聊天
+                        _this.levGroupSet();
+                        _this.refs.messageMenu.delMes(chatGroupId);
+                    } else if (optType == "removeMember") {
+                        //移除成员
+                        _this.levGroupSet();
+                    }
                 } else {
                     message.success(errorTip);
-                }
-                if (optType == "dissolution" || optType == "exitChatGroup") {
-                    //退出或解散
-                } else if (optType == "removeMember") {
-                    //移除成员
                 }
             },
             onError: function (error) {
@@ -742,15 +747,67 @@ const MainLayout = React.createClass({
         });
     },
 
-    showConfirmModal() {
+    /**
+     * 显示删除群成员的确认窗口
+     */
+    showConfirmModal(e) {
+        var target = e.target;
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
+            target = e.target;
+        }
+        var memberIds = target.value;
+        this.setState({"delMemberIds": memberIds});
+        this.refs.confirmModal.changeConfirmModalVisible(true);
+    },
 
+    /**
+     * 关闭移出群聊按钮对应的confirm窗口
+     */
+    closeConfirmModal() {
+        this.refs.confirmModal.changeConfirmModalVisible(false);
+    },
+
+    /**
+     * 移除选中的群组成员
+     */
+    deleteSelectedMember() {
+        var currentGroupObj = this.state.currentGroupObj;
+        var memberIds = this.state.delMemberIds;
+        var optType = "removeMember";
+        this.deleteChatGroupMember(currentGroupObj.chatGroupId, memberIds, optType);
+        this.closeConfirmModal();
     },
 
     /**
      * 删除并退出
      */
-    showExitChatGroupConfirmModal() {
+    showExitChatGroupConfirmModal(e) {
+        var target = e.target;
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
+            target = e.target;
+        }
+        var memberIds = target.value;
+        this.setState({"delMemberIds": memberIds});
+        this.refs.exitChatGroupConfirmModal.changeConfirmModalVisible(true);
+    },
 
+    closeExitChatGroupConfirmModal() {
+        this.refs.exitChatGroupConfirmModal.changeConfirmModalVisible(false);
+    },
+
+    /**
+     * 删除并退出群组
+     */
+    exitChatGroup() {
+        var currentGroupObj = this.state.currentGroupObj;
+        var memberIds = sessionStorage.getItem("ident");
+        var optType = "exitChatGroup";
+        this.deleteChatGroupMember(currentGroupObj.chatGroupId, memberIds, optType);
+        this.closeExitChatGroupConfirmModal();
     },
 
     /**
@@ -787,7 +844,9 @@ const MainLayout = React.createClass({
                         <span className="attention_img"><img
                             src={require('../components/images/maaee_face.png')}></img></span>;
                 }
-                var liTag = <div className="group_fr">
+                var liTag = currentGroupObj.ownerId == e.key ? <div className="group_fr">
+                    <span className="attention_img">{userHeaderIcon}</span><span>{groupUser}</span>
+                </div> : <div className="group_fr">
                     <span className="attention_img">{userHeaderIcon}</span><span>{groupUser}</span>
                     <Button value={memberId} onClick={_this.showConfirmModal} className="group_del"><Icon
                         type="close-circle-o"/></Button>
@@ -1966,11 +2025,14 @@ const MainLayout = React.createClass({
                                   title="确定要解散该群组?"
                                   onConfirmModalCancel={this.closeDissolutionChatGroupConfirmModal}
                                   onConfirmModalOK={this.dissolutionChatGroup}/>
-                    {/*<ConfirmModal ref="exitChatGroupConfirmModal"
+                    <ConfirmModal ref="exitChatGroupConfirmModal"
                                   title="确定要退出该群组?"
                                   onConfirmModalCancel={this.closeExitChatGroupConfirmModal}
-                                  onConfirmModalOK={this.exitChatGroup}/>*/}
-
+                                  onConfirmModalOK={this.exitChatGroup}/>
+                    <ConfirmModal ref="confirmModal"
+                                  title="确定要移除选中的群成员?"
+                                  onConfirmModalCancel={this.closeConfirmModal}
+                                  onConfirmModalOK={this.deleteSelectedMember}/>
                 </div>
             </LocaleProvider>
         );
