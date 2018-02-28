@@ -4780,11 +4780,10 @@ a.color_gary_f, .color_gary_f {
 
 .group_red_font {
     color: #f15e5e;
-    border: none;
     background: none;
     margin-left: 12px;
     border: 1px solid #f15e5e;
-    padding: 8px 25px;
+    padding: 5px 20px 4px 20px;
 }
 
 .group_red_font:hover {
