@@ -1135,6 +1135,8 @@ const PersonCenterComponents = React.createClass({
      * @param e
      */
     setChatGroup(groupObj) {
+        alert('改变')
+        console.log(groupObj);
         var currentGroupObj = groupObj;
         if (isEmpty(currentGroupObj) == false) {
             var members = currentGroupObj.members;
@@ -1592,8 +1594,6 @@ const PersonCenterComponents = React.createClass({
                 var response = ret.response;
                 if (ret.msg == "调用成功" && ret.success == true) {
                     message.success('转让成功');
-                    // _this.setState({mainTransferModalVisible: false});
-                    // _this.setState({radioValue: 1});
                     _this.mainTransferModalHandleCancel();
                     var obj = _this.state.currentGroupObj;
                     obj.owner.colUid = newOwnerId;

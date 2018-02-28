@@ -6,7 +6,7 @@ import {IS_LIVE_DEBUG} from './utils/Const';
 //导出常量
 const REMOTE_URL = "http://www.maaee.com/Excoord_For_Education/webservice";
 
-const LOCAL_URL = "http://192.168.50.15:9006/Excoord_ApiServer/webservice";
+const LOCAL_URL = "http://192.168.2.102:9006/Excoord_ApiServer/webservice";
 
 
 const LOCAL_URL_LIVE = "http://192.168.50.15:9006/Excoord_ApiServer/webservice";

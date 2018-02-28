@@ -1,5 +1,5 @@
 import React from 'react';
-import {Menu, Icon, Row, Col, notification, Modal, Collapse, Checkbox, Input, message} from 'antd';
+import {Menu, Icon, Row, Col, notification, Modal, Collapse, Checkbox, Input, message, Button, Radio} from 'antd';
 import HeaderComponents from '../components/HeaderComponents';
 import UserFace from '../components/UserCardModalComponents';
 import FloatButton from '../components/FloatButton';
@@ -18,18 +18,17 @@ import AntCloudMenu from '../components/layOut/AntCloudMenu';
 import AntCloudTableComponents from '../components/antCloud/AntCloudTableComponents';
 import {LocaleProvider} from 'antd';
 import {showLargeImg} from '../utils/utils'
-import {isEmpty, SMALL_IMG, MIDDLE_IMG, LARGE_IMG} from '../utils/Const'
+import {isEmpty, SMALL_IMG} from '../utils/Const'
 import TeachSpace from '../components/TeachSpaces';
 import TeachSpaceGhostMenu from '../components/TeachSpacesGhostMenu';
 import {MsgConnection} from '../utils/msg_websocket_connection';
 import AntCloudClassRoomMenu from '../components/layOut/AntCloudClassRoomMenu';
 import AntCloudClassRoomComponents from '../components/cloudClassRoom/AntCloudClassRoomComponents';
-import SchoolGroupSettingComponents from '../components/schoolGroupSetting/SchoolGroupSettingComponents';
-import SchoolGroupMenu from '../components/schoolGroupSetting/SchoolGroupMenu';
 import SystemSettingGhostMenu from '../components/SystemSetting/SystemSettingGhostMenu';
 import SystemSettingComponent from '../components/SystemSetting/SystemSettingComponent';
 import AddShiftPosModel from '../components/Attendance/AddShiftPosModel';
 import SendPicModel from '../components/antGroup/SendPicModel'
+import ConfirmModal from '../components/ConfirmModal';
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
 
@@ -38,7 +37,15 @@ import {createStore} from 'redux';
 
 const Panel = Collapse.Panel;
 
+const RadioGroup = Radio.Group;
+
 const CheckboxGroup = Checkbox.Group;
+
+const radioStyle = {
+    display: 'block',
+    height: '30px',
+    lineHeight: '30px',
+};
 
 var messageData = [];
 var userMessageData = [];
@@ -77,6 +84,7 @@ const MainLayout = React.createClass({
             sendPicModel: false,
             lastClick: '',  //聊天功能最后一次点击的对象
             RMsgActiveKey: ['2'],
+            searchWords: '',
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
     },
@@ -498,6 +506,423 @@ const MainLayout = React.createClass({
     },
 
     /**
+     * 群点击设置上层只传入id过来.剩下的交给下层
+     */
+    gopTalkSetClick(id) {
+        var _this = this;
+        var param = {
+            "method": 'getChatGroupById',
+            "chatGroupId": id,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    var data = ret.response;
+                    var members = data.members;
+                    var membersArray = [];
+                    members.forEach(function (e) {
+                        var memberId = e.colUid;
+                        var memberName = e.userName;
+                        var userJson = {key: memberId, groupUser: memberName, userInfo: e};
+                        membersArray.push(userJson);
+                    });
+                    _this.buildGroupSet(membersArray, data);
+
+                } else {
+                    message.error(ret.msg);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 群主转让
+     */
+    mainTransfer(currentMemberArray) {
+        //先渲染出来，在展示弹框
+        var array = [];
+        currentMemberArray.forEach(function (v, i) {
+            var radioSon = <Radio style={radioStyle} value={v.key}>{v.groupUser}</Radio>;
+            array.push(radioSon);
+        });
+        this.setState({radioSon: array});
+        this.setState({mainTransferModalVisible: true});
+    },
+
+    mainTransferModalHandleCancel() {
+        this.setState({mainTransferModalVisible: false});
+        this.setState({radioValue: 1});
+    },
+
+    mainTransferOnChange(e) {
+        this.setState({
+            radioValue: e.target.value,
+        });
+    },
+
+    mainTransferForSure() {
+        var _this = this;
+        var newOwnerId = this.state.radioValue;
+        var oldOwnerId = this.state.currentGroupObj.owner.colUid;
+        var chatGroupId = this.state.currentGroupObj.chatGroupId;
+        var param = {
+            "method": 'changeChatGroupOwner',
+            "chatGroupId": chatGroupId,
+            "oldOwnerId": oldOwnerId,
+            "newOwnerId": newOwnerId
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    message.success('转让成功');
+                    _this.mainTransferModalHandleCancel();
+                    var obj = _this.state.currentGroupObj;
+                    obj.owner.colUid = newOwnerId;
+                    _this.setState({currentGroupObj: obj});
+                    _this.levGroupSet();
+                    //重新刷新页面
+                } else {
+                    message.error(ret.msg);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 修改群名称
+     */
+    showUpdateChatGroupNameModal() {
+        var currentGroupObj = this.state.currentGroupObj;
+        var updateChatGroupTitle = currentGroupObj.name;
+        this.setState({"updateChatGroupNameModalVisible": true, "updateChatGroupTitle": updateChatGroupTitle});
+    },
+
+    /**
+     * 关闭修改群名称的窗口
+     */
+    updateChatGroupNameModalHandleCancel() {
+        this.setState({"updateChatGroupNameModalVisible": false});
+    },
+
+    /**
+     * 修改群名称
+     */
+    updateChatGroupName() {
+        var _this = this;
+        //更新(判断和当前的groupObj信息是否一致)
+        var currentGroupObj = this.state.currentGroupObj;
+        if (isEmpty(this.state.updateChatGroupTitle) == false) {
+            var param = {
+                "method": 'updateChatGroupName',
+                "chatGroupId": currentGroupObj.chatGroupId,
+                "name": this.state.updateChatGroupTitle,
+                "userId": sessionStorage.getItem("ident"),
+            };
+            doWebService(JSON.stringify(param), {
+                onResponse: function (ret) {
+                    var response = ret.response;
+                    if (ret.msg == "调用成功" && ret.success == true && response == true) {
+                        message.success("聊天群组修改成功");
+                    } else {
+                        message.success("聊天群组修改失败");
+                    }
+                    _this.setState({"updateChatGroupNameModalVisible": false});
+                    _this.levGroupSet();
+                    _this.refs.antGroupTabComponents.changeWelcomeTitle(_this.state.updateChatGroupTitle)
+                },
+                onError: function (error) {
+                    message.error(error);
+                }
+            });
+        }
+    },
+
+    /**
+     * 修改群组名称时，名称内容改变的响应函数
+     * @param e
+     */
+    updateChatGroupTitleOnChange(e) {
+        var target = e.target;
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
+            target = e.target;
+        }
+        var updateChatGroupTitle = target.value;
+        this.setState({"updateChatGroupTitle": updateChatGroupTitle});
+    },
+
+    /**
+     * 添加群成员
+     */
+    showAddMembersModal() {
+
+    },
+
+    /**
+     * 解散该群
+     */
+    showDissolutionChatGroupConfirmModal() {
+        this.refs.dissolutionChatGroupConfirmModal.changeConfirmModalVisible(true);
+    },
+
+    /**
+     * 关闭解散群聊按钮对应的confirm窗口
+     */
+    closeDissolutionChatGroupConfirmModal() {
+        this.refs.dissolutionChatGroupConfirmModal.changeConfirmModalVisible(false);
+    },
+
+    /**
+     * 解散聊天群
+     */
+    dissolutionChatGroup() {
+        var currentGroupObj = this.state.currentGroupObj;
+        var memberIds = this.getCurrentMemberIds();
+        var optType = "dissolution";
+        this.deleteChatGroupMember(currentGroupObj.chatGroupId, memberIds, optType);
+        this.closeDissolutionChatGroupConfirmModal();
+    },
+
+    getCurrentMemberIds() {
+        var memberIds = "";
+        var currentGroupObj = this.state.currentGroupObj;
+        if (isEmpty(currentGroupObj) == false) {
+            var members = currentGroupObj.members;
+            members.forEach(function (e) {
+                var memberId = e.colUid;
+                memberIds += memberId + ",";
+            });
+        }
+        return memberIds;
+    },
+
+    deleteChatGroupMember(chatGroupId, memberIds, optType) {
+        var _this = this;
+        var successTip = "";
+        var errorTip = "";
+        if (optType == "dissolution") {
+            successTip = "群组解散成功";
+            errorTip = "群组解散失败";
+        } else if (optType == "removeMember") {
+            successTip = "群成员移出成功";
+            errorTip = "群成员移出失败";
+        } else if (optType == "exitChatGroup") {
+            successTip = "您已成功退出该群组";
+            errorTip = "退出群组失败";
+        }
+        var param = {
+            "method": 'deleteChatGroupMember',
+            "chatGroupId": chatGroupId,
+            "memberIds": memberIds
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if (ret.msg == "调用成功" && ret.success == true && response == true) {
+                    message.success(successTip);
+                    if (optType == "dissolution" || optType == "exitChatGroup") {
+                        //退出或解散
+                        //1.收回侧边  2.右侧滞空  3.左侧删除聊天
+                        _this.levGroupSet();
+                        _this.refs.messageMenu.delMes(chatGroupId);
+                    } else if (optType == "removeMember") {
+                        //移除成员
+                        _this.levGroupSet();
+                    }
+                } else {
+                    message.success(errorTip);
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 显示删除群成员的确认窗口
+     */
+    showConfirmModal(e) {
+        var target = e.target;
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
+            target = e.target;
+        }
+        var memberIds = target.value;
+        this.setState({"delMemberIds": memberIds});
+        this.refs.confirmModal.changeConfirmModalVisible(true);
+    },
+
+    /**
+     * 关闭移出群聊按钮对应的confirm窗口
+     */
+    closeConfirmModal() {
+        this.refs.confirmModal.changeConfirmModalVisible(false);
+    },
+
+    /**
+     * 移除选中的群组成员
+     */
+    deleteSelectedMember() {
+        var currentGroupObj = this.state.currentGroupObj;
+        var memberIds = this.state.delMemberIds;
+        var optType = "removeMember";
+        this.deleteChatGroupMember(currentGroupObj.chatGroupId, memberIds, optType);
+        this.closeConfirmModal();
+    },
+
+    /**
+     * 删除并退出
+     */
+    showExitChatGroupConfirmModal(e) {
+        var target = e.target;
+        if (navigator.userAgent.indexOf("Chrome") > -1) {
+            target = e.currentTarget;
+        } else {
+            target = e.target;
+        }
+        var memberIds = target.value;
+        this.setState({"delMemberIds": memberIds});
+        this.refs.exitChatGroupConfirmModal.changeConfirmModalVisible(true);
+    },
+
+    closeExitChatGroupConfirmModal() {
+        this.refs.exitChatGroupConfirmModal.changeConfirmModalVisible(false);
+    },
+
+    /**
+     * 删除并退出群组
+     */
+    exitChatGroup() {
+        var currentGroupObj = this.state.currentGroupObj;
+        var memberIds = sessionStorage.getItem("ident");
+        var optType = "exitChatGroup";
+        this.deleteChatGroupMember(currentGroupObj.chatGroupId, memberIds, optType);
+        this.closeExitChatGroupConfirmModal();
+    },
+
+    /**
+     * 构建群点击设置
+     * @param arr
+     */
+    buildGroupSet(currentMemberArray, currentGroupObj) {
+        this.state.dissolutionChatGroupButton = '';
+        this.setState({currentGroupObj});
+        var _this = this;
+        var topButton,
+            dissolutionChatGroupButton;
+        var divBlock = 'none';
+        if (currentGroupObj.owner.colUid == sessionStorage.getItem("ident")) {
+            //我是群主
+            divBlock = 'inline-block';
+            topButton = <span className="toobar">
+                <span type="primary" className="noom_cursor set_in_btn_font" onClick={this.showAddMembersModal}><Icon className="i_antdesign" type="plus" />添加群成员</span></span>
+            dissolutionChatGroupButton =
+                <Button onClick={this.showDissolutionChatGroupConfirmModal} className="group_red_font"><i
+                    className="iconfont">&#xe616;</i>解散该群</Button>;
+            _this.setState({dissolutionChatGroupButton})
+
+            var memberLiTag = [];
+            currentMemberArray.forEach(function (e) {
+                var memberId = e.key;
+                var groupUser = e.groupUser;
+                var userInfo = e.userInfo;
+                var userHeaderIcon;
+                if (isEmpty(userInfo) == false) {
+                    userHeaderIcon = <img src={userInfo.avatar}></img>;
+                } else {
+                    userHeaderIcon =
+                        <span className="attention_img"><img
+                            src={require('../components/images/maaee_face.png')}></img></span>;
+                }
+                var liTag = currentGroupObj.ownerId == e.key ? <div className="group_fr">
+                    <span className="attention_img">{userHeaderIcon}</span><span>{groupUser}</span>
+                </div> : <div className="group_fr">
+                    <span className="attention_img">{userHeaderIcon}</span><span>{groupUser}</span>
+                    <Button value={memberId} onClick={_this.showConfirmModal} className="group_del"><Icon
+                        type="close-circle-o"/></Button>
+                </div>;
+                memberLiTag.push(liTag);
+            });
+        } else {
+            //我不是群主
+            if (currentGroupObj.type == 1) {
+                //部门群
+                topButton = <span className="right_ri"></span>;
+            } else {
+                //普通群
+                if (JSON.parse(sessionStorage.getItem("loginUser")).colUtype == 'STUD') {
+                    //学生
+                    topButton = <span className="right_ri"></span>;
+                } else {
+                    //老师
+                    topButton = <span className="right_ri">
+                    <Button type="primary" onClick={this.showAddMembersModal}
+                    >添加群成员</Button>
+                    </span>;
+                }
+            }
+
+            var memberLiTag = [];
+            currentMemberArray.forEach(function (e) {
+                var groupUser = e.groupUser;
+                var userInfo = e.userInfo;
+                var userHeaderIcon;
+                if (isEmpty(userInfo) == false) {
+                    userHeaderIcon = <img src={userInfo.avatar}></img>;
+                } else {
+                    userHeaderIcon =
+                        <span className="attention_img"><img
+                            src={require('../components/images/maaee_face.png')}></img></span>;
+                }
+                var liTag = <div className="group_fr">
+                    <span className="attention_img">{userHeaderIcon}</span><span>{groupUser}</span>
+                </div>;
+                memberLiTag.push(liTag);
+            });
+        }
+
+        var personDate = <div className="group_cont">
+            <div className="myfollow_zb del_out">
+                <ul className="group_fr_ul">
+                    <li className="color_gary_f">群聊名称：{currentGroupObj.name}
+                        <span style={{display: divBlock}} className="noom_cursor set_in_btn_font"
+                              onClick={this.showUpdateChatGroupNameModal}><Icon type="edit" className="i_antdesign" />编辑</span>
+                    </li>
+                    <li className="color_gary_f">群主：{currentGroupObj.owner.userName}
+                        <span style={{display: divBlock}} className="noom_cursor set_in_btn_font"
+                              onClick={this.mainTransfer.bind(this, currentMemberArray)}><Icon type="swap" className="i_antdesign" />转让群主</span>
+                    </li>
+                    <li className="color_gary_f">
+                        <span>群聊成员：{currentMemberArray.length}人</span>{topButton}</li>
+                    <li className="user_hei flow_x">
+                        {memberLiTag}
+                    </li>
+                </ul>
+            </div>
+        </div>;
+
+        this.setState({personDate});
+        this.refs.groupSetPanel.className = 'groupSet_panel ding_enter';
+    },
+
+    /**
+     * 群消息设置侧边栏离场
+     */
+    levGroupSet() {
+        this.refs.groupSetPanel.className = 'groupSet_panel ding_leave';
+    },
+
+    /**
      * 我的好友复选框被选中时的响应
      * @param checkedValues
      */
@@ -529,6 +954,10 @@ const MainLayout = React.createClass({
         this.setState({"checkedRecentConnectOptions": checkedValues});
     },
 
+    searchShareUsersOnChange(checkedValues) {
+        this.setState({"searchShareUsersOptions": checkedValues});
+    },
+
     /**
      * 分享文件点击OK
      */
@@ -545,12 +974,13 @@ const MainLayout = React.createClass({
         var checkedGroupOptions = this.state.checkedGroupOptions;   //群组id数组
         var checkedsSructureOptions = this.state.checkedsSructureOptions;  //组织架构id数组
         var checkedRecentConnectOptions = this.state.checkedRecentConnectOptions;  //最近联系人id 既包括群组(%结尾)又有个人数组
+        var searchShareUsersOptions = this.state.searchShareUsersOptions;
 
         if (typeof(nowThinking) == 'undefined') {
             nowThinking = '这是一个云盘分享的文件'
         }
 
-        if (isEmpty(checkedConcatOptions) == true && isEmpty(checkedGroupOptions) == true && isEmpty(checkedsSructureOptions) == true && isEmpty(checkedRecentConnectOptions) == true) {
+        if (isEmpty(checkedConcatOptions) == true && isEmpty(checkedGroupOptions) == true && isEmpty(checkedsSructureOptions) == true && isEmpty(checkedRecentConnectOptions) == true && isEmpty(searchShareUsersOptions) == true) {
             message.error('请选择转发好友或群组');
             return false
         }
@@ -569,6 +999,34 @@ const MainLayout = React.createClass({
 
         if (isEmpty(checkedRecentConnectOptions) == false) {
             checkedRecentConnectOptions.forEach(function (e) {
+                var mes = e + '';
+                if (mes.indexOf('%') == -1) {
+                    //个人
+                    var uuid = _this.createUUID();
+                    var messageJson = {
+                        'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": e, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToPer, "attachment": attachment, "state": 0
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                } else {
+                    //群组
+                    var toId = e.slice(0, e.length - 1)
+                    var uuid = _this.createUUID();
+                    var messageJson = {
+                        'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
+                        "toId": toId, "command": "message", "hostId": loginUser.colUid,
+                        "uuid": uuid, "toType": messageToGrp, "attachment": attachment, "state": 0
+                    };
+                    var commandJson = {"command": "message", "data": {"message": messageJson}};
+                    ms.send(commandJson);
+                }
+            });
+        }
+
+        if (isEmpty(searchShareUsersOptions) == false) {
+            searchShareUsersOptions.forEach(function (e) {
                 var mes = e + '';
                 if (mes.indexOf('%') == -1) {
                     //个人
@@ -646,7 +1104,9 @@ const MainLayout = React.createClass({
             "checkedConcatOptions": [],
             "checkedsSructureOptions": [],
             "checkedRecentConnectOptions": [],
-            RMsgActiveKey: ['2']
+            "searchShareUsersOptions": [],
+            RMsgActiveKey: ['2'],
+            searchWords: ''
         });
     },
 
@@ -670,7 +1130,6 @@ const MainLayout = React.createClass({
 
     rightMsgDelFinish() {
         this.refs.antGroupTabComponents.rightMsgDelFinish();
-        // console.log(this.state.lastClick);
         // this.setState({lastClick: ''})
         delLastClick = true;
     },
@@ -1084,8 +1543,108 @@ const MainLayout = React.createClass({
         return uuid;
     },
 
-    render() {
+    emitEmpty() {
+        this.userNameInput.focus();
+        this.setState({searchWords: ''});
+    },
 
+    onChangeUserName(e) {
+        //搜索框改变就清空选择数组
+        this.state.checkedConcatOptions = [];
+        this.state.checkedGroupOptions = [];
+        this.state.checkedsSructureOptions = [];
+        this.state.checkedRecentConnectOptions = [];
+        this.state.searchShareUsersOptions = [];
+        if (e.target.value.length != 0) {
+            this.searchShareUsers(e.target.value);
+        }
+        this.setState({searchWords: e.target.value});
+    },
+
+    searchShareUsers(str) {
+        var _this = this;
+        var param = {
+            "method": 'searchShareUsers',
+            "userId": sessionStorage.getItem("ident"),
+            "pageNo": -1,
+            "searchKeyWords": str,
+            "dataType": 0
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    var response = ret.response;
+                    if (isEmpty(response) == false) {
+                        _this.showSearchShareUsers(response)
+                    } else {
+                        //显示没有结果
+                    }
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    showSearchShareUsers(res) {
+        var arr = [];
+        res.forEach(function (data) {
+            var messageType = data.type;
+            if (messageType == 0) {
+                //个人消息
+                var userStructId = data.user.colUid;
+                var userStructName = data.user.userName;
+                var userStructImgTag = <img src={data.user.avatar} className="antnest_38_img" height="38"></img>;
+                var userStructNameTag = <div>{userStructImgTag}<span>{userStructName}</span></div>;
+                var userStructJson = {label: userStructNameTag, value: userStructId};
+
+                if (userStructId != sessionStorage.getItem("userStructId") && userStructId != 138437 && userStructId != 41451 && userStructId != 142033 && userStructId != 139581) {
+                    arr.push(userStructJson);
+                }
+            } else {
+                //群组
+
+                var chatGroupId = data.chatGroup.chatGroupId;
+                var chatGroupName = data.chatGroup.name;
+                var membersCount = data.chatGroup.avatar.split('#').length;
+                var groupMemebersPhoto = [];
+                for (var i = 0; i < membersCount; i++) {
+                    var memberAvatarTag = <img src={data.chatGroup.avatar.split('#')[i] + '?' + SMALL_IMG}></img>;
+                    groupMemebersPhoto.push(memberAvatarTag);
+                    if (i >= 3) {
+                        break;
+                    }
+                }
+                var imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
+                switch (groupMemebersPhoto.length) {
+                    case 1:
+                        imgTag = <div className="maaee_group_face1">{groupMemebersPhoto}</div>;
+                        break;
+                    case 2:
+                        imgTag = <div className="maaee_group_face2">{groupMemebersPhoto}</div>;
+                        break;
+                    case 3:
+                        imgTag = <div className="maaee_group_face3">{groupMemebersPhoto}</div>;
+                        break;
+                    case 4:
+                        imgTag = <div className="maaee_group_face">{groupMemebersPhoto}</div>;
+                        break;
+                }
+                var groupName = chatGroupName;
+                var groupNameTag = <div>{imgTag}<span>{groupName}</span></div>
+                var groupJson = {label: groupNameTag, value: chatGroupId + '%'};
+                arr.push(groupJson);
+            }
+
+        });
+        this.setState({"searchShareUsersData": arr});
+    },
+
+    render() {
+        const suffix = this.state.searchWords ? <Icon type="close-circle" onClick={this.emitEmpty}/> : null;
+        const searchIfOrNot = this.state.searchWords ? 'none' : 'block';
+        const searchNotOrIf = this.state.searchWords ? 'block' : 'none';
         const collapse = this.state.collapse;
         //根据如下判断结果，完成对页面中部位置的渲染，不同情况，渲染不同组件
         var middleComponent;
@@ -1121,6 +1680,7 @@ const MainLayout = React.createClass({
                                                       refresh={this.refresh}
                                                       clearEverything={this.clearEverything}
                                                       delLeftMsgFinish={this.delLeftMsgFinish}
+                                                      gopTalkSetClick={this.gopTalkSetClick}
                 />;
                 break;
             case 'antGroup':
@@ -1334,7 +1894,27 @@ const MainLayout = React.createClass({
                                 </Col>
                             </Row>
                             <Row>
-                                <Col span={11} className="upexam_float cloud_share_cont">
+                                <Col span={11}>
+                                    <Input
+                                        placeholder="首字母搜索更快捷"
+                                        suffix={this.state.searchWords ?
+                                            <Icon type="close-circle" onClick={this.emitEmpty}/> : null}
+                                        value={this.state.searchWords}
+                                        onChange={this.onChangeUserName}
+                                        ref={node => this.userNameInput = node}
+                                    />
+                                </Col>
+                            </Row>
+                            <Row className="yinyong3">
+                                <Col style={{display: searchNotOrIf}} span={11}
+                                     className="upexam_float cloud_share_cont ant-collapse-content favorite_up cloud_share_cont_search">
+                                    <CheckboxGroup options={this.state.searchShareUsersData}
+                                                   value={this.state.searchShareUsersOptions}
+                                                   onChange={this.searchShareUsersOnChange}
+                                    />
+                                </Col>
+                                <Col style={{display: searchIfOrNot}} span={11}
+                                     className="upexam_float cloud_share_cont">
                                     <Collapse bordered={false} activeKey={this.state.RMsgActiveKey}
                                               onChange={this.collapseChange}
                                     >
@@ -1380,6 +1960,79 @@ const MainLayout = React.createClass({
                             {this.state.imgArr}
                         </li>
                     </ul>
+                    {/*群设置侧边栏*/}
+                    <div className="groupSet_panel" ref="groupSetPanel">
+                        <div className="side_header">
+                            群设置
+                            <Icon type="close" className="d_mesclose_new" onClick={this.levGroupSet}/>
+                        </div>
+                        <div className="set_in_background">
+                            {this.state.personDate}
+                        </div>
+                        <div className="set_in_del_btn">
+                            <Button onClick={this.showExitChatGroupConfirmModal}
+                                    className="group_red_btn">删除并退出</Button>{this.state.dissolutionChatGroupButton}
+
+                        </div>
+                    </div>
+
+                    <Modal className="person_change_right"
+                           visible={this.state.mainTransferModalVisible}
+                           title="转移群主"
+                           onCancel={this.mainTransferModalHandleCancel}
+                           transitionName=""  //禁用modal的动画效果
+                           maskClosable={false} //设置不允许点击蒙层关闭
+                           footer={[
+                               <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
+                                       onClick={this.mainTransferForSure}>确定</button>,
+                               <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
+                                       onClick={this.mainTransferModalHandleCancel}>取消</button>
+                           ]}
+                    >
+                        <Row className="ant-form-item">
+                            <Col span={24}>
+                                <RadioGroup onChange={this.mainTransferOnChange} value={this.state.radioValue}>
+                                    {this.state.radioSon}
+                                </RadioGroup>
+                            </Col>
+                        </Row>
+                    </Modal>
+
+                    <Modal className="modol_width"
+                           visible={this.state.updateChatGroupNameModalVisible}
+                           title="修改群名称"
+                           onCancel={this.updateChatGroupNameModalHandleCancel}
+                           transitionName=""  //禁用modal的动画效果
+                           maskClosable={false} //设置不允许点击蒙层关闭
+                           footer={[
+                               <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
+                                       onClick={this.updateChatGroupName}>确定</button>,
+                               <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
+                                       onClick={this.updateChatGroupNameModalHandleCancel}>取消</button>
+                           ]}
+                    >
+                        <Row className="ant-form-item">
+                            <Col span={6} className="right_look">群名称：</Col>
+                            <Col span={14}>
+                                <Input value={this.state.updateChatGroupTitle}
+                                       defaultValue={this.state.updateChatGroupTitle}
+                                       onChange={this.updateChatGroupTitleOnChange}/>
+                            </Col>
+                        </Row>
+                    </Modal>
+
+                    <ConfirmModal ref="dissolutionChatGroupConfirmModal"
+                                  title="确定要解散该群组?"
+                                  onConfirmModalCancel={this.closeDissolutionChatGroupConfirmModal}
+                                  onConfirmModalOK={this.dissolutionChatGroup}/>
+                    <ConfirmModal ref="exitChatGroupConfirmModal"
+                                  title="确定要退出该群组?"
+                                  onConfirmModalCancel={this.closeExitChatGroupConfirmModal}
+                                  onConfirmModalOK={this.exitChatGroup}/>
+                    <ConfirmModal ref="confirmModal"
+                                  title="确定要移除选中的群成员?"
+                                  onConfirmModalCancel={this.closeConfirmModal}
+                                  onConfirmModalOK={this.deleteSelectedMember}/>
                 </div>
             </LocaleProvider>
         );
