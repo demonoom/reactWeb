@@ -1,5 +1,19 @@
 import React from 'react';
-import {Menu, Icon, Row, Col, notification, Modal, Collapse, Checkbox, Input, message, Button, Radio} from 'antd';
+import {
+    Menu,
+    Icon,
+    Row,
+    Col,
+    notification,
+    Modal,
+    Collapse,
+    Checkbox,
+    Input,
+    message,
+    Button,
+    Radio,
+    Transfer
+} from 'antd';
 import HeaderComponents from '../components/HeaderComponents';
 import UserFace from '../components/UserCardModalComponents';
 import FloatButton from '../components/FloatButton';
@@ -662,7 +676,78 @@ const MainLayout = React.createClass({
     /**
      * 添加群成员
      */
-    showAddMembersModal() {
+    showAddMembersModal(obj) {
+        // obj.type=1是部门群
+        this.getNotMemberUser();
+        this.setState({"addGroupMemberModalVisible": true});
+    },
+
+    /**
+     * 添加群成员时，获取未在群成员列表中的联系人
+     */
+    getNotMemberUser() {
+        var _this = this;
+        const memberData = [];
+        memberData.splice(0);
+        var memberTargetKeys = [];
+        var param = {
+            "method": 'getUserContacts',
+            "ident": sessionStorage.getItem("ident"),
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                response.forEach(function (e) {
+                    var userId = e.colUid;
+                    var userName = e.userName;
+                    var isExist = _this.checkMemberIsExist(userId);
+                    var userType = e.colUtype;
+                    if (isExist == false && userType != "SGZH" && parseInt(userId) != sessionStorage.getItem("ident")) {
+                        const data = {
+                            key: userId,
+                            title: userName,
+                        };
+                        memberData.push(data);
+                    }
+                });
+                _this.setState({memberData, memberTargetKeys});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 检查群组成员是否已经存在
+     */
+    checkMemberIsExist(memberId) {
+        var isExist = false;
+        var currentGroupObj = this.state.currentGroupObj;
+        if (isEmpty(currentGroupObj) == false) {
+            var members = currentGroupObj.members;
+            if (isEmpty(members) == false && members.length != 0) {
+                for (var i = 0; i < members.length; i++) {
+                    var member = members[i];
+                    var memberIdInCurrent = member.colUid;
+                    if (memberId == memberIdInCurrent) {
+                        isExist = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return isExist;
+    },
+
+    /**
+     * 关闭添加群成员Modal窗口
+     */
+    addGroupMemberModalHandleCancel() {
+        this.setState({"addGroupMemberModalVisible": false});
+    },
+
+    addGroupMember() {
 
     },
 
@@ -824,7 +909,8 @@ const MainLayout = React.createClass({
         if (currentGroupObj.owner.colUid == sessionStorage.getItem("ident")) {
             //我是群主
             divBlock = 'inline-block';
-            topButton = <span className="toobar"><Button type="primary" onClick={this.showAddMembersModal}
+            topButton = <span className="toobar"><Button type="primary"
+                                                         onClick={this.showAddMembersModal.bind(this, currentGroupObj)}
             >添加群成员</Button></span>
             dissolutionChatGroupButton =
                 <Button onClick={this.showDissolutionChatGroupConfirmModal} className="group_red_font"><i
@@ -2017,6 +2103,38 @@ const MainLayout = React.createClass({
                                 <Input value={this.state.updateChatGroupTitle}
                                        defaultValue={this.state.updateChatGroupTitle}
                                        onChange={this.updateChatGroupTitleOnChange}/>
+                            </Col>
+                        </Row>
+                    </Modal>
+
+                    <Modal
+                        visible={this.state.addGroupMemberModalVisible}
+                        title="添加群成员"
+                        onCancel={this.addGroupMemberModalHandleCancel}
+                        transitionName=""  //禁用modal的动画效果
+                        maskClosable={false} //设置不允许点击蒙层关闭
+                        footer={[
+                            <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
+                                    onClick={this.addGroupMember}>确定</button>,
+                            <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
+                                    onClick={this.addGroupMemberModalHandleCancel}>取消</button>
+                        ]}
+                    >
+                        <Row className="ant-form-item">
+                            <Col span={24}>
+                                <Transfer
+                                    dataSource={this.state.memberData}
+                                    showSearch
+                                    listStyle={{
+                                        width: 268,
+                                        height: 320,
+                                    }}
+                                    titles={['待选联系人', '已选联系人']}
+                                    operations={['', '']}
+                                    targetKeys={this.state.memberTargetKeys}
+                                    onChange={this.addMemberTransferHandleChange}
+                                    render={item => `${item.title}`}
+                                />
                             </Col>
                         </Row>
                     </Modal>
