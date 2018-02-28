@@ -517,7 +517,6 @@ const CreateClassComponents = React.createClass({
      * 添加课程目录
      */
     addLesson() {
-        debugger;
         var tagArrByNoom = [];
         this.state.noomTages.push(tagArrByNoom);
         var _this = this;
