@@ -608,8 +608,6 @@ const AntNestTabComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                debugger
-                console.log(ret);
                 var response = ret.response;
                 response.forEach(function (e) {
                     //话题的回复
@@ -712,6 +710,7 @@ const AntNestTabComponents = React.createClass({
      * 话题被点击的回调
      */
     getTopicPartakeInfo(e) {
+        antNest.reGetTopicInfo(antNest.state.currentPage, getAllTopic());
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             target = e.currentTarget;
@@ -736,6 +735,8 @@ const AntNestTabComponents = React.createClass({
      * 获取作业详情
      */
     getHomeWorkPartakeInfo(e) {
+        //不写下面这句,评论之后进去第一次不显示评论
+        antNest.reGetTopicInfo(antNest.state.currentPage, getAllTopic());
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             target = e.currentTarget;
@@ -1332,6 +1333,7 @@ const AntNestTabComponents = React.createClass({
             boxDisplay: 'none',
             radioDisplay: 'block',
             homeWorkTime: '',
+            homeWorkDate: ''
         });
     },
 
@@ -1510,9 +1512,9 @@ const AntNestTabComponents = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.success == true && ret.response == true) {
-                    message.success("说说发表成功");
+                    message.success("发表成功");
                 } else {
-                    message.error("说说发表失败");
+                    message.error("发表失败");
                 }
                 $("#emotionInput").val("");
                 if (antNest.state.type == 0) {
@@ -1579,6 +1581,13 @@ const AntNestTabComponents = React.createClass({
             target = e.target;
         }
         var optType = target.value;
+        if (optType == 'talk') {
+            this.setState({publishTitle: '发布说说'})
+        } else if (optType == 'topic') {
+            this.setState({publishTitle: '发布话题'})
+        } else {
+            this.setState({publishTitle: '发布作业'})
+        }
         antNest.initMyEmotionInput();
         var param = {
             "method": 'getClazzesByUserId',
@@ -1724,7 +1733,6 @@ const AntNestTabComponents = React.createClass({
                 if (ret.success == true && ret.response == true) {
                     message.success("话题参与成功");
                 } else {
-                    // message.error("话题参与失败");
                     message.error(ret.msg);
                 }
                 if (antNest.state.optType == "getTopicById") {
@@ -1878,7 +1886,7 @@ const AntNestTabComponents = React.createClass({
                         </Row>
                     </div>
                 </Modal>
-                <Modal title="发布说说"
+                <Modal title={antNest.state.publishTitle}
                        visible={antNest.state.addTopicModalVisible}
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭

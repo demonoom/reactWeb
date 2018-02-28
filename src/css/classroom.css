@@ -315,7 +315,7 @@
     margin: 0;
 }
 .modal_classroom_box .ant-modal-body{
-    padding: 10px 20px 20px 20px !important;
+    padding: 10px 20px 0 20px !important;
     height: 431px;
 }
 .btn_push_i{
@@ -328,4 +328,11 @@
 }
 .btn_push_box{
     height: calc(100% - 50px) !important;
+}
+.more_classroom{
+    position: relative;
+    top: -42px;
+}
+.classroom_file_50{
+    width: calc(100% - 50px);
 }

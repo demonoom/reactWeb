@@ -638,7 +638,6 @@ const AntCloudTableComponents = React.createClass({
                 var schoolId = e.schoolId;
                 var valid = e.valid;
                 var path = e.path;
-                console.log("path---------->" + path);
                 var downloadButton;
 
                 if (directory) {
@@ -653,16 +652,16 @@ const AntCloudTableComponents = React.createClass({
                 var fileLogo = _this.buildFileLogo(name, directory, e);
                 var cloudFileJsonForEveryFile = {"fileId": key, "cloudFileObj": e};
                 cloudFileArray.push(cloudFileJsonForEveryFile);
-                var editButton = <Button type="button" className="score3_i" value={key} text={key}
+                var editButton = <Button title="编辑" type="button" className="score3_i" value={key} text={key}
                                          onClick={cloudTable.editDirectoryName.bind(cloudTable, e)}
                                          icon="edit"></Button>;
-                var deleteButton = <Button type="button" value={key} text={key}
+                var deleteButton = <Button title="删除" type="button" value={key} text={key}
                                            onClick={cloudTable.deleteFileOrDirectory.bind(cloudTable, e)}
                                            icon="delete"></Button>;
-                var shareButton = <Button type="button" value={key} text={key}
+                var shareButton = <Button title="分享" type="button" value={key} text={key}
                                           onClick={cloudTable.showShareModal.bind(cloudTable, e)}
                                           icon="share-alt"></Button>;
-                var moveButton = <Button type="button" value={key} text={key}
+                var moveButton = <Button title="移动" type="button" value={key} text={key}
                                          onClick={cloudTable.showMoveFileModal.bind(cloudTable, e)}
                                          icon="swap"></Button>;
 

@@ -257,6 +257,10 @@ const AntGroupTabComponents = React.createClass({
         this.setState({optType: 'getUserList'})
     },
 
+    changeWelcomeTitle(welcomeTitle) {
+        antGroup.state.currentGroupObj.name = welcomeTitle;
+    },
+
     /**
      *  已读消息回复服务器
      */
@@ -398,6 +402,14 @@ const AntGroupTabComponents = React.createClass({
             _this.showNevReaderList(e.uuid);
             //先进入详情，后willcomponents
         }
+    },
+
+    /**
+     * 群设置点击
+     */
+    gopTalkSetClick() {
+        var groupSetId = this.state.groupSetId;
+        this.props.gopTalkSetClick(groupSetId);
     },
 
     /**
@@ -2763,6 +2775,7 @@ const AntGroupTabComponents = React.createClass({
      * @param index　当前行的索引顺序，从０开始
      */
     sendGroupMessage(groupObj, timeNode) {
+        this.setState({groupSetId: groupObj.chatGroupId});
         scrollType = "auto";
         isDirectToBottom = true;
         antGroup.setState({"messageComeFrom": "groupMessage", "currentUser": '', messageList: []});
@@ -3313,6 +3326,10 @@ const AntGroupTabComponents = React.createClass({
     },
 
     render() {
+        var groupSetting = 'none';
+        if (this.state.messageComeFrom == 'groupMessage') {
+            groupSetting = 'block'
+        }
         var _this = this;
         const rowSelection = {
             selectedRowKeys: this.state.selectedRowKeys,
@@ -4794,8 +4811,10 @@ const AntGroupTabComponents = React.createClass({
                 defaultActiveKey={this.state.defaultActiveKey}
                 transitionName=""  //禁用Tabs的动画效果
             >
+                {/*<TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">*/}
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div id="personTalk">
+                        <i style={{display: groupSetting}} title="群设置" className="iconfont groupTalkSetting noom_cursor" onClick={this.gopTalkSetClick} >&#xe675;</i>
                         <div className="group_talk 44" id="groupTalk"
                              onMouseOver={this.handleScrollType.bind(this, Event)}
                              onScroll={this.handleScroll}>

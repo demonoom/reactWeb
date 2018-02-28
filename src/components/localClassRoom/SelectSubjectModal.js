@@ -26,6 +26,8 @@ var scheduleColumns = [{
 /**
  * 从备课计划选题的modal
  */
+//是否给出无更多数据的提示
+var isTipNoDataMessage=true;
 class SelectSubjectModal extends React.Component {
 
     constructor(props) {
@@ -39,7 +41,7 @@ class SelectSubjectModal extends React.Component {
         this.SelectSubjectModalHandleCancel = this.SelectSubjectModalHandleCancel.bind(this);
         this.initPage = this.initPage.bind(this);
         this.subjectModalHandleOk = this.subjectModalHandleOk.bind(this);
-        this.pageOnChange = this.pageOnChange.bind(this);
+        this.loadMoreSubject = this.loadMoreSubject.bind(this);
         this.getScheduleList = this.getScheduleList.bind(this);
         this.onScheduleSelectChange = this.onScheduleSelectChange.bind(this);
         this.getSubjectDataBySchedule = this.getSubjectDataBySchedule.bind(this);
@@ -75,14 +77,11 @@ class SelectSubjectModal extends React.Component {
     }
 
     /**
-     * 题目分页页码改变的响应函数
-     * @param pageNo
+     * 本地课堂中，加载更多的题目，以完成数据分页获取
      */
-    pageOnChange(pageNo){
-        this.getSubjectDataBySchedule(this.state.currentScheduleId, pageNo);
-        this.setState({
-            currentPage: pageNo,
-        });
+    loadMoreSubject(){
+        var newPage = parseInt(this.state.currentPage)+1;
+        this.getSubjectDataBySchedule(this.state.currentScheduleId, newPage);
     }
 
     //在选择题目的窗口中，先获取老师名下的备课计划
@@ -120,6 +119,8 @@ class SelectSubjectModal extends React.Component {
     onScheduleSelectChange(selectedRowKeys) {
         var scheduleId = selectedRowKeys.key;
         subjectData = [];
+        //切换备课计划时，不提示无更多数据
+        isTipNoDataMessage = false;
         this.getSubjectDataBySchedule(scheduleId, 1);
         this.setState({currentScheduleId: scheduleId});
     }
@@ -137,25 +138,31 @@ class SelectSubjectModal extends React.Component {
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                response.forEach(function (e) {
-                    var key = e.id;
-                    var popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>' + e.content + '<hr/><span class="answer_til answer_til_2">答案：</span>' + e.answer + '</div>';
-                    var content = <Popover placement="rightTop"
-                                           content={<article id='contentHtml' className='content Popover_width'
-                                                             dangerouslySetInnerHTML={{__html: popOverContent}}></article>}>
-                        <article id='contentHtml' className='content'
-                                 dangerouslySetInnerHTML={{__html: e.content}}></article>
-                    </Popover>;
-                    var subjectType = e.typeName;
-                    subjectData.push({
-                        key: key,
-                        content: content,
-                        subjectType: subjectType,
-                        subjectObj:e
+                if(isEmpty(response)==false && response.length>0){
+                    isTipNoDataMessage = true;
+                    response.forEach(function (e) {
+                        var key = e.id;
+                        var popOverContent = '<div><span class="answer_til answer_til_1">题目：</span>' + e.content + '<hr/><span class="answer_til answer_til_2">答案：</span>' + e.answer + '</div>';
+                        var content = <Popover placement="rightTop"
+                                               content={<article id='contentHtml' className='content Popover_width'
+                                                                 dangerouslySetInnerHTML={{__html: popOverContent}}></article>}>
+                            <article id='contentHtml' className='content'
+                                     dangerouslySetInnerHTML={{__html: e.content}}></article>
+                        </Popover>;
+                        var subjectType = e.typeName;
+                        subjectData.push({
+                            key: key,
+                            content: content,
+                            subjectType: subjectType,
+                            subjectObj:e
+                        });
                     });
-                    var pager = ret.pager;
-                    _this.setState({totalSubjectCount: parseInt(pager.rsCount)});
-                });
+                    _this.setState({currentPage: pageNo});
+                }else{
+                    if(isTipNoDataMessage==true){
+                        message.error("无更多数据");
+                    }
+                }
             },
             onError: function (error) {
                 message.error(error);
@@ -208,11 +215,10 @@ class SelectSubjectModal extends React.Component {
                                    dataSource={subjectData}
                                    rowSelection={subjectRowSelection}
                                    showHeader={false}
-                                   pagination={{
-                                total: this.state.totalSubjectCount,
-                                pageSize: getPageSize(),
-                                onChange: this.pageOnChange
-                            }} scroll={{y: 300}}/>
+                                   pagination={false} scroll={{y: 300}}/>
+                            <div className="schoolgroup_operate schoolgroup_more more_classroom">
+                                <a onClick={this.loadMoreSubject} className="schoolgroup_more_a">加载更多</a>
+                            </div>
                         </div>
                     </Col>
                 </Row>
