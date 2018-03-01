@@ -42,7 +42,7 @@ import SystemSettingComponent from '../components/SystemSetting/SystemSettingCom
 import AddShiftPosModel from '../components/Attendance/AddShiftPosModel';
 import SendPicModel from '../components/antGroup/SendPicModel'
 import ConfirmModal from '../components/ConfirmModal';
-import {isEmpty,showLargeImg,setLocalLanaguage,getMessageFromLanguage, getLocalFromLanguage} from '../utils/utils';
+import {isEmpty, showLargeImg, setLocalLanaguage, getMessageFromLanguage, getLocalFromLanguage} from '../utils/utils';
 //国际化
 import {IntlProvider, addLocaleData} from 'react-intl';
 import {FormattedMessage} from 'react-intl';
@@ -707,13 +707,62 @@ const MainLayout = React.createClass({
         if (type == 1) {
             //部门群
             this.getStructureById("-1");
-            this.setState({"addDeGroupMemberModalVisible": true, originDiv: 'none'});
+            this.setState({
+                "addDeGroupMemberModalVisible": true,
+                originDiv: 'none',
+                OriUserNotOrIf: 'none',
+                OriUserIfOrNot: 'block'
+            });
         } else {
             //普通群
             //显示顶部的三个标签
             //显示另一个table
-            this.setState({"addDeGroupMemberModalVisible": true, originDiv: 'block'});
+            //去请求最近联系人
+            this.getRecentShareUsers();
+            this.setState({
+                "addDeGroupMemberModalVisible": true,
+                originDiv: 'block',
+                OriUserNotOrIf: 'block',
+                OriUserIfOrNot: 'none'
+            });
         }
+    },
+
+    getRecentShareUsers() {
+        var _this = this;
+        var param = {
+            "method": 'getRecentShareUsers',
+            "userId": sessionStorage.getItem("ident"),
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    if (isEmpty(response) == false) {
+                        var arr = [];
+                        response.forEach(function (v) {
+                            if (v.type == 0) {
+                                if (v.user.colUid != 120024) {
+                                    var user = v.user;
+                                    arr.push({
+                                        key: user.colUid,
+                                        userId: user.colUid,
+                                        userName: user.userName,
+                                    });
+                                }
+                            }
+                        })
+                        _this.setState({defaultUserData: arr});
+                    }
+                } else {
+
+                }
+            },
+
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     /**
@@ -2443,8 +2492,8 @@ const MainLayout = React.createClass({
                         width={700}
                     >
                         <div style={{display: this.state.originDiv}}>
-                            <li style={{float: 'left'}}>我的好友</li>
                             <li style={{float: 'left'}}>最近联系人</li>
+                            <li style={{float: 'left'}}>我的好友</li>
                             <li style={{float: 'left'}}>组织架构</li>
                         </div>
                         <Row className="ant-form-item">
@@ -2464,7 +2513,19 @@ const MainLayout = React.createClass({
                         </Row>
                         <Row className="ant-form-item">
                             <Col span={24}>
-                                <div className="department_scroll">
+
+                                <div style={{display: this.state.OriUserNotOrIf}} className="favorite_scroll">
+                                    <div className="down_table_height">
+                                        <Table columns={memberColumns}
+                                               pagination={false} dataSource={this.state.defaultUserData}
+                                               className="schoolgroup_table1 schoolgroup_table_department"
+                                               scroll={{y: 240}}
+                                               rowSelection={rowSelection}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div style={{display: this.state.OriUserIfOrNot}} className="department_scroll">
                                     <div style={{display: searchOriNotOrIf}} className="favorite_scroll">
                                         {/*获取组织架构的部门下的人*/}
                                         <div className="down_table_height">
