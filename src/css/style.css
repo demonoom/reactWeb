@@ -8672,4 +8672,11 @@ select.course_n:hover {
     height: 46px;
     padding-bottom:0
 }
-
+.add_member_right .ant-table table th.dold_text{
+    position: relative;
+    left:-30px;
+}
+.add_member_right .schoolgroup_table_department .ant-table-thead > tr > th.ant-table-selection-column{
+    width: 40px;
+    text-align: left;
+}
