@@ -854,8 +854,8 @@ const MainLayout = React.createClass({
 
                     });
                 } else {
-                    var subGroupName = <div style={{textAlign: 'center'}}>
-                        没有下级部门了
+                    var subGroupName = <div style={{textAlign: 'center', height:'242px'}}>
+                        <img className="noDataTipImg" style={{width:'235px'}} src={require('../components/images/noDataTipImg.png')}/>
                     </div>
                     subGroupList.push({
                         key: 99999,
@@ -1135,7 +1135,7 @@ const MainLayout = React.createClass({
         if (currentGroupObj.owner.colUid == sessionStorage.getItem("ident")) {
             //我是群主
             divBlock = 'inline-block';
-            topButton = <span className="toobar">
+            topButton = <span>
                 <span type="primary" className="noom_cursor set_in_btn_font"
                       onClick={this.showAddMembersModal.bind(this, groupType)}><Icon
                     className="i_antdesign" type="plus"/>添加群成员</span></span>
@@ -1178,7 +1178,7 @@ const MainLayout = React.createClass({
                     topButton = <span className="right_ri"></span>;
                 } else {
                     //老师
-                    topButton = <span className="toobar">
+                    topButton = <span>
                         <span type="primary" className="noom_cursor set_in_btn_font"
                               onClick={this.showAddMembersModal.bind(this, groupType)}>
                         <Icon className="i_antdesign" type="plus"/>添加群成员</span></span>
@@ -2496,24 +2496,20 @@ const MainLayout = React.createClass({
                             <li style={{float: 'left'}}>我的好友</li>
                             <li style={{float: 'left'}}>组织架构</li>
                         </div>
-                        <Row className="ant-form-item">
-                            <Col span={24}>
-                                <Col span={10}>
-                                    <Input
-                                        placeholder="请输入要搜索的姓名"
-                                        value={this.state.userNameFromOri}
-                                        onChange={this.onChangeUserNameFromOri}
-                                        ref={node => this.userNameInput = node}
-                                    />
-                                </Col>
-                                <span className="password_ts" style={{marginLeft: 8}}>
-                                    {hasSelected ? `已选择 ${this.state.selectedRowKeys.length} 人` : ''}
-                                </span>
+                        <div className="ant-form-item flex">
+                            <Col span={10}>
+                                <Input
+                                    placeholder="请输入要搜索的姓名"
+                                    value={this.state.userNameFromOri}
+                                    onChange={this.onChangeUserNameFromOri}
+                                    ref={node => this.userNameInput = node}
+                                />
                             </Col>
-                        </Row>
-                        <Row className="ant-form-item">
-                            <Col span={24}>
-
+                            <span className="password_ts" style={{marginLeft: 8}}>
+                                {hasSelected ? `已选择 ${this.state.selectedRowKeys.length} 人` : ''}
+                            </span>
+                        </div>
+                        <div className="ant-form-item flex">
                                 <div style={{display: this.state.OriUserNotOrIf}} className="favorite_scroll">
                                     <div className="down_table_height">
                                         <Table columns={memberColumns}
@@ -2525,7 +2521,7 @@ const MainLayout = React.createClass({
                                     </div>
                                 </div>
 
-                                <div style={{display: this.state.OriUserIfOrNot}} className="department_scroll">
+                                <div style={{display: this.state.OriUserIfOrNot}} className="department_scroll bai">
                                     <div style={{display: searchOriNotOrIf}} className="favorite_scroll">
                                         {/*获取组织架构的部门下的人*/}
                                         <div className="down_table_height">
@@ -2565,8 +2561,7 @@ const MainLayout = React.createClass({
                                         </div>
                                     </div>
                                 </div>
-                            </Col>
-                        </Row>
+                        </div>
                     </Modal>
 
                     <ConfirmModal ref="dissolutionChatGroupConfirmModal"
