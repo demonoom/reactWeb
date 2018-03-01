@@ -20,7 +20,6 @@ import UserFace from '../components/UserCardModalComponents';
 import FloatButton from '../components/FloatButton';
 import PersonCenterMenu from '../components/layOut/PersonCenterMenu';
 import PersonCenter from '../components/PersonCenter';
-import moment from 'moment';
 import AntNestTabComponents from '../components/antNest/AntNestTabComponents';
 import DingMessageTabComponents from '../components/dingMessage/DingMessageTabComponents';
 import AntGroupTabComponents from '../components/antGroup/AntGroupTabComponents';
@@ -32,8 +31,7 @@ import PersonCenterComponents from '../components/antGroup/PersonCenterComponent
 import AntCloudMenu from '../components/layOut/AntCloudMenu';
 import AntCloudTableComponents from '../components/antCloud/AntCloudTableComponents';
 import {LocaleProvider} from 'antd';
-import {showLargeImg} from '../utils/utils'
-import {isEmpty, SMALL_IMG} from '../utils/Const'
+import {SMALL_IMG} from '../utils/Const'
 import TeachSpace from '../components/TeachSpaces';
 import TeachSpaceGhostMenu from '../components/TeachSpacesGhostMenu';
 import {MsgConnection} from '../utils/msg_websocket_connection';
@@ -44,10 +42,13 @@ import SystemSettingComponent from '../components/SystemSetting/SystemSettingCom
 import AddShiftPosModel from '../components/Attendance/AddShiftPosModel';
 import SendPicModel from '../components/antGroup/SendPicModel'
 import ConfirmModal from '../components/ConfirmModal';
-// 推荐在入口文件全局设置 locale
-import 'moment/locale/zh-cn';
+import {isEmpty, showLargeImg, setLocalLanaguage, getMessageFromLanguage, getLocalFromLanguage} from '../utils/utils';
+//国际化
+import {IntlProvider, addLocaleData} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
+import zh from 'react-intl/locale-data/zh';
+import en from 'react-intl/locale-data/en';
 
-moment.locale('zh-cn');
 import {createStore} from 'redux';
 
 const Panel = Collapse.Panel;
@@ -706,10 +707,62 @@ const MainLayout = React.createClass({
         if (type == 1) {
             //部门群
             this.getStructureById("-1");
-            this.setState({"addDeGroupMemberModalVisible": true});
+            this.setState({
+                "addDeGroupMemberModalVisible": true,
+                originDiv: 'none',
+                OriUserNotOrIf: 'none',
+                OriUserIfOrNot: 'block'
+            });
         } else {
             //普通群
+            //显示顶部的三个标签
+            //显示另一个table
+            //去请求最近联系人
+            this.getRecentShareUsers();
+            this.setState({
+                "addDeGroupMemberModalVisible": true,
+                originDiv: 'block',
+                OriUserNotOrIf: 'block',
+                OriUserIfOrNot: 'none'
+            });
         }
+    },
+
+    getRecentShareUsers() {
+        var _this = this;
+        var param = {
+            "method": 'getRecentShareUsers',
+            "userId": sessionStorage.getItem("ident"),
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    if (isEmpty(response) == false) {
+                        var arr = [];
+                        response.forEach(function (v) {
+                            if (v.type == 0) {
+                                if (v.user.colUid != 120024) {
+                                    var user = v.user;
+                                    arr.push({
+                                        key: user.colUid,
+                                        userId: user.colUid,
+                                        userName: user.userName,
+                                    });
+                                }
+                            }
+                        })
+                        _this.setState({defaultUserData: arr});
+                    }
+                } else {
+
+                }
+            },
+
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     /**
@@ -1749,7 +1802,7 @@ const MainLayout = React.createClass({
                 url: 'http://www.maaee.com//Excoord_PhoneService/antSearch/indexSearch/' + loginUserId,
                 title: '搜索'
             }
-        ;
+            ;
         LP.Start(obj);
     },
 
@@ -2011,6 +2064,9 @@ const MainLayout = React.createClass({
 
     render() {
         var _this = this;
+        //引入国际化的支持
+        var messageFromLanguage = getMessageFromLanguage();
+        var local = getLocalFromLanguage();
 
         const rowSelection = {
             selectedRowKeys: this.state.selectedRowKeys,
@@ -2182,7 +2238,10 @@ const MainLayout = React.createClass({
         //
         //
         return (
-            <LocaleProvider locale={this.state.locale}>
+            <IntlProvider
+                locale={local}
+                messages={messageFromLanguage}
+            >
                 <div className={collapse ? "ant-layout-aside ant-layout-aside-collapse" : "ant-layout-aside"}>
 
                     <aside className="ant-layout-sider">
@@ -2197,8 +2256,13 @@ const MainLayout = React.createClass({
                             <Menu.Item key="message" className="padding_menu">
                                 <i className="icon_menu_ios icon_message"></i>
                                 <b className="ding_alert" ref='msgAlert'></b>
-                                <div className="tan">动态</div>
-
+                                <div className="tan">
+                                    <FormattedMessage
+                                        id='dynamic'
+                                        description='动态'
+                                        defaultMessage='动态'
+                                    />
+                                </div>
                             </Menu.Item>
                             <Menu.Item key="antNest" className="padding_menu">
                                 <i className="icon_menu_ios icon_yichao1"></i>
@@ -2427,6 +2491,11 @@ const MainLayout = React.createClass({
                         ]}
                         width={700}
                     >
+                        <div style={{display: this.state.originDiv}}>
+                            <li style={{float: 'left'}}>最近联系人</li>
+                            <li style={{float: 'left'}}>我的好友</li>
+                            <li style={{float: 'left'}}>组织架构</li>
+                        </div>
                         <Row className="ant-form-item">
                             <Col span={24}>
                                 <Col span={10}>
@@ -2444,7 +2513,19 @@ const MainLayout = React.createClass({
                         </Row>
                         <Row className="ant-form-item">
                             <Col span={24}>
-                                <div className="department_scroll">
+
+                                <div style={{display: this.state.OriUserNotOrIf}} className="favorite_scroll">
+                                    <div className="down_table_height">
+                                        <Table columns={memberColumns}
+                                               pagination={false} dataSource={this.state.defaultUserData}
+                                               className="schoolgroup_table1 schoolgroup_table_department"
+                                               scroll={{y: 240}}
+                                               rowSelection={rowSelection}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div style={{display: this.state.OriUserIfOrNot}} className="department_scroll">
                                     <div style={{display: searchOriNotOrIf}} className="favorite_scroll">
                                         {/*获取组织架构的部门下的人*/}
                                         <div className="down_table_height">
@@ -2501,7 +2582,7 @@ const MainLayout = React.createClass({
                                   onConfirmModalCancel={this.closeConfirmModal}
                                   onConfirmModalOK={this.deleteSelectedMember}/>
                 </div>
-            </LocaleProvider>
+            </IntlProvider>
         );
     },
 

@@ -8638,6 +8638,9 @@ select.course_n:hover {
     top:2px;
     margin-right: 4px;
 }
+.add_member .ant-modal-body{
+    height: 390px;
+}
 .add_member_right .schoolgroup_table1 .ant-table-content{
     padding:0
 }
@@ -8659,7 +8662,7 @@ select.course_n:hover {
 .add_member_right{
     float: right;
     box-sizing: border-box;
-    width: 350px;
+    width: 376px;
     border: 1px solid #e1e1e1;
     border-radius: 4px;
     height: 300px;
