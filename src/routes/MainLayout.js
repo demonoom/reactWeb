@@ -2418,6 +2418,7 @@ const MainLayout = React.createClass({
                         onCancel={this.addDeGroupMemberModalHandleCancel}
                         transitionName=""  //禁用modal的动画效果
                         maskClosable={false} //设置不允许点击蒙层关闭
+                        className="add_member"
                         footer={[
                             <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
                                     onClick={this.addGroupMember}>确定</button>,
@@ -2428,16 +2429,20 @@ const MainLayout = React.createClass({
                     >
                         <Row className="ant-form-item">
                             <Col span={24}>
-                                <Input
-                                    placeholder="请输入要搜索的姓名"
-                                    value={this.state.userNameFromOri}
-                                    onChange={this.onChangeUserNameFromOri}
-                                    ref={node => this.userNameInput = node}
-                                />
+                                <Col span={10}>
+                                    <Input
+                                        placeholder="请输入要搜索的姓名"
+                                        value={this.state.userNameFromOri}
+                                        onChange={this.onChangeUserNameFromOri}
+                                        ref={node => this.userNameInput = node}
+                                    />
+                                </Col>
                                 <span className="password_ts" style={{marginLeft: 8}}>
                                     {hasSelected ? `已选择 ${this.state.selectedRowKeys.length} 人` : ''}
                                 </span>
                             </Col>
+                        </Row>
+                        <Row className="ant-form-item">
                             <Col span={24}>
                                 <div className="department_scroll">
                                     <div style={{display: searchOriNotOrIf}} className="favorite_scroll">
@@ -2454,7 +2459,7 @@ const MainLayout = React.createClass({
 
                                     <div style={{display: searchOriIfOrNot}} className="favorite_scroll">
                                         {/*获取组织架构的所有部门*/}
-                                        <div className="up_table_height" style={{float: 'left', width: '280px'}}>
+                                        <div className="add_member_left">
                                             {/*面包屑*/}
                                             <Breadcrumb separator=">">
                                                 {breadcrumbItemObjArray}
@@ -2465,7 +2470,7 @@ const MainLayout = React.createClass({
                                                    pagination={false}/>
                                         </div>
                                         {/*获取组织架构的部门下的人*/}
-                                        <div className="down_table_height" style={{float: 'right', width: '350px'}}>
+                                        <div className="add_member_right">
                                             <Table columns={memberColumns}
                                                    pagination={false} dataSource={this.state.subGroupMemberList}
                                                    className="schoolgroup_table1 schoolgroup_table_department"
