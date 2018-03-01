@@ -2426,18 +2426,18 @@ const MainLayout = React.createClass({
                     >
                         <Row className="ant-form-item">
                             <Col span={24}>
+                                <Input
+                                    placeholder="请输入要搜索的姓名"
+                                    value={this.state.userNameFromOri}
+                                    onChange={this.onChangeUserNameFromOri}
+                                    ref={node => this.userNameInput = node}
+                                />
+                                <span className="password_ts" style={{marginLeft: 8}}>
+                                    {hasSelected ? `已选择 ${this.state.selectedRowKeys.length} 人` : ''}
+                                </span>
+                            </Col>
+                            <Col span={24}>
                                 <div className="department_scroll">
-                                    <Input
-                                        placeholder="请输入要搜索的姓名"
-                                        value={this.state.userNameFromOri}
-                                        onChange={this.onChangeUserNameFromOri}
-                                        ref={node => this.userNameInput = node}
-                                    />
-
-                                    <span className="password_ts" style={{marginLeft: 8}}>
-                                                {hasSelected ? `已选择 ${this.state.selectedRowKeys.length} 人` : ''}
-                                            </span>
-
                                     <div style={{display: searchOriNotOrIf}} className="favorite_scroll">
                                         {/*获取组织架构的部门下的人*/}
                                         <div className="down_table_height">
