@@ -3387,24 +3387,18 @@ const AntGroupTabComponents = React.createClass({
                          extname = name.substr(name.lastIndexOf('.')+1);
                         if(extname == 'mp3'){
                             styleImg = '../src/components/images/mp3.png';
-                        }
-                        if(extname == 'mp4'){
+                        }else if(extname == 'mp4'){
                             styleImg = '../src/components/images/mp4_icon.png';
-                        }
-                        if(extname == 'ppt'){
+                        }else if(extname == 'ppt'){
                             styleImg = '../src/components/images/ppt.png';
-                        }
-                        if(extname == 'docx'){
+                        }else if(extname == 'docx'){
                             styleImg = '../src/components/images/doc.png';
-                        }
-                        if(extname == 'pdf'){
+                        }else if(extname == 'pdf'){
                             styleImg = '../src/components/images/pdf.png';
-                        }
-                        if(extname == 'xls'){
+                        }else if(extname == 'xls'){
                             styleImg = '../src/components/images/xls.png';
-                        }
-                         if(extname != 'mp3'&& extname != 'mp4'&& extname != 'ppt'&& extname != 'docx'&& extname != 'pdf'&& extname != 'xls'){
-                             styleImg = '../src/components/images/maaee_link_file_102_102.png';
+                        }else{
+                            styleImg = '../src/components/images/maaee_link_file_102_102.png';
                         }
                     }
 
