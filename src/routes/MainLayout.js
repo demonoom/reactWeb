@@ -800,6 +800,14 @@ const MainLayout = React.createClass({
                         });
 
                     });
+                } else {
+                    var subGroupName = <div style={{textAlign: 'center'}}>
+                        没有下级部门了
+                    </div>
+                    subGroupList.push({
+                        key: 99999,
+                        subGroupName: subGroupName,
+                    });
                 }
                 _this.setState({subGroupList, "optType": "getGroupMenu"});
             },
@@ -881,6 +889,7 @@ const MainLayout = React.createClass({
         subGroupMemberList.splice(0);
         structuresObjArray.splice(0);
         this.state.selectedRowKeys = [];
+        this.state.userNameFromOri = '';
         this.setState({"addDeGroupMemberModalVisible": false});
     },
 
