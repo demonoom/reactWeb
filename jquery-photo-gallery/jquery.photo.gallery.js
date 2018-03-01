@@ -691,12 +691,6 @@
                 });
             });
 
-            imgs.push({
-                url: imgUrl,
-                imgHeight: imgHeight,
-                imgWidth: imgWidth
-            });
-
             localStorage["photoGalleryImgs"] = JSON.stringify(imgs); //因为此字符串可能是base64字符，appgo无法传
             localStorage["photoGalleryActiveIndex"] = activeIndex;
 

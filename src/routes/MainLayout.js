@@ -712,7 +712,8 @@ const MainLayout = React.createClass({
                 originDiv: 'none',
                 OriUserNotOrIf: 'none',
                 OriUserIfOrNot: 'block',
-                originFlag: true
+                originFlag: true,
+                searchArea: 'originzation'
             });
         } else {
             //普通群
@@ -725,7 +726,8 @@ const MainLayout = React.createClass({
                 originDiv: 'block',
                 OriUserNotOrIf: 'block',
                 OriUserIfOrNot: 'none',
-                originFlag: false
+                originFlag: false,
+                searchArea: 'defaultArea'
             });
         }
     },
@@ -736,10 +738,11 @@ const MainLayout = React.createClass({
     originClicked() {
         this.getStructureById("-1");
         this.setState({
+            userNameFromOri: '',  //解决搜索框有内容去切换头部无效的问题
             originDiv: 'block',   //控制普通群头部三个按钮
             OriUserNotOrIf: 'none',  //控制最大的两个table的显示隐藏
             OriUserIfOrNot: 'block',  //控制最大的两个table的显示隐藏
-            originFlag: true   //控制搜索框有无内容的显示结果
+            originFlag: true,   //控制搜索框有无内容的显示结果,只要是组织架构的就设成true
         });
     },
 
@@ -754,7 +757,8 @@ const MainLayout = React.createClass({
             originDiv: 'block',
             OriUserNotOrIf: 'block',
             OriUserIfOrNot: 'none',
-            originFlag: false
+            originFlag: false,
+            userNameFromOri: ''  //解决搜索框有内容去切换头部无效的问题
         });
     },
 
@@ -764,8 +768,56 @@ const MainLayout = React.createClass({
     friendClicked() {
         //改变dataSourse
         //显示隐藏
+        this.getUserContacts();
+        this.setState({
+            originDiv: 'block',
+            OriUserNotOrIf: 'block',
+            OriUserIfOrNot: 'none',
+            originFlag: false,
+            userNameFromOri: ''  //解决搜索框有内容去切换头部无效的问题
+        });
     },
 
+    /**
+     * 获取我的好友
+     */
+    getUserContacts() {
+        var _this = this;
+        var param = {
+            "method": 'getUserContacts',
+            "ident": sessionStorage.getItem("ident"),
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    if (isEmpty(response) == false) {
+                        var arr = [];
+                        response.forEach(function (v) {
+                            if (v.colUid != 41451 && v.colUid != 138437 && v.colUid != 142033 && v.colUid != 139581 && v.colUid != sessionStorage.getItem("ident")) {
+                                arr.push({
+                                    key: v.colUid,
+                                    userId: v.colUid,
+                                    userName: v.userName,
+                                });
+                            }
+                        })
+                        _this.setState({defaultUserData: arr});
+                    }
+                } else {
+
+                }
+            },
+
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 获取最近联系人
+     */
     getRecentShareUsers() {
         var _this = this;
         var param = {
@@ -892,8 +944,14 @@ const MainLayout = React.createClass({
 
                     });
                 } else {
+<<<<<<< HEAD
                     var subGroupName = <div className="add_member_noDataTipImg">
                         <img className="noDataTipImg" style={{width:'235px'}} src={require('../components/images/noDataTipImg.png')}/>
+=======
+                    var subGroupName = <div style={{textAlign: 'center', height: '242px'}}>
+                        <img className="noDataTipImg" style={{width: '235px'}}
+                             src={require('../components/images/noDataTipImg.png')}/>
+>>>>>>> 370a9deb12d47d4ff58f743e2c5be7b5cf66697e
                     </div>
                     subGroupList.push({
                         key: 99999,
@@ -1840,7 +1898,7 @@ const MainLayout = React.createClass({
                 url: 'http://www.maaee.com//Excoord_PhoneService/antSearch/indexSearch/' + loginUserId,
                 title: '搜索'
             }
-            ;
+        ;
         LP.Start(obj);
     },
 
@@ -1938,14 +1996,19 @@ const MainLayout = React.createClass({
      * @param str
      */
     searchUserFromOri(str) {
+        var searchArea = this.state.searchArea;  //defaultArea为全局,originzation为组织架构内
         var _this = this;
         var param = {
             "method": 'searchShareUsers',
             "userId": sessionStorage.getItem("ident"),
             "pageNo": -1,
             "searchKeyWords": str,
-            "dataType": 3
         };
+        if (searchArea == 'defaultArea') {
+            param.dataType = 0;
+        } else if (searchArea == 'originzation') {
+            param.dataType = 3;
+        }
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 if (ret.msg == "调用成功" && ret.success == true) {
@@ -2559,10 +2622,23 @@ const MainLayout = React.createClass({
                             </span>
                         </div>
                         <div className="ant-form-item flex">
-                                <div style={{display: this.state.OriUserNotOrIf}} className="favorite_scroll">
+                            <div style={{display: this.state.OriUserNotOrIf}} className="favorite_scroll">
+                                <div className="down_table_height">
+                                    <Table columns={memberColumns}
+                                           pagination={false} dataSource={this.state.defaultUserData}
+                                           className="schoolgroup_table1 schoolgroup_table_department"
+                                           scroll={{y: 240}}
+                                           rowSelection={rowSelection}
+                                    />
+                                </div>
+                            </div>
+
+                            <div style={{display: this.state.OriUserIfOrNot}} className="department_scroll bai">
+                                <div style={{display: searchOriNotOrIf}} className="favorite_scroll">
+                                    {/*获取组织架构的部门下的人*/}
                                     <div className="down_table_height">
                                         <Table columns={memberColumns}
-                                               pagination={false} dataSource={this.state.defaultUserData}
+                                               pagination={false} dataSource={this.state.searchUserFromOri}
                                                className="schoolgroup_table1 schoolgroup_table_department"
                                                scroll={{y: 240}}
                                                rowSelection={rowSelection}
@@ -2570,6 +2646,7 @@ const MainLayout = React.createClass({
                                     </div>
                                 </div>
 
+<<<<<<< HEAD
                                 <div style={{display: this.state.OriUserIfOrNot}} className="department_scroll bai">
                                     <div style={{display: searchOriNotOrIf}} className="favorite_scroll">
                                         {/*获取组织架构的部门下的人*/}
@@ -2581,35 +2658,35 @@ const MainLayout = React.createClass({
                                                    rowSelection={rowSelection}
                                             />
                                         </div>
+=======
+                                <div style={{display: searchOriIfOrNot}} className="favorite_scroll">
+                                    {/*获取组织架构的所有部门*/}
+                                    <div className="add_member_left">
+                                        {/*面包屑*/}
+                                        <Breadcrumb separator=">">
+                                            {breadcrumbItemObjArray}
+                                        </Breadcrumb>
+                                        <Table showHeader={false} columns={columns}
+                                               dataSource={this.state.subGroupList}
+                                               className="schoolgroup_table"
+                                               pagination={false}/>
+>>>>>>> 370a9deb12d47d4ff58f743e2c5be7b5cf66697e
                                     </div>
-
-                                    <div style={{display: searchOriIfOrNot}} className="favorite_scroll">
-                                        {/*获取组织架构的所有部门*/}
-                                        <div className="add_member_left">
-                                            {/*面包屑*/}
-                                            <Breadcrumb separator=">">
-                                                {breadcrumbItemObjArray}
-                                            </Breadcrumb>
-                                            <Table showHeader={false} columns={columns}
-                                                   dataSource={this.state.subGroupList}
-                                                   className="schoolgroup_table"
-                                                   pagination={false}/>
-                                        </div>
-                                        {/*获取组织架构的部门下的人*/}
-                                        <div className="add_member_right">
-                                            <Table columns={memberColumns}
-                                                   pagination={false} dataSource={this.state.subGroupMemberList}
-                                                   className="schoolgroup_table1 schoolgroup_table_department"
-                                                   scroll={{y: 240}}
-                                                   rowSelection={rowSelection}
-                                            />
-                                            <div className="schoolgroup_operate schoolgroup_more">
-                                                <a onClick={this.loadMoreMember}
-                                                   className="schoolgroup_more_a">{this.state.wordSrc}</a>
-                                            </div>
+                                    {/*获取组织架构的部门下的人*/}
+                                    <div className="add_member_right">
+                                        <Table columns={memberColumns}
+                                               pagination={false} dataSource={this.state.subGroupMemberList}
+                                               className="schoolgroup_table1 schoolgroup_table_department"
+                                               scroll={{y: 240}}
+                                               rowSelection={rowSelection}
+                                        />
+                                        <div className="schoolgroup_operate schoolgroup_more">
+                                            <a onClick={this.loadMoreMember}
+                                               className="schoolgroup_more_a">{this.state.wordSrc}</a>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
                         </div>
                     </Modal>
 
