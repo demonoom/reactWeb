@@ -8641,8 +8641,13 @@ select.course_n:hover {
 .add_member .ant-modal-body{
     height: 390px;
 }
-.add_member_right .schoolgroup_table1 .ant-table-content{
+.add_member_right .schoolgroup_table1 .ant-table-content, .add_member_wrap .schoolgroup_table1 .ant-table-content{
     padding:0
+}
+.add_member_wrap{
+    box-sizing: border-box;
+    width: 100%;
+    height: 300px;
 }
 .add_member_left{
     float: left;
@@ -8655,9 +8660,13 @@ select.course_n:hover {
 .add_member_left .schoolgroup_table .ant-table-content{
     max-height: 100% !important;
     height: 252px;
+    padding: 0px;
 }
 .add_member_left .clearfix > div:first-child{
     height: calc(100% - 46px);
+}
+.add_member_left .ant-table-tbody > tr:nth-last-child(1) td{
+    border-bottom: 0;
 }
 .add_member_right{
     float: right;
@@ -8670,16 +8679,39 @@ select.course_n:hover {
 .add_member_right .schoolgroup_table_department{
     height: 260px;
 }
-.add_member_right .ant-table-fixed-header .ant-table-scroll .ant-table-header{
+.add_member_wrap .schoolgroup_table_department{
+    height: 300px;
+}
+.add_member_right .ant-table-fixed-header .ant-table-scroll .ant-table-header, .add_member_wrap .ant-table-fixed-header .ant-table-scroll .ant-table-header {
     width: 100%;
     height: 46px;
-    padding-bottom:0
+    margin-bottom:0 !important
+}
+.add_member_right .ant-table-body{
+    height: calc(100% - 46px);
 }
 .add_member_right .ant-table table th.dold_text{
     position: relative;
     left:-30px;
 }
-.add_member_right .schoolgroup_table_department .ant-table-thead > tr > th.ant-table-selection-column{
+.add_member_wrap .ant-table table th.dold_text{
+   position: relative;
+   left:-90px;
+   height: 46px;
+   line-height: 30px;
+}
+.add_member_right .schoolgroup_table_department .ant-table-thead > tr > th.ant-table-selection-column, .add_member_wrap .schoolgroup_table_department .ant-table-thead > tr > th.ant-table-selection-column{
     width: 40px;
     text-align: left;
+}
+.add_member_noDataTipImg{
+    text-align: center;
+    height: 252px;
+    cursor: default;
+    background: #fff;
+    width: 278px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 4px;
 }

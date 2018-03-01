@@ -70,11 +70,6 @@ var columns = [{
     title: '部门名称',
     dataIndex: 'subGroupName',
     key: 'subGroupName',
-}, {
-    title: '操作',
-    dataIndex: 'opt',
-    key: 'opt',
-    width: '86px'
 }];
 
 const radioStyle = {
@@ -944,9 +939,8 @@ const MainLayout = React.createClass({
 
                     });
                 } else {
-                    var subGroupName = <div style={{textAlign: 'center', height: '242px'}}>
-                        <img className="noDataTipImg" style={{width: '235px'}}
-                             src={require('../components/images/noDataTipImg.png')}/>
+                    var subGroupName = <div className="add_member_noDataTipImg">
+                        <img className="noDataTipImg" style={{width:'235px'}} src={require('../components/images/noDataTipImg.png')}/>
                     </div>
                     subGroupList.push({
                         key: 99999,
@@ -2612,13 +2606,13 @@ const MainLayout = React.createClass({
                                     ref={node => this.userNameInput = node}
                                 />
                             </Col>
-                            <span className="password_ts" style={{marginLeft: 8}}>
+                            <span className="password_ts" style={{marginLeft: '8px', lineHeight:'28px'}}>
                                 {hasSelected ? `已选择 ${this.state.selectedRowKeys.length} 人` : ''}
                             </span>
                         </div>
                         <div className="ant-form-item flex">
                             <div style={{display: this.state.OriUserNotOrIf}} className="favorite_scroll">
-                                <div className="down_table_height">
+                                <div className="add_member_wrap">
                                     <Table columns={memberColumns}
                                            pagination={false} dataSource={this.state.defaultUserData}
                                            className="schoolgroup_table1 schoolgroup_table_department"
@@ -2631,7 +2625,7 @@ const MainLayout = React.createClass({
                             <div style={{display: this.state.OriUserIfOrNot}} className="department_scroll bai">
                                 <div style={{display: searchOriNotOrIf}} className="favorite_scroll">
                                     {/*获取组织架构的部门下的人*/}
-                                    <div className="down_table_height">
+                                    <div className="add_member_wrap">
                                         <Table columns={memberColumns}
                                                pagination={false} dataSource={this.state.searchUserFromOri}
                                                className="schoolgroup_table1 schoolgroup_table_department"
