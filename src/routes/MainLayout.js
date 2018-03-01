@@ -1810,6 +1810,7 @@ const MainLayout = React.createClass({
 
     onChangeUserName(e) {
         //搜索框改变就清空选择数组
+        this.state.searchShareUsersData = [];
         this.state.checkedConcatOptions = [];
         this.state.checkedGroupOptions = [];
         this.state.checkedsSructureOptions = [];
@@ -1823,6 +1824,7 @@ const MainLayout = React.createClass({
 
     //群组加人搜索
     onChangeUserNameFromOri(e) {
+        this.state.searchUserFromOri = [];
         if (e.target.value.length != 0) {
             this.searchUserFromOri(e.target.value);
         }
