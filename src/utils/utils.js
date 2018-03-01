@@ -1,3 +1,7 @@
+import zh_CN from '../components/languages/zh_CN';
+import en_US from '../components/languages/en_US';
+import enUS from 'antd/lib/locale-provider/en_US';
+
 /**
  * Created by madapeng on 17-4-8.
  */
@@ -191,4 +195,48 @@ export function cutString(str, len) {
 
 export function showModal(modalStatus) {
     alert(modalStatus);
+}
+
+export function getMessageFromLanguage() {
+    var lan = localStorage.getItem("language");
+    switch (lan) {
+        case 'en-US':
+        case 'en':
+            return en_US;
+            break;
+        case 'zh-CN':
+        case 'zh':
+            return zh_CN;
+            break;
+        default:
+            return zh_CN;
+            break;
+    }
+}
+
+export function getLocalFromLanguage() {
+    var lan = localStorage.getItem("language");
+    switch (lan) {
+        case 'en-US':
+        case 'en':
+            return 'en';
+            break;
+        case 'zh-CN':
+        case 'zh':
+            return 'zh';
+            break;
+        default:
+            return 'zh';
+            break;
+    }
+}
+
+export function setLocalLanaguage(la) {
+    var language = "en-US";
+    if(la==true){
+        language = "en-US";
+    }else{
+        language = "zh-CN";
+    }
+    localStorage.setItem("language", language);
 }

@@ -5,7 +5,12 @@ const TabPane = Tabs.TabPane;
 import { doWebService } from '../WebServiceHelper';
 import {doWebService_CloudClassRoom} from '../utils/CloudClassRoomURLUtils';
 import {SimpleWebsocketConnection} from '../utils/simple_websocket_connection.js';
-import {isEmpty} from '../utils/utils';
+import {isEmpty,setLocalLanaguage,getMessageFromLanguage, getLocalFromLanguage} from '../utils/utils';
+//国际化
+import {IntlProvider, addLocaleData} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
+import zh from 'react-intl/locale-data/zh';
+import en from 'react-intl/locale-data/en';
 
 var code;
 var loginComponent;
@@ -16,6 +21,7 @@ const Login = Form.create()(React.createClass({
 
     getInitialState() {
         loginComponent = this;
+        addLocaleData([...en, ...zh]);
         return {
             code: '',
             isValidateCode:false,
@@ -59,6 +65,10 @@ const Login = Form.create()(React.createClass({
 
     componentDidMount(){
         var _this = this;
+        //true：使用英文显示   false：使用中文显示
+        if (isEmpty(sessionStorage.getItem("language"))) {
+            setLocalLanaguage(false);
+        }
         _this.getLoginTeachSystemEwm();
         _this.createCode();
         simpleMS.msgWsListener = {
@@ -254,6 +264,8 @@ const Login = Form.create()(React.createClass({
     },
 
     render() {
+        var messageFromLanguage = getMessageFromLanguage();
+        var local = getLocalFromLanguage();
         const { getFieldDecorator } = loginComponent.props.form;
         const formItemLayout = {
             labelCol: { span: 0 },
@@ -282,50 +294,58 @@ const Login = Form.create()(React.createClass({
         }
 
         return (
-            <div className="login_bg">
-			<div className="login_logo"><img src={('../../src/components/images/maaee.png')}/></div>
-			<div className="login_bg_cont">
-			 	<div className="login_bg_content">
-                    <div className="card-container">
-                        <Tabs type="card">
-                            <TabPane tab="扫码登录" key="1">
-                                {this.state.loginImg}
-                                <div className="login_ewm">请使用小蚂蚁移动教学扫二维码登录</div>
-                            </TabPane>
-                            <TabPane tab="密码登录" key="2">
-                                <Form onSubmit={loginComponent.handleSubmit} className="login-form">
-                                    <FormItem {...formItemLayout} >
-                                        {getFieldDecorator('userName',{
-                                            rules: [{ required: true, message: '请输入用户名!' }],
-                                        })(
-                                            <Input addonBefore={<Icon type="user" />} placeholder="请输入用户名"/>
-                                        )}
-                                    </FormItem>
-                                    <FormItem {...formItemLayout} >
-                                        {getFieldDecorator('password',{
-                                            rules: [{ required: true, message: '请输入密码!' }],
-                                        })(
-                                            <Input addonBefore={<Icon type="lock" />} type="password" placeholder="请输入密码"/>
-                                        )}
-                                    </FormItem>
-                                    {codeDiv}
+            <IntlProvider
+                locale={local}
+                messages={messageFromLanguage}
+            >
+                <div className="login_bg">
+                    <div className="login_logo"><img src={('../../src/components/images/maaee.png')}/></div>
+                    <div className="login_bg_cont">
+                        <div className="login_bg_content">
+                            <div className="card-container">
+                                <Tabs type="card">
+                                    <TabPane tab={<FormattedMessage
+                                        id='scanLogin'
+                                        description='扫码登录'
+                                        defaultMessage='扫码登录'
+                                    />} key="1">
+                                        {this.state.loginImg}
+                                        <div className="login_ewm">请使用小蚂蚁移动教学扫二维码登录</div>
+                                    </TabPane>
+                                    <TabPane tab="密码登录" key="2">
+                                        <Form onSubmit={loginComponent.handleSubmit} className="login-form">
+                                            <FormItem {...formItemLayout} >
+                                                {getFieldDecorator('userName',{
+                                                    rules: [{ required: true, message: '请输入用户名!' }],
+                                                })(
+                                                    <Input addonBefore={<Icon type="user" />} placeholder="请输入用户名"/>
+                                                )}
+                                            </FormItem>
+                                            <FormItem {...formItemLayout} >
+                                                {getFieldDecorator('password',{
+                                                    rules: [{ required: true, message: '请输入密码!' }],
+                                                })(
+                                                    <Input addonBefore={<Icon type="lock" />} type="password" placeholder="请输入密码"/>
+                                                )}
+                                            </FormItem>
+                                            {codeDiv}
 
-                                    <div className="login_buton">
-                                        <Button type="primary" htmlType="submit" className="login-form-button login_buton">
-                                            登录
-                                        </Button>
-                                    </div>
+                                            <div className="login_buton">
+                                                <Button type="primary" htmlType="submit" className="login-form-button login_buton">
+                                                    登录
+                                                </Button>
+                                            </div>
 
-                                </Form>
-                            </TabPane>
+                                        </Form>
+                                    </TabPane>
 
-                        </Tabs>
+                                </Tabs>
+                            </div>
+
+                        </div>
                     </div>
-
-						</div>
-					</div>
-            </div>
-
+                </div>
+            </IntlProvider>
         );
     },
 }));
