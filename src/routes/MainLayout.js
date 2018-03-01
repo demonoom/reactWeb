@@ -701,7 +701,7 @@ const MainLayout = React.createClass({
     },
 
     /**
-     * 添加群成员
+     * 添加群成员(两种情况下的搜索fanwei)
      */
     showAddMembersModal(type) {
         if (type == 1) {
@@ -711,7 +711,8 @@ const MainLayout = React.createClass({
                 "addDeGroupMemberModalVisible": true,
                 originDiv: 'none',
                 OriUserNotOrIf: 'none',
-                OriUserIfOrNot: 'block'
+                OriUserIfOrNot: 'block',
+                originFlag: true
             });
         } else {
             //普通群
@@ -723,9 +724,46 @@ const MainLayout = React.createClass({
                 "addDeGroupMemberModalVisible": true,
                 originDiv: 'block',
                 OriUserNotOrIf: 'block',
-                OriUserIfOrNot: 'none'
+                OriUserIfOrNot: 'none',
+                originFlag: false
             });
         }
+    },
+
+    /**
+     * 普通群加人组织架构被点击
+     */
+    originClicked() {
+        this.getStructureById("-1");
+        this.setState({
+            originDiv: 'block',   //控制普通群头部三个按钮
+            OriUserNotOrIf: 'none',  //控制最大的两个table的显示隐藏
+            OriUserIfOrNot: 'block',  //控制最大的两个table的显示隐藏
+            originFlag: true   //控制搜索框有无内容的显示结果
+        });
+    },
+
+    /**
+     * 普通群加人最近联系人被点击
+     */
+    rencentClicked() {
+        //改变dataSourse
+        //显示隐藏
+        this.getRecentShareUsers();
+        this.setState({
+            originDiv: 'block',
+            OriUserNotOrIf: 'block',
+            OriUserIfOrNot: 'none',
+            originFlag: false
+        });
+    },
+
+    /**
+     * 普通群加人我的好友被点击
+     */
+    friendClicked() {
+        //改变dataSourse
+        //显示隐藏
     },
 
     getRecentShareUsers() {
@@ -1877,10 +1915,21 @@ const MainLayout = React.createClass({
 
     //群组加人搜索
     onChangeUserNameFromOri(e) {
+        var originFlag = this.state.originFlag;  //部门群下搜索此值为true,普通群为false
         this.state.searchUserFromOri = [];
         if (e.target.value.length != 0) {
             this.searchUserFromOri(e.target.value);
         }
+
+        if (!originFlag) {
+            //普通群,搜索框的内容决定最大的两个table的显示隐藏
+            if (e.target.value.length != 0) {
+                this.setState({OriUserNotOrIf: 'none', OriUserIfOrNot: 'block'})
+            } else {
+                this.setState({OriUserNotOrIf: 'block', OriUserIfOrNot: 'none'})
+            }
+        }
+
         this.setState({userNameFromOri: e.target.value});
     },
 
@@ -2492,9 +2541,9 @@ const MainLayout = React.createClass({
                         width={700}
                     >
                         <div style={{display: this.state.originDiv}}>
-                            <li style={{float: 'left'}}>最近联系人</li>
-                            <li style={{float: 'left'}}>我的好友</li>
-                            <li style={{float: 'left'}}>组织架构</li>
+                            <span onClick={this.rencentClicked}>最近联系人</span>
+                            <span onClick={this.friendClicked}>我的好友</span>
+                            <span onClick={this.originClicked}>组织架构</span>
                         </div>
                         <Row className="ant-form-item">
                             <Col span={24}>
