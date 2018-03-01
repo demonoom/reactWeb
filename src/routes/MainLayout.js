@@ -2592,10 +2592,10 @@ const MainLayout = React.createClass({
                         ]}
                         width={700}
                     >
-                        <div style={{display: this.state.originDiv}}>
-                            <span onClick={this.rencentClicked}>最近联系人</span>
-                            <span onClick={this.friendClicked}>我的好友</span>
-                            <span onClick={this.originClicked}>组织架构</span>
+                        <div className="ant-form-item flex" style={{display: this.state.originDiv}}>
+                            <span className="add_member_menu" onClick={this.rencentClicked}>最近联系人</span>
+                            <span className="add_member_menu add_member_menu_select" onClick={this.friendClicked}>我的好友</span>
+                            <span className="add_member_menu" onClick={this.originClicked}>组织架构</span>
                         </div>
                         <div className="ant-form-item flex">
                             <Col span={10}>

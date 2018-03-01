@@ -8715,3 +8715,15 @@ select.course_n:hover {
     top: 0;
     border-radius: 4px;
 }
+.add_member_menu {
+    width: 33%;
+    display: inline-block;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    padding: 0 0 8px 0;
+    color: #666;
+}
+.add_member_menu_select{
+    border-bottom: 1px solid #96cfff;
+    color: #309ffb;
+}
