@@ -2653,6 +2653,7 @@ const MainLayout = React.createClass({
                                                className="schoolgroup_table"
                                                pagination={false}/>
                                     </div>
+                                    
                                     {/*获取组织架构的部门下的人*/}
                                     <div className="add_member_right">
                                         <Table columns={memberColumns}
