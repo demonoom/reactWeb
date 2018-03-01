@@ -706,9 +706,12 @@ const MainLayout = React.createClass({
         if (type == 1) {
             //部门群
             this.getStructureById("-1");
-            this.setState({"addDeGroupMemberModalVisible": true});
+            this.setState({"addDeGroupMemberModalVisible": true, originDiv: 'none'});
         } else {
             //普通群
+            //显示顶部的三个标签
+            //显示另一个table
+            this.setState({"addDeGroupMemberModalVisible": true, originDiv: 'block'});
         }
     },
 
@@ -2427,6 +2430,11 @@ const MainLayout = React.createClass({
                         ]}
                         width={700}
                     >
+                        <div style={{display: this.state.originDiv}}>
+                            <li style={{float: 'left'}}>我的好友</li>
+                            <li style={{float: 'left'}}>最近联系人</li>
+                            <li style={{float: 'left'}}>组织架构</li>
+                        </div>
                         <Row className="ant-form-item">
                             <Col span={24}>
                                 <Col span={10}>
