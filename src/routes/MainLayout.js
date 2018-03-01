@@ -5,7 +5,6 @@ import UserFace from '../components/UserCardModalComponents';
 import FloatButton from '../components/FloatButton';
 import PersonCenterMenu from '../components/layOut/PersonCenterMenu';
 import PersonCenter from '../components/PersonCenter';
-import moment from 'moment';
 import AntNestTabComponents from '../components/antNest/AntNestTabComponents';
 import DingMessageTabComponents from '../components/dingMessage/DingMessageTabComponents';
 import AntGroupTabComponents from '../components/antGroup/AntGroupTabComponents';
@@ -17,8 +16,7 @@ import PersonCenterComponents from '../components/antGroup/PersonCenterComponent
 import AntCloudMenu from '../components/layOut/AntCloudMenu';
 import AntCloudTableComponents from '../components/antCloud/AntCloudTableComponents';
 import {LocaleProvider} from 'antd';
-import {showLargeImg} from '../utils/utils'
-import {isEmpty, SMALL_IMG} from '../utils/Const'
+import {SMALL_IMG} from '../utils/Const'
 import TeachSpace from '../components/TeachSpaces';
 import TeachSpaceGhostMenu from '../components/TeachSpacesGhostMenu';
 import {MsgConnection} from '../utils/msg_websocket_connection';
@@ -29,10 +27,13 @@ import SystemSettingComponent from '../components/SystemSetting/SystemSettingCom
 import AddShiftPosModel from '../components/Attendance/AddShiftPosModel';
 import SendPicModel from '../components/antGroup/SendPicModel'
 import ConfirmModal from '../components/ConfirmModal';
-// 推荐在入口文件全局设置 locale
-import 'moment/locale/zh-cn';
+import {isEmpty,showLargeImg,setLocalLanaguage,getMessageFromLanguage, getLocalFromLanguage} from '../utils/utils';
+//国际化
+import {IntlProvider, addLocaleData} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
+import zh from 'react-intl/locale-data/zh';
+import en from 'react-intl/locale-data/en';
 
-moment.locale('zh-cn');
 import {createStore} from 'redux';
 
 const Panel = Collapse.Panel;
@@ -1642,6 +1643,8 @@ const MainLayout = React.createClass({
     },
 
     render() {
+        var messageFromLanguage = getMessageFromLanguage();
+        var local = getLocalFromLanguage();
         const suffix = this.state.searchWords ? <Icon type="close-circle" onClick={this.emitEmpty}/> : null;
         const searchIfOrNot = this.state.searchWords ? 'none' : 'block';
         const searchNotOrIf = this.state.searchWords ? 'block' : 'none';
@@ -1791,7 +1794,10 @@ const MainLayout = React.createClass({
         //
         //
         return (
-            <LocaleProvider locale={this.state.locale}>
+            <IntlProvider
+                locale={local}
+                messages={messageFromLanguage}
+            >
                 <div className={collapse ? "ant-layout-aside ant-layout-aside-collapse" : "ant-layout-aside"}>
 
                     <aside className="ant-layout-sider">
@@ -1806,8 +1812,13 @@ const MainLayout = React.createClass({
                             <Menu.Item key="message" className="padding_menu">
                                 <i className="icon_menu_ios icon_message"></i>
                                 <b className="ding_alert" ref='msgAlert'></b>
-                                <div className="tan">动态</div>
-
+                                <div className="tan">
+                                    <FormattedMessage
+                                        id='dynamic'
+                                        description='动态'
+                                        defaultMessage='动态'
+                                    />
+                                </div>
                             </Menu.Item>
                             <Menu.Item key="antNest" className="padding_menu">
                                 <i className="icon_menu_ios icon_yichao1"></i>
@@ -2034,7 +2045,7 @@ const MainLayout = React.createClass({
                                   onConfirmModalCancel={this.closeConfirmModal}
                                   onConfirmModalOK={this.deleteSelectedMember}/>
                 </div>
-            </LocaleProvider>
+            </IntlProvider>
         );
     },
 
