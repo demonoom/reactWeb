@@ -1,5 +1,20 @@
 import React from 'react';
-import {Menu, Icon, Row, Col, notification, Modal, Collapse, Checkbox, Input, message, Button, Radio} from 'antd';
+import {
+    Menu,
+    Icon,
+    Row,
+    Col,
+    notification,
+    Modal,
+    Collapse,
+    Checkbox,
+    Input,
+    message,
+    Button,
+    Radio,
+    Table,
+    Breadcrumb
+} from 'antd';
 import HeaderComponents from '../components/HeaderComponents';
 import UserFace from '../components/UserCardModalComponents';
 import FloatButton from '../components/FloatButton';
@@ -42,6 +57,26 @@ const RadioGroup = Radio.Group;
 
 const CheckboxGroup = Checkbox.Group;
 
+const memberColumns = [{
+    title: '姓名',
+    dataIndex: 'userName',
+    key: 'userName',
+    width: 160,
+    className: 'dold_text departmental_officer'
+}];
+
+//部门
+var columns = [{
+    title: '部门名称',
+    dataIndex: 'subGroupName',
+    key: 'subGroupName',
+}, {
+    title: '操作',
+    dataIndex: 'opt',
+    key: 'opt',
+    width: '86px'
+}];
+
 const radioStyle = {
     display: 'block',
     height: '30px',
@@ -50,6 +85,8 @@ const radioStyle = {
 
 var messageData = [];
 var userMessageData = [];
+var structuresObjArray = [];
+var subGroupMemberList = [];
 
 var delLastClick = false;
 
@@ -86,6 +123,9 @@ const MainLayout = React.createClass({
             lastClick: '',  //聊天功能最后一次点击的对象
             RMsgActiveKey: ['2'],
             searchWords: '',
+            userNameFromOri: '',
+            structuresObjArray: [],
+            selectedRowKeys: [],
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
     },
@@ -663,8 +703,225 @@ const MainLayout = React.createClass({
     /**
      * 添加群成员
      */
-    showAddMembersModal() {
+    showAddMembersModal(type) {
+        if (type == 1) {
+            //部门群
+            this.getStructureById("-1");
+            this.setState({"addDeGroupMemberModalVisible": true});
+        } else {
+            //普通群
+        }
+    },
 
+    /**
+     * 获取当前用户的组织根节点(蚁群中的组织架构菜单)
+     * @param operateUserId
+     * @param structureId
+     */
+    getStructureById(structureId) {
+        let _this = this;
+        var structureId = structureId + '';
+        if (isEmpty(structureId)) {
+            structureId = "-1";
+        }
+        var param = {
+            "method": 'getStructureById',
+            "operateUserId": sessionStorage.getItem("ident"),
+            "structureId": structureId,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var parentGroup = ret.response;
+                if (isEmpty(ret.response) == false) {
+                    var owner = parentGroup.chatGroup.owner.colUid;
+                }
+                // 根据组织根节点的id请求该组织根节点里的子部门， 调用 列举子部门函数
+                if (structureId == "-1") {
+                    _this.listStructures(parentGroup.id);
+                    var defaultPageNo = 1;
+                    _this.getStrcutureMembers(parentGroup.id, defaultPageNo);
+                    _this.setState({structureId: parentGroup.id});
+                }
+                if (isEmpty(parentGroup) == false) {
+                    var isExit = _this.checkStructureIsExitAtArray(parentGroup);
+                    if (isExit == false) {
+                        //存放组织架构的层次关系
+                        structuresObjArray.push(parentGroup);
+
+                    }
+                }
+
+                _this.setState({parentGroup, structuresObjArray, owner});
+            },
+
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    checkStructureIsExitAtArray(newStructure) {
+        var isExit = false;
+        for (var i = 0; i < structuresObjArray.length; i++) {
+            var structure = structuresObjArray[i];
+            if (structure.id == newStructure.id) {
+                isExit = true;
+                break;
+            }
+        }
+        return isExit;
+    },
+
+    /**
+     * 列举蚁群中的子部门11
+     * @param operateUserId
+     * @param structureId
+     */
+    listStructures(structureId) {
+        let _this = this;
+        _this.getStructureById(structureId);
+        var param = {
+            "method": 'listStructures',
+            "operateUserId": sessionStorage.getItem("ident"),
+            "structureId": structureId,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                var subGroupList = [];
+                if (isEmpty(response) == false) {
+                    response.forEach(function (subGroup) {
+                        var subGroupName = <div className="first_indent"
+                                                onClick={_this.getSubGroupForButton.bind(_this, subGroup.id)}>
+                            <span className="antnest_name affix_bottom_tc name_max3 dold_text">{subGroup.name}</span>
+                        </div>
+                        subGroupList.push({
+                            key: subGroup.id,
+                            subGroupName: subGroupName,
+                        });
+
+                    });
+                } else {
+                    var subGroupName = <div style={{textAlign: 'center'}}>
+                        没有下级部门了
+                    </div>
+                    subGroupList.push({
+                        key: 99999,
+                        subGroupName: subGroupName,
+                    });
+                }
+                _this.setState({subGroupList, "optType": "getGroupMenu"});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+
+    },
+
+    /**
+     * 点击部门时，获取部门下的成员
+     * @param record
+     * @param index
+     */
+    getSubGroupForButton(structureId) {
+        var memberPageNo = 1;
+        subGroupMemberList.splice(0);
+        var defaultMemberPageNo = 1;
+        this.setState({
+            structureId: structureId,
+            memberPageNo: defaultMemberPageNo,
+        });
+        this.listStructures(structureId);
+        this.getStrcutureMembers(structureId, memberPageNo);
+        this.getStructureById(sessionStorage.getItem("ident"), structureId)
+    },
+
+    /**
+     * 根据部门id获取部门成员
+     * @param operateUserId
+     * @param structureId
+     */
+    getStrcutureMembers(structureId, pageNo) {
+        let _this = this;
+        var structureId = structureId + '';
+        if (structureId.indexOf(',') !== -1) {
+            var structureIdArr = structureId.split(',');
+            structureId = structureIdArr[0];
+        }
+        var param = {
+            "method": 'getStrcutureMembers',
+            "operateUserId": sessionStorage.getItem("ident"),
+            "structureId": structureId,
+            "pageNo": pageNo,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                var owner = _this.state.owner;
+                if (isEmpty(response) == false) {
+                    response.forEach(function (member) {
+                        var user = member.user;
+                        subGroupMemberList.push({
+                            key: user.colUid,
+                            userId: user.colUid,
+                            userName: user.userName,
+                        });
+                    });
+                }
+                var pager = ret.pager;
+                var pageCount = pager.pageCount;
+                if (pageCount == pageNo) {
+                    var wordSrc = '无更多数据';
+                    _this.setState({wordSrc});
+
+                }
+                _this.setState({subGroupMemberList, totalMember: pager.rsCount});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+
+
+    },
+
+    addDeGroupMemberModalHandleCancel() {
+        subGroupMemberList.splice(0);
+        structuresObjArray.splice(0);
+        this.state.selectedRowKeys = [];
+        this.state.userNameFromOri = '';
+        this.setState({"addDeGroupMemberModalVisible": false});
+    },
+
+    /**
+     * 添加群成员
+     */
+    addGroupMember() {
+        var _this = this;
+        var memberTargetkeys = this.state.selectedRowKeys;
+        var memberIds = memberTargetkeys.join(",");
+        var currentGroupObj = this.state.currentGroupObj;
+        var param = {
+            "method": 'addChatGroupMember',
+            "chatGroupId": currentGroupObj.chatGroupId,
+            "memberIds": memberIds
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if (ret.msg == "调用成功" && ret.success == true && response == true) {
+                    message.success("群成员添加成功");
+                } else {
+                    message.success("群成员添加失败");
+                }
+                _this.levGroupSet();
+                _this.addDeGroupMemberModalHandleCancel();
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     /**
@@ -816,6 +1073,7 @@ const MainLayout = React.createClass({
      * @param arr
      */
     buildGroupSet(currentMemberArray, currentGroupObj) {
+        var groupType = currentGroupObj.type;
         this.state.dissolutionChatGroupButton = '';
         this.setState({currentGroupObj});
         var _this = this;
@@ -826,7 +1084,9 @@ const MainLayout = React.createClass({
             //我是群主
             divBlock = 'inline-block';
             topButton = <span className="toobar">
-                <span type="primary" className="noom_cursor set_in_btn_font" onClick={this.showAddMembersModal}><Icon className="i_antdesign" type="plus" />添加群成员</span></span>
+                <span type="primary" className="noom_cursor set_in_btn_font"
+                      onClick={this.showAddMembersModal.bind(this, groupType)}><Icon
+                    className="i_antdesign" type="plus"/>添加群成员</span></span>
             dissolutionChatGroupButton =
                 <Button onClick={this.showDissolutionChatGroupConfirmModal} className="group_red_font"><i
                     className="iconfont">&#xe616;</i>解散该群</Button>;
@@ -866,10 +1126,10 @@ const MainLayout = React.createClass({
                     topButton = <span className="right_ri"></span>;
                 } else {
                     //老师
-                    topButton = <span className="right_ri">
-                    <Button type="primary" onClick={this.showAddMembersModal}
-                    >添加群成员</Button>
-                    </span>;
+                    topButton = <span className="toobar">
+                        <span type="primary" className="noom_cursor set_in_btn_font"
+                              onClick={this.showAddMembersModal.bind(this, groupType)}>
+                        <Icon className="i_antdesign" type="plus"/>添加群成员</span></span>
                 }
             }
 
@@ -897,11 +1157,12 @@ const MainLayout = React.createClass({
                 <ul className="group_fr_ul">
                     <li className="color_gary_f">群聊名称：{currentGroupObj.name}
                         <span style={{display: divBlock}} className="noom_cursor set_in_btn_font"
-                              onClick={this.showUpdateChatGroupNameModal}><Icon type="edit" className="i_antdesign" />编辑</span>
+                              onClick={this.showUpdateChatGroupNameModal}><Icon type="edit" className="i_antdesign"/>编辑</span>
                     </li>
                     <li className="color_gary_f">群主：{currentGroupObj.owner.userName}
                         <span style={{display: divBlock}} className="noom_cursor set_in_btn_font"
-                              onClick={this.mainTransfer.bind(this, currentMemberArray)}><Icon type="swap" className="i_antdesign" />转让群主</span>
+                              onClick={this.mainTransfer.bind(this, currentMemberArray)}><Icon type="swap"
+                                                                                               className="i_antdesign"/>转让群主</span>
                     </li>
                     <li className="color_gary_f">
                         <span>群聊成员：{currentMemberArray.length}人</span>{topButton}</li>
@@ -1479,7 +1740,6 @@ const MainLayout = React.createClass({
      * @param menuItemKey
      */
     getCloudClassRoom(menuItemKey) {
-        console.log("menuItemKey:" + menuItemKey);
         this.setState({"cloudRoomMenuItem": menuItemKey});
     },
     search() {
@@ -1551,6 +1811,7 @@ const MainLayout = React.createClass({
 
     onChangeUserName(e) {
         //搜索框改变就清空选择数组
+        this.state.searchShareUsersData = [];
         this.state.checkedConcatOptions = [];
         this.state.checkedGroupOptions = [];
         this.state.checkedsSructureOptions = [];
@@ -1560,6 +1821,62 @@ const MainLayout = React.createClass({
             this.searchShareUsers(e.target.value);
         }
         this.setState({searchWords: e.target.value});
+    },
+
+    //群组加人搜索
+    onChangeUserNameFromOri(e) {
+        this.state.searchUserFromOri = [];
+        if (e.target.value.length != 0) {
+            this.searchUserFromOri(e.target.value);
+        }
+        this.setState({userNameFromOri: e.target.value});
+    },
+
+    /**
+     * 从组织架构搜索人
+     * @param str
+     */
+    searchUserFromOri(str) {
+        var _this = this;
+        var param = {
+            "method": 'searchShareUsers',
+            "userId": sessionStorage.getItem("ident"),
+            "pageNo": -1,
+            "searchKeyWords": str,
+            "dataType": 3
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    var response = ret.response;
+                    if (isEmpty(response) == false) {
+                        _this.showSearchUserFromOri(response)
+                    } else {
+                        //显示没有结果
+                    }
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 构建从组织架构搜索出来的用户表格
+     * @param data
+     */
+    showSearchUserFromOri(data) {
+        var arr = [];
+        data.forEach(function (v) {
+            var user = v.user;
+            arr.push({
+                key: user.colUid,
+                userId: user.colUid,
+                userName: user.userName,
+            });
+        })
+        this.setState({searchUserFromOri: arr});
     },
 
     searchShareUsers(str) {
@@ -1642,12 +1959,87 @@ const MainLayout = React.createClass({
         this.setState({"searchShareUsersData": arr});
     },
 
+    /**
+     * 部门成员加载更多
+     */
+    loadMoreMember() {
+        var _this = this;
+        if (isEmpty(_this.state.memberPageNo)) {
+            return
+        }
+        var memberPageNo = parseInt(_this.state.memberPageNo) + 1;
+        this.memberPageOnChange(memberPageNo);
+    },
+
+    /**
+     * 部门成员的数据分页
+     * @param pageNo
+     */
+    memberPageOnChange(pageNo) {
+        this.setState({
+            memberPageNo: pageNo,
+        });
+        this.getStrcutureMembers(this.state.structureId, pageNo);
+    },
+
+    /**
+     * 面包条点击响应
+     * 切换到当前的组织架构层次，同时，在此面包条后的数据移除
+     */
+    breadCrumbClick(structureId) {
+        var defaultPageNo = 1;
+        for (var i = 0; i < structuresObjArray.length; i++) {
+            var structure = structuresObjArray[i];
+            if (structure.id == structureId) {
+                structuresObjArray.splice(i, structuresObjArray.length);
+                break;
+            }
+        }
+        this.listStructures(structureId);
+        subGroupMemberList.splice(0);
+        this.getStrcutureMembers(structureId, defaultPageNo);
+        var defaultMemberPageNo = 1;
+        this.setState({"structureId": structureId, structuresObjArray, "memberPageNo": defaultMemberPageNo});
+    },
+
+    /**
+     * 表格选中响应函数
+     * @param selectedRowKeys
+     */
+    onSelectChange(selectedRowKeys) {
+        this.setState({selectedRowKeys});
+    },
+
     render() {
+        var _this = this;
+        //引入国际化的支持
         var messageFromLanguage = getMessageFromLanguage();
         var local = getLocalFromLanguage();
+
+        const rowSelection = {
+            selectedRowKeys: this.state.selectedRowKeys,
+            onChange: this.onSelectChange,
+        };
+
+        const hasSelected = this.state.selectedRowKeys.length > 0;
+
+        //构建蚁群中的组织架构部分的面包屑组件
+        var breadcrumbItemObjArray = [];
+        if (isEmpty(_this.state.structuresObjArray) == false) {
+            _this.state.structuresObjArray.forEach(function (structure) {
+
+                var breadcrumbItemObj = <Breadcrumb.Item key={structure.id}>
+                    <a onClick={_this.breadCrumbClick.bind(_this, structure.id)}>{structure.name}</a></Breadcrumb.Item>;
+                breadcrumbItemObjArray.push(breadcrumbItemObj);
+
+            });
+        }
+
         const suffix = this.state.searchWords ? <Icon type="close-circle" onClick={this.emitEmpty}/> : null;
         const searchIfOrNot = this.state.searchWords ? 'none' : 'block';
         const searchNotOrIf = this.state.searchWords ? 'block' : 'none';
+        const searchOriIfOrNot = this.state.userNameFromOri ? 'none' : 'block';
+        const searchOriNotOrIf = this.state.userNameFromOri ? 'block' : 'none';
         const collapse = this.state.collapse;
         //根据如下判断结果，完成对页面中部位置的渲染，不同情况，渲染不同组件
         var middleComponent;
@@ -2028,6 +2420,82 @@ const MainLayout = React.createClass({
                                 <Input value={this.state.updateChatGroupTitle}
                                        defaultValue={this.state.updateChatGroupTitle}
                                        onChange={this.updateChatGroupTitleOnChange}/>
+                            </Col>
+                        </Row>
+                    </Modal>
+
+                    <Modal
+                        visible={this.state.addDeGroupMemberModalVisible}
+                        title="添加群成员"
+                        onCancel={this.addDeGroupMemberModalHandleCancel}
+                        transitionName=""  //禁用modal的动画效果
+                        maskClosable={false} //设置不允许点击蒙层关闭
+                        className="add_member"
+                        footer={[
+                            <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
+                                    onClick={this.addGroupMember}>确定</button>,
+                            <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
+                                    onClick={this.addDeGroupMemberModalHandleCancel}>取消</button>
+                        ]}
+                        width={700}
+                    >
+                        <Row className="ant-form-item">
+                            <Col span={24}>
+                                <Col span={10}>
+                                    <Input
+                                        placeholder="请输入要搜索的姓名"
+                                        value={this.state.userNameFromOri}
+                                        onChange={this.onChangeUserNameFromOri}
+                                        ref={node => this.userNameInput = node}
+                                    />
+                                </Col>
+                                <span className="password_ts" style={{marginLeft: 8}}>
+                                    {hasSelected ? `已选择 ${this.state.selectedRowKeys.length} 人` : ''}
+                                </span>
+                            </Col>
+                        </Row>
+                        <Row className="ant-form-item">
+                            <Col span={24}>
+                                <div className="department_scroll">
+                                    <div style={{display: searchOriNotOrIf}} className="favorite_scroll">
+                                        {/*获取组织架构的部门下的人*/}
+                                        <div className="down_table_height">
+                                            <Table columns={memberColumns}
+                                                   pagination={false} dataSource={this.state.searchUserFromOri}
+                                                   className="schoolgroup_table1 schoolgroup_table_department"
+                                                   scroll={{y: 240}}
+                                                   rowSelection={rowSelection}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div style={{display: searchOriIfOrNot}} className="favorite_scroll">
+                                        {/*获取组织架构的所有部门*/}
+                                        <div className="add_member_left">
+                                            {/*面包屑*/}
+                                            <Breadcrumb separator=">">
+                                                {breadcrumbItemObjArray}
+                                            </Breadcrumb>
+                                            <Table showHeader={false} columns={columns}
+                                                   dataSource={this.state.subGroupList}
+                                                   className="schoolgroup_table"
+                                                   pagination={false}/>
+                                        </div>
+                                        {/*获取组织架构的部门下的人*/}
+                                        <div className="add_member_right">
+                                            <Table columns={memberColumns}
+                                                   pagination={false} dataSource={this.state.subGroupMemberList}
+                                                   className="schoolgroup_table1 schoolgroup_table_department"
+                                                   scroll={{y: 240}}
+                                                   rowSelection={rowSelection}
+                                            />
+                                            <div className="schoolgroup_operate schoolgroup_more">
+                                                <a onClick={this.loadMoreMember}
+                                                   className="schoolgroup_more_a">{this.state.wordSrc}</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </Col>
                         </Row>
                     </Modal>
