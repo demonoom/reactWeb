@@ -8771,7 +8771,13 @@ select.course_n:hover {
 .add_member_menu_tab {
     width: 50%;
 }
-
+.add_member_menu_search {
+    width: 45%;
+    float: right;
+}
+.add_member_menu_search2 {
+    width: 100%;
+}
 .add_member_tags_wrap {
     height: 26px;
     overflow: auto;
