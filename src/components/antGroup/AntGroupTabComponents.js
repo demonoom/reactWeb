@@ -3851,7 +3851,7 @@ const AntGroupTabComponents = React.createClass({
                                                         <span className="bot"></span>
                                                         <span className="top"></span>
                                                         <div className="borderballoon_le_cont">
-                                                            <img className="upexam_float" style={{width: 38}}
+                                                            <img className="upexam_float"
                                                                  src={styleImg}
                                                                  alt=""/>
                                                             <img id={fileUid} style={{display: "none"}} src={filePath}
@@ -4329,7 +4329,7 @@ const AntGroupTabComponents = React.createClass({
                                                             <span className="bot"></span>
                                                             <span className="top"></span>
                                                             <div className="borderballoon_le_cont">
-                                                                <img className="upexam_float" style={{width: 38}}
+                                                                <img className="upexam_float"
                                                                      src="../src/components/images/icon_view_details.png"
                                                                      onClick={showLargeImg} alt=""/>
                                                                 <span
@@ -4703,7 +4703,7 @@ const AntGroupTabComponents = React.createClass({
                                                     <span className="bot"></span>
                                                     <span className="top"></span>
                                                     <div className="borderballoon_le_cont">
-                                                        <img className="upexam_float" style={{width: 38}}
+                                                        <img className="upexam_float"
                                                              src={styleImg}
                                                              onClick={showLargeImg} alt=""/>
                                                         <span className="span_link">{fileName}</span>

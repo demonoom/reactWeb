@@ -4763,17 +4763,19 @@ a.color_gary_f, .color_gary_f {
 
 .group_del {
     border: none;
-    padding: 0;
     display: none;
     position: absolute;
     top: 26px;
     right: 0px;
+    border-radius: 50%;
+    padding: 1px;
 }
 
 .group_del i {
     width: 16px;
     height: 16px;
     font-size: 14px;
+    float: left;
 }
 
 .group_del i:hover {
@@ -8662,7 +8664,7 @@ select.course_n:hover {
 }
 
 .add_member .ant-modal-body {
-    height: 390px;
+    height: 410px;
 }
 
 .add_member_right .schoolgroup_table1 .ant-table-content, .add_member_wrap .schoolgroup_table1 .ant-table-content {
