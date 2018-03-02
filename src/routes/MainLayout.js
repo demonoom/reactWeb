@@ -2729,8 +2729,8 @@ const MainLayout = React.createClass({
                             </Col>
                         </div>
                         <div className="ant-form-item flex">
-                          <span className="password_ts" style={{height: '24px'}}>
-                                <span className="upexam_float" style={{lineHeight: '24px'}}>已选择：</span>
+                          <span className="gray_6_12" style={{height: '24px'}}>
+                                <span className="upexam_float " style={{lineHeight: '24px'}}>已选择：</span>
                                 <div className="add_member_tags_wrap">
                                     <div className="add_member_tags upexam_float">
                                         {tags.map((tag, index) => {
