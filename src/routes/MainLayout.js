@@ -677,7 +677,14 @@ const MainLayout = React.createClass({
                     }
                     _this.setState({"updateChatGroupNameModalVisible": false});
                     _this.levGroupSet();
-                    _this.refs.antGroupTabComponents.changeWelcomeTitle(_this.state.updateChatGroupTitle)
+                    var antGroupTabComponents = _this.refs.antGroupTabComponents;
+                    var personCenterComponents = _this.refs.personCenterComponents;
+                    if (isEmpty(antGroupTabComponents) == false) {
+                        antGroupTabComponents.changeWelcomeTitle(_this.state.updateChatGroupTitle)
+                    }
+                    if (isEmpty(personCenterComponents) == false) {
+                        personCenterComponents.getUserChatGroup()
+                    }
                 },
                 onError: function (error) {
                     message.error(error);
@@ -714,9 +721,9 @@ const MainLayout = React.createClass({
                 OriUserNotOrIf: 'none',
                 OriUserIfOrNot: 'block',
                 originFlag: true,
-                searchArea: 'originzation'
+                searchArea: 'originzation',
+                inputClassName: 'ant-form-item add_member_menu_search2 line_block'
             });
-            document.getElementById('inPut100').className = 'ant-form-item add_member_menu_search2 line_block'
         } else {
             //普通群
             //显示顶部的三个标签
@@ -729,9 +736,9 @@ const MainLayout = React.createClass({
                 OriUserNotOrIf: 'block',
                 OriUserIfOrNot: 'none',
                 originFlag: false,
-                searchArea: 'defaultArea'
+                searchArea: 'defaultArea',
+                inputClassName: 'ant-form-item add_member_menu_search line_block'
             });
-            document.getElementById('inPut100').className = 'ant-form-item add_member_menu_search line_block'
         }
     },
 
@@ -2054,13 +2061,15 @@ const MainLayout = React.createClass({
     showSearchUserFromOri(data) {
         var arr = [];
         data.forEach(function (v) {
-            var user = v.user;
-            arr.push({
-                key: user.colUid,
-                userId: user.colUid,
-                userName: user.userName,
-            });
-        })
+            if (v.type == 0) {
+                var user = v.user;
+                arr.push({
+                    key: user.colUid,
+                    userId: user.colUid,
+                    userName: user.userName,
+                });
+            }
+        });
         this.setState({searchUserFromOri: arr});
     },
 
@@ -2361,6 +2370,7 @@ const MainLayout = React.createClass({
                                                        userInfo={this.state.userObj}
                                                        userContactsData={this.state.userContactsData}
                                                        onSendGroupMessage={this.sendGroupMessage}
+                                                       setChatGroup={this.gopTalkSetClick}
                                                        onSendMessage={this.sendMessage}/>;
                 break;
             case 'personCenter':
@@ -2718,7 +2728,7 @@ const MainLayout = React.createClass({
                             <span className="add_member_menu noom_cursor" onClick={this.friendClicked}>我的好友</span>
                             <span className="add_member_menu noom_cursor" onClick={this.originClicked}>组织架构</span>
                         </div>
-                        <div id="inPut100" className="ant-form-item add_member_menu_search line_block">
+                        <div id="inPut100" className={this.state.inputClassName}>
                             <Col span={24} className="right_ri">
                                 <Input
                                     placeholder="请输入要搜索的姓名"
