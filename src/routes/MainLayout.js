@@ -724,7 +724,7 @@ const MainLayout = React.createClass({
             this.getRecentShareUsers();
             this.setState({
                 "addDeGroupMemberModalVisible": true,
-                originDiv: 'block',
+                originDiv: 'inline-block',
                 OriUserNotOrIf: 'block',
                 OriUserIfOrNot: 'none',
                 originFlag: false,
@@ -745,7 +745,7 @@ const MainLayout = React.createClass({
         this.getStructureById("-1");
         this.setState({
             userNameFromOri: '',  //解决搜索框有内容去切换头部无效的问题
-            originDiv: 'block',   //控制普通群头部三个按钮
+            originDiv: 'inline-block',   //控制普通群头部三个按钮
             OriUserNotOrIf: 'none',  //控制最大的两个table的显示隐藏
             OriUserIfOrNot: 'block',  //控制最大的两个table的显示隐藏
             originFlag: true,   //控制搜索框有无内容的显示结果,只要是组织架构的就设成true
@@ -765,7 +765,7 @@ const MainLayout = React.createClass({
         //显示隐藏
         this.getRecentShareUsers();
         this.setState({
-            originDiv: 'block',
+            originDiv: 'inline-block',
             OriUserNotOrIf: 'block',
             OriUserIfOrNot: 'none',
             originFlag: false,
@@ -786,7 +786,7 @@ const MainLayout = React.createClass({
         //显示隐藏
         this.getUserContacts();
         this.setState({
-            originDiv: 'block',
+            originDiv: 'inline-block',
             OriUserNotOrIf: 'block',
             OriUserIfOrNot: 'none',
             originFlag: false,
