@@ -8727,3 +8727,17 @@ select.course_n:hover {
     border-bottom: 1px solid #96cfff;
     color: #309ffb;
 }
+.add_member_menu_tab{
+    width:50%;
+    display: inline-block !important
+}
+.add_member_tags_wrap {
+    height: 26px;
+    overflow: auto;
+    margin-right: 0;
+    display: inline-block;
+}
+.add_member_tags{
+    height: 24px;
+    width: 606px;
+}
