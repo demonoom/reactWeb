@@ -162,36 +162,63 @@ const AntMulitiClassComponents = React.createClass({
                 //
                 //     </div>;
                 // }
+               if(isSeries=='3' || isSeries =='4'){
+                   if (money == 0) {
+                       optButtons = <div>
+                           {/*<Col span={24}><Button icon="play-circle-o" className="exam-particulars_title liveing_color" title="直播"*/}
+                                                  {/*onClick={_this.getClassPlayDetail.bind(_this, row)}></Button></Col>*/}
+                           <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑"
+                                                  onClick={_this.editClass.bind(_this, id)}></Button></Col>
+                           <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情"
+                                                  onClick={_this.getClassDetail.bind(_this, row)}></Button></Col>
+                           <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
+                                                  disabled={false}
+                                                  onClick={_this.showConfirmDrwaModal.bind(_this, id)}></Button></Col>
 
-                if (money == 0) {
-                    optButtons = <div>
-                        <Col span={24}><Button icon="play-circle-o" className="exam-particulars_title liveing_color" title="直播"
-                                               onClick={_this.getClassPlayDetail.bind(_this, row)}></Button></Col>
-                        <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑"
-                                               onClick={_this.editClass.bind(_this, id)}></Button></Col>
-                        <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情"
-                                               onClick={_this.getClassDetail.bind(_this, row)}></Button></Col>
-                        <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
-                                               disabled={false}
-                                               onClick={_this.showConfirmDrwaModal.bind(_this, id)}></Button></Col>
+                       </div>;
+                   } else {
+                       optButtons = <div>
+                           {/*<Col span={24}><Button icon="play-circle-o" className="exam-particulars_title liveing_color" title="直播"*/}
+                                                  {/*onClick={this.getClassPlayDetail.bind(_this, row)}></Button></Col>*/}
+                           <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑"
+                                                  onClick={_this.editClass.bind(_this, id)}></Button></Col>
+                           <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情"
+                                                  onClick={_this.getClassDetail.bind(_this, row)}></Button></Col>
+                           <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
+                                                  disabled={true}
+                                                  onClick={_this.showConfirmDrwaModal.bind(_this, id)}></Button></Col>
 
-                    </div>;
-                } else {
-                    optButtons = <div>
-                        <Col span={24}><Button icon="play-circle-o" className="exam-particulars_title liveing_color" title="直播"
-                                               onClick={this.getClassPlayDetail.bind(_this, row)}></Button></Col>
-                        <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑"
-                                               onClick={_this.editClass.bind(_this, id)}></Button></Col>
-                        <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情"
-                                               onClick={_this.getClassDetail.bind(_this, row)}></Button></Col>
-                        <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
-                                               disabled={true}
-                                               onClick={_this.showConfirmDrwaModal.bind(_this, id)}></Button></Col>
+                       </div>;
+                   }
+               }else{
+                   if (money == 0) {
+                       optButtons = <div>
+                           <Col span={24}><Button icon="play-circle-o" className="exam-particulars_title liveing_color" title="直播"
+                                                  onClick={_this.getClassPlayDetail.bind(_this, row)}></Button></Col>
+                           <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑"
+                                                  onClick={_this.editClass.bind(_this, id)}></Button></Col>
+                           <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情"
+                                                  onClick={_this.getClassDetail.bind(_this, row)}></Button></Col>
+                           <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
+                                                  disabled={false}
+                                                  onClick={_this.showConfirmDrwaModal.bind(_this, id)}></Button></Col>
 
-                    </div>;
-                }
+                       </div>;
+                   } else {
+                       optButtons = <div>
+                           <Col span={24}><Button icon="play-circle-o" className="exam-particulars_title liveing_color" title="直播"
+                                                  onClick={this.getClassPlayDetail.bind(_this, row)}></Button></Col>
+                           <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑"
+                                                  onClick={_this.editClass.bind(_this, id)}></Button></Col>
+                           <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情"
+                                                  onClick={_this.getClassDetail.bind(_this, row)}></Button></Col>
+                           <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
+                                                  disabled={true}
+                                                  onClick={_this.showConfirmDrwaModal.bind(_this, id)}></Button></Col>
 
-
+                       </div>;
+                   }
+               }
                 break;
             case "2":
                 isPublishStr = "未发布";
