@@ -61,8 +61,8 @@ const FileUploadComponents = React.createClass({
             }else if(!this.checkIsRightFileTypeByEndWith(fileType)){
                 /*message.warning("本系统只支持后缀名为ppt、pptx、pdf、mp3、mp4、flv文件的上传操作,请重新上传,谢谢!",10);*/
                 message.warning("本系统只支持后缀名为ppt、pptx、pdf、mp4、flv文件的上传操作,请重新上传,谢谢!",10);
-            }else if(fileSize >= 104857600){
-                message.warning("请勿上传超过100M的文件，谢谢!");
+            } else if (fileSize >= 157286400) {
+                    message.warning("请勿上传超过150M的文件，谢谢!");
             }else{
                 var fileJson = { label: fileName,value:fileName,fileObj:files };
                 submitFileOptions.push(fileJson);

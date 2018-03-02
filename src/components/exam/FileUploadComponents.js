@@ -53,8 +53,8 @@ const FileUploadComponents = React.createClass({
             message.warning("请勿重复上传,谢谢!");
         }else if(!this.checkIsRightFileType(fileType)){
             message.warning("文件类型不正确,请重新上传,谢谢!");
-        }else if(fileSize >= 104857600){
-            message.warning("请勿上传超过100M的文件，谢谢!");
+        }else if (fileSize >= 157286400) {
+                message.warning("请勿上传超过150M的文件，谢谢!");
         }else{
             var fileJson = { label: fileName,value:fileName,fileObj:files };
             submitFileOptions.push(fileJson);
