@@ -1598,22 +1598,46 @@ const MainLayout = React.createClass({
     },
 
     sendMessage_noom_user(userInfo) {
-        var contentJson = {"content": '', "createTime": ''};
-        var contentArray = [contentJson];
-        var userJson = {
-            key: userInfo.colUid,
-            "fromUser": userInfo,
-            contentArray: contentArray,
-            "messageToType": 1,
+        var _this = this;
+        var content = '';
+        var createTime = '';
+
+        var param = {
+            "method": 'getUser2UserMessages',
+            "user1Id": sessionStorage.getItem("ident"),
+            "user2Id": userInfo.colUid,
+            "timeNode": (new Date()).valueOf()
         };
-        this.setState({
-            currentKey: 'message',
-            resouceType: '',
-            "userInfo": userInfo,
-            "messageType": 'message',
-            "actionFrom": "search",
-            userJson,
-            isSearch: true
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.msg == '调用成功') {
+                    var response = ret.response;
+                    if (isEmpty(response) == false) {
+                        content = response[0].content;
+                        createTime = response[0].createTime;
+                    }
+                    var contentJson = {"content": content, "createTime": ''};
+                    var contentArray = [contentJson];
+                    var userJson = {
+                        key: userInfo.colUid,
+                        "fromUser": userInfo,
+                        contentArray: contentArray,
+                        "messageToType": 1,
+                    };
+                    _this.setState({
+                        currentKey: 'message',
+                        resouceType: '',
+                        "userInfo": userInfo,
+                        "messageType": 'message',
+                        "actionFrom": "search",
+                        userJson,
+                        isSearch: true
+                    });
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
         });
     },
 
@@ -1621,7 +1645,32 @@ const MainLayout = React.createClass({
         this.sendMessage_noom_group(obj);
     },
 
+    /*sendChatGroupMes(mes) {
+        if (isEmpty(mes.response) == false) {
+            var obj = this.state.userJson;
+            obj.contentArray[0].content = mes.response[0].content;
+            this.setState({userJson: obj});
+        }
+    },*/
+
     sendMessage_noom_group(groupObj) {
+
+        /*setTimeout(function () {
+            var param = {
+                "method": 'getChatGroupMessages',
+                "chatGroupId": groupObj.chatGroupId,
+                "timeNode": (new Date()).valueOf()
+            };
+            doWebService(JSON.stringify(param), {
+                onResponse: function (ret) {
+                    console.log(ret);
+                },
+                onError: function (error) {
+                    message.error(error);
+                }
+            });
+        }, 500)*/
+
         var contentJson = {"content": '', "createTime": ''};
         var contentArray = [contentJson];
         var userJson = {
@@ -2357,6 +2406,7 @@ const MainLayout = React.createClass({
                                                       clearEverything={this.clearEverything}
                                                       delLeftMsgFinish={this.delLeftMsgFinish}
                                                       gopTalkSetClick={this.gopTalkSetClick}
+                                                      sendChatGroupMes={this.sendChatGroupMes}
                 />;
                 break;
             case 'antGroup':
