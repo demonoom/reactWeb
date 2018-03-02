@@ -4329,7 +4329,7 @@ const AntGroupTabComponents = React.createClass({
                                                             <span className="bot"></span>
                                                             <span className="top"></span>
                                                             <div className="borderballoon_le_cont">
-                                                                <img className="upexam_float" style={{width: 38}}
+                                                                <img className="upexam_float"
                                                                      src="../src/components/images/icon_view_details.png"
                                                                      onClick={showLargeImg} alt=""/>
                                                                 <span
