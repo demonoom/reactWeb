@@ -13,7 +13,9 @@ import {
     Button,
     Radio,
     Table,
-    Breadcrumb
+    Breadcrumb,
+    Tag,
+    Tooltip
 } from 'antd';
 import HeaderComponents from '../components/HeaderComponents';
 import UserFace from '../components/UserCardModalComponents';
@@ -121,6 +123,9 @@ const MainLayout = React.createClass({
             userNameFromOri: '',
             structuresObjArray: [],
             selectedRowKeys: [],
+            tags: [],  //标签显示
+            inputVisible: false,
+            inputValue: '',
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
     },
@@ -730,7 +735,12 @@ const MainLayout = React.createClass({
     /**
      * 普通群加人组织架构被点击
      */
-    originClicked() {
+    originClicked(e) {
+        var arr = document.getElementsByClassName('add_member_menu');
+        for (var i = 0; i < arr.length; i++) {
+            arr[i].className = 'add_member_menu noom_cursor'
+        }
+        e.target.className = 'add_member_menu noom_cursor add_member_menu_select';
         this.getStructureById("-1");
         this.setState({
             userNameFromOri: '',  //解决搜索框有内容去切换头部无效的问题
@@ -744,7 +754,12 @@ const MainLayout = React.createClass({
     /**
      * 普通群加人最近联系人被点击
      */
-    rencentClicked() {
+    rencentClicked(e) {
+        var arr = document.getElementsByClassName('add_member_menu');
+        for (var i = 0; i < arr.length; i++) {
+            arr[i].className = 'add_member_menu noom_cursor'
+        }
+        e.target.className = 'add_member_menu noom_cursor add_member_menu_select';
         //改变dataSourse
         //显示隐藏
         this.getRecentShareUsers();
@@ -760,7 +775,12 @@ const MainLayout = React.createClass({
     /**
      * 普通群加人我的好友被点击
      */
-    friendClicked() {
+    friendClicked(e) {
+        var arr = document.getElementsByClassName('add_member_menu');
+        for (var i = 0; i < arr.length; i++) {
+            arr[i].className = 'add_member_menu noom_cursor'
+        }
+        e.target.className = 'add_member_menu noom_cursor add_member_menu_select';
         //改变dataSourse
         //显示隐藏
         this.getUserContacts();
@@ -940,7 +960,8 @@ const MainLayout = React.createClass({
                     });
                 } else {
                     var subGroupName = <div className="add_member_noDataTipImg">
-                        <img className="noDataTipImg" style={{width:'235px'}} src={require('../components/images/noDataTipImg.png')}/>
+                        <img className="noDataTipImg" style={{width: '235px'}}
+                             src={require('../components/images/noDataTipImg.png')}/>
                     </div>
                     subGroupList.push({
                         key: 99999,
@@ -2163,7 +2184,48 @@ const MainLayout = React.createClass({
         this.setState({selectedRowKeys});
     },
 
+    /*标签关闭的回调*/
+    /*handleClose(removedTag) {
+        const tags = this.state.tags.filter(tag => tag !== removedTag);
+        var arr = [];
+        this.setState({tags});
+        //设置勾选状态   selectedRowKeys
+        for (var i = 0; i < tags.length; i++) {
+            arr.push(tags[i].key);
+        }
+        this.state.selectedRowKeys = arr;
+        //在这里把点击的这一项从selectArr中删除  selectArr全局函数
+        for (var i = 0; i < selectArr.length; i++) {
+            if (selectArr[i].key == removedTag.key) {
+                selectArr.splice(i, 1);
+            }
+        }
+    },
+
+    handleInputChange(e) {
+        this.setState({inputValue: e.target.value});
+    },
+
+    handleInputConfirm() {
+        const state = this.state;
+        const inputValue = state.inputValue;
+        let tags = state.tags;
+        if (inputValue && tags.indexOf(inputValue) === -1) {
+            tags = [...tags, inputValue];
+        }
+        this.setState({
+            tags,
+            inputVisible: false,
+            inputValue: '',
+        });
+    },*/
+
+    // saveInputRef = input => this.input = input;
+
     render() {
+
+        const {tags, inputVisible, inputValue} = this.state;
+
         var _this = this;
         //引入国际化的支持
         var messageFromLanguage = getMessageFromLanguage();
@@ -2592,10 +2654,11 @@ const MainLayout = React.createClass({
                         ]}
                         width={700}
                     >
-                        <div className="ant-form-item flex" style={{display: this.state.originDiv}}>
-                            <span className="add_member_menu" onClick={this.rencentClicked}>最近联系人</span>
-                            <span className="add_member_menu add_member_menu_select" onClick={this.friendClicked}>我的好友</span>
-                            <span className="add_member_menu" onClick={this.originClicked}>组织架构</span>
+                        <div id="mebChecked" className="ant-form-item flex" style={{display: this.state.originDiv}}>
+                            <span className="add_member_menu noom_cursor add_member_menu_select"
+                                  onClick={this.rencentClicked}>最近联系人</span>
+                            <span className="add_member_menu noom_cursor" onClick={this.friendClicked}>我的好友</span>
+                            <span className="add_member_menu noom_cursor" onClick={this.originClicked}>组织架构</span>
                         </div>
                         <div className="ant-form-item flex">
                             <Col span={10}>
@@ -2606,8 +2669,8 @@ const MainLayout = React.createClass({
                                     ref={node => this.userNameInput = node}
                                 />
                             </Col>
-                            <span className="password_ts" style={{marginLeft: '8px', lineHeight:'28px'}}>
-                                {hasSelected ? `已选择 ${this.state.selectedRowKeys.length} 人` : ''}
+                            <span className="password_ts" style={{marginLeft: '8px', lineHeight: '28px'}}>
+                                <span className="upexam_float">已选择：</span>
                             </span>
                         </div>
                         <div className="ant-form-item flex">
@@ -2647,7 +2710,7 @@ const MainLayout = React.createClass({
                                                className="schoolgroup_table"
                                                pagination={false}/>
                                     </div>
-                                    
+
                                     {/*获取组织架构的部门下的人*/}
                                     <div className="add_member_right">
                                         <Table columns={memberColumns}
