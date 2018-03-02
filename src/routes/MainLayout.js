@@ -721,11 +721,9 @@ const MainLayout = React.createClass({
                 OriUserNotOrIf: 'none',
                 OriUserIfOrNot: 'block',
                 originFlag: true,
-                searchArea: 'originzation'
+                searchArea: 'originzation',
+                inputClassName: 'ant-form-item add_member_menu_search2 line_block'
             });
-            if (isEmpty(document.getElementById('inPut100')) == false) {
-                document.getElementById('inPut100').className = 'ant-form-item add_member_menu_search2 line_block'
-            }
         } else {
             //普通群
             //显示顶部的三个标签
@@ -738,9 +736,9 @@ const MainLayout = React.createClass({
                 OriUserNotOrIf: 'block',
                 OriUserIfOrNot: 'none',
                 originFlag: false,
-                searchArea: 'defaultArea'
+                searchArea: 'defaultArea',
+                inputClassName: 'ant-form-item add_member_menu_search line_block'
             });
-            document.getElementById('inPut100').className = 'ant-form-item add_member_menu_search line_block'
         }
     },
 
@@ -2730,7 +2728,7 @@ const MainLayout = React.createClass({
                             <span className="add_member_menu noom_cursor" onClick={this.friendClicked}>我的好友</span>
                             <span className="add_member_menu noom_cursor" onClick={this.originClicked}>组织架构</span>
                         </div>
-                        <div id="inPut100" className="ant-form-item add_member_menu_search2 line_block">
+                        <div id="inPut100" className={this.state.inputClassName}>
                             <Col span={24} className="right_ri">
                                 <Input
                                     placeholder="请输入要搜索的姓名"
