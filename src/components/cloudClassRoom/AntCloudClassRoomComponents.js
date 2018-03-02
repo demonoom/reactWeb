@@ -103,14 +103,14 @@ const AntCloudClassRoomComponents = React.createClass({
                 topButton = createClassBtn;
                 leftBtn = "";
                 tabPanel =
-                    <AntMulitiClassComponents ref="antMulitiClassComponents" isSeries="1"></AntMulitiClassComponents>;
+                    <AntMulitiClassComponents ref="antMulitiClassComponents" isSeries="" courseClass=""></AntMulitiClassComponents>;
                 break;
             case "singleClass":
                 //实景课（原来是单节课，现在不需要单节课了）
                 topButton = createClassBtn;
                 leftBtn = "";
                 tabPanel =
-                    <AntMulitiClassComponents ref="antSingleClassComponents" isSeries=""></AntMulitiClassComponents>;
+                    <AntMulitiClassComponents ref="antSingleClassComponents" isSeries="" courseClass="29"></AntMulitiClassComponents>;
                 break;
             case "myTeam":
                 if (this.state.isHide == true) {

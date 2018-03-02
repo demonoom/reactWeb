@@ -774,7 +774,7 @@ const SubjectUploadComponent = React.createClass({
 
                         <Row>
                             <Col span={3} className="ant-form-item-label row-t-f">
-                                <span className="font-14">知识点00000：</span>
+                                <span className="font-14">知识点：</span>
                             </Col>
                             <Col span={20} className="row-t-f">
                                 <div className="select_knoledge_width upexam_float">
