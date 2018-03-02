@@ -670,6 +670,7 @@ const AntMulitiClassComponents = React.createClass({
                 var videoStatus = response.videoStatus;
                 if (isEmpty(videoStatus) == false && videoStatus == 3) {
                     _this.setState({"tipModalVisible": true});
+                    newTab.close();
                     return;
                 }
                 var userId = sessionStorage.getItem("ident");
