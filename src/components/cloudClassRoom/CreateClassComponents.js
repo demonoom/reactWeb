@@ -62,8 +62,14 @@ const CreateClassComponents = React.createClass({
         this.getAllClass();
         this.findTeamByUserId();
         var isSeries = this.props.isSeries;
+        var courseClass = this.props.courseClass;
+        if(isEmpty(courseClass)==false && courseClass == "29"){
+            isSeries = "";
+        }else{
+            isSeries = "1";
+        }
         this.getAllSubject(isSeries);
-        this.setState({isSeries});
+        this.setState({isSeries,courseClass});
         if (isSeries == "1") {
             isSeriesStr = "系列课";
         } else {
@@ -81,6 +87,12 @@ const CreateClassComponents = React.createClass({
         var isShowClass = this.state.isShowClass;
         var isTestClass = this.state.isTestClass;
         var isSeries = nextProps.isSeries;
+        var courseClass = nextProps.courseClass;
+        if(isEmpty(courseClass)==false && courseClass == "29"){
+            isSeries = "";
+        }else{
+            isSeries = "1";
+        }
         //isWeiClass为true，代表是微课
         if (isWeiClass) {
             if (isSeries == 1) {
@@ -97,7 +109,7 @@ const CreateClassComponents = React.createClass({
         //     showCourse = 0
         // }
         var stepDirect = nextProps.stepDirect;
-        this.setState({stepDirect, isSeries});
+        this.setState({stepDirect, isSeries,courseClass});
         if (isSeries == "1" || isSeries == "3") {
             isSeriesStr = "系列课";
         } else {
@@ -345,7 +357,7 @@ const CreateClassComponents = React.createClass({
                 }
                 fileList.splice(0);
                 // weifileList.splice(0);
-                _this.props.onSaveOk();
+                _this.props.onSaveOk(_this.state.courseClass);
             },
             onError: function (error) {
                 message.error(error);

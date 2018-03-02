@@ -861,15 +861,15 @@ const AntMulitiClassComponents = React.createClass({
         });
     },
 
-    courseAddOk() {
+    courseAddOk(courseClass) {
         this.setState({"createClassModalVisible": false, "isChangeStep": false, stepDirect: ''});
-        var courseClass = "";
+        /*var courseClass = "";
         if (isEmpty(this.state.isSeries)) {
             //实景课的课程列表
             courseClass = '29';
         } else {
             courseClass = this.state.courseClass;
-        }
+        }*/
         this.findCourseByAccountWeb(this.state.currentPage, this.state.isSeries, this.state.classFliterValue, courseClass);
     },
 
@@ -997,7 +997,7 @@ const AntMulitiClassComponents = React.createClass({
                        width={800}
                 >
                     <div className="space">
-                        <CreateClassComponents ref="createClassComponent" isSeries={this.state.isSeries}
+                        <CreateClassComponents ref="createClassComponent" isSeries={this.state.isSeries} courseClass={this.state.courseClass}
                                                onSaveOk={this.courseAddOk}></CreateClassComponents>
                     </div>
                 </Modal>
