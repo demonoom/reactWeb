@@ -716,6 +716,7 @@ const MainLayout = React.createClass({
                 originFlag: true,
                 searchArea: 'originzation'
             });
+            document.getElementById('inPut100').className = 'ant-form-item add_member_menu_search2 line_block'
         } else {
             //普通群
             //显示顶部的三个标签
@@ -730,6 +731,7 @@ const MainLayout = React.createClass({
                 originFlag: false,
                 searchArea: 'defaultArea'
             });
+            document.getElementById('inPut100').className = 'ant-form-item add_member_menu_search line_block'
         }
     },
 
@@ -1046,6 +1048,12 @@ const MainLayout = React.createClass({
     },
 
     addDeGroupMemberModalHandleCancel() {
+        var arr = document.getElementsByClassName('add_member_menu');
+        for (var i = 0; i < arr.length; i++) {
+            arr[i].className = 'add_member_menu noom_cursor'
+        }
+        arr[0].className = 'add_member_menu noom_cursor add_member_menu_select';
+
         subGroupMemberList.splice(0);
         structuresObjArray.splice(0);
         this.state.selectedRowKeys = [];
@@ -2703,13 +2711,14 @@ const MainLayout = React.createClass({
                         ]}
                         width={700}
                     >
-                        <div id="mebChecked" className="ant-form-item add_member_menu_tab" style={{display: this.state.originDiv}}>
+                        <div id="mebChecked" className="ant-form-item add_member_menu_tab"
+                             style={{display: this.state.originDiv}}>
                             <span className="add_member_menu noom_cursor add_member_menu_select"
                                   onClick={this.rencentClicked}>最近联系人</span>
                             <span className="add_member_menu noom_cursor" onClick={this.friendClicked}>我的好友</span>
                             <span className="add_member_menu noom_cursor" onClick={this.originClicked}>组织架构</span>
                         </div>
-                        <div className="ant-form-item add_member_menu_search line_block">
+                        <div id="inPut100" className="ant-form-item add_member_menu_search line_block">
                             <Col span={24} className="right_ri">
                                 <Input
                                     placeholder="请输入要搜索的姓名"
@@ -2720,8 +2729,8 @@ const MainLayout = React.createClass({
                             </Col>
                         </div>
                         <div className="ant-form-item flex">
-                          <span className="password_ts" style={{height:'24px'}}>
-                                <span className="upexam_float" style={{lineHeight:'24px'}}>已选择：</span>
+                          <span className="password_ts" style={{height: '24px'}}>
+                                <span className="upexam_float" style={{lineHeight: '24px'}}>已选择：</span>
                                 <div className="add_member_tags_wrap">
                                     <div className="add_member_tags upexam_float">
                                         {tags.map((tag, index) => {
