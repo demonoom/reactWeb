@@ -2676,14 +2676,14 @@ const MainLayout = React.createClass({
                         ]}
                         width={700}
                     >
-                        <div id="mebChecked" className="ant-form-item flex" style={{display: this.state.originDiv}}>
+                        <div id="mebChecked" className="ant-form-item add_member_menu_tab" style={{display: this.state.originDiv}}>
                             <span className="add_member_menu noom_cursor add_member_menu_select"
                                   onClick={this.rencentClicked}>最近联系人</span>
                             <span className="add_member_menu noom_cursor" onClick={this.friendClicked}>我的好友</span>
                             <span className="add_member_menu noom_cursor" onClick={this.originClicked}>组织架构</span>
                         </div>
-                        <div className="ant-form-item flex">
-                            <Col span={10}>
+                        <div className="ant-form-item add_member_menu_tab">
+                            <Col span={20} className="right_ri">
                                 <Input
                                     placeholder="请输入要搜索的姓名"
                                     value={this.state.userNameFromOri}
@@ -2691,10 +2691,12 @@ const MainLayout = React.createClass({
                                     ref={node => this.userNameInput = node}
                                 />
                             </Col>
-                            <span className="password_ts" style={{marginLeft: '8px', lineHeight: '28px'}}>
-                                <span className="upexam_float">已选择：</span>
-                                <div className="ding_tags_wrap">
-                                    <div className="ding_tags upexam_float">
+                        </div>
+                        <div className="ant-form-item flex">
+                          <span className="password_ts" style={{height:'24px'}}>
+                                <span className="upexam_float" style={{lineHeight:'24px'}}>已选择：</span>
+                                <div className="add_member_tags_wrap">
+                                    <div className="add_member_tags upexam_float">
                                         {tags.map((tag, index) => {
                                             const isLongTag = tag.length > 20;
                                             const tagElem = (
