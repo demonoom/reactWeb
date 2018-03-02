@@ -44,7 +44,7 @@ const AntMulitiClassComponents = React.createClass({
         var fliterValue = this.state.fliterValue;
         classFliterValue = "1";
         fliterValue = "0";
-        this.setState({isSeries, courseClass, currentPage: initPageNo,classFliterValue,fliterValue});
+        this.setState({isSeries, courseClass, currentPage: initPageNo, classFliterValue, fliterValue});
         this.getCourseListBySeries(isSeries, courseClass, initPageNo);
     },
 
@@ -162,63 +162,65 @@ const AntMulitiClassComponents = React.createClass({
                 //
                 //     </div>;
                 // }
-               if(isSeries=='3' || isSeries =='4'){
-                   if (money == 0) {
-                       optButtons = <div>
-                           {/*<Col span={24}><Button icon="play-circle-o" className="exam-particulars_title liveing_color" title="直播"*/}
-                                                  {/*onClick={_this.getClassPlayDetail.bind(_this, row)}></Button></Col>*/}
-                           <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑"
-                                                  onClick={_this.editClass.bind(_this, id)}></Button></Col>
-                           <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情"
-                                                  onClick={_this.getClassDetail.bind(_this, row)}></Button></Col>
-                           <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
-                                                  disabled={false}
-                                                  onClick={_this.showConfirmDrwaModal.bind(_this, id)}></Button></Col>
+                if (isSeries == '3' || isSeries == '4') {
+                    if (money == 0) {
+                        optButtons = <div>
+                            {/*<Col span={24}><Button icon="play-circle-o" className="exam-particulars_title liveing_color" title="直播"*/}
+                            {/*onClick={_this.getClassPlayDetail.bind(_this, row)}></Button></Col>*/}
+                            <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑"
+                                                   onClick={_this.editClass.bind(_this, id)}></Button></Col>
+                            <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情"
+                                                   onClick={_this.getClassDetail.bind(_this, row)}></Button></Col>
+                            <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
+                                                   disabled={false}
+                                                   onClick={_this.showConfirmDrwaModal.bind(_this, id)}></Button></Col>
 
-                       </div>;
-                   } else {
-                       optButtons = <div>
-                           {/*<Col span={24}><Button icon="play-circle-o" className="exam-particulars_title liveing_color" title="直播"*/}
-                                                  {/*onClick={this.getClassPlayDetail.bind(_this, row)}></Button></Col>*/}
-                           <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑"
-                                                  onClick={_this.editClass.bind(_this, id)}></Button></Col>
-                           <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情"
-                                                  onClick={_this.getClassDetail.bind(_this, row)}></Button></Col>
-                           <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
-                                                  disabled={true}
-                                                  onClick={_this.showConfirmDrwaModal.bind(_this, id)}></Button></Col>
+                        </div>;
+                    } else {
+                        optButtons = <div>
+                            {/*<Col span={24}><Button icon="play-circle-o" className="exam-particulars_title liveing_color" title="直播"*/}
+                            {/*onClick={this.getClassPlayDetail.bind(_this, row)}></Button></Col>*/}
+                            <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑"
+                                                   onClick={_this.editClass.bind(_this, id)}></Button></Col>
+                            <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情"
+                                                   onClick={_this.getClassDetail.bind(_this, row)}></Button></Col>
+                            <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
+                                                   disabled={true}
+                                                   onClick={_this.showConfirmDrwaModal.bind(_this, id)}></Button></Col>
 
-                       </div>;
-                   }
-               }else{
-                   if (money == 0) {
-                       optButtons = <div>
-                           <Col span={24}><Button icon="play-circle-o" className="exam-particulars_title liveing_color" title="直播"
-                                                  onClick={_this.getClassPlayDetail.bind(_this, row)}></Button></Col>
-                           <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑"
-                                                  onClick={_this.editClass.bind(_this, id)}></Button></Col>
-                           <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情"
-                                                  onClick={_this.getClassDetail.bind(_this, row)}></Button></Col>
-                           <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
-                                                  disabled={false}
-                                                  onClick={_this.showConfirmDrwaModal.bind(_this, id)}></Button></Col>
+                        </div>;
+                    }
+                } else {
+                    if (money == 0) {
+                        optButtons = <div>
+                            <Col span={24}><Button icon="play-circle-o" className="exam-particulars_title liveing_color"
+                                                   title="直播"
+                                                   onClick={_this.getClassPlayDetail.bind(_this, row)}></Button></Col>
+                            <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑"
+                                                   onClick={_this.editClass.bind(_this, id)}></Button></Col>
+                            <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情"
+                                                   onClick={_this.getClassDetail.bind(_this, row)}></Button></Col>
+                            <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
+                                                   disabled={false}
+                                                   onClick={_this.showConfirmDrwaModal.bind(_this, id)}></Button></Col>
 
-                       </div>;
-                   } else {
-                       optButtons = <div>
-                           <Col span={24}><Button icon="play-circle-o" className="exam-particulars_title liveing_color" title="直播"
-                                                  onClick={this.getClassPlayDetail.bind(_this, row)}></Button></Col>
-                           <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑"
-                                                  onClick={_this.editClass.bind(_this, id)}></Button></Col>
-                           <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情"
-                                                  onClick={_this.getClassDetail.bind(_this, row)}></Button></Col>
-                           <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
-                                                  disabled={true}
-                                                  onClick={_this.showConfirmDrwaModal.bind(_this, id)}></Button></Col>
+                        </div>;
+                    } else {
+                        optButtons = <div>
+                            <Col span={24}><Button icon="play-circle-o" className="exam-particulars_title liveing_color"
+                                                   title="直播"
+                                                   onClick={this.getClassPlayDetail.bind(_this, row)}></Button></Col>
+                            <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑"
+                                                   onClick={_this.editClass.bind(_this, id)}></Button></Col>
+                            <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情"
+                                                   onClick={_this.getClassDetail.bind(_this, row)}></Button></Col>
+                            <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
+                                                   disabled={true}
+                                                   onClick={_this.showConfirmDrwaModal.bind(_this, id)}></Button></Col>
 
-                       </div>;
-                   }
-               }
+                        </div>;
+                    }
+                }
                 break;
             case "2":
                 isPublishStr = "未发布";
@@ -268,11 +270,12 @@ const AntMulitiClassComponents = React.createClass({
                         <Row className="details_cont">
                             <Row>
                                 <Col span={24}>
-                                    <span className="font_gray_33 submenu_left_hidden upexam_float width_area">{courseName}</span>
+                                    <span
+                                        className="font_gray_33 submenu_left_hidden upexam_float width_area">{courseName}</span>
                                     <span className="series_recall upexam_float margin_left ">{isPublishStr}</span>
                                     <span className="series_recall upexam_float margin_left ">{courseTypeName}</span>
                                     <span className="series_recall upexam_float margin_left ">微课</span>
-                                    </Col>
+                                </Col>
                             </Row>
                             <Col span={24} className="price"><span className="c-jg price_between">￥{money}</span><span
                                 className="price_between gray_line"></span><span
@@ -307,7 +310,8 @@ const AntMulitiClassComponents = React.createClass({
                         <Row className="details_cont">
                             <Row>
                                 <Col span={24}>
-                                    <span className="font_gray_33 submenu_left_hidden upexam_float width_area">{courseName}</span>
+                                    <span
+                                        className="font_gray_33 submenu_left_hidden upexam_float width_area">{courseName}</span>
                                     <span className="series_recall upexam_float margin_left ">{isPublishStr}</span>
                                     <span className="series_recall upexam_float margin_left ">{courseTypeName}</span>
                                 </Col>
@@ -646,7 +650,6 @@ const AntMulitiClassComponents = React.createClass({
      */
     openLive(liveObj, liveType) {
         //0:课程   1 章节  targetType
-        debugger;
         var originTime = liveObj.liveTime;
         //获取当前时间 时间戳
         var rightTime = Date.parse(new Date());
@@ -655,9 +658,9 @@ const AntMulitiClassComponents = React.createClass({
             "method": 'findVideoById',
             "id": liveObj.id,
         };
-            if(originTime > rightTime){
-                message.warning('未到开课时间');
-                return;
+        if (originTime > rightTime) {
+            message.warning('未到开课时间');
+            return;
         }
         //在执行ajax请求前，打开一个空白的新窗口
         var newTab = window.open('about:blank');
@@ -711,7 +714,7 @@ const AntMulitiClassComponents = React.createClass({
         //获取当前时间 时间戳
         var rightTime = Date.parse(new Date());
         var isSerises = classObj.isSeries
-        if(isSerises == '3' || isSerises == '4'){
+        if (isSerises == '3' || isSerises == '4') {
             //微课
             if (isEmpty(videosArray) == false) {
                 videosArray.forEach(function (video) {
@@ -758,7 +761,7 @@ const AntMulitiClassComponents = React.createClass({
                     </Col>
                 </Row>
             </Card>;
-        }else{
+        } else {
             if (isEmpty(videosArray) == false) {
                 videosArray.forEach(function (video) {
                     //播放按钮
@@ -805,10 +808,10 @@ const AntMulitiClassComponents = React.createClass({
                 </Row>
             </Card>;
         }
-        if(originTime > rightTime){
+        if (originTime > rightTime) {
             this.setState({classPlayDetailModalVisible: false, classDetailPanel});
             message.warning('未到开课时间');
-        }else{
+        } else {
             this.setState({classPlayDetailModalVisible: true, classDetailPanel});
         }
 
@@ -926,6 +929,10 @@ const AntMulitiClassComponents = React.createClass({
         this.refs.confirmDrawModal.changeConfirmModalVisible(false);
     },
 
+    tipModalHandleCancel(){
+        this.setState({"tipModalVisible":false,"classDetailModalVisible":false});
+        this.getCourseList(this.state.currentPage);
+    },
     /**
      * 渲染页面
      * @returns {XML}
@@ -1042,6 +1049,18 @@ const AntMulitiClassComponents = React.createClass({
                 >
                     <div className="space">
                         {this.state.classDetailPanel}
+                    </div>
+                </Modal>
+
+                <Modal
+                    visible={this.state.tipModalVisible}
+                    title="课程状态"
+                    onCancel={this.tipModalHandleCancel}
+                    transitionName=""  //禁用modal的动画效果
+                    maskClosable={false} //设置不允许点击蒙层关闭
+                    footer={[]}>
+                    <div className="font_center">
+                        当前课程已经直播过，稍后请选择其他章节再次开启直播，谢谢！
                     </div>
                 </Modal>
             </div>
