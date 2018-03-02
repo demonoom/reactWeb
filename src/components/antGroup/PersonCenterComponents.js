@@ -1135,9 +1135,9 @@ const PersonCenterComponents = React.createClass({
      * @param e
      */
     setChatGroup(groupObj) {
-        alert('改变')
-        console.log(groupObj);
-        var currentGroupObj = groupObj;
+        this.props.setChatGroup(groupObj.chatGroupId);
+        //采用新逻辑,取消老逻辑
+        /*var currentGroupObj = groupObj;
         if (isEmpty(currentGroupObj) == false) {
             var members = currentGroupObj.members;
             var membersArray = [];
@@ -1152,7 +1152,7 @@ const PersonCenterComponents = React.createClass({
                 "currentMemberArray": membersArray,
                 "currentGroupObj": groupObj
             });
-        }
+        }*/
     },
 
     onChatGroupPageChange(page) {

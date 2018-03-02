@@ -238,6 +238,11 @@ const MessageMenu = React.createClass({
             }
         });
 
+        if (isEmpty(delUuid)) {
+            alert(1);
+            return
+        }
+
         var _this = this;
         var param = {
             "method": 'removeUserRecentMessage',

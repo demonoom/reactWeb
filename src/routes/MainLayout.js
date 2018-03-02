@@ -1,11 +1,27 @@
 import React from 'react';
-import {Menu, Icon, Row, Col, notification, Modal, Collapse, Checkbox, Input, message, Button, Radio} from 'antd';
+import {
+    Menu,
+    Icon,
+    Row,
+    Col,
+    notification,
+    Modal,
+    Collapse,
+    Checkbox,
+    Input,
+    message,
+    Button,
+    Radio,
+    Table,
+    Breadcrumb,
+    Tag,
+    Tooltip
+} from 'antd';
 import HeaderComponents from '../components/HeaderComponents';
 import UserFace from '../components/UserCardModalComponents';
 import FloatButton from '../components/FloatButton';
 import PersonCenterMenu from '../components/layOut/PersonCenterMenu';
 import PersonCenter from '../components/PersonCenter';
-import moment from 'moment';
 import AntNestTabComponents from '../components/antNest/AntNestTabComponents';
 import DingMessageTabComponents from '../components/dingMessage/DingMessageTabComponents';
 import AntGroupTabComponents from '../components/antGroup/AntGroupTabComponents';
@@ -17,8 +33,7 @@ import PersonCenterComponents from '../components/antGroup/PersonCenterComponent
 import AntCloudMenu from '../components/layOut/AntCloudMenu';
 import AntCloudTableComponents from '../components/antCloud/AntCloudTableComponents';
 import {LocaleProvider} from 'antd';
-import {showLargeImg} from '../utils/utils'
-import {isEmpty, SMALL_IMG} from '../utils/Const'
+import {SMALL_IMG} from '../utils/Const'
 import TeachSpace from '../components/TeachSpaces';
 import TeachSpaceGhostMenu from '../components/TeachSpacesGhostMenu';
 import {MsgConnection} from '../utils/msg_websocket_connection';
@@ -29,10 +44,13 @@ import SystemSettingComponent from '../components/SystemSetting/SystemSettingCom
 import AddShiftPosModel from '../components/Attendance/AddShiftPosModel';
 import SendPicModel from '../components/antGroup/SendPicModel'
 import ConfirmModal from '../components/ConfirmModal';
-// 推荐在入口文件全局设置 locale
-import 'moment/locale/zh-cn';
+import {isEmpty, showLargeImg, setLocalLanaguage, getMessageFromLanguage, getLocalFromLanguage} from '../utils/utils';
+//国际化
+import {IntlProvider, addLocaleData} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
+import zh from 'react-intl/locale-data/zh';
+import en from 'react-intl/locale-data/en';
 
-moment.locale('zh-cn');
 import {createStore} from 'redux';
 
 const Panel = Collapse.Panel;
@@ -41,14 +59,32 @@ const RadioGroup = Radio.Group;
 
 const CheckboxGroup = Checkbox.Group;
 
+const memberColumns = [{
+    title: '姓名',
+    dataIndex: 'userName',
+    key: 'userName',
+    width: 160,
+    className: 'dold_text departmental_officer'
+}];
+
+//部门
+var columns = [{
+    title: '部门名称',
+    dataIndex: 'subGroupName',
+    key: 'subGroupName',
+}];
+
 const radioStyle = {
     display: 'block',
     height: '30px',
     lineHeight: '30px',
 };
 
+var selectArr = [];
 var messageData = [];
 var userMessageData = [];
+var structuresObjArray = [];
+var subGroupMemberList = [];
 
 var delLastClick = false;
 
@@ -85,6 +121,12 @@ const MainLayout = React.createClass({
             lastClick: '',  //聊天功能最后一次点击的对象
             RMsgActiveKey: ['2'],
             searchWords: '',
+            userNameFromOri: '',
+            structuresObjArray: [],
+            selectedRowKeys: [],
+            tags: [],  //标签显示
+            inputVisible: false,
+            inputValue: '',
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
     },
@@ -635,7 +677,14 @@ const MainLayout = React.createClass({
                     }
                     _this.setState({"updateChatGroupNameModalVisible": false});
                     _this.levGroupSet();
-                    _this.refs.antGroupTabComponents.changeWelcomeTitle(_this.state.updateChatGroupTitle)
+                    var antGroupTabComponents = _this.refs.antGroupTabComponents;
+                    var personCenterComponents = _this.refs.personCenterComponents;
+                    if (isEmpty(antGroupTabComponents) == false) {
+                        antGroupTabComponents.changeWelcomeTitle(_this.state.updateChatGroupTitle)
+                    }
+                    if (isEmpty(personCenterComponents) == false) {
+                        personCenterComponents.getUserChatGroup()
+                    }
                 },
                 onError: function (error) {
                     message.error(error);
@@ -660,10 +709,395 @@ const MainLayout = React.createClass({
     },
 
     /**
+     * 添加群成员(两种情况下的搜索fanwei)
+     */
+    showAddMembersModal(type) {
+        if (type == 1) {
+            //部门群
+            this.getStructureById("-1");
+            this.setState({
+                "addDeGroupMemberModalVisible": true,
+                originDiv: 'none',
+                OriUserNotOrIf: 'none',
+                OriUserIfOrNot: 'block',
+                originFlag: true,
+                searchArea: 'originzation',
+                inputClassName: 'ant-form-item add_member_menu_search2 line_block'
+            });
+        } else {
+            //普通群
+            //显示顶部的三个标签
+            //显示另一个table
+            //去请求最近联系人
+            this.getRecentShareUsers();
+            this.setState({
+                "addDeGroupMemberModalVisible": true,
+                originDiv: 'inline-block',
+                OriUserNotOrIf: 'block',
+                OriUserIfOrNot: 'none',
+                originFlag: false,
+                searchArea: 'defaultArea',
+                inputClassName: 'ant-form-item add_member_menu_search line_block'
+            });
+        }
+    },
+
+    /**
+     * 普通群加人组织架构被点击
+     */
+    originClicked(e) {
+        var arr = document.getElementsByClassName('add_member_menu');
+        for (var i = 0; i < arr.length; i++) {
+            arr[i].className = 'add_member_menu noom_cursor'
+        }
+        e.target.className = 'add_member_menu noom_cursor add_member_menu_select';
+        this.getStructureById("-1");
+        this.setState({
+            userNameFromOri: '',  //解决搜索框有内容去切换头部无效的问题
+            originDiv: 'inline-block',   //控制普通群头部三个按钮
+            OriUserNotOrIf: 'none',  //控制最大的两个table的显示隐藏
+            OriUserIfOrNot: 'block',  //控制最大的两个table的显示隐藏
+            originFlag: true,   //控制搜索框有无内容的显示结果,只要是组织架构的就设成true
+        });
+    },
+
+    /**
+     * 普通群加人最近联系人被点击
+     */
+    rencentClicked(e) {
+        var arr = document.getElementsByClassName('add_member_menu');
+        for (var i = 0; i < arr.length; i++) {
+            arr[i].className = 'add_member_menu noom_cursor'
+        }
+        e.target.className = 'add_member_menu noom_cursor add_member_menu_select';
+        //改变dataSourse
+        //显示隐藏
+        this.getRecentShareUsers();
+        this.setState({
+            originDiv: 'inline-block',
+            OriUserNotOrIf: 'block',
+            OriUserIfOrNot: 'none',
+            originFlag: false,
+            userNameFromOri: ''  //解决搜索框有内容去切换头部无效的问题
+        });
+    },
+
+    /**
+     * 普通群加人我的好友被点击
+     */
+    friendClicked(e) {
+        var arr = document.getElementsByClassName('add_member_menu');
+        for (var i = 0; i < arr.length; i++) {
+            arr[i].className = 'add_member_menu noom_cursor'
+        }
+        e.target.className = 'add_member_menu noom_cursor add_member_menu_select';
+        //改变dataSourse
+        //显示隐藏
+        this.getUserContacts();
+        this.setState({
+            originDiv: 'inline-block',
+            OriUserNotOrIf: 'block',
+            OriUserIfOrNot: 'none',
+            originFlag: false,
+            userNameFromOri: ''  //解决搜索框有内容去切换头部无效的问题
+        });
+    },
+
+    /**
+     * 获取我的好友
+     */
+    getUserContacts() {
+        var _this = this;
+        var param = {
+            "method": 'getUserContacts',
+            "ident": sessionStorage.getItem("ident"),
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    if (isEmpty(response) == false) {
+                        var arr = [];
+                        response.forEach(function (v) {
+                            if (v.colUid != 41451 && v.colUid != 138437 && v.colUid != 142033 && v.colUid != 139581 && v.colUid != sessionStorage.getItem("ident")) {
+                                arr.push({
+                                    key: v.colUid,
+                                    userId: v.colUid,
+                                    userName: v.userName,
+                                });
+                            }
+                        })
+                        _this.setState({defaultUserData: arr});
+                    }
+                } else {
+
+                }
+            },
+
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 获取最近联系人
+     */
+    getRecentShareUsers() {
+        var _this = this;
+        var param = {
+            "method": 'getRecentShareUsers',
+            "userId": sessionStorage.getItem("ident"),
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    if (isEmpty(response) == false) {
+                        var arr = [];
+                        response.forEach(function (v) {
+                            if (v.type == 0) {
+                                if (v.user.colUid != 120024) {
+                                    var user = v.user;
+                                    arr.push({
+                                        key: user.colUid,
+                                        userId: user.colUid,
+                                        userName: user.userName,
+                                    });
+                                }
+                            }
+                        })
+                        _this.setState({defaultUserData: arr});
+                    }
+                } else {
+
+                }
+            },
+
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 获取当前用户的组织根节点(蚁群中的组织架构菜单)
+     * @param operateUserId
+     * @param structureId
+     */
+    getStructureById(structureId) {
+        let _this = this;
+        var structureId = structureId + '';
+        if (isEmpty(structureId)) {
+            structureId = "-1";
+        }
+        var param = {
+            "method": 'getStructureById',
+            "operateUserId": sessionStorage.getItem("ident"),
+            "structureId": structureId,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var parentGroup = ret.response;
+                if (isEmpty(ret.response) == false) {
+                    var owner = parentGroup.chatGroup.owner.colUid;
+                }
+                // 根据组织根节点的id请求该组织根节点里的子部门， 调用 列举子部门函数
+                if (structureId == "-1") {
+                    _this.listStructures(parentGroup.id);
+                    var defaultPageNo = 1;
+                    _this.getStrcutureMembers(parentGroup.id, defaultPageNo);
+                    _this.setState({structureId: parentGroup.id});
+                }
+                if (isEmpty(parentGroup) == false) {
+                    var isExit = _this.checkStructureIsExitAtArray(parentGroup);
+                    if (isExit == false) {
+                        //存放组织架构的层次关系
+                        structuresObjArray.push(parentGroup);
+
+                    }
+                }
+
+                _this.setState({parentGroup, structuresObjArray, owner});
+            },
+
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    checkStructureIsExitAtArray(newStructure) {
+        var isExit = false;
+        for (var i = 0; i < structuresObjArray.length; i++) {
+            var structure = structuresObjArray[i];
+            if (structure.id == newStructure.id) {
+                isExit = true;
+                break;
+            }
+        }
+        return isExit;
+    },
+
+    /**
+     * 列举蚁群中的子部门11
+     * @param operateUserId
+     * @param structureId
+     */
+    listStructures(structureId) {
+        let _this = this;
+        _this.getStructureById(structureId);
+        var param = {
+            "method": 'listStructures',
+            "operateUserId": sessionStorage.getItem("ident"),
+            "structureId": structureId,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                var subGroupList = [];
+                if (isEmpty(response) == false) {
+                    response.forEach(function (subGroup) {
+                        var subGroupName = <div className="first_indent"
+                                                onClick={_this.getSubGroupForButton.bind(_this, subGroup.id)}>
+                            <span className="antnest_name affix_bottom_tc name_max3 dold_text">{subGroup.name}</span>
+                        </div>
+                        subGroupList.push({
+                            key: subGroup.id,
+                            subGroupName: subGroupName,
+                        });
+
+                    });
+                } else {
+                    var subGroupName = <div className="add_member_noDataTipImg">
+                        <img className="noDataTipImg" style={{width: '235px'}}
+                             src={require('../components/images/noDataTipImg.png')}/>
+                    </div>
+                    subGroupList.push({
+                        key: 99999,
+                        subGroupName: subGroupName,
+                    });
+                }
+                _this.setState({subGroupList, "optType": "getGroupMenu"});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+
+    },
+
+    /**
+     * 点击部门时，获取部门下的成员
+     * @param record
+     * @param index
+     */
+    getSubGroupForButton(structureId) {
+        var memberPageNo = 1;
+        subGroupMemberList.splice(0);
+        var defaultMemberPageNo = 1;
+        this.setState({
+            structureId: structureId,
+            memberPageNo: defaultMemberPageNo,
+        });
+        this.listStructures(structureId);
+        this.getStrcutureMembers(structureId, memberPageNo);
+        this.getStructureById(sessionStorage.getItem("ident"), structureId)
+    },
+
+    /**
+     * 根据部门id获取部门成员
+     * @param operateUserId
+     * @param structureId
+     */
+    getStrcutureMembers(structureId, pageNo) {
+        let _this = this;
+        var structureId = structureId + '';
+        if (structureId.indexOf(',') !== -1) {
+            var structureIdArr = structureId.split(',');
+            structureId = structureIdArr[0];
+        }
+        var param = {
+            "method": 'getStrcutureMembers',
+            "operateUserId": sessionStorage.getItem("ident"),
+            "structureId": structureId,
+            "pageNo": pageNo,
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                var owner = _this.state.owner;
+                if (isEmpty(response) == false) {
+                    response.forEach(function (member) {
+                        var user = member.user;
+                        subGroupMemberList.push({
+                            key: user.colUid,
+                            userId: user.colUid,
+                            userName: user.userName,
+                        });
+                    });
+                }
+                var pager = ret.pager;
+                var pageCount = pager.pageCount;
+                if (pageCount == pageNo) {
+                    var wordSrc = '无更多数据';
+                    _this.setState({wordSrc});
+
+                }
+                _this.setState({subGroupMemberList, totalMember: pager.rsCount});
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+
+
+    },
+
+    addDeGroupMemberModalHandleCancel() {
+        var arr = document.getElementsByClassName('add_member_menu');
+        for (var i = 0; i < arr.length; i++) {
+            arr[i].className = 'add_member_menu noom_cursor'
+        }
+        arr[0].className = 'add_member_menu noom_cursor add_member_menu_select';
+
+        subGroupMemberList.splice(0);
+        structuresObjArray.splice(0);
+        this.state.selectedRowKeys = [];
+        this.state.userNameFromOri = '';
+        this.state.tags = [];
+        selectArr = [];
+        this.setState({"addDeGroupMemberModalVisible": false});
+    },
+
+    /**
      * 添加群成员
      */
-    showAddMembersModal() {
-
+    addGroupMember() {
+        var _this = this;
+        var memberTargetkeys = this.state.selectedRowKeys;
+        var memberIds = memberTargetkeys.join(",");
+        var currentGroupObj = this.state.currentGroupObj;
+        var param = {
+            "method": 'addChatGroupMember',
+            "chatGroupId": currentGroupObj.chatGroupId,
+            "memberIds": memberIds
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if (ret.msg == "调用成功" && ret.success == true && response == true) {
+                    message.success("群成员添加成功");
+                } else {
+                    message.success("群成员添加失败");
+                }
+                _this.levGroupSet();
+                _this.addDeGroupMemberModalHandleCancel();
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     /**
@@ -815,6 +1249,7 @@ const MainLayout = React.createClass({
      * @param arr
      */
     buildGroupSet(currentMemberArray, currentGroupObj) {
+        var groupType = currentGroupObj.type;
         this.state.dissolutionChatGroupButton = '';
         this.setState({currentGroupObj});
         var _this = this;
@@ -824,8 +1259,10 @@ const MainLayout = React.createClass({
         if (currentGroupObj.owner.colUid == sessionStorage.getItem("ident")) {
             //我是群主
             divBlock = 'inline-block';
-            topButton = <span className="toobar">
-                <span type="primary" className="noom_cursor set_in_btn_font" onClick={this.showAddMembersModal}><Icon className="i_antdesign" type="plus" />添加群成员</span></span>
+            topButton = <span>
+                <span type="primary" className="noom_cursor set_in_btn_font"
+                      onClick={this.showAddMembersModal.bind(this, groupType)}><Icon
+                    className="i_antdesign" type="plus"/>添加群成员</span></span>
             dissolutionChatGroupButton =
                 <Button onClick={this.showDissolutionChatGroupConfirmModal} className="group_red_font"><i
                     className="iconfont">&#xe616;</i>解散该群</Button>;
@@ -865,10 +1302,10 @@ const MainLayout = React.createClass({
                     topButton = <span className="right_ri"></span>;
                 } else {
                     //老师
-                    topButton = <span className="right_ri">
-                    <Button type="primary" onClick={this.showAddMembersModal}
-                    >添加群成员</Button>
-                    </span>;
+                    topButton = <span>
+                        <span type="primary" className="noom_cursor set_in_btn_font"
+                              onClick={this.showAddMembersModal.bind(this, groupType)}>
+                        <Icon className="i_antdesign" type="plus"/>添加群成员</span></span>
                 }
             }
 
@@ -896,11 +1333,12 @@ const MainLayout = React.createClass({
                 <ul className="group_fr_ul">
                     <li className="color_gary_f">群聊名称：{currentGroupObj.name}
                         <span style={{display: divBlock}} className="noom_cursor set_in_btn_font"
-                              onClick={this.showUpdateChatGroupNameModal}><Icon type="edit" className="i_antdesign" />编辑</span>
+                              onClick={this.showUpdateChatGroupNameModal}><Icon type="edit" className="i_antdesign"/>编辑</span>
                     </li>
                     <li className="color_gary_f">群主：{currentGroupObj.owner.userName}
                         <span style={{display: divBlock}} className="noom_cursor set_in_btn_font"
-                              onClick={this.mainTransfer.bind(this, currentMemberArray)}><Icon type="swap" className="i_antdesign" />转让群主</span>
+                              onClick={this.mainTransfer.bind(this, currentMemberArray)}><Icon type="swap"
+                                                                                               className="i_antdesign"/>转让群主</span>
                     </li>
                     <li className="color_gary_f">
                         <span>群聊成员：{currentMemberArray.length}人</span>{topButton}</li>
@@ -1478,7 +1916,6 @@ const MainLayout = React.createClass({
      * @param menuItemKey
      */
     getCloudClassRoom(menuItemKey) {
-        console.log("menuItemKey:" + menuItemKey);
         this.setState({"cloudRoomMenuItem": menuItemKey});
     },
     search() {
@@ -1550,6 +1987,7 @@ const MainLayout = React.createClass({
 
     onChangeUserName(e) {
         //搜索框改变就清空选择数组
+        this.state.searchShareUsersData = [];
         this.state.checkedConcatOptions = [];
         this.state.checkedGroupOptions = [];
         this.state.checkedsSructureOptions = [];
@@ -1559,6 +1997,80 @@ const MainLayout = React.createClass({
             this.searchShareUsers(e.target.value);
         }
         this.setState({searchWords: e.target.value});
+    },
+
+    //群组加人搜索
+    onChangeUserNameFromOri(e) {
+        var originFlag = this.state.originFlag;  //部门群下搜索此值为true,普通群为false
+        this.state.searchUserFromOri = [];
+        if (e.target.value.length != 0) {
+            this.searchUserFromOri(e.target.value);
+        }
+
+        if (!originFlag) {
+            //普通群,搜索框的内容决定最大的两个table的显示隐藏
+            if (e.target.value.length != 0) {
+                this.setState({OriUserNotOrIf: 'none', OriUserIfOrNot: 'block'})
+            } else {
+                this.setState({OriUserNotOrIf: 'block', OriUserIfOrNot: 'none'})
+            }
+        }
+
+        this.setState({userNameFromOri: e.target.value});
+    },
+
+    /**
+     * 从组织架构搜索人
+     * @param str
+     */
+    searchUserFromOri(str) {
+        var searchArea = this.state.searchArea;  //defaultArea为全局,originzation为组织架构内
+        var _this = this;
+        var param = {
+            "method": 'searchShareUsers',
+            "userId": sessionStorage.getItem("ident"),
+            "pageNo": -1,
+            "searchKeyWords": str,
+        };
+        if (searchArea == 'defaultArea') {
+            param.dataType = 0;
+        } else if (searchArea == 'originzation') {
+            param.dataType = 3;
+        }
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    var response = ret.response;
+                    if (isEmpty(response) == false) {
+                        _this.showSearchUserFromOri(response)
+                    } else {
+                        //显示没有结果
+                    }
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
+    /**
+     * 构建从组织架构搜索出来的用户表格
+     * @param data
+     */
+    showSearchUserFromOri(data) {
+        var arr = [];
+        data.forEach(function (v) {
+            if (v.type == 0) {
+                var user = v.user;
+                arr.push({
+                    key: user.colUid,
+                    userId: user.colUid,
+                    userName: user.userName,
+                });
+            }
+        });
+        this.setState({searchUserFromOri: arr});
     },
 
     searchShareUsers(str) {
@@ -1641,10 +2153,174 @@ const MainLayout = React.createClass({
         this.setState({"searchShareUsersData": arr});
     },
 
+    /**
+     * 部门成员加载更多
+     */
+    loadMoreMember() {
+        var _this = this;
+        if (isEmpty(_this.state.memberPageNo)) {
+            return
+        }
+        var memberPageNo = parseInt(_this.state.memberPageNo) + 1;
+        this.memberPageOnChange(memberPageNo);
+    },
+
+    /**
+     * 部门成员的数据分页
+     * @param pageNo
+     */
+    memberPageOnChange(pageNo) {
+        this.setState({
+            memberPageNo: pageNo,
+        });
+        this.getStrcutureMembers(this.state.structureId, pageNo);
+    },
+
+    /**
+     * 面包条点击响应
+     * 切换到当前的组织架构层次，同时，在此面包条后的数据移除
+     */
+    breadCrumbClick(structureId) {
+        var defaultPageNo = 1;
+        for (var i = 0; i < structuresObjArray.length; i++) {
+            var structure = structuresObjArray[i];
+            if (structure.id == structureId) {
+                structuresObjArray.splice(i, structuresObjArray.length);
+                break;
+            }
+        }
+        this.listStructures(structureId);
+        subGroupMemberList.splice(0);
+        this.getStrcutureMembers(structureId, defaultPageNo);
+        var defaultMemberPageNo = 1;
+        this.setState({"structureId": structureId, structuresObjArray, "memberPageNo": defaultMemberPageNo});
+    },
+
+    /**
+     * 表格选中响应函数
+     * @param selectedRowKeys
+     */
+    onSelectChange(selectedRowKeys) {
+        this.setState({selectedRowKeys});
+    },
+
+    /**
+     * 同步table与tags
+     * @param record
+     * @param selected
+     */
+    onRowSelected(record, selected) {
+        if (selected) {
+            selectArr.push(record);
+        } else {
+            var key = record.key;
+            for (var i = 0; i < selectArr.length; i++) {
+                if (selectArr[i].key == key) {
+                    selectArr.splice(i, 1);
+                }
+            }
+        }
+        this.setState({tags: selectArr});
+    },
+
+    /**
+     * 用户手动选择/取消选择所有列的回调
+     */
+    onSelectAll(selected, selectedRows, changeRows) {
+        var arr = this.state.tags;
+        var array;
+        //此处应该是连接数组或者是取消数组
+        // 第一个参数布尔值true表示钩中，false表示取消，第三个参数表示钩中的人的数组
+        if (selected) {
+            //数组合并
+            array = arr.concat(changeRows);
+        } else {
+            //在原数组中去除这个数组的项
+            changeRows.forEach(function (data, index) {
+                arr.forEach(function (v, i) {
+                    if (v.key == data.key) {
+                        arr.splice(i, 1);
+                    }
+                })
+            })
+            array = arr;
+        }
+        this.setState({tags: array});
+        selectArr = array;
+    },
+
+    /*标签关闭的回调*/
+    handleClose(removedTag) {
+        const tags = this.state.tags.filter(tag => tag !== removedTag);
+        var arr = [];
+        this.setState({tags});
+        //设置勾选状态   selectedRowKeys
+        for (var i = 0; i < tags.length; i++) {
+            arr.push(tags[i].key);
+        }
+        this.state.selectedRowKeys = arr;
+        //在这里把点击的这一项从selectArr中删除  selectArr全局函数
+        for (var i = 0; i < selectArr.length; i++) {
+            if (selectArr[i].key == removedTag.key) {
+                selectArr.splice(i, 1);
+            }
+        }
+    },
+
+    handleInputChange(e) {
+        this.setState({inputValue: e.target.value});
+    },
+
+    handleInputConfirm() {
+        const state = this.state;
+        const inputValue = state.inputValue;
+        let tags = state.tags;
+        if (inputValue && tags.indexOf(inputValue) === -1) {
+            tags = [...tags, inputValue];
+        }
+        this.setState({
+            tags,
+            inputVisible: false,
+            inputValue: '',
+        });
+    },
+
+
     render() {
+
+        const {tags, inputVisible, inputValue} = this.state;
+
+        var _this = this;
+        //引入国际化的支持
+        var messageFromLanguage = getMessageFromLanguage();
+        var local = getLocalFromLanguage();
+
+        const rowSelection = {
+            selectedRowKeys: this.state.selectedRowKeys,
+            onChange: this.onSelectChange,
+            onSelect: this.onRowSelected,
+            onSelectAll: this.onSelectAll
+        };
+
+        const hasSelected = this.state.selectedRowKeys.length > 0;
+
+        //构建蚁群中的组织架构部分的面包屑组件
+        var breadcrumbItemObjArray = [];
+        if (isEmpty(_this.state.structuresObjArray) == false) {
+            _this.state.structuresObjArray.forEach(function (structure) {
+
+                var breadcrumbItemObj = <Breadcrumb.Item key={structure.id}>
+                    <a onClick={_this.breadCrumbClick.bind(_this, structure.id)}>{structure.name}</a></Breadcrumb.Item>;
+                breadcrumbItemObjArray.push(breadcrumbItemObj);
+
+            });
+        }
+
         const suffix = this.state.searchWords ? <Icon type="close-circle" onClick={this.emitEmpty}/> : null;
         const searchIfOrNot = this.state.searchWords ? 'none' : 'block';
         const searchNotOrIf = this.state.searchWords ? 'block' : 'none';
+        const searchOriIfOrNot = this.state.userNameFromOri ? 'none' : 'block';
+        const searchOriNotOrIf = this.state.userNameFromOri ? 'block' : 'none';
         const collapse = this.state.collapse;
         //根据如下判断结果，完成对页面中部位置的渲染，不同情况，渲染不同组件
         var middleComponent;
@@ -1694,6 +2370,7 @@ const MainLayout = React.createClass({
                                                        userInfo={this.state.userObj}
                                                        userContactsData={this.state.userContactsData}
                                                        onSendGroupMessage={this.sendGroupMessage}
+                                                       setChatGroup={this.gopTalkSetClick}
                                                        onSendMessage={this.sendMessage}/>;
                 break;
             case 'personCenter':
@@ -1791,7 +2468,10 @@ const MainLayout = React.createClass({
         //
         //
         return (
-            <LocaleProvider locale={this.state.locale}>
+            <IntlProvider
+                locale={local}
+                messages={messageFromLanguage}
+            >
                 <div className={collapse ? "ant-layout-aside ant-layout-aside-collapse" : "ant-layout-aside"}>
 
                     <aside className="ant-layout-sider">
@@ -1806,8 +2486,13 @@ const MainLayout = React.createClass({
                             <Menu.Item key="message" className="padding_menu">
                                 <i className="icon_menu_ios icon_message"></i>
                                 <b className="ding_alert" ref='msgAlert'></b>
-                                <div className="tan">动态</div>
-
+                                <div className="tan">
+                                    <FormattedMessage
+                                        id='dynamic'
+                                        description='动态'
+                                        defaultMessage='动态'
+                                    />
+                                </div>
                             </Menu.Item>
                             <Menu.Item key="antNest" className="padding_menu">
                                 <i className="icon_menu_ios icon_yichao1"></i>
@@ -2021,6 +2706,123 @@ const MainLayout = React.createClass({
                         </Row>
                     </Modal>
 
+                    <Modal
+                        visible={this.state.addDeGroupMemberModalVisible}
+                        title="添加群成员"
+                        onCancel={this.addDeGroupMemberModalHandleCancel}
+                        transitionName=""  //禁用modal的动画效果
+                        maskClosable={false} //设置不允许点击蒙层关闭
+                        className="add_member"
+                        footer={[
+                            <button type="primary" htmlType="submit" className="ant-btn ant-btn-primary ant-btn-lg"
+                                    onClick={this.addGroupMember}>确定</button>,
+                            <button type="ghost" htmlType="reset" className="ant-btn ant-btn-ghost login-form-button"
+                                    onClick={this.addDeGroupMemberModalHandleCancel}>取消</button>
+                        ]}
+                        width={700}
+                    >
+                        <div id="mebChecked" className="ant-form-item add_member_menu_tab"
+                             style={{display: this.state.originDiv}}>
+                            <span className="add_member_menu noom_cursor add_member_menu_select"
+                                  onClick={this.rencentClicked}>最近联系人</span>
+                            <span className="add_member_menu noom_cursor" onClick={this.friendClicked}>我的好友</span>
+                            <span className="add_member_menu noom_cursor" onClick={this.originClicked}>组织架构</span>
+                        </div>
+                        <div id="inPut100" className={this.state.inputClassName}>
+                            <Col span={24} className="right_ri">
+                                <Input
+                                    placeholder="请输入要搜索的姓名"
+                                    value={this.state.userNameFromOri}
+                                    onChange={this.onChangeUserNameFromOri}
+                                    ref={node => this.userNameInput = node}
+                                />
+                            </Col>
+                        </div>
+                        <div className="ant-form-item flex">
+                          <span className="gray_6_12" style={{height: '24px'}}>
+                                <span className="upexam_float " style={{lineHeight: '24px'}}>已选择：</span>
+                                <div className="add_member_tags_wrap">
+                                    <div className="add_member_tags upexam_float">
+                                        {tags.map((tag, index) => {
+                                            const isLongTag = tag.length > 20;
+                                            const tagElem = (
+                                                <Tag key={tag.key} closable={index !== -1}
+                                                     afterClose={() => this.handleClose(tag)}>
+                                                    {isLongTag ? `${tag.userName.slice(0, 20)}...` : tag.userName}
+                                                </Tag>
+                                            );
+                                            return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
+                                        })}
+                                        {inputVisible && (
+                                            <Input
+                                                type="text" size="small"
+                                                style={{width: 78}}
+                                                value={inputValue}
+                                                onChange={this.handleInputChange}
+                                                onBlur={this.handleInputConfirm}
+                                                onPressEnter={this.handleInputConfirm}
+                                            />
+                                        )}
+                                    </div>
+                                </div>
+                            </span>
+                        </div>
+                        <div className="ant-form-item flex">
+                            <div style={{display: this.state.OriUserNotOrIf}} className="favorite_scroll">
+                                <div className="add_member_wrap">
+                                    <Table columns={memberColumns}
+                                           pagination={false} dataSource={this.state.defaultUserData}
+                                           className="schoolgroup_table1 schoolgroup_table_department"
+                                           scroll={{y: 240}}
+                                           rowSelection={rowSelection}
+                                    />
+                                </div>
+                            </div>
+
+                            <div style={{display: this.state.OriUserIfOrNot}} className="department_scroll bai">
+                                <div style={{display: searchOriNotOrIf}} className="favorite_scroll">
+                                    {/*获取组织架构的部门下的人*/}
+                                    <div className="add_member_wrap">
+                                        <Table columns={memberColumns}
+                                               pagination={false} dataSource={this.state.searchUserFromOri}
+                                               className="schoolgroup_table1 schoolgroup_table_department"
+                                               scroll={{y: 240}}
+                                               rowSelection={rowSelection}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div style={{display: searchOriIfOrNot}} className="favorite_scroll">
+                                    {/*获取组织架构的所有部门*/}
+                                    <div className="add_member_left">
+                                        {/*面包屑*/}
+                                        <Breadcrumb separator=">">
+                                            {breadcrumbItemObjArray}
+                                        </Breadcrumb>
+                                        <Table showHeader={false} columns={columns}
+                                               dataSource={this.state.subGroupList}
+                                               className="schoolgroup_table"
+                                               pagination={false}/>
+                                    </div>
+
+                                    {/*获取组织架构的部门下的人*/}
+                                    <div className="add_member_right">
+                                        <Table columns={memberColumns}
+                                               pagination={false} dataSource={this.state.subGroupMemberList}
+                                               className="schoolgroup_table1 schoolgroup_table_department"
+                                               scroll={{y: 240}}
+                                               rowSelection={rowSelection}
+                                        />
+                                        <div className="schoolgroup_operate schoolgroup_more">
+                                            <a onClick={this.loadMoreMember}
+                                               className="schoolgroup_more_a">{this.state.wordSrc}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </Modal>
+
                     <ConfirmModal ref="dissolutionChatGroupConfirmModal"
                                   title="确定要解散该群组?"
                                   onConfirmModalCancel={this.closeDissolutionChatGroupConfirmModal}
@@ -2034,7 +2836,7 @@ const MainLayout = React.createClass({
                                   onConfirmModalCancel={this.closeConfirmModal}
                                   onConfirmModalOK={this.deleteSelectedMember}/>
                 </div>
-            </LocaleProvider>
+            </IntlProvider>
         );
     },
 
