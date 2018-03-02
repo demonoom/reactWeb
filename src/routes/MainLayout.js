@@ -2206,6 +2206,32 @@ const MainLayout = React.createClass({
         this.setState({tags: selectArr});
     },
 
+    /**
+     * 用户手动选择/取消选择所有列的回调
+     */
+    onSelectAll(selected, selectedRows, changeRows) {
+        var arr = this.state.tags;
+        var array;
+        //此处应该是连接数组或者是取消数组
+        // 第一个参数布尔值true表示钩中，false表示取消，第三个参数表示钩中的人的数组
+        if (selected) {
+            //数组合并
+            array = arr.concat(changeRows);
+        } else {
+            //在原数组中去除这个数组的项
+            changeRows.forEach(function (data, index) {
+                arr.forEach(function (v, i) {
+                    if (v.key == data.key) {
+                        arr.splice(i, 1);
+                    }
+                })
+            })
+            array = arr;
+        }
+        this.setState({tags: array});
+        selectArr = array;
+    },
+
     /*标签关闭的回调*/
     handleClose(removedTag) {
         const tags = this.state.tags.filter(tag => tag !== removedTag);
@@ -2256,6 +2282,7 @@ const MainLayout = React.createClass({
             selectedRowKeys: this.state.selectedRowKeys,
             onChange: this.onSelectChange,
             onSelect: this.onRowSelected,
+            onSelectAll: this.onSelectAll
         };
 
         const hasSelected = this.state.selectedRowKeys.length > 0;
