@@ -42,10 +42,8 @@ const AntMulitiClassComponents = React.createClass({
         var initPageNo = 1;
         var classFliterValue = this.state.classFliterValue;
         var fliterValue = this.state.fliterValue;
-        if(courseClass=="29"){
-            classFliterValue = "1";
-            fliterValue = "0";
-        }
+        classFliterValue = "1";
+        fliterValue = "0";
         this.setState({isSeries, courseClass, currentPage: initPageNo,classFliterValue,fliterValue});
         this.getCourseListBySeries(isSeries, courseClass, initPageNo);
     },
