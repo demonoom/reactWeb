@@ -230,7 +230,9 @@ const MessageMenu = React.createClass({
     },
 
     delMes(id) {
+        var _this = this;
         var delUuid;
+        var selectRowKey = _this.state.selectRowKey;
         delCannotFlag = false;
         messageData.forEach(function (v) {
             if (v.key == id) {
@@ -239,11 +241,25 @@ const MessageMenu = React.createClass({
         });
 
         if (isEmpty(delUuid)) {
-            alert(1);
+            //搜索出的消息沒有uuid,所以这么处理
+            //从数组中去除那条消息
+            var messageLists = _this.state.userMessageData;
+            messageLists.forEach(function (v, i) {
+                if (isEmpty(v) == false) {
+                    if (v.key == id) {
+                        messageLists.splice(i, 1);
+                        messageData.splice(i, 1);
+                    }
+                }
+            });
+            _this.setState({userMessageData: messageLists});
+            if (selectRowKey == id) {
+                //删除对象处于点击状态,删除人之后将系统右侧还原成初始状态
+                _this.props.rightMsgDelFinish()
+            }
             return
         }
 
-        var _this = this;
         var param = {
             "method": 'removeUserRecentMessage',
             "uuids": delUuid,
@@ -270,9 +286,6 @@ const MessageMenu = React.createClass({
                 message.error(error);
             }
         });
-
-
-        // console.log(mMenu.state.userMessageData);
     },
 
     /**

@@ -2854,9 +2854,13 @@ const AntGroupTabComponents = React.createClass({
             "chatGroupId": groupObj.chatGroupId,
             "timeNode": timeNode
         };
+
+        console.log(param);
+
         isRequesting = true;
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                console.log(ret);
                 isRequesting = false;
                 if (ret.msg == "调用成功" && ret.success == true) {
                     var i = 0;
@@ -3383,21 +3387,21 @@ const AntGroupTabComponents = React.createClass({
                     //文件后缀名
                     var extname;
                     var styleImg;
-                    if(isEmpty(name)==false){
-                         extname = name.substr(name.lastIndexOf('.')+1);
-                        if(extname == 'mp3'){
+                    if (isEmpty(name) == false) {
+                        extname = name.substr(name.lastIndexOf('.') + 1);
+                        if (extname == 'mp3') {
                             styleImg = '../src/components/images/mp3.png';
-                        }else if(extname == 'mp4'){
+                        } else if (extname == 'mp4') {
                             styleImg = '../src/components/images/mp4_icon.png';
-                        }else if(extname == 'ppt'){
+                        } else if (extname == 'ppt') {
                             styleImg = '../src/components/images/ppt.png';
-                        }else if(extname == 'docx'){
+                        } else if (extname == 'docx') {
                             styleImg = '../src/components/images/doc.png';
-                        }else if(extname == 'pdf'){
+                        } else if (extname == 'pdf') {
                             styleImg = '../src/components/images/pdf.png';
-                        }else if(extname == 'xls'){
+                        } else if (extname == 'xls') {
                             styleImg = '../src/components/images/xls.png';
-                        }else{
+                        } else {
                             styleImg = '../src/components/images/maaee_link_file_102_102.png';
                         }
                     }
@@ -3619,7 +3623,7 @@ const AntGroupTabComponents = React.createClass({
                                                         <div className="borderballoon_le_cont">
                                                             <img className="upexam_float span_link_img"
                                                                  style={{width: 38}}
-                                                                 src = {styleImg}
+                                                                 src={styleImg}
                                                                  alt=""/>
                                                             <div className="span_link_div">
                                                                 <span className="span_link">{fileName}</span>
@@ -4837,7 +4841,8 @@ const AntGroupTabComponents = React.createClass({
                 {/*<TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">*/}
                 <TabPane tab={welcomeTitle} key="loginWelcome" className="topics_rela">
                     <div id="personTalk">
-                        <i style={{display: groupSetting}} title="群设置" className="iconfont groupTalkSetting noom_cursor" onClick={this.gopTalkSetClick} >&#xe675;</i>
+                        <i style={{display: groupSetting}} title="群设置" className="iconfont groupTalkSetting noom_cursor"
+                           onClick={this.gopTalkSetClick}>&#xe675;</i>
                         <div className="group_talk 44" id="groupTalk"
                              onMouseOver={this.handleScrollType.bind(this, Event)}
                              onScroll={this.handleScroll}>
