@@ -2709,7 +2709,7 @@ const MainLayout = React.createClass({
                             <span className="add_member_menu noom_cursor" onClick={this.friendClicked}>我的好友</span>
                             <span className="add_member_menu noom_cursor" onClick={this.originClicked}>组织架构</span>
                         </div>
-                        <div className="ant-form-item add_member_menu_tab">
+                        <div className="ant-form-item add_member_menu_tab line_block">
                             <Col span={20} className="right_ri">
                                 <Input
                                     placeholder="请输入要搜索的姓名"
