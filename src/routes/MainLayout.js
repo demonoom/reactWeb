@@ -80,6 +80,7 @@ const radioStyle = {
     lineHeight: '30px',
 };
 
+var selectArr = [];
 var messageData = [];
 var userMessageData = [];
 var structuresObjArray = [];
@@ -1049,6 +1050,8 @@ const MainLayout = React.createClass({
         structuresObjArray.splice(0);
         this.state.selectedRowKeys = [];
         this.state.userNameFromOri = '';
+        this.state.tags = [];
+        selectArr = [];
         this.setState({"addDeGroupMemberModalVisible": false});
     },
 
@@ -2184,8 +2187,27 @@ const MainLayout = React.createClass({
         this.setState({selectedRowKeys});
     },
 
+    /**
+     * 同步table与tags
+     * @param record
+     * @param selected
+     */
+    onRowSelected(record, selected) {
+        if (selected) {
+            selectArr.push(record);
+        } else {
+            var key = record.key;
+            for (var i = 0; i < selectArr.length; i++) {
+                if (selectArr[i].key == key) {
+                    selectArr.splice(i, 1);
+                }
+            }
+        }
+        this.setState({tags: selectArr});
+    },
+
     /*标签关闭的回调*/
-    /*handleClose(removedTag) {
+    handleClose(removedTag) {
         const tags = this.state.tags.filter(tag => tag !== removedTag);
         var arr = [];
         this.setState({tags});
@@ -2218,9 +2240,8 @@ const MainLayout = React.createClass({
             inputVisible: false,
             inputValue: '',
         });
-    },*/
+    },
 
-    // saveInputRef = input => this.input = input;
 
     render() {
 
@@ -2234,6 +2255,7 @@ const MainLayout = React.createClass({
         const rowSelection = {
             selectedRowKeys: this.state.selectedRowKeys,
             onChange: this.onSelectChange,
+            onSelect: this.onRowSelected,
         };
 
         const hasSelected = this.state.selectedRowKeys.length > 0;
@@ -2671,6 +2693,30 @@ const MainLayout = React.createClass({
                             </Col>
                             <span className="password_ts" style={{marginLeft: '8px', lineHeight: '28px'}}>
                                 <span className="upexam_float">已选择：</span>
+                                <div className="ding_tags_wrap">
+                                    <div className="ding_tags upexam_float">
+                                        {tags.map((tag, index) => {
+                                            const isLongTag = tag.length > 20;
+                                            const tagElem = (
+                                                <Tag key={tag.key} closable={index !== -1}
+                                                     afterClose={() => this.handleClose(tag)}>
+                                                    {isLongTag ? `${tag.userName.slice(0, 20)}...` : tag.userName}
+                                                </Tag>
+                                            );
+                                            return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
+                                        })}
+                                        {inputVisible && (
+                                            <Input
+                                                type="text" size="small"
+                                                style={{width: 78}}
+                                                value={inputValue}
+                                                onChange={this.handleInputChange}
+                                                onBlur={this.handleInputConfirm}
+                                                onPressEnter={this.handleInputConfirm}
+                                            />
+                                        )}
+                                    </div>
+                                </div>
                             </span>
                         </div>
                         <div className="ant-form-item flex">
