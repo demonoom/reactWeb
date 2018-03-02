@@ -693,12 +693,16 @@ const AntMulitiClassComponents = React.createClass({
     已发布课程点击播放
      */
     getClassPlayDetail(classObj) {
+        debugger;
         var _this = this;
         var videosArray = classObj.videos;
         var cloudClassRoomUser = JSON.parse(sessionStorage.getItem("cloudClassRoomUser"));
         var userId = cloudClassRoomUser.colUid;
         var videoLiTagArray = [];
         var startTime = formatYMD(classObj.startTime);
+        var originTime = classObj.startTime;
+        //获取当前时间 时间戳
+        var rightTime = Date.parse(new Date());
         var isSerises = classObj.isSeries
         if(isSerises == '3' || isSerises == '4'){
             //微课
@@ -794,7 +798,13 @@ const AntMulitiClassComponents = React.createClass({
                 </Row>
             </Card>;
         }
-        this.setState({classPlayDetailModalVisible: true, classDetailPanel});
+        if(originTime >= rightTime){
+            this.setState({classPlayDetailModalVisible: false, classDetailPanel});
+            message.warning('未到开课时间');
+        }else{
+            this.setState({classPlayDetailModalVisible: true, classDetailPanel});
+        }
+
     },
     /*
     关闭直播 modal
