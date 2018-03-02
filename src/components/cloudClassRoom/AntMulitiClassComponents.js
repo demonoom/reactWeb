@@ -646,11 +646,19 @@ const AntMulitiClassComponents = React.createClass({
      */
     openLive(liveObj, liveType) {
         //0:课程   1 章节  targetType
+        debugger;
+        var originTime = liveObj.liveTime;
+        //获取当前时间 时间戳
+        var rightTime = Date.parse(new Date());
         var _this = this;
         var param = {
             "method": 'findVideoById',
             "id": liveObj.id,
         };
+            if(originTime > rightTime){
+                message.warning('未到开课时间');
+                return;
+        }
         //在执行ajax请求前，打开一个空白的新窗口
         var newTab = window.open('about:blank');
         doWebService_CloudClassRoom(JSON.stringify(param), {
@@ -693,7 +701,6 @@ const AntMulitiClassComponents = React.createClass({
     已发布课程点击播放
      */
     getClassPlayDetail(classObj) {
-        debugger;
         var _this = this;
         var videosArray = classObj.videos;
         var cloudClassRoomUser = JSON.parse(sessionStorage.getItem("cloudClassRoomUser"));
@@ -798,7 +805,7 @@ const AntMulitiClassComponents = React.createClass({
                 </Row>
             </Card>;
         }
-        if(originTime >= rightTime){
+        if(originTime > rightTime){
             this.setState({classPlayDetailModalVisible: false, classDetailPanel});
             message.warning('未到开课时间');
         }else{
