@@ -3627,8 +3627,7 @@ const AntGroupTabComponents = React.createClass({
                                                                  alt=""/>
                                                             <div className="span_link_div">
                                                                 <span className="span_link">{fileName}</span>
-                                                                <span
-                                                                    className="span_link password_ts">{fileLength}kb</span>
+                                                                <span className="span_link password_ts">{fileLength}kb</span>
                                                             </div>
                                                         </div>
                                                         <img id={fileUid} style={{display: "none"}} src={filePath}
@@ -3860,9 +3859,10 @@ const AntGroupTabComponents = React.createClass({
                                                                  alt=""/>
                                                             <img id={fileUid} style={{display: "none"}} src={filePath}
                                                                  onClick={showLargeImg} alt=""/>
-                                                            <span className="span_link">{fileName}</span>
-                                                            <span
-                                                                className="span_link password_ts">{fileLength}kb</span>
+                                                            <div className="span_link_div">
+                                                                <span className="span_link">{fileName}</span>
+                                                                <span className="span_link password_ts">{fileLength}kb</span>
+                                                            </div>
                                                             <i className="borderballoon_dingcorner_ri_no"></i>
                                                         </div>
                                                         <div className="file_noom">
@@ -4260,8 +4260,7 @@ const AntGroupTabComponents = React.createClass({
                                                              src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
                                                              alt=""/>
                                                          <div className="span_link_div">
-                                                             <span
-                                                                 className="span_link file_link_img_t">{e.messageReturnJson.content}</span>
+                                                             <span className="span_link file_link_img_t">{e.messageReturnJson.content}</span>
                                                          </div>
                                                     </div>
                                                     <i className="borderballoon_dingcorner_ri_no"></i>
@@ -4295,8 +4294,7 @@ const AntGroupTabComponents = React.createClass({
                                                              src="../src/components/images/lALPBY0V4o8X1aNISA_72_72.png"
                                                              alt=""/>
                                                          <div className="span_link_div">
-                                                             <span
-                                                                 className="span_link file_link_img_t">{e.messageReturnJson.content}</span>
+                                                             <span className="span_link file_link_img_t">{e.messageReturnJson.content}</span>
                                                          </div>
                                                     </div>
                                                     <i className="borderballoon_dingcorner_ri_no"></i>
@@ -4336,8 +4334,7 @@ const AntGroupTabComponents = React.createClass({
                                                                 <img className="upexam_float" style={{width: 38}}
                                                                      src="../src/components/images/icon_view_details.png"
                                                                      onClick={showLargeImg} alt=""/>
-                                                                <span
-                                                                    className="span_link">{e.messageReturnJson.content}</span>
+                                                                <span className="span_link">{e.messageReturnJson.content}</span>
                                                                 <i className="borderballoon_dingcorner_ri_no"></i>
                                                             </div>
                                                             <div className="file_noom">
@@ -4655,8 +4652,7 @@ const AntGroupTabComponents = React.createClass({
                                                              alt=""/>
                                                         <div className="span_link_div">
                                                             <span className="span_link">{fileName}</span>
-                                                            <span
-                                                                className="span_link password_ts">{fileLength}kb</span>
+                                                            <span className="span_link password_ts">{fileLength}kb</span>
                                                         </div>
                                                         <img id={fileUid} style={{display: "none"}} src={filePath}
                                                              onClick={showLargeImg} alt=""/>
@@ -4710,8 +4706,10 @@ const AntGroupTabComponents = React.createClass({
                                                         <img className="upexam_float" style={{width: 38}}
                                                              src={styleImg}
                                                              onClick={showLargeImg} alt=""/>
-                                                        <span className="span_link">{fileName}</span>
-                                                        <span className="span_link password_ts">{fileLength}kb</span>
+                                                        <div className="span_link_div">
+                                                            <span className="span_link">{fileName}</span>
+                                                            <span className="span_link password_ts">{fileLength}kb</span>
+                                                        </div>
                                                         <i className="borderballoon_dingcorner_ri_no"></i>
                                                     </div>
                                                     <div className="file_noom">
