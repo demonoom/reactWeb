@@ -1175,9 +1175,11 @@ const PersonCenterComponents = React.createClass({
      * 显示创建群组的窗口
      */
     showCreateChatGroup() {
-        personCenter.getUserContactsMockData();
-        personCenter.setState({"createChatGroupModalVisible": true, "updateGroupId": ''});
+        this.props.creatGroup();
+        // personCenter.getUserContactsMockData();
+        // personCenter.setState({"createChatGroupModalVisible": true, "updateGroupId": ''});
     },
+
     /**
      * 创建群组时，获取当前用户的联系人列表
      */
@@ -1696,48 +1698,6 @@ const PersonCenterComponents = React.createClass({
     showDissolutionChatGroupConfirmModal() {
         personCenter.refs.dissolutionChatGroupConfirmModal.changeConfirmModalVisible(true);
     },
-
-    /**
-     * 显示创建群组的窗口
-     */
-    showCreateChatGroup() {
-        personCenter.getUserContactsMockData();
-        personCenter.setState({"createChatGroupModalVisible": true, "updateGroupId": ''});
-    },
-
-    /**
-     * 创建群组时，获取当前用户的联系人列表
-     */
-    getUserContactsMockData() {
-        const mockData = [];
-        var targetKeys = [];
-        var param = {
-            "method": 'getUserContacts',
-            "ident": sessionStorage.getItem("ident"),
-        };
-        doWebService(JSON.stringify(param), {
-            onResponse: function (ret) {
-                var response = ret.response;
-                response.forEach(function (e) {
-                    var userId = e.colUid;
-                    var userName = e.userName;
-                    var userType = e.colUtype;
-                    if (userType != "SGZH" && parseInt(userId) != sessionStorage.getItem("ident")) {
-                        const data = {
-                            key: userId,
-                            title: userName,
-                        };
-                        mockData.push(data);
-                    }
-                });
-                personCenter.setState({mockData, targetKeys});
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });
-    },
-
 
     render() {
         var _this = this;

@@ -708,6 +708,11 @@ const MainLayout = React.createClass({
         this.setState({"updateChatGroupTitle": updateChatGroupTitle});
     },
 
+    creatGroup() {
+        //创建群聊
+        this.showAddMembersModal(99)
+    },
+
     /**
      * 添加群成员(两种情况下的搜索fanwei)
      */
@@ -722,7 +727,23 @@ const MainLayout = React.createClass({
                 OriUserIfOrNot: 'block',
                 originFlag: true,
                 searchArea: 'originzation',
-                inputClassName: 'ant-form-item add_member_menu_search2 line_block'
+                inputClassName: 'ant-form-item add_member_menu_search2 line_block',
+                creatInput: 'none',
+                superTitleName: '添加群成员',
+            });
+        } else if (type == 99) {
+            //创建群聊
+            this.getRecentShareUsers();
+            this.setState({
+                "addDeGroupMemberModalVisible": true,
+                originDiv: 'inline-block',
+                OriUserNotOrIf: 'block',
+                OriUserIfOrNot: 'none',
+                originFlag: false,
+                searchArea: 'defaultArea',
+                inputClassName: 'ant-form-item add_member_menu_search line_block',
+                creatInput: 'block',    //控制创建群名搜索框
+                superTitleName: '创建群聊',
             });
         } else {
             //普通群
@@ -737,7 +758,9 @@ const MainLayout = React.createClass({
                 OriUserIfOrNot: 'none',
                 originFlag: false,
                 searchArea: 'defaultArea',
-                inputClassName: 'ant-form-item add_member_menu_search line_block'
+                inputClassName: 'ant-form-item add_member_menu_search line_block',
+                creatInput: 'none',
+                superTitleName: '添加群成员',
             });
         }
     },
@@ -1065,9 +1088,57 @@ const MainLayout = React.createClass({
         structuresObjArray.splice(0);
         this.state.selectedRowKeys = [];
         this.state.userNameFromOri = '';
+        this.state.groupCreatName = '';
         this.state.tags = [];
         selectArr = [];
         this.setState({"addDeGroupMemberModalVisible": false});
+    },
+
+    /**
+     * 获取页面数据，创建聊天群组
+     */
+    createChatGroup() {
+        var _this = this;
+        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+        var memberIds = this.state.selectedRowKeys.join(",");
+        var groupCreatName = this.state.groupCreatName;
+        if (isEmpty(groupCreatName)) {
+            message.error("请输入群组名称");
+            return;
+        }
+        if (groupCreatName.length > 10) {
+            message.error("群组名称不能超过10个字符");
+            return;
+        }
+        if (isEmpty(memberIds)) {
+            message.error("请选择群成员");
+            return;
+        }
+        var param = {
+            "method": 'createChatGroup',
+            "groupAvatar": loginUser.avatar,
+            "groupName": groupCreatName,
+            "ownerId": sessionStorage.getItem("ident"),
+            "memberIds": memberIds
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    message.success("聊天群组创建成功");
+                    //关闭弹窗
+                    //清空输入群名的input
+                    //动态刷新
+                    _this.addDeGroupMemberModalHandleCancel();
+                    _this.refs.personCenterComponents.getUserChatGroup();
+                } else {
+                    message.success("聊天群组创建失败");
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
 
     /**
@@ -1075,29 +1146,34 @@ const MainLayout = React.createClass({
      */
     addGroupMember() {
         var _this = this;
-        var memberTargetkeys = this.state.selectedRowKeys;
-        var memberIds = memberTargetkeys.join(",");
-        var currentGroupObj = this.state.currentGroupObj;
-        var param = {
-            "method": 'addChatGroupMember',
-            "chatGroupId": currentGroupObj.chatGroupId,
-            "memberIds": memberIds
-        };
-        doWebService(JSON.stringify(param), {
-            onResponse: function (ret) {
-                var response = ret.response;
-                if (ret.msg == "调用成功" && ret.success == true && response == true) {
-                    message.success("群成员添加成功");
-                } else {
-                    message.success("群成员添加失败");
+        if (this.state.creatInput == 'block') {
+            //创建群名的输入框显示,确定转到创建群的逻辑
+            _this.createChatGroup();
+        } else {
+            var memberTargetkeys = this.state.selectedRowKeys;
+            var memberIds = memberTargetkeys.join(",");
+            var currentGroupObj = this.state.currentGroupObj;
+            var param = {
+                "method": 'addChatGroupMember',
+                "chatGroupId": currentGroupObj.chatGroupId,
+                "memberIds": memberIds
+            };
+            doWebService(JSON.stringify(param), {
+                onResponse: function (ret) {
+                    var response = ret.response;
+                    if (ret.msg == "调用成功" && ret.success == true && response == true) {
+                        message.success("群成员添加成功");
+                    } else {
+                        message.success("群成员添加失败");
+                    }
+                    _this.levGroupSet();
+                    _this.addDeGroupMemberModalHandleCancel();
+                },
+                onError: function (error) {
+                    message.error(error);
                 }
-                _this.levGroupSet();
-                _this.addDeGroupMemberModalHandleCancel();
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });
+            });
+        }
     },
 
     /**
@@ -1645,49 +1721,49 @@ const MainLayout = React.createClass({
         this.sendMessage_noom_group(obj);
     },
 
-    /*sendChatGroupMes(mes) {
-        if (isEmpty(mes.response) == false) {
-            var obj = this.state.userJson;
-            obj.contentArray[0].content = mes.response[0].content;
-            this.setState({userJson: obj});
-        }
-    },*/
-
     sendMessage_noom_group(groupObj) {
+        var _this = this;
+        var content = '';
+        var createTime = '';
 
-        /*setTimeout(function () {
-            var param = {
-                "method": 'getChatGroupMessages',
-                "chatGroupId": groupObj.chatGroupId,
-                "timeNode": (new Date()).valueOf()
-            };
-            doWebService(JSON.stringify(param), {
-                onResponse: function (ret) {
-                    console.log(ret);
-                },
-                onError: function (error) {
-                    message.error(error);
-                }
-            });
-        }, 500)*/
-
-        var contentJson = {"content": '', "createTime": ''};
-        var contentArray = [contentJson];
-        var userJson = {
-            key: groupObj.chatGroupId,
-            "fromUser": groupObj,
-            contentArray: contentArray,
-            "messageToType": 4,
-            "toChatGroup": groupObj
+        var param = {
+            "method": 'getChatGroupMessages',
+            "chatGroupId": groupObj.chatGroupId,
+            "timeNode": (new Date()).valueOf()
         };
-        this.setState({
-            currentKey: 'message',
-            resouceType: '',
-            "groupObj": groupObj,
-            "messageType": 'groupMessage',
-            "actionFrom": "personCenterGroupList",
-            userJson,
-            isSearchGroup: true
+
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                if (ret.msg == '调用成功') {
+                    var response = ret.response;
+                    if (isEmpty(response) == false) {
+                        content = response[0].content;
+                        createTime = response[0].createTime;
+
+                        var contentJson = {"content": content, "createTime": ''};
+                        var contentArray = [contentJson];
+                        var userJson = {
+                            key: groupObj.chatGroupId,
+                            "fromUser": groupObj,
+                            contentArray: contentArray,
+                            "messageToType": 4,
+                            "toChatGroup": groupObj
+                        };
+                        _this.setState({
+                            currentKey: 'message',
+                            resouceType: '',
+                            "groupObj": groupObj,
+                            "messageType": 'groupMessage',
+                            "actionFrom": "personCenterGroupList",
+                            userJson,
+                            isSearchGroup: true
+                        });
+                    }
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
         });
     },
 
@@ -2048,6 +2124,11 @@ const MainLayout = React.createClass({
         this.setState({searchWords: e.target.value});
     },
 
+    onChangeGroupName(e) {
+        console.log(e.target.value);
+        this.setState({groupCreatName: e.target.value});
+    },
+
     //群组加人搜索
     onChangeUserNameFromOri(e) {
         var originFlag = this.state.originFlag;  //部门群下搜索此值为true,普通群为false
@@ -2406,7 +2487,6 @@ const MainLayout = React.createClass({
                                                       clearEverything={this.clearEverything}
                                                       delLeftMsgFinish={this.delLeftMsgFinish}
                                                       gopTalkSetClick={this.gopTalkSetClick}
-                                                      sendChatGroupMes={this.sendChatGroupMes}
                 />;
                 break;
             case 'antGroup':
@@ -2421,6 +2501,7 @@ const MainLayout = React.createClass({
                                                        userContactsData={this.state.userContactsData}
                                                        onSendGroupMessage={this.sendGroupMessage}
                                                        setChatGroup={this.gopTalkSetClick}
+                                                       creatGroup={this.creatGroup}
                                                        onSendMessage={this.sendMessage}/>;
                 break;
             case 'personCenter':
@@ -2758,7 +2839,7 @@ const MainLayout = React.createClass({
 
                     <Modal
                         visible={this.state.addDeGroupMemberModalVisible}
-                        title="添加群成员"
+                        title={this.state.superTitleName}
                         onCancel={this.addDeGroupMemberModalHandleCancel}
                         transitionName=""  //禁用modal的动画效果
                         maskClosable={false} //设置不允许点击蒙层关闭
@@ -2771,6 +2852,14 @@ const MainLayout = React.createClass({
                         ]}
                         width={700}
                     >
+                        <div style={{display: this.state.creatInput, marginBottom: '20px'}}>
+                            <Input
+                                placeholder="请输入群名称"
+                                value={this.state.groupCreatName}
+                                onChange={this.onChangeGroupName}
+                                ref={node => this.userNameInput = node}
+                            />
+                        </div>
                         <div id="mebChecked" className="ant-form-item add_member_menu_tab"
                              style={{display: this.state.originDiv}}>
                             <span className="add_member_menu noom_cursor add_member_menu_select"

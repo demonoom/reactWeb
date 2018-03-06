@@ -1,7 +1,7 @@
 /**
  * Created by madapeng on 17-4-17.
  */
-// import {showModal} from '../utils/utils';
+// import {WEB_VERSION} from '../utils/Const';
 
 ;(function ($) {
 
@@ -1676,15 +1676,29 @@ function doWebService(data, listener) {
             8
         );
     }
-    $.post(WEBSERVICE_URL, {
-        params: data
-    }, function (result, status) {
-        if (status == "success") {
+    $.ajax({
+        type: "post",
+        url: WEBSERVICE_URL,
+        data: {params: data},
+        dataType: "json",
+        beforeSend: function (XMLHttpRequest) {
+            XMLHttpRequest.setRequestHeader("accessUser", sessionStorage.getItem("ident"));
+            XMLHttpRequest.setRequestHeader("machine", localStorage.getItem("machineId"));
+            XMLHttpRequest.setRequestHeader("machineType", "web");
+            XMLHttpRequest.setRequestHeader("version", '1.10');
+        },
+        // headers: {
+        //     "accessUser": sessionStorage.getItem("ident"),
+        //     "machine": localStorage.getItem("machineId"),
+        //     "machineType":"web",
+        //     "version": "1.01"
+        // },
+        success: function (result) {
             listener.onResponse(result);
-        } else {
+        }, error: function (error) {
             listener.onError(result);
         }
-    }, "json");
+    });
 }
 
 function changeStatus(videoEl) {

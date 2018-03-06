@@ -2105,7 +2105,6 @@ const AntGroupTabComponents = React.createClass({
                         var data = info.data;
                         //手机发送的群消息的处理
                         // messageOfSinge = data.messages[0];
-                        // console.log(messageOfSinge);
 
 
                         var messageArray = data.messages;
@@ -2724,7 +2723,6 @@ const AntGroupTabComponents = React.createClass({
             //     contentArray: contentArray,
             //     "messageToType": 1
             // };
-            // console.log(userJson);
             // antGroup.props.onNewMessage(userJson);
             // antGroup.setState({"messageList": messageList, "isDirectToBottom": true});
             /*var messageList = [];
@@ -2855,12 +2853,9 @@ const AntGroupTabComponents = React.createClass({
             "timeNode": timeNode
         };
 
-        console.log(param);
-
         isRequesting = true;
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                console.log(ret);
                 isRequesting = false;
                 if (ret.msg == "调用成功" && ret.success == true) {
                     var i = 0;
@@ -3355,9 +3350,6 @@ const AntGroupTabComponents = React.createClass({
             messageTagArray.splice(0);
             var messageList = antGroup.state.messageList;
 
-            // console.log(messageList);
-            // console.log('messageList');
-
             var imgArr = [];
             if (isEmpty(messageList) == false && messageList.length > 0) {
                 for (var i = messageList.length - 1; i >= 0; i--) {
@@ -3379,7 +3371,6 @@ const AntGroupTabComponents = React.createClass({
                     }
                     var e = messageList[i];
 
-                    // console.log(e);
                     if (isEmpty(e) == true) {
                         continue;
                     }
