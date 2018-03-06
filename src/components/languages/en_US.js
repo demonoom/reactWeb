@@ -68,6 +68,7 @@ const en_US = {
     LessonNum: "Lesson { num }",
     creatTime:"Creat Coursetime",
     knowledgePoint:"KnowledgePoint",
-    endTime:"endTime"
+    endTime:"endTime",
+    deleted:"Deleted",
 }
 export default en_US;

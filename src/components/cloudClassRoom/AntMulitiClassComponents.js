@@ -156,6 +156,25 @@ const AntMulitiClassComponents = React.createClass({
         var optButtons;
         var isSeries = row.isSeries;
         var endTime;
+        var editButtonTip='编辑';
+        var detailsButtonTip = '详情';
+        var deletedButtonTip = '删除';
+        var livingCourseButtonTip = '直播';
+        var publishButtonTip = '发布';
+        var lan = localStorage.getItem("language");
+        if (lan == "zh-CN") {
+            editButtonTip='编辑';
+            detailsButtonTip = '详情';
+            deletedButtonTip = '删除';
+            livingCourseButtonTip = '直播';
+            publishButtonTip = '发布';
+        }else{
+            editButtonTip='edit';
+            detailsButtonTip = 'details';
+            deletedButtonTip = 'deleted';
+            livingCourseButtonTip = 'liveingCourse';
+            publishButtonTip = 'publish';
+        }
         if (isEmpty(isSeries) || isSeries == "2") {
             endTime = null;
         } else {
@@ -170,11 +189,15 @@ const AntMulitiClassComponents = React.createClass({
         }
         switch (isPublish) {
             case "1":
-                isPublishStr = "已发布";
+                isPublishStr = <FormattedMessage
+                    id='published'
+                    description='已发布'
+                    defaultMessage='已发布'
+                />;
                 //出现删除、详情等按钮
                 // if(studentNum==0){
                 //     optButtons=<div>
-                //         <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,row)}></Button></Col>
+                //         <Col span={24}><Button icon="edit" className="exam-particulars_title" title="" onClick={_this.editClass.bind(_this,row)}></Button></Col>
                 //         <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
                 //
                 //     </div>;
@@ -184,11 +207,14 @@ const AntMulitiClassComponents = React.createClass({
                         optButtons = <div>
                             {/*<Col span={24}><Button icon="play-circle-o" className="exam-particulars_title liveing_color" title="直播"*/}
                             {/*onClick={_this.getClassPlayDetail.bind(_this, row)}></Button></Col>*/}
-                            <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑"
+                            <Col span={24}><Button icon="edit" className="exam-particulars_title"
+                                                   title={editButtonTip}
                                                    onClick={_this.editClass.bind(_this, id)}></Button></Col>
-                            <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情"
+                            <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title"
+                                                   title={detailsButtonTip}
                                                    onClick={_this.getClassDetail.bind(_this, row)}></Button></Col>
-                            <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
+                            <Col span={24}><Button icon="delete" className="exam-particulars_title"
+                                                   title={deletedButtonTip}
                                                    disabled={false}
                                                    onClick={_this.showConfirmDrwaModal.bind(_this, id)}></Button></Col>
 
@@ -197,11 +223,14 @@ const AntMulitiClassComponents = React.createClass({
                         optButtons = <div>
                             {/*<Col span={24}><Button icon="play-circle-o" className="exam-particulars_title liveing_color" title="直播"*/}
                             {/*onClick={this.getClassPlayDetail.bind(_this, row)}></Button></Col>*/}
-                            <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑"
+                            <Col span={24}><Button icon="edit" className="exam-particulars_title"
+                                                   title={editButtonTip}
                                                    onClick={_this.editClass.bind(_this, id)}></Button></Col>
-                            <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情"
+                            <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title"
+                                                   title={detailsButtonTip}
                                                    onClick={_this.getClassDetail.bind(_this, row)}></Button></Col>
-                            <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
+                            <Col span={24}><Button icon="delete" className="exam-particulars_title"
+                                                   title={deletedButtonTip}
                                                    disabled={true}
                                                    onClick={_this.showConfirmDrwaModal.bind(_this, id)}></Button></Col>
 
@@ -211,13 +240,16 @@ const AntMulitiClassComponents = React.createClass({
                     if (money == 0) {
                         optButtons = <div>
                             <Col span={24}><Button icon="play-circle-o" className="exam-particulars_title liveing_color"
-                                                   title="直播"
+                                                   title={livingCourseButtonTip}
                                                    onClick={_this.getClassPlayDetail.bind(_this, row)}></Button></Col>
-                            <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑"
+                            <Col span={24}><Button icon="edit" className="exam-particulars_title"
+                                                   title={editButtonTip}
                                                    onClick={_this.editClass.bind(_this, id)}></Button></Col>
-                            <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情"
+                            <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title"
+                                                   title={detailsButtonTip}
                                                    onClick={_this.getClassDetail.bind(_this, row)}></Button></Col>
-                            <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
+                            <Col span={24}><Button icon="delete" className="exam-particulars_title"
+                                                   title={deletedButtonTip}
                                                    disabled={false}
                                                    onClick={_this.showConfirmDrwaModal.bind(_this, id)}></Button></Col>
 
@@ -225,13 +257,16 @@ const AntMulitiClassComponents = React.createClass({
                     } else {
                         optButtons = <div>
                             <Col span={24}><Button icon="play-circle-o" className="exam-particulars_title liveing_color"
-                                                   title="直播"
+                                                   title={livingCourseButtonTip}
                                                    onClick={this.getClassPlayDetail.bind(_this, row)}></Button></Col>
-                            <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑"
+                            <Col span={24}><Button icon="edit" className="exam-particulars_title"
+                                                   title={editButtonTip}
                                                    onClick={_this.editClass.bind(_this, id)}></Button></Col>
-                            <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情"
+                            <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title"
+                                                   title={detailsButtonTip}
                                                    onClick={_this.getClassDetail.bind(_this, row)}></Button></Col>
-                            <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
+                            <Col span={24}><Button icon="delete" className="exam-particulars_title"
+                                                   title={deletedButtonTip}
                                                    disabled={true}
                                                    onClick={_this.showConfirmDrwaModal.bind(_this, id)}></Button></Col>
 
@@ -240,25 +275,39 @@ const AntMulitiClassComponents = React.createClass({
                 }
                 break;
             case "2":
-                isPublishStr = "未发布";
+                isPublishStr = <FormattedMessage
+                    id='unpublished'
+                    description='未发布'
+                    defaultMessage='未发布'
+                />;
                 optButtons = <div>
-                    <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情"
+                    <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title"
+                                           title={detailsButtonTip}
                                            onClick={_this.getClassDetail.bind(_this, row)}></Button></Col>
-                    <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑"
+                    <Col span={24}><Button icon="edit" className="exam-particulars_title"
+                                           title={editButtonTip}
                                            onClick={_this.editClass.bind(_this, id)}></Button></Col>
-                    <Col span={24}><Button icon="check-circle-o" className="exam-particulars_title" title="发布"
+                    <Col span={24}><Button icon="check-circle-o" className="exam-particulars_title"
+                                           title={publishButtonTip}
                                            onClick={_this.showConfirmPushModal.bind(_this, id)}></Button></Col>
-                    <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
+                    <Col span={24}><Button icon="delete" className="exam-particulars_title"
+                                           title={deletedButtonTip}
                                            onClick={_this.showConfirmDrwaModal.bind(_this, id)}></Button></Col>
                 </div>;
                 break;
             case "3":
-                isPublishStr = "已删除";
+                isPublishStr = <FormattedMessage
+                    id='deleted'
+                    description='已删除'
+                    defaultMessage='已删除'
+                />;
                 optButtons = <div>
-                    <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情"
+                    <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title"
+                                           title={detailsButtonTip}
                                            onClick={_this.getClassDetail.bind(_this, row)}></Button></Col>
                     {/*<Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,row)}></Button></Col>*/}
-                    <Col span={24}><Button icon="check-circle-o" className="exam-particulars_title" title="发布"
+                    <Col span={24}><Button icon="check-circle-o" className="exam-particulars_title"
+                                           title={publishButtonTip}
                                            onClick={_this.showConfirmPushModal.bind(_this, id)}></Button></Col>
                 </div>;
                 break;
@@ -289,9 +338,16 @@ const AntMulitiClassComponents = React.createClass({
                                 <Col span={24}>
                                     <span
                                         className="font_gray_33 submenu_left_hidden upexam_float width_area">{courseName}</span>
-                                    <span className="series_recall upexam_float margin_left ">{isPublishStr}</span>
+                                    <span className="series_recall upexam_float margin_left ">{isPublishStr}
+                                    </span>
                                     <span className="series_recall upexam_float margin_left ">{courseTypeName}</span>
-                                    <span className="series_recall upexam_float margin_left ">微课</span>
+                                    <span className="series_recall upexam_float margin_left ">
+                                       <FormattedMessage
+                                           id='miniClass'
+                                           description='微课'
+                                           defaultMessage='微课'
+                                       />
+                                    </span>
                                 </Col>
                             </Row>
                             <Col span={24} className="price"><span className="c-jg price_between">￥{money}</span><span
@@ -787,7 +843,8 @@ const AntMulitiClassComponents = React.createClass({
                     //播放按钮
                     var playButton;
                     if (video.userID == userId && video.videoStatus != "3") {
-                        playButton = <Button icon="play-circle-o" className="exam-particulars_title" title="直播"
+                        playButton = <Button icon="play-circle-o" className="exam-particulars_title"
+                                             title='直播'
                                              onClick={_this.openLive.bind(_this, video, "mulitiClass")}></Button>;
                     }
                     var liveTimeStr = formatNoSecond(video.liveTime);
