@@ -7799,7 +7799,8 @@ select.course_n:hover {
 .switchWaring{
     position: absolute;
     top: 16px;
-    right: 50px;
+    right: 70px;
+    color: #fff;
 }
 .search_header {
     color: #fff;
