@@ -66,5 +66,11 @@ const zh_CN = {
     publishImmediately:"立即发布",
     Classtime:"授课时间",
     LessonNum: "第{ num }课时",
+    creatTime:"创课时间",
+    knowledgePoint:"知识点",
+    endTime:'结束时间',
+    deleted:"删除",
+
+
 };
 export default zh_CN;

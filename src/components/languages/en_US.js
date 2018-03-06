@@ -66,5 +66,9 @@ const en_US = {
     publishImmediately:"Publish immediately",
     Classtime:"Class time",
     LessonNum: "Lesson { num }",
+    creatTime:"Creat Coursetime",
+    knowledgePoint:"KnowledgePoint",
+    endTime:"endTime",
+    deleted:"Deleted",
 }
 export default en_US;
