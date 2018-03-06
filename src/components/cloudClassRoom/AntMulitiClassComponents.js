@@ -7,6 +7,11 @@ import {isEmpty, cutString} from '../../utils/utils';
 import ConfirmModal from '../ConfirmModal';
 import CreateClassComponents from './CreateClassComponents';
 import UpdateClassComponents from './UpdateClassComponents';
+//国际化
+import {IntlProvider, addLocaleData} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
+import zh from 'react-intl/locale-data/zh';
+import en from 'react-intl/locale-data/en';
 
 const RadioGroup = Radio.Group;
 const Step = Steps.Step;
@@ -86,7 +91,13 @@ const AntMulitiClassComponents = React.createClass({
                 } else {
                     var cardObj = <Card className="noDataTipImg">
                         <div>
-                            <Icon type="frown-o"/><span>&nbsp;&nbsp;暂无数据</span>
+                            <Icon type="frown-o"/><span>&nbsp;&nbsp;
+                          <FormattedMessage
+                              id='noata'
+                              description='暂无数据'
+                              defaultMessage='暂无数据'
+                          />
+                        </span>
                         </div>
                     </Card>;
                     cardArray.push(cardObj);
@@ -944,23 +955,82 @@ const AntMulitiClassComponents = React.createClass({
 
         if (isEmpty(this.state.stepDirect) || this.state.stepDirect == "pre") {
             saveButtons = [
-                <Button onClick={this.changeStep.bind(this, "next", "save")}>下一步</Button>,
-                <Button onClick={this.createClassModalHandleCancel}>关闭</Button>
+                <Button onClick={this.changeStep.bind(this, "next", "save")}>
+                    <FormattedMessage
+                        id='next'
+                        description='下一步'
+                        defaultMessage='下一步'
+                    />
+                </Button>,
+                <Button onClick={this.createClassModalHandleCancel}>
+                    <FormattedMessage
+                        id='close'
+                        description='关闭'
+                        defaultMessage='关闭'
+                    /></Button>
             ];
             var updateButtons = [
-                <Button onClick={this.changeStep.bind(this, "next", "update")}>下一步</Button>,
-                <Button onClick={this.updateClassModalHandleCancel}>关闭</Button>
+                <Button onClick={this.changeStep.bind(this, "next", "update")}>
+                    <FormattedMessage
+                        id='next'
+                        description='下一步'
+                        defaultMessage='下一步'
+                    />
+                </Button>,
+                <Button onClick={this.updateClassModalHandleCancel}>
+                    <FormattedMessage
+                        id='close'
+                        description='关闭'
+                        defaultMessage='关闭'
+                    />
+                </Button>
             ];
         } else if (this.state.stepDirect == "next") {
             saveButtons = [
-                <Button onClick={this.changeStep.bind(this, "pre", "save")}>上一步</Button>,
-                <Button onClick={this.saveClassInfo.bind(this, "save")}>提交</Button>,
-                <Button onClick={this.createClassModalHandleCancel}>关闭</Button>
+                <Button onClick={this.changeStep.bind(this, "pre", "save")}>
+                    <FormattedMessage
+                        id='back'
+                        description='上一步'
+                        defaultMessage='上一步'
+                    />
+                </Button>,
+                <Button onClick={this.saveClassInfo.bind(this, "save")}>
+                    <FormattedMessage
+                        id='submit'
+                        description='提交'
+                        defaultMessage='提交'
+                    />
+                </Button>,
+                <Button onClick={this.createClassModalHandleCancel}>
+                    <FormattedMessage
+                        id='close'
+                        description='关闭'
+                        defaultMessage='关闭'
+                    />
+                </Button>
             ];
             var updateButtons = [
-                <Button onClick={this.changeStep.bind(this, "pre", "update")}>上一步</Button>,
-                <Button onClick={this.saveClassInfo.bind(this, "update")}>提交</Button>,
-                <Button onClick={this.updateClassModalHandleCancel}>关闭</Button>
+                <Button onClick={this.changeStep.bind(this, "pre", "update")}>
+                    <FormattedMessage
+                        id='back'
+                        description='上一步'
+                        defaultMessage='上一步'
+                    />
+                </Button>,
+                <Button onClick={this.saveClassInfo.bind(this, "update")}>
+                    <FormattedMessage
+                        id='submit'
+                        description='提交'
+                        defaultMessage='提交'
+                    />
+                </Button>,
+                <Button onClick={this.updateClassModalHandleCancel}>
+                    <FormattedMessage
+                        id='close'
+                        description='关闭'
+                        defaultMessage='关闭'
+                    />
+                </Button>
             ];
         }
 
@@ -970,16 +1040,46 @@ const AntMulitiClassComponents = React.createClass({
                     <div>
                         <RadioGroup value={this.state.fliterValue} onChange={this.fliterOnChange}
                                     className="series_choose">
-                            <Radio value="0">全部</Radio>
-                            <Radio value="1">直播课</Radio>
-                            <Radio value="3">微课</Radio>
+                            <Radio value="0">
+                                <FormattedMessage
+                                    id='all'
+                                    description='全部'
+                                    defaultMessage='全部'
+                                />
+                            </Radio>
+                            <Radio value="1">
+                                <FormattedMessage
+                                    id='liveClass'
+                                    description='直播课'
+                                    defaultMessage='直播课'
+                                />
+                            </Radio>
+                            <Radio value="3">
+                                <FormattedMessage
+                                    id='miniClass'
+                                    description='微课'
+                                    defaultMessage='微课'
+                                />
+                            </Radio>
                         </RadioGroup>
                         {/*<Input placeholder="请输入课程名"/>*/}
                         <Select value={this.state.classFliterValue} className='select_publish'
                                 onChange={this.slectFilterOnChange}>
                             {/*<Option value="0">全部</Option>*/}
-                            <Option value="1">已发布</Option>
-                            <Option value="2">未发布</Option>
+                            <Option value="1">
+                                <FormattedMessage
+                                    id='published'
+                                    description='已发布'
+                                    defaultMessage='已发布'
+                                />
+                            </Option>
+                            <Option value="2">
+                                <FormattedMessage
+                                    id='unpublished'
+                                    description='未发布'
+                                    defaultMessage='未发布'
+                                />
+                            </Option>
                         </Select>
                         <div className="details">
                             {this.state.cardArray}
@@ -989,7 +1089,13 @@ const AntMulitiClassComponents = React.createClass({
                     <Pagination total={this.state.total} pageSize={getPageSize()} current={this.state.currentPage}
                                 onChange={this.pageOnChange}/>
                 </div>
-                <Modal className="modal_course" title="创建课程" visible={this.state.createClassModalVisible}
+                <Modal className="modal_course"
+                       title={<FormattedMessage
+                           id='createNewLesson'
+                           description='创建课程'
+                           defaultMessage='创建课程'
+                       />}
+                       visible={this.state.createClassModalVisible}
                        onCancel={this.createClassModalHandleCancel}
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
@@ -1007,7 +1113,13 @@ const AntMulitiClassComponents = React.createClass({
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
                        footer={[
-                           <Button onClick={this.classDetailModalHandleCancel}>关闭</Button>
+                           <Button onClick={this.classDetailModalHandleCancel}>
+                               <FormattedMessage
+                                   id='close'
+                                   description='关闭'
+                                   defaultMessage='关闭'
+                               />
+                           </Button>
                        ]}
                 >
                     <div className="space">
@@ -1045,7 +1157,13 @@ const AntMulitiClassComponents = React.createClass({
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
                        footer={[
-                           <Button onClick={this.classPlayDetailModalHandleCancel}>关闭</Button>
+                           <Button onClick={this.classPlayDetailModalHandleCancel}>
+                               <FormattedMessage
+                                   id='close'
+                                   description='关闭'
+                                   defaultMessage='关闭'
+                               />
+                           </Button>
                        ]}
                 >
                     <div className="space">
