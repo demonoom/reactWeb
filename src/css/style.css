@@ -8679,7 +8679,7 @@ select.course_n:hover {
 }
 
 .add_member .ant-modal-body {
-    height: 410px;
+    padding-bottom:0px;
 }
 
 .add_member_right .schoolgroup_table1 .ant-table-content, .add_member_wrap .schoolgroup_table1 .ant-table-content {
