@@ -52,7 +52,7 @@ const HeaderComponents = React.createClass({
         return (
             <div>
                 <MaaeeLogo/>
-              <Switch checkedChildren="En" unCheckedChildren="中"
+              <Switch checkedChildren="English" unCheckedChildren="中文"
                         onChange={this.checkoutLanguage}
                         defaultChecked={defaultChecked}
                         className="switchWaring"
