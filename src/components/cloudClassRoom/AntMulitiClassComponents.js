@@ -159,8 +159,14 @@ const AntMulitiClassComponents = React.createClass({
         if (isEmpty(isSeries) || isSeries == "2") {
             endTime = null;
         } else {
-            endTime = <Col span={24}><span className="series_gray_le">结束时间：</span><span
-                className="series_gray_ri">{endTime}</span></Col>;
+            endTime = <Col span={24}><span className="series_gray_le">
+                   <FormattedMessage
+                       id='endTime'
+                       description='结束时间'
+                       defaultMessage='结束时间'
+                   />
+            </span>
+                <span className="series_gray_ri" style={{marginLeft:10}}>{endTime}</span></Col>;
         }
         switch (isPublish) {
             case "1":
@@ -290,17 +296,44 @@ const AntMulitiClassComponents = React.createClass({
                             </Row>
                             <Col span={24} className="price"><span className="c-jg price_between">￥{money}</span><span
                                 className="price_between gray_line"></span><span
-                                className=" price_between font-14">共{videoNum}课时</span></Col>
-                            <Col span={24}><span className="series_gray_le">主讲老师：</span><span
-                                className="series_gray_ri">{userSpanArray}</span></Col>
-                            <Col span={24}><span className="series_gray_le">创课时间：</span><span
-                                className="series_gray_ri">{createTime}
+                                className=" price_between font-14">
+                                共{videoNum}课时
+                            </span></Col>
+                            <Col span={24}><span className="series_gray_le">
+                               <FormattedMessage
+                                   id='teacher'
+                                   description='授课老师'
+                                   defaultMessage='授课老师'
+                               />
+                            </span>
+                                <span className="series_gray_ri" style={{marginLeft:10}} >{userSpanArray}</span></Col>
+                            <Col span={24}><span className="series_gray_le">
+                                      <FormattedMessage
+                                          id='creatTime'
+                                          description='创课时间'
+                                          defaultMessage='创课时间'
+                                      />
+                            </span>
+                                <span className="series_gray_ri" style={{marginLeft:10}}>{createTime}
                         </span></Col>
-                            <Col span={24}><span className="series_gray_le">知识点：</span><span
-                                className="series_gray_ri">{newNameTotal}</span>
+                            <Col span={24}><span className="series_gray_le">
+                                {/*知识点：*/}
+                                   <FormattedMessage
+                                       id='knowledgePoint'
+                                       description='知识点'
+                                       defaultMessage='知识点'
+                                   />
+                            </span>
+                                <span className="series_gray_ri" style={{marginLeft:10}}>{newNameTotal}</span>
                             </Col>
-                            <Col span={24}><span className="series_gray_le">课程概述：</span><span
-                                className="series_gray_ri">{content}</span></Col>
+                            <Col span={24}><span className="series_gray_le">
+                                 <FormattedMessage
+                                     id='courseDescription'
+                                     description='课程概述'
+                                     defaultMessage='课程概述'
+                                 />
+                            </span>
+                                <span className="series_gray_ri" style={{marginLeft:10}}>{content}</span></Col>
                         </Row>
                     </Col>
                     <Col span={2}>
@@ -330,18 +363,39 @@ const AntMulitiClassComponents = React.createClass({
                             <Col span={24} className="price"><span className="c-jg price_between">￥{money}</span><span
                                 className="price_between gray_line"></span><span
                                 className=" price_between font-14">共{videoNum}课时</span></Col>
-                            <Col span={24}><span className="series_gray_le">主讲老师：</span><span
-                                className="series_gray_ri">{userSpanArray}</span></Col>
-                            <Col span={24}><span className="series_gray_le">开始时间：</span><span
-                                className="series_gray_ri">{firstLiveTime}</span></Col>
+                            <Col span={24}><span className="series_gray_le">
+                                {/*主讲老师：*/}
+                             <FormattedMessage
+                                 id='teacher'
+                                 description='授课老师'
+                                 defaultMessage='授课老师'
+                             />
+                            </span>
+                                <span className="series_gray_ri" style={{marginLeft:10}}>{userSpanArray}</span></Col>
+                            <Col span={24}><span className="series_gray_le">
+                                {/*开始时间：*/}
+                              <FormattedMessage
+                                  id='creatTime'
+                                  description='创课时间'
+                                  defaultMessage='创课时间'
+                              />
+                            </span>
+                                <span className="series_gray_ri" style={{marginLeft:10}}>{firstLiveTime}</span></Col>
                             {endTime}
                             {/*<Col span={24}><span className="series_gray_le">排课时间：</span><span*/}
                             {/*className="series_gray_ri">{firstLiveTime}</span>*/}
                             {/*</Col>*/}
                             {/*<Col span={24}><span className="series_gray_le">知识点：</span><span*/}
                             {/*className="series_gray_ri">{newNameTotal}</span></Col>*/}
-                            <Col span={24}><span className="series_gray_le">课程概述：</span><span
-                                className="series_gray_ri">{content}</span></Col>
+                            <Col span={24}><span className="series_gray_le">
+                                {/*课程概述：*/}
+                             <FormattedMessage
+                                 id='courseDescription'
+                                 description='课程概述'
+                                 defaultMessage='课程概述'
+                             />
+                            </span>
+                                <span className="series_gray_ri" style={{marginLeft:10}}>{content}</span></Col>
                         </Row>
                     </Col>
                     <Col span={2}>
