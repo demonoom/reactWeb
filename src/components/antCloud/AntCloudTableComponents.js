@@ -654,7 +654,7 @@ const AntCloudTableComponents = React.createClass({
                 var fileLogo = _this.buildFileLogo(name, directory, e);
                 var cloudFileJsonForEveryFile = {"fileId": key, "cloudFileObj": e};
                 cloudFileArray.push(cloudFileJsonForEveryFile);
-                var editButton = <Button title="编辑" type="button" className="score3_i" value={key} text={key}
+                var editButton = <Button title="重命名" type="button" className="score3_i" value={key} text={key}
                                          onClick={cloudTable.editDirectoryName.bind(cloudTable, e)}
                                          icon="edit"></Button>;
                 var deleteButton = <Button title="删除" type="button" value={key} text={key}
