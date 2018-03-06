@@ -47,6 +47,7 @@ const en_US = {
     teamMember:"Team member",
     grade:"Grade",
     demoLesson:"Is it a demo lesson?",
+    testLesson:"Is it a test lesson?",
     next:"Next",
     close:"Close",
     back:"Back",

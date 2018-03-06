@@ -47,6 +47,7 @@ const zh_CN = {
     teamMember:"选择团队",
     grade:"授课年级",
     demoLesson:"是否为展示课",
+    testLesson:"是否为测试课",
     next:"下一步",
     close:"关闭",
     back:'上一步',

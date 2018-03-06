@@ -9,6 +9,11 @@ import {doWebService_CloudClassRoom} from '../../utils/CloudClassRoomURLUtils';
 import moment from 'moment';
 import WeiClassUploadComponents from './WeiClassUploadComponents';
 import KnowledgePointModal from './KnowledgePointModal';
+//国际化
+import {IntlProvider, addLocaleData} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
+import zh from 'react-intl/locale-data/zh';
+import en from 'react-intl/locale-data/en';
 
 const dateFormat = 'YYYY/MM/DD';
 const dateFullFormat = 'YYYY-MM-DD HH:mm:ss';
@@ -1468,7 +1473,13 @@ const UpdateClassComponents = React.createClass({
         if (isEmpty(this.state.test) == false) {
             isShowTestClass =
                 <Row>
-                    <Checkbox onChange={this.isTestClass} checked={this.state.isTestClass} className="upexam_le_datika">是否为测试课</Checkbox>
+                    <Checkbox onChange={this.isTestClass} checked={this.state.isTestClass} className="upexam_le_datika">
+                        <FormattedMessage
+                            id='testLesson'
+                            description='是否为测试课'
+                            defaultMessage='是否为测试课'
+                        />
+                    </Checkbox>
                 </Row>
         } else {
             isShowTestClass = null;
@@ -1483,7 +1494,13 @@ const UpdateClassComponents = React.createClass({
             var subjectTitle = "课程分类";
             if(isEmpty(this.state.courseClass)==false && this.state.courseClass != "29"){
                 classRow = <Row>
-                    <Col span={4}>授课年级：</Col>
+                    <Col span={4}>
+                        <FormattedMessage
+                            id='grade'
+                            description='授课年级'
+                            defaultMessage='授课年级'
+                        />
+                    </Col>
                     <Col span={18}>
                         <Select defaultValue={this.state.courseClass} value={this.state.courseClass}
                                 style={{width: 120}} disabled={this.state.LessionIsUpdateDisable}
@@ -1496,21 +1513,41 @@ const UpdateClassComponents = React.createClass({
             }
             stepPanel = <div>
                 <Row>
-                    <Col span={4}>课程名称：</Col>
+                    <Col span={4}>
+                        <FormattedMessage
+                            id='courseName'
+                            description='课程名称'
+                            defaultMessage='课程名称'
+                        />
+                    </Col>
                     <Col span={18}>
                         <Input disabled={this.state.LessionIsUpdateDisable} value={this.state.courseName}
                                onChange={this.courseNameOnChange}/>
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={4}>是否免费：</Col>
+                    <Col span={4}>
+                        <FormattedMessage
+                            id='coursefee'
+                            description='课程费用'
+                            defaultMessage='课程费用'
+                        />
+                    </Col>
                     <Col span={18}>
                         <RadioGroup onChange={this.classIsFreeOnChange} value={this.state.isFree}>
                             <Radio style={radioStyle} value={1} className="line_block">
-                                免费
+                                <FormattedMessage
+                                    id='free'
+                                    description='免费'
+                                    defaultMessage='免费'
+                                />
                             </Radio>
                             <Radio style={radioStyle} value={2} className="line_block">
-                                收费
+                                <FormattedMessage
+                                    id='fee'
+                                    description='收费'
+                                    defaultMessage='收费'
+                                />
                             </Radio>
                             <span>
                                   <Input value={this.state.money} style={{width: 160}}
@@ -1520,16 +1557,30 @@ const UpdateClassComponents = React.createClass({
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={4}>人数限制：</Col>
+                    <Col span={4}>
+                        <FormattedMessage
+                            id='limitPeople'
+                            description='人数限制'
+                            defaultMessage='人数限制'
+                        />
+                    </Col>
                     <Col span={18}>
                         <RadioGroup onChange={this.numberIsLimit} value={this.state.isLimit}>
                             <Radio disabled={this.state.updateDisabled} style={radioStyle} value={1}
                                    className="line_block">
-                                不限人数
+                                <FormattedMessage
+                                    id='withoutLimits'
+                                    description='不限人数'
+                                    defaultMessage='不限人数'
+                                />
                             </Radio>
                             <Radio disabled={this.state.updateDisabled} style={radioStyle} value={2}
                                    className="line_block">
-                                限制人数
+                                <FormattedMessage
+                                    id='Limits'
+                                    description='限制人数'
+                                    defaultMessage='限制人数'
+                                />
                             </Radio>
                             <span>
                               <Input value={this.state.limitPerson} style={{width: 160}}
@@ -1539,7 +1590,13 @@ const UpdateClassComponents = React.createClass({
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={4}>{subjectTitle}：</Col>
+                    <Col span={4}>
+                        <FormattedMessage
+                            id='subject'
+                            description={subjectTitle}
+                            defaultMessage={subjectTitle}
+                        />
+                    </Col>
                     <Col span={18}>
                         <Select defaultValue={[this.state.defaultSubjectSelected]}
                                 value={this.state.defaultSubjectSelected} style={{width: 120}}
@@ -1560,10 +1617,22 @@ const UpdateClassComponents = React.createClass({
                     </Col>
                 </Row>*/}
                 <Row>
-                    <Col span={4}>授课形式：</Col>
+                    <Col span={4}>
+                        <FormattedMessage
+                            id='teachingForm'
+                            description='授课形式'
+                            defaultMessage='授课形式'
+                        />
+                    </Col>
                     <Col span={18} style={{height: 160}}>
                         <RadioGroup onChange={this.classTypeOnChange} value={this.state.isTeam}>
-                            <Radio style={radioStyle} value={1} disabled={this.state.updateDisabled}>单人授课</Radio>
+                            <Radio style={radioStyle} value={1} disabled={this.state.updateDisabled}>
+                                <FormattedMessage
+                                    id='individualTeacher'
+                                    description='单人授课'
+                                    defaultMessage='单人授课'
+                                />
+                            </Radio>
                             {/*<Row style={{width: 420}}>*/}
                                 {/*<Col span={24} style={{marginLeft: 22}}>选择课程类型：{this.state.isSeriesStr}</Col>*/}
                                 {/*<Col span={16}>
@@ -1574,9 +1643,19 @@ const UpdateClassComponents = React.createClass({
 								</Col>*/}
                             {/*</Row>*/}
                             <Radio style={radioStyle} value={2} disabled={this.state.updateDisabled}>
-                                团队授课
+                                <FormattedMessage
+                                    id='teamOfTeachers'
+                                    description='团队授课'
+                                    defaultMessage='团队授课'
+                                />
                                 <Row>
-                                    <Col span={6} style={{marginLeft: 22}}>选择团队：</Col>
+                                    <Col span={6} style={{marginLeft: 22}}>
+                                        <FormattedMessage
+                                            id='teamMember'
+                                            description='选择团队'
+                                            defaultMessage='选择团队'
+                                        />
+                                    </Col>
                                     <Col span={16}>
                                         <Select defaultValue={this.state.defaultTeamSelected}
                                                 value={this.state.defaultTeamSelected}
@@ -1592,11 +1671,23 @@ const UpdateClassComponents = React.createClass({
                 </Row>
                 <Row>
                     <Checkbox onChange={this.isShowClass} defaultChecked={false} disabled={this.state.updateDisabled}
-                              checked={this.state.isShowClass} className="upexam_le_datika">是否为展示课</Checkbox>
+                              checked={this.state.isShowClass} className="upexam_le_datika">
+                        <FormattedMessage
+                            id='demoLesson'
+                            description='是否为展示课'
+                            defaultMessage='是否为展示课'
+                        />
+                    </Checkbox>
                 </Row>
                 <Row>
                     <Checkbox onChange={this.isWeiClass} defaultChecked={false} disabled={this.state.updateDisabled}
-                              checked={this.state.isWeiClass} className="upexam_le_datika">是否为微课</Checkbox>
+                              checked={this.state.isWeiClass} className="upexam_le_datika">
+                        <FormattedMessage
+                            id='isMininClass'
+                            description='是否为微课'
+                            defaultMessage='是否为微课'
+                        />
+                    </Checkbox>
                 </Row>
 
                 {isShowTestClass}
@@ -1609,7 +1700,13 @@ const UpdateClassComponents = React.createClass({
                 {/*</Row>*/}
 
                 <Row>
-                    <Col span={4}>课程封面：</Col>
+                    <Col span={4}>
+                        <FormattedMessage
+                            id='courseCover'
+                            description='课程封面'
+                            defaultMessage='课程封面'
+                        />
+                    </Col>
                     <Col span={18}>
                         <ImageAnswerUploadComponents fileList={fileList}
                                                      callBackParent={this.getLessonImageList}
@@ -1619,7 +1716,13 @@ const UpdateClassComponents = React.createClass({
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={4}>课程概述：</Col>
+                    <Col span={4}>
+                        <FormattedMessage
+                            id='courseDescription'
+                            description='课程概述'
+                            defaultMessage='课程概述'
+                        />
+                    </Col>
                     <Col span={18}>
                         <Input value={this.state.courseSummary} type="textarea" rows={4}
                                onChange={this.classSummaryOnChange}/>
@@ -1627,7 +1730,13 @@ const UpdateClassComponents = React.createClass({
                 </Row>
             </div>;
         } else {
-            preButton = <Button onClick={this.changeStep.bind(this, "pre")}>上一步</Button>;
+            preButton = <Button onClick={this.changeStep.bind(this, "pre")}>
+                <FormattedMessage
+                    id='back'
+                    description='上一步'
+                    defaultMessage='上一步'
+                />
+            </Button>;
             saveButton = <Button onClick={this.saveClassInfo}>保存</Button>;
             nextButton = "";
             var everyLessonArray = [];
@@ -1641,7 +1750,16 @@ const UpdateClassComponents = React.createClass({
                         var InputObj = <Input id={lessonJson.squence} value={videoName}
                                               onChange={_this.lessonTitleOnChange} className="noom_input"/>;
                         var lessonRowObj = <Row>
-                            <Col span={3}>第{lessonJson.lessonNum}课时</Col>
+                            <Col span={3}>
+                                <FormattedMessage
+                                    id='LessonNum'
+                                    description='LessonNum'
+                                    defaultMessage='第{ num }课时'
+                                    values={
+                                        {num: lessonJson.lessonNum}
+                                    }
+                                />
+                            </Col>
                             {/*{lessonJson.videoNameObj}*/}
                             <Col span={8}>{InputObj}</Col>
                             <Col span={4} className="class_right"> {lessonJson.teacherObj}</Col>
@@ -1692,28 +1810,70 @@ const UpdateClassComponents = React.createClass({
                 }
                 stepPanel = <div>
                     <Row>
-                        <Col span={4}>总&nbsp;&nbsp;课&nbsp;&nbsp;时：</Col>
+                        <Col span={4}>
+                            <FormattedMessage
+                                id='totalHours'
+                                description='总课时'
+                                defaultMessage='总课时'
+                            />
+                        </Col>
                         <Col span={20}>
                             <Input value={this.state.videoNum} disabled={this.state.updateDisabled}
                                    onChange={this.classTimesOnChange}/>
                         </Col>
                     </Row>
                     <Row>
-                        <Col span={4}>设置课表：</Col>
+                        <Col span={4}>
+                            <FormattedMessage
+                                id='scheduleSetting'
+                                description='设置课表'
+                                defaultMessage='设置课表'
+                            />
+                        </Col>
                         <Col span={20}>
                             <Row className="no_ant-row price">
-                                <Col span={3} className="add_left">目录</Col>
-                                <Col span={8}>名称</Col>
-                                <Col span={4} className="class_right">授课老师</Col>
+                                <Col span={3} className="add_left">
+                                    <FormattedMessage
+                                        id='content'
+                                        description='目录'
+                                        defaultMessage='目录'
+                                    />
+                                </Col>
+                                <Col span={8}>
+                                    <FormattedMessage
+                                        id='name'
+                                        description='名称'
+                                        defaultMessage='名称'
+                                    />
+                                </Col>
+                                <Col span={4} className="class_right">
+                                    <FormattedMessage
+                                        id='teacher'
+                                        description='授课老师'
+                                        defaultMessage='授课老师'
+                                    />
+                                </Col>
                                 <Col span={4} className="class_right">附件名</Col>
                                 <Col span={3} className="class_right">微课上传</Col>
-                                <Col span={2} className="class_right">操作</Col>
+                                <Col span={2} className="class_right">
+                                    <FormattedMessage
+                                        id='delete'
+                                        description='操作'
+                                        defaultMessage='操作'
+                                    />
+                                </Col>
                             </Row>
                             {everyLessonArray}
                             <Row>
                                 <Col span={24}>
                                     <Button icon="add" onClick={this.addLesson}
-                                            className="add_DIR add_study-b">添加目录</Button>
+                                            className="add_DIR add_study-b">
+                                        <FormattedMessage
+                                            id='add'
+                                            description='添加目录'
+                                            defaultMessage='添加目录'
+                                        />
+                                    </Button>
                                 </Col>
                             </Row>
                         </Col>
@@ -1721,7 +1881,13 @@ const UpdateClassComponents = React.createClass({
                     <Row>
                         <Col span={24} className="knowledge_ri">
                             <Checkbox disabled={this.state.isShowseclect} defaultChecked={this.state.isShowseclect}
-                                      onChange={this.publishClassAtNow}>立即发布</Checkbox>
+                                      onChange={this.publishClassAtNow}>
+                                <FormattedMessage
+                                    id='publishImmediately'
+                                    description='立即发布'
+                                    defaultMessage='立即发布'
+                                />
+                            </Checkbox>
                         </Col>
                     </Row>
                 </div>;
@@ -1751,7 +1917,16 @@ const UpdateClassComponents = React.createClass({
                             />
                         </Col>;
                         var lessonRowObj = <Row>
-                            <Col span={4} className="add_left">第{lessonJson.lessonNum}课时</Col>
+                            <Col span={4} className="add_left">
+                                <FormattedMessage
+                                    id='LessonNum'
+                                    description='LessonNum'
+                                    defaultMessage='第{ num }课时'
+                                    values={
+                                        {num: lessonJson.lessonNum}
+                                    }
+                                />
+                            </Col>
                             <Col span={8}>{InputObj}</Col>
                             <Col span={4}> {lessonJson.teacherObj}</Col>
                             {timeObj}
@@ -1766,27 +1941,75 @@ const UpdateClassComponents = React.createClass({
                 }
                 stepPanel = <div>
                     <Row>
-                        <Col span={4}>总&nbsp;&nbsp;课&nbsp;&nbsp;时：</Col>
+                        <Col span={4}>
+                            <FormattedMessage
+                                id='totalHours'
+                                description='总课时'
+                                defaultMessage='总课时'
+                            />
+                        </Col>
                         <Col span={20}>
                             <Input value={this.state.videoNum} disabled={this.state.updateDisabled}
                                    onChange={this.classTimesOnChange}/>
                         </Col>
                     </Row>
                     <Row>
-                        <Col span={4}>设置课表：</Col>
+                        <Col span={4}>
+                            <FormattedMessage
+                                id='scheduleSetting'
+                                description='设置课表'
+                                defaultMessage='设置课表'
+                            />
+                        </Col>
                         <Col span={20}>
                             <Row className="no_ant-row price">
-                                <Col span={4} className="add_left">目录</Col>
-                                <Col span={8}>名称</Col>
-                                <Col span={4}>授课老师</Col>
-                                <Col span={4}>授课时间</Col>
-                                <Col span={4}>操作</Col>
+                                <Col span={4} className="add_left">
+                                    <FormattedMessage
+                                        id='content'
+                                        description='目录'
+                                        defaultMessage='目录'
+                                    />
+                                </Col>
+                                <Col span={8}>
+                                    <FormattedMessage
+                                        id='name'
+                                        description='名称'
+                                        defaultMessage='名称'
+                                    />
+                                </Col>
+                                <Col span={4}>
+                                    <FormattedMessage
+                                        id='teacher'
+                                        description='授课老师'
+                                        defaultMessage='授课老师'
+                                    />
+                                </Col>
+                                <Col span={4}>
+                                    <FormattedMessage
+                                        id='Classtime'
+                                        description='授课时间'
+                                        defaultMessage='授课时间'
+                                    />
+                                </Col>
+                                <Col span={4}>
+                                    <FormattedMessage
+                                        id='delete'
+                                        description='操作'
+                                        defaultMessage='操作'
+                                    />
+                                </Col>
                             </Row>
                             {everyLessonArray}
                             <Row>
                                 <Col span={24}>
                                     <Button icon="add" onClick={this.addLesson}
-                                            className="add_DIR add_study-b">添加目录</Button>
+                                            className="add_DIR add_study-b">
+                                        <FormattedMessage
+                                            id='add'
+                                            description='添加目录'
+                                            defaultMessage='添加目录'
+                                        />
+                                    </Button>
                                 </Col>
                             </Row>
                         </Col>
@@ -1794,7 +2017,13 @@ const UpdateClassComponents = React.createClass({
                     <Row>
                         <Col span={24} className="knowledge_ri">
                             <Checkbox disabled={this.state.isShowseclect} defaultChecked={this.state.isShowseclect}
-                                      onChange={this.publishClassAtNow}>立即发布</Checkbox>
+                                      onChange={this.publishClassAtNow}>
+                                <FormattedMessage
+                                    id='publishImmediately'
+                                    description='立即发布'
+                                    defaultMessage='立即发布'
+                                />
+                            </Checkbox>
                         </Col>
                     </Row>
                 </div>;
@@ -1807,8 +2036,16 @@ const UpdateClassComponents = React.createClass({
             <div>
                 <div className="modal_steps">
                     <Steps current={this.state.stepNum}>
-                        <Step title="课程信息" icon={<Icon type="credit-card"/>}/>
-                        <Step title="设置课表" icon={<Icon type="smile-o"/>}/>
+                        <Step title={<FormattedMessage
+                            id='courseInformation'
+                            description='课程信息'
+                            defaultMessage='课程信息'
+                        />} icon={<Icon type="credit-card"/>}/>
+                        <Step title={<FormattedMessage
+                            id='schedule'
+                            description='设置课表'
+                            defaultMessage='设置课表'
+                        />} icon={<Icon type="smile-o"/>}/>
                     </Steps>
                 </div>
                 {stepPanel}

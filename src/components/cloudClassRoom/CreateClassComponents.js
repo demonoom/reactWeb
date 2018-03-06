@@ -1130,7 +1130,13 @@ const CreateClassComponents = React.createClass({
         if (isEmpty(this.state.test) == false) {
             isShowTestClass =
                 <Row>
-                    <Checkbox onChange={this.isTestClass} checked={this.state.isTestClass} className="upexam_le_datika">是否为测试课</Checkbox>
+                    <Checkbox onChange={this.isTestClass} checked={this.state.isTestClass} className="upexam_le_datika">
+                        <FormattedMessage
+                            id='testLesson'
+                            description='是否为测试课'
+                            defaultMessage='是否为测试课'
+                        />
+                    </Checkbox>
                 </Row>
         } else {
             isShowTestClass = null;
