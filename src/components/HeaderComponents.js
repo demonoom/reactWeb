@@ -46,9 +46,9 @@ const HeaderComponents = React.createClass({
         return (
             <div>
                 <MaaeeLogo/>
-                {/*<Switch checkedChildren="En" unCheckedChildren="中"
+              <Switch checkedChildren="En" unCheckedChildren="中"
                         onChange={this.checkoutLanguage}
-                        defaultChecked={defaultChecked}/>*/}
+                        defaultChecked={defaultChecked}/>
                 <Icon type="search" className="search_header" onClick={this.search}/>
                 <ProgressBar style={{valign: 'bottom'}}></ProgressBar>
                 <Button icon="book" onClick={this.redirectHelpPage} className="colud_bnt help_note">操作手册</Button>
