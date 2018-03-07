@@ -391,10 +391,9 @@ const Login = Form.create()(React.createClass({
 
                                         </Form>
                                     </TabPane>
-
                                 </Tabs>
                                 <div className="switchStyle">
-                                    <Switch checkedChildren="English" unCheckedChildren="中文"
+                                    <Switch checkedChildren="中文" unCheckedChildren="English"
                                          onChange={this.checkoutLanguage}
                                         defaultChecked={defaultChecked}
                                     />
