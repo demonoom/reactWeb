@@ -25,7 +25,13 @@ code, kbd, pre, samp {
     position: absolute;
     left: 0px;
 }
-
+.logoFont{
+    position: absolute;
+    margin: 0;
+    top: 15px;
+    left: 40px;
+    color: #fff;
+}
 div, a, span, input, button, textarea, marquee, select {
     outline: none;
 }
@@ -2459,13 +2465,10 @@ li.ant-menu-submenu > ul > li.ant-menu-submenu {
     line-height: 24px;
 
 }
-
 .help_note {
     float: left;
-    margin-left: 260px;
-
+    margin-left: 280px;
 }
-
 .examination_up_img {
     width: 300px;
     margin: 10px 0 0 0;
@@ -7628,7 +7631,12 @@ select.course_n:hover {
     font-size: 12px;
     margin-top: 5px;
 }
-
+.switchStyle{
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translate(-50%, 0)
+}
 .send_img_cont {
     max-width: 230px;
     min-height: 21px;
@@ -7788,6 +7796,12 @@ select.course_n:hover {
     }
 }
 
+.switchWaring{
+    position: absolute;
+    top: 16px;
+    right: 70px;
+    color: #fff;
+}
 .search_header {
     color: #fff;
     position: absolute;

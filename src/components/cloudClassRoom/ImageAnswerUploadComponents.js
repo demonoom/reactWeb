@@ -1,6 +1,11 @@
 import React, {PropTypes} from 'react';
 import {Upload, Icon, Button, message, Modal} from 'antd';
 import {isEmpty} from '../../utils/Const';
+//国际化
+import {IntlProvider, addLocaleData} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
+import zh from 'react-intl/locale-data/zh';
+import en from 'react-intl/locale-data/en';
 
 var subjectFather;
 var fileList = [];
@@ -118,7 +123,12 @@ const ImageAnswerUploadComponents = React.createClass({
                 <Upload {...props}>
                     <Button value={this.state.subjectInfo} disabled={this.state.imgIsUpdateDisable}
                             onClick={this.showInfo} className="add_study-b">
-                        <Icon type="upload"/> 上传
+                        <Icon type="upload"/>
+                        <FormattedMessage
+                            id='upload'
+                            description='上传'
+                            defaultMessage='上传'
+                        />
                     </Button>
                 </Upload>
                 <Modal maskClosable={false} visible={this.state.previewVisible} footer={null}
