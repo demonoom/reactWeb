@@ -8829,3 +8829,50 @@ select.course_n:hover {
     height: 24px;
     width: 606px;
 }
+.shrinkage {
+    cursor: pointer;
+    background:url(../../src/components/images/board_shen1.png) no-repeat;
+    width: 54px;
+    height: 42px;
+    z-index: 20000;
+    position: absolute;
+    right: 0;
+    top: 54%;
+    transform: translate(0,-54%);
+    -ms-transform: translate(0px,-54%);
+    -moz-transform: translate(0px,-54%);
+    -webkit-transform: translate(0px,-54%);
+    -o-transform: translate(0px,-54%);
+}
+.shrinkage:hover{
+    background:url(../../src/components/images/board_shen.png) no-repeat;
+}
+.shrinkage1 {
+    cursor: pointer;
+    background: url(../../src/components/images/board_suo1.png) no-repeat;
+    width: 54px;
+    height: 42px;
+    z-index: 20000;
+    position: absolute;
+    right: 0;
+    top: 54%;
+    transform: translate(0px,-54%);
+    -ms-transform: translate(0px,-54%);
+    -moz-transform: translate(0px,-54%);
+    -webkit-transform: translate(0px,-54%);
+    -o-transform: translate(0px,-54%);
+}
+.shrinkage1:hover{
+     background:url(../../src/components/images/board_suo.png) no-repeat;
+ }
+.modal_iframe_cont{
+    width: 100%;
+    height:100%
+}
+.modal_iframe_cont iframe{
+    width: 100%;
+    height: 100%;
+    border: none;
+    padding: 0;
+    margin: 0;
+}

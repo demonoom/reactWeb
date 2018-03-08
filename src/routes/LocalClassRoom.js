@@ -246,11 +246,13 @@ const LocalClassRoom = React.createClass({
                     <div className="classroom_btn">
                         <Button className="classroom_btn_b" onClick={this.getPPT} ><img src={require('../components/images/icon_kejian.png')} /></Button>
                         <Button className="classroom_btn_b  add_out" onClick={this.getSubject} ><img src={require('../components/images/icon_timu_class_white.png')} /></Button>
-                        <Button className="classroom_btn_b  add_out" onClick={this.getClazzStatus} ><img src={require('../components/images/icon_timu_class_white.png')} /></Button>
+                        <Button className="classroom_btn_b  add_out" onClick={this.getClazzStatus} ><img src={require('../components/images/icon_statistical_section.png')} /></Button>
                     </div>
                     <div className="classroom_btn_finish">
                         <Button className="classroom_btn_b add_out" onClick={this.showConfirmModal}><img src={require('../components/images/finish_class.png')} /></Button>
                     </div>
+                    <div><i className="shrinkage"></i></div>
+                    <div><i className="shrinkage1"></i></div>
                 </div>
                 <div><Icon type={this.state.closeIconType} onClick={this.closeOrOpenMessageDiv} /></div>
                 <div className="local_class_right" id="messageDiv">
