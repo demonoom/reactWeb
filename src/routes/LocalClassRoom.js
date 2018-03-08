@@ -24,7 +24,8 @@ const LocalClassRoom = React.createClass({
             antCloudMaterialsModalIsShow:false,
             closeScheduleMaterialsModal:false,
             sendPicModel: false,
-            closeIconType:'double-right'
+            closeIconType:'double-right',
+            closeOrOpen:'open'
         };
     },
 
@@ -202,12 +203,16 @@ const LocalClassRoom = React.createClass({
      * 关闭/打开聊天讨论区
      */
     closeOrOpenMessageDiv(){
-        if(this.state.closeIconType=='double-right'){
+        if(this.state.closeOrOpen == "open"){
             $("#messageDiv").fadeOut(500);
-            this.setState({'closeIconType':'double-left'});
+            $("#closeITag").removeClass('shrinkage');
+            $("#closeITag").addClass('shrinkage1');
+            this.setState({'closeOrOpen':'close'});
         }else{
             $("#messageDiv").fadeIn(500);
-            this.setState({'closeIconType':'double-right'});
+            $("#closeITag").removeClass('shrinkage1');
+            $("#closeITag").addClass('shrinkage');
+            this.setState({'closeOrOpen':'open'});
         }
     },
 
@@ -236,47 +241,45 @@ const LocalClassRoom = React.createClass({
                     <source src="https://www.maaee.com/upload2/common/board_welcome2.mp4" type="video/mp4" />
                 </video>
             </div>
+            return (
+                <div className="local_class flex">
+                    <div className="flex_auto classroom_left">
+
+                        {classIfream}
+                        <div className="classroom_btn">
+                            <Button className="classroom_btn_b" onClick={this.getPPT} ><img src={require('../components/images/icon_kejian.png')} /></Button>
+                            <Button className="classroom_btn_b  add_out" onClick={this.getSubject} ><img src={require('../components/images/icon_timu_class_white.png')} /></Button>
+                            <Button className="classroom_btn_b  add_out" onClick={this.getClazzStatus} ><img src={require('../components/images/icon_statistical_section.png')} /></Button>
+                        </div>
+                        <div className="classroom_btn_finish">
+                            <Button className="classroom_btn_b add_out" onClick={this.showConfirmModal}><img src={require('../components/images/finish_class.png')} /></Button>
+                        </div>
+                        <div><i className="shrinkage" id="closeITag"  onClick={this.closeOrOpenMessageDiv}></i></div>
+                    </div>
+                    <div className="local_class_right" id="messageDiv">
+                        <LocalClassesMessage id="localClassMessageObj" ref="localClassesMessage" ms={ms} classCode={this.state.classCode} classType={this.state.classType}></LocalClassesMessage>
+                    </div>
+                    <SelectSubjectModal isShow={this.state.subjectModalIsShow} onCancel={this.closeSubjectModal} pushSubjectToClass={this.pushSubjectToClass}></SelectSubjectModal>
+                    <ClazzStatusModal isShow={this.state.clazzStatusModalIsShow} onCancel={this.closeClazzModal} vid = {this.state.vid}></ClazzStatusModal>
+                    <SelectAntCloudMaterialsModal isShow={this.state.antCloudMaterialsModalIsShow} onCancel={this.closeAntCloudMaterialsModal} pushMaterialsToClass={this.pushMaterialsToClass}></SelectAntCloudMaterialsModal>
+                    <SelectScheduleMaterialsModal isShow={this.state.schduleMaterialsModalIsShow} onCancel={this.closeScheduleMaterialsModal} pushMaterialsToClass={this.pushMaterialsToClass}></SelectScheduleMaterialsModal>
+                    <ConfirmModal ref="confirmModal"
+                                  title="确定要下课吗?"
+                                  onConfirmModalCancel={this.closeConfirmModal}
+                                  onConfirmModalOK={this.disConnectClassRoom}
+                    ></ConfirmModal>
+                    <GuideModal ref="guideModal" setGuideType={this.setGuideType}></GuideModal>
+                    <SendPicModel
+                        isShow={this.state.sendPicModel}
+                        closeModel={this.closeSendPicModel}
+                        pinSrc={this.state.pinSrc}
+                        picFile={this.state.picFile}
+                        sendPicToOthers={this.sendPicToOthers}
+                    />
+                </div>
+            );
+
         }
-
-        return (
-            <div className="local_class flex">
-                <div className="flex_auto classroom_left">
-
-                    {classIfream}
-                    <div className="classroom_btn">
-                        <Button className="classroom_btn_b" onClick={this.getPPT} ><img src={require('../components/images/icon_kejian.png')} /></Button>
-                        <Button className="classroom_btn_b  add_out" onClick={this.getSubject} ><img src={require('../components/images/icon_timu_class_white.png')} /></Button>
-                        <Button className="classroom_btn_b  add_out" onClick={this.getClazzStatus} ><img src={require('../components/images/icon_statistical_section.png')} /></Button>
-                    </div>
-                    <div className="classroom_btn_finish">
-                        <Button className="classroom_btn_b add_out" onClick={this.showConfirmModal}><img src={require('../components/images/finish_class.png')} /></Button>
-                    </div>
-                    <div><i className="shrinkage"></i></div>
-                    <div><i className="shrinkage1"></i></div>
-                </div>
-                <div><Icon type={this.state.closeIconType} onClick={this.closeOrOpenMessageDiv} /></div>
-                <div className="local_class_right" id="messageDiv">
-                    <LocalClassesMessage id="localClassMessageObj" ref="localClassesMessage" ms={ms} classCode={this.state.classCode} classType={this.state.classType}></LocalClassesMessage>
-                </div>
-                <SelectSubjectModal isShow={this.state.subjectModalIsShow} onCancel={this.closeSubjectModal} pushSubjectToClass={this.pushSubjectToClass}></SelectSubjectModal>
-                <ClazzStatusModal isShow={this.state.clazzStatusModalIsShow} onCancel={this.closeClazzModal} vid = {this.state.vid}></ClazzStatusModal>
-                <SelectAntCloudMaterialsModal isShow={this.state.antCloudMaterialsModalIsShow} onCancel={this.closeAntCloudMaterialsModal} pushMaterialsToClass={this.pushMaterialsToClass}></SelectAntCloudMaterialsModal>
-                <SelectScheduleMaterialsModal isShow={this.state.schduleMaterialsModalIsShow} onCancel={this.closeScheduleMaterialsModal} pushMaterialsToClass={this.pushMaterialsToClass}></SelectScheduleMaterialsModal>
-                <ConfirmModal ref="confirmModal"
-                              title="确定要下课吗?"
-                              onConfirmModalCancel={this.closeConfirmModal}
-                              onConfirmModalOK={this.disConnectClassRoom}
-                ></ConfirmModal>
-                <GuideModal ref="guideModal" setGuideType={this.setGuideType}></GuideModal>
-                <SendPicModel
-                    isShow={this.state.sendPicModel}
-                    closeModel={this.closeSendPicModel}
-                    pinSrc={this.state.pinSrc}
-                    picFile={this.state.picFile}
-                    sendPicToOthers={this.sendPicToOthers}
-                />
-            </div>
-        );
     },
 
 });
