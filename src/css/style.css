@@ -3946,6 +3946,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 
 .borderballoon_le_cont {
     display: flex;
+    align-items: center;
 }
 
 .borderballoon_le_cont img {
@@ -7581,8 +7582,9 @@ select.course_n:hover {
 .file_noom {
     border-top: 1px solid #e4e4e4;
     color: #DFE1E6;
-    margin: 10px 0 0 0;
-    padding: 3px 0 0 0;
+    margin: 8px 0 0 0;
+    padding: 8px 0 0 0;
+    line-height: 18px;
 }
 
 .file_noom a {
