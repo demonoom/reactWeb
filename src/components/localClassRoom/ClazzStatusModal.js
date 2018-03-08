@@ -56,7 +56,7 @@ class ClazzStatusModal extends React.Component {
                    onCancel={this.ClazzStatusModalHandleCancel}
                    transitionName=""  //禁用modal的动画效果
                    maskClosable={false} //设置不允许点击蒙层关闭
-                   width={800}
+                   width={500}
                    footer={null}
             >
                 <Row className="modal_flex">
