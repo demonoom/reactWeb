@@ -24,18 +24,28 @@ class ClazzStatusModal extends React.Component {
     componentDidMount() {
         var _this = this;
         var isShow = _this.props.isShow;
-        var vid = _this.props.vid;
-        var userId = this.state.loginUser.colUid;
-        var clazzStatusUrl = "https://www.maaee.com/ant_service/edu/subject_result_web?uid="+userId+"&vid="+vid;
-        this.setState({isShow,vid,clazzStatusUrl});
+        var rd = Math.random()*10000;
+        var rdInt = Math.round(rd);
+        if(isShow==true){
+            var vid = _this.props.vid;
+            var userId = this.state.loginUser.colUid;
+            var clazzStatusUrl = "https://www.maaee.com/ant_service/edu/subject_result_web?uid="+userId+"&vid="+vid+"&version="+rdInt;
+            this.setState({isShow,vid,clazzStatusUrl});
+            $("#clazzStatusFrame")[0].window.location.reload();
+        }
     }
 
     componentWillReceiveProps(nextProps) {
         var isShow = nextProps.isShow;
-        var vid = this.props.vid;
-        var userId = this.state.loginUser.colUid;
-        var clazzStatusUrl = "https://www.maaee.com/ant_service/edu/subject_result_web?uid="+userId+"&vid="+vid;
-        this.setState({isShow,vid,clazzStatusUrl});
+        var rd = Math.random()*10000;
+        var rdInt = Math.round(rd);
+        if(isShow == true){
+            var vid = this.props.vid;
+            var userId = this.state.loginUser.colUid;
+            var clazzStatusUrl = "https://www.maaee.com/ant_service/edu/subject_result_web?uid="+userId+"&vid="+vid+"&version="+rdInt;
+            this.setState({isShow,vid,clazzStatusUrl});
+            $("#clazzStatusFrame")[0].window.location.reload();
+        }
     }
 
     ClazzStatusModalHandleCancel() {
@@ -60,7 +70,7 @@ class ClazzStatusModal extends React.Component {
                    footer={null}
             >
                 <Row className="modal_flex">
-                        <div className="modal_iframe_cont"><iframe src={this.state.clazzStatusUrl}></iframe></div>
+                        <div className="modal_iframe_cont"><iframe id="clazzStatusFrame" src={this.state.clazzStatusUrl}></iframe></div>
                 </Row>
             </Modal>
         );
