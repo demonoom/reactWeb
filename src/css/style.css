@@ -8876,3 +8876,7 @@ select.course_n:hover {
     padding: 0;
     margin: 0;
 }
+.modal_iframe_wrap .ant-modal-body{
+    height: 600px !important;
+    padding: 0 !important;
+}
