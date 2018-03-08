@@ -1,10 +1,11 @@
 import React from 'react';
-import {Modal, message, Row, Col, Button, Tabs, Input} from 'antd';
+import {Modal, message, Row, Col, Button, Tabs, Input,Icon} from 'antd';
 import LocalClassesMessage from '../components/localClassRoom/LocalClassesMessage'
 import {isEmpty} from "../utils/Const";
 import SelectSubjectModal from '../components/localClassRoom/SelectSubjectModal';
 import SelectAntCloudMaterialsModal from '../components/localClassRoom/SelectAntCloudMaterialsModal';
 import SelectScheduleMaterialsModal from '../components/localClassRoom/SelectScheduleMaterialsModal';
+import ClazzStatusModal from '../components/localClassRoom/ClazzStatusModal';
 import ConfirmModal from '../components/ConfirmModal';
 import GuideModal from '../components/localClassRoom/GuideModal';
 import SendPicModel from '../components/antGroup/SendPicModel'
@@ -23,6 +24,7 @@ const LocalClassRoom = React.createClass({
             antCloudMaterialsModalIsShow:false,
             closeScheduleMaterialsModal:false,
             sendPicModel: false,
+            closeIconType:'double-right'
         };
     },
 
@@ -167,6 +169,12 @@ const LocalClassRoom = React.createClass({
         var vid = this.state.vid;
         var userId = this.state.userId;
         var classRoomUrl = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid="+vid+"&userId="+userId+"&role=manager&ppt="+pptURL;
+        var protocal = eval('(' + "{'command':'class_ppt','data':{'control':1,'html':'"+pptURL+"'}}" + ')');
+        connection.send(protocal);
+
+        //让新版的学生端显示ppt
+        var p1 = eval('(' + "{'command':'class_ppt','data':{'control':9}}" + ')');
+        connection.send(p1);
         this.setState({classRoomUrl});
     },
 
@@ -190,6 +198,33 @@ const LocalClassRoom = React.createClass({
         this.refs.confirmModal.changeConfirmModalVisible(false);
     },
 
+    /**
+     * 关闭/打开聊天讨论区
+     */
+    closeOrOpenMessageDiv(){
+        if(this.state.closeIconType=='double-right'){
+            $("#messageDiv").fadeOut(500);
+            this.setState({'closeIconType':'double-left'});
+        }else{
+            $("#messageDiv").fadeIn(500);
+            this.setState({'closeIconType':'double-right'});
+        }
+    },
+
+    /**
+     * 获取本节课堂统计
+     */
+    getClazzStatus(){
+        this.setState({clazzStatusModalIsShow:true});
+    },
+
+    /**
+     * 关闭课堂统计的modal
+     */
+    closeClazzModal(){
+        this.setState({clazzStatusModalIsShow:false});
+    },
+
     render() {
 
         var classIfream = null;
@@ -211,15 +246,18 @@ const LocalClassRoom = React.createClass({
                     <div className="classroom_btn">
                         <Button className="classroom_btn_b" onClick={this.getPPT} ><img src={require('../components/images/icon_kejian.png')} /></Button>
                         <Button className="classroom_btn_b  add_out" onClick={this.getSubject} ><img src={require('../components/images/icon_timu_class_white.png')} /></Button>
+                        <Button className="classroom_btn_b  add_out" onClick={this.getClazzStatus} ><img src={require('../components/images/icon_timu_class_white.png')} /></Button>
                     </div>
                     <div className="classroom_btn_finish">
                         <Button className="classroom_btn_b add_out" onClick={this.showConfirmModal}><img src={require('../components/images/finish_class.png')} /></Button>
                     </div>
                 </div>
-                <div className="local_class_right">
-                    <LocalClassesMessage ref="localClassesMessage" ms={ms} classCode={this.state.classCode} classType={this.state.classType}></LocalClassesMessage>
+                <div><Icon type={this.state.closeIconType} onClick={this.closeOrOpenMessageDiv} /></div>
+                <div className="local_class_right" id="messageDiv">
+                    <LocalClassesMessage id="localClassMessageObj" ref="localClassesMessage" ms={ms} classCode={this.state.classCode} classType={this.state.classType}></LocalClassesMessage>
                 </div>
                 <SelectSubjectModal isShow={this.state.subjectModalIsShow} onCancel={this.closeSubjectModal} pushSubjectToClass={this.pushSubjectToClass}></SelectSubjectModal>
+                <ClazzStatusModal isShow={this.state.clazzStatusModalIsShow} onCancel={this.closeClazzModal} vid = {this.state.vid}></ClazzStatusModal>
                 <SelectAntCloudMaterialsModal isShow={this.state.antCloudMaterialsModalIsShow} onCancel={this.closeAntCloudMaterialsModal} pushMaterialsToClass={this.pushMaterialsToClass}></SelectAntCloudMaterialsModal>
                 <SelectScheduleMaterialsModal isShow={this.state.schduleMaterialsModalIsShow} onCancel={this.closeScheduleMaterialsModal} pushMaterialsToClass={this.pushMaterialsToClass}></SelectScheduleMaterialsModal>
                 <ConfirmModal ref="confirmModal"
