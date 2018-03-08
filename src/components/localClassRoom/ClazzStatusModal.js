@@ -52,11 +52,11 @@ class ClazzStatusModal extends React.Component {
 
     render() {
         return (
-            <Modal title="本节统计" className="modal_classroom modal_classroom_push" visible={this.state.isShow}
+            <Modal title="本节统计" className="modal_classroom modal_iframe_wrap" visible={this.state.isShow}
                    onCancel={this.ClazzStatusModalHandleCancel}
                    transitionName=""  //禁用modal的动画效果
                    maskClosable={false} //设置不允许点击蒙层关闭
-                   width={400}
+                   width={800}
                    footer={null}
             >
                 <Row className="modal_flex">
