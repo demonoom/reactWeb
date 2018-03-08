@@ -4,6 +4,12 @@ import MaaeeLogo from './MaaeeLogo';
 import ProgressBar from '../components/ProgressBar';
 import {isEmpty,setLocalLanaguage} from '../utils/utils';
 
+//国际化
+import {IntlProvider, addLocaleData} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
+import zh from 'react-intl/locale-data/zh';
+import en from 'react-intl/locale-data/en';
+
 var floatButton;
 const HeaderComponents = React.createClass({
 
@@ -46,12 +52,20 @@ const HeaderComponents = React.createClass({
         return (
             <div>
                 <MaaeeLogo/>
-                {/*<Switch checkedChildren="En" unCheckedChildren="中"
+              <Switch checkedChildren="中文" unCheckedChildren="English"
                         onChange={this.checkoutLanguage}
-                        defaultChecked={defaultChecked}/>*/}
+                        defaultChecked={defaultChecked}
+                        className="switchWaring"
+              />
                 <Icon type="search" className="search_header" onClick={this.search}/>
                 <ProgressBar style={{valign: 'bottom'}}></ProgressBar>
-                <Button icon="book" onClick={this.redirectHelpPage} className="colud_bnt help_note">操作手册</Button>
+                <Button icon="book" onClick={this.redirectHelpPage} className="colud_bnt help_note">
+                    <FormattedMessage
+                        id='userManual'
+                        description='操作手册'
+                        defaultMessage='操作手册'
+                    />
+                </Button>
             </div>
         );
     }

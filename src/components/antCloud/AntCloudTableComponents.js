@@ -12,7 +12,8 @@ import {
     Radio,
     Cascader,
     Collapse,
-    Checkbox
+    Checkbox,
+    Tabs
 } from 'antd';
 import ConfirmModal from '../ConfirmModal';
 import CloudFileUploadComponents from './CloudFileUploadComponents';
@@ -24,6 +25,7 @@ import {isEmpty, TO_TYPE, SMALL_IMG} from '../../utils/Const';
 import {bubbleSort} from '../../utils/utils';
 import {showLargeImg} from '../../utils/utils';
 
+const TabPane = Tabs.TabPane;
 const RadioGroup = Radio.Group;
 const Panel = Collapse.Panel;
 const CheckboxGroup = Checkbox.Group;
@@ -78,7 +80,6 @@ var userMessageData = [];
 const AntCloudTableComponents = React.createClass({
     getInitialState() {
         cloudTable = this;
-
         return {
             ident: sessionStorage.getItem('ident'),
             selectedRowKeys: [],
@@ -136,7 +137,7 @@ const AntCloudTableComponents = React.createClass({
     },
 
     getFileByType(fileType) {
-        console.log("fileType" + fileType);
+        // console.log("fileType" + fileType);
         var initPageNo = 1;
         if (fileType == "myFile") {
             cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo);
@@ -217,7 +218,6 @@ const AntCloudTableComponents = React.createClass({
                         cloudTable.buildTableDataByResponse(ret);
                     } else if (optSrc == "moveDirModal") {
                         cloudTable.buildTargetDirData(ret);
-
                     } else if ("copyDirModal" == optSrc) {
                         cloudTable.buildTargetDirDataSaveLocal(ret);
                     } else {
@@ -610,6 +610,7 @@ const AntCloudTableComponents = React.createClass({
      * @param ret
      */
     buildTableDataByResponse(ret) {
+        debugger;
         var _this = this;
         var i = 0;
         var cloudFileArray = [];
@@ -643,11 +644,12 @@ const AntCloudTableComponents = React.createClass({
                 if (directory) {
                     downloadButton = null;
                 } else {
-                    var pathLocal = path.substring(path.indexOf('/upload') - 1, path.length);
-                    downloadButton =
-                        <a href={path} target="_blank" title="下载" download={e.name} className="te_download_a_noom">
-                            <Button icon="download"/></a>;
-
+                    if(isEmpty(path)==false){
+                        var pathLocal = path.substring(path.indexOf('/upload') - 1, path.length);
+                        downloadButton =
+                            <a href={path} target="_blank" title="下载" download={e.name} className="te_download_a_noom">
+                                <Button icon="download"/></a>;
+                    }
                 }
                 var fileLogo = _this.buildFileLogo(name, directory, e);
                 var cloudFileJsonForEveryFile = {"fileId": key, "cloudFileObj": e};
@@ -2184,13 +2186,8 @@ const AntCloudTableComponents = React.createClass({
                         </Row>
                     </div>
                 </Modal>
-
-
                 {toolbar}
                 <div className="favorite_scroll">
-                    {/*<div className="pl_del">
-                            {delBtn}
-                        </div>*/}
                     {delBtn}
                     <Table className="cloud_box" rowSelection={rowSelection} columns={columns}
                            dataSource={cloudTable.state.tableData} pagination={{
@@ -2199,6 +2196,17 @@ const AntCloudTableComponents = React.createClass({
                         onChange: cloudTable.pageOnChange
                     }} scroll={{y: 400}}/>
                 </div>
+                {/*<Tabs*/}
+                    {/*hideAdd*/}
+                    {/*ref = "mainTab"*/}
+                    {/*// activeKey={this.state.activeKey}*/}
+                    {/*// defaultActiveKey={this.state.defaultActiveKey}*/}
+                    {/*// tabBarExtraContent={toolbarExtra}*/}
+                    {/*transitionName=""  //禁用Tabs的动画效果*/}
+                {/*>*/}
+                    {/*<TabPane tab="我的资源" key="1"></TabPane>*/}
+                    {/*<TabPane tab="我的题目" key="2">Content of Tab Pane 2</TabPane>*/}
+                {/*</Tabs>*/}
                 <ul>
                     <li className="imgLi">
                         {this.state.imgArr}

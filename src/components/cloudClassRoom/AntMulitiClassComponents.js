@@ -7,6 +7,11 @@ import {isEmpty, cutString} from '../../utils/utils';
 import ConfirmModal from '../ConfirmModal';
 import CreateClassComponents from './CreateClassComponents';
 import UpdateClassComponents from './UpdateClassComponents';
+//国际化
+import {IntlProvider, addLocaleData} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
+import zh from 'react-intl/locale-data/zh';
+import en from 'react-intl/locale-data/en';
 
 const RadioGroup = Radio.Group;
 const Step = Steps.Step;
@@ -86,7 +91,13 @@ const AntMulitiClassComponents = React.createClass({
                 } else {
                     var cardObj = <Card className="noDataTipImg">
                         <div>
-                            <Icon type="frown-o"/><span>&nbsp;&nbsp;暂无数据</span>
+                            <Icon type="frown-o"/><span>&nbsp;&nbsp;
+                          <FormattedMessage
+                              id='noata'
+                              description='暂无数据'
+                              defaultMessage='暂无数据'
+                          />
+                        </span>
                         </div>
                     </Card>;
                     cardArray.push(cardObj);
@@ -145,19 +156,48 @@ const AntMulitiClassComponents = React.createClass({
         var optButtons;
         var isSeries = row.isSeries;
         var endTime;
+        var editButtonTip='编辑';
+        var detailsButtonTip = '详情';
+        var deletedButtonTip = '删除';
+        var livingCourseButtonTip = '直播';
+        var publishButtonTip = '发布';
+        var lan = localStorage.getItem("language");
+        if (lan == "zh-CN") {
+            editButtonTip='编辑';
+            detailsButtonTip = '详情';
+            deletedButtonTip = '删除';
+            livingCourseButtonTip = '直播';
+            publishButtonTip = '发布';
+        }else{
+            editButtonTip='edit';
+            detailsButtonTip = 'details';
+            deletedButtonTip = 'deleted';
+            livingCourseButtonTip = 'liveingCourse';
+            publishButtonTip = 'publish';
+        }
         if (isEmpty(isSeries) || isSeries == "2") {
             endTime = null;
         } else {
-            endTime = <Col span={24}><span className="series_gray_le">结束时间：</span><span
-                className="series_gray_ri">{endTime}</span></Col>;
+            endTime = <Col span={24}><span className="series_gray_le">
+                   <FormattedMessage
+                       id='endTime'
+                       description='结束时间'
+                       defaultMessage='结束时间'
+                   />
+            </span>
+                <span className="series_gray_ri" style={{marginLeft:10}}>{endTime}</span></Col>;
         }
         switch (isPublish) {
             case "1":
-                isPublishStr = "已发布";
+                isPublishStr = <FormattedMessage
+                    id='published'
+                    description='已发布'
+                    defaultMessage='已发布'
+                />;
                 //出现删除、详情等按钮
                 // if(studentNum==0){
                 //     optButtons=<div>
-                //         <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,row)}></Button></Col>
+                //         <Col span={24}><Button icon="edit" className="exam-particulars_title" title="" onClick={_this.editClass.bind(_this,row)}></Button></Col>
                 //         <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
                 //
                 //     </div>;
@@ -167,11 +207,14 @@ const AntMulitiClassComponents = React.createClass({
                         optButtons = <div>
                             {/*<Col span={24}><Button icon="play-circle-o" className="exam-particulars_title liveing_color" title="直播"*/}
                             {/*onClick={_this.getClassPlayDetail.bind(_this, row)}></Button></Col>*/}
-                            <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑"
+                            <Col span={24}><Button icon="edit" className="exam-particulars_title"
+                                                   title={editButtonTip}
                                                    onClick={_this.editClass.bind(_this, id)}></Button></Col>
-                            <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情"
+                            <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title"
+                                                   title={detailsButtonTip}
                                                    onClick={_this.getClassDetail.bind(_this, row)}></Button></Col>
-                            <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
+                            <Col span={24}><Button icon="delete" className="exam-particulars_title"
+                                                   title={deletedButtonTip}
                                                    disabled={false}
                                                    onClick={_this.showConfirmDrwaModal.bind(_this, id)}></Button></Col>
 
@@ -180,11 +223,14 @@ const AntMulitiClassComponents = React.createClass({
                         optButtons = <div>
                             {/*<Col span={24}><Button icon="play-circle-o" className="exam-particulars_title liveing_color" title="直播"*/}
                             {/*onClick={this.getClassPlayDetail.bind(_this, row)}></Button></Col>*/}
-                            <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑"
+                            <Col span={24}><Button icon="edit" className="exam-particulars_title"
+                                                   title={editButtonTip}
                                                    onClick={_this.editClass.bind(_this, id)}></Button></Col>
-                            <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情"
+                            <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title"
+                                                   title={detailsButtonTip}
                                                    onClick={_this.getClassDetail.bind(_this, row)}></Button></Col>
-                            <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
+                            <Col span={24}><Button icon="delete" className="exam-particulars_title"
+                                                   title={deletedButtonTip}
                                                    disabled={true}
                                                    onClick={_this.showConfirmDrwaModal.bind(_this, id)}></Button></Col>
 
@@ -194,13 +240,16 @@ const AntMulitiClassComponents = React.createClass({
                     if (money == 0) {
                         optButtons = <div>
                             <Col span={24}><Button icon="play-circle-o" className="exam-particulars_title liveing_color"
-                                                   title="直播"
+                                                   title={livingCourseButtonTip}
                                                    onClick={_this.getClassPlayDetail.bind(_this, row)}></Button></Col>
-                            <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑"
+                            <Col span={24}><Button icon="edit" className="exam-particulars_title"
+                                                   title={editButtonTip}
                                                    onClick={_this.editClass.bind(_this, id)}></Button></Col>
-                            <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情"
+                            <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title"
+                                                   title={detailsButtonTip}
                                                    onClick={_this.getClassDetail.bind(_this, row)}></Button></Col>
-                            <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
+                            <Col span={24}><Button icon="delete" className="exam-particulars_title"
+                                                   title={deletedButtonTip}
                                                    disabled={false}
                                                    onClick={_this.showConfirmDrwaModal.bind(_this, id)}></Button></Col>
 
@@ -208,13 +257,16 @@ const AntMulitiClassComponents = React.createClass({
                     } else {
                         optButtons = <div>
                             <Col span={24}><Button icon="play-circle-o" className="exam-particulars_title liveing_color"
-                                                   title="直播"
+                                                   title={livingCourseButtonTip}
                                                    onClick={this.getClassPlayDetail.bind(_this, row)}></Button></Col>
-                            <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑"
+                            <Col span={24}><Button icon="edit" className="exam-particulars_title"
+                                                   title={editButtonTip}
                                                    onClick={_this.editClass.bind(_this, id)}></Button></Col>
-                            <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情"
+                            <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title"
+                                                   title={detailsButtonTip}
                                                    onClick={_this.getClassDetail.bind(_this, row)}></Button></Col>
-                            <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
+                            <Col span={24}><Button icon="delete" className="exam-particulars_title"
+                                                   title={deletedButtonTip}
                                                    disabled={true}
                                                    onClick={_this.showConfirmDrwaModal.bind(_this, id)}></Button></Col>
 
@@ -223,25 +275,39 @@ const AntMulitiClassComponents = React.createClass({
                 }
                 break;
             case "2":
-                isPublishStr = "未发布";
+                isPublishStr = <FormattedMessage
+                    id='unpublished'
+                    description='未发布'
+                    defaultMessage='未发布'
+                />;
                 optButtons = <div>
-                    <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情"
+                    <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title"
+                                           title={detailsButtonTip}
                                            onClick={_this.getClassDetail.bind(_this, row)}></Button></Col>
-                    <Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑"
+                    <Col span={24}><Button icon="edit" className="exam-particulars_title"
+                                           title={editButtonTip}
                                            onClick={_this.editClass.bind(_this, id)}></Button></Col>
-                    <Col span={24}><Button icon="check-circle-o" className="exam-particulars_title" title="发布"
+                    <Col span={24}><Button icon="check-circle-o" className="exam-particulars_title"
+                                           title={publishButtonTip}
                                            onClick={_this.showConfirmPushModal.bind(_this, id)}></Button></Col>
-                    <Col span={24}><Button icon="delete" className="exam-particulars_title" title="删除"
+                    <Col span={24}><Button icon="delete" className="exam-particulars_title"
+                                           title={deletedButtonTip}
                                            onClick={_this.showConfirmDrwaModal.bind(_this, id)}></Button></Col>
                 </div>;
                 break;
             case "3":
-                isPublishStr = "已删除";
+                isPublishStr = <FormattedMessage
+                    id='deleted'
+                    description='已删除'
+                    defaultMessage='已删除'
+                />;
                 optButtons = <div>
-                    <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情"
+                    <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title"
+                                           title={detailsButtonTip}
                                            onClick={_this.getClassDetail.bind(_this, row)}></Button></Col>
                     {/*<Col span={24}><Button icon="edit" className="exam-particulars_title" title="编辑" onClick={_this.editClass.bind(_this,row)}></Button></Col>*/}
-                    <Col span={24}><Button icon="check-circle-o" className="exam-particulars_title" title="发布"
+                    <Col span={24}><Button icon="check-circle-o" className="exam-particulars_title"
+                                           title={publishButtonTip}
                                            onClick={_this.showConfirmPushModal.bind(_this, id)}></Button></Col>
                 </div>;
                 break;
@@ -272,24 +338,58 @@ const AntMulitiClassComponents = React.createClass({
                                 <Col span={24}>
                                     <span
                                         className="font_gray_33 submenu_left_hidden upexam_float width_area">{courseName}</span>
-                                    <span className="series_recall upexam_float margin_left ">{isPublishStr}</span>
+                                    <span className="series_recall upexam_float margin_left ">{isPublishStr}
+                                    </span>
                                     <span className="series_recall upexam_float margin_left ">{courseTypeName}</span>
-                                    <span className="series_recall upexam_float margin_left ">微课</span>
+                                    <span className="series_recall upexam_float margin_left ">
+                                       <FormattedMessage
+                                           id='miniClass'
+                                           description='微课'
+                                           defaultMessage='微课'
+                                       />
+                                    </span>
                                 </Col>
                             </Row>
                             <Col span={24} className="price"><span className="c-jg price_between">￥{money}</span><span
                                 className="price_between gray_line"></span><span
-                                className=" price_between font-14">共{videoNum}课时</span></Col>
-                            <Col span={24}><span className="series_gray_le">主讲老师：</span><span
-                                className="series_gray_ri">{userSpanArray}</span></Col>
-                            <Col span={24}><span className="series_gray_le">创课时间：</span><span
-                                className="series_gray_ri">{createTime}
+                                className=" price_between font-14">
+                                共{videoNum}课时
+                            </span></Col>
+                            <Col span={24}><span className="series_gray_le">
+                               <FormattedMessage
+                                   id='teacher'
+                                   description='授课老师'
+                                   defaultMessage='授课老师'
+                               />
+                            </span>
+                                <span className="series_gray_ri" style={{marginLeft:10}} >{userSpanArray}</span></Col>
+                            <Col span={24}><span className="series_gray_le">
+                                      <FormattedMessage
+                                          id='creatTime'
+                                          description='创课时间'
+                                          defaultMessage='创课时间'
+                                      />
+                            </span>
+                                <span className="series_gray_ri" style={{marginLeft:10}}>{createTime}
                         </span></Col>
-                            <Col span={24}><span className="series_gray_le">知识点：</span><span
-                                className="series_gray_ri">{newNameTotal}</span>
+                            <Col span={24}><span className="series_gray_le">
+                                {/*知识点：*/}
+                                   <FormattedMessage
+                                       id='knowledgePoint'
+                                       description='知识点'
+                                       defaultMessage='知识点'
+                                   />
+                            </span>
+                                <span className="series_gray_ri" style={{marginLeft:10}}>{newNameTotal}</span>
                             </Col>
-                            <Col span={24}><span className="series_gray_le">课程概述：</span><span
-                                className="series_gray_ri">{content}</span></Col>
+                            <Col span={24}><span className="series_gray_le">
+                                 <FormattedMessage
+                                     id='courseDescription'
+                                     description='课程概述'
+                                     defaultMessage='课程概述'
+                                 />
+                            </span>
+                                <span className="series_gray_ri" style={{marginLeft:10}}>{content}</span></Col>
                         </Row>
                     </Col>
                     <Col span={2}>
@@ -319,18 +419,39 @@ const AntMulitiClassComponents = React.createClass({
                             <Col span={24} className="price"><span className="c-jg price_between">￥{money}</span><span
                                 className="price_between gray_line"></span><span
                                 className=" price_between font-14">共{videoNum}课时</span></Col>
-                            <Col span={24}><span className="series_gray_le">主讲老师：</span><span
-                                className="series_gray_ri">{userSpanArray}</span></Col>
-                            <Col span={24}><span className="series_gray_le">开始时间：</span><span
-                                className="series_gray_ri">{firstLiveTime}</span></Col>
+                            <Col span={24}><span className="series_gray_le">
+                                {/*主讲老师：*/}
+                             <FormattedMessage
+                                 id='teacher'
+                                 description='授课老师'
+                                 defaultMessage='授课老师'
+                             />
+                            </span>
+                                <span className="series_gray_ri" style={{marginLeft:10}}>{userSpanArray}</span></Col>
+                            <Col span={24}><span className="series_gray_le">
+                                {/*开始时间：*/}
+                              <FormattedMessage
+                                  id='creatTime'
+                                  description='创课时间'
+                                  defaultMessage='创课时间'
+                              />
+                            </span>
+                                <span className="series_gray_ri" style={{marginLeft:10}}>{firstLiveTime}</span></Col>
                             {endTime}
                             {/*<Col span={24}><span className="series_gray_le">排课时间：</span><span*/}
                             {/*className="series_gray_ri">{firstLiveTime}</span>*/}
                             {/*</Col>*/}
                             {/*<Col span={24}><span className="series_gray_le">知识点：</span><span*/}
                             {/*className="series_gray_ri">{newNameTotal}</span></Col>*/}
-                            <Col span={24}><span className="series_gray_le">课程概述：</span><span
-                                className="series_gray_ri">{content}</span></Col>
+                            <Col span={24}><span className="series_gray_le">
+                                {/*课程概述：*/}
+                             <FormattedMessage
+                                 id='courseDescription'
+                                 description='课程概述'
+                                 defaultMessage='课程概述'
+                             />
+                            </span>
+                                <span className="series_gray_ri" style={{marginLeft:10}}>{content}</span></Col>
                         </Row>
                     </Col>
                     <Col span={2}>
@@ -722,7 +843,8 @@ const AntMulitiClassComponents = React.createClass({
                     //播放按钮
                     var playButton;
                     if (video.userID == userId && video.videoStatus != "3") {
-                        playButton = <Button icon="play-circle-o" className="exam-particulars_title" title="直播"
+                        playButton = <Button icon="play-circle-o" className="exam-particulars_title"
+                                             title='直播'
                                              onClick={_this.openLive.bind(_this, video, "mulitiClass")}></Button>;
                     }
                     var liveTimeStr = formatNoSecond(video.liveTime);
@@ -944,23 +1066,82 @@ const AntMulitiClassComponents = React.createClass({
 
         if (isEmpty(this.state.stepDirect) || this.state.stepDirect == "pre") {
             saveButtons = [
-                <Button onClick={this.changeStep.bind(this, "next", "save")}>下一步</Button>,
-                <Button onClick={this.createClassModalHandleCancel}>关闭</Button>
+                <Button onClick={this.changeStep.bind(this, "next", "save")}>
+                    <FormattedMessage
+                        id='next'
+                        description='下一步'
+                        defaultMessage='下一步'
+                    />
+                </Button>,
+                <Button onClick={this.createClassModalHandleCancel}>
+                    <FormattedMessage
+                        id='close'
+                        description='关闭'
+                        defaultMessage='关闭'
+                    /></Button>
             ];
             var updateButtons = [
-                <Button onClick={this.changeStep.bind(this, "next", "update")}>下一步</Button>,
-                <Button onClick={this.updateClassModalHandleCancel}>关闭</Button>
+                <Button onClick={this.changeStep.bind(this, "next", "update")}>
+                    <FormattedMessage
+                        id='next'
+                        description='下一步'
+                        defaultMessage='下一步'
+                    />
+                </Button>,
+                <Button onClick={this.updateClassModalHandleCancel}>
+                    <FormattedMessage
+                        id='close'
+                        description='关闭'
+                        defaultMessage='关闭'
+                    />
+                </Button>
             ];
         } else if (this.state.stepDirect == "next") {
             saveButtons = [
-                <Button onClick={this.changeStep.bind(this, "pre", "save")}>上一步</Button>,
-                <Button onClick={this.saveClassInfo.bind(this, "save")}>提交</Button>,
-                <Button onClick={this.createClassModalHandleCancel}>关闭</Button>
+                <Button onClick={this.changeStep.bind(this, "pre", "save")}>
+                    <FormattedMessage
+                        id='back'
+                        description='上一步'
+                        defaultMessage='上一步'
+                    />
+                </Button>,
+                <Button onClick={this.saveClassInfo.bind(this, "save")}>
+                    <FormattedMessage
+                        id='submit'
+                        description='提交'
+                        defaultMessage='提交'
+                    />
+                </Button>,
+                <Button onClick={this.createClassModalHandleCancel}>
+                    <FormattedMessage
+                        id='close'
+                        description='关闭'
+                        defaultMessage='关闭'
+                    />
+                </Button>
             ];
             var updateButtons = [
-                <Button onClick={this.changeStep.bind(this, "pre", "update")}>上一步</Button>,
-                <Button onClick={this.saveClassInfo.bind(this, "update")}>提交</Button>,
-                <Button onClick={this.updateClassModalHandleCancel}>关闭</Button>
+                <Button onClick={this.changeStep.bind(this, "pre", "update")}>
+                    <FormattedMessage
+                        id='back'
+                        description='上一步'
+                        defaultMessage='上一步'
+                    />
+                </Button>,
+                <Button onClick={this.saveClassInfo.bind(this, "update")}>
+                    <FormattedMessage
+                        id='submit'
+                        description='提交'
+                        defaultMessage='提交'
+                    />
+                </Button>,
+                <Button onClick={this.updateClassModalHandleCancel}>
+                    <FormattedMessage
+                        id='close'
+                        description='关闭'
+                        defaultMessage='关闭'
+                    />
+                </Button>
             ];
         }
 
@@ -970,16 +1151,46 @@ const AntMulitiClassComponents = React.createClass({
                     <div>
                         <RadioGroup value={this.state.fliterValue} onChange={this.fliterOnChange}
                                     className="series_choose">
-                            <Radio value="0">全部</Radio>
-                            <Radio value="1">直播课</Radio>
-                            <Radio value="3">微课</Radio>
+                            <Radio value="0">
+                                <FormattedMessage
+                                    id='all'
+                                    description='全部'
+                                    defaultMessage='全部'
+                                />
+                            </Radio>
+                            <Radio value="1">
+                                <FormattedMessage
+                                    id='liveClass'
+                                    description='直播课'
+                                    defaultMessage='直播课'
+                                />
+                            </Radio>
+                            <Radio value="3">
+                                <FormattedMessage
+                                    id='miniClass'
+                                    description='微课'
+                                    defaultMessage='微课'
+                                />
+                            </Radio>
                         </RadioGroup>
                         {/*<Input placeholder="请输入课程名"/>*/}
                         <Select value={this.state.classFliterValue} className='select_publish'
                                 onChange={this.slectFilterOnChange}>
                             {/*<Option value="0">全部</Option>*/}
-                            <Option value="1">已发布</Option>
-                            <Option value="2">未发布</Option>
+                            <Option value="1">
+                                <FormattedMessage
+                                    id='published'
+                                    description='已发布'
+                                    defaultMessage='已发布'
+                                />
+                            </Option>
+                            <Option value="2">
+                                <FormattedMessage
+                                    id='unpublished'
+                                    description='未发布'
+                                    defaultMessage='未发布'
+                                />
+                            </Option>
                         </Select>
                         <div className="details">
                             {this.state.cardArray}
@@ -989,7 +1200,13 @@ const AntMulitiClassComponents = React.createClass({
                     <Pagination total={this.state.total} pageSize={getPageSize()} current={this.state.currentPage}
                                 onChange={this.pageOnChange}/>
                 </div>
-                <Modal className="modal_course" title="创建课程" visible={this.state.createClassModalVisible}
+                <Modal className="modal_course"
+                       title={<FormattedMessage
+                           id='createNewLesson'
+                           description='创建课程'
+                           defaultMessage='创建课程'
+                       />}
+                       visible={this.state.createClassModalVisible}
                        onCancel={this.createClassModalHandleCancel}
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
@@ -1007,7 +1224,13 @@ const AntMulitiClassComponents = React.createClass({
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
                        footer={[
-                           <Button onClick={this.classDetailModalHandleCancel}>关闭</Button>
+                           <Button onClick={this.classDetailModalHandleCancel}>
+                               <FormattedMessage
+                                   id='close'
+                                   description='关闭'
+                                   defaultMessage='关闭'
+                               />
+                           </Button>
                        ]}
                 >
                     <div className="space">
@@ -1045,7 +1268,13 @@ const AntMulitiClassComponents = React.createClass({
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭
                        footer={[
-                           <Button onClick={this.classPlayDetailModalHandleCancel}>关闭</Button>
+                           <Button onClick={this.classPlayDetailModalHandleCancel}>
+                               <FormattedMessage
+                                   id='close'
+                                   description='关闭'
+                                   defaultMessage='关闭'
+                               />
+                           </Button>
                        ]}
                 >
                     <div className="space">

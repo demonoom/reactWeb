@@ -6,6 +6,11 @@ import OpenClassComponents from './OpenClassComponents';
 import MyMessageComponents from './MyMessageComponents';
 import {doWebService_CloudClassRoom} from '../../utils/CloudClassRoomURLUtils';
 import RecommendComponents from './RecommendComponents';
+//国际化
+import {IntlProvider, addLocaleData} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
+import zh from 'react-intl/locale-data/zh';
+import en from 'react-intl/locale-data/en';
 
 var loginUserId = sessionStorage.getItem("ident");
 
@@ -86,7 +91,13 @@ const AntCloudClassRoomComponents = React.createClass({
         var leftBtn;
         let topButton;
         let createClassBtn = <span className="btn2 talk_ant_btn1">
-            <Button className="ant-btn ant-btn-primary add_study" onClick={this.createClass}>创建新课程</Button>
+            <Button className="ant-btn ant-btn-primary add_study" onClick={this.createClass}>
+                  <FormattedMessage
+                      id='createNewLesson'
+                      description='创建新课程'
+                      defaultMessage='创建新课程'
+                  />
+            </Button>
         </span>;
         let teamBtn = <span className="btn2 talk_ant_btn1">
             <Button className="ant-btn ant-btn-primary add_study series_top_btn2"

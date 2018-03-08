@@ -2619,7 +2619,7 @@ const MainLayout = React.createClass({
                                 <b className="ding_alert" ref='msgAlert'></b>
                                 <div className="tan">
                                     <FormattedMessage
-                                        id='dynamic'
+                                        id='chat'
                                         description='动态'
                                         defaultMessage='动态'
                                     />
@@ -2627,32 +2627,71 @@ const MainLayout = React.createClass({
                             </Menu.Item>
                             <Menu.Item key="antNest" className="padding_menu">
                                 <i className="icon_menu_ios icon_yichao1"></i>
-                                <div className="tan">蚁巢</div>
+                                <div className="tan">
+                                    <FormattedMessage
+                                        id='antNest'
+                                        description='蚁巢'
+                                        defaultMessage='蚁巢'
+                                    />
+                                </div>
                             </Menu.Item>
                             <Menu.Item key="teachSpace" className="padding_menu">
                                 <i className="icon_menu_ios icon_jiaoxue"></i>
-                                <div className="tan">教学空间</div>
+                                <div className="tan">
+                                    <FormattedMessage
+                                        id='teachingSpace'
+                                        description='教学空间'
+                                        defaultMessage='教学空间'
+                                    />
+                                </div>
                             </Menu.Item>
                             <Menu.Item key="antGroup" className="padding_menu">
                                 <i className="icon_menu_ios icon_antgroup"></i>
-                                <div className="tan">蚁群</div>
+                                <div className="tan">
+                                    <FormattedMessage
+                                        id='contacts'
+                                        description='蚁群'
+                                        defaultMessage='蚁群'
+                                    />
+                                </div>
                             </Menu.Item>
                             <Menu.Item key="antCloudClassRoom" className="padding_menu">
                                 <i className="icon_menu_ios icon_cloud"></i>
-                                <div className="tan">云校</div>
+                                <div className="tan">
+                                    <FormattedMessage
+                                        id='cloudClass'
+                                        description='云校'
+                                        defaultMessage='云校'
+                                    />
+                                </div>
                             </Menu.Item>
                             <Menu.Item key="antCloud" className="padding_menu">
                                 <i className="icon_menu_ios icon_antdisk"></i>
-                                <div className="tan">蚁盘</div>
+                                <div className="tan">
+                                    <FormattedMessage
+                                        id='cloudDisk'
+                                        description='蚁盘'
+                                        defaultMessage='蚁盘'
+                                    /></div>
                             </Menu.Item>
                             <Menu.Item key="systemSetting" className="padding_menu">
                                 <i className="icon_menu_ios icon_schoolGroup"></i>
-                                <div className="tan">教务管理</div>
+                                <div className="tan">
+                                    <FormattedMessage
+                                        id='courseMangement'
+                                        description='教务管理'
+                                        defaultMessage='教务管理'
+                                    /></div>
                             </Menu.Item>
                             <Menu.Item key="dingMessage" className="padding_menu">
                                 <i className="icon_menu_ios icon_ding"></i>
                                 <b className="ding_alert" ref='dingAlert'></b>
-                                <div className="tan">叮一下</div>
+                                <div className="tan">
+                                    <FormattedMessage
+                                        id='notificationCenter'
+                                        description='叮一下'
+                                        defaultMessage='叮一下'
+                                    /></div>
                             </Menu.Item>
                             <FloatButton ref="floatButton" messageUtilObj={ms}/>
                         </Menu>

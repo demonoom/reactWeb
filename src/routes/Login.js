@@ -1,11 +1,12 @@
 import React, { PropTypes } from 'react';
-import { Form, Icon, Input, Button, message,Tabs } from 'antd';
+import { Form, Icon, Input, Button, message,Tabs,Switch} from 'antd';
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 import { doWebService } from '../WebServiceHelper';
 import {doWebService_CloudClassRoom} from '../utils/CloudClassRoomURLUtils';
 import {SimpleWebsocketConnection} from '../utils/simple_websocket_connection.js';
 import {isEmpty,setLocalLanaguage,getMessageFromLanguage, getLocalFromLanguage} from '../utils/utils';
+import HeaderComponents from '../components/HeaderComponents';
 //国际化
 import {IntlProvider, addLocaleData} from 'react-intl';
 import {FormattedMessage} from 'react-intl';
@@ -25,7 +26,7 @@ const Login = Form.create()(React.createClass({
         return {
             code: '',
             isValidateCode:false,
-            loginFailedCount:0,
+            loginFailedCount:0
         };
     },
 
@@ -200,6 +201,14 @@ const Login = Form.create()(React.createClass({
             }
         });
     },
+    /**
+     *语言切换的回调
+     */
+    checkoutLanguage(checked) {
+        //在此处切换isDefineLanguage值
+        setLocalLanaguage(checked);
+        location.href="/#/login";
+    },
 
     getHistoryAccessPointId(userId){
         var param = {
@@ -264,6 +273,35 @@ const Login = Form.create()(React.createClass({
     },
 
     render() {
+        var defaultChecked;
+        var userNameTip='Username';
+        var passwordTip='password';
+        if (isEmpty(localStorage.getItem("language"))) {
+            //true是英文，false是中文
+            //localStorage中没有语言，才用浏览器默认语言
+            if (navigator.language == 'zh-CN') {
+                defaultChecked = false;
+                userNameTip = "请输入用户名";
+                passwordTip='请输入密码';
+            } else {
+                defaultChecked = true;
+                userNameTip = "Username";
+                passwordTip='password';
+            }
+        } else {
+            //根据localStorage中的来设置
+            var lan = localStorage.getItem("language");
+            if (lan == "zh-CN") {
+                defaultChecked = false;
+                userNameTip = "请输入用户名";
+                passwordTip='请输入密码';
+            } else {
+                defaultChecked = true;
+                userNameTip = "Username";
+                passwordTip='password';
+            }
+        }
+
         var messageFromLanguage = getMessageFromLanguage();
         var local = getLocalFromLanguage();
         const { getFieldDecorator } = loginComponent.props.form;
@@ -310,36 +348,56 @@ const Login = Form.create()(React.createClass({
                                         defaultMessage='扫码登录'
                                     />} key="1">
                                         {this.state.loginImg}
-                                        <div className="login_ewm">请使用小蚂蚁移动教学扫二维码登录</div>
+                                        <div className="login_ewm">
+                                            <FormattedMessage
+                                                id='pleaseLogin'
+                                                description='请使用小蚂蚁移动教学扫二维码登录'
+                                                defaultMessage='请使用小蚂蚁移动教学扫二维码登录'
+                                            />
+                                        </div>
                                     </TabPane>
-                                    <TabPane tab="密码登录" key="2">
+                                    <TabPane tab={<FormattedMessage
+                                        id='PasswordLogin'
+                                        description='密码登录'
+                                        defaultMessage='密码登录'
+                                    />}
+                                             key="2">
                                         <Form onSubmit={loginComponent.handleSubmit} className="login-form">
                                             <FormItem {...formItemLayout} >
                                                 {getFieldDecorator('userName',{
-                                                    rules: [{ required: true, message: '请输入用户名!' }],
+                                                    rules: [{ required: true, message: userNameTip }],
                                                 })(
-                                                    <Input addonBefore={<Icon type="user" />} placeholder="请输入用户名"/>
+                                                    <Input addonBefore={<Icon type="user" />} placeholder={userNameTip}/>
                                                 )}
                                             </FormItem>
                                             <FormItem {...formItemLayout} >
                                                 {getFieldDecorator('password',{
-                                                    rules: [{ required: true, message: '请输入密码!' }],
+                                                    rules: [{ required: true, message: passwordTip }],
                                                 })(
-                                                    <Input addonBefore={<Icon type="lock" />} type="password" placeholder="请输入密码"/>
+                                                    <Input addonBefore={<Icon type="lock" />} type="password" placeholder={passwordTip}/>
                                                 )}
                                             </FormItem>
                                             {codeDiv}
 
                                             <div className="login_buton">
                                                 <Button type="primary" htmlType="submit" className="login-form-button login_buton">
-                                                    登录
+                                                    <FormattedMessage
+                                                        id='login'
+                                                        description='登录'
+                                                        defaultMessage='登录'
+                                                    />
                                                 </Button>
                                             </div>
 
                                         </Form>
                                     </TabPane>
-
                                 </Tabs>
+                                <div className="switchStyle">
+                                    <Switch checkedChildren="中文" unCheckedChildren="English"
+                                         onChange={this.checkoutLanguage}
+                                        defaultChecked={defaultChecked}
+                                    />
+                                </div>
                             </div>
 
                         </div>
