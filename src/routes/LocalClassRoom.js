@@ -235,12 +235,13 @@ const LocalClassRoom = React.createClass({
         var classIfream = null;
         if (isEmpty(this.state.classRoomUrl) == false) {
             classIfream = <div className="classroom_draw"><iframe src={this.state.classRoomUrl} style={{width: '100%', height: '100%'}}></iframe></div>;
-        }else{
+        }else {
             classIfream = <div className="classroom_welcome">
-                <video width="954" height="584" autoPlay="autoPlay" className="center_all" >
-                    <source src="https://www.maaee.com/upload2/common/board_welcome2.mp4" type="video/mp4" />
+                <video width="954" height="584" autoPlay="autoPlay" className="center_all">
+                    <source src="https://www.maaee.com/upload2/common/board_welcome2.mp4" type="video/mp4"/>
                 </video>
             </div>
+        }
             return (
                 <div className="local_class flex">
                     <div className="flex_auto classroom_left">
@@ -278,8 +279,6 @@ const LocalClassRoom = React.createClass({
                     />
                 </div>
             );
-
-        }
     },
 
 });
