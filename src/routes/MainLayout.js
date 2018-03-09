@@ -2891,7 +2891,7 @@ const MainLayout = React.createClass({
                         ]}
                         width={700}
                     >
-                        <div style={{display: this.state.creatInput, marginBottom: '20px'}}>
+                        <div style={{display: this.state.creatInput, marginBottom: '14px'}}>
                             <Input
                                 placeholder="请输入群名称"
                                 value={this.state.groupCreatName}

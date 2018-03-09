@@ -3,7 +3,7 @@ import {Card, Radio, Row, Col, Button, Icon, message, Steps, Modal, Form, Pagina
 import {doWebService_CloudClassRoom, TEACH_LIVE_URL} from '../../utils/CloudClassRoomURLUtils';
 import {getPageSize} from '../../utils/Const';
 import {getLocalTime, formatYMD, formatHM, formatNoSecond} from '../../utils/utils';
-import {isEmpty, cutString} from '../../utils/utils';
+import {isEmpty, cutString,getLocalFromLanguage} from '../../utils/utils';
 import ConfirmModal from '../ConfirmModal';
 import CreateClassComponents from './CreateClassComponents';
 import UpdateClassComponents from './UpdateClassComponents';
@@ -783,6 +783,10 @@ const AntMulitiClassComponents = React.createClass({
             message.warning('未到开课时间');
             return;
         }
+        var localLanguage=getLocalFromLanguage();
+        if(localLanguage=="zh"){
+            localLanguage = "zh-CN";
+        }
         //在执行ajax请求前，打开一个空白的新窗口
         var newTab = window.open('about:blank');
         doWebService_CloudClassRoom(JSON.stringify(param), {
@@ -810,8 +814,7 @@ const AntMulitiClassComponents = React.createClass({
                     targetId = liveObj.id;
                     title = liveObj.name;
                 }
-                requestUrl += userId + "/" + targetType + "/" + targetId + "/" + title;
-                // window.open(requestUrl);
+                requestUrl += userId + "/" + targetType + "/" + targetId + "/" + title+"/"+localLanguage;
                 //将之前打开的新窗口重定向到当前指定的路径上（目的：解决在ajax中打开新窗口被拦截的问题）
                 newTab.location.href = requestUrl;
             },
@@ -913,14 +916,44 @@ const AntMulitiClassComponents = React.createClass({
                                 <Col span={21} className="font_gray_33">{classObj.courseName}</Col>
                             </Row>
                             <Col span={24} className="ant-form-item">
-                                <span className="series_gray_le">排课时间：</span>
+                                <span className="series_gray_le">
+                                    <FormattedMessage
+                                        id='LessonSchedule'
+                                        description='排课时间'
+                                        defaultMessage='排课时间'
+                                    />
+                                </span>
                                 <ul>
                                     <li className="course_section">
                                         <div className="course_section_title">
-                                            <span className="name">章节名称</span>
-                                            <span className="cont">授课老师</span>
-                                            <span className="cont">授课时间</span>
-                                            <span className="cont3">操作</span>
+                                            <span className="name">
+                                                <FormattedMessage
+                                                    id='LessonName'
+                                                    description='章节名称'
+                                                    defaultMessage='章节名称'
+                                                />
+                                            </span>
+                                            <span className="cont">
+                                                <FormattedMessage
+                                                    id='Teacher'
+                                                    description='授课老师'
+                                                    defaultMessage='授课老师'
+                                                />
+                                            </span>
+                                            <span className="cont">
+                                                <FormattedMessage
+                                                    id='Time'
+                                                    description='授课时间'
+                                                    defaultMessage='授课时间'
+                                                />
+                                            </span>
+                                            <span className="cont3">
+                                                <FormattedMessage
+                                                    id='Operate'
+                                                    description='操作'
+                                                    defaultMessage='操作'
+                                                />
+                                            </span>
                                         </div>
                                     </li>
                                     {videoLiTagArray}
@@ -1263,7 +1296,13 @@ const AntMulitiClassComponents = React.createClass({
                               onConfirmModalCancel={this.closeConfirmDrawModal}
                               onConfirmModalOK={this.withDrawClass}
                 ></ConfirmModal>
-                <Modal className="modal_classDetail" title="直播章节" visible={this.state.classPlayDetailModalVisible}
+                <Modal className="modal_classDetail" title={
+                    <FormattedMessage
+                        id='courseInformationOpen'
+                        description='直播章节'
+                        defaultMessage='直播章节'
+                    />
+                } visible={this.state.classPlayDetailModalVisible}
                        onCancel={this.classPlayDetailModalHandleCancel}
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭

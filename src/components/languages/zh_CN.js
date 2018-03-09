@@ -70,7 +70,12 @@ const zh_CN = {
     knowledgePoint:"知识点",
     endTime:'结束时间',
     deleted:"删除",
-
+    courseInformationOpen:'直播章节',
+    LessonSchedule:'排课时间',
+    LessonName:'章节名称',
+    Teacher:'授课老师',
+    Time:'授课时间',
+    Operate:'操作',
 
 };
 export default zh_CN;
