@@ -3,7 +3,7 @@ import {Card, Radio, Row, Col, Button, Icon, message, Steps, Modal, Form, Pagina
 import {doWebService_CloudClassRoom, TEACH_LIVE_URL} from '../../utils/CloudClassRoomURLUtils';
 import {getPageSize} from '../../utils/Const';
 import {getLocalTime, formatYMD, formatHM, formatNoSecond} from '../../utils/utils';
-import {isEmpty, cutString,getLocalFromLanguage} from '../../utils/utils';
+import {isEmpty, cutString,getLocalFromLanguage,isToday} from '../../utils/utils';
 import ConfirmModal from '../ConfirmModal';
 import CreateClassComponents from './CreateClassComponents';
 import UpdateClassComponents from './UpdateClassComponents';
@@ -773,14 +773,21 @@ const AntMulitiClassComponents = React.createClass({
         //0:课程   1 章节  targetType
         var originTime = liveObj.liveTime;
         //获取当前时间 时间戳
-        var rightTime = Date.parse(new Date());
+        var rightTime = new Date();
         var _this = this;
         var param = {
             "method": 'findVideoById',
             "id": liveObj.id,
         };
-        if (originTime > rightTime) {
+        var isCurrentDay = isToday(originTime);
+        var min=rightTime.getMinutes();
+        rightTime.setMinutes(min+5);
+        console.log(rightTime.toLocaleString());
+        if (originTime > Date.parse(rightTime)) {
             message.warning('未到开课时间');
+            return;
+        }else if(isCurrentDay===false){
+            message.warning('授课时间已过，请修正后再重新开课，谢谢！',6);
             return;
         }
         var localLanguage=getLocalFromLanguage();
@@ -935,6 +942,7 @@ const AntMulitiClassComponents = React.createClass({
                                         description='排课时间'
                                         defaultMessage='排课时间'
                                     />
+                                    <span>(云校直播可以提前5分钟开课)</span>
                                 </span>
                                         <ul>
                                             <li className="course_section">
