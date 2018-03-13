@@ -8795,7 +8795,7 @@ select.course_n:hover {
 }
 
 .add_member_menu {
-    width: 33%;
+    width: 25%;
     display: inline-block;
     text-align: center;
     border-bottom: 1px solid #eee;
@@ -8809,10 +8809,10 @@ select.course_n:hover {
 }
 
 .add_member_menu_tab {
-    width: 50%;
+    width: 65%;
 }
 .add_member_menu_search {
-    width: 45%;
+    width: 30%;
     float: right;
 }
 .add_member_menu_search2 {
