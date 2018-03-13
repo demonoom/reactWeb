@@ -509,9 +509,6 @@ const MainLayout = React.createClass({
             target = e.target;
         }
         var nowThinking = target.value;
-        // if (isEmpty(nowThinking)) {
-        //     nowThinking = "这是一个云盘分享的文件";
-        // }
         this.setState({"nowThinking": nowThinking});
     },
 
@@ -1137,6 +1134,7 @@ const MainLayout = React.createClass({
         this.state.selectedRowKeys = [];
         this.state.userNameFromOri = '';
         this.state.groupCreatName = '';
+        this.state.nowThinking = '';
         this.state.tags = [];
         selectArr = [];
         this.setState({"addDeGroupMemberModalVisible": false});
@@ -1531,7 +1529,6 @@ const MainLayout = React.createClass({
     shareFilesNew() {
         var _this = this;
         var memberTargetkeys = this.state.selectedRowKeys;
-
         var nowThinking = this.state.nowThinking;
         var shareSrc = this.state.shareSrc;
         var shareTitle = this.state.shareTitle;
@@ -1540,7 +1537,7 @@ const MainLayout = React.createClass({
         var messageToPer = 1;//根据接收者是群组还是个人来决定
         var messageToGrp = 4;
 
-        if (typeof(nowThinking) == 'undefined') {
+        if (typeof(nowThinking) == 'undefined' || nowThinking == '') {
             nowThinking = '这是一个云盘分享的文件'
         }
 
@@ -1584,7 +1581,7 @@ const MainLayout = React.createClass({
                 var commandJson = {"command": "message", "data": {"message": messageJson}};
                 ms.send(commandJson);
             }
-        })
+        });
         this.addDeGroupMemberModalHandleCancel();
     },
 
@@ -3007,7 +3004,8 @@ const MainLayout = React.createClass({
                         width={700}
                     >
                         <div style={{display: this.state.idea, marginBottom: '14px'}}>
-                            <Input type="textarea" rows={2} placeholder="这一刻的想法"/>
+                            <Input type="textarea" rows={2} placeholder="这一刻的想法" value={this.state.nowThinking}
+                                   onChange={this.nowThinkingInputChange}/>
                         </div>
                         <div style={{display: this.state.creatInput, marginBottom: '14px'}}>
                             <Input
