@@ -250,8 +250,6 @@ const NschoolGroupSettingComponents = React.createClass({
      * @param structureId
      */
     getStrcutureMembers(structureId, pageNo) {
-        console.log('这是1');
-        console.log(structureId);
         let _this = this;
         var structureId = structureId + '';
 
@@ -265,11 +263,9 @@ const NschoolGroupSettingComponents = React.createClass({
             "structureId": structureId,
             "pageNo": pageNo,
         };
-        console.log(param);
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var response = ret.response;
-                console.log(response);
                 if (isEmpty(response) == false) {
                     response.forEach(function (member) {
                         var user = member.user;
@@ -454,7 +450,6 @@ const NschoolGroupSettingComponents = React.createClass({
 
     addSubGroupComplete(key) {
         var _this = this;
-        console.log(key);
         var root;
         root = structuresObjArray[0].id;
         if(root == key){

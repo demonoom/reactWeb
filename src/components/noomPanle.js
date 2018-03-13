@@ -245,7 +245,6 @@
     littlePanle.prototype.sharePanel = function () {
         //分享移动网页
         var iframe = this.ifrel[0];
-        console.log(iframe);
         window.__noomShareMbile__(iframe.src, titleNoom);
 
     };

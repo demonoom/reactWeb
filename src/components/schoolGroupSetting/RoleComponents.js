@@ -63,8 +63,6 @@ const RoleComponents = React.createClass({
 
                 var selectedPapa = papaArr[0];
                 this.props.defaultId.forEach(function (v,i) {
-                    console.log(v);
-                    console.log(selectedPapa);
                     if(v == selectedPapa) {
                         _this.setState({disabled:true});
                     } else{
@@ -188,7 +186,6 @@ const RoleComponents = React.createClass({
             title: '确定删除?',
             onOk() {
                 var selectedMem = _this.state.selectedRowKeys;
-                // console.log(selectedMem);
                 var userIds = '';
                 selectedMem.forEach(function (v,i) {
                     userIds += v + ',';
@@ -200,10 +197,8 @@ const RoleComponents = React.createClass({
                     "roleId": _this.state.roleId,
                     "userIds": userIds.substr(0,userIds.length-1)
                 };
-                // console.log(param);
                 doWebService(JSON.stringify(param), {
                     onResponse: function (ret) {
-                        // console.log(ret);
                         if(ret.success==true && ret.msg=="调用成功") {
                             message.success("删除成功");
                             _this.ajaxData(_this.state.roleId);

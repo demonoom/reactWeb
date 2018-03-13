@@ -55,6 +55,8 @@ import {createStore} from 'redux';
 
 const Panel = Collapse.Panel;
 
+const {TextArea} = Input;
+
 const RadioGroup = Radio.Group;
 
 const CheckboxGroup = Checkbox.Group;
@@ -222,11 +224,12 @@ const MainLayout = React.createClass({
      * @param src
      */
     noomShareMbile(src, title) {
-        this.getAntGroup();
-        this.getStructureUsers();
-        this.getRecentContents();
+        this.showAddMembersModal(999);
         this.setState({shareSrc: src, shareTitle: title});
-        this.setState({shareModalVisible: true});
+        // this.getAntGroup();
+        // this.getStructureUsers();
+        // this.getRecentContents();
+        // this.setState({shareModalVisible: true});
     },
 
     collapseChange(key) {
@@ -287,41 +290,6 @@ const MainLayout = React.createClass({
                     });
                     _this.setState({"groupOptions": groupOptions});
                 }
-            },
-            onError: function (error) {
-                message.error(error);
-            }
-        });
-    },
-
-    /**
-     * 获取联系人列表
-     */
-    getAntGroup() {
-        var _this = this;
-        var param = {
-            "method": 'getUserContacts',
-            "ident": sessionStorage.getItem("ident"),
-        };
-        doWebService(JSON.stringify(param), {
-            onResponse: function (ret) {
-                var response = ret.response;
-                var i = 0;
-                var concatOptions = [];
-                for (var i = 0; i < response.length; i++) {
-                    if (response[i].colUid == 41451 || response[i].colUid == 138437 || response[i].colUid == 142033 || response[i].colUid == 139581) {
-                        continue
-                    }
-                    var userId = response[i].colUid;
-                    var userName = response[i].userName;
-                    var imgTag = <img src={response[i].avatar} className="antnest_38_img" height="38"></img>;
-                    var userNameTag = <div>{imgTag}<span>{userName}</span></div>;
-                    var userJson = {label: userNameTag, value: userId};
-                    if (userId != sessionStorage.getItem("ident")) {
-                        concatOptions.push(userJson);
-                    }
-                }
-                _this.setState({"concatOptions": concatOptions});
             },
             onError: function (error) {
                 message.error(error);
@@ -710,7 +678,7 @@ const MainLayout = React.createClass({
 
     creatGroup() {
         //创建群聊
-        this.showAddMembersModal(99)
+        this.showAddMembersModal(99);
     },
 
     /**
@@ -730,6 +698,8 @@ const MainLayout = React.createClass({
                 inputClassName: 'ant-form-item add_member_menu_search2 line_block',
                 creatInput: 'none',
                 superTitleName: '添加群成员',
+                groupDiv: 'none',
+                idea: 'none',
             });
         } else if (type == 99) {
             //创建群聊
@@ -744,6 +714,24 @@ const MainLayout = React.createClass({
                 inputClassName: 'ant-form-item add_member_menu_search line_block',
                 creatInput: 'block',    //控制创建群名搜索框
                 superTitleName: '创建群聊',
+                groupDiv: 'none',
+                idea: 'none',
+            });
+        } else if (type == 999) {
+            //分享想法
+            this.getRecentShareUsers();
+            this.setState({
+                "addDeGroupMemberModalVisible": true,
+                originDiv: 'inline-block',
+                OriUserNotOrIf: 'block',
+                OriUserIfOrNot: 'none',
+                originFlag: false,
+                searchArea: 'defaultArea',
+                inputClassName: 'ant-form-item add_member_menu_search line_block',
+                creatInput: 'none',    //控制创建群名搜索框
+                idea: 'block',    //控制想法textarea
+                superTitleName: '分享文件',
+                groupDiv: 'inline-block',
             });
         } else {
             //普通群
@@ -761,6 +749,8 @@ const MainLayout = React.createClass({
                 inputClassName: 'ant-form-item add_member_menu_search line_block',
                 creatInput: 'none',
                 superTitleName: '添加群成员',
+                groupDiv: 'none',
+                idea: 'none',
             });
         }
     },
@@ -825,6 +815,64 @@ const MainLayout = React.createClass({
             userNameFromOri: ''  //解决搜索框有内容去切换头部无效的问题
         });
     },
+
+    /**
+     * 普通群加人我的群组被点击
+     */
+    groupClicked(e) {
+        var arr = document.getElementsByClassName('add_member_menu');
+        for (var i = 0; i < arr.length; i++) {
+            arr[i].className = 'add_member_menu noom_cursor'
+        }
+        e.target.className = 'add_member_menu noom_cursor add_member_menu_select';
+        //改变dataSourse
+        //显示隐藏
+        this.getAntGroup();
+        this.setState({
+            originDiv: 'inline-block',
+            OriUserNotOrIf: 'block',
+            OriUserIfOrNot: 'none',
+            originFlag: false,
+            userNameFromOri: ''  //解决搜索框有内容去切换头部无效的问题
+        });
+    },
+
+
+    /**
+     * 获取联系人列表
+     */
+    getAntGroup() {
+        var _this = this;
+        var param = {
+            "method": 'getUserChatGroup',
+            "userId": sessionStorage.getItem("ident"),
+            "pageNo": -1
+        };
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var response = ret.response;
+                if (ret.msg == "调用成功" && ret.success == true) {
+                    if (isEmpty(response) == false) {
+                        var arr = [];
+                        response.forEach(function (v) {
+                            arr.push({
+                                key: v.chatGroupId + '@',
+                                userId: v.chatGroupId,
+                                userName: v.name,
+                            });
+                        });
+                        _this.setState({defaultUserData: arr});
+                    }
+                } else {
+
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
+    },
+
 
     /**
      * 获取我的好友
@@ -1146,33 +1194,37 @@ const MainLayout = React.createClass({
      */
     addGroupMember() {
         var _this = this;
-        if (this.state.creatInput == 'block') {
-            //创建群名的输入框显示,确定转到创建群的逻辑
-            _this.createChatGroup();
+        if (this.state.idea == 'block') {
+            _this.shareFilesNew()
         } else {
-            var memberTargetkeys = this.state.selectedRowKeys;
-            var memberIds = memberTargetkeys.join(",");
-            var currentGroupObj = this.state.currentGroupObj;
-            var param = {
-                "method": 'addChatGroupMember',
-                "chatGroupId": currentGroupObj.chatGroupId,
-                "memberIds": memberIds
-            };
-            doWebService(JSON.stringify(param), {
-                onResponse: function (ret) {
-                    var response = ret.response;
-                    if (ret.msg == "调用成功" && ret.success == true && response == true) {
-                        message.success("群成员添加成功");
-                    } else {
-                        message.success("群成员添加失败");
+            if (this.state.creatInput == 'block') {
+                //创建群名的输入框显示,确定转到创建群的逻辑
+                _this.createChatGroup();
+            } else {
+                var memberTargetkeys = this.state.selectedRowKeys;
+                var memberIds = memberTargetkeys.join(",");
+                var currentGroupObj = this.state.currentGroupObj;
+                var param = {
+                    "method": 'addChatGroupMember',
+                    "chatGroupId": currentGroupObj.chatGroupId,
+                    "memberIds": memberIds
+                };
+                doWebService(JSON.stringify(param), {
+                    onResponse: function (ret) {
+                        var response = ret.response;
+                        if (ret.msg == "调用成功" && ret.success == true && response == true) {
+                            message.success("群成员添加成功");
+                        } else {
+                            message.success("群成员添加失败");
+                        }
+                        _this.levGroupSet();
+                        _this.addDeGroupMemberModalHandleCancel();
+                    },
+                    onError: function (error) {
+                        message.error(error);
                     }
-                    _this.levGroupSet();
-                    _this.addDeGroupMemberModalHandleCancel();
-                },
-                onError: function (error) {
-                    message.error(error);
-                }
-            });
+                });
+            }
         }
     },
 
@@ -1470,6 +1522,21 @@ const MainLayout = React.createClass({
 
     searchShareUsersOnChange(checkedValues) {
         this.setState({"searchShareUsersOptions": checkedValues});
+    },
+
+    shareFilesNew() {
+        debugger
+        var _this = this;
+        var memberTargetkeys = this.state.selectedRowKeys;
+
+        var nowThinking = this.state.nowThinking;
+        var shareSrc = this.state.shareSrc;
+        var shareTitle = this.state.shareTitle;
+        var loginUser = JSON.parse(sessionStorage.getItem("loginUser"));
+        var createTime = (new Date()).valueOf();
+        var messageToPer = 1;//根据接收者是群组还是个人来决定
+        var messageToGrp = 4;
+        console.log(memberTargetkeys);
     },
 
     /**
@@ -2125,7 +2192,6 @@ const MainLayout = React.createClass({
     },
 
     onChangeGroupName(e) {
-        console.log(e.target.value);
         this.setState({groupCreatName: e.target.value});
     },
 
@@ -2891,6 +2957,9 @@ const MainLayout = React.createClass({
                         ]}
                         width={700}
                     >
+                        <div style={{display: this.state.idea, marginBottom: '14px'}}>
+                            <Input type="textarea" rows={2} placeholder="这一刻的想法"/>
+                        </div>
                         <div style={{display: this.state.creatInput, marginBottom: '14px'}}>
                             <Input
                                 placeholder="请输入群名称"
@@ -2904,6 +2973,8 @@ const MainLayout = React.createClass({
                             <span className="add_member_menu noom_cursor add_member_menu_select"
                                   onClick={this.rencentClicked}>最近联系人</span>
                             <span className="add_member_menu noom_cursor" onClick={this.friendClicked}>我的好友</span>
+                            <span style={{display: this.state.groupDiv}} className="add_member_menu noom_cursor"
+                                  onClick={this.groupClicked}>我的群组</span>
                             <span className="add_member_menu noom_cursor" onClick={this.originClicked}>组织架构</span>
                         </div>
                         <div id="inPut100" className={this.state.inputClassName}>

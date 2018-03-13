@@ -610,7 +610,6 @@ const AntCloudTableComponents = React.createClass({
      * @param ret
      */
     buildTableDataByResponse(ret) {
-        debugger;
         var _this = this;
         var i = 0;
         var cloudFileArray = [];
