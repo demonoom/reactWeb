@@ -3,7 +3,7 @@ import {Card, Radio, Row, Col, Button, Icon, message, Steps, Modal, Form, Pagina
 import {doWebService_CloudClassRoom, TEACH_LIVE_URL} from '../../utils/CloudClassRoomURLUtils';
 import {getPageSize} from '../../utils/Const';
 import {getLocalTime, formatYMD, formatHM, formatNoSecond} from '../../utils/utils';
-import {isEmpty, cutString} from '../../utils/utils';
+import {isEmpty, cutString,getLocalFromLanguage,isToday} from '../../utils/utils';
 import ConfirmModal from '../ConfirmModal';
 import CreateClassComponents from './CreateClassComponents';
 import UpdateClassComponents from './UpdateClassComponents';
@@ -241,7 +241,7 @@ const AntMulitiClassComponents = React.createClass({
                         optButtons = <div>
                             <Col span={24}><Button icon="play-circle-o" className="exam-particulars_title liveing_color"
                                                    title={livingCourseButtonTip}
-                                                   onClick={_this.getClassPlayDetail.bind(_this, row)}></Button></Col>
+                                                   onClick={_this.getClassPlayDetail.bind(_this, row.id)}></Button></Col>
                             <Col span={24}><Button icon="edit" className="exam-particulars_title"
                                                    title={editButtonTip}
                                                    onClick={_this.editClass.bind(_this, id)}></Button></Col>
@@ -258,7 +258,7 @@ const AntMulitiClassComponents = React.createClass({
                         optButtons = <div>
                             <Col span={24}><Button icon="play-circle-o" className="exam-particulars_title liveing_color"
                                                    title={livingCourseButtonTip}
-                                                   onClick={this.getClassPlayDetail.bind(_this, row)}></Button></Col>
+                                                   onClick={this.getClassPlayDetail.bind(_this, row.id)}></Button></Col>
                             <Col span={24}><Button icon="edit" className="exam-particulars_title"
                                                    title={editButtonTip}
                                                    onClick={_this.editClass.bind(_this, id)}></Button></Col>
@@ -773,15 +773,26 @@ const AntMulitiClassComponents = React.createClass({
         //0:课程   1 章节  targetType
         var originTime = liveObj.liveTime;
         //获取当前时间 时间戳
-        var rightTime = Date.parse(new Date());
+        var rightTime = new Date();
         var _this = this;
         var param = {
             "method": 'findVideoById',
             "id": liveObj.id,
         };
-        if (originTime > rightTime) {
+        var isCurrentDay = isToday(originTime);
+        var min=rightTime.getMinutes();
+        rightTime.setMinutes(min+5);
+        console.log(rightTime.toLocaleString());
+        if (originTime > Date.parse(rightTime)) {
             message.warning('未到开课时间');
             return;
+        }else if(isCurrentDay===false){
+            message.warning('授课时间已过，请修正后再重新开课，谢谢！',6);
+            return;
+        }
+        var localLanguage=getLocalFromLanguage();
+        if(localLanguage=="zh"){
+            localLanguage = "zh-CN";
         }
         //在执行ajax请求前，打开一个空白的新窗口
         var newTab = window.open('about:blank');
@@ -791,6 +802,9 @@ const AntMulitiClassComponents = React.createClass({
                 var videoStatus = response.videoStatus;
                 if (isEmpty(videoStatus) == false && videoStatus == 3) {
                     _this.setState({"tipModalVisible": true});
+                    var courseId = liveObj.courseId;
+                    _this.setState({'classPlayDetailModalVisible':false});
+                    _this.getClassPlayDetail(courseId);
                     newTab.close();
                     return;
                 }
@@ -810,8 +824,8 @@ const AntMulitiClassComponents = React.createClass({
                     targetId = liveObj.id;
                     title = liveObj.name;
                 }
+                // requestUrl += userId + "/" + targetType + "/" + targetId + "/" + title+"/"+localLanguage;
                 requestUrl += userId + "/" + targetType + "/" + targetId + "/" + title;
-                // window.open(requestUrl);
                 //将之前打开的新窗口重定向到当前指定的路径上（目的：解决在ajax中打开新窗口被拦截的问题）
                 newTab.location.href = requestUrl;
             },
@@ -825,119 +839,163 @@ const AntMulitiClassComponents = React.createClass({
     /*
     已发布课程点击播放
      */
-    getClassPlayDetail(classObj) {
+    getClassPlayDetail(courseId) {
         var _this = this;
-        var videosArray = classObj.videos;
         var cloudClassRoomUser = JSON.parse(sessionStorage.getItem("cloudClassRoomUser"));
-        var userId = cloudClassRoomUser.colUid;
-        var videoLiTagArray = [];
-        var startTime = formatYMD(classObj.startTime);
-        var originTime = classObj.startTime;
-        //获取当前时间 时间戳
-        var rightTime = Date.parse(new Date());
-        var isSerises = classObj.isSeries
-        if (isSerises == '3' || isSerises == '4') {
-            //微课
-            if (isEmpty(videosArray) == false) {
-                videosArray.forEach(function (video) {
-                    //播放按钮
-                    var playButton;
-                    if (video.userID == userId && video.videoStatus != "3") {
-                        playButton = <Button icon="play-circle-o" className="exam-particulars_title"
-                                             title='直播'
-                                             onClick={_this.openLive.bind(_this, video, "mulitiClass")}></Button>;
-                    }
-                    var liveTimeStr = formatNoSecond(video.liveTime);
-                    var videoLi = <li className="course_section_info">
-                        <span className="name">{video.name}</span>
-                        <span className="cont">{video.user.userName}</span>
-                        <span className="time1"></span>
-                        <span className="cont3">
+        var param = {
+            "method": 'findCourseByCourseId',
+            "id": courseId,
+            "publisher_id": cloudClassRoomUser.colUid
+        };
+        doWebService_CloudClassRoom(JSON.stringify(param), {
+            onResponse: function (ret) {
+                var classObj = ret.response;
+                var videosArray = classObj.videos;
+                var cloudClassRoomUser = JSON.parse(sessionStorage.getItem("cloudClassRoomUser"));
+                var userId = cloudClassRoomUser.colUid;
+                var videoLiTagArray = [];
+                var startTime = formatYMD(classObj.startTime);
+                var originTime = classObj.startTime;
+                //获取当前时间 时间戳
+                var rightTime = Date.parse(new Date());
+                var isSerises = classObj.isSeries
+                if (isSerises == '3' || isSerises == '4') {
+                    //微课
+                    if (isEmpty(videosArray) == false) {
+                        videosArray.forEach(function (video) {
+                            //播放按钮
+                            var playButton;
+                            if (video.userID == userId && video.videoStatus != "3") {
+                                playButton = <Button icon="play-circle-o" className="exam-particulars_title"
+                                                     title='直播'
+                                                     onClick={_this.openLive.bind(_this, video, "mulitiClass")}></Button>;
+                            }
+                            var liveTimeStr = formatNoSecond(video.liveTime);
+                            var videoLi = <li className="course_section_info">
+                                <span className="name">{video.name}</span>
+                                <span className="cont">{video.user.userName}</span>
+                                <span className="time1"></span>
+                                <span className="cont3">
                             {playButton}
                     </span>
-                    </li>;
-                    videoLiTagArray.push(videoLi);
-                });
-            }
-            var classDetailPanel = <Card>
-                <Row>
-                    <Col span={24}>
-                        <Row className="modal_cloud_info">
-                            <Row className="upexam_botom_ma">
-                                <Col span={21} className="font_gray_33">{classObj.courseName}</Col>
-                            </Row>
-                            <Col span={24} className="ant-form-item">
-                                <span className="series_gray_le">排课时间：</span>
-                                <ul>
-                                    <li className="course_section">
-                                        <div className="course_section_title">
-                                            <span className="name">章节名称</span>
-                                            <span className="cont">授课老师</span>
-                                            <span className="cont"></span>
-                                            <span className="cont3">操作</span>
-                                        </div>
-                                    </li>
-                                    {videoLiTagArray}
-                                </ul>
+                            </li>;
+                            videoLiTagArray.push(videoLi);
+                        });
+                    }
+                    var classDetailPanel = <Card>
+                        <Row>
+                            <Col span={24}>
+                                <Row className="modal_cloud_info">
+                                    <Row className="upexam_botom_ma">
+                                        <Col span={21} className="font_gray_33">{classObj.courseName}</Col>
+                                    </Row>
+                                    <Col span={24} className="ant-form-item">
+                                        <span className="series_gray_le">排课时间：</span>
+                                        <ul>
+                                            <li className="course_section">
+                                                <div className="course_section_title">
+                                                    <span className="name">章节名称</span>
+                                                    <span className="cont">授课老师</span>
+                                                    <span className="cont"></span>
+                                                    <span className="cont3">操作</span>
+                                                </div>
+                                            </li>
+                                            {videoLiTagArray}
+                                        </ul>
+                                    </Col>
+                                </Row>
                             </Col>
                         </Row>
-                    </Col>
-                </Row>
-            </Card>;
-        } else {
-            if (isEmpty(videosArray) == false) {
-                videosArray.forEach(function (video) {
-                    //播放按钮
-                    var playButton;
-                    if (video.userID == userId && video.videoStatus != "3") {
-                        playButton = <Button icon="play-circle-o" className="exam-particulars_title" title="直播"
-                                             onClick={_this.openLive.bind(_this, video, "mulitiClass")}></Button>;
-                    }
-                    var liveTimeStr = formatNoSecond(video.liveTime);
-                    var videoLi = <li className="course_section_info">
-                        <span className="name">{video.name}</span>
-                        <span className="cont">{video.user.userName}</span>
-                        <span className="time1">{liveTimeStr}</span>
-                        <span className="cont3">
+                    </Card>;
+                } else {
+                    if (isEmpty(videosArray) == false) {
+                        videosArray.forEach(function (video) {
+                            //播放按钮
+                            var playButton;
+                            if (video.userID == userId && video.videoStatus != "3") {
+                                playButton = <Button icon="play-circle-o" className="exam-particulars_title" title="直播"
+                                                     onClick={_this.openLive.bind(_this, video, "mulitiClass")}></Button>;
+                            }
+                            var liveTimeStr = formatNoSecond(video.liveTime);
+                            var videoLi = <li className="course_section_info">
+                                <span className="name">{video.name}</span>
+                                <span className="cont">{video.user.userName}</span>
+                                <span className="time1">{liveTimeStr}</span>
+                                <span className="cont3">
                             {playButton}
                     </span>
-                    </li>;
-                    videoLiTagArray.push(videoLi);
-                });
-            }
-            var classDetailPanel = <Card>
-                <Row>
-                    <Col span={24}>
-                        <Row className="modal_cloud_info">
-                            <Row className="upexam_botom_ma">
-                                <Col span={21} className="font_gray_33">{classObj.courseName}</Col>
-                            </Row>
-                            <Col span={24} className="ant-form-item">
-                                <span className="series_gray_le">排课时间：</span>
-                                <ul>
-                                    <li className="course_section">
-                                        <div className="course_section_title">
-                                            <span className="name">章节名称</span>
-                                            <span className="cont">授课老师</span>
-                                            <span className="cont">授课时间</span>
-                                            <span className="cont3">操作</span>
-                                        </div>
-                                    </li>
-                                    {videoLiTagArray}
-                                </ul>
+                            </li>;
+                            videoLiTagArray.push(videoLi);
+                        });
+                    }
+                    var classDetailPanel = <Card>
+                        <Row>
+                            <Col span={24}>
+                                <Row className="modal_cloud_info">
+                                    <Row className="upexam_botom_ma">
+                                        <Col span={21} className="font_gray_33">{classObj.courseName}</Col>
+                                    </Row>
+                                    <Col span={24} className="ant-form-item">
+                                <span className="series_gray_le">
+                                    <FormattedMessage
+                                        id='LessonSchedule'
+                                        description='排课时间'
+                                        defaultMessage='排课时间'
+                                    />
+                                    <span>(云校直播可以提前5分钟开课)</span>
+                                </span>
+                                        <ul>
+                                            <li className="course_section">
+                                                <div className="course_section_title">
+                                            <span className="name">
+                                                <FormattedMessage
+                                                    id='LessonName'
+                                                    description='章节名称'
+                                                    defaultMessage='章节名称'
+                                                />
+                                            </span>
+                                                    <span className="cont">
+                                                <FormattedMessage
+                                                    id='Teacher'
+                                                    description='授课老师'
+                                                    defaultMessage='授课老师'
+                                                />
+                                            </span>
+                                                    <span className="cont">
+                                                <FormattedMessage
+                                                    id='Time'
+                                                    description='授课时间'
+                                                    defaultMessage='授课时间'
+                                                />
+                                            </span>
+                                                    <span className="cont3">
+                                                <FormattedMessage
+                                                    id='Operate'
+                                                    description='操作'
+                                                    defaultMessage='操作'
+                                                />
+                                            </span>
+                                                </div>
+                                            </li>
+                                            {videoLiTagArray}
+                                        </ul>
+                                    </Col>
+                                </Row>
                             </Col>
                         </Row>
-                    </Col>
-                </Row>
-            </Card>;
-        }
-        if (originTime > rightTime) {
-            this.setState({classPlayDetailModalVisible: false, classDetailPanel});
-            message.warning('未到开课时间');
-        } else {
-            this.setState({classPlayDetailModalVisible: true, classDetailPanel});
-        }
-
+                    </Card>;
+                }
+                if (originTime > rightTime) {
+                    _this.setState({classPlayDetailModalVisible: false, classDetailPanel});
+                    message.warning('未到开课时间');
+                } else {
+                    _this.setState({classPlayDetailModalVisible: true, classDetailPanel});
+                }
+            },
+            onError: function (error) {
+                message.error(error);
+            }
+        });
     },
     /*
     关闭直播 modal
@@ -1263,7 +1321,13 @@ const AntMulitiClassComponents = React.createClass({
                               onConfirmModalCancel={this.closeConfirmDrawModal}
                               onConfirmModalOK={this.withDrawClass}
                 ></ConfirmModal>
-                <Modal className="modal_classDetail" title="直播章节" visible={this.state.classPlayDetailModalVisible}
+                <Modal className="modal_classDetail" title={
+                    <FormattedMessage
+                        id='courseInformationOpen'
+                        description='直播章节'
+                        defaultMessage='直播章节'
+                    />
+                } visible={this.state.classPlayDetailModalVisible}
                        onCancel={this.classPlayDetailModalHandleCancel}
                        transitionName=""  //禁用modal的动画效果
                        maskClosable={false} //设置不允许点击蒙层关闭

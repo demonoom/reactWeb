@@ -103,7 +103,6 @@ class AddSubGroupModal extends React.Component {
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                console.log(ret);
                 if (ret.msg == "调用成功" && ret.success == true) {
                     message.success("删除角色组成功");
                     _this.closeAddSubGroupModal();
@@ -153,7 +152,6 @@ class AddSubGroupModal extends React.Component {
         } else {
             target = e.target;
         }
-        console.log(e);
         var parentRoleId = e;
         this.setState({parentRoleId});
     }

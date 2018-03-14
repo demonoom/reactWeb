@@ -210,7 +210,7 @@ const SubjectUploadComponent = React.createClass({
             onResponse: function (ret) {
                 if (ret.msg == "调用成功" && ret.response == true) {
                     message.success("题目添加成功");
-                        subjectUpload.props.courseUploadCallBack();
+                    subjectUpload.props.courseUploadCallBack();
                 }
             },
             onError: function (error) {
@@ -228,12 +228,12 @@ const SubjectUploadComponent = React.createClass({
     copySubjectsToCloudFile(operateUserId, parentCloudFileId,subjectId) {
         var _this = this;
         var floderId = _this.props.floderId;
-            var param = {
-                "method": 'copySubjectsToCloudFile',
-                "operateUserId": sessionStorage.getItem("ident"),
-                "parentCloudFileId": floderId,
-                "subjectId":subjectId
-            };
+        var param = {
+            "method": 'copySubjectsToCloudFile',
+            "operateUserId": sessionStorage.getItem("ident"),
+            "parentCloudFileId": floderId,
+            "subjectId":subjectId
+        };
         doWebService(JSON.stringify(param),{
             onResponse:function(ret){
                 if (ret.msg == "调用成功" && ret.response == true) {

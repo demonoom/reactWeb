@@ -104,7 +104,6 @@ const TestAnalysisComponents = React.createClass({
      * 显示分值最高的人姓名
      */
     getMaxUser(){
-        console.log("getMaxUser");
         // highestScoreNames
         var maxLiArray = [];
         if(this.state.highestScoreNames.length==0){

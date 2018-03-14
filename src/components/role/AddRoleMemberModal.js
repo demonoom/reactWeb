@@ -44,7 +44,6 @@ class AddRoleMemberModal extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-      // console.log(nextProps.addedMemberData);
       var isShow = nextProps.isShow;
     var parentGroup = nextProps.parentGroup;
     var parentGroupName="";
@@ -98,7 +97,6 @@ class AddRoleMemberModal extends React.Component {
     };
       doWebService(JSON.stringify(param), {
       onResponse: function (ret) {
-          console.log('成功');
           if(ret.success==true && ret.msg=="调用成功"){
           message.success("添加成功");
           _this.props.addRoleComplete();
@@ -173,7 +171,6 @@ class AddRoleMemberModal extends React.Component {
 
           var isExitAtTargetOptions=_this.findTeacherIsExitAtTargetOptions(userId);
           var isExitInSettingTeam = _this.findTeacherIsExitAtSettringTeam(userId);
-            console.log(isExitInSettingTeam);
             // && isExitInSettingTeam==false
           if(isExitAtTargetOptions==false&&isExitInSettingTeam==false){
             const data = {key:userId,
@@ -225,8 +222,6 @@ class AddRoleMemberModal extends React.Component {
   findTeacherIsExitAtSettringTeam(userId){
     var isExit = false;
     var addedMemberData = this.props.addedMemberData;
-      console.log(addedMemberData);
-      console.log(userId);
       if(isEmpty(addedMemberData)==false){
       for(var i=0;i<addedMemberData.length;i++){
         var teamUser = addedMemberData[i];

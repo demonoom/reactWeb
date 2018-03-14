@@ -253,7 +253,6 @@ class EditDingModal extends React.Component {
         }
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
-                console.log(ret);
                 if (ret.msg == "调用成功" && ret.success == true) {
                     message.success("发送成功");
                     _this.props.dingMsgReturnSuc(_this.state.dingUuid);

@@ -109,7 +109,6 @@ class AddSubGroupModal extends React.Component {
         } else {
             target = e.target;
         }
-        console.log(e);
         var parentRoleId = e;
         this.setState({parentRoleId});
     }

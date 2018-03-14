@@ -314,26 +314,26 @@ const UseKnowledgeComponents = React.createClass({
 */
     copySubjectsToCloudFile(e){
         var _this = this;
-       var parentCloudFileId = e.parentId;
-       var subjectId = this.state.currentKnowlege;
-       var copyFile = _this.state.copyFile;
-       var param
-       if(this.state.optType =='courseWare'){
-           param = {
-               "method": 'createCloudFiles',
-               "operateUserId": sessionStorage.getItem("ident"),
-               "parentCloudFileId": e.id,
-               "name":copyFile[1],
-               "path":copyFile[3]
-           };
-       }else{
-           param = {
-               "method": 'copySubjectsToCloudFile',
-               "operateUserId": sessionStorage.getItem("ident"),
-               "parentCloudFileId":e.id,
-               "subjectId":subjectId
-           };
-       }
+        var parentCloudFileId = e.parentId;
+        var subjectId = this.state.currentKnowlege;
+        var copyFile = _this.state.copyFile;
+        var param
+        if(this.state.optType =='courseWare'){
+            param = {
+                "method": 'createCloudFiles',
+                "operateUserId": sessionStorage.getItem("ident"),
+                "parentCloudFileId": e.id,
+                "name":copyFile[1],
+                "path":copyFile[3]
+            };
+        }else{
+            param = {
+                "method": 'copySubjectsToCloudFile',
+                "operateUserId": sessionStorage.getItem("ident"),
+                "parentCloudFileId":e.id,
+                "subjectId":subjectId
+            };
+        }
         doWebService(JSON.stringify(param),{
             onResponse:function(ret){
                 if (ret.msg == "调用成功" && ret.response == true) {
@@ -357,14 +357,14 @@ const UseKnowledgeComponents = React.createClass({
                 n.push(array[i]);
             }
         }
-            return n;
+        return n;
     },
     /**
      * 如果是文件夹，则可以点击文件夹名称，进入文件夹内部
      */
     intoDirectoryInner(directoryObj) {
         this.setState({
-             "parentDirectoryId": directoryObj.parentId,
+            "parentDirectoryId": directoryObj.parentId,
             "currentDirectoryId": directoryObj.id,
         });
         parentDirectoryIdArry.push(this.state.parentDirectoryId);
@@ -518,25 +518,25 @@ const UseKnowledgeComponents = React.createClass({
 
         return (
 
-                <Modal
-                    visible={this.state.visible}
-                    title="使用至我的资源"
-                    onCancel={this.handleCancel}
-                    transitionName=""  //禁用modal的动画效果
-                    maskClosable={false} //设置不允许点击蒙层关闭
-                    footer={null}
-                >
-                    <div className="move_file">
-                        <Row>
-                            <Col span={24}>
-                                {returnToolbar}
-                                <Table columns={targetDirColumns} showHeader={false}
-                                       dataSource={this.state.targetDirDataArray}
-                                       scroll={{y: 300}}/>
-                            </Col>
-                        </Row>
-                    </div>
-                </Modal>
+            <Modal
+                visible={this.state.visible}
+                title="使用至我的资源"
+                onCancel={this.handleCancel}
+                transitionName=""  //禁用modal的动画效果
+                maskClosable={false} //设置不允许点击蒙层关闭
+                footer={null}
+            >
+                <div className="move_file">
+                    <Row>
+                        <Col span={24}>
+                            {returnToolbar}
+                            <Table columns={targetDirColumns} showHeader={false}
+                                   dataSource={this.state.targetDirDataArray}
+                                   scroll={{y: 300}}/>
+                        </Col>
+                    </Row>
+                </div>
+            </Modal>
         );
     },
 });

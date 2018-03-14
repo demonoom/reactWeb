@@ -240,6 +240,11 @@ const MessageMenu = React.createClass({
             }
         });
 
+        if (selectRowKey == id) {
+            //删除对象处于点击状态,删除人之后将系统右侧还原成初始状态
+            _this.props.rightMsgDelFinish()
+        }
+
         if (isEmpty(delUuid)) {
             //搜索出的消息沒有uuid,所以这么处理
             //从数组中去除那条消息
@@ -253,10 +258,6 @@ const MessageMenu = React.createClass({
                 }
             });
             _this.setState({userMessageData: messageLists});
-            if (selectRowKey == id) {
-                //删除对象处于点击状态,删除人之后将系统右侧还原成初始状态
-                _this.props.rightMsgDelFinish()
-            }
             return
         }
 

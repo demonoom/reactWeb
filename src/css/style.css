@@ -3949,6 +3949,7 @@ p.group_double + div.clearfix table tr, .group_table .ant-table-tbody > tr, .maa
 
 .borderballoon_le_cont {
     display: flex;
+    align-items: center;
 }
 
 .borderballoon_le_cont img {
@@ -7584,8 +7585,9 @@ select.course_n:hover {
 .file_noom {
     border-top: 1px solid #e4e4e4;
     color: #DFE1E6;
-    margin: 10px 0 0 0;
-    padding: 3px 0 0 0;
+    margin: 8px 0 0 0;
+    padding: 8px 0 0 0;
+    line-height: 18px;
 }
 
 .file_noom a {
@@ -8593,6 +8595,13 @@ select.course_n:hover {
     position: relative;
 }
 
+.local_class_right50 {
+    width: 50px;
+    height: 100%;
+    background: #f9f9f9;
+    position: relative;
+}
+
 .warning_message {
     position: absolute;
     padding: 10px 0;
@@ -8693,7 +8702,7 @@ select.course_n:hover {
 }
 
 .add_member .ant-modal-body {
-    height: 410px;
+    padding-bottom:0px;
 }
 
 .add_member_right .schoolgroup_table1 .ant-table-content, .add_member_wrap .schoolgroup_table1 .ant-table-content {
@@ -8786,7 +8795,7 @@ select.course_n:hover {
 }
 
 .add_member_menu {
-    width: 33%;
+    width: 25%;
     display: inline-block;
     text-align: center;
     border-bottom: 1px solid #eee;
@@ -8800,10 +8809,10 @@ select.course_n:hover {
 }
 
 .add_member_menu_tab {
-    width: 50%;
+    width: 65%;
 }
 .add_member_menu_search {
-    width: 45%;
+    width: 30%;
     float: right;
 }
 .add_member_menu_search2 {
@@ -8819,4 +8828,62 @@ select.course_n:hover {
 .add_member_tags {
     height: 24px;
     width: 606px;
+}
+.shrinkage {
+    cursor: pointer;
+    background:url(../../src/components/images/board_shen1.png) no-repeat;
+    width: 54px;
+    height: 42px;
+    z-index: 20000;
+    position: absolute;
+    right: 0;
+    top: 54%;
+    transform: translate(0,-54%);
+    -ms-transform: translate(0px,-54%);
+    -moz-transform: translate(0px,-54%);
+    -webkit-transform: translate(0px,-54%);
+    -o-transform: translate(0px,-54%);
+}
+.shrinkage:hover{
+    background:url(../../src/components/images/board_shen.png) no-repeat;
+}
+.shrinkage1 {
+    cursor: pointer;
+    background: url(../../src/components/images/board_suo1.png) no-repeat;
+    width: 54px;
+    height: 42px;
+    z-index: 20000;
+    position: absolute;
+    right: 0;
+    top: 54%;
+    transform: translate(0px,-54%);
+    -ms-transform: translate(0px,-54%);
+    -moz-transform: translate(0px,-54%);
+    -webkit-transform: translate(0px,-54%);
+    -o-transform: translate(0px,-54%);
+}
+.shrinkage1:hover{
+     background:url(../../src/components/images/board_suo.png) no-repeat;
+ }
+.modal_iframe_cont{
+    width: 100%;
+    height:100%
+}
+.modal_iframe_cont iframe{
+    width: 100%;
+    height: 100%;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+.modal_iframe_wrap{
+    width: 30% !important;
+    height: 85% !important;
+    padding: 0 !important;
+}
+
+.modal_iframe_wrap .ant-modal-body, .modal_iframe_wrap .ant-modal-content{
+    width: 100% !important;
+    height: 100% !important;
+    padding: 0 !important;
 }

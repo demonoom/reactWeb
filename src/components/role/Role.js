@@ -38,8 +38,6 @@ const Role = React.createClass({
     },
 
     componentWillReceiveProps(nextProps) {
-        // console.log(nextProps.roleGroupClick);
-        // var _this = this;
 
         if (isEmpty(nextProps.roleGroupClick) == false) {
             var selectedMessage = nextProps.roleGroupClick;
@@ -100,7 +98,6 @@ const Role = React.createClass({
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
                 var data = ret.response;
-                // console.log(data);
                 _this.drawTable(data);
 
             },
@@ -175,9 +172,6 @@ const Role = React.createClass({
      * @param roleName
      */
     onDelComplete(roleId, roleName) {
-        console.log(roleId);
-        console.log(roleName);
-        //
         this.props.onDelComplete(roleId, roleName);
     },
 
@@ -186,7 +180,6 @@ const Role = React.createClass({
      * @param selectedRowKeys
      */
     onSelectChange(selectedRowKeys) {
-        console.log('selectedRowKeys changed: ', selectedRowKeys);
         this.setState({selectedRowKeys});
     },
 
@@ -196,7 +189,6 @@ const Role = React.createClass({
             title: '确定删除?',
             onOk() {
                 var selectedMem = _this.state.selectedRowKeys;
-                // console.log(selectedMem);
                 var userIds = '';
                 selectedMem.forEach(function (v, i) {
                     userIds += v + ',';

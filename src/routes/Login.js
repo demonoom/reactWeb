@@ -67,7 +67,7 @@ const Login = Form.create()(React.createClass({
     componentDidMount(){
         var _this = this;
         //true：使用英文显示   false：使用中文显示
-        if (isEmpty(sessionStorage.getItem("language"))) {
+        if (isEmpty(localStorage.getItem("language"))) {
             setLocalLanaguage(false);
         }
         _this.getLoginTeachSystemEwm();

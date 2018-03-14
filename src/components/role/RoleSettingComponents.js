@@ -90,7 +90,6 @@ const RoleSettingComponents = React.createClass({
 
     /*渲染角色函数*/
     buildMenuPart(part) {
-        console.log(part);
         let _this = this;
         var menuContent;
         var subRoleMenuItemArray = [];
@@ -159,7 +158,6 @@ const RoleSettingComponents = React.createClass({
     },
 
     handleClickRole(e) {
-        console.log(e);
         this.setState({
             selectedRoleKeys: e.key,
             selectedRoleKeyPath: e.keyPath

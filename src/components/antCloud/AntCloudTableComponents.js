@@ -459,7 +459,7 @@ const AntCloudTableComponents = React.createClass({
             </span>;
             }else{
                 var subjectContent = <article id='contentHtml' className='content'
-                                       dangerouslySetInnerHTML={{__html: name}}  onClick={cloudTable.readDoc.bind(cloudTable, e)}></article>;
+                                              dangerouslySetInnerHTML={{__html: name}}  onClick={cloudTable.readDoc.bind(cloudTable, e)}></article>;
                 fileLogo = subjectContent;
             }
         }
@@ -517,7 +517,7 @@ const AntCloudTableComponents = React.createClass({
      * @param queryConditionJson
      * @param pageNo
      */
-     listFiles: function (operateUserId, cloudFileId, queryConditionJson, pageNo, optSrc) {
+    listFiles: function (operateUserId, cloudFileId, queryConditionJson, pageNo, optSrc) {
         data = [];
         cloudTable.setState({totalCount: 0});
         var param = {
@@ -614,26 +614,26 @@ const AntCloudTableComponents = React.createClass({
             }
         });
     },
-        /*
-    蚁盘，点"我的题目"时调用的接口
-    userId   --- 登录用户的id
-    pageNo   --- 页码，-1取全部
-    */
+    /*
+蚁盘，点"我的题目"时调用的接口
+userId   --- 登录用户的id
+pageNo   --- 页码，-1取全部
+*/
     getUserRootCloudSubjects(userId,pageNo){
         cloudTable.setState({
             "currentSubjectDirectoryId": -1,
         });
-      var param = {
-          "method":'getUserRootCloudSubjects',
-          "userId":userId,
-          "pageNo":pageNo,
-      };
-      doWebService(JSON.stringify(param),{
-          onResponse:function(ret){
-              cloudTable.buildTableDataByResponse(ret);
-          }
-          }
-      )
+        var param = {
+            "method":'getUserRootCloudSubjects',
+            "userId":userId,
+            "pageNo":pageNo,
+        };
+        doWebService(JSON.stringify(param),{
+                onResponse:function(ret){
+                    cloudTable.buildTableDataByResponse(ret);
+                }
+            }
+        )
     },
     /**
      * 蚁盘我的资源tabs切换响应函数
@@ -649,11 +649,11 @@ const AntCloudTableComponents = React.createClass({
             cloudTable.getUserRootCloudSubjects(cloudTable.state.ident,1)
         }
     },
-/**
+    /**
      * 构建表格的数据
      * @param ret
      */
-buildTableDataByResponse(ret) {
+    buildTableDataByResponse(ret) {
         var _this = this;
         var i = 0;
         var cloudFileArray = [];
@@ -668,8 +668,8 @@ buildTableDataByResponse(ret) {
                             _this.setState({"parentDirectoryId": parentDirectoryId});
                         }
                     }else{
-                            var parentDirectoryId = e.parentId;
-                            _this.setState({"parentSubjectDirectoryId": parentDirectoryId});
+                        var parentDirectoryId = e.parentId;
+                        _this.setState({"parentSubjectDirectoryId": parentDirectoryId});
                     }
                 }
                 i++
@@ -764,7 +764,7 @@ buildTableDataByResponse(ret) {
                     subjectOpt: subjectOpt,
                 });
             });
-        // , totalCount: parseInt(ret.pager.rsCount)
+            // , totalCount: parseInt(ret.pager.rsCount)
             _this.setState({"tableData": data, cloudFileArray});
         } else {
             _this.setState({"tableData": [], cloudFileArray: [], totalCount: 0});
@@ -975,7 +975,7 @@ buildTableDataByResponse(ret) {
                 "name": cloudTable.state.editDirectoryName
             };
         }else{
-             param = {
+            param = {
                 "method": 'mkdir',
                 "operateUserId": cloudTable.state.ident,
                 "parentCloudFileId": cloudTable.state.currentDirectoryId,
@@ -2129,16 +2129,16 @@ buildTableDataByResponse(ret) {
             tipTitle = "我的文件";
             newButton = <Button value="newDirectory" className="antnest_talk"
                                 onClick={cloudTable.showMkdirModal}>新建文件夹</Button>;
-                if(cloudTable.state.activeKey == '2'){
-                    //上传题目
-                    if(cloudTable.state.currentSubjectDirectoryId != -1){
-                        uploadButton = <SubjectUploadComponent ref="subjectUploadComponent" activeKey={this.state.activeKey} floderId={this.state.currentSubjectDirectoryId} courseUploadAntCloud={this.courseUploadAntCloud}></SubjectUploadComponent>
-                    }
-                }else{
-                    if (cloudTable.state.currentDirectoryId != -1) {
-                        uploadButton = <Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
-                    }
+            if(cloudTable.state.activeKey == '2'){
+                //上传题目
+                if(cloudTable.state.currentSubjectDirectoryId != -1){
+                    uploadButton = <SubjectUploadComponent ref="subjectUploadComponent" activeKey={this.state.activeKey} floderId={this.state.currentSubjectDirectoryId} courseUploadAntCloud={this.courseUploadAntCloud}></SubjectUploadComponent>
                 }
+            }else{
+                if (cloudTable.state.currentDirectoryId != -1) {
+                    uploadButton = <Button value="uploadFile" onClick={cloudTable.showUploadFileModal}>上传文件</Button>;
+                }
+            }
             delBtn =
                 <div className="cloud_tool"><Button type="primary" onClick={cloudTable.showdelAllDirectoryConfirmModal}
                                                     disabled={!hasSelected && cloudTable.state.delBtnReadOnly}
@@ -2150,8 +2150,8 @@ buildTableDataByResponse(ret) {
             var content = <Tabs
                 hideAdd
                 onChange={cloudTable.onChange}
-                 activeKey={cloudTable.state.activeKey}
-                 defaultActiveKey={cloudTable.state.defaultActiveKey}
+                activeKey={cloudTable.state.activeKey}
+                defaultActiveKey={cloudTable.state.defaultActiveKey}
                 tabBarExtraContent={delBtn}
                 transitionName=""  //禁用Tabs的动画效果
             >
@@ -2195,11 +2195,11 @@ buildTableDataByResponse(ret) {
             }
             var content = <div style={{"height":'100%'}}>
                 <Table className="cloud_box" rowSelection={rowSelection} columns={columns} dataSource={cloudTable.state.tableData} pagination={{
-                        total: cloudTable.state.totalCount,
-                        pageSize: getPageSize(),
-                        // onChange: cloudTable.pageOnChange
-                    }} scroll={{y: 400}}/>
-                </div>
+                    total: cloudTable.state.totalCount,
+                    pageSize: getPageSize(),
+                    // onChange: cloudTable.pageOnChange
+                }} scroll={{y: 400}}/>
+            </div>
         }
         // console.log("------>" + cloudTable.state.parentDirectoryId);
         if ((cloudTable.state.parentDirectoryId != -1 && cloudTable.state.currentDirectoryId != -1) &&(cloudTable.state.parentSubjectDirectoryId!=-1 && cloudTable.state.currentSubjectDirectoryId != -1)) {
@@ -2430,7 +2430,7 @@ buildTableDataByResponse(ret) {
                 <div className="favorite_scroll">
                     {content}
                 </div>
-            }
+                }
                 <ul>
                     <li className="imgLi">
                         {this.state.imgArr}
