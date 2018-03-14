@@ -921,7 +921,7 @@ const UpdateClassComponents = React.createClass({
             </Col>
             <Col span={3}>
                 <Button className="ding_modal_top roe-t-f-left"
-                        onClick={this.showSelectKnowledgeModal.bind(this, i)}>选择知识点333</Button>
+                        onClick={this.showSelectKnowledgeModal.bind(this, i)}>选择知识点</Button>
                 <KnowledgePointModal isShow={this.state.selectKnowledgeModalIsShow}
                                      initTags={this.state.initTags}
                                      knowledgePointNumber={i}
