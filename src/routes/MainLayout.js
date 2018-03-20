@@ -135,7 +135,6 @@ const MainLayout = React.createClass({
 
     openNotification() {
         notification.open({
-            // message: 'Notification Title',
             description: '你有一条新的叮消息，请及时查看.',
         });
     },
@@ -700,7 +699,6 @@ const MainLayout = React.createClass({
             });
         } else if (type == 99) {
             //创建群聊
-            this.getRecentShareUsers();
             this.setState({
                 "addDeGroupMemberModalVisible": true,
                 originDiv: 'inline-block',
@@ -714,9 +712,9 @@ const MainLayout = React.createClass({
                 groupDiv: 'none',
                 idea: 'none',
             });
+            this.getRecentShareUsers();
         } else if (type == 999) {
             //分享想法
-            this.getRecentShareUsers();
             this.setState({
                 "addDeGroupMemberModalVisible": true,
                 originDiv: 'inline-block',
@@ -730,12 +728,12 @@ const MainLayout = React.createClass({
                 superTitleName: '分享文件',
                 groupDiv: 'inline-block',
             });
+            this.getRecentShareUsers();
         } else {
             //普通群
             //显示顶部的三个标签
             //显示另一个table
             //去请求最近联系人
-            this.getRecentShareUsers();
             this.setState({
                 "addDeGroupMemberModalVisible": true,
                 originDiv: 'inline-block',
@@ -749,6 +747,7 @@ const MainLayout = React.createClass({
                 groupDiv: 'none',
                 idea: 'none',
             });
+            this.getRecentShareUsers();
         }
     },
 
@@ -924,17 +923,40 @@ const MainLayout = React.createClass({
                     if (isEmpty(response) == false) {
                         var arr = [];
                         response.forEach(function (v) {
-                            if (v.type == 0) {
-                                if (v.user.colUid != 120024) {
-                                    var user = v.user;
+                            if (_this.state.idea == 'block') {
+                                //包括群组
+                                if (v.type == 0) {
+                                    //个人
+                                    if (v.user.colUid != 120024) {
+                                        var user = v.user;
+                                        arr.push({
+                                            key: user.colUid,
+                                            userId: user.colUid,
+                                            userName: user.userName,
+                                        });
+                                    }
+                                } else {
+                                    //群
                                     arr.push({
-                                        key: user.colUid,
-                                        userId: user.colUid,
-                                        userName: user.userName,
+                                        key: v.chatGroup.chatGroupId + '@',
+                                        userId: v.chatGroup.chatGroupId,
+                                        userName: v.chatGroup.name,
                                     });
                                 }
+                            } else {
+                                //不包括群组
+                                if (v.type == 0) {
+                                    if (v.user.colUid != 120024) {
+                                        var user = v.user;
+                                        arr.push({
+                                            key: user.colUid,
+                                            userId: user.colUid,
+                                            userName: user.userName,
+                                        });
+                                    }
+                                }
                             }
-                        })
+                        });
                         _this.setState({defaultUserData: arr});
                     }
                 } else {
@@ -1136,6 +1158,7 @@ const MainLayout = React.createClass({
         this.state.groupCreatName = '';
         this.state.nowThinking = '';
         this.state.tags = [];
+        this.state.idea = 'none';
         selectArr = [];
         this.setState({"addDeGroupMemberModalVisible": false});
     },
