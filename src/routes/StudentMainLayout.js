@@ -25,6 +25,8 @@ import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
 import {createStore} from 'redux';
 import LiveTV from "../components/LiveTV/LiveTV";
+import {IntlProvider} from 'react-intl';
+import {getMessageFromLanguage, getLocalFromLanguage} from '../utils/utils';
 
 
 const store = createStore(function () {
@@ -479,7 +481,9 @@ const StudentMainLayout = React.createClass({
     },
 
     render() {
-
+        //引入国际化的支持
+        var messageFromLanguage = getMessageFromLanguage();
+        var local = getLocalFromLanguage();
         const collapse = this.state.collapse;
         //根据如下判断结果，完成对页面中部位置的渲染，不同情况，渲染不同组件
         var middleComponent;
@@ -591,7 +595,10 @@ const StudentMainLayout = React.createClass({
         //
         //
         return (
-            <LocaleProvider locale={this.state.locale}>
+            <IntlProvider
+                locale={local}
+                messages={messageFromLanguage}
+            >
                 <div className={collapse ? "ant-layout-aside ant-layout-aside-collapse" : "ant-layout-aside"}>
 
                     <aside className="ant-layout-sider">
@@ -654,7 +661,7 @@ const StudentMainLayout = React.createClass({
                         sendPicToOthers={this.sendPicToOthers}
                     />
                 </div>
-            </LocaleProvider>
+            </IntlProvider>
         );
     },
 
