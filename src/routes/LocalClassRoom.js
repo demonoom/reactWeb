@@ -5,6 +5,7 @@ import {isEmpty} from "../utils/Const";
 import SelectSubjectModal from '../components/localClassRoom/SelectSubjectModal';
 import SelectAntCloudMaterialsModal from '../components/localClassRoom/SelectAntCloudMaterialsModal';
 import SelectScheduleMaterialsModal from '../components/localClassRoom/SelectScheduleMaterialsModal';
+import SelectAntCloudSubjectsModal from '../components/localClassRoom/SelectAntCloudSubjectsModal';
 import ClazzStatusModal from '../components/localClassRoom/ClazzStatusModal';
 import ConfirmModal from '../components/ConfirmModal';
 import GuideModal from '../components/localClassRoom/GuideModal';
@@ -260,10 +261,11 @@ const LocalClassRoom = React.createClass({
                     <div className="local_class_right" id="messageDiv">
                         <LocalClassesMessage id="localClassMessageObj" ref="localClassesMessage" ms={ms} classCode={this.state.classCode} classType={this.state.classType}></LocalClassesMessage>
                     </div>
-                    <SelectSubjectModal isShow={this.state.subjectModalIsShow} onCancel={this.closeSubjectModal} pushSubjectToClass={this.pushSubjectToClass}></SelectSubjectModal>
+                    {/*<SelectSubjectModal isShow={this.state.subjectModalIsShow} onCancel={this.closeSubjectModal} pushSubjectToClass={this.pushSubjectToClass}></SelectSubjectModal>*/}
                     <ClazzStatusModal isShow={this.state.clazzStatusModalIsShow} onCancel={this.closeClazzModal} vid = {this.state.vid}></ClazzStatusModal>
                     <SelectAntCloudMaterialsModal isShow={this.state.antCloudMaterialsModalIsShow} onCancel={this.closeAntCloudMaterialsModal} pushMaterialsToClass={this.pushMaterialsToClass}></SelectAntCloudMaterialsModal>
                     <SelectScheduleMaterialsModal isShow={this.state.schduleMaterialsModalIsShow} onCancel={this.closeScheduleMaterialsModal} pushMaterialsToClass={this.pushMaterialsToClass}></SelectScheduleMaterialsModal>
+                    <SelectAntCloudSubjectsModal isShow={this.state.subjectModalIsShow} onCancel={this.closeSubjectModal} pushSubjectToClass={this.pushSubjectToClass}></SelectAntCloudSubjectsModal>
                     <ConfirmModal ref="confirmModal"
                                   title="确定要下课吗?"
                                   onConfirmModalCancel={this.closeConfirmModal}
