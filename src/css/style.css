@@ -67,7 +67,6 @@ i, cite, em, var, address, dfn {
 :-ms-input-placeholder { /* Internet Explorer 10+ */
     　　color: #999 !important;
 }
-
 @media only screen and (min-width: 1366px) {
     .ant-layout-aside {
         position: absolute;
@@ -1870,13 +1869,11 @@ p.user_cont span.name1 {
     margin-bottom: 16px !important;
 }
 
-.17
-_hei1 {
+.17_hei1 {
     height: 98%;
 }
 
-.17
-_hei2 > table {
+.17_hei2 > table {
     padding: 3px 8px !important;
 }
 
@@ -8886,4 +8883,51 @@ select.course_n:hover {
     width: 100% !important;
     height: 100% !important;
     padding: 0 !important;
+}
+
+.table_operation button{
+    border: none;
+    background: none;
+    padding: 0 !important;
+    margin: 0 8px;
+}
+.table_name_high{
+    height: 28px;
+}
+.table_name_high article.content{
+    width: 100%;
+    overflow: hidden;
+    height: 100%;
+}
+.table_name_high article.content > div > div{
+    padding:0 !important;
+    line-height: 28px !important;
+}
+.table_name_high article.content img{
+    max-width:100%;
+}
+.icon_question{
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    margin-right: 12px;
+    position: relative;
+    top: 2px;
+}
+/* 题型 */
+.icon_single_choice {
+    background: url(../components/images/singleChoice.png) no-repeat;
+    background-size: 100%;
+}
+.icon_short_answer {
+    background: url(../components/images/shortAnswer.png) no-repeat;
+    background-size: 100%;
+}
+.icon_trueOrfalse {
+    background: url(../components/images/trueOrFalse.png) no-repeat;
+    background-size: 100%;
+}
+.icon_multiple_choice {
+    background: url(../components/images/multipleChoice.png) no-repeat;
+    background-size: 100%;
 }
