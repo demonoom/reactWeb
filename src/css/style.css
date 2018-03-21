@@ -8931,3 +8931,18 @@ select.course_n:hover {
     background: url(../components/images/multipleChoice.png) no-repeat;
     background-size: 100%;
 }
+.choose_topic .clearfix{
+    height:calc(100% - 42px);
+}
+.choose_topic2{
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    background: #f8f8f8;
+    border-top: 1px solid #e5e5e5;
+    width: 616px;
+    left: -20px;
+}
+.choose_topic2 button{
+    padding: 6px 35px;
+}
