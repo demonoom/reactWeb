@@ -246,7 +246,7 @@ class CourseWare extends React.Component {
 
     }
 
-    showModal(e) {
+/*    showModal(e) {
         var target = e.target;
         if (navigator.userAgent.indexOf("Chrome") > -1) {
             target = e.currentTarget;
@@ -254,7 +254,18 @@ class CourseWare extends React.Component {
             target = e.target;
         }
         var currentSchedule = target.value;
-        this.refs.useKnowledgeComponents.showModal(currentSchedule, "courseWare", this.state.knowledgeName);
+        var courseListState = this.state.courseListState;
+        var path;
+        courseListState.forEach(function(e){
+            path = e[3];
+        });
+        this.refs.useKnowledgeComponents.showModal(currentSchedule, "courseWare", this.state.knowledgeName,path);
+    }*/
+
+    showModal(copyFile) {
+        var currentSchedule = copyFile[0];
+        var courseListState = this.state.courseListState;
+        this.refs.useKnowledgeComponents.showModal(currentSchedule, "courseWare", this.state.knowledgeName,copyFile);
     }
 
     isDeleteAll(e) {
@@ -471,6 +482,7 @@ class CourseWare extends React.Component {
     }
 
     buildKonwledgePanels(courseWareList) {
+        var _this = this;
         if (courseWareList.length == 0) {
             this.coursePanelChildren =
                 <img className="noDataTipImg" onClick={$.openPhotoGallery} src={require('./images/noDataTipImg.png')}/>;
@@ -513,7 +525,7 @@ class CourseWare extends React.Component {
                                 <a href={e[3]} target="_blank" title="下载" download={e[3]}
                                    className="te_download_a"><Button icon="download"/></a>
                                 <Button style={{float: 'right'}} type="" icon="export" title="使用" value={e[0]}
-                                        onClick={this.showModal}></Button>
+                                        onClick={this.showModal.bind(_this,e)}></Button>
                                 {eysOnButton}
                             </div>
 

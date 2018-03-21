@@ -135,7 +135,6 @@ const MainLayout = React.createClass({
 
     openNotification() {
         notification.open({
-            // message: 'Notification Title',
             description: '你有一条新的叮消息，请及时查看.',
         });
     },
@@ -509,9 +508,6 @@ const MainLayout = React.createClass({
             target = e.target;
         }
         var nowThinking = target.value;
-        // if (isEmpty(nowThinking)) {
-        //     nowThinking = "这是一个云盘分享的文件";
-        // }
         this.setState({"nowThinking": nowThinking});
     },
 
@@ -703,7 +699,6 @@ const MainLayout = React.createClass({
             });
         } else if (type == 99) {
             //创建群聊
-            this.getRecentShareUsers();
             this.setState({
                 "addDeGroupMemberModalVisible": true,
                 originDiv: 'inline-block',
@@ -717,9 +712,9 @@ const MainLayout = React.createClass({
                 groupDiv: 'none',
                 idea: 'none',
             });
+            this.getRecentShareUsers();
         } else if (type == 999) {
             //分享想法
-            this.getRecentShareUsers();
             this.setState({
                 "addDeGroupMemberModalVisible": true,
                 originDiv: 'inline-block',
@@ -733,12 +728,12 @@ const MainLayout = React.createClass({
                 superTitleName: '分享文件',
                 groupDiv: 'inline-block',
             });
+            this.getRecentShareUsers();
         } else {
             //普通群
             //显示顶部的三个标签
             //显示另一个table
             //去请求最近联系人
-            this.getRecentShareUsers();
             this.setState({
                 "addDeGroupMemberModalVisible": true,
                 originDiv: 'inline-block',
@@ -752,6 +747,7 @@ const MainLayout = React.createClass({
                 groupDiv: 'none',
                 idea: 'none',
             });
+            this.getRecentShareUsers();
         }
     },
 
@@ -927,17 +923,40 @@ const MainLayout = React.createClass({
                     if (isEmpty(response) == false) {
                         var arr = [];
                         response.forEach(function (v) {
-                            if (v.type == 0) {
-                                if (v.user.colUid != 120024) {
-                                    var user = v.user;
+                            if (_this.state.idea == 'block') {
+                                //包括群组
+                                if (v.type == 0) {
+                                    //个人
+                                    if (v.user.colUid != 120024) {
+                                        var user = v.user;
+                                        arr.push({
+                                            key: user.colUid,
+                                            userId: user.colUid,
+                                            userName: user.userName,
+                                        });
+                                    }
+                                } else {
+                                    //群
                                     arr.push({
-                                        key: user.colUid,
-                                        userId: user.colUid,
-                                        userName: user.userName,
+                                        key: v.chatGroup.chatGroupId + '@',
+                                        userId: v.chatGroup.chatGroupId,
+                                        userName: v.chatGroup.name,
                                     });
                                 }
+                            } else {
+                                //不包括群组
+                                if (v.type == 0) {
+                                    if (v.user.colUid != 120024) {
+                                        var user = v.user;
+                                        arr.push({
+                                            key: user.colUid,
+                                            userId: user.colUid,
+                                            userName: user.userName,
+                                        });
+                                    }
+                                }
                             }
-                        })
+                        });
                         _this.setState({defaultUserData: arr});
                     }
                 } else {
@@ -1137,7 +1156,9 @@ const MainLayout = React.createClass({
         this.state.selectedRowKeys = [];
         this.state.userNameFromOri = '';
         this.state.groupCreatName = '';
+        this.state.nowThinking = '';
         this.state.tags = [];
+        this.state.idea = 'none';
         selectArr = [];
         this.setState({"addDeGroupMemberModalVisible": false});
     },
@@ -1524,11 +1545,13 @@ const MainLayout = React.createClass({
         this.setState({"searchShareUsersOptions": checkedValues});
     },
 
+    /**
+     * 新版分享文件
+     * @returns {boolean}
+     */
     shareFilesNew() {
-        debugger
         var _this = this;
         var memberTargetkeys = this.state.selectedRowKeys;
-
         var nowThinking = this.state.nowThinking;
         var shareSrc = this.state.shareSrc;
         var shareTitle = this.state.shareTitle;
@@ -1536,13 +1559,59 @@ const MainLayout = React.createClass({
         var createTime = (new Date()).valueOf();
         var messageToPer = 1;//根据接收者是群组还是个人来决定
         var messageToGrp = 4;
-        console.log(memberTargetkeys);
+
+        if (typeof(nowThinking) == 'undefined' || nowThinking == '') {
+            nowThinking = '这是一个云盘分享的文件'
+        }
+
+        if (isEmpty(memberTargetkeys) == true) {
+            message.error('请选择转发好友或群组');
+            return false
+        }
+
+        //链接消息
+        var cover = "http://png.findicons.com/files/icons/2083/go_green_web/64/link.png";
+        var attachment = {
+            "address": shareSrc,
+            "createTime": createTime,
+            "playing": false,
+            "type": 4,
+            "user": loginUser,
+            "cover": cover,
+            "content": shareTitle,
+        };
+
+        memberTargetkeys.forEach(function (v, i) {
+            var str = v + '';
+            if (str.indexOf('@') == '-1') {
+                var uuid = _this.createUUID();
+                var messageJson = {
+                    'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
+                    "toId": str, "command": "message", "hostId": loginUser.colUid,
+                    "uuid": uuid, "toType": messageToPer, "attachment": attachment, "state": 0
+                };
+                var commandJson = {"command": "message", "data": {"message": messageJson}};
+                ms.send(commandJson);
+
+            } else {
+                var toId = str.slice(0, str.length - 1)
+                var uuid = _this.createUUID();
+                var messageJson = {
+                    'content': nowThinking, "createTime": createTime, 'fromUser': loginUser,
+                    "toId": toId, "command": "message", "hostId": loginUser.colUid,
+                    "uuid": uuid, "toType": messageToGrp, "attachment": attachment, "state": 0
+                };
+                var commandJson = {"command": "message", "data": {"message": messageJson}};
+                ms.send(commandJson);
+            }
+        });
+        this.addDeGroupMemberModalHandleCancel();
     },
 
     /**
      * 分享文件点击OK
      */
-    getsharekey() {
+    /*getsharekey() {
         var nowThinking = this.state.nowThinking;
         var shareSrc = this.state.shareSrc;
         var shareTitle = this.state.shareTitle;
@@ -1673,12 +1742,12 @@ const MainLayout = React.createClass({
             });
         }
         _this.shareModalHandleCancel();
-    },
+    },*/
 
     /**
      * 关闭分享文件model
      */
-    shareModalHandleCancel() {
+    /*shareModalHandleCancel() {
         this.setState({
             shareModalVisible: false,
             "checkedGroupOptions": [],
@@ -1689,7 +1758,7 @@ const MainLayout = React.createClass({
             RMsgActiveKey: ['2'],
             searchWords: ''
         });
-    },
+    },*/
 
     toWhichCharObj() {
         if (delLastClick) {
@@ -2799,7 +2868,7 @@ const MainLayout = React.createClass({
                         picFile={this.state.picFile}
                         sendPicToOthers={this.sendPicToOthers}
                     />
-                    <Modal title="分享文件" className="cloud_share_Modal"
+                    {/*<Modal title="分享文件" className="cloud_share_Modal"
                            visible={this.state.shareModalVisible}
                            transitionName=""  //禁用modal的动画效果
                            maskClosable={false} //设置不允许点击蒙层关闭
@@ -2875,7 +2944,7 @@ const MainLayout = React.createClass({
                                 </Col>
                             </Row>
                         </div>
-                    </Modal>
+                    </Modal>*/}
                     <ul style={{display: 'none'}}>
                         <li className="imgLi">
                             {this.state.imgArr}
@@ -2958,7 +3027,8 @@ const MainLayout = React.createClass({
                         width={700}
                     >
                         <div style={{display: this.state.idea, marginBottom: '14px'}}>
-                            <Input type="textarea" rows={2} placeholder="这一刻的想法"/>
+                            <Input type="textarea" rows={2} placeholder="这一刻的想法" value={this.state.nowThinking}
+                                   onChange={this.nowThinkingInputChange}/>
                         </div>
                         <div style={{display: this.state.creatInput, marginBottom: '14px'}}>
                             <Input
