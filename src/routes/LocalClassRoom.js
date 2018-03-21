@@ -115,7 +115,8 @@ const LocalClassRoom = React.createClass({
      * 获取课件，打开ppt，完成推ppt的操作
      */
     getPPT() {
-        this.refs.guideModal.changeGuideModalVisible(true);
+        //this.refs.guideModal.changeGuideModalVisible(true);
+        this.setState({antCloudMaterialsModalIsShow:true});
     },
 
     /**
