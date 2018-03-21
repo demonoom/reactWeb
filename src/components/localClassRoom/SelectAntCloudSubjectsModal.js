@@ -9,6 +9,7 @@ import {isEmpty} from '../../utils/utils';
 var targetDirColumns = [{
     title: '文件夹名称',
     dataIndex: 'dirName',
+    className:'table_left_0'
 },
 ];
 
@@ -337,7 +338,7 @@ class SelectAntCloudSubjectsModal extends React.Component {
                                        rowSelection={subjectRowSelection}
                                        onRowClick={this.pushFileFromAntCloud}
                                        pagination={false} />
-                                <div className="schoolgroup_operate schoolgroup_more more_classroom">
+                                <div className="schoolgroup_operate schoolgroup_more more_classroom2">
                                     <a onClick={this.loadMoreAntCloudFlile} className="schoolgroup_more_a">加载更多</a>
                                 </div>
                                 <div className="choose_topic2">

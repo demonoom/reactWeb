@@ -2088,7 +2088,7 @@ a {
     margin-left: 12px;
 }
 
-.le_1 .ant-checkbox-wrapper {
+.le_1 .ant-checkbox-wrapper , .table_left_0{
     padding-left: 0 !important;
 }
 
