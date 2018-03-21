@@ -459,9 +459,14 @@ const AntCloudTableComponents = React.createClass({
                     <span className="yipan_name" onClick={cloudTable.readDoc.bind(cloudTable, e)}>{name}</span>
             </span>;
             } else {
-                var subjectContent = <article id='contentHtml' className='content'
-                                              dangerouslySetInnerHTML={{__html: name}}
-                                              onClick={cloudTable.readDoc.bind(cloudTable, e)}></article>;
+                var subjectContent = <span className="cloud_text">
+                <i className="icon_question icon_single_choice upexam_float"></i>
+                <span className="antnest_name affix_bottom_tc table_name_high">
+                    <article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: name}} onClick={cloudTable.readDoc.bind(cloudTable, e)}></article>
+                </span>
+            </span>
+
+                    ;
                 fileLogo = subjectContent;
             }
         }
@@ -740,8 +745,8 @@ pageNo   --- 页码，-1取全部
                 if (cloudTable.state.activeKey == '2' && cloudTable.state.getFileType == "myFile") {
                     if (directory) {
                         subjectOpt = <div>
-                            {editButton}
                             {deleteButton}
+                            {editButton}
                         </div>
                     } else {
                         subjectOpt = <div>
