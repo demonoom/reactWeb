@@ -9,6 +9,7 @@ import {isEmpty} from '../../utils/utils';
 var targetDirColumns = [{
     title: '文件夹名称',
     dataIndex: 'dirName',
+    className:'table_left_0'
 },
 ];
 
@@ -319,7 +320,7 @@ class SelectAntCloudSubjectsModal extends React.Component {
             onChange: this.onSubjectTableSelectChange,
         };
         return (
-            <Modal className="modal_classroom modal_classroom_push modal_classroom_box" visible={this.state.isShow}
+            <Modal className="modal_classroom modal_classroom_push modal_classroom_box choose_topic" visible={this.state.isShow}
                    onCancel={this.SelectSubjectModalHandleCancel}
                    transitionName=""  //禁用modal的动画效果
                    title="选择题目"
@@ -332,15 +333,17 @@ class SelectAntCloudSubjectsModal extends React.Component {
                         <Row>
                             <Col span={24} >
                                 <Icon type="left" className="classroom_left_i" onClick={this.returnParentAtMoveModal} />
-                                <Button key="return" type="primary" size="large" className="btn_push_i"
-                                        onClick={this.subjectModalHandleOk}>推送</Button>
                                 <Table columns={targetDirColumns} showHeader={false}
                                        dataSource={this.state.targetDirDataArray}
                                        rowSelection={subjectRowSelection}
                                        onRowClick={this.pushFileFromAntCloud}
                                        pagination={false} />
-                                <div className="schoolgroup_operate schoolgroup_more more_classroom">
+                                <div className="schoolgroup_operate schoolgroup_more more_classroom2">
                                     <a onClick={this.loadMoreAntCloudFlile} className="schoolgroup_more_a">加载更多</a>
+                                </div>
+                                <div className="choose_topic2">
+                                    <Button key="return" type="primary" size="large" className="btn_push_i"
+                                            onClick={this.subjectModalHandleOk}>推送</Button>
                                 </div>
                             </Col>
                         </Row>

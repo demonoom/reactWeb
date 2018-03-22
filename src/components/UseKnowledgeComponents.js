@@ -1,8 +1,8 @@
 import React, {PropTypes} from 'react';
-import {Modal, Button, message,Table, Row, Col,} from 'antd';
-import {Form, Input, Select, Radio,Icon} from 'antd';
+import {Modal, Button, message, Table, Row, Col,} from 'antd';
+import {Form, Input, Select, Radio, Icon} from 'antd';
 import {doWebService} from '../WebServiceHelper';
-import {getPageSize,isEmpty} from '../utils/Const';
+import {getPageSize, isEmpty} from '../utils/Const';
 
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
@@ -40,15 +40,20 @@ const UseKnowledgeComponents = React.createClass({
             newScheduleDisableStatus: true,    //新建备课计划文本框的可用状态，默认为不可用
         };
     },
-    showModal(currentKnowlege, optType, knowledgeName,copyFile) {
+    showModal(currentKnowlege, optType, knowledgeName, copyFile) {
         //当前点击的，计划应用的课件资源
-        debugger;
         knowledgeName = knowledgeName;
         if (optType == "TeacherAllSubjects" || optType == "TeacherAllCourseWare") {
             knowledge.setState({useTypeValue: 'searchSchedule', searchScheduleDisableStatus: false});
         }
-        knowledge.setState({visible: true,knowledgeName: knowledgeName,optType: optType,currentKnowlege: currentKnowlege,copyFile});
-        console.log('----',this.state.path);
+        knowledge.setState({
+            visible: true,
+            knowledgeName: knowledgeName,
+            optType: optType,
+            currentKnowlege: currentKnowlege,
+            copyFile
+        });
+        console.log('----', this.state.path);
         this.getUserRootCloudDir();
     },
 
@@ -191,8 +196,8 @@ const UseKnowledgeComponents = React.createClass({
             "userId": sessionStorage.getItem("ident"),
             "pageNo": -1,
         };
-        doWebService(JSON.stringify(param),{
-            onResponse:function(ret){
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
                 _this.buildTargetDirData(ret);
             }
         })
@@ -212,7 +217,7 @@ const UseKnowledgeComponents = React.createClass({
                 var name = e.name;
                 var lastPointIndex = name.lastIndexOf(".");
                 var fileType = name.substring(lastPointIndex + 1);
-                if (isDriectory==true && lastPointIndex == -1) {  //过滤不是文件夹的 文件
+                if (isDriectory == true && lastPointIndex == -1) {  //过滤不是文件夹的 文件
                     if (i == 0) {
                         var parentDirectoryId = e.parentId;
                         _this.setState({"parentDirectoryId": parentDirectoryId});
@@ -220,13 +225,13 @@ const UseKnowledgeComponents = React.createClass({
                     i++;
                     var key = e.id;
                     var fileLogo = _this.buildFileLogo(name, isDriectory, e);
-                    var dirName = <span className="font_gray_666" onClick={_this.intoDirectoryInner.bind(_this,e)}>
+                    var dirName = <span className="font_gray_666" onClick={_this.intoDirectoryInner.bind(_this, e)}>
                 {fileLogo}
                 </span>;
                     var moveDirOpt;
                     if (e.directory == true) {
                         moveDirOpt = <div>
-                            <Button onClick={_this.copySubjectsToCloudFile.bind(_this,e)}>确定</Button>
+                            <Button onClick={_this.copySubjectsToCloudFile.bind(_this, e)}>确定</Button>
                         </div>;
                     } else {
                         dirName = name;
@@ -240,7 +245,7 @@ const UseKnowledgeComponents = React.createClass({
                 }
             })
             _this.setState({"targetDirDataArray": targetDirDataArray});
-        }else{
+        } else {
             parentDirectoryIdArry.pop();
         }
     },
@@ -312,30 +317,29 @@ const UseKnowledgeComponents = React.createClass({
   path              ---- 课件的路径, 当选中多个题目时，用逗号分隔
 
 */
-    copySubjectsToCloudFile(e){
+    copySubjectsToCloudFile(e) {
         var _this = this;
         var parentCloudFileId = e.parentId;
         var subjectId = this.state.currentKnowlege;
         var copyFile = _this.state.copyFile;
         var param
-        if(this.state.optType =='courseWare'){
+        if (this.state.optType == 'courseWare') {
             param = {
                 "method": 'createCloudFiles',
                 "operateUserId": sessionStorage.getItem("ident"),
                 "parentCloudFileId": e.id,
-                "name":copyFile[1],
-                "path":copyFile[3]
+                "mids": copyFile[0],
             };
-        }else{
+        } else {
             param = {
                 "method": 'copySubjectsToCloudFile',
                 "operateUserId": sessionStorage.getItem("ident"),
-                "parentCloudFileId":e.id,
-                "subjectId":subjectId
+                "parentCloudFileId": e.id,
+                "subjectId": subjectId
             };
         }
-        doWebService(JSON.stringify(param),{
-            onResponse:function(ret){
+        doWebService(JSON.stringify(param), {
+            onResponse: function (ret) {
                 if (ret.msg == "调用成功" && ret.response == true) {
                     message.success('保存成功');
                 }
@@ -344,16 +348,16 @@ const UseKnowledgeComponents = React.createClass({
                 message.error('保存失败');
             }
         })
-        this.setState({visible:false})
+        this.setState({visible: false})
     },
 
     /*
     数组去重
      */
-    unique(array){
+    unique(array) {
         var n = []; //一个新的临时数组
-        for(var i = 0; i < array.length; i++){
-            if (n.indexOf(array[i]) == -1){
+        for (var i = 0; i < array.length; i++) {
+            if (n.indexOf(array[i]) == -1) {
                 n.push(array[i]);
             }
         }
@@ -369,7 +373,7 @@ const UseKnowledgeComponents = React.createClass({
         });
         parentDirectoryIdArry.push(this.state.parentDirectoryId);
         this.unique(parentDirectoryIdArry);
-        console.log('parentDirectoryIdArry',parentDirectoryIdArry);
+        console.log('parentDirectoryIdArry', parentDirectoryIdArry);
         this.listCloudSubject(directoryObj.id);
     },
     /**
@@ -377,7 +381,7 @@ const UseKnowledgeComponents = React.createClass({
      *
      listCloudDir(String cloudFileId, String pageNo)
      */
-    listCloudSubject(cloudFileId,pageNO) {
+    listCloudSubject(cloudFileId, pageNO) {
         var _this = this;
         var data = [];
         var param = {
@@ -399,14 +403,14 @@ const UseKnowledgeComponents = React.createClass({
     saveBarBack() {
         var initPageNo = 1;
         var lastSubjectParent = parentDirectoryIdArry.pop();
-        console.log('lastSubjectParent',lastSubjectParent);
+        console.log('lastSubjectParent', lastSubjectParent);
         // var lastSubjectParentId = parentDirectoryIdArry[parentDirectoryIdArry.length-1];
-        if(lastSubjectParent == 0){
+        if (lastSubjectParent == 0) {
             lastSubjectParent = [];
-            this.setState({parentDirectoryId:'-1',currentDirectoryId:"-1"});
+            this.setState({parentDirectoryId: '-1', currentDirectoryId: "-1"});
             this.getUserRootCloudDir();
-        }else{
-            this.listCloudSubject(lastSubjectParent,initPageNo);
+        } else {
+            this.listCloudSubject(lastSubjectParent, initPageNo);
         }
     },
 
