@@ -202,7 +202,7 @@ const AntNestTabComponents = React.createClass({
             obj.div = <div>{e.topicVoice.voiceTopicResult}</div>;
         } else if (e.topicVoice.voiceTopicResultType == 2) {
             //图片  voiceTopicResultUrl
-            obj.div = <img src={e.topicVoice.voiceTopicResultUrl}/>
+            obj.div = <div className="side_topicVoice"><img className="noDataTipImg" src={e.topicVoice.voiceTopicResultUrl}/></div>
         } else if (e.topicVoice.voiceTopicResultType == 3) {
             //语音  voiceTopicResultUrl
         }
