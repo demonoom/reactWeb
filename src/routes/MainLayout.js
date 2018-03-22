@@ -1510,6 +1510,21 @@ const MainLayout = React.createClass({
     },
 
     /**
+     * 公共侧边栏进场
+     */
+    interPublicSidebarSet(obj) {
+        this.setState({publicSidebarTitle: obj.title, publicSidebarContent: obj.div});
+        this.refs.publicSidebar.className = 'groupSet_panel ding_enter';
+    },
+
+    /**
+     * 公共侧边栏离场
+     */
+    levPublicSidebarSet() {
+        this.refs.publicSidebar.className = 'groupSet_panel ding_leave';
+    },
+
+    /**
      * 我的好友复选框被选中时的响应
      * @param checkedValues
      */
@@ -2648,7 +2663,10 @@ const MainLayout = React.createClass({
             case 'antNest':
                 //蚁巢
                 middleComponent = <AntNestMenu callbackParent={this.getAntNest}/>;
-                tabComponent = <AntNestTabComponents ref="antNestTabComponents"/>;
+                tabComponent = <AntNestTabComponents
+                    ref="antNestTabComponents"
+                    interPublicSidebarSet={this.interPublicSidebarSet}
+                />;
 
                 break;
             case 'teachSpace':
@@ -2963,6 +2981,17 @@ const MainLayout = React.createClass({
                             <Button onClick={this.showExitChatGroupConfirmModal}
                                     className="group_red_btn">删除并退出</Button>{this.state.dissolutionChatGroupButton}
 
+                        </div>
+                    </div>
+
+                    {/*公共侧边栏*/}
+                    <div className="groupSet_panel" ref="publicSidebar">
+                        <div className="side_header">
+                            {this.state.publicSidebarTitle}
+                            <Icon type="close" className="d_mesclose_new" onClick={this.levPublicSidebarSet}/>
+                        </div>
+                        <div className="set_in_background">
+                            {this.state.publicSidebarContent}
                         </div>
                     </div>
 

@@ -193,7 +193,21 @@ const AntNestTabComponents = React.createClass({
      * @param e
      */
     readContentsModel(e) {
-        console.log(e.topicVoice);
+        console.log(e);
+        //侧边栏进场,根据voiceTopicResultType区分文字,语音,图片进行展示
+        var obj = {
+            title: '跟读内容'
+        };
+        if (e.topicVoice.voiceTopicResultType == 1) {
+            //字符串  voiceTopicResult
+            obj.div = <div>{e.topicVoice.voiceTopicResult}</div>;
+        } else if (e.topicVoice.voiceTopicResultType == 2) {
+            //图片  voiceTopicResultUrl
+            obj.div = <img src={e.topicVoice.voiceTopicResultUrl}/>
+        } else if (e.topicVoice.voiceTopicResultType == 3) {
+            //语音  voiceTopicResultUrl
+        }
+        this.props.interPublicSidebarSet(obj);
     },
 
     /**
@@ -371,7 +385,8 @@ const AntNestTabComponents = React.createClass({
                     <span
                         className="topics_time">作答{parTakeCountInfo.participatecount}人，未作答{parTakeCountInfo.unParticipatecount}人</span>
                             <span style={{display: antNest.state.zuodaTime}}><Button value={topicObj.id}
-                                                                                     onClick={() => message.warning('此为语音朗读作业，请使用客户端作答哦！')} className="antnest_talk">立即作答</Button>
+                                                                                     onClick={() => message.warning('此为语音朗读作业，请使用客户端作答哦！')}
+                                                                                     className="antnest_talk">立即作答</Button>
                             </span>
                             <Button value={topicObj.id}
                                     onClick={antNest.readContentsModel.bind(this, topicObj)}>跟读内容</Button>
