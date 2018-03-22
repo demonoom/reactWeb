@@ -188,8 +188,12 @@ const AntNestTabComponents = React.createClass({
         this.setState({whoISSecretModalVisible: false});
     },
 
-    readContentsModel() {
-        alert(1);
+    /**
+     * 跟读内容
+     * @param e
+     */
+    readContentsModel(e) {
+        console.log(e.topicVoice);
     },
 
     /**
@@ -198,7 +202,6 @@ const AntNestTabComponents = React.createClass({
      * @param useType 用途 0:列表  1：单个话题
      */
     buildTopicCard(topicObj, useType, topicReplayInfoArray, parTakeCountInfo, homeWorkFlag) {
-        console.log(topicObj);
         var screatPic = '';
         if (topicObj.fromUserId == sessionStorage.getItem("ident") && topicObj.applyWhiteList == true) {
             screatPic =
@@ -207,7 +210,7 @@ const AntNestTabComponents = React.createClass({
         }
         //如果用户头像为空，使用系统默认头像
         var commentDisplayTime = '';
-        if (topicObj.type == 11) {
+        if (topicObj.type == 11 || topicObj.type == 3) {
             commentDisplayTime =
                 <span className="topics_time">(结束时间:{getLocalTime(topicObj.commentDisplayTime)})</span>;
         }
@@ -371,7 +374,7 @@ const AntNestTabComponents = React.createClass({
                                                                                      onClick={() => message.warning('此为语音朗读作业，请使用客户端作答哦！')}>立即作答</Button>
                             </span>
                             <Button value={topicObj.id}
-                                    onClick={antNest.readContentsModel}>跟读内容</Button>
+                                    onClick={antNest.readContentsModel.bind(this, topicObj)}>跟读内容</Button>
                         </ul>
                     </div>;
                 } else {
