@@ -193,7 +193,6 @@ const AntNestTabComponents = React.createClass({
      * @param e
      */
     readContentsModel(e) {
-        console.log(e);
         //侧边栏进场,根据voiceTopicResultType区分文字,语音,图片进行展示
         var obj = {
             title: '跟读内容'
@@ -647,6 +646,7 @@ const AntNestTabComponents = React.createClass({
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
+                console.log(ret);
                 var response = ret.response;
                 response.forEach(function (e) {
                     //话题的回复
