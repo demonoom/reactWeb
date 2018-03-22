@@ -60,9 +60,6 @@ const AntCloudClassRoomMenu = React.createClass({
                             />
                         </Menu.Item>
                     </SubMenu>
-                    {/*<SubMenu key="liveVideoSub" title={<span><Icon type="play-circle-o" /><span>课程直播</span></span>}>*/}
-                        {/*<Menu.Item key="liveVideo">直播列表</Menu.Item>*/}
-                    {/*</SubMenu>*/}
                     <SubMenu key="teamManager" title={<span><Icon type="team" /><span>
                       <FormattedMessage
                           id='teamManagement'

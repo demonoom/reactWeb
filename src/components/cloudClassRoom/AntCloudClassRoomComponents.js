@@ -2,7 +2,6 @@ import React, {PropTypes} from 'react';
 import {Tabs, Breadcrumb, Icon, Card, Button, Row, Col, Input} from 'antd';
 import AntMulitiClassComponents from './AntMulitiClassComponents';
 import AntTeamComponents from './AntTeamComponents';
-import OpenClassComponents from './OpenClassComponents';
 import MyMessageComponents from './MyMessageComponents';
 import {doWebService_CloudClassRoom} from '../../utils/CloudClassRoomURLUtils';
 import RecommendComponents from './RecommendComponents';
@@ -14,6 +13,9 @@ import en from 'react-intl/locale-data/en';
 
 var loginUserId = sessionStorage.getItem("ident");
 
+/**
+ * 云校管理的主入口文件
+ */
 const AntCloudClassRoomComponents = React.createClass({
 
     getInitialState() {
@@ -132,11 +134,6 @@ const AntCloudClassRoomComponents = React.createClass({
                 leftBtn = "";
                 tabPanel = <AntTeamComponents ref="antTeamComponents" onSetBtnClick={this.hideTeamBtn} type="myTeam"
                                               teamSearchKey={this.state.teamSearchKey}></AntTeamComponents>;
-                break;
-            case "liveVideo":
-                topButton = "";
-                leftBtn = "";
-                tabPanel = <OpenClassComponents ref="openClassComponents"></OpenClassComponents>;
                 break;
             default:
                 topButton = createClassBtn;
