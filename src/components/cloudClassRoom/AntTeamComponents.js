@@ -54,6 +54,9 @@ const options = [
         </div>, value: '2'
     },
 ];
+/**
+ * 云校团队管理功能
+ */
 const AntTeamComponents = React.createClass({
 
     getInitialState() {

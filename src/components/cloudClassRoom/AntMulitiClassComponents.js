@@ -19,6 +19,9 @@ const Search = Input.Search;
 var whereJson = {};
 var courseInfoJson = {};
 var cardArray = [];
+/**
+ * 云校的课程列表文件
+ */
 const AntMulitiClassComponents = React.createClass({
 
     getInitialState() {
@@ -110,6 +113,9 @@ const AntMulitiClassComponents = React.createClass({
         });
     },
 
+    /**
+     * 构建每一个课程的显示card
+     */
     buildEveryCard(row, cardArray) {
         var _this = this;
         var id = row.id;
@@ -187,6 +193,10 @@ const AntMulitiClassComponents = React.createClass({
             </span>
                 <span className="series_gray_ri" style={{marginLeft:10}}>{endTime}</span></Col>;
         }
+        var isTestSpan = null;
+        if(isEmpty(row.test)===false && row.test === "test"){
+            isTestSpan = <span className="series_recall upexam_float margin_left ">测试课</span>;
+        }
         switch (isPublish) {
             case "1":
                 isPublishStr = <FormattedMessage
@@ -194,19 +204,9 @@ const AntMulitiClassComponents = React.createClass({
                     description='已发布'
                     defaultMessage='已发布'
                 />;
-                //出现删除、详情等按钮
-                // if(studentNum==0){
-                //     optButtons=<div>
-                //         <Col span={24}><Button icon="edit" className="exam-particulars_title" title="" onClick={_this.editClass.bind(_this,row)}></Button></Col>
-                //         <Col span={24}><Button icon="info-circle-o" className="exam-particulars_title" title="详情" onClick={_this.getClassDetail.bind(_this,row)}></Button></Col>
-                //
-                //     </div>;
-                // }
                 if (isSeries == '3' || isSeries == '4') {
                     if (money == 0) {
                         optButtons = <div>
-                            {/*<Col span={24}><Button icon="play-circle-o" className="exam-particulars_title liveing_color" title="直播"*/}
-                            {/*onClick={_this.getClassPlayDetail.bind(_this, row)}></Button></Col>*/}
                             <Col span={24}><Button icon="edit" className="exam-particulars_title"
                                                    title={editButtonTip}
                                                    onClick={_this.editClass.bind(_this, id)}></Button></Col>
@@ -312,10 +312,6 @@ const AntMulitiClassComponents = React.createClass({
                 </div>;
                 break;
         }
-
-        var publisher_id = row.publisher_id;
-        var publisher = row.publisher;
-        var videos = row.videos;
         var users = row.users;
         var userSpanArray = [];
         if (isEmpty(users) == false) {
@@ -348,6 +344,7 @@ const AntMulitiClassComponents = React.createClass({
                                            defaultMessage='微课'
                                        />
                                     </span>
+                                    {isTestSpan}
                                 </Col>
                             </Row>
                             <Col span={24} className="price"><span className="c-jg price_between">￥{money}</span><span
@@ -414,6 +411,7 @@ const AntMulitiClassComponents = React.createClass({
                                         className="font_gray_33 submenu_left_hidden upexam_float width_area">{courseName}</span>
                                     <span className="series_recall upexam_float margin_left ">{isPublishStr}</span>
                                     <span className="series_recall upexam_float margin_left ">{courseTypeName}</span>
+                                    {isTestSpan}
                                 </Col>
                             </Row>
                             <Col span={24} className="price"><span className="c-jg price_between">￥{money}</span><span
@@ -438,11 +436,6 @@ const AntMulitiClassComponents = React.createClass({
                             </span>
                                 <span className="series_gray_ri" style={{marginLeft:10}}>{firstLiveTime}</span></Col>
                             {endTime}
-                            {/*<Col span={24}><span className="series_gray_le">排课时间：</span><span*/}
-                            {/*className="series_gray_ri">{firstLiveTime}</span>*/}
-                            {/*</Col>*/}
-                            {/*<Col span={24}><span className="series_gray_le">知识点：</span><span*/}
-                            {/*className="series_gray_ri">{newNameTotal}</span></Col>*/}
                             <Col span={24}><span className="series_gray_le">
                                 {/*课程概述：*/}
                              <FormattedMessage
@@ -462,35 +455,6 @@ const AntMulitiClassComponents = React.createClass({
                 </Row>
             </Card>;
         }
-
-        // var cardObj = <Card key={id}>
-        //     <Row>
-        //         <Col span={4}>
-        //             <img alt="example" width="100%" src={image} />
-        //         </Col>
-        //         <Col span={18}>
-        //             <Row className="details_cont">
-        //                 <Row>
-        //                     <Col span={21} className="font_gray_33 submenu_left_hidden">{courseName}</Col>
-        //                     <Col span={3} className="series_recall right_ri">{isPublishStr}</Col>
-        //                 </Row>
-        //                 <Col span={24} className="price"><span className="c-jg price_between">￥{money}</span><span className="price_between gray_line"></span><span className=" price_between font-14">共{videoNum}课时</span></Col>
-        //                 <Col span={24}><span className="series_gray_le">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：</span><span className="series_gray_ri">{courseTypeName}</span></Col>
-        //                 <Col span={24}><span className="series_gray_le">主讲老师：</span><span className="series_gray_ri">{userSpanArray}</span></Col>
-        //                 <Col span={24}><span className="series_gray_le">开始时间：</span><span className="series_gray_ri">{startTime}</span></Col>
-        //                 {endTime}
-        //                 <Col span={24}><span className="series_gray_le">排课时间：</span><span className="series_gray_ri">{firstLiveTime}
-        //                 </span></Col>
-        //                 <Col span={24}><span className="series_gray_le">课程概述：</span><span className="series_gray_ri">{content}</span></Col>
-        //         </Row>
-        //         </Col>
-        //         <Col span={2}>
-        //             <Row className="knowledge_ri">
-        //                 {optButtons}
-        //             </Row>
-        //         </Col>
-        //     </Row>
-        // </Card>;
         cardArray.push(cardObj);
     },
 
@@ -561,6 +525,11 @@ const AntMulitiClassComponents = React.createClass({
             </Col>;
         }
 
+        var isTestSpan = null;
+        if(isEmpty(classObj.test)===false && classObj.test === "test"){
+            isTestSpan = <Col span={3} className="series_recall right_ri">测试课</Col>;
+        }
+
         if (isSeries == "3" || isSeries == "4") {
             var classDetailPanel = <Card>
                 <Row>
@@ -570,8 +539,9 @@ const AntMulitiClassComponents = React.createClass({
                     <Col span={24}>
                         <Row className="modal_cloud_info">
                             <Row className="upexam_botom_ma">
-                                <Col span={21} className="font_gray_33">{classObj.courseName}</Col>
+                                <Col span={18} className="font_gray_33">{classObj.courseName}</Col>
                                 <Col span={3} className="series_recall right_ri">{isPublishStr}</Col>
+                                {isTestSpan}
                             </Row>
                             <Col span={24} className="price ant-form-item">
                                 <span className="c-jg price_between" id="picr">￥{classObj.money}</span>
@@ -624,8 +594,9 @@ const AntMulitiClassComponents = React.createClass({
                     <Col span={24}>
                         <Row className="modal_cloud_info">
                             <Row className="upexam_botom_ma">
-                                <Col span={21} className="font_gray_33">{classObj.courseName}</Col>
+                                <Col span={18} className="font_gray_33">{classObj.courseName}</Col>
                                 <Col span={3} className="series_recall right_ri">{isPublishStr}</Col>
+                                {isTestSpan}
                             </Row>
                             <Col span={24} className="price ant-form-item">
                                 <span className="c-jg price_between" id="picr">￥{classObj.money}</span>

@@ -211,7 +211,7 @@ const AntCloudTableComponents = React.createClass({
     },
 
     //点击导航时，进入的我的文件列表
-    getUserRootCloudFiles: function (userId, pageNo, optSrc) {
+    getUserRootCloudFiles: function (userId, pageNo, optSrc, flag) {
         var _this = this;
         data = [];
         cloudTable.setState({currentDirectoryId: -1, totalCount: 0});
@@ -233,7 +233,9 @@ const AntCloudTableComponents = React.createClass({
                         // 保存
                         cloudTable.buildTargetDirDataSaveLocal(ret);
                     } else {
-                        cloudTable.buildTableDataByResponse(ret);
+                        if (!flag) {
+                            cloudTable.buildTableDataByResponse(ret);
+                        }
                         cloudTable.buildTargetDirData(ret);
                         cloudTable.buildTargetDirDataSaveLocal(ret);
                     }
@@ -359,8 +361,8 @@ const AntCloudTableComponents = React.createClass({
                 };
                 targetDirDataArray.push(dataJson);
             })
+            cloudTable.setState({"targetDirDataArray1": targetDirDataArray});
         }
-        cloudTable.setState({"targetDirDataArray1": targetDirDataArray});
     },
 
 
@@ -459,14 +461,22 @@ const AntCloudTableComponents = React.createClass({
                     <span className="yipan_name" onClick={cloudTable.readDoc.bind(cloudTable, e)}>{name}</span>
             </span>;
             } else {
+                if (e.subject.typeName == '单选题') {
+                    var subjectI = <i className="icon_question icon_single_choice upexam_float"></i>
+                } else if (e.subject.typeName == '判断题') {
+                    var subjectI = <i className="icon_question icon_trueOrfalse upexam_float"></i>
+                } else if (e.subject.typeName == '多选题') {
+                    var subjectI = <i className="icon_question icon_multiple_choice upexam_float"></i>
+                } else {
+                    var subjectI = <i className="icon_question icon_short_answer upexam_float"></i>
+                }
                 var subjectContent = <span className="cloud_text">
-                <i className="icon_question icon_single_choice upexam_float"></i>
-                <span className="antnest_name affix_bottom_tc table_name_high">
-                    <article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: name}} onClick={cloudTable.readDoc.bind(cloudTable, e)}></article>
+                    {subjectI}
+                    <span className="antnest_name affix_bottom_tc table_name_high">
+                    <article id='contentHtml' className='content' dangerouslySetInnerHTML={{__html: name}}
+                             onClick={cloudTable.readDoc.bind(cloudTable, e)}></article>
                 </span>
             </span>
-
-                    ;
                 fileLogo = subjectContent;
             }
         }
@@ -648,7 +658,7 @@ pageNo   --- 页码，-1取全部
      */
     onChange(activeKey) {
         if (activeKey == "1") {
-            cloudTable.setState({activeKey: '1'});
+            cloudTable.setState({activeKey: '1', currentSubjectDirectoryId: '-999'});//不知道currentSubjectDirectoryId是什么值,在点击我的蚁盘时不要赋值成-1就可以解决没有后退按钮的问题
             cloudTable.getUserRootCloudFiles(cloudTable.state.ident, 1);
         }
         if (activeKey == "2") {
@@ -783,7 +793,6 @@ pageNo   --- 页码，-1取全部
      * 如果是文件夹，则可以点击文件夹名称，进入文件夹内部
      */
     intoDirectoryInner(directoryObj, optSrc) {
-        debugger
         var initPageNo = 1;
         var queryConditionJson = "";
         //点击第一层文件夹时，记录当前文件夹的群主是否是当前用户
@@ -1311,7 +1320,6 @@ pageNo   --- 页码，-1取全部
      * 移动文件的modal中的回退按钮
      */
     returnParentAtMoveModal() {
-        debugger
         var initPageNo = 1;
         if (cloudTable.state.getFileType == "myFile") {
             if (cloudTable.state.parentDirectoryIdAtMoveModal == 0) {
@@ -1364,7 +1372,6 @@ pageNo   --- 页码，-1取全部
      * @param fileLength
      */
     getCloudFileSave(fileObject) {
-        debugger
         var initPageNo = 1;
         this.getUserRootCloudFiles(this.state.ident, initPageNo, "copyDirModal");
         this.setState({saveFileModalVisible: true, "saveFileId": fileObject.id});
@@ -1588,13 +1595,12 @@ pageNo   --- 页码，-1取全部
      */
 
     saveBarBack() {
-        debugger
         var initPageNo = 1;
         //我的文件 列表里面 我的资源
         if (cloudTable.state.activeKey == '1') {
             if (cloudTable.state.parentDirectoryIdAtMoveModalSave == '0') {
                 cloudTable.setState({"parentDirectoryIdAtMoveModalSave": -1, "currentDirectoryIdAtMoveModalSave": -1});
-                cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo);
+                cloudTable.getUserRootCloudFiles(cloudTable.state.ident, initPageNo, '', true);
             } else {
                 var queryConditionJson = "";
                 cloudTable.listFilesLocal(cloudTable.state.ident, cloudTable.state.parentDirectoryIdAtMoveModalSave, queryConditionJson, initPageNo);
