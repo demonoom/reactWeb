@@ -188,12 +188,17 @@ const AntNestTabComponents = React.createClass({
         this.setState({whoISSecretModalVisible: false});
     },
 
+    readContentsModel() {
+        alert(1);
+    },
+
     /**
      * 构建话题的card对象
      * @param topicObj 话题对象
      * @param useType 用途 0:列表  1：单个话题
      */
     buildTopicCard(topicObj, useType, topicReplayInfoArray, parTakeCountInfo, homeWorkFlag) {
+        console.log(topicObj);
         var screatPic = '';
         if (topicObj.fromUserId == sessionStorage.getItem("ident") && topicObj.applyWhiteList == true) {
             screatPic =
@@ -222,7 +227,8 @@ const AntNestTabComponents = React.createClass({
             topicTitle = <a value={topicObj.id} title={topicObj.id} onClick={antNest.getTopicPartakeInfo}
                             className="topics">#{topicObj.title}#</a>
         }
-        if (isEmpty(topicObj.title) == false && useType == 0 && topicObj.valid == 0 && topicObj.type == 11) {
+        //增加type=3语音作业类型
+        if (isEmpty(topicObj.title) == false && useType == 0 && topicObj.valid == 0 && (topicObj.type == 11 || topicObj.type == 3)) {
             topicTitle = <a value={topicObj.id} title={topicObj.id} id={topicObj.commentDisplayTime}
                             onClick={antNest.getHomeWorkPartakeInfo}
                             className="topics">#{topicObj.title}#</a>
@@ -355,14 +361,29 @@ const AntNestTabComponents = React.createClass({
         var parTakeCountCard;
         if (isEmpty(parTakeCountInfo) == false) {
             if (homeWorkFlag) {
-                parTakeCountCard = <div className="upexam_top topics_blue_bg">
-                    <ul className="topics_mar60">
+                if (topicObj.type == 3) {
+                    //语音跟读作业
+                    parTakeCountCard = <div className="upexam_top topics_blue_bg">
+                        <ul className="topics_mar60">
                     <span
                         className="topics_time">作答{parTakeCountInfo.participatecount}人，未作答{parTakeCountInfo.unParticipatecount}人</span>
-                        <span style={{display: antNest.state.zuodaTime}}><Button value={topicObj.id}
-                                                                                 onClick={antNest.showPartakeModal}>立即作答</Button></span>
-                    </ul>
-                </div>;
+                            <span style={{display: antNest.state.zuodaTime}}><Button value={topicObj.id}
+                                                                                     onClick={() => message.warning('此为语音朗读作业，请使用客户端作答哦！')}>立即作答</Button>
+                            </span>
+                            <Button value={topicObj.id}
+                                    onClick={antNest.readContentsModel}>跟读内容</Button>
+                        </ul>
+                    </div>;
+                } else {
+                    parTakeCountCard = <div className="upexam_top topics_blue_bg">
+                        <ul className="topics_mar60">
+                    <span
+                        className="topics_time">作答{parTakeCountInfo.participatecount}人，未作答{parTakeCountInfo.unParticipatecount}人</span>
+                            <span style={{display: antNest.state.zuodaTime}}><Button value={topicObj.id}
+                                                                                     onClick={antNest.showPartakeModal}>立即作答</Button></span>
+                        </ul>
+                    </div>;
+                }
             } else {
                 parTakeCountCard = <div className="upexam_top topics_blue_bg">
                     <ul className="topics_mar60">
@@ -596,7 +617,7 @@ const AntNestTabComponents = React.createClass({
     },
 
     /**
-     * 根据作业的id，获取对应的话题详细信息
+     * 根据作业的id，获取对应的话题详细信息(貌似是地下的评论)
      */
     getZuoYeInfoById(topicId, parTakeCountInfo, pageNo) {
         var topicReplayInfoArray = [];
