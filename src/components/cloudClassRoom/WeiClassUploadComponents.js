@@ -6,6 +6,9 @@ var subjectFather;
 var fileList = [];
 var noom = [];
 
+/**
+ * 微课视频文件上传的组件
+ */
 const WeiClassUploadComponents = React.createClass({
 
     getInitialState() {

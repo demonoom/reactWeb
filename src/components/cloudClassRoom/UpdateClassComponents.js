@@ -38,6 +38,10 @@ var teamJsonArray = [];
 var fileList = [];
 var oriUrl;
 var uploadClickNum;
+
+/**
+ * 编辑课程的组件
+ */
 const UpdateClassComponents = React.createClass({
 
     getInitialState() {
