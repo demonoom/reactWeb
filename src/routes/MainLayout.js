@@ -3185,7 +3185,8 @@ const MainLayout = React.createClass({
                                   onConfirmModalOK={this.deleteSelectedMember}/>
                 </div>
             </IntlProvider>
-        );
+        )
+            ;
     },
 
 });
