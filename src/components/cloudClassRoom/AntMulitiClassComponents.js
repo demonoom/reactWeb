@@ -539,8 +539,8 @@ const AntMulitiClassComponents = React.createClass({
                     <Col span={24}>
                         <Row className="modal_cloud_info">
                             <Row className="upexam_botom_ma">
-                                <Col span={18} className="font_gray_33">{classObj.courseName}</Col>
-                                <Col span={3} className="series_recall right_ri">{isPublishStr}</Col>
+                                <Col span={16} className="font_gray_33">{classObj.courseName}</Col>
+                                <Col span={3} className="series_recall right_ri margin_left">{isPublishStr}</Col>
                                 {isTestSpan}
                             </Row>
                             <Col span={24} className="price ant-form-item">

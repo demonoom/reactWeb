@@ -100,7 +100,7 @@ const LocalClasses = React.createClass({
                 <div className="public—til—blue">
                     班级列表
                 </div>
-                <div>
+                <div className="localclass_scroll">
                     <Table columns={classRoomColumns}
                            dataSource={this.state.classRoomList}
                            pagination={false} scroll={{y:'420px'}}/>

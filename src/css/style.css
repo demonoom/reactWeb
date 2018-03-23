@@ -4649,10 +4649,12 @@ a.color_gary_f, .color_gary_f {
     top: 6px;
 }
 
-.favorite_scroll {
+.favorite_scroll, .localclass_scroll {
     height: calc(100% - 46px);
 }
-
+.localclass_scroll .clearfix > div:first-child{
+    height:100%
+}
 .favorite_scroll2 {
     height: calc(100% - 91px);
 }
@@ -6557,7 +6559,7 @@ select.course_n:hover {
     text-align: center;
     border-radius: 4px;
     font-size: 12px;
-    padding:0 4px;
+    padding: 2px 4px
 }
 .margin_left{
     margin-left:10px;
