@@ -103,7 +103,7 @@ const LocalClasses = React.createClass({
                 <div>
                     <Table columns={classRoomColumns}
                            dataSource={this.state.classRoomList}
-                           pagination={false}/>
+                           pagination={false} scroll={{y:'420px'}}/>
                 </div>
             </div>
         );
