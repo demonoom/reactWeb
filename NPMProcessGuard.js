@@ -42,6 +42,7 @@ function run(){
 }
 //监听方法
 function checkServerStatus(){
+    var currentTime = getCurrentTime();
     console.log(currentTime+":"+"into checkServerStatus");
     //监控系统的nodejs进程
     child_process.exec(currentTime+":"+'pgrep nodejs',execOptions, function(e, stdout, stderr) {
@@ -63,16 +64,19 @@ function checkServerStatus(){
 
 //主程序未捕获异常的处理方式
 process.on('uncaughtException', function (err) {
+    var currentTime = getCurrentTime();
     console.error(currentTime+":"+'Caught exception: '+ err.name + err.message+ ",发生在" + err.lineNumber+"行");
     console.error(currentTime+":"+'Caught exception: ' + err);
 });
 
 //child_process退出处理
 cat.on('exit', function() {
+    var currentTime = getCurrentTime();
     console.error(currentTime+":"+'child_process退出了');
 });
 //child_process线程异常捕获处理
 cat.on('uncaughtException', function(e) {
+    var currentTime = getCurrentTime();
     console.error(currentTime+":"+'child_process线程异常捕获处理: '+ e.name + e.message+ ",发生在" + e.lineNumber+"行");
     console.error(currentTime+":"+"child_process error==>:"+e);
 });

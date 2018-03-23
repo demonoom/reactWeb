@@ -376,6 +376,9 @@
             }
 
             function toggleImage() {
+                if(o==null || o =="undefined" || o.imgs.length==0){
+                    return;
+                }
                 imageWidth = o.imgs[o.activeIndex].imgWidth;
                 imageHeight = o.imgs[o.activeIndex].imgHeight;
                 imgRatio = imageWidth / imageHeight;
