@@ -358,13 +358,8 @@ const AntMulitiClassComponents = React.createClass({
                                 className=" price_between font-14">
                                 <FormattedMessage
                                     id='HoursInTotal'
-                                    description='微课'
-                                    defaultMessage='微课'
-                                />
-                                <FormattedMessage
-                                    id='HoursInTotal'
                                     description='HoursInTotal'
-                                    defaultMessage='共{videoNum}课时'
+                                    defaultMessage='共{num}课时'
                                     values={
                                         {num:videoNum}
                                     }
@@ -438,7 +433,7 @@ const AntMulitiClassComponents = React.createClass({
                                 <FormattedMessage
                                     id='HoursInTotal'
                                     description='HoursInTotal'
-                                    defaultMessage='共{videoNum}课时'
+                                    defaultMessage='共{num}课时'
                                     values={
                                         {num:videoNum}
                                     }
@@ -596,7 +591,7 @@ const AntMulitiClassComponents = React.createClass({
                                     <FormattedMessage
                                         id='HoursInTotal'
                                         description='HoursInTotal'
-                                        defaultMessage='共{videoNum}课时'
+                                        defaultMessage='共{num}课时'
                                         values={
                                             {num:classObj.videoNum}
                                         }
@@ -687,7 +682,7 @@ const AntMulitiClassComponents = React.createClass({
                                     <FormattedMessage
                                         id='HoursInTotal'
                                         description='HoursInTotal'
-                                        defaultMessage='共{videoNum}课时'
+                                        defaultMessage='共{num}课时'
                                         values={
                                             {num:classObj.videoNum}
                                         }
