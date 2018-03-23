@@ -1902,7 +1902,7 @@ pageNo   --- 页码，-1取全部
      */
     showShareModal(fileObject) {
         var _this = this;
-        // cloudTable.setState({"shareCloudFileIds": fileObject.id, "shareCloudFile": fileObject});
+        /*//分享到蚁巢的业务逻辑
         var shareFileId = fileObject.id;
         var param = {
             "method": 'share',
@@ -1914,9 +1914,9 @@ pageNo   --- 页码，-1取全部
                 if (ret.success == true && ret.msg == "调用成功") {
                     var response = ret.response;
                     //cloudTable.shareFile(response);
-                    /*远程调试*/
+                    /!*远程调试*!/
                     var globalSrc = "http://" + 'www.maaee.com' + ":" + 80 + "/Excoord_PhoneService" + "/cloudFile/shareShow/" + response;
-                    /*本地调试*/
+                    /!*本地调试*!/
                     // var filePath = "http://" + '192.168.1.34' + ":" + 8080 + "/Excoord_PhoneService" + "/cloudFile/shareShow/" + response;
                     var globalTitle = fileObject.name;
                     // _this.setState({globalTitle,globalSrc});
@@ -1927,16 +1927,12 @@ pageNo   --- 页码，-1取全部
             onError: function (error) {
                 message.error(error);
             }
-        });
-        /*var globalTitle = fileObject.name;
-        var globalSrc = fileObject.path;
-        this.setState({globalTitle,globalSrc});
-        this.refs.guideModal.changeGuideModalVisible(true);*/
-        // window.__noomShareMbile__(globalSrc, globalTitle);
-        /*cloudTable.getAntGroup();
+        });*/
+        cloudTable.setState({"shareCloudFileIds": fileObject.id, "shareCloudFile": fileObject});
+        cloudTable.getAntGroup();
         this.getStructureUsers();
         this.getRecentContents();
-        cloudTable.setState({shareModalVisible: true});*/
+        cloudTable.setState({shareModalVisible: true});
     },
 
     /**
@@ -2403,7 +2399,7 @@ pageNo   --- 页码，-1取全部
                        onCancel={cloudTable.shareModalHandleCancel}
                        onOk={cloudTable.getsharekey}
                 >
-                    <div >
+                    <div>
                         <Row>
                             <Col span={12} className="share_til">选择好友分享文件：</Col>
                             <Col span={12} className="share_til">这一刻的想法：
