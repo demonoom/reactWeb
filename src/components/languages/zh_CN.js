@@ -21,6 +21,14 @@ const zh_CN = {
     teamManagement:"团队管理",
     myTeam:"我的团队",
     all:"全部",
+    TeamsICreated:"我创建的团队",
+    TeamsIJoined:"我加入的团队",
+    createTeam:"创建团队",
+    TeamSetting:"团队设置",
+    edit:"编辑",
+    TeamMembers:"团队成员",
+    AddMember:"添加成员",
+    DismissTheTeam:"解散该团队",
     liveClass:'直播课',
     miniClass:"微课",
     createNewLesson:"创建新课程",
@@ -76,6 +84,12 @@ const zh_CN = {
     Teacher:'授课老师',
     Time:'授课时间',
     Operate:'操作',
-
+    CourseDetail:'课程详情',
+    HoursInTotal: "共{ num }课时",
+    CourseCategory: "课程分类",
+    MainTeacher: "主讲老师",
+    StartFrom: "开始时间",
+    EndAt:"结束时间",
+    testLessonTip:"测试课",
 };
 export default zh_CN;
