@@ -8946,3 +8946,15 @@ select.course_n:hover {
 .choose_topic2 button{
     padding: 6px 35px;
 }
+.side_topicVoice{
+    border: 20px solid transparent;
+    height: 100%;
+    text-align: center;
+    width: 100%;
+    position: relative;
+    box-sizing: border-box;
+}
+.side_topicVoice img{
+    max-width: 100%;
+    max-height: 100%;
+}

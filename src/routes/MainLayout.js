@@ -51,8 +51,8 @@ import {FormattedMessage} from 'react-intl';
 import zh from 'react-intl/locale-data/zh';
 import en from 'react-intl/locale-data/en';
 import GuideModal from '../components/GuideModal';
-
 import {createStore} from 'redux';
+import {doWebService} from '../WebServiceHelper';
 
 const Panel = Collapse.Panel;
 
@@ -1511,6 +1511,21 @@ const MainLayout = React.createClass({
     },
 
     /**
+     * 公共侧边栏进场
+     */
+    interPublicSidebarSet(obj) {
+        this.setState({publicSidebarTitle: obj.title, publicSidebarContent: obj.div});
+        this.refs.publicSidebar.className = 'groupSet_panel ding_enter';
+    },
+
+    /**
+     * 公共侧边栏离场
+     */
+    levPublicSidebarSet() {
+        this.refs.publicSidebar.className = 'groupSet_panel ding_leave';
+    },
+
+    /**
      * 我的好友复选框被选中时的响应
      * @param checkedValues
      */
@@ -2555,8 +2570,8 @@ const MainLayout = React.createClass({
      * 显示文件分享的引导页
      */
     showShareGuideModal(globalTitle,globalSrc){
-        this.setState({globalTitle,globalSrc});
         this.refs.guideModal.changeGuideModalVisible(true);
+        this.setState({'shareSrc': globalSrc, 'shareTitle': globalTitle});
     },
 
     /**
@@ -2565,7 +2580,7 @@ const MainLayout = React.createClass({
      */
     setGuideType(guideType){
         if(guideType.key == "friend"){
-            window.__noomShareMbile__(this.state.globalSrc, this.state.globalTitle);
+            window.__noomShareMbile__(this.state.shareSrc, this.state.shareTitle);
         }else{
             console.log("到蚁巢");
             this.setState({shareToAntNestVisible:true});
@@ -2582,7 +2597,6 @@ const MainLayout = React.createClass({
 
     /**
      * 分享文件到蚁巢
-     * todo 链接地址应该是文件地址，而非生成后的网页地址（待确认）
      */
     shareToAntNest(){
         var _this = this;
@@ -2592,8 +2606,8 @@ const MainLayout = React.createClass({
             "ident": sessionStorage.getItem("ident"),
             "content": _this.state.nowThinking,
             "cover": cover,
-            "title": _this.state.globalTitle,
-            "linkAddress": _this.state.globalSrc,
+            "title": _this.state.shareTitle,
+            "linkAddress": _this.state.shareSrc,
         };
         doWebService(JSON.stringify(param), {
             onResponse: function (ret) {
@@ -2708,7 +2722,10 @@ const MainLayout = React.createClass({
             case 'antNest':
                 //蚁巢
                 middleComponent = <AntNestMenu callbackParent={this.getAntNest}/>;
-                tabComponent = <AntNestTabComponents ref="antNestTabComponents"/>;
+                tabComponent = <AntNestTabComponents
+                    ref="antNestTabComponents"
+                    interPublicSidebarSet={this.interPublicSidebarSet}
+                />;
 
                 break;
             case 'teachSpace':
@@ -2950,6 +2967,16 @@ const MainLayout = React.createClass({
                         </div>
                     </div>
                     <GuideModal ref="guideModal" setGuideType={this.setGuideType}></GuideModal>
+                    {/*公共侧边栏*/}
+                    <div className="groupSet_panel" ref="publicSidebar">
+                        <div className="side_header">
+                            {this.state.publicSidebarTitle}
+                            <Icon type="close" className="d_mesclose_new" onClick={this.levPublicSidebarSet}/>
+                        </div>
+                        <div className="set_in_background">
+                            {this.state.publicSidebarContent}
+                        </div>
+                    </div>
                     <Modal className="person_change_right"
                            visible={this.state.mainTransferModalVisible}
                            title="转移群主"
@@ -3146,7 +3173,7 @@ const MainLayout = React.createClass({
                                    onChange={this.nowThinkingInputChange}/>
                         </div>
                         <div style={{display: this.state.creatInput, marginBottom: '14px'}}>
-                            {this.state.globalTitle}
+                            {this.state.shareTitle}
                         </div>
                     </Modal>
 

@@ -188,8 +188,29 @@ const AntNestTabComponents = React.createClass({
         this.setState({whoISSecretModalVisible: false});
     },
 
-    readContentsModel() {
-        alert(1);
+    /**
+     * 跟读内容
+     * @param e
+     */
+    readContentsModel(e) {
+        //侧边栏进场,根据voiceTopicResultType区分文字,语音,图片进行展示
+        var obj = {
+            title: '跟读内容'
+        };
+        if (e.topicVoice.voiceTopicResultType == 1) {
+            //字符串  voiceTopicResult
+            obj.div = <div>{e.topicVoice.voiceTopicResult}</div>;
+        } else if (e.topicVoice.voiceTopicResultType == 2) {
+            //图片  voiceTopicResultUrl
+            obj.div = <div className="side_topicVoice"><img className="noDataTipImg topics_zanImg noom_cursor"
+                                                            onClick={showLargeImg}
+                                                            alt={e.topicVoice.voiceTopicResultUrl}
+                                                            src={e.topicVoice.voiceTopicResultUrl + '?' + MIDDLE_IMG}/>
+            </div>
+        } else if (e.topicVoice.voiceTopicResultType == 3) {
+            //语音  voiceTopicResultUrl
+        }
+        this.props.interPublicSidebarSet(obj);
     },
 
     /**
@@ -198,7 +219,6 @@ const AntNestTabComponents = React.createClass({
      * @param useType 用途 0:列表  1：单个话题
      */
     buildTopicCard(topicObj, useType, topicReplayInfoArray, parTakeCountInfo, homeWorkFlag) {
-        console.log(topicObj);
         var screatPic = '';
         if (topicObj.fromUserId == sessionStorage.getItem("ident") && topicObj.applyWhiteList == true) {
             screatPic =
@@ -207,7 +227,7 @@ const AntNestTabComponents = React.createClass({
         }
         //如果用户头像为空，使用系统默认头像
         var commentDisplayTime = '';
-        if (topicObj.type == 11) {
+        if (topicObj.type == 11 || topicObj.type == 3) {
             commentDisplayTime =
                 <span className="topics_time">(结束时间:{getLocalTime(topicObj.commentDisplayTime)})</span>;
         }
@@ -368,10 +388,11 @@ const AntNestTabComponents = React.createClass({
                     <span
                         className="topics_time">作答{parTakeCountInfo.participatecount}人，未作答{parTakeCountInfo.unParticipatecount}人</span>
                             <span style={{display: antNest.state.zuodaTime}}><Button value={topicObj.id}
-                                                                                     onClick={() => message.warning('此为语音朗读作业，请使用客户端作答哦！')}>立即作答</Button>
+                                                                                     onClick={() => message.warning('此为语音朗读作业，请使用客户端作答哦！')}
+                                                                                     className="antnest_talk">立即作答</Button>
                             </span>
                             <Button value={topicObj.id}
-                                    onClick={antNest.readContentsModel}>跟读内容</Button>
+                                    onClick={antNest.readContentsModel.bind(this, topicObj)}>跟读内容</Button>
                         </ul>
                     </div>;
                 } else {
@@ -520,26 +541,52 @@ const AntNestTabComponents = React.createClass({
                                         onClick={antNest.showSetTopicTopModal}
                                         className="topics_btn antnest_talk teopics_spa">置顶</Button>;
                 }
-                var topicReplayCard = <div style={{marginBottom: '15px'}}>
-                    <div style={{marginLeft: '0'}} className="antnest_user">{replayUserHeadPhoto}</div>
-                    <ul>
-                        <li className="antnest_name yichao_blue">{topicReplayInfo.fromUser.userName}</li>
-                        <li>  {topicReplayInfo.content}</li>
-                        <li>{replayAttachMentsArray}</li>
-                        <li className="topics_bot"><span
-                            className="topics_time">{getLocalTime(topicReplayInfo.createTime)}</span><span
-                            className="topics_dianzan">
+                if (topicReplayInfo.type == 3) {
+                    console.log(topicReplayInfo.topicVoice.voiceAccuracy);
+                    //topicReplayInfo.type == 3为新加的语音作业的回复,content为空将不再展示,只展示topicVoice中的语音和评分
+                    var topicReplayCard = <div style={{marginBottom: '15px'}}>
+                        <div style={{marginLeft: '0'}} className="antnest_user">{replayUserHeadPhoto}</div>
+                        <ul>
+                            <li className="antnest_name yichao_blue">{topicReplayInfo.fromUser.userName}</li>
+                            <li>语音作业</li>
+                            <li>评分:{topicReplayInfo.topicVoice.voiceAccuracy}</li>
+                            <li>{replayAttachMentsArray}</li>
+                            <li className="topics_bot"><span
+                                className="topics_time">{getLocalTime(topicReplayInfo.createTime)}</span><span
+                                className="topics_dianzan">
                         {delBtnInReplayCard}
-                            {praiseBtn}
-                            {replayPraiseButton}
-                            <Button icon="message" value={topicReplayInfo.id + "#toUser"}
-                                    onClick={antNest.showDiscussModal}
-                                    className="topics_btn teopics_spa">评论</Button></span></li>
-                    </ul>
-                    <ul>
-                        {replayCardForSingle}
-                    </ul>
-                </div>;
+                                {praiseBtn}
+                                {replayPraiseButton}
+                                <Button icon="message" value={topicReplayInfo.id + "#toUser"}
+                                        onClick={antNest.showDiscussModal}
+                                        className="topics_btn teopics_spa">评论</Button></span></li>
+                        </ul>
+                        <ul>
+                            {replayCardForSingle}
+                        </ul>
+                    </div>;
+                } else {
+                    var topicReplayCard = <div style={{marginBottom: '15px'}}>
+                        <div style={{marginLeft: '0'}} className="antnest_user">{replayUserHeadPhoto}</div>
+                        <ul>
+                            <li className="antnest_name yichao_blue">{topicReplayInfo.fromUser.userName}</li>
+                            <li>  {topicReplayInfo.content}</li>
+                            <li>{replayAttachMentsArray}</li>
+                            <li className="topics_bot"><span
+                                className="topics_time">{getLocalTime(topicReplayInfo.createTime)}</span><span
+                                className="topics_dianzan">
+                        {delBtnInReplayCard}
+                                {praiseBtn}
+                                {replayPraiseButton}
+                                <Button icon="message" value={topicReplayInfo.id + "#toUser"}
+                                        onClick={antNest.showDiscussModal}
+                                        className="topics_btn teopics_spa">评论</Button></span></li>
+                        </ul>
+                        <ul>
+                            {replayCardForSingle}
+                        </ul>
+                    </div>;
+                }
                 topicReplayCardArray.push(topicReplayCard);
             });
         }

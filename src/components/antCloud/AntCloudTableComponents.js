@@ -1904,10 +1904,9 @@ pageNo   --- 页码，-1取全部
         var _this = this;
         // cloudTable.setState({"shareCloudFileIds": fileObject.id, "shareCloudFile": fileObject});
         var shareFileId = fileObject.id;
-        var operateUserId = fileObject.createUid;
         var param = {
             "method": 'share',
-            "operateUserId": operateUserId,
+            "operateUserId": sessionStorage.getItem("ident"),
             "cloudFileIds": shareFileId,
         };
         doWebService(JSON.stringify(param), {
