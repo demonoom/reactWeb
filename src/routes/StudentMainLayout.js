@@ -1,12 +1,12 @@
-import React from  'react';
+import React from 'react';
 import {Menu, Icon, Row, Col} from 'antd';
 import MainTabComponents from '../components/MainTabComponents';
 import HeaderComponents from '../components/HeaderComponents';
 import UserFace from '../components/UserCardModalComponents';
-import FloatButton  from '../components/FloatButton';
+import FloatButton from '../components/FloatButton';
 
 import StudentPersonCenterMenu from '../components/layOut/StudentPersonCenterMenu';
-import StudentPersonCenter  from '../components/studentComponents/StudentPersonCenter';
+import StudentPersonCenter from '../components/studentComponents/StudentPersonCenter';
 import moment from 'moment';
 import AntNestTabComponents from '../components/antNest/AntNestTabComponents';
 import AntGroupTabComponents from '../components/antGroup/AntGroupTabComponents';
@@ -15,13 +15,14 @@ import AntGroupMenu from '../components/layOut/AntGroupMenu';
 import AntNestMenu from '../components/layOut/AntNestMenu';
 import PersonCenterComponents from '../components/antGroup/PersonCenterComponents';
 import {LocaleProvider} from 'antd';
-import TeachSpace  from '../components/TeachSpaces';
+import TeachSpace from '../components/TeachSpaces';
 import TeachSpaceGhostMenu from '../components/TeachSpacesGhostMenu';
 import {MsgConnection} from '../utils/msg_websocket_connection';
 import {isEmpty} from '../utils/Const'
 import SendPicModel from '../components/antGroup/SendPicModel'
 // 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
+
 moment.locale('zh-cn');
 import {createStore} from 'redux';
 import LiveTV from "../components/LiveTV/LiveTV";
@@ -50,7 +51,7 @@ const StudentMainLayout = React.createClass({
             ifr: {},
             isPersonCenter: false,
             isSearchGroup: false,
-            sendPicModel:false,
+            sendPicModel: false,
         };
         this.changeGhostMenuVisible = this.changeGhostMenuVisible.bind(this)
     },
@@ -146,7 +147,7 @@ const StudentMainLayout = React.createClass({
         }
     },
 
-    componentWillMount(){
+    componentWillMount() {
         var userIdent = sessionStorage.getItem("ident");
         if (userIdent == null || userIdent == "") {
             location.hash = "login";
@@ -165,7 +166,7 @@ const StudentMainLayout = React.createClass({
                 "version": 0.1
             }
         };
-        ms =  new MsgConnection();
+        ms = new MsgConnection();
         ms.connect(pro);
     },
 
@@ -207,7 +208,7 @@ const StudentMainLayout = React.createClass({
     },
     // 不用了
     // 呼叫本组件中的实例任何方法 dapeng
-    componentDidUpdate(){
+    componentDidUpdate() {
         if (this.autoeventparam) {
             // ['antGroupTabComponents', 'param', 'antGroupTabComponents'],
             let param = this.autoeventparam.linkpart.shift();
@@ -237,25 +238,25 @@ const StudentMainLayout = React.createClass({
         this.refs.studyEvaluateTabComponents.getStudyEvaluate();
     },
 
-    callBackKnowledgeMenuBuildBreadCrume(menuText, menuLevel, menuId, openKeysStr){
+    callBackKnowledgeMenuBuildBreadCrume(menuText, menuLevel, menuId, openKeysStr) {
         return this.refs.knowledgeMenuComponents.bulidBreadCrumbArray(menuText, menuLevel, menuId, openKeysStr);
 
     },
 
-    getStudentResource(params){
+    getStudentResource(params) {
 
         this.setState({resouceType: '', currentKey: "personCenter", personCenterParams: params});
     },
 
 
-/*    getAntNest(optType){
-        var pageNo;
-        if ("getAllTopic" == optType) {
-            this.refs.antNestTabComponents.getTopics(pageNo, 0);
-        } else {
-            this.refs.antNestTabComponents.getTopics(pageNo, 1);
-        }
-    },*/
+    /*    getAntNest(optType){
+            var pageNo;
+            if ("getAllTopic" == optType) {
+                this.refs.antNestTabComponents.getTopics(pageNo, 0);
+            } else {
+                this.refs.antNestTabComponents.getTopics(pageNo, 1);
+            }
+        },*/
 
     getAntNest(optType) {
         //onlyTeacherTopic或者getAllTopic
@@ -268,14 +269,14 @@ const StudentMainLayout = React.createClass({
         }
     },
 
-    teachSpaceTab(activeMenu, beActive){
+    teachSpaceTab(activeMenu, beActive) {
 
         // 2
         this.changeGhostMenuVisible({visible: false, beActive: beActive});
         this.setState({activeMiddleMenu: activeMenu});
     },
 
-    changeGhostMenuVisible(obj){
+    changeGhostMenuVisible(obj) {
 
 
         if (obj) {
@@ -292,24 +293,24 @@ const StudentMainLayout = React.createClass({
     /**
      * 获取个人中心需要的数据,老师和学生可通用,后期需要什么再添加
      */
-    getPersonalCenterData(userId){
+    getPersonalCenterData(userId) {
         this.refs.personCenterComponents.getPersonalCenterData(userId);
     },
 
-    setFirstPerson(userContactsData){
+    setFirstPerson(userContactsData) {
         var userJson = userContactsData[0];
         this.setState({"userContactsData": userContactsData});
         this.getPersonalCenterData(userJson.userObj.colUid);
     },
 
-    getGroupInfo(){
+    getGroupInfo() {
         this.refs.personCenterComponents.getUserChatGroup();
     },
     /**
      * 回调发送群组消息
      * @param groupObj
      */
-    sendGroupMessage(groupObj){
+    sendGroupMessage(groupObj) {
         var contentJson = {"content": '', "createTime": ''};
         var contentArray = [contentJson];
         var userJson = {
@@ -332,7 +333,7 @@ const StudentMainLayout = React.createClass({
     /**
      * 好友对好友的消息发送
      */
-    sendMessage(userInfo){
+    sendMessage(userInfo) {
         var contentJson = {"content": '', "createTime": ''};
         var contentArray = [contentJson];
         var userJson = {
@@ -355,7 +356,7 @@ const StudentMainLayout = React.createClass({
     /**
      * 好友对好友的消息发送
      */
-    receiveNewMessage(userJson){
+    receiveNewMessage(userJson) {
         this.setState({
             // currentKey: 'message',
             // resouceType: '',
@@ -371,7 +372,7 @@ const StudentMainLayout = React.createClass({
      * 根据当前点击的消息对象不同，分别进入个人消息和群组消息界面
      * @param fromObj
      */
-    turnToMessagePage(fromObj){
+    turnToMessagePage(fromObj) {
         var timeNode = (new Date()).valueOf();
         if (fromObj.messageType == 1) {
             // 个人消息
@@ -480,6 +481,21 @@ const StudentMainLayout = React.createClass({
         });
     },
 
+    /**
+     * 公共侧边栏进场
+     */
+    interPublicSidebarSet(obj) {
+        this.setState({publicSidebarTitle: obj.title, publicSidebarContent: obj.div});
+        this.refs.publicSidebar.className = 'groupSet_panel ding_enter';
+    },
+
+    /**
+     * 公共侧边栏离场
+     */
+    levPublicSidebarSet() {
+        this.refs.publicSidebar.className = 'groupSet_panel ding_leave';
+    },
+
     render() {
         //引入国际化的支持
         var messageFromLanguage = getMessageFromLanguage();
@@ -489,7 +505,7 @@ const StudentMainLayout = React.createClass({
         var middleComponent;
         var mainContent;
         var tabComponent;
-        console.log("stu---->"+this.state.currentKey);
+        console.log("stu---->" + this.state.currentKey);
         switch (this.state.currentKey) {
             default:
                 tabComponent = <MainTabComponents ref="mainTabComponents"/>;
@@ -546,7 +562,8 @@ const StudentMainLayout = React.createClass({
             case 'antNest':
                 //蚁巢
                 middleComponent = <AntNestMenu callbackParent={this.getAntNest}/>;
-                tabComponent = <AntNestTabComponents ref="antNestTabComponents"/>;
+                tabComponent = <AntNestTabComponents ref="antNestTabComponents"
+                                                     interPublicSidebarSet={this.interPublicSidebarSet}/>;
 
                 break;
             case 'classRoom':
@@ -660,6 +677,16 @@ const StudentMainLayout = React.createClass({
                         picFile={this.state.picFile}
                         sendPicToOthers={this.sendPicToOthers}
                     />
+                    {/*公共侧边栏*/}
+                    <div className="groupSet_panel" ref="publicSidebar">
+                        <div className="side_header">
+                            {this.state.publicSidebarTitle}
+                            <Icon type="close" className="d_mesclose_new" onClick={this.levPublicSidebarSet}/>
+                        </div>
+                        <div className="set_in_background">
+                            {this.state.publicSidebarContent}
+                        </div>
+                    </div>
                 </div>
             </IntlProvider>
         );
